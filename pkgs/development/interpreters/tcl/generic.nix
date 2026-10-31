@@ -73,12 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.tcl
   ];
 
-  buildInputs = [
-    bashNonInteractive
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "9.0") [
-    zlib
-  ];
+  buildInputs =
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
+      zlib
+    ];
 
   strictDeps = true;
 
@@ -228,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
           name = "tcl-requires-check-hook";
           substitutions = {
             tcl_hook = ./tcl-requires-check-hook.tcl;
+            tclsh = lib.getExe finalAttrs.finalPackage;
           };
           meta = {
             inherit (finalAttrs.meta) maintainers platforms;

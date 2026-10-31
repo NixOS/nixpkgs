@@ -13,6 +13,15 @@
   firefox-esr-unwrapped,
 }:
 
+let
+  # This pin basically never gets updated.
+  headers = fetchFromGitHub {
+    owner = "WebAssembly";
+    repo = "WASI";
+    rev = "59cbe140561db52fc505555e859de884e0ee7f00";
+    hash = "sha256-qCZI+aQfzddO7J5OY5SphrcyAuwGecNQveVZycVMfXM=";
+  };
+in
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
   version = "32";
@@ -23,13 +32,17 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     owner = "WebAssembly";
     repo = "wasi-libc";
     tag = "wasi-sdk-${finalAttrs.version}";
-    hash = "sha256-iP/SFYvO8zQMwwbY4VvIboO+Kx195L9brpMq8cbsA7c=";
-    fetchSubmodules = true;
+    hash = "sha256-7SL/205NkcbJvGsNYX3tjOjwM418y7z0QCUe4WDu4ls=";
+    # We don't use `fetchSubmodules` here to avoid a cycle between `gitMinimal` -> `rustc` -> LLVM -> bintools -> rustc
   };
 
   patches = [
     ./0000-relax-version-bounds.patch
   ];
+
+  postPatch = ''
+    ln -s ${headers} tools/wasi-headers
+  '';
 
   nativeBuildInputs = [
     cmake

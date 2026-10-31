@@ -4,7 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
-  systemd,
+  systemdLibs,
 }:
 
 rustPlatform.buildRustPackage {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-    systemd
+    systemdLibs
   ];
   nativeBuildInputs = [ pkg-config ];
 

@@ -11,7 +11,7 @@
   jansson,
   libunistring,
   wxwidgets_3_2,
-  lua53Packages,
+  lua55Packages,
   perlPackages,
   gtk3,
   nix-update-script,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libunistring
     wxwidgets_3_2
   ]
-  ++ (with lua53Packages; [
+  ++ (with lua55Packages; [
     lua
     busted
   ])

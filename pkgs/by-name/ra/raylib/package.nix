@@ -38,13 +38,13 @@ lib.checkListOfEnum "raylib: platform"
       __structuredAttrs = true;
 
       pname = "raylib";
-      version = "6.0";
+      version = "6.2";
 
       src = fetchFromGitHub {
         owner = "raysan5";
         repo = "raylib";
         rev = finalAttrs.version;
-        hash = "sha256-8+6MDTMc7Spix4ndAUzp51Q5iWcl7pQmyXuV2RutnOk=";
+        hash = "sha256-z885D8MdNdx/sOG+xMfk2gwZfaIrgMnbW7Xx1Ee4f6M=";
       };
 
       # autoPatchelfHook is needed for appendRunpaths

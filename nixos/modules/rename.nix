@@ -24,6 +24,10 @@ in
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
       "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead."
     )
+    (mkRemovedOptionModule [
+      "boot"
+      "iscsi-initiator"
+    ] "Support for booting from iSCSI has been removed due to lack of maintenance.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
       The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
@@ -96,6 +100,14 @@ in
         due to lack of usage and being broken since its introduction.
       ''
     ) # added 2025-11-29
+    (mkRemovedOptionModule [
+      "services"
+      "podgrab"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
+    (mkRemovedOptionModule [
+      "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -302,6 +314,13 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "minio"
+      ]
+      "The minio module has been removed because the `minio` package was abandoned upstream and therefore dropped from nixpkgs."
+    ) # Added 2026-10-11
     (mkRemovedOptionModule [
       "services"
       "mxisd"
@@ -389,6 +408,13 @@ in
       "services"
       "wakeonlan"
     ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "wasabibackend"
+      ]
+      "This module was removed as the corresponding package was removed due to being unmaintained in nixpkgs."
+    )
     (mkRemovedOptionModule [
       "services"
       "winstone"
@@ -572,6 +598,12 @@ in
       ]
       "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
     )
+    (mkRemovedOptionModule [ "services" "unit" ] ''
+      services.unit has been removed together with pkgs.unit.
+    '')
+    (mkRemovedOptionModule [ "services" "castopod" ] ''
+      services.castopod has been removed together with pkgs.castopod.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

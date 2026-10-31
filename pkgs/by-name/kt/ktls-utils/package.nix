@@ -8,8 +8,8 @@
   keyutils,
   glib,
   libnl,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   nix-update-script,
   nixosTests,
 }:

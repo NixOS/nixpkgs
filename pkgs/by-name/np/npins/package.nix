@@ -9,13 +9,17 @@
   # runtime dependencies
   nix-prefetch-git,
   nix-prefetch-docker,
+  skopeo,
   git, # for git ls-remote
+  pkg-config,
+  aws-lc,
 }:
 
 let
   runtimePath = lib.makeBinPath [
     nix-prefetch-git
     nix-prefetch-docker
+    skopeo
     git
   ];
 in
@@ -40,8 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    pkg-config
     makeWrapper
     installShellFiles
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   # (Almost) all tests require internet

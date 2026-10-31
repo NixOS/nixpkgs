@@ -1,8 +1,8 @@
 {
   lib,
-  callPackage,
-  cudaPackages_13,
   common-updater-scripts,
+  cudaPackages,
+  extraPackages ? (ps: [ ]),
   fetchFromGitHub,
   gnutar,
   gzip,
@@ -10,7 +10,6 @@
   makeBinaryWrapper,
   python3,
   stdenvNoCC,
-  withManager ? false,
   writeShellApplication,
   yq-go,
 }:
@@ -18,19 +17,7 @@
 let
   # Using overrideScope does not work when using `withPackages appDependencies`
   # and creates a an env without those overrides
-  python = python3.override {
-    self = python;
-    packageOverrides = final: prev: {
-      # older cudaPackages are not supported and actively disabled
-      # https://github.com/Comfy-Org/ComfyUI/blob/v0.27.0/comfy/quant_ops.py#L25
-      torch = prev.torch.override {
-        cudaPackages = cudaPackages_13;
-      };
-      triton = prev.triton.override {
-        cudaPackages = cudaPackages_13;
-      };
-    };
-  };
+  python = python3;
 
   appDependencies =
     ps:
@@ -65,22 +52,19 @@ let
       sqlalchemy
       tokenizers
       torch
-      torchaudio
       torchsde
       torchvision
       tqdm
       transformers
       yarl
     ]
-    ++ lib.optionals withManager [
-      ps.comfyui-manager
-    ];
+    ++ extraPackages ps;
 
   pythonEnv = python.withPackages appDependencies;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "comfyui";
-  version = "0.37.0";
+  version = "0.42.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -89,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "Comfy-Org";
     repo = "ComfyUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hfpoQsu8xzKHCy2Qqw2BMGsorwizJEuhKXWjUUJzTHs=";
+    hash = "sha256-BcwaXDvVWf7JHa7mqKwZhe99LpBKtDqohb/ESgyMFiY=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -165,11 +149,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
-  }
-  // lib.optionalAttrs (!withManager) {
-    tests.withManager = callPackage ./package.nix {
-      withManager = true;
-    };
   };
 
   meta = {
@@ -180,8 +159,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "comfyui";
     maintainers = with lib.maintainers; [
       caniko
+      knightfemale
       SuperSandro2000
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = cudaPackages.cudaOlder "13";
   };
 })

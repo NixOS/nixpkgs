@@ -25,7 +25,7 @@
   libunistring,
   libverto,
   libpwquality,
-  systemd,
+  systemdLibs,
   python3Packages,
   bind,
   sssd,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     libunistring
     libverto
-    systemd
+    systemdLibs
     bind
     libpwquality
     jansson

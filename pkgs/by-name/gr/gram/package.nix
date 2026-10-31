@@ -18,7 +18,6 @@
   vulkan-loader,
   envsubst,
   nix-update-script,
-  cargo-about,
   versionCheckHook,
   cargo-bundle,
   git,
@@ -31,7 +30,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "3.3.0";
+  version = "3.4.1";
 
   outputs = [
     "out"
@@ -47,22 +46,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-9HtHVx40XCydGMXeiJIJViNAI/tItk5ccmMeglaVT3A=";
+    hash = "sha256-+arejkex6DnnIVivt4ACuGUUNfePIXC0Y5WRGIBB9Hw=";
   };
 
-  postPatch = ''
-    # The generate-licenses script wants a specific version of cargo-about eventhough
-    # newer versions work just as well.
-    substituteInPlace script/generate-licenses \
-      --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
-  '';
-
-  cargoHash = "sha256-dAHpDdEchTaqiWtsa6u8O9qbNwTjt4ldYADzXQHgqzU=";
+  cargoHash = "sha256-0sTtUSCtjvdJPkpzNgd4Rk0g7Fn3w8uttfuEtl53kbQ=";
 
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    cargo-about
     cmake
     pkg-config
     protobuf
@@ -108,10 +99,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     GRAM_UPDATE_EXPLANATION = "Updates are handled by nixpkgs";
   };
 
-  preBuild = ''
-    bash script/generate-licenses
-  '';
-
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
   ];
@@ -129,10 +116,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/gram target/release/gram
 
     pushd crates/gram
-    # Note that this is GNU sed, while Gram's bundle-mac uses BSD sed
-    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    # Select the stable bundle and migrate its macOS keys to cargo-bundle 0.12's schema.
+    substituteInPlace Cargo.toml \
+          --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]' \
+          --replace-fail 'osx_minimum_system_version' 'osx.minimum_system_version' \
+          --replace-fail 'osx_info_plist_exts' 'osx.info_plist_exts' \
+          --replace-fail 'osx_url_schemes' 'osx.url_schemes'
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p $out/Applications $out/bin

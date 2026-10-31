@@ -5,52 +5,60 @@
   buildPythonPackage,
   buildPackages,
   cffi,
-  fetchPypi,
-  pycparser,
-  setuptools,
+  cmake,
+  fetchFromGitHub,
+  ninja,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-build-core,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvex";
-  version = "9.2.154";
+  # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "10.0.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-a3ei2w66v18QKAofpPvDUoM42zHRHPrNQic+FE+rLKY=";
+  disabled = pythonOlder "3.12";
+
+  src = fetchFromGitHub {
+    owner = "angr";
+    repo = "pyvex";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3w7A9xYSYHh/o1JXpUllR4aUrW2MdUVdDR1ua7/gpCU=";
+    fetchSubmodules = true;
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cffi
+    scikit-build-core
+  ];
 
   dependencies = [
     bitstring
     cffi
-    pycparser
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \
       --replace-fail '/usr/bin/ar' 'ar'
   '';
 
-  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    "--plat-name"
-    "linux"
-  ];
-
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
-    substituteInPlace pyvex_c/Makefile \
-      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
-  # No tests are available on PyPI, GitHub release has tests
-  # Switch to GitHub release after all angr parts are present
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyvex" ];
 
@@ -60,8 +68,11 @@ buildPythonPackage (finalAttrs: {
     license = with lib.licenses; [
       bsd2
       gpl3Plus
-      lgpl3Plus
+      lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      fab
+    ];
   };
 })

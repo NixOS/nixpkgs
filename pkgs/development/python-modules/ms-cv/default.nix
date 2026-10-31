@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "OpenXbox";
     repo = "ms_cv";
     rev = "v${version}";
-    sha256 = "0pkna0kvmq1cp4rx3dnzxsvvlxxngryp77k42wkyw2phv19a2mjd";
+    hash = "sha256-TVahUtjwCu4nF2Sec31+tne6t+7fttEzuSzguidQdl4=";
   };
 
   postPatch = ''

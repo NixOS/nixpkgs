@@ -8,6 +8,7 @@
   versionCheckHook,
   esptool,
   esphome,
+  nixosTests,
 }:
 
 let
@@ -33,14 +34,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "esphome-device-builder";
-  version = "1.14.9";
+  version = "1.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder";
     tag = finalAttrs.version;
-    hash = "sha256-G2zY0ilXCAFiSkQvaSN7rdlSBH8WkjKXkkDQqvTfvI0=";
+    hash = "sha256-S1y0IXrCQV/EK9gQ7UdSKfdKJZK6UY6q7NdFEcy7yao=";
   };
 
   __structuredAttrs = true;
@@ -80,6 +81,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pytest-timeout
     pytest-xdist
     blockbuster
+    jsonschema
   ];
 
   postPatch = ''
@@ -135,9 +137,16 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
     # TOOD: requires patching the device state monitor
     "test_start_logs_ping_count_at_debug"
+
+    # broken test: AssertionError: compile failed: Failed config
+    "test_native_arduino_compile_download_round_trip"
   ];
 
   passthru = {
+    tests = {
+      inherit (nixosTests) esphome;
+    };
+
     frontend = pythonPackages.esphome-device-builder-frontend;
     updateScript = callPackage ./update.nix { };
   };

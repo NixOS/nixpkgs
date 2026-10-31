@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jtojnar";
     repo = "poly2tri-c";
     rev = "p2tc-${finalAttrs.version}";
-    sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
+    hash = "sha256-6AHII8OgV61e5uXPUTFGw1u5ab6E4UnOEkJ3h/moG5U=";
   };
 
   nativeBuildInputs = [

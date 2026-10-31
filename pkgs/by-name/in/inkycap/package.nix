@@ -9,7 +9,6 @@
   gst_all_1,
   libayatana-appindicator,
   libsecret,
-  nodejs,
   perl,
   pkg-config,
   tinymist,
@@ -18,65 +17,29 @@
 }:
 
 let
-  version = "26.9.6";
-  src = fetchFromForgejo {
-    domain = "codefloe.com";
-    owner = "InkyCap";
-    repo = "app";
-    tag = "v${version}";
-    hash = "sha256-X4KjRHUDYx0C61gBa5vr9i1u0DOZok1AUTwe6srVhy4=";
-  };
-  changelog = "https://codefloe.com/InkyCap/app/releases/tag/v${version}";
-  homepage = "http://inkycap.org/";
-  license = lib.licenses.liliq-p-11;
-  maintainers = with lib.maintainers; [ luker ];
-
   # from TINYMIST_VERSION in scripts/download-tinymist.sh.
   # developer says it should work with newer version, but no guarantees.
   requiredTinymistVersion = "0.15.2";
-
-  frontend = buildNpmPackage (finalAttrs: {
-    pname = "inkycap-frontend";
-    inherit version src;
-
-    npmDepsHash = "sha256-vXf4W3U5EIzqHRdUkIy1z+0+umMbR1AflQ31pJCo37M=";
-
-    # The npm hook installs with `npm ci --ignore-scripts`, so the
-    # postinstall script (patch-package) never runs. Apply the patches
-    # from patches/ explicitly, before the bundle.
-    preBuild = ''
-      ./node_modules/.bin/patch-package
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      cp -r dist $out
-      runHook postInstall
-    '';
-
-    meta = {
-      inherit
-        changelog
-        homepage
-        license
-        maintainers
-        ;
-      description = "Frontend assets for InkyCap";
-    };
-  });
 in
 assert (builtins.compareVersions requiredTinymistVersion tinymist.version) <= 0;
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inkycap";
-  inherit version src;
-
+  version = "26.10.8";
   __structuredAttrs = true;
+
+  src = fetchFromForgejo {
+    domain = "codefloe.com";
+    owner = "InkyCap";
+    repo = "app";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9+VvDR9bq2PD4n6k2eGN/9g8EpXpiT5402gRaP4ZuLc=";
+  };
 
   cargoRoot = "src-tauri";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NHlLURI2O2W28gAWGZd6Hx7lWOXn8LNeoiubReRA5Bo=";
+    hash = "sha256-RiIKrRH71DDo2dy0EdXys/CB7wM3hLYCb+FZRl8Lsv8=";
   };
   buildAndTestSubdir = "src-tauri";
 
@@ -104,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm755 ${tinymist}/bin/tinymist \
       "src-tauri/binaries/inkycap-tinymist-${stdenv.hostPlatform.rust.rustcTargetSpec}"
 
-    cp -r ${frontend} dist
+    cp -r ${finalAttrs.finalPackage.passthru.frontend} dist
 
     # The frontend is already built; drop beforeBuildCommand so the
     # tauri CLI does not re-run `npm run build`
@@ -113,15 +76,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"beforeDevCommand": "npm run dev",' '"beforeDevCommand": "npm run dev"'
   '';
 
+  passthru.frontend = buildNpmPackage {
+    pname = "inkycap-frontend";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-MAFqX8nNW9qFAQp/db0k1OUULwlT8AtP0COz/N6r8qY=";
+
+    # The npm hook installs with `npm ci --ignore-scripts`, so the
+    # postinstall script (patch-package) never runs. Apply the patches
+    # from patches/ explicitly, before the bundle.
+    preBuild = ''
+      ./node_modules/.bin/patch-package
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -r dist $out
+      runHook postInstall
+    '';
+
+    meta = {
+      inherit (finalAttrs.meta)
+        changelog
+        homepage
+        license
+        maintainers
+        ;
+      description = "Frontend assets for InkyCap";
+    };
+  };
+
   doCheck = false;
 
   meta = {
-    inherit
-      changelog
-      homepage
-      license
-      maintainers
-      ;
+    changelog = "https://codefloe.com/InkyCap/app/releases/tag/v${finalAttrs.version}";
+    homepage = "http://inkycap.org/";
+    license = lib.licenses.liliq-p-11;
+    maintainers = with lib.maintainers; [ luker ];
     description = "Personal knowledge management (PKM) tool that uses Typst markup";
     longDescription = ''
       InkyCap is a personal knowledge management tool that helps you explore

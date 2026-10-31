@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  help2man,
-  gzip,
-  libxt,
-  openusd,
-  onetbb,
-  vtk,
-  autoPatchelfHook,
-  python3Packages,
-  opencascade-occt,
   assimp,
+  autoPatchelfHook,
+  cmake,
   fontconfig,
+  gzip,
+  help2man,
+  libxcb,
+  libxt,
+  onetbb,
+  opencascade-occt,
+  openusd,
+  python3Packages,
+  vtk,
   withManual ? !stdenv.hostPlatform.isDarwin,
   withPythonBinding ? false,
   withUsd ? openusd.meta.available,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.5.0";
+  version = "4.0.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
+    hash = "sha256-C58+KnwfWBv+2m6b1f0Sg47kId6OKczRVW3FRUWZlEE=";
     fetchLFS = true;
   };
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withManual [
     # manpage
-    help2man
     gzip
+    help2man
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
@@ -48,10 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vtk
-    opencascade-occt
     assimp
     fontconfig
+    libxcb
+    opencascade-occt
+    vtk
   ]
   ++ lib.optionals withPythonBinding [
     python3Packages.python
@@ -60,8 +61,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withUsd [
     libxt
-    openusd
     onetbb
+    openusd
   ];
 
   cmakeFlags = [
@@ -85,11 +86,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
-      substituteInPlace $thumbnailer \
-        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
-        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
-    done
+    substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
+      --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+      --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
   '';
 
   meta = {

@@ -23,6 +23,7 @@ let
     optional
     optionalString
     seq
+    toLower
     unsafeGetAttrPos
     warn
     all
@@ -282,6 +283,7 @@ let
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
+      cmakeConfigModules = listOf str;
       inherit platforms;
       hydraPlatforms = listOf str;
       # Automatically turns into meta.problems.broken, see ./problems.nix
@@ -538,7 +540,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = toLower attrs.pname;
             #version = null;
             #update = null;
             edition = "*";

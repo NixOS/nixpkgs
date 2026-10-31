@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "go-i18n";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "nicksnyder";
     repo = "go-i18n";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ag/8GBAwqkOyIVrdlaFYLxy9dgPOq7VbactrLmzxK7E=";
+    hash = "sha256-IOswveIccIu7AQWdnPjSlyDlE8W24dMa8AAKbVN1W1k=";
   };
 
-  vendorHash = "sha256-HhSzcK5FdOL2itnO/9kPTExbq0ZvVbvkl+aFtbv//4c=";
+  vendorHash = "sha256-Dyktd6BWk6nGmc9WArMYNi3/tN6Z2+zvCxZ8Gsd9SwM=";
 
   subPackages = [
     "goi18n"

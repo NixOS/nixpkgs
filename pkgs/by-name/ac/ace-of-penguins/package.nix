@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       generateItem = gameName: {
         name = "ace-of-penguins-${gameName}";
-        exec = "${placeholder "out"}/bin/${gameName}";
+        exec = gameName;
         comment = "Ace of Penguins ${gameName} Card Game";
         desktopName = gameName;
         genericName = gameName;

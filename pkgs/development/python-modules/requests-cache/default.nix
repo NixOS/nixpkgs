@@ -7,6 +7,7 @@
   botocore,
   cattrs,
   fetchFromGitHub,
+  fetchpatch,
   itsdangerous,
   platformdirs,
   psutil,
@@ -39,6 +40,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-iqoP7NalipY3BXMQkh+lrzPtPQehYg3bB/3azgx0iuo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "url-normalize-3.0.1-compat.patch";
+      url = "https://github.com/requests-cache/requests-cache/commit/2541eb8d8f513a1a70fdaa4daf8a17a8ee37b520.patch";
+      hash = "sha256-l6fsYynNqjG6+V8xyh/5bzkbScbjFOVrzrvyoV8O3PQ=";
+      excludes = [ "uv.lock" ];
+    })
+  ];
 
   build-system = [ hatchling ];
 

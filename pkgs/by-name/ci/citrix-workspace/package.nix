@@ -55,7 +55,7 @@
   sane-backends,
   speex,
   symlinkJoin,
-  systemd,
+  systemdLibs,
   tzdata,
   which,
   woff2,
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     sane-backends
     speex
     stdenv.cc.cc
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
     woff2
     webkitgtk_4_1
     libxscrnsaver

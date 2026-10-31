@@ -38,7 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   nativeCheckInputs = [
     cacert

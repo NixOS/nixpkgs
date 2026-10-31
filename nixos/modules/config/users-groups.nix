@@ -980,8 +980,7 @@ in
         "/etc/profiles/per-user/$USER"
       ];
 
-      # systemd initrd
-      boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
+      boot.initrd.systemd = lib.mkIf config.boot.initrd.enable {
         contents = {
           "/etc/passwd".text = ''
             ${lib.concatStringsSep "\n" (
@@ -1117,7 +1116,7 @@ in
       ]
       ++ flip mapAttrsToList config.boot.initrd.systemd.users (
         name: user: {
-          assertion = config.boot.initrd.systemd.enable -> (baseNameOf user.shell != "cryptsetup-askpass");
+          assertion = config.boot.initrd.enable -> (baseNameOf user.shell != "cryptsetup-askpass");
           message = ''
             cryptsetup-askpass is not available in systemd stage 1. Please remove it from: boot.initrd.systemd.users.${name}.shell
 

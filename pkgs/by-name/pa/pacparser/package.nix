@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacparser";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "manugarg";
     repo = "pacparser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JW4FuKqhiIpX+0p8+OBFbsy6/34q161L2C15kipiUQc=";
+    hash = "sha256-zAntXNjqkOsILsy7FdQVuBpOM9FCRFcDIVT20FhaVzo=";
   };
 
   makeFlags = [

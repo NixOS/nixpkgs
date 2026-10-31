@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
   # nixpkgs-update: no auto update
-  version = "0.9.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ufMoB71xebxO/Cu/xVQ3BMrcCgIlkG+MXH2Ru2i6uXo=";
+    hash = "sha256-7oKJcvoMpHVsajVkBYkAypBn1IXsddylN9Sq9KDYLwM=";
   };
 
   nativeBuildInputs = [ cmake ];

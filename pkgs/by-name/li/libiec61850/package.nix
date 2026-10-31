@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libiec61850";
-  version = "1.6.2";
+  version = "1.6.2.1";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "libiec61850";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KqgQxy/4vwFDkr9tVCVWDmbNuGivN6knf7rNHS+DTxc=";
+    hash = "sha256-jahJ08qOfw3V57gxRSK5fX5MszgKXQVjtDvBPGf776E=";
   };
 
   separateDebugInfo = true;

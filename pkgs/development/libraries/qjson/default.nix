@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "flavio";
     repo = "qjson";
     rev = version;
-    sha256 = "1f4wnxzx0qdmxzc7hqk28m0sva7z9p9xmxm6aifvjlp0ha6pmfxs";
+    hash = "sha256-urt6jYLgUrldVKb22tNN/6itQUViYnjY77Vh0H+3nLg=";
   };
 
   # CMake 2.8.8 is deprecated and no longer supported by CMake > 4

@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Viewer and mounter for video streams";
-    homepage = "https://cctv-viewer.org";
+    homepage = "https://github.com/iEvgeny/cctv-viewer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ teohz ];
     platforms = lib.platforms.linux;

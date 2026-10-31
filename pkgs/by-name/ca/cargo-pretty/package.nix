@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-pretty";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "romancitodev";
     repo = "cargo-pretty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Nv/Yo2Z10YbEnqYGWwN3AxnJfv1aXPvn/JAcZ87Y4k=";
+    hash = "sha256-AyvGh1sG+WIB/WVnDAt23lQz3IjoA1KU9FHdOT2c6XY=";
   };
 
-  cargoHash = "sha256-d9u8pyxzx+SNvQiCobTMul+KSuXMkGc//GAtBKIWd6k=";
+  cargoHash = "sha256-zsADWe67rjkcXTwNPFMu+k8zEgdudca8cdX4N6vVECY=";
 
   __structuredAttrs = true;
 

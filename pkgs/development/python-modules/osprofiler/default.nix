@@ -4,7 +4,7 @@
   ddt,
   docutils,
   elasticsearch,
-  fetchPypi,
+  fetchFromGitHub,
   netaddr,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
@@ -21,15 +21,25 @@
   webob,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osprofiler";
   version = "4.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bgjffu9q/A0tAngT1A5DyyKPDrPrNEHWFJXCgA6/oyA=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "osprofiler";
+    tag = finalAttrs.version;
+    hash = "sha256-igWYNdGusfEPagzmmoh0lnO1bHn63loxGXm76UVWJZs=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include osprofiler *" > MANIFEST.in
+  '';
 
   build-system = [ setuptools ];
 
@@ -55,7 +65,10 @@ buildPythonPackage rec {
     stestrCheckHook
   ];
 
-  pythonImportsCheck = [ "osprofiler" ];
+  pythonImportsCheck = [
+    "osprofiler"
+    "osprofiler.drivers"
+  ];
 
   meta = {
     description = "OpenStack Library to profile request between all involved services";
@@ -64,4 +77,4 @@ buildPythonPackage rec {
     mainProgram = "osprofiler";
     teams = [ lib.teams.openstack ];
   };
-}
+})

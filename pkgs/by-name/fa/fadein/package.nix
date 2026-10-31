@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation {
   pname = "fadein";
-  version = "5.0.14";
+  version = "5.0.15";
 
   src = fetchzip {
-    url = "https://web.archive.org/web/20260920202430/https://www.fadeinpro.com/download/demo/fadein-linux-x64-demo.tar.gz";
-    hash = "sha256-dgecUd/zuby13Ck5UXHLAkCnXPsC4dVuItQCHU/g8eo=";
+    url = "https://web.archive.org/web/20260929081038/https://www.fadeinpro.com/download/demo/fadein-linux-x64-demo.tar.gz";
+    hash = "sha256-pfpdAouRUTL8NhemKDybzi6B2J2Y/DCTfWZpmt1kMQU=";
   };
 
   strictDeps = true;

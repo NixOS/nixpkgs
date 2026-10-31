@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   crystal,
   libxml2,
   openssl,
@@ -18,6 +19,14 @@ crystal.buildCrystalPackage rec {
   };
 
   format = "shards";
+
+  patches = [
+    # Update ameba for compat with Crystal 1.21; remove with next release.
+    (fetchpatch {
+      url = "https://github.com/mint-lang/mint/commit/f5c71b25db08811a0129dbf9b342f8ab42b6342a.patch?full_index=1";
+      hash = "sha256-Llht8LL2QVHSJv4imbNXy/FWABAixczSVa6UNd4DLDI=";
+    })
+  ];
 
   # Update with
   #   nix-shell -p crystal2nix --run crystal2nix

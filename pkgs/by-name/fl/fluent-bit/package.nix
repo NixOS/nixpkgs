@@ -22,20 +22,20 @@
   pkg-config,
   rdkafka,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "5.1.0";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VXLHuyOxKWiMaYSRObu/I8kFbmUx8pGa4oKMGaEItbg=";
+    hash = "sha256-L76MOMlT9xKGwtdnwtA1+lrLa50NnCqCvUdR12X1oao=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # libbpf doesn't build for Darwin yet.
     libbpf
-    systemd
+    systemdLibs
   ];
 
   cmakeFlags = [

@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   pcre2,
 }:
 
@@ -13,6 +14,7 @@ buildPecl {
   buildInputs = [ pcre2 ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data";
     license = lib.licenses.bsd3;
     homepage = "https://developers.google.com/protocol-buffers/";

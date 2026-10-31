@@ -11,7 +11,7 @@ build-idris-package {
     owner = "QuentinDuval";
     repo = "IdrisPipes";
     rev = "888abe405afce42015014899682c736028759d42";
-    sha256 = "1dxbqzg0qy7lkabmkj0qypywdjz5751g7h2ql8b2253dy3v0ndbs";
+    hash = "sha256-ejUL9vBtFCEWoljA80I55cvG/fUYyFmXmvR4DN7Hq7c=";
   };
 
   meta = {

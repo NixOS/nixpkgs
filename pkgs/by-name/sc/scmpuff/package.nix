@@ -2,21 +2,30 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   versionCheckHook,
+  which,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "scmpuff";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = "scmpuff";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-c8F7BgjbR/w2JH8lE2t93s8gj6cWbTQGIkgYTQp9R3U=";
+    hash = "sha256-PrnZYk0moWH46AT5njQPk7kVOQaktwVbOGMAX307tyY=";
   };
 
-  vendorHash = "sha256-7xSMToc5rlxogS0N9H6siauu8i33zUA5/omqXAszDOg=";
+  vendorHash = "sha256-Uu3tZhIoYPq4QWc63Y5cPNa+MZtFklwuZyUc0CJLlXc=";
+
+  preCheck = ''
+    substituteInPlace \
+      internal/cmd/inits/data/status_shortcuts.sh \
+      internal/cmd/inits/data/status_shortcuts.fish \
+      --replace-fail /usr/bin/env env
+  '';
 
   ldflags = [
     "-s"
@@ -29,7 +38,10 @@ buildGoModule (finalAttrs: {
     "-X main.treeState=clean"
   ];
 
-  strictDeps = true;
+  nativeCheckInputs = [
+    gitMinimal
+    which
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

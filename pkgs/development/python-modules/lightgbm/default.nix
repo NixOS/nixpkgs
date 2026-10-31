@@ -4,7 +4,6 @@
   stdenv,
   pkgs,
   buildPythonPackage,
-  fetchPypi,
 
   # build-system
   scikit-build-core,
@@ -23,6 +22,7 @@
   opencl-headers,
 
   # dependencies
+  narwhals,
   numpy,
   scipy,
 
@@ -50,13 +50,15 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     pname
     version
     patches
+    src
     ;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
-  };
+  # These need to be in the root for the build to work.
+  # The tarballs on PyPi are structured the same.
+  postUnpack = ''
+    mv source/python-package/{pyproject.toml,README.rst} source/
+  '';
 
   build-system = [
     scikit-build-core
@@ -83,9 +85,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
       cudaPackages.cuda_cudart
+      cudaPackages.nccl
     ];
 
   dependencies = [
+    narwhals
     numpy
     scipy
   ];
@@ -100,6 +104,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport [
     # build fails otherwise
     (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
+
+    # needed to find nccl
+    (lib.cmakeBool "BUILD_WITH_SHARED_NCCL" true)
+    (lib.cmakeFeature "NCCL_ROOT" "${lib.getLib cudaPackages.nccl}")
   ];
 
   optional-dependencies = {
@@ -117,9 +125,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     pandas = [ pandas ];
     scikit-learn = [ scikit-learn ];
   };
-
-  # No python tests
-  doCheck = false;
 
   pythonImportsCheck = [ "lightgbm" ];
 

@@ -1,23 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
   stdenv,
-  cmake,
+  fetchFromGitHub,
   SDL2,
-  sqlite,
+  cmake,
   libsForQt5,
+  sqlite,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pegasus-frontend";
-  version = "0-unstable-2026-07-18";
+  version = "0-unstable-2026-10-26";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "6b322063a036db60cba5810fda82a3ce38f1e62f";
+    rev = "cf28a1b7cf20c975b171d0bf7fd68be8a3d70d21";
+    hash = "sha256-jGMQb59ApfxHdgLF7lohpFybsqgSF3u6PnNHnIxHFpE=";
     fetchSubmodules = true;
-    hash = "sha256-HsOli+iU9DjTrFSjBENiIURCXQcazB9QWrti7VszNvE=";
   };
 
   nativeBuildInputs = [
@@ -26,28 +30,29 @@ stdenv.mkDerivation {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    (with libsForQt5; [
-      qtbase
-      qtmultimedia
-      qtsvg
-      qtgraphicaleffects
-      qtx11extras
-    ])
-    ++ [
-      sqlite
-      SDL2
-    ];
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qtgraphicaleffects
+    libsForQt5.qtimageformats # required for additional image formats like webp
+    libsForQt5.qtmultimedia
+    libsForQt5.qtsvg
+    libsForQt5.qtwayland
+    SDL2
+    sqlite
+  ];
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
-    mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       tengkuizdihar
       irgolic
+      xelacodes
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "pegasus-fe";
   };
-}
+})

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "xorg/app";
     repo = "xedit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
+    hash = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
   };
 
   # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'

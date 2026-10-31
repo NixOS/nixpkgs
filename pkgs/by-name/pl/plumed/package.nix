@@ -13,7 +13,7 @@ assert !blas.isILP64;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plumed";
-  version = "2.10.1";
+  version = "2.10.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "plumed";
     repo = "plumed2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K22IE4bMk6b96Ac2yA2+dfGqy4BeoRuymYBk5hwrVok=";
+    hash = "sha256-IHmELGzF4LjpNNPuojT+QJ2rKt2d5zPhGixFDYbwTg0=";
   };
 
   postPatch = ''

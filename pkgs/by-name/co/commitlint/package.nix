@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules
     yarn install --offline --production --ignore-scripts
     mkdir -p $out/bin
     mkdir -p $out/lib/node_modules/@commitlint/root

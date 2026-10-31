@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "qtemu";
     repo = "gui";
     rev = finalAttrs.version;
-    sha256 = "1555178mkfw0gwmw8bsxmg4339j2ifp0yb4b2f39nxh9hwshg07j";
+    hash = "sha256-8oAHNYcJdpuGE4ssD66LQqYxyKtdL8Qrf4C7WdEJpZQ=";
   };
 
   nativeBuildInputs = [

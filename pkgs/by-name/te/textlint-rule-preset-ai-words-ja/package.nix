@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint-rule-preset-ai-words-ja";
-  version = "1.2.1";
+  version = "1.2.2";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "p1ass";
     repo = "textlint-rule-preset-ai-words-ja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0QgNPVyheFdPLCLq6JJy5AFIJ5txr1TOvzJ2VFC2C0I=";
+    hash = "sha256-uQmcThe2eSFi8iOstUaA58PX/rvcLKyGGLXHwI/9gfc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules
     pnpm install --offline --frozen-lockfile --ignore-scripts --prod
     mkdir -p $out/lib/node_modules/textlint-rule-preset-ai-words-ja
     cp -r lib node_modules package.json $out/lib/node_modules/textlint-rule-preset-ai-words-ja

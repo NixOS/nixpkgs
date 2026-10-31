@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "imaplib2";
     rev = "v${version}";
-    sha256 = "14asi3xnvf4bb394k5j8c3by6svvmrr75pawzy6kaax5jx0h793m";
+    hash = "sha256-daQDQZelKzWN/1zdcnKue2vj12BIlknSWIu4bfuIWpE=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

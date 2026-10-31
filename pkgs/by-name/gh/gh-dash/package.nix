@@ -8,13 +8,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gh-dash";
-  version = "4.26.0";
+  version = "4.26.2";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NWJEe6ocC1FdXNLLGgVAcWlzjWqtgrMLnpnJrgbR7U4=";
+    hash = "sha256-ohhNiuEwt22vzwPBLz+1yWEFakaP6oKJGB070KdQu40=";
   };
 
   vendorHash = "sha256-edFzZpM1DIwFnMLQlOuh5c8CFzYm3X2YheGFDgOLZ0I=";

@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # tests
+  runtimeShell,
   cabal-install,
   cargo,
   gitMinimal,
@@ -13,7 +14,7 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   coursier,
-  dotnet-sdk,
+  dotnetCorePackages,
   nodejs,
 
   # passthru
@@ -24,17 +25,21 @@
 
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
+
+  # The source-built SDK patches codesign paths for the Darwin sandbox.
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnetAvailable = lib.meta.availableOn stdenv.buildPlatform dotnet-sdk;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
-  version = "4.6.2";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aCEN9dVz/3lB2gy7U+6dVj3jSM7cmVsstOp+LHvYRsU=";
+    hash = "sha256-iCs3ja53pC0iFmBYIvs2nH6IDgplXd1S5+gXg+Kcbrg=";
   };
 
   patches = [
@@ -75,9 +80,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
     # coursier-related test that is currently disabled on i686-linux.
     coursier
-    # i686-linux: dotnet-sdk not available
-    dotnet-sdk
-  ];
+  ]
+  ++ lib.optional dotnetAvailable dotnet-sdk;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -89,8 +93,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace pre_commit/languages/node.py \
       --subst-var-by nodeenv ${python3Packages.nodeenv}
 
+    # These shebangs are embedded in hooks generated during the tests.
+    substituteInPlace tests/commands/install_uninstall_test.py \
+      --replace-fail '/usr/bin/env bash' '${runtimeShell}'
+
     patchShebangs pre_commit/resources/hook-tmpl
   '';
+
+  env = lib.optionalAttrs dotnetAvailable {
+    DOTNET_ROOT = "${dotnet-sdk}/share/dotnet";
+
+    # NuGet auditing requires network access.
+    NuGetAudit = "false";
+  };
 
   preCheck = ''
     export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
@@ -99,10 +114,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Some CLI tests expect to run in a Git repository.
     git init
-  ''
-  + lib.optionalString (!i686Linux) ''
-    # Resolve `.NET location: Not found` errors for dotnet tests
-    export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
   '';
 
   disabledTests = [
@@ -182,13 +193,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_docker_hook"
     "test_docker_image_"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "test_install_existing_hooks_no_overwrite"
-    "test_uninstall_restores_legacy_hooks"
-  ]
+  ++ lib.optional (!dotnetAvailable) "test_dotnet_"
   ++ lib.optionals i686Linux [
-    # i686-linux: dotnet-sdk not available
-    "test_dotnet_"
     # From coursier_test.py:
     "test_error_if_no_deps_or_channel"
   ];

@@ -61,6 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydantic" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";

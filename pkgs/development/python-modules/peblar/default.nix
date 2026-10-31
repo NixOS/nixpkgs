@@ -8,6 +8,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -31,13 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-co3440R9OVEdcLPNsBu1jz6WzZTz746IEFcyTlzNkc0=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version for GitHub releases
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  patches = [
+    ./typer-0.26.patch
+  ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -66,6 +67,8 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "peblar" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python client for Peblar EV chargers";

@@ -19,7 +19,6 @@ buildGoModule (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   vendorHash = "sha256-71+6I0u3en/Aw3PVMXx6dF+NQtCiE1T+kd7MENCKnlk=";
 

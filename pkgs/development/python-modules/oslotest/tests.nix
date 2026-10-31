@@ -2,7 +2,7 @@
   buildPythonPackage,
   oslo-config,
   oslotest,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
@@ -22,10 +22,6 @@ buildPythonPackage {
   nativeCheckInputs = [
     oslotest
     oslo-config
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

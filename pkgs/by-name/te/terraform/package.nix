@@ -4,7 +4,6 @@
   buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
-  coreutils,
   runCommand,
   runtimeShell,
   writeText,
@@ -15,18 +14,24 @@
 let
   package = buildGo127Module rec {
     pname = "terraform";
-    version = "1.16.4";
+    version = "1.17.0";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
       rev = "v${version}";
-      hash = "sha256-RfN/uQryR+mA2OYhWvaFvwK+63+LN9iZ7PoLj0YSA90=";
+      hash = "sha256-1TcZrcpIU14lnS0yD0kqJEKkp9M/1+c3+3jEPWP/Xdw=";
     };
 
-    vendorHash = "sha256-1NR5xhfZrHvG8VUwAJMgKCRvfs2AA8y5KPB/IYQiQB0=";
+    proxyVendor = true; # darwin/linux hash mismatch
+    vendorHash = "sha256-0QVv6uLejijAjJJRMjvqvWXHVM2iIWOmhpf6IS79e+0=";
 
-    patches = [ ./provider-path-0_15.patch ];
+    patches = [
+      ./provider-path-0_15.patch
+      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+      # can't use substituteInPlace for the path in goModules when using proxyVendor so update dependency instead
+      ./stty.patch
+    ];
 
     # Set CGO_ENABLED based on platform:
     # - Linux: CGO_ENABLED=0 for static linking (avoids LTO plugin issues)
@@ -49,11 +54,6 @@ let
       # https://tldr.fail/
       substituteInPlace go.mod \
         --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
-    '';
-    postConfigure = ''
-      # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
-      substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
     '';
 
     nativeBuildInputs = [ installShellFiles ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor version}/pyatspi-${version}.tar.xz";
-    sha256 = "Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
+    hash = "sha256-Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
   };
 
   nativeBuildInputs = [

@@ -35,7 +35,7 @@
   writableTmpDirAsHomeHook,
   buildDocs ? false,
   buildTests ? false,
-  gpuTargets ? clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 let
@@ -65,7 +65,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "AMDMIGraphX";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-raYsrMZASdEIxSstk14b38q9dt5EOq3rKidoFvobnxk=";
+    tag = "rocm-${finalAttrs.version}";
+    hash = "sha256-oDVJn2vwSoLxrA5ynRduZ3uRR8XhBa0pAf3Vyx7o3HE=";
   };
 
   nativeBuildInputs = [

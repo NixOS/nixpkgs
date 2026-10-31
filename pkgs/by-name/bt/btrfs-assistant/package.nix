@@ -12,28 +12,18 @@
   util-linux,
   enableSnapper ? true,
   nix-update-script,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-assistant";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitLab {
     owner = "btrfs-assistant";
     repo = "btrfs-assistant";
     rev = finalAttrs.version;
-    hash = "sha256-sjqLmpiLdoV9wUxNqeBTzw4gkj5o0/guXzqp1uYhYnA=";
+    hash = "sha256-dug56EbUp2Bn84MFSDN3+EWPm+e9CZm//BFNqLA65xE=";
   };
-
-  patches = [
-    # Avoid unprivileged crashes before command-line arguments are processed.
-    # https://gitlab.com/btrfs-assistant/btrfs-assistant/-/merge_requests/98
-    (fetchpatch {
-      url = "https://gitlab.com/btrfs-assistant/btrfs-assistant/-/commit/5fb306c7871e5be63a8adf6fbce31c50fce7512b.diff";
-      hash = "sha256-JU9l611OoSOqKMI1cGRoFY9rnf1MC58DeMnI5vmAhKo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

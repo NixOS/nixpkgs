@@ -17,6 +17,7 @@
   pkg-config,
   makeWrapper,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
@@ -78,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -87,10 +89,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     webkitgtk_4_1
   ];
-
-  preCheck = ''
-    export HOME=$TMP
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/stump_server \

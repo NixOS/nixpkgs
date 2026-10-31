@@ -42,6 +42,7 @@ buildPythonPackage rec {
   doCheck = false; # Needs to run both test server and client simultaneously
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Django MCP Server implementation";
     homepage = "https://github.com/omarbenhamid/django-mcp-server";
     license = lib.licenses.mit;

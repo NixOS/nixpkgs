@@ -54,6 +54,7 @@ sets are
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
 * `pkgs.python315Packages`
+* `pkgs.python316Packages`
 * `pkgs.pypy27Packages`
 * `pkgs.pypy310Packages`
 
@@ -163,8 +164,85 @@ following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name
   appears more than once in dependency tree. Default is `true`.
-* `disabled ? false`: If `true`, package is not built for the particular Python
-  interpreter version.
+* `disabled ? false`:
+  If set to `true` for a particular Python interpreter version or implementation, the package is marked with `meta.problems.unsupportedPython`, and will throw an error message complaining the Python interpreter being unsupported during package instantiation.
+
+  ```nix
+  {
+    lib,
+    pythonAtLeast,
+    buildPythonPackage,
+    fetchFromGitHub,
+    setuptools,
+  }:
+  buildPythonPackage (finalAttrs: {
+    pname = "coconut";
+    version = "3.1.2";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "evhub";
+      repo = "coconut";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
+    };
+
+    disabled = pythonAtLeast "3.13";
+
+    build-system = [
+      setuptools
+    ];
+
+    meta = {
+      homepage = "http://coconut-lang.org/";
+    };
+  })
+  ```
+
+  One can also choose to mark a package with `meta.problems.unsupportedPython` providing a custom `message` and optional `urls`:
+
+  ```nix
+  {
+    lib,
+    python,
+    pythonAtLeast,
+    buildPythonPackage,
+    fetchFromGitHub,
+    setuptools,
+  }:
+  buildPythonPackage (finalAttrs: {
+    pname = "coconut";
+    version = "3.1.2";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "evhub";
+      repo = "coconut";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
+    };
+
+    build-system = [
+      setuptools
+    ];
+
+    meta = {
+      homepage = "http://coconut-lang.org/";
+      problems.unsupportedPython = lib.optionalAttrs (pythonAtLeast "3.13") {
+        message = lib.removePrefix (python.libPrefix + "-") finalAttrs.name + " requires Python <3.13";
+        urls = [
+          "https://github.com/evhub/coconut/issues/873"
+        ];
+      };
+    };
+  })
+  ```
+
+  ::: {.note}
+  Referencing `<pkg>.disabled` or `finalAtts.disabled` for Python packages are deprecated.
+  Use `<pkg> ? meta.problems.unsupportedPython` instead (the same goes with `finalAttrs`).
+  :::
+
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
@@ -578,7 +656,7 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `sphinxHook` to build documentation and manpages using Sphinx.
-- `stestrCheckHook` to run tests with `stestr`.
+- `stestrCheckHook` to run tests with `stestr`. See [example usage](#using-stestrcheckhook).
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
@@ -1554,6 +1632,35 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 ```
 
 `pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
+
+#### Using stestrCheckHook {#using-stestrcheckhook}
+
+`stestrCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m stestr run`:
+
+```nix
+{
+  nativeCheckInputs = [ stestrCheckHook ];
+
+  stestrFlags = [
+    "--test-path"
+    "tests"
+  ];
+}
+```
+
+`stestrCheckHook` recognizes the following attributes:
+
+`disabledTests`
+
+:   To specify test IDs to exclude, matched exactly (each entry is anchored as `^<id>$`).
+
+`disabledTestsRegex`
+
+:   To specify regular expressions of test IDs to exclude, matched unanchored.
+
+`stestrFlags`
+
+:   To append additional command-line arguments to `python -m stestr run`.
 
 #### Using sphinxHook {#using-sphinxhook}
 

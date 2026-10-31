@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autolinks-plugin";
-  version = "071";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zachhannum";
     repo = "mkdocs-autolinks-plugin";
-    # The commit messages mention version 0.7.1, but the tag is v_071.
-    tag = "v_${version}";
+    # The tag for version 0.7.1 is v_071
+    tag = "v_${lib.replaceStrings [ "." ] [ "" ] version}";
     hash = "sha256-mEbuB9VwK7po1TqtJfBSkItOVlI3/W3nD2LYRHgPpTA=";
   };
 

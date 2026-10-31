@@ -1,12 +1,17 @@
 {
-  jdk,
-  version,
-  src,
+  majorVersion, # jdk wording is "featureVersion"
+  jdk11,
+  jdk17,
+  jdk21,
+  jdk25,
   lib,
+  fetchurl,
   stdenv,
   gradle,
+  cacert,
+  jre-generate-cacerts,
+  nixpkgs-openjdk-updater,
   extraConfig ? [ ],
-  extraNativeBuildInputs ? [ ],
   rsync,
   runCommand,
   testers,
@@ -23,23 +28,67 @@
 # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
 # "major.minor.security.build.revision"
 let
-  majorVersion = builtins.head (lib.strings.splitString "." version); # same as "featureVersion" for OpenJDK
+  sourceFile = ./. + "/${majorVersion}/source.json";
+  source = nixpkgs-openjdk-updater.openjdkSource {
+    inherit sourceFile;
+    featureVersionPrefix = majorVersion;
+  };
+  version = lib.removePrefix "refs/tags/" source.src.rev; # "17.0.8.8.1"
+  jdk =
+    {
+      "11" = jdk11;
+      "17" = jdk17;
+      "21" = jdk21;
+      "25" = jdk25;
+    }
+    .${majorVersion};
+  is11 = majorVersion == "11";
+  is17 = majorVersion == "17";
+  is21 = majorVersion == "21";
+  is25 = majorVersion == "25";
   pname = "corretto${majorVersion}";
 in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
-    inherit pname version src;
+    inherit pname version;
+    inherit (source) src;
 
-    nativeBuildInputs =
-      oldAttrs.nativeBuildInputs
-      ++ [
-        jdk
-        gradle
-        rsync
-      ]
-      ++ extraNativeBuildInputs;
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+      jdk
+      gradle
+      rsync
+    ];
 
     dontConfigure = true;
+
+    patches =
+      if is11 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          ./11/gradle8.patch
+        ]
+      else if is17 then
+        # Corretto17 has incorporated this patch already so it fails to apply.
+        # We thus skip it here.
+        # See https://github.com/corretto/corretto-17/pull/158
+        lib.remove (fetchurl {
+          url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
+          sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
+        }) (oldAttrs.patches or [ ])
+        ++ [ ./17/gradle8.patch ]
+      else if is21 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          ./21/gradle8.patch
+        ]
+      else if is25 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          # See patches in openjdk/generic.nix.
+          ./25/remove_removal_of_wformat_during_test_compilation.patch
+        ]
+      else
+        (oldAttrs.patches or [ ]);
 
     postPatch =
       let
@@ -76,12 +125,26 @@ jdk.overrideAttrs (
         # openjdk/generic.nix) while giving Corretto's flags precedence.
         # Note that the OpenJdK flags contain "--with-boot-jdk=..."!
         substituteInPlace build.gradle --replace-fail "correttoCommonFlags = [" "correttoCommonFlags = [${jdk_configure_flags} ,"
-        # Finally, *append* nix-corretto-version specific flags.
-        gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
+        # Finally, *append* our flags. build.gradle places corretto.extra_config
+        # after Corretto's own flags, so our --with-cacerts-file (see preBuild)
+        # overrides Corretto's, and the nix-corretto-version specific flags in
+        # extra_config come last and can override ours.
+        gradleFlagsArray+=(-Pcorretto.extra_config="--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts ${extra_config}")
       '';
 
     # since we dontConfigure, we must run this manually
-    preBuild = "gradleConfigureHook";
+    # dontConfigure also skips OpenJDK's preConfigure, so build
+    # lib/security/cacerts from cacert here, the same way it does.
+    preBuild = ''
+      gradleConfigureHook
+
+      mkdir "$NIX_BUILD_TOP/cacerts-gen"
+      (
+        cd "$NIX_BUILD_TOP/cacerts-gen"
+        JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+          ${jre-generate-cacerts} ${jdk.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      )
+    '';
 
     # The Linux installer is placed at linux/universal/tar whereas the MacOS
     # one is at mac/tar.

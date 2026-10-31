@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.7.8";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "superqt";
     tag = "v${version}";
-    hash = "sha256-ipDtwymKocCRwcW/eYpM6jrmrjkYQJlaEyaSV4SinMM=";
+    hash = "sha256-URvP2cCnfLN/ncBC3sP3Dbmir84PfZw1DTjRZxF0sv0=";
   };
 
   build-system = [

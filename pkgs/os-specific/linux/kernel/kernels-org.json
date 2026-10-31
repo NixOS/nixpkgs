@@ -1,42 +1,37 @@
 {
     "testing": {
-        "version": "7.3-rc5",
-        "hash": "sha256:1slzmxyadz75p6lbk373x1waapyr6ggm6mz999sy5xkmidzg5d1n",
+        "version": "7.3-rc7",
+        "hash": "sha256:119ld4v32ydw63yj5jd15i9gmh3h3lbz3mvdrfnz9m6szyzsbm3g",
         "lts": false
     },
     "6.1": {
-        "version": "6.1.188",
-        "hash": "sha256:0fm3048h1c98gxhpwjprjc2jkrhhwaac1vw91hikbhh72g5hlkgd",
-        "lts": true
-    },
-    "5.15": {
-        "version": "5.15.221",
-        "hash": "sha256:130ll4gnj2779kpx8x4r6v28vnwjn4qdw9ksaq3f5vr8wphq4y60",
-        "lts": true
-    },
-    "5.10": {
-        "version": "5.10.270",
-        "hash": "sha256:1rzb9ms2v04gwwka7d8byaxrcfymlikslq36p1p1zsabn0ldawyy",
+        "version": "6.1.191",
+        "hash": "sha256:0pf38nb163libbqhgh7n1nllwhg2ha9yyciqj83mdq8ks9vmpw82",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.157",
-        "hash": "sha256:0c4c42qzr2vcbqglb9vq5q5vqv4mbqasq1n93j3vf288cg846jmp",
+        "version": "6.6.161",
+        "hash": "sha256:1iki1f24xzpk981iw9q1i4hpb8g3k2kyzjz9lnr8jjfdwmdl0d3x",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.111",
-        "hash": "sha256:044qhkby6dgrb4mmggk6j0m6dmlw96c9a7v0lq9gm221c9kxqncy",
+        "version": "6.12.115",
+        "hash": "sha256:1fxikisa8fc7mkccmcky3va0pd12vqnnszmpcjvb28h4nbj0zj8f",
         "lts": true
     },
     "6.18": {
-        "version": "6.18.54",
-        "hash": "sha256:1b5c7v7vxl27z3xrdnqxgyzdv2b8xy464majpv8bn0l1vl10pwwx",
+        "version": "6.18.60",
+        "hash": "sha256:07k2kpv80q2a038971rn17zqix0yxkka5na4six1l0ncdbpl8brw",
         "lts": true
     },
     "7.2": {
-        "version": "7.2.8",
-        "hash": "sha256:0h8rwp1zipb0szf3y05pbmqyscdi4902x239bid7rbfifflxbs0j",
+        "version": "7.2.14",
+        "hash": "sha256:0zb4jym2dwk0z35bc17q43vbnjkm1l7ayyvv7w5y33asz4g8f6xv",
+        "lts": false
+    },
+    "7.3": {
+        "version": "7.3.1",
+        "hash": "sha256:0cg25pg7qfbf814ppbpxsx7j4wrngkpr0aiwjsf84kvkjfnmlngs",
         "lts": false
     }
 }

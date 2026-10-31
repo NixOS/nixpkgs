@@ -1,13 +1,14 @@
 {
   cacert,
   fetchFromGitHub,
+  sqlite,
+  openssl,
   lib,
   nix-update-script,
   nixosTests,
   rustPlatform,
   versionCheckHook,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
   version = "0.26.3";
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "rustls-platform-verifier"
     "tls-ring"
   ];
+
+  buildInputs = [ sqlite ];
 
   # skip tests that need network or public resolvers
   checkFlags = [
@@ -68,18 +71,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::readme_example"
   ];
 
+  nativeCheckInputs = [ openssl ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
 
   preCheck = ''
+    # bundled test certs expire after Sep 2026
+    substituteInPlace tests/test-data/test_configs/sec/gen-keys.sh \
+      --replace-fail /etc/ssl/openssl.cnf ${openssl}/etc/ssl/openssl.cnf
+    (cd tests/test-data/test_configs/sec && bash gen-keys.sh)
+
+    substituteInPlace scripts/gen_certs.sh \
+      --replace-fail "-out ca.pem -config /tmp/ca.conf" "-out ca.pem -config /tmp/ca.conf -extensions req_ext"
+    rm -f tests/test-data/{ca.key,ca.pem,cert.key,cert.csr,cert.pem,cert.p12}
+    bash scripts/gen_certs.sh
+
     # integration tests spin up the server which needs a cert bundle
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # skip some doctests that need network
     substituteInPlace crates/resolver/src/lib.rs --replace-fail '//! ```rust' '//! ```rust,no_run'
   '';
+
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
 
   passthru = {
     tests = {

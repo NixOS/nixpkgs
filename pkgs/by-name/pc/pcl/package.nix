@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
   # when SSE not detected
@@ -108,6 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_GPU" cudaSupport)
     (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
     (lib.cmakeBool "WITH_CUDA" cudaSupport)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDA_ARCH_BIN" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   passthru.updateScript = gitUpdater {

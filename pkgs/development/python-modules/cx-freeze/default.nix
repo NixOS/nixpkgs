@@ -92,7 +92,7 @@ buildPythonPackage rec {
     substituteInPlace tests/conftest.py \
       --replace-fail \
         "Path(pytest.__file__).parent.parent.relative_to(prefix).as_posix()" \
-        "'python/lib/python${lib.versions.majorMinor python.version}/site-packages/'"
+        "'python/${python.sitePackages}/'"
   '';
 
   disabledTests = [

@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocshmem${clr.gpuArchSuffix}";
-  version = "7.2.3";
+  version = "7.2.4";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocSHMEM";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-7TiUABwCVPvosoLdR8zN+QGiX+OD7iD+HKMLnGMmRYA=";
   };
 

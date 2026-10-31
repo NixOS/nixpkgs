@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "siphashc";
-  version = "2.8";
+  version = "2.9.1";
   pyproject = true;
   build-system = [ setuptools ];
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "WeblateOrg";
     repo = "siphashc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZlTBDsb8g04PJe7vQ5AJ0Ndp1CJsN+/R8kM6xA+EtFM=";
+    hash = "sha256-z0tLAo1mcbC4A/hPBcN6SyvzTpHiigMeqHSaOhSjqbY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

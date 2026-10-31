@@ -6,13 +6,13 @@
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "reva";
-  version = "7.3.0";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "cyberkaida";
     repo = "reverse-engineering-assistant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5DVHEcZHq7Thi4L1OJuaOwK/nAqntolYCBEE2acHNHw=";
+    hash = "sha256-eYZeyhXlGwLVa/k77Y5x2OeGo/m9fh3VauzAqB+obxw=";
   };
 
   mitmCache = gradle.fetchDeps {

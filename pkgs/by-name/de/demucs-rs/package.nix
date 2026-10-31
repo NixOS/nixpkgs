@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "demucs-rs";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "nikhilunni";
     repo = "demucs-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IidfPS+/T8aJoW30gdnKhhsgluMt+h9RllAXH9Yrq1g=";
+    hash = "sha256-M3Lujw2c6dkvjH8kzE1WbWHPCeFaomUlLqFcWA1mLY0=";
   };
 
-  cargoHash = "sha256-xngHyenlB3sMqzJHNk9utk4TNhdt+awutDuP1JzhhBA=";
+  cargoHash = "sha256-M0p/RzWjVSSWgSeWYrF5pRuoJRw5XNpj3vnLWLTjlDo=";
 
   # Only build the CLI crate, not the DAW plugin or WASM targets
   buildAndTestSubdir = "demucs-cli";

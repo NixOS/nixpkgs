@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "progettihwsw";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ardaseremet";
     repo = "progettihwsw";
-    tag = version;
-    hash = "sha256-9dpZyQ7i3WNdDVyEBLz4bJcWF1Ap7SH089PXWYI6UOA=";
+    tag = "v${version}";
+    hash = "sha256-MSHb9zRfrsQ7Gh+31Ky7pH8dwOqM17tbqpBELSif60U=";
   };
 
   build-system = [ setuptools ];

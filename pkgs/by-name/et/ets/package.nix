@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ets";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "gdubicki";
     repo = "ets";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LnNd4rAMJliWKbL4uVl11BAa9FPUcLwVSWnFe1vEk7g=";
+    hash = "sha256-73U5UqEKAee7Qhqeeqrojk7XDIfyfgtREhVY6VgX+2I=";
   };
 
   vendorHash = "sha256-lzukgI/7gxlWHY81MkK1CzpUUaZ4B+4xZ0RSZUpL62c=";

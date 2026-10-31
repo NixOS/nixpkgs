@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "slaypni";
     repo = "fastdtw";
     rev = "v${version}";
-    sha256 = "0irc5x4ahfp7f7q4ic97qa898s2awi0vdjznahxrfjirn8b157dw";
+    hash = "sha256-vJ0SFrI5Spc7VPbLtkHkSmiUkMInsUjwcec6qEgvLEc=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # Remove when PR 40 merged
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/slaypni/fastdtw/pull/40.patch";
-      sha256 = "0xjma0h84bk1n32wgk99rwfc85scp187a7fykhnylmcc73ppal9q";
+      hash = "sha256-OFF17ziMVeotnN4ddVC4TBfEHM8pzcfFsGEugiBQVXY=";
     })
   ];
 

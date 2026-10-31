@@ -67,8 +67,6 @@ let
 
     nativeCheckInputs = [ xvfb-run ];
 
-    strictDeps = true;
-
     doCheck = stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform);
 
     checkPhase = ''

@@ -37,13 +37,13 @@ let
     else
       lib.getLib cudaPackages.libnvvm;
 
-  libCudaPath =
-    # `cuda_compat` provides `libcuda.so` on pre-Thor Jetsons
+  libCudaDir =
+    # `cuda_compat` provides `libcuda.so` in its `compat` directory
     if (cudaPackages.cuda_compat.meta.available or false) then
-      cudaPackages.cuda_compat
+      "${cudaPackages.cuda_compat}/compat"
     # Else: the host driver library
     else
-      addDriverRunpath.driverLink;
+      "${addDriverRunpath.driverLink}/lib";
 
   cudartInclude = "${lib.getInclude cudaPackages.cuda_cudart}/include";
   # `cuda/atomic` & al., to compile the NRT headers with NVRTC
@@ -89,7 +89,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
       substituteInPlace numba_cuda/numba/cuda/cudadrv/driver.py \
         --replace-fail \
           'dldir = ["/usr/lib", "/usr/lib64"]' \
-          'dldir = ["${libCudaPath}/lib"]'
+          'dldir = ["${libCudaDir}"]'
     ''
     # Expanded at parse time even when overridden, making the build log look like `make` failed
     + ''

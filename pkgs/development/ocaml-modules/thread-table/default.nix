@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "pIzYhGNZfflELEuqaczAYJHKd7px5DjTYJ+64PO4Hd0=";
+    hash = "sha256-pIzYhGNZfflELEuqaczAYJHKd7px5DjTYJ+64PO4Hd0=";
   };
 
   doCheck = true;

@@ -29,6 +29,7 @@
         immichUrl = "http://localhost:2283";
         port = 8002;
         settings.ipp.responseHeaders."X-NixOS" = "Rules";
+        upload.enable = true;
       };
 
       # TODO: Remove when PostgreSQL 17 is supported.
@@ -42,9 +43,14 @@
     machine.wait_for_unit("immich-public-proxy.service")
     machine.wait_for_open_port(2283)
     machine.wait_for_open_port(8002)
+    machine.wait_for_unit("immich-public-proxy-upload.service")
+    machine.wait_for_open_port(3001)
 
     # The proxy should be up
     machine.succeed("curl -sf http://localhost:8002")
+
+    # The upload service should be up and able to reach Immich
+    assert machine.succeed("curl -sf http://localhost:3001/healthcheck") == "upload-ok"
 
     # Verify the static assets are served
     machine.succeed("curl -sf http://localhost:8002/robots.txt")

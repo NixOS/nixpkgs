@@ -8,16 +8,18 @@
   tornado,
   prometheus-client,
   pytestCheckHook,
+  redis,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flower";
-  version = "2.0.1";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WrcXuXlTB3DBavtItQ0qmNI8Pp/jmFHc9rxNAYRaAqA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xPR1GUL/i1Bp5mBKE24HO4YJcbdliFm9xh2h3BekuzI=";
   };
 
   postPatch = ''
@@ -26,7 +28,9 @@ buildPythonPackage rec {
     rm tests/load.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     celery
     humanize
     prometheus-client
@@ -36,14 +40,18 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    redis
+  ];
 
   pythonImportsCheck = [ "flower" ];
 
   meta = {
+    changelog = "https://github.com/mher/flower/releases/tag/v${finalAttrs.version}";
     description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
-}
+})

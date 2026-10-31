@@ -6,7 +6,7 @@
 }:
 
 {
-  addRtp = drv: lib.warn "`addRtp` is deprecated, does nothing." drv;
+  addRtp = drv: lib.throw "`addRtp` has been removed.";
 
   buildVimPlugin =
     {
@@ -26,8 +26,6 @@
       drv = stdenv.mkDerivation (
         attrs
         // {
-          name = lib.warnIf (attrs ? vimprefix) "The 'vimprefix' is now hardcoded in toVimPlugin" name;
-
           __structuredAttrs = true;
           inherit
             unpackPhase

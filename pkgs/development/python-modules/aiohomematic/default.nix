@@ -4,10 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  godevccu,
   openccu-data,
   orjson,
   pydantic,
-  pydevccu,
   pytest-asyncio,
   pytest-socket,
   pytest-xdist,
@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomematic";
-  version = "2026.9.2";
+  version = "2026.10.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = finalAttrs.version;
-    hash = "sha256-lcQcYYPvR4gbsBZNQBBjxWO1w8q8bdNIDENe5t2sz78=";
+    hash = "sha256-PLEht1xJkhJpGTWViiX9gX4GtGjhzcBYJMZZ7l0CGbY=";
   };
 
   build-system = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     freezegun
-    pydevccu
+    godevccu
     pytest-asyncio
     pytest-xdist
     pytest-socket

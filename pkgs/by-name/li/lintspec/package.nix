@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lintspec"
   ];
 
-  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lintspec \

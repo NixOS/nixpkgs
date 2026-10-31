@@ -33,7 +33,7 @@ let
             reproducibleBuild = true;
             profiledCompiler = false;
             libcCross = if !buildIsTarget then targetPackages.libc or pkgs.libc else null;
-            threadsCross = if !buildIsTarget then targetPackages.threads or pkgs.threads else { };
+            threadsCross = if !buildIsTarget then targetPackages.threads or pkgs.threads else null;
             isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
             # do not allow version skew when cross-building gcc
             #

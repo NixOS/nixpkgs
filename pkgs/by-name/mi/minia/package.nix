@@ -46,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/GATB/minia";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

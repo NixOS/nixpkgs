@@ -11,7 +11,7 @@
   libmpeg2,
   libx11,
   libxi,
-  lua,
+  lua5_2_compat,
   openal,
   pkg-config,
   strip-nondeterminism,
@@ -20,6 +20,9 @@
   zlib,
   nix-update-script,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fsuae";

@@ -30,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mllB1T3Fws/AQsj2MRAC6QagEi5Nw9BK8QduKA/2eF8=";
+    hash = "sha256-GCpsJKpiJg+kR4y6eCkW5RaHSc1b6pf8w/S08zt//Do=";
   };
 
   postPatch =
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                        "OpenH264Version(${major}, ${minor}, ${patch})"
     '';
 
-  cargoHash = "sha256-nSxVZXAjusE/VZvAjVeDoZasGlX19elPrgWmZuUS0B8=";
+  cargoHash = "sha256-fTfd7z98eaZabXUyi1FUWBW9HdF2geZNxfANJrkzuPE=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =

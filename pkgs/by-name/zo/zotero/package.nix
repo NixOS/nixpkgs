@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   buildNpmPackage,
   darwin,
+  callPackage,
   nodejs_22,
   perl,
   python3,
@@ -15,7 +17,6 @@
   pkg-config,
   pango,
   giflib,
-  firefox-esr-153-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
   libGL,
@@ -32,15 +33,23 @@ let
   # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
   nodejs = nodejs_22;
 
+  firefox = callPackage ./firefox-esr-140-bin.nix { };
+
+  # Custom Firefox components (currently libmozglue.dylib) that Zotero overlays on macOS.
+  firefoxCustomComponentsMac = fetchurl {
+    url = "https://download.zotero.org/dev/firefox-components/mac/15e328615e53f1c37374f44567f108affcf80cfdc07b100da159a5aed15d9b59.tar.xz";
+    hash = "sha256-FeMoYV5T8cNzdPRFZ/EIr/z4DP3AexANoVmlrtFdm1k=";
+  };
+
   pname = "zotero";
-  version = "10.0.4";
+  version = "10.0.6";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-vevcTBWo4o2K7ibg+FOetx07EyH3k1V2I43UF2tQrRU=";
+    hash = "sha256-x3Y+rDhfhAA54MgTRQeME8eAjfmWKuz7XitdUrCjEoQ=";
   };
 
   pdf-js = buildNpmPackage {
@@ -253,10 +262,12 @@ buildNpmPackage (finalAttrs: {
       mkdir -p app/xulrunner/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r "${firefox-esr-153-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+      cp -r "${firefox}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+      # Provides app/xulrunner/MacOS/, which build.sh overlays onto Zotero.app
+      tar xf ${firefoxCustomComponentsMac} -C app/xulrunner/
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      cp -r "${firefox-esr-153-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
+      cp -r "${firefox}/lib/${firefox.libName}" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
         lib.replaceString "aarch64" "arm64" stdenv.hostPlatform.parsed.cpu.name
       }"
     ''

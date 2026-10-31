@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gq/OfpKjw6BSbGKTXbRa2crxleJJoj0BN4Ful1npWlw=";
+    hash = "sha256-a2BfT4Yq6OR0znESJoXB9eoELr5PHryW/+D4L3bFlV0=";
   };
 
   build-system = [ hatchling ];

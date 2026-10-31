@@ -348,7 +348,7 @@ In some instances, it may be necessary to disable testing altogether (with `doCh
   unnecessary build steps to speed up the build.
 * If tests are highly impure (e.g. due to network usage).
 
-There will obviously be some corner-cases not listed above where it's sensible to disable tests.
+There will be some corner-cases not listed above where it's sensible to disable tests.
 The above are just guidelines, and exceptions may be granted on a case-by-case basis.
 
 However, please check if it's possible to disable a problematic subset of the
@@ -1013,7 +1013,7 @@ There are two community maintained approaches to Rust toolchain management:
 
 Despite their names, both projects provides a similar set of packages and overlays under different APIs.
 
-Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
+Oxalica's overlay selects a particular Rust version without you providing a hash or a flake input,
 but comes with a larger git repository than fenix.
 
 Fenix also provides `rust-analyzer` nightly in addition to the Rust toolchains.

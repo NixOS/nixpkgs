@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyfibaro";
-  version = "0.8.3";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rappenze";
     repo = "pyfibaro";
     tag = finalAttrs.version;
-    hash = "sha256-KdlndW066TDxZpkIP0Oa3Lii0mBpwELfHtoGKiwh6GE=";
+    hash = "sha256-eMKaw/E1RLE5HoQa6g+fgmeQaObcOvwrybkHDmeT4dE=";
   };
 
   build-system = [ setuptools ];

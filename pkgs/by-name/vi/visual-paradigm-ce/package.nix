@@ -4,13 +4,13 @@
   fetchurl,
   copyDesktopItems,
   makeDesktopItem,
-  openjdk,
+  openjdk11,
   writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "18.1.20260913";
+  version = "18.1.20261012";
 
   src =
     let
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-/1gPFfzO0ee1sXgxAjDY3CKpsY6XJtOp96L2KEZHHYo=";
+      hash = "sha256-49/70FlQILdPkA3B4UBmAXHo9vxBqAhS6AaCNnbEVvc=";
     };
 
   passthru.updateScript = writeScript "update-visual-paradigm-ce" ''
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for bin in Visual_Paradigm Visual_Paradigm_Product_Selector Visual_Paradigm_Shape_Editor; do
       substituteInPlace $out/share/visual-paradigm-ce/Application/bin/$bin \
-        --replace-fail '# INSTALL4J_JAVA_HOME_OVERRIDE=' "INSTALL4J_JAVA_HOME_OVERRIDE=${openjdk}" \
+        --replace-fail '# INSTALL4J_JAVA_HOME_OVERRIDE=' "INSTALL4J_JAVA_HOME_OVERRIDE=${openjdk11}" \
         --replace-fail 'app_home=../../' "app_home=${placeholder "out"}/share/visual-paradigm-ce"
       ln -s $out/share/visual-paradigm-ce/Application/bin/$bin $out/bin/
     done

@@ -3,7 +3,6 @@
   alsa-lib,
   boost,
   meson,
-  config,
   expat,
   fetchFromGitHub,
   ffmpeg,
@@ -18,6 +17,7 @@
   intltool,
   libGL,
   libass,
+  libportal-gtk3,
   libpulseaudio,
   libuchardet,
   luajit,
@@ -34,24 +34,26 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   openalSupport ? true,
   portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:
 
 let
   luajit' = luajit.override { enable52Compat = true; };
+  boost' =
+    if stdenv.hostPlatform.isDarwin then boost.override { extraB2Args = [ "cxxstd=17" ]; } else boost;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "TypesettingTools";
     repo = "aegisub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ho+JG570FWbiYZ86CbCKa52j6UNyPIUh8fxpM3vVU/M=";
+    hash = "sha256-3tL5TZpuxCzpoYlyWujvpryUspBq6piZsl4lSzu76kQ=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost'
     expat
     ffmpeg
     ffms
@@ -81,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     wxwidgets_3_2
     zlib
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libportal-gtk3 ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
   ++ lib.optionals portaudioSupport [ portaudio ]
@@ -111,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    patchShebangs tools/respack.py
+    patchShebangs tools/combine-config.py tools/respack.py
 
     # TODO: Tests require wrapped GoogleTest; upstream support for
     # system version?

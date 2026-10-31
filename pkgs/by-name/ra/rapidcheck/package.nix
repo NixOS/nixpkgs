@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidcheck";
-  version = "0-unstable-2026-08-06";
+  version = "0-unstable-2026-10-05";
 
   src = fetchFromGitHub {
     owner = "emil-e";
     repo = "rapidcheck";
-    rev = "6e8dadfdafa3a74eabb52ead87f8787f72eccd0b";
-    hash = "sha256-AOHG06EVsOOdvyOohP5hsFuEe7yfXuvkEgFHQUVUs0w=";
+    rev = "2c3c4365aca21ef4e612768fdc95b1ce8b39a651";
+    hash = "sha256-kfiDY6OjXt9C1EOdyHOfnSbaRP/ncNdoN6hKlVTRXJQ=";
   };
 
   outputs = [

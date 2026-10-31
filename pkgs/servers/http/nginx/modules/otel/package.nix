@@ -59,7 +59,7 @@ mkNginxPlugin (finalAttrs: {
     # cmake's setup hook would replace nginx's configurePhase.
     forNginx.dontUseCmakeConfigure = true;
 
-    tests = { inherit (nixosTests) nginx-otel; };
+    tests = { inherit (nixosTests.nginx.stable) otel; };
   };
 
   meta = {

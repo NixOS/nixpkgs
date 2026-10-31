@@ -66,10 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      exlevan
-      kamilchm
-    ];
+    maintainers = with lib.maintainers; [ kamilchm ];
     platforms = lib.platforms.linux;
     mainProgram = "pasystray";
   };

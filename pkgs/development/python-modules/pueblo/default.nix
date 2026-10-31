@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.19";
+  version = "0.1.0";
   pyproject = true;
 
   # This tarball doesn't include tests unfortunately, and the GitHub tarball
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TGPjM6lOHUTKOdp+lu67ENvkmyfUVdAUaMIHgCxto3U=";
+    hash = "sha256-21jTu9XEXXiYpVN1FKJeZR95L6XBKOdy9pXEmY8Qj4Q=";
   };
 
   build-system = [

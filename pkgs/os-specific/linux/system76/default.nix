@@ -26,14 +26,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=misc"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    install -D system76.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76.ko
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
+
+  postInstall = ''
     mkdir -p $out/lib/udev/hwdb.d
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';

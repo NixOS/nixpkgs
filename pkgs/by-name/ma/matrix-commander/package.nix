@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
       -e '/argparse/d' \
       -e '/asyncio/d' \
       -e '/datetime/d' \
+      -e '/async-timeout/d' \
       setup.cfg requirements.txt
   '';
 

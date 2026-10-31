@@ -242,8 +242,8 @@
   "com/google/guava/guava/maven-metadata": {
    "xml": {
     "groupId": "com.google.guava",
-    "lastUpdated": "20260817142319",
-    "release": "33.7.0-jre"
+    "lastUpdated": "20260929145258",
+    "release": "33.7.2-jre"
    }
   },
   "com/google/inject#guice-parent/3.0": {
@@ -282,13 +282,13 @@
    "jar": "sha256-HTFpZEVpdyBScJF1Q2kIKmZRvUl4G2AF3rlOVnU0Bvk=",
    "pom": "sha256-O5Wj083TqkuRqzJ921ob/gPYHic3lONqoUQEcdXXDl4="
   },
-  "net/java/dev/jna#jna-platform/5.18.1": {
-   "jar": "sha256-rRTBsexPQ9OWIxIZ36Y16/go9zjqyfiQ6hvAd5WJLZo=",
-   "pom": "sha256-OdU4qVmaRHR3CDiGXtQs+j5rPRMIbLHld7i7QxSNGmU="
+  "net/java/dev/jna#jna-platform/5.19.1": {
+   "jar": "sha256-Ozhk9bRJ6cPCSxaGFSS2IrCGVj9E4M2DhMjvxaYFL4I=",
+   "pom": "sha256-PpYD9vDnpJyIN40qgryvU+M61n28kKjVon4JqXNvzlA="
   },
-  "net/java/dev/jna#jna/5.18.1": {
-   "jar": "sha256-JgxLHiKx254RDuRBxPE84RX4QfpIxB14dQmGIUs5VVc=",
-   "pom": "sha256-mLYq5v8oDXR/s1n8QuSP7RE9Rbw3Kagj3DC4MIqAZkU="
+  "net/java/dev/jna#jna/5.19.1": {
+   "jar": "sha256-T7FB3Y72sFhf/O6kvElgL7xjEvqXfixIh5TqPmqv7K4=",
+   "pom": "sha256-kRt1SgO2avD+0rvf3DqGgHNg3QNq07SB71FixoXkVr8="
   },
   "net/sf/jopt-simple#jopt-simple/4.4": {
    "jar": "sha256-PKo+nzO/XYuMCu/qjPFmp/RomIBCHESkLZzqDTrG4u0=",
@@ -320,42 +320,42 @@
    "jar": "sha256-W4qj/X71SsaVqnPGv+opmpviz3Ry7WuKn6hN/QAL3LM=",
    "pom": "sha256-zYf3dhgsAKnai7KIbXx7rLvoMjJsKw4sQ3rrs7fvAVg="
   },
-  "org/eclipse/emf#org.eclipse.emf.common/2.45.0": {
-   "pom": "sha256-Momjqyn/zL6YIl3+lfnffSiuQz6xrNNUZkZQfzXtqwc="
+  "org/eclipse/emf#org.eclipse.emf.common/2.46.0": {
+   "pom": "sha256-U6rB4sBnZmUqGhdyulYOLgyLRq+IeI/nFs+EPGWYfEQ="
   },
   "org/eclipse/emf#org.eclipse.emf.ecore.xmi/2.16.0": {
    "jar": "sha256-2NoRRs2DZ19dVBf92R/Inyr0tD5KMBEGYTJplNxxF20=",
    "pom": "sha256-McYAPeGYu++mcsQ9ixI5b+K0DnXH8M+N6pvOkGZix18="
   },
-  "org/eclipse/emf#org.eclipse.emf.ecore.xmi/2.40.0": {
-   "pom": "sha256-Vo7z0mmi/HE1/EBvXJ5JbdQjQ6CB3xufaaMj9fHuSzE="
+  "org/eclipse/emf#org.eclipse.emf.ecore.xmi/2.41.0": {
+   "pom": "sha256-CRBsW5iskvbqIni5Bkb+ZdFVuEAyEWAaG9JidmKtcAU="
   },
   "org/eclipse/emf#org.eclipse.emf.ecore/2.20.0": {
    "jar": "sha256-nuU5o8UO88/LqjqF808EHupoKtRZ0+lW33dp9rKZGzY=",
    "pom": "sha256-6aoQO2xLlRT1Par3jX/y2/B6zexP7uKVCb4I6hvsOSw="
   },
-  "org/eclipse/emf#org.eclipse.emf.ecore/2.42.0": {
-   "pom": "sha256-9J8c6yPnlQi1R0TqD5Ii8y97jTTpQq2rDrmKwv6JvtY="
+  "org/eclipse/emf#org.eclipse.emf.ecore/2.43.0": {
+   "pom": "sha256-R/G5098697VmdK68y8Nh8Ec8zLRqFuGWVdRC30mbijE="
   },
   "org/eclipse/emf/org.eclipse.emf.common/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.emf",
-    "lastUpdated": "20260224162236",
-    "release": "2.45.0"
+    "lastUpdated": "20260824110927",
+    "release": "2.46.0"
    }
   },
   "org/eclipse/emf/org.eclipse.emf.ecore.xmi/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.emf",
-    "lastUpdated": "20260224162235",
-    "release": "2.40.0"
+    "lastUpdated": "20260824110922",
+    "release": "2.41.0"
    }
   },
   "org/eclipse/emf/org.eclipse.emf.ecore/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.emf",
-    "lastUpdated": "20260224162245",
-    "release": "2.42.0"
+    "lastUpdated": "20260824110920",
+    "release": "2.43.0"
    }
   },
   "org/eclipse/jdt#org.eclipse.jdt.compiler.apt/1.3.1100": {
@@ -373,39 +373,36 @@
    "jar": "sha256-sf7D5ZoMCcXisipnc3pUFithF/FQA3iya+SQgWw0Q8I=",
    "pom": "sha256-IHpNbAWKRyIzp/n11ufbRdIG1szT9c6jTgQHuoQm0yU="
   },
-  "org/eclipse/platform#org.eclipse.core.commands/3.12.500": {
-   "jar": "sha256-RHEzYuVe0o5ttdLDG/Z1JP7wh2RaRNwyOdrGDs4BfLk=",
-   "pom": "sha256-yD+4t0dc62ANfijxwyfGjhzSaFHeyEEKthn/9W17SoI="
+  "org/eclipse/platform#org.eclipse.core.commands/3.13.0": {
+   "jar": "sha256-/pFpeXk9Nk/NCnHBXD+oA9YKhWbP+MZLDu8EkYtbamU=",
+   "pom": "sha256-Mv1h/lRhKav3bVJ/ivcizXdFF4iyzcI6voPbc5HG9aQ="
   },
-  "org/eclipse/platform#org.eclipse.core.contenttype/3.9.800": {
-   "jar": "sha256-4MLblmANUZzjanX5t8lxr9KHDS0Fnu5L8kNtmzOqC40=",
-   "pom": "sha256-vZ20X3R3JIQpxxz4RlcC2r+xUgzoU0+dwl1BeOu1iXs="
+  "org/eclipse/platform#org.eclipse.core.contenttype/3.9.900": {
+   "jar": "sha256-bFcTJ0BSO1xd4SXABBykPBYG2mVjIUwbrjmZ+iHq2JM=",
+   "pom": "sha256-goXTt4IuXnsI0hx186aPRihkSQPBY8Wrb1IQPGAWQTw="
   },
-  "org/eclipse/platform#org.eclipse.core.expressions/3.9.600": {
-   "jar": "sha256-7/hM/I8g4jVEjDpk+kwvpl+X4O0I0mMC8zG2d9/3emY=",
-   "pom": "sha256-LoubbvcTC0GLfGQY7X7mTAo7nd806z3Va/qLIzr2qtI="
+  "org/eclipse/platform#org.eclipse.core.expressions/3.9.700": {
+   "jar": "sha256-BqGCNq4YFlnh5UmdkS1o3lJ3IGhvH1HatjLT4pjjK3g=",
+   "pom": "sha256-jxhTRlEAyGL3ohT5/nDf5Noo9nYHvCveKybUY0Y3s7s="
   },
-  "org/eclipse/platform#org.eclipse.core.filesystem/1.11.400": {
-   "jar": "sha256-b3C5XRS5DsV7lMXj26fh0YlnnPmkvEUm6ckb7tfWoO8=",
-   "pom": "sha256-sQA8+u8BN+YzwThrzFfbCl5Yelm1Fx5We6Uwz6u/jMU="
+  "org/eclipse/platform#org.eclipse.core.filesystem/1.11.500": {
+   "jar": "sha256-v5rVb2vuAESCm8u+CsW53yi7NUvrCkvfD+mkid7RLTY=",
+   "pom": "sha256-HClZ9jL0h3xwGo+Zq/Ii2rXJB7anSNR0dDwoR2NlTFk="
   },
-  "org/eclipse/platform#org.eclipse.core.jobs/3.15.700": {
-   "jar": "sha256-NwFReae5uQ0Wy5L0sb5gg6Gm2tJUKPqPa4libwzC2nk=",
-   "pom": "sha256-OUVAotjHPjVRHz1f8J2fNkdm4P4steb4V8Tfqwl9Ot8="
+  "org/eclipse/platform#org.eclipse.core.jobs/3.15.900": {
+   "jar": "sha256-lBs8X+66TsCpSaipT/ECg7JQWBP6c2yeY0XxRq4bfoo=",
+   "pom": "sha256-FyB6RGOoIz9Zqf4Xs2c6Y2Mv2PBAVQpMpXENlfokP8k="
   },
-  "org/eclipse/platform#org.eclipse.core.jobs/3.15.800": {
-   "pom": "sha256-4BqLscYYZjcJv4yyFznslhvc6MVVXQTn+3VzvjD2jWY="
-  },
-  "org/eclipse/platform#org.eclipse.core.resources/3.24.0": {
-   "jar": "sha256-4mcC2BfWwm6D5Nbn5v9HYaU3dEh6JHsfr3yXXTlWg/4=",
-   "pom": "sha256-2LzuUCsfE1UK/R4pjZCLeh4cbNveVUj2joroopFNShE="
+  "org/eclipse/platform#org.eclipse.core.resources/3.24.100": {
+   "jar": "sha256-lGhRz1kCzTsAKSAGOjCxaeVxAIi2wa190FvdO+T7//Q=",
+   "pom": "sha256-Om5EeUmV2Vhh9/75xD2C+F6CnoeX/ndpP4/rQuYkDyc="
   },
   "org/eclipse/platform#org.eclipse.core.runtime/3.19.0": {
    "pom": "sha256-5d9UsnVbbVg/aoJOpuRLwYBQKfaaF6M8GISSOPCCMnQ="
   },
-  "org/eclipse/platform#org.eclipse.core.runtime/3.34.200": {
-   "jar": "sha256-tPNqCssI8D0LPbVLIfxWOMggxEdEakELpJalBw+jQ2M=",
-   "pom": "sha256-VUfhQDP4BRrlX0qDhwRsdAk7UgNs3DVu9p6lGOrn5uw="
+  "org/eclipse/platform#org.eclipse.core.runtime/3.35.0": {
+   "jar": "sha256-WwwnlOn+F4U2DeySDMgC8ziKDrcu4luJBUt5/z4vB8k=",
+   "pom": "sha256-uFzQ0uLeVxC+u/KLdtuEXnXHSMEYs6QBP5jSv/zDsOk="
   },
   "org/eclipse/platform#org.eclipse.equinox.app/1.7.600": {
    "jar": "sha256-/TUzmINRB2CPVUd5pukYkXJe+5Tg9XVZ0Ks86kthVsc=",
@@ -414,12 +411,9 @@
   "org/eclipse/platform#org.eclipse.equinox.common/3.13.0": {
    "pom": "sha256-+3O5zurY3z4CrkYhA323gKKaURHCIDHszq+BXLmw35A="
   },
-  "org/eclipse/platform#org.eclipse.equinox.common/3.20.300": {
-   "pom": "sha256-ALs//vT1/wr/lXaIGYlvxY1kxitKkEc60niE6P0viFI="
-  },
-  "org/eclipse/platform#org.eclipse.equinox.common/3.20.400": {
-   "jar": "sha256-QjtYYTpOm7vm7CI5aQ/zKfE9aeuyhAal+dcFFqZkOiQ=",
-   "pom": "sha256-uGupfIVGTB0QapWYJrNFQkoubQ1bCI/Sf/8FGW/xS+8="
+  "org/eclipse/platform#org.eclipse.equinox.common/3.21.0": {
+   "jar": "sha256-JUXtJ9QI8ZiCaVcDCX5ZmL8lZSvQ2sdqjm0Tkewiirc=",
+   "pom": "sha256-ql/o4Q83bnCZ0b0E24UJnK6d8WoAO4uZhqwZ/SD+Jc8="
   },
   "org/eclipse/platform#org.eclipse.equinox.preferences/3.12.100": {
    "jar": "sha256-/QToGiirMra7BzKG6yk8RLdgF2/PHjXvFWFNYt+CD4Y=",
@@ -432,40 +426,40 @@
   "org/eclipse/platform#org.eclipse.osgi/3.23.100": {
    "pom": "sha256-gph5O0PkohKzeJ6c/dpZEqEGTCkPTgr4pUrLSNB5TuQ="
   },
-  "org/eclipse/platform#org.eclipse.osgi/3.24.200": {
-   "jar": "sha256-v+g/zR+gNOuamGs8tuXisY27rLZ+q9qtLaMoBOzYxlo=",
-   "pom": "sha256-sMVs+qxqcAh+RUJXzABLfTb7uYk9vu5N64fGISWGERY="
+  "org/eclipse/platform#org.eclipse.osgi/3.24.300": {
+   "jar": "sha256-SncKpKeN9lOvhxBzyLTd1WiEiV9fxx0QxAtCiax8i58=",
+   "pom": "sha256-1veLGCOq+Buu5rHOTqA+7KYUwfVMxe5gkiRm6sX9VaA="
   },
-  "org/eclipse/platform#org.eclipse.text/3.14.700": {
-   "jar": "sha256-QHX3qjoZ8s5v/R9VXrwIhOBlzEC1n3HXdNoJKMFCNVU=",
-   "pom": "sha256-CUpEEYG78vzd7jYOoXXKFPO/NfAVtPlNpV6CTltDM+0="
+  "org/eclipse/platform#org.eclipse.text/3.14.800": {
+   "jar": "sha256-FIFMHxpzf94KLVbEei8Cz0yMXe50h1bEdj5nTK4hQlA=",
+   "pom": "sha256-XUG8QBmthbh+kDS6D/MJbHtmhWoOz2TGGaXQvhxwaCQ="
   },
   "org/eclipse/platform/org.eclipse.core.contenttype/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20251208072734",
-    "release": "3.9.800"
+    "lastUpdated": "20260907074542",
+    "release": "3.9.900"
    }
   },
   "org/eclipse/platform/org.eclipse.core.filesystem/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20251208072743",
-    "release": "1.11.400"
+    "lastUpdated": "20260907074538",
+    "release": "1.11.500"
    }
   },
   "org/eclipse/platform/org.eclipse.core.jobs/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20260608064403",
-    "release": "3.15.800"
+    "lastUpdated": "20260907074541",
+    "release": "3.15.900"
    }
   },
   "org/eclipse/platform/org.eclipse.core.resources/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20260608064402",
-    "release": "3.24.0"
+    "lastUpdated": "20260907074546",
+    "release": "3.24.100"
    }
   },
   "org/eclipse/platform/org.eclipse.equinox.app/maven-metadata": {
@@ -492,15 +486,15 @@
   "org/eclipse/platform/org.eclipse.osgi/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20260608064445",
-    "release": "3.24.200"
+    "lastUpdated": "20260907074558",
+    "release": "3.24.300"
    }
   },
   "org/eclipse/platform/org.eclipse.text/maven-metadata": {
    "xml": {
     "groupId": "org.eclipse.platform",
-    "lastUpdated": "20260608064456",
-    "release": "3.14.700"
+    "lastUpdated": "20260907074617",
+    "release": "3.14.800"
    }
   },
   "org/eclipse/xtend#org.eclipse.xtend.core/2.26.0.M1": {

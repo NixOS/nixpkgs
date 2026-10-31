@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      xaverdh
+      mserajnik
     ];
     platforms = lib.platforms.linux;
     mainProgram = "tailor";

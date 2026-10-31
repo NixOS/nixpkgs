@@ -28,6 +28,7 @@ GEM
       bigdecimal
     readline (0.0.4)
       reline
+    readline-ext (0.2.0)
     reline (0.7.0)
       io-console (~> 0.5)
     rexml (3.4.4)
@@ -62,10 +63,11 @@ DEPENDENCIES
   fileutils
   logger
   readline
+  readline-ext
   stringio
   syslog
   winrm
   winrm-fs
 
 BUNDLED WITH
-   2.6.9
+   2.7.2

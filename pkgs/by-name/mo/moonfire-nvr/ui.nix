@@ -27,10 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-U/SHOVlx0kj1hfl09KcPg3CQZX9HZE5SghVEThWL1RA=";
   };
 
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm run build
+
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    cp -r public $out
+    cp -r dist $out
 
     runHook postInstall
   '';

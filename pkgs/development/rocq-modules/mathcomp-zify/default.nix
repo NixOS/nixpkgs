@@ -3,7 +3,7 @@
   mkRocqDerivation,
   rocq-core,
   mathcomp-boot,
-  mathcomp-fingroup,
+  mathcomp-order,
   mathcomp-algebra,
   stdlib,
   version ? null,
@@ -50,8 +50,8 @@ mkRocqDerivation {
 
   propagatedBuildInputs = [
     mathcomp-boot
+    mathcomp-order
     mathcomp-algebra
-    mathcomp-fingroup
     stdlib
   ];
 

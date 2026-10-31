@@ -50,12 +50,13 @@ buildPythonPackage rec {
     ];
   };
 
+  # matplotlib and pillow are purposly omitted as it only is required for one test and has a big closure size trough pillow, gdk-pixbuf, gobject-introspection and many more
   nativeCheckInputs = [
-    matplotlib
     pandas
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ optional-dependencies.dataframe
+  ++ optional-dependencies.num;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
@@ -74,6 +75,11 @@ buildPythonPackage rec {
     # i686-linux not listed in the report, but seems to have this issue as well
     "test_different_data_types"
     "test_common_case" # not listed in the issue, but fails after the above is skipped
+  ];
+
+  disabledTestPaths = [
+    # only test file using image extra
+    "tests/test_image_regression.py"
   ];
 
   pythonImportsCheck = [

@@ -12,16 +12,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "openbao";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SPmFX4gApN49399Yi8r+1TEJS8i9GD2KGy621axRNPk=";
+    hash = "sha256-Z9CwB85fRuAFqAKFcyyEm3qapmsB2qayjorqtu7IrI4=";
   };
 
-  vendorHash = "sha256-cm5NiwDX8TgH77vDLea37eRJi5CAIVQGspy65uCq24U=";
+  vendorHash = "sha256-DPeOOHQQBQTWA6rQ+rY6fCjkxvm+fQvM//8784e1428=";
 
   proxyVendor = true;
 
@@ -59,7 +59,7 @@ buildGo127Module (finalAttrs: {
 
   passthru = {
     ui = callPackage ./ui.nix { };
-    tests = { inherit (nixosTests) openbao; };
+    tests = { inherit (nixosTests) openbao openbao-agent; };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"

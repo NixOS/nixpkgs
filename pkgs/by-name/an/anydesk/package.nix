@@ -31,6 +31,7 @@
   libice,
   libxkbfile,
   libxcb,
+  libevdev,
   minizip,
   net-tools,
   lsb-release,
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
     libxcb
     libxkbfile
+    libevdev
     libx11
     libxdamage
     libxext

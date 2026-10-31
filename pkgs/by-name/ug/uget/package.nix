@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    homepage = "http://www.ugetdm.com";
+    homepage = "https://sourceforge.net/projects/urlget/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];

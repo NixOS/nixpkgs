@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pikpaktui";
   version = "0.0.56";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

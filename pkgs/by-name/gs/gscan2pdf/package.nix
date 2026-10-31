@@ -74,6 +74,8 @@ perlPackages.buildPerlPackage rec {
     SubOverride
   ]);
 
+  strictDeps = true;
+
   # Required for the program to properly load its SVG assets
   postPatch = ''
     substituteInPlace bin/gscan2pdf \
@@ -105,6 +107,10 @@ perlPackages.buildPerlPackage rec {
     "man"
   ];
 
+  checkInputs = with perlPackages; [
+    GooCanvas2
+  ];
+
   nativeCheckInputs = [
     imagemagick
     libtiff
@@ -114,11 +120,13 @@ perlPackages.buildPerlPackage rec {
     unpaper
     pdftk
 
+    sane-backends
     xvfb-run
     file
     tesseract
   ]
   ++ (with perlPackages; [
+    Gtk3
     TestPod
   ]);
 
@@ -136,6 +144,8 @@ perlPackages.buildPerlPackage rec {
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";

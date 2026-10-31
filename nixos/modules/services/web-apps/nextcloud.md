@@ -218,7 +218,7 @@ release notes when upgrading.
     the cache size to zero:
 
     ```nix
-    { services.nextcloud.phpOptions."realpath_cache_size" = "0"; }
+    { services.nextcloud.phpOptions.realpath_cache_size = 0; }
     ```
 
   - **Empty Files on chunked uploads**

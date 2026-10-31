@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
     installShellCompletion tfctl.{bash,zsh,fish}
   '';
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {

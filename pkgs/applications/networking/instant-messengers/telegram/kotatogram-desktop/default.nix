@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   telegram-desktop,
   withWebkit ? true,
@@ -13,15 +14,19 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: {
     pname = "kotatogram-desktop-unwrapped";
-    version = "${version}-unstable-2026-07-03";
+    version = "${version}-unstable-2026-10-06";
 
     src = fetchFromGitHub {
       owner = "kotatogram";
       repo = "kotatogram-desktop";
-      rev = "7263a1b53c9e6b45a416532644fff7a4c7f90d54";
-      hash = "sha256-xOfHZ7oUJKk65j7o/AgxtFfc5NqsAoA9E+8U6rHlSmc=";
+      rev = "4561e1a33bb55feb692282d8ae5ba1bf6f7a72f3";
+      hash = "sha256-P+EDqXzRokgBmf6xbu9g/2wgKfUPKps/GQSXUXojlNI=";
       fetchSubmodules = true;
     };
+
+    # Find the Swift SDK overlays needed by the translation provider.
+    # Remove after next release
+    env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L/usr/lib/swift";
 
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";

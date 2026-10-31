@@ -12,7 +12,10 @@
 
 vmTools.buildRPM (
 
-  removeAttrs args [ "vmTools" ]
+  removeAttrs args [
+    "vmTools"
+    "lib"
+  ]
   //
 
     {

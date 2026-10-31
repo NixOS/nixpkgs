@@ -23,7 +23,7 @@ buildPythonPackage {
     # Radicale >=3.2 compatibility fix: https://github.com/Unrud/RadicaleInfCloud/pull/27
     (fetchpatch {
       url = "https://github.com/Unrud/RadicaleInfCloud/commit/c7487d34a544a499b751fdc92b01196edef599c6.patch";
-      sha256 = "sha256-H5cSKFYQhC7+zpdbi0ojU8UlRJnldXtxv6d8gJ8D39w=";
+      hash = "sha256-H5cSKFYQhC7+zpdbi0ojU8UlRJnldXtxv6d8gJ8D39w=";
     })
   ];
 

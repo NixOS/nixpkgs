@@ -3,7 +3,7 @@
   stdenv,
   fetchbzr,
   pkg-config,
-  systemd,
+  systemdLibs,
   autoreconfHook,
   glib,
   dbus-glib,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     glib
     dbus-glib
     json-glib
-    systemd
+    systemdLibs
     gtk3
     libindicator
     libdbusmenu-gtk3

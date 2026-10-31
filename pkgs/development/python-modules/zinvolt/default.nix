@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zinvolt";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-zinvolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e4kbAEUxJzc2qOnXhtNMFUeDcsUc/G1Wo0LHwTQcgXs=";
+    hash = "sha256-Zt4iWfd0UXSwzOit5IBMkwg15kk0WQn3hPkTrFooa8k=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

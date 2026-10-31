@@ -27,19 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "15.4"; # nixpkgs-update: no auto update
+  version = "15.9"; # nixpkgs-update: no auto update
 
   outputs = [
     "out"
     "man"
-    "tools"
   ];
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-MCFnVEMZNNY6tQc4boCCbdY/yBuopGBo1OvQBoS6iJs=";
+    hash = "sha256-vyRKYsTidvn/ONwfIg5X1cAwOG76OozUSn4ouiGYGR4=";
     fetchSubmodules = true;
   };
 
@@ -101,10 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional useCeph ceph;
 
-  postPatch = ''
-    substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
-  '';
-
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
     patchelf --add-rpath $out/lib $out/lib/libganesha_nfsd.so
@@ -115,10 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --add-rpath $out/lib $out/lib/libganesha_rados_urls.so
   '';
 
-  postInstall = ''
-    install -Dm755 ../tools/mount.9P $tools/bin/mount.9P
-  ''
-  + lib.optionalString useDbus ''
+  postInstall = lib.optionalString useDbus ''
     # Policy for D-Bus statistics interface
     install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
@@ -130,10 +122,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3Plus;
     mainProgram = "ganesha.nfsd";
-    outputsToInstall = [
-      "out"
-      "man"
-      "tools"
-    ];
   };
 })

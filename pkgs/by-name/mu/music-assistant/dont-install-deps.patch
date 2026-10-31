@@ -61,7 +61,7 @@ index 81d209910..40516d7be 100644
          self._cookie = str(self.get_setup_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.get_setup_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
-@@ -1219,16 +1216,3 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
+@@ -1285,19 +1282,6 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
                  )
              )
          return result
@@ -78,3 +78,25 @@ index 81d209910..40516d7be 100644
 -            await import_module_in_thread("yt_dlp")
 -        except ImportError:
 -            raise SetupFailedError("Package yt_dlp failed to install")
+ 
+ 
+ def _has_login_cookie(cookiejar: Iterable[Any]) -> bool:
+diff --git a/tests/providers/ytmusic/test_ytmusic.py b/tests/providers/ytmusic/test_ytmusic.py
+--- a/tests/providers/ytmusic/test_ytmusic.py
++++ b/tests/providers/ytmusic/test_ytmusic.py
+@@ -91,7 +91,6 @@
+         return_value=_ping_context_manager(exc=ClientError("connection refused"))
+     )
+     with (
+-        patch.object(provider, "_install_packages", AsyncMock()),
+         patch.object(provider, "get_setup_value", return_value=""),
+         pytest.raises(SetupFailedError) as exc_info,
+     ):
+@@ -148,7 +147,6 @@
+         CONF_PO_TOKEN_SERVER_URL: "",
+     }
+     with (
+-        patch.object(provider, "_install_packages", AsyncMock()),
+         patch.object(provider, "_verify_po_token_url", AsyncMock(return_value=True)),
+         patch.object(provider, "get_setup_value", side_effect=setup_values.get),
+         pytest.raises(LoginFailed) as exc_info,

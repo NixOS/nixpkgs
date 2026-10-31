@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
   fixtures,
-  testtools,
+  hatch-vcs,
+  hatchling,
   pytestCheckHook,
+  testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "testresources";
   version = "2.1.2";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "testing-cabal";
     repo = "testresources";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CLo0b0V1fXQQFHDn/rYAmZy4ifzMEnFv26opmvn6TdQ=";
   };
 
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
   ];
 
   nativeCheckInputs = [
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

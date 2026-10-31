@@ -6,36 +6,45 @@
   git,
   pkg-config,
   zlib,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-agecrypt";
-  version = "0-unstable-2024-03-11";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "git-agecrypt";
-    rev = "126be86c515466c5878a60561f754a9ab4af6ee8";
-    hash = "sha256-cmnBW/691mmLHq8tWpD3+zwCf7Wph5fcVdSxQGxqd1k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tN5APSipMAS/vFQV9SsFlTGA8K4eF2U10kBVAzp1z/E=";
   };
 
-  cargoHash = "sha256-71puTOjuV3egkip8pbiYbKxfhoZYtnirp4NrgiXR13I=";
+  cargoHash = "sha256-xeucrpQb/fVN5XzPvr1VAR82/kAzj4DphdtqQUAzWpI=";
 
-  nativeBuildInputs = [
-    pkg-config
-    git
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libgit2
     zlib
   ];
 
+  nativeCheckInputs = [ git ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Alternative to git-crypt using age instead of GPG";
     homepage = "https://github.com/vlaci/git-agecrypt";
+    changelog = "https://github.com/vlaci/git-agecrypt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kuznetsss ];
+    maintainers = with lib.maintainers; [
+      kuznetsss
+      vlaci
+    ];
     mainProgram = "git-agecrypt";
   };
-}
+})

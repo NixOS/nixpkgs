@@ -3,15 +3,11 @@
   lib,
   bc,
   bison,
-  dtc,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   flex,
   gnutls,
   installShellFiles,
   libuuid,
-  meson-tools,
   ncurses,
   openssl,
   rkbin,
@@ -34,10 +30,12 @@
 }@pkgs:
 
 let
-  defaultVersion = "2026.07";
-  defaultSrc = fetchurl {
-    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-eOi/w4L+OI+bVaodr4xWNSKgN3ebXUw0nRQV44HxJD4=";
+  defaultVersion = "2026.10";
+  defaultSrc = fetchFromGitHub {
+    owner = "u-boot";
+    repo = "u-boot";
+    tag = "v${defaultVersion}";
+    hash = "sha256-BXIpyAY+uKSohrdG4BxAo0zq4CYmh2z9rFw1jA7Yu8s=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -83,11 +81,16 @@ let
           patchShebangs tools
           patchShebangs scripts
         ''
-        # This warning got removed in
-        # https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=cba90ce82064ad1e6d25f20d8eaa940bd2fc97ed
+        # dtc 1.8 removed the `graph_child_address` check and added the
+        # `node_name_not_empty` error. This now rejects binman's
+        # "@<name>-SEQ" template nodes. Upstream has yet to update
+        # binman, so we use this workaround for now.
         + ''
           for f in scripts/Makefile.lib dts/upstream/Makefile; do
-            substituteInPlace "$f" --replace-fail -Wno-graph_child_address ""
+            # dts/upstream only exists since U-Boot 2024.07
+            # https://github.com/u-boot/u-boot/commit/dbe9334e5125efcf8a825e7c5c924e2780e609e3
+            [ -e "$f" ] || continue
+            substituteInPlace "$f" --replace-fail -Wno-graph_child_address -Eno-node_name_not_empty
           done
         '';
 
@@ -153,7 +156,7 @@ let
         __structuredAttrs = true;
 
         meta = {
-          homepage = "https://www.denx.de/wiki/U-Boot/";
+          homepage = "https://u-boot-project.org/";
           description = "Boot loader for embedded systems";
           license = lib.licenses.gpl2Plus;
           maintainers = with lib.maintainers; [

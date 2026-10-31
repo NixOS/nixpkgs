@@ -26,8 +26,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
-      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
+      rev = "a6b4a9f00b36c19af9997d68a1cf6e0b5b3d032c";
+      hash = "sha256-yJzrkJxJUtCXmBJK474mu4MHJTT6ZnNnBRNwuCkRHEo=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "ea13a98decd497a8c5588fb5de71b57bcf10d864";
-      hash = "sha256-v9bNWc9yfK3vG8hYhQ7vkc7DHaoPF6RAKfX9kC0Gw8c=";
+      rev = "b1f8b0c3b8db9c3711349144acf951226700ddb4";
+      hash = "sha256-R8VxOEjJvkBCcQRWpTi9oWI3Mhxp31wrOcQ2IQN3GIw=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -50,8 +50,8 @@ let
     miniz = fetchFromGitHub {
       owner = "richgel999";
       repo = "miniz";
-      rev = "d10b03cc73475af673df40f06e5cefd1d5f940d9";
-      hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
+      rev = "77d0dce8627735138c51770d1799a1ef48f2117d";
+      hash = "sha256-/MAJWZXZ+pbelFduGE75rK/x9qEzxSFEj8RJWe3JUv0=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
@@ -82,15 +82,15 @@ let
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
-      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+      rev = "22561883dd63fd1850f18e1f6adac321e4f609b0";
+      hash = "sha256-JscUapUNVs2n0Ky08dksFCigBv83DcbxWHcaktqYP7Y=";
     };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.14.0";
+  version = "3.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-9h2glQJHeXjLgAwFx2g78O9p3euovKLRtlkD++6Qn+A=";
+    hash = "sha256-sa8mqUk28IMwjXZSc1xGBWxutnf/q/Yf12TwpqBJyE4=";
   };
 
   patches = [

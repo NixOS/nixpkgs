@@ -14,20 +14,20 @@
 
 buildGoModule rec {
   pname = "mautrix-whatsapp";
-  version = "26.09";
-  tag = "v0.2609.0";
+  version = "26.10";
+  tag = "v0.2610.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
     inherit tag;
-    hash = "sha256-u+Ck8ckCbFu+Q7pVM7T05InqDq7NknqYOAb0wis93OU=";
+    hash = "sha256-qovNMS4N6u9dTZj/BDloSpBsDAMmX3GSZDDO6xm4K6U=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-Kpireqd1Cll0XZvnouUJV4BJYJRWPlhQRDhLekujg60=";
+  vendorHash = "sha256-0/p+Q6dt6n6KFGzMVREX0eeywfi6nl1H1eCYiqNiRtw=";
 
   ldflags = [
     "-s"

@@ -6,7 +6,7 @@
   pkg-config,
   libmpdclient,
   openssl,
-  lua5_4,
+  lua5_5,
   libid3tag,
   flac,
   pcre2,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "26.0.0";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OwTYcyiRT/2K09UirhcNobXo1g9aDpz7eh5OYtA0eIo=";
+    sha256 = "sha256-WcBzUj9q+0wC4rXd/qP61sc2eQ2hSHOWh/KTCl1Nd5U=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     gzip
     perl
     jq
-    lua5_4 # luac is needed for cross builds
+    lua5_5 # luac is needed for cross builds
   ];
   preConfigure = ''
     env MYMPD_BUILDDIR=$PWD/build ./build.sh createassets
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libmpdclient
     openssl
-    lua5_4
+    lua5_5
     libid3tag
     flac
     pcre2

@@ -13,6 +13,7 @@
     hunspellDictsChromium.fr-fr
     hunspellDictsChromium.sv-se
   ],
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -25,28 +26,25 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "7.4.4";
+  version = "7.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-r0Ozwbbv7n6rMuivGDtvoTZRYU/yHxVwJ++pH0D/tSA=";
+    hash = "sha256-11XHhb7uwygcCIPV1mQydMtj4mXnjtzxxd+JNftHx7w=";
   };
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     qt6.qtwayland
     qt6.qtsvg
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   build-system = with python3Packages; [ setuptools ];
 

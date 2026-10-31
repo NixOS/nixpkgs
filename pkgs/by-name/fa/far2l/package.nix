@@ -46,13 +46,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "far2l";
-  version = "_2.9.0-unstable-2026-09-08";
+  version = "2.9.1-unstable-2026-10-10";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    rev = "8afb44570f29cae97ab637e8d7432c1e7354565f";
-    hash = "sha256-M4kUBTdNn01B56GLANrWsxR7Q2P0s3k1iOxtiLHbFAs=";
+    rev = "5ec2011794fa0c781e6dde92c84c77b5ae02b25b";
+    hash = "sha256-nBcZNIRMKWxMaTPVdXF08KpNPCh/VbgmD2Q4e0rGqCw=";
   };
 
   nativeBuildInputs = [
@@ -134,7 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch=master"
+      "--version-regex=v_(.*)"
+    ];
+  };
 
   meta = {
     description = "Linux port of FAR Manager v2 with enhanced plugin support";

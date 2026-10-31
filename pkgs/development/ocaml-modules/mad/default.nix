@@ -15,8 +15,8 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-mad";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rSFzWyUYTrGL7GvVsY5qKdCXqY/XJQkuBerexG838jc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rSFzWyUYTrGL7GvVsY5qKdCXqY/XJQkuBerexG838jc=";
   };
 
   buildInputs = [ dune-configurator ];

@@ -57,10 +57,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhanko_certvalidator" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex=pyhanko-certvalidator/v(.*)"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=pyhanko-certvalidator/v(.*)"
+      ];
+    };
   };
 
   meta = {

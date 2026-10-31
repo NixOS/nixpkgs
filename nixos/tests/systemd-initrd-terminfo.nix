@@ -7,10 +7,7 @@
   nodes.machine =
     { config, ... }:
     {
-      boot.initrd.systemd = {
-        enable = true;
-        extraBin.script = "${config.boot.initrd.systemd.package.util-linux}/bin/script";
-      };
+      boot.initrd.systemd.extraBin.script = "${config.boot.initrd.systemd.package.util-linux}/bin/script";
       testing.initrdBackdoor = true;
     };
 

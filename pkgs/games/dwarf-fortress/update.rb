@@ -154,7 +154,7 @@ class DFUrl < Struct.new(:url, :output_hash, keyword_init: true)
   end
 end
 
-class DFGithub < Struct.new(:url, :revision, :output_hash, keyword_init: true)
+class DFGithub < Struct.new(:url, :revision, :output_hash, :ref_type, keyword_init: true)
   include Mergeable
   extend Mergeable
 
@@ -166,7 +166,7 @@ class DFGithub < Struct.new(:url, :revision, :output_hash, keyword_init: true)
       url: self.url,
       revision: self.revision,
       outputHash: self.output_hash
-    }
+    }.tap { _1[:refType] = self.ref_type if self.ref_type }
   end
 
   # Returns or computes the output hash.
@@ -186,7 +186,8 @@ class DFGithub < Struct.new(:url, :revision, :output_hash, keyword_init: true)
     DFGithub.new(
       url: hash.fetch(:url),
       revision: hash.fetch(:revision),
-      output_hash: hash[:outputHash]
+      output_hash: hash[:outputHash],
+      ref_type: hash[:refType]
     )
   end
 end
@@ -594,6 +595,18 @@ end
 # 0.43 and below has a broken dfhack.
 new_df_lock = DFLock.new
 new_df_lock.load! cutoff: '0.44'
+
+# DF 0.47.05 needs the maintained r9 branch rather than the upstream r8 tag.
+new_df_lock.game.versions.fetch('0.47.05').hack = DFHackVersion.new(
+  version: '0.47.05-r9',
+  git: DFGithub.new(
+    url: 'https://github.com/cizra/dfhack.git',
+    revision: 'd61235c5ad8f9de506c9f68f54680b1bbd3b7a96',
+    output_hash: 'sha256-StyOYmBw1EenxyuiPvn+eU/o3YHAvguVXaScU4Fh75M=',
+    ref_type: 'rev'
+  ),
+  xml_rev: '172b218857ef6b02cb9106d72052392f521bcc8f'
+)
 
 df_lock_file = File.join(__dir__, 'df.lock.json')
 df_lock, df_lock_json = if File.file?(df_lock_file)

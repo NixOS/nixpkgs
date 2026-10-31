@@ -1,31 +1,46 @@
 {
   lib,
+  bottle,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
   sphinx,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-httpdomain";
-  version = "1.8.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bC3+bKKC119m3zM4absM5zMcAbR122gJ/50Qe3zf4Es=";
+  src = fetchFromGitHub {
+    owner = "sphinx-contrib";
+    repo = "httpdomain";
+    tag = finalAttrs.version;
+    hash = "sha256-DDG5YQ8hvcAQcztxNIzxszlTESkX656pDbDV6Qss1BQ=";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >= 0.9.26, <0.10.0" "uv_build"
+  '';
 
-  # Check is disabled due to this issue:
-  # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
-  doCheck = false;
+  build-system = [ uv-build ];
+
+  buildInputs = [ sphinx ];
+
+  nativeCheckInputs = [
+    bottle
+    pytestCheckHook
+  ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = {
     description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
-    homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
+    homepage = "https://github.com/sphinx-contrib/httpdomain";
+    changelog = "https://github.com/sphinx-contrib/httpdomain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
-}
+})

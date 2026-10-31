@@ -11,12 +11,12 @@
   python3,
 }:
 let
-  version = "20.4.0";
+  version = "24.8.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${version}";
-    hash = "sha256-WfzCV304xgTqiKBCsZc5rnzaC+UHA6c155FG+HWBY7s=";
+    hash = "sha256-HypTLf16HxL2Jile5ACulNJw8L6Xr+Bxgt6eNFRWYo8=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/expo/eas-cli/blob/main/package.json#L38
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-Iqdk0MpXeiKm5hgF68XOKvl0a+5LpXsNNcelCcbfj3s=";
+    hash = "sha256-oSy6t6vDeFVfkUp6Dw5PNt1+6MXx2FQIEnzJCPW0ufw=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn build
 
     runHook postBuild
+  '';
+
+  # Prune to only production deps to save space
+  preInstall = ''
+    yarn workspaces focus -A --production
   '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.

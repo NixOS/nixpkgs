@@ -11,7 +11,7 @@
   glib,
   gtk3,
   openssl,
-  systemd,
+  systemdLibs,
   imagemagick,
   libGL,
   libxkbcommon,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gtk3
     openssl
-    systemd
+    systemdLibs
   ];
 
   runtimeDependencies = [

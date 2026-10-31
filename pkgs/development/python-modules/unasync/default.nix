@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "unasync";
     rev = "v${version}";
-    sha256 = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
+    hash = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
   };
 
   build-system = [ setuptools ];

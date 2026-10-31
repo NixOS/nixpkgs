@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pygitguardian";
-  version = "1.34.0";
+  version = "1.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vjD4RZSV1CN7QaYJYrs/K+2Ax+Mac27bTJ4SQJQHEgU=";
+    hash = "sha256-t1T5Xp+qMLURBNbvZ/Rpjr3ZP4J1DtBaYuTnUO0SIec=";
   };
 
   build-system = [ pdm-backend ];

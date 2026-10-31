@@ -36,20 +36,19 @@ let
   version = "4.0.3";
   hash = "sha256-lbkuywAuLeTIoe/5zbKmxCbnNcEx96BiX6ftNJHutZE=";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "solana-cli";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "anza-xyz";
     repo = "agave";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     inherit hash;
   };
 
   cargoHash = "sha256-lQl8q0xMpXOmUirqL3Eyb4JcmYGSZK6pPMxQHOav9Zk=";
 
-  strictDeps = true;
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
 
   env = {
@@ -124,4 +123,4 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.updateScript = nix-update-script { };
-}
+})

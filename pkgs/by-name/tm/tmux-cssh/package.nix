@@ -8,14 +8,17 @@
 
 stdenv.mkDerivation {
   pname = "tmux-cssh";
-  version = "unstable-2015-10-15";
+  version = "0-unstable-2024-07-31";
 
   src = fetchFromGitHub {
     owner = "zinic";
     repo = "tmux-cssh";
-    rev = "21750733c5b6fa2fe23b9e50ce69d8564f2f742a";
-    hash = "sha256-Rz4n87aYZLkF0TQNl5F80gJwXHYWEes67EwkUh9ptSw=";
+    rev = "2841d12a20e15a3a7778e3b0d9222889a12173b1";
+    hash = "sha256-4w4P4ss6ou6CfHDMsgVRiOF+/xLxINzS0Qu79LXW1X4=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -26,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/dennishafemann/tmux-cssh";
+    homepage = "https://github.com/zinic/tmux-cssh";
     description = "SSH to multiple hosts at the same time using tmux";
 
     longDescription = ''

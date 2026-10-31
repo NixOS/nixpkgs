@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "4.2.2";
+  version = "4.3.0";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-U6FzNNqYX2wwfS8EdCyT6qvEb0X1YuL4QbyJWupOh4k=";
+    hash = "sha256-Cw0s2XIPHNpUzprX2i1YO1+YlVZeKtnWmjaa/HdibVM=";
   };
 
   postPatch = ''
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3Clear;
     pkgConfigModules = [ "lcevc_dec" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
-    # https://github.com/v-novaltd/LCEVCdec/blob/bf7e0d91c969502e90a925942510a1ca8088afec/cmake/modules/VNovaProject.cmake#L29
-    platforms = lib.platforms.aarch ++ lib.platforms.x86;
+    # https://github.com/v-novaltd/LCEVCdec/blob/main/cmake/modules/CMakeProject.cmake#L22
+    platforms = lib.platforms.aarch ++ lib.platforms.x86 ++ lib.platforms.riscv64;
   };
 })

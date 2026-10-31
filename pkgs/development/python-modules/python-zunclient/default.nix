@@ -13,11 +13,11 @@
   prettytable,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-zunclient";
   version = "5.4.0";
   pyproject = true;
@@ -25,11 +25,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zunclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ps4V05obkbiy4dbPBOff3WQ1d502Ie303jAmtatNOdc=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -58,24 +59,20 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  nativeCheckInputs = [ stestr ];
+  nativeCheckInputs = [ stestrCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-      zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_internal
-      zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_public
-      zunclient.tests.unit.test_shell.ShellTest.test_main_env_region
-      zunclient.tests.unit.test_shell.ShellTest.test_main_no_region
-      zunclient.tests.unit.test_shell.ShellTest.test_main_option_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_internal
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_public
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_env_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_no_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_option_region
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_internal"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_public"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_env_region"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_no_region"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_option_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_internal"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_public"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_env_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_no_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_option_region"
+  ];
 
   pythonImportsCheck = [ "zunclient" ];
 
@@ -86,4 +83,4 @@ buildPythonPackage rec {
     mainProgram = "zun";
     teams = [ lib.teams.openstack ];
   };
-}
+})

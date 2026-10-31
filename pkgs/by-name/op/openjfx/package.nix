@@ -112,6 +112,15 @@ stdenv.mkDerivation {
         extraPrefix = "modules/javafx.web/src/main/native/";
         hash = "sha256-W/sYyzrE12kEA993bfru6igiBdkyRtMiKBRjJqXN97g=";
       })
+    ]
+    ++ lib.optionals withMedia [
+      # This disables functionality that attempts to dlopen a bunch of
+      # different versions of libavcodec.so, in order to detect which version
+      # is available. Under Nix, this is both unnecessary (because the correct
+      # version is already linked by store path) and broken (because in the
+      # general case, none of the versions are found, which effectively
+      # disables media playing in javafx.media).
+      ./disable-dynamic-avcodec-version-detection.patch
     ];
 
   nativeBuildInputs = [

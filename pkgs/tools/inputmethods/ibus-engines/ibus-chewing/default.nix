@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   cmake,
   pkg-config,
   wrapGAppsHook4,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus-chewing";
-  version = "2.1.7";
+  version = "2.2.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "chewing";
     repo = "ibus-chewing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lNzQHuWFreIf4M6z4St5ZfOwjAJOMBLwzOI8KTCTEw=";
+    hash = "sha256-0kXAvvbOsTUMmno6zzpRqpYb9xQlD4iwC1WNf5cMsSw=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     isIbusEngine = true;
     description = "Chewing engine for IBus";
-    homepage = "https://github.com/chewing/ibus-chewing";
-    changelog = "https://github.com/chewing/ibus-chewing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://codeberg.org/chewing/ibus-chewing";
+    changelog = "https://codeberg.org/chewing/ibus-chewing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ShamrockLee ];
     platforms = lib.platforms.linux;

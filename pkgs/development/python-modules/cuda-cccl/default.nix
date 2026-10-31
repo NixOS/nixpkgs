@@ -30,7 +30,7 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cuda-cccl";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,14 +38,17 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "NVIDIA";
     repo = "cccl";
     tag = "python-${finalAttrs.version}";
-    hash = "sha256-0Qsf3l9VvSxYVVWQG0ST7S33s7LdsNyWoV6Q2f0Ru6o=";
+    hash = "sha256-3lPANIBPFP/U8S3sMiA9jPvHD3/k7kwEt8qkXd57Avw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/cuda_cccl";
+  # Some patches touch files outside of sourceRoot
+  postUnpack = ''
+    chmod -R u+w -- "$sourceRoot/../.."
+  '';
 
   patches = [
     (replaceVars ./patch-nvidia-libs-paths.patch {
-      libcudart = lib.getLib cudaPackages.cuda_cudart;
       libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
       libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
     })
@@ -53,8 +56,12 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     # Disable all tests requiring unpackaged `numba-cuda-mlir` through `cuda.compute`
     ./skip-missing-jit-backend.patch
   ];
-  # Apply patch relative to python/cuda_cccl
-  patchFlags = [ "-p3" ];
+  # Apply patches from the repository root (parent of sourceRoot)
+  patchFlags = [
+    "-p1"
+    "-d"
+    "../.."
+  ];
 
   postPatch = ''
     substituteInPlace cuda/cccl/headers/include_paths.py \

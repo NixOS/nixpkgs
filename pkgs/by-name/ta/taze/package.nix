@@ -44,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  preInstall = ''
+    # Prune deps before installing to save space
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
+
   dontNpmPrune = true;
 
   nativeInstallCheckInputs = [

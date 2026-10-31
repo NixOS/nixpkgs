@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.4.1";
+  version = "4.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
     tag = version;
-    hash = "sha256-6/I5GI2fcD48IOwtbhgqpNn5RHU7Z4PeqMBZUEtiE9g=";
+    hash = "sha256-NbeXyL227MeF0hnI8D5yYlQFC9dLkWvvISsptta855I=";
   };
 
   pythonRelaxDeps = [ "tablib" ];

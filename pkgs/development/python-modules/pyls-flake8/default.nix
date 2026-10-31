@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "emanspeaks";
     repo = "pyls-flake8";
     rev = "v${version}";
-    sha256 = "14wkmwh8mqr826vdzxhvhdwrnx2akzmnbv3ar391qs4imwqfjx3l";
+    hash = "sha256-dHTpMK+RaBzSyGrsZeufSnSbeYMb9t+2ESjjiiCvk5M=";
   };
 
   propagatedBuildInputs = [

@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
-  version = "5.1.1";
+  version = "5.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "python-social-auth";
     repo = "social-core";
     tag = finalAttrs.version;
-    hash = "sha256-OqABpMD0CbU++j5IXev71WDNrFNbKlknieXKPhEhatI=";
+    hash = "sha256-4Z08ZHTSPSNG9x9XZWwGuvKYk3UnogLm5pO/MHWN0CE=";
   };
 
   build-system = [ setuptools ];

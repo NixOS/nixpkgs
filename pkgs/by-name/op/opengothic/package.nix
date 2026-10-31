@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-validation-layers
   ];
 
+  # GCC 16 false positive in std::sort/std::vector::resize (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124945),
+  # turned fatal by upstream's -Werror: https://github.com/Try/OpenGothic/issues/1010
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+
   installPhase = ''
     runHook preInstall
 

@@ -6,16 +6,16 @@
 buildGoModule (finalAttrs: {
 
   pname = "gotemplate";
-  version = "3.12.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "gotemplate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XcSlQ0Gw+EW2sJK+M2Sp9pcSSy2wsdRZ3MeFewhx7nw=";
+    hash = "sha256-O3tImosacomIQGAnbShCOWjwuvwo3HsXViVBSHj6Z6c=";
   };
 
-  vendorHash = "sha256-iNH0YmmZ/Qlc7WDoIbORd+uVg0rbQVKL6hX7YvbL0BE=";
+  vendorHash = "sha256-gxKtwA9i9wYWYsBx7zSfKiTsADN8cC7tbWzoX2mctZM=";
 
   # This is the value reported when running `gotemplate --version`,
   # see https://github.com/coveooss/gotemplate/issues/262

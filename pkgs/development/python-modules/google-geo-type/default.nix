@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-geo-type";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-geo-type-v${version}";
-    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${src.name}/packages/google-geo-type";

@@ -102,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     }";
     description = "Interactive decompiler, disassembler, debugger";
     homepage = "https://binary.ninja/";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "binary-ninja";
       fullName = "Binary Ninja Free Software License";
       url = "https://docs.binary.ninja/about/license.html#free-license";
       free = false;

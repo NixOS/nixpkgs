@@ -2,51 +2,35 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substitute,
   makeWrapper,
-  nodejs,
+  nodejs-slim,
   nixosTests,
   yarn-berry_4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-msFMfjNkpXaJisbTpJMQowyD0KZ5zfvSgTutEeLp9Vk=";
-
-    # Remove after upstream updates to Yarn 4.15
-    # https://github.com/outline/outline/blob/main/package.json#L393
-    postFetch = ''
-      cd $out
-      patch -p1 < ${
-        (substitute {
-          src = ./yarn-fix.patch;
-          substitutions = [
-            "--replace-fail"
-            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-            yarn-berry_4.lockfileVersion
-          ];
-        })
-      }
-    '';
+    hash = "sha256-7S6ZqTf7DMq3YCz7400FzDIazDQ+7NUrlAMTJuHhp9w=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   nativeBuildInputs = [
     makeWrapper
+    nodejs-slim
     yarn-berry_4.yarnBerryConfigHook
     yarn-berry_4
   ];
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-bEsnu4NL/Dgv6yPXXvV/4uMvQ7Sc9eDfeAD2fhFCB98=";
+    hash = "sha256-i0NF1x3cLckb8SvoaQD46CXg1/KXYdmA+8mE1qrpQzE=";
   };
 
   buildPhase = ''
@@ -71,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     build=$out/share/outline/build
     server=$out/share/outline/server
 
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
+    makeWrapper ${nodejs-slim}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]} # required to run migrations
+      --prefix PATH : ${lib.makeBinPath [ nodejs-slim ]} # required to run migrations
 
     runHook postInstall
   '';

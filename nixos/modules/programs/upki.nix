@@ -29,7 +29,7 @@ in
       example = lib.literalExpression ''
         {
           cache-dir = "/var/cache/upki";
-          revocation.fetch-url = "https://upki.rustls.dev/";
+          revocation.fetch-url = "https://upki.rustls.dev/revocation/";
         }
       '';
     };
@@ -42,7 +42,7 @@ in
 
     services.upki.settings = {
       cache-dir = lib.mkDefault "/var/cache/upki";
-      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/";
+      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/revocation/";
     };
 
     users.users.upki = {
@@ -64,7 +64,7 @@ in
         User = "upki";
         Group = "upki";
         ConfigurationDirectory = "upki";
-        CacheDirectory = "upki";
+        CacheDirectory = "upki/revocation";
         CacheDirectoryMode = "0755";
         UMask = "0022";
 
@@ -77,16 +77,24 @@ in
         ProtectHome = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
         ProtectSystem = "strict";
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
         RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        ProcSubset = "pid";
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = "@system-service";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
+        CapabilityBoundingSet = [ "" ];
+        AmbientCapabilities = [ "" ];
       };
     };
 
@@ -94,13 +102,16 @@ in
       description = "Update the upki cache every ${cfg.interval}";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnActiveSec = "0";
+        OnBootSec = "10min";
         OnUnitActiveSec = cfg.interval;
       };
     };
   };
 
   meta = {
-    maintainers = [ lib.maintainers.skyesoss ];
+    maintainers = [
+      lib.maintainers.skyesoss
+      lib.maintainers.cpu
+    ];
   };
 }

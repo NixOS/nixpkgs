@@ -45,7 +45,7 @@ assert lib.assertOneOf "simdTarget" simdTarget [
 ];
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.4.0";
+  version = "1.4.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -54,7 +54,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-Q1eyWLt+AIz0DZmytBpgKJ/NHcwenYPIIQF6gQzP78M=";
+    hash = "sha256-odAT/EFwS+N9FBIew9AbDO4hJGQN2t3P2DPp7d+nflE=";
     fetchSubmodules = true;
   };
 

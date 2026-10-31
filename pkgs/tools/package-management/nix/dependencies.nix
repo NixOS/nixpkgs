@@ -1,7 +1,6 @@
 regular@{
   lib,
   boehmgc,
-  aws-sdk-cpp,
   fetchFromGitHub,
   pkgs,
 }:
@@ -18,21 +17,6 @@ regular@{
       # Look for messages such as `Mark stack overflow`, `No room to copy back mark stack`, and
       # `Grew mark stack to ... frames`.
       initialMarkStackSize = 1048576;
-    };
-
-    aws-sdk-cpp = regular.aws-sdk-cpp.override {
-      # Nix only needs these AWS APIs.
-      apis = [
-        "identity-management"
-        "s3"
-        "transfer"
-      ];
-
-      # Don't use AWS' custom memory management.
-      customMemoryManagement = false;
-
-      # only a stripped down version is built which takes a lot less resources to build
-      requiredSystemFeatures = [ ];
     };
 
     # https://github.com/NixOS/nix/issues/16180

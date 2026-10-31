@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonified linux asm-generic/ioctl.h";
     homepage = "https://github.com/vpelletier/python-ioctl-opt";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

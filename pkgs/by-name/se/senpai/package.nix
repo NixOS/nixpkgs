@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "~delthas";
     repo = "senpai";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VjXgKdy4IpBhAP6uw/NtlexPki7nJzQi/HuY/+5lE/o=";
+    hash = "sha256-VjXgKdy4IpBhAP6uw/NtlexPki7nJzQi/HuY/+5lE/o=";
   };
 
   vendorHash = "sha256-4Ax9YVa9z1Unk3Z2iy9ZEqKjNmdgK0aF4GrD9ucXtjk=";

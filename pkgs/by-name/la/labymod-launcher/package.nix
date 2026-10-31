@@ -4,24 +4,18 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "labymod-launcher";
   version = "3.0.14";
-
   src = fetchurl {
     name = "labymod-launcher";
-    url = "https://releases.r2.labymod.net/launcher/linux/x64/LabyMod%20Launcher-${version}.AppImage";
+    url = "https://releases.r2.labymod.net/launcher/linux/x64/LabyMod%20Launcher-${finalAttrs.version}.AppImage";
     hash = "sha256-+NEO4Z8/g54o11YtCFzvNTWHcOTDZyBAQvEcpNg9/Nw=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/labymodlauncher.desktop $out/share/applications/labymod-launcher.desktop
-    install -Dm444 ${appimageContents}/resources/icons/icon.png $out/share/icons/hicolor/512x512/apps/labymod-launcher.png
+    install -Dm444 ${finalAttrs.contents}/labymodlauncher.desktop $out/share/applications/labymod-launcher.desktop
+    install -Dm444 ${finalAttrs.contents}/resources/icons/icon.png $out/share/icons/hicolor/512x512/apps/labymod-launcher.png
     substituteInPlace $out/share/applications/labymod-launcher.desktop \
       --replace-fail 'Exec=labymodlauncher' 'Exec=labymod-launcher' \
       --replace-fail 'Icon=labymodlauncher' 'Icon=labymod-launcher'
@@ -35,4 +29,4 @@ appimageTools.wrapType2 {
     mainProgram = "labymod-launcher";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

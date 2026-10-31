@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,10 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-D91n+sx8qwkn/rEWP5ftS/mhmRru43TmKZUyvAc47H0=";
 
-  # tests expect ~/.cache/asm-lsp to be writable
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Language server for NASM/GAS/GO Assembly";

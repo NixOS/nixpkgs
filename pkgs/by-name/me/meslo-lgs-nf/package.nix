@@ -5,15 +5,18 @@
   installFonts,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meslo-lgs-nf";
-  version = "unstable-2023-04-03";
+  version = "2.3.3";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k-media";
-    rev = "145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d";
-    sha256 = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
   };
 
   nativeBuildInputs = [ installFonts ];
@@ -25,4 +28,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ bbigras ];
     platforms = lib.platforms.all;
   };
-}
+})

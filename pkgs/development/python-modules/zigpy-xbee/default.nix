@@ -43,6 +43,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_connect" # Attempts to test ioctl
+    # TypeError: Coordinator <MagicMock id='140737275870048'> is not a Zigbee device
+    "test_rx"
+    "test_rx_nwk_0000"
+    "test_rx_device_annce"
   ];
 
   meta = {

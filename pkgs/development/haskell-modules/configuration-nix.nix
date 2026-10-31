@@ -1244,6 +1244,7 @@ builtins.intersectAttrs super {
         pkgs.git
         pkgs.gnupg
         pkgs.lsof
+        pkgs.magic-wormhole # p2p pairing
         pkgs.openssh
         pkgs.perl
         pkgs.rsync
@@ -1857,7 +1858,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_31;
+          nixPackage = pkgs.nixVersions.nix_2_34;
         };
       })
       (

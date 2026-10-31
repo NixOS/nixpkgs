@@ -57,6 +57,7 @@ let
     foldlAttrs
     foldr
     functionArgs
+    genAttrs
     generators
     genList
     getExe
@@ -930,6 +931,54 @@ runTests {
     expected = "1.2.3";
   };
 
+  testFunctionArgsNestedFunctors =
+    let
+      faOrig = {
+        x = false;
+      };
+      faAlt = {
+        x = false;
+        y = true;
+      };
+      f0 = { x, ... }: x;
+    in
+    {
+      expr = {
+        a = functionArgs {
+          __functor = self: {
+            __functor = self: f0;
+            __functionArgs = faAlt;
+          };
+        };
+        b = functionArgs { __functor = self: { __functor = self: f0; }; };
+        c = functionArgs {
+          __functor = {
+            __functor = self: outer: f0;
+          };
+        };
+        d = functionArgs {
+          __functor = {
+            __functor = self: outer: {
+              __functor = self: f0;
+              __functionArgs = faAlt;
+            };
+          };
+        };
+        e = functionArgs {
+          __functor = {
+            __functor = self: outer: { __functor = self: f0; };
+          };
+        };
+      };
+      expected = {
+        a = faAlt;
+        b = faOrig;
+        c = faOrig;
+        d = faAlt;
+        e = faOrig;
+      };
+    };
+
   testIsFunctionStr = {
     expr = isFunction "a";
     expected = false;
@@ -986,6 +1035,61 @@ runTests {
     expr = isFunction { __functor = null; };
     expected = false;
   };
+  testIsFunctionAttrsWithNestedFunctors = {
+    expr = {
+      a = isFunction { __functor = self: { __functor = self: x: null; }; };
+      b = isFunction {
+        __functor = {
+          __functor =
+            self: outer: x:
+            null;
+        };
+      };
+      c = isFunction {
+        __functor = {
+          __functor = self: outer: { __functor = self: x: null; };
+        };
+      };
+    };
+    expected = {
+      a = true;
+      b = true;
+      c = true;
+    };
+  };
+  testIsFunctionNestedSetFunctionArgs =
+    let
+      faOrig = {
+        x = false;
+      };
+      fa1 = faOrig // {
+        y1 = true;
+      };
+      fa2 = faOrig // {
+        y2 = true;
+      };
+      fa3 = faOrig // {
+        y3 = true;
+      };
+      fa4 = faOrig // {
+        y4 = true;
+      };
+      f0 = { x, ... }: x;
+      f1 = setFunctionArgs f0 fa1;
+      f2 = setFunctionArgs f1 fa2;
+      f3 = setFunctionArgs f2 fa3;
+      f4 = setFunctionArgs f3 fa4;
+    in
+    {
+      expr = map isFunction [
+        f0
+        f1
+        f2
+        f3
+        f4
+      ];
+      expected = replicate 5 true;
+    };
 
   testIsStorePath = {
     expr =

@@ -5,20 +5,13 @@
   appimageTools,
   makeBinaryWrapper,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "lmath";
   version = "1.11.2";
   src = fetchurl {
-    url = "https://github.com/lehtoroni/lmath-issues/releases/download/v${version}/LMath_Linux_r${version}-release.AppImage";
+    url = "https://github.com/lehtoroni/lmath-issues/releases/download/v${finalAttrs.version}/LMath_Linux_r${finalAttrs.version}-release.AppImage";
     hash = "sha256-NHfNnBYxKXRk4IQonQTjYtIIk3apZs45BbWGIvLfl3w=";
   };
-
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -26,8 +19,8 @@ appimageTools.wrapType2 {
 
   # '--skip-updated-bundle-check' stops automatic updates from breaking the package
   extraInstallCommands = ''
-    install -Dm 444 ${appimageContents}/lmath.desktop $out/share/applications/lmath.desktop
-    install -Dm 444 ${appimageContents}/lmath.png $out/share/icons/hicolor/512x512/apps/lmath.png
+    install -Dm 444 ${finalAttrs.contents}/lmath.desktop $out/share/applications/lmath.desktop
+    install -Dm 444 ${finalAttrs.contents}/lmath.png $out/share/icons/hicolor/512x512/apps/lmath.png
 
     wrapProgram $out/bin/lmath \
       --add-flags "--no-update-check"
@@ -46,4 +39,4 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [ langsjo ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

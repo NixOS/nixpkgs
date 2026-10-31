@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "https://git.pengutronix.de/cgit/genimage";
+    homepage = "https://github.com/pengutronix/genimage";
     description = "Generate filesystem images from directory trees";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;

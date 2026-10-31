@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.2";
+  version = "3.3.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-tUHBpMyArqM61X3LqNbQQioD1Fe38bQj9jqkHDojVwU=";
+    hash = "sha256-b2CYHqjWtbugKotEfSjnU21m+P8RhoH+nelbc0whfqI=";
   };
 
   build-system = [
@@ -116,6 +116,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: equal_computations failed
     "test_infer_shape_db_handles_xtensor_lowering"
+
+    # With fastmath=False, the LLVM IR still contains a `fcmp reassoc` instruction
+    # AssertionError: assert True == False
+    "test_config_options_fastmath_vectorized"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"

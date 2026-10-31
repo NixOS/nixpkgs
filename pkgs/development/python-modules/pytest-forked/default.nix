@@ -4,71 +4,43 @@
   buildPythonPackage,
   pythonAtLeast,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   setuptools-scm,
-  wheel,
-  py,
   pytest,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-forked";
-  version = "1.6.0";
+  version = "1.7.5";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-forked";
-    tag = "v${version}";
-    hash = "sha256-owkGwF5WQ17/CXwTsIYJ2AgktekRB4qhtsDxR0LCI/k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RPuJAukcfVjZHZQ+a/bxADhY3BJKmSe3S/6eHUG3kYQ=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/pytest-dev/pytest-forked/actions
-      name = "pytest8-compat.patch";
-      url = "https://github.com/pytest-dev/pytest-forked/commit/b2742322d39ebda97d5170922520f3bb9c73f614.patch";
-      hash = "sha256-tTRW0p3tOotQMtjjJ6RUKdynsAnKRz0RAV8gAUHiNNA=";
-    })
-    # https://github.com/pytest-dev/pytest-forked/pull/96
-    ./pytest9-compat.patch
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ py ];
-
   nativeCheckInputs = [
-    py
     pytestCheckHook
   ];
-
-  disabledTests =
-    if (pythonAtLeast "3.12" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
-      [
-        # non reproducible test failure on hydra, works on community builder
-        # https://hydra.nixos.org/build/252537267
-        "test_xfail"
-      ]
-    else
-      null;
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/pytest-dev/pytest-forked/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/pytest-forked/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Run tests in isolated forked subprocesses";
     homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

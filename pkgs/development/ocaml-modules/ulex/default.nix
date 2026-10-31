@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;
-    rev = "v${param.version}";
+    tag = "v${param.version}";
     inherit (param) sha256;
   };
 

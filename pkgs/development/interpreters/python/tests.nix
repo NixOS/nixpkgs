@@ -210,11 +210,23 @@ let
               self;
           in
           assert myPython.pkgs.foobar == myPython.pkgs.numpy;
+          assert myPython.pkgs.python.pkgs.foobar == myPython.pkgs.numpy;
+          assert
+            myPython.pkgs.python.withPackages (ps: with ps; [ foobar ])
+            == myPython.withPackages (ps: with ps; [ numpy ]);
           myPython.withPackages (ps: with ps; [ foobar ]);
-        # overrideScope is broken currently
-        # test-overrideScope = let
-        #  myPackages = python.pkgs.overrideScope extension;
-        # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
+        test-overrideScope =
+          let
+            myPackages = python.pkgs.overrideScope extension;
+          in
+          assert myPackages.foobar == myPackages.numpy;
+          assert myPackages.python.pkgs.foobar == myPackages.numpy;
+          myPackages.python.withPackages (
+            ps: with ps; [
+              foobar
+              ps.python.pkgs.foobar
+            ]
+          );
         #
         # Have to skip prebuilt python as it's not present in top-level
         # `pkgs` as an attribute.

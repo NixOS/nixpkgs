@@ -34,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "optimum"
     "transformers"
   ];
   dependencies = [

@@ -15,7 +15,7 @@ build-idris-package {
     owner = "pierrebeaucamp";
     repo = "idris-hrtime";
     rev = "e1f54ce74bde871010ae76d9afd42048cd2aae83";
-    sha256 = "0rmmpi1kp1h7ficmcxbxkny9lq9pjli2qhwy17vgbgx8fx60m8l0";
+    hash = "sha256-gKIKTHeov/X2CZ5DLCKVN2GavJ19dVZZdAeGO0O8tWY=";
   };
 
   meta = {

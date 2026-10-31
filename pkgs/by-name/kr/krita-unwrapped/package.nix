@@ -7,6 +7,7 @@
   eigen_5,
   exiv2,
   fetchurl,
+  fetchpatch,
   fftw,
   fribidi,
   giflib,
@@ -37,10 +38,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
-  version = "6.0.4";
+  version = "6.0.4.1";
   src = fetchurl {
     url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kEFp/3Fz///8Jkuy7KQhRDGHGrPRfwtNRhz25BRo5ys=";
+    hash = "sha256-6v8AUhlYUDqh0+8SBtdeALV+1lmT6VNonwoEhQQn4tg=";
   };
 
   nativeBuildInputs = [
@@ -123,19 +124,21 @@ stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace plugins/impex/jp2/jp2_converter.cc \
         --replace '<openjpeg.h>' '<${openjpeg.incDir}/openjpeg.h>'
-    ''
-    # https://invent.kde.org/graphics/krita/-/commit/30182dbfe789c9b44e5762978bf9ebb22c4f72b6
-    + ''
-      patch -p1 <<EOF
-      --- a/cmake/modules/SIPMacros.cmake
-      +++ b/cmake/modules/SIPMacros.cmake
-      @@ -152,3 +152,3 @@
-               if (QT_MAJOR_VERSION STREQUAL "6")
-      -            set(abi_version "13.0")
-      +            set(abi_version "13.8")
-                   set(sip_disabled_features "[\"Krita_Qt5\"]")
-      EOF
     '';
+
+  patches = [
+    (fetchpatch {
+      # Update SIP ABI to 13.8
+      url = "https://invent.kde.org/graphics/krita/-/commit/30182dbfe789c9b44e5762978bf9ebb22c4f72b6.patch";
+      hash = "sha256-IZNaRmDYnj7M+7gg3fqHrhI+t5fgE6/ecxWW6slvX4g=";
+    })
+    (fetchpatch {
+      # qt 6.12 support
+      # Fix invalid widget class name
+      url = "https://invent.kde.org/graphics/krita/-/commit/3f5b2882017f4e12c9b021de0ea24e6dd2eb26dd.patch";
+      hash = "sha256-Oq/ojwTYt2bmXQm0UuIVCIN+7PVgTO1WGbcFUnDDFIA=";
+    })
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
 

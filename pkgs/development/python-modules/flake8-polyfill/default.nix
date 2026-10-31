@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nlf1mkqw856vi6782qcglqhaacb23khk9wkcgn55npnjxshhjz4";
+    hash = "sha256-5EsIdZf22lLsY5OnCecQiykFMX0MC3RM3KYgjmcNjto=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "skip-tests.patch";
       url = "https://github.com/PyCQA/flake8-polyfill/commit/3cf414350e82ceb835ca2edbd5d5967d33e9ff35.patch";
-      sha256 = "mElZafodq8dF3wLO/LOqwFb7eLMsPLlEjNSu5AWqets=";
+      hash = "sha256-mElZafodq8dF3wLO/LOqwFb7eLMsPLlEjNSu5AWqets=";
     })
   ];
 

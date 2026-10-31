@@ -13,16 +13,16 @@
 }:
 
 let
-  version = "2026.160.6555";
+  version = "2026.239.6882";
 
   sources = {
     x86_64-linux = {
       url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-      hash = "sha256-Sk2pALZtcraNpca6wkDiPCvWgU0hYlSeiwwszfZeKeM=";
+      hash = "sha256-BLPXDW21LeidOAbwuTd+LrZo/hF3Zp6F56F015CXPm4=";
     };
     aarch64-linux = {
       url = "https://binaries.twingate.com/client/linux/DEB/aarch64/${version}/twingate-arm64.deb";
-      hash = "sha256-rK6bSSdkCNWHpOpojHn+CtZejiy6jarCb34aumBbmbs=";
+      hash = "sha256-EdCxpsTw1H2MS6tk++xKs66m/fXzP2wNGcv6PP/9G8I=";
     };
   };
 in
@@ -54,12 +54,19 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     mv etc $out/
     mv usr/bin $out/bin
     mv usr/sbin/* $out/bin
     mv usr/lib $out/lib
     mv usr/share $out/share
+
+    # 2026.188 renamed the CLI to `twingate-classic`
+    ln -s twingate-classic $out/bin/twingate
+
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) twingate; };

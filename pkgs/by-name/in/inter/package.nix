@@ -28,6 +28,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Typeface specially designed for user interfaces";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ demize ];
+    maintainers = with lib.maintainers; [
+      demize
+      trespaul
+    ];
   };
 })

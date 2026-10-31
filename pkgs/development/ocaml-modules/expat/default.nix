@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "ocaml-expat";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eDA6MUcztaI+fpunWBdanNnPo9Y5gvbj/ViVcxYYEBg=";
   };
 

@@ -1,11 +1,11 @@
 diff --git a/windmill-worker/nsjail/run.ansible.config.proto b/windmill-worker/nsjail/run.ansible.config.proto
-index 65a8ea700..d4c8c2afc 100644
+index ce5dab1..580f3df 100644
 --- a/windmill-worker/nsjail/run.ansible.config.proto
 +++ b/windmill-worker/nsjail/run.ansible.config.proto
-@@ -18,16 +18,24 @@ keep_caps: false
+@@ -20,16 +20,24 @@ keep_caps: false
  keep_env: true
  mount_proc: true
- 
+
 +mount {
 +    src: "/nix/store"
 +    dst: "/nix/store"
@@ -18,27 +18,20 @@ index 65a8ea700..d4c8c2afc 100644
      is_bind: true
 +    mandatory: false
  }
- 
+
  mount {
      src: "/lib"
      dst: "/lib"
      is_bind: true
 +    mandatory: false
  }
- 
- 
-@@ -42,12 +50,14 @@ mount {
-     src: "/root/.local/share/uv/tools/ansible"
-     dst: "/root/.local/share/uv/tools/ansible"
-     is_bind: true
-+    mandatory: false
- }
- 
- mount {
+
+
+@@ -51,6 +59,7 @@ mount {
      src: "/usr"
      dst: "/usr"
      is_bind: true
 +    mandatory: false
  }
- 
+
  mount {

@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "flavors";
     repo = "django-graphiql-debug-toolbar";
     rev = version;
-    sha256 = "0fikr7xl786jqfkjdifymqpqnxy4qj8g3nlkgfm24wwq0za719dw";
+    hash = "sha256-vKVw1AeYcyKqe5Pa8ZDExHeLL67exSanw9KgQ/vJMzo=";
   };
 
   patches = [

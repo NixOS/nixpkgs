@@ -8,22 +8,23 @@
   pandas,
   pytestCheckHook,
   python-dateutil,
+  pythonOlder,
+  backports-zstd,
   cramjam,
   setuptools,
   zlib-ng,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastavro";
     repo = "fastavro";
     tag = version;
-    hash = "sha256-r/zaQ44ZPuSR1HxaqxD26kZPWREhmKP+oTOSa5QCEU4=";
+    hash = "sha256-UeOfYM03Htqrh+lpBKWiAPgZTv63jpO/FZZRMSgW5Ug=";
   };
 
   preBuild = ''
@@ -39,10 +40,12 @@ buildPythonPackage rec {
     codecs = [
       cramjam
       lz4
-      zstandard
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
     ];
     snappy = [ cramjam ];
-    zstandard = [ zstandard ];
+    zstandard = lib.optionals (pythonOlder "3.,14") [ backports-zstd ];
     lz4 = [ lz4 ];
   };
 

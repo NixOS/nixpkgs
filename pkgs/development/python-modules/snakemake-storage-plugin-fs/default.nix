@@ -9,6 +9,7 @@
   # dependencies
   snakemake-interface-common,
   snakemake-interface-storage-plugins,
+  reretry,
   sysrsync,
 
   # tests
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    reretry
     snakemake-interface-common
     snakemake-interface-storage-plugins
     sysrsync

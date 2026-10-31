@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace setup.py \
       --replace-fail \
         "cmake_args = [" \
-        'cmake_args = [ *os.environ.get("cmakeFlags", "").split(),'
+        "cmake_args = [ *\"''${cmakeFlags[*]}\".split(),"
   '';
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)

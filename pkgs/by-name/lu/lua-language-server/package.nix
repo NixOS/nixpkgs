@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.19.1";
+  version = "3.19.2";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-3Sm958Fr5wn54B+aJMaK+cR/F10dPIcGvBrhjHTy2us=";
+    hash = "sha256-5faQvh+zyObOq25ExsDcp3XNZnczzHg+I2AnmQoT93c=";
     fetchSubmodules = true;
   };
 
@@ -156,7 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/luals/lua-language-server";
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gepbird ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      yvnth
+    ];
     mainProgram = "lua-language-server";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

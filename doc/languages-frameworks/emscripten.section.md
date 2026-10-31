@@ -86,7 +86,7 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
     libz.so.${old.version} -I . -o example.js
 
     echo "Using node to execute the test"
-    ${pkgs.nodejs}/bin/node ./example.js
+    ${lib.getExe pkgs.nodejs} ./example.js
 
     set +x
     if [ $? -ne 0 ]; then

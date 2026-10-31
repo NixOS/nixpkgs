@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "TaylorSMarks";
     repo = "playsound";
     rev = "v${version}";
-    sha256 = "0jbq641lmb0apq4fy6r2zyag8rdqgrz8c4wvydzrzmxrp6yx6wyd";
+    hash = "sha256-zXPTvbm5159/85sThn5+uGX0lP8iG+8IvgqsSgMxeEk=";
   };
 
   doCheck = false;

@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-s9kegTZOZEgGx0Yj8jOfzAyjyy1EuabOybMDBoodRvo=";
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   build-system = with python3Packages; [

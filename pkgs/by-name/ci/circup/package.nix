@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -33,9 +34,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  postBuild = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   pythonImportsCheck = [ "circup" ];
 

@@ -37,6 +37,7 @@
 
   # tests
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -102,10 +103,17 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";

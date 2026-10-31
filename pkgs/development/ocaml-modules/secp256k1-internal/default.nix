@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ocaml-secp256k1-internal";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-amVtp94cE1NxClWJgcJvRmilnQlC7z44mORUaxvPn00=";
   };
 

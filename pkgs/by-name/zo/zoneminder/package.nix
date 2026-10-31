@@ -7,6 +7,7 @@
   makeWrapper,
   pkg-config,
   arp-scan,
+  cacert,
   curl,
   ffmpeg,
   glib,
@@ -89,13 +90,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.38.4";
+  version = "1.38.6";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-bowVUTRtrTyS1zSaF+wKua6Wx5F7C5S40y7BKr6q9sE=";
+    hash = "sha256-sSFEarFMbCHDMbrWRJT1Y/0owLJqr033t0eaVDPjzdw=";
     fetchSubmodules = true;
   };
 
@@ -260,6 +261,9 @@ stdenv.mkDerivation rec {
     done
 
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
+
+    rm $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
 
     # Combine configs under $out/etc/zoneminder/conf.d/ into
     # $out/etc/zoneminder/zm.conf, because we patch so that we read from

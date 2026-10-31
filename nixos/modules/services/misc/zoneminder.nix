@@ -314,9 +314,7 @@ in
               all.sysvsem
             ]
           );
-          phpOptions = ''
-            date.timezone = "${config.time.timeZone}"
-          '';
+          phpOptions."date.timezone" = config.time.timeZone;
           settings = lib.mapAttrs (name: lib.mkDefault) {
             "listen.owner" = user;
             "listen.group" = group;

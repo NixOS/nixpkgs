@@ -8,46 +8,7 @@
   pkgs,
   tree-sitter-grammars,
   lockedGrammars ? lib.importJSON ./grammars.json,
-  grammarsOverlay ? (
-    final: prev: {
-      tree-sitter-agda = prev.tree-sitter-agda.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-beancount = prev.tree-sitter-beancount.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-git-rebase = prev.tree-sitter-git-rebase.overrideAttrs {
-        dontPatch = true;
-      };
-      tree-sitter-glimmer = prev.tree-sitter-glimmer.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-janet-simple = prev.tree-sitter-janet-simple.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
-        dontCheckForBrokenSymlinks = true;
-      };
-      tree-sitter-sql = prev.tree-sitter-sql.override {
-        generate = false;
-      };
-      tree-sitter-strace = prev.tree-sitter-strace.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-tact = prev.tree-sitter-tact.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-vue = prev.tree-sitter-vue.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-wit = prev.tree-sitter-wit.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-      tree-sitter-yuck = prev.tree-sitter-yuck.override {
-        excludeBrokenTreeSitterJson = false;
-      };
-    }
-  ),
+  grammarsOverlay ? null,
 }:
 let
   lockedVersionsOverlay =
@@ -66,23 +27,71 @@ let
         }
     ) prev;
 
+  defaultGrammarsOverlay = final: prev: {
+    tree-sitter-agda = prev.tree-sitter-agda.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-beancount = prev.tree-sitter-beancount.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-git-rebase = prev.tree-sitter-git-rebase.overrideAttrs {
+      dontPatch = true;
+    };
+    tree-sitter-glimmer = prev.tree-sitter-glimmer.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-janet-simple = prev.tree-sitter-janet-simple.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
+      dontCheckForBrokenSymlinks = true;
+    };
+    tree-sitter-sql = prev.tree-sitter-sql.override {
+      generate = false;
+    };
+    tree-sitter-strace = prev.tree-sitter-strace.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-tact = prev.tree-sitter-tact.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-vue = prev.tree-sitter-vue.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-wit = prev.tree-sitter-wit.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-yuck = prev.tree-sitter-yuck.override {
+      excludeBrokenTreeSitterJson = false;
+    };
+    tree-sitter-haskell = prev.tree-sitter-haskell.overrideAttrs (oldAttrs: {
+      # Avoid GCC 16 heap corruption in the pinned Haskell scanner.
+      # https://github.com/NixOS/nixpkgs/issues/569011
+      # Remove once both Helix and Steelix include the grammar update:
+      # https://github.com/helix-editor/helix/pull/16331
+      env = oldAttrs.env // {
+        NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -fno-strict-aliasing";
+      };
+    });
+    tree-sitter-perl = prev.tree-sitter-perl.overrideAttrs {
+      # Avoid a collision with glibc 2.44's bsearch macro.
+      # Remove once the pinned Perl grammar includes:
+      # https://github.com/tree-sitter-perl/tree-sitter-perl/pull/220
+      postPatch = ''
+        rm src/bsearch.c
+        substituteInPlace src/tsp_unicode.h \
+          --replace-fail '#include "bsearch.c"' ""
+      '';
+    };
+  };
+
   helixTreeSitterGrammars =
     lib.filterAttrs (drvName: _: lib.hasAttr (lib.removePrefix "tree-sitter-" drvName) lockedGrammars)
       (
         tree-sitter-grammars.overrideScope (
-          lib.composeManyExtensions [
-            lockedVersionsOverlay
-            grammarsOverlay
-            (self: super: {
-              tree-sitter-perl = super.tree-sitter-perl.overrideAttrs {
-                postPatch = ''
-                  rm src/bsearch.c
-                  substituteInPlace src/tsp_unicode.h \
-                    --replace-fail '#include "bsearch.c"' ""
-                '';
-              };
-            })
-          ]
+          lib.composeManyExtensions (
+            [ lockedVersionsOverlay ] ++ lib.toList (lib.defaultTo defaultGrammarsOverlay grammarsOverlay)
+          )
         )
       );
 
@@ -110,7 +119,6 @@ let
     fi
   '';
 in
-
 symlinkJoin {
   pname = "helix";
   inherit (helix-unwrapped) version;
@@ -130,6 +138,7 @@ symlinkJoin {
     ];
     runtime = runtimeDir;
     tree-sitter-grammars = helixTreeSitterGrammars;
+    inherit defaultGrammarsOverlay;
   };
 
   meta = {

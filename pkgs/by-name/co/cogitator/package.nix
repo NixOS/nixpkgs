@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  checkFlagsArray = [
+  checkFlags = [
     # Tests are broken
     "--skip=proxy_guard::tests::relative_uri_no_host_header_falls_back_to_tunnel_host"
     "--skip=spider::tests::audit_html_flags_potential_token_leak_without_panicking"

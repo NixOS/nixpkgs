@@ -2,7 +2,7 @@
 {
   name = "taskchampion-sync-server";
 
-  nodes = {
+  containers = {
     server = {
       services.taskchampion-sync-server.enable = true;
       services.taskchampion-sync-server.host = "0.0.0.0";
@@ -15,9 +15,9 @@
       };
   };
   testScript =
-    { nodes, ... }:
+    { containers, ... }:
     let
-      cfg = nodes.server.services.taskchampion-sync-server;
+      cfg = containers.server.services.taskchampion-sync-server;
       port = toString cfg.port;
       # Generated with uuidgen
       uuid = "bf01376e-04a4-435a-9263-608567531af3";

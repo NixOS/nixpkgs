@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-expand";
-  version = "1.0.126";
+  version = "1.0.127";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cargo-expand";
     tag = finalAttrs.version;
-    hash = "sha256-YiJyh2bti5eA02MvJxBPUs+xmfGerVy8kUhMMB2jwbo=";
+    hash = "sha256-IRNIWIvNYVB93Q9yEg3QSBgI4o0pH6Lv3CWI70GjJJM=";
   };
 
-  cargoHash = "sha256-TjZ8GY7WjkTs5Nvi7w26evcHzcwUz+VAjl9y85+Cj5M=";
+  cargoHash = "sha256-jFgbAtbMmNnyYE1qiNzWL3DKqSTB5fmd5/n2NmchavM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

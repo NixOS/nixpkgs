@@ -18,7 +18,7 @@ build-idris-package {
     owner = "ericqweinstein";
     repo = "wyvern";
     rev = "b9e3e5747c5b23608c6ed5e2ccf43b86caa04292";
-    sha256 = "0zihf95w7i0903zy1mzn1ldn697nf57yl80nl32dpgji72h98kh2";
+    hash = "sha256-Ak6UoDhRvtvEoBYg6k9x9iRjGw321+D/AAnEw0tyMH4=";
   };
 
   postUnpack = ''

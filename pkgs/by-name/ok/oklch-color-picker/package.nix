@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oklch-color-picker";
-  version = "2.4.1";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "eero-lehtinen";
     repo = "oklch-color-picker";
     tag = finalAttrs.version;
-    hash = "sha256-1QKI88aYJDVRuSeu6rweM2NpshvD2NDa4vSDPkSVcvY=";
+    hash = "sha256-ktgxOEg+Za9930bUjmapYR449q6f+bq+EpeKvjRVN8M=";
   };
 
-  cargoHash = "sha256-WLeF8+KHmOReg6gtvKp/V2gZJPdDlplg/okG9+yA7ek=";
+  cargoHash = "sha256-EtPJ+TPQvpifIzYDgoyfw2yYFZ/USmCd1bh2//9r08c=";
 
   nativeBuildInputs = [
     copyDesktopItems

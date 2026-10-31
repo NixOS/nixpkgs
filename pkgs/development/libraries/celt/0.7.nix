@@ -7,7 +7,7 @@ callPackage ./generic.nix (
 
     src = fetchurl {
       url = "https://downloads.xiph.org/releases/celt/celt-${version}.tar.gz";
-      sha256 = "0rihjgzrqcprsv8a1pmiglwik7xqbs2yw3fwd6gb28chnpgy5w4k";
+      hash = "sha256-k/Di37WQIbGeadwN7oVeuJ8ZOX2x3qDQ1vkynP+TMGY=";
     };
   }
 )

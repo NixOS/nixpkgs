@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://bandit.readthedocs.io/";
     changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

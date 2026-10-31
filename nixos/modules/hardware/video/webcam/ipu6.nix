@@ -118,7 +118,9 @@ in
       preStart = mkForce ''
         mkdir -p "$(dirname "$V4L2_DEVICE_FILE")"
         ${config.boot.kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl \
-          add --name "Intel MIPI Camera" --exclusive-caps=1 ${toString cfg.videoDeviceNumber} || [ $? -eq 17 ]
+          add --name "Intel MIPI Camera" --exclusive-caps=1 \
+          --buffers ${toString config.services.v4l2-relayd.instances.ipu6.bufferCount} \
+          ${toString cfg.videoDeviceNumber} || [ $? -eq 17 ]
         echo /dev/video${toString cfg.videoDeviceNumber} > "$V4L2_DEVICE_FILE"
       '';
       postStop = mkForce ''

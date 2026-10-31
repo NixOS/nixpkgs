@@ -39,55 +39,61 @@ let
 
   nodeFolderConfigModules = [
     # "foo" is a folder that is synchronised only between nodes a and b.
-    rec {
-      a = {
-        services.syncthing.settings.folders.foo = {
-          path = "/var/lib/syncthing/foo";
-          devices = [
-            "a"
-            "b"
-          ];
+    (
+      let
+        abFooConfig = {
+          services.syncthing.settings.folders.foo = {
+            path = "/var/lib/syncthing/foo";
+            devices = [
+              "a"
+              "b"
+            ];
+          };
         };
-      };
-
-      b = a;
-
-      c = { };
-    }
+      in
+      {
+        a = abFooConfig;
+        b = abFooConfig;
+        c = { };
+      }
+    )
 
     # "bar" is synchronised between a and c, and between b and c, but c only
     # gets an encrypted copy, and a and b never synchronise directly to each
     # other.
-    rec {
-      a =
-        { config, ... }:
-        {
-          environment.etc.bar-encryption-password.text = testPassword;
+    (
+      let
+        abBarConfig =
+          { config, ... }:
+          {
+            environment.etc.bar-encryption-password.text = testPassword;
 
+            services.syncthing.settings.folders.bar = {
+              path = "/var/lib/syncthing/bar";
+              devices = [
+                {
+                  name = "c";
+                  encryptionPasswordFile = "/etc/${config.environment.etc.bar-encryption-password.target}";
+                }
+              ];
+            };
+          };
+      in
+      {
+        a = abBarConfig;
+        b = abBarConfig;
+        c = {
           services.syncthing.settings.folders.bar = {
             path = "/var/lib/syncthing/bar";
             devices = [
-              {
-                name = "c";
-                encryptionPasswordFile = "/etc/${config.environment.etc.bar-encryption-password.target}";
-              }
+              "a"
+              "b"
             ];
+            type = "receiveencrypted";
           };
         };
-
-      b = a;
-
-      c = {
-        services.syncthing.settings.folders.bar = {
-          path = "/var/lib/syncthing/bar";
-          devices = [
-            "a"
-            "b"
-          ];
-          type = "receiveencrypted";
-        };
-      };
-    }
+      }
+    )
 
     # "baz" is synchronised between all three nodes, but has filters on b and c
     # that mean they shouldn't receive certain files.
@@ -154,7 +160,10 @@ let
 in
 {
   name = "syncthing-folders";
-  meta.maintainers = with pkgs.lib.maintainers; [ zarelit ];
+  meta.maintainers = with lib.maintainers; [
+    zarelit
+    me-and
+  ];
 
   # Run from the root of the nixpkgs repository with
   #
@@ -184,7 +193,7 @@ in
     '';
   };
 
-  nodes = lib.genAttrs nodeNames (n: {
+  containers = lib.genAttrs nodeNames (n: {
     imports = [
       commonNodeConfigModule
       nodeConfigModules."${n}"

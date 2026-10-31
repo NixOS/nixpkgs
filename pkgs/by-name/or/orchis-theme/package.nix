@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  gnome-themes-extra,
+  nix-update-script,
   sassc,
   border-radius ? null, # Suggested: 2 < value < 16
   tweaks ? [ ], # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
@@ -35,30 +35,36 @@ assert nordXorDracula;
 lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2026-07-07";
 
     src = fetchFromGitHub {
       repo = "Orchis-theme";
       owner = "vinceliuice";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-oX6+tPe0nGsl+OzFZCpbKvE00Z/xvP+NoHY7QZ9YAo0=";
     };
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       gtk3
       sassc
     ];
 
-    buildInputs = [ gnome-themes-extra ];
+    # The GTK2 themes need an engine that is no longer packaged.
+    # Replace with --no-gtk2 once merged:
+    # https://github.com/vinceliuice/Orchis-theme/pull/603
+    patches = [ ./remove-gtk2.patch ];
 
-    preInstall = ''
-      mkdir -p $out/share/themes
-    '';
+    dontConfigure = true;
+    dontBuild = true;
 
     installPhase = ''
       runHook preInstall
+
       bash install.sh -d $out/share/themes -t all \
         ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         ${lib.optionalString (border-radius != null) ("--round " + toString border-radius + "px")}
@@ -69,11 +75,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
       runHook postInstall
     '';
 
+    passthru.updateScript = nix-update-script { };
+
     meta = {
       description = "Material Design theme for GNOME/GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/Orchis-theme";
       license = lib.licenses.gpl3Plus;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.all;
       maintainers = [ lib.maintainers.ncfavier ];
     };
-  }
+  })

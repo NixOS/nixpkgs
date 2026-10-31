@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/syrusakbary/promise";
     changelog = "https://github.com/syrusakbary/promise/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

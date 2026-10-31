@@ -46,6 +46,15 @@ in
         '';
       };
 
+      cmdArgs = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+        example = "--generate-missing-image-thumbnails";
+        description = ''
+          Extra commandline args to pass to porn-vault.
+        '';
+      };
+
       settings = mkOption {
         type = configFormat.type;
         description = ''
@@ -65,13 +74,13 @@ in
     systemd.services.porn-vault = {
       description = "Porn-Vault server";
       environment = {
-        PV_CONFIG_FOLDER = "/etc/porn-vault";
+        PV_CONFIG_PATH = "/etc/porn-vault/config.json";
         NODE_ENV = "production";
         DATABASE_NAME = "production";
         PORT = toString cfg.port;
       };
       serviceConfig = {
-        ExecStart = getExe cfg.package;
+        ExecStart = "${getExe cfg.package} ${cfg.cmdArgs}";
         CacheDirectory = "porn-vault";
         # Hardening options
         CapabilityBoundingSet = [ "CAP_SYS_NICE" ];

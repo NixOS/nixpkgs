@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/weechat/scripts/5f073d966e98d54344a91be4f5afc0ec9e2697dc/perl/multiline.pl";
-    sha256 = "sha256-TXbU2Q7Tm8iTwOQqrWpqHXuKrjoBFLyUWRsH+TsR9Lo=";
+    hash = "sha256-TXbU2Q7Tm8iTwOQqrWpqHXuKrjoBFLyUWRsH+TsR9Lo=";
   };
 
   dontUnpack = true;

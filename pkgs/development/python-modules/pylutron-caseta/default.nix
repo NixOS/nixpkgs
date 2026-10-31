@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylutron-caseta";
-  version = "0.29.0";
+  version = "0.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gurumitts";
     repo = "pylutron-caseta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YGdx/WQLM7Dglo4FSEr+QJDKTf7Dyn8V3qSFWNlEu00=";
+    hash = "sha256-pc1GzW0sMhR3B3DOWbkDinD+stGUgloR+xWaaEB8M0E=";
   };
 
   build-system = [ hatchling ];

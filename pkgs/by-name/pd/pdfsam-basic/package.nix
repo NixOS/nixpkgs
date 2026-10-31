@@ -122,7 +122,12 @@ maven.buildMavenPackage rec {
   };
 
   mvnParameters = "-Drelease -Dmaven.test.skip";
-  mvnHash = "sha256-l8ns++RTK69AV2dq8EFPOzhfzhcgYQlF/OUZ0IZ7QII=";
+  mvnHash = "sha256-W0RDSDcUYG2Pd11rf68o7X1BjMWk4SMwH1fFwWqd1Lg=";
+
+  # The mac profile declares exec-maven-plugin twice (jpackage and
+  # notarize-dmg executions). Maven >= 3.10 rejects duplicate plugins as a
+  # model validation error, even for inactive profiles.
+  patches = [ ./remove-duplicate-exec-maven-plugin.patch ];
 
   # fix for:
   #

@@ -23,20 +23,20 @@
 
 let
   pname = "github-copilot-app";
-  version = "1.1.23";
+  version = "1.1.32";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-HWNnLEliPzGzq8YySicZHNJqzoUr+9PxsRWdCw3pBmM=";
+      hash = "sha256-bOfgGPjdn4TgKbnYHutfBd6u8j1U+WKhB0t3iRv/VBU=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-ah2XDAM4HE/myCdVoJ8ErCIAmpw2F8yvO87P5El9RLY=";
+      hash = "sha256-HRjyzwA99a7Pl+P6Iw6zYV6H6n5aLeH0MJgIlKYtoao=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-f7QvkGpuDMixBZF4DJKyK9zmaig5LgGOqcNyucqZALw=";
+      hash = "sha256-kXggAP7sFODF2N5CkepsaHLK6c9HOmtGBy8G9CgIf3c=";
     };
   };
 
@@ -111,7 +111,8 @@ stdenv.mkDerivation {
 
         # Update desktop file to use the new executable name
         substituteInPlace $out/share/applications/*.desktop \
-          --replace-fail "Exec=github" "Exec=github-copilot-app"
+          --replace-fail "Exec=github" "Exec=github-copilot-app" \
+          --replace-fail "StartupWMClass=github" "StartupWMClass=github-copilot-app"
       ''
   )
   + ''

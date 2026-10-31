@@ -10,11 +10,11 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vrc-get";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-7Remfn9U+yDvKuxLaeKAW+1Xqjz6dmm/nuxEIZwkZAg=";
+    hash = "sha256-NeNl1N6YowEi1KkZcGGXNyTfpNw6VNgSxBJDWE8t02c=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  cargoHash = "sha256-bU+TVVnbrhmkQ8L/u42Kkx0PCBufsjf2rN+GWnYg2h4=";
+  cargoHash = "sha256-Yl7IM3zVZyqznXePPWZFrObky2vtZCULXaBK5ojKga4=";
 
   # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
   # If no emulator is available, then give up on generating shell completions

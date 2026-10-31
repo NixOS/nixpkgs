@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "subjack";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "haccer";
     repo = "subjack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHzBPtMpXy8ZG+lh7PpcvkJkdUal3ONhEQIhMVFSx+A=";
+    hash = "sha256-EVRNNPlDu1OxNU+bUUN90bH/Cg/YSR/ocIDEn3focT0=";
   };
 
-  vendorHash = "sha256-Ma4kAcMfYm1ltOaAX39j78lxaAnWq03FYyB6rnKv9y8=";
+  vendorHash = "sha256-AN+VEY+mrwf4mFTL2gdyr7zVnYgoCc719hUkuMVyzVw=";
 
   __structuredAttrs = true;
 

@@ -42,8 +42,12 @@ python3.pkgs.buildPythonApplication {
   ];
 
   makeWrapperArgs = [
-    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-    "--set CHARSET en_us.UTF-8"
+    "--set"
+    "LOCALE_ARCHIVE"
+    "${glibcLocales}/lib/locale/locale-archive"
+    "--set"
+    "CHARSET"
+    "en_us.UTF-8"
   ];
 
   build-system = with python3.pkgs; [

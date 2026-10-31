@@ -65,7 +65,6 @@
   libglvnd,
   libnotify,
   libxcomposite,
-  libunity,
   libva,
   libxcursor,
   libxext,
@@ -75,6 +74,7 @@
   libxrender,
   libxkbcommon,
   pango,
+  pciutils,
   pipewire,
   libappindicator,
   libdbusmenu,
@@ -117,7 +117,6 @@ let
         libnotify
         libx11
         libxcomposite
-        libunity
         libuuid
         libva
         libxcursor
@@ -132,6 +131,7 @@ let
         libxcb
         libxkbcommon
         pango
+        pciutils
         pipewire
         libxscrnsaver
         libappindicator
@@ -224,6 +224,11 @@ stdenv.mkDerivation (finalAttrs: {
     )}
 
     mkdir -p $out/opt/${binaryName}/modules/discord_krisp/KMS/logs
+
+    # The web client only keeps OpenH264 2.7.0; names must stay the same length
+    grep -qF libopenh264-2.5.1-linux64.7.so $out/opt/${binaryName}/modules/discord_desktop_core/core.asar
+    sed -i 's/libopenh264-2\.5\.1-linux64\.7\.so/libopenh264-2.7.0-linux64.8.so/g' \
+      $out/opt/${binaryName}/modules/discord_desktop_core/core.asar
 
     # Chromium 148 multiplies Plasma's GTK DPI scale by the native Wayland surface
     # scale, which makes the UI too large. See #551645

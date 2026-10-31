@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "epaper-dithering";
-  version = "6.0.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenDisplay";
     repo = "epaper-dithering";
     tag = "epaper-dithering-v${finalAttrs.version}";
-    hash = "sha256-dumfngbwhhodLiPS6dDI/wjEXz8PD4FT2W8ADVJjeuY=";
+    hash = "sha256-rKf8sM9F0qk2sw7HHyUo0A68ttIBlXeXNThts4BFSRo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python";
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-KXEDtl4k08jco8sG7cS9yM3iJkKWKZNF5Fb9+wHxhyc=";
+    hash = "sha256-KjG9DDx3zngJKkTvfGfeAdSQ6unEBfvy3xdc/Xg2mFs=";
   };
 
   nativeBuildInputs = [

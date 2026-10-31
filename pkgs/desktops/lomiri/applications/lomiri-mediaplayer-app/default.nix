@@ -88,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
         list: suffix: lib.strings.concatMapStringsSep ":" (drv: "${lib.getBin drv}/${suffix}") list;
     in
     ''
-      export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
+      export QT_PLUGIN_PATH=${
+        listToQtVar [
+          qtbase
+          qtmultimedia
+        ] qtbase.qtPluginPrefix
+      }
       export QML2_IMPORT_PATH=${
         listToQtVar [
           lomiri-ui-toolkit

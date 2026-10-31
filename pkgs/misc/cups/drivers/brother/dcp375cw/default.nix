@@ -26,7 +26,7 @@ in
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf005427/dcp375cwlpr-${version}-1.i386.deb";
-      sha256 = "6daf0144b5802ea8da394ca14db0e6f0200d4049545649283791f899b7f7bd26";
+      hash = "sha256-ba8BRLWALqjaOUyhTbDm8CANQElUVkkoN5H4mbf3vSY=";
     };
 
     nativeBuildInputs = [
@@ -83,7 +83,7 @@ in
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf005429/dcp375cwcupswrapper-${version}-1.i386.deb";
-      sha256 = "9a255728b595d2667b2caf9d0d332b677e1a6829a3ec1ed6d4e900a44069cf2d";
+      hash = "sha256-miVXKLWV0mZ7LK+dDTMrZ34aaCmj7B7W1OkApEBpzy0=";
     };
 
     nativeBuildInputs = [

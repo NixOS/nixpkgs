@@ -11,7 +11,7 @@ build-idris-package {
     owner = "timjb";
     repo = "quantities";
     rev = "76bb872bd89122043083351993140ae26eb91ead";
-    sha256 = "0fv12kdi9089b4kkr6inhqvs2s8x62nv5vqj76wzk8hy0lrzylzj";
+    hash = "sha256-8lP/MwUeovm5ORLvsq0wHWmhN4Y2mjwnWQmBFNsUYTs=";
   };
 
   meta = {

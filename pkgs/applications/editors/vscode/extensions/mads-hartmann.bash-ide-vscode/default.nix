@@ -11,8 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "mads-hartmann";
     name = "bash-ide-vscode";
-    version = "1.43.0";
-    hash = "sha256-IpJCzoYZ+L39HqBts487E00RfVnZhLa9wUYs2FIV9pQ=";
+    version = "1.43.2";
+    hash = "sha256-dNSkfsp3o3ErFQrQjtoU9B8d9fz3tcyB5gSwt3S36F0=";
   };
   nativeBuildInputs = [
     jq

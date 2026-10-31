@@ -2,13 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   qt6,
   pkg-config,
   vulkan-headers,
   SDL2,
   SDL2_ttf,
-  ffmpeg_8,
+  ffmpeg,
   libopus,
   libplacebo,
   openssl,
@@ -19,27 +18,46 @@
   libxkbcommon,
   wayland,
   libdrm,
+  apple-sdk_15,
   nix-update-script,
 }:
 
+let
+  # Moonlight-qt 6.2.0's MoltenVK renderer requires libplacebo's scRGB support,
+  # which is not in any release yet.
+  # Reuse the same libplacebo revision as upstream's macOS builds, see
+  # https://github.com/moonlight-stream/moonlight-qt-deps
+  # Remove this override once libplacebo provides PL_COLOR_TRC_SCRGB.
+  libplacebo' =
+    if stdenv.hostPlatform.isDarwin then
+      libplacebo.overrideAttrs (prev: {
+        version = "7.360.1-unstable-2026-10-01";
+        src = prev.src.override {
+          tag = null;
+          rev = "92b5ac6db79f4d680eb656692f7bf51e9606f42a";
+          hash = "sha256-cYX2Hn7I8zWz7yvHyvmlpC+YmoCMqD7ZJQktYp9MJhM=";
+        };
+      })
+    else
+      libplacebo;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-qt";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
+    hash = "sha256-s6b3L51jCNuYJS0dvx2tkNvzNzrsSzzdSfTgM+IR1kg=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix build for Xcode < 14
-    (fetchpatch {
-      url = "https://github.com/moonlight-stream/moonlight-qt/commit/76deafbd7bf868562d69061e7d6abf2612a2c7ad.patch";
-      hash = "sha256-+rXdexZQpOP6yS+oTmvYVxasWxOX16uU1udN75zNX3w=";
-    })
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # nixpkgs' ffmpeg on darwin is built without Vulkan, so it lacks
+    # av_vk_get_optional_device_extensions(). Use the static extension list.
+    ./darwin-no-ffmpeg-vulkan.patch
   ];
 
   nativeBuildInputs = [
@@ -52,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_ttf
-    ffmpeg_8
+    ffmpeg
     libopus
-    libplacebo
+    libplacebo'
     qt6.qtdeclarative
     qt6.qtsvg
     openssl
@@ -68,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
     wayland
     libdrm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # The Metal renderer needs FP16 simd support, which is only in the macOS 15+ SDK.
+    apple-sdk_15
   ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];

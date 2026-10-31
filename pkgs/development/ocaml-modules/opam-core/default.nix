@@ -14,6 +14,8 @@
 buildDunePackage {
   pname = "opam-core";
 
+  minimalOCamlVersion = "4.11";
+
   inherit (opam) src version;
 
   propagatedBuildInputs = [

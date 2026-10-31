@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.4.10";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TrWsqoFvARUBoSLLm0mHdidIOCzNldBun8U7BsMUHVI=";
+    hash = "sha256-za4G56fIJac8bJ22NsWYnVEChmE/JXmHLG0w8O1jeXg=";
   };
 
-  cargoHash = "sha256-xmsgsSoJ8INa0BE6LpebBSBTXMmjGmqkCPmEZSxYDP0=";
+  cargoHash = "sha256-J2FA74Ry2oRrd/GA5yA0a7k/DzIQoRkg9kMWQEE9ZTo=";
 
   __structuredAttrs = true;
 
@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
       --add-flags "--no-upgrade-check" \
       --prefix PATH : ${lib.makeBinPath [ python3 ]}
-    rm -rf $out/bin/fresh.dSYM
   '';
 
   # Tests create a local http server to check update functionality
@@ -67,6 +66,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--lib"
     "--bins"
   ];
+  # cfg(debug_assertions) is not set for release builds, so we need to run tests in debug mode to get the assertions enabled.
+  checkType = "debug";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -74,19 +75,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Terminal-based text editor with LSP support and TypeScript plugins";
-    homepage = "https://github.com/sinelaw/fresh";
+    description = "Terminal based IDE & text editor: easy, powerful and fast";
+    homepage = "https://getfresh.dev";
     changelog = "https://github.com/sinelaw/fresh/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
       randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-    ];
   };
 })

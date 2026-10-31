@@ -10,7 +10,7 @@ buildDunePackage {
   pname = "caqti-async";
   inherit (caqti) version src;
 
-  minimalOCamlVersion = "5.0";
+  minimalOCamlVersion = "5.1";
 
   propagatedBuildInputs = [
     async_kernel

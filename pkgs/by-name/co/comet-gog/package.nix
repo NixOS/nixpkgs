@@ -5,7 +5,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  buildPackages,
+  protobuf,
+  sqlite,
 
   meson,
   ninja,
@@ -15,9 +16,9 @@
 let
   versionInfoTable = {
     "latest" = {
-      version = "0.3.2";
-      srcHash = "sha256-DUkeOkUf9roZGKqdjoy/DfUL1OrVfSVjMhEvfACLEoo=";
-      cargoHash = "sha256-AiBoM7rywsuokz/fmLmye630N+t1GtwZsxkmtlH5MI8=";
+      version = "0.4.0";
+      srcHash = "sha256-FewXNGhEjqj8mvzaRCqsgejzwnTlCUdRJPuoYg8IuK0=";
+      cargoHash = "sha256-GVXvUsKt314svSeP78+eXt7LoVzI5c/qbvOeQPFHn3o=";
     };
     # version pin that is compatible with heroic
     "heroic" = {
@@ -46,8 +47,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
+  # Resolve protoc from PATH
   # TECHNICALLY, we could remove this, but then we'd be using the vendored precompiled protoc binary...
-  env.PROTOC = lib.getExe' buildPackages.protobuf "protoc";
+  env.PROTOC = "protoc";
+
+  nativeBuildInputs = [ protobuf ];
+
+  buildInputs = [ sqlite ];
 
   passthru.dummy-service = stdenv.mkDerivation {
     pname = "galaxy-dummy-service";

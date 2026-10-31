@@ -11,9 +11,9 @@
   nix-update-script,
   dbus,
   rcodesign,
-  re-plistbuddy,
   alsa-lib,
   libpulseaudio,
+  pipewire,
   libGL,
   libx11,
   libxkbcommon,
@@ -38,7 +38,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "spotifast";
-  version = "0.10.1";
+  version = "0.14.2";
 
   __structuredAttrs = true;
 
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "spotifast";
     tag = "v${version}";
-    hash = "sha256-rLyzvv7eJSHbzJdwx0iuwk5MHXWHHneGTOkpUQwIGAg=";
+    hash = "sha256-LdhBPj7ZrXXMvQpM/DqYH5m7zH7duTZ/tZbHO3XI5CQ=";
   };
 
-  cargoHash = "sha256-pwid4r8fy3t4g6CsAepkvT9KbExUxml6jj8c71Pv/wc=";
+  cargoHash = "sha256-q6wmUeh102dRN4yIwPogq726Zx4AcefUT4lDiqhSnMU=";
 
   # projectm-sys only searches lib, while CMake may otherwise install to lib64.
   postPatch = ''
@@ -57,12 +57,6 @@ rustPlatform.buildRustPackage rec {
       --replace-fail \
       '.define("BUILD_SHARED_LIBS", build_shared_libs)' \
       '.define("CMAKE_INSTALL_LIBDIR", "lib").define("BUILD_SHARED_LIBS", build_shared_libs)'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/updates/macos.rs \
-      --replace-fail \
-      'Command::new("/usr/libexec/PlistBuddy")' \
-      'Command::new("${lib.getExe' re-plistbuddy "PlistBuddy"}")'
   '';
 
   # The proxy test needs a valid CA bundle.
@@ -79,7 +73,6 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rcodesign
     icnsify
-    re-plistbuddy
   ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
@@ -88,6 +81,7 @@ rustPlatform.buildRustPackage rec {
     lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libpulseaudio
+      pipewire
       libGL
       libx11
     ]
@@ -95,8 +89,6 @@ rustPlatform.buildRustPackage rec {
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/fastpotify \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibraries}
       wrapProgram $out/bin/spotifast \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runtimeLibraries}
     ''

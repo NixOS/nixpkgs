@@ -11,7 +11,7 @@
   zlib,
   torsocks,
   libseccomp,
-  systemd,
+  systemdLibs,
   libcap,
   xz,
   zstd,
@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.13";
+  version = "0.4.9.15";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XnSNMnLN9Ep9d0EXPzccje89lu7Ld+k8icUGY86cx5I=";
+    hash = "sha256-GRH1shamgU7RQ6CLvP8cbcltLKO1Bd+aIYdggKkpY/M=";
   };
 
   outputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     libcap
   ];
 

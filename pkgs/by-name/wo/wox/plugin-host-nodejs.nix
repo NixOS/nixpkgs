@@ -6,6 +6,7 @@
   nodejs,
   pnpmConfigHook,
   pnpm_11,
+  typescript,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wox-plugin-host-nodejs";
@@ -32,7 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm_11
+    typescript
   ];
+
+  preBuild = ''
+    # Build the SDK
+    pushd ../wox.plugin.nodejs
+    chmod -R +w .
+    patch -p2 -i ${./plugin-nodejs-fix-rootDir.patch} && tsc
+    chmod -R -w .
+    popd
+
+    # Replace symlink with a real copy so ncc bundles the SDK
+    rm -rf node_modules/@wox-launcher/wox-plugin
+    cp -R "../wox.plugin.nodejs" node_modules/@wox-launcher/wox-plugin
+  '';
 
   buildPhase = ''
     runHook preBuild

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   boost186,
   glibc,
+  versionCheckHook,
 }:
 let
   boost' = boost186.override {
@@ -13,6 +14,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autodock-vina";
   version = "1.2.7";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ccsb-scripps";
@@ -45,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.boost = boost';
 

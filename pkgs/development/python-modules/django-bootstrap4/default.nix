@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "26.2";
+  version = "26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     tag = "v${version}";
-    hash = "sha256-7MmooIDiZFlrOm/vwIU57wEzdIyw6dEDkgFCYydOFxo=";
+    hash = "sha256-+Kp0vuJ+36kF3FvBHyyNpgQpsCEQPnyvBjITeP+Dc6M=";
   };
 
   postPatch = ''

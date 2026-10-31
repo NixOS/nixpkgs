@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "obsproject";
     repo = "obs-websocket";
     rev = version;
-    sha256 = "sha256-cHsJxoQjwbWLxiHgIa3Es0mu62vyLCAd1wULeZqZsJM=";
+    hash = "sha256-cHsJxoQjwbWLxiHgIa3Es0mu62vyLCAd1wULeZqZsJM=";
   };
 
   nativeBuildInputs = [ cmake ];

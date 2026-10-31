@@ -566,7 +566,7 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      phpOptions = toKeyValue cfg.phpOptions;
+      phpOptions = cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;

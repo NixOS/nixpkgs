@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
   '';
 
+  guileImportsCheck = [
+    "git"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = {

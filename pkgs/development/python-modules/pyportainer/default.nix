@@ -8,6 +8,7 @@
   lib,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -17,15 +18,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.45";
+  version = "1.0.50";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JQ17DT8NIqMpeNSlXUgSTB2Q4jCJpfaoYTsR8jLNDvY=";
+    hash = "sha256-+nilVMVp8A8uGvF4C4Hn+kC3CbuGjLYQZeyZOkloLPI=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 

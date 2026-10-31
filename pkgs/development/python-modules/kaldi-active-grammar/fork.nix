@@ -22,7 +22,7 @@ let
       repo = "openfst";
       # required by https://github.com/daanzu/kaldi-fork-active-grammar/blob/e9c7d0ffca401cf312779d25f2c05a34b41ff696/cmake/third_party/openfst.cmake#L7
       rev = "0bca6e76d24647427356dc242b0adbf3b5f1a8d9";
-      sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
+      hash = "sha256-PYdg7VNDG12ka2q+fN/abIpAlAsdqKJ4oH8ARULOAqA=";
     };
     buildInputs = [ zlib ];
   });
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "daanzu";
     repo = "kaldi-fork-active-grammar";
     rev = version;
-    sha256 = "+kT2xJRwDj/ECv/v/J1FpsINWOK8XkP9ZvZ9moFRl70=";
+    hash = "sha256-+kT2xJRwDj/ECv/v/J1FpsINWOK8XkP9ZvZ9moFRl70=";
   };
 
   patches = [

@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   pbr,
   setuptools,
 
   # dependencies
+  cryptography,
   debtcollector,
   iso8601,
   netaddr,
@@ -28,27 +29,34 @@
   pyyaml,
   qemu-utils,
   stdenv,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-utils";
-  version = "10.0.1";
+  version = "10.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_utils";
-    inherit version;
-    hash = "sha256-Ib/Cm7TBzZr7TvdB+445Ro+lSF5gcX9PkPOtPc6KHyI=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.utils";
+    tag = finalAttrs.version;
+    hash = "sha256-0Q8gKL7h9IF9K6wH8yF4J+g6KYqS9tAcXLkIJSkmbG8=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch =
     let
       soext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
+      # pbr needs git to ship subpackages and package data
+      echo "recursive-include oslo_utils *" > MANIFEST.in
+
       substituteInPlace oslo_utils/secretutils.py \
         --replace-fail "ctypes.util.find_library(\"crypt\")" '"${lib.getLib libxcrypt-legacy}/lib/libcrypt${soext}"'
 
@@ -63,6 +71,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    cryptography
     debtcollector
     iso8601
     netaddr
@@ -81,26 +90,28 @@ buildPythonPackage rec {
     oslotest
     pyyaml
     qemu-utils
-    stestr
+    stestrCheckHook
     testscenarios
     tzdata
   ];
 
-  # disabled tests:
-  # https://bugs.launchpad.net/oslo.utils/+bug/2054134
-  # netaddr default behaviour changed to be stricter
-  checkPhase = ''
+  preCheck = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-
-    stestr run -e <(echo "
-      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
-      oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
-      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
-    ")
   '';
 
-  pythonImportsCheck = [ "oslo_utils" ];
+  disabledTests = [
+    # https://bugs.launchpad.net/oslo.utils/+bug/2054134
+    # netaddr default behaviour changed to be stricter
+    "oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip"
+    "oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4"
+    "oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout"
+  ];
+
+  pythonImportsCheck = [
+    "oslo_utils"
+    "oslo_utils.imageutils"
+  ];
 
   meta = {
     description = "Oslo Utility library";
@@ -108,4 +119,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

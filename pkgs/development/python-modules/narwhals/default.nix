@@ -21,17 +21,22 @@
   sqlframe,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "narwhals";
-  version = "2.23.0";
+  version = "2.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
-    tag = "v${version}";
-    hash = "sha256-fT3v7T2S7cmv0tX60kjRBrUq+89TG2/Ar9Qh9O4LP8U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zw45xT54D8LeaJRyMxWhFGUBzSmDmLTzpISk2zPSbLY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.0,<0.13.0" "uv_build"
+  '';
 
   build-system = [ uv-build ];
 
@@ -59,7 +64,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -91,6 +96,8 @@ buildPythonPackage rec {
     "test_over_quantile"
     "test_quantile_expr"
     "test_join_duplicate_column_names"
+    # PySpark does not yet fully support pandas >= 3.0.0
+    "test_backend_version[pyspark[connect]]"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -105,8 +112,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

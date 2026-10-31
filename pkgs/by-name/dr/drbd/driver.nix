@@ -56,6 +56,5 @@ stdenv.mkDerivation (finalAttrs: {
       DRBD is a software-based, shared-nothing, replicated storage solution
       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
-    broken = kernel.kernelOlder "6.19" && kernel.kernelAtLeast "6.18";
   };
 })

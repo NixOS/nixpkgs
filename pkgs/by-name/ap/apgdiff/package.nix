@@ -23,7 +23,7 @@ maven.buildMavenPackage rec {
       src/main/resources/cz/startnet/utils/pgdiff/Resources.properties
   '';
 
-  mvnHash = "sha256-zJQirS8sVqHKZsBukEOf7ox5IeiAVOP6wEHWb4CAyxc=";
+  mvnHash = "sha256-xfXD/YnK3v++YJA6EJC/F7xz6G4J65gyB1Kf50Jsug4=";
 
   nativeBuildInputs = [ makeWrapper ];
 

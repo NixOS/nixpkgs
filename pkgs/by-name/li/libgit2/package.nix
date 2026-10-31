@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.9.7";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   outputs = [
     "lib"
     "dev"

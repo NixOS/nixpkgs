@@ -102,6 +102,7 @@ buildPythonPackage (finalAttrs: {
     "test_cpu"
     "test_entropy_categorical"
     "test_gaussian_model"
+    "test_zero_inflated_logits_probs_agree"
 
     # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
     # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.

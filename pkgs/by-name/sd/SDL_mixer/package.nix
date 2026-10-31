@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_mixer";
-  version = "1.2.12-unstable-2026-09-12";
+  version = "1.2.12-unstable-2026-10-17";
 
   # word of caution: while there is a somewhat maintained SDL-1.2 branch on
   # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
-    rev = "98c1b9615ee7507dbdd30c4fe3b907cc58800064";
-    hash = "sha256-FwDwUPLzuOlokKP91w8dF/BJPG2rFIlgn5kR6Tka0ws=";
+    rev = "d0ced428604ee4e645e5a8813b3022cd20519d72";
+    hash = "sha256-ZnRxuZIVWLOYRJJmY8cO4FD+BONORd8Wpk3vpFmYquc=";
   };
 
   # Upstream does an okay job bumping these vendor dependencies, and we don't use them in nix anyways.
@@ -90,10 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "SDL multi-channel audio mixer library";
-    homepage = "http://www.libsdl.org/projects/SDL_mixer/";
+    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
     pkgConfigModules = [ "SDL_mixer" ];
     teams = [ lib.teams.sdl ];
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
+    identifiers.cpeParts =
+      let
+        # version shenanigans to strip -unstable suffix which is not supported by CPE
+        versionString = "${lib.versions.majorMinor finalAttrs.version}.${lib.versions.patch finalAttrs.version}";
+      in
+      lib.meta.cpeFullVersionWithVendor "libsdl" versionString;
   };
 })

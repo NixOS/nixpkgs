@@ -21,9 +21,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-oBguMNOj3n9yq6La1WiZTZUmpDTu6zuVj87cQsX7Fk8=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     async-lru

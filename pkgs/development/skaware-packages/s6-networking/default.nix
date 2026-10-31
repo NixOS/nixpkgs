@@ -7,17 +7,16 @@
   s6-dns,
 
   # Whether to build the TLS/SSL tools and what library to use
-  # acceptable values: "bearssl", "libressl", false
-  sslSupport ? "bearssl",
+  # See "Requirements" section on https://skarnet.org/software/s6-networking/
+  # acceptable values: "libressl", false
+  sslSupport ? "libressl",
   libressl,
-  bearssl,
 }:
 
 let
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
     libressl = libressl;
-    bearssl = bearssl;
   };
 
 in

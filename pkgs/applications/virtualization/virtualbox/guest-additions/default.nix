@@ -2,6 +2,7 @@
   stdenv,
   kernel,
   callPackage,
+  coreutils,
   lib,
   dbus,
   kmod,
@@ -16,11 +17,12 @@
   makeWrapper,
   wayland,
   libx11,
+  kernelModuleMakeFlags,
 }:
 let
-  virtualboxVersion = "7.2.18";
+  virtualboxVersion = "7.2.22";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "06db4060caadc70346335c0a731ca6667cdabf206de289c64f3f96f2d341b9d0";
+  virtualboxSha256 = "440a2b3eeb46e7e992961b70ef24f43e95b3c99fa2ab30aac20b963ef9e91ad7";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -101,6 +103,8 @@ stdenv.mkDerivation {
     substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c \
       --replace-fail "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0)" \
       "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0) || RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999)"
+
+    sed -i '0,/RTLNX_VER_MIN(6,19,0)/s//RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,112, 6,12,999) || RTLNX_VER_RANGE(6,18,55, 6,18,999)/' ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_main.c
   '';
 
   buildPhase = ''
@@ -109,7 +113,7 @@ stdenv.mkDerivation {
     # Build kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
-    make
+    make $makeFlags
     cd ../..
 
     # Change the interpreter for various binaries
@@ -133,6 +137,12 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=$(out)"
+    "DEPMOD=${coreutils}/bin/true"
+    "VBOX_ALLOW_MODULE_SIGNING=1"
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -140,7 +150,7 @@ stdenv.mkDerivation {
 
     # Install kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
-    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
+    make $makeFlags install KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
     # Install binaries

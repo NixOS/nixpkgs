@@ -23,12 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kreya";
-  version = "1.19.1";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "https://stable-downloads.kreya.app/${finalAttrs.version}/Kreya-linux-x64.tar.gz";
-    hash = "sha256-l1LeQv2QKI57bXwqi9KMCDtuDiuawLLq1ysx6SbmHKI=";
+    hash = "sha256-ZNSK+L9hLDZi1YuWtlKfjRaX/4CqPHWI9jfNDU6tjmw=";
   };
+  sourceRoot = ".";
 
   nativeBuildInputs = [
     makeWrapper
@@ -47,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/kreya/
     cp -r example-project $out/share/kreya/
     cp -r protoc $out/share/kreya/
-    cp kreya.xml $out/share/kreya/
 
     wrapProgram $out/bin/kreya \
       --set LD_LIBRARY_PATH "$out/lib:${lib.makeLibraryPath libraries}"

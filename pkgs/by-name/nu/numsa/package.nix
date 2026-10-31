@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Solvent accessible surface area calculation";
     homepage = "https://github.com/grimme-lab/numsa";
     changelog = "https://github.com/grimme-lab/numsa/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };

@@ -26,7 +26,7 @@
   gnome-shell,
   gcr_3,
   pam,
-  systemd,
+  systemdLibs,
   upower,
   wayland,
   dbus,
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-session
     gtk4
     pam
-    systemd
+    systemdLibs
     upower
     wayland
     feedbackd

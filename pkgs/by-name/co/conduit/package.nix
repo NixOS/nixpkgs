@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conduit";
-  version = "0.9.8";
+  version = "0.9.9";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "conduit";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-uGHOz15jv8RHM2JTuJpzppMBKCqMqoWX7w0QZqJ+h8c=";
+    hash = "sha256-l3fBK20AqNmdOfFtZ+wburekv/+A1VGSQM+V47h/DBI=";
   };
 
   nativeBuildInputs = [

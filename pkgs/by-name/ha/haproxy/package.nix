@@ -13,7 +13,7 @@
   aws-lc,
   libressl,
   openssl,
-  lua5_4,
+  lua5_5,
   pcre2,
 }:
 
@@ -34,28 +34,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.4.4";
+  version = "3.4.7";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sMUFPE1GhA7N7jklc2/po95kclWbQ8aRg9cOWT2RM98=";
+    hash = "sha256-zP00Lzckws1llXQETXiPROILISRnxr1e27/FF6J3Xco=";
   };
-
-  patches = [
-    # Remove once the packaged release fixes CVE-2026-90678.
-    (fetchpatch2 {
-      name = "CVE-2026-90678.patch";
-      url = "https://github.com/haproxy/haproxy/commit/86a4ebc761a278838e8cb06f3a292282ba704c65.patch?full_index=1";
-      hash = "sha256-GTI9c1Y3d7DN2m11eODM3FkY2Aitrndi3CTI2Tr95OU=";
-    })
-  ];
 
   buildInputs = [
     sslPkg
     zlib
     libxcrypt
   ]
-  ++ lib.optional useLua lua5_4
+  ++ lib.optional useLua lua5_5
   ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
@@ -96,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals useLua [
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_4}/lib"
-    "LUA_INC=${lua5_4}/include"
+    "LUA_LIB=${lua5_5}/lib"
+    "LUA_INC=${lua5_5}/include"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_GETADDRINFO=1"

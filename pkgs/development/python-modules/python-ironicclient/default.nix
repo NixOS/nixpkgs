@@ -19,11 +19,11 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ironicclient";
   version = "6.0.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-ironicclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AbxzRpyfplR4Mk9CcaRXi+CNo08tlRIxAFxsJjrkxvY=";
   };
 
@@ -60,18 +60,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     requests-mock
     oslotest
   ];
 
-  env.PBR_VERSION = version;
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   pythonImportsCheck = [ "ironicclient" ];
 
@@ -82,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

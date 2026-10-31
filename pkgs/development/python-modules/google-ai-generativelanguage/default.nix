@@ -60,6 +60,11 @@ buildPythonPackage (finalAttrs: {
     "google.ai.generativelanguage_v1beta2"
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Google Ai Generativelanguage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-ai-generativelanguage";

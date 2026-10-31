@@ -10,10 +10,12 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
 
-  ## wandb-xpu
+  ## wandb-symon
   rustPlatform,
 
   ## parquet-rust-wrapper
+  pkg-config,
+  pkgsHostTarget,
   cacert,
 
   ## wandb
@@ -58,6 +60,7 @@
   matplotlib,
   moto,
   moviepy,
+  optuna,
   pandas,
   parameterized,
   pillow,
@@ -82,27 +85,24 @@
 }:
 
 let
-  version = "0.30.0";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-4ccIM8bXbz8IkZeMBdr5zqoG7IxwwW8lb/VKIOOJWeE=";
+    hash = "sha256-Hp0e+7Lmng7eCGz46QyrmQcAfifUjNgzuubzPT23Ns4=";
   };
 
-  wandb-xpu = rustPlatform.buildRustPackage {
-    pname = "wandb-xpu";
-    version = "0.7.1";
+  wandb-symon = rustPlatform.buildRustPackage {
+    pname = "wandb-symon";
+    version = "0.8.0";
     inherit src;
 
-    sourceRoot = "${src.name}/xpu";
+    sourceRoot = "${src.name}/symon";
 
-    cargoHash = "sha256-arb96ajbju/CeAglgvTjD5/omrEpigEORjXVAVSSV2Q=";
+    cargoHash = "sha256-ZMa3aGbp4AtFBmATEua+woRlI9l7nTxfrevPcoZ3s1Y=";
 
     checkFlags = [
-      # fails in sandbox
-      "--skip=gpu_amd::tests::test_gpu_amd_new"
-
       # tries to download libtpu wheel from PyPI
       "--skip=tpu_libtpu::tests::test_libtpu_sdk"
     ];
@@ -113,7 +113,7 @@ let
     doInstallCheck = true;
 
     meta = {
-      mainProgram = "wandb-xpu";
+      mainProgram = "wandb-symon";
     };
   };
 
@@ -134,6 +134,12 @@ let
       # build a client at all without system CA certificates.
       # Its setup hook exports `SSL_CERT_FILE`.
       cacert
+      pkg-config
+    ];
+
+    buildInputs = [
+      pkgsHostTarget.aws-lc
+      pkgsHostTarget.zstd
     ];
 
     # The original build script renames the library:
@@ -152,12 +158,12 @@ let
     sourceRoot = "${src.name}/core";
 
     postPatch =
-      # hardcode the `wandb-xpu` binary path.
+      # hardcode the `wandb-symon` binary path.
       ''
-        substituteInPlace internal/monitor/xpuresourcemanager.go \
+        substituteInPlace internal/monitor/symonresourcemanager.go \
           --replace-fail \
-            'cmdPath, err := getXPUCmdPath()' \
-            'cmdPath, err := "${lib.getExe wandb-xpu}", error(nil)'
+            'cmdPath, err := symonPath()' \
+            'cmdPath, err := "${lib.getExe wandb-symon}", error(nil)'
       ''
       # hardcode the `parquet-rust-wrapper` library path.
       + ''
@@ -229,7 +235,7 @@ buildPythonPackage (finalAttrs: {
     # Prevent the install script from trying to build and embed native binaries in the wheel.
     # Their paths have been patched accordingly in the `wandb-core` and `wandb` source codes.
     # https://github.com/wandb/wandb/blob/v0.18.5/hatch_build.py#L37-L47
-    WANDB_BUILD_SKIP_WANDB_XPU = true;
+    WANDB_BUILD_SKIP_WANDB_SYMON = true;
     WANDB_BUILD_SKIP_ORJSON = true;
     WANDB_BUILD_UNIVERSAL = true;
   };
@@ -238,6 +244,10 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRemoveDeps = [
+    # Only lazily imported for CES EvalTable logging, and not packaged in nixpkgs
+    "cwevals"
+  ];
   dependencies = [
     click
     opentelemetry-api
@@ -278,6 +288,7 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     moto
     moviepy
+    optuna
     pandas
     parameterized
     pillow
@@ -320,6 +331,13 @@ buildPythonPackage (finalAttrs: {
 
     # Requires kfp which is not packaged
     "tests/unit_tests/test_kfp.py"
+
+    # UsageError: This W&B server does not support CES EvalTable logging.
+    "tests/unit_tests/test_eval_table_media_ces.py::test_eval_table_writes_supported_media_extensions_to_ces"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_columns_register_distinct_overlay_class_labels"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_overlay_class_labels_merge_with_resumed_string_ids"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_overlay_keys_register_distinct_class_labels"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_rows_merge_overlay_class_labels"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
@@ -411,6 +429,20 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: Not all requests have been executed
     "test_image_refs"
+
+    # AssertionError: logger state differs (pytest's own log capture handlers)
+    "test_restore_library_logs_undoes_routing"
+
+    # cursed regression in click 8.4 leads to ansi escapes not being stripped
+    # in output. since this output is asserted on in tests, we get failures to
+    # match strings.
+    # remove when updating to click >= 3.5.0
+    # https://github.com/pallets/click/issues/3572
+    # https://github.com/wandb/wandb/blob/v0.30.0/requirements/requirements_dev.txt#L3-L4
+    "test_finds_synced_runs"
+    "test_include_unsynced"
+    "test_include_unsynced_mixed"
+    "test_reports_rmtree_errors"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert not copy2_mock.called
@@ -449,7 +481,7 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit
       wandb-core
-      wandb-xpu
+      wandb-symon
       parquet-rust-wrapper
       ;
   };
@@ -459,8 +491,11 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/wandb/wandb";
     changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
     mainProgram = "wandb";
-    broken = wandb-xpu.meta.broken || wandb-core.meta.broken;
+    broken = wandb-symon.meta.broken || wandb-core.meta.broken;
   };
 })

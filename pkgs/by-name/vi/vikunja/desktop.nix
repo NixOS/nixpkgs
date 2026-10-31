@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-RpME/0lU8i+D8erEkTfA0cXrEs8LRZvNdfU8e3X366Y=";
+    hash = "sha256-bUiLKzZJWGscGiKn0oNaaMbSsW/vF0FNUal5Gv7n278=";
   };
 
   env = {

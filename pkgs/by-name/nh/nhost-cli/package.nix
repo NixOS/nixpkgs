@@ -1,22 +1,22 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "nhost-cli";
-  version = "1.42.1";
+  version = "1.52.0";
 
   src = fetchFromGitHub {
     owner = "nhost";
     repo = "nhost";
     tag = "cli@${finalAttrs.version}";
-    hash = "sha256-n61YgU1/Ad1NMZr/1/jnmuZpN8PemPUW/gomf+ETvRw=";
+    hash = "sha256-QcUvPtByLlMbxoR6HqxsEmyETXnlyiAg7ukyya4IdAA=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/cli";
+  subPackages = [ "cli" ];
 
   vendorHash = null;
 
@@ -28,9 +28,6 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mv $out/bin/cli $out/bin/nhost
   '';
-
-  # require network access
-  checkFlags = [ "-skip=^TestMakeJSONRequest$" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

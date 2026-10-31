@@ -222,6 +222,17 @@ let
         doCheck = false;
       };
 
+      # passivestamp subpackage must be installed into recoveryservicesbackup directory.
+      azure-mgmt-recoveryservicesbackup =
+        super.azure-mgmt-recoveryservicesbackup.overridePythonAttrs
+          (attrs: {
+            dependencies = attrs.dependencies ++ [ self.azure-mgmt-recoveryservicesbackup-passivestamp ];
+            postInstall = (attrs.postInstall or "") + ''
+              ln -s ${self.azure-mgmt-recoveryservicesbackup-passivestamp}/${py.sitePackages}/azure/mgmt/recoveryservicesbackup/passivestamp \
+                $out/${py.sitePackages}/azure/mgmt/recoveryservicesbackup/passivestamp
+            '';
+          });
+
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
         version = "4.0.0b22";
@@ -241,18 +252,6 @@ let
           hash = "sha256-zZ010cwbjLC9JBrVXJG3fRTgSuc8YyraEUATX5whf+E=";
         };
       });
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.recoveryservicesbackup.activestamp'
-      azure-mgmt-recoveryservicesbackup =
-        super.azure-mgmt-recoveryservicesbackup.overridePythonAttrs
-          (attrs: rec {
-            version = "9.2.0";
-            src = fetchPypi {
-              pname = "azure_mgmt_recoveryservicesbackup";
-              inherit version;
-              hash = "sha256-xAKz4ipsOHnfVrw34AYxQsM1LFECWZ/xAtGYJPGzKyk=";
-            };
-          });
     };
   };
 in

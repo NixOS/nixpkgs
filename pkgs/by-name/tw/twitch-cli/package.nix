@@ -6,6 +6,7 @@
   lib,
   testers,
   twitch-cli,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -31,9 +32,7 @@ buildGoModule (finalAttrs: {
     "-X=main.buildVersion=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   nativeBuildInputs = [ installShellFiles ];
 

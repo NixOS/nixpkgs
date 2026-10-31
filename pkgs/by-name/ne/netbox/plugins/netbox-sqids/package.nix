@@ -9,7 +9,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-sqids";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jsenecal";
     repo = "netbox-sqids";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B9BUjaKUqORlITbjiDYFetCaSx8lL0ECRU9yuPkoA0k=";
+    hash = "sha256-c25xnN6aC1GUtVGOdE0uXMM79L/MMO2Cd3avr6eWwXA=";
   };
 
   build-system = [ setuptools ];

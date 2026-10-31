@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocaml-ppx";
     repo = "ppx_tools_versioned";
     rev = finalAttrs.version;
-    sha256 = "07lnj4yzwvwyh5fhpp1dxrys4ddih15jhgqjn59pmgxinbnddi66";
+    hash = "sha256-xsTW7LKxv3pTsRI/KEuAsTWife4t3AtdgZ5v/j2Rlh4=";
   };
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];

@@ -8,7 +8,7 @@
   SDL2,
   xercesc,
   openal,
-  lua,
+  lua5_2_compat,
   libvlc,
   libjpeg,
   wxwidgets_3_2,
@@ -35,6 +35,7 @@
   fetchpatch,
 }:
 let
+  lua = lua5_2_compat;
   version = "3.13.0";
   lib-env = buildEnv {
     name = "megaglest-lib-env";

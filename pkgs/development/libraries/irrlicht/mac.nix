@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "quiark";
     repo = "IrrlichtCMake";
     rev = "523a5e6ef84be67c3014f7b822b97acfced536ce";
-    sha256 = "10ahnry2zl64wphs233gxhvs6c0345pyf5nwa29mc6yn49x7bidi";
+    hash = "sha256-scV1eiLWG1aTUNwW528hAzCjN+xvDKHh5cTQL3y2UIE=";
   };
 
   postUnpack = ''

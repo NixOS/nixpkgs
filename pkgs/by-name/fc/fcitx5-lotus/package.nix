@@ -2,17 +2,15 @@
   lib,
   stdenv,
   acl,
-  buildGoModule,
   cmake,
   fcitx5,
   fetchFromGitHub,
   gettext,
-  go,
   hicolor-icon-theme,
   kdePackages,
+  libevdev,
   libinput,
-  librsvg,
-  libx11,
+  libnotify,
   nix-update-script,
   pkg-config,
   python3,
@@ -31,37 +29,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.10";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ti4O0wyUYVyGzFmlG8SN3wusoM8TlsbmI60BPyaS0RU=";
-    fetchSubmodules = true;
+    hash = "sha256-zWOnjTaifwhzIk9QLksf/g3EF/SOg1vJmM4IQ5P1+H8=";
   };
 
-  vendorDir = finalAttrs.passthru."go-modules";
-
   passthru = {
-    "go-modules" =
-      (buildGoModule {
-        pname = "fcitx5-lotus-go-modules";
-        inherit (finalAttrs) version src;
-        modRoot = "bamboo";
-        vendorHash = "sha256-0Q8axcw5UKrODpe5oU0yWiBykPWNPuun1161MUgnrlM=";
-      }).goModules;
-
     updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [
     cmake
     gettext
-    go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
-    librsvg
     pkg-config
     qt6.wrapQtAppsHook
   ];
@@ -70,8 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     acl
     fcitx5
     kdePackages.extra-cmake-modules
+    libevdev
     libinput
-    libx11
+    libnotify
     pythonEnv
     qt6.qtbase
     qt6.qtsvg
@@ -84,41 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-
-    rm -rf bamboo/vendor
-    cp -r $vendorDir bamboo/vendor
-  '';
-
-  postPatch = ''
-    substituteInPlace src/lotus-monitor.cpp \
-      --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5-lotus-server") == 0' \
-                     '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 24 && strcmp(exe_path + strlen(exe_path) - 24, "/bin/fcitx5-lotus-server") == 0)'
-
-    substituteInPlace server/lotus-server.cpp \
-      --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
-                     '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
-
-    substituteInPlace src/lotus-engine.cpp \
-      --replace-fail '/usr/share/icons/hicolor' '/run/current-system/sw/share/icons/hicolor'
-
-    substituteInPlace settings-gui/i18n.py \
-      --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
-
-    substituteInPlace settings-gui/ui/pages/dict_editor.py \
-      --replace-fail '"/usr/share/fcitx5/lotus/vietnamese.cm.dict"' '"'"$out"'/share/fcitx5/lotus/vietnamese.cm.dict"'
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/lib/udev/rules.d/99-lotus.rules \
-      --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl"
-
-    substituteInPlace $out/lib/systemd/system/fcitx5-lotus-server@.service \
-      --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl" \
-      --replace-fail "/usr/bin/fcitx5-lotus-server" "$out/bin/fcitx5-lotus-server"
-  '';
+  cmakeFlags = [
+    "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"
+    "-DLOTUS_SETFACL_EXECUTABLE=${acl}/bin/setfacl"
+  ];
 
   postFixup = ''
     patchShebangs $out/share/fcitx5-lotus/settings-gui
@@ -131,7 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/LotusInputMethod/fcitx5-lotus";
     license = with lib.licenses; [
       gpl3Plus
-      lgpl21Plus
     ];
     maintainers = with lib.maintainers; [
       imcvampire

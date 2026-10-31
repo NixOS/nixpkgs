@@ -13,7 +13,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
-  version = "0.9.1";
+  version = "0.9.5";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "herdrdev";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N6+kprfWRyh0AkAiopkGsNXUGGORyPVFHEaDHCpGQs8=";
+    hash = "sha256-N7e7oCKxeCoxek6UT8Lweq16rSsQQi34QMb7C2iNpm8=";
   };
 
-  cargoHash = "sha256-1VAmsDE3zeU0wMVQKleQcd/zq8/k/oor8tasrsRQfeY=";
+  cargoHash = "sha256-a6DgQodo+qa5yg/d+yMfsM9EUv2LQRFrqZgmwgVxggE=";
 
   zigDeps = zig_0_16.fetchDeps {
     inherit (finalAttrs) pname version;
@@ -75,12 +75,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd herdr \
-      --bash <("$out/bin/herdr" completion bash) \
-      --fish <("$out/bin/herdr" completion fish) \
-      --zsh <("$out/bin/herdr" completion zsh)
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd herdr \
+        --bash <("$out/bin/herdr" completion bash) \
+        --fish <("$out/bin/herdr" completion fish) \
+        --zsh <("$out/bin/herdr" completion zsh)
+    ''
+    # Ship the per-agent hook/plugin sources so integrations can be wired up
+    # declaratively (e.g. home-manager) instead of running
+    # `herdr integration install <agent>`.
+    + ''
+      install -d "$out/share/herdr"
+      cp -r src/integration/assets "$out/share/herdr/integrations"
+      find "$out/share/herdr/integrations" -name '*.test.ts' -delete
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

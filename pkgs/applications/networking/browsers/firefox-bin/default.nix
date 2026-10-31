@@ -154,7 +154,7 @@ stdenv.mkDerivation {
     changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = {
+    license = lib.licenses.mkLicense {
       shortName = "firefox";
       fullName = "Firefox Terms of Use";
       url = "https://www.mozilla.org/about/legal/terms/firefox/";

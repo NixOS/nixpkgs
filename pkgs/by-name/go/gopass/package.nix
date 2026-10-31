@@ -28,7 +28,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gopass";
-  version = "1.17.3";
+  version = "1.17.4";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,10 +39,10 @@ buildGoModule (finalAttrs: {
     owner = "gopasspw";
     repo = "gopass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UlnibTEge5eCW7PZqQBWlZUaaYtNLKywbyacTs/Af/M=";
+    hash = "sha256-HjCDjj2av2Uw8zQVEWxu/Wa8/s9Jy9yfl3lVneQs88o=";
   };
 
-  vendorHash = "sha256-2J0/eyEhMsDCXmRCeQx3vMZZc+1T2oz8p0y2Csv7VU4=";
+  vendorHash = "sha256-Rn04iPVok88sr+tQZT6B0oWftpi7J7aWHaC+wGp2JK4=";
 
   subPackages = [ "." ];
 

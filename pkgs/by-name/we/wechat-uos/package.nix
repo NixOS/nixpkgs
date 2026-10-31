@@ -51,7 +51,7 @@
   libexif,
   ffmpeg,
   pulseaudio,
-  systemd,
+  systemdLibs,
   libuuid,
   expat,
   bzip2,
@@ -133,7 +133,7 @@ let
     libdrm
     libgbm
     vulkan-loader
-    systemd
+    systemdLibs
     wayland
     pulseaudio
     qt6.qt5compat

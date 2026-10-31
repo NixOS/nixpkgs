@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "dash-bootstrap-templates";
-  version = "2.1.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AnnMarieW";
     repo = "dash-bootstrap-templates";
     tag = "V${version}";
-    hash = "sha256-B7iyN4sJA6DmoLf3DpFEONDe5tUd4cBlDIH4E7JtULk=";
+    hash = "sha256-GYL8shd8B5kdBhjurirtAMBIbPyQNbZL4+3WyTn2Qsw=";
   };
   build-system = [
     setuptools

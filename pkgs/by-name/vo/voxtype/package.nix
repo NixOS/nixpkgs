@@ -19,6 +19,7 @@
   libnotify,
   openssl,
   pciutils,
+  pulseaudio,
   wl-clipboard,
   wtype,
   which,
@@ -56,7 +57,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "voxtype";
-  version = "1.0.1";
+  version = "1.1.1";
 
   __structuredAttrs = true;
 
@@ -64,10 +65,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "peteonrails";
     repo = "voxtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OT0tVSi9x3U7NwgZU00mojXk3RRWxuFoezpdSknLmmU=";
+    hash = "sha256-7Djbq7nUIqL3afCEYKnPWtRnx4jXBvhY4iA1m/4w8Ak=";
   };
 
-  cargoHash = "sha256-kJFI9sSMzaaYHuc7ze5Lkwt3ZVskM9rB9bvTon0XguU=";
+  # The lock file pins openvino-genai to a git fork whose openvino-sys crate
+  # carries a submodule with a symlink loop, which fetchCargoVendor cannot
+  # copy. The fork only matters for the openvino-whisper feature, which is not
+  # built here, so resolve it from crates.io instead.
+  cargoPatches = [ ./openvino-genai-from-crates-io.patch ];
+
+  cargoHash = "sha256-/3EINM6XjftYdi8B2/WQ+62vhOC/wX4x156IjXLmNv8=";
 
   buildFeatures =
     [ ]
@@ -154,6 +161,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         (lib.makeBinPath (
           [
             libnotify
+            pulseaudio # pactl for media ducking
             which
           ]
           ++ lib.optionals vulkanSupport [
@@ -170,7 +178,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ''}
   ''
   + lib.optionalString installManPages ''
-    installManPage target/debug/build/voxtype-*/out/man/*
+    installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType/build/voxtype-*/out/man/*
   ''
   + lib.optionalString installShellCompletions ''
     installShellCompletion packaging/completions/voxtype.{bash,zsh,fish}

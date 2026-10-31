@@ -10,19 +10,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evtx";
-  version = "0.13.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
     tag = finalAttrs.version;
-    hash = "sha256-5szp+yh2RCUFWbd44nr5dfnu6o6tyaF/vT5MyzwN4iY=";
+    hash = "sha256-blWHrm16pw3dUsO987jXMS9u4eAoNThXKE1FXwqIhsM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-y4QIjbGN1rVJmCvHq3KSKiwZvMOvQI9I/sdGgizYxMw=";
+    hash = "sha256-LpYrbs9fwVMUHSvxRGjoct60r5Tpdy9iJtyDj9X8e/E=";
   };
 
   nativeBuildInputs = with rustPlatform; [

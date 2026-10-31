@@ -31,7 +31,10 @@ let
     emulated_hue = [
       defusedxml
     ];
-    esphome = getComponentDeps "homeassistant_hardware";
+    esphome = concatMap getComponentDeps [
+      "homeassistant_hardware"
+      "zwave_js"
+    ];
     gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     go2rtc = [
       tqdm

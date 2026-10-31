@@ -8,6 +8,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "drf-spectacular-sidecar";
+  # Upstream does automated monthly releases even if there are no changes at all
+  # https://github.com/tfranzel/drf-spectacular-sidecar/issues/17
+  # nixpkgs-update: no auto update
   version = "2026.9.1";
   pyproject = true;
 

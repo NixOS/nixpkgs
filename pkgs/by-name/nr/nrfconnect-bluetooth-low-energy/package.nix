@@ -6,23 +6,14 @@
   libxshmfence,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "nrfconnect-bluetooth-low-energy";
   version = "4.0.4";
-
   src = fetchurl {
-    url = "https://github.com/NordicPlayground/pc-nrfconnect-ble-standalone/releases/download/v${version}/nrfconnect-bluetooth-low-energy-${version}-x86_64.AppImage";
+    url = "https://github.com/NordicPlayground/pc-nrfconnect-ble-standalone/releases/download/v${finalAttrs.version}/nrfconnect-bluetooth-low-energy-${finalAttrs.version}-x86_64.AppImage";
     hash = "sha256-mL8ky/cYjNgfUJgE7W5LFK/w7Ky9Xx6E84UT668HRAk=";
-    name = "${pname}-${version}.AppImage";
+    name = "${finalAttrs.pname}-${finalAttrs.version}.AppImage";
   };
-
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [
     segger-jlink-headless
@@ -30,8 +21,8 @@ appimageTools.wrapType2 {
   ];
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/nrfconnect-bluetooth-low-energy.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/512x512/apps/nrfconnect-bluetooth-low-energy.png \
+    install -Dm444 ${finalAttrs.contents}/nrfconnect-bluetooth-low-energy.desktop -t $out/share/applications
+    install -Dm444 ${finalAttrs.contents}/usr/share/icons/hicolor/512x512/apps/nrfconnect-bluetooth-low-energy.png \
       -t $out/share/icons/hicolor/512x512/apps
     substituteInPlace $out/share/applications/nrfconnect-bluetooth-low-energy.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=nrfconnect-bluetooth-low-energy'
@@ -45,4 +36,4 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [ stargate01 ];
     mainProgram = "nrfconnect-bluetooth-low-energy";
   };
-}
+})

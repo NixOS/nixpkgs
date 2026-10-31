@@ -16,10 +16,10 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-designateclient";
   version = "6.4.0";
   pyproject = true;
@@ -27,11 +27,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-designateclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OBvPdulj2lg2FCyMDOp1iw12MxLre0/jkMdc7syJatc=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -59,14 +60,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     oslotest
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "designateclient" ];
 
@@ -76,4 +71,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

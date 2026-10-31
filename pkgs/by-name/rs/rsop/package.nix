@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsop";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromCodeberg {
     owner = "heiko";
     repo = "rsop";
     rev = "rsop/v${finalAttrs.version}";
-    hash = "sha256-RqrHJuqgO+m6bWjDcjDaiAgnIJoyUEPxGG/VWQOc8KM=";
+    hash = "sha256-0sXrXDROuqUT6psFdHyxWAaijQqBIyaguR7m3SwY5to=";
   };
 
-  cargoHash = "sha256-mWjPIsir3h/OOHqAaEd64s+2CrowlmXpNa9U9LGKpuA=";
+  cargoHash = "sha256-Oee/9ja5QuBxDr56dO5998RVpdZD/rwSoQGVilGbH5Q=";
 
   nativeBuildInputs = [ pkg-config ];
 

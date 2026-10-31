@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "games-team";
     repo = "xteddy";
     rev = "debian/${finalAttrs.version}";
-    sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
+    hash = "sha256-HqPD0RQU42lWk8IzEAMbDhwGKvZPkbgdwVJh09Dhp2Y=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cuddly teddy bear for your X desktop";
-    homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
+    homepage = "https://salsa.debian.org/games-team/xteddy";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.linux;

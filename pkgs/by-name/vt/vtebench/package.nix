@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];
-  strictDeps = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

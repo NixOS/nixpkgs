@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   stdenv,
+  testers,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
@@ -38,11 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
+    pkgConfigModules = [ "SDL2_net" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })

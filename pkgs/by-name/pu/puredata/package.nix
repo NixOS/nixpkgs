@@ -81,5 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ carlthome ];
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

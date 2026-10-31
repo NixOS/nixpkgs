@@ -1,26 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   fetchPypi,
   pandas,
-  poetry-core,
   requests,
   zeep,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "noaa-coops";
-  version = "0.4.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "noaa_coops";
     inherit version;
-    hash = "sha256-m3hTzUspYTMukwcj3uBbRahTmXbL1aJVD9NXfjwghB8=";
+    hash = "sha256-VF7mYnaZ2Qnk0DX64U9c2PQ1mMzWMk6IhA1qoYEAP94=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pandas

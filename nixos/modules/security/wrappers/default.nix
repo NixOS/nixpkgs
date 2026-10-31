@@ -60,7 +60,10 @@ let
       };
       options.source = lib.mkOption {
         type = lib.types.path;
-        description = "The absolute path to the program to be wrapped.";
+        description = ''
+          The absolute path to the program to be wrapped.
+          This must be an ELF executable.
+        '';
       };
       options.program = lib.mkOption {
         type = with lib.types; nullOr str;
@@ -234,7 +237,8 @@ in
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
         modifying it. This works by creating a wrapper program in a directory
-        (not configurable), which is then added to the shell `PATH`.
+        (not configurable), which is then added to the shell `PATH`. Source
+        programs are required to be ELF executables.
       '';
     };
 
@@ -361,16 +365,18 @@ in
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (
-      pkgs.runCommandLocal "ensure-all-wrappers-paths-exist"
+      pkgs.runCommandLocal "ensure-wrapper-integrity"
         {
-          nativeBuildInputs = [ pkgs.libcap-text-verifier ];
+          nativeBuildInputs = [
+            pkgs.libcap-text-verifier
+          ];
           preferLocalBuild = true;
         }
         ''
           # make sure we produce output
           mkdir -p $out
 
-          echo -n "Checking that Nix store paths of all wrapped programs exist... "
+          echo -n "Checking that Nix store paths of all wrapped programs exist and are ELF executables... "
           ${lib.toShellVar "wrappers" (lib.mapAttrs (n: v: v.source) wrappers)}
           for name in "''${!wrappers[@]}"; do
             path="''${wrappers[$name]}"
@@ -379,6 +385,15 @@ in
               echo "FAIL"
               echo "The path $path does not exist!"
               echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+              test -t 1 && echo -ne '\033[0m'
+              exit 1
+            fi
+            read -r -n 4 magic < "$path"
+            if ! [[ "$magic" = $'\x7fELF' ]]; then
+              test -t 1 && echo -ne '\033[1;31m'
+              echo "FAIL"
+              echo "The target executable $path is not an ELF! This is a security risk."
+              echo "Script wrappers (e.g. bash or python) are commonly susceptible to dangerous env var injections."
               test -t 1 && echo -ne '\033[0m'
               exit 1
             fi

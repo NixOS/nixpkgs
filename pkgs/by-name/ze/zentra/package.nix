@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/zentra --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
 
-  checkFlagsArray = [
+  checkFlags = [
     # Some details are missing for these tests
     "--skip=incremental::detect::tests::compute_change_set_git_includes_committed_and_dirty"
     "--skip=incremental::detect::tests::working_tree_changes_includes_non_ascii_filename"

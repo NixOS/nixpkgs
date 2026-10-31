@@ -9,18 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "asnmap";
-  version = "1.1.1";
+  version = "1.2.0";
 
+  __darwinAllowLocalNetworking = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "asnmap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dGSWUuM4Zcz9QYjYaHur3RYryxe1wJycx/wUL5yqCpM=";
+    hash = "sha256-4ra7Ex8ri5iRS+nBtCtFqsgaOxVaVPDIPFibom/aYqQ=";
   };
 
-  vendorHash = "sha256-bSpMYQvrlR9T06dYF8gaTZmMAp6Gnb2cfsYCUes7i2s=";
+  vendorHash = "sha256-rSBznMd4lyXb1m06CCEMJdsmWWXY8ZxW1wTOugl9M18=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

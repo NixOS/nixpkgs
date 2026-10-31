@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "glances-api";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
     tag = finalAttrs.version;
-    hash = "sha256-xYKjKbISNa1gIZMgmP+2HJFNoelZEzdP0oBoIzdI/Ro=";
+    hash = "sha256-iGZED6TOkFm1d/Au+iVajIB8Zxauxw3koGKuQMbMZno=";
   };
 
   build-system = [ poetry-core ];

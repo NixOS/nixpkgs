@@ -12,10 +12,12 @@
   libgudev,
   libmanette,
   lsfg-vk,
+  lsfgSupport ? false,
   meson,
   ninja,
   nix-update-script,
   python3Packages,
+  pciutils,
   umu-launcher,
   wrapGAppsHook4,
   xdg-utils,
@@ -23,14 +25,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "2.3.0";
+  version = "2.5.4";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-fD4mvz4zSYzyp9MCTKjYvaYMa/Hc7IRrirnF/GNF6p8=";
+    hash = "sha256-tDOum8u9GZsTmj1DzcByYoSkmzjAB3xOCdLfkboUClE=";
   };
 
   nativeBuildInputs = [
@@ -65,9 +67,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
 
     substituteInPlace faugus/path_manager.py \
-      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
+      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
+  ''
+  + lib.optionalString lsfgSupport ''
+    substituteInPlace faugus/path_manager.py \
       --replace-fail "/usr/lib/extensions/vulkan/lsfgvk/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so" \
-      --replace-fail "/usr/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so"
+      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lsfg-vk}/lib/liblsfg-vk-layer.so"
   '';
 
   preFixup = ''
@@ -81,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           gawk
           gnugrep
           icoextract
+          pciutils
           umu-launcher
           xdg-utils
         ]

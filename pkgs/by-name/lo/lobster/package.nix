@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2026.7";
+  version = "2026.8";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R9S69gwtAd3U9MKUqHuxx6+G0ufQWr9o38/t4z/9ARo=";
+    hash = "sha256-OC4LF0z84GzUT92G8dGyxgKJwWeV03XbZcepFhbwZII=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

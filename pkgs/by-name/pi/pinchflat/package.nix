@@ -89,5 +89,8 @@ beamPackages.mixRelease rec {
     maintainers = with lib.maintainers; [ charludo ];
     platforms = lib.platforms.unix;
     mainProgram = "pinchflat";
+    knownVulnerabilities = [
+      "multiple CVEs in dependencies. consider `pinchflat-ngx` fork as an alternative"
+    ];
   };
 }

@@ -5,7 +5,9 @@
   rustPlatform,
   cacert,
   pkg-config,
+  aws-lc,
   oniguruma,
+  zstd,
   installShellFiles,
   testers,
 }:
@@ -29,7 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     oniguruma
+    zstd
   ];
 
   checkInputs = [

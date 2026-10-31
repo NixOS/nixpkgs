@@ -39,7 +39,12 @@ buildLua (finalAttrs: {
   meta = {
     description = "Feature-rich minimalist proximity-based UI for MPV player";
     homepage = "https://github.com/tomasklaen/uosc";
-    license = lib.licenses.gpl3Only;
+    license =
+      with lib.licenses;
+      AND [
+        lgpl21Only
+        mit
+      ];
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
 })

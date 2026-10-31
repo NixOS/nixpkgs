@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dsda-launcher";
-  version = "1.4";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Pedro-Beirao";
     repo = "dsda-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OMgxhb+9GdLK00nl/df9QiYYewr+YEjdX2KjQWvu1mk=";
+    hash = "sha256-lk4MtITvJKh6p3x8KhJl3Yqs4VJjSr2aJTIaGmyABpQ=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/bin
     cp ./dsda-launcher $out/bin
-    install -Dm444 ../icons/dsda-Launcher.desktop $out/share/applications/dsda-Launcher.desktop
-    install -Dm444 ../icons/dsda-launcher.png $out/share/pixmaps/dsda-launcher.png
+    install -Dm444 ../../dist/linux/eu.pedro_beirao.dsda-launcher.desktop $out/share/applications/dsda-launcher.desktop
+    install -Dm444 ../../dist/icons/eu.pedro_beirao.dsda-launcher.svg $out/share/icons/hicolor/scalable/apps/eu.pedro_beirao.dsda-launcher.svg
     runHook postInstall
   '';
 

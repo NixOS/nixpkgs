@@ -31,9 +31,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5

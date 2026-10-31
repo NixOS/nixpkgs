@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   cmake,
   fetchFromGitHub,
   fetchzip,
@@ -60,6 +61,8 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace cmake/install_directives.cmake --replace "/control" "control"
+    substituteInPlace osquery/utils/config/default_paths.h \
+      --replace-fail '"/opt/osquery/share/osquery/certs/"' "\"$out/share/osquery/certs/\""
   '';
 
   configurePhase = ''
@@ -79,6 +82,7 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     rm -rf $out/control
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/osquery/certs/certs.pem
     remove-references-to -t ${toolchain} $out/bin/osqueryd
   '';
 

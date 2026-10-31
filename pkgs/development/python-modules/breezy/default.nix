@@ -94,7 +94,8 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/brz --prefix PYTHONPATH : "$PYTHONPATH"
+    buildPythonPath "$out ${toString dependencies}"
+    wrapProgram $out/bin/brz --prefix PYTHONPATH : "$program_PYTHONPATH"
 
     # symlink for bazaar compatibility
     ln -s "$out/bin/brz" "$out/bin/bzr"

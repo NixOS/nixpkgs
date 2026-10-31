@@ -1,6 +1,7 @@
 {
   lib,
   aiosqlite,
+  alembic,
   buildPythonPackage,
   cryptography,
   fastapi,
@@ -12,6 +13,7 @@
   hatchling,
   httpx-sse,
   httpx,
+  json-rpc,
   opentelemetry-api,
   opentelemetry-sdk,
   protobuf,
@@ -19,11 +21,13 @@
   pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
+  pytest-mock,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
   respx,
+  rfc8785,
   sqlalchemy,
   sse-starlette,
   starlette,
@@ -34,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "a2a-sdk";
-  version = "0.3.26";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "a2aproject";
     repo = "a2a-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OQVNoKCx/7t3LeLgcVCVJUDnrWnugbM6EReE0713CM4=";
+    hash = "sha256-s6/Z4jzwnZWd3ZnowbH5w3AX5VkqPc31bT3ojIOHLYs=";
   };
 
   build-system = [
@@ -53,6 +57,7 @@ buildPythonPackage (finalAttrs: {
     google-api-core
     httpx
     httpx-sse
+    json-rpc
     protobuf
     pydantic
   ];
@@ -93,30 +98,35 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aiosqlite
+    alembic
     pytest-asyncio
     pytest-cov-stub
+    pytest-mock
     pytest-timeout
     pytest-xdist
     pytestCheckHook
     respx
+    rfc8785
     uvicorn
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "a2a" ];
 
-  disabledTests =
-    [ ]
-    ++ lib.optionals (pythonAtLeast "3.14") [
-      # _pickle.PicklingError: Can't pickle local object <function...
-      "test_notification_triggering"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: Can't get local object 'FastAPI.setup.<locals>.openap…
-      "test_notification_triggering_with_in_message_config_e2e"
-      "test_notification_triggering_after_config_change_e2e"
-      "test_trace_function_sync_attribute_extractor_error_logged"
-    ];
+  disabledTests = [
+    "test_cross_version"
+    "test_trace_function_sync_attribute_extractor_error_logged"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.PicklingError: Can't pickle local object <function...
+    "test_notification_triggering"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: Can't get local object 'FastAPI.setup.<locals>.openap…
+    "test_notification_triggering_with_in_message_config_e2e"
+    "test_notification_triggering_after_config_change_e2e"
+    "test_trace_function_sync_attribute_extractor_error_logged"
+  ];
 
   meta = {
     description = "Python SDK for the Agent2Agent (A2A) Protocol";

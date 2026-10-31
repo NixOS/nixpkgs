@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://erratique.ch/software/fpath/releases/fpath-${version}.tbz";
-    sha256 = "03z7mj0sqdz465rc4drj1gr88l9q3nfs374yssvdjdyhjbqqzc0j";
+    hash = "sha256-ErCP8ZLQN9m21p6coZ0dOFGE8gsyN8JyMeQ3rIGs5w8=";
   };
 
   nativeBuildInputs = [

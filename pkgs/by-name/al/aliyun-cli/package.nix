@@ -3,24 +3,37 @@
   buildGoModule,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "aliyun-cli";
-  version = "3.4.11";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SMwp0Dei2TCwn7wad8gmdRB81DJIbzB9f4s5Inlej6Y=";
+    hash = "sha256-ZvHldYiUNNNIoEdoJvqUSs2ZLQAIm5Mt9/EMxbMM/2A=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-smlPjS2kda0ij+3Jch/FKRHm820Zux6vWXooqhm6fCA=";
+  vendorHash = "sha256-xxbA3fpOetotYcmc3ntRqYkCyHRTzqupCoPm/8FYW1Y=";
 
   subPackages = [ "main" ];
+
+  # Build like upstream's release artifacts: bake the OpenAPI metadata into the binary.
+  tags = [ "aliyun_cli_packed_meta" ];
+
+  # Don't run go generate in the module fetching (preBuild runs before vendor/ exists).
+  overrideModAttrs = _: {
+    preBuild = null;
+  };
+
+  preBuild = ''
+    GOOS= GOARCH= go generate ./bundledmeta
+  '';
 
   ldflags = [
     "-s"
@@ -29,6 +42,14 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   postInstall = ''
     mv $out/bin/main $out/bin/aliyun

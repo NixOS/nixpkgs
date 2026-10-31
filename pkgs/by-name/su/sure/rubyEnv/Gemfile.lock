@@ -92,8 +92,14 @@ GEM
       cgi
       connection_pool
       standardwebhooks
+    apnotic (1.8.0)
+      base64
+      connection_pool (>= 2, < 4)
+      net-http2 (>= 0.18.3, < 2)
     ast (2.4.3)
     attr_required (1.0.2)
+    auth-sanitizer (0.2.3)
+      version_gem (~> 1.1, >= 1.1.14)
     aws-eventstream (1.4.0)
     aws-partitions (1.1196.0)
     aws-sdk-core (3.240.0)
@@ -157,12 +163,13 @@ GEM
     crack (1.0.0)
       bigdecimal
       rexml
-    crass (1.0.6)
+    crass (1.0.7)
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
-    css_parser (1.22.0)
+    css_parser (3.0.0)
       addressable
+      ssrf_filter (~> 1.5)
     csv (3.3.5)
     date (3.5.1)
     debug (1.11.0)
@@ -283,7 +290,8 @@ GEM
       signet (>= 0.16, < 2.a)
     hashdiff (1.2.0)
     hashery (2.1.2)
-    hashie (5.0.0)
+    hashie (5.1.0)
+      logger
     heapy (0.2.0)
       thor
     highline (3.1.2)
@@ -299,6 +307,7 @@ GEM
       turbo-rails (>= 1.2)
     htmlbeautifier (1.4.3)
     htmlentities (4.3.4)
+    http-2 (1.2.1)
     httparty (0.24.0)
       csv
       mini_mime (>= 1.0.0)
@@ -336,7 +345,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    json (2.19.9)
+    json (2.21.2)
     json-jwt (1.16.7)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -347,7 +356,7 @@ GEM
     json-schema (5.2.2)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
-    jwt (2.10.2)
+    jwt (2.10.3)
       base64
     langfuse-ruby (0.1.4)
       concurrent-ruby (~> 1.0)
@@ -377,7 +386,7 @@ GEM
       logtail (~> 0.1, >= 0.1.14)
       logtail-rack (~> 0.1)
       railties (>= 5.0.0)
-    loofah (2.25.1)
+    loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lookbook (2.3.11)
@@ -394,7 +403,7 @@ GEM
       zeitwerk (~> 2.5)
     lucide-rails (0.7.3)
       railties (>= 4.1.0)
-    mail (2.9.0)
+    mail (2.9.1)
       logger
       mini_mime (>= 0.1.1)
       net-imap
@@ -412,20 +421,22 @@ GEM
     minitest (5.27.0)
     mocha (2.7.1)
       ruby2_keywords (>= 0.0.5)
-    msgpack (1.8.0)
+    msgpack (1.8.2)
     multi_json (1.20.1)
-    multi_xml (0.8.0)
+    multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.4.1)
+    net-http2 (0.19.0)
+      http-2 (>= 1.0)
+    net-imap (0.6.6)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.2)
+    net-protocol (0.3.0)
       timeout
     net-smtp (0.5.1)
       net-protocol
@@ -449,14 +460,15 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-musl)
       racc (~> 1.4)
-    oauth2 (2.0.18)
+    oauth2 (2.0.22)
+      auth-sanitizer (~> 0.2, >= 0.2.1)
       faraday (>= 0.17.3, < 4.0)
       jwt (>= 1.0, < 4.0)
       logger (~> 1.2)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 4)
-      snaky_hash (~> 2.0, >= 2.0.3)
-      version_gem (~> 1.1, >= 1.1.9)
+      snaky_hash (~> 2.0, >= 2.0.5)
+      version_gem (~> 1.1, >= 1.1.11)
     octokit (10.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
@@ -585,8 +597,8 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.7.0)
-      loofah (~> 2.25)
+    rails-html-sanitizer (1.7.1)
+      loofah (~> 2.25, >= 2.25.2)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     rails-i18n (8.1.0)
       i18n (>= 0.7, < 2)
@@ -711,18 +723,18 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
-    rubyzip (2.4.1)
+    rubyzip (3.4.0)
     safety_net_attestation (0.5.0)
       jwt (>= 2.0, < 4.0)
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
     securerandom (0.4.1)
-    selenium-webdriver (4.34.0)
+    selenium-webdriver (4.49.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
+      rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
     sentry-rails (5.26.0)
       railties (>= 5.0)
@@ -762,12 +774,10 @@ GEM
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     smart_properties (1.17.0)
-    snaky_hash (2.0.3)
+    snaky_hash (2.0.7)
       hashie (>= 0.1.0, < 6)
-      version_gem (>= 1.1.8, < 3)
-    snaptrade (2.0.156)
-      faraday (>= 1.0.1, < 3.0)
-      faraday-multipart (~> 1.0, >= 1.0.4)
+      version_gem (~> 1.1, >= 1.1.14)
+    ssrf_filter (1.5.0)
     stackprof (0.2.27)
     standardwebhooks (1.1.0)
     stimulus-rails (1.3.4)
@@ -806,8 +816,6 @@ GEM
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2026.3)
-      tzinfo (>= 1.0.0)
     uber (0.1.0)
     unaccent (0.4.0)
     unicode (0.4.4.5)
@@ -822,7 +830,7 @@ GEM
     vcr (6.3.1)
       base64
     vernier (1.8.0)
-    version_gem (1.1.9)
+    version_gem (1.1.14)
     view_component (4.12.0)
       actionview (>= 7.1.0)
       activesupport (>= 7.1.0)
@@ -849,7 +857,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     websocket (1.2.11)
-    websocket-driver (0.8.1)
+    websocket-driver (0.8.2)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -874,6 +882,7 @@ DEPENDENCIES
   activerecord-import
   after_commit_everywhere (~> 1.0)
   anthropic (~> 1.0)
+  apnotic (~> 1.8)
   aws-sdk-s3 (~> 1.208.0)
   bcrypt (~> 3.1)
   benchmark-ips
@@ -944,7 +953,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   ruby-lsp-rails
   ruby-openai
-  rubyzip (~> 2.3)
+  rubyzip (~> 3.4)
   selenium-webdriver
   sentry-rails
   sentry-ruby
@@ -954,7 +963,6 @@ DEPENDENCIES
   sidekiq-unique-jobs
   simplecov
   skylight
-  snaptrade (~> 2.0)
   stackprof
   stimulus-rails
   stripe
@@ -967,6 +975,7 @@ DEPENDENCIES
   web-console
   webauthn (~> 3.4)
   webmock
+  websocket-driver (~> 0.8)
 
 RUBY VERSION
    ruby 3.4.9p82

@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.5034";
+  version = "0.4.5051";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fsbnD9y0wxXq3NmVe5vMhI613G4HlZyqsv7+DNKzZzY=";
+    hash = "sha256-vcDCtoCO3Gyw5yO5iixZJXQERYElH7JZaDDk7bNR3xI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-nnhtJNw/D6Tir3n6rrURjL/cw1EWocs4/r4K7Yq4Fdk=";
+    hash = "sha256-aAv3EmoKTKv7fyCJT7/rRQBr4yBR5OsGuDU5MSIsRzY=";
   };
 
   buildPhase = ''

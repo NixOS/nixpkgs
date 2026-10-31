@@ -6,6 +6,9 @@
   pkg-config,
   sqlite,
   gitMinimal,
+  curl,
+  jq,
+  coreutils,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -13,17 +16,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtk";
-  version = "0.50.0";
+  version = "1.1.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "rtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cQq+iJ6L7YTc9oinNw1X+qt8PkDhYM/mi7tXMJf7fp8=";
+    hash = "sha256-RlMGWDGSvKvbRjZ/duJNdVrnqY7B4dM/5IWVJ5LUzjg=";
   };
 
-  cargoHash = "sha256-COpR8TZJgim/WxRG//bEKc4tAEWy0GfkGcFK/dnpRlQ=";
+  cargoHash = "sha256-rPkrAUgeEktzpNBPAw3xVJS7QSUS0lKGsBDWv3MlE8I=";
+
+  postPatch = ''
+    substituteInPlace tests/run_shell_test.rs \
+      --replace-fail /usr/bin/printf ${lib.getExe' coreutils "printf"} \
+      --replace-fail /bin/echo ${lib.getExe' coreutils "echo"} \
+      --replace-fail /bin/true ${lib.getExe' coreutils "true"} \
+      --replace-fail /bin/false ${lib.getExe' coreutils "false"}
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -45,7 +56,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
+    curl
     gitMinimal
+    jq
     writableTmpDirAsHomeHook
   ];
 
@@ -54,6 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # fails on its own 60s timeout.
     "--skip=signalled_run_still_prints_captured_output"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -72,7 +87,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands";
     homepage = "https://github.com/rtk-ai/rtk";
     changelog = "https://github.com/rtk-ai/rtk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+    ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rtk";
   };

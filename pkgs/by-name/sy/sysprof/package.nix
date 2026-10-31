@@ -19,7 +19,7 @@
   pkg-config,
   polkit,
   shared-mime-info,
-  systemd,
+  systemdLibs,
   wrapGAppsHook4,
   gnome,
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     json-glib
     polkit
-    systemd
+    systemdLibs
     libadwaita
     libdex
     libpanel

@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   cacert,
+  libgit2,
   openssl,
   rustfmt,
   installShellFiles,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ];
 

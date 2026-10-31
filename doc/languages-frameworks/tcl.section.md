@@ -4,8 +4,11 @@
 
 Tcl interpreters are available under the `tcl` and `tcl-X_Y` attributes, where `X_Y` is the Tcl version.
 
-Tcl libraries are available in the `tclPackages` attribute set.
-They are only guaranteed to work with the default Tcl version, but will probably also work with others thanks to the [stubs mechanism](https://wiki.tcl-lang.org/page/Stubs).
+Tcl libraries are available in the `tcl8Packages` and `tcl9Packages` attribute sets.
+They are only guaranteed to work with the corresponding Tcl version,
+but will probably also work if just the major version is the same (eg. 9.0 and 9.1) thanks to the [stubs mechanism](https://wiki.tcl-lang.org/page/Stubs).
+If the Tcl version isn't important, use `tclPackages` instead,
+which defaults to the version of the top-level `tcl`.
 
 ## Packaging guide {#sec-language-tcl-packaging}
 

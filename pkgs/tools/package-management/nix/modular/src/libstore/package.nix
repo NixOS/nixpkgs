@@ -11,7 +11,6 @@
   curl,
   cmake,
   aws-c-common,
-  aws-sdk-cpp,
   aws-crt-cpp,
   libseccomp,
   nlohmann_json,
@@ -50,23 +49,27 @@ mkMesonLibrary (finalAttrs: {
   workDir = ./.;
 
   nativeBuildInputs =
-    lib.optional embeddedSandboxShell unixtools.hexdump
-    ++ lib.optional (withAWS && lib.versionAtLeast version "2.34pre") cmake;
+    lib.optionals embeddedSandboxShell [
+      unixtools.hexdump
+    ]
+    ++ lib.optionals withAWS [
+      cmake
+    ];
 
   buildInputs = [
     boost
     curl
     sqlite
   ]
-  ++ lib.optional (
-    lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD
-  ) freebsd.libjail
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-  # There have been issues building these dependencies
-  ++
-    lib.optional withAWS
-      # Nix >=2.33 doesn't depend on aws-sdk-cpp and only requires aws-crt-cpp for authenticated s3:// requests.
-      (if lib.versionAtLeast (lib.versions.majorMinor version) "2.33" then aws-crt-cpp else aws-sdk-cpp);
+  ++ lib.optionals (lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD) [
+    freebsd.libjail
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libseccomp
+  ]
+  ++ lib.optionals withAWS [
+    aws-crt-cpp
+  ];
 
   propagatedBuildInputs = [
     nix-util
@@ -79,10 +82,8 @@ mkMesonLibrary (finalAttrs: {
   mesonFlags = [
     (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
+    (lib.mesonEnable "s3-aws-auth" withAWS)
   ]
-  ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") (
-    lib.mesonEnable "s3-aws-auth" withAWS
-  )
   ++ lib.optionals withSandboxShell [
     (lib.mesonOption "sandbox-shell" sandboxShell)
   ];

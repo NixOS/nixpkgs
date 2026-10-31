@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "badgemagic-rs";
-  version = "0.1.0-unstable-2025-07-15";
+  version = "0.1.0-unstable-2026-06-28";
 
   src = fetchFromGitHub {
     owner = "fossasia";
     repo = "badgemagic-rs";
-    rev = "5d745ab8fda418204425f3df0e969a98bf479f2d";
-    hash = "sha256-IyPUPNbXkLNz/cuzVuzrD2iCE1ddeO3xkAOKhbrNU+k=";
+    rev = "3ac3c13828f8a111ffe0efb35094d9e3c43d6bf8";
+    hash = "sha256-aCPvMD1qNoEQHvkIdyLwxyEBe4lWHOoiUpYYq9sHmm0=";
   };
 
-  cargoHash = "sha256-jT/pJLqdWGTpQFlnhuZo1FLqRQJWXCD2tuDB2AEyNPQ=";
+  cargoHash = "sha256-BjuGanZRCuFjy23JrHQOI6rPMrfTHcj1uvAHkA4/x8c=";
 
   buildFeatures = [ "cli" ];
 

@@ -13,14 +13,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Twiggy";
     inherit version;
-    sha256 = "7938840275972f6ce89994a5bdfb0b84f0386301a043a960af6364952e78ffe4";
+    hash = "sha256-eTiEAnWXL2zomZSlvfsLhPA4YwGgQ6lgr2NklS54/+Q=";
   };
 
   propagatedBuildInputs = [ six ];
   doCheck = false;
 
   meta = {
-    homepage = "http://twiggy.wearpants.org";
+    homepage = "https://github.com/wearpants/twiggy";
     # Taken from http://i.wearpants.org/blog/meet-twiggy/
     description = "Twiggy is the first totally new design for a logger since log4j";
     license = lib.licenses.bsd3;

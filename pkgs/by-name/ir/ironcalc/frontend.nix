@@ -90,7 +90,6 @@ let
     '';
 
     __structuredAttrs = true;
-    strictDeps = true;
 
     meta = ironcalc.meta // {
       description = "Ironcalc wasm bindings";

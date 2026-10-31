@@ -13,6 +13,7 @@
   gitMinimal,
   cacert,
   jq,
+  writableTmpDirAsHomeHook,
   writeText,
   stdenvNoCC,
 }:
@@ -113,48 +114,58 @@ lib.extendMkDerivation {
         lean4
         gitMinimal
         jq
+        writableTmpDirAsHomeHook
       ];
 
       propagatedBuildInputs = lib.optionals isLibrary leanDeps;
       buildInputs = lib.optionals (!isLibrary) leanDeps;
 
       configurePhase =
-        args.configurePhase or ''
-          runHook preConfigure
-
-          export HOME="$TMPDIR"
-
+        args.configurePhase or (
+          ''
+            runHook preConfigure
+          ''
           # Disable cloud caching and Reservoir lookups.
-          export LAKE_NO_CACHE=1
-          export RESERVOIR_API_URL=""
-          export LEAN_CC="${stdenv.cc}/bin/cc"
+          + ''
+            export LAKE_NO_CACHE=1
+            export RESERVOIR_API_URL=""
+            export LEAN_CC="${stdenv.cc}/bin/cc"
+          ''
+          # `lake` has no `-j`: it schedules build jobs on Lean's task manager, which otherwise
+          # sizes itself from `hardware_concurrency()` and ignores the builder's core budget.
+          + ''
+            export LEAN_NUM_THREADS="$NIX_BUILD_CORES"
 
-          if [ -n "''${LEAN_PATH:-}" ]; then
-            echo "buildLakePackage: LEAN_PATH=$LEAN_PATH"
-          fi
+            if [ -n "''${LEAN_PATH:-}" ]; then
+              echo "buildLakePackage: LEAN_PATH=$LEAN_PATH"
+            fi
 
-          ${lib.optionalString (computedLakeDeps != null) ''
-            mkdir -p .lake/packages
-            for dep in ${computedLakeDeps}/*; do
-              depName="$(basename "$dep")"
-              cp -r "$dep" ".lake/packages/$depName"
-              chmod -R u+w ".lake/packages/$depName"
-            done
+            ${lib.optionalString (computedLakeDeps != null) (
+              ''
+                mkdir -p .lake/packages
+                for dep in ${computedLakeDeps}/*; do
+                  depName="$(basename "$dep")"
+                  cp -r "$dep" ".lake/packages/$depName"
+                  chmod -R u+w ".lake/packages/$depName"
+                done
+              ''
+              # FOD deps use package-overrides.json (the on-disk mechanism).
+              # Nix-managed deps use --packages (the CLI mechanism, takes precedence).
+              + ''
+                jq -n --argjson pkgs "$(
+                  for dep in .lake/packages/*/; do
+                    [ -d "$dep" ] || continue
+                    depName="$(basename "$dep")"
+                    jq -n --arg name "$depName" --arg dir ".lake/packages/$depName" \
+                      '{type: "path", name: $name, inherited: false, dir: $dir}'
+                  done | jq -s '.'
+                )" '{schemaVersion: "1.2.0", packages: $pkgs}' > .lake/package-overrides.json
+              ''
+            )}
 
-            # FOD deps use package-overrides.json (the on-disk mechanism).
-            # Nix-managed deps use --packages (the CLI mechanism, takes precedence).
-            jq -n --argjson pkgs "$(
-              for dep in .lake/packages/*/; do
-                [ -d "$dep" ] || continue
-                depName="$(basename "$dep")"
-                jq -n --arg name "$depName" --arg dir ".lake/packages/$depName" \
-                  '{type: "path", name: $name, inherited: false, dir: $dir}'
-              done | jq -s '.'
-            )" '{schemaVersion: "1.2.0", packages: $pkgs}' > .lake/package-overrides.json
-          ''}
-
-          runHook postConfigure
-        '';
+            runHook postConfigure
+          ''
+        );
 
       buildPhase =
         args.buildPhase or ''

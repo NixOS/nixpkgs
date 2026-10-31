@@ -45,7 +45,7 @@ nixexpr() {
           lib = import $1/lib;
           hydraJobs = import $1/pkgs/top-level/release.nix
             # Compromise: accuracy vs. resources needed for evaluation.
-            { supportedSystems = cfg.systems or [ "x86_64-linux" "x86_64-darwin" ]; };
+            { supportedSystems = cfg.systems or [ "x86_64-linux" "aarch64-darwin" ]; };
           cfg = (import $1 {}).config.rebuild-amount or {};
 
           recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };

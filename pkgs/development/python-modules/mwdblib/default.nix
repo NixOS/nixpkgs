@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mwdblib";
-  version = "4.7.0";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "mwdblib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eP8q5G97vfe7eN3+/+UF7Qda5/xzwC/GRrTorucjEGo=";
+    hash = "sha256-K6izUFwzeVs7q0LCDz/pmb4Ghfm6hy/wDSpcYbg5wp0=";
   };
 
   build-system = [ setuptools ];

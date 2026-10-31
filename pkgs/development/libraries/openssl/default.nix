@@ -46,7 +46,6 @@ let
       version,
       hash,
       patches ? [ ],
-      withDocs ? false,
       extraMeta ? { },
     }:
     stdenv.mkDerivation (finalAttrs: {
@@ -63,18 +62,11 @@ let
       postPatch = ''
         patchShebangs Configure
       ''
-      + lib.optionalString (lib.versionOlder version "1.1.1") ''
-        patchShebangs test/*
-        for a in test/t* ; do
-          substituteInPlace "$a" \
-            --replace /bin/rm rm
-        done
-      ''
       # config is a configure script which is not installed.
-      + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
+      + ''
         substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
       ''
-      + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
+      + lib.optionalString stdenv.hostPlatform.isMusl ''
         substituteInPlace crypto/async/arch/async_posix.h \
           --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                     '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
@@ -97,12 +89,11 @@ let
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
       ''
-      # this test has inconsistent behavior in the freebsd sandbox
-      # (binds to only ipv6 and connects on only ipv4)
+      # this test has multiple issues in the freebsd sandbox:
+      # * binds to only ipv6 and connects on only ipv4
+      # * attempts name resolution which fails
       + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        substituteInPlace test/recipes/82-test_ocsp_cert_chain.t \
-          --replace-fail '"-accept",' '"-4", "-accept",' \
-          --replace-fail '"-connect",' '"-4", "-connect",'
+        rm test/recipes/82-test_ocsp_cert_chain.t
       '';
 
       outputs = [
@@ -110,8 +101,8 @@ let
         "dev"
         "out"
         "man"
+        "doc"
       ]
-      ++ lib.optional withDocs "doc"
       # Separate output for the runtime dependencies of the static build.
       # Specifically, move OPENSSLDIR into this output, as its path will be
       # compiled into 'libcrypto.a'. This makes it a runtime dependency of
@@ -146,9 +137,7 @@ let
           x86_64-solaris = "./Configure solaris64-x86_64-gcc";
           powerpc-linux = "./Configure linux-ppc";
           powerpc64-linux = "./Configure linux-ppc64";
-          riscv32-linux = "./Configure ${
-            if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
-          }";
+          riscv32-linux = "./Configure linux32-riscv32";
           riscv64-linux = "./Configure linux64-riscv64";
         }
         .${stdenv.hostPlatform.system} or (
@@ -219,13 +208,13 @@ let
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-      ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
-      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional enableKTLS "enable-ktls"
+      ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
-      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
+      ++ lib.optional static "no-shared"
+      ++ lib.optional static "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
@@ -372,7 +361,7 @@ let
             exit 1
           fi
         ''
-        + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+        + ''
           # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
           # pkg-config gets its paths fixed correctly
           rm -rf $dev/lib/cmake
@@ -388,7 +377,7 @@ let
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
         donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
-        license = lib.licenses.openssl;
+        license = lib.licenses.asl20;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
         teams = [ lib.teams.security-review ];
@@ -406,15 +395,15 @@ let
 in
 {
   # intended version "policy":
-  # - latest 3.x LTS
-  # - latest 3.x non-LTS as preview/for development
+  # - latest LTS
+  # - latest non-LTS as preview/for development
   #
   # - other versions in between only when reasonable need is stated for some package
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
   openssl_3_5 = common {
-    version = "3.5.8";
-    hash = "sha256-qPhKOZGOxkFc52XZtCnTE7qXuBQxacFy5zS5UURk9bI=";
+    version = "3.5.9";
+    hash = "sha256-YD9WAuLu8A13+9Qp003NWCK7MBdXobyc2yTGcPHrhZo=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -432,21 +421,12 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./3.5/fix-mingw-linking.patch
     ];
-
-    withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
-  openssl_3_6 = common {
-    version = "3.6.5";
-    hash = "sha256-ohV8KDDv3sN4iTmwDJsGODBtPwu7dtxIMu5QO7OX35g=";
+  openssl_4_1 = common {
+    version = "4.1.0";
+    hash = "sha256-UMF7r1TLAI9s5C1Q3rSygFChqtcRY2yr1LJBx+kMwv0=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -465,40 +445,5 @@ in
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
-
-    withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
-  };
-
-  openssl_4_0 = common {
-    version = "4.0.3";
-    hash = "sha256-MltcgGFnwTtAsf/q3+AkgZfADszEzxI+weKNLS/SFtk=";
-
-    patches = [
-      # Support for NIX_SSL_CERT_FILE, motivation:
-      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.5/nix-ssl-cert-file.patch
-
-      # openssl will only compile in KTLS if the current kernel supports it.
-      # This patch disables build-time detection.
-      ./3.5/openssl-disable-kernel-detection.patch
-
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
-    ];
-
-    withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 }

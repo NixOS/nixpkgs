@@ -18,6 +18,8 @@ runCommand "update-python-libraries"
         ]
       ))
     ];
+
+    meta.license = lib.licenses.mit;
   }
   ''
     cp ${./update-python-libraries.py} $out

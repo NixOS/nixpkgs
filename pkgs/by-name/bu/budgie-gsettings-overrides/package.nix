@@ -40,7 +40,8 @@ let
 
     [com.solus-project.budgie-panel:Budgie]
     dark-theme=false
-    builtin-theme=false
+    # See https://github.com/vinceliuice/Qogir-theme/issues/364.
+    builtin-theme=true
 
     [com.solus-project.icon-tasklist:Budgie]
     pinned-launchers=["nemo.desktop", "firefox.desktop", "vlc.desktop"]

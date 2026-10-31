@@ -18,11 +18,10 @@
   pythonAtLeast,
   setuptools,
   stdenv,
-  stestr,
-  writeText,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-concurrency";
   version = "7.4.1";
   pyproject = true;
@@ -30,11 +29,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.concurrency";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NZ6OsaDwqEsW2FZEi8cjXkLa7EwVqt3mYPRkG/jGiFM=";
   };
 
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_concurrency *" > MANIFEST.in
+
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
       --replace-fail "/usr" "" \
       --replace-fail "/bin/bash" "${bash}/bin/bash" \
@@ -45,7 +47,8 @@ buildPythonPackage rec {
       --replace-fail '"oslo_concurrency"' '"oslo_concurrency", "oslo_concurrency.fixture", "oslo_concurrency.tests"'
   '';
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -63,41 +66,36 @@ buildPythonPackage rec {
     fixtures
     libredirect.hook
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase =
-    let
-      disabledTests = [
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn"
-        "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "oslo_concurrency.tests.unit.test_lockutils.FileBasedLockingTestCase.test_interprocess_nonblocking_external_lock"
-        "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally"
-        "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally_lock_dir_not_exist"
-        "oslo_concurrency.tests.unit.test_processutils.PrlimitTestCase.test_stack_size"
-      ]
-      ++ lib.optionals (pythonAtLeast "3.14") [
-        # Disable test incompatible with Python 3.14+
-        # See proposed change upstream: https://review.opendev.org/c/openstack/oslo.concurrency/+/971765
-        "oslo_concurrency.tests.unit.test_lockutils"
-      ];
-    in
-    ''
-      runHook preCheck
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+  '';
 
-      echo "nameserver 127.0.0.1" > resolv.conf
-      export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+  disabledTestsRegex = [
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_lock_with_spawn_n"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "oslo_concurrency.tests.unit.test_lockutils.FileBasedLockingTestCase.test_interprocess_nonblocking_external_lock"
+    "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally"
+    "oslo_concurrency.tests.unit.test_lockutils.LockTestCase.test_lock_externally_lock_dir_not_exist"
+    "oslo_concurrency.tests.unit.test_processutils.PrlimitTestCase.test_stack_size"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # Disable test incompatible with Python 3.14+
+    # See proposed change upstream: https://review.opendev.org/c/openstack/oslo.concurrency/+/971765
+    "oslo_concurrency.tests.unit.test_lockutils"
+  ];
 
-      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
-
-      runHook postCheck
-    '';
-
-  pythonImportsCheck = [ "oslo_concurrency" ];
+  pythonImportsCheck = [
+    "oslo_concurrency"
+    "oslo_concurrency.fixture"
+  ];
 
   meta = {
     description = "Oslo Concurrency library";
@@ -106,4 +104,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

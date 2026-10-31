@@ -26,7 +26,6 @@ let
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       pyxattr
       pylibacl
-      fuse
     ];
 in
 

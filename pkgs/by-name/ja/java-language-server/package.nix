@@ -32,7 +32,7 @@ maven.buildMavenPackage {
 
   mvnFetchExtraArgs.dontConfigure = true;
   mvnJdk = jdk25_headless;
-  mvnHash = "sha256-mSjz5OM/tMZuiX4kmB1DprvQuIP4EzeDpAr4oQ5T11s=";
+  mvnHash = "sha256-o+nCZKodwo6j7BKc1ID766j704b/tx2L2wn/Hwe0OEA=";
 
   nativeBuildInputs = [
     jdk25_headless

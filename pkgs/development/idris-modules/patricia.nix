@@ -14,7 +14,7 @@ build-idris-package {
     owner = "ChShersh";
     repo = "idris-patricia";
     rev = "24724e6d0564f2f813d0d0a58f5c5db9afe35313";
-    sha256 = "093q3qjmr93wv8pqwk0zfm3hzf14c235k9c9ip53rhg6yzcm0yqz";
+    hash = "sha256-H3tQ2ffmwTzKjYmlWYZgJLgPR3UfTI4v2nykXCUeeCQ=";
   };
 
   meta = {

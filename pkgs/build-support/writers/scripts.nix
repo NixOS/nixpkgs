@@ -405,9 +405,18 @@ rec {
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.dash}";
+          check = argsOrScript.check or "${lib.getExe pkgs.dash} -n";
+        }
+      ) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.dash}";
+        check = "${lib.getExe pkgs.dash} -n";
+      } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to dash
@@ -877,16 +886,16 @@ rec {
   */
   writeNu =
     name: argsOrScript:
-    # Separate the shebang from doc comments attached to `main`.
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      script:
       makeScriptWriter (
-        argsOrScript // { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; }
-      ) name "\n${script}"
+        argsOrScript
+        // {
+          # Separate the shebang from doc comments attached to `main`.
+          interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+        }
+      ) name
     else
-      makeScriptWriter {
-        interpreter = "${lib.getExe pkgs.nushell} --no-config-file";
-      } name "\n${argsOrScript}";
+      writeNu name { } argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to nu
@@ -1019,7 +1028,7 @@ rec {
 
     :::
   */
-  writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
+  writeLua = makeLuaWriter pkgs.lua5_2_compat pkgs.lua52Packages buildPackages.lua52Packages;
 
   writeLuaBin = name: writeLua "/bin/${name}";
 
@@ -1354,4 +1363,75 @@ rec {
   writeFSharp = makeFSharpWriter { };
 
   writeFSharpBin = name: writeFSharp "/bin/${name}";
+
+  /**
+    Creates an executable R script.
+
+    # Inputs
+
+    `name` (String)
+    : Name of or path to the script, as in `makeScriptWriter`.
+
+    `config` (AttrSet)
+    : `libraries` (List of packages, Default: [])
+      : R packages available to the script.
+    : `options` (List of strings, Default: [])
+      : Additional command-line options passed to Rscript.
+    : `doCheck` (Boolean, Default: true)
+      : Whether to check the script with jarl.
+
+    Other attributes are passed to `makeScriptWriter`.
+
+    `content` (String or Path)
+    : Script source or a file containing it.
+
+    # Examples
+
+    :::{.example}
+    ## `pkgs.writers.writeRscript` usage example
+
+    ```nix
+    writeRscript "example" { libraries = [ pkgs.rPackages.jsonlite ]; } ''
+      message <- jsonlite::fromJSON('{"text":"Hello!"}')
+      cat(message$text)
+    ''
+    ```
+
+    :::
+  */
+  writeRscript =
+    name:
+    args@{
+      libraries ? [ ],
+      options ? [ ],
+      doCheck ? true,
+      ...
+    }:
+    let
+      R = pkgs.rWrapper.override { packages = libraries; };
+      rest = (
+        removeAttrs args [
+          "libraries"
+          "options"
+          "doCheck"
+        ]
+      );
+
+      rCheck = writeDash "rCheck" /* sh */ ''
+        exec ${buildPackages.jarl}/bin/jarl check "$1"
+      '';
+    in
+    makeScriptWriter (
+      rest
+      // {
+        interpreter = toString ([ "${R}/bin/Rscript" ] ++ options);
+        check = if doCheck then rCheck else "";
+      }
+    ) name;
+
+  /**
+    Takes the same arguments as `writeRscript`, but creates the script
+    at `$out/bin/<name>` (like `writeScriptBin`).
+  */
+  writeRscriptBin = name: writeRscript "/bin/${name}";
 }

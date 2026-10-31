@@ -18,6 +18,7 @@
   cups,
   libdrm,
   gdk-pixbuf,
+  musl,
   nss,
   nspr,
   libxrandr,
@@ -32,7 +33,7 @@
   libxkbcommon,
   libgbm,
   vulkan-loader,
-  systemd,
+  systemdLibs,
   libGL,
   krb5,
   unixodbc,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src =
     let
@@ -54,9 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-sYfAxxBHDV+D+9EcbHP24/n1Ua97e3eScqz/+DMuceg=";
-        aarch64-linux = "sha256-EGPJPQ+CUVni2wXtLJUkmNthOQnC+rQW5A4LyNPgmqY=";
-        aarch64-darwin = "sha256-LIEgs56Qszl9lZc4GJe8EOy9+eF2nOp1oGN/1D8o5b0=";
+        x86_64-linux = "sha256-QoxEZBXhQEDHYWAlTMEAczMs17U6Wifvix5cyWOUdPY=";
+        aarch64-linux = "sha256-xUIycMYpiiG00m6cIV/L0AZRXWyMBJVzIk2xn+421VE=";
+        aarch64-darwin = "sha256-FyDkqAW9+A1mfDQSKqpxE76An7GladFrVnUU3POgBuA=";
       };
     };
 
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     libdrm
     gdk-pixbuf
+    musl
     nss
     nspr
     alsa-lib
@@ -100,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     unixodbc
   ];
 
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemdLibs);
 
   installPhase = ''
     runHook preInstall
@@ -158,9 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-    ];
-    knownVulnerabilities = [
-      "Uses Electron 39.8.1, which was EOL on March 13 2026, with several known CVEs"
     ];
   };
 })

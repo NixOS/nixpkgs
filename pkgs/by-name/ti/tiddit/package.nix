@@ -31,15 +31,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bwa
-        fermi2
-        ropebwt2
-      ]
-    }"
-    "--set PYTHONPATH $PYTHONPATH"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bwa
+      fermi2
+      ropebwt2
+    ])
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+  '';
 
   meta = {
     homepage = "https://github.com/SciLifeLab/TIDDIT";

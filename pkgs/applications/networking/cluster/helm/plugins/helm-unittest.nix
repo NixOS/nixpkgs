@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.1.2";
+  version = "1.2.1";
 in
 buildGoModule (finalAttrs: {
   pname = "helm-unittest";
@@ -20,10 +20,10 @@ buildGoModule (finalAttrs: {
     owner = "helm-unittest";
     repo = "helm-unittest";
     tag = "v${version}";
-    hash = "sha256-4555mm73Q5YMJ6k7fy86JyCXeSjJ/0fJkFS2o5HQsMA=";
+    hash = "sha256-avYzgTieN8nQrsBxPFvtDauQGzm02w2mk9eEW0rLbBM=";
   };
 
-  vendorHash = "sha256-JjFhF/vaf39DYtcESV5N/wvjCFb2KrwU8rQXgZUwjrs=";
+  vendorHash = "sha256-GbA2axwZwsytfdquZ2EqmonCW9iqmpY6U4JERPZ/zlc=";
 
   postPatch = ''
     # Remove the install and upgrade hooks.

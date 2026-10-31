@@ -19,14 +19,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "smoked-salmon";
-  version = "0.10.1";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smokin-salmon";
     repo = "smoked-salmon";
     tag = finalAttrs.version;
-    hash = "sha256-kgBTdQTWzGmKWsHjtazaVvQoTulyF5WNFPEUuoanCo4=";
+    hash = "sha256-Qe9h15FHAp8h6HBvTg5YZKtANsdL/be+Gt2BXiVyGmc=";
   };
 
   # Upstream tends to use very narrow version constraints
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       aiohttp
       aiohttp-jinja2
+      aiohttp-socks
       aiolimiter
       anyio
       asyncclick
@@ -56,11 +57,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       musicbrainzngs
       mutagen
       numpy
+      openai
       pillow
       platformdirs
       pycambia
       pyimgbox
-      pyoxipng
       pyperclip
       qbittorrent-api
       requests
@@ -71,7 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       transmission-rpc
       unidecode
     ]
-    ++ aiohttp.optional-dependencies.speedups
     ++ beautifulsoup4.optional-dependencies.lxml
     ++ msgspec.optional-dependencies.toml;
 

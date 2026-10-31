@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w4h7m0isbvfy4zx6m5j4594p5y4pjbpzsr0h4yzmdgd7hip69sy";
+    hash = "sha256-XidzIzzttfo9gSDrf5e8xJdLUiGyVNM/8W4vHUE9kPA=";
   };
 
   # tests require working internet connection

@@ -6,13 +6,13 @@
 }:
 buildNpmPackage rec {
   pname = "i18next-cli";
-  version = "1.74.1";
+  version = "1.80.5";
 
   src = fetchFromGitHub {
     owner = "i18next";
     repo = "i18next-cli";
     tag = "v${version}";
-    hash = "sha256-Kqz4OUuqq6WzP1lZttJKYawSQ6pEpG2UjBjGu9oKa3I=";
+    hash = "sha256-6Drhi0b3Xynx0DEm3wc7oTg9e6gBMRmUQhBK54uUJJg=";
   };
 
   # NOTE: Generating lock-file
@@ -21,7 +21,7 @@ buildNpmPackage rec {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-m5VMXE7ceVqZmNdAbSnjYmbkX5Fp8teCcU6iv58BNhw=";
+  npmDepsHash = "sha256-vVzwK+muVtgfvE5P6b/G0N/bvvAis86EiU8fNnmkU2A=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--generate-lockfile" ];

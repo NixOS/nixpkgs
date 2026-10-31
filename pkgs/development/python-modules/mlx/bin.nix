@@ -61,6 +61,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "mlx" ];
 
+  # The bot requires a Linux build, but these wheels only support Darwin.
+  # nixpkgs-update: no auto update
   passthru.updateScript = callPackage ./update-wheels.nix { };
 
   passthru.srcs = {

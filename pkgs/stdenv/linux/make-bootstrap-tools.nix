@@ -10,16 +10,25 @@ let
     libc
     ;
 
-  patchelf = pkgs.patchelf.overrideAttrs (previousAttrs: {
-    NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or [ ]) ++ [
-      "-static-libgcc"
-      "-static-libstdc++"
-    ];
-    NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or [ ]) ++ [
-      "-static-libgcc"
-      "-static-libstdc++"
-    ];
-  });
+  patchelf = pkgs.patchelf.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      #FIXME: avoid version override after resolving https://github.com/NixOS/patchelf/pull/672
+      version = "0.15.2";
+      src = pkgs.fetchurl {
+        url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+        hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+      };
+
+      NIX_CFLAGS_COMPILE = (previousAttrs.NIX_CFLAGS_COMPILE or [ ]) ++ [
+        "-static-libgcc"
+        "-static-libstdc++"
+      ];
+      NIX_CFLAGS_LINK = (previousAttrs.NIX_CFLAGS_LINK or [ ]) ++ [
+        "-static-libgcc"
+        "-static-libstdc++"
+      ];
+    }
+  );
 in
 rec {
   coreutilsMinimal = pkgs.coreutils.override (args: {

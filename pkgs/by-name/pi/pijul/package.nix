@@ -5,6 +5,7 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  aws-lc,
   dbus,
   libsodium,
   openssl,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    aws-lc
     dbus
     openssl
     libsodium

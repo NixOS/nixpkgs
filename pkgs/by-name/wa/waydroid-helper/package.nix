@@ -19,7 +19,7 @@
   fakeroot,
   libadwaita,
   libxml2,
-  systemd,
+  systemdLibs,
   unzip,
   vte-gtk4,
   nix-update-script,
@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication {
     dbus
     libadwaita
     libxml2
-    systemd
+    systemdLibs
     vte-gtk4
   ];
 
@@ -100,18 +100,20 @@ python3Packages.buildPythonApplication {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        android-tools
-        bindfs
-        e2fsprogs
-        fakeroot
-        unzip
-      ]
-    }"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          android-tools
+          bindfs
+          e2fsprogs
+          fakeroot
+          unzip
+        ]
+      }"
+    )
+  '';
 
   postInstallCheck = ''
     mesonCheckPhase

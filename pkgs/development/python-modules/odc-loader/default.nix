@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "odc-loader";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-loader";
     tag = finalAttrs.version;
-    hash = "sha256-nJSC93+uPzsZY0ZHmrodPkCIk2FZnZ2ksfJIvr+x0As=";
+    hash = "sha256-WrJL/ghcJCzzg9BfsvDa48lh2Wanihw8UIy0ZgWrAJo=";
   };
 
   build-system = [

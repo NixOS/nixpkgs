@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "debian";
     repo = "sensible-utils";
     rev = "debian/${finalAttrs.version}";
-    sha256 = "sha256-vxzCICkF3KDBe+IIZ63JMiZmfHOllHf1Xtw/vWaimc8=";
+    hash = "sha256-vxzCICkF3KDBe+IIZ63JMiZmfHOllHf1Xtw/vWaimc8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

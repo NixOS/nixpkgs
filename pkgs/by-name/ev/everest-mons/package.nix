@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -33,10 +34,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "mons" ];
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   meta = {
     homepage = "https://mons.coloursofnoise.ca/";

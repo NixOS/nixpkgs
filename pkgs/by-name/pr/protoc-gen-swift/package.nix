@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-swift";
-  version = "1.34.1";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "swift-protobuf";
     rev = "${finalAttrs.version}";
-    hash = "sha256-Kit/kQDNs0ohtaNC0xWxG6o0vNGUWWE++YK1JP2o8OM=";
+    hash = "sha256-BINU2Lu0aUyXDCfXEuI5+iJ9Fo1ReOVNzyJ+SU3vzbw=";
     fetchSubmodules = true;
   };
 

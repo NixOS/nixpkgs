@@ -15,13 +15,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "4.0.9";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
     tag = finalAttrs.version;
-    hash = "sha256-ADHrHCUrpu5aCAU84QyLkmDDJ6QwICLsL6M8o/OMWxU=";
+    hash = "sha256-xoEFp4mj45f8K4C6FtTR08FyXYNmsqykQHpuxnm0qMA=";
   };
 
   nativeBuildInputs = [

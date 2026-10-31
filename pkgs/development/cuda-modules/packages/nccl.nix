@@ -69,11 +69,21 @@ backendStdenv.mkDerivation (finalAttrs: {
     repo = "nccl";
     tag = "v${finalAttrs.version}";
     hash = getAttr finalAttrs.version {
-      "2.32.3-1" = "sha256-xUllfdWAL0Ee9P9T9CZC2ddkPRnSXZXgwApgO398i6g=";
+      "2.32.3-1" = "sha256-3OYSPfhYABe8Aj0Or58Vzg9CmY4aRCaqLlEIYWm6RqU=";
       "2.28.7-1" = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
       "2.26.6-1" = "sha256-vkWMGXCy+dIpYCecdafmOAGlnfRxIQ5Y2ZQuMjinraI=";
       "2.25.1-1" = "sha256-3snh0xdL9I5BYqdbqdl+noizJoI38mZRVOJChgEE1I8=";
     };
+    # .git_archival.txt is marked with `export-subst` attribute since
+    # https://github.com/NVIDIA/nccl/commit/76c747405b7846240eaaf4e50f8ee238a5c07ba6
+    # %(describe...) expression generates string like `nccl4py-v0.6.0-3-g12df1a11af`,
+    # but leaves the length of the commit hash prefix up to GitHub's whim that changes
+    # trim everything after `-g` to keep only more stable and predictable parts of this value
+    postFetch = ''
+      if [ -f "$out/bindings/nccl4py/.git_archival.txt" ]; then
+        sed -E -i 's/^(describe-name: .*)-g[0-9a-h]+/\1/' "$out/bindings/nccl4py/.git_archival.txt"
+      fi
+    '';
   };
 
   outputs = [

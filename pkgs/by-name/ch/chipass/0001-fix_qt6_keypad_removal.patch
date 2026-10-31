@@ -1,0 +1,36 @@
+diff --git a/tests/gui/TestGui.cpp b/tests/gui/TestGui.cpp
+index 4c7fabcb..0f0c5b5f 100644
+--- a/tests/gui/TestGui.cpp
++++ b/tests/gui/TestGui.cpp
+@@ -76,7 +76,6 @@ int main(int argc, char* argv[])
+     app.setApplicationVersion(CHIPASS_VERSION);
+     app.setQuitOnLastWindowClosed(false);
+     app.setAttribute(Qt::AA_Use96Dpi, true);
+-    QTEST_DISABLE_KEYPAD_NAVIGATION
+     TestGui tc;
+     QTEST_SET_MAIN_SOURCE_PATH
+     return QTest::qExec(&tc, argc, argv);
+diff --git a/tests/gui/TestGuiBrowser.cpp b/tests/gui/TestGuiBrowser.cpp
+index 148d8de5..09ddf69b 100644
+--- a/tests/gui/TestGuiBrowser.cpp
++++ b/tests/gui/TestGuiBrowser.cpp
+@@ -48,7 +48,6 @@ int main(int argc, char* argv[])
+     app.setApplicationVersion(CHIPASS_VERSION);
+     app.setQuitOnLastWindowClosed(false);
+     app.setAttribute(Qt::AA_Use96Dpi, true);
+-    QTEST_DISABLE_KEYPAD_NAVIGATION
+     TestGuiBrowser tc;
+     QTEST_SET_MAIN_SOURCE_PATH
+     return QTest::qExec(&tc, argc, argv);
+diff --git a/tests/gui/TestGuiFdoSecrets.cpp b/tests/gui/TestGuiFdoSecrets.cpp
+index 82da0f69..e3266141 100644
+--- a/tests/gui/TestGuiFdoSecrets.cpp
++++ b/tests/gui/TestGuiFdoSecrets.cpp
+@@ -54,7 +54,6 @@ int main(int argc, char* argv[])
+     app.setApplicationVersion(CHIPASS_VERSION);
+     app.setQuitOnLastWindowClosed(false);
+     app.setAttribute(Qt::AA_Use96Dpi, true);
+-    QTEST_DISABLE_KEYPAD_NAVIGATION
+     TestGuiFdoSecrets tc;
+     QTEST_SET_MAIN_SOURCE_PATH
+     return QTest::qExec(&tc, argc, argv);

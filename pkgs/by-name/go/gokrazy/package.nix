@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gokrazy";
-  version = "0-unstable-2026-09-13";
+  version = "0-unstable-2026-10-20";
 
   src = fetchFromGitHub {
     owner = "gokrazy";
     repo = "tools";
-    rev = "64f7f697dfff1a24457b00cd93ca5c30c866f34e";
-    hash = "sha256-puqXa3OpHyzPpOYuf/SicoMJTNDf0hovLE/TOhmBDSw=";
+    rev = "8e26fb9532e18e2f9c4ee86bcfdee993e7c0d3e2";
+    hash = "sha256-Ry5pTi1rs2b1vfQwExZ5wv2pKC7egVlPRGIc7q/8+w8=";
   };
 
-  vendorHash = "sha256-+9i4dlxcxXw0WpeuHhnxli2qhB6IWOc4babuJXIO4wA=";
+  vendorHash = "sha256-5CpSzJEagGNnpMa3AHRku0rD5EprQj0jM24aBFECjjw=";
 
   ldflags = [
     "-s"

@@ -29,6 +29,9 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/icons
     cp -a Jade* $out/share/icons
 
+    # Upstream (unmaintained since 2021) ships symlinks to icons that don't exist
+    find $out/share/icons -xtype l -delete
+
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

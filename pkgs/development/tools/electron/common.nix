@@ -26,17 +26,6 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
-
-  # Only apply to old versions after upstream updates to Yarn 4.15
-  # https://github.com/electron/electron/blob/main/package.json#L152
-  yarnPatch = substitute {
-    src = ./yarn-fix.patch;
-    substitutions = [
-      "--replace-fail"
-      "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-      yarn-berry_4.lockfileVersion
-    ];
-  };
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
@@ -84,7 +73,6 @@ in
       null;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     src = gclientDeps."src/electron".path;
-    patches = [ yarnPatch ];
     hash = info.electron_yarn_data.hash;
     missingHashes =
       if (info.electron_yarn_data ? "missing_hashes") then
@@ -167,16 +155,7 @@ in
     #endif  // GPU_WEBGPU_DAWN_COMMIT_HASH_H_
     EOF
     (
-      PATH=$PATH:${
-        lib.makeBinPath (
-          with pkgsBuildHost;
-          [
-            git
-          ]
-        )
-      }
       cd electron
-      git apply ${yarnPatch}
       YARN_ENABLE_SCRIPTS=0 yarnBerryConfigHook
     )
     (
@@ -213,6 +192,12 @@ in
       cd third_party/node
       grep patch update_npm_deps | sh
     )
+
+    gnFlags+=' v8_version_hash_salt_files=["//electron/patches/v8/.patches"'
+    for patch in $(cat electron/patches/v8/.patches); do
+      gnFlags+=",\"//electron/patches/v8/$patch\""
+    done
+    gnFlags+=']'
   ''
   + (base.preConfigure or "");
 
@@ -248,6 +233,8 @@ in
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
     node_openssl_path = "//third_party/boringssl";
+    node_v8_path = "//v8";
+    node_use_v8_platform = false;
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;

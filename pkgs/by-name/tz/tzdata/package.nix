@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2026d";
+  version = "2026e";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-DLKqjjM8PcBJutxCoMYfIZh7jNROEH+pALrXZKrMd2c=";
+      hash = "sha256-smiCgF8mqsWdWyIpeOZYBIS4NMzcmL6J3y8FptxTplI=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-L1yff+Kea4y4Y1g2Z4hLjOF7CkhTVaBUtZHGvfzYF5E=";
+      hash = "sha256-zD0nyioNg5lQRVG5IJcNgK+Dv7nCFugIKhVJGSGTXVQ=";
     })
   ];
 
@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildOutputs = [ ];
 
-  buildInputs = [ bashNonInteractive ]; # for 'tzselect'
+  buildInputs =
+    # For `tzselect`'s shebang. Where `bashNonInteractive` is unavailable
+    # (e.g. MinGW), `tzselect` keeps its `#!/bin/bash`, which is fine for now
+    # as we're not going to run it there anyways.
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive;
 
   strictDeps = true;
 

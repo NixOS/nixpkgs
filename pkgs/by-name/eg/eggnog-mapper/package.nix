@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3Packages,
+  stdenv,
   wget,
   zlib,
 }:
@@ -29,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

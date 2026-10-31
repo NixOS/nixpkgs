@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lakefs";
-  version = "1.86.0";
+  version = "1.88.0";
 
   src = fetchFromGitHub {
     owner = "treeverse";
     repo = "lakeFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8C0XK1qs7z/1MCSPzDP2elJtJRxLcypZbtDYUpEe4g4=";
+    hash = "sha256-QB52EKQyyRrL2oPh7KH5E+GiFvLgULSOZ8lgYvGRXyc=";
   };
 
   webui = buildNpmPackage {
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
 
     nodejs = nodejs_22;
 
-    npmDepsHash = "sha256-YNnMNwmtJMiVcQewg91PiLQ2ZPcGjGhzgZO6BAPYo7Q=";
+    npmDepsHash = "sha256-JdpxsFi6IXhnZ/xVlx78ZUMPwc5uRr9aFOn9ymM4rV4=";
 
     installPhase = ''
       runHook preInstall
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/lakefs" ];
   proxyVendor = true;
-  vendorHash = "sha256-UNDIqP79CG2+M8HKkHT1l7X2/Dt6YDTQzADR5T7klUg=";
+  vendorHash = "sha256-onaErYy7TrHmVPbN7TzntS7UZD1HSylHOAWjrf9B2UI=";
 
   ldflags = [
     "-s"
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     mkdir -p webui/dist
     cp -r ${finalAttrs.webui}/* webui/dist/
-    go generate ./pkg/api/apigen ./pkg/auth ./pkg/authentication
+    go generate ./pkg/api/apigen ./pkg/auth
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

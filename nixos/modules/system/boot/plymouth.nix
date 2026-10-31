@@ -12,8 +12,6 @@ let
     mkEnableOption
     optional
     mkIf
-    mkBefore
-    mkAfter
     literalExpression
     types
     literalMD
@@ -334,112 +332,6 @@ in
         sed -i '/loginctl/d' $out/etc/udev/rules.d/71-seat.rules
       '')
     ];
-
-    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) (
-      ''
-        copy_bin_and_libs ${getExe' cfg.package "plymouth"}
-        copy_bin_and_libs ${getExe' cfg.package "plymouthd"}
-
-      ''
-      + checkIfThemeExists
-      + ''
-
-        moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
-
-        mkdir -p $out/lib/plymouth/renderers
-        # module might come from a theme
-        cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
-        cp ${cfg.package}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
-        # useless in the initrd, and adds several megabytes to the closure
-        rm $out/lib/plymouth/renderers/x11.so
-
-        mkdir -p $out/share/plymouth/themes
-        cp ${cfg.package}/share/plymouth/plymouthd.defaults $out/share/plymouth
-
-        # Copy themes into working directory for patching
-        mkdir themes
-
-        # Use -L to copy the directories proper, not the symlinks to them.
-        # Copy all themes because they're not large assets, and bgrt depends on the ImageDir of
-        # the spinner theme.
-        cp -r -L ${themesEnv}/share/plymouth/themes/* themes
-
-        # Patch out any attempted references to the theme or plymouth's themes directory
-        chmod -R +w themes
-        find themes -type f | while read file
-        do
-          sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
-        done
-
-        # Install themes
-        cp -r themes/* $out/share/plymouth/themes
-
-        # Install logo
-        mkdir -p $out/etc/plymouth
-        cp -r -L ${themesEnv}/etc/plymouth $out/etc
-
-        # Setup font
-        mkdir -p $out/share/fonts
-        cp ${cfg.font} $out/share/fonts
-        mkdir -p $out/etc/fonts
-        cat > $out/etc/fonts/fonts.conf <<EOF
-        <?xml version="1.0"?>
-        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-        <fontconfig>
-            <dir>$out/share/fonts</dir>
-        </fontconfig>
-        EOF
-      ''
-    );
-
-    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-      $out/bin/plymouthd --help >/dev/null
-      $out/bin/plymouth --help >/dev/null
-    '';
-
-    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-      cp ${config.systemd.package}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out
-      sed -i '/loginctl/d' $out/71-seat.rules
-    '';
-
-    # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
-    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
-      plymouth_enabled=1
-      for o in $(cat /proc/cmdline); do
-          case $o in
-              plymouth.enable=0)
-                  plymouth_enabled=0
-                  ;;
-          esac
-      done
-
-      if [ "$plymouth_enabled" != 0 ]; then
-        mkdir -p /etc/plymouth
-        mkdir -p /run/plymouth
-        ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
-        ln -s ${configFile} /etc/plymouth/plymouthd.conf
-        ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
-        ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
-        ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
-        ln -s $extraUtils/etc/fonts /etc/fonts
-
-        plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
-        plymouth show-splash
-      fi
-    '');
-
-    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-      if [ "$plymouth_enabled" != 0 ]; then
-        plymouth update-root-fs --new-root-dir="$targetRoot"
-      fi
-    '';
-
-    # `mkBefore` to ensure that any custom prompts would be visible.
-    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-      if [ "$plymouth_enabled" != 0 ]; then
-        plymouth quit --wait
-      fi
-    '');
 
   };
 

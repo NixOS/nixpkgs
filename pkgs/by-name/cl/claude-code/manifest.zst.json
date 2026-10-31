@@ -1,91 +1,84 @@
 {
-  "version": "2.1.286",
+  "version": "2.1.314",
   "manifestSignatureEnforcement": "flag",
-  "commit": "f344a08993bbba4fc1ea9b295245324610f02c58",
-  "modsCommit": "732e167ee9d71296b4b63d6f529ac1334513826a",
-  "buildDate": "2026-09-30T15:57:03Z",
+  "commit": "5c99a5b6399766569a32979c715862fdb61c7efa",
+  "buildDate": "2026-10-29T23:01:46Z",
   "platforms": {
     "darwin-arm64": {
       "binary": "claude.zst",
-      "checksum": "b1be27fbd8fe95bef2418c09f60a307f91c8631dc444fe9a828a7ed2520e45b5",
-      "size": 75060478,
+      "checksum": "a23ee5ca645a7e342f0960464c948baeb7c4218894ba25836da12c289ada56ca",
+      "size": 94571356,
       "bundle": {
-        "checksum": "f2326db618029608409be774a5f4d5fde8a032d319d6aa58c3043afda393dd96",
-        "size": 75074255
+        "checksum": "77aa04c73e1117a20a7d92ed72d911a189bd133b413f0bbc15d328d514310efe",
+        "size": 94578963
       }
     },
     "darwin-x64": {
       "binary": "claude.zst",
-      "checksum": "e2bbc2a329924533319d0eb4f5a33e2488ce921f60329ab333bca10b0e4c02f2",
-      "size": 79220957,
+      "checksum": "1ceb09cb91340b3b4de212c97b093ce39c9b05b92592402b7a6f180e968170ab",
+      "size": 100220791,
       "bundle": {
-        "checksum": "fda00b160da41c43716c36fbd4f21729108f898911eea5ede701b10305bca5eb",
-        "size": 79224277
+        "checksum": "9ae05b0e79420e92d9358cae8487706e0c72ef26ca98113724a80c5f5f12f771",
+        "size": 100216724
       }
     },
     "linux-arm64": {
       "binary": "claude.zst",
-      "checksum": "fb24324439bcca9575083f06af6a351a7f9f25066fcf370372b5e829287ef1ee",
-      "size": 84176167
+      "checksum": "5ad42d08f44e02d56922ca82d88db6388e93564a8fc03fef02e4279b23204214",
+      "size": 105147380
     },
     "linux-x64": {
       "binary": "claude.zst",
-      "checksum": "a14d80443473126e40cbc50eb78899f43e8f4d4336095863f8089a6b9ca02a97",
-      "size": 84909116
+      "checksum": "e8c6f963a5417a93eb19a8db70f4609c039d827426120971d2eff34e90c704b3",
+      "size": 107353846
     },
     "linux-arm64-musl": {
       "binary": "claude.zst",
-      "checksum": "e86dc4ad41e7e0af1b2cdadcd9b850acb4aed8f141bddce754f29091e59cf250",
-      "size": 82570865
+      "checksum": "12dd7ef6e7e07bfe38f70d298931f85dfa1d763cca7389eb13b13f190bfa0ec3",
+      "size": 102121171
     },
     "linux-x64-musl": {
       "binary": "claude.zst",
-      "checksum": "b79ed7738c8eb72812d89d2d4032fe4196cf19dac067ee8e724d4f892350c710",
-      "size": 83360753
+      "checksum": "14238b2f775d6ae2f85ed6e958c603984fbb23119d670bec2963c48c6c779404",
+      "size": 103217626
     },
     "win32-x64": {
       "binary": "claude.exe.zst",
-      "checksum": "635c1867224abd72c010948307b6dd871c64837dada77e67d98ed850408198bf",
-      "size": 87205724
+      "checksum": "dd9a764520cc9336dcd1580504b23de08f218a2a994dc04b39e9a38d922c81af",
+      "size": 108263820
     },
     "win32-arm64": {
       "binary": "claude.exe.zst",
-      "checksum": "f485b6b45317d01eb9c6cb3f62c66520aaa87f3e0f7c729ece129b832c211cbc",
-      "size": 83529567
+      "checksum": "6ccba3912b025a5e7a848549785b1ef44885150faa599261bfb9217bb55bd203",
+      "size": 103400908
     }
   },
   "sdkCompat": {
     "testedWrapperVersions": [
-      "0.3.246",
-      "0.3.247",
-      "0.3.248",
-      "0.3.250",
-      "0.3.251",
-      "0.3.252",
-      "0.3.257",
-      "0.3.258",
-      "0.3.259",
-      "0.3.260",
-      "0.3.261",
-      "0.3.263",
-      "0.3.265",
-      "0.3.266",
-      "0.3.267",
-      "0.3.268",
-      "0.3.269",
-      "0.3.270",
-      "0.3.271",
-      "0.3.272",
-      "0.3.273",
-      "0.3.274",
-      "0.3.275",
-      "0.3.276",
-      "0.3.277",
-      "0.3.278",
-      "0.3.280",
       "0.3.281",
       "0.3.282",
-      "0.3.285"
+      "0.3.283",
+      "0.3.284",
+      "0.3.285",
+      "0.3.286",
+      "0.3.287",
+      "0.3.288",
+      "0.3.289",
+      "0.3.290",
+      "0.3.291",
+      "0.3.292",
+      "0.3.293",
+      "0.3.294",
+      "0.3.295",
+      "0.3.296",
+      "0.3.299",
+      "0.3.300",
+      "0.3.301",
+      "0.3.302",
+      "0.3.303",
+      "0.3.304",
+      "0.3.305",
+      "0.3.306"
     ],
     "harnessSchema": 1
   }

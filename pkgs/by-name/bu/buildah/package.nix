@@ -9,10 +9,9 @@
   runc, # Default container runtime
   crun, # Container runtime (default with cgroups v2 for podman/buildah)
   conmon, # Container runtime monitor
-  slirp4netns, # User-mode networking for unprivileged namespaces
   fuse-overlayfs, # CoW for images, much faster than default vfs
   util-linuxMinimal, # nsenter
-  iptables,
+  nftables,
   aardvark-dns,
   netavark,
   passt,
@@ -26,10 +25,9 @@ let
       runc
       crun
       conmon
-      slirp4netns
       fuse-overlayfs
       util-linuxMinimal
-      iptables
+      nftables
     ]
     ++ extraPackages
   );

@@ -16,16 +16,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-docker";
-  version = "3.2.5";
+  version = "3.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
     repo = "pytest-docker";
-    tag = "v${version}";
-    hash = "sha256-AkVLfCt2aQZrvSfa/5oXr95XUIR5mRqcMRz67kmuKKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0yLXdyuN9jJdFh97S8giPTsZMBYaAcyc0slJ2cEXXRU=";
   };
 
   build-system = [ setuptools ];
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Docker-based integration tests";
     homepage = "https://github.com/avast/pytest-docker";
-    changelog = "https://github.com/avast/pytest-docker/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/avast/pytest-docker/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "memcached-exporter";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "memcached_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VTEkRibS6jtLqHhUDZFDeaPf438fuemfBMzOj3iRBWw=";
+    hash = "sha256-mOkDi1CWNAvVXZhk/HHeIF4Uq0ieafx5WNp4ZhJ7TUc=";
   };
 
-  vendorHash = "sha256-LdkE6seovYH1Srkn2mCR3VJugoCHz3fZJJuhKKdtGVo=";
+  vendorHash = "sha256-bQNFKGIodcG/zOLYOB891XNm89Y1mjDjGwab8GYf6Bc=";
 
   # Tests touch the network
   doCheck = false;

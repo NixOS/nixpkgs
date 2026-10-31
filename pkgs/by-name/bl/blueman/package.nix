@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchurl,
@@ -18,7 +17,7 @@
   wrapGAppsHook3,
   gobject-introspection,
   networkmanager,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withPulseAudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   procps,
 }:

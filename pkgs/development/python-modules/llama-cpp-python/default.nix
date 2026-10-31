@@ -34,16 +34,17 @@
   cudaPackages ? { },
 
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-cpp-python";
-  version = "0.3.23";
+  version = "0.3.36";
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
-    tag = "v${version}";
-    hash = "sha256-LqSgohfTv02RNZGMjKG0Pq2vHuIX+446uI2Q3KRmnzI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OYmCvd3hvdc7JjmfD5Nxp8l1xFk0vNI7HZsYUBfsnzI=";
     fetchSubmodules = true;
   };
 
@@ -107,6 +108,12 @@ buildPythonPackage rec {
     # tries to download model from huggingface-hub
     "test_real_model"
     "test_real_llama"
+    "test_recurrent_model_prompt_cache_reset"
+    "test_hybrid_model_prompt_cache_reset"
+    "test_exact_cached_prompt_reuse_matches_fresh"
+    "test_loaded_exact_cached_prompt_reuse_matches_fresh"
+    "test_ram_cache_exact_prompt_hit_matches_fresh"
+    "test_shorter_prompt_prefix_reuse_matches_fresh"
   ];
 
   pythonImportsCheck = lib.optionals (!cudaSupport) [
@@ -132,11 +139,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for llama.cpp";
     homepage = "https://github.com/abetlen/llama-cpp-python";
-    changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/abetlen/llama-cpp-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       booxter
       kirillrdy
     ];
   };
-}
+})

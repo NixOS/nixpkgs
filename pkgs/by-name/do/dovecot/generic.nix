@@ -13,7 +13,7 @@
   bison,
   perl,
   pkg-config,
-  systemd,
+  systemdLibs,
   openssl,
   bzip2,
   lz4,
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     xapian
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    systemd
+    systemdLibs
     pam
     libcap
     inotify-tools

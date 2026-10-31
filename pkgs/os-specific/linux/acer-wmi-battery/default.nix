@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  pahole,
 }:
 
 let
@@ -21,7 +22,14 @@ stdenv.mkDerivation {
     hash = "sha256-mI6Ob9BmNfwqT3nndWf3jkz8f7tV10odkTnfApsNo+A=";
   };
 
-  makeFlags = kernelModuleMakeFlags;
+  nativeBuildInputs = [ pahole ];
+
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/platform/x86"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -30,20 +38,22 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
-    find . -name '*.ko' -exec xz -f {} \;
-    install -Dm444 -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86 *.ko.xz
-
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Driver for the Acer WMI battery health control interface";
     homepage = "https://github.com/frederik-h/acer-wmi-battery";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

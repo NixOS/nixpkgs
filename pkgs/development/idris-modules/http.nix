@@ -20,7 +20,7 @@ build-idris-package {
     owner = "uwap";
     repo = "idris-http";
     rev = "dc4a31543f87c0bc44cbaa98192f0303cd8dd82e";
-    sha256 = "1abrwi5ikymff4g7a0g5wskycvhpnn895z1z1bz9r71ks554ypl8";
+    hash = "sha256-iF5PStEznJz+Cj/8kpC1F27mp+blAXUeca76GUvkeak=";
   };
 
   meta = {

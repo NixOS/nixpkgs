@@ -61,7 +61,8 @@ in
       description = "Readarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "READARR" cfg.settings;
+      environment =
+        servarr.mkServarrSettingsEnvVars "READARR" cfg.settings // servarr.commonDotnetEnvVars;
 
       serviceConfig = {
         Type = "simple";

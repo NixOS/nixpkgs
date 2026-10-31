@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
     tag = "v${version}";
-    hash = "sha256-R8I22TzfkXgNi6SEv149xdbyeUwXUNjwsOHlcieCLwQ=";
+    hash = "sha256-Qnh0J0RVCtIZzaHnsauArmttG60zd2uncDVr4HTCeRU=";
   };
 
   postPatch = ''
@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   dependencies = [
     playwright
-    pytest-base-url
     python-slugify
   ];
 

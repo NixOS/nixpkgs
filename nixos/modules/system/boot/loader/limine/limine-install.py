@@ -449,6 +449,37 @@ def copy_file(from_path: str, to_path: str):
     paths[to_path] = True
 
 
+def is_pe_coff_image(path: str) -> bool:
+    """Check whether path is a PE/COFF image, which is what sbctl can sign.
+
+    sbctl parses the file as PE/COFF and ignores the filename entirely, so the
+    extension is deliberately not taken into account here. This mirrors the
+    checks done by Go's debug/pe: the DOS "MZ" magic, a "PE\\0\\0" signature
+    at the offset stored at 0x3c, and a recognised optional header magic.
+    """
+    try:
+        with open(path, "rb") as file:
+            if file.read(2) != b"MZ":
+                return False
+
+            # The PE signature offset lives in the last 4 bytes of the DOS header.
+            file.seek(0x3C)
+            offset = int.from_bytes(file.read(4), "little")
+            file.seek(offset)
+
+            if file.read(4) != b"PE\0\0":
+                return False
+
+            # The optional header follows the signature and the 20 byte COFF
+            # file header. Its first field is the magic, 0x10b for PE32 and
+            # 0x20b for PE32+.
+            file.seek(offset + 4 + 20)
+            magic = file.read(2)
+            return magic in (b"\x0b\x01", b"\x0b\x02")
+    except OSError:
+        return False
+
+
 def option_from_config(name: str, config_path: List[str]) -> str:
     value = config(*config_path)
     if value is None:
@@ -530,6 +561,7 @@ def install_bootloader() -> None:
     timeout = config("timeout")
     editor_enabled = bool_to_yes_no(config("enableEditor"))
     hash_mismatch_panic = bool_to_yes_no(config("panicOnChecksumMismatch"))
+    graphics = bool_to_yes_no(config("style", "graphicalTerminal", "enable"))
 
     current_system = sys.argv[1]
     with open(os.path.join(current_system, "boot.json"), "r") as file:
@@ -541,7 +573,7 @@ def install_bootloader() -> None:
         timeout: {timeout}
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
-        graphics: yes
+        graphics: {graphics}
         default_entry: 1
     """)
 
@@ -571,36 +603,37 @@ def install_bootloader() -> None:
     config_file += option_from_config(
         "interface_help_hidden", ["style", "interface", "helpHidden"]
     )
-    config_file += option_from_config(
-        "term_font_scale", ["style", "graphicalTerminal", "font", "scale"]
-    )
-    config_file += option_from_config(
-        "term_font_spacing", ["style", "graphicalTerminal", "font", "spacing"]
-    )
-    config_file += option_from_config(
-        "term_palette", ["style", "graphicalTerminal", "palette"]
-    )
-    config_file += option_from_config(
-        "term_palette_bright", ["style", "graphicalTerminal", "brightPalette"]
-    )
-    config_file += option_from_config(
-        "term_foreground", ["style", "graphicalTerminal", "foreground"]
-    )
-    config_file += option_from_config(
-        "term_background", ["style", "graphicalTerminal", "background"]
-    )
-    config_file += option_from_config(
-        "term_foreground_bright", ["style", "graphicalTerminal", "brightForeground"]
-    )
-    config_file += option_from_config(
-        "term_background_bright", ["style", "graphicalTerminal", "brightBackground"]
-    )
-    config_file += option_from_config(
-        "term_margin", ["style", "graphicalTerminal", "margin"]
-    )
-    config_file += option_from_config(
-        "term_margin_gradient", ["style", "graphicalTerminal", "marginGradient"]
-    )
+    if config("style", "graphicalTerminal", "enable"):
+        config_file += option_from_config(
+            "term_font_scale", ["style", "graphicalTerminal", "font", "scale"]
+        )
+        config_file += option_from_config(
+            "term_font_spacing", ["style", "graphicalTerminal", "font", "spacing"]
+        )
+        config_file += option_from_config(
+            "term_palette", ["style", "graphicalTerminal", "palette"]
+        )
+        config_file += option_from_config(
+            "term_palette_bright", ["style", "graphicalTerminal", "brightPalette"]
+        )
+        config_file += option_from_config(
+            "term_foreground", ["style", "graphicalTerminal", "foreground"]
+        )
+        config_file += option_from_config(
+            "term_background", ["style", "graphicalTerminal", "background"]
+        )
+        config_file += option_from_config(
+            "term_foreground_bright", ["style", "graphicalTerminal", "brightForeground"]
+        )
+        config_file += option_from_config(
+            "term_background_bright", ["style", "graphicalTerminal", "brightBackground"]
+        )
+        config_file += option_from_config(
+            "term_margin", ["style", "graphicalTerminal", "margin"]
+        )
+        config_file += option_from_config(
+            "term_margin_gradient", ["style", "graphicalTerminal", "marginGradient"]
+        )
 
     config_file += textwrap.dedent(f"""
         # {config("distroName")} boot entries start here
@@ -712,6 +745,35 @@ def install_bootloader() -> None:
             except:
                 print("error: failed to sign limine", file=sys.stderr)
                 sys.exit(1)
+
+            if config("secureBoot", "signAdditionalFiles", "enable"):
+                skip = config("secureBoot", "signAdditionalFiles", "skip")
+
+                for additional_file in config("additionalFiles"):
+                    if additional_file in skip:
+                        print(f"skipping signing of {additional_file}")
+                        continue
+
+                    path = os.path.join(str(config("efiMountPoint")), additional_file)
+
+                    # Only PE/COFF images can be signed. Anything else is left
+                    # alone instead of failing the installation, as additional
+                    # files are not necessarily meant to be bootable.
+                    if not is_pe_coff_image(path):
+                        print(
+                            f"skipping signing of {additional_file}: not a PE/COFF image"
+                        )
+                        continue
+
+                    print(f"signing {additional_file}...")
+                    try:
+                        subprocess.run([sbctl, "sign", path], check=True)
+                    except (subprocess.CalledProcessError, OSError):
+                        print(
+                            f"error: failed to sign {additional_file}",
+                            file=sys.stderr,
+                        )
+                        sys.exit(1)
 
         if not config("efiRemovable") and not config("canTouchEfiVariables"):
             print(

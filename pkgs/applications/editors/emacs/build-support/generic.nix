@@ -38,12 +38,16 @@ lib.extendMkDerivation {
         args.unpackCmd or ''
           case "$curSrc" in
             *.el)
-              # keep original source filename without the hash
-              local filename=$(basename "$curSrc")
-              filename="''${filename:33}"
-              cp $curSrc $filename
-              chmod +w $filename
-              sourceRoot="."
+              if [ -f "$curSrc" ]; then
+                # keep original source filename without the hash
+                local filename=$(basename "$curSrc")
+                filename="''${filename:33}"
+                cp $curSrc $filename
+                chmod +w $filename
+                sourceRoot="."
+              else
+                _defaultUnpack "$curSrc"
+              fi
               ;;
             *)
               _defaultUnpack "$curSrc"

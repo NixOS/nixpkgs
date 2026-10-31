@@ -47,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "packaging"
     "protobuf"
+    "websockets"
   ];
 
   dependencies = [

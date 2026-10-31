@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     librevenge
   ];
 
+  env = {
+    CXXFLAGS = "-std=gnu++17";
+  };
+
   meta = {
     description = "QuarkXPress import library";
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libqxp";

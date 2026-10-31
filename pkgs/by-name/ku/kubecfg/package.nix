@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubecfg";
-  version = "0.37.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uJ6G0puANDrnA5NOOWZSGt6gVgIOMUgLfZcBWoXutyo=";
+    hash = "sha256-zUPz/y47thlGDw1OFsHO6+WG6PuLzKGn17SnhO7okiw=";
   };
 
-  vendorHash = "sha256-eMDdbjsYXK5TxC+cIq3lJ+G7lp7Kt/HgoVPPHv2ESsk=";
+  vendorHash = "sha256-irXFpynf0o9+JCAU78NFtW70AYpqWsYBSvk8JhIRFC8=";
 
   ldflags = [
     "-s"

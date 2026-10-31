@@ -15,7 +15,6 @@ Subject: [PATCH 01/11] gnu-install-dirs
  Sources/PackageGraph/CMakeLists.txt              | 6 +++---
  Sources/PackageLoading/CMakeLists.txt            | 6 +++---
  Sources/PackageModel/CMakeLists.txt              | 6 +++---
- Sources/PackageModelSyntax/CMakeLists.txt        | 6 +++---
  Sources/PackageRegistryCommand/CMakeLists.txt    | 6 +++---
  Sources/QueryEngine/CMakeLists.txt               | 6 +++---
  Sources/SPMBuildCore/CMakeLists.txt              | 6 +++---
@@ -28,7 +27,7 @@ Subject: [PATCH 01/11] gnu-install-dirs
  Sources/swift-run/CMakeLists.txt                 | 2 +-
  Sources/swift-sdk/CMakeLists.txt                 | 2 +-
  Sources/swift-test/CMakeLists.txt                | 2 +-
- 24 files changed, 62 insertions(+), 62 deletions(-)
+ 23 files changed, 59 insertions(+), 59 deletions(-)
 
 diff --git a/Sources/Basics/CMakeLists.txt b/Sources/Basics/CMakeLists.txt
 index e2910d09b..2f523dedb 100644
@@ -61,10 +60,10 @@ index 495bd7a87..9b32067ff 100644
 +  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
  set_property(GLOBAL APPEND PROPERTY SwiftPM_EXPORTS Build)
 diff --git a/Sources/Commands/CMakeLists.txt b/Sources/Commands/CMakeLists.txt
-index c62c7424e..5efcc760d 100644
+index b7e4e4b84..11c5e2a53 100644
 --- a/Sources/Commands/CMakeLists.txt
 +++ b/Sources/Commands/CMakeLists.txt
-@@ -80,6 +80,6 @@ set_target_properties(Commands PROPERTIES
+@@ -85,6 +85,6 @@ set_target_properties(Commands PROPERTIES
    INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
  
  install(TARGETS Commands
@@ -176,7 +175,7 @@ index 476588dbf..f363cd12d 100644
 +  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
  set_property(GLOBAL APPEND PROPERTY SwiftPM_EXPORTS PackageLoading)
 diff --git a/Sources/PackageModel/CMakeLists.txt b/Sources/PackageModel/CMakeLists.txt
-index 48ff3b9ba..3c2e305a9 100644
+index de1b511e1..cee539eef 100644
 --- a/Sources/PackageModel/CMakeLists.txt
 +++ b/Sources/PackageModel/CMakeLists.txt
 @@ -75,7 +75,7 @@ set_target_properties(PackageModel PROPERTIES
@@ -190,21 +189,6 @@ index 48ff3b9ba..3c2e305a9 100644
 +  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 +  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
  set_property(GLOBAL APPEND PROPERTY SwiftPM_EXPORTS PackageModel)
-diff --git a/Sources/PackageModelSyntax/CMakeLists.txt b/Sources/PackageModelSyntax/CMakeLists.txt
-index 02142c690..70dcf942c 100644
---- a/Sources/PackageModelSyntax/CMakeLists.txt
-+++ b/Sources/PackageModelSyntax/CMakeLists.txt
-@@ -39,7 +39,7 @@ set_target_properties(PackageModelSyntax PROPERTIES
-   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
- 
- install(TARGETS PackageModelSyntax
--  ARCHIVE DESTINATION lib
--  LIBRARY DESTINATION lib
--  RUNTIME DESTINATION bin)
-+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
- set_property(GLOBAL APPEND PROPERTY SwiftPM_EXPORTS PackageModelSyntax)
 diff --git a/Sources/PackageRegistryCommand/CMakeLists.txt b/Sources/PackageRegistryCommand/CMakeLists.txt
 index 92c7785ed..a62300a1a 100644
 --- a/Sources/PackageRegistryCommand/CMakeLists.txt
@@ -234,10 +218,10 @@ index 869c52c45..36d71c89c 100644
 +  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 +  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 diff --git a/Sources/SPMBuildCore/CMakeLists.txt b/Sources/SPMBuildCore/CMakeLists.txt
-index eaf92ddd1..ed7f25ca9 100644
+index 365e4f0fc..5d3430344 100644
 --- a/Sources/SPMBuildCore/CMakeLists.txt
 +++ b/Sources/SPMBuildCore/CMakeLists.txt
-@@ -40,7 +40,7 @@ target_link_libraries(SPMBuildCore PUBLIC
+@@ -43,7 +43,7 @@ target_link_libraries(SPMBuildCore PUBLIC
  
  
  install(TARGETS SPMBuildCore

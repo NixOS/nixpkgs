@@ -60,9 +60,9 @@ let
   ];
   # FIXME: Makes hash stable across platforms and convert to a single hash.
   mvnHashByPlatform = {
-    "x86_64-linux" = "sha256-KYF7vSMXPgi6xvtgcSIIEOltK5RL4ynGQf1579Is5nM=";
-    "aarch64-linux" = "sha256-KYF7vSMXPgi6xvtgcSIIEOltK5RL4ynGQf1579Is5nM=";
-    "aarch64-darwin" = "sha256-uJXOACtuE4fKIb4a6C3Cy+MilI8OOdsuAgtJyklxHdw=";
+    "x86_64-linux" = "sha256-8yEHlNOIEzJIbH+XI3jB2y+mO9AOnmYq6CwAUdGssQ0=";
+    "aarch64-linux" = "sha256-8yEHlNOIEzJIbH+XI3jB2y+mO9AOnmYq6CwAUdGssQ0=";
+    "aarch64-darwin" = "sha256-dPCcoPurBGPuSiVYDl+VKffW07nFHBDvdNKLtKrOUTM=";
   };
   wrapperArgs = [
     "\${gappsWrapperArgs[@]}"

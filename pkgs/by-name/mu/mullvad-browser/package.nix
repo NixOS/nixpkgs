@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg_7,
+  ffmpeg_8,
 
   audioSupport ? mediaSupport,
 
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
+    ++ lib.optionals mediaSupport [ ffmpeg_8 ]
   );
 
-  version = "15.0.24";
+  version = "16.0";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,19 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-vKVlZ2t9S66AZQ82fUw+csRQtMvOJLrJbbetS33Fb+o=";
+      hash = "sha256-qlccbcAKrSFK+akuQU86a9nhITm0gZ9a8vOqqj2fSqM=";
+    };
+
+    aarch64-linux = fetchurl {
+      urls = [
+        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+      ];
+      hash = "sha256-f9pB/+TC1zKlRPVQku9IMSjCJKKqRoDYY+eTx14Ds9k=";
     };
   };
 
@@ -219,9 +231,6 @@ stdenv.mkDerivation rec {
 
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
-
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
 
     // Allow sandbox access to sound devices if using ALSA directly
     ${

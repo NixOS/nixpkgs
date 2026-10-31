@@ -7,7 +7,7 @@
   hicolor-icon-theme,
   gtk3,
   glib,
-  systemd,
+  systemdLibs,
   libxtst,
   libxrender,
   libxrandr,
@@ -40,12 +40,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.1.0";
+  version = "7.1.1";
   pname = "staruml";
 
   src = fetchurl {
     url = "https://files.staruml.io/releases-v7/StarUML_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-5jJD5Nh+fw82PEdYb63nprdmcg8gr3KFN+intX5Yxl4=";
+    hash = "sha256-EzWn+FBQwWF39WVxjmniU7m8HHLX2eRzUreaZ6qrXFs=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib
     ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${lib.getLib systemdLibs}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --interpreter ${bintools.dynamicLinker} --add-needed libGL.so.1 $out/opt/StarUML/staruml
 

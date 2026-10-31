@@ -7,6 +7,7 @@
   fetchPypi,
   lxml,
   cssselect,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     lxml
     cssselect
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "prosemirror" ];

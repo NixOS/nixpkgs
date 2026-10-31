@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ktosiek";
     repo = "pytest-freezegun";
     rev = version;
-    sha256 = "10c4pbh03b4s1q8cjd75lr0fvyf9id0zmdk29566qqsmaz28npas";
+    hash = "sha256-Wl2LxFdVY2xMSWK2+kGLyfntQKblNMkQDpqsAeC6hIE=";
   };
 
   patches = [

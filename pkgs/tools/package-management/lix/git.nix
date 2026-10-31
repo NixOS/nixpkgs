@@ -3,19 +3,24 @@
   rustPlatform,
 }:
 rec {
-  version = "2.96.0-pre-20260408_${builtins.substring 0 12 src.rev}";
+  version = "2.97.0-pre-20261014_${builtins.substring 0 12 src.rev}";
+
+  useMimalloc = true;
+  useLicxxbridge = true;
 
   src = fetchFromGitea {
     domain = "git.lix.systems";
     owner = "lix-project";
     repo = "lix";
-    rev = "bc9fb560ac2d36cd317a856ee96785ea2055fbff";
-    hash = "sha256-bONRPjhk5OZdnkQZexZNJzlvwIPg31Gy7fNiwGoX3BQ=";
+    rev = "3c5f629014e92037f9e446863441bcc5ba94eae3";
+    hash = "sha256-q1afbP0uTTIFPUC4KMHbta+61saOMKQTsRbdvOs7rTw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "lix-${version}";
     inherit src;
-    hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
+    hash = "sha256-aLLl8Zp9txhAxlBj55lOo25NSz0z33pg1XDdEdCppy8=";
   };
+
+  updateScript = ./update-git.sh;
 }

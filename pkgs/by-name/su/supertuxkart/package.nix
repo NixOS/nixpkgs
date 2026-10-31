@@ -197,5 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${finalAttrs.version}/CHANGELOG.md";
+    # supertuxkart-server never built on darwin since first introduction in nixpkgs
+    # see https://hydra.nixos.org/build/345422087
+    broken = stdenv.hostPlatform.isDarwin && serverOnly;
   };
 })

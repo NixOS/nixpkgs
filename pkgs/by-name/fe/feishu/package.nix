@@ -53,7 +53,7 @@
   pipewire,
   pixman,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   xdg-utils,
   writeScript,
@@ -127,7 +127,7 @@ let
     pipewire
     pixman
     stdenv.cc.cc
-    systemd
+    systemdLibs
     wayland
     xdg-utils
   ];

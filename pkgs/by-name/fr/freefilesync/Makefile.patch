@@ -2,43 +2,69 @@ diff --git a/FreeFileSync/Source/Makefile b/FreeFileSync/Source/Makefile
 index 9d81055..aed0f30 100644
 --- a/FreeFileSync/Source/Makefile
 +++ b/FreeFileSync/Source/Makefile
-@@ -1,5 +1,5 @@
+@@ -1,16 +1,16 @@
+-SHELL := /bin/bash
++SHELL := bash
+ .SHELLFLAGS := -euo pipefail -c
+ #-e  exit script when last command fails
+ #-u  treat undefined variables as error
+ #-o pipefail  consider all individual calls when using pipes
+ #-c  execute the subsequent command string passed by Make
  CXX ?= g++
--exeName = FreeFileSync_$(shell arch)
-+exeName = FreeFileSync
+-exeName := FreeFileSync_$(shell arch)
++exeName := FreeFileSync
  
- CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../.. -I../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
-            -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
-@@ -21,8 +21,9 @@ CXXFLAGS += `pkg-config --cflags libssh2`
- LDFLAGS  += `pkg-config --libs libssh2`
+ CXXFLAGS += -std=c++26 -pipe -I../.. -I../../zenXml -include "zen/i18n.h" \
+            -DWXINTL_NO_GETTEXT_MACRO -DwxNO_IMPLICIT_WXSTRING_ENCODING -DwxNO_IMPLICIT_WXSTRING_CONV_TO_PTR \
+            -Wall -Wfatal-errors -Wshadow -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wimplicit-fallthrough -Wundef -Wpedantic -Wredundant-decls \
+-           -Wno-unused-function -Wno-deprecated-enum-enum-conversion
++           -Wno-unused-function -Wno-deprecated-enum-enum-conversion \
+            -O3 -DNDEBUG
+ CXXFLAGS += -Wno-maybe-uninitialized -Wno-free-nonheap-object -Wno-restrict -Wduplicated-cond -Wlogical-op
  
- CXXFLAGS += `pkg-config --cflags gtk+-3.0`
-+LDFLAGS += `pkg-config --libs gtk+-3.0`
+@@ -32,8 +32,9 @@ CXXFLAGS += $(shell pkg-config --cflags libssh2)
+ LDFLAGS  += $(shell pkg-config --libs libssh2)
+ 
+ CXXFLAGS += $(shell pkg-config --cflags gtk+-3.0)
++LDFLAGS += $(shell pkg-config --libs gtk+-3.0)
  #treat as system headers so that warnings are hidden:
 -CXXFLAGS += -isystem/usr/include/gtk-3.0
 +CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
  
  #support for SELinux (optional)
- SELINUX_EXISTING=$(shell pkg-config --exists libselinux && echo YES)
+ haveSelinux := $(shell pkg-config --exists libselinux && echo YES)
 diff --git a/FreeFileSync/Source/RealTimeSync/Makefile b/FreeFileSync/Source/RealTimeSync/Makefile
 index 0be46c9..f510284 100644
 --- a/FreeFileSync/Source/RealTimeSync/Makefile
 +++ b/FreeFileSync/Source/RealTimeSync/Makefile
-@@ -1,5 +1,5 @@
+@@ -1,16 +1,16 @@
+-SHELL := /bin/bash
++SHELL := bash
+ .SHELLFLAGS := -euo pipefail -c
+ #-e  exit script when last command fails
+ #-u  treat undefined variables as error
+ #-o pipefail  consider all individual calls when using pipes
+ #-c  execute the subsequent command string passed by Make
  CXX ?= g++
--exeName = RealTimeSync_$(shell arch)
-+exeName = RealTimeSync
+-exeName := RealTimeSync_$(shell arch)
++exeName := RealTimeSync
  
- CXXFLAGS += -std=c++23 -pipe -DWXINTL_NO_GETTEXT_MACRO -I../../.. -I../../../zenXml -include "zen/i18n.h" -include "zen/warn_static.h" \
-            -Wall -Wfatal-errors -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wno-unused-function -Wshadow -Wno-maybe-uninitialized \
-@@ -9,8 +9,9 @@ LDFLAGS += -s `wx-config --libs std, aui, richtext --debug=no` -pthread
+ CXXFLAGS += -std=c++26 -pipe -I../../.. -I../../../zenXml -include "zen/i18n.h" \
+            -DWXINTL_NO_GETTEXT_MACRO -DwxNO_IMPLICIT_WXSTRING_ENCODING -DwxNO_IMPLICIT_WXSTRING_CONV_TO_PTR \
+            -Wall -Wfatal-errors -Wshadow -Wmissing-include-dirs -Wswitch-enum -Wcast-align -Wnon-virtual-dtor -Wimplicit-fallthrough -Wundef -Wpedantic -Wredundant-decls \
+-           -Wno-unused-function -Wno-deprecated-enum-enum-conversion
++           -Wno-unused-function -Wno-deprecated-enum-enum-conversion \
+            -O3 -DNDEBUG
+ CXXFLAGS += -Wno-maybe-uninitialized -Wno-free-nonheap-object -Wno-restrict -Wduplicated-cond -Wlogical-op
  
+@@ -20,8 +20,9 @@ CXXFLAGS += $(shell wx-config --cxxflags --debug=no)
+ LDFLAGS  += $(shell wx-config --libs std, aui, richtext --debug=no)
  
- CXXFLAGS += `pkg-config --cflags gtk+-3.0`
-+LDFLAGS += `pkg-config --libs gtk+-3.0`
+ CXXFLAGS += $(shell pkg-config --cflags gtk+-3.0)
++LDFLAGS += $(shell pkg-config --libs gtk+-3.0)
  #treat as system headers so that warnings are hidden:
 -CXXFLAGS += -isystem/usr/include/gtk-3.0
 +CXXFLAGS += -isystem@gtk3-dev@/include/gtk-3.0
  
- cppFiles=
- cppFiles+=application.cpp
+ cppFiles :=
+ cppFiles += application.cpp

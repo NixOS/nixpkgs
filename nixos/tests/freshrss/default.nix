@@ -7,4 +7,5 @@
   pgsql = runTest ./pgsql.nix;
   nginx-sqlite = runTest ./nginx-sqlite.nix;
   caddy-sqlite = runTest ./caddy-sqlite.nix;
+  updater = runTest ./updater.nix;
 }

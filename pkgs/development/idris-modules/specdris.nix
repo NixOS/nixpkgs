@@ -12,7 +12,7 @@ build-idris-package {
     owner = "pheymann";
     repo = "specdris";
     rev = "625f88f5e118e53f30bcf5e5f3dcf48eb268ac21";
-    sha256 = "1gc717xf4i7z75aqazy5wqm7b1dqfyx5pprdypxz1h3980m67fsa";
+    hash = "sha256-SrtjKkBpwPD79S3fW7p3uIV1KubFf4VVOf9E4voJh70=";
   };
 
   idrisDeps = [ effects ];

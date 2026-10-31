@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pack";
-  version = "0.40.9";
+  version = "0.40.10";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RBDkPqlck64ChnXGFa1sa0WmC2T66ZBN6nQbstymSHU=";
+    hash = "sha256-IRNtF09I9R6X1s5oRiUH31A+BIjZ3fSXq5yVSwXTceA=";
   };
 
-  vendorHash = "sha256-iJTEdnWJb1YyZ0mkamlKkCq/dJsMP6s0h+S8Bh3CnVM=";
+  vendorHash = "sha256-mUfLk5teaJswky7ipTiPWfDeaAk6B7yq0E7mI19e6D4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

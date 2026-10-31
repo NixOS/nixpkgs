@@ -13,7 +13,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-5QcMNmWOEw2C26OXlvAvxqDxTpjIMBhwmaIFwVgHuIU=";
+    hash = "sha256-5QcMNmWOEw2C26OXlvAvxqDxTpjIMBhwmaIFwVgHuIU=";
   };
 
   passthru = {

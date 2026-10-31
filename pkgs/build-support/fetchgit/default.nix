@@ -269,7 +269,7 @@ lib.makeOverridable (
             // meta.identifiers or { };
           };
 
-          env = {
+          env = derivationArgs.env or { } // {
             NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
           };
 

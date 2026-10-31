@@ -11,7 +11,7 @@
   rustPlatform,
 }:
 let
-  version = "0-unstable-2025-03-07";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "arg274";

@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "dnote";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dnote";
     repo = "dnote";
     tag = "cli-v${version}";
-    hash = "sha256-so86Pit8/JeO/qwoOCZp8gY/E/HwhiDi6nzye2AM33A=";
+    hash = "sha256-wQC3RbuT7MO6GWGQUmMTtZy88ZPBAyuPtKO49hMnhvw=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildGoModule rec {
     inherit version src;
     pname = "${pname}-webui";
     sourceRoot = "${src.name}/pkg/server/assets";
-    hash = "sha256-yq55iO3Svqbjah9HdWfSicJISNEipxUkNDD1KJ7ZUhY=";
+    hash = "sha256-Hc9304vz9hwBvq/D5YaNNuke0AltFnlSCgnUZ/0j/x4=";
   };
 
   overrideModAttrs = oldAttrs: {
@@ -106,7 +106,7 @@ buildGoModule rec {
 
   checkFlags = [ "-p 1" ];
 
-  vendorHash = "sha256-PExF+1SWcCROmthzo1e8Y7zqhW780GufYe35l0FRhxY=";
+  vendorHash = "sha256-YURzSakmtgkb02ptcEyhyyxxlQV6EgBKmZ8Bl/MvrrA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

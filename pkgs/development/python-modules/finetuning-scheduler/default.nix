@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "finetuning-scheduler";
-  version = "2.13.0";
+  version = "2.14.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K3+a+/tSLdlzm0T3wIcJiw0RIlMUf41vRPxQXSW4GH4=";
+    hash = "sha256-OUDYqruMHBmr8ZMIg9A/VnOjf6REyxVsMYX4EdO7WHo=";
   };
 
   build-system = [ setuptools ];

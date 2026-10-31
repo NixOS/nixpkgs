@@ -7,7 +7,11 @@
   meson,
   ninja,
   hotdoc,
-  buildDevDoc ? true,
+  buildDevDoc ?
+    lib.meta.availableOn stdenv.hostPlatform hotdoc
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  mesonEmulatorHook,
 
   # for passthru.tests
   gnuradio,
@@ -55,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals buildDevDoc [
     hotdoc
+  ]
+  ++ lib.optionals (buildDevDoc && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41

@@ -62,7 +62,7 @@ Exceptions to this rule are:
   ```nix
   {
     patchedPackageJSON = final.runCommand "package.json" { } ''
-      ${jq}/bin/jq '.version = "0.4.0" |
+      ${lib.getExe jq} '.version = "0.4.0" |
         .devDependencies."@jsdoc/cli" = "^0.2.5"
         ${sonar-src}/package.json > $out
     '';
@@ -331,7 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "...";
   };
 })
@@ -381,7 +381,7 @@ Available options:
 
 - `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
 - `pnpmBuildFlags`: array of flags to pass to the build script.
-- `pnpmFlags`: currently the same as `pnpmBuildFlags`, but might be used by other hooks in the future.
+- `pnpmFlags`: array of flags passed to all invocations of pnpm itself.
 - `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
 
 Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
@@ -470,14 +470,14 @@ In this example, `prePnpmInstall` runs in both `pnpmConfigHook` and the `fetchPn
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. Use `4` for new packages:
+This is the version of the output of `fetchPnpmDeps`. Use `5` for new packages:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -496,6 +496,7 @@ Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 2
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975) (removed in 26.11)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
+- 5: [Keep virtual store materializations out of the archived store](https://github.com/NixOS/nixpkgs/pull/565315)
 
 ### Yarn {#javascript-yarn}
 

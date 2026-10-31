@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,12 +25,14 @@ buildGoModule (finalAttrs: {
     "-X=main.Version=${finalAttrs.version}"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Personal multi-machine syncable key value store";
     homepage = "https://github.com/charmbracelet/skate";
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "skate";
   };
 })

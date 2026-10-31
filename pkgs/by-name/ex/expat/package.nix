@@ -7,7 +7,7 @@
   python3,
   perlPackages,
   haskellPackages,
-  luaPackages,
+  lua55Packages,
   ocamlPackages,
   testers,
 }:
@@ -23,13 +23,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
-  version = "2.8.5";
+  version = "2.9.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libexpat/libexpat/releases/download/${tagFor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-HnJ7iTPsUad6mp2a/PjmiLzkXZB8E+Nqtzk/425wMYI=";
+    hash = "sha256-HmNxhizDGZmzaMO4m0mZTwZ34bq18bK4WuN0H12AMFE=";
   };
 
   strictDeps = true;
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) xmltodict;
     inherit (haskellPackages) hexpat;
     inherit (perlPackages) XMLSAXExpat XMLParser;
-    inherit (luaPackages) luaexpat;
+    inherit (lua55Packages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;

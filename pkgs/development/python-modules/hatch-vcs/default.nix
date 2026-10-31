@@ -6,6 +6,9 @@
   gitMinimal,
   hatchling,
   setuptools-scm,
+
+  doCheck ? false, # `gitMinimal` for tests depends on Rust, which depends on LLVM, which depends on `hatch-vcs`. So, disable tests by default to easily break the cycle.
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +29,8 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  inherit doCheck;
+
   nativeCheckInputs = [
     gitMinimal
     pytestCheckHook
@@ -37,6 +42,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hatch_vcs" ];
+
+  passthru.tests.withChecks = hatch-vcs.override { doCheck = true; };
 
   meta = {
     changelog = "https://github.com/ofek/hatch-vcs/releases/tag/v${version}";

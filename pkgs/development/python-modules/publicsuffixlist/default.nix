@@ -2,21 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   pandoc,
+  publicsuffix-list,
   pytestCheckHook,
   requests,
-  setuptools,
-  publicsuffix-list,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "publicsuffixlist";
-  version = "1.0.2.20260925";
+  version = "1.1.2.20261029";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-K6zWHIs2H/P6oR+YSjVU8qMEcyeQlGfLnL06Ep2AZfg=";
+    hash = "sha256-Z4jZXSTAw+byRxXqN12rd7HPDH+hSDwd5IcYvCSy8F4=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat publicsuffixlist/public_suffix_list.dat
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     update = [ requests ];

@@ -24,11 +24,11 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "stashcat";
-  version = "6.54.1";
+  version = "6.57.0";
 
   src = fetchurl {
     url = "http://deb.stashcat.com/repo01/dists/stashcat-dc/main/binary-amd64/stashcat-dc/${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
-    hash = "sha512-S5YWA+X6W3PcwnbHSJ3rDFA1Y/tqTV2pbm+FZx2p9WeFvtSJnTELCPTWKGzbZTcGhU14Dj/ispRRqJdkmzoUPg==";
+    hash = "sha512-fdGHMOgyTZuLdeEU0xE257puGGjQAz0KWyDYsVlV5H9/X8Tsj4KjJcBwNVXtKyCScIpXfUumYgijREwyrbXCzQ==";
   };
 
   strictDeps = true;

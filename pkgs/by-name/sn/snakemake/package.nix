@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.23.1";
+  version = "9.27.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3u48cmG6+C4yU9k1v4kUxRVloYR3MlfhXdOoZ9XSB4I=";
+    hash = "sha256-pRL8I8ILaSlZq7CTA+7D/d9PJQlccVQA45csJPBHppw=";
   };
 
   postPatch = ''
@@ -36,28 +36,30 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "docutils"
     "packaging"
     "sqlmodel"
   ];
   dependencies = with python3Packages; [
-    appdirs
     conda-inject
     configargparse
     connection-pool
-    datrie
     docutils
+    dpath
     gitpython
     humanfriendly
     immutables
     jinja2
     jsonschema
     nbformat
+    packaging
+    platformdirs
     psutil
     pulp
     pygments
     pyyaml
+    referencing
     requests
-    reretry
     smart-open
     snakemake-interface-common
     snakemake-interface-executor-plugins
@@ -66,11 +68,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     snakemake-interface-scheduler-plugins
     snakemake-interface-storage-plugins
     sqlmodel
-    stopit
     tabulate
     tenacity
     throttler
-    toposort
     wrapt
     yte
   ];

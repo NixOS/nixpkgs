@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pshs";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "projg2";
     repo = "pshs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sfhhxeQa0rmBerfAemuHou0N001Zq5Hh7s7utxLQHOI=";
+    hash = "sha256-yxcBKDJF+/OHLQtT7LGhdwnllS+WRuMJ6apeG4Jxoss=";
   };
 
   nativeBuildInputs = [

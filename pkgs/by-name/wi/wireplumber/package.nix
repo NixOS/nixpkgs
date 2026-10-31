@@ -16,7 +16,7 @@
   # runtime deps
   glib,
   systemdLibs,
-  lua5_4,
+  lua5_5,
   pipewire,
   # options
   enableDocs ? true,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireplumber";
-  version = "0.5.18";
+  version = "0.5.19";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "wireplumber";
     tag = finalAttrs.version;
-    hash = "sha256-VIa11ynYJsr4zqZ7XogPin4Ks0oEDltCjo51aWVMH8c=";
+    hash = "sha256-M+cgWxuokT9xy5A6M8r/zbFb8AutOBuWY7CNBqS24vU=";
   };
 
   strictDeps = true;
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     systemdLibs
-    lua5_4
+    lua5_5
     pipewire
   ];
 

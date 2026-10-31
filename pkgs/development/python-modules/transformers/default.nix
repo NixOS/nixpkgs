@@ -211,6 +211,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "transformers" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";

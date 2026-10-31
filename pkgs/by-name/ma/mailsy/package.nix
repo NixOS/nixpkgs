@@ -29,7 +29,7 @@ buildNpmPackage rec {
   meta = {
     description = "Quickly generate a disposable email straight from terminal";
     mainProgram = "mailsy";
-    homepage = "https://fig.io/manual/mailsy";
+    homepage = "https://github.com/BalliAsghar/Mailsy";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers._404wolf ];
   };

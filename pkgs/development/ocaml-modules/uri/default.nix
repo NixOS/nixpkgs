@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "cdabaf6ef5cd2161e59cc7b74c6e4a68ecb80a9f4e96002e338e1b6bf17adec4";
+    hash = "sha256-zauvbvXNIWHlnMe3TG5KaOy4Cp9OlgAuM44ba/F63sQ=";
   };
 
   checkInputs = [ ounit ];

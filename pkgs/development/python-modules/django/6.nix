@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.1.1";
+  version = "6.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-jOshsS3ceWEJoxOuyUSEJvIPE5LLMrzMXEhVgX6wDPQ=";
+    hash = "sha256-19yg25WIOZq+SlSnP6Tl3RFMFRh93VtDXnYBEhZWbwA=";
   };
 
   patches = [
@@ -65,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     # https://code.djangoproject.com/ticket/36997
     # https://github.com/django/django/pull/21019
     ./6.x/invalidate-importlib-cache.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./6.x/gdal.patch {
@@ -134,6 +135,11 @@ buildPythonPackage (finalAttrs: {
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor finalAttrs.version}/releases/${finalAttrs.version}/";

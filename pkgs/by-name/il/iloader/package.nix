@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   rustPlatform,
   nodejs,
@@ -22,13 +23,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "iloader";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "nab138";
     repo = "iloader";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FpWX9m5WtTYTXueKX41RP1Zhyf5UuuhrSIYITq+g+Ew=";
+    sha256 = "sha256-fiMLl0OkG9/+T/gEIAeK23TrPOQzm5e0yk6oX9VFsr8=";
   };
 
   nodeModules = stdenv.mkDerivation {
@@ -64,14 +65,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       runHook postInstall
     '';
 
-    outputHash = "sha256-UTNnOm1BRVuz7x8Vrxv/WL7N6Cyi8VxYusAXFpCIako=";
+    outputHash = "sha256-v6Hy3fmbpArVJh0YLJZGKH65nXiWPMjUsu1nPKdHlQ8=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
-  cargoHash = "sha256-te7XB/pkM9s94fUJadCtoOvcB/kEN/U1BwQMWcKPglM=";
+  cargoHash = "sha256-hn+TQtDLs8/JA/XH4w8rPjC7vujJ1OzX5k80koeZ2s8=";
 
   doCheck = false;
 
@@ -112,13 +113,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper $out/Applications/iloader.app/Contents/MacOS/iloader $out/bin/iloader
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "nodeModules"
+    ];
+  };
+
   meta = {
     changelog = "https://github.com/nab138/iloader/releases/tag/v${finalAttrs.version}";
     description = "User friendly sideloader";
     homepage = "https://github.com/nab138/iloader";
     license = lib.licenses.mit;
     mainProgram = "iloader";
-    maintainers = with lib.maintainers; [ ern775 ];
+    maintainers = with lib.maintainers; [
+      ern775
+      mirdukkkkk
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

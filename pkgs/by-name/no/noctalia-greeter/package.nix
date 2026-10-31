@@ -14,6 +14,7 @@
   freetype,
   glib,
   libGL,
+  libjxl,
   librsvg,
   libwebp,
   libxkbcommon,
@@ -32,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-greeter";
-  version = "1.6.0";
+  version = "1.7.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "noctalia-dev";
     repo = "noctalia-greeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-agpHRmhsUL4ZNFseCNilGSiC/cc0S2tC1ZvC5rXmgtY=";
+    hash = "sha256-ILFIjvpGFxwt6y9GDESlNcVm2t0Q2Ku108vWiqCsWfM=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glib
     libGL
+    libjxl
     librsvg
     libwebp
     libxkbcommon
@@ -85,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dtomvan
+      pyrox0
       samiser
       spacedentist
     ];

@@ -48,6 +48,9 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-A0es0mk6aEMdKvweVfffkaezfgIi1DWAr3dLmNwGOTo=";
   };
 
+  # Compatibility with opam-format 2.6
+  patches = [ ./opam-2_6.patch ];
+
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [
     curly

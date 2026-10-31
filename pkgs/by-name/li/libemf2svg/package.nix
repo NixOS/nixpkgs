@@ -36,6 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/kakwa/libemf2svg";
     maintainers = with lib.maintainers; [ erdnaxe ];
     license = lib.licenses.gpl2Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

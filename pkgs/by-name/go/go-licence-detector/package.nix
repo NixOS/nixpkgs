@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-licence-detector";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "go-licence-detector";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/94rUYWS8r8rRTmMyNs93voLdK3WlzJlIQWxgGE6eaQ=";
+    hash = "sha256-EF1DN83kushDvuJFkTHawQ7DEmdhZ9BBO3XT6eZ18VA=";
   };
 
-  vendorHash = "sha256-wJ6jB8MxyYOlOpABRv5GmULofWuPQR8yClj63qsr/tg=";
+  vendorHash = "sha256-mEi/aMPdygwiQHuGU1tz82IOanOD15VYpdEePDzCwOU=";
 
   meta = {
     description = "Detect licences in Go projects and generate documentation";

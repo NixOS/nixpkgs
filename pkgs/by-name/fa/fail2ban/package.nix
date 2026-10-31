@@ -65,6 +65,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       # causes merge conflicts
       excludes = [ "ChangeLog" ];
     })
+    # remove next release
+    (fetchpatch {
+      name = "CVE-2026-109786.patch";
+      url = "https://github.com/fail2ban/fail2ban/commit/ddd879d22664904ace24e1255ac6571808c58187.patch";
+      hash = "sha256-0gsSgwlpsHAhF5LfV+tnGF/8ZgEWt5Sesk1eC7/iIcY=";
+    })
   ];
 
   preInstall = ''

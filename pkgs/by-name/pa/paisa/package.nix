@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
@@ -24,23 +23,23 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "paisa";
-  version = "0.7.4";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "ananthakumaran";
     repo = "paisa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GuD0X1Im8pc8arVX/c2KMBZwp/yXyaqPnRObvPe4G5c=";
+    hash = "sha256-UsuHoB+dLx0+VD9DM15rBLu+6gptFyvf9fAqEsauQnQ=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-5jrxI+zSKbopGs5GmGVyqQcMHNZJbCsiFEH/LPXWxpk=";
+  vendorHash = "sha256-th2jxlYseQjkIvu0mbUnNRzAFgHHTrm/lh4+CvonfWc=";
   frontend = buildNpmPackage' {
     pname = "paisa-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-86LvGTSs2PaxrYMGaU7yOUGiAMZY1MfFIexpYVNwvZ8=";
+    npmDepsHash = "sha256-QkYtUk/JhL+KC8/9uSd/oGjsjdmwZl47W2oZh3oRGGA=";
 
     # canvas fails to build with Node 22 (upstream nan/V8 incompatibility).
     # It is only used client-side via pdf-js, so the native binding is never

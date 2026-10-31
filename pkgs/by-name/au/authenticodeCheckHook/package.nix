@@ -15,5 +15,6 @@ makeSetupHook {
     description = "Setup hook for verifying Authenticode signatures";
     inherit (pesign.meta) platforms;
     teams = [ lib.teams.boot-security ];
+    license = lib.licenses.mit;
   };
 } ./setup-hook.bash

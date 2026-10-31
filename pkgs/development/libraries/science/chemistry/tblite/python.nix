@@ -24,6 +24,7 @@ buildPythonPackage {
     version
     src
     postPatch
+    patches
     meta
     ;
 
@@ -54,11 +55,6 @@ buildPythonPackage {
     simple-dftd3
     cffi
     numpy
-  ];
-
-  patches = [
-    # Add multicharge to the meson deps; otherwise we get missing mod_multicharge errors
-    ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
   ];
 
   pyproject = false;

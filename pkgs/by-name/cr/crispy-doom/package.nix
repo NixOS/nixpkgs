@@ -2,14 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
-  libpng,
-  libsamplerate,
-  pkg-config,
-  python3,
   SDL2,
   SDL2_mixer,
   SDL2_net,
+  autoreconfHook,
+  libpng,
+  libsamplerate,
+  nix-update-script,
+  pkg-config,
+  python3,
+  versionCheckHook,
   zlib,
 
   enableTruecolor ? false,
@@ -17,20 +19,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crispy-doom";
-  version = "7.1";
+  version = "7.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "crispy-doom";
     tag = "crispy-doom-${finalAttrs.version}";
-    hash = "sha256-LJLqlPSOarmm5oqSLMilxNMJl4+uKukDl/b58NpZ8VI=";
+    hash = "sha256-OzhhiuU6IH2SqMFG8y2UeOeOvzTB4F3Uu2Vp+96VgFk=";
   };
 
   postPatch = ''
-    for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
+    patchShebangs --build man data textscreen/fonts
   '';
-
-  configureFlags = lib.optionals enableTruecolor [ "--enable-truecolor" ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -48,23 +51,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+  configureFlags = lib.optionals enableTruecolor [ "--enable-truecolor" ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
-  strictDeps = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "crispy-doom-(.*)"
+    ];
+  };
 
   meta = {
-    homepage = "https://fabiangreffrath.github.io/crispy-homepage";
-    changelog = "https://github.com/fabiangreffrath/crispy-doom/releases/tag/crispy-doom-${finalAttrs.version}";
     description = "Limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
     longDescription = ''
       Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom.
       Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.
     '';
-    mainProgram = "crispy-doom";
+    homepage = "https://fabiangreffrath.github.io/crispy-homepage";
+    changelog = "https://github.com/fabiangreffrath/crispy-doom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Gliczy
       keenanweaver
     ];
+    platforms = lib.platforms.unix;
+    mainProgram = "crispy-doom";
   };
 })

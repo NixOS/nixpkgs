@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
     pylance
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Tests require pylance, which is a circular dependency
   doCheck = false;

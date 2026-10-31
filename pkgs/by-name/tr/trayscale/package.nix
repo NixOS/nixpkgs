@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
@@ -12,18 +12,18 @@
   desktopToDarwinBundle,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "trayscale";
-  version = "0.18.9";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPKOxU3b+i85Y5xaCYWzy7fLWi3K9rN7yPtaUv7fsEU=";
+    hash = "sha256-I/HBbw/sRU8nL0Yp2ZA0QVo/0rvLwhdPeTigWfsusZE=";
   };
 
-  vendorHash = "sha256-G53kmNrTXhHCT5Axb/h9Mkbz/S2mScxnYjn07fBT2Lc=";
+  vendorHash = "sha256-sSYyEWSHKhmERmXJFUIRnTxvtwthyUnTl/SUqW0q52w=";
 
   subPackages = [ "cmd/trayscale" ];
 

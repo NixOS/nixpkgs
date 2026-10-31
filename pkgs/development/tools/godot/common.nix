@@ -101,6 +101,7 @@ let
 
   harfbuzz-raster = harfbuzz.override {
     withRaster = lib.versionAtLeast version "4.7";
+    withVector = lib.versionAtLeast version "4.7";
     withCairo = lib.versionAtLeast version "4.7";
   };
 

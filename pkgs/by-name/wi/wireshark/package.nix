@@ -27,7 +27,7 @@
   libsmi,
   libssh,
   libxml2,
-  lua5_4,
+  lua5_5,
   lz4,
   makeWrapper,
   minizip,
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsmi
     libssh
     libxml2
-    lua5_4
+    lua5_5
     lz4
     minizip
     nghttp2

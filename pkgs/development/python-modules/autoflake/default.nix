@@ -1,39 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   pyflakes,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "autoflake";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c9OyK62JA0h596SHHCecjRibPywLnZ4nS45bRowX+aA=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "autoflake";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Th2MyC6Yu+OLF7WZCG1e5VQqBIGz6Eaxx2dTaEpqTtA=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ pyflakes ];
+  dependencies = [ pyflakes ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "autoflake" ];
 
-  disabledTests = [
-    # AssertionError: True is not false
-    "test_is_literal_or_name"
+  enabledTestPaths = [
+    "test_autoflake.py"
+    "test_fuzz.py"
   ];
 
   meta = {
     description = "Tool to remove unused imports and unused variables";
-    mainProgram = "autoflake";
-    homepage = "https://github.com/myint/autoflake";
+    homepage = "https://github.com/PyCQA/autoflake";
+    changelog = "https://github.com/PyCQA/autoflake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
+    mainProgram = "autoflake";
   };
-}
+})

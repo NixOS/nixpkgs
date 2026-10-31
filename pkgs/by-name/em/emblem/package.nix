@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -26,14 +26,12 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "emblem";
     tag = version;
-    hash = "sha256-OqP6KLaDix4hR/AA+lfaMu4nZPqpAKfYzZu7tr+RUJI=";
-    # Temporary workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    hash = "sha256-hKsME/edn8E+tKF3TbhqQF7GsRdbvfXprV4fFgHdx6w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-J00zw8jOeMLjGyn2Gj4TA5vHjIWOw+x/XEIXMyBFMdw=";
+    hash = "sha256-M0z+twxu16FON/OgbG3SCfVYCHAkkfSzf5QTt983MhA=";
   };
 
   nativeBuildInputs = [

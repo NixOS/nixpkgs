@@ -52,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "DESTDIR=${placeholder "out"}"
+  ];
+
+  buildFlags = [ "module" ];
+
+  installFlags = [
+    "-C"
     "module"
   ];
 
@@ -61,11 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     "fortify"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
+  postInstall = ''
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
-    runHook postInstall
   '';
 
   enableParallelBuilding = true;

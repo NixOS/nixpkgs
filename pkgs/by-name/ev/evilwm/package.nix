@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
-    license = {
+    license = lib.licenses.mkLicense {
       shortName = "evilwm";
       fullName = "Custom, inherited from aewm and 9wm";
       url = "https://www.6809.org.uk/evilwm/";

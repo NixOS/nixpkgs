@@ -398,21 +398,15 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "10" "";
-    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
-    cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
-  };
-
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "9" "";
-    hash = "sha256-e7TU9egHzCclHRTZ1ghtGCxbJYdRkeRKsVtwnNen3Zw=";
+    version = rubyVersion "3" "4" "11" "";
+    hash = "sha256-XCK+RFJDErPUM9aHObzFMGM7HaXvi6CvoKN2gNoX094=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "7" "";
-    hash = "sha256-kRrOIPkNBoyg5N2m0OTw+B5S5S8t1PQATHIeJTQS6C0=";
+    version = rubyVersion "4" "0" "9" "";
+    hash = "sha256-w1NQaC/wULeXAtV63kUW5zNgY/UQFV0Z+y+1s/OQlRE=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

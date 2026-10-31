@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = "pmdsky-debug-py";
     tag = version;
-    sha256 = "sha256-klgtuNjxNQcW01VkKCR69ahpno2XYoQy7MfZSOZ5H9Q=";
+    hash = "sha256-klgtuNjxNQcW01VkKCR69ahpno2XYoQy7MfZSOZ5H9Q=";
   };
 
   prePatch = "cd src";

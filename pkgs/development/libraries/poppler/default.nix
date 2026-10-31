@@ -65,7 +65,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.09.0";
+  version = "26.10.0";
 
   outputs = [
     "out"
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gFnq22gFNAdo8TjEZbV/gWTJK0oHc8N+8DHqbA2Yey4=";
+    hash = "sha256-Z5LLfGkgUAeth9LpNs7MWzox+sKatU/8MXX9trKmzjU=";
   };
 
   nativeBuildInputs = [

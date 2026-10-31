@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       binary protocol and Cassandra Query Language v3.
     '';
     license = lib.licenses.asl20;
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.linux;
     homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
     maintainers = [ lib.maintainers.npatsakula ];
   };

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gobgp";
-  version = "4.9.0";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-52eJtAQfDF76vvLQMxnttPgXppaumZcZ/toOoLeYBu8=";
+    sha256 = "sha256-sCTC7qJdkuxbJV/U6rMDCo5NO9yukGjqGPGHZvPKO7A=";
   };
 
-  vendorHash = "sha256-9r8LZlCF4sr8VTyJfDktjhk32afc8ep7GXtqxUnAleE=";
+  vendorHash = "sha256-eqI8JtTYANJziTOl2rAB8CZZft0MqXgowSwh8K1+ejI=";
 
   postConfigure = ''
     export CGO_ENABLED=0

@@ -185,6 +185,42 @@ const cases: Array<{
     expected: 'dismiss',
   },
   {
+    name: 'kernel common-config exemption suppresses a possible mass rebuild on staging-nixos',
+    facts: {
+      base: 'staging-nixos',
+      maxRebuildCount: 999,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/common-config.nix',
+    },
+    expected: 'dismiss',
+  },
+  {
+    name: 'kernel common-config exemption suppresses a definite mass rebuild on staging-nixos',
+    facts: {
+      base: 'staging-nixos',
+      maxRebuildCount: 1000,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/common-config.nix',
+    },
+    expected: 'dismiss',
+  },
+  {
+    name: "kernel common-config exemption doesn't suppress a possible mass rebuild on release branch",
+    facts: {
+      base: 'release-26.05',
+      maxRebuildCount: 999,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/common-config.nix',
+    },
+    expected: 'possible-mass-rebuild',
+  },
+  {
+    name: "kernel common-config exemption doesn't suppress a definite mass rebuild on master",
+    facts: {
+      base: 'master',
+      maxRebuildCount: 1000,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/common-config.nix',
+    },
+    expected: 'mass-rebuild',
+  },
+  {
     name: 'xanmod kernel exemption suppresses a possible mass rebuild',
     facts: {
       maxRebuildCount: 999,

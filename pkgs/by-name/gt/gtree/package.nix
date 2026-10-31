@@ -1,15 +1,12 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   gtree,
   nix-update-script,
   testers,
 }:
-# buildGoModule currently builds with go 1.25.0. This package requires
-# version 1.26.0 theirfor needing to be pinned to buildGo126Module until
-# it's updated.
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gtree";
   version = "1.14.9";
 

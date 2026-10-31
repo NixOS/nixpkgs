@@ -158,6 +158,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      recutita
+    ];
   };
 }

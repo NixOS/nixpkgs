@@ -3,21 +3,28 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simpleproxy";
   version = "3.6";
-  rev = "v.${version}";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "vzaliva";
     repo = "simpleproxy";
-    sha256 = "sha256-O4PncEm8LZaJDN28kwsSvCEewr+k0EAyHMu3U+JYyQQ=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-O4PncEm8LZaJDN28kwsSvCEewr+k0EAyHMu3U+JYyQQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/vzaliva/simpleproxy";
@@ -26,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.montag451 ];
     mainProgram = "simpleproxy";
   };
-}
+})

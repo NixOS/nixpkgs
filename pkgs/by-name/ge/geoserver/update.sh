@@ -16,11 +16,10 @@ SMALLEST_VERSION=$(printf "%s\n%s" "$UPDATE_NIX_OLD_VERSION" "$UPDATE_NIX_NEW_VE
 
 if [[ "$SMALLEST_VERSION" == "$UPDATE_NIX_NEW_VERSION" ]]; then
   echo "geoserver is up-to-date: $SMALLEST_VERSION"
-  exit 0
+else
+  echo "Updating geoserver..."
+  update-source-version geoserver "$UPDATE_NIX_NEW_VERSION"
 fi
-
-echo "Updating geoserver..."
-update-source-version geoserver "$UPDATE_NIX_NEW_VERSION"
 
 cd "$(dirname "$(readlink -f "$0")")"
 

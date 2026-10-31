@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   ffmpeg,
+  makeBinaryWrapper,
   nodejs,
   npmHooks,
   fetchNpmDeps,
@@ -20,6 +21,7 @@ buildGoModule (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     nodejs
     npmHooks.npmConfigHook
   ];
@@ -53,14 +55,11 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  # for transcoding
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
-  ];
+  postFixup = ''
+    # for transcoding
+    wrapProgram "$out/bin/seanime" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+  '';
 
   passthru.updateScript = nix-update-script { };
 

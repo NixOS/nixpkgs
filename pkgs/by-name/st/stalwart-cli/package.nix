@@ -7,14 +7,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-cli";
-  version = "1.0.13";
+  version = "1.0.14";
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8HiFxJT5mGZp/9al1y8Ycm5im+E0PMDhw2+XeJAabTY=";
+    hash = "sha256-3SotRkEDIrI3hgYFjAkkKhCZoD/woXreLshBaLr0Y2c=";
   };
-  cargoHash = "sha256-Lj7wBLMqN4xP2GXicFGgIxkPrGi7F8i9KBSfFSn+KNk=";
+  cargoHash = "sha256-/vYb083UVPDZQpDWh16XkMWk+n9081OiV9S1i1om5zQ=";
   __structuredAttrs = true;
   # `Result::unwrap()` on an `Err` value: Network(reqwest::Error { kind: Builder, source: General("No CA certificates were loaded from the system") })
   nativeCheckInputs = [ cacert ];
@@ -31,12 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/stalwartlabs/cli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     mainProgram = "stalwart-cli";
     maintainers = with lib.maintainers; [

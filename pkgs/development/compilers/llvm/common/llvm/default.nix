@@ -107,6 +107,15 @@ stdenv.mkDerivation (
             + lib.optionalString (lib.versionAtLeast release_version "21") ''
               cp -r ${monorepoSrc}/libc "$out"
             ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
           )
       else
         src;
@@ -266,12 +275,7 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals (lib.versionOlder release_version "22") [
         # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
-        (fetchpatch {
-          name = "llvm-textapi-separate-arch-name-enum-label.patch";
-          url = "https://github.com/llvm/llvm-project/commit/477a65a051ce151895193f8dede1262fdc251132.patch";
-          stripLen = 1;
-          hash = "sha256-XXteX2zK5TzFQX+XhLzUtikY4PkCWF1f8l5MshelzX4=";
-        })
+        (getVersionFile "llvm/llvm-textapi-separate-arch-name-enum-label.patch")
       ]
       ++ lib.optionals (lib.versionOlder release_version "23") [
         # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
@@ -298,6 +302,7 @@ stdenv.mkDerivation (
     buildInputs = [
       libxml2
       libffi
+      python3 # for opt-viewer scripts
     ]
     ++ optional enablePFM libpfm; # exegesis
 

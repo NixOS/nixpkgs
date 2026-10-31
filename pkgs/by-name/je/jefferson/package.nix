@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jefferson";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "jefferson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dIb6ZmjGxDwUO0L6Uy2SlgioY8NCnTO7IGveRraw0LI=";
+    hash = "sha256-/YZ3JvXtnjwGipZ3WlJbeUdn4cDhVoHETsrkIHHADM8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

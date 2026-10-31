@@ -18,6 +18,7 @@
   optipng,
   pngquant,
   oxipng,
+  scour,
   nix-update-script,
 }:
 
@@ -74,6 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           optipng
           pngquant
           oxipng
+          scour
         ]
       }"
     )

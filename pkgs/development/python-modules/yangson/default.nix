@@ -40,10 +40,7 @@ buildPythonPackage rec {
     description = "Library for working with data modelled in YANG";
     mainProgram = "yangson";
     homepage = "https://github.com/CZ-NIC/yangson";
-    license = with lib.licenses; [
-      gpl3Plus
-      lgpl3Plus
-    ];
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

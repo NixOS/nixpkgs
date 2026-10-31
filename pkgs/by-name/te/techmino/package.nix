@@ -5,6 +5,7 @@
   callPackage,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   love,
   luajit,
   writeShellScript,
@@ -16,34 +17,38 @@
 let
   pname = "techmino";
   description = "Modern Tetris clone with many features";
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = "techmino";
-    icon = fetchurl {
-      name = "techmino.png";
-      url = "https://github.com/26F-Studio/Techmino/assets/9590981/95981af1-f39a-47d9-bd99-a78ab767c08f";
-      hash = "sha256-+j+8m2vwaWgHYSFL6urvTcB0vA+PCZ+FYJ22CNXfcSc=";
-    };
-    comment = description;
-    desktopName = "Techmino";
-    genericName = "Tetris Clone";
-    categories = [ "Game" ];
-  };
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "0.17.21";
 
   src = fetchurl {
-    url = "https://github.com/26F-Studio/Techmino/releases/download/v${version}/Techmino_Bare.love";
+    url = "https://github.com/26F-Studio/Techmino/releases/download/v${finalAttrs.version}/Techmino_Bare.love";
     hash = "sha256-8gMIyNP1FS52LnbpQ+G9XNtK3rQruzkMDRz7Gk9LZcQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   dontUnpack = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "techmino";
+      icon = fetchurl {
+        name = "techmino.png";
+        url = "https://github.com/26F-Studio/Techmino/assets/9590981/95981af1-f39a-47d9-bd99-a78ab767c08f";
+        hash = "sha256-+j+8m2vwaWgHYSFL6urvTcB0vA+PCZ+FYJ22CNXfcSc=";
+      };
+      comment = description;
+      desktopName = "Techmino";
+      genericName = "Tetris Clone";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -55,9 +60,6 @@ stdenv.mkDerivation rec {
     makeWrapper ${lib.getExe love} $out/bin/techmino \
       --add-flags $out/share/games/lovegames/techmino.love \
       --suffix LUA_CPATH : ${ccloader}/lib/lua/${luajit.luaversion}/CCLoader.so
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
 
     runHook postInstall
   '';
@@ -80,4 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "techmino";
     maintainers = with lib.maintainers; [ chayleaf ];
   };
-}
+})

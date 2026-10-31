@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "8.3.2";
+  version = "8.6.0";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-LGnrQc8/iO/uThiB2M9nx3dJHLXb6Kf3koByUIl7Uxk=";
+    hash = "sha256-FPWup4pvtIpbP1EyKdQzLAx1On3G7xB3yi+/ksRGrfM=";
   };
 
   patches = [
@@ -55,12 +55,11 @@ buildDotnetModule rec {
 
   postInstall = ''
     install -D NAPS2.Setup/config/linux/com.naps2.Naps2.desktop $out/share/applications/com.naps2.Naps2.desktop
-    install -D NAPS2.Lib/Icons/scanner-16-rev0.png $out/share/icons/hicolor/16x16/apps/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-32-rev2.png $out/share/icons/hicolor/32x32/apps/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-48-rev2.png $out/share/icons/hicolor/48x48/apps/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-64-rev2.png $out/share/icons/hicolor/64x64/apps/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-72-rev1.png $out/share/icons/hicolor/72x72/apps/com.naps2.Naps2.png
-    install -D NAPS2.Lib/Icons/scanner-128.png $out/share/icons/hicolor/128x128/apps/com.naps2.Naps2.png
+    for size in 16 32 48 128; do
+      install -D NAPS2.Lib/Icons/scanner_$size.png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/com.naps2.Naps2.png
+    done
+    install -D NAPS2.Lib/Icons/svg/scanner.svg $out/share/icons/hicolor/scalable/apps/com.naps2.Naps2.svg
     case "${stdenv.hostPlatform.system}" in
       x86_64-linux)
         chmod a+x $out/lib/naps2/_linux/tesseract
@@ -83,5 +82,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
   };
-
 }

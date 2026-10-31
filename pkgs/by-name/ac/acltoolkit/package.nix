@@ -5,7 +5,7 @@
 }:
 
 python3Packages.buildPythonPackage (finalAttrs: {
-  pname = "acltoolkit";
+  pname = "acltoolkit-ad";
   version = "0.2.2-unstable-2023-02-03";
   pyproject = true;
 
@@ -17,10 +17,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     hash = "sha256-97cbkGyIkq2Pk1hydMcViXWoh+Ipi3m0YvEYiaV4zcM=";
   };
 
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//" setup.py
-  '';
+  pythonRelaxDeps = true;
 
   build-system = with python3Packages; [ setuptools ];
 

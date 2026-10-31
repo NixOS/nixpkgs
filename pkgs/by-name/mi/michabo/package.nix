@@ -4,17 +4,10 @@
   makeDesktopItem,
   fetchFromGitLab,
   libsForQt5,
+  copyDesktopItems,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "Michabo";
-    desktopName = "Michabo";
-    exec = "Michabo";
-  };
-
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "michabo";
   version = "0.1";
 
@@ -22,27 +15,32 @@ stdenv.mkDerivation rec {
     domain = "git.pleroma.social";
     owner = "kaniini";
     repo = "michabo";
-    rev = "v${version}";
-    sha256 = "0pl4ymdb36r0kwlclfjjp6b1qml3fm9ql7ag5inprny5y8vcjpzn";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9l/JNvLF23xtLE8dilN1g1YclrlSOsoonyCbsVr1hF4=";
   };
 
   nativeBuildInputs = [
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
+    copyDesktopItems
   ];
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.qtwebsockets
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Michabo";
+      desktopName = "Michabo";
+      exec = "Michabo";
+    })
+  ];
+
   qmakeFlags = [
     "michabo.pro"
     "DESTDIR=${placeholder "out"}/bin"
   ];
-
-  postInstall = ''
-    ln -s ${desktopItem}/share $out/share
-  '';
 
   meta = {
     description = "Native desktop app for Pleroma and Mastodon servers";
@@ -52,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

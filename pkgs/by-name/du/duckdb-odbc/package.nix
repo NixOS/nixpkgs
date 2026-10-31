@@ -12,13 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "duckdb-odbc";
-  version = "1.5.6.0";
+  version = "2.0.0.0";
 
   src = fetchFromGitHub {
     owner = "duckdb";
     repo = "duckdb-odbc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EaDwmQ0kb7oZLRm5le6sz63wT4RIMX2NW4lr0RARKRU=";
+    hash = "sha256-RrRGSmiGlD2l6OXykntnMM+JevblYIcpwQEZx/lPEGU=";
   };
 
   nativeBuildInputs = [ cmake ];

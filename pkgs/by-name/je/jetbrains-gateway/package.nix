@@ -10,26 +10,12 @@
   # keep-sorted end
 }:
 let
-  system = stdenv.hostPlatform.system;
-  # update-script-start: urls
-  urls = {
-    x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2.tar.gz";
-      hash = "sha256-FdjMPo4SyWAojyqKm+FFdt3f7NuEfSFvH8I2ctygxjE=";
-    };
-    aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2-aarch64.tar.gz";
-      hash = "sha256-bYLMkv7/aNFyZOBLFp0SBFA44YCzFjqArTWEpJO+jmo=";
-    };
-    aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2-aarch64.dmg";
-      hash = "sha256-FUus7mjiYWAiyIihEjhpEILYupLAFdjrA8xClovJU2o=";
-    };
-  };
-  # update-script-end: urls
+  inherit (stdenv.hostPlatform) system;
+  versionInfo = lib.importJSON ./version.json;
 in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
+  inherit (versionInfo) version buildNumber;
 
   pname = "gateway";
 
@@ -37,12 +23,7 @@ jetbrains.mkJetBrainsProduct {
   product = "JetBrains Gateway";
   productShort = "Gateway";
 
-  # update-script-start: version
-  version = "2026.2";
-  buildNumber = "262.8665.250";
-  # update-script-end: version
-
-  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
   jdk =

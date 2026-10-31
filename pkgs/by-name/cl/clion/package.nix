@@ -18,38 +18,19 @@
   # keep-sorted end
 }:
 let
-  system = stdenv.hostPlatform.system;
-  # update-script-start: urls
-  urls = {
-    x86_64-linux = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1.tar.gz";
-      hash = "sha256-3/SNgt6bpr0aIQWmTJnvkgftdZE0M5wcE/LDS1Hk4R0=";
-    };
-    aarch64-linux = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1-aarch64.tar.gz";
-      hash = "sha256-IG2U2v9mTk+GCbB9jJVoX5hKju37+DfqRiMtxu8b8bo=";
-    };
-    aarch64-darwin = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1-aarch64.dmg";
-      hash = "sha256-nkkJ80rc1bApEBMZT0ZjZQcnhkzAG3i1p9GhQUA4gT4=";
-    };
-  };
-  # update-script-end: urls
+  inherit (stdenv.hostPlatform) system;
+  versionInfo = lib.importJSON ./version.json;
 in
 (jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
+  inherit (versionInfo) version buildNumber;
 
   pname = "clion";
 
   wmClass = "jetbrains-clion";
   product = "CLion";
 
-  # update-script-start: version
-  version = "2026.2.0.1";
-  buildNumber = "262.8665.321";
-  # update-script-end: version
-
-  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
   jdk =

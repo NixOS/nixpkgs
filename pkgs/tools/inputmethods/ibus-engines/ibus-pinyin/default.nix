@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   intltool,
   pkg-config,
@@ -10,7 +11,7 @@
   glib,
   gtk3,
   ibus,
-  lua,
+  lua5_5,
   pyzy,
   sqlite,
   nix-update-script,
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-8nM/dEjkNhQNv6Ikv4xtRkS3mALDT6OYC1EAKn1zNtI=";
   };
 
+  patches = [
+    # lua 5.5 compat, https://www.lua.org/manual/5.5/manual.html#8.1
+    (fetchpatch {
+      url = "https://github.com/libpinyin/ibus-libpinyin/commit/9264c2fdb731516f803ca66e84c6ec17ab1cfbf7.patch";
+      hash = "sha256-3UufD+4n4yrPOQx5YHPdNURmrup8WDyL7bwJTnq3wOI=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     intltool
@@ -39,7 +48,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     ibus
-    lua
+    lua5_5
     pyzy
     sqlite
   ];
@@ -48,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     isIbusEngine = true;
-    description = "PinYin engine for IBus";
+    description = "PinYin engine for IBus (deprecated, new users should switch to ibus-engines.libpinyin)";
     homepage = "https://github.com/ibus/ibus-pinyin";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ azuwis ];

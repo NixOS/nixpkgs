@@ -7,10 +7,11 @@
   which,
   eprover,
   makeWrapper,
-  coq,
+  rocqPackages,
 }:
 
 let
+  coq = rocqPackages.coq;
   inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
 in
 stdenv.mkDerivation (finalAttrs: {

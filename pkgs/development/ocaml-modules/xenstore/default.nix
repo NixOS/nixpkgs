@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-xenstore";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-LaynsbCE/+2QfbQCOLZi8nw1rqmZtgrwAov9cSxYZw8=";
   };
 

@@ -18,11 +18,11 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-troveclient";
   version = "8.10.0";
   pyproject = true;
@@ -30,11 +30,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-troveclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ayNRhT337eG6NJM2ugAqiH6st+2s4gySIeNQ4jJb8nU=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -65,17 +66,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httplib2
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-    troveclient.tests.test_shell.ShellTest.test_help
-    troveclient.tests.test_shell.ShellTestKeystoneV3.test_help
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    "troveclient.tests.test_shell.ShellTest.test_help"
+    "troveclient.tests.test_shell.ShellTestKeystoneV3.test_help"
+  ];
 
   pythonImportsCheck = [ "troveclient" ];
 
@@ -86,4 +83,4 @@ buildPythonPackage rec {
     mainProgram = "trove";
     teams = [ lib.teams.openstack ];
   };
-}
+})

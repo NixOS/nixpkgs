@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pihole-web";
-  version = "6.6";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uGkxCa1ErE0uwFyZKfto0YQIRQMnnNAxGEaM6YB8+Ug=";
+    hash = "sha256-z1SAQr3ZMiN2A3p0iYYa9AgNqydIZhxCqRK66nw2xYA=";
   };
 
   propagatedBuildInputs = [

@@ -5,6 +5,7 @@
   rustPlatform,
   bashInteractive,
   coreutils,
+  installAgentSkills,
   installShellFiles,
   libiconv,
   mdbook,
@@ -41,9 +42,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-zpP5XLmgQFH4+B97zMhh+iE6kS+PHTh9heH89rXCQo0=";
 
-  nativeBuildInputs =
-    lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
-    ++ lib.optionals withDocumentation [ mdbook ];
+  nativeBuildInputs = [
+    installAgentSkills
+  ]
+  ++ lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
+  ++ lib.optionals withDocumentation [ mdbook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''

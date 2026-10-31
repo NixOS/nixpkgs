@@ -4,6 +4,7 @@
   glib,
   gobject-introspection,
   gtk3,
+  libayatana-appindicator,
   lib,
   python3Packages,
   sound-theme-freedesktop,
@@ -24,6 +25,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     glib
     gtk3
+    libayatana-appindicator
   ];
 
   nativeBuildInputs = [

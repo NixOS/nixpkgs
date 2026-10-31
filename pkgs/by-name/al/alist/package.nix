@@ -103,6 +103,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
+    broken = true; # stuck on fuse2
     description = "File list/WebDAV program that supports multiple storages";
     homepage = "https://github.com/AlistGo/alist";
     changelog = "https://github.com/AlistGo/alist/releases/tag/v${finalAttrs.version}";

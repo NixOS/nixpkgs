@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-unused-function";
 
+  guileImportsCheck = [ "avahi" ];
+
   meta = {
     description = "Bindings to Avahi for GNU Guile";
     homepage = "https://www.nongnu.org/guile-avahi/";

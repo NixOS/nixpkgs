@@ -3,7 +3,9 @@
   fetchFromGitHub,
   lib,
 
+  pkg-config,
   installShellFiles,
+  oniguruma,
   rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,12 +18,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-V69VxhMiTY1Tgo4aW06AjwBIoXjK0Ov6oIahxk0NzGg=";
 
-  env.YAZI_GEN_COMPLETIONS = true;
-  env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2026-09-1";
+  env = {
+    YAZI_GEN_COMPLETIONS = true;
+    VERGEN_GIT_SHA = "Nixpkgs";
+    VERGEN_BUILD_DATE = "2026-09-1";
+    RUSTONIG_SYSTEM_LIBONIG = 1;
+  };
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    oniguruma
+    rust-jemalloc-sys
+  ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \

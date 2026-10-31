@@ -13,11 +13,15 @@
   curl,
   ftgl,
   glew,
-  lua,
+  lua5_5,
   mpg123,
   wrapGAppsHook3,
   libwebp,
 }:
+
+let
+  lua = lua5_5;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slade";

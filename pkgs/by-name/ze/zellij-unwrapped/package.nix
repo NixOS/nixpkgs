@@ -8,6 +8,7 @@
   curl,
   libssh2,
   openssl,
+  sqlite,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -52,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     curl
     libssh2
     openssl
+    sqlite
   ];
 
   nativeCheckInputs = [

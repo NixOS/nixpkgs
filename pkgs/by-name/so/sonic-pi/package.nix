@@ -18,7 +18,7 @@
   crossguid,
   reproc,
   platform-folders,
-  ruby_3_3,
+  ruby_3_4,
   alsa-lib,
   libsndfile,
   rtmidi,
@@ -32,7 +32,9 @@
 }@args:
 
 let
-  ruby = args.ruby_3_3.withPackages (ps: [
+  ruby = args.ruby_3_4.withPackages (ps: [
+    # Vendored minitest requires mutex_m, which is no longer a default gem in Ruby 3.4.
+    ps.mutex_m
     ps.prime
     ps.racc
     ps.rake

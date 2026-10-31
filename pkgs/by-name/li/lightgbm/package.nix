@@ -47,14 +47,17 @@ stdenv.mkDerivation (finalAttrs: {
   #   in \
   #   rWrapper.override{ packages = [ lgbm ]; }"
   pname = lib.optionalString rLibrary "r-" + "lightgbm";
-  version = "4.6.0";
+  version = "4.7.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lightgbm-org";
     repo = "lightgbm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vq/TlM87i1GNq0Rpy0OTulT9LF+uvi4PhOUz7ZNeceA=";
+    hash = "sha256-2SEt+7jrDa0/7Dg6WmnXHDaBYp4cUG4bM4Y+BINEcfE=";
   };
 
   patches = [
@@ -95,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
   ++ lib.optionals openclSupport [
     opencl-headers
@@ -110,7 +114,16 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
   ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.nccl
+  ];
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
@@ -128,6 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [
       (lib.cmakeBool "USE_CUDA" true)
       (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe cudaPackages.backendStdenv.cc))
+      (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+      (lib.cmakeBool "CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS" true)
+
+      # needed to find nccl
+      (lib.cmakeBool "BUILD_WITH_SHARED_NCCL" true)
+      (lib.cmakeFeature "NCCL_ROOT" "${lib.getLib cudaPackages.nccl}")
     ]
     ++ lib.optionals openclSupport [
       (lib.cmakeBool "USE_GPU" true)

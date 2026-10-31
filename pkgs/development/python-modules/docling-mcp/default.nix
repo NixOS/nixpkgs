@@ -2,10 +2,10 @@
   lib,
   accelerate,
   buildPythonPackage,
-  docling,
+  docling-core,
+  docling-slim,
   fetchFromGitHub,
   hatchling,
-  httpx,
   llama-index-core,
   llama-index-embeddings-huggingface,
   llama-index-embeddings-openai,
@@ -28,16 +28,16 @@
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-mcp";
-  version = "1.3.3";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-mcp";
-    tag = "v${version}";
-    hash = "sha256-OyLL8g9fh1H9N3i5ok885IzC5pFckMoqsjd8oX/HdRY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3xSk9EvRPS508bOpxiyLNAsysp7+58AIFiMB64fzkqA=";
   };
 
   pythonRemoveDeps = [
@@ -48,13 +48,15 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    docling
-    httpx
+    docling-core
+    docling-slim
     mcp
     pydantic
     pydantic-settings
     python-dotenv
-  ];
+  ]
+  ++ docling-slim.optional-dependencies.service-client
+  ++ mcp.optional-dependencies.cli;
 
   optional-dependencies = {
     llama-index-rag = [
@@ -69,33 +71,31 @@ buildPythonPackage rec {
       llama-index-vector-stores-milvus
     ];
     llama-stack = [ llama-stack-client ];
+    local = docling-slim.optional-dependencies.standard;
     smolagents = [
       accelerate
       ollama
       smolagents
       torch
       transformers
-    ];
+    ]
+    ++ smolagents.optional-dependencies.litellm
+    ++ smolagents.optional-dependencies.mcp;
   };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.local;
 
   pythonImportsCheck = [ "docling_mcp" ];
-
-  disabledTestPaths = [
-    # Tests require network access
-    "tests/test_mcp_server.py"
-    "tests/test_conversion_tools.py"
-  ];
 
   meta = {
     description = "Making docling agentic through MCP";
     homepage = "https://github.com/docling-project/docling-mcp";
-    changelog = "https://github.com/docling-project/docling-mcp/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-mcp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

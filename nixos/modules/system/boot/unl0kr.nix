@@ -27,7 +27,7 @@ in
 
         See `unl0kr.conf(5)` for supported values.
 
-        Alternatively, visit `https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/3.2.0/unl0kr/unl0kr.conf`
+        Alternatively, visit `https://gitlab.nura.eco/nura/buffybox/-/blob/3.2.0/unl0kr/unl0kr.conf`
       '';
 
       example = lib.literalExpression ''
@@ -47,13 +47,6 @@ in
 
   config = lib.mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ hustlerone ];
-    assertions = [
-      {
-        assertion = cfg.enable -> config.boot.initrd.systemd.enable;
-        message = "boot.initrd.unl0kr is only supported with boot.initrd.systemd.";
-      }
-    ];
-
     warnings = lib.mkMerge [
       (lib.mkIf (config.hardware.amdgpu.initrd.enable) [
         "Use early video loading at your risk. It's not guaranteed to work with unl0kr."

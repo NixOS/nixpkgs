@@ -52,8 +52,8 @@ let
       nixosTests,
       clientOnly ? !stdenv.hostPlatform.isLinux,
       symlinkJoin,
-      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-      systemd,
+      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+      systemdLibs,
       withBtrfs ? stdenv.hostPlatform.isLinux,
       btrfs-progs,
       withLvm ? stdenv.hostPlatform.isLinux,
@@ -64,6 +64,8 @@ let
       versionCheckHook,
     }:
     let
+      systemdLibs' = systemdLibs.override { withCompression = true; };
+
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
@@ -169,6 +171,8 @@ let
           pname = "moby";
           inherit version;
 
+          __structuredAttrs = true;
+
           src = moby-src;
 
           vendorHash = null;
@@ -188,7 +192,7 @@ let
           ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
           ++ lib.optionals withLvm [ lvm2 ]
           ++ lib.optionals withBtrfs [ btrfs-progs ]
-          ++ lib.optionals withSystemd [ systemd ]
+          ++ lib.optionals withSystemd [ systemdLibs' ]
           ++ lib.optionals withSeccomp [ libseccomp ];
 
           postPatch = ''
@@ -271,6 +275,8 @@ let
       {
         pname = "docker";
         inherit version;
+
+        __structuredAttrs = true;
 
         src = fetchFromGitHub {
           owner = "docker";
@@ -424,18 +430,18 @@ in
 
   docker_29 =
     let
-      version = "29.8.1";
+      version = "29.9.2";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-xJ0UATkStx31/DHzmmXE0Srm9BYMY1RZ5rIz36kHesw=";
+      cliHash = "sha256-4zkbutgBREYn90r5cxc/dH7VAKCway3VLtENXbRjvCw=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-tyn738es5SBqVAVKv2tgj88c6WJbS13MDLVgi2eWsSc=";
-      runcRev = "v1.5.1";
-      runcHash = "sha256-N059CtWkenSXYksVu5Uh+sGodC+JHc91R56b+VoC96k=";
-      containerdRev = "v2.3.5";
-      containerdHash = "sha256-RIZxlXwgOizLVKr4XRIKAlUP19URolGp4J849hoQMSM=";
+      mobyHash = "sha256-GZClQfJCONvkUUjX0rrTNWeSPgA8cmpDlAj5vDUtzL0=";
+      runcRev = "v1.5.2";
+      runcHash = "sha256-DOEnEK/1KlMCzJHW5bWCVChfBUzWOgbgPJn7GMatwAc=";
+      containerdRev = "v2.4.2";
+      containerdHash = "sha256-RP1qn/dlfVCAwe3ZxASStzGZmuYwdUVwfPGG8XByNNk=";
       tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
       tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };

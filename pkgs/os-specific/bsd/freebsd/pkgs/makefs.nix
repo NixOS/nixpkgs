@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   libnetbsd,
   compatIfNeeded,
@@ -21,4 +22,6 @@ mkDerivation {
   ];
   MK_TESTS = "no";
   MK_PIE = "no";
+
+  meta.platforms = lib.platforms.unix;
 }

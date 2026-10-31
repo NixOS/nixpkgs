@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   kernel,
-  kmod,
   kernelModuleMakeFlags,
   nix-update-script,
 }:
@@ -11,6 +10,10 @@
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
   version = "0.15.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
@@ -24,21 +27,7 @@ stdenv.mkDerivation rec {
     "pic"
   ];
 
-  preBuild = ''
-    substituteInPlace Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
-    sed -i '/depmod/d' Makefile
-  '';
-
-  # Don't use makeFlags for this
-  postBuild = ''
-    make utils
-  '';
-
-  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
-
-  postInstall = ''
-    make install-utils PREFIX=$bin
-  '';
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   outputs = [
     "out"
@@ -47,9 +36,28 @@ stdenv.mkDerivation rec {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
-    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "v4l2loopback.ko"
   ];
+
+  installFlags = [
+    "DEPMOD=true"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) "''${makeFlags[@]}"
+    # Don't use makeFlags for this
+    make utils
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
+    make install-utils PREFIX=$bin
+    runHook postInstall
+  '';
 
   passthru.updateScript = nix-update-script { };
 

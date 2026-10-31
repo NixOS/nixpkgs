@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   mkYaziPlugin,
 }:
 mkYaziPlugin {
@@ -13,6 +14,13 @@ mkYaziPlugin {
     rev = "9ef1254d8afe88aba21cd56a186f4485dd532ab8";
     hash = "sha256-GQFBRB2aQqmmuKZ0BpcCAC4r0JFKqIANZNhUC98SlwY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/sidhantunnithan/bookmarks.yazi/commit/f60eec36bdf2327efbcdd0db3405ad4e5359e774.patch";
+      hash = "sha256-XNPPH7ajl3V6eZkbpRWsMXihbJt8LbrY5eNwnOsAcUo=";
+    })
+  ];
 
   meta = {
     description = "Yazi plugin that adds the basic functionality of vi-like marks";

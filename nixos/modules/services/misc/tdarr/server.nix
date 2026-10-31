@@ -136,7 +136,7 @@ in
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectHome = true;
-        ReadWritePaths = [ cfg.dataDir ];
+        ReadWritePaths = [ cfg.dataDir ] ++ cfg.libraryDir;
       }
       // lib.optionalAttrs (cfg.server.environmentFile != null) {
         EnvironmentFile = cfg.server.environmentFile;

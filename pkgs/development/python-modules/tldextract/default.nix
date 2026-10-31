@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tldextract";
-  version = "5.3.2";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "john-kurkowski";
     repo = "tldextract";
     tag = finalAttrs.version;
-    hash = "sha256-n5lwh1A57gpdTRpXx3TJ9qZwEEHGSb3Nm7U3TOPDsk4=";
+    hash = "sha256-gNunyZgj9KghNOSDgvdo+zNmhHEdXdeBJ7Z0j2bExcM=";
   };
 
   build-system = [

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
   git,
@@ -30,7 +30,7 @@ let
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-rduD3GqgdUlF95HTnKe8smToyHop4RrO6QDTRzh2RCk=";
+      hash = "sha256-Q8PJfQ5RPKM1upeujKLd5msANQRj+Fjwz/Q+lqov0yI=";
     };
 
     nativeBuildInputs = [
@@ -51,42 +51,30 @@ let
     '';
   });
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gitea";
-  version = "1.27.3";
-
-  src = fetchFromGitHub {
-    owner = "go-gitea";
-    repo = "gitea";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-91hF7VpMDHyBj1dBlsVC/b3IhNAnUwK/qhZb77GPEnc=";
-  };
-
-  proxyVendor = true;
-
-  vendorHash = "sha256-YRBMGWKIZgMxOXaXG2bIBj1XzkhSwiMyfRy+yQGw+Bo=";
+  version = "28.2.0";
 
   outputs = [
     "out"
     "data"
   ];
 
-  patches = [ ./static-root-path.patch ];
-
-  # go-modules derivation doesn't provide $data
-  # so we need to wait until it is built, and then
-  # at that time we can then apply the substituteInPlace
-  overrideModAttrs = _: {
-    postPatch = ''
-      substituteInPlace go.mod \
-        --replace-fail "go 1.26.4" "go 1.26.0"
-    '';
+  src = fetchFromGitHub {
+    owner = "go-gitea";
+    repo = "gitea";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gCS27gw/zNYVlcbwBiAtqM5JGVOTzbk3LoTd+p+EzKM=";
   };
 
+  proxyVendor = true;
+
+  vendorHash = "sha256-AXEzpW4nPXu0D5exmUwBYoe5Fb1PHFWSSvnwz7VSQos=";
+
   postPatch = ''
-    substituteInPlace modules/setting/server.go --subst-var data
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go 1.26.0"
+    substituteInPlace modules/setting/server.go \
+      --replace-fail '"gitea.dev/modules/util"' "" \
+      --replace-fail "StaticRootPath = util.IfZero(StaticRootPath, AppWorkPath)" "StaticRootPath = \"$data\""
   '';
 
   subPackages = [ "." ];

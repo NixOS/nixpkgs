@@ -75,7 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/todds-encoder/todds";
     changelog = "https://github.com/todds-encoder/todds/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
     mainProgram = "todds";
     platforms = lib.platforms.linux;
   };

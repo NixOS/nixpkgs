@@ -30,13 +30,14 @@
   ada,
   pango,
   tlottie,
-  cmark-gfm,
   libfido2,
   libavif,
   libheif,
   libjxl,
   libicns,
+  wallet-engine,
   apple-sdk_15,
+  swift,
   nix-update-script,
 }:
 
@@ -49,14 +50,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.2.8";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hhx65dqKlsoLvh7lEWYxnIiXFFd0qrDKpYYsHdhzqnk=";
+    hash = "sha256-stC5zo3ofC7o5U+dwvRlWs0V6hYzRx9GppjOmN8ZqYg=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    swift
   ];
 
   buildInputs = [
@@ -85,21 +89,17 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
-    cmark-gfm
     libfido2
     (tdlib.override { tde2eOnly = true; })
+    tlottie
+    wallet-engine
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
     qtwayland
     kcoreaddons
     hunspell
-  ]
-  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped" && stdenv.hostPlatform.isLinux) [
     pango
-  ]
-  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped") [
-    tlottie
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
@@ -115,8 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
-    # swift 6 is not available in nixpkgs
-    (lib.cmakeBool "DESKTOP_APP_DISABLE_SWIFT6" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_Swift_COMPILER_TARGET" stdenv.hostPlatform.swift.triple)
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

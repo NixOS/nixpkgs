@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "GNOME";
     repo = "network-manager-iodine";
     rev = "ce18eb60893887e104a7623fb919264c12769d03";
-    sha256 = "wQVajbnw8q544APKQJfoUb7JaSH8MU3qQN3Gp6mYReE=";
+    hash = "sha256-wQVajbnw8q544APKQJfoUb7JaSH8MU3qQN3Gp6mYReE=";
   };
 
   patches = [

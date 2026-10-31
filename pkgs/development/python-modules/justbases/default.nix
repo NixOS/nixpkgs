@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
+  setuptools,
+  pytestCheckHook,
   hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "justbases";
-  version = "0.15.2";
-  format = "setuptools";
+  version = "0.15.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mulkieran";
     repo = "justbases";
     tag = "v${version}";
-    hash = "sha256-XraUh3beI2JqKPRHYN5W3Tn3gg0GJCwhnhHIOFdzh6U=";
+    hash = "sha256-5BiX6TD528PP+4fxHC73dmnQIZFRJmO+oH3kBs8TqVw=";
   };
 
+  build-system = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
     hypothesis
   ];
 

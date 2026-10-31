@@ -8,13 +8,15 @@
 
 stdenv.mkDerivation {
   pname = "spike";
-  version = "1.1.0-unstable-2024-09-21";
+  version = "1.1.0-unstable-2026-10-20";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "riscv-isa-sim";
-    rev = "de5094a1a901d77ff44f89b38e00fefa15d4018e";
-    sha256 = "sha256-mAgR2VzDgeuIdmPEgrb+MaA89BnWfmNanOVidqn0cgc=";
+    rev = "d140cbc0ae4ef4fc64ad323f3f175ff15f6dca56";
+    sha256 = "sha256-chyTl7v7pZUGcRczzrawLOYxSYbbk7eWohcbduU7VBU=";
+    # Pulls in ucb-bar/berkeley-softfloat-3
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ dtc ];
@@ -51,6 +53,9 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ blitz ];
+    maintainers = with lib.maintainers; [
+      blitz
+      evanwporter
+    ];
   };
 }

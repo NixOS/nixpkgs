@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "passphrase2pgp";
   version = "1.3.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "passphrase2pgp";

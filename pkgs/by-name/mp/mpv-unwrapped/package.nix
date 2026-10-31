@@ -5,7 +5,6 @@
   alsa-lib,
   bash,
   buildPackages,
-  config,
   docutils,
   fetchFromGitHub,
   ffmpeg,
@@ -36,7 +35,7 @@
   libva,
   libvdpau,
   libxkbcommon,
-  lua,
+  lua5_2_compat,
   makeBinaryWrapper,
   libgbm,
   meson,
@@ -75,7 +74,7 @@
   javascriptSupport ? true,
   openalSupport ? true,
   pipewireSupport ? !stdenv.hostPlatform.isDarwin,
-  pulseSupport ? config.pulseaudio or (!stdenv.hostPlatform.isDarwin),
+  pulseSupport ? !stdenv.hostPlatform.isDarwin,
   rubberbandSupport ? true,
   sdl2Support ? false,
   sixelSupport ? false,
@@ -90,6 +89,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in
 stdenv.mkDerivation (finalAttrs: {

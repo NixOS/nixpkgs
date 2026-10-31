@@ -41,6 +41,13 @@
     docker.fail("sudo -u noprivs docker ps")
     docker.succeed("docker stop sleeping")
 
+    with subtest("docker logs can read compressed journal files"):
+        docker.succeed(
+            "docker run --name=journald --log-driver=journald -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/echo docker-journald-test"
+        )
+        docker.wait_until_succeeds("docker logs journald | grep docker-journald-test", timeout=30)
+        docker.succeed("docker rm journald")
+
     # Must match version 4 times to ensure client and server git commits and versions are correct
     docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
     docker.succeed("systemctl restart systemd-sysctl")

@@ -4,7 +4,10 @@
   fetchFromGitHub,
   rustPlatform,
   buildPackages,
+  makeBinaryWrapper,
   installShellFiles,
+  pkg-config,
+  zstd,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -12,7 +15,8 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.57.4";
+  version = "0.64.1";
+  __structuredAttrs = true;
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -21,16 +25,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-x746fFULv8/Na9JXbpDWbXXqONyQhcg5wOMJ6ntt73Y=";
+    hash = "sha256-LO6l6oJ1mU0oo5kDIJlOk9QEH5i2vyAdkaAkol2NITk=";
   };
 
-  cargoHash = "sha256-8H+znlW7tr59SLcQoh1cA6Bm38ouQ3JJQJffi7Kfj1w=";
+  cargoHash = "sha256-oz7Y31PncII6J/XoKHwmvhvvX5F7lBHRBpwxfV9zI6g=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+    pkg-config
+  ];
 
-  # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
-  # Adding "libunwind" in buildInputs did not resolve it.
-  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+  buildInputs = [
+    zstd
+  ];
+
+  env = {
+    # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
+    # Adding "libunwind" in buildInputs did not resolve it.
+    RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  # Avoiding utils::url::test::* failures in the Darwin sandbox
+  __darwinAllowLocalNetworking = true;
 
   cargoBuildFlags = [
     "--package=dprint"
@@ -43,13 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # Require creating directory and network access
-    "--skip=plugins::cache_fs_locks::test"
-    "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
-    # Requires deno for the testing, and making unstable results on darwin
-    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall =
@@ -60,8 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         else
           lib.getExe buildPackages.dprint;
     in
+    # dprint only supports a runtime switch (DPRINT_TLS_CA_STORE) to prefer system certs.
+    # Avoid the upstream default `mozilla,system` to reduce risks like https://github.com/NixOS/nixpkgs/issues/576485
     ''
       rm "$out/bin/test-process-plugin"
+      wrapProgram "$out/bin/dprint" \
+        --set-default DPRINT_TLS_CA_STORE system
       export DPRINT_CACHE_DIR="$(mktemp -d)"
       installShellCompletion --cmd dprint \
         --bash <(${dprint} completions bash) \

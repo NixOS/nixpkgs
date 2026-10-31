@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   python3Packages,
   makeWrapper,
@@ -7,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tautulli";
-  version = "2.18.1";
+  version = "2.18.2";
   pyproject = false;
 
   pythonPath = [ python3Packages.setuptools ];
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Tautulli";
     repo = "Tautulli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Fs1Zih7Hx7tu+/EKwkeQUC35iTiJBkv12jZns8NyL6Q=";
+    sha256 = "sha256-mfQwuLRbMBxp0RWzNCNL38BWtVGos0wYK5UKOEwe88c=";
   };
 
   postPatch = ''
@@ -46,6 +47,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ln -s $out/bin/tautulli $out/bin/plexpy
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/libexec/tautulli/lib/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/libexec/tautulli/lib/certifi/cacert.pem
   '';
 
   checkPhase = ''

@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "createrepo_c";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "createrepo_c";
     tag = finalAttrs.version;
-    hash = "sha256-qd2XEVKt5oxB3+czaUP05poJcN+mdK3p3pvuLAVDmFA=";
+    hash = "sha256-6t5g64k2TDWTcbRasZx3NxDXmjqsOAwVMJ9gv7fDFBQ=";
   };
 
   postPatch = ''

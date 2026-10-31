@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -38,12 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
 

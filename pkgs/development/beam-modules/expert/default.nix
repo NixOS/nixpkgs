@@ -9,19 +9,19 @@
 
 mixRelease (finalAttrs: {
   pname = "expert";
-  version = "0.1.10";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "expert-lsp";
     repo = "expert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aMkJ3wnnpQwZptQ8xSWuFel+nHhZtf2wBBt9E57Gr/g=";
+    hash = "sha256-tXTETzlUCz17YqOrfOD5veQwftj4zKZ7bjFpGnKdORU=";
   };
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${finalAttrs.pname}";
     inherit (finalAttrs) src version;
-    hash = "sha256-IKAp+FSDEl+cGugxRvZ/We2rYDq8DaA88goFADQ5OKU=";
+    hash = "sha256-0XyfrMK4tucWgHDQySECtDw+wcW/EkTRCOht1nTTpJA=";
 
     preConfigure = ''
       cd apps/expert
@@ -34,7 +34,7 @@ mixRelease (finalAttrs: {
     pname = "mix-deps-expert-engine";
 
     inherit (finalAttrs) src version;
-    hash = "sha256-wpU4BUzyEEDlKI9SFjKT/NybqB7RF/ilQoTQk3oXN1A=";
+    hash = "sha256-ELLpCr47FGjs3K0nu5RWGgoEdWbDtm6Fx8jutg9Enmo=";
 
     preConfigure = ''
       cd apps/engine

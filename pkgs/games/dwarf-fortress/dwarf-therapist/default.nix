@@ -14,7 +14,7 @@
   hash ? dfVersions.therapist.git.outputHash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dwarf-therapist";
 
   inherit version;
@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [ "-GNinja" ];
+  cmakeFlags = [
+    "-GNinja"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

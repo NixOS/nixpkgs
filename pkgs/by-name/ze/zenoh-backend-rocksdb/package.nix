@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-backend-rocksdb";
-  version = "1.10.0"; # nixpkgs-update: no auto update
+  version = "1.10.2"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-rocksdb";
     tag = finalAttrs.version;
-    hash = "sha256-m4Tnos5o/iBfJ+06ajUjJ51DFjYIvrwjgUsfRKHSWRc=";
+    hash = "sha256-5og3Zir3G+UnruRmy1KVBnu6pCB1gNdhp5DHPX4NzBk=";
   };
 
-  cargoHash = "sha256-QF3ojTyMsxxlxkQXNxcokqiv8InQ2iRAwqtz84fDefE=";
+  cargoHash = "sha256-wvu6jGD1U5+D8Y+zU1CCMhyzw7xrSPuTBrzjv3A9zEE=";
 
   nativeBuildInputs = [
     pkg-config

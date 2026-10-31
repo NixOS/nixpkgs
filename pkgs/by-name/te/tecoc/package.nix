@@ -81,7 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       TECOC is a portable C implementation of TECO-11.
     '';
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "tecoc";
       url = "https://github.com/blakemcbride/TECOC/blob/${finalAttrs.src.rev}/doc/readme-1st.txt";
     };
     maintainers = [ ];

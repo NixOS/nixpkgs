@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       "add_library(_casadi MODULE \''${PYTHON_FILE})" \
       "add_library(_casadi MODULE \''${PYTHON_FILE})
        target_include_directories(_casadi SYSTEM PRIVATE
-         ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
+         ${python3Packages.python}/include/${python3Packages.python.libPrefix})"
 
     # I have no clue. without this, it tries to install a non existent file.
     # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.

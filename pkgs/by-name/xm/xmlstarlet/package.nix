@@ -2,10 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   autoreconfHook,
   pkg-config,
+
+  # buildInputs
   libxml2,
   libxslt,
+
+  # passthru
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmlstarlet";
@@ -41,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s xml $out/bin/xmlstarlet
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Command line tool for manipulating and querying XML data";

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-6vzQaifvQ24LpSQFwPMvEvb1wuyv0iRpLCFHFO9V7sc=";
+    hash = "sha256-dd6BoaUUz84nf3g3v4E78t0mDC+ZhXKe0ld2gCNurZs=";
   };
 
   postPatch = ''

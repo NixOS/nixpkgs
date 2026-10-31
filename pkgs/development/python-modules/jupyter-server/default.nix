@@ -112,6 +112,10 @@ buildPythonPackage (finalAttrs: {
     # Fails under load on Hydra; kernel stays in 'starting' state due to a zmq socket error
     "test_cull_connected"
     "test_execution_state"
+    # AssertionError
+    "test_check_version"
+    # Flaky; updated timestamp can be equal to old timestamp
+    "test_created_timestamp"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
@@ -130,6 +134,9 @@ buildPythonPackage (finalAttrs: {
     # nbconvert failed: `relax_add_props` kwargs of validate has been
     # deprecated for security reasons, and will be removed soon.
     "tests/nbconvert/test_handlers.py"
+    # timing sensitive
+    "tests/services/contents/test_manager.py::test_created_timestamp"
+    "tests/services/kernels/test_connection.py::test_disconnect_resolves_orphaned_kernel_info_future"
   ];
 
   __darwinAllowLocalNetworking = true;

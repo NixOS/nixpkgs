@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGoModule,
   buildNpmPackage,
 }:
 
@@ -27,7 +27,7 @@ let
     '';
   };
 in
-buildGo126Module {
+buildGoModule {
   inherit version src pname;
   subPackages = [ "server/main" ];
   env.GOEXPERIMENT = "jsonv2";

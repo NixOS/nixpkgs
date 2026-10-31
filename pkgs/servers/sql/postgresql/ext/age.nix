@@ -10,31 +10,48 @@
 }:
 
 let
-  hashes = {
-    "18" = "sha256-Hqjg62YLTLEa6wRA5S4MAIED7Hobtiih4E55cSzVTqE";
-    "17" = "sha256-hAjhNj/benwZbbuxDl9RSjwWRai9CUozbEN6ecPKoFE=";
-    "16" = "sha256-iukdi2c3CukGvjuTojybFFAZBlAw8GEfzFPr2qJuwTA=";
-    "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
-    "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
+  sources = {
+    "19" = {
+      version = "1.8.0-rc0";
+      hash = "sha256-tEWWn2Wtz30N18pfvW+R3TEylustFeII7kBE1aiJw80=";
+    };
+    "18" = {
+      version = "1.8.0-rc0";
+      hash = "sha256-QtcH0lUWvey/URZm/cqh1TempMU2Vnerzu6SQg+yofA=";
+    };
+    "17" = {
+      version = "1.7.0-rc0";
+      hash = "sha256-hAjhNj/benwZbbuxDl9RSjwWRai9CUozbEN6ecPKoFE=";
+    };
+    "16" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-iukdi2c3CukGvjuTojybFFAZBlAw8GEfzFPr2qJuwTA=";
+    };
+    "15" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-W4EALCgCuyzCOUiTu5aU2fz2P8rJFv+7/8m+d+dIV60=";
+    };
+    "14" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-6TTuqJs//QpNgNMw4TZf/3rdtMGSO/ytG4s8i+Jv2d8=";
+    };
   };
+
+  source =
+    sources.${lib.versions.major postgresql.version} or {
+      version = "";
+      hash = throw "Source for Age is not available for ${postgresql.version}";
+    };
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "age";
-  version =
-    if lib.versionAtLeast postgresql.version "17" then
-      "1.7.0-rc0"
-    else if lib.versionAtLeast postgresql.version "16" then
-      "1.6.0-rc0"
-    else
-      "1.5.0-rc0";
+  inherit (source) version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "age";
     tag = "PG${lib.versions.major postgresql.version}/v${finalAttrs.version}";
-    hash =
-      hashes.${lib.versions.major postgresql.version}
-      or (throw "Source for Age is not available for ${postgresql.version}");
+    inherit (source) hash;
   };
 
   makeFlags = [
@@ -76,11 +93,11 @@ postgresqlBuildExtension (finalAttrs: {
   };
 
   meta = {
-    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames hashes);
+    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames sources);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/age/raw/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
-    maintainers = [ ];
+    changelog = "https://github.com/apache/age/raw/refs/tags/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
+    maintainers = with lib.maintainers; [ anish ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
   };

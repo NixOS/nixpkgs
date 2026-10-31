@@ -13,6 +13,7 @@
   librsvg,
   libsecret,
   openssl,
+  openvfs,
   pcre2,
   pkg-config,
   sphinx,
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "34.0.4";
+  version = "35.0.0";
 
   outputs = [
     "out"
@@ -34,8 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5qHhhMpgmdfNCO88ZtEtE+HcqeTOgxPUXYb8cgC6YiA=";
+    hash = "sha256-DtdQ0PbICVYSBbUMGI/iYMjJym44E1yCAiD68oo+Cwc=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
@@ -68,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libp11
     libsecret
     openssl
+    openvfs
     pcre2
     qt6Packages.qt5compat
     qt6Packages.qtbase
@@ -81,9 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${lib.makeLibraryPath [ libsecret ]}"
     # make xdg-open overridable at runtime
-    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    "--suffix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [
@@ -97,6 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/nextcloud/desktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop sync client for Nextcloud";
+    longDescription = ''
+      It is highly recommend to link the default config to avoid that file managers download all files when indexing directories and creating thumbnails:
+
+      ```
+      environment.etc."xdg/openvfs/config.json".source = "''${pkgs.openvfs}/etc/xdg/openvfs/config.json";
+      ```
+    '';
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [

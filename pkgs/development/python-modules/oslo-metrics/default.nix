@@ -14,10 +14,10 @@
 
   # tests
   oslotest,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-metrics";
   version = "0.16.0";
   pyproject = true;
@@ -25,11 +25,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.metrics";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LV4NGHs0lBtktjzboOsPOnA56QqjnaKwtGGdy5WlW6Q=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_metrics *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -44,16 +50,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [ "oslo_metrics" ];
+  pythonImportsCheck = [
+    "oslo_metrics"
+    "oslo_metrics.metrics"
+  ];
 
   meta = {
     description = "OpenStack library for collecting metrics from Oslo libraries";
@@ -61,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

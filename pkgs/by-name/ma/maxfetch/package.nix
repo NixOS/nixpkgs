@@ -10,7 +10,10 @@
 
 stdenvNoCC.mkDerivation {
   pname = "maxfetch";
-  version = "unstable-2023-07-31";
+  version = "1.2.0-unstable-2023-07-31";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "natewhar";

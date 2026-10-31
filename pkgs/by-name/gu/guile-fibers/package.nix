@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   guile,
   libevent,
@@ -13,8 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
   version = "1.4.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "guile";
     repo = "fibers";
     rev = "v${finalAttrs.version}";
@@ -38,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "GUILE_AUTO_COMPILE=0"
   ];
+
+  guileImportsCheck = [ "fibers" ];
 
   meta = {
     homepage = "https://codeberg.org/guile/fibers";

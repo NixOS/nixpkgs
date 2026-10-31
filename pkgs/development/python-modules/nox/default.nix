@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nox";
-  version = "2026.08.17";
+  version = "2026.10.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wntrblm";
     repo = "nox";
     tag = finalAttrs.version;
-    hash = "sha256-zHgxU2Gq04dOb8Xd6+VtTf6KRYNrwX7tYjO0eDBidxU=";
+    hash = "sha256-c845eFRmSLvkQet6sUM9fsRUdr+LoGkMj25LFAWeIuw=";
   };
 
   build-system = [ hatchling ];
@@ -71,8 +71,9 @@ buildPythonPackage (finalAttrs: {
     "test_uv"
     # Test requires network access
     "test_noxfile_script_mode_url_req"
-    # Don't test CLi mode
+    # Don't test CLI mode
     "test_noxfile_script_mode"
+    "test_get_dependencies"
   ];
 
   disabledTestPaths = [

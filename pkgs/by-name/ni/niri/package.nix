@@ -17,7 +17,7 @@
   rustPlatform,
   seatd,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   withDbus ? true,
   withDinit ? false,
@@ -49,8 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-gfnalA3qI3a9h3PvsxgQLCrzapfjLLkxhTMJpwRh+ro=";
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     installShellFiles
     pkg-config
@@ -69,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
   ++ lib.optional withScreencastSupport pipewire
-  ++ lib.optional withSystemd systemd # Includes libudev
+  ++ lib.optional withSystemd systemdLibs # Includes libudev
   ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
   buildFeatures =

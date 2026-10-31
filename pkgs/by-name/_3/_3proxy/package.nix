@@ -2,41 +2,52 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pcre2,
+  python3,
+  openssl,
+  cmake,
+  pkg-config,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-JRoSCmoTIXHsUWZt9OyDVp1Veuy2w1ZPFe0rUGdJv0k=";
+    sha256 = "sha256-W3mg478jwqeTaMZiLoG0RZtp0xDSpIK7j/q37AyWFKw=";
   };
 
-  # They use 'install -s', that calls the native strip instead of the cross.
-  # Don't strip binary on install, we strip it on fixup phase anyway.
-  postPatch = ''
-    substituteInPlace Makefile.Linux \
-      --replace-fail "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
-      --replace-fail "/usr" ""
-  '';
-
-  makeFlags = [
-    "-f Makefile.Linux"
-    "INSTALL=install"
-    "DESTDIR=${placeholder "out"}"
-    "CC:=$(CC)"
+  buildInputs = [
+    pcre2
+    openssl
   ];
 
-  postInstall = ''
-    rm -fr $out/var
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  nativeCheckInputs = [ python3 ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    python3 ../tests/run.py -v
+    runHook postCheck
   '';
 
-  # common.c:208:9: error: initialization of 'int (*)(struct pollfd *, unsigned int,  int)' from incompatible pointer type 'int (*)(struct pollfd *, nfds_t,  int)' {aka 'int (*)(struct pollfd *, long unsigned int,  int)'}
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail " /Library" " Library" \
+      --replace-fail " /etc" " etc" \
+      --replace-fail " /opt" " opt" \
+      --replace-fail "/usr" "usr"
+  '';
 
   passthru.tests = {
     smoke-test = nixosTests._3proxy;
@@ -46,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny free proxy server";
     homepage = "https://github.com/3proxy/3proxy";
     license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ misuzu ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "3proxy" finalAttrs.version;
   };

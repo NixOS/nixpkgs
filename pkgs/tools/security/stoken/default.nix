@@ -10,14 +10,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stoken";
   version = "0.93";
 
   src = fetchFromGitHub {
     owner = "stoken-dev";
     repo = "stoken";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8N7TXdBu37eXWIKCBdaXVW0pvN094oRWrdlcy9raddI=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -69,8 +69,7 @@ in
                 wal-partition-flush-delay = "2s";
               };
 
-              cluster = mkAllOptionDefault {
-                shard-writer-timeout = "5s";
+              coordinator = mkAllOptionDefault {
                 write-timeout = "5s";
               };
 
@@ -156,6 +155,13 @@ in
   ###### implementation
 
   config = lib.mkIf config.services.influxdb.enable {
+
+    assertions = [
+      {
+        assertion = !(cfg.settings ? cluster);
+        message = "services.influxdb.settings.cluster was renamed to services.influxdb.settings.coordinator";
+      }
+    ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"

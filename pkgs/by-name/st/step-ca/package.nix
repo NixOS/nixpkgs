@@ -9,6 +9,7 @@
   pkg-config,
   hsmSupport ? true,
   nixosTests,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -50,9 +51,7 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/system systemd/step-ca.service
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted

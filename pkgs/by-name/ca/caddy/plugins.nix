@@ -52,6 +52,10 @@ caddy.overrideAttrs (
     vendorHash = null;
     subPackages = [ "." ];
 
+    postConfigure = ''
+      rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
+    '';
+
     src = stdenv.mkDerivation {
       pname = "caddy-src-with-plugins-${pluginsHash}";
       version = finalAttrs.version;
@@ -63,6 +67,15 @@ caddy.overrideAttrs (
         git
       ];
       dontUnpack = true;
+
+      env.GOTOOLCHAIN = "local";
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+        "GOPROXY"
+      ];
+
       buildPhase =
         let
           withArgs = concatMapStrings (plugin: "--with ${plugin} ") pluginsSorted;

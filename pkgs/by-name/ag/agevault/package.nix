@@ -2,20 +2,27 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "agevault";
-  version = "1.1.2";
+  version = "1.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ndavd";
     repo = "agevault";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uc4g1dBGIIXciTbZRi7ADfQGiGNe0447kZ+unY1L+w8=";
+    hash = "sha256-lcOrHvRPM+qC5fyXNttvfkooSDcggHg38AuNdewanWE=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  preInstall = ''
+    installManPage doc/*.1
+  '';
 
   vendorHash = "sha256-yt4K+EcoZMJ36E5qolZdbDoeWp1WhVzppVx6nDrFq2s=";
   doInstallCheck = true;

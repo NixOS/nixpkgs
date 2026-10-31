@@ -8,20 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri-asset-gst-plugin";
-  version = "0.1.0";
+  version = "0.0.1";
 
-  # From upstream PR https://github.com/tauri-apps/tauri/pull/14402
   src = fetchFromGitHub {
-    owner = "aaalloc";
-    repo = "tauri";
-    rev = "bc502b45a6995aab5687ce3e50b3d218ca5ee105";
-    hash = "sha256-H27n2rsqmGbk7ru8K7LhEvvftpz6mxgTow/18SpQn1Q=";
+    owner = "tauri-apps";
+    repo = "tauri-gstreamer-plugin";
+    tag = "gst-plugin-tauri-v${finalAttrs.version}";
+    hash = "sha256-bn2CnMRIjgLytO0bHMoKnU/gnqfF8ye8fZPrRHibjwE=";
   };
 
-  cargoHash = "sha256-n9CZ92ezRP9i4JpARwLpW4KIo9/6cB481YuG3qN1BKo=";
-
-  cargoBuildFlags = [ "--package tauri-asset-gst-plugin" ];
-  cargoTestFlags = finalAttrs.cargoBuildFlags;
+  cargoHash = "sha256-b0RcECJglSrjPe1FdSVUviaHIpoo89RkKRGXjLKAWJE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ];
 
   postInstall = ''
@@ -37,8 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "GStreamer plugin to handle the tauri asset:// protocol";
-    homepage = "https://github.com/tauri-apps/tauri/pull/14402";
+    description = "GStreamer plugin to support media playback via Tauri's asset:// protocol";
+    homepage = "https://github.com/tauri-apps/tauri-gstreamer-plugin/";
     license = [
       lib.licenses.mit
       lib.licenses.asl20

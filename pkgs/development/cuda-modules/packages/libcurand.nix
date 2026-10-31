@@ -13,12 +13,11 @@ buildRedist {
   ];
 
   meta = {
-    description = "Helper module for the cuBLASMp library that allows it to efficiently perform communications between different GPUs";
+    description = "GPU-accelerated random number generation library";
     longDescription = ''
-      Communication Abstraction Library (CAL) is a helper module for the cuBLASMp library that allows it to
-      efficiently perform communications between different GPUs.
+      The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality
+      pseudorandom and quasirandom numbers.
     '';
     homepage = "https://developer.nvidia.com/curand";
-    changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
   };
 }

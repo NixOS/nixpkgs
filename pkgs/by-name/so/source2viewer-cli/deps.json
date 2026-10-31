@@ -1,8 +1,8 @@
 [
   {
     "pname": "Blake3",
-    "version": "2.0.0",
-    "hash": "sha256-WN+SuzMiv8UfT3r0r124wcbs/8OOixjpZkYwdTfeHvc="
+    "version": "3.0.2",
+    "hash": "sha256-ZDgpdZQdFjmjyd17MUdFN7W1yL/TCiulNcjnn+PUS4Y="
   },
   {
     "pname": "ConsoleAppFramework",
@@ -36,33 +36,28 @@
   },
   {
     "pname": "SkiaSharp",
-    "version": "3.119.2",
-    "hash": "sha256-A9F397K5FfLeOsNZacKmUh4IU/WMK60B4Z6TEtS/oqo="
+    "version": "4.151.1",
+    "hash": "sha256-LR/u8j8o5VhkythEn3tgq/XW2xqmHsB674N+ng6u5z4="
   },
   {
     "pname": "SkiaSharp.NativeAssets.Linux.NoDependencies",
-    "version": "3.119.2",
-    "hash": "sha256-79BCLZAYjfHP1DZKgB+hsyyBlhnyZQPi+Swvs0RYnng="
+    "version": "4.151.1",
+    "hash": "sha256-8zqhEf9CQc+MsDeXEB3vwOWq3rHWuwCAd3iFQ/uLApo="
   },
   {
     "pname": "SkiaSharp.NativeAssets.macOS",
-    "version": "3.119.2",
-    "hash": "sha256-KEeGqSiyAiMbzLgH/0JkwUz/pWcL49gYB1T1YLkMPaI="
+    "version": "4.151.1",
+    "hash": "sha256-nt58+/t4OynYqY99sjOxsQwDLJF88nD8Z+Wwj5DavdU="
   },
   {
     "pname": "SkiaSharp.NativeAssets.Win32",
-    "version": "3.119.2",
-    "hash": "sha256-CI6dg+MlxX8t+vbnkxtd5QE3xalMKkA8LUSudxg7TNU="
+    "version": "4.151.1",
+    "hash": "sha256-pulHlVVEDtj9MO5zeEcBRFIYR66keeHv2IXzyAE/5Fg="
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "10.0.5",
-    "hash": "sha256-iZrjJEZU+GnKBWYLi0+NUc+yYKrCSQkaLmQrGDQyyeE="
-  },
-  {
-    "pname": "System.IO.Hashing",
-    "version": "9.0.11",
-    "hash": "sha256-TlrAIz1kWyCBCpEZzcvR9Bir1NMJUqKxXtbgjPjPFYs="
+    "version": "10.0.10",
+    "hash": "sha256-TPzhNJAi0x/X5NoYu62MbRLB7GgVCneSqRDbV3aYQ0M="
   },
   {
     "pname": "TinyBCSharp",
@@ -71,8 +66,8 @@
   },
   {
     "pname": "TinyEXR.NET",
-    "version": "0.3.11",
-    "hash": "sha256-/FRb3ZKlACiSM+q8Fj5zEvVMyNmOaO1O/w2c/NULBgA="
+    "version": "1.1.0",
+    "hash": "sha256-QFkFY45RHhkIDJam9FbY7q79ZV2v+d0pvlbSt4vvJXc="
   },
   {
     "pname": "ValveKeyValue",
@@ -81,8 +76,8 @@
   },
   {
     "pname": "ValvePak",
-    "version": "4.0.0.142",
-    "hash": "sha256-NjrVgZgXIQOZ2lHrnN1cLlZprsL5PstiqQ9hwUsgC00="
+    "version": "5.0.2.177",
+    "hash": "sha256-6wU1dGgTQiqU3iNjLewf/zCspf3yzTL6abt1eOhFc6w="
   },
   {
     "pname": "Vortice.SPIRV",
@@ -96,7 +91,7 @@
   },
   {
     "pname": "ZstdSharp.Port",
-    "version": "0.8.7",
-    "hash": "sha256-WsuDTZOv3TgiE8NV/TXbKRMHBsZKgWB8iDdKKr9OvAo="
+    "version": "0.8.8",
+    "hash": "sha256-9nlxkt7r9FNfBgHCJz51DaDAIGLjCj5KPEARuawiQDo="
   }
 ]

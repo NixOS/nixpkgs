@@ -10,7 +10,6 @@ let
   makeZfsTest =
     {
       kernelPackages,
-      enableSystemdStage1 ? false,
       zfsPackage,
       extraTest ? "",
     }:
@@ -43,7 +42,6 @@ let
           boot.kernelPackages = kernelPackages;
           boot.zfs.package = zfsPackage;
           boot.supportedFilesystems = [ "zfs" ];
-          boot.initrd.systemd.enable = enableSystemdStage1;
 
           environment.systemPackages = [ pkgs.parted ];
 
@@ -225,34 +223,14 @@ in
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest {
-    zfsPackage = pkgs.zfs_unstable;
-    kernelPackages = pkgs.linuxPackages;
-    enableSystemdStage1 = true;
-  };
-
   installerBoot =
     (import ./installer.nix {
       inherit system;
-      systemdStage1 = false;
     }).separateBootZfs;
 
   installer =
     (import ./installer.nix {
       inherit system;
-      systemdStage1 = false;
-    }).zfsroot;
-
-  installerBootWithSystemdStage1 =
-    (import ./installer.nix {
-      inherit system;
-      systemdStage1 = true;
-    }).separateBootZfs;
-
-  installerWithSystemdStage1 =
-    (import ./installer.nix {
-      inherit system;
-      systemdStage1 = true;
     }).zfsroot;
 
   expand-partitions = runTest {

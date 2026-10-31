@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     exec nix-update --version "$VERSION" "$@"
   '';
 
-  passthru.tests.nginx-mime = nixosTests.nginx-mime;
+  passthru.tests.nginx-mime = nixosTests.nginx.mainline.mime;
 
   __structuredAttrs = true;
 

@@ -434,6 +434,15 @@ in
       commonSystemdConfig
     ];
 
+    systemd.services.lasuite-meet-purge-inactive-rooms = lib.mkMerge [
+      {
+        description = "Scheduled job to purge inactive rooms from LaSuite Meet";
+        startAt = "daily";
+        serviceConfig.ExecStart = "${getExe cfg.package} purge_inactive_rooms";
+      }
+      commonSystemdConfig
+    ];
+
     services.postgresql = mkIf cfg.postgresql.createLocally {
       enable = true;
       ensureDatabases = [ "lasuite-meet" ];

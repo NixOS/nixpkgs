@@ -5,17 +5,24 @@
   fetchPypi,
   libmaxminddb,
   pytestCheckHook,
+  setuptools-scm,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maxminddb";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "3.1.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l5KxliWUXf8Ubi4xh/nkcLgjMKkS986lWBuL1a8w2os=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-sZqTjEgVGPGaLFNP/cs7xZWC8Pu9z5+BrJrfkSoK9oY=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ libmaxminddb ];
 
@@ -30,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Reader for the MaxMind DB format";
     homepage = "https://github.com/maxmind/MaxMind-DB-Reader-python";
-    changelog = "https://github.com/maxmind/MaxMind-DB-Reader-python/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/maxmind/MaxMind-DB-Reader-python/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

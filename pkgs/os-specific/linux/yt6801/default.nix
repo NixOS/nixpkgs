@@ -4,6 +4,7 @@
   fetchzip,
   kmod,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'modprobe $(KFILE)' ""
   '';
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KSRC_BASE="
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

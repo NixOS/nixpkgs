@@ -183,15 +183,6 @@ with lib.maintainers;
     github = "cuda-maintainers";
   };
 
-  danklinux = {
-    members = [
-      luckshiba
-      marcusramberg
-    ];
-    scope = "Maintain DankMaterialShell and related packages and modules from Dank Linux.";
-    shortName = "Dank Linux";
-  };
-
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -231,6 +222,15 @@ with lib.maintainers;
     ];
     scope = "Maintainers of the .NET build tools and packages";
     shortName = "dotnet";
+  };
+
+  duxlabs = {
+    members = [
+      luckshiba
+      marcusramberg
+    ];
+    scope = "Maintain Dux Shell and related packages and modules from Dux Labs.";
+    shortName = "Dux Labs";
   };
 
   electron = {
@@ -760,11 +760,16 @@ with lib.maintainers;
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
+    enableFeatureFreezePing = true;
   };
 
   systemd = {
     github = "systemd";
     enableFeatureFreezePing = true;
+  };
+
+  tenstorrent = {
+    github = "tenstorrent";
   };
 
   test-driver = {

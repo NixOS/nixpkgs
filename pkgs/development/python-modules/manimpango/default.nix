@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.6.1";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manimpango";
     tag = "v${version}";
-    hash = "sha256-8eQmhVsW440/zxOwjngnPTGT7iFbdSvBV7tnI332piE=";
+    hash = "sha256-oZBrDAnI53Q51WMkfCr+zABilbhSgO34GAUD5arpx+o=";
   };
 
   postPatch = ''
@@ -52,6 +52,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ManimCommunity/ManimPango";
     changelog = "https://github.com/ManimCommunity/ManimPango/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      haansn08
+    ];
   };
 }

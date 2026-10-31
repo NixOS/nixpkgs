@@ -4136,3 +4136,3308 @@ index a3bd24b71f..98797e0887 100644
  }
  strong_alias (__fmodf, __ieee754_fmodf)
  versioned_symbol (libm, __fmodf, fmodf, GLIBC_2_43);
+
+commit d6ff274313d79feb864cc10eb775b91c817a67e9
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 14 13:41:16 2026 +0200
+
+    misc: Fix out-of-bounds array write in tdelete (bug 34506)
+    
+    Allocate the maximum array sizes directly, instead of resizing
+    the arrays as needed.  This eliminates alloca usage from the
+    function, and fixes the out-of-bounds accesses.  The asserts
+    guard against the bug coming back if the balancing of the tree
+    turns out not to work correctly.
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit e2789c46e3bfdcd67a82bea9946b315c179e83d3)
+
+diff --git a/misc/tsearch.c b/misc/tsearch.c
+index 9b2eb34b25..e517dfa712 100644
+--- a/misc/tsearch.c
++++ b/misc/tsearch.c
+@@ -85,6 +85,7 @@
+ #include <assert.h>
+ #include <stdalign.h>
+ #include <stddef.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <search.h>
+@@ -406,12 +407,13 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+   int cmp;
+   node *rootp = (node *) vrootp;
+   node root, unchained;
+-  /* Stack of nodes so we remember the parents without recursion.  It's
+-     _very_ unlikely that there are paths longer than 40 nodes.  The tree
+-     would need to have around 250.000 nodes.  */
+-  int stacksize = 40;
++  /* Stack of nodes so we remember the parents without recursion.  The
++     stack size is a conservative approximation of the maximum height
++     of a red-black tree, based on size of the address space.
++     Actual numbers are closer to 57 (32 bit) and 117 (63 bit).  */
++  enum { stacksize = 2 * UINTPTR_WIDTH };
+   int sp = 0;
+-  node **nodestack = alloca (sizeof (node *) * stacksize);
++  node *nodestack[stacksize];
+ 
+   if (rootp == NULL)
+     return NULL;
+@@ -424,14 +426,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+   root = DEREFNODEPTR(rootp);
+   while ((cmp = (*compar) (key, root->key)) != 0)
+     {
+-      if (sp == stacksize)
+-	{
+-	  node **newstack;
+-	  stacksize += 20;
+-	  newstack = alloca (sizeof (node *) * stacksize);
+-	  nodestack = memcpy (newstack, nodestack, sp * sizeof (node *));
+-	}
+-
++      assert (sp < stacksize);
+       nodestack[sp++] = rootp;
+       p = DEREFNODEPTR(rootp);
+       if (cmp < 0)
+@@ -470,13 +465,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+       node upn;
+       for (;;)
+ 	{
+-	  if (sp == stacksize)
+-	    {
+-	      node **newstack;
+-	      stacksize += 20;
+-	      newstack = alloca (sizeof (node *) * stacksize);
+-	      nodestack = memcpy (newstack, nodestack, sp * sizeof (node *));
+-	    }
++	  assert (sp < stacksize);
+ 	  nodestack[sp++] = parentp;
+ 	  parentp = up;
+ 	  upn = DEREFNODEPTR(up);
+@@ -541,6 +530,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+ 		  SETNODEPTR(pp,q);
+ 		  /* Make sure pp is right if the case below tries to use
+ 		     it.  */
++		  assert (sp < stacksize);
+ 		  nodestack[sp++] = pp = LEFTPTR(q);
+ 		  q = RIGHT(p);
+ 		}
+@@ -625,6 +615,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+ 		  SETLEFT(p,RIGHT(q));
+ 		  SETRIGHT(q,p);
+ 		  SETNODEPTR(pp,q);
++		  assert (sp < stacksize);
+ 		  nodestack[sp++] = pp = RIGHTPTR(q);
+ 		  q = LEFT(p);
+ 		}
+
+commit ae9225d55963c4420c49ccfa3f2fafc416f92032
+Author: Andreas Schwab <schwab@linux-m68k.org>
+Date:   Mon Aug 24 18:00:26 2026 +0200
+
+    m68k: remove sysdeps/m68k/m680x0/fpu/w_fmod_compat.c (bug 34559)
+    
+    This was missed from commit 6deadd4eb6.
+    
+    (cherry picked from commit ff1c5580610dee6d743169fc0f6684505d372dc9)
+
+diff --git a/sysdeps/m68k/m680x0/fpu/w_fmod_compat.c b/sysdeps/m68k/m680x0/fpu/w_fmod_compat.c
+deleted file mode 100644
+index 57f38091e6..0000000000
+--- a/sysdeps/m68k/m680x0/fpu/w_fmod_compat.c
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* m68k provides an optimized __ieee752_fmod.  */
+-#include <math-svid-compat.h>
+-#ifdef SHARED
+-# undef SHLIB_COMPAT
+-# define SHLIB_COMPAT(a, b, c) 1
+-# undef LIBM_SVID_COMPAT
+-# define LIBM_SVID_COMPAT 1
+-# undef compat_symbol
+-# define compat_symbol(a, b, c, d)
+-#include <math/w_fmod_compat.c>
+-libm_alias_double (__fmod_compat, fmod)
+-#else
+-#include <math-type-macros-double.h>
+-#include <w_fmod_template.c>
+-#endif
+
+commit 9c48b91ee34431f19fca47bf31e2f2ef77c119d5
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu Aug 13 08:53:06 2026 -0300
+
+    posix: Remove unnecessary overflow check in wordexp (BZ 34090)
+    
+    The WRDE_APPEND path duplicates the caller's we_wordv array, which
+    already holds we_offs + we_wordc + 1 pointers.  Follow-up to commit
+    e2cefe16c37.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    
+    (cherry picked from commit 53ec26f1736aee747b353aaea0667b1ebdd5cae7)
+
+diff --git a/posix/wordexp.c b/posix/wordexp.c
+index 8fdc8b8caf..9a49e102ee 100644
+--- a/posix/wordexp.c
++++ b/posix/wordexp.c
+@@ -35,7 +35,6 @@
+ #include <scratch_buffer.h>
+ #include <_itoa.h>
+ #include <assert.h>
+-#include <intprops.h>
+ 
+ /*
+  * This is a recursive-descent-style word expansion routine.
+@@ -2269,16 +2268,14 @@ wordexp (const char *words, wordexp_t *pwordexp, int flags)
+     {
+       /* WRDE_APPEND with an existing word list: duplicate the array so that
+ 	 realloc during parsing does not invalidate the caller's pointer.  The
+-	 strings themselves are shared.  */
+-      size_t num_p;
+-      char **dup;
+-      if (INT_ADD_WRAPV (pwordexp->we_offs, pwordexp->we_wordc, &num_p)
+-	  || INT_ADD_WRAPV (num_p, 1, &num_p))
+-	return WRDE_NOSPACE;
+-      dup = __libc_reallocarray (NULL, num_p, sizeof *dup);
++	 strings themselves are shared an the array already holds
++	 'we_offs + we_wordc + 1 pointers' (so the size computation cannot
++	 overflow).  */
++      size_t num_p = pwordexp->we_offs + pwordexp->we_wordc + 1;
++      char **dup = malloc (num_p * sizeof (char *));
+       if (dup == NULL)
+ 	return WRDE_NOSPACE;
+-      memcpy (dup, pwordexp->we_wordv, num_p * sizeof *dup);
++      memcpy (dup, pwordexp->we_wordv, num_p * sizeof (char *));
+       saved_wordv = pwordexp->we_wordv;
+       pwordexp->we_wordv = dup;
+     }
+
+commit 63b53df549451a5d69fcba6d7612ea99f517e8e3
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Aug 27 13:34:54 2026 +0200
+
+    stdlib: Fix right-justification in strfmon (bug 34510, CVE-2026-19499)
+    
+    The memmove call did not take into account that __printf_buffer_pad
+    updated the buffer pointers.
+    
+    Fixes commit e88b9f0e5cc50cab57a299dc7efe1a4eb385161d
+    ("stdio-common: Convert vfprintf and related functions to buffers"),
+    which went into glibc 2.37.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit b090cf226ff65b913e41536f1f573f500855615c)
+
+diff --git a/stdlib/Makefile b/stdlib/Makefile
+index addf7dc99f..16948eb512 100644
+--- a/stdlib/Makefile
++++ b/stdlib/Makefile
+@@ -347,6 +347,7 @@ tests := \
+   tst-stdc_leading_zeros \
+   tst-stdc_trailing_ones \
+   tst-stdc_trailing_zeros \
++  tst-strfmon-bug34510 \
+   tst-strfmon_l \
+   tst-strfrom \
+   tst-strfrom-locale \
+diff --git a/stdlib/strfmon_l.c b/stdlib/strfmon_l.c
+index f864289480..c39babaeae 100644
+--- a/stdlib/strfmon_l.c
++++ b/stdlib/strfmon_l.c
+@@ -549,7 +549,8 @@ __vstrfmon_l_buffer (struct __printf_buffer *buf, locale_t loc,
+       /* Now test whether the output width is filled.  */
+       if (buf->write_ptr - startp < width)
+ 	{
+-	  size_t pad_width = width - (buf->write_ptr - startp);
++	  size_t written_width = buf->write_ptr - startp;
++	  size_t pad_width = width - written_width;
+ 	  __printf_buffer_pad (buf, ' ', pad_width);
+ 	  if (__printf_buffer_has_failed (buf))
+ 	    /* Implies length check.  */
+@@ -558,7 +559,7 @@ __vstrfmon_l_buffer (struct __printf_buffer *buf, locale_t loc,
+ 	     Otherwise move the field contents in place.  */
+ 	  if (!left)
+ 	    {
+-	      memmove (startp + pad_width, startp, buf->write_ptr - startp);
++	      memmove (startp + pad_width, startp, written_width);
+ 	      memset (startp, ' ', pad_width);
+ 	    }
+ 	}
+diff --git a/stdlib/tst-strfmon-bug34510.c b/stdlib/tst-strfmon-bug34510.c
+new file mode 100644
+index 0000000000..b187bde1f4
+--- /dev/null
++++ b/stdlib/tst-strfmon-bug34510.c
+@@ -0,0 +1,33 @@
++/* Test handling of right-padding in strfmon (bug 34510, CVE-2026-19499).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <monetary.h>
++#include <errno.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++
++static int
++do_test (void)
++{
++  struct support_next_to_fault ntf = support_next_to_fault_allocate (100);
++  TEST_COMPARE (strfmon (ntf.buffer, ntf.length, "%100n", 1.23), -1);
++  TEST_COMPARE (errno, E2BIG);
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 6f9b2bfa500bf5d1cff5d990adfff4b71298dadd
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: SHIFT_JISX0213 decoding lacks pending character reset (CVE-2026-77117)
+    
+    This fixes bug 34556.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 68d94bbe50b7577d48998107d632ef3a0df050e3)
+
+diff --git a/iconvdata/shift_jisx0213.c b/iconvdata/shift_jisx0213.c
+index 61c9c3ce6d..e9179f605e 100644
+--- a/iconvdata/shift_jisx0213.c
++++ b/iconvdata/shift_jisx0213.c
+@@ -226,6 +226,9 @@
+ 	    STANDARD_FROM_LOOP_ERR_HANDLER (1);				      \
+ 	  }								      \
+       }									      \
++    else 								      \
++      /* There was a pending character.  Clear it.  */			      \
++      *statep = 0;							      \
+ 									      \
+     put32 (outptr, ch);							      \
+     outptr += 4;							      \
+
+commit cb61572ea3f773e1e1978f6c412cc36a30acdb0c
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: EUC_JISX0213 decoding lacks pending character reset (CVE-2026-80489)
+    
+    This fixes bug 34568.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 4dafa087ff5fe7df45bd37dc727e988da6b8c935)
+
+diff --git a/iconvdata/euc-jisx0213.c b/iconvdata/euc-jisx0213.c
+index 5572bbdb7b..61c22231e1 100644
+--- a/iconvdata/euc-jisx0213.c
++++ b/iconvdata/euc-jisx0213.c
+@@ -224,6 +224,9 @@
+ 	    STANDARD_FROM_LOOP_ERR_HANDLER (1);				      \
+ 	  }								      \
+       }									      \
++    else 								      \
++      /* There was a pending character.  Clear it.  */			      \
++      *statep = 0;							      \
+ 									      \
+     put32 (outptr, ch);							      \
+     outptr += 4;							      \
+
+commit ca54198decdc3be693b010687f8de716a750b0e4
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: Test case for bug 34556, bug 34568
+    
+    Assisted-by: LLM
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 35efcffa97553df071bc37ab31fd7dc2c634e7da)
+
+diff --git a/iconvdata/Makefile b/iconvdata/Makefile
+index fbb0067302..ba2eec2b48 100644
+--- a/iconvdata/Makefile
++++ b/iconvdata/Makefile
+@@ -76,7 +76,8 @@ tests = bug-iconv1 bug-iconv2 tst-loading tst-e2big tst-iconv4 bug-iconv4 \
+ 	tst-iconv6 bug-iconv5 bug-iconv6 tst-iconv7 bug-iconv8 bug-iconv9 \
+ 	bug-iconv10 bug-iconv11 bug-iconv12 tst-iconv-big5-hkscs-to-2ucs4 \
+ 	bug-iconv13 bug-iconv14 bug-iconv15 \
+-	tst-iconv-iso-2022-cn-ext tst-bug33980
++	tst-iconv-iso-2022-cn-ext tst-bug33980 \
++	tst-jisx0213-progress
+ ifeq ($(have-thread-library),yes)
+ tests += bug-iconv3
+ endif
+@@ -335,6 +336,8 @@ $(objpfx)tst-iconv-iso-2022-cn-ext.out: $(addprefix $(objpfx), $(gconv-modules))
+ 					$(addprefix $(objpfx),$(modules.so))
+ $(objpfx)tst-bug33980.out: $(addprefix $(objpfx), $(gconv-modules)) \
+ 			   $(addprefix $(objpfx),$(modules.so))
++$(objpfx)tst-jisx0213-progress.out: \
++  $(addprefix $(objpfx), $(gconv-modules)) $(addprefix $(objpfx),$(modules.so))
+ 
+ $(objpfx)iconv-test.out: run-iconv-test.sh \
+ 			 $(addprefix $(objpfx), $(gconv-modules)) \
+diff --git a/iconvdata/tst-jisx0213-progress.c b/iconvdata/tst-jisx0213-progress.c
+new file mode 100644
+index 0000000000..7b2073be1f
+--- /dev/null
++++ b/iconvdata/tst-jisx0213-progress.c
+@@ -0,0 +1,124 @@
++/* Test JISX0213 combining character conversion progress (bug 34556, bug 34568).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* Certain JISX0213 byte sequences map to a combining sequence, for
++   example U+304B (HIRAGANA LETTER KA) followed by U+309A (COMBINING
++   SEMI-VOICED SOUND MARK).  When converting to internal encoding
++   (actually UTF-32) with a small output buffer, the first code point
++   is emitted and the second is queued in the converter state.  This
++   test verifies that the queued code point is consumed exactly once
++   on retry, so that the conversion makes progress and terminates.  */
++
++#include <errno.h>
++#include <iconv.h>
++#include <stdio.h>
++#include <string.h>
++
++#include <support/check.h>
++#include <support/support.h>
++
++static void
++test_one (const char *charset, const char *input, size_t outbufsize)
++{
++  printf ("info: %s: testing output buffer size %zu\n", charset, outbufsize);
++
++  /* Expected UTF-32 output.  */
++  static const wchar_t expected[] = { 0x304b, 0x309a, 'A' };
++
++  /* Use WCHAR_T encoding to avoid the BOM.  */
++  iconv_t cd = iconv_open ("WCHAR_T", charset);
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++
++  char result[64];
++  size_t result_len = 0;
++
++  char *inptr = (char *) input;
++  size_t inleft = strlen (input);
++
++  char outbuf[64];
++
++  int iterations = 0;
++  while (inleft > 0)
++    {
++      char *outptr = outbuf;
++      size_t outleft = outbufsize;
++      size_t inleft_before = inleft;
++
++      size_t ret = iconv (cd, &inptr, &inleft, &outptr, &outleft);
++      size_t produced = outptr - outbuf;
++
++      TEST_VERIFY_EXIT (result_len + produced <= sizeof (result));
++      memcpy (result + result_len, outbuf, produced);
++      result_len += produced;
++
++      if (ret == (size_t) -1 && errno == E2BIG)
++	{
++	  if (produced == 0 && inleft == inleft_before)
++	    {
++	      /* Output buffer too small for a single code point.  */
++	      TEST_VERIFY_EXIT (outbufsize < 4);
++	      break;
++	    }
++	  /* Bound iterations to detect non-progress bugs.  */
++	  if (++iterations < 10)
++	    continue;
++	  else
++	    {
++	      FAIL ("%s: no progress", charset);
++	      goto out;
++	    }
++	}
++      if (ret == (size_t) -1)
++	FAIL_EXIT1 ("outbufsize %zu: iconv: %m", outbufsize);
++      break;
++    }
++
++  /* Flush pending converter state.  */
++  {
++    char *outptr = outbuf;
++    size_t outleft = outbufsize;
++    size_t ret = iconv (cd, NULL, NULL, &outptr, &outleft);
++    TEST_VERIFY (ret == 0);
++    size_t produced = outptr - outbuf;
++    memcpy (result + result_len, outbuf, produced);
++    result_len += produced;
++  }
++
++  if (outbufsize >= 4)
++    {
++      TEST_COMPARE (inleft, 0);
++      TEST_COMPARE_BLOB (result, result_len,
++			 expected, sizeof (expected));
++    }
++
++ out:
++  TEST_VERIFY_EXIT (iconv_close (cd) == 0);
++}
++
++static int
++do_test (void)
++{
++  for (size_t outbufsize = 1; outbufsize <= 16; outbufsize++)
++    {
++      test_one ("EUC-JISX0213", "\244\367A", outbufsize);
++      test_one ("SHIFT_JISX0213", "\202\365A", outbufsize);
++    }
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 890f1c13f0de88678db16f8f189d43b51b77b8dc
+Author: Magnus Lindholm <linmag7@gmail.com>
+Date:   Mon Aug 3 17:51:59 2026 +0200
+
+    alpha: Fix stack alignment in makecontext
+    
+    The Alpha ABI requires the stack pointer to be 16-byte aligned.
+    However, __makecontext did not realign it after reserving space for
+    arguments. Depending on uc_stack.ss_size, this could leave the stack
+    only 8-byte aligned.
+    
+    Round the new stack pointer down to a 16-byte boundary after reserving
+    the argument area.
+    
+    This fixes stdlib/tst-makecontext2.
+    
+    Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 4a07bb292f921c10e71fbf48c4a7f44391feb06c)
+
+diff --git a/sysdeps/unix/sysv/linux/alpha/makecontext.S b/sysdeps/unix/sysv/linux/alpha/makecontext.S
+index b0479315d5..1de0dd2653 100644
+--- a/sysdeps/unix/sysv/linux/alpha/makecontext.S
++++ b/sysdeps/unix/sysv/linux/alpha/makecontext.S
+@@ -38,6 +38,9 @@ ENTRY(__makecontext)
+ 	s8addq	$1, 0, $2
+ 	subq	$8, $2, $8
+ 
++	/* The Alpha ABI requires a 16-byte-aligned stack pointer.  */
++	bic	$8, 15, $8
++
+ 	/* Copy all parameters.  Switch statement header here.  */
+ 	ldah	$3, $jumptable($29)	!gprelhigh
+ 	cmple	$18, 6, $1
+
+commit 3258c3fd9167ac5e1bfbb62b55710a139382d6a0
+Author: Matt Turner <mattst88@gmail.com>
+Date:   Mon Aug 3 19:55:06 2026 -0400
+
+    alpha: add the denormal trap enable bit to FE_NOMASK_ENV
+    
+    FE_NOMASK_ENV is the floating-point environment in which no exception is
+    masked, so it must enable every exception that FE_ALL_EXCEPT covers.  On
+    Alpha that includes the GNU extension FE_DENORMAL, whose SWCR trap enable
+    bit is IEEE_TRAP_ENABLE_DNO (bit 6).
+    
+    The constant only set bits 1 through 5 (INV, DZE, OVF, UNF and INE), so
+    after fesetenv (FE_NOMASK_ENV) a subsequent fegetexcept () returned
+    0x3e0000 rather than FE_ALL_EXCEPT (0x7e0000), and denormal exceptions
+    stayed masked.  Set bit 6 as well.
+    
+    Fixes math/test-fenv-return on alpha.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 8e41f6008df3b5d56df199e8b4d19891666857a4)
+
+diff --git a/sysdeps/alpha/fpu/bits/fenv.h b/sysdeps/alpha/fpu/bits/fenv.h
+index b1135f1f0a..530f298914 100644
+--- a/sysdeps/alpha/fpu/bits/fenv.h
++++ b/sysdeps/alpha/fpu/bits/fenv.h
+@@ -121,7 +121,7 @@ typedef unsigned long int fenv_t;
+ 
+ #ifdef __USE_GNU
+ /* Floating-point environment where none of the exceptions are masked.  */
+-# define FE_NOMASK_ENV	((const fenv_t *) 0x880000000000003eUL)
++# define FE_NOMASK_ENV	((const fenv_t *) 0x880000000000007eUL)
+ 
+ /* Floating-point environment with (processor-dependent) non-IEEE floating
+    point.  In this case, mapping denormals to zero.  */
+
+commit 8587edfc9642b46232292b5722fec955851aa7c2
+Author: Matt Turner <mattst88@gmail.com>
+Date:   Mon Aug 3 19:55:09 2026 -0400
+
+    alpha: expect test-float32x-float64-div to fail
+    
+    _Float32x and _Float64 are both binary64 on Alpha, so this narrowing
+    divide is a plain divide and the hardware alone decides whether to signal
+    underflow.
+    
+    IEEE 754 determines tininess after rounding from the result rounded as if
+    the exponent range were unbounded, while Alpha determines it from the
+    delivered result.  The two differ for a quotient that is tiny but rounds
+    up to the smallest normal, as in DBL_MIN / (1 + 2^-52) under a rounding
+    mode that rounds away from zero: the binade below DBL_MIN has a finer
+    spacing than the subnormals, so the unbounded rounding stays below
+    DBL_MIN and the result is tiny, but the delivered result is DBL_MIN and
+    looks normal.  Alpha signals no underflow for it.
+    
+    Nothing in software can correct this.  The hardware detects no underflow,
+    so no software completion trap is taken and the kernel emulation never
+    runs, and as the operation is not really narrowing there is no wider
+    intermediate for libm to examine.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit a32db99a38c5f0c64b414af270830c3b6e3719c1)
+
+diff --git a/sysdeps/alpha/Makefile b/sysdeps/alpha/Makefile
+index 60a369e255..faa59ab27a 100644
+--- a/sysdeps/alpha/Makefile
++++ b/sysdeps/alpha/Makefile
+@@ -53,6 +53,20 @@ CFLAGS-s_lrint.c += -mieee-with-inexact
+ CFLAGS-test-misc.c += -mieee-with-inexact
+ # Avoid "conflicting types for built-in function" warnings
+ CFLAGS-s_isnan.c += -fno-builtin-isnanf
++
++# _Float32x and _Float64 are both binary64 on Alpha, so this narrowing
++# divide is a plain divide and the hardware alone decides whether to
++# signal underflow.  IEEE 754 determines tininess after rounding from the
++# result rounded as if the exponent range were unbounded, but Alpha
++# determines it from the delivered result.  For a quotient that is tiny
++# but rounds up to the smallest normal -- DBL_MIN / (1 + 2^-52) under a
++# rounding mode that rounds away from zero -- the unbounded rounding
++# stays below DBL_MIN, because that binade has a finer spacing than the
++# subnormals, while the delivered result is DBL_MIN and looks normal.
++# Alpha raises no underflow for it.  No trap is taken, so the kernel
++# emulation cannot correct this, and the operation has no wider
++# intermediate for libm to examine.
++test-xfail-test-float32x-float64-div = yes
+ endif
+ 
+ # Build everything with full IEEE math support, and with dynamic rounding;
+
+commit 2d5421ffca8893534d5e02ad38c28acd8e778fa3
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Wed Aug 26 15:18:35 2026 +0800
+
+    Add check-symbol-version.awk
+    
+    commit 6deadd4eb6ab4f59d116b2d7ad97be0d0848cb7f
+    Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    Date:   Wed Oct 8 10:55:05 2025 -0300
+    
+    didn't remove sysdeps/m68k/m680x0/fpu/w_fmod_compat.c.  As the result,
+    due to a linker bug:
+    
+    https://sourceware.org/bugzilla/show_bug.cgi?id=34550
+    
+    there were 2 default versions of fmod in m68k libm:
+    
+       996: 0001433c   174 FUNC    WEAK   DEFAULT   12 fmod@@GLIBC_2.0
+       997: 000307d4   214 FUNC    GLOBAL DEFAULT   12 fmod@@GLIBC_2.43
+    
+    Add check-symbol-version.awk to verify that versioned symbols only have
+    one default version in dynamic symbol table.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 0e57c798c68eaf229a9fa8cb02179e43d4f8581a)
+
+diff --git a/elf/Makefile b/elf/Makefile
+index d279a5135c..54a4339148 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -1432,6 +1432,7 @@ tests-special += \
+   $(objpfx)check-execstack.out \
+   $(objpfx)check-initfini.out \
+   $(objpfx)check-localplt.out \
++  $(objpfx)check-symbol-version.out \
+   $(objpfx)check-textrel.out \
+   $(objpfx)check-wx-segment.out \
+   # tests-special
+@@ -2377,6 +2378,12 @@ $(objpfx)check-initfini.out: $(..)scripts/check-initfini.awk \
+ 	$(evaluate-test)
+ generated += check-initfini.out
+ 
++$(objpfx)check-symbol-version.out: $(..)scripts/check-symbol-version.awk \
++			    $(all-built-dso:=.dynsym)
++	LC_ALL=C $(AWK) -f $^ > $@; \
++	$(evaluate-test)
++generated += check-symbol-version.out
++
+ $(objpfx)tst-dlopenrpath: $(objpfx)tst-dlopenrpathmod.so
+ CFLAGS-tst-dlopenrpath.c += -DPFX=\"$(objpfx)\"
+ LDFLAGS-tst-dlopenrpathmod.so += -Wl,-rpath,\$$ORIGIN/test-subdir
+diff --git a/scripts/check-symbol-version.awk b/scripts/check-symbol-version.awk
+new file mode 100644
+index 0000000000..2ddaa0edc9
+--- /dev/null
++++ b/scripts/check-symbol-version.awk
+@@ -0,0 +1,67 @@
++# Copyright (C) 2026 Free Software Foundation, Inc.
++# This file is part of the GNU C Library.
++
++# The GNU C Library is free software; you can redistribute it and/or
++# modify it under the terms of the GNU Lesser General Public
++# License as published by the Free Software Foundation; either
++# version 2.1 of the License, or (at your option) any later version.
++
++# The GNU C Library is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++# Lesser General Public License for more details.
++
++# You should have received a copy of the GNU Lesser General Public
++# License along with the GNU C Library; if not, see
++# <https://www.gnu.org/licenses/>.
++
++# This awk script expects to get command-line files that are each
++# the output of 'readelf -W --dyn-syms' on a single shared object.
++# It exits successfully (0) if there are versioned symbols with more
++# than one default version in dynamic symbol table.
++# It fails (1) if any did contain versioned symbols with more than one
++# default version in dynamic symbol table.
++# It fails (2) if the input did not take the expected form.
++
++BEGIN { result = incorrect = sanity = 0 }
++
++function check_one(name) {
++  if (!sanity) {
++    print name ": *** input did not look like readelf -d output";
++    result = 2;
++  } else {
++    ok = 1;
++    if (incorrect) {
++      print name ": *** incorrect dynamic symbol table";
++      result = result ? result : 1;
++      ok = 0;
++    }
++    if (ok)
++      print name ": OK";
++  }
++
++  delete version
++  incorrect = sanity = 0
++}
++
++FILENAME != lastfile {
++  if (lastfile)
++    check_one(lastfile);
++  lastfile = FILENAME;
++}
++
++$1 == "Symbol" && $2 == "table" && $3 == "'.dynsym'" { sanity = 1 }
++$8 ~ "@@" {
++  split($8,a,"@");
++  if (version[a[1]] != "") {
++    incorrect = 1;
++    print a[1] " has 2 default versions: " version[a[1]] ", " a[3];
++  } else {
++    version[a[1]] = a[3];
++  }
++}
++
++END {
++  check_one(lastfile);
++  exit(result);
++}
+
+commit 93606c5c1d2a571abf5d2e8af66e4f0aee9c67ba
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Tue Aug 18 21:48:34 2026 +0200
+
+    powerpc: Fix non-atomic stack pointer update in fortified longjmp (bug 34530)
+    
+    After commit 78f1f0e39cd41d28ae771eb3498bc33780c85cfd ("Consolidate
+    the C pointer guard and align the assembly implementations"),
+    PTR_DEMANGLE3 on POWER no longer atomically updates the destination
+    register. The fortified longjmp relies on atomic update of the
+    stack pointer (r1) in sysdeps/powerpc/powerpc64/__longjmp-common.S
+    and parallel files:
+    
+    #ifdef PTR_DEMANGLE
+    # ifdef CHECK_SP
+            PTR_DEMANGLE3 (r22, r22, r25)
+    # else
+            PTR_DEMANGLE3 (r1, r22, r25)
+    # endif
+    #endif
+    
+    Fix this by using PTR_DEMANGLE instead of PTR_DEMANGLE3.  Remove
+    PTR_MANGLE3 and PTR_DEMANGLE3 as unused.
+    
+    An alternate fix would store the pointer guard cookie rotated,
+    but this would go against the unification in the commit that
+    introduced the regression.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 24d188a2a149b9933e17240e454f917e065cdf06)
+
+diff --git a/sysdeps/powerpc/powerpc32/__longjmp-common.S b/sysdeps/powerpc/powerpc32/__longjmp-common.S
+index eb228bf4fe..9da86330f7 100644
+--- a/sysdeps/powerpc/powerpc32/__longjmp-common.S
++++ b/sysdeps/powerpc/powerpc32/__longjmp-common.S
+@@ -30,11 +30,12 @@ ENTRY (__longjmp_symbol)
+ 
+ #if defined PTR_DEMANGLE || defined CHECK_SP
+ 	lwz r24,(JB_GPR1*4)(r3)
++# ifdef PTR_DEMANGLE
++	PTR_DEMANGLE (r24, r25)
++# endif
+ # ifdef CHECK_SP
+-#  ifdef PTR_DEMANGLE
+-	PTR_DEMANGLE3 (r24, r24, r25)
+-#  endif
+ 	CHECK_SP (r24)
++# endif
+ 	mr r1,r24
+ # endif
+ #else
+@@ -49,9 +50,6 @@ ENTRY (__longjmp_symbol)
+ 	lwz r19,((JB_GPRS+19-14)*4)(r3)
+ 	lwz r20,((JB_GPRS+20-14)*4)(r3)
+ #ifdef PTR_DEMANGLE
+-# ifndef CHECK_SP
+-	PTR_DEMANGLE3 (r1, r24, r25)
+-# endif
+ 	PTR_DEMANGLE2 (r0, r25)
+ #endif
+ 	/* longjmp/longjmp_target probe expects longjmp first argument (4@3),
+diff --git a/sysdeps/powerpc/powerpc32/fpu/__longjmp-common.S b/sysdeps/powerpc/powerpc32/fpu/__longjmp-common.S
+index c5acc1610c..8e383cc997 100644
+--- a/sysdeps/powerpc/powerpc32/fpu/__longjmp-common.S
++++ b/sysdeps/powerpc/powerpc32/fpu/__longjmp-common.S
+@@ -114,13 +114,13 @@ L(no_vmx):
+ #endif
+ #if defined PTR_DEMANGLE || defined CHECK_SP
+ 	lwz r24,(JB_GPR1*4)(r3)
++# ifdef PTR_DEMANGLE
++	PTR_DEMANGLE (r24, r25)
++# endif
+ # ifdef CHECK_SP
+-#  ifdef PTR_DEMANGLE
+-	PTR_DEMANGLE3 (r24, r24, r25)
+-#  endif
+ 	CHECK_SP (r24)
+-	mr r1,r24
+ # endif
++	mr r1,r24
+ #else
+ 	lwz r1,(JB_GPR1*4)(r3)
+ #endif
+@@ -140,9 +140,6 @@ L(no_vmx):
+ 	lwz r20,((JB_GPRS+6)*4)(r3)
+ 	lfd fp20,((JB_FPRS+6*2)*4)(r3)
+ #ifdef PTR_DEMANGLE
+-# ifndef CHECK_SP
+-	PTR_DEMANGLE3 (r1, r24, r25)
+-# endif
+ 	PTR_DEMANGLE2 (r0, r25)
+ #endif
+ 	/* longjmp/longjmp_target probe expects longjmp first argument (4@3),
+diff --git a/sysdeps/powerpc/powerpc64/__longjmp-common.S b/sysdeps/powerpc/powerpc64/__longjmp-common.S
+index 99b2718677..fe8488fcac 100644
+--- a/sysdeps/powerpc/powerpc64/__longjmp-common.S
++++ b/sysdeps/powerpc/powerpc64/__longjmp-common.S
+@@ -115,19 +115,15 @@ L(no_vmx):
+ #endif
+ #if defined PTR_DEMANGLE || defined CHECK_SP
+ 	ld r22,(JB_GPR1*8)(r3)
+-#else
+-	ld r1,(JB_GPR1*8)(r3)
+-#endif
+-#ifdef PTR_DEMANGLE
+-# ifdef CHECK_SP
+-	PTR_DEMANGLE3 (r22, r22, r25)
+-# else
+-	PTR_DEMANGLE3 (r1, r22, r25)
++# ifdef PTR_DEMANGLE
++	PTR_DEMANGLE (r22, r25)
+ # endif
+-#endif
+-#ifdef CHECK_SP
++# ifdef CHECK_SP
+ 	CHECK_SP (r22)
++# endif
+ 	mr r1,r22
++#else
++	ld r1,(JB_GPR1*8)(r3)
+ #endif
+ 	ld r2,(JB_GPR2*8)(r3)
+ 	ld r0,(JB_LR*8)(r3)
+diff --git a/sysdeps/unix/sysv/linux/powerpc/pointer_guard-asm.h b/sysdeps/unix/sysv/linux/powerpc/pointer_guard-asm.h
+index 962ad10e59..cb3e031467 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/pointer_guard-asm.h
++++ b/sysdeps/unix/sysv/linux/powerpc/pointer_guard-asm.h
+@@ -65,10 +65,6 @@
+ # define PTR_MANGLE2(reg, tmpreg) \
+ 	xor	reg,tmpreg,reg; \
+ 	PTR_ROT_MANGLE (reg, reg)
+-# define PTR_MANGLE3(destreg, reg, tmpreg) \
+-	PTR_GUARD_LOAD (tmpreg); \
+-	xor	destreg,tmpreg,reg; \
+-	PTR_ROT_MANGLE (destreg, destreg)
+ # define PTR_DEMANGLE(reg, tmpreg) \
+ 	PTR_GUARD_LOAD (tmpreg); \
+ 	PTR_ROT_DEMANGLE (reg, reg); \
+@@ -76,10 +72,6 @@
+ # define PTR_DEMANGLE2(reg, tmpreg) \
+ 	PTR_ROT_DEMANGLE (reg, reg); \
+ 	xor	reg,tmpreg,reg
+-# define PTR_DEMANGLE3(destreg, reg, tmpreg) \
+-	PTR_GUARD_LOAD (tmpreg); \
+-	PTR_ROT_DEMANGLE (destreg, reg); \
+-	xor	destreg,tmpreg,destreg
+ #endif
+ 
+ #endif /* POINTER_GUARD_ASM_H */
+
+commit 5c479454d1232f71c78fa21584e90a2f57883407
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Aug 24 13:38:02 2026 -0300
+
+    powerpc: Fix preprocessor conditional in soft-float __longjmp (bug 34530)
+    
+    Commit 24d188a2a149b9933e17240e454f917e065cdf06 left a stray #endif in
+    the powerpc32 soft-float __longjmp-common.S. Remove it, matching the
+    fpu variant.
+    
+    Checked with a build for powerpc32-linux-gnu-soft.
+    
+    (cherry picked from commit 5f5bc63a4d8a7eec7f11e56664ca76455d837b22)
+
+diff --git a/sysdeps/powerpc/powerpc32/__longjmp-common.S b/sysdeps/powerpc/powerpc32/__longjmp-common.S
+index 9da86330f7..f1da933704 100644
+--- a/sysdeps/powerpc/powerpc32/__longjmp-common.S
++++ b/sysdeps/powerpc/powerpc32/__longjmp-common.S
+@@ -37,7 +37,6 @@ ENTRY (__longjmp_symbol)
+ 	CHECK_SP (r24)
+ # endif
+ 	mr r1,r24
+-# endif
+ #else
+ 	lwz r1,(JB_GPR1*4)(r3)
+ #endif
+
+commit 0b4e41fc51e6aba6216a908961b49b0622b47fa0
+Author: Dongkyun Son <dongkyun.s@samsung.com>
+Date:   Fri Sep 4 21:28:41 2026 +0900
+
+    libio: Fix CVE-2026-18374 heap buffer overflow in ccs= handling
+    
+    When fopen() is called with a ,ccs= parameter whose value becomes empty
+    after strip(), the code must reject it with EINVAL instead of attempting
+    to use it.  The original upstr() fallback could read past the ',' delimiter
+    and cause a heap buffer overflow.
+    
+    The fix checks if the charset specification is empty after strip() and
+    returns EINVAL immediately, preventing the overflow and following the
+    approach described in BZ #34574.
+    
+    CVE-2026-18374 - CVSS 4.9 (AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L)
+    
+    Reported-by: AISLE in partnership with Red Hat
+    Signed-off-by: Dongkyun Son <dongkyun.s@samsung.com>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit 9765a538ebf8661a6e5578e01e35a3dd30db7eb4)
+
+diff --git a/libio/fileops.c b/libio/fileops.c
+index 9348d7c3a1..5a249725ee 100644
+--- a/libio/fileops.c
++++ b/libio/fileops.c
+@@ -355,12 +355,14 @@ _IO_new_file_fopen (FILE *fp, const char *filename, const char *mode,
+ 	  *((char *) __mempcpy (ccs, cs + 5, endp - (cs + 5))) = '\0';
+ 	  strip (ccs, ccs);
+ 
+-	  if (__wcsmbs_named_conv (&fcts, ccs[2] == '\0'
+-				   ? upstr (ccs, cs + 5) : ccs) != 0)
++	  /* After stripping, ccs[2] == '\0' means the charset name is empty.
++	     This is not a valid charset and would cause problems downstream.
++	     Reject it with EINVAL (BZ #34574, CVE-2026-18374).  */
++	  if (ccs[2] == '\0' || __wcsmbs_named_conv (&fcts, ccs) != 0)
+ 	    {
+-	      /* Something went wrong, we cannot load the conversion modules.
+-		 This means we cannot proceed since the user explicitly asked
+-		 for these.  */
++	      /* Either the charset name is empty after strip(), or conversion
++		 modules cannot be loaded.  This means we cannot proceed since
++		 the user explicitly asked for character conversion.  */
+ 	      (void) _IO_file_close_it (fp);
+ 	      free (ccs);
+ 	      __set_errno (EINVAL);
+
+commit 30950ce64dbc29db0aedf1d46b6b8eb70b360f0c
+Author: Shamil Abdulaev <ashamil435@gmail.com>
+Date:   Thu Sep 3 20:19:42 2026 +0300
+
+    libio: Add test for fopen with an empty ", ccs=" value [BZ #34574]
+    
+    This goes on top of the fix for CVE-2026-18374.  The test runs the
+    reproducer from the bug report, plus "w,ccs=" and "w,ccs=,", and
+    expects NULL with errno set to EINVAL.
+    
+    Signed-off-by: Shamil Abdulaev <ashamil435@gmail.com>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit cca93e5d88d3d4ed073c03100467696f652269e7)
+
+diff --git a/libio/Makefile b/libio/Makefile
+index 616107ee10..9aec016cca 100644
+--- a/libio/Makefile
++++ b/libio/Makefile
+@@ -110,6 +110,7 @@ tests = \
+   tst-fgetwc \
+   tst-fgetws \
+   tst-file-init-race \
++  tst-fopen-ccs-empty \
+   tst-fopenloc2 \
+   tst-fputws \
+   tst-freopen \
+diff --git a/libio/tst-fopen-ccs-empty.c b/libio/tst-fopen-ccs-empty.c
+new file mode 100644
+index 0000000000..64723965e1
+--- /dev/null
++++ b/libio/tst-fopen-ccs-empty.c
+@@ -0,0 +1,62 @@
++/* Test fopen with an empty ",ccs=" value in the mode string (bug 34574).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/support.h>
++#include <support/temp_file.h>
++#include <support/xunistd.h>
++
++static void
++check_fopen_fails (const char *path, const char *mode)
++{
++  errno = 0;
++  FILE *fp = fopen (path, mode);
++  TEST_VERIFY (fp == NULL);
++  TEST_COMPARE (errno, EINVAL);
++  if (fp != NULL)
++    fclose (fp);
++}
++
++static int
++do_test (void)
++{
++  char *path;
++  xclose (create_temp_file ("tst-fopen-ccs-empty", &path));
++
++  /* The value is blank and the mode string continues well past it.  */
++  enum { size = 1024 * 1024 };
++  char *mode = xmalloc (size);
++  memset (mode, 'X', size);
++  mode[size - 1] = '\0';
++  static const char prefix[] = "w,ccs=                     ,";
++  memcpy (mode, prefix, sizeof (prefix) - 1);
++  check_fopen_fails (path, mode);
++  free (mode);
++
++  check_fopen_fails (path, "w,ccs=");
++  check_fopen_fails (path, "w,ccs=,");
++
++  free (path);
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit b4f51887c48ac82acfdb13f96d9eab5d120cb2b7
+Author: Hemanth Kumar M D <Hemanth.KumarMD@windriver.com>
+Date:   Mon Sep 7 01:59:06 2026 -0700
+
+    nptl: Skip pretty-printer tests without python3 [BZ #34507]
+    
+    The tests-printers-out rule in Rules wraps $(PYTHON) through
+    $(test-wrapper-env).  Unlike ordinary tests, which wrap a freshly built
+    target binary, this wraps python3, a build-host tool.  When cross-testing
+    with test-wrapper set (e.g. via scripts/cross-test-ssh.sh) the whole
+    command is forwarded to the target; if the target lacks python3 the shell
+    returns 127 and evaluate-test.sh reports the six nptl pretty-printer
+    tests as FAIL instead of UNSUPPORTED.
+    
+    scripts/test_printers_common.py already exits UNSUPPORTED (77) when its
+    dependencies are missing, but that is unreachable when python3 itself is
+    absent.
+    
+    Guard the invocation with a "command -v" check so the recipe exits 77
+    (UNSUPPORTED) when python3 is not found.  Native builds are unaffected,
+    as configure requires python3.
+    
+    Signed-off-by: Hemanth Kumar M D <Hemanth.KumarMD@windriver.com>
+    Suggested-by: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    
+    (cherry picked from commit c958d789db3bd8dbfb93868d8a975d13a3d66396)
+
+diff --git a/NEWS b/NEWS
+index 697049efd1..a9a89bf6bc 100644
+--- a/NEWS
++++ b/NEWS
+@@ -18,6 +18,8 @@ The following bugs are resolved with this release:
+   [34441] math: math: sinh() returns wrong results for some inputs with
+     |x| > 36.736801
+   [34465] math: math: x86_64 tanh ifunc selection wrong
++  [34507] nptl: Pretty-printer tests FAIL instead of UNSUPPORTED when
++    cross-testing without python3 on target
+   [34509] libc: [m68k] Regression: Perl locks up after upgrading glibc
+     to 2.43
+ 
+diff --git a/Rules b/Rules
+index 71495028fb..cfdbb459c8 100644
+--- a/Rules
++++ b/Rules
+@@ -467,8 +467,9 @@ py-env := PYTHONPATH=$(py-const-dir):$(..)scripts:$${PYTHONPATH}
+ # The pretty printer files and test_common_printers.py must be present for all.
+ $(tests-printers-out): $(objpfx)%.out: $(objpfx)% %.py %.c $(pretty-printers) \
+ 		       $(..)scripts/test_printers_common.py
+-	$(test-wrapper-env) $(py-env) \
+-	    $(PYTHON) $*.py $*.c $(objpfx)$* $(pretty-printers) > $@; \
++	$(test-wrapper-env) $(py-env) sh -c \
++	    'command -v $(firstword $(PYTHON)) > /dev/null 2>&1 || exit 77; \
++	     exec $(PYTHON) $*.py $*.c $(objpfx)$* $(pretty-printers)' > $@; \
+ 	$(evaluate-test)
+ endif
+ 
+
+commit b84047b5b792e1f028f4d82acbfa9ee9f6e89069
+Author: Shamil Abdulaev <ashamil435@gmail.com>
+Date:   Fri Sep 11 14:59:48 2026 +0200
+
+    elf: Do not load cache extensions from an old-format ld.so.cache [BZ #34600]
+    
+    Since b9957a70b8 the cache extensions are loaded in
+    _dl_maybe_load_ldsocache.  A cache written by "ldconfig -c old" has no
+    new-format header, so tmp_cache_new is NULL there and
+    cache_extension_load dereferences it.  Because __tunables_init loads the
+    cache unconditionally, ld.so crashes at startup of every dynamically
+    linked program.  An old-format cache cannot carry extensions, so return
+    early instead.
+    
+    Checked on x86_64-linux-gnu.
+    
+    Signed-off-by: Shamil Abdulaev <ashamil435@gmail.com>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit fa91c51bb7bdd47ba4a1bb0ee7d66be101032ba5)
+
+diff --git a/elf/Makefile b/elf/Makefile
+index 54a4339148..f1a8a75fdc 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -306,6 +306,7 @@ tst-ifunc-resolver-protector-static-non-pie-no-pie = yes
+ 
+ tests-container := \
+   tst-dl-cache-long-path \
++  tst-dl-cache-old-format \
+   tst-ldconfig-bad-aux-cache \
+   tst-ldconfig-ld_so_conf-update \
+   # tests-container
+@@ -3043,9 +3044,10 @@ LDFLAGS-tst-dlopen-nodelete-reloc-mod17.so = -Wl,--no-as-needed
+ 
+ $(objpfx)tst-ldconfig-ld_so_conf-update.out: $(objpfx)tst-ldconfig-ld-mod.so
+ 
+-# Reuses the trivial module already built for tst-dl-path-buf.
+ $(objpfx)tst-dl-cache-long-path: $(shared-thread-library)
++# Both cache tests reuse the trivial module already built for tst-dl-path-buf.
+ $(objpfx)tst-dl-cache-long-path.out: $(objpfx)tst-dl-path-buf-mod.so
++$(objpfx)tst-dl-cache-old-format.out: $(objpfx)tst-dl-path-buf-mod.so
+ 
+ LDFLAGS-tst-dst-needed-leaf-mod.so = \
+   -Wl,-soname,\$$ORIGIN/\$$ORIGIN/\$$ORIGIN/\$$ORIGIN/\$$ORIGIN/leaf.so
+diff --git a/elf/tst-dl-cache-old-format.c b/elf/tst-dl-cache-old-format.c
+new file mode 100644
+index 0000000000..985aed99ec
+--- /dev/null
++++ b/elf/tst-dl-cache-old-format.c
+@@ -0,0 +1,144 @@
++/* Test that ld.so accepts an ld.so.cache written in the old format.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* A cache written by "ldconfig -c old" carries no new-format header, so
++   the loader must not look for cache extensions in it.  The test writes
++   such a cache, then starts a dynamically linked child, which is where
++   an unpatched loader dies before main, and then dlopens a module that
++   is only reachable through the cache, which covers the reload path.  */
++
++#include <dlfcn.h>
++#include <fcntl.h>
++#include <getopt.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/stat.h>
++
++#include <support/capture_subprocess.h>
++#include <support/check.h>
++#include <support/support.h>
++#include <support/temp_file.h>
++#include <support/xdlfcn.h>
++#include <support/xunistd.h>
++
++/* ldconfig only indexes file names starting with "lib", so the module is
++   deployed under a lib-prefixed name and dlopened by that name.  */
++#define MOD_BUILT	"tst-dl-path-buf-mod.so"
++#define MOD_DEPLOYED	"libtst-dl-path-buf-mod.so"
++#define MOD_SYMBOL	"tst_dl_path_buf_mod_value"
++#define MOD_EXPECTED	0xaabbccddu
++
++#define MOD_DIR "/tst-dl-cache-old-format"
++
++/* Copied from sysdeps/generic/dl-cache.h, which cannot be included here
++   because it relies on libc-internal attributes.  */
++#define CACHE_MAGIC_OLD "ld.so-1.7.0"
++#define CACHE_MAGIC_NEW "glibc-ld.so.cache1.1"
++
++/* Set in the re-executed child, whose only job is to reach main.  */
++static int restart;
++#define CMDLINE_OPTIONS \
++  { "restart", no_argument, &restart, 1 },
++
++static void
++run_ldconfig (void *closure __attribute__ ((unused)))
++{
++  char *prog = xasprintf ("%s/ldconfig", support_install_rootsbindir);
++  char *args[] = { prog, (char *) "-c", (char *) "old", NULL };
++  execv (args[0], args);
++  FAIL_EXIT1 ("execv (%s): %m", prog);
++}
++
++/* ldconfig accepts an unknown -c argument without complaining and falls
++   back to the new format, so verify that the cache on disk really is the
++   old format and carries no new-format header anywhere.  */
++static void
++check_cache_is_old_format (void)
++{
++  char *path = xasprintf ("%s/ld.so.cache", support_sysconfdir_prefix);
++  int fd = xopen (path, O_RDONLY, 0);
++  struct stat64 st;
++  xfstat64 (fd, &st);
++  size_t length = st.st_size;
++  char *contents = xmalloc (length);
++  xread (fd, contents, length);
++  xclose (fd);
++
++  TEST_COMPARE_BLOB (contents, sizeof CACHE_MAGIC_OLD - 1,
++		     CACHE_MAGIC_OLD, sizeof CACHE_MAGIC_OLD - 1);
++  TEST_VERIFY (memmem (contents, length, CACHE_MAGIC_NEW,
++		       sizeof CACHE_MAGIC_NEW - 1) == NULL);
++
++  free (contents);
++  free (path);
++}
++
++static void
++do_prepare (int argc, char **argv)
++{
++  if (restart)
++    return;
++
++  xmkdirp (MOD_DIR, 0777);
++  add_temp_file (MOD_DIR);
++  char *src = xasprintf ("%s/elf/" MOD_BUILT, support_objdir_root);
++  support_copy_file (src, MOD_DIR "/" MOD_DEPLOYED);
++  add_temp_file (MOD_DIR "/" MOD_DEPLOYED);
++  free (src);
++
++  char *conf = xasprintf ("%s/ld.so.conf", support_sysconfdir_prefix);
++  support_write_file_string (conf, MOD_DIR "\n");
++  free (conf);
++
++  xmkdirp ("/var/cache/ldconfig", 0777);
++  struct support_capture_subprocess result
++    = support_capture_subprocess (run_ldconfig, NULL);
++  support_capture_subprocess_check (&result, "ldconfig", 0, sc_allow_none);
++  support_capture_subprocess_free (&result);
++
++  check_cache_is_old_format ();
++}
++#define PREPARE do_prepare
++
++static int
++do_test (int argc, char **argv)
++{
++  if (restart)
++    /* Reaching main is the entire check: the loader read the old-format
++       cache while starting this process.  */
++    return 0;
++
++  char *spargv[] = { argv[0], (char *) "--direct", (char *) "--restart",
++		     NULL };
++  struct support_capture_subprocess result
++    = support_capture_subprogram (spargv[0], spargv, NULL);
++  support_capture_subprocess_check (&result, "restart", 0, sc_allow_none);
++  support_capture_subprocess_free (&result);
++
++  /* This process still has the cache from its own startup mapped, so the
++     dlopen exercises the reload of the replaced file as well.  */
++  void *handle = xdlopen (MOD_DEPLOYED, RTLD_NOW | RTLD_LOCAL);
++  unsigned int (*value) (void) = xdlsym (handle, MOD_SYMBOL);
++  TEST_COMPARE (value (), MOD_EXPECTED);
++  xdlclose (handle);
++
++  return 0;
++}
++
++#define TEST_FUNCTION_ARGV do_test
++#include <support/test-driver.c>
+diff --git a/elf/tst-dl-cache-old-format.root/postclean.req b/elf/tst-dl-cache-old-format.root/postclean.req
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/sysdeps/generic/dl-cache.h b/sysdeps/generic/dl-cache.h
+index 972ab32b86..b1de245438 100644
+--- a/sysdeps/generic/dl-cache.h
++++ b/sysdeps/generic/dl-cache.h
+@@ -321,6 +321,9 @@ cache_extension_load (const struct cache_file_new *cache,
+ 		      struct cache_extension_all_loaded *loaded)
+ {
+   memset (loaded, 0, sizeof (*loaded));
++  if (cache == NULL)
++    /* Old-format cache without a new-format header, so no extensions.  */
++    return true;
+   if (cache->extension_offset == 0)
+     /* No extensions present.  This is not a format error.  */
+     return true;
+
+commit b14c4b0bc95c25f9718807be07ad9a13442d2b6f
+Author: Sam James <sam@gentoo.org>
+Date:   Sat Aug 29 16:54:46 2026 +0100
+
+    io: drop nonnull attribute for fchmodat, faccessat, fchownat's path argument [BZ #34313]
+    
+    Since Linux 6.11, AT_EMPTY_PATH can be used for a NULL path argument, so
+    the nonnull attribute is no longer sound. Drop it.
+    
+    This bug was worked around in gnulib's 6db27b4dd36eda618db20e997ff56bbed7fce3cb.
+    
+    See also 55618e13968a60b89e5b226a23afaa8f17c5ef48 which fixed fstatat
+    in glibc.
+    
+    Bug: https://sourceware.org/PR34313
+
+diff --git a/io/sys/stat.h b/io/sys/stat.h
+index 3069e187b0..ff70b69f59 100644
+--- a/io/sys/stat.h
++++ b/io/sys/stat.h
+@@ -370,7 +370,7 @@ extern int fchmod (int __fd, __mode_t __mode) __THROW;
+    the directory FD is open on.  */
+ extern int fchmodat (int __fd, const char *__file, __mode_t __mode,
+ 		     int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use ATFILE.  */
+ 
+ 
+diff --git a/posix/unistd.h b/posix/unistd.h
+index 06a6a88b52..dc5c2ec009 100644
+--- a/posix/unistd.h
++++ b/posix/unistd.h
+@@ -307,7 +307,7 @@ extern int execveat (int __fd, const char *__path, char *const __argv[],
+    If AT_EACCESS is set in FLAG, then use effective IDs like `eaccess',
+    otherwise use real IDs like `access'.  */
+ extern int faccessat (int __fd, const char *__file, int __type, int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use GNU.  */
+ 
+ 
+@@ -510,7 +510,7 @@ extern int lchown (const char *__file, __uid_t __owner, __gid_t __group)
+    on.  */
+ extern int fchownat (int __fd, const char *__file, __uid_t __owner,
+ 		     __gid_t __group, int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use GNU.  */
+ 
+ /* Change the process's working directory to PATH.  */
+
+commit d19791b12ae5f054187ebe93a653c0ef90447a4f
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Wed Sep 16 08:22:35 2026 +0800
+
+    x86-64: Link tst-shstk-legacy-1{f,g} with -Wl,--no-as-needed
+    
+    Link tst-shstk-legacy-1f and tst-shstk-legacy-1g with -Wl,--no-as-needed
+    so that tst-shstk-legacy-mod-1.so is added to DT_NEEDED.  This fixes
+    BZ #31877.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Aurelien Jarno <aurelien@aurel32.net>
+    (cherry picked from commit 1db83d1652d35115525960021e4fb5b76dd1c633)
+
+diff --git a/sysdeps/x86_64/Makefile b/sysdeps/x86_64/Makefile
+index ff0463d7ca..dfb344d74a 100644
+--- a/sysdeps/x86_64/Makefile
++++ b/sysdeps/x86_64/Makefile
+@@ -467,10 +467,12 @@ $(objpfx)tst-shstk-legacy-1e-static.out: \
+ 	$(SHELL) $< $(common-objpfx) 2> $@; \
+ 	$(evaluate-test)
+ tst-shstk-legacy-1f-ENV = GLIBC_TUNABLES=glibc.cpu.hwcaps=SHSTK
++LDFLAGS-tst-shstk-legacy-1f = -Wl,--no-as-needed
+ $(objpfx)tst-shstk-legacy-1f: $(objpfx)tst-shstk-legacy-mod-1.so
+ $(objpfx)tst-shstk-legacy-mod-1.so: \
+   $(objpfx)tst-shstk-legacy-mod-1.os \
+   $(objpfx)tst-shstk-legacy-1-extra.os
++LDFLAGS-tst-shstk-legacy-1g = -Wl,--no-as-needed
+ $(objpfx)tst-shstk-legacy-1g: $(objpfx)tst-shstk-legacy-mod-1.so
+ $(objpfx)tst-shstk-legacy-1g.out: \
+   $(..)/sysdeps/x86_64/tst-shstk-legacy-1g.sh $(objpfx)tst-shstk-legacy-1g
+
+commit d7179269b79eb7394e980cb8ebd810629c686f0f
+Author: Sam James <sam@gentoo.org>
+Date:   Thu Sep 17 02:04:11 2026 +0100
+
+    Revert "io: drop nonnull attribute for fchmodat, faccessat, fchownat's path argument [BZ #34313]"
+    
+    This reverts commit b14c4b0bc95c25f9718807be07ad9a13442d2b6f.
+
+diff --git a/io/sys/stat.h b/io/sys/stat.h
+index ff70b69f59..3069e187b0 100644
+--- a/io/sys/stat.h
++++ b/io/sys/stat.h
+@@ -370,7 +370,7 @@ extern int fchmod (int __fd, __mode_t __mode) __THROW;
+    the directory FD is open on.  */
+ extern int fchmodat (int __fd, const char *__file, __mode_t __mode,
+ 		     int __flag)
+-     __THROW __wur;
++     __THROW __nonnull ((2)) __wur;
+ #endif /* Use ATFILE.  */
+ 
+ 
+diff --git a/posix/unistd.h b/posix/unistd.h
+index dc5c2ec009..06a6a88b52 100644
+--- a/posix/unistd.h
++++ b/posix/unistd.h
+@@ -307,7 +307,7 @@ extern int execveat (int __fd, const char *__path, char *const __argv[],
+    If AT_EACCESS is set in FLAG, then use effective IDs like `eaccess',
+    otherwise use real IDs like `access'.  */
+ extern int faccessat (int __fd, const char *__file, int __type, int __flag)
+-     __THROW __wur;
++     __THROW __nonnull ((2)) __wur;
+ #endif /* Use GNU.  */
+ 
+ 
+@@ -510,7 +510,7 @@ extern int lchown (const char *__file, __uid_t __owner, __gid_t __group)
+    on.  */
+ extern int fchownat (int __fd, const char *__file, __uid_t __owner,
+ 		     __gid_t __group, int __flag)
+-     __THROW __wur;
++     __THROW __nonnull ((2)) __wur;
+ #endif /* Use GNU.  */
+ 
+ /* Change the process's working directory to PATH.  */
+
+commit e58294a5a7e37971ab3827efbd0469ac6a19e4b8
+Author: Sam James <sam@gentoo.org>
+Date:   Sat Aug 29 16:54:46 2026 +0100
+
+    io: drop nonnull attribute for fchmodat, faccessat, fchownat's path argument [BZ #34313]
+    
+    Since Linux 6.11, AT_EMPTY_PATH can be used for a NULL path argument, so
+    the nonnull attribute is no longer sound. Drop it.
+    
+    This bug was worked around in gnulib's 6db27b4dd36eda618db20e997ff56bbed7fce3cb.
+    
+    See also 55618e13968a60b89e5b226a23afaa8f17c5ef48 which fixed fstatat
+    in glibc.
+    
+    Bug: https://sourceware.org/PR34313
+    Reviewed-by: Paul Eggert <eggert@cs.ucla.edu>
+    (cherry picked from commit 5bcfeca12b295908453c9045965842feb9e63ced)
+
+diff --git a/io/sys/stat.h b/io/sys/stat.h
+index 3069e187b0..ff70b69f59 100644
+--- a/io/sys/stat.h
++++ b/io/sys/stat.h
+@@ -370,7 +370,7 @@ extern int fchmod (int __fd, __mode_t __mode) __THROW;
+    the directory FD is open on.  */
+ extern int fchmodat (int __fd, const char *__file, __mode_t __mode,
+ 		     int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use ATFILE.  */
+ 
+ 
+diff --git a/posix/unistd.h b/posix/unistd.h
+index 06a6a88b52..dc5c2ec009 100644
+--- a/posix/unistd.h
++++ b/posix/unistd.h
+@@ -307,7 +307,7 @@ extern int execveat (int __fd, const char *__path, char *const __argv[],
+    If AT_EACCESS is set in FLAG, then use effective IDs like `eaccess',
+    otherwise use real IDs like `access'.  */
+ extern int faccessat (int __fd, const char *__file, int __type, int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use GNU.  */
+ 
+ 
+@@ -510,7 +510,7 @@ extern int lchown (const char *__file, __uid_t __owner, __gid_t __group)
+    on.  */
+ extern int fchownat (int __fd, const char *__file, __uid_t __owner,
+ 		     __gid_t __group, int __flag)
+-     __THROW __nonnull ((2)) __wur;
++     __THROW __wur;
+ #endif /* Use GNU.  */
+ 
+ /* Change the process's working directory to PATH.  */
+
+commit e01330dcec96ddc3495bb3c62fe59e4fc9bbe083
+Author: Sam James <sam@gentoo.org>
+Date:   Sat Aug 29 17:02:29 2026 +0100
+
+    fcntl: drop nonnull attribute for openat, openat2's path argument [BZ #34313]
+    
+    .. and openat64.
+    
+    Linux 7.2 (31cf44efa6df72a524b40adefb80539f3a4e13ba) allows openat, openat2
+    to take a NULL path with the new O_EMPTYPATH flag, so the nonnull attribute
+    is no longer sound. Drop it.
+    
+    Bug: https://sourceware.org/PR34313
+    Reviewed-by: Paul Eggert <eggert@cs.ucla.edu>
+    (cherry picked from commit f750ffab2f76ae10575cde110b4069ae7009667f)
+
+diff --git a/include/fcntl.h b/include/fcntl.h
+index be435047bc..86890a5b3d 100644
+--- a/include/fcntl.h
++++ b/include/fcntl.h
+@@ -20,11 +20,9 @@ extern int __fcntl (int __fd, int __cmd, ...);
+ libc_hidden_proto (__fcntl)
+ extern int __fcntl64 (int __fd, int __cmd, ...) attribute_hidden;
+ libc_hidden_proto (__fcntl64)
+-extern int __openat (int __fd, const char *__file, int __oflag, ...)
+-  __nonnull ((2));
++extern int __openat (int __fd, const char *__file, int __oflag, ...);
+ libc_hidden_proto (__openat)
+-extern int __openat64 (int __fd, const char *__file, int __oflag, ...)
+-  __nonnull ((2));
++extern int __openat64 (int __fd, const char *__file, int __oflag, ...);
+ libc_hidden_proto (__openat64)
+ 
+ extern int __open_2 (const char *__path, int __oflag);
+diff --git a/io/bits/fcntl2.h b/io/bits/fcntl2.h
+index f076cc3367..074c16b204 100644
+--- a/io/bits/fcntl2.h
++++ b/io/bits/fcntl2.h
+@@ -135,18 +135,14 @@ open64 (__fortify_clang_overload_arg (const char *, ,__path), int __oflag,
+ 
+ #ifdef __USE_ATFILE
+ # ifndef __USE_FILE_OFFSET64
+-extern int __openat_2 (int __fd, const char *__path, int __oflag)
+-     __nonnull ((2));
++extern int __openat_2 (int __fd, const char *__path, int __oflag);
+ extern int __REDIRECT (__openat_alias, (int __fd, const char *__path,
+-					int __oflag, ...), openat)
+-     __nonnull ((2));
++					int __oflag, ...), openat);
+ # else
+ extern int __REDIRECT (__openat_2, (int __fd, const char *__path,
+-				    int __oflag), __openat64_2)
+-     __nonnull ((2));
++				    int __oflag), __openat64_2);
+ extern int __REDIRECT (__openat_alias, (int __fd, const char *__path,
+-					int __oflag, ...), openat64)
+-     __nonnull ((2));
++					int __oflag, ...), openat64);
+ # endif
+ 
+ # ifdef __va_arg_pack_len
+diff --git a/io/fcntl.h b/io/fcntl.h
+index d0ad4d6652..3d90cc9adb 100644
+--- a/io/fcntl.h
++++ b/io/fcntl.h
+@@ -230,19 +230,17 @@ extern int open64 (const char *__file, int __oflag, ...) __nonnull ((1));
+    This function is a cancellation point and therefore not marked with
+    __THROW.  */
+ # ifndef __USE_FILE_OFFSET64
+-extern int openat (int __fd, const char *__file, int __oflag, ...)
+-     __nonnull ((2));
++extern int openat (int __fd, const char *__file, int __oflag, ...);
+ # else
+ #  ifdef __REDIRECT
+ extern int __REDIRECT (openat, (int __fd, const char *__file, int __oflag,
+-				...), openat64) __nonnull ((2));
++				...), openat64);
+ #  else
+ #   define openat openat64
+ #  endif
+ # endif
+ # ifdef __USE_LARGEFILE64
+-extern int openat64 (int __fd, const char *__file, int __oflag, ...)
+-     __nonnull ((2));
++extern int openat64 (int __fd, const char *__file, int __oflag, ...);
+ # endif
+ #endif
+ 
+diff --git a/sysdeps/unix/sysv/linux/bits/fcntl-linux-fortify.h b/sysdeps/unix/sysv/linux/bits/fcntl-linux-fortify.h
+index 4c8f3a874e..b12b5b75da 100644
+--- a/sysdeps/unix/sysv/linux/bits/fcntl-linux-fortify.h
++++ b/sysdeps/unix/sysv/linux/bits/fcntl-linux-fortify.h
+@@ -25,7 +25,7 @@
+ extern int __REDIRECT (__openat2_alias, (int __dfd, const char *__filename,
+ 					 const struct open_how *__how,
+ 					 size_t __usize), openat2)
+-     __nonnull ((2, 3));
++     __nonnull ((3));
+ 
+ #if !__fortify_use_clang
+ __errordecl (__openat2_invalid_size,
+diff --git a/sysdeps/unix/sysv/linux/bits/fcntl-linux.h b/sysdeps/unix/sysv/linux/bits/fcntl-linux.h
+index 587b815124..6aaa6cc4e7 100644
+--- a/sysdeps/unix/sysv/linux/bits/fcntl-linux.h
++++ b/sysdeps/unix/sysv/linux/bits/fcntl-linux.h
+@@ -485,7 +485,7 @@ extern int open_by_handle_at (int __mountdirfd, struct file_handle *__handle,
+ extern int openat2 (int __dfd, const char * __filename,
+ 		    const struct open_how * __how,
+ 		    __SIZE_TYPE__ __usize)
+-     __nonnull ((2, 3));
++     __nonnull ((3));
+ 
+ #endif	/* use GNU */
+ 
+
+commit 1f5026241027260e9280039698bca031484c82ad
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Sep 14 17:08:03 2026 -0300
+
+    resolv: Fix assertion failure on search list truncation [BZ 31026, CVE-2026-8674]
+    
+    update_from_conf copies the search list into the 256-byte
+    resp->defdname and truncates it when an entry does not fit, then
+    asserts that resolv_conf_matches accepts the result.
+    
+    The truncation check there compared the accumulated size against
+    sizeof (resp->dnsrch) (the pointer array) instead of resp->defdname,
+    and the empty-list case did not account for a first entry that does
+    not fit at all.  A long search domain in resolv.conf or LOCALDOMAIN
+    thus aborts any process using the resolver.
+    
+    Check whether the entry fits in the remaining defdname space, matching
+    alloc_buffer_copy_string, and also accept an empty resp->dnsrch when
+    the first entry is too long.  Add tests covering both cases through
+    the search and domain directives.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    
+    (cherry picked from commit 506ea57086bfb9ce3daff1c14246a1cb532aba0a)
+
+diff --git a/resolv/resolv_conf.c b/resolv/resolv_conf.c
+index d33f32ac1a..a688d4223b 100644
+--- a/resolv/resolv_conf.c
++++ b/resolv/resolv_conf.c
+@@ -281,8 +281,12 @@ resolv_conf_matches (const struct __res_state *resp,
+   {
+     if (resp->dnsrch[0] == NULL)
+       {
+-        /* Empty search list.  No default domain name.  */
+-        return conf->search_list_size == 0 && resp->defdname[0] == '\0';
++        /* Empty search list, or the first entry does not fit in
++           resp->defdname.  No default domain name.  */
++        return resp->defdname[0] == '\0'
++          && (conf->search_list_size == 0
++              || (strlen (conf->search_list[0]) + 1
++                  > sizeof (resp->defdname)));
+       }
+ 
+     if (resp->dnsrch[0] != resp->defdname)
+@@ -309,11 +313,12 @@ resolv_conf_matches (const struct __res_state *resp,
+           }
+         else
+           {
+-            /* resp->dnsrch is truncated if the number of elements
+-               exceeds MAXDNSRCH, or if the combined storage space for
+-               the search list exceeds what can be stored in
+-               resp->defdname.  */
+-            if (i == MAXDNSRCH || search_list_size > sizeof (resp->dnsrch))
++            /* resp->dnsrch is truncated if the number of elements exceeds
++               MAXDNSRCH, or if conf->search_list[i] does not fit in the
++               remaining space of resp->defdname.  */
++            if (i == MAXDNSRCH
++                || (search_list_size + strlen (conf->search_list[i]) + 1
++                    > sizeof (resp->defdname)))
+               break;
+             /* Otherwise, a mismatch indicates a match failure.  */
+             return false;
+diff --git a/resolv/tst-resolv-res_init-skeleton.c b/resolv/tst-resolv-res_init-skeleton.c
+index 1e4c59dac9..e51a532c7e 100644
+--- a/resolv/tst-resolv-res_init-skeleton.c
++++ b/resolv/tst-resolv-res_init-skeleton.c
+@@ -724,6 +724,41 @@ struct test_case test_cases[] =
+      "nameserver 192.0.2.1\n"
+      "; nameserver[0]: [192.0.2.1]:53\n"
+     },
++/* Search list entries which do not fit in the legacy 256-byte
++   resp->defdname buffer (bug 31026).  LONG244 is 244 characters long,
++   so it does not fit after "example.com\0" (12 bytes).  LONG256 is 256
++   characters long, so it does not fit even as the first entry.  */
++#define LBL63 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
++#define LONG244 LBL63 "." LBL63 "." LBL63 "." \
++  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
++#define LONG256 LBL63 "." LBL63 "." LBL63 "." LBL63 "a"
++    {.name = "search list truncated at long entry after short entry",
++     .conf = "nameserver 192.0.2.1\n"
++     "search example.com " LONG244 "\n",
++     .expected = "search example.com\n"
++     "; search[0]: example.com\n"
++     "; search[1]: " LONG244 "\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++    {.name = "search list truncated at long first entry",
++     .conf = "nameserver 192.0.2.1\n"
++     "search " LONG256 " example.com\n",
++     .expected = "; search[0]: " LONG256 "\n"
++     "; search[1]: example.com\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++    {.name = "long first entry from the domain directive",
++     .conf = "nameserver 192.0.2.1\n"
++     "domain " LONG256 "\n",
++     .expected = "; search[0]: " LONG256 "\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++#undef LONG256
++#undef LONG244
++#undef LBL63
+     {.name = "trust-ad flag",
+      .conf = "options trust-ad\n"
+      "nameserver 192.0.2.1\n",
+
+commit 6b48c0b29c359dfa84c09c32373a48c8f663c304
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Aug 17 15:15:32 2026 -0300
+
+    elf: Open the normalized $ORIGIN rpath in AT_SECURE programs (BZ 34360)
+    
+    For AT_SECURE programs the loader honors $ORIGIN in DT_RPATH only when the
+    expansion is rooted in a trusted directory, but it validated the lexically
+    normalized path while opening the raw expansion.  As "a/b/../c" only names
+    "a/c" when "b" is not a symlink, an attacker who controls a component of
+    $ORIGIN -- e.g. by hard-linking the setuid binary into an attacker-owned
+    directory -- can make the opened path escape the trusted directory even
+    though the check passed, loading an attacker-controlled object.
+    
+    Normalize the expansion in place and open that, so the path that is opened
+    is exactly the path that was validated.  _dl_normalize_path rewrites the
+    string in place without ever advancing its write cursor past its read
+    cursor or appending, so it stays within the original storage.
+    
+    Add elf/tst-origin-secure as a regression test.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit ed0c137b97eb940b4b64981e84ed806d3276edd9)
+
+diff --git a/elf/Makefile b/elf/Makefile
+index f1a8a75fdc..a9cafed56d 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -567,6 +567,7 @@ tests-internal += \
+   tst-audit19a \
+   tst-create_format1 \
+   tst-dl-hwcaps_split \
++  tst-dl-path-normalize \
+   tst-dl_find_object \
+   tst-dl_find_object-threads \
+   tst-dlmopen2 \
+@@ -592,6 +593,7 @@ tests-container += \
+   tst-dlopen-self-container \
+   tst-dlopen-tlsmodid-container \
+   tst-ldconfig-cache \
++  tst-origin-secure \
+   tst-pldd \
+   tst-preload-pthread-libc \
+   tst-ptrguard-static-dlopen \
+@@ -600,6 +602,7 @@ tests-container += \
+   # tests-container
+ 
+ test-srcs = \
++  tst-origin-secure-victim \
+   tst-pathopt \
+   tst-sprof-basic \
+   # tests-srcs
+@@ -840,6 +843,7 @@ modules-names += \
+   libtracemod3-1 \
+   libtracemod4-1 \
+   libtracemod5-1 \
++  libtst-origin-secure-mod \
+   ltglobmod1 \
+   ltglobmod2 \
+   neededobj1 \
+@@ -1035,6 +1039,7 @@ modules-names += \
+   tst-nodeps2-mod \
+   tst-non-directory-mod \
+   tst-null-argv-lib \
++  tst-origin-secure-evilmod \
+   tst-p_alignmod-base \
+   tst-p_alignmod3 \
+   tst-ptrguard-static-dlopen-mod \
+@@ -3773,3 +3778,16 @@ $(objpfx)tst-dl-debug-exclude.out: tst-dl-debug-exclude.sh \
+ 		 $(objpfx)tst-recursive-tls > $@; \
+ 	$(evaluate-test)
+ endif
++
++LDFLAGS-libtst-origin-secure-mod.so += -Wl,-soname,libtst-origin-secure-mod.so
++LDFLAGS-tst-origin-secure-evilmod.so += -Wl,-soname,libtst-origin-secure-mod.so
++$(objpfx)tst-origin-secure-victim: $(objpfx)libtst-origin-secure-mod.so
++# The number of "../" here must match the layout invariants described in
++# tst-origin-secure.c.
++LDFLAGS-tst-origin-secure-victim += \
++  -Wl,--no-as-needed \
++  -Wl,-rpath,\$$ORIGIN/sub/../../../../..$(slibdir)/tst-origin-secure \
++  -Wl,--disable-new-dtags
++$(objpfx)tst-origin-secure.out: $(objpfx)tst-origin-secure-victim \
++			       $(objpfx)libtst-origin-secure-mod.so \
++			       $(objpfx)tst-origin-secure-evilmod.so
+diff --git a/elf/dl-load.c b/elf/dl-load.c
+index 95404adae9..471478649b 100644
+--- a/elf/dl-load.c
++++ b/elf/dl-load.c
+@@ -34,6 +34,7 @@
+ #include <gnu/lib-names.h>
+ #include <dl-tunables.h>
+ #include <dl-scratch-buffer.h>
++#include <dl-path-normalize.h>
+ 
+ #include "dynamic-link.h"
+ #include "get-dynamic-info.h"
+@@ -91,67 +92,30 @@ static const size_t system_dirs_len[] =
+ };
+ #define nsystem_dirs_len array_length (system_dirs_len)
+ 
++/* Return true if the normalized path NPATH of length NLEN is rooted in one of
++   the trusted system directories.  The system_dirs entries carry a trailing
++   '/'; NPATH matches an entry when it shares the entry's leading component
++   sequence and then either ends or continues with '/'.  For instance,
++   "/lib64" and "/lib64/x" match "/lib64/" but "/lib64x" does not.  */
+ static bool
+-is_trusted_path_normalize (const char *path, size_t len)
++path_is_trusted (const char *npath, size_t nlen)
+ {
+-  if (len == 0)
+-    return false;
+-
+-  struct dl_scratch_buffer scratch = dl_scratch_buffer_init ();
+-  dl_scratch_buffer_allocate (&scratch, len + 2, 0);
+-  char *npath = scratch.data;
+-  char *wnp = npath;
+-  while (*path != '\0')
+-    {
+-      if (path[0] == '/')
+-	{
+-	  if (path[1] == '.')
+-	    {
+-	      if (path[2] == '.' && (path[3] == '/' || path[3] == '\0'))
+-		{
+-		  while (wnp > npath && *--wnp != '/')
+-		    ;
+-		  path += 3;
+-		  continue;
+-		}
+-	      else if (path[2] == '/' || path[2] == '\0')
+-		{
+-		  path += 2;
+-		  continue;
+-		}
+-	    }
+-
+-	  if (wnp > npath && wnp[-1] == '/')
+-	    {
+-	      ++path;
+-	      continue;
+-	    }
+-	}
+-
+-      *wnp++ = *path++;
+-    }
+-
+-  if (wnp == npath || wnp[-1] != '/')
+-    *wnp++ = '/';
+-
+-  bool result = false;
+   const char *trun = system_dirs;
+ 
+   for (size_t idx = 0; idx < nsystem_dirs_len; ++idx)
+     {
+-      if (wnp - npath >= system_dirs_len[idx]
+-	  && memcmp (trun, npath, system_dirs_len[idx]) == 0)
+-	{
+-	  /* Found it.  */
+-	  result = true;
+-	  break;
+-	}
++      /* Compare against the entry without its trailing '/'.  */
++      size_t dirlen = system_dirs_len[idx] - 1;
++
++      if (nlen >= dirlen
++	  && memcmp (trun, npath, dirlen) == 0
++	  && (npath[dirlen] == '/' || npath[dirlen] == '\0'))
++	return true;
+ 
+       trun += system_dirs_len[idx] + 1;
+     }
+ 
+-  dl_scratch_buffer_free (&scratch);
+-  return result;
++  return false;
+ }
+ 
+ /* Given a substring starting at INPUT, just after the DST '$' start
+@@ -335,16 +299,21 @@ _dl_dst_substitute (struct link_map *l, const char *input, char *result)
+      checked for trust, the authors of the binaries themselves are
+      trusted to have designed this correctly.  Only $ORIGIN is tested in
+      this way because it may be manipulated in some ways with hard
+-     links.  */
+-  if (__glibc_unlikely (check_for_trusted)
+-      && !is_trusted_path_normalize (result, wp - result))
+-    {
+-      *result = '\0';
+-      return result;
+-    }
++     links.
++
++     _dl_normalize_path replaces the expansion with its normalized form
++     in place, so that the path that is opened is exactly the path that
++     was validated.  */
+ 
+   *wp = '\0';
+ 
++  if (__glibc_unlikely (check_for_trusted))
++    {
++      size_t nlen = _dl_normalize_path (result);
++      if (!path_is_trusted (result, nlen))
++	*result = '\0';
++    }
++
+   return result;
+ }
+ 
+diff --git a/elf/dl-path-normalize.h b/elf/dl-path-normalize.h
+new file mode 100644
+index 0000000000..ca4b14698c
+--- /dev/null
++++ b/elf/dl-path-normalize.h
+@@ -0,0 +1,118 @@
++/* In-place lexical path normalization for the dynamic loader.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#ifndef _DL_PATH_NORMALIZE_H
++#define _DL_PATH_NORMALIZE_H
++
++#include <stddef.h>
++#include <string.h>
++
++/* Lexically normalize the null-terminated PATH in place and return the
++   length of the result (excluding the terminating NUL byte):
++
++   - Runs of '/' are collapsed to a single '/'.
++
++   - "." components are removed.
++
++   - A ".." component removes the preceding component if there is one and it
++     is not itself a preserved "..".  In an absolute path a surplus ".." at
++     the root is dropped ("/../a" normalizes to "/a"), in a relative path
++     leading ".." components are preserved ("../a" stays "../a", "a/../../b"
++     normalizes to "../b").
++
++   - The result has no trailing '/' except for the root path "/" itself
++     ("/a/" normalizes to "/a").
++
++   - The result is empty if and only if every component cancels or is removed
++     ("", ".", "a/.." all normalize to "").
++
++   The PATH is written in place, and the internal write cursor never runs
++   ahead of the read cursor.  Only bytes within the strlen (PATH) + 1 storage
++   are accessed.  */
++static inline size_t
++_dl_normalize_path (char *path)
++{
++  /* The root '/' of an absolute path is not removed.  */
++  char *pstart = path + (path[0] == '/');
++  const char *rnp = pstart;
++  char *wnp = pstart;
++  /* End of the prefix a ".." may not remove.  Either the root '/', or, for
++     relative paths, the original start of the string extended by any
++     preserved leading ".." components.  */
++  char *limit = pstart;
++
++  while (*rnp != '\0')
++    {
++      /* Collapse consecutive separators.  */
++      if (*rnp == '/')
++	{
++	  ++rnp;
++	  continue;
++	}
++
++      /* [RNP, REND) is the next input component.  */
++      const char *rend = rnp;
++      while (*rend != '\0' && *rend != '/')
++	++rend;
++      size_t clen = rend - rnp;
++
++      /* Drop '.' component.  */
++      if (clen == 1 && rnp[0] == '.')
++	;
++      else if (clen == 2 && rnp[0] == '.' && rnp[1] == '.')
++	{
++	  if (wnp > limit)
++	    {
++	      /* Remove the last component along with the '/' separating it
++		 from its predecessor (the root '/' of an absolute path is
++		 retained).  */
++	      while (wnp > limit && wnp[-1] != '/')
++		--wnp;
++	      if (wnp > pstart)
++		--wnp;
++	    }
++	  else if (pstart == path)
++	    {
++	      /* No component is left and the original path is relative:
++		 keep the unresolvable ".." (it becomes part of the
++		 preserved prefix).  */
++	      if (wnp > pstart)
++		*wnp++ = '/';
++	      *wnp++ = '.';
++	      *wnp++ = '.';
++	      limit = wnp;
++	    }
++	  /* Otherwise the path is absolute and the surplus ".." at the
++	     root is dropped ("/../a" normalizes to "/a").  */
++	}
++      else
++	{
++	  if (wnp > pstart)
++	    *wnp++ = '/';
++	  memmove (wnp, rnp, clen);
++	  wnp += clen;
++	}
++
++      rnp = rend;
++    }
++
++  *wnp = '\0';
++  return wnp - path;
++}
++
++#endif /* _DL_PATH_NORMALIZE_H */
+diff --git a/elf/libtst-origin-secure-mod.c b/elf/libtst-origin-secure-mod.c
+new file mode 100644
+index 0000000000..8d7f372094
+--- /dev/null
++++ b/elf/libtst-origin-secure-mod.c
+@@ -0,0 +1,25 @@
++/* Module for tst-origin-secure (the "good" copy).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-origin-secure.h"
++
++int
++origin_secure_id (void)
++{
++  return ORIGIN_SECURE_ID_TRUSTED;
++}
+diff --git a/elf/tst-dl-path-normalize.c b/elf/tst-dl-path-normalize.c
+new file mode 100644
+index 0000000000..f6d45d654f
+--- /dev/null
++++ b/elf/tst-dl-path-normalize.c
+@@ -0,0 +1,142 @@
++/* Unit tests for dl-path-normalize.h.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <dl-path-normalize.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++
++static void
++check_one_guarded (const char *input, const char *expected, bool before)
++{
++  size_t size = strlen (input) + 1;
++  struct support_next_to_fault ntf
++    = before ? support_next_to_fault_allocate_before (size)
++	     : support_next_to_fault_allocate (size);
++  memcpy (ntf.buffer, input, size);
++
++  size_t len = _dl_normalize_path (ntf.buffer);
++
++  TEST_COMPARE (len, strlen (ntf.buffer));
++  TEST_COMPARE_STRING (ntf.buffer, expected);
++
++  support_next_to_fault_free (&ntf);
++}
++
++static void
++check_one (const char *input, const char *expected)
++{
++  /* Check that _dl_normalize_path does not access the string outside the
++     input argument.  It checks for both over-runs and under-runs (the
++     latter for the case of '..' expansions).  */
++  check_one_guarded (input, expected, false);
++  check_one_guarded (input, expected, true);
++}
++
++static int
++do_test (void)
++{
++  /* Absolute paths.  */
++  check_one ("/", "/");
++  check_one ("//", "/");
++  check_one ("///", "/");
++  check_one ("////", "/");
++  check_one ("/a", "/a");
++  check_one ("/a/", "/a");
++  check_one ("/a//", "/a");
++  check_one ("//a//b//", "/a/b");
++  check_one ("/.", "/");
++  check_one ("/./", "/");
++  check_one ("/./a", "/a");
++  check_one ("/a/./b", "/a/b");
++  check_one ("/a/.", "/a");
++  check_one ("/..", "/");
++  check_one ("/../", "/");
++  check_one ("/../a", "/a");
++  check_one ("/a/..", "/");
++  check_one ("/a/../", "/");
++  check_one ("/a/../..", "/");
++  check_one ("/a/../b", "/b");
++  check_one ("/a/../../b", "/b");
++  check_one ("/a/b/../../c", "/c");
++  check_one ("/a/b/../c", "/a/c");
++  check_one ("/a/b/c/../..", "/a");
++  check_one ("/usr/lib/../lib64", "/usr/lib64");
++  check_one ("/usr/lib/../lib64/", "/usr/lib64");
++  check_one ("/usr/lib/..//lib64/", "/usr/lib64");
++  check_one ("/usr/lib/../../lib64/", "/lib64");
++
++  /* "." and ".." are special only as complete components.  */
++  check_one ("/a..", "/a..");
++  check_one ("/..a", "/..a");
++  check_one ("/a/...", "/a/...");
++  check_one ("/.../a", "/.../a");
++  check_one ("/a./b", "/a./b");
++  check_one (".a", ".a");
++  check_one ("a.", "a.");
++  check_one ("..a", "..a");
++  check_one ("...", "...");
++
++  /* Relative paths.  */
++  check_one ("", "");
++  check_one (".", "");
++  check_one ("./", "");
++  check_one ("..", "..");
++  check_one ("../", "..");
++  check_one ("a", "a");
++  check_one ("a/", "a");
++  check_one ("a//b", "a/b");
++  check_one ("a..", "a..");
++  check_one ("./a", "a");
++  check_one ("./.", "");
++  check_one ("./..", "..");
++
++  check_one ("a/..", "");
++  check_one ("a/../", "");
++  check_one ("ab/..", "");
++  check_one (".a/..", "");
++  check_one ("a./..", "");
++  check_one (".../..", "");
++  check_one ("a/./..", "");
++  check_one ("a/b/..", "a");
++  check_one ("abc/def/..", "abc");
++
++  /* Appending a component to an emptied relative output must not produce a
++     leading '/' (the path must stay relative).  */
++  check_one ("a/../b", "b");
++  check_one ("a/.././b", "b");
++  check_one ("a/../lib64/b", "lib64/b");
++
++  /* Leading ".." components of a relative path are preserved and stack
++     instead of cancelling each other; ordinary components may follow and be
++     removed again afterwards.  */
++  check_one ("../a", "../a");
++  check_one ("../..", "../..");
++  check_one ("../../..", "../../..");
++  check_one ("../../a", "../../a");
++  check_one ("../a/..", "..");
++  check_one ("../../a/..", "../..");
++  check_one ("a/../../b", "../b");
++  check_one ("a/b/../../..", "..");
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/elf/tst-origin-secure-evilmod.c b/elf/tst-origin-secure-evilmod.c
+new file mode 100644
+index 0000000000..0913e32e21
+--- /dev/null
++++ b/elf/tst-origin-secure-evilmod.c
+@@ -0,0 +1,28 @@
++/* Module for tst-origin-secure (the attacker-controlled copy).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-origin-secure.h"
++
++/* If the victim reports this copy, the loader opened the un-normalized rpath
++   and resolved it through the attacker's symlink -- i.e. the trusted-path
++   check was bypassed (bug 34360).  */
++int
++origin_secure_id (void)
++{
++  return ORIGIN_SECURE_ID_ATTACKER;
++}
+diff --git a/elf/tst-origin-secure-victim.c b/elf/tst-origin-secure-victim.c
+new file mode 100644
+index 0000000000..601265aaa4
+--- /dev/null
++++ b/elf/tst-origin-secure-victim.c
+@@ -0,0 +1,43 @@
++/* Victim program for tst-origin-secure.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include "tst-origin-secure.h"
++
++extern int __libc_enable_secure;
++
++/* Report both which module was loaded and whether the loader ran in secure
++   mode, so the driver can tell a genuine trusted-path bypass apart from a run
++   that simply was not secure.
++
++   The exit status is the combination of the ORIGIN_SECURE_STATUS_* bits:
++
++     _NONE                    trusted copy, not secure
++     _ATTACKER                attacker copy, not secure  (the control run)
++     _SECURE                  trusted copy, secure       (a fixed loader)
++     _SECURE | _ATTACKER      attacker copy, secure      (the bug: the raw
++                                                          rpath was opened)  */
++int
++main (void)
++{
++  int status = ORIGIN_SECURE_STATUS_NONE;
++  if (origin_secure_id () == ORIGIN_SECURE_ID_ATTACKER)
++    status |= ORIGIN_SECURE_STATUS_ATTACKER;
++  if (__libc_enable_secure != 0)
++    status |= ORIGIN_SECURE_STATUS_SECURE;
++  return status;
++}
+diff --git a/elf/tst-origin-secure.c b/elf/tst-origin-secure.c
+new file mode 100644
+index 0000000000..f304823b49
+--- /dev/null
++++ b/elf/tst-origin-secure.c
+@@ -0,0 +1,203 @@
++/* Test that AT_SECURE $ORIGIN rpath entries are looked up using the
++   normalized (trusted) path, not the raw expansion (bug 34360).
++
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++
++/* For a SUID/SGID program the loader only honors $ORIGIN in DT_RPATH when
++   the normalized expansion is rooted in a trusted directory.  If the loader
++   opens the un-normalized string (that contains "../"), it might disagree
++   as soon as a path component is a symbolic link.
++
++   This test builds the executable with the rpath:
++
++     $ORIGIN/sub/../../../../..SLIBDIR/tst-origin-secure
++
++   and runs it as BASE/a/b/victim, so $ORIGIN is BASE/a/b.  Lexically the
++   five "../" pop $ORIGIN/sub back to "/" (BASE is /tmp/tst-origin-secure,
++   so $ORIGIN/sub is the five components tmp, tst-origin-secure, a, b, sub),
++   and the entry normalizes to the trusted SLIBDIR/tst-origin-secure.  But
++   "sub" is a symlink pointing six levels deep under BASE, so opening the raw
++   string makes the kernel resolve the "../" through the symlink and land in
++   BASE/x1 SLIBDIR/tst-origin-secure instead.
++
++   The "../" count in the rpath (see the Makefile) is therefore
++   depth(BASE) + 2 (for the "a/b" of $ORIGIN) + 1 (for "sub"); it is
++   independent of SLIBDIR, which is appended whole on both the raw and the
++   normalized side.
++
++   A trusted copy of the module (ORIGIN_SECURE_ID_TRUSTED) is installed in
++   SLIBDIR/tst-origin-secure; an attacker copy (ORIGIN_SECURE_ID_ATTACKER) is
++   placed at the symlink-diverted location.  The trusted subdirectory is
++   rooted under SLIBDIR (so it passes the trusted-path check) but is not
++   itself a default loader search directory.
++
++   The victim reports, in its exit status, both which module it loaded and
++   whether it ran in secure mode.
++
++   Secure mode is forced with glibc.rtld.enable_secure=1 so that no real
++   SUID/SGID binary is required.  */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <sys/wait.h>
++
++#include <support/capture_subprocess.h>
++#include <support/check.h>
++#include <support/support.h>
++#include <support/xunistd.h>
++#include "tst-origin-secure.h"
++
++#define BASE   "/tmp/tst-origin-secure"
++#define SONAME "libtst-origin-secure-mod.so"
++/* Subdirectory of the trusted SLIBDIR that the rpath normalizes to.  It is
++   trusted (rooted under SLIBDIR) but not a default search directory.  */
++#define SUBDIR "tst-origin-secure"
++
++static int
++run_victim (char *const *envp)
++{
++  const char *victim = BASE "/a/b/victim";
++  char *const argv[] = { (char *) victim, NULL };
++
++  struct support_capture_subprocess res
++    = support_capture_subprogram (victim, argv, envp);
++  /* The victim itself prints nothing; forward any loader diagnostics to
++     the test log.  */
++  if (res.err.length > 0)
++    printf ("info: victim stderr: %s\n", res.err.buffer);
++  int status = res.status;
++  support_capture_subprocess_free (&res);
++  return WIFEXITED (status) ? WEXITSTATUS (status) : -1;
++}
++
++/* With SLIBDIR "/lib64" the container layout is:
++
++     /lib64/tst-origin-secure/libtst-origin-secure-mod.so   trusted copy (id 1)
++     BASE/a/b/victim                                        the executable
++     BASE/a/b/sub -> BASE/x1/x2/x3/x4/x5/x6                 six levels deep
++     BASE/x1/lib64/tst-origin-secure/libtst-origin-secure-mod.so
++                                                            attacker copy (id 2)
++     BASE/x1/x2/x3/x4/x5/x6/                                the symlink target
++
++   The victim's rpath is $ORIGIN/sub + five "../" + /lib64/tst-origin-secure.  */
++static void
++do_prepare (int argc, char **argv)
++{
++  const char *slibdir = support_slibdir_prefix;
++  const char *objelf = support_objdir_root;
++
++  char *good_src = xasprintf ("%s/elf/libtst-origin-secure-mod.so", objelf);
++  char *evil_src = xasprintf ("%s/elf/tst-origin-secure-evilmod.so", objelf);
++  char *victim_src = xasprintf ("%s/elf/tst-origin-secure-victim", objelf);
++
++  xmkdirp (BASE "/a/b", 0755);
++  xmkdirp (BASE "/x1/x2/x3/x4/x5/x6", 0755);
++
++  /* Where the trusted copy lives (reached only via the normalized rpath,
++     SLIBDIR/SUBDIR) ...  */
++  char *good_dir = xasprintf ("%s/%s", slibdir, SUBDIR);
++  char *good_dst = xasprintf ("%s/%s", good_dir, SONAME);
++  xmkdirp (good_dir, 0755);
++  /* ... and where the raw, symlink-diverted lookup lands.  */
++  char *evil_dir = xasprintf ("%s/x1%s/%s", BASE, slibdir, SUBDIR);
++  char *evil_dst = xasprintf ("%s/%s", evil_dir, SONAME);
++  xmkdirp (evil_dir, 0755);
++
++  /* support_copy_file preserves the source mode, so the victim stays
++     executable and the modules readable; no chmod is needed.  */
++  support_copy_file (good_src, good_dst);
++  support_copy_file (evil_src, evil_dst);
++  support_copy_file (victim_src, BASE "/a/b/victim");
++
++  unlink (BASE "/a/b/sub");
++  xsymlink (BASE "/x1/x2/x3/x4/x5/x6", BASE "/a/b/sub");
++
++  free (good_src);
++  free (evil_src);
++  free (victim_src);
++  free (good_dir);
++  free (good_dst);
++  free (evil_dir);
++  free (evil_dst);
++}
++#define PREPARE do_prepare
++
++static int
++do_test (void)
++{
++  /* Control run: in normal mode $ORIGIN is honored without the trusted check,
++     so the raw rpath resolves through "sub" and the attacker copy is
++     loaded.  */
++  {
++    char *const env[] = { NULL };
++    int rc = run_victim (env);
++    if (rc != ORIGIN_SECURE_STATUS_ATTACKER)
++      FAIL_EXIT1 ("control run returned status %d, expected %d (attacker "
++		  "copy, not secure): the $ORIGIN layout does not reproduce "
++		  "the divergence between the raw and the normalized rpath",
++		  rc, ORIGIN_SECURE_STATUS_ATTACKER);
++  }
++
++  /* Secure run: force AT_SECURE.  A fixed loader normalizes the rpath to the
++     trusted SLIBDIR/SUBDIR and loads the trusted copy; a loader with the bug
++     opens the raw path, resolves "sub", and loads the attacker copy.  */
++  {
++    char *const env[] = { (char *) "GLIBC_TUNABLES=glibc.rtld.enable_secure=1",
++			  NULL };
++    int rc = run_victim (env);
++    switch (rc)
++      {
++      /* Secure, trusted copy loaded via the normalized rpath: fixed.  */
++      case ORIGIN_SECURE_STATUS_SECURE:
++	break;
++
++      /* Secure, attacker copy loaded: the raw rpath was opened.  */
++      case ORIGIN_SECURE_STATUS_SECURE | ORIGIN_SECURE_STATUS_ATTACKER:
++	FAIL_EXIT1 ("secure-mode loader resolved the un-normalized rpath "
++		    "through the attacker symlink (bug 34360)");
++
++      /* Not secure, attacker copy: exactly what the control run produced, so
++	 the tunable did not engage and this run says nothing about the
++	 trusted-path handling.  */
++      case ORIGIN_SECURE_STATUS_ATTACKER:
++	FAIL_UNSUPPORTED ("glibc.rtld.enable_secure=1 did not enable "
++			  "secure mode (victim status %d)", rc);
++
++      /* Not secure, yet the trusted copy was loaded, which is reachable only
++	 through the normalized rpath, and only a secure loader normalizes it.
++	 Fail rather than report UNSUPPORTED.  */
++      case ORIGIN_SECURE_STATUS_NONE:
++	FAIL_EXIT1 ("secure run loaded the trusted copy but the victim "
++		    "reports not being secure: __libc_enable_secure is no "
++		    "longer a valid proxy for secure mode");
++
++      /* Neither copy loaded: since the trusted copy is reachable only through
++	 the normalized rpath, this means the rpath entry was not honored at
++	 all.  */
++      default:
++	FAIL_EXIT1 ("secure run did not load the module via the normalized "
++		    "rpath (victim status %d)", rc);
++      }
++  }
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/elf/tst-origin-secure.h b/elf/tst-origin-secure.h
+new file mode 100644
+index 0000000000..2e2b944607
+--- /dev/null
++++ b/elf/tst-origin-secure.h
+@@ -0,0 +1,41 @@
++/* Definitions shared by the tst-origin-secure test, its victim and modules.
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#ifndef _TST_ORIGIN_SECURE_H
++#define _TST_ORIGIN_SECURE_H 1
++
++enum
++  {
++    ORIGIN_SECURE_ID_TRUSTED = 1,  /* The copy installed in the trusted
++				      SLIBDIR.  */
++    ORIGIN_SECURE_ID_ATTACKER = 2, /* The copy reachable only by resolving the
++				      "sub" symlink.  */
++  };
++
++extern int origin_secure_id (void);
++
++enum
++  {
++    ORIGIN_SECURE_STATUS_NONE = 0,
++    ORIGIN_SECURE_STATUS_ATTACKER = 1 << 0,  /* The victim loaded attacker
++						rather than the trusted.  */
++    ORIGIN_SECURE_STATUS_SECURE = 1 << 1,    /* The loader ran the victim in
++						secure mode.  */
++  };
++
++#endif
+diff --git a/elf/tst-origin-secure.root/postclean.req b/elf/tst-origin-secure.root/postclean.req
+new file mode 100644
+index 0000000000..e69de29bb2
+
+commit 1848099f063e99d4ffecbd7667766d54862398b9
+Author: Mark Wielaard <mark@klomp.org>
+Date:   Fri Sep 18 00:24:34 2026 +0200
+
+    stdlib: Don't call clearenv from __libc_setenv_freemem
+    
+    Since commit 7a61e7f557a9 ("stdlib: Make getenv thread-safe in more
+    cases") clearenv doesn't call any deallocation functions anymore.
+    __libc_setenv_freemem (called from __libc_freeres) now clears all
+    backing arrays. So there is no reason anymore to call clearenv from
+    __libc_setenv_freemem.
+    
+    Tested against valgrind memcheck with --run-libc-freeres=yes which is
+    the default.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit b837aae83df8fe80c8977b5ed5c538aebd2b152a)
+
+diff --git a/stdlib/setenv.c b/stdlib/setenv.c
+index 1f7a4498b0..cbf83f8f8e 100644
+--- a/stdlib/setenv.c
++++ b/stdlib/setenv.c
+@@ -384,9 +384,6 @@ clearenv (void)
+ void
+ __libc_setenv_freemem (void)
+ {
+-  /* Remove all traces.  */
+-  clearenv ();
+-
+   /* Clear all backing arrays.  */
+   while (__environ_array_list != NULL)
+     {
+
+commit 13fd9fe7df9783ef1471865786ecb841165b213e
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Aug 31 13:09:36 2026 -0300
+
+    Revert "posix: Add POSIX aliases to some spawn functions" (BZ 34437)
+    
+    This reverts commit 7594b4e5a75d41e891782aa7e3fb51924f6840cb.
+    
+    Reviewed-by: Andreas K. Huettel <dilfridge@gentoo.org>
+    (cherry picked from commit 24b18e1dfd46e05198a516133648fc18a49e3610)
+
+diff --git a/conform/data/spawn.h-data b/conform/data/spawn.h-data
+index 1f332324c2..43aa9cb8ae 100644
+--- a/conform/data/spawn.h-data
++++ b/conform/data/spawn.h-data
+@@ -29,10 +29,6 @@ function int posix_spawnattr_setpgroup (posix_spawnattr_t*, pid_t)
+ function int posix_spawnattr_setschedparam (posix_spawnattr_t*, const struct sched_param*)
+ function int posix_spawnattr_setschedpolicy (posix_spawnattr_t*, int)
+ function int posix_spawnattr_setsigmask (posix_spawnattr_t*, const sigset_t*)
+-#if defined XOPEN2K24 || defined POSIX2024
+-function int posix_spawn_file_actions_addchdir (posix_spawn_file_actions_t*, const char *)
+-function int posix_spawn_file_actions_addfchdir (posix_spawn_file_actions_t*, int)
+-#endif
+ function int posix_spawn_file_actions_addclose (posix_spawn_file_actions_t*, int)
+ function int posix_spawn_file_actions_adddup2 (posix_spawn_file_actions_t*, int, int)
+ function int posix_spawn_file_actions_addopen (posix_spawn_file_actions_t*, int, const char *, int, mode_t)
+diff --git a/posix/Makefile b/posix/Makefile
+index 10d70ae0ae..7478cc2174 100644
+--- a/posix/Makefile
++++ b/posix/Makefile
+@@ -316,7 +316,6 @@ tests := \
+   tst-rxspencer-no-utf8 \
+   tst-sched_getaffinity \
+   tst-spawn-chdir \
+-  tst-spawn-chdir-posix \
+   tst-spawn4 \
+   tst-spawn5 \
+   tst-spawn6 \
+diff --git a/posix/spawn.h b/posix/spawn.h
+index 0aabf5ebef..5e68752a66 100644
+--- a/posix/spawn.h
++++ b/posix/spawn.h
+@@ -200,26 +200,6 @@ extern int posix_spawn_file_actions_adddup2 (posix_spawn_file_actions_t *
+ 					     int __fd, int __newfd)
+      __THROW __nonnull ((1));
+ 
+-#ifdef __USE_XOPEN2K24XSI
+-
+-/* Add an action changing the directory to PATH during spawn.  This
+-   affects the subsequent file actions.
+-   Alias of posix_spawn_file_actions_addchdir_np.  */
+-extern int __REDIRECT_NTH (posix_spawn_file_actions_addchdir,
+-                            (posix_spawn_file_actions_t * __restrict __actions,
+-                             const char *__restrict __path),
+-                            posix_spawn_file_actions_addchdir_np);
+-
+-/* Add an action changing the directory to FD during spawn.  This
+-   affects the subsequent file actions.  FD is not duplicated and must
+-   be open when the file action is executed.
+-   Alias of posix_spawn_file_actions_addfchdir_np.  */
+-extern int __REDIRECT_NTH (posix_spawn_file_actions_addfchdir,
+-                           (posix_spawn_file_actions_t *, int __fd),
+-                           posix_spawn_file_actions_addfchdir_np);
+-
+-#endif /* __USE_XOPEN2K24XSI */
+-
+ #ifdef __USE_MISC
+ /* Add an action changing the directory to PATH during spawn.  This
+    affects the subsequent file actions.  */
+diff --git a/posix/tst-spawn-chdir-posix.c b/posix/tst-spawn-chdir-posix.c
+deleted file mode 100644
+index 3f8d8952bb..0000000000
+--- a/posix/tst-spawn-chdir-posix.c
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#define USE_POSIX_ALIASES
+-#include "tst-spawn-chdir.c"
+diff --git a/posix/tst-spawn-chdir.c b/posix/tst-spawn-chdir.c
+index 166f835492..a3478d61f6 100644
+--- a/posix/tst-spawn-chdir.c
++++ b/posix/tst-spawn-chdir.c
+@@ -78,25 +78,12 @@ add_chdir (posix_spawn_file_actions_t *actions, const char *path,
+     {
+       TEST_COMPARE (posix_spawn_file_actions_addopen
+                     (actions, tmpfd, path, O_DIRECTORY | O_RDONLY, 0), 0);
+-
+-#ifdef USE_POSIX_ALIASES
+-      int ret = posix_spawn_file_actions_addfchdir (actions, tmpfd);
+-#else
+-      int ret = posix_spawn_file_actions_addfchdir_np (actions, tmpfd);
+-#endif
+-      TEST_COMPARE (ret, 0);
+-
++      TEST_COMPARE (posix_spawn_file_actions_addfchdir_np
++                    (actions, tmpfd), 0);
+       TEST_COMPARE (posix_spawn_file_actions_addclose (actions, tmpfd), 0);
+     }
+   else
+-    {
+-#ifdef USE_POSIX_ALIASES
+-      int ret = posix_spawn_file_actions_addchdir (actions, path);
+-#else
+-      int ret = posix_spawn_file_actions_addchdir_np (actions, path);
+-#endif
+-      TEST_COMPARE (ret, 0);
+-    }
++    TEST_COMPARE (posix_spawn_file_actions_addchdir_np (actions, path), 0);
+ }
+ 
+ static int
+
+commit 6dea23eeac895231d86c375891a580b27866f6e1
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Wed Aug 5 16:03:34 2026 +0800
+
+    LoongArch: Fix intermittent nptl/tst-cancel32 failure
+    
+    The nptl/tst-cancel32 test fails intermittently on LoongArch
+    with SIGSEGV at __longjmp:
+    
+    0x7ffff7de7f6c <__longjmp+28>   rotri.d         $sp, $t0, 0x11
+    0x7ffff7de7f70 <__longjmp+32>   xor             $sp, $sp, $t1
+    
+    rotri.d and xor are expanded from PTR_DEMANGLE2.
+    If the thread is cancelled between the rotri.d and xor,
+    an incomplete sp register causes the SIGSEGV.
+    
+    Change the destination register of rotri.d to avoid an incomplete sp.
+    
+    (cherry picked from commit 4b0c2842a85f2f3cbe4aa11bd8aea18487982ba8)
+
+diff --git a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+index 75498545cb..24e27e4092 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
++++ b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+@@ -40,8 +40,8 @@
+   xor  dst, src, guard; \
+   rotri.d  dst, dst, 47;
+ # define PTR_DEMANGLE2(dst, src, guard) \
+-  rotri.d  dst, src, 17; \
+-  xor  dst, dst, guard;
++  rotri.d  src, src, 17; \
++  xor  dst, src, guard;
+ #endif
+ 
+ #endif /* POINTER_GUARD_ASM_H */
+
+commit 2ee4e25c971eedb25a9413e17f38a88e2f5b43c3
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Mon Aug 10 16:44:53 2026 +0800
+
+    LoongArch: Support pointer guard on LoongArch32
+    
+    LoongArch32 Reduced has no rotri.d/rotri.w instructions.
+    Use slli.w/srli.w/or to synthesize the rotation on LoongArch32
+    and LoongArch32 Reduced.
+    
+    Reported-by: Haiyong Sun <sunhaiyong@loongson.cn>
+    
+    (cherry picked from commit dd63105d1b883a9fb5603a5eb3e12aab64d72d47)
+
+diff --git a/sysdeps/loongarch/__longjmp.S b/sysdeps/loongarch/__longjmp.S
+index 191f03320a..302cb6894a 100644
+--- a/sysdeps/loongarch/__longjmp.S
++++ b/sysdeps/loongarch/__longjmp.S
+@@ -23,9 +23,9 @@
+ ENTRY (__longjmp)
+ #ifdef PTR_MANGLE
+ 	REG_L t0, a0, 0*SZREG
+-	PTR_DEMANGLE (ra, t0, t1)
++	PTR_DEMANGLE (ra, t0, t1, t2)
+ 	REG_L t0, a0, 1*SZREG
+-	PTR_DEMANGLE2 (sp, t0, t1)
++	PTR_DEMANGLE2 (sp, t0, t1, t2)
+ #else
+ 	REG_L ra, a0, 0*SZREG
+ 	REG_L sp, a0, 1*SZREG
+diff --git a/sysdeps/loongarch/setjmp.S b/sysdeps/loongarch/setjmp.S
+index 591e0d2709..58c1ee02b2 100644
+--- a/sysdeps/loongarch/setjmp.S
++++ b/sysdeps/loongarch/setjmp.S
+@@ -31,9 +31,9 @@ END (setjmp)
+ 
+ ENTRY (__sigsetjmp)
+ #ifdef PTR_MANGLE
+-	PTR_MANGLE (t0, ra, t1)
++	PTR_MANGLE (t0, ra, t1, t2)
+ 	REG_S t0, a0, 0*SZREG
+-	PTR_MANGLE2 (t0, sp, t1)
++	PTR_MANGLE2 (t0, sp, t1, t2)
+ 	REG_S t0, a0, 1*SZREG
+ #else
+ 	REG_S ra, a0, 0*SZREG
+diff --git a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+index 24e27e4092..006b713f9c 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
++++ b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+@@ -24,24 +24,40 @@
+       || (!defined SHARED && (IS_IN (libc) \
+       || IS_IN (libpthread))))
+ #  define PTR_MANGLE_LOAD(guard) \
+-  LOAD_LOCAL (guard, __pointer_chk_guard_local);
++	LOAD_LOCAL (guard, __pointer_chk_guard_local);
+ # else
+ #  define PTR_MANGLE_LOAD(guard) \
+-  LOAD_GLOBAL (guard, __pointer_chk_guard);
++	LOAD_GLOBAL (guard, __pointer_chk_guard);
+ # endif
+-# define PTR_MANGLE(dst, src, guard) \
+-  PTR_MANGLE_LOAD (guard); \
+-  PTR_MANGLE2 (dst, src, guard);
+-# define PTR_DEMANGLE(dst, src, guard) \
+-  PTR_MANGLE_LOAD (guard); \
+-  PTR_DEMANGLE2 (dst, src, guard);
++
++# define PTR_MANGLE(dst, src, guard, tmp) \
++	PTR_MANGLE_LOAD (guard); \
++	PTR_MANGLE2 (dst, src, guard, tmp);
++# define PTR_DEMANGLE(dst, src, guard, tmp) \
++	PTR_MANGLE_LOAD (guard); \
++	PTR_DEMANGLE2 (dst, src, guard, tmp);
++
++# if __loongarch_grlen == 64
+ /* Use PTR_MANGLE2 for efficiency if guard is already loaded.  */
+-# define PTR_MANGLE2(dst, src, guard) \
+-  xor  dst, src, guard; \
+-  rotri.d  dst, dst, 47;
+-# define PTR_DEMANGLE2(dst, src, guard) \
+-  rotri.d  src, src, 17; \
+-  xor  dst, src, guard;
++#  define PTR_MANGLE2(dst, src, guard, tmp) \
++	xor	  tmp, src, guard; \
++	rotri.d	  dst, tmp, 47;
++#  define PTR_DEMANGLE2(dst, src, guard, tmp) \
++	rotri.d	  tmp, src, 17; \
++	xor	  dst, tmp, guard;
++# elif __loongarch_grlen == 32 /* __loongarch_grlen == 64 */
++#  define PTR_MANGLE2(dst, src, guard, tmp) \
++	xor	  tmp, src, guard; \
++	slli.w	  dst, tmp, 9; \
++	srli.w	  tmp, tmp, 23; \
++	or	  dst, dst, tmp;
++#  define PTR_DEMANGLE2(dst, src, guard, tmp) \
++	srli.w	  tmp, src, 9; \
++	slli.w	  src, src, 23; \
++	or	  tmp, tmp, src; \
++	xor	  dst, tmp, guard;
++# endif /* __loongarch_grlen == 64 */
++
+ #endif
+ 
+ #endif /* POINTER_GUARD_ASM_H */
+
+commit 67dd5150c6c1f76262b7d76ecbc296c564376c74
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Mon Aug 24 17:48:52 2026 +0800
+
+    LoongArch: Add standard search paths for 32-bit
+    
+    Previously, add_system_dir added different paths depending on the ABI:
+      ilp32d: /lib32
+      ilp32s: /lib32/sf
+    
+    Now, add_sysmtem_dir adds all of the following directories to standard
+    search path for both ilp32d ABI and ilp32s ABI:
+      /lib
+      /lib32
+      /lib32/sf
+      /lib64
+      /lib64/sf
+    
+    This change fixes elf/tst-ptrguard-static-dlopen on ilp32s ABI.
+    The test is a statically linked executable with dlopen
+    tst-ptrguard-static-dlopen-mod.so. Without this patch, the test fails
+    because it looks for ld.so in /lib32/sf, but the file is actually
+    in /lib32.
+    
+    (cherry picked from commit b3d14eff4fe5c9a3d52ab076d3edd29f96f0082d)
+
+diff --git a/sysdeps/unix/sysv/linux/loongarch/dl-cache.h b/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
+index 955f0dc68f..e52c6e2090 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
++++ b/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
+@@ -33,6 +33,8 @@
+    LoongArch, libraries can be found in paths ending in:
+      - /lib64
+      - /lib64/sf
++     - /lib32
++     - /lib32/sf
+    so this will add all of those paths.  */
+ 
+ #define add_system_dir(dir) 						\
+@@ -41,6 +43,8 @@
+       static const char* lib_dirs[] = {					\
+ 	"/lib64",							\
+ 	"/lib64/sf",							\
++	"/lib32",							\
++	"/lib32/sf",							\
+ 	NULL,								\
+       };								\
+       const size_t lib_len = sizeof ("/lib") - 1;			\
+
+commit c90398e00571476711792baacb6d92bd2a7b6891
+Author: DJ Delorie <dj@redhat.com>
+Date:   Mon Sep 28 14:27:16 2026 +0200
+
+    CVE-2026-89092: nscd: replace alloca with malloc in aicache, hstcache
+    
+    This changes the alloca fallback to a malloc fallback
+    in the addrinfo and host cache code.
+    
+    This fixes bug 34624.
+    
+    Co-authored-by: Florian Weimer <fweimer@redhat.com>
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit cbf59b836645b6ac69ad8c47a560598bc4942ecc)
+
+diff --git a/nscd/aicache.c b/nscd/aicache.c
+index ef15c373f5..d87e7e966f 100644
+--- a/nscd/aicache.c
++++ b/nscd/aicache.c
+@@ -102,7 +102,9 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+   int32_t ttl = INT32_MAX;
+   ssize_t total = 0;
+   char *key_copy = NULL;
+-  bool alloca_used = false;
++  /* If not NULL, dataset is a temporary dataset not inserted into the
++     database, and needs to be free'd.  */
++  void *dataset_alloc = NULL;
+   time_t timeout = MAX_TIMEOUT_VALUE;
+ 
+   while (!no_more)
+@@ -173,10 +175,12 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 	      /* We cannot permanently add the result in the moment.  But
+ 		 we can provide the result as is.  Store the data in some
+ 		 temporary memory.  */
+-	      dataset = (struct dataset *) alloca (total + req->key_len);
++	      dataset = (struct dataset *) malloc (total + req->key_len);
++	      if (dataset == NULL)
++		goto out;
+ 
+ 	      /* We cannot add this record to the permanent database.  */
+-	      alloca_used = true;
++	      dataset_alloc = dataset;
+ 	    }
+ 
+ 	  /* Fill in the address and address families.  */
+@@ -345,10 +349,12 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 	      /* We cannot permanently add the result in the moment.  But
+ 		 we can provide the result as is.  Store the data in some
+ 		 temporary memory.  */
+-	      dataset = (struct dataset *) alloca (total + req->key_len);
++	      dataset = (struct dataset *) malloc (total + req->key_len);
++	      if (dataset == NULL)
++		goto out;
+ 
+ 	      /* We cannot add this record to the permanent database.  */
+-	      alloca_used = true;
++	      dataset_alloc = dataset;
+ 	    }
+ 
+ 	  /* Fill in the address and address families.  */
+@@ -400,8 +406,7 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 						   resp)) == 0)
+ 	    {
+ 	      /* The data has not changed.  We will just bump the
+-		 timeout value.  Note that the new record has been
+-		 allocated on the stack and need not be freed.  */
++		 timeout value.  */
+ 	      dh->timeout = dataset->head.timeout;
+ 	      dh->ttl = dataset->head.ttl;
+ 	      ++dh->nreloads;
+@@ -419,7 +424,9 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 		  key_copy = (char *) newp + (key_copy - (char *) dataset);
+ 
+ 		  dataset = memcpy (newp, dataset, total + req->key_len);
+-		  alloca_used = false;
++
++		  free (dataset_alloc);
++		  dataset_alloc = NULL;
+ 		}
+ 
+ 	      /* Mark the old record as obsolete.  */
+@@ -502,7 +509,7 @@ next_nip:
+  out:
+   __resolv_context_put (ctx);
+ 
+-  if (dataset != NULL && !alloca_used)
++  if (dataset != NULL && dataset_alloc == NULL)
+     {
+       /* If necessary, we also propagate the data to disk.  */
+       if (db->persistent)
+@@ -528,6 +535,8 @@ next_nip:
+   scratch_buffer_free (&tmpbuf4);
+   scratch_buffer_free (&canonbuf);
+ 
++  free (dataset_alloc);
++
+   return timeout;
+ }
+ 
+diff --git a/nscd/hstcache.c b/nscd/hstcache.c
+index fe91818640..44ef80be77 100644
+--- a/nscd/hstcache.c
++++ b/nscd/hstcache.c
+@@ -15,7 +15,6 @@
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see <https://www.gnu.org/licenses/>.  */
+ 
+-#include <alloca.h>
+ #include <assert.h>
+ #include <errno.h>
+ #include <error.h>
+@@ -188,7 +187,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       /* Determine the I/O structure.  */
+       size_t h_name_len = strlen (hst->h_name) + 1;
+       size_t h_aliases_cnt;
+-      uint32_t *h_aliases_len;
++      uint32_t *h_aliases_len = NULL;
+       size_t h_addr_list_cnt;
+       char *addresses;
+       char *aliases;
+@@ -202,7 +201,13 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       for (cnt = 0; hst->h_aliases[cnt] != NULL; ++cnt)
+ 	++h_aliases_cnt;
+       /* Determine the length of all aliases.  */
+-      h_aliases_len = (uint32_t *) alloca (h_aliases_cnt * sizeof (uint32_t));
++      if (h_aliases_cnt > 0)
++	{
++	  h_aliases_len = (uint32_t *) reallocarray (NULL, h_aliases_cnt,
++						     sizeof (uint32_t));
++	  if (h_aliases_len == NULL)
++	    return MAX_TIMEOUT_VALUE;
++	}
+       total = 0;
+       for (cnt = 0; cnt < h_aliases_cnt; ++cnt)
+ 	{
+@@ -216,8 +221,11 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	++h_addr_list_cnt;
+ 
+       if (h_addr_list_cnt == 0)
+-	/* Invalid entry.  */
+-	return MAX_TIMEOUT_VALUE;
++	{
++	  /* Invalid entry.  */
++	  free (h_aliases_len);
++	  return MAX_TIMEOUT_VALUE;
++	}
+ 
+       total += (sizeof (struct dataset)
+ 		+ h_name_len
+@@ -228,8 +236,10 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	 change.  Allocate memory on the cache since it is likely
+ 	 discarded anyway.  If it turns out to be necessary to have a
+ 	 new record we can still allocate real memory.  */
+-      bool alloca_used = false;
+       dataset = NULL;
++      /* If not NULL, dataset is a temporary dataset not inserted into
++	 the database, and needs to be free'd.  */
++      void *dataset_alloc = NULL;
+ 
+       /* If the record contains more than one IP address (used for
+ 	 load balancing etc) don't cache the entry.  This is something
+@@ -245,10 +255,15 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	  /* We cannot permanently add the result in the moment.  But
+ 	     we can provide the result as is.  Store the data in some
+ 	     temporary memory.  */
+-	  dataset = (struct dataset *) alloca (total + req->key_len);
++	  dataset = (struct dataset *) malloc (total + req->key_len);
++	  if (dataset == NULL)
++	    {
++	      free (h_aliases_len);
++	      return MAX_TIMEOUT_VALUE;
++	    }
+ 
+ 	  /* We cannot add this record to the permanent database.  */
+-	  alloca_used = true;
++	  dataset_alloc = dataset;
+ 	}
+ 
+       timeout = datahead_init_pos (&dataset->head, total + req->key_len,
+@@ -271,7 +286,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       cp = dataset->strdata;
+ 
+       cp = mempcpy (cp, hst->h_name, h_name_len);
+-      cp = mempcpy (cp, h_aliases_len, h_aliases_cnt * sizeof (uint32_t));
++      if (h_aliases_cnt > 0)
++	cp = mempcpy (cp, h_aliases_len, h_aliases_cnt * sizeof (uint32_t));
+ 
+       /* The normal addresses first.  */
+       addresses = cp;
+@@ -283,6 +299,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       for (cnt = 0; cnt < h_aliases_cnt; ++cnt)
+ 	cp = mempcpy (cp, hst->h_aliases[cnt], h_aliases_len[cnt]);
+ 
++      free (h_aliases_len);
++
+       assert (cp
+ 	      == dataset->strdata + total - offsetof (struct dataset,
+ 						      strdata));
+@@ -308,8 +326,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 			 dh->allocsize - offsetof (struct dataset, resp)) == 0)
+ 	    {
+ 	      /* The data has not changed.  We will just bump the
+-		 timeout value.  Note that the new record has been
+-		 allocated on the stack and need not be freed.  */
++		 timeout value.  */
+ 	      assert (h_addr_list_cnt == 1);
+ 	      dh->ttl = dataset->head.ttl;
+ 	      dh->timeout = dataset->head.timeout;
+@@ -335,7 +352,9 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 		      key_copy = (char *) newp + (key_copy - (char *) dataset);
+ 
+ 		      dataset = memcpy (newp, dataset, total + req->key_len);
+-		      alloca_used = false;
++
++		      free (dataset_alloc);
++		      dataset_alloc = NULL;
+ 		    }
+ 		}
+ 
+@@ -363,7 +382,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	 the current cache handling cannot handle and it is more than
+ 	 questionable whether it is worthwhile complicating the cache
+ 	 handling just for handling such a special case. */
+-      if (! alloca_used)
++      if (dataset_alloc == NULL)
+ 	{
+ 	  /* If necessary, we also propagate the data to disk.  */
+ 	  if (db->persistent)
+@@ -394,6 +413,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 
+ 	  pthread_rwlock_unlock (&db->lock);
+ 	}
++      free (dataset_alloc);
++      dataset_alloc = NULL;
+     }
+ 
+   if (__builtin_expect (!all_written, 0) && debug_level > 0)
+
+commit 07dc0a64a3256151beb20a2b4ebc77ee74ebe0dc
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Mon Sep 28 01:23:15 2026 +0200
+
+    realloc: Fix mmap non-mremap reallocation case [BZ #34697]
+    
+    This case was missing copying SIZE_SZ bytes from the old allocation.
+    
+    Fixes commit 614cfd0f8a2820aed54f9745077c7da0e6643bac
+    ("malloc: Change mmap chunk layout"), which went into glibc 2.43.
+    
+    Checked by Wilco Dijkstra <Wilco.Dijkstra@arm.com>
+    
+    Resolves #34697.
+    
+    (cherry picked from commit 1e0512a684809e32170eae42c8f04f61126d77cc)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index 8fe8b18340..a50ff3598c 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -3256,7 +3256,7 @@ __libc_realloc (void *oldmem, size_t bytes)
+       if (newmem == NULL)
+         return NULL;              /* propagate failure */
+ 
+-      memcpy (newmem, oldmem, oldsize - CHUNK_HDR_SZ);
++      memcpy (newmem, oldmem, usable);
+       munmap_chunk (oldp);
+       return newmem;
+     }
+
+commit 34106fee698c83eb0af71d4d0381e66b399be746
+Author: Sachin Monga <smonga@linux.ibm.com>
+Date:   Thu Oct 1 00:51:23 2026 +0530
+
+    powerpc: Fix one byte overread in strncasecmp (bug 34683, CVE-2026-97399)
+    
+    The Power8 strncasecmp (strcasecmp.S with USE_AS_STRNCASECMP) touches
+    s1[n]/s2[n] in three places when the first n bytes compare equal and
+    contain no NUL: L(loop) preloads the next byte before its bdnz;
+    L(loop1) increments then loads before its bdnz; and L(bytebybyte) loads
+    s1[0]/s2[0] before checking r5. A caller that maps exactly n readable bytes
+    can get SIGSEGV if byte n falls on an unmapped page.
+    
+    The L(bytebybyte) site was identified by Florian Weimer; the
+    original AISLE report covered only the two loops.
+    
+    Fix all three sites: guard L(bytebybyte) with a r5 == 0 check, split the
+    bdnz/load pairs in L(loop) and L(loop1) so the load only runs when the
+    count is still positive, and preload rCHAR1/rCHAR2 in L(lessthan4) after
+    confirming r5 != 0.  strcasecmp is unaffected; its generated code is
+    unchanged.
+    
+    Add string/test-strncasecmp-nonarray.c, built on the test-Xncmp-nonarray.c
+    skeleton: maps a PROT_NONE page past both buffers and sweeps all start
+    offsets and lengths.  Runs as an xtest.
+    
+    Reported-by: AISLE in partnership with Red Hat
+    Suggested-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit e622f82ea8797704ac8f761f88ed3e429e97fedd)
+
+diff --git a/string/Makefile b/string/Makefile
+index aa0b0c2f57..bfda81daaa 100644
+--- a/string/Makefile
++++ b/string/Makefile
+@@ -244,8 +244,8 @@ endif
+ # This test allocates a lot of memory and can run for a long time.
+ xtests += tst-strcoll-overflow
+ 
+-# This test runs for a long time.
+-xtests += test-strncmp-nonarray
++# These tests run for a long time.
++xtests += test-strncasecmp-nonarray test-strncmp-nonarray
+ 
+ # This test needs libdl.
+ ifeq (yes,$(build-shared))
+diff --git a/string/test-strncasecmp-nonarray.c b/string/test-strncasecmp-nonarray.c
+new file mode 100644
+index 0000000000..d68e58d5ec
+--- /dev/null
++++ b/string/test-strncasecmp-nonarray.c
+@@ -0,0 +1,4 @@
++#define TEST_IDENTIFIER strncasecmp
++#define TEST_NAME "strncasecmp"
++typedef char CHAR;
++#include "test-Xncmp-nonarray.c"
+diff --git a/sysdeps/powerpc/powerpc64/power8/strcasecmp.S b/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
+index 3c45e9ea50..8de75fb7e5 100644
+--- a/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
++++ b/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
+@@ -355,6 +355,14 @@ L(bytebybyte):
+ 	offset and string descriptors are only updated in the end
+ 	of loop unrolling. */
+ 	ld	rLOC, LOCALE_CTYPE_TOLOWER(rLOC)
++#ifdef USE_AS_STRNCASECMP
++	/* This entry point can be reached from the vector loop with
++	   r5 == 0 (the last vector chunk ended exactly at the `n'
++	   boundary).  Do not read s1[0]/s2[0] in that case: those
++	   bytes are s1[n]/s2[n], one past the caller's bound.  */
++	cmpdi	cr7, r5, 0
++	beq	cr7, L(retnull)
++#endif
+ 	lbz	rCHAR1, 0(rSTR1)	/* Load char from s1 */
+ 	lbz	rCHAR2, 0(rSTR2)	/* Load char from s2 */
+ #ifdef USE_AS_STRNCASECMP
+@@ -405,19 +413,23 @@ L(loop):
+ 	cmpw	cr1, rLWR1, rLWR2
+ 	crorc	4*cr1+eq,eq,4*cr1+eq
+ 	beq     cr1, L(done)
++#ifdef USE_AS_STRNCASECMP
++	/* Test the remaining count before touching the next byte. */
++	bdnz	L(loop_load)
++	b	L(lessthan4)
++L(loop_load):
++#endif
+ 	lbz	rCHAR1, 0(rSTR1)	/* Load char from s1 */
+ 	lbz	rCHAR2, 0(rSTR2)	/* Load char from s2 */
+-#ifdef USE_AS_STRNCASECMP
+-	bdnz	L(loop)
+-#else
+ 	b	L(loop)
+-#endif
+ #ifdef USE_AS_STRNCASECMP
+ L(lessthan4):
+ 	clrldi	r5, r5, 62
+ 	cmpdi	cr7, r5, 0
+ 	beq	cr7, L(retnull)
+ 	mtctr	r5
++	lbz	rCHAR1, 0(rSTR1)
++	lbz	rCHAR2, 0(rSTR2)
+ L(loop1):
+ 	cmpdi	rCHAR1, 0
+ 	sldi	rADDR1, rCHAR1, 2
+@@ -427,11 +439,14 @@ L(loop1):
+ 	cmpw	cr1, rLWR1, rLWR2
+ 	crorc	4*cr1+eq,eq,4*cr1+eq
+ 	beq	cr1, L(done)
++	bdnz	L(loop1_load)
++	b	L(retnull)
++L(loop1_load):
+ 	addi	rSTR1, rSTR1, 1
+ 	addi	rSTR2, rSTR2, 1
+ 	lbz	rCHAR1, 0(rSTR1)
+ 	lbz	rCHAR2, 0(rSTR2)
+-	bdnz	L(loop1)
++	b	L(loop1)
+ #endif
+ L(done):
+ 	subf	r0, rLWR2, rLWR1

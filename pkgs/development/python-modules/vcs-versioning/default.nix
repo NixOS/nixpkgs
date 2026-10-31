@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vcs-versioning";
-  version = "1.1.1";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools-scm";
     tag = "vcs-versioning-v${finalAttrs.version}";
-    hash = "sha256-CfRzupWFtvmQLbubyr+eXRnLi4auZc2PA/Zz0aFNgaU=";
+    hash = "sha256-vuIALTydsT5ndYeFWGMuvNxmRMqj9txPbp29ImBdMFc=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;

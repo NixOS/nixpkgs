@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
   ];
 
+  patches = [ ./gcc-16.patch ];
+
   configureFlags = [
     "--with-ssl"
   ]
@@ -76,6 +78,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "links";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    broken = true;
   };
 })

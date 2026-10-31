@@ -127,6 +127,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tkinter" ];
 
+  passthru = {
+    inherit tcl tk;
+  };
+
   meta = {
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
     description = "Standard Python interface to the Tcl/Tk GUI toolkit";

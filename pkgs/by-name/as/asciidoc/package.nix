@@ -169,30 +169,30 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + lib.optionalString _enableDitaaFilter ''
     echo "Extracting ditaa filter"
     unzip -d "$out/etc/asciidoc/filters/ditaa" "${ditaaFilterSrc}"
-    sed -i -e "s|java -jar|${jre}/bin/java -jar|" \
+    sed -i -e "s|java -jar|${lib.getExe jre} -jar|" \
         "$out/etc/asciidoc/filters/ditaa/ditaa2img.py"
   ''
   + lib.optionalString _enableMscgenFilter ''
     echo "Extracting mscgen filter"
     unzip -d "$out/etc/asciidoc/filters/mscgen" "${mscgenFilterSrc}"
-    sed -i -e "s|filter-wrapper.py mscgen|filter-wrapper.py ${mscgen}/bin/mscgen|" \
+    sed -i -e "s|filter-wrapper.py mscgen|filter-wrapper.py ${lib.getExe mscgen}|" \
         "$out/etc/asciidoc/filters/mscgen/mscgen-filter.conf"
   ''
   + lib.optionalString _enableDiagFilter ''
     echo "Extracting diag filter"
     unzip -d "$out/etc/asciidoc/filters/diag" "${diagFilterSrc}"
     sed -i \
-        -e "s|filter='blockdiag|filter=\'${blockdiag}/bin/blockdiag|" \
-        -e "s|filter='seqdiag|filter=\'${seqdiag}/bin/seqdiag|" \
-        -e "s|filter='actdiag|filter=\'${actdiag}/bin/actdiag|" \
-        -e "s|filter='nwdiag|filter=\'${nwdiag}/bin/nwdiag|" \
-        -e "s|filter='packetdiag|filter=\'${nwdiag}/bin/packetdiag|" \
+        -e "s|filter='blockdiag|filter=\'${lib.getExe blockdiag}|" \
+        -e "s|filter='seqdiag|filter=\'${lib.getExe seqdiag}|" \
+        -e "s|filter='actdiag|filter=\'${lib.getExe actdiag}|" \
+        -e "s|filter='nwdiag|filter=\'${lib.getExe' nwdiag "nwdiag"}|" \
+        -e "s|filter='packetdiag|filter=\'${lib.getExe' nwdiag "packetdiag"}|" \
         "$out/etc/asciidoc/filters/diag/diag-filter.conf"
   ''
   + lib.optionalString _enableQrcodeFilter ''
     echo "Extracting qrcode filter"
     unzip -d "$out/etc/asciidoc/filters/qrcode" "${qrcodeFilterSrc}"
-    sed -i -e "s|systemcmd('qrencode|systemcmd('${qrencode}/bin/qrencode|" \
+    sed -i -e "s|systemcmd('qrencode|systemcmd('${lib.getExe qrencode}|" \
         "$out/etc/asciidoc/filters/qrcode/qrcode2img.py"
   ''
   + lib.optionalString _enableMatplotlibFilter ''
@@ -232,21 +232,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + (
     if enableStandardFeatures then
       ''
-        sed -e "s|dot|${graphviz}/bin/dot|g" \
-            -e "s|neato|${graphviz}/bin/neato|g" \
-            -e "s|twopi|${graphviz}/bin/twopi|g" \
-            -e "s|circo|${graphviz}/bin/circo|g" \
-            -e "s|fdp|${graphviz}/bin/fdp|g" \
-            -i "asciidoc/resources/filters/graphviz/graphviz2png.py"
+        substituteInPlace asciidoc/resources/filters/graphviz/graphviz2png.py \
+          --replace-fail '["dot", "-T?"]' '["${lib.getExe' graphviz "dot"}", "-T?"]' \
+          --replace-fail "cmd = '%s -T%s" "cmd = '${lib.getBin graphviz}/bin/%s -T%s"
 
-        sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
-            -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
-            -e "s|cmd = 'dvisvgm'|cmd = '${texlive}/bin/dvisvgm'|g" \
+        sed -e "s|run('latex|run('${lib.getExe' texlive "latex"}|g" \
+            -e "s|cmd = 'dvipng'|cmd = '${lib.getExe' texlive "dvipng"}'|g" \
+            -e "s|cmd = 'dvisvgm'|cmd = '${lib.getExe' texlive "dvisvgm"}'|g" \
             -i "asciidoc/resources/filters/latex/latex2img.py"
 
-        sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
-            -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
-            -e "s|run('convert|run('${imagemagick.out}/bin/convert|g" \
+        sed -e "s|run('abc2ly|run('${lib.getExe' lilypond "abc2ly"}|g" \
+            -e "s|run('lilypond|run('${lib.getExe' lilypond "lilypond"}|g" \
+            -e "s|run('convert|run('${lib.getExe' imagemagick "convert"}|g" \
             -i "asciidoc/resources/filters/music/music2png.py"
 
         sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
@@ -267,20 +264,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
           ]
         }', **(dict(filter(lambda v: v[0] == 'SOURCE_DATE_EPOCH', os.environ.items()))))|" \
             -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
-            -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
-            -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
-            ${lib.optionalString enableJava ''-e "s|^FOP =.*|FOP = '${fop}/bin/fop'|"''} \
-            -e "s|^W3M =.*|W3M = '${w3m-batch}/bin/w3m'|" \
-            -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
-            -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
-            -e "s|^EPUBCHECK =.*|EPUBCHECK = '${epubcheck}/bin/epubcheck'|" \
+            -e "s|^XSLTPROC =.*|XSLTPROC = '${lib.getExe' libxslt "xsltproc"}'|" \
+            -e "s|^DBLATEX =.*|DBLATEX = '${lib.getExe dblatexFull}'|" \
+            ${lib.optionalString enableJava ''-e "s|^FOP =.*|FOP = '${lib.getExe fop}'|"''} \
+            -e "s|^W3M =.*|W3M = '${lib.getExe w3m-batch}'|" \
+            -e "s|^LYNX =.*|LYNX = '${lib.getExe lynx}'|" \
+            -e "s|^XMLLINT =.*|XMLLINT = '${lib.getExe' libxml2 "xmllint"}'|" \
+            -e "s|^EPUBCHECK =.*|EPUBCHECK = '${lib.getExe epubcheck}'|" \
             -i asciidoc/a2x.py
       ''
     else
       ''
         sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', **(dict(filter(lambda v: v[0] == 'SOURCE_DATE_EPOCH', os.environ.items()))))|" \
-            -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
-            -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
+            -e "s|^XSLTPROC =.*|XSLTPROC = '${lib.getExe' libxslt "xsltproc"}'|" \
+            -e "s|^XMLLINT =.*|XMLLINT = '${lib.getExe' libxml2 "xmllint"}'|" \
             -i asciidoc/a2x.py
       ''
   )
@@ -294,7 +291,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
     substituteInPlace Makefile.in \
-      --replace "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"
+      --replace-fail "python3 -m asciidoc.a2x" "${lib.getExe' buildPackages.asciidoc "a2x"}"
   '';
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [ setuptools ];

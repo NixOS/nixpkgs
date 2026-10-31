@@ -14,11 +14,11 @@ mattermost.override (
       # See https://docs.mattermost.com/about/mattermost-server-releases.html
       # and make sure the version regex is up to date here.
       # Ensure you also check ../mattermost/package.nix for ESR releases.
-      regex = "^v(11\\.[0-9]+\\.[0-9]+)$";
-      version = "11.11.0";
-      srcHash = "sha256-QB7C3TCmrUgTUST6hUEIM143cUfiORyaYnP6I2t37b8=";
-      vendorHash = "sha256-FNZ6030d8Tro06ZlycN9lU9gd+7oxfuFciJOeLv+enQ=";
-      npmDepsHash = "sha256-5Bl+enzE3i8GBPjTtudvrOM9DjfNHL3CkMbNMXSH4AU=";
+      regex = "^v(12\\.[0-9]+\\.[0-9]+)$";
+      version = "12.0.1";
+      srcHash = "sha256-369VbCXv0tB3PYDuPrGEBRj40eZfMaPg8iWQ5JcwpLA=";
+      vendorHash = "sha256-1cBMtVPS4JMxQsF7vDNRY+eR6A75LIf//JNYYwfACJ8=";
+      npmDepsHash = "sha256-n31nZ36c6RCp3c8lajjrHYEppnUU65DtpTwI6KCPSUc=";
       autoUpdate = ./package.nix;
     };
   }

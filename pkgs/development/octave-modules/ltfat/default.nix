@@ -18,7 +18,7 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ltfat/ltfat/releases/download/v${version}/${pname}-${version}-of.tar.gz";
-    sha256 = "sha256-FMDZ8XFhLG7KDoUjtXvafekg6tSltwBaO0+//jMzJj4=";
+    hash = "sha256-FMDZ8XFhLG7KDoUjtXvafekg6tSltwBaO0+//jMzJj4=";
   };
 
   buildInputs = [

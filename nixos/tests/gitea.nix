@@ -56,6 +56,7 @@ let
                   "repository.signing".SIGNING_KEY = signingPrivateKeyId;
                   actions.ENABLED = true;
                   metrics.ENABLED = true;
+                  server.ROOT_URL = "http://localhost:3000/";
                   service.DISABLE_REGISTRATION = true;
                 };
               };

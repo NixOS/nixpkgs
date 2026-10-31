@@ -12,7 +12,7 @@
   libayatana-common,
   lomiri,
   pkg-config,
-  systemd,
+  systemdLibs,
   vala,
   wrapGAppsHook3,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.cmake-extras
     glib
     libayatana-common
-    systemd
+    systemdLibs
   ];
 
   cmakeFlags = [

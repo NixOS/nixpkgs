@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonOlder,
   celery,
   fetchFromGitHub,
   flit-core,
@@ -18,18 +19,22 @@
   aio-pika,
   httpx,
   feedparser,
+  fakeredis,
+  testcontainers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.6.1";
+  version = "4.10.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-ZWYLbsFeDM219rUde12tp3bXKxQpb8VjyZ4iUAJM9X8=";
+    hash = "sha256-l4/C6Z6SbNP4AZXDTl8WE45MXO6CN+RBwAOqsBhhZFQ=";
   };
 
   build-system = [
@@ -61,6 +66,8 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     libredirect.hook
+    fakeredis
+    testcontainers
   ];
 
   disabledTests = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -117,6 +118,16 @@ let
             CGO_ENABLED = "1";
           };
         });
+    # From version 1.0.2, `go.mod` requires Go 1.27 (version 1.1.2 requires Go 1.27.1).
+    # Remove this override when `buildGoModule` uses Go 1.27.1 or newer.
+    charpand_openprovider = automated-providers.charpand_openprovider.override {
+      mkProviderGoModule = buildGoLatestModule;
+    };
+    # The `main` package of the provider is not at the root of the repository.
+    # The repository also has a CLI, which is not built here.
+    tasansga_lldap = automated-providers.tasansga_lldap.overrideAttrs (_: {
+      subPackages = [ "cmd/terraform-provider-lldap" ];
+    });
   };
 
   # Put all the providers we not longer support in this list.

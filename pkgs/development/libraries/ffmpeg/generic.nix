@@ -54,6 +54,7 @@
   withBs2b ? withFullDeps, # bs2b DSP library
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
+  withCairo ? withFullDeps && lib.versionAtLeast version "8.1", # drawing via vgs
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
   withCelt ? withFullDeps && lib.versionOlder version "9.0", # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
@@ -112,6 +113,7 @@
   withMfx ? false, # Hardware acceleration via intel-media-sdk/libmfx
   withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin, # ModPlug support
   withMp3lame ? withHeadlessDeps, # LAME MP3 encoder
+  withMpeghdec ? withFullDeps && (!withGPL || withUnfree) && lib.versionAtLeast version "8.1", # MPEG-H decoder
   withMysofa ? withFullDeps, # HRTF support via SOFAlizer
   withNpp ? withFullDeps && withUnfree && config.cudaSupport, # Nvidia Performance Primitives-based code
   withNvdec ? withHeadlessDeps && withNvcodec,
@@ -119,6 +121,7 @@
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
   withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
+  withOpenColorIO ? withFullDeps && lib.versionAtLeast version "8.1", # Color Managment
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
   withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin, # OpenGL rendering
@@ -149,7 +152,6 @@
   withSsh ? withHeadlessDeps, # SFTP protocol
   withSvg ? withFullDeps, # SVG protocol
   withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
-  withTensorflow ? false, # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
   withTheora ? withHeadlessDeps, # Theora encoder
   withTwolame ? withFullDeps, # MP2 encoding
   withUavs3d ? withFullDeps, # AVS3 decoder
@@ -258,6 +260,7 @@
   aribb24,
   avisynthplus,
   bzip2,
+  cairo,
   celt,
   chromaprint,
   codec2,
@@ -310,7 +313,6 @@
   librist,
   librsvg,
   libssh,
-  libtensorflow,
   libtheora,
   libv4l,
   libva,
@@ -326,12 +328,14 @@
   libxext,
   libxml2,
   libxv,
+  mpeghdec,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
   openal,
   openapv,
   opencl-headers, # OpenCL headers
+  opencolorio,
   opencore-amr,
   openh264,
   openjpeg,
@@ -471,15 +475,6 @@ stdenv.mkDerivation (
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
       ]
-      ++ optionals (lib.versionAtLeast version "8.1.2") [
-        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/23825 (merged, but not backported to 8.1.x or 9.0.x)
-        # As git.ffmpeg.org deploys Anubis, we cannot fetch this patch reliably from there.
-        # So instead, we fetch it from Debian.
-        (fetchpatch2 {
-          url = "https://salsa.debian.org/multimedia-team/ffmpeg/-/raw/d52aea25bc9123bfaf61f7a7e5a0d9da01c8788d/debian/patches/0001-swscale-loongarch-fix-buffer-underflow-in-yuv2plane1.patch";
-          hash = "sha256-QRkb7z4Btyd9ZgV/1hh6Fb87IhkygFgVDqQdloXKL6Q=";
-        })
-      ]
       ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.1.4") [
         (fetchpatch2 {
           name = "unbreak-hardcoded-tables.patch";
@@ -520,6 +515,15 @@ stdenv.mkDerivation (
           name = "svt-av1-4.0.0-compat.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
           hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "8") [
+        # compatibility with openapv 1.1. remove when >8.1.3 and >9.0.2
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663
+        (fetchpatch2 {
+          name = "openapv-1.1-compat.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/c54710db21c1827dbc3e47658a562525af0fe528.patch";
+          hash = "sha256-ENpPDEHtl3kj/UF52hfV+LwvO7CUaK8UvTy+OAYlWFw=";
         })
       ];
 
@@ -625,6 +629,11 @@ stdenv.mkDerivation (
       (enableFeature withBs2b "libbs2b")
       (enableFeature withBzlib "bzlib")
       (enableFeature withCaca "libcaca")
+    ]
+    ++ optionals (versionAtLeast version "8.1") [
+      (enableFeature withCairo "cairo")
+    ]
+    ++ [
       (enableFeature withCdio "libcdio")
     ]
     ++ optionals (versionOlder version "9.0") [
@@ -693,6 +702,11 @@ stdenv.mkDerivation (
       (enableFeature withMfx "libmfx")
       (enableFeature withModplug "libmodplug")
       (enableFeature withMp3lame "libmp3lame")
+    ]
+    ++ optionals (versionAtLeast version "8.1") [
+      (enableFeature withMpeghdec "libmpeghdec")
+    ]
+    ++ [
       (enableFeature withMysofa "libmysofa")
       (enableFeature withNpp "libnpp")
       (enableFeature withNvdec "nvdec")
@@ -704,6 +718,11 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature withOpencl "opencl")
+    ]
+    ++ lib.optionals (versionAtLeast version "8.1") [
+      (enableFeature withOpenColorIO "libopencolorio")
+    ]
+    ++ [
       (enableFeature withOpencoreAmrnb "libopencore-amrnb")
       (enableFeature withOpencoreAmrwb "libopencore-amrwb")
       (enableFeature withOpengl "opengl")
@@ -742,7 +761,7 @@ stdenv.mkDerivation (
       (enableFeature withSsh "libssh")
       (enableFeature withSvg "librsvg")
       (enableFeature withSvtav1 "libsvtav1")
-      (enableFeature withTensorflow "libtensorflow")
+      (enableFeature false "libtensorflow")
       (enableFeature withTheora "libtheora")
       (enableFeature withTwolame "libtwolame")
       (enableFeature withUavs3d "libuavs3d")
@@ -878,6 +897,7 @@ stdenv.mkDerivation (
       ++ optionals withBs2b [ libbs2b ]
       ++ optionals withBzlib [ bzip2 ]
       ++ optionals withCaca [ libcaca ]
+      ++ optionals withCairo [ cairo ]
       ++ optionals withCdio [
         libcdio
         libcdio-paranoia
@@ -922,6 +942,7 @@ stdenv.mkDerivation (
       ++ optionals withMfx [ intel-media-sdk ]
       ++ optionals withModplug [ libmodplug ]
       ++ optionals withMp3lame [ lame ]
+      ++ optionals withMpeghdec [ mpeghdec ]
       ++ optionals withMysofa [ libmysofa ]
       ++ optionals withNpp [
         libnpp
@@ -934,6 +955,7 @@ stdenv.mkDerivation (
         ocl-icd
         opencl-headers
       ]
+      ++ optionals withOpenColorIO [ opencolorio ]
       ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
       ++ optionals withOpengl [
         libGL
@@ -965,7 +987,6 @@ stdenv.mkDerivation (
       ++ optionals withSsh [ libssh ]
       ++ optionals withSvg [ librsvg ]
       ++ optionals withSvtav1 [ svt-av1 ]
-      ++ optionals withTensorflow [ libtensorflow ]
       ++ optionals withTheora [ libtheora ]
       ++ optionals withTwolame [ twolame ]
       ++ optionals withUavs3d [ uavs3d ]
@@ -1006,12 +1027,17 @@ stdenv.mkDerivation (
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-pointer-types"
-        "-Wno-error=int-conversion"
-      ];
-    };
+    env =
+      lib.optionalAttrs stdenv.cc.isGNU {
+        NIX_CFLAGS_COMPILE = toString [
+          "-Wno-error=incompatible-pointer-types"
+          "-Wno-error=int-conversion"
+        ];
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+        # MPEG-TS demuxing exceeds musl's default 128 KiB thread stack.
+        NIX_LDFLAGS = "-z stack-size=262144";
+      };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
@@ -1057,15 +1083,20 @@ stdenv.mkDerivation (
     # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
     # See the explanation in addDriverRunpath.
     postFixup =
+      let
+        vulkanLoaderPath = lib.makeLibraryPath [ vulkan-loader ];
+        addLibvulkanRpath = versionAtLeast version "5.0" && withVulkan;
+      in
       optionalString (stdenv.hostPlatform.isLinux && withLib) ''
         addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
         addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
       ''
       # https://trac.ffmpeg.org/ticket/10809
-      + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
-        patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${
-          lib.makeLibraryPath [ vulkan-loader ]
-        }
+      + optionalString (addLibvulkanRpath && stdenv.hostPlatform.isDarwin) ''
+        install_name_tool $lib/lib/libavcodec.dylib -add_rpath ${vulkanLoaderPath}
+      ''
+      + optionalString (addLibvulkanRpath && stdenv.hostPlatform.isElf) ''
+        patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${vulkanLoaderPath}
       '';
 
     enableParallelBuilding = true;

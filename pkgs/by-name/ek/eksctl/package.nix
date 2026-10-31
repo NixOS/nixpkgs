@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "eksctl";
-  version = "0.230.0";
+  version = "0.231.0";
 
   src = fetchFromGitHub {
     owner = "eksctl-io";
     repo = "eksctl";
     rev = finalAttrs.version;
-    hash = "sha256-slyLgQ01m1iZs10auYBgmc2x+A2UhwEX65RDBdCAWkc=";
+    hash = "sha256-+YVLF4ORRzKK5c0kZDN6YFFg7ZebKGDB+LXckOzPjpU=";
   };
 
-  vendorHash = "sha256-XGLxHXwoL768wnpXoM5Hz+TTGH+zdWLbiAUqNT6Zmrk=";
+  vendorHash = "sha256-cWggtB2pv3RM67O9K/wDLczkU5SZrwGc0LJQ5emDptc=";
 
   doCheck = false;
 

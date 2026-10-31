@@ -13,14 +13,14 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "copilot-language-server";
-  version = "1.551.2";
+  version = "1.556.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/github/copilot-language-server-release/releases/download/${finalAttrs.version}/copilot-language-server-js-${finalAttrs.version}.zip";
-    hash = "sha256-wDV1F8rzO49sp2XxcZdvwyWKSzu+2CWahZ2kLoVoGRE=";
+    hash = "sha256-wYcFzRXZvj2HZEPkhaQU0YY5Zg/P0WkPl4oeS8h/bxY=";
     stripRoot = false;
   };
 
@@ -72,12 +72,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Use GitHub Copilot with any editor or IDE via the Language Server Protocol";
     homepage = "https://github.com/features/copilot";
-    license = {
+    license = lib.licenses.mkLicense {
       deprecated = false;
       free = false;
       fullName = "GitHub Copilot Product Specific Terms";
       redistributable = false;
-      shortName = "GitHub Copilot License";
+      shortName = "GitHub-Copilot-License";
       url = "https://github.com/customer-terms/github-copilot-product-specific-terms";
     };
     sourceProvenance = with lib.sourceTypes; [

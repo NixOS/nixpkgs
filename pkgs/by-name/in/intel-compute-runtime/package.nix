@@ -64,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv.cc.cc
       ]
     } \
-      $out/lib/intel-opencl/libigdrcl.so
+      $out/lib/intel-opencl/libigdrcl.so \
+      $out/lib/libze_intel_gpu.so.1 \
+      $out/lib/libocloc.so
   '';
 
   passthru = {
@@ -81,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      recutita
+    ];
   };
 })

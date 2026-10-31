@@ -20,10 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cider-2";
   version = "4.0.17";
 
-  src = fetchurl {
-    url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-x64.deb";
-    hash = "sha256-CanpS0yydWOkGKp/8SIVSJ7EavFUs9xBxUgmL9AUXJU=";
-  };
+  src = fetchurl (
+    if stdenv.hostPlatform.isAarch64 then
+      {
+        url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-arm64.deb";
+        hash = "sha256-HA68YE3z08yFg+1OETondI44ysT/PKjRmntObS+nTe4=";
+      }
+    else
+      {
+        url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-x64.deb";
+        hash = "sha256-CanpS0yydWOkGKp/8SIVSJ7EavFUs9xBxUgmL9AUXJU=";
+      }
+  );
 
   nativeBuildInputs = [
     dpkg
@@ -99,6 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
       antoineco
       l0r3v
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

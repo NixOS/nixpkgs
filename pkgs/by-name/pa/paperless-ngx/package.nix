@@ -22,7 +22,7 @@
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  defaultPythonPackageOverrides = final: prev: {
+  defaultPythonPackageOverrides = _final: prev: {
     django = prev.django_5;
 
     # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.2.1";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9M3BS4YbWyr3Y2RepSYyzZHumL4ohqivt5NXSncucg=";
+    hash = "sha256-KUDQ75CJc30Cjyx1UpKKzcN2erYv7gQ/q2H2wI4I6aY=";
   };
 
   postPatch = ''
@@ -84,12 +84,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
-    "django-filter"
-    "django-guardian"
-    "drf-spectacular-sidecar"
+    "python-ipware"
     "redis"
     "regex"
-    "torch"
+    "turbohtml"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
@@ -101,7 +99,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     [
       azure-ai-documentintelligence
       babel
-      bleach
       celery
       channels
       channels-redis
@@ -121,7 +118,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-soft-delete
       django-treenode
       djangorestframework
-      djangorestframework-guardian
       drf-spectacular
       drf-spectacular-sidecar
       drf-writable-nested
@@ -162,14 +158,17 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       tantivy
       tika-client
       torch
+      turbohtml
       watchfiles
       whitenoise
       whoosh-compat
       zxing-cpp
     ]
+    ++ celery.optional-dependencies.redis
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ gotenberg-client.optional-dependencies.httpx
+    ++ ocrmypdf.optional-dependencies.heic
     ++ redis.optional-dependencies.hiredis
     ++ tika-client.optional-dependencies.httpx
     ++ whoosh-compat.optional-dependencies.tantivy;
@@ -275,6 +274,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # flaky test:
     #   ValueError: Failed to open file for read: 'FileDoesNotExist("meta.json")'
     "src/documents/tests/test_permission_filtering_security.py::TestTrashRestorePermissionBoundary::test_restore_allows_document_with_explicit_delete_permission"
+    # OSError: [Errno 95] Operation not supported
+    "src/documents/tests/test_management_exporter.py::TestExportDerivedFileNameCollisions::test_long_titles_export_within_file_name_limit"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

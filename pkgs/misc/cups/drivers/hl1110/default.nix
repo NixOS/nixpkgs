@@ -17,16 +17,16 @@ let
   version = "3.0.1-1";
   cupsdeb = fetchurl {
     url = "http://download.brother.com/welcome/dlf100421/hl1110cupswrapper-${version}.i386.deb";
-    sha256 = "a87880f4ece764a724411b5b24d15d1b912f6ffc6ecbfd9fac4cd5eda13d2eb7";
+    hash = "sha256-qHiA9OznZKckQRtbJNFdG5Evb/xuy/2frEzV7aE9Lrc=";
   };
   srcdir = "hl1110cupswrapper-GPL_src-${version}";
   cupssrc = fetchurl {
     url = "http://download.brother.com/welcome/dlf100422/${srcdir}.tar.gz";
-    sha256 = "be1dce6a4608cb253b0b382db30bf5885da46b010e8eb595b15c435e2487761c";
+    hash = "sha256-vh3OakYIyyU7Czgtswv1iF2kawEOjrWVsVxDXiSHdhw=";
   };
   lprdeb = fetchurl {
     url = "http://download.brother.com/welcome/dlf100419/hl1110lpr-${version}.i386.deb";
-    sha256 = "5af241782a0d500d7f47e06ea43d61127f4019b5b1c6e68b4c1cb4521a742c22";
+    hash = "sha256-WvJBeCoNUA1/R+BupD1hEn9AGbWxxuaLTBy0Uhp0LCI=";
   };
 in
 stdenv.mkDerivation {

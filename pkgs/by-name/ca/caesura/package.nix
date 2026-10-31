@@ -1,9 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   rustPlatform,
-  cacert,
   writableTmpDirAsHomeHook,
   flac,
   lame,
@@ -19,38 +17,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caesura";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "RogueOneEcho";
     repo = "caesura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+REt+MKImO7fnYWJ32P6mKzulGJTnxc+9ednVF5aCJU=";
+    hash = "sha256-0YhYEHMwLgWb/QWwHz47ybxZ6VHNckUA921gdREuhwc=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "normalize-sox-dependent-full-spectrogram-widths.patch";
-      url = "https://github.com/RogueOneEcho/caesura/commit/3af818ae35a3e18f444c889d9d3b88294f4f110f.patch?full_index=1";
-      hash = "sha256-znAbk6hFVj198BUUwwDo76SWei0cKINeXzlYEFvTwHA=";
-    })
-  ];
-
-  cargoHash = "sha256-0+vZma8AC44XqVHzmJT/roV7sy8w6DYhujRK9N91J5c=";
+  cargoHash = "sha256-/l4A1uI71aJsFwhST4xr/vrY3K2wmZHGeICk5Kq9C5g=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ];
   nativeCheckInputs = [
-    cacert
     writableTmpDirAsHomeHook
   ]
   ++ runtimeDeps;
-
-  env = {
-    CAESURA_NIX = "1";
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
 
   postPatch = ''
     substituteInPlace Cargo.toml crates/*/Cargo.toml \
@@ -66,6 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/caesura \
       --prefix PATH : ${lib.makeBinPath finalAttrs.passthru.runtimeDeps}
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/caesura version --offline
   '';
 
   passthru = {

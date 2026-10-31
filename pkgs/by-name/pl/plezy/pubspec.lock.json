@@ -128,8 +128,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "1bcc9978e9b5e503dd08176cc423cfabee703761",
-        "resolved-ref": "1bcc9978e9b5e503dd08176cc423cfabee703761",
+        "ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
+        "resolved-ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -390,11 +390,11 @@
       "dependency": "direct main",
       "description": {
         "name": "dart_discord_presence",
-        "sha256": "6860826f809517d354e2af14e504e46809afde11c43ff3685c7438073d226211",
+        "sha256": "8b1c4b4a75e14e090292a2cb53bc5c205d5f03d6cf43d8386a49ed704f7a99bb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.1"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -553,7 +553,7 @@
       "version": "6.0.0"
     },
     "flutter_localizations": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": "flutter",
       "source": "sdk",
       "version": "0.0.0"
@@ -689,6 +689,46 @@
       },
       "source": "hosted",
       "version": "4.1.2"
+    },
+    "in_app_purchase": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase",
+        "sha256": "d8317ec2ed6fe33199957d67ee67e08a4fd4871ef93b91d7611d8ee560892afc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.3.1"
+    },
+    "in_app_purchase_android": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_android",
+        "sha256": "eac857f7408769a68194be99ceb233ad4e3599e55ccd6422afaf0c7fd5066738",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.4"
+    },
+    "in_app_purchase_platform_interface": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_platform_interface",
+        "sha256": "0b0076cac8ce4fa7048f01e76af8b123aeb6a7c4e0dea2a5206d6664454f3e36",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.1"
+    },
+    "in_app_purchase_storekit": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_storekit",
+        "sha256": "21af88fc18865a7ee4c2468b33a726101b6c034cfe79bd1a1e1d1450a6d3a3a9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.4.13+3"
     },
     "intl": {
       "dependency": "direct main",
@@ -919,6 +959,16 @@
       },
       "source": "hosted",
       "version": "2.1.0"
+    },
+    "openwatchparty": {
+      "dependency": "direct main",
+      "description": {
+        "name": "openwatchparty",
+        "sha256": "c557ede0201079af2ef54b6a06c6016d4cb2bd446fb7c9ba90561f8e595c87db",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
     },
     "os_media_controls": {
       "dependency": "direct main",
@@ -1744,7 +1794,7 @@
       "version": "1.1.1"
     },
     "web_socket": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "web_socket",
         "sha256": "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c",
@@ -1787,11 +1837,11 @@
       "dependency": "direct main",
       "description": {
         "name": "win_http",
-        "sha256": "ebc4d37e2c0e6800cc200e40d289d3bac22fc17d40fce3ae7909d49a20da77bc",
+        "sha256": "82a9270dccdffcda42e162e036079f522fec319227d18c9049cfa7a4f958408f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.2"
+      "version": "0.2.3"
     },
     "window_manager": {
       "dependency": "direct main",

@@ -16,7 +16,7 @@
   mate-menus,
   mate-panel,
   pam,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     mate-menus
     mate-panel
     pam
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [ "--without-console-kit" ];

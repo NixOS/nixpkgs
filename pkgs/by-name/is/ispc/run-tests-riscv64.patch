@@ -1,0 +1,12 @@
+--- a/scripts/run_tests.py
++++ b/scripts/run_tests.py
+@@ -1368,6 +1368,9 @@
+ elif platform.machine() == "ppc64le":
+     default_target = "generic-i32x4"
+     default_arch = "ppc64le"
++elif platform.machine() == "riscv64":
++    default_target = "rvv-x4"
++    default_arch = "riscv64"
+ elif "86" in platform.machine() or platform.machine() == "AMD64":
+     # Some variant of x86: x86_64, i386, i486, i586, i686
+     # Windows reports platform as AMD64

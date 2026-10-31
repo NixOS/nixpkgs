@@ -2,10 +2,11 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 let
-  version = "0.13.0";
+  version = "0.13.1";
 in
 python3Packages.buildPythonApplication {
   pname = "whatsapp-chat-exporter";
@@ -16,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     tag = version;
-    hash = "sha256-nD8rpA1BbKbHpjAuIDdhaiMUjQCypDuo0pNAYbkoOxo=";
+    hash = "sha256-XRDvXYV4RWSjFkVW1JEA2JkwddgJP1ZE+RgB/WP7PLM=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -28,6 +29,8 @@ python3Packages.buildPythonApplication {
     pycryptodome
     tqdm
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter";

@@ -22,7 +22,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "2.0.1";
+  version = "2.4.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -31,7 +31,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-KECJUCvlQz6YpDpktlmLSMiBZPn4qZkA0Ye3aaHHi0Q=";
+    hash = "sha256-XHIs3CW94++3p2tQlDGYYG9eCmqIyV5ofNuPWEAsElI=";
   };
 
   outputs = [
@@ -162,7 +162,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       "man"
     ];
     homepage = "https://nixtamal.toast.al";
-    changelog = "https://nixtamal.toast.al/changelog/";
+    changelog = "https://nixtamal.toast.al/changelog/#${finalAttrs.version}";
     description = "Fulfilling input pinning for Nix";
     longDescription = ''
       • Automate the manual work of input pinning for dependency management

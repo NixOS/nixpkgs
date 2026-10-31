@@ -6,7 +6,7 @@
   testSignedPackages,
   linkFarm,
   runCommand,
-  openssl_4_0,
+  openssl_4_1,
 }:
 
 {
@@ -58,7 +58,7 @@ linkFarm "autopen-test" (
           nativeBuildInputs = [
             # Versions prior to 4.0 suffer from
             # <https://github.com/openssl/openssl/issues/15124>…
-            openssl_4_0
+            openssl_4_1
           ];
           inherit (signedPackages) uefiCertificate;
           strictDeps = true;

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "akkuscm";
     repo = "akku";
     rev = "c37e3e9e320cf9ab363eaf557771c95a4dbb55b6";
-    sha256 = "sha256-AhdbhAO1etkyyFyHevnq5dBX8q/3mHy7lF0Keo84x2U=";
+    hash = "sha256-AhdbhAO1etkyyFyHevnq5dBX8q/3mHy7lF0Keo84x2U=";
   };
 
   nativeBuildInputs = [

@@ -47,7 +47,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flare-capa";
-  version = "9.4.0";
+  version = "10.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mandiant";
     repo = "capa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h9ML+TJe9NprBEy4W7XKahmUTM0d4vY0zIFs6MxYzZ8=";
+    hash = "sha256-Gs3Dq8JvZ1frsAtvMwbasRZ5RawTyEG0JicFfVYtH9k=";
     fetchSubmodules = true;
   };
 

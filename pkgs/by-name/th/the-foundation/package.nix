@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   pkg-config,
   curl,
@@ -15,8 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
   version = "1.13.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";

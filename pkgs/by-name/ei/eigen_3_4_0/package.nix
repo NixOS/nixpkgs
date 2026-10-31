@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    homepage = "https://eigen.tuxfamily.org";
+    homepage = "https://libeigen.gitlab.io/";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [

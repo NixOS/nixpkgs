@@ -95,7 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "polyFormStrict100";
       fullName = "PolyForm Strict License 1.0.0";
       url = "https://polyformproject.org/licenses/strict/1.0.0/";
       free = false;

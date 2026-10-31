@@ -38,35 +38,35 @@ in
 rec {
   deu2eng = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/deu-eng.tar.gz";
-    sha256 = "0dqrhv04g4f5s84nbgisgcfwk5x0rpincif0yfhfh4sc1bsvzsrb";
+    hash = "sha256-K+u/9QpME+ig88BFZuPNoJfJHXs6vmUJ0sWRR8CGGTc=";
   }) "deu-eng" "de_DE";
   eng2deu = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/eng-deu.tar.gz";
-    sha256 = "01x12p72sa3071iff3jhzga8588440f07zr56r3x98bspvdlz73r";
+    hash = "sha256-eZxP2756odRHNiX/AxwgBKGC1PtQDudiOGAoLc4VoQc=";
   }) "eng-deu" "en_EN";
   nld2eng = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/nld-eng.tar.gz";
-    sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
+    hash = "sha256-B0BgRrK3Mum7pZG7H7sTapKRvbX63y31d8QseG9AHO4=";
   }) "nld-eng" "nl_NL";
   eng2nld = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/eng-nld.tar.gz";
-    sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
+    hash = "sha256-lO3zq3H3JRy81si4ve7BY2hXcSbPsH6r4GBP3ygSj2U=";
   }) "eng-nld" "en_UK";
   eng2rus = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/eng-rus.tar.gz";
-    sha256 = "15409ivhww1wsfjr05083pv6mg10bak8v5pg1wkiqybk7ck61rry";
+    hash = "sha256-PudgJjtzeRwnD++WjaZaILxq9h0IFJCl0zxwDndMgJQ=";
   }) "eng-rus" "en_UK";
   fra2eng = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/fra-eng.tar.gz";
-    sha256 = "0sdd88s2zs5whiwdf3hd0s4pzzv75sdsccsrm1wxc87l3hjm85z3";
+    hash = "sha256-4xdUJRz0INZ5qFkzppsuZ/9/iQYNDtd4hLzoLzRCrWk=";
   }) "fra-eng" "fr_FR";
   eng2fra = makeDictdDBFreedict (fetchurl {
     url = "mirror://sourceforge/freedict/eng-fra.tar.gz";
-    sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
+    hash = "sha256-dcjFqTo/WQ2PeK5XAFVeceL2wbDVgoYwNQxavGzOJjo=";
   }) "eng-fra" "en_UK";
   epo2eng = makeDictdDB (fetchurl {
     url = "https://download.freedict.org/dictionaries/epo-eng/1.0.1/freedict-epo-eng-1.0.1.dictd.tar.xz";
-    sha256 = "095xwqfc43dnm0g74i83lg03542f064jy2xbn3qnjxiwysz9ksnz";
+    hash = "sha256-3+qZvvY8dmnxsKsLL4kBTpAywKMDRXIeqLYNwhzmvSQ=";
   }) "epo-eng" "epo-eng" "eo";
   jpn2eng = makeDictdDB (fetchurl {
     url =
@@ -74,7 +74,7 @@ rec {
         version = "0.1";
       in
       "mirror://sourceforge/freedict/jpn-eng/${version}/freedict-jpn-eng-${version}.dictd.tar.xz";
-    sha256 = "sha256-juJBoEq7EztLZzOomc7uoZhXVaQPKoUvIxxPLB0xByc=";
+    hash = "sha256-juJBoEq7EztLZzOomc7uoZhXVaQPKoUvIxxPLB0xByc=";
   }) "jpn-eng" "jpn-eng" "ja_JP";
   eng2jpn = makeDictdDB (fetchurl {
     url =
@@ -82,11 +82,11 @@ rec {
         version = "2022.04.06";
       in
       "https://download.freedict.org/dictionaries/eng-jpn/${version}/freedict-eng-jpn-${version}.dictd.tar.xz";
-    sha256 = "sha256-kfRT2kgbV3XKarCr4mqDRT5A1jR8M8APky5M5MFYatE=";
+    hash = "sha256-kfRT2kgbV3XKarCr4mqDRT5A1jR8M8APky5M5MFYatE=";
   }) "eng-jpn" "eng-jpn" "en_UK";
   mueller_eng2rus_pkg = makeDictdDB (fetchurl {
     url = "mirror://sourceforge/mueller-dict/mueller-dict-3.1.tar.gz";
-    sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
+    hash = "sha256-uDp+/yi89/3qKxZDKw9qbe3+BHRPLtwnRIvVbX/vJRM=";
   }) "mueller-eng-rus" "mueller-dict-*/dict" "en_UK";
   mueller_enru_abbr = {
     outPath = "${mueller_eng2rus_pkg}/share/dictd/mueller-abbrev";

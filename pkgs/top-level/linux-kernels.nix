@@ -43,22 +43,6 @@ in
         # New vendor kernels should go to nixos-hardware instead.
         # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
 
-        linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "5.10";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "5.15";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_6_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.1";
           kernelPatches = [
@@ -94,6 +78,14 @@ in
 
         linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "7.2";
+          kernelPatches = [
+            kernelPatches.bridge_stp_helper
+            kernelPatches.request_key_helper
+          ];
+        };
+
+        linux_7_3 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.3";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -158,6 +150,8 @@ in
 
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11";
+        linux_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11";
+        linux_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11";
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
@@ -220,6 +214,21 @@ in
       {
         inherit callPackage;
         kernel = kernel_;
+
+        # vmlinux.h derived from this kernel's BTF, for BPF consumers such as
+        # systemd's nsresourced/mountfsd.
+        # This derivation requires CONFIG_DEBUG_INFO_BTF-built kernel (this is
+        # the case in nixpkgs), otherwise it will fail.
+        ebpf-headers = callPackage ../os-specific/linux/kernel/ebpf-headers.nix {
+          inherit kernel;
+        };
+
+        # systemd compiled against this kernel's BTF, so its BPF programs
+        # (nsresourced/mountfsd, networkd) match the kernel that will run.
+        systemd = pkgs.systemd.override {
+          vmlinux-btf = self.ebpf-headers;
+        };
+
         inherit (kernel) stdenv; # in particular, use the same compiler by default
 
         # to help determine module compatibility
@@ -230,12 +239,16 @@ in
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+          "DEPMOD=true"
+          "INSTALL_MOD_STRIP=1"
         ];
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
         inherit (pkgs) bcc bpftrace; # added 2021-12
         inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
         inherit (pkgs) dpdk; # added 2024-03
+
+        rebuildImage = callPackage ../os-specific/linux/kernel/rebuild-image.nix { };
 
         acer-wmi-battery = callPackage ../os-specific/linux/acer-wmi-battery { };
 
@@ -607,17 +620,18 @@ in
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
     linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
+    linux_7_3 = recurseIntoAttrs (packagesFor kernels.linux_7_3);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
     linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
+    linux_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
+    linux_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
     linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
@@ -681,7 +695,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_7_2;
+    linux_latest = packages.linux_7_3;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

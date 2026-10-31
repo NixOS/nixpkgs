@@ -5,8 +5,8 @@
 
   # build-system
   cmake,
+  nanobind_3,
   ninja,
-  pybind11,
   setuptools,
 
   # nativeBuildInputs
@@ -42,10 +42,16 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     cudaPackages.cudnn-frontend.postPatch
     + ''
       substituteInPlace pyproject.toml \
-        --replace-fail '"ninja==1.11.1.1"' '"ninja"' \
-        --replace-fail '"pybind11[global]>=2.13,<3"' '"pybind11"'
+        --replace-fail '"ninja==1.11.1.1;' '"ninja;'
 
       sed -i '/cmake_args =/a\\f"-DCUDNN_FRONTEND_USE_SYSTEM_DLPACK=ON",' setup.py
+    ''
+    # The bindings include standard headers before Python.h, so pyconfig.h redefines the
+    # _POSIX_C_SOURCE and _XOPEN_SOURCE that glibc already defined, with different values.
+    # That warning is an error under upstream's -Werror.
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail '-Wpedantic -Werror ' '-Wpedantic '
     ''
     + ''
       substituteInPlace python/cudnn/__init__.py \
@@ -56,8 +62,8 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   build-system = [
     cmake
+    nanobind_3
     ninja
-    pybind11
     setuptools
   ];
 
@@ -100,5 +106,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   passthru.gpuCheck = nvidia-cudnn-frontend.overridePythonAttrs {
     requiredSystemFeatures = [ "cuda" ];
     doCheck = true;
+  };
+
+  # The version and source are cudaPackages.cudnn-frontend's, so updating it updates this package too.
+  passthru.updateScript = cudaPackages.cudnn-frontend.updateScript // {
+    attrPath = "cudaPackages.cudnn-frontend";
   };
 })

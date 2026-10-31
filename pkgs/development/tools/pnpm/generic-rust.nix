@@ -13,6 +13,7 @@
   version,
   srcHash,
   cargoHash,
+  cargoPatches ? [ ],
   knownVulnerabilities ? [ ],
 }:
 let
@@ -20,7 +21,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pnpm";
-  inherit version cargoHash;
+  inherit version cargoHash cargoPatches;
 
   src = fetchFromGitHub {
     owner = "pnpm";
@@ -33,6 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     makeWrapper
   ];
+
+  postPatch = ''
+    # upstream duplicates some sources in .cargo/config.toml
+    # that's also defined in Cargo.toml, cargo fails with duplicate definitions
+    sed -i '/# >>> pnpm-managed cargo sources >>>/,/# <<< pnpm-managed cargo sources <<</d' .cargo/config.toml
+  '';
 
   cargoBuildFlags = [
     "--bin=pnpm"
@@ -87,7 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   # Tests take way too long to run

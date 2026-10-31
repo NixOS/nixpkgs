@@ -25,7 +25,7 @@ buildPythonPackage {
     # Upstream maintainer currently does not tag releases
     # https://github.com/clayrisser/sphinx-markdown-parser/issues/35
     rev = "2fd54373770882d1fb544dc6524c581c82eedc9e";
-    sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
+    hash = "sha256-uxY+xQgVPvEIQSX9qlr7Fla9CBSx02C6HwjWVq+CEEQ=";
   };
 
   nativeBuildInputs = [ setuptools ];

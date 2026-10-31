@@ -16,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "kjdev";
     repo = "php-ext-zstd";
-    rev = version;
+    tag = version;
     hash = "sha256-3uTuAfHSeLKMbaRkUMUo3WWA4oGT7nXqXWlB1DUfzao=";
   };
 

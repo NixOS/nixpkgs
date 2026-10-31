@@ -14,7 +14,7 @@ php.buildComposerWithPlugin {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "composer-local-repo-plugin";
-    rev = version;
+    tag = version;
     hash = "sha256-edbn07r/Uc1g0qOuVBZBs6N1bMN5kIfA1b4FCufdw5M=";
   };
 

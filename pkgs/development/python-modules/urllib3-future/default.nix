@@ -19,20 +19,21 @@
   stdenv,
   tornado,
   trustme,
+  websockets,
   wsproto,
   zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "urllib3-future";
-  version = "2.24.908";
+  version = "2.25.904";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
     tag = finalAttrs.version;
-    hash = "sha256-/1gAHvXtp0g88PE0pZrBDlB0Gj/NkpbrggvsNHQO+8o=";
+    hash = "sha256-ihNH2C6dd0t4UMOczFUAXfL8/4lPD+eiKBdUltIX5Co=";
   };
 
   postPatch = ''
@@ -55,9 +56,18 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     brotli = [ (if isPyPy then brotlicffi else brotli) ];
     qh3 = [ qh3 ];
+    # FIXME package rtls
+    # rtls = lib.optionals (!isPyPy) [ rtls ];
     secure = [ ];
     socks = [ python-socks ];
+    # FIXME package utls
+    # utls = lib.optionals (!isPyPy) [
+    #   brotli
+    #   utls
+    #   zstandard
+    # ];
     ws = [ wsproto ];
+    ws-fast = [ websockets ];
     zstd = lib.optionals (pythonOlder "3.14") [ zstandard ];
   };
 
@@ -84,6 +94,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # test connects to the internet
     "test/contrib/test_resolver.py::test_url_resolver"
+    # https://github.com/jawah/urllib3.future/issues/437
+    "test/contrib/asynchronous/test_socks.py"
+    "test/contrib/test_socks.py"
   ];
 
   meta = {

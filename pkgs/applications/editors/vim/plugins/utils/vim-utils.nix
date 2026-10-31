@@ -114,7 +114,7 @@
 
     vim_with_plugins =
       let vim = vim-full;
-          inherit (vimUtil.override {inherit vim}) rtpPath addRtp buildVimPlugin vimHelpTags;
+          inherit (vimUtil.override {inherit vim}) rtpPath buildVimPlugin vimHelpTags;
           vimPlugins = [
             # the derivation list from the buffer created by nix#ExportPluginsForNix
             # don't set which will default to pkgs.vimPlugins

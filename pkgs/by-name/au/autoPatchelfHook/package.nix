@@ -17,5 +17,6 @@ makeSetupHook {
   };
   meta = {
     maintainers = with lib.maintainers; [ layus ];
+    license = lib.licenses.mit;
   };
 } ./auto-patchelf.sh

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jaq";
-  version = "3.1.1";
+  version = "3.1.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/yAwLcPwfW5UH+PCCrsFaM0Nuk1S5QONLsNgvVCBLX8=";
+    hash = "sha256-aUmJxZaILF2r/w2iXty9ZeRMqqIytQtJOnwPvTLeQFA=";
   };
 
-  cargoHash = "sha256-5+IBUOTO7XNWogQBNEt8XydLZ1xTvldvx5lIfh7K0QA=";
+  cargoHash = "sha256-zU7LNHoUK1H+BoK5KvOF59lyfc1Vy2TxbaaCiQ6/H9E=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

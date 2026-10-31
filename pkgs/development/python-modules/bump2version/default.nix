@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "c4urself";
     repo = "bump2version";
     tag = "v${version}";
-    sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
+    hash = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
   build-system = [ setuptools ];

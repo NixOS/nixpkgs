@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   lib,
   tlpdb,
   bin,
@@ -27,6 +27,7 @@
   zip,
   luajit,
   texinfo,
+  unzip,
 }:
 oldTlpdb:
 let
@@ -478,9 +479,31 @@ lib.recursiveUpdate orig rec {
   '';
 
   # find files in script directory, not in binary directory
-  minted.postFixup = ''
-    substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
-  '';
+  # fix compatibility with Python 3.14 by loading a patched copy of the latexminted package
+  # (the patch is applied here rather than in postUnpack, since repacking the wheel inside the
+  # fixed-output tex container would make its hash depend on the zip/zlib implementation)
+  minted.extraNativeBuildInputs = [ unzip ];
+  minted.postFixup =
+    let
+      patch = fetchpatch2 {
+        name = "minted-python314-compat.patch";
+        url = "https://github.com/gpoore/minted/commit/2a7b3a48e47b834bbc4a616679a0ef9710896a16.diff";
+        hash = "sha256-JcaQjSDqBQFsWLNRaOSNxCvPNa2HktfuzjsMKAWUPl8=";
+        includes = [ "python/latexminted/cmdline.py" ];
+      };
+    in
+    ''
+      substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
+
+      latexmintedLib="$out"/share/minted/python
+      mkdir -p "$latexmintedLib"
+      unzip -q "$scriptsFolder"/latexminted-0.6.0-py3-none-any.whl 'latexminted/*' -d "$latexmintedLib"
+      sed -i 's/\r$//' "$latexmintedLib"/latexminted/cmdline.py
+      patch -p2 -d "$latexmintedLib" -i "${patch}"
+      substituteInPlace "$out"/bin/latexminted \
+        --replace-fail "from latexminted.cmdline import main" \
+          "sys.path.insert(0, '$latexmintedLib')"$'\n'"from latexminted.cmdline import main"
+    '';
 
   # find files in source container, fix incompatibilities with snobol4
   texaccents.postFixup = ''

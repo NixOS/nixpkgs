@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "2.0.3";
   src = fetchurl {
     url = "http://download.qt.io/official_releases/qt-installer-framework/${version}/qt-installer-framework-opensource-${version}-src.tar.gz";
-    sha256 = "003gwjg02isw8qjyka377g1ahlisfyi44l6xfa4hvvdgqqq0hy2f";
+    hash = "sha256-TngIMMav7Q2Jct1QQqJ3OlKowjtnqOklRlxHAZ7kbwA=";
     name = "qt-installer-framework-opensource-src-${version}.tar.gz";
   };
 

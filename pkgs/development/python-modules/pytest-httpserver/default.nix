@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.1.3";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "csernazs";
     repo = "pytest-httpserver";
     tag = version;
-    hash = "sha256-5pyCDzt9nCwYcUdCjWlJiAkyNmf6oWBqSHQL7kJJluA=";
+    hash = "sha256-6GU7LwCy5BacgdT1owrzN1NYazRE4zHSVl4hxPhrYSo=";
   };
 
   nativeBuildInputs = [ poetry-core ];

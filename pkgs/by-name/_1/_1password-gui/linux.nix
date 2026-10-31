@@ -5,8 +5,13 @@
   version,
   src,
   meta,
+
+  # nativeBuildInputs
+  autoPatchelfHook,
   makeShellWrapper,
   wrapGAppsHook3,
+
+  # buildInputs
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -29,12 +34,14 @@
   libxkbcommon,
   libxshmfence,
   libGL,
-  libappindicator,
   libgbm,
   nspr,
   nss,
   pango,
   systemd,
+
+  # runtime dependencies
+  libappindicator,
   udev,
   xdg-utils,
 
@@ -57,84 +64,84 @@ stdenv.mkDerivation {
     ;
 
   nativeBuildInputs = [
+    autoPatchelfHook
     makeShellWrapper
     wrapGAppsHook3
   ];
-  buildInputs = [ glib ];
+
+  buildInputs = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    libx11
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libdrm
+    libxcb
+    libxkbcommon
+    libxshmfence
+    libgbm
+    nspr
+    nss
+    pango
+    systemd
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  # Electron loads this with dlopen(), so it never appears in DT_NEEDED.
+  runtimeDependencies = [ libappindicator ];
+
+  # Applied to every patched file, including bundled libraries (¯\_(ツ)_/¯)
+  # ANGLE's libGLESv2.so dlopen()s libEGL.so.1 itself, and Electron dlopen()s
+  # libraries bundled next to its executable.
+  appendRunpaths = [
+    "${lib.getLib libGL}/lib"
+    "${placeholder "out"}/share/1password"
+  ];
 
   dontConfigure = true;
   dontBuild = true;
+  # Keep patchELF's --shrink-rpath from removing the dlopen()-only entries above.
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  installPhase =
-    let
-      rpath =
-        lib.makeLibraryPath [
-          alsa-lib
-          at-spi2-atk
-          at-spi2-core
-          atk
-          cairo
-          cups
-          dbus
-          expat
-          gdk-pixbuf
-          glib
-          gtk3
-          libx11
-          libxcomposite
-          libxdamage
-          libxext
-          libxfixes
-          libxrandr
-          libdrm
-          libxcb
-          libxkbcommon
-          libxshmfence
-          libGL
-          libappindicator
-          libgbm
-          nspr
-          nss
-          pango
-          systemd
-        ]
-        + ":${lib.getLib stdenv.cc.cc}/lib64";
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/bin $out/share/1password
-      cp -a * $out/share/1password
+    mkdir -p $out/bin $out/share/1password
+    cp -a * $out/share/1password
 
-      # Desktop file
-      install -Dt $out/share/applications resources/*.desktop
-      substituteInPlace $out/share/applications/*.desktop \
-        --replace-fail 'Exec=/opt/1Password/1password' 'Exec=1password'
+    # Desktop file
+    install -Dt $out/share/applications resources/*.desktop
+    substituteInPlace $out/share/applications/*.desktop \
+      --replace-fail 'Exec=/opt/1Password/1password' 'Exec=1password'
 
-    ''
-    + (lib.optionalString (polkitPolicyOwners != [ ]) ''
-      # Polkit file
-        mkdir -p $out/share/polkit-1/actions
-        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace-fail "\''${POLICY_OWNERS}" "${policyOwners}"
-    '')
-    + ''
+  ''
+  + (lib.optionalString (polkitPolicyOwners != [ ]) ''
+    # Polkit file
+      mkdir -p $out/share/polkit-1/actions
+      substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace-fail "\''${POLICY_OWNERS}" "${policyOwners}"
+  '')
+  + ''
 
-      # Icons
-      cp -a resources/icons $out/share
+    # Icons
+    cp -a resources/icons $out/share
 
-      interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-LastPass-Exporter,op-ssh-sign}
-      for file in $(find $out -type f -name \*.so\* ); do
-        patchelf --set-rpath ${rpath}:$out/share/1password $file
-      done
+    ln -s $out/share/1password/op-ssh-sign $out/bin/op-ssh-sign
 
-      ln -s $out/share/1password/op-ssh-sign $out/bin/op-ssh-sign
-
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   preFixup = ''
     # makeWrapper defaults to makeBinaryWrapper due to wrapGAppsHook

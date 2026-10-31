@@ -18,6 +18,7 @@ let
     evalModules
     hasPrefix
     removePrefix
+    removeSuffix
     flip
     foldr
     types
@@ -40,6 +41,13 @@ let
   # you'd need to include `extraSources = [ pkgs.customModules ]`
   prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
   stripAnyPrefixes = flip (foldr removePrefix) prefixesToStrip;
+
+  moduleChapterId =
+    p:
+    let
+      stem = removeSuffix ".nix" (baseNameOf p.file);
+    in
+    if stem == "default" then baseNameOf (dirOf p.file) else stem;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
     inherit
@@ -113,7 +121,9 @@ let
       --replace-fail \
           '"@MODULE_CHAPTERS@"' \
           ${escapeShellArg (
-            concatMapStringsSep ",\n" (p: ''{ "file": "${p.value}" }'') (sortOn (p: p.file) config.meta.doc)
+            concatMapStringsSep ",\n" (p: ''{ "id": "${moduleChapterId p}", "file": "${p.value}" }'') (
+              sortOn (p: p.file) config.meta.doc
+            )
           )}
     substituteInPlace ./nixos-options.md \
       --replace-fail \

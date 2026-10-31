@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.16.5";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "farion1231";

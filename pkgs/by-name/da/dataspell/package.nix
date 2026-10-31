@@ -12,38 +12,19 @@
   # keep-sorted end
 }:
 let
-  system = stdenv.hostPlatform.system;
-  # update-script-start: urls
-  urls = {
-    x86_64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz";
-      hash = "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg=";
-    };
-    aarch64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz";
-      hash = "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww=";
-    };
-    aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg";
-      hash = "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY=";
-    };
-  };
-  # update-script-end: urls
+  inherit (stdenv.hostPlatform) system;
+  versionInfo = lib.importJSON ./version.json;
 in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
+  inherit (versionInfo) version buildNumber;
 
   pname = "dataspell";
 
   wmClass = "jetbrains-dataspell";
   product = "DataSpell";
 
-  # update-script-start: version
-  version = "2026.1.3";
-  buildNumber = "261.26222.84";
-  # update-script-end: version
-
-  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
   jdk =

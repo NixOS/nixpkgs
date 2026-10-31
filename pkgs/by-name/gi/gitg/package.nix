@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitg";
-  version = "44";
+  version = "50";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor finalAttrs.version}/gitg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NCoxaE2rlnHNNBvT485mWtzuBGDCoIHdxJPNvAMTJTA=";
+    hash = "sha256-MxIWqGkgzU6KubADbmPOyz4aHRFixhqjG9aSTphagVQ=";
   };
 
   patches = [

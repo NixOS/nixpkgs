@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "spelll";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nI8fdArYynR70PUJIgyogGBCe4gFhfVzuRdZzFGKqOc=";
   };
 

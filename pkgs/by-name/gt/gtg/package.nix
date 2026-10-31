@@ -16,6 +16,7 @@
   libsecret,
   gobject-introspection,
   xvfb-run,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gettext
     wrapGAppsHook3
     gobject-introspection
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -70,10 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     xvfb-run
     pytest
   ];
-
-  preBuild = ''
-    export HOME="$TMP"
-  '';
 
   pyproject = false;
 

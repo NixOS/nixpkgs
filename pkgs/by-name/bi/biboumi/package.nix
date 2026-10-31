@@ -7,7 +7,7 @@
   expat,
   libiconv,
   botan3,
-  systemd,
+  systemdLibs,
   pkg-config,
   python3Packages,
   withIDN ? true,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     libuuid
     expat
     libiconv
-    systemd
+    systemdLibs
     botan3
   ]
   ++ lib.optional withIDN libidn

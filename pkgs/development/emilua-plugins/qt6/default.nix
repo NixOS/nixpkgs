@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ch99ntLreiOjACxyJVR4174sHJT8EYXzDGPdysqmBXM=";
   };
 
+  patches = [
+    # std::mutex and std::lock_guard are used here without <mutex>.
+    ./missing-mutex-include.patch
+  ];
+
   buildInputs = with qt6Packages; [
     qtbase
     qtdeclarative

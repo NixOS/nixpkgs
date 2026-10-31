@@ -7,6 +7,7 @@
   factory-boy,
   fetchFromGitHub,
   poetry-core,
+  pylint,
   pylint-plugin-utils,
   pytestCheckHook,
 }:
@@ -25,7 +26,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ pylint-plugin-utils ];
+  dependencies = [
+    pylint
+    pylint-plugin-utils
+  ];
 
   optional-dependencies = {
     with_django = [ django ];
@@ -45,6 +49,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyCQA/pylint-django";
     changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

@@ -48,7 +48,7 @@ buildPythonPackage (
 
     src = fetchurl {
       url = "https://download.mosek.com/stable/${finalAttrs.version}/mosektoolslinux64x86.tar.bz2";
-      sha256 = "sha256-DVSZ+8ggmK7EyiaHYCUjxQ/3mY5GcUlgXVRfReiBkiw=";
+      hash = "sha256-DVSZ+8ggmK7EyiaHYCUjxQ/3mY5GcUlgXVRfReiBkiw=";
     };
 
     # Move the source we want to the root

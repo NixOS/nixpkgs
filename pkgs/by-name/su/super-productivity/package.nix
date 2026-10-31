@@ -1,8 +1,9 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_43,
+  electron_44,
   fetchFromGitHub,
+  gitMinimal,
   lib,
   makeDesktopItem,
   nix-update-script,
@@ -15,12 +16,12 @@
   cargo,
 }:
 let
-  electron = electron_43;
+  electron = electron_44;
   nodejs = nodejs_22;
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "19.1.0";
+  version = "19.3.1";
 
   inherit nodejs;
 
@@ -28,7 +29,7 @@ buildNpmPackage (finalAttrs: {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iWiWVUGr3qGcfYqCJg9hkXSTM1eWarYZgWspj3+Bn0Q=";
+    hash = "sha256-RlDpD+dfJiMjXlbVq1hW16eyt+S/IFGiJvoce6ZWAEM=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -74,7 +75,7 @@ buildNpmPackage (finalAttrs: {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-vP3wVozl/7KKnJ4CcOzXsljCdQ3Z83Rm0zYEyg1Ce0c=";
+      hash = "sha256-q0mj8EJ2RE/i6u5FjT/Fm+7GyMLnF2FqIxsfKQO2SNU=";
     }
   );
 
@@ -95,9 +96,15 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
+    # Use JavaScript Sass implementation instead bundled Dart executable.
+    NG_BUILD_SASS_EMBEDDED = "false";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    # Required by the build-time tests.
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     cargo
     copyDesktopItems
     rustPlatform.cargoSetupHook

@@ -47,10 +47,9 @@ buildNpmPackage rec {
   postInstall = ''
     mv "$out/bin/pyright" "$out/bin/basedpyright"
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
-    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
-    find -L $out -type l -print -delete
-    # Remove native module build artifacts that reference nodejs source
-    rm -rf "$out/lib/node_modules/pyright-root/node_modules/keytar/build"
+    # dist/ is a bundle whose only non-builtin require is the optional, darwin-only fsevents;
+    # the rest of node_modules is monorepo tooling that npm prune leaves behind
+    find "$out/lib/node_modules/pyright-root/node_modules" -mindepth 1 -maxdepth 1 ! -name fsevents -exec rm -rf {} +
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

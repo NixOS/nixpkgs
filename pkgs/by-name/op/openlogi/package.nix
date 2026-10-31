@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openlogi";
   version = "0.6.25";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

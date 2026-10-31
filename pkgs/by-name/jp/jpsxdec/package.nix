@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/m35/jpsxdec/blob/${finalAttrs.src.rev}/jpsxdec/doc/CHANGES.txt";
     description = "Cross-platform PlayStation 1 audio and video converter";
     homepage = "https://jpsxdec.blogspot.com/";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "jpsxdec";
       url = "https://raw.githubusercontent.com/m35/jpsxdec/${finalAttrs.src.rev}/.github/LICENSE.md";
       free = true;
     };

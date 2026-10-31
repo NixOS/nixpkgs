@@ -15,7 +15,7 @@ rec {
       group = "World";
       owner = "OpenPaperwork";
       rev = version;
-      sha256 = "sha256-PRh0ohmPLwpM76qYfbExFqq4OK6Hm0fbdzrjXungSoY=";
+      hash = "sha256-PRh0ohmPLwpM76qYfbExFqq4OK6Hm0fbdzrjXungSoY=";
     };
     patches = [
       # fix installing translations
@@ -43,7 +43,7 @@ rec {
     owner = "OpenPaperwork";
     # https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/blob/master/paperwork-gtk/src/paperwork_gtk/model/help/screenshot.sh see TEST_DOCS_TAG
     rev = "2.1";
-    sha256 = "0m79fgc1ycsj0q0alqgr0axn16klz1sfs2km1h83zn3kysqcs6xr";
+    hash = "sha256-uRvNsPZz2D8QDHUK7XT4dJpguwL5YaoABlIzH9hz6VQ=";
   };
 
 }

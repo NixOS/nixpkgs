@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
-  version = "0.3.48";
+  version = "0.3.52";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = finalAttrs.version;
-    hash = "sha256-mN4hIIFBHCawpHq6qGcSmBTsuQk2/gngSgnXMka1HTA=";
+    hash = "sha256-tffPKO28Qh/6hY46HuRQP4XsSqq2sideEQGQC/SwMC8=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://partclone.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ daimond113 ];
     platforms = lib.platforms.linux;
   };
 })

@@ -23,6 +23,7 @@ buildPecl {
   doCheck = true;
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "High performance, open source, general RPC framework that puts mobile and HTTP/2 first";
     homepage = "https://github.com/grpc/grpc/tree/master/src/php/ext/grpc";
     license = lib.licenses.asl20;

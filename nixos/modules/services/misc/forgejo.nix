@@ -801,9 +801,11 @@ in
       // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.server.START_SSH_SERVER or false) [
-      "GIT_PROTOCOL"
-    ];
+    services.openssh.extraConfig = mkIf (!cfg.settings.server.START_SSH_SERVER or false) ''
+      Match User ${cfg.user}
+        AcceptEnv GIT_PROTOCOL
+      Match All
+    '';
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {

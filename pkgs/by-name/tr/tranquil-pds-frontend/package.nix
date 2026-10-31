@@ -12,12 +12,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
-  version = "0.6.7";
+  version = "0.7.0";
 
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bhG5ydQZ9nHXQSlrM2jZaUpEP8ZW3Xx6r5O83vLDf8k=";
+    hash = "sha256-qsV7AXQHITaWQ3lFGyvdukV8gcVoI4P02QWS4BsZxIQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 

@@ -41,9 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  env.CXXFLAGS = toString [
-    "-DQT_NO_USE_NODISCARD_FILE_OPEN"
-  ];
+  env.CXXFLAGS = toString (
+    [
+      "-DQT_NO_USE_NODISCARD_FILE_OPEN"
+    ]
+    # vendored maplibre-native builds with -Werror and trips GCC 16's -Wsfinae-incomplete
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "16") [
+      "-Wno-error=sfinae-incomplete"
+    ]
+  );
 
   buildInputs = [
     qtlocation

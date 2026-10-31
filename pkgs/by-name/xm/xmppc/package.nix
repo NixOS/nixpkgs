@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Anoxinon_e.V.";
     repo = "xmppc";
     rev = finalAttrs.version;
-    sha256 = "07cy3j4g7vycagdiva3dqb59361lw7s5f2yydpczmyih29v7hkm8";
+    hash = "sha256-qE54dhIw+vrZbd4LV/ThNJiRysJtqB3bU8zv84gcnh0=";
   };
 
   nativeBuildInputs = [

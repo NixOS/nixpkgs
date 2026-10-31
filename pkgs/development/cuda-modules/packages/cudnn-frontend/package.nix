@@ -35,13 +35,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
 
   pname = "cudnn-frontend";
-  version = "1.29.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fCmsjglU4rSreN4249ZL/Y0dY0v8se1Jbani2UZT36g=";
+    hash = "sha256-xrLk0gD5cvbX6qxdIFcFmHsHl6JpGTBG+U1Eu+3pJ1Q=";
   };
 
   # nlohmann_json should be the only vendored dependency.
@@ -139,6 +139,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater {
     inherit (finalAttrs) pname version;
     rev-prefix = "v";
+    # Skip pre-releases (e.g. 1.32.0.dev74371060, 1.31.0-rc.72477416)
+    ignoredVersions = "(\\.dev|-rc)";
   };
 
   meta = {

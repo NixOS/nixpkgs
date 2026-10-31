@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-dlhQx0hooLWgL++/wbOAhCtk5fehyLFlXjIqOxTAFyY=";
+    hash = "sha256-Q+1Gsh0VGqZDxnZUV8cxCCe5OMHPRdUQmgFS3k7wYic=";
   };
 
   pythonRemoveDeps = [
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     description = "NVIDIA CUTLASS Python DSL";
     homepage = "https://github.com/NVIDIA/cutlass";
     changelog = "https://github.com/NVIDIA/cutlass/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary
+    license = lib.licenses.nvidiaCutlassDsl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };

@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Emmanuel-PLF/facile/releases/download/${finalAttrs.version}/facile-${finalAttrs.version}.tbz";
-    sha256 = "0jqrwmn6fr2vj2rrbllwxq4cmxykv7zh0y4vnngx29f5084a04jp";
+    hash = "sha256-VxKgCALFJdGftZt4AP/Z0/fKCO6c0pWzkFtkZ2zlGUs=";
   };
 
   patches = fetchpatch {

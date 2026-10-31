@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comrak";
-  version = "0.55.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "kivikakk";
     repo = "comrak";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uxOCxuOL3iMMVPZCG0tE9To7lJp94ILf2crm/ShCChE=";
+    sha256 = "sha256-MU+RTbGhiNXZsWnFkVxOZP9zAyAoVz/nJFbFaGgcKAU=";
   };
 
-  cargoHash = "sha256-fn9y6Hwtw3vUq5BES796IsyNXHQm8YydmYUDWbXUA3o=";
+  cargoHash = "sha256-Vy3iXflDESq+LkaCW+vglOCsKEaxVgSjAMYIV0YnCYA=";
 
   meta = {
     description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";

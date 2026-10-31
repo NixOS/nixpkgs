@@ -76,7 +76,7 @@ in
 {
   options = {
     services.netdata = {
-      enable = lib.mkEnableOption "netdata";
+      enable = lib.mkEnableOption "Netdata";
 
       package = lib.mkPackageOption pkgs "netdata" { };
 
@@ -180,7 +180,7 @@ in
       config = lib.mkOption {
         type = lib.types.attrsOf lib.types.attrs;
         default = { };
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = "Configuration for `netdata.conf` as Nix attributes, cannot be combined with `configText`.";
         example = lib.literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -194,13 +194,15 @@ in
         type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
-          Complete netdata config directory except netdata.conf.
+          Complete netdata config directory except `netdata.conf`.
           The default configuration is merged with changes
           defined in this option.
+
           Each top-level attribute denotes a path in the configuration
-          directory as in environment.etc.
+          directory as in `environment.etc`.
+
           Its value is the absolute path and must be readable by netdata.
-          Cannot be combined with configText.
+          Cannot be combined with `configText`.
         '';
         example = lib.literalExpression ''
           "health_alarm_notify.conf" = pkgs.writeText "health_alarm_notify.conf" '''

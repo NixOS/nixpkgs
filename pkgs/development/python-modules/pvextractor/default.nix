@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "radio-astro-tools";
     repo = "pvextractor";
     tag = "v${version}";
-    sha256 = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
+    hash = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
   };
 
   buildInputs = [ pyqt-builder ];

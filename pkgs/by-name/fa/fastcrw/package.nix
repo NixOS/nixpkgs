@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastcrw";
-  version = "0.33.0";
+  version = "0.37.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "us";
+    owner = "fastcrw";
     repo = "crw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ltZoCLgIR7jBBsyggLwZspwqCNspH4+jqpadyQ2HS/0=";
+    hash = "sha256-zgzyCHSHqpN7lxkRxH78AZLcAqWacniPmDJDqTNmrcw=";
   };
 
-  cargoHash = "sha256-G4N82svyVX9MXRHLH9nrPXVl6PQWxVwzr8eRKYwezic=";
+  cargoHash = "sha256-VEbM7WvJHhfbbW+9c7fwl5NoFYmDvfQwVKR1R/S+JfU=";
 
   # aws-lc-sys drives its C build through cmake and generates its bindings.
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=crawl_with_renderer_auto_accepted"
     "--skip=crawl_with_renderer_unavailable_returns_400"
     "--skip=mcp_crw_crawl_renderer_unavailable_returns_tool_error"
+    "--skip=scrape_with_impersonated_pin_400s_on_absent_tier_or_contradiction"
     "--skip=scrape_with_renderer_unavailable_returns_400"
     "--skip=v2_extract_blank_system_prompt_is_tolerated"
   ];
@@ -68,8 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Web scraper, crawler and search API with an MCP server for AI agents";
-    homepage = "https://github.com/us/crw";
-    changelog = "https://github.com/us/crw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/fastcrw/crw";
+    changelog = "https://github.com/fastcrw/crw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "crw";

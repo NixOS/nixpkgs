@@ -44,6 +44,13 @@ let
   cudaManifests = { inherit (cudaPackages.manifests) cuda cudnn; };
   cudaManifestHash = builtins.hashString "sha256" (builtins.toJSON cudaManifests);
   cudaLocal = callPackage ./cuda-local.nix { inherit cudaPackages; };
+  cudaHashes = {
+    "41d8c351dd9ceb95086c8fc2ebcb49b317c5082393220e5919372a7860487c60" =
+      "sha256-BXPlzvYSCOudbKgHU/IhHaHG5umNBGgD0hKl7jnOxcc=";
+  };
+  cudaHash =
+    cudaHashes.${cudaManifestHash} or throw
+      "xla: no Bazel dependency hash for these CUDA/cuDNN manifests; overrideAttrs with deps.overrideAttrs { outputHash = ...; outputHashAlgo = \"sha256\"; } (see tests/README.md)";
 
   # Keep a real build-only driver, not a toolkit stub, for CUDA-linked exec
   # tools. CCCL has its own LOCAL_CCCL_PATH hook and stays pinned by XLA.
@@ -287,11 +294,7 @@ in
         cpu.x86_64-linux = "sha256-wbLvzCLpFw4+QF86zIBroAeFrwqUTe31aJV7tcjhSZE=";
         # This hash covers the selected manifests, not cudaCapabilities. Alternate
         # manifests need a caller-supplied deps outputHash/outputHashAlgo override.
-        cuda.x86_64-linux =
-          if cudaManifestHash == "41d8c351dd9ceb95086c8fc2ebcb49b317c5082393220e5919372a7860487c60" then
-            "sha256-BXPlzvYSCOudbKgHU/IhHaHG5umNBGgD0hKl7jnOxcc="
-          else
-            throw "xla: no Bazel dependency hash for these CUDA/cuDNN manifests; overrideAttrs with deps.overrideAttrs { outputHash = ...; outputHashAlgo = \"sha256\"; } (see tests/README.md)";
+        cuda.x86_64-linux = cudaHash;
       }
       .${if cudaSupport then "cuda" else "cpu"}.${stdenv.hostPlatform.system}
         or (throw "unsupported system: ${stdenv.hostPlatform.system}");
@@ -593,6 +596,16 @@ in
     ++ lib.optionals cudaSupport ([ lib.licenses.nvidiaCudaRedist ] ++ cudaPackages.cudnn.meta.license);
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
+    problems = lib.optionalAttrs (!(lib.hasAttr cudaManifestHash cudaHashes)) {
+      unsupported-cuda-toolkit = {
+        message = ''
+          Unsupported cuda version for XLA.
+            Current `cudaManifestHash`: ${cudaManifestHash}
+            Supported hash(es): ${lib.concatStringsSep ", " (builtins.attrNames cudaHashes)}
+        '';
+        kind = "broken";
+      };
+    };
   };
 }).overrideAttrs
   # buildBazelPackage accepts only an attrset, not mkDerivation's finalAttrs callback.

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tacacsplus";
-  version = "4.0.4.31";
+  version = "4.0.4.32";
 
   src = fetchurl {
     url = "ftp://ftp.shrubbery.net/pub/tac_plus/tacacs-F${finalAttrs.version}.tar.gz";
-    hash = "sha256-MKad/Ax1vbz7GPV23l79cq6qBwnDGMBPFTcjn0UeyA8=";
+    hash = "sha256-7j5AOgecdcrRPOnkUcGvARWwZHFCdlu9heYNep8/P9I=";
   };
 
   nativeBuildInputs = [

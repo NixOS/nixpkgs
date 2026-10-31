@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hwdata";
-  version = "0.411";
+  version = "0.412";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y2iBWSOYPCliGsy1rMBBsCT9imzGpgEWJgJHebN/jUA=";
+    hash = "sha256-kEFxNMFLg6UEEp3l7LP60y6uJbqbti/Ustu4crvMZMU=";
   };
 
   strictDeps = true;

@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   meta = {
-    homepage = "https://tmate.io/";
+    homepage = "https://github.com/tmate-io/tmate";
     description = "Instant Terminal Sharing";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

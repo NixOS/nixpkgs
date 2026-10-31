@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.12.0";
+  version = "5.13.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zeHpTe4DlurFqdsrJBlXSl+vXCOdhJRCjHLDpFf2u1o=";
+    hash = "sha256-NT1kRrN31+IjrkWGcLgFIawp73Senb88BTsgrYyEcuU=";
   };
 
   __structuredAttrs = true;

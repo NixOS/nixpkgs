@@ -35,7 +35,7 @@
   libpng,
   libnotify,
   libgcrypt,
-  systemd,
+  systemdLibs,
   fontconfig,
   dbus,
   expat,
@@ -57,6 +57,8 @@
   ayatana-ido,
   libdbusmenu,
   libGL,
+  libva,
+  pciutils,
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
   deviceScaleFactor ? null,
@@ -91,12 +93,14 @@ let
     libnotify
     libpng
     libpulseaudio
+    libva
     libxkbcommon
     libgbm
     nss_latest
     pango
+    pciutils
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libice
     libsm
     libx11

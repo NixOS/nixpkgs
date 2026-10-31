@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "smartctl_exporter";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "smartctl_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9woQgqkPYKMu8p35aeSv3ua1l35BuMzFT4oCVpmyG2E=";
+    hash = "sha256-HwyVczHaXjc7e53mKr0TQ5JgGaFKiuRK7b6K+Z1kucw=";
   };
 
-  vendorHash = "sha256-bDO7EgCjmObNaYHllczDKuFyKTKH0iCFDSLke6VMsHI=";
+  vendorHash = "sha256-Grw8k8nSJYBWQCfSf9HSNjIuyk2UIUaRoFQYtnG8668=";
 
   postPatch = ''
     substituteInPlace main.go README.md \
@@ -31,6 +31,7 @@ buildGoModule (finalAttrs: {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smartctl; };
 
   meta = {
+    changelog = "https://github.com/prometheus-community/smartctl_exporter/releases/tag/${finalAttrs.src.tag}";
     description = "Export smartctl statistics for Prometheus";
     mainProgram = "smartctl_exporter";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";

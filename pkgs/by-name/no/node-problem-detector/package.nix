@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
 }:
 
 buildGoModule (finalAttrs: {
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
 
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 

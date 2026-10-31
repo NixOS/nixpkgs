@@ -46,7 +46,7 @@
   shared-mime-info,
   socat,
   replaceVars,
-  systemd,
+  systemdLibs,
   testers,
   valgrind,
   validatePkgConfig,
@@ -75,7 +75,7 @@
   withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit,
   withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
   withSELinuxModule ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withGlibNetworking glib-networking
   ++ lib.optional withMalcontent malcontent
   ++ lib.optional withPolkit polkit
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   # Required by flatpak.pc
   propagatedBuildInputs = [

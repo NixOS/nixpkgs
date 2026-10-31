@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.7.1";
+  version = "4.8.1";
 
   inherit (stdenv.hostPlatform) system;
 
@@ -38,47 +38,47 @@ let
   hashes = {
     base = {
       x86_64-linux = {
-        cp311 = "sha256-Qx42SLhK1KgajTsfp+RFMmy1pSTmT2witNGRp2RVvfk=";
-        cp312 = "sha256-wrZ9rKv8kF5NEyeE/khIZH9AsLl7HN3jzkpIJkJTa4Q=";
-        cp313 = "sha256-YQl8XDVeHkL4Ux79To6tC6Ya4atrC5rPy/LKZls9rlo=";
-        cp314 = "sha256-B3ZQb2ZuHGg0qKkZXvICmXM64BPSNHJoKVZb5dhQmUI=";
+        cp311 = "sha256-BPYNSBXUC4WI3BK8WFcpI2GfG5VHk2GV6AY0qUaMD7I=";
+        cp312 = "sha256-rC/Yx/o9be0AkX+ny6hoYGEAXajEcDxqKeA8FQRUOQk=";
+        cp313 = "sha256-M02LIZ/5UER55Q74b62qVpWhHyGoflyHp1NUsNa6EPw=";
+        cp314 = "sha256-FpQaRNTop2M9vmbT5bZO1ME2E0vxT9V9uEy99XCS5ys=";
       };
       aarch64-linux = {
-        cp311 = "sha256-KY5zrQ8bBITkuEOOnarjhzKmytyfQCNHXlsMKGiYWro=";
-        cp312 = "sha256-6GxVpQEKft/AZ2SKdcsp0MW9Z9dSEBaM9Qew0OTRW6c=";
-        cp313 = "sha256-BmWOaR6xBHyDvki6UBv3Py6n7N2MHuX58m21h5COQ+0=";
-        cp314 = "sha256-NhkrTQ9yxPR7Od7yD0/acQWABWF7cgQ5VXB2iCdSSYI=";
+        cp311 = "sha256-jVG64HLtg89VmoooM11A60Dx/vXgURxAXZ4dpv0rEyA=";
+        cp312 = "sha256-xjEviy8ardlZoCdtrzxLrMBceDxuoRGYWe1OvTwH47E=";
+        cp313 = "sha256-e8GZoCRBdoSbGpccvDf8QWT3C3Ehp7QmycQr3yQDyxk=";
+        cp314 = "sha256-6EscpqE4pPRitAugVUsBf7ztO26CUzNRLZ4bAdZRj4k=";
       };
     };
     cu12 = {
       x86_64-linux = {
-        cp311 = "sha256-83/L2UqtZrAW3OpIPbUN2w/Kq3EwxTjfIO8p3e64uoU=";
-        cp312 = "sha256-yKD5OhzeQUBGlrMZTdH1icbzp7QmvKvpeEX4/pb5SfU=";
-        cp313 = "sha256-s0qTPN4eXPLfHzz9eO+9VITqM90Ml74gHAV+For3nBA=";
-        cp314 = "sha256-BvU99K2hQEO0WZk6bcRp0FBa2aFE0QG19ARhpYqOgOM=";
+        cp311 = "sha256-36i+ILJXv7UKiEOSgncXa2mljsOg/PItfUgl8sOD7YE=";
+        cp312 = "sha256-RAuIc5Egxl2WxfFbvklqO9fCY5KHTVr2Bh04SX+Exww=";
+        cp313 = "sha256-SdKmQTrvabYGve08S8SBIzVCufk83iQfhpWn6mK08ig=";
+        cp314 = "sha256-4h2V54yA9jyQ6wBIFFiZSQbvD3/R60q1eyNCWzjUx6E=";
       };
       aarch64-linux = {
-        cp311 = "sha256-SdVW8r4YjXWBD6jFR60V26QGhROKwn1UQYRBgqxJVak=";
-        cp312 = "sha256-9Xo5VcF7fc1UcqpHxGUT5fORThMl/DCK/KG5BjqPiXs=";
-        cp313 = "sha256-d2hKhhkRlbLW619wiLub8l5F21jOtEqcAv+weHu5X7k=";
-        cp314 = "sha256-03CLeLm3DcGynJpIpwMNFKGowXtS8/LQiNs9c8YDvsg=";
+        cp311 = "sha256-cKwOEJGDh+WxsyuzvAjqVlVsTlAMOJ3GiheMXU6Y898=";
+        cp312 = "sha256-yJ2f+VdOlFYeF74jwMBtZ/we22pLw+sGfzih3B9oK24=";
+        cp313 = "sha256-JJspR/UA0TrsVivVJ8mRNcQ7UgMy2YLwR6hmYefGqSk=";
+        cp314 = "sha256-5NPnwH3+nVf4WmI4U7+PDkU85wYTB5vx6b5o2g7weso=";
       };
     };
     cu13 = {
       x86_64-linux = {
-        cp311 = "sha256-gT7hn4yLbTkoSiSumd2am0lrM8mScLLPlUjnn0kXhAU=";
-        cp312 = "sha256-IMFOFhJcuONryZR6nwpXpmD0RlE2Uze5EchKveSWf18=";
-        cp313 = "sha256-L4b+jRp+9RC4U6OADL8yRAGhL9x3DMz0rF4gqdDH0b0=";
-        cp314 = "sha256-Z9NjqWA869uEdpi8b8GLwUupT1wPRcILETijFuBox74=";
+        cp311 = "sha256-lpzbjs/oyLUYEAH39IQp991THUPGYJrljr+MkoGFz08=";
+        cp312 = "sha256-UBkaOB2MwTkzc64LyHmwrvqaJWwjwi1PocL+Pf5XvJA=";
+        cp313 = "sha256-4GN/x+wfEZz4j8QtUAfHf3b1J8uCCSDkdmW8GTt4sL4=";
+        cp314 = "sha256-MdfyXJG+4kqXWM1pmmdSafuKWSlTh2ApvujD5Hj3dls=";
       };
       aarch64-linux = {
-        cp311 = "sha256-eq9DgKM4rjbFNRL2a4lHDebuHwTzgWOonNJebe6S/oc=";
-        cp312 = "sha256-5nW/BNxskffE1VQGmbegMfK4tEzSaHsywgiS8RL34Nk=";
-        cp313 = "sha256-odI870RnXmOCXD9ddz57QiiALKFV6rYcC8XlUcrzWtI=";
-        cp314 = "sha256-QlZ2czwaF1Hl/U/E3dTsb75nYNYxzhLtKH3WPPjDZG4=";
+        cp311 = "sha256-DwqjlOshARNMRKljO+p3ba8xXy/qKrcjzMbJEU+J1+o=";
+        cp312 = "sha256-hiN4wMUaOvLgU7NjZWUBsG+aVPd37uW+jABG14C2aVY=";
+        cp313 = "sha256-19hf9CHYMTSu8FZz6aRolJ/v2KfMr345AR9b/7mNmJA=";
+        cp314 = "sha256-D/KolD4SQ7kzXm0YXOyEHeJzPwwH+FCKVBizv7mEYPk=";
       };
     };
-    core = "sha256-xlZiq8mrGP2ZfFdUeJVzaSjlWfRiS74qoaqRQY6gFMo=";
+    core = "sha256-usxnYOMobbRH1Fcg0yrlisLmzsreEVI0XveEstXkRDE=";
   };
 
   fetchLibsWheel =
@@ -104,7 +104,7 @@ let
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-xlZiq8mrGP2ZfFdUeJVzaSjlWfRiS74qoaqRQY6gFMo=";
+    hash = hashes.core;
   };
 in
 buildPythonPackage {
@@ -116,9 +116,6 @@ buildPythonPackage {
   src = fetchLibsWheel "base";
 
   pythonRemoveDeps = [
-    # Only cuda-bindings is needed
-    "cuda-python"
-
     # just a wrapper for cudaPackages.cuda_nvdisasm
     "nvidia-cuda-nvdisasm"
 
@@ -190,7 +187,7 @@ buildPythonPackage {
     homepage = "https://github.com/NVIDIA/cutlass";
     changelog = "https://github.com/NVIDIA/cutlass/blob/v${version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary
+    license = lib.licenses.nvidiaCutlassDsl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };

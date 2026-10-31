@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.0";
+  version = "5.0.1";
   pname = "fints";
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     tag = "v${version}";
-    hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
+    hash = "sha256-ySOlASUTkCpdkl8oEGwKbX0zGrOg44V+svRLPeuXN/M=";
   };
 
   pythonRelaxDeps = [ "lxml" ];

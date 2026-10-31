@@ -31,6 +31,9 @@ let
 
       buildInputs = [
         expat
+      ];
+
+      propagatedBuildInputs = [
         systemdLibs
       ];
 

@@ -1,6 +1,6 @@
-From f0fc5eb48ff3a0e6f350bf1db6388a458a653cf7 Mon Sep 17 00:00:00 2001
+From d8c70bc2306248226cee7915fed76c45e29181b0 Mon Sep 17 00:00:00 2001
 From: Morgan Helton <mhelton@gmail.com>
-Date: Sat, 30 May 2026 06:59:25 -0500
+Date: Sun, 4 Oct 2026 18:54:25 -0500
 Subject: [PATCH] chore: use placeholders for par2-turbo and rapidyenc
 
 ---
@@ -9,7 +9,7 @@ Subject: [PATCH] chore: use placeholders for par2-turbo and rapidyenc
  2 files changed, 2 insertions(+), 10 deletions(-)
 
 diff --git a/cmake/par2-turbo.cmake b/cmake/par2-turbo.cmake
-index 16a80ffa..992bfe79 100644
+index dc06b623..992bfe79 100644
 --- a/cmake/par2-turbo.cmake
 +++ b/cmake/par2-turbo.cmake
 @@ -56,11 +56,7 @@ endif()
@@ -17,7 +17,7 @@ index 16a80ffa..992bfe79 100644
  	par2-turbo
  	PREFIX			par2-turbo
 -	GIT_REPOSITORY	https://github.com/nzbgetcom/par2cmdline-turbo.git
--	GIT_TAG			v1.4.0-20260323
+-	GIT_TAG			v1.4.0-20260803
 -	TLS_VERIFY		TRUE
 -	GIT_SHALLOW		TRUE
 -	GIT_PROGRESS	TRUE
@@ -26,15 +26,15 @@ index 16a80ffa..992bfe79 100644
  	BUILD_BYPRODUCTS ${PAR2_LIBS}
  	CMAKE_ARGS		 ${CMAKE_ARGS}
 diff --git a/cmake/rapidyenc.cmake b/cmake/rapidyenc.cmake
-index 9242efe4..0e8d7527 100644
+index cb17b8c1..17371854 100644
 --- a/cmake/rapidyenc.cmake
 +++ b/cmake/rapidyenc.cmake
-@@ -51,11 +51,7 @@ endif()
+@@ -55,11 +55,7 @@ endif()
  ExternalProject_add(
  	rapidyenc
  	PREFIX			rapidyenc
 -	GIT_REPOSITORY	https://github.com/nzbgetcom/rapidyenc.git
--	GIT_TAG			v1.1.1-20260217
+-	GIT_TAG			v1.1.1-20260821
 -	TLS_VERIFY		TRUE
 -	GIT_SHALLOW		TRUE
 -	GIT_PROGRESS	TRUE
@@ -43,5 +43,5 @@ index 9242efe4..0e8d7527 100644
  	BUILD_BYPRODUCTS ${RAPIDYENC_LIBS}
  	CMAKE_ARGS		 ${CMAKE_ARGS}
 -- 
-2.54.0
+2.55.0
 

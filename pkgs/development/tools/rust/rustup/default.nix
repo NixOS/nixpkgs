@@ -25,16 +25,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.29.1";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-zL/N2Bx3HIEzrRQQVdTQ7VnSoNNbqe8FE26GcjwHSjM=";
+    hash = "sha256-vtfZNMkUAmbdXv0sv7wdm62AjCkYJY188jLx8RrmO2M=";
   };
 
-  cargoHash = "sha256-soSeDzZzIPxR9cham+0VQfI21LgLX5o/9r00xK7fNHY=";
+  cargoHash = "sha256-UL6nS3SbxKXFWftJLeFY622VQEyAimhNz+YJgZsLHJc=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

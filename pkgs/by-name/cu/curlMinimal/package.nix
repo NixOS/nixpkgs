@@ -37,6 +37,7 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
+  httpsigSupport ? false,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -195,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature ldapSupport "ldap")
     (lib.enableFeature ldapSupport "ldaps")
     (lib.enableFeature websocketSupport "websockets")
+    (lib.enableFeature httpsigSupport "httpsig")
     # --with-ca-fallback is only supported for openssl https://github.com/curl/curl/blame/curl-8_16_0/acinclude.m4#L1258
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
@@ -300,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
         # error: attribute 'override' missing
         # Additional checking with support http3 protocol.
         # nginx-http3 = useThisCurl nixosTests.nginx-http3;
-        nginx-http3 = nixosTests.nginx-http3;
+        nginx-http3 = nixosTests.nginx.mainline.http3;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
         static = pkgsStatic.curl;
       };

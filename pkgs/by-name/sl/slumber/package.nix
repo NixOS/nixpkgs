@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slumber";
-  version = "5.3.0";
+  version = "5.4.3";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/ijYOAM8Az/BfUNtkybASuwe9pji0MY68RhySFyVkV8=";
+    hash = "sha256-rWYJruIcaEfFZpx5k4lJetOmM4pE1bk/njAh5ZHDVuc=";
   };
 
-  cargoHash = "sha256-aUwk0Ar/yz/zHZwsjWfjhGii0kamDafbWvlysadzMNY=";
+  cargoHash = "sha256-CS9HnycoJhMKyKWEA2cx+atb1u9OKgnMWcAs2pVNKLY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

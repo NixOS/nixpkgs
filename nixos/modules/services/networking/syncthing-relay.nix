@@ -15,9 +15,12 @@ let
   relayOptions = [
     "--keys=${dataDirectory}"
     "--listen=${cfg.listenAddress}:${toString cfg.port}"
-    "--status-srv=${cfg.statusListenAddress}:${toString cfg.statusPort}"
     "--provided-by=${escapeShellArg cfg.providedBy}"
   ]
+  ++ optional (cfg.statusListenAddress == null && cfg.statusPort == null) "--status-srv="
+  ++ optional (
+    cfg.statusListenAddress != null || cfg.statusPort != null
+  ) "--status-srv=${toString cfg.statusListenAddress}:${toString cfg.statusPort}"
   ++ optional (cfg.pools != null) "--pools=${escapeShellArg (concatStringsSep "," cfg.pools)}"
   ++ optional (cfg.globalRateBps != null) "--global-rate=${toString cfg.globalRateBps}"
   ++ optional (cfg.perSessionRateBps != null) "--per-session-rate=${toString cfg.perSessionRateBps}"
@@ -28,6 +31,37 @@ in
 
   options.services.syncthing.relay = {
     enable = mkEnableOption "Syncthing relay service";
+
+    cert = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `cert.pem` file, which will be copied into `dataDirectory`.
+      '';
+    };
+
+    key = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `key.pem` file, which will be copied into `dataDirectory`.
+      '';
+    };
+
+    token = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Path to the file containing the token. This can be used to run private
+        relays.
+
+        ::: {.warning}
+        Since syncthing-relay doesn't support passing the token through a
+        file, the token value will be exposed in clear text in the process
+        list.
+        :::
+      '';
+    };
 
     listenAddress = mkOption {
       type = types.str;
@@ -43,25 +77,31 @@ in
       default = 22067;
       description = ''
         Port to listen on for relay traffic. This port should be added to
-        `networking.firewall.allowedTCPPorts`.
+        {option}`networking.firewall.allowedTCPPorts`.
       '';
     };
 
     statusListenAddress = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "";
       example = "1.2.3.4";
       description = ''
         Address to listen on for serving the relay status API.
+
+        Set {option}`statusPort` and {option}`statusListenAddress` to `null`
+        to disable the status API.
       '';
     };
 
     statusPort = mkOption {
-      type = types.port;
+      type = types.nullOr types.port;
       default = 22070;
       description = ''
         Port to listen on for serving the relay status API. This port should be
-        added to `networking.firewall.allowedTCPPorts`.
+        added to {option}`networking.firewall.allowedTCPPorts`.
+
+        Set {option}`statusPort` and {option}`statusListenAddress` to `null`
+        to disable the status API.
       '';
     };
 
@@ -118,9 +158,33 @@ in
         DynamicUser = true;
         StateDirectory = baseNameOf dataDirectory;
 
+        LoadCredential =
+          optional (cfg.token != null) "token:${cfg.token}"
+          ++ optional (cfg.key != null) "key:${cfg.key}"
+          ++ optional (cfg.cert != null) "cert:${cfg.cert}";
+
         Restart = "on-failure";
-        ExecStart = "${pkgs.syncthing-relay}/bin/strelaysrv ${concatStringsSep " " relayOptions}";
       };
+
+      preStart = lib.mkIf (cfg.cert != null || cfg.key != null) ''
+        install -dm700 ${dataDirectory}
+        ${optionalString (cfg.cert != null) ''
+          install -Dm644 "$CREDENTIALS_DIRECTORY/cert" ${dataDirectory}/cert.pem
+        ''}
+        ${optionalString (cfg.key != null) ''
+          install -Dm600 "$CREDENTIALS_DIRECTORY/key" ${dataDirectory}/key.pem
+        ''}
+      '';
+
+      script = ''
+        ${pkgs.syncthing-relay}/bin/strelaysrv \
+          ${optionalString (cfg.token != null) ''-token="$(cat "$CREDENTIALS_DIRECTORY/token")"''} \
+          ${concatStringsSep " " relayOptions}
+      '';
     };
   };
+
+  meta.maintainers = with maintainers; [
+    Sighery
+  ];
 }

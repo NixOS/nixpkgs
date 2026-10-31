@@ -2,23 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zulip-emoji-mapping";
   version = "1.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "GearKite";
     repo = "zulip-emoji-mapping";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-logm5uAnLAcFqI7mUxKEO9ZmHqRkd6CFiCW4B5tqZzg=";
   };
 
+  postPatch = ''
+    cat >> pyproject.toml <<EOF
+
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
+  '';
+
   build-system = [
-    setuptools
+    poetry-core
   ];
 
   pythonImportsCheck = [
@@ -32,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ robertrichter ];
   };
-}
+})

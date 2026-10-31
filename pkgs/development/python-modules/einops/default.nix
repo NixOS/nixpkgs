@@ -7,13 +7,8 @@
   hatchling,
 
   # tests
-  jupyter,
-  nbconvert,
   numpy,
-  parameterized,
-  pillow,
   pytestCheckHook,
-  torch,
   writableTmpDirAsHomeHook,
 }:
 
@@ -33,13 +28,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   nativeCheckInputs = [
-    jupyter
-    nbconvert
     numpy
-    parameterized
-    pillow
     pytestCheckHook
-    torch
     writableTmpDirAsHomeHook
   ];
 

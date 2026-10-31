@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://selendroid.io/";
+    homepage = "https://selendroid.github.io/selendroid.io/";
     description = "Test automation for native or hybrid Android apps and the mobile web";
     maintainers = [ ];
     platforms = lib.platforms.all;

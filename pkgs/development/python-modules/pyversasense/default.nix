@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "imstevenxyz";
     repo = "pyversasense";
     rev = "v${version}";
-    sha256 = "vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
+    hash = "sha256-vTaDEwImWDMInwti0Jj+j+RFEtXOOKtiH5wOMD6ZmJk=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

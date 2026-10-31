@@ -1,0 +1,32 @@
+From da067079c2f7840a8dc11bf1ad8464cf7b2d90da Mon Sep 17 00:00:00 2001
+From: Jamie Magee <jamie.magee@gmail.com>
+Date: Tue, 20 Oct 2026 16:16:15 -0700
+Subject: [PATCH] Fix CLI tests with Typer 0.27.2
+
+---
+ tests/cli/test_cli.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/cli/test_cli.py b/tests/cli/test_cli.py
+index c99d0174..53dda183 100644
+--- a/tests/cli/test_cli.py
++++ b/tests/cli/test_cli.py
+@@ -7,8 +7,8 @@
+ from typing import TYPE_CHECKING
+ from unittest.mock import AsyncMock, MagicMock, patch
+ 
+-import click
+ import pytest
++from typer.core import TyperGroup
+ from typer.main import get_command
+ from typer.testing import CliRunner
+ from zeroconf import ServiceStateChange
+@@ -109,7 +109,7 @@ def light_state_off() -> dict:
+ def test_cli_structure(snapshot: SnapshotAssertion) -> None:
+     """The CLI exposes the expected commands and options."""
+     group = get_command(cli)
+-    assert isinstance(group, click.Group)
++    assert isinstance(group, TyperGroup)
+     structure = {
+         name: sorted(param.name for param in subcommand.params)
+         for name, subcommand in sorted(group.commands.items())

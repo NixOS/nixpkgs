@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/2.6/${pname}-${version}.tar.xz";
-    sha256 = "0slzlzcr3h8jikpz5a5amqd0csqh2m40gdk910ws2hnaf5m6hjbi";
+    hash = "sha256-cUloanHKQqE5CGm2B0gVEGsGGq6qqPLvjBLBkdmnn2o=";
   };
 
   outputs = [

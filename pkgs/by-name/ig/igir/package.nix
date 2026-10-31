@@ -13,21 +13,21 @@
   libz,
   lz4,
   sdl2-compat,
-  systemd,
+  systemdLibs,
 }:
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "5.4.1";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-8yx5FYF9WGBt00ylmhP4Z7v74ghWMk4aFLv4kbmyvu4=";
+    hash = "sha256-W7P2G6sjiuw1sCY3H/TwlVel3CErXqteulJszxGK4Tc=";
   };
 
-  npmDepsHash = "sha256-KyrIOnwJomWULVqFfWbik53amHBqS1XU9HMtQnCKRxk=";
+  npmDepsHash = "sha256-1QN5YZx6GCs+eKZmXdyqarvubSpDjh4ID63P339gIdQ=";
 
   # I have no clue why I have to do this
   postPatch = ''
@@ -43,7 +43,7 @@ buildNpmPackage rec {
     libz
     lz4
     sdl2-compat
-    systemd
+    systemdLibs
   ];
 
   # from lib/node_modules/igir/node_modules/@node-rs/crc32-linux-x64-musl/crc32.linux-x64-musl.node

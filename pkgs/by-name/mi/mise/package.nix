@@ -7,6 +7,7 @@
   installShellFiles,
   coreutils,
   bash,
+  darwin,
   direnv,
   git,
   pkg-config,
@@ -14,26 +15,29 @@
   cmake,
   cacert,
   tzdata,
+  python3,
   usage,
   testers,
   runCommand,
   jq,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.8.6";
+  version = "2026.10.17";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dm+cIb6i+npYSIUfxaEi3ohumeT9lXXlQwYREndwZFE=";
+    hash = "sha256-3JBs2i+07hY27EpIrmbMu7D5p6rGV6wuerilx0BECjw=";
   };
 
-  cargoHash = "sha256-VzRNo2fa4n4oOw27itjFebKpIhSdm8UmI/xdBBJIh9g=";
+  cargoHash = "sha256-94BNmTVcJoY9ujO7boBzxMxaMy2tjLzpD+s+RLJxBEs=";
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     pkg-config
   ];
@@ -47,26 +51,43 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ./src/cli/generate/git_pre_commit.rs \
       ./src/cli/generate/snapshots/*.snap
 
-    substituteInPlace ./src/test.rs \
+    substituteInPlace ./src/testing.rs \
       --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
 
-    substituteInPlace ./src/git.rs \
+    substituteInPlace ./crates/mise-util/src/git.rs \
       --replace-fail '"git"' '"${lib.getExe git}"'
 
-    substituteInPlace ./src/env_diff.rs \
+    substituteInPlace ./crates/mise-util/src/env_diff.rs \
       --replace-fail '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace-fail '"env"' '"${lib.getExe' coreutils "env"}"' \
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
+
+    # tests spawn helpers with PATH=/usr/bin:/bin, which is near-empty here
+    substituteInPlace ./crates/mise-util/src/cmd/tests.rs \
+      --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")'
+
+    substituteInPlace ./crates/mise-util/src/inline_command.rs \
+      --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")' \
+      --replace-fail 'Command::new("/bin/sh")' 'Command::new("${lib.getExe' bash "sh"}")'
+
+    substituteInPlace ./crates/mise-util/src/agecrypt/fixtures/age-plugin-se.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe python3}'
   '';
 
   nativeCheckInputs = [
     cacert
-    cmake
+    coreutils
     # gix spawns git-upload-pack by name in file:// clone tests.
     git
+    python3
     rustPlatform.bindgenHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # lists_every_process_on_macos compares against `ps -A`
+    darwin.ps
   ];
 
   env = {
@@ -74,32 +95,88 @@ rustPlatform.buildRustPackage (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error";
     # tera date helper tests look up timezone data via TZDIR.
     TZDIR = "${tzdata}/share/zoneinfo";
+    # the other profiles' 250ms slow-timeout kills tests on loaded builders
+    NEXTEST_PROFILE = "ci-shared";
   };
 
+  # the suite assumes nextest's process-per-test model: tests move or unlink
+  # the process cwd, which strands later tests in a shared `cargo test` process
+  useNextest = true;
+
+  # nextest's libtest emulation takes `--skip PATTERN`, not `--skip=`
   checkFlags = [
     # last_modified will always be different in nix
-    "--skip=tera::tests::test_last_modified"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # shell out to macOS system binaries that the darwin sandbox refuses to exec
-    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    "--skip"
+    "tera::tests::test_last_modified"
+    # bootstrapping node-gyp through aube requires network access
+    "--skip"
+    "mise_binary_services_aube_node_gyp_bootstrap_trampoline"
     # we don't care about brew tests and a lot of them fails here
-    "--skip=system::packages::brew::cask::tests::"
+    "--skip"
+    "system::packages::brew::cask::tests::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # shell out to macOS system binaries that the darwin sandbox refuses to exec
+    "--skip"
+    "system::defaults::tests::test_status_missing_keys_are_unset"
+    # need a running cfprefsd
+    "--skip"
+    "system::defaults::tests::test_dock_apps_native_round_trip"
+    "--skip"
+    "system::defaults::tests::test_host_scopes_are_independent"
+    "--skip"
+    "system::defaults::tests::test_host_uuid_names_core_foundation_byhost_files"
+    "--skip"
+    "system::defaults::tests::test_nested_value_round_trip"
+    "--skip"
+    "system::defaults::tests::test_patch_native_round_trip_and_preflight"
+    "--skip"
+    "system::defaults::tests::test_sandboxed_round_trip_writes_container"
+    # sandbox-exec is unavailable in the sandbox
+    "--skip"
+    "sandbox::macos::tests::"
+    "--skip"
+    "cmd::tests::test_macos_sandbox_preserves_piped_stdin"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # fake hdiutil scripts use /bin/bash, which the Linux sandbox does not provide
+    "--skip"
+    "file::tests::links::un_dmg_accepts_license_and_extracts_app"
+    "--skip"
+    "file::tests::links::un_dmg_extracts_app_without_license"
+    "--skip"
+    "file::tests::links::un_dmg_detaches_image_left_attached_by_interrupted_run"
+    # the copy probe symlinks /bin/cp, which the sandbox does not provide
+    "--skip"
+    "backend::spm::tests::test_inline_install_command_uses_install_environment"
+    # chmods setuid, which the sandbox refuses
+    "--skip"
+    "system_install::tests::archive_boundary"
+    # copy sleep from /usr/bin or /bin, which the sandbox does not provide
+    "--skip"
+    "toolset::running::tests::finds_a_process_by_its_executable"
+    "--skip"
+    "toolset::running::tests::finds_a_process_through_a_symlinked_install_path"
+    "--skip"
+    "toolset::running::tests::matches_whole_path_components"
   ];
 
-  cargoTestFlags = [ "--all-features" ];
-  # some tests access the same folders, don't test in parallel to avoid race conditions
+  # every test process resets the same fixed $HOME/cwd
   dontUseCargoParallelTests = true;
+
+  cargoTestFlags = [
+    # much of the suite moved into the mise-util workspace crate
+    "--package=mise"
+    "--package=mise-util"
+    "--all-features"
+    "--no-fail-fast"
+  ];
 
   # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
   __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
-
-    substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
-      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \

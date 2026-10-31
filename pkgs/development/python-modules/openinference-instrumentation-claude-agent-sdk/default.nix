@@ -62,7 +62,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "openinference.instrumentation.claude_agent_sdk" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenInference Claude Agent SDK Instrumentation";

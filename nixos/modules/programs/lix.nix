@@ -29,6 +29,11 @@ let
     };
   };
 
+  enableExperimentalRpc = builtins.elem "rpc-sockets" (
+    config.nix.settings.experimental-features or [ ]
+    ++ config.nix.settings.extra-experimental-features or [ ]
+  );
+
 in
 
 {
@@ -40,6 +45,10 @@ in
           Enabling the Lix Daemon requires also enabling Nix (config.nix.enable = true).
         '';
       }
+    ];
+
+    warnings = lib.mkIf (enableExperimentalRpc && lib.versionOlder nixPackage.version "2.96") [
+      "Lix: selected experimental feature 'rpc-sockets', but Lix version ${nixPackage.version} doesn't support it."
     ];
 
     # Require the tun kernel module for pasta, can be disabled if pasta is not used.
@@ -101,6 +110,22 @@ in
     ];
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables =
+      cfg.envVars
+      // lib.optionalAttrs enableExperimentalRpc {
+        NIX_REMOTE = "daemon?protocol=any";
+      };
+
+    systemd.sockets."lix-daemon-xp1".wantedBy = lib.mkIf enableExperimentalRpc [ "sockets.target" ];
+
+    systemd.services."lix-daemon-xp1@" = lib.mkIf enableExperimentalRpc (
+      lib.mkMerge [
+        commonNixDaemonConfig
+        {
+          # Do not kill daemons in flight.
+          restartIfChanged = false;
+        }
+      ]
+    );
   };
 }

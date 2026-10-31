@@ -7,6 +7,7 @@
   xcbuild,
   libxml2,
   ninja,
+  removeReferencesTo,
   zlib,
   coreutils,
   callPackage,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     (lib.getDev llvmPackages.llvm.dev)
     ninja
+    removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # provides xcode-select, which is required for SDK detection
@@ -102,7 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postBuild =
-    if lib.versionAtLeast finalAttrs.version "0.14" then
+    if lib.versionAtLeast finalAttrs.version "0.17" then
+      ''
+        ZIG_LIB_DIR=$(pwd)/stage3/lib/zig stage3/bin/zig build langref -Dversion-string=${finalAttrs.version}
+      ''
+    else if lib.versionAtLeast finalAttrs.version "0.14" then
       ''
         stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       ''
@@ -114,6 +120,19 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm444 ../zig-out/doc/langref.html -t $doc/share/doc/zig-${finalAttrs.version}/html
   '';
+
+  # Drop unused LLVM/Clang paths left by static linking.
+  postFixup = ''
+    remove-references-to \
+      -t ${lib.getLib llvmPackages.llvm} \
+      -t ${lib.getLib llvmPackages.libclang} \
+      $out/bin/zig
+  '';
+
+  disallowedReferences = [
+    (lib.getLib llvmPackages.llvm)
+    (lib.getLib llvmPackages.libclang)
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''

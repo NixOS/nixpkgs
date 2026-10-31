@@ -103,6 +103,8 @@ buildDotnetModule (finalAttrs: {
     "-p:Architecture=${hostArch}"
     "-p:Version=${lib.head (lib.splitString "-" finalAttrs.version)}"
     "-p:InformationalVersion=${finalAttrs.version}+git${finalAttrs.src.rev}"
+    # this removes the Microsoft.WindowsDesktop.App.Ref dependency
+    "-p:EnableWindowsTargeting=false"
   ];
 
   dotnetInstallFlags = [ "-p:TargetFramework=${targetFramework}" ];

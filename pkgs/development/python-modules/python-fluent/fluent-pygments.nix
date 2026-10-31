@@ -41,6 +41,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fluent.pygments" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/projectfluent/python-fluent/blob/main/fluent.pygments/CHANGELOG.rst";
     description = "Plugin for pygments to add syntax highlighting of Fluent files in Sphinx";

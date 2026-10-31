@@ -142,14 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ubuntu/lightdm";
     description = "Cross-desktop display manager";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [
-      gpl3Plus
-      # and (
-      lgpl2Only
-      # or
-      lgpl3Only
-      # )
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        (OR [
+          lgpl2Only
+          lgpl3Only
+        ])
+      ];
     teams = [ lib.teams.pantheon ];
   };
 })

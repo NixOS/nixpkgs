@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xevd";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpeg5";
     repo = "xevd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MMqtgXEcIYLr5gyIpGj1p0aPiEW0zb6ZAQ+75kHhyxU=";
+    hash = "sha256-mOFKeBoqfJBpULBIAStfmp7ntJ59NEL0/EBOBxuhSdI=";
   };
 
   postPatch = ''
@@ -26,11 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     let
-      inherit (lib) cmakeBool cmakeFeature optional;
-      inherit (stdenv.hostPlatform) isAarch64 isDarwin;
+      inherit (lib) cmakeFeature optional;
+      inherit (stdenv.hostPlatform) isDarwin;
     in
-    optional isAarch64 (cmakeBool "ARM" true)
-    ++ optional isDarwin (cmakeFeature "CMAKE_SYSTEM_NAME" "Darwin");
+    optional isDarwin (cmakeFeature "CMAKE_SYSTEM_NAME" "Darwin");
 
   postInstall = ''
     ln $dev/include/xevd/* $dev/include/
@@ -53,6 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xevd" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

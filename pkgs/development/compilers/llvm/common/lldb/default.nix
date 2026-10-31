@@ -61,6 +61,15 @@ stdenv.mkDerivation (
               mkdir -p "$out/llvm"
               cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
             ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
           )
       else
         src;
@@ -147,6 +156,11 @@ stdenv.mkDerivation (
       #
       # so, we just ignore the resulting errors
       (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
+    ]
+    ++ lib.optionals (lib.versionAtLeast release_version "23" && enableManpages) [
+      # This could be done differently, but this is to keep some consistency with Clang and LLVM manpage packages
+      # Unlike Clang's CMakeLists.txt, LLDB's doesn't set LLVM_MAIN_SRC_DIR to ${CMAKE_CURRENT_SOURCE_DIR}/../llvm
+      (lib.cmakeOptionType "path" "LLVM_BUILD_MAIN_SRC_DIR" "${finalAttrs.finalPackage.src}/llvm")
     ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")

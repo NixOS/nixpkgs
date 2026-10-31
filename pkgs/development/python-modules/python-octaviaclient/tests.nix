@@ -9,7 +9,7 @@
   pygments,
   python-subunit,
   oslotest,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
@@ -31,15 +31,7 @@ buildPythonPackage {
     pygments
     python-subunit
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 }

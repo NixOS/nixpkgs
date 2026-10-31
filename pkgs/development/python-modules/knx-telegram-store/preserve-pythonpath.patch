@@ -1,0 +1,13 @@
+diff --git a/tests/test_optional_dependencies.py b/tests/test_optional_dependencies.py
+index 77c0002..affdd05 100644
+--- a/tests/test_optional_dependencies.py
++++ b/tests/test_optional_dependencies.py
+@@ -22,7 +22,7 @@ sys.meta_path.insert(0, BlockSQLAlchemy())
+ 
+ def _run_script(script: str) -> None:
+     env = os.environ.copy()
+-    env["PYTHONPATH"] = str(_PROJECT_ROOT / "src")
++    env["PYTHONPATH"] = env["PYTHONPATH"] + f":{_PROJECT_ROOT / 'src'}"
+     result = subprocess.run(
+         [sys.executable, "-c", script],
+         cwd=_PROJECT_ROOT,

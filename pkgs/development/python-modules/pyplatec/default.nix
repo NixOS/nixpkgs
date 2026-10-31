@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PXQlJtC4Z0ifphqTelOuBQS5wubxCH/f0PSWnE7OeNg=";
+    hash = "sha256-PXQlJtC4Z0ifphqTelOuBQS5wubxCH/f0PSWnE7OeNg=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-std=c++11";

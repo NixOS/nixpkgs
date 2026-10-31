@@ -36,7 +36,7 @@
 }:
 
 let
-  version = "7.2.3";
+  version = "7.2.4";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "22.0.0-rocm";
   # llvmPackages_base version should match rocmLlvmVersion
@@ -117,7 +117,7 @@ let
   llvmSrc = fetchFromGitHub {
     owner = "ROCm";
     repo = "llvm-project";
-    rev = "rocm-${version}";
+    tag = "rocm-${version}";
     hash = "sha256-TwFvQimbax2E37ZC/52lNkHXCgyBNfSGDBaqmas2x/s=";
   };
   llvmMajorVersion = lib.versions.major rocmLlvmVersion;

@@ -56,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./use_crocus_and_iris.patch
   ];
 
+  # Xorg loads helper modules after loading this driver, so their symbols must
+  # be resolved lazily.
+  hardeningDisable = [ "bindnow" ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

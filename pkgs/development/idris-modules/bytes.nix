@@ -11,7 +11,7 @@ build-idris-package {
     owner = "ziman";
     repo = "idris-bytes";
     rev = "c0ed9db526d4529780f9d7d2636a40faa07661a5";
-    sha256 = "1xyb7k0mrk5imjf5jr2gvqwvasbfy6j4lxvz99r9icfz7crz8dfp";
+    hash = "sha256-1zX0MzvfsZhySn93SqTxbmm1Od5PZFmcrLHMXME8y/c=";
   };
 
   meta = {

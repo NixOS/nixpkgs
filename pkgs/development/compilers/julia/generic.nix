@@ -40,8 +40,11 @@ let
     "ambiguous"
     "compiler/contextual"
   ]
-  ++ lib.optionals (lib.versionAtLeast version "1.11") [
+  ++ lib.optionals (lib.versionAtLeast version "1.10") [
+    # Loading tests try to download package registries in the sandbox.
     "loading"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "1.11") [
     "cmdlineargs"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.12") [

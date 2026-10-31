@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "PyVolumio";
     rev = "v${version}";
-    sha256 = "1nyvflap39cwq1cm9wwl9idvfmz1ixsl80f1dnskx22fk0lmvj4h";
+    hash = "sha256-kMhdKZhOiD61bcEBRHWP4Ve3W0yU81RZwJylcRV129s=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

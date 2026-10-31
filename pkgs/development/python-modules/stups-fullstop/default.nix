@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "zalando-stups";
     repo = "fullstop-cli";
     rev = version;
-    sha256 = "1cpzz1b8g2mich7c1p74vfgw70vlxpgwi82a1ld82wv3srwqa0h3";
+    hash = "sha256-AwKFedZjc4EaDUqgyN/tdIPDn9vk3MAOZLGKh1b4/7I=";
   };
 
   propagatedBuildInputs = [

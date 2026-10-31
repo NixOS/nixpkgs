@@ -2,11 +2,12 @@
   lib,
   python3,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -14,7 +15,7 @@ python3.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     tag = "v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
+    hash = "sha256-dALBRDstVqPZZK/TjDXO4w6q3E9EfCpSoTPes0don7s=";
   };
 
   postPatch = ''
@@ -50,15 +51,12 @@ python3.pkgs.buildPythonPackage rec {
     pytest-sugar
     pytestCheckHook
     pyyaml
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = ''
     mkdir -p $out/share/flare-floss/
     cp -r floss/sigs $out/share/flare-floss/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
   '';
 
   meta = {

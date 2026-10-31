@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "openthread";
     repo = "pyspinel";
     rev = "50d104e29eacd92d229f0b7179ec1067f5851c17";
-    sha256 = "0s2r00zb909cq3dd28i91qbl0nz8cga3g98z84gq5jqkjpiy8269";
+    hash = "sha256-yQjk45UTy4IfQR+lN9Rj6FtAFw4pItHawCyBtD4AWWg=";
   };
 
   propagatedBuildInputs = [ pyserial ];

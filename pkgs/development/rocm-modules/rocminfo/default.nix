@@ -12,13 +12,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.2.3";
+  version = "7.2.4";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocminfo"
       "shared"

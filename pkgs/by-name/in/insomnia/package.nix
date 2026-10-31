@@ -7,18 +7,18 @@
 }:
 let
   pname = "insomnia";
-  version = "13.0.0";
+  version = "13.3.1";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-sPl7KXC8Z13LFZvxuKg02iDbtrCxn//Yrr8AOOf3VD4=";
+          hash = "sha256-rW5iYPCDFi5h6Hm5nyfWm5NK482/aBfdsoSs2KQwJlA=";
         };
         x86_64-linux = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
-          hash = "sha256-PlcKBQnkmgU/SsLRKX7ohrGHm7B4hK9FMkplwlbFolI=";
+          hash = "sha256-zKrbI9XAvi3euBeGXaGn+8NC2epm76m5RD+BCARBJdY=";
         };
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");

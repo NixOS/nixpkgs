@@ -22,7 +22,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.38.0";
+  version = "1.41.0";
   pname = "azure-core";
   pyproject = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-gZTSaCJFo+TjFRpmfGhkZMN4b+15GLOU0DW9zWG7WZM=";
+    hash = "sha256-9G/1380jDyXPHBnoo0uNwIozeyUD4mi7YAoWwA24rVo=";
   };
 
   build-system = [ setuptools ];

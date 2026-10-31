@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "simmel";
     repo = "urxvt-resize-font";
     rev = "e966a5d77264e9263bfc8a51e160fad24055776b";
-    sha256 = "18ab3bsfdkzzh1n9fpi2al5bksvv2b7fjmvxpx6fzqcy4bc64vkh";
+    hash = "sha256-cG5i2CKe4e9Mv31X6c4Se+u5ClUiXpdsgP/P5vQaS6E=";
   };
 
   installPhase = ''

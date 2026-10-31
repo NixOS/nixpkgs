@@ -15,7 +15,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-T+GPIrcME6Wq5sdfIt4t426/3ew5sUQMykYeZ6zw1ko=";
   };
 
-  cargoHash = "sha256-1oJCdqBa1pWpQ7QvZ0vZaOd73R+SzR9OPf+yoI+RwCY=";
+  cargoPatches = [
+    # TODO: remove once upstream updates webpki
+    #  webpki-roots 0.26.0 -> 1.0.11
+    ./update-webpki.patch
+  ];
+
+  cargoHash = "sha256-F11IlCYP4t92rvoGeogcLkVh2geDpHu1AMhyciQ0IeE=";
 
   env.RUSTC_BOOTSTRAP = 1;
 

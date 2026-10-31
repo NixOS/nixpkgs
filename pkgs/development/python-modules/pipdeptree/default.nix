@@ -1,67 +1,81 @@
 {
   lib,
   buildPythonPackage,
+  cargo,
   fetchFromGitHub,
-  graphviz,
-  hatchling,
-  hatch-vcs,
-  packaging,
-  pip-requirements-parser,
+  gitMinimal,
+  graphviz-nox,
+  meson,
+  meson-python,
+  nab,
+  nab-index,
+  nab-project,
+  ninja,
   pytestCheckHook,
-  pytest-mock,
-  pytest-subprocess,
-  rich,
-  virtualenv,
+  rustc,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "3.1.1";
+  version = "4.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-EDpKJBDb3CkTMfiLyYMakbm5riIHsf+49yM99uQDPT8=";
+    hash = "sha256-PHuwLe0ITPWaA06SYC7tZ1jcbPEMCIMCfAEUWsET5Fc=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-5EqZBM+Gv47cCrwbl6oPNgP43zNcsvrtRnEVFu/WbRk=";
+  };
+
+  postPatch = ''
+    patchShebangs tools
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python>=0.22.1" meson-python
+  '';
+
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   build-system = [
-    hatchling
-    hatch-vcs
+    meson
+    meson-python
+    ninja
   ];
 
-  dependencies = [ packaging ];
+  dontUseMesonConfigure = true;
 
-  optional-dependencies = {
-    graphviz = [ graphviz ];
-    index = [
-      # nab-index # Unstable + not packaged yet
-      # nab-python # Same
-      pip-requirements-parser
-    ];
-    rich = [ rich ];
-  };
+  env.PIPDEPTREE_VERSION = finalAttrs.version;
+
+  dependencies = [
+    nab
+    nab-index
+    nab-project
+  ];
 
   nativeCheckInputs = [
-    pytest-mock
-    pytest-subprocess
+    gitMinimal
+    graphviz-nox
     pytestCheckHook
-    virtualenv
-  ]
-  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "pipdeptree" ];
-
-  disabledTests = [
-    # Don't run console tests
-    "test_console"
-  ];
 
   meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
-    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/tox-dev/pipdeptree/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       charlesbaynham

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dua";
-  version = "2.45.1";
+  version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lY7sPncWvqltAR3+VtNfQEfExSGyGMMyu2e6M9MRwF0=";
+    hash = "sha256-NBuMHQIlTCnYFmmPW8sHQp0WADriIL8q9t05R7OUgUY=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-S9jfM8Bb75LGzS6TB5K0sZTuVSE7cfTh9ahEXV0qzdQ=";
+  cargoHash = "sha256-Hw5LxWoew2CMA/FV+et7YzMZEP+G6R8GOigNwlHVo7M=";
 
   checkFlags = [
     # Skip interactive tests

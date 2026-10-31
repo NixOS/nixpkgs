@@ -1,6 +1,5 @@
 {
   lib,
-  dictionary,
   fetchFromGitHub,
   helm,
   melpaBuild,
@@ -18,7 +17,6 @@ melpaBuild {
   };
 
   packageRequires = [
-    dictionary
     helm
   ];
 

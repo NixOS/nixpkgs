@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   nativeBuildInputs = [

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  systemd,
+  systemdLibs,
   meson,
   replaceVars,
   swaybg,
@@ -31,7 +31,7 @@
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   trayEnabled ? systemdSupport,
 }:
 

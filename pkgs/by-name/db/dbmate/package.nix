@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dbmate";
-  version = "2.35.1";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DOgDIBV0EJLpijvbHT4GF7vZRkyGmWCHtEPDcVozeSc=";
+    hash = "sha256-PlPS6bPfKjVzRxR78etDAPZxBfWcMbTCqPY5S79/XAc=";
   };
 
-  vendorHash = "sha256-BUqSBLc9MQpXht9sQ8HKt2sHGuf1OevKEZtN8nik+F4=";
+  vendorHash = "sha256-3Sc9nKNX8xWRAQ7Vtz5IEtNTs6MHVN8yoKOy+p2r7XY=";
 
   tags = [ "fts5" ];
 

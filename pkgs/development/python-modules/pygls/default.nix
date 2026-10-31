@@ -54,12 +54,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pygls" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # Skips pre-releases
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Skips pre-releases
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {

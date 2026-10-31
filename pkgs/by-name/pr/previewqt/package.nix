@@ -4,9 +4,11 @@
   exiv2,
   fetchFromGitLab,
   imagemagick,
+  libappimage,
   libarchive,
   libraw,
   mpv,
+  openslide,
   pkg-config,
   qt6Packages,
   withSyntaxHighlighting ? stdenv.hostPlatform.isLinux,
@@ -18,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "5.0";
+  version = "6.0";
 
   src = fetchFromGitLab {
     owner = "lspies";
     repo = "previewqt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OvLJWuLrd7A9px0fF2pRN5frLF4Q5PCG/PxKjdLmC/g=";
+    hash = "sha256-Bbucjh8AJmH+YmyUDs0B89jwh0YewT2O6az6yuAPo10=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     exiv2
     imagemagick
+    libappimage
     libarchive
     libraw
     mpv
+    openslide
     resvg
     vips
   ]

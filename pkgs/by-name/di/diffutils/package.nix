@@ -42,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   # If no explicit coreutils is given, use the one from stdenv.
   buildInputs = [ coreutils ];
 
+  __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
   # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
@@ -72,15 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isGnu) [
       "gl_cv_func_getopt_gnu=yes"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
     ];
 
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";

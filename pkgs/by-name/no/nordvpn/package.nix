@@ -4,9 +4,10 @@
   lib,
   nix-update-script,
   symlinkJoin,
+  _experimental-update-script-combinators,
 }:
 let
-  version = "5.4.0";
+  version = "6.0.1";
 
   common = {
     inherit version;
@@ -15,7 +16,7 @@ let
       owner = "NordSecurity";
       repo = "nordvpn-linux";
       tag = version;
-      hash = "sha256-m3evkWYrXtgXJu7dt1mFKPVkcnrn5g3udZWafb4lFcM=";
+      hash = "sha256-FI65+ZrsTYAXYoK5HYFWjyGXZZaajC+HCtROtZno5CM=";
     };
 
     # rec so that changelog can reference homepage
@@ -24,6 +25,7 @@ let
       changelog = "${homepage}/releases/tag/${version}";
       license = lib.licenses.gpl3Only;
       maintainers = with lib.maintainers; [
+        different-error
         novalkun
       ];
       platforms = lib.platforms.linux;
@@ -53,14 +55,22 @@ symlinkJoin {
   passthru = {
     cli = callPackage ./cli.nix common;
     gui = callPackage ./gui.nix common;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "cli"
-        "--subpackage"
-        "gui"
-      ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--subpackage"
+          "cli"
+          "--subpackage"
+          "gui"
+        ];
+      })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "nordvpn.gui.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+    ];
   };
 
   meta = common.meta // {

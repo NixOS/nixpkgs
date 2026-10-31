@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -43,6 +44,20 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-pntQ/7kefi7LLLG1DTKY9Zjlzb0UXiduQCzlX5PkZds=";
   };
+
+  patches = [
+    # Fix compatibility with warp-nn 0.4.0 (`training` became a read-only property)
+    # https://github.com/Toni-SM/skrl/pull/462
+    (fetchpatch {
+      name = "fix-warp-implementation-bugs.patch";
+      url = "https://github.com/Toni-SM/skrl/commit/2ec6ee1620b51b997bbf5273899223c6d9626d58.patch";
+      includes = [
+        "pyproject.toml"
+        "skrl/*"
+      ];
+      hash = "sha256-LzCrz7rSwyx62WlIzgDO0tKrzb3Dc1UpRCyf1NQh9g4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

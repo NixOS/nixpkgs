@@ -1,26 +1,33 @@
 {
   lib,
-  fetchgit,
+  fetchFromTangled,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "sessiond-hooks";
-  version = "0.1.0";
+  version = "0.2.0";
 
-  cargoHash = "sha256-XD2g3nkV4iz9ZQlb0+0YDuJl+8XdMOdwbMcCnCjKGT8=";
-
-  src = fetchgit {
-    url = "https://tangled.org/did:plc:ujej26vte653yzllxk3q2dtf";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zVEHxDNjF0xRydp2Y+oqM6O5KqM4zZTv0IqlHGXCgsA=";
+  src = fetchFromTangled {
+    did = "did:plc:vj3bxta3i3cp26nn46yideoh";
+    tag = "${finalAttrs.pname}-v${finalAttrs.version}";
+    hash = "sha256-X2ePs10hjZNOcHAJuN4J5KeBQaW24E2jMRq0biNdY3E=";
   };
+
+  cargoHash = "sha256-+ENVyHs4UFsN62rkIau1aXC2RmF3Mqtj6XWeR55rR8w=";
+
+  cargoBuildFlags = [
+    "--locked"
+    "-p"
+    "sessiond-hooks"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   meta = {
     description = "Launch and supervise per-user session hooks with sessiond";
-    homepage = "https://tangled.org/did:plc:ujej26vte653yzllxk3q2dtf";
+    homepage = "https://tangled.org/r0chd.pl/sessiond";
     license = lib.licenses.gpl3Only;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) r0chd; };
+    maintainers = [ lib.maintainers.r0chd ];
     platforms = lib.platforms.linux;
     mainProgram = "sessiond-hooks";
   };

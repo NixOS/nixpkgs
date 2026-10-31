@@ -207,5 +207,5 @@ in
   # i3 is optional
   xrandr.propagatedBuildInputs = [ pkgs.xrandr ];
   yubikey.propagatedBuildInputs = [ pkgs.yubico ];
-  zpool = { };
+  zpool.propagatedBuildInputs = [ py.packaging ];
 }

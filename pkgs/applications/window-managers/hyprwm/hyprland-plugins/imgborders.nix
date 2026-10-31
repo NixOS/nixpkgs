@@ -7,13 +7,13 @@
 }:
 mkHyprlandPlugin {
   pluginName = "imgborders";
-  version = "1.0.2-unstable-2026-05-17";
+  version = "2.0.0-unstable-2026-08-16";
 
   src = fetchFromCodeberg {
     owner = "zacoons";
     repo = "imgborders";
-    rev = "a20b4d36d01f82823ba3749db95c91743d26f656";
-    hash = "sha256-e3PiaR7G6l/lMJ41xtSPcfMKhZcx8UHj13lr0u+8JAk=";
+    rev = "08be22236144d3c91607bcfa955ed0d457f4f50b";
+    hash = "sha256-O+896T2qrisxiWTotB5HlzKw8XEJqPDTgSUHAAVUD18=";
   };
 
   nativeBuildInputs = [

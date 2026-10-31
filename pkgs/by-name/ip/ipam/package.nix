@@ -42,7 +42,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Cli based IPAM written in Go with PowerDNS support";
-    homepage = "https://ipam.lauka.net/";
+    homepage = "https://ipam.adora.codes/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];

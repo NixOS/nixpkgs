@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = "https://linuxonly.ru/page/modem-manager-gui";
+    homepage = "https://salsa.debian.org/debian/modem-manager-gui";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       ahuzik

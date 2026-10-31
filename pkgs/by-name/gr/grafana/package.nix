@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   removeReferencesTo,
   tzdata,
@@ -17,23 +17,28 @@
   xcbuild,
   faketty,
   nodejs,
+  withSourceMaps ? false,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  wire' = wire.override { buildGoModule = buildGo127Module; };
+in
+let
+  wire = wire';
+in
+buildGo127Module (finalAttrs: {
   pname = "grafana";
-  version = "13.1.6";
+  version = "13.3.0";
 
   subPackages = [
     "pkg/cmd/grafana"
-    "pkg/cmd/grafana-server"
-    "pkg/cmd/grafana-cli"
   ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-w3/QReBRp1fGy6WHiCJS/YRerIpyoW9sBjiOZ1+a5h0=";
+    hash = "sha256-DkeUu2NOdEOx19CggtO0Mgqx+hdRysPvGD73aGeylBI=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -49,12 +54,12 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-4SGm/S5ighzWOdDYB5Na2Gfv2USbWtV6TKSOyJO7yYI=";
+    hash = "sha256-TKxFCDmAB3Sxi/wqw6f6hgHHpVG3ZQemPGz+8A3cgRk=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-i5XwCA9ghUMUp6xYbM/WuVEF48xbbAq5qBWp3Auxg3o=";
+  vendorHash = "sha256-VERugA42Tp4Ju8ZIMj7foBk5nlMeE6xCMxQnHkorSW4=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -119,7 +124,6 @@ buildGoModule (finalAttrs: {
 
     # Workaround for https://github.com/nrwl/nx/issues/22445
     faketty yarn run build
-    yarn run plugins:build-bundled
   '';
 
   ldflags = [
@@ -141,6 +145,11 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/grafana
     cp -r public conf $out/share/grafana/
+    find "$out/share/grafana/public" -type d -name node_modules -prune -exec rm -rf {} +
+    find "$out/share/grafana/public" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.snap" \) -delete
+  ''
+  + lib.optionalString (!withSourceMaps) ''
+    find "$out/share/grafana/public" -type f -name "*.js.map" -delete
   '';
 
   postFixup = ''

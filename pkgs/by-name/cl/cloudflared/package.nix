@@ -1,24 +1,24 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   callPackage,
   gitUpdater,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "cloudflared";
-  version = "2026.9.3";
+  version = "2026.10.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = finalAttrs.version;
-    hash = "sha256-hWU8hdIUqiwU3RfL4alL1pck0SGcbwxunv9Yw9+9xfY=";
+    hash = "sha256-k1OMkHHItOT5VHhQqgC8ODm/RCJEtwtZi0Lxyf/esLg=";
   };
 
-  vendorHash = "sha256-mTNP7u+kCYR9rcYGJ20q7Tl/Oi6ZF/UdEfiI1C7mfpw=";
+  vendorHash = "sha256-KqTLXEm0jxJ1TsyYzxAwYMe8niIgJxBHQPz/aZKmS40=";
 
   ldflags = [
     "-s"

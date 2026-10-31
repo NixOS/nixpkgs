@@ -79,7 +79,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.69";
+  version = "0.70";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "yosys";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Vjyk6aMKwnJEE25tQ0SKWQcXfJxjpCVou+4Hf8c+IL4=";
+    hash = "sha256-MVurTpkYol4kqCP5XV+VpRxyEEnNSH63JDNQP6MbeAQ=";
   };
 
   postPatch = ''
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       Luflosi
       gonsolo
-      carlossless
+      karstx
     ];
   };
 })

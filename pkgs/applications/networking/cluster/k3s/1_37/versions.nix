@@ -1,8 +1,8 @@
 {
-  k3sVersion = "1.37.0+k3s1";
-  k3sCommit = "bb7cf0657bafdfbb4349d1740810442d09c2248a";
-  k3sRepoSha256 = "0glzg974w7f0jdaljr9bxw36qv53chii25rjbrvlbzlyzjq19wws";
-  k3sVendorHash = "sha256-AObmRWcIyFDy1aTA66LLFYnnUQzpf6+Ts6HQRA3i26A=";
+  k3sVersion = "1.37.1+k3s1";
+  k3sCommit = "356c025475bbefaa09cf0d7e48e8e2adbbde57db";
+  k3sRepoSha256 = "0yj5jshbli5nr0rai5lpswqby8jbmdblkszhq7vadqia0rjgas34";
+  k3sVendorHash = "sha256-wnGMzi4b9ooV7jRNrr9GiU5jHZrMzijdVOIoGZSSfuA=";
   chartVersions = import ./chart-versions.nix;
   imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
   k3sRootVersion = "0.15.2";

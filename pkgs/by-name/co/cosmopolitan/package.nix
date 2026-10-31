@@ -80,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
         "test/libc/calls/cachestat_test.c"
         "test/libc/calls/getprogramexecutablename_test.c"
         "test/libc/proc/posix_spawn_test.c"
+        # asserts st_blocks of a sparse file, which depends on the builder's filesystem
+        "test/tool/net/lunix_test.lua"
       ];
     in
     lib.concatStringsSep ";\n" (map (t: "rm -v ${t}") failingTests);

@@ -5,12 +5,13 @@
   buildPythonPackage,
   distro,
   django,
+  djangorestframework,
   fetchFromGitHub,
+  flask,
   freezegun,
   google-genai,
   mcp,
   mock,
-  monotonic,
   openai,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
@@ -18,25 +19,23 @@
   pytest-asyncio,
   pytest-bdd,
   pytestCheckHook,
-  python-dateutil,
   pythonAtLeast,
   requests,
   setuptools,
-  six,
   typing-extensions,
   zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.58.0";
+  version = "7.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "posthog-v${finalAttrs.version}";
-    hash = "sha256-2HvOlaS6rlM2kyE5sM7CsocO+a6eRfZcNRt7fGWOgJY=";
+    hash = "sha256-4sc1PZaN/SdUk/akzyHhuPejUEDYyXuHlBxIw2LYOaA=";
   };
 
   build-system = [ setuptools ];
@@ -44,16 +43,15 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     backoff
     distro
-    monotonic
-    python-dateutil
     requests
-    six
     typing-extensions
   ];
 
   nativeCheckInputs = [
     anthropic
     django
+    djangorestframework
+    flask
     freezegun
     google-genai
     mcp
@@ -78,9 +76,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/posthog/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

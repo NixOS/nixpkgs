@@ -29,12 +29,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gaiasky";
-  version = "3.7.1";
+  version = "3.8.0";
   src = fetchFromCodeberg {
     owner = "gaiasky";
     repo = "gaiasky";
     tag = finalAttrs.version;
-    hash = "sha256-UAVuivkeF234hoUyfCv7depspr3dyoyzYJDD0mKGAr4=";
+    hash = "sha256-ElVtKGa4qc+Xa1zNb63CP6N0Vf64DczIL9dPB9fHL3s=";
   };
 
   nativeBuildInputs = [
@@ -68,9 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The build output is stored in releases/gaiasky-version-version instead of releases/gaiasky-.
   postPatch = ''
-    substituteInPlace build.gradle \
-      --replace-fail "def cmd = \"git describe --abbrev=0 --tags HEAD\"" "def cmd = \"echo ${finalAttrs.version}\"" \
-      --replace-fail "cmd = \"git rev-parse --short HEAD\"" "cmd = \"echo ${finalAttrs.version}\""
+    substituteInPlace build.gradle.kts \
+      --replace-fail 'val gitTag = fetchGitInfo(listOf("git", "describe", "--abbrev=0", "--tags", "HEAD")) ?: "unknown"' 'val gitTag = "${finalAttrs.version}"' \
+      --replace-fail 'val gitRev = fetchGitInfo(listOf("git", "rev-parse", "--short", "HEAD")) ?: "???"' 'val gitRev = "${finalAttrs.version}"'
   '';
 
   postBuild = ''

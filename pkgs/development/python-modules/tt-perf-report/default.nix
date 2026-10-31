@@ -44,6 +44,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-perf-report";
     changelog = "https://github.com/tenstorrent/tt-perf-report/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ mert-kurttutan ];
     mainProgram = "tt-perf-report";
   };

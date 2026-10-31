@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   glib,
-  systemd,
+  systemdLibs,
   fmt,
   buildPackages,
   # Inputs
@@ -140,7 +140,7 @@ let
     pcre = [ pcre2 ];
     sqlite = [ sqlite ];
     syslog = [ ];
-    systemd = [ systemd ];
+    systemd = [ systemdLibs ];
     zeroconf = [
       avahi
       dbus
@@ -197,13 +197,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpd";
-  version = "0.24.15";
+  version = "0.24.17";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "MPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-52fns2SyMacJcXO8aoFseSHuGp6zYGuzSlYEXAtrJFo=";
+    sha256 = "sha256-451Nmdoxmgw9ZGzDCYUGedcOmNyR2V/QRdrUYtd15qg=";
   };
 
   buildInputs = [

@@ -15,18 +15,15 @@
   pkg-config,
   pkgsBuildBuild,
   readline,
+  guileImportsCheckHook,
 }:
 
-let
-  # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
-in
-builder rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile";
   version = "2.2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.xz";
     sha256 = "013mydzhfswqci6xmyc1ajzd59pfbdak15i0b090nhr9bzm7dxyd";
   };
 
@@ -62,6 +59,9 @@ builder rec {
     libtool
     libunistring
   ];
+  propagatedNativeBuildInputs = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    (guileImportsCheckHook.override { effectiveVersion = finalAttrs.passthru.effectiveVersion; })
+  ];
 
   # According to Bernhard M. Wiedemann <bwiedemann suse de> on
   # #reproducible-builds on irc.oftc.net, (2020-01-29): they had to
@@ -75,7 +75,6 @@ builder rec {
     # Read the header of the patch to more info
     ./eai_system.patch
   ]
-  ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
     url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
     sha256 = "12wvwdna9j8795x59ldryv9d84c1j3qdk2iskw09306idfsis207";
@@ -124,14 +123,14 @@ builder rec {
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   setupHook = ./setup-hook-2.2.sh;
 
-  passthru = rec {
-    effectiveVersion = lib.versions.majorMinor version;
-    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
-    siteDir = "share/guile/site/${effectiveVersion}";
+  passthru = {
+    effectiveVersion = lib.versions.majorMinor finalAttrs.version;
+    siteCcacheDir = "lib/guile/${finalAttrs.passthru.effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${finalAttrs.passthru.effectiveVersion}";
   };
 
   meta = {
@@ -149,4 +148,4 @@ builder rec {
     maintainers = with lib.maintainers; [ ludo ];
     platforms = lib.platforms.all;
   };
-}
+})

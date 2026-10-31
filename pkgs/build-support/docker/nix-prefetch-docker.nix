@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     mainProgram = "nix-prefetch-docker";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

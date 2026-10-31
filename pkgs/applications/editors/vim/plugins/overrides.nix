@@ -27,6 +27,7 @@
   fzy,
   gawk,
   git,
+  gh,
   glow,
   helm-ls,
   himalaya,
@@ -52,7 +53,6 @@
   sshfs,
   sops,
   stylish-haskell,
-  tabnine,
   tmux,
   typescript_7,
   typescript-language-server,
@@ -259,6 +259,23 @@ assertNoAdditions {
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
+  };
+
+  atlas-nvim = super.atlas-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires Diffview plugin initialization to populate DiffviewGlobal.
+      "atlas.pulls.diff.diffview.keymaps"
+    ];
+    runtimeDeps = [
+      curl
+      gitMinimal
+    ];
+    checkInputs = with self; [
+      codediff-nvim
+      diffview-nvim
+      fzf-lua
+      snacks-nvim
+    ];
   };
 
   augment-vim = super.augment-vim.overrideAttrs (old: {
@@ -802,16 +819,6 @@ assertNoAdditions {
     checkInputs = [ self.nvim-cmp ];
   };
 
-  cmp-tabnine = super.cmp-tabnine.overrideAttrs {
-    checkInputs = [ self.nvim-cmp ];
-    buildInputs = [ tabnine ];
-
-    postFixup = ''
-      mkdir -p $target/binaries/${tabnine.version}
-      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
-    '';
-  };
-
   cmp-tmux = super.cmp-tmux.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
     dependencies = [ tmux ];
@@ -986,15 +993,6 @@ assertNoAdditions {
 
   completion-buffers = super.completion-buffers.overrideAttrs {
     dependencies = [ self.completion-nvim ];
-  };
-
-  completion-tabnine = super.completion-tabnine.overrideAttrs {
-    dependencies = [ self.completion-nvim ];
-    buildInputs = [ tabnine ];
-    postFixup = ''
-      mkdir -p $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
-    '';
   };
 
   conflict-marker-vim = super.conflict-marker-vim.overrideAttrs (old: {
@@ -1186,6 +1184,15 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  dadbod-grip-nvim = super.dadbod-grip-nvim.overrideAttrs {
+    # Optional pickers: these adapters probe for telescope/snacks with pcall and
+    # fall back to the built-in picker when the dependency is absent.
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+    ];
+  };
 
   dailies-nvim = super.dailies-nvim.overrideAttrs {
     runtimeDeps = [
@@ -1841,7 +1848,7 @@ assertNoAdditions {
     runtimeDeps = [ xxd ];
   };
 
-  himalaya-vim = super.himalaya-vim.overrideAttrs {
+  himalaya-vim9 = super.himalaya-vim9.overrideAttrs {
     buildInputs = [ himalaya ];
     # Optional integrations
     checkInputs = with self; [
@@ -2781,7 +2788,6 @@ assertNoAdditions {
   neogit = super.neogit.overrideAttrs {
     # Optional diffview integration
     checkInputs = [ self.diffview-nvim ];
-    dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # E5108: Error executing lua ...vim-2024-06-13/lua/diffview/api/views/diff/diff_view.lua:13: attempt to index global 'DiffviewGlobal' (a nil value)
       # Requires diffview-nvim's plugin script to be sourced.
@@ -2856,6 +2862,15 @@ assertNoAdditions {
       neotest
       nvim-nio
     ];
+  };
+
+  neotest-busted = super.neotest-busted.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+    # Helper scripts are run in the project's Busted/LuaRocks environment.
+    nvimRequireCheck = "neotest-busted";
   };
 
   neotest-ctest = super.neotest-ctest.overrideAttrs {
@@ -4969,8 +4984,8 @@ assertNoAdditions {
 
   vim-agda = super.vim-agda.overrideAttrs {
     preFixup = ''
-      substituteInPlace "$out"/autoload/agda.vim \
-        --replace-fail "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
+      substituteInPlace "$out"/ftplugin/agda.vim \
+        --replace-fail "let g:agda_executable = 'agda'" "let g:agda_executable = '${agda}/bin/agda'"
     '';
   };
 
@@ -5107,6 +5122,16 @@ assertNoAdditions {
       license = lib.licenses.vim;
     };
   });
+
+  vim-dadbod-manager-ui = super.vim-dadbod-manager-ui.overrideAttrs {
+    # Only vim-dadbod: the drawer this plugin extends is vendored, and upstream
+    # states that a separate vim-dadbod-ui "must not be installed next to it",
+    # so it is deliberately not listed here.
+    dependencies = [ self.vim-dadbod ];
+
+    doInstallCheck = true;
+    vimCommandCheck = "DBManager";
+  };
 
   vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs {
     dependencies = [ self.vim-dadbod ];

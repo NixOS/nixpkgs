@@ -4,6 +4,7 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg_7-headless,
   nixosTests,
   openssl,
@@ -17,6 +18,9 @@ let
     final: prev: {
       # TODO: package properly when no longer using a fork
       aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
+
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
 
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
@@ -78,7 +82,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.3";
+  version = "2.10.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,10 +90,17 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-5YfXmk4GE1BNdWLFbAvBo1s6SlD3Mo38Oa6zgehTJTs=";
+    hash = "sha256-czoI/RdZ/hUQQbw7NmS//7DSujawwMahTWaDV+jchsw=";
   };
 
   patches = [
+    # Fix streams tests leaking a raised log level into other tests
+    # https://github.com/music-assistant/server/pull/6344
+    (fetchpatch {
+      url = "https://github.com/music-assistant/server/commit/28a25af1674cb9a72cc9f6a9fb8faf6632857222.patch";
+      hash = "sha256-sOF1RTt8+DJ10+pMYFuwgdq00FQ9XVWSYfX8qexYP48=";
+    })
+
     (replaceVars ./ffmpeg.patch {
       ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
       ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
@@ -120,14 +131,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # E   IndexError: tuple index out of range
     ./fix-webserver-tests-in-sandbox.patch
 
+    # Avoid Sendspin port collisions in parallel test run.
+    ./fix-sendspin-tests-parallel.patch
+
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
     ./disable-default-provider.diff
-
-    # Fixes this warning on startup:
-    #  On-device ML inference capability probe was inconclusive (exit code 1); assuming this CPU is capable
-    # Music-Assistant's site-packages is injected via passthru.pythonPath, because $out cannot be used with replaceVars
-    ./inherit-env-for-avx2-check.diff
   ];
 
   postPatch = ''
@@ -270,6 +279,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "squeezelite"
       "tidal"
       "vban_receiver"
+      "wiim"
       "ytmusic"
     ]);
 
@@ -287,13 +297,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/bandcamp"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
+    "tests/providers/ibroadcast"
     "tests/providers/kion_music"
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
     "tests/providers/siriusxm"
     "tests/providers/stream_limits"
-    "tests/providers/wiim"
     "tests/providers/yandex_music"
     "tests/providers/yandex_smarthome"
     "tests/providers/yandex_station"

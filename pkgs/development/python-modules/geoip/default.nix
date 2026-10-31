@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "GeoIP";
     inherit version;
-    sha256 = "1rphxf3vrn8wywjgr397f49s0s22m83lpwcq45lm0h2p45mdm458";
+    hash = "sha256-qJDaaiFXQFBpIZjxSweqQmigE3Enjfwk9xzZvIfr8OY=";
   };
 
   build-system = [ setuptools ];

@@ -2759,6 +2759,7 @@ broken-packages:
   - hF2 # failure in job https://hydra.nixos.org/build/233208978 at 2023-09-02
   - hfann # failure in job https://hydra.nixos.org/build/233198657 at 2023-09-02
   - HFitUI # failure in job https://hydra.nixos.org/build/233218009 at 2023-09-02
+  - HFuse # fuse2 removal https://github.com/NixOS/nixpkgs/issues/526161
   - hfmt # failure in job https://hydra.nixos.org/build/233246648 at 2023-09-02
   - hfoil # failure in job https://hydra.nixos.org/build/234467169 at 2023-09-13
   - hfov # failure in job https://hydra.nixos.org/build/233227082 at 2023-09-02

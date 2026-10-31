@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch2,
   lib,
   libGL,
   libxkbcommon,
@@ -21,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xrizer";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xrizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y/K+eXECUi9wGol0IUuIUI9hqhEN8GHaOO5i1xMFNQo=";
+    hash = "sha256-o8iZfY2WbaWS6c+RHvhbTePzZZAn0N1Iq39scp4AtRQ=";
   };
 
-  cargoHash = "sha256-btGPIujawY5NPmx7hGBxW5ZYi2RvboyQpfw6fA3c3jE=";
+  cargoHash = "sha256-HVeKLohd73oBoiQHZE5jGwDJeLvR4J8I5zRnYvZlHoA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openxr-loader
   ];
 
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "monado"
+  ];
+
+  env.XRIZER_VERSION = finalAttrs.version;
+
   postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail 'features = ["static"]' 'features = ["linked"]'
     substituteInPlace src/graphics_backends/gl.rs \
       --replace-fail 'libGLX.so.0' '${lib.getLib libGL}/lib/libGLX.so.0'
   '';

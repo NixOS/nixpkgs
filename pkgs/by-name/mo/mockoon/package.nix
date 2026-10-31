@@ -4,29 +4,20 @@
   fetchurl,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "mockoon";
   version = "9.6.1";
-
   src = fetchurl {
-    url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
+    url = "https://github.com/mockoon/mockoon/releases/download/v${finalAttrs.version}/mockoon-${finalAttrs.version}.x86_64.AppImage";
     hash = "sha256-Y6DmoWGvNp0cvRYgDDMHul5K6CzhiWxMxVTR+W9PE5E=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -Dm 444 ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
   '';
 
   meta = {
@@ -37,10 +28,10 @@ appimageTools.wrapType2 {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://mockoon.com";
-    changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
+    changelog = "https://github.com/mockoon/mockoon/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "mockoon";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

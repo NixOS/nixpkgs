@@ -1,8 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch2,
   poetry-core,
+  pytestCheckHook,
   cryptography,
   fido2,
   requests,
@@ -12,17 +14,28 @@
   semver,
   crcmod,
   hidapi,
+  pyscard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nitrokey";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZyB5gNZc5HxohZypc/198PPBxqG9URscQfXYAWzs7n8=";
+  src = fetchFromGitHub {
+    owner = "Nitrokey";
+    repo = "nitrokey-sdk-py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ACKszYvOD0kt+ws+upxanvv11lKOix59dg25Fzs6Q80=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "compatibility-with-pytest.patch";
+      url = "https://github.com/Nitrokey/nitrokey-sdk-py/commit/c9b2516aa10027d238665ab7718fb474d80a2753.patch?full_index=1";
+      hash = "sha256-3qYlV0RFLM2aJKfnO9WoQkXZuMisdaGuutmkRp33bWc=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "protobuf"
@@ -43,19 +56,26 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  # no tests
-  doCheck = false;
+  optional-dependencies = {
+    ccid = [
+      pyscard
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "nitrokey" ];
 
   meta = {
     description = "Python SDK for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-sdk-py";
-    changelog = "https://github.com/Nitrokey/nitrokey-sdk-py/releases/tag/v${version}";
+    changelog = "https://github.com/Nitrokey/nitrokey-sdk-py/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ panicgh ];
   };
-}
+})

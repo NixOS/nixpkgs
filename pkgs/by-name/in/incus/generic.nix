@@ -14,7 +14,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   acl,
   buildPackages,
   cowsql,
@@ -52,7 +52,7 @@ let
       sphinxext-opengraph
     ]
   );
-  evaluatedPatches = if lib.isFunction patches then patches fetchpatch2 else patches;
+  evaluatedPatches = if lib.isFunction patches then patches fetchpatch else patches;
 in
 
 buildGoModule (finalAttrs: {

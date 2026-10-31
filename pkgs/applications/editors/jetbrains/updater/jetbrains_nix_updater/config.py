@@ -1,9 +1,12 @@
-import os
-
 import dataclasses
+import os
 from pathlib import Path
 
 SUPPORTED_SYSTEMS = ["x86_64-linux", "aarch64-linux", "aarch64-darwin"]
+
+
+class CannotFindNixpkgsRootException(Exception):
+    "raised when Nixpkgs cannot be found automatically"
 
 
 def find_nixpkgs(current_path: Path) -> Path:
@@ -11,7 +14,9 @@ def find_nixpkgs(current_path: Path) -> Path:
         return current_path
     parent = current_path.parent
     if parent == current_path:
-        raise Exception("nixpkgs could not be found, please provide --nixpkgs-root")
+        raise CannotFindNixpkgsRootException(
+            "nixpkgs could not be found, please provide --nixpkgs-root"
+        )
     return find_nixpkgs(parent)
 
 

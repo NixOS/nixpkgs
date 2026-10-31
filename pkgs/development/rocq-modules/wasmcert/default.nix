@@ -30,12 +30,14 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
+        (case (lib.versions.range "9.2" "9.2") (lib.versions.range "2.4" "2.6") "2.2.1") # wasmcert 2.2.1 also supports Rocq 9.1 but would break CertiRocq
         (case (lib.versions.range "8.20" "9.1") (lib.versions.range "2.4" "2.5") "2.2.0")
       ]
       null;
 
   release."2.1.0".hash = "sha256-k094mxDLLeelYP+ABm+dm6Y5YrachrbhNeZhfwLHNRo=";
   release."2.2.0".hash = "sha256-GsfNpXgCG6XGqDE+bekzwZsWIHyjDTzWRuNnjCtS/88=";
+  release."2.2.1".hash = "sha256-RtJXfaX/04+BuMWjnq6PKOyNm5Ed5v/ZP71C9Q8iSVk=";
 
   mlPlugin = true;
   useDune = true;

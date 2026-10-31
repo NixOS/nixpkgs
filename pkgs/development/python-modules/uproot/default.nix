@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.7.6";
+  version = "5.7.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,8 +35,17 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "uproot5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9dUquO9B1WHPy8fjbaZVpdhY/2EtK+lxYp08tXuV3xY=";
+    hash = "sha256-uEFX5VRG6baA0NPubjTQLJo3zxOrc+rISiQUAKRDbjw=";
   };
+
+  # shutil.copy preserves the read-only permissions of the test files from the nix store,
+  # which then cannot be opened in update mode.
+  postPatch = ''
+    substituteInPlace tests/test_1687_rntuple_update.py tests/test_1690_ttree_inplace.py \
+      --replace-fail \
+        "shutil.copy(" \
+        "shutil.copyfile("
+  '';
 
   build-system = [
     hatch-vcs

@@ -65,9 +65,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      xaverdh
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

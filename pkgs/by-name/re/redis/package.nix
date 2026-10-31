@@ -3,8 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
-  apple-sdk,
-  lua,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -27,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.10.2";
+  version = "8.10.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-lje8tQPxIgOt8xOlSySmD2ZNcLOvIGIQMbdmQiFrj1k=";
+    hash = "sha256-ftzedXSe3QwEe3ZWaLJTpeO1PY2OP++7SuurJjY4OyM=";
   };
 
   patches = [
@@ -48,26 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
-    # can provide that functionality for us.
-    substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
-      --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib' \
-        '${apple-sdk.sdkroot}/usr/lib'
-  '';
-
   nativeBuildInputs = [
     pkg-config
     which
     python3
   ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
   makeFlags = [

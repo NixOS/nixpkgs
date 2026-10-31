@@ -12,6 +12,26 @@
   useToolchainLibraries ? true,
 }:
 
+let
+  syntaxModules = [
+    "SwiftBasicFormat"
+    "SwiftCompilerPlugin"
+    "SwiftCompilerPluginMessageHandling"
+    "SwiftDiagnostics"
+    "SwiftIDEUtils"
+    "SwiftIfConfig"
+    "SwiftLexicalLookup"
+    "SwiftOperators"
+    "SwiftParser"
+    "SwiftParserDiagnostics"
+    "SwiftSyntax"
+    "SwiftSyntaxBuilder"
+    "SwiftSyntaxMacroExpansion"
+    "SwiftSyntaxMacros"
+  ]
+  ++ lib.optionals (lib.versionAtLeast swift_release "6.3") [ "SwiftRefactor" ];
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-syntax";
   version = swift_release;
@@ -65,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         # from the compiler.
         mkdir -p "''${!outputDev}/lib/cmake/SwiftSyntax"
         substitute ${./files/SwiftSyntaxConfig.cmake} "''${!outputDev}/lib/cmake/SwiftSyntax/SwiftSyntaxConfig.cmake" \
+          --replace-fail '@syntaxModules@' ${lib.escapeShellArg syntaxModules} \
           --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
           --replace-fail '@dev@' ${lib.escapeShellArg swift.swiftc.out} \
           --replace-fail '@lib@' ${lib.escapeShellArg swift.swiftc.out}
@@ -76,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         # Install CMake config file for Swift Syntax.
         mkdir -p "''${!outputDev}/lib/cmake/SwiftSyntax"
         substitute ${./files/SwiftSyntaxConfig.cmake} "''${!outputDev}/lib/cmake/SwiftSyntax/SwiftSyntaxConfig.cmake" \
+          --replace-fail '@syntaxModules@' ${lib.escapeShellArg syntaxModules} \
           --replace-fail '@buildType@' ${if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED"} \
           --replace-fail '@dev@' "''${!outputDev}" \
           --replace-fail '@lib@/lib/swift/host' "''${!outputLib}/lib"

@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron_43,
+  electron_44,
   libicns,
   pipewire,
   libpulseaudio,
@@ -26,17 +26,17 @@
   withSystemVencord ? false,
 }:
 let
-  electron = electron_43;
+  electron = electron_44;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.7";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y74FIqcY26Dizz+DoY+r8caOfX+4/VmiEbmhcOpMHqE=";
+    hash = "sha256-K7vgEtHf8047mge06KsoAJeg0v2leHgGbADW0rSfoXQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-AK+ZbylpG7iKWKsIA0nfFfZYP7HaTCTSeDbNUFx/iY4=";
+    hash = "sha256-7wzkmGaXx1t43zNAWsocKJy12ib9CUoDNN3d9unoahg=";
   };
 
   nativeBuildInputs = [

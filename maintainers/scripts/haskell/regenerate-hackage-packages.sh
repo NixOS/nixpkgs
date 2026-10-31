@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils haskellPackages.cabal2nix-unstable.bin git -I nixpkgs=.
+#! nix-shell -i bash -E 'with import ../../.. {}; mkShell { packages = [ bash coreutils haskellPackages.cabal2nix-unstable.bin git (import ../../../ci {}).fmt.pkg ]; }'
 
 set -euo pipefail
 
@@ -102,7 +102,7 @@ run_hackage2nix
 
 fi
 
-nixfmt pkgs/development/haskell-modules/hackage-packages.nix
+treefmt --no-cache pkgs/development/haskell-modules/hackage-packages.nix
 
 if [[ "$DO_COMMIT" -eq 1 ]]; then
 git add pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml

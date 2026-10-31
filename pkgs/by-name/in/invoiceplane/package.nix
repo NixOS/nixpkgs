@@ -21,19 +21,20 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
-  inherit version;
+  # unstable-2026-09-28 version syntax not supported here
+  version = "1.7.2.1";
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
-    tag = "v${version}";
-    hash = "sha256-LC/c1wdVNguv8BrrY7ysVwomgG8uTPoY1Fw8/EPFk2I=";
+    rev = "a934e27e6c0961ac96d4b8c19baf6e17c03beb1f";
+    hash = "sha256-Nh0F0IGiY25g2MvuEdLs/p2oIAJuni116KKwzyVSa9c=";
   };
 
   # Composer.lock validation currently fails for unknown reason
   composerStrictValidation = true;
 
-  vendorHash = "sha256-BRNglvJMREFD9iHPqXycw1WYlxuV9fL8/Zoba2Z3p8w=";
+  vendorHash = "sha256-bkPoUd+u1wKM+CpbrbmD8lT6zyMKf/vx6km5kzo9s5Q=";
 
   nativeBuildInputs = [
     yarnConfigHook

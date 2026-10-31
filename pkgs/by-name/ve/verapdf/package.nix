@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-wfIg6yVmcOiuEphcI5bgEutNi7wZSRWkF8TL2jPCE4c=";
+  mvnHash = "sha256-Go5+7AtLkGkrympN6jNkc8zQcktyBhRNaOZpHOSBsgE=";
 
   strictDeps = true;
 

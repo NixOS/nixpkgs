@@ -3,15 +3,14 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "github-copilot-cli.fish";
   version = "0.1.33.1";
 
   src = fetchFromGitHub {
     owner = "z11i";
     repo = "github-copilot-cli.fish";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CFXbeO0euC/UtvQV0KCz4WQfdJgsuXKPM6M9oaw7hvg=";
   };
 
@@ -21,4 +20,4 @@ buildFishPlugin rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.malo ];
   };
-}
+})

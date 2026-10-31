@@ -47,15 +47,15 @@ index 87db7a97a..2e1689ed7 100644
      {
        gchar *alternative_dir;
  
-@@ -1650,6 +1660,40 @@ desktop_file_dirs_lock (void)
+@@ -1650,6 +1660,47 @@ desktop_file_dirs_lock (void)
        for (i = 0; dirs[i]; i++)
          g_ptr_array_add (desktop_file_dirs, desktop_file_dir_new (dirs[i]));
  
 +      {
-+        /* Monitor the system and user profile under /nix/var/nix/profiles and
-+         * treat modifications to them as if they were modifications to their
-+         * /share sub-directory.  */
++        /* Monitor the system and user profiles and treat modifications to them
++         * as if they were modifications to their /share sub-directory.  */
 +        const gchar *user;
++        gchar *profile_dir, *user_data_dir;
 +        DesktopFileDir *system_profile_dir, *user_profile_dir, *user_env_dir;
 +
 +        system_profile_dir =
@@ -63,10 +63,17 @@ index 87db7a97a..2e1689ed7 100644
 +        system_profile_dir->nix_profile_watch_dir = g_strdup ("/nix/var/nix/profiles");
 +        g_ptr_array_add (desktop_file_dirs, desktop_file_dir_ref (system_profile_dir));
 +
++        profile_dir = g_build_filename (g_get_user_state_dir (), "nix", "profiles", NULL);
++        user_data_dir = g_build_filename (profile_dir, "profile", "share", NULL);
++        user_profile_dir = desktop_file_dir_new (user_data_dir);
++        user_profile_dir->nix_profile_watch_dir = profile_dir;
++        g_ptr_array_add (desktop_file_dirs, user_profile_dir);
++        g_free (user_data_dir);
++
 +        user = g_get_user_name ();
 +        if (user != NULL)
 +          {
-+            gchar *profile_dir, *user_data_dir, *env_dir, *env_data_dir;
++            gchar *env_dir, *env_data_dir;
 +
 +            profile_dir = g_build_filename ("/nix/var/nix/profiles/per-user", user, NULL);
 +            user_data_dir = g_build_filename (profile_dir, "profile", "share", NULL);

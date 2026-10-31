@@ -151,6 +151,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
     substituteInPlace packaging/linux/app-dev.lizardbyte.app.Sunshine.service.in \
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+  ''
+  # std::jthread works without -fexperimental-library, which fails to link libc++experimental
+  + lib.optionalString isDarwin ''
+    substituteInPlace cmake/compile_definitions/common.cmake \
+      --replace-fail 'if(APPLE OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")' 'if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")'
   '';
 
   nativeBuildInputs = [
@@ -163,11 +168,11 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.setuptools
     ]))
     makeWrapper
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals isLinux [
     wayland-scanner
     shaderc # provides glslc, needed at configure time for shader compilation
-    qt6.wrapQtAppsHook
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
   ]
@@ -184,6 +189,8 @@ stdenv'.mkDerivation (finalAttrs: {
     nlohmann_json
     openssl
     libopus
+    qt6.qtbase
+    qt6.qtsvg
   ]
   ++ lib.optionals isLinux [
     avahi
@@ -218,8 +225,6 @@ stdenv'.mkDerivation (finalAttrs: {
     svt-av1
     vulkan-loader
     pipewire
-    qt6.qtbase
-    qt6.qtsvg
     libnotify
   ]
   ++ lib.optionals cudaSupport [
@@ -298,7 +303,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  postFixup = lib.optionalString isLinux ''
+  postFixup = ''
     wrapProgram $out/bin/sunshine \
       "''${qtWrapperArgs[@]}" \
       ${lib.optionalString cudaSupport "--set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}"}

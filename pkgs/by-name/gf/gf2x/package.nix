@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gf2x";
     repo = "gf2x";
     rev = "gf2x-${finalAttrs.version}";
-    sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
+    hash = "sha256-LZKg0WE2hhoPd7WE8tAyc8TPoaprN8HJMuRvEsGT5RE=";
   };
 
   patches = [

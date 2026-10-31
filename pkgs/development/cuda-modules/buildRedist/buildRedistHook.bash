@@ -69,7 +69,8 @@ unpackCudaPkgConfigDirs() {
   local path
   local -r pkgConfigDir="${NIX_BUILD_TOP:?}/${sourceRoot:?}/share/pkgconfig"
 
-  for path in "${NIX_BUILD_TOP:?}/${sourceRoot:?}"/{pkg-config,pkgconfig}; do
+  # NOTE: Some redistributables (e.g., NVPL) ship their pkg-config files in lib/pkgconfig.
+  for path in "${NIX_BUILD_TOP:?}/${sourceRoot:?}"/{pkg-config,pkgconfig,lib/pkgconfig}; do
     [[ -d $path ]] || continue
     mkdir -p "$pkgConfigDir"
     mv \
@@ -93,6 +94,7 @@ patchCudaPkgConfig() {
     nixLog "patching $pc"
     sed -i \
       -e "s|^cudaroot\s*=.*\$|cudaroot=${!outputDev:?}|" \
+      -e "s|^prefix\s*=\s*/usr\$|prefix=${!outputDev:?}|" \
       -e "s|^libdir\s*=.*/lib\$|libdir=${!outputLib:?}/lib|" \
       -e "s|^includedir\s*=.*/include\$|includedir=${!outputInclude:?}/include|" \
       "$pc"

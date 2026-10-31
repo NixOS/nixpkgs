@@ -73,10 +73,12 @@ python3Packages.buildPythonApplication {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath packages}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath packages}"
+    )
+  '';
 
   postInstall = ''
     substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \

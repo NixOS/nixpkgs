@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bleak-retry-connector";
-  version = "4.7.0";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bleak-retry-connector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3aBADooshin8Gkkf2EVFEHz82ENB07F+XMPzaGO/9I=";
+    hash = "sha256-wYzK0to0XZb+njjRDcce2q1rEztntC4NNtcZbE+ufQA=";
   };
 
   build-system = [ poetry-core ];

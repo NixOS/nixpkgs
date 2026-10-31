@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromCodeberg,
+  installShellFiles,
   rustPlatform,
   versionCheckHook,
   withRuntimeRules ? true,
@@ -35,6 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
   ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage man/*
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

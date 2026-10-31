@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   fontforge,
-  python3Packages,
   python3,
+  installFonts,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fontforge
-    python3Packages.fonttools
+    installFonts
     python3
   ];
 
   installPhase = ''
     runHook preInstall
-    find . -name '*Narrow*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
     install -m444 -Dt $out/doc/${pname}-${version} AUTHORS ChangeLog COPYING License.txt README.rst
     runHook postInstall
   '';

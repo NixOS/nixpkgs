@@ -6,9 +6,7 @@
   kodi,
   requests,
   dateutil,
-  six,
-  kodi-six,
-  signals,
+  typing_extensions,
   websocket,
 }:
 let
@@ -23,7 +21,7 @@ buildKodiAddon rec {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
     rev = "v${version}";
-    sha256 = "sha256-TWDhCOe4EO2HJ/Px+en2++YWniiw4Y+vU3sQtxOvT8U=";
+    hash = "sha256-TWDhCOe4EO2HJ/Px+en2++YWniiw4Y+vU3sQtxOvT8U=";
   };
 
   nativeBuildInputs = [ python ];
@@ -42,10 +40,8 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     requests
     dateutil
-    six
-    kodi-six
-    signals
     websocket
+    typing_extensions
   ];
 
   meta = {

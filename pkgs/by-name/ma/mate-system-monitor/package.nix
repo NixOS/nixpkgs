@@ -10,7 +10,7 @@
   libgtop,
   librsvg,
   polkit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   mate-desktop,
   gitUpdater,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgtop
     librsvg
     polkit
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

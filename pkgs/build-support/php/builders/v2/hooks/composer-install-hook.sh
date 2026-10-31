@@ -101,6 +101,10 @@ composerInstallInstallHook() {
   mkdir -p "$out"/share/php/"${pname}"
   cp -r . "$out"/share/php/"${pname}"/
 
+  # composer/ca-bundle uses its vendored bundle when it finds no system CA store.
+  find "$out"/share/php/"${pname}" -path "*/composer/ca-bundle/res/cacert.pem" \
+    -exec ln -sf @caBundle@ {} \;
+
   # Create symlinks for the binaries.
   mapfile -t BINS < <(jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json)
   for bin in "${BINS[@]}"; do

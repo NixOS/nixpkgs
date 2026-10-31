@@ -127,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://asb2m10.github.io/dexed";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
   };
 })

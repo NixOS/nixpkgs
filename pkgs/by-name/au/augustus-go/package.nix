@@ -1,21 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "augustus-go";
-  version = "0.3.0";
+  version = "0.14.34";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "augustus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZQoE8liABfAEceNvtJsHtLyfxECEJIRwK3eKGrMIpIE=";
+    hash = "sha256-UMDyW9fe0SjCYKqpfGdv9DxLhVNEPPyDl9HEV/R50aU=";
   };
 
-  vendorHash = "sha256-IdfrBD0N9zEreUzwMmT84d/UP6KnGETzvwyUfJVpNXo=";
+  vendorHash = "sha256-QjO2nzqmE+P20kRea+mHEHTtt6anRdAo8R4go6Kawfc=";
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [ "-s" ];
 
@@ -26,8 +29,11 @@ buildGoModule (finalAttrs: {
     substituteInPlace internal/detectors/packagehallucination/rubygems_test.go \
       --replace-fail "TestRubyGems_Detect_FakeGem" "Skip_TestRubyGems_Detect_FakeGem"
     # Tests require network access
-    rm  internal/generators/bedrock/bedrock_test.go
+    rm internal/generators/bedrock/bedrock_test.go
+    rm internal/generators/bedrock/nova_test.go
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "LLM security testing framework for detecting prompt injection, jailbreaks and adversarial attacks";

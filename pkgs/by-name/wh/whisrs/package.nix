@@ -16,7 +16,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "whisrs";
-  version = "0.1.28";
+  version = "0.1.30";
 
   __structuredAttrs = true;
 
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "y0sif";
     repo = "whisrs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zxKZ0dGfg+4iEsxU+TVc7gvua/hSGNwnOpzr4EBQ1GM=";
+    hash = "sha256-mGY4efAUOydHVPSQfVmadpla6cnQYEgK6CpZHJzbz3A=";
   };
 
-  cargoHash = "sha256-poK4PCR8GgcNDEl4MNYc1B7kLGPI3Zg9LYjLrqEQyvM=";
+  cargoHash = "sha256-JxY41Z5HvfsgFdWH5Ec4WQ4SMYy8M3h9al3GxDyTaSY=";
 
   nativeBuildInputs = [
     cmake

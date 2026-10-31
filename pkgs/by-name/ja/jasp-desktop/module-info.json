@@ -1,218 +1,756 @@
 {
   "jaspAcceptanceSampling": {
     "pname": "jaspAcceptanceSampling",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-sbLzTuGr7r/OsIMliOfvwVsmgUgZxL+6rqiq4W+BIBc="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-mgchSnqPJ6gjRAnZ85QZc1d/enIIhxJVj9cnq7FNnGY=",
+    "deps": [
+      "abtest",
+      "AcceptanceSampling",
+      "BayesFactor",
+      "conting",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "plyr",
+      "Rcpp",
+      "RcppParallel",
+      "rlang",
+      "rstan",
+      "rstantools",
+      "stringr",
+      "vcd",
+      "vcdExtra",
+      "BH",
+      "RcppEigen",
+      "StanHeaders"
+    ]
   },
   "jaspAnova": {
     "pname": "jaspAnova",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-K695RXTxzbYVF+gh8gzFTsceTTNdx976yF6WiPHm3No="
+    "version": "0.96.6-release.803",
+    "tag": "0.96.6-release.803_R-4-5-2_Release",
+    "hash": "sha256-tWgekORjfbhNbgmqmkWtUhgj7JUafkH9TgTSJe8p/xg=",
+    "deps": [
+      "afex",
+      "BayesFactor",
+      "boot",
+      "car",
+      "colorspace",
+      "emmeans",
+      "effectsize",
+      "ggplot2",
+      "jaspBase",
+      "jaspDescriptives",
+      "jaspGraphs",
+      "jaspTTests",
+      "KernSmooth",
+      "matrixStats",
+      "multcomp",
+      "multcompView",
+      "mvShapiroTest",
+      "onewaytests",
+      "plyr",
+      "stringi",
+      "stringr",
+      "restriktor"
+    ]
   },
   "jaspAudit": {
     "pname": "jaspAudit",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-1j6Na7Ikk8XJQjbTRRuK28K3jMVdUVe0FwTzo5ywppY="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-7VDzKWmkKBFdMTvz9QEQV5R6sV8JpZFhCROaMmc8Nys=",
+    "deps": [
+      "bstats",
+      "extraDistr",
+      "ggplot2",
+      "ggrepel",
+      "jaspBase",
+      "jaspGraphs",
+      "jfa"
+    ]
   },
   "jaspBFF": {
     "pname": "jaspBFF",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-bh3uLZcjfYpwaNmEzqVW5eNdPFq/Ig3bh7+1DgXYoF8="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-Uq4mTM1+boeAknXFF9LXxlaTckTAiZTvqiV8ixI1mj8=",
+    "deps": [
+      "BFF",
+      "jaspBase",
+      "jaspGraphs"
+    ]
   },
   "jaspBain": {
     "pname": "jaspBain",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-CcelkJJD/rr5BOx8MaCkHfbUKp7/tvWOSSC+Ilsopc8="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-sFEPHn9O38YWE3YNStLQM+g2neYmFeAs+D0Mdb7JGUA=",
+    "deps": [
+      "bain",
+      "lavaan",
+      "ggplot2",
+      "semPlot",
+      "stringr",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspSem"
+    ]
   },
   "jaspBfpack": {
     "pname": "jaspBfpack",
-    "version": "0.97.2-release.0",
-    "tag": "0.97.2-release.0_R-4-5-2_Release",
-    "hash": "sha256-jIlA4qaummkbx696UJkKTGRQQviUeuqYJX6V5AFuiTA="
+    "version": "0.97.2-release.803",
+    "tag": "0.97.2-release.803_R-4-5-2_Release",
+    "hash": "sha256-++L0wUmX1ZYC9fc+aizKzYdTVlEWnHMKr6jVXaQ1HOU=",
+    "deps": [
+      "BFpack",
+      "bain",
+      "ggplot2",
+      "stringr",
+      "coda",
+      "jaspBase",
+      "jaspGraphs"
+    ]
   },
   "jaspBsts": {
     "pname": "jaspBsts",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-sFbn0yOr7ZaaO2APYNOshBcs1zvgIZUT89BvdRrN/+4="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-CX3E8Bo/ahdZ8aBlJ53qppg+pdasMSktCXL/BcuZ9Ig=",
+    "deps": [
+      "Boom",
+      "bsts",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "matrixStats",
+      "reshape2"
+    ]
   },
   "jaspCircular": {
     "pname": "jaspCircular",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-fqBSR/um02+BXuu7gucd7WWG/RSOeLmhXHQl2wXiVGw="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-uKHVTEd5NeBxo9Zg/8QjVOLVCmD4viyJz90yZEi8sXM=",
+    "deps": [
+      "jaspBase",
+      "jaspGraphs",
+      "circular",
+      "ggplot2"
+    ]
+  },
+  "jaspClassicalTests": {
+    "pname": "jaspClassicalTests",
+    "version": "0.1.1-release.803",
+    "tag": "0.1.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-MnHHClc+ju6MknLyJXhgtTBiYvfoR2n7EzvDFF6n0A8=",
+    "deps": [
+      "DescTools",
+      "jaspBase",
+      "jaspFrequencies",
+      "jaspRegression",
+      "jaspGraphs",
+      "jaspTTests"
+    ]
   },
   "jaspCochrane": {
     "pname": "jaspCochrane",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-z6rglW4wItG9akHWplpDBzB5yzRko/ze+DcQotJmHTg="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-k1cIofZ1w10lvTuU3JuQz0hJhxeIgF57yKv56DokxV4=",
+    "deps": [
+      "jaspBase",
+      "jaspGraphs",
+      "jaspDescriptives",
+      "metafor",
+      "metaBMA"
+    ]
   },
   "jaspDescriptives": {
     "pname": "jaspDescriptives",
-    "version": "0.96.5-release.0",
-    "tag": "0.96.5-release.0_R-4-5-2_Release",
-    "hash": "sha256-226O52pW8GRvmtTA4pS5xWosZ4JR5ONeD1RQvx/tpVg="
+    "version": "0.98.1-release.803",
+    "tag": "0.98.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-q3fKi6kvFH1ugI2MIAEN3k+W6dzWy/+Ep80eE7BPh8c=",
+    "deps": [
+      "ggplot2",
+      "ggrepel",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspTTests",
+      "forecast",
+      "flexplot",
+      "ggrain",
+      "ggh4x",
+      "ggpp",
+      "ggtext",
+      "dplyr",
+      "tidyplots",
+      "ggpubr",
+      "forcats",
+      "patchwork"
+    ]
   },
   "jaspDistributions": {
     "pname": "jaspDistributions",
-    "version": "0.96.5-release.0",
-    "tag": "0.96.5-release.0_R-4-5-2_Release",
-    "hash": "sha256-zwk2CuW2gUhtnOX8LdmMlxUKCk974BjvR3zYlZAT+W8="
+    "version": "0.97.2-release.803",
+    "tag": "0.97.2-release.803_R-4-5-2_Release",
+    "hash": "sha256-ivZuu1thQsM5TMkwZJwzlTcTgQPndxXiuumHJJR4xfw=",
+    "deps": [
+      "car",
+      "fitdistrplus",
+      "ggplot2",
+      "goftest",
+      "gnorm",
+      "jaspBase",
+      "jaspGraphs",
+      "MASS",
+      "nortest",
+      "sgt",
+      "sn",
+      "DistributionS7"
+    ]
   },
   "jaspEquivalenceTTests": {
     "pname": "jaspEquivalenceTTests",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-4XFN6ikBfOZWHMTLbNPBwgMoYiLVULQE0XyNaoPQ40k="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-J1Jic+eaShEwrPlPM1Dfe6STbce+x/PzU1iK6b7sTcw=",
+    "deps": [
+      "BayesFactor",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "metaBMA",
+      "TOSTER",
+      "knitr",
+      "jaspTTests"
+    ]
   },
   "jaspEsci": {
     "pname": "jaspEsci",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-pH1neP1GmL3usXP5ycQKGeLNzvfMV/UBrrKF718QaGI="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-HWV9oJKmJuRCyr6sPMjE18zmwmdA6dqVIGCZ7MqNo8o=",
+    "deps": [
+      "jaspBase",
+      "jaspGraphs",
+      "esci",
+      "glue",
+      "vdiffr",
+      "legendry"
+    ]
   },
   "jaspFactor": {
     "pname": "jaspFactor",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-AU9nTrxZNseN0Wsp3932V3N+ax5CzfJMoEB128AR5LM="
+    "version": "0.97.1-release.803",
+    "tag": "0.97.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-GEVkmo6KB/fha/7ff0LtAMSWOJLwHy1dg7V8+FOhvoA=",
+    "deps": [
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspSem",
+      "lavaan",
+      "poLCA",
+      "psych",
+      "qgraph",
+      "reshape2",
+      "semPlot",
+      "GPArotation",
+      "Rcsdp",
+      "semTools"
+    ]
   },
   "jaspFrequencies": {
     "pname": "jaspFrequencies",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-qolgiJjiODzheW04fXdtxNqAreEny7ln+GlwV4ztRik="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-82f1q7bLnz0x5qmaU/ySKPFFQyJqxLv7K30iA88jkB4=",
+    "deps": [
+      "abtest",
+      "BayesFactor",
+      "bridgesampling",
+      "conting",
+      "multibridge",
+      "ggplot2",
+      "interp",
+      "jaspBase",
+      "jaspGraphs",
+      "plyr",
+      "stringr",
+      "vcd"
+    ]
   },
   "jaspJags": {
     "pname": "jaspJags",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-f26njMClIUWNc4fGsPgwitzKbqdU6Ld+Ys6ukWAHE/M="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-soMAtCLst1qchqhobVIzbD0YU6zq6Ixb3uLuTp18kB0=",
+    "deps": [
+      "coda",
+      "ggplot2",
+      "ggtext",
+      "hexbin",
+      "jaspBase",
+      "jaspGraphs",
+      "rjags",
+      "runjags",
+      "scales",
+      "stringr"
+    ]
   },
   "jaspLearnBayes": {
     "pname": "jaspLearnBayes",
-    "version": "0.96.5-release.0",
-    "tag": "0.96.5-release.0_R-4-5-2_Release",
-    "hash": "sha256-TdlwB2TV+YNj4Uwf4rNSIw/OtKQHEbrFKv1t2RioTmI="
+    "version": "0.96.5-release.803",
+    "tag": "0.96.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-zbJ9DomMm2BcWaf58Hs5S9Yl/s6owYQVGmD3HPDXXJo=",
+    "deps": [
+      "extraDistr",
+      "ggplot2",
+      "HDInterval",
+      "jaspBase",
+      "jaspGraphs",
+      "MASS",
+      "MCMCpack",
+      "MGLM",
+      "scales",
+      "ggalluvial",
+      "ragg",
+      "rjags",
+      "runjags",
+      "ggdist",
+      "png",
+      "posterior"
+    ]
   },
   "jaspLearnStats": {
     "pname": "jaspLearnStats",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-Yvqhv269Uvr087IjiGMBzTHZj+4Wu5A8dN/F9+8odqY="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-t9zB6sHb3bkflTVpKcqSZUSjq2HoTF1bOGXy+Mf2IjQ=",
+    "deps": [
+      "extraDistr",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspDistributions",
+      "jaspDescriptives",
+      "jaspTTests",
+      "ggforce",
+      "tidyr",
+      "igraph",
+      "HDInterval",
+      "metafor",
+      "psych"
+    ]
   },
   "jaspMachineLearning": {
     "pname": "jaspMachineLearning",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-Wg1C/ZJL98U8JkMfeZcc4/83DmCHRYOIn2OglsMqImw="
+    "version": "0.96.5-release.803",
+    "tag": "0.96.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-H3fYTrcE2BqhgofC+JsbmuDUp8AKGSE1R7PYQWgWswQ=",
+    "deps": [
+      "kknn",
+      "AUC",
+      "cluster",
+      "colorspace",
+      "DALEX",
+      "dbscan",
+      "e1071",
+      "fpc",
+      "gbm",
+      "Gmedian",
+      "ggparty",
+      "ggdendro",
+      "ggnetwork",
+      "ggplot2",
+      "ggrepel",
+      "ggridges",
+      "glmnet",
+      "jaspBase",
+      "jaspGraphs",
+      "MASS",
+      "mclust",
+      "mvnormalTest",
+      "neuralnet",
+      "network",
+      "partykit",
+      "plyr",
+      "randomForest",
+      "rpart",
+      "ROCR",
+      "Rtsne",
+      "signal",
+      "VGAM"
+    ]
   },
   "jaspMetaAnalysis": {
     "pname": "jaspMetaAnalysis",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-bXHlYiGEtNMqr833ve3Qrdv+TCm7G4let07McMETUv8="
+    "version": "0.97.5-release.803",
+    "tag": "0.97.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-HMLov9eEPtM9qEJzuWrJEc9xzwNLTzcZkECojEkdSUY=",
+    "deps": [
+      "dplyr",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspSem",
+      "MASS",
+      "metaBMA",
+      "metafor",
+      "metaSEM",
+      "lme4",
+      "psych",
+      "purrr",
+      "rstan",
+      "stringr",
+      "tibble",
+      "tidyr",
+      "weightr",
+      "BayesTools",
+      "RoBMA",
+      "metamisc",
+      "ggmcmc",
+      "pema",
+      "robvis",
+      "clubSandwich",
+      "CompQuadForm",
+      "sp",
+      "BiasedUrn",
+      "dfoptim",
+      "minqa",
+      "nloptr",
+      "nleqslv",
+      "patchwork"
+    ]
   },
   "jaspMixedModels": {
     "pname": "jaspMixedModels",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-F7NEyqA+vW+66l/ZmWaVvTSbG+0fxI+SsgfV6GmwJLs="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-ycXYx5G6nPxNo3wbfOynzS30A506qZhcBDhfuDxrdqA=",
+    "deps": [
+      "afex",
+      "emmeans",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "lme4",
+      "loo",
+      "mgcv",
+      "rstan",
+      "rstanarm",
+      "stanova",
+      "withr"
+    ]
   },
   "jaspNetwork": {
     "pname": "jaspNetwork",
-    "version": "0.96.3-release.0",
-    "tag": "0.96.3-release.0_R-4-5-2_Release",
-    "hash": "sha256-Gh4GuvNKK17Lfwncx0TNTsHOjY4g85q/yhnvoCppAxQ="
+    "version": "0.96.3-release.803",
+    "tag": "0.96.3-release.803_R-4-5-2_Release",
+    "hash": "sha256-73RdmQZzSaRVT4imHp4D3njqlrIMnPqV6AtUUMY8D2k=",
+    "deps": [
+      "bootnet",
+      "corpcor",
+      "dplyr",
+      "bgms",
+      "easybgm",
+      "foreach",
+      "ggplot2",
+      "gtools",
+      "HDInterval",
+      "huge",
+      "IsingSampler",
+      "jaspBase",
+      "jaspGraphs",
+      "mvtnorm",
+      "qgraph",
+      "reshape2",
+      "snow",
+      "stringr"
+    ]
   },
   "jaspPower": {
     "pname": "jaspPower",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-Q5CBXoHr6jPs/UNMpyQXzhMm5a48G8LTYr37VKfzrrc="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-HaiQl2R8r2pkA4W9IzCLZKBjLT6By7LeICZAGtYyjxA=",
+    "deps": [
+      "bfpwr",
+      "ggplot2",
+      "gsDesign",
+      "pwr",
+      "viridis",
+      "jaspBase",
+      "jaspGraphs"
+    ]
   },
   "jaspPredictiveAnalytics": {
     "pname": "jaspPredictiveAnalytics",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-CrpozVhA+vTv15dWUH9CqK37BdO7okE8XML6BYRsoYw="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-7xuZ+V9NOFSihzfKkikjFrZOG1Z/jWuFeXQoMWVnBB4=",
+    "deps": [
+      "jaspBase",
+      "jaspGraphs",
+      "bsts",
+      "bssm",
+      "precrec",
+      "reshape2",
+      "Boom",
+      "lubridate",
+      "prophet",
+      "BART",
+      "EBMAforecast",
+      "imputeTS",
+      "scoringRules",
+      "scoringutils"
+    ]
   },
   "jaspProcess": {
     "pname": "jaspProcess",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-ZO3Y+3qA84s0wUdL9iRqnc4vljzg69crH34eCbGWmOo="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-3TWzSd3m5ugwLdom0ZIU1t7Pl2zHE9MqnR907cwBYs4=",
+    "deps": [
+      "blavaan",
+      "dagitty",
+      "ggplot2",
+      "ggraph",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspJags",
+      "runjags"
+    ]
   },
   "jaspProphet": {
     "pname": "jaspProphet",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-rEBXWEVpavXiMljtvNfKLVvI8VIaTk+yymaGx4w/li8="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-uVJNn2T2K+/on8HXQ0Sd4n6jSjq2tJvUczpyJdKrdqE=",
+    "deps": [
+      "rstan",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "prophet",
+      "scales"
+    ]
   },
   "jaspQualityControl": {
     "pname": "jaspQualityControl",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-5DNz827MZHfmLnFXNUTFweMmOdDftxm6S8ZJwzCCDa8="
+    "version": "0.97.1-release.803",
+    "tag": "0.97.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-xTI11JrSANM1b+j1uw8GoOk8lP6n/mFQQ+yBz8OkDK8=",
+    "deps": [
+      "car",
+      "cowplot",
+      "daewr",
+      "desirability",
+      "DoE_base",
+      "EnvStats",
+      "FAdist",
+      "fitdistrplus",
+      "FrF2",
+      "ggplot2",
+      "ggrepel",
+      "goftest",
+      "ggpp",
+      "irr",
+      "jaspBase",
+      "jaspDescriptives",
+      "jaspGraphs",
+      "lubridate",
+      "psych",
+      "qcc",
+      "rsm",
+      "Rspc",
+      "tidyr",
+      "tibble",
+      "vipor",
+      "weibullness",
+      "flexsurv"
+    ]
   },
   "jaspRegression": {
     "pname": "jaspRegression",
-    "version": "0.95.5-release.13",
-    "tag": "0.95.5-release.13_R-4-5-2_Release",
-    "hash": "sha256-Tte/I2ZcNG0j4s4ka/1T0E+49IzN3KW38J0NpBy+seM="
+    "version": "0.96.5-release.803",
+    "tag": "0.96.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-7/J1iEu9iDflxpdZqCH+PfJan9C0CucYT0iaITr0bP8=",
+    "deps": [
+      "BAS",
+      "boot",
+      "bstats",
+      "combinat",
+      "emmeans",
+      "ggplot2",
+      "ggrepel",
+      "jaspAnova",
+      "jaspBase",
+      "jaspDescriptives",
+      "jaspGraphs",
+      "jaspTTests",
+      "lmtest",
+      "logistf",
+      "MASS",
+      "matrixStats",
+      "mdscore",
+      "ppcor",
+      "purrr",
+      "Rcpp",
+      "statmod",
+      "VGAM"
+    ]
   },
   "jaspReliability": {
     "pname": "jaspReliability",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-uKacghynWflNIdeKryT6dFCD8zZhAM5AOiZwHk9YmJw="
+    "version": "0.98.1-release.803",
+    "tag": "0.98.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-B1f5LOXpP21eduZ1gUjRkBjFxE5gkFAcD+wVzDue8xc=",
+    "deps": [
+      "Bayesrel",
+      "coda",
+      "ggplot2",
+      "ggridges",
+      "irr",
+      "jaspBase",
+      "jaspGraphs",
+      "LaplacesDemon",
+      "lme4",
+      "MASS",
+      "psych",
+      "mirt"
+    ]
+  },
+  "jaspRobust": {
+    "pname": "jaspRobust",
+    "version": "0.1.0-release.803",
+    "tag": "0.1.0-release.803_R-4-5-2_Release",
+    "hash": "sha256-FGUKutEIhfyVFy1yjQ5GIkShdFuUGO6PsVmn1yuV9mM=",
+    "deps": [
+      "boot",
+      "car",
+      "ggplot2",
+      "jaspBase",
+      "jaspDescriptives",
+      "jaspGraphs",
+      "jaspTTests",
+      "lmtest",
+      "MASS",
+      "matrixStats",
+      "statmod",
+      "WRS2"
+    ]
   },
   "jaspRobustTTests": {
     "pname": "jaspRobustTTests",
-    "version": "0.95.0-release.12",
-    "tag": "0.95.0-release.12_R-4-5-2_Release",
-    "hash": "sha256-U6qH0tKC7lLFvnTGK9mNli7Azh/SA6pUEJdsUoOCsYo="
+    "version": "0.95.0-release.803",
+    "tag": "0.95.0-release.803_R-4-5-2_Release",
+    "hash": "sha256-gvOnRSwcuercvYL6cMGptX+cR1YG1HsWFXOb3mJqLB0=",
+    "deps": [
+      "RoBTT",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs"
+    ]
   },
   "jaspSem": {
     "pname": "jaspSem",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-atNjOnnmkpmViw7az+JwkugepHfLcdg2jbZzJkbgXQk="
+    "version": "0.97.1-release.803",
+    "tag": "0.97.1-release.803_R-4-5-2_Release",
+    "hash": "sha256-0G0fZ0CN0OCZ1o1/I6Wctj7IeCrRgrfFSGHbVy86DDQ=",
+    "deps": [
+      "forcats",
+      "ggplot2",
+      "lavaan",
+      "cSEM",
+      "reshape2",
+      "jaspBase",
+      "jaspGraphs",
+      "semPlot",
+      "semTools",
+      "stringr",
+      "tibble",
+      "tidyr",
+      "SEMsens",
+      "mxsem",
+      "OpenMx"
+    ]
   },
   "jaspSummaryStatistics": {
     "pname": "jaspSummaryStatistics",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-UuC26atGRnRHwp1xhAJtj5vkdPvYjcs2WIPgAq/0Uvg="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-u24Kehqrw7XEkJpAugTMwlipVTxpi4b0WsQ0e3o4L7I=",
+    "deps": [
+      "BayesFactor",
+      "bstats",
+      "jaspBase",
+      "jaspFrequencies",
+      "jaspGraphs",
+      "jaspRegression",
+      "jaspTTests",
+      "jaspAnova",
+      "jaspDescriptives",
+      "SuppDists",
+      "bayesplay"
+    ]
   },
   "jaspSurvival": {
     "pname": "jaspSurvival",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-P652YSopruDje69vXfeBMSBMU/GPmYCuRp7jd2ZneEI="
+    "version": "0.96.6-release.803",
+    "tag": "0.96.6-release.803_R-4-5-2_Release",
+    "hash": "sha256-aKpBKVoT1iLUudllf4imlNv9tBT0TbX60wmOJfMx73k=",
+    "deps": [
+      "survival",
+      "ggplot2",
+      "ggsurvfit",
+      "flexsurv",
+      "jaspBase",
+      "jaspGraphs",
+      "scales"
+    ]
   },
   "jaspTTests": {
     "pname": "jaspTTests",
-    "version": "0.95.5-release.13",
-    "tag": "0.95.5-release.13_R-4-5-2_Release",
-    "hash": "sha256-K1thMejBibf8nzP07QbKyS/j3FbbrGQNPdiBpkhKf1w="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-T7K0hmZkUXQVIA3WdpcFhiT9IHhpK8Sg7e8+245ZqFU=",
+    "deps": [
+      "BayesFactor",
+      "car",
+      "ggplot2",
+      "jaspBase",
+      "jaspGraphs",
+      "logspline",
+      "plotrix",
+      "plyr"
+    ]
   },
   "jaspTimeSeries": {
     "pname": "jaspTimeSeries",
-    "version": "0.95.0-release.12",
-    "tag": "0.95.0-release.12_R-4-5-2_Release",
-    "hash": "sha256-FZEEa1n7B9Kt74L7dw+oYWmHBGobI78wUBzQ1wsKos8="
+    "version": "0.95.0-release.803",
+    "tag": "0.95.0-release.803_R-4-5-2_Release",
+    "hash": "sha256-DSLZUGaExESKLZ2wSwY/jOf8AuXYVaLPFo2FW7Z/itw=",
+    "deps": [
+      "jaspBase",
+      "jaspGraphs",
+      "jaspDescriptives",
+      "forecast",
+      "lubridate"
+    ]
   },
   "jaspVisualModeling": {
     "pname": "jaspVisualModeling",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-lhvH69LUIzXsFQ730hqcWnkTK0aeMhal3VhSTrr4eHc="
+    "version": "0.95.5-release.803",
+    "tag": "0.95.5-release.803_R-4-5-2_Release",
+    "hash": "sha256-aDyrHOBfYtVBlgracX0Mq8MrGxAbnod6RxlkOk7sjDE=",
+    "deps": [
+      "flexplot",
+      "jaspBase",
+      "jaspGraphs",
+      "jaspDescriptives"
+    ]
   }
 }

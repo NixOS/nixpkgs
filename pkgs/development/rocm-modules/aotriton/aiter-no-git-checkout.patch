@@ -1,0 +1,57 @@
+diff --git a/v3src/CMakeLists.txt b/v3src/CMakeLists.txt
+index 8d2f62e..f7eb928 100644
+--- a/v3src/CMakeLists.txt
++++ b/v3src/CMakeLists.txt
+@@ -90,52 +90,6 @@ else()
+   set(AOTRITON_ENABLE_FP32 0)
+ endif()
+ 
+-if(NOT AOTRITON_NOIMAGE_MODE)
+-  find_package(Git REQUIRED)
+-  ## Handle aiter.txt
+-  # CAVEAT: MUST USE GIT TAG OTHERWISE GIT_SHALLOW WILL NOT WORK
+-  execute_process(
+-    COMMAND ${CMAKE_COMMAND} -E cat "${CMAKE_CURRENT_SOURCE_PARENT_DIR}/third_party/aiter.txt"
+-    OUTPUT_VARIABLE AITER_GIT_TAG
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-  )
+-  # CAVEAT: FetchContent_Declare is buggy and unsuitable for our needs
+-  #         See https://stackoverflow.com/questions/78237952
+-  set(AITER_DIR "${AOTRITON_V2_BUILD_DIR}/aiter")
+-  if(NOT EXISTS "${AITER_DIR}/.git")
+-    execute_process(
+-      COMMAND ${GIT_EXECUTABLE} clone --depth 1 --branch ${AITER_GIT_TAG}
+-      https://github.com/ROCm/aiter.git
+-      WORKING_DIRECTORY "${AOTRITON_V2_BUILD_DIR}"
+-      COMMAND_ERROR_IS_FATAL ANY
+-    )
+-  else()
+-    # Check current HEAD tag to avoid unnecessary network fetches on every configure
+-    execute_process(
+-      COMMAND ${GIT_EXECUTABLE} describe --tags --exact-match HEAD
+-      WORKING_DIRECTORY "${AITER_DIR}"
+-      RESULT_VARIABLE AITER_DESCRIBE_RESULT
+-      OUTPUT_VARIABLE AITER_CURRENT_TAG
+-      OUTPUT_STRIP_TRAILING_WHITESPACE
+-      ERROR_QUIET
+-    )
+-    if(NOT AITER_DESCRIBE_RESULT EQUAL 0 OR NOT AITER_CURRENT_TAG STREQUAL "${AITER_GIT_TAG}")
+-      execute_process(
+-        COMMAND ${GIT_EXECUTABLE} fetch origin --depth 1 "tag" "${AITER_GIT_TAG}"
+-        WORKING_DIRECTORY "${AITER_DIR}"
+-        COMMAND_ERROR_IS_FATAL ANY
+-      )
+-      # cmake doc: "For sequential execution of multiple commands use multiple
+-      # execute_process calls each with a single COMMAND argument."
+-      execute_process(
+-        COMMAND ${GIT_EXECUTABLE} checkout ${AITER_GIT_TAG}
+-        WORKING_DIRECTORY "${AITER_DIR}"
+-        COMMAND_ERROR_IS_FATAL ANY
+-      )
+-    endif()
+-  endif()
+-endif()
+-
+ ## Generate Bare.* files and shim files
+ execute_process(
+ COMMAND ${CMAKE_COMMAND}

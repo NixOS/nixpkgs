@@ -37,11 +37,7 @@ mkMesonDerivation (finalAttrs: {
     jq
     python3
     rsync
-  ]
-  ++ lib.optionals (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") [
     json-schema-for-humans
-  ]
-  ++ [
     nix-cli
   ];
 

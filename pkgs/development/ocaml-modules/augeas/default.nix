@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://people.redhat.com/~rjones/augeas/files/ocaml-augeas-0.6.tar.gz";
-    sha256 = "04bn62hqdka0658fgz0p0fil2fyic61i78plxvmni1yhmkfrkfla";
+    hash = "sha256-irqZ3azQh2jr7vSiE4Nh0TtBowMX/OdQMUDNhqEwdhE=";
   };
 
   patches = [

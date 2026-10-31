@@ -5,6 +5,7 @@
   makeWrapper,
   withPulseaudio ? false,
   pulseaudio,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "~tsdh";
     repo = "swayr";
     tag = "swayrbar-${finalAttrs.version}";
-    sha256 = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
+    hash = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
   };
 
   cargoHash = "sha256-Aj4U2xyfNhf3HDSEd1SQ5TyO2MXn2/hrfnG0ZayzMtU=";
@@ -25,9 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = lib.optionalString withPulseaudio ''
     wrapProgram "$out/bin/swayrbar" \

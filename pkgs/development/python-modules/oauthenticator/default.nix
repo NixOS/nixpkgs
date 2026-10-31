@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   google-api-python-client,
   google-auth-oauthlib,
   jsonschema,
@@ -14,22 +15,41 @@
   requests,
   requests-mock,
   ruamel-yaml,
-  setuptools,
+  hatchling,
+  hatch-requirements-txt,
   tornado,
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oauthenticator";
-  version = "17.3.0";
+  version = "17.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5dkMskEf/z3G/MFjNGgjPA4OAjlCLAh8dzTRaFBVuPM=";
+  src = fetchFromGitHub {
+    owner = "jupyterhub";
+    repo = "oauthenticator";
+    tag = finalAttrs.version;
+    hash = "sha256-s5YRAVr0s1mYZU5lzxYsebOZBayF4FX99gkmbuII014=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    # Tests assert on the exact set of keys of the auth model, which fails
+    # since JupyterHub 6 adds new user fields.
+    # https://github.com/jupyterhub/oauthenticator/pull/841
+    (fetchpatch {
+      name = "dont-fail-tests-when-jupyterhub-adds-new-user-fields.patch";
+      url = "https://github.com/jupyterhub/oauthenticator/commit/7c9ee3d9b4ab1a767aedef171efe02a084ca54db.patch";
+      excludes = [ "oauthenticator/tests/test_oidc.py" ];
+      hash = "sha256-iBUbXUXTXfMI+nSnp772/coSii8J81JTDKolE2ONicI=";
+    })
+  ];
+
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     jsonschema
@@ -55,31 +75,16 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  disabledTests = [
-    # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
-    "test_azuread"
-    "test_mediawiki"
-    # Tests require network access
-    "test_allowed"
-    "test_auth0"
-    "test_bitbucket"
-    "test_cilogon"
-    "test_github"
-    "test_gitlab"
-    "test_globus"
-    "test_google"
-    "test_openshift"
-  ];
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "oauthenticator" ];
 
   meta = {
     description = "Authenticate JupyterHub users with common OAuth providers";
     homepage = "https://github.com/jupyterhub/oauthenticator";
-    changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
+    changelog = "https://github.com/jupyterhub/oauthenticator/blob/${finalAttrs.src.rev}/docs/source/reference/changelog.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    teams = with lib.teams; [ jupyter ];
   };
-}
+})

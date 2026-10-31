@@ -1,89 +1,123 @@
 {
   lib,
   fetchFromGitHub,
-  glib,
-  gst_all_1,
-  iproute2,
-  libtool,
-  makeBinaryWrapper,
+  stdenv,
+
+  # nativeBuildInputs
+  gobject-introspection,
   meson,
-  miraclecast,
   ninja,
   pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
+  bashNonInteractive,
+  coreutils,
+  glib,
+  gst_all_1,
+  gtk3,
+  iproute2,
+  procps,
+  python3,
   readline,
-  stdenv,
   systemdLibs,
-  testers,
-  udev,
   wpa_supplicant,
+
+  # checkInputs
+  check,
+
   relyUdev ? true,
 }:
-
 let
-  gstreamerPluginPaths = lib.concatMapStrings (pth: pth + "/lib/gstreamer-1.0:") [
-    (lib.getLib gst_all_1.gstreamer)
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-  ];
+  pythonPath = python3.withPackages (ps: [ ps.pygobject3 ]);
 in
 stdenv.mkDerivation {
   pname = "miraclecast";
-  version = "1.0-unstable-2024-07-13";
+  version = "1.0-unstable-2026-03-10";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "albfan";
     repo = "miraclecast";
-    rev = "937747fd4de64a33bccf5adb73924c435ceb821b";
-    hash = "sha256-y37+AOz8xYjtDk9ITxMB7UeWeMpDH+b6HQBczv+x5zo=";
+    rev = "0b7f1f1f6586dc65ff480f3cda5c2170a70aa020";
+    hash = "sha256-AC4cFFjmUS3Ykshk4VHqnmZ5ak6jgQJSYQ6T3nM5NjE=";
   };
 
+  postPatch = ''
+    substituteInPlace res/gstplayer \
+      --replace-fail 'GObject.threads_init()' ""
+    substituteInPlace res/meson.build \
+      --replace-fail \
+        "join_paths(get_option('sysconfdir'), 'dbus-1', 'system.d')" \
+        "join_paths(get_option('datadir'), 'dbus-1', 'system.d')"
+    substituteInPlace res/miracle-gst \
+      --replace-fail \
+        '/usr/bin/gst-launch-1.0' \
+        '${lib.getExe' gst_all_1.gstreamer "gst-launch-1.0"}'
+    substituteInPlace res/uibc-viewer \
+      --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
+      --replace-fail 'gstplayer $@' "$out/bin/gstplayer \$@" \
+      --replace-fail '| miracle-uibcctl' "| $out/bin/miracle-uibcctl"
+    substituteInPlace src/ctl/sinkctl.c \
+      --replace-fail '"uibc-viewer"' "\"$out/bin/uibc-viewer\"" \
+      --replace-fail '"miracle-gst"' "\"$out/bin/miracle-gst\"" \
+      --replace-fail '"miracle-uibcctl"' "\"$out/bin/miracle-uibcctl\""
+    substituteInPlace src/wifi/wifid-supplicant.c \
+      --replace-fail '"miracle-dhcp"' "\"$out/bin/miracle-dhcp\""
+  '';
+
   nativeBuildInputs = [
-    makeBinaryWrapper
+    gobject-introspection
     meson
     ninja
     pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    bashNonInteractive
     glib
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
-    iproute2
-    libtool
+    gtk3
+    pythonPath
     readline
     systemdLibs
-    udev
-    wpa_supplicant
   ];
 
   mesonFlags = [
-    "-Dbuild-tests=true"
-    "-Dip-binary=${iproute2}/bin/ip"
-  ]
-  ++ lib.optionals relyUdev [
-    "-Drely-udev=true"
+    (lib.mesonOption "ip-binary" (lib.getExe' iproute2 "ip"))
+    (lib.mesonBool "rely-udev" relyUdev)
   ];
 
-  postPatch = ''
-    substituteInPlace res/miracle-gst \
-      --replace-fail "/usr/bin/gst-launch-1.0" "${gst_all_1.gstreamer}/bin/gst-launch-1.0"
-  '';
+  doCheck = true;
+  checkInputs = [ check ];
+  mesonCheckFlags = [ "--exclude=Miraclecast:rtsp test" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/miracle-gst --set GST_PLUGIN_SYSTEM_PATH_1_0 ${gstreamerPluginPaths}
-  '';
+  dontWrapGApps = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = miraclecast;
-    command = "miracled --version";
-    version = "Miraclecast 1";
-  };
+  postFixup = ''
+    wrapGApp $out/bin/gstplayer
+    wrapGApp $out/bin/miracle-gst \
+      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
+    wrapProgram $out/bin/miracle-wifid \
+      --suffix PATH : ${lib.makeBinPath [ wpa_supplicant ]}
+  '';
 
   meta = {
     description = "Connect external monitors to your system via Wifi-Display specification also known as Miracast";
     homepage = "https://github.com/albfan/miraclecast";
-    license = lib.licenses.lgpl21Plus;
+    license = with lib.licenses; [
+      lgpl21Plus
+
+      # src/dhcp
+      gpl2Only
+    ];
     maintainers = [ lib.maintainers.wizardlink ];
     platforms = lib.platforms.linux;
   };

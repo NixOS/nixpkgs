@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bioinfo.mnhn.fr/abi/public/RepSeek";
     maintainers = [ lib.maintainers.bzizou ];
     license = lib.licenses.lgpl21;
+    problems.broken.message = "repseek is broken because its upstream sources (https://bioinfo.mnhn.fr and http://wwwabi.snv.jussieu.fr) are no longer available and the tarball is not archived anywhere; it is superseded by obitools4.";
   };
 
 })

@@ -11,12 +11,12 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/awstats-${version}.tar.gz";
-    sha256 = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
+    hash = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
   };
 
   postPatch = ''
     substituteInPlace wwwroot/cgi-bin/awstats.pl \
-      --replace /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
+      --replace-fail /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
   '';
 
   outputs = [
@@ -31,6 +31,8 @@ perlPackages.buildPerlPackage rec {
     JSONXS
     TryTiny
   ];
+
+  strictDeps = true;
 
   preConfigure = ''
     touch Makefile.PL
@@ -50,6 +52,8 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     mv wwwroot "$out/wwwroot"
     rm -r "$out/wwwroot/classes/src/"
@@ -63,7 +67,11 @@ perlPackages.buildPerlPackage rec {
     mkdir -p "$doc/share/doc"
     mv README.md docs/
     mv docs "$doc/share/doc/awstats"
+
+    runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://www.awstats.org/docs/awstats_changelog.txt";

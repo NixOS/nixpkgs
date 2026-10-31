@@ -237,13 +237,6 @@ in
 
     (mkIf config.boot.initrd.services.resolved.enable {
 
-      assertions = [
-        {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "'boot.initrd.services.resolved.enable' can only be enabled with systemd stage 1.";
-        }
-      ];
-
       boot.initrd.systemd = {
         contents = {
           "/etc/systemd/resolved.conf".text = resolvedConf;

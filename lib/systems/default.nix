@@ -163,10 +163,9 @@ let
         # Use the split GCC package set (`gccNGPackages`) instead of the
         # monolithic `gcc`.
         #
-        # I (@Ericson2314) plan on making more obscure low-tier
-        # platforms (e.g. NetBSD) use it soon, so we can dogfood GCC NG
-        # and thereby iron out its bugs.
-        useGccNG = final.isCygwin;
+        # NetBSD is here to dogfood it: it is low tier and has to use GCC
+        # rather than LLVM.
+        useGccNG = final.isCygwin || final.isNetBSD;
 
         libc =
           if final.isDarwin then
@@ -539,10 +538,14 @@ let
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
               abi_ =
-                # We're very explicit about the POWER ELF ABI w/ glibc in our parsing, while Rust is not.
-                # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
-                if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
-                  "gnu"
+                # Rustc uses different triplets for ELFv1 & ELFv2 w/ glibc.
+                # (we reject just "gnu" due to ambiguity, musl is ELFv2-only)
+                if (cpu.name == "powerpc64" && kernel.name == "linux") then
+                  {
+                    "gnuabielfv1" = "gnu";
+                    "gnuabielfv2" = "gnuelfv2";
+                  }
+                  .${abi.name} or abi.name
                 else
                   abi.name;
 

@@ -31,6 +31,7 @@
   fontconfig,
   imagemagick,
   libdbusmenu,
+  libpulseaudio,
   glib,
   wayland,
   libglvnd,
@@ -288,6 +289,9 @@ stdenv.mkDerivation (
       libdbusmenu
       wayland
       libsecret
+      # dlopen()ed by Chromium; without it audio falls back to ALSA and
+      # accessibility signal sounds stay silent on PipeWire/PulseAudio setups
+      libpulseaudio
     ];
 
     nativeBuildInputs = [
@@ -414,6 +418,13 @@ stdenv.mkDerivation (
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"
+
+          # FIXME: drop this when `asar extract` preserves the mode of unpacked files in
+          # the archives Microsoft ships, fixes https://github.com/NixOS/nixpkgs/issues/573021
+          if [ -d "$packed.unpacked" ]; then
+            cp -a "$packed.unpacked/." "$unpacked/"
+          fi
+
           substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
             --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
             --replace-fail "/bin/bash" "${bash}/bin/bash"

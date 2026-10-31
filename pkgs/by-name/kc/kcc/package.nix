@@ -55,12 +55,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # Note: python scripts wouldn't get wrapped anyway, but let's be explicit about it
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ]
-  ++ lib.optionals archiveSupport [
-    "--prefix PATH : ${lib.makeBinPath [ p7zip ]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+  ''
+  + lib.optionalString archiveSupport ''
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ p7zip ]}"
+  ''
+  + ''
+    )
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/kcc-c2e";

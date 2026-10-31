@@ -47,14 +47,14 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "12.9.1";
+  version = "12.9.4";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7nxJhnDQ0WyJfss5HNg3zTdQgc/TZL0xmNsUTJKqzLQ=";
+    hash = "sha256-T3X/yo4RoQMOQ+K5q4L6waD4mF4cQNQp/qn9KXJpNEc=";
   };
 
   enableParallelBuilding = true;

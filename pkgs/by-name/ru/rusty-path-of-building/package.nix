@@ -8,7 +8,7 @@
   pkg-config,
   icoutils,
   luajit,
-  zlib,
+  openssl,
   libxkbcommon,
   vulkan-loader,
   wayland,
@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
-  version = "0.2.18";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=";
+    hash = "sha256-6ZXJZW/ct9cRhHNr8lBPYnDX49qOGOdjU9TO9DlgiOw=";
   };
 
-  cargoHash = "sha256-8J1tZukp/Cchxj0QireOhu/eZd0N7uZa86XDLTBmHQk=";
+  cargoHash = "sha256-jHCLhrk6bORFQsoKV6MbhK51K69atOBoe97emrSofqI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,21 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     luajit
-    luajit.pkgs.lua-curl
-    luajit.pkgs.luautf8
-    luajit.pkgs.luasocket
-
-    # this is weird and vendored and should probably stay that way
-    (luajit.pkgs.buildLuaPackage {
-      pname = "lzip";
-      inherit (finalAttrs) version;
-      src = "${finalAttrs.src}/lua/libs/lzip";
-
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ zlib ];
-      installFlags = [ "LUA_CMOD=$(out)/lib/lua/${luajit.luaversion}" ];
-    })
-
+    openssl
     wayland
   ];
 
@@ -83,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       name = "rusty-path-of-building-1";
       desktopName = "Path of Building";
       comment = "Offline build planner for Path of Exile";
-      exec = "rusty-path-of-building poe1";
+      exec = "rusty-path-of-building poe1 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -101,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       name = "rusty-path-of-building-2";
       desktopName = "Path of Building 2";
       comment = "Offline build planner for Path of Exile 2";
-      exec = "rusty-path-of-building poe2";
+      exec = "rusty-path-of-building poe2 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -113,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob2" ];
     })
   ];
 

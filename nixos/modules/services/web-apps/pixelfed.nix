@@ -18,7 +18,7 @@ let
     optipng
     pngquant
     gifsicle
-    ffmpeg
+    ffmpeg-headless
   ];
   # Ensure PHP extensions: https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L135-L147
   phpPackage = cfg.phpPackage.buildEnv {
@@ -335,11 +335,11 @@ in
       inherit user group;
       inherit phpPackage;
 
-      phpOptions = ''
-        post_max_size = ${toString cfg.maxUploadSize}
-        upload_max_filesize = ${toString cfg.maxUploadSize}
+      phpOptions = {
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
         max_execution_time = 600;
-      '';
+      };
 
       settings = {
         "listen.owner" = user;

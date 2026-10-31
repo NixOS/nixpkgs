@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.dymo.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ makefu ];
+    platforms = lib.platforms.linux;
   };
 }

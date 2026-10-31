@@ -1,4 +1,10 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  name,
+  opencloudPackage,
+  ...
+}:
 
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
@@ -49,7 +55,7 @@ let
 in
 
 {
-  name = "opencloud";
+  inherit name;
 
   meta.maintainers = with lib.maintainers; [
     christoph-heiss
@@ -69,6 +75,7 @@ in
 
     services.opencloud = {
       enable = true;
+      package = opencloudPackage;
       url = "https://${domain}:9200";
       environment = {
         ADMIN_PASSWORD = adminPassword;

@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
     changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

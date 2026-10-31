@@ -49,6 +49,11 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
+> [!NOTE]
+> Many upstream developers submit their own projects for inclusion in Nixpkgs.
+> While these PRs are welcomed, this is often a sign that the package doesn't yet meet the userbase requirements.
+> Consider waiting for another user of your project to submit it instead.
+
 Special care has to be taken with security-critical software components.
 Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
 
@@ -124,7 +129,7 @@ To add a package to Nixpkgs:
    - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix).
      Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix).
+   - Apache HTTPD: [`pkgs/by-name/ap/apacheHttpd_2_4/package.nix`](./by-name/ap/apacheHttpd_2_4/package.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](./build-support/build-mozilla-mach/default.nix).
@@ -762,14 +767,14 @@ For very simple tests, they can be written inline:
 
 ```nix
 # ... ,
-{ yq-go }:
+{ lib, yq-go }:
 
 buildGoModule rec {
   # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" { } ''
-      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      echo "test: 1" | ${lib.getExe yq-go} eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
   };
@@ -845,7 +850,11 @@ stdenv.mkDerivation {
 Create `tests.nix` in the package directory:
 
 ```nix
-{ runCommand, phoronix-test-suite }:
+{
+  lib,
+  runCommand,
+  phoronix-test-suite,
+}:
 
 let
   inherit (phoronix-test-suite) pname version;
@@ -853,14 +862,14 @@ let
 in
 runCommand "${pname}-tests" { meta.timeout = 60; } ''
   # automatic initial setup to prevent interactive questions
-  ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+  ${lib.getExe phoronix-test-suite} enterprise-setup >/dev/null
   # get version of installed program and compare with package version
-  if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+  if [[ `${lib.getExe phoronix-test-suite} version` != *"${version}"*  ]]; then
     echo "Error: program version does not match package version"
     exit 1
   fi
   # run dummy command
-  ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+  ${lib.getExe phoronix-test-suite} dummy_module.dummy-command >/dev/null
   # needed for Nix to register the command as successful
   touch $out
 ''
@@ -912,9 +921,9 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
-`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+The [community bot `r-ryantm`](https://github.com/NixOS/infra/blob/main/non-critical-infra/modules/nixpkgs-update/README.md), periodically tries to update all packages in Nixpkgs.
+It runs the program [`nixpkgs-update`](https://nixos.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nixos.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
 However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
 ### Valid `passthru.updateScript` values
@@ -1310,7 +1319,7 @@ Each entry corresponds to a vulnerable version of a package; as a consequence:
 - One entry can contain several CVEs;
 - A single package can be concerned by several entries.
 
-Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/subscriptions/) for the packages they maintain.
+Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/user/subscriptions) for the packages they maintain.
 
 #### Triaging and Fixing
 

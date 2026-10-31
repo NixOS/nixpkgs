@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/hannesm/gmap/releases/download/${finalAttrs.version}/gmap-${finalAttrs.version}.tbz";
-    sha256 = "073wa0lrb0jj706j87cwzf1a8d1ff14100mnrjs8z3xc4ri9xp84";
+    hash = "sha256-BN2eYiasj4+0zLYCEEhwLjSkgvucHSQNOFKClSlQfBw=";
   };
 
   minimalOCamlVersion = "4.03";

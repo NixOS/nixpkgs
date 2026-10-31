@@ -128,6 +128,13 @@ in
         default = null;
         description = ''
           Password for RPC connections.
+
+          ::: {.warning}
+          A literal value is written to `monero.conf` in the Nix store, which is
+          world-readable. To keep the password out of the store, set this to a
+          placeholder such as `"$MONERO_RPC_PASSWORD"` and provide the value
+          through {option}`services.monero.environmentFile`.
+          :::
         '';
       };
 
@@ -241,11 +248,13 @@ in
           ```
           # In environment file:
           MINING_ADDRESS=888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H
+          MONERO_RPC_PASSWORD=correct-horse-battery-staple
           ```
 
           ```
           # Service config
           services.monero.mining.address = "$MINING_ADDRESS";
+          services.monero.rpc.password = "$MONERO_RPC_PASSWORD";
           ```
         '';
       };

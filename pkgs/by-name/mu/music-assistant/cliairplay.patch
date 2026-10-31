@@ -2,12 +2,12 @@ diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/prov
 index e7f38aae7..ec81fe539 100644
 --- a/music_assistant/providers/airplay/helpers.py
 +++ b/music_assistant/providers/airplay/helpers.py
-@@ -8,6 +8,7 @@
- import plistlib
+@@ -9,6 +9,7 @@
  import re
+ import time
  from fnmatch import fnmatchcase
 +from shutil import which
- from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any, Final
  
  from aiohttp import ClientError, ClientTimeout
 @@ -291,14 +292,7 @@ async def get_cli_binary() -> str:

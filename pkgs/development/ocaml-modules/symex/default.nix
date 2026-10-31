@@ -11,6 +11,8 @@ buildDunePackage (finalAttrs: {
   pname = "symex";
   version = "0.2";
 
+  minimalOCamlVersion = "5.1";
+
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "symex";

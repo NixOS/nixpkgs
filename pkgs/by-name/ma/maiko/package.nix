@@ -33,5 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Interlisp/maiko/releases";
     license = lib.licenses.mit;
     inherit (libx11.meta) platforms;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

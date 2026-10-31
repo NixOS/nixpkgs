@@ -3,28 +3,20 @@
   appimageTools,
   fetchurl,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "motrix";
   version = "1.8.19";
-
   src = fetchurl {
-    url = "https://github.com/agalwood/Motrix/releases/download/v${version}/Motrix-${version}.AppImage";
+    url = "https://github.com/agalwood/Motrix/releases/download/v${finalAttrs.version}/Motrix-${finalAttrs.version}.AppImage";
     hash = "sha256-oSO+VH3bZcjnXjECqZgOmsvlOONbfgOq50qVLvHdKfo=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -Dm 444 ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
   '';
 
   meta = {
@@ -36,4 +28,4 @@ appimageTools.wrapType2 {
     maintainers = [ ];
     mainProgram = "motrix";
   };
-}
+})

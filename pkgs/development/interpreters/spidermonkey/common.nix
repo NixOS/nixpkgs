@@ -139,20 +139,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
-    export LIBXUL_DIST=$out
-    export PYTHON="${buildPackages.python3.interpreter}"
-    export M4=m4
-    export AWK=awk
-    export AS=$CC
-    export AC_MACRODIR=$PWD/build/autoconf/
-    patchShebangs build/cargo-linker
-    # We can't build in js/src/, so create a build dir
-    mkdir obj
-    cd obj/
-    configureScript=../js/src/configure
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+      # match the vendor too, so rustc picks riscv64gc over riscv64-oe-linux-gnu
+      substituteInPlace build/moz.configure/rust.configure \
+        --replace-fail \
+          'and c.target.raw_cpu == host_or_target.raw_cpu' \
+          'and c.target.raw_cpu == host_or_target.raw_cpu and c.target.vendor == host_or_target.vendor'
+    ''
+    + ''
+      export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+      export LIBXUL_DIST=$out
+      export PYTHON="${buildPackages.python3.interpreter}"
+      export M4=m4
+      export AWK=awk
+      export AS=$CC
+      export AC_MACRODIR=$PWD/build/autoconf/
+      patchShebangs build/cargo-linker
+      # We can't build in js/src/, so create a build dir
+      mkdir obj
+      cd obj/
+      configureScript=../js/src/configure
+    '';
 
   env = lib.optionalAttrs (lib.versionAtLeast version "140") {
     # '-Wformat-security' ignored without '-Wformat'

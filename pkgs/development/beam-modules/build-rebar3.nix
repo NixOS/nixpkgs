@@ -6,6 +6,7 @@
   rebar3WithPlugins,
   rebarDevendorPatchHook,
 
+  cacert,
   libyaml,
   openssl,
 
@@ -86,5 +87,10 @@ lib.extendMkDerivation {
       passthru = {
         inherit beamDeps;
       };
+    }
+    // lib.optionalAttrs (args.name == "certifi") {
+      postPatch = (args.postPatch or "") + ''
+        cp ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
+      '';
     };
 }

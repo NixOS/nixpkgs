@@ -1,41 +1,56 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
   lld,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bear";
-  version = "4.0.4";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "bear";
     rev = finalAttrs.version;
-    hash = "sha256-/sR0kIAqXaQkksoUvgSt2q1ZMQObeiLCr3TGalYiHs0=";
+    hash = "sha256-W0t4UfTytoIXQ39LjHvA9U5owZJMsZNQd+fZ21DvsIg=";
   };
 
-  cargoHash = "sha256-rjtf+8ZnkpTX6by20QN2VydWuuLRMvkDB8OTPlDCagI=";
+  cargoHash = "sha256-ckWcNHR8D1FUWCFiP1SHdCzsDWppBbuZ/YG0hRj3F+4=";
 
   nativeBuildInputs = [
     installShellFiles
     lld
+    makeWrapper
   ];
 
-  postPatch = ''
-    substituteInPlace bear/build.rs \
-      --replace-fail 'const DEFAULT_WRAPPER_PATH: &str = "/usr/local/libexec/bear";' \
-        "const DEFAULT_WRAPPER_PATH: &str = \"$out/libexec/bear\";" \
-      --replace-fail 'const DEFAULT_PRELOAD_PATH: &str = "/usr/local/libexec/bear/$LIB";' \
-        "const DEFAULT_PRELOAD_PATH: &str = \"$out/lib\";"
-  '';
+  # buildRustPackage sets RUST_LOG="", which env_logger parses as
+  # error-only, hiding warnings the tests assert on.
+  env.RUST_LOG = "info";
+
+  # Run tests serially to reduce contention around their fixed startup deadlines.
+  dontUseCargoParallelTests = true;
 
   postInstall = ''
-    # wrapper should not end up on path
-    install -d $out/libexec/bear
-    mv $out/bin/wrapper $out/libexec/bear/wrapper
+    install -d $out/libexec/bear/bin $out/libexec/bear/lib
+    mv $out/bin/bear-driver $out/libexec/bear/bin/
+    mv $out/bin/bear-wrapper $out/libexec/bear/bin/
+    mv $out/lib/libexec${stdenv.hostPlatform.extensions.sharedLibrary} $out/libexec/bear/lib/
+
+    makeWrapper $out/libexec/bear/bin/bear-driver $out/bin/bear
+
+    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      $out/bin/generate-completions completions
+      installShellCompletion --cmd bear \
+        --bash completions/bear.bash \
+        --fish completions/bear.fish \
+        --zsh completions/_bear
+    ''}
+
+    rm $out/bin/generate-completions $out/bin/cdb-compare
 
     installManPage man/bear.1
   '';

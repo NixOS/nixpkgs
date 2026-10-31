@@ -11,12 +11,12 @@
   slurmSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdsh";
   version = "2.36";
 
   src = fetchurl {
-    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
+    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${finalAttrs.version}/pdsh-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pmEJXOUd1fsF45jPXQ4dYxVxI5WEQfbTUSvPGn0lxRc=";
   };
 
@@ -31,24 +31,22 @@ stdenv.mkDerivation rec {
 
   # Do not use git to derive a version.
   postPatch = ''
-    sed -i 's/m4_esyscmd(\[git describe.*/[${version}])/' configure.ac
+    sed -i 's/m4_esyscmd(\[git describe.*/[${finalAttrs.version}])/' configure.ac
   '';
 
-  preConfigure = ''
-    configureFlagsArray=(
-      "--infodir=$out/share/info"
-      "--mandir=$out/share/man"
-      "--with-machines=/etc/pdsh/machines"
-      ${if readline == null then "--without-readline" else "--with-readline"}
-      ${if ssh == null then "--without-ssh" else "--with-ssh"}
-      ${if rsh == false then "--without-rsh" else "--with-rsh"}
-      ${if slurmSupport then "--with-slurm" else "--without-slurm"}
-      "--with-dshgroups"
-      "--with-xcpu"
-      "--disable-debug"
-      '--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh'
-    )
-  '';
+  configureFlags = [
+    "--infodir=$out/share/info"
+    "--mandir=$out/share/man"
+    "--with-machines=/etc/pdsh/machines"
+    (if readline == null then "--without-readline" else "--with-readline")
+    (if ssh == null then "--without-ssh" else "--with-ssh")
+    (if rsh == false then "--without-rsh" else "--with-rsh")
+    (if slurmSupport then "--with-slurm" else "--without-slurm")
+    "--with-dshgroups"
+    "--with-xcpu"
+    "--disable-debug"
+    "--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh"
+  ];
 
   meta = {
     homepage = "https://github.com/chaos/pdsh";
@@ -66,4 +64,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

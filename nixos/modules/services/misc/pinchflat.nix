@@ -97,7 +97,7 @@ in
         '';
         description = ''
           The configuration of Pinchflat is handled through environment variables.
-          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/README.md#environment-variables).
+          The available configuration options can be found in [the Pinchflat README](https://github.com/kieraneglin/pinchflat/blob/master/README.md#environment-variables).
         '';
       };
 
@@ -166,6 +166,9 @@ in
         ExecStartPre = "${lib.getExe' cfg.package "migrate"}";
         ExecStart = "${getExe cfg.package} start";
         Restart = "on-failure";
+
+        # give enough time for migrations to run
+        TimeoutStartSec = "600s";
       };
     };
 

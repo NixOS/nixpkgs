@@ -27,7 +27,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookapp";
-  version = "0.6.13";
+  version = "0.7.1";
 
   __structuredAttrs = true;
 
@@ -35,13 +35,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunkka19xx";
     repo = "look";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rfSuwSRD1mHpvi8wP+xZNaE4bsc6btMRxAM4q/314FU=";
+    hash = "sha256-o0ljBn4b2d+Mcelrx4Zr4RdwozYt3fB1e7kEYCRtmgA=";
   };
 
   cargoRoot = "apps/linows/src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-U58By3qm5hr35oZjOChOHgf7LcrJy5VEAAjKz+vWdmw=";
+  cargoHash = "sha256-dCeeUHbDQUBTTfJrwb7UOdxOdl6z6jSNm7GwH6BrYAQ=";
 
   nativeBuildInputs = [
     copyDesktopItems

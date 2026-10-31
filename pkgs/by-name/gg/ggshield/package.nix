@@ -8,15 +8,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.54.0";
+  version = "1.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8U8kY8IiYM1NXL30cRHrh3Sy5UWIiS8eATKhiugHVik=";
+    hash = "sha256-jkrhV1skdS56+L5OPbWvTFuPvhi90l0FZc0w3rvZnBo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
 
   pythonRelaxDeps = true;
 
@@ -41,6 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyyaml
     requests
     rich
+    ruamel-yaml
     sigstore
     tomli
     tomlkit

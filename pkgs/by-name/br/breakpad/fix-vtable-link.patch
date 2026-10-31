@@ -1,0 +1,95 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Mon, 23 Jun 2026 00:00:00 +0000
+Subject: [PATCH] module_factory: move CreateModule out of line to fix vtable
+ link error
+
+module_factory.h defines BasicModuleFactory::CreateModule and
+FastModuleFactory::CreateModule inline. These inline functions
+construct a {Basic,Fast}SourceLineResolver::Module, whose only
+out-of-line virtual ("key") function lives in
+{basic,fast}_source_line_resolver.cc. Consequently every translation
+unit that includes module_factory.h (notably
+source_line_resolver_base.cc) emits an undefined reference to the
+Module vtable.
+
+With newer linkers (and --as-needed) the binaries that link
+source_line_resolver_base.o but not fast_source_line_resolver.o, such
+as microdump_stackwalk, fail to link with:
+
+  undefined reference to `vtable for
+  google_breakpad::FastSourceLineResolver::Module'
+
+Move the CreateModule definitions out of the header into the
+respective .cc files, which already include module_factory.h and which
+are also where the Module vtables are emitted. This way
+source_line_resolver_base.o no longer references the Fast/Basic Module
+vtables.
+
+Upstream-Status: Submitted [https://github.com/google/breakpad]
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/processor/basic_source_line_resolver.cc | 5 +++++
+ src/processor/fast_source_line_resolver.cc  | 5 +++++
+ src/processor/module_factory.h              | 8 ++------
+ 3 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/src/processor/basic_source_line_resolver.cc b/src/processor/basic_source_line_resolver.cc
+index 1111111..2222222 100644
+--- a/src/processor/basic_source_line_resolver.cc
++++ b/src/processor/basic_source_line_resolver.cc
+@@ -108,6 +108,11 @@ static const char* kWhitespace = " \r\n";
+ static const int kMaxErrorsPrinted = 5;
+ static const int kMaxErrorsBeforeBailing = 100;
+
++BasicSourceLineResolver::Module* BasicModuleFactory::CreateModule(
++    const string& name) const {
++  return new BasicSourceLineResolver::Module(name);
++}
++
+ BasicSourceLineResolver::BasicSourceLineResolver() :
+     SourceLineResolverBase(new BasicModuleFactory) { }
+
+diff --git a/src/processor/fast_source_line_resolver.cc b/src/processor/fast_source_line_resolver.cc
+index 1111111..2222222 100644
+--- a/src/processor/fast_source_line_resolver.cc
++++ b/src/processor/fast_source_line_resolver.cc
+@@ -60,6 +60,11 @@ using std::unique_ptr;
+
+ namespace google_breakpad {
+
++FastSourceLineResolver::Module* FastModuleFactory::CreateModule(
++    const string& name) const {
++  return new FastSourceLineResolver::Module(name);
++}
++
+ FastSourceLineResolver::FastSourceLineResolver()
+   : SourceLineResolverBase(new FastModuleFactory) { }
+
+diff --git a/src/processor/module_factory.h b/src/processor/module_factory.h
+index 1111111..2222222 100644
+--- a/src/processor/module_factory.h
++++ b/src/processor/module_factory.h
+@@ -52,18 +52,14 @@ class BasicModuleFactory : public ModuleFactory {
+  public:
+   virtual ~BasicModuleFactory() { }
+   virtual BasicSourceLineResolver::Module* CreateModule(
+-      const string& name) const {
+-    return new BasicSourceLineResolver::Module(name);
+-  }
++      const string& name) const;
+ };
+
+ class FastModuleFactory : public ModuleFactory {
+  public:
+   virtual ~FastModuleFactory() { }
+   virtual FastSourceLineResolver::Module* CreateModule(
+-      const string& name) const {
+-    return new FastSourceLineResolver::Module(name);
+-  }
++      const string& name) const;
+ };
+
+ }  // namespace google_breakpad
+--
+2.49.0

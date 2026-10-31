@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lstk";
-  version = "1.0.1";
+  version = "1.4.2";
 
   __structuredAttrs = true;
 
@@ -15,14 +15,18 @@ buildGoModule (finalAttrs: {
     owner = "localstack";
     repo = "lstk";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-QXc/VVejMgf3UdSmy6Xl6zZud+559/l4RFYc16zlNBw=";
+    sha256 = "sha256-pl/Dozx79EUQIfw1MPUE7ICTSs2upOhmmcjUguPrCZ8=";
   };
 
-  vendorHash = "sha256-AQ2hQ1PYqd0gFBr0Bhxe7F6RxoC9QVsoNmBWxWbMSuw=";
+  vendorHash = "sha256-saylUiV19DHHIV11kHuYJkwhh0Dc3NEno6X1YXhqBxI=";
 
   excludedPackages = "test/integration";
 
   __darwinAllowLocalNetworking = true;
+
+  ldflags = [
+    "-X github.com/localstack/lstk/internal/version.version=${finalAttrs.version}"
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

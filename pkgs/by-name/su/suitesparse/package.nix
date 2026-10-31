@@ -36,8 +36,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FcEyOvt96FLwCTil4l52ug+faiRlEG+mMUvKWipMxng=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FcEyOvt96FLwCTil4l52ug+faiRlEG+mMUvKWipMxng=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +86,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # GraphBLAS JIT builds a native helper binary (grb_jitpackage) but uses
     # the cross compiler, so it can't execute on the build host.
     (lib.cmakeBool "GRAPHBLAS_USE_JIT" false)
+  ]
+  ++ lib.optionals enableCuda [
+    (lib.cmakeFeature "SUITESPARSE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   env = lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {

@@ -1,0 +1,11 @@
+diff --git a/tests/common.py b/tests/common.py
+--- a/tests/common.py
++++ b/tests/common.py
+@@ -121,6 +121,7 @@ def use_ephemeral_server_ports() -> Iterator[None]:
+     with (
+         patch("music_assistant.controllers.webserver.controller.DEFAULT_SERVER_PORT", 0),
+         patch("music_assistant.controllers.streams.controller.DEFAULT_PORT", 0),
++        patch("music_assistant.providers.sendspin.provider.SENDSPIN_SERVER_PORT", 0),
+         patch("music_assistant.controllers.webserver.controller.DEFAULT_HOST", LOOPBACK_IP),
+         patch("music_assistant.controllers.streams.controller.DEFAULT_HOST", LOOPBACK_IP),
+         # keep address detection off the host's real interfaces

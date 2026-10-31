@@ -10,12 +10,12 @@
 (buildMozillaMach rec {
   pname = "firefox-devedition";
   binaryName = "firefox-devedition";
-  version = "158.0b1";
+  version = "160.0b1";
   applicationName = "Firefox Developer Edition";
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "0780e3f58d8dd3f51863aa5b3abffed59a85ad693f9a15e59de0d7cb926f69aeefa35d68bddcfeb88d148288e7ac5cf03ddb3b33b254db0e781cad07634cac16";
+    sha512 = "3d156efc2a76543f11e7fd554bc2cd50916faaa705181f936347ee5a18b09013186002b002dba623d0fc03e2853069a956eaf000363bc5d32eca69b08bf67b27";
   };
 
   # buildMozillaMach sets MOZ_APP_REMOTINGNAME during configuration, but

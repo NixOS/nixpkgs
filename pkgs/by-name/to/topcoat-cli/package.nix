@@ -1,11 +1,14 @@
 {
   fetchFromGitHub,
+  git,
   lib,
   rustPlatform,
+  rustfmt,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topcoat-cli";
-  version = "0.9.0";
+  version = "0.11.0";
 
   __structuredAttrs = true;
 
@@ -13,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tokio-rs";
     repo = "topcoat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BsirKja5/ZIW4L6bDqIP6NfF8kmdaLrOAyJ705epevI=";
+    hash = "sha256-4zyzziMw1VNG333QwBos9hAQqeNRB4zUSqbQe23F3MU=";
   };
 
-  cargoHash = "sha256-/7P8JclH3jl1kOGOh2PMUJH8C9JOkYM64THBhLNrsCY=";
+  cargoHash = "sha256-ALeX5Sr3w7TRWiwx28hFbwc8feLn27T6X8Wlo8QYj6Q=";
 
   cargoBuildFlags = [
     "-p"
@@ -26,6 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "topcoat-cli"
   ];
+
+  nativeCheckInputs = [
+    git
+    rustfmt
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI for Topcoat, a modular, batteries-included Rust web framework for server-rendered apps";

@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     description = "IOC extraction engine for PE binaries and text";
     homepage = "https://github.com/iocx-dev/iocx";
     changelog = "https://github.com/iocx-dev/iocx/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

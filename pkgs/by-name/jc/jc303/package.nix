@@ -82,13 +82,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jc303";
-  version = "0.12.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "midilab";
     repo = "jc303";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5OA7ir8loT0Lx05guwuZNCW9J9I3TA5+A9JZ9E7oWXA=";
+    hash = "sha256-isU0EzSQNHRQ9nRURr/RR0yRWQddUB5Bb0cBSSBwR7w=";
   };
 
   patches = [

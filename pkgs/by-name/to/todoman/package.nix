@@ -62,8 +62,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   sphinxBuilders = [
-    "singlehtml"
-    "man"
+    # TODO: Split into separate strings again once #573479 arrives in master
+    "singlehtml man"
   ];
 
   preInstallSphinx = ''

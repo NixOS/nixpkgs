@@ -55,12 +55,12 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/fleetdm/fleet/releases/tag/orbit-v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
-      {
+      (lib.licenses.mkLicense {
         shortName = "fleet-ee";
         fullName = "Fleet Enterprise Edition License";
         url = "https://github.com/fleetdm/fleet/blob/orbit-v${finalAttrs.version}/ee/LICENSE";
         free = false;
-      }
+      })
     ];
     mainProgram = "orbit";
     maintainers = with lib.maintainers; [

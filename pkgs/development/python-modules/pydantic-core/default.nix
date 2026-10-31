@@ -52,7 +52,11 @@ let
 
     # escape infinite recursion with pydantic via inline-snapshot
     doCheck = false;
-    passthru.tests.pytest = pydantic-core.overridePythonAttrs { doCheck = true; };
+    passthru = {
+      # bulk updater uses wrong tag
+      skipBulkUpdate = true;
+      tests.pytest = pydantic-core.overridePythonAttrs { doCheck = true; };
+    };
 
     nativeCheckInputs = [
       pytestCheckHook

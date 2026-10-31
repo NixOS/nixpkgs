@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vastai";
-  version = "1.8.2";
+  version = "1.8.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "vast-ai";
     repo = "vast-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vkw1DKITaFW/TzLmabn+07LS6/qsL9JrYZFGGHkPUnw=";
+    hash = "sha256-+JDDzc002lSFay2TEXzaxsfbJpLJTMdw1WI1EzJBOmU=";
   };
 
   patches = [

@@ -78,6 +78,9 @@ in
     unnamed.wait_for_unit("cloud-init-local.service")
     unnamed.wait_for_unit("cloud-final.service")
 
+    # SSH host key fingerprints must be printed to the console on boot (regression test)
+    unnamed.succeed("journalctl -t cloud-init | grep -q 'BEGIN SSH HOST KEY FINGERPRINTS'")
+
     unnamed.succeed("cat /tmp/cloudinit-write-file | grep -q 'cloudinit'")
 
     # install snakeoil ssh key and provision .ssh/config file

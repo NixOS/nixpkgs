@@ -15,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "arnaud-lb";
     repo = "php-memory-profiler";
-    rev = version;
+    tag = version;
     hash = "sha256-gq+txAU2Fw+Zm1aIu0lwPUHRqtccNcHFpp0fm3f7BnQ=";
   };
 

@@ -34,11 +34,15 @@ let
   unfuck-releases = {
     "0.44.12" = {
       unfuckRelease = "0.44.12";
+      owner = "svenstaro";
+      rev = "0.44.12";
       hash = "sha256-f9vDe3Q3Vl2hFLCPSzYtqyv9rLKBKEnARZTu0MKaX88=";
     };
     "0.47.05" = {
       unfuckRelease = "0.47.05-final";
-      hash = "sha256-kBdzU6KDpODOBP9XHM7lQRIEWUGOj838vXF1FbSr0Xw=";
+      owner = "cizra";
+      rev = "29fddba2ad92039b95d8873b9b05bbded7111fd0";
+      hash = "sha256-ogeHYvyaJMhU3yXMAS0XwJ/H/15H9iXNusnmcbfPWOo=";
     };
   };
 
@@ -54,10 +58,8 @@ stdenv.mkDerivation {
   version = release.unfuckRelease;
 
   src = fetchFromGitHub {
-    owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
-    rev = release.unfuckRelease;
-    inherit (release) hash;
+    inherit (release) owner rev hash;
   };
 
   patches = lib.optionals (versionOlder release.unfuckRelease "0.47.05") [
@@ -132,6 +134,7 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       numinit
+      cizra
     ];
   };
 }

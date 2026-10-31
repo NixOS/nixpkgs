@@ -15,13 +15,14 @@ buildPecl {
   src = fetchFromGitHub {
     repo = "phpredis";
     owner = "phpredis";
-    rev = version;
+    tag = version;
     hash = "sha256-mdphyUG4OUc1PBEA5Ub1X9afFDMJ5+HoXH4WnmeAKpE=";
   };
 
   internalDeps = with php.extensions; [ session ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";
     description = "PHP extension for interfacing with Redis";
     license = lib.licenses.php301;

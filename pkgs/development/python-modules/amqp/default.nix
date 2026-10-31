@@ -5,20 +5,23 @@
   fetchPypi,
   pytestCheckHook,
   pytest-rerunfailures,
+  setuptools,
   vine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amqp";
-  version = "5.4.0";
-  format = "setuptools";
+  version = "5.4.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qqM5h9y2p4k5VdO09TfF1HVa3c4QCZKeY+XRjBtRoKc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-eanAq3DnF0VmfxJ/+AZmiUpzTCYja28zFJyWSwlvCyA=";
   };
 
-  propagatedBuildInputs = [ vine ];
+  build-system = [ setuptools ];
+
+  dependencies = [ vine ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -41,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Advanced Message Queuing Protocol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
     homepage = "https://github.com/celery/py-amqp";
-    changelog = "https://github.com/celery/py-amqp/releases/tag/v${version}";
+    changelog = "https://github.com/celery/py-amqp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

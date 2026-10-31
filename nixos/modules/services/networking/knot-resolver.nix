@@ -16,11 +16,12 @@ let
     runCommandLocal "knot-resolver.yaml"
       {
         nativeBuildInputs = [ remarshal ];
+        strictDeps = true;
         value = builtins.toJSON cfg.settings;
-        passAsFile = [ "value" ];
+        __structuredAttrs = true;
       }
       ''
-        remarshal --from json --to yaml-1.1 "$valuePath" "$out"
+        printf "%s" "$value" | remarshal --from json --to yaml-1.1 > "$out"
         ${
           # We skip validation if the build platform cannot execute # the binary targeting the host platform.
           lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

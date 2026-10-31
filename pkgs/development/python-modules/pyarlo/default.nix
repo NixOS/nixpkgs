@@ -19,7 +19,7 @@ buildPythonPackage (finalattrs: {
     owner = "tchellomello";
     repo = "python-arlo";
     tag = finalattrs.version;
-    sha256 = "0pp7y2llk4xnf6zh57j5xas0gw5zqm42qaqssd8p4qa3g5rds8k3";
+    hash = "sha256-YyLdcnlDYXJR0xorLEjFv/AHtOpFngK/cbaTSanw514=";
   };
 
   build-system = [ setuptools ];

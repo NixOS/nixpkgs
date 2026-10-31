@@ -2,29 +2,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bashNonInteractive,
+  installShellFiles,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bashcards";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rpearce";
     repo = "bashcards";
-    rev = "v${finalAttrs.version}";
-    sha256 = "1rpqrh0022sbrjvd55a0jvpdqhhka5msf8dsz6adbbmxy3xzgdid";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKqXX3+E5zZ5zYlfUT8q7VF8MFi8zCVH/pc6BPLX5v8=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ bashNonInteractive ];
+
   dontBuild = true;
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man8
-    cp bashcards.8 $out/share/man/man8/
-    cp bashcards $out/bin/
+    runHook preInstall
+
+    install -Dm755 bashcards -t "$out/bin"
+    installManPage bashcards.1
+
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Practice flashcards in bash";
     homepage = "https://github.com/rpearce/bashcards/";
+    changelog = "https://github.com/rpearce/bashcards/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rpearce ];
     platforms = lib.platforms.all;

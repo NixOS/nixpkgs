@@ -2,29 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio,
+  serialx,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyblackbird";
-  version = "0.6";
-  format = "setuptools";
+  version = "0.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koolsb";
     repo = "pyblackbird";
     tag = version;
-    hash = "sha256-+ehzrr+RrwFKOOuxBq3+mwnuMPxZFV4QTZG1IRgsbLc=";
+    hash = "sha256-0XkHSRLHKAaem9qMr4Qac1YA2txci/SDgA0kfXMeiM0=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-    pyserial-asyncio
-  ];
+  build-system = [ setuptools ];
 
-  # Test setup try to create a serial port
-  doCheck = false;
+  dependencies = [ serialx ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyblackbird" ];
 

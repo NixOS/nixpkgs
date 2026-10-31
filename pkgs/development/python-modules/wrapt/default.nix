@@ -8,7 +8,7 @@
   sphinx-rtd-theme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wrapt";
   version = "2.2.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "wrapt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-m3vjzV2aM4P+PoH3w9f8swLnp4DBLz5vfCz4An/XoMQ=";
   };
 
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for decorators, wrappers and monkey patching";
     homepage = "https://github.com/GrahamDumpleton/wrapt";
+    changelog = "https://github.com/GrahamDumpleton/wrapt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

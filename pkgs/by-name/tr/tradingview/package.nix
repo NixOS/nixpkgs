@@ -17,7 +17,7 @@
   libGL,
   pango,
   sqlite,
-  systemd,
+  systemdLibs,
   wayland,
   libxext,
   libx11,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     pango
     sqlite
-    systemd
+    systemdLibs
     wayland
     libxcb
     libx11

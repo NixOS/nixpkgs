@@ -20,6 +20,7 @@ buildPecl {
   '';
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://pecl.php.net/package-changelog.php?package=PDO_OCI";
     description = "PHP PDO_OCI extension lets you access Oracle Database";
     license = lib.licenses.php301;

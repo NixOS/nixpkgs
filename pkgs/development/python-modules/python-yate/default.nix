@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-yate";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "eventphone";
     repo = "python-yate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/tlDme4RmO9XH5PNTvK2yVzbF+iDNeCY21nArq6NU+g=";
+    hash = "sha256-j+n3DwzCs4G6Ee9opnRopqTx528Uwcw+OIF8MFY8+5Q=";
   };
 
   build-system = [

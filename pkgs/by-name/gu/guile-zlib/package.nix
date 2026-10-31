@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  guileImportsCheck = [ "zlib" ];
+
   meta = {
     description = "GNU Guile library providing bindings to zlib";
     homepage = "https://notabug.org/guile-zlib/guile-zlib";

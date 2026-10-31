@@ -6,6 +6,7 @@
   katex,
   perlPackages,
   python3Packages,
+  rPackages,
   runCommand,
   testers,
   writers,
@@ -44,6 +45,8 @@ let
     writePyPy3
     writePython3
     writePython3Bin
+    writeRscript
+    writeRscriptBin
     writeRuby
     writeRust
     writeRustBin
@@ -175,6 +178,12 @@ recurseIntoAttrs {
           - test: success
         """)
         print(y[0]['test'])
+      ''
+    );
+
+    rscript = expectSuccessBin (
+      writeRscriptBin "test-writers-rscript-bin" { } /* R */ ''
+        cat("success")
       ''
     );
 
@@ -367,6 +376,17 @@ recurseIntoAttrs {
       ''
     );
 
+    rscript = expectSuccess (
+      writeRscript "test-writers-rscript"
+        {
+          libraries = [ rPackages.jsonlite ];
+        }
+        /* R */ ''
+          result <- jsonlite::fromJSON('{"message":"success"}')
+          cat(result$message)
+        ''
+    );
+
     # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
 
     #pypy2 = expectSuccessBin (writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
@@ -473,6 +493,25 @@ recurseIntoAttrs {
         ''
       )
     );
+
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-path-doc-comment" (
+          writeText "test" ''
+            # Doc comment example
+            def main [] {}
+          ''
+        );
+      in
+      runCommand "test-writers-nushell-path-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
   };
 
   data = recurseIntoAttrs {

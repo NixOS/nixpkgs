@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "arvkevi";
     repo = "kneed";
     tag = "v${version}";
-    sha256 = "sha256-A9d5igX9Eqr3rgx93VMee9yFEs6WfO0bb/eCEFCxUJg=";
+    hash = "sha256-A9d5igX9Eqr3rgx93VMee9yFEs6WfO0bb/eCEFCxUJg=";
   };
 
   build-system = [ hatchling ];

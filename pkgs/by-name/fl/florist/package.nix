@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Posix Ada Bindings";
     homepage = "https://github.com/adacore/florist";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lutzberger ];
     platforms = lib.platforms.linux;
   };

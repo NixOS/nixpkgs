@@ -119,7 +119,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     `allowUnfreePackages` permits the listed unfree packages.
 
-    In NixOS modules, lists set through `nixpkgs.config.allowUnfreePackages` merge additively across modules. This allows you to declare your unfree exceptions in the same modules that triggered them.
+    In NixOS modules, lists set through `nixpkgs.config.allowUnfreePackages` merge additively across modules. Declare your unfree exceptions in the same modules that triggered them.
 
     To allow unfree packages programmatically:
 

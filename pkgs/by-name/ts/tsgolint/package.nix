@@ -1,25 +1,24 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   findutils,
   nix-update-script,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "tsgolint";
-  version = "7.0.2003";
+  version = "7.0.2005";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bux2WAskdj0jRWJyhRzcSv+L0hITl0RJUbdnsg04aCc=";
+    hash = "sha256-UX6HHR04ehOiTRrcaTcA42vsO9NaYPxg2uZN93xedoM=";
     fetchSubmodules = true;
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   nativeBuildInputs = [ findutils ];
 
@@ -45,7 +44,7 @@ buildGo126Module (finalAttrs: {
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-X+JPv4SLJXyF938H34ldDgK2XsuORbDxbWhJ0svYTAs=";
+  vendorHash = "sha256-Xt3Coh+Q2VneVz+PfnT80sN9FAlMZbvPWxYWQUuGXYo=";
 
   subPackages = [ "cmd/tsgolint" ];
 

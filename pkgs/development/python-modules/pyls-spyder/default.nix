@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "spyder-ide";
     repo = "pyls-spyder";
     rev = "v${version}";
-    sha256 = "11ajbsia60d4c9s6m6rbvaqp1d69fcdbq6a98lkzkkzv2b9pdhkk";
+    hash = "sha256-c8J20xL7z/knRUkZvBpzybRwsdorm2p0YqQBo6JeUoU=";
   };
 
   propagatedBuildInputs = [ python-lsp-server ];

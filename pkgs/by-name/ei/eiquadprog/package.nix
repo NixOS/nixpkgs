@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ reimplementation of eiquadprog";
     homepage = "https://github.com/stack-of-tasks/eiquadprog";
     changelog = "https://github.com/stack-of-tasks/eiquadprog/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix;
   };

@@ -18,6 +18,9 @@ let
     *  `metricProvider` (optional)
     *    this attribute contains additional machine config
     *
+    *  `maintainers` (optional)
+    *    maintainers for this test
+    *
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
@@ -596,16 +599,74 @@ let
       };
 
     ipmi =
-      { ... }:
+      { pkgs, ... }:
+      let
+        exporterConfig = pkgs.writeText "ipmi-exporter.yml" ''
+          modules:
+            default:
+              user: ipmiusr
+              pass: test
+              privilege: admin
+              driver: LAN_2_0
+              timeout: 2000
+              # necessary for openipmi bmc, per ipmi-sensors(8)
+              workaround_flags:
+                - opensesspriv
+              collectors:
+                - ipmi
+        '';
+        simulatorConfig = pkgs.writeText "ipmi-simulator.conf" ''
+          name "ipmisim1"
+
+          startlan 1
+            addr 192.168.1.1 623
+            priv_limit admin
+            guid a123456789abcdefa123456789abcdef
+          endlan
+
+          user 2 true "ipmiusr" "test" admin 10
+        '';
+        simulatorCommands = "${pkgs.openipmi}/etc/ipmi/ipmisim1.emu";
+      in
       {
+        maintainers = pkgs.freeipmi.meta.maintainers;
         exporterConfig = {
           enable = true;
+          configFile = exporterConfig;
+        };
+        metricProvider = {
+          networking.firewall.allowedUDPPorts = [ 623 ];
+          systemd.services.ipmi-simulator = {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network.target" ];
+            preStart = ''
+              # ipmi_sim expects specific name for its SDR.
+              ${pkgs.coreutils}/bin/install -Dm600 \
+                ${pkgs.openipmi}/share/openipmi/ipmisim1.bsdr \
+                /run/ipmi-simulator/ipmi_sim/ipmisim1/sdr.20.main
+            '';
+            serviceConfig = {
+              ExecStart = ''
+                ${pkgs.openipmi}/bin/ipmi_sim -n \
+                  -c ${simulatorConfig} \
+                  -f ${simulatorCommands} \
+                  -s /run/ipmi-simulator
+              '';
+              RuntimeDirectory = "ipmi-simulator";
+            };
+          };
         };
         exporterTest = ''
+          wait_for_unit("ipmi-simulator.service")
+          wait_until_succeeds("ss -lunp | grep -F '192.168.1.1:623'")
           wait_for_unit("prometheus-ipmi-exporter.service")
           wait_for_open_port(9290)
+
+          # ipmi_sim command file sets MBTemp = 0x60 (96).
           succeed(
-            "curl -sSf http://localhost:9290/metrics | grep 'ipmi_scrape_duration_seconds'"
+            "curl -sSf 'http://localhost:9290/ipmi?target=192.168.1.1' > /tmp/ipmi-metrics",
+            "grep -F 'ipmi_up{collector=\"ipmi\"} 1' /tmp/ipmi-metrics",
+            "grep -F 'ipmi_temperature_celsius{id=\"3\",name=\"MBTemp\"} 96' /tmp/ipmi-metrics",
           )
         '';
       };
@@ -1738,7 +1799,7 @@ let
         };
         exporterTest = ''
           wait_until_succeeds(
-              'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
+              'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep -q "devices=/dev/vda"'
           )
         '';
       };
@@ -2253,7 +2314,7 @@ lib.mapAttrs (
         )}
       '';
 
-      meta.maintainers = [ ];
+      meta.maintainers = testConfig.maintainers or [ ];
     }
   ))
 ) exporterTests

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "google-auth-library-python-httplib2";
     tag = "v${version}";
-    sha256 = "sha256-NXz2oqbNVGTWOECH+Ly9v/CMxbhygFZhlHRHrnYLhCg=";
+    hash = "sha256-NXz2oqbNVGTWOECH+Ly9v/CMxbhygFZhlHRHrnYLhCg=";
   };
 
   build-system = [ setuptools ];

@@ -3,14 +3,14 @@
   installShellFiles,
   lib,
   libnotify,
-  pandoc,
   patchelf,
   rustPlatform,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hinoirisetr";
-  version = "1.6.3";
+  version = "1.6.5";
 
   __structuredAttrs = true;
 
@@ -19,15 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "me";
     repo = "hinoirisetr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XgIeeVCnlntf2RopA6SMuFCgbqTlTEZv6V5ezjEHVKA=";
+    hash = "sha256-/76APHYDswc1rKIk9aiQcOOax+L0+2iuayqjqEMCBSU=";
   };
 
-  cargoHash = "sha256-lydS9TWb+Y1PPC7C3Mn6KNVX1fsooAcDKJeKMnXWZY0=";
+  cargoHash = "sha256-UX2Js2rrT6xBGe9CbgtqYF9F0tJdBYyiqjX5NpB09zc=";
 
   nativeBuildInputs = [
     installShellFiles
-    pandoc
     patchelf
+    scdoc
   ];
 
   buildInputs = [
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postBuild = ''
-    pandoc manpages/hinoirisetr.1.md -s -t man -o hinoirisetr.1
+    scdoc < manpages/hinoirisetr.1.sc > hinoirisetr.1
   '';
 
   postInstall = ''

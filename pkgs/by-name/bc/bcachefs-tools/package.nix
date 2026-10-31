@@ -32,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.39.6";
+  version = "1.39.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cBYn/g6eLT5rTumo4Y24rWSHS2Sc7gFthPuCg1AQ22k=";
+    hash = "sha256-H8uzTohV30NU1wYhr/WXN76g1zDqGEzRE5QZcmcM7Jc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-djiIwZie9HjQ/+bCEGniMFkJA66oI0n+9y9Iax4GHOM=";
+    hash = "sha256-4ZStyYaT+6Suup1ue2wFFCTAlnsnEO9WaUJHe47BKXY=";
   };
 
   postPatch = ''
@@ -139,7 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       smoke-test = nixosTests.bcachefs;
-      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+      inherit (nixosTests.installer)
+        bcachefsSimple
+        bcachefsEncrypted
+        bcachefsMulti
+        bcachefsEncryptedLatestKernel
+        bcachefsEncryptedRcKernel
+        ;
     };
 
     updateScript = nix-update-script { };

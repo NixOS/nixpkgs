@@ -56,13 +56,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2609"; # Please backport to stable for netplay compat
+  version = "2609a"; # Please backport to stable for netplay compat
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-mylUTwDBIOIdGKCdA64RSqioTVc9f6oTP5WHAVtkH9w=";
+    hash = "sha256-0yQVW7Q3EKqfGihVA9I8Ucs0Hn/QVGVXuZ8ePbCZ5TQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

@@ -6,19 +6,20 @@
   aiohttp,
   gql,
   oathtool,
+  gitMinimal,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "monarchmoneycommunity";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bradleyseanf";
     repo = "monarchmoneycommunity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZGnKzg7HNCrM0ZOeKuhvwyw4vm7P11R8OjdcDayXquw=";
+    hash = "sha256-Xy/Qk0lbr/RGRpQy4B88mN8iyxp2ONh9yknVRmaANuY=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +30,10 @@ buildPythonPackage (finalAttrs: {
     oathtool
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    gitMinimal
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "monarchmoney" ];
 

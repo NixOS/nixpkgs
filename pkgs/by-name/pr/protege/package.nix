@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk11;
-  mvnHash = "sha256-xC/zLPPLbQ8tZIkCZHOfY6FEaWXFF5ZC1LX4ovaSSqg=";
+  mvnHash = "sha256-/M8hWBDjtHkCetFB3ZuJrU23OOUsHi+MdqGRdwk4uRs=";
 
   patches = [
     # Pin built-in Maven plugins to avoid checksum variations on Maven updates

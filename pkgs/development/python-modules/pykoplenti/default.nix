@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pykoplenti";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stegm";
     repo = "pykoplenti";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mwh6QOdsvf32U09ebleEKL7vt3xz8tjiftVVxKL/lO4=";
+    hash = "sha256-ykTM87YP5M839x4XmpcktLtuCRMo0dQzL2TK5OXDDzk=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];

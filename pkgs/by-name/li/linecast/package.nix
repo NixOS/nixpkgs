@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "linecast";
-  version = "2.7.0";
+  version = "2.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ashuttl";
     repo = "linecast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mZqcI9Um5CwTNw5KDyFxSb1BvSeo1yyOHotTOIQeAiI=";
+    hash = "sha256-/+LPNmfpLvAPC6xxQRXx/rOrcpZixyCJ/VCvKW9hI18=";
   };
 
   build-system = [

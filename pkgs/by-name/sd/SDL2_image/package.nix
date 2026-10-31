@@ -10,6 +10,7 @@
   pkg-config,
   stdenv,
   zlib,
+  testers,
   # Boolean flags
   enableSTB ? true,
   ## Darwin headless will hang when trying to run the SDL test program
@@ -67,11 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "SDL image library";
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "SDL2_image" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })

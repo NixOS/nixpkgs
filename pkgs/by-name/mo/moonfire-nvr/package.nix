@@ -14,18 +14,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonfire-nvr";
-  version = "0.7.32";
+  version = "0.7.33";
 
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TPyH7kbI09qkwT1Y6vJussYRSpUH12rLWK+ruXrI/Ts=";
+    hash = "sha256-nqemseOqkEIrh2WhuRNHY375Y7w7lqUAPYeAZq4WWyw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  cargoHash = "sha256-4/jit53vE2D8BMulFEChv+KRImKzjvIczmZgP90KZRI=";
+  cargoHash = "sha256-5caBXqy95K/ljrKL4/TKBQpi9cTCmu45ZhRShD1Zg3c=";
 
   env.VERSION = "v${finalAttrs.version}";
 
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/scottlamb/moonfire-nvr";
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "moonfire-nvr";
   };
 })

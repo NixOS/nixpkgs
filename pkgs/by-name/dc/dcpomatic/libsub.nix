@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsub";
-  version = "1.6.64";
+  version = "1.6.65";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/libsub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5umGV7qzh0iYkWbnnSVAtENhI9nIk+AE7pZHbDZuArk=";
+    hash = "sha256-XPpmEruRFTmJfKkAZ42zakuLa2yDsO9sb/OwoB2R6wo=";
   };
 
   # for some reason the version is not set properly upstream

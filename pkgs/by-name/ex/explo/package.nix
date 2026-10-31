@@ -11,7 +11,6 @@ buildGoModule (finalAttrs: {
   pname = "explo";
   version = "1.2.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

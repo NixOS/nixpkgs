@@ -4,13 +4,12 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 makeTest {
-  name = "hibernate" + pkgs.lib.optionalString systemdStage1 "-systemd-stage-1";
+  name = "hibernate";
 
   nodes = {
     machine =
@@ -21,10 +20,6 @@ makeTest {
         ...
       }:
       {
-        imports = [
-          ./common/auto-format-root-device.nix
-        ];
-
         powerManagement.powerDownCommands = "systemctl --no-block stop backdoor.service";
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
@@ -39,7 +34,6 @@ makeTest {
             options = [ "x-systemd.makefs" ];
           }
         ];
-        boot.initrd.systemd.enable = systemdStage1;
         virtualisation.useEFIBoot = true;
       };
   };

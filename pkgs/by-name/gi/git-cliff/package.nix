@@ -4,11 +4,17 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  libgit2,
+  libz,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-cliff";
   version = "2.14.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "orhun";
@@ -19,10 +25,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-yO8Ov2+cJky3JqePy2mnOd4AFEKJRuAirm/iozTwArU=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
+    ZSTD_SYS_USE_PKG_CONFIG = 1;
+  };
+
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+    libz
+    zstd
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export OUT_DIR=$(mktemp -d)

@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-dnscollector";
-  version = "3.1.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "dmachard";
     repo = "DNS-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W0fCI/1aiSbKiFQ/DwNuc2+NSGs+QwN+Gv9OUu5rLOY=";
+    hash = "sha256-HW81WbDKNWj0cWBJel5Fu8O23Gj+2pq2ownMILk5Xoc=";
   };
 
-  vendorHash = "sha256-6GMoyJy9HtuGjur1VwtgP3G9CXBKiJZlK/4YNPxhIgo=";
+  vendorHash = "sha256-Q0TltguyGccv2VnQLsjKA4i+DoIFvY+pWDZFiCN1CNM=";
 
   subPackages = [ "." ];
 

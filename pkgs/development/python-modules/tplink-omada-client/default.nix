@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tplink-omada-client";
-  version = "1.5.10";
+  version = "1.5.13";
   pyproject = true;
 
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit (finalAttrs) version;
-    hash = "sha256-fnWNevtEPZOaSCAcEk6pJu6jp453TCwQs7jgzjiPHOM=";
+    hash = "sha256-hnqWRs4O4bDTHneULGk31RLSRs6UzvyIgoHbsmkWPhQ=";
   };
 
   build-system = [ hatchling ];

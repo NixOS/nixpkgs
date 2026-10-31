@@ -11,13 +11,13 @@ diff --git a/azurelinuxagent/pa/provision/default.py b/azurelinuxagent/pa/provis
 index 91fe04edab..48edf01490 100644
 --- a/azurelinuxagent/pa/provision/default.py
 +++ b/azurelinuxagent/pa/provision/default.py
-@@ -237,9 +237,6 @@ def config_user_account(self, ovfenv):
+@@ -238,9 +238,6 @@ def config_user_account(self, ovfenv):
          self.osutil.conf_sudoer(ovfenv.username,
                                  nopasswd=ovfenv.user_password is None)
  
 -        logger.info("Configure sshd")
 -        self.osutil.conf_sshd(ovfenv.disable_ssh_password_auth)
 -
+         self._download_ssh_keys_if_needed(ovfenv)
          self.deploy_ssh_pubkeys(ovfenv)
          self.deploy_ssh_keypairs(ovfenv)
- 

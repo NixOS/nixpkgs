@@ -9,6 +9,7 @@
 
   # nativeBuildInputs
   cmake,
+  pyprojectVersionPatchHook,
 
   # dependencies
   torch,
@@ -38,6 +39,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pyprojectVersionPatchHook
   ];
   dontUseCmakeConfigure = true;
 

@@ -31,14 +31,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   # feed args to wrapPythonApp
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ ffmpeg ]}"
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   propagatedBuildInputs = (
     with python3.pkgs;

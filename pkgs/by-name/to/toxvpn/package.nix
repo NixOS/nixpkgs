@@ -8,7 +8,7 @@
   libsodium,
   libcap,
   zeromq,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation {
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-    systemd
+    systemdLibs
   ];
 
   nativeBuildInputs = [ cmake ];

@@ -358,7 +358,7 @@ in
         in
         [
           ''
-            ${lib.getExe' cfg.database.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+            ${lib.getExe' cfg.database.package "psql"} -p "${toString cfg.database.port}" -d "${cfg.database.name}" -f "${sqlFile}"
           ''
         ];
     };
@@ -377,7 +377,9 @@ in
       let
         postgresEnv =
           if isPostgresUnixSocket then
-            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
+            {
+              DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}&port=${toString cfg.database.port}";
+            }
           else
             {
               DB_HOSTNAME = cfg.database.host;

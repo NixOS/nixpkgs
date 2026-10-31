@@ -59,9 +59,6 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     mainProgram = "hypridle";
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 })

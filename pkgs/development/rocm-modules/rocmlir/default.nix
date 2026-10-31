@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocMLIR";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-0OvQT8pX6GbEqUwuauKGI66IHw8dsnt5mIijnzYyiRc=";
+    tag = "rocm-${finalAttrs.version}";
+    hash = "sha256-1qADqYI5pilXHr/vrS9SvgmTW6KUWXNpG1G+brwD/HI=";
   };
 
   nativeBuildInputs = [

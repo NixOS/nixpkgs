@@ -7,12 +7,12 @@
 
   setuptools,
 
-  flash-linear-attention,
   llguidance,
   marisa-trie,
   ninja,
   numpy,
   pillow,
+  pybind11,
   pydantic,
   pyyaml,
   rich,
@@ -26,6 +26,7 @@ let
   # https://github.com/turboderp-org/exllamav3/issues/44
   # Using unsupported platforms the build will fail
   cudaCapabilities = lib.intersectLists torch.cudaCapabilities [
+    "7.5"
     "8.0"
     "8.6"
     "8.9"
@@ -33,17 +34,25 @@ let
     "10.0"
     "12.0"
   ];
+
+  # https://github.com/turboderp-org/exllamav3/blob/master/.github/workflows/build.yml#L77
+  # Only consumer RDNA cards are supported
+  rocmGpuTargets = lib.filter (lib.hasPrefix "gfx1") (lib.splitString ";" torch.gpuTargetString);
+
+  inherit (torch) rocmPackages;
+
+  stdenv = if torch.rocmSupport then rocmPackages.stdenv else torch.stdenv;
 in
-buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
+buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "1.5.0";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gW6A2nWx3lumnJz7r7vxQyC1qM9Agqdr0DiL68yJvAI=";
+    hash = "sha256-Q13szUdWsvXagzsqFwbzTIJa0ulsNsZV78UIoPdVH9k=";
   };
 
   pythonRelaxDeps = [
@@ -56,6 +65,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   nativeBuildInputs = [
     ninja
+  ]
+  ++ lib.optionals torch.rocmSupport [
+    rocmPackages.clr
   ];
 
   buildInputs = lib.optionals torch.cudaSupport [
@@ -67,7 +79,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   dependencies = [
-    flash-linear-attention # Upstream vendors it instead
+    # Upstream has a vendored modified flash-linear-attention
     llguidance
     marisa-trie
     numpy
@@ -81,12 +93,18 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     typing-extensions
   ];
 
-  env = lib.optionalAttrs torch.cudaSupport {
-    CUDA_HOME = lib.getDev cudaPackages.cuda_nvcc;
-    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" (
-      cudaCapabilities ++ [ "${lib.last cudaCapabilities}+PTX" ]
-    );
-  };
+  env =
+    lib.optionalAttrs torch.cudaSupport {
+      CUDA_HOME = lib.getDev cudaPackages.cuda_nvcc;
+      TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" (
+        cudaCapabilities ++ [ "${lib.last cudaCapabilities}+PTX" ]
+      );
+    }
+    // lib.optionalAttrs torch.rocmSupport {
+      ROCM_HOME = torch.rocmtoolkit_joined;
+      PYTORCH_ROCM_ARCH = lib.concatStringsSep ";" rocmGpuTargets;
+      CPLUS_INCLUDE_PATH = lib.makeIncludePath [ pybind11 ];
+    };
 
   pythonImportsCheck = [ "exllamav3" ];
 
@@ -104,7 +122,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       "x86_64-windows"
       "x86_64-linux"
     ];
-    broken = !torch.cudaSupport; # Package requires CUDA for functionality
+    broken = !(torch.cudaSupport || torch.rocmSupport); # Requires CUDA or ROCM for functionality
     maintainers = with lib.maintainers; [ BatteredBunny ];
   };
 })

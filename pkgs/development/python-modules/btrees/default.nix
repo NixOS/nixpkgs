@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "6.3";
+  version = "6.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fga9/6erKMaACYRUC2le7oSPbhWwFF2Fj/SwxiZOjtI=";
+    hash = "sha256-GHbK0OvKw/aNrc3KgBjqbLdrM0+Zkac6qFy7DLj9jPA=";
   };
 
   build-system = [ setuptools ];

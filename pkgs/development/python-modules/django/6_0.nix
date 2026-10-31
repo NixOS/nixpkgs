@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "6.0.8";
+  version = "6.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-hQQMKa8YirrTAoCrW1nn3RqRXv0szLgeSOjeKxBfiSo=";
+    hash = "sha256-rDa+er1XjE6RuHPtGC4lHKjAhm+brL/S7WmU9yJYXjY=";
   };
 
   patches = [

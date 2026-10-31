@@ -67,12 +67,15 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ youtube-dl ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ youtube-dl ])
   ];
 
   meta = {
     description = "GUI front-end for youtube-dl";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mkg20001 ];
     homepage = "https://tartube.sourceforge.io/";

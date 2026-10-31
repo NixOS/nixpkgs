@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
 
   # cannot run test program while cross compiling
-  configureFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_openssl_xts_duplicate_keys=yes"
   ];
 
