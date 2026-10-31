@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pykcs11";
-  version = "1.5.18";
+  version = "1.5.20";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ev2HizaYIdgMG+ihQMheig+xNY/Kq6ZspmhpITaS8ic=";
+    hash = "sha256-H3p8gWT6xjY4Kqew1wJ5rVWBN5dI/BeiC8C+j+V0wlk=";
   };
 
   build-system = [ setuptools ];
