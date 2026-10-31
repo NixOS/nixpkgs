@@ -182,6 +182,7 @@
   ./programs/bash/undistract-me.nix
   ./programs/bat.nix
   ./programs/bazecor.nix
+  ./programs/bazelisk.nix
   ./programs/bcc.nix
   ./programs/benchexec.nix
   ./programs/browserpass.nix
