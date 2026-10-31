@@ -139,6 +139,7 @@ let
           powerpc64-linux = "./Configure linux-ppc64";
           riscv32-linux = "./Configure linux32-riscv32";
           riscv64-linux = "./Configure linux64-riscv64";
+          s390x-linux = "./Configure linux64-s390x -march=z13";
         }
         .${stdenv.hostPlatform.system} or (
           if stdenv.hostPlatform == stdenv.buildPlatform then
