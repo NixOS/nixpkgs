@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NPJG1SsRlG9kGtUwdJa/uP6DAtF09nCctzeorrvjAhQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UF2g+QIlXOqtlp11QHqundyKHo0g7xIuQB0kg4vN8oY=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
+      ignoredVersions = "-";
     };
     tests = {
       ffmpeg = ffmpeg.override { withSvtav1 = true; };
