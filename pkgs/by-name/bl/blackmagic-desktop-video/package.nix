@@ -1,5 +1,4 @@
 {
-  autoPatchelfHook,
   cacert,
   common-updater-scripts,
   curl,
@@ -8,6 +7,7 @@
   lib,
   libGL,
   libcxx,
+  patchelf,
   runCommandLocal,
   stdenv,
   writeShellApplication,
@@ -16,8 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
   version = "16.3";
 
+  nativeBuildInputs = [
+    patchelf
+  ];
+
   buildInputs = [
-    autoPatchelfHook
     libcxx
     libGL
     gcc.cc.lib
@@ -128,8 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # need to tell the DesktopVideoHelper where to find its own library
-  appendRunpaths = [ "${placeholder "out"}/lib" ];
+  postFixup = ''
+    patchelf --set-rpath "${
+      lib.makeLibraryPath ([ (placeholder "out") ] ++ finalAttrs.buildInputs)
+    }" $out/bin/DesktopVideoHelper
+  '';
 
   meta = {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
