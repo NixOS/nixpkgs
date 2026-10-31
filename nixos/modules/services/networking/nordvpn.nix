@@ -82,6 +82,12 @@ in
     # nordvpnd uses resolved to configure dns
     services.resolved.enable = true;
 
+    networking.firewall = {
+      # encrypted tunnels with the server and with other meshnet peers
+      # can trust those
+      trustedInterfaces = [ "nordlynx" ];
+    };
+
     # policy that allows nordvpnd to configure dns
     security.polkit = {
       enable = true;
@@ -125,16 +131,19 @@ in
       );
       serviceConfig = {
         # nordvpnd needs CAP_NET_ADMIN to configure network interfaces.
+        # libtelio needs CAP_NET_RAW for ping.
         AmbientCapabilities = [
           "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
         ];
         CapabilityBoundingSet = [
           "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
         ];
         DeviceAllow = [
           "/dev/net/tun rw"
         ];
-        ExecStart = lib.getExe' nordvpn "nordvpnd";
+        ExecStart = "${lib.getExe' nordvpn "nordvpnd"} --hosts-readonly";
         Group = cfg.group;
         KillMode = "process";
         NoNewPrivileges = "yes";
@@ -179,13 +188,14 @@ in
     systemd.user.services.norduserd = {
       after = [ "network-online.target" ];
       description = "NordUserD Service";
+      unitConfig.ConditionGroup = cfg.group;
       serviceConfig = {
         ExecStart = lib.getExe' nordvpn "norduserd";
         NonBlocking = true;
         Restart = "on-failure";
         RestartSec = 5;
       };
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
       wants = [ "network-online.target" ];
     };
   };
