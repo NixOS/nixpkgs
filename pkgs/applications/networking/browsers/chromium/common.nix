@@ -99,8 +99,10 @@
   cups ? null,
   proprietaryCodecs ? true,
   libpulseaudio ? null,
-  ungoogled ? false,
+  variant ? "chromium", # Can be chromium, ungoogled, or helium
   ungoogled-chromium,
+  helium,
+  helium-linux ? null,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -110,6 +112,11 @@
 buildFun:
 
 let
+  isUngoogled = lib.elem variant [
+    "ungoogled"
+    "helium"
+  ];
+
   python3WithPackages = python3.pythonOnBuildForHost.withPackages (
     ps: with ps; [
       ply
@@ -181,9 +188,19 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
-    inherit (upstream-info.deps.ungoogled-patches) rev hash;
+  ungooglers = {
+    ungoogled = ungoogled-chromium;
+    inherit helium;
   };
+
+  ungoogler = ungooglers.${variant} (
+    {
+      inherit (upstream-info.deps.ungoogled-patches) rev hash;
+    }
+    // lib.optionalAttrs (variant == "helium") {
+      inherit helium-linux;
+    }
+  );
 
   # There currently isn't a (much) more concise way to get a stdenv
   # that uses lld as its linker without bootstrapping pkgsLLVM; see
@@ -363,27 +380,30 @@ let
 
   chromiumDeps = lib.mapAttrs (
     path: args:
-    fetchFromGitiles (
-      removeAttrs args [ "recompress" ]
-      // lib.optionalAttrs args.recompress or false {
-        name = "source.tar.zstd";
-        downloadToTemp = false;
-        passthru.unpack = true;
-        nativeBuildInputs = [ zstd ];
-        postFetch = ''
-          tar \
-            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
-            --sort=name \
-            --mtime="1970-01-01" \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --remove-files \
-            --directory="$out" \
-            -cf "$TMPDIR/source.zstd" .
-          mv "$TMPDIR/source.zstd" "$out"
-        '';
-      }
-    )
+    if lib.hasAttr "rev" args then
+      fetchFromGitiles (
+        removeAttrs args [ "recompress" ]
+        // lib.optionalAttrs args.recompress or false {
+          name = "source.tar.zstd";
+          downloadToTemp = false;
+          passthru.unpack = true;
+          nativeBuildInputs = [ zstd ];
+          postFetch = ''
+            tar \
+              --use-compress-program="zstd -T$NIX_BUILD_CORES" \
+              --sort=name \
+              --mtime="1970-01-01" \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              --remove-files \
+              --directory="$out" \
+              -cf "$TMPDIR/source.zstd" .
+            mv "$TMPDIR/source.zstd" "$out"
+          '';
+        }
+      )
+    else
+      fetchzip args
   ) upstream-info.DEPS;
 
   unpackPhaseSnippet = lib.concatStrings (
@@ -419,7 +439,7 @@ let
   };
 
   base = rec {
-    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
+    pname = ((import ./variants/meta.nix lib).${variant}).pname + "-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -664,7 +684,7 @@ let
         hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
       })
     ]
-    ++ lib.optionals (!chromiumVersionAtLeast "154" && !ungoogled) [
+    ++ lib.optionals (!chromiumVersionAtLeast "154" && !isUngoogled) [
       # Same as the patch above, but from ungoogled-chromium and much
       # cleaner (and smaller) than reverting an endless chain of CLs.
       (fetchpatch {
@@ -674,7 +694,7 @@ let
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
       })
     ]
-    ++ lib.optionals (versionRange "154" "155" && !ungoogled) [
+    ++ lib.optionals (versionRange "154" "155" && !isUngoogled) [
       # Error: Cannot find module @rollup/rollup-linux-x64-gnu.
       # Essentially build-with-wasm-rollup.patch from the not yet merged PR for M154:
       # https://github.com/ungoogled-software/ungoogled-chromium/pull/3966
@@ -686,8 +706,7 @@ let
         hash = "sha256-o+jpDMfelVSTGcT9Ehl6zg92GOXg0cOP25MHYzOH4RQ=";
       })
     ]
-    ++ lib.optionals (!ungoogled) [
-      # Revert CL 7457194 to fix the following error:
+    ++ lib.optionals (!isUngoogled) [
       #  ERROR at //chrome/test/BUILD.gn:6355:9: Unable to load "/build/src/components/variations/test_data/cipd/BUILD.gn".
       #  "//components/variations/test_data/cipd:single_group_per_study_prefer_existing_behavior_seed",
       (fetchpatch {
@@ -807,7 +826,7 @@ let
         hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
       })
     ]
-    ++ lib.optionals (versionRange "151" "152") [
+    ++ lib.optionals (versionRange "151" "152" && variant != "helium") [
       # ERROR Unresolved dependencies.
       # //tools/metrics:metrics_metadata(//build/toolchain/linux/unbundle:default)
       #   needs //tools/metrics:histograms_xml(//build/toolchain/linux/unbundle:default)
@@ -827,7 +846,7 @@ let
       # both (all) architectures instead.
       ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !ungoogled) [
+    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !isUngoogled) [
       # Don't show misleading Terms of Service dialog on first run that literally says [^1]
       #
       # > This Space Intentionally Blank
@@ -863,7 +882,7 @@ let
       # error: unknown argument: '-fno-experimental-lifetime-safety-tu-analysis'
       ./patches/chromium-152-dawn-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "153") [
+    ++ lib.optionals (chromiumVersionAtLeast "153" && variant != "helium") [
       (fetchpatch {
         name = "chromium-153-revert-DEPS-use-DEPS-provided-python-instead-of-a-system-one.patch";
         # https://chromium-review.googlesource.com/c/chromium/src/+/8160801
@@ -1006,13 +1025,13 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString isUngoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -1074,9 +1093,22 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      ''
+      + lib.optionalString (variant == "helium") ''
+        # Apply helium-linux patches BEFORE name substitution,
+        # as the patch context expects "Chromium" not "Helium"
+        for p in ${ungoogler}/patches/helium/linux/*.patch; do
+          if [ -f "$p" ]; then
+            echo "Applying helium-linux patch: $(basename $p)"
+            patch -Np1 --fuzz=2 --no-backup-if-mismatch < "$p"
+          fi
+        done
+        ${ungoogler}/utils/name_substitution.py --sub -t .
+        ${ungoogler}/utils/helium_version.py --tree ${ungoogler} --platform-tree ${helium-linux} --chromium-tree .
+        ${ungoogler}/utils/replace_resources.py ${ungoogler}/resources/helium_resources.txt ${ungoogler}/resources .
       '';
 
     # Sadly, Chromium is not even -fstrict-flex-array=1 clean
@@ -1220,7 +1252,8 @@ let
         use_typescript_go = false;
         devtools_use_typescript_go = false;
       }
-      // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (lib.importTOML ./variants/ungoogled/flags.toml)
+      // lib.optionalAttrs (variant == "helium") (lib.importTOML ./variants/helium/flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
