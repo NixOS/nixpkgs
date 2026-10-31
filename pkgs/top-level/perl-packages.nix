@@ -36296,6 +36296,10 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.03.tar.gz";
       hash = "sha256-SLvOnyNJNaiFlWGOBN0UFigkbWUPKnJgJN8cE34LZfs=";
     };
+    preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace Makefile.PL \
+        --replace-fail "eval q| require Text::CSV |;" "\$Text::CSV::Worker = 'Text::CSV_PP'; eval q| require Text::CSV |;"
+    '';
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
       license = with lib.licenses; [
