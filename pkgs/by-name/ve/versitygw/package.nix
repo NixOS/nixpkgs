@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ike6iFIRAb8ENjNp+jl8joP0bnei7AEaNvZFlosB3n0=";
+    hash = "sha256-DNfVHuwL7zdLl+geGBX77Tfm6B9uYYsbrKyKtm28Qbo=";
   };
 
-  vendorHash = "sha256-/dGRcQr/XgZV2h8Eju2/Reo3W6cBuYS2gDv/FddQ8ow=";
+  vendorHash = "sha256-koXJU3e0zDyUqR413//zVQt4r77BXf7g9iQGw0t51qs=";
 
   excludedPackages = [
     # depends on cgo/cuda
