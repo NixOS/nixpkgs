@@ -54,6 +54,12 @@ stdenv.mkDerivation (
     };
 
     postPatch = ''
+      # Generic Electron treats this store installation as unpackaged, so the
+      # backend would otherwise use the read-only application root as its cwd.
+      substituteInPlace apps/desktop/src/app/DesktopEnvironment.ts \
+        --replace-fail 'backendCwd: input.isPackaged ? homeDirectory : appRoot,' \
+                       'backendCwd: homeDirectory,'
+
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
