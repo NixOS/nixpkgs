@@ -5,8 +5,9 @@
 use std::{
     cell::RefCell,
     collections::HashMap,
+    ffi,
     io::{BufRead, Read, Write},
-    os::unix::fs::{MetadataExt, PermissionsExt},
+    os::unix::fs::PermissionsExt,
     os::unix::process::CommandExt,
     path::{Path, PathBuf},
     rc::Rc,
@@ -15,20 +16,22 @@ use std::{
     time::Duration,
 };
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{Context, Result, anyhow, bail};
 use dbus::{
-    blocking::{stdintf::org_freedesktop_dbus::Properties, LocalConnection, Proxy},
     Message,
+    blocking::{LocalConnection, Proxy, stdintf::org_freedesktop_dbus::Properties},
 };
 use glob::glob;
 use ini::{Ini, ParseOption};
 use log::LevelFilter;
 use nix::{
     fcntl::{Flock, FlockArg, OFlag},
+    libc,
     sys::{
         signal::{self, SigHandler, Signal},
         stat::Mode,
     },
+    unistd,
 };
 use regex::Regex;
 use syslog::Facility;
@@ -52,11 +55,8 @@ mod logind_manager {
 }
 
 use crate::systemd_manager::OrgFreedesktopSystemd1Manager;
-use crate::{
-    logind_manager::OrgFreedesktopLogin1Manager,
-    systemd_manager::{
-        OrgFreedesktopSystemd1ManagerJobRemoved, OrgFreedesktopSystemd1ManagerReloading,
-    },
+use crate::systemd_manager::{
+    OrgFreedesktopSystemd1ManagerJobRemoved, OrgFreedesktopSystemd1ManagerReloading,
 };
 
 type UnitInfo = HashMap<String, HashMap<String, Vec<String>>>;
@@ -1067,14 +1067,6 @@ fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
     )
 }
 
-fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
-    conn.with_proxy(
-        "org.freedesktop.login1",
-        "/org/freedesktop/login1",
-        BUS_TIMEOUT,
-    )
-}
-
 fn block_on_jobs(
     conn: &LocalConnection,
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
@@ -1893,7 +1885,6 @@ won't take effect until you reboot the system.
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
     let systemd = systemd1_proxy(&dbus_conn);
-    let logind = login1_proxy(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -2075,7 +2066,9 @@ won't take effect until you reboot the system.
         if std::fs::exists(DRY_RESTART_BY_ACTIVATION_LIST_FILE)?
             || std::fs::exists(DRY_RELOAD_BY_ACTIVATION_LIST_FILE)?
         {
-            eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+            eprintln!(
+                "WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11."
+            );
         }
 
         for unit in std::fs::read_to_string(DRY_RESTART_BY_ACTIVATION_LIST_FILE)
@@ -2246,7 +2239,9 @@ won't take effect until you reboot the system.
     if std::fs::exists(RESTART_BY_ACTIVATION_LIST_FILE)?
         || std::fs::exists(RELOAD_BY_ACTIVATION_LIST_FILE)?
     {
-        eprintln!("WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11.");
+        eprintln!(
+            "WARN: restarting or reloading systemd units from the activation script is deprecated and will be removed in NixOS 26.11."
+        );
     }
 
     // Handle the activation script requesting the restart or reload of a unit.
@@ -2379,66 +2374,56 @@ won't take effect until you reboot the system.
         .context("Failed to cleanup systemd Reloading match")?;
 
     // Reload user units
-    match logind.list_users() {
-        Err(err) => {
-            eprintln!("Unable to list users with logind: {err}");
-            exit_code = 4;
+    unsafe { libc::setutxent() };
+    loop {
+        let entry = unsafe { libc::getutxent() };
+        if entry.is_null() {
+            break;
         }
-        Ok(users) => {
-            for (uid, name, _user_dbus_path) in users {
-                // Derive GID and runtime path from the filesystem instead of querying
-                // logind via D-Bus, which races against logind's async GC of user
-                // objects (list_users snapshot → Properties::get hits UnknownObject).
-                // /run/user/<uid> exists iff the user manager is active (BindsTo= on
-                // user@.service), so stat() is an atomic, race-free liveness check.
-                let runtime_path = PathBuf::from(format!("/run/user/{uid}"));
-                let metadata = match std::fs::metadata(&runtime_path) {
-                    Ok(m) => m,
-                    Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                        eprintln!(
-                            "skipping user {name}: {} not found \
-                             (user manager not running)",
-                            runtime_path.display()
-                        );
-                        continue;
-                    }
-                    Err(err) => {
-                        eprintln!(
-                            "warning: failed to stat {} for user {name}; \
-                             skipping: {err}",
-                            runtime_path.display()
-                        );
-                        exit_code = 4;
-                        continue;
-                    }
-                };
 
-                eprintln!("reloading user units for {name}...");
-                let myself = Path::new("/proc/self/exe")
-                    .canonicalize()
-                    .context("Failed to get full path to /proc/self/exe")?;
-
-                log::debug!("Performing user switch for {name}");
-                let status = std::process::Command::new(&myself)
-                    .uid(uid)
-                    .gid(metadata.gid())
-                    .env_clear()
-                    .env("XDG_RUNTIME_DIR", runtime_path)
-                    .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
-                    .env("TOPLEVEL", &toplevel)
-                    .env("OLD_TOPLEVEL", &old_toplevel)
-                    .env("NIXOS_ACTION", Into::<&'static str>::into(action))
-                    .spawn()
-                    .with_context(|| format!("Failed to spawn user activation for {name}"))?
-                    .wait()
-                    .with_context(|| format!("Failed to run user activation for {name}"))?;
-                if !status.success() {
-                    eprintln!("warning: user activation for {name} failed");
-                    exit_code = 4;
+        let entry = unsafe { &*entry };
+        if entry.ut_type == libc::USER_PROCESS {
+            let username = unsafe { ffi::CStr::from_ptr(entry.ut_user.as_ptr()) }.to_string_lossy();
+            let user = match unistd::User::from_name(&username) {
+                Ok(Some(user)) => user,
+                Ok(None) => {
+                    eprintln!("skipping utmp user {username}: no matching account");
+                    continue;
                 }
+                Err(err) => {
+                    eprintln!("skipping utmp user {username}: account lookup failed: {err}");
+                    continue;
+                }
+            };
+
+            let runtime_path = PathBuf::from("/run/user").join(user.uid.as_raw().to_string());
+
+            eprintln!("reloading user units for {}...", user.name);
+            let myself = Path::new("/proc/self/exe")
+                .canonicalize()
+                .context("Failed to get full path to /proc/self/exe")?;
+
+            log::debug!("Performing user switch for {}", user.name);
+            let status = std::process::Command::new(&myself)
+                .uid(user.uid.as_raw())
+                .gid(user.gid.as_raw())
+                .env_clear()
+                .env("XDG_RUNTIME_DIR", runtime_path)
+                .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
+                .env("TOPLEVEL", &toplevel)
+                .env("OLD_TOPLEVEL", &old_toplevel)
+                .env("NIXOS_ACTION", Into::<&'static str>::into(action))
+                .spawn()
+                .with_context(|| format!("Failed to spawn user activation for {}", user.name))?
+                .wait()
+                .with_context(|| format!("Failed to run user activation for {}", user.name))?;
+            if !status.success() {
+                eprintln!("warning: user activation for {} failed", user.name);
+                exit_code = 4;
             }
         }
     }
+    unsafe { libc::endutxent() };
 
     // Restart sysinit-reactivation.target. This target only exists to restart services ordered
     // before sysinit.target. We cannot use X-StopOnReconfiguration to restart sysinit.target
