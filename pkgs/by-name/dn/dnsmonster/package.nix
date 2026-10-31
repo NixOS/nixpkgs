@@ -41,7 +41,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/FenkoHQ/dnsmonster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "dnsmonster";
   };
 })
