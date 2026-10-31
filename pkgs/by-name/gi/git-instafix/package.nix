@@ -5,7 +5,6 @@
   oniguruma,
   pkg-config,
   rustPlatform,
-  stdenv,
   fetchFromGitHub,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,6 +44,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mightyiam
       quodlibetor
     ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
