@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   soapysdr,
   avahi,
@@ -10,21 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapyremote";
-  version = "0.5.2-unstable-2024-01-24";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyRemote";
-    rev = "54caa5b2af348906607c5516a112057650d0873d";
-    hash = "sha256-uekElbcbX2P5TEufWEoP6tgUM/4vxgSQZu8qaBCSo18=";
+    tag = "soapy-remote-${finalAttrs.version}";
+    hash = "sha256-+/EhkPJa6IctQ1T82AO0l1Y47YOMRjAoL/QEXnVHOd4=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyRemote/commit/40c3ef9053b63885b7444ce7e9ef00d2c7964c9d.patch";
-      hash = "sha256-kEx4gge+AQW/LSUyo+aWXlqDzXjoxCfn3pi2mk5xsNI=";
-    })
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
