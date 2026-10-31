@@ -182,6 +182,7 @@ let
         isFunction
         toFunction
         mirrorFunctionArgs
+        inheritFunctionArgs
         fromHexString
         toHexString
         toBaseDigits
