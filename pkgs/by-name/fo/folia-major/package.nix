@@ -83,6 +83,9 @@ buildNpmPackage (finalAttrs: {
     find node_modules/@lox-audioserver/node-librespot/prebuilds -mindepth 1 -maxdepth 1 \
       ! -name darwin-${arch} -exec rm -r {} +
     magick build/icon.png build/icon.icns
+
+    mkdir -p build/mac-helper/darwin-${arch}
+    ln -s ${finalAttrs.passthru.folia-click-guard}/lib/* build/mac-helper/darwin-${arch}/
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # autoPatchelf cannot satisfy the musl variant
@@ -150,6 +153,7 @@ buildNpmPackage (finalAttrs: {
       inherit (finalAttrs) version src meta;
       inherit (finalAttrs.passthru) sources;
     };
+    folia-click-guard = callPackage ./folia-click-guard.nix { inherit (finalAttrs) version src meta; };
     # Linux wallpaper mode, upstream builds it in packaging/linux/build-windowtolayer.mjs
     windowtolayer = windowtolayer.overrideAttrs (old: {
       inherit (finalAttrs.passthru.sources.windowtolayer) version cargoHash;
