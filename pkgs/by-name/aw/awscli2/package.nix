@@ -19,6 +19,16 @@ let
   py = python3 // {
     pkgs = python3.pkgs.overrideScope (
       final: prev: {
+        # awscli2 requires awscrt>=0.38.0. Updating python3Packages.awscrt
+        # rebuilds thousands of packages, so it has to go through staging.
+        awscrt = prev.awscrt.overridePythonAttrs (prev: rec {
+          version = "0.38.0";
+          src = prev.src.override {
+            inherit version;
+            hash = "sha256-SoQjxKdjkMblxPOG4+Nn3M3PZ9bRoLwcWXdrsUzcKtk=";
+          };
+        });
+
         # https://github.com/NixOS/nixpkgs/issues/449266
         prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
           version = "3.0.51";
@@ -55,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.36.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.39.3"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-OTLezXSBAlgyrd7O8MGWsylBSOYxb01ljINbpLhLWDE=";
+    hash = "sha256-HEQ73GYAi/MS24mNYoC3Cth4fZcLw5Q8hV7/ZF0GByU=";
   };
 
   postPatch = ''
@@ -166,6 +176,9 @@ py.pkgs.buildPythonApplication rec {
     # Integration tests require networking
     "tests/integration"
 
+    # Needs localstub, a mock server that is not packaged
+    "tests/blackbox"
+
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
@@ -175,6 +188,9 @@ py.pkgs.buildPythonApplication rec {
     # Requires networking (socket binding not possible in sandbox)
     "test_is_socket"
     "test_is_special_file_warning"
+
+    # Creates an awscrt S3 client, which needs the system trust store
+    "test_upper_bound_matches_what_awscrt_accepts"
 
     # Disable slow tests
     "test_details_disabled_for_choice_wo_details"
@@ -190,7 +206,7 @@ py.pkgs.buildPythonApplication rec {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [
         "--version-regex"
-        "^(2\\.(.*))"
+        "^(2\\..*)"
       ];
     };
     tests.version = testers.testVersion {
