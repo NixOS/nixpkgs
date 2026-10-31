@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlink";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-kxjUDh+A4X+jddgBfrJSaVRjxo805EvJHaASElv8yKc=";
+    hash = "sha256-bFbwsBdhOOqGqd2jQ5n/g5Zx0Io9JRlz4zHgxWbaCfk=";
   };
 
-  cargoHash = "sha256-GKtoGmK2Y3qmwAhlSk42iqvPd2qFXhcu4GBDGnVBxVo=";
+  cargoHash = "sha256-GtvZZrZOj2Rw3ZUOHrSW+kBkU97lQtU7SpIujfAVwTI=";
 
   nativeBuildInputs = [
     pkg-config
