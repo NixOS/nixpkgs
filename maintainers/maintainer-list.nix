@@ -20258,6 +20258,11 @@
     githubId = 16356569;
     name = "Marcos Benevides";
   };
+  muddyblack = {
+    github = "Muddyblack";
+    githubId = 70057554;
+    name = "Muddyblack";
+  };
   mudmaster556 = {
     email = "mityakuz2308@gmail.com";
     github = "mudmaster556";
