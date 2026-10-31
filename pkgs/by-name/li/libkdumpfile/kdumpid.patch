@@ -1,0 +1,108 @@
+commit 62fd4508dcf40b8b39f862d71d18ed83b0db2263
+Author: Sam James <sam@gentoo.org>
+Date:   Thu Dec 26 04:25:40 2024 +0000
+
+    tools: kdumpid: include config.h before <dis-asm.h>
+    
+    Before including bfd.h (or any of the headers installed by binutils),
+    one has to define PACKAGE_NAME and PACKAGE_VERSION for kind of painful
+    reasons described in binutils bug PR14243.
+    
+    This doesn't show up on some distros as they patch out the #ifdef check
+    in the headers, but it does on Gentoo where we don't, at least.
+    
+    Moreover, we want to include config.h before *any* headers anyway, so
+    that e.g. AC_SYSTEM_EXTENSIONS and various other autoconf macros work
+    correctly if used.
+    
+    Bug: https://sourceware.org/PR14243
+    Signed-off-by: Sam James <sam@gentoo.org>
+
+diff --git a/tools/kdumpid/main.c b/tools/kdumpid/main.c
+index f78d36b..53e755a 100644
+--- a/tools/kdumpid/main.c
++++ b/tools/kdumpid/main.c
+@@ -14,6 +14,8 @@
+ 
+ #define _GNU_SOURCE
+ 
++#include "config.h"
++
+ #include <stdio.h>
+ #include <errno.h>
+ #include <stdlib.h>
+diff --git a/tools/kdumpid/ppc.c b/tools/kdumpid/ppc.c
+index 1c63b18..dd97e83 100644
+--- a/tools/kdumpid/ppc.c
++++ b/tools/kdumpid/ppc.c
+@@ -12,6 +12,8 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include "config.h"
++
+ #include <stdarg.h>
+ #include <string.h>
+ 
+diff --git a/tools/kdumpid/ppc64.c b/tools/kdumpid/ppc64.c
+index 11379f8..0cce802 100644
+--- a/tools/kdumpid/ppc64.c
++++ b/tools/kdumpid/ppc64.c
+@@ -12,6 +12,8 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include "config.h"
++
+ #include <stdarg.h>
+ #include <string.h>
+ 
+diff --git a/tools/kdumpid/s390.c b/tools/kdumpid/s390.c
+index 0879cb9..4be5114 100644
+--- a/tools/kdumpid/s390.c
++++ b/tools/kdumpid/s390.c
+@@ -12,6 +12,8 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include "config.h"
++
+ #include <stdarg.h>
+ #include <string.h>
+ 
+diff --git a/tools/kdumpid/search.c b/tools/kdumpid/search.c
+index 83d66c7..9972184 100644
+--- a/tools/kdumpid/search.c
++++ b/tools/kdumpid/search.c
+@@ -12,6 +12,8 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <string.h>
+ 
+diff --git a/tools/kdumpid/util.c b/tools/kdumpid/util.c
+index 0e42335..2d5a078 100644
+--- a/tools/kdumpid/util.c
++++ b/tools/kdumpid/util.c
+@@ -12,6 +12,8 @@
+  * GNU General Public License for more details.
+  */
+ 
++#include "config.h"
++
+ #include <string.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+diff --git a/tools/kdumpid/x86.c b/tools/kdumpid/x86.c
+index 5e35778..8cabc4c 100644
+--- a/tools/kdumpid/x86.c
++++ b/tools/kdumpid/x86.c
+@@ -1,3 +1,5 @@
++#include "config.h"
++
+ #include <stdarg.h>
+ #include <stdlib.h>
+ #include <string.h>
