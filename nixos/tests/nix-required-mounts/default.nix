@@ -12,10 +12,12 @@ in
     {
       virtualisation.writableStore = true;
       system.extraDependencies = [ (pkgs.runCommand "deps" { } "mkdir $out").inputDerivation ];
-      nix.nixPath = [ "nixpkgs=${../../..}" ];
-      nix.settings.substituters = lib.mkForce [ ];
-      nix.settings.system-features = [ "supported-feature" ];
-      nix.settings.experimental-features = [ "nix-command" ];
+      nix.settings = {
+        experimental-features = [ "nix-command" ];
+        nix-path = [ "nixpkgs=${../../..}" ];
+        substituters = lib.mkForce [ ];
+        system-features = [ "supported-feature" ];
+      };
       nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
       programs.nix-required-mounts.enable = true;
       programs.nix-required-mounts.allowedPatterns.supported-feature = {
