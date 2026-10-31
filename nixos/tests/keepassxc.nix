@@ -43,7 +43,7 @@
   testScript =
     { nodes, ... }:
     let
-      aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2 &");'';
+      aliceDo = cmd: ''machine.succeed("su - alice -c '${cmd}' >&2");'';
     in
     ''
       with subtest("Ensure X starts"):
@@ -53,6 +53,7 @@
       with subtest("Can create database and entry with CLI"):
           ${aliceDo "keepassxc-cli db-create --set-key-file foo.keyfile foo.kdbx"}
           ${aliceDo "keepassxc-cli add --no-password -k foo.keyfile foo.kdbx bar"}
+          ${aliceDo "keepassxc-cli ls --no-password -k foo.keyfile foo.kdbx | grep bar"}
 
       with subtest("Ensure KeePassXC starts"):
           # start KeePassXC window
