@@ -49,6 +49,7 @@ let
     setup_cmd = dmcfg.sessionData.wrapper;
     brightness_up_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s +10%";
     brightness_down_cmd = "${lib.getExe pkgs.brightnessctl} -q -n s 10%-";
+    session_log = ".local/state/ly-session.log";
   }
   // optionalAttrs dmcfg.autoLogin.enable {
     auto_login_service = "ly-autologin";
