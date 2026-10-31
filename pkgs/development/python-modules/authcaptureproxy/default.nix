@@ -31,9 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-3osyh4Er0bZ8dvOtDV1w66zOWuzECIWeL8M90gqi+D8=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # fix tests for aiohttp 3.14
+    ./aiohttp-comp.diff
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     beautifulsoup4
     httpx

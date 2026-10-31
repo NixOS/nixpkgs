@@ -24,14 +24,19 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 
 {
   version = "{{ version }}";
-  builtins = [
+  builtinProviders = [
 {%- for builtin in builtins | sort %}
     "{{ builtin }}"
 {%- endfor %}
   ];
-  providers = {
+  providerDependencies = {
+{%- for provider in providers | sort(attribute='domain') if provider.depends_on %}
+    {{ provider.domain }} = [ "{{ provider.depends_on | sort | join('\", \"') }}" ];
+{%- endfor %}
+  };
+  providerPackages = {
 {%- for provider in providers | sort(attribute='domain') %}
-    {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
+    {{ provider.domain }} = {% if provider.available or provider.extra_list_deps %}ps: with ps;{% else %}_:{% endif %} [
 {%- for requirement in provider.available | sort %}
     {{ requirement }}
 {%- endfor %}
@@ -42,6 +47,11 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 ;{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
 {%- endfor %}
   };
+  providersWithMissingDependencies = [
+{%- for domain in providersWithMissingDependencies %}
+    "{{ domain }}"
+{%- endfor %}
+  ];
 }
 
 """
@@ -70,7 +80,7 @@ EXTRA_DEPS = {
     "msx_bridge": ["pydantic"],
     "nicovideo": ["pydantic"],
     "ytmusic": [
-        # https://github.com/music-assistant/server/blob/2.5.8/music_assistant/providers/ytmusic/__init__.py#L120
+        # https://github.com/music-assistant/server/blob/2.11.0b7/music_assistant/providers/ytmusic/__init__.py#L158
         "bgutil-ytdlp-pot-provider",
         "yt-dlp",
     ],
@@ -79,6 +89,11 @@ EXTRA_DEPS = {
 
 EXTRA_LIST_DEPS = {
     "sendspin": ["aiosendspin.optional-dependencies.server"],
+}
+
+EXTERNAL_REQUIREMENTS = {
+    # Added to PATH by the module
+    "ytmusic": ["deno"],
 }
 
 
@@ -196,9 +211,9 @@ def resolve_package_attribute(package: str) -> str:
     return matches.pop()
 
 
-async def get_package_version(package: str) -> str:
-    version = cast(str, await Nix.eval(f"{PACKAGE_SET}.{package}.version"))
-    return version
+def get_package_version(package: str) -> str:
+    package_info = packageset_attributes()[f"{PACKAGE_SET}.{package}"]
+    return cast(str, package_info["version"])
 
 
 @dataclass
@@ -207,6 +222,7 @@ class Provider:
     available: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
     extra_list_deps: list[str] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
 
     def __eq__(self, other):
         return self.domain == other.domain
@@ -219,7 +235,10 @@ async def resolve_providers(manifests) -> tuple[set, set]:
     errors = []
     providers = set()
     for manifest in manifests:
-        provider = Provider(manifest.domain)
+        provider = Provider(
+            domain=manifest.domain,
+            depends_on=[manifest.depends_on] if manifest.depends_on else [],
+        )
         requirements = manifest.requirements
         for requirement in requirements:
             # allow substituting requirement specifications that packaging cannot parse
@@ -227,6 +246,8 @@ async def resolve_providers(manifests) -> tuple[set, set]:
                 requirement = PACKAGE_MAP[requirement]
 
             requirement = Requirement(requirement)
+            if requirement.name in EXTERNAL_REQUIREMENTS.get(manifest.domain, []):
+                continue
             try:
                 attr = resolve_package_attribute(requirement.name)
                 provider.available.append(attr)
@@ -238,7 +259,7 @@ async def resolve_providers(manifests) -> tuple[set, set]:
                 provider.missing.append(requirement.name)
                 continue
 
-            version = await get_package_version(attr)
+            version = get_package_version(attr)
             if version not in requirement.specifier:
                 errors.append(f"{requirement} not satisfied by version {version}")
         if manifest.domain in EXTRA_DEPS:
@@ -260,9 +281,15 @@ async def resolve_providers(manifests) -> tuple[set, set]:
 def render(outpath: str, version: str, providers: set, builtins: set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers, builtins=builtins).dump(
-        outpath
+    providers_with_missing_dependencies = sorted(
+        provider.domain for provider in providers if provider.missing
     )
+    template.stream(
+        version=version,
+        providers=providers,
+        builtins=builtins,
+        providersWithMissingDependencies=providers_with_missing_dependencies,
+    ).dump(outpath)
 
 
 async def main():

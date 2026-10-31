@@ -1,8 +1,8 @@
 diff --git a/music_assistant/controllers/config/dsp.py b/music_assistant/controllers/config/dsp.py
-index a33c8eb73..5dca8813b 100644
+index 9bccb4ae3..f3fabba7b 100644
 --- a/music_assistant/controllers/config/dsp.py
 +++ b/music_assistant/controllers/config/dsp.py
-@@ -187,7 +187,7 @@ async def upload_dsp_ir(self, name: str, data: str) -> dict[str, Any]:
+@@ -190,7 +190,7 @@ async def upload_dsp_ir(self, name: str, data: str) -> dict[str, Any]:
              # transcoding to wav both validates the upload is decodable audio and
              # gives afir a format it can always read back at playback time
              returncode, output = await check_output(
@@ -12,10 +12,10 @@ index a33c8eb73..5dca8813b 100644
                  "-loglevel",
                  "error",
 diff --git a/music_assistant/controllers/streams/smart_fades/fades.py b/music_assistant/controllers/streams/smart_fades/fades.py
-index 9a35a55dd..05f29df7a 100644
+index ff8b90af9..3005d7854 100644
 --- a/music_assistant/controllers/streams/smart_fades/fades.py
 +++ b/music_assistant/controllers/streams/smart_fades/fades.py
-@@ -242,7 +242,7 @@ def _mix_ffmpeg_args(self, pcm_format: AudioFormat, fadeout_read_fd: int) -> lis
+@@ -257,7 +257,7 @@ def _mix_ffmpeg_args(self, pcm_format: AudioFormat, fadeout_read_fd: int) -> lis
              pcm_format.content_type.value,
          ]
          return [
@@ -25,10 +25,10 @@ index 9a35a55dd..05f29df7a 100644
              "-loglevel",
              "error",
 diff --git a/music_assistant/helpers/audio.py b/music_assistant/helpers/audio.py
-index ce3b5e580..702722cc4 100644
+index 7855989f8..15c3360e4 100644
 --- a/music_assistant/helpers/audio.py
 +++ b/music_assistant/helpers/audio.py
-@@ -157,7 +157,7 @@ async def strip_silence(
+@@ -167,7 +167,7 @@ async def strip_silence(
      :param pcm_format: AudioFormat of the audio data.
      :param reverse: If True, strip from end instead of beginning.
      """
@@ -37,7 +37,7 @@ index ce3b5e580..702722cc4 100644
      args += [
          "-acodec",
          pcm_format.content_type.name.lower(),
-@@ -511,7 +511,7 @@ async def get_silence(
+@@ -525,7 +525,7 @@ async def get_silence(
          return
      # use ffmpeg for all other encodings
      args = [
@@ -47,10 +47,19 @@ index ce3b5e580..702722cc4 100644
          "-loglevel",
          "quiet",
 diff --git a/music_assistant/helpers/ffmpeg.py b/music_assistant/helpers/ffmpeg.py
-index 71fffbb99..371549269 100644
+index e7c85738c..3287fee6e 100644
 --- a/music_assistant/helpers/ffmpeg.py
 +++ b/music_assistant/helpers/ffmpeg.py
-@@ -518,7 +518,7 @@ def get_ffmpeg_args(
+@@ -427,7 +427,7 @@ async def probe_audio_stream(
+     :returns: The detected stream details, or None if the source could not be probed.
+     """
+     args = [
+-        "ffprobe",
++        "@ffprobe@",
+         "-hide_banner",
+         "-loglevel",
+         "error",
+@@ -628,7 +628,7 @@ def get_ffmpeg_args(
          extra_output_args = []
      # the binary plus the options that apply to the command as a whole
      global_args = [
@@ -59,7 +68,7 @@ index 71fffbb99..371549269 100644
          "-hide_banner",
          "-loglevel",
          loglevel,
-@@ -689,7 +689,7 @@ async def check_ffmpeg_version() -> None:
+@@ -830,7 +830,7 @@ async def check_ffmpeg_version() -> None:
      """Check that ffmpeg is present and usable, and cache the capabilities it reports."""
      # check for FFmpeg presence
      try:
@@ -68,7 +77,7 @@ index 71fffbb99..371549269 100644
      except FileNotFoundError:
          raise AudioError(
              "FFmpeg binary is missing from system. "
-@@ -717,7 +717,7 @@ async def check_ffmpeg_version() -> None:
+@@ -858,7 +858,7 @@ async def check_ffmpeg_version() -> None:
      # which builds from git report as e.g. "N-121037-g1234567". A probe that fails reads as
      # "not blocked", so the check stays in place. Drop this once every supported build
      # whitelists CMAF.
@@ -78,20 +87,20 @@ index 71fffbb99..371549269 100644
          returncode == 0 and b"extension_picky" in hls_options and b"cmfa" not in hls_options
      )
 diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
-index 87e37be5e..d1a17e742 100644
+index 83f352718..2a7d8f868 100644
 --- a/music_assistant/helpers/tags.py
 +++ b/music_assistant/helpers/tags.py
-@@ -697,7 +697,7 @@ def parse_tags(
-     Input_file may be a (local) filename or URL accessible by ffmpeg.
-     """
+@@ -793,7 +793,7 @@ def parse_tags(
+     source = input_file if fd is None else descriptor_path(fd)
+     pass_fds = () if fd is None else (fd,)
      args = (
 -        "ffprobe",
 +        "@ffprobe@",
          "-hide_banner",
          "-loglevel",
          "error",
-@@ -764,7 +764,7 @@ def get_file_duration(input_file: str) -> float:
-     NOT Async friendly.
+@@ -875,7 +875,7 @@ def get_file_duration(
+     :param verify_ssl: Whether the certificate of an https source must be verified.
      """
      args = (
 -        "ffmpeg",
@@ -99,7 +108,7 @@ index 87e37be5e..d1a17e742 100644
          "-hide_banner",
          "-loglevel",
          "info",
-@@ -1473,7 +1473,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
+@@ -1765,7 +1765,7 @@ async def _get_embedded_image(
  
      # Use FFmpeg for all other cases (URLs, ID3 tags, Vorbis comments, etc.)
      args = [
@@ -109,10 +118,10 @@ index 87e37be5e..d1a17e742 100644
          "-loglevel",
          "error",
 diff --git a/music_assistant/providers/ai_radio/rendering.py b/music_assistant/providers/ai_radio/rendering.py
-index 9f632931b..2b95433ad 100644
+index f7941c213..fdcb8babd 100644
 --- a/music_assistant/providers/ai_radio/rendering.py
 +++ b/music_assistant/providers/ai_radio/rendering.py
-@@ -408,7 +408,7 @@ async def _measure_loudness(self, path: str) -> float | None:
+@@ -579,7 +579,7 @@ async def _measure_loudness(self, path: str, verify_ssl: bool = True) -> float |
          """Return the integrated loudness of the given audio in LUFS, or None when it fails."""
          try:
              returncode, output = await check_output(
@@ -120,7 +129,7 @@ index 9f632931b..2b95433ad 100644
 +                "@ffmpeg@",
                  "-hide_banner",
                  "-nostats",
-                 "-i",
+                 *tls_verify_args(path, verify_ssl),
 diff --git a/music_assistant/providers/ambient_sounds/__init__.py b/music_assistant/providers/ambient_sounds/__init__.py
 index 2332005d4..84d13d84f 100644
 --- a/music_assistant/providers/ambient_sounds/__init__.py
@@ -148,10 +157,10 @@ index beb242c0a..b98329e31 100644
          text=True,
          check=False,
 diff --git a/tests/controllers/config/test_dsp.py b/tests/controllers/config/test_dsp.py
-index d5bf3f38b..a9413c2cc 100644
+index da6ae3f45..1c5936eac 100644
 --- a/tests/controllers/config/test_dsp.py
 +++ b/tests/controllers/config/test_dsp.py
-@@ -176,7 +176,7 @@ def _wav_bytes(tmp_path: Path, channels: int = 2, duration: float = 0.1) -> byte
+@@ -227,7 +227,7 @@ def _wav_bytes(tmp_path: Path, channels: int = 2, duration: float = 0.1) -> byte
      wav_path = tmp_path / f"source_{channels}ch_{duration}s.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -160,7 +169,7 @@ index d5bf3f38b..a9413c2cc 100644
              "-y",
              "-f",
              "lavfi",
-@@ -197,7 +197,7 @@ def _silent_flac_bytes(tmp_path: Path, duration: float) -> bytes:
+@@ -248,7 +248,7 @@ def _silent_flac_bytes(tmp_path: Path, duration: float) -> bytes:
      flac_path = tmp_path / f"silence_{duration}s.flac"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -169,11 +178,24 @@ index d5bf3f38b..a9413c2cc 100644
              "-y",
              "-f",
              "lavfi",
+diff --git a/tests/helpers/test_dsd_conversion.py b/tests/helpers/test_dsd_conversion.py
+index 96e6fef4e..8009b13db 100644
+--- a/tests/helpers/test_dsd_conversion.py
++++ b/tests/helpers/test_dsd_conversion.py
+@@ -88,7 +88,7 @@ def _probe(path: Path) -> dict[str, object]:
+     """Return FFprobe's first audio-stream description for a fixture."""
+     result = subprocess.run(  # noqa: S603
+         [  # noqa: S607
+-            "ffprobe",
++            "@ffprobe@",
+             "-v",
+             "error",
+             "-show_streams",
 diff --git a/tests/helpers/test_ffmpeg.py b/tests/helpers/test_ffmpeg.py
-index fdf723028..a2f1b9aa8 100644
+index 3bb97eb98..6fca32138 100644
 --- a/tests/helpers/test_ffmpeg.py
 +++ b/tests/helpers/test_ffmpeg.py
-@@ -127,7 +127,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
+@@ -237,7 +237,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
      # only the rear channels carry a tone: a downmix that drops them yields silence
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -182,7 +204,7 @@ index fdf723028..a2f1b9aa8 100644
              "-y",
              "-f",
              "lavfi",
-@@ -163,7 +163,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
+@@ -273,7 +273,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
  
      duration = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -191,7 +213,7 @@ index fdf723028..a2f1b9aa8 100644
              "-v",
              "error",
              "-show_entries",
-@@ -451,7 +451,7 @@ def overlay_file(tmp_path: Path) -> Path:
+@@ -644,7 +644,7 @@ def overlay_file(tmp_path: Path) -> Path:
      """Generate a 1 second mono sine-tone wav file to use as overlay source."""
      overlay_path = tmp_path / "overlay.wav"
      subprocess.run(  # noqa: S603
@@ -200,7 +222,7 @@ index fdf723028..a2f1b9aa8 100644
          check=True,
          capture_output=True,
      )
-@@ -464,7 +464,7 @@ def overlay_file_stereo(tmp_path: Path) -> Path:
+@@ -657,7 +657,7 @@ def overlay_file_stereo(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_stereo.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -209,7 +231,7 @@ index fdf723028..a2f1b9aa8 100644
              "-f",
              "lavfi",
              "-i",
-@@ -485,7 +485,7 @@ def overlay_file_wide_stereo(tmp_path: Path) -> Path:
+@@ -678,7 +678,7 @@ def overlay_file_wide_stereo(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_wide.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -218,7 +240,7 @@ index fdf723028..a2f1b9aa8 100644
              "-f",
              "lavfi",
              "-i",
-@@ -506,7 +506,7 @@ def overlay_file_with_silent_intro(tmp_path: Path) -> Path:
+@@ -699,7 +699,7 @@ def overlay_file_with_silent_intro(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_silent_intro.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -227,7 +249,7 @@ index fdf723028..a2f1b9aa8 100644
              "-f",
              "lavfi",
              "-i",
-@@ -1067,7 +1067,7 @@ def _rms_db(path: Path) -> float:
+@@ -1416,7 +1416,7 @@ def _rms_db(path: Path) -> float:
      """Return the overall RMS level of an audio file in dB via ffmpeg astats."""
      output = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -236,7 +258,7 @@ index fdf723028..a2f1b9aa8 100644
              "-hide_banner",
              "-nostats",
              "-i",
-@@ -1095,7 +1095,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1444,7 +1444,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      out = tmp_path / "out.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -245,7 +267,7 @@ index fdf723028..a2f1b9aa8 100644
              "-y",
              "-f",
              "lavfi",
-@@ -1111,7 +1111,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1460,7 +1460,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      # a single-sample impulse is the identity IR: convolving with it returns the input
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -254,7 +276,7 @@ index fdf723028..a2f1b9aa8 100644
              "-y",
              "-f",
              "lavfi",
-@@ -1127,7 +1127,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1476,7 +1476,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      )
      result = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -263,7 +285,7 @@ index fdf723028..a2f1b9aa8 100644
              "-hide_banner",
              "-loglevel",
              "error",
-@@ -1154,7 +1154,7 @@ def test_mono_source_keeps_its_level_when_widened_to_stereo(tmp_path: Path) -> N
+@@ -1503,7 +1503,7 @@ def test_mono_source_keeps_its_level_when_widened_to_stereo(tmp_path: Path) -> N
      out = tmp_path / "stereo.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -272,11 +294,29 @@ index fdf723028..a2f1b9aa8 100644
              "-y",
              "-f",
              "lavfi",
+@@ -1742,7 +1742,7 @@ async def test_probe_audio_stream_opens_the_input_like_the_decoder(
+     assert info == FFMpegStreamInfo(
+         codec=ContentType.FLAC, sample_rate=96000, bit_depth=24, channels=2
+     )
+-    assert proc.args[0] == "ffprobe"
++    assert proc.args[0] == "@ffprobe@"
+     read_args_start = proc.args.index(_INPUT_READ_ARGS[0])
+     assert proc.args[read_args_start : read_args_start + len(_INPUT_READ_ARGS)] == _INPUT_READ_ARGS
+     assert proc.args.index("-user_agent") < proc.args.index("-i")
+@@ -1806,7 +1806,7 @@ def tagged_wav(tmp_path: Path) -> Path:
+     # a title tag shifts the data chunk off a whole 24-bit stereo frame
+     subprocess.run(  # noqa: S603
+         [  # noqa: S607
+-            "ffmpeg",
++            "@ffmpeg@",
+             "-y",
+             "-f",
+             "lavfi",
 diff --git a/tests/helpers/test_images.py b/tests/helpers/test_images.py
-index dfc436bdc..98d46e607 100644
+index 09a0433e5..3d9f7db62 100644
 --- a/tests/helpers/test_images.py
 +++ b/tests/helpers/test_images.py
-@@ -570,7 +570,7 @@ def _create_mp3_with_cover(track_path: str, cover_path: str) -> None:
+@@ -717,7 +717,7 @@ def _create_mp3_with_cover(track_path: str, cover_path: str) -> None:
      """Create a short mp3 file with the given image embedded as cover art."""
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -286,10 +326,10 @@ index dfc436bdc..98d46e607 100644
              "-hide_banner",
              "-loglevel",
 diff --git a/tests/helpers/test_tags.py b/tests/helpers/test_tags.py
-index e21c760ea..ae3eb0493 100644
+index a5321c6a2..1e7700e13 100644
 --- a/tests/helpers/test_tags.py
 +++ b/tests/helpers/test_tags.py
-@@ -50,7 +50,7 @@ def test_parse_tags_reports_actionable_ffprobe_error(
+@@ -61,7 +61,7 @@ def test_parse_tags_reports_actionable_ffprobe_error(
      """Test that tag parsing reports a useful FFprobe failure."""
      process_error = subprocess.CalledProcessError(
          returncode=1,
@@ -298,3 +338,34 @@ index e21c760ea..ae3eb0493 100644
          output=b'{"error":{"code":-1,"string":"Unknown error occurred"}}',
          stderr=stderr,
      )
+@@ -1415,7 +1415,7 @@ async def test_get_embedded_image_refuses_non_file_input(input_file: str) -> Non
+     mock_process.assert_not_called()
+ 
+ 
+-@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="ffmpeg not installed")
++@pytest.mark.skipif(shutil.which("@ffmpeg@") is None, reason="ffmpeg not installed")
+ @pytest.mark.parametrize("over_http", [False, True], ids=["local", "http"])
+ async def test_get_embedded_image_extracts_cover_with_protocol_whitelist(
+     tmp_path: pathlib.Path, over_http: bool
+@@ -1447,7 +1447,7 @@ def _create_mp3_with_cover(tmp_path: pathlib.Path, track_path: str) -> None:
+     Image.new("RGB", (32, 32), (255, 0, 0)).save(cover_path, "PNG")
+     subprocess.run(  # noqa: S603
+         [  # noqa: S607
+-            "ffmpeg",
++            "@ffmpeg@",
+             "-y",
+             "-hide_banner",
+             "-loglevel",
+diff --git a/tests/providers/filesystem_local/test_checked_playback.py b/tests/providers/filesystem_local/test_checked_playback.py
+index a8ad79fb5..78d39ff35 100644
+--- a/tests/providers/filesystem_local/test_checked_playback.py
++++ b/tests/providers/filesystem_local/test_checked_playback.py
+@@ -34,7 +34,7 @@
+ def _make_flac(path: Path, source: str, rate: int, channels: int, seconds: int = 1) -> None:
+     subprocess.run(  # noqa: S603
+         [  # noqa: S607
+-            "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
++            "@ffmpeg@", "-hide_banner", "-loglevel", "error", "-y",
+             "-f", "lavfi", "-i", f"{source}:d={seconds}",
+             "-ar", str(rate), "-ac", str(channels), str(path),
+         ],

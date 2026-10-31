@@ -40,8 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Modern, asynchronous Python client for the Bandcamp API";
     homepage = "https://github.com/ALERTua/bandcamp_async_api";
-    # https://github.com/ALERTua/bandcamp_async_api/issues/34
-    license = lib.licenses.unfree;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 })
