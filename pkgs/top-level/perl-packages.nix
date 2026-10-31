@@ -10239,11 +10239,11 @@ with self;
 
   DBI = buildPerlPackage {
     pname = "DBI";
-    version = "1.653";
+    version = "1.656";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.653.tgz";
-      hash = "sha256-qYwh/Tfu2PhBFyh10XXZcv6H8GPX0NKjt3ZZCLsl61g=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBI-1.656.tgz";
+      hash = "sha256-q18rmu8AlR7UWYcj1hMaALA+aBk0eN1eXyEQFVIKbvA=";
     };
 
     env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -12153,10 +12153,10 @@ with self;
 
   EmailSender = buildPerlPackage {
     pname = "Email-Sender";
-    version = "2.600";
+    version = "2.603";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-2.600.tar.gz";
-      hash = "sha256-7MZ10DDXnZpPsGRWfqiFxmsXw4Yjea0w+CBaKBzY7ik=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-2.603.tar.gz";
+      hash = "sha256-nW8qShs3TAKFNZmWZz+Rn5rslRnYjFUQBnn4i56+AHU=";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [
@@ -13133,10 +13133,10 @@ with self;
 
   ExtUtilsTypemapsDefault = buildPerlModule {
     pname = "ExtUtils-Typemaps-Default";
-    version = "1.05";
+    version = "1.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.05.tar.gz";
-      hash = "sha256-Pfr1g36/3AB4lb/KhMPC521Ymn0zZADo37MkPYGCFd4=";
+      url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.07.tar.gz";
+      hash = "sha256-Jorqub3wmXxDYRUZjkrb2wqCzF+uw1xinkrW20jtjXg=";
     };
     meta = {
       description = "Set of useful typemaps";
@@ -16862,10 +16862,10 @@ with self;
 
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
-    version = "1.23";
+    version = "1.24_01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.23.tar.gz";
-      hash = "sha256-7OmB9BYWNaL7piFdAlcZXlOMTyNDhFMFAd/bahvY1jY=";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.24_01.tar.gz";
+      hash = "sha256-lvoSm0qQMhz7N1QZcyPgEz3ekYUCkQt2R20HFn3FO2o=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
@@ -17053,13 +17053,14 @@ with self;
 
   HTTPHeadersActionPack = buildPerlPackage {
     pname = "HTTP-Headers-ActionPack";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTTP-Headers-ActionPack-0.09.tar.gz";
-      hash = "sha256-x4ERq4V+SMaYJJA9S2zoKT/v/GtdZw21UKdn+FOsx9o=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/HTTP-Headers-ActionPack-0.10.tar.gz";
+      hash = "sha256-ZCl9SVHCtwWZNJs1bqmo9/c/k2fmSsYts5z52iBQaVY=";
     };
     buildInputs = [
       TestFatal
+      TestTimer
       TestWarnings
     ];
     propagatedBuildInputs = [
@@ -17419,10 +17420,10 @@ with self;
 
   Imager = buildPerlPackage rec {
     pname = "Imager";
-    version = "1.036";
+    version = "1.040";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-${version}.tar.gz";
-      hash = "sha256-bxUkz7feTkzmmo9pmetXqujALsliIM/dd0/vtufF3Vw=";
+      hash = "sha256-cv8RRx2G9OgOl1aThS0K7QB4IchaWyJ92vIWIpUUO3g=";
     };
     buildInputs = [
       pkgs.freetype
@@ -21950,10 +21951,10 @@ with self;
 
   MIMETools = buildPerlPackage {
     pname = "MIME-tools";
-    version = "5.509";
+    version = "5.522";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DS/DSKOLL/MIME-tools-5.509.tar.gz";
-      hash = "sha256-ZFefDJI9gdmiGUWG5Hw0dVGeJkbktcECqJIHWfrPaXM=";
+      url = "mirror://cpan/authors/id/D/DS/DSKOLL/MIME-tools-5.522.tar.gz";
+      hash = "sha256-zQe1PUgdGYaWwCxi8DS8EEaOqxV0QFFd4AJegLD0kz8=";
     };
     propagatedBuildInputs = [ MailTools ];
     buildInputs = [ TestDeep ];
@@ -25966,20 +25967,11 @@ with self;
 
   NetIDNEncode = buildPerlModule {
     pname = "Net-IDN-Encode";
-    version = "2.500";
+    version = "2.590";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.500.tar.gz";
-      hash = "sha256-VUU2M+P/JM4yWzS8LIFXuYWZYqMatc8ov3zMHJs6Pqo=";
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Net-IDN-Encode-2.590-TRIAL.tar.gz";
+      hash = "sha256-SQgTbv5V4Ov/WlU1ZezZenbao0Yn+ncs7seMjB5yTTs=";
     };
-    patches = [
-      # Fix use of function removed in Perl 5.38.0
-      # https://github.com/cfaerber/Net-IDN-Encode/pull/11
-      (fetchpatch2 {
-        name = "Net-IDN-Encode-use-uvchr_to_utf8_flags.patch";
-        url = "https://github.com/cfaerber/Net-IDN-Encode/commit/3ebe6f2e239b470efcb64a044edc8202798188af.diff";
-        hash = "sha256-t/BulZoyRvpi+TKNxKFxUS1y3X7bGi1sG7mG75nW/Gc=";
-      })
-    ];
     buildInputs = [ TestNoWarnings ];
     meta = {
       description = "Internationalizing Domain Names in Applications (UTS #46)";
@@ -28577,10 +28569,10 @@ with self;
 
   Plack = buildPerlPackage {
     pname = "Plack";
-    version = "1.0053";
+    version = "1.0057";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0053.tar.gz";
-      hash = "sha256-QPxEA0wWTpr3DdCP++5AjCQwLsDbMQ0pAd9xdTuxZ9o=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0057.tar.gz";
+      hash = "sha256-Ac/gNidnA/Ys9sHOx8fmMEIGd0mN+nvDM62I7KnXp2U=";
     };
     buildInputs = [
       AuthenSimplePasswd
@@ -28827,10 +28819,10 @@ with self;
 
   PlackMiddlewareReverseProxy = buildPerlPackage {
     pname = "Plack-Middleware-ReverseProxy";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ReverseProxy-0.16.tar.gz";
-      hash = "sha256-h0kx030HZnug0PN5A7lFEQcfQZH+tz+kV2XaK4wVoSg=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ReverseProxy-0.17.tar.gz";
+      hash = "sha256-+b3ZxAzAt57Fg4gZJQMkCakmzCdHy+0Jsv8iHDy2QlQ=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
@@ -29845,10 +29837,10 @@ with self;
 
   podlators = buildPerlPackage {
     pname = "podlators";
-    version = "5.01";
+    version = "6.1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RR/RRA/podlators-5.01.tar.gz";
-      hash = "sha256-zP0d+fGkfwlbzm1xj61a9A94ziSR8scjlibhW3AgvHE=";
+      url = "mirror://cpan/authors/id/R/RR/RRA/podlators-v6.1.1.tar.gz";
+      hash = "sha256-cJp9xKIlloPrL4nghexwz3Q3ENlQUQ5Insbdyj64DGg=";
     };
     preCheck = ''
       # remove failing spdx check
@@ -31704,10 +31696,10 @@ with self;
 
   Starman = buildPerlModule {
     pname = "Starman";
-    version = "0.4018";
+    version = "0.4019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4018.tar.gz";
-      hash = "sha256-bY2yl9hRFB+k/3dI3/BVG+K6j5pELtnKrGRNvMmjbt0=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4019.tar.gz";
+      hash = "sha256-SjPyCmoyUJOPyF4hd540xW4VaJX+So+oyDrE6W7K72E=";
     };
     buildInputs = [
       LWP
@@ -35892,6 +35884,22 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  TestTimer = buildPerlModule {
+    pname = "Test-Timer";
+    version = "2.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Test-Timer-2.12.tar.gz";
+      hash = "sha256-6xtcGZeTzBxZGj0f5dFcFv2lOXVbptXdITjVY4gh8vw=";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ Error ];
+    meta = {
+      description = "Test module to test/assert response times";
+      homepage = "https://jonasbn.github.io/perl-test-timer/";
+      license = lib.licenses.artistic2;
     };
   };
 
