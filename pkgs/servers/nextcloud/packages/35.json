@@ -548,15 +548,5 @@
     "licenses": [
       "AGPL-3.0-or-later"
     ]
-  },
-  "whiteboard": {
-    "hash": "sha256-OCRziJb63ffrnc5HWcKz9/ipW4jBpA9ba7343OeiUqs=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v2.0.0/whiteboard-v2.0.0.tar.gz",
-    "version": "2.0.0",
-    "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
-    "homepage": "https://github.com/nextcloud/whiteboard",
-    "licenses": [
-      "agpl"
-    ]
   }
 }
