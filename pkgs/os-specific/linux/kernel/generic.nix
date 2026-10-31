@@ -253,6 +253,7 @@ lib.makeOverridable (
       enableParallelBuilding = true;
 
       __structuredAttrs = true;
+      strictDeps = true;
 
       passthru = rec {
         module = import ../../../../nixos/modules/system/boot/kernel_config.nix;
