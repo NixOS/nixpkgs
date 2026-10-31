@@ -28,9 +28,9 @@ let
       modelHash = "sha256-Yx/NJwtD4ltETpkzlcadZsFKqEmMneoZaXiHVSB1WoE=";
     };
     "34" = {
-      version = "12.0.0";
-      appHash = "sha256-1TpfDRMmJ7d5MPp0iTr/RpZHAG7LDsXof9u35O3+5Mg=";
-      modelHash = "sha256-+ec7kRPyWPVTk2wgRKMOP5mdmSnpv9mZmiRicEDKD6A=";
+      version = "12.0.2";
+      appHash = "sha256-0BhUwVGWKnuaH1vg/McgNSHE0/f317a4gddcbgVF00I=";
+      modelHash = "sha256-H87YTPe0UnTTzULPsKwfmM3MbmTaIN/xIN0QD3zwzFI=";
     };
   };
   currentVersionInfo =
