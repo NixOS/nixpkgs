@@ -12,14 +12,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3";
+  version = "0.4";
   pname = "2bwm";
 
   src = fetchFromGitHub {
     owner = "venam";
     repo = "2bwm";
     rev = "v${version}";
-    sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
+    sha256 = "sha256-yuW05cgW3m4yNXMvvOvVip6Z3jrrivcp+GC6KqjlF44=";
   };
 
   # Allow users set their own list of patches
