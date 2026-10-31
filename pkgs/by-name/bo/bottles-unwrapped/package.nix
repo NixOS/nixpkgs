@@ -27,23 +27,25 @@
   vulkan-tools,
   vmtouch,
   libportal-gtk4,
+  libsecret,
   obs-studio-plugins,
   libxml2,
   umu-launcher,
   nix-update-script,
   removeWarningPopup ? false,
   withObsVkCapture ? false,
+  withLsfgVk ? false,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "67.4";
+  version = "67.5";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = finalAttrs.version;
-    hash = "sha256-Ohzsg/CTmk6ix+hATCncusmN5DqWHcw8jDP0dg67r4o=";
+    hash = "sha256-GKKSUwAZoe/4j4KmoT6TKasASZ/ahwfZLMTwK9eVLdM=";
   };
 
   patches = [
@@ -78,6 +80,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gtksourceview5
     libadwaita
     libportal-gtk4
+    libsecret
   ];
 
   propagatedBuildInputs =
