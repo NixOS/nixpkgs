@@ -2,27 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   libbladeRF,
   soapysdr,
 }:
 
-let
-  version = "0.4.2";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapybladerf";
-  inherit version;
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyBladeRF";
-    rev = "soapy-bladerf-${version}";
-    sha256 = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
+    tag = "soapy-bladerf-${finalAttrs.version}";
+    hash = "sha256-kKt13/jMjb+CKmopasNFIMEgS+jOR2vB+OU5BFp10wc=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -31,13 +29,6 @@ stdenv.mkDerivation {
   buildInputs = [
     libbladeRF
     soapysdr
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyBladeRF/commit/f141b61624f24a56aa3bdf7b0cc61c9fa65c26a3.patch";
-      hash = "sha256-szqHbSAHiK0F83bxYnrblEBi/U7tpD0AXotYV1eTFxU=";
-    })
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
@@ -49,4 +40,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})
