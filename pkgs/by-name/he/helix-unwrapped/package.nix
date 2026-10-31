@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage (
       installShellCompletion contrib/completion/hx.{bash,fish,zsh}
       mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
       cp contrib/Helix.desktop $out/share/applications/Helix.desktop
+      install -Dm644 contrib/Helix.appdata.xml $out/share/metainfo/com.helix_editor.Helix.metainfo.xml
       cp contrib/helix.png $out/share/icons/hicolor/256x256/apps/helix.png
       mkdir -p $doc/share/doc
       cp -r ../book-html $doc/share/doc/$name

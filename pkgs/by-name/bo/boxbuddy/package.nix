@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     cp icons/* ./
     XDG_DATA_HOME=$out/share INSTALL_DIR=$out ./scripts/install.sh
+    install -Dm644 io.github.dvlv.boxbuddyrs.metainfo.xml -t $out/share/metainfo
   '';
 
   preFixup = ''

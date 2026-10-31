@@ -102,6 +102,8 @@ rustPlatform.buildRustPackage rec {
         $out/share/applications/spotifast.desktop
       install -Dm644 packaging/icons/spotifast.svg \
         $out/share/icons/hicolor/scalable/apps/spotifast.svg
+      install -Dm644 packaging/flatpak/rocks.spotifast.Spotifast.metainfo.xml \
+        -t $out/share/metainfo
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       app="$out/Applications/Spotifast.app/Contents"

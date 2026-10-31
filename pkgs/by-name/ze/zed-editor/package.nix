@@ -302,6 +302,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mkdir -p "$out/share/applications"
       ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
     )
+
+    # extracted from crates/zed/resources/flatpak/manifest-template.json and script/flatpak/bundle-flatpak
+    (
+      export APP_ID="dev.zed.Zed"
+      export APP_NAME="Zed"
+      export BRANDING_LIGHT="#99c1f1"
+      export BRANDING_DARK="#1a5fb4"
+      metainfo="$out/share/metainfo/$APP_ID.metainfo.xml"
+      mkdir -p "$out/share/metainfo"
+      ${lib.getExe envsubst} < "crates/zed/resources/flatpak/zed.metainfo.xml.in" > "$metainfo"
+      sed -i -e '/@release_info@/{r crates/zed/resources/flatpak/release-info/${channel}' -e 'd}' "$metainfo"
+    )
   ''
   + lib.optionalString buildRemoteServer ''
     install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}

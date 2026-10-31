@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 linux/com.system76.keyboardconfigurator.desktop -t $out/share/applications
+    install -Dm444 linux/com.system76.keyboardconfigurator.appdata.xml -t $out/share/metainfo
     cp -r data/icons $out/share
   '';
 

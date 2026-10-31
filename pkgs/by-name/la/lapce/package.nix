@@ -87,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ''
         install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
         install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
+        install -Dm0644 $src/extra/linux/dev.lapce.lapce.metainfo.xml -t $out/share/metainfo
 
         $STRIP -S $out/bin/lapce
 

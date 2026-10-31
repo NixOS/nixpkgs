@@ -92,6 +92,9 @@ rustPlatform.buildRustPackage rec {
 
       install -Dm644 packaging/icons/zapfast.svg \
         $out/share/icons/hicolor/scalable/apps/zapfast.svg
+
+      install -Dm644 packaging/flatpak/rocks.zapfast.ZapFast.metainfo.xml \
+        -t $out/share/metainfo
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       app="$out/Applications/ZapFast.app/Contents"

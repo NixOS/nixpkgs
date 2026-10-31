@@ -94,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     for size in 32 128 512; do
       install -Dm644 src-tauri/icons/"$size"x"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/balatro-mod-manager.png
     done
+    install -Dm644 packaging/flatpak/io.balatro.ModManager.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {

@@ -95,6 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 packaging/flatpak/io.music_assistant.Companion.metainfo.xml -t $out/share/metainfo
+  '';
+
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator ]}"
