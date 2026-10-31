@@ -20,10 +20,14 @@ let
       });
       xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs (oldAttrs: rec {
         version = "4.7.0.0";
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          pname = "XStatic-Font-Awesome";
           inherit version;
           hash = "sha256-4B+0gMqqfHlj3LMyikcA5jG+9gcNsOi2hYFtIg5oX2w=";
         };
+
+        # uses pkg_resources.declare_namespace, removed in setuptools 83.
+        build-system = [ self.setuptools_80 ];
       });
     };
   };
@@ -55,6 +59,11 @@ bepastyPython.pkgs.buildPythonPackage rec {
   ];
 
   buildInputs = with bepastyPython.pkgs; [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "xstatic-jquery-ui"
+    "xstatic-jquery-file-upload"
+  ];
 
   src = fetchPypi {
     inherit pname version;
