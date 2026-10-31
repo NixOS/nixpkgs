@@ -7743,6 +7743,10 @@ with pkgs;
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
+  immich-cli_3 = pkgs.immich-cli.override {
+    immich = immich_3;
+  };
+
   inspircdMinimal = inspircd.override { extraModules = [ ]; };
 
   inherit (callPackages ../servers/http/jetty { })
