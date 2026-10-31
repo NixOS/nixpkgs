@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n-nodes-evolution-api";
-  version = "1.0.4";
+  version = "@1.0.2";
 
   src = fetchFromGitHub {
     owner = "oriondesign2015";
