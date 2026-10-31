@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.1";
+  version = "1.6.1";
   pname = "commons-daemon";
 
   src = fetchurl {
     url = "mirror://apache/commons/daemon/binaries/commons-daemon-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-pw+2L45wlKKtN0qKkihfbOyP+m9+kEHGdJ2WsovcxlY=";
+    hash = "sha256-CdCCgAXl1aAMDqw4Rl/zBhlr9mOJSBmDAUVK2UrH1dU=";
   };
 
   installPhase = ''
