@@ -11,13 +11,21 @@
     "src": {
       "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1027.30824_arm64.deb",
       "hash": "sha256-tkjiu8HEMO+8dHDGnmRE98bT8yyYqKq1qiA/LCnT3gU="
-    }
+    },
+    "primaryRuntime": null
   },
   "x86_64-linux": {
     "version": "26.1027.30824",
     "src": {
       "url": "https://persistent.oaistatic.com/codex-app-prod/linux/deb/pool/main/c/chatgpt/chatgpt_26.1027.30824_amd64.deb",
       "hash": "sha256-ThOaRPfJF6ZD8t0BStMimN0wrsbTJNMjUksZD3ZnaEw="
+    },
+    "primaryRuntime": {
+      "version": "26.1026.10807",
+      "src": {
+        "url": "https://persistent.oaistatic.com/codex-primary-runtime/alpha/26.1026.10807/codex-primary-runtime-linux-x64-26.1026.10807.tar.xz",
+        "hash": "sha256-yTChy1JFkWp0A6Dl3qGq6T688oca3Dlbirj8kVirDD4="
+      }
     }
   }
 }
