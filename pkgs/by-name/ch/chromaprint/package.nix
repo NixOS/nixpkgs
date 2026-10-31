@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chromaprint";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "acoustid";
     repo = "chromaprint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Es903zeZ++9/Xb/npUU3rB0V87DVqwT9uTMbQdSzfJI=";
+    hash = "sha256-rh+iRlK814kepCxj4XXRY0tNH4oL3OdOGCyXf/mP0iM=";
   };
 
   nativeBuildInputs = [
