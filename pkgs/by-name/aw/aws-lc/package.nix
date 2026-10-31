@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     mainProgram = "bssl";
     maintainers = with lib.maintainers; [
-      theoparis
       whispersofthedawn
     ];
     pkgConfigModules = [
