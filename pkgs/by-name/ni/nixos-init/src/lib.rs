@@ -2,7 +2,6 @@ mod activate;
 mod config;
 mod env_generator;
 mod etc_overlay;
-mod find_etc;
 mod fs;
 mod init;
 mod initrd_init;
@@ -17,8 +16,7 @@ use anyhow::{Context, Result, bail};
 pub use crate::{
     activate::activate,
     env_generator::env_generator,
-    etc_overlay::clear_etc_opaque,
-    find_etc::find_etc,
+    etc_overlay::{initrd_etc_overlay, mount_etc_overlay},
     init::init,
     initrd_init::initrd_init,
     path::{resolve_in_prefix, resolve_in_root},
