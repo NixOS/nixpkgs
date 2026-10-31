@@ -7,6 +7,7 @@
   desktopName,
   passthru,
   moduleSrcs,
+  moduleManifest,
   # Package utilities
   disableBreakingUpdates,
   stageModules,
@@ -16,8 +17,8 @@
   withEquicord ? false,
   withMoonlight ? false,
   # Disabling this would normally break Discord.
-  # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
-  # for example if a settings.json is linked declaratively (e.g., with home-manager).
+  # The intended use-case is when SKIP_HOST_UPDATE and SKIP_MODULE_UPDATE are
+  # enabled via other means, such as a declaratively linked settings.json
   disableUpdates ? true,
   # Feature flags (Linux exclusive)
   withTTS ? true,
@@ -222,8 +223,10 @@ stdenv.mkDerivation (finalAttrs: {
         brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
       '') moduleSrcs
     )}
+    echo ${lib.escapeShellArg moduleManifest} > $out/opt/${binaryName}/modules/installed.json
 
-    mkdir -p $out/opt/${binaryName}/modules/discord_krisp/KMS/logs
+    # The updater creates pending even when module updates are disabled
+    mkdir -p $out/opt/${binaryName}/modules/{pending,discord_krisp/KMS/logs}
 
     # The web client only keeps OpenH264 2.7.0; names must stay the same length
     grep -qF libopenh264-2.5.1-linux64.7.so $out/opt/${binaryName}/modules/discord_desktop_core/core.asar

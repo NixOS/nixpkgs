@@ -44,9 +44,8 @@ if os.path.exists(settings_path):
 else:
     settings = {}
 
-required_settings = {"SKIP_HOST_UPDATE": True}
-if "@skipModuleUpdate@" == "true":
-    required_settings["SKIP_MODULE_UPDATE"] = True
+# The module directory is pinned in the Nix store and cannot accept updates
+required_settings = {"SKIP_HOST_UPDATE": True, "SKIP_MODULE_UPDATE": True}
 
 missing_settings = {
     key: value for key, value in required_settings.items() if settings.get(key) != value

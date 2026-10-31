@@ -7,6 +7,7 @@
   desktopName,
   passthru,
   moduleSrcs,
+  moduleManifest,
   # Package utilities
   disableBreakingUpdates,
   stageModules,
@@ -16,8 +17,8 @@
   withEquicord ? false,
   withMoonlight ? false,
   # Disabling this would normally break Discord.
-  # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
-  # for example if a settings.json is linked declaratively (e.g., with home-manager).
+  # The intended use-case is when SKIP_HOST_UPDATE and SKIP_MODULE_UPDATE are
+  # enabled via other means, such as a declaratively linked settings.json
   disableUpdates ? true,
   # Package arguments
   commandLineArgs ? "",
@@ -106,6 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
         extractDistro ${src} "$out/share/${pname}/modules/${name}"
       '') moduleSrcs
     )}
+    # The updater creates pending even when module updates are disabled
+    mkdir -p "$out/share/${pname}/modules/pending"
+    echo ${lib.escapeShellArg moduleManifest} > "$out/share/${pname}/modules/installed.json"
 
     # wrap executable to $out/bin
     mkdir -p $out/bin
