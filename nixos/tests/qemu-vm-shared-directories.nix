@@ -46,11 +46,12 @@
     }]:
         with subtest(f"cache={policy} propagates host file changes to the guest as expected"):
             machine.succeed("grep before /mnt/test/hello.txt")
+            # Growing the file reveals a guest holding on to a stale size.
             with open(f"/tmp/{policy}/hello.txt", "w") as f:
-                f.write("after")
+                f.write("after, and longer than before")
             if policy == "always":
                 always.succeed("grep before /mnt/test/hello.txt")
             else:
-                machine.succeed("grep after /mnt/test/hello.txt")
+                machine.succeed("grep 'after, and longer than before' /mnt/test/hello.txt")
   '';
 }
