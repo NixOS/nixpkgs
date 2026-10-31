@@ -6583,6 +6583,9 @@ with pkgs;
   # the unversioned attributes should always point to the same go version
   go = go_1_26;
   buildGoModule = buildGo126Module;
+  fetchGoModules = callPackage ../build-support/go/fetchGoModules.nix {
+    go = buildPackages.go;
+  };
 
   go_latest = go_1_27;
   buildGoLatestModule = buildGo127Module;
