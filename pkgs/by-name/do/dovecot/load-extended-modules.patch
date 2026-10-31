@@ -10,3 +10,17 @@ index e0a0a5b..a7fd725 100644
 +#define CONFIG_MODULE_DIR "/run/current-system/sw/lib/dovecot/modules/settings"
  
  #define IS_WHITE(c) ((c) == ' ' || (c) == '\t')
+
+diff --git a/src/doveadm/doveadm-util.c
+ib/src/doveadm/doveadm-util.cndex e0a0a5b..a7fd725 100644
+--- a/src/doveadm/doveadm-util.c
++++ b/src/doveadm/doveadm-util.c
+@@ -19,6 +19,8 @@
+ #include <sys/stat.h>
+ #include <ctype.h>
+ 
++#define DOVEADM_MODULEDIR "/run/current-system/sw/lib/dovecot/modules/doveadm"
++
+ bool doveadm_verbose = FALSE, doveadm_debug = FALSE, doveadm_server = FALSE;
+ static struct module *modules = NULL;
+ 
