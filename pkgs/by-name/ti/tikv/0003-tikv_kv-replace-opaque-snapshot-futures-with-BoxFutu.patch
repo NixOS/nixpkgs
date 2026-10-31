@@ -1,0 +1,71 @@
+From 81fc6d394eb955693b55c61aee5d08eb693c95e6 Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 3/6] tikv_kv: replace opaque snapshot futures with BoxFuture
+
+---
+ components/tikv_kv/src/btree_engine.rs   | 6 +++---
+ components/tikv_kv/src/rocksdb_engine.rs | 7 ++++---
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/components/tikv_kv/src/btree_engine.rs b/components/tikv_kv/src/btree_engine.rs
+index 04a14059e..a451a4dd9 100644
+--- a/components/tikv_kv/src/btree_engine.rs
++++ b/components/tikv_kv/src/btree_engine.rs
+@@ -107,15 +107,15 @@ impl Engine for BTreeEngine {
+         stream::once(future::ready(WriteEvent::Finished(res)))
+     }
+ 
+-    type SnapshotRes = impl Future<Output = EngineResult<Self::Snap>> + Send;
++    type SnapshotRes = future::BoxFuture<'static, EngineResult<Self::Snap>>;
+     /// warning: It returns a fake snapshot whose content will be affected by
+     /// the later modifies!
+     fn async_snapshot(&mut self, _ctx: SnapContext<'_>) -> Self::SnapshotRes {
+-        futures::future::ready(Ok(BTreeEngineSnapshot::new(self)))
++        Box::pin(future::ready(Ok(BTreeEngineSnapshot::new(self))))
+     }
+ 
+     type IMSnap = Self::Snap;
+-    type IMSnapshotRes = Self::SnapshotRes;
++    type IMSnapshotRes = future::BoxFuture<'static, EngineResult<Self::IMSnap>>;
+     fn async_in_memory_snapshot(&mut self, ctx: SnapContext<'_>) -> Self::IMSnapshotRes {
+         self.async_snapshot(ctx)
+     }
+diff --git a/components/tikv_kv/src/rocksdb_engine.rs b/components/tikv_kv/src/rocksdb_engine.rs
+index b83c99225..a805792d7 100644
+--- a/components/tikv_kv/src/rocksdb_engine.rs
++++ b/components/tikv_kv/src/rocksdb_engine.rs
+@@ -22,6 +22,7 @@ use engine_traits::{
+ use file_system::IoRateLimiter;
+ use futures::{
+     channel::{mpsc, oneshot},
++    future,
+     stream, Future, Stream,
+ };
+ use kvproto::{kvrpcpb::Context, metapb, raft_cmdpb};
+@@ -307,7 +308,7 @@ impl<RE: RaftExtension + 'static> Engine for RocksEngine<RE> {
+         })
+     }
+ 
+-    type SnapshotRes = impl Future<Output = Result<Self::Snap>> + Send;
++    type SnapshotRes = future::BoxFuture<'static, Result<Self::Snap>>;
+     fn async_snapshot(&mut self, _: SnapContext<'_>) -> Self::SnapshotRes {
+         let res = (|| {
+             fail_point!("rockskv_async_snapshot", |_| Err(box_err!(
+@@ -323,11 +324,11 @@ impl<RE: RaftExtension + 'static> Engine for RocksEngine<RE> {
+             Ok(rx)
+         })();
+ 
+-        async move { Ok(res?.await.unwrap()) }
++        Box::pin(async move { Ok(res?.await.unwrap()) })
+     }
+ 
+     type IMSnap = Self::Snap;
+-    type IMSnapshotRes = Self::SnapshotRes;
++    type IMSnapshotRes = future::BoxFuture<'static, Result<Self::IMSnap>>;
+     fn async_in_memory_snapshot(&mut self, ctx: SnapContext<'_>) -> Self::IMSnapshotRes {
+         self.async_snapshot(ctx)
+     }
+-- 
+2.53.0
+
