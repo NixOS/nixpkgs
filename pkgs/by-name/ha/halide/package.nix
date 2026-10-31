@@ -3,7 +3,6 @@
   stdenv,
   llvmPackages,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   flatbuffers,
   libffi,
@@ -29,43 +28,14 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "halide";
-  version = "21.0.0";
+  version = "22.1.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A5EnZgXc9+L+bzWHftaL74nHmP8Jf0rnT5KJAAWvKis=";
+    hash = "sha256-Lpo6FXYTY1pAwmbi4o2KrFGHL9WV8AghSl3+BZcOlNU=";
   };
-
-  patches = [
-    # Backport: properly initialize bf16 inputs in simd_op_check.
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/acb58504f0ce02e07b8b9008668c8779d3561ec8.patch?full_index=1";
-      hash = "sha256-n9avTYe8JFYQKeJQBQQV9xoOoYp0imXD2GQgifRym/A=";
-    })
-    # Backport: add Zen4/Zen5/AVXVNNI feature flags to simd_op_check's can_run_code.
-    (fetchpatch2 {
-      url = "https://github.com/halide/Halide/commit/1b9be55dfaa162fad6a3ed3c6e8d83f966ce8af1.patch?full_index=1";
-      hash = "sha256-5f6Q2Q1pvimlFV3lCcMzIHMIze6A8TmnMjVpQ8/ceyg=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace src/runtime/CMakeLists.txt --replace-fail \
-        '-isystem "''${VulkanHeaders_INCLUDE_DIR}"' \
-        '-isystem "''${VulkanHeaders_INCLUDE_DIR}"
-         -isystem "${llvmPackages.clang}/resource-root/include"'
-  ''
-  # Upstream Halide include a check in their CMake files that forces Halide to
-  # link LLVM dynamically because of WebAssembly. It unnecessarily increases
-  # the closure size in cases when the WebAssembly target is not used. Hence,
-  # the following hack
-  + lib.optionalString (!wasmSupport) ''
-    substituteInPlace cmake/FindHalide_LLVM.cmake --replace-fail \
-        'if (comp STREQUAL "WebAssembly")' \
-        'if (FALSE)'
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON_BINDINGS" pythonSupport)
@@ -77,10 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
     (lib.cmakeBool "WITH_TEST_FUZZ" false)
-    # Disable FetchContent and use versions from nixpkgs instead
-    (lib.cmakeBool "Halide_USE_FETCHCONTENT" false)
     (lib.cmakeFeature "Halide_WASM_BACKEND" (if wasmSupport then "wabt" else "OFF"))
     (lib.cmakeBool "Halide_LLVM_SHARED_LIBS" wasmSupport)
+  ]
+  ++ lib.optionals pythonSupport [
+    (lib.cmakeFeature "nanobind_DIR" "${python3Packages.nanobind}/${python3Packages.python.sitePackages}/nanobind/cmake")
   ];
 
   outputs = [
@@ -127,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
   # to get a hint howto setup atlas instead of openblas
   buildInputs = [
     llvmPackages.llvm
-    llvmPackages.lld
     llvmPackages.openmp
     llvmPackages.libclang
     libffi
@@ -140,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     libGL
   ]
-  ++ lib.optionals wasmSupport [ wabt ];
+  ++ lib.optionals wasmSupport [
+    llvmPackages.lld
+    wabt
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -150,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.python
-    python3Packages.pybind11
+    python3Packages.nanobind
   ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
