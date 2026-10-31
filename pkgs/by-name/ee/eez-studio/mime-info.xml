@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+<mime-type type="application/x-eez-project">
+  <glob pattern="*.eez-project"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-eez-dashboard">
+  <glob pattern="*.eez-dashboard"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+</mime-info>
