@@ -29287,6 +29287,11 @@
     githubId = 70479099;
     matrix = "@eyes1238:matrix.org";
   };
+  the-homeless-god = {
+    name = "Marat Zimnurov";
+    github = "the-homeless-god";
+    githubId = 32175240;
+  };
   theaninova = {
     name = "Thea Schöbl";
     email = "dev@theaninova.de";
