@@ -37,6 +37,18 @@
           serverConfig.Preferences.WebUI.Port = "8181";
         };
       };
+
+      specialisation.passwordFile.configuration = {
+        services.qbittorrent = {
+          enable = true;
+          webuiPort = null;
+          webuiPasswordFile = "/run/secrets/qbittorrent-password";
+          serverConfig.Preferences.WebUI = {
+            Username = "user";
+            Port = "8181";
+          };
+        };
+      };
     };
     # Seperate vm because it's not possible to reboot into a specialisation with
     # switch-to-configuration: https://github.com/NixOS/nixpkgs/issues/82851
@@ -76,6 +88,7 @@
       portChange = "${simpleSpecPath}/portChange";
       openPorts = "${simpleSpecPath}/openPorts";
       serverConfig = "${simpleSpecPath}/serverConfig";
+      passwordFile = "${simpleSpecPath}/passwordFile";
       serverConfigChange = "${declarativeSpecPath}/serverConfigChange";
     in
     ''
@@ -189,5 +202,50 @@
       with subtest("changes in serverConfig are applied correctly"):
           declarative.succeed("${serverConfigChange}/bin/switch-to-configuration test")
           test_webui(declarative, 7171)
+
+
+      # Password file tests
+
+      with subtest("webuiPasswordFile injects password at startup"):
+          # Create the password file and remove any existing config to test
+          # the "no prior config" case
+          simple.succeed("mkdir -p /run/secrets")
+          simple.succeed("echo -n adminadmin > /run/secrets/qbittorrent-password")
+          simple.succeed("rm -rf /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf")
+
+          simple.succeed("${passwordFile}/bin/switch-to-configuration test")
+          test_webui(simple, 8181)
+
+          # Verify authentication works with the injected password
+          qb_url = "http://localhost:8181"
+          api_url = f"{qb_url}/api/v2"
+          result = simple.succeed(
+              f'curl --header "Referer: {qb_url}" '
+              f'--data "username=user&password=adminadmin" '
+              f'{api_url}/auth/login'
+          )
+          assert "Ok" in result, f"Login failed, got: {result}"
+
+      with subtest("webuiPasswordFile rejects empty password files"):
+          simple.succeed(": > /run/secrets/qbittorrent-password")
+          simple.succeed("rm -f /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf")
+
+          simple.succeed("${passwordFile}/bin/switch-to-configuration test")
+          simple.fail("systemctl restart qbittorrent.service")
+          simple.succeed("systemctl is-failed qbittorrent.service")
+          simple.succeed(
+              "journalctl -u qbittorrent.service -b --no-pager | grep -F 'Error: password file is empty'"
+          )
+
+      with subtest("webuiPasswordFile fails clearly when the password file is missing"):
+          simple.succeed("systemctl reset-failed qbittorrent.service")
+          simple.succeed("rm -f /run/secrets/qbittorrent-password")
+          simple.succeed("rm -f /var/lib/qBittorrent/qBittorrent/config/qBittorrent.conf")
+
+          simple.fail("${passwordFile}/bin/switch-to-configuration test")
+          simple.succeed("systemctl is-failed qbittorrent.service")
+          simple.succeed(
+              "journalctl -u qbittorrent.service -b --no-pager | grep -E 'Failed to set up credentials|Failed at step CREDENTIALS|No such file or directory'"
+          )
     '';
 }
