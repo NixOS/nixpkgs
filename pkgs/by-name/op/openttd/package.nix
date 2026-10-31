@@ -34,6 +34,7 @@
   alsa-lib,
   libjack2,
   makeWrapper,
+  makeBinaryWrapper,
   buildPackages,
   versionCheckHook,
 }:
@@ -65,6 +66,8 @@ let
       install -Dm555 src/settingsgen/settingsgen -t $out/bin
     '';
   });
+
+  darwinOutputContents = "Applications/OpenTTD.app/Contents";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
@@ -79,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     crossTools
@@ -98,18 +102,29 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     pcre2
   ]
-  ++ lib.optionals withFluidSynth [
-    fluidsynth
-    soundfont-fluid
-    libsndfile
-    flac
-    libogg
-    libvorbis
-    libopus
-    libmpg123
-    pulseaudio
-    alsa-lib
-    libjack2
+  ++ lib.optionals withFluidSynth (
+    [
+      fluidsynth
+      soundfont-fluid
+      libsndfile
+      flac
+      libogg
+      libvorbis
+      libopus
+      libmpg123
+      libjack2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      pulseaudio
+    ]
+  );
+
+  cmakeFlags = [
+    (lib.cmakeBool "OPTION_USE_ASSERTS" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${darwinOutputContents}/Resources"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -121,17 +136,33 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/music/fluidsynth.cpp \
       --replace-fail "/usr/share/soundfonts/default.sf2" \
                      "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/PackageBundle.cmake \
+      --replace-fail 'fixup_bundle(\"\''${CMAKE_INSTALL_PREFIX}/../MacOS/openttd\"  \"\" \"\")' \
+                     '# fixup_bundle disabled for Nix builds'
   '';
 
   postInstall =
+    let
+      basesetDirectory =
+        if stdenv.hostPlatform.isDarwin then
+          "$out/${darwinOutputContents}/Resources/baseset"
+        else
+          "$out/share/games/openttd/baseset";
+    in
     lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+      cp ${opengfx}/*.tar ${basesetDirectory}
     ''
     + lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+      cp ${opensfx}/*.tar ${basesetDirectory}
     ''
     + lib.optionalString withOpenMSX ''
-      tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
+      tar -xf ${openmsx}/*.tar -C ${basesetDirectory}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/bin
+      makeBinaryWrapper $out/${darwinOutputContents}/MacOS/openttd $out/bin/openttd
     '';
 
   meta = {
@@ -150,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       jcumming
       fpletz
