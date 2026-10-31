@@ -22,7 +22,10 @@ buildGo127Module (finalAttrs: {
 
   vendorHash = "sha256-RU0ZSkwGk8bL4mkhnMDveNIW7JGwYwudT+ywmncuT2k=";
 
-  subPackages = [ "cmd/entire" ];
+  subPackages = [
+    "cmd/entire"
+    "cmd/git-remote-entire"
+  ];
 
   ldflags = [
     "-s"
@@ -36,6 +39,9 @@ buildGo127Module (finalAttrs: {
     git
     writableTmpDirAsHomeHook
   ];
+
+  # git-remote-entire tests bind localhost via httptest
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd entire \
@@ -60,6 +66,7 @@ buildGo127Module (finalAttrs: {
       iamanaws
       sheeeng
       squishykid
+      toothbrush
     ];
     mainProgram = "entire";
   };
