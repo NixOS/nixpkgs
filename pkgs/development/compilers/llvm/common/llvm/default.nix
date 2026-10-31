@@ -35,13 +35,30 @@
   enableTerminfo ? true,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
-  fetchpatch,
+  fetchpatch2,
   # for tests
   libllvm,
 }:
 
 let
   inherit (lib) optional optionals optionalString;
+
+  # Backport the benchmark __COUNTER__ warning fix to LLVM 20.
+  # This warning is fatal due to -pedantic-errors
+  benchmarkPatches = lib.optionals (lib.versions.major release_version == "20") [
+    (fetchpatch2 {
+      name = "benchmark-counter-warning-precursor.patch";
+      url = "https://github.com/llvm/llvm-project/commit/df1d786c460e0e47c9074f3533f098190ebfbc1b.patch?full_index=1";
+      relative = "third-party/benchmark";
+      hash = "sha256-odaXdeHRb64TO9jODcywKfFlHvwBOcy/dWuqTfWNkRc=";
+    })
+    (fetchpatch2 {
+      name = "benchmark-counter-warning.patch";
+      url = "https://github.com/llvm/llvm-project/commit/7fb92cdf5fa69423b4b99259057eb8de813c1344.patch?full_index=1";
+      relative = "third-party/benchmark";
+      hash = "sha256-iumygTV3eTnrHeKBdBCf8PpcjNEWF7lRdi5/9OS1ias=";
+    })
+  ];
 
   # Is there a better way to do this? Darwin wants to disable tests in the first
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
@@ -186,27 +203,28 @@ stdenv.mkDerivation (
           # Add missing include headers to build against gcc-15:
           #   https://github.com/llvm/llvm-project/pull/101761
           (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
-              hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+            fetchpatch2 {
+              name = "7e44305041d96b064c197216b931ae3917a34ac1.patch";
+              url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch?full_index=1";
+              hash = "sha256-i2Nk5bbeEIwbwGaOIKggObUhnUdQNN9zPa5ABZfkqXA=";
               stripLen = 1;
             }
           )
       ++ lib.optionals (lib.versions.major release_version == "18") [
         # Reorgs one test so the next patch applies
-        (fetchpatch {
+        (fetchpatch2 {
           name = "osabi-test-reorg.patch";
-          url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch";
+          url = "https://github.com/llvm/llvm-project/commit/06cecdc60ec9ebfdd4d8cdb2586d201272bdf6bd.patch?full_index=1";
           stripLen = 1;
-          hash = "sha256-s9GZTNgzLS511Pzh6Wb1hEV68lxhmLWXjlybHBDMhvM=";
+          hash = "sha256-CRSayFlkslH9WYN+vl1sg0+vSLA60JW7gwKx82nMzec=";
         })
         # Sets the OSABI for OpenBSD, needed for an LLD patch for OpenBSD.
         # https://github.com/llvm/llvm-project/pull/98553
-        (fetchpatch {
+        (fetchpatch2 {
           name = "mc-set-openbsd-osabi.patch";
-          url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch";
+          url = "https://github.com/llvm/llvm-project/commit/b64c1de714c50bec7493530446ebf5e540d5f96a.patch?full_index=1";
           stripLen = 1;
-          hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
+          hash = "sha256-fOh3pF6uDiccNBo4hXx+e1gfinotZBQ6t1m4ulg5tmE=";
         })
         # Fix build with gcc15
         # https://github.com/llvm/llvm-project/commit/8f39502b85d34998752193e85f36c408d3c99248
@@ -215,9 +233,10 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals (lib.versionOlder release_version "19") [
         # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-        (fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-          hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
+        (fetchpatch2 {
+          name = "1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+          url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch?full_index=1";
+          hash = "sha256-7WaMwY95lukUnnd++seOKadeiwaP6C/abEb7yzSKaLY=";
           stripLen = 1;
         })
       ]
@@ -232,9 +251,10 @@ stdenv.mkDerivation (
           # Test failure on riscv64, fixed in llvm 21
           # https://github.com/llvm/llvm-project/issues/150818
           (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
-              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+            fetchpatch2 {
+              name = "bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch?full_index=1";
+              hash = "sha256-cwaLbH7XJ9sdRJBjAjpAuSPtG366DmuwdgCO8h5/tpY=";
               stripLen = 1;
             }
           )
@@ -259,11 +279,11 @@ stdenv.mkDerivation (
         # the time of the LLVM PR, and was thus not backported upstream, the
         # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
         # fetch the patch from there.
-        (fetchpatch {
+        (fetchpatch2 {
           name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
-          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch?full_index=1";
           stripLen = 1;
-          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+          hash = "sha256-bXLCiJxSaMjloA+MTG1OXw2mYQan+D3MwTV/AWqkGHk=";
         })
       ]
       ++ lib.optionals (lib.versionOlder release_version "22") [
@@ -331,7 +351,10 @@ stdenv.mkDerivation (
     strictDeps = true;
 
     postPatch =
-      optionalString stdenv.hostPlatform.isDarwin (
+      lib.concatMapStrings (patch: ''
+        patch -p1 -d ../third-party/benchmark -i ${patch}
+      '') benchmarkPatches
+      + optionalString stdenv.hostPlatform.isDarwin (
         ''
           substituteInPlace cmake/modules/AddLLVM.cmake \
             --replace-fail 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)"
@@ -681,6 +704,13 @@ stdenv.mkDerivation (
         update = "*";
       };
     };
+  }
+  // lib.optionalAttrs (benchmarkPatches != [ ] && !enableManpages) {
+    # The unpack phase only makes llvm/ writable,
+    # leaving third-party/benchmark/ read-only
+    postUnpack = ''
+      chmod -R u+w "$sourceRoot/../third-party/benchmark"
+    '';
   }
   // lib.optionalAttrs enableManpages {
     pname = "llvm-manpages";
