@@ -3002,6 +3002,8 @@ self: super: with self; {
 
   cel-python = callPackage ../development/python-modules/cel-python { };
 
+  celerite = callPackage ../development/python-modules/celerite { };
+
   celery = callPackage ../development/python-modules/celery { };
 
   celery-batches = callPackage ../development/python-modules/celery-batches { };
