@@ -1,5 +1,5 @@
 {
-  ruby,
+  ruby_3_4,
   lib,
   bundlerApp,
   bundlerUpdateScript,
@@ -8,6 +8,7 @@
 
 bundlerApp {
   pname = "mailcatcher";
+  ruby = ruby_3_4;
   gemdir = ./.;
   exes = [
     "mailcatcher"
