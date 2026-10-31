@@ -1881,6 +1881,7 @@ in
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
   thelounge = runTest ./thelounge.nix;
+  thunderbird-appointment = runTest ./web-apps/thunderbird-appointment.nix;
   tiddlywiki = runTest ./tiddlywiki.nix;
   tigervnc = handleTest ./tigervnc.nix { };
   tika = runTest ./tika.nix;
