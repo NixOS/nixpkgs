@@ -94,6 +94,8 @@
 
   # passthru.tests
   testers,
+  runCommand,
+  mesa,
 }:
 let
   vtkPackages = lib.makeScope newScope (self: {
@@ -340,6 +342,26 @@ stdenv.mkDerivation (finalAttrs: {
           qt6.wrapQtAppsHook
         ];
       };
+    }
+    // lib.optionalAttrs (pythonSupport && stdenv.hostPlatform.isLinux) {
+      # Render offscreen through EGL with Mesa's software rasterizer: no GPU, no X.
+      egl-render =
+        runCommand "vtk-test-egl-render"
+          {
+            nativeBuildInputs = [
+              python3Packages.python
+              mesa.llvmpipeHook
+            ];
+            env = {
+              PYTHONPATH = "${finalAttrs.finalPackage}/${python3Packages.python.sitePackages}";
+              EGL_PLATFORM = "surfaceless";
+            };
+          }
+          ''
+            # Automatic window selection (no DISPLAY) must reach EGL.
+            mkdir $out
+            python3 ${./test-egl-render.py}
+          '';
     };
   };
 
