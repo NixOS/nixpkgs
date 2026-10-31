@@ -2,12 +2,14 @@ diff -rc read.c read.c
 *** read.c	2006-03-17 15:24:20.000000000 +0100
 --- read.c	2007-05-24 17:16:31.000000000 +0200
 ***************
-*** 99,107 ****
---- 99,109 ----
+*** 97,107 ****
+--- 97,109 ----
+    This is defined as a placeholder.  */
+ # define INCLUDEDIR "."
   #endif
++ #if 0
       INCLUDEDIR,
   #ifndef _AMIGA
-+ #if 0    
       "/usr/gnu/include",
       "/usr/local/include",
       "/usr/include",
