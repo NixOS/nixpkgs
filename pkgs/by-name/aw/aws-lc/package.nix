@@ -2,11 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  buildGoModule,
   cmake,
   ninja,
+  go,
+  perl,
   rust-bindgen,
   testers,
   nix-update-script,
+  writableTmpDirAsHomeHook,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
   withRustBindings ? true,
 }:
@@ -31,17 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    writableTmpDirAsHomeHook
     cmake
     ninja
+    go
+    perl
   ]
   ++ lib.optionals withRustBindings [
     rust-bindgen
   ];
 
+  goDeps =
+    (buildGoModule {
+      inherit (finalAttrs) pname version src;
+      vendorHash = "sha256-495bUr3Cuo7kuhuNLMVhrVg9NXTAXyFmnXRmBrCHovA=";
+    }).goModules;
+
+  preConfigure = ''
+    ln -s ${finalAttrs.goDeps} vendor
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" useSharedLibraries)
-    (lib.cmakeBool "DISABLE_GO" true)
-    (lib.cmakeBool "DISABLE_PERL" true)
     (lib.cmakeBool "GENERATE_RUST_BINDINGS" withRustBindings)
   ]
   ++ lib.optionals stdenv.cc.isGNU [
@@ -50,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  checkTarget = "run_minimal_tests";
+  checkTarget = "run_tests";
 
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
