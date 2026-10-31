@@ -4,6 +4,9 @@
   buildFHSEnv,
   stdenvNoCC,
   fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  patchelf,
   autoPatchelfHook,
   dpkg,
   nss,
@@ -21,6 +24,19 @@ let
   version = "3.9.11.60043";
   web-archive-id = "20260929183129"; # upload via https://web.archive.org/save/
   debian-dist = "forky_amd64";
+
+  # Remove once a new patchelf release including NixOS/patchelf#672 has reached Nixpkgs
+  patchelfWithFix = patchelf.overrideAttrs (oldAttrs: {
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "patchelf";
+      rev = "3e996dbef1fa0658012f8dd290bddcf0302acade";
+      hash = "sha256-+c7LIYKu0pYnG7h1dsEIDs6l4+91Vh/oDrSDARdBK3o=";
+    };
+    nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ autoreconfHook ];
+    version = "0.19.2-unstable-2026-10-20";
+  });
+
   insync-pkg = stdenvNoCC.mkDerivation {
     pname = "${pname}-pkg";
     inherit version;
@@ -35,6 +51,7 @@ let
 
     nativeBuildInputs = [
       dpkg
+      patchelfWithFix
       autoPatchelfHook
       qt5.wrapQtAppsHook
     ];
@@ -54,6 +71,9 @@ let
       # Remove unused plugins. This is based on missing libraries from the upstream package.
       rm -rf usr/lib/insync/PySide2/Qt/qml/
 
+      # auto-patchelf crashes on *.debug objects
+      find usr -name '*.debug' -type f -delete
+
       mkdir -p $out
       cp -R usr/* $out/
 
@@ -63,7 +83,6 @@ let
     # NB! This did the trick, otherwise it segfaults! However I don't understand why!
     dontStrip = true;
   };
-
 in
 buildFHSEnv {
   inherit pname version;
