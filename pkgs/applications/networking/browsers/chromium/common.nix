@@ -273,8 +273,11 @@ let
     pname = "gnrt";
     version = "0-unstable";
 
-    src = chromiumDeps."src";
-    sourceRoot = "tools/crates/gnrt";
+    # TODO: Rework how chromium and electron pass src to gnrt or offload gnrt entirely
+    src = upstream-info.gclientDeps."src".path or chromiumDeps."src";
+    sourceRoot =
+      lib.optionalString (!finalAttrs.src.unpack or false) "${finalAttrs.src.name}/"
+      + "tools/crates/gnrt";
 
     # -vendor-staging does not inherit zstd from top-level, so we need
     # to use rustPlatform.fetchCargoVendor despite rustPlatform.buildRustPackage

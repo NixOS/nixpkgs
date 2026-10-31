@@ -26,9 +26,12 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
+  upstream-info = info.chromium // {
+    inherit gclientDeps;
+  };
 in
 
-((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+((chromium.override { inherit upstream-info; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
 
