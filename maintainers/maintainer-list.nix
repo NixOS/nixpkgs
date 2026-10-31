@@ -21055,6 +21055,11 @@
     github = "ngerstle";
     githubId = 1023752;
   };
+  nguyenphivn = {
+    name = "Nguyen Phi";
+    github = "nguyenphivn";
+    githubId = 19565657;
+  };
   nh2 = {
     email = "mail@nh2.me";
     matrix = "@nh2:matrix.org";
