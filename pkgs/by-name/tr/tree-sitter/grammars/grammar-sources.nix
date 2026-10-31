@@ -1594,9 +1594,9 @@
   };
 
   kdl = {
-    version = "1.1.0";
+    version = "2.0.0";
     url = "github:tree-sitter-grammars/tree-sitter-kdl";
-    hash = "sha256-+oJqfbBDbrNS7E+x/QCX9m6FVf0NLw4qWH9n54joJYA=";
+    hash = "sha256-Ot1abHQPNFaXeWzOGNPNe4WTvdFGP8pNuc+tfGlpXEU=";
     meta = {
       license = lib.licenses.mit;
     };
