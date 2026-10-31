@@ -109,6 +109,10 @@ in
       serviceName: topLevelService: makeUnits "sockets" serviceName topLevelService
     ) config.system.services;
 
+    systemd.timers = concatMapAttrs (
+      serviceName: topLevelService: makeUnits "timers" serviceName topLevelService
+    ) config.system.services;
+
     environment.etc = concatMapAttrs (
       serviceName: topLevelService: makeNixosEtcFiles serviceName topLevelService
     ) config.system.services;
