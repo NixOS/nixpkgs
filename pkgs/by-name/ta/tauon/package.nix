@@ -171,6 +171,8 @@ python3Packages.buildPythonApplication {
     mv $out/bin/tauonmb $out/bin/tauon
     mkdir -p $out/share/applications
     install -Dm755 extra/tauonmb.desktop $out/share/applications/tauonmb.desktop
+    mkdir -p $out/share/metainfo
+    install -Dm644 extra/com.github.taiko2k.tauonmb.metainfo.xml -t $out/share/metainfo
     mkdir -p $out/share/icons/hicolor/scalable/apps
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
     ln -s ${lib.getExe lrclib-solver} $out/${python3Packages.python.sitePackages}/tauon/lrclib-solver
