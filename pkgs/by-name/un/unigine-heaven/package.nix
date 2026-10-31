@@ -15,6 +15,7 @@
   openal,
   imagemagick,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 let
   version = "4.0";
@@ -27,13 +28,6 @@ let
     else
       throw "Unsupported platform ${stdenv.hostPlatform.system}";
 
-  desktopItem = makeDesktopItem {
-    name = "Heaven";
-    exec = "heaven";
-    genericName = "A GPU Stress test tool from the UNIGINE";
-    icon = "Heaven";
-    desktopName = "Heaven Benchmark";
-  };
 in
 stdenv.mkDerivation {
   pname = "unigine-heaven";
@@ -44,7 +38,19 @@ stdenv.mkDerivation {
     hash = "sha256-UtsuXe3VYh18K/qTa0gsCnzGmzBhYnjvGZUT1JTY45c=";
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Heaven";
+      exec = "heaven";
+      genericName = "A GPU Stress test tool from the UNIGINE";
+      icon = "Heaven";
+      desktopName = "Heaven Benchmark";
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     sh $src --target $name
 
     mkdir -p $out/lib/unigine/heaven/bin
@@ -71,13 +77,14 @@ stdenv.mkDerivation {
         convert $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
     done
 
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
     imagemagick
+    copyDesktopItems
   ];
 
   buildInputs = [
