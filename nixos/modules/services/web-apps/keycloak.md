@@ -128,6 +128,14 @@ Keycloak through [](#opt-services.keycloak.themes). See the
 ) and the description of the aforementioned NixOS option for
 more information.
 
+## Secret vault {#module-services-keycloak-vault}
+
+The Keycloak vault can be used to integrate Keycloak with
+secret management tools like [sops-nix](https://github.com/Mic92/sops-nix).
+See the [Using a vault section of the Keycloak Server Administration Guide](
+  https://www.keycloak.org/server/vault
+) and the description of the NixOS option [](#opt-services.keycloak.vault) for more information.
+
 ## Configuration file settings {#module-services-keycloak-settings}
 
 Keycloak server configuration parameters can be set in
