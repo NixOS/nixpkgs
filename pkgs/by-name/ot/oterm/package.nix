@@ -3,55 +3,68 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "oterm";
-  version = "0.14.7";
+  version = "0.26.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = finalAttrs.version;
-    hash = "sha256-f8UUWQtn+lG0mzO7i6LWDoNwGBLFbIbGdqAptNgoek4=";
+    hash = "sha256-WlUgwOpXX4/AkCzWY+NYMSNVIXZyfpOEaXKYuXpBSJg=";
   };
 
-  pythonRelaxDeps = [
-    "aiosql"
-    "aiosqlite"
-    "httpx"
-    "ollama"
-    "packaging"
-    "pillow"
-    "pydantic"
-    "textual"
-    "typer"
-    "fastmcp"
-  ];
+  pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with pythonPackages; [ hatchling ];
 
-  dependencies = with python3Packages; [
-    aiohttp
-    aiosql
-    aiosqlite
-    fastmcp
-    httpx
-    mcp
-    ollama
-    packaging
-    pillow
-    pyperclip
-    python-dotenv
-    rich-pixels
-    textual
-    textual-image
-    textualeffects
-    typer
-  ];
+  dependencies =
+    with pythonPackages;
+    [
+      aiosql
+      aiosqlite
+      ollama
+      packaging
+      pillow
+      pydantic
+      pydantic-ai-harness
+      pydantic-ai-slim
+      python-dotenv
+      python-multipart
+      textual
+      textual-image
+      textual-speedups
+      textualeffects
+      typer
+    ]
+    ++ pydantic-ai-slim.optional-dependencies.anthropic
+    ++ pydantic-ai-slim.optional-dependencies.bedrock
+    ++ pydantic-ai-slim.optional-dependencies.cohere
+    ++ pydantic-ai-slim.optional-dependencies.duckduckgo
+    ++ pydantic-ai-slim.optional-dependencies.google
+    ++ pydantic-ai-slim.optional-dependencies.groq
+    ++ pydantic-ai-slim.optional-dependencies.huggingface
+    ++ pydantic-ai-slim.optional-dependencies.logfire
+    ++ pydantic-ai-slim.optional-dependencies.mcp
+    ++ pydantic-ai-slim.optional-dependencies.mistral
+    ++ pydantic-ai-slim.optional-dependencies.openai
+    ++ pydantic-ai-slim.optional-dependencies.web-fetch;
 
   pythonImportsCheck = [ "oterm" ];
 
@@ -62,9 +75,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd oterm \
+      --bash <(_OTERM_COMPLETE=source_bash $out/bin/oterm) \
+      --fish <(_OTERM_COMPLETE=source_fish $out/bin/oterm) \
+      --zsh  <(_OTERM_COMPLETE=source_zsh  $out/bin/oterm)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Text-based terminal client for Ollama";
