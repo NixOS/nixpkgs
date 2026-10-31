@@ -1,33 +1,103 @@
 {
-  appimageTools,
+  fetchFromGitHub,
+  fetchPnpmDeps,
   lib,
-  fetchurl,
+  rustPlatform,
+  # Common
+  cargo-tauri,
+  jq,
+  moreutils,
+  nix-update-script,
+  nodejs_22,
+  pkg-config,
+  pnpmConfigHook,
+  pnpm_10,
+  stdenv,
+  # Linux Dependents
+  glib-networking,
+  openssl,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
+  # Darwin Dependents
+  darwin,
 }:
-appimageTools.wrapType2 (finalAttrs: {
-  pname = "nuclear";
-  version = "0.6.48";
-  src = fetchurl {
-    # Nuclear currently only publishes AppImage releases for x86_64, which is hardcoded in
-    # the package name. We also hardcode the host arch in the release name, but should upstream
-    # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
-    # source URL accordingly.
-    url = "https://github.com/nukeop/nuclear/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-v${finalAttrs.version}-x86_64.AppImage";
-    hash = "sha256-k3qGWPn+O4kazsrrZAYHIvSrrix9LNnnJgZGJqlJbJE=";
-  };
+rustPlatform.buildRustPackage (
+  finalAttrs:
+  let
+    version = "1.39.1";
+  in
+  {
+    pname = "nuclear";
+    inherit version;
 
-  extraInstallCommands = ''
-    install -m 444 -D ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
-    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
-  '';
+    __structuredAttrs = true;
 
-  meta = {
-    description = "Streaming music player that finds free music for you";
-    homepage = "https://nuclear.js.org/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.NotAShelf ];
-    platforms = [ "x86_64-linux" ];
-    mainProgram = "nuclear";
-  };
-})
+    src = fetchFromGitHub {
+      owner = "nukeop";
+      repo = "nuclear";
+      tag = "player@${version}";
+      hash = "sha256-s1D394YRB3sl4q9mqm4gOn4KlPUcQcbNd/XQAvI/xV4=";
+    };
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        patches
+        ;
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-nwqUTgcLxEq01Q2vEJNFxBTPH/vi3u+LKADrqE+9cXg=";
+    };
+
+    cargoRoot = "packages/player/src-tauri";
+
+    postPatch =
+      let
+        tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
+      in
+      ''
+        jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
+      ''
+      # Disable Tauri's built-in codesigning
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        jq '.bundle.macOS.signingIdentity = null' ${tauriConfJson} | sponge ${tauriConfJson}
+      '';
+
+    buildAndTestSubdir = finalAttrs.cargoRoot;
+
+    cargoHash = "sha256-GyuVVSBoANqJa+03IY3eOQYv0MiuyMeCXQ2f29lk/kk=";
+
+    tauriBuildFlags = [ "--verbose" ];
+
+    nativeBuildInputs = [
+      cargo-tauri.hook
+      jq
+      moreutils
+      nodejs_22
+      pkg-config
+      pnpmConfigHook
+      pnpm_10
+      wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      glib-networking
+      openssl
+      webkitgtk_4_1
+    ];
+
+    passthru.updateScript = nix-update-script { };
+
+    meta = {
+      description = "Streaming music player that finds free music for you";
+      homepage = "https://nuclear.js.org/";
+      license = lib.licenses.agpl3Plus;
+      maintainers = [ ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      mainProgram = "nuclear-music-player";
+    };
+  }
+)
