@@ -1,0 +1,42 @@
+diff --git a/builtin/help.c b/builtin/help.c
+index a140339..453366d 100644
+--- a/builtin/help.c
++++ b/builtin/help.c
+@@ -538,12 +538,37 @@ static void show_info_page(const char *page)
+ 	die(_("no info viewer handled the request"));
+ }
+ 
++static char *html_path_from_data_dirs(const char *page)
++{
++	const char *dirs = getenv("XDG_DATA_DIRS");
++	struct strbuf dir = STRBUF_INIT;
++	struct stat st;
++
++	while (dirs && *dirs) {
++		const char *end = strchrnul(dirs, ':');
++
++		if (end != dirs) {
++			strbuf_reset(&dir);
++			strbuf_add(&dir, dirs, end - dirs);
++			strbuf_addstr(&dir, "/doc/git");
++			if (!stat(mkpath("%s/%s.html", dir.buf, page), &st) &&
++			    S_ISREG(st.st_mode))
++				return strbuf_detach(&dir, NULL);
++		}
++		dirs = *end ? end + 1 : end;
++	}
++	strbuf_release(&dir);
++	return NULL;
++}
++
+ static void get_html_page_path(struct strbuf *page_path, const char *page)
+ {
+ 	struct stat st;
+ 	const char *path = html_path;
+ 	char *to_free = NULL;
+ 
++	if (!path)
++		path = to_free = html_path_from_data_dirs(page);
+ 	if (!path)
+ 		path = to_free = system_path(GIT_HTML_PATH);
+ 

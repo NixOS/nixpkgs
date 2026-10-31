@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  gitMinimal,
+  gitBootstrap,
   hatchling,
   setuptools-scm,
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   inherit doCheck;
 
   nativeCheckInputs = [
-    gitMinimal
+    gitBootstrap
     pytestCheckHook
   ];
 

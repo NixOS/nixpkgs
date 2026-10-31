@@ -5,7 +5,7 @@
   writers,
   python3,
   cargo,
-  gitMinimal,
+  gitBootstrap,
   nix-prefetch-git,
   cacert,
 }:
@@ -31,7 +31,7 @@ let
   } (builtins.readFile ./replace-workspace-values.py);
 
   nix-prefetch-git' = nix-prefetch-git.override {
-    git = gitMinimal;
+    git = gitBootstrap;
     # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
     # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
     git-lfs = null;
