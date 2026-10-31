@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyelectra";
   version = "1.2.14";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jafar-atili";
     repo = "pyelectra";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Z07v5sj+HkTNA7DIHRBeYjJgSUy2k3R+3bbBFW9RrOE=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/jafar-atili/pyElectra/releases/tag/${version}";
+    changelog = "https://github.com/jafar-atili/pyElectra/releases/tag/${finalAttrs.src.tag}";
     description = "Electra Smart Python Integration";
     homepage = "https://github.com/jafar-atili/pyelectra";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
