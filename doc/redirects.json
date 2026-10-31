@@ -47,6 +47,9 @@
   "cuda-extending-cuda-package-sets": [
     "index.html#cuda-extending-cuda-package-sets"
   ],
+  "cuda-gpu-unlock": [
+    "index.html#cuda-gpu-unlock"
+  ],
   "cuda-modifying-cuda-package-sets": [
     "index.html#cuda-modifying-cuda-package-sets",
     "index.html#cuda-configuring-cuda-package-sets"
