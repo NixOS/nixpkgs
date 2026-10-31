@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vzvm";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "applicative-systems";
     repo = "vzvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAozYULlBYelKH5Z35uOWm6nzu9gpMCV6G5WhWL8GKk=";
+    hash = "sha256-2DbMZzc3EAc8ZHN7jTX1Yg8mVqq3tA1GLEEYSMX5E/A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/vzvm";
