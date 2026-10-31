@@ -444,7 +444,7 @@ lib.fix (
     in
     {
 
-      inherit name;
+      inherit pname version;
 
       # remove fake derivations (without 'outPath') to avoid undesired build dependencies
       paths =
