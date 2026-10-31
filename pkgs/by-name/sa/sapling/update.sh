@@ -1,98 +1,86 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq git gnused nix-prefetch-github rustup python3 nix prefetch-yarn-deps coreutils nix-prefetch-git
+#!nix-shell -i bash -p gnused curl jq git nix prefetch-yarn-deps coreutils python3 rustup nix-prefetch-git nix-prefetch-github
 
 set -euo pipefail
 
-# Some Facebook package make use of nightly Rust features
-rustup toolchain install nightly --force
-
-# Paths
-nixpkgs="$(git rev-parse --show-toplevel)"
-pkgdir="$nixpkgs/pkgs/by-name/sa/sapling"
+pkgdir="$(cd "$(dirname "$0")" && pwd)"
+nixpkgs="$(cd "$pkgdir/../../../.." && pwd)"
 pkgfile="$pkgdir/package.nix"
-latest_json="$(curl -s https://api.github.com/repos/facebook/sapling/releases/latest)"
-latest_tag="$(jq -r .tag_name <<<"$latest_json")"
-tarball_url="$(jq -r .tarball_url <<<"$latest_json")"
+remote_repo="https://github.com/facebook/sapling.git"
+latest_tag="$(
+  git ls-remote --tags --refs "$remote_repo" \
+    | awk '{print $2}' \
+    | sed 's|^refs/tags/||' \
+    | grep -E '^0\.2\.[0-9]{8}-[0-9]{6}\+[0-9a-f]{7,}$' \
+    | sort \
+    | tail -n 1
+)"
+
+if [[ -z "$latest_tag" ]]; then
+  echo "Error: unable to determine latest tag" >&2
+  exit 1
+fi
+
+echo "Latest tag: $latest_tag"
+
+tarball_url="https://github.com/facebook/sapling/archive/refs/tags/${latest_tag}.tar.gz"
 
 # Update version
-sed -i -e 's|^  version = "[^"]*";|  version = "'"$latest_tag"'";|' "$pkgfile"
+sed -i 's|^  version = "[^"]*";|  version = "'"$latest_tag"'";|' "$pkgfile"
 
-# Prefetch source tarball and get unpacked path
-mapfile -t tarball_lines < <(nix-prefetch-url --print-path --unpack "$tarball_url")
-source_dir="${tarball_lines[1]}"
+# Prefetch source tarball
+tarball_output="$(nix-prefetch-url --print-path --unpack "$tarball_url")"
+src_hash_raw="$(echo "$tarball_output" | head -1)"
+source_dir="$(echo "$tarball_output" | tail -1)"
 
-# Update Cargo.lock by running cargo fetch in a writable copy of the source
+# Regenerate Cargo.lock via cargo fetch
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
+export TMPDIR="$tmpdir"
+export RUSTUP_HOME="$tmpdir/rustup"
+export CARGO_HOME="$tmpdir/cargo"
+mkdir -p "$RUSTUP_HOME" "$CARGO_HOME"
+
+rustup toolchain install nightly --profile minimal --force
 cp -R "$source_dir" "$tmpdir/src"
 chmod -R u+w "$tmpdir/src"
+
+# Remove [patch.crates-io] to prevent cargo from cloning git repos during fetch
+sed -i '/^\[patch\.crates-io\]$/,/^$/d' "$tmpdir/src/eden/scm/Cargo.toml"
+
 rustup run nightly cargo fetch --manifest-path "$tmpdir/src/eden/scm/Cargo.toml"
 cp "$tmpdir/src/eden/scm/Cargo.lock" "$pkgdir/Cargo.lock"
 
-# Parse Cargo.lock and prefetch git sources
-cargo_output_hashes="$(python3 -c '
-import json
-import subprocess
-import sys
-import tomllib
+# Discover fetchCargoVendor hash: set hash empty, build, capture the "got:" hash from nix error output
+sed -i 's|^    hash = "[^"]*";|    hash = "";|' "$pkgfile"
+vendor_hash_raw="$(nix build "$nixpkgs#sapling" --no-link 2>&1 \
+  | grep -o 'got:.*sha256-[A-Za-z0-9/+]*=' \
+  | head -1 \
+  | sed 's/^got:[[:space:]]*//' \
+  || true)"
 
-cargo_lock_path = sys.argv[1]
+if [[ -n "$vendor_hash_raw" ]]; then
+  sed -i 's|^    hash = "[^"]*";|    hash = "'"$vendor_hash_raw"'";|' "$pkgfile"
+  echo "fetchCargoVendor hash: $vendor_hash_raw"
+else
+  echo "WARNING: could not determine fetchCargoVendor hash" >&2
+fi
 
-allowed_packages = {
-    "abomonation",
-    "cloned",
-    "fb303_core",
-    "fbthrift",
-    "serde_bser",
-    "watchman_client"
-}
+# Update fetchFromGitHub hash
+src_hash_sri="$(nix hash convert --hash-algo sha256 --to sri "$src_hash_raw")"
+sed -i 's|hash = "[^"]*";|hash = "'"$src_hash_sri"'";|' "$pkgfile"
 
-with open(cargo_lock_path, "rb") as f:
-    lock = tomllib.load(f)
+# Update yarn offline cache hash
+sed 's|https://registry.facebook.net|https://registry.npmjs.org|g' \
+  "$source_dir/addons/yarn.lock" > "$tmpdir/yarn.lock"
 
-for pkg in lock.get("package", []):
-    source = pkg.get("source", "")
-    if source.startswith("git+"):
-        name = pkg["name"]
-        if name not in allowed_packages:
-            continue
-        version = pkg["version"]
-        # source format: git+https://url?rev#hash
-        parts = source.split("#")
-        if len(parts) == 2:
-            rev = parts[1]
-            url_part = parts[0][4:] # remove git+
-            if "?" in url_part:
-                url = url_part.split("?")[0]
-            else:
-                url = url_part
-            out = subprocess.check_output(
-                ["nix-prefetch-git", "--url", url, "--rev", rev, "--quiet"],
-                text=True
-            )
-            data = json.loads(out)
-            hash_val = data["hash"]
-            print(f"      \"{name}-{version}\" = \"{hash_val}\";")
-' "$pkgdir/Cargo.lock")"
+yarn_hash_raw="$(NODE_NO_WARNINGS=1 prefetch-yarn-deps "$tmpdir/yarn.lock")"
+if [[ -z "$yarn_hash_raw" ]]; then
+  echo "Error: prefetch-yarn-deps returned empty hash" >&2
+  exit 1
+fi
 
-# First clear existing hashes
-sed -i '/outputHashes = {/,/};/ {
-  /outputHashes = {/n
-  /};/!d
-}' "$pkgfile"
-
-# Then insert new hashes
-echo "$cargo_output_hashes" > "$tmpdir/hashes.txt"
-sed -i '/outputHashes = {/r '"$tmpdir/hashes.txt" "$pkgfile"
-
-# Prefetch source hash for fetchFromGitHub
-src_hash="$(nix-prefetch-github facebook sapling --rev "$latest_tag" | jq -r '.hash')"
-
-# Update the fetchFromGitHub src block's hash
-sed -i -e '/src = fetchFromGitHub {/,/}/{s|hash = "[^"]*";|hash = "'"$src_hash"'";|}' "$pkgfile"
-
-# Compute yarn offline cache hash without building
-yarn_lock="$source_dir/addons/yarn.lock"
-yarn_hash_raw="$(prefetch-yarn-deps "$yarn_lock")"
 yarn_hash_sri="$(nix hash convert --hash-algo sha256 --to sri "$yarn_hash_raw")"
-sed -i -e '/yarnOfflineCache = fetchYarnDeps {/,/};/{s|sha256 = "[^"]*";|sha256 = "'"$yarn_hash_sri"'";|}' "$pkgfile"
+sed -i 's|sha256 = "[^"]*";|sha256 = "'"$yarn_hash_sri"'";|' "$pkgfile"
+
+echo "Updated to $latest_tag"
