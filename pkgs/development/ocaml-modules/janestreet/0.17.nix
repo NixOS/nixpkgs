@@ -2304,7 +2304,8 @@ with self;
 
   zstandard = janePackage {
     pname = "zstandard";
-    hash = "sha256-EUI7fnN8ZaM1l0RBsgSAMWO+VXA8VoCv/lO5kcj+j4E=";
+    version = "0.17.1";
+    hash = "sha256-xGwKQOv2mSBKf1LfNtQpb6htGRVbNPujKhjMEVHvsxU=";
     meta.description = "OCaml bindings to Zstandard";
     buildInputs = [ ppx_jane ];
     propagatedBuildInputs = [
