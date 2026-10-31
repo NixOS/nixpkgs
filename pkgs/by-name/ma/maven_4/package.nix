@@ -42,6 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    jdk = jdk_headless;
+
     # Reuse maven's builder so build-maven-package.nix is not duplicated.
     buildMavenPackage = maven.mkBuildMavenPackage finalAttrs.finalPackage;
 
