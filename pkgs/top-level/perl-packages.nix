@@ -39483,9 +39483,20 @@ with self;
     postInstall = ''
       mkdir -p $out/bin
       cp tools/xml_grep/xml_grep $out/bin
+    ''
+    + lib.optionalString (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) ''
+      # The source shebang uses build-time miniperl when cross-compiling.
+      patchShebangs --host --update "$out/bin/xml_grep"
     '';
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false; # requires lots of extra packages
+    passthru.tests.runtimeInterpreter =
+      buildPackages.runCommand "xml-twig-runtime-interpreter-check" { }
+        ''
+          IFS= read -r shebang < ${XMLTwig}/bin/xml_grep
+          test "$shebang" = "#!${perl}/bin/perl -w"
+          touch "$out"
+        '';
     meta = {
       description = "Perl module for processing huge XML documents in tree mode";
       license = with lib.licenses; [
