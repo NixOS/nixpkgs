@@ -24,6 +24,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
+  # Tell qmake to embed an absolute library path on macOS.
+  qmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "QMAKE_SONAME_PREFIX=${placeholder "out"}/lib";
+
   buildInputs = [
     qtbase
   ]
