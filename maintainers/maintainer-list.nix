@@ -12159,6 +12159,11 @@
     githubId = 55025025;
     name = "Feather Lin";
   };
+  ign1x = {
+    github = "Ign1x";
+    githubId = 115052661;
+    name = "Ign1x";
+  };
   igor-ramazanov = {
     email = "personal@igorramazanov.tech";
     github = "igor-ramazanov";
