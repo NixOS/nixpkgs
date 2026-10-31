@@ -281,6 +281,8 @@ let
               server.succeed(f"echo {runner_registration.get("token")} > /forgejo-runner_token")
               server.succeed(f"echo {runner_registration.get("uuid")} > /forgejo-runner_uuid")
 
+              # Wait for SSH logout to finish stopping the user manager before activation.
+              server.wait_until_succeeds("test ! -d /run/user/$(id -u forgejo)")
               server.succeed("${serverSystem}/specialisation/forgejo-runner/bin/switch-to-configuration test")
               server.wait_for_unit("forgejo-runner-test.service")
               server.succeed("journalctl -o cat -u forgejo-runner-test.service | grep -q 'declared successfully'")
