@@ -26,9 +26,17 @@ while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
         --root)
+            if [ -z "$1" ]; then
+                echo "$0: '$i' requires an argument" >&2
+                exit 1
+            fi
             mountPoint="$1"; shift 1
             ;;
         --system)
+            if [ -z "$1" ]; then
+                echo "$0: '$i' requires an argument" >&2
+                exit 1
+            fi
             system="$1"; shift 1
             ;;
         --help)
@@ -36,6 +44,10 @@ while [ "$#" -gt 0 ]; do
             exit 1
             ;;
         --command|-c)
+            if [ -z "$1" ]; then
+                echo "$0: '$i' requires an argument" >&2
+                exit 1
+            fi
             command=("$system/sw/bin/bash" "-c" "$1")
             shift 1
             ;;
