@@ -13440,6 +13440,12 @@
     githubId = 42114389;
     name = "Jerry Starke";
   };
+  jerryx77 = {
+    email = "hujerryx77@gmail.com";
+    github = "Jerryx0709";
+    githubId = 208721712;
+    name = "Jerryx";
+  };
   jervw = {
     email = "jervw@pm.me";
     github = "jervw";
