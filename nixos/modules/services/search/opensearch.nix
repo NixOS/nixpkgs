@@ -179,7 +179,8 @@ in
       inherit (cfg) restartIfChanged;
       environment = {
         OPENSEARCH_HOME = cfg.dataDir;
-        OPENSEARCH_JAVA_OPTS = toString cfg.extraJavaOptions;
+        # JNA needs executable temporary files; the state directory can be mounted noexec.
+        OPENSEARCH_JAVA_OPTS = toString ([ "-Djna.tmpdir=/tmp" ] ++ cfg.extraJavaOptions);
         OPENSEARCH_PATH_CONF = configDir;
       };
       serviceConfig = {
@@ -263,6 +264,7 @@ in
         Restart = "always";
         TimeoutStartSec = "infinity";
         DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
+        PrivateTmp = true;
       }
       // (lib.optionalAttrs usingDefaultDataDir {
         StateDirectory = "opensearch";
