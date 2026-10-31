@@ -3,11 +3,12 @@
   fetchFromGitHub,
   pan-bindings,
   libsodium,
+  nix-update-script,
   lib,
 }:
 ioquake3.overrideAttrs (old: {
   pname = "ioq3-scion";
-  version = "0-unstable-2024-12-14";
+  version = "0-unstable-2026-08-17";
   buildInputs = old.buildInputs ++ [
     pan-bindings
     libsodium
@@ -15,11 +16,13 @@ ioquake3.overrideAttrs (old: {
   src = fetchFromGitHub {
     owner = "lschulz";
     repo = "ioq3-scion";
-    rev = "a21c257b9ad1d897f6c31883511c3f422317aa0a";
-    hash = "sha256-CBy3Av/mkFojXr0tAXPRWKwLeQJPebazXQ4wzKEmx0I=";
+    rev = "698e6719662c81ab294c77e9e29f99f69be0b313";
+    hash = "sha256-uCK0zp0rPuVQr6ovJle5XfbC5an5n41R713lQUx3l40=";
   };
-  # gcc15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  # follow the dev branch, main still uses the old Makefile build
+  passthru = old.passthru // {
+    updateScript = nix-update-script { extraArgs = [ "--version=branch=dev" ]; };
+  };
   meta = {
     description = "ioquake3 with support for path aware networking";
     homepage = "https://github.com/lschulz/ioq3-scion";
