@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en_US</string>
+  <key>CFBundleDisplayName</key>
+  <string>PySolFC</string>
+  <key>CFBundleExecutable</key>
+  <string>pysolfc</string>
+  <key>CFBundleGetInfoString</key>
+  <string>PySol Fan Club Edition @VERSION@</string>
+  <key>CFBundleIconFile</key>
+  <string>PySol.icns</string>
+  <key>CFBundleIdentifier</key>
+  <string>net.sourceforge.pysolfc</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>PySolFC</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>@VERSION@</string>
+  <key>CFBundleVersion</key>
+  <string>@VERSION@</string>
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.card-games</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>10.13.0</string>
+  <key>NSHighResolutionCapable</key>
+  <true/>
+  <key>NSHumanReadableCopyright</key>
+  <string>Copyright (C) 1998-2003 Markus F.X.J. Oberhumer</string>
+</dict>
+</plist>
