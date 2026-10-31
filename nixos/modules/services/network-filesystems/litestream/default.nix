@@ -7,6 +7,7 @@
 let
   cfg = config.services.litestream;
   settingsFormat = pkgs.formats.yaml { };
+  settingsFile = settingsFormat.generate "litestream-config.yaml" cfg.settings;
 in
 {
   options.services.litestream = {
@@ -65,16 +66,13 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    environment.etc = {
-      "litestream.yml" = {
-        source = settingsFormat.generate "litestream-config.yaml" cfg.settings;
-      };
-    };
+    environment.etc."litestream.yml".source = settingsFile;
 
     systemd.services.litestream = {
       description = "Litestream";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      restartTriggers = [ settingsFile ];
       serviceConfig = {
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/litestream replicate";
