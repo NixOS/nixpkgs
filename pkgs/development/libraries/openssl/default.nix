@@ -151,7 +151,7 @@ let
             else
               "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isMinGW then
-            "./Configure mingw${
+            "./Configure mingw${lib.optionalString stdenv.hostPlatform.isAarch64 "arm"}${
               lib.optionalString (stdenv.hostPlatform.parsed.cpu.bits != 32) (
                 toString stdenv.hostPlatform.parsed.cpu.bits
               )
@@ -241,6 +241,13 @@ let
         # conflicting flags.
         "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
       ]
+      # llvm-rc (acting as windres) searches PATH for an unprefixed `clang` to
+      # preprocess .rc files, which finds the unwrapped compiler lacking the
+      # mingw-w64 include paths. Point it at the wrapped cross compiler instead.
+      ++ lib.optional (stdenv.hostPlatform.isMinGW && stdenv.cc.bintools.isLLVM) (
+        "RCFLAGS=--preprocessor=${stdenv.cc.targetPrefix}clang"
+        + " --preprocessor-arg=-E --preprocessor-arg=-xc --preprocessor-arg=-DRC_INVOKED"
+      )
       # tests are not being installed, it makes no sense
       # to build them if check is disabled, e.g. on cross.
       ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
@@ -388,6 +395,10 @@ let
         ];
         platforms = lib.platforms.all;
         identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openssl" finalAttrs.version;
+        # Windows on ARM support was added in 3.6 and not backported to the 3.5 LTS
+        broken = (
+          lib.versionOlder version "3.6" && stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.isAarch64
+        );
       }
       // extraMeta;
     });
