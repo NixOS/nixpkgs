@@ -9,7 +9,7 @@
   edition ? "oss",
   environmentVariables ? { },
   nixosTests,
-  nodejs_22,
+  nodejs_24,
   nix-update-script,
 }:
 
@@ -37,7 +37,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.24.0";
+  version = "1.25.3";
 
   __structuredAttrs = true;
   enableParallelBuilding = true;
@@ -46,12 +46,13 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-EYyqT7yDz1KpkCyb1niOZcSNxkRMJ6LXjuAcXPhemgM=";
+    hash = "sha256-dhOnxuRW1DXji3TmgyrqR8dO4NAHJucd8EMVF2Ymu1k=";
   };
 
-  nodejs = nodejs_22;
+  # upstream uses '24.22.1' github.com/fosrl/pangolin/commit/f40cf0f
+  nodejs = nodejs_24;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-nWlIy+1m6IJuGaXV3U1ampTL9Xvxj7jONuJ0ecGAU3g=";
+  npmDepsHash = "sha256-hPPnBHrzdxh7mjImqQ2Ij1twN6n/I/Tiv5o74ELTHqo=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
