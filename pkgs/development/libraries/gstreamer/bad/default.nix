@@ -112,6 +112,8 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
+  openni2,
+  openni2Support ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -275,6 +277,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
+  ]
+  ++ lib.optionals openni2Support [
+    openni2
   ];
 
   mesonFlags = [
@@ -307,7 +312,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmusepack=disabled"
     "-Dnvcomp=disabled"
     "-Dnvdswrapper=disabled"
-    "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dsvtjpegxs=disabled" # not packaged in nixpkgs as of writing
@@ -326,6 +330,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Daja=${if ajaSupport then "enabled" else "disabled"}"
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "openni2" openni2Support)
     (lib.mesonEnable "openh264" openh264Support)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "directfb" false)
