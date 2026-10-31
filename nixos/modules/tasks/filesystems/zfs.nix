@@ -100,6 +100,9 @@ let
         state="$("${zpoolCmd}" import -d "${devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
         if [[ "$state" = "ONLINE" ]]; then
           return 0
+        elif [[ "$state" = "DEGRADED" ]]; then
+          echo "Pool $pool in state $state, but continuing to boot"
+          return 0
         else
           echo "Pool $pool in state $state, waiting"
           return 1
