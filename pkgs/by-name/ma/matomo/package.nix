@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeWrapper,
+  cacert,
   php,
   nixosTests,
   nix-update-script,
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     # copy everything to share/, used as webroot folder, and then remove what's known to be not needed
     mkdir -p $out/share
     cp -ra * $out/share/
+    rm $out/share/vendor/composer/ca-bundle/res/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/vendor/composer/ca-bundle/res/cacert.pem
     # tmp/ is created by matomo in PIWIK_USER_PATH
     rmdir $out/share/tmp
     # config/ needs to be accessed by PIWIK_USER_PATH anyway
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "misc/cron/archive.sh"
     "plugins/GeoIp2/config/config.php"
     "plugins/Installation/FormDatabaseSetup.php"
+    "vendor/composer/ca-bundle/res/cacert.pem"
     "vendor/pear/archive_tar/sync-php4"
     "vendor/szymach/c-pchart/coverage.sh"
     "vendor/matomo/matomo-php-tracker/run_tests.sh"
