@@ -1,0 +1,119 @@
+diff --git a/src/polkitagent/polkitagenthelper-bsdauth.c b/src/polkitagent/polkitagenthelper-bsdauth.c
+index 95d9962..f564d82 100644
+--- a/src/polkitagent/polkitagenthelper-bsdauth.c
++++ b/src/polkitagent/polkitagenthelper-bsdauth.c
+@@ -114,7 +114,7 @@ main (int argc, char *argv[])
+   /* now send a D-Bus message to the polkit daemon that
+    * includes a) the cookie; and b) the user we authenticated
+    */
+-  if (!send_dbus_message (cookie, user_to_auth, -1, -1))
++  if (!send_dbus_message (cookie, user_to_auth, -1))
+     {
+ #ifdef PAH_DEBUG
+       fprintf (stderr, "polkit-agent-helper-1: error sending D-Bus message to polkit daemon\n");
+diff --git a/src/polkitagent/polkitagenthelper-pam.c b/src/polkitagent/polkitagenthelper-pam.c
+index 2dc4882..6cd8b1f 100644
+--- a/src/polkitagent/polkitagenthelper-pam.c
++++ b/src/polkitagent/polkitagenthelper-pam.c
+@@ -86,7 +86,6 @@ main (int argc, char *argv[])
+ {
+   int rc;
+   int pidfd = -1;
+-  int uid = -1;
+   int errval = 1;
+   const char *user_to_auth;
+   char *user_to_auth_free = NULL;
+@@ -141,7 +140,6 @@ main (int argc, char *argv[])
+   if (argv[1] != NULL && strcmp (argv[1], "--socket-activated") == 0)
+     {
+       socklen_t socklen = sizeof(int);
+-      struct ucred ucred;
+ 
+       user_to_auth_free = read_cookie (argc, argv);
+       if (!user_to_auth_free)
+@@ -164,17 +162,13 @@ main (int argc, char *argv[])
+ 
+           goto error;
+         }
+-
+-      socklen = sizeof(ucred);
+-      rc = getsockopt(STDIN_FILENO, SOL_SOCKET, SO_PEERCRED, &ucred, &socklen);
+-      if (rc < 0)
+-        {
+-          syslog (LOG_ERR, "Unable to get credentials from socket");
+-          fprintf (stderr, "polkit-agent-helper-1: unable to get credentials from socket.\n");
+-          goto error;
+-        }
+-
+-      uid = ucred.uid;
++      /* Deliberately do not take the uid from SO_PEERCRED: it reports the
++       * caller's *effective* uid, while polkitd identifies a process by its
++       * *real* uid (polkit_unix_process_get_racy_uid__()). The two differ for
++       * a setuid caller such as pkexec's built-in agent, and polkitd then
++       * fails to find the authentication session. Leave the uid unset so that
++       * PolkitUnixProcess derives it from the pidfd the same way polkitd does.
++       */
+     }
+   else
+     user_to_auth = argv[1];
+@@ -275,7 +269,7 @@ main (int argc, char *argv[])
+    * includes a) the cookie; b) the user we authenticated;
+    * c) the pidfd and uid of the caller, if socket-activated
+    */
+-  if (!send_dbus_message (cookie, user_to_auth, pidfd, uid))
++  if (!send_dbus_message (cookie, user_to_auth, pidfd))
+     {
+ #ifdef PAH_DEBUG
+       fprintf (stderr, "polkit-agent-helper-1: error sending D-Bus message to PolicyKit daemon\n");
+diff --git a/src/polkitagent/polkitagenthelper-shadow.c b/src/polkitagent/polkitagenthelper-shadow.c
+index e194b99..a3a494f 100644
+--- a/src/polkitagent/polkitagenthelper-shadow.c
++++ b/src/polkitagent/polkitagenthelper-shadow.c
+@@ -147,7 +147,7 @@ main (int argc, char *argv[])
+   /* now send a D-Bus message to the PolicyKit daemon that
+    * includes a) the cookie; and b) the user we authenticated
+    */
+-  if (!send_dbus_message (cookie, user_to_auth, -1, -1))
++  if (!send_dbus_message (cookie, user_to_auth, -1))
+     {
+ #ifdef PAH_DEBUG
+       fprintf (stderr, "polkit-agent-helper-1: error sending D-Bus message to PolicyKit daemon\n");
+diff --git a/src/polkitagent/polkitagenthelperprivate.c b/src/polkitagent/polkitagenthelperprivate.c
+index 35bca85..c904f36 100644
+--- a/src/polkitagent/polkitagenthelperprivate.c
++++ b/src/polkitagent/polkitagenthelperprivate.c
+@@ -78,7 +78,7 @@ read_cookie (int argc, char **argv)
+ }
+ 
+ gboolean
+-send_dbus_message (const char *cookie, const char *user, int pidfd, int uid)
++send_dbus_message (const char *cookie, const char *user, int pidfd)
+ {
+   PolkitAuthority *authority = NULL;
+   PolkitIdentity *identity = NULL;
+@@ -105,9 +105,10 @@ send_dbus_message (const char *cookie, const char *user, int pidfd, int uid)
+       goto out;
+     }
+ 
+-  if (pidfd >= 0 && uid >= 0)
++  if (pidfd >= 0)
+     {
+-      subject = polkit_unix_process_new_pidfd (pidfd, uid, NULL);
++      /* uid -1 lets PolkitUnixProcess derive the process owner from the pidfd */
++      subject = polkit_unix_process_new_pidfd (pidfd, -1, NULL);
+       ret = polkit_authority_authentication_agent_response_with_subject_sync (authority,
+                                                                               cookie,
+                                                                               identity,
+diff --git a/src/polkitagent/polkitagenthelperprivate.h b/src/polkitagent/polkitagenthelperprivate.h
+index 35f2744..35a9a6c 100644
+--- a/src/polkitagent/polkitagenthelperprivate.h
++++ b/src/polkitagent/polkitagenthelperprivate.h
+@@ -39,7 +39,7 @@ int _polkit_clearenv (void);
+ 
+ char *read_cookie (int argc, char **argv);
+ 
+-gboolean send_dbus_message (const char *cookie, const char *user, int pidfd, int uid);
++gboolean send_dbus_message (const char *cookie, const char *user, int pidfd);
+ 
+ void flush_and_wait (void);
+ 
