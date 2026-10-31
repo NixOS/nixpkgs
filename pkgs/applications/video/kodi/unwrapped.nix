@@ -68,7 +68,7 @@
   bzip2,
   zip,
   unzip,
-  mesa-demos,
+  mesa-utils,
   libcec,
   libcec_platform,
   dcadec,
@@ -340,7 +340,7 @@ stdenv.mkDerivation (
       bzip2
       zip
       unzip
-      mesa-demos
+      mesa-utils
       libcec
       libcec_platform
       dcadec
@@ -498,7 +498,7 @@ stdenv.mkDerivation (
             lib.makeBinPath (
               [
                 python3Packages.python
-                mesa-demos
+                mesa-utils
               ]
               ++ lib.optional x11Support xdpyinfo
               ++ lib.optional sambaSupport samba
