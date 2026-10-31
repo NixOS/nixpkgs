@@ -57,9 +57,14 @@ let
           src = fetchurl { inherit url hash; };
           passthru = {
             updateScript = extensionUpdateScript { inherit pname; };
-            tests.azWithExtension = testAzWithExts [ self ];
           }
-          // args.passthru or { };
+          // args.passthru or { }
+          // {
+            tests = {
+              azWithExtension = testAzWithExts [ self ];
+            }
+            // args.passthru.tests or { };
+          };
           meta = {
             inherit description;
             inherit (azure-cli.meta) platforms maintainers;
@@ -115,7 +120,7 @@ let
     name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
   ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
   extensions-manual = callPackages ./extensions-manual.nix {
-    inherit mkAzExtension;
+    inherit mkAzExtension python3;
     python3Packages = python3.pkgs;
   };
   extensions = extensions-generated // extensions-manual;
