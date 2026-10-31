@@ -6,11 +6,11 @@
 
 applyPatches (final: {
   pname = "ceph-src";
-  version = "20.2.4";
+  version = "21.2.0";
 
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
-    hash = "sha256-XzRWkkGiiQRGuTHwbNhE+TvKZl90CiBjFCnS1Vsemzc=";
+    hash = "sha256-gtPAJgkWG94TDHxBwzxfiztZGFzep355KbveLLxm44U=";
   };
 
   patches = [
@@ -31,24 +31,13 @@ applyPatches (final: {
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
-    # fixes compilation on the gcc version present in nixos-unstable
-    # See: https://github.com/ceph/ceph/pull/67081
-    (fetchpatch2 {
-      name = "ceph-20.2.1-backport-gcc16-fixes.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/ceph-20.2.1-backport-gcc16-fixes.patch?h=ceph&id=b158fda8a3e3834a7aa362954dc17077dc46f609";
-      hash = "sha256-uLl20Sdd+JJFWqbMHIZRt53OpGRXlTaceajgpzYCaTM=";
-      excludes = [
-        # these cause CMake dependency cycles
-        "src/test/CMakeLists.txt"
-        "src/rgw/CMakeLists.txt"
-      ];
-    })
-    # fixes compilation on the gcc version present in nixos-unstable
-    # See: https://github.com/ceph/ceph/pull/69166
-    (fetchpatch2 {
-      name = "ceph-20.2.4-radosgw-gcc16-fixes.patch";
-      url = "https://github.com/ceph/ceph/pull/69166.patch?full_index=1";
-      hash = "sha256-yaqOrmw0ZItT2efzNfpDqjTRsva8VN0R+TLqbTX0snc=";
-    })
+    # allows bin/dbstore-bin to compile without linker errors due to missing expat
+    ./patches/0003-dbstore-expat.patch
+    # `./autogen.sh` of the vendored qatlib and QATzip fails with `exec format error`
+    # because the shebang is below the license header.
+    # Fixed upstream; remove when this patch fails to apply.
+    # See: https://tracker.ceph.com/issues/81385
+    # See: https://github.com/ceph/ceph/pull/73061
+    ./patches/0004-qat-autogen-shebang.patch
   ];
 })

@@ -1,0 +1,65 @@
+From aafe4fba5cd62d7075fd170e1319258fc3fa07ab Mon Sep 17 00:00:00 2001
+From: benaryorg <binary@benary.org>
+Date: Wed, 28 Oct 2026 20:44:38 +0000
+Subject: [PATCH] rgw: allow dbstore-bin to link expat
+
+```text
+[ 98%] Linking CXX executable ../../../../bin/dbstore-bin
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: ../../../../lib/librgw_common.a(rgw_xml.cc.o): in function `RGWXMLParser::~RGWXMLParser()':
+rgw_xml.cc:(.text+0xd01): undefined reference to `XML_ParserFree'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: ../../../../lib/librgw_common.a(rgw_xml.cc.o): in function `RGWXMLParser::RGWXMLParser()':
+rgw_xml.cc:(.text+0x3790): undefined reference to `XML_ParserCreate'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: ../../../../lib/librgw_common.a(rgw_xml.cc.o): in function `RGWXMLParser::init()':
+rgw_xml.cc:(.text+0x37f1): undefined reference to `XML_SetElementHandler'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: rgw_xml.cc:(.text+0x3804): undefined reference to `XML_SetCharacterDataHandler'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: rgw_xml.cc:(.text+0x3813): undefined reference to `XML_SetUserData'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: ../../../../lib/librgw_common.a(rgw_xml.cc.o): in function `RGWXMLParser::parse(char const*, int, int)':
+rgw_xml.cc:(.text+0x38e1): undefined reference to `XML_Parse'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: rgw_xml.cc:(.text+0x3918): undefined reference to `XML_GetErrorCode'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: rgw_xml.cc:(.text+0x391f): undefined reference to `XML_ErrorString'
+/nix/store/y6ri2r743ckh5kk160r461czl9n2f2wf-binutils-2.46/bin/ld.bfd: rgw_xml.cc:(.text+0x392e): undefined reference to `XML_GetCurrentLineNumber'
+collect2: error: ld returned 1 exit status
+make[2]: *** [src/rgw/driver/dbstore/CMakeFiles/dbstore-bin.dir/build.make:162: bin/dbstore-bin] Error 1
+make[1]: *** [CMakeFiles/Makefile2:12054: src/rgw/driver/dbstore/CMakeFiles/dbstore-bin.dir/all] Error 2
+```
+
+Signed-off-by: benaryorg <binary@benary.org>
+---
+ src/rgw/CMakeLists.txt                | 1 +
+ src/rgw/driver/dbstore/CMakeLists.txt | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/rgw/CMakeLists.txt b/src/rgw/CMakeLists.txt
+index aebcc19d56ae1aa1a3e20edaf82c1ad6c08d508a..e64b14440c16fec945e46b1c113bf0710ad99bc6 100644
+--- a/src/rgw/CMakeLists.txt
++++ b/src/rgw/CMakeLists.txt
+@@ -317,6 +317,7 @@ target_link_libraries(rgw_common
+     OATH::OATH
+     dmclock::dmclock
+     ${CURL_LIBRARIES}
++    expat
+     ${EXPAT_LIBRARIES}
+     ${ARROW_LIBRARIES}
+     ${ARROW_FLIGHT_LIBRARIES}
+diff --git a/src/rgw/driver/dbstore/CMakeLists.txt b/src/rgw/driver/dbstore/CMakeLists.txt
+index 0226c3afb02039b4bdf9bd338908d72fe571449e..d6bb6bab75f4f82a1b5c370404442d50c1839412 100644
+--- a/src/rgw/driver/dbstore/CMakeLists.txt
++++ b/src/rgw/driver/dbstore/CMakeLists.txt
+@@ -37,7 +37,13 @@ if(WITH_JAEGER)
+   list(APPEND link_targets jaeger_base)
+ endif()
+ list(APPEND link_targets rgw_common)
+-target_link_libraries(dbstore_lib PUBLIC ${link_targets})
++find_package(EXPAT REQUIRED)
++target_link_libraries(dbstore_lib
++	PRIVATE
++	${EXPAT_LIBRARIES}
++	PUBLIC
++	${link_targets}
++)
+ 
+ set (CMAKE_LINK_LIBRARIES ${CMAKE_LINK_LIBRARIES} dbstore_lib)
+ 
+-- 
+2.56.0
+
