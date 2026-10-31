@@ -73,6 +73,37 @@
 
       build.inhibitSwitch = pkgs.writers.writeJSON "switch-inhibitors" config.system.switch.inhibitors;
 
+      # with binfmt emulation, a foreign system activates fine and then
+      # installs a bootloader the machine cannot start
+      preSwitchChecks.cpuFamily =
+        let
+          inherit (pkgs.stdenv.hostPlatform) system;
+          inherit (pkgs.stdenv.hostPlatform.parsed.cpu) family;
+          sameFamily = lib.attrNames (
+            lib.filterAttrs (_: cpu: cpu.family == family) lib.systems.parse.cpuTypes
+          );
+        in
+        ''
+          booted="/run/booted-system/system"
+          # absent under nixos-enter, e.g. during nixos-install
+          if [ ! -e "$booted" ]; then
+            exit
+          fi
+
+          booted_system="$(< "$booted")"
+          case "''${booted_system%%-*}" in
+            ${lib.concatStringsSep "|" sameFamily}) ;;
+            *)
+              echo "This configuration is for ${system}, but the running system is $booted_system."
+              echo "Activating it would install a bootloader this machine cannot start."
+              echo
+              echo "If you really want to switch into this configuration, then"
+              echo "you can set NIXOS_NO_CHECK=1 to ignore pre-switch checks."
+              exit 1
+              ;;
+          esac
+        '';
+
       preSwitchChecks.switchInhibitors =
         let
           jq = lib.getExe pkgs.jq;
