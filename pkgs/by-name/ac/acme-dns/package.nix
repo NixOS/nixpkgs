@@ -33,7 +33,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
     mainProgram = "acme-dns";
-    # Tests time out on darwin.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -47,8 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
       veprbl
     ];
     platforms = lib.platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "motion";
   };
 })

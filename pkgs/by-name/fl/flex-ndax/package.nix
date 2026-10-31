@@ -25,7 +25,6 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/kc2g-flex-tools/nDAX";
     description = "FlexRadio digital audio transport (DAX) connector for PulseAudio";
     changelog = "https://github.com/kc2g-flex-tools/nDAX/releases/tag/v${finalAttrs.version}";

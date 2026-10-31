@@ -42,8 +42,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "hof";
-    # Broken on darwin for Go toolchain > 1.22, with error:
-    # 'panic: open /etc/protocols: operation not permitted'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -43,7 +43,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/dim-an/cod/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "cod";
   };
 })

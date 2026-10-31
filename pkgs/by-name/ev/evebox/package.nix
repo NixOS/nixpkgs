@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/jasonish/evebox/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

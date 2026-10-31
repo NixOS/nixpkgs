@@ -48,7 +48,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://coan2.sourceforge.net/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    # The last successful Darwin Hydra build was in 2024
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

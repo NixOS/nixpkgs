@@ -75,7 +75,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     inherit (jdk.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin
   };
 }
 # TODO: Processing app
