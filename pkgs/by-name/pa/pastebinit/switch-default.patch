@@ -1,0 +1,22 @@
+commit c293318b5102225cba39adf8fc166b762c5ad564
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Tue Oct 20 12:30:32 2026 +0100
+
+    switch default from dpa.st to paste.opendev.org
+    
+    Since dpa.st currently doesn't work
+    https://github.com/pastebinit/pastebinit/issues/16
+
+diff --git a/pastebinit b/pastebinit
+index 90575d8..2cebeb7 100755
+--- a/pastebinit
++++ b/pastebinit
+@@ -42,7 +42,7 @@ except ImportError:
+ version = "1.8.0"
+ 
+ # Set the default pastebin
+-defaultPB = "bpa.st"
++defaultPB = "paste.opendev.org"
+ 
+ # Now try to override it with a distributor pastebin
+ try:
