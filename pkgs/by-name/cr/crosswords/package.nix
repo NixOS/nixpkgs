@@ -14,6 +14,7 @@
   pkg-config,
   shared-mime-info,
   wrapGAppsHook4,
+  _experimental-update-script-combinators,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "Exec=crosswords-thumbnailer" "Exec=$out/bin/crosswords-thumbnailer"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "libipuz";
+    })
+    (nix-update-script {
+      attrPath = "crosswords";
+    })
+  ];
 
   meta = {
     description = "Crossword player and editor for GNOME";
