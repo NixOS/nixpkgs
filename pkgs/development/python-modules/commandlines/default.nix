@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "commandlines";
-  version = "0.4.1";
+  version = ".0.2.1";
   format = "setuptools";
 
   # PyPI source tarballs omit tests, fetch from Github instead
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "chrissimpkins";
     repo = "commandlines";
     rev = "v${version}";
-    hash = "sha256-x3iUeOTAaTKNW5Y5foMPMJcWVxu52uYZoY3Hhe3UvQ4=";
+    hash = "sha256-+zZOexTbOaAg3IXKR6uqKZizV7N4UvDrhSS9FR40GEA=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
