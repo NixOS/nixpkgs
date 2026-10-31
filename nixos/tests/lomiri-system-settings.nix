@@ -52,11 +52,11 @@
           type = "internal";
           element = "discoverable|None detected";
         }
-        # only text we can really look for with VPN is on a button, OCR on CI struggles with it
         {
           name = "vpn";
           type = "internal";
           element = "Add|Manual|Configuration";
+          # only text we can really look for with VPN is on a button, OCR on CI struggles with it
           skipOCR = true;
         }
 
@@ -64,66 +64,68 @@
         {
           name = "appearance";
           type = "internal";
-          element = "Background image|blur effects";
+          element = "Global theme|dark mode|Visual effects|blur effects|Background image";
         }
         {
           name = "desktop";
           type = "internal";
-          element = "workspaces|Icon size";
+          element = "workspaces|Icon size|Side stage|Indicator menu";
         }
         {
           name = "sound";
           type = "internal";
-          element = "Silent Mode|Message sound";
+          element = "Silent Mode|Message sound|Vibrate|Calendar reminder sound|Calendar sound";
         }
         {
           name = "language";
           type = "internal";
-          element = "Display language|External keyboard";
+          element = "Display language|External keyboard|Spell checking|Auto correction|Word suggestions";
         }
         {
           name = "notification";
           type = "internal";
-          element = "Apps that notify";
+          element = "alert you|notification bubbles|Apps that notify";
         }
         {
           name = "gestures";
           type = "internal";
-          element = "Edge drag";
+          element = "Edge drag|Screenshot editor|editing screenshots";
         }
 
         # System
         {
           name = "printing";
           type = "internal";
-          element = "Configured printers|no printers configured";
-        }
-        {
-          name = "mouse";
-          type = "internal";
-          element = "Cursor speed|Wheel scrolling speed";
+          element = "Configured printers|pdf";
         }
         {
           name = "timedate";
           type = "internal";
-          element = "Time zone|Set the time and date";
+          element = "Set the time and date|Time zone|week numbers";
+        }
+        {
+          name = "mouse";
+          type = "internal";
+          element = "Cursor speed|Wheel scrolling speed|Primary button";
         }
         {
           name = "security-privacy";
           type = "internal";
-          element = "Locking|unlocking|permissions";
+          element = "Locking|unlocking|Location|permissions";
         }
       ];
     in
     ''
+      import datetime
+
       machine.wait_for_x()
 
       with subtest("lomiri system settings launches"):
           machine.succeed("lomiri-system-settings >&2 &")
           machine.wait_for_console_text("qml: Plugin about does not exist")
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
           machine.send_key("alt-f10")
-          machine.sleep(5)
+          machine.sleep(datetime.timedelta(seconds=5))
           machine.wait_for_text("System Settings")
           machine.screenshot("lss_open")
 
@@ -153,9 +155,9 @@
       with subtest("lomiri system settings localisation works"):
           machine.succeed("env LANG=de_DE.UTF-8 lomiri-system-settings >&2 &")
           machine.wait_for_console_text("qml: Plugin about does not exist")
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
           machine.send_key("alt-f10")
-          machine.sleep(5)
+          machine.sleep(datetime.timedelta(seconds=5))
           machine.wait_for_text("Systemeinstellungen")
           machine.screenshot("lss_localised_open")
 
