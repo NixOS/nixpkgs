@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/jorgerojas26/lazysql";
     changelog = "https://github.com/jorgerojas26/lazysql/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "lazysql";
   };
 })
