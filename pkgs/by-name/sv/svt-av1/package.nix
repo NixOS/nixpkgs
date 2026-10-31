@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DSVT_AV1_LTO=ON"
   ];
@@ -40,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       ffmpeg = ffmpeg.override { withSvtav1 = true; };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
