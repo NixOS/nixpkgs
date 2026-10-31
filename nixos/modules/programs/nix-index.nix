@@ -24,6 +24,10 @@ in
     enableFishIntegration = mkEnableOption "Fish integration" // {
       default = true;
     };
+
+    enableNushellIntegration = mkEnableOption "Nushell integration" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -66,5 +70,9 @@ in
             ${wrapper} $argv
         end
       '';
+
+    programs.nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+      $env.config.hooks.command_not_found = source ${cfg.package}/etc/profile.d/command-not-found.nu
+    '';
   };
 }
