@@ -75,6 +75,10 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    substituteInPlace src/com/eteks/sweethome3d/SweetHome3DBootstrap.java \
+      --replace-fail '"com.eteks.sweethome3d",' \
+        '"com.eteks.sweethome3d", "com.sm.sweethome3d",'
+
     addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
     autoPatchelf lib
 
@@ -124,7 +128,7 @@ stdenv.mkDerivation {
     makeWrapper ${jdk}/bin/java $out/bin/${meta.mainProgram} \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/SweetHome3D-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      --add-flags "-Dsun.java2d.opengl=true -Dcom.eteks.sweethome3d.j3d.useOffScreen3DView=true -jar $out/share/java/SweetHome3D-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
 
 
     # remember the store paths found inside the .jar libraries. note that
