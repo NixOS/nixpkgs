@@ -1786,6 +1786,7 @@ mapAliases {
   matrix-gtk-theme = throw "'matrix-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   matrix-synapse-tools.rust-synapse-compress-state = throw "'matrix-synapse-tools.rust-synapse-compress-state' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   matrix-synapse-tools.synadm = throw "'matrix-synapse-tools.synadm' has been renamed to/replaced by 'synadm'"; # Converted to throw 2025-10-27
+  matter-compiler = throw "'matter-compiler' has been removed as it was archived upstream in 2019."; # Added 2026-10-29
   mbedtls_2 = throw "'mbedtls_2' has been removed as it reached its end of life. Migrate to 'mbedtls'.";
   mcomix3 = throw "'mcomix3' has been renamed to/replaced by 'mcomix'"; # Converted to throw 2025-10-27
   mcphost = throw "'mcphost' has been removed as it was marked discontinued upstream"; # Added 2026-07-08
