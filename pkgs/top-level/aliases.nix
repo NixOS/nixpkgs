@@ -2466,6 +2466,7 @@ mapAliases {
   signal-desktop-bin = throw "'signal-desktop-bin' has been replaced by 'signal-desktop' which is built from source"; # Added 2026-03-02
   signal-desktop-source = throw "'signal-desktop-source' has been renamed to/replaced by 'signal-desktop'"; # Converted to throw 2025-10-27
   silver-searcher = throw "'silver-searcher' has been removed as it has seen no development since 2020 and is stuck on the obsolete pcre library. Consider using 'silver-searcher-ng', which is a fork with support for PCRE2.";
+  silverbullet-cli = lib.warnOnInstantiate "'silverbullet-cli' has been merged with 'silverbullet'. This package is now redundant." silverbullet; # Added 2026-10-28
   simple64-netplay-server = gopher64-netplay-server; # Added 2026-08-01
   simple-mtpfs = throw "'simple-mtpfs has been removed because it is unmaintained upstream.'"; # Added 2026-07-30
   simpleBluez = warnAlias "'simpleBluez' has been renamed to 'simplebluez'" simplebluez; # Added 2026-02-18
