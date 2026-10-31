@@ -32,6 +32,12 @@ Open UDP port:
 Show all firewall rules:
   nixos-firewall-tool show
 
+Close TCP port:
+  nixos-firewall-tool close tcp 8888
+
+Close UDP port:
+  nixos-firewall-tool close udp 51820
+
 Reset firewall configuration to system settings:
   nixos-firewall-tool reset"
 }
@@ -70,6 +76,24 @@ case $1 in
         ;;
     esac
   ;;
+  "close")
+    if [[ -z ${2+x} ]] || [[ -z ${3+x} ]]; then
+      show_help
+      exit 1
+    fi
+
+    protocol="$2"
+    port="$3"
+
+    case $BACKEND in
+      iptables)
+        ip46tables -D nixos-fw -p "$protocol" --dport "$port" -j nixos-fw-accept
+        ;;
+      nftables)
+        nft delete element inet nixos-fw "temp-ports" "{ $protocol . $port }"
+        ;;
+    esac
+  ;;
   "reset")
     case $BACKEND in
       iptables)
@@ -89,3 +113,4 @@ case $1 in
     exit 1
   ;;
 esac
+
