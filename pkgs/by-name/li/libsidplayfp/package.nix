@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   makeFontsConf,
   gitUpdater,
   testers,
@@ -15,19 +14,20 @@
   libusb1,
   perl,
   pkg-config,
+  writableTmpDirAsHomeHook,
   xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-c2LzjFwPdk/Di9Eh6E5sBwup+DD5IPXRJYjlnSBBNJU=";
+    hash = "sha256-j5Cm/tBjzcN/NiRuh02xLcwjbO3ER8Rvd4leQA8xIEI=";
   };
 
   outputs = [
@@ -38,19 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
-
-  patches = [
-    (fetchpatch {
-      name = "0001-libsidplayfp-CVE-2026-111148.patch";
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/20413d5df77bf74bbeed50b10fce19826c9d4b00.patch";
-      # Was fixed after v5 SID support was added, which can have a non-zero trailer length. For SIDs before that, always zero.
-      postFetch = ''
-        substituteInPlace $out \
-          --replace-fail '(m_fileOffset + m_trailerLen)' 'm_fileOffset'
-      '';
-      hash = "sha256-dJ3Umk1Lvrd97Ra+iak7ReRZSdRHO4iGC69B8J50IMc=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -65,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals docSupport [
     doxygen
     graphviz
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -80,11 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-
-  preBuild = ''
-    # Reduce noise from fontconfig during doc building
-    export XDG_CACHE_HOME=$TMPDIR
-  '';
 
   buildFlags = [ "all" ] ++ lib.optionals docSupport [ "doc" ];
 
