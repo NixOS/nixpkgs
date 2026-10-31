@@ -3525,6 +3525,11 @@ with pkgs;
 
   hscolour = haskell.lib.compose.justStaticExecutables haskellPackages.hscolour;
 
+  cabal-gild = (haskell.lib.compose.justStaticExecutables haskellPackages.cabal-gild).overrideAttrs {
+    strictDeps = true;
+    __structuredAttrs = true;
+  };
+
   cabal-install = haskell.lib.compose.justStaticExecutables haskellPackages.cabal-install;
 
   stack =

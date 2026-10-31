@@ -525,6 +525,8 @@ package-maintainers:
     - rest-rewrite
   terlar:
     - nix-diff
+  tfausak:
+    - cabal-gild
   thielema:
     - accelerate-arithmetic
     - accelerate-fftw
