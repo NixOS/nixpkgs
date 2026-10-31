@@ -844,19 +844,6 @@ let
         ) configs;
         configs;
 
-      # an attrset 'name' => list of submodules that define ‘name’.
-      pushedDownDefinitionsByName = zipAttrsWith (n: concatLists) (
-        map (
-          module:
-          mapAttrs (
-            n: value:
-            map (config: {
-              inherit (module) file;
-              inherit config;
-            }) (pushDownProperties value)
-          ) module.config
-        ) checkedConfigs
-      );
       # extract the definitions for each loc
       rawDefinitionsByName = zipAttrs (
         map (
@@ -962,7 +949,7 @@ let
               (head optionDecls).options.type.description or "<no description>"
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
-          mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ])
+          mergeModules' loc decls (pushDownDefinitions defns')
       ) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
@@ -1027,6 +1014,15 @@ let
     in
     throw (concatStringsSep "\n\n" paragraphs);
 
+  # pushDownProperties for a list of definitions, keeping the file of each.
+  pushDownDefinitions = concatMap (
+    def:
+    map (config: {
+      inherit (def) file;
+      inherit config;
+    }) (pushDownProperties def.value)
+  );
+
   /**
     Merge multiple option declarations into a single declaration.  In
     general, there should be only one declaration of each option.
@@ -1051,73 +1047,84 @@ let
     : 2\. Function argument
   */
   mergeOptionDecls =
-    loc:
-    foldl'
-      (
-        res: opt:
-        let
-          typeSet =
-            if res ? type && opt.options ? type then
-              let
-                mergedType = res.type.typeMerge opt.options.type.functor;
-              in
-              if mergedType != null then
-                {
-                  type = mergedType;
-                }
-              else
-                # Keep in sync with the same error below!
-                throw
-                  "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
-            else
-              { };
-
-          bothHave = k: res ? ${k} && opt.options ? ${k};
-        in
-        if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
-          # Keep in sync with the same error above!
-          throw
-            "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
-        else
-          let
-            getSubModules = opt.options.type.getSubModules or null;
-            submodules =
-              if getSubModules != null then
-                map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
-              else
-                res.options;
-          in
-          opt.options
-          // res
-          // {
-            declarations = res.declarations ++ [ opt._file ];
-            # In the case of modules that are generated dynamically, we won't
-            # have exact declaration lines; fall back to just the file being
-            # evaluated.
-            declarationPositions =
-              res.declarationPositions
-              ++ (
-                if opt.pos != null then
-                  [ opt.pos ]
-                else
-                  [
-                    {
-                      file = opt._file;
-                      line = null;
-                      column = null;
-                    }
-                  ]
-              );
-            options = submodules;
-          }
-          // typeSet
-      )
-      {
+    loc: opts:
+    if length opts == 1 then
+      # Same result as the fold below, but cheaper. Most options are declared once.
+      let
+        opt = head opts;
+      in
+      opt.options
+      // {
         inherit loc;
-        declarations = [ ];
-        declarationPositions = [ ];
-        options = [ ];
+        declarations = [ opt._file ];
+        declarationPositions = [ (declarationPosition opt) ];
+        options = declaredSubmodules opt;
+      }
+    else
+      foldl'
+        (
+          res: opt:
+          let
+            typeSet =
+              if res ? type && opt.options ? type then
+                let
+                  mergedType = res.type.typeMerge opt.options.type.functor;
+                in
+                if mergedType != null then
+                  {
+                    type = mergedType;
+                  }
+                else
+                  # Keep in sync with the same error below!
+                  throw
+                    "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+              else
+                { };
+
+            bothHave = k: res ? ${k} && opt.options ? ${k};
+          in
+          if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
+            # Keep in sync with the same error above!
+            throw
+              "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+          else
+            opt.options
+            // res
+            // {
+              declarations = res.declarations ++ [ opt._file ];
+              declarationPositions = res.declarationPositions ++ [ (declarationPosition opt) ];
+              options = declaredSubmodules opt ++ res.options;
+            }
+            // typeSet
+        )
+        {
+          inherit loc;
+          declarations = [ ];
+          declarationPositions = [ ];
+          options = [ ];
+        }
+        opts;
+
+  # In the case of modules that are generated dynamically, we won't
+  # have exact declaration lines; fall back to just the file being
+  # evaluated.
+  declarationPosition =
+    opt:
+    if opt.pos != null then
+      opt.pos
+    else
+      {
+        file = opt._file;
+        line = null;
+        column = null;
       };
+
+  declaredSubmodules =
+    opt:
+    let
+      getSubModules = opt.options.type.getSubModules or null;
+    in
+    if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules else [ ];
 
   /**
     Merge all the definitions of an option to produce the final
