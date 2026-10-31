@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   nix-update-script,
 }:
@@ -27,13 +28,30 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "EARCUT_BUILD_VIZ" false)
   ];
 
-  # Upstream's own CMakeLists.txt leaves its test/bench/viz helper libraries
-  # (fixtures/comparison/libtess2) unconditionally defined even with the
-  # above options off, which would otherwise pull them (and libtess2's own
-  # sources) into the default "all" target. The real earcut_hpp target is a
-  # plain INTERFACE library - nothing to compile - so skip building "all"
-  # entirely; install (which only needs the configure step to have produced
-  # the export files) is all that's needed.
+  patches = [
+    # Guards the test/bench/libtess2/common helper targets behind
+    # EARCUT_BUILD_*, which upstream's own CMakeLists.txt previously left
+    # unconditionally defined even with those options off. Merged upstream:
+    # https://github.com/mapbox/earcut.hpp/pull/139
+    #
+    # Our pinned rev predates that fix by 11 CMakeLists.txt-touching commits
+    # (unrelated FetchContent/fixtures rework in between), so this fetches
+    # the full CMakeLists.txt-only diff across that range instead of just
+    # the one commit - the result is byte-identical to upstream master's
+    # current CMakeLists.txt. Scoped to CMakeLists.txt only: none of the
+    # other files in that range (algorithm, test fixtures) are pulled in.
+    (fetchpatch2 {
+      name = "guard-test-bench-viz-helper-targets.patch";
+      url = "https://github.com/mapbox/earcut.hpp/compare/f36ced7e50254738c4e5af1a239f5fb7b1094007...2fbafada15dbe5350c606426e17111b91a964e55.diff";
+      includes = [ "CMakeLists.txt" ];
+      hash = "sha256-UIlHnJfY5bJRwxmwnwauIRQEkVpeYVyY8gdBoIIh9j4=";
+    })
+  ];
+
+  # The real earcut_hpp target is a plain INTERFACE library - nothing to
+  # compile - so skip building "all" entirely; install (which only needs
+  # the configure step to have produced the export files) is all that's
+  # needed.
   dontBuild = true;
 
   nativeBuildInputs = [ cmake ];
