@@ -5807,6 +5807,8 @@ self: super: with self; {
 
   executorch = callPackage ../development/python-modules/executorch { };
 
+  exhale = callPackage ../development/python-modules/exhale { };
+
   exif = callPackage ../development/python-modules/exif { };
 
   exifread = callPackage ../development/python-modules/exifread { };
