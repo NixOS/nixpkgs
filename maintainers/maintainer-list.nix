@@ -22806,6 +22806,11 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  r-xyz = {
+    github = "r-xyz";
+    githubId = 100710244;
+    name = "r-xyz";
+  };
   r17x = {
     email = "hi@rin.rocks";
     github = "r17x";
