@@ -42,7 +42,6 @@ in
         RuntimeDirectory = "dump1090-fa";
         WorkingDirectory = "%t/dump1090-fa";
         RuntimeDirectoryMode = 755;
-        PrivateNetwork = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
