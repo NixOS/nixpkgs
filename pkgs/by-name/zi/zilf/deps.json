@@ -1,0 +1,92 @@
+[
+  {
+    "pname": "FastHashSet",
+    "version": "0.1.0-alpha.2",
+    "hash": "sha256-exrgwuRQrNKQbDJOINiIJAnOPllpV2jkwSDbTNjADUM="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.3.4",
+    "hash": "sha256-qDzTfZBSCvAUu9gzq2k+LOvh6/eRvJ9++VCNck/ZpnE="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "4.9.2",
+    "hash": "sha256-QU/nyiJWpdPQGHBdaOEVc+AghnGHcKBFBX0oyhRZ9CQ="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "4.9.2",
+    "hash": "sha256-j06Q4A9E65075SBXdXVCMRgeLxA63Rv1vxarydmmVAA="
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
+  },
+  {
+    "pname": "MSBuildTasks",
+    "version": "1.5.0.235",
+    "hash": "sha256-l3g1t46l3d00dEgqwgNLcY/EK0wcPnRByvltODULtBs="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
+  },
+  {
+    "pname": "ReadLine",
+    "version": "2.0.1",
+    "hash": "sha256-MCoW1OsLkjuX/9EKADvsJxTjh6Mf52YjcXOmBH1Uh60="
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.5.1",
+    "hash": "sha256-wws90sfi9M7kuCPWkv1CEYMJtCqx9QB/kj0ymlsNaxI="
+  },
+  {
+    "pname": "System.Collections.Immutable",
+    "version": "8.0.0",
+    "hash": "sha256-F7OVjKNwpqbUh8lTidbqJWYi476nsq9n+6k0+QVRo3w="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.0-rc.2.25502.107",
+    "hash": "sha256-aa8dUxLHZxU4bDs1NJ70VhlvwmkxiP/yPHAXaSnT4Uw="
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.5",
+    "hash": "sha256-EPQ9o1Kin7KzGI5O3U3PUQAZTItSbk9h/i4rViN3WiI="
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.4.0",
+    "hash": "sha256-auXQK2flL/JpnB/rEcAcUm4vYMCYMEMiWOCAlIaqu2U="
+  },
+  {
+    "pname": "System.Reflection.Metadata",
+    "version": "8.0.0",
+    "hash": "sha256-dQGC30JauIDWNWXMrSNOJncVa1umR1sijazYwUDdSIE="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.3",
+    "hash": "sha256-lnZMUqRO4RYRUeSO8HSJ9yBHqFHLVbmenwHWkIU20ak="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "6.0.0",
+    "hash": "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I="
+  },
+  {
+    "pname": "System.Text.Encoding.CodePages",
+    "version": "8.0.0",
+    "hash": "sha256-fjCLQc1PRW0Ix5IZldg0XKv+J1DqPSfu9pjMyNBp7dE="
+  },
+  {
+    "pname": "System.Threading.Tasks.Extensions",
+    "version": "4.5.4",
+    "hash": "sha256-owSpY8wHlsUXn5xrfYAiu847L6fAKethlvYx97Ri1ng="
+  }
+]
