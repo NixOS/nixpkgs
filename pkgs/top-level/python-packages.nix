@@ -12846,6 +12846,10 @@ self: super: with self; {
 
   opentelemetry-distro = callPackage ../development/python-modules/opentelemetry-distro { };
 
+  opentelemetry-exporter-http-transport =
+    callPackage ../development/python-modules/opentelemetry-exporter-http-transport
+      { };
+
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
