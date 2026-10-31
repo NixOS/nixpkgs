@@ -23,6 +23,24 @@ with lib;
 
       package = mkPackageOption pkgs "xray" { };
 
+      settingsExtension = mkOption {
+        type = types.enum [
+          "json"
+          "yaml"
+          "toml"
+        ];
+        default = "json";
+        description = ''
+          The config file format, and therefore the parser xray uses to read it.
+
+          This controls how `settings` is serialised. When `settingsFile` is
+          used instead, its contents must be written in this format, as xray
+          selects the parser from the config file extension.
+
+          Note that TOML cannot represent null values.
+        '';
+      };
+
       settingsFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -68,17 +86,16 @@ with lib;
   config =
     let
       cfg = config.services.xray;
-      settingsFile =
-        if cfg.settingsFile != null then
-          cfg.settingsFile
-        else
-          pkgs.writeTextFile {
-            name = "xray.json";
-            text = builtins.toJSON cfg.settings;
-            checkPhase = ''
-              ${cfg.package}/bin/xray -test -config $out
-            '';
-          };
+      extension = cfg.settingsExtension;
+
+      settingsFormat = pkgs.formats.${extension} { };
+
+      generatedSettingsFile = pkgs.runCommandLocal "xray-config.${extension}" { } ''
+        ln -s ${settingsFormat.generate "xray.${extension}" cfg.settings} "$out"
+        ${cfg.package}/bin/xray -test -config "$out"
+      '';
+
+      settingsFile = if cfg.settingsFile != null then cfg.settingsFile else generatedSettingsFile;
 
     in
     mkIf cfg.enable {
@@ -94,9 +111,9 @@ with lib;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/xray -config \"\${CREDENTIALS_DIRECTORY}\"/config.json";
+          ExecStart = "${cfg.package}/bin/xray -config \"\${CREDENTIALS_DIRECTORY}\"/config.${extension}";
           DynamicUser = true;
-          LoadCredential = "config.json:${settingsFile}";
+          LoadCredential = "config.${extension}:${settingsFile}";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           NoNewPrivileges = true;
