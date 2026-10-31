@@ -9,6 +9,7 @@
   git,
   cmake,
   pkg-config,
+  brotli,
   zlib,
   icu,
   lttng-ust_2_12,
@@ -68,6 +69,7 @@ let
   runtimeDeps =
     hostPlatform:
     [
+      brotli
       zlib
       _icu
       openssl
@@ -232,6 +234,42 @@ stdenv.mkDerivation {
       src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
       --replace-fail '$(CrossCompileArch)-linux-' '$(CrossCompileArch)-unknown-linux-'
   ''
+  # use brotli from nixpkgs instead of the bundled copy (see also buildFlags)
+  + lib.optionalString hasRuntime (
+    ''
+      # make sure that the build cannot use the bundled copy
+      rm -r src/runtime/src/native/external/brotli
+    ''
+    + lib.optionalString (lib.versionOlder version "9") ''
+      substituteInPlace \
+        src/runtime/eng/SourceBuild.props \
+        --replace-fail \
+        '/p:ArcadeBuildFromSource=true</InnerBuildArgs>' \
+        '/p:ArcadeBuildFromSource=true --cmakeargs -DCLR_CMAKE_USE_SYSTEM_BROTLI=true</InnerBuildArgs>'
+    ''
+    + lib.optionalString (lib.versionAtLeast version "9" && lib.versionOlder version "10") ''
+      substituteInPlace \
+        src/runtime/eng/DotNetBuild.props \
+        --replace-fail \
+        "<InnerBuildArgs Condition=\"'\$(PortableBuild)' != 'true'\">\$(InnerBuildArgs) --cmakeargs -DCLR_CMAKE_USE_SYSTEM_BROTLI=true" \
+        "<InnerBuildArgs>\$(InnerBuildArgs) --cmakeargs -DCLR_CMAKE_USE_SYSTEM_BROTLI=true"
+
+      substituteInPlace \
+        src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+        --replace-fail \
+        "'\$(UseSystemBrotli)' != 'false' and Exists('\$(IlcSdkPath)nonportable.txt')" \
+        "'\$(UseSystemBrotli)' != 'false'"
+    ''
+    + lib.optionalString (lib.versionAtLeast version "9") ''
+      # apps that publish with NativeAOT link brotli from nixpkgs
+      substituteInPlace \
+        src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+        --replace-fail \
+        '<LinkerArg Include="-Wl,--as-needed"' \
+        '<LinkerArg Include="-L${lib.getLib brotli}/lib;-Wl,-rpath,${lib.getLib brotli}/lib" />
+        <LinkerArg Include="-Wl,--as-needed"'
+    ''
+  )
   + lib.optionalString (lib.versionAtLeast version "9" && hasRuntime) (
     ''
       # repro.csproj fails to restore due to missing freebsd packages
@@ -478,6 +516,10 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (lib.versionAtLeast version "9") [
     "--source-build"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "10" && hasRuntime) [
+    "--with-system-libs"
+    "brotli"
   ]
   # https://github.com/dotnet/source-build/issues/5521
   ++ lib.optionals (version == "11.0.0-preview.2") [
