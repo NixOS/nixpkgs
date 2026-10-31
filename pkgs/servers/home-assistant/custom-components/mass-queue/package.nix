@@ -9,13 +9,13 @@
 buildHomeAssistantComponent rec {
   owner = "droans";
   domain = "mass_queue";
-  version = "0.10.4";
+  version = "0.10.5-b.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "mass_queue";
     tag = "v${version}";
-    hash = "sha256-VLX32fDcqnwYqbcHUPNtfjPgw0grxNSbUjkMce4pKDA=";
+    hash = "sha256-DzvjtXr4SzmOBkCucEdgLK3NAueLm2BOnqG0FwFa8I0=";
   };
 
   dependencies = [
