@@ -11,7 +11,14 @@
 
 let
   lib = import ../../lib;
-  cudaLib = (import ../development/cuda-modules/_cuda).lib;
+  _cuda = import ../development/cuda-modules/_cuda;
+  cudaLib = _cuda.lib;
+
+  isBaselineJetsonCapability =
+    cudaCapabilityInfo:
+    cudaCapabilityInfo.isJetson
+    && !cudaCapabilityInfo.isArchitectureSpecific
+    && !cudaCapabilityInfo.isFamilySpecific;
 in
 
 {
@@ -21,6 +28,11 @@ in
     "aarch64-linux"
   ],
   variant ? "cuda",
+  # CUDA capabilities to build one at a time.
+  # The default is Jetson, because Jetson cannot be built with other capabilities.
+  extraCudaCapabilities ? lib.attrNames (
+    lib.filterAttrs (_: isBaselineJetsonCapability) _cuda.db.cudaCapabilityToInfo
+  ),
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
@@ -57,13 +69,26 @@ let
     mapTestOn
     packagePlatforms
     pkgs
+    pkgsFor
+    supportedMatches
     ;
+
+  # backendStdenv asserts that it can target the configured capabilities.
+  canTargetConfiguredCapabilities =
+    cudaPackages: (builtins.tryEval cudaPackages.backendStdenv).success;
 
   # Package sets to evaluate whole
   # Derivations from these package sets are selected based on the value
   # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
-  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
+  autoPackagePlatformsIn =
+    targetPkgs:
+    let
+      isCudaPackageSet = lib.strings.hasPrefix "cudaPackages";
+      autoPackageSets = builtins.filter (
+        pset: isCudaPackageSet pset && canTargetConfiguredCapabilities targetPkgs.${pset}
+      ) (builtins.attrNames targetPkgs);
+    in
+    lib.genAttrs autoPackageSets (pset: packagePlatforms targetPkgs.${pset});
 
   # Explicitly select additional packages to also evaluate
   # The desired platforms must be set explicitly here
@@ -171,9 +196,47 @@ let
       };
     };
 
-  # Explicitly specified platforms take precedence over the platforms
-  # automatically inferred in autoPackagePlatforms
-  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
-  jobs = mapTestOn allPackagePlatforms;
+  allPackagePlatformsIn =
+    targetPkgs: lib.recursiveUpdate (autoPackagePlatformsIn targetPkgs) explicitPackagePlatforms;
+
+  mergePackagePlatforms = lib.zipAttrsWith (
+    _: values:
+    if lib.all lib.isList values then
+      lib.unique (lib.concatLists values)
+    else
+      mergePackagePlatforms values
+  );
+
+  packagePlatformsFor =
+    cudaCapability:
+    let
+      pkgsForCapabilityOn =
+        system: (pkgsFor system).pkgsForCudaArch.${cudaLib.mkRealArchitecture cudaCapability};
+      canTargetCapabilityOn =
+        system: canTargetConfiguredCapabilities (pkgsForCapabilityOn system).cudaPackages;
+      packagePlatformsOn =
+        system:
+        lib.mapAttrsRecursive (
+          _: declaredPlatforms: lib.intersectLists (supportedMatches declaredPlatforms) [ system ]
+        ) (allPackagePlatformsIn (pkgsForCapabilityOn system));
+    in
+    mergePackagePlatforms (map packagePlatformsOn (lib.filter canTargetCapabilityOn supportedSystems));
+
+  extraCudaCapabilityPackagePlatforms =
+    let
+      hasPackages = _: packagePlatforms: packagePlatforms != { };
+      packagePlatformsByArchitecture = lib.genAttrs' extraCudaCapabilities (
+        cudaCapability:
+        lib.nameValuePair (cudaLib.mkRealArchitecture cudaCapability) (packagePlatformsFor cudaCapability)
+      );
+    in
+    lib.filterAttrs hasPackages packagePlatformsByArchitecture;
+
+  jobs = mapTestOn (
+    allPackagePlatformsIn pkgs
+    // lib.optionalAttrs (variant == "cuda") {
+      pkgsForCudaArch = extraCudaCapabilityPackagePlatforms;
+    }
+  );
 in
 jobs
