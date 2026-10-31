@@ -7966,10 +7966,6 @@ with pkgs;
 
   ### APPLICATIONS
 
-  _2bwm = callPackage ../applications/window-managers/2bwm {
-    patches = config."2bwm".patches or [ ];
-  };
-
   inherit (callPackage ../applications/office/activitywatch { })
     aw-qt
     aw-notify
