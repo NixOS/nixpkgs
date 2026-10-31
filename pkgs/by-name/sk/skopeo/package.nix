@@ -8,25 +8,23 @@
   btrfs-progs,
   pkg-config,
   go-md2man,
-  installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
   fuse-overlayfs,
   dockerTools,
   runCommand,
-  testers,
-  skopeo,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "skopeo";
   version = "1.24.1";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "podman-container-tools";
     repo = "skopeo";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jLKbo6+xgHaMkMimbGIni5iZcVyeMF8wHTI594UkHQI=";
   };
 
@@ -37,13 +35,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  doCheck = false;
-
   nativeBuildInputs = [
     pkg-config
     go-md2man
-    installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -74,7 +69,7 @@ buildGoModule rec {
     PREFIX=${placeholder "out"} make install-completions
   ''
   + ''
-    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
+    install -m644 ${finalAttrs.passthru.policy}/default-policy.json -Dt $out/etc/containers
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/skopeo \
@@ -84,20 +79,31 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    make test-unit-local
+    runHook postCheck
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     policy = runCommand "policy" { } ''
-      install ${src}/default-policy.json -Dt $out
+      install -m644 ${finalAttrs.src}/default-policy.json -Dt $out
     '';
     tests = {
-      version = testers.testVersion {
-        package = skopeo;
-      };
-      inherit (dockerTools.examples) testNixFromDockerHub;
+      testNixFromDockerHub =
+        (dockerTools.override {
+          skopeo = finalAttrs.finalPackage;
+        }).examples.testNixFromDockerHub;
     };
   };
 
   meta = {
-    changelog = "https://github.com/podman-container-tools/skopeo/releases/tag/${src.rev}";
+    changelog = "https://github.com/podman-container-tools/skopeo/releases/tag/${finalAttrs.src.tag}";
     description = "Command line utility for various operations on container images and image repositories";
     mainProgram = "skopeo";
     homepage = "https://github.com/podman-container-tools/skopeo";
@@ -109,4 +115,4 @@ buildGoModule rec {
     teams = [ lib.teams.podman ];
     license = lib.licenses.asl20;
   };
-}
+})
