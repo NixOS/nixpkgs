@@ -608,6 +608,11 @@ stdenv.mkDerivation (
               )
             )
           ]
+      ++ optionals stdenv.hostPlatform.is32bit [
+        # building some targets (*cough* RISC-V *cough*) OOMs on 32-bit
+        # so build a reduced set of things that is vaguely reasonable
+        (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "Native;AMDGPU;BPF;SPIRV;WebAssembly")
+      ]
       ++ devExtraCmakeFlags;
 
     postInstall = ''
