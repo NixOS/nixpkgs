@@ -55,7 +55,7 @@ maven.buildMavenPackage rec {
   postInstall = ''
     install -Dm444 src/deb/application-filius-project.xml $out/share/mime/packages/application-filius-project.xml
 
-    for size in {32,64,96}; do
+    for size in 32 64 96; do
       install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/apps/filius.png
       install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/mimetypes/filius.png
     done
