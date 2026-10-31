@@ -1169,6 +1169,12 @@
     github = "akotro";
     githubId = 20772540;
   };
+  akrine346b = {
+    email = "akrine346b";
+    github = "akrine346b";
+    githubId = 76834320;
+    name = "Light Theory";
+  };
   akru = {
     email = "mail@akru.me";
     github = "akru";
