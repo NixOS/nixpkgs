@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "50.2";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rhvc8c1Hy1DJ2EdleEYH+Bxy3xfdbmrZM/6hQXPSufQ=";
+    hash = "sha256-S4yvUn2F9+q8Y+vp0jIOBJBlPC4Ti4j79C5vQd0+RRw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       ;
-    hash = "sha256-6Fd6V0Ksl8jqoM1znyYI0Mve2QQU+JBf3yn2C2Bcda8=";
+    hash = "sha256-GvC5Jv5k/uicRkoYw/YuGwlLPcCiAL1ALTel2KObwL0=";
   };
 
   nativeBuildInputs = [
@@ -102,13 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     nautilus
   ];
 
-  mesonFlags =
-    lib.optionals (!withLibsecret) [
-      "-Dkeyring=disabled"
-    ]
-    ++ lib.optionals (!supportNautilus) [
-      "-Dnautilus=false"
-    ];
+  mesonFlags = [
+    (lib.mesonEnable "keyring" withLibsecret)
+    (lib.mesonBool "nautilus" supportNautilus)
+  ];
 
   # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -122,6 +119,20 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    appDir="$out/Applications/Papers.app/Contents"
+
+    mkdir -p "$appDir"/{MacOS,Resources}
+
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Info.plist" "$appDir/Info.plist"
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Papers.icns" "$appDir/Resources/Papers.icns"
+
+    substituteInPlace "$appDir/Info.plist" \
+      --replace-fail "<string>1.0</string>" "<string>${finalAttrs.version}</string>" \
+      --replace-fail "<string>1</string>" "<string>${finalAttrs.version}</string>"
+
+    ln -s "$out/bin/papers" "$appDir/MacOS/Papers"
   '';
 
   preFixup = ''
