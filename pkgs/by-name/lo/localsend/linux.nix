@@ -26,8 +26,6 @@
 flutter341.buildFlutterApplication (finalAttrs: {
   inherit pname version;
 
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "localsend";
     repo = "localsend";
