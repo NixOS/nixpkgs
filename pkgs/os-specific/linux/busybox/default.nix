@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib -L${musl.dev}/lib")
   '';
 
   makeFlags = [ "SKIP_STRIP=y" ];
