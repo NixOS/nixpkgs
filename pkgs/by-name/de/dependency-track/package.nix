@@ -1,146 +1,128 @@
 {
   lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  jre_headless,
-  protobuf_30,
-  xmlstarlet,
-  cyclonedx-cli,
-  makeWrapper,
   maven,
+  fetchFromGitHub,
+  jdk25_headless,
+  protobuf_36,
+  cyclonedx-cli,
+  jq,
+  writeShellApplication,
+  junixsocket-common,
+  junixsocket-native-common,
+  makeWrapper,
+  callPackage,
   nix-update-script,
   nixosTests,
 }:
+
 let
-  version = "4.14.5";
-
-  frontend = buildNpmPackage {
-    pname = "dependency-track-frontend";
-    inherit version;
-
-    src = fetchFromGitHub {
-      owner = "DependencyTrack";
-      repo = "frontend";
-      tag = version;
-      hash = "sha256-lvuupRL2MfYSEijZPirigE6RmlOmFGNFny1AbIPCfAg=";
-    };
-
-    installPhase = ''
-      mkdir $out
-      cp -R ./dist $out/
+  # `cyclonedx merge` adds the current time and a random serial number.
+  # Keep the serial of the BOM it merges into, which cyclonedx-maven-plugin derives from the project.
+  cyclonedx-merge = writeShellApplication {
+    name = "cyclonedx-merge";
+    runtimeInputs = [
+      cyclonedx-cli
+      jq
+    ];
+    text = ''
+      bom=''${*: -1}
+      serial=$(jq -r .serialNumber "$bom")
+      cyclonedx "$@"
+      jq --arg serial "$serial" '.serialNumber = $serial | del(.metadata.timestamp)' "$bom" > "$bom.tmp"
+      mv "$bom.tmp" "$bom"
     '';
-
-    npmDepsHash = "sha256-awQQ0Q4vLXc8SHUNJ+vb9YPxtvfcA/qGYY5+KIn5mFw=";
-    forceGitDeps = true;
-    makeCacheWritable = true;
-
-    # The prepack script runs the build script, which we'd rather do in the build phase.
-    npmPackFlags = [ "--ignore-scripts" ];
   };
 in
-
-maven.buildMavenPackage rec {
-  inherit version;
+maven.buildMavenPackage (finalAttrs: {
   pname = "dependency-track";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "DependencyTrack";
     repo = "dependency-track";
-    tag = version;
-    hash = "sha256-1Ri1iEu6CSMFHFeZ7SNVtGWQk+bl6R40zTtTRGdR3jo=";
+    tag = finalAttrs.version;
+    hash = "sha256-3TmCxHhbz7oB4EwwupUvX0oWYuaMPriGurQ7K4ilCQ0=";
   };
 
+  # Use protoc from nixpkgs instead of the prebuilt binary from Maven Central.
+  # protobuf-java rejects code from a newer protoc.
   postPatch = ''
-    # update to version 5.1.3 to fix NullPointer and specify protoc path
-    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
-    --update '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:version' -v "5.1.3" \
-    --delete '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:configuration/x:protoc' \
-    --subnode '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:configuration' -t elem -n protoc -v "" \
-    --var protoc '$prev' \
-    --insert '$protoc' -t attr -n kind -v "path" \
-    --subnode '$protoc' -t elem -n name -v "protoc" \
-    pom.xml
+    grep -q '<lib.protobuf-java.version>4.${protobuf_36.version}<' pom.xml \
+      || { echo "protobuf_36 ${protobuf_36.version} does not match protobuf-java in pom.xml"; exit 1; }
+    substituteInPlace pom.xml \
+      --replace-fail '<protoc>''${lib.protobuf-java.version}</protoc>' '<protoc>PATH</protoc>'
 
-    # remove frontend related tasks
-    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
-    --delete '//x:execution[x:id="frontend-download"]' \
-    --delete '//x:execution[x:id="frontend-extract"]' \
-    --delete '//x:execution[x:id="frontend-resource-deploy"]' \
-    pom.xml
-
-    # add junixsocket to enable unixsocket connection to postgres
-    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
-    --subnode '/x:project/x:dependencies' -t elem -n dependency -v "" \
-    --var dependency '$prev' \
-    --subnode '$dependency' -t elem -n groupId -v "com.kohlschutter.junixsocket" \
-    --subnode '$dependency' -t elem -n artifactId -v "junixsocket-core" \
-    --subnode '$dependency' -t elem -n version -v "2.10.0" \
-    --subnode '$dependency' -t elem -n type -v "pom" \
-    pom.xml
+    # Pin the build timestamp, and derive the build UUID from $out so it still changes with every input.
+    # Dependency-Track re-seeds its default objects whenever the UUID changes.
+    timestamp=$(date -ud "@$SOURCE_DATE_EPOCH" +%FT%TZ)
+    uuid=$(sha256sum <<< "$out" | sed -E 's/^(.{8})(.{4})(.{4})(.{4})(.{12}).*/\1-\2-\3-\4-\5/')
+    substituteInPlace apiserver/src/main/resources/application.version \
+      --replace-fail 'timestamp=''${maven.build.timestamp}' "timestamp=$timestamp" \
+      --replace-fail 'uuid=''${project.build.uuid}' "uuid=$uuid"
+    substituteInPlace alpine/alpine-server/src/main/resources/alpine.version \
+      --replace-fail 'timestamp=''${timestamp}' "timestamp=$timestamp" \
+      --replace-fail 'uuid=''${project.build.uuid}' "uuid=$uuid"
   '';
 
-  mvnJdk = jre_headless;
-  mvnHash = "sha256-hCiDcmZENAiaZ3cao9bzXsJk2U8TmVYlHeIgNutFUGM=";
-  manualMvnArtifacts = [
-    "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1"
-    # added to saticfy protobuf compiler plugin dependency resolving
-    "jakarta.el:jakarta.el-api:5.0.1"
-    "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.19.1"
-    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.2"
-    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.2"
-    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.4"
-    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
-    "io.micrometer:micrometer-core:1.16.0"
-    "io.micrometer:micrometer-observation:1.16.0"
-  ];
-  buildOffline = true;
+  mvnJdk = jdk25_headless;
+  # cyclonedx-maven-plugin skips the SBOM in offline mode. The sandbox still blocks network access.
+  mvnOffline = false;
+  mvnHash = "sha256-p+fwRt31P2BcOMN+1N0TB5tMF8jEh++y53H+TTHVZTo=";
 
-  mvnDepsParameters = lib.escapeShellArgs [
-    "-Dmaven.test.skip=true"
-    "-P enhance"
-    "-P embedded-jetty"
-  ];
-
+  # Upstream's release build uses these flags.
   mvnParameters = lib.escapeShellArgs [
-    "-Dmaven.test.skip=true"
-    "-P enhance"
-    "-P embedded-jetty"
+    "-Pquick"
+    "-Dmaven.build.cache.enabled=false"
     "-Dservices.bom.merge.skip=false"
-    "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
-    "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
+    "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-merge}"
   ];
-
-  afterDepsSetup = ''
-    mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
-      org.codehaus.mojo:exec-maven-plugin:exec@merge-services-bom
-  '';
 
   doCheck = false;
 
   nativeBuildInputs = [
+    finalAttrs.mvnJdk
     makeWrapper
-    xmlstarlet
-    protobuf_30
+    protobuf_36
   ];
 
+  # Upstream's container image uses this layout and a JRE trimmed with jlink.
+  # junixsocket lets the JDBC driver connect to PostgreSQL over its Unix socket.
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 target/dependency-track-*.jar $out/share/dependency-track/dependency-track.jar
-    makeWrapper ${jre_headless}/bin/java $out/bin/dependency-track \
-      --add-flags "-jar $out/share/dependency-track/dependency-track.jar"
+    mkdir -p $out/share/dependency-track
+    pushd apiserver/target
+    mv lib-internal/* lib/
+    ln -s ${junixsocket-common}/share/java/*.jar ${junixsocket-native-common}/share/java/*.jar lib/
+    bash ../src/main/docker/create-jre.sh -i dependency-track-apiserver.jar -o $out/share/dependency-track/jre
+    cp -rP -t $out/share/dependency-track dependency-track-apiserver.jar lib
+    popd
+    cp -t $out/share/dependency-track support/v4-migrator/target/v4-migrator.jar
+
+    makeWrapper $out/share/dependency-track/jre/bin/java $out/bin/dependency-track \
+      --add-flag --add-opens=java.base/java.util.concurrent=ALL-UNNAMED \
+      --add-flag --enable-native-access=ALL-UNNAMED \
+      --add-flag --sun-misc-unsafe-memory-access=allow \
+      --add-flag -Djdk.http.auth.tunneling.disabledSchemes= \
+      --add-flag -cp \
+      --add-flag "$out/share/dependency-track/dependency-track-apiserver.jar:$out/share/dependency-track/lib/*" \
+      --add-flag org.dependencytrack.Application
+
+    makeWrapper $out/share/dependency-track/jre/bin/java $out/bin/dependency-track-v4-migrator \
+      --add-flag --enable-native-access=ALL-UNNAMED \
+      --add-flag -cp \
+      --add-flag "$out/share/dependency-track/v4-migrator.jar:${junixsocket-common}/share/java/*:${junixsocket-native-common}/share/java/*" \
+      --add-flag org.dependencytrack.v4migrator.V4Migrator
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit frontend;
-    tests = {
-      inherit (nixosTests) dependency-track;
-    };
+    frontend = callPackage ./frontend.nix { dependency-track = finalAttrs.finalPackage; };
+    tests = { inherit (nixosTests) dependency-track; };
     updateScript = nix-update-script {
       extraArgs = [
-        "-s"
+        "--subpackage"
         "frontend"
       ];
     };
@@ -148,13 +130,14 @@ maven.buildMavenPackage rec {
 
   meta = {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
-    homepage = "https://github.com/DependencyTrack/dependency-track";
+    homepage = "https://dependencytrack.org/";
+    changelog = "https://github.com/DependencyTrack/dependency-track/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       e1mo
       xanderio
     ];
     mainProgram = "dependency-track";
-    inherit (jre_headless.meta) platforms;
+    inherit (finalAttrs.mvnJdk.meta) platforms;
   };
-}
+})
