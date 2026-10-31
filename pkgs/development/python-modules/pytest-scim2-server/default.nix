@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  hatchling,
+  fetchFromGitHub,
+  uv-build,
   portpicker,
   pytest,
   scim2-server,
@@ -11,20 +11,26 @@
   cacert,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-scim2-server";
-  version = "0.1.6";
+  version = "0.3.0";
 
   pyproject = true;
 
   # Pypi doesn't link a VCS repository
-  src = fetchPypi {
-    pname = "pytest_scim2_server";
-    inherit version;
-    hash = "sha256-Diu8TPPELQG30NZvafI/t7IR+HzkI0sPsjcUFxwVPLw=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-scim2-server";
+    tag = finalAttrs.version;
+    hash = "sha256-GKIFGuqPeTI6tMo5o08i/twkke95A9YVcNkcymRgGK8=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.12.13,<0.13.0' 'uv_build'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     portpicker
@@ -36,15 +42,16 @@ buildPythonPackage rec {
     pytestCheckHook
     scim2-client
   ]
-  ++ scim2-client.optional-dependencies.httpx;
+  ++ scim2-client.optional-dependencies.httpx2;
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   pythonImportsCheck = [ "pytest_scim2_server" ];
 
   meta = {
-    homepage = "https://pypi.org/project/pytest-scim2-server";
+    homepage = "https://github.com/pytest-dev/pytest-scim2-server";
+    changelog = "https://github.com/pytest-dev/pytest-scim2-server/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})
