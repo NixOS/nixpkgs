@@ -76,7 +76,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/porres/pd-else";
     license = lib.licenses.wtfpl;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    # pd-else 1.0-rc13 doesn't build against puredata >= 0.56: pdlua.c calls
+    # glist_findrtext, which was renamed to glist_getrtext. Fixed in 1.0-rc14.
+    broken = true;
     maintainers = [ lib.maintainers.kugland ];
   };
 }
