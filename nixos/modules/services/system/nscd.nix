@@ -79,6 +79,15 @@ in
         '';
       };
 
+      workerThreads = lib.mkOption {
+        type = lib.types.number;
+        default = 8;
+        description = ''
+          Amount of worker threads nsncd will spawn.
+          This option takes no effect when enableNsncd is set to false.
+        '';
+      };
+
     };
 
   };
@@ -143,7 +152,10 @@ in
         RemoveIPC = true;
         PrivateTmp = true;
         # https://github.com/twosigma/nsncd/pull/33/files#r1496927653
-        Environment = [ "NSNCD_HANDOFF_TIMEOUT=10" ];
+        Environment = [
+          "NSNCD_HANDOFF_TIMEOUT=10"
+          "NSNCD_WORKER_COUNT=${toString cfg.workerThreads}"
+        ];
         NoNewPrivileges = true;
         RestrictSUIDSGID = true;
         ProtectSystem = "strict";
