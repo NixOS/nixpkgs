@@ -67,6 +67,20 @@ buildGoModule (finalAttrs: {
       url = "https://github.com/podman-container-tools/podman/commit/7cef788844bdaae01ca672a55698d40428644eb4.patch";
       hash = "sha256-CAECXYRFyOF4aIc9qIZQceiz5vE/gFGyitjPI48IhYU=";
     })
+
+    # backports from upstream main, drop once included in a release
+    # shut down the store when the runtime fails to initialize
+    (fetchpatch {
+      url = "https://github.com/podman-container-tools/podman/commit/aa6acd8a438fb57e0af675c98f498c1f42f370d4.patch";
+      hash = "sha256-xle+RTcj7BpUiiZd84axr10w5QFyPsJBs73sxz6CgXE=";
+    })
+    # report why the default OCI runtime failed to initialize instead of
+    # claiming it was not found, e.g. when $XDG_RUNTIME_DIR is not writable
+    (fetchpatch {
+      url = "https://github.com/podman-container-tools/podman/commit/ac190fad1887b1f655c0e8abcbe00da23e9d494d.patch";
+      includes = [ "libpod/*" ];
+      hash = "sha256-Ia2f3fChSBYfWCP4DuXji+bAWChqGr7SkpsceLfVv5I=";
+    })
   ];
 
   vendorHash = null;
