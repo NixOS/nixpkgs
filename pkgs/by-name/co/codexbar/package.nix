@@ -20,13 +20,11 @@ stdenvNoCC.mkDerivation (
   let
     darwin = stdenvNoCC.hostPlatform.isDarwin;
 
-    macos = {
-      url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
-      hash = "sha256-abKC78odg8FNhK1nzsW55PmM/qHORuAO+QJ5LsWCp6Q=";
-    };
-
     sources = {
-      aarch64-darwin = macos;
+      aarch64-darwin = {
+        url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
+        hash = "sha256-abKC78odg8FNhK1nzsW55PmM/qHORuAO+QJ5LsWCp6Q=";
+      };
       aarch64-linux = {
         url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBarCLI-v${finalAttrs.version}-linux-aarch64.tar.gz";
         hash = "sha256-bEjqR4FUwt8yVgVyp+haq46FD6QTtu5iV/9ozs54nYk=";
@@ -43,15 +41,10 @@ stdenvNoCC.mkDerivation (
     __structuredAttrs = true;
     strictDeps = true;
 
-    src = fetchurl {
-      inherit
-        (sources.${stdenvNoCC.hostPlatform.system}
-          or (throw "codexbar: unsupported platform ${stdenvNoCC.hostPlatform.system}")
-        )
-        url
-        hash
-        ;
-    };
+    src = fetchurl (
+      sources.${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
+    );
 
     sourceRoot = ".";
 
@@ -64,38 +57,34 @@ stdenvNoCC.mkDerivation (
       else
         [ autoPatchelfHook ];
 
-    installPhase =
-      if darwin then
-        ''
-          runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-          mkdir -p $out/Applications
-          cp -r CodexBar.app $out/Applications
-          makeWrapper $out/Applications/CodexBar.app/Contents/MacOS/CodexBar $out/bin/codexbar
-
-          runHook postInstall
-        ''
-      else
-        ''
-          runHook preInstall
-
-          mkdir -p $out/bin $out/libexec/codexbar
-          install -m755 CodexBarCLI $out/libexec/codexbar/codexbar
-          # Located relative to the executable at runtime, so it stays beside it.
-          install -m644 VERSION $out/libexec/codexbar/VERSION
-          cp -r CodexBar_CodexBarCore.bundle $out/libexec/codexbar/
-          ln -s ../libexec/codexbar/codexbar $out/bin/codexbar
-          install -Dm644 THIRD_PARTY_NOTICES $out/share/doc/codexbar/THIRD_PARTY_NOTICES
-
-          runHook postInstall
-        '';
+      ${
+        if darwin then
+          ''
+            mkdir -p $out/Applications
+            cp -r CodexBar.app $out/Applications
+            makeWrapper $out/Applications/CodexBar.app/Contents/MacOS/CodexBar $out/bin/codexbar
+          ''
+        else
+          ''
+            install -Dm755 CodexBarCLI $out/libexec/codexbar/codexbar
+            install -m644 VERSION $out/libexec/codexbar/VERSION
+            cp -r CodexBar_CodexBarCore.bundle $out/libexec/codexbar/
+            mkdir -p $out/bin
+            ln -s ../libexec/codexbar/codexbar $out/bin/codexbar
+            install -Dm644 THIRD_PARTY_NOTICES $out/share/doc/codexbar/THIRD_PARTY_NOTICES
+          ''
+      }
+      runHook postInstall
+    '';
 
     passthru.updateScript = writeShellScript "update-codexbar" ''
+      set -euo pipefail
+
       ${lib.getExe nix-update} codexbar --url=https://github.com/steipete/CodexBar
       latestVersion=$(nix eval --raw --file . codexbar.version)
-      if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
-        exit 0
-      fi
       for system in ${lib.concatStringsSep " " (builtins.attrNames sources)}; do
         url=$(nix eval --raw --file . codexbar.src.url --system "$system")
         hash=$(nix store prefetch-file --json "$url" | ${lib.getExe jq} --raw-output .hash)
@@ -124,6 +113,6 @@ stdenvNoCC.mkDerivation (
     ];
 
     nativeInstallCheckInputs = [ versionCheckHook ];
-    doInstallCheck = true;
+    doInstallCheck = stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform;
   }
 )
