@@ -321,6 +321,7 @@ let
     }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+      enableInBandIpmi = name == "ipmi" && conf.inBandDevices != [ ];
       nftables = config.networking.nftables.enable;
     in
     mkIf conf.enable {
@@ -338,13 +339,23 @@ let
         (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
           "${name}-exporter" = { };
         })
+        (mkIf enableInBandIpmi {
+          ipmi-exporter-access = { };
+        })
         (mkIf (name == "smartctl") {
           "smartctl-exporter-access" = { };
         })
       ];
-      services.udev.extraRules = mkIf (name == "smartctl") ''
-        ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
-      '';
+      services.udev.extraRules = mkMerge [
+        (mkIf enableInBandIpmi (
+          lib.concatMapStringsSep "\n" (device: ''
+            ACTION=="add", SUBSYSTEM=="ipmi", ENV{DEVNAME}=="${device}", GROUP="ipmi-exporter-access", MODE="0660", TAG+="systemd"
+          '') conf.inBandDevices
+        ))
+        (mkIf (name == "smartctl") ''
+          ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
+        '')
+      ];
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
@@ -362,7 +373,7 @@ let
           serviceConfig.Group = conf.group;
           # Hardening
           serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
-          serviceConfig.DeviceAllow = [ "" ];
+          serviceConfig.DeviceAllow = mkIf (!enableInBandIpmi) [ "" ];
           serviceConfig.LockPersonality = true;
           serviceConfig.MemoryDenyWriteExecute = true;
           serviceConfig.NoNewPrivileges = true;
