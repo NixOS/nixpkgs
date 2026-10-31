@@ -1,12 +1,17 @@
 {
+  lib,
   buildGoModule,
   fetchFromGitHub,
-  lib,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "nextdns";
   version = "1.49.0";
+
+  __structuredAttrs = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "nextdns";
@@ -19,9 +24,12 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=${finalAttrs.version}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "NextDNS DNS/53 to DoH Proxy";
