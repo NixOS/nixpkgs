@@ -180,6 +180,7 @@ in
           };
           containers = {
             default_sysctls = lib.mkDefault [ "net.ipv4.ping_group_range=0 0" ];
+            init_path = lib.mkDefault "/run/current-system/sw/libexec/podman/catatonit";
           };
         };
         storage = {
