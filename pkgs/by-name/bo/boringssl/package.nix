@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
     maintainers = with lib.maintainers; [
-      thoughtpolice
       niklaskorz
     ];
     license = with lib.licenses; [
