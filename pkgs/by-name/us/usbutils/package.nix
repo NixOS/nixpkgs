@@ -60,17 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://www.linux-usb.org/";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usbutils.git/";
     description = "Tools for working with USB devices, such as lsusb";
     maintainers = with lib.maintainers; [
       cafkafk
       chuangzhu
     ];
-    license = with lib.licenses; [
-      gpl2Only # manpages, usbreset
-      gpl2Plus # most of the code
-    ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Only # manpages, usbreset
+        gpl2Plus # most of the code
+      ];
+    platforms =
+      with lib.platforms;
+      linux
+      ++ darwin
+      ++ [
+        # > for use on Linux and BSD systems
+        (lib.systems.inspect.patterns.isBSD)
+      ];
     mainProgram = "lsusb";
   };
 })
