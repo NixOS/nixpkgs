@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  procps,
   fetchurl,
   dpkg,
   writeShellScript,
@@ -14,14 +13,17 @@
   libxext,
   libx11,
   libxrandr,
-  glibc,
   cairo,
   libva,
+  libgbm,
+  libpng,
+  libxcb,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
   libdrm,
-  coreutils,
   libxi,
   libGL,
-  bash,
   libxcomposite,
   libxdamage,
   libxfixes,
@@ -36,13 +38,13 @@
 }:
 
 let
-  version = "4.7.2.0";
+  version = "4.9.6.0";
   todesk-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "todesk-unwrapped";
     version = version;
     src = fetchurl {
-      url = "https://web.archive.org/web/20250302114501if_/https://newdl.todesk.com/linux/todesk-v4.7.2.0-amd64.deb";
-      hash = "sha256-v7VpXXFVaKI99RpzUWfAc6eE7NHGJeFrNeUTbVuX+yg=";
+      url = "https://web.archive.org/web/20260908130616if_/https://dl.todesk.com/linux/todesk-v4.9.6.0-amd64.deb";
+      hash = "sha256-t+KgiUmW7k40/LPd+zlpLHKUPAWxM6c69J9IBD19rBY=";
     };
     nativeBuildInputs = [ dpkg ];
 
@@ -60,6 +62,8 @@ let
       mv "$out/opt/todesk/bin" "$out/bin"
       cp "$out/bin/libmfx.so.1" "$out/lib"
       cp "$out/bin/libglut.so.3" "$out/lib"
+      cp "$out/bin/libzulerLog.so" "$out/lib"
+      cp "$out/bin/libigdgmm.so.12" "$out/lib"
       mkdir "$out/opt/todesk/config"
       mkdir "$out/opt/todesk/bin"
       mkdir -p "$out/share/applications"
@@ -82,15 +86,11 @@ buildFHSEnv {
     systemdMinimal
     glib
     libz
-    bash
-    coreutils
     libx11
     libxext
     libxrandr
-    glibc
     libdrm
     libGL
-    procps
     cairo
     libxcomposite
     libxdamage
@@ -102,16 +102,25 @@ buildFHSEnv {
     gdk-pixbuf
     pango
     libva
+    libgbm
+    libpng
+    libxcb
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
   extraBwrapArgs = [
     "--tmpfs /opt/todesk"
-    "--bind /var/lib/todesk /opt/todesk/config" # create the folder before bind to avoid permission denided.
+    # /var/lib/todesk must already exist: bwrap treats a missing --bind source
+    # as a fatal error. On NixOS, services.todesk creates it via StateDirectory.
+    "--bind /var/lib/todesk /opt/todesk/config"
     "--bind ${todesk-unwrapped}/bin /opt/todesk/bin"
     "--bind /var/lib/todesk /etc/todesk" # service write uuid here. Such a pain!
   ]; # soft link doesn't work so that we should bind ourselves
   runScript = writeShellScript "ToDesk.sh" ''
     export LIBVA_DRIVER_NAME=iHD
     export LIBVA_DRIVERS_PATH=${todesk-unwrapped}/bin
+    export GDK_BACKEND=x11
     if [ "''${1}" = 'service' ]
     then
         /opt/todesk/bin/ToDesk_Service
