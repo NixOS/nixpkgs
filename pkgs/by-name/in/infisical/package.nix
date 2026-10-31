@@ -21,7 +21,7 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.44.2";
+  version = "0.44.11";
 
   # the platform-specific, statically linked binary
   src =
