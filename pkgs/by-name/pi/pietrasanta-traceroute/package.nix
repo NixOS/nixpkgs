@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pietrasanta-traceroute";
-  version = "0.0.5-unstable-2024-09-06";
+  version = "0.1.36-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "catchpoint";
     repo = "Pietrasanta-traceroute";
-    rev = "e4a5cf94dccd646e03b9b75a762e9b014e3a3128";
-    hash = "sha256-5FbuITewgSh6UFUU1vttkokk8uZ2IrzkDwsCuWJPKlM=";
+    rev = "2ec4344a25ae9263a84c14d1370f85d82f4d96a5";
+    hash = "sha256-AJvRGlhs4MZt01SVwJcD/0QhGXJG743Jc8ZqZQEbGeI=";
   };
   passthru.updateScript = unstableGitUpdater { };
 
