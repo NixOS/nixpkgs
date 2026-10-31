@@ -6,6 +6,7 @@
   zig_0_16,
   installAgentSkills,
   installShellFiles,
+  libnotify,
   cctools,
   xcbuild,
   versionCheckHook,
@@ -45,6 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
+      # `ui.toast.delivery = "system"` silently no-ops when notify-send is not on PATH.
+      substituteInPlace src/platform/linux.rs \
+        --replace-fail 'let mut cmd = command("notify-send");' \
+          'let mut cmd = command("${lib.getExe' libnotify "notify-send"}");'
+
       substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
         --replace-fail 'lib.bundle_compiler_rt = true;' 'lib.bundle_compiler_rt = false;' \
         --replace-fail 'lib.bundle_ubsan_rt = true;' 'lib.bundle_ubsan_rt = false;'
