@@ -40,7 +40,7 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     aquamarine
     hyprgraphics
     cairo
-    (glaze.override { enableSSL = false; })
+    glaze
   ];
 
   doInstallCheck = true;
