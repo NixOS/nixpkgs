@@ -1095,7 +1095,9 @@ builtins.intersectAttrs super {
     testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
   }) super.smtlib-backends-process;
 
-  # overrideCabal because the tests need to execute the built executable "fixpoint"
+  # overrideCabal because
+  # - the tests need to execute the built executable "fixpoint"
+  # - the installed fixpoint executable starts an SMT solver at runtime
   liquid-fixpoint = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/fixpoint:$PATH
@@ -1105,7 +1107,39 @@ builtins.intersectAttrs super {
       pkgs.cvc5
       pkgs.z3
     ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
   }) super.liquid-fixpoint;
+
+  # Same as liquid-fixpoint above, for the GHC 9.14 LiquidHaskell stack
+  liquid-fixpoint_0_9_6_3_7 = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/fixpoint:$PATH
+    ''
+    + (drv.preCheck or "");
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
+  }) super.liquid-fixpoint_0_9_6_3_7;
 
   # overrideCabal because
   # - tests need to execute the built executable "liquid"
@@ -1119,6 +1153,23 @@ builtins.intersectAttrs super {
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
     doHaddock = false;
   }) super.liquidhaskell;
+
+  # Same as liquidhaskell above, for the GHC 9.14 LiquidHaskell stack
+  liquidhaskell_0_9_14_1_1 = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/liquid:$PATH
+    ''
+    + (drv.preCheck or "");
+    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
+  }) super.liquidhaskell_0_9_14_1_1;
+
+  # The liquid-* packages run the LiquidHaskell plugin while compiling their
+  # library, so they need an SMT solver as well.
+  liquid-parallel = addBuildTool pkgs.z3 super.liquid-parallel;
+  liquid-prelude = addBuildTool pkgs.z3 super.liquid-prelude;
+  liquid-prelude_0_9_14_1 = addBuildTool pkgs.z3 super.liquid-prelude_0_9_14_1;
+  liquid-vector = addBuildTool pkgs.z3 super.liquid-vector;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
