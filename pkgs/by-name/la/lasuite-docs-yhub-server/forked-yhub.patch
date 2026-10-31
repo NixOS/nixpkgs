@@ -1,0 +1,30 @@
+diff --git a/src/yhub-server/package.json b/src/yhub-server/package.json
+index ae6c47d77..e6ec4d140 100644
+--- a/src/yhub-server/package.json
++++ b/src/yhub-server/package.json
+@@ -17,7 +17,7 @@
+     "@aws-sdk/client-s3": "3.1146.0",
+     "@sentry/node": "10.75.0",
+     "@sentry/profiling-node": "10.75.0",
+-    "@y/hub": "0.10.1",
++    "@y/hub": "https://github.com/ma27/yhub#12f5c45dbcf32e682124f3e675fb7b95c0491c0f",
+     "@y/y": "14.0.0-rc.29",
+     "jose": "6.2.12",
+     "lru-cache": "11.5.3",
+diff --git a/src/yhub-server/yarn.lock b/src/yhub-server/yarn.lock
+index 59f9d9b95..17c0ed847 100644
+--- a/src/yhub-server/yarn.lock
++++ b/src/yhub-server/yarn.lock
+@@ -823,10 +823,9 @@
+   resolved "https://registry.yarnpkg.com/@y-crdt/yn/-/yn-0.1.4.tgz#8cd8329bcf0b30a7614a10fbd1018dde5ab54f45"
+   integrity sha512-BrRpTE4tvONSx+hYXbpZERu7Cx3/xyHFNXKNnBd9/maTJNsCGaVwfkfH3PN9fx/IrIXxa3GTjX0t8zJam273BQ==
+ 
+-"@y/hub@0.10.1":
++"@y/hub@https://github.com/ma27/yhub#12f5c45dbcf32e682124f3e675fb7b95c0491c0f":
+   version "0.10.1"
+-  resolved "https://registry.yarnpkg.com/@y/hub/-/hub-0.10.1.tgz#6e0145c1bdcab3ac26283a673ad850556b9e841f"
+-  integrity sha512-etcSmaZs4ItqArc0v+bwIixs03quzDBMGJWixpNHA27eZj+AutHMlykXWuSz6H41J/wGYPd6mCLdiYbSdiEGJQ==
++  resolved "https://github.com/ma27/yhub#12f5c45dbcf32e682124f3e675fb7b95c0491c0f"
+   dependencies:
+     "@y-crdt/yn" "^0.1.4"
+     "@y/protocols" "^1.0.6-rc.1"
