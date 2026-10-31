@@ -31,6 +31,11 @@ applyPatches (final: {
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
+    # fixes exec format errors when configuring the bundled QAT libraries
+    # See: https://github.com/NixOS/nixpkgs/issues/576414
+    #      https://github.com/intel/qatlib/pull/130
+    #      https://github.com/intel/QATzip/issues/143
+    ./patches/0003-qat-autogen-shebangs.patch
     # fixes compilation on the gcc version present in nixos-unstable
     # See: https://github.com/ceph/ceph/pull/67081
     (fetchpatch2 {
