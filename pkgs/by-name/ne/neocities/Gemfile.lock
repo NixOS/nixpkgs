@@ -3,8 +3,18 @@ GEM
   specs:
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    domain_name (0.6.20260902)
+    domain_name (0.7.20261007)
     ffi (1.17.4)
+    ffi (1.17.4-aarch64-linux-gnu)
+    ffi (1.17.4-aarch64-linux-musl)
+    ffi (1.17.4-arm-linux-gnu)
+    ffi (1.17.4-arm-linux-musl)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86-linux-gnu)
+    ffi (1.17.4-x86-linux-musl)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-musl)
     ffi-compiler (1.4.2)
       ffi (>= 1.15.5)
       rake
@@ -16,12 +26,12 @@ GEM
     http-cookie (1.1.0)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    json (3.0.2)
+    json (3.1.0)
     llhttp-ffi (0.5.1)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     mutex_m (0.3.0)
-    neocities (0.2.1)
+    neocities (0.3.0)
       http (~> 5.3, >= 5.3.1)
       http-cookie (~> 1.0, < 1.1.1)
       openssl (~> 3.3, >= 3.3.1)
@@ -62,7 +72,17 @@ GEM
     wisper (2.0.1)
 
 PLATFORMS
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
   ruby
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   mutex_m (~> 0.3.0)
