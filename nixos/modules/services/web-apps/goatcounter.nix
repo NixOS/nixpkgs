@@ -59,6 +59,7 @@ in
           [
             (lib.getExe cfg.package)
             "serve"
+            "-automigrate"
             "-listen"
             "${cfg.address}:${toString cfg.port}"
           ]
