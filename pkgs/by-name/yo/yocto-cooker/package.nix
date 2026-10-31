@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yocto-cooker";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpb-";
     repo = "yocto-cooker";
     tag = finalAttrs.version;
-    hash = "sha256-h4fmpYzErOiu5M7XHuqlRUvDpXUoOC0c/HGs9a5PZNg=";
+    hash = "sha256-Ft9mugieVTYQv0rXohnsfX3AJlrgg12JNP/N7cLSdmw=";
   };
 
   build-system = with python3Packages; [
