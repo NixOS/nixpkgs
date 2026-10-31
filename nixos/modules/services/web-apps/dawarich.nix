@@ -294,8 +294,9 @@ in
           attrsOf (submodule {
             options = {
               jobClasses = lib.mkOption {
-                # https://github.com/Freika/dawarich/blob/0.37.2/config/sidekiq.yml
+                # https://github.com/Freika/dawarich/blob/1.18.1/config/sidekiq.yml
                 type = listOf (enum [
+                  "achievements"
                   "app_version_checking"
                   "archival"
                   "cache"
@@ -303,6 +304,7 @@ in
                   "default"
                   "digests"
                   "exports"
+                  "extractions"
                   "families"
                   "highest_priority"
                   "imports"
@@ -312,10 +314,12 @@ in
                   "points"
                   "posters"
                   "reverse_geocoding"
+                  "route_videos"
                   "stats"
                   "tracks"
                   "trips"
                   "visit_suggesting"
+                  "webhooks"
                 ]);
                 description = ''
                   If not empty, which job classes should be executed by this process.
