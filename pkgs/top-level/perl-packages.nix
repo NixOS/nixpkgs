@@ -7493,6 +7493,11 @@ with self;
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
       hash = "sha256-oJErQsUr4XPaUo1VJ+QNlnMkvASseNn8LdyR/xb+ljM=";
     };
+    postInstall = ''
+      # The value should be '1.00' in the distribution as per the comment in Config.pm
+      # This also fixes reproducibility
+      sed -i 's/my $_entropy_per_byte =.*/my $_entropy_per_byte = 1.00;/' $(find $out -name Config.pm)
+    '';
     meta = {
       description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
       homepage = "https://github.com/danaj/Crypt-Random-TESHA2";
