@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
-  buildGoModule,
+  buildGo127Module,
   npmHooks,
   nodejs,
   turbo,
@@ -26,15 +26,15 @@ let
   );
 
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "perses";
-  version = "0.54.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6RkRL0L2ydKujk0J5hXOrL8ju0g6y0EScehXL4zdrss=";
+    hash = "sha256-6nb+gl/rKOt6+Lddj9+mu6D5Asu5dDF31wD9U2KywUw=";
   };
 
   outputs = [
@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-KjOQgR9LcRzMijeOKdXmjIwRMwxr0kZGmZI2RQ9+u6U=";
+    hash = "sha256-RGtGI1ylJCihrgg+86/aqIOE7pM+EY1i+ZvuCBmynoY=";
   };
 
   npmRoot = "ui";
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-vMHIdKGplPQ8opnPJbVp2034KoIid0VYT4WDbj7a6sg=";
+  vendorHash = "sha256-ohvAxU54fMXl4PJ7aP2Puw149bV7NRwu0UHtGbYI8sU=";
 
   ldflags = [
     "-s"
