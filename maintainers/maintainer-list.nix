@@ -8196,6 +8196,12 @@
     githubId = 119483;
     name = "Matthew Brown";
   };
+  edfork = {
+    email = "kynixcn@yahoo.com";
+    github = "edfork1011";
+    githubId = 340793987;
+    name = "Adrian Chen";
+  };
   edgar-vincent = {
     name = "Edgar Vincent";
     email = "e-v@posteo.net";
