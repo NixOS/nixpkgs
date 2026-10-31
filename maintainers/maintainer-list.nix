@@ -21461,6 +21461,12 @@
     githubId = 1767648;
     name = "Nikolas Moya";
   };
+  no-mood = {
+    email = "mood.dev@pm.me";
+    github = "no-mood";
+    githubId = 74420740;
+    name = "mood";
+  };
   noaccos = {
     name = "Francesco Noacco";
     email = "francesco.noacco2000@gmail.com";
