@@ -1,14 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  systemdLibs,
   versionCheckHook,
   nix-update-script,
+  withJournald ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "filebeat";
   version = "8.19.19";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
@@ -22,6 +27,13 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-e++Y5mhwms/uJnZCUyZNifoYqGH4TGEugSFHSGl0AQE=";
 
   subPackages = [ "filebeat" ];
+
+  buildInputs = lib.optionals withJournald [ systemdLibs ];
+  tags = lib.optionals withJournald [ "withjournald" ];
+
+  postFixup = lib.optionalString withJournald ''
+    patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs) ]} "$out/bin/filebeat"
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
