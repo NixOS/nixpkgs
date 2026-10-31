@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.4.7";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     tag = "v${version}";
-    hash = "sha256-ehx8X3jbKls/DVgCzWJ+nTX+m/Cdknnu/sjrAMxnJFo=";
+    hash = "sha256-oYrIhRh1E9EHzY2lyT1aIxO6JrAqtuZJt0GmqMolOH0=";
   };
 
   # build C version if it exists
