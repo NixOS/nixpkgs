@@ -1,0 +1,29 @@
+GEM
+  specs:
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    amazing_print (2.0.0)
+    coderay (1.1.3)
+    io-console (0.9.3)
+    method_source (1.1.0)
+    pry (0.16.0)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+      reline (>= 0.6.0)
+    reline (0.7.0)
+      io-console (~> 0.5)
+    wifi-wand (3.0.0)
+      amazing_print (~> 2.0)
+      pry (~> 0.14, >= 0.14.2)
+      reline (~> 0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  wifi-wand!
+
+BUNDLED WITH
+   2.6.9
