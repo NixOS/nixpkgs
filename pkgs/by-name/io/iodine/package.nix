@@ -33,6 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to tunnel IPv4 data through a DNS server";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
   };
 })
