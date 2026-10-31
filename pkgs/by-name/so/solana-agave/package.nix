@@ -17,7 +17,7 @@
   clang,
   llvm,
   llvmPackages,
-  rocksdb,
+  rocksdb_10_10,
   nix-update-script,
 }:
 
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTFLAGS = "--cap-lints warn";
     # Use the pre-built rocksdb from nixpkgs instead of compiling from source.
     # This avoids GCC 13+ compatibility issues with missing <cstdint> includes.
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
   };
 
   # Disabling tests because:

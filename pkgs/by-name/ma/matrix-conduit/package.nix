@@ -6,7 +6,7 @@
   sqlite,
   stdenv,
   nixosTests,
-  rocksdb,
+  rocksdb_10_10,
   rust-jemalloc-sys,
 }:
 
@@ -37,12 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     sqlite
     rust-jemalloc-sys
-    rocksdb
+    rocksdb_10_10
   ];
 
   env = {
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
   };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction

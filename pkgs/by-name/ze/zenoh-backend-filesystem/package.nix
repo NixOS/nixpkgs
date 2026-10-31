@@ -5,7 +5,7 @@
   pkg-config,
   bzip2,
   zstd,
-  rocksdb,
+  rocksdb_10_10,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
