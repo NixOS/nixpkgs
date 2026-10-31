@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "void refresh_screen()" "void refresh_screen(SDL_Surface *screen)"
   '';
 
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-sdltest" ];
+
   buildInputs = [
     SDL
     SDL_mixer
@@ -34,6 +36,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "barrage";
     maintainers = [ ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
