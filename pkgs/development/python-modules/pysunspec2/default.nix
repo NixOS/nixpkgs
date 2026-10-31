@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAtrs: {
   pname = "pysunspec2";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunspec";
     repo = "pysunspec2";
     tag = "v${finalAtrs.version}";
-    hash = "sha256-9VZy0QwMh9JK0DpECRMhF279lo125Dq1AUaa6gtHuV0=";
+    hash = "sha256-N5OBzH1DSHhS2/fGvxEoISbX96Z8h+m2FDQPfpkr0VA=";
     fetchSubmodules = true;
   };
 
