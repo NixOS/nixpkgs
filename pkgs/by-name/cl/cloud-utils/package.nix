@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   # $ nix-build nixos/release-combined.nix -A nixos.tests.ec2-nixops
   # growpart is needed in initrd in nixos/system/boot/grow-partition.nix
   pname = "cloud-utils";
-  version = "0.33";
+  version = "0.34";
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-utils";
     tag = finalAttrs.version;
-    hash = "sha256-YqfkmYclPZu6Mc2bFYxtiuH7uvfa3V4YlD0aHuKn1hw=";
+    hash = "sha256-egnJxXA8huG8IK06Z6v6uA2dbjlChLbEGMtJRhMlFZw=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
