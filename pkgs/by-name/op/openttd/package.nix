@@ -124,16 +124,18 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall =
-    lib.optionalString withOpenGFX ''
-      cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenSFX ''
-      cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenMSX ''
-      cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
-    '';
+  postInstall = ''
+    ln -s $out/share/doc/${finalAttrs.pname}/* $out/share/games/openttd
+  ''
+  + lib.optionalString withOpenGFX ''
+    cp -r ${openttd-opengfx}/* $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenSFX ''
+    cp ${openttd-opensfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenMSX ''
+    cp -r ${openttd-openmsx}/* $out/share/games/openttd/baseset
+  '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence (
     map
