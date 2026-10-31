@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazysql";
-  version = "0.5.9";
+  version = "0.7.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "jorgerojas26";
     repo = "lazysql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A9arRNJXJGbb1xuSknTVhNNe+KGxFdtv4Qhpe9stRF8=";
+    hash = "sha256-s22JHYS8H1KQb54mExJlh1yrADcgLohf5/xeevnrxAo=";
   };
 
-  vendorHash = "sha256-g2gXH0PzleT77ycLosflk7gyHL59mFtDD/6ImWtGg7o=";
+  vendorHash = "sha256-dhQRURBA8WzA0uweIWcS/x9edClGatbMCcOn55xlF2w=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/jorgerojas26/lazysql";
     changelog = "https://github.com/jorgerojas26/lazysql/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "lazysql";
   };
 })
