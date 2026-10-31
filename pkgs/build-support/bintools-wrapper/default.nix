@@ -254,6 +254,16 @@ stdenvNoCC.mkDerivation {
     fi
   ''
 
+  # TODO: just add wasm-component-ld and wasm-ld to the list of things to symlink below; this is being done this way (i.e., conditionalised on target platform) to avoid rebuilding stdenv for the host!
+  + optionalString (targetPlatform.linker == "wasm-component-ld") ''
+    ln -s ${lib.getExe' bintools "${targetPrefix}wasm-component-ld"} $out/bin/${targetPrefix}wasm-component-ld
+    ln -s ${lib.getExe' bintools "${targetPrefix}wasm-ld"} $out/bin/${targetPrefix}wasm-ld
+    # rustc doesn't look for a prefixed wasm-component-ld, only the bare form. TODO: should something be done about this?
+    ln -s ${lib.getExe' bintools "${targetPrefix}wasm-component-ld"} $out/bin/wasm-component-ld
+    # ...and wasm-component-ld, when invoked without --wasm-ld-path, only looks for a bare wasm-ld. (Clang invokes it with --wasm-ld-path, but rustc doesn't.)
+    ln -s ${lib.getExe' bintools "${targetPrefix}wasm-ld"} $out/bin/wasm-ld
+  ''
+
   # Create symlinks for rest of the binaries.
   + ''
     for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \

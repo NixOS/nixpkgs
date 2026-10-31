@@ -427,6 +427,12 @@ rec {
     useLLVM = true;
   };
 
+  wasm32-wasip2 = {
+    # LLVM exclusively uses this spelling (i.e., without the 'unknown') when it adds the platform prefix to tools when it searches for them. TODO: this is from getting wasilibc to build; am I sure that I'm not just setting TARGET_TRIPLE inappropriately there?
+    config = "wasm32-wasip2";
+    useLLVM = true;
+  };
+
   wasm32-unknown-none = {
     config = "wasm32-unknown-none";
     rust.rustcTarget = "wasm32-unknown-unknown";
