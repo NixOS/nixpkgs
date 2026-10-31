@@ -5,8 +5,11 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "libguestfs-appliance";
+  pname = "libguestfs-appliance-fedora";
   version = "1.56.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
@@ -23,17 +26,15 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "VM appliance disk image used in libguestfs package";
+    description = "Fedora-based upstream VM appliance disk image used in libguestfs package";
     homepage = "https://libguestfs.org";
-    license = with lib.licenses; [
-      gpl2Plus
-      lgpl2Plus
-    ];
+    license = lib.licenses.free;
     maintainers = with lib.maintainers; [ lukts30 ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+    sourceProvenance = [ ];
     hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
 }
