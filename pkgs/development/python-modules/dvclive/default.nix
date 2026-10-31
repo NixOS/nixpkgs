@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvclive";
     tag = version;
     hash = "sha256-jjYglvXPtwPJEp2Qo309QeRLYooUmsDhO1Dc1S3OjQg=";
@@ -122,8 +122,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library for logging machine learning metrics and other metadata in simple file formats";
-    homepage = "https://github.com/iterative/dvclive";
-    changelog = "https://github.com/iterative/dvclive/releases/tag/${src.tag}";
+    homepage = "https://github.com/treeverse/dvclive";
+    changelog = "https://github.com/treeverse/dvclive/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

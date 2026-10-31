@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "django-polymorphic";
+    owner = "django-commons";
     repo = "django-polymorphic";
     tag = "v${version}";
     hash = "sha256-8MZrQErWWd4GiNaIEnGvj4jONGFzsi3bu5NervF4AnE=";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/jazzband/django-polymorphic/releases/tag/${src.tag}";
-    homepage = "https://github.com/django-polymorphic/django-polymorphic";
+    homepage = "https://github.com/django-commons/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = lib.licenses.bsd3;
     maintainers = [ ];

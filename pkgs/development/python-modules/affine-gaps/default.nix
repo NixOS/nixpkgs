@@ -16,8 +16,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "gata-bio";
-    repo = "affine-gaps";
+    owner = "unum-science";
+    repo = "AffineGaps";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Nbm79gKuCMqcCWQCjk8O2bbnzXBvby6FB/YhzqeDIJw=";
   };
@@ -40,8 +40,8 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "test.py" ];
 
   meta = {
-    changelog = "https://github.com/gata-bio/affine-gaps/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/gata-bio/affine-gaps";
+    changelog = "https://github.com/unum-science/AffineGaps/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/unum-science/AffineGaps";
     license = lib.licenses.asl20;
     mainProgram = "affine-gaps";
     maintainers = [ lib.maintainers.dotlambda ];

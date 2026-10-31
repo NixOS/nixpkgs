@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-studio-client";
     tag = version;
     hash = "sha256-Zc6DQ/memnEwxHkSMPi1/fLBgvinqaMpWSOBfAI4sUk=";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library to post data from DVC/DVCLive to Iterative Studio";
-    homepage = "https://github.com/iterative/dvc-studio-client";
-    changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${src.tag}";
+    homepage = "https://github.com/treeverse/dvc-studio-client";
+    changelog = "https://github.com/treeverse/dvc-studio-client/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
   };
 }

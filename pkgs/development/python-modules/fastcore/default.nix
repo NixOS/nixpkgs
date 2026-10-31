@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fastai";
+    owner = "AnswerDotAI";
     repo = "fastcore";
     tag = finalAttrs.version;
     hash = "sha256-QreuO/k9vVT/cYWdmvfESO+CneRNTr1sKEwlcDcrPzY=";
@@ -29,8 +29,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module for Fast AI";
-    homepage = "https://github.com/fastai/fastcore";
-    changelog = "https://github.com/fastai/fastcore/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/AnswerDotAI/fastcore";
+    changelog = "https://github.com/AnswerDotAI/fastcore/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

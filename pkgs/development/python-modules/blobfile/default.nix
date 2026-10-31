@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "christopher-hesse";
+    owner = "blobfile";
     repo = "blobfile";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6WECMS05upC+M81EtOlEs1K3NKD/z073PqutA/OCMiE=";
@@ -39,8 +39,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";
-    homepage = "https://github.com/christopher-hesse/blobfile";
-    changelog = "https://github.com/christopher-hesse/blobfile/blob/${finalAttrs.src.tag}/CHANGES.md";
+    homepage = "https://github.com/blobfile/blobfile";
+    changelog = "https://github.com/blobfile/blobfile/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ happysalada ];
   };

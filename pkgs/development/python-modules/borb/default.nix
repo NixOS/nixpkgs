@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jorisschellekens";
+    owner = "borb-pdf";
     repo = "borb";
     tag = "v${version}";
     hash = "sha256-p9tVG2Pvqk5uDXdeB+7F71w3h4/zut+htlm4p+qqfWA=";
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for reading, creating and manipulating PDF files in Python";
     homepage = "https://borbpdf.com/";
-    changelog = "https://github.com/jorisschellekens/borb/releases/tag/${src.tag}";
+    changelog = "https://github.com/borb-pdf/borb/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
   };

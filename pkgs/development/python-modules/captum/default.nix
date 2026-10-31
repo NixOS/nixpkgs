@@ -24,7 +24,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   src = fetchFromGitHub {
-    owner = "pytorch";
+    owner = "meta-pytorch";
     repo = "captum";
     tag = "v${version}";
     hash = "sha256-WuKbMYZPHWaTYYhVseSSkwXQk9LBzGuWfmneDw9V2hg=";
@@ -59,7 +59,7 @@ buildPythonPackage rec {
       "tests/attr/test_data_parallel.py"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # Issue reported upstream at https://github.com/pytorch/captum/issues/1447
+      # Issue reported upstream at https://github.com/meta-pytorch/captum/issues/1447
       "tests/concept/test_tcav.py"
     ];
 
@@ -71,7 +71,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Model interpretability and understanding for PyTorch";
-    homepage = "https://github.com/pytorch/captum";
+    homepage = "https://github.com/meta-pytorch/captum";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

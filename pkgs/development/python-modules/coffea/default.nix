@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "CoffeaTeam";
+    owner = "scikit-hep";
     repo = "coffea";
     tag = "v${finalAttrs.version}";
     hash = "sha256-zVcTAlL4Wl6oUm2VOmX0zBgsHbEyI93RNQwf4NBhE9s=";
@@ -100,7 +100,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     # Requires internet access
-    # https://github.com/CoffeaTeam/coffea/issues/1094
+    # https://github.com/scikit-hep/coffea/issues/1094
     "test_lumimask"
 
     # Flaky: FileNotFoundError: [Errno 2] No such file or directory
@@ -113,8 +113,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
-    homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/scikit-hep/coffea";
+    changelog = "https://github.com/scikit-hep/coffea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
