@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-notices";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";
     repo = "netbox-notices";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-He7F4DAkrrhjNorhJ8Aok8out0txvmtSbiZ4BzRVPWg=";
+    hash = "sha256-o7qVBtqrYXm6PsgO2evYjHgjrMMBDd+DCyzXT8pTXNU=";
   };
 
   build-system = [ setuptools ];
