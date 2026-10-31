@@ -19287,6 +19287,8 @@ self: super: with self; {
 
   simplesqlite = callPackage ../development/python-modules/simplesqlite { };
 
+  simplicial = callPackage ../development/python-modules/simplicial { };
+
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
 
   simpy = callPackage ../development/python-modules/simpy { };
