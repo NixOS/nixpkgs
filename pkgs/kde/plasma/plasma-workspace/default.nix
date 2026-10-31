@@ -41,12 +41,7 @@ mkKdeDerivation {
     })
   ];
 
-  outputs = [
-    "out"
-    "dev"
-    "devtools"
-    "sessions"
-  ];
+  extraOutputs = [ "sessions" ];
 
   postInstall = ''
     # Prevent patching this shell file, it only is used by sourcing it from /bin/sh.
