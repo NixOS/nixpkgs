@@ -36,6 +36,7 @@ in
         $feature{'highlight'}{'default'} = [1];
         $feature{'ctags'}{'default'} = [1];
         $feature{'avatar'}{'default'} = ['gravatar'];
+        $feature{'pathinfo'}{'default'} = [1];
       '';
     };
 
@@ -153,6 +154,8 @@ in
             include ${config.services.nginx.package}/conf/fastcgi_params;
             fastcgi_param GITWEB_CONFIG ${cfg.gitwebConfigFile};
             fastcgi_pass unix:/run/gitweb/gitweb.sock;
+            fastcgi_split_path_info ^(${cfg.location}/)(.*)$;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
           '';
         };
       };
