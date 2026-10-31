@@ -5,6 +5,7 @@
   fontforge,
   perl,
   perlPackages,
+  installFonts,
 }:
 
 let
@@ -38,6 +39,7 @@ let
       perl
       perlPackages.IOString
       perlPackages.FontTTF
+      installFonts
     ];
 
     strictDeps = true;
@@ -53,7 +55,10 @@ let
 
     preBuild = "patchShebangs scripts";
 
-    installPhase = "install -m444 -Dt $out/share/fonts/truetype build/*.ttf";
+    installPhase = ''
+      runHook preInstall
+      runHook postInstall
+    '';
 
     __structuredAttrs = true;
 
