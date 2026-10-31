@@ -1,0 +1,2834 @@
+The following patch was taken from https://github.com/logseq/og/pull/50
+The changes to the lsplugin.*.js files were not included here
+because their content is only one minified line.
+Instead, we regenerate them from the lsplugin.*.ts files during the build.
+
+
+From 3c276de0a001895456fdfa5330a551e9885ea69e Mon Sep 17 00:00:00 2001
+From: CR0CKER <6056387+CR0CKER@users.noreply.github.com>
+Date: Fri, 28 Aug 2026 11:18:29 +0200
+Subject: [PATCH] feat(electron): upgrade to Electron 43 and restore plugin
+ loading and HTTP
+
+41.x reached end of life on 2026-08-25; 43.x is supported until 2027-01-05.
+Restores the two things the newer Chromium breaks, and changes nothing about
+what a plugin is allowed to reach. 43 rather than 44 because 44.0.0 was two
+days old when this was prepared and 43.4.1 is a matured patch line.
+
+better-sqlite3 12.10.0 no longer compiles against Electron 43's V8 -- its
+SetNativeDataProperty call is ambiguous against the three overloads now
+declared in v8-template.h. 13.0.3 fixes that and ships N-API prebuilds, so it
+no longer needs an electron-rebuild pass per Electron major. node-abi bumped
+to 4.33.0, and the root yarn.lock regenerated so it agrees with the bumped
+devDependency (net -255 lines: @electron/get 5 drops transitives that version 2
+pulled in). Note for packagers: from Electron 42 the npm package no longer
+fetches its binary in a postinstall script -- it downloads on first use, so
+offline or sandboxed builds need to prime the cache explicitly.
+
+PLUGIN LOADING. Electron 40 tightened opaque-origin rules. Loading the
+renderer from file:// makes the parent origin opaque, which breaks the
+postMessage handshake plugin iframes rely on, so no plugin loads at all. The
+renderer is served over the privileged lsp:// scheme instead. That means lsp://
+can no longer serve static app files from one flat root, so the routes are
+namespaced into /plugins/ (dot-root installs) and /external/<urlencoded-root>/
+(plugins installed elsewhere), with everything else still resolving against
+__dirname. The bare legacy form lsp://logseq.io/<pid>/... is still accepted:
+themes register under it and their URLs are persisted in preferences.json and
+localStorage, so rejecting it silently breaks every installed theme on upgrade.
+Ported from logseq/logseq#12741.
+
+PLUGIN HTTP. Serving the renderer over lsp:// gives plugin frames a real tuple
+origin, so Chromium began enforcing CORS on requests they make; under file://
+none was applied and the same calls worked. Most endpoints a plugin talks to
+send no Access-Control-Allow-Origin at all -- ordinary web pages, local APIs
+like Zotero or Syncthing -- or omit the plugin's custom client header from
+Access-Control-Allow-Headers, so the request fails before it is sent. Observed:
+Readwise sync, url-title-tagger, and Syncthing/Zotero-backed plugins
+(logseq/logseq#12736).
+
+Two halves. The SDK installs a fetch bridge in plugin frames that routes
+http(s) fetch through the main process, sidestepping the browser's CORS layer
+rather than relaxing it; :httpRequest gains includeResponse so a real Response
+can be rebuilt with its status, headers and url. Anything the bridge cannot
+carry faithfully keeps the native implementation rather than being silently
+altered: non-http(s) URLs, credentials:'include' (a main-process request has no
+cookies), and a non-string body such as FormData/Blob/ArrayBuffer, which the
+handler would JSON-serialise into "{}". AbortSignal is wired to the host's own
+abort path, and an abort is never retried natively. A string body is also no
+longer double-encoded by JSON.stringify, which broke the common
+fetch(url, {body: JSON.stringify(x)}) shape.
+
+The other half is a permissive CORS response for the requests the bridge cannot
+see -- XHR, and anything issued before the bridge installs. It publishes a
+WILDCARD origin, deliberately, not the echoed request origin: the browser
+rejects "*" for credentialed requests, so cookie-bearing cross-origin reads
+stay blocked. Echoing the origin would let a plugin read another site's
+authenticated responses -- a real escalation. Access-Control-Expose-Headers is
+published too, since under file:// a plugin could read every response header
+and the CORS-safelisted six are not enough for the Link/ETag/X-RateLimit
+headers real APIs answer with. Otherwise this grants no new capability: any
+plugin can already issue unrestricted HTTP via logseq.Request -> exper_request
+-> node-fetch in the main process, with no CORS at all. Unlike
+webSecurity:false, same-origin DOM access and mixed-content blocking are
+untouched.
+
+The relaxation is scoped and fails closed. The main renderer is ALSO
+lsp://logseq.com (electron.html), so matching on scheme alone would relax the
+app's own requests -- plugin paths are matched specifically, and only
+xhr/other resource types. Identity is resolved in onBeforeRequest, where the
+frame is still alive, and recorded against the webRequest id; Electron
+documents details.frame as nullable once a frame has navigated or been
+destroyed, which is exactly its state at onHeadersReceived time. Anything not
+positively attributed is left untouched. The onBeforeRequest listener never
+cancels a request -- it only records attribution -- so plugin network reach is
+exactly what it was before. It is filtered to http(s): an unfiltered listener
+also sees the renderer's own lsp:// asset loads and stalls them, and the app
+never finishes starting.
+
+logseq.Request also now initiates over the postMessage caller rather than
+Experiments.invokeExperMethod, which does a synchronous window.top.logseq read
+-- that throws for a plugin iframe on a different origin than the host, i.e.
+every :effect false plugin, so requests never started there. Ported from
+logseq/logseq#12753.
+
+PATH CONTAINMENT. The new /external/ route takes the directory to serve from
+out of the URL, so containment alone cannot decide whether that directory may
+be read at all: resolveWithin faithfully confirms that id_ed25519 is inside
+~/.ssh. A URL may therefore only name a root the app already knows about --
+preferences.json's "externals", plus <dot-root>/tmp, where the SDK generates
+the entry document for a plugin whose package main is a .js file. That second
+root is not optional: such a plugin addresses its generated entry with its own
+directory as the root, which is never an "external", so leaving it out refuses
+the entry and the plugin does not load at all. It is app-controlled rather than
+named by the URL, so trusting it adds no reach. The list is seeded at startup
+and re-read when the handler meets an unrecognised root (throttled to once a
+second, so a stream of bogus roots cannot hammer the disk).
+
+Re-reading is not enough for a FIRST install, though, and load order is why:
+PluginLocal#load() mounts the plugin's frame -- which fetches its entry document
+and then the plugin's own scripts over lsp:// -- BEFORE LSPluginCore registers it
+and writes preferences.json. At that moment the file is not yet a record of
+anything, so nothing on disk can authorise the plugin being installed. The
+authority there is the directory the user picked, so the load-unpacked-plugin
+flow gets its own IPC (:openPluginDirDialog) that opens the same dialog and
+allows the chosen directory for the rest of the session. It is deliberately not
+a renderer-callable "trust this path" API: the only path it ever accepts is one
+the main process watched the user choose in a file dialog. From the next launch
+preferences.json covers it. Every branch of the
+handler additionally resolves through resolveWithin, which also closes the
+pre-existing traversal in the plugin branch.
+
+RELEASE-BUILD TRAPS, all invisible to a dev compile. utils.js is
+Closure-compiled under :advanced in a release build, which renames any path.*
+PROPERTY it has no extern for: path.sep and path.relative compile to mangled
+keys that are undefined on Node's real path object, so a containment check
+written with path.sep returns null for EVERYTHING -- including the app's own
+electron.html, giving a blank window. Containment is done with plain string ops
+instead. externs.js gains onBeforeRequest/resourceType/frame for the same
+reason: without them the call fails with "$onBeforeRequest$ is not a function",
+which aborts app setup before the 'main' IPC channel registers and leaves the
+renderer dead on arrival. Registration is wrapped so a failure degrades to "no
+attribution" rather than taking the app down.
+
+The same renaming bites a property read on PARSED DATA, where there is nothing
+to write an extern against: preferences.json's `externals`, read as prefs.externals,
+compiled to a mangled key that is undefined on the real object -- so only the tmp
+root was seeded and every plugin installed outside the dot-root was refused. It is
+read as prefs['externals']; a string literal cannot be renamed. Caught by running
+the packaged app, not by the suite, so there is now a guard over the compiled
+output for it too. Note the trap inside the trap: a pseudo-named build spells the
+BROKEN form `.$externals$`, which still contains the word, so grepping the bundle
+for "externals" proves nothing -- the guard asserts the absence of the mangled
+form.
+
+Adds test/electron-js (46 cases, bare `node --test`, no Electron or build step)
+covering containment, the external-root allowlist and its re-seed path, and
+which requests are relaxed plus the header rewrite itself. It lives outside the
+deps.edn :paths so it stays off the shadow-cljs compile surface, is chained
+into `npm test`, and runs as its own step in the build workflow, whose test job
+invokes yarn cljs:test directly rather than yarn test.
+
+Two of those cases are guards over the COMPILED output, since neither trap
+above is observable any other way. They read static/electron.js when it exists
+and was built with pseudo-names (`--debug`); a plain release renames the
+symbols away entirely, leaving nothing to match on, so that case is skipped
+explicitly. When the build IS observable, a missing marker FAILS rather than
+skipping -- a guard whose marker has gone stale silently protects nothing. The
+marker anchors on resolveWithin's DEFINITION rather than its export line,
+because Closure emits the export as a bare alias once the function has a second
+caller inside the module.
+
+Verified against a real advanced build (`clojure -M:cljs release electron
+--debug`): resolveWithin compiles to plain string comparisons with
+path.resolve/path.join intact and no path.sep, and onBeforeRequest /
+onHeadersReceived / responseHeaders / resourceType all survive unrenamed.
+
+Fixes #32.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+---
+ .github/workflows/build.yml           |   3 +
+ externs.js                            |   7 +
+ libs/src/LSPlugin.core.ts             |  78 ++++-
+ libs/src/LSPlugin.user.ts             | 148 ++++++++
+ libs/src/helpers.ts                   |   5 +-
+ libs/src/modules/LSPlugin.Request.ts  |   9 +-
+ package.json                          |   5 +-
+ resources/js/lsplugin.core.js         |   2 +-
+ resources/js/lsplugin.user.js         |   2 +-
+ resources/package.json                |  12 +-
+ src/electron/electron/core.cljs       | 104 +++++-
+ src/electron/electron/handler.cljs    |  57 ++-
+ src/electron/electron/utils.js        | 362 +++++++++++++++++++
+ src/electron/electron/window.cljs     |   7 +-
+ src/main/frontend/handler/plugin.cljs |   5 +-
+ static/yarn.lock                      | 220 +++---------
+ test/electron-js/plugin-cors.test.mjs | 480 ++++++++++++++++++++++++++
+ yarn.lock                             | 331 ++----------------
+ 18 files changed, 1327 insertions(+), 510 deletions(-)
+ create mode 100644 test/electron-js/plugin-cors.test.mjs
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index bd9c56b5bf..dbc2673ecc 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -82,6 +82,9 @@ jobs:
+           yarn cljs:test
+           node static/tests.js
+ 
++      - name: Run Electron main-process tests
++        run: yarn test:electron-js
++
+   lint:
+     runs-on: ubuntu-22.04
+ 
+diff --git a/externs.js b/externs.js
+index 23bc4f1d4e..16c31605fe 100644
+--- a/externs.js
++++ b/externs.js
+@@ -122,6 +122,13 @@ dummy.commit = function() {};
+ dummy.raw = function() {};
+ dummy.onHeadersReceived = function() {};
+ dummy.responseHeaders = function() {};
++// Electron webRequest names used by the plugin CORS policy in
++// src/electron/electron/utils.js. Without these, advanced-mode property renaming
++// mangles them and the call fails at runtime with "$onBeforeRequest$ is not a
++// function" -- which aborts app setup before the 'main' IPC handler registers.
++dummy.onBeforeRequest = function() {};
++dummy.resourceType = function() {};
++dummy.frame = function() {};
+ dummy.velocityDecay = function() {};
+ dummy.velocityDecay = function() {};
+ dummy.updatePosition = function() {};
+diff --git a/libs/src/LSPlugin.core.ts b/libs/src/LSPlugin.core.ts
+index 92f57ba6eb..6bdadad1c1 100644
+--- a/libs/src/LSPlugin.core.ts
++++ b/libs/src/LSPlugin.core.ts
+@@ -11,6 +11,9 @@ import {
+   getSDKPathRoot,
+   PROTOCOL_FILE,
+   URL_LSP,
++  URL_LSP_EXTERNAL,
++  URL_LSP_HOST,
++  URL_LSP_HOST_EXTERNAL,
+   safetyPathJoin,
+   path,
+   safetyPathNormalize,
+@@ -371,16 +374,43 @@ function initApiProxyHandlers(pluginLocal: PluginLocal) {
+   })
+ }
+ 
+-function convertToLSPResource(fullUrl: string, dotPluginRoot: string) {
+-  if (dotPluginRoot && fullUrl.startsWith(PROTOCOL_FILE + dotPluginRoot)) {
++function convertToLSPResource(
++  fullUrl: string,
++  localRoot: string,
++  lspRoot = URL_LSP
++) {
++  if (localRoot && fullUrl.startsWith(PROTOCOL_FILE + localRoot)) {
+     fullUrl = safetyPathJoin(
+-      URL_LSP,
+-      fullUrl.substr(PROTOCOL_FILE.length + dotPluginRoot.length)
++      lspRoot,
++      fullUrl.substr(PROTOCOL_FILE.length + localRoot.length)
+     )
+   }
+   return fullUrl
+ }
+ 
++function getPluginLSPRoot(effect?: boolean) {
++  return effect ? URL_LSP_HOST : URL_LSP
++}
++
++function getExternalLSPRoot(localRoot: string, effect?: boolean) {
++  return safetyPathJoin(
++    effect === false ? URL_LSP_EXTERNAL : URL_LSP_HOST_EXTERNAL,
++    encodeURIComponent(localRoot)
++  )
++}
++
++function convertToExternalLSPResource(
++  fullUrl: string,
++  localRoot: string,
++  effect?: boolean
++) {
++  return convertToLSPResource(
++    fullUrl,
++    localRoot,
++    getExternalLSPRoot(localRoot, effect)
++  )
++}
++
+ class IllegalPluginPackageError extends Error {
+   constructor(message: string) {
+     super(message)
+@@ -507,9 +537,19 @@ class PluginLocal extends EventEmitter<
+       const url = path.join(localRoot, filePath)
+       filePath = reg.test(url) ? url : PROTOCOL_FILE + url
+     }
+-    return !this.options.effect && this.isInstalledInDotRoot
+-      ? convertToLSPResource(filePath, this.dotPluginsRoot)
+-      : filePath
++    if (this.isInstalledInDotRoot) {
++      return convertToLSPResource(
++        filePath,
++        this.dotPluginsRoot,
++        getPluginLSPRoot(this.options.effect)
++      )
++    }
++
++    return convertToExternalLSPResource(
++      filePath,
++      localRoot,
++      this.options.effect
++    )
+   }
+ 
+   async _preparePackageConfigs() {
+@@ -619,7 +659,10 @@ class PluginLocal extends EventEmitter<
+     devEntry = devEntry || settings?.get('_devEntry')
+ 
+     if (devEntry) {
+-      this._options.entry = devEntry
++      this._options.entry = this._resolveResourceFullUrl(
++        devEntry,
++        this._localRoot
++      )
+       return
+     }
+ 
+@@ -657,10 +700,21 @@ class PluginLocal extends EventEmitter<
+       dirPathInstalled
+     )
+ 
+-    entry = convertToLSPResource(
+-      withFileProtocol(path.normalize(entryPath)),
+-      this.dotPluginsRoot
+-    )
++    entry = withFileProtocol(path.normalize(entryPath))
++
++    if (this.isInstalledInDotRoot) {
++      entry = convertToLSPResource(
++        entry,
++        this.dotPluginsRoot,
++        getPluginLSPRoot(this.options.effect)
++      )
++    } else {
++      entry = convertToExternalLSPResource(
++        entry,
++        path.dirname(entryPath),
++        this.options.effect
++      )
++    }
+ 
+     this._options.entry = entry
+   }
+diff --git a/libs/src/LSPlugin.user.ts b/libs/src/LSPlugin.user.ts
+index 99922371a9..e9f00fa59f 100644
+--- a/libs/src/LSPlugin.user.ts
++++ b/libs/src/LSPlugin.user.ts
+@@ -526,6 +526,154 @@ export class LSPluginUser
+         actor?.reject(e)
+       }
+     })
++
++    this._installFetchBridge()
++  }
++
++  /**
++   * Route plugin `fetch` calls for http(s) URLs through the host process.
++   *
++   * Plugin iframes are served over the privileged `lsp://` scheme, which is a real
++   * origin, so Chromium enforces CORS on requests they make. Most endpoints a plugin
++   * talks to either send no `Access-Control-Allow-Origin` at all (ordinary web pages,
++   * local APIs such as Zotero or Syncthing) or omit the plugin's custom client header
++   * from `Access-Control-Allow-Headers`, so the request fails before it is sent. Under
++   * the old `file://` renderer Chromium applied no CORS and the same calls worked.
++   *
++   * Performing the request in the main process sidesteps the browser's CORS layer
++   * instead of disabling it: nothing in the renderer is relaxed, and the scope is
++   * exactly plugin frames. Non-http(s) URLs -- the plugin's own `lsp://` assets,
++   * `data:`, `blob:`, relative paths -- keep the native implementation.
++   */
++  private _installFetchBridge () {
++    const g = globalThis as any
++    if (g.__lspFetchBridged) return
++
++    const nativeFetch = typeof g.fetch === 'function' ? g.fetch.bind(g) : null
++    if (!nativeFetch) return
++
++    const toHeaderRecord = (h: any): Record<string, string> => {
++      const out: Record<string, string> = {}
++      if (!h) return out
++      if (typeof h.forEach === 'function') h.forEach((v: any, k: any) => { out[String(k)] = String(v) })
++      else if (Array.isArray(h)) for (const [k, v] of h) out[String(k)] = String(v)
++      else Object.assign(out, h)
++      return out
++    }
++
++    const abortError = () =>
++      typeof DOMException !== 'undefined'
++        ? new DOMException('The operation was aborted.', 'AbortError')
++        : Object.assign(new Error('The operation was aborted.'), { name: 'AbortError' })
++
++    g.fetch = async (input: any, init?: any) => {
++      const url = typeof input === 'string'
++        ? input
++        : (typeof URL !== 'undefined' && input instanceof URL ? input.href : input?.url)
++
++      if (typeof url !== 'string' || !/^https?:\/\//i.test(url)) {
++        return nativeFetch(input, init)
++      }
++
++      const req = input && typeof input === 'object' && 'url' in input ? input : null
++      const signal: AbortSignal | undefined = init?.signal ?? req?.signal
++      const credentials = init?.credentials ?? req?.credentials
++      let body = init?.body ?? undefined
++
++      // The host performs the request outside the browser, so it carries no
++      // cookies. A caller that explicitly asked for them is better served by the
++      // native path, where the browser attaches them, than by a bridged request
++      // that silently goes out unauthenticated.
++      if (credentials === 'include') {
++        return nativeFetch(input, init)
++      }
++
++      if (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams) {
++        body = body.toString()
++      }
++
++      // The host serialises a non-string body with JSON.stringify, which turns a
++      // FormData/Blob/ArrayBuffer upload into "{}" and sends it without
++      // complaint. Silent corruption is worse than CORS, so those keep the
++      // native path.
++      if (body != null && typeof body !== 'string') {
++        return nativeFetch(input, init)
++      }
++
++      if (signal?.aborted) throw abortError()
++
++      try {
++        const options: any = {
++          url,
++          method: String(init?.method ?? req?.method ?? 'GET').toUpperCase(),
++          headers: { ...toHeaderRecord(req?.headers), ...toHeaderRecord(init?.headers) },
++          data: body,
++          returnType: 'base64',
++          includeResponse: true
++        }
++
++        let res: any
++        if (signal) {
++          // `abortable` makes _request resolve a task rather than the payload,
++          // which is the only handle the host gives us onto an in-flight request.
++          const task: any = await this.Request._request({ ...options, abortable: true })
++          const onAbort = () => task.abort?.()
++          signal.addEventListener('abort', onAbort, { once: true })
++          try {
++            res = await Promise.race([
++              task.promise,
++              new Promise((_, reject) => {
++                signal.addEventListener('abort', () => reject(abortError()), { once: true })
++              })
++            ])
++          } finally {
++            signal.removeEventListener('abort', onAbort)
++          }
++        } else {
++          res = await this.Request._request(options)
++        }
++
++        // A host without includeResponse support resolves the bare body; there is
++        // no status or headers to rebuild from, so let the native path handle it.
++        if (!res || typeof res !== 'object' || typeof res.status !== 'number') {
++          return nativeFetch(input, init)
++        }
++
++        let payload: Uint8Array | null = null
++        if (res.body) {
++          const bin = atob(res.body)
++          payload = Uint8Array.from(bin, (c: string) => c.charCodeAt(0))
++        }
++
++        // 204/205/304 are forbidden from carrying a body
++        const nullBody = res.status === 204 || res.status === 205 || res.status === 304
++
++        const response = new Response(nullBody ? null : payload, {
++          status: res.status,
++          statusText: res.statusText || '',
++          headers: res.headers || {}
++        })
++
++        // Response.url is read-only and empty on a constructed Response; plugins
++        // read it after a redirect, so publish the URL we actually requested.
++        try {
++          Object.defineProperty(response, 'url', { value: url, configurable: true })
++        } catch (e) {
++          // non-fatal: the response is still usable without it
++        }
++
++        return response
++      } catch (e) {
++        // An abort is the caller's own decision -- never retry it on the native
++        // path, which would send the request a second time.
++        if (signal?.aborted || (e as any)?.name === 'AbortError') throw e
++        // Otherwise never turn a request the native path could have served into a
++        // hard failure -- fall back rather than propagating a bridge-side error.
++        return nativeFetch(input, init)
++      }
++    }
++
++    g.__lspFetchBridged = true
+   }
+ 
+   // Life related
+diff --git a/libs/src/helpers.ts b/libs/src/helpers.ts
+index 63397c1bf6..b9d6529497 100644
+--- a/libs/src/helpers.ts
++++ b/libs/src/helpers.ts
+@@ -19,7 +19,10 @@ export const path =
+ export const IS_DEV = process.env.NODE_ENV === 'development'
+ export const PROTOCOL_FILE = 'file://'
+ export const PROTOCOL_LSP = 'lsp://'
+-export const URL_LSP = PROTOCOL_LSP + 'logseq.io/'
++export const URL_LSP = PROTOCOL_LSP + 'logseq.io/plugins/'
++export const URL_LSP_EXTERNAL = PROTOCOL_LSP + 'logseq.io/external/'
++export const URL_LSP_HOST = PROTOCOL_LSP + 'logseq.com/plugins/'
++export const URL_LSP_HOST_EXTERNAL = PROTOCOL_LSP + 'logseq.com/external/'
+ 
+ let _appPathRoot
+ 
+diff --git a/libs/src/modules/LSPlugin.Request.ts b/libs/src/modules/LSPlugin.Request.ts
+index b730f9c0bf..4f85a5c566 100644
+--- a/libs/src/modules/LSPlugin.Request.ts
++++ b/libs/src/modules/LSPlugin.Request.ts
+@@ -118,8 +118,13 @@ export class LSPluginRequest extends EventEmitter {
+   > {
+     const pid = this.ctx.baseInfo.id
+     const { success, fail, final, ...requestOptions } = options
+-    const reqID = this.ctx.Experiments.invokeExperMethod(
+-      'request',
++    // Initiate over the postMessage caller rather than Experiments.invokeExperMethod.
++    // The latter does a synchronous `window.top.logseq` read, which throws for a
++    // plugin iframe on a different origin than the host (any `:effect false`
++    // plugin, served from lsp://logseq.io), so requests never start there.
++    // The abort path already goes through the caller. Ported from logseq/logseq#12753.
++    const reqID = await this.ctx._execCallableAPIAsync(
++      'exper_request',
+       pid,
+       requestOptions
+     )
+diff --git a/package.json b/package.json
+index f4131c41c4..e1301f5290 100644
+--- a/package.json
++++ b/package.json
+@@ -48,7 +48,8 @@
+         "run-android-release": "yarn clean && yarn release-app && rm -rf ./public/static && rm -rf ./static/js/*.map && mv static ./public && npx cap sync android && npx cap run android",
+         "run-ios-release": "yarn clean && yarn release-app && rm -rf ./public/static && rm -rf ./static/js/*.map && mv static ./public && npx cap sync ios && npx cap run ios",
+         "clean": "gulp clean",
+-        "test": "run-s cljs:test cljs:run-test",
++        "test": "run-s cljs:test cljs:run-test test:electron-js",
++        "test:electron-js": "node --test \"test/electron-js/**/*.test.mjs\"",
+         "report": "run-s cljs:report",
+         "style:lint": "stylelint \"src/**/*.css\"",
+         "gulp:watch": "gulp watch",
+@@ -113,7 +114,7 @@
+         "d3-force": "3.0.0",
+         "diff": "5.0.0",
+         "dompurify": "2.4.0",
+-        "electron": "41.7.1",
++        "electron": "43.4.1",
+         "electron-dl": "^4.0.0",
+         "fs": "0.0.1-security",
+         "fs-extra": "9.1.0",
+diff --git a/resources/package.json b/resources/package.json
+index 001bb2cf90..7b85b5b84b 100644
+--- a/resources/package.json
++++ b/resources/package.json
+@@ -14,7 +14,7 @@
+     "electron:make-linux-arm64": "electron-forge make --platform=linux --arch=arm64",
+     "electron:make-macos-arm64": "electron-forge make --platform=darwin --arch=arm64",
+     "electron:publish:github": "electron-forge publish",
+-    "rebuild:all": "electron-rebuild -v 41.7.1 -f",
++    "rebuild:all": "electron-rebuild -v 43.4.1 -f",
+     "postinstall": "install-app-deps"
+   },
+   "config": {
+@@ -25,7 +25,7 @@
+     "@logseq/rsapi": "0.0.92",
+     "@sentry/electron": "2.5.1",
+     "abort-controller": "3.0.0",
+-    "better-sqlite3": "12.10.0",
++    "better-sqlite3": "13.0.3",
+     "chokidar": "^3.5.1",
+     "command-exists": "1.2.9",
+     "diff-match-patch": "1.0.5",
+@@ -54,14 +54,14 @@
+     "@electron-forge/maker-squirrel": "^7.8.3",
+     "@electron-forge/maker-wix": "^7.8.3",
+     "@electron-forge/maker-zip": "^7.8.3",
+-    "@electron/rebuild": "4.0.1",
+-    "electron": "41.7.1",
++    "@electron/rebuild": "4.2.0",
++    "electron": "43.4.1",
+     "electron-builder": "26.0.12",
+     "electron-forge-maker-appimage": "https://github.com/logseq/electron-forge-maker-appimage.git"
+   },
+   "resolutions": {
+-    "**/electron": "41.7.1",
+-    "**/node-abi": "4.31.0",
++    "**/electron": "43.4.1",
++    "**/node-abi": "4.33.0",
+     "**/node-gyp": "12.0.0",
+     "string-width": "4.2.0",
+     "wrap-ansi": "^7.0.0",
+diff --git a/src/electron/electron/core.cljs b/src/electron/electron/core.cljs
+index 401e8423d3..8f433d41ff 100644
+--- a/src/electron/electron/core.cljs
++++ b/src/electron/electron/core.cljs
+@@ -13,6 +13,7 @@
+             [cljs-bean.core :as bean]
+             [electron.configs :as cfgs]
+             [electron.fs-watcher :as fs-watcher]
++            ["fs" :as fs]
+             ["path" :as node-path]
+             ["electron" :refer [BrowserWindow Menu app protocol ipcMain dialog shell] :as electron]
+             ["electron-deeplink" :refer [Deeplink]]
+@@ -28,8 +29,12 @@
+ (defonce FILE_LSP_SCHEME "lsp")
+ (defonce FILE_ASSETS_SCHEME "assets")
+ (defonce LSP_PROTOCOL (str FILE_LSP_SCHEME "://"))
+-(defonce PLUGIN_URL (str LSP_PROTOCOL "logseq.io/"))
+ (defonce STATIC_URL (str LSP_PROTOCOL "logseq.com/"))
++(defonce PLUGIN_HOST_URL (str LSP_PROTOCOL "logseq.io/"))
++(defonce PLUGIN_URL (str PLUGIN_HOST_URL "plugins/"))
++(defonce EXTERNAL_PLUGIN_URL (str LSP_PROTOCOL "logseq.io/external/"))
++(defonce HOST_PLUGIN_URL (str STATIC_URL "plugins/"))
++(defonce HOST_EXTERNAL_PLUGIN_URL (str STATIC_URL "external/"))
+ (defonce PLUGINS_ROOT (.join node-path cfgs/dot-root "plugins"))
+ 
+ (defonce *setup-fn (volatile! nil))
+@@ -59,6 +64,31 @@
+     (when (= (str LSP_SCHEME ":") (.-protocol parsed-url))
+       (logseq-url-handler win parsed-url))))
+ 
++(defn- seed-external-plugin-roots!
++  "Tell the lsp:// handler which external plugin roots are legitimate.
++
++   The external route serves from a directory named IN THE URL, so containment
++   alone cannot decide whether that directory may be read at all -- a URL naming
++   any path on disk would otherwise be served over the privileged lsp:// scheme.
++   preferences.json's `externals` is the SDK's own record of the external plugins
++   the user installed, so it is the right source of truth for \"which roots may be
++   served from\", and js-utils adds the dot-root tmp dir the SDK generates plugin
++   entry documents into.
++
++   Called at startup and again whenever the handler meets a root it does not
++   recognise, so a plugin installed mid-session does not have to wait for a
++   restart to be served."
++  []
++  (let [prefs (.join node-path cfgs/dot-root "preferences.json")
++        ^js json (try
++                   (when (.existsSync fs prefs)
++                     (js/JSON.parse (.toString (.readFileSync fs prefs))))
++                   (catch :default e
++                     (logger/warn ::seed-external-roots "could not read preferences.json" e)
++                     nil))]
++    (js-utils/seedPluginRoots
++     (js-utils/pluginRootsFromPreferences cfgs/dot-root json))))
++
+ (defn setup-interceptor! [^js app]
+   (.setAsDefaultProtocolClient app LSP_SCHEME)
+ 
+@@ -88,15 +118,62 @@
+    (fn [^js request callback]
+      (let [url (.-url request)
+            url' ^js (js/URL. url)
+-           [_ ROOT] (if (string/starts-with? url PLUGIN_URL)
+-                      [PLUGIN_URL PLUGINS_ROOT]
+-                      [STATIC_URL js/__dirname])
+-
++           external-plugin-url? (or (string/starts-with? url EXTERNAL_PLUGIN_URL)
++                                    (string/starts-with? url HOST_EXTERNAL_PLUGIN_URL))
++           ;; The whole logseq.io host is the plugins root, so accept the bare
++           ;; legacy form (lsp://logseq.io/<pid>/...) alongside the namespaced
++           ;; one. Themes register under the legacy form and their URLs are
++           ;; persisted in preferences, so dropping it breaks every installed
++           ;; theme on upgrade.
++           plugin-url? (and (not external-plugin-url?)
++                            (or (string/starts-with? url PLUGIN_HOST_URL)
++                                (string/starts-with? url HOST_PLUGIN_URL)))
+            path' (.-pathname url')
+-           path' (utils/safe-decode-uri-component path')
+-           path' (.join node-path ROOT path')]
+-
+-       (callback #js {:path path'}))))
++           ;; Every branch resolves through js-utils/resolveWithin, which returns
++           ;; nil when the result would escape its root. Without it a decoded ".."
++           ;; -- or, for the external form, an absolute path named directly in the
++           ;; URL -- reads any file on disk through the privileged lsp:// scheme.
++           ;; The traversal in the plugin branch predates this fork; the external
++           ;; branch is ours, and is the wider hole of the two.
++           path' (cond
++                   plugin-url?
++                   (-> path'
++                       (utils/safe-decode-uri-component)
++                       (string/replace-first #"^/plugins" "")
++                       (#(js-utils/resolveWithin PLUGINS_ROOT %)))
++
++                   external-plugin-url?
++                   (let [external-path (subs path' (count "/external/"))
++                         separator-index (string/index-of external-path "/")
++                         encoded-root (if separator-index
++                                        (subs external-path 0 separator-index)
++                                        external-path)
++                         relative-path (if separator-index
++                                         (subs external-path separator-index)
++                                         "")
++                         root (utils/safe-decode-uri-component encoded-root)
++                         relative-path (utils/safe-decode-uri-component relative-path)]
++                     ;; An external root is only legitimate if a plugin actually
++                     ;; loaded from it. Anything else is a URL naming a path it
++                     ;; has no business reading. A root the startup seeding did not
++                     ;; know about earns one re-read of preferences.json before it
++                     ;; is refused -- that is how a plugin installed mid-session
++                     ;; gets served.
++                     (js-utils/resolveExternalPluginAsset
++                      root relative-path seed-external-plugin-roots!))
++
++                   :else
++                   (-> path'
++                       (utils/safe-decode-uri-component)
++                       (#(js-utils/resolveWithin js/__dirname %))))]
++
++       (if path'
++         (callback #js {:path path'})
++         (do
++           (logger/warn ::lsp-protocol "Refused to serve out-of-root lsp:// url" url)
++           ;; net::ERR_FILE_NOT_FOUND -- deliberately indistinguishable from a
++           ;; genuinely missing file, so this is not a probe oracle.
++           (callback #js {:error -6}))))))
+ 
+   #(do
+      (.unregisterProtocol protocol FILE_LSP_SCHEME)
+@@ -285,6 +362,15 @@
+ 
+                (utils/<restore-proxy-settings)
+ 
++               (logger/info
++                (str "External plugin roots seeded for lsp://: "
++                     (seed-external-plugin-roots!)))
++
++               ;; Must be installed before disableXFrameOptions: it attributes
++               ;; in-flight requests to plugin frames, and the CORS relaxation in
++               ;; that listener fails closed on anything it cannot attribute.
++               (js-utils/trackPluginFrameRequests win)
++
+                (js-utils/disableXFrameOptions win)
+ 
+                (search/ensure-search-dir!)
+diff --git a/src/electron/electron/handler.cljs b/src/electron/electron/handler.cljs
+index bf643fd543..2fdedaea16 100644
+--- a/src/electron/electron/handler.cljs
++++ b/src/electron/electron/handler.cljs
+@@ -369,6 +369,17 @@
+ (defmethod handle :openDialog [^js _window _messages]
+   (open-dir-dialog))
+ 
++(defmethod handle :openPluginDirDialog [^js _window _messages]
++  ;; Same dialog, plus the one thing the lsp:// handler cannot work out for
++  ;; itself: this directory may be served. A plugin installed from outside the
++  ;; dot-root has its assets fetched while it loads, which is BEFORE the SDK
++  ;; records it in preferences.json -- so on a first install there is nothing to
++  ;; read, and the user's own choice here is the authority. Scoped to this
++  ;; session; preferences.json covers it from the next launch.
++  (p/let [path (open-dir-dialog)]
++    (when path (js-utils/addPluginRoot path))
++    path))
++
+ (defmethod handle :copyDirectory [^js _window [_ src dest opts]]
+   (fs-extra/copy src dest opts))
+ 
+@@ -517,7 +528,11 @@
+ (def *request-abort-signals (atom {}))
+ 
+ (defmethod handle :httpRequest [_ [_ req-id opts]]
+-  (let [{:keys [url abortable method data returnType headers]} opts]
++  ;; `includeResponse` resolves to {:status :statusText :headers :body} instead of
++  ;; the bare parsed body, so a caller can reconstruct a real Response. Needed by
++  ;; the plugin fetch bridge, which has to preserve status codes and headers --
++  ;; plugins branch on both (e.g. 401/403 handling, Content-Type sniffing).
++  (let [{:keys [url abortable method data returnType headers includeResponse]} opts]
+     (when-let [[method type] (and (not (string/blank? url))
+                                   [(keyword (string/upper-case (or method "GET")))
+                                    (keyword (string/lower-case (or returnType "json")))])]
+@@ -526,25 +541,37 @@
+                             :headers (and headers (bean/->js headers))}
+                            (merge (when (and (not (contains? #{:GET :HEAD} method)) data)
+                                     ;; TODO: support type of arrayBuffer
+-                                    {:body (js/JSON.stringify (bean/->js data))})
++                                    ;; A string body is already serialized -- passing it through
++                                    ;; JSON.stringify again would double-encode it (the common
++                                    ;; `fetch(url, {body: JSON.stringify(x)})` shape).
++                                    {:body (if (string? data)
++                                             data
++                                             (js/JSON.stringify (bean/->js data)))})
+ 
+                                   (when-let [^js controller (and abortable (AbortController.))]
+                                     (swap! *request-abort-signals assoc req-id controller)
+                                     {:signal (.-signal controller)}))))
+           (p/then (fn [^js res]
+-                    (case type
+-                      :json
+-                      (.json res)
+-
+-                      :arraybuffer
+-                      (.arrayBuffer res)
+-
+-                      :base64
+-                      (-> (.buffer res)
+-                          (p/then #(.toString % "base64")))
+-
+-                      :text
+-                      (.text res))))
++                    (-> (case type
++                          :json
++                          (.json res)
++
++                          :arraybuffer
++                          (.arrayBuffer res)
++
++                          :base64
++                          (-> (.buffer res)
++                              (p/then #(.toString % "base64")))
++
++                          :text
++                          (.text res))
++                        (p/then (fn [body]
++                                  (if includeResponse
++                                    #js {:status     (.-status res)
++                                         :statusText (.-statusText res)
++                                         :headers    (js/Object.fromEntries (.entries (.-headers res)))
++                                         :body       body}
++                                    body))))))
+           (p/catch
+            (fn [^js e]
+              ;; TODO: handle special cases
+diff --git a/src/electron/electron/utils.js b/src/electron/electron/utils.js
+index afa64a1873..be3fc73e48 100644
+--- a/src/electron/electron/utils.js
++++ b/src/electron/electron/utils.js
+@@ -6,8 +6,370 @@ import fse from 'fs-extra'
+ // headers.
+ 
+ // Should we do this? Does this make evil sites doing danagerous things?
++
++// ---------------------------------------------------------------------------
++// Plugin frames, the lsp:// scheme, and CORS
++//
++// Plugin frames are served over the privileged lsp:// scheme, which is a real
++// origin, so Chromium enforces CORS on the requests they make. Most endpoints a
++// plugin talks to either send no Access-Control-Allow-Origin at all (ordinary web
++// pages, local APIs such as Zotero or Syncthing) or omit the plugin's custom client
++// header from Access-Control-Allow-Headers, so the request fails before it is sent.
++// The previous file:// renderer had no CORS applied and the same calls worked.
++//
++// Why this is not a new capability: any plugin can already perform unrestricted
++// HTTP through logseq.Request -> exper_request -> node-fetch in the main process,
++// with arbitrary URLs and headers and no CORS at all. Against a hostile plugin,
++// browser CORS is not a boundary here; it only penalises honest plugins using
++// plain fetch.
++//
++// The one thing browser CORS still buys us is protection of *ambient* credentials:
++// a main-process request carries no browser cookies, a credentialed fetch does. So
++// we publish a WILDCARD origin rather than echoing the request origin -- the browser
++// rejects "*" outright for credentialed requests, which keeps cookie-bearing
++// cross-origin reads blocked while ordinary plugin requests succeed. Do not change
++// this to echo the origin: combined with a server sending
++// Access-Control-Allow-Credentials, that would let a plugin read another site's
++// authenticated responses, which IS an escalation over what it can do today.
++//
++// Unlike webSecurity:false this leaves the same-origin policy for DOM access and
++// mixed-content blocking untouched.
++//
++// IMPORTANT, and easy to get wrong when testing this: the SDK installs a fetch
++// bridge in every plugin frame that routes http(s) `fetch` to the main process. A
++// bridged request never reaches Chromium's CORS layer at all, so the headers below
++// apply only to UNBRIDGED requests from plugin frames -- XHR, and anything issued
++// before the bridge installs.
++//
++// NOTE: this must stay inside the single onHeadersReceived listener below --
++// Electron allows only ONE listener per method per session, so a second
++// registration elsewhere silently replaces this one.
++// ---------------------------------------------------------------------------
++
++// ---------------------------------------------------------------------------
++// External plugin roots
++//
++// Plugins installed outside the dot-root are served from
++// lsp://logseq.com/external/<urlencoded-root>/..., i.e. the URL names the
++// directory to serve from. resolveWithin can only verify that the file stays
++// inside the root it was given; it cannot know whether that root is legitimate.
++// Without an allowlist, a URL naming any directory on disk would be served
++// through the privileged lsp:// scheme.
++//
++// Roots are seeded once at startup from the SDK's own record of installed
++// external plugins (preferences.json "externals"), which is the right source of
++// truth for "which roots may be served from".
++// ---------------------------------------------------------------------------
++const seededRoots = new Set()
++
++// Roots the user chose in THIS session, which no re-seed may drop.
++//
++// Load order forces the split. PluginLocal#load() mounts the plugin's frame --
++// which fetches its entry document and then its own scripts over lsp:// --
++// BEFORE LSPluginCore registers the plugin and writes preferences.json. So on a
++// first install the file is not yet a record of anything, and re-reading it
++// cannot authorise the very plugin being installed. The authority for that one
++// is the directory the user picked in the load-unpacked-plugin dialog, which the
++// main process learns first-hand.
++const sessionRoots = new Set()
++
++export const seedPluginRoots = (roots) => {
++  seededRoots.clear()
++  if (!Array.isArray(roots)) return 0
++  for (const r of roots) {
++    if (typeof r === 'string' && r !== '') seededRoots.add(path.resolve(r))
++  }
++  return seededRoots.size + sessionRoots.size
++}
++
++/**
++ * Allow one root for the rest of the session. Called only from the
++ * load-unpacked-plugin dialog handler, where the path is the user's own choice --
++ * never from anything a plugin or the renderer can drive with a path of its own.
++ */
++export const addPluginRoot = (root) => {
++  if (typeof root !== 'string' || root === '') return false
++  sessionRoots.add(path.resolve(root))
++  return true
++}
++
++/** Test seam. Not used by the app. */
++export const clearPluginRoots = () => {
++  seededRoots.clear()
++  sessionRoots.clear()
++}
++
++/**
++ * Is this fs path the root of an external plugin the user actually installed?
++ * Anything else is a URL naming a path of its own choosing.
++ */
++export const isRegisteredRoot = (candidate) => {
++  if (typeof candidate !== 'string' || candidate === '') return false
++  const resolved = path.resolve(candidate)
++  return seededRoots.has(resolved) || sessionRoots.has(resolved)
++}
++
++/**
++ * The roots that may legitimately be served over lsp://logseq.com/external/.
++ *
++ * Two sources, and both are needed:
++ *  - preferences.json "externals", the SDK's record of the external plugins the
++ *    user installed; and
++ *  - <dot-root>/tmp, where the SDK generates an entry document for a plugin whose
++ *    package `main` is a .js file (write_user_tmp_file). For a plugin outside the
++ *    dot-root that document is addressed with ITS OWN directory as the root, and
++ *    that directory is never an "external", so leaving it out refuses the entry
++ *    and the plugin never loads.
++ *
++ * The tmp dir is app-controlled rather than named by the URL, so trusting it adds
++ * no reach a plugin did not already have.
++ */
++export const pluginRootsFromPreferences = (dotRoot, prefs) => {
++  const roots = []
++  if (typeof dotRoot !== 'string' || dotRoot === '') return roots
++  roots.push(path.join(dotRoot, 'tmp'))
++  // QUOTED, and it must stay quoted. This module is Closure-compiled under
++  // :advanced, which renames any property read it has no extern for -- and
++  // preferences.json is parsed data, so there is nothing to write an extern
++  // against. `prefs.externals` compiled to a mangled key that is undefined on the
++  // real object, silently seeding the tmp root alone and refusing every plugin
++  // installed outside the dot-root. A quoted read is a string literal and cannot
++  // be renamed.
++  const externals = prefs && prefs['externals']
++  if (Array.isArray(externals)) {
++    for (const e of externals) {
++      if (typeof e === 'string' && e !== '') roots.push(e)
++    }
++  }
++  return roots
++}
++
++/**
++ * Resolve a file on the lsp://.../external/<root>/<relative> route.
++ *
++ * Roots are seeded at startup, but a plugin installed from outside the dot-root
++ * DURING a session is written to preferences.json only after startup, so its
++ * assets would be refused until the app restarted. On a miss, re-read once
++ * through `reseed` and decide again; a root that is still unknown afterwards is
++ * a URL naming a directory of its own choosing, and is refused.
++ *
++ * Returns the absolute path to serve, or null.
++ */
++const RESEED_THROTTLE_MS = 1000
++let lastReseedAt = 0
++
++/** Test seam. Not used by the app. */
++export const resetReseedThrottle = () => {
++  lastReseedAt = 0
++}
++
++export const resolveExternalPluginAsset = (root, relative, reseed) => {
++  if (!isRegisteredRoot(root)) {
++    if (typeof reseed !== 'function') return null
++    // A URL is free to name any root it likes, and every unknown one would
++    // otherwise cost a preferences.json read. Throttle: a genuine mid-session
++    // install is one event, not a stream.
++    const now = Date.now()
++    if (now - lastReseedAt < RESEED_THROTTLE_MS) return null
++    lastReseedAt = now
++    try {
++      reseed()
++    } catch (e) {
++      // An unreadable preferences.json is not a reason to serve an unverified
++      // root. Fail closed.
++      console.error('[lsp] could not refresh external plugin roots:', e)
++      return null
++    }
++    if (!isRegisteredRoot(root)) return null
++  }
++  return resolveWithin(root, relative)
++}
++
++/**
++ * Join `relative` onto `root` and return the result ONLY if it stays inside
++ * `root`; otherwise null. The containment check is the point -- `path.join`
++ * happily walks out of the root given "../..", and a naive startsWith() would
++ * accept "/srv/root-evil" as being inside "/srv/root".
++ */
++export const resolveWithin = (root, relative) => {
++  if (typeof root !== 'string' || root === '') return null
++  const base = path.resolve(root)
++  const rel = typeof relative === 'string' ? relative : ''
++  // Strip a leading separator so an absolute-looking relative path cannot
++  // replace the base outright (path.resolve('/a', '/etc/passwd') === '/etc/passwd').
++  const full = path.resolve(path.join(base, rel.replace(/^[/\\]+/, '')))
++  // Containment check with PURE STRING ops -- deliberately no path.sep and no
++  // path.relative. Both are covered by externs only partially, so Closure
++  // :advanced (release builds ONLY) renamed them to mangled keys that are
++  // undefined on Node's real path object; the check then silently failed for
++  // every contained path and refused even the app's own electron.html. `base` is
++  // already path.resolve'd, so it has no trailing separator; a contained path is
++  // base itself or base followed by a separator. Check both separators so this
++  // needs neither path.sep nor a platform assumption. String literals and
++  // String.prototype.startsWith cannot be mangled.
++  if (full === base || full.startsWith(base + '/') || full.startsWith(base + '\\')) {
++    return full
++  }
++  return null
++}
++
++// Only these are plugin frames. Note the main renderer is ALSO lsp://logseq.com
++// (electron.html), so matching on the scheme alone would relax the app's own
++// requests too -- match on the plugin paths specifically.
++//   lsp://logseq.io/...              whole host is the plugins root (legacy + namespaced)
++//   lsp://logseq.com/plugins/...     dot-root installs
++//   lsp://logseq.com/external/...    plugins installed outside the dot-root
++const PLUGIN_FRAME_RE =
++  /^lsp:\/\/(logseq\.io\/|logseq\.com\/(plugins|external)\/)/
++
++// CORS relaxation is only needed for fetch/XHR. Images, stylesheets, fonts,
++// media, scripts and subframes do not read response bodies cross-origin, so they
++// never needed the relaxed ACAO headers.
++const RELAXABLE_RESOURCE_TYPES = new Set(['xhr', 'other'])
++
++/**
++ * Should this request's response be CORS-relaxed? True only for a request whose
++ * initiating frame is a plugin frame AND whose resource type actually reads a
++ * cross-origin body. Pure and synchronous so it is unit-testable.
++ */
++export const isRelaxablePluginRequest = ({ frameUrl, resourceType } = {}) => {
++  if (typeof frameUrl !== 'string' || !PLUGIN_FRAME_RE.test(frameUrl)) return false
++  return RELAXABLE_RESOURCE_TYPES.has(resourceType)
++}
++
++// details.frame is documented as nullable once a frame has navigated or been
++// destroyed, so it cannot be trusted at onHeadersReceived time. onBeforeRequest
++// fires while the frame is still alive, so identity is resolved THERE and recorded
++// against the webRequest id, which is stable for the life of the request.
++//
++// Anything not positively identified as a plugin request is left untouched: this
++// must fail CLOSED. A request we cannot attribute is not a request we relax.
++const pluginRequestIds = new Map() // id -> timestamp
++const MAX_TRACKED_REQUESTS = 2000
++// Long enough to outlive any realistic request/response round trip, so a slow
++// download does not lose its entry before onHeadersReceived fires -- which would
++// silently drop the CORS relaxation and fail a request that should have worked.
++const TRACKED_REQUEST_TTL_MS = 10 * 60 * 1000
++
++/**
++ * Evict by AGE, not by insertion order. A count-based "drop the oldest quarter"
++ * evicts whatever is oldest even when it is still in flight: a long-lived request
++ * that outlived 500 later ones lost its relaxation mid-flight.
++ */
++const evictStaleRequests = () => {
++  const cutoff = Date.now() - TRACKED_REQUEST_TTL_MS
++  for (const [k, t] of pluginRequestIds) {
++    if (t < cutoff) pluginRequestIds.delete(k)
++  }
++}
++
++export const rememberPluginRequest = (id) => {
++  pluginRequestIds.set(id, Date.now())
++  if (pluginRequestIds.size > MAX_TRACKED_REQUESTS) {
++    evictStaleRequests()
++    // Everything is younger than the TTL: this is a genuine flood rather than a
++    // leak, so fall back to dropping the oldest to keep the map bounded.
++    if (pluginRequestIds.size > MAX_TRACKED_REQUESTS) {
++      let drop = Math.floor(MAX_TRACKED_REQUESTS / 4)
++      for (const k of pluginRequestIds.keys()) {
++        pluginRequestIds.delete(k)
++        if (--drop <= 0) break
++      }
++    }
++  }
++}
++
++/** Test seam. Not used by the app. */
++export const clearTrackedRequests = () => {
++  pluginRequestIds.clear()
++}
++
++/** Test seam. Not used by the app. */
++export const trackedRequestCount = () => pluginRequestIds.size
++
++/**
++ * Records which in-flight requests were initiated by a plugin frame.
++ * Must be installed alongside disableXFrameOptions -- without it nothing is
++ * attributable and the CORS relaxation below never applies (fails closed).
++ *
++ * This listener never cancels a request. It only records attribution, so plugin
++ * network reach is exactly what it was before the lsp:// renderer.
++ */
++export const trackPluginFrameRequests = (win) => {
++  // Registration must never abort app startup. This runs before *setup-fn is
++  // assigned in core.cljs, so an exception here leaves the 'main' IPC channel
++  // unregistered and the renderer dead on arrival -- the app opens and nothing
++  // works. Degrade to "no attribution" (and therefore no CORS relaxation) rather
++  // than taking the app down with us.
++  try {
++    installBeforeRequestTracker(win)
++  } catch (e) {
++    console.error('[plugin-cors] request tracker not installed:', e)
++  }
++}
++
++const installBeforeRequestTracker = (win) => {
++  // Filter to http(s) only. An unfiltered onBeforeRequest listener also sees the
++  // renderer's own lsp:// asset loads and stalls them -- the app never finishes
++  // starting. CORS only concerns http(s) anyway, so this is both the fix and the
++  // correct scope.
++  win.webContents.session.webRequest.onBeforeRequest(
++    { urls: ['http://*/*', 'https://*/*'] },
++    (d, c) => {
++      let frameUrl = ''
++      try {
++        frameUrl = d.frame?.url || ''
++        // A subframe navigation reports the not-yet-navigated CHILD frame as
++        // d.frame -- its url is empty -- while the plugin that created the iframe
++        // is d.frame.parent.
++        if (!frameUrl && d.frame?.parent?.url) frameUrl = d.frame.parent.url
++      } catch (e) {
++        // frame already gone; treated as unattributable, i.e. not relaxed
++      }
++
++      if (isRelaxablePluginRequest({ frameUrl, resourceType: d.resourceType })) {
++        rememberPluginRequest(d.id)
++      }
++
++      c({ cancel: false })
++    }
++  )
++}
++
++export const relaxCorsForPluginFrames = (d) => {
++  // Fail closed: only requests positively attributed to a plugin frame at
++  // onBeforeRequest time are relaxed. Not tracked -> leave the response alone.
++  // NOTE: do NOT delete the entry here. onHeadersReceived fires again for each
++  // hop of a redirect chain, and dropping it on the first response would leave
++  // the final one unrelaxed. Entries expire by age instead.
++  if (!pluginRequestIds.has(d.id)) return
++
++  for (const k of Object.keys(d.responseHeaders)) {
++    const lk = k.toLowerCase()
++    if (
++      lk === 'access-control-allow-origin' ||
++      lk === 'access-control-allow-headers' ||
++      lk === 'access-control-allow-methods' ||
++      lk === 'access-control-expose-headers'
++    ) {
++      delete d.responseHeaders[k]
++    }
++  }
++
++  d.responseHeaders['Access-Control-Allow-Origin'] = ['*']
++  d.responseHeaders['Access-Control-Allow-Headers'] = ['*']
++  d.responseHeaders['Access-Control-Allow-Methods'] = [
++    'GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD'
++  ]
++  // Without this a plugin can only read the six CORS-safelisted response headers.
++  // Under file:// it could read all of them, so omitting this leaves a request
++  // that "works" but whose Link/X-RateLimit/ETag headers have silently vanished.
++  d.responseHeaders['Access-Control-Expose-Headers'] = ['*']
++}
+ export const disableXFrameOptions = (win) => {
+   win.webContents.session.webRequest.onHeadersReceived((d, c) => {
++    relaxCorsForPluginFrames(d)
++
+     if (d.responseHeaders['X-Frame-Options']) {
+       delete d.responseHeaders['X-Frame-Options']
+     }
+diff --git a/src/electron/electron/window.cljs b/src/electron/electron/window.cljs
+index 6523d4ebcc..dcafdfc2b5 100644
+--- a/src/electron/electron/window.cljs
++++ b/src/electron/electron/window.cljs
+@@ -16,8 +16,11 @@
+ 
+ (def MAIN_WINDOW_ENTRY (if dev?
+                          ;"http://localhost:3001"
+-                         (str "file://" (node-path/join js/__dirname "index.html"))
+-                         (str "file://" (node-path/join js/__dirname "electron.html"))))
++                         ;; Loading the renderer through Logseq's privileged
++                         ;; scheme keeps the parent origin non-opaque for
++                         ;; plugin iframe postMessage handshakes (Electron 40+).
++                         "lsp://logseq.com/index.html"
++                         "lsp://logseq.com/electron.html"))
+ 
+ (defn create-main-window!
+   ([]
+diff --git a/src/main/frontend/handler/plugin.cljs b/src/main/frontend/handler/plugin.cljs
+index 205e0d85a9..f6553e19ae 100644
+--- a/src/main/frontend/handler/plugin.cljs
++++ b/src/main/frontend/handler/plugin.cljs
+@@ -484,7 +484,10 @@
+ (defn load-unpacked-plugin
+   []
+   (when util/electron?
+-    (p/let [path (ipc/ipc "openDialog")]
++    ;; openPluginDirDialog, not openDialog: the main process also has to allow the
++    ;; chosen directory to be served over lsp://, and this is the only flow where
++    ;; the user is choosing a plugin.
++    (p/let [path (ipc/ipc "openPluginDirDialog")]
+       (when-not (:plugin/selected-unpacked-pkg @state/state)
+         (state/set-state! :plugin/selected-unpacked-pkg path)))))
+ 
+diff --git a/static/yarn.lock b/static/yarn.lock
+index a728e946e6..d60fc081d2 100644
+--- a/static/yarn.lock
++++ b/static/yarn.lock
+@@ -279,6 +279,11 @@
+   dependencies:
+     chrome-trace-event "^1.0.3"
+ 
++"@electron-internal/extract-zip@^1.0.1":
++  version "1.0.5"
++  resolved "https://registry.yarnpkg.com/@electron-internal/extract-zip/-/extract-zip-1.0.5.tgz#6782c0f6066e60b7fd286fe7a5c7600f7650d420"
++  integrity sha512-+bqFCP98pLI0Tt0XQo1TmlXtwjWchISndDOxCkEcIuUgXWpBnLyRI+2DU+mesvnMMX6L1XDqYNA0lXNDHd/yiA==
++
+ "@electron/asar@3.2.18":
+   version "3.2.18"
+   resolved "https://registry.yarnpkg.com/@electron/asar/-/asar-3.2.18.tgz#fa607f829209bab8b9e0ce6658d3fe81b2cba517"
+@@ -306,10 +311,10 @@
+     fs-extra "^9.0.1"
+     minimist "^1.2.5"
+ 
+-"@electron/get@^2.0.0":
+-  version "2.0.3"
+-  resolved "https://registry.yarnpkg.com/@electron/get/-/get-2.0.3.tgz#fba552683d387aebd9f3fcadbcafc8e12ee4f960"
+-  integrity sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==
++"@electron/get@^3.0.0":
++  version "3.1.0"
++  resolved "https://registry.yarnpkg.com/@electron/get/-/get-3.1.0.tgz#22c5a0bd917ab201badeb77bc4ad18cba54cb4ec"
++  integrity sha512-F+nKc0xW+kVbBRhFzaMgPy3KwmuNTYX1fx6+FxxoSnNgwYX6LD7AKBTWkU0MQ6IBoe7dz069CNkR673sPAgkCQ==
+   dependencies:
+     debug "^4.1.1"
+     env-paths "^2.2.0"
+@@ -321,20 +326,19 @@
+   optionalDependencies:
+     global-agent "^3.0.0"
+ 
+-"@electron/get@^3.0.0":
+-  version "3.1.0"
+-  resolved "https://registry.yarnpkg.com/@electron/get/-/get-3.1.0.tgz#22c5a0bd917ab201badeb77bc4ad18cba54cb4ec"
+-  integrity sha512-F+nKc0xW+kVbBRhFzaMgPy3KwmuNTYX1fx6+FxxoSnNgwYX6LD7AKBTWkU0MQ6IBoe7dz069CNkR673sPAgkCQ==
++"@electron/get@^5.0.0":
++  version "5.1.0"
++  resolved "https://registry.yarnpkg.com/@electron/get/-/get-5.1.0.tgz#f96ca2a0e89b27490ff8f7b5a392bd4df6942998"
++  integrity sha512-3kSBtG8ObcTVfXanm5vVJ6UnBLEVmVsRk1M+vGqCuMBV+XLCbJYuWQful+yIy0GQDsSlK0kHEriEHn7SPk4EnA==
+   dependencies:
+     debug "^4.1.1"
+-    env-paths "^2.2.0"
+-    fs-extra "^8.1.0"
+-    got "^11.8.5"
++    env-paths "^3.0.0"
++    graceful-fs "^4.2.11"
+     progress "^2.0.3"
+-    semver "^6.2.0"
++    semver "^7.6.3"
+     sumchecker "^3.0.1"
+   optionalDependencies:
+-    global-agent "^3.0.0"
++    undici "^7.24.4"
+ 
+ "@electron/node-gyp@https://github.com/electron/node-gyp#06b29aafb7708acef8b3669835c8a7857ebc92d2":
+   version "10.2.0-electron.1"
+@@ -450,25 +454,17 @@
+     tar "^6.0.5"
+     yargs "^17.0.1"
+ 
+-"@electron/rebuild@4.0.1":
+-  version "4.0.1"
+-  resolved "https://registry.yarnpkg.com/@electron/rebuild/-/rebuild-4.0.1.tgz#0620d5bb71a0b8b09a86fb9fa979244e1fcc10bf"
+-  integrity sha512-iMGXb6Ib7H/Q3v+BKZJoETgF9g6KMNZVbsO4b7Dmpgb5qTFqyFTzqW9F3TOSHdybv2vKYKzSS9OiZL+dcJb+1Q==
++"@electron/rebuild@4.2.0":
++  version "4.2.0"
++  resolved "https://registry.yarnpkg.com/@electron/rebuild/-/rebuild-4.2.0.tgz#ee7429a97134d13eb37b7f517d737e02d1dea877"
++  integrity sha512-RKL/O+jGoXJMxrx/5771y1n0xTKmFuOYGO3gMmwypBM6rsH0kou0mswwdXA2JrhIkE4xyC7v9vGk0n6NPzgOxQ==
+   dependencies:
+     "@malept/cross-spawn-promise" "^2.0.0"
+-    chalk "^4.0.0"
+     debug "^4.1.1"
+-    detect-libc "^2.0.1"
+-    got "^11.7.0"
+-    graceful-fs "^4.2.11"
+     node-abi "^4.2.0"
+     node-api-version "^0.2.1"
+-    node-gyp "^11.2.0"
+-    ora "^5.1.0"
++    node-gyp "^12.2.0"
+     read-binary-file-arch "^1.0.6"
+-    semver "^7.3.5"
+-    tar "^6.0.5"
+-    yargs "^17.0.1"
+ 
+ "@electron/rebuild@^3.7.0":
+   version "3.7.2"
+@@ -1698,13 +1694,12 @@ baseline-browser-mapping@^2.8.25:
+   resolved "https://registry.yarnpkg.com/baseline-browser-mapping/-/baseline-browser-mapping-2.8.28.tgz#9ef511f5a7c19d74a94cafcbf951608398e9bdb3"
+   integrity sha512-gYjt7OIqdM0PcttNYP2aVrr2G0bMALkBaoehD4BuRGjAOtipg0b6wHg1yNL+s5zSnLZZrGHOw4IrND8CD+3oIQ==
+ 
+-better-sqlite3@12.10.0:
+-  version "12.10.0"
+-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.10.0.tgz#bde622d14a18008583a53bc53501ae98f1a12221"
+-  integrity sha512-CyzaZRQKyHkB2ZInfTTl2nvT33EbDpjkLEbE8/Zck3Ll6O0qqvuGdrJ45HgtH+HykRg88ITY3AdreBGN70aBSQ==
++better-sqlite3@13.0.3:
++  version "13.0.3"
++  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-13.0.3.tgz#b6ea0dc7fff7e28d04d9093e81051d38f7beabe2"
++  integrity sha512-RbOBxmLBG8uvFUc15X9+9SFemKcQ0WBuISBVkpuiaUB2qblC8UWlHEjdWVoZ8AdhSwmoEgsiXKfopX0CQxaACQ==
+   dependencies:
+-    bindings "^1.5.0"
+-    prebuild-install "^7.1.1"
++    node-addon-api "^8.0.0"
+ 
+ binary-extensions@^2.0.0:
+   version "2.3.0"
+@@ -1718,7 +1713,7 @@ bindings@^1.5.0:
+   dependencies:
+     file-uri-to-path "1.0.0"
+ 
+-bl@^4.0.3, bl@^4.1.0:
++bl@^4.1.0:
+   version "4.1.0"
+   resolved "https://registry.yarnpkg.com/bl/-/bl-4.1.0.tgz#451535264182bec2fbbc83a62ab98cf11d9f7b3a"
+   integrity sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==
+@@ -1968,11 +1963,6 @@ chokidar@^3.5.1:
+   optionalDependencies:
+     fsevents "~2.3.2"
+ 
+-chownr@^1.1.1:
+-  version "1.1.4"
+-  resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
+-  integrity sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==
+-
+ chownr@^2.0.0:
+   version "2.0.0"
+   resolved "https://registry.yarnpkg.com/chownr/-/chownr-2.0.0.tgz#15bfbe53d2eab4cf70f18a8cd68ebe5b3cb1dece"
+@@ -2235,11 +2225,6 @@ decompress-response@^6.0.0:
+   dependencies:
+     mimic-response "^3.1.0"
+ 
+-deep-extend@^0.6.0:
+-  version "0.6.0"
+-  resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
+-  integrity sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==
+-
+ defaults@^1.0.3:
+   version "1.0.4"
+   resolved "https://registry.yarnpkg.com/defaults/-/defaults-1.0.4.tgz#b0b02062c1e2aa62ff5d9528f0f98baa90978d7a"
+@@ -2280,7 +2265,7 @@ dequal@^2.0.3:
+   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
+   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
+ 
+-detect-libc@^2.0.0, detect-libc@^2.0.1:
++detect-libc@^2.0.1:
+   version "2.0.4"
+   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.4.tgz#f04715b8ba815e53b4d8109655b6508a6865a7e8"
+   integrity sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==
+@@ -2583,14 +2568,14 @@ electron-wix-msi@^5.1.3:
+   optionalDependencies:
+     "@bitdisaster/exe-icon-extractor" "^1.0.10"
+ 
+-electron@*, electron@41.7.1:
+-  version "41.7.1"
+-  resolved "https://registry.yarnpkg.com/electron/-/electron-41.7.1.tgz#2b4f1979a3a9a96ef522512a76e7a7840f3b9382"
+-  integrity sha512-pdRvNNP99Qfvs1lyIxo/sfIGAwJP0CrJFNCE3goFKc7/fV+kjK3EPxx5Nt6sLTkzqTyeRYylpwPUfpeGojiyyw==
++electron@*, electron@43.4.1:
++  version "43.4.1"
++  resolved "https://registry.yarnpkg.com/electron/-/electron-43.4.1.tgz#38fe7deff46c1c848b30ac46ad8e57c942704a34"
++  integrity sha512-5b+EuiwkgG5iRcsEL34rimgRpkYp15SsfZOa0pC5kXs0Tb82TH4n95rpQzTZa7yRCbA7tm0WoEbuBL6NaAhAcA==
+   dependencies:
+-    "@electron/get" "^2.0.0"
++    "@electron-internal/extract-zip" "^1.0.1"
++    "@electron/get" "^5.0.0"
+     "@types/node" "^24.9.0"
+-    extract-zip "^2.0.1"
+ 
+ emoji-regex@^8.0.0:
+   version "8.0.0"
+@@ -2609,7 +2594,7 @@ encoding@^0.1.13:
+   dependencies:
+     iconv-lite "^0.6.2"
+ 
+-end-of-stream@^1.1.0, end-of-stream@^1.4.1:
++end-of-stream@^1.1.0:
+   version "1.4.4"
+   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.4.tgz#5ae64a5f45057baf3626ec14da0ca5e4b2431eb0"
+   integrity sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==
+@@ -2763,11 +2748,6 @@ execa@^1.0.0:
+     signal-exit "^3.0.0"
+     strip-eof "^1.0.0"
+ 
+-expand-template@^2.0.3:
+-  version "2.0.3"
+-  resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
+-  integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
+-
+ exponential-backoff@^3.1.1:
+   version "3.1.2"
+   resolved "https://registry.yarnpkg.com/exponential-backoff/-/exponential-backoff-3.1.2.tgz#a8f26adb96bf78e8cd8ad1037928d5e5c0679d91"
+@@ -2797,7 +2777,7 @@ external-editor@^3.1.0:
+     iconv-lite "^0.4.24"
+     tmp "^0.0.33"
+ 
+-extract-zip@2.0.1, extract-zip@^2.0.0, extract-zip@^2.0.1:
++extract-zip@2.0.1, extract-zip@^2.0.0:
+   version "2.0.1"
+   resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.1.tgz#663dca56fe46df890d5f131ef4a06d22bb8ba13a"
+   integrity sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
+@@ -3013,11 +2993,6 @@ form-data@^4.0.0:
+     es-set-tostringtag "^2.1.0"
+     mime-types "^2.1.12"
+ 
+-fs-constants@^1.0.0:
+-  version "1.0.0"
+-  resolved "https://registry.yarnpkg.com/fs-constants/-/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
+-  integrity sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==
+-
+ fs-extra@9.1.0, fs-extra@^9.0.0, fs-extra@^9.0.1:
+   version "9.1.0"
+   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
+@@ -3194,11 +3169,6 @@ get-stream@^5.1.0:
+   dependencies:
+     pump "^3.0.0"
+ 
+-github-from-package@0.0.0:
+-  version "0.0.0"
+-  resolved "https://registry.yarnpkg.com/github-from-package/-/github-from-package-0.0.0.tgz#97fb5d96bfde8973313f20e8288ef9a167fa64ce"
+-  integrity sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==
+-
+ github-url-to-object@^4.0.4:
+   version "4.0.6"
+   resolved "https://registry.yarnpkg.com/github-url-to-object/-/github-url-to-object-4.0.6.tgz#5ea8701dc8c336b8d582dc3fa5bf964165c3b365"
+@@ -3493,11 +3463,6 @@ ini@2.0.0:
+   resolved "https://registry.yarnpkg.com/ini/-/ini-2.0.0.tgz#e5fd556ecdd5726be978fa1001862eacb0a94bc5"
+   integrity sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==
+ 
+-ini@~1.3.0:
+-  version "1.3.8"
+-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+-  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
+-
+ interpret@^3.1.1:
+   version "3.1.1"
+   resolved "https://registry.yarnpkg.com/interpret/-/interpret-3.1.1.tgz#5be0ceed67ca79c6c4bc5cf0d7ee843dcea110c4"
+@@ -4060,7 +4025,7 @@ minimatch@^9.0.3, minimatch@^9.0.4:
+   dependencies:
+     brace-expansion "^2.0.1"
+ 
+-minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.2.7, minimist@^1.2.8:
++minimist@^1.1.3, minimist@^1.2.5, minimist@^1.2.6, minimist@^1.2.7, minimist@^1.2.8:
+   version "1.2.8"
+   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
+@@ -4161,11 +4126,6 @@ minizlib@^3.1.0:
+   dependencies:
+     minipass "^7.1.2"
+ 
+-mkdirp-classic@^0.5.2, mkdirp-classic@^0.5.3:
+-  version "0.5.3"
+-  resolved "https://registry.yarnpkg.com/mkdirp-classic/-/mkdirp-classic-0.5.3.tgz#fa10c9115cc6d8865be221ba47ee9bed78601113"
+-  integrity sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==
+-
+ mkdirp@^0.5.1:
+   version "0.5.6"
+   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.6.tgz#7def03d2432dcae4ba1d611445c48396062255f6"
+@@ -4212,11 +4172,6 @@ nan@^2.4.0:
+   resolved "https://registry.yarnpkg.com/nan/-/nan-2.22.2.tgz#6b504fd029fb8f38c0990e52ad5c26772fdacfbb"
+   integrity sha512-DANghxFkS1plDdRsX0X9pm0Z6SJNN6gBdtXfanwoZ8hooC5gosGFSBGRYHUVPz1asKA/kMRqDRdHrluZ61SpBQ==
+ 
+-napi-build-utils@^2.0.0:
+-  version "2.0.0"
+-  resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-2.0.0.tgz#13c22c0187fcfccce1461844136372a47ddc027e"
+-  integrity sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==
+-
+ negotiator@^0.6.3:
+   version "0.6.4"
+   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.4.tgz#777948e2452651c570b712dd01c23e262713fff7"
+@@ -4237,10 +4192,10 @@ nice-try@^1.0.4:
+   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
+   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
+ 
+-node-abi@4.31.0, node-abi@^3.3.0, node-abi@^3.45.0, node-abi@^4.2.0:
+-  version "4.31.0"
+-  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-4.31.0.tgz#ac1e244d05d1b8c9e82d6fdcaa37b6407a47bf66"
+-  integrity sha512-Erq5w/t3syw3s4sDsUaX4QttIdBPsGKTT1DTRsCkTonGggczhlDKm/wDX3o+HPJpQ41EjXCbcmXf0tgr5YZJXw==
++node-abi@4.33.0, node-abi@^3.45.0, node-abi@^4.2.0:
++  version "4.33.0"
++  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-4.33.0.tgz#cce9b7bce0cbfa1d5d5a9b6908bc5eed698969cc"
++  integrity sha512-vLBWCKb+7LWsX+TbfzWOkw0W81m377tyx3hOweBTjO43CXZnRGS1/JPWs20fr0PgZyDXk6ROYrylsEycK8raDA==
+   dependencies:
+     semver "^7.6.3"
+ 
+@@ -4254,6 +4209,11 @@ node-addon-api@^2.0.0:
+   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-2.0.2.tgz#432cfa82962ce494b132e9d72a15b29f71ff5d32"
+   integrity sha512-Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==
+ 
++node-addon-api@^8.0.0:
++  version "8.9.2"
++  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.9.2.tgz#db7ac94a13ffd9b55e6cb04584bd5ef8e1d74b18"
++  integrity sha512-VijLXbi3UACN69I0JVXJsX4tjACjNoQDgv2gTF6sx2wWEi8tkSg2eX8p5gSIFi8z2+DL3oHmY6OyKce38SDolg==
++
+ node-api-version@^0.2.0, node-api-version@^0.2.1:
+   version "0.2.1"
+   resolved "https://registry.yarnpkg.com/node-api-version/-/node-api-version-0.2.1.tgz#19bad54f6d65628cbee4e607a325e4488ace2de9"
+@@ -4275,7 +4235,7 @@ node-fetch@^2.6.7:
+   dependencies:
+     whatwg-url "^5.0.0"
+ 
+-node-gyp@12.0.0, node-gyp@^11.2.0:
++node-gyp@12.0.0, node-gyp@^12.2.0:
+   version "12.0.0"
+   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-12.0.0.tgz#9e44b11421fb1a3ed1a60b14042496cffa7f99bd"
+   integrity sha512-wHhC3dtPgsK6WskpSu4XmudWUmWbe/z7aaLtxAqudq5i2Sn8xRYkUit4yGiGkrd6yWjbYlkKVk4/ogG3mqooLw==
+@@ -4620,24 +4580,6 @@ postject@^1.0.0-alpha.6:
+   dependencies:
+     commander "^9.4.0"
+ 
+-prebuild-install@^7.1.1:
+-  version "7.1.3"
+-  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-7.1.3.tgz#d630abad2b147443f20a212917beae68b8092eec"
+-  integrity sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==
+-  dependencies:
+-    detect-libc "^2.0.0"
+-    expand-template "^2.0.3"
+-    github-from-package "0.0.0"
+-    minimist "^1.2.3"
+-    mkdirp-classic "^0.5.3"
+-    napi-build-utils "^2.0.0"
+-    node-abi "^3.3.0"
+-    pump "^3.0.0"
+-    rc "^1.2.7"
+-    simple-get "^4.0.0"
+-    tar-fs "^2.0.0"
+-    tunnel-agent "^0.6.0"
+-
+ proc-log@^2.0.1:
+   version "2.0.1"
+   resolved "https://registry.yarnpkg.com/proc-log/-/proc-log-2.0.1.tgz#8f3f69a1f608de27878f91f5c688b225391cb685"
+@@ -4726,16 +4668,6 @@ randombytes@^2.1.0:
+   dependencies:
+     safe-buffer "^5.1.0"
+ 
+-rc@^1.2.7:
+-  version "1.2.8"
+-  resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.8.tgz#cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
+-  integrity sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==
+-  dependencies:
+-    deep-extend "^0.6.0"
+-    ini "~1.3.0"
+-    minimist "^1.2.0"
+-    strip-json-comments "~2.0.1"
+-
+ rcedit@^4.0.1:
+   version "4.0.1"
+   resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-4.0.1.tgz#892ac47a19204a380f49e00ea38ce070443343c2"
+@@ -4784,7 +4716,7 @@ read-pkg@^2.0.0:
+     normalize-package-data "^2.3.2"
+     path-type "^2.0.0"
+ 
+-readable-stream@^3.1.1, readable-stream@^3.4.0:
++readable-stream@^3.4.0:
+   version "3.6.2"
+   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.2.tgz#56a9b36ea965c00c5a93ef31eb111a0f11056967"
+   integrity sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==
+@@ -4931,7 +4863,7 @@ run-parallel@^1.1.9:
+   dependencies:
+     queue-microtask "^1.2.2"
+ 
+-safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
++safe-buffer@^5.1.0, safe-buffer@~5.2.0:
+   version "5.2.1"
+   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
+   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
+@@ -5065,20 +4997,6 @@ signal-exit@^4.0.1, signal-exit@^4.1.0:
+   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-4.1.0.tgz#952188c1cbd546070e2dd20d0f41c0ae0530cb04"
+   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
+ 
+-simple-concat@^1.0.0:
+-  version "1.0.1"
+-  resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.1.tgz#f46976082ba35c2263f1c8ab5edfe26c41c9552f"
+-  integrity sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==
+-
+-simple-get@^4.0.0:
+-  version "4.0.1"
+-  resolved "https://registry.yarnpkg.com/simple-get/-/simple-get-4.0.1.tgz#4a39db549287c979d352112fa03fd99fd6bc3543"
+-  integrity sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==
+-  dependencies:
+-    decompress-response "^6.0.0"
+-    once "^1.3.1"
+-    simple-concat "^1.0.0"
+-
+ simple-update-notifier@2.0.0:
+   version "2.0.0"
+   resolved "https://registry.yarnpkg.com/simple-update-notifier/-/simple-update-notifier-2.0.0.tgz#d70b92bdab7d6d90dfd73931195a30b6e3d7cebb"
+@@ -5302,11 +5220,6 @@ strip-eof@^1.0.0:
+   resolved "https://registry.yarnpkg.com/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
+   integrity sha512-7FCwGGmx8mD5xQd3RPUvnSpUXHM3BWuzjtpD4TXsfcZ9EL4azvVVUscFYwD9nx8Kh+uCBC00XBtAykoMHwTh8Q==
+ 
+-strip-json-comments@~2.0.1:
+-  version "2.0.1"
+-  resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+-  integrity sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==
+-
+ strip-outer@^1.0.1:
+   version "1.0.1"
+   resolved "https://registry.yarnpkg.com/strip-outer/-/strip-outer-1.0.1.tgz#b2fd2abf6604b9d1e6013057195df836b8a9d631"
+@@ -5345,27 +5258,6 @@ tapable@^2.2.0, tapable@^2.3.0:
+   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.3.0.tgz#7e3ea6d5ca31ba8e078b560f0d83ce9a14aa8be6"
+   integrity sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg==
+ 
+-tar-fs@^2.0.0:
+-  version "2.1.2"
+-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-2.1.2.tgz#425f154f3404cb16cb8ff6e671d45ab2ed9596c5"
+-  integrity sha512-EsaAXwxmx8UB7FRKqeozqEPop69DXcmYwTQwXvyAPF352HJsPdkVhvTaDPYqfNgruveJIJy3TA2l+2zj8LJIJA==
+-  dependencies:
+-    chownr "^1.1.1"
+-    mkdirp-classic "^0.5.2"
+-    pump "^3.0.0"
+-    tar-stream "^2.1.4"
+-
+-tar-stream@^2.1.4:
+-  version "2.2.0"
+-  resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-2.2.0.tgz#acad84c284136b060dc3faa64474aa9aebd77287"
+-  integrity sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==
+-  dependencies:
+-    bl "^4.0.3"
+-    end-of-stream "^1.4.1"
+-    fs-constants "^1.0.0"
+-    inherits "^2.0.3"
+-    readable-stream "^3.1.1"
+-
+ tar-stream@^3.1.7:
+   version "3.2.0"
+   resolved "https://registry.yarnpkg.com/tar-stream/-/tar-stream-3.2.0.tgz#0d0064d9b67ea3c9f5abde155e35faab0df37591"
+@@ -5549,13 +5441,6 @@ tslib@^2.2.0:
+   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
+   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
+ 
+-tunnel-agent@^0.6.0:
+-  version "0.6.0"
+-  resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
+-  integrity sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==
+-  dependencies:
+-    safe-buffer "^5.0.1"
+-
+ type-fest@^0.13.1:
+   version "0.13.1"
+   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
+@@ -5591,6 +5476,11 @@ undici-types@~7.16.0:
+   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.16.0.tgz#ffccdff36aea4884cbfce9a750a0580224f58a46"
+   integrity sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==
+ 
++undici@^7.24.4:
++  version "7.29.0"
++  resolved "https://registry.yarnpkg.com/undici/-/undici-7.29.0.tgz#ae0f6f62e06e057a9cbb7b2b5fde2bb74f791b8f"
++  integrity sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==
++
+ unique-filename@^2.0.0:
+   version "2.0.1"
+   resolved "https://registry.yarnpkg.com/unique-filename/-/unique-filename-2.0.1.tgz#e785f8675a9a7589e0ac77e0b5c34d2eaeac6da2"
+diff --git a/test/electron-js/plugin-cors.test.mjs b/test/electron-js/plugin-cors.test.mjs
+new file mode 100644
+index 0000000000..180cf48d28
+--- /dev/null
++++ b/test/electron-js/plugin-cors.test.mjs
+@@ -0,0 +1,480 @@
++/**
++ * Regression suite for the lsp:// path containment and the plugin-frame CORS
++ * relaxation in src/electron/electron/utils.js.
++ *
++ * Runs under bare `node --test` -- no Electron, no browser, no build step. The
++ * functions under test are pure and take no Electron dependencies, so the whole
++ * decision surface is reachable from a plain import.
++ *
++ * This suite lives outside the deps.edn :paths (src/main src/electron
++ * src/resources) so it stays off the shadow-cljs compile surface.
++ */
++import { describe, test, beforeEach } from 'node:test'
++import assert from 'node:assert/strict'
++import path from 'node:path'
++
++import {
++  resolveWithin,
++  isRegisteredRoot,
++  seedPluginRoots,
++  clearPluginRoots,
++  addPluginRoot,
++  pluginRootsFromPreferences,
++  resolveExternalPluginAsset,
++  resetReseedThrottle,
++  isRelaxablePluginRequest,
++  rememberPluginRequest,
++  clearTrackedRequests,
++  trackedRequestCount,
++  relaxCorsForPluginFrames,
++} from '../../src/electron/electron/utils.js'
++
++describe('resolveWithin', () => {
++  const ROOT = path.resolve('/srv/root')
++
++  test('returns the joined path for a contained relative path', () => {
++    assert.equal(resolveWithin(ROOT, 'a/b.txt'), path.join(ROOT, 'a/b.txt'))
++  })
++
++  test('returns the root itself for an empty relative path', () => {
++    assert.equal(resolveWithin(ROOT, ''), ROOT)
++  })
++
++  test('refuses a traversal that escapes the root', () => {
++    assert.equal(resolveWithin(ROOT, '../../etc/passwd'), null)
++  })
++
++  test('refuses a traversal hidden mid-path', () => {
++    assert.equal(resolveWithin(ROOT, 'a/../../../etc/passwd'), null)
++  })
++
++  test('treats an absolute-looking relative path as relative to the root', () => {
++    // path.resolve('/srv/root', '/etc/passwd') would be '/etc/passwd' outright,
++    // so the leading separator is stripped before joining.
++    assert.equal(resolveWithin(ROOT, '/etc/passwd'), path.join(ROOT, 'etc/passwd'))
++  })
++
++  test('refuses a sibling directory whose name merely starts with the root', () => {
++    // The startsWith() trap: "/srv/root-evil" is not inside "/srv/root".
++    assert.equal(resolveWithin(ROOT, '../root-evil/x'), null)
++  })
++
++  test('refuses a missing or non-string root', () => {
++    assert.equal(resolveWithin('', 'a'), null)
++    assert.equal(resolveWithin(undefined, 'a'), null)
++    assert.equal(resolveWithin(null, 'a'), null)
++  })
++
++  test('treats a non-string relative path as empty rather than throwing', () => {
++    assert.equal(resolveWithin(ROOT, undefined), ROOT)
++    assert.equal(resolveWithin(ROOT, null), ROOT)
++  })
++})
++
++describe('isRegisteredRoot', () => {
++  beforeEach(() => clearPluginRoots())
++
++  test('rejects every root before any has been seeded', () => {
++    assert.equal(isRegisteredRoot('/home/u/.ssh'), false)
++  })
++
++  test('accepts a seeded root and rejects an unseeded one', () => {
++    seedPluginRoots(['/home/u/plugins/foo'])
++    assert.equal(isRegisteredRoot('/home/u/plugins/foo'), true)
++    assert.equal(isRegisteredRoot('/home/u/.ssh'), false)
++  })
++
++  test('compares roots after normalisation, not as raw strings', () => {
++    seedPluginRoots(['/home/u/plugins/foo'])
++    assert.equal(isRegisteredRoot('/home/u/plugins/foo/'), true)
++    assert.equal(isRegisteredRoot('/home/u/plugins/bar/../foo'), true)
++  })
++
++  test('a seeded PARENT does not make its children roots', () => {
++    // Only the recorded root may be served from; resolveWithin then contains the
++    // request within it. A child directory is not itself a legitimate root.
++    seedPluginRoots(['/home/u/plugins'])
++    assert.equal(isRegisteredRoot('/home/u/plugins/foo'), false)
++  })
++
++  test('re-seeding replaces the previous set rather than adding to it', () => {
++    seedPluginRoots(['/home/u/plugins/foo'])
++    seedPluginRoots(['/home/u/plugins/bar'])
++    assert.equal(isRegisteredRoot('/home/u/plugins/foo'), false)
++    assert.equal(isRegisteredRoot('/home/u/plugins/bar'), true)
++  })
++
++  test('ignores junk entries without throwing', () => {
++    assert.equal(seedPluginRoots(['/a', '', null, undefined, 42]), 1)
++    assert.equal(seedPluginRoots('not-an-array'), 0)
++    assert.equal(isRegisteredRoot(''), false)
++    assert.equal(isRegisteredRoot(undefined), false)
++  })
++})
++
++describe('isRelaxablePluginRequest', () => {
++  test('relaxes xhr from each of the three plugin frame forms', () => {
++    for (const frameUrl of [
++      'lsp://logseq.io/my-plugin/index.html',
++      'lsp://logseq.com/plugins/my-plugin/index.html',
++      'lsp://logseq.com/external/%2Fhome%2Fu%2Fdev/index.html',
++    ]) {
++      assert.equal(
++        isRelaxablePluginRequest({ frameUrl, resourceType: 'xhr' }),
++        true,
++        frameUrl
++      )
++    }
++  })
++
++  test('does NOT relax the main app frame', () => {
++    // The renderer is also served over lsp://, from logseq.com -- matching on the
++    // scheme alone would relax the app's own requests.
++    assert.equal(
++      isRelaxablePluginRequest({
++        frameUrl: 'lsp://logseq.com/electron.html',
++        resourceType: 'xhr',
++      }),
++      false
++    )
++  })
++
++  test('does not relax resource types that never read a cross-origin body', () => {
++    const frameUrl = 'lsp://logseq.io/my-plugin/index.html'
++    for (const resourceType of ['image', 'script', 'stylesheet', 'font', 'subFrame']) {
++      assert.equal(
++        isRelaxablePluginRequest({ frameUrl, resourceType }),
++        false,
++        resourceType
++      )
++    }
++  })
++
++  test('relaxes the "other" type, which is where plain fetch lands', () => {
++    assert.equal(
++      isRelaxablePluginRequest({
++        frameUrl: 'lsp://logseq.io/my-plugin/index.html',
++        resourceType: 'other',
++      }),
++      true
++    )
++  })
++
++  test('does not relax a non-lsp frame', () => {
++    assert.equal(
++      isRelaxablePluginRequest({
++        frameUrl: 'https://evil.example/index.html',
++        resourceType: 'xhr',
++      }),
++      false
++    )
++  })
++
++  test('a missing frame url is treated as not-a-plugin, not a crash', () => {
++    assert.equal(isRelaxablePluginRequest({ resourceType: 'xhr' }), false)
++    assert.equal(isRelaxablePluginRequest({ frameUrl: '', resourceType: 'xhr' }), false)
++    assert.equal(isRelaxablePluginRequest(), false)
++  })
++
++  test('a plugin-shaped host on the wrong scheme is not a plugin frame', () => {
++    assert.equal(
++      isRelaxablePluginRequest({
++        frameUrl: 'https://logseq.io/my-plugin/index.html',
++        resourceType: 'xhr',
++      }),
++      false
++    )
++  })
++})
++
++describe('pluginRootsFromPreferences', () => {
++  const DOT = path.resolve('/home/u/.logseq-og')
++
++  test('always includes the dot-root tmp dir, where generated entries are written', () => {
++    // A non-dot-root plugin whose package main is a .js file gets an entry
++    // document generated into <dot-root>/tmp by write_user_tmp_file. That
++    // directory is never in `externals`, so without it here the entry is refused
++    // and the plugin does not load at all.
++    assert.ok(pluginRootsFromPreferences(DOT, {}).includes(path.join(DOT, 'tmp')))
++  })
++
++  test('includes every external the SDK recorded', () => {
++    const roots = pluginRootsFromPreferences(DOT, { externals: ['/a/one', '/b/two'] })
++    assert.ok(roots.includes('/a/one'))
++    assert.ok(roots.includes('/b/two'))
++  })
++
++  test('tolerates a missing, non-array or junk externals list', () => {
++    assert.deepEqual(pluginRootsFromPreferences(DOT, null), [path.join(DOT, 'tmp')])
++    assert.deepEqual(pluginRootsFromPreferences(DOT, { externals: 'nope' }), [path.join(DOT, 'tmp')])
++    assert.deepEqual(
++      pluginRootsFromPreferences(DOT, { externals: [null, '', 3, '/ok'] }),
++      [path.join(DOT, 'tmp'), '/ok']
++    )
++  })
++
++  test('yields no roots at all without a dot-root', () => {
++    assert.deepEqual(pluginRootsFromPreferences('', {}), [])
++  })
++})
++
++describe('addPluginRoot', () => {
++  beforeEach(() => clearPluginRoots())
++
++  test('allows a root the user picked, which no preferences file mentions yet', () => {
++    // The install-time case: PluginLocal#load() fetches the plugin's own scripts
++    // before LSPluginCore writes preferences.json, so re-reading that file cannot
++    // authorise the plugin being installed. Only the dialog knows.
++    const ROOT = path.resolve('/home/u/dev/my-plugin')
++    assert.equal(isRegisteredRoot(ROOT), false)
++    addPluginRoot(ROOT)
++    assert.equal(isRegisteredRoot(ROOT), true)
++  })
++
++  test('survives a re-seed from preferences.json', () => {
++    // seedPluginRoots replaces the file-derived set. Dropping the session root
++    // with it would refuse the plugin mid-install the moment anything re-seeded.
++    const ROOT = path.resolve('/home/u/dev/my-plugin')
++    addPluginRoot(ROOT)
++    seedPluginRoots(['/some/other/root'])
++    assert.equal(isRegisteredRoot(ROOT), true)
++  })
++
++  test('refuses junk without recording anything', () => {
++    assert.equal(addPluginRoot(''), false)
++    assert.equal(addPluginRoot(null), false)
++    assert.equal(isRegisteredRoot(''), false)
++  })
++
++  test('a session root does not make its parent or children roots', () => {
++    const ROOT = path.resolve('/home/u/dev/my-plugin')
++    addPluginRoot(ROOT)
++    assert.equal(isRegisteredRoot(path.resolve('/home/u/dev')), false)
++    assert.equal(isRegisteredRoot(path.join(ROOT, 'dist')), false)
++  })
++})
++
++describe('resolveExternalPluginAsset', () => {
++  const ROOT = path.resolve('/srv/plugin')
++
++  beforeEach(() => {
++    clearPluginRoots()
++    resetReseedThrottle()
++  })
++
++  test('serves a contained file from a seeded root without re-reading preferences', () => {
++    seedPluginRoots([ROOT])
++    let reseeds = 0
++    assert.equal(
++      resolveExternalPluginAsset(ROOT, '/dist/index.html', () => reseeds++),
++      path.join(ROOT, 'dist/index.html')
++    )
++    assert.equal(reseeds, 0)
++  })
++
++  test('re-seeds once for a root installed after startup, then serves it', () => {
++    // Roots are seeded at startup; a plugin installed mid-session is in
++    // preferences.json but not yet in the seeded set. Refusing it would break the
++    // install until the app restarts.
++    let reseeds = 0
++    const reseed = () => {
++      reseeds++
++      seedPluginRoots([ROOT])
++    }
++    assert.equal(
++      resolveExternalPluginAsset(ROOT, 'index.html', reseed),
++      path.join(ROOT, 'index.html')
++    )
++    assert.equal(reseeds, 1)
++  })
++
++  test('refuses a root that is still unknown after re-seeding', () => {
++    assert.equal(resolveExternalPluginAsset('/not/installed', 'index.html', () => {}), null)
++  })
++
++  test('still refuses a traversal out of a legitimately seeded root', () => {
++    seedPluginRoots([ROOT])
++    assert.equal(resolveExternalPluginAsset(ROOT, '../../etc/passwd', () => {}), null)
++  })
++
++  test('throttles re-reads, so a stream of bogus roots cannot hammer the disk', () => {
++    let reseeds = 0
++    const reseed = () => reseeds++
++    for (let i = 0; i < 50; i++) resolveExternalPluginAsset(`/bogus/${i}`, 'x', reseed)
++    assert.equal(reseeds, 1)
++  })
++
++  test('a throwing re-seed refuses rather than propagating', () => {
++    assert.equal(
++      resolveExternalPluginAsset(ROOT, 'index.html', () => {
++        throw new Error('preferences.json is unreadable')
++      }),
++      null
++    )
++  })
++})
++
++describe('relaxCorsForPluginFrames', () => {
++  const headersOf = (h) => {
++    const d = { id: 1, responseHeaders: h }
++    relaxCorsForPluginFrames(d)
++    return d.responseHeaders
++  }
++
++  beforeEach(() => clearTrackedRequests())
++
++  test('leaves an unattributed response completely alone', () => {
++    const h = { 'Content-Type': ['text/plain'] }
++    assert.deepEqual(headersOf(h), { 'Content-Type': ['text/plain'] })
++  })
++
++  test('publishes a wildcard origin for an attributed request', () => {
++    rememberPluginRequest(1)
++    const h = headersOf({})
++    // A WILDCARD, never the echoed origin: the browser rejects "*" for
++    // credentialed requests, which is what keeps cookie-bearing cross-origin
++    // reads blocked.
++    assert.deepEqual(h['Access-Control-Allow-Origin'], ['*'])
++    assert.deepEqual(h['Access-Control-Allow-Headers'], ['*'])
++    assert.ok(h['Access-Control-Allow-Methods'])
++  })
++
++  test('exposes response headers, so a plugin can read more than the CORS-safelisted ones', () => {
++    rememberPluginRequest(1)
++    assert.deepEqual(headersOf({})['Access-Control-Expose-Headers'], ['*'])
++  })
++
++  test('replaces an existing header whatever its casing, rather than duplicating it', () => {
++    rememberPluginRequest(1)
++    const h = headersOf({ 'access-control-allow-origin': ['https://example.com'] })
++    assert.equal(h['access-control-allow-origin'], undefined)
++    assert.deepEqual(h['Access-Control-Allow-Origin'], ['*'])
++  })
++
++  test('keeps relaxing across the hops of a redirect chain', () => {
++    // onHeadersReceived fires once per hop. Dropping the entry on the first
++    // response would leave the final one unrelaxed.
++    rememberPluginRequest(1)
++    headersOf({})
++    assert.deepEqual(headersOf({})['Access-Control-Allow-Origin'], ['*'])
++  })
++
++  test('does not touch headers it was not asked about', () => {
++    rememberPluginRequest(1)
++    assert.deepEqual(headersOf({ 'Content-Type': ['application/json'] })['Content-Type'], [
++      'application/json',
++    ])
++  })
++})
++
++describe('plugin request tracking', () => {
++  beforeEach(() => clearTrackedRequests())
++
++  test('stays bounded under a flood of requests that are all still young', () => {
++    for (let i = 0; i < 3000; i++) rememberPluginRequest(i)
++    assert.ok(trackedRequestCount() <= 2000, `tracked ${trackedRequestCount()}`)
++  })
++
++  test('a flood evicts the oldest entries and keeps the newest', () => {
++    for (let i = 0; i < 3000; i++) rememberPluginRequest(i)
++    assert.ok(trackedRequestCount() > 0)
++    const d = { id: 2999, responseHeaders: {} }
++    relaxCorsForPluginFrames(d)
++    assert.deepEqual(d.responseHeaders['Access-Control-Allow-Origin'], ['*'])
++  })
++})
++
++describe('compiled release output (guard)', () => {
++  const loadBuilt = async () => {
++    const { readFileSync, existsSync } = await import('node:fs')
++    const { fileURLToPath } = await import('node:url')
++    const built = fileURLToPath(new URL('../../static/electron.js', import.meta.url))
++    return existsSync(built) ? readFileSync(built, 'utf8') : null
++  }
++
++  // Closure renames symbols in a release build, so this guard can only READ the
++  // compiled output when it was built with pseudo-names (`--debug`, which is what
++  // cljs:release-electron passes). A plain release renames resolveWithin away
++  // entirely and there is nothing left to match on.
++  //
++  // The distinction matters: an earlier version of this guard looked for a marker
++  // that never appears in ANY build and returned early when it was missing, so it
++  // passed unconditionally and protected nothing. If the build is observable, a
++  // missing marker is now a FAILURE, not a silent skip.
++  const isPseudoNamed = (s) => /\.\$[a-zA-Z_]+\$/.test(s)
++  // The DEFINITION, not the `module.resolveWithin =` export line: once a second
++  // caller exists inside the module Closure emits the export as a bare alias and
++  // the body lands elsewhere in the file. Anchoring on the export site silently
++  // inspected the wrong function.
++  const MARKER = '$resolveWithin$$module$electron$utils$$ = ('
++
++  // src/electron/electron/utils.js is Closure-compiled under :advanced in a
++  // RELEASE build, which renames any path.* PROPERTY it has no extern for.
++  // path.sep and path.relative both compiled to mangled keys that are undefined on
++  // Node's real path object, so resolveWithin's containment check became
++  // startsWith(base + "undefined") -- false for every contained path. It then
++  // refused the app's own electron.html and the window came up blank, in release
++  // builds only. A dev `cljs compile` does NOT rename properties and cannot catch
++  // this. Rule: do containment with plain string ops, never path.sep/path.relative.
++  test('resolveWithin has no mangled path.* property', async () => {
++    const s = await loadBuilt()
++    if (!s) return // not built; run `clojure -M:cljs release electron --debug`
++    if (!isPseudoNamed(s)) return // plain release build: symbols are unrecoverable
++
++    const i = s.indexOf(MARKER)
++    assert.notEqual(
++      i,
++      -1,
++      `guard could not find ${MARKER} in a pseudo-named build -- the marker is ` +
++        'stale and this check is protecting nothing; fix the marker (Closure ' +
++        'moves the definition when the set of callers changes)'
++    )
++    const body = s.slice(i, i + 1200)
++    assert.ok(
++      !/\.\$(sep|relative|normalize)\$/.test(body),
++      'compiled resolveWithin references a mangled path.* property -- undefined at runtime'
++    )
++    // The externs-covered calls must survive UNmangled, or containment is broken
++    // in the other direction.
++    assert.ok(
++      /\.resolve\(/.test(body) && /\.join\(/.test(body),
++      'compiled resolveWithin lost path.resolve/path.join -- check externs.js'
++    )
++  })
++
++  test('the preferences.json read stays quoted, not renamed to a mangled key', async () => {
++    // preferences.json is parsed data, so no extern can cover a dotted read of it.
++    // `prefs.externals` compiled to a mangled property that is undefined on the
++    // real object: only the tmp root was seeded and every external plugin was
++    // refused. Note a pseudo-named build spells the mangled form `.$externals$`,
++    // which still CONTAINS the word -- so grepping for "externals" is not a check.
++    const s = await loadBuilt()
++    if (!s) return
++    if (!isPseudoNamed(s)) return
++
++    const i = s.indexOf('$pluginRootsFromPreferences$')
++    assert.notEqual(i, -1, 'guard could not find pluginRootsFromPreferences; fix the marker')
++    const body = s.slice(i, i + 900)
++    assert.ok(
++      !/\.\$externals\$/.test(body),
++      'the externals read was renamed -- quote it as prefs[\'externals\']'
++    )
++    // Closure emits a quoted read back as plain `.externals` but marks it
++    // un-renameable, so the surviving evidence is the UNmangled name, not a
++    // quoted literal.
++    assert.ok(/\.externals\b/.test(body), 'the externals read has gone missing entirely')
++  })
++
++  test('the webRequest names used by the CORS policy survive renaming', async () => {
++    const s = await loadBuilt()
++    if (!s) return
++    if (!isPseudoNamed(s)) return
++    for (const name of ['onBeforeRequest', 'onHeadersReceived', 'responseHeaders', 'resourceType']) {
++      assert.ok(
++        !new RegExp(`\\.\\$${name}\\$`).test(s),
++        `${name} was renamed -- it needs an entry in externs.js, or the call fails ` +
++          'at runtime and aborts app setup before the main IPC channel registers'
++      )
++    }
++  })
++})
+diff --git a/yarn.lock b/yarn.lock
+index 5f26a383fc..edce84975f 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -269,20 +269,24 @@
+   resolved "https://registry.yarnpkg.com/@capgo/capacitor-navigation-bar/-/capacitor-navigation-bar-6.1.75.tgz#60ff3c460683e6842bb856fff2aedc6377148e49"
+   integrity sha512-vjrEqygJm5q1EvTtJJxxNrNcd01kZB6TAuKjAJ6KoQPdMdjrV94JyQgo9X1Roi8uX2M5/VYwvgHXp/cyjvzFiQ==
+ 
+-"@electron/get@^2.0.0":
+-  version "2.0.3"
+-  resolved "https://registry.yarnpkg.com/@electron/get/-/get-2.0.3.tgz#fba552683d387aebd9f3fcadbcafc8e12ee4f960"
+-  integrity sha512-Qkzpg2s9GnVV2I2BjRksUi43U5e6+zaQMcjoJy0C+C5oxaKl+fmckGDQFtRpZpZV0NQekuZZ+tGz7EA9TVnQtQ==
++"@electron-internal/extract-zip@^1.0.1":
++  version "1.0.5"
++  resolved "https://registry.yarnpkg.com/@electron-internal/extract-zip/-/extract-zip-1.0.5.tgz#6782c0f6066e60b7fd286fe7a5c7600f7650d420"
++  integrity sha512-+bqFCP98pLI0Tt0XQo1TmlXtwjWchISndDOxCkEcIuUgXWpBnLyRI+2DU+mesvnMMX6L1XDqYNA0lXNDHd/yiA==
++
++"@electron/get@^5.0.0":
++  version "5.1.0"
++  resolved "https://registry.yarnpkg.com/@electron/get/-/get-5.1.0.tgz#f96ca2a0e89b27490ff8f7b5a392bd4df6942998"
++  integrity sha512-3kSBtG8ObcTVfXanm5vVJ6UnBLEVmVsRk1M+vGqCuMBV+XLCbJYuWQful+yIy0GQDsSlK0kHEriEHn7SPk4EnA==
+   dependencies:
+     debug "^4.1.1"
+-    env-paths "^2.2.0"
+-    fs-extra "^8.1.0"
+-    got "^11.8.5"
++    env-paths "^3.0.0"
++    graceful-fs "^4.2.11"
+     progress "^2.0.3"
+-    semver "^6.2.0"
++    semver "^7.6.3"
+     sumchecker "^3.0.1"
+   optionalDependencies:
+-    global-agent "^3.0.0"
++    undici "^7.24.4"
+ 
+ "@excalidraw/excalidraw@0.16.1":
+   version "0.16.1"
+@@ -800,11 +804,6 @@
+     "@sentry/types" "6.19.7"
+     tslib "^1.9.3"
+ 
+-"@sindresorhus/is@^4.0.0":
+-  version "4.6.0"
+-  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f"
+-  integrity sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==
+-
+ "@stylelint/postcss-css-in-js@^0.37.2":
+   version "0.37.3"
+   resolved "https://registry.yarnpkg.com/@stylelint/postcss-css-in-js/-/postcss-css-in-js-0.37.3.tgz#d149a385e07ae365b0107314c084cb6c11adbf49"
+@@ -820,13 +819,6 @@
+     remark "^13.0.0"
+     unist-util-find-all-after "^3.0.2"
+ 
+-"@szmarczak/http-timer@^4.0.5":
+-  version "4.0.6"
+-  resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-4.0.6.tgz#b4a914bb62e7c272d4e5989fe4440f812ab1d807"
+-  integrity sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==
+-  dependencies:
+-    defer-to-connect "^2.0.0"
+-
+ "@tabler/icons@^1.96.0":
+   version "1.119.0"
+   resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.119.0.tgz#8c590bc5a563c8673a78ccd451bedabd584b376e"
+@@ -866,16 +858,6 @@
+   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
+   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
+ 
+-"@types/cacheable-request@^6.0.1":
+-  version "6.0.3"
+-  resolved "https://registry.yarnpkg.com/@types/cacheable-request/-/cacheable-request-6.0.3.tgz#a430b3260466ca7b5ca5bfd735693b36e7a9d183"
+-  integrity sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==
+-  dependencies:
+-    "@types/http-cache-semantics" "*"
+-    "@types/keyv" "^3.1.4"
+-    "@types/node" "*"
+-    "@types/responselike" "^1.0.0"
+-
+ "@types/earcut@^2.1.0":
+   version "2.1.4"
+   resolved "https://registry.yarnpkg.com/@types/earcut/-/earcut-2.1.4.tgz#5811d7d333048f5a7573b22ddc84923e69596da6"
+@@ -912,18 +894,6 @@
+     "@types/vinyl-fs" "*"
+     chokidar "^3.3.1"
+ 
+-"@types/http-cache-semantics@*":
+-  version "4.2.0"
+-  resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.2.0.tgz#f6a7788f438cbfde15f29acad46512b4c01913b3"
+-  integrity sha512-L3LgimLHXtGkWikKnsPg0/VFx9OGZaC+eN1u4r+OB1XRqH3meBIAVC2zr1WdMH+RHmnRkqliQAOHNJ/E0j/e0Q==
+-
+-"@types/keyv@^3.1.4":
+-  version "3.1.4"
+-  resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
+-  integrity sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
+-  dependencies:
+-    "@types/node" "*"
+-
+ "@types/mdast@^3.0.0":
+   version "3.0.15"
+   resolved "https://registry.yarnpkg.com/@types/mdast/-/mdast-3.0.15.tgz#49c524a263f30ffa28b71ae282f813ed000ab9f5"
+@@ -965,13 +935,6 @@
+   resolved "https://registry.yarnpkg.com/@types/picomatch/-/picomatch-4.0.0.tgz#28da88d1bddf40f84f1b2bd7b0e978cf7592696b"
+   integrity sha512-J1Bng+wlyEERWSgJQU1Pi0HObCLVcr994xT/M+1wcl/yNRTGBupsCxthgkdYG+GCOMaQH7iSVUY3LJVBBqG7MQ==
+ 
+-"@types/responselike@^1.0.0":
+-  version "1.0.3"
+-  resolved "https://registry.yarnpkg.com/@types/responselike/-/responselike-1.0.3.tgz#cc29706f0a397cfe6df89debfe4bf5cea159db50"
+-  integrity sha512-H/+L+UkTV33uf49PH5pCAUBVPNj2nDBXTN+qS1dOwyyg24l3CcicicCA7ca+HMvJBZcFgl5r8e+RR6elsb4Lyw==
+-  dependencies:
+-    "@types/node" "*"
+-
+ "@types/slice-ansi@^4.0.0":
+   version "4.0.0"
+   resolved "https://registry.yarnpkg.com/@types/slice-ansi/-/slice-ansi-4.0.0.tgz#eb40dfbe3ac5c1de61f6bcb9ed471f54baa989d6"
+@@ -1020,13 +983,6 @@
+     "@types/expect" "^1.20.4"
+     "@types/node" "*"
+ 
+-"@types/yauzl@^2.9.1":
+-  version "2.10.3"
+-  resolved "https://registry.yarnpkg.com/@types/yauzl/-/yauzl-2.10.3.tgz#e9b2808b4f109504a03cda958259876f61017999"
+-  integrity sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==
+-  dependencies:
+-    "@types/node" "*"
+-
+ "@xmldom/xmldom@^0.8.8":
+   version "0.8.10"
+   resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.10.tgz#a1337ca426aa61cef9fe15b5b28e340a72f6fa99"
+@@ -1471,11 +1427,6 @@ boolbase@^1.0.0:
+   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
+   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
+ 
+-boolean@^3.0.1:
+-  version "3.2.0"
+-  resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.2.0.tgz#9e5294af4e98314494cbb17979fa54ca159f116b"
+-  integrity sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==
+-
+ bplist-parser@^0.3.2:
+   version "0.3.2"
+   resolved "https://registry.yarnpkg.com/bplist-parser/-/bplist-parser-0.3.2.tgz#3ac79d67ec52c4c107893e0237eb787cbacbced7"
+@@ -1648,24 +1599,6 @@ cache-base@^1.0.1:
+     union-value "^1.0.0"
+     unset-value "^1.0.0"
+ 
+-cacheable-lookup@^5.0.3:
+-  version "5.0.4"
+-  resolved "https://registry.yarnpkg.com/cacheable-lookup/-/cacheable-lookup-5.0.4.tgz#5a6b865b2c44357be3d5ebc2a467b032719a7005"
+-  integrity sha512-2/kNscPhpcxrOigMZzbiWF7dz8ilhb/nIHU3EyZiXWXpeq/au8qJ8VhdftMkty3n7Gj6HIGalQG8oiBNB3AJgA==
+-
+-cacheable-request@^7.0.2:
+-  version "7.0.4"
+-  resolved "https://registry.yarnpkg.com/cacheable-request/-/cacheable-request-7.0.4.tgz#7a33ebf08613178b403635be7b899d3e69bbe817"
+-  integrity sha512-v+p6ongsrp0yTGbJXjgxPow2+DL93DASP4kXCDKb8/bwRtt9OEF3whggkkDkGNzgcWy2XaF4a8nZglC7uElscg==
+-  dependencies:
+-    clone-response "^1.0.2"
+-    get-stream "^5.1.0"
+-    http-cache-semantics "^4.0.0"
+-    keyv "^4.0.0"
+-    lowercase-keys "^2.0.0"
+-    normalize-url "^6.0.1"
+-    responselike "^2.0.0"
+-
+ call-bind-apply-helpers@^1.0.0, call-bind-apply-helpers@^1.0.1, call-bind-apply-helpers@^1.0.2:
+   version "1.0.2"
+   resolved "https://registry.yarnpkg.com/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz#4b5428c222be985d79c3d82657479dbe0b59b2d6"
+@@ -1924,13 +1857,6 @@ clone-regexp@^2.1.0:
+   dependencies:
+     is-regexp "^2.0.0"
+ 
+-clone-response@^1.0.2:
+-  version "1.0.3"
+-  resolved "https://registry.yarnpkg.com/clone-response/-/clone-response-1.0.3.tgz#af2032aa47816399cf5f0a1d0db902f517abb8c3"
+-  integrity sha512-ROoL94jJH2dUVML2Y/5PEDNaSHgeOdSDicUyS7izcF63G6sTc/FTjLub4b8Il9S8S0beOfYt0TaA5qvFK+w0wA==
+-  dependencies:
+-    mimic-response "^1.0.0"
+-
+ clone-stats@^1.0.0:
+   version "1.0.0"
+   resolved "https://registry.yarnpkg.com/clone-stats/-/clone-stats-1.0.0.tgz#b3782dff8bb5474e18b9b6bf0fdfe782f8777680"
+@@ -2416,13 +2342,6 @@ decompress-response@^4.2.0:
+   dependencies:
+     mimic-response "^2.0.0"
+ 
+-decompress-response@^6.0.0:
+-  version "6.0.0"
+-  resolved "https://registry.yarnpkg.com/decompress-response/-/decompress-response-6.0.0.tgz#ca387612ddb7e104bd16d85aab00d5ecf09c66fc"
+-  integrity sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==
+-  dependencies:
+-    mimic-response "^3.1.0"
+-
+ deepmerge@^4.2.2:
+   version "4.3.1"
+   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.3.1.tgz#44b5f2147cd3b00d4b56137685966f26fd25dd4a"
+@@ -2440,11 +2359,6 @@ default-resolution@^2.0.0:
+   resolved "https://registry.yarnpkg.com/default-resolution/-/default-resolution-2.0.0.tgz#bcb82baa72ad79b426a76732f1a81ad6df26d684"
+   integrity sha512-2xaP6GiwVwOEbXCGoJ4ufgC76m8cj805jrghScewJC2ZDsb9U0b4BIrba+xt/Uytyd0HvQ6+WymSRTfnYj59GQ==
+ 
+-defer-to-connect@^2.0.0:
+-  version "2.0.1"
+-  resolved "https://registry.yarnpkg.com/defer-to-connect/-/defer-to-connect-2.0.1.tgz#8016bdb4143e4632b77a3449c6236277de520587"
+-  integrity sha512-4tvttepXG1VaYGrRibk5EwJd1t4udunSOVMdLSAL6mId1ix438oPwPZMALY41FCijukO1L0twNcGsdzS7dHgDg==
+-
+ define-data-property@^1.0.1, define-data-property@^1.1.4:
+   version "1.1.4"
+   resolved "https://registry.yarnpkg.com/define-data-property/-/define-data-property-1.1.4.tgz#894dc141bb7d3060ae4366f6a0107e68fbe48c5e"
+@@ -2532,11 +2446,6 @@ detect-libc@^2.0.0:
+   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.4.tgz#f04715b8ba815e53b4d8109655b6508a6865a7e8"
+   integrity sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==
+ 
+-detect-node@^2.0.4:
+-  version "2.1.0"
+-  resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
+-  integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
+-
+ didyoumean@^1.2.2:
+   version "1.2.2"
+   resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.2.tgz#989346ffe9e839b4555ecf5666edea0d3e8ad037"
+@@ -2695,14 +2604,14 @@ electron-to-chromium@^1.5.149:
+   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.151.tgz#5edd6c17e1b2f14b4662c41b9379f96cc8c2bb7c"
+   integrity sha512-Rl6uugut2l9sLojjS4H4SAr3A4IgACMLgpuEMPYCVcKydzfyPrn5absNRju38IhQOf/NwjJY8OGWjlteqYeBCA==
+ 
+-electron@41.7.1:
+-  version "41.7.1"
+-  resolved "https://registry.yarnpkg.com/electron/-/electron-41.7.1.tgz#2b4f1979a3a9a96ef522512a76e7a7840f3b9382"
+-  integrity sha512-pdRvNNP99Qfvs1lyIxo/sfIGAwJP0CrJFNCE3goFKc7/fV+kjK3EPxx5Nt6sLTkzqTyeRYylpwPUfpeGojiyyw==
++electron@43.4.1:
++  version "43.4.1"
++  resolved "https://registry.yarnpkg.com/electron/-/electron-43.4.1.tgz#38fe7deff46c1c848b30ac46ad8e57c942704a34"
++  integrity sha512-5b+EuiwkgG5iRcsEL34rimgRpkYp15SsfZOa0pC5kXs0Tb82TH4n95rpQzTZa7yRCbA7tm0WoEbuBL6NaAhAcA==
+   dependencies:
+-    "@electron/get" "^2.0.0"
++    "@electron-internal/extract-zip" "^1.0.1"
++    "@electron/get" "^5.0.0"
+     "@types/node" "^24.9.0"
+-    extract-zip "^2.0.1"
+ 
+ element-resize-detector@^1.1.14:
+   version "1.2.4"
+@@ -2763,6 +2672,11 @@ env-paths@^2.2.0:
+   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
+   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
+ 
++env-paths@^3.0.0:
++  version "3.0.0"
++  resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-3.0.0.tgz#2f1e89c2f6dbd3408e1b1711dd82d62e317f58da"
++  integrity sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==
++
+ error-ex@^1.2.0, error-ex@^1.3.1:
+   version "1.3.2"
+   resolved "https://registry.yarnpkg.com/error-ex/-/error-ex-1.3.2.tgz#b4ac40648107fdcdcfae242f428bea8a14d4f1bf"
+@@ -2873,11 +2787,6 @@ es5-ext@^0.10.35, es5-ext@^0.10.46, es5-ext@^0.10.62, es5-ext@^0.10.64, es5-ext@
+     esniff "^2.0.1"
+     next-tick "^1.1.0"
+ 
+-es6-error@^4.1.1:
+-  version "4.1.1"
+-  resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
+-  integrity sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==
+-
+ es6-iterator@^2.0.1, es6-iterator@^2.0.3:
+   version "2.0.3"
+   resolved "https://registry.yarnpkg.com/es6-iterator/-/es6-iterator-2.0.3.tgz#a7de889141a05a94b0854403b2d0a0fbfa98f3b7"
+@@ -2920,11 +2829,6 @@ escape-string-regexp@^1.0.5:
+   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+   integrity sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==
+ 
+-escape-string-regexp@^4.0.0:
+-  version "4.0.0"
+-  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
+-  integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
+-
+ escape-string-regexp@^5.0.0:
+   version "5.0.0"
+   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz#4683126b500b61762f2dbebace1806e8be31b1c8"
+@@ -3067,17 +2971,6 @@ extglob@^2.0.4:
+     snapdragon "^0.8.1"
+     to-regex "^3.0.1"
+ 
+-extract-zip@^2.0.1:
+-  version "2.0.1"
+-  resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.1.tgz#663dca56fe46df890d5f131ef4a06d22bb8ba13a"
+-  integrity sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
+-  dependencies:
+-    debug "^4.1.1"
+-    get-stream "^5.1.0"
+-    yauzl "^2.10.0"
+-  optionalDependencies:
+-    "@types/yauzl" "^2.9.1"
+-
+ fancy-log@^1.3.2:
+   version "1.3.3"
+   resolved "https://registry.yarnpkg.com/fancy-log/-/fancy-log-1.3.3.tgz#dbc19154f558690150a23953a0adbd035be45fc7"
+@@ -3323,15 +3216,6 @@ fs-extra@^10.0.0:
+     jsonfile "^6.0.1"
+     universalify "^2.0.0"
+ 
+-fs-extra@^8.1.0:
+-  version "8.1.0"
+-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
+-  integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
+-  dependencies:
+-    graceful-fs "^4.2.0"
+-    jsonfile "^4.0.0"
+-    universalify "^0.1.0"
+-
+ fs-minipass@^2.0.0:
+   version "2.1.0"
+   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-2.1.0.tgz#7f5036fdbf12c63c169190cbe4199c852271f9fb"
+@@ -3480,13 +3364,6 @@ get-stream@^4.0.0:
+   dependencies:
+     pump "^3.0.0"
+ 
+-get-stream@^5.1.0:
+-  version "5.2.0"
+-  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-5.2.0.tgz#4966a1795ee5ace65e706c4b7beb71257d6e22d3"
+-  integrity sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==
+-  dependencies:
+-    pump "^3.0.0"
+-
+ get-symbol-description@^1.1.0:
+   version "1.1.0"
+   resolved "https://registry.yarnpkg.com/get-symbol-description/-/get-symbol-description-1.1.0.tgz#7bdd54e0befe8ffc9f3b4e203220d9f1e881b6ee"
+@@ -3586,18 +3463,6 @@ glob@^9.2.0:
+     minipass "^4.2.4"
+     path-scurry "^1.6.1"
+ 
+-global-agent@^3.0.0:
+-  version "3.0.0"
+-  resolved "https://registry.yarnpkg.com/global-agent/-/global-agent-3.0.0.tgz#ae7cd31bd3583b93c5a16437a1afe27cc33a1ab6"
+-  integrity sha512-PT6XReJ+D07JvGoxQMkT6qji/jVNfX/h364XHZOWeRzy64sSFr+xJ5OX7LI3b4MPQzdL4H8Y8M0xzPpsVMwA8Q==
+-  dependencies:
+-    boolean "^3.0.1"
+-    es6-error "^4.1.1"
+-    matcher "^3.0.0"
+-    roarr "^2.15.3"
+-    semver "^7.3.2"
+-    serialize-error "^7.0.1"
+-
+ global-modules@^1.0.0:
+   version "1.0.0"
+   resolved "https://registry.yarnpkg.com/global-modules/-/global-modules-1.0.0.tgz#6d770f0eb523ac78164d72b5e71a8877265cc3ea"
+@@ -3639,7 +3504,7 @@ globals@^11.1.0:
+   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
+   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
+ 
+-globalthis@^1.0.1, globalthis@^1.0.4:
++globalthis@^1.0.4:
+   version "1.0.4"
+   resolved "https://registry.yarnpkg.com/globalthis/-/globalthis-1.0.4.tgz#7430ed3a975d97bfb59bcce41f5cabbafa651236"
+   integrity sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==
+@@ -3694,24 +3559,7 @@ gopd@^1.0.1, gopd@^1.2.0:
+   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.2.0.tgz#89f56b8217bdbc8802bd299df6d7f1081d7e51a1"
+   integrity sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==
+ 
+-got@^11.8.5:
+-  version "11.8.6"
+-  resolved "https://registry.yarnpkg.com/got/-/got-11.8.6.tgz#276e827ead8772eddbcfc97170590b841823233a"
+-  integrity sha512-6tfZ91bOr7bOXnK7PRDCGBLa1H4U080YHNaAQ2KsMGlLEzRbk44nsZF2E1IeRc3vtJHPVbKCYgdFbaGO2ljd8g==
+-  dependencies:
+-    "@sindresorhus/is" "^4.0.0"
+-    "@szmarczak/http-timer" "^4.0.5"
+-    "@types/cacheable-request" "^6.0.1"
+-    "@types/responselike" "^1.0.0"
+-    cacheable-lookup "^5.0.3"
+-    cacheable-request "^7.0.2"
+-    decompress-response "^6.0.0"
+-    http2-wrapper "^1.0.0-beta.5.2"
+-    lowercase-keys "^2.0.0"
+-    p-cancelable "^2.0.0"
+-    responselike "^2.0.0"
+-
+-graceful-fs@^4.0.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
++graceful-fs@^4.0.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.11, graceful-fs@^4.2.4:
+   version "4.2.11"
+   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
+   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
+@@ -3954,19 +3802,6 @@ htmlparser2@^3.10.0:
+     inherits "^2.0.1"
+     readable-stream "^3.1.1"
+ 
+-http-cache-semantics@^4.0.0:
+-  version "4.2.0"
+-  resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-4.2.0.tgz#205f4db64f8562b76a4ff9235aa5279839a09dd5"
+-  integrity sha512-dTxcvPXqPvXBQpq5dUr6mEMJX4oIEFv6bwom3FDwKRDsuIjjJGANqhBuoAn9c1RQJIdAKav33ED65E2ys+87QQ==
+-
+-http2-wrapper@^1.0.0-beta.5.2:
+-  version "1.0.3"
+-  resolved "https://registry.yarnpkg.com/http2-wrapper/-/http2-wrapper-1.0.3.tgz#b8f55e0c1f25d4ebd08b3b0c2c079f9590800b3d"
+-  integrity sha512-V+23sDMr12Wnz7iTcDeJr3O6AIxlnvT/bmaAAAP/Xda35C90p9599p0F1eHR/N1KILWSoWVAiOMFjBBXaXSMxg==
+-  dependencies:
+-    quick-lru "^5.1.1"
+-    resolve-alpn "^1.0.0"
+-
+ https-browserify@^1.0.0:
+   version "1.0.0"
+   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
+@@ -4598,23 +4433,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
+   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
+   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
+ 
+-json-stringify-safe@^5.0.1:
+-  version "5.0.1"
+-  resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+-  integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
+-
+ json5@^2.2.3:
+   version "2.2.3"
+   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
+   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
+ 
+-jsonfile@^4.0.0:
+-  version "4.0.0"
+-  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
+-  integrity sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==
+-  optionalDependencies:
+-    graceful-fs "^4.1.6"
+-
+ jsonfile@^6.0.1:
+   version "6.1.0"
+   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-6.1.0.tgz#bc55b2634793c679ec6403094eb13698a6ec0aae"
+@@ -4656,7 +4479,7 @@ katex@^0.16.10:
+   dependencies:
+     commander "^8.3.0"
+ 
+-keyv@^4.0.0, keyv@^4.5.3:
++keyv@^4.5.3:
+   version "4.5.4"
+   resolved "https://registry.yarnpkg.com/keyv/-/keyv-4.5.4.tgz#a879a99e29452f942439f2a405e3af8b31d4de93"
+   integrity sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==
+@@ -4870,11 +4693,6 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
+   dependencies:
+     js-tokens "^3.0.0 || ^4.0.0"
+ 
+-lowercase-keys@^2.0.0:
+-  version "2.0.0"
+-  resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-2.0.0.tgz#2603e78b7b4b0006cbca2fbcc8a3202558ac9479"
+-  integrity sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
+-
+ lru-cache@^10.2.0:
+   version "10.4.3"
+   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.4.3.tgz#410fc8a17b70e598013df257c2446b7f3383f119"
+@@ -4952,13 +4770,6 @@ matchdep@^2.0.0:
+     resolve "^1.4.0"
+     stack-trace "0.0.10"
+ 
+-matcher@^3.0.0:
+-  version "3.0.0"
+-  resolved "https://registry.yarnpkg.com/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"
+-  integrity sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==
+-  dependencies:
+-    escape-string-regexp "^4.0.0"
+-
+ math-intrinsics@^1.1.0:
+   version "1.1.0"
+   resolved "https://registry.yarnpkg.com/math-intrinsics/-/math-intrinsics-1.1.0.tgz#a0dd74be81e2aa5c2f27e65ce283605ee4e2b7f9"
+@@ -5101,21 +4912,11 @@ mimic-fn@^2.0.0:
+   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
+   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
+ 
+-mimic-response@^1.0.0:
+-  version "1.0.1"
+-  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
+-  integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
+-
+ mimic-response@^2.0.0:
+   version "2.1.0"
+   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-2.1.0.tgz#d13763d35f613d09ec37ebb30bac0469c0ee8f43"
+   integrity sha512-wXqjST+SLt7R009ySCglWBCFpjUygmCIfD790/kVbiGmUgfYGuB14PiTd5DwVxSV4NcYHjzMkoj5LjQZwTQLEA==
+ 
+-mimic-response@^3.1.0:
+-  version "3.1.0"
+-  resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-3.1.0.tgz#2d1d59af9c1b129815accc2c46a022a5ce1fa3c9"
+-  integrity sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==
+-
+ min-indent@^1.0.0:
+   version "1.0.1"
+   resolved "https://registry.yarnpkg.com/min-indent/-/min-indent-1.0.1.tgz#a63f681673b30571fbe8bc25686ae746eefa9869"
+@@ -5594,11 +5395,6 @@ own-keys@^1.0.1:
+     object-keys "^1.1.1"
+     safe-push-apply "^1.0.0"
+ 
+-p-cancelable@^2.0.0:
+-  version "2.1.1"
+-  resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-2.1.1.tgz#aab7fbd416582fa32a3db49859c122487c5ed2cf"
+-  integrity sha512-BZOr3nRQHOntUjTrH8+Lh54smKHoHyur8We1V8DSMVrl5A2malOOwuJRnKRDjSnkoeBh4at6BwEnb5I7Jl31wg==
+-
+ p-defer@^1.0.0:
+   version "1.0.0"
+   resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
+@@ -6573,11 +6369,6 @@ quick-lru@^4.0.1:
+   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
+   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
+ 
+-quick-lru@^5.1.1:
+-  version "5.1.1"
+-  resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
+-  integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
+-
+ randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
+   version "2.1.0"
+   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
+@@ -6936,11 +6727,6 @@ require-main-filename@^1.0.1:
+   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
+   integrity sha512-IqSUtOVP4ksd1C/ej5zeEh/BIP2ajqpn8c5x+q99gvcIG/Qf0cud5raVnE/Dwd0ua9TXYDoDc0RE5hBSdz22Ug==
+ 
+-resolve-alpn@^1.0.0:
+-  version "1.2.1"
+-  resolved "https://registry.yarnpkg.com/resolve-alpn/-/resolve-alpn-1.2.1.tgz#b7adbdac3546aaaec20b45e7d8265927072726f9"
+-  integrity sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g==
+-
+ resolve-dir@^1.0.0, resolve-dir@^1.0.1:
+   version "1.0.1"
+   resolved "https://registry.yarnpkg.com/resolve-dir/-/resolve-dir-1.0.1.tgz#79a40644c362be82f26effe739c9bb5382046f43"
+@@ -6980,13 +6766,6 @@ resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.22.2, resolve@^1.4.0
+     path-parse "^1.0.7"
+     supports-preserve-symlinks-flag "^1.0.0"
+ 
+-responselike@^2.0.0:
+-  version "2.0.1"
+-  resolved "https://registry.yarnpkg.com/responselike/-/responselike-2.0.1.tgz#9a0bc8fdc252f3fb1cca68b016591059ba1422bc"
+-  integrity sha512-4gl03wn3hj1HP3yzgdI7d3lCkF95F21Pz4BPGvKHinyQzALR5CapwC8yIi0Rh58DEMQ/SguC03wFj2k0M/mHhw==
+-  dependencies:
+-    lowercase-keys "^2.0.0"
+-
+ ret@~0.1.10:
+   version "0.1.15"
+   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
+@@ -7024,18 +6803,6 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
+     hash-base "^3.0.0"
+     inherits "^2.0.1"
+ 
+-roarr@^2.15.3:
+-  version "2.15.4"
+-  resolved "https://registry.yarnpkg.com/roarr/-/roarr-2.15.4.tgz#f5fe795b7b838ccfe35dc608e0282b9eba2e7afd"
+-  integrity sha512-CHhPh+UNHD2GTXNYhPWLnU8ONHdI+5DI+4EYIAOaiD63rHeYlZvyh8P+in5999TTSFgUYuKUAjzRI4mdh/p+2A==
+-  dependencies:
+-    boolean "^3.0.1"
+-    detect-node "^2.0.4"
+-    globalthis "^1.0.1"
+-    json-stringify-safe "^5.0.1"
+-    semver-compare "^1.0.0"
+-    sprintf-js "^1.1.2"
+-
+ run-parallel@^1.1.9:
+   version "1.2.0"
+   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.2.0.tgz#66d1368da7bdf921eb9d95bd1a9229e7f21a43ee"
+@@ -7113,11 +6880,6 @@ scheduler@^0.20.2:
+     loose-envify "^1.1.0"
+     object-assign "^4.1.1"
+ 
+-semver-compare@^1.0.0:
+-  version "1.0.0"
+-  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
+-  integrity sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==
+-
+ semver-greatest-satisfied-range@^1.1.0:
+   version "1.1.0"
+   resolved "https://registry.yarnpkg.com/semver-greatest-satisfied-range/-/semver-greatest-satisfied-range-1.1.0.tgz#13e8c2658ab9691cb0cd71093240280d36f77a5b"
+@@ -7130,21 +6892,21 @@ semver-greatest-satisfied-range@^1.1.0:
+   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.2.tgz#48d55db737c3287cd4835e17fa13feace1c41ef8"
+   integrity sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==
+ 
+-semver@^6.0.0, semver@^6.2.0, semver@^6.3.1:
++semver@^6.0.0, semver@^6.3.1:
+   version "6.3.1"
+   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
+   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
+ 
+-semver@^7.3.2:
+-  version "7.8.1"
+-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.8.1.tgz#bf4970b5e70fda0686363cc18bfe8805d5ed957e"
+-  integrity sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==
+-
+ semver@^7.3.4, semver@^7.3.5, semver@^7.3.7:
+   version "7.7.1"
+   resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
+   integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
+ 
++semver@^7.6.3:
++  version "7.8.5"
++  resolved "https://registry.yarnpkg.com/semver/-/semver-7.8.5.tgz#39b646037dd50c14fb451e7e4cac58ed8b863f69"
++  integrity sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==
++
+ send-intent@^5.0.0:
+   version "5.0.0"
+   resolved "https://registry.yarnpkg.com/send-intent/-/send-intent-5.0.0.tgz#95d00455a7db4d95d9f79f8203698e96760c7408"
+@@ -7153,13 +6915,6 @@ send-intent@^5.0.0:
+     "@capacitor/cli" "^5.0.0"
+     "@capacitor/core" "^5.0.0"
+ 
+-serialize-error@^7.0.1:
+-  version "7.0.1"
+-  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-7.0.1.tgz#f1360b0447f61ffb483ec4157c737fab7d778e18"
+-  integrity sha512-8I8TjW5KMOKsZQTvoxjuSIa7foAwPWGOts+6o7sgjz41/qMD9VQHEDxi6PBvK2l0MXUmqZyNpUK+T2tQaaElvw==
+-  dependencies:
+-    type-fest "^0.13.1"
+-
+ set-blocking@^2.0.0:
+   version "2.0.0"
+   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
+@@ -7507,11 +7262,6 @@ split2@^4.2.0:
+   resolved "https://registry.yarnpkg.com/split2/-/split2-4.2.0.tgz#c9c5920904d148bab0b9f67145f245a86aadbfa4"
+   integrity sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==
+ 
+-sprintf-js@^1.1.2:
+-  version "1.1.3"
+-  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.3.tgz#4914b903a2f8b685d17fdf78a70e917e872e444a"
+-  integrity sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==
+-
+ stable@^0.1.8:
+   version "0.1.8"
+   resolved "https://registry.yarnpkg.com/stable/-/stable-0.1.8.tgz#836eb3c8382fe2936feaf544631017ce7d47a3cf"
+@@ -8132,11 +7882,6 @@ tty-browserify@0.0.0:
+   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
+   integrity sha512-JVa5ijo+j/sOoHGjw0sxw734b1LhBkQ3bvUGNdxnVXDCX81Yx7TFgnZygxrIIWn23hbfTaMYLwRmAxFyDuFmIw==
+ 
+-type-fest@^0.13.1:
+-  version "0.13.1"
+-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
+-  integrity sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==
+-
+ type-fest@^0.18.0:
+   version "0.18.1"
+   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.18.1.tgz#db4bc151a4a2cf4eebf9add5db75508db6cc841f"
+@@ -8265,6 +8010,11 @@ undici-types@~7.16.0:
+   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.16.0.tgz#ffccdff36aea4884cbfce9a750a0580224f58a46"
+   integrity sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==
+ 
++undici@^7.24.4:
++  version "7.29.0"
++  resolved "https://registry.yarnpkg.com/undici/-/undici-7.29.0.tgz#ae0f6f62e06e057a9cbb7b2b5fde2bb74f791b8f"
++  integrity sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==
++
+ unified@^9.1.0:
+   version "9.2.2"
+   resolved "https://registry.yarnpkg.com/unified/-/unified-9.2.2.tgz#67649a1abfc3ab85d2969502902775eb03146975"
+@@ -8314,11 +8064,6 @@ unist-util-stringify-position@^2.0.0:
+   dependencies:
+     "@types/unist" "^2.0.2"
+ 
+-universalify@^0.1.0:
+-  version "0.1.2"
+-  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
+-  integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+-
+ universalify@^2.0.0:
+   version "2.0.1"
+   resolved "https://registry.yarnpkg.com/universalify/-/universalify-2.0.1.tgz#168efc2180964e6386d061e094df61afe239b18d"
