@@ -84,5 +84,6 @@ buildRedist {
     '';
     homepage = "https://developer.nvidia.com/cudss";
     changelog = "https://docs.nvidia.com/cuda/cudss/release_notes.html";
+    cmakeConfigModules = [ "cudss" ];
   };
 }

@@ -106,5 +106,11 @@ buildRedist (finalAttrs: {
   # "Never again", cf. https://github.com/NixOS/nixpkgs/pull/457424
   disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
-  meta.description = "CUDA Runtime";
+  meta = {
+    description = "CUDA Runtime";
+    pkgConfigModules = [
+      "cuda"
+      "cudart"
+    ];
+  };
 })

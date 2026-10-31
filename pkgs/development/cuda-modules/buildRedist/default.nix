@@ -20,6 +20,7 @@
   stdenv,
   stdenvNoCC,
   zstd,
+  testers,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
@@ -392,6 +393,19 @@ extendMkDerivation {
 
         supportedRedistSystems =
           passthru.supportedRedistSystems or (naturalSort (attrNames finalAttrs.passthru.supportedReleases));
+
+        tests =
+          passthru.tests or { }
+          // optionalAttrs (meta ? cmakeConfigModules) {
+            cmake-config = testers.hasCmakeConfigModules {
+              package = finalAttrs.finalPackage;
+            };
+          }
+          // optionalAttrs (meta ? pkgConfigModules) {
+            pkg-config = testers.hasPkgConfigModules {
+              package = finalAttrs.finalPackage;
+            };
+          };
 
         # NOTE: Downstream may expand this to include other outputs, but they must remember to set the appropriate
         # outputNameVarFallbacks!
