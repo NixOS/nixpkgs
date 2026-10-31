@@ -80,6 +80,22 @@ stdenv.mkDerivation (finalAttrs: {
     find "$root" \
       \( -name 'libstdc++.so*' -o -name 'libgcc_s.so*' \) -delete
 
+    # Share ABI-compatible libraries with Nixpkgs; retain LibreOffice's patched libraries.
+    # Keep libjpeg.so.8 because Nixpkgs provides libjpeg.so.62.
+    find "$root/dependencies/native" \
+      \( -name 'libexpat.so*' \
+      -o -name 'libfontconfig.so*' \
+      -o -name 'libfreetype.so*' \
+      -o -name 'libicudata.so*' \
+      -o -name 'libicui18n.so*' \
+      -o -name 'libicuuc.so*' \
+      -o -name 'liblcms2.so*' \
+      -o -name 'libopenjp2.so*' \
+      -o -name 'libpixman-1.so*' \
+      -o -name 'libpng16.so*' \
+      -o -name 'libxml2.so*' \
+      -o -name 'libz.so*' \) -delete
+
     HOST_PATH="$root/dependencies/python/bin:$root/dependencies/node/bin:${lib.makeBinPath [ bash ]}" \
       patchShebangs --host "$root"
     runHook postInstall
