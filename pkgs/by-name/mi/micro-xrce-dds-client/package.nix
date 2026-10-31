@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   microcdr,
+  gtest,
   nix-update-script,
 }:
 
@@ -32,6 +33,34 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vL2A2La1MdZfxO84BVVcSu31L74+PSmfk5fH5OcJtks=";
   };
 
+  postPatch =
+    let
+      # test/unitary's DiscoveryTransport gtest target links microxrcedds_client
+      # expecting uxr_bytes_to_ip(), which only exists when UCLIENT_PROFILE_DISCOVERY
+      # is on - deliberately off below, since PX4's uxrce_dds_client module doesn't
+      # use the discovery profile. Drop just that one test target so the rest of
+      # the real test/unitary suite still builds and runs.
+      dropDiscoveryTransportTest = ''
+        sed -i \
+          -e '/unitary_test(DiscoveryTransport/d' \
+          -e '/target_link_libraries(DiscoveryTransport/d' \
+          test/unitary/CMakeLists.txt
+      '';
+      # test/shared_memory doesn't test anything this package actually ships
+      # (UCLIENT_PROFILE_SHARED_MEMORY is off below): it unconditionally
+      # re-invokes this same top-level CMakeLists.txt with that profile forced
+      # on, in a nested ExternalProject_Add - precisely the kind of
+      # SuperBuild-style nested rebuild UCLIENT_SUPERBUILD=false is here to
+      # avoid, and it hits its own bug doing so (its BUILD_BYPRODUCTS/
+      # IMPORTED_LOCATION hardcode a "lib" install dir that the nested
+      # GNUInstallDirs call doesn't actually use on this system, so it fails
+      # to link). Skip it.
+      dropSharedMemoryTest = ''
+        sed -i '/add_subdirectory(test\/shared_memory)/d' CMakeLists.txt
+      '';
+    in
+    dropDiscoveryTransportTest + dropSharedMemoryTest;
+
   # UCLIENT_SUPERBUILD defaults on and would otherwise just return() early
   # and delegate to cmake/SuperBuild.cmake, which vendors+rebuilds microcdr
   # itself via an ExternalProject_Add(... GIT_REPOSITORY ...) that fetches
@@ -53,7 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "UCLIENT_PROFILE_CUSTOM_TRANSPORT" false)
     (lib.cmakeBool "UCLIENT_PROFILE_MULTITHREAD" false)
     (lib.cmakeBool "UCLIENT_PROFILE_SHARED_MEMORY" false)
-  ];
+    (lib.cmakeBool "UCLIENT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ]
+  # test/unitary/CMakeLists.txt (and the other test/ subdirectories) have
+  # their own cmake_minimum_required(VERSION 3.5.0), which modern CMake
+  # (>= 4.0, dropping support for < 3.5) rejects outright.
+  ++ lib.optional finalAttrs.finalPackage.doCheck (
+    lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5"
+  );
 
   # microxrcedds_clientConfig.cmake transitively find_package()s microcdr,
   # so anything that find_package(microxrcedds_client)s this package also
@@ -62,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ microcdr ];
 
   nativeBuildInputs = [ cmake ];
+
+  checkInputs = [ gtest ];
+  doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
