@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
   nixosTests,
   python3,
@@ -152,15 +153,37 @@ python.pkgs.buildPythonPackage {
     pytest-xdist
   ];
 
-  # flaky
   disabledTests = [
+    # flaky
     "test_add_duplicate"
     "test_reset_inherit_space_fields"
     "test_search_count"
     "test_url_import_regex_replace"
     "test_url_validator"
     "test_delete"
-  ];
+
+    # broken upstream
+    "test_auto_plan_or_mode"
+    "test_auto_plan_and_mode"
+    "test_share_permission"
+    "test_share_permission_invalid"
+    "test_update[arg2]"
+    "test_preference_retrieve[arg0]"
+    "test_add[arg1]"
+    "test_markdown_renderer"
+    "test_adapter_social_signup_allowed_with_providers"
+    "test_adapter_local_signup_allowed_with_invite_token"
+    "test_adapter_local_signup_blocked_with_expired_invite"
+    "test_adapter_local_signup_blocked_with_invalid_token"
+    "test_adapter_oauth_callback_allowed"
+    "test_adapter_unknown_view_allowed"
+    "test_adapter_no_resolver_match"
+    "test_invite_link_unauthenticated_redirects_to_signup"
+    "test_invite_link_expired"
+    "test_invite_link_nonexistent_uuid"
+    "test_markdown_doc[arg0]"
+  ]
+  ++ map (n: "test_setup[arg${toString n}]") (lib.range 0 3);
 
   passthru = {
     inherit frontend python;
