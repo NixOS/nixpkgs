@@ -9,28 +9,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sprite";
-  version = "0.0.1-rc48";
+  version = "2026-10-20-hotfix.1";
 
   src = fetchurl {
-    url = "https://sprites-binaries.t3.storage.dev/client/v${finalAttrs.version}/sprite-${
-      if stdenv.hostPlatform.isLinux then "linux" else "darwin"
-    }-${if stdenv.hostPlatform.isx86_64 then "amd64" else "arm64"}.tar.gz";
+    url = "https://sprites.dev/dl/client/${finalAttrs.version}/sprite-${
+      if stdenv.hostPlatform.isLinux then "linux" else "macos"
+    }-${if stdenv.hostPlatform.isx86_64 then "x86_64" else "aarch64"}";
     hash =
       {
-        aarch64-darwin = "sha256-HoYKvupDS4Lak5ce07yZ8VkgafzxlSI0YNb6pg+xRTg=";
-        aarch64-linux = "sha256-taj5QskS1bRgv0QFh9nu/IXUvzJCXGxiDP6lYPaL5tU=";
-        x86_64-linux = "sha256-UlgRQoNfiFTSIgaj67qcNriXEcorM0XPJC1Doy3HnP4=";
+        aarch64-darwin = "sha256-PwqCYRBuq9BHaHsqELdeTrFIsMF3ONgqHRur2G7d9mg=";
+        aarch64-linux = "sha256-QPaJYk09BLcWC+6fSjVjgYvvqShmyfRmytr/vRxdDyI=";
+        x86_64-linux = "sha256-c0j1RlL7zK6nnX60tXJC5h89ZXOSfeqqFCfbRGHQorI=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  sourceRoot = ".";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase = ''
     mkdir -p $out/bin
-    install -m 755 sprite $out/bin/
+    install -m 755 $src $out/bin/sprite
     wrapProgram $out/bin/sprite --set UPGRADE_CHECK false
   '';
 
