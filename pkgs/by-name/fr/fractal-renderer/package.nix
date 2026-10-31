@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fractal-renderer";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Definitely-Not-A-Dolphin";
     repo = "Fractal-Renderer";
