@@ -17,7 +17,7 @@ runCommand "${package.name}-pkg-test"
   }
   ''
     { octave-cli --eval 'pkg test ${package.pname}' || touch FAILED_ERRCODE; } \
-      |& tee >( grep --quiet '^Failure Summary:$' && touch FAILED_OUTPUT || : ; cat >/dev/null )
+      |& tee >( grep --quiet -P '^\s*FAIL\s*[1-9]\d*$' && touch FAILED_OUTPUT || : ; cat >/dev/null )
     if [[ -f FAILED_ERRCODE ]]; then
       echo >&2 "octave-cli returned with non-zero exit code."
       false
