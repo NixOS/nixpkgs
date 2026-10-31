@@ -24691,6 +24691,12 @@
     github = "rc-zb";
     githubId = 161540043;
   };
+  rclement = {
+    email = "git@romain-clement.net";
+    github = "rclement";
+    githubId = 1238873;
+    name = "Romain Clement";
+  };
   rcmlz = {
     email = "haguga-nixos@yahoo.com";
     github = "rcmlz";
