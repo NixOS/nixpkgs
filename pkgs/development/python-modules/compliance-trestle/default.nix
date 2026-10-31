@@ -34,7 +34,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "compliance-trestle";
-  version = "5.0.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     repo = "compliance-trestle";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-8ObzK0P1syPw7L6m0LfCs507jruazxRNNwob5CzS6Zw=";
+    hash = "sha256-g/g2b5vpsbpy+tYULncRUA8Bx+MWoqSVcnfOhrJfEKY=";
   };
 
   postPatch = ''
