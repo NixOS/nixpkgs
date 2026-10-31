@@ -731,6 +731,11 @@ in
       group = "systemd-resolve";
     };
     users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+    users.users.systemd-timesync = {
+      uid = config.ids.uids.systemd-timesync;
+      group = "systemd-timesync";
+    };
+    users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
     # Target for ‘charon send-keys’ to hook into.
     users.groups.keys.gid = config.ids.gids.keys;

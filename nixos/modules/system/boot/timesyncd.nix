@@ -100,11 +100,5 @@ in
 
     environment.etc."systemd/timesyncd.conf".text =
       utils.systemdUtils.lib.settingsToSections cfg.settings;
-
-    users.users.systemd-timesync = {
-      uid = config.ids.uids.systemd-timesync;
-      group = "systemd-timesync";
-    };
-    users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
   };
 }
