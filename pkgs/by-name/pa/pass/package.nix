@@ -3,6 +3,7 @@
   lib,
   pkgs,
   fetchurl,
+  fetchpatch,
   bash,
   buildEnv,
   coreutils,
@@ -110,6 +111,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./set-correct-program-name-for-sleep.patch
     ./extension-dir.patch
+    # `pass -c` marks the clip sensitive (x-kde-passwordManagerHint, wl-clipboard >= 2.3.0),
+    # so clipboard managers like cliphist leave passwords out of their history.
+    # Submitted upstream: https://lists.zx2c4.com/pipermail/password-store/2026-March/004971.html
+    (fetchpatch {
+      name = "wl-copy-sensitive.patch";
+      url = "https://lists.zx2c4.com/pipermail/password-store/attachments/20260324/97e2610c/attachment.bin";
+      hash = "sha256-WcIOrxgQ5mOXVw5daCdRy/wG8dehyQU7bekmfesBsSM=";
+    })
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
 
