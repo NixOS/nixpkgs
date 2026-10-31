@@ -187,7 +187,10 @@ buildNpmPackage (finalAttrs: {
       binaryNativeCode
     ];
     mainProgram = "folia-major";
-    maintainers = with lib.maintainers; [ chillcicada ];
+    maintainers = with lib.maintainers; [
+      chillcicada
+      moraxyc
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
