@@ -471,6 +471,8 @@ in
           (map (
             port:
             lib.pipe port [
+              (lib.splitString ":")
+              lib.last
               (builtins.split "[[:alpha:]]+")
               builtins.head
               lib.toInt
