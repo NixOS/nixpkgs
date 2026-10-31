@@ -1,0 +1,18 @@
+diff --git a/misc/spout2pw.sh b/misc/spout2pw.sh
+index 26b5c71..eec68bd 100755
+--- a/misc/spout2pw.sh
++++ b/misc/spout2pw.sh
+@@ -304,11 +304,11 @@ usage() {
+     show_info \
+ "Usage:
+ 
+-   $0 umu-run app.exe
++   spout2pw umu-run app.exe
+ 
+ or set the Steam launch flags to:
+ 
+-   $(realpath "$0") %command%"
++   spout2pw %command%"
+ }
+ 
+ validate_paths() {
