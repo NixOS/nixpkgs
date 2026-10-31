@@ -14,7 +14,7 @@ bundlerApp {
 
   meta = {
     description = "Bash command line framework and CLI generator";
-    homepage = "https://github.com/DannyBen/bashly";
+    homepage = "https://github.com/bashly-framework/bashly";
     license = lib.licenses.mit;
     mainProgram = "bashly";
     maintainers = [ ];
