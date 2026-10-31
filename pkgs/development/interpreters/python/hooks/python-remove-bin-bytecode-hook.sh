@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for removing bytecode from the bin folder
 echo "Sourcing python-remove-bin-bytecode-hook.sh"
 

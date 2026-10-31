@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
 perlUseLibs='use lib'

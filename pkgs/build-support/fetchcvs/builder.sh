@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 (echo "#!$SHELL"; \
  echo 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$@"') > ssh
 chmod +x ssh

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # fixQtBuiltinPaths
 #
 # Usage: fixQtBuiltinPaths _dir_ _pattern_

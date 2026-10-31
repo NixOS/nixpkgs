@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p curl -p jq -p common-updater-scripts -i bash
+# shellcheck shell=bash
 set -e
 
 entryPointURL='https://customerconnect.omnissa.com/channel/public/api/v1.0/products/getRelatedDLGList?locale=en_US&category=desktop_end_user_computing&product=omnissa_horizon_clients&version=8&dlgType=PRODUCT_BINARY'

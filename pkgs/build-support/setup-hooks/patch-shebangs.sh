@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook causes the fixup phase to rewrite all script
 # interpreter file names (`#!  /path') to paths found in $PATH.  E.g.,
 # /bin/sh will be rewritten to /nix/store/<hash>-some-bash/bin/sh.

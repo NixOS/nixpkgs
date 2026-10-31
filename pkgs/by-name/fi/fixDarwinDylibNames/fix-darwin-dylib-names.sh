@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # On macOS, binaries refer to dynamic library dependencies using
 # either relative paths (e.g. "libicudata.dylib", searched relative to
 # $DYLD_LIBRARY_PATH) or absolute paths

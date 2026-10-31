@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "exporting $url (r$rev) into $out"
 
 if test -n "$http_proxy"; then

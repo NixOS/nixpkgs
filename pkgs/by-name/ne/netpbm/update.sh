@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p bash -p subversion -p common-updater-scripts -i bash
+# shellcheck shell=bash
 
 die() {
     echo "error: $1" >&2

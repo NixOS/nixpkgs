@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 tar xf $src
 cd */
 tarballdir=$(pwd)

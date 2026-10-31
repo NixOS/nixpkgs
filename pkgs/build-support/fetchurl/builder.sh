@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 source "$NIX_ATTRS_SH_FILE"
 
 # This file will bring variables of the form "_mirror_<mirrorname>" into scope.

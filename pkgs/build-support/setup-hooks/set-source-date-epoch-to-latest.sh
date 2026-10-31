@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 updateSourceDateEpoch() {
     local path="$1"
     # Avoid passing option-looking directory to find. The example is diffoscope-269:

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p google-cloud-sdk
+# shellcheck shell=bash
 
 set -euo pipefail
 

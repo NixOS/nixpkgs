@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook validates each pkgconfig file in each output.
 
 fixupOutputHooks+=(_validatePkgConfig)

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 make_gobject_introspection_find_gir_files() {
     # required for .typelib files, eg mypaint git version
     if [ -d "$1/lib/girepository-1.0" ]; then

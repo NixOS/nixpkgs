@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 COMMAND=$1
 shift

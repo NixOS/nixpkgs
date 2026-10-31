@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Remove the initial slash from a path, since genisofs likes it that way.
 stripSlash() {
     res="$1"

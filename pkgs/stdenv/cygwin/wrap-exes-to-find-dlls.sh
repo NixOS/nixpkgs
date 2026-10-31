@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 postFixupHooks+=(_cygwinWrapExesToFindDlls)
 
 _cygwinWrapExesToFindDlls() {

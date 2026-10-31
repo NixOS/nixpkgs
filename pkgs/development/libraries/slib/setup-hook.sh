@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addSlibPath () {
     if test -f "$1/lib/slib/slibcat"
     then

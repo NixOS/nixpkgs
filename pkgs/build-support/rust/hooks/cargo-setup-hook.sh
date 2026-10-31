@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 cargoSetupPostUnpackHook() {
     echo "Executing cargoSetupPostUnpackHook"
 

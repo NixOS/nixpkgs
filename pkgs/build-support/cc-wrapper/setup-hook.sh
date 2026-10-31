@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # CC Wrapper hygiene
 #
 # For at least cross compilation, we need to depend on multiple cc-wrappers at

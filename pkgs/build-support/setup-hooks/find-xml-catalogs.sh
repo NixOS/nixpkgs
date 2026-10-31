@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addXMLCatalogs () {
     local d i
     # ‘xml/dtd’ and ‘xml/xsl’ are deprecated. Catalogs should be

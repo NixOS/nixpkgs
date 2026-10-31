@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl nix coreutils
+# shellcheck shell=bash
 set -euxo pipefail
 
 # This script piggybacks on the automatic code generation done by the nix-community emacs overlay
