@@ -114,6 +114,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace package.json \
       --replace-fail '"vendor:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"vendor:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
+
+    substituteInPlace crates/yaak-templates/build-wasm.cjs crates/yaak-wasm/build-wasm.cjs \
+      --replace-fail 'execSync("wasm-pack build' 'execSync("CARGO_BUILD_TARGET=wasm32-unknown-unknown wasm-pack build'
   '';
 
   preBuild =
