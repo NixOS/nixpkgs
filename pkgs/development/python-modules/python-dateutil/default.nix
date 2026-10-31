@@ -1,19 +1,27 @@
 {
   lib,
+  attrs,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  freezegun,
+  hypothesis,
+  pytest-cov,
+  pytestCheckHook,
   setuptools-scm,
   six,
+  tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-dateutil";
-  version = "2.9.0.post0";
+  version = "3.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N91UII2n4c2HU4ghfV4A69QXkkn5D7ckN+kaNUWaCtM=";
+  src = fetchFromGitHub {
+    owner = "dateutil";
+    repo = "dateutil";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-mGJAC2A2pSJABV3l3lOX1aTCX3UdBrGp8vnR8qhgkSU=";
   };
 
   postPatch = ''
@@ -21,12 +29,35 @@ buildPythonPackage rec {
       --replace-fail "setuptools_scm<8.0" "setuptools_scm"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [
+    six
+    tzdata
+  ];
 
   # cyclic dependency: tests need freezegun, which depends on python-dateutil
   doCheck = false;
+
+  nativeCheckInputs = [
+    attrs
+    freezegun
+    hypothesis
+    pytest-cov
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # the sandbox breaks timezone assumptions
+    "test_gettz_local_abbreviation_without_time_zone_data"
+    "test_tzlocal_local_time_trim_colon"
+  ];
+
+  passthru.tests = {
+    pytest = finalAttrs.finalPackage.overrideAttrs {
+      doInstallCheck = true;
+    };
+  };
 
   pythonImportsCheck = [
     "dateutil.easter"
@@ -39,7 +70,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dateutil/dateutil/blob/${version}/NEWS";
+    changelog = "https://github.com/dateutil/dateutil/blob/${finalAttrs.src.tag}/NEWS";
     description = "Powerful extensions to the standard datetime module";
     homepage = "https://github.com/dateutil/dateutil/";
     license = with lib.licenses; [
@@ -48,4 +79,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
