@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DSVT_AV1_LTO=ON"
   ];
