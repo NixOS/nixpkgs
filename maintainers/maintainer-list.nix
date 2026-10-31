@@ -785,6 +785,12 @@
     githubId = 5091511;
     name = "Allen Nelson";
   };
+  adoyle = {
+    email = "adoyle.h@gmail.com";
+    github = "adoyle-h";
+    githubId = 1998490;
+    name = "ADoyle";
+  };
   adrian-gierakowski = {
     email = "adrian.gierakowski@gmail.com";
     github = "adrian-gierakowski";
