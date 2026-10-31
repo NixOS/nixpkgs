@@ -1,0 +1,15 @@
+diff --git a/src/thirdparty/bcd/CMakeLists.txt b/src/thirdparty/bcd/CMakeLists.txt
+index b90d97e46..6ae960b5e 100644
+--- a/src/thirdparty/bcd/CMakeLists.txt
++++ b/src/thirdparty/bcd/CMakeLists.txt
+@@ -76,7 +76,9 @@ link_against_openexr (bcd)
+ # Include paths.
+ #--------------------------------------------------------------------------------------------------
+ 
+-target_include_directories (bcd PRIVATE ext/eigen)
++find_package(Eigen3 REQUIRED)
++
++target_link_libraries(bcd Eigen3::Eigen)
+ 
+ 
+ #--------------------------------------------------------------------------------------------------
