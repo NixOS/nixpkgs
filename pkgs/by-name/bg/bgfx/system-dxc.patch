@@ -1,0 +1,27 @@
+Use the packaged DXC on Linux without installing the bundled binary.
+Load the configured library name directly so an absolute Nix store path is
+not prefixed with the shaderc executable directory.
+Upstream status: packaging-specific; not submitted upstream.
+
+--- a/cmake/bgfx/shaderc.cmake
++++ b/cmake/bgfx/shaderc.cmake
+@@ -49,7 +49,7 @@
+ 				${BGFX_DIR}/3rdparty/directx-headers/include
+ 				${BGFX_DIR}/3rdparty/directx-headers/include/wsl/stubs
+ 	)
+-	set(DXCOMPILER_RUNTIME ${BGFX_DIR}/tools/bin/linux/libdxcompiler.so)
++	set(DXCOMPILER_RUNTIME)
+ elseif(WIN32)
+ 	set(DXCOMPILER_RUNTIME ${BGFX_DIR}/tools/bin/windows/dxcompiler.dll)
+ endif()
+--- a/bgfx/tools/shaderc/shaderc_dxil.cpp
++++ b/bgfx/tools/shaderc/shaderc_dxil.cpp
+@@ -227,7 +227,7 @@
+ 		dxcCompilerDll.join(dxcCompilerDllName);
+ 
+ 		Dxc dxc;
+-		dxc.dll = bx::dlopen(dxcCompilerDll.getCPtr() );
++		dxc.dll = bx::dlopen(dxcCompilerDllName);
+ 
+ 		if (NULL == dxc.dll)
+ 		{

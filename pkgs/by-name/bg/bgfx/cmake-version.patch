@@ -1,0 +1,19 @@
+Allow source archive builds to supply the bgfx commit count.
+Without Git history, the installed CMake package version ends in an empty
+component (e.g. 1.164.), breaking versioned find_package requests.
+Keep automatic Git-derived values uncached so reconfiguration sees updates.
+Upstream status: not submitted upstream.
+
+--- a/cmake/version.cmake
++++ b/cmake/version.cmake
+@@ -30,7 +30,9 @@
+ file(READ "${BGFX_DIR}/scripts/bgfx.idl" BGFX_IDL)
+ string(REGEX MATCH "version\\(([^\)]+)\\)" BGFX_API_VERSION ${BGFX_IDL})
+ set(BGFX_API_VERSION ${CMAKE_MATCH_1})
+-set(BGFX_REV_NUMBER ${GIT_REV_COUNT})
++if(NOT DEFINED BGFX_REV_NUMBER)
++	set(BGFX_REV_NUMBER ${GIT_REV_COUNT})
++endif()
+ set(BGFX_REV ${GIT_REV})
+ 
+ # set project specific versions
