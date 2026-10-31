@@ -13965,6 +13965,12 @@
     githubId = 297653;
     name = "Joe Salisbury";
   };
+  Joey574 = {
+    email = "joeysoroka@outlook.com";
+    github = "Joey574";
+    githubId = 90403963;
+    name = "Joey Soroka";
+  };
   johannwagner = {
     email = "nix@wagner.digital";
     github = "johannwagner";
