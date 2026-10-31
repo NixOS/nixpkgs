@@ -20,26 +20,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
-  version = "0.29.0";
+  version = "0.30.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TabularisDB";
     repo = "tabularis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u/sNbmUXHE76aOh/MgujuWXA0TOgnAcLgxcHRo3EJTI=";
+    hash = "sha256-KV/u7H56bqyN49lmhL9iz3H3IUCQdtg4NpcxgBg+mso=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-fJnlkmjSAlK5G7+y8LnEyW8IlRDP9kJqLC9wTEtzUq4=";
+  cargoHash = "sha256-WpcQ2Tli9T7+per1xrWQkUCGSrUaNA8Fu4HUmAgaEJM=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-/E40mIMYLSQhoE/uxO6I+X3qdTdiyNOGKk1vI3FhJtA=";
+    hash = "sha256-kucuLDfHJ1ckEyYRPWXNBb9Vj6KmDhnOsdv+dU2VkFU=";
   };
 
   postPatch = ''
