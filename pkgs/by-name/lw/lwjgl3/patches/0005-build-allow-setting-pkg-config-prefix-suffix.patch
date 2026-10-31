@@ -1,0 +1,64 @@
+From 508b031f7edf480f6a8966c8779e395658d206c5 Mon Sep 17 00:00:00 2001
+From: Seth Flynn <getchoo@tuta.io>
+Date: Thu, 6 Mar 2025 02:31:35 -0500
+Subject: [PATCH 5/5] build: allow setting pkg-config prefix & suffix
+
+---
+ config/linux/build.xml | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 829ce2b1d..0c0700fb9 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -18,6 +18,13 @@
+         <isset property="gcc.version"/>
+     </condition>
+ 
++    <condition property="pkg-config.prefix" value="" else="${linux.triplet}-">
++        <isset property="build.arch.x64|x86"/>
++    </condition>
++    <condition property="pkg-config.suffix" value="-${pkg-config.version}" else="">
++        <isset property="pkg-config.version"/>
++    </condition>
++
+     <property name="module.lwjgl.rel" value="../../../../${module.lwjgl}"/>
+ 
+     <macrodef name="compile">
+@@ -286,10 +293,10 @@
+                 <local name="gtk3-cflags"/>
+                 <local name="gtk3-libflags"/>
+                 <local name="stderr"/>
+-                <exec outputproperty="gtk3-cflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="gtk-3.0-cflags">
++								<exec outputproperty="gtk3-cflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="gtk-3.0-cflags">
+                     <arg line="--cflags gtk+-3.0"/>
+                 </exec>
+-                <exec outputproperty="gtk3-libflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="gtk-3.0-libflags">
++                <exec outputproperty="gtk3-libflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="gtk-3.0-libflags">
+                     <arg line="--libs gtk+-3.0"/>
+                 </exec>
+                 <compile lang="c++">
+@@ -312,16 +319,16 @@
+                 <local name="glib-cflags"/>
+                 <local name="glib-libflags"/>
+                 <local name="stderr"/>
+-                <exec outputproperty="dbus-cflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="dbus-cflags">
++                <exec outputproperty="dbus-cflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="dbus-cflags">
+                     <arg line="--cflags dbus-1"/>
+                 </exec>
+-                <exec outputproperty="dbus-libflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="dbus-libflags">
++                <exec outputproperty="dbus-libflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="dbus-libflags">
+                     <arg line="--libs dbus-1"/>
+                 </exec>
+-                <exec outputproperty="glib-cflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="glib-cflags">
++                <exec outputproperty="glib-cflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="glib-cflags">
+                     <arg line="--cflags glib-2.0"/>
+                 </exec>
+-                <exec outputproperty="glib-libflags" errorproperty="stderr" executable="pkg-config" failonerror="true" taskname="glib-libflags">
++                <exec outputproperty="glib-libflags" errorproperty="stderr" executable="${pkg-config.prefix}pkg-config${pkg-config.suffix}" failonerror="true" taskname="glib-libflags">
+                     <arg line="--libs glib-2.0"/>
+                 </exec>
+                 <compile lang="c++">
+-- 
+2.48.1
+
