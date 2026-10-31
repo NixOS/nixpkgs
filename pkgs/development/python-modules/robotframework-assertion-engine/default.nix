@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  setuptools,
   robotframework,
   robotframework-pythonlibcore,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    poetry-core
+    setuptools
   ];
 
   dependencies = [
