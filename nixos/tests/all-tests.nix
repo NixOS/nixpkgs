@@ -1867,6 +1867,7 @@ in
   tandoor-recipes-media = runTest ./tandoor-recipes-media.nix;
   tandoor-recipes-script-name = runTest ./tandoor-recipes-script-name.nix;
   tang = runTest ./tang.nix;
+  tango-database = runTest ./tango-database.nix;
   taskchampion-sync-server = runTest ./taskchampion-sync-server.nix;
   taskserver = runTest ./taskserver.nix;
   tayga = runTest ./tayga.nix;
