@@ -6121,6 +6121,8 @@ self: super: with self; {
 
   fields = callPackage ../development/python-modules/fields { };
 
+  fifengine = callPackage ../development/python-modules/fifengine { };
+
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
   filebrowser-safe = callPackage ../development/python-modules/filebrowser-safe { };
