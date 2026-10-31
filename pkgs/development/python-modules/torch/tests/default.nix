@@ -44,12 +44,19 @@ let
     feature = null;
     libraries = ps: [ ps.torch ];
   };
+  tester-aotInductorCpu = callPackage ./mk-aot-inductor-check.nix {
+    feature = null;
+    libraries = ps: [ ps.torch ];
+  };
 in
 {
   inherit tester-compileCpu;
   compileCpu = tester-compileCpu.gpuCheck;
 
   cpp-extension = callPackage ./cpp-extension.nix { };
+
+  inherit tester-aotInductorCpu;
+  aotInductorCpu = tester-aotInductorCpu.gpuCheck;
 
   mnist-example = callPackage ./mnist-example { };
 
