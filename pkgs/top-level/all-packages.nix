@@ -9624,7 +9624,18 @@ with pkgs;
     useRx3d = true;
   };
 
-  raxml-mpi = raxml.override { useMpi = true; };
+  minc_tools = callPackage ../applications/science/biology/minc-tools {
+    inherit (perlPackages) perl TextFormat;
+  };
+
+  # raxml MPI is not available on darwin
+  raxml-mpi =
+    (raxml.override {
+      useMpi = true;
+    }).overrideAttrs
+      {
+        meta.platforms = [ "x86_64-linux" ];
+      };
 
   ### SCIENCE/MACHINE LEARNING
 
