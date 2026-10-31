@@ -636,6 +636,7 @@ mapAliases {
   python-clementine-remote = throw "'python-clementine-remote' was removed because Home Assistant dropped the integration"; # Added 2026-06-04
   python-constraint = python-constraint2; # added 2026-10-20
   python-djvulibre = djvulibre-python; # Added 2026-08-07
+  python-etherscan-api = warnAlias "'python-etherscan-api' has been renamed to 'etherscan-python'" etherscan-python; # Added 2026-10-31
   python-ethtool = throw "'python-ethtool' has been renamed to/replaced by 'ethtool'"; # Converted to throw 2025-10-29
   python-igraph = throw "'python-igraph' has been renamed to/replaced by 'igraph'"; # Converted to throw 2025-10-29
   python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
