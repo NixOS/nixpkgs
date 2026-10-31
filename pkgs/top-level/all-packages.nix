@@ -9024,15 +9024,16 @@ with pkgs;
     open-watcom-bin = null;
   };
 
-  virtualboxKvm = lowPrio (
-    virtualbox.override {
-      enableKvm = true;
-    }
-  );
-
   virtualboxHardened = lowPrio (
     virtualbox.override {
       enableHardening = true;
+    }
+  );
+
+  virtualboxKvm = lowPrio (
+    virtualbox.override {
+      enableHardening = true;
+      enableKvm = true;
     }
   );
 
