@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchpatch,
   runCommand,
   writeText,
   versionCheckHook,
@@ -19,8 +18,10 @@
   coreutils,
   dbus,
   file,
+  findutils,
   gawk,
   glib,
+  glibc,
   gnugrep,
   gnused,
   hostname,
@@ -42,6 +43,7 @@ let
     coreutils
     gnugrep
     gnused
+    gawk
   ];
   # These are all faked because the current desktop is detected
   # based on their presence, so we want them to be missing by default.
@@ -77,7 +79,7 @@ let
     {
       scripts = [ "bin/xdg-desktop-menu" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ gawk ];
+      inputs = commonDeps;
       fake.external = commonFakes;
       keep."$KDE_SESSION_VERSION" = true;
       prologue = commonPrologue;
@@ -87,13 +89,14 @@ let
       scripts = [ "bin/xdg-email" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        gawk
         glib.bin
+        (lib.getBin glibc) # for iconv
         "${placeholder "out"}/bin"
       ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
         "cannot:${placeholder "out"}/bin/xdg-open"
+        "cannot:${lib.getExe' glibc "iconv"}"
       ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
@@ -129,7 +132,6 @@ let
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
         file
-        gawk
       ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
@@ -167,6 +169,8 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
+        findutils # for xargs
+        bash
         hostname
         glib.bin
         "${placeholder "out"}/bin"
@@ -194,12 +198,15 @@ let
         "run-mailcap" # generic
         "rundll32.exe" # WSL
         "wslpath" # WSL
+        "xfce-open"
+        "sh"
       ];
       fix."$printf" = [ "printf" ];
       keep = {
         "env:$command" = true;
         "$browser" = true;
         "$KDE_SESSION_VERSION" = true;
+        "sh:$mailer" = true;
       };
     }
 
@@ -220,6 +227,7 @@ let
         "xautolock" # Xautolock
         "xscreensaver-command" # Xscreensaver
         "xset" # generic-ish X
+        "xss-lock"
       ];
       keep = {
         "$MV" = true;
@@ -284,14 +292,17 @@ let
       fake.external = commonFakes ++ [
         "gconftool-2" # GNOME
         "exo-open" # XFCE
+        "xfce-open" # XFCE
         "lxterminal" # LXQT
         "qterminal" # LXQT
         "terminology" # Englightenment
+        "foot"
+        "xterm"
+        "xdg-terminal-exec"
       ];
       keep = {
-        "$command" = true;
         "$kreadconfig" = true;
-        "$terminal_exec" = true;
+        "$TRY_TERMINAL_CMD" = true;
       };
       prologue = commonPrologue;
     }
@@ -300,27 +311,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils";
-  version = "1.2.1";
+  version = "1.3.0-rc.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
+    hash = "sha256-utZWIeEES09HazVP7DKUMv2EOaDeeCgDR8WGK65SLOw=";
   };
 
   patches = lib.optionals withXdgOpenUsePortalPatch [
     # Allow forcing the use of XDG portals using NIXOS_XDG_OPEN_USE_PORTAL environment variable.
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
-    #  Enable build of xdg-terminal
-    ./enable-xdg-terminal.patch
-    # Get rid of qtpaths runtime dependency (can be dropped in next release)
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/e6a6e4f1fbcb029bac0cb8eecdeb2879694e1ba8.patch";
-      hash = "sha256-toSFzIaw7gCWZH/kvIalWDQYL1xecOsRBAHvpbBlsY8=";
-    })
   ];
 
   # just needed when built from git
