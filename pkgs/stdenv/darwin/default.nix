@@ -552,6 +552,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         # Use libiconvReal with gettext to break an infinite recursion.
         gettext = super.gettext.override { libiconv = super.libiconvReal; };
+        gettext-runtime = super.gettext-runtime.override { libiconv = super.libiconvReal; };
 
         # Disable grep’s tests for now due to impure locale updates in
         # macOS 15.4 breaking them in the bootstrap.
@@ -561,7 +562,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         libffi = super.libffi.override { doCheck = false; };
 
         # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
-        libxml2 = super.libxml2.override { pythonSupport = false; };
+        libxml2 = super.libxml2.override {
+          pythonSupport = false;
+          libiconv = super.libiconvReal;
+        };
 
         # TODO: The Meson tests fail when using pkgconf, as we do in
         # the bootstrap. Remove this once that’s fixed.
