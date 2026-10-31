@@ -24,17 +24,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Update only together with voicevox and voicevox-engine
   # nixpkgs-update: no auto update
-  version = "0.16.2";
-  passthru.modelVersion = "0.16.4";
+  version = "0.17.0";
+  passthru.modelVersion = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_core";
     tag = finalAttrs.version;
-    hash = "sha256-aRy9x6IzFDwL4HjhCW705LpkZ13/SJ25h45XbbXciy0=";
+    hash = "sha256-I3GIvksXYMcSFjmPzTvRCLjVEbbcSvYMhGoN4k/vhRA=";
   };
 
-  cargoHash = "sha256-8udiXUZGn3ZT7RvmZd/F5tLsCKi5QLPG3pzv7LFyLvQ=";
+  cargoHash = "sha256-gSPnZuUHPZrjSck38OdD0oU3Rvvv+iSe7vwHrlk9SSk=";
 
   postPatch = ''
     cp -r --no-preserve=all ${openjtalk-src} ./openjtalk
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
       tag = finalAttrs.passthru.modelVersion;
-      hash = "sha256-/NU9CZcb+gHXHeno3NLF0EgPLw+6f8XyiAE2b9XJmuE=";
+      hash = "sha256-GmXsBiUsdVSenSR02gP9ouDM3FAdrt+fYTUbVZmcPLI=";
     };
 
     nativeBuildInputs = [ python3 ];
