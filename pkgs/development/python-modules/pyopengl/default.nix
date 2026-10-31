@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyopengl";
-  version = "3.1.10";
+  version = "4.0.0a1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mcfletch";
     repo = "pyopengl";
     tag = finalAttrs.version;
-    hash = "sha256-U/7J3EoxKHp/dR2LAzTiwR5wcjZbUBuT5Dt3c76xxj4=";
+    hash = "sha256-EcqwafnivM93cF4CPhtKWR5pRuzPih5nzoDPQpxfMXc=";
   };
 
   patches = lib.optionals (finalAttrs.passthru.runtimeLibs != [ ]) [
