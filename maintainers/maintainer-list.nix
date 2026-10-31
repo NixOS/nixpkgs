@@ -3047,6 +3047,12 @@
     github = "aware70";
     githubId = 7832566;
   };
+  awariac = {
+    name = "awariac";
+    github = "awariac";
+    githubId = 26686259;
+    email = "git@ariac.at";
+  };
   awildleon = {
     name = "Leon Hubrich";
     github = "AWildLeon";
