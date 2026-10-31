@@ -78,27 +78,60 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  postPatch = lib.optionalString isLinux ''
-    # autoPatchelf moves PT_INTERP beyond detect-libc's 2 KiB limit.
-    # Its process.report fallback crashes Electron.
-    asar extract usr/lib/chatgpt/resources/app.asar app
-    substituteInPlace app/node_modules/@parcel/watcher/index.js \
-      --replace-fail 'const family = familySync();' "const family = '${stdenv.hostPlatform.libc}';"
-    # Don't pack packages that were originally unpacked
-    unpackedDirs="$(
-      # Only descend into @scope directories
-      find usr/lib/chatgpt/resources/app.asar.unpacked/node_modules \
-        -mindepth 1 -maxdepth 2 \
-        ! -name '@*' -printf '%P\n' -prune |
-        paste -sd,
-    )"
-    asar pack app usr/lib/chatgpt/resources/app.asar \
-      --unpack-dir "node_modules/{$unpackedDirs}"
-  '';
+  postPatch =
+    lib.optionalString isLinux ''
+      # autoPatchelf moves PT_INTERP beyond detect-libc's 2 KiB limit.
+      # Its process.report fallback crashes Electron.
+      asar extract usr/lib/chatgpt/resources/app.asar app
+      substituteInPlace app/node_modules/@parcel/watcher/index.js \
+        --replace-fail 'const family = familySync();' "const family = '${stdenv.hostPlatform.libc}';"
+    ''
+    # Use the Nix-built primary runtime instead of downloading an unpatched one.
+    # Anchors avoid minified names that change between releases.
+    + lib.optionalString (finalAttrs.passthru.primaryRuntime != null) ''
+      # Like --replace-fail, but requires an exact match count across the bundle.
+      replaceInBundle() {
+        local expected=$1 from=$2 to=$3 found
+        found=$({ grep -ohF -- "$from" app/.vite/build/*.js || true; } | wc -l)
+        if (( found != expected )); then
+          echo "expected $expected occurrence(s) of '$from', found $found" >&2
+          exit 1
+        fi
+        substituteInPlace $(grep -lF -- "$from" app/.vite/build/*.js) --replace-fail "$from" "$to"
+      }
+
+      # Resolve the default runtime root to the nix store.
+      replaceInBundle 4 'homedir(),".cache","codex-runtimes")' 'homedir()&&"${finalAttrs.passthru.primaryRuntime}/lib")'
+
+      # Refuse to install or update it.
+      replaceInBundle 1 '="manual_install"}){' '="manual_install"}){throw Error("The Codex runtime is managed by Nix.");'
+      replaceInBundle 1 'getStaticDisabledReason(){' 'getStaticDisabledReason(){return"managed-by-nix";'
+
+      # Sync its bundled plugins at startup like the read-only Windows runtime, from a writable copy.
+      replaceInBundle 1 '.resolve()))return()=>void 0;' '.resolve())&&!1)return()=>void 0;'
+      replaceInBundle 1 '"framework"===(0,' '!0||"framework"===(0,'
+      replaceInBundle 1 '.rename(n,r),r}' \
+        '.rename(n,r),require("node:child_process").execFileSync("${lib.getExe' coreutils "chmod"}",["-R","u+w",r]),r}'
+
+      for js in app/.vite/build/*.js; do node --check "$js"; done
+    ''
+    + lib.optionalString isLinux ''
+      # Don't pack packages that were originally unpacked
+      unpackedDirs="$(
+        # Only descend into @scope directories
+        find usr/lib/chatgpt/resources/app.asar.unpacked/node_modules \
+          -mindepth 1 -maxdepth 2 \
+          ! -name '@*' -printf '%P\n' -prune |
+          paste -sd,
+      )"
+      asar pack app usr/lib/chatgpt/resources/app.asar \
+        --unpack-dir "node_modules/{$unpackedDirs}"
+    '';
 
   nativeBuildInputs = [
     makeWrapper
   ]
+  ++ lib.optionals (finalAttrs.passthru.primaryRuntime != null) [ nodejs-slim ]
   ++ lib.optionals isDarwin [
     unzip
     patchelf
@@ -188,7 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
         find "$resources" -type f -name '*.musl.node' -delete
       ''
       + ''
-
         ln -sf ${lib.getExe tectonic-unwrapped} "$resources/tectonic/tectonic"
         ln -sf ${lib.getExe ripgrep} "$resources/rg"
         mkdir -p "$resources/cua_node/bin"
@@ -259,6 +291,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
     sources = lib.importJSON ./source.json;
     source = finalAttrs.passthru.sources.${system} or (throw "chatgpt is not supported on ${system}");
+    primaryRuntime =
+      if (finalAttrs.passthru.source.primaryRuntime or null) != null then
+        callPackage ./primary-runtime.nix { inherit (finalAttrs.passthru) source sources; }
+      else
+        null;
     launcher = callPackage ./launcher.nix { };
   };
 
