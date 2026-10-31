@@ -1,0 +1,29 @@
+diff --git a/constants.py b/constants.py
+index df20268..fe632a9 100644
+--- a/constants.py
++++ b/constants.py
+@@ -46,14 +46,7 @@ def _resource_path(relative_path: Path | str) -> Path:
+ 
+     Works for dev and for PyInstaller.
+     """
+-    if IS_APPIMAGE:
+-        base_path = Path(sys.argv[0]).resolve().parent
+-    elif IS_PACKAGED:
+-        # PyInstaller's folder where the one-file app is unpacked
+-        meipass: str = getattr(sys, "_MEIPASS")
+-        base_path = Path(meipass)
+-    else:
+-        base_path = WORKING_DIR
++    base_path = Path("@out@/share")
+     return base_path.joinpath(relative_path)
+ 
+ 
+@@ -91,7 +84,7 @@ else:
+     SELF_PATH = Path(sys.argv[0]).resolve()
+     if SELF_PATH.stem == "pyinstaller" or SELF_PATH.name == "gui.py":
+         SELF_PATH = Path(__file__).with_name("main.py").resolve()
+-WORKING_DIR = SELF_PATH.parent
++WORKING_DIR = Path(os.path.expanduser("~/.local/share/twitch-drops-miner"))
+ # Development paths
+ VENV_PATH = Path(WORKING_DIR, "env")
+ SITE_PACKAGES_PATH = Path(VENV_PATH, SYS_SITE_PACKAGES)
