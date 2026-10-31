@@ -25,13 +25,31 @@ lib.pipe drv
         pkg:
         pkg.overrideAttrs (
           previousAttrs:
-          lib.optionalAttrs (!hostIsTarget && (enableShared || targetPlatform.isMinGW) && withoutTargetLibc) {
-            makeFlags = [
-              "all-gcc"
-              "all-target-libgcc"
-            ];
-            installTargets = "install-gcc install-target-libgcc";
-          }
+          lib.optionalAttrs (!hostIsTarget && (enableShared || targetPlatform.isMinGW) && withoutTargetLibc) (
+            let
+              # mlibc is written in freestanding C++ and needs the freestanding
+              # subset of the libstdc++ headers.
+              installFreestandingCxxHeaders = targetPlatform.libc == "mlibc";
+            in
+            {
+              makeFlags = [
+                "all-gcc"
+                "all-target-libgcc"
+              ]
+              ++ lib.optionals installFreestandingCxxHeaders [
+                # Configure libstdc++-v3 without building the library.
+                "configure-target-libstdc++-v3"
+              ];
+              installTargets = "install-gcc install-target-libgcc";
+            }
+            // lib.optionalAttrs installFreestandingCxxHeaders {
+              postInstall = (previousAttrs.postInstall or "") + ''
+                libstdcxx=${targetPlatform.config}/libstdc++-v3
+                make -C "$libstdcxx/include" install-headers
+                make -C "$libstdcxx/libsupc++" install-stdHEADERS install-bitsHEADERS
+              '';
+            }
+          )
         )
       )
 
