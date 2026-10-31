@@ -2266,6 +2266,9 @@ with pkgs;
   nodejs-slim_26 = callPackage ../development/web/nodejs/v26.nix { };
   nodejs_26 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_26; };
 
+  nodejs-slim_27 = callPackage ../development/web/nodejs/v27.nix { };
+  nodejs_27 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_27; };
+
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_26;
   nodejs-slim_latest = nodejs-slim_26;
