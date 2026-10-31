@@ -26,7 +26,7 @@ in
     package = lib.mkPackageOption pkgs "mihomo" { };
 
     configFile = lib.mkOption {
-      type = lib.types.path;
+      type = lib.types.externalPath;
       description = "Configuration file to use.";
     };
 
