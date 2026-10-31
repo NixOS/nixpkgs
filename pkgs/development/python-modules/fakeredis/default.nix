@@ -66,6 +66,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # redis.exceptions.ResponseError: unknown command 'evalsha'
     "test_async_lock"
+    # behavior change in latest valkey
+    "test_zinterstore_nan_to_zero"
   ];
 
   preCheck = ''
