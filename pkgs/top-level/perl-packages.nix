@@ -22452,13 +22452,20 @@ with self;
       ParseRecDescent
       PodStrip
     ];
-    buildInputs = [
+    checkInputs = [
       TestDeep
       TestNoWarnings
     ];
     preCheck = ''
+      # Both the ./Build test and install commands re-generate
+      # the grammar file and this breaks reproducibility.
+      # Move it to a safe place and move it back in postInstall
+      mv "$(find lib -name Grammar.pm)" /build
       # Remove tests with hardcoded line numbers.
       rm t/20_parse_self.t
+    '';
+    postInstall = ''
+      mv /build/Grammar.pm "$(find $out -name Grammar.pm)"
     '';
     meta = {
       description = "Find out what modules are used";
