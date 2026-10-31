@@ -25,12 +25,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ulauncher";
-  version = "5.15.7";
+  version = "5.16.2";
   pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${finalAttrs.version}/ulauncher_${finalAttrs.version}.tar.gz";
-    hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
+    hash = "sha256-WiKfURgMdW/aaNKtt2ThZT/vH0tfBa+gGzFjcl9q2qw=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +81,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     ./fix-path.patch
     ./fix-extensions.patch
-    (fetchpatch {
-      name = "support-gir1.2-webkit2-4.1.patch";
-      url = "https://src.fedoraproject.org/rpms/ulauncher/raw/rawhide/f/support-gir1.2-webkit2-4.1.patch";
-      hash = "sha256-w1c+Yf6SA3fyMrMn1LXzCXf5yuynRYpofkkUqZUKLS8=";
-    })
   ];
 
   postPatch = ''
