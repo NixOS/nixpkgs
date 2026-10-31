@@ -1646,6 +1646,11 @@
     githubId = 89567766;
     name = "Zynix";
   };
+  alphajack = {
+    github = "AlphaJack";
+    githubId = 19962243;
+    name = "AlphaJack";
+  };
   alternateved = {
     email = "alternateved@pm.me";
     github = "alternateved";
