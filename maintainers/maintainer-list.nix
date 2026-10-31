@@ -10093,6 +10093,12 @@
     githubId = 4717341;
     name = "Brenton Horne";
   };
+  futurekismo = {
+    name = "futurekismo";
+    email = "futurekismo@gmail.com";
+    github = "futurekismo-oss";
+    githubId = 227779972;
+  };
   fuuzetsu = {
     email = "fuuzetsu@fuuzetsu.co.uk";
     github = "Fuuzetsu";
@@ -11753,6 +11759,13 @@
     github = "holymonson";
     githubId = 902012;
     name = "Monson Shao";
+  };
+  HomieDerPrakti = {
+    github = "HomieDerPrakti";
+    githubId = 182787927;
+    name = "HomieDerPrakti";
+    matrix = "@homiederprakti:matrix.org";
+    email = "homiederprakti@proton.me";
   };
   hongchangwu = {
     email = "wuhc85@gmail.com";
