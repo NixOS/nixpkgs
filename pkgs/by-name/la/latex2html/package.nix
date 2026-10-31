@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "latex2html";
-  version = "2025";
+  version = "2026";
 
   src = fetchFromGitHub {
     owner = "latex2html";
     repo = "latex2html";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xylIU2GY/1t9mA8zJzEjHwAIlvVxZmUAUdQ/IXEy+Wg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qsCmq4ZMnOIiHBIU3LjbWlAI+hDf2CUhMszXkh2+RhY=";
   };
 
   buildInputs = [
