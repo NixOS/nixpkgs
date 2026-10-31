@@ -7,7 +7,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pybind11-stubgen";
-  version = "2.5.5";
+  version = "3.0.0";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sizmailov";
     repo = "pybind11-stubgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J2LydgkiNQp+2/agwBCSTtr+Ci4zONLkHmnMLFBww24=";
+    hash = "sha256-xS2fKcMyb6ubv0co3zE3viWXonbj0a6UcST/8GoZ5nE=";
   };
 
   # For testing purposes, the upstream source uses a shell script to build the pybind11
