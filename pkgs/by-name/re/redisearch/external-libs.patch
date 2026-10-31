@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index be6f2cb91..064f67879 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -289,9 +289,6 @@ if (NOT DEFINED BOOST_DIR)
+ endif()
+ 
+ include(${root}/build/boost/boost.cmake)
+-if (NOT IS_DIRECTORY ${BOOST_DIR})
+-    message(FATAL_ERROR "BOOST_DIR is not defined or does not point to a valid directory ${BOOST_DIR}")
+-endif()
+ 
+ message(STATUS "BOOST_DIR: ${BOOST_DIR}")
+ set(BOOST_ROOT ${BOOST_DIR})
+@@ -310,7 +307,6 @@ include_directories(
+     ${root}/deps/VectorSimilarity/src
+     ${root}/deps/rmalloc
+     ${root}/src/ttl_table
+-    ${BOOST_DIR}
+     ${root})
+ 
+ #----------------------------------------------------------------------------------------------
+diff --git a/build/boost/boost.cmake b/build/boost/boost.cmake
+index 1bee3ecef..85cc40f52 100644
+--- a/build/boost/boost.cmake
++++ b/build/boost/boost.cmake
+@@ -13,22 +13,5 @@ else()
+     message(STATUS "BOOST_DIR '${BOOST_DIR}' is not a valid boost directory path")
+     set(BOOST_ENABLE_CMAKE ON)
+ 
+-    message(STATUS "fetching boost")
+-
+-    include(FetchContent)
+-    # we want to see the progress of the download, so we set FETCHCONTENT_QUIET to false
+-    Set(FETCHCONTENT_QUIET FALSE)
+-    FetchContent_Declare(
+-            Boost
+-            URL https://github.com/boostorg/boost/releases/download/boost-1.88.0/boost-1.88.0-b2-nodocs.tar.gz
+-            USES_TERMINAL_DOWNLOAD TRUE
+-            DOWNLOAD_NO_EXTRACT FALSE
+-            DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+-    )
+-    FetchContent_MakeAvailable(Boost)
+-
+-    message(STATUS "boost fetched")
+-    message(STATUS "boost source dir: ${boost_SOURCE_DIR}")
+-    message(STATUS "boost binary dir: ${boost_BINARY_DIR}")
+-    set(BOOST_DIR ${boost_SOURCE_DIR})
++    find_package(Boost REQUIRED)
+ endif()
