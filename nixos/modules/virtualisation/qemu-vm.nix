@@ -28,6 +28,8 @@ let
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
+  runScript = hostPkgs.callPackage ./run-virtiofsd-qemu { };
+
   driveOptions =
     { ... }:
     {
@@ -326,33 +328,28 @@ let
         ''
     )}
 
-    ${lib.optionalString useVirtiofs ''
-      echo "Starting virtiofs daemons..."
-      NIX_VIRTIOFS_DIR=$(mktemp -d)
-      ${lib.concatLines (
-        lib.mapAttrsToList (tag: share: ''
-          ${lib.getExe hostPkgs.virtiofsd} \
-            --socket-path="$NIX_VIRTIOFS_DIR"/"${tag}" \
-            --shared-dir="$(readlink -f "${share.source}")" \
-            ${if share.writable then "--writeback" else "--readonly"} \
-            --sandbox=none \
-            --seccomp=none \
-            --cache=${share.cache} \
-            --no-announce-submounts \
-            --translate-uid=host:65534:0:1 \
-            --translate-gid=host:65534:0:1 \
-            &
-        '') cfg.sharedDirectories
-      )}
-    ''}
+    export NIX_VIRTIOFS_DIR=$(mktemp -d)
 
     # Start QEMU.
-    exec ${
-      qemu-common.qemuBinaryWith {
-        qemuPkg = qemu;
-        forceAccel = cfg.qemu.forceAccel;
-      }
-    } \
+    exec ${lib.getExe runScript} \
+      ${
+        lib.optionalString (useVirtiofs && cfg.sharedDirectories != { })
+          "--virtiofs-paths ${
+            lib.concatStringsSep " " (
+              lib.mapAttrsToList (
+                tag: share:
+                "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
+              ) cfg.sharedDirectories
+            )
+          }"
+      } \
+      -- \
+      ${
+        qemu-common.qemuBinaryWith {
+          qemuPkg = qemu;
+          forceAccel = cfg.qemu.forceAccel;
+        }
+      } \
         -name ${config.system.name} \
         -m ${toString config.virtualisation.memorySize} \
         -smp ${toString config.virtualisation.cores} \
