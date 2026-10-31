@@ -28,6 +28,6 @@ buildNpmPackage rec {
     mainProgram = "stylelint";
     homepage = "https://stylelint.io";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }
