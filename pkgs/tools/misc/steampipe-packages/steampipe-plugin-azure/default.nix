@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "steampipe-plugin-azure";
-  version = "1.13.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-azure";
     tag = "v${version}";
-    hash = "sha256-SDyNl1AM9/C7mhaWMDTpsC7s876zat0HFs+21XuSPmo=";
+    hash = "sha256-Y4JjE8PNGzQfK+fyGR5jlcin7gQtE57J6TP+xgYnquU=";
   };
 
-  vendorHash = "sha256-FVStqWc50lgaqWv+zc+V6+fIwxLnWdODXmn1Mqx0KbE=";
+  vendorHash = "sha256-VuQp6YmKXTitBx+RUr3LpvdAV+QiqrZGAno1R+Xzcts=";
 
   ldflags = [
     "-s"
