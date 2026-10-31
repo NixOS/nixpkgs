@@ -27,6 +27,12 @@ let
       stateDirectory = "ceph/${
         if daemonType == "rgw" then "radosgw" else daemonType
       }/${clusterName}-${daemonId}";
+      isRadosClientDaemon = lib.elem daemonType [
+        "rgw"
+        "mds"
+        "mgr"
+        # There are others but they are currently not provided by this module.
+      ];
     in
     {
       enable = true;
@@ -37,7 +43,19 @@ let
         "network-online.target"
         "time-sync.target"
       ]
-      ++ lib.optional (daemonType == "osd") "ceph-mon.target";
+      ++ lib.optional (daemonType == "osd") "ceph-mon.target"
+      # RGW, MDS and MGR are RADOS clients that do I/O to OSDs when shutting down;
+      # for example, `radosgw` joins its object expirer thread, which may be waiting
+      # in a synchronous RADOS operation (which has no timeout by default).
+      # If the OSDs on the same host are stopped concurrently (e.g. by `systemctl stop ceph.target`
+      # or at system shutdown), that operation, and thus the daemon's shutdown,
+      # can hang until systemd's `TimeoutStopSec` kills the daemon.
+      # Ordering them after the local OSDs and mons fixes that.
+      # On hosts without local OSDs or mons, these orderings have no effect.
+      ++ lib.optionals isRadosClientDaemon [
+        "ceph-mon.target"
+        "ceph-osd.target"
+      ];
       wants = [
         "network-online.target"
         "time-sync.target"
