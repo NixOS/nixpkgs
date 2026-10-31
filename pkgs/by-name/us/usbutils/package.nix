@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage ../man/usbreset.1
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.linux-usb.org/";
     description = "Tools for working with USB devices, such as lsusb";
