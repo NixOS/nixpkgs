@@ -5171,7 +5171,10 @@ with pkgs;
           src = electron-source.electron_44;
           bin = electron_44-bin;
         };
-        electron_45 = electron_45-bin;
+        electron_45 = getElectronPkg {
+          src = electron-source.electron_45;
+          bin = electron_45-bin;
+        };
       }
     )
     electron_38
