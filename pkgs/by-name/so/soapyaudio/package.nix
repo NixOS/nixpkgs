@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   hamlib,
@@ -16,22 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapyaudio";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyAudio";
     tag = "soapy-audio-${finalAttrs.version}";
-    hash = "0minlsc1lvmqm20vn5hb4im7pz8qwklfy7sbr2xr73xkrbqdahc0";
+    hash = "sha256-0o1HxqzYhZY2qbG/YG7VbWvXqDHBs0hkpw/xRDm5AdM=";
   };
-
-  patches = [
-    # CMake < 3.5.0 fix. Remove when (https://github.com/pothosware/SoapyAudio/pull/23 is merged && next version bump).
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyAudio/pull/23/commits/265c6f043762810b369490398956c5e511ca5261.patch";
-      hash = "sha256-eqx/7i7jewkHm0M54rtEhznDRN9iPeIlgwHMJY9pN9g=";
-    })
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
