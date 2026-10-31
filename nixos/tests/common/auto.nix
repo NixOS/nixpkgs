@@ -30,7 +30,10 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    services.xserver.displayManager.lightdm.enable = true;
+    services.xserver.displayManager.lightdm = {
+      enable = true;
+      debug = lib.mkDefault true;
+    };
     services.displayManager.autoLogin = {
       enable = true;
       user = cfg.user;
