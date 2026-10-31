@@ -1,0 +1,18 @@
+scripts/CMakeLists.txt probes `ps` at configure time to set FIND_PROC for
+mysqld_safe. In the nix darwin sandbox `ps` cannot see other processes, so
+the probe fails and cmake emits an `if` with no condition. Set FIND_PROC
+directly for APPLE so the probe is skipped.
+
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -293,6 +293,10 @@
+     SET (FIND_PROC
+       "ps wwwp $PID | grep -v mysqld_safe | grep -- $MYSQLD > /dev/null")
+   ENDIF()
++  IF(APPLE)
++    SET (FIND_PROC
++      "ps -p $PID | grep -v mysqld_safe | grep -- $MYSQLD > /dev/null")
++  ENDIF()
+   IF(SOLARIS)
+     SET (FIND_PROC
+       "ps -p $PID | grep -v mysqld_safe | grep -- $MYSQLD > /dev/null")
