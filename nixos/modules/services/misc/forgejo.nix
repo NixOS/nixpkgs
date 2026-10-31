@@ -411,8 +411,8 @@ in
 
               ROOT_URL = mkOption {
                 type = types.str;
-                default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                defaultText = literalExpression ''"http://''${config.services.forgejo.settings.server.DOMAIN}:''${toString config.services.forgejo.settings.server.HTTP_PORT}/"'';
+                default = "${cfg.settings.server.PROTOCOL}://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
+                defaultText = literalExpression ''"''${config.services.forgejo.settings.server.PROTOCOL}://''${config.services.forgejo.settings.server.DOMAIN}:''${toString config.services.forgejo.settings.server.HTTP_PORT}/"'';
                 description = "Full public URL of Forgejo server.";
               };
 
