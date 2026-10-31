@@ -56,11 +56,11 @@ stripDirs() {
     [ -z "$ranlibCmd" ] && echo "stripDirs: Ranlib command is empty" 1>&2 && exit 1
 
     local pattern
-    if [ -n "${stripExclude:-}" ]; then
-        for pattern in "${stripExclude[@]}"; do
-            excludeFlags+=(-a '!' '(' -name "$pattern" -o -wholename "$prefix/$pattern" ')' )
-        done
-    fi
+    local excludePatterns=()
+    concatTo excludePatterns stripExclude
+    for pattern in "${excludePatterns[@]}"; do
+        excludeFlags+=(-a '!' '(' -name "$pattern" -o -wholename "$prefix/$pattern" ')' )
+    done
 
     local p
     for p in ${paths}; do
