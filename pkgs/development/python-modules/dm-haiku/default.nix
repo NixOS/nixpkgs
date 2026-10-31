@@ -40,13 +40,13 @@ buildPythonPackage (finalAttrs: {
   __srtructuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "dm-haiku";
     tag = "v${finalAttrs.version}";
     hash = "sha256-CXEMEuQY6VyQ3Ahn1vYYN6slyqABSbIBeJuxJTPapvw=";
   };
 
-  # https://github.com/deepmind/dm-haiku/pull/672
+  # https://github.com/google-deepmind/dm-haiku/pull/672
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
@@ -96,7 +96,7 @@ buildPythonPackage (finalAttrs: {
     # unregistered operation 'vhlo.composite_v2' found in dialect ('vhlo') that does not allow unknown operations
     "JaxToTfTest"
 
-    # See https://github.com/deepmind/dm-haiku/issues/366.
+    # See https://github.com/google-deepmind/dm-haiku/issues/366.
     "test_jit_Recurrent"
 
     # Assertion errors
@@ -143,7 +143,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Haiku is a simple neural network library for JAX developed by some of the authors of Sonnet";
-    homepage = "https://github.com/deepmind/dm-haiku";
+    homepage = "https://github.com/google-deepmind/dm-haiku";
     changelog = "https://github.com/google-deepmind/dm-haiku/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];

@@ -12,7 +12,7 @@ buildPythonPackage {
 
   # Pypi version does not have tests
   src = fetchFromGitHub {
-    owner = "floyernick";
+    owner = "ua-nick";
     repo = "fleep-py";
     rev = "994bc2c274482d80ab13d89d8f7343eb316d3e44";
     hash = "sha256-TaU7njx98nxkhZawGMFqWj4g+yCtIX9aPWQHoamzfMY=";
@@ -29,7 +29,7 @@ buildPythonPackage {
 
   meta = {
     description = "File format determination library";
-    homepage = "https://github.com/floyernick/fleep-py";
+    homepage = "https://github.com/ua-nick/fleep-py";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

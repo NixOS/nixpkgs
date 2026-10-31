@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "aiodhcpwatcher";
     tag = "v${finalAttrs.version}";
     hash = "sha256-a6svFLu0nmVVVVCg/evdmygTPj8VP+mjKTaaZGA0TQk=";
@@ -45,8 +45,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Watch for DHCP packets with asyncio";
-    homepage = "https://github.com/bdraco/aiodhcpwatcher";
-    changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/Bluetooth-Devices/aiodhcpwatcher";
+    changelog = "https://github.com/Bluetooth-Devices/aiodhcpwatcher/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;

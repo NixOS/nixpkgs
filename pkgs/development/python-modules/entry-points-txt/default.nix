@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jwodder";
+    owner = "wheelodex";
     repo = "entry-points-txt";
     tag = "v${version}";
     hash = "sha256-8oGK7aIDgXkCLh/d38hWzfF367KhmggG2s820D2r/EA=";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Read & write entry_points.txt files";
-    homepage = "https://github.com/jwodder/entry-points-txt";
+    homepage = "https://github.com/wheelodex/entry-points-txt";
     changelog = "https://github.com/wheelodex/entry-points-txt/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];

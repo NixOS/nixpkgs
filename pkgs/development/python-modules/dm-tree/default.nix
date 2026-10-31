@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "tree";
     tag = finalAttrs.version;
     hash = "sha256-L1DOwgJriFoS0rf6g+f3qcw94Q/ia4N6kZ1ai6F/Qng=";
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python library for working with nested data structures";
-    homepage = "https://github.com/deepmind/tree";
+    homepage = "https://github.com/google-deepmind/tree";
     changelog = "https://github.com/google-deepmind/tree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

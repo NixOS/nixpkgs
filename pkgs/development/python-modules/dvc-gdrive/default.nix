@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-gdrive";
     tag = finalAttrs.version;
     hash = "sha256-oqHSMmwfR24ydJlpXGI3cCxIlF0BwNdgje5zKa0c7FA=";
@@ -37,8 +37,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Google Drive plugin for DVC";
-    homepage = "https://github.com/iterative/dvc-gdrive";
-    changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/treeverse/dvc-gdrive";
+    changelog = "https://github.com/treeverse/dvc-gdrive/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

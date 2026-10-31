@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-account";
     tag = "v${version}";
     hash = "sha256-Ipz2zIKCpIzKBtX0UZnvpKZeTUcDPbGTzMgmcJC/4qs=";
@@ -79,8 +79,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Account abstraction library for web3.py";
-    homepage = "https://github.com/ethereum/eth-account";
-    changelog = "https://github.com/ethereum/eth-account/blob/v${version}/docs/release_notes.rst";
+    homepage = "https://github.com/ApeWorX/eth-account";
+    changelog = "https://github.com/ApeWorX/eth-account/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
