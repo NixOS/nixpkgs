@@ -96,4 +96,17 @@
         '';
       }
     );
+
+  # The following packages are used by azure-functions-core-tools to provide templates for creating new functions projects.
+  "Microsoft.Azure.Functions.Worker.ItemTemplates" =
+    package: package.overrideAttrs { createInstallableNugetSource = true; };
+
+  "Microsoft.Azure.Functions.Worker.ProjectTemplates" =
+    package: package.overrideAttrs { createInstallableNugetSource = true; };
+
+  "Microsoft.Azure.WebJobs.ItemTemplates" =
+    package: package.overrideAttrs { createInstallableNugetSource = true; };
+
+  "Microsoft.Azure.WebJobs.ProjectTemplates" =
+    package: package.overrideAttrs { createInstallableNugetSource = true; };
 }
