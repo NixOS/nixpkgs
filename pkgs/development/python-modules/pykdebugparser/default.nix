@@ -1,33 +1,35 @@
 {
   buildPythonPackage,
+  bytestruct,
   click,
-  construct,
   fetchFromGitHub,
   lib,
-  pygments,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykdebugparser";
-  version = "1.2.7";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matan1008";
     repo = "pykdebugparser";
-    tag = "v${version}";
-    hash = "sha256-V6WyFsPcjiBUJ+Amc3xk0GwdHzwakRizB/dPnSXT6vo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yu0QOZVwRnY/aA4Q6eWqgr1y3QuIRuUEfjXLC7jIKPk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    bytestruct
     click
-    construct
-    pygments
     termcolor
   ];
 
@@ -38,11 +40,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/matan1008/pykdebugparser/releases/tag/${src.tag}";
+    changelog = "https://github.com/matan1008/pykdebugparser/releases/tag/${finalAttrs.src.tag}";
     description = "Kdebug events and ktraces parser";
     homepage = "https://github.com/matan1008/pykdebugparser";
     license = lib.licenses.mit;
     mainProgram = "pykdebugparser";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})
