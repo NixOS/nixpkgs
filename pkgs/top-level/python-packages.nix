@@ -9214,8 +9214,6 @@ self: super: with self; {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
-  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
-
   kdl-py = callPackage ../development/python-modules/kdl-py { };
 
   keba-kecontact = callPackage ../development/python-modules/keba-kecontact { };
