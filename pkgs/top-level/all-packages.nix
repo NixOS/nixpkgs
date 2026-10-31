@@ -3693,6 +3693,7 @@ with pkgs;
 
   openjdk = jdk;
   openjdk_headless = jdk_headless;
+  buildJavaPackage = callPackage ../build-support/build-java-package { };
 
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
