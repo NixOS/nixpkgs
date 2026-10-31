@@ -1616,6 +1616,8 @@ mapAliases {
   linux_rpi02w = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
   linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
   linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+  linux_xanmod_latest = warnAlias "linux_xanmod_latest has been renamed to linux_xanmod_main" linux_xanmod_main; # Added 2026-10-31
+  linux_xanmod_stable = warnAlias "linux_xanmod_stable has been renamed to linux_xanmod_main" linux_xanmod_main; # Added 2026-10-31
   linuxPackages-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages-rt = throw "linuxPackages-rt has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages-rt_latest = throw "linuxPackages-rt_latest has been removed due to lack of maintenance"; # Added 2026-03-24
@@ -1659,6 +1661,8 @@ mapAliases {
   linuxPackages_rt_5_10 = throw "linuxPackages_rt_5_10 has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages_rt_5_15 = throw "linuxPackages_rt_5_15 has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages_rt_6_1 = throw "linuxPackages_rt_6_1 has been removed due to lack of maintenance"; # Added 2026-03-24
+  linuxPackages_xanmod_latest = warnAlias "linuxPackages_xanmod_latest has been renamed to linuxPackages_xanmod_main" linuxPackages_xanmod_main; # Added 2026-10-31
+  linuxPackages_xanmod_stable = warnAlias "linuxPackages_xanmod_stable has been renamed to linuxPackages_xanmod_main" linuxPackages_xanmod_main; # Added 2026-10-31
   linuxPackages_xen_dom0 = throw "'linuxPackages_xen_dom0' has been renamed to/replaced by 'linuxPackages'"; # Converted to throw 2025-10-27
   linuxPackages_xen_dom0_hardened = throw "'linuxPackages_xen_dom0_hardened' has been renamed to/replaced by 'linuxPackages_hardened'"; # Converted to throw 2025-10-27
   linuxstopmotion = throw "'linuxstopmotion' has been renamed to/replaced by 'stopmotion'"; # Converted to throw 2025-10-27
