@@ -32,10 +32,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     docker
     duckdb
     keyring
-    mysql-connector-python
     oracledb
-    paramiko
+    paramiko_3
     psycopg2
+    pymysql
     pyodbc
     pyperclip
     pytz
