@@ -13,6 +13,8 @@
   cargo,
   rustPlatform,
   buildRubyGem,
+  pkg-config,
+  oniguruma,
 }:
 
 let
@@ -48,9 +50,11 @@ let
         nativeBuildInputs = [
           cargo
           rustc
+          pkg-config
           rustPlatform.cargoSetupHook
           rustPlatform.bindgenHook
         ];
+        buildInputs = [ oniguruma ];
         disallowedReferences = [
           rustc.unwrapped
         ];
