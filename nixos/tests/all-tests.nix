@@ -1627,6 +1627,7 @@ in
   routinator = handleTest ./routinator.nix { };
   rqbit = runTest ./rqbit.nix;
   rshim = handleTest ./rshim.nix { };
+  rsnapshot = runTest ./rsnapshot.nix;
   rspamd = handleTest ./rspamd.nix { };
   rspamd-trainer = runTest ./rspamd-trainer.nix;
   rss-bridge = handleTest ./web-apps/rss-bridge { };
