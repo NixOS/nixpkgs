@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildHomeAssistantComponent,
   music-assistant-client,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
@@ -25,6 +26,10 @@ buildHomeAssistantComponent rec {
 
   # tests are being fixed in https://github.com/droans/mass_queue/pull/107
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+  };
 
   meta = {
     changelog = "https://github.com/droans/mass_queue/releases/tag/${src.tag}";

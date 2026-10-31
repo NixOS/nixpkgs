@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,6 +19,10 @@ buildHomeAssistantComponent rec {
 
   # has no tests
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$" ];
+  };
 
   meta = {
     changelog = "https://github.com/bastgau/ha-pi-hole-v6/releases/tag/${src.tag}";
