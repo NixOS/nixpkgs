@@ -422,6 +422,7 @@ if ( defined $description ) {
     $description =~ s/\.$//;          # remove period at the end
     $description =~ s/\s*$//;
     $description =~ s/^\s*//;
+    $description =~ s/"/\\\"/g;       # escape quotes
     $description =~ s/\n+/ /;         # Replace new lines by space.
     INFO("description: $description");
 }
