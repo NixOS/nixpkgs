@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-recording";
-  version = "0.13.4";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
     tag = "v${version}";
-    hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
+    hash = "sha256-C2eiuOIxXjwcxk57JepFItym9OqZtwpTOog4CiX7PnE=";
   };
 
   build-system = [ hatchling ];
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_recording" ];
 
   meta = {
+    changelog = "https://github.com/kiwicom/pytest-recording/blob/${src.tag}/docs/changelog.rst";
     description = "Pytest plugin that allows you recording of network interactions via VCR.py";
     homepage = "https://github.com/kiwicom/pytest-recording";
     license = lib.licenses.mit;
