@@ -27339,6 +27339,12 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  Simpaqt = {
+    email = "simpa@proton.me";
+    github = "Simpaqt";
+    githubId = 21122565;
+    name = "Simon Luukas Reher";
+  };
   sinanmohd = {
     name = "Sinan Mohd";
     email = "sinan@sinanmohd.com";
