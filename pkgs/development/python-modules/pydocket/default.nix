@@ -25,22 +25,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.25.2";
+  version = "0.27.1";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
-    tag = finalAttrs.version;
-    hash = "sha256-xiA4VHRDPv3iMil/MjFezAQCqw6rsR1nHj9fdBzHEQk=";
+    tag = "python/v${finalAttrs.version}";
+    hash = "sha256-lIYSzEQIPebDgBUEq8R2zShYXqxPZJ3epfVSHc5YVBk=";
   };
+
+  # The repository became a uv workspace, with the Python package in `python/`
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [
     hatch-vcs
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    # The `>=1.45.1` floor only follows upstream's Dependabot lock bumps
+    "opentelemetry-api"
+  ];
   dependencies = [
     burner-redis
     cloudpickle
