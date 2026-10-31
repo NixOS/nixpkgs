@@ -1,0 +1,24 @@
+diff --git a/src/Ryujinx.Audio.Backends.SoundIo/Ryujinx.Audio.Backends.SoundIo.csproj b/src/Ryujinx.Audio.Backends.SoundIo/Ryujinx.Audio.Backends.SoundIo.csproj
+index 911401338..ec56f0f52 100644
+--- a/src/Ryujinx.Audio.Backends.SoundIo/Ryujinx.Audio.Backends.SoundIo.csproj
++++ b/src/Ryujinx.Audio.Backends.SoundIo/Ryujinx.Audio.Backends.SoundIo.csproj
+@@ -10,19 +10,5 @@
+     <ProjectReference Include="..\Ryujinx.Audio\Ryujinx.Audio.csproj" />
+   </ItemGroup>
+ 
+-  <ItemGroup>
+-    <ContentWithTargetPath Include="Native\libsoundio\libs\libsoundio.dll" Condition="'$(RuntimeIdentifier)' != 'linux-x64' AND '$(RuntimeIdentifier)' != 'linux-arm64' AND '$(RuntimeIdentifier)' != 'osx-x64' AND '$(RuntimeIdentifier)' != 'osx-arm64'">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-      <TargetPath>libsoundio.dll</TargetPath>
+-    </ContentWithTargetPath>
+-    <ContentWithTargetPath Include="Native\libsoundio\libs\libsoundio.dylib" Condition="'$(RuntimeIdentifier)' != 'linux-x64' AND '$(RuntimeIdentifier)' != 'linux-arm64' AND '$(RuntimeIdentifier)' != 'win-x64' AND '$(RuntimeIdentifier)' != 'win-arm64'">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-      <TargetPath>libsoundio.dylib</TargetPath>
+-    </ContentWithTargetPath>
+-    <ContentWithTargetPath Include="Native\libsoundio\libs\libsoundio.so" Condition="'$(RuntimeIdentifier)' != 'win-x64' AND '$(RuntimeIdentifier)' != 'win-arm64' AND '$(RuntimeIdentifier)' != 'osx-x64' AND '$(RuntimeIdentifier)' != 'osx-arm64' AND '$(RuntimeIdentifier)' != 'linux-arm64'">
+-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+-      <TargetPath>libsoundio.so</TargetPath>
+-    </ContentWithTargetPath>
+-  </ItemGroup>
+ 
+ </Project>
