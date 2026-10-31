@@ -1,8 +1,7 @@
 diff --git a/src/cmake/modules/FindLLVM.cmake b/src/cmake/modules/FindLLVM.cmake
-index 56809dc3..b1a1ec1e 100644
 --- a/src/cmake/modules/FindLLVM.cmake
 +++ b/src/cmake/modules/FindLLVM.cmake
-@@ -103,19 +103,6 @@ if (NOT LLVM_LIBRARY)
+@@ -103,19 +103,6 @@
      set (LLVM_LIBRARY "${LLVM_LIBRARIES}")
  endif ()
  
@@ -19,6 +18,6 @@ index 56809dc3..b1a1ec1e 100644
 -    endif ()
 -endif ()
 -
- foreach (COMPONENT clangFrontend clangDriver clangSerialization
-                    clangParse clangSema clangAnalysis clangAST
-                    clangASTMatchers clangEdit clangLex
+ # libclang-cpp contains all the clang components we need, so the separate
+ # static archives are only a fallback for when it isn't present (such as an
+ # LLVM built with LLVM_LINK_LLVM_DYLIB=OFF). Linking both is redundant, and
