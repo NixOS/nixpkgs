@@ -33,7 +33,10 @@ let
 
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
-  project = "Microsoft.CodeAnalysis.LanguageServer";
+  projects = [
+    "Microsoft.CodeAnalysis.LanguageServer"
+    "roslyn-language-server"
+  ];
 in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
@@ -50,7 +53,7 @@ buildDotnetModule (finalAttrs: {
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
   version = "5.13.0-1.26513.11";
-  projectFile = "src/LanguageServer/${project}/${project}.csproj";
+  projectFile = map (project: "src/LanguageServer/${project}/${project}.csproj") projects;
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
 
@@ -84,20 +87,25 @@ buildDotnetModule (finalAttrs: {
     "-p:EnableRuntimePackDownload=false"
   ];
 
-  executables = [ project ];
+  executables = projects;
 
   postInstall = ''
-    # fake executable that we substitute in postFixup
-    touch $out/lib/$pname/${project}
-    chmod +x $out/lib/$pname/${project}
+    # fake executables that we substitute in postFixup
+    for project in ${toString projects}; do
+      touch $out/lib/$pname/$project
+      chmod +x $out/lib/$pname/$project
+    done
   '';
 
-  # problem and solution:
-  # BuildHost project within roslyn is running Build target during publish -> --no-build removed
+  # custom install phase: default publishes with --no-build,
+  # but the DeployNetFrameworkBuildHost target in Workspaces.MSBuild explicitly invokes Build
+  #
+  # publishing roslyn-language-server also publishes Microsoft.CodeAnalysis.LanguageServer
+  # next to it (PublishBundledLanguageServer target)
   installPhase = ''
     runHook preInstall
 
-    env dotnet publish $dotnetProjectFiles \
+    env dotnet publish src/LanguageServer/roslyn-language-server/roslyn-language-server.csproj \
         -p:ContinuousIntegrationBuild=true \
         -p:Deterministic=true \
         -p:InformationalVersion=$version \
@@ -114,20 +122,27 @@ buildDotnetModule (finalAttrs: {
     runHook postInstall
   '';
 
-  # force dotnet-runtime to run the dll
-  # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
   postFixup = ''
-    rm -f $out/lib/$pname/${project}
-    substituteInPlace $out/bin/${project} \
-      --replace-fail "$out/lib/$pname/${project}" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/${project}.dll"
+    for project in ${toString projects}; do
+      # force dotnet-runtime to run the dll
+      # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
+      substituteInPlace $out/bin/$project \
+        --replace-fail "$out/lib/$pname/$project" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/$project.dll"
+      # roslyn-language-server launches both executables from its own directory; point them at the wrappers
+      ln -sf $out/bin/$project $out/lib/$pname/$project
+    done
   '';
 
   passthru = {
     tests =
       let
-        with-sdk =
-          sdk:
-          runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
+        handshake =
+          {
+            sdk ? null,
+            program ? finalAttrs.meta.mainProgram,
+            args ? "",
+          }:
+          runCommand "${program}${args}-with-${if sdk ? version then sdk.version else "no"}-sdk"
             {
               nativeBuildInputs = [
                 finalAttrs.finalPackage
@@ -144,7 +159,7 @@ buildDotnetModule (finalAttrs: {
                 set timeout 60
                 set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
 
-                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
+                set chan [open "|${program} --stdio ${args} --extensionLogDirectory log 2>@stderr" r+]
                 fconfigure $chan -translation binary -buffering none
                 spawn -open $chan
                 match_max 100000
@@ -161,11 +176,16 @@ buildDotnetModule (finalAttrs: {
       in
       {
         # Make sure we can run with any supported SDK version, as well as without
-        with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
-        with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
-        with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
-        with-net11-sdk = with-sdk dotnetCorePackages.sdk_11_0;
-        no-sdk = with-sdk null;
+        with-net8-sdk = handshake { sdk = dotnetCorePackages.sdk_8_0; };
+        with-net9-sdk = handshake { sdk = dotnetCorePackages.sdk_9_0; };
+        with-net10-sdk = handshake { sdk = dotnetCorePackages.sdk_10_0; };
+        with-net11-sdk = handshake { sdk = dotnetCorePackages.sdk_11_0; };
+        no-sdk = handshake { };
+        thin-client = handshake { program = "roslyn-language-server"; };
+        thin-client-daemon = handshake {
+          program = "roslyn-language-server";
+          args = "--daemon-mode";
+        };
         version = testers.testVersion { package = finalAttrs.finalPackage; };
       };
     updateScript = ./update.sh;
