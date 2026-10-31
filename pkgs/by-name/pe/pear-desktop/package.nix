@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/pear-desktop"
-    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/pear-desktop"
+    cp -r pack/*-unpacked/resources "$out/share/pear-desktop"
 
     pushd assets/generated/icons/png
     for file in *.png; do

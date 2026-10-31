@@ -97,7 +97,7 @@ buildNpmPackage (finalAttrs: {
     done
 
     mkdir -p $out/share/bs-manager
-    cp -r release/build/*-unpacked/{locales,resources{,.pak}} $out/share/bs-manager
+    cp -r release/build/*-unpacked/resources $out/share/bs-manager
 
     makeWrapper ${lib.getExe electron} $out/bin/bs-manager \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

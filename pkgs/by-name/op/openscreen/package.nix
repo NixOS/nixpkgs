@@ -77,7 +77,7 @@ buildNpmPackage (finalAttrs: {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/openscreen
-      cp -r release/*/*-unpacked/{locales,resources{,.pak}} $out/share/openscreen
+      cp -r release/*/*-unpacked/resources $out/share/openscreen
 
       makeWrapper ${lib.getExe electron} $out/bin/openscreen \
           --add-flags $out/share/openscreen/resources/app.asar \

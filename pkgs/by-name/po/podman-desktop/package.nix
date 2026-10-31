@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         mkdir -p "$out/share/lib/podman-desktop"
-        cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
+        cp -r dist/*-unpacked/resources "$out/share/lib/podman-desktop"
 
         install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 

@@ -172,7 +172,7 @@ buildNpmPackage {
         ''
           # Install the application resources.
           mkdir -p $out/share/${packageName}
-          cp -r prod/*-unpacked/{locales,resources{,.pak}} $out/share/${packageName}
+          cp -r prod/*-unpacked/resources $out/share/${packageName}
 
           # Install the desktop icon.
           mkdir -p $out/share/icons/hicolor/128x128/apps

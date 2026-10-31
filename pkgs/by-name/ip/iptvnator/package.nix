@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "ERROR: electron-builder output directory not found: $linuxDir" >&2
       exit 1
     fi
-    cp -r "$linuxDir"/{locales,resources{,.pak}} $out/share/iptvnator/
+    cp -r "$linuxDir"/resources $out/share/iptvnator/
 
     makeWrapper ${lib.getExe electron_43} $out/bin/iptvnator \
       --add-flags $out/share/iptvnator/resources/app.asar \
