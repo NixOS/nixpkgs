@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 3481967..f4c91ce 100644
+--- a/setup.py
++++ b/setup.py
+@@ -243,6 +243,10 @@ class BuildExtWithCmake(build_ext):
+                 shutil.rmtree(dest)
+             print(f"Staging MLIR Python bindings: {mlir_pkg} -> {dest}")
+             shutil.copytree(str(mlir_pkg), str(dest))
++            os.chmod(str(dest), 0o755)
++            for root, dirs, files in os.walk(str(dest)):
++                for name in dirs + files:
++                    os.chmod(os.path.join(root, name), 0o755)
+         _patch_mlir_windows_dll_search(dest)
+ 
+     def _stage_libllvm7(self):
