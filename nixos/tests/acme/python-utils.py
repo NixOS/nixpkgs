@@ -131,6 +131,16 @@ def check_fullchain(node, cert_name):
 
     assert False
 
+# Ensures the installed certificate and private key are the same keypair.
+# Webservers may reject a mismatched pair at startup.
+def check_keypair(node, cert_name):
+    certdir = f"/var/lib/acme/{cert_name}"
+    from_cert = node.succeed(f"openssl x509 -noout -pubkey -in {certdir}/fullchain.pem")
+    from_key = node.succeed(f"openssl pkey -pubout -in {certdir}/key.pem")
+    assert (
+        from_cert == from_key
+    ), f"{certdir}/fullchain.pem does not match {certdir}/key.pem"
+
 # Checks the permissions in the cert directories are as expected
 def check_permissions(node, cert_name, group):
     stat = "stat -L -c '%a %U %G' "
