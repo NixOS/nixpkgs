@@ -305,6 +305,7 @@ in
         ethercat = callPackage pkgs.ethercat.kernelModule { };
 
         evdi = callPackage ../os-specific/linux/evdi { };
+        hermes-kms = callPackage ../os-specific/linux/hermes-kms { };
 
         fanout = callPackage ../os-specific/linux/fanout { };
 
