@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Library and utility for displaying and configuring Wayland outputs";
     license = lib.licenses.mpl20;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-randr";
   };
