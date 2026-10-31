@@ -22,25 +22,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = "7.5.0";
+  version = "7.6.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     tag = finalAttrs.version;
-    hash = "sha256-X6A1+AuJyBQJGs8NteGuhUVRt6MISlb4ZtNGcAvPLdk=";
+    hash = "sha256-8kWmVgtw1l1HckfWS4sukQs8KFJced2zTVhKlR/9qP8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-XQfSMtV4ERo0chry9qPnc3jeOiRDUuV1QfOFUVbNlF8=";
+    hash = "sha256-HOeKyzk+EIPdlVuJ6wbgtWT4YEGv9IQZYSo0L7fH23I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zlSAxkBA+IgyT09z8XSgvFjKRa5GGWltkexAvoNmYMk=";
+    hash = "sha256-Sxsb/VYNBBJLeEJr62Q6hSnn2Ofn47hxFs/nvesbDEw=";
   };
 
   buildInputs = [ openssl ];
@@ -66,11 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preBuild = ''
-    # We want nixpkgs' version of this instead, and yes it's included twice at different versions through different dependencies... Luckily they're all API compatible.
-    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
-      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
@@ -95,10 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --production --offline --ignore-scripts --frozen-lockfile
 
     # Re-install matrix-sdk-crypto-nodejs
-    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
-      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
-    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
       node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs

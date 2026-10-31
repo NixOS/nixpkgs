@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.56.0";
+  version = "1.56.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkrhV1skdS56+L5OPbWvTFuPvhi90l0FZc0w3rvZnBo=";
+    hash = "sha256-ytFRk86W34fhhJVgpbBF6Sbc6mTw0OmWjwBVpZIr6RQ=";
   };
 
   postPatch = ''

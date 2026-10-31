@@ -3,7 +3,11 @@
 
 set -euo pipefail
 
-version=$(curl -s "https://www.synology.com/api/releaseNote/findChangeLog?identify=SynologyDriveClient&lang=en-uk" | jq -r '.info.versions | to_entries[0].value.all_versions[0].version')
+version=$(curl -s "https://www.synology.com/api/releaseNote/findChangeLog?identify=SynologyDriveClient&lang=en-uk" | jq -r '
+  [ .info.versions[].all_versions[].version ]
+  | sort_by([scan("[0-9]+")] | map(tonumber))
+  | last
+')
 build="${version##*-}"
 
 update_hash() {
