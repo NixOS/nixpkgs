@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "ansitable";
-  version = "0.11.7";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A7seYrOgTvO9npvE0vRbKlkiGqi1P6Q/mKXfWKQz4aE=";
+    hash = "sha256-baf/GemGygLLZK3f2Nv7qLYQVP/44O/kWLeP0KLZyhs=";
   };
 
   build-system = [ hatchling ];
