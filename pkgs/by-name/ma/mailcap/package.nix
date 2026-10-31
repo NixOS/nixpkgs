@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   nixosTests,
 
   # updater
@@ -17,9 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mailcap";
   version = "2.1.54";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/mailcap/mailcap-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mkAyIC/A0rCFj0GxZzianP5SrCTsKC5kebkHZTGd4RM=";
+  src = fetchFromGitHub {
+    owner = "InfrastructureServices";
+    repo = "mailcap";
+    rev = "r${lib.replaceString "." "-" finalAttrs.version}";
+    hash = "sha256-tiyYiYKSB4UJRh+OZOvBDSF/VDyIIFA95H63qxFyc5g=";
   };
 
   strictDeps = true;
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
         nix-update
       ]
     }:$PATH
-    VERSION="$(git ls-remote --tags --sort="v:refname" https://pagure.io/mailcap.git | \
+    VERSION="$(git ls-remote --tags --sort="v:refname" https://github.com/InfrastructureServices/mailcap | \
       awk '{ print $2 }' | \
       grep "refs/tags/r" | \
       sed -E -e "s,refs/tags/r(.*)$,\1," -e "s/-/./g" | \
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Helper application and MIME type associations for file types";
-    homepage = "https://pagure.io/mailcap";
+    homepage = "https://github.com/InfrastructureServices/mailcap";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
