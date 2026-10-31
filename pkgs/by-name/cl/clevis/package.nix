@@ -1,6 +1,6 @@
 {
   lib,
-  asciidoc-full,
+  asciidoc,
   coreutils,
   cryptsetup,
   curl,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    asciidoc-full
+    asciidoc
     makeWrapper
     meson
     ninja
