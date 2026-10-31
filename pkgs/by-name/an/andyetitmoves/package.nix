@@ -10,23 +10,30 @@
   SDL_image,
   zlib,
   libx11,
-  libpng,
+  libpng12,
+  libGLU,
+  libGL,
   openal,
-  runtimeShell,
   requireFile,
+  autoPatchelfHook,
+  makeWrapper,
   commercialVersion ? false,
+  waylandSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "andyetitmoves";
   version = "1.2.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then
       let
         postfix = if stdenv.hostPlatform.system == "i686-linux" then "i386" else "x86_64";
-        commercialName = "${pname}-${version}_${postfix}.tar.gz";
-        demoUrl = "http://www.andyetitmoves.net/demo/${pname}Demo-${version}_${postfix}.tar.gz";
+        commercialName = "andyetitmoves-${finalAttrs.version}_${postfix}.tar.gz";
+        demoUrl = "http://www.andyetitmoves.net/demo/andyetitmovesDemo-${finalAttrs.version}_${postfix}.tar.gz";
       in
       if commercialVersion then
         requireFile {
@@ -37,45 +44,31 @@ stdenv.mkDerivation rec {
             directory where you saved it.
           '';
           name = commercialName;
-          sha256 =
+          hash =
             if stdenv.hostPlatform.system == "i686-linux" then
-              "15wvzmmidvykwjrbnq70h5jrvnjx1hcrm0357qj85q4aqbzavh01"
+              "sha256-AcCt/sKK4IIkPmWAmhkMXdqdZYHgYLuy5NPvFmv9m5c="
             else
-              "1v8z16qa9ka8sf7qq45knsxj87s6sipvv3a7xq11pb5xk08fb2ql";
+              "sha256-FIvlEJi9rBsC7keNvW/URh8ku7azEIyP00jNpLAJH+0=";
         }
       else
         fetchurl {
           url = demoUrl;
-          sha256 =
+          hash =
             if stdenv.hostPlatform.system == "i686-linux" then
-              "0f14vrrbq05hsbdajrb5y9za65fpng1lc8f0adb4aaz27x7sh525"
+              "sha256-RRSoTz/iK0VWU8AhRsOz1xWjfvJlZana0rAAvHLeJDg="
             else
-              "0mg41ya0b27blq3b5498kwl4rj46dj21rcd7qd0rw1kyvr7sx4v4";
+              "sha256-ZJOuT95+Bp5Bw6exHIRshshMKJ8okbIGpuuIBZQP5FU=";
         }
     else
-      throw "And Yet It Moves nix package only supports linux and intel cpu's.";
+      throw "`andyetitmoves`: nix package only supports linux on 32 or 64-bit x86.";
 
-  installPhase = ''
-    mkdir -p $out/{opt/andyetitmoves,bin}
-    cp -r * $out/opt/andyetitmoves/
-
-    fullPath=${lib.getLib stdenv.cc.cc}/lib64
-    for i in $nativeBuildInputs; do
-      fullPath=$fullPath''${fullPath:+:}$i/lib
-    done
-
-    binName=${if commercialVersion then "AndYetItMoves" else "AndYetItMovesDemo"}
-
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
-    cat > $out/bin/$binName << EOF
-    #!${runtimeShell}
-    cd $out/opt/andyetitmoves
-    exec ./lib/$binName
-    EOF
-    chmod +x $out/bin/$binName
-  '';
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
+    stdenv.cc.cc.lib
     libvorbis
     libogg
     libtheora
@@ -84,9 +77,33 @@ stdenv.mkDerivation rec {
     SDL_image
     zlib
     libx11
-    libpng
+    libpng12
+    libGLU
+    libGL
     openal
   ];
+
+  installPhase = ''
+    mkdir -p $out/{opt/andyetitmoves,bin,lib}
+    cp -r * $out/opt/andyetitmoves/
+
+    # Nuke ancient bundled standard libraries to prevent Mesa crashes
+    rm -f $out/opt/andyetitmoves/lib/libstdc++.so*
+    rm -f $out/opt/andyetitmoves/lib/libgcc_s.so*
+
+    # Create a compat symlink for the legacy Theora library
+    ln -s ${libtheora}/lib/libtheoradec.so $out/lib/libtheora.so.0
+
+    binName=${if commercialVersion then "AndYetItMoves" else "AndYetItMovesDemo"}
+
+    # The permanent legacy compatibility wrapper
+    makeWrapper $out/opt/andyetitmoves/lib/$binName $out/bin/$binName \
+      --run "cd $out/opt/andyetitmoves" \
+      --set SDL_VIDEODRIVER ${if waylandSupport then "wayland" else "x11"} \
+      --set MESA_GL_VERSION_OVERRIDE 2.1 \
+      --set MESA_GLSL_VERSION_OVERRIDE 120 \
+      --set allow_rgb10_configs false
+  '';
 
   meta = {
     description = "Physics/Gravity Platform game";
@@ -96,4 +113,4 @@ stdenv.mkDerivation rec {
     homepage = "http://www.andyetitmoves.net/";
     license = lib.licenses.unfree;
   };
-}
+})
