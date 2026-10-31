@@ -1,0 +1,45 @@
+diff --git i/cli/src/commands/update.rs w/cli/src/commands/update.rs
+index 8924c8d9b..51bbb5b22 100644
+--- i/cli/src/commands/update.rs
++++ w/cli/src/commands/update.rs
+@@ -13,8 +13,6 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-use crate::helpers::Updater;
+-
+ use anyhow::Result;
+ use clap::Parser;
+ 
+@@ -35,30 +33,6 @@ pub struct Update {
+ impl Update {
+     /// Update snarkOS.
+     pub fn parse(self) -> Result<String> {
+-        match self.list {
+-            true => match Updater::show_available_releases() {
+-                Ok(output) => Ok(output),
+-                Err(error) => Ok(format!("Failed to list the available versions of snarkOS\n{error}\n")),
+-            },
+-            false => {
+-                let result = Updater::update_to_release(!self.quiet, self.version);
+-                if !self.quiet {
+-                    match result {
+-                        Ok(status) => {
+-                            if status.uptodate() {
+-                                Ok("\nsnarkOS is already on the latest version".to_string())
+-                            } else if status.updated() {
+-                                Ok(format!("\nsnarkOS has updated to version {}", status.version()))
+-                            } else {
+-                                Ok(String::new())
+-                            }
+-                        }
+-                        Err(e) => Ok(format!("\nFailed to update snarkOS to the latest version\n{e}\n")),
+-                    }
+-                } else {
+-                    Ok(String::new())
+-                }
+-            }
+-        }
++        Ok(format!("\nSelf update is not supported on Nix.\nPackage must be updated via Nix\n"))
+     }
+ }
