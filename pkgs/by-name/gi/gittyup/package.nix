@@ -76,6 +76,5 @@ stdenv.mkDerivation (finalAttrs: {
       phijor
     ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
