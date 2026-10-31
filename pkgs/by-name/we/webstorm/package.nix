@@ -40,10 +40,7 @@ jetbrains.mkJetBrainsProduct {
     homepage = "https://www.jetbrains.com/webstorm/";
     description = "Web IDE from JetBrains";
     longDescription = "WebStorm provides an editor for HTML, JavaScript (incl. Node.js), and CSS with on-the-fly code analysis, error prevention and automated refactorings for JavaScript code.";
-    maintainers = with lib.maintainers; [
-      abaldeau
-      tymscar
-    ];
+    maintainers = with lib.maintainers; [ tymscar ];
     teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =

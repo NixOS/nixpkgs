@@ -521,12 +521,6 @@
     githubId = 202316;
     name = "Ashik Salahudeen";
   };
-  abaldeau = {
-    email = "andreas@baldeau.net";
-    github = "baldo";
-    githubId = 178750;
-    name = "Andreas Baldeau";
-  };
   abathur = {
     email = "travis.a.everett+nixpkgs@gmail.com";
     github = "abathur";
