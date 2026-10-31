@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymssql";
-  version = "2.3.13";
+  version = "2.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymssql";
     repo = "pymssql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UOb1gULAg5mNPiOiqcGpZ0Ux3f2Kz204gQ3Xn8fJFfA=";
+    hash = "sha256-BfhBUPgPFuAhQqPYz+5RumdyCVKAzAfH85xe8qxjgqA=";
   };
 
   postPatch = ''
