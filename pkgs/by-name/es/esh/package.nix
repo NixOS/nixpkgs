@@ -9,11 +9,14 @@
   runtimeShell,
   binlore,
   versionCheckHook,
+  esh,
+  coreutils,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "esh";
-  version = "0.1.1";
+  version = "0.3.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,15 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jirutka";
     repo = "esh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3EhavdwqyHw9GFtCxzDzSrZSkZcY5vm2b8HRa0uUqrU=";
+    hash = "sha256-suwbUT8miOYMdTMw+vJm2URiDInhEczn0JG9K5KpEto=";
   };
 
   nativeBuildInputs = [ asciidoctor ];
-
-  buildInputs = [
-    gawk
-    gnused
-  ];
 
   makeFlags = [
     "prefix=$(out)"
@@ -38,15 +36,28 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs .
+    substituteInPlace tests/run-tests \
+        --replace-fail 'set -eu' "set -eu;export ESH_SHELL=${runtimeShell}"
     substituteInPlace esh \
         --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
         --replace-fail '"awk"' '"${gawk}/bin/awk"' \
         --replace-fail 'sed' '${gnused}/bin/sed' \
         --replace-fail 'cat' '${coreutils}/bin/cat'
-    substituteInPlace tests/test-dump.exp \
-        --replace-fail '#!/bin/sh' '#!${runtimeShell}'
-  '';
+        --replace-fail 'sed -' '${gnused}/bin/sed -'
+    substituteInPlace tests/test-cli-no-args.exp2 \
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"'
+    substituteInPlace tests/test-cli-help.exp \
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"' \
+        --replace-fail '"awk"' '"${gawk}/bin/awk"'
+    substituteInPlace tests/test-cli-dump.exp \
+        --replace-fail '!/bin/sh' '!${runtimeShell}'
+    substituteInPlace tests/test-eval-error.t \
+        --replace-fail 'cut' '${coreutils}/bin/cut' \
+        --replace-fail ' rev' ' ${util-linux}/bin/rev'
+    substituteInPlace tests/test-eval-error-nested.t \
+        --replace-fail 'cut' '${coreutils}/bin/cut' \
+        --replace-fail ' rev' ' ${util-linux}/bin/rev'
 
   doCheck = true;
   checkTarget = "test";
