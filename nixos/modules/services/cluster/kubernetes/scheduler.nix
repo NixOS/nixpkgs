@@ -43,9 +43,9 @@ in
       default = true;
     };
 
-    port = lib.mkOption {
-      description = "Kubernetes scheduler listening port.";
-      default = 10251;
+    securePort = lib.mkOption {
+      description = "Kubernetes scheduler secure listening port.";
+      default = 10259;
       type = port;
     };
 
@@ -81,7 +81,7 @@ in
                     } \
                     --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
                     --leader-elect=${lib.boolToString cfg.leaderElect} \
-                    --secure-port=${toString cfg.port} \
+                    --secure-port=${toString cfg.securePort} \
                     ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
                     ${cfg.extraOpts}
         '';
