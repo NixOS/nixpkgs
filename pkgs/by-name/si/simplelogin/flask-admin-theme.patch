@@ -1,0 +1,5 @@
+--- a/app/admin/index.py
++++ b/app/admin/index.py
+@@ -41 +41 @@
+-    admin = Admin(name="SimpleLogin", template_mode="bootstrap4")
++    admin = Admin(name="SimpleLogin")
