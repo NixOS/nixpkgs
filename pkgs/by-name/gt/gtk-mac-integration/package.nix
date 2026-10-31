@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-mac-integration";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-mac-integration";
     rev = "gtk-mac-integration-${version}";
-    hash = "sha256-6k0pikco+6/XIB4A5Ej0qffopjivnUZiga6XjO6ogGk=";
+    hash = "sha256-sjMJlBG3wOEQZTDBQD1rirMtoRaDlbwG6xvYxs4H9HU=";
   };
 
   nativeBuildInputs = [
