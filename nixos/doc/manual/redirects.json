@@ -2990,5 +2990,26 @@
   ],
   "module-garm-setup": [
     "index.html#module-garm-setup"
+  ],
+  "module-services-falco": [
+    "index.html#module-services-falco"
+  ],
+  "module-services-falco-basic-usage": [
+    "index.html#module-services-falco-basic-usage"
+  ],
+  "module-services-falco-configuration": [
+    "index.html#module-services-falco-configuration"
+  ],
+  "module-services-falco-rules": [
+    "index.html#module-services-falco-rules"
+  ],
+  "module-services-falco-outputs": [
+    "index.html#module-services-falco-outputs"
+  ],
+  "module-services-falco-webserver": [
+    "index.html#module-services-falco-webserver"
+  ],
+  "module-services-falco-best-practices": [
+    "index.html#module-services-falco-best-practices"
   ]
 }
