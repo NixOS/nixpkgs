@@ -2,42 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   hackrf,
   soapysdr,
 }:
 
-let
-  version = "0.3.4";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyhackrf";
-  inherit version;
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyHackRF";
-    rev = "soapy-hackrf-${version}";
-    sha256 = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
+    tag = "soapy-hackrf-${finalAttrs.version}";
+    hash = "sha256-5Cr46rfDczfUV1yLivxBYl90mqnzdHrxZZaIzuabFAE=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
     hackrf
     soapysdr
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyHackRF/commit/143ff5e7e0f786e341df8846c04e8273c5183c26.patch";
-      hash = "sha256-8tMN6uEWUt1sUC45kBM6WHXDd/oTFyo6u+NpVPg+z5Q=";
-    })
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
@@ -49,4 +41,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})
