@@ -12303,6 +12303,12 @@
     github = "ilyakooo0";
     githubId = 6209627;
   };
+  ilyamiro = {
+    name = "ilyamiro";
+    email = "ilyamiro.work@gmail.com";
+    github = "ilyamiro";
+    githubId = 142908366;
+  };
   ilys = {
     name = "ilys";
     github = "ilyist";
