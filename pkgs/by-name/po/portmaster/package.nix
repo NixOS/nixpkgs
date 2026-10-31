@@ -293,6 +293,7 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       WitteShadovv
+      azahi
       nyabinary
     ];
     mainProgram = "portmaster";
