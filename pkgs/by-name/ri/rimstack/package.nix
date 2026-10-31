@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   coreutils,
@@ -55,8 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
-    qt6.qtwayland
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   nativeCheckInputs = [ git ];
 
@@ -82,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           gzip
         ]
       }
-      --set RIMSTACK_LAUNCHER ${lib.getExe externalRunner}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--set RIMSTACK_LAUNCHER ${lib.getExe externalRunner}"}
     )
   '';
 
@@ -95,6 +96,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ neolouker ];
     mainProgram = "rimstack";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
 })
