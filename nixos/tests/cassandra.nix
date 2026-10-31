@@ -108,6 +108,19 @@ in
         cass0.wait_until_succeeds("nodetool info -p ${jmxPortStr}")
         cass0.succeed("${checkHeapLimitCommand}")
 
+    with subtest("Private /tmp"):
+        cass0.wait_for_unit("cassandra.service")
+        pid = cass0.succeed("systemctl show --property MainPID --value cassandra.service").strip()
+        cass0.succeed(
+            "[ \"$(stat -c %d:%i /tmp)\" != \"$(stat -c %d:%i /proc/" + pid + "/root/tmp)\" ]"
+        )
+        # The JDK 11 attach client writes its trigger file to its own /tmp, so we run
+        # it in the mount namespace of the service.
+        cass0.succeed(
+            "nsenter --target " + pid + " --mount"
+            + " runuser -u cassandra -- ${testPackage.jre}/bin/jcmd " + pid + " VM.version"
+        )
+
     # Check cluster interaction
     with subtest("Bring up cluster"):
         cass1.wait_for_unit("cassandra.service")
@@ -151,6 +164,12 @@ in
         cass0.wait_until_succeeds(
             "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass2'"
         )
+
+    with subtest("JVM crash log"):
+        pid = cass0.succeed("systemctl show --property MainPID --value cassandra.service").strip()
+        cass0.succeed("kill -SEGV " + pid)
+        cass0.wait_until_fails("systemctl is-active cassandra.service")
+        cass0.succeed("test -s /var/lib/cassandra/hs_err_pid" + pid + ".log")
   '';
 
   passthru = {
