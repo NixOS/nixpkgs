@@ -924,6 +924,13 @@ Contributors are expected to be able to answer questions about their contributio
 It is not permitted to submit automated contributions without any manual review or intervention, outside of standard community automation.
 Automation without any manual review must not be used as the sole arbiter of whether to merge a change.
 
+## Use of LLM output in prose
+
+In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
+However, LLMs may be used to generate the summary (first line) of a commit message.
+Additionally, any form of automation may be used to add Git trailers (e.g. `Assisted-by: ...`).
+Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
+
 ## Transparency
 
 All covered use of automated tooling for a contribution must be disclosed as part of that contribution.
