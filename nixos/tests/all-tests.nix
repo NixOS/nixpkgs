@@ -1475,6 +1475,7 @@ in
   phylactery = runTest ./web-apps/phylactery.nix;
   pict-rs = runTest ./pict-rs.nix;
   pihole-ftl = import ./pihole-ftl { inherit runTest; };
+  pingvin-share-x = runTest ./pingvin-share-x.nix;
   pinnwand = runTest ./pinnwand.nix;
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
   plantuml-server = runTest ./plantuml-server.nix;
