@@ -14,6 +14,7 @@
   pkg-config,
   polkit,
   python3,
+  python3Packages,
   scons,
   util-linux,
   wrapGAppsHook3,
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    python3.pkgs.sphinx
+    python3Packages.sphinx
     scons
   ]
   ++ lib.optionals withGui [
