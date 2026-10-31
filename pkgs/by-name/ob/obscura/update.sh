@@ -23,6 +23,8 @@ if [ "$CURRENT_VERSION" == "$NEW_VERSION" ]; then
   exit 0
 fi
 
+# deno_core enables rusty_v8's simdutf feature. RUSTY_V8_ARCHIVE bypasses
+# rusty_v8's feature-based archive selection, so select the matching build here.
 TEMP_FILE=$(mktemp)
 cat >"$TEMP_FILE" <<EOF
 {
@@ -34,16 +36,16 @@ cat >"$TEMP_FILE" <<EOF
 let
   version = "$NEW_VERSION";
   hashes = {
-    x86_64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz")";
-    aarch64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz")";
-    aarch64-darwin = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_release_aarch64-apple-darwin.a.gz")";
+    x86_64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_simdutf_release_x86_64-unknown-linux-gnu.a.gz")";
+    aarch64-linux = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_simdutf_release_aarch64-unknown-linux-gnu.a.gz")";
+    aarch64-darwin = "$(nix-prefetch-url --type sha256 "https://github.com/denoland/rusty_v8/releases/download/v${NEW_VERSION}/librusty_v8_simdutf_release_aarch64-apple-darwin.a.gz")";
   };
 in
 stdenv.mkDerivation {
   name = "librusty_v8-\${version}";
 
   src = fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v\${version}/librusty_v8_release_\${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
+    url = "https://github.com/denoland/rusty_v8/releases/download/v\${version}/librusty_v8_simdutf_release_\${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
     sha256 =
       hashes.\${stdenv.hostPlatform.system}
         or (throw "librusty_v8: unsupported platform \${stdenv.hostPlatform.system}");

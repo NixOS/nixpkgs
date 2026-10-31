@@ -19,16 +19,16 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "obscura";
   __structuredAttrs = true;
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "h4ckf0r0day";
     repo = "obscura";
     rev = "v${version}";
-    hash = "sha256-ponNfeiRO4ajUYRZ3Pz3JYtPW1j8OP5jGDSF/a6PYuw=";
+    hash = "sha256-92Y4sjlH9K8PBjpLaCq84y9tu8fcEDzIDFRBDjEU2a0=";
   };
 
-  cargoHash = "sha256-YUKy5m6gOHD62kcOuk/o3oj1MfudeetBQV4q5asaOqQ=";
+  cargoHash = "sha256-kQ4RmRigvaHZ5D+QRlj/lNi9V2NXwjF6zezwlHSdB14=";
 
   # Enable the `render` (HTML rendering/PDF) and `stealth` (anti-bot
   # evasion) features.
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
     RUSTY_V8_ARCHIVE = librusty_v8;
     # Upstream never bumps the workspace Cargo.toml version per release (still
-    # 0.1.0 at the v0.2.2 tag); obscura-cli/build.rs only reports the git tag
+    # 0.1.0 at the v0.2.5 tag); obscura-cli/build.rs only reports the git tag
     # on GitHub Actions and otherwise falls back to CARGO_PKG_VERSION. Pin it
     # here so `obscura --version` matches the packaged release.
     OBSCURA_VERSION = version;
