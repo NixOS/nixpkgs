@@ -34,7 +34,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ doctest ];
+
+  doCheck = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "ULOG_CPP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  checkInputs = [ doctest ];
+
+  # test/CMakeLists.txt calls enable_testing()/add_test() itself rather than
+  # at the project root, so the generated top-level CTestTestfile.cmake never
+  # aggregates it and `ctest`/`make test` finds "No tests were found!!!".
+  # Run the doctest binary directly instead.
+  checkPhase = ''
+    runHook preCheck
+    ./test/tests
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
