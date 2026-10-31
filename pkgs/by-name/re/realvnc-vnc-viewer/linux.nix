@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  rpmextract,
+  dpkg,
   libx11,
   libxext,
   pname,
@@ -16,26 +16,22 @@ stdenv.mkDerivation (finalAttrs: {
   src =
     {
       "x86_64-linux" = fetchurl rec {
-        name = "VNC-Viewer-${finalAttrs.version}-Linux-x64.rpm";
-        url = "https://downloads.realvnc.com/download/file/viewer.files/${name}";
-        hash = "sha256-rIOP7d8qrOeMgaQRYo+GRXT1fLnPegdpONT0p5aBCxM=";
+        name = "VNC-Viewer-${finalAttrs.version}-Linux-x64.deb";
+        url = "https://web.archive.org/web/20251201122208/https://downloads.realvnc.com/download/file/viewer.files/${name}";
+        hash = "sha256-BePHXgU1B0kve5o/LXWSWsa13JJJr3OubBrFG8XWqrs=";
       };
     }
     .${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
-    rpmextract
+    dpkg
   ];
   buildInputs = [
     libx11
     libxext
     stdenv.cc.cc.libgcc or null
   ];
-
-  unpackPhase = ''
-    rpmextract $src
-  '';
 
   postPatch = ''
     substituteInPlace ./usr/share/applications/realvnc-vncviewer.desktop \
