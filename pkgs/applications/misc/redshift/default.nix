@@ -158,7 +158,7 @@ rec {
       homepage = "http://jonls.dk/redshift";
       platforms = lib.platforms.unix;
       mainProgram = "redshift";
-      maintainers = [ ];
+      maintainers = [ lib.maintainers.kamadorueda ];
     };
   };
 
@@ -177,7 +177,7 @@ rec {
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = with lib.maintainers; [ acidbong ] ++ redshift.meta.maintainers;
+      maintainers = with lib.maintainers; [ acidbong ];
     };
   };
 }
