@@ -1,0 +1,18 @@
+--- a/libgimpconfig/gimpconfig-path.c
++++ b/libgimpconfig/gimpconfig-path.c
+@@ -214,9 +214,11 @@ gimp_config_build_data_path (const gchar *name)
+   if (g_getenv ("GIMP_TESTING_ABS_TOP_SRCDIR"))
+     /* Unit-testing mode: the source directory is where data is found. */
+-    return g_strconcat (g_getenv ("GIMP_TESTING_ABS_TOP_SRCDIR"),
+-                        G_DIR_SEPARATOR_S, "data",
+-                        G_DIR_SEPARATOR_S, name,
+-                        NULL);
++    return g_strconcat ("${gimp_dir}", G_DIR_SEPARATOR_S, name,
++                        G_SEARCHPATH_SEPARATOR_S,
++                        g_getenv ("GIMP_TESTING_ABS_TOP_SRCDIR"),
++                        G_DIR_SEPARATOR_S, "data",
++                        G_DIR_SEPARATOR_S, name,
++                        NULL);
+   else
+     return g_strconcat ("${gimp_dir}", G_DIR_SEPARATOR_S, name,
+                         G_SEARCHPATH_SEPARATOR_S,
