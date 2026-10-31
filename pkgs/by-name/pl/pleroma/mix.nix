@@ -46,12 +46,12 @@ let
 
       bandit = buildMix rec {
         name = "bandit";
-        version = "1.13.1";
+        version = "1.14.0";
 
         src = fetchHex {
           pkg = "bandit";
           version = "${version}";
-          sha256 = "39028f0b5a21404661410a6c19275060a9822c9dcca70b7c3e4e4fa50b11da58";
+          sha256 = "2d07630e4bf77b55240881386f7629bcc2f87426a299860b2d31c4ad77a48746";
         };
 
         beamDeps = [
@@ -854,12 +854,12 @@ let
 
       h2 = buildRebar3 rec {
         name = "h2";
-        version = "0.11.0";
+        version = "0.12.5";
 
         src = fetchHex {
           pkg = "h2";
           version = "${version}";
-          sha256 = "c61f24361d0dc76375eaf35c2bf0e01235d81b7685538df571db036467fac358";
+          sha256 = "a4524bf80cafb86e599710c1d5c9f63aca0284607cb4d99fb53ae63fd55aa03f";
         };
 
         beamDeps = [ ];
@@ -867,12 +867,12 @@ let
 
       hackney = buildRebar3 rec {
         name = "hackney";
-        version = "4.7.3";
+        version = "4.9.1";
 
         src = fetchHex {
           pkg = "hackney";
           version = "${version}";
-          sha256 = "3f460e01d5a1abba39c32d06e9a733bb76e35d1ab87a83868b6bb29d646fe25f";
+          sha256 = "093e1830e523c2b1972d570dcee83d000d41f7b39e7eb3c6b5240cf0f64a1973";
         };
 
         beamDeps = [
@@ -881,6 +881,7 @@ let
           idna
           mimerl
           parse_trans
+          quic
           ssl_verify_fun
           webtransport
         ];
@@ -1857,12 +1858,12 @@ let
 
       quic = buildRebar3 rec {
         name = "quic";
-        version = "1.8.0";
+        version = "2.1.3";
 
         src = fetchHex {
           pkg = "quic";
           version = "${version}";
-          sha256 = "6b1f8f08a45412ac503bc6771efb8edc696bb14079bc48d2ca960b92933da8a4";
+          sha256 = "1520df50fc63093c0a4d209cb97056e132d06f0b8fd54c5cf933ddc0c0ea6fe2";
         };
 
         beamDeps = [ ];
@@ -2256,12 +2257,12 @@ let
 
       webtransport = buildRebar3 rec {
         name = "webtransport";
-        version = "0.4.4";
+        version = "0.4.8";
 
         src = fetchHex {
           pkg = "webtransport";
           version = "${version}";
-          sha256 = "80a6641e0f6628938ceee4c9d7a4f6d48a6089890da1ae3288ca8dab13a6005e";
+          sha256 = "08477a2195ccbf944da0b78f85dc4e6ee4498790e3dd7fe84ee7a245938e1b26";
         };
 
         beamDeps = [
