@@ -127,6 +127,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # fallback to ipv4 during build on darwin to ensure match with sandbox
+  # profile rule
+  #  https://github.com/anthropics/sandbox-runtime/blob/bcad38810efcc2b7342bbc6ec26d15b7bbbabcfb/src/sandbox/macos-sandbox-utils.ts#L1098-L1115
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;

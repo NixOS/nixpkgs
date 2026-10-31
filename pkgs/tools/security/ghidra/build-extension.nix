@@ -34,6 +34,12 @@ let
         ...
       }@args:
       {
+        # Needed to run gradle on darwin
+        __darwinAllowLocalNetworking = true;
+        env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+        };
+
         nativeBuildInputs = nativeBuildInputs ++ [
           unzip
           jdk
@@ -47,9 +53,6 @@ let
           export XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$(mktemp -d)}"
           ${args.preBuild or ""}
         '';
-
-        # Needed to run gradle on darwin
-        __darwinAllowLocalNetworking = true;
 
         gradleBuildTask = args.gradleBuildTask or "buildExtension";
         gradleFlags = args.gradleFlags or [ ] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
