@@ -75,6 +75,7 @@ in
       # Caching
       #redis_url = "redis://127.0.0.1:8082"; # The nixpkgs build doesn't have the redis-cache feature enabled
       cache_expiry_time = lib.mkDefault 600;
+      http_cache_expiry_time = lib.mkDefault 60;
 
       # Search Engines
       upstream_search_engines = {
@@ -85,8 +86,10 @@ in
         LibreX = lib.mkDefault false;
         Mojeek = lib.mkDefault false;
         Bing = lib.mkDefault false;
+        Qwant = lib.mkDefault false;
         Wikipedia = lib.mkDefault true;
         Yahoo = lib.mkDefault false;
+        SepiaSearch = lib.mkDefault false;
       };
 
       proxy = lib.mkDefault null;
