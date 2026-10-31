@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  lib,
   pkg-config,
   packagekit-qt,
 }:
@@ -8,4 +9,6 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ packagekit-qt ];
+
+  meta.badPlatforms = lib.platforms.darwin;
 }

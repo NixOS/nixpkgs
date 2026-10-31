@@ -8,6 +8,8 @@
   kconfig,
   kdegraphics-mobipocket,
   libappimage,
+  lib,
+  stdenv,
 }:
 mkKdeDerivation {
   pname = "kfilemetadata";
@@ -18,12 +20,14 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    attr
     ebook_tools
     exiv2
     ffmpeg
     kconfig
     kdegraphics-mobipocket
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     libappimage
+    attr
   ];
 }
