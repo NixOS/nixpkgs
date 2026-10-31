@@ -92,6 +92,16 @@
                 ''"-Ctarget-feature=${if stdenv.targetPlatform.isStatic then "+" else "-"}crt-static"''
               ]
               ++ lib.optional (!stdenv.targetPlatform.isx86_32) ''"-Cforce-frame-pointers=yes"''
+              # rustc cannot infer the flavor from the `-cc` suffix and
+              # falls back to the wasm default of a bare `wasm-ld`. The
+              # target spec gives clang the LLVM triple, which can differ
+              # from the wrapper triple. Then clang does not find the
+              # wrapper linker. Clang uses the last `--target`.
+              ++ lib.optionals stdenv.targetPlatform.isWasm [
+                ''"-Clinker-flavor=gcc"''
+                ''"-Clink-self-contained=no"''
+                ''"-Clink-arg=--target=${stdenv.targetPlatform.config}"''
+              ]
             )
           } ]
         ''
@@ -108,6 +118,8 @@
       test = tests.rust-hooks.cargoSetupHook;
       ${if stdenv.hostPlatform.isLinux then "testCross" else null} =
         pkgsCross.riscv64.tests.rust-hooks.cargoSetupHook;
+      ${if stdenv.hostPlatform.isLinux then "testWasi" else null} =
+        pkgsCross.wasi32.tests.rust-hooks.cargoSetupHook;
     };
     meta.license = lib.licenses.mit;
   } ./cargo-setup-hook.sh;

@@ -1,4 +1,5 @@
 {
+  lib,
   rustPlatform,
   stdenv,
   cargo,
@@ -22,7 +23,7 @@
     '';
     installPhase = ''
       mkdir -p $out/bin
-      mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello $out/bin/
+      mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/hello${lib.optionalString stdenv.hostPlatform.isWasm ".wasm"} $out/bin/
     '';
   };
 
