@@ -1,0 +1,424 @@
+diff --git a/src/commands/build.ts b/src/commands/build.ts
+index 8b8195125877..5990c55fef10 100644
+--- a/src/commands/build.ts
++++ b/src/commands/build.ts
+@@ -1,7 +1,6 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import execa from 'execa'
+ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+ import { join, resolve } from 'node:path'
+ import { bin_name, config } from '..'
+@@ -27,24 +26,12 @@ const applyConfig = async (os: string) => {
+ 
+   const brandingKey = dynamicConfig.get('brand')
+ 
+-  let changeset
+-
+-  try {
+-    // Retrieve changeset
+-    const { stdout } = await execa('git', ['rev-parse', 'HEAD'])
+-    changeset = stdout.trim()
+-  } catch (error) {
+-    log.warning(
+-      'Surfer expects that you are building your browser with git as your version control'
+-    )
+-    log.warning(
+-      'If you are using some other version control system, please migrate to git'
+-    )
+-    log.warning('Otherwise, you can setup git in this folder by running:')
+-    log.warning('   |git init|')
+-
+-    throw error
+-  }
++  // Surfer derived the changeset below from |git rev-parse HEAD|. Builds
++  // made with nixpkgs have no git repository available, so the display
++  // version of the brand is used instead. Configuration only requires a
++  // non-empty changeset; it is informational metadata from the build config.
++  const brandingConfig: BrandInfo | undefined = config.brands[brandingKey]
++  const version = brandingConfig?.release?.displayVersion || '1.0.0'
+ 
+   const templateOptions = {
+     name: config.name,
+@@ -56,7 +43,7 @@ const applyConfig = async (os: string) => {
+       ? 'browser/branding/' + brandingKey
+       : 'browser/branding/unofficial',
+     binName: config.binaryName,
+-    changeset,
++    changeset: version,
+   }
+ 
+   const commonConfig = stringTemplate(
+@@ -104,9 +91,6 @@ const applyConfig = async (os: string) => {
+ 
+   // We need to install the browser display version inside of browser/config/version.txt
+   // and browser/config/version_display.txt
+-  const brandingConfig: BrandInfo | undefined = config.brands[brandingKey]
+-  const version = brandingConfig?.release?.displayVersion || '1.0.0'
+-
+   log.debug(`Writing ${version} to the browser version files`)
+   writeFileSync(join(ENGINE_DIR, 'browser/config/version.txt'), version)
+   writeFileSync(join(ENGINE_DIR, 'browser/config/version_display.txt'), version)
+diff --git a/src/commands/discard.ts b/src/commands/discard.ts
+index e4f686691f9a..0b0221799d98 100644
+--- a/src/commands/discard.ts
++++ b/src/commands/discard.ts
+@@ -1,23 +1,10 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import execa from 'execa'
+-import { existsSync, statSync } from 'node:fs'
+-import { resolve } from 'node:path'
+ import { log } from '../log'
+-import { ENGINE_DIR } from '../constants'
+ 
+ export const discard = async (file: string): Promise<void> => {
+-  const realFile = resolve(ENGINE_DIR, file)
+-
+-  log.info(`Discarding ${realFile}...`)
+-
+-  if (!existsSync(realFile)) throw new Error(`File ${realFile} does not exist`)
+-  if (!statSync(realFile).isFile()) throw new Error('Target must be a file.')
+-
+-  try {
+-    await execa('git', ['restore', file], { cwd: ENGINE_DIR })
+-  } catch {
+-    log.warning(`The file ${file} was not changed`)
+-  }
++  log.error(
++    `This surfer build does not use git, so it cannot discard changes of ${file}. Please redownload the engine instead.`
++  )
+ }
+diff --git a/src/commands/download/addon.ts b/src/commands/download/addon.ts
+index 8610fbe7b8cd..36218a95f816 100644
+--- a/src/commands/download/addon.ts
++++ b/src/commands/download/addon.ts
+@@ -216,18 +216,9 @@ ${runTree(files, '')}`
+ }
+ 
+ export async function initializeAddon(addon: AddonInfo & { name: string }) {
+-  const outPath = join(ENGINE_DIR, 'browser', 'extensions', addon.name)
+-
+-  log.info(`Initializing addon...`)
+-
+-  await configDispatch('git', {
+-    args: ['add', '-f', '.'],
+-    cwd: outPath,
+-  })
+-  await configDispatch('git', {
+-    args: ['commit', '-m', addon.name],
+-    cwd: ENGINE_DIR,
+-  })
++  log.info(
++    'Skipping addon initialization as this surfer build has no git available'
++  )
+ }
+ 
+ export async function addAddonsToMozBuild(
+diff --git a/src/commands/export-file.ts b/src/commands/export-file.ts
+index e20a92d36dce..44fe3e2ef6c5 100644
+--- a/src/commands/export-file.ts
++++ b/src/commands/export-file.ts
+@@ -1,56 +1,16 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import execa from 'execa'
+-import { existsSync, writeFileSync } from 'node:fs'
+-import { basename, resolve } from 'node:path'
+ import { log } from '../log'
+-import { ENGINE_DIR, SRC_DIR } from '../constants'
+-import { delay, ensureDirectory } from '../utils'
++import { basename } from 'node:path'
+ 
+ export const getPatchName = (file: string): string =>
+   `${basename(file).replace(/\./g, '-')}.patch`
+ 
++// Exporting a patch relies on git history of the engine to compute a diff.
++// This surfer build does not use git, so this command is not available.
+ export const exportFile = async (file: string): Promise<void> => {
+-  log.info(`Exporting ${file}...`)
+-
+-  if (!existsSync(resolve(ENGINE_DIR, file)))
+-    throw new Error(
+-      `File ${file} could not be found in engine directory. Check the path for any mistakes and try again.`
+-    )
+-
+-  const proc = await execa(
+-    'git',
+-    [
+-      'diff',
+-      '--src-prefix=a/',
+-      '--dst-prefix=b/',
+-      '--full-index',
+-      resolve(ENGINE_DIR, file),
+-    ],
+-    {
+-      cwd: ENGINE_DIR,
+-      stripFinalNewline: false,
+-    }
++  log.error(
++    `This surfer build does not use git, so it cannot export ${file} as a patch.`
+   )
+-  const name = getPatchName(file)
+-  const patchPath = file.replace(/\./g, '-').split('/').slice(0, -1)
+-
+-  await ensureDirectory(resolve(SRC_DIR, ...patchPath))
+-
+-  if (proc.stdout.length >= 8000) {
+-    log.warning('')
+-    log.warning(
+-      `Exported patch is over 8000 characters. This patch may become hard to manage in the future.`
+-    )
+-    log.warning(
+-      `We recommend trying to decrease your patch size by making minimal edits to the source.`
+-    )
+-    log.warning('')
+-    await delay(2000)
+-  }
+-
+-  writeFileSync(resolve(SRC_DIR, ...patchPath, name), proc.stdout)
+-  log.info(`Wrote "${name}" to patches directory.`)
+-  console.log()
+ }
+diff --git a/src/commands/init.ts b/src/commands/init.ts
+index 45ac07c57aa9..d8e44b9d093d 100644
+--- a/src/commands/init.ts
++++ b/src/commands/init.ts
+@@ -6,7 +6,6 @@ import { existsSync, readFileSync } from 'node:fs'
+ import { resolve } from 'node:path'
+ import { bin_name } from '..'
+ import { log } from '../log'
+-import { config, configDispatch } from '../utils'
+ 
+ export const init = async (directory: Command | string): Promise<void> => {
+   const cwd = process.cwd()
+@@ -36,53 +35,11 @@ export const init = async (directory: Command | string): Promise<void> => {
+ 
+   version = version.trim().replace(/\\n/g, '')
+ 
+-  if (process.env.ZEN_DOWNLOAD_DONT_INIT_GIT === '1') {
+-    log.info(
+-      'Skipping git initialization as ZEN_DOWNLOAD_DONT_INIT_GIT is set to 1'
+-    )
+-    return
+-  }
+-
+-  // TODO: Use bash on windows, this may significantly improve performance.
+-  // Still needs testing though
+-  log.info('Initializing git, this may take some time')
+-
+-  await configDispatch('git', {
+-    args: ['init'],
+-    cwd: absoluteInitDirectory,
+-  })
+-
+-  await configDispatch('git', {
+-    args: ['checkout', '--orphan', version],
+-    cwd: absoluteInitDirectory,
+-  })
+-
+-  await configDispatch('git', {
+-    args: ['add', '-f', '.'],
+-    cwd: absoluteInitDirectory,
+-  })
+-
+-  await configDispatch('git', {
+-    args: ['config', 'commit.gpgsign', 'false'],
+-    cwd: absoluteInitDirectory,
+-  })
+-
+-  await configDispatch('git', {
+-    args: ['config', 'core.safecrlf', 'false'],
+-    cwd: absoluteInitDirectory,
+-  })
+-
+-  log.info('Committing...')
+-
+-  await configDispatch('git', {
+-    args: ['commit', '-aqm', `"Firefox ${version}"`],
+-    cwd: absoluteInitDirectory,
+-    // Committing can fail for configuration issues: see https://github.com/zen-browser/desktop/issues/1877
+-    killOnError: true,
+-  })
+-
+-  await configDispatch('git', {
+-    args: ['checkout', '-b', config.name.toLowerCase().replace(/\s/g, '_')],
+-    cwd: absoluteInitDirectory,
+-  })
++  // Surfer tracks the Firefox tree with git on dev machines, which patches are
++  // also kept up to date with. The nixpkgs build works without git available,
++  // so no initialization is possible or necessary.
++  log.info(
++    'Skipping git initialization as this surfer build has no git available'
++  )
++  return
+ }
+diff --git a/src/commands/patches/command.ts b/src/commands/patches/command.ts
+index bf50a5c1f78a..22b4f4b087e4 100644
+--- a/src/commands/patches/command.ts
++++ b/src/commands/patches/command.ts
+@@ -205,13 +205,20 @@ async function importInternalPatch(): Promise<Task> {
+ }
+ 
+ export async function applyPatches(): Promise<void> {
++  // When building with nix, patch application is done by nix itself: the
++  // tracked patches (surfer's internal ones and the project's *.patch files)
++  // are applied with GNU patch and the src folders are mirrored into the
++  // engine by the build, so skip both of them here. Surfer still applies the
++  // generated branding patches.
++  const nixAppliesPatches = process.env.SURFER_NO_TRACKED_PATCHES === '1'
+   const canDoBrandingPatch = process.env.SURFER_NO_BRANDING_PATCH !== 'true'
+-  let tasks = [
+-    await importInternalPatch(),
+-    canDoBrandingPatch ? importMelonPatches() : undefined,
+-    await importFolders(),
+-    await importGitPatch(),
++
++  const tasks = [
++    ...(nixAppliesPatches ? [] : [await importInternalPatch()]),
++    ...(canDoBrandingPatch ? [importMelonPatches()] : []),
++    ...(nixAppliesPatches ? [] : [await importFolders()]),
++    ...(nixAppliesPatches ? [] : [await importGitPatch()]),
+     await importCertPatches(),
+-  ].filter((task) => task !== undefined) as Task[]
++  ]
+   await new TaskList(tasks).run()
+ }
+diff --git a/src/commands/patches/git-patch.ts b/src/commands/patches/git-patch.ts
+index e26efbbd4e02..b08be72d1596 100644
+--- a/src/commands/patches/git-patch.ts
++++ b/src/commands/patches/git-patch.ts
+@@ -11,22 +11,27 @@ export interface IGitPatch extends IMelonPatch {
+   path: string
+ }
+ 
++// Surfer normally applies patches with `git apply`. The nixpkgs build of
++// zen-browser has no git available, so GNU patch is used instead. As upstream
++// did, an already applied patch is reverted first so it can be re-applied.
++// GNU patch exits non-zero when it fails to reverse the patch, which means it
++// was not applied yet.
+ export async function apply(path: string): Promise<void> {
+   try {
+-    await execa('git', ['apply', '-R', ...PATCH_ARGS, path], {
+-      cwd: ENGINE_DIR,
+-    })
++    await execa(
++      'patch',
++      [...PATCH_ARGS, '--quiet', '--reverse', '-i', path],
++      { cwd: ENGINE_DIR }
++    )
+   } catch {
+-    // If the patch has already been applied, we want to revert it. Because
+-    // there is no good way to check this we are just going to catch and
+-    // discard the error
++    // The patch has not been applied yet, so there is nothing to revert
+     undefined
+   }
+ 
+   const { stdout, exitCode } = await execa(
+-    'git',
+-    ['apply', ...PATCH_ARGS, path],
+-    { cwd: ENGINE_DIR }
++    'patch',
++    [...PATCH_ARGS, '--forward', '-i', path],
++    { cwd: ENGINE_DIR, all: true }
+   )
+ 
+   if (exitCode != 0) log.error(stdout)
+diff --git a/src/commands/reset.ts b/src/commands/reset.ts
+index 3715ebb532fb..1185c2d4a1c3 100644
+--- a/src/commands/reset.ts
++++ b/src/commands/reset.ts
+@@ -1,27 +1,10 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import execa from 'execa'
+-
+-import { bin_name } from '..'
+-import { ENGINE_DIR } from '../constants'
+ import { log } from '../log'
+ 
+ export const reset = async (): Promise<void> => {
+-  log.warning(`This will remove any changes that you have made to firefox`)
+-  log.warning(
+-    `If you have made changes to firefox's internal files, save them with |${bin_name} export [filename]|`
+-  )
+-  await log.hardWarning(
+-    `You will need to run |${bin_name} import| to bring back your saved changes`
++  log.error(
++    'This surfer build does not use git, so it cannot reset the engine. Please redownload the engine instead.'
+   )
+-
+-  log.info('Unstaging changes...')
+-  await execa('git', ['reset'], { cwd: ENGINE_DIR })
+-
+-  log.info('Reverting uncommitted changes...')
+-  await execa('git', ['checkout', '.'], { cwd: ENGINE_DIR })
+-
+-  log.info('Removing all untracked files...')
+-  await execa('git', ['clean', '-fdx'], { cwd: ENGINE_DIR })
+ }
+diff --git a/src/commands/status.ts b/src/commands/status.ts
+index cdfcc6ff1ac3..1924e777639b 100644
+--- a/src/commands/status.ts
++++ b/src/commands/status.ts
+@@ -1,33 +1,10 @@
+ // This Source Code Form is subject to the terms of the Mozilla Public
+ // License, v. 2.0. If a copy of the MPL was not distributed with this
+ // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-import { existsSync } from 'node:fs'
+ import { log } from '../log'
+-import { BIN_NAME, ENGINE_DIR } from '../constants'
+-import { dispatch, hasConfig } from '../utils'
+ 
+ export const status = async (): Promise<void> => {
+-  const configExists = hasConfig()
+-  const engineExists = existsSync(ENGINE_DIR)
+-
+-  if (!configExists && !engineExists) {
+-    log.info(
+-      `Surfer doesn't appear to be setup for this project. You can set it up by running |${BIN_NAME} setup-project|`
+-    )
+-
+-    return
+-  }
+-
+-  if (engineExists) {
+-    log.info("The following changes have been made to firefox's source code")
+-    await dispatch('git', ['diff'], ENGINE_DIR)
+-
+-    return
+-  } else {
+-    log.info(
+-      `It appears that ${BIN_NAME} has been configured, but you haven't run |${BIN_NAME} download|`
+-    )
+-
+-    return
+-  }
++  log.info(
++    'This surfer build does not use git, so it cannot show the changes made to firefox'
++  )
+ }
+diff --git a/src/constants/index.ts b/src/constants/index.ts
+index 26891ab9de86..f241fef2acd0 100644
+--- a/src/constants/index.ts
++++ b/src/constants/index.ts
+@@ -11,11 +11,9 @@ export const BIN_NAME = 'surfer'
+ export const BUILD_TARGETS = ['linux', 'windows', 'macos']
+ export const ARCHITECTURE = ['i686', 'x86_64']
+ 
+-export const PATCH_ARGS = [
+-  '--ignore-space-change',
+-  '--ignore-whitespace',
+-  '--verbose',
+-]
++// Applied through GNU patch, not `git apply`, because the nixpkgs build runs
++// without git available.
++export const PATCH_ARGS = ['-p1', '-l']
+ 
+ export const ENGINE_DIR = resolve(process.cwd(), 'engine')
+ export const SRC_DIR = resolve(process.cwd(), 'src')
