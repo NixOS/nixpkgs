@@ -15,7 +15,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firecrawl-mcp";
-  version = "3.24.0";
+  version = "3.24.1";
   __structuredAttrs = true;
   strictDeps = true;
 
