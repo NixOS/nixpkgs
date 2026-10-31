@@ -10,6 +10,8 @@
 mkKdeDerivation {
   pname = "kpat";
 
+  __structuredAttrs = true;
+
   extraNativeBuildInputs = [
     _7zz
     shared-mime-info
@@ -20,6 +22,12 @@ mkKdeDerivation {
     freecell-solver
   ];
 
-  qtWrapperArgs = [ "--prefix XDG_DATA_DIRS : ${libkdegames}/share" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${libkdegames}/share"
+  ];
+
   meta.mainProgram = "kpat";
 }

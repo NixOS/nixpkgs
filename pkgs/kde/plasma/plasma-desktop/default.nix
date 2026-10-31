@@ -33,6 +33,8 @@ in
 mkKdeDerivation {
   pname = "plasma-desktop";
 
+  __structuredAttrs = true;
+
   patches = [
     (replaceVars ./kcm-access.patch {
       gsettings = "${gsettings-wrapper}/bin/gsettings";
@@ -64,5 +66,10 @@ mkKdeDerivation {
   ];
 
   # wrap kaccess with wrapped gsettings so it can access accessibility schemas
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ gsettings-wrapper ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gsettings-wrapper ])
+  ];
 }

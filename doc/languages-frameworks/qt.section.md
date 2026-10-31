@@ -44,7 +44,12 @@ Add entries to `qtWrapperArgs` to modify the wrappers created by
 stdenv.mkDerivation {
   # ...
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
-  qtWrapperArgs = [ "--prefix PATH : /path/to/bin" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "/path/to/bin"
+  ];
 }
 ```
 

@@ -26,6 +26,8 @@ in
 mkKdeDerivation {
   pname = "audiotube";
 
+  __structuredAttrs = true;
+
   extraNativeBuildInputs = [
     ps.pybind11
   ];
@@ -49,7 +51,11 @@ mkKdeDerivation {
   ++ pythonDeps;
 
   qtWrapperArgs = [
-    "--prefix PYTHONPATH : ${ps.makePythonPath pythonDeps}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (ps.makePythonPath pythonDeps)
   ];
+
   meta.mainProgram = "audiotube";
 }

@@ -14,6 +14,8 @@
 mkKdeDerivation {
   pname = "kdepim-runtime";
 
+  __structuredAttrs = true;
+
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
@@ -29,11 +31,12 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix SASL_PATH : ${
-      lib.makeSearchPath "lib/sasl2" [
-        cyrus_sasl.out
-        libkgapi
-      ]
-    }"
+    "--prefix"
+    "SASL_PATH"
+    ":"
+    (lib.makeSearchPath "lib/sasl2" [
+      cyrus_sasl.out
+      libkgapi
+    ])
   ];
 }
