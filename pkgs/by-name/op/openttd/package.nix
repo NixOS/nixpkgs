@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
   openmsxVersion = "0.4.2";
   opensfxVersion = "1.0.3";
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     longDescription = ''
