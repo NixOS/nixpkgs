@@ -10,14 +10,19 @@ per application. A minimal configuration is:
 ```
 
 The desktop client is installed in the system environment when the service is enabled and starts in the background with
-graphical sessions. It is authenticated through the package's immutable binary directory. Set
-`services.portmaster.settings.devmode = true` only when unrestricted browser or debugging access to
-`http://127.0.0.1:817` is required.
+graphical sessions. It is authenticated through the package's immutable binary directory. Only set
+`services.portmaster.settings.devmode = true` for debugging: it turns off authentication of the local API at
+`http://127.0.0.1:817`, so every local process and user gets full control over Portmaster.
 
 Portmaster's binary self-updater is disabled because Nix owns the installed files. Intelligence data updates remain
 enabled and are stored under {option}`services.portmaster.stateDir`.
 Changing `stateDir` does not automatically move Portmaster's existing state or remove module-managed files from its old
 location.
+
+Portmaster only recognizes the system's DNS resolver at fixed paths that don't exist on NixOS. Name lookups through nscd,
+which is enabled by default, are therefore attributed to an `nsncd` application instead of the requesting one, and
+per-application domain rules don't apply to them. Until Portmaster supports this, enable
+{option}`services.resolved.enable`, which lets Portmaster learn the resolved domains from systemd-resolved.
 
 ## Declarative configuration {#module-services-portmaster-declarative-configuration}
 
@@ -41,7 +46,13 @@ added to their display names so that module-managed profiles are easy to recogni
 
     profiles = {
       Firefox = {
-        packages = [ pkgs.firefox ];
+        # The firefox wrapper starts lib/firefox/firefox, not bin/firefox.
+        packages = [
+          {
+            package = pkgs.firefox;
+            directory = "lib/firefox";
+          }
+        ];
         settings.filter.defaultAction = "permit";
       };
 
