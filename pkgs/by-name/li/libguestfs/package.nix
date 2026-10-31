@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   makeWrapper,
@@ -20,7 +21,7 @@
   libcap_ng,
   libconfig,
   systemdLibs,
-  fuse,
+  fuse3,
   yajl,
   libvirt,
   hivex,
@@ -89,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcap_ng
     libconfig
     systemdLibs
-    fuse
+    fuse3
     yajl
     libvirt
     gmp
@@ -112,6 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = ''
     patchShebangs .
   '';
+
+  postPatch = ''
+    # Use the FUSE 3 unmount helper instead of relying on FUSE 2 being installed.
+    substituteInPlace fuse/guestunmount.c --replace-fail fusermount fusermount3
+  '';
+
   configureFlags = [
     "--enable-daemon"
     "--enable-install-daemon"
@@ -126,6 +133,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!javaSupport) [ "--without-java" ];
 
   patches = [
+    (fetchpatch {
+      name = "libguestfs-fuse3.patch";
+      url = "https://salsa.debian.org/libvirt-team/libguestfs/-/raw/debian/1%251.56.2-5/debian/patches/Add-FUSE-3-support.patch";
+      hash = "sha256-kbOG80ewMgB03KmUxqBKZ0Ekz292zYD5qsa5n2ZuocE=";
+    })
     ./libguestfs-syms.patch
     # Fixes PERL Sys-Guestfs build failure
     ./Revert-perl-Pass-CFLAGS-through-extra_linker_flags.patch
@@ -182,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    broken = true; # stuck on fuse2
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with lib.licenses; [
       gpl2Plus
