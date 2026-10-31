@@ -51,6 +51,7 @@ stdenv.mkDerivation {
     description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage = "https://github.com/cleverca22/toxvpn";
     license = lib.licenses.gpl3;
+    mainProgram = "toxvpn";
     maintainers = with lib.maintainers; [
       cleverca22
       craigem
