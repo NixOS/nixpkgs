@@ -54,8 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Clean up broken symlinks left behind by `pnpm prune`
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete
-     # Remove non-deterministic files
-    rm node_modules/.modules.yaml
     runHook postBuild
   '';
 

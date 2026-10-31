@@ -56,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     CI=true pnpm prune --prod --ignore-scripts
     find -type f \( -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
-
-    # remove non-deterministic files
-    rm node_modules/.modules.yaml
   '';
 
   # Upstream scripts uses `pnpm run prod` which is equivalent to
