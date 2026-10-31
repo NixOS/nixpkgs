@@ -10,6 +10,8 @@
   openssl,
   onnxruntime,
   webkitgtk_4_1,
+  aws-lc,
+  oniguruma,
   gtk3,
   glib,
   gdk-pixbuf,
@@ -44,16 +46,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.6.6";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b5QW+BPKs4Xk/ASnd+DjAVyC7OIWvNic665bwZjumxI=";
+    hash = "sha256-VLIXy6phMtz/DJ+PiyeCgJ3yS7t6M8E95RrRQXuWz08=";
   };
 
-  cargoHash = "sha256-lY+oboU1BSoXqWbVqHnql3RW7r/9BYnDtJuj+I1uwdM=";
+  cargoHash = "sha256-xJTOk1rLj5lA4oIauS9wf009tlx9CVUnsj8YJKn8aqU=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
@@ -72,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    oniguruma
     nodejs_24
     glib-networking
     openssl
@@ -117,9 +121,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '  "identifier": "io.github.CyberTimon.RapidRAW",' '  "identifier": "io.github.CyberTimon.RapidRAW", "mainBinaryName": "rapidraw",'
 
-    # Disable downloading of ONNX runtime library this is correctly linked during postInstall
+    # Patch out required runtime dependencies to avoid downloading them during the build
+    # onnxruntime is correctly linked during postInstall
     substituteInPlace src-tauri/build.rs \
-      --replace-fail 'if !is_valid' 'if false'
+      --replace-fail 'runtime_libraries(&target_os, &target_arch)' 'Vec::<(&str, &str, &str)>::new()'
   '';
 
   tauriBuildFlags = [
