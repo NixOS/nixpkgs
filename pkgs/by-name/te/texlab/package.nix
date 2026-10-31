@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Implementation of the Language Server Protocol for LaTeX";
     homepage = "https://github.com/latex-lsp/texlab";
     changelog = "https://github.com/latex-lsp/texlab/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       doronbehar
       kira-bruneau
