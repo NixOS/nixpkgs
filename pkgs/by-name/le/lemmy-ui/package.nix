@@ -2,30 +2,26 @@
   lib,
   stdenvNoCC,
   libsass,
+  vips,
   nodejs,
   pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
   nixosTests,
-  vips,
+  nix-update-script,
 }:
 
-let
-  pinData = lib.importJSON ./pin.json;
-in
-
 stdenvNoCC.mkDerivation (finalAttrs: {
-
   pname = "lemmy-ui";
-  version = pinData.uiVersion;
+  version = "0.19.21";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy-ui";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = pinData.uiHash;
+    hash = "sha256-2M5noLwLo6x44dfrwLkz+X3BUpSiWoXmoahGGT94yak=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = pinData.uiPNPMDepsHash;
+    hash = "sha256-hCyA8hKamPKfxJ8nq7wj+teoihhsijBnLGY6KI5DCbg=";
   };
 
   buildPhase = ''
@@ -75,7 +71,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.py;
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
     tests.lemmy-ui = nixosTests.lemmy;
   };
 

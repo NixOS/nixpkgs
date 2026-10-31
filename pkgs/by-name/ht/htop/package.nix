@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rob
-      relrod
       SuperSandro2000
       thiagokokada
     ];
