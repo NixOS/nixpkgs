@@ -1,0 +1,93 @@
+{
+  "latest": "1.1.65",
+  "published_at": "2026-09-30T11:08:42.735Z",
+  "files": [
+    {
+      "os": "darwin",
+      "arch": "arm64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-darwin-arm64.tar.gz",
+      "sha256": "04fcedb15acbd59577f595377ab38176c6c42e34f4f9e6a0dd9dcdea588a26f8"
+    },
+    {
+      "os": "darwin",
+      "arch": "amd64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-darwin-x64.tar.gz",
+      "sha256": "5327efcdd82e637387bcdbd237b9a9c5cc24c7976b5d5eedde8cfa85400fc9ec"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64-musl",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-linux-arm64-musl.tar.gz",
+      "sha256": "2b80faa6fab27ab0d8b1fa30681781f4e996025f668ed036d41a4dc8eceb40c8"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-linux-arm64.tar.gz",
+      "sha256": "c08c9b9763984cdfae5ac0e08f833a8f2856eaaebcbd02def21d36ca048610a5"
+    },
+    {
+      "os": "linux",
+      "arch": "amd64-baseline",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-linux-x64-baseline.tar.gz",
+      "sha256": "7b28022b3eac5dfd66e4cad78767f91c985ae071a149329042bc21890a4a4876"
+    },
+    {
+      "os": "linux",
+      "arch": "amd64-musl",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-linux-x64-musl.tar.gz",
+      "sha256": "9eee0104627302d8937a5763c5c6caa978427a71496457923df337732449a4af"
+    },
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-linux-x64.tar.gz",
+      "sha256": "a316b656ddee84fc161540ac5aeeef5b292f01be3b773f24d3e122f251079d79"
+    },
+    {
+      "os": "openharmony",
+      "arch": "arm64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-openharmony-arm64.tar.gz",
+      "sha256": "104c2afe6da8458e6c75bbab97a75ca4c6b03e30063424f5aed2f7a51d3db886"
+    },
+    {
+      "os": "windows",
+      "arch": "arm64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-windows-arm64.zip",
+      "sha256": "12951b9c93eb985df6504def5b6875d664977b1baf8236edb42d1240889a0496",
+      "runtime": "bun",
+      "variant": "standard",
+      "min_windows_build": 17763
+    },
+    {
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-windows-x64-legacy.zip",
+      "sha256": "b46719be6f73cea814952ec882f2d2515e35450d8166180637ceb6f4fc5ebedd",
+      "runtime": "node-sea",
+      "variant": "legacy"
+    },
+    {
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://static.qoder.com.cn/qoder-cli-cn/releases/1.1.65/qoderclicn-windows-x64.zip",
+      "sha256": "e565c71e35d9419c1715a6a1bb49cc719c9615cd25224f85b1af39b2b2c5e642",
+      "runtime": "bun",
+      "variant": "standard",
+      "min_windows_build": 17763
+    }
+  ],
+  "rollback_versions": [
+    "1.1.64",
+    "1.1.63",
+    "1.1.62",
+    "1.1.61",
+    "1.1.60",
+    "1.1.59",
+    "1.1.58",
+    "1.1.57",
+    "1.1.56",
+    "1.1.55",
+    "1.0.45"
+  ]
+}
