@@ -22544,6 +22544,8 @@ self: super: with self; {
 
   volvocarsapi = callPackage ../development/python-modules/volvocarsapi { };
 
+  vosk = callPackage ../development/python-modules/vosk { };
+
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
