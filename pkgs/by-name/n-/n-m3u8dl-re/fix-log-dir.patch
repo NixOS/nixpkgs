@@ -1,0 +1,19 @@
+diff --git a/src/N_m3u8DL-RE.Common/Log/Logger.cs b/src/N_m3u8DL-RE.Common/Log/Logger.cs
+index 30dfa1c..71202cf 100644
+--- a/src/N_m3u8DL-RE.Common/Log/Logger.cs
++++ b/src/N_m3u8DL-RE.Common/Log/Logger.cs
+@@ -33,7 +33,13 @@ public static partial class Logger
+ 
+         try
+         {
+-            var logDir = Path.GetDirectoryName(LogFilePath) ?? (Path.GetDirectoryName(Environment.ProcessPath) + "/Logs");
++            var logDir = Path.GetDirectoryName(LogFilePath);
++            if (string.IsNullOrEmpty(logDir))
++            {
++                logDir = OperatingSystem.IsWindows()
++                    ? Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "Logs")
++                    : Path.Combine(Environment.GetEnvironmentVariable("XDG_STATE_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "state"), "N_m3u8DL-RE", "Logs");
++            }
+             if (!Directory.Exists(logDir))
+             {
+                 Directory.CreateDirectory(logDir);
