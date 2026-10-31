@@ -29,7 +29,15 @@ stdenv.mkDerivation {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
     "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
+    # remove references to kernel.dev, which was added by rustc
+    "KRUSTFLAGS=--remap-path-prefix=${kernel.dev}/="
   ];
+
+  # Modules are installed compressed, so the generic strip hooks skip them.
+  # Strip before compression, like ZFS kernel module does.
+  postBuild = ''
+    find . -name '*.ko' -print0 | xargs -0 -P$NIX_BUILD_CORES ${stdenv.cc.targetPrefix}strip --strip-debug
+  '';
 
   installPhase = ''
     runHook preInstall
