@@ -1,52 +1,20 @@
 {
   lib,
-  stdenvNoCC,
+  mkProtonBinDerivation,
   fetchzip,
-  writeScript,
   steamDisplayName ? null,
 }:
 assert
   steamDisplayName == null
   || throw "proton-ge-bin: The `steamDisplayName` interface has been changed to an attribute, which is overridable using `overrideAttrs`.";
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+mkProtonBinDerivation (finalAttrs: {
   # Can be overridden to alter the display name in steam
   # This could be useful if multiple versions should be installed together
   steamDisplayName = "GE-Proton";
 
   pname = "proton-ge-bin";
   version = "GE-Proton11-11";
-
-  inherit (finalAttrs.passthru.variants.${stdenvNoCC.hostPlatform.system}) src toolName;
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  outputs = [
-    "out"
-    "steamcompattool"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    # Make it impossible to add to an environment. You should use the appropriate NixOS option.
-    # Also leave some breadcrumbs in the file.
-    echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
-
-    mkdir $steamcompattool
-    ln -s $src/* $steamcompattool
-    rm $steamcompattool/compatibilitytool.vdf
-    cp $src/compatibilitytool.vdf $steamcompattool
-
-    runHook postInstall
-  '';
-
-  preFixup = ''
-    substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
-      --replace-fail "$toolName" "$steamDisplayName"
-  '';
 
   passthru = {
     variants = {
@@ -74,14 +42,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       we avoid nix-update-script and use our own update script instead.
       See: <https://github.com/NixOS/nixpkgs/pull/294532#issuecomment-1987359650>
     */
-    updateScript = writeScript "update-proton-ge" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      repo="https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases"
-      version="$(curl -sL "$repo" | jq 'map(select(.prerelease == false)) | .[0].tag_name' --raw-output)"
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version proton-ge-bin "$version" --ignore-same-version --source-key="variants.$platform.src"
-      done
+    latestVersionCommand = ''
+      curl -fsSL "https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases" \
+        | jq -er 'map(select(.prerelease == false)) | .[0].tag_name'
     '';
   };
 
@@ -99,7 +62,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Scrumplex
       shawn8901
     ];
-    platforms = builtins.attrNames finalAttrs.passthru.variants;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })
