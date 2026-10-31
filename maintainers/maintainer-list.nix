@@ -16127,6 +16127,12 @@
     github = "kylerisse";
     githubId = 5565316;
   };
+  kylescudder = {
+    name = "Kyle Scudder";
+    email = "kyle@kylescudder.co.uk";
+    github = "kylescudder";
+    githubId = 74150974;
+  };
   kylesferrazza = {
     name = "Kyle Sferrazza";
     email = "nixpkgs@kylesferrazza.com";
