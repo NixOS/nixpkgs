@@ -6,6 +6,7 @@
   pkg-config,
   stdenv,
   curl,
+  sqlite,
   openssl,
   buildPackages,
   installShellFiles,
@@ -35,7 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [ curl ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs = [
+    curl
+    sqlite
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preFixup = lib.optionalString canRunCmd ''
     installShellCompletion --cmd gix \
