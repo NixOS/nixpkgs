@@ -3391,6 +3391,8 @@ self: super: with self; {
 
   cock = callPackage ../development/python-modules/cock { };
 
+  coco-experiment = callPackage ../development/python-modules/coco-experiment { };
+
   coconut = callPackage ../development/python-modules/coconut { };
 
   cocotb = callPackage ../development/python-modules/cocotb { };
