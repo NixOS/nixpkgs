@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-eslint";
-  version = "3.0.15";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-eslint";
     tag = finalAttrs.version;
-    hash = "sha256-41mUQpiFzBWMRoK7aQu0Gu4FBsYZdHbHPzrSMZR6RLQ=";
+    hash = "sha256-sM/Q3rCiXvPEAI/U1GMezYo8bepr5V3VOiAZy3Qhldc=";
   };
 
-  npmDepsHash = "sha256-g5gLAtBmwsHBCDHPfcVPETH7+djh0piJ6nJYSsy9GJQ=";
+  npmDepsHash = "sha256-5DVkt6m/U2o1vncmkPHhyJygsFXR8oLK3D9bCy3M4Fs=";
 
   passthru.updateScript = nix-update-script { };
 
