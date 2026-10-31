@@ -30,15 +30,35 @@ stdenv.mkDerivation {
   patches = [
     # LINUX: Disable osi_dnlc
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16927/revisions/a3bd427be8437a38c96ac34ef8216e58ab999945/patch";
+      url = "https://github.com/openafs/openafs/commit/de32db0b657cf95ab65d5ae5b5ac639eb3caa7ab.patch";
       hash = "sha256-q0AOGpWL1r2hMLQgowMBkfOcEvhXEhXVLe1A/tlawFo=";
-      decode = "base64 -d";
     })
     # linux: replace strncpy with strscpy
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16928/revisions/5f04ae748a1ede14882174a81dfa38baa2e66a20/patch";
+      url = "https://github.com/openafs/openafs/commit/dd1dc35068587ac88bc24199a35878d83fa4113c.patch";
       hash = "sha256-fwzRzS799Y68l29vlzIAmHLda57gToLippgNMKWfWaw=";
+    })
+    # afs: Introduce and use afs_UserScan()
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/f8469c5694f297b4361520144611f4c8c37fd99f.patch";
+      hash = "sha256-+uN0Tc1S3cQD57YMiMTcAVXtaOS8yLPc2JW5lSTiAr8=";
+    })
+    # LINUX: Grab unixuser refs in osi_proc.c
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/b52839f04d91d79b5716c2690ba7f76de990453e.patch";
+      hash = "sha256-sEPVyCUzlixoyyM53LGJE36zyiK4l7W1KBsJZLXxTZM=";
+    })
+    # Linux: Remove excl arg from inode_ops->create()
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/17049/revisions/fbd768a43885fb7211f0e39e2b1805a2ff572f93/patch";
       decode = "base64 -d";
+      hash = "sha256-K/xrEtiClGuiTW/GQHzLK/WJihSfsGxTgGECoOr3fgw=";
+    })
+    # cf: Ensure BTF info is created in tests for Linux
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/17051/revisions/c2549fee44f3820f102b841ae378a873f8e67edd/patch";
+      decode = "base64 -d";
+      hash = "sha256-iO84BoCpUgUxgZi1F3f2wbjUFQNksXZVQiyjXziByro=";
     })
   ];
 
