@@ -81,83 +81,83 @@
   },
   "linux-development": {
     "distro": {
-      "hash": "sha256-RRnTlqetbqKatkxe8a8cxAS24WziaVpnxJpUGWHgK1M=",
-      "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/full.distro"
+      "hash": "sha256-kxl7hS8kF6QIm3lv41ZRXqAzuUwLe2/ndTYwTstnVs0=",
+      "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/full.distro"
     },
     "kind": "distro",
     "modules": {
       "discord_cloudsync": {
-        "hash": "sha256-xBhEAM2vi3CdjWN4HK+8bgNBD0wW8qBKi7L4UFLWPZY=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_cloudsync/1/full.distro",
+        "hash": "sha256-7Buvq6sFe/E00nU9lo2wN4ptvfCkOyfHkMKwRXtkSBo=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_cloudsync/1/full.distro",
         "version": 1
       },
       "discord_desktop_core": {
-        "hash": "sha256-bJS0fE3MRHTHq6Kcj46InElDy6WHDuMXHAp0t2DkXqc=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_desktop_core/1/full.distro",
+        "hash": "sha256-9eE3BWBmhkuEq3gJXhIPTwujmnYX/1+Y6JGOepZyfEQ=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_desktop_core/1/full.distro",
         "version": 1
       },
       "discord_dispatch": {
-        "hash": "sha256-lrVELYq0MWDU0hdZt/TMvgDCCNQKqRniNO9Af8fV08Y=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_dispatch/1/full.distro",
+        "hash": "sha256-8tJEKYma4VjKGy80PAHQJg3mrNFx1KiRTLFxnc6W304=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_dispatch/1/full.distro",
         "version": 1
       },
       "discord_erlpack": {
-        "hash": "sha256-GqAgFKIfuL/PzgegHgTFMhx3FvYArFrHKIffP9V+9+Y=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_erlpack/1/full.distro",
+        "hash": "sha256-WMLtzkqoNb/s2mHcFIJI2HWFjuj7pIY4wMexPPYzcJc=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_erlpack/1/full.distro",
         "version": 1
       },
       "discord_game_utils": {
-        "hash": "sha256-dsk2tH9miTA5vF7DEfbCTqlgE5Ddee80tZqBc3Us5Ys=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_game_utils/1/full.distro",
+        "hash": "sha256-o64P1loPiTClakQsoOOpbx2nkZ5+rr2dCfgXqWlbfLk=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_game_utils/1/full.distro",
         "version": 1
       },
       "discord_krisp": {
-        "hash": "sha256-/fxixn6QtU3TVRL+GKCzEDCiopaUmQ4Hv1sXjASSjn4=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_krisp/1/full.distro",
+        "hash": "sha256-zPwASSnGJPTNkASw9XvFcP2zp89nBz2y47NEaN2HdjU=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_krisp/1/full.distro",
         "version": 1
       },
       "discord_modules": {
-        "hash": "sha256-DwJ2AGRWIc53QbI6I9B877My8kYzw+6D8roh0vkvhtk=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_modules/1/full.distro",
+        "hash": "sha256-QFHHBDcpbgLw+4D/SXJn1ONZqrll9h+NY7FTeqBBg9o=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_modules/1/full.distro",
         "version": 1
       },
       "discord_ndi": {
-        "hash": "sha256-JDQ42PPF5XLgov5+wavxjxev6ojsL5OjvjJq2D0gPXA=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_ndi/1/full.distro",
+        "hash": "sha256-dhoI9qTeG/OTyG0hMM7qac6IXHh38oMU9zoegPvMOCw=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_ndi/1/full.distro",
         "version": 1
       },
       "discord_rpc": {
-        "hash": "sha256-sogt/HHjocfMa8cq2+SBDf+ibH23rpNd4sIEZFL5EKM=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_rpc/1/full.distro",
+        "hash": "sha256-Hb/oObVnqVaNn0KwLc9u8dbR/XEWMCCCeiE/df0vcmg=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_rpc/1/full.distro",
         "version": 1
       },
       "discord_spellcheck": {
-        "hash": "sha256-xNL0Fd1nBh3PAEfW6G+888X5jYOUVoAsZbR+a+n+Row=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_spellcheck/1/full.distro",
+        "hash": "sha256-sHem5msKKUApIkms6i4fpFs5ye961FsZWvoxcFHwtK4=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_spellcheck/1/full.distro",
         "version": 1
       },
       "discord_sysimg": {
-        "hash": "sha256-nsyeaxygl73y+wz0Q1Ok6K1Mwpofg3LKuBWM+D7d+YE=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_sysimg/1/full.distro",
+        "hash": "sha256-euWikj1D8taOM4rTncDucZIpix3cGstgtpdbvlsQ7yQ=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_sysimg/1/full.distro",
         "version": 1
       },
       "discord_utils": {
-        "hash": "sha256-AtTHuKF6vOiKBlRlMot83f1J1rgjcSGGTxO1GNf3cak=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_utils/1/full.distro",
+        "hash": "sha256-x8T4Z9zUeLspcSobN9NuJ/3jG5cy+RGcuOrX7Rff37Y=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_utils/1/full.distro",
         "version": 1
       },
       "discord_voice": {
-        "hash": "sha256-U2+bdSxb8gZXhvmZ25Djn2eBPFwXdRdF+4ogee9RQrY=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_voice/1/full.distro",
+        "hash": "sha256-6U6Hr6CxNkG3ckOR1YH6uPxIEXgDWIBDD7mTSRFEKmE=",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_voice/1/full.distro",
         "version": 1
       },
       "discord_zstd": {
         "hash": "sha256-KuWKA5s3PGXk3uMOkZ74uvbElbDUuKYQ80mnzk4tZCI=",
-        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1017/discord_zstd/1/full.distro",
+        "url": "https://development.dl2.discordapp.net/distro/app/development/linux/x64/1.0.1018/discord_zstd/1/full.distro",
         "version": 1
       }
     },
-    "version": "1.0.1017"
+    "version": "1.0.1018"
   },
   "linux-ptb": {
     "distro": {
