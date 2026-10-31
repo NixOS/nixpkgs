@@ -18,8 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-If9O5BEeymsLN+C0drZsPSxEWXpJTxeDBGNHNXSumm4=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    rocm-cmake
+  ];
+
+  buildInputs = [
     rocm-cmake
   ];
 
@@ -28,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ library for half precision floating point arithmetics";
     homepage = "https://github.com/ROCm/half";
+    changelog = "https://github.com/ROCm/half/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.unix;
