@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghunt";
-  version = "2.3.4";
+  version = "2.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -14,8 +14,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     repo = "ghunt";
     # The newer releases aren't git-tagged to we just take the
     # commit with the version bump
-    rev = "e8b0669cabb410dc40fb76b8d5d386a3a83fe08c";
-    hash = "sha256-Zd0kpyr+Hkbh5MH3q3lrkH3liXw95sKRX+SZhsUVUhI=";
+    rev = "5ee893929c51c7a8a665b199bbae04ce85a662b4";
+    hash = "sha256-pBH8Uhh+Yg9rrX8duEPLf/+JF5PR4I5zUhQ4EMiyk7A=";
   };
 
   pythonRelaxDeps = true;
