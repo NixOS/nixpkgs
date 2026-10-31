@@ -10136,9 +10136,6 @@ with self;
     ];
     propagatedBuildInputs = [ DBI ];
 
-    postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -add_rpath "${pkgs.oracle-instantclient.lib}/lib" blib/arch/auto/DBD/Oracle/Oracle.bundle
-    '';
     meta = {
       description = "Oracle database driver for the DBI module";
       license = with lib.licenses; [
