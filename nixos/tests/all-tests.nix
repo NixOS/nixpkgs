@@ -1281,6 +1281,9 @@ in
   nixos-rebuild-target-host-interrupted = runTest {
     imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
   };
+  nixos-rebuild-version-suffix = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./nixos-rebuild-version-suffix.nix ];
+  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
     pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
