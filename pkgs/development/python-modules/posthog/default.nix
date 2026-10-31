@@ -3,23 +3,33 @@
   anthropic,
   backoff,
   buildPythonPackage,
+  celery,
   distro,
   django,
   djangorestframework,
+  fastapi,
   fetchFromGitHub,
   flask,
   freezegun,
   google-genai,
+  langchain-core,
   mcp,
-  mock,
   openai,
   opentelemetry-exporter-otlp,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-aiohttp-client,
+  opentelemetry-instrumentation-celery,
+  opentelemetry-instrumentation-django,
+  opentelemetry-instrumentation-flask,
+  opentelemetry-instrumentation-httpx,
+  opentelemetry-instrumentation-requests,
+  opentelemetry-instrumentation-sqlite3,
+  opentelemetry-instrumentation-system-metrics,
   opentelemetry-sdk,
   parameterized,
   pytest-asyncio,
   pytest-bdd,
   pytestCheckHook,
-  pythonAtLeast,
   requests,
   setuptools,
   typing-extensions,
@@ -28,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.71.0";
+  version = "7.81.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "posthog-v${finalAttrs.version}";
-    hash = "sha256-4sc1PZaN/SdUk/akzyHhuPejUEDYyXuHlBxIw2LYOaA=";
+    hash = "sha256-Qeo4ZJ1EfgFNJW6a0u8ulU8VmRWrTn+UQS544Cwy3OI=";
   };
 
   build-system = [ setuptools ];
@@ -49,15 +59,26 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     anthropic
+    celery
     django
     djangorestframework
+    fastapi
     flask
     freezegun
     google-genai
+    langchain-core
     mcp
-    mock
     openai
     opentelemetry-exporter-otlp
+    opentelemetry-instrumentation
+    opentelemetry-instrumentation-aiohttp-client
+    opentelemetry-instrumentation-celery
+    opentelemetry-instrumentation-django
+    opentelemetry-instrumentation-flask
+    opentelemetry-instrumentation-httpx
+    opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-sqlite3
+    opentelemetry-instrumentation-system-metrics
     opentelemetry-sdk
     parameterized
     pytest-asyncio
