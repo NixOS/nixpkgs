@@ -1,18 +1,18 @@
 {
-  "version": "2026.2.4",
-  "buildNumber": "262.11879.74",
+  "version": "2026.2.4.1",
+  "buildNumber": "262.11879.106",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4.tar.gz",
-      "hash": "sha256-wdFCJFAUb7dJ8YwgGvJy7zSdy6eagZz09ycQ4jJPCUE="
+      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4.1.tar.gz",
+      "hash": "sha256-bdJNAPgwhSZWUx0LXktL3rXcEWX6DfyGjds+srfVSro="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4-aarch64.tar.gz",
-      "hash": "sha256-vn99o3doOKNG6GsSVmEGQtvqa3p/yz1ZCk/d60atwks="
+      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4.1-aarch64.tar.gz",
+      "hash": "sha256-5pGfzKiLdBKbQgJAYKXQfloZBjNJbpPo9xJ/+sr+uwI="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4-aarch64.dmg",
-      "hash": "sha256-wya4cZ6+3l69JIPGr0Yx4W1eG+4P1KyX0VaCyEzWWG8="
+      "url": "https://download.jetbrains.com/cpp/CLion-2026.2.4.1-aarch64.dmg",
+      "hash": "sha256-0zLkUy+xL3SAGgVwfHhPV88P9ziVEWgR+m6+Wi9WghY="
     }
   }
 }
