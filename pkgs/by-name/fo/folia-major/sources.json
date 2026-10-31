@@ -1,0 +1,16 @@
+{
+  "mnn": {
+    "rev": "d407447ed56c4121a11ccbd266dc184ca1ead0c2",
+    "hash": "sha256-Ai8W9Aj462fZVBoV7SbyeO2lAA8J7xTV4RTrT20H6So="
+  },
+  "models": [
+    {
+      "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/beat_this-wgsl.bin",
+      "hash": "sha256-Y2WuW6LkKSJ3LaAfv9C96N0gtzYqZ5AY54pfJR/oqWc="
+    },
+    {
+      "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/htdemucs-wgsl.bin",
+      "hash": "sha256-J9UzGnSk4jsYFys9WdA3jmmP15vA0P7TMW2nfjo32NE="
+    }
+  ]
+}

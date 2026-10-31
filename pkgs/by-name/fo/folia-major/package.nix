@@ -3,12 +3,14 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchurl,
+  callPackage,
   jq,
   imagemagick,
   makeWrapper,
+  autoPatchelfHook,
   electron,
   ffmpeg_8,
-  nix-update-script,
 }:
 
 let
@@ -25,7 +27,7 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "folia-major";
-  version = "0.7.15";
+  version = "0.7.25";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -34,16 +36,20 @@ buildNpmPackage (finalAttrs: {
     owner = "chthollyphile";
     repo = "folia-major";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TzplbxRUH10bSvV6gnRkaZJfp91TQq21pvN5haTFYfM=";
+    hash = "sha256-8I8ho3xu/sbecjAuCL7VXJuyv98LEUomoROHbdPTV6g=";
   };
 
-  npmDepsHash = "sha256-7SXUneDyMmqMzyEI/oXTGVD4FOq1pQf/aSS995fz9oU=";
+  npmDepsHash = "sha256-4T7zzNbG16pt+WniPayEdxQvYJ53Ebq44iODN2csZG4=";
 
   nativeBuildInputs = [
     jq
     makeWrapper
   ]
+  # koffi and node-librespot ship prebuilt addons linking libstdc++, which electron does not load
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ imagemagick ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -58,11 +64,11 @@ buildNpmPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace electron/main.cjs \
+    substituteInPlace electron/main.cjs electron/ffmpeg.cjs electron/analysis/mnn.cjs electron/modSystem/discovery.cjs \
       --replace-fail "process.resourcesPath" "'${resourcesDir}'"
   '';
 
-  # beforePack downloads ffmpeg; stage it here instead
+  # beforePack downloads ffmpeg and the models and builds MNN; stage them here instead
   preBuild = ''
     jq 'del(.build.beforePack, .build.generateUpdatesFilesForAllChannels)' package.json > package.json.tmp
     mv package.json.tmp package.json
@@ -71,11 +77,24 @@ buildNpmPackage (finalAttrs: {
     # afterPack verifies a Koffi copy that only beforePack downloads
     jq 'del(.build.afterPack) | .build.mac.icon = "build/icon.icns"' package.json > package.json.tmp
     mv package.json.tmp package.json
+    # Without afterPack, prune the other platforms' prebuilds ourselves
+    find node_modules/@lox-audioserver/node-librespot/prebuilds -mindepth 1 -maxdepth 1 \
+      ! -name darwin-${arch} -exec rm -r {} +
     magick build/icon.png build/icon.icns
   ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # autoPatchelf cannot satisfy the musl variant
+    rm -r node_modules/@koromix/koffi-*/musl_*
+  ''
   + ''
-    mkdir -p build/ffmpeg/${platformDir}
+    mkdir -p build/ffmpeg/${platformDir} build/mnn/${platformDir} models
     ln -s ${lib.getExe' ffmpeg_8 "ffmpeg"} build/ffmpeg/${platformDir}/ffmpeg
+    ln -s ${finalAttrs.passthru.folia-mnn}/lib/* build/mnn/${platformDir}/
+    ${lib.concatMapStrings (model: ''
+      ln -s ${model} models/${model.name}
+    '') finalAttrs.passthru.models}
+    # verifies the staged models against shared/modelManifest.json
+    node build/fetchModels.mjs
   '';
 
   postBuild = ''
@@ -118,7 +137,16 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru = {
+    folia-mnn = callPackage ./folia-mnn.nix {
+      inherit (finalAttrs) version src meta;
+      inherit (finalAttrs.passthru) sources;
+    };
+    models = map fetchurl finalAttrs.passthru.sources.models;
+
+    sources = lib.importJSON ./sources.json;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Lyrics Reimagine desktop app";
@@ -126,6 +154,11 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://github.com/chthollyphile/folia-major/releases";
     changelog = "https://github.com/chthollyphile/folia-major/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      # prebuilt node addons of koffi and node-librespot
+      binaryNativeCode
+    ];
     mainProgram = "folia-major";
     maintainers = with lib.maintainers; [ chillcicada ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
