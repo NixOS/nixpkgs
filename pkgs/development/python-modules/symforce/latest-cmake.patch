@@ -1,0 +1,11 @@
+diff --git a/third_party/skymarshal/cmake/parse_types.py b/third_party/skymarshal/cmake/parse_types.py
+index 978e6daa..31eb2ddb 100644
+--- a/third_party/skymarshal/cmake/parse_types.py
++++ b/third_party/skymarshal/cmake/parse_types.py
+@@ -1,6 +1,5 @@
+ import argh
+ 
+-
+ def main(lcmtypes_dir: str) -> None:
+     import skymarshal.package_map
+ 

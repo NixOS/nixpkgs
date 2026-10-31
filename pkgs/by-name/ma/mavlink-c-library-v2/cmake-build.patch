@@ -1,0 +1,171 @@
+diff -ruN mavlink-pristine/cmake/mavlink-c-library-v2Config.cmake.in mavlink-new/cmake/mavlink-c-library-v2Config.cmake.in
+--- mavlink-pristine/cmake/mavlink-c-library-v2Config.cmake.in	1969-12-31 19:00:00.000000000 -0500
++++ mavlink-new/cmake/mavlink-c-library-v2Config.cmake.in	2026-10-31 12:38:45.070959163 -0400
+@@ -0,0 +1,3 @@
++@PACKAGE_INIT@
++
++include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+diff -ruN mavlink-pristine/cmake/mavlink_roundtrip_test.c.in mavlink-new/cmake/mavlink_roundtrip_test.c.in
+--- mavlink-pristine/cmake/mavlink_roundtrip_test.c.in	1969-12-31 19:00:00.000000000 -0500
++++ mavlink-new/cmake/mavlink_roundtrip_test.c.in	2026-10-31 12:42:19.281346044 -0400
+@@ -0,0 +1,63 @@
++/* Exercises the pack/unpack round-trip self-test code that mavgen
++ * generates into every dialect's testsuite.h (upstream mavlink/mavlink's
++ * own C-generator test harness), for the single dialect @MAVLINK_TEST_DIALECT@
++ * vendored in this repository. c_library_v2 ships these testsuite.h files
++ * but no driver program and no real MAVLINK_ASSERT (protocol.h's default is
++ * a no-op), so this file supplies both. */
++
++#include <stdio.h>
++#include <stdlib.h>
++
++/* protocol.h's default MAVLINK_ASSERT(x) expands to nothing, and CMake's
++ * default Release build type (which nixpkgs' cmake setup hook always
++ * selects) also disables plain assert() via -DNDEBUG, so define an
++ * assertion macro that always aborts loudly on failure regardless of
++ * build type. */
++#define MAVLINK_ASSERT(x)                                                   \
++    do {                                                                    \
++        if (!(x)) {                                                         \
++            fprintf(stderr, "MAVLINK_ASSERT failed: %s:%d: %s\n",           \
++                    __FILE__, __LINE__, #x);                                \
++            exit(1);                                                        \
++        }                                                                   \
++    } while (0)
++
++/* testsuite.h also round-trips every message through its wire-format
++ * mavlink_msg_*_send()/_to_send_buffer() path, which only exist when
++ * MAVLINK_USE_CONVENIENCE_FUNCTIONS is defined, and which in turn require
++ * the embedder to supply comm_send_ch() (mavlink_helpers.h says as much
++ * right above its own, commented-out, example implementation). Route it
++ * through the real streaming parser (mavlink_parse_char) so comm_send_ch
++ * behaves the same way a real transport's receive side would. */
++#define MAVLINK_USE_CONVENIENCE_FUNCTIONS
++
++/* mavlink_types.h (included by mavlink.h below) only declares the type;
++ * mavlink_helpers.h's send-path expects an application-supplied global of
++ * this type named mavlink_system, and calls comm_send_ch() before either
++ * one is declared in this file's textual order, so pull in the type and
++ * forward-declare/define both ahead of the dialect's own mavlink.h. */
++#include "mavlink_types.h"
++
++void comm_send_ch(mavlink_channel_t chan, uint8_t ch);
++mavlink_system_t mavlink_system = { 1, 1 };
++
++#include "@MAVLINK_TEST_DIALECT@/mavlink.h"
++#include "@MAVLINK_TEST_DIALECT@/testsuite.h"
++
++static mavlink_message_t *mavlink_test_last_msg;
++
++void comm_send_ch(mavlink_channel_t chan, uint8_t ch)
++{
++    mavlink_status_t status;
++    (void)mavlink_parse_char(chan, ch, mavlink_test_last_msg, &status);
++}
++
++int main(void)
++{
++    mavlink_message_t last_msg;
++
++    mavlink_test_last_msg = &last_msg;
++    mavlink_test_all(1, 1, &last_msg);
++    printf("@MAVLINK_TEST_DIALECT@: all message pack/unpack round-trips OK\n");
++    return 0;
++}
+diff -ruN mavlink-pristine/CMakeLists.txt mavlink-new/CMakeLists.txt
+--- mavlink-pristine/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ mavlink-new/CMakeLists.txt	2026-10-31 12:42:51.178627812 -0400
+@@ -0,0 +1,93 @@
++cmake_minimum_required(VERSION 3.16)
++project(mavlink-c-library-v2 VERSION 1.0 LANGUAGES C)
++
++add_library(mavlink INTERFACE)
++
++target_include_directories(mavlink
++    INTERFACE
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/all>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/development>
++        $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
++        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/all>
++        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/common>
++        $<INSTALL_INTERFACE:include/${PROJECT_NAME}/development>
++)
++
++add_library(${PROJECT_NAME}::mavlink ALIAS mavlink)
++
++# Upstream (mavlink/mavlink) generates a pack/unpack round-trip self-test
++# (testsuite.h, using MAVLINK_ASSERT) into every dialect alongside its
++# message headers, but c_library_v2 vendors only the generated headers, not
++# the generator's own test driver. Supply that driver here so the round-trip
++# checks mavgen itself produces actually run against the headers we package.
++include(CTest)
++
++if(BUILD_TESTING)
++    file(GLOB MAVLINK_TESTSUITE_HEADERS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "*/testsuite.h")
++
++    foreach(_testsuite_header ${MAVLINK_TESTSUITE_HEADERS})
++        get_filename_component(MAVLINK_TEST_DIALECT "${_testsuite_header}" DIRECTORY)
++
++        # "all" is mavlink's own aggregate of every other dialect's XML, and
++        # its generated testsuite.h has an upstream mavgen bug: it both
++        # recurses into itself (infinite recursion at runtime) and defines
++        # a second, empty mavlink_test_all() outside its own include guard
++        # (a compile error). Every message it would exercise is already
++        # covered by testing its constituent dialects individually below,
++        # so skip only this one, broken, redundant aggregate.
++        if(MAVLINK_TEST_DIALECT STREQUAL "all")
++            continue()
++        endif()
++
++        set(_test_src "${CMAKE_CURRENT_BINARY_DIR}/mavlink_roundtrip_test_${MAVLINK_TEST_DIALECT}.c")
++        configure_file(
++            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/mavlink_roundtrip_test.c.in"
++            "${_test_src}"
++            @ONLY
++        )
++
++        add_executable(mavlink_roundtrip_test_${MAVLINK_TEST_DIALECT} "${_test_src}")
++        target_link_libraries(mavlink_roundtrip_test_${MAVLINK_TEST_DIALECT} PRIVATE mavlink)
++        add_test(
++            NAME mavlink_roundtrip_${MAVLINK_TEST_DIALECT}
++            COMMAND mavlink_roundtrip_test_${MAVLINK_TEST_DIALECT}
++        )
++    endforeach()
++endif()
++
++install(TARGETS mavlink
++    EXPORT ${PROJECT_NAME}Targets
++)
++
++install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
++    DESTINATION include/${PROJECT_NAME}
++    FILES_MATCHING PATTERN "*.h"
++)
++
++install(EXPORT ${PROJECT_NAME}Targets
++    FILE ${PROJECT_NAME}Targets.cmake
++    NAMESPACE ${PROJECT_NAME}::
++    DESTINATION lib/cmake/${PROJECT_NAME}
++)
++
++include(CMakePackageConfigHelpers)
++
++write_basic_package_version_file(
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    VERSION ${PROJECT_VERSION}
++    COMPATIBILITY AnyNewerVersion
++)
++
++configure_package_config_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
++)
++
++install(FILES
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    DESTINATION lib/cmake/${PROJECT_NAME}
++)

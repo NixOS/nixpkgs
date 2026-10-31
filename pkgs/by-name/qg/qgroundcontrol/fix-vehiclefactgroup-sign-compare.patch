@@ -1,0 +1,22 @@
+diff --git a/src/Vehicle/FactGroups/VehicleFactGroup.cc b/src/Vehicle/FactGroups/VehicleFactGroup.cc
+index 09540ec..943eb2b 100644
+--- a/src/Vehicle/FactGroups/VehicleFactGroup.cc
++++ b/src/Vehicle/FactGroups/VehicleFactGroup.cc
+@@ -128,7 +128,7 @@ void VehicleFactGroup::_handleAttitudeWorker(double rollRadians, double pitchRad
+ 
+ void VehicleFactGroup::_handleAttitude(Vehicle *vehicle, const mavlink_message_t &message)
+ {
+-    if ((message.sysid != vehicle->id()) || (message.compid != vehicle->compId())) {
++    if ((message.sysid != static_cast<uint32_t>(vehicle->id())) || (message.compid != vehicle->compId())) {
+         return;
+     }
+ 
+@@ -160,7 +160,7 @@ void VehicleFactGroup::_handleAltitude(const mavlink_message_t &message)
+ void VehicleFactGroup::_handleAttitudeQuaternion(Vehicle *vehicle, const mavlink_message_t &message)
+ {
+     // only accept the attitude message from the vehicle's flight controller
+-    if ((message.sysid != vehicle->id()) || (message.compid != vehicle->compId())) {
++    if ((message.sysid != static_cast<uint32_t>(vehicle->id())) || (message.compid != vehicle->compId())) {
+         return;
+     }
+ 

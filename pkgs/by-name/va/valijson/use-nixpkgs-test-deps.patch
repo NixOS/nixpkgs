@@ -1,0 +1,80 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -102,59 +102,20 @@ if(Qt${QT_VERSION_MAJOR}Core_FOUND)
+     set(valijson_QT_CORE_TARGET Qt${QT_VERSION_MAJOR}::Core)
+ endif()
+ 
+-# jsoncpp library
+-add_library(jsoncpp
+-    thirdparty/jsoncpp/src/lib_json/json_reader.cpp
+-    thirdparty/jsoncpp/src/lib_json/json_value.cpp
+-    thirdparty/jsoncpp/src/lib_json/json_writer.cpp
+-)
+-
+-target_include_directories(jsoncpp SYSTEM PRIVATE thirdparty/jsoncpp/include)
+-set_target_properties(jsoncpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/jsoncpp)
+-
+-add_library(json11
+-    thirdparty/json11/json11.cpp
+-)
+-
+-target_include_directories(json11 SYSTEM PRIVATE thirdparty/json11)
+-if(MSVC)
+-    target_compile_options(json11 PRIVATE /FIcstdint)
+-else()
+-    target_compile_options(json11 PRIVATE
+-        -include cstdint
+-        $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-unqualified-std-cast-call>
+-    )
+-endif()
+-set_target_properties(json11 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/json11)
+-
+-# yaml-cpp library
+-file(GLOB yamlcpp_SOURCES "thirdparty/yaml-cpp/src/*.cpp")
+-add_library(yamlcpp ${yamlcpp_SOURCES})
+-
+-target_include_directories(yamlcpp SYSTEM PRIVATE thirdparty/yamlcpp/include)
+-set_target_properties(yamlcpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/yamlcpp)
+-
+-# Not all of these are required for examples build it doesn't hurt to include them
+-include_directories(include SYSTEM
+-    thirdparty/googletest/include
+-    thirdparty/json11
+-    thirdparty/jsoncpp/include
+-    thirdparty/rapidjson/include
+-    thirdparty/picojson
+-    thirdparty/nlohmann-json/include
+-    thirdparty/yaml-cpp/include
+-)
++include_directories(include SYSTEM)
+ 
+ if(valijson_BUILD_TESTS)
+     if(NOT valijson_EXCLUDE_BOOST)
+         find_package(Boost)
+     endif()
+ 
+-    # Build local gtest
+-    set(gtest_force_shared_crt ON)
+-    option(BUILD_GMOCK FALSE)
+-    option(INSTALL_GTEST FALSE)
+-    add_subdirectory(thirdparty/googletest)
++    find_package(GTest REQUIRED)
++    find_package(jsoncpp REQUIRED)
++    find_package(yaml-cpp REQUIRED)
++    find_package(nlohmann_json REQUIRED)
++    find_package(RapidJSON REQUIRED)
++    find_package(json11 REQUIRED)
++    find_package(picojson REQUIRED)
+ 
+     set(TEST_SOURCES
+         tests/test_adapter_comparison.cpp
+@@ -178,7 +139,7 @@ if(valijson_BUILD_TESTS)
+         tests/test_utf8_utils.cpp
+     )
+ 
+-    set(TEST_LIBS gtest_main jsoncpp json11 yamlcpp)
++    set(TEST_LIBS GTest::gtest_main JsonCpp::JsonCpp json11::json11 picojson::picojson yaml-cpp::yaml-cpp nlohmann_json::nlohmann_json RapidJSON)
+ 
+     if(Boost_FOUND)
+         include_directories(${Boost_INCLUDE_DIRS})

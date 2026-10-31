@@ -1,0 +1,27 @@
+diff --git a/symforce/internal/symbolic.py b/symforce/internal/symbolic.py
+index 9e7ba1a..0fb08ac 100644
+--- a/symforce/internal/symbolic.py
++++ b/symforce/internal/symbolic.py
+@@ -677,8 +677,20 @@ SymPyCopysignNoZero = CopysignNoZero
+ if not T.TYPE_CHECKING and sympy.__package__ == "symengine":
+     del SignNoZero
+     del CopysignNoZero
+-    from symengine import CopysignNoZero
+-    from symengine import SignNoZero
++
++    # Not real symengine APIs: symforce's own (no longer used) vendored
++    # fork of symengine.py added these as C++-backed Function classes
++    # itself (symengine_wrapper.in.pyx) rather than them ever being part
++    # of upstream symengine. Reuse the exact algebraic identities the
++    # sympy-backend classes above already use for their own _eval_evalf
++    # numeric fallback - these hold for every real x (not just as a
++    # numeric approximation), so they work as the primary definition here.
++    def SignNoZero(x: T.Any) -> T.Any:
++        return 2 * Min(sign(x), 0) + 1
++
++    def CopysignNoZero(x: T.Any, y: T.Any) -> T.Any:
++        return Abs(x) * SignNoZero(y)
++
+ elif sympy.__package__ == "sympy":
+     pass
+ else:

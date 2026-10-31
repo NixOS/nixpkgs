@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "metis";
   version = "5.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  separateDebugInfo = true;
+
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "METIS";
@@ -46,11 +50,58 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
   ];
 
+  # Upstream's CMakeLists.txt registers no CTest tests at all, so exercise
+  # gpmetis and graphchk by hand against one of the graphs checked into
+  # upstream's own repo.
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./programs/graphchk ../graphs/4elt.graph | grep -q "format of the graph is correct"
+
+    ./programs/gpmetis ../graphs/4elt.graph 8
+    [ "$(wc -l < ../graphs/4elt.graph.part.8)" = "15606" ]
+    awk '$1 < 0 || $1 > 7 { exit 1 }' ../graphs/4elt.graph.part.8
+    rm -f ../graphs/4elt.graph.part.8
+
+    runHook postCheck
+  '';
+
+  # Upstream's own CMakeLists.txt never exports a CMake package-config file
+  # (just a bare `install(TARGETS metis ...)`, no `install(EXPORT ...)` and
+  # no Config.cmake of any kind), so `find_package(METIS)` can't find this
+  # package from any consumer. Write one by hand describing the library and
+  # headers this derivation already installs, as a `METIS::metis` imported
+  # target (matching the real `metis` target name METIS' own
+  # add_library(metis ...) call uses, kept lowercase as upstream has it).
+  postInstall =
+    let
+      libSuffix =
+        if !stdenv.hostPlatform.isStatic then
+          stdenv.hostPlatform.extensions.sharedLibrary
+        else
+          stdenv.hostPlatform.extensions.staticLibrary;
+    in
+    ''
+      mkdir -p $out/lib/cmake/metis
+
+      substitute ${./cmake/MetisConfig.cmake.in} $out/lib/cmake/metis/metis-config.cmake \
+        --subst-var out \
+        --subst-var-by libSuffix "${libSuffix}"
+
+      substitute ${./cmake/MetisConfigVersion.cmake.in} $out/lib/cmake/metis/metis-config-version.cmake \
+        --subst-var-by version "${finalAttrs.version}"
+    '';
+
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";
     homepage = "https://github.com/KarypisLab/METIS";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ qbisi ];
+    maintainers = with lib.maintainers; [
+      qbisi
+      pandapip1
+    ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,0 +1,21 @@
+--- a/src/lib/heatshrink/CMakeLists.txt	2026-10-30 13:50:47.825932973 -0400
++++ b/src/lib/heatshrink/CMakeLists.txt	2026-10-30 13:51:12.023752133 -0400
+@@ -31,12 +31,9 @@
+ #
+ ############################################################################
+ 
+-px4_add_git_submodule(TARGET git_heatshrink PATH heatshrink)
+-
+-px4_add_library(heatshrink
+-	heatshrink/heatshrink_decoder.c
+-)
+-
+-target_compile_options(heatshrink PRIVATE
+-	${MAX_CUSTOM_OPT_LEVEL}
+-	-DHEATSHRINK_DYNAMIC_ALLOC=0)
++# Consumed as a real, independently-built nixpkgs package (pkgs/by-name/he/heatshrink)
++# via find_package() instead of vendoring the submodule. heatshrink::heatshrink
++# already publicly compiles with -DHEATSHRINK_DYNAMIC_ALLOC=0, matching what
++# this module set here before.
++find_package(heatshrink REQUIRED)
++add_library(heatshrink ALIAS heatshrink::heatshrink)
