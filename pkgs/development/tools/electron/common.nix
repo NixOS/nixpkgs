@@ -108,8 +108,13 @@ in
     base.patches
     ++
       # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
-      lib.optional (lib.versionAtLeast info.version "44")
-        ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
+      lib.optional (
+        lib.versions.major info.version == "44"
+      ) ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch
+    ++
+      # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
+      lib.optional (lib.versionAtLeast info.version "45")
+        ./0002-electron-45-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
 
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
