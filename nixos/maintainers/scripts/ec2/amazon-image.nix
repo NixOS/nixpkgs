@@ -46,6 +46,14 @@ in
   ];
 
   options.amazonImage = {
+    extraFsOptions = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Extra command-line options to pass to mkfs when creating the rootfs.
+      '';
+    };
+
     contents = mkOption {
       example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -161,7 +169,10 @@ in
         inherit (config.image) baseName;
         name = config.image.baseName;
 
+        extraFsOptions = cfg.extraFsOptions;
+
         fsType = "ext4";
+
         partitionTableType = if config.ec2.efi then "efi" else "legacy+gpt";
 
         inherit (config.virtualisation) diskSize;
