@@ -5,6 +5,7 @@
   darwinMinVersionHook,
   cacert,
   fetchFromGitHub,
+  fetchgit,
   fetchzip,
   pdfjs,
   chromium-hsts-preload-list,
@@ -200,10 +201,20 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     simdutf
     (skia.overrideAttrs (prev: {
+      # Use Ladybird's vcpkg baseline without updating Skia for other release packages.
+      version = "148-unstable-2026-04-14";
+      src = fetchgit {
+        url = "https://skia.googlesource.com/skia.git";
+        rev = "e7c90ecca9444fe09598f1630ab7cee2c0ee027a";
+        hash = "sha256-2+fxWqkNBStoN6l5Y3xMqkwvh69sCU6A//wz8fMnmjY=";
+      };
       # Ladybird also uses Skia's color management API directly.
-      gnFlags = prev.gnFlags ++ [
-        "extra_cflags+=[\"-DSKCMS_DLL\"]"
-      ];
+      gnFlags =
+        prev.gnFlags
+        ++ [ "extra_cflags+=[\"-DSKCMS_DLL\"]" ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          "extra_cflags+=[\"-DSK_USE_EXTERNAL_VULKAN_HEADERS\"]"
+        ];
       postInstall =
         (prev.postInstall or "")
         + lib.optionalString stdenv.hostPlatform.isDarwin ''
