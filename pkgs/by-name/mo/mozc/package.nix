@@ -184,7 +184,7 @@ let
       "unix/ibus:ibus_mozc"
       "unix/emacs:mozc_emacs_helper"
     ];
-    hash = "sha256-7qZhXZWxHqAxf6iv7yTX5m1Yjv4B5t4k7dxVJxl/5Q4=";
+    hash = "sha256-+g7qIk3xBETNeVh/PzIXXeFg6qphYBu2SvrgLjyi4ZQ=";
   };
 in
 stdenv.mkDerivation {
