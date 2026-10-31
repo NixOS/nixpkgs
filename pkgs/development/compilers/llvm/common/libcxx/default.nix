@@ -55,6 +55,10 @@ let
     # https://github.com/llvm/llvm-project/issues/55245
     (lib.cmakeBool "LIBCXX_ENABLE_STATIC_ABI_LIBRARY" stdenv.hostPlatform.isWindows)
   ]
+  # Avoid symbol clashes with macOS libc++.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "LIBCXX_ABI_NAMESPACE" "__nix")
+  ]
   ++ lib.optionals (cxxabi == null) [
     # Include libc++abi symbols within libc++.a for static linking libc++;
     # dynamic linking includes them through libc++.so being a linker script
