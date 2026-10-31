@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags =
     lib.mapAttrsToList lib.mesonEnable {
       v4l2 = true;
-      tracing = true;
+      tracing = withTracing;
       pycamera = true;
       qcam = withQcam;
       apps-output-dng = withQcam;
