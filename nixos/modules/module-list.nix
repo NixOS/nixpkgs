@@ -371,6 +371,7 @@
   ./programs/wayland/ironbar.nix
   ./programs/wayland/kanshi.nix
   ./programs/wayland/labwc.nix
+  ./programs/wayland/ly-lock.nix
   ./programs/wayland/mango.nix
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/niri.nix

@@ -25778,6 +25778,12 @@
     github = "rudolfvesely";
     githubId = 13966949;
   };
+  rugbedbugg = {
+    name = "Oxide 1-6";
+    github = "rugbedbugg";
+    githubId = 160270614;
+    keys = [ { fingerprint = "A65A 3A76 72C3 4896 51AE  8BD4 8BBC B014 DE46 077B"; } ];
+  };
   ruiiiijiiiiang = {
     name = "Rui Jiang";
     email = "me@ruijiang.me";
