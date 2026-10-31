@@ -7,6 +7,7 @@
   libGLU,
   libGL,
   openal,
+  lua5_1,
   luajit,
   freetype,
   physfs,
@@ -19,6 +20,7 @@
   libtool,
   libx11,
   cmake,
+  withLuajit ? lib.meta.availableOn stdenv.hostPlatform luajit,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     openal
-    luajit
+    (if withLuajit then luajit else lua5_1)
     freetype
     physfs
     libmodplug
@@ -63,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # Required by LÖVE's CMakeLists.txt
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # Don't include build directory in RPATH
     (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_RPATH" true) # Use install RPATH even during build
-    (lib.cmakeBool "LOVE_JIT" true) # Enable LuaJIT support even though it is warned about for Apple
+    (lib.cmakeBool "LOVE_JIT" withLuajit) # Enable LuaJIT support even though it is warned about for Apple
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+  env.NIX_CFLAGS_COMPILE = lib.optionalString withLuajit "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   # CMake doesn't define install target for LÖVE, so install manually
   installPhase = ''
