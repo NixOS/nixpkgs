@@ -3,15 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  makePerlPath,
 
   # Perl libraries
-  LWP,
-  LWPProtocolHttps,
-  HTTPMessage,
-  HTTPDate,
-  URI,
-  TryTiny,
+  perlPackages,
 
   # Required
   coreutils,
@@ -125,14 +119,17 @@ stdenv.mkDerivation rec {
     [
       "--set"
       "PERL5LIB"
-      "${makePerlPath [
-        LWP
-        LWPProtocolHttps
-        HTTPMessage
-        URI
-        HTTPDate
-        TryTiny
-      ]}"
+      "${perlPackages.makePerlPath (
+        with perlPackages;
+        [
+          LWP
+          LWPProtocolHttps
+          HTTPMessage
+          URI
+          HTTPDate
+          TryTiny
+        ]
+      )}"
       "--prefix"
       "PATH"
       ":"
