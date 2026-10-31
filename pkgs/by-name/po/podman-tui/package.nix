@@ -3,19 +3,21 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
-  testers,
   nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "podman-tui";
-  version = "1.11.3";
+  version = "2.0.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qeUYn9FDhuLaNjeJekmQYjR1PJJx4/sKBuxT5qOLCj8=";
+    hash = "sha256-01W3iG7WOKNKVMEjP4o53TiDOVqge91IrUWCx0hEUsQ=";
   };
 
   vendorHash = null;
@@ -28,10 +30,7 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   checkFlags =
     let
@@ -43,16 +42,21 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "HOME=$(mktemp -d) podman-tui version";
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/containers/podman-tui";
+    changelog = "https://github.com/containers/podman-tui/releases/tag/${finalAttrs.src.tag}";
     description = "Podman Terminal UI";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
