@@ -48,8 +48,12 @@ let
             ++ old.optional-dependencies.otp
             ++ old.optional-dependencies.sms;
           makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-            "--set CANAILLE_CONFIG /etc/canaille/config.toml"
-            "--set SECRETS_DIR \"${secretsDir}\""
+            "--set"
+            "CANAILLE_CONFIG"
+            "/etc/canaille/config.toml"
+            "--set"
+            "SECRETS_DIR"
+            "\"${secretsDir}\""
           ];
         })
       );
