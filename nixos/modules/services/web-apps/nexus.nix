@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.nexus;
@@ -15,44 +13,44 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "Sonatype Nexus3 OSS service";
+      enable = lib.mkEnableOption "Sonatype Nexus3 OSS service";
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
       jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "User which runs Nexus3.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nexus";
         description = "Group which runs Nexus3.";
       };
 
-      home = mkOption {
-        type = types.str;
+      home = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/sonatype-work";
         description = "Home directory of the Nexus3 instance.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address to listen on.";
       };
 
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         default = 8081;
         description = "Port to listen on.";
       };
 
-      jvmOpts = mkOption {
-        type = types.lines;
+      jvmOpts = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           -Xms1200M
           -Xmx1200M
@@ -72,7 +70,7 @@ in
           -Dkaraf.startLocalConsole=false
           -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
         '';
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           '''
             -Xms1200M
             -Xmx1200M
@@ -103,7 +101,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
       inherit (cfg) group home;
@@ -117,8 +115,6 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = [ cfg.home ];
-
       environment = {
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
@@ -127,6 +123,7 @@ in
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 
+      enableStrictShellChecks = true;
       preStart = ''
         mkdir -p ${cfg.home}/nexus3/etc
 
@@ -147,7 +144,38 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
+        PrivateUsers = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectProc = "invisible";
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
         LimitNOFILE = 102642;
+        ReadWritePaths = [
+          cfg.home
+        ];
+        SystemCallArchitecture = "native";
+        CapabilityBoundingSet = [ "" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+          "~@debug"
+        ];
       };
     };
   };
