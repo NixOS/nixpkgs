@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  catch2,
   nix-update-script,
 }:
 
@@ -22,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "EXPECTED_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    # avoid FetchContent reaching out to the network for Catch2 at configure time
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CATCH2" "${catch2.src}")
+  ];
+
+  doCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
