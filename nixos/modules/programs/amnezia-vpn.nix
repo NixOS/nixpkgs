@@ -17,7 +17,8 @@ in
     environment.systemPackages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
     services.resolved.enable = true;
-
+    networking.firewall.checkReversePath = "loose";
+    
     systemd = {
       packages = [ cfg.package ];
       services."AmneziaVPN" = {
