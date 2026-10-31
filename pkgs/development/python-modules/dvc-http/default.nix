@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc-http";
     tag = finalAttrs.version;
     hash = "sha256-ru/hOFv/RcS/7SBpTJU8xFxdllmaiH4dV1ouS6GGKkY=";
@@ -42,8 +42,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "HTTP plugin for dvc";
-    homepage = "https://github.com/iterative/dvc-http";
-    changelog = "https://github.com/iterative/dvc-http/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/treeverse/dvc-http";
+    changelog = "https://github.com/treeverse/dvc-http/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

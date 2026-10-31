@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "ax";
     tag = finalAttrs.version;
     hash = "sha256-8Q/p74rzMAciNUjaTJtf6duslc3TXT7MIjcHt2sffqI=";
@@ -136,7 +136,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
-    changelog = "https://github.com/facebook/Ax/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/meta/Ax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };

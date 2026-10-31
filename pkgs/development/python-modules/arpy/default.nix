@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "viraptor";
+    owner = "onekey-sec";
     repo = "arpy";
     tag = finalAttrs.version;
     hash = "sha256-jD1XJJhcpJymn0CwZ65U06xLKm1JjHffmx/umEO7a5s=";
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library for accessing the archive files and reading the contents";
-    homepage = "https://github.com/viraptor/arpy";
+    homepage = "https://github.com/onekey-sec/arpy";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ thornycrackers ];
   };

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-abi";
     tag = "v${version}";
     hash = "sha256-/tyGm/lH72oZEKfTd25t+k0y3TuAZQg+hUABT4YCP2g=";
@@ -55,8 +55,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Ethereum ABI utilities";
-    homepage = "https://github.com/ethereum/eth-abi";
-    changelog = "https://github.com/ethereum/eth-abi/blob/v${version}/docs/release_notes.rst";
+    homepage = "https://github.com/ApeWorX/eth-abi";
+    changelog = "https://github.com/ApeWorX/eth-abi/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
