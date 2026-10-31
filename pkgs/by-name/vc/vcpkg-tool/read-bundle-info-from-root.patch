@@ -1,8 +1,8 @@
 diff --git a/include/vcpkg/vcpkgpaths.h b/include/vcpkg/vcpkgpaths.h
-index 90fd4d09..ebc6342b 100644
+index a1287c6..4b442ce 100644
 --- a/include/vcpkg/vcpkgpaths.h
 +++ b/include/vcpkg/vcpkgpaths.h
-@@ -28,6 +28,8 @@
+@@ -31,6 +31,8 @@
  
  namespace vcpkg
  {
@@ -12,10 +12,10 @@ index 90fd4d09..ebc6342b 100644
      {
          ZStringView name;
 diff --git a/src/vcpkg.cpp b/src/vcpkg.cpp
-index 2b62cb55..d7b8ead5 100644
+index b696e08..ad87083 100644
 --- a/src/vcpkg.cpp
 +++ b/src/vcpkg.cpp
-@@ -296,7 +296,8 @@ int main(const int argc, const char* const* const argv)
+@@ -306,7 +306,8 @@ int main(const int argc, const char* const* const argv)
          Debug::println("To include the environment variables in debug output, pass --debug-env");
      }
      args.check_feature_flag_consistency();
@@ -26,10 +26,10 @@ index 2b62cb55..d7b8ead5 100644
      bool to_enable_metrics = true;
      {
 diff --git a/src/vcpkg/vcpkgpaths.cpp b/src/vcpkg/vcpkgpaths.cpp
-index 77e107f5..132050ba 100644
+index f8f4e7b..7466c74 100644
 --- a/src/vcpkg/vcpkgpaths.cpp
 +++ b/src/vcpkg/vcpkgpaths.cpp
-@@ -518,6 +518,11 @@ namespace
+@@ -538,6 +538,11 @@ namespace
  
  namespace vcpkg
  {
@@ -38,6 +38,6 @@ index 77e107f5..132050ba 100644
 +        return determine_root(fs, original_cwd, args);
 +    }
 +
-     Path InstalledPaths::listfile_path(const BinaryParagraph& pgh) const
+     void InstalledPaths::create_directories(const Filesystem& fs) const
      {
-         return this->vcpkg_dir_info() / (pgh.fullstem() + ".list");
+         fs.create_directories(root(), VCPKG_LINE_INFO);
