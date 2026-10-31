@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "berkeleydb";
-  version = "18.1.16";
+  version = "18.1.17";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-eCsaEzCPNjdfP0RgI3tzVtmb5cTGjFhcVG1w21FKKt0=";
+    hash = "sha256-EeGTuvzPh7qV4NaK9FO4Fq9MkXY5aTMc3cY6WKdWRtQ=";
   };
 
   build-system = [ setuptools ];

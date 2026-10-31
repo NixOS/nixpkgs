@@ -6266,7 +6266,6 @@ with pkgs;
         pkgsHostTarget
         kdePackages
         ;
-      inherit stdenv;
     }
   );
 

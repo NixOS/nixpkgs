@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   async-timeout,
+  blockbuster,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
@@ -13,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioharmony";
-  version = "1.0.10";
+  version = "1.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Harmony-Libs";
     repo = "aioharmony";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j4VlYxGd3I6SLZjJUOSZW9hyfSkX04L/8CGBWp7vTj0=";
+    hash = "sha256-Ry42MfXRII3mSXqpVekTdaUFPmk93rwlOXey8DZMARY=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    blockbuster
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

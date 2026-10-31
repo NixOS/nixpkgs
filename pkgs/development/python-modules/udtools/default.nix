@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "udtools";
-  version = "0.2.8";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UniversalDependencies";
     repo = "tools";
     tag = "py${finalAttrs.version}";
-    hash = "sha256-PeMIjxHU99HHNwT/D6UiS5HqxXj66ngRTYfA1xn9uOw=";
+    hash = "sha256-ddo+cmwcD+QgglAxrIPHX76m+Sr6ohDmOoWu4NVcdvI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/udtools";

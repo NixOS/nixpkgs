@@ -1,28 +1,49 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iammeter";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Q0o392Xf3cY5BkX4ic6pE3XKMSgek5cpW4TMqSh+Ew8=";
+  src = fetchFromGitHub {
+    owner = "lewei50";
+    repo = "iammeter_pip_lib";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DzqJ0F1KHu755IxcNW4GqhXg0CsfZEGJf34W3TbY5GA=";
   };
 
-  # Module has no tests
-  doCheck = false;
+  pythonRelaxDeps = [ "aiohttp" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
+    requests
+    voluptuous
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "iammeter" ];
 
   meta = {
     description = "Module to work with the IamMeter API";
-    homepage = "https://pypi.org/project/iammeter/";
+    homepage = "https://github.com/lewei50/iammeter_pip_lib";
+    changelog = "https://github.com/lewei50/iammeter_pip_lib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

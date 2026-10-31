@@ -1,5 +1,3 @@
-diff --git a/z3.pc.cmake.in b/z3.pc.cmake.in
-index 436dd6208..dd1e179c7 100644
 --- a/z3.pc.cmake.in
 +++ b/z3.pc.cmake.in
 @@ -1,13 +1,10 @@

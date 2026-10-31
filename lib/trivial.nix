@@ -1264,14 +1264,7 @@ in
     if match != null then
       (fromTOML "v=0x${builtins.elemAt match 1}").v
     else
-      # TODO: Turn this into a `throw` in 26.05.
-      assert lib.warn "fromHexString: ${
-        lib.generators.toPretty { } str
-      } is not a valid input and will be rejected in 26.05" true;
-      let
-        noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
-      in
-      (fromTOML "v=0x${noPrefix}").v;
+      throw "fromHexString: ${lib.generators.toPretty { } str} is not a valid input";
 
   /**
     Convert the given positive integer to a string of its hexadecimal

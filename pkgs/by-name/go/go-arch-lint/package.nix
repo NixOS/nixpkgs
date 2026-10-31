@@ -14,13 +14,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "go-arch-lint";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "fe3dback";
     repo = "go-arch-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eA+xM7WSOyzj3uhVUT/6dHGoHx1tsBCCKXPLOintimE=";
+    hash = "sha256-aeLM1pG81pmq+H7mmFYjvf8bXISBztuPPhKh9waS8qg=";
   };
 
   vendorHash = "sha256-USP8gFDd4ii8yO/dch3OHVrDsVUy4HgRxBvnFwAbHeU=";
