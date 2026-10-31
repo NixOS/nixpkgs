@@ -119,7 +119,12 @@ flutter.buildFlutterApplication {
 
   flutterBuildFlags = [ "--dart-define-from-file=pili_release.json" ];
 
-  extraWrapProgramArgs = "--prefix LD_LIBRARY_PATH : $out/app/piliplus/lib";
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/piliplus/lib"
+  ];
 
   postInstall = ''
     declare -A sizes=(
