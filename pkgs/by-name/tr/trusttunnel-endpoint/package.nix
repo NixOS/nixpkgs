@@ -6,6 +6,8 @@
   boringssl,
   cacert,
   python3,
+  aws-lc-prefixed,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -43,10 +45,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
   buildInputs = [
     boringssl
+    aws-lc-prefixed
   ];
 
   nativeCheckInputs = [
