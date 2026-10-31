@@ -1,0 +1,221 @@
+--- a/packages/contracts/src/updates.ts
++++ b/packages/contracts/src/updates.ts
+@@ -38,7 +38,7 @@
+  * offers no channel. Pacman owns the files of an Arch package; upgrades use makepkg or an AUR
+  * helper, and the app never updates that copy.
+  */
+-export type Distribution = "direct" | "store" | "pacman";
++export type Distribution = "direct" | "store" | "pacman" | "nix";
+ 
+ /** An Arch package adds this file beside app.asar; signed direct/Homebrew apps have none. */
+ export const INSTALLATION_MARKER = "mrstreamer-installation.json";
+@@ -50,6 +50,7 @@
+     case "direct":
+       return true;
+     case "store":
++    case "nix":
+     case "pacman":
+       return false;
+   }
+--- a/apps/desktop/src/main/platform/installation.ts
++++ b/apps/desktop/src/main/platform/installation.ts
+@@ -1,57 +1,11 @@
+-import { lstat, readFile } from "node:fs/promises";
+-import { join } from "node:path";
+-import { t } from "@mrstreamer/core/i18n";
+-import {
+-  INSTALLATION_MARKER,
+-  PACMAN_INSTALLATION,
+-  type Distribution,
+-} from "@mrstreamer/contracts/updates";
++import type { Distribution } from "@mrstreamer/contracts/updates";
+ 
+-/** Resolves installation-owned metadata before Analytics or an updater is constructed. */
+-export async function installedDistribution(options: {
++/** This source build is updated exclusively through Nix. */
++export async function installedDistribution(_options: {
+   readonly platform: string;
+   readonly packaged: boolean;
+   readonly store: boolean;
+   readonly resources: string;
+ }): Promise<Distribution> {
+-  if (options.store) return "store";
+-  if (options.platform !== "linux" || !options.packaged) return "direct";
+-  const path = join(options.resources, INSTALLATION_MARKER);
+-  try {
+-    await lstat(path);
+-  } catch (error) {
+-    if (error instanceof Error && "code" in error && error.code === "ENOENT") return "direct";
+-    throw new Error(
+-      t("Cannot inspect {path}. Reinstall Mr. Streamer with your package manager.", { path }),
+-      {
+-        cause: error,
+-      },
+-    );
+-  }
+-  let text: string;
+-  try {
+-    text = await readFile(path, "utf8");
+-  } catch (error) {
+-    throw new Error(
+-      t("Cannot read {path}. Reinstall Mr. Streamer with your package manager.", { path }),
+-      {
+-        cause: error,
+-      },
+-    );
+-  }
+-  try {
+-    const value: unknown = JSON.parse(text);
+-    if (
+-      typeof value === "object" &&
+-      value !== null &&
+-      "schema" in value &&
+-      value.schema === PACMAN_INSTALLATION.schema &&
+-      "updates" in value &&
+-      value.updates === PACMAN_INSTALLATION.updates
+-    )
+-      return "pacman";
+-  } catch {
+-    // A present marker is authoritative; damage must never enable direct updating.
+-  }
+-  throw new Error(t("Invalid {path}. Reinstall Mr. Streamer with your package manager.", { path }));
++  return "nix";
+ }
+--- a/apps/desktop/src/main/index.ts
++++ b/apps/desktop/src/main/index.ts
+@@ -451,6 +451,8 @@
+     switch (distribution) {
+       case "store":
+         return { installed: app.getVersion(), openStore: () => shell.openExternal(STORE_PAGE) };
++      case "nix":
++        return { installed: app.getVersion(), managed: "nix" };
+       case "pacman":
+         return { installed: app.getVersion(), managed: "pacman" };
+       case "direct":
+--- a/apps/desktop/src/main/services/updates.ts
++++ b/apps/desktop/src/main/services/updates.ts
+@@ -101,16 +101,16 @@
+   readonly openStore: () => Promise<void>;
+ }
+ 
+-/** Pacman owns an Arch installation. No direct updater capability enters this branch. */
+-export interface PacmanUpdates {
+-  readonly managed: "pacman";
++/** The package manager owns this installation. No direct updater capability enters this branch. */
++export interface PackageManagerUpdates {
++  readonly managed: "pacman" | "nix";
+ }
+ 
+ /** What the app passes in: its version, and who updates this copy. */
+ export type UpdatesConfig = {
+   /** The running build's version. */
+   readonly installed: string;
+-} & (DirectUpdates | StoreUpdates | PacmanUpdates);
++} & (DirectUpdates | StoreUpdates | PackageManagerUpdates);
+ 
+ export type UpdatesDeps = UpdatesConfig & {
+   readonly dataDir: string;
+@@ -479,7 +479,7 @@
+  * Externally managed copies never check, download, install or read/write updates.json.
+  * Only the Store variant has an action, which opens its Store page.
+  */
+-function managed(deps: UpdatesDeps & (StoreUpdates | PacmanUpdates)) {
++function managed(deps: UpdatesDeps & (StoreUpdates | PackageManagerUpdates)) {
+   const status: UpdateStatus = {
+     version: deps.installed,
+     distribution: "managed" in deps ? deps.managed : "store",
+--- a/apps/desktop/src/main/platform/diagnostics-export.ts
++++ b/apps/desktop/src/main/platform/diagnostics-export.ts
+@@ -260,6 +260,8 @@
+       return "Direct install";
+     case "store":
+       return "Microsoft Store";
++    case "nix":
++      return "Nix";
+     case "pacman":
+       return "AUR (pacman)";
+   }
+--- a/apps/desktop/src/renderer/src/features/updates/distribution.ts
++++ b/apps/desktop/src/renderer/src/features/updates/distribution.ts
+@@ -8,6 +8,8 @@
+       return t("Direct install");
+     case "store":
+       return "Microsoft Store";
++    case "nix":
++      return "Nix";
+     case "pacman":
+       return "AUR (pacman)";
+   }
+--- a/apps/desktop/src/renderer/src/features/updates/UpdatesSection.tsx
++++ b/apps/desktop/src/renderer/src/features/updates/UpdatesSection.tsx
+@@ -60,8 +60,11 @@
+       </Section>
+     );
+   }
+-  if (status.distribution === "pacman") {
+-    const instructions = t("Updates come from the AUR. Use an AUR helper or makepkg.");
++  if (status.distribution === "pacman" || status.distribution === "nix") {
++    const instructions =
++      status.distribution === "nix"
++        ? "Updates are managed by Nix."
++        : t("Updates come from the AUR. Use an AUR helper or makepkg.");
+     return (
+       <Section title={t("Updates")}>
+         <Row
+--- a/apps/desktop/test/updates.test.ts
++++ b/apps/desktop/test/updates.test.ts
+@@ -434,17 +434,17 @@
+   });
+ });
+ 
+-describe("a copy managed by pacman", () => {
++describe.each(["pacman", "nix"] as const)("a copy managed by %s", (manager) => {
+   it("ignores stale direct update state and leaves every update action inert", async () => {
+     const dataDir = await tempDir();
+     const path = join(dataDir, "updates.json");
+     const stored = JSON.stringify({ channel: "nightly", dismissed: "0.0.18", future: "keep" });
+     await writeFile(path, stored);
+-    const service = await startUpdates({ dataDir, installed: "0.0.17", managed: "pacman" });
++    const service = await startUpdates({ dataDir, installed: "0.0.17", managed: manager });
+     const initial = await service.status();
+     expect(initial).toEqual({
+       version: "0.0.17",
+-      distribution: "pacman",
++      distribution: manager,
+       channel: "stable",
+       update: { kind: "idle" },
+       offer: null,
+--- /dev/null
++++ b/apps/desktop/test/nix-installation.test.ts
+@@ -0,0 +1,31 @@
++import { readdir, writeFile } from "node:fs/promises";
++import { join } from "node:path";
++import { expect, it } from "vitest";
++import { INSTALLATION_MARKER, updatesInApp } from "@mrstreamer/contracts/updates";
++import { installedDistribution } from "../src/main/platform/installation.ts";
++import { distributionLabel } from "../src/renderer/src/features/updates/distribution.ts";
++import { tempDir } from "./support.ts";
++
++// Nixpkgs launches the app with its shared Electron runtime. It must not fall
++// back to direct updates when Electron reports an unpackaged application.
++it.each([false, true])("uses Nix updates with packaged=%s", async (packaged) => {
++  const resources = await tempDir();
++  const distribution = await installedDistribution({
++    resources,
++    platform: "linux",
++    packaged,
++    store: false,
++  });
++  expect(distribution).toBe("nix");
++  expect(updatesInApp(distribution)).toBe(false);
++  expect(distributionLabel(distribution)).toBe("Nix");
++  expect(await readdir(resources)).toEqual([]);
++});
++
++it("does not use a foreign installation marker to select an updater", async () => {
++  const resources = await tempDir();
++  await writeFile(join(resources, INSTALLATION_MARKER), '{"schema":1,"updates":"pacman"}');
++  expect(
++    await installedDistribution({ resources, platform: "linux", packaged: true, store: false }),
++  ).toBe("nix");
++});
