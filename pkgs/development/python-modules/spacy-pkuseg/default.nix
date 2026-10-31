@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-tIB4d1r/80kUN1NE1W9wo37ARBiMyuzj9wgG/TIqR+s=";
+    hash = "sha256-IK6pquzp/LqOjylbVbRjv4DNkwA5qLYApRNG+nOlhpc=";
   };
 
   build-system = [
