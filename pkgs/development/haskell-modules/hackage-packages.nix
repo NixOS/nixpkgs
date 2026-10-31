@@ -18023,6 +18023,7 @@ self: {
       description = "HFuse is a binding for the Linux FUSE library";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      hydraPlatforms = lib.platforms.none;
       broken = true;
     }
   ) { inherit (pkgs) fuse; };
@@ -446812,7 +446813,7 @@ self: {
     {
       mkDerivation,
       base,
-      lua5_4,
+      lua,
       tasty,
       tasty-hunit,
     }:
@@ -446825,7 +446826,7 @@ self: {
         "-f-use-pkgconfig"
       ];
       libraryHaskellDepends = [ base ];
-      librarySystemDepends = [ lua5_4 ];
+      librarySystemDepends = [ lua ];
       testHaskellDepends = [
         base
         tasty
@@ -446834,7 +446835,7 @@ self: {
       description = "Lua, an embeddable scripting language";
       license = lib.meta.getLicenseFromSpdxId "MIT";
     }
-  ) { inherit (pkgs) lua5_4; };
+  ) { lua = null; };
 
   lua-arbitrary = callPackage (
     {
@@ -527571,6 +527572,8 @@ self: {
       ];
       description = "Portable regex library for Perl 5 compatible regular expressions";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 
@@ -587495,6 +587498,8 @@ self: {
       libraryPkgconfigDepends = [ pcre ];
       description = "PCRE Backend for \"Text.Regex\" (regex-base)";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 
