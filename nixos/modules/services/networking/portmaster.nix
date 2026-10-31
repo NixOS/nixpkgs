@@ -946,6 +946,7 @@ in
     doc = ./portmaster.md;
     maintainers = with lib.maintainers; [
       WitteShadovv
+      azahi
       nyabinary
     ];
   };

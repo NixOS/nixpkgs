@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "2.2.4";
+  version = "2.2.8";
 
   nodejsPython = buildPackages.nodejs.python.withPackages (ps: [ ps.setuptools ]);
 
@@ -34,7 +34,7 @@ let
     owner = "safing";
     repo = "portmaster";
     tag = "v${version}";
-    hash = "sha256-N4FHUY1xmY2P5F0RFnb8mXn2KMMpmYcQC4hcvf1XNrE=";
+    hash = "sha256-INqNYIIxrsIcHj2LVcZVEQnnp1gsc6Qp2tG/NMRqWBs=";
   };
 
   portmasterUI = buildNpmPackage {
@@ -49,7 +49,7 @@ let
     ];
 
     sourceRoot = "${src.name}/desktop/angular";
-    npmDepsHash = "sha256-8SNdZLN4Mn8gfPUvQSBxrWeyS68wpLgjVHsnsOBIsz4=";
+    npmDepsHash = "sha256-Tdoqd/tIG0ZuyWIfBJ2i22IMz44SZc4B50zPBGKN75Y=";
 
     nativeBuildInputs = [ nodejsPython ];
 
@@ -85,7 +85,7 @@ let
     pname = "portmaster-desktop";
     inherit version src;
 
-    cargoHash = "sha256-Tf/0ZVVvxXEDNPpvrlTzeItIWk/p99XoRJaj78gFRPo=";
+    cargoHash = "sha256-RO06OFXjPYhSQGayH7gaClF0AdIyLbxnGWtLElrbJKU=";
     cargoRoot = "desktop/tauri/src-tauri";
     buildAndTestSubdir = finalAttrs.cargoRoot;
 
@@ -293,6 +293,7 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       WitteShadovv
+      azahi
       nyabinary
     ];
     mainProgram = "portmaster";

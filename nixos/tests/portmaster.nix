@@ -82,6 +82,7 @@ in
   name = "portmaster";
   meta.maintainers = with lib.maintainers; [
     WitteShadovv
+    azahi
     nyabinary
   ];
 
