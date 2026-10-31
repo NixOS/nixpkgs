@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ctestCheckHook,
+  gtest,
+  python3,
   nix-update-script,
 }:
 
@@ -28,9 +31,37 @@ stdenv.mkDerivation (finalAttrs: {
   # expected to vendor the checkout directly). TODO: Upstream.
   patches = [ ./install-generated-header.patch ];
 
-  cmakeFlags = [ (lib.cmakeBool "ENABLE_TESTING" false) ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_TESTING" true)
+    # Tests FetchContent-fetch googletest; point that at gtest's own source
+    # instead of hitting the network.
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
+    # googletest's own CMakeLists.txt would otherwise build and install gmock
+    # and install gtest itself straight into our output.
+    (lib.cmakeBool "BUILD_GMOCK" false)
+    (lib.cmakeBool "INSTALL_GTEST" false)
+  ];
 
   nativeBuildInputs = [ cmake ];
+
+  # python3 is also needed unconditionally during the normal build, not just
+  # checkPhase: ENABLE_TESTING above makes the test executables (which the
+  # generated events header is a dependency of) part of the default build
+  # target. doCheck = true below merges this into nativeBuildInputs too.
+  nativeCheckInputs = [
+    ctestCheckHook
+    (python3.withPackages (ps: [ ps.jinja2 ]))
+  ];
+
+  # enable_testing() is only called in tests/CMakeLists.txt, not at the top
+  # level, so there's no top-level CTestTestfile.cmake for a plain `ctest` to
+  # find the tests through.
+  ctestFlags = [
+    "--test-dir"
+    "tests"
+  ];
+
+  doCheck = true;
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
