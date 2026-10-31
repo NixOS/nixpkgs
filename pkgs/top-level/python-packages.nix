@@ -16783,6 +16783,8 @@ self: super: with self; {
 
   pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
 
+  pytest-mysql = callPackage ../development/python-modules/pytest-mysql { };
+
   pytest-notebook = callPackage ../development/python-modules/pytest-notebook { };
 
   pytest-order = callPackage ../development/python-modules/pytest-order { };
