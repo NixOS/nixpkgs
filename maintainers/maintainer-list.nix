@@ -16026,6 +16026,12 @@
     githubId = 7752934;
     name = "kurogeek";
   };
+  kushvinth = {
+    email = "here@kushvinth.com";
+    github = "kushvinth";
+    githubId = 149933295;
+    name = "Kushvinth Madhavan";
+  };
   kuwii = {
     name = "kuwii";
     email = "kuwii.someone@gmail.com";
