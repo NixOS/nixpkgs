@@ -20,7 +20,6 @@
   libcap_ng,
   libconfig,
   systemdLibs,
-  fuse,
   yajl,
   libvirt,
   hivex,
@@ -89,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcap_ng
     libconfig
     systemdLibs
-    fuse
     yajl
     libvirt
     gmp
@@ -182,7 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    broken = true; # stuck on fuse2
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with lib.licenses; [
       gpl2Plus
