@@ -6,8 +6,6 @@
   fetchFromGitHub,
   pkg-config,
   patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
   desktopToDarwinBundle,
   versionCheckHook,
   vulkan-loader,
@@ -38,7 +36,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridcraft";
-  version = "0.8.0";
+  version = "0.13.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -47,10 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "gridcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G0xsNWRoNMtA5lTKSZgLCHP6gcq+zOaOPdcColuFr0A=";
+    hash = "sha256-L1kbIku3WX/7pU/DpTqy2A2yT/+7vQVoK+iUYf5Dkpk=";
   };
 
-  cargoHash = "sha256-EY/41uMNm9hG7LhynI4d/7RSj5tGXsT8/s+Al8mr7pk=";
+  cargoHash = "sha256-gudikEONztiu7cfkt87CTIydKQEfPNgvRBTobzXz3qM=";
 
   # The mac_menu_appkit test starts a real NSApplication, and AppKit aborts in the build
   # sandbox ("required built-in appearance SystemAppearance not found").
@@ -71,57 +69,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     patchelf
-    copyDesktopItems
   ]
   # Turns the desktop item into Applications/GridCraft.app.
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.gridcraft";
-      desktopName = "GridCraft";
-      genericName = "Spreadsheet";
-      comment = "Calculate, analyse and chart data in workbooks";
-      exec = "gridcraft %F";
-      tryExec = "gridcraft";
-      icon = "ai.storyteller.gridcraft";
-      terminal = false;
-      startupNotify = true;
-      startupWMClass = "ai.storyteller.gridcraft";
-      categories = [
-        "Office"
-        "Spreadsheet"
-      ];
-      keywords = [
-        "spreadsheet"
-        "workbook"
-        "sheet"
-        "table"
-        "formula"
-        "chart"
-        "pivot"
-        "xlsx"
-        "xlsb"
-        "ods"
-        "csv"
-        "tsv"
-        "excel"
-      ];
-      mimeTypes = [
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        "application/vnd.ms-excel.sheet.macroEnabled.12"
-        "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
-        "application/vnd.oasis.opendocument.spreadsheet"
-        "text/csv"
-        "text/tab-separated-values"
-      ];
-    })
-  ];
 
   # On darwin, desktopToDarwinBundle builds the app icon from these.
   postInstall = ''
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
+    install -Dm644 packaging/linux/ai.storyteller.gridcraft.desktop \
+      $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 packaging/linux/ai.storyteller.gridcraft.mime.xml $out/share/mime/packages/ai.storyteller.gridcraft.xml
