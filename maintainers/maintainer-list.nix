@@ -23742,6 +23742,12 @@
     githubId = 175521;
     name = "Patrick Rauscher";
   };
+  pravin = {
+    email = "pravinp@gmail.com";
+    github = "pravin";
+    githubId = 12790;
+    name = "Pravin Paratey";
+  };
   preisschild = {
     email = "florian@florianstroeger.com";
     github = "Preisschild";
