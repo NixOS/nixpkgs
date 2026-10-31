@@ -13661,12 +13661,6 @@
     githubId = 184898;
     name = "Jirka Marsik";
   };
-  jitwit = {
-    email = "jrn@bluefarm.ca";
-    github = "jitwit";
-    githubId = 51518420;
-    name = "jitwit";
-  };
   jjacke13 = {
     email = "vaios.k@pm.me";
     github = "jjacke13";
