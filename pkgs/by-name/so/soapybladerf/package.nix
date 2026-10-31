@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   libbladeRF,
@@ -11,21 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapybladerf";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyBladeRF";
     tag = "soapy-bladerf-${finalAttrs.version}";
-    hash = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
+    hash = "sha256-kKt13/jMjb+CKmopasNFIMEgS+jOR2vB+OU5BFp10wc=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyBladeRF/commit/f141b61624f24a56aa3bdf7b0cc61c9fa65c26a3.patch";
-      hash = "sha256-szqHbSAHiK0F83bxYnrblEBi/U7tpD0AXotYV1eTFxU=";
-    })
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
