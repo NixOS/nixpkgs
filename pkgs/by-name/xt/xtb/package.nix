@@ -30,15 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xtb";
   # No tagged release supports the tblite 0.6 / dftd4 4.2 API; the latest tag (6.7.1) targets
   # tblite 0.3. Track master, which builds against the current grimme-lab stack packaged in nixpkgs
-  version = "6.7.1-unstable-2026-07-13";
+  version = "bleed-unstable-2026-09-25";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "xtb";
-    rev = "b31754bf3c7cccf8c242c469b03ae675e04bd608";
-    hash = "sha256-HLKSVP/U6rggFYE9l7e4rRBGxkdWCmiYf/KpsQmF3Yw=";
+    rev = "17790202eb14eeb40effc05008f5508fb0a52157";
+    hash = "sha256-3P+X/zLUM0BVSAKow3Z/7aylZ9IZMDS2R+/NZSJRE4U=";
   };
 
   # The `solve`/`solve4` eigensolvers size the DSYGVD workspace from a `LWORK = -1` query.
