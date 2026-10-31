@@ -53,10 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "binocle";
     homepage = "https://github.com/sharkdp/binocle";
     changelog = "https://github.com/sharkdp/binocle/releases/tag/v0.3.2";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

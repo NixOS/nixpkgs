@@ -32,10 +32,12 @@ buildPythonPackage rec {
     description = "Library to parse Rubygem gemspec and Gemfile files";
     homepage = "https://github.com/aboutcode-org/gemfileparser2";
     changelog = "https://github.com/aboutcode-org/gemfileparser2/blob/v${version}/CHANGELOG.rst";
-    license = with lib.licenses; [
-      mit # or
-      gpl3Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        gpl3Plus
+      ];
     maintainers = with lib.maintainers; [ harvidsen ];
   };
 }

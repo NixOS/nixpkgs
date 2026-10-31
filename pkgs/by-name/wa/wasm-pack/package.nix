@@ -36,10 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
     homepage = "https://github.com/wasm-bindgen/wasm-pack";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       dhkl
       hythera

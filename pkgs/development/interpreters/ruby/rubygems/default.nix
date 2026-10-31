@@ -36,10 +36,12 @@ stdenv.mkDerivation rec {
     description = "Package management framework for Ruby";
     changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
-    license = with lib.licenses; [
-      mit # or
-      ruby
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        ruby
+      ];
     mainProgram = "gem";
     maintainers = with lib.maintainers; [ zimbatm ];
   };

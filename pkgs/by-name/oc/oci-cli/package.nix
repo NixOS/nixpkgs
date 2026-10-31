@@ -116,10 +116,12 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
     changelog = "https://github.com/oracle/oci-cli/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      upl
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        upl
+      ];
     mainProgram = "oci";
     maintainers = with lib.maintainers; [
       ilian

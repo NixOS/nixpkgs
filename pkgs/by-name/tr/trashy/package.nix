@@ -32,10 +32,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ oberblastmeister ];
     mainProgram = "trash";
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8

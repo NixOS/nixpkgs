@@ -86,6 +86,7 @@ The following are all valid examples:
   - This applies when the package directly incorporates code under another license.
 
 These compound licenses may also be combined within each other: `with lib.licenses; AND [ (OR [ mit asl20 ]) gpl3Plus ]`.
+See [Multiple Licenses](#sec-meta-license-multiple) for the full set of license operators.
 
 The list of valid licenses is defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
 See [Licenses](#sec-meta-license) for additional generic values.
@@ -227,23 +228,75 @@ If this list is not empty, the package is marked as "insecure", meaning that it 
 
 When available, use a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
 Otherwise, a custom license can be defined using `lib.licenses.mkLicense`.
-These generic options are also available:
 
-### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
+### Multiple Licenses {#sec-meta-license-multiple}
+
+If the package is covered under multiple licenses, use license operators to produce compound licenses.
+These operators model the structure of SPDX license expressions, and their semantics are defined in the [SPDX specification][spdx-spec].
+
+#### `lib.licenses.OR [ ... ]` {#lib.licenses.OR}
+
+If the user is able to choose between two or more licenses, use `OR`.
+
+```nix
+# Apache-2.0 OR MIT
+lib.licenses.OR [
+  lib.licenses.asl20
+  lib.licenses.mit
+]
+```
+
+#### `lib.licenses.AND [ ... ]` {#lib.licenses.AND}
+
+If the user must simultaneously abide by the rules of two or more licenses, use `AND`.
+
+```nix
+# GPL-2.0-only AND CC-by-30
+lib.licenses.AND [
+  lib.licenses.gpl2Only
+  lib.licenses.cc-by-30
+]
+```
+
+#### `lib.licenses.WITH license exception` {#lib.licenses.WITH}
+
+If the license text is modified from the original, use `WITH`.
+Common license exceptions are included in `lib.licenses`.
+
+```nix
+# Apache-2.0 WITH LLVM-exception
+lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception
+```
+
+#### `lib.licenses.PLUS license` {#lib.licenses.PLUS}
+
+If the content is licensed under the current version of the license or any later version, use `PLUS`.
+This does not apply to GPL licenses.
+
+```nix
+# CDDL-1.0+
+lib.licenses.PLUS lib.licenses.cddl
+```
+
+### Generic Licenses {#sec-meta-license-generic}
+
+Although it’s typically better to indicate the specific license, the following generic options are also available.
+
+#### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
 
 Catch-all for free software licenses not listed above.
 
-### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
+#### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
 
 Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the *output* of the derivation. This means that the package can be included in the Nixpkgs channel.
 
 Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies `patchelf` to make them work. Thus, its license is `"unfree"` and it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
+#### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
 
 Unfree package that cannot be redistributed. You can build it yourself, but you cannot redistribute the output of the derivation. Thus it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
+#### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
 
@@ -378,3 +431,5 @@ It provides an interface for additional identifiers of `mkDerivation.src` or for
 
 Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
 For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.
+
+[spdx-spec]: https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/

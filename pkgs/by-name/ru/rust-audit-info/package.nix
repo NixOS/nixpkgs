@@ -23,10 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line tool to extract the dependency trees embedded in binaries by cargo-auditable";
     mainProgram = "rust-audit-info";
     homepage = "https://github.com/rust-secure-code/cargo-auditable/tree/master/rust-audit-info";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

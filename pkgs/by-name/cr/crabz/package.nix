@@ -31,10 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
     changelog = "https://github.com/sstadick/crabz/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      unlicense # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        unlicense
+        mit
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "crabz";
   };
