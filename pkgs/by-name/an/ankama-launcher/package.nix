@@ -5,15 +5,15 @@
 }:
 appimageTools.wrapType2 (finalAttrs: {
   pname = "ankama-launcher";
-  version = "3.15.5";
+  version = "3.15.9";
 
   # The original URL for the launcher is:
   # https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage
   # As it does not encode the version, we use the wayback machine (web.archive.org) to get a fixed URL.
   # To update the client, head to web.archive.org and create a new snapshot of the download page.
   src = fetchurl {
-    url = "https://web.archive.org/web/20260909143802/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
-    hash = "sha256-6q0kAFXtrnud8rvxN6o6mIiwklzjZYAopf1MlS3ODbU=";
+    url = "https://web.archive.org/web/20261026140056/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
+    hash = "sha256-qb0lUPSs3uTMxgoE2Rt9Cxgexfmv10BLroI8JmXe5mA=";
   };
 
   extraPkgs = pkgs: [ pkgs.wine ];
