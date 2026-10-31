@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
+  postInstall = ''
+    install -Dm644 ../com.librumreader.librum.metainfo.xml -t $out/share/metainfo
+  '';
+
   meta = {
     description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''

@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
+      install -Dm644 -t $out/share/metainfo $src/src/unix/assets/net.86box.86Box.metainfo.xml
 
       for icon in $src/src/unix/assets/*x*/net.86box.86Box.png; do
         size=$(basename "$(dirname "$icon")")

@@ -77,6 +77,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     ln -s $out/bin/$pname-qt $out/bin/$pname
+    install -Dm644 ../eiskaltdcpp-qt/eiskaltdcpp-qt.appdata.xml $out/share/metainfo/com.github.eiskaltdcpp.metainfo.xml
   '';
 
   preFixup = ''

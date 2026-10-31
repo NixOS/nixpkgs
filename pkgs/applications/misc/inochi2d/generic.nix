@@ -118,6 +118,7 @@ buildDubPackage (
 
       mkdir -p $out/share/${pname}
       cp -r out/* $out/share/${pname}
+      install -Dm644 build-aux/linux/${pname}.appdata.xml -t $out/share/metainfo
 
       runHook postInstall
     '';

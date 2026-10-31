@@ -197,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 \
       ../platforms/freedesktop/dev.twilitrealm.dusk.desktop \
       $out/share/applications/dev.twilitrealm.dusk.desktop
+    install -Dm644 \
+      ../platforms/freedesktop/dev.twilitrealm.dusk.metainfo.xml \
+      $out/share/metainfo/dev.twilitrealm.dusk.metainfo.xml
 
     for size in 16x16 32x32 48x48 64x64 128x128 256x256 512x512 1024x1024; do
       install -Dm644 \

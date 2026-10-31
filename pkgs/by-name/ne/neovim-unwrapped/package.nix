@@ -258,6 +258,10 @@ stdenv.mkDerivation (
       '') finalAttrs.treesitter-parsers
     );
 
+    postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../runtime/nvim.appdata.xml $out/share/metainfo/io.neovim.nvim.metainfo.xml
+    '';
+
     shellHook = ''
       export VIMRUNTIME=$PWD/runtime
     '';

@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/serioussam --prefix LD_LIBRARY_PATH : ${libvorbis}/lib
     wrapProgram $out/bin/serioussamse --prefix LD_LIBRARY_PATH : ${libvorbis}/lib
+    install -Dm644 ../appimage/serioussam{,se}/*.appdata.xml -t $out/share/metainfo
   '';
 
   meta = {

@@ -167,6 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+      install -Dm644 -t $out/share/metainfo Flatpak/org.DolphinEmu.dolphin-emu.metainfo.xml
+      # remove the generated release, which has the SOURCE_DATE_EPOCH date
+      substituteInPlace $out/share/metainfo/org.DolphinEmu.dolphin-emu.metainfo.xml \
+        --replace-fail '<release version="${finalAttrs.version}" date="1980-01-01"/>' ""
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Only gets installed automatically if the standalone executable is used

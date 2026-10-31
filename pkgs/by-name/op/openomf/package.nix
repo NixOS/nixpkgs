@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     unzip -p ${icons} omf-logo/omf-256x256.png > $out/share/icons/hicolor/256x256/apps/org.openomf.OpenOMF.png
     install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop $out/share/applications/org.openomf.OpenOMF.desktop
+    install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.metainfo.xml -t $out/share/metainfo
   '';
 
   doInstallCheck = true;

@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp ../LICENSE ../README.md $out/share/doc/js8call
     cp ../artwork/js8call_icon.png $out/share/icons/hicolor/128x128/apps
     cp ../.github/workflows/misc/JS8Call.desktop $out/share/applications
+    install -Dm644 ../.github/workflows/misc/JS8Call.appdata.xml $out/share/metainfo/io.github.JS8Call_improved.JS8Call.metainfo.xml
     runHook postInstall
   '';
 

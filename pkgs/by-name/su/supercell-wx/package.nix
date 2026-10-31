@@ -167,9 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  # Install .desktop file and icons
+  # Install .desktop file, AppStream metainfo and icons
   postInstall = ''
     install -m0644 -D "$src/scwx-qt/res/linux/supercell-wx.desktop" "$out/share/applications/supercell-wx.desktop"
+    install -m0644 -D "scwx-qt/res/linux/net.supercellwx.app.metainfo.xml" "$out/share/metainfo/net.supercellwx.app.metainfo.xml"
     install -m0644 -D "$src/scwx-qt/res/icons/scwx-256.png"  "$out/share/icons/hicolor/256x256/apps/supercell-wx.png"
     install -m0644 -D "$src/scwx-qt/res/icons/scwx-64.png"  "$out/share/icons/hicolor/64x64/apps/supercell-wx.png"
   '';

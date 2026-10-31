@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "NCINE_OVERRIDE_CONTENT_PATH" "${jazz2-content}")
   ];
 
+  # CMake installs the metainfo only for Flatpak builds (`NCINE_BUILD_FLATPAK`)
+  postInstall = ''
+    install -Dm644 ../Sources/project.metainfo.xml $out/share/metainfo/dev.de4th.jazz2.metainfo.xml
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
