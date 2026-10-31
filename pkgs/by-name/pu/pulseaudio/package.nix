@@ -38,6 +38,7 @@
   ninja,
   m4,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
   fetchpatch2,
   nixosTests,
 
@@ -56,6 +57,13 @@
   bluetoothSupport ? stdenv.hostPlatform.isLinux,
   advancedBluetoothCodecs ? false,
 
+  glibSupport ? !stdenv.hostPlatform.isDarwin,
+  gsettingsSupport ?
+    glibSupport
+    && !libOnly
+    && stdenv.hostPlatform.isLinux
+    && stdenv.buildPlatform == stdenv.hostPlatform,
+
   remoteControlSupport ? false,
 
   zeroconfSupport ? false,
@@ -68,12 +76,15 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${finalAttrs.version}.tar.xz";
     hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
@@ -99,7 +110,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fails in LXC containers where not all cores are enabled, where this setaffinity call will return EINVAL
     sed -i "/fail_unless(pthread_setaffinity_np/d" src/tests/once-test.c
-  '';
+  ''
+  + (lib.optionalString libOnly ''
+    # Disable the CLI tools when libonly
+    substituteInPlace src/meson.build \
+      --replace-fail "  'pulsecore/sndfile-util.c'," "" \
+      --replace-fail "iconv_dep, sndfile_dep, dbus_dep," "iconv_dep, dbus_dep," \
+      --replace-fail "subdir('utils')" ""
+    # libsndfile is only used in the daemon aned the CLI tools
+    substituteInPlace meson.build \
+      --replace-fail "sndfile_dep = dependency('sndfile', version : '>= 1.0.20')" \
+                     "sndfile_dep = declare_dependency()"
+  '');
 
   outputs = [
     "out"
@@ -114,9 +136,8 @@ stdenv.mkDerivation rec {
     perlPackages.perl
     perlPackages.XMLParser
     m4
-    udevCheckHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
+  ++ lib.optionals (!libOnly && glibSupport) [ glib ]
   # gstreamer plugin discovery requires wrapping
   ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
 
@@ -124,22 +145,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtool
-    libsndfile
     soxr
     speexdsp
-    fftwFloat
     check
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    glib
     dbus
+  ]
+  ++ lib.optionals glibSupport [
+    glib
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
     libintl
   ]
   ++ lib.optionals (!libOnly) (
     [
+      fftwFloat
       libasyncns
+      libsndfile
       webrtc-audio-processing_1
     ]
     ++ lib.optional jackaudioSupport libjack2
@@ -189,13 +212,14 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "bluez5" (!libOnly && bluetoothSupport))
     # advanced bluetooth audio codecs are provided by gstreamer
     (lib.mesonEnable "bluez5-gstreamer" (!libOnly && bluetoothSupport && advancedBluetoothCodecs))
+    (lib.mesonBool "daemon" (!libOnly))
     (lib.mesonOption "database" "simple")
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
+    (lib.mesonEnable "fftw" (!libOnly))
+    (lib.mesonEnable "glib" glibSupport)
     # gsettings does not support cross-compilation
-    (lib.mesonEnable "gsettings" (
-      stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
-    ))
+    (lib.mesonEnable "gsettings" gsettingsSupport)
     (lib.mesonEnable "gstreamer" false)
     (lib.mesonEnable "gtk" false)
     (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
@@ -225,7 +249,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.mesonEnable "consolekit" false)
     (lib.mesonEnable "dbus" false)
-    (lib.mesonEnable "glib" false)
     (lib.mesonEnable "oss-output" false)
   ];
 
@@ -234,15 +257,17 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (udevSupport && !libOnly) [
+    udevCheckHook
+  ];
 
   postInstall =
     lib.optionalString libOnly ''
       find $out/share -maxdepth 1 -mindepth 1 ! -name "vala" -prune -exec rm -r {} \;
       find $out/share/vala -maxdepth 1 -mindepth 1 ! -name "vapi" -prune -exec rm -r {} \;
-      rm -r $out/{.bin-unwrapped,etc,lib/pulse-*}
     ''
     + ''
       moveToOutput lib/cmake "$dev"
@@ -252,9 +277,9 @@ stdenv.mkDerivation rec {
     '';
 
   preFixup =
-    lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
+    lib.optionalString gsettingsSupport ''
       wrapProgram $out/libexec/pulse/gsettings-helper \
-       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
+       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}" \
        --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
     ''
     # add .so symlinks for modules to be found under macOS
@@ -303,4 +328,4 @@ stdenv.mkDerivation rec {
       one are easily achieved using a sound server.
     '';
   };
-}
+})
