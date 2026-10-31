@@ -9,12 +9,12 @@
 
 buildDunePackage rec {
   pname = "vdom";
-  version = "0.3";
+  version = "0.4";
   minimalOCamlVersion = "4.08";
 
   src = fetchzip {
     url = "https://github.com/LexiFi/ocaml-vdom/archive/refs/tags/${version}.tar.gz";
-    hash = "sha256-mlXOb+KCdHWNL9PAppan7m7JaP83JEjq+tu14JI+NJo=";
+    hash = "sha256-fkvS55VOiBlaRbzGXmGnrWDkhbuibuJnhILCKn5DAnc=";
   };
 
   nativeBuildInputs = [
