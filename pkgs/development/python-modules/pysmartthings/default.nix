@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysmartthings";
-  version = "4.0.3";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "andrewsayre";
     repo = "pysmartthings";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CltBrBmyNfCz0Ogpu2/NAZzH6zEk69mhBbanB4h0Abg=";
+    hash = "sha256-8D+Xtd7y105z7+q+3zTXC2anasi2uYZzISOtmweGA6Q=";
   };
 
   build-system = [ hatchling ];
