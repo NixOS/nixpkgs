@@ -3,12 +3,14 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  pkgs,
   perlPackages,
+  imagemagickBig,
   gettext,
   makeWrapper,
-  ImageMagick,
   which,
   highlight,
+  gitUpdater,
   gitSupport ? false,
   git,
   docutilsSupport ? false,
@@ -28,13 +30,23 @@
   extraUtils ? [ ],
 }:
 
+let
+  # Build the Image::Magick perl module against imagemagickBig instead of the default imagemagick.
+  ImageMagick =
+    (perlPackages.override {
+      pkgs = pkgs // {
+        imagemagick = imagemagickBig;
+      };
+    }).ImageMagick;
+in
+
 stdenv.mkDerivation rec {
   pname = "ikiwiki";
-  version = "3.20200202.3";
+  version = "3.20260201";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/i/ikiwiki/ikiwiki_${version}.orig.tar.xz";
-    sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
+    sha256 = "SU+LBc8uJNuN4BsaACNL2U7C7LOEIhMH2R7f1Jjp8I4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -85,12 +97,6 @@ stdenv.mkDerivation rec {
     # A few markdown tests fail, but this is expected when using Text::Markdown
     # instead of Text::Markdown::Discount.
     ./remove-markdown-tests.patch
-
-    (fetchpatch {
-      name = "Catch-up-to-highlight-4.0-API-change";
-      url = "http://source.ikiwiki.branchable.com/?p=source.git;a=patch;h=9ea3f9dfe7c0341f4e002b48728b8139293e19d0";
-      sha256 = "16s4wvsfclx0a5cm2awr69dvw2vsi8lpm0d7kyl5w0kjlmzfc7h9";
-    })
   ];
 
   postPatch = ''
@@ -134,6 +140,12 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
   doCheck = true;
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "git://git.ikiwiki.info/";
+    allowedVersions = "^[0-9]";
+  };
 
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
