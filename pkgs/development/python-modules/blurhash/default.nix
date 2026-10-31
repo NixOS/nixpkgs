@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "blurhash";
-  version = "1.1.5";
+  version = "1.1.5-pub-2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "blurhash-python";
     tag = "v${version}";
-    hash = "sha256-lTPn2GTD7eQ9XkZyuttFqEvNgzcx6b7OdeMc5WOXrJs=";
+    hash = "sha256-bORzsgM7H57TONwP2vhCxcDrlYzfPBigevzYxAOZJdY=";
   };
 
   build-system = [ setuptools ];
