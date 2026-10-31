@@ -3675,12 +3675,8 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/julia { })
     julia_110-bin
-    julia_111-bin
-    julia_112-bin
     julia_113-bin
     julia_110
-    julia_111
-    julia_112
     julia_113
     ;
 
