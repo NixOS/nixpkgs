@@ -28,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Upstream installs common/, parse/ and protocol/ but not generated/, even
   # though that header is part of the library's public API (consumers are
-  # expected to vendor the checkout directly). TODO: Upstream.
+  # expected to vendor the checkout directly). Upstream PR:
+  # https://github.com/mavlink/libevents/pull/18
   patches = [ ./install-generated-header.patch ];
 
   cmakeFlags = [

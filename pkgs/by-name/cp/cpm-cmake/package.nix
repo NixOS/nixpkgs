@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # distinguishing "found on the system" from "built by CPM") sees it as
     # unset even though CPM did find and use the real package. Confirmed
     # against upstream's latest release (v0.43.2); not specific to this
-    # nixpkgs packaging. TODO: Upstream.
+    # nixpkgs packaging. Upstream PR: https://github.com/cpm-cmake/CPM.cmake/pull/721
     ./forward-found-variable.patch
   ];
 
