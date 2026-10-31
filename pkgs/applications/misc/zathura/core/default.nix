@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "2026.10.4";
+  version = "2026.10.23";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwmt";
     repo = "zathura";
     tag = finalAttrs.version;
-    hash = "sha256-g3FWbuPI2fhBHIHRynDiRjB0eZOf4nAcVfg/OA2EEPw=";
+    hash = "sha256-X0hMPUvJ7kzx+fyIibtNOYsk23lOhycRsuAZ+8ZKmA8=";
   };
 
   outputs = [
