@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "6.0.0";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zWOnjTaifwhzIk9QLksf/g3EF/SOg1vJmM4IQ5P1+H8=";
+    hash = "sha256-WClUYW4DU/hy6F5Q2yylSPWqxkTtca/LlV36Ekmba0o=";
   };
 
   passthru = {
@@ -70,9 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  doCheck = true;
+
   cmakeFlags = [
     "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"
     "-DLOTUS_SETFACL_EXECUTABLE=${acl}/bin/setfacl"
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   postFixup = ''
