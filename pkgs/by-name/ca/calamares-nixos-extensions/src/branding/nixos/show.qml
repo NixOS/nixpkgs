@@ -30,7 +30,7 @@ Presentation
         }
         Image {
             id: background1
-            source: "gfx-landing-reproducible.png"
+            source: "@branding@/features/reproducable.svg"
             width: 200; height: 200
             fillMode: Image.PreserveAspectFit
             anchors.bottom: text1.top
@@ -62,7 +62,7 @@ Presentation
         }
         Image {
             id: background2
-            source: "gfx-landing-declarative.png"
+            source: "@branding@/features/declarative.svg"
             width: 200; height: 200
             fillMode: Image.PreserveAspectFit
             anchors.bottom: text2.top
@@ -93,7 +93,7 @@ Presentation
         }
         Image {
             id: background3
-            source: "gfx-landing-reliable.png"
+            source: "@branding@/features/reliable.svg"
             width: 200; height: 200
             fillMode: Image.PreserveAspectFit
             anchors.bottom: text3.top
