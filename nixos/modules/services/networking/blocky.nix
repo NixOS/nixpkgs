@@ -38,6 +38,9 @@ in
         "network-online.target"
         "nss-lookup.target"
       ];
+      after = [
+        "network-online.target"
+      ];
       before = [
         "nss-lookup.target"
       ];
