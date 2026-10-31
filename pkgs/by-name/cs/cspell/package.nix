@@ -98,6 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/streetsidesoftware/cspell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "cspell";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
