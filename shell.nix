@@ -18,32 +18,22 @@
     # TODO: remove after 26.05 support ends.
     if system == "x86_64-darwin" && (builtins.readFile ./.version) == "26.05" then
       let
-        pinned = (builtins.fromJSON (builtins.readFile ./ci/pinned.json)).pins;
+        inputs = import ./ci/inputs;
         warn = builtins.warn or (import ./lib).warn;
 
-        inherit (pinned."nixpkgs-26.05-darwin")
-          url
-          hash
-          revision
-          branch
-          ;
-
         withWarning = warn (toString [
-          "The currently pinned Nixpkgs (${pinned.nixpkgs.revision}) does not support ${system},"
-          "using revision (${revision}) from ${branch}."
+          "The currently pinned Nixpkgs (${inputs.nixpkgs.rev}) does not support ${system},"
+          "using revision (${inputs.nixpkgs-26_05-darwin.rev}) from nixpkgs-26.05-darwin."
           "You may experience some differences to CI."
         ]);
       in
-      withWarning fetchTarball {
-        inherit url;
-        sha256 = hash;
-      }
+      withWarning inputs.nixpkgs-26_05-darwin
     else
       null
   ),
-}:
+}@args:
 let
-  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
+  inherit (import ./ci args) pkgs fmt;
 
   # For `nix-shell -A hello`
   curPkgs = removeAttrs (import ./. { inherit system; }) [
