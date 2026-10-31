@@ -2107,7 +2107,6 @@ mapAliases {
   pcb = throw "'pcb' has been removed as it is unmaintained upstream."; # Added 2026-07-26
   pcmanx-gtk2 = throw "'pcmanx-gtk2' has been removed has gtk2 has reach end of life"; # Added 2026-03-19
   pcmciaUtils = warnAlias "'pcmciaUtils' has been renamed to 'pcmciautils'" pcmciautils; # Added 2026-02-12
-  pcp = throw "'pcp' has been removed because the upstream repo was archived and it hasn't been updated since 2021"; # Added 2025-09-23
   pcre16 = throw "'pcre16' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2025-05-29
   pcre = throw "'pcre' has been removed because it is end of life and was not updated upstream since 2015"; # Added 2026-10-25
   pcre-cpp = throw "'pcre-cpp' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2026-10-20
