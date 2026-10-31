@@ -42,10 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y2u+C0ioSORKkEiKRLAABGzTSAnoFU3J7OIlNOC4MAQ=";
   };
 
-  postPatch = ''
-    substituteInPlace src/capture/v4l2.c src/image_writer.c \
-      --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
-  '';
+  postPatch =
+    let
+      nv-codec-headers = lib.findFirst (p: p.pname or "" == "nv-codec-headers") null ffmpeg.buildInputs;
+    in
+    ''
+      substituteInPlace src/capture/v4l2.c src/image_writer.c \
+        --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ''
+    # upstream guesses the NVENC API from libavcodec's major version
+    + lib.optionalString (nv-codec-headers != null) ''
+      substituteInPlace src/codec_query/nvenc.c \
+        --replace-fail "#if defined(GSR_FFMPEG_STATIC)" \
+          $'#if 1\n#define FFMPEG_REQUIRED_NVENC_API_VERSION NVENCAPI_PACKED_VERSION(${lib.versions.major nv-codec-headers.version}, ${lib.versions.minor nv-codec-headers.version})\n#elif defined(GSR_FFMPEG_STATIC)'
+    '';
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
