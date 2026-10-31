@@ -79,8 +79,8 @@
       serverConfigChange = "${declarativeSpecPath}/serverConfigChange";
     in
     ''
-      simple.start(allow_reboot=True)
-      declarative.start(allow_reboot=True)
+      simple.start_and_allow_reboot()
+      declarative.start_and_allow_reboot()
 
 
       def test_webui(machine, port):
