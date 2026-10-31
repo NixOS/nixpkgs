@@ -29,6 +29,7 @@
   readline,
   numactl,
   libapparmor,
+  libselinux,
   json_c,
   getopt,
   perlPackages,
@@ -45,11 +46,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-  version = "1.56.2";
+  version = "1.58.1";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-u0SJGnleC3khPO4sSRSVpt1ksh9ydEVZFzDX94kBaJo=";
+    hash = "sha256-G45bTvQ+hjAsPO3Lb7wBS+W8pehcoode8Xw89nxnEYA=";
   };
 
   strictDeps = true;
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     db
     numactl
     libapparmor
+    libselinux
     perlPackages.ModuleBuild
     python3
     libtirpc
@@ -136,9 +138,16 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
+  # Extra arguments appended to every wrapProgram call. Overridable by
+  # downstream packages (e.g. libguestfs-with-appliance-nix) to inject
+  # additional PATH entries or environment variables without double-wrapping.
+  extraWrapArgs = [ ];
+
   outputs = [
     "out"
     "guestfsd"
+    "init"
+    "udev"
   ];
 
   postInstall = ''
@@ -151,8 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
-        --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
+        --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}" \
+        ${lib.escapeShellArgs finalAttrs.extraWrapArgs}
     done
+
+    install -Dm755 appliance/init $init/bin/init
+    install -Dm644 appliance/99-guestfs-serial.rules $udev/etc/udev/rules.d/99-guestfs-serial.rules
   '';
 
   postFixup = lib.optionalString (appliance != null) ''
