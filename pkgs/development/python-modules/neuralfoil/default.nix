@@ -1,26 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
+  fetchPypi,
+  hatchling,
   numpy,
   aerosandbox,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "neuralfoil";
-  version = "0.2.3";
+  version = "0.3.3";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "peterdsharpe";
-    repo = "NeuralFoil";
-    rev = "46cda4041134d1b1794d3a81761d8d3e63f20855";
-    hash = "sha256-kbPHPJh8xcIdPYIiaxwYqpfcnYzzDD6F0tG3flR0j3M=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-mELkbPtOVQ7t0GX7gnPUv9OzDTZIBUEHsnQJQDjA7S8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
   dependencies = [
     numpy
     aerosandbox
@@ -28,7 +27,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "neuralfoil" ];
 
-  nativeBuildInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Airfoil aerodynamics analysis tool using physics-informed machine learning, in pure Python/NumPy";
@@ -36,4 +38,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})
