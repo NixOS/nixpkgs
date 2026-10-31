@@ -39,18 +39,23 @@
   # Enable plymouth
   boot.plymouth.enable = true;
 
-  environment.defaultPackages = with pkgs; [
-    # Include gparted for partitioning disks.
-    gparted
+  environment = {
+    defaultPackages = [
+      # Temporary workaround for #263295/#263289
+    ];
+    systemPackages = with pkgs; [
+      # Include gparted for partitioning disks.
+      gparted
 
-    # Include some editors.
-    vim
-    nano
+      # Include some editors.
+      vim
+      nano
 
-    # Firefox for reading the manual.
-    firefox
+      # Firefox for reading the manual.
+      firefox
 
-    mesa-demos
-  ];
+      mesa-demos
+    ];
+  };
 
 }
