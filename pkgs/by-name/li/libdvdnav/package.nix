@@ -1,22 +1,53 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  testers,
+  fetchFromGitLab,
+  gitUpdater,
+
   pkg-config,
+  meson,
+  ninja,
   libdvdread,
+
+  # for passthru.tests
+  gst_all_1,
+  vlc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdnav";
-  version = "6.1.1";
+  version = "7.0.0";
 
-  src = fetchurl {
-    url = "https://get.videolan.org/libdvdnav/${finalAttrs.version}/libdvdnav-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-wZGnR1lH0yP/doDPksD7G+gjdwGIXzdlbGTQTpjRjUg=";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = "libdvdnav";
+    tag = finalAttrs.version;
+    hash = "sha256-WuHgMsCEdIRJxvueixFQLMV4Q0gwh7p/KNKzHZZpLDM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+
   buildInputs = [ libdvdread ];
+
+  passthru = {
+    inherit libdvdread;
+
+    updateScript = gitUpdater { };
+
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      inherit (gst_all_1) gst-plugins-bad;
+    };
+  };
 
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
@@ -24,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "dvdnav" ];
   };
-
-  passthru = { inherit libdvdread; };
 })
