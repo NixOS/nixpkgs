@@ -12,6 +12,7 @@
   rocmPackages,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
+  normaliseNixPaths ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-NujxQ6d8K+cRlwPfcoJk9XC0GDeh6Omx8x+WkCbxTcs=";
   };
+
+  patches = lib.optionals normaliseNixPaths [
+    ./normalise-processes.patch
+  ];
 
   nativeBuildInputs = [
     cmake
