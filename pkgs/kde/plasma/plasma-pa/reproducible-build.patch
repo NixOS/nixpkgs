@@ -1,0 +1,43 @@
+commit 6cb12c0865c3584a883801d9754c8b1187df610e
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Sat Sep 26 09:42:56 2026 +0200
+
+    fix build nondeterminism
+    
+    This is a possible fix for https://bugs.kde.org/show_bug.cgi?id=526254
+    
+    I'll admit this is a bit of a stab in the dark, but the nondeterminism
+    I observed was that the code for 'proxy' on line 14
+    of `applet/KDEDProxy.qml` was not consistently generated, and that
+    refers to `kded`, which is possibly tied to `src/kded`, in which case
+    it might make sense that 'src' would need to be included before
+    'applet'.
+    
+    The nondeterminism does appear to trigger quite easily without this
+    change (by varying the build parallelism and retrying a few times),
+    which goes away after this change.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b5de4e1d..cd751300 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -115,8 +115,8 @@ ecm_set_disabled_deprecation_versions(QT 6.11.0
+ )
+ 
+ add_subdirectory(autotests)
+-add_subdirectory(applet)
+ add_subdirectory(src)
++add_subdirectory(applet)
+ add_subdirectory(appiumtests)
+ 
+ # add clang-format target for all our real source files
+diff --git a/applet/CMakeLists.txt b/applet/CMakeLists.txt
+index fb03cd85..6fc7ee0a 100644
+--- a/applet/CMakeLists.txt
++++ b/applet/CMakeLists.txt
+@@ -13,3 +13,5 @@ plasma_add_applet(org.kde.plasma.volume
+         main.xml
+     GENERATE_APPLET_CLASS
+ )
++
++add_dependencies(org.kde.plasma.volume plasma-volume-declarative)
