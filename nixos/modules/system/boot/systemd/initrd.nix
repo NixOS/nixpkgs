@@ -97,6 +97,7 @@ let
     "systemd-factory-reset-complete.service"
     "factory-reset-now.target"
     "systemd-fsck@.service"
+    "systemd-loop@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
@@ -613,6 +614,7 @@ in
         "${cfg.package}/lib/systemd/systemd-bsod"
         "${cfg.package}/lib/systemd/systemd-sysroot-fstab-check"
         "${cfg.package}/lib/systemd/systemd-factory-reset"
+        "${cfg.package}/bin/systemd-dissect"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
