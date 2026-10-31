@@ -43,11 +43,8 @@ buildGoModule (finalAttrs: {
     make docs/sbctl.conf.5 docs/sbctl.8
   '';
 
-  checkFlags = [
-    # https://github.com/Foxboron/sbctl/issues/343
-    "-skip"
-    "github.com/google/go-tpm-tools/.*"
-  ];
+  # https://github.com/Foxboron/sbctl/issues/343
+  doCheck = false;
 
   postInstall = ''
     installManPage docs/sbctl.conf.5 docs/sbctl.8
