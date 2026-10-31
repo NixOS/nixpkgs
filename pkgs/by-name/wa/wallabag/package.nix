@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wallabag";
-  version = "2.6.14";
+  version = "2.6.15";
 
   # Release tarball includes vendored files
   src = fetchurl {
     url = "https://github.com/wallabag/wallabag/releases/download/${finalAttrs.version}/wallabag-${finalAttrs.version}.tar.gz";
-    hash = "sha256-AEk0WuxZfazo4r4shcK453RCF/4V/VMDvKs4EXGe/w0=";
+    hash = "sha256-+eGuC+GMJWnz/VK5poa3z9DWWka7XbDam+81gcjaRb0=";
   };
 
   patches = [
