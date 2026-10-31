@@ -7,19 +7,18 @@ set -o pipefail
 root=$(pwd)
 
 if [ ! -f "./update.sh" ]; then
-    echo "Please run this script from within pkgs/misc/documentation-highlighter/!"
+    echo "Please run this script from within pkgs/by-name/do/documentation-highlighter/!"
     exit 1
 fi
 
 scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
 function finish {
-  rm -rf "$scratch"
+    rm -rf "$scratch"
 }
 trap finish EXIT
 
-
-mkdir $scratch/src
-cd $scratch/src
+mkdir "$scratch/src"
+cd "$scratch/src"
 
 curl \
     -X POST \
@@ -28,17 +27,16 @@ curl \
       "api": 2,
       "languages": ["bash", "nix", "shell"]
     }' \
-    https://highlightjs.org/api/download > $scratch/out.zip
-
+    https://highlightjs.org/api/download >"$scratch/out.zip"
 
 unzip "$scratch/out.zip"
-out="$root/"
+out="$root/src"
 mkdir -p "$out"
 cp ./highlight.min.js "$out/highlight.pack.js"
 cp ./{LICENSE,styles/mono-blue.css} "$out"
 
 (
-    echo "This file was generated with pkgs/misc/documentation-highlighter/update.sh"
+    echo "This file was generated with pkgs/by-name/do/documentation-highlighter/update.sh"
     echo ""
     cat README.md
-) > "$out/README.md"
+) >"$out/README.md"
