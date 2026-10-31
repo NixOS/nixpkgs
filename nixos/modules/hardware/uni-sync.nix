@@ -4,8 +4,16 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    maintainers
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    literalExpression
+    types
+    mkIf
+    ;
   cfg = config.hardware.uni-sync;
 in
 {
@@ -103,8 +111,8 @@ in
                     };
                     speed = mkOption {
                       type = types.int;
-                      default = "50";
-                      example = "100";
+                      default = 50;
+                      example = 100;
                       description = "Fan speed as percentage (clamped between 0 and 100).";
                     };
                   };
@@ -115,14 +123,29 @@ in
         }
       );
     };
+
+    configFile = mkOption {
+      type = types.nullOr types.path;
+      default =
+        if cfg.devices == [ ] then
+          null
+        else
+          builtins.toFile "uni-sync.json" (builtins.toJSON { configs = cfg.devices; });
+      defaultText = "Generated from `config.hardware.uni-sync.devices`";
+      description = "Configuration file to be mounted at `/etc/uni-sync/uni-sync.json`.";
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.etc."uni-sync/uni-sync.json".text = mkIf (cfg.devices != [ ]) (
-      builtins.toJSON { configs = cfg.devices; }
-    );
-
     environment.systemPackages = [ cfg.package ];
-    services.udev.packages = [ cfg.package ];
+
+    environment.etc."uni-sync/uni-sync.json".source = mkIf (cfg.configFile != null) cfg.configFile;
+
+    systemd.services.uni-sync = {
+      description = "Uni-Sync service";
+      serviceConfig.ExecStart = "${lib.getExe cfg.package}";
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ cfg.configFile ];
+    };
   };
 }
