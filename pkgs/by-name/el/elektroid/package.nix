@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elektroid";
-  version = "3.3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "dagargo";
     repo = "elektroid";
     rev = finalAttrs.version;
-    hash = "sha256-ozpc2+sXOedmYYXdIH6HibGszLyKsT8QYS0Trhem6kI=";
+    hash = "sha256-9ySyjhnFXn4xzLjHbbo+WSpzQINsXKPgETdlJ4eqgvQ=";
   };
 
   nativeBuildInputs = [
