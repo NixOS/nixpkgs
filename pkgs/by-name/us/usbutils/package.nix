@@ -11,6 +11,7 @@
   libusb1,
   hwdata,
   python3,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libusb1
     python3
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) [
+    bashNonInteractive
   ];
+
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -58,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 usbreset -t $out/bin
     installManPage ../man/usbreset.1
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://www.linux-usb.org/";
