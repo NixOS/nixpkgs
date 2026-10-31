@@ -1,0 +1,595 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 48493d1..c9f09f1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -291,12 +291,8 @@ if (BUILD_TESTING)
+     add_library(testing_dcgm_cublas_stubs STATIC)
+ endif()
+ 
+-add_executable(BwChecker_11)
+-add_executable(BwChecker_12)
+ add_executable(BwChecker_13)
+ add_executable(dcgmi)
+-add_executable(dcgmproftester11)
+-add_executable(dcgmproftester12)
+ add_executable(dcgmproftester13)
+ add_executable(nv-hostengine)
+ add_executable(nvvs)
+@@ -350,8 +346,6 @@ add_library(childprocess STATIC)
+ add_library(common_watch_objects STATIC)
+ add_library(cuda_lib_base STATIC)
+ add_library(dcgm_common STATIC)
+-add_library(dcgm_cuda_worker11 STATIC)
+-add_library(dcgm_cuda_worker12 STATIC)
+ add_library(dcgm_cuda_worker13 STATIC)
+ add_library(dcgm_entity_types STATIC)
+ add_library(dcgm_logging STATIC)
+@@ -363,8 +357,6 @@ add_library(dcgmi_objects_without_main STATIC)
+ add_library(nvvs_without_main_objects OBJECT)
+ add_library(nvvs_main_objects OBJECT)
+ add_library(nvvs_plugins_common_objects OBJECT)
+-add_library(pluginCudaCommon_11 STATIC)
+-add_library(pluginCudaCommon_12 STATIC)
+ add_library(pluginCudaCommon_13 STATIC)
+ add_library(remoteconn STATIC)
+ add_library(sdk_nvml_essentials_objects STATIC)
+@@ -390,35 +382,17 @@ add_library(dcgmmodulenvswitch SHARED)
+ add_library(dcgmmodulepolicy SHARED)
+ add_library(dcgmmodulesysmon SHARED)
+ 
+-add_library(ContextCreate_11 SHARED)
+-add_library(ContextCreate_12 SHARED)
+ add_library(ContextCreate_13 SHARED)
+-add_library(Diagnostic_11 SHARED)
+-add_library(Diagnostic_12 SHARED)
+ add_library(Diagnostic_13 SHARED)
+-add_library(Memory_11 SHARED)
+-add_library(Memory_12 SHARED)
+ add_library(Memory_13 SHARED)
+-add_library(Memtest_11 SHARED)
+-add_library(Memtest_12 SHARED)
+ add_library(Memtest_13 SHARED)
+-add_library(NcclTests_12 SHARED)
+ add_library(NcclTests_13 SHARED)
+-add_library(NVBandwidth_12 SHARED)
+ add_library(NVBandwidth_13 SHARED)
+-add_library(Pcie_11 SHARED)
+-add_library(Pcie_12 SHARED)
+ add_library(Pcie_13 SHARED)
+-add_library(TargetedPower_11 SHARED)
+-add_library(TargetedPower_12 SHARED)
+ add_library(TargetedPower_13 SHARED)
+-add_library(TargetedStress_11 SHARED)
+-add_library(TargetedStress_12 SHARED)
+ add_library(TargetedStress_13 SHARED)
+ 
+ add_library(dcgm SHARED)
+-add_library(dcgm_cublas_proxy11 SHARED)
+-add_library(dcgm_cublas_proxy12 SHARED)
+ add_library(dcgm_cublas_proxy13 SHARED)
+ add_library(pluginCommon SHARED)
+ 
+@@ -428,30 +402,14 @@ add_library(sdk_nvsdm_loader)
+ add_library(DCGM::dcgm ALIAS dcgm)
+ 
+ set_target_properties(
+-    ContextCreate_11
+-    ContextCreate_12
+     ContextCreate_13
+-    Diagnostic_11
+-    Diagnostic_12
+     Diagnostic_13
+-    Memory_11
+-    Memory_12
+     Memory_13
+-    Memtest_11
+-    Memtest_12
+     Memtest_13
+-    NcclTests_12
+     NcclTests_13
+-    NVBandwidth_12
+     NVBandwidth_13
+-    Pcie_11
+-    Pcie_12
+     Pcie_13
+-    TargetedPower_11
+-    TargetedPower_12
+     TargetedPower_13
+-    TargetedStress_11
+-    TargetedStress_12
+     TargetedStress_13
+     dcgm
+     dcgmmoduleconfig
+@@ -462,8 +420,6 @@ set_target_properties(
+     dcgmmodulenvswitch
+     dcgmmodulepolicy
+     dcgmmodulesysmon
+-    dcgm_cublas_proxy11
+-    dcgm_cublas_proxy12
+     dcgm_cublas_proxy13
+     pluginCommon
+     PROPERTIES
+@@ -477,8 +433,6 @@ set_target_properties(nvvs PROPERTIES
+     RUNTIME_OUTPUT_DIRECTORY nvvs)
+ 
+ set_target_properties(
+-    BwChecker_11
+-    BwChecker_12
+     BwChecker_13
+     PROPERTIES
+         INSTALL_RPATH "${DCGM_RPATH}:$ORIGIN/../../../${DCGM_TESTS_ARCH}")
+@@ -486,38 +440,20 @@ set_target_properties(
+ set_target_properties(dcgmi PROPERTIES RUNTIME_OUTPUT_DIRECTORY dcgmi)
+ 
+ set_target_properties(
+-    ContextCreate_11
+-    ContextCreate_12
+     ContextCreate_13
+-    Diagnostic_11
+-    Diagnostic_12
+     Diagnostic_13
+-    Memory_11
+-    Memory_12
+     Memory_13
+-    Memtest_11
+-    Memtest_12
+     Memtest_13
+-    NcclTests_12
+     NcclTests_13
+-    NVBandwidth_12
+     NVBandwidth_13
+-    Pcie_11
+-    Pcie_12
+     Pcie_13
+-    TargetedPower_11
+-    TargetedPower_12
+     TargetedPower_13
+-    TargetedStress_11
+-    TargetedStress_12
+     TargetedStress_13
+     nvml_injection
+     nvmli_public
+     nvvs_without_main_objects
+     nvvs_plugins_common_objects
+     pluginCommon
+-    pluginCudaCommon_11
+-    pluginCudaCommon_12
+     pluginCudaCommon_13
+     PROPERTIES
+         C_VISIBILITY_PRESET default
+@@ -636,18 +572,6 @@ install(
+         DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}"
+         COMPONENT Core)
+ 
+-install(
+-    TARGETS
+-        dcgm_cublas_proxy11
+-        dcgmproftester11
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-        COMPONENT Cuda11
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-        COMPONENT Cuda11)
+-
+ install(
+     TARGETS pluginCommon
+     LIBRARY
+@@ -658,36 +582,6 @@ install(
+         DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/plugins/cudaless"
+         COMPONENT Core)
+ 
+-install(
+-    TARGETS
+-        BwChecker_11
+-        ContextCreate_11
+-        Diagnostic_11
+-        Memory_11
+-        Memtest_11
+-        Pcie_11
+-        TargetedPower_11
+-        TargetedStress_11
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/plugins/cuda11"
+-        COMPONENT Cuda11
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/plugins/cuda11"
+-        COMPONENT Cuda11)
+-
+-install(
+-    TARGETS
+-        dcgm_cublas_proxy12
+-        dcgmproftester12
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-        COMPONENT Cuda12
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-        COMPONENT Cuda12)
+-
+ install(
+     TARGETS
+         dcgm_cublas_proxy13
+@@ -700,26 +594,6 @@ install(
+         DESTINATION "${CMAKE_INSTALL_BINDIR}"
+         COMPONENT Cuda13)
+ 
+-install(
+-    TARGETS
+-        BwChecker_12
+-        ContextCreate_12
+-        Diagnostic_12
+-        Memory_12
+-        Memtest_12
+-        NcclTests_12
+-        NVBandwidth_12
+-        Pcie_12
+-        TargetedPower_12
+-        TargetedStress_12
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/plugins/cuda12"
+-        COMPONENT Cuda12
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${PROJECT_NAME}/plugins/cuda12"
+-        COMPONENT Cuda12)
+-
+  install(
+     TARGETS
+         BwChecker_13
+@@ -750,8 +624,6 @@ install(
+ install(
+     TARGETS
+         dcgm
+-        dcgm_cublas_proxy11
+-        dcgm_cublas_proxy12
+         dcgm_cublas_proxy13
+         dcgmi
+         dcgmmoduleconfig
+@@ -762,8 +634,6 @@ install(
+         dcgmmodulenvswitch
+         dcgmmodulepolicy
+         dcgmmodulesysmon
+-        dcgmproftester11
+-        dcgmproftester12
+         dcgmproftester13
+         nv-hostengine
+         nvml_injection
+@@ -785,44 +655,6 @@ install(
+         DESTINATION "${CMAKE_INSTALL_DATADIR}/dcgm_tests/apps/nvvs/plugins/cudaless"
+         COMPONENT Tests)
+ 
+-install(
+-    TARGETS
+-        BwChecker_11
+-        ContextCreate_11
+-        Diagnostic_11
+-        Memory_11
+-        Memtest_11
+-        Pcie_11
+-        TargetedPower_11
+-        TargetedStress_11
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_DATADIR}/dcgm_tests/apps/nvvs/plugins/cuda11"
+-        COMPONENT Tests
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_DATADIR}/dcgm_tests/apps/nvvs/plugins/cuda11"
+-        COMPONENT Tests)
+-
+-install(
+-    TARGETS
+-        BwChecker_12
+-        ContextCreate_12
+-        Diagnostic_12
+-        Memory_12
+-        Memtest_12
+-        NVBandwidth_12
+-        NcclTests_12
+-        Pcie_12
+-        TargetedPower_12
+-        TargetedStress_12
+-    LIBRARY
+-        DESTINATION "${CMAKE_INSTALL_DATADIR}/dcgm_tests/apps/nvvs/plugins/cuda12"
+-        COMPONENT Tests
+-        NAMELINK_SKIP
+-    RUNTIME
+-        DESTINATION "${CMAKE_INSTALL_DATADIR}/dcgm_tests/apps/nvvs/plugins/cuda12"
+-        COMPONENT Tests)
+-
+ install(
+     TARGETS
+         BwChecker_13
+diff --git a/cmake/FindCuda.cmake b/cmake/FindCuda.cmake
+index c3f42f8..5b5da72 100644
+--- a/cmake/FindCuda.cmake
++++ b/cmake/FindCuda.cmake
+@@ -14,7 +14,7 @@
+ # limitations under the License.
+ #
+ 
+-set(_Cuda_VERSIONS 11.8 12.9 13.2)
++set(_Cuda_VERSIONS 13.3)
+ 
+ if (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+     set(_Cuda_TARGET_DIR "targets/x86_64-linux")
+diff --git a/common/CudaLib/CMakeLists.txt b/common/CudaLib/CMakeLists.txt
+index ecd7d7f..83aec6f 100644
+--- a/common/CudaLib/CMakeLists.txt
++++ b/common/CudaLib/CMakeLists.txt
+@@ -15,7 +15,7 @@
+ add_subdirectory(mock)
+ 
+ target_include_directories(cuda_lib_base PUBLIC
+-    "${CUDA12_INCLUDE_DIR}")
++    "${CUDA13_INCLUDE_DIR}")
+ target_include_directories(cuda_lib_base PUBLIC
+     "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+diff --git a/common/CudaLib/mock/CMakeLists.txt b/common/CudaLib/mock/CMakeLists.txt
+index 6661593..ebde471 100644
+--- a/common/CudaLib/mock/CMakeLists.txt
++++ b/common/CudaLib/mock/CMakeLists.txt
+@@ -25,7 +25,7 @@ target_compile_definitions(mock_cuda_lib PUBLIC
+     CUDA_VERSION_USED=12)
+ 
+ target_include_directories(mock_cuda_lib PUBLIC
+-    "${CUDA12_INCLUDE_DIR}"
++    "${CUDA13_INCLUDE_DIR}"
+     "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+ target_link_libraries(mock_cuda_lib PUBLIC
+diff --git a/common/CudaLib/mock/tests/CMakeLists.txt b/common/CudaLib/mock/tests/CMakeLists.txt
+index ec13beb..3da23c3 100644
+--- a/common/CudaLib/mock/tests/CMakeLists.txt
++++ b/common/CudaLib/mock/tests/CMakeLists.txt
+@@ -21,7 +21,7 @@ target_sources(cudalibmocktests
+     PRIVATE
+         MockCudaLibTests.cpp)
+ 
+-target_include_directories(cudalibmocktests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(cudalibmocktests PRIVATE ${CUDA13_INCLUDE_DIR})
+ 
+ target_link_libraries(cudalibmocktests
+     PRIVATE
+diff --git a/common/CudaWorker/CMakeLists.txt b/common/CudaWorker/CMakeLists.txt
+index 406f5a9..a915e84 100644
+--- a/common/CudaWorker/CMakeLists.txt
++++ b/common/CudaWorker/CMakeLists.txt
+@@ -35,6 +35,4 @@ macro(define_dcgm_cuda_worker cuda_version)
+         DcgmDgemm.cpp)
+ endmacro()
+ 
+-define_dcgm_cuda_worker(11)
+-define_dcgm_cuda_worker(12)
+ define_dcgm_cuda_worker(13)
+diff --git a/cublas_proxy/CMakeLists.txt b/cublas_proxy/CMakeLists.txt
+index 7a79b12..ee0020d 100644
+--- a/cublas_proxy/CMakeLists.txt
++++ b/cublas_proxy/CMakeLists.txt
+@@ -38,6 +38,4 @@ macro(define_proxy_lib CUDA_VER)
+         rt)
+ endmacro()
+ 
+-add_subdirectory(Cuda11)
+-add_subdirectory(Cuda12)
+ add_subdirectory(Cuda13)
+diff --git a/dcgmproftester/CMakeLists.txt b/dcgmproftester/CMakeLists.txt
+index fc95413..d42ae5a 100644
+--- a/dcgmproftester/CMakeLists.txt
++++ b/dcgmproftester/CMakeLists.txt
+@@ -64,8 +64,6 @@ macro(define_dcgmproftester cuda_version)
+             ${COMMON_SRCS})
+ endmacro()
+ 
+-define_dcgmproftester(11)
+-define_dcgmproftester(12)
+ define_dcgmproftester(13)
+ 
+ install(
+diff --git a/dcgmproftester/tests/CMakeLists.txt b/dcgmproftester/tests/CMakeLists.txt
+index 0cdbc15..5dfb430 100644
+--- a/dcgmproftester/tests/CMakeLists.txt
++++ b/dcgmproftester/tests/CMakeLists.txt
+@@ -53,7 +53,7 @@ target_link_libraries(dcgmproftester_tests
+ target_include_directories(dcgmproftester_tests
+     PRIVATE
+         ${CMAKE_CURRENT_SOURCE_DIR}/..  # Include parent directory for dcgmproftester headers
+-        ${CUDA12_INCLUDE_DIR}          # Include CUDA headers for compilation
++        ${CUDA13_INCLUDE_DIR}          # Include CUDA headers for compilation
+         ${PROJECT_SOURCE_DIR}/cublas_proxy  # Include cublas_proxy headers
+         ${PROJECT_SOURCE_DIR}/common   # Include common headers
+         ${PROJECT_SOURCE_DIR}/common/tests  # Include common test helpers
+diff --git a/nvvs/plugin_src/contextcreate/tests/CMakeLists.txt b/nvvs/plugin_src/contextcreate/tests/CMakeLists.txt
+index 4570577..747293c 100644
+--- a/nvvs/plugin_src/contextcreate/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/contextcreate/tests/CMakeLists.txt
+@@ -26,7 +26,7 @@ target_sources(contextcreatetests
+ 
+ target_include_directories(contextcreatetests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(contextcreatetests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(contextcreatetests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(contextcreatetests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(contextcreatetests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(contextcreatetests PRIVATE ..) # include the plugin dir
+ target_include_directories(contextcreatetests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/cuda_common/tests/CMakeLists.txt b/nvvs/plugin_src/cuda_common/tests/CMakeLists.txt
+index 9ea7e05..ae4c1d4 100644
+--- a/nvvs/plugin_src/cuda_common/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/cuda_common/tests/CMakeLists.txt
+@@ -25,7 +25,7 @@ target_sources(cudacommontests
+ 
+ target_include_directories(cudacommontests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(cudacommontests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(cudacommontests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(cudacommontests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(cudacommontests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(cudacommontests PRIVATE ..) # include the plugin dir
+ target_include_directories(cudacommontests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/diagnostic/tests/CMakeLists.txt b/nvvs/plugin_src/diagnostic/tests/CMakeLists.txt
+index 93d6db5..fafabbf 100644
+--- a/nvvs/plugin_src/diagnostic/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/diagnostic/tests/CMakeLists.txt
+@@ -25,7 +25,7 @@ target_sources(diagnostictests
+ 
+ target_include_directories(diagnostictests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(diagnostictests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(diagnostictests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(diagnostictests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(diagnostictests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(diagnostictests PRIVATE ..) # include the plugin dir
+ target_include_directories(diagnostictests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/memory/tests/CMakeLists.txt b/nvvs/plugin_src/memory/tests/CMakeLists.txt
+index 0a0bfc6..2a4983e 100644
+--- a/nvvs/plugin_src/memory/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/memory/tests/CMakeLists.txt
+@@ -28,7 +28,7 @@ target_sources(memorytests
+ 
+ target_include_directories(memorytests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(memorytests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(memorytests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(memorytests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(memorytests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(memorytests PRIVATE ..) # include the plugin dir
+ target_include_directories(memorytests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/memtest/tests/CMakeLists.txt b/nvvs/plugin_src/memtest/tests/CMakeLists.txt
+index 9c6059a..7704393 100644
+--- a/nvvs/plugin_src/memtest/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/memtest/tests/CMakeLists.txt
+@@ -26,7 +26,7 @@ target_sources(memtesttests
+         ../MemoryChunkManager.cpp
+ )
+ 
+-target_include_directories(memtesttests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(memtesttests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(memtesttests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(memtesttests PRIVATE ..) # include the plugin dir
+ target_include_directories(memtesttests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/nccl_tests/CMakeLists.txt b/nvvs/plugin_src/nccl_tests/CMakeLists.txt
+index 5beead5..7f3960e 100644
+--- a/nvvs/plugin_src/nccl_tests/CMakeLists.txt
++++ b/nvvs/plugin_src/nccl_tests/CMakeLists.txt
+@@ -16,5 +16,4 @@ add_subdirectory(tests)
+ 
+ declare_nvvs_plugin(nccl_tests .)
+ 
+-add_subdirectory(Cuda12)
+ add_subdirectory(Cuda13)
+diff --git a/nvvs/plugin_src/nvbandwidth/CMakeLists.txt b/nvvs/plugin_src/nvbandwidth/CMakeLists.txt
+index f3dacef..36e4249 100644
+--- a/nvvs/plugin_src/nvbandwidth/CMakeLists.txt
++++ b/nvvs/plugin_src/nvbandwidth/CMakeLists.txt
+@@ -16,17 +16,7 @@ add_subdirectory(tests)
+ 
+ declare_nvvs_plugin(nvbandwidth .)
+ 
+-add_subdirectory(Cuda12)
+ add_subdirectory(Cuda13)
+-target_link_libraries(NVBandwidth_12 PRIVATE
+-    serialize
+-    fmt::fmt
+-    dcgm_common
+-    dcgm_logging
+-    Boost::stacktrace_basic
+-    dl
+-    rt)
+-
+ target_link_libraries(NVBandwidth_13 PRIVATE
+     serialize
+     fmt::fmt
+diff --git a/nvvs/plugin_src/nvbandwidth/tests/CMakeLists.txt b/nvvs/plugin_src/nvbandwidth/tests/CMakeLists.txt
+index afb50fd..1b3c633 100644
+--- a/nvvs/plugin_src/nvbandwidth/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/nvbandwidth/tests/CMakeLists.txt
+@@ -28,7 +28,7 @@ target_sources(nvbandwidthtests
+ 
+ target_include_directories(nvbandwidthtests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(nvbandwidthtests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(nvbandwidthtests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(nvbandwidthtests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(nvbandwidthtests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(nvbandwidthtests PRIVATE ..) # include the plugin dir
+ target_include_directories(nvbandwidthtests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/pcie/tests/CMakeLists.txt b/nvvs/plugin_src/pcie/tests/CMakeLists.txt
+index e185c67..5ab28eb 100644
+--- a/nvvs/plugin_src/pcie/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/pcie/tests/CMakeLists.txt
+@@ -28,7 +28,7 @@ target_sources(pcietests
+ 
+ target_include_directories(pcietests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(pcietests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(pcietests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(pcietests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(pcietests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(pcietests PRIVATE ..) # include the plugin dir
+ target_include_directories(pcietests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/targetedpower/tests/CMakeLists.txt b/nvvs/plugin_src/targetedpower/tests/CMakeLists.txt
+index 2cf6df2..9db7526 100644
+--- a/nvvs/plugin_src/targetedpower/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/targetedpower/tests/CMakeLists.txt
+@@ -25,7 +25,7 @@ target_sources(targetedpowertests
+ 
+ target_include_directories(targetedpowertests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(targetedpowertests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(targetedpowertests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(targetedpowertests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(targetedpowertests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(targetedpowertests PRIVATE ..) # include the plugin dir
+ target_include_directories(targetedpowertests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/targetedstress/tests/CMakeLists.txt b/nvvs/plugin_src/targetedstress/tests/CMakeLists.txt
+index 820a06c..3f037d9 100644
+--- a/nvvs/plugin_src/targetedstress/tests/CMakeLists.txt
++++ b/nvvs/plugin_src/targetedstress/tests/CMakeLists.txt
+@@ -25,7 +25,7 @@ target_sources(targetedstresstests
+ 
+ target_include_directories(targetedstresstests PRIVATE ${YAML_INCLUDE_DIR})
+ target_include_directories(targetedstresstests PRIVATE ${JSONCPP_INCLUDE_DIR})
+-target_include_directories(targetedstresstests PRIVATE ${CUDA12_INCLUDE_DIR})
++target_include_directories(targetedstresstests PRIVATE ${CUDA13_INCLUDE_DIR})
+ target_include_directories(targetedstresstests PRIVATE ${PROJECT_SOURCE_DIR}/cublas_proxy)
+ target_include_directories(targetedstresstests PRIVATE ..) # include the plugin dir
+ target_include_directories(targetedstresstests PRIVATE ../../include) # include the plugin_src/include dir
+diff --git a/nvvs/plugin_src/test_common/CMakeLists.txt b/nvvs/plugin_src/test_common/CMakeLists.txt
+index 2326fc7..7b14467 100644
+--- a/nvvs/plugin_src/test_common/CMakeLists.txt
++++ b/nvvs/plugin_src/test_common/CMakeLists.txt
+@@ -18,7 +18,7 @@ endif()
+ 
+ target_include_directories(testing_cuda_stubs
+     PRIVATE
+-        "${CUDA12_INCLUDE_DIR}")
++        "${CUDA13_INCLUDE_DIR}")
+ 
+ target_link_libraries(testing_cuda_stubs
+     PUBLIC
+@@ -36,12 +36,12 @@ target_sources(testing_cuda_stubs
+ target_include_directories(testing_cuda_stubs_interface
+     INTERFACE
+         "${CMAKE_CURRENT_SOURCE_DIR}"
+-        "${CUDA12_INCLUDE_DIR}")
++        "${CUDA13_INCLUDE_DIR}")
+ 
+ target_include_directories(testing_dcgm_cublas_stubs
+     PRIVATE
+         "${CMAKE_SOURCE_DIR}/cublas_proxy"
+-        "${CUDA12_INCLUDE_DIR}")
++        "${CUDA13_INCLUDE_DIR}")
+ 
+ target_sources(testing_dcgm_cublas_stubs
+     PRIVATE
+diff --git a/nvvs/plugin_src/CMakeLists.txt b/nvvs/plugin_src/CMakeLists.txt
+index 5fc9aa9..5fdf995 100644
+--- a/nvvs/plugin_src/CMakeLists.txt
++++ b/nvvs/plugin_src/CMakeLists.txt
+@@ -74,7 +74,7 @@ macro(define_plugin PLUGIN_NAME CUDA_VER)
+     target_link_libraries(nvvs_plugins INTERFACE "${PLUGIN_NAME}_${CUDA_VER}")
+ endmacro()
+ 
+-set(SUPPORTED_CUDA_VERSIONS 11 12 13)
++set(SUPPORTED_CUDA_VERSIONS 13)
+ 
+ add_subdirectory(common)
+ add_subdirectory(contextcreate)

@@ -55,6 +55,7 @@ let
         "ecoflow"
         "chrony"
         "collectd"
+        "dcgm"
         "deluge"
         "dmarc"
         "dnsmasq"
