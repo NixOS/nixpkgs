@@ -5,17 +5,20 @@
   autoPatchelfHook,
   zenity,
   ninja,
+  libserialport,
 }:
 
 flutter335.buildFlutterApplication rec {
   pname = "chameleonultragui";
-  version = "1.3";
+  version = "1.3-stableish-2026-09-23";
+  # “Main is assumed stable ish and everything builds from main and thats it”
+  # — GameTec-live https://github.com/GameTec-live/ChameleonUltraGUI/pull/1008#issuecomment-5847621957
 
   src = fetchFromGitHub {
     owner = "GameTec-live";
     repo = "ChameleonUltraGUI";
-    tag = version;
-    hash = "sha256-9Hwjx1nt/QD520eLMAB5xyFjOGfjZSwS83ARNn8GsFo=";
+    rev = "9d26ad61adca08da10b5ab6b9f6750d2db1cabc9";
+    hash = "sha256-VAfkBjPb18SjKjJya2oRAmV3y3M3lepST3v+9bzJYOE=";
   };
 
   sourceRoot = "${src.name}/chameleonultragui";
@@ -31,26 +34,37 @@ flutter335.buildFlutterApplication rec {
   buildInputs = [
     zenity
     ninja
+    libserialport
   ];
 
-  postPatch = ''
-    substituteInPlace linux/main.cc \
-      --replace-fail '"../shared", "librecovery.so"' '"lib", "librecovery.so"'
-  '';
+  runtimeDependencies = [
+    libserialport
+  ];
 
   postInstall = ''
     install -Dm0644 aur/chameleonultragui.desktop $out/share/applications/chameleonultragui.desktop
     install -Dm0644 aur/chameleonultragui.png $out/share/icons/chameleonultragui.png
-    install -Dm0644 build/linux/*/release/shared/librecovery.so $out/app/chameleonultragui/lib
   '';
 
   meta = {
     description = "Cross platform GUI for the Chameleon Ultra written in flutter";
     homepage = "https://github.com/GameTec-live/ChameleonUltraGUI";
-    changelog = "https://github.com/GameTec-live/ChameleonUltraGUI/releases/${version}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/GameTec-live/ChameleonUltraGUI/releases/dev";
+    license = with lib.licenses; [
+      gpl3Only # main
+
+      asl20 # chameleonultragui/assets/fonts/
+      bsd3 # chameleonultragui/lib/helpers/font.dart
+      # chameleonultragui/src/
+      gpl2Plus # hardnested/, crapto1, crypto1, mfkey, parity
+      mit # hardnested/, minlzlib/
+      gpl3Plus # pm3/, hardnested.{c,h}
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "chameleonultragui";
-    maintainers = with lib.maintainers; [ wilaz ];
+    maintainers = with lib.maintainers; [
+      Merikei
+      wilaz
+    ];
   };
 }
