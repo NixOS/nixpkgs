@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plum-dispatch";
-  version = "2.9.0";
+  version = "2.10.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "beartype";
     repo = "plum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oQTM2Op/ymNYu0yCOADI9Is2RutwF+AYmhMLAkMe87s=";
+    hash = "sha256-xlwGNYug2S/oqNfp4r4eZKePP7yCXxxrYJ4/oavVxdM=";
   };
 
   build-system = [
