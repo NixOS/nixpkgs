@@ -631,6 +631,8 @@ with pkgs;
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
+  fetchFromGitProvider = callPackage ../build-support/fetchgitprovider { };
+
   fetchFromGitea = callPackage ../build-support/fetchgitea { };
 
   fetchFromForgejo = fetchFromGitea;
