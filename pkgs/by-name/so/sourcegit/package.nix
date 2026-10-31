@@ -22,13 +22,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "sourcegit";
-  version = "2026.21";
+  version = "2026.23";
 
   src = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QKelsfqnmK3q0wnXgkB4UtK9eWRlbE3xJiGf+pwW6bw=";
+    hash = "sha256-PyhqQS4vYdo2GBsc7a1lXUuxZuPt3RfdDrMqPc5tYAk=";
     fetchSubmodules = true;
   };
 
