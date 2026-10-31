@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patatt";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-97K+ihXyUfu8kMa3NKuRBlSnqdGENpzp53ttJuQ7nuo=";
+    hash = "sha256-wia15+RJpJgbgnxI4lhqko+kW2kK8Zo4krknmzNPJVE=";
   };
 
   build-system = with python3Packages; [
