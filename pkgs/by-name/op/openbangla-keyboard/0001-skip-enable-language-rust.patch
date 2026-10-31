@@ -1,0 +1,14 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,8 +12,9 @@ add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
+ set(CMAKE_CXX_STANDARD 17)
+
+ if(NOT WIN32)
+-    enable_language(Rust)
+-    include(CMakeCargo)
++    find_program(CARGO_EXECUTABLE cargo REQUIRED)
++    find_program(RUSTC_EXECUTABLE rustc REQUIRED)
++    include(CMakeCargo)
+ endif()
+
+ find_package(Qt5 COMPONENTS Widgets Network REQUIRED)

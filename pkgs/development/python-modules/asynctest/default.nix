@@ -1,0 +1,38 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonAtLeast,
+}:
+
+buildPythonPackage rec {
+  pname = "asynctest";
+  version = "0.13.0";
+  format = "setuptools";
+
+  # Unmaintained and incompatible python 3.11
+  disabled = pythonAtLeast "3.11";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-wnhihC0V2D5qNOsLKGbDI4gOs6deRIWweeoRdI/Xf6w=";
+  };
+
+  postPatch = ''
+    # Skip failing test, probably caused by file system access
+    substituteInPlace test/test_selector.py \
+      --replace "test_events_watched_outside_test_are_ignored" "xtest_events_watched_outside_test_are_ignored"
+  '';
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest test
+  '';
+
+  meta = {
+    description = "Enhance the standard unittest package with features for testing asyncio libraries";
+    homepage = "https://github.com/Martiusweb/asynctest";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
+  };
+}

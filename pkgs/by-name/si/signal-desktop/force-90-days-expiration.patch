@@ -1,0 +1,28 @@
+diff --git a/scripts/get-expire-time.mjs b/scripts/get-expire-time.mjs
+index 8c520ba5b..f23c32e35 100644
+--- a/scripts/get-expire-time.mjs
++++ b/scripts/get-expire-time.mjs
+@@ -19,7 +19,7 @@ const isNotUpdatable = !parseVersion(packageJson.version).isUpdatable;
+ 
+ // NB: Build expirations are also determined via users' auto-update settings; see
+ // getExpirationTimestamp
+-const validDuration = isNotUpdatable ? DAY * 30 : DAY * 90;
++const validDuration = DAY * 90;
+ const buildExpiration = buildCreation + validDuration;
+ 
+ const localProductionPath = join(
+diff --git a/ts/util/buildExpiration.std.ts b/ts/util/buildExpiration.std.ts
+index c2ac24c6d..65260f8bd 100644
+--- a/ts/util/buildExpiration.std.ts
++++ b/ts/util/buildExpiration.std.ts
+@@ -70,9 +70,7 @@ export function hasBuildExpired({
+     return true;
+   }
+ 
+-  const safeExpirationMs = autoDownloadUpdate
+-    ? NINETY_ONE_DAYS
+-    : THIRTY_ONE_DAYS;
++  const safeExpirationMs = NINETY_ONE_DAYS;
+ 
+   const buildExpirationDuration = buildExpirationTimestamp - now;
+   const tooFarIntoFuture = buildExpirationDuration > safeExpirationMs;

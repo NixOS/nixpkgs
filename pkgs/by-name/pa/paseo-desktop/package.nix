@@ -1,0 +1,1 @@
+{ paseo }: paseo.passthru.desktop

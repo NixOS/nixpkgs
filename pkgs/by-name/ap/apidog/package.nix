@@ -1,0 +1,61 @@
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  makeDesktopItem,
+}:
+
+appimageTools.wrapType2 (finalAttrs: {
+  pname = "apidog";
+  version = "2.8.52";
+
+  src = fetchurl {
+    url = "https://file-assets.apidog.com/download/${finalAttrs.version}/Apidog-${finalAttrs.version}.AppImage";
+    hash = "sha256-xf+xMayNgJE6ms7/xvTAQj0jZlgPknHvGqNN5DQprsI=";
+  };
+
+  extraPkgs = pkgs: [
+    pkgs.nss
+    pkgs.gtk3
+    pkgs.libx11
+    pkgs.libxcb
+    pkgs.libxrandr
+    pkgs.libxcomposite
+    pkgs.libxdamage
+    pkgs.libxfixes
+    pkgs.libxext
+    pkgs.libdbusmenu
+    pkgs.alsa-lib
+    pkgs.nodejs
+  ];
+
+  extraInstallCommands = ''
+    install -Dm444 ${finalAttrs.contents}/apidog.png \
+      $out/share/icons/hicolor/512x512/apps/apidog.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "apidog";
+      exec = "apidog %U";
+      icon = "apidog";
+      desktopName = "Apidog";
+      comment = "All-in-One API Platform: Design, Debug, Mock, Test, and Document.";
+      categories = [
+        "Development"
+        "Utility"
+      ];
+      mimeTypes = [ "x-scheme-handler/apidog" ];
+    })
+  ];
+
+  meta = with lib; {
+    description = "All-in-one API design, test, mock and documentation platform";
+    homepage = "https://apidog.com";
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "apidog";
+    maintainers = with maintainers; [ DomagojAlaber ];
+  };
+})

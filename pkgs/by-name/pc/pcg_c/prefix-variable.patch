@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index dddea44..fdb9401 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,8 +30,8 @@ all:
+ PREFIX = /usr/local
+ 
+ install: all
+-	install src/libpcg_random.a $PREFIX/lib
+-	install -m 0644 include/pcg_variants.h $PREFIX/include
++	install src/libpcg_random.a ${PREFIX}/lib
++	install -m 0644 include/pcg_variants.h ${PREFIX}/include
+ 
+ test:   all
+ 	cd test-low; $(MAKE) test

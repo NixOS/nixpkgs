@@ -1,0 +1,23 @@
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -305,7 +305,7 @@ void Application::applyXwaylandScale()
+ #if KWIN_BUILD_X11
+     if (x11Connection()) {
+         // rerun the script that runs xrdb with the new settings
+-        QProcess::startDetached(QString(LIBEXEC_DIR) + QStringLiteral("/plasma-setup-xwayland"));
++        QProcess::startDetached(QStringLiteral("/run/current-system/sw/libexec/plasma-setup-xwayland"));
+     }
+ #endif
+ }
+--- a/src/xwayland/xwayland.cpp
++++ b/src/xwayland/xwayland.cpp
+@@ -596,8 +596,7 @@ void Xwayland::runXWaylandStartupScripts()
+ 
+     QDir scriptDir(XWAYLAND_SESSION_SCRIPTS);
+     QStringList scripts = scriptDir.entryList(QStringList(), QDir::Files, QDir::Name);
+-    scripts << QString(LIBEXEC_DIR) + QStringLiteral("/plasma-setup-xwayland");
+-
++    scripts << QStringLiteral("/run/current-system/sw/libexec/plasma-setup-xwayland");
+     for (const QString &script : std::as_const(scripts)) {
+         const QString path = scriptDir.filePath(script);
+         qCDebug(KWIN_XWL) << "Running Xwayland startup script" << path;

@@ -1,0 +1,22 @@
+diff --git a/tests/components/command_line/test_sensor.py b/tests/components/command_line/test_sensor.py
+index 66a1197e2f0..1e665bae12c 100644
+--- a/tests/components/command_line/test_sensor.py
++++ b/tests/components/command_line/test_sensor.py
+@@ -1319,7 +1319,7 @@ async def test_template_quoted_executable_uses_exec(
+                     "sensor": {
+                         "name": "Test",
+                         "command": (
+-                            '"/usr/bin/echo" {{ states.sensor.input_sensor.state }}'
++                            '"@echo@" {{ states.sensor.input_sensor.state }}'
+                         ),
+                     }
+                 }
+@@ -1333,7 +1333,7 @@ async def test_template_quoted_executable_uses_exec(
+         await hass.async_block_till_done(wait_background_tasks=True)
+ 
+     mock_exec.assert_called_once_with(
+-        "/usr/bin/echo",
++        "@echo@",
+         "safe_value",
+         stdin=None,
+         stdout=-1,

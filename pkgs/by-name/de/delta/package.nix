@@ -1,0 +1,91 @@
+{
+  lib,
+  rustPlatform,
+  buildPackages,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
+  libgit2,
+  stdenv,
+  git,
+  zlib,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "delta";
+  version = "0.20.1";
+
+  src = fetchFromGitHub {
+    owner = "dandavison";
+    repo = "delta";
+    tag = finalAttrs.version;
+    hash = "sha256-p/vYclCifRzk8ockxT5k1zBCBL+eF4oldhD3lTvy2EA=";
+  };
+
+  cargoHash = "sha256-YjmYeSRt9X/+PROEGg3pBQ1IRnNuwziZ30bA/nKqbWc=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    oniguruma
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
+
+  nativeCheckInputs = [ git ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd delta \
+        --bash <(${emulator} $out/bin/delta --generate-completion bash) \
+        --fish <(${emulator} $out/bin/delta --generate-completion fish) \
+        --zsh <(${emulator} $out/bin/delta --generate-completion zsh)
+    ''
+  );
+
+  # test_env_parsing_with_pager_set_to_bat sets environment variables,
+  # which can be flaky with multiple threads:
+  # https://github.com/dandavison/delta/issues/1660
+  dontUseCargoParallelTests = true;
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # This test tries to read /etc/passwd, which fails with the sandbox
+    # enabled on Darwin
+    "--skip=test_diff_real_files"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
+
+  meta = {
+    homepage = "https://github.com/dandavison/delta";
+    description = "Syntax-highlighting pager for git";
+    changelog = "https://github.com/dandavison/delta/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      zowoq
+      SuperSandro2000
+    ];
+    mainProgram = "delta";
+  };
+})

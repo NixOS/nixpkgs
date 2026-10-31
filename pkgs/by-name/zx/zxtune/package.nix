@@ -1,0 +1,201 @@
+{
+  lib,
+  stdenv,
+  config,
+  fetchFromBitbucket,
+  dos2unix,
+  gitUpdater,
+  boost,
+  zlib,
+  # File backends (for decoding and encoding)
+  withMp3 ? config.zxtune.withMp3 or true,
+  lame,
+  withOgg ? config.zxtune.withOgg or true,
+  libvorbis,
+  withFlac ? config.zxtune.withFlac or true,
+  flac,
+  # Audio backends (for playback)
+  withOpenal ? config.zxtune.withOpenal or false,
+  openal,
+  withSDL ? config.zxtune.withSDL or false,
+  SDL,
+  withOss ? config.zxtune.withOss or false,
+  withAlsa ? config.zxtune.withAlsa or stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  withPulse ? config.zxtune.withPulse or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  # GUI audio player
+  withQt ? config.zxtune.withQt or true,
+  qt5,
+  zip,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
+let
+  dlopenBuildInputs =
+    [ ]
+    ++ lib.optional withMp3 lame
+    ++ lib.optional withOgg libvorbis
+    ++ lib.optional withFlac flac
+    ++ lib.optional withOpenal openal
+    ++ lib.optional withSDL SDL
+    ++ lib.optional withAlsa alsa-lib
+    ++ lib.optional withPulse libpulseaudio;
+  supportWayland = (!stdenv.hostPlatform.isDarwin);
+  platformName = "linux";
+  staticBuildInputs = [
+    boost
+    zlib
+  ]
+  ++ lib.optional withQt (if supportWayland then qt5.qtwayland else qt5.qtbase);
+in
+stdenv.mkDerivation rec {
+  pname = "zxtune";
+  version = "5112";
+
+  outputs = [ "out" ];
+
+  src = fetchFromBitbucket {
+    owner = "zxtune";
+    repo = "zxtune";
+    rev = "r${version}";
+    hash = "sha256-903dvy7XegZzoP/+0ZTWQDg3nWib6k1g+05vGRfcenI=";
+  };
+
+  passthru.updateScript = gitUpdater { rev-prefix = "r"; };
+
+  strictDeps = true;
+
+  nativeBuildInputs = lib.optionals withQt [
+    zip
+    qt5.wrapQtAppsHook
+    copyDesktopItems
+  ];
+
+  buildInputs = staticBuildInputs ++ dlopenBuildInputs;
+
+  prePatch = ''
+    # update-vgm.patch : Hunk #1 FAILED at 18 (different line endings)
+    find 3rdparty/vgm/ -type f -exec ${dos2unix}/bin/dos2unix {} \;
+  '';
+  patches = [
+    # fix https://hydra.nixos.org/build/317966891
+    ./disable_updates.patch
+  ];
+
+  postPatch = ''
+    # Fix use of old OpenAL header path
+    substituteInPlace src/sound/backends/gates/openal_api.h \
+      --replace-fail \
+        "#include <OpenAL/" \
+        "#include <AL/"
+    # Fix build for gcc16 - https://hydra.nixos.org/build/347457913
+    substituteInPlace src/strings/encoding.h \
+     --replace-fail \
+       '#include "string_view.h"' \
+       $'#include "string_view.h"\n#include <cstdint>'
+    substituteInPlace src/strings/conversion.h \
+     --replace-fail \
+       '#include <charconv>' \
+       $'#include <charconv>\n#include <cstdint>'
+  '';
+
+  buildPhase =
+    let
+      setOptionalSupport = name: var: "support_${name}=" + (if var then "1" else "");
+      makeOptsCommon = [
+        "-j$NIX_BUILD_CORES"
+        "root.version=${src.rev}"
+        "system.zlib=1"
+        "platform=${platformName}"
+        ''includes.dirs.${platformName}="${lib.makeSearchPathOutput "dev" "include" buildInputs}"''
+        ''libraries.dirs.${platformName}="${lib.makeLibraryPath staticBuildInputs}"''
+        ''ld_flags="-Wl,-rpath=\"${lib.makeLibraryPath dlopenBuildInputs}\""''
+        (setOptionalSupport "mp3" withMp3)
+        (setOptionalSupport "ogg" withOgg)
+        (setOptionalSupport "flac" withFlac)
+        (setOptionalSupport "openal" withOpenal)
+        (setOptionalSupport "sdl" withSDL)
+        (setOptionalSupport "oss" withOss)
+        (setOptionalSupport "alsa" withAlsa)
+        (setOptionalSupport "pulseaudio" withPulse)
+      ];
+      makeOptsQt = [
+        "tools.uic=${qt5.qtbase.dev}/bin/uic"
+        "tools.moc=${qt5.qtbase.dev}/bin/moc"
+        "tools.rcc=${qt5.qtbase.dev}/bin/rcc"
+      ];
+    in
+    ''
+      runHook preBuild
+      make ${toString makeOptsCommon} -C apps/xtractor
+      make ${toString makeOptsCommon} -C apps/zxtune123
+    ''
+    + lib.optionalString withQt ''
+      make ${toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+    ''
+    + ''
+      runHook postBuild
+    '';
+
+  # Libs from dlopenBuildInputs are found with dlopen. Do not shrink rpath. Can
+  # check output of 'out/bin/zxtune123 --list-backends' to verify all plugins
+  # load ("Status: Available" or "Status: Failed to load dynamic library...").
+  dontPatchELF = true;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/linux/release/xtractor -t $out/bin
+    install -Dm755 bin/linux/release/zxtune123 -t $out/bin
+  ''
+  + lib.optionalString withQt ''
+    install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  # Only wrap the gui
+  dontWrapQtApps = true;
+  preFixup = lib.optionalString withQt ''
+    wrapQtApp "$out/bin/zxtune-qt"
+  '';
+
+  desktopItems = lib.optionals withQt [
+    (makeDesktopItem {
+      name = "ZXTune";
+      exec = "zxtune-qt";
+      icon = "zxtune";
+      desktopName = "ZXTune";
+      genericName = "ZXTune";
+      comment = meta.description;
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
+      type = "Application";
+    })
+  ];
+
+  meta = {
+    description = "Crossplatform chiptunes player";
+    longDescription = ''
+      Chiptune music player with truly extensive format support. Supported
+      formats/chips include AY/YM, ZX Spectrum, PC, Amiga, Atari, Acorn, Philips
+      SAA1099, MOS6581 (Commodore 64), NES, SNES, GameBoy, Atari, TurboGrafX,
+      Nintendo DS, Sega Master System, and more. Powered by vgmstream, OpenMPT,
+      sidplay, and many other libraries.
+    '';
+    homepage = "https://zxtune.bitbucket.io/";
+    license = lib.licenses.gpl3;
+    # zxtune supports mac and windows, but more work will be needed to
+    # integrate with the custom make system (see platformName above)
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pbsds
+      EBADBEEF
+    ];
+    mainProgram = if withQt then "zxtune-qt" else "zxtune123";
+  };
+}

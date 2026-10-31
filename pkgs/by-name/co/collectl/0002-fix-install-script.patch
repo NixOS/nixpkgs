@@ -1,0 +1,133 @@
+--- a/INSTALL	2025-08-14 08:46:43.845548078 +0000
++++ b/INSTALL	2025-08-14 08:50:33.771706783 +0000
+@@ -1,28 +1,29 @@
+ #!/bin/sh
+ 
+-DESTDIR=${DESTDIR:="/"}
++# Use Nix output directory instead of system paths
++DESTDIR=${out}
+ 
+-BINDIR=$DESTDIR/usr/bin
+-DOCDIR=$DESTDIR/usr/share/doc/collectl
+-SHRDIR=$DESTDIR/usr/share/collectl
+-MANDIR=$DESTDIR/usr/share/man/man1
+-SYSDDIR=$DESTDIR/usr/lib/systemd/system
+-ETCDIR=$DESTDIR/etc
+-INITDIR=$ETCDIR/init.d
++BINDIR=$out/bin
++DOCDIR=$out/share/doc/collectl
++SHRDIR=$out/share/collectl
++MANDIR=$out/share/man/man1
++SYSDDIR=$out/lib/systemd/system
++ETCDIR=$out/etc
++INITDIR=$out/etc/init.d
+ 
+ mkdir -p $BINDIR
+ mkdir -p $DOCDIR
+ mkdir -p $SHRDIR
+ mkdir -p $ETCDIR
+ mkdir -p $MANDIR
+-mkdir -p $INITDIR
++# Skip init.d creation for Nix
+ mkdir -p $SHRDIR/util
+ mkdir -p $DESTDIR/var/log/collectl
+ 
+ cp collectl colmux       $BINDIR
+ cp collectl.conf         $ETCDIR
+ cp man1/*                $MANDIR
+-cp initd/*               $INITDIR
++# Skip init scripts for Nix
+ 
+ cp docs/*                $DOCDIR
+ cp GPL ARTISTIC COPYING  $DOCDIR
+@@ -42,87 +43,12 @@
+ # Force in case redoing the install and files already zipped
+ gzip -f $MANDIR/collectl*
+ 
+-chmod 755 $INITDIR/collectl*
++# Skip chmod on init scripts for Nix
+ chmod 444 $ETCDIR/collectl.conf
+ chmod 755 $BINDIR/collectl
+ chmod 444 $DOCDIR/ARTISTIC $DOCDIR/COPYING $DOCDIR/GPL
+ chmod 444 $SHRDIR/*ph
+ chmod 755 $SHRDIR/util/*
+ 
+-# remove any stale versions in case the names/numbers used have changed.
+-# on new ROCKS installion 'rm' isn't there yet!  [thanks roy]
+-if [ -x /bin/rm ] ; then
+-  /bin/rm -f $INITDIR/rc*.d/*collectl
+-  /bin/rm -f $ETCDIR/rc.d/rc*.d/*collectl
+-fi
+-
+-# only if systemd is supported
+-if [ -d $SYSDDIR ]; then
+-  cp service/collectl.service $SYSDDIR
+-fi
+-
+-# Try and decide which distro this is based on distro specific files.
+-distro=1
+-if [ -f /sbin/yast ]; then
+-    distro=2
+-    mv -f $INITDIR/collectl-suse $INITDIR/collectl
+-    rm -f $INITDIR/collectl-debian
+-    rm -f $INITDIR/collectl-generic
+-fi
+-
+-# debian
+-if [ -f /usr/sbin/update-rc.d ]; then
+-    distro=3
+-    mv -f $INITDIR/collectl-debian $INITDIR/collectl
+-    rm -f $INITDIR/collectl-suse
+-    rm -f $INITDIR/collectl-generic
+-
+-    # only if we're installing under /
+-    [ "$DESTDIR" = "/" ] && update-rc.d collectl defaults
+-fi
+-
+-# redhat
+-if [ -f /etc/redhat-release ]; then
+-    distro=4
+-    rm -f $INITDIR/collectl-suse
+-    rm -f $INITDIR/collectl-debian
+-    rm -f $INITDIR/collectl-generic
+-    if [ -f /usr/sbin/chkconfig ]; then
+-    	[ "$DESTDIR" = "/" ] && chkconfig --add collectl
+-    fi	
+-# Not needed for RHEL8 and higher	
+-fi
+-
+-# gentoo
+-if [ -f $ETCDIR/gentoo-release ]; then
+-    distro=5
+-    mv -f $INITDIR/collectl-generic $INITDIR/collectl
+-    rm -f $INITDIR/collectl-suse
+-    rm -f $INITDIR/collectl-debian
+-    [ "$DESTDIR" = "/" ] && rc-update -a collectl default
+-fi
+-
+-# Generic Distros
+-# If /etc/init.d doesn't exist and/or there's no way to use chkconfig or 
+-# rc-update you're going to have to add some custom code below...
+-if [ ${distro} = 1 ]; then
+-
+-    mv -f $INITDIR/collectl-generic $INITDIR/collectl
+-    rm -f $INITDIR/collectl-suse
+-    rm -f $INITDIR/collectl-debian
+-
+-    # If in not installing under / there's nothing extra do
+-    [ $DESTDIR != "/" ] && exit 0
+-
+-    # figure out how to handle reboots
+-    if [ -f /sbin/chkconfig ]; then
+-        chkconfig --add collectl
+-    elif [ -f /sbin/rc-update ]; then
+-        rc-update -a collectl default
+-# RHEL9 has no chkconfig	
+-    elif [ -f /usr/bin/systemctl ]; then
+-        systemctl enable collectl
+-    else
+-        echo "could not figure out how to enable restarting across reboots"
+-    fi
+-fi
++# Skip all distro-specific service installation for Nix
++# Nix manages services differently through NixOS modules

@@ -1,0 +1,26 @@
+diff --git a/tests/common.rs b/tests/common.rs
+index d40bd6db67e7..b0b5c05c0698 100644
+--- a/tests/common.rs
++++ b/tests/common.rs
+@@ -6,7 +6,20 @@ pub fn project_root() -> PathBuf {
+ }
+ 
+ pub fn cargo_bundle_bin() -> PathBuf {
+-    project_root().join("target/debug/cargo-bundle")
++    let debug_bin = project_root().join("target/debug/cargo-bundle");
++    if debug_bin.exists() {
++        return debug_bin;
++    }
++    // Fall back to a release build, possibly nested under a target triple
++    // directory (e.g. when the project is built by nix with `--target`).
++    let Ok(entries) = fs::read_dir(project_root().join("target")) else {
++        return debug_bin;
++    };
++    entries
++        .flatten()
++        .map(|entry| entry.path().join("release/cargo-bundle"))
++        .find(|candidate| candidate.exists())
++        .unwrap_or(debug_bin)
+ }
+ 
+ #[cfg(test)]

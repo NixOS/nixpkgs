@@ -1,0 +1,26 @@
+diff -Naurp hddtemp-0.3-beta15-orig/src/satacmds.c hddtemp-0.3-beta15/src/satacmds.c
+--- hddtemp-0.3-beta15-orig/src/satacmds.c	2007-02-10 14:25:15.000000000 +0100
++++ hddtemp-0.3-beta15/src/satacmds.c	2007-02-10 14:26:53.000000000 +0100
+@@ -54,7 +54,6 @@ int sata_pass_thru(int device, unsigned 
+   unsigned char cdb[16];
+   unsigned char sense[32];
+   int dxfer_direction;
+-  int ret;
+   
+   memset(cdb, 0, sizeof(cdb));
+   cdb[0] = ATA_16;
+@@ -78,13 +77,7 @@ int sata_pass_thru(int device, unsigned 
+     cdb[6] = cmd[1];
+   cdb[14] = cmd[0];
+ 
+-  ret = scsi_SG_IO(device, cdb, sizeof(cdb), buffer, cmd[3] * 512, sense, sizeof(sense), dxfer_direction);
+- 
+-  /* Verify SATA magics */
+-  if (sense[0] != 0x72 || sense[7] != 0x0e || sense[9] != 0x0e || sense[10] != 0x00)
+-    return 1;		  
+-  else 
+-    return ret;
++  return scsi_SG_IO(device, cdb, sizeof(cdb), buffer, cmd[3] * 512, sense, sizeof(sense), dxfer_direction);
+ }
+ 
+ void sata_fixstring(unsigned char *s, int bytecount)

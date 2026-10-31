@@ -1,0 +1,68 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 24 Sep 2026 15:51:35 -0400
+Subject: [PATCH 3/3] Add missing imports
+
+This is apparently needed after updating to Glibc 2.44.
+---
+ Sources/FoundationEssentials/Date.swift                         | 2 ++
+ .../FoundationEssentials/FileManager/FileManager+Basics.swift   | 2 ++
+ Sources/FoundationEssentials/URL/URL.swift                      | 2 ++
+ Sources/FoundationEssentials/URL/URL_Swift.swift                | 2 ++
+ 4 files changed, 8 insertions(+)
+
+diff --git a/Sources/FoundationEssentials/Date.swift b/Sources/FoundationEssentials/Date.swift
+index 4db2a736..30496a7f 100644
+--- a/Sources/FoundationEssentials/Date.swift
++++ b/Sources/FoundationEssentials/Date.swift
+@@ -24,6 +24,8 @@ import WinSDK
+ @preconcurrency import WASILibc
+ #endif
+ 
++internal import _FoundationCShims
++
+ #if !FOUNDATION_FRAMEWORK
+ @available(macOS 10.10, iOS 8.0, watchOS 2.0, tvOS 9.0, *)
+ public typealias TimeInterval = Double
+diff --git a/Sources/FoundationEssentials/FileManager/FileManager+Basics.swift b/Sources/FoundationEssentials/FileManager/FileManager+Basics.swift
+index 31447649..0b31240b 100644
+--- a/Sources/FoundationEssentials/FileManager/FileManager+Basics.swift
++++ b/Sources/FoundationEssentials/FileManager/FileManager+Basics.swift
+@@ -25,6 +25,8 @@ import WinSDK
+ @preconcurrency import WASILibc
+ #endif
+ 
++internal import _FoundationCShims
++
+ #if FOUNDATION_FRAMEWORK
+ internal import Foundation_Private
+ #endif
+diff --git a/Sources/FoundationEssentials/URL/URL.swift b/Sources/FoundationEssentials/URL/URL.swift
+index 61285c4a..8e60070b 100644
+--- a/Sources/FoundationEssentials/URL/URL.swift
++++ b/Sources/FoundationEssentials/URL/URL.swift
+@@ -13,6 +13,8 @@
+ public struct URLResourceKey {}
+ #endif
+ 
++internal import _FoundationCShims
++
+ #if FOUNDATION_FRAMEWORK
+ internal import _ForSwiftFoundation
+ internal import CoreFoundation_Private.CFURL
+diff --git a/Sources/FoundationEssentials/URL/URL_Swift.swift b/Sources/FoundationEssentials/URL/URL_Swift.swift
+index 7da7365e..2ea7d122 100644
+--- a/Sources/FoundationEssentials/URL/URL_Swift.swift
++++ b/Sources/FoundationEssentials/URL/URL_Swift.swift
+@@ -24,6 +24,8 @@ import WinSDK
+ @preconcurrency import WASILibc
+ #endif
+ 
++internal import _FoundationCShims
++
+ #if canImport(os)
+ internal import os
+ #endif
+-- 
+2.54.0
+

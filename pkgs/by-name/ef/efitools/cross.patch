@@ -1,0 +1,89 @@
+--- a/Make.rules
++++ b/Make.rules
+@@ -68,35 +68,35 @@ endif
+ %.h: %.auth
+ 	./xxdi.pl $< > $@
+ 
+-%.hash: %.efi hash-to-efi-sig-list
+-	./hash-to-efi-sig-list $< $@
++%.hash: %.efi
++	hash-to-efi-sig-list $< $@
+ 
+-%-blacklist.esl: %.crt cert-to-efi-hash-list
+-	./cert-to-efi-sig-list $< $@
++%-blacklist.esl: %.crt
++	cert-to-efi-sig-list $< $@
+ 
+-%-hash-blacklist.esl: %.crt cert-to-efi-hash-list
+-	./cert-to-efi-hash-list $< $@
++%-hash-blacklist.esl: %.crt
++	cert-to-efi-hash-list $< $@
+ 
+-%.esl: %.crt cert-to-efi-sig-list
+-	./cert-to-efi-sig-list -g $(MYGUID) $< $@
++%.esl: %.crt
++	cert-to-efi-sig-list -g $(MYGUID) $< $@
+ 
+ getcert = $(shell if [ "$(1)" = "PK" -o "$(1)" = "KEK" ]; then echo "-c PK.crt -k PK.key"; else echo "-c KEK.crt -k KEK.key"; fi)
+ getvar = $(shell if [ "$(1)" = "PK" -o "$(1)" = "KEK" ]; then echo $(1); else echo db; fi)
+ 
+-%.auth: %.esl PK.crt KEK.crt sign-efi-sig-list
+-	./sign-efi-sig-list $(call getcert,$*) $(call getvar,$*) $< $@
++%.auth: %.esl PK.crt KEK.crt
++	sign-efi-sig-list $(call getcert,$*) $(call getvar,$*) $< $@
+ 
+-%-update.auth: %.esl PK.crt KEK.crt sign-efi-sig-list
+-	./sign-efi-sig-list -a $(call getcert,$*) $(call getvar,$*) $< $@
++%-update.auth: %.esl PK.crt KEK.crt
++	sign-efi-sig-list -a $(call getcert,$*) $(call getvar,$*) $< $@
+ 
+-%-pkupdate.auth: %.esl PK.crt sign-efi-sig-list
+-	./sign-efi-sig-list -a -c PK.crt -k PK.key $(call getvar,$*) $< $@
++%-pkupdate.auth: %.esl PK.crt
++	sign-efi-sig-list -a -c PK.crt -k PK.key $(call getvar,$*) $< $@
+ 
+-%-blacklist.auth: %-blacklist.esl KEK.crt sign-efi-sig-list
+-	./sign-efi-sig-list -a -c KEK.crt -k KEK.key dbx $< $@
++%-blacklist.auth: %-blacklist.esl KEK.crt
++	sign-efi-sig-list -a -c KEK.crt -k KEK.key dbx $< $@
+ 
+-%-pkblacklist.auth: %-blacklist.esl PK.crt sign-efi-sig-list
+-	./sign-efi-sig-list -a -c PK.crt -k PK.key dbx $< $@
++%-pkblacklist.auth: %-blacklist.esl PK.crt
++	sign-efi-sig-list -a -c PK.crt -k PK.key dbx $< $@
+ 
+ %.o: %.c
+ 	$(CC) $(INCDIR) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+--- a/Makefile
++++ b/Makefile
+@@ -27,13 +27,11 @@ include Make.rules
+ 
+ EFISIGNED = $(patsubst %.efi,%-signed.efi,$(EFIFILES))
+ 
+-all: $(EFISIGNED) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
++all: $(EFISIGNED) $(BINARIES) noPK.auth $(KEYAUTH) \
+ 	$(KEYUPDATEAUTH) $(KEYBLACKLISTAUTH) $(KEYHASHBLACKLISTAUTH)
+ 
+ 
+ install: all
+-	$(INSTALL) -m 755 -d $(MANDIR)
+-	$(INSTALL) -m 644 $(MANPAGES) $(MANDIR)
+ 	$(INSTALL) -m 755 -d $(EFIDIR)
+ 	$(INSTALL) -m 755 $(EFIFILES) $(EFIDIR)
+ 	$(INSTALL) -m 755 -d $(BINDIR)
+@@ -65,11 +63,11 @@ DB.h: DB.auth
+ noPK.esl:
+ 	> noPK.esl
+ 
+-noPK.auth: noPK.esl PK.crt sign-efi-sig-list
+-	./sign-efi-sig-list -t "$(shell date --date='1 second' +'%Y-%m-%d %H:%M:%S')" -c PK.crt -k PK.key PK $< $@
++noPK.auth: noPK.esl PK.crt
++	sign-efi-sig-list -t "$(shell date --date='1 second' +'%Y-%m-%d %H:%M:%S')" -c PK.crt -k PK.key PK $< $@
+ 
+-ms-%.esl: ms-%.crt cert-to-efi-sig-list
+-	./cert-to-efi-sig-list -g $(MSGUID) $< $@
++ms-%.esl: ms-%.crt
++	cert-to-efi-sig-list -g $(MSGUID) $< $@
+ 
+ hashlist.h: HashTool.hash
+ 	cat $^ > /tmp/tmp.hash

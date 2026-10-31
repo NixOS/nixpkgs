@@ -1,0 +1,38 @@
+From e5eb394458e19ce8f8a231e8b2005c80c64fd426 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Fri, 15 Jul 2022 10:13:23 +0800
+Subject: [PATCH] Hardcode isUbuntu=false to avoid hostname dependency.
+
+The original build.xml detects whether the system is ubuntu based on its
+hostname, which is useless in nixpkgs and brings additional dependency.
+
+As suggested by @risicle in #180613, we can simply hardcode isUbuntu to
+false.
+
+Signed-off-by: Jiajie Chen <c@jia.je>
+---
+ build.xml | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/build.xml b/build.xml
+index c4f0974..15a6078 100644
+--- a/build.xml
++++ b/build.xml
+@@ -143,11 +143,9 @@
+         </and>
+     </condition>
+ 
+-    <exec executable="hostname" outputproperty="computer.hostname"/>
+-
+-    <condition property="isUbuntu">
+-        <contains string="${computer.hostname}" substring="ubuntu" />
+-    </condition>
++    <!-- Since we do not package .deb nor .rpm files, we can safely
++        hardcode isUbuntu = false. -->
++    <property name="isUbuntu" value="false" />
+ 
+     <!-- Build 64-bit binary.
+        Note: os.arch gives the architecture of the JVM, NOT the OS;
+-- 
+2.36.1
+

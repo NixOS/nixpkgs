@@ -1,0 +1,20 @@
+diff --git a/gtk3/immodule/Makefile.am b/gtk3/immodule/Makefile.am
+index 2ad0f7f4..e9893102 100644
+--- a/gtk3/immodule/Makefile.am
++++ b/gtk3/immodule/Makefile.am
+@@ -44,6 +44,7 @@ IM_UIM_SOURCES = \
+ 
+ QUERY_COMMAND = gtk-query-immodules-3.0
+ 
++if FALSE
+ install-data-hook:
+ 	if test -z $(DESTDIR); then \
+ 	  if test $(libdir) = $(GTK3_LIBDIR); then \
+@@ -79,6 +80,7 @@ uninstall-hook:
+ 	    fi \
+ 	  fi \
+ 	fi
++endif
+ else
+ install-data-hook:
+ 

@@ -1,0 +1,33 @@
+diff --git a/libecdsaauth/keypair.c b/libecdsaauth/keypair.c
+index 5e098c5..b5dd21e 100644
+--- a/libecdsaauth/keypair.c
++++ b/libecdsaauth/keypair.c
+@@ -22,6 +22,7 @@
+ 
+ #include <string.h>
+ #include <stdlib.h>
++#include <openssl/pem.h>
+ 
+ static inline libecdsaauth_key_t *libecdsaauth_key_alloc(void)
+ {
+diff --git a/tool/main.c b/tool/main.c
+index 23d19a3..f88016c 100644
+--- a/tool/main.c
++++ b/tool/main.c
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <openssl/pem.h>
+ 
+ #include "libecdsaauth/keypair.h"
+ #include "libecdsaauth/op.h"
+@@ -41,7 +42,7 @@ static int tool_keygen(int argc, const char *argv[])
+ 	key = libecdsaauth_key_new();
+ 
+ 	pubout = fopen(argv[1], "w");
+-	PEM_write_ECPrivateKey(pubout, key->eckey, NULL, NULL, 0, NULL);
++	PEM_write_ECPrivateKey(pubout, key->eckey, NULL, NULL, 0, NULL, NULL);
+ 	fclose(pubout);
+ 
+ 	pubkey = libecdsaauth_key_public_key_base64(key);

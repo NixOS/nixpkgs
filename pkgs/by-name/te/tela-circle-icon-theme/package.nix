@@ -1,0 +1,95 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  adwaita-icon-theme,
+  kdePackages,
+  gtk3,
+  hicolor-icon-theme,
+  jdupes,
+  gitUpdater,
+  allColorVariants ? false,
+  circularFolder ? false,
+  colorVariants ? [ ], # default is standard
+}:
+
+lib.checkListOfEnum "tela-circle-icon-theme: color variants"
+  [
+    "standard"
+    "black"
+    "blue"
+    "brown"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "yellow"
+    "manjaro"
+    "ubuntu"
+    "dracula"
+    "nord"
+  ]
+  colorVariants
+
+  stdenvNoCC.mkDerivation
+  rec {
+    pname = "tela-circle-icon-theme";
+    version = "2026-07-07";
+
+    src = fetchFromGitHub {
+      owner = "vinceliuice";
+      repo = "tela-circle-icon-theme";
+      tag = version;
+      hash = "sha256-0P4KLwrBPsLMaSdaq06dUe8E1qFoGLlMbWxZ89GebKE=";
+    };
+
+    nativeBuildInputs = [
+      gtk3
+      jdupes
+    ];
+
+    propagatedBuildInputs = [
+      adwaita-icon-theme
+      kdePackages.breeze-icons
+      hicolor-icon-theme
+    ];
+
+    dontDropIconThemeCache = true;
+    dontWrapQtApps = true;
+
+    # These fixup steps are slow and unnecessary for this package.
+    # Package may install almost 400 000 small files.
+    dontPatchELF = true;
+    dontRewriteSymlinks = true;
+
+    postPatch = ''
+      patchShebangs install.sh
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      ./install.sh -d $out/share/icons \
+        ${lib.optionalString circularFolder "-c"} \
+        ${if allColorVariants then "-a" else toString colorVariants}
+
+      # remove broken symlinks
+      find $out -xtype l -print -delete
+
+      jdupes --quiet --link-soft --recurse $out/share
+
+      runHook postInstall
+    '';
+
+    passthru.updateScript = gitUpdater { };
+
+    meta = {
+      description = "Flat and colorful personality icon theme";
+      homepage = "https://github.com/vinceliuice/Tela-circle-icon-theme";
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
+      maintainers = with lib.maintainers; [ romildo ];
+    };
+  }

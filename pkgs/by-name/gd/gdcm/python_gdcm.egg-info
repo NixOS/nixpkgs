@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: python-gdcm
+Version: @GDCM_VER@
+Summary: C++ library for DICOM medical files wrapped for Python using SWIG
+Platform: UNKNOWN

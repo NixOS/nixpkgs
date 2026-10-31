@@ -1,0 +1,22 @@
+diff --git a/__nix-prepend-search-paths.js b/__nix-prepend-search-paths.js
+new file mode 100644
+index 0000000..bd477f1
+--- /dev/null
++++ b/__nix-prepend-search-paths.js
+@@ -0,0 +1,2 @@
++import GIRepository from "gi://GIRepository";
++"@typelibPath@".split(":").forEach(path => GIRepository.Repository.dup_default().prepend_search_path(path));
+diff --git a/prefs.js b/prefs.js
+index 456827c..4849e92 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -1,6 +1,8 @@
+ // SPDX-FileCopyrightText: tuberry
+ // SPDX-License-Identifier: GPL-3.0-or-later
+ 
++import './__nix-prepend-search-paths.js';
++
+ import Adw from 'gi://Adw';
+ import Gdk from 'gi://Gdk';
+ import Gio from 'gi://Gio';
+

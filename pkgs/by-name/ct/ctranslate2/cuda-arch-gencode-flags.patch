@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -538,8 +538,6 @@
+     list(REMOVE_DUPLICATES CUDA_ARCH_LIST)
+   endif()
+ 
+-  cuda_select_nvcc_arch_flags(ARCH_FLAGS ${CUDA_ARCH_LIST})
+-  list(APPEND CUDA_NVCC_FLAGS ${ARCH_FLAGS})
+   set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
+ 
+   # flags for flash attention

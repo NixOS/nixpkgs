@@ -1,0 +1,34 @@
+{
+  mkDerivation,
+  lib,
+  libcasper,
+  libcapsicum,
+  libnv,
+}:
+mkDerivation {
+  path = "usr.sbin/syslogd";
+
+  extraPaths = [
+    "usr.bin/wall"
+    "sys/sys"
+  ];
+
+  buildInputs = [
+    libcasper
+    libcapsicum
+    libnv
+  ];
+
+  # These want to install some config files which we don't want
+  MK_FTP = "no";
+  MK_LPR = "no";
+  MK_PPP = "no";
+
+  MK_TESTS = "no";
+
+  meta = {
+    description = "FreeBSD syslog daemon";
+    maintainers = with lib.maintainers; [ artemist ];
+    license = lib.licenses.bsd2;
+  };
+}

@@ -1,0 +1,39 @@
+diff --git i/Makefile w/Makefile
+index c45b32b..258189c 100644
+--- i/Makefile
++++ w/Makefile
+@@ -5,7 +5,8 @@ TARGET   := $(notdir $(CURDIR))
+ BUILD    := build
+ INCLUDES := include
+ SOURCES  := source
+-DEFINES  := -D_FORTIFY_SOURCE=2
++LSBLK_PATH ?= /usr/bin/lsblk
++DEFINES  := -D_FORTIFY_SOURCE=2 -DLSBLK_PATH=\"$(LSBLK_PATH)\"
+ 
+ 
+ # Compiler settings
+diff --git i/source/blockdev.cpp w/source/blockdev.cpp
+index a179604..b4de5ef 100644
+--- i/source/blockdev.cpp
++++ w/source/blockdev.cpp
+@@ -7,6 +7,7 @@
+ #include <errno.h>
+ #include <fcntl.h>     // open()...
+ #include <linux/fs.h>  // BLKGETSIZE64...
++#include <limits.h>    // PATH_MAX
+ #include <sys/ioctl.h> // ioctl()...
+ #include <sys/stat.h>  // S_IRUSR, S_IWUSR...
+ #include <unistd.h>    // write(), close()...
+@@ -21,8 +22,10 @@
+ static int checkDevice(const char *const path)
+ {
+ 	int res = EINVAL; // By default assume the given path is not a suitable device.
+-	char cmd[64] = "/usr/bin/lsblk -dnr -oTYPE,HOTPLUG,PHY-SEC ";
+-	strncpy(&cmd[43], path, sizeof(cmd) - 43);
++	const char cmdPrefix[] = LSBLK_PATH " -dnr -oTYPE,HOTPLUG,PHY-SEC ";
++	char cmd[sizeof(cmdPrefix) + PATH_MAX];
++	memcpy(cmd, cmdPrefix, sizeof(cmdPrefix) - 1);
++	strncpy(&cmd[sizeof(cmdPrefix) - 1], path, sizeof(cmd) - sizeof(cmdPrefix));
+ 	cmd[sizeof(cmd) - 1] = '\0';
+ 	FILE *const p = ::popen(cmd, "r");
+ 	if(p == nullptr)

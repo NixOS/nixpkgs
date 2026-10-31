@@ -1,0 +1,285 @@
+diff --git a/source/basisset/basisinfo.cc b/source/basisset/basisinfo.cc
+index 402d513..1c05e72 100644
+--- a/source/basisset/basisinfo.cc
++++ b/source/basisset/basisinfo.cc
+@@ -512,8 +512,8 @@ void BasisInfoStruct::addBasisfuncsForAtomList(const Atom* atomList,
+   for(int i = 0; i < noOfShellsNew; i++) {
+     for(int kk = 0; kk < shell_list_new[i].noOfContr; kk++) {
+       // calculate size
+-      shell_list_new[i].sizeList[kk] = 
+-	template_blas_fabs(template_blas_pow((ergo_real)pi/shell_list_new[i].exponentList[kk], (ergo_real)1.5) * shell_list_new[i].coeffList[kk]);
++      shell_list_new[i].sizeList[kk] =
++	template_blas_fabs(template_blas_pow((ergo_real)PI/shell_list_new[i].exponentList[kk], (ergo_real)1.5) * shell_list_new[i].coeffList[kk]);
+     }
+   } /* END FOR i */
+ 
+diff --git a/source/dft/grid_hicu.cc b/source/dft/grid_hicu.cc
+index 8c161fd..e808db5 100644
+--- a/source/dft/grid_hicu.cc
++++ b/source/dft/grid_hicu.cc
+@@ -613,7 +613,7 @@ compute_1d_gaussian_integral_recursive(real a, real b, int n, real alpha)
+   if(n == 0)
+     {
+       sqrtalpha = template_blas_sqrt(alpha);
+-      result = template_blas_sqrt(pi/(4*alpha)) * (hicuErf(sqrtalpha*b)-hicuErf(sqrtalpha*a));
++      result = template_blas_sqrt(PI/(4*alpha)) * (hicuErf(sqrtalpha*b)-hicuErf(sqrtalpha*a));
+       return result;
+     }
+   if(n == 1)
+@@ -647,15 +647,15 @@ compute_1d_gaussian_integral(real a, real b, int n, real alpha)
+     {
+     case 0:
+       sqrtalpha = template_blas_sqrt(alpha);
+-      result = template_blas_sqrt(pi/(4*alpha)) * (hicuErf(sqrtalpha*b)-hicuErf(sqrtalpha*a));
++      result = template_blas_sqrt(PI/(4*alpha)) * (hicuErf(sqrtalpha*b)-hicuErf(sqrtalpha*a));
+       break;
+     case 1:
+       result = -(1 / (2*alpha)) * (template_blas_exp(-alpha*b*b) - template_blas_exp(-alpha*a*a));
+       break;
+     case 2:
+       sqrtalpha = template_blas_sqrt(alpha);
+-      term1 = 
+-        template_blas_sqrt(pi/(16*alpha*alpha*alpha)) * 
++      term1 =
++        template_blas_sqrt(PI/(16*alpha*alpha*alpha)) *
+         (hicuErf(sqrtalpha*b) - hicuErf(sqrtalpha*a));
+       term2 = -(1 / (2 * alpha)) * (b*template_blas_exp(-alpha*b*b) - a*template_blas_exp(-alpha*a*a));
+       result = term1 + term2;
+@@ -2664,7 +2664,7 @@ get_density(const BasisInfoStruct& bis,
+   /* skipping those that have too small coeff */
+   int resultCount = 0;
+   for(int i = 0; i < count; i++) {
+-      real sqrtValue = template_blas_sqrt(pi / workList[i].exponent);
++      real sqrtValue = template_blas_sqrt(PI / workList[i].exponent);
+       real absvalue = workList[i].coeff * sqrtValue * sqrtValue * sqrtValue;
+       if(absvalue < 0) absvalue *= -1;
+       if(absvalue > DISTR_COEFF_CUTOFF_VALUE) {
+diff --git a/source/electron_dynamics/tdhf_dynamics.cc b/source/electron_dynamics/tdhf_dynamics.cc
+index c1afbff..956f6d1 100644
+--- a/source/electron_dynamics/tdhf_dynamics.cc
++++ b/source/electron_dynamics/tdhf_dynamics.cc
+@@ -332,12 +332,12 @@ static void get_curr_electric_field(ergo_real* electricField, ergo_real t) {
+   const ergo_real E_max = 0.07;
+   const ergo_real phasePhi = 0;
+   ergo_real E = 0;
+-  if(t < 2*pi/omega)
+-    E = E_max * omega*t/(2*pi);
+-  else if(t < 4*pi/omega)
++  if(t < 2*PI/omega)
++    E = E_max * omega*t/(2*PI);
++  else if(t < 4*PI/omega)
+     E = E_max;
+-  else if(t < 6*pi/omega)
+-    E = E_max * (3 - omega*t/(2*pi));
++  else if(t < 6*PI/omega)
++    E = E_max * (3 - omega*t/(2*PI));
+   else
+     E = 0;
+   electricField[0] = 0;
+diff --git a/source/integrals/basis_func_extent.cc b/source/integrals/basis_func_extent.cc
+index 8dfe66e..79db2ea 100644
+--- a/source/integrals/basis_func_extent.cc
++++ b/source/integrals/basis_func_extent.cc
+@@ -84,8 +84,8 @@ compute_extent_for_all_basis_funcs_core(const BasisInfoStruct & basisInfo,
+ 					ergo_real maxAbsDensMatElement)
+ {
+   ergo_real twotopow1o4 = template_blas_pow((ergo_real)2, (ergo_real)0.25);
+-  ergo_real pitopow5o4 = template_blas_pow((ergo_real)pi, (ergo_real)1.25);
+-  
++  ergo_real pitopow5o4 = template_blas_pow((ergo_real)PI, (ergo_real)1.25);
++
+   int n = basisInfo.noOfBasisFuncs;
+   for(int i = 0; i < n; i++)
+     {
+diff --git a/source/integrals/basis_func_extent_1el.cc b/source/integrals/basis_func_extent_1el.cc
+index 73cb65e..4889e2d 100644
+--- a/source/integrals/basis_func_extent_1el.cc
++++ b/source/integrals/basis_func_extent_1el.cc
+@@ -81,7 +81,7 @@ compute_extent_for_all_basis_funcs_1el(const BasisInfoStruct & basisInfo,
+ 	      if(c_b > 0)
+ 		{
+ 		  // This extent definition was derived from the estimate of the largest possible contribution to V given by (2 * pi * coeff / exponent).
+-		  ergo_real R2 = -1 * ((a+b)/(a*b)) * template_blas_log(threshold*(a+b)/(2*pi*c_a*c_b*maxCharge));
++		  ergo_real R2 = -1 * ((a+b)/(a*b)) * template_blas_log(threshold*(a+b)/(2*PI*c_a*c_b*maxCharge));
+ 		  if(R2 < 0)
+ 		    continue;
+ 		  ergo_real R = template_blas_sqrt(R2);
+diff --git a/source/integrals/basis_func_pair_list_1el.cc b/source/integrals/basis_func_pair_list_1el.cc
+index ac417e5..593fe92 100644
+--- a/source/integrals/basis_func_pair_list_1el.cc
++++ b/source/integrals/basis_func_pair_list_1el.cc
+@@ -142,7 +142,7 @@ get_basis_func_pair_list_1el_for_V(const BasisInfoStruct & basisInfo,
+ 	  for(int k = 0; k < n_psi; k++)
+ 	    {
+ 	      // Check if this distr can give contribution larger than threshold.
+-	      ergo_real estimatedMaxContrib = template_blas_fabs(2 * pi * maxCharge * psi_list[k].coeff / psi_list[k].exponent);
++	      ergo_real estimatedMaxContrib = template_blas_fabs(2 * PI * maxCharge * psi_list[k].coeff / psi_list[k].exponent);
+ 	      if(estimatedMaxContrib > threshold)
+ 		{
+ 		  // This product distr is large enough.
+diff --git a/source/integrals/boysfunction.cc b/source/integrals/boysfunction.cc
+index 0796022..2659a1b 100644
+--- a/source/integrals/boysfunction.cc
++++ b/source/integrals/boysfunction.cc
+@@ -205,7 +205,7 @@ BoysFunctionManager::init(void) {
+   } /* END FOR n */
+   // Also prepare SavedPrefactor_list
+   for(int n = 0; n < BOYS_N_MAX; n++)
+-    SavedPrefactor_list[n] = (semiFactorial(2*n-1) * template_blas_sqrt(pi) / template_blas_pow((ergo_real)2, (ergo_real)(n+1)));
++    SavedPrefactor_list[n] = (semiFactorial(2*n-1) * template_blas_sqrt(PI) / template_blas_pow((ergo_real)2, (ergo_real)(n+1)));
+   // Set Boys_init_flag to indicate that initialization is done
+   Boys_init_flag = 1;
+   timeMeter.print(LOG_AREA_INTEGRALS, "BoysFunctionManager::init");
+diff --git a/source/integrals/integrals_1el_potential.cc b/source/integrals/integrals_1el_potential.cc
+index 7b21e42..edcdc39 100644
+--- a/source/integrals/integrals_1el_potential.cc
++++ b/source/integrals/integrals_1el_potential.cc
+@@ -619,7 +619,7 @@ do_interaction_recursive(const IntegralInfo & integralInfo,
+ 	  ergo_real dx0 = currAtom->coords[0] - distr1->centerCoords[0];
+ 	  ergo_real dx1 = currAtom->coords[1] - distr1->centerCoords[1];
+ 	  ergo_real dx2 = currAtom->coords[2] - distr1->centerCoords[2];
+-	  ergo_real resultPreFactor = 2 * pi / alpha1;
++	  ergo_real resultPreFactor = 2 * PI / alpha1;
+ 	  get_related_integrals_hermite(integralInfo,
+ 					CAM_params_not_used,
+ 					n1, noOfMonomials_1,
+@@ -663,7 +663,7 @@ do_interaction_recursive(const IntegralInfo & integralInfo,
+ 	  ergo_real dx0 = currAtom->coords[0] - distr1->centerCoords[0];
+ 	  ergo_real dx1 = currAtom->coords[1] - distr1->centerCoords[1];
+ 	  ergo_real dx2 = currAtom->coords[2] - distr1->centerCoords[2];
+-	  ergo_real resultPreFactor = 2 * pi / alpha1;
++	  ergo_real resultPreFactor = 2 * PI / alpha1;
+ 	  get_related_integrals_hermite(integralInfo,
+ 					CAM_params_not_used,
+ 					n1, noOfMonomials_1,
+@@ -881,7 +881,7 @@ do_interaction_recursive_2(const IntegralInfo & integralInfo,
+ 	  ergo_real dx0 = currAtom->coords[0] - distr1->centerCoords[0];
+ 	  ergo_real dx1 = currAtom->coords[1] - distr1->centerCoords[1];
+ 	  ergo_real dx2 = currAtom->coords[2] - distr1->centerCoords[2];
+-	  ergo_real resultPreFactor = 2 * pi / alpha1;
++	  ergo_real resultPreFactor = 2 * PI / alpha1;
+ 	  get_related_integrals_hermite(integralInfo,
+ 					CAM_params_not_used,
+ 					n1, noOfMonomials_1,
+@@ -978,7 +978,7 @@ get_list_of_distrs_for_V(const BasisInfoStruct& basisInfo,
+ 	  // now take care of psi_list[k]
+ 	  // Here, we estimate the largest possible contribution to V from this distr as (maxCharge * 2 * pi * coeff / exponent).
+ 	  DistributionSpecStruct* prim = &psi_list[k];
+-	  ergo_real maxContrib = template_blas_fabs(maxCharge * 2 * pi * prim->coeff / prim->exponent);
++	  ergo_real maxContrib = template_blas_fabs(maxCharge * 2 * PI * prim->coeff / prim->exponent);
+ 	  if(maxContrib > threshold)
+ 	    {
+ 	      if(maxCountResult > 0 && distrCount >= maxCountResult)
+diff --git a/source/integrals/integrals_1el_single.cc b/source/integrals/integrals_1el_single.cc
+index 8d4f14c..d16eeed 100644
+--- a/source/integrals/integrals_1el_single.cc
++++ b/source/integrals/integrals_1el_single.cc
+@@ -78,7 +78,7 @@ do_1e_repulsion_integral_using_symb_info_h(const DistributionSpecStruct & psi,
+   ergo_real dx1 = pointChargeCoords[1] - psi.centerCoords[1];
+   ergo_real dx2 = pointChargeCoords[2] - psi.centerCoords[2];
+ 
+-  ergo_real resultPreFactor = 2 * pi / alpha1;
++  ergo_real resultPreFactor = 2 * PI / alpha1;
+ 
+   ergo_real primitiveIntegralList_h[noOfMonomials_1*noOfMonomials_2];
+   ergo_real primitiveIntegralList_2[noOfMonomials_1*noOfMonomials_2];
+@@ -136,7 +136,7 @@ std::vector<ergo_real> do_1e_repulsion_integral_derivatives_using_symb_info(cons
+   ergo_real dx1 = pointChargeCoords[1] - psi->centerCoords[1];
+   ergo_real dx2 = pointChargeCoords[2] - psi->centerCoords[2];
+ 
+-  ergo_real resultPreFactor = 2 * pi / alpha1;
++  ergo_real resultPreFactor = 2 * PI / alpha1;
+ 
+   ergo_real primitiveIntegralList_h[noOfMonomials_1*noOfMonomials_2];
+ 
+diff --git a/source/integrals/integrals_2el_single.cc b/source/integrals/integrals_2el_single.cc
+index 04ee293..5a2f483 100644
+--- a/source/integrals/integrals_2el_single.cc
++++ b/source/integrals/integrals_2el_single.cc
+@@ -55,7 +55,7 @@ do_2e_integral_using_symb_info_h(const JK::ExchWeights & CAM_params,
+ 				 const DistributionSpecStruct* psi2,
+ 				 const IntegralInfo & integralInfo)
+ {
+-  const ergo_real twoTimesPiToPow5half = 2 * std::pow(pi, 2.5);
++  const ergo_real twoTimesPiToPow5half = 2 * std::pow(PI, 2.5);
+   ergo_real alpha1 = psi1->exponent;
+   ergo_real alpha2 = psi2->exponent;
+   ergo_real alphasum = alpha1 + alpha2;
+diff --git a/source/integrals/integrals_general.cc b/source/integrals/integrals_general.cc
+index 24ec468..697365d 100644
+--- a/source/integrals/integrals_general.cc
++++ b/source/integrals/integrals_general.cc
+@@ -224,7 +224,7 @@ get_product_simple_prims(const DistributionSpecStruct& primA_in,
+ 	    {
+ 	      ergo_real newCoeff = AiAj * CxCyCz * poly0[k] * poly1[l] * poly2[m];
+ 
+-	      ergo_real sqrtValue = template_blas_sqrt(pi / alphaNew);
++	      ergo_real sqrtValue = template_blas_sqrt(PI / alphaNew);
+ 	      ergo_real absvalue = newCoeff * sqrtValue * sqrtValue * sqrtValue;
+ 	      if(absvalue < 0) absvalue *= -1;
+ 
+@@ -323,7 +323,7 @@ compute_integral_of_simple_prim(const DistributionSpecStruct & distr) {
+ 	distr.monomialInts[2]) & 1) == 1) /* odd integrals disappear */
+     return 0;
+   alpha = distr.exponent;
+-  result = distr.coeff * template_blas_pow((ergo_real)pi/alpha, (ergo_real)1.5);
++  result = distr.coeff * template_blas_pow((ergo_real)PI/alpha, (ergo_real)1.5);
+   ergo_real twoA = 2*alpha;
+   for(i = 0; i < 3; i++) {
+     n = distr.monomialInts[i];
+diff --git a/source/integrals/organize_distrs.cc b/source/integrals/organize_distrs.cc
+index 4e974bc..3417231 100644
+--- a/source/integrals/organize_distrs.cc
++++ b/source/integrals/organize_distrs.cc
+@@ -389,7 +389,7 @@ organize_distributions(const IntegralInfo & integralInfo,
+       ergo_real maxExtent = 0;
+       for(int ii = groupIndexList[i]; ii < groupIndexList[i] + groupCountList[i]; ii++)
+ 	{
+-	  ergo_real size = template_blas_fabs(template_blas_pow((ergo_real)pi/distrList[ii].distr.exponent, (ergo_real)1.5) * distrList[ii].distr.coeff);
++	  ergo_real size = template_blas_fabs(template_blas_pow((ergo_real)PI/distrList[ii].distr.exponent, (ergo_real)1.5) * distrList[ii].distr.coeff);
+ 	  if(size > maxSize)
+ 	    maxSize = size;
+ 	  ergo_real limitingFactor = distrList[ii].limitingFactor;
+diff --git a/source/utilities/densitymanager.cc b/source/utilities/densitymanager.cc
+index 289da47..64d4325 100644
+--- a/source/utilities/densitymanager.cc
++++ b/source/utilities/densitymanager.cc
+@@ -58,7 +58,7 @@ compute_1d_gaussian_integral_recursive(ergo_real a, ergo_real b, int n, ergo_rea
+   if(n == 0)
+     {
+       sqrtalpha = template_blas_sqrt(alpha);
+-      result = template_blas_sqrt(pi/(4*alpha)) * (template_blas_erf(sqrtalpha*b) - template_blas_erf(sqrtalpha*a));
++      result = template_blas_sqrt(PI/(4*alpha)) * (template_blas_erf(sqrtalpha*b) - template_blas_erf(sqrtalpha*a));
+       return result;
+     }
+   if(n == 1)
+@@ -555,7 +555,7 @@ int get_density(const BasisInfoStruct & basisInfo,
+   resultCount = 0;
+   for(i = 0; i < count; i++)
+     {
+-      sqrtValue = template_blas_sqrt(pi / workList[i].exponent);
++      sqrtValue = template_blas_sqrt(PI / workList[i].exponent);
+       absvalue = workList[i].coeff * sqrtValue * sqrtValue * sqrtValue;
+       if(absvalue < 0) absvalue *= -1;
+       if(absvalue > cutoff)
+diff --git a/source/utilities_basic/pi.h b/source/utilities_basic/pi.h
+index 70bb7c1..3af39b8 100644
+--- a/source/utilities_basic/pi.h
++++ b/source/utilities_basic/pi.h
+@@ -47,14 +47,14 @@
+ #ifdef PRECISION_QUAD_FLT128
+ 
+ /* __float128 case: use suffix 'Q' */
+-#define pi         3.1415926535897932384626433832795028Q
++#define PI         3.1415926535897932384626433832795028Q
+ #define sqrtpi     1.7724538509055160272981674833411451Q
+ #define pitopow52 17.4934183276248628462628216798715544Q
+ 
+ #else
+ 
+ /* regular, non-__float128 case: use suffix 'L' */
+-#define pi         3.1415926535897932384626433832795028L
++#define PI         3.1415926535897932384626433832795028L
+ #define sqrtpi     1.7724538509055160272981674833411451L
+ #define pitopow52 17.4934183276248628462628216798715544L
+ 

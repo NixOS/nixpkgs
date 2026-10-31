@@ -1,0 +1,63 @@
+diff --git a/main/CMakeLists.txt b/main/CMakeLists.txt
+index e67e5c8f5c..a4c6dd61fd 100644
+--- a/main/CMakeLists.txt
++++ b/main/CMakeLists.txt
+@@ -499,15 +499,6 @@ if (APPLE)
+       ../fonts/finalebroadway/FinaleBroadwayText.otf
+      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
+      )
+-     install(DIRECTORY
+-      ${QT_INSTALL_QML}
+-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+-      REGEX ".*QtWebkit.*" EXCLUDE
+-      REGEX ".*QtTest.*" EXCLUDE
+-      REGEX ".*QtSensors.*" EXCLUDE
+-      REGEX ".*QtMultimedia.*" EXCLUDE
+-      REGEX ".*QtAudioEngine.*" EXCLUDE
+-      REGEX ".*_debug\\.dylib" EXCLUDE)
+ endif (APPLE)
+ 
+ if (MSCORE_OUTPUT_NAME)
+diff --git a/mscore/CMakeLists.txt b/mscore/CMakeLists.txt
+index 8daa49b517..471cedf06d 100644
+--- a/mscore/CMakeLists.txt
++++ b/mscore/CMakeLists.txt
+@@ -142,6 +142,7 @@ if (APPLE)
+          cocoabridge STATIC
+          macos/cocoabridge.mm
+          )
++      set_source_files_properties(macos/cocoabridge.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+ else (APPLE)
+       set(INCS "")
+       set(COCOABRIDGE "")
+diff --git a/mscore/macos/cocoabridge.h b/mscore/macos/cocoabridge.h
+index d6a217ad99..0c61197bbb 100644
+--- a/mscore/macos/cocoabridge.h
++++ b/mscore/macos/cocoabridge.h
+@@ -20,6 +20,10 @@
+ #ifndef __COCOABRIDGE_H__
+ #define __COCOABRIDGE_H__
+ 
++#include <functional>
++
++#include <QString>
++
+ class CocoaBridge {
+       CocoaBridge() {};
+    public:
+diff --git a/mscore/qml/msqmlengine.cpp b/mscore/qml/msqmlengine.cpp
+index 77c94b593c..ffd066d41d 100644
+--- a/mscore/qml/msqmlengine.cpp
++++ b/mscore/qml/msqmlengine.cpp
+@@ -37,9 +37,9 @@ MsQmlEngine::MsQmlEngine(QObject* parent)
+       setImportPathList(importPaths);
+ #endif
+ #ifdef Q_OS_MAC
+-      QStringList importPaths;
++      QStringList importPaths = importPathList();
+       QDir dir(mscoreGlobalShare + QString("/qml"));
+-      importPaths.append(dir.absolutePath());
++      importPaths.prepend(dir.absolutePath());
+       setImportPathList(importPaths);
+ #endif
+       }

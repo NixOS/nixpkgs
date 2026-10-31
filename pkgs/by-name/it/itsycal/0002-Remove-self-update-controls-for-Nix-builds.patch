@@ -1,0 +1,124 @@
+From f1474c9b296a3fbef30ca577dbd9a92224290b97 Mon Sep 17 00:00:00 2001
+From: 4evy <git@evy.pink>
+Date: Sat, 11 Jul 2026 01:12:47 +0300
+Subject: [PATCH 2/4] Remove self-update controls for Nix builds
+
+Sparkle cannot replace an application inside the immutable Nix store. Leaving
+its menu item and preference checkbox backed by a no-op stub is misleading.
+
+Remove the updater object, imports, controls, action, and matching Tahoe menu
+symbol so the Nix build has no Sparkle runtime dependency or non-functional
+update UI.
+---
+ Itsycal/Base.lproj/MainMenu.xib |  1 -
+ Itsycal/PrefsGeneralVC.m        | 11 ++---------
+ Itsycal/ViewController.m        |  9 ---------
+ 3 files changed, 2 insertions(+), 19 deletions(-)
+
+diff --git a/Itsycal/Base.lproj/MainMenu.xib b/Itsycal/Base.lproj/MainMenu.xib
+index aa2067e..1a25048 100644
+--- a/Itsycal/Base.lproj/MainMenu.xib
++++ b/Itsycal/Base.lproj/MainMenu.xib
+@@ -89,6 +89,5 @@
+                 </menuItem>
+             </items>
+         </menu>
+-        <customObject id="9Zs-J5-87v" customClass="SUUpdater"/>
+     </objects>
+ </document>
+diff --git a/Itsycal/PrefsGeneralVC.m b/Itsycal/PrefsGeneralVC.m
+index 7c19942..86f6be0 100644
+--- a/Itsycal/PrefsGeneralVC.m
++++ b/Itsycal/PrefsGeneralVC.m
+@@ -9,7 +9,6 @@
+ #import "MoVFLHelper.h"
+ #import "EventCenter.h"
+ #import "MASShortcut/Shortcut.h"
+-#import "Sparkle/SUUpdater.h"
+ 
+ static NSString * const kSourceCellId = @"SourceCell";
+ static NSString * const kCalendarCellId = @"CalendarCell";
+@@ -33,7 +32,6 @@ static NSString * const kCalendarCellId = @"CalendarCell";
+ {
+     NSTextField *_title;
+     NSButton *_login;
+-    NSButton *_checkUpdates;
+     NSButton *_beepBeep;
+     NSPopUpButton *_firstDayPopup;
+     NSTableView *_calendarsTV;
+@@ -66,7 +64,6 @@ static NSString * const kCalendarCellId = @"CalendarCell";
+     // Checkboxes
+     _login = chkbx(NSLocalizedString(@"Launch at login", @""));
+     _login.action = @selector(launchAtLogin:);
+-    _checkUpdates = chkbx(NSLocalizedString(@"Automatically check for updates", @""));
+     _beepBeep = chkbx(NSLocalizedString(@"Beep beep on the hour", @""));
+ 
+     // First day of week label
+@@ -130,10 +127,9 @@ static NSString * const kCalendarCellId = @"CalendarCell";
+                                      NSLocalizedString(@"31 days", @"")]];
+     [v addSubview:_agendaDaysPopup];
+ 
+-    MoVFLHelper *vfl = [[MoVFLHelper alloc] initWithSuperview:v metrics:@{@"m": @20} views:NSDictionaryOfVariableBindings(_login, _checkUpdates, _beepBeep, firstDayLabel, _firstDayPopup, shortcutLabel, shortcutView, tvContainer, agendaDaysLabel, _agendaDaysPopup)];
+-    [vfl :@"V:|-m-[_login]-[_checkUpdates]-[_beepBeep]-20-[_firstDayPopup]-20-[shortcutLabel]-3-[shortcutView(25)]-20-[tvContainer(170)]-[_agendaDaysPopup]-m-|"];
++    MoVFLHelper *vfl = [[MoVFLHelper alloc] initWithSuperview:v metrics:@{@"m": @20} views:NSDictionaryOfVariableBindings(_login, _beepBeep, firstDayLabel, _firstDayPopup, shortcutLabel, shortcutView, tvContainer, agendaDaysLabel, _agendaDaysPopup)];
++    [vfl :@"V:|-m-[_login]-[_beepBeep]-20-[_firstDayPopup]-20-[shortcutLabel]-3-[shortcutView(25)]-20-[tvContainer(170)]-[_agendaDaysPopup]-m-|"];
+     [vfl :@"H:|-m-[_login]-(>=m)-|"];
+-    [vfl :@"H:|-m-[_checkUpdates]-(>=m)-|"];
+     [vfl :@"H:|-m-[_beepBeep]-(>=m)-|"];
+     [vfl :@"H:|-m-[firstDayLabel]-[_firstDayPopup]-(>=m)-|" :NSLayoutFormatAlignAllFirstBaseline];
+     [vfl :@"H:|-(>=m)-[shortcutLabel]-(>=m)-|"];
+@@ -144,9 +140,6 @@ static NSString * const kCalendarCellId = @"CalendarCell";
+     // Center shortcutLabel
+     [v addConstraint:[NSLayoutConstraint constraintWithItem:shortcutLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:v attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+ 
+-    // Binding for Sparkle automatic update checks
+-    [_checkUpdates bind:@"value" toObject:[SUUpdater sharedUpdater] withKeyPath:@"automaticallyChecksForUpdates" options:@{NSContinuouslyUpdatesValueBindingOption: @(YES)}];
+-    
+     // Binding for hourly beep
+     [_beepBeep bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:[@"values." stringByAppendingString:kBeepBeepOnTheHour] options:@{NSContinuouslyUpdatesValueBindingOption: @(YES)}];
+     
+diff --git a/Itsycal/ViewController.m b/Itsycal/ViewController.m
+index 1d55c4f..0bd303b 100644
+--- a/Itsycal/ViewController.m
++++ b/Itsycal/ViewController.m
+@@ -21,7 +21,6 @@
+ #import "MoButton.h"
+ #import "MoVFLHelper.h"
+ #import "MoUtils.h"
+-#import "Sparkle/SUUpdater.h"
+ 
+ @implementation ViewController
+ {
+@@ -378,7 +377,6 @@
+     NSInteger i = 0;
+ 
+     [optMenu insertItemWithTitle:NSLocalizedString(@"About Itsycal", @"") action:@selector(showAbout:) keyEquivalent:@"" atIndex:i++];
+-    [optMenu insertItemWithTitle:NSLocalizedString(@"Check for Updates…", @"") action:@selector(checkForUpdates:) keyEquivalent:@"" atIndex:i++];
+     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
+     [optMenu insertItemWithTitle:NSLocalizedString(@"Go to Date…", @"") action:@selector(showDatePickerPopover:) keyEquivalent:@"T" atIndex:i++];
+     [optMenu insertItem:[NSMenuItem separatorItem] atIndex:i++];
+@@ -394,7 +392,6 @@
+         NSInteger index = 0;
+         NSArray *symbolNames = @[
+             @"info.circle",
+-            @"arrow.trianglehead.2.clockwise",
+             @"21.calendar",
+             @"gear",
+             @"calendar.badge.clock",
+@@ -462,11 +459,6 @@
+     [self.prefsWC showWindow:self];
+ }
+ 
+-- (void)checkForUpdates:(id)sender
+-{
+-    [[SUUpdater sharedUpdater] checkForUpdates:self];
+-}
+-
+ - (void)openDateAndTimePrefs:(id)sender
+ {
+     NSURL *url = nil;
+@@ -1514,4 +1506,3 @@
+ }
+ 
+ @end
+-

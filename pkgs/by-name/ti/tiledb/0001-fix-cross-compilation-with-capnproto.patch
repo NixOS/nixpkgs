@@ -1,0 +1,29 @@
+From 300f6e39cfc1723f0c703a3050cf0c2fd943baee Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Sun, 15 Mar 2026 10:14:06 -0400
+Subject: [PATCH] fix cross-compilation with capnproto
+
+See https://github.com/capnproto/capnproto/issues/1802
+---
+ tiledb/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tiledb/CMakeLists.txt b/tiledb/CMakeLists.txt
+index 8bf8559ed..1b5adb80c 100644
+--- a/tiledb/CMakeLists.txt
++++ b/tiledb/CMakeLists.txt
+@@ -617,6 +617,11 @@ target_include_directories(TILEDB_CORE_OBJECTS
+ # Serialization
+ if(TILEDB_SERIALIZATION)
+   find_package(CapnProto REQUIRED)
++  find_program(CAPNP_EXECUTABLE_HOST capnp REQUIRED)
++  set_target_properties(CapnProto::capnp_tool PROPERTIES
++    IMPORTED_LOCATION ${CAPNP_EXECUTABLE_HOST}
++  )
++
+   target_link_libraries(TILEDB_CORE_OBJECTS_ILIB
+           INTERFACE
+           CapnProto::capnp
+-- 
+2.51.2
+

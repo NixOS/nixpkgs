@@ -1,0 +1,12 @@
+diff --git i/Makefile.in w/Makefile.in
+index 04e1c8e5..9bd5d01b 100644
+--- i/Makefile.in
++++ w/Makefile.in
+@@ -329,7 +329,6 @@ install-files:
+ 	$(MKDIR_P) $(DESTDIR)$(mandir)/$(mansubdir)5
+ 	$(MKDIR_P) $(DESTDIR)$(mandir)/$(mansubdir)8
+ 	$(MKDIR_P) $(DESTDIR)$(libexecdir)
+-	$(MKDIR_P) -m 0755 $(DESTDIR)$(PRIVSEP_PATH)
+ 	$(INSTALL) -m 0755 $(STRIP_OPT) ssh$(EXEEXT) $(DESTDIR)$(bindir)/ssh$(EXEEXT)
+ 	$(INSTALL) -m 0755 $(STRIP_OPT) scp$(EXEEXT) $(DESTDIR)$(bindir)/scp$(EXEEXT)
+ 	$(INSTALL) -m 0755 $(STRIP_OPT) ssh-add$(EXEEXT) $(DESTDIR)$(bindir)/ssh-add$(EXEEXT)
