@@ -6,6 +6,8 @@
   openssl,
   stdenv,
   alsa-lib,
+  alsa-plugins,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -33,7 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    alsa-plugins
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/lowfi \
+      --set ALSA_PLUGIN_DIR "${alsa-plugins}/lib/alsa-lib"
+  '';
 
   checkFlags = [
     # Skip this test as it doesn't work in the nix sandbox
