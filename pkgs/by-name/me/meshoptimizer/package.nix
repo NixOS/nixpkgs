@@ -17,12 +17,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "meshoptimizer";
-  version = "1.2";
+  version = "1.3";
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "meshoptimizer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1dHT4+aOwIY3DUrj6JwcDizRPWwL/PWkEcpmA8zD/vE=";
+    hash = "sha256-Q4oHUJKifmqrfPB7pixZsJqsABGqD6RYnLt17/OQMME=";
   };
 
   nativeBuildInputs = [ cmake ];
