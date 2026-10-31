@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -68,7 +69,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pythonImportsCheck = [ "mlx_lm" ];
+  # Metal-enabled mlx imports crash in the sandbox (No Metal device available),
+  # and the test suite fails on GPU-dependent assertions.
+  pythonImportsCheck = lib.optionals (!config.metalSupport) [ "mlx_lm" ];
+  dontUsePytestCheck = config.metalSupport;
 
   disabledTestPaths = [
     # Requires network access to huggingface.co
