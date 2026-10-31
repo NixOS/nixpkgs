@@ -9,21 +9,7 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = _final: prev: {
-      # TODO remove when wtforms has a 3.3 stable release
-      wtforms = prev.wtforms.overridePythonAttrs (_old: rec {
-        version = "3.3.0b3";
-        src = fetchFromGitHub {
-          owner = "wtforms";
-          repo = "wtforms";
-          tag = version;
-          hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
-        };
-      });
-    };
-  };
+  python = python3;
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "canaille";

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchPypi,
+  fetchFromGitHub,
 }:
 
 let
@@ -11,10 +12,11 @@ let
       wtforms = super.wtforms.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.1";
 
-        src = fetchPypi {
-          pname = "WTForms";
-          inherit version;
-          sha256 = "sha256-hhoTs65SHWcA2sOydxlwvTVKY7pwQ+zDqCtSiFlqGXI=";
+        src = fetchFromGitHub {
+          owner = "wtforms";
+          repo = "wtforms";
+          tag = version;
+          hash = "sha256-NEhC4Zc1WZujO16UtfDwtNWw6Acec/xAVEeB5gu8hQM=";
         };
 
         doCheck = false;
