@@ -137,6 +137,15 @@ in
         TimeoutStartSec = "infinity";
       };
 
+      # the server watches modification times, which store paths never change
+      reloadTriggers = [
+        serverConfigFile
+        usersConfigFile
+        cfg.extraServerConfig
+        cfg.extraUsersConfig
+      ];
+      reload = "${cfg.package}/bin/clickhouse-client --query 'SYSTEM RELOAD CONFIG'";
+
       environment = {
         # Switching off watchdog is very important for sd_notify to work correctly.
         CLICKHOUSE_WATCHDOG_ENABLE = "0";
