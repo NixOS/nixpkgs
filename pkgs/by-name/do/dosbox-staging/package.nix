@@ -1,8 +1,10 @@
 {
   lib,
   SDL2,
-  SDL2_net,
+  SDL2_image,
   alsa-lib,
+  asio,
+  cmake,
   fetchFromGitHub,
   fluidsynth,
   gitUpdater,
@@ -18,9 +20,11 @@
   libpulseaudio,
   libslirp,
   libsndfile,
+  libtiff,
+  libwebp,
+  libx11,
+  libxi,
   makeWrapper,
-  meson,
-  ninja,
   opusfile,
   pkg-config,
   speexdsp,
@@ -31,29 +35,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
-  version = "0.82.2";
-  shortRev = "f8c24f8";
+  version = "0.83.0";
+  shortRev = "7b40053";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u9W6TfHF+BNeoExcx98kCVJu1BNwWnvjBEg84evMnBw=";
+    hash = "sha256-pDAJVuuOI0VktLFw+JGvoKWgxzRywmXoCo2JJlN0Ul8=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    gtest
+    cmake
     makeWrapper
-    meson
-    ninja
     pkg-config
   ];
 
   buildInputs = [
     SDL2
-    SDL2_net
+    SDL2_image
+    asio
     fluidsynth
     glib
+    gtest
     iir1
     libGL
     libGLU
@@ -64,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libslirp
     libsndfile
+    libtiff
+    libwebp
+    libx11
+    libxi
     opusfile
     speexdsp
     zlib-ng
@@ -75,18 +85,20 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # replace instances of the get-version.sh script that uses git in meson.build with manual values
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "meson.project_source_root() + '/scripts/get-version.sh'," "'printf'," \
-      --replace-fail "'version', check: true," "'${finalAttrs.version}', check: true," \
-      --replace-fail "'./scripts/get-version.sh', 'hash'," "'printf', '${
-        builtins.substring 0 5 finalAttrs.shortRev
-      }',"
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_LIBS" true)
+  ];
 
-  postInstall = ''
-    install -Dm644 $src/contrib/linux/org.dosbox-staging.dosbox-staging.desktop $out/share/applications/
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-I${lib.getInclude SDL2}/include/SDL2"
+  ];
+
+  # git rev-parse doesn't work, so manually set the hash
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "BUILD_GIT_HASH \"?\"" "BUILD_GIT_HASH \"${
+        builtins.substring 0 5 finalAttrs.shortRev
+      }\""
   '';
 
   # Rename binary, add a wrapper, and copy manual to avoid conflict with
@@ -96,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mv $out/bin/dosbox $out/bin/dosbox-staging
     makeWrapper $out/bin/dosbox-staging $out/bin/dosbox
+    mv $out/share/dosbox-staging/resources/* $out/share/dosbox-staging/
 
     pushd $man/share/man/man1/
     ln -s dosbox.1.gz dosbox-staging.1.gz
