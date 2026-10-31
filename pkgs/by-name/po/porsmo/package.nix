@@ -6,8 +6,8 @@
   alsa-lib,
   testers,
   porsmo,
+  stdenv,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "porsmo";
   version = "0.3.0";
@@ -26,9 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    alsa-lib
-  ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals (stdenv.isLinux) [
+      alsa-lib
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = porsmo;
