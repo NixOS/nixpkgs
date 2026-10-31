@@ -1,0 +1,107 @@
+Read local inputs from MOZC_SOURCE and JAWIKI_TITLES instead of downloading
+them. Preserve upstream's processing and indentation.
+
+--- a/src/merge/merge_dictionaries.py
++++ b/src/merge/merge_dictionaries.py
+@@ -9,6 +9,7 @@
+ import html
+ import io
+ import json
++import os
+ import re
+ import sys
+ import urllib.request
+@@ -64,27 +65,9 @@
+ 
+ 
+ def get_mozc_entry():
+-    # Mozc の最終コミット日を取得
+-    url = 'https://api.github.com/repos/google/mozc/commits/master'
+-
+-    with urllib.request.urlopen(url) as response:
+-        data = json.loads(response.read().decode())
+-        date_str = data['commit']['committer']['date']
+-
+-    date_str = datetime.fromisoformat(date_str)
+-    date_str = date_str.strftime('%Y%m%d')
+-
+-    # Mozc のアーカイブを取得
+-    url = 'https://github.com/google/mozc/archive/refs/heads/master.zip'
+-
+-    if not Path(f'mozc-{date_str}.zip').exists():
+-        urllib.request.urlretrieve(
+-                url, f'mozc-{date_str}.zip')
+-
+-    with ZipFile(f'mozc-{date_str}.zip') as zip_ref:
++    if True: # Redundant if to match original indentation
+         # 一般名詞の ID を取得
+-        with zip_ref.open(
+-                'mozc-master/src/data/dictionary_oss/id.def') as file:
++        with open(os.environ['MOZC_SOURCE'] + '/src/data/dictionary_oss/id.def', 'rb') as file:
+             for line in file:
+                 line = line.decode()
+ 
+@@ -93,15 +76,14 @@
+                     break
+ 
+         # Mozc 辞書のファイルリストを取得
+-        all_files = zip_ref.namelist()
+-        dict_path = 'mozc-master/src/data/dictionary_oss/dictionary0'
+-        dict_files = [f for f in all_files if f.startswith(dict_path)]
++        dict_path = Path(os.environ['MOZC_SOURCE']) / 'src/data/dictionary_oss'
++        dict_files = sorted(dict_path.glob('dictionary0*'))
+ 
+         # Mozc 辞書のエントリを取得
+         mozc_entry = []
+ 
+         for dict_file in dict_files:
+-            with zip_ref.open(dict_file) as file:
++            with open(dict_file, 'rb') as file:
+                 # バイナリストリームをテキストストリームに変換
+                 file_text = io.TextIOWrapper(file, encoding='utf-8')
+                 reader = csv.reader(file_text, delimiter='\t')
+@@ -148,43 +130,9 @@
+ 
+ 
+ def generate_jawiki_hit_dict():
+-    # jawiki-*-multistream-index.txt.bz2 を取得
+-    url = 'https://dumps.wikimedia.org/jawiki/latest/' + \
+-        'jawiki-latest-pages-articles-multistream-index.txt.bz2-rss.xml'
+-
+-    headers = {
+-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
+-        Chrome/91.0.4472.124"}
+-
+-    try:
+-        req = urllib.request.Request(url, headers=headers)
+-        with urllib.request.urlopen(req) as response:
+-            root = ET.fromstring(response.read().decode())
+-    except urllib.error.HTTPError as e:
+-        print(f'Error: {e.code}')
+-
+-    description_text = root.find('.//item/description').text
+-    url = re.search(r'href="([^"]+)"', description_text).group(1)
+-
+-    jawiki_index_file = url.rsplit('/', 1)[1]
+-
+-    if not Path(jawiki_index_file).exists():
+-        try:
+-            req = urllib.request.Request(url, headers=headers)
+-            with urllib.request.urlopen(req) as response, \
+-                    open(jawiki_index_file, "wb") as out_file:
+-                # 1MB ずつ書き込む
+-                while True:
+-                    chunk = response.read(1024 * 1024)
+-                    if not chunk:
+-                        break
+-                    out_file.write(chunk)
+-        except urllib.error.HTTPError as e:
+-            print(f'Error: {e.code}')
+-
+     jawiki_index = []
+ 
+-    with bz2.open(jawiki_index_file, 'rt', encoding='utf-8') as file:
++    with open(os.environ['JAWIKI_TITLES'], 'rt', encoding='utf-8') as file:
+         entry_to_skip = (
+             'ファイル:', 'Wikipedia:', 'Template:', 'Portal:',
+             'Help:', 'Category:', 'プロジェクト:', '曖昧さ回避')

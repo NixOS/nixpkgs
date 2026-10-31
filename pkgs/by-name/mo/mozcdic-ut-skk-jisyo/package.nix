@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-skk-jisyo";
-  version = "0-unstable-2024-10-12";
+  version = "0-unstable-2026-04-19";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-skk-jisyo";
-    rev = "f34f5801b1f29cff34633e4a03b887702f98ed54";
-    hash = "sha256-W5ZZDSKvN5fLsFyrEKGMQl/S4q9WGLmewPqofztOPe0=";
+    rev = "7c02e535bd6d999a715a53b58c3366f2401bfb7f";
+    hash = "sha256-Ew8mzdhQHzCHSkwo9HzPKduSPrH0BZx/YNEsoOPLe3I=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-skk-jisyo.txt.tar.bz2
+    install -Dt $out mozcdic-ut-skk-jisyo.txt.bz2
 
     runHook postInstall
   '';
@@ -40,8 +40,5 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }
