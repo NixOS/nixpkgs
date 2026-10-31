@@ -2548,7 +2548,6 @@ mapAliases {
   sqlitestudio = warnAlias "`sqlitestudio` has been renamed to `letos` by upstream in v4.0.0. See https://github.com/pawelsalawa/letos/issues/5441 for more." letos; # Added 2026-09-01
   sqlitestudio-plugins = warnAlias "`sqlitestudio-plugins` has been renamed to `letos-plugins` by upstream in v4.0.0. See https://github.com/pawelsalawa/letos/issues/5441 for more." letos-plugins; # Added 2026-09-01
   squashfsTools = squashfs-tools; # Added 2026-07-05
-  squirreldisk = throw "'squirreldisk' has been removed as it depended on webkitgtk 4.0"; # Added 2026-06-07
   src = throw "The \"src\" package has been renamed to \"simple-revision-control\". If you encounter this error and did not intend to use that package you may have a falsely constructed overlay."; # Added 2025-11-19
   ssh-ashkpass-fullscreen = throw "'ssh-askpass-fullscreen' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-08-03
   ssh-openpgpg-auth = throw "'ssh-openpgpg-auth' has been removed as it is no longer maintained."; # Added 2026-10-23
