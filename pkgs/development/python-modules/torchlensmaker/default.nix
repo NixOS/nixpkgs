@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    tests = callPackage ./tests { };
+    tests.landscape = callPackage ./tests { };
 
     # nix-shell -A python3Packages.torchlensmaker.pyEnv
     pyEnv = python.withPackages (

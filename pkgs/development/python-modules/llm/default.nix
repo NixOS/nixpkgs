@@ -256,8 +256,15 @@ let
         ${plugin.pname} = callPackage ./mk-plugin-test.nix { inherit llm plugin; };
       };
 
-      # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
+      # Prefix plugin tests so shared test names do not overwrite each other.
+      tests = lib.mergeAttrsList (
+        map (
+          pluginName:
+          lib.mapAttrs' (testName: test: lib.nameValuePair "${pluginName}-${testName}" test) (
+            python.pkgs.${pluginName}.tests or { }
+          )
+        ) withPluginsArgNames
+      );
     };
 
     meta = {
