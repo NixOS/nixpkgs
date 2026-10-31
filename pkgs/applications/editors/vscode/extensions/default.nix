@@ -3135,6 +3135,8 @@ let
         };
       };
 
+      meta.pyrefly = callPackage ./meta.pyrefly { };
+
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "git-graph";
