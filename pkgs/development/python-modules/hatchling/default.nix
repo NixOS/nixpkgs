@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
 
   # runtime
   editables,
@@ -22,6 +23,8 @@ buildPythonPackage (finalAttrs: {
   pname = "hatchling";
   version = "1.31.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

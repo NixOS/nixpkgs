@@ -226,6 +226,7 @@ in
   python = toPythonModule python // {
     pkgs = self;
     withPackages = import ./with-packages.nix {
+      inherit lib python;
       inherit (python) buildEnv;
       pythonPackages = self;
     };

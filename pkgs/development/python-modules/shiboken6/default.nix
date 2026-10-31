@@ -22,7 +22,7 @@ stdenv'.mkDerivation (finalAttrs: {
     cmake
     python.pkgs.ninja
     shiboken6-generator
-    (python.pythonOnBuildForHost.withPackages (ps: [
+    (python.withPackages (ps: [
       ps.packaging
       ps.setuptools
     ]))

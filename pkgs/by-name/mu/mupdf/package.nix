@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (enableGL || enableX11) copyDesktopItems
   ++ lib.optional (stdenv.hostPlatform.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
   ++ lib.optionals (enableCxx || enablePython) [
-    (python3.pythonOnBuildForHost.withPackages (ps: [
+    (python3.withPackages (ps: [
       ps.setuptools
       ps.clang
       ps.pipcl

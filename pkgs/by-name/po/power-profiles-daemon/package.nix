@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     wrapGAppsNoGuiHook
     # checkInput but checked for during the configuring
-    (python3.pythonOnBuildForHost.withPackages (
+    (python3.withPackages (
       ps: with ps; [
         pygobject3
         dbus-python

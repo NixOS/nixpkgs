@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     autoreconfHook
     pkg-config
-    (python3.pythonOnBuildForHost.withPackages (p: [
+    (python3.withPackages (p: [
       p.numpy
       p.matplotlib
       p.libtfr

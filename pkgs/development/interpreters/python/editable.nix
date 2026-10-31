@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   hatchling,
+  python,
   tomli-w,
 }:
 {
@@ -81,7 +82,7 @@ buildPythonPackage (
     pyproject = true;
 
     unpackPhase = ''
-      python -c "import json, os, tomli_w; attrs = json.load(open(os.environ['NIX_ATTRS_JSON_FILE'], 'r')); print(tomli_w.dumps(attrs['pyprojectContents']))" > pyproject.toml
+      ${python.executable} -c "import json, os, tomli_w; attrs = json.load(open(os.environ['NIX_ATTRS_JSON_FILE'], 'r')); print(tomli_w.dumps(attrs['pyprojectContents']))" > pyproject.toml
       echo 'import os.path, sys; sys.path.insert(0, os.path.expandvars("${root}"))' > _${pname}.pth
     '';
 

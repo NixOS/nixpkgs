@@ -46,6 +46,18 @@ let
   isPy3k = (lib.versions.major pythonVersion) == "3";
   isPy38OrNewer = lib.versionAtLeast pythonVersion "3.8";
   isPy39OrNewer = lib.versionAtLeast pythonVersion "3.9";
+
+  # All interpreter variants must use the same package overrides.
+  override =
+    interpreter:
+    let
+      python = interpreter.override {
+        inherit packageOverrides;
+        self = python;
+      };
+    in
+    python;
+
   passthru = passthruFun rec {
     inherit
       self
@@ -62,11 +74,13 @@ let
     hasDistutilsCxxPatch = false;
     inherit pythonAttr;
 
-    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
-    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
-    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
-    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+    pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (
+      override pkgsTargetTarget.${pythonAttr}
+    );
 
     pythonABITags = [
       "none"
