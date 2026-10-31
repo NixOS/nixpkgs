@@ -12,6 +12,8 @@ buildGo127Module (finalAttrs: {
   pname = "circleci-cli";
   version = "1.11.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
