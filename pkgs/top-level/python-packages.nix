@@ -5064,6 +5064,8 @@ self: super: with self; {
 
   dlinfo = callPackage ../development/python-modules/dlinfo { };
 
+  dllist = callPackage ../development/python-modules/dllist { };
+
   dllogger = callPackage ../development/python-modules/dllogger { };
 
   dlms-cosem = callPackage ../development/python-modules/dlms-cosem { };
@@ -21111,6 +21113,12 @@ self: super: with self; {
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
+
+  torch-tensorrt = callPackage ../development/python-modules/torch-tensorrt {
+    torch-tensorrt = pkgs.torch-tensorrt.override {
+      python3Packages = self;
+    };
+  };
 
   torchWithCuda = self.torch.override {
     triton = self.triton-cuda;
