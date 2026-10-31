@@ -3,4 +3,10 @@
   ...
 }@args:
 
-voxtype.override ({ hipSupport = true; } // removeAttrs args [ "voxtype" ])
+voxtype.override (
+  {
+    hipSupport = true;
+    osdGtk4Support = true;
+  }
+  // removeAttrs args [ "voxtype" ]
+)
