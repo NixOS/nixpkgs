@@ -21138,6 +21138,8 @@ self: super: with self; {
 
   torchbench = callPackage ../development/python-modules/torchbench { };
 
+  torchbenchmark = callPackage ../development/python-modules/torchbenchmark { };
+
   torchcodec = callPackage ../development/python-modules/torchcodec { };
 
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
