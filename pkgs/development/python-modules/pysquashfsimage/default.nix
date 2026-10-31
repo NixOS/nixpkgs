@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pysquashfsimage";
   version = "0.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matteomattei";

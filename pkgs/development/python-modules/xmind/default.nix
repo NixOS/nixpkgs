@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "zhuifengshen";
     repo = "xmind";

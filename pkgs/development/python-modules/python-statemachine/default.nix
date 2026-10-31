@@ -21,8 +21,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "python_statemachine";
     inherit (finalAttrs) version;

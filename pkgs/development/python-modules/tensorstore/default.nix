@@ -35,7 +35,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tensorstore";
   version = "0.1.84";
   format = "wheel";
-  __structuredAttrs = true;
 
   # The source build involves some wonky Bazel stuff.
   src = fetchPypi {

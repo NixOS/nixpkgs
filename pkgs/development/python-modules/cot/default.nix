@@ -22,8 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "cot";
     inherit (finalAttrs) version;

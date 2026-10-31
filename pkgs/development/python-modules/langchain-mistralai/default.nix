@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
   version = "1.1.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";

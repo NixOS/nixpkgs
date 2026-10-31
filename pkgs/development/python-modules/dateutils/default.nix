@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.12";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "dateutils";
     inherit (finalAttrs) version;

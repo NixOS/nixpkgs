@@ -56,7 +56,6 @@ buildPythonApplication (finalAttrs: {
   pname = "mobsf";
   version = "4.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MobSF";

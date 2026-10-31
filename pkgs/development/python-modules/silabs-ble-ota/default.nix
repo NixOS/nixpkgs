@@ -41,8 +41,6 @@ buildPythonPackage (finalAttrs: {
     "silabs_ble_ota"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Flash firmware to Silicon Labs EFR32 devices over BLE";
     homepage = "https://github.com/OpenDisplay/silabs-ble-ota";

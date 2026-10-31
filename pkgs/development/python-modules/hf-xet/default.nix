@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hf-xet";
   version = "1.6.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

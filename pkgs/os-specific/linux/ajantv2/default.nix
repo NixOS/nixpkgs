@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${libajantv2.src.name}/driver/linux";
 
   patches = [
-    ./fix-linux-6.15.patch
+    ./fix-linux-7.patch
   ];
   patchFlags = "-p3";
 

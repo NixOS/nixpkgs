@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.3.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "arpy";

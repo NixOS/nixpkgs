@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     util-macros
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "font-util-";
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "X.Org font package creation/installation utilities";

@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "textual";
   version = "8.2.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";

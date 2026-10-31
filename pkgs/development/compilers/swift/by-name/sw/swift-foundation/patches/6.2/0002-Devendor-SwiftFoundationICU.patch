@@ -30,7 +30,7 @@ index 8b4f45e..f71be26 100644
 -        GIT_REPOSITORY https://github.com/apple/swift-foundation-icu.git
 -        GIT_TAG release/6.2)
 -endif()
-+find_package(SwiftFoundationICU)
++find_package(_FoundationICU)
  
  if (_SwiftCollections_SourceDIR)
      message(STATUS "_SwiftCollections_SourceDIR provided, using swift-foundation-icu checkout at ${_SwiftCollections_SourceDIR}")

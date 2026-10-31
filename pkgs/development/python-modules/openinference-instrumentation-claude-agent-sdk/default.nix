@@ -24,8 +24,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.7";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Arize-ai";
     repo = "openinference";

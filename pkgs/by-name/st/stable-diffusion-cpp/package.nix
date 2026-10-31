@@ -25,7 +25,7 @@
   vulkan-loader,
   spirv-tools,
 
-  metalSupport ? (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  metalSupport ? stdenv.hostPlatform.isDarwin,
   darwin,
   apple-sdk,
 }:

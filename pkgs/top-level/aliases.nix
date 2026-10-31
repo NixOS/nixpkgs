@@ -382,6 +382,7 @@ mapAliases {
   autoconf264 = throw "'autoconf264' has been removed in favor of 'autoconf'"; # Added 2025-07-21
   autoconf271 = throw "'autoconf271' has been removed in favor of 'autoconf'"; # Added 2026-03-29
   automake111x = throw "'automake111x' has been removed in favor of 'automake'"; # Added 2025-07-21
+  automake118x = throw "'automake118x' has been removed in favor of 'automake'"; # Added 2026-09-10
   autopanosiftc = throw "'autopanosiftc' has been removed, as it is unmaintained upstream"; # Added 2025-10-07
   autoreconfHook264 = throw "'autoreconfHook264' has been removed in favor of 'autoreconfHook'"; # Added 2025-07-21
   autoreconfHook271 = throw "'autoreconfHook271' has been removed in favor of 'autoreconfHook'"; # Added 2026-03-29
@@ -2525,6 +2526,7 @@ mapAliases {
   sourceHanSerifPackages.korean = throw "'sourceHanSerifPackages.korean' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
   sourceHanSerifPackages.simplified-chinese = throw "'sourceHanSerifPackages.simplified-chinese' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
   sourceHanSerifPackages.traditional-chinese = throw "'sourceHanSerifPackages.traditional-chinese' has been renamed to/replaced by 'source-han-serif'"; # Converted to throw 2025-10-27
+  sourceHighlight = warnAlias "'sourceHighlight' has been renamed to/replaced by 'source-highlight'" source-highlight; # Added 2026-10-14
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   SP800-90B_EntropyAssessment = throw "'SP800-90B_EntropyAssessment' has been renamed to/replaced by 'sp800-90b-entropyassessment'"; # Converted to throw 2025-10-27
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
@@ -2979,6 +2981,7 @@ mapAliases {
   xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
   xhtml1 = throw "'xhtml1' has been removed because it was superseded in 2018"; # Added 2026-07-24
+  xhyve = throw "'xhyve' has been removed because x86_64-darwin is no longer supported"; # Added 2026-10-26
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
   xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
   xkeyboardconfig = xkeyboard-config; # Added 2026-02-04

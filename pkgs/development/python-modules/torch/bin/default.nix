@@ -43,7 +43,6 @@ let
 in
 buildPythonPackage {
   inherit version;
-  __structuredAttrs = true;
 
   pname = "torch";
   # Don't forget to update torch to the same version.

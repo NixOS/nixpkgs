@@ -31,9 +31,7 @@ stdenv.mkDerivation {
     ./rename_format_to_run-clang-format.patch
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-U__ARM_NEON__";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-U__ARM_NEON__";
 
   passthru.updateScript = unstableGitUpdater {
     tagPrefix = "v";

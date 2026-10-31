@@ -51,9 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isAarch64 (
       lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
-    )
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
     );
 
   doCheck = true;

@@ -25,8 +25,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.54";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Arize-ai";
     repo = "openinference";
@@ -70,6 +68,11 @@ buildPythonPackage (finalAttrs: {
     "test_input_value"
     "test_openai"
     "test_tool_calls"
+  ];
+
+  disabledTestPaths = [
+    # want to connect to OpenAI's API
+    "tests/openinference/instrumentation/openai/test_instrumentor.py"
   ];
 
   passthru = {

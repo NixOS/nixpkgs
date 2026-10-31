@@ -25,7 +25,7 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages,
+  llvmPackages_23,
   llvm,
   cargo-auditable,
   wrapCCWith,
@@ -35,7 +35,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages.libllvm.override (
+    pkgSet.llvmPackages_23.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -43,21 +43,22 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_23.clangUseLLVM;
         };
       }
     );
 in
 import ./default.nix
   {
-    rustcVersion = "1.99.0";
-    rustcSha256 = "sha256-IDXkB3uDSkL/iv0H8neuPwY0AJi4ax0oQ6ojS0z8rmc=";
+    rustcVersion = "1.99.1";
+    rustcSha256 = "sha256-21a7xk20kc7aa3iigRptEhxjkziQb9lE9yAonL0CJFw=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
+    llvmPackages = llvmPackages_23;
 
-    inherit llvmPackages cargo-auditable;
+    inherit cargo-auditable;
 
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
@@ -65,27 +66,27 @@ import ./default.nix
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
     # https://github.com/NixOS/nixpkgs/pull/351028#issuecomment-2438244363
-    bootstrapVersion = "1.99.0";
+    bootstrapVersion = "1.99.1";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "1ce31e45476c18aa3a00d7e349c61e10b1e061ab8f6e42d2eb5b5bbbee17af3d";
-      x86_64-unknown-linux-gnu = "de0581ca9d732295a6474cfbd02461db27d69acd5050a8206523a8d6fa1599db";
-      x86_64-unknown-linux-musl = "c812c6f52447721fe64cf0feb516769cf758475548a0da25c5b76b65613050a9";
-      arm-unknown-linux-gnueabihf = "e686d5e3fd27e86297fde7bc2cf48510a6982a446eb9fee40c736d0c37a4bc94";
-      armv7-unknown-linux-gnueabihf = "c3a3c5177971d6818c478b8414c8e942e08c3af6dc0cf607d71d1b613f6aa168";
-      aarch64-unknown-linux-gnu = "42214e693ec00733e2a591e67c13af98faf02a82934108a9f37afd247b376dd0";
-      aarch64-unknown-linux-musl = "2d979ae621949ef802f357369f888f17c97fd3731a8dc4dc13f713e9d3a6784f";
-      x86_64-apple-darwin = "596756101bf43cd335fb247f5cc9ede0c157245523baff25a66694682495cfcb";
-      aarch64-apple-darwin = "f35e7c5b2cf63e67c075d323e4d6b87501219311f09744ab24caecb761c96643";
-      powerpc64-unknown-linux-gnu = "1c4c53148cd5e78b6a63b869b6b45c104bbba80ae2c165df4dd38549db31ce3d";
-      powerpc64le-unknown-linux-gnu = "2db292783506bf29b465fd73f7e4c09445d533ef2a6897c5407463f39048e22e";
-      powerpc64le-unknown-linux-musl = "06d2e3bc39cb85b4a1da877e8377d87fb5768fec8180c2cd9bd53b36d1102c5b";
-      riscv64gc-unknown-linux-gnu = "c6d21031de5f65d1486ace8f2ab16d8a6962f0a3b58a057d288a0252adbbb2e7";
-      s390x-unknown-linux-gnu = "3d576e0ddb69b341593ae0f371e63233b427729fefeb380e9adb46762b23f1f2";
-      loongarch64-unknown-linux-gnu = "26969dd72bf9eb4b277d18c7afb3d2ea89ae6b6d4e32796770127d3328e864b6";
-      loongarch64-unknown-linux-musl = "6630489e02cfef1f7d8b31d9572a181e0f40a97e6817d851668032507ad5aa4c";
-      x86_64-unknown-freebsd = "9a14b060a681932e30c1453c30fe4f95e6170011425d660b97c739521a9f2cb9";
+      i686-unknown-linux-gnu = "4ec7d2dece30bbf56c2423c24b87c50dd556fd08e3c803c6c300bcb3343bc42c";
+      x86_64-unknown-linux-gnu = "aded4e6c1d580415e7b594a3080d8e23e9cbe06f159f97e300aa6875211f71bf";
+      x86_64-unknown-linux-musl = "553f0b4f8789da1552514e99a23d5733e2afb62059c56b8965c8e4b03e6f70a3";
+      arm-unknown-linux-gnueabihf = "3ae3d8424847bfa7376b83a576f223e55028cb16f9c8e8b3e20b00450b5c6f9e";
+      armv7-unknown-linux-gnueabihf = "60e6c555137de78d29ddfc1cc8a879f418da462ab28ce97701b93a581b1a5ab0";
+      aarch64-unknown-linux-gnu = "703b190f0d723ae68985797f3bb5f62f01b1723f138464c6f30f32b766eb0abf";
+      aarch64-unknown-linux-musl = "83dc2ff5a720b3d7665dde0524b9d8d5cabb893b8c52ca3485d28702741ec384";
+      x86_64-apple-darwin = "ca9900354aeaa5d31c47ce8e07ac90e9fb7377b39ca10e3981a85d6008679522";
+      aarch64-apple-darwin = "b73b6a78c4e7171a8fe1b4bee5342273605c5c9a9a4997554c15bb3ce2753b6a";
+      powerpc64-unknown-linux-gnu = "3b37ee1866ff6657139d77c0046c2071299e698487da29ab11ded59989b81c67";
+      powerpc64le-unknown-linux-gnu = "efed6b2c054100a8fe3d333e4f09941fb2d72daf2d4d6a73baa11be9e355f032";
+      powerpc64le-unknown-linux-musl = "3ff2a27b4b7ee1ae0e75450f4e446cd4b27685b2e229a82bee633f3df28dd41c";
+      riscv64gc-unknown-linux-gnu = "b66f5a0ce75cab10fa38b6f1ec989d0b2f4310da5efd24f3dd2573e6fae2dfd3";
+      s390x-unknown-linux-gnu = "6998cd09229d60468ee2002d3c3bb0db4084e1a6582ef551b3322b520bc3127d";
+      loongarch64-unknown-linux-gnu = "cb387b33f097fe9e2c64dd1d3a18200dc36910124eb2aa121b8e406344fb972d";
+      loongarch64-unknown-linux-musl = "72ff7e74b93cb78ecb4109dbded6cc50d1a22d8a2c89d6b7ca74e33878b2a5f9";
+      x86_64-unknown-freebsd = "ae86ea93813f33003fc329b404bcd9343502621a7a6a0a6f758bfcd16a1f5d87";
     };
 
     selectRustPackage = pkgs: pkgs.rust_1_99;
@@ -93,7 +94,7 @@ import ./default.nix
 
   (
     removeAttrs args [
-      "llvmPackages"
+      "llvmPackages_23"
       "llvm"
       "wrapCCWith"
       "overrideCC"

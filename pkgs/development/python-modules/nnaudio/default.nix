@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nnaudio";
   version = "0.3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "KinWaiCheuk";

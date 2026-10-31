@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "protobuf-py-ext";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tag on GitHub for this release: bufbuild/protobuf-py's only tag is v0.2.0.
   # This has to stay in lockstep with protobuf-py, which is held at 0.1.1.

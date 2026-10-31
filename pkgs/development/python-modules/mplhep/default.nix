@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mplhep";
   version = "1.3.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";

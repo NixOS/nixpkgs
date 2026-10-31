@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyjnius";
   version = "1.7.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {

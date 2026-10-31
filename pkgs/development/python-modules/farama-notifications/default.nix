@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "farama-notifications";
   version = "0.0.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";

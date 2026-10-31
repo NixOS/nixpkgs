@@ -4,6 +4,8 @@
   rustPlatform,
   installShellFiles,
   pandoc,
+  pkg-config,
+  libgit2,
   testers,
   lsd,
   git,
@@ -25,6 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     pandoc
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
   ];
 
   postInstall = ''

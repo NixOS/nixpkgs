@@ -10,7 +10,6 @@ buildPythonPackage rec {
   pname = "miltertest";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flowerysong";

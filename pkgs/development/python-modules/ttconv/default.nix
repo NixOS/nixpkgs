@@ -30,8 +30,6 @@ buildPythonPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Timed Text Conversion";
     longDescription = ''

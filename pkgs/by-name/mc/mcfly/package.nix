@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-9oNfXNQywvgTREa0G1UbId4ezLSCem4IBkqE5X234hE=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ sqlite ];
 
   meta = {
     homepage = "https://github.com/cantino/mcfly";

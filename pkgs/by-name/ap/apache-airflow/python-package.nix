@@ -397,8 +397,6 @@ buildPythonPackage (
     pname = "apache-airflow";
     version = "3.3.2";
 
-    __structuredAttrs = true;
-
     src = fetchFromGitHub {
       owner = "apache";
       repo = "airflow";

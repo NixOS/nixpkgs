@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit imagemagick hdrmerge;
     inherit (python3.pkgs) rawkit;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";

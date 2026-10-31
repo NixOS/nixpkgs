@@ -12,16 +12,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libpass";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThirVondukr";
     repo = "passlib";
-    tag = version;
-    hash = "sha256-fzI9HpGE3wNK41ZSOeA5NAr5T4r3Jzdqe5+SHoWVXUs=";
+    tag = finalAttrs.version;
+    hash = "sha256-d+iBTJrUzzLXAnbIJ56NHg8dZrv7Qd3ikNWOhXBiUzM=";
   };
 
   build-system = [ hatchling ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "passlib" ];
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ThirVondukr/passlib/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ThirVondukr/passlib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Comprehensive password hashing framework supporting over 30 schemes";
     homepage = "https://github.com/ThirVondukr/passlib";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

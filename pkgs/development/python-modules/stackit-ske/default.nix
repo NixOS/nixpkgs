@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.13.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "stackit_ske";
     inherit (finalAttrs) version;

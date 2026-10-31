@@ -15,8 +15,8 @@ let
   rev = "cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341";
 
   src = fetchurl {
-    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=";
+    url = "https://github.com/tinycc/tinycc/archive/${rev}.tar.gz";
+    hash = "sha256-c4H5RKqSVc1WDoGSxbAkEkbSyD7qVLjrMXECmS/h4rs=";
   };
 
   tccTarget =
@@ -56,7 +56,7 @@ let
       ''
         # Unpack
         tar xzf ${src}
-        cd tinycc-${builtins.substring 0 7 rev}
+        cd tinycc-${rev}
 
         # Patch
         ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}

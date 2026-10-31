@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-logger-plugin-rich";
   version = "0.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cademirch";

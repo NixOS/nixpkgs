@@ -38,8 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "qlever"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Command-line tool for controlling the QLever graph database";
     homepage = "https://github.com/qlever-dev/qlever-control";

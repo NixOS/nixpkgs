@@ -102,7 +102,7 @@ let
         # RocksDB's startup path via unique_ptr<T[]> bounds checks.
         hardeningDisable =
           (oldAttrs.hardeningDisable or [ ])
-          ++ (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+          ++ (lib.optionals stdenv.hostPlatform.isDarwin [
             "libcxxhardeningfast"
           ]);
       });

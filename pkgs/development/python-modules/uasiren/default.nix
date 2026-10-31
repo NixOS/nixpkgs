@@ -20,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
     repo = "uasiren";

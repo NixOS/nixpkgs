@@ -1,0 +1,14 @@
+diff --git a/src-tauri/build.rs b/src-tauri/build.rs
+index 9f8ada79ec..1f020aa6a0 100644
+--- a/src-tauri/build.rs
++++ b/src-tauri/build.rs
+@@ -483,6 +483,9 @@ fn build_apple_intelligence_bridge() {
+             // `-parse-as-library` keeps the compilation in library mode so
+             // no `_main` is emitted. See:
+             //   https://forums.swift.org/t/main-in-a-single-swift-file/63079
++            "-external-plugin-path",
++            "@open-apple-macros@/lib/swift/host/plugins#@open-apple-macros@/libexec/swift/plugins/OpenAppleMacrosServer",
++            "-disable-sandbox", // Because Nixpkgs builds already happen in a sandbox.
+             "-parse-as-library",
+             "-target",
+             "arm64-apple-macosx11.0",

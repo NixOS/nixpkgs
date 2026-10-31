@@ -18,8 +18,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   postPatch = ''
     substituteInPlace immich_ml/sessions/ort.py \
       --replace-fail 'Path(ort.__file__).parent / "capi" / "libopenvino_c.so"' '"${lib.getLib openvino}/lib/libopenvino_c.so"' \

@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytensor";
   version = "3.3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";

@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nipreps-versions";
   version = "1.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";

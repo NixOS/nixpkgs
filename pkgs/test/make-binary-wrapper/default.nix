@@ -60,6 +60,8 @@ let
       "prefix"
       "suffix"
       "prefix-dedup-last"
+      "prefix-unchecked"
+      "empty-segment"
     ] makeGoldenTest
     // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       cross =

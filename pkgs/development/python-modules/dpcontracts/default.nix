@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "0.6.0-unstable-2018-11-20";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "deadpixi";
     repo = "contracts";

@@ -11,8 +11,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   version = "6.29.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "codechecker";

@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pipx";
   version = "1.16.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

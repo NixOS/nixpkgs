@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pygrib";
   version = "2.1.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jswhit";

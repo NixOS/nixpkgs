@@ -60,7 +60,6 @@ buildPythonPackage (finalAttrs: {
   pname = "semgrep";
   inherit (common) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "semgrep";

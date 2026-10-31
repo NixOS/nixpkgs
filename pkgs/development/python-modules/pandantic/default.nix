@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pandantic";
   version = "1.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wesselhuising";

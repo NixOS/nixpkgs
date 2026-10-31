@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.31.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "shodan";
     inherit (finalAttrs) version;

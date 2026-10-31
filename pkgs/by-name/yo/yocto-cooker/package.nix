@@ -26,8 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyjson5
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Meta buildtool for Yocto Project based Linux embedded systems";
     homepage = "https://github.com/cpb-/yocto-cooker";

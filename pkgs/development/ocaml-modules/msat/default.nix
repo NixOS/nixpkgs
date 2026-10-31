@@ -28,7 +28,7 @@ buildDunePackage (finalAttrs: {
 
   doCheck = true;
   checkInputs = [ containers ];
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   meta = {
     description = "Modular sat/smt solver with proof output";

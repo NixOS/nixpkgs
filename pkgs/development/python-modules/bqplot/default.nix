@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bqplot";
   version = "0.13.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bqplot";

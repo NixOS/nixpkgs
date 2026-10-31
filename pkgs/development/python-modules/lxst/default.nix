@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lxst";
   version = "0.5.0";
   format = "wheel";
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "lxst";

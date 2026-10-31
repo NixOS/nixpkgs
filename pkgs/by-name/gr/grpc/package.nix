@@ -25,7 +25,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation (finalAttrs: {
   pname = "grpc";
-  version = "1.84.0"; # N.B: if you change this, please update:
+  version = "1.84.1"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grpc";
     repo = "grpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cuNa/Juh8/whghdtbSaEDMqGRASt6vbzeEtHp34STrc=";
+    hash = "sha256-+QV48Mf4TZPwqBbvAhNYwDMiYBaMtu+3cUh690EUknI=";
     fetchSubmodules = true;
   };
 
@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
+  ];
+
+  outputs = [
+    "out"
+    "dev"
   ];
 
   nativeBuildInputs = [
@@ -67,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DgRPC_ZLIB_PROVIDER=package"
@@ -109,6 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '-msse2' ""
   '';
 
+  postInstall = ''
+    substituteInPlace \
+      $out/lib/cmake/grpc/gRPCTargets-release.cmake \
+      $out/lib/cmake/grpc/gRPCPluginTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
+  '';
+
   # When natively compiling, grpc_cpp_plugin is executed from the build directory,
   # needing to load dynamic libraries from the build directory, so we set
   # LD_LIBRARY_PATH to enable this. When cross compiling we need to avoid this,
@@ -136,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";

@@ -51,8 +51,6 @@ buildPythonPackage rec {
     pysha3 = [ safe-pysha3 ];
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";

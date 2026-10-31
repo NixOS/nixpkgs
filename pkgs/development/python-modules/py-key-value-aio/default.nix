@@ -61,7 +61,6 @@ buildPythonPackage (finalAttrs: {
   pname = "py-key-value-aio";
   version = "0.4.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "strawgate";

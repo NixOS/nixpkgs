@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   inherit (mujoco) version;
 
   pyproject = true;
-  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via

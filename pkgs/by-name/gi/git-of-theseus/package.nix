@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication {
   pname = "git-of-theseus";
   version = "0.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "erikbern";

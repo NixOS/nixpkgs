@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "clu";
   version = "0.0.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";

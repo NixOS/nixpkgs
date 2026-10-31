@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.5.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "XStatic-Bootbox";
     inherit (finalAttrs) version;

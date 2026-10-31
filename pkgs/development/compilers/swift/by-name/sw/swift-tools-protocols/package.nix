@@ -8,18 +8,21 @@
   stdenv,
   swift,
   swift_sources,
+  swift_release,
 }:
 
 let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
+
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
 in
 
-# The version of swift-tools-protocols comes from Swift’s `update_checkout` script. It is unfortunately not tagged
-# using the `swift-<version>-RELEASE` convention other toolchain dependencies use.
-# See: https://github.com/swiftlang/swift/blob/main/utils/update_checkout/update-checkout-config.json
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-tools-protocols";
-  inherit (swift_sources.swift-tools-protocols) version;
+  version = swift_release;
 
   outputs = [
     "out"
@@ -29,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "swiftlang";
     repo = "swift-tools-protocols";
-    tag = swift_sources.swift-tools-protocols.version;
+    tag = "swift-${finalAttrs.version}-RELEASE";
     inherit (swift_sources.swift-tools-protocols) hash;
   };
 
@@ -49,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvm_libtool ];
 

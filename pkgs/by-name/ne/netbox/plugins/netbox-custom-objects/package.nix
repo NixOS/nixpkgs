@@ -7,8 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-custom-objects";
   version = "0.7.0";
   pyproject = true;

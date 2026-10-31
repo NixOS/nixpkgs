@@ -33,6 +33,8 @@ assertExecutable() {
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
+# --prefix-unchecked ENV SEP VAL  : same as --prefix/--suffix, accepted for compatibility
+# --suffix-unchecked                with makeBinaryWrapper
 # --prefix-each     ENV SEP VALS  : like --prefix, but VALS is a list
 # --suffix-each     ENV SEP VALS  : like --suffix, but VALS is a list
 # --prefix-contents ENV SEP FILES : like --suffix-each, but contents of FILES
@@ -145,7 +147,7 @@ makeShellWrapper() {
             command="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "$command" >> "$wrapper"
-        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") ]]; then
+        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") || ("$p" == "--suffix-unchecked") || ("$p" == "--prefix-unchecked") ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             value="${params[$((n + 3))]}"

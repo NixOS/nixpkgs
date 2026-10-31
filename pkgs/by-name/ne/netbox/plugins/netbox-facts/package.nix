@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-facts";
   version = "0.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

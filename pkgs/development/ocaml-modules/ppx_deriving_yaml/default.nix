@@ -52,7 +52,7 @@ buildDunePackage (finalAttrs: {
     alcotest
     mdx
   ];
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   meta = {
     description = "YAML codec generator for OCaml";

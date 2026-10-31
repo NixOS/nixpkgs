@@ -69,7 +69,6 @@ let
 
       sourceRoot = "${src.name}/python/${subdir}";
       cargoRoot = "..";
-      __structuredAttrs = true;
 
       nativeBuildInputs = with rustPlatform; [
         cargoSetupHook

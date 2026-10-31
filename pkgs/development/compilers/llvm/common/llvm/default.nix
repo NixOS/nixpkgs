@@ -266,6 +266,12 @@ stdenv.mkDerivation (
           hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
         })
       ]
+      ++ lib.optionals (lib.versionOlder release_version "22") [
+        # Fixes incorrect template specializations that cause building LLVM to fail to build after Darwin bumps its
+        # system libc++ headers to 22.1.6+apple-sdk-27.0. These definitions were also UB apparently.
+        # See: https://github.com/llvm/llvm-project/pull/160804
+        (getVersionFile "llvm/get-rid-of-incorrect-std-template-specializations.patch")
+      ]
       ++ lib.optionals (lib.versionOlder release_version "23") [
         # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
         # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
@@ -282,6 +288,12 @@ stdenv.mkDerivation (
         # a new arm64 subtype that gives more pointer authentication machinery.
         # Vendored backport of the patch for LLVM 23
         (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # macOS 27 requires the string pool to be pointer-aligned when dylibs are linked against the 27.0 SDK.
+        # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
+        # See: https://github.com/llvm/llvm-project/issues/203678
+        (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
       ];
 
     nativeBuildInputs = [

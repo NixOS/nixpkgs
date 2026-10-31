@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
   pname = "azure-nspkg";
 
   src = fetchPypi {

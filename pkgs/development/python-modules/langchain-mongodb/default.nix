@@ -38,7 +38,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
   version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";

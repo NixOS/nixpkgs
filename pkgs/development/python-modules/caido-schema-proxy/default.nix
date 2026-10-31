@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.59.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "caido_schema_proxy";
     inherit (finalAttrs) version;

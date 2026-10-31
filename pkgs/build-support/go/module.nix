@@ -302,7 +302,7 @@ lib.extendMkDerivation {
 
                 if [ "$cmd" = "test" ]; then
                   flags+=(-vet=off)
-                  flags+=($checkFlags)
+                  concatTo flags checkFlags
                 fi
 
                 local OUT

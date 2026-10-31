@@ -10,7 +10,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-copy";
   version = "6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.copy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hYeLUSwAq5rK4TRngvNQGR4Fdimb2k5dHtFdptMVqPo=";
   };
 
@@ -42,9 +42,8 @@ buildPythonPackage rec {
     zope-schema
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "src/zope/copy"
+  unittestFlags = [
+    "--start-directory=src/zope/copy"
   ];
 
   pythonNamespaces = [ "zope" ];
@@ -52,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pluggable object copying mechanism";
     homepage = "https://github.com/zopefoundation/zope.copy";
-    changelog = "https://github.com/zopefoundation/zope.copy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.copy/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

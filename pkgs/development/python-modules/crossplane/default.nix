@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "crossplane";
   version = "0.5.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nginxinc";

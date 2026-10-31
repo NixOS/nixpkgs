@@ -36,9 +36,7 @@ let
     isDarwin
     isLinux
     isAarch64
-    isx86_64
     ;
-  isAarch64Darwin = isDarwin && isAarch64;
   isAarch64Linux = isLinux && isAarch64;
 in
 buildPythonPackage (finalAttrs: {
@@ -53,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-szPyGqvvXSboDRcsLKAkXSBI+Kgx4Fganw/SlONimcY=";
   };
 
-  patches = lib.optionals isAarch64Darwin [
+  patches = lib.optionals isDarwin [
     ./use-system-cpuinfo.patch
     (replaceVars ./use-llvm-openmp.patch {
       inherit (llvmPackages) openmp;
@@ -64,12 +62,12 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
-  nativeBuildInputs = lib.optionals isAarch64Darwin [
+  nativeBuildInputs = lib.optionals isDarwin [
     cmake
   ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals isAarch64Darwin [
+  buildInputs = lib.optionals isDarwin [
     cpuinfo
   ];
 
@@ -287,15 +285,6 @@ buildPythonPackage (finalAttrs: {
     "test_workflow_e2e_numerics_config1"
     "test_workflow_e2e_numerics_config4"
     "test_workflow_e2e_numerics_config5"
-  ]
-  ++ lib.optionals (isDarwin && isx86_64) [
-    # Flaky: [gw0] node down: keyboard-interrupt
-    "test_int8_weight_only_quant_with_freeze_0_cpu"
-    "test_int8_weight_only_quant_with_freeze_1_cpu"
-    "test_int8_weight_only_quant_with_freeze_2_cpu"
-
-    # Illegal instruction in subclass_4bit.py::dequantize
-    "test_subclass_slice"
   ];
 
   disabledTestPaths = [

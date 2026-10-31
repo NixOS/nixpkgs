@@ -20,6 +20,8 @@
     pname = "prefetch-npm-deps";
     version = (lib.importTOML ./Cargo.toml).package.version;
 
+    __structuredAttrs = true;
+
     src = lib.cleanSourceWith {
       src = ./.;
       filter =

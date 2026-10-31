@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
   version = "0.18.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";

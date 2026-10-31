@@ -19,8 +19,6 @@ buildPythonPackage {
   version = "0.1.35";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "GaParmar";
     repo = "clean-fid";

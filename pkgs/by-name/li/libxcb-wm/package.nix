@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB client and window-manager helpers for ICCCM & EWMH.";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcb-wm";

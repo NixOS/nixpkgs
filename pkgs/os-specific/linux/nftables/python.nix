@@ -9,8 +9,6 @@ buildPythonPackage (finalAttrs: {
   inherit (nftables) version src;
   pyproject = true;
 
-  __structuredAttrs = true;
-
   postPatch = ''
     substituteInPlace "src/nftables.py" \
       --replace-fail 'NFTABLES_VERSION = "0.1"' 'NFTABLES_VERSION = "${finalAttrs.version}"' \

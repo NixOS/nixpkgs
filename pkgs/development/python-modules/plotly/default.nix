@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "plotly";
   version = "6.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "plotly";

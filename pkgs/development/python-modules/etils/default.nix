@@ -42,7 +42,6 @@ buildPythonPackage (finalAttrs: {
   pname = "etils";
   version = "1.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";

@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ sqlite ];
 
+  # Using Swift Build doesn’t work. It fails to build Swift Syntax when it references its SPIs.
+  swiftpmFlags = [ "--build-system=native" ];
+
   configurePhase = generated.configure;
 
   installPhase = ''

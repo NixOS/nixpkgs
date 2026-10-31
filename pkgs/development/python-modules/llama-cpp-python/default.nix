@@ -37,7 +37,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "llama-cpp-python";
   version = "0.3.36";
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

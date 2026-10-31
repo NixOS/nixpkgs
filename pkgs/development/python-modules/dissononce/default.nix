@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.34.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "dissononce";

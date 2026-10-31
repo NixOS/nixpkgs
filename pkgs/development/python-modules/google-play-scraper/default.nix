@@ -9,7 +9,6 @@ buildPythonPackage {
   pname = "google-play-scraper";
   version = "1.2.7-unstable-2024-06-07";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "JoMingyu";

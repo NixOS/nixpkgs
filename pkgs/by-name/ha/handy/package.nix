@@ -10,10 +10,13 @@
   cctools,
   cargo-tauri,
   jq,
+  sqlite,
   writableTmpDirAsHomeHook,
   makeBinaryWrapper,
   swift,
   apple-sdk_26,
+  open-apple-macros,
+  replaceVars,
   symlinkJoin,
   nix-update-script,
 
@@ -72,6 +75,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallInputs = [ jq ];
 
+  patches =
+    # Use apple-open-macros to enable using Apple Intelligence on Darwin.
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      (replaceVars ./add-plugin-path-for-swift-macros.patch {
+        inherit open-apple-macros;
+      })
+    ];
+
   postPatch = ''
     patch_json() {
       local file=$1 filter=$2
@@ -92,10 +103,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Strip cbindgen build steps
     find "$cargoDepsCopy" -path "*/ferrous-opencc-*/build.rs" \
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
-
-    # FoundationModels requires macros that are only shipped with Xcode. The 26.x SDK in Nixpkgs does not have them.
-    substituteInPlace src-tauri/build.rs \
-      --replace-fail 'has_foundation_models = framework_path.exists()' ' has_foundation_models = false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
@@ -125,6 +132,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    sqlite
     onnxruntime
     openssl
   ]

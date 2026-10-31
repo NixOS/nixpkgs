@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.14";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "boalang";
     repo = "api-python";

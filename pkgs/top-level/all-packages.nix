@@ -1174,7 +1174,7 @@ with pkgs;
     )
   );
 
-  tw = ocamlPackages.tw.bin;
+  tw = ocamlPackages.tw;
 
   wrapRetroArch = retroarch-bare.wrapper;
 
@@ -3553,12 +3553,7 @@ with pkgs;
 
   stack =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.stack;
 
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
@@ -3833,7 +3828,7 @@ with pkgs;
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
   ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
-  ocaml-crunch = ocamlPackages.crunch.bin;
+  ocaml-crunch = ocamlPackages.crunch;
 
   inherit (ocaml-ng.ocamlPackages_4_14)
     ocamlformat_0_19_0
@@ -3981,6 +3976,7 @@ with pkgs;
     swift-format
     swiftpm
     swiftpm2nix
+    swiftpmDepsUpdater
     ;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
@@ -4659,12 +4655,6 @@ with pkgs;
   electron-bin = electron_43-bin;
   electron-chromedriver = electron-chromedriver_43;
 
-  automake = automake118x;
-
-  automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
-
-  automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
-
   bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_7;
@@ -4977,12 +4967,7 @@ with pkgs;
 
   haskell-ci =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.haskell-ci;
 
   nexusmods-app-unfree = nexusmods-app.override {
@@ -5083,12 +5068,7 @@ with pkgs;
 
   shake =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.shake;
 
   shellcheck = callPackage ../development/tools/shellcheck {
@@ -5925,12 +5905,7 @@ with pkgs;
 
   matterhorn =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.matterhorn;
 
   inherit
@@ -6607,8 +6582,8 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_26;
-  buildGoModule = buildGo126Module;
+  go = go_1_27;
+  buildGoModule = buildGo127Module;
 
   go_latest = go_1_27;
   buildGoLatestModule = buildGo127Module;
@@ -6719,14 +6694,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_7 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_8 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.8"; };
     faslExt = "fasl";
@@ -6735,7 +6702,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_8;
+  sbcl_2_6_9 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.9"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_9;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -8356,12 +8331,7 @@ with pkgs;
   hledger-ui = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
@@ -9289,12 +9259,7 @@ with pkgs;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.bench;
 
   ### GAMES
@@ -10154,7 +10119,7 @@ with pkgs;
   nix-serve-ng =
     # FIXME: manually eliminate incorrect references on aarch64-darwin,
     # see https://github.com/NixOS/nixpkgs/issues/318013
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+    if stdenv.hostPlatform.isDarwin then
       haskellPackages.nix-serve-ng
     else
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;

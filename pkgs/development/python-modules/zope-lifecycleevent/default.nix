@@ -10,7 +10,7 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-lifecycleevent";
   version = "6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.lifecycleevent";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HgxOUseRYc+mkwESUDqauoH2D2E4PL8XxM1C0FC35w8=";
   };
 
@@ -45,15 +45,15 @@ buildPythonPackage rec {
     zope-testing
   ];
 
-  unittestFlagsArray = [ "src/zope/lifecycleevent" ];
+  unittestFlags = [ "--start-directory=src/zope/lifecycleevent" ];
 
   pythonNamespaces = [ "zope" ];
 
   meta = {
     homepage = "https://github.com/zopefoundation/zope.lifecycleevent";
     description = "Object life-cycle events";
-    changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.lifecycleevent/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

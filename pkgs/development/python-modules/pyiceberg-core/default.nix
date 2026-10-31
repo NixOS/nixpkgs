@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
 
   # tests
   datafusion,
@@ -19,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
   version = "0.10.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
@@ -48,7 +49,10 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   pythonImportsCheck = [ "pyiceberg_core" ];
 

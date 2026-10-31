@@ -6,6 +6,7 @@
   cargo,
   pkg-config,
   glibc,
+  zstd,
   openssl,
   libcap_ng,
   libepoxy,
@@ -90,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     virglrenderer
   ]
   ++ lib.optional withSound pipewire
-  ++ lib.optional (variant == "sev" || variant == "tdx") openssl;
+  ++ lib.optional (variant == "sev" || variant == "tdx") openssl
+  ++ lib.optional stdenv.hostPlatform.isx86_64 zstd;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

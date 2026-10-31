@@ -19,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.27";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "abravalheri";
     repo = "validate-pyproject";

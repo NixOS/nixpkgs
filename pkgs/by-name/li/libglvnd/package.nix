@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     xorgproto
   ];
+
+  strictDeps = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
     # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-asm";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-asm";
 
   outputs = [
     "out"
@@ -89,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = { inherit (addDriverRunpath) driverLink; };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "GL Vendor-Neutral Dispatch library";

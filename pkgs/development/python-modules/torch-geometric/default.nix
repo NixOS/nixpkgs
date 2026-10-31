@@ -81,7 +81,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torch-geometric";
   version = "2.8.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyg-team";

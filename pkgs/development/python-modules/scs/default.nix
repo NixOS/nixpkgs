@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "scs";
   inherit (pkgs.scs) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bodono";

@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kafka-python";
   version = "3.0.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dpkp";

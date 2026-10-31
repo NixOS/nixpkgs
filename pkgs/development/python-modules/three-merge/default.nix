@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # pypi does not contain test files
   src = fetchFromGitHub {
     owner = "spyder-ide";

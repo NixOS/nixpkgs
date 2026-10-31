@@ -60,18 +60,6 @@ buildDunePackage (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  outputs = [
-    "bin"
-    "lib"
-    "out"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib mdx
-    runHook postInstall
-  '';
-
   passthru.updateScript = gitUpdater { };
 
   meta = {

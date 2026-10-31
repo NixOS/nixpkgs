@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-control-tool";

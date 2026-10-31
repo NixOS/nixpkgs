@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-std=gnu89" # Isn't compatible with C23
     ]
     # https://github.com/macports/macports-ports/commit/656932616eebe60f4e8cfd96d8268801dad8224d
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DNO_SCANSTACK"
     ]
   );

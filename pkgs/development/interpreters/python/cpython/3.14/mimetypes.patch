@@ -1,0 +1,21 @@
+diff --git a/Lib/mimetypes.py b/Lib/mimetypes.py
+index ba942c6..ec82ef0 100644
+--- a/Lib/mimetypes.py
++++ b/Lib/mimetypes.py
+@@ -49,15 +49,7 @@ if sys.platform == "win32":
+     knownfiles = []
+ else:
+     knownfiles = [
+-        "/etc/mime.types",
+-        "/etc/httpd/mime.types",                    # Mac OS X
+-        "/etc/httpd/conf/mime.types",               # Apache
+-        "/etc/apache/mime.types",                   # Apache 1
+-        "/etc/apache2/mime.types",                  # Apache 2
+-        "/usr/local/etc/httpd/conf/mime.types",
+-        "/usr/local/lib/netscape/mime.types",
+-        "/usr/local/etc/httpd/conf/mime.types",     # Apache 1.2
+-        "/usr/local/etc/mime.types",                # Apache 1.3
++        "@mime-types@/etc/mime.types"
+         ]
+ 
+ inited = False

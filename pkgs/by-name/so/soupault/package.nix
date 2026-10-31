@@ -27,7 +27,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   nativeBuildInputs = [
     removeReferencesTo
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
   ];
 

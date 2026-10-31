@@ -14,8 +14,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.9";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "epsylon";
     repo = "xsser";

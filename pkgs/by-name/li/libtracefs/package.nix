@@ -8,7 +8,7 @@
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
-  sourceHighlight,
+  source-highlight,
   meson,
   flex,
   bison,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
     docbook_xml_dtd_45
     docbook_xsl
-    sourceHighlight
+    source-highlight
     flex
     bison
   ];

@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.3.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Hackerest";
     repo = "pwneye";

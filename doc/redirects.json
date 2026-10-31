@@ -4636,6 +4636,15 @@
   "ssec-swiftpm-install-phase": [
     "index.html#ssec-swiftpm-install-phase"
   ],
+  "ssec-swift-macros": [
+    "index.html#ssec-swift-macros"
+  ],
+  "ssec-swift-macros-open-apple-macros": [
+    "index.html#ssec-swift-macros-open-apple-macros"
+  ],
+  "ssec-swift-macros-xcode-macros": [
+    "index.html#ssec-swift-macros-xcode-macros"
+  ],
   "ssec-swift-hooks": [
     "index.html#ssec-swift-hooks"
   ],

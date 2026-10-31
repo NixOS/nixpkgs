@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # provides no sdist on pypi
   src = fetchFromGitHub {
     owner = "nipunsadvilkar";

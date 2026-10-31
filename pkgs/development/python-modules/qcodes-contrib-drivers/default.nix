@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "qcodes-contrib-drivers";
   version = "0.25.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "QCoDeS";

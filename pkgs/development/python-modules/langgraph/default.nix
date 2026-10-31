@@ -43,7 +43,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langgraph";
   version = "1.2.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";

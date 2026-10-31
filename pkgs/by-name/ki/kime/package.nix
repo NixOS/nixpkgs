@@ -95,10 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     export PKG_CONFIG_PATH="${qt6.qtbase}/lib/pkgconfig''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
   '';
 
-  preBuild = ''
-    export CARGO_BUILD_JOBS="$NIX_BUILD_CORES"
-  '';
-
   doCheck = true;
   checkPhase = ''
     runHook preCheck

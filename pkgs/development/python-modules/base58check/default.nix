@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   build-system = [ setuptools ];
 
   src = fetchFromGitHub {

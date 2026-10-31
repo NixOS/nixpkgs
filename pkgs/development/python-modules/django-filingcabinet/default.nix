@@ -43,7 +43,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-filingcabinet";
   version = "0.17-unstable-2026-05-07";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "okfde";

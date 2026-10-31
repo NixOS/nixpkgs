@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   disabled = pythonOlder "3.12";
 
   src = fetchPypi {

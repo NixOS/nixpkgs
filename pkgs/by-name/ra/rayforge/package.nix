@@ -19,8 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.11.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "barebaric";
     repo = "rayforge";

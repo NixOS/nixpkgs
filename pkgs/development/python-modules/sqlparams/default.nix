@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sqlparams";
   version = "6.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cpburnz";

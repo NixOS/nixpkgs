@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "treescope";
   version = "0.1.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";

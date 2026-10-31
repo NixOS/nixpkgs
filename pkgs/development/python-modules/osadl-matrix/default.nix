@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "osadl-matrix";
   version = "2024.05.23.010555";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "immich-model";
   version = "0-unstable-2026-10-06";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "immich-app";

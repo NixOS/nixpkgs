@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.1.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "elder-plinius";
     repo = "OBLITERATUS";

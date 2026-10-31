@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "apache-tvm-ffi";
   version = "0.1.15-post0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";

@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     installShellFiles
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals withGui [ qt5.wrapQtAppsHook ];

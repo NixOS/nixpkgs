@@ -36,12 +36,6 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    # timeout
-    rm testdata/script/branch_submit_remote_prompt.txt
-    rm testdata/script/branch_submit_multiple_pr_templates.txt
-  '';
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gs \
       --bash <($out/bin/gs shell completion bash) \

@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-triton";
   version = "3.8.10.post20260920";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lightseekorg";

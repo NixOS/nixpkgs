@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pyprojectVersionPatchHook,
   rustPlatform,
+  pkg-config,
+  zstd,
 
   # tests
   hypothesis,
@@ -16,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cramjam";
   version = "2.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
@@ -34,7 +35,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     pyprojectVersionPatchHook
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [
     hypothesis

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastapi-pagination";
   version = "0.16.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "uriyyo";

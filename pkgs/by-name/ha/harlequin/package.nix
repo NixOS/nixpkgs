@@ -15,7 +15,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
   version = "2.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";

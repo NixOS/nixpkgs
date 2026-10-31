@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
   };
 
+  __structuredAttrs = true;
+
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell

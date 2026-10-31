@@ -28,7 +28,6 @@ buildPythonPackage {
   pname = "torchvision";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration-ui";
   version = "3.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration_ui";

@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "geopandas";
   version = "1.1.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";

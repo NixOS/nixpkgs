@@ -22,8 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.54.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";

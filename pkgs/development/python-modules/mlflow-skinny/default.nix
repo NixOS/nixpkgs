@@ -35,7 +35,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow-skinny";
   inherit (mlflow) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";

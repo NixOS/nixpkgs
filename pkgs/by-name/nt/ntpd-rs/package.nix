@@ -99,7 +99,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       getchoo
     ];
     mainProgram = "ntp-ctl";
-    # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

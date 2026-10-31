@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.3-unstable-2014-09-11";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "facundobatista";
     repo = "yaswfp";

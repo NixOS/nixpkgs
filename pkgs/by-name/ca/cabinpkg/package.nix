@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     homepage = "https://cabinpkg.com";
     description = "Package manager and build system for C++";
     license = lib.licenses.asl20;

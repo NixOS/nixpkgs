@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nutpie";
   version = "0.16.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";

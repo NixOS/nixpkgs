@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sqlite-utils";
   version = "4.2.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   build-system = [ setuptools ];
 

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "mutesync";
     inherit (finalAttrs) version;

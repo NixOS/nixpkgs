@@ -6,13 +6,18 @@
   autoreconfHook,
 }:
 
+# Note: this package is used for bootstrapping fetchurl, and thus cannot use
+# fetchpatch! Any mutable patches (retrieved from GitHub, cgit or any other
+# place) that are needed here should be directly included together as regular
+# files.
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "patch";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/patch/patch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
+    hash = "sha256-MkDHlZxTR8jtNH48QgHAM3v0JA1c8J1oiJ5Y7qujDhc=";
   };
 
   # This test is filesystem-dependent - observed failing on ZFS.

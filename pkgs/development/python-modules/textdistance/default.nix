@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.6.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "textdistance";
     inherit (finalAttrs) version;

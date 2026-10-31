@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "scippnexus";
   version = "26.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scipp";

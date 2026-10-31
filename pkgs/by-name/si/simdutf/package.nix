@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "9.2.1";
+  version = "9.3.3";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MZUEZWibRgoVwjz3SqkNTepAHgreWYkZTWh74jXtRfY=";
+    hash = "sha256-xCQf+PQKybvGIN/DxwNIrSpkQFdCCyo/A7pXThsd6zk=";
   };
 
   outputs = [

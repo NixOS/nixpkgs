@@ -28,8 +28,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "xacro" ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Xacro is an XML macro language. With xacro, you can construct shorter and more readable XML files by using macros that expand to larger XML expressions";
     homepage = "https://github.com/ros/xacro";

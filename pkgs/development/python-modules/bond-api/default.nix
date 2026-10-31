@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.18";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";

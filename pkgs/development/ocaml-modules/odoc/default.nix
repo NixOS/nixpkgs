@@ -58,17 +58,8 @@ buildDunePackage (self: {
     patchShebangs test
   '';
 
-  outputs = [
-    "bin"
-    "lib"
-    "out"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib odoc
-    remove-references-to -t ${ocaml} $bin/bin/odoc
-    runHook postInstall
+  postInstall = ''
+    remove-references-to -t ${ocaml} $out/bin/odoc
   '';
 
   meta = {

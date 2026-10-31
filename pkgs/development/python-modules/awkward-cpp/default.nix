@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "awkward-cpp";
   version = "57";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "awkward_cpp";

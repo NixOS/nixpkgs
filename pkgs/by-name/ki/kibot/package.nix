@@ -76,8 +76,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     extraArgs = [ "--version-regex=v(\\d.\\d.\\d)" ];
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tool for generating fabrication and documentation files for KiCad";
     homepage = "https://github.com/INTI-CMNB/KiBot";

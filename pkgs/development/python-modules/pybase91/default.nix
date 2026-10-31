@@ -12,7 +12,6 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pybase91";
-  __structuredAttrs = true;
   # The same source and vendored crates as the base91 command-line tool:
   # updating base91 updates both.
   inherit (base91) version src cargoDeps;

@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "accelerate";
   version = "1.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -180,10 +179,6 @@ buildPythonPackage (finalAttrs: {
 
     # ImportError: cannot import name 'PretrainedConfig' from 'transformers.modeling_utils'
     "test_nested_hook"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # RuntimeError: torch_shm_manager: execl failed: Permission denied
-    "CheckpointTest"
   ];
 
   disabledTestPaths = [

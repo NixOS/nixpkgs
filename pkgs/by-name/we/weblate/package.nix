@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
   version = "2026.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   outputs = [
     "out"

@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.7.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "agentsploit";
     repo = "agentsploit";
@@ -52,6 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   disabledTestPaths = [
     # Tests need network access
+    "tests/unit/test_openai_adapter.py"
     "tests/integration/"
   ];
 

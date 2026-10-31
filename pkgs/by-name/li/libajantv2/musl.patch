@@ -1,7 +1,7 @@
-From 8312398dbc1f0a960c0e64c2faaa756277c0f67c Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Alyssa Ross <hi@alyssa.is>
 Date: Fri, 3 Jan 2025 12:21:28 +0100
-Subject: [PATCH 3/3] Don't use non-standard ACCESSPERMS macro
+Subject: [PATCH] Don't use non-standard ACCESSPERMS macro
 
 This macro is non-standard, and is not defined by e.g. musl libc.
 It's just a define for 0777, so just use that instead.
@@ -12,10 +12,10 @@ Link: https://github.com/aja-video/libajantv2/pull/42
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/ajabase/test/main.cpp b/ajabase/test/main.cpp
-index 78196446..e18b10a3 100644
+index ce7c693d5a84af27804b56fc83324a4c3b3e0d80..522858b659d878253f7cbf7423a524f2dc1fad67 100644
 --- a/ajabase/test/main.cpp
 +++ b/ajabase/test/main.cpp
-@@ -1951,9 +1951,9 @@ TEST_SUITE("file" * doctest::description("functions in ajabase/system/file_io.h"
+@@ -2124,9 +2124,9 @@ TEST_SUITE("file" * doctest::description("functions in ajabase/system/file_io.h"
  				_mkdir(tempDir.c_str());
  				_getcwd(cwdBuf, AJA_MAX_PATH);
  	#else
@@ -27,6 +27,3 @@ index 78196446..e18b10a3 100644
  				}
  				char* result = getcwd(cwdBuf, AJA_MAX_PATH);
  				AJA_UNUSED(result);
--- 
-2.49.0
-

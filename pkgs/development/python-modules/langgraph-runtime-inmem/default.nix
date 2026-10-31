@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langgraph-runtime-inmem";
   version = "0.36.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Not available in any repository
   src = fetchPypi {

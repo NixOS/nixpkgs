@@ -209,7 +209,11 @@ let
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
       ++ lib.optional enableKTLS "enable-ktls"
-      ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
+      # Linux kernel starting with 7.3 restricts the access to AF_ALG and
+      # probably will drop this interface in the future. 4.0 and above dropped
+      # it along with engine support in
+      # https://github.com/openssl/openssl/commit/2db3f8cf8b432f0c39b619dd92269a732256449e
+      ++ lib.optional (lib.versionOlder version "4.0") "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
@@ -367,7 +371,17 @@ let
           rm -rf $dev/lib/cmake
         '';
 
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      passthru.tests = {
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        certificate-discovery = testers.runNixOSTest (
+          import ./tests/certificate-discovery.nix {
+            inherit lib;
+            openssl = finalAttrs.finalPackage;
+          }
+        );
+      };
 
       strictDeps = true;
       __structuredAttrs = true;
@@ -414,13 +428,8 @@ in
       # This patch disables build-time detection.
       ./3.5/openssl-disable-kernel-detection.patch
 
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
+      # Prefer the system CA bundle, then fall back to the default Nix profile.
+      ./3.5/use-etc-ssl-certs.patch
     ];
   };
 
@@ -437,13 +446,8 @@ in
       # This patch disables build-time detection.
       ./3.5/openssl-disable-kernel-detection.patch
 
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
+      # Prefer the system CA bundle, then fall back to the default Nix profile.
+      ./3.5/use-etc-ssl-certs.patch
     ];
   };
 }

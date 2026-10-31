@@ -45,6 +45,26 @@ lib.extendMkDerivation {
 
         strictDeps = true;
 
+        # OCaml libraries, and the dependencies they propagate, are only needed
+        # to build other packages. Unless the package chooses its outputs,
+        # those are installed into "dev", rather than "out", to minimize the
+        # "out" runtime closure. Man pages and documentation go to "man" and
+        # "doc".
+        outputs =
+          args.outputs or [
+            "out"
+            "dev"
+            "man"
+            "doc"
+          ];
+
+        # The findlib setup hook always points OCAMLFIND_DESTDIR at $out, so
+        # override it after all setup hooks have run.
+        postHook = ''
+          export OCAMLFIND_DESTDIR="''${!outputDev}/lib/ocaml/${ocaml.version}/site-lib/"
+        ''
+        + args.postHook or "";
+
         inherit enableParallelBuilding;
         dontAddStaticConfigureFlags = true;
         configurePlatforms = [ ];
@@ -67,12 +87,15 @@ lib.extendMkDerivation {
           args.installPhase or ''
             runHook preInstall
             dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${lib.concatStringsSep " " dunePackages} \
-             ${
-               if lib.versionAtLeast Dune.version "2.9" then
-                 "--docdir $out/share/doc --mandir $out/share/man"
-               else
-                 ""
-             }
+             ${lib.optionalString (lib.versionAtLeast Dune.version "2.9") ''
+               --docdir "''${!outputDoc}/share/doc" --mandir "''${!outputMan}/share/man" --etcdir "$out/etc" \
+             ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
+               --bindir "''${!outputBin}/bin" --datadir "$out/share"
+             ''}
+            # Not every package installs something into each output.
+            for output in $(getAllOutputNames); do
+              mkdir -p "''${!output}"
+            done
             runHook postInstall
           '';
 
@@ -83,8 +106,22 @@ lib.extendMkDerivation {
             runHook postCheck
           '';
 
-        meta = (args.meta or { }) // {
-          platforms = args.meta.platforms or ocaml.meta.platforms;
-        };
+        # With several outputs, multiple-outputs.sh passes autoconf-style
+        # --bindir/--libdir/--mandir/... flags to ./configure. The configure
+        # scripts shipped by dune packages are hand-written and reject them.
+        setOutputFlags = args.setOutputFlags or false;
+
+        meta =
+          let
+            meta = args.meta or { };
+            # meta is often copied from another package, which may have other
+            # outputs. Keep the default if none of them are left.
+            outputsToInstall = lib.intersectLists finalAttrs.outputs (meta.outputsToInstall or [ ]);
+          in
+          removeAttrs meta [ "outputsToInstall" ]
+          // {
+            platforms = meta.platforms or ocaml.meta.platforms;
+          }
+          // lib.optionalAttrs (outputsToInstall != [ ]) { inherit outputsToInstall; };
       };
 }

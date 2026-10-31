@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "14.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "azure_mgmt_redis";

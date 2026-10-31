@@ -20,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   version = "6.168.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";

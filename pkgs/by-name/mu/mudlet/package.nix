@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     qtWrapperArgs+=(--set LUA_CPATH "${luaEnv}/lib/lua/${lua5_1.luaversion}/?.so")
-    qtWrapperArgs+=(--prefix LUA_PATH : "$NIX_LUA_PATH")
     ${lib.optionalString withDiscordRpc ''
       qtWrapperArgs+=(--prefix ${libPathVar} : "${lib.makeLibraryPath [ discord-rpc ]}")
     ''}

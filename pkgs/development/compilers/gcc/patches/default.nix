@@ -108,6 +108,9 @@ optionals noSysDirs (
 # LoongArch: fix miscompile of both_non_zero{,_subreg} when operands[0] == operands[2]
 # See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=127153
 ++ optional is16 ./16/loongarch-fix-miscompile-of-both_non_zero.patch
+# Allow room for the sign in libgomp device UIDs; GCC 16 otherwise fails with
+# -Werror=format-truncation when cross-compiling against glibc.
+++ optional is16 ../ng/16/libgomp/uid-buffer-size.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 

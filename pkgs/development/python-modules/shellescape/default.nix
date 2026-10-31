@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.8.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chrissimpkins";
     repo = "shellescape";

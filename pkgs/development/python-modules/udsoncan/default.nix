@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "udsoncan";
   version = "1.26.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pylessard";

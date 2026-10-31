@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_darabonba_signature_util";
     inherit (finalAttrs) version;

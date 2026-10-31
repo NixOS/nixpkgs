@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rich-click";
   version = "1.9.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ewels";

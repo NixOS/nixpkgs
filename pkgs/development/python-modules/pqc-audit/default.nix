@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "rauleteee";
     repo = "pqc-scanner";

@@ -65,7 +65,6 @@ buildPythonPackage (finalAttrs: {
   pname = "emerge";
   version = "2.8.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";

@@ -59,6 +59,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ hexagonal-sun ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

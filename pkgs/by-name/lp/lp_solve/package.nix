@@ -29,15 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
       cctools
       fixDarwinDylibNames
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.autoSignDarwinBinariesHook
     ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-  }
-  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
   dontConfigure = true;

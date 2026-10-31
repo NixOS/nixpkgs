@@ -39,6 +39,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   minimalOCamlVersion = "4.12";
 
+  # The custom installPhase installs everything into $out.
+  outputs = [ "out" ];
+
   depsBuildBuild = [
     ocamlPackages.menhir
     ocamlPackages.lem

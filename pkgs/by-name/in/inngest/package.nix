@@ -104,6 +104,6 @@ buildGoModule (finalAttrs: {
       kikos0
     ];
     mainProgram = "inngest";
-    platforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 })

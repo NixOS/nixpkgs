@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "llvmlite";
   version = "0.49.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = isPyPy;
 

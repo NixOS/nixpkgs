@@ -1,0 +1,17 @@
+diff --git a/tools/include/uapi/linux/types.h b/tools/include/uapi/linux/types.h
+index 85aa327..adc3543 100644
+--- a/tools/include/uapi/linux/types.h
++++ b/tools/include/uapi/linux/types.h
+@@ -7,6 +7,12 @@
+ #ifndef __ASSEMBLER__
+ 
+ /* copied from linux:include/uapi/linux/types.h */
++
++#ifdef __SIZEOF_INT128__
++typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
++#endif
++
+ #define __bitwise
+ typedef __u16 __bitwise __le16;
+ typedef __u16 __bitwise __be16;

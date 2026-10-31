@@ -50,7 +50,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";

@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "docling-jobkit";
   version = "3.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";

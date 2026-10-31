@@ -80,7 +80,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ray";
   version = "2.59.0";
   format = "wheel";
-  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.15";
 

@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "flash-linear-attention";
   inherit (fla-core) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   # Only ships fla/{layers,models}. The rest of `fla` is provided by fla-core.
   postPatch = ''

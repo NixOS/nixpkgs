@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "distrax";
   version = "0.1.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";

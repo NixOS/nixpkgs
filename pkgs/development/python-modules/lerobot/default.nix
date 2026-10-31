@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lerobot";
   version = "0.6.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

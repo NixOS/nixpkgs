@@ -20,7 +20,7 @@
 
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
+  metalSupport ? stdenv.hostPlatform.isDarwin,
   # one of [ null "cpu" "rocm" "cuda" "metal" ];
   acceleration ? null,
 }:
@@ -56,7 +56,7 @@ let
   # If user did not not override the acceleration attribute, then try to use one of
   # - nixpkgs.config.cudaSupport
   # - nixpkgs.config.rocmSupport
-  # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+  # - metal if stdenv.hostPlatform.isDarwin
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
   featureDevice =
     if (isNull acceleration) then
@@ -70,11 +70,11 @@ let
       "building tabby with `${api}` is only supported on linux; falling back to cpu"
       stdenv.hostPlatform.isLinux
     );
-  warnIfNotDarwinAarch64 =
+  warnIfNotDarwin =
     api:
-    (lib.warnIfNot (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    (lib.warnIfNot stdenv.hostPlatform.isDarwin
       "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
-      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      stdenv.hostPlatform.isDarwin
     );
 
   validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [
@@ -88,7 +88,7 @@ let
   #  The would result in a startup failure of the service module.
   enableRocm = validAccel && (featureDevice == "rocm") && (warnIfNotLinux "rocm");
   enableCuda = validAccel && (featureDevice == "cuda") && (warnIfNotLinux "cuda");
-  enableMetal = validAccel && (featureDevice == "metal") && (warnIfNotDarwinAarch64 "metal");
+  enableMetal = validAccel && (featureDevice == "metal") && (warnIfNotDarwin "metal");
 
   # We have to use override here because tabby doesn't actually tell llama-cpp
   # to use a specific device type as it is relying on llama-cpp only being

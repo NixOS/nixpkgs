@@ -25,10 +25,10 @@ stdenvNoCC.mkDerivation {
 
     # Provide a CMake module. This is primarily used to glue together parts of the Swift toolchain.
     # Upstream provides a build that does this for us, but we want to reuse our existing ICU build.
-    mkdir -p "''${!outputDev}/lib/cmake/SwiftFoundationICU"
+    mkdir -p "''${!outputDev}/lib/cmake/_FoundationICU"
     export dylibExt="${stdenvNoCC.hostPlatform.extensions.sharedLibrary}"
 
-    substitute ${./files/SwiftFoundationICUConfig.cmake} "''${!outputDev}/lib/cmake/SwiftFoundationICU/SwiftFoundationICUConfig.cmake" \
+    substitute ${./files/_FoundationICUConfig.cmake} "''${!outputDev}/lib/cmake/_FoundationICU/_FoundationICUConfig.cmake" \
       --replace-fail '@buildType@' ${if stdenvNoCC.hostPlatform.isStatic then "STATIC" else "SHARED"} \
       --replace-fail '@lib@' ${lib.escapeShellArg (lib.getLib darwin.ICU)} \
       --replace-fail '@dev@' "''${!outputDev}"

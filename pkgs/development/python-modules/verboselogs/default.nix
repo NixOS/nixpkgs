@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.7";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-verboselogs";

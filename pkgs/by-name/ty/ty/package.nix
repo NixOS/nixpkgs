@@ -6,9 +6,11 @@
 
   # nativeBuildInputs
   installShellFiles,
+  pkg-config,
 
   # buildInputs
   rust-jemalloc-sys,
+  zstd,
 
   buildPackages,
   versionCheckHook,
@@ -42,8 +44,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-FaK/P6nBJqfSkUqv8qmmIeAPQh5ksIS/lpIBVkrGALg=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   # `ty`'s tests use `insta-cmd`, which depends on the structure of the `target/` directory,
   # and also fails to find the environment variable `$CARGO_BIN_EXE_ty`, which leads to tests failing.

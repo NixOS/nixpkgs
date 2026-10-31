@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "formulas";
   version = "1.3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vinci1it2000";

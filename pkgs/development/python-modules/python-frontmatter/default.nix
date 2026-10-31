@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "python-frontmatter";
   version = "1.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eyeseast";

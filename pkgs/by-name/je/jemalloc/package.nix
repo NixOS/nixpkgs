@@ -87,10 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
   ++ [
     "--with-lg-page=${toString pageSizeMap."${toString pageSizeKiB}"}"
-  ]
-  # See https://github.com/jemalloc/jemalloc/issues/1997
-  # Using a value of 48 should work on both emulated and native x86_64-darwin.
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--with-lg-vaddr=48";
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=array-bounds";
 

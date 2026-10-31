@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fasttransport";

@@ -36,10 +36,8 @@ buildGoModule (finalAttrs: {
     installShellCompletion --cmd nix-auth \
       --bash <($out/bin/nix-auth completion bash) \
       --fish <($out/bin/nix-auth completion fish) \
+      --powershell <($out/bin/nix-auth completion powershell) \
       --zsh <($out/bin/nix-auth completion zsh)
-
-    mkdir -p $out/share/powershell
-    $out/bin/nix-auth completion powershell > $out/share/powershell/nix-auth.Completion.ps1
   '';
 
   doInstallCheck = true;

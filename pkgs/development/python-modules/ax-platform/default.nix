@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -35,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ax-platform";
   version = "1.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -131,10 +129,6 @@ buildPythonPackage (finalAttrs: {
     # Timeout
     "test_efficient_loo_cv_with_fully_bayesian_model"
     "test_fitting_auxiliary_experiment_dataset"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # flaky
-    "test_gen_with_expanded_parameter_space"
   ];
 
   pythonImportsCheck = [ "ax" ];

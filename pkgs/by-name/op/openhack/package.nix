@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.2.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "openhackai";
     repo = "openhack";

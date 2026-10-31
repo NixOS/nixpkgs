@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "borb";
   version = "2.1.25";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

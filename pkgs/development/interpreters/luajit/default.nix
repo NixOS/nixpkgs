@@ -68,6 +68,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "luajit";
   inherit version src;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   luaversion = "5.1";
 
@@ -183,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
         vcunat
         lblasc
       ];
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "luajit" finalAttrs.version;
     }
     // extraMeta;
 })

@@ -546,6 +546,36 @@ lib.extendMkDerivation {
                 '';
             };
 
+          # Deprecated unittestFlagsArray (internal)
+          ${
+            if
+              finalAttrs ? unittestFlagsArray
+              && finalAttrs.unittestFlagsArray != null
+              && finalAttrs.unittestFlagsArray != [ ]
+            then
+              "buildPythonPackage-internal-unittestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos =
+                    if
+                      attrs ? unittestFlagsArray && attrs.unittestFlagsArray != null && attrs.unittestFlagsArray != [ ]
+                    then
+                      unsafeGetAttrPos "unittestFlagsArray" attrs
+                    else
+                      null;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument unittestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
+            };
+
           # Deprecated argument stdenv (internal)
           ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
             kind = "broken";

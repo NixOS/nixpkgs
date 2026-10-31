@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
 
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Lagg";
     repo = "steamodd";

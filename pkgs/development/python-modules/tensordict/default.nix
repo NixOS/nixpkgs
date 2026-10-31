@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tensordict";
   version = "0.15.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";

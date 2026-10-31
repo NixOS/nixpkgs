@@ -62,7 +62,6 @@ buildPythonPackage (finalAttrs: {
   pname = "kserve";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kserve";

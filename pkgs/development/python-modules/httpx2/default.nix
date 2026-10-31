@@ -18,6 +18,7 @@
   idna,
 
   # optional dependencies
+  backports-zstd,
   brotli,
   brotlicffi,
   click,
@@ -26,7 +27,6 @@
   rich,
   socksio,
   wsproto,
-  zstandard,
 
   # tests
   chardet,
@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     http2 = [ h2 ];
     socks = [ socksio ];
     ws = [ wsproto ];
-    zstd = lib.optionals (pythonOlder "3.14") [ zstandard ];
+    zstd = lib.optionals (pythonOlder "3.14") [ backports-zstd ];
   };
 
   pythonImportsCheck = [
@@ -127,7 +127,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   meta = {
     description = "A next generation HTTP client for Python";

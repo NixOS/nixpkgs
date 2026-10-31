@@ -20,7 +20,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "foss-flame";
   version = "0.21.8";
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

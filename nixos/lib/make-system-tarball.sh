@@ -41,7 +41,8 @@ mkdir -p $out/tarball
 
 rm env-vars
 
-time tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c * $extraArgs | $compressCommand > $out/tarball/$fileName.tar${extension}
+# Store optimization can change hardlink topology without changing input NARs.
+time tar --hard-dereference --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c * $extraArgs | $compressCommand > $out/tarball/$fileName.tar${extension}
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system

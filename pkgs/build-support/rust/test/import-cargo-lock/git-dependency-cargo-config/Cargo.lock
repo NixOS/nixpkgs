@@ -1,0 +1,13 @@
+version = 3
+
+[[package]]
+name = "fixture"
+version = "0.1.0"
+dependencies = [
+ "bootloader",
+]
+
+[[package]]
+name = "bootloader"
+version = "0.11.17"
+source = "git+https://github.com/rust-osdev/bootloader.git?rev=3d7f72e36d4101ecf78b70cef2475d700bb01721#3d7f72e36d4101ecf78b70cef2475d700bb01721"

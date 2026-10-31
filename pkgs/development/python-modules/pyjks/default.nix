@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyjks";
   version = "20.0.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {
