@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   rustPlatform,
+  rustc,
   fetchFromGitHub,
   cacert,
   protobuf,
@@ -24,6 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-QG4HMADZmOu5ilFZBqogdrwBaBegoqNP9GvsDddUYbs=";
+
+  patches = lib.optionals (stdenv.hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") [
+    # Remove when https://github.com/NixOS/nixpkgs/pull/544495 is merged and propagated to master
+    ./0001-disable-avx512vnni.patch
+  ];
 
   nativeBuildInputs = [
     protobuf
