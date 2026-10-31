@@ -8,6 +8,8 @@ let
     ;
 in
 rec {
+  backend = import ./backend-lib.nix { inherit lib; };
+
   flattenMapServicesConfigToList =
     f: loc: config:
     f loc config

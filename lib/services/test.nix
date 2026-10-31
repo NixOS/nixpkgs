@@ -124,6 +124,36 @@ let
           ];
         };
       };
+
+      # All init-system-independent lifecycle, dependency and runtime options.
+      fullFeatured = {
+        enable = true;
+        dependencies = {
+          after = [ "dep-a" ];
+          before = [ "dep-b" ];
+          requires = [ "dep-c" ];
+          wants = [ "dep-d" ];
+        };
+        runtime = {
+          user = "nobody";
+          group = "nogroup";
+          workingDirectory = "/tmp";
+        };
+        environment = {
+          FOO = "bar";
+        };
+        process = {
+          argv = [ "/bin/daemon" ];
+          type = "oneshot";
+          stopSignal = "SIGUSR1";
+          startTimeout = 10;
+          stopTimeout = 20;
+        };
+        restart = {
+          policy = "on-failure";
+          delay = 2;
+        };
+      };
       # `argv` and `flags` share one `lib.mkOrder` space.
       flagsOrdering = {
         process = {
@@ -300,6 +330,16 @@ let
             assertions = [ ];
             warnings = [ ];
           };
+          fullFeatured = {
+            process = {
+              argv = [ "/bin/daemon" ];
+              reloadCommand = null;
+              reloadSignal = null;
+            };
+            services = { };
+            assertions = [ ];
+            warnings = [ ];
+          };
         };
       };
 
@@ -327,6 +367,70 @@ let
           assertion = false;
         }
       ];
+
+    # The init-system-independent lifecycle, dependency, runtime and restart
+    # options must evaluate to the values that were configured.
+    assert
+      let
+        s = exampleEval.config.services.fullFeatured;
+      in
+      s.enable == true
+      &&
+        s.dependencies == {
+          after = [ "dep-a" ];
+          before = [ "dep-b" ];
+          requires = [ "dep-c" ];
+          wants = [ "dep-d" ];
+        }
+      &&
+        s.runtime == {
+          user = "nobody";
+          group = "nogroup";
+          workingDirectory = "/tmp";
+        }
+      &&
+        s.environment == {
+          FOO = "bar";
+        }
+      && s.process.type == "oneshot"
+      && s.process.stopSignal == "SIGUSR1"
+      && s.process.startTimeout == 10
+      && s.process.stopTimeout == 20
+      &&
+        s.restart == {
+          policy = "on-failure";
+          delay = 2;
+        };
+
+    # Unset options fall back to the documented defaults.
+    assert
+      let
+        s = exampleEval.config.services.service1;
+      in
+      s.enable == true
+      &&
+        s.dependencies == {
+          after = [ ];
+          before = [ ];
+          requires = [ ];
+          wants = [ ];
+        }
+      &&
+        s.runtime == {
+          user = "root";
+          group = "root";
+          workingDirectory = null;
+        }
+      && s.environment == { }
+      && s.process.type == "simple"
+      && s.process.stopSignal == null
+      && s.process.startTimeout == null
+      && s.process.stopTimeout == null
+      &&
+        s.restart == {
+          policy = "always";
+          delay = 5;
+        };
 
     "ok";
 
