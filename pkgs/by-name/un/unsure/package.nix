@@ -8,8 +8,6 @@ buildDartApplication (finalAttrs: {
   pname = "unsure";
   version = "0.5.0-unstable-2026-11-12";
 
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "filiph";
     repo = "unsure";
