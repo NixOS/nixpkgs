@@ -4060,6 +4060,12 @@
     githubId = 929598;
     name = "Bohdan Tkachenko";
   };
+  bohdaq = {
+    email = "bohdan.tsap@tutanota.com";
+    github = "bohdaq";
+    githubId = 1307140;
+    name = "Bohdan Tsap";
+  };
   bohreromir = {
     github = "bohreromir";
     githubId = 40412303;
