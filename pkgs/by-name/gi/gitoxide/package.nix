@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     curl
     sqlite
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preFixup = lib.optionalString canRunCmd ''
     installShellCompletion --cmd gix \
