@@ -26,9 +26,14 @@ with lib;
       settingsFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/etc/xray/config.json";
+        example = "/etc/xray/config.yaml";
         description = ''
           The absolute path to the configuration file.
+
+          xray selects the parser from the file extension, so files ending in
+          `.yaml`, `.yml` or `.toml` are read as YAML or TOML, and anything
+          else is read as JSON. When the file comes from a secret manager, make
+          sure the secret's path keeps the extension.
 
           Either `settingsFile` or `settings` must be specified.
 
@@ -80,6 +85,16 @@ with lib;
             '';
           };
 
+      settingsExtension =
+        if cfg.settingsFile == null then
+          "json"
+        else
+          findFirst (ext: hasSuffix ".${ext}" (toString cfg.settingsFile)) "json" [
+            "yaml"
+            "yml"
+            "toml"
+          ];
+
     in
     mkIf cfg.enable {
       assertions = [
@@ -94,9 +109,9 @@ with lib;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/xray -config \"\${CREDENTIALS_DIRECTORY}\"/config.json";
+          ExecStart = "${cfg.package}/bin/xray -config \"\${CREDENTIALS_DIRECTORY}\"/config.${settingsExtension}";
           DynamicUser = true;
-          LoadCredential = "config.json:${settingsFile}";
+          LoadCredential = "config.${settingsExtension}:${settingsFile}";
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           NoNewPrivileges = true;
