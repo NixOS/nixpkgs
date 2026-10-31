@@ -31075,6 +31075,12 @@
     githubId = 19894025;
     name = "Vinny Meller";
   };
+  vinso = {
+    email = "8vinso8@gmail.com";
+    github = "8Vinso8";
+    githubId = 44764023;
+    name = "Vinso";
+  };
   vinylen = {
     email = "victor@viclab.se";
     github = "vinylen";
