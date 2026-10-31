@@ -1,5 +1,7 @@
 {
+  stdenv,
   audit,
+  blazesym-c,
   bash,
   bison,
   cmake,
@@ -9,22 +11,26 @@
   iperf,
   lib,
   libbpf,
+  bpftools,
   llvmPackages,
   luajit,
   makeWrapper,
   netperf,
   nixosTests,
+  testers,
   python3Packages,
   readline,
   removeReferencesTo,
   replaceVars,
   zip,
+  linuxHeaders,
+  openssl,
+  libbfd,
+  libcap,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "bcc";
+let
   version = "0.37.0";
-  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -32,6 +38,52 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-OfQWqZ7yyN+rs6PJP5QUIn07QdxOiBoUEetGQPp6KJo=";
   };
+
+  libbpf-tools = stdenv.mkDerivation (finalAttrs: {
+    pname = "libbpf-tools";
+    inherit version src;
+
+    sourceRoot = "${finalAttrs.src.name}/libbpf-tools";
+
+    patches = [
+      # Use system blazesym instead of building from source
+      ./libbpf-tools-makefile.patch
+    ];
+
+    nativeBuildInputs = [
+      bpftools
+      llvmPackages.clang
+      llvmPackages.llvm
+    ];
+
+    buildInputs = [
+      blazesym-c
+      llvmPackages.libclang
+      elfutils
+      libbpf
+      linuxHeaders
+      openssl
+      libbfd
+      libcap
+    ];
+
+    hardeningDisable = [ "all" ];
+
+    makeFlags = [
+      "prefix=${placeholder "out"}"
+      "USE_BLAZESYM=1"
+      "BPFTOOL=${lib.getExe' bpftools "bpftool"}"
+      "LIBBPF_OBJ=${libbpf}/lib/libbpf.a"
+      "LIBBLAZESYM_OBJ=${blazesym-c}/lib/libblazesym_c.a"
+    ];
+  });
+in
+python3Packages.buildPythonApplication rec {
+  pname = "bcc";
+  inherit version;
+  pyproject = false;
+
+  inherit src;
 
   patches = [
     # This is needed until we fix
@@ -130,8 +182,21 @@ python3Packages.buildPythonApplication rec {
     "man"
   ];
 
-  passthru.tests = {
-    bpf = nixosTests.bpf;
+  passthru = {
+    tests = {
+      bpf = nixosTests.bpf;
+      libbpf-tools = testers.runCommand {
+        name = "bcc-libbpf-tools";
+        nativeBuildInputs = [ libbpf-tools ];
+        script = ''
+          ${lib.getExe' libbpf-tools "syscount"} -h >/dev/null
+
+          touch $out
+        '';
+      };
+    };
+
+    libbpf-tools = libbpf-tools;
   };
 
   meta = {
