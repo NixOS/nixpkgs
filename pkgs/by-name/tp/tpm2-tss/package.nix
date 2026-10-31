@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  autoreconfHook,
+  autoreconfHook269,
   autoconf-archive,
   pkg-config,
   doxygen,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoreconfHook269
     autoconf-archive
     pkg-config
     doxygen
