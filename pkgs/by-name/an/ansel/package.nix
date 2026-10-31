@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2026-06-13";
+  version = "0-unstable-2026-10-30";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "2a9850bdc393d88f799b2cb3d80f22757d467d3e";
-    hash = "sha256-hCleHtaqH9dRHDtOVuKN16L1jPMeYJbr4qSwVPLIgL8=";
+    rev = "11fe9d529a18ff4f23c440939f53593eb74212b1";
+    hash = "sha256-REOmcSQ5RpeBpkwk6Z4Rgul6OMELf4+bpAhZGSwr4w4=";
     fetchSubmodules = true;
   };
 
@@ -162,6 +162,11 @@ stdenv.mkDerivation {
     util-linux
     x265
   ];
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail "target_include_directories(ansel_deps INTERFACE" "target_include_directories(ansel_deps INTERFACE ${glib.dev}/include/gio-unix-2.0/"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
