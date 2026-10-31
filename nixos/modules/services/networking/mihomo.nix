@@ -16,7 +16,8 @@ let
     ++ lib.optionals cfg.processesInfo [
       "CAP_DAC_READ_SEARCH"
       "CAP_SYS_PTRACE"
-    ];
+    ]
+    ++ lib.optional cfg.lowPortsAccess "CAP_NET_BIND_SERVICE";
   CapabilityBoundingSet = AmbientCapabilities;
 in
 {
@@ -63,6 +64,10 @@ in
 
     processesInfo = lib.mkEnableOption ''
       necessary capabilities for rules about process information such as `process-name`
+    '';
+
+    lowPortsAccess = lib.mkEnableOption ''
+      necessary capabilities for mihomo to bind the low ports such as port 53.
     '';
   };
 
