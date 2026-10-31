@@ -4,21 +4,32 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "fcast-client";
-  version = "0.1.0-unstable-2024-05-23";
+  version = "0.1.0-unstable-2026-06-02";
 
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "fcast";
-    rev = "cc07f95d2315406fcacf67cb3abb98efff5df5d9";
-    hash = "sha256-vsD4xgrC5KbnZT6hPX3fi3M/CH39LtoRfa6nYD0iFew=";
+    rev = "cb3dc29d31b2b97277b1b96b0267c3d61922a4d2";
+    hash = "sha256-ipnch1QU//EspAuWRh+s4hQAIwfkJDFjibPY4bCW0k0=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/clients/terminal";
+  # `fcast` is one member of a large Cargo workspace; the other members (GUI
+  # senders and receivers) pull git dependencies (slint, gst-plugins-rs) that the
+  # terminal client never uses and that cannot be vendored here. Trim the
+  # workspace to the client's dependency closure so the build resolves against the
+  # small, git-free Cargo.lock committed alongside this package.
+  postPatch = ''
+    sed -i '/^members = \[/,/^]/c\members = [ "senders/terminal", "sdk/sender/fcast-sender-sdk", "crates/fcast-protocol", "crates/file-server", "crates/google-cast-protocol" ]' Cargo.toml
+    cp ${./Cargo.lock} Cargo.lock
+    rm -f senders/terminal/Cargo.lock
+  '';
 
-  cargoHash = "sha256-yzsAe+fr1yX8RBJPtXSr/R7W0iJpeF3JW3E4ius+8nU=";
+  cargoLock.lockFile = ./Cargo.lock;
+
+  buildAndTestSubdir = "senders/terminal";
 
   meta = {
     description = "FCast Client Terminal, a terminal open-source media streaming client";
@@ -32,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       receiver devices or integrate the FCast protocol into their own apps.
     '';
     mainProgram = "fcast";
-    maintainers = with lib.maintainers; [ yusufraji ];
+    maintainers = with lib.maintainers; [
+      caniko
+      yusufraji
+    ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-})
+}
