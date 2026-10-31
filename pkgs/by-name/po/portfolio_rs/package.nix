@@ -4,20 +4,21 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "portfolio_rs";
-  version = "0.7.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "MarkusZoppelt";
     repo = "portfolio_rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SuukTNEfPOCCE5bg08/K7M68R2dAe75cch39whtcSWg=";
+    hash = "sha256-UKk74q24DrQpMJG49cmi8pR10h3a55K5qK4tmRcn4NM=";
   };
 
-  cargoHash = "sha256-L14Cu/Gex6FGeSEL7zcY+E6khtkH6fwzqkjHm67ALUw=";
+  cargoHash = "sha256-mXm6JXDri9zYdc8nkpuylewz095lcR5H02YhPLyA5wA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -28,8 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_get_quote_price"
     "--skip=test_get_historic_price"
     "--skip=test_handle_position"
-    "--skip=test_get_historic_total_value"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line tool for managing financial investment portfolios.";
