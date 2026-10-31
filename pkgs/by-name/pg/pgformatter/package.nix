@@ -17,9 +17,6 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-ibWRkQlKKOvmqEdl1gVaZmE7bsyA9Mmo234LBTGEHa8=";
   };
 
-  strictDeps = true;
-  __structuredAttrs = true;
-
   outputs = [ "out" ];
 
   makeMakerFlags = [ "INSTALLDIRS=vendor" ];
