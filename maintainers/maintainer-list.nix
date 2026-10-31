@@ -8337,6 +8337,11 @@
     githubId = 411447;
     name = "Leo Gaspard";
   };
+  ekovshilovsky = {
+    github = "ekovshilovsky";
+    githubId = 4632199;
+    name = "Eugene Kovshilovsky";
+  };
   ekzyis = {
     email = "ramdip.singhgill@gmail.com";
     github = "ekzyis";
