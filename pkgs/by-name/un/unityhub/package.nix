@@ -9,13 +9,13 @@
   extraLibs ? pkgs: [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unityhub";
-  version = "3.19.5";
+  version = "3.22.5";
 
   src = fetchurl {
-    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${version}-amd64.deb";
-    hash = "sha256-WltXrcnOIJMcQVTFf/3tCPP/onQyhv3xTJ563WshJUA=";
+    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${finalAttrs.version}-amd64.deb";
+    hash = "sha256-+/cR+388r/EBXFB8HrX3HRx5YGUilC8h5xYxRlUyHUM=";
   };
 
   nativeBuildInputs = [
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   fhsEnv = buildFHSEnv {
-    pname = "${pname}-fhs-env";
-    inherit version;
+    pname = "unityhub-fhs-env";
+    inherit (finalAttrs) version;
     runScript = "";
 
     targetPkgs =
@@ -126,20 +126,17 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    mv opt/ usr/share/ $out
+    mv usr/lib/ $out/opt/
+    mv usr/share/ $out
 
     # `/opt/unityhub/unityhub` is a shell wrapper that runs `/opt/unityhub/unityhub-bin`
     # which we don't need and overwrite with our own wrapper that uses the fhs env.
-    makeWrapper ${fhsEnv}/bin/${pname}-fhs-env $out/opt/unityhub/unityhub \
+    makeWrapper ${finalAttrs.fhsEnv}/bin/unityhub-fhs-env $out/opt/unityhub/unityhub \
       --add-flags $out/opt/unityhub/unityhub-bin \
       --argv0 unityhub
 
     mkdir -p $out/bin
     ln -s $out/opt/unityhub/unityhub $out/bin/unityhub
-
-    # Replace absolute path in desktop file to correctly point to nix store
-    substituteInPlace $out/share/applications/unityhub.desktop \
-      --replace-fail /opt/unityhub/unityhub $out/opt/unityhub/unityhub
 
     # This file is used by auto updater to determine whether this install is
     # a .deb, .rpm, etc. Remove this to disable the auto updater, which auto
@@ -155,10 +152,10 @@ stdenv.mkDerivation rec {
     description = "Official Unity3D app to download and manage Unity Projects and installations";
     homepage = "https://unity.com/";
     downloadPage = "https://unity.com/unity-hub";
-    changelog = "https://unity.com/unity-hub/release-notes#${version}";
+    changelog = "https://unity.com/unity-hub/release-notes#${finalAttrs.version}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ huantian ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
