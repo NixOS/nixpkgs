@@ -26253,6 +26253,11 @@
     email = "hey@sandydoo.me";
     matrix = "@sandydoo:matrix.org";
   };
+  santiagolxx = {
+    github = "santiagolxx";
+    githubId = 149891004;
+    name = "santiagolxx";
+  };
   SapphoSys = {
     name = "Chloe";
     github = "SapphoSys";
