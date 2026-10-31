@@ -106,7 +106,7 @@ let
 
         extraPassthru.updateScript = {
           command = [
-            ./update-xanmod.sh
+            ./update.sh
             variant
           ];
           supportedFeatures = [

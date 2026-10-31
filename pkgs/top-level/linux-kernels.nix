@@ -119,7 +119,7 @@ in
         };
 
         # This contains the variants of the XanMod kernel
-        xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
+        xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod;
 
         linux_xanmod = xanmodKernels {
           variant = "lts";
