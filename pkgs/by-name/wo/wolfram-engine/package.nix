@@ -39,8 +39,7 @@
 
 let
   l10n = import ./l10ns.nix {
-    lib = lib;
-    inherit requireFile lang;
+    inherit lib requireFile lang;
   };
   dirName = "WolframEngine";
 in
@@ -128,6 +127,8 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/${dirName}/Executables
     for path in MathKernel math mcc wolfram; do
+      # mcc was removed in Wolfram Engine 15.0.0
+      [ -e "$path" ] || continue
       makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path --set LD_LIBRARY_PATH "${zlib}/lib:${lib.getLib stdenv.cc.cc}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}"
     done
 
