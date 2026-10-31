@@ -9,6 +9,14 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.controllerManager;
+
+  # --flag=value form; interpolate path literals so they end up in the store
+  optionFormat = option: {
+    option = "--${option}";
+    sep = "=";
+    explicitBool = option != "use-service-account-credentials";
+    formatArg = v: if builtins.isPath v then "${v}" else lib.generators.mkValueStringDefault { } v;
+  };
 in
 {
   imports = [
@@ -122,36 +130,31 @@ in
         RestartSec = "30s";
         Restart = "on-failure";
         Slice = "kubernetes.slice";
-        ExecStart = ''
-          ${top.package}/bin/kube-controller-manager \
-                    --allocate-node-cidrs=${lib.boolToString cfg.allocateNodeCIDRs} \
-                    --bind-address=${cfg.bindAddress} \
-                    ${lib.optionalString (cfg.clusterCidr != null) "--cluster-cidr=${cfg.clusterCidr}"} \
-                    ${
-                      lib.optionalString (cfg.featureGates != { })
-                        "--feature-gates=${
-                          lib.concatStringsSep "," (
-                            builtins.attrValues (lib.mapAttrs (n: v: "${n}=${lib.trivial.boolToString v}") cfg.featureGates)
-                          )
-                        }"
-                    } \
-                    --kubeconfig=${top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig} \
-                    --leader-elect=${lib.boolToString cfg.leaderElect} \
-                    ${lib.optionalString (cfg.rootCaFile != null) "--root-ca-file=${cfg.rootCaFile}"} \
-                    --secure-port=${toString cfg.securePort} \
-                    ${
-                      lib.optionalString (
-                        cfg.serviceAccountKeyFile != null
-                      ) "--service-account-private-key-file=${cfg.serviceAccountKeyFile}"
-                    } \
-                    ${lib.optionalString (cfg.tlsCertFile != null) "--tls-cert-file=${cfg.tlsCertFile}"} \
-                    ${
-                      lib.optionalString (cfg.tlsKeyFile != null) "--tls-private-key-file=${cfg.tlsKeyFile}"
-                    } \
-                    ${lib.optionalString (lib.elem "RBAC" top.apiserver.authorizationMode) "--use-service-account-credentials"} \
-                    ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-                    ${cfg.extraOpts}
-        '';
+        ExecStart = lib.concatStringsSep " " [
+          "${top.package}/bin/kube-controller-manager"
+          (lib.cli.toCommandLineShell optionFormat {
+            allocate-node-cidrs = cfg.allocateNodeCIDRs;
+            bind-address = cfg.bindAddress;
+            cluster-cidr = cfg.clusterCidr;
+            feature-gates =
+              if cfg.featureGates != { } then
+                lib.concatStringsSep "," (
+                  builtins.attrValues (lib.mapAttrs (n: v: "${n}=${lib.trivial.boolToString v}") cfg.featureGates)
+                )
+              else
+                null;
+            kubeconfig = top.lib.mkKubeConfig "kube-controller-manager" cfg.kubeconfig;
+            leader-elect = cfg.leaderElect;
+            root-ca-file = cfg.rootCaFile;
+            secure-port = cfg.securePort;
+            service-account-private-key-file = cfg.serviceAccountKeyFile;
+            tls-cert-file = cfg.tlsCertFile;
+            tls-private-key-file = cfg.tlsKeyFile;
+            use-service-account-credentials = lib.elem "RBAC" top.apiserver.authorizationMode;
+            v = cfg.verbosity;
+          })
+          cfg.extraOpts
+        ];
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
         Group = "kubernetes";
