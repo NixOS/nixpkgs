@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       robinkrahl
+      liamthexpl0rer
     ];
   };
 })
