@@ -1,0 +1,97 @@
+From 113b456d7febf1bdd18837fa3bb471875f7d7dc6 Mon Sep 17 00:00:00 2001
+From: DanConwayDev <DanConwayDev@protonmail.com>
+Date: Mon, 21 Sep 2026 15:01:40 +0000
+Subject: [PATCH] test(sync): wait for complete reconnect recovery evidence
+
+A delayed test task may observe more than the requested two reconnects.
+Treat the fixture's minimum session count as the readiness precondition,
+then wait for the complete relay-specific retained-failure-streak log line.
+
+This preserves the backoff assertion without assuming when the test task
+runs or accepting another relay's log as readiness. Production reconnect
+behavior and deadlines are unchanged; unrelated fixture cleanup is excluded.
+
+Validation: full workspace suite passed (3,566 passed, 16 ignored); both
+focused reconnect tests passed after final import cleanup. Formatting and
+whitespace checks passed. Independent review found no remaining findings.
+
+Assisted-by: Codex (GPT-6)
+---
+ tests/sync/reconnect_backoff.rs | 39 ++++++++++++---------------------
+ 1 file changed, 14 insertions(+), 25 deletions(-)
+
+diff --git a/tests/sync/reconnect_backoff.rs b/tests/sync/reconnect_backoff.rs
+index 3730563..95d1bbb 100644
+--- a/tests/sync/reconnect_backoff.rs
++++ b/tests/sync/reconnect_backoff.rs
+@@ -31,35 +31,29 @@ async fn discovery_only_mailbox_keeps_failure_history_through_cleanup() {
+     flapping
+         .wait_for_connections(2, Duration::from_secs(60))
+         .await;
+-    let logs = wait_for_log(
+-        &syncing.log_path(),
+-        "consecutive_failures=1",
+-        Duration::from_secs(15),
+-    )
+-    .await;
+-    assert!(logs.lines().any(|line| {
+-        line.contains(flapping.url())
+-            && line.contains("consecutive_failures=1")
+-            && line.contains("preserving failure streak until stable")
+-    }));
++    wait_for_retained_failure_streak(&syncing, flapping.url(), Duration::from_secs(15)).await;
+ 
+     syncing.stop().await;
+     flapping.stop().await;
+     index.stop().await;
+ }
+ 
+-async fn wait_for_log(log_path: &std::path::Path, needle: &str, timeout: Duration) -> String {
++async fn wait_for_retained_failure_streak(relay: &TestRelay, url: &str, timeout: Duration) {
+     tokio::time::timeout(timeout, async {
+         loop {
+-            let contents = std::fs::read_to_string(log_path).unwrap_or_default();
+-            if contents.contains(needle) {
+-                return contents;
++            let contents = std::fs::read_to_string(relay.log_path()).unwrap_or_default();
++            if contents.lines().any(|line| {
++                line.contains(url)
++                    && line.contains("consecutive_failures=1")
++                    && line.contains("preserving failure streak until stable")
++            }) {
++                return;
+             }
+             tokio::task::yield_now().await;
+         }
+     })
+     .await
+-    .unwrap_or_else(|_| panic!("relay log never contained {needle:?}"))
++    .unwrap_or_else(|_| panic!("relay {url} never reconnected with its first failure retained"));
+ }
+ 
+ #[tokio::test]
+@@ -101,17 +95,12 @@ async fn flapping_relay_handshakes_do_not_reset_exponential_backoff() {
+     // its WebSocket handshake as proof of stability. Each session reaches a
+     // normal REQ before the fixture drops it. Unit coverage below the actor
+     // boundary verifies that the retained count drives the next backoff step.
+-    let attempts = flapping
++    // The fixture reports all sessions observed so far. A delayed test task
++    // may resume after further reconnects; only the minimum is a precondition.
++    flapping
+         .wait_for_connections(2, Duration::from_secs(25))
+         .await;
+-    assert_eq!(attempts.len(), 2);
+-    let logs = wait_for_log(
+-        &syncing.log_path(),
+-        "consecutive_failures=1",
+-        Duration::from_secs(20),
+-    )
+-    .await;
+-    assert!(logs.contains("preserving failure streak until stable"));
++    wait_for_retained_failure_streak(&syncing, flapping.url(), Duration::from_secs(20)).await;
+ 
+     client.disconnect().await;
+     syncing.stop().await;
+-- 
+2.54.0
+
