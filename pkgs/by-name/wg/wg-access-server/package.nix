@@ -6,22 +6,22 @@
   makeWrapper,
   iptables,
   nixosTests,
-  nodejs_22,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "wg-access-server";
-  version = "0.13.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "freifunkMUC";
     repo = "wg-access-server";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x4QNEn5SR6D1YIiv+mKnQlZ94jZ7BrdIxiLxBqhtBjg=";
+    hash = "sha256-NnIvVgshrvZiSsXXCjluTAVy9T0MthP9uJHJaK0QHWU=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-pjQeF1+1gr/0pF76KNdK7GDX3pYBTqqY3xbJeMLsJIM=";
+  vendorHash = "sha256-mcyQtBS9185GQJIKbO/92v8bxrF4xVyqKbeWYem8QF4=";
 
   env.CGO_ENABLED = 1;
 
@@ -38,9 +38,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "wg-access-server-ui";
 
-    nodejs = nodejs_22;
-
-    npmDepsHash = "sha256-UntV5+9E2lyp8IQGKbbnBNdd0JLvM5NsfkLvCSOgyGo=";
+    npmDepsHash = "sha256-2jFr3W1XwiN2q2YUzWAMB6yDIz8Gp9qwQYG2QlFf6vY=";
 
     sourceRoot = "${finalAttrs.src.name}/website";
 
@@ -66,6 +64,12 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) wg-access-server; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "ui"
+      ];
+    };
   };
 
   meta = {
