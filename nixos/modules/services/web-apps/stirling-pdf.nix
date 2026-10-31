@@ -103,7 +103,8 @@ in
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
-        ProcSubset = "pid";
+        # LibreOffice's launcher exits unless it can stat /proc/version.
+        ProcSubset = "all";
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -121,7 +122,11 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @clock @setuid @chown"
+          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @clock @setuid"
+          # LibreOffice calls chown() when saving its profile and carries on if
+          # it fails. Return EPERM instead of killing it; this must come after
+          # @privileged, which also contains @chown.
+          "~@chown:EPERM"
         ];
         UMask = "0077";
       };
