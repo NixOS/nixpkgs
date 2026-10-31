@@ -10,18 +10,18 @@
   curl,
   perl,
   python3,
-  bash,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcftools";
-  version = "1.22";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "samtools";
     repo = "bcftools";
     tag = finalAttrs.version;
-    hash = "sha256-S+FuqjiOf38sAQKWYOixv/MlXGnuDmkx9z4Co/pk/eM=";
+    hash = "sha256-ZwlrnfCUwrBpS1CfwPtw1To94ygbK4qoGeiuhkDPm2Q=";
   };
 
   nativeBuildInputs = [
@@ -53,17 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs misc/
     patchShebangs test/
-    sed -i -e 's|/bin/bash|${bash}/bin/bash|' test/test.pl
   '';
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
     license = lib.licenses.mit;
-    homepage = "http://www.htslib.org/";
+    homepage = "https://www.htslib.org/";
+    changelog = "https://github.com/samtools/bcftools/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mimame ];
   };

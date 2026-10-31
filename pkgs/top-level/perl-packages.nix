@@ -2557,6 +2557,15 @@ with self;
     propagatedBuildInputs = [ BioPerl ];
     htslibStore = toString pkgs.htslib;
 
+    patches = [
+      # t/05vcf.t hardcodes packed GT values predating htslib 1.22 prefixed
+      # phasing. Debian patch by Andreas Tille, Ensembl/Bio-DB-HTS#112.
+      (fetchpatch {
+        url = "https://salsa.debian.org/med-team/libbio-db-hts-perl/-/raw/8adcdbd08651ad5240169867b3727491ba611057/debian/patches/fix_vcf_gt_test.patch";
+        hash = "sha256-/hDFT1Md8uio1/AtI3j1AINxG9ux/L4k+ZN0NS9E7TA=";
+      })
+    ];
+
     preBuild = ''
       export HTSLIB_DIR=${pkgs.htslib}
     '';
