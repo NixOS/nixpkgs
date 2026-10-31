@@ -1509,6 +1509,7 @@ mapAliases {
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27
   librtlsdr = throw "'librtlsdr' has been renamed to/replaced by 'rtl-sdr'"; # Converted to throw 2025-10-27
+  libsciter = throw "'libsciter' has been removed as it was the unfree, binary-only Sciter engine used only by the deprecated Sciter build of 'rustdesk'"; # Added 2026-10-27
   libsForQt515 = throw "'libsForQt515' has been renamed to/replaced by 'libsForQt5'"; # Converted to throw 2025-10-27
   libsigcxx30 = throw "'libsigcxx30' has been renamed to 'libsigcxx_3_0'"; # Added 2026-09-05
   libsigcxx = throw "'libsigcxx' attribute has been removed from nixpkgs. Use a 'libsigcxx_*' attribute with an explicit ABI version instead."; # Added 2026-09-05
@@ -2419,6 +2420,7 @@ mapAliases {
   rust-paddle-ocr = throw "'rust-paddle-ocr' has been renamed to/replaced by 'newbee-ocr'"; # Added 2026-10-19
   rust-synapse-state-compress = throw "'rust-synapse-state-compress' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   rustc-wasm32 = throw "'rustc-wasm32' has been renamed to/replaced by 'rustc'"; # Converted to throw 2025-10-27
+  rustdesk-flutter = warnAlias "'rustdesk-flutter' has been renamed to 'rustdesk'" rustdesk; # Added 2026-10-27
   rustic-rs = throw "'rustic-rs' has been renamed to/replaced by 'rustic'"; # Converted to throw 2025-10-27
   rx = throw "'rx' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
   rye = throw "'rye' has been removed as it is archived upstream; use 'uv' instead"; # Added 2026-10-19
