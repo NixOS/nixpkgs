@@ -79,7 +79,6 @@ in
       systemd = {
         extraBin = {
           clevis = "${cfg.package}/bin/clevis";
-          curl = "${pkgs.curl}/bin/curl";
         };
 
         storePaths = [
