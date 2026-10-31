@@ -314,6 +314,7 @@ in
           name = cfg.database.user;
           ensureDBOwnership = true;
           ensureClauses.login = true;
+          ensureClauses.superuser = true;
         }
       ];
       extensions = ps: [
