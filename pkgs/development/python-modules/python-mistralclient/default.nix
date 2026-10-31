@@ -3,7 +3,6 @@
   buildPythonPackage,
   cliff,
   fetchFromGitHub,
-  fetchpatch,
   keystoneauth1,
   openstackdocstheme,
   openstacksdk,
@@ -27,23 +26,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-mistralclient";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
     tag = finalAttrs.version;
-    hash = "sha256-FNfee7d8gTcsTdv7lxqDbniUiKQvUXHRSkAlNOCn/k4=";
+    hash = "sha256-Ohotgzzjs2N2U41re2dsK5FZ21uuPpBmiu86DPS9uYw=";
   };
-
-  patches = [
-    # Fix unit test failure caused by osprofiler 4.4.0
-    (fetchpatch {
-      url = "https://github.com/openstack/python-mistralclient/commit/4cee2bb25a4d15e7dd1802f3e7e75520177446db.patch";
-      hash = "sha256-H8JSvPFcHZJsnIWpV0WPvkqyvmg8SBbpsUzqcZeFBwA=";
-    })
-  ];
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
   env.PBR_VERSION = finalAttrs.version;

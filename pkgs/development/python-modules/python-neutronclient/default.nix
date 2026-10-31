@@ -32,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-neutronclient";
-  version = "11.8.0";
+  version = "14.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-neutronclient";
     tag = finalAttrs.version;
-    hash = "sha256-wf+ZTLaBEzQPRVQOZ6JaqH88ymgGIgtRKKdJi2UvKdM=";
+    hash = "sha256-b2bw+O28bM761LAhlRjqDUj9bebrkLCyHFdumOMG0qE=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)

@@ -17,18 +17,19 @@
   sphinxHook,
   stestrCheckHook,
   stevedore,
+  websocket-client,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-zaqarclient";
-  version = "4.4.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
     tag = finalAttrs.version;
-    hash = "sha256-bxB6f3HgTPeMkMYg+yEzkgHBkXPb6UMuKBo9XC74O/U=";
+    hash = "sha256-atUQs3helpHj+j1q1fNCgSGED5bbi/d41lIJUWlSLkg=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
@@ -57,11 +58,16 @@ buildPythonPackage (finalAttrs: {
     stevedore
   ];
 
+  optional-dependencies = {
+    websocket = [ websocket-client ];
+  };
+
   nativeCheckInputs = [
     ddt
     requests-mock
     stestrCheckHook
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.websocket;
 
   pythonImportsCheck = [ "zaqarclient" ];
 

@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oslo-log";
-  version = "8.3.0";
+  version = "8.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = finalAttrs.version;
-    hash = "sha256-teESuCQg8fxCWPMUWTTYyBIGSn9m916Uoy3UkWArVVs=";
+    hash = "sha256-b57pX/+wFZV0vtMKqIUtVZBmlhTd5rZaqV8NSv9vfaQ=";
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are
