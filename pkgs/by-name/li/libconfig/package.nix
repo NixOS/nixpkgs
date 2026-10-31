@@ -16,13 +16,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5Z/7kC3Vcx1dTk+4HTuYlpdhX+q3Lf18MGGBZ7kaQu4=";
   };
 
+  strictDeps = true;
+
   inherit doCheck;
 
   configureFlags =
     lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic) "--disable-examples"
     ++ lib.optional (!finalAttrs.finalPackage.doCheck) "--disable-tests";
 
-  cmakeFlags = lib.optionals (!finalAttrs.finalPackage.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://hyperrealm.github.io/libconfig/";
