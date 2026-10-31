@@ -23,16 +23,16 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-eO+Pg2ndcs56871NrFOPWy9gFoKZ9poDcDX/IKpIDuw=";
-      aarch64-linux = "sha256-wTQVPXIegws7xXiWELbvwawKraQeEwD6g7ZgmaKaouw=";
-      armv7l-linux = "sha256-JJh5GttKnkIbafl0IoiMcQeEbjIBX2IRB9+jq9c+deE=";
-      aarch64-darwin = "sha256-8X1mVkD4stRy9AFHc9h0HUz07WQ48zL+IXk2i9dFjKQ=";
+      x86_64-linux = "sha256-gJvPJGaBK6r+7qqTaKUdPOw43phddJgkmcf2ave7ypI=";
+      aarch64-linux = "sha256-0srSyqLWpsDX6ji/fDYM6/6q1MxuKhWDVO2nlJvh0+c=";
+      armv7l-linux = "sha256-PmgZcqP3jf5yFg+YJSbhrVMHAKT7lrNeAcjrRpw3voM=";
+      aarch64-darwin = "sha256-hwzasrxPqv3aWN8449oiuoYqjT/SR6P4YSzH1KzAa/Y=";
     }
     .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "2.0.4";
+  version = "2.0.8";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";
