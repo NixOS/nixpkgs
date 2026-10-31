@@ -1,26 +1,26 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   openssl,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tootik";
-  version = "0.24.1";
+  version = "0.25.5";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WNvoY1SHjhH6nUz3L6GZ+yS+XHmcurjl7LahKtR44d8=";
+    hash = "sha256-E7ipyOQ1ouEH7N4JTCJgj6vrHm6Ufb4lYdWCBYPHPOE=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-oNyN/az26DNYIfFvOE8zjIYqOCvo5ifndhgq1hwbHvM=";
+  vendorHash = "sha256-imFOJ5IBf0WGLEl+g+F9DmAz6Mmdws9sEETSsvjissw=";
 
   subPackages = [ "cmd/tootik" ];
 
