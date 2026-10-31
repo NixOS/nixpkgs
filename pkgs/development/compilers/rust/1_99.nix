@@ -90,6 +90,50 @@ import ./default.nix
     };
 
     selectRustPackage = pkgs: pkgs.rust_1_99;
+
+    rustcPatches = [
+      # https://github.com/rust-lang/rust/pull/161767
+      (fetchpatch {
+        name = "0001-rustc-DEFAULT_STACK_SIZE-17MiB.patch";
+        url = "https://github.com/rust-lang/rust/commit/d3a3f135a353104f5e413c1cdced76e06f73d999.patch";
+        hash = "sha256-YpA5RPSHZ0x5Jfa3Ev0VFdnqxtzmvcfJwOtv9nVNOJg=";
+      })
+
+      # https://github.com/rust-lang/rust/pull/163289
+      (fetchpatch {
+        name = "0002-rustc-Pass-chosen-stack-size-to-llvm-worker-threads.patch";
+        url = "https://github.com/rust-lang/rust/commit/0f125fae31e2edec291b23707f0ee9eed9753202.patch";
+        # This hunk otherwise needs unrelated change first: https://github.com/rust-lang/rust/commit/51673f89e1d7ff9a0753baa8836177c1052942bc
+        postFetch = ''
+          substituteInPlace $out --replace-fail \
+            '--- a/compiler/rustc_interface/src/interface.rs
+          +++ b/compiler/rustc_interface/src/interface.rs
+          @@ -450,6 +450,9 @@
+                           config.using_internal_features,
+                       );
+           '""'
+          +            // STACK_SIZE is setup in run_in_thread_pool_with_globals, before arriving here.
+          +            sess.opts.recommended_stack_size = *util::STACK_SIZE.get().unwrap();
+          +
+                       let target_config = codegen_backend.target_config(&sess);
+           '""'
+                       // Store all of the target features in the session.' \
+            '--- a/compiler/rustc_interface/src/interface.rs
+          +++ b/compiler/rustc_interface/src/interface.rs
+          @@ -432,6 +432,9 @@
+                           config.using_internal_features,
+                       );
+           '""'
+          +            // STACK_SIZE is setup in run_in_thread_pool_with_globals, before arriving here.
+          +            sess.opts.recommended_stack_size = *util::STACK_SIZE.get().unwrap();
+          +
+                       let codegen_backend = match config.make_codegen_backend {
+                           None => util::get_codegen_backend(
+                               &early_dcx,'
+        '';
+        hash = "sha256-Pkvi2bKtQZGOQqSfvRXXFUuwaPs4GN9Uad7Uv2kA0io=";
+      })
+    ];
   }
 
   (
