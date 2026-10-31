@@ -124,6 +124,14 @@ When switching an existing QEMU builder over, delete its data disk first (e.g.
 `sudo rm /var/lib/linux-builder/nixos.qcow2`): the vz builder reuses the file name
 but writes a raw image, and refuses to misread a genuine qcow2 left behind.
 
+The guest runs on demand: it boots on the first connection and keeps it on hold
+until the guest is ready (usually around 12s). If there are no connections for
+10 minutes, the guest is stopped. The data disk is kept across these reboots,
+even with nix-darwin's `nix.linux-builder.ephemeral`.
+The `ephemeral` setting wipes the disk only during the launchd service start.
+Set `virtualisation.vz.idleTimeout` to a number of seconds, or to `null` to keep
+the guest running forever.
+
 The guest console goes to the macOS unified log by default; read it with:
 
 ```ShellSession

@@ -74,6 +74,7 @@ let
       else
         { mode = vzCfg.console; };
   }
+  // lib.optionalAttrs (vzCfg.idleTimeout != null) { idleTimeoutSeconds = vzCfg.idleTimeout; }
   // vzCfg.extraConfig;
 
   staticConfigFile = hostPkgs.writeText "vzvm-config.json" (builtins.toJSON staticConfig);
@@ -186,6 +187,25 @@ in
       '';
     };
 
+    virtualisation.vz.idleTimeout = lib.mkOption {
+      type = lib.types.nullOr (lib.types.ints.between 1 (7 * 24 * 60 * 60));
+      default = null;
+      example = 30 * 60;
+      description = ''
+        Run guest on demand: `vzvm` keeps listening on
+        {option}`virtualisation.vz.forwardPorts` and boots guest on first
+        connection. Vzvm powers it off once no forwarded connection has been
+        open for this many seconds. Next connection boots it again and keeps
+        connections on hold until it is ready (~12s).
+
+        Reboots are managed by the `vzvm` process and keep the data disk:
+        nix-darwin's `nix.linux-builder.ephemeral` wipes it when the launchd
+        service starts, not between on-demand boots.
+
+        `null` runs the guest without timeout for as long as `vzvm` runs.
+      '';
+    };
+
     virtualisation.vz.extraConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -218,6 +238,14 @@ in
           message = ''
             virtualisation.vz.diskImage is null, so there is nowhere to put the
             writable store. Enable virtualisation.writableStoreUseTmpfs.
+          '';
+        }
+        {
+          assertion = vzCfg.idleTimeout != null -> vzCfg.forwardPorts != [ ];
+          message = ''
+            {option}`virtualisation.vz.idleTimeout` boots guest on first forwarded
+            connection but virtualisation.vz.forwardPorts is empty:
+            guest would never start.
           '';
         }
       ];
