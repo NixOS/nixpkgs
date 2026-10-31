@@ -15,7 +15,7 @@ import ./make-test-python.nix (
         enable = true;
 
         username = "test";
-        passwordFile = pkgs.writeText "stash-password" "MyPassword";
+        passwordFile = pkgs.writeText "stash-password" "$2y$10$VcuMbQR7Lfh4gyLkDsidJ.tHpQdRfKXQzVcU/.oI7MmNNuwGMUjaq"; # MyPassword
 
         jwtSecretKeyFile = pkgs.writeText "jwt_secret_key" "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         sessionStoreKeyFile = pkgs.writeText "session_store_key" "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
