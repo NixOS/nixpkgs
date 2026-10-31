@@ -25,7 +25,7 @@
 let
   nodejs = nodejs_24;
 
-  version = "2026.5.6";
+  version = "2026.5.7";
 
   cargoPackageFlags = [
     "--package"
@@ -36,7 +36,7 @@ let
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-/HdXzjjvuSW7zjbCNJKm3Fj8gvIwfrDf8mOYev0yuIg=";
+    hash = "sha256-FLv667/eGJ/Lq2WngweMCm/AXsIBSuVEK/cOOpCDC9E=";
   };
 
   meta = {
@@ -129,7 +129,7 @@ let
     sourceRoot = "${src.name}/website";
 
     inherit nodejs;
-    npmDepsHash = "sha256-5zAsS+Jw/hcBOws+MvFGZMMSn+NNKcpUmmkd9NO9fTY=";
+    npmDepsHash = "sha256-v54EFQNXa8RUDk8ReuDBAopZZ6fATEwbnhF/aEQFy6c=";
     npmDepsFetcherVersion = 2;
     makeCacheWritable = true;
     npmInstallFlags = [ "--legacy-peer-deps" ];
@@ -190,7 +190,7 @@ let
     outputHash =
       {
         "aarch64-linux" = "sha256-ZdfDKrrcVpNImY8cYa9CPEwI7tuaoPn3kM6MXGGio2U=";
-        "x86_64-linux" = "sha256-p6xjAinU2Isl/uYgoJuacqHN7jBnbWam40J6AQudbtQ=";
+        "x86_64-linux" = "sha256-itaK/8JoAv/bhKfYmRti1ceelDqyvdeIJtWB130yu7s=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -492,7 +492,7 @@ let
     pname = "authentik-worker";
     inherit version src meta;
 
-    cargoHash = "sha256-bpS1cXIG8srVE4tTS1rXL6R+ZBE65BZTlMghSPiAJy4=";
+    cargoHash = "sha256-Tl4SKIy++IrNIWZ0fmlaKmMnQ2RZsO4q61f/RnrFjtk=";
 
     nativeBuildInputs = [
       cmake
