@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10_latest,
+  pnpm_11,
   pnpmConfigHook,
   fetchPnpmDeps,
   nodejs,
@@ -10,26 +10,26 @@
 }:
 
 let
-  pnpm = pnpm_10_latest;
+  pnpm = pnpm_11;
 
   # Separately build matrix-js-sdk, as upstream expects to 'pnpm i && pnpm build' in the dependency's directory
   # Keep this in sync with upstream locked version (likely a stable release, but not always latest)
   matrix-js-sdk = stdenv.mkDerivation (finalAttrs: {
     pname = "matrix-js-sdk";
-    version = "41.8.0";
+    version = "43.0.0-unstable-2026-10-01";
 
     src = fetchFromGitHub {
       owner = "matrix-org";
       repo = "matrix-js-sdk";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-9OWB3Hz8EoDIu27jvA6Am4l1dH53IZGE9TStB2Viw6E=";
+      rev = "fa4772a4ddd335a5a8bfbf8bb21df49b70f7a999";
+      hash = "sha256-ldquetRKrjgI+YN2zp6mXzqEqSpBFqKCwJw8UEoD+gY=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-Me76t/wl4HtmbQ+FzUNLEpOM6aYbzTl68tuDSEh+Hq4=";
+      hash = "sha256-TPr/z7D9FkvToUE1gQEZwXMMllx5U224s8+O9yNT2BM=";
     };
 
     nativeBuildInputs = [
@@ -58,20 +58,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.20.3";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H+In5fsX82eMDGk5kaS5ulqU1U5S67auEPc24rtCkuA=";
+    hash = "sha256-c/Q1xUGYU0odkDsRcEnPJPIo3pWbx/dMcpPBhGF07OQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-JOpKxtElmNKepx3W+1LIolcrYrevsCEq7+Aoh0kwZEw=";
+    hash = "sha256-0PLGOvevYMXvRWmC3ic0+oABuNU3jMGGn2ABHftsnOM=";
   };
 
   inherit matrix-js-sdk;
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/element-hq/element-call/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/element-hq/element-call";
-    description = "Group calls powered by Matrix";
+    description = "Matrix client for group calls on the web";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       bartoostveen
