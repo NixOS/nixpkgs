@@ -9,9 +9,6 @@ buildDartApplication (finalAttrs: {
   pname = "mono_repo";
   version = "6.6.3";
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   # Fetch the whole monorepo
   src = fetchFromGitHub {
     owner = "google";
