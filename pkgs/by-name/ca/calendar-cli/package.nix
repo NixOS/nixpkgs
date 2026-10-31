@@ -28,6 +28,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail "../bin/calendar-cli.py" "$out/bin/calendar-cli"
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = with python3.pkgs; [
     hatch-vcs
     hatchling
