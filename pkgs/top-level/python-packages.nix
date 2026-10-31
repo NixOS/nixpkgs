@@ -5030,6 +5030,8 @@ self: super: with self; {
     callPackage ../development/python-modules/djangorestframework-dataclasses
       { };
 
+  djangorestframework-gis = callPackage ../development/python-modules/djangorestframework-gis { };
+
   djangorestframework-guardian =
     callPackage ../development/python-modules/djangorestframework-guardian
       { };
