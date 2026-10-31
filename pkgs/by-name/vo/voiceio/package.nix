@@ -50,7 +50,7 @@ py.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     pname = "python-voiceio";
     inherit (finalAttrs) version;
-    hash = "sha256-453d71488ea97833e174d72ab112678a6cd0d4c67a588fd5f48b3040031f8763";
+    hash = "sha256-RT1xSI6peDPhdNcqsRJnimzQ1MZ6WI/V9IswQAMfh2M";
   };
 
   build-system = [
