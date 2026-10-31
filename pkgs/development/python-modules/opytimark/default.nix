@@ -2,40 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   numpy,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opytimark";
-  version = "1.0.8";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gugarosa";
     repo = "opytimark";
-    rev = "v${version}";
-    hash = "sha256-T3OFm10gvGrUXAAHOnO0Zv1nWrXPBXSmEWnbJxrWYU0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FxULG9qiMrdwJBzjrdRs+uzj5d1TmQ8qQcJNA8zo+6c=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/gugarosa/opytimark/pull/2.patch";
-      hash = "sha256-r/oCKI9Q1nuCZDGHx7UW8j523sFe4EFmguMOJTs/LOU=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # several tests are failing
+  # numpy is not available in the test subprocess
   disabledTests = [
-    "test_year"
-    "test_decorator"
-    "test_loader"
-    "cec_benchmark"
+    "test_zip_import_handles_present_and_missing_resources"
   ];
 
   pythonImportsCheck = [ "opytimark" ];
@@ -43,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library consisting of optimization benchmarking functions";
     homepage = "https://github.com/gugarosa/opytimark";
-    changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${version}";
+    changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})
