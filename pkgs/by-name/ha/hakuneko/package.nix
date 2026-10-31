@@ -101,5 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
     ];
     mainProgram = "hakuneko";
+    knownVulnerabilities = [
+      "Uses Electron 6.1.7, which was EOL on February 25, 2020, with many known CVEs"
+    ];
   };
 })
