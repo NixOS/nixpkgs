@@ -119,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
           stdenv.cc.bintools.isLLVM
           && lib.versionAtLeast stdenv.cc.bintools.version "17"
           && !stdenv.hostPlatform.isMinGW
+          # wasm-ld does not accept `--undefined-version`, and wasm has no shared libraries.
+          && !stdenv.hostPlatform.isWasm
         )
         {
           # https://reviews.llvm.org/D135402

@@ -143,6 +143,19 @@ let
         interpreter = python;
       };
     }
+    //
+      lib.optionalAttrs
+        (
+          python.implementation == "cpython"
+          && python.pythonAtLeast "3.13"
+          && builtins.match "python3[0-9]+" (python.pythonAttr or "") != null
+          && stdenv.hostPlatform.isLinux
+        )
+        {
+          wasi = callPackage ./tests/test_wasi {
+            inherit (python) pythonAttr;
+          };
+        }
   );
 
   # Test editable package support

@@ -43,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+  configureFlags =
+    lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic"
+    # The benchmark in the tests uses `clock`, which WASI does not have.
+    ++ lib.optional stdenv.hostPlatform.isWasi "--without-tests";
 
   outputMan = "dev"; # tiny page for a dev tool
 

@@ -22,16 +22,17 @@
   libffi,
   libuuid,
   libxcrypt,
-  withMpdecimal ? !withMinimalDeps,
+  withMpdecimal ? !withMinimalDeps && !stdenv.hostPlatform.isWasi,
   mpdecimal,
   ncurses,
-  withOpenssl ? !withMinimalDeps,
+  withOpenssl ? !withMinimalDeps && !stdenv.hostPlatform.isWasi,
   openssl,
-  withSqlite ? !withMinimalDeps,
+  withSqlite ? !withMinimalDeps && !stdenv.hostPlatform.isWasi,
   sqlite,
   xz,
   zlib,
-  withZstd ? !withMinimalDeps,
+  # The `zstd` package does not build for WASI.
+  withZstd ? !withMinimalDeps && !stdenv.hostPlatform.isWasi,
   zstd,
 
   # platform-specific dependencies
@@ -44,9 +45,9 @@
   mimetypesSupport ? !withMinimalDeps,
   mailcap,
   tzdata,
-  withGdbm ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
+  withGdbm ? !withMinimalDeps && !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi,
   gdbm,
-  withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
+  withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi,
   readline,
 
   # splicing/cross
@@ -148,7 +149,9 @@ let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
-  tzdataSupport = !withMinimalDeps && tzdata != null && passthru.pythonAtLeast "3.9";
+  # The `tzdata` package does not build for WASI.
+  tzdataSupport =
+    !withMinimalDeps && !stdenv.hostPlatform.isWasi && tzdata != null && passthru.pythonAtLeast "3.9";
 
   passthru =
     let
@@ -268,14 +271,20 @@ let
       ];
 
   buildInputs = lib.filter (p: p != null) (
-    optionals (!withMinimalDeps) [
-      bzip2
-      libffi
-      libuuid
-      ncurses
-      xz
-      zlib
-    ]
+    optionals (!withMinimalDeps) (
+      # The `bzip2` program does not compile on WASI.
+      # CPython does not support `ctypes`, `uuid` with `libuuid` and `curses` on WASI.
+      optionals (!stdenv.hostPlatform.isWasi) [
+        bzip2
+        libffi
+        libuuid
+        ncurses
+      ]
+      ++ [
+        xz
+        zlib
+      ]
+    )
     ++ optionals withLibxcrypt [
       libxcrypt
     ]
@@ -361,7 +370,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit nativeBuildInputs;
   buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isWindows) [
+    lib.optionals (!stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi) [
       bashNonInteractive # only required for patchShebangs
     ]
     ++ buildInputs;
@@ -459,7 +468,8 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postPatch =
-    optionalString (!stdenv.hostPlatform.isWindows) ''
+    # WASI has no processes, thus `subprocess` does not work there.
+    optionalString (!stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi) ''
       substituteInPlace Lib/subprocess.py \
         --replace-fail "'/bin/sh'" "'${bashNonInteractive}/bin/sh'"
     ''
@@ -481,6 +491,16 @@ stdenv.mkDerivation (finalAttrs: {
     );
     # Determinism: We fix the hashes of str, bytes and datetime objects.
     PYTHONHASHSEED = 0;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isWasi {
+    # The `configure` cache values that upstream uses for WASI.
+    CONFIG_SITE =
+      if pythonAtLeast "3.15" then
+        "Platforms/WASI/config.site-wasm32-wasi"
+      else if pythonAtLeast "3.14" then
+        "Tools/wasm/wasi/config.site-wasm32-wasi"
+      else
+        "Tools/wasm/config.site-wasm32-wasi";
   };
 
   # https://docs.python.org/3/using/configure.html
@@ -501,6 +521,15 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (execSuffix != "") [
     "--with-suffix=${execSuffix}"
+  ]
+  ++ optionals stdenv.hostPlatform.isWasi [
+    # On WASI, the default suffix is `.wasm`. Use no suffix, as `passthru.interpreter` does.
+    "--with-suffix=no"
+  ]
+  ++ optionals (stdenv.hostPlatform.isWasi && pythonAtLeast "3.15") [
+    # `configure` requires this value when it cross-compiles to WASI. Only the test suite uses it.
+    # Use a name, not a store path, thus the output has no reference to a build platform package.
+    "HOSTRUNNER=wasmtime"
   ]
   ++ optionals enableLTO [
     "--with-lto"
@@ -536,19 +565,24 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_x87_double_rounding=yes"
     "ac_cv_tanh_preserves_zero_sign=yes"
     # Generally assume that things are present and work
-    "ac_cv_posix_semaphores_enabled=yes"
+    # WASI has no semaphores and no `tzset`.
+    "ac_cv_posix_semaphores_enabled=${lib.boolToYesNo (!stdenv.hostPlatform.isWasi)}"
     "ac_cv_broken_sem_getvalue=no"
     "ac_cv_wchar_t_signed=yes"
     "ac_cv_rshift_extends_sign=yes"
     "ac_cv_broken_nice=no"
     "ac_cv_broken_poll=no"
-    "ac_cv_working_tzset=yes"
+    "ac_cv_working_tzset=${lib.boolToYesNo (!stdenv.hostPlatform.isWasi)}"
     "ac_cv_have_long_long_format=yes"
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
-    # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
-    "ac_cv_file__dev_ptmx=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
-    "ac_cv_file__dev_ptc=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
+    # Both fail when building for windows or WASI, normally configure checks this by itself but on other platforms this is set to yes always.
+    "ac_cv_file__dev_ptmx=${
+      lib.boolToYesNo (!stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi)
+    }"
+    "ac_cv_file__dev_ptc=${
+      lib.boolToYesNo (!stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isWasi)
+    }"
   ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
@@ -872,7 +906,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
     platforms =
-      lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
+      lib.platforms.linux
+      ++ lib.platforms.darwin
+      ++ lib.platforms.windows
+      ++ lib.platforms.freebsd
+      # WASI is a tier 2 platform since 3.13.
+      ++ optionals (pythonAtLeast "3.13") lib.platforms.wasi;
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on aarch64-darwin breaks with:

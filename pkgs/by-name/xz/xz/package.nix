@@ -29,11 +29,23 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
     "dev"
     "out"
-    "man"
-    "doc"
-  ];
+  ]
+  # Without the programs, there are no manual pages.
+  ++ lib.optional (!stdenv.hostPlatform.isWasi) "man"
+  ++ [ "doc" ];
 
-  configureFlags = lib.optional enableStatic "--disable-shared";
+  configureFlags =
+    lib.optional enableStatic "--disable-shared"
+    # WASI has no threads and no signals. Thus build only `liblzma`.
+    ++ lib.optionals stdenv.hostPlatform.isWasi [
+      "--disable-threads"
+      "--disable-xz"
+      "--disable-xzdec"
+      "--disable-lzmadec"
+      "--disable-lzmainfo"
+      "--disable-lzma-links"
+      "--disable-scripts"
+    ];
 
   enableParallelBuilding = true;
   doCheck = true;
