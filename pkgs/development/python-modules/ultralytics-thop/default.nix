@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ultralytics-thop";
-  version = "2.0.19";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "thop";
     tag = "v${version}";
-    hash = "sha256-icBfJagsK2DabMC8xgWNT1o3EdDGL+U2UyIf/LfugYc=";
+    hash = "sha256-oFL2g3odD1wteLUPAklEK1GeMwr6nYK7AwQzEITO7yI=";
   };
 
   build-system = [ setuptools ];
