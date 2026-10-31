@@ -19,8 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+  doInstallCheck = true;
 
-  checkTargets = [ "installcheck" ];
+  installCheckTarget = "installcheck";
 
   meta = {
     description = "Fortran source code formatter";
