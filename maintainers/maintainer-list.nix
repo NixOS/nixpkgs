@@ -11369,6 +11369,12 @@
     githubId = 147689;
     name = "Hans-Christian Esperer";
   };
+  HCHogan = {
+    email = "hankchogan@gmail.com";
+    github = "HCHogan";
+    githubId = 78535316;
+    name = "Hank Hogan";
+  };
   hchokshi = {
     github = "hchokshi";
     githubId = 10136407;
