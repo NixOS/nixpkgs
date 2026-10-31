@@ -650,6 +650,13 @@
     github = "acid-bong";
     githubId = 94849097;
   };
+  acmdf = {
+    name = "Fall";
+    email = "acmdf.fr@gmail.com";
+    github = "acmdf";
+    githubId = 233685277;
+    keys = [ { fingerprint = "2781 7348 CF9F 6403 D929  906E 78AB FA7C A88C ABE4"; } ];
+  };
   acowley = {
     email = "acowley@gmail.com";
     github = "acowley";
