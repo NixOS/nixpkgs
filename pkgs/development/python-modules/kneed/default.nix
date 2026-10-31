@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "kneed";
-  version = "0.8.6";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arvkevi";
     repo = "kneed";
     tag = "v${version}";
-    hash = "sha256-A9d5igX9Eqr3rgx93VMee9yFEs6WfO0bb/eCEFCxUJg=";
+    hash = "sha256-P35E/3DyT+W9qtDTB5PQzGNgxHP4FwOj+vFlhClphc8=";
   };
 
   build-system = [ hatchling ];
