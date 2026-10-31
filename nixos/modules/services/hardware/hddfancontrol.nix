@@ -62,7 +62,7 @@ in
                   '';
                   example = [
                     "/dev/sda"
-                    "`find /dev/disk/by-id -name \"scsi*\" -and -not -name \"*-part*\" -printf \"%p \"`"
+                    "$(find /dev/disk/by-id -name \"scsi*\" -and -not -name \"*-part*\" -printf \"%p \")"
                   ];
                 };
 
