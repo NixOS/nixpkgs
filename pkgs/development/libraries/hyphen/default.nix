@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyphen";
-  version = "2.8.9";
+  version = "2.8.10";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hyphen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F7PJQjEiE5t5i1gi5B8wzrwAJQl8FWzopRA8uDsaZBc=";
+    hash = "sha256-WHxAgxvgLkzHQHwTx/ExUupZ4iIt61v+a3GNeut7gEE=";
   };
 
   enableParallelBuilding = true;
