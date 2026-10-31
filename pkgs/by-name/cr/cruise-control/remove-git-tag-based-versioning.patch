@@ -1,0 +1,26 @@
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -3,23 +3,6 @@
+  */
+ import org.gradle.util.GradleVersion
+ 
+-buildscript {
+-  repositories {
+-    maven {
+-      url 'https://plugins.gradle.org/m2/'
+-    }
+-  }
+-  dependencies {
+-    // Needed to override an old version of Apache HttpClient that was being included by the
+-    // net.vivin.gradle-semantic-build-versioning plugin.
+-    // See https://www.jfrog.com/jira/browse/GAP-317 for more info.
+-    classpath 'org.apache.httpcomponents:httpclient:4.5.13'
+-    classpath 'gradle.plugin.net.vivin:gradle-semantic-build-versioning:4.0.0'
+-  }
+-}
+-
+-apply plugin: 'net.vivin.gradle-semantic-build-versioning'
+-
+ //otherwise it defaults to the folder name
+ rootProject.name = 'cruise-control'
+ 

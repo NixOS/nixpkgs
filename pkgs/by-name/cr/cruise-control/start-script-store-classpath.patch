@@ -1,0 +1,52 @@
+--- a/kafka-cruise-control-start.sh
++++ b/kafka-cruise-control-start.sh
+@@ -27,7 +27,7 @@ copyJars() {
+   done
+ }
+ 
+-base_dir=$(dirname $0)
++base_dir=@out@
+ 
+ if [ -z "$SCALA_VERSION" ]; then
+   SCALA_VERSION=2.13.6
+@@ -37,29 +37,7 @@ if [ -z "$SCALA_BINARY_VERSION" ]; then
+   SCALA_BINARY_VERSION=$(echo $SCALA_VERSION | cut -f 1-2 -d '.')
+ fi
+ 
+-# run ./gradlew copyDependantLibs to get all dependant jars in a local dir
+-shopt -s nullglob
+-for dir in "$base_dir"/cruise-control/build/dependant-libs;
+-do
+-  if [ -z "$CLASSPATH" ] ; then
+-    CLASSPATH="$dir/*"
+-  else
+-    CLASSPATH="$CLASSPATH:$dir/*"
+-  fi
+-done
+-
+-if [ -z "$CLASSPATH" ]; then
+-  CLASSPATH="$base_dir/cruise-control/build/libs/*"
+-else
+-  CLASSPATH="$CLASSPATH:$base_dir/cruise-control/build/libs/*"
+-fi
+-
+-if [ -z "$CLASSPATH" ]; then
+-  CLASSPATH="$base_dir/cruise-control-metrics-reporter/build/libs/*"
+-else
+-  CLASSPATH="$CLASSPATH:$base_dir/cruise-control-metrics-reporter/build/libs/*"
+-fi
+-shopt -u nullglob
++CLASSPATH="${CLASSPATH:+$CLASSPATH:}$base_dir/share/cruise-control/*"
+ 
+ # JMX settings
+ if [ -z "$KAFKA_JMX_OPTS" ]; then
+@@ -186,7 +164,7 @@ fi
+ 
+ # Launch mode
+ if [ "x$DAEMON_MODE" = "xtrue" ]; then
+-  nohup $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp $CLASSPATH $KAFKA_OPTS com.linkedin.kafka.cruisecontrol.KafkaCruiseControlMain "$@" > "$CONSOLE_OUTPUT_FILE" 2>&1 < /dev/null &
++  nohup $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp "$CLASSPATH" $KAFKA_OPTS com.linkedin.kafka.cruisecontrol.KafkaCruiseControlMain "$@" > "$CONSOLE_OUTPUT_FILE" 2>&1 < /dev/null &
+ else
+-  exec $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp $CLASSPATH $KAFKA_OPTS com.linkedin.kafka.cruisecontrol.KafkaCruiseControlMain "$@"
++  exec $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp "$CLASSPATH" $KAFKA_OPTS com.linkedin.kafka.cruisecontrol.KafkaCruiseControlMain "$@"
+ fi
