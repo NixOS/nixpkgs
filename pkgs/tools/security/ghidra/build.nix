@@ -3,9 +3,9 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_9,
   makeBinaryWrapper,
-  openjdk21,
+  openjdk25,
   unzip,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,9 +18,12 @@
 }:
 
 let
+  gradle = gradle_9;
+  openjdk = openjdk25;
+  antlrReproducible = callPackage ./antlr-reproducible.nix { inherit openjdk; };
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "12.1.4";
+  version = "12.2";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
@@ -30,17 +33,19 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-EeB3wHE2fbGhvC9Aik83ekGoeXxaA5ZWBSvRi9qLRQc=";
+    hash = "sha256-MDoae4arsR6CxE8h1k5tEFiSmQo8D/nOU80X/HxKGtw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
+      commitDate=$(git log -1 --pretty=%ct)
       git rev-parse HEAD > $out/COMMIT
+      printf '%s\n' "$commitDate" > $out/SOURCE_DATE_EPOCH
       # Git commit date, e.g. 2026-Sep-11
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/COMMIT_DATE
+      date -u -d "@$commitDate" "+%Y-%b-%d" > $out/COMMIT_DATE
       # Git commit date, e.g. 20260911
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
+      date -u -d "@$commitDate" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
@@ -57,6 +62,12 @@ let
 
     # Remove timestamps from generated JavaHelp files
     ./0004-Remove-help-timestamps.patch
+
+    # Normalize archive timestamps
+    ./0005-Reproducible-archive-timestamps.patch
+
+    # Normalize PyGhidra source archives
+    ./0006-Reproducible-PyGhidra-sdist.patch
   ];
 
   postPatch = ''
@@ -76,6 +87,12 @@ let
       }
     }
     HERE
+
+    # Use the reproducible ANTLR tool JAR.
+    substituteInPlace Ghidra/Framework/SoftwareModeling/build.gradle \
+      --replace-fail \
+      'antlr "org.antlr:antlr:3.5.2"' \
+      "antlr files('${antlrReproducible}/share/java/antlr-3.5.2.jar')"
   '';
 
 in
@@ -131,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${openjdk21}"
+    "-Dorg.gradle.java.home=${openjdk}"
   ]
   ++ lib.optionals isMacArm64 [
     # For some reason I haven't been able to figure out yet, ghidra builds for
@@ -148,6 +165,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
+    export SOURCE_DATE_EPOCH="$(cat SOURCE_DATE_EPOCH)"
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
     gradle -I gradle/support/fetchDependencies.gradle
   '';
@@ -186,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk ]}
   '';
 
   passthru = {
@@ -219,6 +239,5 @@ stdenv.mkDerivation (finalAttrs: {
       roblabla
       vringar
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })
