@@ -3,10 +3,15 @@
   stdenv,
   fetchurl,
   pkg-config,
+  pythonSupport ? true,
   python3,
+  bluetoothSupport ? stdenv.hostPlatform.isLinux,
   bluez,
+  tclSupport ? true,
   tcl,
   acl,
+  polkitSupport ? lib.meta.availableOn stdenv.hostPlatform polkit,
+  polkit,
   kmod,
   coreutils,
   shadow,
@@ -31,18 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
+    tcl # One of the build scripts requires tclsh, regardless of tclSupport
+    udevCheckHook
+  ]
+  ++ lib.optionals pythonSupport [
     python3.pkgs.cython
     python3.pkgs.setuptools
-    tcl # One of build scripts require tclsh
-    udevCheckHook
   ];
   buildInputs = [
-    bluez
     ncurses.dev
-    tcl # For TCL bindings
   ]
   ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional systemdSupport systemdMinimal;
+  ++ lib.optional bluetoothSupport bluez
+  ++ lib.optional polkitSupport polkit
+  ++ lib.optional systemdSupport systemdMinimal
+  ++ lib.optional tclSupport tcl; # For TCL bindings
 
   doInstallCheck = true;
 
@@ -61,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   makeFlags = [
-    "PYTHON_PREFIX=$(out)"
     "SYSTEMD_UNITS_DIRECTORY=$(out)/lib/systemd/system"
     "SYSTEMD_USERS_DIRECTORY=$(out)/lib/sysusers.d"
     "SYSTEMD_FILES_DIRECTORY=$(out)/lib/tmpfiles.d"
@@ -70,13 +77,30 @@ stdenv.mkDerivation (finalAttrs: {
     "UDEV_RULES_TYPE=all"
     "POLKIT_POLICY_DIR=$(out)/share/polkit-1/actions"
     "POLKIT_RULE_DIR=$(out)/share/polkit-1/rules.d"
-    "TCL_DIR=$(out)/lib"
-  ];
+  ]
+  ++ lib.optional pythonSupport "PYTHON_PREFIX=$(out)"
+  ++ lib.optional tclSupport "TCL_DIR=$(out)/lib";
   configureFlags = [
     "--with-writable-directory=/run/brltty"
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
+    (lib.enableFeature polkitSupport "polkit")
+    (lib.enableFeature pythonSupport "python-bindings")
+    (lib.enableFeature tclSupport "tcl-bindings")
+    (lib.withFeature bluetoothSupport "bluetooth-package")
   ];
+
+  # latex-access is an executable contraction table implemented in Python, so
+  # it cannot work without Python — and shipping it would keep a reference to
+  # python3 (~200 MiB) in the closure of an otherwise Python-free build.
+  postFixup = lib.optionalString (!pythonSupport) ''
+    rm -f $out/etc/brltty/Contraction/latex-access.ctb
+  '';
+
+  # Enforce the "Python-free closure" guarantee above: if a future upstream
+  # table (or a rename of latex-access.ctb) reintroduces a python3 reference,
+  # fail the build rather than silently pulling ~200 MiB back in.
+  disallowedReferences = lib.optionals (!pythonSupport) [ python3 ];
   installFlags = [
     "install-systemd"
     "install-udev"
