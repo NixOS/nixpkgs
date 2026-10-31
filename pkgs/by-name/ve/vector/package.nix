@@ -28,19 +28,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.60.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cV1BXvdMiHvm7igf0qSvECPtPvOzTQNadOGMkpcHYS8=";
+    hash = "sha256-mbfD8mcn3O+dewq7VG9l3es6za0C47pk1xxBRDm2ybs=";
   };
 
   cargoPatches = [
     # Make the postgres and doris sinks (sqlx) use the system CA store
-    # instead of webpki-roots, and bump webpki-roots >= 1.0.10 and
-    # rustls-webpki >= 0.103.16 for the remaining compiled-in copies.
     # https://github.com/NixOS/nixpkgs/issues/576544
     ./sqlx-native-roots-and-bump-webpki.patch
   ];
@@ -51,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./mongodb-metrics-system-ca.patch
   ];
 
-  cargoHash = "sha256-aFDO02KB5jqZsDJHrdeLLDDUZxRGEVWwjGo6LUIywiU=";
+  cargoHash = "sha256-FOqW75iqSbYtPmVefUKIlkzzrS4AmR3wxzSMFqfAf8s=";
 
   nativeBuildInputs = [
     pkg-config

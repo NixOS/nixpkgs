@@ -2,121 +2,14 @@ diff --git a/Cargo.lock b/Cargo.lock
 index 5a92226..8a55f65 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1075,7 +1075,7 @@ dependencies = [
-  "ring",
-  "rustls-native-certs 0.8.1",
-  "rustls-pki-types",
-- "rustls-webpki 0.103.15",
-+ "rustls-webpki 0.103.16",
-  "serde",
-  "serde_json",
-  "serde_nanos",
-@@ -5875,7 +5875,7 @@ dependencies = [
-  "tokio",
-  "tokio-rustls 0.26.2",
-  "tower-service",
-- "webpki-roots 0.26.1",
-+ "webpki-roots 0.26.11",
- ]
- 
- [[package]]
-@@ -7537,7 +7537,7 @@ dependencies = [
-  "tokio-util",
-  "typed-builder",
-  "uuid",
-- "webpki-roots 1.0.4",
-+ "webpki-roots 1.0.10",
- ]
- 
- [[package]]
-@@ -10281,7 +10281,7 @@ dependencies = [
-  "wasm-bindgen-futures",
-  "wasm-streams 0.4.0",
-  "web-sys",
-- "webpki-roots 1.0.4",
-+ "webpki-roots 1.0.10",
- ]
- 
- [[package]]
-@@ -10630,7 +10630,7 @@ dependencies = [
-  "once_cell",
-  "ring",
-  "rustls-pki-types",
-- "rustls-webpki 0.103.15",
-+ "rustls-webpki 0.103.16",
-  "subtle",
-  "zeroize",
- ]
-@@ -10702,7 +10702,7 @@ dependencies = [
-  "rustls 0.23.46",
-  "rustls-native-certs 0.8.1",
-  "rustls-platform-verifier-android",
-- "rustls-webpki 0.103.15",
-+ "rustls-webpki 0.103.16",
-  "security-framework 3.7.0",
-  "security-framework-sys",
-  "webpki-root-certs",
-@@ -10728,9 +10728,9 @@ dependencies = [
- 
- [[package]]
- name = "rustls-webpki"
--version = "0.103.15"
-+version = "0.103.16"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
-+checksum = "4443b1b6d39d7c663139942cc4558262562d2c84123bb6282ef177009ca8b281"
- dependencies = [
-  "ring",
-  "rustls-pki-types",
 @@ -11607,6 +11607,7 @@ dependencies = [
   "once_cell",
   "percent-encoding",
-  "rustls 0.23.46",
-+ "rustls-native-certs 0.8.1",
+  "rustls",
++ "rustls-native-certs",
   "serde",
   "serde_json",
   "sha2 0.10.9",
-@@ -11616,7 +11617,6 @@ dependencies = [
-  "tokio-stream",
-  "tracing 0.1.44",
-  "url",
-- "webpki-roots 0.26.1",
- ]
- 
- [[package]]
-@@ -12498,7 +12498,7 @@ dependencies = [
-  "tokio",
-  "tokio-rustls 0.26.2",
-  "tokio-util",
-- "webpki-roots 0.26.1",
-+ "webpki-roots 0.26.11",
- ]
- 
- [[package]]
-@@ -14516,18 +14516,18 @@ dependencies = [
- 
- [[package]]
- name = "webpki-roots"
--version = "0.26.1"
-+version = "0.26.11"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "b3de34ae270483955a94f4b21bdaaeb83d508bb84a01435f393818edb0012009"
-+checksum = "521bc38abb08001b01866da9f51eb7c5d647a19260e00054a8c7fd5f9e57f7a9"
- dependencies = [
-- "rustls-pki-types",
-+ "webpki-roots 1.0.10",
- ]
- 
- [[package]]
- name = "webpki-roots"
--version = "1.0.4"
-+version = "1.0.10"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "b2878ef029c47c6e8cf779119f20fcf52bde7ad42a731b2a304bc221df17571e"
-+checksum = "1c1c8e20c8a38fc7d65abfe74eb7280e4aa667e8eec8bc84996d2874810748d9"
- dependencies = [
-  "rustls-pki-types",
- ]
 diff --git a/Cargo.toml b/Cargo.toml
 index 3e72bd2..27bb477 100644
 --- a/Cargo.toml
