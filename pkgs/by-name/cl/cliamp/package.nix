@@ -1,4 +1,5 @@
 {
+  alsa-plugins,
   lib,
   stdenv,
   buildGoModule,
@@ -10,11 +11,29 @@
   libmpg123,
   libogg,
   libvorbis,
-  ffmpeg,
+  ffmpeg-headless,
   flac,
+  pipewire,
+  symlinkJoin,
   yt-dlp,
   versionCheckHook,
 }:
+
+let
+  # The audio backend talks to ALSA, and on PipeWire/PulseAudio systems the
+  # host's /etc/alsa/conf.d routes the default device through a plugin named
+  # by bare filename ("libasound_module_pcm_pipewire.so"). Nix's libasound only
+  # searches its own store path for plugins, so on non-NixOS hosts that lookup
+  # fails and cliamp plays into silence. Ship both plugins and point libasound
+  # at them.
+  alsaPluginDir = symlinkJoin {
+    name = "cliamp-alsa-plugins";
+    paths = [
+      "${alsa-plugins}/lib/alsa-lib"
+      "${pipewire}/lib/alsa-lib"
+    ];
+  };
+in
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
@@ -31,9 +50,11 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+    "-w"
     "-X main.version=${finalAttrs.version}"
   ];
 
+  doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   nativeBuildInputs = [
@@ -57,13 +78,18 @@ buildGoModule (finalAttrs: {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/cliamp \
+    wrapProgram "$out/bin/cliamp" \
       --prefix PATH : ${
         lib.makeBinPath [
-          ffmpeg
+          ffmpeg-headless
           yt-dlp
         ]
-      }
+      } \
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--set-default ALSA_PLUGIN_DIR ${alsaPluginDir}"}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 Cliamp.png "$out/share/icons/hicolor/512x512/apps/cliamp.png"
+    install -Dm644 cliamp.desktop "$out/share/applications/cliamp.desktop"
   '';
 
   # this is set due to failure of testset `net/http/httptest` on darwin
@@ -72,10 +98,10 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Terminal Winamp - a retro terminal music player inspired by Winamp 2.x";
+    description = "Retro terminal music player inspired by Winamp";
     homepage = "https://github.com/bjarneo/cliamp";
     license = lib.licenses.mit;
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ supermarin ];
     mainProgram = "cliamp";
   };
