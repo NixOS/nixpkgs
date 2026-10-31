@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   alsa-lib,
+  fontconfig,
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
@@ -17,20 +18,16 @@
   libx11,
   xvfb,
   freetype,
-  expat,
-  libGL,
   libjack2,
   curl,
-  webkitgtk_4_1,
+  libxext,
   libsysprof-capture,
   pcre2,
   util-linux,
   libselinux,
   libsepol,
   libthai,
-  libxkbcommon,
   libdatrie,
-  libepoxy,
   lerc,
   sqlite,
   ninja,
@@ -80,6 +77,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     alsa-lib
+    fontconfig
     libx11
     libxcomposite
     libxcursor
@@ -88,23 +86,19 @@ stdenv.mkDerivation {
     libxtst
     libxdmcp
     xvfb
-    libGL
     libjack2
     libsysprof-capture
     libselinux
     libsepol
     libthai
-    libxkbcommon
     libdatrie
-    libepoxy
     lerc
     freetype
     curl
-    webkitgtk_4_1
+    libxext
     pcre2
     util-linux
     sqlite
-    expat
   ];
 
   cmakeFlags = [

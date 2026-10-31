@@ -15,7 +15,6 @@
   libxi,
   libxinerama,
   libxrandr,
-  expat,
   freetype,
   fontconfig,
   curl,
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxi
     libxinerama
     libxrandr
-    expat
     freetype
     fontconfig
     alsa-lib
