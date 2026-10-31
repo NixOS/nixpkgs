@@ -9,6 +9,7 @@
   gdk-pixbuf,
   libxkbcommon,
   vulkan-loader,
+  wayland,
   makeDesktopItem,
   autoPatchelfHook,
   copyDesktopItems,
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   runtimeDependencies = [
     vulkan-loader
     libxkbcommon
+    wayland
   ];
 
   doCheck = false; # there are no cli tests
