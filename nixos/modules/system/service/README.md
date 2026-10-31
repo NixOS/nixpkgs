@@ -52,7 +52,7 @@ Many services implement automatic reloading or reloading on e.g. `SIGUSR1`, but 
   If we parameterize `/etc/system-services`, it will have to become an `importApply` style module nonetheless (function returning module).
 
 - **Simple attribute structure**: Unlike `environment.etc`, `configData` uses a simpler structure with just `enable`, `name`, `text`, `source`, and `path` attributes. Complex ownership options were omitted for simplicity and portability.
-  Per-service user creation is still TBD.
+  Per-service user creation is covered by the `identity.*` options;
 
 ## No `pkgs` module argument
 

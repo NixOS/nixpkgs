@@ -78,6 +78,83 @@ This can be achieved in two ways:
 
 These aren't mutually exclusive. In fact, it is a good practice when developing services to first write them as individual services, and then compose them into a higher-level composition. Each of these services is a valid modular service, including their composition.
 
+## Identity {#modular-service-identity}
+
+Modular services have `identity.*` options for running a service as a specific user or group.
+The option values are *requests*: on platforms that support users, the service manager resolves them to the real values (the user name, its uid, and groups) when the values are read; on platforms without user support, they resolve to `null`.
+
+By default, each service gets its own user on platforms that support users.
+The user's name is derived from the service's attribute path, and the uid/gid is allocated by the platform (e.g. NixOS picks a free uid at activation).
+The primary group defaults to a user-private group named after the user.
+
+To run services under a shared user without pinning names or ids, set `identity.sameUser` on a service to another service's *configuration*, which serves as a reference to it:
+
+```nix
+{
+  system.services.my-app = { config, ... }: {
+    # imports = [ ... ];
+    services.web = {
+      # Run the web instance as the worker sub-service's user.
+      identity.sameUser = config.services.example-2;
+    };
+    # services.api.settings = {
+    #
+    # };
+  };
+}
+```
+
+Because the reference is the target service's configuration itself, such code is reusable regardless of where the composite module is imported; no service attribute paths have to be spelled out:
+
+```nix
+# my-composite-service.nix
+{ config, ... }: {
+  services.foo = {
+    imports = [ ./foo.nix ];
+  };
+  services.bar = {
+    imports = [ ./bar.nix ];
+    identity.sameUser = config.services.foo;
+  };
+}
+```
+
+This works because the service manager (here: NixOS's systemd integration, `nixos/modules/system/service/systemd/identity.nix`) injects a built-in, read-only `absoluteServicePath` option on every service, turning each service configuration into a referenceable handle.
+The referenced service's resolved identity is used for the referencing service.
+
+Alternatively, a composing service can anchor the shared user on one of its sub-services:
+
+```nix
+{
+  system.services.my-app = { config, ... }: {
+    # imports = [ ... ];
+
+    # Run my-app itself as the same user as its `worker` sub-service.
+    identity.sameUser = config.services.worker;
+    services.worker.settings = {
+      #...
+    };
+  };
+}
+```
+
+Names and ids can be pinned at any granularity:
+
+```nix
+{
+  system.services.my-app.identity = {
+    user = "my-app";
+    uid = 300;
+    group = "my-app";
+    gid = 300;
+    groups = [ "www-data" ];
+    gids = [ 33 ];
+  };
+}
+```
+
+Each option can be pinned independently, such as only `identity.uid` while the name is still derived from the attribute path.
+
 ## Migration {#modular-service-migration}
 
 Many services could be migrated to the modular service system, but even when the modular service system is mature, it is not necessary to migrate all services.

@@ -33,6 +33,7 @@ When reviewing a modular service, you should check the following. Details and ra
 - [ ] Has a `meta.maintainers` attribute
 - [ ] Systemd-specific definitions are behind `optionalAttrs (options ? systemd)` to promote portability.
 - [ ] `_class = "service"`
+- [ ] User/group needs are expressed through the portable `identity.*` requests (`lib/services/identity.nix`) instead of binding users or groups directly, so that the service stays portable and the service manager resolves them.
 - [ ] Modular services provided through `passthru.services` must override the default of the package option using `finalAttrs.finalPackage`
 - [ ] Is the modular services infrastructure sufficient for this service? If one or more features are not covered, comment in https://github.com/NixOS/nixpkgs/issues/428084
 - [ ] Has been added to `nixos/modules/misc/documentation/modular-services.nix`
