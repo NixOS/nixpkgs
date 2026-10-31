@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Scrumplex
       ImSapphire
     ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "ALCOM";
   };
 })
