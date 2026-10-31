@@ -1617,21 +1617,116 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
+`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run either `python -m unittest discover` or `python -m unittest`:
 
 ```nix
 {
   nativeCheckInputs = [ unittestCheckHook ];
 
+  unittestStartDir = "tests";
+
   unittestFlags = [
-    "-s"
-    "tests"
     "-v"
   ];
 }
 ```
 
-`pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
+```nix
+{
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  dontUseUnittestDiscover = true;
+
+  enabledTestPaths = [
+    "tests/test_a1.py"
+    "tests/test_b*.py"
+    "tests.test_c1"
+    "tests.test_c2.TestClass1"
+    "tests.test_c2.TestClass2.test_method1"
+    "tests.test_d1.test_function1"
+  ];
+
+  unittestFlags = [
+    "-v"
+  ];
+}
+```
+
+`unittestCheckHook` recognizes the following attributes:
+
+`dontUseUnittestCheck` (boolean, default to `false`)
+
+: Whether to opt out the default `unittestCheckPhase` execution.
+
+`dontUseUnittestDiscover` (boolean, default to `false`)
+
+: Whether to opt out the `unittest`'s test file discovery feature, i.e., invoke `python3 -m unittest path1 [path2 ...]` instead of `python3 -m unittest discover`.
+
+  Default to `false` as most projects uses `pytest discover`.
+
+`enabledTests` (`null` or list of strings, default to `null`)
+
+: White-listed patterns (sub-strings or globs) to match the tests.
+  Each specified pattern is passed via the `-k` flag,
+  and will be matched against the fully qualified test method name as imported by the test loader.
+
+  The default value `null` opts out from the white-listing.
+
+  The matching is case-sensitive.
+  A pattern without `*` matches as a sub-string of the fully qualified test method name, such as `test_foo` or `FooTests.test_foo` matching `tests.test_module.FooTests.test_foo`.
+  A pattern with `*` is a glob that has to match the whole fully qualified test method name, such as `*.FooTests.test_*`.
+
+`disabledTests` (list of strings, default to `[ ]`)
+
+: Black-listed patterns (sub-strings or globs) to deselect the tests.
+  The patterns follow the same rules as `enabledTests`.
+
+  As `python3 -m unittest -k` provides no negation,
+  `unittestCheckHook` runs the tests through a wrapper of `python3 -m unittest` with a custom test loader when `disabledTests` is non-empty.
+  Each deselected test is reported in the build log.
+
+`unittestFlags` (list, default to `[ ]`)
+
+: Additional flags to append to the `python3 -m unittest` command.
+
+With `unittest discover`:
+
+`unittestStartDir` (string)
+
+: Directory to start test discovery.
+
+  The value will pass via `--start-directory` if specified non-empty, or `unittest` falls back to the current working directory (`.`).
+
+`unittestFilePattern` (string)
+
+: Glob pattern to match test files.
+
+  The value will pass via `--pattern` if specified non-empty, or `unittest` falls back to `test*.py`.
+
+`unittestTopDir` (string)
+
+: Top-level directory of the package to be tested.
+
+  The value will pass via `--top-level-directory` if specified non-empty.
+
+Without `unittest discover`:
+
+`enabledTestPaths` (non-empty list of strings, required)
+
+: A list of paths, path globs or importable module/function/class/method identifiers to discover tests in.
+
+  Path globs will be expanded before appending to the `python3 -m unittest` command.
+  A path glob that matches no paths results in build failure.
+
+  `enabledTestPaths` must be a non-empty list when `dontUseUnittestDiscover == true`, as plain `python3 -m unittest` is equivalent to `python3 -m unittest discover`.
+
+`pytest` supports test cases defined for `unittest`, making it possible to use `pytestCheckHook` instead of `unittestCheckHook` for additional features such as fine-grained test selection, but with the following caveats:
+- There are subtle difference between the behaviour of `pytest` and `unittest`.
+  For example, the default filename pattern for `unittest` is `test*.py`, while `pytest` defaults to `test_*.py` or `*_test.py`.
+- `pytest` and `unittest` has different command-line interface.
+  Upstream-provided flags for `unittest` needs manual translation.
+- `pytest` is a third-party Python package that depends on other Python packages, while `unittest` is part of the Python standard library.
+  Beware of circular dependencies.
 
 #### Using stestrCheckHook {#using-stestrcheckhook}
 
