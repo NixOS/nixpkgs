@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "materialscloud-org";
     repo = "seekpath";
     tag = "v${version}";
-    hash = "sha256-yz9IX68AmFP8P8uzZMKa4d/pdzbOm0IcQsZMvC7MuSU=";
+    hash = "sha256-0Y3vIh2fv3kjPvYWFkwt4y7QPUe1Evyh/NK4B+BJx+o=";
   };
 
   env.LC_ALL = "en_US.utf-8";
