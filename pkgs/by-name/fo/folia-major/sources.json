@@ -12,5 +12,15 @@
       "url": "https://github.com/chthollyphile/folia-major/releases/download/models-v1/htdemucs-wgsl.bin",
       "hash": "sha256-J9UzGnSk4jsYFys9WdA3jmmP15vA0P7TMW2nfjo32NE="
     }
-  ]
+  ],
+  "windowtolayer": {
+    "version": "0.3.1-unstable-2026-07-29",
+    "rev": "618a482d791e90f4977d643c206417f6aee73936",
+    "hash": "sha256-b2hkhcg+R3QUKw0ghgDb7KEUUPlFIjE7VzZ1Vf2EJag=",
+    "cargoHash": "sha256-MqcutNzorDeYoGKWFbCzIrNuo1w2vwnGEFOuooZwPgk=",
+    "patches": [
+      "windowtolayer-popup-resilience.patch",
+      "windowtolayer-single-layer-window.patch"
+    ]
+  }
 }

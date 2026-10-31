@@ -4,7 +4,9 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchurl,
+  fetchFromGitLab,
   callPackage,
+  windowtolayer,
   jq,
   imagemagick,
   makeWrapper,
@@ -90,6 +92,12 @@ buildNpmPackage (finalAttrs: {
     mkdir -p build/ffmpeg/${platformDir} build/mnn/${platformDir} models
     ln -s ${lib.getExe' ffmpeg_8 "ffmpeg"} build/ffmpeg/${platformDir}/ffmpeg
     ln -s ${finalAttrs.passthru.folia-mnn}/lib/* build/mnn/${platformDir}/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    ln -s ${lib.getExe finalAttrs.passthru.windowtolayer} build/windowtolayer
+    ln -s ${finalAttrs.passthru.windowtolayer.src}/COPYING build/windowtolayer-COPYING
+  ''
+  + ''
     ${lib.concatMapStrings (model: ''
       ln -s ${model} models/${model.name}
     '') finalAttrs.passthru.models}
@@ -142,6 +150,21 @@ buildNpmPackage (finalAttrs: {
       inherit (finalAttrs) version src meta;
       inherit (finalAttrs.passthru) sources;
     };
+    # Linux wallpaper mode, upstream builds it in packaging/linux/build-windowtolayer.mjs
+    windowtolayer = windowtolayer.overrideAttrs (old: {
+      inherit (finalAttrs.passthru.sources.windowtolayer) version cargoHash;
+      src = fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "mstoeckl";
+        repo = "windowtolayer";
+        inherit (finalAttrs.passthru.sources.windowtolayer) rev hash;
+      };
+      patches =
+        old.patches or [ ]
+        ++ map (
+          patch: "${finalAttrs.src}/packaging/linux/patches/${patch}"
+        ) finalAttrs.passthru.sources.windowtolayer.patches;
+    });
     models = map fetchurl finalAttrs.passthru.sources.models;
 
     sources = lib.importJSON ./sources.json;
