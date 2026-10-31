@@ -15,13 +15,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "alcobar";
-  version = "0.3.2";
+  version = "0.4.0";
   minimalOCamlVersion = "4.10";
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/samoht/alcobar/releases/download/v${finalAttrs.version}/alcobar-${finalAttrs.version}.tbz";
-    hash = "sha256-GUJggepuCBkuo564L9ydusZ0DOwOCTlhBI4ze/ntZ+k=";
+    hash = "sha256-4ASlhN62YFtP+cZmY6yo8P8HjDkOuviBw+qgA70a7oE=";
   };
 
   propagatedBuildInputs = [
