@@ -9,6 +9,7 @@
   pnpmConfigHook,
   stdenv,
   versionCheckHook,
+  nixosTests,
 }:
 buildGoModule (
   finalAttrs:
@@ -43,39 +44,43 @@ buildGoModule (
     versionCheckProgramArg = "version";
 
     doInstallCheck = true;
-    passthru.updateScript = nix-update-script { };
+    passthru = {
+      tests = { inherit (nixosTests) fmd-server; };
 
-    passthru.ui = stdenv.mkDerivation {
-      inherit (finalAttrs) version src pnpmDeps;
-      pname = "${finalAttrs.pname}-web-ui";
+      updateScript = nix-update-script { };
 
-      pnpmRoot = "web";
-      distRoot = "dist";
+      ui = stdenv.mkDerivation {
+        inherit (finalAttrs) version src pnpmDeps;
+        pname = "${finalAttrs.pname}-web-ui";
 
-      nativeBuildInputs = [
-        nodejs
-        pnpmConfigHook
-        pnpm_11
-      ];
+        pnpmRoot = "web";
+        distRoot = "dist";
 
-      buildPhase = ''
-        runHook preBuild
+        nativeBuildInputs = [
+          nodejs
+          pnpmConfigHook
+          pnpm_11
+        ];
 
-        pushd web
-        pnpm build
-        popd
+        buildPhase = ''
+          runHook preBuild
 
-        runHook postBuild
-      '';
+          pushd web
+          pnpm build
+          popd
 
-      installPhase = ''
-        runHook preInstall
+          runHook postBuild
+        '';
 
-        mkdir -p "$out"
-        cp -r '${ui.pnpmRoot}/${ui.distRoot}' "$out"
+        installPhase = ''
+          runHook preInstall
 
-        runHook postInstall
-      '';
+          mkdir -p "$out"
+          cp -r '${ui.pnpmRoot}/${ui.distRoot}' "$out"
+
+          runHook postInstall
+        '';
+      };
     };
 
     meta = {
