@@ -1,0 +1,19 @@
+--- a/src/config.ts
++++ b/src/config.ts
+@@ -1,5 +1,7 @@
+ import { readFileSync } from 'node:fs';
+
++const CONFIG_PATH = process.env.CONFIG_PATH || '/data/options.json'
++
+ export type MeterConfig = {
+   prm: string;
+   token: string;
+@@ -25,7 +27,7 @@ export function getUserConfig(): UserConfig {
+   let parsed: { meters?: any[]; costs?: any } = {};
+
+   try {
+-    parsed = JSON.parse(readFileSync('/data/options.json', 'utf8'));
++    parsed = JSON.parse(readFileSync(CONFIG_PATH, 'utf8'));
+   } catch (e) {
+     throw new Error('Cannot read user configuration: ' + e.toString());
+   }
