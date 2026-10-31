@@ -3,8 +3,13 @@
   lib,
   fetchurl,
   pkg-config,
+  meson,
+  ninja,
   gtk3,
+  shared-mime-info,
+  desktop-file-utils,
   itstool,
+  appstream,
   gst_all_1,
   libxml2,
   libnotify,
@@ -14,13 +19,15 @@
   libburn,
   libisofs,
   vcdimager,
+  totem-pl-parser,
+  tinysparql,
   wrapGAppsHook3,
   hicolor-icon-theme,
 }:
 
 let
   major = "3.12";
-  minor = "3";
+  minor = "4";
   binpath = lib.makeBinPath [
     dvdauthor
     vcdimager
@@ -33,13 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/brasero/${major}/brasero-${finalAttrs.version}.tar.xz";
-    hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
+    hash = "sha256-MiYEmsQJaQk8V1b5iS5229oe/rEFzaMvOf1S9lR+1bM=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    meson
+    ninja
+    shared-mime-info
+    desktop-file-utils
     itstool
-    intltool
+    appstream
     wrapGAppsHook3
   ];
 
@@ -50,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     libburn
     libisofs
+    totem-pl-parser
+    tinysparql
     hicolor-icon-theme
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -63,25 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
   # will obviously not work on nix
   patches = [ ./remove-symlink-check.patch ];
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    "--with-girdir=$out/share/gir-1.0"
-    "--with-typelibdir=$out/lib/girepository-1.0"
-  ];
-
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${binpath}")
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   meta = {
     description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";
-    maintainers = [ lib.maintainers.bdimcheff ];
+    maintainers = [
+      lib.maintainers.bdimcheff
+      lib.maintainers.juliusfreudenberger
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "brasero";
