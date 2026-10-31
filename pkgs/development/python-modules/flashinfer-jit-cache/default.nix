@@ -61,8 +61,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   buildInputs = with cudaPackages; [
     cccl
     cuda_cudart
+    cuda_nvrtc
     libcublas
     libcurand
+    libcusolver
+    libcusparse
+    nccl
   ];
 
   env = {

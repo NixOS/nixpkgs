@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
 
   # dependencies
   nvidia-cutlass-dsl-libs-base,
@@ -32,6 +33,13 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     nvidia-cutlass-dsl-libs-base
   ];
+
+  # Fix `ModuleNotFoundError: No module named 'nvidia_cutlass_dsl'` when
+  # importing. It is not needed in Nixpkgs since nvidia-cutlass-dsl-libs-base
+  # handles the import and path changes itself.
+  postInstall = ''
+    rm "$out/${python.sitePackages}/nvidia_cutlass_dsl_packages.pth"
+  '';
 
   pythonImportsCheck = [ "cutlass" ];
 
