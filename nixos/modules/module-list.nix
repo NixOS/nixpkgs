@@ -1679,6 +1679,7 @@
   ./services/wayland/hypridle.nix
   ./services/wayland/vellum.nix
   ./services/web-apps/actual.nix
+  ./services/web-apps/affine-server.nix
   ./services/web-apps/agorakit.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix

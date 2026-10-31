@@ -30780,6 +30780,13 @@
     githubId = 6882568;
     name = "Vaci";
   };
+  vagahbond = {
+    email = "vagahbond@pm.me";
+    github = "vagahbond";
+    githubId = 56230065;
+    name = "Vagahbond";
+    matrix = "@vagahbond:matrix.org";
+  };
   vaibhavsagar = {
     email = "vaibhavsagar@gmail.com";
     matrix = "@vaibhavsagar:matrix.org";
