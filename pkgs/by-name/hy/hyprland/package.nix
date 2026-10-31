@@ -55,7 +55,7 @@
   debug ? false,
   enableXWayland ? true,
   withSystemd ? lib.meta.availableOn gcc16Stdenv.hostPlatform systemdLibs,
-  withUWSM ? withSystemd,
+  withUWSM ? false,
   wrapRuntimeDeps ? true,
 }:
 assert withUWSM -> withSystemd;
