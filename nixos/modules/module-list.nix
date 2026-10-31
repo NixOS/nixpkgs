@@ -1793,6 +1793,7 @@
   ./services/web-apps/linkwarden.nix
   ./services/web-apps/loops-server.nix
   ./services/web-apps/lubelogger.nix
+  ./services/web-apps/luker.nix
   ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix
   ./services/web-apps/matomo.nix
