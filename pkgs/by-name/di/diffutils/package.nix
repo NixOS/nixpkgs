@@ -77,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
+    ]
+    # gnulib only detects static linking via `-static` in LDFLAGS, but our
+    # wrapper injects it through NIX_CFLAGS_LINK. Weak pthread references then
+    # resolve to NULL, breaking the multithreaded gnulib tests.
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "gl_cv_have_weak=no"
     ];
 
   # Test failure on QEMU only (#300550)
