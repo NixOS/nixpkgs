@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyfin-desktop";
-  version = "2.0.0-unstable-2026-08-31";
+  version = "2.0.0-unstable-2026-10-28";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-desktop";
-    rev = "2cb4a4456fd29b5b62d825ef0e5df93ed6913328";
-    hash = "sha256-EbDTw7Nzq6JTF3YmIBNizDiPJ8wbc1leREfgCbME3Js=";
+    rev = "a575a4359859543c2d6b0af53fefbd8523997667";
+    hash = "sha256-aHrpS5D2SDWVI3TlfT3JJ2P2Ez03EDH4/P2cV53D5F0=";
     fetchSubmodules = true;
   };
   patches = [
