@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   gitMinimal,
+  python3,
   installShellFiles,
   installAgentSkills,
   versionCheckHook,
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.80.0";
+  version = "0.81.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wT9V9A6ty4yCp/wJ9F92AC5SrsQzemEb8/d2NSjH/SY=";
+    hash = "sha256-Sgim8WgH5nGr1GhSZRtwkRu87b/S2W9gp7eHgtTGBAo=";
   };
 
-  cargoHash = "sha256-CVk7tSdt0eh7MtbbMruU1f4664tlnQPjQ2ovXfRcbIA=";
+  cargoHash = "sha256-cJ5rd4+5IIxuUTWWAe5DF2cDU+lyZVMUq+l+I029peU=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -51,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/wt config shell completions zsh)
   '';
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    # shell_exec and signal_forwarder tests run python3 as a child process
+    python3
+  ];
 
   checkFlags = [
     # Integration tests use insta snapshots with environment-specific paths
