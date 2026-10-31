@@ -22931,6 +22931,8 @@ self: super: with self; {
 
   wtforms-htmx = callPackage ../development/python-modules/wtforms-htmx { };
 
+  wtforms-htmx-components = callPackage ../development/python-modules/wtforms-htmx-components { };
+
   wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
 
   wtforms_3_3 = callPackage ../development/python-modules/wtforms/3_3.nix { };
