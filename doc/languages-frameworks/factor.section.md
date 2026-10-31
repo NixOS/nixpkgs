@@ -48,7 +48,7 @@ The online Factor documentation is extensive on how to use the scaffolding frame
 
 All Factor vocabularies that shall be added to a Factor environment via the `extraVocabs` attribute must adhere to the following directory scheme.
 Its top-level directory must be one (or multiple) of `basis`, `core` or `extra`.
-`work` is routed to `/var/lib/factor` and is not shipped nor referenced in the nix store, see the section on [scaffolding](#ssec-factor-scaffolding).
+`work` is routed to `/var/lib/factor` and is not shipped nor referenced in the nix store, see [Scaffolding and the `work` vocabulary root](#ssec-factor-scaffolding).
 You should usually use `extra`, but you can use the other roots to overwrite built-in vocabularies.
 Be aware that vocabularies in `core` are part of the Factor image which the development environment is run from.
 This means the code in those vocabularies is not loaded from the sources, such that you need to call `refresh-all` to recompile and load the changed definitions.

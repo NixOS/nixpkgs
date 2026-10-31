@@ -28,7 +28,7 @@ or
 agda.withPackages (p: [ p.standard-library ])
 ```
 
-or can be called as in the [Compiling Agda](#compiling-agda) section.
+or can be called as in [Compiling Agda](#compiling-agda).
 
 If you want to use a different version of a library (for instance a development version)
 override the `src` attribute of the package to point to your local repository

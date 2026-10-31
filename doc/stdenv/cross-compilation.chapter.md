@@ -6,8 +6,6 @@
 
 For a hands-on tutorial, see the [cross-compilation guide on nix.dev](https://nix.dev/tutorials/cross-compilation).
 
-This chapter will be organized in three parts. First, it will describe the basics of how to package software in a way that supports cross-compilation. Second, it will describe how to use Nixpkgs when cross-compiling. Third, it will describe the internal infrastructure supporting cross-compilation.
-
 ## Packaging in a cross-friendly manner {#sec-cross-packaging}
 
 ### Platform parameters {#ssec-cross-platform-parameters}
@@ -80,7 +78,7 @@ Using these attributes, the build process of a package can change depending on t
 This is a rather philosophical description that isn't very Nixpkgs-specific. For an overview of all the relevant attributes given to `mkDerivation`, see [](#ssec-stdenv-dependencies). For a description of how everything is implemented, see [](#ssec-cross-dependency-implementation).
 :::
 
-In this section we explore the relationship between both runtime and build-time dependencies and the 3 Autoconf platforms.
+Runtime and build-time dependencies relate to the 3 Autoconf platforms as follows.
 
 A run time dependency between two packages requires that their host platforms match. This is directly implied by the meaning of "host platform" and "runtime dependency": The package dependency exists while both packages are running on a single host platform.
 
@@ -132,8 +130,6 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 * If `g++` itself linked against `libgccjit.so` (for example, to allow compile-time-evaluated C++ expressions), then the `libgccjit` package used to provide this functionality would be a "host→ host" dependency of `g++`: it is code which runs on the `host` and emits code for execution on the `host`.
 
 ### Cross packaging cookbook {#ssec-cross-cookbook}
-
-Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
 #### How do I test cross-compilation using emulation? {#cross-qa-emulation}
 
@@ -257,7 +253,7 @@ You may want to look in to using `stdenvAdapters.makeStatic` or `pkgsStatic` or 
 
 ## Cross-building packages {#sec-cross-usage}
 
-Nixpkgs can be instantiated with `localSystem` alone, in which case there is no cross-compiling and everything is built by and for that system, or also with `crossSystem`, in which case packages run on the latter, but all building happens on the former. Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section. As mentioned above, `lib.systems.examples` has some platforms which are used as arguments for these parameters in practice. You can use them programmatically, or on the command line:
+Nixpkgs can be instantiated with `localSystem` alone, in which case there is no cross-compiling and everything is built by and for that system, or also with `crossSystem`, in which case packages run on the latter, but all building happens on the former. Both parameters take the same schema as the 3 (build, host, and target) platforms defined in [Platform parameters](#ssec-cross-platform-parameters). As mentioned above, `lib.systems.examples` has some platforms which are used as arguments for these parameters in practice. You can use them programmatically, or on the command line:
 
 ```ShellSession
 $ nix-build '<nixpkgs>' --arg crossSystem '(import <nixpkgs/lib>).systems.examples.fooBarBaz' -A whatever
@@ -273,13 +269,13 @@ $ nix-build '<nixpkgs>' --arg crossSystem '{ config = "<arch>-<os>-<vendor>-<abi
 works in the vast majority of cases. The problem today is dependencies on other sorts of configuration which aren't given proper defaults. We rely on the examples to crudely to set those configuration parameters in some vaguely sane manner on the users behalf. Issue [\#34274](https://github.com/NixOS/nixpkgs/issues/34274) tracks this inconvenience along with its root cause in crufty configuration options.
 :::
 
-While one is free to pass both parameters in full, there's a lot of logic to fill in missing fields. As discussed in the previous section, only one of `system`, `config`, and `parsed` is needed to infer the other two. Additionally, `libc` will be inferred from `parse`. Finally, `localSystem.system` is also _impurely_ inferred based on the platform evaluation occurs. This means it is often not necessary to pass `localSystem` at all, as in the command-line example in the previous paragraph.
+While one is free to pass both parameters in full, there's a lot of logic to fill in missing fields. Only one of `system`, `config`, and `parsed` is needed to infer the other two. Additionally, `libc` will be inferred from `parse`. Finally, `localSystem.system` is also _impurely_ inferred based on the platform evaluation occurs. This means it is often not necessary to pass `localSystem` at all, as in the command-line example above.
 
 ::: {.note}
 Many sources (manual, wiki, etc) probably mention passing `system`, `platform`, along with the optional `crossSystem` to Nixpkgs: `import <nixpkgs> { system = ..; platform = ..; crossSystem = ..; }`. Passing those two instead of `localSystem` is still supported for compatibility, but is discouraged. Indeed, much of the inference we do for these parameters is motivated by compatibility as much as convenience.
 :::
 
-One would think that `localSystem` and `crossSystem` overlap horribly with the three `*Platforms` (`buildPlatform`, `hostPlatform,` and `targetPlatform`; see `stage.nix` or the manual). Actually, those identifiers are purposefully not used here to draw a subtle but important distinction: While the granularity of having 3 platforms is necessary to properly *build* packages, it is overkill for specifying the user's *intent* when making a build plan or package set. A simple "build vs deploy" dichotomy is adequate: the sliding window principle described in the previous section shows how to interpolate between the these two "end points" to get the 3 platform triple for each bootstrapping stage. That means for any package a given package set, even those not bound on the top level but only reachable via dependencies or `buildPackages`, the three platforms will be defined as one of `localSystem` or `crossSystem`, with the former replacing the latter as one traverses build-time dependencies. A last simple difference is that `crossSystem` should be null when one doesn't want to cross-compile, while the `*Platform`s are always non-null. `localSystem` is always non-null.
+One would think that `localSystem` and `crossSystem` overlap horribly with the three `*Platforms` (`buildPlatform`, `hostPlatform,` and `targetPlatform`; see `stage.nix` or [Platform parameters](#ssec-cross-platform-parameters)). Actually, those identifiers are purposefully not used here to draw a subtle but important distinction: While the granularity of having 3 platforms is necessary to properly *build* packages, it is overkill for specifying the user's *intent* when making a build plan or package set. A simple "build vs deploy" dichotomy is adequate: the sliding window principle interpolates between the these two "end points" to get the 3 platform triple for each bootstrapping stage. That means for any package a given package set, even those not bound on the top level but only reachable via dependencies or `buildPackages`, the three platforms will be defined as one of `localSystem` or `crossSystem`, with the former replacing the latter as one traverses build-time dependencies. A last simple difference is that `crossSystem` should be null when one doesn't want to cross-compile, while the `*Platform`s are always non-null. `localSystem` is always non-null.
 
 ## Cross-compilation infrastructure {#sec-cross-infra}
 

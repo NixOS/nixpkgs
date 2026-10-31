@@ -267,7 +267,7 @@ services:
 ## Contributing {#cuda-contributing}
 
 ::: {.warning}
-This section of the docs is still very much in progress. Feedback is welcome in GitHub Issues tagging @NixOS/cuda-maintainers or on [Matrix](https://matrix.to/#/#cuda:nixos.org).
+Documentation for contributing to the CUDA packages is incomplete. Feedback is welcome in GitHub Issues tagging @NixOS/cuda-maintainers or on [Matrix](https://matrix.to/#/#cuda:nixos.org).
 :::
 
 ### Package set maintenance {#cuda-package-set-maintenance}
