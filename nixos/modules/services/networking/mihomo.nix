@@ -110,7 +110,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         RestrictNamespaces = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6";
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service bpf";
         UMask = "0077";
@@ -118,7 +118,7 @@ in
       // lib.optionalAttrs cfg.tunMode {
         PrivateDevices = false;
         PrivateUsers = false;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
       };
     };
   };
