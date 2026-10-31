@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
+    priority = -10;
   };
 }

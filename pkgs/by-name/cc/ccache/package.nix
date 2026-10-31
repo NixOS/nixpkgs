@@ -93,10 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     # bashInteractive, but not bash.
     bashInteractive
     ctestCheckHook
-    elfutils # eu-elfcmp
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
+  ++ lib.optional stdenv.hostPlatform.isLinux elfutils # eu-elfcmp
   ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
@@ -108,7 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
   # reproducibility
   preCheck = ''
     export NIX_ENFORCE_NO_NATIVE=0
-  '';
+  ''
+  +
+    # Darwin wrapper flags trigger warnings, which the test suite
+    # treats as errors. Silence these warnings.
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export NIX_CFLAGS_COMPILE="''${NIX_CFLAGS_COMPILE:-} -Wno-unused-command-line-argument"
+    '';
 
   disabledTests = [
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
