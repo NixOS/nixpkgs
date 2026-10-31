@@ -42,6 +42,5 @@ buildGo127Module (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "azurehound";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
