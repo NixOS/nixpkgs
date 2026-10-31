@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujs";
-  version = "1.3.6";
+  version = "1.3.10";
 
   src = fetchurl {
     url = "https://mujs.com/downloads/mujs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-fPOl5iLP9BkD7/8DNFGPyUrwYyVnUsOLpGGKUZHkTxg=";
+    hash = "sha256-bjbBXbuE/4WTICl8kAhS8kGxMae23a6maayaZb11Vxw=";
   };
 
   buildInputs = [ readline ];
