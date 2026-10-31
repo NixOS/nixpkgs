@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   hyprland,
   jq,
   grim,
@@ -23,6 +24,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-9taTmV357cWglMGuN3NLq3bfNneFthwV6y+Ml4qEeHA=";
   };
+
+  patches = [
+    # Fix clipboard wipe and false notification on cancelled selection
+    # https://github.com/Gustash/Hyprshot/pull/156
+    (fetchpatch {
+      name = "fix-cancel-clipboard-wipe.patch";
+      url = "https://github.com/Gustash/Hyprshot/commit/ceefa2ae488656548574a94bb4562e0e126bf448.patch";
+      hash = "sha256-Za04FGqNMwu1X3P2Hzid5arkH3iEWddhVuUNn4sVfQ4=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
