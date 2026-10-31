@@ -46,6 +46,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mv usr $out
+    cp "$out/bin/ToneLib-Jam" "$out/bin/ToneLib-Jam-ignored"
   '';
 
   buildInputs = [
@@ -55,6 +56,10 @@ stdenv.mkDerivation {
   autoPatchelfIgnoreMissingDeps = [
     "libGL.so.1"
     "libasound.so.2"
+  ];
+
+  autoPatchelfIgnoreFiles = [
+    "bin/ToneLib-Jam-ignored"
   ];
 
   inherit runtimeDependencies;
@@ -68,7 +73,9 @@ stdenv.mkDerivation {
     in
     ''
       local binary="$out/bin/ToneLib-Jam"
+      local ignored="$out/bin/ToneLib-Jam-ignored"
       local interpreter=$(patchelf --print-interpreter $binary)
+      local ignoredInterpreter=$(patchelf --print-interpreter $ignored)
       local runpath=$(patchelf --print-rpath $binary)
       local glibcStorePath="${stdenv.cc.libc}"
 
@@ -77,6 +84,9 @@ stdenv.mkDerivation {
       # to point to the store.
       echo "[auto-patchelf-hook-test]: Check that the interpreter is in the store"
       test "''${interpreter#$glibcStorePath}" != "$interpreter"
+
+      echo "[auto-patchelf-hook-test]: Check that the ignored binary is not patched"
+      test "''${ignoredInterpreter#$glibcStorePath}" = "$ignoredInterpreter"
 
       readarray -td':' runpathArray < <(echo -n "$runpath")
 
