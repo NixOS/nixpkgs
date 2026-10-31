@@ -12,7 +12,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-last-updated-by-git";
-  version = "0.3.8-unstable-2026-03-22";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
