@@ -15732,6 +15732,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kosoyyagent = {
+    email = "kosoyy161439@maxxspace.com";
+    github = "kosoyyagent";
+    githubId = 347294309;
+    name = "kosoyyagent";
+  };
   kosslan = {
     email = "kosslan@kosslan.dev";
     matrix = "@kosslan:kosslan.dev";
