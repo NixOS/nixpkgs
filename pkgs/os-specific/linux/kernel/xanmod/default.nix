@@ -58,6 +58,8 @@ let
             ;
         };
 
+        extraPassthru.strictDeps = true; # nixpkgs-vet
+
         extraPassthru.updateScript = {
           command = [
             ./update.sh

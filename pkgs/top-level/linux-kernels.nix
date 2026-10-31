@@ -128,14 +128,7 @@ in
             kernelPatches.request_key_helper
           ];
         };
-        linux_xanmod_stable = xanmodKernels {
-          variant = "main";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-        linux_xanmod_latest = xanmodKernels {
+        linux_xanmod_main = xanmodKernels {
           variant = "main";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
@@ -147,6 +140,8 @@ in
         linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
+        linux_xanmod_latest = lib.warnOnInstantiate "linux_xanmod_latest has been renamed to linux_xanmod_main" linux_xanmod_main; # 2026-10-31
+        linux_xanmod_stable = lib.warnOnInstantiate "linux_xanmod_stable has been renamed to linux_xanmod_main" linux_xanmod_main; # 2026-10-31
 
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11";
@@ -654,13 +649,14 @@ in
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
-      linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
-      linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+      linux_xanmod_main = recurseIntoAttrs (packagesFor kernels.linux_xanmod_main);
     }
     // lib.optionalAttrs config.allowAliases {
       linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
       linux_libre = throw "linux_libre has been removed due to lack of maintenance";
       linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
+      linux_xanmod_latest = lib.warnOnInstantiate "linux_xanmod_latest has been renamed to linux_xanmod_main" packages.linux_xanmod_main; # 2026-10-31
+      linux_xanmod_stable = lib.warnOnInstantiate "linux_xanmod_stable has been renamed to linux_xanmod_main" packages.linux_xanmod_main; # 2026-10-31
 
       linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
       linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
