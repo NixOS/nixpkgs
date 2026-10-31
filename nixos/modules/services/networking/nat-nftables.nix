@@ -12,7 +12,13 @@ let
   toNftSet = list: concatStringsSep ", " list;
   toNftRange = ports: replaceStrings [ ":" ] [ "-" ] (toString ports);
 
-  ifaceSet = toNftSet (map (x: ''"${x}"'') cfg.internalInterfaces);
+  # One iifname per interface so nftables prefix wildcards like ve-+ work.
+  # A set (iifname { "ve-+" }) treats the + as a literal name.
+  ifaceRules =
+    action:
+    concatMapStrings (iface: ''
+      iifname "${iface}" ${oifExpr} ${action} comment "from internal interfaces"
+    '') cfg.internalInterfaces;
   ipSet = toNftSet cfg.internalIPs;
   ipv6Set = toNftSet cfg.internalIPv6s;
   oifExpr = optionalString (cfg.externalInterface != null) ''oifname "${cfg.externalInterface}"'';
@@ -94,9 +100,7 @@ let
       chain post {
         type nat hook postrouting priority srcnat;
 
-        ${optionalString (ifaceSet != "") ''
-          iifname { ${ifaceSet} } ${oifExpr} ${dest} comment "from internal interfaces"
-        ''}
+        ${ifaceRules dest}
         ${optionalString (ipSet != "") ''
           ${ipVer} saddr { ${ipSet} } ${oifExpr} ${dest} comment "from internal IPs"
         ''}
@@ -161,9 +165,7 @@ in
     };
 
     networking.firewall.extraForwardRules = optionalString config.networking.firewall.filterForward ''
-      ${optionalString (ifaceSet != "") ''
-        iifname { ${ifaceSet} } ${oifExpr} accept comment "from internal interfaces"
-      ''}
+      ${ifaceRules "accept"}
       ${optionalString (ipSet != "") ''
         ip saddr { ${ipSet} } ${oifExpr} accept comment "from internal IPs"
       ''}
