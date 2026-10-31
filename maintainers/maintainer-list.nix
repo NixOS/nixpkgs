@@ -12774,7 +12774,7 @@
   };
   j0schu = {
     name = "Jonas";
-    email = "Joschu2015@t-online.de";
+    email = "joschu.dev@gmail.com";
     github = "J0schu";
     githubId = 56407950;
   };
