@@ -192,11 +192,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail /bin/sh ${lib.getExe' bash "sh"}
   '';
 
-  preFixup = lib.optionalString withMediaPlayer ''
-    cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
+  # The default config.jsonc depends on mediaplayer.py and power_menu.xml, so
+  # we package them too, and rewrite the config file to reference them.
+  # Users who modify the default configuration will need to supply their own
+  # copies in a stable location.
+  preFixup = ''
+    sed -i 's#$HOME/\.config/waybar#'$out'/etc/xdg/waybar#g' $out/etc/xdg/waybar/config.jsonc
 
+    cp $src/resources/custom_modules/power_menu.xml $out/etc/xdg/waybar/power_menu.xml
+  ''
+  + lib.optionalString withMediaPlayer ''
+    cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
     wrapProgram $out/bin/waybar-mediaplayer.py \
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
+    ln -sf $out/bin/waybar-mediaplayer.py $out/etc/xdg/waybar/mediaplayer.py
   '';
 
   nativeInstallCheckInputs = [
