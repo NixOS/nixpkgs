@@ -72,6 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sql-formatter-org.github.io/sql-formatter";
     license = lib.licenses.mit;
     mainProgram = "sql-formatter";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
