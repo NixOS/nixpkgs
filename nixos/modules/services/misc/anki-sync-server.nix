@@ -122,6 +122,7 @@ in
         SYNC_BASE = cfg.baseDirectory;
         SYNC_HOST = specEscape cfg.address;
         SYNC_PORT = toString cfg.port;
+        PASSWORDS_HASHED = lib.mkIf (lib.versionAtLeast config.system.stateVersion "26.11") "1";
       };
 
       serviceConfig = {
