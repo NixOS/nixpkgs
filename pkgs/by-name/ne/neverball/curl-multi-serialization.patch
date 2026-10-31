@@ -1,0 +1,16 @@
+--- a/share/fetch_curl.c
++++ b/share/fetch_curl.c
+@@ -445,3 +445,4 @@
+         CURLMcode code;
+-
++        /* Serialize access to the multi handle with fetch_url(). */
++        SDL_LockMutex(fetch_mutex);
+         code = curl_multi_poll(multi_handle, NULL, 0u, 1000 / 30, NULL);
+@@ -450,3 +451,2 @@
+         {
+-            SDL_LockMutex(fetch_mutex);
+             fetch_step();
+@@ -457,2 +457,3 @@
+             log_printf("libcurl poll failure: %s\n", curl_multi_strerror(code));
++            SDL_UnlockMutex(fetch_mutex);
+             SDL_AtomicSet(&fetch_thread_running, 0);
