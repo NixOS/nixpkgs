@@ -36,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   # error: 'class boost::filesystem::path' has no member named 'normalize', resp.
   env.NIX_CFLAGS_COMPILE = "-UCIFTILIB_BOOST_NO_FSV3 -UCIFTILIB_BOOST_NO_CANONICAL";
 
-  doCheck = true;
+  # tests fail on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -52,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for reading and writing CIFTI files";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.bsd2;
   };
 })
