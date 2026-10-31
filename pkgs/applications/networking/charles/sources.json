@@ -1,0 +1,57 @@
+{
+  "charles5": {
+    "version": "5.2.2",
+    "sources": {
+      "x86_64-linux": {
+        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2_x86_64.tar.gz",
+        "hash": "sha256-oj6yCojocVHUzia8Hy+D36r8OB+cESUYHfAqMIniUok="
+      },
+      "aarch64-linux": {
+        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2_aarch64.tar.gz",
+        "hash": "sha256-d3+s6+p/oRFPKj11opZSNWQjHns5Lm+Zb2zlhLzMc1I="
+      },
+      "x86_64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2.dmg",
+        "hash": "sha256-Vg4Qwxuy5oC5udrfD7ZkUCib0itKaLysWhOozOUtnwU="
+      },
+      "aarch64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/5.2.2/charles-proxy-5.2.2.dmg",
+        "hash": "sha256-Vg4Qwxuy5oC5udrfD7ZkUCib0itKaLysWhOozOUtnwU="
+      }
+    }
+  },
+  "charles4": {
+    "version": "4.6.8",
+    "sources": {
+      "x86_64-linux": {
+        "url": "https://www.charlesproxy.com/assets/release/4.6.8/charles-proxy-4.6.8_amd64.tar.gz",
+        "hash": "sha256-AaS+zmQTWsGoLEhyGHA/UojmctE7IV0N9fnygNhEPls="
+      },
+      "x86_64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/4.6.8/charles-proxy-4.6.8.dmg",
+        "hash": "sha256-chXXj9csIBGRT1Za+hiEm1iFWIc1zgDFuFw09bVxH1Y="
+      },
+      "aarch64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/4.6.8/charles-proxy-4.6.8.dmg",
+        "hash": "sha256-chXXj9csIBGRT1Za+hiEm1iFWIc1zgDFuFw09bVxH1Y="
+      }
+    }
+  },
+  "charles3": {
+    "version": "3.12.3",
+    "sources": {
+      "x86_64-linux": {
+        "url": "https://www.charlesproxy.com/assets/release/3.12.3/charles-proxy-3.12.3.tar.gz",
+        "hash": "sha256-Wotxzf6kutYv1F6q71eJVojVJsATJ81war/w4K1A848="
+      },
+      "x86_64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/3.12.3/charles-proxy-3.12.3.dmg",
+        "hash": "sha256-chByBPsWkY7VkLk8AJs7VCG9r0JTgfGlxVQkIyDqDKc="
+      },
+      "aarch64-darwin": {
+        "url": "https://www.charlesproxy.com/assets/release/3.12.3/charles-proxy-3.12.3.dmg",
+        "hash": "sha256-chByBPsWkY7VkLk8AJs7VCG9r0JTgfGlxVQkIyDqDKc="
+      }
+    }
+  }
+}
