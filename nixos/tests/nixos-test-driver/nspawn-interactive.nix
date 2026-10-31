@@ -23,7 +23,6 @@ in
   # Run a nested interactive driver under Xvfb, type into the container through
   # TigerVNC, and check that closing the viewer leaves the container running.
   testScript = ''
-    import datetime as dt
     import os
     import subprocess
     from collections.abc import Generator
@@ -32,18 +31,19 @@ in
     from test_driver.driver import Driver, load_driver_configuration
 
     def xdotool(*args: str) -> str:
+        # Match the test driver's default 15-minute wait timeout.
         return subprocess.check_output(
-            ["${lib.getExe hostPkgs.xdotool}", *args], text=True, timeout=30
+            ["${lib.getExe hostPkgs.xdotool}", *args], text=True, timeout=15 * 60
         ).strip()
 
     def wait_for_host_display() -> None:
         def can_connect(_last_try: bool) -> bool:
             return subprocess.call(
                 ["${lib.getExe hostPkgs.xdotool}", "getdisplaygeometry"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
             ) == 0
 
-        retry(can_connect, timeout=dt.timedelta(seconds=30))
+        retry(can_connect)
 
     def wait_for_viewer() -> str:
         return xdotool(
@@ -54,7 +54,7 @@ in
     def open_guest_terminal(machine: NspawnMachine) -> None:
         # Keep the shell prompt from replacing the terminal's window title.
         machine.execute("xterm -title input-test -e bash --noprofile --norc >&2 &")
-        machine.wait_for_window("input-test", timeout=dt.timedelta(seconds=30))
+        machine.wait_for_window("input-test")
 
     def focus_terminal_in_viewer(machine: NspawnMachine, window: str) -> None:
         xdotool("windowraise", window)
@@ -63,8 +63,7 @@ in
         xdotool("click", "1")
 
         machine.wait_until_succeeds(
-            'test "$(xdotool getwindowfocus getwindowname)" = input-test',
-            timeout=dt.timedelta(seconds=30),
+            'test "$(xdotool getwindowfocus getwindowname)" = input-test'
         )
 
     def run_command_in_terminal(
@@ -112,10 +111,7 @@ in
                 machine.fail("ss -H -lntp | grep -w x11vnc")
                 open_guest_terminal(machine)
                 run_command_in_terminal(machine, window, "echo viewer-input > /tmp/viewer-input")
-                machine.wait_until_succeeds(
-                    "grep -qx viewer-input /tmp/viewer-input",
-                    timeout=dt.timedelta(seconds=30),
-                )
+                machine.wait_until_succeeds("grep -qx viewer-input /tmp/viewer-input")
 
             with subtest("closing the viewer leaves the container running"):
                 xdotool("windowclose", window)
