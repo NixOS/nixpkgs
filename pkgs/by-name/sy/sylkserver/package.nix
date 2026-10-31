@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sylkserver";
-  version = "6.6.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "sylkserver";
     tag = finalAttrs.version;
-    hash = "sha256-FeoyQWM4dvO1FJ6q5uXczPCtX2Aocm+jIkAy88uvPFI=";
+    hash = "sha256-ohpEbfiwX+ZESEXv5l37MX9uokzC7OsZx4tYR0Akuyc=";
   };
 
   build-system = with python3Packages; [
