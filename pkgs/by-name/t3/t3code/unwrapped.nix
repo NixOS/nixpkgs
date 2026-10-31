@@ -1,6 +1,7 @@
 {
   cctools,
   copyDesktopItems,
+  desktop-file-utils,
   electron_44,
   fetchFromGitHub,
   installShellFiles,
@@ -18,6 +19,7 @@
   stdenv,
   writeDarwinBundle,
   xcbuild,
+  xdg-utils,
   fetchPnpmDeps,
   pnpm_12,
   pnpmConfigHook,
@@ -57,10 +59,12 @@ stdenv.mkDerivation (
       substituteInPlace apps/web/vite.config.ts \
         --replace-fail 'const host = explicitHost || "localhost";' \
                        'const host = explicitHost || "127.0.0.1";'
-
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+
+      # Bake the T3 Connect public identifiers (public, not secrets; see .env.example)
+      cp .env.example .env
     '';
 
     nativeBuildInputs = [
@@ -168,7 +172,13 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0
+        --inherit-argv0 \
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix PATH : "${
+          lib.makeBinPath [
+            desktop-file-utils
+            xdg-utils
+          ]
+        }"''}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
@@ -221,6 +231,10 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
+        # The app's runtime registration is skipped while Electron runs
+        # unpackaged, so advertise the scheme on the packaged entry. Making it
+        # the default handler is user configuration (xdg.mimeApps).
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
