@@ -14043,6 +14043,11 @@
     githubId = 50095635;
     name = "Masum Reza";
   };
+  JohnSmith-dink = {
+    name = "JohnSmith-dink";
+    github = "JohnSmith-dink";
+    githubId = 184856902;
+  };
   johntitor = {
     email = "huyuumi.dev@gmail.com";
     github = "JohnTitor";
