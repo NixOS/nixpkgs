@@ -17,7 +17,7 @@ let
       else
         throw "Unknown license operator"
     else if license.licenseType == "exception" then
-      evaluateSubProperty license.license && evaluateSubProperty license.exception
+      evaluateSubProperty license.exception
     else if license.licenseType == "plus" then
       evaluateSubProperty license.license
     else
@@ -265,14 +265,14 @@ rec {
         ;
       licenseType = "simple";
     }
-    // optionalAttrs (attrs ? spdxId) {
+    // optionalAttrs (spdxId != null) {
       inherit spdxId;
       url = "https://spdx.org/licenses/${spdxId}.html";
     }
-    // optionalAttrs (attrs ? url) {
+    // optionalAttrs (url != null) {
       inherit url;
     }
-    // optionalAttrs (attrs ? fullName) {
+    // optionalAttrs (fullName != null) {
       inherit fullName;
     };
 }
