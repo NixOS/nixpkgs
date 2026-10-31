@@ -1,0 +1,13 @@
+--- a/src/ui/window/tests/keyboard_dispatch/go_prompt.rs
++++ b/src/ui/window/tests/keyboard_dispatch/go_prompt.rs
+@@ -485,8 +485,9 @@
+             assert_eq!(browser.active_location(), origin, "Tab never navigates");
+             assert!(fixture.shortcuts.prompt_has_focus());
+ 
++            let history = crate::services::NavigationHistory::shared();
+             for _ in 0..3 {
+-                crate::services::NavigationHistory::shared().record(&root.join("beta"));
++                history.record(&root.join("beta"));
+             }
+             fixture.shortcuts.prompt().set_text("./");
+             wait_until(|| fixture.shortcuts.candidates().len() == 5);
