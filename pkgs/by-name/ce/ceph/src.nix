@@ -23,16 +23,6 @@ applyPatches (final: {
       stripLen = 1;
       hash = "sha256-0jn5X4jIdluCufFXWHeO6skMz6XQpliHkC1tPLK6dbk=";
     })
-    # revert the upstream change to the way the directory for systemd units is located
-    # The new way seemingly cannot be overridden, and resolves to the location that *systemd* places its units.
-    # With Nix guarding the access to /nix/store, this fails.
-    # See: https://github.com/ceph/ceph/pull/43993
-    (fetchpatch2 {
-      name = "ceph-systemd-unit-dir.patch";
-      url = "https://github.com/ceph/ceph/pull/43993.diff?full_index=1";
-      hash = "sha256-00jW3Mp9q/Z1/83Dpu2Q7HJqeDQZPZCV8AsNznhUigw=";
-      revert = true;
-    })
     # arrow-cpp 24 dropped the `arrow/util/span.h` header and switched its
     # parquet encryption API from `arrow::util::span` to `std::span`.
     # Must be applied on top of the s3select patch above, which introduces the
@@ -43,5 +33,11 @@ applyPatches (final: {
     ./patches/0001-mgr-python-interpreter.patch
     # allows bin/dbstore-bin to compile without linker errors due to missing expat
     ./patches/0003-dbstore-expat.patch
+    # `./autogen.sh` of the vendored qatlib and QATzip fails with `exec format error`
+    # because the shebang is below the license header.
+    # Fixed upstream; remove when this patch fails to apply.
+    # See: https://tracker.ceph.com/issues/81385
+    # See: https://github.com/ceph/ceph/pull/73061
+    ./patches/0004-qat-autogen-shebang.patch
   ];
 })
