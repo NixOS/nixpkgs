@@ -11,25 +11,25 @@
     }
   },
   "aarch64-linux": {
-    "version": "23.26.3.0.0",
-    "directory": "2326300",
+    "version": "23.26.4.0.0",
+    "directory": "2326400",
     "hashes": {
-      "basic": "sha256-dLB0TXvxvij2DD2QoTXl2arKGUa6sK3MDI21+8LMl1g=",
-      "sdk": "sha256-X7A7RhXYbKemRTpBozT8J9ysbYOd1+VBF3MiqvOe4xg=",
-      "sqlplus": "sha256-w8Dvwac0ZV5ITHHzFkYEGKBrpapa8AxV0e2h2racbak=",
-      "tools": "sha256-0lzr6PX96IYT7PKcvI99OpMB8SxHPAseFvzTFlLLrME=",
-      "odbc": "sha256-YlsMBi3tSjyGdjb5QRsny58aGJmWvxDKCxbw4UIEbEQ="
+      "basic": "sha256-aI30Jsq7TllF6ECa4CKs0WuS/wZYLI2Try9B4/uaQvM=",
+      "sdk": "sha256-ineXpcxyOS60U/KN1TKa4jEzzv1RkVFHz2YxgSaEp7I=",
+      "sqlplus": "sha256-cSeD8kpr9y40mP8sDNyec2kUFr35A0TY6XtMjmFiJ+c=",
+      "tools": "sha256-397uKbAyux2os37e2OhzwrVvrxKHWm/6RGVEM3tl8jY=",
+      "odbc": "sha256-cmWB1MH5LmiS5oOg9aQzL5pK/jHsj+bnn29Mu6y/i48="
     }
   },
   "x86_64-linux": {
-    "version": "23.26.3.0.0",
-    "directory": "2326300",
+    "version": "23.26.4.0.0",
+    "directory": "2326400",
     "hashes": {
-      "basic": "sha256-/OSFNhMykn+DKOpLaNmJaMaw6hJOYkcN6MnQzviAEw4=",
-      "sdk": "sha256-esE1h7qKc0rnzAbPQnU7v9vmmDna+HvVk1pJyD3szP0=",
-      "sqlplus": "sha256-ZXDXk5hWdnzbtUm1HhQj1qX1MUPFfDDAFWaXBvZaYyo=",
-      "tools": "sha256-aAtubzt64Tly1MOVmz3E870HWgvtUeXVshkV1VNfNQs=",
-      "odbc": "sha256-Jjz8d7uruWSEcg7fF+g6+5bJF9lvBTrnYhhvCrzm9Aw="
+      "basic": "sha256-yrWao7QRs7UImORW+pqr/kjWfiXLwbsjMDgAOQzn3iY=",
+      "sdk": "sha256-dbe3LDeGk+yo8+BQLy0DVhK67EO+HnV2CDnMh8Q3+wE=",
+      "sqlplus": "sha256-PNQyGcuq1Zu3XO4Y568HStpwdEbxM5e2+T7H5MqHBJA=",
+      "tools": "sha256-leYN7cr2Sk68Td7XP1YUxJSowX+ics08BIXg0T6CUAA=",
+      "odbc": "sha256-dmUnxK9EaGKYYpfjqhae1CWCuKtVoX1LkBKA6BT3DYo="
     }
   }
 }
