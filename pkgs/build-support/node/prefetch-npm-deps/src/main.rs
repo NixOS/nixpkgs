@@ -251,7 +251,9 @@ fn fixup_lockfile(
                     } else if let Some(cache_hashes) = cache {
                         let cache_hash = cache_hashes
                             .get(resolved)
-                            .expect("dependency should have a hash");
+                            .unwrap_or_else(|| {
+                                panic!("dependency '{resolved}' should have a hash")
+                            });
 
                         if integrity != cache_hash {
                             fixed = true;
@@ -302,7 +304,9 @@ fn fixup_v1_deps(
             } else if let Some(cache_hashes) = cache {
                 let cache_hash = cache_hashes
                     .get(resolved)
-                    .expect("dependency should have a hash");
+                    .unwrap_or_else(|| {
+                        panic!("dependency '{resolved}' should have a hash")
+                    });
 
                 if integrity != cache_hash {
                     *fixed = true;
