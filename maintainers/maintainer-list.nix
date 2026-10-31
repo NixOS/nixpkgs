@@ -32164,6 +32164,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xela-zone = {
+    name = "Xela";
+    github = "xela-zone";
+    githubId = 4016295;
+    email = "git@xela.zone";
+  };
   xelacodes = {
     name = "Alex";
     github = "itzTheMeow";
