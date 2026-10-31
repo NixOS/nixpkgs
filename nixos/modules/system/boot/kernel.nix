@@ -92,9 +92,9 @@ in
         (as a convenience), and returns an attribute set containing at
         the very least an attribute {var}`kernel`.
         Additional attributes may be needed depending on your
-        configuration.  For instance, if you use the NVIDIA X driver,
+        configuration. For instance, if you use the NVIDIA X driver,
         then it also needs to contain an attribute
-        {var}`nvidia_x11`.
+        {var}`nvidiaPackages`.
 
         Please note that we strictly support kernel versions that are
         maintained by the Linux developers only. More information on the
@@ -193,7 +193,7 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
+      example = literalExpression "[ config.boot.kernelPackages.nvidiaPackages.production.open ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
