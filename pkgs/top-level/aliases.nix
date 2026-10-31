@@ -1451,6 +1451,8 @@ mapAliases {
   libfpx = throw "libfpx has been removed as it was unmaintained in Nixpkgs and had known vulnerabilities"; # Added 2025-05-20
   libFS = libfs; # Added 2026-02-04
   libgadu = throw "'libgadu' has been removed as upstream is unmaintained and has no dependents or maintainers in Nixpkgs"; # Added 2025-05-17
+  libgda5 = throw "'libgda5' has been removed as it was unmaintained upstream, which is problematic for a database client library"; # Added 2026-10-25
+  libgda6 = throw "'libgda6' has been removed as it was unmaintained upstream, which is problematic for a database client library"; # Added 2026-10-25
   libgda = throw "'libgda' has been renamed to/replaced by 'libgda5'"; # Converted to throw 2025-10-27
   libgdamm = throw "'libgdamm' has been removed due to being archived upstream."; # Added 2026-10-24
   libgdata = throw "'libgdata' has been removed due to being archived upstream."; # Added 2026-05-29
@@ -2212,6 +2214,7 @@ mapAliases {
   polyml56 = throw "'polyml56' has been deprecated in favor of polyml"; # Added 2026-06-01
   polyml57 = throw "'polyml57' has been deprecated in favor of polyml"; # Added 2026-06-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
+  pomodoro-gtk = throw "'pomodoro-gtk' has been removed as it was unmaintained upstream and depended on the unmaintained libgda database client library"; # Added 2026-10-25
   popcorntime = throw "'popcorntime' has been removed since the upstream project has been forked"; # Added 2026-09-03
   poppler_utils = throw "'poppler_utils' has been renamed to/replaced by 'poppler-utils'"; # Converted to throw 2025-10-27
   popura = throw "'popura' is abandoned upstream and in nixpkgs and has been removed"; # Added 2026-01-15
@@ -2446,6 +2449,7 @@ mapAliases {
   semantik = throw "'semantik' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   semiphemeral = throw "'semiphemeral' has been removed as it is archived upstream"; # Added 2025-11-06
   seq24 = throw "'seq24' has been removed as it was unmaintained upsteam and depended on the deprecated GTK 2 engine."; # Added 2026-08-03
+  sequeler = throw "'sequeler' has been removed as it depended on the unmaintained libgda database client library"; # Added 2026-10-25
   sequoia = throw "'sequoia' has been renamed to/replaced by 'sequoia-sq'"; # Converted to throw 2025-10-27
   sequoia-sqop = sequoia-sop; # Added 2026-01-23
   serverless = throw "'serverless' has been removed because version 3.x is unmaintained upstream and vulnerable, and version 4.x lacks a suitable binary or source download."; # Added 2025-11-22
