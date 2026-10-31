@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   autoPatchelfHook,
+  cacert,
   libxcrypt-legacy,
   makeBinaryWrapper,
   openssl,
@@ -90,6 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     popd
+  '';
+
+  preFixup = ''
+    rm $out/lib/pgsql-tools/_internal/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/lib/pgsql-tools/_internal/certifi/cacert.pem
   '';
 
   dontAutoPatchelf = true;
