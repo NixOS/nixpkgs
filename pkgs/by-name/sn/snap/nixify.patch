@@ -1,0 +1,267 @@
+diff --git a/cmd/Makefile.am b/cmd/Makefile.am
+index b1923adf44..f17cce66d8 100644
+--- a/cmd/Makefile.am
++++ b/cmd/Makefile.am
+@@ -98,7 +98,7 @@ fmt:: $(filter-out $(addprefix %,$(new_format)),$(foreach dir,$(subdirs),$(wildc
+ # installing a fresh copy of snap confine and the appropriate apparmor profile.
+ .PHONY: hack
+ hack: snap-confine/snap-confine-debug snap-confine/snap-confine.apparmor snap-update-ns/snap-update-ns snap-seccomp/snap-seccomp snap-discard-ns/snap-discard-ns snap-device-helper/snap-device-helper snapd-apparmor/snapd-apparmor
+-	sudo install -D -m 4755 snap-confine/snap-confine-debug $(DESTDIR)$(libexecdir)/snap-confine
++	sudo install -D -m 755 snap-confine/snap-confine-debug $(DESTDIR)$(libexecdir)/snap-confine
+ 	if [ -d $(DESTDIR)$(APPARMOR_SYSCONFIG) ]; then sudo install -m 644 snap-confine/snap-confine.apparmor $(DESTDIR)$(APPARMOR_SYSCONFIG)/$(patsubst .%,%,$(subst /,.,$(libexecdir))).snap-confine.real; fi
+ 	sudo install -d -m 755 $(DESTDIR)$(snapdstatedir)/apparmor/snap-confine/
+ 	if [ "$$(command -v apparmor_parser)" != "" ]; then sudo apparmor_parser -r snap-confine/snap-confine.apparmor; fi
+@@ -418,7 +418,7 @@ endif
+ 
+ install-exec-hook:
+ # Ensure that snap-confine is u+s (setuid)
+-	chmod 4755 $(DESTDIR)$(libexecdir)/snap-confine
++	chmod 755 $(DESTDIR)$(libexecdir)/snap-confine
+ 
+ ##
+ ## snap-mgmt
+diff --git a/cmd/configure.ac b/cmd/configure.ac
+index 9df43ac860..78c8f428b3 100644
+--- a/cmd/configure.ac
++++ b/cmd/configure.ac
+@@ -232,9 +232,6 @@ fi
+ dnl FIXME: get this via something like pkgconf once it is defined there
+ dnl FIXME: Use PKG_CHECK_VAR when we have dropped Trusty (14.04)
+ AC_ARG_VAR([SYSTEMD_PREFIX], [value for systemd prefix (overriding pkg-config)])
+-if test -z "${SYSTEMD_PREFIX}"; then
+-  SYSTEMD_PREFIX="$($PKG_CONFIG --variable=prefix systemd)"
+-fi
+ if test -n "${SYSTEMD_PREFIX}"; then
+   SYSTEMD_SYSTEM_ENV_GENERATOR_DIR="${SYSTEMD_PREFIX}/lib/systemd/system-environment-generators"
+ else
+diff --git a/cmd/libsnap-confine-private/utils.c b/cmd/libsnap-confine-private/utils.c
+index f39e498a65..7288297508 100644
+--- a/cmd/libsnap-confine-private/utils.c
++++ b/cmd/libsnap-confine-private/utils.c
+@@ -242,7 +242,7 @@ int sc_nonfatal_mkpath(const char *const path, mode_t mode)
+ bool sc_is_expected_path(const char *path)
+ {
+ 	const char *expected_path_re =
+-	    "^((/var/lib/snapd)?/snap/(snapd|core)/x?[0-9]+/usr/lib|/usr/lib(exec)?)/snapd/snap-confine$";
++	    "^((/var/lib/snapd)?/snap/(snapd|core)/x?[0-9]+/usr/lib|(/usr|@out@)/lib(exec)?)/snapd/snap-confine(-unwrapped)?$";
+ 	regex_t re;
+ 	if (regcomp(&re, expected_path_re, REG_EXTENDED | REG_NOSUB) != 0)
+ 		die("can not compile regex %s", expected_path_re);
+diff --git a/cmd/snap-confine/mount-support.c b/cmd/snap-confine/mount-support.c
+index 513c6794d2..706fedbbe4 100644
+--- a/cmd/snap-confine/mount-support.c
++++ b/cmd/snap-confine/mount-support.c
+@@ -976,7 +976,7 @@ void sc_populate_mount_ns(struct sc_apparmor *apparmor, int snap_update_ns_fd,
+ 			{.path = "/run"},	// to get /run with sockets and what not
+ 			{.path = "/lib/modules",.is_optional = true},	// access to the modules of the running kernel
+ 			{.path = "/lib/firmware",.is_optional = true},	// access to the firmware of the running kernel
+-			{.path = "/usr/src"},	// FIXME: move to SecurityMounts in system-trace interface
++			{.path = "/usr/src",.is_optional = true},	// FIXME: move to SecurityMounts in system-trace interface
+ 			{.path = "/var/log"},	// FIXME: move to SecurityMounts in log-observe interface
+ #ifdef MERGED_USR
+ 			{.path = "/run/media",.is_bidirectional = true,.altpath = "/media"},	// access to the users removable devices
+diff --git a/cmd/snap-confine/seccomp-support.c b/cmd/snap-confine/seccomp-support.c
+index 5bf3338819..1eea7ea22e 100644
+--- a/cmd/snap-confine/seccomp-support.c
++++ b/cmd/snap-confine/seccomp-support.c
+@@ -83,10 +83,6 @@ static void validate_path_has_strict_perms(const char *path)
+ 		die("%s not root-owned %i:%i", path, stat_buf.st_uid,
+ 		    stat_buf.st_gid);
+ 	}
+-
+-	if (stat_buf.st_mode & S_IWOTH) {
+-		die("%s has 'other' write %o", path, stat_buf.st_mode);
+-	}
+ }
+ 
+ static void validate_bpfpath_is_safe(const char *path)
+diff --git a/cmd/snap-confine/snap-confine.c b/cmd/snap-confine/snap-confine.c
+index 6392657054..8dfb4a89e7 100644
+--- a/cmd/snap-confine/snap-confine.c
++++ b/cmd/snap-confine/snap-confine.c
+@@ -436,7 +436,7 @@ int main(int argc, char **argv)
+ 		 * one, which definitely doesn't run in a snap-specific namespace, has a
+ 		 * predictable PID and is long lived.
+ 		 */
+-		sc_reassociate_with_pid1_mount_ns();
++		// NIX PATCH: Don't try to escape the FHS environment
+ 		// Do global initialization:
+ 		int global_lock_fd = sc_lock_global();
+ 		// Ensure that "/" or "/snap" is mounted with the
+diff --git a/dirs/dirs.go b/dirs/dirs.go
+index f1d441ee33..4e8bc24513 100644
+--- a/dirs/dirs.go
++++ b/dirs/dirs.go
+@@ -378,7 +378,7 @@ func SnapSystemdConfDirUnder(rootdir string) string {
+ // SnapServicesDirUnder returns the path to the systemd services
+ // conf dir under rootdir.
+ func SnapServicesDirUnder(rootdir string) string {
+-	return filepath.Join(rootdir, "/etc/systemd/system")
++	return filepath.Join(rootdir, "/var/lib/snapd/nix-systemd-system")
+ }
+ 
+ func SnapRuntimeServicesDirUnder(rootdir string) string {
+@@ -533,7 +533,7 @@ func SetRootDir(rootdir string) {
+ 	SnapSystemdDir = filepath.Join(rootdir, "/etc/systemd")
+ 	SnapSystemdRunDir = filepath.Join(rootdir, "/run/systemd")
+ 
+-	SnapDBusSystemPolicyDir = filepath.Join(rootdir, "/etc/dbus-1/system.d")
++	SnapDBusSystemPolicyDir = filepath.Join(rootdir, "/var/lib/snapd/nix-dbus-system")
+ 	SnapDBusSessionPolicyDir = filepath.Join(rootdir, "/etc/dbus-1/session.d")
+ 	// Use 'dbus-1/services' and `dbus-1/system-services' to mirror
+ 	// '/usr/share/dbus-1' hierarchy.
+@@ -544,7 +544,7 @@ func SetRootDir(rootdir string) {
+ 
+ 	CloudInstanceDataFile = filepath.Join(rootdir, "/run/cloud-init/instance-data.json")
+ 
+-	SnapUdevRulesDir = filepath.Join(rootdir, "/etc/udev/rules.d")
++	SnapUdevRulesDir = filepath.Join(rootdir, "/var/lib/snapd/nix-udev-rules")
+ 
+ 	SnapKModModulesDir = filepath.Join(rootdir, "/etc/modules-load.d/")
+ 	SnapKModModprobeDir = filepath.Join(rootdir, "/etc/modprobe.d/")
+@@ -589,7 +589,7 @@ func SetRootDir(rootdir string) {
+ 		// both RHEL and CentOS list "fedora" in ID_LIKE
+ 		DistroLibExecDir = filepath.Join(rootdir, "/usr/libexec/snapd")
+ 	} else {
+-		DistroLibExecDir = filepath.Join(rootdir, "/usr/lib/snapd")
++		DistroLibExecDir = filepath.Join(rootdir, "@out@/libexec/snapd")
+ 	}
+ 
+ 	XdgRuntimeDirBase = filepath.Join(rootdir, "/run/user")
+diff --git a/interfaces/system_key.go b/interfaces/system_key.go
+index d6595154b3..52df93e914 100644
+--- a/interfaces/system_key.go
++++ b/interfaces/system_key.go
+@@ -107,7 +107,7 @@ func generateSystemKey() (*systemKey, error) {
+ 	sk := &systemKey{
+ 		Version: systemKeyVersion,
+ 	}
+-	snapdPath, err := snapdtool.InternalToolPath("snapd")
++	snapdPath, err := snapdtool.InternalToolPath("snapd-unwrapped")
+ 	if err != nil {
+ 		return nil, err
+ 	}
+@@ -274,7 +274,7 @@ func SystemKeyMismatch(extraData SystemKeyExtraData) (bool, error) {
+ 	if mockedSystemKey == nil {
+ 		if exe, err := os.Readlink("/proc/self/exe"); err == nil {
+ 			// detect running local local builds
+-			if !strings.HasPrefix(exe, "/usr") && !strings.HasPrefix(exe, dirs.SnapMountDir) {
++			if !strings.HasPrefix(exe, "/usr") && !strings.HasPrefix(exe, dirs.SnapMountDir) && !strings.HasPrefix(exe, "@out@") {
+ 				logger.Noticef("running from non-installed location %s: ignoring system-key", exe)
+ 				return false, ErrSystemKeyVersion
+ 			}
+diff --git a/snap/info.go b/snap/info.go
+index 96b7356e30..f481e94f8e 100644
+--- a/snap/info.go
++++ b/snap/info.go
+@@ -1501,9 +1501,9 @@ func (app *AppInfo) launcherCommand(command string) string {
+ 		command = " " + command
+ 	}
+ 	if app.Name == app.Snap.SnapName() {
+-		return fmt.Sprintf("/usr/bin/snap run%s %s", command, app.Snap.InstanceName())
++		return fmt.Sprintf("@out@/bin/snap run%s %s", command, app.Snap.InstanceName())
+ 	}
+-	return fmt.Sprintf("/usr/bin/snap run%s %s.%s", command, app.Snap.InstanceName(), app.Name)
++	return fmt.Sprintf("@out@/bin/snap run%s %s.%s", command, app.Snap.InstanceName(), app.Name)
+ }
+ 
+ // LauncherCommand returns the launcher command line to use when invoking the
+diff --git a/systemd/systemd.go b/systemd/systemd.go
+index a6ad62a771..e5ea856068 100644
+--- a/systemd/systemd.go
++++ b/systemd/systemd.go
+@@ -616,6 +616,14 @@ func (s *systemd) EnableNoReload(serviceNames []string) error {
+ 	if len(serviceNames) == 0 {
+ 		return nil
+ 	}
++	for _, serviceName := range serviceNames {
++		servicePath := filepath.Join(dirs.SnapServicesDir, serviceName)
++		serviceRuntimePath := filepath.Join(dirs.SnapRuntimeServicesDir, serviceName)
++		os.Remove(serviceRuntimePath)
++		if err := os.Symlink(servicePath, serviceRuntimePath); err != nil {
++			return err
++		}
++	}
+ 	var args []string
+ 	if s.rootDir != "" {
+ 		// passing root already implies no reload
+@@ -623,6 +631,7 @@ func (s *systemd) EnableNoReload(serviceNames []string) error {
+ 	} else {
+ 		args = append(args, "--no-reload")
+ 	}
++	args = append(args, "--runtime")
+ 	args = append(args, "enable")
+ 	args = append(args, serviceNames...)
+ 	_, err := s.systemctl(args...)
+@@ -643,6 +652,14 @@ func (s *systemd) DisableNoReload(serviceNames []string) error {
+ 	if len(serviceNames) == 0 {
+ 		return nil
+ 	}
++	for _, serviceName := range serviceNames {
++		servicePath := filepath.Join(dirs.SnapServicesDir, serviceName)
++		serviceRuntimePath := filepath.Join(dirs.SnapRuntimeServicesDir, serviceName)
++		os.Remove(serviceRuntimePath)
++		if err := os.Symlink(servicePath, serviceRuntimePath); err != nil {
++			return err
++		}
++	}
+ 	var args []string
+ 	if s.rootDir != "" {
+ 		// passing root already implies no reload
+@@ -650,6 +667,7 @@ func (s *systemd) DisableNoReload(serviceNames []string) error {
+ 	} else {
+ 		args = append(args, "--no-reload")
+ 	}
++	args = append(args, "--runtime")
+ 	args = append(args, "disable")
+ 	args = append(args, serviceNames...)
+ 	_, err := s.systemctl(args...)
+diff --git a/usersession/userd/launcher.go b/usersession/userd/launcher.go
+index 830ed9995c..843f628730 100644
+--- a/usersession/userd/launcher.go
++++ b/usersession/userd/launcher.go
+@@ -206,7 +206,7 @@ func (s *Launcher) OpenURL(addr string, sender dbus.Sender) *dbus.Error {
+ 	// this code must not add directories from the snap
+ 	// to XDG_DATA_DIRS and similar, see
+ 	// https://ubuntu.com/security/CVE-2020-11934
+-	if err := exec.Command("xdg-open", addr).Run(); err != nil {
++	if err := exec.Command("@out@/libexec/xdg-open", addr).Run(); err != nil {
+ 		return dbus.MakeFailedError(fmt.Errorf("cannot open supplied URL"))
+ 	}
+ 
+@@ -292,7 +292,7 @@ func (s *Launcher) OpenFile(parentWindow string, clientFd dbus.UnixFD, sender db
+ 		return dbus.MakeFailedError(fmt.Errorf("permission denied"))
+ 	}
+ 
+-	if err = exec.Command("xdg-open", filename).Run(); err != nil {
++	if err = exec.Command("@out@/libexec/xdg-open", filename).Run(); err != nil {
+ 		return dbus.MakeFailedError(fmt.Errorf("cannot open supplied URL"))
+ 	}
+ 
+diff --git a/wrappers/binaries.go b/wrappers/binaries.go
+index 5f88b3aff8..ca2c187b87 100644
+--- a/wrappers/binaries.go
++++ b/wrappers/binaries.go
+@@ -220,7 +220,7 @@ func EnsureSnapBinaries(s *snap.Info) (err error) {
+ 		}
+ 
+ 		appBase := filepath.Base(app.WrapperPath())
+-		binariesContent[appBase] = &osutil.SymlinkFileState{Target: "/usr/bin/snap"}
++		binariesContent[appBase] = &osutil.SymlinkFileState{Target: "@out@/bin/snap"}
+ 
+ 		if completionVariant != noCompletion && app.Completer != "" {
+ 			completersContent[appBase] = &osutil.SymlinkFileState{Target: completeSh}
+diff --git a/wrappers/internal/service_unit_gen.go b/wrappers/internal/service_unit_gen.go
+index 7f066942fb..4a014ca981 100644
+--- a/wrappers/internal/service_unit_gen.go
++++ b/wrappers/internal/service_unit_gen.go
+@@ -157,6 +157,8 @@ TimeoutStopSec={{.StopTimeout.Seconds}}
+ TimeoutStartSec={{.StartTimeout.Seconds}}
+ {{- end}}
+ Type={{.App.Daemon}}
++# NIX PATCH: This is needed because nixpkgs's chrootenv runs the code in a child process
++NotifyAccess=all
+ {{- if .Remain}}
+ RemainAfterExit={{.Remain}}
+ {{- end}}
+
