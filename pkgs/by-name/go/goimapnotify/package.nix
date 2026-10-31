@@ -3,6 +3,7 @@
   fetchFromGitLab,
   lib,
   runtimeShell,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,6 +24,12 @@ buildGoModule (finalAttrs: {
       substituteInPlace $f --replace-fail '"sh"' '"${runtimeShell}"'
     done
   '';
+
+  ldflags = [ "-X main.gittag=${finalAttrs.version}" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   meta = {
     description = "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
