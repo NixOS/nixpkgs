@@ -9,9 +9,6 @@ buildDartApplication (finalAttrs: {
   pname = "dart_frog_cli";
   version = "1.2.14";
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "dart-frog-dev";
     repo = "dart_frog";

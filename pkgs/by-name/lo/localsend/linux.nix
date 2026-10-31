@@ -23,8 +23,6 @@
 flutter341.buildFlutterApplication (finalAttrs: {
   inherit pname version;
 
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "localsend";
     repo = "localsend";
@@ -83,9 +81,12 @@ flutter341.buildFlutterApplication (finalAttrs: {
     done
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/localsend/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/localsend/lib"
+  ];
 
   desktopItems = [
     (makeDesktopItem {

@@ -64,6 +64,8 @@ let
       writableTmpDirAsHomeHook
     ];
 
+    strictDeps = true;
+
     env = {
       NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -118,6 +120,8 @@ let
       find . -name "*.pyc" -delete
       cp --recursive sdk $out
     '';
+
+    __structuredAttrs = true;
   });
 in
 dart-bin.overrideAttrs (oldAttrs: {

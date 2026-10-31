@@ -151,7 +151,11 @@ flutter347.buildFlutterApplication {
   '';
 
   # without this, only the splash screen will be shown
-  extraWrapProgramArgs = "--set FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR $out/app/intiface-central/lib";
+  extraWrapProgramArgs = [
+    "--set"
+    "FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR"
+    "$out/app/intiface-central/lib"
+  ];
 
   postInstall = ''
     install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/icons/hicolor/512x512/apps/intiface-central.png

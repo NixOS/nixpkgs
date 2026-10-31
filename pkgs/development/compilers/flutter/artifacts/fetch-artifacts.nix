@@ -49,18 +49,24 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
       unzip
     ];
 
-    NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
-    NIX_FLUTTER_OPERATING_SYSTEM =
-      {
-        "x86_64-linux" = "linux";
-        "aarch64-linux" = "linux";
-        "aarch64-darwin" = "macos";
-      }
-      .${systemPlatform};
+    strictDeps = true;
+
+    env = {
+      NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
+      NIX_FLUTTER_OPERATING_SYSTEM =
+        {
+          "x86_64-linux" = "linux";
+          "aarch64-linux" = "linux";
+          "aarch64-darwin" = "macos";
+        }
+        .${systemPlatform};
+    };
 
     outputHash = hash;
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
+
+    __structuredAttrs = true;
 
     passthru = {
       inherit flutterPlatform;
