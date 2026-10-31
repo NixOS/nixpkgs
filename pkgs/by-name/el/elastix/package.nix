@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/SuperElastix/elastix/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "elastix";
-    platforms = lib.platforms.x86_64; # libitkpng linker issues with ITK 5.1
+    platforms = lib.platforms.linux; # libitkpng linker issues with ITK 5.1
     license = lib.licenses.asl20;
   };
 })
