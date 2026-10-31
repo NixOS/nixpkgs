@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libpulse";
-  version = "0.7";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "xdegaye";
     repo = "libpulse";
     tag = finalAttrs.version;
-    hash = "sha256-JxWJaD/9WxvF/lajWWot10/urqGktr4JGGOJRNhbPjk=";
+    hash = "sha256-y5X7Qld/dLwQYfzEqNYn9IiY/JwJ1TUIX0643m564LE=";
   };
 
   postPatch = ''
