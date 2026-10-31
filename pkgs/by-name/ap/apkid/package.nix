@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "apkid";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sX9HQUW+oB7vmlz3I0I/NwqOVGqR8j1WZXtDCISMkxY=";
+    hash = "sha256-Xh/P39tqz0Huj+qy5iMMMtVFkHhXOU9+yELueIxm2ns=";
   };
 
   postPatch = ''
