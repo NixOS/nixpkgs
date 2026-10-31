@@ -75,9 +75,13 @@ in
     systemd.services.shellhub-agent = {
       description = "ShellHub Agent";
 
+      restartIfChanged = false;
+
       wantedBy = [ "multi-user.target" ];
-      requires = [ "local-fs.target" ];
-      wants = [ "network-online.target" ];
+      wants = [
+        "local-fs.target"
+        "network-online.target"
+      ];
       after = [
         "local-fs.target"
         "network.target"
