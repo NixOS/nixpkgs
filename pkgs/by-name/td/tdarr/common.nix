@@ -103,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.87.01";
+  version = "3.04.00";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -143,13 +143,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "#!/usr/bin/perl" "#!${perl}/bin/perl"
 
     # * exiftool-vendored checks for /usr/bin/perl existence; when missing (NixOS), it sets ignoreShebang=true which breaks spawn by using shell:true with an env lacking PATH. Since we patched the shebang, force ignoreShebang to false.
-    substituteInPlace node_modules/exiftool-vendored/dist/ExifTool.js \
+    substituteInPlace node_modules/exiftool-vendored/index.js \
       --replace-fail '!_fs.existsSync("/usr/bin/perl")' 'false'
 
     # * Substitute in nixpkgs version of pnpm as autopatchelf breaks the bundled copy see: https://github.com/NixOS/nixpkgs/issues/544841
     rm ./runtime/pnpm
     makeWrapper ${pnpm_10}/bin/pnpm ./runtime/pnpm \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
+
+    # * replace in-built node runtime with vendored node_js
+    rm ./runtime/${componentName}_Runtime
+    ln -s ${lib.getExe nodejs} ./runtime/${componentName}_Runtime
   '';
 
   preInstall = ''
@@ -202,10 +206,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = {
-      command = [ ./update-hashes.sh ];
-      supportedFeatures = [ "commit" ];
-    };
     tests.nixos = nixosTests.tdarr;
   }
   // passthru;
