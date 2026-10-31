@@ -49,7 +49,10 @@ if ($len == 0) {
         if ($ENV{"NIX_AUTO_RUN_INTERACTIVE"} // "") {
             while (1) {
                 print STDERR "'$program' from package '$package' will be run, confirm? [yn]: ";
-                chomp(my $confirm = <STDIN>);
+                my $confirm = <STDIN>;
+                # EOF (Ctrl-D, closed stdin) would re-prompt forever
+                exit 127 unless defined $confirm;
+                chomp $confirm;
                 if (lc $confirm eq "n") {
                     exit 0;
                 } elsif (lc $confirm eq "y") {
@@ -77,7 +80,10 @@ EOF
             print STDERR "Your choice [1-${len}]: ";
             # 0 can be invalid user input like non-number string
             # so we start from 1
-            $choice = <STDIN> + 0;
+            my $line = <STDIN>;
+            # EOF (Ctrl-D, closed stdin) would re-prompt forever
+            exit 127 unless defined $line;
+            $choice = $line + 0;
             if (1 <= $choice && $choice <= $len) {
                 exec("nix-shell", "-p", @$res[$choice - 1]->{package},
                     "--run", shell_quote("exec", @ARGV));

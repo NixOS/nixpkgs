@@ -455,6 +455,7 @@ in
   coder = runTest ./coder.nix;
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
+  command-not-found-auto-run = runTest ./command-not-found-auto-run.nix;
   connman = runTest ./connman.nix;
   console = runTest ./console.nix;
   console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
