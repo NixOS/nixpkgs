@@ -1641,30 +1641,46 @@ rec {
     :::
   */
   toCamelCase =
+    let
+      getFirstCharacter = substring 0 1;
+      removeFirstCharacter = substring 1 (-1);
+
+      # separator followed by multiple capitals, a single char, or end of string
+      case1 = "[[:space:]_-]+([A-Z][A-Z]+|.|$)";
+      # string of capitals at the beginning
+      case2 = "^([A-Z]+)";
+      # capital followed by more capitals
+      case3 = "([A-Z][A-Z]+)";
+      splitOnSeparators = split "${case1}|${case2}|${case3}";
+
+      combineParts = builtins.foldl' (
+        acc: part:
+        if isString part then
+          acc + part
+        else if head part != null then
+          if stringLength (head part) <= 1 then
+            # capitalize the character after the separator
+            # foo-bar -> fooBar
+            acc + toUpper (head part)
+          else
+            # after separator, lowercase all but the first capital
+            # foo-BAR -> fooBar
+            acc + getFirstCharacter (head part) + toLower (removeFirstCharacter (head part))
+        else if elemAt part 1 != null then
+          # lowercase all capitals at the start of string
+          # FOoBar -> fooBar
+          acc + toLower (elemAt part 1)
+        else
+          # lowercase all but the first capital
+          # fooBAr -> fooBar
+          acc + getFirstCharacter (elemAt part 2) + toLower (removeFirstCharacter (elemAt part 2))
+      ) "";
+    in
     str:
     if !isString str then
       throw "toCamelCase does only accepts string values, but got ${typeOf str}"
     else
-      let
-        separators = splitStringBy (
-          prev: curr:
-          elem curr [
-            "-"
-            "_"
-            " "
-          ]
-        ) false str;
-
-        parts = lib.flatten (
-          map (splitStringBy (
-            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
-          ) true) separators
-        );
-
-        first = if length parts > 0 then toLower (head parts) else "";
-        rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
-      in
-      concatStrings ([ first ] ++ rest);
+      combineParts (splitOnSeparators str);
 
   /**
     Appends string context from string like object `src` to `target`.
