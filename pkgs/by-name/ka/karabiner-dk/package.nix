@@ -12,14 +12,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karabiner-dk";
-  sourceVersion = "6.6.0";
+  sourceVersion = "6.14.0";
   version = lib.defaultTo finalAttrs.sourceVersion driver-version;
 
   src = fetchFromGitHub {
     owner = "pqrs-org";
     repo = "Karabiner-DriverKit-VirtualHIDDevice";
     tag = "v${finalAttrs.sourceVersion}";
-    hash = "sha256-e4hdP70tb3qyrcplZbDjMlPj4OnX6EdBBJWAgjZCtuM=";
+    hash = "sha256-v/BIsyf4bYbXcxeUmVW5tUvnDsJcHqzinm9CBlhJ9DA=";
   };
 
   nativeBuildInputs = [
