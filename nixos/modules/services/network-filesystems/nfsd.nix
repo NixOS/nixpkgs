@@ -159,12 +159,16 @@ in
       restartTriggers = [ exports ];
       serviceConfig.StateDirectory = [ "nfs" ];
 
-      preStart = lib.optionalString cfg.createMountPoints ''
-        # create export directories:
-        # skip comments, take first col which may either be a quoted
-        # "foo bar" or just foo (-> man export)
-        sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-        | xargs -d '\n' mkdir -p
+      preStart = ''
+        touch /var/lib/nfs/etab /var/lib/nfs/rmtab
+
+        ${lib.optionalString cfg.createMountPoints ''
+          # create export directories:
+          # skip comments, take first col which may either be a quoted
+          # "foo bar" or just foo (-> man export)
+          sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+          | xargs -d '\n' mkdir -p
+        ''}
       '';
     };
 
