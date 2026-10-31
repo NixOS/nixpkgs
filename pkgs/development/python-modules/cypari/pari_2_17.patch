@@ -1,0 +1,431 @@
+diff --git a/autogen/args.py b/autogen/args.py
+index 8b628a7..4c3fe79 100644
+--- a/autogen/args.py
++++ b/autogen/args.py
+@@ -308,7 +308,7 @@ class PariArgumentPrec(PariArgumentClass):
+     def get_argument_name(self, namesiter):
+         return "precision"
+     def c_convert_code(self):
+-        s = "        {name} = prec_bits_to_words({name})\n"
++        s = "        {name} = prec_bits_to_pari({name})\n"
+         return s.format(name=self.name)
+ 
+ class PariArgumentBitprec(PariArgumentClass):
+diff --git a/autogen/generator.py b/autogen/generator.py
+index a1824a5..57c7bdb 100644
+--- a/autogen/generator.py
++++ b/autogen/generator.py
+@@ -159,7 +159,7 @@ class PariFunctionGenerator(object):
+                     cdef GEN _tech = NULL
+                     if _have_tech:
+                         _tech = (<Gen>tech).g
+-                    precision = prec_bits_to_words(precision)
++                    precision = prec_bits_to_pari(precision)
+                     cdef GEN _ret = bnfinit0(_P, flag, _tech, precision)
+                     return new_gen(_ret)
+             <BLANKLINE>
+diff --git a/cypari/_pari.pxd b/cypari/_pari.pxd
+index ce9d301..85e80e9 100644
+--- a/cypari/_pari.pxd
++++ b/cypari/_pari.pxd
+@@ -20,7 +20,7 @@ cdef Gen new_gen_from_double(double)
+ cdef Gen new_t_POL_from_int_star(int* vals, unsigned long length, long varnum)
+ 
+ # pari_instance.pyx
+-cpdef long prec_bits_to_words(unsigned long prec_in_bits)
++cpdef long prec_bits_to_pari(unsigned long prec_in_bits)
+ cpdef long prec_words_to_bits(long prec_in_words)
+ cpdef long default_bitprec(long bitprec=*)
+ 
+diff --git a/cypari/convert.pyx b/cypari/convert.pyx
+index 917026f..69f52b5 100644
+--- a/cypari/convert.pyx
++++ b/cypari/convert.pyx
+@@ -382,10 +382,10 @@ cdef Gen new_gen_from_double(double x):
+         g = real_0_bit(-53)
+     else:
+         g = dbltor(x)
+-    if prec - 2 == 64 / BITS_IN_LONG:
++    if prec == 64:
+         return new_gen(g)
+     else:
+-        G = bitprecision0(g, (prec - 2)*BITS_IN_LONG)
++        G = bitprecision0(g, prec2nbits(prec))
+         return new_gen(G)
+ 
+ cdef Gen new_t_COMPLEX_from_double(double re, double im):
+@@ -399,10 +399,10 @@ cdef Gen new_t_COMPLEX_from_double(double re, double im):
+         set_gel(g, 2, gen_0)
+     else:
+         set_gel(g, 2, dbltor(im))
+-    if prec - 2 == 64 / BITS_IN_LONG:
++    if prec == 64:
+         return new_gen(g)
+     else:
+-        G = bitprecision0(g, (prec - 2)*BITS_IN_LONG)
++        G = bitprecision0(g, prec2nbits(prec))
+         return new_gen(G)
+ 
+ 
+diff --git a/cypari/gen.pyx b/cypari/gen.pyx
+index 0cfd7e2..e647654 100644
+--- a/cypari/gen.pyx
++++ b/cypari/gen.pyx
+@@ -78,8 +78,7 @@ from .paridecl cimport *
+ from .paripriv cimport *
+ from .convert cimport (integer_to_gen, gen_to_integer,
+                        new_gen_from_double, new_t_COMPLEX_from_double)
+-from .pari_instance cimport (prec_bits_to_words, prec_words_to_bits,
+-                             default_bitprec, get_var)
++from .pari_instance cimport (prec_words_to_bits, default_bitprec, get_var)
+ from .stack cimport new_gen, new_gen_noclear, clear_stack
+ from .closure cimport objtoclosure
+ """
+@@ -556,7 +555,7 @@ cdef class Gen(Gen_base):
+             return NotImplemented
+         t0 = left.Mod(m) if m is not None else left
+         sig_on()
+-        return new_gen(gpow(t0.g, t1.g, prec_bits_to_words(0)))
++        return new_gen(gpow(t0.g, t1.g, prec_bits_to_pari(0)))
+ 
+     def __rpow__(Gen right, left, m):
+         cdef Gen t
+@@ -567,7 +566,7 @@ cdef class Gen(Gen_base):
+         if m is not None:
+             t = t.Mod(m)
+         sig_on()
+-        return new_gen(gpow(t.g, right.g, prec_bits_to_words(0)))
++        return new_gen(gpow(t.g, right.g, prec_bits_to_pari(0)))
+ 
+     def __neg__(self):
+         sig_on()
+@@ -2792,7 +2791,7 @@ cdef class Gen(Gen_base):
+             192
+         """
+         sig_on()
+-        return new_gen(bernreal(self, prec_bits_to_words(precision)))
++        return new_gen(bernreal(self, prec_bits_to_pari(precision)))
+ 
+     def besselk(Gen nu, x, flag=None, unsigned long precision=0):
+         """
+@@ -2830,7 +2829,7 @@ cdef class Gen(Gen_base):
+         """
+         cdef Gen t0 = objtogen(x)
+         sig_on()
+-        return new_gen(kbessel(nu.g, t0.g, prec_bits_to_words(precision)))
++        return new_gen(kbessel(nu.g, t0.g, prec_bits_to_pari(precision)))
+ 
+     def eint1(x, long n=0, unsigned long precision=0):
+         r"""
+@@ -2858,9 +2857,9 @@ cdef class Gen(Gen_base):
+         """
+         sig_on()
+         if n <= 0:
+-            return new_gen(eint1(x.g, prec_bits_to_words(precision)))
++            return new_gen(eint1(x.g, prec_bits_to_pari(precision)))
+         else:
+-            return new_gen(veceint1(x.g, stoi(n), prec_bits_to_words(precision)))
++            return new_gen(veceint1(x.g, stoi(n), prec_bits_to_pari(precision)))
+ 
+     log_gamma = Gen_base.lngamma
+ 
+@@ -2890,7 +2889,7 @@ cdef class Gen(Gen_base):
+             -0.400459056163451
+         """
+         sig_on()
+-        return new_gen(polylog0(m, x.g, flag, prec_bits_to_words(precision)))
++        return new_gen(polylog0(m, x.g, flag, prec_bits_to_pari(precision)))
+ 
+     def sqrtint(x):
+         r"""Returns the integer square root of x, i.e. the largest integer y
+@@ -2958,7 +2957,7 @@ cdef class Gen(Gen_base):
+         cdef GEN zetan
+         cdef Gen t0 = objtogen(n)
+         sig_on()
+-        ans = new_gen_noclear(gsqrtn(x.g, t0.g, &zetan, prec_bits_to_words(precision)))
++        ans = new_gen_noclear(gsqrtn(x.g, t0.g, &zetan, prec_bits_to_pari(precision)))
+         return ans, new_gen(zetan)
+ 
+     def ffprimroot(self):
+@@ -3322,7 +3321,7 @@ cdef class Gen(Gen_base):
+         sig_on()
+         return new_gen(elltors(self.g))
+ 
+-    def omega(self, unsigned long precision=0):
++    def omega(self):
+         """
+         Return the basis for the period lattice of this elliptic curve.
+ 
+@@ -3331,9 +3330,20 @@ cdef class Gen(Gen_base):
+             sage: e = pari([0, -1, 1, -10, -20]).ellinit()
+             sage: e.omega()
+             [1.26920930427955, 0.634604652139777 - 1.45881661693850*I]
++
++        The precision is determined by the ``ellinit`` call::
++
++            sage: e = pari([0, -1, 1, -10, -20]).ellinit(precision=256)
++            sage: e.omega().bitprecision()
++            256
++
++        This also works over quadratic imaginary number fields::
++
++            sage: e = pari.ellinit([0, -1, 1, -10, -20], "nfinit(y^2 - 2)")
++            sage: w = e.omega()
+         """
+         sig_on()
+-        return new_gen(ellR_omega(self.g, prec_bits_to_words(precision)))
++        return new_gen(member_omega(self.g))
+ 
+     def disc(self):
+         """
+@@ -3904,38 +3914,6 @@ cdef class Gen(Gen_base):
+         sig_on()
+         return new_gen(factorpadic(self.g, t0.g, r))
+ 
+-    def poldegree(self, var=-1):
+-        """
+-        Return the degree of this polynomial.
+-        """
+-        sig_on()
+-        cdef long n = <long>poldegree(self.g, get_var(var))
+-        sig_off()
+-        return n
+-
+-    def polisirreducible(self):
+-        """
+-        f.polisirreducible(): Returns True if f is an irreducible
+-        non-constant polynomial, or False if f is reducible or constant.
+-        """
+-        sig_on()
+-        cdef long t = <long>polisirreducible(self.g)
+-        clear_stack()
+-        return t != 0
+-
+-    def polroots(self, unsigned long precision=0):
+-        """
+-        Complex roots of the given polynomial using Schonhage's method,
+-        as modified by Gourdon.
+-        """
+-        sig_on()
+-        return new_gen(cleanroots(self.g, prec_bits_to_words(precision)))
+-
+-    def rnfisnorm(self, T, long flag=0):
+-        cdef Gen t0 = objtogen(T)
+-        sig_on()
+-        return new_gen(rnfisnorm(t0.g, self.g, flag))
+-
+     def ncols(self):
+         """
+         Return the number of columns of self.
+@@ -4369,7 +4347,7 @@ cdef class Gen(Gen_base):
+             g0 = RgX_to_ser(g0, n+4)
+         elif typ(g0) == t_RFRAC:
+             g0 = rfrac_to_ser(g0, n+4)
+-        return new_gen(ellwp0(self.g, g0, flag, prec_bits_to_words(precision)))
++        return new_gen(ellwp0(self.g, g0, flag, prec_bits_to_pari(precision)))
+ 
+     def debug(self, long depth = -1):
+         r"""
+@@ -4518,15 +4496,13 @@ cpdef Gen objtogen(s):
+     Conversion from reals uses the real's own precision::
+ 
+         sage: a = pari(1.2); a, a.type(), a.precision()
+-        (1.20000000000000, 't_REAL', 4) # 32-bit
+-        (1.20000000000000, 't_REAL', 3) # 64-bit
++        (1.20000000000000, 't_REAL', 64)
+ 
+     Conversion from strings uses the current PARI real precision.
+     By default, this is 64 bits::
+ 
+         sage: a = pari('1.2'); a, a.type(), a.precision()
+-        (1.20000000000000, 't_REAL', 4)  # 32-bit
+-        (1.20000000000000, 't_REAL', 3)  # 64-bit
++        (1.20000000000000, 't_REAL', 64)
+ 
+     Unicode and bytes work fine::
+ 
+@@ -4540,8 +4516,7 @@ cpdef Gen objtogen(s):
+         sage: pari.set_real_precision(35)  # precision in decimal digits
+         15
+         sage: a = pari('1.2'); a, a.type(), a.precision()
+-        (1.2000000000000000000000000000000000, 't_REAL', 6)  # 32-bit
+-        (1.2000000000000000000000000000000000, 't_REAL', 4)  # 64-bit
++        (1.2000000000000000000000000000000000, 't_REAL', 128)
+ 
+     Set the precision to 15 digits for the remaining tests::
+ 
+diff --git a/cypari/pari_instance.pyx b/cypari/pari_instance.pyx
+index 91f2d61..fca5b57 100644
+--- a/cypari/pari_instance.pyx
++++ b/cypari/pari_instance.pyx
+@@ -313,9 +313,9 @@ cdef bytes to_bytes(s):
+ cdef extern from *:
+     int sig_on_count "cysigs.sig_on_count"
+ 
+-# Default precision (in PARI words) for the PARI library interface,
+-# when no explicit precision is given and the inputs are exact.
+-cdef long prec = prec_bits_to_words(53)
++# Default precision for the PARI library interface, when no explicit
++# precision is given and the inputs are exact.
++cdef long prec = prec_bits_to_pari(53)
+ 
+ #################################################################
+ # conversions between various real precision models
+@@ -352,32 +352,28 @@ def prec_dec_to_bits(long prec_in_dec):
+     cdef double log_10 = 3.32192809488736
+     return int(prec_in_dec*log_10 + 1.0)  # Add one to round up
+ 
+-cpdef long prec_bits_to_words(unsigned long prec_in_bits):
++cpdef long prec_bits_to_pari(unsigned long prec_in_bits):
+     r"""
+-    Convert from precision expressed in bits to pari real precision
+-    expressed in words. Note: this rounds up to the nearest word,
+-    adjusts for the two codewords of a pari real, and is
+-    architecture-dependent.
++    Convert from precision expressed in bits to the precision argument
++    of the PARI library, using the default precision if ``prec_in_bits``
++    is 0.  This rounds up to a multiple of the word size.
+ 
+     EXAMPLES::
+ 
+-        sage: from cypari._pari import prec_bits_to_words
+-        sage: prec_bits_to_words(70)
+-        5   # 32-bit
+-        4   # 64-bit
++        sage: from cypari._pari import prec_bits_to_pari
++        sage: prec_bits_to_pari(70)
++        96    # 32-bit
++        128   # 64-bit
+ 
+     ::
+ 
+-        sage: [(32*n, prec_bits_to_words(32*n)) for n in range(1, 9)]
+-        [(32, 3), (64, 4), (96, 5), (128, 6), (160, 7), (192, 8), (224, 9), (256, 10)] # 32-bit
+-        [(32, 3), (64, 3), (96, 4), (128, 4), (160, 5), (192, 5), (224, 6), (256, 6)] # 64-bit
++        sage: [(32*n, prec_bits_to_pari(32*n)) for n in range(1, 9)]
++        [(32, 32), (64, 64), (96, 96), (128, 128), (160, 160), (192, 192), (224, 224), (256, 256)] # 32-bit
++        [(32, 64), (64, 64), (96, 128), (128, 128), (160, 192), (192, 192), (224, 256), (256, 256)] # 64-bit
+     """
+     if not prec_in_bits:
+         return prec
+-    cdef unsigned long wordsize = BITS_IN_LONG
+-
+-    # This equals ceil(prec_in_bits/wordsize) + 2
+-    return (prec_in_bits - 1)//wordsize + 3
++    return nbits2prec(prec_in_bits)
+ 
+ cpdef long prec_words_to_bits(long prec_in_words):
+     r"""
+@@ -413,26 +409,8 @@ cpdef long default_bitprec(long bitprec=-1):
+     global prec
+     cdef long old_prec = prec
+     if bitprec >= 0:
+-        prec = prec_bits_to_words(bitprec)
+-    return (old_prec - 2) * BITS_IN_LONG
+-
+-def prec_dec_to_words(long prec_in_dec):
+-    r"""
+-    Convert from precision expressed in decimal to precision expressed
+-    in words. Note: this rounds up to the nearest word, adjusts for the
+-    two codewords of a pari real, and is architecture-dependent.
+-
+-    EXAMPLES::
+-
+-        sage: from cypari._pari import prec_dec_to_words
+-        sage: prec_dec_to_words(38)
+-        6   # 32-bit
+-        4   # 64-bit
+-        sage: [(n, prec_dec_to_words(n)) for n in range(10, 90, 10)]
+-        [(10, 4), (20, 5), (30, 6), (40, 7), (50, 8), (60, 9), (70, 10), (80, 11)] # 32-bit
+-        [(10, 3), (20, 4), (30, 4), (40, 5), (50, 5), (60, 6), (70, 6), (80, 7)] # 64-bit
+-    """
+-    return prec_bits_to_words(prec_dec_to_bits(prec_in_dec))
++        prec = prec_bits_to_pari(bitprec)
++    return prec2nbits(old_prec)
+ 
+ def prec_words_to_dec(long prec_in_words):
+     r"""
+@@ -806,8 +784,7 @@ cdef class Pari(Pari_auto):
+         >>> pari.pi()
+         3.14159265358979
+         >>> pari.pi().precision()
+-        3  # 64-bit
+-        4  # 32-bit
++        64
+         >>> pari.set_default_bit_precision(212)
+         64
+         >>> pari.get_default_bit_precision()
+@@ -816,8 +793,8 @@ cdef class Pari(Pari_auto):
+         >>> pari.pi()
+         3.14159265358979
+         >>> pari.pi().precision()
+-        6  # 64-bit
+-        9  # 32-bit
++        256 # 64-bit
++        224 # 32-bit
+         >>> old_real_precision = pari.set_real_precision(50)
+         >>> pari.pi()
+         3.1415926535897932384626433832795028841971693993751
+@@ -866,13 +843,12 @@ cdef class Pari(Pari_auto):
+         will have word length (not including codewords) which is large
+         enough to provide the requested number of bits, but no larger.
+ 
+-        >>> from cypari._pari import prec_bits_to_words
+         >>> old_precision = pari.set_real_precision(64)
+         >>> x = pari._real_coerced_to_bits_prec(1.23456789012345678, 100)
+         >>> x
+         1.23456789012345669043213547411141917109
+-        >>> x.length() == prec_bits_to_words(100) - 2
+-        True
++        >>> x.bitprecision()
++        128
+         >>> pari.set_real_precision(old_precision)
+         64
+ 
+@@ -880,14 +856,14 @@ cdef class Pari(Pari_auto):
+         100 bits of precision.  This can be used, for example, to convert
+         quad-double numbers to pari numbers.
+         """
+-        cdef long words = prec_bits_to_words(bits)
++        cdef long pari_prec = prec_bits_to_pari(bits)
+         cdef GEN g
+         sig_on()
+         if x == 0:
+             return new_gen(real_0_bit(-bits))
+         else:
+             g = dbltor(x)
+-            return new_gen(gtofp(g, words))
++            return new_gen(gtofp(g, pari_prec))
+ 
+     def complex(self, re, im):
+         """
+diff --git a/cypari/tests.py b/cypari/tests.py
+index 94d2762..9056bce 100644
+--- a/cypari/tests.py
++++ b/cypari/tests.py
+@@ -1296,7 +1296,7 @@ Quadratic class numbers::
+     >>> pari(-104).quadclassunit()
+     [6, [6], [Qfb(5, -4, 6)], 1]
+     >>> pari(109).quadclassunit()
+-    [1, [], [], 5.56453508676047]
++    [1, [], [], 5.56453508676047, -1]
+     >>> pari(10001).quadclassunit() # random generators
+     [16, [16], [Qfb(5, 99, -10, 0.E-19)], 5.29834236561059]
+     >>> pari(10001).quadclassunit()[0]
+@@ -1620,13 +1620,13 @@ General number fields::
+     >>> x = pari('zz') # this one will have lower priority
+     >>> nf = pari(x**2 + 2).nfinit()
+     >>> nf.nfroots(y**2 + 2)
+-    [Mod(-zz, zz^2 + 2), Mod(zz, zz^2 + 2)]
++    [Mod(-zz, zz^2 + 2), Mod(zz, zz^2 + 2)]~
+     >>> nf = pari(x**3 + 2).nfinit()
+     >>> nf.nfroots(y**3 + 2)
+-    [Mod(zz, zz^3 + 2)]
++    [Mod(zz, zz^3 + 2)]~
+     >>> nf = pari(x**4 + 2).nfinit()
+     >>> nf.nfroots(y**4 + 2)
+-    [Mod(-zz, zz^4 + 2), Mod(zz, zz^4 + 2)]
++    [Mod(-zz, zz^4 + 2), Mod(zz, zz^4 + 2)]~
+ 
+     >>> nf = pari('x^2 + 1').nfinit()
+     >>> [nf.nfbasistoalg_lift(r) for r in nf.nfrootsof1()]
