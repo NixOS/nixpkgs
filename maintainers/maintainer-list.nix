@@ -29460,6 +29460,14 @@
     githubId = 91203390;
     name = "Felix Kimmel";
   };
+  TheSast = {
+    name = "TheSast";
+    email = "thesast@proton.me";
+    github = "TheSast";
+    githubId = 27977196;
+    keys = [ { fingerprint = "DZvfhwo/xBZDj5cBKn5Dxruq4kbuum0nldjr7R8+9lQ"; } ];
+    matrix = "@thesast:matrix.org";
+  };
   thesn = {
     github = "thesn10";
     githubId = 38666407;
