@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   openttd,
   zstd,
 }:
@@ -18,6 +19,20 @@ openttd.overrideAttrs (oldAttrs: rec {
   patches = [ ];
 
   buildInputs = oldAttrs.buildInputs ++ [ zstd ];
+
+  buildFlags = [
+    "all"
+    "openttd_test"
+  ];
+
+  passthru = oldAttrs.passthru // {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "jgrpp-(.*)"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://github.com/JGRennison/OpenTTD-patches";
