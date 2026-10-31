@@ -1,0 +1,112 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/a4dwzp7sfx9dicw1xlv9z46jzjbyn2pk-source",
+      "rev": "ca7734f9d0cdff7eb37576fd17ec2189c26315c4",
+      "sha256": "18jqd0nvps1y34gl2y1kypq25ic047xkidhadwpr4dg363bhkm10",
+      "url": "https://github.com/capocasa/streamhttp/archive/ca7734f9d0cdff7eb37576fd17ec2189c26315c4.tar.gz",
+      "ref": "ca7734f9d0cdff7eb37576fd17ec2189c26315c4",
+      "packages": [
+        "streamhttp"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/cbd4311bjyr1rxk78viwwhmbs2x2wx60-source",
+      "rev": "455c4f67989a65bb8f36e62e5b330ee05dc51979",
+      "sha256": "09928ah2cikqkmk9nl7m3l7wvnanjfdn0p0bldx2lpbfm5b8wdls",
+      "url": "https://github.com/capocasa/ttty/archive/455c4f67989a65bb8f36e62e5b330ee05dc51979.tar.gz",
+      "ref": "455c4f67989a65bb8f36e62e5b330ee05dc51979",
+      "packages": [
+        "ttty"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/gxdmxzyyhmfyvybmhq6g1b1wgs7iy7an-source",
+      "rev": "b70aac15a3fdc7647997bd6cd10bccd8b2c00e54",
+      "sha256": "00z5z1m14gw266ld7yy3gvnm08d1kgij66cg4h76yllkc1k1xk0s",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/b70aac15a3fdc7647997bd6cd10bccd8b2c00e54.tar.gz",
+      "ref": "b70aac15a3fdc7647997bd6cd10bccd8b2c00e54",
+      "packages": [
+        "unicodedb"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/2712wvhsvd7481az2r19j6b05qykfkzq-source",
+      "rev": "eea495daf0bc304698423d2022c0e33495dc22fc",
+      "sha256": "1g42cz64zy3kvsrfin6hs2kvlg3q311317pgb53dxb11hr3zjsmx",
+      "url": "https://github.com/capocasa/tinotify/archive/eea495daf0bc304698423d2022c0e33495dc22fc.tar.gz",
+      "ref": "eea495daf0bc304698423d2022c0e33495dc22fc",
+      "packages": [
+        "tinotify"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/x7xjwvkdj2v6a9afsg051852srd92mcd-source",
+      "rev": "bcb0ed1121a9e1b8ec9c11e1a888814af8c3ecfe",
+      "sha256": "0vbqh83rhlzxskk7ihmirqz2ksls8ls2aw6i20dy9swl2wk7x6i9",
+      "url": "https://github.com/capocasa/sandwall/archive/bcb0ed1121a9e1b8ec9c11e1a888814af8c3ecfe.tar.gz",
+      "ref": "bcb0ed1121a9e1b8ec9c11e1a888814af8c3ecfe",
+      "packages": [
+        "sandwall"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/9l8szdmb4fpnx9jba8xb3kihl481vhx5-source",
+      "rev": "fcdc448a63cc70814df5e92de050d8225715fe0a",
+      "sha256": "0dsl5mksj0p98d8zgd41gcri4diw033fqpksn1nb8yapqz1nv50b",
+      "url": "https://github.com/forlan-ua/nim-libsha/archive/fcdc448a63cc70814df5e92de050d8225715fe0a.tar.gz",
+      "ref": "master",
+      "packages": [
+        "libsha"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/8qaywzr8nzsiddjba77nhf75hzmxx0d9-source",
+      "rev": "29aca5e519ebf5d833f63a6a2769e62ec7bfb83a",
+      "sha256": "16npqgmi2qawjxaddj9ax15rfpdc7sqc37i2r5vg23lyr6znq4wc",
+      "url": "https://github.com/nim-lang/x11/archive/29aca5e519ebf5d833f63a6a2769e62ec7bfb83a.tar.gz",
+      "ref": "1.2",
+      "packages": [
+        "x11"
+      ],
+      "srcDir": ""
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/qh35fnzjzb4njfqjicnmf35hwja3l8hd-source",
+      "rev": "cd562ba43ae8904a4d1ba55611b8a521ef4a179e",
+      "sha256": "1gz2c7v4hz5fzvnn7jw5x86gakxf2r8mcsicwcnn6iykx083y8hi",
+      "url": "https://github.com/guzba/zippy/archive/cd562ba43ae8904a4d1ba55611b8a521ef4a179e.tar.gz",
+      "ref": "cd562ba43ae8904a4d1ba55611b8a521ef4a179e",
+      "packages": [
+        "zippy"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/h214k8m5qdw6ajh45f2wjzld856qcvc6-source",
+      "rev": "c9c0c7b51e2e83cc9305a895a0b144a297b4bea8",
+      "sha256": "0x1jahhx0wcfay79v0xqddyadf5ckcilhv25cq1g6rarshcg1zvd",
+      "url": "https://github.com/treeform/ws/archive/c9c0c7b51e2e83cc9305a895a0b144a297b4bea8.tar.gz",
+      "ref": "c9c0c7b51e2e83cc9305a895a0b144a297b4bea8",
+      "packages": [
+        "ws"
+      ],
+      "srcDir": "src"
+    }
+  ]
+}
