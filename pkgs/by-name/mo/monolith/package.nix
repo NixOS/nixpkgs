@@ -3,36 +3,29 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  openssl,
+  cacert,
   libiconv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monolith";
-  version = "2.10.1";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = "monolith";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7D/r9/uY1JcShKgfNUGVTn8P5kUAwUIa/xBbhpReeNw=";
+    hash = "sha256-oaH31j5KDOQmI4pyGokTvQqypZakg2P7KdXHO78EzSA=";
   };
 
-  cargoHash = "sha256-rIwlNXe7me3Ehj1EIYiOYo12FQqovmZT0ui58gFRWWw=";
+  cargoHash = "sha256-LMYjxPvndu1ZT5MXHW0pEKjh/FbM9WhS//oH8I9LIIM=";
 
-  env.OPENSSL_NO_VENDOR = true;
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
-  checkFlags = [ "--skip=tests::cli" ];
+  nativeCheckInputs = [ cacert ];
 
   passthru.updateScript = nix-update-script { };
 
