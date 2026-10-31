@@ -1,0 +1,22 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index d0bd77f..43d3cfb 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -6186,17 +6186,6 @@ dependencies = [
+  "syn 2.0.101",
+ ]
+ 
+-[[package]]
+-name = "typst-macros"
+-version = "0.13.1"
+-source = "git+https://github.com/Myriad-Dreamin/typst.git?tag=tinymist%2Fv0.13.10#946ea31fb554bcf62e3215f64ddda87d70b026af"
+-dependencies = [
+- "heck 0.5.0",
+- "proc-macro2",
+- "quote",
+- "syn 2.0.101",
+-]
+-
+ [[package]]
+ name = "typst-pdf"
+ version = "0.13.1"
