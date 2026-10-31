@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     description = "Easily rotate your AWS key";
     homepage = "https://github.com/stefansundin/aws-rotate-key";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.mbode ];
+    maintainers = [ ];
     mainProgram = "aws-rotate-key";
   };
 })

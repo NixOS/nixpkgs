@@ -38,10 +38,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "Go based command line tool for exercism.io";
     license = lib.licenses.mit;
-    maintainers = [
-      lib.maintainers.rbasso
-      lib.maintainers.nobbz
-    ];
+    maintainers = [ lib.maintainers.nobbz ];
     mainProgram = "exercism";
   };
 })
