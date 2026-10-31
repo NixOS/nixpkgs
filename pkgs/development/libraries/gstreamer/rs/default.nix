@@ -211,7 +211,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.15.3";
+  version = "0.15.4";
 
   outputs = [
     "out"
@@ -222,14 +222,16 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "gstreamer";
     repo = "gst-plugins-rs";
-    rev = finalAttrs.version;
-    hash = "sha256-DO5Dk9xjqWTI4ORzlHYPc/O/tyHfSyh7+YCzES5ZiHs=";
+    # NOTE: upstream released a fixup version for 0.15.4 because the initial release had a broken Cargo.lock file
+    # revert to `tag = finalAttrs.version` in next release
+    tag = "${finalAttrs.version}+fixup";
+    hash = "sha256-VM0vlzv++n5UmoqB92Nh7026FqPP5XQ6BnoM0xRC75c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-EHikshVeaBzyx9+GBIkOPii63T12BobWdW6nTBLzwU8=";
+    hash = "sha256-umy9iC87uDSjPRqNtNfKbDii55ZihV0+HGZzdjYri3s=";
   };
 
   postConfigure = ''
