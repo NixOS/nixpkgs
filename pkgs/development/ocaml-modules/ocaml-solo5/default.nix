@@ -28,13 +28,13 @@ assert lib.asserts.assertOneOf "ocaml-solo5's ocaml version" entry allowlisted;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml-solo5";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-solo5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZbJoh3HHjD7XNvGK1Ehdu/uEoPFtRgVNNz8vtT7zaXI=";
+    hash = "sha256-ncCmcRs5zjDvJONF/SmE3OFWnBZzeP//1dZteDK4D6Y=";
   };
 
   strictDeps = true;
