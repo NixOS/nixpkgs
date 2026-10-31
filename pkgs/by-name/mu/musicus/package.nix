@@ -22,18 +22,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musicus";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "johrpan";
     repo = "musicus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6+JcgseNgHN7q6v0+gcDmZKA7wr52QVG1lncxNynORU=";
+    hash = "sha256-dRioyeyfCZJVZIJUEGlO7AK+s1Ry+JPcIrMNOe+C4V0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-PWqt5G+OjijyAoSj61iUjWBT6bV5d54okF/vm0+hWsA=";
+    hash = "sha256-asrwC9G3pxH7Fw58e+hj0GJcLSL+hWnFid2fiBimNc8=";
   };
 
   nativeBuildInputs = [
