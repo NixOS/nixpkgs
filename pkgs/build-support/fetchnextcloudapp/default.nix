@@ -28,6 +28,7 @@ applyPatches {
   inherit patches;
 
   src = (if unpack then fetchzip else fetchurl) {
+    ${if name == null then null else "pname"} = appName;
     inherit url;
     ${if hash == "" then null else "hash"} = hash;
     ${if sha256 == "" then null else "sha256"} = sha256;
