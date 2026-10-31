@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (
   finalAttrs:
   {
     pname = "pokemmo";
-    version = "32920"; # https://dl.pokemmo.com/live/current/revision.txt
+    version = "34702"; # https://dl.pokemmo.com/live/current/revision.txt
     __structuredAttrs = true;
     strictDeps = true;
 
@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (
       else
         fetchurl {
           url = "https://dl.pokemmo.com/PokeMMO-Client.zip?r=${finalAttrs.version}";
-          hash = "sha256-eFJBIDbpawkRL2Zr3HE41+YY0bqvVCUqzQr0cdj2xM4=";
+          hash = "sha256-H/FYSJGU5OFpaYVH0EJo1xd0xNSx92Q9U7I/QrEE1Ps=";
         };
 
     desktopItems = [
