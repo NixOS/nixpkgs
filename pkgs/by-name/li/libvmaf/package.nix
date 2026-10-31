@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     homepage = "https://github.com/Netflix/vmaf";
