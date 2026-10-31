@@ -1,0 +1,12 @@
+{
+  "version": "3.7.0",
+  "sourceHash": "sha256-K9sOcVBMDwdF6aO5MkziLshDW+/Pm03ykzvDMDUsKkk=",
+  "serverJar": {
+    "version": "0.4.0",
+    "hash": "sha256-C3ToPFX0Q1Oan3b1zgI6UUZrdksRAOQJeolwU/38DrY="
+  },
+  "serverApk": {
+    "version": "2.4.0",
+    "hash": "sha256-b4VZRwCtlt6J0BKzdnBJwsaYhRC2izG0Od0qbdk6MMk="
+  }
+}
