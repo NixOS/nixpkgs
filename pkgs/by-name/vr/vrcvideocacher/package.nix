@@ -15,13 +15,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "vrcvideocacher";
-  version = "2026.5.2";
+  version = "2026.9.10";
 
   src = fetchFromGitHub {
     owner = "EllyVR";
     repo = "VRCVideoCacher";
     tag = finalAttrs.version;
-    hash = "sha256-rabx93WBYnVPAQHndNkz+lN45S8lWufoMQ6s50gW+rY=";
+    hash = "sha256-OUupWLSYplBCocFk3KCMGSliCHkXgswdRNkrvBD0tcE=";
   };
 
   __structuredAttrs = true;

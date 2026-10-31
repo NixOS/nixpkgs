@@ -326,8 +326,8 @@
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
-    "version": "2.1.11",
-    "hash": "sha256-kWRapMTVEfcc0DxnI9Ai1+RwAAcR2+HUu+WF+OeLJCs="
+    "version": "2.1.12",
+    "hash": "sha256-qaBua1oxP27zZ1+RmX0BKt7/6KqeH/1p7Uak5oWwVOE="
   },
   {
     "pname": "SQLitePCLRaw.core",
@@ -335,14 +335,19 @@
     "hash": "sha256-s/fxEoYlNf9c2C4HZueMzPCBvpiViDVlSpg7epB0GXY="
   },
   {
+    "pname": "SQLitePCLRaw.core",
+    "version": "2.1.12",
+    "hash": "sha256-rwaQQTj/ptyVpZkTPWTSVHFtb6zHVDprO5EHk9rp3KU="
+  },
+  {
     "pname": "SQLitePCLRaw.lib.e_sqlite3",
-    "version": "2.1.11",
-    "hash": "sha256-ZmffbHNgnLUdsPbikilEAihxXl1MedIBQ1Xzt9226Bw="
+    "version": "2.1.12",
+    "hash": "sha256-SiLAL/z0iXkpA88mPe+fzidzlxaIP5ZfC17v8WN0MKw="
   },
   {
     "pname": "SQLitePCLRaw.provider.e_sqlite3",
-    "version": "2.1.11",
-    "hash": "sha256-LdfV325AmYgBOwmwP7MNZxMJZkNO6bwrHvB6C5SyItA="
+    "version": "2.1.12",
+    "hash": "sha256-3ysycZkuXXGRhsRnHjz0+GWAl8FUy81BSUq1lMWZdZU="
   },
   {
     "pname": "Tmds.DBus.Protocol",
