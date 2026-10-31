@@ -16208,6 +16208,8 @@ self: super: with self; {
 
   pyric = callPackage ../development/python-modules/pyric { };
 
+  pyrime = callPackage ../development/python-modules/pyrime { };
+
   pyring-buffer = callPackage ../development/python-modules/pyring-buffer { };
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
