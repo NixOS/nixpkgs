@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uncalled-for";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     owner = "chrisguidry";
     repo = "uncalled-for";
     tag = finalAttrs.version;
-    hash = "sha256-owpWPOV70z1NCpfVOGlyczfqrPR8Yyd7SUzY9wWZiXU=";
+    hash = "sha256-/gMOX+WYoQ+RlIOTHSY7X1DHwuTuHLGlGMO7TgTZTx8=";
   };
 
   build-system = [
