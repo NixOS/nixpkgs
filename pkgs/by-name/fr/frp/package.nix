@@ -22,6 +22,10 @@ buildGoModule (finalAttrs: {
 
   doCheck = false;
 
+  patches = [
+    ./apply-middleware-pprof-path.patch
+  ];
+
   subPackages = [
     "cmd/frpc"
     "cmd/frps"
