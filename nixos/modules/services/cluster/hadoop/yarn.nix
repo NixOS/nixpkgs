@@ -157,6 +157,7 @@ in
         wantedBy = [ "multi-user.target" ];
         inherit (cfg.yarn.nodemanager) restartIfChanged;
         environment = cfg.yarn.nodemanager.extraEnv;
+        path = [ pkgs.util-linux ]; # umount
 
         preStart = ''
           # create log dir
