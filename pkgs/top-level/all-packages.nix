@@ -5834,7 +5834,7 @@ with pkgs;
     libprom
     ;
 
-  libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
+  libtorrent-rasterbar = libtorrent-rasterbar-2_1_x;
 
   libubox-nossl = libubox.override { with_ustream_ssl = false; };
 
