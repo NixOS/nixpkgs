@@ -1,0 +1,764 @@
+diff -Naur a/Dockerfile b/Dockerfile
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -15,7 +15,7 @@
+ 
+ FROM alpine:latest
+ WORKDIR /src/
+-RUN apk --no-cache add pcre ca-certificates openssl
++RUN apk --no-cache add pcre2 ca-certificates openssl
+ COPY --from=nim /src/nitter/nitter ./
+ COPY --from=nim /src/nitter/nitter.example.conf ./nitter.conf
+ COPY --from=nim /src/nitter/public ./public
+
+diff -Naur a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -78,7 +78,7 @@
+ 
+ ### Dependencies
+ 
+-- libpcre
++- libpcre2-8
+ - libsass
+ - redis/valkey
+ 
+
+diff -Naur a/.github/workflows/run-tests.yml b/.github/workflows/run-tests.yml
+--- a/.github/workflows/run-tests.yml
++++ b/.github/workflows/run-tests.yml
+@@ -72,7 +72,7 @@
+     steps:
+       - name: Install runtime deps
+         run: |
+-          sudo apt-get install -y --no-install-recommends libsass-dev libpcre3
++          sudo apt-get install -y --no-install-recommends libsass-dev libpcre2-8-0
+ 
+       - name: Checkout code
+         uses: actions/checkout@v6
+
+diff -Naur a/src/pcre2.nim b/src/pcre2.nim
+--- /dev/null
++++ b/src/pcre2.nim
+@@ -0,0 +1,234 @@
++# SPDX-License-Identifier: MIT
++# Nim binding subset for the PCRE2 8-bit library.
++#
++# This module binds the small subset of the PCRE2 API needed by the vendored
++# `re` module in this directory, so Nitter depends exclusively on libpcre2-8
++# and libpcre (PCRE1) is no longer referenced.
++#
++# The library and its symbols are resolved manually (instead of
++# importc/dynlib) because PCRE2 shared libraries use either plain symbol
++# names (`pcre2_compile`, the common distro layout) or code-unit-suffixed
++# names (`pcre2_compile_8`, used when the 8/16/32-bit widths are built
++# together and exported from separate libraries). Both variants are probed
++# per symbol.
++#
++# Constants and prototypes mirror `pcre2.h` from PCRE2 10.48.
++
++when defined(nimHasStyleChecks):
++  {.push styleChecks: off.}
++
++type
++  Code* = object ## an opaque pointer to a compiled PCRE2 pattern
++  MatchData* = object ## an opaque pointer to PCRE2 match data (ovector)
++
++proc compile*(pattern: ptr uint8, length: csize_t, options: uint32,
++              errorcode: ptr cint, erroroffset: ptr csize_t,
++              ccontext: pointer): ptr Code
++
++proc match*(code: ptr Code, subject: ptr uint8, length: csize_t,
++            startoffset: csize_t, options: uint32, match_data: ptr MatchData,
++            match_context: pointer): cint
++
++proc code_free*(code: ptr Code)
++
++proc match_data_create_from_pattern*(code: ptr Code,
++                                     gcontext: pointer): ptr MatchData
++
++proc match_data_free*(match_data: ptr MatchData)
++
++proc get_ovector_count*(match_data: ptr MatchData): uint32
++
++proc get_ovector_pointer*(match_data: ptr MatchData): ptr csize_t
++
++proc jit_compile*(code: ptr Code, options: uint32): cint
++
++proc get_error_message*(errorcode: cint, buffer: ptr uint8,
++                        buffersize: csize_t): cint
++
++proc config*(what: uint32, where: pointer): cint
++
++# Option constants (values from pcre2.h).
++#
++# NOTE: unlike PCRE1, these bit values are NOT identical to Nim's
++# `RegexFlag` values; `re.nim` contains the translation tables.
++const
++  CASELESS* = 0x00000008'u32
++  MULTILINE* = 0x00000400'u32
++  DOTALL* = 0x00000020'u32
++  EXTENDED* = 0x00000080'u32
++  ANCHORED* = 0x80000000'u32
++  UNGREEDY* = 0x00040000'u32
++  UTF* = 0x00080000'u32
++  NOTBOL* = 0x00000001'u32
++  NOTEOL* = 0x00000002'u32
++  NOTEMPTY* = 0x00000004'u32
++  NOTEMPTY_ATSTART* = 0x00000008'u32
++  NOMATCH* = -1'i32
++  UNSET* = high(csize_t) # (~(PCRE2_SIZE)0)
++  JIT_COMPLETE* = 0x00000001'u32
++  CONFIG_JIT* = 1'u32
++
++# ---------------------------------------------------------------------------
++# library and symbol loading
++# ---------------------------------------------------------------------------
++
++when defined(windows):
++  proc loadLibraryA(path: cstring): pointer
++    {.importc, header: "<windows.h>".}
++  proc getProcAddress(lib: pointer, name: cstring): pointer
++    {.importc: "GetProcAddress", header: "<windows.h>".}
++else:
++  proc dlopen(path: cstring, mode: cint): pointer
++    {.importc, header: "<dlfcn.h>".}
++  proc dlsym(handle: pointer, name: cstring): pointer
++    {.importc, header: "<dlfcn.h>".}
++  proc dlclose(handle: pointer) {.importc, header: "<dlfcn.h>".}
++
++when defined(macosx):
++  # Probe the nix store path first so dlopen resolves inside the package's
++  # own runtime closure; bare sonames remain as fallbacks for non-nix
++  # environments (Docker image, macOS system library).
++  const libNames*: array[4, cstring] = [(cstring"@pcre2Lib@/libpcre2-8.dylib"),
++    (cstring"libpcre2-8.dylib"), (cstring"libpcre2-8.0.dylib"),
++    (cstring"libpcre2-8.1.dylib")]
++else:
++  const libNames*: array[4, cstring] = [(cstring"@pcre2Lib@/libpcre2-8.so.0"),
++    (cstring"libpcre2-8.so.0"), (cstring"libpcre2-8.so"),
++    (cstring"libpcre2-8.0")]
++
++proc loadPcre2Lib(): pointer =
++  ## Loads libpcre2-8, returning a non-nil handle on success.
++  when defined(windows):
++    for name in ["pcre2-8.dll", "libpcre2-8.dll"]:
++      result = loadLibraryA(name)
++      if result != nil: return
++  else:
++    const RTLD_NOW = 2
++    for name in libNames:
++      result = dlopen(name, RTLD_NOW)
++      if result != nil: return
++
++proc resolveSymbol(handle: pointer, plain, suffixed: cstring): pointer =
++  ## Resolves `plain` (e.g. `pcre2_compile`), falling back to `suffixed`
++  ## (e.g. `pcre2_compile_8`), the code-unit-suffixed name used by
++  ## multi-width builds.
++  when defined(windows):
++    result = getProcAddress(handle, plain)
++    if result == nil:
++      result = getProcAddress(handle, suffixed)
++  else:
++    result = dlsym(handle, plain)
++    if result == nil:
++      result = dlsym(handle, suffixed)
++
++type
++  PCompile = proc(pattern: ptr uint8, length: csize_t, options: uint32,
++                  errorcode: ptr cint, erroroffset: ptr csize_t,
++                  ccontext: pointer): ptr Code {.cdecl.}
++  PMatch = proc(code: ptr Code, subject: ptr uint8, length: csize_t,
++                startoffset: csize_t, options: uint32,
++                match_data: ptr MatchData, match_context: pointer): cint {.cdecl.}
++  PCodeFree = proc(code: ptr Code) {.cdecl, raises: [].}
++  PMdCreate = proc(code: ptr Code, gcontext: pointer): ptr MatchData {.cdecl.}
++  PMdFree = proc(match_data: ptr MatchData) {.cdecl, raises: [].}
++  POvecCount = proc(match_data: ptr MatchData): uint32 {.cdecl.}
++  POvecPointer = proc(match_data: ptr MatchData): ptr csize_t {.cdecl.}
++  PJitCompile = proc(code: ptr Code, options: uint32): cint {.cdecl.}
++  PErrorMsg = proc(errorcode: cint, buffer: ptr uint8,
++                   buffersize: csize_t): cint {.cdecl.}
++  PConfig = proc(what: uint32, where: pointer): cint {.cdecl.}
++
++var
++  pcompile: PCompile
++  pmatch: PMatch
++  pcodeFree: PCodeFree
++  pmatchDataCreate: PMdCreate
++  pmatchDataFree: PMdFree
++  pgetOvectorCount: POvecCount
++  pgetOvectorPointer: POvecPointer
++  pjitCompile: PJitCompile
++  pgetErrorMessage: PErrorMsg
++  pconfig: PConfig
++
++proc initPcre2() =
++  ## Resolves libpcre2-8 and the required symbols at program start; exits
++  ## like std/re's PCRE1 loader when the library is unavailable.
++  let handle = loadPcre2Lib()
++  if handle == nil:
++    when defined(windows):
++      quit("could not load: pcre2-8.dll", 1)
++    else:
++      quit("could not load: " & $libNames[0], 1)
++  pcompile = cast[PCompile](resolveSymbol(handle, "pcre2_compile",
++    "pcre2_compile_8"))
++  pmatch = cast[PMatch](resolveSymbol(handle, "pcre2_match", "pcre2_match_8"))
++  pcodeFree = cast[PCodeFree](resolveSymbol(handle, "pcre2_code_free",
++    "pcre2_code_free_8"))
++  pmatchDataCreate = cast[PMdCreate](resolveSymbol(handle,
++    "pcre2_match_data_create_from_pattern",
++    "pcre2_match_data_create_from_pattern_8"))
++  pmatchDataFree = cast[PMdFree](resolveSymbol(handle,
++    "pcre2_match_data_free", "pcre2_match_data_free_8"))
++  pgetOvectorCount = cast[POvecCount](resolveSymbol(handle,
++    "pcre2_get_ovector_count", "pcre2_get_ovector_count_8"))
++  pgetOvectorPointer = cast[POvecPointer](resolveSymbol(handle,
++    "pcre2_get_ovector_pointer", "pcre2_get_ovector_pointer_8"))
++  pjitCompile = cast[PJitCompile](resolveSymbol(handle, "pcre2_jit_compile",
++    "pcre2_jit_compile_8"))
++  pgetErrorMessage = cast[PErrorMsg](resolveSymbol(handle,
++    "pcre2_get_error_message", "pcre2_get_error_message_8"))
++  pconfig = cast[PConfig](resolveSymbol(handle, "pcre2_config",
++    "pcre2_config_8"))
++  if (addr pcompile)[] == nil or (addr pmatch)[] == nil or
++     (addr pcodeFree)[] == nil or (addr pmatchDataCreate)[] == nil or
++     (addr pconfig)[] == nil:
++    quit("could not import PCRE2 symbols", 1)
++
++initPcre2()
++
++proc compile*(pattern: ptr uint8, length: csize_t, options: uint32,
++              errorcode: ptr cint, erroroffset: ptr csize_t,
++              ccontext: pointer): ptr Code =
++  pcompile(pattern, length, options, errorcode, erroroffset, ccontext)
++
++proc match*(code: ptr Code, subject: ptr uint8, length: csize_t,
++            startoffset: csize_t, options: uint32, match_data: ptr MatchData,
++            match_context: pointer): cint =
++  pmatch(code, subject, length, startoffset, options, match_data,
++         match_context)
++
++proc code_free*(code: ptr Code) {.raises: [].} =
++  pcodeFree(code)
++
++proc match_data_create_from_pattern*(code: ptr Code,
++                                     gcontext: pointer): ptr MatchData =
++  pmatchDataCreate(code, gcontext)
++
++proc match_data_free*(match_data: ptr MatchData) {.raises: [].} =
++  pmatchDataFree(match_data)
++
++proc get_ovector_count*(match_data: ptr MatchData): uint32 =
++  pgetOvectorCount(match_data)
++
++proc get_ovector_pointer*(match_data: ptr MatchData): ptr csize_t =
++  pgetOvectorPointer(match_data)
++
++proc jit_compile*(code: ptr Code, options: uint32): cint =
++  pjitCompile(code, options)
++
++proc get_error_message*(errorcode: cint, buffer: ptr uint8,
++                        buffersize: csize_t): cint =
++  pgetErrorMessage(errorcode, buffer, buffersize)
++
++proc config*(what: uint32, where: pointer): cint =
++  pconfig(what, where)
++
++{.pop.} # styleChecks
++
++proc errorMessage*(errorcode: cint): string =
++  ## Returns the PCRE2 message for `errorcode` (or an empty string).
++  var buffer: array[512, uint8]
++  let size = get_error_message(errorcode, addr buffer[0],
++                               csize_t(buffer.len))
++  if size > 0:
++    result = $cast[cstring](addr buffer[0])
+
+diff -Naur a/src/regexutils.nim b/src/regexutils.nim
+--- /dev/null
++++ b/src/regexutils.nim
+@@ -0,0 +1,291 @@
++# SPDX-License-Identifier: MIT
++# Nitter's regex layer, backed directly by PCRE2 (libpcre2-8).
++#
++# Nitter's own regex usage (formatters, parser utils and Jester's regex
++# routes) goes through this module instead of std/re, so the program's own
++# code depends exclusively on libpcre2-8. The API mirrors the subset of
++# std/re that the code base uses; Jester's route macro picks up `re`,
++# `find` and `MaxSubpatterns` from the importer's scope.
++
++when defined(js):
++  {.error: "This module needs to be compiled with a c-like backend.".}
++
++## Regular expression support for Nim (PCRE2 port).
++##
++## This is a vendored copy of Nim's `std/re` module, ported from the PCRE1
++## wrapper (`std/pcre`, `libpcre.so.3`) to the PCRE2 8-bit library
++## (`libpcre2-8`) so the program depends exclusively on PCRE2. The public
++## API (procedures, options, semantics) is kept identical to `std/re` in
++## Nim 2.2.12 so that all callers (including Jester's route matching and
++## the `markdown` package) keep working without source changes.
++##
++## PCRE2's licence follows:
++##
++## .. include:: ../../doc/regexprs.txt
++##
++
++runnableExamples:
++  ## Unless specified otherwise, `start` parameter in each proc indicates
++  ## where the scan starts, but outputs are relative to the start of the input
++  ## string, not to `start`:
++  doAssert find("uxabc", re"(?<=x|y)ab", start = 1) == 2 # lookbehind assertion
++  doAssert find("uxabc", re"ab", start = 3) == -1 # we're past `start` => not found
++  doAssert not match("xabc", re"^abc$", start = 1)
++    # can't match start of string since we're starting at 1
++
++import
++  pcre2, strutils
++
++when defined(nimPreviewSlimSystem):
++  import std/syncio
++
++const
++  MaxSubpatterns* = 20
++    ## defines the maximum number of subpatterns that can be captured
++    ## in `replacef` (and by Jester's route matching).
++
++type
++  RegexFlag* = enum     ## options for regular expressions
++    reIgnoreCase = 0,   ## do caseless matching
++    reMultiLine = 1,    ## `^` and `$` match newlines within data
++    reDotAll = 2,       ## `.` matches anything including NL
++    reExtended = 3,     ## ignore whitespace and `#` comments
++    reStudy = 4         ## study the expression (may be omitted if the
++                        ## expression will be used only once)
++
++  RegexDesc = object
++    h: ptr pcre2.Code
++    m: ptr pcre2.MatchData
++
++  Regex* = ref RegexDesc ## a compiled regular expression
++
++  RegexError* = object of ValueError
++    ## is raised if the pattern is no valid regular expression.
++
++when defined(gcDestructors):
++  when defined(nimAllowNonVarDestructor):
++    proc `=destroy`(x: RegexDesc) =
++      if not isNil(x.h):
++        pcre2.code_free(x.h)
++      if not isNil(x.m):
++        pcre2.match_data_free(x.m)
++  else:
++    proc `=destroy`(x: var RegexDesc) =
++      if not isNil(x.h):
++        pcre2.code_free(x.h)
++      if not isNil(x.m):
++        pcre2.match_data_free(x.m)
++
++proc raiseInvalidRegex(msg: string) {.noinline, noreturn.} =
++  var e: ref RegexError
++  new(e)
++  e.msg = msg
++  raise e
++
++# PCRE1 option values used by `std/re` (from PCRE1 8.36); translated to the
++# different PCRE2 values at compile/match time since they do not line up.
++# PCRE1 option values used by the `RegexFlag` enum layout (from PCRE1
++# 8.36); translated to the different PCRE2 values at compile/match time.
++const
++  PCRE1_CASELESS = 0x00000001'i32
++  PCRE1_MULTILINE = 0x00000002'i32
++  PCRE1_DOTALL = 0x00000004'i32
++  PCRE1_EXTENDED = 0x00000008'i32
++  PCRE1_ANCHORED = 0x00000010'i32
++  PCRE1_NOTBOL = 0x00000080'i32
++  PCRE1_NOTEOL = 0x00000100'i32
++  PCRE1_NOTEMPTY = 0x00000400'i32
++  PCRE1_NOTEMPTY_ATSTART = 0x10000000'i32
++
++proc compileOptions(flags: cint): uint32 =
++  ## Translates the `RegexFlag` bit set cast into the PCRE2 compile options.
++  ## PCRE2 uses different numeric values than PCRE1 for these.
++  result = 0
++  if (flags and PCRE1_CASELESS) != 0: result = result or pcre2.CASELESS
++  if (flags and PCRE1_MULTILINE) != 0: result = result or pcre2.MULTILINE
++  if (flags and PCRE1_DOTALL) != 0: result = result or pcre2.DOTALL
++  if (flags and PCRE1_EXTENDED) != 0: result = result or pcre2.EXTENDED
++
++proc translateVerbatim(pattern: string, options: var uint32): string =
++  ## PCRE1-only verbatims in patterns are transliterated to their PCRE2
++  ## equivalents: `(*U)` (ungreedy) becomes the `PCRE2_UNGREEDY` compile
++  ## option and `(*UTF8)` becomes `(*UTF)`. PCRE2 accepts a plain `(*UTF)`
++  ## verbatim, so that check remains untouched.
++  result = strutils.replace(pattern, "(*U)", "")
++  if result != pattern:
++    options = options or pcre2.UNGREEDY
++  result = strutils.replace(result, "(*UTF8)", "(*UTF)")
++
++proc rawCompile(pattern: string, flags: cint): ptr pcre2.Code =
++  var
++    errorCode: cint
++    offset: csize_t
++    options = compileOptions(flags)
++  let pattern2 = translateVerbatim(pattern, options)
++  result = pcre2.compile(cast[ptr uint8](pattern2.cstring),
++                         cast[csize_t](pattern2.len), options,
++                         addr errorCode, addr offset, nil)
++  if result == nil:
++    raiseInvalidRegex(pcre2.errorMessage(errorCode) & "\n" & pattern & "\n" &
++      spaces(int(offset)) & "^\n")
++
++proc finalizeRegEx(x: Regex) =
++  pcre2.code_free(x.h)
++  if not isNil(x.m):
++    pcre2.match_data_free(x.m)
++
++proc re*(s: string, flags = {reStudy}): Regex =
++  ## Constructor of regular expressions.
++  ##
++  ## Note that Nim's
++  ## extended raw string literals support the syntax `re"[abc]"` as
++  ## a short form for `re(r"[abc]")`. Also note that since this
++  ## compiles the regular expression, which is expensive, you should
++  ## avoid putting it directly in the arguments of the functions like
++  ## the examples show below if you plan to use it a lot of times, as
++  ## this will hurt performance immensely. (e.g. outside a loop, ...)
++  when defined(gcDestructors):
++    result = Regex()
++  else:
++    new(result, finalizeRegEx)
++  result.h = rawCompile(s, cast[cint](flags - {reStudy}))
++  result.m = pcre2.match_data_create_from_pattern(result.h, nil)
++  if isNil(result.m):
++    pcre2.code_free(result.h)
++    raiseInvalidRegex("could not create match data\n" & s & "\n")
++  if reStudy in flags:
++    # PCRE2 has no `pcre_study`; the replacement for it is JIT compilation.
++    var hasJit: uint32
++    if pcre2.config(pcre2.CONFIG_JIT, addr hasJit) == 0 and hasJit != 0:
++      let rc = pcre2.jit_compile(result.h, pcre2.JIT_COMPLETE)
++      if rc < 0:
++        pcre2.code_free(result.h)
++        pcre2.match_data_free(result.m)
++        raiseInvalidRegex("JIT compilation failed: " &
++          pcre2.errorMessage(rc) & "\n" & s & "\n")
++
++proc bufSubstr(b: cstring, sPos, ePos: int): string {.inline.} =
++  ## Return a Nim string built from a slice of a cstring buffer.
++  ## Don't assume cstring is '\0' terminated
++  let sz = ePos - sPos
++  result = newString(sz+1)
++  copyMem(addr(result[0]), unsafeAddr(b[sPos]), sz)
++  result.setLen(sz)
++
++proc matchFlags(flags: cint): uint32 =
++  ## Translates the match-time option flags (PCRE1 values) to PCRE2.
++  result = 0
++  if (flags and PCRE1_ANCHORED) != 0: result = result or pcre2.ANCHORED
++  if (flags and PCRE1_NOTBOL) != 0: result = result or pcre2.NOTBOL
++  if (flags and PCRE1_NOTEOL) != 0: result = result or pcre2.NOTEOL
++  if (flags and PCRE1_NOTEMPTY) != 0: result = result or pcre2.NOTEMPTY
++  if (flags and PCRE1_NOTEMPTY_ATSTART) != 0:
++    result = result or pcre2.NOTEMPTY_ATSTART
++
++proc runMatch(pattern: Regex; buf: cstring; bufSize, start: int;
++              flags: cint): cint =
++  ## Executes `pattern` against `buf[start ..< bufSize]` and returns the
++  ## PCRE2 result code (number of capture pairs, or a negative error code).
++  result = pcre2.match(pattern.h, cast[ptr uint8](buf),
++                       cast[csize_t](bufSize), cast[csize_t](start),
++                       matchFlags(flags), pattern.m, nil)
++
++proc ovectorAt(pattern: Regex; i: int): int =
++  ## Returns ovector entry `i` of `pattern`, with unset captures
++  ## (PCRE2_UNSET) mapped to -1 like PCRE1 used to report them.
++  if i >= int(pcre2.get_ovector_count(pattern.m)) * 2:
++    return -1
++  let ovc = cast[ptr UncheckedArray[csize_t]](
++    pcre2.get_ovector_pointer(pattern.m))
++  let v = ovc[i]
++  if v == pcre2.UNSET: -1
++  else: int(v)
++
++proc matchOrFind(buf: cstring, pattern: Regex, matches: var openArray[string],
++                 start, bufSize, flags: cint): cint =
++  let res = runMatch(pattern, buf, bufSize, start, flags)
++  if res < 0'i32: return res
++  for i in 1..int(res)-1:
++    let a = ovectorAt(pattern, i * 2)
++    let b = ovectorAt(pattern, i * 2 + 1)
++    if a >= 0:
++      matches[i-1] = bufSubstr(buf, int(a), int(b))
++    else: matches[i-1] = ""
++  return cint(ovectorAt(pattern, 1) - ovectorAt(pattern, 0))
++
++proc findBoundsImpl(buf: cstring, pattern: Regex,
++                    start = 0, bufSize = 0, flags = 0): tuple[first, last: int] =
++  let res = runMatch(pattern, buf, bufSize, start, flags.int32)
++
++  if res < 0'i32:
++    result = (-1, 0)
++  else:
++    result = (int(ovectorAt(pattern, 0)), int(ovectorAt(pattern, 1)-1))
++
++
++proc find*(buf: cstring, pattern: Regex, matches: var openArray[string],
++           start = 0, bufSize: int): int =
++  ## returns the starting position of `pattern` in `buf` and the captured
++  ## substrings in the array `matches`. If it does not match, nothing
++  ## is written into `matches` and `-1` is returned.
++  ## `buf` has length `bufSize` (not necessarily `'\0'` terminated).
++  ##
++  ## .. note:: The memory for `matches` needs to be allocated before this function is called, otherwise it will just remain empty.
++  let res = runMatch(pattern, buf, bufSize, start, 0'i32)
++  if res < 0'i32: return res
++  for i in 1..int(res)-1:
++    let a = ovectorAt(pattern, i * 2)
++    let b = ovectorAt(pattern, i * 2 + 1)
++    if a >= 0: matches[i-1] = bufSubstr(buf, int(a), int(b))
++    else: matches[i-1] = ""
++  return ovectorAt(pattern, 0)
++
++proc find*(s: string, pattern: Regex, matches: var openArray[string],
++           start = 0): int {.inline.} =
++  ## returns the starting position of `pattern` in `s` and the captured
++  ## substrings in the array `matches`. If it does not match, nothing
++  ## is written into `matches` and `-1` is returned.
++  ##
++  ## .. note:: The memory for `matches` needs to be allocated before this function is called, otherwise it will just remain empty.
++  result = find(cstring(s), pattern, matches, start, s.len)
++
++
++
++proc replace*(s: string, sub: Regex, by = ""): string =
++  ## Replaces `sub` in `s` by the string `by`. Captures cannot be
++  ## accessed in `by`.
++  runnableExamples:
++    doAssert "var1=key; var2=key2".replace(re"(\w+)=(\w+)") == "; "
++    doAssert "var1=key; var2=key2".replace(re"(\w+)=(\w+)", "?") == "?; ?"
++  result = ""
++  var prev = 0
++  var flags = int32(0)
++  while prev < s.len:
++    var match = findBoundsImpl(s.cstring, sub, prev, s.len, flags)
++    flags = 0
++    if match.first < 0: break
++    add(result, substr(s, prev, match.first-1))
++    add(result, by)
++    if match.first > match.last:
++      # 0-len match
++      flags = PCRE1_NOTEMPTY_ATSTART
++    prev = match.last + 1
++  add(result, substr(s, prev))
++
++proc replacef*(s: string, sub: Regex, by: string): string =
++  ## Replaces `sub` in `s` by the string `by`. Captures can be accessed in `by`
++  ## with the notation `$i` and `$#` (see strutils.\`%\`).
++  runnableExamples:
++    doAssert "var1=key; var2=key2".replacef(re"(\w+)=(\w+)", "$1<-$2$2") ==
++      "var1<-keykey; var2<-key2key2"
++  result = ""
++  var caps: array[MaxSubpatterns, string]
++  var prev = 0
++  while prev < s.len:
++    var match = findBoundsImpl(s.cstring, sub, prev, s.len, 0'i32)
++    if match.first < 0: break
++    add(result, substr(s, prev, match.first-1))
++    addf(result, by, caps)
++    if match.last + 1 == prev: break
++    prev = match.last + 1
++  add(result, substr(s, prev))
+
+diff -Naur a/src/formatters.nim b/src/formatters.nim
+--- a/src/formatters.nim
++++ b/src/formatters.nim
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+ import strutils, strformat, times, uri, tables, xmltree, htmlparser, htmlgen, math
+-import std/[enumerate, re]
++import std/enumerate
++import regexutils
+ import types, utils, query
+ 
+ const
+@@ -88,7 +89,7 @@
+ 
+ proc getM3u8Url*(content: string): string =
+   var matches: array[1, string]
+-  if re.find(content, m3u8Regex, matches) != -1:
++  if find(content, m3u8Regex, matches) != -1:
+     result = matches[0]
+ 
+ proc proxifyVideo*(manifest: string; proxy: bool; manifestUrl = ""): string =
+
+diff -Naur a/src/parserutils.nim b/src/parserutils.nim
+--- a/src/parserutils.nim
++++ b/src/parserutils.nim
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+-import std/[times, macros, htmlgen, options, algorithm, re]
++import std/[times, macros, htmlgen, options, algorithm]
++import regexutils
+ import std/strutils except escape
+ import std/unicode except strip
+ from xmltree import escape
+@@ -16,7 +17,7 @@
+   unRegex = re"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
+   unReplace = "$1<a href=\"/$2\">@$2</a>"
+ 
+-  htRegex = re"(^|[^\w-_./?])([#$]|＃)([\w_]+)"
++  htRegex = re"(^|[^\w./?-])([#$]|＃)([\w_]+)"
+   htReplace = "$1<a href=\"/search?f=tweets&q=%23$3\">$2$3</a>"
+ 
+ type
+
+diff -Naur a/src/experimental/parser/user.nim b/src/experimental/parser/user.nim
+--- a/src/experimental/parser/user.nim
++++ b/src/experimental/parser/user.nim
+@@ -1,14 +1,15 @@
+-import std/[algorithm, unicode, re, strutils, strformat, options, nre]
++import std/[algorithm, unicode, strutils, strformat, options]
++import ../../regexutils
+ import jsony
+ import utils, slices
+ import ../types/user as userType
+ from ../../types import Result, User, Error
+ 
+ let
+-  unRegex = re.re"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
++  unRegex = re"(^|[^A-z0-9-_./?])@([A-z0-9_]{1,15})"
+   unReplace = "$1<a href=\"/$2\">@$2</a>"
+ 
+-  htRegex = nre.re"""(*U)(^|[^\w-_.?])([#＃$])([\w_]*+)(?!</a>|">|#)"""
++  htRegex = re"""(*U)(^|[^\w.?-])([#＃$])([\w_]*+)(?!</a>|">|#)"""
+   htReplace = "$1<a href=\"/search?f=tweets&q=%23$3\">$2$3</a>"
+ 
+ proc expandUserEntities(user: var User; raw: RawUser) =
+@@ -29,7 +30,7 @@
+ 
+   user.bio = orig.replacedWith(replacements, 0 .. orig.len)
+                  .replacef(unRegex, unReplace)
+-                 .replace(htRegex, htReplace)
++                 .replacef(htRegex, htReplace)
+ 
+ proc getBanner(user: RawUser): string =
+   if user.profileBannerUrl.len > 0:
+
+diff -Naur a/src/routes/media.nim b/src/routes/media.nim
+--- a/src/routes/media.nim
++++ b/src/routes/media.nim
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: AGPL-3.0-only
+-import uri, strutils, httpclient, os, hashes, base64, re
++import uri, strutils, httpclient, os, hashes, base64
++import ../regexutils
+ import asynchttpserver, asyncstreams, asyncfile, asyncnet
+ import asyncdispatch
+ 
+@@ -114,10 +115,7 @@
+     enableRawMode()
+     break route
+ 
+-proc decoded*(req: jester.Request; index: int): string =
+-  let
+-    based = req.matches[0].len > 1
+-    encoded = req.matches[index]
++proc decoded*(encoded: string; based = false): string =
+   if based: decode(encoded)
+   else: decodeUrl(encoded)
+ 
+@@ -132,8 +130,8 @@
+     get "/pic/?":
+       resp Http404
+ 
+-    get re"^\/pic\/orig\/(enc)?\/?(.+)":
+-      var url = decoded(request, 1)
++    get "/pic/orig/enc/@url":
++      var url = decoded(@"url", based=true)
+       cond "/amplify_video/" notin url
+       normalizeImgUrl(url)
+       url.add("?name=orig")
+@@ -144,10 +142,11 @@
+       let code = await proxyMedia(request, url)
+       check code
+ 
+-    get re"^\/pic\/(enc)?\/?(.+)":
+-      var url = decoded(request, 1)
++    get "/pic/orig/@url":
++      var url = decoded(@"url")
+       cond "/amplify_video/" notin url
+       normalizeImgUrl(url)
++      url.add("?name=orig")
+ 
+       let uri = parseUri(url)
+       cond isTwitterUrl(uri) == true
+@@ -155,11 +154,33 @@
+       let code = await proxyMedia(request, url)
+       check code
+ 
+-    get re"^\/video\/(enc)?\/?(.+)\/(.+)$":
+-      let url = decoded(request, 2)
++    get "/pic/enc/@url":
++      var url = decoded(@"url", based=true)
++      cond "/amplify_video/" notin url
++      normalizeImgUrl(url)
++
++      let uri = parseUri(url)
++      cond isTwitterUrl(uri) == true
++
++      let code = await proxyMedia(request, url)
++      check code
++
++    get "/pic/@url":
++      var url = decoded(@"url")
++      cond "/amplify_video/" notin url
++      normalizeImgUrl(url)
++
++      let uri = parseUri(url)
++      cond isTwitterUrl(uri) == true
++
++      let code = await proxyMedia(request, url)
++      check code
++
++    get "/video/enc/@sig/@url":
++      let url = decoded(@"url", based=true)
+       cond isTwitterUrl(url)
+ 
+-      if getHmac(url) != request.matches[1]:
++      if getHmac(url) != @"sig":
+         resp Http403, showError("Failed to verify signature", cfg)
+ 
+       if ".mp4" in url or ".ts" in url or ".m4s" in url or ".aac" in url:
+@@ -179,3 +200,29 @@
+         content = proxifyVideo(vid, requestPrefs().proxyVideos, url)
+ 
+       resp content, m3u8Mime
++
++
++    get "/video/@sig/@url":
++      let url = decoded(@"url")
++      cond isTwitterUrl(url)
++
++      if getHmac(url) != @"sig":
++        resp Http403, showError("Failed to verify signature", cfg)
++
++      if ".mp4" in url or ".ts" in url or ".m4s" in url or ".aac" in url:
++        let code = await proxyMedia(request, url)
++        check code
++
++      var content: string
++      if ".vmap" in url:
++        let m3u8 = getM3u8Url(await safeFetch(url))
++        if m3u8.len > 0:
++          content = await safeFetch(url)
++        else:
++          resp Http404
++
++      if ".m3u8" in url:
++        let vid = await safeFetch(url)
++        content = proxifyVideo(vid, requestPrefs().proxyVideos, url)
++
++      resp content, m3u8Mime
