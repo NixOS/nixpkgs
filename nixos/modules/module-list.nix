@@ -1055,6 +1055,7 @@
   ./services/monitoring/amazon-cloudwatch-agent.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
+  ./services/monitoring/autokuma.nix
   ./services/monitoring/below.nix
   ./services/monitoring/beszel-agent.nix
   ./services/monitoring/beszel-hub.nix
