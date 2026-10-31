@@ -24,6 +24,9 @@ buildGoModule (finalAttrs: {
     substituteInPlace $out/lib/systemd/system/acme-dns.service --replace-fail "/usr/local/bin/acme-dns" "$out/bin/acme-dns"
   '';
 
+  # tests fail in the Darwin sandbox due to an attempt to access /etc/protocols
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   passthru.tests = { inherit (nixosTests) acme-dns; };
 
   meta = {
@@ -33,7 +36,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
     mainProgram = "acme-dns";
-    # Tests time out on darwin.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
