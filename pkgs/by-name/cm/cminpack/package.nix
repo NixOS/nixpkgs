@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cminpack";
-  version = "1.3.11";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "devernay";
     repo = "cminpack";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GF9HiITX/XV8hXrp5lJw2XM0Zyb/CBkMZkRFBbQj03A=";
+    hash = "sha256-cJRFcgxQV3hXVuIex9aupZx4XJKUv4ktKSXujD4/+6I=";
   };
 
   postPatch = ''
