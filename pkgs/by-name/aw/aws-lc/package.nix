@@ -14,6 +14,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
   version = "5.12.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
