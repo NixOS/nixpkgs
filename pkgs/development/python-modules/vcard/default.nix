@@ -36,5 +36,14 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "vcard";
     maintainers = with lib.maintainers; [ l0b0 ];
+    categories = with lib.categories; [
+      implementedIn.python
+      interface.commandline
+      role.program
+      scope.utility
+      use.checking
+      worksWith.file
+      worksWith.pim
+    ];
   };
 }
