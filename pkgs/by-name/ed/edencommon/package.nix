@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2026.07.27.00";
+  version = "2026.08.10.00";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RcLdBurFB4Zk479EHeGZHdNKvSMO1M54HDbxHVEFa7Y=";
+    hash = "sha256-AX/Ezj/3C0Pxny+RaH5hMbqPDCVSCpkGNxEXpjnbHeM=";
   };
 
   nativeBuildInputs = [
