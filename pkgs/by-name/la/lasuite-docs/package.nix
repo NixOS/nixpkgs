@@ -40,6 +40,31 @@ let
 
     dontInstall = true;
   };
+
+  python3Packages' = python3Packages.overrideScope (
+    self: super: {
+      django-treebeard = super.django-treebeard.overridePythonAttrs (
+        finalAttrs: { src, ... }: {
+          version = "4.8.0";
+          src = src.override {
+            hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+          };
+        }
+      );
+      mcp = self.mcp_1;
+      # mistralai's MCP integration (unused here) requires mcp>=2
+      mistralai = super.mistralai.overridePythonAttrs (old: {
+        disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+          "src/mistralai/extra/tests/test_connectors_gateway.py"
+          "src/mistralai/extra/tests/test_mcp_streamable_http.py"
+        ];
+      });
+    }
+  );
+in
+let
+  # Prevent using the wrong one.
+  python3Packages = python3Packages';
 in
 
 python3Packages.buildPythonApplication (finalAttrs: {
