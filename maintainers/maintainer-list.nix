@@ -32292,6 +32292,12 @@
     githubId = 47603387;
     name = "Mihók Martin";
   };
+  xscriptor = {
+    email = "x@xscriptor.com";
+    github = "xscriptor";
+    githubId = 164530146;
+    name = "xscriptor";
+  };
   xsteadfastx = {
     email = "marvin@xsteadfastx.org";
     github = "xsteadfastx";
