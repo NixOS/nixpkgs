@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "hickle";
-  version = "5.0.3-unstable-2026-07-25";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
