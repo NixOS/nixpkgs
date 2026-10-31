@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
   version = "0.7.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "camera";
