@@ -43,7 +43,6 @@ let
             ++ old.optional-dependencies.front
             ++ old.optional-dependencies.oidc
             ++ old.optional-dependencies.scim
-            ++ old.optional-dependencies.ldap
             ++ old.optional-dependencies.sentry
             ++ old.optional-dependencies.postgresql
             ++ old.optional-dependencies.otp
