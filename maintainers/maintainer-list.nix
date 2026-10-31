@@ -4418,6 +4418,12 @@
     githubId = 7560938;
     name = "Bas van den Wollenberg";
   };
+  bryab = {
+    name = "Bryan Fordney";
+    email = "kriegerskastle+nixpkgs@proton.me";
+    github = "bryab";
+    githubId = 126733;
+  };
   bryango = {
     name = "Bryan Lai";
     email = "bryanlais@gmail.com";
