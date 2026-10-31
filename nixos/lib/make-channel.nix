@@ -38,7 +38,7 @@ pkgs.releaseTools.makeSourceTarball {
 
     # The compression tasks are shortlived; use all available CPUs (-T0) to
     # prioritize fast channel advancement.
-    XZ_OPT="-T0" tar \
+    XZ_OPT="-9e -T0" tar \
       --create \
       --file=$out/tarballs/$releaseName.tar.xz \
       --xz \
@@ -55,7 +55,7 @@ pkgs.releaseTools.makeSourceTarball {
     tar \
       --create \
       --file="$out/tarballs/$releaseName.tar.zst" \
-      --use-compress-program="zstd -19 -T0" \
+      --use-compress-program="zstd --ultra -22 -T0" \
       --absolute-names \
       --owner=0 \
       --group=0 \
