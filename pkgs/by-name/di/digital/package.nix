@@ -4,6 +4,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  jdk,
   jre,
   maven,
 }:
@@ -32,6 +33,9 @@ maven.buildMavenPackage (finalAttrs: {
   # Also use the v0.31 commit date as a build and output timestamp.
   mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=v${finalAttrs.version} -Dproject.build.outputTimestamp=2024-09-03T14:02:31+02:00 -DbuildTimestamp=2024-09-03T14:02:31+02:00";
   mvnHash = "sha256-g6gev7ZVhQSzPgUj496E/QjQnQ3rIcBq4o8a/r5x8FA=";
+
+  # SVG export and shape tests need AWT, missing from maven's default jdk_headless
+  mvnJdk = jdk;
 
   nativeBuildInputs = [
     copyDesktopItems
