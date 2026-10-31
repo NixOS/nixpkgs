@@ -179,19 +179,19 @@ with haskellLib;
         # c.f. https://github.com/commercialhaskell/stack/issues/693
         (pkgs.fetchpatch {
           name = "stack-semaphore-compat-2.0.patch";
-          url = "https://github.com/commercialhaskell/stack/commit/c9e3cbc3f460de65d5abeffb583242255b41be23.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/31d28c450aac4daf26f748bf2db07237ab726d2d.patch";
           includes = [ "src/**" ];
-          hash = "sha256-flf1f/QoBZAw9VRTzdNJQu+Zt1b+9q/pi7+1ukCad6c=";
+          hash = "sha256-dr9HxAoc024nAHx+AbvCc0AsQlRemsto6e0q5vsQ0Yw=";
         })
         (pkgs.fetchpatch {
           name = "stack-semaphore-compat-compiler-paths.patch";
-          url = "https://github.com/commercialhaskell/stack/commit/02fa193245fc7210c6ce88646b2fa94ab39b9fc4.patch";
-          hash = "sha256-oE0GfXADSYlPceurzeZbq1Ix14gOtZEBssA8ZINv2qs=";
+          url = "https://github.com/commercialhaskell/stack/commit/26bbb59e8a6f81ba0c460c4f0a3b91be03fbbede.patch";
+          hash = "sha256-PFHnPhq3btHJv2TNmlNQDD8JhQB5jrV52fGi01CEepc=";
         })
         (pkgs.fetchpatch {
           name = "stack-semaphore-ghc-compat-map.patch";
-          url = "https://github.com/commercialhaskell/stack/commit/960e704b9cd61094b75fad4689f0034b4435a268.patch";
-          hash = "sha256-zYIsttG3z4gbpfXgQsKz0PlkAEzODlLYiYdPpfBohvM=";
+          url = "https://github.com/commercialhaskell/stack/commit/106614b898367e551f06bd434c64bb0c0eaea3fa.patch";
+          hash = "sha256-QnstDRRNJ4mUPOJdB3YWAM9bssIvJcJZtfMVIPOUU5M=";
         })
       ]
       (
@@ -200,6 +200,15 @@ with haskellLib;
           prePatch = ''
             ${drv.prePatch or ""}
             find doc src -type f -exec sed -i -e 's/\r$//' '{}' '+'
+
+            # part of semaphore-compat 2.0 support
+            substituteInPlace stack.cabal \
+              --replace-fail 'semaphore-compat >=1.0.0 && <2' 'semaphore-compat >=2.0.1' \
+              --replace-fail 'semaphore-compat >=1.0.0 && < 2' 'semaphore-compat >=2.0.1'
+
+            # https://github.com/commercialhaskell/stack/pull/6939/changes
+            substituteInPlace stack.cabal \
+              --replace-fail 'memory >=0.18.0' 'ram >= 0.21 && < 0.23'
           '';
         }) super.stack
       );
