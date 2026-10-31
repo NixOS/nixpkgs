@@ -96,16 +96,18 @@ stdenv.mkDerivation (finalAttrs: {
     rm baseset/opengfx-*.tar
   '';
 
-  postInstall =
-    lib.optionalString withOpenGFX ''
-      cp ${finalAttrs.passthru.opengfx}/*.tar $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenSFX ''
-      cp ${finalAttrs.passthru.opensfx}/*.tar $out/share/games/openttd/baseset
-    ''
-    + lib.optionalString withOpenMSX ''
-      tar -xf ${finalAttrs.passthru.openmsx}/*.tar -C $out/share/games/openttd/baseset
-    '';
+  postInstall = ''
+    ln -s $out/share/doc/${finalAttrs.pname}/* $out/share/games/openttd
+  ''
+  + lib.optionalString withOpenGFX ''
+    cp ${finalAttrs.passthru.opengfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenSFX ''
+    cp ${finalAttrs.passthru.opensfx}/*.tar $out/share/games/openttd/baseset
+  ''
+  + lib.optionalString withOpenMSX ''
+    tar -xf ${finalAttrs.passthru.openmsx}/*.tar -C $out/share/games/openttd/baseset
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
