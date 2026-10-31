@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
+    ./treat-linked-services-as-enabled.patch
   ];
 
   nativeBuildInputs = [
