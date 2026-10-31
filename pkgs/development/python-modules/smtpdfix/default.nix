@@ -41,6 +41,8 @@ buildPythonPackage rec {
     "test_missing_certs"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "SMTP server for use as a pytest fixture for testing";
     homepage = "https://github.com/bebleo/smtpdfix";
