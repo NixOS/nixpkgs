@@ -151,6 +151,9 @@ let
       writeText,
       autoPatchelfHook,
       buildPackages,
+      cacert,
+      jre-generate-cacerts,
+      zip,
 
       # The JDK/JRE used for running Gradle.
       java ? defaultJava,
@@ -176,6 +179,7 @@ let
       nativeBuildInputs = [
         makeWrapper
         unzip
+        zip
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
@@ -208,6 +212,27 @@ let
           mkdir -vp $gradleLibexec
           cp -av lib/ $gradleLibexec
           [ -f $gradleLibexec/lib/gradle-launcher-*.jar ] || { echo "No Gradle launcher jar found!" >&2 && exit 1; }
+
+          # google-api-client (GCS repositories and build cache) trusts only its bundled google.p12.
+          # Replace it with a store made from cacert. Nothing reads google.jks.
+          for jar in $gradleLibexec/lib/plugins/google-api-client-*.jar; do
+            unzip -l "$jar" com/google/api/client/googleapis/google.p12 >/dev/null
+            work="$(mktemp -d)"
+            pushd "$work"
+            export JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE"
+            ${jre-generate-cacerts} ${buildPackages.jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+            mkdir -p com/google/api/client/googleapis
+            ${buildPackages.jdk}/bin/keytool -importkeystore -noprompt \
+              -srckeystore cacerts -srcstorepass changeit \
+              -destkeystore com/google/api/client/googleapis/google.p12 \
+              -deststoretype PKCS12 -deststorepass notasecret
+            unset JAVA_TOOL_OPTIONS
+            touch -d @315619200 com/google/api/client/googleapis/google.p12
+            zip -q -d "$jar" com/google/api/client/googleapis/google.jks
+            zip -q -X "$jar" com/google/api/client/googleapis/google.p12
+            popd
+            rm -r "$work"
+          done
 
           # Set up toolchain paths in the gradle.properties.
           echo ${lib.escapeShellArg toolchainPaths} > $gradleLibexec/gradle.properties
