@@ -190,6 +190,13 @@ in
 
             if [ -f "$storePath/v11/index.db" ]; then
               pnpm-fixup-state-db "$storePath/v11";
+              # pnpm 12.15 introduced pinning packages using other hashes? This
+              # breaks reproducibility across versions, so let's drop it for
+              # now. See
+              # https://github.com/pnpm/pnpm/commit/7b0d6873a68ff10862e1f0fa03c728af4bc7b56a
+              # TODO: Next time we introduce a new fetcher version, this should
+              # probably be skipped?
+              sqlite3 "$storePath/v11/index.db" "DROP TABLE IF EXISTS package_index_alias"
               # Dump the SQLite database to a SQL text file for reproducibility.
               # SQLite's binary format is non-deterministic (version-valid-for number, etc),
               # so we store the logical contents as SQL statements and reconstruct during build.
