@@ -1845,6 +1845,8 @@ with pkgs;
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
   rocmPackages = recurseIntoAttrs (callPackage ../development/rocm-modules { });
+  # Kept out of Hydra until the default ROCm scope switches.
+  rocmPackages_10 = callPackage ../development/rocm-modules/10 { };
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
