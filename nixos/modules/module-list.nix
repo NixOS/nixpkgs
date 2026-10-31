@@ -1497,6 +1497,7 @@
   ./services/networking/tinyproxy.nix
   ./services/networking/tlsrouter.nix
   ./services/networking/tmate-ssh-server.nix
+  ./services/networking/tor.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
