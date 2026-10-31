@@ -229,6 +229,13 @@ let
 
     # Shut down ceph by stopping ceph.target.
     monA.succeed("systemctl stop ceph.target")
+    # `systemctl stop ceph.target` returns before the daemons have stopped:
+    # it only waits for `ceph.target` itself, which stops immediately.
+    # Wait until they all have, otherwise the `systemctl start` below
+    # cancels their pending stop jobs, and they are not restarted.
+    monA.wait_until_fails(
+        "systemctl list-units --no-legend --state=active,activating,deactivating,reloading 'ceph-*.service' | grep ."
+    )
 
     # Start it up
     monA.succeed("systemctl start ceph.target")
