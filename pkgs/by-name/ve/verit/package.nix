@@ -2,23 +2,21 @@
   lib,
   gccStdenv,
   fetchurl,
-  autoreconfHook,
   gmp,
   flex,
   bison,
 }:
 
-gccStdenv.mkDerivation {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "veriT";
-  version = "2021.06.2";
+  version = "2026.05";
 
   src = fetchurl {
-    url = "https://verit.loria.fr/download/2021.06.2/verit-2021.06.2-rmx.tar.gz";
-    sha256 = "1yjvvxnsix0rhilc81ycx1s85dymq366c6zh1hwwd8qxp7k1zca2";
+    url = "https://www.verit-solver.org/download/${finalAttrs.version}/verit-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-wNN1S1mdAsBENZBkDs770t31YDt63Nj737MbhOWcwvE=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
     flex
     bison
   ];
@@ -35,9 +33,12 @@ gccStdenv.mkDerivation {
 
   meta = {
     description = "Open, trustable and efficient SMT-solver";
-    homepage = "https://verit.loria.fr/";
+    homepage = "https://www.verit-solver.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      sempiternal-aurora
+    ];
   };
-}
+})
