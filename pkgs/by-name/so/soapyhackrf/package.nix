@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   hackrf,
@@ -11,21 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapyhackrf";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyHackRF";
     tag = "soapy-hackrf-${finalAttrs.version}";
-    hash = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
+    hash = "sha256-5Cr46rfDczfUV1yLivxBYl90mqnzdHrxZZaIzuabFAE=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyHackRF/commit/143ff5e7e0f786e341df8846c04e8273c5183c26.patch";
-      hash = "sha256-8tMN6uEWUt1sUC45kBM6WHXDd/oTFyo6u+NpVPg+z5Q=";
-    })
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
