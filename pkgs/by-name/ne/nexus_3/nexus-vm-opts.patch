@@ -1,0 +1,14 @@
+diff --git a/bin/nexus b/bin/nexus
+index 5bd5c88a8fec..bd8080821b5d
+--- a/bin/nexus
++++ b/bin/nexus
+@@ -139,7 +139,8 @@ read_vmoptions() {
+
+ cd "$HOME" || exit 1
+ vmoptions_val=""
+-read_vmoptions "nexus.vmoptions"
++VM_OPTS=${VM_OPTS_FILE:-"$linkdir/$ALTERNATIVE_NAME.vmoptions"}
++read_vmoptions "$VM_OPTS"
+ INSTALL4J_ADD_VM_PARAMS="$INSTALL4J_ADD_VM_PARAMS $vmoptions_val"
+
+ # deduce the chosen data directory and prepare log and tmp directories  
