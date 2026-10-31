@@ -54,6 +54,7 @@ in
               types.submodule (
                 { name, ... }:
                 {
+                  freeformType = settingsFormat.type;
                   options = {
                     enable = mkOption {
                       description = "enable reaction-plugin-${name}";
