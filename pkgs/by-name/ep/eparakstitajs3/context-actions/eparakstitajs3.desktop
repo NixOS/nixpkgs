@@ -1,0 +1,31 @@
+[Desktop Entry]
+Type=Service
+MimeType=application/pdf;application/vnd.etsi.asic-e+zip;application/lv.eme.edoc;inode/directory;
+Actions=SignPDF;SignEDOC;Extract;NewContainer;Batch;
+Icon=eparakstitajs3
+X-KDE-Submenu=eParakstītājs
+
+[Desktop Action SignPDF]
+Name=Sign as PDF
+Icon=@out@/share/eparakstitajs3/eparakstitajs3.xpm
+Exec=@out@/bin/eparakstitajs3 -signpdf %F
+
+[Desktop Action SignEDOC]
+Name=Sign as eDOC
+Icon=@out@/share/eparakstitajs3/eparakstitajs3.xpm
+Exec=@out@/bin/eparakstitajs3 -sign %F
+
+[Desktop Action Extract]
+Name=Extract with eParakstītājs
+Icon=archive-extract
+Exec=@out@/bin/eparakstitajs3 -export %F
+
+[Desktop Action NewContainer]
+Name=New with eParakstītājs
+Icon=document-new
+Exec=@out@/bin/eparakstitajs3 -new %F
+
+[Desktop Action Batch]
+Name=Batch with eParakstītājs
+Icon=document-multiple
+Exec=@out@/bin/eparakstitajs3 -batch %F
