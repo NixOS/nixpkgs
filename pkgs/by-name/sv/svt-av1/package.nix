@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gitlab.com/AOMediaCodec/SVT-AV1";
     description = "AV1-compliant encoder/decoder library core";
