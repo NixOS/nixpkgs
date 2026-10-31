@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_12,
   nodejs,
   makeBinaryWrapper,
   versionCheckHook,
@@ -12,59 +13,55 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commitlint";
-  version = "21.0.0";
+  version = "21.2.4";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i1Nom/piZHBPV7d8DwBsu/42CCopAu2OAOzlJTwNFP8=";
+    hash = "sha256-NU8X/VGBnMuJjhevdqX7HCv0lmBkUzXQpESqSJ28eyg=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-e51t2ODoBU19ADUZ4IJBsRs92XipmWCywJWMJ4EzRf8=";
+  pnpmWorkspaces = [
+    "."
+    "@commitlint/cli..."
+    "@commitlint/config-conventional..."
+    "@commitlint/config-pnpm-scopes..."
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-L8lcAQYcLPQ8GvOnsZQIHj9udBWd6iABeud9MqUGiFA=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
+    pnpmConfigHook
+    pnpm_12
     nodejs
     makeBinaryWrapper
   ];
 
+  # Make pnpm happy to re-install deps for prod
+  env.CI = true;
+
   buildPhase = ''
     runHook preBuild
 
-    # Remove test files to avoid dependency on commitlint test packages
-    rm -rf @commitlint/**/*.test.{js,ts}
+    # Tests of this package are not excluded by its tsconfig and need test-only workspace packages
+    rm @commitlint/config-pnpm-scopes/index.test.ts
 
-    # See https://github.com/conventional-changelog/commitlint/blob/20.1.0/Dockerfile.ci
-    # Excludes `config-nx-scopes` which is a plain JavaScript package
-    pkgs=(
-      "config-validator"
-      "rules"
-      "parse"
-      "is-ignored"
-      "lint"
-      "resolve-extends"
-      "execute-rule"
-      "load"
-      "read"
-      "types"
-      "cli"
-      "config-conventional"
-      "config-pnpm-scopes"
-      "ensure"
-      "format"
-      "message"
-      "to-lines"
-      "top-level"
-    )
-    for p in "''${pkgs[@]}" ; do
+    for p in cli config-conventional config-pnpm-scopes; do
       echo "Building package: @commitlint/$p"
-      cd @commitlint/$p/
-      yarn run --offline tsc --build --force
-      cd ../..
+      pushd @commitlint/$p
+      ../../node_modules/.bin/tsc --build --force
+      popd
     done
 
     runHook postBuild
@@ -73,8 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    rm -rf node_modules
-    yarn install --offline --production --ignore-scripts
+    rm -rf node_modules @commitlint/*/node_modules @packages/*/node_modules
+    export pnpm_config_node_linker=hoisted
+    export pnpm_config_prefer_symlinked_executables=false
+    pnpm --filter="@commitlint/cli..." --filter="@commitlint/config-conventional..." --filter="@commitlint/config-pnpm-scopes..." --offline --prod --ignore-scripts install
+
     mkdir -p $out/bin
     mkdir -p $out/lib/node_modules/@commitlint/root
     mv * $out/lib/node_modules/@commitlint/root/
@@ -99,6 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://commitlint.js.org/";
     license = lib.licenses.mit;
     mainProgram = "commitlint";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
