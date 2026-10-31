@@ -50,11 +50,12 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
 
-  propagatedBuildInputs = [
-    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
-  ]
-  ++ lib.optionals withCairo [
+  propagatedBuildInputs = lib.optionals withCairo [
     pycairo
+  ];
+
+  propagatedNativeBuildInputs = [
+    gobject-introspection.setupHook
   ];
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/378447
