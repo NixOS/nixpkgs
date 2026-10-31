@@ -8,7 +8,7 @@
   cinnamon-gsettings-overrides,
   desktop-file-utils,
   glib,
-  gnome,
+  gnome-gsettings-overrides,
   gtk3,
   mate-desktop,
   mate-settings-daemon,
@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     cinnamon-gsettings-overrides
     glib
-    gnome.nixos-gsettings-overrides
+    gnome-gsettings-overrides
     gtk3
     mate-desktop
     mate-settings-daemon
