@@ -24,19 +24,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
-  version = "22";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "clevis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1glqXKOP0GdzbQLMzUEgacRCafneFH9+MTHRYNgjG3Q=";
+    hash = "sha256-/Feigc1iOdID5hq+AbaNwYW5eL/g6hh6oR6KKmRK2eM=";
   };
 
   patches = [
     # Replaces the clevis-decrypt 300s timeout to a 10s timeout
     # https://github.com/latchset/clevis/issues/289
     ./0000-tang-timeout.patch
+  ];
+
+  # The tpm1 and pkcs11 pins became 'auto' feature options in v24, but the
+  # meson setup hook forces -Dauto_features=enabled, which turns their
+  # required programs (tpm_sealdata from the TPM 1.2 stack, pcscd and
+  # pkcs11-tool) into hard errors. Disable them explicitly to keep the same
+  # pins v22 built (it had no such options and skipped the pins silently).
+  mesonFlags = [
+    "-Dtpm1=disabled"
+    "-Dpkcs11=disabled"
   ];
 
   nativeBuildInputs = [
