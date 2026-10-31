@@ -141,6 +141,9 @@ buildPythonPackage (finalAttrs: {
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wd15 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      wd15
+    ];
   };
 })

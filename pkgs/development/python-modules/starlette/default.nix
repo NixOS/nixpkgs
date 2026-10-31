@@ -72,6 +72,9 @@ buildPythonPackage rec {
     homepage = "https://starlette.dev";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ wd15 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      wd15
+    ];
   };
 }
