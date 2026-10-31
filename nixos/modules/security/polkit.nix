@@ -40,7 +40,7 @@ in
       type = types.submodule {
         freeformType = iniFmt.type;
         options.Polkitd.ExpirationSeconds = lib.mkOption {
-          description = "Expiration timeout of authenticated sesssions.";
+          description = "Expiration timeout of authenticated sessions.";
           type = types.ints.positive;
           default = 300; # current polkit upstream default
         };
