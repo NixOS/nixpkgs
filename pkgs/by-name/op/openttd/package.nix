@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
     };
     opensfx-version = "1.0.3";
+    updateScript = ./update.sh;
   };
 
   meta = {
