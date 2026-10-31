@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   pdfium-binaries,
 }:
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder version "0.2.0") ''
     substituteInPlace linux/CMakeLists.txt \
       --replace-fail "\''${PDFIUM_DIR}/\''${PDFIUM_RELEASE}" "${pdfium-binaries}"
   '';
