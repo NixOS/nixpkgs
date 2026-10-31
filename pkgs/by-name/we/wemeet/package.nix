@@ -37,58 +37,11 @@
   libpsl,
   libkrb5,
   xkeyboard_config,
-  libsForQt5,
   pkg-config,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  wireplumber,
-  libportal,
-  xdg-desktop-portal,
-  opencv4WithoutCuda,
   pipewire,
   fetchgit,
 }:
 let
-  wemeet-wayland-screenshare = stdenv.mkDerivation {
-    pname = "wemeet-wayland-screenshare";
-    version = "0-unstable-2025-05-31";
-
-    src = fetchFromGitHub {
-      owner = "xuwd1";
-      repo = "wemeet-wayland-screenshare";
-      rev = "7f338966e162612b09d838512b11af5901414d05";
-      hash = "sha256-UtPcgEa+9KrF4CblC8D4oClvVJs+a5DWtwH/fD7puVs=";
-      fetchSubmodules = true;
-    };
-
-    nativeBuildInputs = [
-      cmake
-      ninja
-      pkg-config
-    ];
-
-    buildInputs = [
-      wireplumber
-      libportal
-      xdg-desktop-portal
-      libsForQt5.qtwayland
-      opencv4WithoutCuda
-      pipewire
-      libxdamage
-      libxrandr
-      libx11
-    ];
-
-    dontWrapQtApps = true;
-
-    meta = {
-      description = "Hooked WeMeet that enables screenshare on Wayland";
-      homepage = "https://github.com/xuwd1/wemeet-wayland-screenshare";
-      license = lib.licenses.mit;
-    };
-  };
-
   # for mitigating file transfer crashes
   libwemeetwrap = stdenv.mkDerivation {
     pname = "libwemeetwrap";
@@ -311,6 +264,8 @@ stdenv.mkDerivation {
   # set XDG_SESSION_TYPE; unset WAYLAND_DISPLAY getting border shadows to work
   # set QT_STYLE_OVERRIDE solve the color of the font is not visible when using the included Qt
   # set IBUS_USE_PORTAL fix ibus
+  # set WEMEET_XWAYLAND on wayland to enable native screen sharing via xdg-desktop-portal, like the bundled wemeetapp.sh does;
+  # wemeet dlopen()s libpipewire-0.3.so.0 for it
   preFixup =
     let
       baseWrapperArgs = [
@@ -318,19 +273,19 @@ stdenv.mkDerivation {
         "--set QT_STYLE_OVERRIDE fusion"
         "--set IBUS_USE_PORTAL 1"
         "--set XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
-        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${libxext}/lib:${libxdamage}/lib:${opencv4WithoutCuda}/lib:${libxrandr}/lib"
+        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${libxext}/lib:${libxdamage}/lib:${libxrandr}/lib:${lib.getLib pipewire}/lib"
         "--prefix PATH : $out/app/wemeet/bin"
         "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
+        "--run 'if [[ $XDG_SESSION_TYPE == \"wayland\" ]]; then export WEMEET_XWAYLAND=1; fi'"
       ];
       commonWrapperArgs = baseWrapperArgs ++ [
         "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-x11-fix}/lib/libwemeet-x11-fix.so:${wemeet-camera-fix}/lib/libwemeet-camera-fix.so"
-        "--run 'if [[ $XDG_SESSION_TYPE == \"wayland\" ]]; then export LD_PRELOAD=${wemeet-wayland-screenshare}/lib/wemeet/libhook.so\${LD_PRELOAD:+:$LD_PRELOAD}; fi'"
       ];
       xwaylandWrapperArgs = baseWrapperArgs ++ [
         "--set XDG_SESSION_TYPE x11"
         "--set QT_QPA_PLATFORM xcb"
         "--unset WAYLAND_DISPLAY"
-        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so:${wemeet-wayland-screenshare}/lib/wemeet/libhook.so"
+        "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so"
       ];
     in
     ''
