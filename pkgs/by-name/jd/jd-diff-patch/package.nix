@@ -21,6 +21,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "gae"
     "pack"
+    "web/ui"
   ];
 
   vendorHash = "sha256-qo5yG7DqScC4/bU7vWEKLqTZ/j+QMTg2vpl3WHjxLUI=";
