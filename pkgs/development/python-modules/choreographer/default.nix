@@ -8,19 +8,20 @@
 
   # dependencies
   logistro,
+  platformdirs,
   simplejson,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "choreographer";
-  version = "1.2.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "choreographer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WjAE3UlUCiXK5DxwmZvehQQaoJRkgEE8rNJQdAyOM4Q=";
+    hash = "sha256-CGIH3tkRX9wheZeUXA+eW4yS8Lmee6W/R0pfJySpKHQ=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     logistro
+    platformdirs
     simplejson
   ];
 
@@ -48,6 +50,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/plotly/choreographer";
     changelog = "https://github.com/plotly/choreographer/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 })
