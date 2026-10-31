@@ -4,6 +4,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
+use pathrs::{Root, flags::RenameFlags};
 
 use crate::{config::Config, fs::atomic_symlink};
 
@@ -105,7 +106,67 @@ fn setup_usrbinenv(prefix: &str, env_binary: impl AsRef<Path>) -> Result<()> {
 ///
 /// `/bin/sh` is an essential part of a Linux system as this path is hardcoded in the `system()` call
 /// from libc. See `man systemd(3)`.
+///
+/// The actual symlink lives in `/usr/bin` and `/bin` is a symlink to `usr/bin`. Otherwise systemd
+/// taints the system with `unmerged-usr`.
 fn setup_binsh(prefix: &str, sh_binary: impl AsRef<Path>) -> Result<()> {
-    let binsh_path = PathBuf::from(prefix).join("bin/sh");
-    atomic_symlink(&sh_binary, binsh_path)
+    let usrbin_path = PathBuf::from(prefix).join("usr/bin");
+    fs::create_dir_all(&usrbin_path).context("Failed to create /usr/bin")?;
+    atomic_symlink(&sh_binary, usrbin_path.join("sh"))?;
+    setup_bin_symlink(prefix)
+}
+
+/// Make `/bin` a symlink to `usr/bin`.
+///
+/// Older generations created `/bin` as a directory that only contains `sh`. Atomically exchange it
+/// with the symlink so that `/bin/sh` never disappears.
+fn setup_bin_symlink(prefix: &str) -> Result<()> {
+    let bin_path = PathBuf::from(prefix).join("bin");
+
+    if bin_path.is_symlink() || !bin_path.is_dir() {
+        return atomic_symlink("usr/bin", bin_path);
+    }
+
+    let tmp_path = PathBuf::from(prefix).join(".bin.tmp");
+    std::os::unix::fs::symlink("usr/bin", &tmp_path)
+        .with_context(|| format!("Failed to create {}", tmp_path.display()))?;
+    Root::open(prefix)
+        .with_context(|| format!("Failed to open prefix {prefix}"))?
+        .rename(".bin.tmp", "bin", RenameFlags::RENAME_EXCHANGE)
+        .context("Failed to exchange /bin with a symlink")?;
+    // /bin is already migrated at this point, so failing to clean up must not fail the boot.
+    if let Err(err) = fs::remove_file(tmp_path.join("sh")).and_then(|()| fs::remove_dir(&tmp_path))
+    {
+        log::warn!("Failed to remove old /bin at {}: {err}", tmp_path.display());
+    }
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use tempfile::tempdir;
+
+    const SH: &str = "/nix/store/xxx-bash/bin/sh";
+
+    #[test]
+    fn binsh_migrates_bin_dir() -> Result<()> {
+        let prefix = tempdir()?;
+        fs::create_dir(prefix.path().join("bin"))?;
+        std::os::unix::fs::symlink(SH, prefix.path().join("bin/sh"))?;
+
+        setup_binsh(prefix.path().to_str().unwrap(), SH)?;
+
+        assert_eq!(
+            fs::read_link(prefix.path().join("bin"))?,
+            Path::new("usr/bin")
+        );
+        assert_eq!(
+            fs::read_link(prefix.path().join("usr/bin/sh"))?,
+            Path::new(SH)
+        );
+        assert!(!prefix.path().join(".bin.tmp").exists());
+        Ok(())
+    }
 }
