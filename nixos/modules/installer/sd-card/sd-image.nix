@@ -399,13 +399,13 @@ in
       script = ''
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${lib.getExe' pkgs.util-linux "findmnt"} -n -o SOURCE /)
-        bootDevice=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PKNAME $rootPart)
-        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo MAJ:MIN $rootPart | ${lib.getExe pkgs.gawk} -F: '{print $2}')
+        bootDevice=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PKNAME "$rootPart")
+        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo MAJ:MIN "$rootPart" | ${lib.getExe pkgs.gawk} -F: '{print $2}')
 
         # Resize the root partition and the filesystem to fit the disk
-        echo ",+," | ${lib.getExe' pkgs.util-linux "sfdisk"} -N$partNum --no-reread $bootDevice
+        echo ",+," | ${lib.getExe' pkgs.util-linux "sfdisk"} -N"$partNum" --no-reread "$bootDevice"
         ${lib.getExe' pkgs.parted "partprobe"}
-        ${lib.getExe' pkgs.e2fsprogs "resize2fs"} $rootPart
+        ${lib.getExe' pkgs.e2fsprogs "resize2fs"} "$rootPart"
       '';
     };
 
