@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tfsort";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "AlexNabokikh";
     repo = "tfsort";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nUIT/xkqkE3Y5aswhaeEZamH4rQ9V/iAhkZHEipEV68=";
+    hash = "sha256-7Pn0yAcJBEoX0Q5IAdm9vVfQ4vwd60okt4sily96PKA=";
   };
 
   vendorHash = "sha256-0+oHc2R9C7XEXgpH4VqtMgdOcI8yU6L5hF77PrEkDi4=";
