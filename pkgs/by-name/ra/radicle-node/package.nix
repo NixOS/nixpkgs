@@ -14,11 +14,13 @@
   stdenv,
   xdg-utils,
   versionCheckHook,
+  nix-update-script,
 
   version ? "1.10.3",
   srcHash ? "sha256-xbVu+s4TQMc6fA8iUNq01y5lDxfC76Pwe6Z2rqA6C5Q=",
   cargoHash ? "sha256-zQ6XnDJt3pek0WzC0J8PY111LGuzZeSCZ1QxwYAhPWw=",
-  updateScript ? ./update.sh,
+  updateScriptExtraArgs ? [ ],
+  updateScript ? nix-update-script { extraArgs = updateScriptExtraArgs; },
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

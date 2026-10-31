@@ -5,6 +5,7 @@
   stdenv,
   gitMinimal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tests segfault on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Secure artifact distribution for Radicle";
