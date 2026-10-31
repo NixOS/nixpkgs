@@ -12,7 +12,7 @@
   stdenv,
   _experimental-update-script-combinators,
   nix-update-script,
-  rocksdb,
+  rocksdb_10_10,
   callPackage,
   python3Packages,
   cacert,
@@ -70,8 +70,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_DIR = lib.getDev openssl;
     OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
   }
   //
     lib.optionalAttrs
@@ -277,7 +277,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    inherit rocksdb_10_10; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`

@@ -2386,6 +2386,9 @@ mapAliases {
   robo = throw "'robo' was removed due to lack of in-tree maintenance"; # Added 2026-10-18
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27
   rockcraft = throw "rockcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
+  rocksdb_6_23 = throw "'rocksdb_6_23' has been removed from nixpkgs because no packages in nixpkgs depend on it anymore. Use 'rocksdb' or another supported version instead."; # Added 2026-10-19
+  rocksdb_7_10 = throw "'rocksdb_7_10' has been removed from nixpkgs because no packages in nixpkgs depend on it anymore. Use 'rocksdb' or another supported version instead."; # Added 2026-10-19
+  rocksdb_8_11 = throw "'rocksdb_8_11' has been removed from nixpkgs because no packages in nixpkgs depend on it anymore. Use 'rocksdb' or another supported version instead."; # Added 2026-10-19
   rofi-emoji-wayland = throw "'rofi-emoji-wayland' has been merged into `rofi-emoji as 'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-pass = throw "'rofi-pass' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   rofi-wayland = throw "'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
