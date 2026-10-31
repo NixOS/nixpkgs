@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  asciidoc-full,
+  asciidoc,
   jansson,
   jose,
-  http-parser,
   systemdLibs,
+  llhttp,
   meson,
   ninja,
   makeWrapper,
@@ -19,17 +19,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tang";
-  version = "15";
+  version = "16";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nlC2hdNzQZrfirjS2gX4oFp2OD1OdxmLsN03hfxD3ug=";
+    hash = "sha256-YpRoJ6G7Dj7arHwBrfCkroRd2nz/0ItzFmZPFQKjiYo=";
   };
 
+  patches = [ ./meson-no-dirs-on-native.patch ];
+
   nativeBuildInputs = [
-    asciidoc-full
+    asciidoc
     meson
     ninja
     pkg-config
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     jansson
     jose
-    http-parser
+    llhttp
     systemdLibs
   ];
 
