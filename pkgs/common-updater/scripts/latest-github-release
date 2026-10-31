@@ -1,0 +1,225 @@
+#!/usr/bin/env bash
+
+# fetch latest GitHub release name for a repository
+
+set -euo pipefail
+
+declare -r scriptName="latest-github-release"
+trap 'printf "%s: failed at line %s" "$scriptName" "$LINENO" >&2' ERR
+
+nixpkgs_root="$(git rev-parse --show-toplevel || echo "./.")"
+readonly nixpkgs_root
+
+usage() {
+  echo "Usage:"
+  echo "  $scriptName [options...] {--attr | -A} ATTR_PATH"
+  echo "  $scriptName [options...] --owner OWNER --repo REPO"
+  echo
+  echo "  -A, --attr ATTR_PATH         look up repository owner and name based on src attribute of ATTR_PATH (defaults to \$UPDATE_NIX_ATTR_PATH)"
+  echo "  -o, --owner OWNER            GitHub repository owner"
+  echo "  -r, --repo OWNER             GitHub repository name"
+  echo
+  echo "Options:"
+  echo "  --system SYSTEM              use system for nixpkgs evaluation (default: builtins.currentSystem)"
+  echo "  --github-base GITHUB_BASE    use GITHUB_BASE instead of default hostname (github.com)"
+  echo "  --gh                         use gh api tool to make GitHub API request (default)"
+  echo "  --curl                       use curl to make GitHub API request"
+  echo "  --trim-prefix                trim 'v' prefix from tag name"
+  echo "  --jq JQ_FILTER               additionally pipe the tag name through JQ_FILTER"
+  echo "  --select-release RELEASE_JQ_FILTER"
+  echo "                               use jq filter to select a release tag name (example: startswith(\"vulkan-cts-\"))"
+  echo "  -v, --verbose                increase verbosity"
+  echo
+  echo "Note: Prereleases and draft releases are always filtered."
+
+  exit 1
+}
+
+declare have_gh
+if gh --version >/dev/null; then
+  have_gh=true
+else
+  have_gh=false
+fi
+readonly have_gh
+
+opts=$(getopt \
+  --shell bash \
+  --name "$scriptName" \
+  --options hA:o:r:v \
+  --longoptions help,system:,attr:,owner:,repo:,github-base:,jq:,curl,gh,trim-prefix,select-release:,verbose \
+  -- "$@") || usage
+
+eval set -- "$opts"
+
+declare verbose=false system attrpath githubBase="github.com" owner repo use_gh=$have_gh trim_prefix=false jq_extra_filter release_filter
+
+if [[ -v UPDATE_NIX_ATTR_PATH ]]; then
+  attrpath="$UPDATE_NIX_ATTR_PATH"
+fi
+
+while (($#))
+do
+  case $1 in
+    -h|--help)
+      usage;;
+    --system)
+      system=$2; shift;;
+    -A|--attr)
+      attrpath=$2; shift;;
+    -o|--owner)
+      owner=$2; shift;;
+    -r|--repo)
+      repo=$2; shift;;
+    --github-base)
+      githubBase=$2; shift;;
+    --jq)
+      jq_extra_filter=$2; shift;;
+    --trim-prefix)
+      trim_prefix=true;;
+    --gh)
+      use_gh=true;;
+    --curl)
+      use_gh=false;;
+    --select-release)
+      release_filter=$2; shift;;
+    -v|--verbose)
+      verbose=true;;
+    --)
+      shift; break;;
+    *)
+      false
+  esac
+  shift
+done
+readonly verbose system attrpath githubBase owner repo use_gh trim_prefix jq_extra_filter release_filter
+
+declare release_filter_mode=false
+if [[ -v release_filter ]]; then
+  release_filter_mode=true
+fi
+readonly release_filter_mode
+
+verbose_printf() {
+  if [ $verbose = true ]; then
+    # shellcheck disable=SC2059
+    printf 1>&2 "$@"
+  fi
+}
+
+if [ $release_filter_mode = true ] && [ $have_gh = false ]; then
+  printf "%s: request --select-filter, but gh tool is not available\n" "$scriptName" 1>&2
+  exit 1
+fi
+
+if [[ ! -v attrpath ]] && [[ ! -v owner ]] && [[ ! -v repo ]]; then
+  printf "%s: either attrpath (-A) or owner and repository (-o/-r) are required\n" "$scriptName" 1>&2
+  exit 1
+fi
+
+read -r -d '' get_github_api_url <<- 'EOF' || true
+{
+  system ? builtins.currentSystem,
+  tree ? ./.,
+  nixpkgs ? import tree { inherit system; },
+  attrpath ? null,
+  owner ? null,
+  repo ? null,
+}:
+
+assert attrpath != null || (owner != null && repo != null);
+
+let
+  path = nixpkgs.lib.splitString "." attrpath;
+  pkg = nixpkgs.lib.getAttrFromPath path nixpkgs;
+  src = pkg.src;
+in
+if owner != null && repo != null then
+  "${owner}/${repo}"
+else
+  "${src.owner}/${src.repo}"
+EOF
+declare -r get_github_api_url
+
+if [[ -v attrpath ]]; then
+  verbose_printf "%s: use attrpath='%s'\n" "$scriptName" "$attrpath"
+elif [[ -v owner ]] && [[ -v repo ]]; then
+  verbose_printf "%s: use owner='%s' repo='%s'\n" "$scriptName" "$owner" "$repo"
+fi
+
+owner_repo="$(nix-instantiate \
+  --eval \
+  --raw \
+  --arg tree "$nixpkgs_root" \
+  ${system:+--system "$system"} \
+  ${attrpath:+--argstr attrpath "$attrpath"} \
+  ${owner:+--argstr owner "$owner"} \
+  ${repo:+--argstr repo "$repo"} \
+  --expr "$get_github_api_url")"
+readonly owner_repo
+verbose_printf "%s: use owner/repo '%s'\n" "$scriptName" "$owner_repo"
+
+if [ $release_filter_mode = true ]; then
+  declare tag_name_jq_filter='.'
+  if [ $trim_prefix = true ]; then
+    tag_name_jq_filter='ltrimstr("v")'
+  fi
+  if [[ -v jq_extra_filter ]]; then
+    tag_name_jq_filter="$tag_name_jq_filter | $jq_extra_filter"
+  fi
+  readonly tag_name_jq_filter
+
+  verbose_printf "%s: final tag_name_jq_filter='%s'\n" "$scriptName" "$tag_name_jq_filter"
+
+  readonly release_jq_filter="map(.tagName | select(${release_filter:-.})) | first | $tag_name_jq_filter"
+  verbose_printf "%s: final release_jq_filter='%s'\n" "$scriptName" "$release_jq_filter"
+
+  tag_name=$(gh release list \
+    --json tagName \
+    --jq "$release_jq_filter" \
+    --repo "$githubBase/$owner_repo" \
+    --exclude-drafts \
+    --exclude-pre-releases)
+else
+  if [ $trim_prefix = true ]; then
+    tag_name_jq_filter='.tag_name | ltrimstr("v")'
+  else
+    tag_name_jq_filter='.tag_name'
+  fi
+  if [[ -v jq_extra_filter ]]; then
+    tag_name_jq_filter="$tag_name_jq_filter | $jq_extra_filter"
+  fi
+  readonly tag_name_jq_filter
+
+  verbose_printf "%s: final tag_name_jq_filter='%s'\n" "$scriptName" "$tag_name_jq_filter"
+
+  if [ $use_gh = true ]; then
+    readonly api_url="repos/$owner_repo/releases/latest"
+
+    tag_name=$(gh api \
+      ${githubBase:+--hostname "$githubBase"} \
+      --jq "$tag_name_jq_filter" \
+      "$api_url")
+  else
+    if [ $have_gh = true ] && [[ ! -v GITHUB_TOKEN ]]; then
+      GITHUB_TOKEN="$(gh auth token --hostname "$githubBase")" || true
+    fi
+
+    readonly url="https://api.$githubBase/$api_url"
+
+    tag_name=$(curl \
+      ${GITHUB_TOKEN:+--oauth2-bearer "$GITHUB_TOKEN"} \
+      --header "Accept: application/vnd.github+json" \
+      --header "X-GitHub-Api-Version: 2026-03-10" \
+      --location \
+      --proto =https \
+      --http2-prior-knowledge \
+      --tlsv1.3 \
+      --silent --show-error --fail \
+      "$url" \
+      | jq -r "$tag_name_jq_filter")
+  fi
+fi
+
+echo "$tag_name"
+
