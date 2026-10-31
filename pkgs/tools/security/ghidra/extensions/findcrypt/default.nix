@@ -5,13 +5,13 @@
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "findcrypt";
-  version = "3.1.10";
+  version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "antoniovazquezblanco";
     repo = "GhidraFindcrypt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TWC6C4uxlYw9D5iHrFOuR0FmjMo5jhCg0A5y8hPv/to=";
+    hash = "sha256-3bg/2UkSS2wCcC9GRDBKfAUNn9jcQIcNHxKsIyFGZQo=";
   };
 
   meta = {
