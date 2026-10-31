@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "axis2";
-  version = "1.8.2";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "mirror://apache/axis/axis2/java/core/${finalAttrs.version}/axis2-${finalAttrs.version}-bin.zip";
-    hash = "sha256-oilPVFFpl3F61nVDxcYx/bc81FopS5fzoIdXzeP8brk=";
+    hash = "sha256-JDrrk1Giwi5Y95vGaiFDYpqpnXRYUxHBHjzRX/Q/1XA=";
   };
 
   nativeBuildInputs = [
