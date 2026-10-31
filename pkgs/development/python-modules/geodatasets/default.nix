@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "geodatasets";
-  version = "2026.5.1";
+  version = "2026.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
     tag = version;
-    hash = "sha256-wKe5hDK0J3e+9PyMvH1dJWpNMC8Ct4u5ysJoi7/xw4k=";
+    hash = "sha256-Kh1Cvjlfq+GAPhYPjQCNt8mHJFeSrdUfg74NoSQm618=";
   };
 
   build-system = [ setuptools-scm ];
