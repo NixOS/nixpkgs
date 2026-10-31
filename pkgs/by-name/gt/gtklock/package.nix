@@ -16,13 +16,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtklock";
   # Must run nixpkgs-review between version changes
-  version = "4.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = "gtklock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e/JRJtQAyIvQhL5hSbY7I/f12Z9g2N0MAHQvX+aXz8Q=";
+    hash = "sha256-ZNK8eGTuHva8nohR6U5WqZXoh5SfHF2GH0iafxoskrI=";
   };
 
   nativeBuildInputs = [
