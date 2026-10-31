@@ -148,7 +148,7 @@ buildNpmPackage (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    (gnome-keyring.override { useWrappedDaemon = false; })
+    gnome-keyring
   ];
 
   checkFlags = [
