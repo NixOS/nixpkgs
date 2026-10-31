@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.9";
+  version = "0.8.10";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "feedbackd";
     repo = "feedbackd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4cbH5jzbLROs/FtbiktlyZPGPYiIo3wgqgOCzyzNzzs=";
+    hash = "sha256-PvLWeHi+fC3iLkhSHhhj9jbTo25ewu6MPfwmtjexbLs=";
   };
 
   postPatch = ''
