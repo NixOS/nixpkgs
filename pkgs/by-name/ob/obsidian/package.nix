@@ -14,7 +14,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.13.7";
+  version = "1.14.5";
   appname = "Obsidian";
   meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -33,28 +33,25 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
 
-  srcs = rec {
+  srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
-      hash = "sha256-08vjdcv6QCTbGRC5gZFkn0E0xcSK7l5gtudxOYfc2yg=";
+      hash = "sha256-G8ZUfIidfQLD8sW1WITLoUmAv6xK2jLAvcbsbbVCqvg=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
-      hash = "sha256-mKrDTR8TKjXPUG/D+hltWV3N7v3r1EsMxfqqehohDeI=";
+      hash = "sha256-uh0ucHCs/7OaeV6BxIw6IRnES+UmM33Y/1iWPzqyBSo=";
     };
 
-    x86_64-darwin = fetchurl {
+    aarch64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
-      hash = "sha256-BdqlT14aRFj3XaKfj6qhfo43rhaZhDJTf2dMYm25m84=";
+      hash = "sha256-vnnmQQ2A+nBSGKpOjLJM6EGM8W4TvkA2InpWWbH2qrI=";
     };
-
-    aarch64-darwin = x86_64-darwin;
   };
 
   src =
@@ -66,7 +63,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "obsidian";
+    name = "md.obsidian.Obsidian";
     desktopName = "Obsidian";
     startupWMClass = "md.obsidian.Obsidian";
     comment = "Knowledge base";
