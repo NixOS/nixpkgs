@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  cmake,
+  ninja,
   boost,
   zlib,
   openssl,
@@ -12,19 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2pd";
-  version = "2.61.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
     tag = finalAttrs.version;
-    hash = "sha256-dfCeY64TGRoTMNvKZk5jrhyRc8b8K03KM7YV5w/pbUM=";
+    hash = "sha256-CoggAEUnGhnUudHxxGvOng4VApWZx744RYdrzG5ftFM=";
   };
-
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
-    substituteInPlace Makefile.osx \
-      --replace-fail "-msse" ""
-  '';
 
   buildInputs = [
     boost
@@ -35,16 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    cmake
+    ninja
   ];
 
-  makeFlags = [
-    "USE_UPNP=${lib.boolToYesNo upnpSupport}"
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+    (lib.cmakeBool "WITH_UPNP" upnpSupport)
   ];
 
-  enableParallelBuilding = true;
+  preConfigure = ''
+    cd build
+  '';
 
-  installPhase = ''
-    install -D i2pd $out/bin/i2pd
+  preInstallPhase = ''
     install --mode=444 -D 'contrib/i2pd.service' "$out/etc/systemd/system/i2pd.service"
     installManPage 'debian/i2pd.1'
   '';
