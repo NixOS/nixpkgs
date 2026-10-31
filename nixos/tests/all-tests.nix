@@ -1714,7 +1714,7 @@ in
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
   sshwifty = runTest ./web-apps/sshwifty/default.nix;
-  sslh = handleTest ./sslh.nix { };
+  sslh = runTest ./sslh.nix;
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
   sstorytime = runTest ./sstorytime.nix;
