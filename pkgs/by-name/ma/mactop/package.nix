@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "mactop";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "metaspartan";
     repo = "mactop";
     tag = "v${version}";
-    hash = "sha256-uIHqnHkqdQGZceruvHdXacS5vD2tgN1KPY4v6k7s5Vc=";
+    hash = "sha256-hFceT6ZHv8Iyhe3jqp1qTQRPPGeQmpGXN4cE6bs4P5E=";
   };
 
   vendorHash = "sha256-TF66wg8nyAb/kZ80XLaD7H39EehZQ896DS6Ce3+P8Lk=";
