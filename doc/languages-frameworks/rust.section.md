@@ -280,7 +280,7 @@ where they are known to differ. But there are ways to customize the argument:
    Note that some tools like Cargo and some crates like `cc` make use of the
    file name of the target JSON.  Therefore, do not use
    `./path/to/target-spec.json` directly, because it will be renamed by Nix.
-   Instead, place it a directory and use `"${./path/to/dir}/target-spec.json"`.
+   Instead, place it in a directory and use `"${./path/to/dir}/target-spec.json"`.
    The directory should contain only this one file, to avoid unrelated changes
    causing unnecessary rebuilds.
 
