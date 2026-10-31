@@ -1,0 +1,17 @@
+--- isabelle/share/Isabelle2025-2/src/Tools/VSCode/extension/yarn.lock	1970-01-01 10:00:01.000000000 +1000
++++ pkgs/by-name/is/isabelleComponents/vscode_extension/yarn.lock	2026-07-24 19:18:16.265246607 +1000
+@@ -12,10 +12,10 @@
+   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.21.tgz#864b987c0c68d07b4345845c3e63b75edd143644"
+   integrity sha512-DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==
+ 
+-"@types/vscode@^1.65.0":
+-  version "1.65.0"
+-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.65.0.tgz#042dd8d93c32ac62cb826cd0fa12376069d1f448"
+-  integrity sha512-wQhExnh2nEzpjDMSKhUvnNmz3ucpd3E+R7wJkOhBNK3No6fG3VUdmVmMOKD0A8NDZDDDiQcLNxe3oGmX5SjJ5w==
++"@types/vscode@^1.104.0":
++  version "1.125.0"
++  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.125.0.tgz#944755fe16fcaf15060899bf214556c7549e4cd6"
++  integrity sha512-0icm/ZQAaism87P0ekHqi4/Ju9du+Tm0RUW+y7vqRsxY2cY0FNRX1nAnaW7nT6npPt2tfHiheZ55Zm9UhqonFA==
+ 
+ "@ungap/promise-all-settled@1.1.2":
+   version "1.1.2"

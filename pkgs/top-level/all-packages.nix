@@ -9842,7 +9842,7 @@ with pkgs;
     enableUnfree = true;
   };
 
-  isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
+  isabelle = isabelleComponents.isabelle-bin;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
