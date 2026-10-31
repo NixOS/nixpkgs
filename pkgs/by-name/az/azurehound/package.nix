@@ -35,6 +35,7 @@ buildGo127Module (finalAttrs: {
 
   doInstallCheck = false;
 
+  __darwinAllowLocalNetworking = true;
   meta = {
     description = "Azure Data Exporter for BloodHound";
     homepage = "https://github.com/SpecterOps/AzureHound";
@@ -42,6 +43,5 @@ buildGo127Module (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "azurehound";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
