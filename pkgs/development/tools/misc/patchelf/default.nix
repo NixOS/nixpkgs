@@ -27,6 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";
 
+  # The test suite builds shared libraries for patchelf to modify.
+  preCheck =
+    if stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      ''
+        unset NIX_CFLAGS_LINK
+      ''
+    else
+      null;
+
   __structuredAttrs = true;
 
   meta = {
