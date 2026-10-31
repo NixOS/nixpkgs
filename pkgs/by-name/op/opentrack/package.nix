@@ -29,13 +29,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentrack";
-  version = "2026.1.0-unstable-2026-09-21";
+  version = "2026.1.0-unstable-2026-10-30";
 
   src = fetchFromGitHub {
     owner = "opentrack";
     repo = "opentrack";
-    rev = "043bfc1be415962151217709a101422404ea36a6";
-    hash = "sha256-VS6Kt5EA+TNoQ/NzVFHMoBhOoopDZafZ3MqaJQyI3MU=";
+    rev = "5a3e7fee049d299b857f2100b92c6a68c97f6d9a";
+    hash = "sha256-EkXA/5uO5Q/L90LM2C95IUjtWDOpMdtQ0N2C7PByHrI=";
+    fetchSubmodules = true;
   };
 
   aruco = callPackage ./aruco.nix { };
