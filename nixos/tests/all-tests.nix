@@ -634,6 +634,7 @@ in
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;
+  falco = runTest ./falco.nix;
   fancontrol = runTest ./fancontrol.nix;
   fanout = runTest ./fanout.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
