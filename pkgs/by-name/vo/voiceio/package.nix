@@ -34,9 +34,7 @@ let
 
   # The IBus engine and the AppIndicator tray run under an interpreter that
   # has PyGObject; voiceio finds it through VOICEIO_SYSTEM_PYTHON.
-  systemPython = python3Packages.python.withPackages (
-    ps: runtimeDeps ++ [ ps.pygobject3 ]
-  );
+  systemPython = python3Packages.python.withPackages (ps: runtimeDeps ++ [ ps.pygobject3 ]);
 in
 python3Packages.buildPythonApplication rec {
   pname = "voiceio";
