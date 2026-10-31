@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.12.3";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-UQhaXOJhgP8icVLX0Uctloq6mSMzy7pQhcIZTV162vk=";
+    hash = "sha256-goF+GkNFiT0E6zu2+gZU6j0zfOiuqDa/UDNbD8H+kXg=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-AhZ6y7BExh7+CpCEo0gDeeu0eJ78SXzYG7HkqkCb0+s=";
+    npmDepsHash = "sha256-/TQOAtz5mVfglV0VdCvTxhtAPpTRZQq4chSp3qX+Kfo=";
 
     npmFlags = [ "--force" ];
 
@@ -43,7 +43,7 @@ let
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
+        --replace-fail "npm run pyodide:fetch && " ""
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
@@ -126,6 +126,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       googleapis-common-protos
       hiredis
       httpx
+      httpx2
       itsdangerous
       joserfc
       langchain
