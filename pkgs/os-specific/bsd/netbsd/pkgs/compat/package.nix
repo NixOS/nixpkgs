@@ -11,6 +11,7 @@
   netbsdSetupHook,
   makeMinimal,
   version,
+  buildPackages,
 }:
 
 mkDerivation (
@@ -78,6 +79,10 @@ mkDerivation (
         # GNU objcopy produces broken .a libs which won't link into dependers.
         # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
         "OBJCOPY=${cctools}/bin/strip"
+      ]
+      # LLVM Strip fails on md2.o test
+      ++ lib.optionals stdenv.hostPlatform.useLLVM [
+        "OBJCOPY=${buildPackages.binutils}/bin/${stdenv.cc.bintools.targetPrefix}strip"
       ];
     env.RENAME = "-D";
 
