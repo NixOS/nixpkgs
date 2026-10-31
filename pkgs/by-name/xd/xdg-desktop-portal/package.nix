@@ -81,6 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
+
+    # See https://github.com/flatpak/xdg-desktop-portal/issues/1983#issuecomment-4651275776
+    ./allow-no-graphical-session-target.patch
   ];
 
   nativeBuildInputs = [
