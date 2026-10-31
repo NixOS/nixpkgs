@@ -1,0 +1,21 @@
+{
+  "version": "2.160.0",
+  "assets": {
+    "Linux_x86_64": {
+      "file": "codebuddy-code_Linux_x86_64.tar.gz",
+      "sha256": "cf3df55bba3fe330d51d1ddabe74def01e373237891c0877e65328a884d2b3cf"
+    },
+    "Linux_arm64": {
+      "file": "codebuddy-code_Linux_arm64.tar.gz",
+      "sha256": "bd3bf92d428b86767dce6a7bb81c42d19b8530b96b0ce18dff3c32c159f57e05"
+    },
+    "Darwin_x86_64": {
+      "file": "codebuddy-code_Darwin_x86_64.tar.gz",
+      "sha256": "0afe7cfbd94c04d44b3b0c71102808b2bb315f46daa905dc2753946ac6710c55"
+    },
+    "Darwin_arm64": {
+      "file": "codebuddy-code_Darwin_arm64.tar.gz",
+      "sha256": "864e32b7f7ac40e316d4bfd49efeffc6ace8900f59db6c914441a466c9e05765"
+    }
+  }
+}
