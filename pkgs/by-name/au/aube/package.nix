@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.32.0";
 
   src = fetchFromGitHub {
-    owner = "jdx";
+    owner = "aubepkg";
     repo = "aube";
     tag = "v${finalAttrs.version}";
     hash = "sha256-0BnaxRk6+KY4AGZ31lis0zxc9uWp3OrxCgp9SgOrqNI=";
@@ -56,8 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Fast Node.js package manager";
-    homepage = "https://github.com/jdx/aube";
-    changelog = "https://github.com/jdx/aube/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/aubepkg/aube";
+    changelog = "https://github.com/aubepkg/aube/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       chillcicada

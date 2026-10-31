@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.4";
 
   src = fetchFromGitHub {
-    owner = "projg2";
+    owner = "gentoo";
     repo = "pshs";
     rev = "v${finalAttrs.version}";
     hash = "sha256-yxcBKDJF+/OHLQtT7LGhdwnllS+WRuMJ6apeG4Jxoss=";

@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
   version = "0.9.2";
 
   src = fetchFromGitHub {
-    owner = "TibixDev";
+    owner = "winboat-org";
     repo = "winboat";
     tag = "v${finalAttrs.version}";
     hash = "sha256-B+Pbi3nQsY3sHACGoaL8PhbHrTjlQbEDgVRWabwm8Iw=";
@@ -116,8 +116,8 @@ buildNpmPackage (finalAttrs: {
   meta = {
     mainProgram = "winboat";
     description = "Run Windows apps on Linux with seamless integration";
-    homepage = "https://github.com/TibixDev/winboat";
-    changelog = "https://github.com/TibixDev/winboat/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/winboat-org/winboat";
+    changelog = "https://github.com/winboat-org/winboat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rexies

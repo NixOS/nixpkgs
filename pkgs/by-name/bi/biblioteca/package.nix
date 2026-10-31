@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
 
   src = fetchFromGitHub {
-    owner = "workbenchdev";
+    owner = "sonnyp";
     repo = "Biblioteca";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;

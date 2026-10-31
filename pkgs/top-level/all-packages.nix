@@ -6272,7 +6272,7 @@ with pkgs;
     pname = "rocksdb";
     version = "9.10.0";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
@@ -6283,7 +6283,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.11.4";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
@@ -6294,7 +6294,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.3.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
@@ -6305,7 +6305,7 @@ with pkgs;
     pname = "rocksdb";
     version = "7.10.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
@@ -6316,7 +6316,7 @@ with pkgs;
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
