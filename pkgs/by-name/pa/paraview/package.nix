@@ -10,8 +10,28 @@
   testers,
   runCommand,
   mesa,
+  mpi,
+
+  withQt ? true,
+  mpiSupport ? true,
 }:
 let
+  vtkBase = vtk-full.override {
+    withQt6 = withQt;
+    inherit mpiSupport;
+  };
+  # ParaView requires VTK::FiltersParallelVerdict, which VTK only enables as part
+  # of its MPI group, although the module itself does not use MPI.
+  vtk =
+    if mpiSupport then
+      vtkBase
+    else
+      vtkBase.overrideAttrs (old: {
+        cmakeFlags = old.cmakeFlags ++ [
+          (lib.cmakeFeature "VTK_MODULE_ENABLE_VTK_FiltersParallelVerdict" "WANT")
+        ];
+      });
+  inherit (vtk-full.vtkPackages) python3Packages;
   paraviewFilesUrl = "https://www.paraview.org/files";
   doc = fetchurl {
     url = "${paraviewFilesUrl}/v6.0/ParaViewGettingStarted-6.0.1.pdf";
@@ -50,29 +70,42 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.kitware.com/paraview/paraview/-/commit/930e016d
     substituteInPlace VTKExtensions/Core/vtkPVStringFormatter.cxx \
       --replace-fail "fmt::format(formattableString)" "fmt::format(fmt::runtime(formattableString))"
+
+    # libc++ rejects std::vector<vtkStdString>::size() on the forward declaration
+    substituteInPlace Utilities/VisItBridge/databases/readers/OpenFOAM/visit_vtkOpenFOAMReader.h \
+      --replace-fail "class vtkStdString;" "#include <vtkStdString.h>"
   '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     ninja
-    qt6Packages.wrapQtAppsHook
-    vtk-full.vtkPackages.python3Packages.pythonRecompileBytecodeHook
-  ];
+    # FindPython3 needs the interpreter on the build side under strictDeps
+    python3Packages.python
+    python3Packages.pythonRecompileBytecodeHook
+  ]
+  # FindMPI needs the mpicc wrapper on PATH
+  ++ lib.optionals mpiSupport [ mpi ]
+  ++ lib.optionals withQt [ qt6Packages.wrapQtAppsHook ];
 
   # propagation required by paraview-config.cmake
   propagatedBuildInputs = [
+    protobuf
+    vtk
+  ]
+  ++ lib.optionals withQt [
     qt6Packages.qttools
     qt6Packages.qt5compat
-    protobuf
-    vtk-full
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "PARAVIEW_VERSIONED_INSTALL" false)
     (lib.cmakeBool "PARAVIEW_BUILD_WITH_EXTERNAL" true)
     (lib.cmakeBool "PARAVIEW_USE_EXTERNAL_VTK" true)
-    (lib.cmakeBool "PARAVIEW_USE_QT" true)
-    (lib.cmakeBool "PARAVIEW_USE_MPI" true)
+    (lib.cmakeBool "PARAVIEW_USE_QT" withQt)
+    (lib.cmakeBool "PARAVIEW_USE_MPI" mpiSupport)
     (lib.cmakeBool "PARAVIEW_USE_PYTHON" true)
     (lib.cmakeBool "PARAVIEW_ENABLE_WEB" true)
     (lib.cmakeBool "PARAVIEW_ENABLE_CATALYST" true)
@@ -103,10 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/paraview/examples
     tar --strip-components=1 -xzf ${examples} -C $out/share/paraview/examples
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString (withQt && stdenv.hostPlatform.isLinux) ''
     install -Dm644 ../Qt/Components/Resources/Icons/pvIcon.svg $out/share/icons/hicolor/scalable/apps/paraview.svg
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  + lib.optionalString (withQt && stdenv.hostPlatform.isDarwin) ''
     ln -s ../Applications/paraview.app/Contents/MacOS/paraview $out/bin/paraview
   '';
 
@@ -116,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       package = finalAttrs.finalPackage;
 
-      nativeBuildInputs = [
+      nativeBuildInputs = lib.optionals withQt [
         qt6Packages.wrapQtAppsHook
       ];
     };
@@ -140,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "3D Data analysis and visualization application";
     homepage = "https://www.paraview.org";
     changelog = "https://www.kitware.com/paraview-${lib.concatStringsSep "-" (lib.versions.splitVersion finalAttrs.version)}-release-notes";
-    mainProgram = "paraview";
+    mainProgram = if withQt then "paraview" else "pvpython";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
