@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "slib";
-  version = "3c2";
+  version = "3c3";
 
   src = fetchurl {
     url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${pname}-${version}.zip";
-    hash = "sha256-eQbY4gHcGOl5RaYaxiznkuyTm2fQvMIwc+ABGsJWGgQ=";
+    hash = "sha256-dd6Qm6QvGvLRrANutSosfGvmLmHsDUUoCUVTkNoI2UI=";
   };
 
   patches = [
