@@ -6,7 +6,7 @@
   replaceVars,
   nodejs,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_10,
   electron,
   makeWrapper,
   slimevr-server,
@@ -30,9 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     pname = "${finalAttrs.pname}-pnpm-deps";
     inherit (finalAttrs) version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-gGBwE6QxJsbVmQc1e390SSXAjs/T992ju8y9wz1H1QQ=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-Y8TSsoXqRxexar9uFKHiIuogAuLSTMqK9blFbMVTwOE=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     makeWrapper
     copyDesktopItems
     udevCheckHook
