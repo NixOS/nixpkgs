@@ -11983,6 +11983,8 @@ self: super: with self; {
 
   nasdaq-data-link = callPackage ../development/python-modules/nasdaq-data-link { };
 
+  nashpy = callPackage ../development/python-modules/nashpy { };
+
   natasha = callPackage ../development/python-modules/natasha { };
 
   native-sparse-attention-pytorch =
