@@ -9,6 +9,7 @@ let
     attrsToList
     elem
     filter
+    length
     literalExpression
     mkEnableOption
     mkIf
@@ -318,7 +319,7 @@ in
               options = brandingModule;
             };
             default = { };
-            description = "Branding configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example#L191), keys are written in camel case.";
+            description = "Branding configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.19.1/app/(main)/admin/_pages/branding.tsx#L33) for all available options.";
           };
 
           domainBranding = mkOption {
@@ -348,7 +349,7 @@ in
         };
       };
       default = { };
-      description = "Bulwark configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example) for more configuration options, keys are written in camel case. ";
+      description = "Bulwark configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.19.1/.env.example) for all available options, keys are written in camel case.";
     };
 
     admin = mkOption {
@@ -396,95 +397,89 @@ in
         freeformType = format.type;
 
         options = {
-          features =
-            let
-              feature =
-                description:
-                mkOption {
-                  type = bool;
-                  default = true;
-                  description = description;
-                };
-            in
-            {
-              pluginsEnabled = feature "Allow the plugin system to load and run plugins for users.";
-              requirePluginApproval = feature "User-uploaded plugins must be approved by an admin before they can be enabled.";
-              themesEnabled = feature "Allow users to select and apply themes.";
-              sidebarAppsEnabled = feature "Allow custom web apps in navigation rail.";
-              settingsExportEnabled = feature "Allow users to export and import settings JSON.";
-              customKeywordsEnabled = feature "Allow user-created labels and tags.";
-              templatesEnabled = feature "Allow email template creation and library.";
-              calendarTasksEnabled = feature "Show task panel in calendar view.";
-              smimeEnabled = feature "Enable certificate management and email signing.";
-              externalContentEnabled = feature "Allow users to choose external content loading policy.";
-              debugModeEnabled = feature "Allow users to enable debug/diagnostic mode.";
-              folderIconsEnabled = feature "Allow custom folder icon picker.";
-              hoverActionsConfigEnabled = feature "Allow users to customize email hover actions.";
-              filesEnabled = feature "Enable file storage via WebDAV. WARNING: Large uploads can cause Stalwart/RocksDB instability. Not recommended for production.";
-              contactsEnabled = feature "Enable contacts/address book features.";
-              crossUnreadViewEnabled = feature ''
-                Allow an Unread entry in the Unified Mailbox section that lists unread mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossStarredViewEnabled = feature ''
-                Allow a Starred entry in the Unified Mailbox section that lists flagged/starred mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossAllViewEnabled = feature ''
-                Allow an All mail entry in the Unified Mailbox section that lists all mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on).
-                Honors the user's folder selection. Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              unifiedCrossAccountEnabled = feature ''
-                Allow users to expand the Unified Mailbox beyond the active account boundary so its lists merge across every logged-in account.
-                When off, the Unified Mailbox stays within the active account and its shared folders.
-              '';
+          features = mkOption {
+            type = submodule {
+              freeformType = format.type;
             };
-          restrictions =
-            let
-              restricted =
-                description:
-                mkOption {
+            default = { };
+            example = literalExpression ''
+              sidebarAppsEnabled = true;
+            '';
+            description = "Enabled features. Check the `FEATURE_GATE_LABELS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.19.1/app/(main)/admin/_pages/policy.tsx#L33) for all available features. Most are on per default, so you don’t need to manually enable them.";
+          };
+          restrictions = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              debugMode.hidden = true;
+              deleteAction = {
+                locked = true;
+                value = "trash-and-read";
+              };
+            '';
+            description = "Restricted settings. Check the `RESTRICTION_KEYS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.19.1/lib/admin/restriction-keys.ts#L31) for all available restrictions.";
+          };
+          defaults = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              fontSize = "x-large";
+            '';
+            description = "Restricted settings. Check the [UNLOCKABLE_SETTING_KEYS](https://github.com/bulwarkmail/webmail/blob/1.19.1/lib/accessibility-settings.ts#L196) and [ACCESSIBILITY_ALLOWED](https://github.com/bulwarkmail/webmail/blob/1.19.1/lib/accessibility-settings.ts#L162) upstream for all available defaults.";
+          };
+          organisation = mkOption {
+            type = submodule {
+              freeformType = format.type;
+            };
+            default = { };
+            example = literalExpression ''
+              externalMail.senderLabel = true;
+            '';
+            description = "Organisation settings. Check the `OrganisationPolicy` [upstream](https://github.com/bulwarkmail/webmail/blob/main/lib/admin/organisation-policy.ts#L23) for all available settings.";
+          };
+          scopes = mkOption {
+            type = listOf (submodule {
+              freeformType = format.type;
+            });
+            default = [ ];
+            example = literalExpression ''
+              {
+                id = "scope-example";
+                label = "Example domain";
+                match.domains = [ "example.com" ];
+                policy.features.sidebarAppsEnabled = true;
+              }
+            '';
+            description = "Policy scopes. Check the `PolicyScope` [upstream](https://github.com/bulwarkmail/webmail/blob/main/lib/admin/policy-scopes.ts#L35) for all available settings.";
+          };
+
+          pushRelays = mkOption {
+            type = listOf (submodule {
+              options = {
+                label = mkOption {
+                  type = str;
+                  description = "Web Push relay name";
+                };
+                url = mkOption {
+                  type = str;
+                  description = "Web Push relay URL";
+                };
+                config = mkOption {
                   type = submodule {
-                    options = {
-                      locked = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is locked.";
-                      };
-                      hidden = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is hidden.";
-                      };
-                    };
+                    freeformType = format.type;
                   };
                   default = { };
-                  description = description;
+                  description = "Web Push relay configuration";
                 };
-            in
-            {
-              fontSize = restricted "Appearance: Font Size";
-              density = restricted "Appearance: Density";
-              animationsEnabled = restricted "Appearance: Animations";
-              markAsReadDelay = restricted "Email: Mark as Read Delay";
-              deleteAction = restricted "Email: Delete Action";
-              showPreview = restricted "Email: Show Preview";
-              mailLayout = restricted "Email: Mail Layout";
-              emailsPerPage = restricted "Email: Emails Per Page";
-              externalContentPolicy = restricted "Email: External Content Policy";
-              sendConfirmation = restricted "Composer: Send Confirmation";
-              defaultReplyMode = restricted "Composer: Default Reply Mode";
-              autoSelectReplyIdentity = restricted "Composer: Auto-select Reply Identity";
-              plainTextMode = restricted "Composer: Plain Text Only";
-              sessionTimeout = restricted "Privacy: Session Timeout";
-              emailNotificationsEnabled = restricted "Notifications: Email Notifications";
-              calendarNotificationsEnabled = restricted "Notifications: Calendar Notifications";
-              debugMode = restricted "Advanced: Debug Mode";
-            };
-
+              };
+            });
+            default = [ ];
+            description = "List of Web Push relays the users can choose from.";
+          };
           pushRelayUrl = mkOption {
             type = str;
             default = "";
@@ -523,6 +518,18 @@ in
                 type = nullOr (enum builtinThemes);
                 description = "Theme applied when users have not chosen one.";
               };
+              defaultColorMode = mkOption {
+                type = nullOr (enum [
+                  "light"
+                  "dark"
+                ]);
+                description = "Color mode applied when users have not chosen one.";
+              };
+              lockColorMode = mkOption {
+                type = bool;
+                default = false;
+                description = "Whether the color mode is locked.";
+              };
             };
 
           forceEnabledPlugins = mkOption {
@@ -536,11 +543,6 @@ in
               );
             '';
             description = "Force-enabled Plugins";
-          };
-          approvedPlugins = mkOption {
-            type = listOf str;
-            default = [ ];
-            description = "Approved Plugins";
           };
           forceEnabledThemes = mkOption {
             type = listOf str;
@@ -621,6 +623,14 @@ in
           !elem cfg.policies.themePolicy.defaultThemeId cfg.policies.themePolicy.disabledBuiltinThemes;
         message = ''
           The default theme specified in <option>services.bulwark.policies.themePolicy.defaultThemeId</option> cannot be disabled via <option>services.bulwark.policies.themePolicy.disabledBuiltinThemes</option>.
+        '';
+      }
+      {
+        assertion =
+          cfg.policies.pushRelayUrl == ""
+          || elem cfg.policies.pushRelayUrl (map (it: it.url) cfg.policies.pushRelays);
+        message = ''
+          The Web Push relay URL specified in <option>services.bulwark.policies.pushRelayUrl</option> must be empty or included in <option>services.bulwark.policies.pushRelays</option>.
         '';
       }
       {
@@ -731,7 +741,9 @@ in
                 name = "policy.json";
                 path = format.generate "policy.json" (
                   recursiveUpdate cfg.policies {
+                    features.pluginsEnabled = length cfg.plugins != 0;
                     features.pluginsUploadEnabled = false;
+                    features.requirePluginApproval = true;
                     features.userThemesEnabled = false;
                   }
                 );
