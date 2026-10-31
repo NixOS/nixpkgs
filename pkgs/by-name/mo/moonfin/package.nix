@@ -20,13 +20,13 @@
 
 flutter347.buildFlutterApplication (finalAttrs: {
   pname = "moonfin";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Moonfin-Client";
     repo = "Moonfin-Core";
     tag = finalAttrs.version;
-    hash = "sha256-y6TmuGA1nXMKCdea7HhfnsGbmdVUkYp1ixqzEWsYzNQ=";
+    hash = "sha256-dHY0qNToNSgHU6rv3RD3B8vsuHRh3vQq+a3JhzVcNkU=";
   };
 
   strictDeps = true;
