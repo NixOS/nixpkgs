@@ -122,29 +122,29 @@ rec {
       args
     else
       let
-        # The argument hash, as a {name, value} pair
-        h =
-          # All hashes passed in arguments (possibly 0 or >1) as a list of {name, value} pairs
-          let
-            hashesAsNVPairs = attrsToList (intersectAttrs hashSet args);
-          in
-          if hashesAsNVPairs == [ ] then
-            if required then throw "fetcher called without `hash`" else null
+        # All hashes passed in arguments (possibly 0 or >1) as a list of {name, value} pairs
+        hashesAsNVPairs = attrsToList (intersectAttrs hashSet args);
+        unspecifiedHash = hashesAsNVPairs == [ ];
+        errorMessage =
+          if unspecifiedHash && required then
+            "fetcher called without `hash`"
           else if length hashesAsNVPairs != 1 then
-            throw "fetcher called with mutually-incompatible arguments: ${
+            "fetcher called with mutually-incompatible arguments: ${
               concatMapStringsSep ", " (a: a.name) hashesAsNVPairs
             }"
           else
-            head hashesAsNVPairs;
+            null;
+        # The argument hash, as a {name, value} pair
+        h = head hashesAsNVPairs;
       in
       removeAttrs args hashNames
-      // (optionalAttrs (h != null) {
-        outputHashAlgo = if h.name == "hash" then null else h.name;
-        outputHash =
-          if h.value == "" then
-            fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}")
-          else
-            h.value;
+      // (optionalAttrs (required || !unspecifiedHash) {
+        outputHashAlgo = lib.throwIf (errorMessage != null) errorMessage (
+          if h.name == "hash" then null else h.name
+        );
+        outputHash = lib.throwIf (errorMessage != null) errorMessage (
+          if h.value == "" then fakeH.${h.name} or (throw "no “fake hash” defined for ${h.name}") else h.value
+        );
       });
 
   /**
