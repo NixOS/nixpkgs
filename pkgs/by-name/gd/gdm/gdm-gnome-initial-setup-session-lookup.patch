@@ -1,0 +1,64 @@
+From 7c6d9c7a8b30ec735553802be3fb5fe90afba4dc Mon Sep 17 00:00:00 2001
+From: Jan Fooken <dev@janvhs.com>
+Date: Thu, 29 Oct 2026 23:01:26 +0100
+Subject: [PATCH] display: Search for session files in XDG_DATA_DIRS
+
+Searching XDG_DATA_DIRS for gnome-session files allows them to be placed in
+directories other than /usr/share.  This allows the user to install
+a development version of gnome-initial-setup session to e.g. /usr/local and
+GDM to pick up the corresponding session from e.g. /usr/local/share.
+Furthermore, it allows GDM in NixOS to find the gnome-initial-setup session
+file, as it is owned by gnome-initial-setup and therefore in the /share
+directory of its own derivation.
+---
+ daemon/gdm-display.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/daemon/gdm-display.c b/daemon/gdm-display.c
+index 1dfb83cb5..65621d498 100644
+--- a/daemon/gdm-display.c
++++ b/daemon/gdm-display.c
+@@ -46,8 +46,6 @@
+ #include "gdm-launch-environment.h"
+ #include "gdm-dbus-util.h"
+ 
+-#define GNOME_SESSION_SESSIONS_PATH DATADIR "/gnome-session/sessions"
+-
+ typedef struct _GdmDisplayPrivate
+ {
+         GObject               parent;
+@@ -1108,13 +1106,25 @@ on_launch_environment_session_died (GdmLaunchEnvironment *launch_environment,
+ static gboolean
+ can_create_environment (const char *session_id)
+ {
+-        g_autofree char *path = NULL;
+-        gboolean session_exists;
+-
+-        path = g_strdup_printf (GNOME_SESSION_SESSIONS_PATH "/%s.session", session_id);
+-        session_exists = g_file_test (path, G_FILE_TEST_EXISTS);
++        const char * const *system_data_dirs = NULL;
++        g_autofree char *session_filename = NULL;
++        int i;
++
++        session_filename = g_strdup_printf ("%s.session", session_id);
++        system_data_dirs = g_get_system_data_dirs ();
++        for (i = 0; system_data_dirs[i]; i++) {
++                g_autofree char *candidate_path = NULL;
++
++                candidate_path = g_build_filename (system_data_dirs[i],
++                                                   "gnome-session",
++                                                   "sessions",
++                                                   session_filename,
++                                                   NULL);
++                if (g_file_test (candidate_path, G_FILE_TEST_EXISTS))
++                        return TRUE;
++        }
+ 
+-        return session_exists;
++        return FALSE;
+ }
+ 
+ #define ALREADY_RAN_INITIAL_SETUP_ON_THIS_BOOT GDM_RUN_DIR "/gdm.ran-initial-setup"
+-- 
+2.54.0
+
