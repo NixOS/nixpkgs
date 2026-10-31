@@ -1,0 +1,19 @@
+sudo removes loader env vars when starting a desktop session process.
+Re-enter the Nix wrapper to restore library and executable paths.
+The wrapper execs the same ELF and preserves the DRM IPC peer
+exec check.
+
+diff --git a/src/platform/linux.rs b/src/platform/linux.rs
+--- a/src/platform/linux.rs
++++ b/src/platform/linux.rs
+@@ -1415,7 +1415,9 @@ where
+         Some(id_name) => id_name,
+         None => get_active_user_id_name(),
+     };
+-    let cmd = std::env::current_exe()?;
++    // sudo clears loader vars: re-enter the Nix wrapper for the session.
++    // The wrapper execs the same ELF and preserves the DRM IPC executable check.
++    let cmd = PathBuf::from("@rustdesk-wrapper@");
+     if uid.is_empty() {
+         bail!("No valid uid");
+     }
