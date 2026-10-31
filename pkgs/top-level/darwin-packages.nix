@@ -144,6 +144,7 @@ makeScopeWithSplicing' {
         xcode_26_6
         xcode_26_6_Apple_silicon
         xcode_27
+        xcode_27_1
         xcode
         requireXcode
         ;

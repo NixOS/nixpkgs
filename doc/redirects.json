@@ -1173,6 +1173,30 @@
   "x86_64-darwin-26.11": [
     "release-notes.html#x86_64-darwin-26.11"
   ],
+  "xtool-build-hook": [
+    "index.html#xtool-build-hook"
+  ],
+  "xtool-build-hook-config": [
+    "index.html#xtool-build-hook-config"
+  ],
+  "xtool-build-hook-dont-build": [
+    "index.html#xtool-build-hook-dont-build"
+  ],
+  "xtool-build-hook-dont-install": [
+    "index.html#xtool-build-hook-dont-install"
+  ],
+  "xtool-build-hook-example": [
+    "index.html#xtool-build-hook-example"
+  ],
+  "xtool-build-hook-example-snippet": [
+    "index.html#xtool-build-hook-example-snippet"
+  ],
+  "xtool-build-hook-flags": [
+    "index.html#xtool-build-hook-flags"
+  ],
+  "xtool-build-hook-variables": [
+    "index.html#xtool-build-hook-variables"
+  ],
   "zip-files": [
     "index.html#zip-files"
   ],
