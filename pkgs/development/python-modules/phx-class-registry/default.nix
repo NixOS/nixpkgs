@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytestCheckHook,
-}:
 
-buildPythonPackage rec {
-  pname = "class-registry";
-  version = "5.1.1";
+  hatchling,
+}:
+buildPythonPackage (finalAttrs: {
+  pname = "phx-class-registry";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "todofixthis";
     repo = "class-registry";
-    tag = version;
-    hash = "sha256-MI63b77ydmhQSbtKovla7BCEUjLF43DW80VABjAVEI0=";
+    tag = finalAttrs.version;
+    hash = "sha256-lZxnZiCR2ZhEUTKH8Udmcp6VvISregGSBmwt5cqdQqo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -28,6 +28,8 @@ buildPythonPackage rec {
     description = "Factory and registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
-}
+})
