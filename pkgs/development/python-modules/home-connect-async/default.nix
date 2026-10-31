@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "home-connect-async";
-  version = "0.8.6";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "home_connect_async";
     inherit version;
-    hash = "sha256-4iF63TqmT47nHGJd9H4D6SnzclToj5S5Z/pm4YxbvQA=";
+    hash = "sha256-Iy0W0dVakaboyteEhVAvmGWkqjpFFaK4DrRuGsqiE3s=";
   };
 
   build-system = [
