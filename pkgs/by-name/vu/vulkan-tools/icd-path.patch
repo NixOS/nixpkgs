@@ -1,0 +1,73 @@
+From a6e43cd21bdac466a14dc43eb03a627710085ea3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stanis=C5=82aw=20Pitucha?= <git@viraptor.info>
+Date: Fri, 20 Mar 2026 01:32:21 +1100
+Subject: [PATCH] mac path
+
+---
+ cube/CMakeLists.txt              | 6 +++---
+ cube/macOS/cube/CMakeLists.txt   | 4 ++--
+ cube/macOS/cubepp/CMakeLists.txt | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/cube/CMakeLists.txt b/cube/CMakeLists.txt
+index dac6bfed..b07632bf 100644
+--- a/cube/CMakeLists.txt
++++ b/cube/CMakeLists.txt
+@@ -28,7 +28,7 @@ if(APPLE)
+     # MoltenVK JSON File
+     execute_process(COMMAND mkdir -p ${PROJECT_BINARY_DIR}/staging-json)
+     execute_process(COMMAND sed -e "/\"library_path\":/s$:[[:space:]]*\"[[:space:]]*[\\.\\/]*$: \"..\\/..\\/..\\/Frameworks\\/$"
+-                            ${MOLTENVK_DIR}/MoltenVK/icd/MoltenVK_icd.json
++                            ${MOLTENVK_DIR}/share/vulkan/icd.d/MoltenVK_icd.json
+                     OUTPUT_FILE ${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.json)
+ 
+     # ~~~
+@@ -41,9 +41,9 @@ if(APPLE)
+     add_custom_target(MoltenVK_icd-staging-json ALL
+         COMMAND mkdir -p ${PROJECT_BINARY_DIR}/staging-json
+         COMMAND sed -e "/\"library_path\":/s$:[[:space:]]*\"[[:space:]]*[\\.\\/]*$: \"..\\/..\\/..\\/Frameworks\\/$"
+-                ${MOLTENVK_DIR}/MoltenVK/icd/MoltenVK_icd.json > ${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.json
++                ${MOLTENVK_DIR}/share/vulkan/icd.d/MoltenVK_icd.json > ${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.json
+         VERBATIM
+-        DEPENDS "${MOLTENVK_DIR}/MoltenVK/icd/MoltenVK_icd.json"
++        DEPENDS "${MOLTENVK_DIR}/share/vulkan/icd.d/MoltenVK_icd.json"
+     )
+     set_source_files_properties(${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.json PROPERTIES GENERATED TRUE)
+ 
+diff --git a/cube/macOS/cube/CMakeLists.txt b/cube/macOS/cube/CMakeLists.txt
+index 3300d6b4..a3fd714c 100644
+--- a/cube/macOS/cube/CMakeLists.txt
++++ b/cube/macOS/cube/CMakeLists.txt
+@@ -78,10 +78,10 @@ set_source_files_properties("${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.jso
+ # Copy the MoltenVK lib into the bundle.
+ if(XCODE)
+     add_custom_command(TARGET vkcube POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib"
++                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/lib/libMoltenVK.dylib"
+                                ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/vkcube.app/Contents/Frameworks/libMoltenVK.dylib)
+ else()
+     add_custom_command(TARGET vkcube POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib"
++                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/lib/libMoltenVK.dylib"
+                                ${CMAKE_CURRENT_BINARY_DIR}/vkcube.app/Contents/Frameworks/libMoltenVK.dylib)
+ endif()
+diff --git a/cube/macOS/cubepp/CMakeLists.txt b/cube/macOS/cubepp/CMakeLists.txt
+index cf051654..793bd431 100644
+--- a/cube/macOS/cubepp/CMakeLists.txt
++++ b/cube/macOS/cubepp/CMakeLists.txt
+@@ -76,10 +76,10 @@ set_source_files_properties("${PROJECT_BINARY_DIR}/staging-json/MoltenVK_icd.jso
+ # Copy the MoltenVK lib into the bundle.
+ if(XCODE)
+     add_custom_command(TARGET vkcubepp POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib"
++                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/lib/libMoltenVK.dylib"
+                                ${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/vkcubepp.app/Contents/Frameworks/libMoltenVK.dylib)
+ else()
+     add_custom_command(TARGET vkcubepp POST_BUILD
+-                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib"
++                       COMMAND ${CMAKE_COMMAND} -E copy "${MOLTENVK_DIR}/lib/libMoltenVK.dylib"
+                                ${CMAKE_CURRENT_BINARY_DIR}/vkcubepp.app/Contents/Frameworks/libMoltenVK.dylib)
+ endif()
+-- 
+2.51.2
+
