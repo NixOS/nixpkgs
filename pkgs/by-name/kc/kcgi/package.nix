@@ -3,38 +3,60 @@
   stdenv,
   pkg-config,
   fetchFromGitHub,
+  bmake,
+  zlib,
   libbsd,
+  curl,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kcgi";
-  version = "0.10.8";
-  underscoreVersion = lib.replaceStrings [ "." ] [ "_" ] version;
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
     repo = "kcgi";
-    rev = "VERSION_${underscoreVersion}";
-    sha256 = "0ha6r7bcgf6pcn5gbd2sl7835givhda1jql49c232f1iair1yqyp";
+    tag = "VERSION_${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-XFcag1oRsw+Qu9tjJvRcg2gAg0E0wh3poI/2mksSok4=";
   };
+
   patchPhase = ''
     substituteInPlace configure \
-      --replace /usr/local /
+      --replace-fail PREFIX=\"/usr/local\" PREFIX=
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
+  nativeBuildInputs = [
+    pkg-config
+    bmake
+  ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libbsd ];
+
+  nativeCheckInputs = [ bmake ];
+  checkInputs = [ curl ];
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    bmake regress
+
+    runHook postCheck
+  '';
 
   dontAddPrefix = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://kristaps.bsd.lv/kcgi";
+    changelog = "https://kristaps.bsd.lv/kcgi/archive.html";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "kfcgi";
   };
-}
+})
