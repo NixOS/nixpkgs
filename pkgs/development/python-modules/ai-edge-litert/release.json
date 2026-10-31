@@ -1,0 +1,71 @@
+{
+  "version": "2.1.6",
+  "src": {
+    "aarch64-darwin": {
+      "3.10": {
+        "url": "https://files.pythonhosted.org/packages/5e/54/715ddb9b9314995c9aaf5240c9ffe8923a4ae45b2e1703c9be37ea1dc824/ai_edge_litert-2.1.6-cp310-cp310-macosx_12_0_arm64.whl",
+        "hash": "sha256-IFf4mWZm6OKlLtRf4W2MwjdDSgLteEXS/r7c6xgR9m0="
+      },
+      "3.11": {
+        "url": "https://files.pythonhosted.org/packages/b6/3d/41a85023e1c6cc76d895f3ba6ac7c22b0785db7e08d0827ebeb8a403eefc/ai_edge_litert-2.1.6-cp311-cp311-macosx_12_0_arm64.whl",
+        "hash": "sha256-7fWYgUAE5ZS0DIiPUsrlnpUNvv/YIeg7pF0o2woKo/U="
+      },
+      "3.12": {
+        "url": "https://files.pythonhosted.org/packages/52/d5/164aaf69f60f72b7076900ef1cc6153bf50d82cd15202bdf1239c0dbfb1c/ai_edge_litert-2.1.6-cp312-cp312-macosx_12_0_arm64.whl",
+        "hash": "sha256-Wt8Mmv3mFR3H8pidA5yADzBg2Y1Au138leQmrU6zaAs="
+      },
+      "3.13": {
+        "url": "https://files.pythonhosted.org/packages/ad/92/578b31c4c05afa9081a664cd86afe33c304fecd70de1c2a4d3a3b9ca51c9/ai_edge_litert-2.1.6-cp313-cp313-macosx_12_0_arm64.whl",
+        "hash": "sha256-Loo/kvpAdpAYlTO+qLZNSbsbip6W9we6J+GmSpw8yM8="
+      },
+      "3.14": {
+        "url": "https://files.pythonhosted.org/packages/a7/0e/f13a9f88c5705dead5792ecd4e1956cdec9a3b0dda517e5007bcce909dea/ai_edge_litert-2.1.6-cp314-cp314-macosx_12_0_arm64.whl",
+        "hash": "sha256-+ljh3fOdjWwZDbgIv4KJ8imH+/QS7QEHoSYXEIxRvJQ="
+      }
+    },
+    "aarch64-linux": {
+      "3.10": {
+        "url": "https://files.pythonhosted.org/packages/42/a5/e6cc6cb394efc58c1aa4f0007491cdf0ef1fa9f509812c6630ee60dbeac0/ai_edge_litert-2.1.6-cp310-cp310-manylinux_2_27_aarch64.whl",
+        "hash": "sha256-9b4Zc03OJDwUEQbDaZOVti13CmH+3Ql7OhCvggBr9X8="
+      },
+      "3.11": {
+        "url": "https://files.pythonhosted.org/packages/53/b5/da7057bfd08f270b5d924c4daba62a583df6dc25d916955fc7543d1c8847/ai_edge_litert-2.1.6-cp311-cp311-manylinux_2_27_aarch64.whl",
+        "hash": "sha256-hHXRjHNpjZJEOArXL2fK9UDlxy2agMZtF8S4HKgaIcg="
+      },
+      "3.12": {
+        "url": "https://files.pythonhosted.org/packages/b7/24/4f490bc5df4e3c5e796de20437804da9982e565cb9eba0d862eb20efa2b7/ai_edge_litert-2.1.6-cp312-cp312-manylinux_2_27_aarch64.whl",
+        "hash": "sha256-6Kpjk+EpP6yDf3ZLWpuj74G7FgaMlKIGjZ37EJok47k="
+      },
+      "3.13": {
+        "url": "https://files.pythonhosted.org/packages/4f/f6/277760deec426c52d4138eb406750d23e83eff22562201214ba867eac5c0/ai_edge_litert-2.1.6-cp313-cp313-manylinux_2_27_aarch64.whl",
+        "hash": "sha256-WBncr+YgBUg3RGNt/kKfzUKaKbo4IYfusVbdoq2i+Cw="
+      },
+      "3.14": {
+        "url": "https://files.pythonhosted.org/packages/a8/e1/7c1f0b91bbc6dd36447b786689f846b63369adfb45582b69c30303dd0d85/ai_edge_litert-2.1.6-cp314-cp314-manylinux_2_27_aarch64.whl",
+        "hash": "sha256-/DYRFMaMGUzp7p5rJ0j6QNI66p4SFzIl7wr/6CM1MJk="
+      }
+    },
+    "x86_64-linux": {
+      "3.10": {
+        "url": "https://files.pythonhosted.org/packages/d4/c1/7ad1f383e0b641c34d2235cc5a70b2aa9d5ea015ab0b389e94fd6729ef7c/ai_edge_litert-2.1.6-cp310-cp310-manylinux_2_27_x86_64.whl",
+        "hash": "sha256-4DfkGhXDKFMC2o6/Mv8oWwhcVhbpKe2TzS9WNTHX2Zg="
+      },
+      "3.11": {
+        "url": "https://files.pythonhosted.org/packages/b2/b9/c7153b2f6f37bc521876b8fa86125eb618bba9d84b20ba0bc5c05795eda7/ai_edge_litert-2.1.6-cp311-cp311-manylinux_2_27_x86_64.whl",
+        "hash": "sha256-r08rpoH6LGiHRsvX3dcaK7vdnmpRqmCdOCv6130caV4="
+      },
+      "3.12": {
+        "url": "https://files.pythonhosted.org/packages/39/df/08defcb80cfe1782a51b58184300ca592f302d7cd1e3d26d5adcd11bb588/ai_edge_litert-2.1.6-cp312-cp312-manylinux_2_27_x86_64.whl",
+        "hash": "sha256-AVbZBRyaJQDNTE7O23dnbv8LRb2O+xAB6OcwqM0NtO4="
+      },
+      "3.13": {
+        "url": "https://files.pythonhosted.org/packages/b3/8e/9264ce26ca8735f716b5f1ac6e76e37370e271da1010bf1a9a46c2a9771b/ai_edge_litert-2.1.6-cp313-cp313-manylinux_2_27_x86_64.whl",
+        "hash": "sha256-x8k/sNwqHUV1BENzHQGTl0c3+fH/s262wYib37Yb8JE="
+      },
+      "3.14": {
+        "url": "https://files.pythonhosted.org/packages/1a/f8/b52c02e4893511c31c8f2d7e6be14d50da872fc8c335b5d7dd9b18a38ef4/ai_edge_litert-2.1.6-cp314-cp314-manylinux_2_27_x86_64.whl",
+        "hash": "sha256-MDyzLKM+jRKpNg3YoTDCp8lLfnVyfaNL4urKtl8NqMY="
+      }
+    }
+  }
+}

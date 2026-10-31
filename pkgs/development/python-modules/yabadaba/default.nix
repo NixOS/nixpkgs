@@ -1,0 +1,64 @@
+{
+  lib,
+  buildPythonPackage,
+  cdcs,
+  datamodeldict,
+  fetchFromGitHub,
+  ipython,
+  lxml,
+  numpy,
+  pandas,
+  pillow,
+  pymongo,
+  pytestCheckHook,
+  tqdm,
+  uv-build,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "yabadaba";
+  version = "0.4.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "usnistgov";
+    repo = "yabadaba";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K/GPHocMn4f1E4n3Tb2OOffJqR6cMvjfwYmLwBMA7N8=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
+
+  dependencies = [
+    cdcs
+    datamodeldict
+    ipython
+    lxml
+    numpy
+    pandas
+    pillow
+    pymongo
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "yabadaba" ];
+
+  meta = {
+    description = "Abstraction layer allowing for common interactions with databases and records";
+    homepage = "https://github.com/usnistgov/yabadaba";
+    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

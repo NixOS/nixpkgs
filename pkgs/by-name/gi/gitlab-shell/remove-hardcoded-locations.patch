@@ -1,0 +1,48 @@
+diff --git a/internal/config/config.go b/internal/config/config.go
+index 99a370c5df..68bf5cdf5b 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -20,7 +20,7 @@
+ )
+ 
+ const (
+-	configFile            = "config.yml"
++	configFile            = "shell-config.yml"
+ 	defaultSecretFileName = ".gitlab_shell_secret" //nolint:gosec // Not actual credentials, just field name
+ )
+ 
+@@ -187,7 +187,7 @@
+ // NewFromDirExternal returns a new config from a given root dir. It also applies defaults appropriate for
+ // gitlab-shell running in an external SSH server.
+ func NewFromDirExternal(dir string) (*Config, error) {
+-	cfg, err := newFromFile(filepath.Join(dir, configFile))
++	cfg, err := newFromFile(filepath.Join("/run/gitlab", configFile))
+ 	if err != nil {
+ 		return nil, err
+ 	}
+diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
+index 6758561e42..f1aaecaf14 100644
+--- a/internal/keyline/key_line.go
++++ b/internal/keyline/key_line.go
+@@ -46,7 +46,7 @@
+ 
+ // ToString converts a KeyLine to a string representation
+ func (k *KeyLine) ToString() string {
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.ID)
++	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.ID)
+ 
+ 	return fmt.Sprintf(`command="%s",%s %s`, command, SSHOptions, k.Value)
+ }
+diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
+index 52ac5eecdb..d96baa3d1b 100644
+--- a/support/gitlab_config.rb
++++ b/support/gitlab_config.rb
+@@ -7,7 +7,7 @@
+   attr_reader :config
+ 
+   def initialize
+-    @config = YAML.load_file(File.join(ROOT_PATH, 'config.yml'))
++    @config = YAML.load_file('/run/gitlab/shell-config.yml')
+   end
+ 
+   def auth_file

@@ -1,0 +1,95 @@
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cvss,
+  deepl,
+  django,
+  fetchFromGitHub,
+  gql,
+  mcp,
+  openai,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  sqlparse,
+  termcolor,
+  tomli-w,
+  tomli,
+  tomlkit,
+  urllib3,
+  writableTmpDirAsHomeHook,
+  xmltodict,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "reptor";
+  version = "0.35";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Syslifters";
+    repo = "reptor";
+    tag = finalAttrs.version;
+    hash = "sha256-tYfWUrY2KGC+z+X39TFhHGpn6L/tvGBIb5R1FbbGsEY=";
+  };
+
+  pythonRelaxDeps = true;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    certifi
+    cvss
+    django
+    pyyaml
+    requests
+    rich
+    termcolor
+    tomli
+    tomli-w
+    tomlkit
+    urllib3
+    xmltodict
+  ];
+
+  optional-dependencies = {
+    ai = [ openai ];
+    all = [
+      openai
+      mcp
+      gql
+      deepl
+    ];
+    ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
+    mcp = [ mcp ];
+    translate = [ deepl ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [ "reptor" ];
+
+  disabledTestMarks = [
+    # Tests need network access
+    "integration"
+  ];
+
+  meta = {
+    description = "Module to do automated pentest reporting with SysReptor";
+    homepage = "https://github.com/Syslifters/reptor";
+    changelog = "https://github.com/Syslifters/reptor/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "reptor";
+  };
+})

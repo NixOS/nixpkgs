@@ -1,0 +1,33 @@
+---
+ plugin/host/host_nodejs.go | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/plugin/host/host_nodejs.go b/plugin/host/host_nodejs.go
+index 2f556e0c9..517f43430 100644
+--- a/plugin/host/host_nodejs.go
++++ b/plugin/host/host_nodejs.go
+@@ -6,7 +6,6 @@ import (
+ 	"fmt"
+ 	"os"
+ 	"os/exec"
+-	"path"
+ 	"path/filepath"
+ 	"runtime"
+ 	"strings"
+@@ -43,12 +42,7 @@ func (n *NodejsHost) GetRuntime(ctx context.Context) plugin.Runtime {
+ }
+ 
+ func (n *NodejsHost) Start(ctx context.Context) error {
+-	nodePath, nodeErr := n.resolveNodejsPath(ctx)
+-	if nodeErr != nil {
+-		return nodeErr
+-	}
+-
+-	return n.websocketHost.StartHost(ctx, nodePath, path.Join(util.GetLocation().GetHostDirectory(), "node-host.js"), nil)
++	return n.websocketHost.StartHost(ctx, "@nodejs-path@", "@plugin-host-nodejs@", nil)
+ }
+ 
+ // FindNodejsPath finds the best available Node.js interpreter path
+-- 
+2.54.0
+

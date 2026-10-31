@@ -1,0 +1,49 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 06f5395..a23a573 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -130,7 +130,9 @@ endif(MSVC)
+ 
+ # Configure subdirectories.
+ # We depend on these for later projects, so they should come first.
+-add_subdirectory(third_party)
++find_package(glslang REQUIRED CONFIG)
++get_target_property(glslang_includes glslang::glslang INTERFACE_INCLUDE_DIRECTORIES)
++set(glslang_SOURCE_DIR "${glslang_includes}/glslang")
+ 
+ add_subdirectory(libshaderc_util)
+ add_subdirectory(libshaderc)
+@@ -142,7 +144,7 @@ endif()
+ add_custom_target(build-version
+   ${Python_EXECUTABLE}
+   ${CMAKE_CURRENT_SOURCE_DIR}/utils/update_build_version.py
+-  ${shaderc_SOURCE_DIR} ${spirv-tools_SOURCE_DIR} ${glslang_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/build-version.inc
++  dummy dummy dummy ${CMAKE_CURRENT_BINARY_DIR}/build-version.inc
+   COMMENT "Update build-version.inc in the Shaderc build directory (if necessary).")
+ 
+ function(define_pkg_config_file NAME LIBS)
+diff --git a/utils/update_build_version.py b/utils/update_build_version.py
+index b7ce5b8..fcb0432 100755
+--- a/utils/update_build_version.py
++++ b/utils/update_build_version.py
+@@ -120,11 +120,15 @@ def get_version_string(project, directory):
+     """Returns a detailed version string for a given project with its
+     directory, which consists of software version string and git description
+     string."""
+-    detailed_version_string_lst = [project]
+-    if project != 'glslang':
+-        detailed_version_string_lst.append(deduce_software_version(directory))
+-    detailed_version_string_lst.append(describe(directory).replace('"', '\\"'))
+-    return ' '.join(detailed_version_string_lst)
++    match project:
++        case "shaderc":
++            return "shaderc v@shaderc-version@"
++        case "spirv-tools":
++            return "spirv-tools v@spirv-tools-version@"
++        case "glslang":
++            return "glslang v@glslang-version@"
++        case _:
++            sys.exit(1)
+ 
+ 
+ def main():

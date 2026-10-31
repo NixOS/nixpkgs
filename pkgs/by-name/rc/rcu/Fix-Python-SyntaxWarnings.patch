@@ -1,0 +1,213 @@
+diff --git a/src/controllers/UIController.py b/src/controllers/UIController.py
+index ea30505..d4cf90c 100644
+--- a/src/controllers/UIController.py
++++ b/src/controllers/UIController.py
+@@ -39,7 +39,7 @@ class UIController:
+     # Override in the pane class
+     compat_hw = ['RM100', 'RM102', 'RM110', 'RM02A', 'RM03A', 'RM12A']
+     xochitl_versions = [
+-        '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$',
++        r'^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$',
+         '^Parabola.*']
+ 
+     # Set to True to keep enabled for backups
+diff --git a/src/model/document.py b/src/model/document.py
+index 57ea53a..979c72a 100644
+--- a/src/model/document.py
++++ b/src/model/document.py
+@@ -823,7 +823,7 @@ class Document(GenericNotebookType):
+             iface = 'usb0'
+ 
+         # Is the interface active?
+-        cmd = "/sbin/ifconfig {} | grep -q '10\.11\.99\.1'; echo $?".format(iface)
++        cmd = r"/sbin/ifconfig {} | grep -q '10\.11\.99\.1'; echo $?".format(iface)
+         out, err = self.model.run_cmd(cmd)
+         iface_active = False
+         if '0' == out.strip():
+diff --git a/src/model/generic_notebook_type.py b/src/model/generic_notebook_type.py
+index 0c78adf..f4d9d2e 100644
+--- a/src/model/generic_notebook_type.py
++++ b/src/model/generic_notebook_type.py
+@@ -36,7 +36,7 @@ class GenericNotebookType:
+ 
+     @classmethod
+     def get_sanitized_name(cls, name):
+-        sanitized = re.sub('[\/\\\!\@\#\$\%\^\&\*\~\|\:\;\?\`\’\“\'\"]',
++        sanitized = re.sub(r'[\/\\\!\@\#\$\%\^\&\*\~\|\:\;\?\`\’\“\'\"]',
+                            '_',
+                            name)
+         return sanitized
+diff --git a/src/model/rcu.py b/src/model/rcu.py
+index aa3034f..fc5d479 100644
+--- a/src/model/rcu.py
++++ b/src/model/rcu.py
+@@ -309,7 +309,7 @@ class RCU:
+             'FreeBSD': 'cd "{}" && ./imx_usb.fbsd12'.format(recoverydir),
+             'Linux': 'cd "{}" && ./imx_usb.linux'.format(recoverydir),
+             'Darwin': 'cd "{}" && ./imx_usb.mac'.format(recoverydir),
+-            'Windows': 'cd /d "{}" && .\imx_usb.win10'.format(recoverydir)
++            'Windows': r'cd /d "{}" && .\imx_usb.win10'.format(recoverydir)
+         }
+         plat = platform.system()
+ 
+@@ -774,7 +774,7 @@ class RCU:
+         # Find safe templates, disable the rest. Safe ones (as is
+         # currently supported) must exist as either .svg or .png.
+         searchpath = Template.syspathpfx
+-        cmd = 'cd "{}" && ls *.svg *.png | sed "s/\.svg//g" | sed "s/\.png//g"'.format(searchpath)
++        cmd = r'cd "{}" && ls *.svg *.png | sed "s/\.svg//g" | sed "s/\.png//g"'.format(searchpath)
+         out, err = self.run_cmd(cmd)
+         passing_templates = set(out.strip().splitlines())
+ 
+diff --git a/src/model/text_handler.py b/src/model/text_handler.py
+index 75833a8..a6b5b51 100644
+--- a/src/model/text_handler.py
++++ b/src/model/text_handler.py
+@@ -132,26 +132,26 @@ class BlockManager:
+             ('^# ', ParagraphStyle.HEADING),
+             ('^## ', ParagraphStyle.HEADING2),
+             # Asterisk bullets
+-            ('^\* ', ParagraphStyle.BULLET),
+-            ('^  \* ', ParagraphStyle.BULLET2),
+-            ('^\* \[ \] ', ParagraphStyle.CHECKBOX),
+-            ('^\* \[X\] ', ParagraphStyle.CHECKBOX_CHECKED),
+-            ('^\* \[x\] ', ParagraphStyle.CHECKBOX_CHECKED),
+-            ('^  \* \[ \] ', ParagraphStyle.CHECKBOX2),
+-            ('^  \* \[X\] ', ParagraphStyle.CHECKBOX2_CHECKED),
+-            ('^  \* \[x\] ', ParagraphStyle.CHECKBOX2_CHECKED),
++            (r'^\* ', ParagraphStyle.BULLET),
++            (r'^  \* ', ParagraphStyle.BULLET2),
++            (r'^\* \[ \] ', ParagraphStyle.CHECKBOX),
++            (r'^\* \[X\] ', ParagraphStyle.CHECKBOX_CHECKED),
++            (r'^\* \[x\] ', ParagraphStyle.CHECKBOX_CHECKED),
++            (r'^  \* \[ \] ', ParagraphStyle.CHECKBOX2),
++            (r'^  \* \[X\] ', ParagraphStyle.CHECKBOX2_CHECKED),
++            (r'^  \* \[x\] ', ParagraphStyle.CHECKBOX2_CHECKED),
+             # Hyphen bullets
+-            ('^\- ', ParagraphStyle.BULLET),
+-            ('^  \- ', ParagraphStyle.BULLET2),
+-            ('^\- \[ \] ', ParagraphStyle.CHECKBOX),
+-            ('^\- \[X\] ', ParagraphStyle.CHECKBOX_CHECKED),
+-            ('^\- \[x\] ', ParagraphStyle.CHECKBOX_CHECKED),
+-            ('^  \- \[ \] ', ParagraphStyle.CHECKBOX2),
+-            ('^  \- \[X\] ', ParagraphStyle.CHECKBOX2_CHECKED),
+-            ('^  \- \[x\] ', ParagraphStyle.CHECKBOX2_CHECKED),
++            (r'^\- ', ParagraphStyle.BULLET),
++            (r'^  \- ', ParagraphStyle.BULLET2),
++            (r'^\- \[ \] ', ParagraphStyle.CHECKBOX),
++            (r'^\- \[X\] ', ParagraphStyle.CHECKBOX_CHECKED),
++            (r'^\- \[x\] ', ParagraphStyle.CHECKBOX_CHECKED),
++            (r'^  \- \[ \] ', ParagraphStyle.CHECKBOX2),
++            (r'^  \- \[X\] ', ParagraphStyle.CHECKBOX2_CHECKED),
++            (r'^  \- \[x\] ', ParagraphStyle.CHECKBOX2_CHECKED),
+             # Numbers
+-            ('^[0-9]+\. ', ParagraphStyle.NUMBER),
+-            ('^  [0-9]+\. ', ParagraphStyle.NUMBER2)
++            (r'^[0-9]+\. ', ParagraphStyle.NUMBER),
++            (r'^  [0-9]+\. ', ParagraphStyle.NUMBER2)
+         ]
+         for t in style_table:
+             pat = re.compile(t[0])
+@@ -168,7 +168,7 @@ class BlockManager:
+         # Currently, these are 1:1 with Markdown format tags, but
+         # that might not always be the case! (2026-01)
+         # ***value***, **value**, or *value*
+-        pattern = '(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*)'
++        pattern = r'(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*)'
+         ret = re.split(pattern, line)
+         # no empty ones
+         for ri in ret:
+diff --git a/src/panes/notebooks/pane.py b/src/panes/notebooks/pane.py
+index 50d8eaa..6fb137f 100644
+--- a/src/panes/notebooks/pane.py
++++ b/src/panes/notebooks/pane.py
+@@ -82,11 +82,11 @@ class NotebooksPane(UIController):
+     ui_filename = Path(adir / bdir / 'notebooks.ui')
+ 
+     xochitl_versions = [
+-        '^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-4]\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.1[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.2[0-7]\.[0-9]\.[0-9]+$'
++        r'^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-4]\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.1[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.2[0-7]\.[0-9]\.[0-9]+$'
+     ]
+ 
+     cli_args = [('--list-documents', True, None, 'list documents by ID, Name, and Timestamp'),
+diff --git a/src/panes/splash/pane.py b/src/panes/splash/pane.py
+index b0fcc7f..f9e36f5 100644
+--- a/src/panes/splash/pane.py
++++ b/src/panes/splash/pane.py
+@@ -82,11 +82,11 @@ class SplashPane(UIController):
+     }
+ 
+     xochitl_versions = [
+-        '^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-4]\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.1[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.2[0-7]\.[0-9]\.[0-9]+$'
++        r'^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-4]\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.1[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.2[0-7]\.[0-9]\.[0-9]+$'
+     ]
+ 
+     @classmethod
+@@ -193,9 +193,9 @@ class SplashPane(UIController):
+         ver = self.model.device_info['osver']
+         cmd = 'cd ' + self.device_sys_path + ' && ' \
+             + '(for f in *.png.bak; do ' \
+-            + '(yes n | cp -i \"\$f\" \"' \
+-              + local_path + '/\${f%.bak}.system_' + ver + '\") && ' \
+-            + '(yes n | cp -i \"\${f%.bak}\" \"' + local_path +'/\${f%.bak}.user\"); ' \
++            + r'(yes n | cp -i "\$f" "' \
++              + local_path + r'/\${f%.bak}.system_' + ver + '\") && ' \
++            + r'(yes n | cp -i "\${f%.bak}" "' + local_path +r'/\${f%.bak}.user"); ' \
+             + 'done)'
+         out, err = self.model.run_cmd('bash -c "' + cmd + '"')
+         if len(err):
+@@ -477,7 +477,7 @@ class SplashPane(UIController):
+         carousel_bak_exists = True if '0' == carousel_bak_exists else False
+ 
+         # Load the carousel images into the list
+-        cmd = '\ls {}/carousel/'.format(self.device_sys_path)
++        cmd = r'\ls {}/carousel/'.format(self.device_sys_path)
+         out, err = self.model.run_cmd(cmd)
+         out = out.strip().splitlines()
+         if len(err):
+diff --git a/src/panes/templates/pane.py b/src/panes/templates/pane.py
+index 352595a..b0ccc9d 100644
+--- a/src/panes/templates/pane.py
++++ b/src/panes/templates/pane.py
+@@ -47,11 +47,11 @@ class TemplatesPane(UIController):
+     ui_filename = Path(adir / bdir / 'templates.ui')
+ 
+     xochitl_versions = [
+-        '^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-4]\.[0-9]+\.[0-9]+$',
+-        '^3\.[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.1[0-9]\.[0-9]\.[0-9]+$',
+-        '^3\.2[0-7]\.[0-9]\.[0-9]+$'
++        r'^[1-2]\.[0-9]+\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-4]\.[0-9]+\.[0-9]+$',
++        r'^3\.[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.1[0-9]\.[0-9]\.[0-9]+$',
++        r'^3\.2[0-7]\.[0-9]\.[0-9]+$'
+     ]
+ 
+     @classmethod
+@@ -479,7 +479,7 @@ class TemplatesController:
+         # This is duplicated from generic_notebook_type.py. Since it's
+         # only used once, here, for templates -- easier to just copy.
+         def get_sanitized_name(template):
+-            return re.sub('[\/\\\!\@\#\$\%\^\&\*\~\|\:\;\?\`\’\“\'\"]',
++            return re.sub(r'[\/\\\!\@\#\$\%\^\&\*\~\|\:\;\?\`\’\“\'\"]',
+                           '_',
+                           template.get_pretty_name_with_orient() + '.rmt')
+ 

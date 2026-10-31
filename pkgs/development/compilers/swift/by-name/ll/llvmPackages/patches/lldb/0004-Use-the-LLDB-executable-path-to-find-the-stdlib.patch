@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 5 Sep 2026 08:24:48 -0400
+Subject: [PATCH 4/4] Use the LLDB executable path to find the stdlib
+
+dyld always resolves symlinks when loading an image, which prevents
+`GetModuleFileSpecForHostAddress` from returning the unresolved path to
+`liblldb.dylib`. We could break the symlink by copying the dylib, but
+that would make the closure much larger. Fortunately, we can use the
+path of the LLDB executable, which will need to be copied into the
+toolchain anyway for other reasons.
+---
+ source/Host/macosx/objcxx/HostInfoMacOSXSwift.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/source/Host/macosx/objcxx/HostInfoMacOSXSwift.cpp b/source/Host/macosx/objcxx/HostInfoMacOSXSwift.cpp
+index 716d0fbb4f63..18ed6cf55ff7 100644
+--- a/source/Host/macosx/objcxx/HostInfoMacOSXSwift.cpp
++++ b/source/Host/macosx/objcxx/HostInfoMacOSXSwift.cpp
+@@ -79,8 +79,8 @@ FileSpec HostInfoMacOSX::GetSwiftResourceDir() {
+   static std::once_flag g_once_flag;
+   static FileSpec g_swift_resource_dir;
+   std::call_once(g_once_flag, []() {
+-    FileSpec lldb_file_spec = HostInfo::GetShlibDir();
+-    ComputeSwiftResourceDirectory(lldb_file_spec, g_swift_resource_dir, true);
++    auto exe_path = HostInfoMacOSX::GetProgramFileSpec().CopyByRemovingLastPathComponent();
++    ComputeSwiftResourceDirectory(exe_path, g_swift_resource_dir, true);
+     Log *log = GetLog(LLDBLog::Host);
+     LLDB_LOG(log, "swift dir -> '{0}'", g_swift_resource_dir);
+   });
+-- 
+2.54.0
+

@@ -1,0 +1,29 @@
+From 3625bc4c8e2015bbd0d902c75d9ef8bb5a8a3c17 Mon Sep 17 00:00:00 2001
+From: Robert Wolke <rwolke@users.noreply.github.com>
+Date: Wed, 18 Feb 2026 14:33:27 +0100
+Subject: [PATCH] fix: Add missing replacment of VGFMAFLAG
+
+---
+ configure | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configure b/configure
+index bc723443e..4e6c8d85b 100755
+--- a/configure
++++ b/configure
+@@ -1024,6 +1024,7 @@ sed < ${SRCDIR}Makefile.in "
+ /^LDFLAGS *=/s#=.*#=$LDFLAGS#
+ /^LDSHARED *=/s#=.*#=$LDSHARED#
+ /^CPP *=/s#=.*#=$CPP#
++/^VGFMAFLAG *=/s#=.*#=$VGFMAFLAG#
+ /^STATICLIB *=/s#=.*#=$STATICLIB#
+ /^SHAREDLIB *=/s#=.*#=$SHAREDLIB#
+ /^SHAREDLIBV *=/s#=.*#=$SHAREDLIBV#
+@@ -1054,6 +1055,7 @@ sed < ${SRCDIR}zlib.pc.in "
+ /^CC *=/s#=.*#=$CC#
+ /^CFLAGS *=/s#=.*#=$CFLAGS#
+ /^CPP *=/s#=.*#=$CPP#
++/^VGFMAFLAG *=/s#=.*#=$VGFMAFLAG#
+ /^LDSHARED *=/s#=.*#=$LDSHARED#
+ /^STATICLIB *=/s#=.*#=$STATICLIB#
+ /^SHAREDLIB *=/s#=.*#=$SHAREDLIB#

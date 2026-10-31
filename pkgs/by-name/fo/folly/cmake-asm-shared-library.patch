@@ -1,0 +1,15 @@
+diff --git a/folly/external/aor/CMakeLists.txt b/folly/external/aor/CMakeLists.txt
+index e07e58745..1429f54e9 100644
+--- a/folly/external/aor/CMakeLists.txt
++++ b/folly/external/aor/CMakeLists.txt
+@@ -20,6 +20,10 @@
+ # Linux ELF directives (.size, etc.) that Darwin's assembler doesn't support
+ if(IS_AARCH64_ARCH)
+ 
++if(BUILD_SHARED_LIBS)
++  set(CMAKE_ASM_CREATE_SHARED_LIBRARY ${CMAKE_C_CREATE_SHARED_LIBRARY})
++endif()
++
+ folly_add_library(
+   NAME memcpy_aarch64
+   SRCS

@@ -1,0 +1,284 @@
+From 93ac19f44b8e9688ea76459bb523a964a1dab2b6 Mon Sep 17 00:00:00 2001
+From: Sebastian Raschka <rasbt@users.noreply.github.com>
+Date: Mon, 28 Sep 2026 13:28:20 -0500
+Subject: [PATCH] Fix sklearn 1.9 tests (#1205)
+
+---
+ .github/workflows/python-package-uv.yml       | 33 +++++++
+ .../tests/test_ensemble_vote_classifier.py    |  7 +-
+ .../tests/test_stacking_classifier.py         |  7 +-
+ .../tests/test_stacking_cv_classifier.py      |  7 +-
+ .../tests/test_exhaustive_feature_selector.py | 85 ++++++++-----------
+ 5 files changed, 80 insertions(+), 59 deletions(-)
+
+diff --git a/.github/workflows/python-package-uv.yml b/.github/workflows/python-package-uv.yml
+index ce869c72c..4bc0c6077 100644
+--- a/.github/workflows/python-package-uv.yml
++++ b/.github/workflows/python-package-uv.yml
+@@ -41,3 +41,36 @@ jobs:
+ 
+       - name: Upload Coverage to Codecov
+         uses: codecov/codecov-action@v4
++
++  build-linux-latest-sklearn:
++    runs-on: ubuntu-latest
++    env:
++      GITHUB_ACTIONS_CI: true
++    steps:
++      - uses: actions/checkout@v4
++
++      - name: Set up Python
++        uses: actions/setup-python@v5
++        with:
++          python-version: "3.11"
++
++      - name: Install uv
++        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
++
++      - name: Install dependencies
++        run: uv sync --frozen --group dev --python 3.11
++
++      - name: Upgrade scikit-learn
++        run: >-
++          uv pip install --python .venv/bin/python
++          --upgrade-package scikit-learn --prerelease disallow scikit-learn
++
++      - name: Show dependency versions
++        run: |
++          uv run --no-sync python -c "import numpy; print('NumPy:', numpy.__version__)"
++          uv run --no-sync python -c "import scipy; print('SciPy:', scipy.__version__)"
++          uv run --no-sync python -c "import sklearn; print('Scikit-learn:', sklearn.__version__)"
++          uv run --no-sync python -c "import pandas; print('Pandas:', pandas.__version__)"
++
++      - name: Run tests
++        run: uv run --no-sync python -m pytest mlxtend
+diff --git a/mlxtend/classifier/tests/test_ensemble_vote_classifier.py b/mlxtend/classifier/tests/test_ensemble_vote_classifier.py
+index a0792576d..62ea57ded 100644
+--- a/mlxtend/classifier/tests/test_ensemble_vote_classifier.py
++++ b/mlxtend/classifier/tests/test_ensemble_vote_classifier.py
+@@ -78,10 +78,11 @@ def test_use_clones():
+ 
+ 
+ def test_sample_weight():
++    # Disable bootstrap sampling to compare unit weights with no weights.
+     # with no weight
+     np.random.seed(123)
+     clf1 = LogisticRegression(solver="lbfgs", max_iter=500)
+-    clf2 = RandomForestClassifier(n_estimators=10)
++    clf2 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf3 = GaussianNB()
+     eclf = EnsembleVoteClassifier(clfs=[clf1, clf2, clf3], voting="hard")
+     prob1 = eclf.fit(X, y).predict_proba(X)
+@@ -90,7 +91,7 @@ def test_sample_weight():
+     w = np.ones(len(y))
+     np.random.seed(123)
+     clf1 = LogisticRegression(solver="lbfgs", max_iter=500)
+-    clf2 = RandomForestClassifier(n_estimators=10)
++    clf2 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf3 = GaussianNB()
+     eclf = EnsembleVoteClassifier(clfs=[clf1, clf2, clf3], voting="hard")
+     prob2 = eclf.fit(X, y, sample_weight=w).predict_proba(X)
+@@ -100,7 +101,7 @@ def test_sample_weight():
+     w = np.array([random.random() for _ in range(len(y))])
+     np.random.seed(123)
+     clf1 = LogisticRegression(solver="lbfgs", max_iter=500)
+-    clf2 = RandomForestClassifier(n_estimators=10)
++    clf2 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf3 = GaussianNB()
+     eclf = EnsembleVoteClassifier(clfs=[clf1, clf2, clf3], voting="hard")
+     prob3 = eclf.fit(X, y, sample_weight=w).predict_proba(X)
+diff --git a/mlxtend/classifier/tests/test_stacking_classifier.py b/mlxtend/classifier/tests/test_stacking_classifier.py
+index b9a0f7f5e..49016f9c5 100644
+--- a/mlxtend/classifier/tests/test_stacking_classifier.py
++++ b/mlxtend/classifier/tests/test_stacking_classifier.py
+@@ -97,6 +97,7 @@ def test_use_clones():
+ 
+ 
+ def test_sample_weight():
++    # Disable bootstrap sampling to compare unit weights with no weights.
+     # Make sure that:
+     #    prediction with weight
+     # != prediction with no weight
+@@ -106,14 +107,14 @@ def test_sample_weight():
+ 
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingClassifier(classifiers=[clf1, clf2], meta_classifier=meta)
+     prob1 = sclf.fit(X, y, sample_weight=w).predict_proba(X)
+ 
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingClassifier(classifiers=[clf1, clf2], meta_classifier=meta)
+     prob2 = sclf.fit(X, y, sample_weight=None).predict_proba(X)
+@@ -123,7 +124,7 @@ def test_sample_weight():
+ 
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingClassifier(classifiers=[clf1, clf2], meta_classifier=meta)
+     prob3 = sclf.fit(X, y, sample_weight=np.ones(len(y))).predict_proba(X)
+diff --git a/mlxtend/classifier/tests/test_stacking_cv_classifier.py b/mlxtend/classifier/tests/test_stacking_cv_classifier.py
+index aa1f76ec0..47d8cebf5 100644
+--- a/mlxtend/classifier/tests/test_stacking_cv_classifier.py
++++ b/mlxtend/classifier/tests/test_stacking_cv_classifier.py
+@@ -90,10 +90,11 @@ def test_use_clones():
+ 
+ 
+ def test_sample_weight():
++    # Disable bootstrap sampling to compare unit weights with no weights.
+     # with no weight given
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingCVClassifier(
+         classifiers=[clf1, clf2], meta_classifier=meta, shuffle=False
+@@ -103,7 +104,7 @@ def test_sample_weight():
+     # with weight = 1
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingCVClassifier(
+         classifiers=[clf1, clf2], meta_classifier=meta, shuffle=False
+@@ -116,7 +117,7 @@ def test_sample_weight():
+     w = np.array([random.random() for _ in range(len(y_iris))])
+     np.random.seed(123)
+     meta = LogisticRegression(solver="lbfgs")
+-    clf1 = RandomForestClassifier(n_estimators=10)
++    clf1 = RandomForestClassifier(n_estimators=10, bootstrap=False, random_state=123)
+     clf2 = GaussianNB()
+     sclf = StackingCVClassifier(
+         classifiers=[clf1, clf2], meta_classifier=meta, shuffle=False
+diff --git a/mlxtend/feature_selection/tests/test_exhaustive_feature_selector.py b/mlxtend/feature_selection/tests/test_exhaustive_feature_selector.py
+index 803f79c44..5c2a4cac6 100644
+--- a/mlxtend/feature_selection/tests/test_exhaustive_feature_selector.py
++++ b/mlxtend/feature_selection/tests/test_exhaustive_feature_selector.py
+@@ -4,15 +4,19 @@
+ #
+ # License: BSD 3 clause
+ 
++from itertools import combinations
++
+ import numpy as np
+ import pandas as pd
++import pytest
+ from numpy.testing import assert_almost_equal
+ from packaging.version import Version
+ from sklearn import __version__ as sklearn_version
++from sklearn.base import clone
+ from sklearn.datasets import load_iris
+ from sklearn.ensemble import RandomForestClassifier
+ from sklearn.linear_model import LinearRegression, LogisticRegression
+-from sklearn.model_selection import GroupKFold
++from sklearn.model_selection import GroupKFold, StratifiedKFold
+ from sklearn.neighbors import KNeighborsClassifier
+ 
+ from mlxtend.classifier import SoftmaxRegression
+@@ -269,11 +273,16 @@ def test_knn_cv3_groups():
+     dict_compare_utility(d1=expect, d2=efs1.subsets_)
+ 
+ 
+-def test_fit_params():
++@pytest.mark.parametrize("uniform_weights", [True, False])
++def test_fit_params(uniform_weights):
+     iris = load_iris()
+     X = iris.data
+     y = iris.target
+-    sample_weight = np.ones(X.shape[0])
++    if uniform_weights:
++        sample_weight = np.ones(X.shape[0])
++    else:
++        sample_weight = np.random.RandomState(87).uniform(0.05, 2.0, size=X.shape[0])
++
+     forest = RandomForestClassifier(n_estimators=100, random_state=123)
+     efs1 = EFS(
+         forest,
+@@ -284,54 +293,30 @@ def test_fit_params():
+         print_progress=False,
+     )
+     efs1 = efs1.fit(X, y, sample_weight=sample_weight)
+-    expect = {
+-        0: {
+-            "feature_idx": (0, 1, 2),
+-            "feature_names": ("0", "1", "2"),
+-            "cv_scores": np.array([0.947, 0.868, 0.919, 0.973]),
+-            "avg_score": 0.9269203413940257,
+-        },
+-        1: {
+-            "feature_idx": (0, 1, 3),
+-            "feature_names": ("0", "1", "3"),
+-            "cv_scores": np.array([0.921, 0.921, 0.892, 1.0]),
+-            "avg_score": 0.9337606837606838,
+-        },
+-        2: {
+-            "feature_idx": (0, 2, 3),
+-            "feature_names": ("0", "2", "3"),
+-            "cv_scores": np.array([0.974, 0.947, 0.919, 0.973]),
+-            "avg_score": 0.9532361308677098,
+-        },
+-        3: {
+-            "feature_idx": (1, 2, 3),
+-            "feature_names": ("1", "2", "3"),
+-            "cv_scores": np.array([0.974, 0.947, 0.892, 1.0]),
+-            "avg_score": 0.9532361308677098,
+-        },
+-    }
+ 
+-    if Version(sklearn_version) < Version("0.22"):
+-        expect[0]["avg_score"] = 0.9401709401709402
+-        expect[0]["cv_scores"] = np.array(
+-            [0.94871795, 0.92307692, 0.91666667, 0.97222222]
+-        )
+-        expect[1]["cv_scores"] = np.array(
+-            [0.94871795, 0.92307692, 0.91666667, 0.97222222]
+-        )
+-        expect[2]["cv_scores"] = np.array(
+-            [0.94871795, 0.92307692, 0.91666667, 0.97222222]
+-        )
+-        expect[2]["avg_score"] = 0.9599358974358974
+-        expect[3]["avg_score"] = 0.9599358974358974
+-        expect[3]["cv_scores"] = np.array([0.97435897, 0.94871795, 0.91666667, 1.0])
+-        assert round(efs1.best_score_, 4) == 0.9599
+-
+-    else:
+-        assert round(efs1.best_score_, 4) == 0.9532
+-
+-    dict_compare_utility(d1=expect, d2=efs1.subsets_)
+-    assert efs1.best_idx_ == (0, 2, 3)
++    # Explicit fold fits check that weights reach the correct training rows
++    # without depending on a particular version's bootstrap sampling results.
++    expect = {}
++    cv = StratifiedKFold(n_splits=4)
++    for i, feature_idx in enumerate(combinations(range(X.shape[1]), 3)):
++        X_subset = X[:, feature_idx]
++        cv_scores = []
++        for train, test in cv.split(X, y):
++            fitted = clone(forest).fit(
++                X_subset[train], y[train], sample_weight=sample_weight[train]
++            )
++            cv_scores.append(fitted.score(X_subset[test], y[test]))
++        expect[i] = {
++            "feature_idx": feature_idx,
++            "feature_names": tuple(str(idx) for idx in feature_idx),
++            "cv_scores": np.array(cv_scores),
++            "avg_score": np.mean(cv_scores),
++        }
++
++    dict_compare_utility(d1=expect, d2=efs1.subsets_, decimal=7)
++    best_subset = max(expect.values(), key=lambda subset: subset["avg_score"])
++    assert_almost_equal(efs1.best_score_, best_subset["avg_score"])
++    assert efs1.best_idx_ == best_subset["feature_idx"]
+ 
+ 
+ def test_regression():

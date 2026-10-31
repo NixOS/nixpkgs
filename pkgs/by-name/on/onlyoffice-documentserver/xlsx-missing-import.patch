@@ -1,0 +1,12 @@
+diff --git a/OOXML/XlsxFormat/Worksheets/SheetData.cpp b/OOXML/XlsxFormat/Worksheets/SheetData.cpp
+index b808b46cb7..c90eb4e254 100644
+--- a/OOXML/XlsxFormat/Worksheets/SheetData.cpp
++++ b/OOXML/XlsxFormat/Worksheets/SheetData.cpp
+@@ -71,6 +71,7 @@
+ #include <boost/regex.hpp>
+ #include <boost/date_time/gregorian/gregorian.hpp>
+ #include <boost/date_time/posix_time/posix_time.hpp>
++#include <cfloat>
+ 
+ #ifndef MININT32
+ #define MAXUINT32   ((uint32_t)~((uint32_t)0))

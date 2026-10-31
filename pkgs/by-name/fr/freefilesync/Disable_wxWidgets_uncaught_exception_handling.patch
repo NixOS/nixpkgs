@@ -1,0 +1,28 @@
+diff --git a/FreeFileSync/Source/RealTimeSync/application.cpp b/FreeFileSync/Source/RealTimeSync/application.cpp
+index 45fb191..ccd2598 100644
+--- a/FreeFileSync/Source/RealTimeSync/application.cpp
++++ b/FreeFileSync/Source/RealTimeSync/application.cpp
+@@ -215,9 +215,6 @@ wxLayoutDirection Application::GetLayoutDirection() const { return languageLayou
+ 
+ int Application::OnRun()
+ {
+-#if wxUSE_EXCEPTIONS
+-#error why is wxWidgets uncaught exception handling enabled!?
+-#endif
+ 
+     //exception => Windows: let it crash and create mini dump!!! Linux/macOS: std::exception::what() logged to console
+         [[maybe_unused]] const int rc = wxApp::OnRun();
+diff --git a/FreeFileSync/Source/application.cpp b/FreeFileSync/Source/application.cpp
+index f0233ab..02169f4 100644
+--- a/FreeFileSync/Source/application.cpp
++++ b/FreeFileSync/Source/application.cpp
+@@ -232,9 +232,6 @@ wxLayoutDirection Application::GetLayoutDirection() const { return languageLayou
+ 
+ int Application::OnRun()
+ {
+-#if wxUSE_EXCEPTIONS
+-#error why is wxWidgets uncaught exception handling enabled!?
+-#endif
+     //exception? => Windows: let it crash and create mini dump!!! Linux/macOS: std::exception::what() logged to console
+ 
+         [[maybe_unused]] const int rc = wxApp::OnRun();

@@ -1,0 +1,14 @@
+diff --git a/setup.cfg b/setup.cfg
+index e29e54e..75c3210 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -29,9 +29,6 @@ classifier =
+ 
+ [options]
+ packages = find:
+-# DON'T CHANGE THE FOLLOWING LINE! IT WILL BE UPDATED BY PYSCAFFOLD!
+-setup_requires =
+-   pyscaffold>=3.3a0,<4
+ # Add here dependencies of your project (semicolon/line-separated), e.g.
+ install_requires =
+     requests>=2.9.1

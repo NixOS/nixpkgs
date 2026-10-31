@@ -1,0 +1,68 @@
+diff --git cdparanoia-III-10.2/interface/utils.h cdparanoia-III-10.2/interface/utils.h
+index c9647da..68c1a3a 100644
+--- cdparanoia-III-10.2/interface/utils.h
++++ cdparanoia-III-10.2/interface/utils.h
+@@ -1,4 +1,6 @@
+-#include <endian.h>
++#include <unistd.h>
++#include <stdint.h>
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <errno.h>
+ #include <string.h>
+@@ -14,15 +16,15 @@ static inline int bigendianp(void){
+ }
+ 
+ static inline int32_t swap32(int32_t x){
+-  return((((u_int32_t)x & 0x000000ffU) << 24) | 
+-	 (((u_int32_t)x & 0x0000ff00U) <<  8) | 
+-	 (((u_int32_t)x & 0x00ff0000U) >>  8) | 
+-	 (((u_int32_t)x & 0xff000000U) >> 24));
++  return((((uint32_t)x & 0x000000ffU) << 24) | 
++	 (((uint32_t)x & 0x0000ff00U) <<  8) | 
++	 (((uint32_t)x & 0x00ff0000U) >>  8) | 
++	 (((uint32_t)x & 0xff000000U) >> 24));
+ }
+ 
+ static inline int16_t swap16(int16_t x){
+-  return((((u_int16_t)x & 0x00ffU) <<  8) | 
+-	 (((u_int16_t)x & 0xff00U) >>  8));
++  return((((uint16_t)x & 0x00ffU) <<  8) | 
++	 (((uint16_t)x & 0xff00U) >>  8));
+ }
+ 
+ #if BYTE_ORDER == LITTLE_ENDIAN
+diff --git cdparanoia-III-10.2/utils.h cdparanoia-III-10.2/utils.h
+index 10dce58..6211ce3 100644
+--- cdparanoia-III-10.2/utils.h
++++ cdparanoia-III-10.2/utils.h
+@@ -1,5 +1,6 @@
++#include <unistd.h>
++#include <stdint.h>
+ #include <stdlib.h>
+-#include <endian.h>
+ #include <stdio.h>
+ #include <errno.h>
+ #include <string.h>
+@@ -18,15 +19,15 @@ static inline int bigendianp(void){
+ }
+ 
+ static inline int32_t swap32(int32_t x){
+-  return((((u_int32_t)x & 0x000000ffU) << 24) | 
+-	 (((u_int32_t)x & 0x0000ff00U) <<  8) | 
+-	 (((u_int32_t)x & 0x00ff0000U) >>  8) | 
+-	 (((u_int32_t)x & 0xff000000U) >> 24));
++  return((((uint32_t)x & 0x000000ffU) << 24) | 
++	 (((uint32_t)x & 0x0000ff00U) <<  8) | 
++	 (((uint32_t)x & 0x00ff0000U) >>  8) | 
++	 (((uint32_t)x & 0xff000000U) >> 24));
+ }
+ 
+ static inline int16_t swap16(int16_t x){
+-  return((((u_int16_t)x & 0x00ffU) <<  8) | 
+-	 (((u_int16_t)x & 0xff00U) >>  8));
++  return((((uint16_t)x & 0x00ffU) <<  8) | 
++	 (((uint16_t)x & 0xff00U) >>  8));
+ }
+ 
+ #if BYTE_ORDER == LITTLE_ENDIAN

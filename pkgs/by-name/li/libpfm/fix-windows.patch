@@ -1,0 +1,18 @@
+diff --git a/lib/Makefile b/lib/Makefile
+index 5ca71e3..cd0717f 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -428,11 +428,13 @@ install:
+ 	-mkdir -p $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL) -m 644 $(ALIBPFM) $(DESTDIR)$(LIBDIR)
+ ifeq ($(CONFIG_PFMLIB_SHARED),y)
++ifeq ($(SYS),Linux)
+ 	$(INSTALL) $(SLIBPFM) $(DESTDIR)$(LIBDIR)
+ 	cd $(DESTDIR)$(LIBDIR); $(LN) $(SLIBPFM) $(VLIBPFM)
+ 	cd $(DESTDIR)$(LIBDIR); $(LN) $(SLIBPFM) libpfm.$(SOLIBEXT)
+ 	-$(LDCONFIG)
+ endif
++endif
+ 
+ tags:
+ 	$(CTAGS) -o $(TOPDIR)/tags --tag-relative=yes $(SRCS) $(INCDEP)

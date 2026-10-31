@@ -1,0 +1,13 @@
+diff --git a/mpeghdec.pc.in b/mpeghdec.pc.in
+index 752c038bfd..4c0f4ee0fb 100644
+--- a/mpeghdec.pc.in
++++ b/mpeghdec.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+
+ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@

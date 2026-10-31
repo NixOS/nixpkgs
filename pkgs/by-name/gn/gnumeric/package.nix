@@ -1,0 +1,106 @@
+{
+  lib,
+  stdenv,
+  pkg-config,
+  intltool,
+  libxml2,
+  perlPackages,
+  goffice,
+  gnome,
+  adwaita-icon-theme,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  bison,
+  python3Packages,
+  itstool,
+  autoreconfHook,
+  gtk-doc,
+  fetchFromGitLab,
+  fetchpatch,
+  gettext,
+  yelp-tools,
+}:
+
+let
+  inherit (python3Packages) python pygobject3;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gnumeric";
+  version = "1.12.62";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnumeric";
+    tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-vMXT0KhzQqjyovZAP4Uh27mWsmRz+21p4PAdJJYMhoc=";
+  };
+
+  patches = [
+    # This commit should get included in the next release.
+    (fetchpatch {
+      name = "CVE-2026-97222.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/bc1dee29525933994181fb2307d6ad584de6040d.diff";
+      hash = "sha256-8A56BLNgekDOYZnA6WqQiyoC0iJTPJQ8jEPnoKv0OPM=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  configureFlags = [ "--disable-component" ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    gtk-doc
+    yelp-tools
+    pkg-config
+    intltool
+    bison
+    itstool
+    glib # glib-compile-resources
+    libxml2 # xmllint
+    python.pythonOnBuildForHost
+    wrapGAppsHook3
+  ];
+
+  # ToDo: optional libgda, introspection?
+  # TODO: fix Perl plugin when cross-compiling
+  buildInputs = [
+    goffice
+    gtk3
+    adwaita-icon-theme
+    python
+    pygobject3
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
+
+  enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gnumeric";
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
+    description = "GNOME Office Spreadsheet";
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://projects.gnome.org/gnumeric/";
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.vcunat ];
+  };
+})

@@ -1,0 +1,48 @@
+diff --git a/src/defines.h b/src/defines.h
+index 9533476..1999826 100644
+--- a/src/defines.h
++++ b/src/defines.h
+@@ -164,7 +164,7 @@
+ #endif
+ 
+ /*extern char *getpass();*/
+-extern char *crypt(); /* libufc */
++extern char *crypt(const char *key, const char *salt); /* libufc */
+ 
+ #if HAVE_TERMIOS_H
+ # include <termios.h>
+diff --git a/src/extra.h b/src/extra.h
+index b655291..bae372e 100644
+--- a/src/extra.h
++++ b/src/extra.h
+@@ -14,7 +14,7 @@ char *get_cfile(int uid, char*);
+ void Bzero(void *s, size_t n);
+ void mcrypt_tolow(char *str, int size);
+ 
+-char *my_getpass();
++char *my_getpass(char *prt);
+ int check_file_head(FILE *fstream, char *algorithm, char* mode, char* keymode, int *keysize, void* salt, int* salt_size);
+ void* read_iv(FILE *fstream, int ivsize);
+ int write_file_head(FILE * filedes, char* algorithm, char* mode, char* keymode, int* keysize, void *salt, int salt_size);
+diff --git a/src/ufc_crypt.c b/src/ufc_crypt.c
+index 8c452d7..7f3a68f 100644
+--- a/src/ufc_crypt.c
++++ b/src/ufc_crypt.c
+@@ -28,7 +28,7 @@
+ 
+ /* UFC optimized for 32 bit machines */
+ 
+-extern word32 *_ufc_dofinalperm();
++extern word32 *_ufc_dofinalperm(word32 l1, word32 l2, word32 r1, word32 r2);
+ 
+ 
+ /*
+@@ -668,7 +668,7 @@ char *salt;
+ 	return outbuf;
+ }
+ 
+-word32 *_ufc_doit();
++word32 *_ufc_doit(word32 l1, word32 l2, word32 r1, word32 r2, word32 itr);
+ 
+ /* 
+  * UNIX crypt function

@@ -1,0 +1,1780 @@
+From e11338de119df16a782fc8a6451e3b4dd0913ca8 Mon Sep 17 00:00:00 2001
+From: Marius Gripsgard <marius@ubports.com>
+Date: Sat, 19 Sep 2026 19:42:33 +0200
+Subject: [PATCH] Vendor the Application API headers instead of depending on
+ lomiri-api
+
+qtmir is the sole implementer of lomiri-shell-application, so there's
+no value fetching those interface headers from a separate API package
+at build time. They move into include/lomiri/shell/application/ here
+(stripped of the inert LOMIRI_API/SymbolExport.h, which has never
+actually done anything outside lomiri-api's own build); lomiri-api
+drops its copy in a companion commit. CMakeLists.txt files that
+referenced them via the old APPLICATION_API_INCLUDEDIR/_INCLUDE_DIRS
+pkg-config variables now point at the local copy instead.
+
+The lomiri-shell-application pkg-config module lomiri still consumes
+is generated here too, folded into the existing libqt5mir1server-dev
+package rather than a new one, since a shell consuming it already
+needs to build against a Mir server implementing the interface.
+
+(cherry picked from commit bd7f9e81adc621fc140b6367b6cc6b71e313ccb2)
+---
+ CMakeLists.txt                                |   8 +-
+ .../application/ApplicationInfoInterface.h    | 364 ++++++++++++++++++
+ .../application/ApplicationManagerInterface.h | 196 ++++++++++
+ include/lomiri/shell/application/Mir.h        | 137 +++++++
+ .../application/MirMousePointerInterface.h    |  77 ++++
+ .../shell/application/MirPlatformCursor.h     |  43 +++
+ .../shell/application/MirSurfaceInterface.h   | 329 ++++++++++++++++
+ .../application/MirSurfaceItemInterface.h     | 176 +++++++++
+ .../application/MirSurfaceListInterface.h     | 107 +++++
+ .../application/SurfaceManagerInterface.h     |  78 ++++
+ src/modules/QtMir/Application/CMakeLists.txt  |  14 +-
+ src/platforms/mirserver/CMakeLists.txt        |  26 +-
+ .../mirserver/lomiri-shell-application.pc.in  |   9 +
+ tests/framework/CMakeLists.txt                |   1 -
+ .../modules/ApplicationManager/CMakeLists.txt |   1 -
+ tests/modules/Session/CMakeLists.txt          |   1 -
+ tests/modules/SurfaceManager/CMakeLists.txt   |   1 -
+ 17 files changed, 1551 insertions(+), 17 deletions(-)
+ create mode 100644 include/lomiri/shell/application/ApplicationInfoInterface.h
+ create mode 100644 include/lomiri/shell/application/ApplicationManagerInterface.h
+ create mode 100644 include/lomiri/shell/application/Mir.h
+ create mode 100644 include/lomiri/shell/application/MirMousePointerInterface.h
+ create mode 100644 include/lomiri/shell/application/MirPlatformCursor.h
+ create mode 100644 include/lomiri/shell/application/MirSurfaceInterface.h
+ create mode 100644 include/lomiri/shell/application/MirSurfaceItemInterface.h
+ create mode 100644 include/lomiri/shell/application/MirSurfaceListInterface.h
+ create mode 100644 include/lomiri/shell/application/SurfaceManagerInterface.h
+ create mode 100644 src/platforms/mirserver/lomiri-shell-application.pc.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b934de2a..c176173e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -102,7 +102,6 @@ pkg_check_modules(GIO gio-2.0)
+ pkg_check_modules(GIO_UNIX gio-unix-2.0)
+ pkg_check_modules(LTTNG lttng-ust)
+ pkg_check_modules(GSETTINGS_QT REQUIRED gsettings-qt)
+-pkg_check_modules(APPLICATION_API REQUIRED lomiri-shell-application=28)
+ 
+ if(WITH_VALGRIND)
+     pkg_check_modules(VALGRIND valgrind REQUIRED)
+@@ -114,7 +113,12 @@ pkg_check_modules(CONTENT_HUB liblomiri-content-hub>=1.0.0 REQUIRED)
+ message(STATUS "Bulding with lomiri-content-hub")
+ endif()
+ 
+-include_directories(SYSTEM ${APPLICATION_API_INCLUDE_DIRS})
++include_directories(SYSTEM ${Qt5Core_INCLUDE_DIRS})
++
++# Lomiri shell Application API headers (lomiri/shell/application/*.h, formerly
++# from liblomiri-shell-api-dev) now live in this tree; make them globally
++# available like the pkg-config module used to.
++include_directories(${CMAKE_SOURCE_DIR}/include)
+ 
+ # Disable all deprecated qt functions in and before qt version 5.9
+ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050900)
+diff --git a/include/lomiri/shell/application/ApplicationInfoInterface.h b/include/lomiri/shell/application/ApplicationInfoInterface.h
+new file mode 100644
+index 00000000..c239a7eb
+--- /dev/null
++++ b/include/lomiri/shell/application/ApplicationInfoInterface.h
+@@ -0,0 +1,364 @@
++/*
++ * Copyright 2013,2015,2016 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_APPLICATIONINFOINTERFACE_H
++#define LOMIRI_SHELL_APPLICATION_APPLICATIONINFOINTERFACE_H
++
++#include <QtCore/QObject>
++#include <QtCore/QUrl>
++#include <QColor>
++#include <QSize>
++
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++Q_MOC_INCLUDE("MirSurfaceListInterface.h")
++#endif
++
++namespace lomiri
++{
++namespace shell
++{
++namespace application
++{
++
++class MirSurfaceListInterface;
++
++/**
++ * @brief A class that holds information about applications
++ *
++ * The items hold all the information required for the visual representation
++ * in the launcher.
++ */
++
++class ApplicationInfoInterface: public QObject
++{
++    Q_OBJECT
++
++    /**
++     * @brief The appId of the application.
++     *
++     * Holds the appId for the application. For example (com.ubuntu.camera-app).
++     * The appId is derived from the filename of the .desktop file.
++     */
++    Q_PROPERTY(QString appId READ appId CONSTANT)
++
++    /**
++     * @brief The name of the application.
++     *
++     * Holds the name of the application. Localized to current language.
++     */
++    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
++
++    /**
++     * @brief The comment for the application.
++     *
++     * Holds the comment of the application as obtained from the .desktop file. Localized
++     * to current language.
++     */
++    Q_PROPERTY(QString comment READ comment NOTIFY commentChanged)
++
++    /**
++     * @brief The application's icon.
++     *
++     * Holds a path to the icon for the application. Can be a file or a gicon url.
++     */
++    Q_PROPERTY(QUrl icon READ icon NOTIFY iconChanged)
++
++    /**
++     * @brief The application's state.
++     *
++     * Holds the current application state.
++     */
++    Q_PROPERTY(State state READ state NOTIFY stateChanged)
++
++    /**
++     * @brief The application's requested running state
++     */
++    Q_PROPERTY(RequestedState requestedState READ requestedState WRITE setRequestedState NOTIFY requestedStateChanged)
++
++    /**
++     * @brief The application's focus state.
++     *
++     * Holds the current application focus state. True if focused, false otherwise.
++     */
++    Q_PROPERTY(bool focused READ focused NOTIFY focusedChanged)
++
++    /**
++     * @brief Show Splash screen
++     *
++     * A splash screen is shown while the application is loading,
++     * before it has drawn its first frame. This sets if it should be shown or not
++     */
++    Q_PROPERTY(bool showSplash READ showSplash CONSTANT)
++
++    /**
++     * @brief Splash screen title
++     *
++     * @see splashShowHeader
++     * Title of the splash screen, to be displayed on its header.
++     *
++     * A splash screen is shown while the application is loading,
++     * before it has drawn its first frame.
++     */
++    Q_PROPERTY(QString splashTitle READ splashTitle CONSTANT)
++
++    /**
++     * @brief Splash image
++     *
++     * Url of the splash image to be shown while the application is loading,
++     * before it has drawn its first frame.
++     *
++     * The splash image is centered on the splash screen and displayed in
++     * its actual size (ie, it's not stretched or shrinked and aspect ratio
++     * is kept).
++     */
++    Q_PROPERTY(QUrl splashImage READ splashImage CONSTANT)
++
++    /**
++     * @brief Whether an application header should be shown on the splash screen
++     *
++     * We offer 2 kinds of splash screens for applications:
++     * 1. A splash with a gradient background and image
++     * 2. A splash faking a MainView with header text set. So it is possible to
++     *    arrange things so that once the app starts up, this splash and the app's
++     *    first frame are identical.
++     *
++     * This property is the switch to select between these.
++     *
++     * The header will display the splashTitle, if defined, or the application
++     * name otherwise.
++     *
++     * @see name, splashTitle
++     */
++    Q_PROPERTY(bool splashShowHeader READ splashShowHeader CONSTANT)
++
++    /**
++     * @brief Background color of the splash screen
++     *
++     * Any color that is not fully opaque (having an alpha value of less than
++     * 1.0) is ignored and the default background color will be used instead.
++     *
++     * A splash screen is shown while the application is loading,
++     * before it has drawn its first frame.
++     */
++    Q_PROPERTY(QColor splashColor READ splashColor CONSTANT)
++
++    /**
++     * @brief Color of the splash screen header
++     *
++     * Any color that is not fully opaque (having an alpha value of less than
++     * 1.0) is ignored and the splashColor will be used instead.
++     *
++     * A splash screen is shown while the application is loading,
++     * before it has drawn its first frame.
++     *
++     * @see splashColor
++     */
++    Q_PROPERTY(QColor splashColorHeader READ splashColorHeader CONSTANT)
++
++    /**
++     * @brief Color of the splash screen footer
++     *
++     * Any color that is not fully opaque (having an alpha value of less than
++     * 1.0) is ignored and the splashColor will be used instead.
++     *
++     * A splash screen is shown while the application is loading,
++     * before it has drawn its first frame.
++     *
++     * @see splashColor
++     */
++    Q_PROPERTY(QColor splashColorFooter READ splashColorFooter CONSTANT)
++
++    /**
++     * @brief The orientations supported by the application UI
++     * @see rotatesContents
++     */
++    Q_PROPERTY(Qt::ScreenOrientations supportedOrientations READ supportedOrientations CONSTANT)
++
++    /**
++     * @brief Whether the application UI will rotate itself to match the screen orientation
++     *
++     * Returns true if the application will rotate the UI in its windows to match the screen
++     * orientation.
++     *
++     * If false, it means that the application never rotates its UI, so it will
++     * rely on the window manager to appropriately rotate his windows to match the screen
++     * orientation instead.
++     *
++     * @see supportedOrientations
++     */
++    Q_PROPERTY(bool rotatesWindowContents READ rotatesWindowContents CONSTANT)
++
++    /**
++     * @brief Whether the application is an app targeting the Ubuntu Touch platform.
++     */
++    Q_PROPERTY(bool isTouchApp READ isTouchApp CONSTANT)
++
++    /**
++     * @brief Whether this app is exempt from lifecycle management
++     *
++     * If true, this app will never entirely suspend its process.
++     */
++    Q_PROPERTY(bool exemptFromLifecycle READ exemptFromLifecycle WRITE setExemptFromLifecycle NOTIFY exemptFromLifecycleChanged)
++
++    /**
++     * @brief The size to be given for new surfaces created by this application
++     */
++    Q_PROPERTY(QSize initialSurfaceSize READ initialSurfaceSize WRITE setInitialSurfaceSize NOTIFY initialSurfaceSizeChanged)
++
++    /**
++     * @brief List of the top-level surfaces created by this application
++     */
++    Q_PROPERTY(lomiri::shell::application::MirSurfaceListInterface* surfaceList READ surfaceList CONSTANT)
++
++    /**
++     * @brief The list of top-level prompt surfaces for this application
++     */
++    Q_PROPERTY(lomiri::shell::application::MirSurfaceListInterface* promptSurfaceList READ promptSurfaceList CONSTANT)
++
++    /**
++     * @brief Count of application's surfaces
++     *
++     * This is a convenience property and will always be the same as surfaceList->count().
++     * It allows to connect to an application and listen for surface creations/removals for
++     * that particular application without having to keep track of the
++     * application <-> surfaceList relationship.
++     */
++     Q_PROPERTY(int surfaceCount READ surfaceCount NOTIFY surfaceCountChanged)
++
++    /**
++     * @brief Whether the application wants server side decoration
++     *
++     * By default this will be true, but may be false if the application specifically requested it
++     * to be off
++     */
++    Q_PROPERTY(bool serverSideDecoration READ serverSideDecoration NOTIFY serverSideDecorationChanged)
++
++protected:
++    /// @cond
++    ApplicationInfoInterface(const QString &appId, QObject* parent = 0): QObject(parent) { Q_UNUSED(appId) }
++    /// @endcond
++
++public:
++    /**
++     * @brief A enum that defines a stage.
++     *
++     * MainStage: The main stage, which is the normal place for applications in
++     * traditional desktop environments.
++     * SideStage: The side stage, a panel on the right to place phone form factor
++     * applications.
++     */
++    enum Stage {
++        MainStage,
++        SideStage
++    };
++    Q_ENUM(Stage)
++
++    /**
++     * @brief An application's state.
++     *
++     * Starting: The application was launched and is currently starting up.
++     * Running: The application is running and ready to be used.
++     * Suspended: The application is in the background and has been suspended by
++     * the system in order to save resources.
++     * Stopped: The application is in the background and has been stopped by
++     * the system in order to save resources. From a programmers point of view,
++     * the application is closed, but it's state has been stored to disk and
++     * can be restored upon next launch.
++     */
++    enum State {
++        Starting,
++        Running,
++        Suspended,
++        Stopped
++    };
++    Q_ENUM(State)
++
++    /**
++     * @brief The desired state of an application
++     *
++     * RequestedRunning: If state is Suspended or Stopped, the application will be resumed
++     *                   or restarted, respectively.
++     * RequestedSuspended: If state is Running, the application will be suspended.
++     */
++    enum RequestedState {
++        RequestedRunning = Running,
++        RequestedSuspended = Suspended
++    };
++    Q_ENUM(RequestedState)
++
++    /**
++     * @brief Closes the application
++     */
++    virtual void close() = 0;
++
++    /// @cond
++    virtual ~ApplicationInfoInterface() {}
++
++    virtual QString appId() const = 0;
++    virtual QString name() const = 0;
++    virtual QString comment() const = 0;
++    virtual QUrl icon() const = 0;
++    virtual State state() const = 0;
++    virtual RequestedState requestedState() const = 0;
++    virtual void setRequestedState(RequestedState) = 0;
++    virtual bool focused() const = 0;
++    virtual bool showSplash() const = 0;
++    virtual QString splashTitle() const = 0;
++    virtual QUrl splashImage() const = 0;
++    virtual bool splashShowHeader() const = 0;
++    virtual QColor splashColor() const = 0;
++    virtual QColor splashColorHeader() const = 0;
++    virtual QColor splashColorFooter() const = 0;
++    virtual Qt::ScreenOrientations supportedOrientations() const = 0;
++    virtual bool rotatesWindowContents() const = 0;
++    virtual bool isTouchApp() const = 0;
++    virtual bool exemptFromLifecycle() const = 0;
++    virtual void setExemptFromLifecycle(bool) = 0;
++    virtual QSize initialSurfaceSize() const = 0;
++    virtual void setInitialSurfaceSize(const QSize &size) = 0;
++    virtual MirSurfaceListInterface* surfaceList() const = 0;
++    virtual MirSurfaceListInterface* promptSurfaceList() const = 0;
++    virtual int surfaceCount() const = 0;
++    virtual bool serverSideDecoration() const = 0;
++    /// @endcond
++
++Q_SIGNALS:
++    /// @cond
++    void nameChanged(const QString &name);
++    void commentChanged(const QString &comment);
++    void iconChanged(const QUrl &icon);
++    void stateChanged(State state);
++    void requestedStateChanged(RequestedState value);
++    void focusedChanged(bool focused);
++    void exemptFromLifecycleChanged(bool exemptFromLifecycle);
++    void initialSurfaceSizeChanged(const QSize &size);
++    void surfaceCountChanged(int surfaceCount);
++    void serverSideDecorationChanged(bool ssd);
++    /// @endcond
++
++    /**
++     * @brief The application is requesting focus
++     */
++    void focusRequested();
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++Q_DECLARE_METATYPE(lomiri::shell::application::ApplicationInfoInterface*)
++
++#endif // LOMIRI_SHELL_APPLICATIONMANAGER_APPLICATIONINFOINTERFACE_H
+diff --git a/include/lomiri/shell/application/ApplicationManagerInterface.h b/include/lomiri/shell/application/ApplicationManagerInterface.h
+new file mode 100644
+index 00000000..4682151c
+--- /dev/null
++++ b/include/lomiri/shell/application/ApplicationManagerInterface.h
+@@ -0,0 +1,196 @@
++/*
++ * Copyright 2013,2016 Canonical Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Authors:
++ *      Michael Zanetti <michael.zanetti@canonical.com>
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_APPLICATIONMANAGERINTERFACE_H
++#define LOMIRI_SHELL_APPLICATION_APPLICATIONMANAGERINTERFACE_H
++
++#include <QtCore/QObject>
++#include <QtCore/QAbstractListModel>
++
++namespace lomiri
++{
++namespace shell
++{
++namespace application
++{
++
++class ApplicationInfoInterface;
++class MirSurfaceInterface;
++
++/**
++ * @brief The Application manager
++ *
++ * This is the main class to interact with Applications
++ */
++
++class ApplicationManagerInterface: public QAbstractListModel
++{
++    Q_OBJECT
++
++    /**
++     * @brief The count of the applications known to the manager.
++     *
++     * This is the same as rowCount, added in order to keep compatibility with QML ListModels.
++     */
++    Q_PROPERTY(int count READ count NOTIFY countChanged)
++
++    /**
++     * @brief The currently focused application.
++     *
++     * Use focusApplication() and unfocusCurrentApplication() to modify this.
++     */
++    Q_PROPERTY(QString focusedApplicationId READ focusedApplicationId NOTIFY focusedApplicationIdChanged)
++
++protected:
++    /// @cond
++    ApplicationManagerInterface(QObject* parent = 0): QAbstractListModel(parent)
++    {
++        m_roleNames.insert(RoleAppId, "appId");
++        m_roleNames.insert(RoleName, "name");
++        m_roleNames.insert(RoleComment, "comment");
++        m_roleNames.insert(RoleIcon, "icon");
++        m_roleNames.insert(RoleState, "state");
++        m_roleNames.insert(RoleFocused, "focused");
++        m_roleNames.insert(RoleIsTouchApp, "isTouchApp");
++        m_roleNames.insert(RoleExemptFromLifecycle, "exemptFromLifecycle");
++        m_roleNames.insert(RoleApplication, "application");
++
++        connect(this, SIGNAL(rowsInserted(QModelIndex, int, int)), SIGNAL(countChanged()));
++        connect(this, SIGNAL(rowsRemoved(QModelIndex, int, int)), SIGNAL(countChanged()));
++        connect(this, SIGNAL(modelReset()), SIGNAL(countChanged()));
++        connect(this, SIGNAL(layoutChanged()), SIGNAL(countChanged()));
++    }
++    /// @endcond
++
++public:
++    /**
++     * @brief The Roles supported by the model
++     *
++     * See ApplicationInfoInterface properties for details.
++     */
++    enum Roles {
++        RoleAppId = Qt::UserRole,
++        RoleName,
++        RoleComment,
++        RoleIcon,
++        RoleState,
++        RoleFocused,
++        RoleIsTouchApp,
++        RoleExemptFromLifecycle,
++        RoleApplication,
++    };
++    Q_ENUM(Roles)
++
++    /// @cond
++    virtual ~ApplicationManagerInterface() {}
++
++    QHash<int, QByteArray> roleNames() const override
++    {
++        return m_roleNames;
++    }
++
++    int count() const {
++        return rowCount();
++    }
++
++    virtual QString focusedApplicationId() const = 0;
++
++    /// @endcond
++
++    /**
++     * @brief Get an ApplicationInfo item (using stack index).
++     *
++     * Note: QML requires the full namespace in the return value.
++     *
++     * @param index the index of the item to get
++     * @returns The item, or null if not found.
++     */
++    Q_INVOKABLE virtual lomiri::shell::application::ApplicationInfoInterface *get(int index) const = 0;
++
++    /**
++     * @brief Get an ApplicationInfo item (using the appId).
++     *
++     * Note: QML requires the full namespace in the return value.
++     *
++     * @param appId the appId of the item to get
++     * @returns The item, or null if not found.
++     */
++    Q_INVOKABLE virtual lomiri::shell::application::ApplicationInfoInterface *findApplication(const QString &appId) const = 0;
++
++    /*
++     * @brief Returns the AplicationInfo with the given surface
++     */
++    virtual ApplicationInfoInterface *findApplicationWithSurface(MirSurfaceInterface* surface) const = 0;
++
++    /**
++     * @brief Request to focus a given application
++     *
++     * This will request the shell to focus the given application.
++     *
++     * @param appId The appId of the app to be focused.
++     * @returns True if the request will processed, false if it was discarded (i.e. the given appid could not be found)
++     */
++    Q_INVOKABLE virtual bool requestFocusApplication(const QString &appId) = 0;
++
++    /**
++     * @brief Start an application.
++     *
++     * @param appId The appId for the application to be spawned.
++     * @param arguments Any arguments to be passed to the process.
++     * @returns The created application item if start successful, else null.
++     */
++    Q_INVOKABLE virtual lomiri::shell::application::ApplicationInfoInterface *startApplication(const QString &appId, const QStringList &arguments) = 0;
++
++    /**
++      * @brief Stops an application.
++      *
++      * @param appId The application to be stopped.
++      * @returns True if application stop successful, else false (i.e. false if application was not running).
++      */
++    Q_INVOKABLE virtual bool stopApplication(const QString &appId) = 0;
++
++Q_SIGNALS:
++    /// @cond
++    void countChanged();
++    /// @endcond
++
++    /**
++     * @brief Will be emitted right before the focused application changes.
++     *
++     * This can be used to prepare for an upcoming focus change. For example starting
++     * an animation.
++     */
++    void focusRequested(const QString &appId);
++
++    /**
++     * @brief Will be emitted whenever the focused application changes.
++     */
++    void focusedApplicationIdChanged();
++
++protected:
++    /// @cond
++    QHash<int, QByteArray> m_roleNames;
++    /// @endcond
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++#endif // LOMIRI_SHELL_APPLICATIONMANAGER_APPLICATIONINFO_H
+diff --git a/include/lomiri/shell/application/Mir.h b/include/lomiri/shell/application/Mir.h
+new file mode 100644
+index 00000000..5c539cb6
+--- /dev/null
++++ b/include/lomiri/shell/application/Mir.h
+@@ -0,0 +1,137 @@
++/*
++ * Copyright (C) 2015-2016 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_MIR_H
++#define LOMIRI_SHELL_APPLICATION_MIR_H
++
++#include <QObject>
++
++/**
++    @brief Acting mostly as a namespace to hold enums and such for use in QML
++ */
++class Mir : public QObject
++{
++    Q_OBJECT
++
++    /**
++        @brief Name of the mouse cursor to be used. Follows the X Cursor naming convention.
++
++        Eg.: "left_ptr" is a left-sided pointer arrow
++     */
++    Q_PROPERTY(QString cursorName READ cursorName WRITE setCursorName NOTIFY cursorNameChanged)
++
++    /**
++      * Current (global) keymap, to be applied on the keyboard device
++      *
++      * E.g.: "cz+qwerty" -> "cz" layout, "qwerty" variant
++      */
++    Q_PROPERTY(QString currentKeymap READ currentKeymap WRITE setCurrentKeymap NOTIFY currentKeymapChanged)
++
++public:
++    /**
++        @brief Surface type
++     */
++    enum Type {
++        UnknownType,
++        NormalType,
++        UtilityType,
++        DialogType,
++        GlossType,
++        FreeStyleType,
++        MenuType,
++        InputMethodType,
++        SatelliteType,
++        TipType,
++    };
++    Q_ENUM(Type)
++
++    /**
++        @brief Surface state
++     */
++    enum State {
++        UnknownState,
++        RestoredState,
++        MinimizedState,
++        MaximizedState,
++        FullscreenState,
++        MaximizedLeftState,
++        MaximizedRightState,
++        HorizMaximizedState,
++        VertMaximizedState,
++        MaximizedTopLeftState,
++        MaximizedTopRightState,
++        MaximizedBottomLeftState,
++        MaximizedBottomRightState,
++        HiddenState,
++        AttachedState,
++    };
++    Q_ENUM(State)
++
++    /**
++        @brief Surface orientation angle
++     */
++    enum OrientationAngle {
++        Angle0 = 0,
++        Angle90 = 90,
++        Angle180 = 180,
++        Angle270 = 270
++    };
++    Q_ENUM(OrientationAngle)
++
++    /**
++        @brief Shell chrome
++     */
++    enum ShellChrome {
++        NormalChrome,
++        LowChrome,
++    };
++    Q_ENUM(ShellChrome)
++
++    /**
++        @brief Form Factor
++     */
++    enum FormFactor {
++        FormFactorUnknown,
++        FormFactorPhone,
++        FormFactorTablet,
++        FormFactorMonitor,
++        FormFactorTV,
++        FormFactorProjector,
++    };
++    Q_ENUM(FormFactor)
++
++    /// @cond
++    virtual void setCursorName(const QString &cursorName) = 0;
++    virtual QString cursorName() const = 0;
++
++    virtual QString currentKeymap() const = 0;
++    virtual void setCurrentKeymap(const QString &currentKeymap) = 0;
++    /// @endcond
++
++Q_SIGNALS:
++    /// @cond
++    void cursorNameChanged(const QString &cursorName);
++    void currentKeymapChanged(const QString &currentKeymap);
++    /// @endcond
++};
++
++Q_DECLARE_METATYPE(Mir::Type)
++Q_DECLARE_METATYPE(Mir::State)
++Q_DECLARE_METATYPE(Mir::OrientationAngle)
++Q_DECLARE_METATYPE(Mir::ShellChrome)
++Q_DECLARE_METATYPE(Mir::FormFactor)
++
++#endif // LOMIRI_SHELL_APPLICATION_MIR_H
+diff --git a/include/lomiri/shell/application/MirMousePointerInterface.h b/include/lomiri/shell/application/MirMousePointerInterface.h
+new file mode 100644
+index 00000000..f76aab23
+--- /dev/null
++++ b/include/lomiri/shell/application/MirMousePointerInterface.h
+@@ -0,0 +1,77 @@
++/*
++ * Copyright (C) 2015-2016 Canonical, Ltd.
++ *
++ * This program is free software: you can redistribute it and/or modify it under
++ * the terms of the GNU Lesser General Public License version 3, as published by
++ * the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranties of MERCHANTABILITY,
++ * SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef MIR_MOUSE_POINTER_INTERFACE_H
++#define MIR_MOUSE_POINTER_INTERFACE_H
++
++#include <QQuickItem>
++
++/**
++ * @brief The QML mouse pointer
++ *
++ * FIXME: Get this out of lomiri-api
++ *
++ * This QML item drives the position of the Mir mouse pointer on the scene
++ */
++class MirMousePointerInterface : public QQuickItem {
++    Q_OBJECT
++
++    /**
++     * @brief Name of the cursor
++     * Defines the look of the mouse pointer along with themeName
++     */
++    Q_PROPERTY(QString cursorName READ cursorName NOTIFY cursorNameChanged)
++
++    /**
++     * @brief Name of the cursor theme
++     * Defines the look of the mouse pointer along with cursorName
++     * Its default value is "default".
++     */
++    Q_PROPERTY(QString themeName READ themeName NOTIFY themeNameChanged)
++
++public:
++    /**
++     * @brief The constructor
++     */
++    MirMousePointerInterface(QQuickItem *parent = nullptr) : QQuickItem(parent) {}
++
++    /// @cond
++    virtual void setCursorName(const QString &cursorName) = 0;
++    virtual QString cursorName() const = 0;
++
++    virtual void setThemeName(const QString &themeName) = 0;
++    virtual QString themeName() const = 0;
++
++    virtual void moveTo(const QPoint& position) = 0;
++    /// @endcond
++
++    /**
++     * @brief Sets the custom cursor
++     *
++     * If it's not a pixmap cursor it will be ignored.
++     *
++     * To use it, cursorName must be set to "custom". themeName is ignored in this case.
++     */
++    virtual void setCustomCursor(const QCursor &) = 0;
++
++Q_SIGNALS:
++    /// @cond
++    void cursorNameChanged(QString name);
++    void themeNameChanged(QString name);
++    /// @endcond
++};
++
++#endif // MIR_MOUSE_POINTER_INTERFACE_H
+diff --git a/include/lomiri/shell/application/MirPlatformCursor.h b/include/lomiri/shell/application/MirPlatformCursor.h
+new file mode 100644
+index 00000000..878fdcd6
+--- /dev/null
++++ b/include/lomiri/shell/application/MirPlatformCursor.h
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (C) 2015 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef MIR_PLATFORM_CURSOR_H
++#define MIR_PLATFORM_CURSOR_H
++
++#include <qpa/qplatformcursor.h>
++
++class MirMousePointerInterface;
++
++/**
++ * @brief Cursor interface for Mir platform
++ *
++ * FIXME: Get this out of lomiri-api
++ */
++class MirPlatformCursor : public QPlatformCursor
++{
++public:
++    /**
++     * @brief Register a mouse pointer that this platform cursor will talk to
++     */
++    virtual void registerMousePointer(MirMousePointerInterface *mousePointer) = 0;
++
++    /**
++     * @brief Unregister a mouse pointer that this platform cursor will talk to
++     */
++    virtual void unregisterMousePointer(MirMousePointerInterface *mousePointer) = 0;
++};
++
++#endif // MIR_PLATFORM_CURSOR_H
+diff --git a/include/lomiri/shell/application/MirSurfaceInterface.h b/include/lomiri/shell/application/MirSurfaceInterface.h
+new file mode 100644
+index 00000000..4dce1c4c
+--- /dev/null
++++ b/include/lomiri/shell/application/MirSurfaceInterface.h
+@@ -0,0 +1,329 @@
++/*
++ * Copyright (C) 2015-2016 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_MIRSURFACE_H
++#define LOMIRI_SHELL_APPLICATION_MIRSURFACE_H
++
++#include <QObject>
++#include <QRect>
++#include <QSize>
++
++#include "Mir.h"
++
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++Q_MOC_INCLUDE("MirSurfaceListInterface.h")
++#endif
++
++namespace lomiri
++{
++namespace shell
++{
++namespace application
++{
++
++class MirSurfaceListInterface;
++
++/**
++   @brief Holds a Mir surface. Pretty much an opaque class.
++
++   All surface manipulation is done by giving it to a MirSurfaceItem and then
++   using MirSurfaceItem's properties.
++ */
++class MirSurfaceInterface : public QObject
++{
++    Q_OBJECT
++
++    /**
++     * @brief The surface type
++     */
++    Q_PROPERTY(Mir::Type type READ type NOTIFY typeChanged)
++
++    /**
++     * @brief Name of the surface, given by the client application
++     */
++    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
++
++    /**
++     * @brief Persistent Id of the surface
++     */
++    Q_PROPERTY(QString persistentId READ persistentId CONSTANT)
++
++    /**
++     * @brief App Id of the app this surface belongs to
++     */
++    Q_PROPERTY(QString appId READ appId CONSTANT)
++
++    /**
++     * @brief Position of the current surface buffer, in pixels.
++     */
++    Q_PROPERTY(QPoint position READ position NOTIFY positionChanged)
++
++    /**
++     * @brief Requested position of the current surface buffer, in pixels.
++     */
++    Q_PROPERTY(QPoint requestedPosition READ requestedPosition WRITE setRequestedPosition NOTIFY requestedPositionChanged)
++
++    /**
++     * @brief Size of the current surface buffer, in pixels.
++     */
++    Q_PROPERTY(QSize size READ size NOTIFY sizeChanged)
++
++    /**
++     * @brief State of the surface
++     */
++    Q_PROPERTY(Mir::State state READ state NOTIFY stateChanged)
++
++    /**
++     * @brief True if it has a mir client bound to it.
++     * A "zombie" (live == false) surface never becomes alive again.
++     */
++    Q_PROPERTY(bool live READ live NOTIFY liveChanged)
++
++     /**
++         * @brief True if surface is ready
++         * MirAL decides surface ready when it swaps its first frame
++         */
++    Q_PROPERTY(bool isReady READ isReady NOTIFY ready)
++
++    /**
++     * @brief Visibility of the surface
++     */
++    Q_PROPERTY(bool visible READ visible NOTIFY visibleChanged)
++
++    /**
++     * @brief Orientation angle of the surface
++     *
++     * How many degrees, clockwise, the UI in the surface has to rotate to match shell's UI orientation
++     */
++    Q_PROPERTY(Mir::OrientationAngle orientationAngle READ orientationAngle WRITE setOrientationAngle
++               NOTIFY orientationAngleChanged DESIGNABLE false)
++
++    /**
++     * @brief The requested minimum width for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
++
++    /**
++     * @brief The requested minimum height for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
++
++    /**
++     * @brief The requested maximum width for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
++
++    /**
++     * @brief The requested maximum height for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
++
++    /**
++     * @brief The requested width increment for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int widthIncrement READ widthIncrement NOTIFY widthIncrementChanged)
++
++    /**
++     * @brief The requested height increment for the surface
++     * Zero if not set
++     */
++    Q_PROPERTY(int heightIncrement READ heightIncrement NOTIFY heightIncrementChanged)
++
++    /**
++     * @brief The Shell chrome mode
++     */
++    Q_PROPERTY(Mir::ShellChrome shellChrome READ shellChrome NOTIFY shellChromeChanged)
++
++    /**
++     * @brief The requested keymap for this surface
++     * Its format is "layout+variant".
++     */
++    Q_PROPERTY(QString keymap READ keymap WRITE setKeymap NOTIFY keymapChanged)
++
++    /**
++     * @brief Whether the surface is focused
++     *
++     * It will be true if this surface is MirFocusControllerInterface::focusedSurface
++     */
++    Q_PROPERTY(bool focused READ focused NOTIFY focusedChanged)
++
++    /**
++     * @brief Input bounds
++     *
++     * Bounding rectangle of the surface region that accepts input.
++     */
++    Q_PROPERTY(QRect inputBounds READ inputBounds NOTIFY inputBoundsChanged)
++
++    /**
++     * @brief Whether the surface wants to confine the mouse pointer within its boundaries
++     *
++     * If true, the surface doesn't want the mouse pointer to leave its boundaries while it's focused.
++     */
++    Q_PROPERTY(bool confinesMousePointer READ confinesMousePointer NOTIFY confinesMousePointerChanged)
++
++    /**
++     * @brief Whether to comply to resize requests coming from the client side
++     *
++     * It's true by default
++     */
++    Q_PROPERTY(bool allowClientResize READ allowClientResize WRITE setAllowClientResize NOTIFY allowClientResizeChanged)
++
++    /**
++     * @brief The parent MirSurface or null if this is a top-level surface
++     */
++    Q_PROPERTY(MirSurfaceInterface* parentSurface READ parentSurface CONSTANT)
++
++    /**
++     * @brief The list of child surfaces
++     *
++     * Ordered from top-most (index=0) to bottom (index=count-1)
++     * So the Z value for an item in this model would be z: count - index
++     */
++    Q_PROPERTY(lomiri::shell::application::MirSurfaceListInterface* childSurfaceList READ childSurfaceList CONSTANT)
++
++public:
++    /// @cond
++    MirSurfaceInterface(QObject *parent = nullptr) : QObject(parent) {}
++    virtual ~MirSurfaceInterface() {}
++
++    virtual Mir::Type type() const = 0;
++
++    virtual QString name() const = 0;
++
++    virtual QString persistentId() const = 0;
++
++    virtual QString appId() const = 0;
++
++    virtual QPoint position() const = 0;
++
++    virtual QSize size() const = 0;
++    virtual void resize(int width, int height) = 0;
++    virtual void resize(const QSize &size) = 0;
++
++    virtual Mir::State state() const = 0;
++
++    virtual bool live() const = 0;
++    virtual bool isReady() const = 0;
++    virtual bool visible() const = 0;
++
++    virtual Mir::OrientationAngle orientationAngle() const = 0;
++    virtual void setOrientationAngle(Mir::OrientationAngle angle) = 0;
++
++    virtual int minimumWidth() const = 0;
++    virtual int minimumHeight() const = 0;
++    virtual int maximumWidth() const = 0;
++    virtual int maximumHeight() const = 0;
++    virtual int widthIncrement() const = 0;
++    virtual int heightIncrement() const = 0;
++
++    virtual void setKeymap(const QString &) = 0;
++    virtual QString keymap() const = 0;
++
++    virtual Mir::ShellChrome shellChrome() const = 0;
++
++    virtual bool focused() const = 0;
++
++    virtual QRect inputBounds() const = 0;
++
++    virtual bool confinesMousePointer() const = 0;
++
++    virtual bool allowClientResize() const = 0;
++    virtual void setAllowClientResize(bool) = 0;
++
++    virtual QPoint requestedPosition() const = 0;
++    virtual void setRequestedPosition(const QPoint &) = 0;
++
++    virtual MirSurfaceInterface* parentSurface() const = 0;
++
++    virtual lomiri::shell::application::MirSurfaceListInterface* childSurfaceList() const = 0;
++    /// @endcond
++
++    /**
++     * @brief Sends a close request
++     *
++     */
++    Q_INVOKABLE virtual void close() = 0;
++
++    /**
++     * @brief Sends a force close request
++     *
++     */
++    Q_INVOKABLE virtual void forceClose() = 0;
++
++    /**
++     * @brief Activates this surface
++     *
++     * It will get focused and raised
++     */
++    Q_INVOKABLE virtual void activate() = 0;
++
++public Q_SLOTS:
++    /**
++     * @brief Requests a change to the specified state
++     */
++    virtual void requestState(Mir::State state) = 0;
++
++Q_SIGNALS:
++    /// @cond
++    void ready();
++    void typeChanged(Mir::Type value);
++    void liveChanged(bool value);
++    void visibleChanged(bool visible);
++    void stateChanged(Mir::State value);
++    void orientationAngleChanged(Mir::OrientationAngle value);
++    void positionChanged(QPoint position);
++    void requestedPositionChanged(QPoint position);
++    void sizeChanged(const QSize &value);
++    void nameChanged(const QString &name);
++    void minimumWidthChanged(int value);
++    void minimumHeightChanged(int value);
++    void maximumWidthChanged(int value);
++    void maximumHeightChanged(int value);
++    void widthIncrementChanged(int value);
++    void heightIncrementChanged(int value);
++    void shellChromeChanged(Mir::ShellChrome value);
++    void keymapChanged(const QString &value);
++    void focusedChanged(bool value);
++    void inputBoundsChanged(QRect value);
++    void confinesMousePointerChanged(bool value);
++    void allowClientResizeChanged(bool value);
++    /// @endcond
++
++    /**
++     * @brief Emitted in response to a requestFocus() call
++     *
++     * If shell agrees with it, it should call activate() on this surface
++     */
++    void focusRequested();
++
++    /**
++     * @brief Emitted when close() is called
++     */
++    void closeRequested();
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++Q_DECLARE_METATYPE(lomiri::shell::application::MirSurfaceInterface*)
++
++#endif // LOMIRI_SHELL_APPLICATION_MIRSURFACE_H
+diff --git a/include/lomiri/shell/application/MirSurfaceItemInterface.h b/include/lomiri/shell/application/MirSurfaceItemInterface.h
+new file mode 100644
+index 00000000..f93a4364
+--- /dev/null
++++ b/include/lomiri/shell/application/MirSurfaceItemInterface.h
+@@ -0,0 +1,176 @@
++/*
++ * Copyright (C) 2015 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_MIRSURFACEITEM_H
++#define LOMIRI_SHELL_APPLICATION_MIRSURFACEITEM_H
++
++#include "Mir.h"
++
++#include <QQuickItem>
++
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++Q_MOC_INCLUDE("MirSurfaceInterface.h")
++#endif
++
++namespace lomiri
++{
++namespace shell
++{
++namespace application
++{
++
++class MirSurfaceInterface;
++
++/**
++   @brief Renders a MirSurface in a QML scene and forwards the input events it receives to it.
++
++   You can have multiple MirSurfaceItems displaying the same MirSurface. But care must
++   be taken that only one of them feeds the MirSurface with input events and also only
++   one resizes it.
++ */
++class MirSurfaceItemInterface : public QQuickItem
++{
++    Q_OBJECT
++
++    /**
++     * @brief The surface to be displayed
++     */
++    Q_PROPERTY(lomiri::shell::application::MirSurfaceInterface* surface READ surface WRITE setSurface NOTIFY surfaceChanged)
++
++    /**
++     * @brief Type of the given surface or Mir.UnknownType if no surface is set
++     */
++    Q_PROPERTY(Mir::Type type READ type NOTIFY typeChanged)
++
++    /**
++     * @brief State of the given surface or Mir.UnknownState if no surface is set
++     */
++    Q_PROPERTY(Mir::State surfaceState READ surfaceState NOTIFY surfaceStateChanged)
++
++    /**
++     * @brief Name of the given surface or an empty string if no surface is set
++     */
++    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
++
++    /**
++     * @brief True if the item has a surface and that surface has a mir client bound to it.
++     * A "zombie" (live == false) surface never becomes alive again.
++     */
++    Q_PROPERTY(bool live READ live NOTIFY liveChanged)
++
++    /**
++     * @brief  Orientation angle of the given surface
++     *
++     * How many degrees, clockwise, the UI in the surface has to rotate to match shell's UI orientation
++     */
++    Q_PROPERTY(Mir::OrientationAngle orientationAngle READ orientationAngle WRITE setOrientationAngle
++               NOTIFY orientationAngleChanged DESIGNABLE false)
++
++
++    /**
++     * @brief Whether the item will forward activeFocus, touch events, mouse events and key events to its surface.
++     * It's false by default.
++     * Only one item should have this property enabled for a given surface.
++     */
++    Q_PROPERTY(bool consumesInput READ consumesInput
++                                  WRITE setConsumesInput
++                                  NOTIFY consumesInputChanged)
++
++    /**
++     * @brief The desired width for the contained MirSurface.
++     * It's ignored if set to zero or a negative number
++     * The default value is zero
++     */
++    Q_PROPERTY(int surfaceWidth READ surfaceWidth
++                                WRITE setSurfaceWidth
++                                NOTIFY surfaceWidthChanged)
++
++    /**
++     * @brief The desired height for the contained MirSurface.
++     * It's ignored if set to zero or a negative number
++     * The default value is zero
++     */
++    Q_PROPERTY(int surfaceHeight READ surfaceHeight
++                                WRITE setSurfaceHeight
++                                NOTIFY surfaceHeightChanged)
++
++    Q_PROPERTY(FillMode fillMode READ fillMode WRITE setFillMode NOTIFY fillModeChanged)
++
++    /**
++     * @brief The Shell chrome mode
++     */
++    Q_PROPERTY(Mir::ShellChrome shellChrome READ shellChrome NOTIFY shellChromeChanged)
++
++public:
++
++    enum FillMode {
++        Stretch,
++        PadOrCrop
++    };
++    Q_ENUM(FillMode)
++
++    /// @cond
++    MirSurfaceItemInterface(QQuickItem *parent = 0) : QQuickItem(parent) {}
++    virtual ~MirSurfaceItemInterface() {}
++
++    virtual Mir::Type type() const = 0;
++    virtual QString name() const = 0;
++    virtual bool live() const = 0;
++
++    virtual Mir::State surfaceState() const = 0;
++
++    virtual Mir::OrientationAngle orientationAngle() const = 0;
++    virtual void setOrientationAngle(Mir::OrientationAngle angle) = 0;
++
++    virtual MirSurfaceInterface* surface() const = 0;
++    virtual void setSurface(MirSurfaceInterface*) = 0;
++
++    virtual bool consumesInput() const = 0;
++    virtual void setConsumesInput(bool value) = 0;
++
++    virtual int surfaceWidth() const = 0;
++    virtual void setSurfaceWidth(int value) = 0;
++
++    virtual int surfaceHeight() const = 0;
++    virtual void setSurfaceHeight(int value) = 0;
++
++    virtual FillMode fillMode() const = 0;
++    virtual void setFillMode(FillMode value) = 0;
++
++    virtual Mir::ShellChrome shellChrome() const = 0;
++    /// @endcond
++
++Q_SIGNALS:
++    /// @cond
++    void typeChanged(Mir::Type);
++    void surfaceStateChanged(Mir::State);
++    void liveChanged(bool live);
++    void orientationAngleChanged(Mir::OrientationAngle angle);
++    void surfaceChanged(lomiri::shell::application::MirSurfaceInterface* surface);
++    void consumesInputChanged(bool value);
++    void surfaceWidthChanged(int value);
++    void surfaceHeightChanged(int value);
++    void nameChanged(const QString &name);
++    void fillModeChanged(FillMode value);
++    void shellChromeChanged(Mir::ShellChrome value);
++    /// @endcond
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++#endif // LOMIRI_SHELL_APPLICATION_MIRSURFACEITEM_H
+diff --git a/include/lomiri/shell/application/MirSurfaceListInterface.h b/include/lomiri/shell/application/MirSurfaceListInterface.h
+new file mode 100644
+index 00000000..e347f4ed
+--- /dev/null
++++ b/include/lomiri/shell/application/MirSurfaceListInterface.h
+@@ -0,0 +1,107 @@
++/*
++ * Copyright (C) 2016 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_MIRSURFACELISTINTERFACE_H
++#define LOMIRI_SHELL_APPLICATION_MIRSURFACELISTINTERFACE_H
++
++#include <QAbstractListModel>
++
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
++Q_MOC_INCLUDE("MirSurfaceInterface.h")
++#endif
++
++namespace lomiri {
++namespace shell {
++namespace application {
++
++class MirSurfaceInterface;
++
++/**
++ * @brief Interface for a list model of MirSurfaces
++ */
++class MirSurfaceListInterface : public QAbstractListModel
++{
++
++    Q_OBJECT
++
++    /**
++     * @brief Number of surfaces in this model
++     *
++     * This is the same as rowCount, added in order to keep compatibility with QML ListModels.
++     */
++    Q_PROPERTY(int count READ count NOTIFY countChanged)
++
++    /**
++     * @brief The first (index 0) surface in this model
++     *
++     * Will always match the result of get(0). But being a property, it's more appropriate
++     * for use in qml bindinds (JS expression gets reevaluated when it changes)
++     */
++    Q_PROPERTY(lomiri::shell::application::MirSurfaceInterface* first READ first NOTIFY firstChanged)
++public:
++    /**
++     * @brief The Roles supported by the model
++     *
++     * SurfaceRole - A MirSurfaceInterface.
++     */
++    enum Roles {
++        SurfaceRole = Qt::UserRole,
++    };
++
++    /// @cond
++    MirSurfaceListInterface(QObject *parent = 0) : QAbstractListModel(parent) {}
++    virtual ~MirSurfaceListInterface() {}
++    /// @endcond
++
++    /**
++     * @brief Returns the surface at the specified index
++     *
++     */
++    Q_INVOKABLE virtual MirSurfaceInterface *get(int index) = 0;
++
++    /// @cond
++    // QAbstractItemModel methods
++    QHash<int, QByteArray> roleNames() const override {
++        QHash<int, QByteArray> roleNames;
++        roleNames.insert(SurfaceRole, "surface");
++        return roleNames;
++    }
++
++    int count() const { return rowCount(); }
++
++    MirSurfaceInterface *first() {
++        if (rowCount() > 0) {
++            return get(0);
++        } else {
++            return nullptr;
++        }
++    }
++    /// @endcond
++
++Q_SIGNALS:
++    /// @cond
++    void countChanged(int count);
++    void firstChanged();
++    /// @endcond
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++Q_DECLARE_METATYPE(lomiri::shell::application::MirSurfaceListInterface*)
++
++#endif // LOMIRI_SHELL_APPLICATION_MIRSURFACELISTINTERFACE_H
+diff --git a/include/lomiri/shell/application/SurfaceManagerInterface.h b/include/lomiri/shell/application/SurfaceManagerInterface.h
+new file mode 100644
+index 00000000..790113ba
+--- /dev/null
++++ b/include/lomiri/shell/application/SurfaceManagerInterface.h
+@@ -0,0 +1,78 @@
++/*
++ * Copyright (C) 2016 Canonical, Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef LOMIRI_SHELL_APPLICATION_SURFACEMANAGERINTERFACE_H
++#define LOMIRI_SHELL_APPLICATION_SURFACEMANAGERINTERFACE_H
++
++#include "Mir.h"
++
++#include <QObject>
++#include <QVector>
++
++#include <memory>
++#include <functional>
++
++namespace miral {
++class Window;
++class Workspace;
++}
++
++namespace lomiri {
++namespace shell {
++namespace application {
++
++class MirSurfaceInterface;
++
++class SurfaceManagerInterface : public QObject
++{
++    Q_OBJECT
++
++public:
++    virtual ~SurfaceManagerInterface() {}
++
++    virtual void raise(MirSurfaceInterface *surface) = 0;
++    virtual void activate(MirSurfaceInterface *surface) = 0;
++
++    virtual void forEachSurfaceInWorkspace(const std::shared_ptr<miral::Workspace> &workspace,
++                                           const std::function<void(lomiri::shell::application::MirSurfaceInterface*)> &callback) = 0;
++    virtual void moveSurfaceToWorkspace(lomiri::shell::application::MirSurfaceInterface* surface,
++                                        const std::shared_ptr<miral::Workspace> &workspace) = 0;
++    virtual void moveWorkspaceContentToWorkspace(const std::shared_ptr<miral::Workspace> &to,
++                                                 const std::shared_ptr<miral::Workspace> &from) = 0;
++
++Q_SIGNALS:
++    void surfaceCreated(lomiri::shell::application::MirSurfaceInterface *surface);
++    void surfaceRemoved(lomiri::shell::application::MirSurfaceInterface *surface);
++    void surfaceReady(lomiri::shell::application::MirSurfaceInterface *surface);
++    void surfaceMoved(lomiri::shell::application::MirSurfaceInterface *surface, const QPoint &topLeft);
++    void surfaceResized(lomiri::shell::application::MirSurfaceInterface *surface, const QSize &size);
++    void surfaceStateChanged(lomiri::shell::application::MirSurfaceInterface *surface, Mir::State state);
++    void surfaceFocusChanged(lomiri::shell::application::MirSurfaceInterface *surface, bool focused);
++    void surfacesRaised(const QVector<lomiri::shell::application::MirSurfaceInterface*> &surfaces);
++    void surfaceRequestedRaise(lomiri::shell::application::MirSurfaceInterface *surface);
++    void surfacesAddedToWorkspace(const std::shared_ptr<miral::Workspace> &workspace,
++                                  const QVector<lomiri::shell::application::MirSurfaceInterface*> &surfaces);
++    void surfacesAboutToBeRemovedFromWorkspace(const std::shared_ptr<miral::Workspace> &workspace,
++                                               const QVector<lomiri::shell::application::MirSurfaceInterface*> &surfaces);
++    void modificationsStarted();
++    void modificationsEnded();
++};
++
++} // namespace application
++} // namespace shell
++} // namespace lomiri
++
++#endif // LOMIRI_SHELL_APPLICATION_SURFACEMANAGERINTERFACE_H
+diff --git a/src/modules/QtMir/Application/CMakeLists.txt b/src/modules/QtMir/Application/CMakeLists.txt
+index f5a0b125..38125b90 100644
+--- a/src/modules/QtMir/Application/CMakeLists.txt
++++ b/src/modules/QtMir/Application/CMakeLists.txt
+@@ -69,13 +69,13 @@ set(QMLMIRPLUGIN_SRC
+     settings.cpp
+     windowmodel.cpp
+ # We need to run moc on these headers
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationInfoInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/ApplicationManagerInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceItemInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirSurfaceListInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/SurfaceManagerInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/ApplicationInfoInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/ApplicationManagerInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/Mir.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/MirSurfaceInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/MirSurfaceItemInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/MirSurfaceListInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/SurfaceManagerInterface.h
+ # Feed the automoc monster
+     session_interface.h
+     applicationinfo.h
+diff --git a/src/platforms/mirserver/CMakeLists.txt b/src/platforms/mirserver/CMakeLists.txt
+index 8aaa86cf..330b2190 100644
+--- a/src/platforms/mirserver/CMakeLists.txt
++++ b/src/platforms/mirserver/CMakeLists.txt
+@@ -76,8 +76,6 @@ include_directories(
+     ${Qt5Quick_PRIVATE_INCLUDE_DIRS}
+     ${Qt5Qml_INCLUDE_DIRS}
+ 
+-    ${APPLICATION_API_INCLUDE_DIRS}
+-
+ if(WITH_CONTENTHUB)
+     ${CONTENT_HUB_INCLUDE_DIRS}
+ endif()
+@@ -163,8 +161,8 @@ set(QMIRSERVER_PLUGIN_SRC
+     wayland/kwinserverdecoration.cpp
+ 
+ # We need to run moc on these headers
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/MirMousePointerInterface.h
+-    ${APPLICATION_API_INCLUDEDIR}/lomiri/shell/application/Mir.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/MirMousePointerInterface.h
++    ${CMAKE_SOURCE_DIR}/include/lomiri/shell/application/Mir.h
+ 
+     ${CMAKE_SOURCE_DIR}/include/qtmir/mirserverapplication.h
+     ${CMAKE_SOURCE_DIR}/include/qtmir/displayconfigurationpolicy.h
+@@ -265,6 +263,26 @@ if(NOT WITH_MIR2)
+   )
+ endif()
+ 
++# Lomiri shell Application API: header-only interfaces that qtmir implements.
++# Kept as its own pkg-config module (versioned independently of qtmirserver's
++# SOVERSION) but shipped in the same libqt5mir1server-dev package, since a
++# shell consuming it already needs to build against a Mir server implementing
++# the interface.
++configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lomiri-shell-application.pc.in
++    ${CMAKE_CURRENT_BINARY_DIR}/lomiri-shell-application.pc
++    @ONLY
++)
++
++install(
++  DIRECTORY ${CMAKE_SOURCE_DIR}/include/lomiri
++  DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/lomiri-shell-api
++)
++
++install(
++  FILES ${CMAKE_CURRENT_BINARY_DIR}/lomiri-shell-application.pc
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
++
+ add_library(qpa-mirserver SHARED
+     mirserverintegration.cpp
+     plugin.cpp
+diff --git a/src/platforms/mirserver/lomiri-shell-application.pc.in b/src/platforms/mirserver/lomiri-shell-application.pc.in
+new file mode 100644
+index 00000000..4e3452a8
+--- /dev/null
++++ b/src/platforms/mirserver/lomiri-shell-application.pc.in
+@@ -0,0 +1,9 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++includedir=${prefix}/include/lomiri-shell-api
++
++Name: lomiri-shell-application
++Description: Lomiri shell Application APIs
++Version: 28
++
++Requires: Qt5Core
++Cflags: -I${includedir}
+diff --git a/tests/framework/CMakeLists.txt b/tests/framework/CMakeLists.txt
+index 3c5d407e..b5d9eb16 100644
+--- a/tests/framework/CMakeLists.txt
++++ b/tests/framework/CMakeLists.txt
+@@ -7,7 +7,6 @@ include_directories(
+ 
+ include_directories(
+     SYSTEM
+-    ${APPLICATION_API_INCLUDE_DIRS}
+     ${MIRAL_INCLUDE_DIRS}
+     ${MIROIL_INCLUDE_DIRS}
+     ${MIRSERVER_INCLUDE_DIRS}
+diff --git a/tests/modules/ApplicationManager/CMakeLists.txt b/tests/modules/ApplicationManager/CMakeLists.txt
+index 6cd39b5a..f3625fa7 100644
+--- a/tests/modules/ApplicationManager/CMakeLists.txt
++++ b/tests/modules/ApplicationManager/CMakeLists.txt
+@@ -13,7 +13,6 @@ include_directories(
+ 
+ include_directories(
+   SYSTEM
+-  ${APPLICATION_API_INCLUDE_DIRS}
+   ${MIRAL_INCLUDE_DIRS}
+   ${MIROIL_INCLUDE_DIRS}
+   ${MIRSERVER_INCLUDE_DIRS}
+diff --git a/tests/modules/Session/CMakeLists.txt b/tests/modules/Session/CMakeLists.txt
+index 48ee1776..cbc90a3a 100644
+--- a/tests/modules/Session/CMakeLists.txt
++++ b/tests/modules/Session/CMakeLists.txt
+@@ -14,7 +14,6 @@ include_directories(
+ 
+ include_directories(
+   SYSTEM
+-  ${APPLICATION_API_INCLUDE_DIRS}
+   ${MIRAL_INCLUDE_DIRS}
+   ${MIROIL_INCLUDE_DIRS}
+   ${MIRSERVER_INCLUDE_DIRS}
+diff --git a/tests/modules/SurfaceManager/CMakeLists.txt b/tests/modules/SurfaceManager/CMakeLists.txt
+index 7f58dd12..5da028cc 100644
+--- a/tests/modules/SurfaceManager/CMakeLists.txt
++++ b/tests/modules/SurfaceManager/CMakeLists.txt
+@@ -14,7 +14,6 @@ include_directories(
+ 
+ include_directories(
+   SYSTEM
+-  ${APPLICATION_API_INCLUDE_DIRS}
+   ${MIRTEST_INCLUDE_DIRS}
+ )
+ 
+-- 
+2.54.0
+

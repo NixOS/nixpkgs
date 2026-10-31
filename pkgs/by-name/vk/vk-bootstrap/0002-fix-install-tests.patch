@@ -1,0 +1,38 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 0b4f2e1..4dd1fe0 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -58,14 +58,16 @@ list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+ include(Catch)
+ catch_discover_tests(vk-bootstrap-test)
+ 
+-# Test add_subdirectory support using fetch content vulkan headers
+-add_test(NAME integration.add_subdirectory.fetch_content_vulkan_headers
+-    COMMAND ${CMAKE_CTEST_COMMAND}
+-        --build-and-test ${CMAKE_CURRENT_LIST_DIR}/integration
+-                         ${CMAKE_CURRENT_BINARY_DIR}/add_subdirectory/fetch_content_vulkan_headers
+-        --build-generator ${CMAKE_GENERATOR}
+-        --build-options -DADD_SUBDIRECTORY_TESTING=ON -DVULKAN_HEADER_VERSION_GIT_TAG=${VK_BOOTSTRAP_SOURCE_HEADER_VERSION_GIT_TAG}
+-)
++# Commented out for nixpkgs due to external dependencies.
++#
++# # Test add_subdirectory support using fetch content vulkan headers
++# add_test(NAME integration.add_subdirectory.fetch_content_vulkan_headers
++#     COMMAND ${CMAKE_CTEST_COMMAND}
++#         --build-and-test ${CMAKE_CURRENT_LIST_DIR}/integration
++#                          ${CMAKE_CURRENT_BINARY_DIR}/add_subdirectory/fetch_content_vulkan_headers
++#         --build-generator ${CMAKE_GENERATOR}
++#         --build-options -DADD_SUBDIRECTORY_TESTING=ON -DVULKAN_HEADER_VERSION_GIT_TAG=${VK_BOOTSTRAP_SOURCE_HEADER_VERSION_GIT_TAG}
++# )
+ 
+  get_target_property(vulkan_headers_include_dir Vulkan::Headers INTERFACE_INCLUDE_DIRECTORIES)
+ 
+@@ -105,7 +107,7 @@ if (VulkanHeaders_FOUND)
+                 --build-and-test ${CMAKE_CURRENT_LIST_DIR}/integration
+                                 ${CMAKE_CURRENT_BINARY_DIR}/find_package/find_package_vulkan_headers
+                 --build-generator ${CMAKE_GENERATOR}
+-                --build-options -DFIND_PACKAGE_TESTING=ON "-DCMAKE_PREFIX_PATH=${vulkan_headers_install_dir};${test_install_dir}"
++                --build-options -DFIND_PACKAGE_TESTING=ON "-DCMAKE_PREFIX_PATH=${vulkan_headers_install_dir};${test_install_dir};${CMAKE_INSTALL_PREFIX}"
+         )
+ 
+         set_tests_properties(integration.find_package.find_package_vulkan_headers PROPERTIES DEPENDS integration.install)

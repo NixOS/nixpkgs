@@ -1,0 +1,12 @@
+diff --git a/cddl/usr.sbin/zfsd/case_file.cc b/cddl/usr.sbin/zfsd/case_file.cc
+index 852767aeb227..69086b4a7255 100644
+--- a/cddl/usr.sbin/zfsd/case_file.cc
++++ b/cddl/usr.sbin/zfsd/case_file.cc
+@@ -49,6 +49,7 @@
+ #include <iomanip>
+ #include <fstream>
+ #include <functional>
++#include <algorithm>
+ #include <sstream>
+ #include <syslog.h>
+ #include <unistd.h>

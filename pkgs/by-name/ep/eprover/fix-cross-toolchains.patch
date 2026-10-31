@@ -1,0 +1,25 @@
+--- a/CONTRIB/picosat-965/makefile.in
++++ b/CONTRIB/picosat-965/makefile.in
+@@ -49,8 +49,7 @@ config.h: makefile VERSION mkconfig.sh # and actually picosat.c
+ 	rm -f $@; ./mkconfig.sh > $@
+ 
+ libpicosat.a: picosat.o version.o
+-	ar rc $@ picosat.o version.o
+-	ranlib $@
++	$(AR) $@ picosat.o version.o
+ 
+ SONAME=-Xlinker -soname -Xlinker libpicosat.so
+ libpicosat.so: picosat.o version.o
+--- a/Makefile.vars
++++ b/Makefile.vars
+@@ -160,8 +160,8 @@ LD         = $(CC) $(LDFLAGS)
+ 
+ # Generic
+ #    AR         = sleep 1;ar rcs
+-   AR         = ar rcs
+-   CC         =  gcc
++#    AR         = ar rcs
++#    CC         =  gcc
+ 
+ # Builds with link time optimization
+ #

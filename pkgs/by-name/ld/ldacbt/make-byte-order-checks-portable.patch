@@ -1,0 +1,55 @@
+diff --git a/src/ldacBT_internal.c b/src/ldacBT_internal.c
+index 94458854fe..ca9df42c72 100644
+--- a/src/ldacBT_internal.c
++++ b/src/ldacBT_internal.c
+@@ -241,7 +241,7 @@
+             char *p_pcm_8 = (char *)pbuff;
+             char *p_lch_8 = (char *)ap_pcm[0];
+             char *p_rch_8 = (char *)ap_pcm[1];
+-#if __BYTE_ORDER == __LITTLE_ENDIAN
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+             for (i = 0; i < nsmpl; i++) {
+                 *p_lch_8++ = p_pcm_8[0];
+                 *p_lch_8++ = p_pcm_8[1];
+@@ -252,24 +252,24 @@
+                 *p_rch_8++ = p_pcm_8[2];
+                 p_pcm_8+=3;
+             }
+-#else   /* __BYTE_ORDER */
++#else   /* __BYTE_ORDER__ */
+ #error unsupported byte order
+-#endif  /* #if __BYTE_ORDER == __LITTLE_ENDIAN */
++#endif  /* #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ */
+         }
+         else if ( fmt == LDACBT_SMPL_FMT_S32 ){
+             char *p_pcm_8 = (char *)pbuff;
+             char *p_lch_8 = (char *)ap_pcm[0];
+             char *p_rch_8 = (char *)ap_pcm[1];
+-#if __BYTE_ORDER == __LITTLE_ENDIAN
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+             for (i = 0; i < nsmpl; i++) {
+                 *p_lch_8++ = p_pcm_8[0]; *p_lch_8++ = p_pcm_8[1]; *p_lch_8++ = p_pcm_8[2]; *p_lch_8++ = p_pcm_8[3];
+                 p_pcm_8+=4;
+                 *p_rch_8++ = p_pcm_8[0]; *p_rch_8++ = p_pcm_8[1]; *p_rch_8++ = p_pcm_8[2]; *p_rch_8++ = p_pcm_8[3];
+                 p_pcm_8+=4;
+             }
+-#else   /* __BYTE_ORDER */
++#else   /* __BYTE_ORDER__ */
+ #error unsupported byte order
+-#endif  /* #if __BYTE_ORDER == __LITTLE_ENDIAN */
++#endif  /* #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ */
+         }
+         else if ( fmt == LDACBT_SMPL_FMT_F32 ){
+             float *p_pcm = (float *)pbuff;
+diff --git a/src/ldacBT_internal.h b/src/ldacBT_internal.h
+index 70dac607e7..170d14be7d 100644
+--- a/src/ldacBT_internal.h
++++ b/src/ldacBT_internal.h
+@@ -9,7 +9,6 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
+-#include <endian.h>
+ #ifdef ANDROID
+ #include <stdint.h>
+ #include <unistd.h>

@@ -1,0 +1,54 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  openssl,
+  pkg-config,
+  qtbase,
+  qt5compat ? null,
+}:
+
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in
+stdenv.mkDerivation rec {
+  pname = "qca";
+  version = "2.3.12";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
+    hash = "sha256-1KKzqgJy1z6gxM0hQJYBd/o03cIDDlmkjs+4DHV1csM=";
+  };
+
+  buildInputs = [
+    openssl
+    qtbase
+    qt5compat
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  dontWrapQtApps = true;
+
+  # tells CMake to use this CA bundle file if it is accessible
+  preConfigure = "export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt";
+
+  separateDebugInfo = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "QT6" isQt6)
+    # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
+    "-Dqca_CERTSTORE=/etc/ssl/certs/ca-certificates.crt"
+  ];
+
+  meta = {
+    description = "Qt Cryptographic Architecture";
+    homepage = "https://invent.kde.org/libraries/qca";
+    teams = [ lib.teams.qt-kde ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+  };
+}

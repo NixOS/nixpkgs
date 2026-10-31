@@ -1,0 +1,64 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index bc6108d..04dec57 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3884,7 +3884,8 @@ dependencies = [
+ [[package]]
+ name = "openvino-finder"
+ version = "0.11.0"
+-source = "git+https://github.com/voxtype/openvino-rs?branch=whisper-pipeline-with-properties#8109638cfc78eb16953316627bf194d59ca521ab"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a527e1414732f5bcad520b9febf29fd92ef4bba100588b4591cba8370ab6cbda"
+ dependencies = [
+  "cfg-if",
+  "log",
+@@ -3893,7 +3894,8 @@ dependencies = [
+ [[package]]
+ name = "openvino-genai"
+ version = "0.11.0"
+-source = "git+https://github.com/voxtype/openvino-rs?branch=whisper-pipeline-with-properties#8109638cfc78eb16953316627bf194d59ca521ab"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "58748dc7c7eb98f2706152eb9e3ce0f4023359e54a9607656d653f8b7af689a8"
+ dependencies = [
+  "openvino-finder",
+  "openvino-genai-sys",
+@@ -3902,7 +3904,8 @@ dependencies = [
+ [[package]]
+ name = "openvino-genai-sys"
+ version = "0.11.0"
+-source = "git+https://github.com/voxtype/openvino-rs?branch=whisper-pipeline-with-properties#8109638cfc78eb16953316627bf194d59ca521ab"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ce904847ba3b9328e412dd95741e432f75db3177e21742f80b22eb9dcef4cafe"
+ dependencies = [
+  "env_logger",
+  "libloading 0.8.9",
+@@ -3913,7 +3916,8 @@ dependencies = [
+ [[package]]
+ name = "openvino-sys"
+ version = "0.11.0"
+-source = "git+https://github.com/voxtype/openvino-rs?branch=whisper-pipeline-with-properties#8109638cfc78eb16953316627bf194d59ca521ab"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "637459f74d22a7bb772af9d3a5df61c88608d8daaa6fefe950849c7aabf891c3"
+ dependencies = [
+  "env_logger",
+  "libloading 0.8.9",
+diff --git a/Cargo.toml b/Cargo.toml
+index 05a6262..e76859c 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -331,15 +331,3 @@ path = "src/bin/voxtype_mirror_registry.rs"
+ [[example]]
+ name = "inspect_cohere_onnx"
+ required-features = ["cohere"]
+-
+-# TEMPORARY: openvino-genai 0.11.0's WhisperPipeline has no way to pass
+-# device properties (CACHE_DIR etc.), unlike LlmPipeline/VlmPipeline in
+-# the same crate which already expose with_properties(). Pinned to a
+-# voxtype-org mirror of the fork branch that adds the same method for
+-# Whisper (upstream review pending at
+-# https://github.com/intel/openvino-rs/pull/196); mirrored so source
+-# builds don't depend on an individual's fork staying available.
+-# Drop this patch (and bump the openvino-genai version requirement above
+-# if needed) once that PR merges and ships in a crates.io release.
+-[patch.crates-io]
+-openvino-genai = { git = "https://github.com/voxtype/openvino-rs", branch = "whisper-pipeline-with-properties" }

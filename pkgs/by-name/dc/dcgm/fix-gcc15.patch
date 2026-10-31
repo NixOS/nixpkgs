@@ -1,0 +1,49 @@
+diff --git a/common/CudaLib/mock/CudaLibMock.cpp b/common/CudaLib/mock/CudaLibMock.cpp
+index f79a74b..a3a43e9 100644
+--- a/common/CudaLib/mock/CudaLibMock.cpp
++++ b/common/CudaLib/mock/CudaLibMock.cpp
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include "CudaLibMock.h"
++#include <algorithm>
+ 
+ #include <fmt/format.h>
+ #include <stdexcept>
+diff --git a/common/DcgmStringHelpers.cpp b/common/DcgmStringHelpers.cpp
+index 8bf1f05..5f72267 100644
+--- a/common/DcgmStringHelpers.cpp
++++ b/common/DcgmStringHelpers.cpp
+@@ -14,6 +14,7 @@
+  * limitations under the License.
+  */
+ #include "DcgmStringHelpers.h"
++#include <algorithm>
+ 
+ #include <cstring>
+ #include <set>
+diff --git a/common/EntityListHelpers.cpp b/common/EntityListHelpers.cpp
+index a10bb1b..6f65efa 100644
+--- a/common/EntityListHelpers.cpp
++++ b/common/EntityListHelpers.cpp
+@@ -98,7 +98,7 @@ struct EntityMapTypedIterator
+ 
+     bool operator==(EntityMapTypedIterator const &other) const
+     {
+-        return m_it == other.it;
++        return m_it == other.m_it;
+     }
+ 
+     template <typename Y>
+diff --git a/nvvs/include/IgnoreErrorCodesHelper.h b/nvvs/include/IgnoreErrorCodesHelper.h
+index 4c94581..4e101ea 100644
+--- a/nvvs/include/IgnoreErrorCodesHelper.h
++++ b/nvvs/include/IgnoreErrorCodesHelper.h
+@@ -18,6 +18,7 @@
+ 
+ #include "DcgmGroupEntityPairHelpers.h"
+ #include "DcgmStringHelpers.h"
++#include <optional>
+ 
+ #include <exception>
+ #include <map>

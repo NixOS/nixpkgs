@@ -1,0 +1,28 @@
+diff --git a/apps/desktop/scripts/after-pack.js b/apps/desktop/scripts/after-pack.js
+index 44ffc2c..0fcbc37 100644
+--- a/apps/desktop/scripts/after-pack.js
++++ b/apps/desktop/scripts/after-pack.js
+@@ -33,6 +33,9 @@ async function run(context) {
+ }
+ 
+ async function doBuild(context) {
++  // skip after-pack
++  return;
++
+   const isMacOsBuild = ["darwin", "mas"].includes(context.electronPlatformName);
+ 
+   let isTargetArch;
+diff --git a/apps/desktop/scripts/after-sign.js b/apps/desktop/scripts/after-sign.js
+index 2100f92..89aaa61 100644
+--- a/apps/desktop/scripts/after-sign.js
++++ b/apps/desktop/scripts/after-sign.js
+@@ -26,6 +26,9 @@ async function run(context) {
+ }
+ 
+ async function doBuild(context) {
++  // skip after-sign
++  return;
++
+   const macBuild = context.electronPlatformName === "darwin";
+   if (macBuild) {
+     await notarizeBuild(context);
