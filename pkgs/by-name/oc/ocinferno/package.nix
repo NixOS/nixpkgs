@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ocinferno";
-  version = "0.6.2-unstable-2026-08-03";
+  version = "0.7.0";
   pyproject = true;
 
   __structuredAttrs = true;
