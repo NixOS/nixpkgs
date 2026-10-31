@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
 
   # Add the missing FIEMAP ioctl constants for loongarch64
   # https://github.com/sunfishcode/linux-raw-sys/pull/195
-  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+  patches = [
     (fetchurl {
       name = "loongarch64-fiemap.patch";
       url = "https://github.com/lcpu-club/loongarch-packages/raw/ebcc3b01e19f8c01eaaeae683b62ff1a3d607fff/uv/loongarch64-fiemap.patch";
