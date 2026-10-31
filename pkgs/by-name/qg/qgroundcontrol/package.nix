@@ -118,6 +118,19 @@ stdenv.mkDerivation (finalAttrs: {
     # compiler/flag combination upstream tests against flags it). Cast to
     # match types instead of touching the actual comparison semantics.
     ./fix-sysid-vehicle-id-sign-compare.patch
+    # Same -Werror=sign-compare issue as fix-sysid-vehicle-id-sign-compare.patch
+    # above (mavlink_message_t's sysid is uint32_t, Vehicle::id()/_targetSystem
+    # are int), in two spots that patch doesn't cover.
+    ./fix-remoteidmanager-sign-compare.patch
+    # GCC's -Warray-bounds misreads the raw-pointer indexing into
+    # QByteArray::constData() here as possibly aliasing QByteArray's shared
+    # empty-string buffer (a static const char[1]); QByteArray::at() is
+    # bounds-checked and doesn't trip the same false positive.
+    ./fix-mavlinklogmanager-array-bounds.patch
+    # Same -Werror=sign-compare issue again, in Vehicle.cc and
+    # VehicleFactGroup.cc.
+    ./fix-vehicle-sign-compare.patch
+    ./fix-vehiclefactgroup-sign-compare.patch
     # src/FirmwarePlugin/APM/CMakeLists.txt's ArduPilotParams CPMAddPackage
     # floats on ArduPilot's default branch with no pin at all (GIT_TAG
     # main) and is DOWNLOAD_ONLY - no find_package attempt, just a plain

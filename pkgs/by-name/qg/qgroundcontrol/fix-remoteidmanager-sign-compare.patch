@@ -1,0 +1,22 @@
+diff --git a/src/Vehicle/RemoteIDManager.cc b/src/Vehicle/RemoteIDManager.cc
+index d367f42..49331c0 100644
+--- a/src/Vehicle/RemoteIDManager.cc
++++ b/src/Vehicle/RemoteIDManager.cc
+@@ -82,7 +82,7 @@ void RemoteIDManager::_handleArmStatus(mavlink_message_t& message)
+     }
+ 
+     // Sanity check, only get messages from same sysid
+-    if (_vehicle->id() != message.sysid) {
++    if (static_cast<uint32_t>(_vehicle->id()) != message.sysid) {
+         return;
+     }
+ 
+@@ -93,7 +93,7 @@ void RemoteIDManager::_handleArmStatus(mavlink_message_t& message)
+     }
+ 
+     // We set the targetsystem
+-    if (_targetSystem != message.sysid) {
++    if (static_cast<uint32_t>(_targetSystem) != message.sysid) {
+         _targetSystem = message.sysid;
+         qCDebug(RemoteIDManagerLog) << "Subscribing to ODID messages coming from system " << _targetSystem;
+     }
