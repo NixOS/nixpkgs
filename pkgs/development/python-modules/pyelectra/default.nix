@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -22,10 +23,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ aiohttp ];
 
-  pythonImportsCheck = [ "electrasmart" ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  # upstream has no tests
-  doCheck = false;
+  pythonImportsCheck = [ "electrasmart" ];
 
   meta = {
     changelog = "https://github.com/jafar-atili/pyElectra/releases/tag/${finalAttrs.src.tag}";
