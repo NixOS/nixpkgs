@@ -9783,8 +9783,6 @@ self: super: with self; {
     }
   );
 
-  libparse-python = callPackage ../development/python-modules/libparse-python/package.nix { };
-
   libpass = callPackage ../development/python-modules/libpass { };
 
   libpcap = callPackage ../development/python-modules/libpcap {
@@ -10271,6 +10269,8 @@ self: super: with self; {
   llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
 
   llmx = callPackage ../development/python-modules/llmx { };
+
+  lln-libparse = callPackage ../development/python-modules/lln-libparse/package.nix { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     inherit (pkgs) cmake ninja;

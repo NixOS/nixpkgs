@@ -389,6 +389,7 @@ mapAliases {
   libbs = throw "'libbs' has been replaced by 'declib', which uses a different Python module name"; # Added 2026-08-20
   libclang = clang; # added 2026-06-18
   libgpiod = gpiod; # added 2026-03-30
+  libparse-python = lib.warnOnInstantiate "'libparse-python' has been renamed to 'lln-libparse'" lln-libparse; # Added 2026-11-01
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
   libvirt = libvirt-python; # added 2026-07-20
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29

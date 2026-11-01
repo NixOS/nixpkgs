@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "libparse-python";
+  pname = "lln-libparse";
   version = "0-unstable-2025-08-30";
   pyproject = true;
 
@@ -38,9 +38,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "libparse" ];
-
-  # Upstream ships this as "lln_libparse", not "libparse-python".
-  dontCheckPythonMetadata = true;
 
   passthru.updateScript = unstableGitUpdater { };
 

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "redu";
-  version = "0.2.15";
+  version = "0.2.16";
 
   src = fetchFromGitHub {
     owner = "drdo";
     repo = "redu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ByXQ3tcvXbCUZwZ+e7WJVUUjvhMf0ivJJiswFlLap4I=";
+    hash = "sha256-Cro9vdWq57IRLCwp5q7iWGfThEaBsQ/z9umHlKbFVz8=";
   };
 
-  cargoHash = "sha256-JnjXe2CHO9Namp++UI/V6ND2Y0/WQtaVA2EcUyXUnjQ=";
+  cargoHash = "sha256-g1UylYWQL741PxNBjhVg5pSBd8P4QKPujMWAkXbusRo=";
 
   buildInputs = [ restic ];
 

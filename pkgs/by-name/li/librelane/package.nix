@@ -23,7 +23,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.14";
+  version = "3.0.17";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-/ZzATYRi9JH6YyFWnI4lLkQ2/e2B0xa7WEI65a/ArJI=";
+    hash = "sha256-/vJzgyBtaBqN2pfTz7gt+a6eXma09one5wZdN30sa3I=";
   };
 
   build-system = [
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cloup
     deprecated
     httpx
-    libparse-python
+    lln-libparse
     lxml
     numpy
     pandas
