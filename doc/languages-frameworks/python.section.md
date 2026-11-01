@@ -60,7 +60,7 @@ sets are
 
 and the aliases
 
-* `pkgs.python3Packages` pointing to `pkgs.python313Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python314Packages`
 * `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
 * `pkgs.pypy3Packages` pointing to `pkgs.pypy310Packages`
 * `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
