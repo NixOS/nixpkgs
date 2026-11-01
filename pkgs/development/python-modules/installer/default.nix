@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "installer";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "installer";
     rev = version;
-    hash = "sha256-GkHLZfzHfTcBL8wQmIGlNkVodEw9Pih4i1SS36mSfBo=";
+    hash = "sha256-l2jxC2UJOmWGpCOUWU/2x2QSuYo7GjGxj9Yeu6V2uh0=";
   };
 
   patches = [
