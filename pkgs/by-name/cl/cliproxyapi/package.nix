@@ -50,7 +50,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/router-for-me/CLIProxyAPI";
     changelog = "https://github.com/router-for-me/CLIProxyAPI/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anish ];
+    maintainers = with lib.maintainers; [
+      anish
+      moraxyc
+    ];
     mainProgram = "cliproxyapi";
   };
 })
