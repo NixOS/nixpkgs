@@ -8,18 +8,20 @@
   setuptools,
 
   # dependencies
+  attn-gym,
   datasets,
   einops,
+  grain,
   pillow,
+  pyarrow,
+  renderers,
   safetensors,
   spmd-types,
   tensorboard,
   tokenizers,
   torch,
   torch-checkpointing,
-  torchdata,
-  transformers,
-  tyro,
+  torch-remat,
   wandb,
 
   # tests
@@ -28,20 +30,21 @@
   pytestCheckHook,
   tomli-w,
   torchvision,
+  transformers,
   triton,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "torchtitan";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "torchtitan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wkhx1uGgzCLMiBDS2h7V6NVcaJYcSyDXkZkn2hUbgHE=";
+    hash = "sha256-I3zy0FpOV38S0ZdmIT2FKEMTkfzcAuVmzP7MZ5HILdE=";
   };
 
   build-system = [
@@ -49,23 +52,33 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "attn-gym"
     "datasets"
+    "grain"
+    "pyarrow"
+    "renderers"
     "spmd_types"
+    "torch_checkpointing"
+    "torch_remat"
   ];
   dependencies = [
+    attn-gym
     datasets
     einops
+    grain
     pillow
+    pyarrow
+    renderers
     safetensors
     spmd-types
     tensorboard
     tokenizers
     torch
     torch-checkpointing
-    torchdata
-    tyro
+    torch-remat
     wandb
-  ];
+  ]
+  ++ attn-gym.optional-dependencies.linear;
 
   pythonImportsCheck = [ "torchtitan" ];
 
@@ -94,7 +107,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # Require internet access
-    "tests/unit_tests/test_tokenizer.py"
+    "tests/unit_tests/cpu/components/test_tokenizer.py"
   ];
 
   meta = {
