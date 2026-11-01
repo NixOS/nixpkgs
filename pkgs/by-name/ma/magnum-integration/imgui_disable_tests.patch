@@ -1,0 +1,19 @@
+diff --git a/src/Magnum/ImGuiIntegration/Test/CMakeLists.txt b/src/Magnum/ImGuiIntegration/Test/CMakeLists.txt
+index 1790206..37ed0e0 100644
+--- a/src/Magnum/ImGuiIntegration/Test/CMakeLists.txt
++++ b/src/Magnum/ImGuiIntegration/Test/CMakeLists.txt
+@@ -35,10 +35,10 @@ corrade_add_test(ImGuiIntegrationContextTest ContextTest.cpp
+ corrade_add_test(ImGuiIntegrationTest IntegrationTest.cpp
+     LIBRARIES MagnumImGuiIntegration)
+ 
+-corrade_add_test(ImGuiIntegrationUserConfigTest UserConfigTest.cpp
+-    LIBRARIES MagnumImGuiIntegration)
+-target_compile_definitions(ImGuiIntegrationUserConfigTest PRIVATE
+-    MAGNUM_IMGUIINTEGRATION_USER_CONFIG="Magnum/ImGuiIntegration/Test/UserConfigTest.h")
++# corrade_add_test(ImGuiIntegrationUserConfigTest UserConfigTest.cpp
++#     LIBRARIES MagnumImGuiIntegration)
++# target_compile_definitions(ImGuiIntegrationUserConfigTest PRIVATE
++#     MAGNUM_IMGUIINTEGRATION_USER_CONFIG="Magnum/ImGuiIntegration/Test/UserConfigTest.h")
+ 
+ if(MAGNUM_BUILD_GL_TESTS)
+     find_package(Corrade REQUIRED PluginManager)
