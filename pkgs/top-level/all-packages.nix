@@ -7147,7 +7147,7 @@ with pkgs;
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
-  qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
+  qboot = callPackage ../applications/virtualization/qboot { };
 
   OVMF = callPackage ../applications/virtualization/OVMF {
     inherit (python3Packages) pexpect;
