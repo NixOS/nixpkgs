@@ -7,14 +7,16 @@
 let
   inherit (lib)
     mkIf
+    mkMerge
     mkEnableOption
     mkPackageOption
     mkOption
+    isString
     attrNames
     types
     match
     optional
-    optionals
+    boolToString
     toInt
     last
     splitString
@@ -33,12 +35,13 @@ let
   addressToPort = address: toInt (last (splitString ":" address));
   httpPort = cfg.web.port;
   tcpMuxPort = addressToPort settings.TCP_MUX_ADDRESS;
-  httpRedirect = settings.ENABLE_HTTP_REDIRECT or (settings.HTTPS_REDIRECT_PORT != null);
+  httpRedirect = settings.ENABLE_HTTP_REDIRECT && (settings.HTTPS_REDIRECT_PORT != null);
+  loggingEnabled = settings.LOGGING_ENABLED != false;
 
   udpPorts =
     optional (settings.UDP_MUX_PORT != null) settings.UDP_MUX_PORT
-    ++ optional (settings.UDP_WHEP_PORT != null) settings.UDP_WHEP_PORT
-    ++ optional (settings.UDP_WHIP_PORT != null) settings.UDP_WHIP_PORT;
+    ++ optional (settings.UDP_MUX_PORT_WHEP != null) settings.UDP_MUX_PORT_WHEP
+    ++ optional (settings.UDP_MUX_PORT_WHIP != null) settings.UDP_MUX_PORT_WHIP;
   tcpPorts = optional (settings.TCP_MUX_ADDRESS != null) tcpMuxPort;
   webPorts = [ httpPort ] ++ optional httpRedirect settings.HTTPS_REDIRECT_PORT;
 in
@@ -66,20 +69,22 @@ in
         '';
       };
 
-      openFirewall = mkEnableOption ''
-        opening the HTTP server port and, if enabled, the HTTPS redirect server
-        port in the firewall.
-      '';
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to open the HTTP server port and, if enabled, the HTTPS redirect server
+        port in the firewall.";
+      };
     };
 
-    openFirewall = mkEnableOption ''
-      opening WebRTC traffic ports in the firewall. Randomly selected ports
-      will not be opened.
-    '';
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to open WebRTC traffic ports in the firewall. Randomly selected ports
+      will not be opened to open the TCP port in the firewall";
+    };
 
     settings = mkOption {
-      visible = "shallow";
-
       type = types.submodule {
         freeformType =
           with types;
@@ -90,47 +95,96 @@ in
               str
             ])
           );
-        options = {
-          TCP_MUX_ADDRESS = mkOption {
-            type = with types; nullOr (strMatching ".*:[0-9]+");
-            default = null;
-          };
+        options =
+          let
+            bboxListOption = {
+              type = with types; nullOr (either str (listOf str));
+              apply = value: if value == null || isString value then value else concatStringsSep "|" value;
+            };
+          in
+          {
+            TCP_MUX_ADDRESS = mkOption {
+              type = with types; nullOr (strMatching ".*:[0-9]+");
+              description = "Address to serve WebRTC traffic over TCP.";
+              default = null;
+            };
 
-          DISABLE_STATUS = mkOption {
-            type = types.bool;
-            default = true;
-          };
+            DISABLE_STATUS = mkOption {
+              type = types.bool;
+              description = "Disables the status API endpoint.";
+              default = true;
+            };
 
-          UDP_MUX_PORT = mkOption {
-            type = with types; nullOr port;
-            default = null;
-          };
+            UDP_MUX_PORT = mkOption {
+              type = with types; nullOr port;
+              description = "Port to multiplex all UDP traffic. Uses random port by default.";
+              default = null;
+            };
 
-          UDP_WHEP_PORT = mkOption {
-            type = with types; nullOr port;
-            default = null;
-          };
+            UDP_MUX_PORT_WHEP = mkOption {
+              type = with types; nullOr port;
+              description = "Port to multiplex WHEP traffic only.";
+              default = null;
+            };
 
-          UDP_WHIP_PORT = mkOption {
-            type = with types; nullOr port;
-            default = null;
-          };
+            UDP_MUX_PORT_WHIP = mkOption {
+              type = with types; nullOr port;
+              description = "Port to multiplex WHIP traffic only.";
+              default = null;
+            };
 
-          ENABLE_HTTP_REDIRECT = mkOption {
-            type = types.bool;
-            default = false;
-          };
+            ENABLE_HTTP_REDIRECT = mkOption {
+              type = types.bool;
+              description = "Enables automatic redirection from HTTP to HTTPS.";
+              default = false;
+            };
 
-          HTTPS_REDIRECT_PORT = mkOption {
-            type = with types; nullOr port;
-            default = if settings.ENABLE_HTTP_REDIRECT then 80 else null;
+            HTTPS_REDIRECT_PORT = mkOption {
+              type = with types; nullOr port;
+              description = "Port to redirect HTTP traffic to HTTPS when using HTTPS.";
+              default = 80;
+            };
+
+            LOGGING_ENABLED = mkOption {
+              type = with types; nullOr bool;
+              description = "Enables logging system.";
+              default = null;
+            };
+
+            STUN_SERVERS =
+              mkOption {
+                example = lib.literalExpression ''
+                  [
+                    "stun.cloudflare.com:3478"
+                    "192.168.1.101:3478"
+                  ]'';
+                description = "List of STUN servers separated by `|`.";
+                default = null;
+              }
+              // bboxListOption;
+
+            NETWORK_TYPES =
+              mkOption {
+                example = lib.literalExpression ''
+                  [
+                    "udp4"
+                    "udp6"
+                  ]'';
+                description = "List of network types to use delineated by `|`.";
+                default = null;
+              }
+              // bboxListOption;
+
+            NAT_1_TO_1_IP =
+              mkOption {
+                default = null;
+                description = "Manually specify IPs (like Public IP) to announce, delineated by `|`.";
+              }
+              // bboxListOption;
           };
-        };
       };
 
-      default = {
-        DISABLE_STATUS = true;
-      };
+      default = { };
 
       example = {
         DISABLE_STATUS = true;
@@ -203,16 +257,21 @@ in
 
       environment =
         (mapAttrs (
-          _: value:
+          key: value:
           if (builtins.typeOf value == "bool") then
-            if !value then null else "true"
+            # this is the only env variable that checks for "false"
+            if key == "LOGGING_ENABLED" then
+              boolToString value
+            else if !value then
+              null
+            else
+              "true"
           else if (builtins.typeOf value == "int") then
             toString value
           else
             value
         ) cfg.settings)
         // {
-          APP_ENV = "nixos";
           HTTP_ADDRESS = cfg.web.host + ":" + toString cfg.web.port;
         };
 
@@ -221,9 +280,24 @@ in
           priviledgedPort = any (p: p > 0 && p < 1024) (udpPorts ++ tcpPorts ++ webPorts);
         in
         {
-          ExecStart = "${getExe cfg.package}";
+          ExecStart =
+            let
+              serviceCfg = config.systemd.services.broadcast-box.serviceConfig;
+              notDefined = opt: serviceCfg ? ${opt} || serviceCfg.${opt} != null;
+              loggingDirectory = lib.optionalString (notDefined "LogsDirectory") "LOGGING_DIRECTORY=$LOGS_DIRECTORY";
+              stateDirectory = lib.optionalString (notDefined "StateDirectory") "STREAM_PROFILE_PATH=$STATE_DIRECTORY/profiles";
+              cmd = concatStringsSep " " [
+                loggingDirectory
+                stateDirectory
+                (getExe cfg.package)
+              ];
+            in
+            lib.mkAfter "${getExe pkgs.bash} -c '${cmd}'";
           Restart = "always";
           RestartSec = "10s";
+
+          LogsDirectory = mkIf ((!settings ? LOGGING_DIRECTORY) && loggingEnabled) "broadcast-box";
+          StateDirectory = mkIf (!settings ? STREAM_PROFILE_PATH) "broadcast-box";
 
           DynamicUser = true;
           LockPersonality = true;
@@ -265,8 +339,11 @@ in
     };
 
     networking.firewall = {
-      allowedTCPPorts = optionals cfg.openFirewall tcpPorts ++ optionals cfg.web.openFirewall webPorts;
-      allowedUDPPorts = optionals cfg.openFirewall udpPorts;
+      allowedTCPPorts = mkMerge [
+        (mkIf cfg.openFirewall tcpPorts)
+        (mkIf cfg.web.openFirewall webPorts)
+      ];
+      allowedUDPPorts = mkIf cfg.openFirewall udpPorts;
     };
   };
 
