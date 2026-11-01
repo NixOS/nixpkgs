@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rapidyaml";
   version = "0.15.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "biojppm";

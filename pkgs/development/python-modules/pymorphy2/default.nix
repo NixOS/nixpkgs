@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.1";
   format = "setuptools";
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-hsRHFX3uLrI0HvvkU44SgadUdWuhqjLad6iWFMWLVgw=";

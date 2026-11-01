@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU autoconf macros shared across X.Org projects";
     homepage = "https://gitlab.freedesktop.org/xorg/util/macros";

@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "svgdigitizer";
   version = "0.14.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";

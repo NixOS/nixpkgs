@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "dash_table";
     inherit (finalAttrs) version;

@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     luaEnv = luajit.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
 
     # Copied from Makefile.am
-    tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (
+    tests.test = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) (
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.7.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";

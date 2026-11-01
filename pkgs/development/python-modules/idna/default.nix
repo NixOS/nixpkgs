@@ -3,26 +3,39 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
+  hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "idna";
-  version = "3.18";
+  version = "3.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kjd";
     repo = "idna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9nLy/9PNuLSQJsf4Jes0uN695+LGjz2LXlfiZxxvGV4=";
+    hash = "sha256-RLwFtWOxsf0s1DI5sdwYY/DuXbhyADqAbp0arREIc30=";
   };
 
   build-system = [ flit-core ];
 
   pythonImportsCheck = [ "idna" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  # infinite recursion via hypothesis
+  doCheck = false;
+
+  passthru.tests = {
+    pytest = finalAttrs.finalPackage.overrideAttrs {
+      doInstallCheck = true;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/kjd/idna/";

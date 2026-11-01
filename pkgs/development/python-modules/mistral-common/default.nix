@@ -41,7 +41,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
   version = "1.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";

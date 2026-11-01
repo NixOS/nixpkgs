@@ -9,8 +9,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-topology-views";
   version = "5.0.0";
   pyproject = true;

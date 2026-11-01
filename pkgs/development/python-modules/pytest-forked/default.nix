@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,

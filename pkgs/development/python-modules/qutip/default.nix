@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "qutip";
   version = "5.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qutip";

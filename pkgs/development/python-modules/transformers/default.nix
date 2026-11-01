@@ -95,7 +95,6 @@ buildPythonPackage (finalAttrs: {
   pname = "transformers";
   version = "5.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

@@ -42,8 +42,6 @@ buildPythonPackage (finalAttrs: {
     "nrf_ota"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Flash firmware to Nordic nRF5x devices over BLE";
     homepage = "https://github.com/OpenDisplay/nrf-ota";

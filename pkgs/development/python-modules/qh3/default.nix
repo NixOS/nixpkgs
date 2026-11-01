@@ -1,10 +1,12 @@
 {
+  aws-lc,
   buildPythonPackage,
   cmake,
   cryptography,
   dnspython,
   fetchFromGitHub,
   lib,
+  pkg-config,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -31,12 +33,17 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
   dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    aws-lc
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [

@@ -29,12 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru = {
     tests = { inherit ffmpeg-headless; };
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";

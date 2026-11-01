@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-http";
   version = "0.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

@@ -10,7 +10,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djvulibre-python";
   version = "0.9.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "python-djvulibre";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ntDRntNxVchZm+i+qBbiZlfHAXJRKMin9Hi+BoJQjTM=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
     "-v"
   ];
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Python support for the DjVu image format";
     homepage = "https://github.com/FriedrichFroebel/python-djvulibre";
     license = lib.licenses.gpl2Only;
-    changelog = "https://github.com/FriedrichFroebel/python-djvulibre/releases/tag/${src.tag}";
+    changelog = "https://github.com/FriedrichFroebel/python-djvulibre/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ dansbandit ];
   };
-}
+})

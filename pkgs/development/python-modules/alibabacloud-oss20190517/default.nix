@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_oss20190517";
     inherit (finalAttrs) version;

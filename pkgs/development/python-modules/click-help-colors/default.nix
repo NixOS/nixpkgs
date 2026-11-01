@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.9.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "click-help-colors";
     inherit (finalAttrs) version;

@@ -11,6 +11,11 @@
 
 let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
+
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   buildInputs = [ (lib.getInclude swift-asn1) ];

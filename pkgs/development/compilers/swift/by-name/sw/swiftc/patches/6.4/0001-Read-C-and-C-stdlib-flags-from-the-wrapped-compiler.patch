@@ -1,0 +1,226 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:37:05 -0500
+Subject: [PATCH 1/9] Read C and C++ stdlib flags from the wrapped compiler
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On most platforms supported by Nixpkgs, the C and C++ standard libraries
+are located separately and are not part of the sysroot, but Swift’s
+ClangImporter assumes they are part of the sysroot by default.
+
+While it is possible to create a sysroot for use with Swift, this has
+negative affects on every package that wants to use Swift and compile
+C++ code. The C++ library must be removed from the standard platform
+configuration, which makes adding Swift as a dependency too disruptive.
+---
+ include/swift/Nixpkgs/NixCC.h           | 76 +++++++++++++++++++++++++
+ lib/CMakeLists.txt                      |  1 +
+ lib/ClangImporter/CMakeLists.txt        |  3 +-
+ lib/ClangImporter/ClangImporter.cpp     |  9 +++
+ lib/ClangImporter/ClangIncludePaths.cpp | 10 ++++
+ lib/Nixpkgs/CMakeLists.txt              |  4 ++
+ lib/Nixpkgs/NixCC.cpp                   | 15 +++++
+ 7 files changed, 117 insertions(+), 1 deletion(-)
+ create mode 100644 include/swift/Nixpkgs/NixCC.h
+ create mode 100644 lib/Nixpkgs/CMakeLists.txt
+ create mode 100644 lib/Nixpkgs/NixCC.cpp
+
+diff --git a/include/swift/Nixpkgs/NixCC.h b/include/swift/Nixpkgs/NixCC.h
+new file mode 100644
+index 00000000000..4669c2c4486
+--- /dev/null
++++ b/include/swift/Nixpkgs/NixCC.h
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++#pragma once
++
++#include "llvm/ADT/StringRef.h"
++#include "llvm/Support/CommandLine.h"
++#include "llvm/Support/FileSystem.h"
++#include "llvm/Support/Process.h"
++#include "llvm/Support/VirtualFileSystem.h"
++
++#include <filesystem>
++#include <functional>
++#include <unordered_map>
++#include <optional>
++#include <string>
++
++using nixsupportcache_t = std::unordered_map<std::string, std::vector<std::string>>;
++extern void accessNixSupportCache(std::function<void(nixsupportcache_t&)>&& fn);
++
++template<typename T>
++void addFlagsFromNixCC(std::vector<T> &invocationArgStrs, const char* flagFile) {
++  if (flagFile == nullptr) return;
++  const std::string flagFileName{flagFile};
++  
++  accessNixSupportCache([&](nixsupportcache_t& nixSupportCache) {
++    const auto [argIterator, didInsert] = nixSupportCache.insert({flagFileName, std::vector<std::string>{}});
++    auto& argVector = argIterator->second;
++
++    if (didInsert) {
++      // Prefer the `clang` next to the running binary but fall back to the one next to `swift` on the path.
++      std::function<std::optional<std::string>()> paths[] = {
++        []() -> std::optional<std::string> {
++          auto result = llvm::sys::fs::getMainExecutable(nullptr, nullptr);
++          if (result == "") return {}; else return result;
++        },
++        []() { return llvm::sys::Process::FindInEnvPath("PATH", "swiftc"); },
++      };
++
++      llvm::BumpPtrAllocator allocator;
++      llvm::StringSaver saver(allocator);
++
++      for (const auto& maybePathFn : paths) {
++        auto maybePath = maybePathFn();
++        if (!maybePath.has_value()) continue;
++        
++        const std::filesystem::path path = maybePath.value();
++        const auto clang = path.parent_path() / "clang";
++
++        if (exists(clang)) {
++          const auto realClang = canonical(clang);
++          const auto flagFilePath = realClang.parent_path().parent_path() / "nix-support" / flagFileName;
++          
++          // Treat `flagFile` as a response file for Clang. Because Clang expects response
++          // files to be expanded already at this point, it has to be expanded manually.
++          if (auto buffer = llvm::vfs::getRealFileSystem()->getBufferForFile(llvm::StringRef(flagFilePath))) {
++            const auto contents = (*buffer)->getMemBufferRef().getBuffer();
++
++            llvm::SmallVector<const char*> args;
++            llvm::cl::TokenizeGNUCommandLine(contents, saver, args);
++
++            for (const auto& arg : args) {
++              argVector.emplace_back(arg);
++            }
++
++            break; // We have an `argVector` with the args. Short-circuit the loop and don’t check further.
++          }
++        }
++      }
++    }
++    
++    // At this point, `argVector` is either the cached vector or the freshly populated one.
++    // Either way, it has the requested flags.
++    for (const auto& arg : argVector) {
++      invocationArgStrs.emplace_back(arg.c_str());
++    }
++  });
++}
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index fe5b2c4c867..c8037f3baae 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -58,6 +58,7 @@ add_subdirectory(Localization)
+ add_subdirectory(Macros)
+ add_subdirectory(Markup)
+ add_subdirectory(Migrator)
++add_subdirectory(Nixpkgs)
+ add_subdirectory(Option)
+ add_subdirectory(Parse)
+ add_subdirectory(PrintAsClang)
+diff --git a/lib/ClangImporter/CMakeLists.txt b/lib/ClangImporter/CMakeLists.txt
+index 2eb5b1fa131..adfdb95a912 100644
+--- a/lib/ClangImporter/CMakeLists.txt
++++ b/lib/ClangImporter/CMakeLists.txt
+@@ -36,7 +36,8 @@ add_swift_host_library(swiftClangImporter STATIC
+ target_link_libraries(swiftClangImporter PRIVATE
+   swiftAST
+   swiftParse
+-  clangTooling)
++  clangTooling
++  nixpkgsStuff)
+ 
+ target_link_libraries(swiftClangImporter INTERFACE
+   clangDependencyScanning)
+diff --git a/lib/ClangImporter/ClangImporter.cpp b/lib/ClangImporter/ClangImporter.cpp
+index 2815b8baf4c..9f3f44a3f25 100644
+--- a/lib/ClangImporter/ClangImporter.cpp
++++ b/lib/ClangImporter/ClangImporter.cpp
+@@ -50,6 +50,7 @@
+ #include "swift/ClangImporter/ClangImporterRequests.h"
+ #include "swift/ClangImporter/ClangModule.h"
+ #include "swift/Frontend/CachingUtils.h"
++#include "swift/Nixpkgs/NixCC.h"
+ #include "swift/Parse/ParseVersion.h"
+ #include "swift/Strings.h"
+ #include "swift/Subsystems.h"
+@@ -624,6 +625,14 @@ void importer::getNormalInvocationArguments(
+     });
+   }
+ 
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(invocationArgStrs, "libc-cflags");
++  
++  // Ensure the libc++ headers are available. The C++ standard library is separate
++  // from the sysroot on most platforms in Nixpkgs.
++  addFlagsFromNixCC(invocationArgStrs, "libcxx-cxxflags");
++
+   if (LangOpts.EnableCXXInterop) {
+     if (auto path = getCxxShimModuleMapPath(searchPathOpts, LangOpts, triple)) {
+       invocationArgStrs.push_back((Twine("-fmodule-map-file=") + *path).str());
+diff --git a/lib/ClangImporter/ClangIncludePaths.cpp b/lib/ClangImporter/ClangIncludePaths.cpp
+index 5bc725811f7..cd1f5814b89 100644
+--- a/lib/ClangImporter/ClangIncludePaths.cpp
++++ b/lib/ClangImporter/ClangIncludePaths.cpp
+@@ -18,6 +18,7 @@
+ #include "swift/Basic/Assertions.h"
+ #include "swift/Basic/Platform.h"
+ #include "swift/ClangImporter/ClangImporter.h"
++#include "swift/Nixpkgs/NixCC.h"
+ #include "clang/Driver/Driver.h"
+ #include "clang/Driver/ToolChain.h"
+ #include "clang/Frontend/CompilerInstance.h"
+@@ -191,6 +192,15 @@ ClangImporter::createClangArgs(const ClangImporterOptions &ClangImporterOpts,
+   for (const auto &each : ClangImporterOpts.ExtraArgs) {
+     clangArgs.push_back(each.c_str());
+   }
++
++  // Ensure libc is available. The C standard library is separate from the sysroot
++  // on most platforms in Nixpkgs. (Darwin is a prominent exception.)
++  addFlagsFromNixCC(clangArgs, "libc-cflags");
++  
++  // Ensure the libc++ headers are available. The C++ standard library is separate
++  // from the sysroot on most platforms in Nixpkgs.
++  addFlagsFromNixCC(clangArgs, "libcxx-cxxflags");
++
+   llvm::opt::InputArgList clangDriverArgs =
+       parseClangDriverArgs(clangDriver, clangArgs);
+   // If a sysroot was explicitly passed to Swift, make sure to pass it to the
+diff --git a/lib/Nixpkgs/CMakeLists.txt b/lib/Nixpkgs/CMakeLists.txt
+new file mode 100644
+index 00000000000..691ce9f4427
+--- /dev/null
++++ b/lib/Nixpkgs/CMakeLists.txt
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++
++add_swift_host_library(nixpkgsStuff STATIC
++  NixCC.cpp)
+diff --git a/lib/Nixpkgs/NixCC.cpp b/lib/Nixpkgs/NixCC.cpp
+new file mode 100644
+index 00000000000..7df2071dd28
+--- /dev/null
++++ b/lib/Nixpkgs/NixCC.cpp
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
++#include "swift/Nixpkgs/NixCC.h"
++
++#include <functional>
++#include <map>
++#include <mutex>
++#include <string>
++
++static nixsupportcache_t NixSupportCache;
++
++extern void accessNixSupportCache(std::function<void(nixsupportcache_t&)>&& fn) {
++  static std::mutex nixSupportCacheMutex;
++  std::lock_guard<std::mutex> lock{nixSupportCacheMutex};
++  fn(NixSupportCache);
++}
+-- 
+2.54.0
+

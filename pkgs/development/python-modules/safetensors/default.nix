@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "safetensors";
   version = "0.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.50.0";
+  version = "2.57.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-auth-v${version}";
-    hash = "sha256-Z3TsDEtDDfXO23gOlmEM5O4a9qS2+fTB7g0vJ4dOFH4=";
+    hash = "sha256-0g0uTpt03BrFLJ7vGptrUy3pVx8EAOKYV+uB2bJTJNQ=";
   };
 
   sourceRoot = "${src.name}/packages/google-auth";

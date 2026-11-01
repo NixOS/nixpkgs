@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
   version = "4.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";

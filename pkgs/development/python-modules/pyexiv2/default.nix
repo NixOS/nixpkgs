@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyexiv2";
   version = "2.16.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LeoHsiao1";

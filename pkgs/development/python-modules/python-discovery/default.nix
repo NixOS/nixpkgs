@@ -14,19 +14,19 @@
   # tests
   pytest-mock,
   pytestCheckHook,
+  vermin,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-discovery";
-  version = "1.4.2";
+  version = "1.6.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "python-discovery";
     tag = finalAttrs.version;
-    hash = "sha256-xnQWXXStdgu99riKFW4+O7tqYL4w5f7etjC872q/LWc=";
+    hash = "sha256-9CHK00PQ1x5L1OntVTSCmq08zFIR9FhHwEI+3jUobL4=";
   };
 
   build-system = [
@@ -44,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    vermin
   ];
 
   meta = {

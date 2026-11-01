@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-executor-plugins";
   version = "9.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

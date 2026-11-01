@@ -63,8 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "RCC=${qt6.qtbase}/libexec/rcc"
   ];
 
-  strictDeps = true;
-
   postFixup = ''
     wrapPythonProgramsIn "$out/share/raysession/src" "$out ''${pythonPath[*]}"
     for file in $out/bin/*; do

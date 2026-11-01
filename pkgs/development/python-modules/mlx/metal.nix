@@ -25,7 +25,6 @@ buildPythonPackage rec {
   pname = "mlx-metal";
   inherit (wheelSources) version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src = srcs.${macosVariant} or (throw "mlx-metal: unsupported macOS wheel variant ${macosVariant}");
 

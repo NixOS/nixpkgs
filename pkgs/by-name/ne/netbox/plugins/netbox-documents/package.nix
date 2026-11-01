@@ -8,8 +8,6 @@
   netbox,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-documents";
   version = "0.8.5";
   pyproject = true;

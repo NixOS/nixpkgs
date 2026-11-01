@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.3.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = "python-tinyhtml";

@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rsl-rl-lib";
   version = "5.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "leggedrobotics";

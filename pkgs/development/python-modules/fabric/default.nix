@@ -17,7 +17,6 @@ buildPythonPackage rec {
   pname = "fabric";
   version = "3.2.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fabric";

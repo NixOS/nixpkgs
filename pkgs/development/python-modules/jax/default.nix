@@ -46,7 +46,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jax";
   version = "0.12.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";

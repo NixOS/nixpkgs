@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "earth2studio";
   version = "0.19.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

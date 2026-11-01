@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nianet";
   version = "1.1.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SasoPavlic";

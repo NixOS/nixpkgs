@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-doubleopen";
   version = "0.1.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hesa";

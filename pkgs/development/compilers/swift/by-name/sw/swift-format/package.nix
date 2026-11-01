@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     swiftpm
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   __structuredAttrs = true;
 

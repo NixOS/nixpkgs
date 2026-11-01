@@ -18,6 +18,7 @@
   nix-update-script,
   pkg-config,
   udev,
+  aws-lc,
   sqlite,
   pam,
   bashInteractive,
@@ -96,6 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     sqlite
     pam
     rust-jemalloc-sys

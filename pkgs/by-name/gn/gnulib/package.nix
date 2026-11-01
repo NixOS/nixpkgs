@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  python3,
   perl,
 }:
 
@@ -17,20 +16,24 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
+    patchShebangs gnulib-tool
     patchShebangs gnulib-tool.py
-    substituteInPlace build-aux/{prefix-gnulib-mk,useless-if-before-free,update-copyright,gitlog-to-changelog,announce-gen} \
-    --replace-fail 'exec perl' 'exec ${lib.getExe perl}'
-  '';
 
-  buildInputs = [ python3 ];
+    substituteInPlace build-aux/{prefix-gnulib-mk,useless-if-before-free,update-copyright,gitlog-to-changelog,announce-gen} \
+      --replace-fail 'exec perl' 'exec ${lib.getExe perl}'
+  '';
 
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r * $out/
     ln -s $out/lib $out/include
     ln -s $out/gnulib-tool $out/bin/
+
+    runHook postInstall
   '';
 
   # do not change headers to not update all vendored build files

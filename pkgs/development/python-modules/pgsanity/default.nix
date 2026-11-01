@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "test" ];
+  unittestFlags = [ "--start-directory=test" ];
 
   propagatedBuildInputs = [ postgresql ];
 

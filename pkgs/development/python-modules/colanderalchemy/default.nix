@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ColanderAlchemy";

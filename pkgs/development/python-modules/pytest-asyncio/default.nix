@@ -1,30 +1,29 @@
 {
   lib,
+  aioesphomeapi,
+  bleak,
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
+  hypothesis,
   pythonOlder,
   pytest,
+  pytestCheckHook,
   setuptools-scm,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-asyncio";
-  version = "1.4.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
-    tag = "v${version}";
-    hash = "sha256-MuTLCRHCuD9TwJkMiFIC5Xv5Xz6NL8j4JZpW8BA45SI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gXBxFf+DcSTufQxSCZmLWdBKOM5ZtL9OEehp05hS5hc=";
   };
-
-  outputs = [
-    "out"
-    "testout"
-  ];
 
   build-system = [ setuptools-scm ];
 
@@ -36,25 +35,30 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  postInstall = ''
-    mkdir $testout
-    cp -R tests $testout/tests
-  '';
-
   doCheck = false;
   passthru = {
     # bulk updater uses wrong tag
     skipBulkUpdate = true;
-    tests.pytest = callPackage ./tests.nix { };
+    tests = {
+      inherit aioesphomeapi bleak;
+      pytest = finalAttrs.finalPackage.overrideAttrs {
+        doInstallCheck = true;
+      };
+    };
   };
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pytest_asyncio" ];
 
   meta = {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
-    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${finalAttrs.src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

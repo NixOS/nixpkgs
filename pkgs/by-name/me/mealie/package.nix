@@ -96,8 +96,6 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
   inherit version src;
   pyproject = true;
 
-  __structuredAttrs = true;
-
   build-system = with pythonpkgs; [ setuptools ];
 
   nativeBuildInputs = [ makeWrapper ];

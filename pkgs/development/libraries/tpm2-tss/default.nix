@@ -30,13 +30,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-tss";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-MNrVKoA2sW3wKaQsq27UtakzdKmfirtDCoPWu0EEndw=";
+    hash = "sha256-+vsoANS3dLK+96sD6jFpbUZ8ut1f3U5RYbfWVtxRCzc=";
   };
 
   outputs = [

@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.12.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-sdk-python";

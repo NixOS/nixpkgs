@@ -20,15 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-builder";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-builder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G6Do2g/WNULgLQo18v9FgVIbug4ls/KXNrMl8+gvD9s=";
+    hash = "sha256-FUCK2tKzL4sj5kld+Z/b/82RSRbyZjGNAqlwST9XH1w=";
   };
 
   build-system = [

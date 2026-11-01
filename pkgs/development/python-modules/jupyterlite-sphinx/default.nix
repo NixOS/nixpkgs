@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterlite-sphinx";
   version = "0.23.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlite";

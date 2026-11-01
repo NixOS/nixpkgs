@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mjviser";
   version = "0.0.14";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mujocolab";

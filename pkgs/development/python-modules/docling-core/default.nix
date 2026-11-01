@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "docling-core";
   version = "2.90.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";

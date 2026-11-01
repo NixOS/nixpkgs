@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyro-ppl";
   version = "1.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";

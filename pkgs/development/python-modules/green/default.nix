@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "green";
     inherit (finalAttrs) version;

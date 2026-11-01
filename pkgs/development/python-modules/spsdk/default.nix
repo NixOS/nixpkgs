@@ -54,7 +54,6 @@ buildPythonPackage (finalAttrs: {
   pname = "spsdk";
   version = "3.11.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";

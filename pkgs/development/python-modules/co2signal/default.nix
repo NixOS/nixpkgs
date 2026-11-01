@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "CO2Signal";

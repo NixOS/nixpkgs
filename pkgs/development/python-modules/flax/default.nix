@@ -38,7 +38,6 @@ buildPythonPackage (finalAttrs: {
   pname = "flax";
   version = "0.12.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";

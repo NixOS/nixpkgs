@@ -66,9 +66,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.unittestCheckHook
   ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
+  unittestFlags = [
+    "--start-directory=test"
   ];
 
   meta = {

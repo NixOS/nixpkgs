@@ -65,7 +65,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cupti-python";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   src = srcs.${srcKey} or (throw "cupti-python: no wheel for ${srcKey}");
 

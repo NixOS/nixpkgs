@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fribidi";
-  version = "1.0.17";
+  version = "1.0.18";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "https://github.com/fribidi/fribidi/releases/download/v${version}/fribidi-${version}.tar.xz";
-    hash = "sha256-aUnc3ifUHOutH9dB/K/DbVWhAg0thy1KbrORTKq7raI=";
+    hash = "sha256-HeXoBz0DU4i3HQstRSsdofjK7qincCmXtAH+G2JQcn8=";
   };
 
   postPatch = ''

@@ -48,7 +48,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rapidocr";
   inherit version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RapidAI";

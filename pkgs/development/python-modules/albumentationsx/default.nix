@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "albumentationsx";
   version = "2.3.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "albumentations-team";

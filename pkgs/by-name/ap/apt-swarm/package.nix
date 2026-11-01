@@ -2,11 +2,15 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apt-swarm";
   version = "0.6.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
@@ -16,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Fo/+UbdfDhbAsoWjoko4tAmyDZK6tPn/0d2CjPKyaaQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ aws-lc ];
 
   meta = {
     description = "Experimental p2p gossip network for OpenPGP signature transparency";

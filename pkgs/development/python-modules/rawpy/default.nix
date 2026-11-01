@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rawpy";
   version = "0.27.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";

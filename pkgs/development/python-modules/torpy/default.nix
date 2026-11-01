@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.6";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "torpyorg";
     repo = "torpy";

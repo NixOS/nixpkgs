@@ -7,20 +7,20 @@
   zstd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "backports-zstd";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rogdham";
     repo = "backports.zstd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     postFetch = ''
       rm -r "$out/src/c/zstd"
     '';
-    hash = "sha256-d5dkWhsRyUkLD0AiauQuLrNYtbPbwUVN8jpKk6N3/R0=";
+    hash = "sha256-Rq9ofN84GNzBZAg1tkw526k1dJHg8xPRGfnNOLmAieg=";
   };
 
   postPatch = ''
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/rogdham/backports.zstd/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rogdham/backports.zstd/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Backport of compression.zstd";
     homepage = "https://github.com/rogdham/backports.zstd";
     license = lib.licenses.psfl;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

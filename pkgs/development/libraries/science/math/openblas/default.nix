@@ -169,7 +169,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
-  version = "0.3.33";
+  version = "0.3.34";
 
   outputs = [
     "out"
@@ -180,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EArf0K2Gs+w8IRD5wkMOQv79e8yMoTgQfa9kzjXKn3Y=";
+    hash = "sha256-usCAvjNUua91vBd1aXjsTyx8YrpuAkKGOpiQ58fT8Hc=";
   };
 
   patches = [
@@ -189,17 +189,22 @@ stdenv.mkDerivation (finalAttrs: {
     # INCLUDEDIR already fixed in upstream HEAD & significant refactor
     # to config gen so not PRing changes
     ./cmake-include-fixes.patch
-    # This was an attempted fix for the below commit but still leaves some scipy tests failing.
+
+    # Patches to fix racey buffer overflow in ~64 or more threads
     (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/e3ce4623c299068bbd47c35ee87aab334bac73b1.patch";
-      revert = true;
-      hash = "sha256-WrP3RCDk/EbpqVOw9XGLnFI+6/bBGJTIrt2TRYGLVQ4=";
+      name = "centralize-buffer-release-bookkeeping.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/95120da710e8ca28d7e6a896fd82cf1cdb0a07ad.patch";
+      hash = "sha256-/6BhcVGDkrBgfwaMsOqvlZ03/cyIBNmGT84KYDLEcKY=";
     })
-    # This commit led to miscompilation of certain ASIMD extensions code paths.
     (fetchpatch {
-      url = "https://github.com/OpenMathLib/OpenBLAS/commit/3f6e928d34aca977bd5d4191e6d2c2338a342.patch";
-      revert = true;
-      hash = "sha256-EccgzxgyfAjVbV+HPemGHmzkRe0kpixu3eS3BZWr0g4=";
+      name = "avoid-possible-hang-on-windows-by-introspecting-shutdown-state.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/b8d83a72f4e12650e1c790bb43badcfb6e917875.patch";
+      hash = "sha256-vIRI5ByW2IcSrQUiOJVd1Ngwusw9UUh+NLK5e9AVOxE=";
+    })
+    (fetchpatch {
+      name = "fix-the-default-allocator-s-overflow-area.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/0c6785998b516b85c0053669cc0c08e9287353fc.patch";
+      hash = "sha256-jfRAn+IdGP5nfPLasYHBDRSu/HG6tKKAcSzb1urjL7Q=";
     })
   ];
 

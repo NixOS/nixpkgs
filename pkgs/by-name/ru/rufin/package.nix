@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cacert,
   cargo,
   cmake,
@@ -15,6 +16,7 @@
   ninja,
   pkg-config,
   rustc,
+  sqlite,
   wrapGAppsHook4,
 }:
 
@@ -50,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     glib-networking
     gtk4
     libadwaita
+    sqlite
   ]
   ++ (with gst_all_1; [
     gstreamer

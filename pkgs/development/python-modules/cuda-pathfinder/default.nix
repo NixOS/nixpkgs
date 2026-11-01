@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cuda-pathfinder";
   version = "1.8.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

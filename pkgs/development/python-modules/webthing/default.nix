@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.15.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "WebThingsIO";
     repo = "webthing-python";

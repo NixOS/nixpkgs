@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "dash_html_components";
     inherit (finalAttrs) version;

@@ -10,7 +10,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-burnin";
   version = "0.4.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";

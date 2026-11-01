@@ -200,37 +200,30 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
     # so, add the directory to the rpath.
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
-    declare -A rpaths
+    declare -A rpaths seenLibDirs
     for dir in ${libDirs+"${libDirs[@]}"}; do
-        # If the path is in the store, do not resolve any symlinks and add it to the rpath.
-        # Resolving symlinks in the store breaks bootstrapping, see issue #454199.
-        # If it is outside the store, resolve symlinks step by step until it falls
-        # into the store or it becomes not a symlink.
-        # Always canonicalize the path before checking it is in the store or not.
-        if dir2=$(realpath -s "$dir"); then
-            dir="$dir2"
-        else
+        # The same directory is often passed many times, such as from
+        # NIX_LDFLAGS; it would give the same result each time.
+        if [ -n "${seenLibDirs[$dir]:-}" ]; then
             continue
         fi
-        while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
-            if dir2=$(readlink "$dir"); then
-                dir="dir2"
-            else
-                break
-            fi
-            if dir2=$(realpath -s "$dir"); then
-                dir="dir2"
-            else
-                break
-            fi
-        done
+        seenLibDirs["$dir"]=1
+        # Find where the directory is, following symlinks outside the store,
+        # and in it only where needed; see resolveLibDir.  Skip directories
+        # that do not exist, in which the linker cannot find libraries either.
+        if ! [ -d "$dir" ] || ! resolveLibDir "$dir"; then
+            continue
+        fi
+        dir="$resolvedPath"
         # If the path turns out to be outside the store, we do not add it to rpath.
         # This typically happens for libraries in /tmp that are later
         # copied to $out/lib. If not, we're screwed.
         if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
             continue
         fi
-        for path in "$dir"/*; do
+        # Every name in libs is that of a shared library, ending in .so or
+        # containing .so., so the rest of the directory can be skipped.
+        for path in "$dir"/*.so*; do
             file="${path##*/}"
             if [ "${libs[$file]:-}" ]; then
                 # This library may have been provided by a previous directory,

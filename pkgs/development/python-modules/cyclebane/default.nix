@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cyclebane";
   version = "26.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scipp";

@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pure-magic-rs";
   version = "0.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qjerome";

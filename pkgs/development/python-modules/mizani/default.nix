@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mizani";
   version = "0.14.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";

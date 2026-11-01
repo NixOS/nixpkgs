@@ -174,6 +174,19 @@ runCommand "make-wrapper-test"
         ];
       })
       (mkWrapperBinary {
+        name = "test-prefix-and-suffix-unchecked";
+        args = [
+          "--prefix-unchecked"
+          "VAR"
+          ":"
+          "foo"
+          "--suffix-unchecked"
+          "VAR"
+          ":"
+          "bar"
+        ];
+      })
+      (mkWrapperBinary {
         name = "test-prefix-multi";
         args = [
           "--prefix"
@@ -283,6 +296,7 @@ runCommand "make-wrapper-test"
     + mkTest "VAR=abc:foo test-suffix" "VAR=abc:foo"
     # --prefix in combination with --suffix
     + mkTest "VAR=abc test-prefix-and-suffix" "VAR=foo:abc:bar"
+    + mkTest "VAR=abc test-prefix-and-suffix-unchecked" "VAR=foo:abc:bar"
 
     # --suffix-each works
     + mkTest "VAR=abc test-suffix-each" "VAR=abc:foo:bar:def"

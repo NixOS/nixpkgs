@@ -15,7 +15,7 @@ let
     if jdk21.pname == "openjdk" then
       jdk21.override {
         enableJavaFX = true;
-        openjfx21 = openjfx21.override { withWebKit = true; };
+        openjfx_jdk = openjfx21.override { withWebKit = true; };
       }
     else
       throw "bad jdk variant";

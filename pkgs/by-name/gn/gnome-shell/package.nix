@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   replaceVars,
   lib,
   stdenv,
@@ -24,7 +23,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  desktop-file-utils,
   libpulseaudio,
   libical,
   gobject-introspection,
@@ -39,7 +37,6 @@
   libnma-gtk4,
   gnome-desktop,
   gsettings-desktop-schemas,
-  gnome-keyring,
   glib,
   gjs,
   mutter,
@@ -49,6 +46,7 @@
   sassc,
   systemdLibs,
   pipewire,
+  libgudev,
   gst_all_1,
   adwaita-icon-theme,
   glycin-loaders,
@@ -66,6 +64,8 @@
   libsoup_3,
   libxml2,
   webkitgtk_6_0,
+  cairo,
+  libglycin,
 }:
 
 let
@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "50.4";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xTGTlTnbMWpBrvI2cDcKvRMw0yVPhLyw+fTa5dbjYs8=";
+    hash = "sha256-IXm6sTrzU0JwZQlq+L89MNp7huDFFuW6hqFJmK+VdfY=";
   };
 
   patches = [
@@ -107,12 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
     # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
     ./greeter-logo-size.patch
-
-    # Work around failing fingerprint auth
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
-      hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -124,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     wrapGAppsHook4
     sassc
-    desktop-file-utils
     libxslt.bin
     gobject-introspection
   ];
@@ -132,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     systemdLibs
     gsettings-desktop-schemas
-    gnome-keyring
     glib
     gcr_4
     accountsservice
@@ -166,6 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libsoup_3
     libxml2
+    cairo
+    json-glib
+    libglycin
 
     # recording
     pipewire
@@ -174,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
 
     # not declared at build time, but typelib is needed at runtime
+    libgudev
     libgweather
     libnma-gtk4
     webkitgtk_6_0 # for gnome-shell-portal-helper
@@ -181,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     # for gnome-extension tool
     bash-completion
     gnome-autoar
-    json-glib
 
     # for tools
     pythonEnv
@@ -201,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
 
-    substituteInPlace meson.build subprojects/extensions-app/meson.build \
+    substituteInPlace meson.build \
       --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
   '';
 

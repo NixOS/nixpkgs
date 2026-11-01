@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vastai";
   version = "1.8.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vast-ai";

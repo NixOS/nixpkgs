@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "zigpy-ziggurat";
   version = "1.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";

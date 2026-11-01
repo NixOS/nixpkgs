@@ -74,6 +74,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Skip long-running tests
     "linearmodels/tests/panel/test_panel_ols.py"
+
+    # Duplicate parametrization IDs detected, but strict_parametrization_ids is set
+    "linearmodels/tests/system"
+    "linearmodels/tests/panel"
   ];
 
   meta = {

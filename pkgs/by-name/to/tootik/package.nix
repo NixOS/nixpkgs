@@ -34,7 +34,7 @@ buildGo127Module (finalAttrs: {
 
   tags = [ "fts5" ];
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

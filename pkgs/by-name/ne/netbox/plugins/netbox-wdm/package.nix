@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-wdm";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

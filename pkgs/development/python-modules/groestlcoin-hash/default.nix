@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "groestlcoin_hash";
     inherit (finalAttrs) version;

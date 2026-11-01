@@ -66,7 +66,6 @@ buildPythonPackage (finalAttrs: {
   pname = "scanpy";
   version = "1.12.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";

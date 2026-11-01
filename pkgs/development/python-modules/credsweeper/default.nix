@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
   version = "1.19.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";

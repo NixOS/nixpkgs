@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyopencl";
   version = "2026.1.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "inducer";

@@ -150,6 +150,67 @@ expandResponseParams() {
     done
 }
 
+# Resolve the path $1 of a library directory, which like the linker
+# takes a relative path from the working directory, to the directory the
+# linker searches, as far as needed to tell whether it is in the store,
+# and where.  Like the kernel, follow each symlink before going on to the
+# next component, so that symlinks in ancestor directories count, and `..`
+# applies to the target of a symlink rather than removing it.  But in the
+# store, keep symlinks that are not followed by `..` as they are, since
+# resolving symlinks between store paths would refer to their targets
+# instead (see issue #454199).  The result is stored in resolvedPath.
+# Fails if there are too many symlinks.
+resolveLibDir() {
+    local rest="$1/" component link target links=0
+    # The common case: a path in the store with no `.`, `..` or empty
+    # components is already resolved, since it has no symlink to follow.
+    if [[ "$1" == "${NIX_STORE:-}"/* && "$1/" != */./* && "$1/" != */../* && "$1/" != *//* ]]; then
+        resolvedPath="$1"
+        return
+    fi
+    if [[ "$rest" != /* ]]; then
+        rest="$PWD/$rest"
+    fi
+    resolvedPath=
+    while [[ -n "$rest" ]]; do
+        component="${rest%%/*}"
+        rest="${rest#*/}"
+        case "$component" in
+            "" | .) continue ;;
+            ..)
+                if [[ -L "$resolvedPath" ]]; then
+                    # Follow it, then apply this `..` to its target.
+                    link="$resolvedPath"
+                    resolvedPath="${resolvedPath%/*}"
+                    rest="../$rest"
+                else
+                    resolvedPath="${resolvedPath%/*}"
+                    continue
+                fi
+                ;;
+            *)
+                link="$resolvedPath/$component"
+                # Keep a symlink in the store unless `..` follows it, and
+                # never resolve the store or its ancestors, which may be
+                # symlinks (NIX_IGNORE_SYMLINK_STORE).
+                if [[ "$link" == "${NIX_STORE:-}"/* || "${NIX_STORE:-}/" == "$link"/* || ! -L "$link" ]]; then
+                    resolvedPath="$link"
+                    continue
+                fi
+                ;;
+        esac
+        (( ++links <= 40 )) || return 1
+        target=$(readlink "$link") || return 1
+        # A relative target is relative to the directory containing the
+        # link, which is now resolvedPath.
+        if [[ "$target" == /* ]]; then
+            resolvedPath=
+        fi
+        rest="$target/$rest"
+    done
+    resolvedPath="${resolvedPath:-/}"
+}
+
 checkLinkType() {
     local arg
     type="dynamic"

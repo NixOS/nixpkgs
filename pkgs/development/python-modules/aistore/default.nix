@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aistore";
   version = "1.26.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Tags on GitHub do not match
   src = fetchPypi {

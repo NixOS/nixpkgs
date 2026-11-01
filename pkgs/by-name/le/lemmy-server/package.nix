@@ -3,9 +3,12 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  openssl,
+  aws-lc,
   libpq,
+  rust-jemalloc-sys,
+  zstd,
   libiconv,
+  pkg-config,
   protobuf,
   rustfmt,
   nixosTests,
@@ -31,20 +34,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-GjuP5ci1f6xGGrDkS8KyfP15Owj42YNITfK3T4MuHp0=";
 
   buildInputs = [
+    aws-lc
     libpq
+    rust-jemalloc-sys
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
   env = {
-    # Using OPENSSL_NO_VENDOR is not an option on darwin
-    # As of version 0.10.35 rust-openssl looks for openssl on darwin
-    # with a hardcoded path to /usr/lib/libssl.x.x.x.dylib
-    # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
-    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-    OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
-
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
 
@@ -52,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTFLAGS = "--cap-lints warn";
   };
   nativeBuildInputs = [
+    pkg-config
     protobuf
     rustfmt
   ];

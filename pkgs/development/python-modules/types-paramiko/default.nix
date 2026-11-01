@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "types-paramiko";
   version = "5.0.0.20261021";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "types_paramiko";
