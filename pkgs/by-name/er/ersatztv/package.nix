@@ -3,8 +3,11 @@
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
+  ersatztv-next,
+  bash,
   ffmpeg,
   which,
+  nixosTests,
 }:
 
 buildDotnetModule rec {
@@ -43,12 +46,20 @@ buildDotnetModule rec {
     "PATH"
     ":"
     "${lib.makeBinPath [
+      bash
       ffmpeg
       which
     ]}"
+    # ETV otherwise looks for ersatztv-channel next to its own executable
+    "--set-default"
+    "ETV_NEXT_FOLDER"
+    "${ersatztv-next}/bin"
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) ersatztv; };
+  };
 
   meta = {
     description = "Stream custom live channels using your own media";

@@ -12,6 +12,7 @@
   ocl-icd,
   vulkan-loader,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -63,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) ersatztv; };
+  };
 
   meta = {
     description = "Streaming engine for ErsatzTV that transcodes playouts into live IPTV channels";
