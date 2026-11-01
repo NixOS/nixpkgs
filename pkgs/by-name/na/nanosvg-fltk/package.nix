@@ -4,14 +4,17 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanosvg-fltk";
-  version = "unstable-2022-12-22";
+  version = "2022-12-22";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fltk";
     repo = "nanosvg";
-    rev = "abcd277ea45e9098bed752cf9c6875b533c0892f";
+    tag = "fltk_${finalAttrs.version}";
     hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
   };
 
@@ -22,4 +25,4 @@ stdenv.mkDerivation {
     homepage = "https://github.com/fltk/nanosvg";
     license = lib.licenses.zlib;
   };
-}
+})
