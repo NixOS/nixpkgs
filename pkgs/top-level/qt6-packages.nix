@@ -11,7 +11,6 @@
   makeScopeWithSplicing',
   generateSplicesForMkScope,
   pkgsHostTarget,
-  kdePackages,
 }:
 
 let
@@ -111,7 +110,7 @@ makeScopeWithSplicing' {
 
       qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-      qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
+      qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
       qtutilities = callPackage ../development/libraries/qtutilities { };
 
