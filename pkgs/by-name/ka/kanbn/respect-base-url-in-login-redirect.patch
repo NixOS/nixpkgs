@@ -1,0 +1,22 @@
+Anchor the "/" -> "/login" redirect on NEXT_PUBLIC_BASE_URL when it is set.
+
+Upstream builds the redirect URL from `request.url`, which yields a *relative*
+`Location` header. Browsers then resolve that against whatever host the client
+typed (often localhost), so a request via the public hostname can end up on
+localhost behind a reverse proxy. When NEXT_PUBLIC_BASE_URL is set we always
+emit an absolute URL pointing at the configured public origin.
+
+--- a/apps/web/src/middleware.ts
++++ b/apps/web/src/middleware.ts
+@@ -5,7 +5,10 @@
+ export function middleware(request: NextRequest) {
+   if (request.nextUrl.pathname === "/") {
+     if (env("NEXT_PUBLIC_KAN_ENV") !== "cloud") {
+-      const loginUrl = new URL("/login", request.url);
++      const loginUrl = new URL(
++        "/login",
++        env("NEXT_PUBLIC_BASE_URL") ?? request.url,
++      );
+       return NextResponse.redirect(loginUrl);
+     }
+   }
