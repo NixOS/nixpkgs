@@ -56,6 +56,11 @@ buildNpmPackage (finalAttrs: {
     "--ignore-scripts"
   ];
 
+  # The default `npm prune`` is scoped to npmWorkspace and leaves root devDependencies behind.
+  # Prune from the repository root before installing node_modules.
+  # Note, this is an issue with npm 11+, see https://github.com/npm/cli/issues/8277
+  dontNpmPrune = true;
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
@@ -70,6 +75,8 @@ buildNpmPackage (finalAttrs: {
     shopt -s globstar
     rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
     shopt -u globstar
+    # Save closure size by pruning all non-production dependencies before installation
+    npm prune --omit=dev --offline --ignore-scripts --legacy-peer-deps
   '';
 
   postInstall = ''
