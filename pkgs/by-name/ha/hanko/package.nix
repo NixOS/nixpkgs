@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.1.3";
 
   src = fetchFromGitHub {
-    owner = "SRv6d";
+    owner = "marvinvogt";
     repo = "hanko";
     tag = "v${finalAttrs.version}";
     hash = "sha256-raQl8inNOO9pRQnlESrQ5dSbQG7uC3LtQIv8AOqD+e0=";
@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Keeps your Git allowed signers file up to date";
-    homepage = "https://github.com/SRv6d/hanko";
-    changelog = "https://github.com/SRv6d/hanko/blob/main/CHANGELOG.md";
+    homepage = "https://github.com/marvinvogt/hanko";
+    changelog = "https://github.com/marvinvogt/hanko/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ srv6d ];
     mainProgram = "hanko";

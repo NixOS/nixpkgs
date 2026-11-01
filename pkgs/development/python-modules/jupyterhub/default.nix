@@ -53,14 +53,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = finalAttrs.version;
-    hash = "sha256-ffcbBwmK2u0O7UCseoDKMb598KD6edIFwjXnJTku2+4=";
+    hash = "sha256-Spc7uqpxNYa7jm7wIKZAmmPovPjWxpFVL3umlgckZzU=";
   };
 
   npmDeps = fetchNpmDeps {

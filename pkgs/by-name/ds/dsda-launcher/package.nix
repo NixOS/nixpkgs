@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.2";
 
   src = fetchFromGitHub {
-    owner = "Pedro-Beirao";
+    owner = "dsda-org";
     repo = "dsda-launcher";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lk4MtITvJKh6p3x8KhJl3Yqs4VJjSr2aJTIaGmyABpQ=";
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/Pedro-Beirao/dsda-launcher";
+    homepage = "https://github.com/dsda-org/dsda-launcher";
     description = "Launcher GUI for the dsda-doom source port";
     mainProgram = "dsda-launcher";
     license = lib.licenses.gpl3;

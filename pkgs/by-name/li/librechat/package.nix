@@ -14,7 +14,7 @@ buildNpmPackage (finalAttrs: {
   version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "danny-avila";
+    owner = "LibreChat-AI";
     repo = "LibreChat";
     tag = "v${finalAttrs.version}";
     hash = "sha256-y3qxc7RgxLWBodK8KXSMh4ZI0qjkbj/b+8xutsbuEjs=";
@@ -92,7 +92,7 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Open-source app for all your AI conversations, fully customizable and compatible with any AI provider";
-    homepage = "https://github.com/danny-avila/LibreChat";
+    homepage = "https://github.com/LibreChat-AI/LibreChat";
     changelog = "https://www.librechat.ai/changelog/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

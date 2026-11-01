@@ -80,10 +80,7 @@ let
             SKK Japanese input method.
           '';
           homepage = "https://github.com/skk-dev/dict";
-          maintainers = with lib.maintainers; [
-            yuriaisaka
-            midchildan
-          ];
+          maintainers = with lib.maintainers; [ midchildan ];
           platforms = lib.platforms.all;
         };
       };

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "workset";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Ryi5zLlOVNVtHhMZ5PglNFKVrrSlrcj3TOoeHKjGAic=";
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "workset";
     description = "Manage git repos with working sets";
-    homepage = "https://github.com/fossable/workset";
+    homepage = "https://github.com/cilki/workset";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cilki ];

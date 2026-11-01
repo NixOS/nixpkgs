@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.7.5";
 
   src = fetchFromGitHub {
-    owner = "rclone-ui";
+    owner = "rclone";
     repo = "rclone-ui";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7rNFJDx1Gsr9EywnRaToOdbZOhL4Yyz6Xpv+0Qhh638=";
@@ -85,9 +85,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Cross-platform desktop GUI for rclone & S3";
-    homepage = "https://github.com/rclone-ui/rclone-ui";
-    downloadPage = "https://github.com/rclone-ui/rclone-ui";
-    changelog = "https://github.com/rclone-ui/rclone-ui/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/rclone/rclone-ui";
+    downloadPage = "https://github.com/rclone/rclone-ui";
+    changelog = "https://github.com/rclone/rclone-ui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "rclone-ui";

@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "brimdata";
+    owner = "superdb";
     repo = "super";
     tag = "v${finalAttrs.version}";
     hash = "sha256-T/L5w15gZVTbs0jHTkHPnHwTJ2s+ILfouHyQMEXkq1M=";
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/brimdata/super/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/superdb/super/releases/tag/v${finalAttrs.version}";
     description = "Analytics database that puts JSON and relational tables on equal footing";
     homepage = "https://superdb.org";
     license = lib.licenses.mkLicense {
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
       free = false;
       fullName = "SuperDB Source Available License version 1.0";
       redistributable = true;
-      url = "https://github.com/brimdata/super/blob/5baa422ab9791bfc1a7f778b2e4354885825adf8/LICENSE.md";
+      url = "https://github.com/superdb/super/blob/5baa422ab9791bfc1a7f778b2e4354885825adf8/LICENSE.md";
     };
     mainProgram = "super";
     maintainers = with lib.maintainers; [ hythera ];

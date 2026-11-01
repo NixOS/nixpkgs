@@ -521,12 +521,6 @@
     githubId = 202316;
     name = "Ashik Salahudeen";
   };
-  abaldeau = {
-    email = "andreas@baldeau.net";
-    github = "baldo";
-    githubId = 178750;
-    name = "Andreas Baldeau";
-  };
   abathur = {
     email = "travis.a.everett+nixpkgs@gmail.com";
     github = "abathur";
@@ -12780,7 +12774,7 @@
   };
   j0schu = {
     name = "Jonas";
-    email = "Joschu2015@t-online.de";
+    email = "joschu.dev@gmail.com";
     github = "J0schu";
     githubId = 56407950;
   };
@@ -13666,12 +13660,6 @@
     github = "jirkamarsik";
     githubId = 184898;
     name = "Jirka Marsik";
-  };
-  jitwit = {
-    email = "jrn@bluefarm.ca";
-    github = "jitwit";
-    githubId = 51518420;
-    name = "jitwit";
   };
   jjacke13 = {
     email = "vaios.k@pm.me";
@@ -32702,12 +32690,6 @@
     github = "yureka-wdz";
     githubId = 255085068;
     name = "Yureka (WDZ)";
-  };
-  yuriaisaka = {
-    email = "yuri.aisaka+nix@gmail.com";
-    github = "yuriaisaka";
-    githubId = 687198;
-    name = "Yuri Aisaka";
   };
   yurkobb = {
     name = "Yury Bulka";

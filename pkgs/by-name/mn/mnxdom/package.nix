@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0";
 
   src = fetchFromGitHub {
-    owner = "rpatters1";
+    owner = "mnx-works";
     repo = "mnxdom";
     tag = "v${finalAttrs.version}";
     hash = "sha256-zM8NRdVKY4RI9fNrVU/BpWOkhmmT9HLrOi21YKPGd0k=";
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "MNX Document Object Model for C++17";
-    homepage = "https://github.com/rpatters1/mnxdom";
+    homepage = "https://github.com/mnx-works/mnxdom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "mnxdom";

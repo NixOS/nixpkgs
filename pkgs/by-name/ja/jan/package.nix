@@ -8,16 +8,16 @@
 }:
 
 let
-  version = "0.8.7";
+  version = "0.8.8";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-PCUfCJ5f6xn8yAMff+8byuxmSsyk2EgjmpPbnFWWkrw=";
+    hash = "sha256-nvnEIb3kOxdR0fw8PczriyD1wwiNEQJ+R5QC0U1iQP4=";
   };
 
   linux-src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
-    hash = "sha256-SzdQGgHNnS5K6qw7uWNS9vffKapWZqz8Mm478zZm9ho=";
+    hash = "sha256-75gxTAIw4wZiNf0ZX/H/32UrhbJku9nd8zf5nQd8kVk=";
   };
 
   appimageContents = appimageTools.extract {
@@ -47,6 +47,8 @@ let
     src = linux-src;
 
     executableName = "Jan-Desktop";
+
+    extraPkgs = pkgs: [ pkgs.libgpg-error ];
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications

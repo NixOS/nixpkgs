@@ -4,7 +4,7 @@
   fetchPypi,
   libftdi1,
   libusb1,
-  poetry-core,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-4iKbwQ0HfwGMvnsrSQInsrU4ZD+m97/xMs3hVUnKEps=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     libftdi1

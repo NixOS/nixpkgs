@@ -5,24 +5,24 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  jre,
+  jdk25,
   libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitnuro";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-x86_64-${finalAttrs.version}.jar";
-        hash = "sha256-EoBjw98O5gO2wTO34KMiFeteryYapZC83MUfIqxtbmQ=";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/${finalAttrs.version}/Gitnuro-linux-x86_64-2.0-${finalAttrs.version}.jar";
+        hash = "sha256-7AaIHJT++xW9YSDoNUmx4YsOS7uqxTAQs4QJtLfubvg=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-arm_aarch64-${finalAttrs.version}.jar";
-        hash = "sha256-oAmCapu9xFS1LMasj21q39Q/4yjLh6MZx79tC8Yjlec=";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/${finalAttrs.version}/Gitnuro-linux-arm_aarch64-2.0-${finalAttrs.version}.jar";
+        hash = "sha256-BBTkXcHGBHRRDFyrVP8yH+5vhBQCU9kkv0jb3i19zSE=";
       }
     else
       throw "Unsupported architecture: ${stdenv.hostPlatform.system}"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/gitnuro \
+    makeWrapper ${jdk25}/bin/java $out/bin/gitnuro \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --add-flags "-jar $src"
 
@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
+    downloadPage = "https://github.com/JetpackDuba/Gitnuro";
     license = lib.licenses.gpl3Plus;
     platforms = [
       "x86_64-linux"

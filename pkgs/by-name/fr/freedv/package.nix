@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
 
   src = fetchFromGitHub {
-    owner = "drowe67";
+    owner = "freedv";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Nd0oOGiMrERviaGOtdOQ0KTSSL/+69Q2bRHjojBUknU=";

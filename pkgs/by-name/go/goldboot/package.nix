@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.0.10";
 
   src = fetchFromGitHub {
-    owner = "fossable";
+    owner = "cilki";
     repo = "goldboot";
     rev = "goldboot-v${finalAttrs.version}";
     hash = "sha256-O9yhyJZpjQxC0HP43RsOgPMOKp6d23SNhMLiGtmwXzs=";
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "goldboot";
     description = "Immutable infrastructure for the desktop";
-    homepage = "https://github.com/fossable/goldboot";
-    changelog = "https://github.com/fossable/goldboot/releases/tag/goldboot-v${finalAttrs.version}";
+    homepage = "https://github.com/cilki/goldboot";
+    changelog = "https://github.com/cilki/goldboot/releases/tag/goldboot-v${finalAttrs.version}";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cilki ];

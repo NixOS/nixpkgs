@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "libcdio";
-    repo = "libcdio";
+    repo = "libcdio-C";
     tag = finalAttrs.version;
     hash = "sha256-NZj6sMIhBORh2ZBs/WGI4BYri1REog4ovUug1t5p8Y8=";
   };

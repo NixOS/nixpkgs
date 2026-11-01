@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2.17.1";
 
   src = fetchFromGitHub {
-    owner = "WithSecureLabs";
+    owner = "WithSecureOpenSource";
     repo = "chainsaw";
     tag = "v${finalAttrs.version}";
     hash = "sha256-bS6xYFfbnD8ZgSzVt+CQWGhfQCFYfzj1pRjLVlk8QMg=";
@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Rapidly Search and Hunt through Windows Forensic Artefacts";
-    homepage = "https://github.com/WithSecureLabs/chainsaw";
-    changelog = "https://github.com/WithSecureLabs/chainsaw/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/WithSecureOpenSource/chainsaw";
+    changelog = "https://github.com/WithSecureOpenSource/chainsaw/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chainsaw";

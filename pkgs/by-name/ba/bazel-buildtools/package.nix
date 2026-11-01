@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "10.2.0";
 
   src = fetchFromGitHub {
-    owner = "bazelbuild";
+    owner = "bazel-contrib";
     repo = "buildtools";
     rev = "v${finalAttrs.version}";
     hash = "sha256-pnzvuerzKSxF++GeceGOzGgx0nQjAAKCj9fnjW1EIIE=";
@@ -36,8 +36,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
-    homepage = "https://github.com/bazelbuild/buildtools";
-    changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/bazel-contrib/buildtools";
+    changelog = "https://github.com/bazel-contrib/buildtools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
   };
