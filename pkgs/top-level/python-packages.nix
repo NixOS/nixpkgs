@@ -6467,6 +6467,8 @@ self: super: with self; {
 
   flit-core = callPackage ../development/python-modules/flit-core { };
 
+  flit-core_3 = callPackage ../development/python-modules/flit-core/3.nix { };
+
   flit-gettext = callPackage ../development/python-modules/flit-gettext { };
 
   flit-scm = callPackage ../development/python-modules/flit-scm { };
