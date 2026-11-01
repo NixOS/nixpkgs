@@ -31418,10 +31418,10 @@ with self;
 
   SpreadsheetXLSX = buildPerlPackage {
     pname = "Spreadsheet-XLSX";
-    version = "0.17";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AS/ASB/Spreadsheet-XLSX-0.17.tar.gz";
-      hash = "sha256-M7d4knz/FjCQZbdOuMRpawNxZg0szf5FvkYFCSrO6XY=";
+      url = "mirror://cpan/authors/id/A/AS/ASB/Spreadsheet-XLSX-0.20.tar.gz";
+      hash = "sha256-Wt17kcSEWAmwZaG2HjJmJ7ABmq7JEHix76VIQsmnq10=";
     };
     buildInputs = [
       TestNoWarnings
