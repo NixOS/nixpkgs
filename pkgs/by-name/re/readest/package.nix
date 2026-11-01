@@ -134,18 +134,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    # Read the required CEF major from the lockfile validated by cargoSetupHook.
-    cefVersion=$(awk '
-      $1 == "name" { isCef = ($3 == "\"cef-dll-sys\"") }
-      isCef && $1 == "version" { gsub(/"/, "", $3); print $3; exit }
-    ' "$cargoDepsLockfile")
-    if [ -z "$cefVersion" ]; then
-      echo "readest: cef-dll-sys is missing from Cargo.lock" >&2
-      exit 1
-    fi
-    cefMajor="''${cefVersion%%.*}"
+    # Assert that `cef-dll-sys` and `cef-binary`'s major versions are the same
+    cefMajor=$(
+      grep -A1 '^name = "cef-dll-sys"$' "$cargoDepsLockfile" |
+        sed -nE 's/^version = "([0-9]+)\..*/\1/p'
+    )
+
     if [ "$cefMajor" != "${lib.versions.major cef-binary.version}" ]; then
-      echo "readest: cef-dll-sys $cefVersion requires CEF $cefMajor, but cef-binary is ${cef-binary.version}" >&2
+      echo "readest: Cargo.lock wants CEF major '$cefMajor', but cef-binary is ${cef-binary.version}" >&2
       exit 1
     fi
 
