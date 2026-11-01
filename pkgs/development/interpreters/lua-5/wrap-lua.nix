@@ -9,7 +9,7 @@
 # imported as wrapLua in lua-packages.nix and passed to build-lua-derivation to be used as buildInput
 makeSetupHook {
   name = "wrap-lua-hook";
-  propagatedBuildInputs = [ makeWrapper ];
+  propagatedNativeBuildInputs = [ makeWrapper ];
   substitutions.luaBuild = lua.luaOnBuildForHost;
   substitutions.luaHost = lua.luaOnHostForHost;
   substitutions.luarocksBuild = lua.luaOnBuildForHost.pkgs.luarocks_bootstrap;
