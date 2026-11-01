@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
+  makeRustPlatform,
   build,
   buildPythonPackage,
   cargo,
@@ -38,13 +40,18 @@
 }:
 
 let
+  stdenv' = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  rustPlatform' = makeRustPlatform {
+    inherit rustc cargo;
+    stdenv = stdenv';
+  };
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { stdenv = stdenv'; } (finalAttrs: {
   pname = "polars";
   version = "2.1.0";
   pyproject = true;
@@ -72,10 +79,10 @@ buildPythonPackage (finalAttrs: {
     cargo
     pkg-config
     cmake # libz-ng-sys
-    rustPlatform.cargoSetupHook
-    rustPlatform.cargoBuildHook
-    rustPlatform.cargoInstallHook
-    rustPlatform.maturinBuildHook
+    rustPlatform'.cargoSetupHook
+    rustPlatform'.cargoBuildHook
+    rustPlatform'.cargoInstallHook
+    rustPlatform'.maturinBuildHook
     rustc
   ];
 
