@@ -9324,9 +9324,9 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
+  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../by-name/dw/dwarf-fortress { });
 
-  inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
+  inherit (dwarf-fortress-packages) dwarf-fortress-full dwarf-therapist;
 
   dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 

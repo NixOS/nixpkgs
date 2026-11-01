@@ -18,18 +18,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-browser";
-  version = "0.39.1";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WIg6WAnk3728NrZVh8JYtu2iRoHi8lYT2e5CDgOg2Sc=";
+    hash = "sha256-siJ37qavluO6psfgaNTFkOSmL5f+PATFlPNWS7PXF6U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-f+7fTDs/irnf/6jCmSlSKaIaVAuqmTvjhW/vBT5gBKM=";
+  cargoHash = "sha256-YMLJ6ykf4IQNDjCNP3E6E5Rj+gLYe9INysbnVFaeqQA=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''

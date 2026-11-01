@@ -4725,6 +4725,7 @@ broken-packages:
   - pcf-font-embed # failure in job https://hydra.nixos.org/build/233246806 at 2023-09-02
   - pcgen # failure in job https://hydra.nixos.org/build/233195356 at 2023-09-02
   - PCLT # failure in job https://hydra.nixos.org/build/233246845 at 2023-09-02
+  - pcre-light # depends on pcre, which has been dropped from Nixpkgs
   - pcre-light-extra # failure in job https://hydra.nixos.org/build/233194585 at 2023-09-02
   - pcubature # failure in job https://hydra.nixos.org/build/253698476 at 2024-03-31
   - pdf-slave-template # failure in job https://hydra.nixos.org/build/233217870 at 2023-09-02
@@ -5336,6 +5337,7 @@ broken-packages:
   - regex-do # failure in job https://hydra.nixos.org/build/307521538 at 2025-09-19
   - regex-generator # failure in job https://hydra.nixos.org/build/233239502 at 2023-09-02
   - regex-parsec # failure in job https://hydra.nixos.org/build/233223781 at 2023-09-02
+  - regex-pcre # depends on pcre, which has been dropped from Nixpkgs
   - regex-posix-unittest # failure in job https://hydra.nixos.org/build/233249685 at 2023-09-02
   - regex-tdfa-pipes # failure in job https://hydra.nixos.org/build/233247416 at 2023-09-02
   - regex-tdfa-quasiquoter # failure in job https://hydra.nixos.org/build/233234166 at 2023-09-02

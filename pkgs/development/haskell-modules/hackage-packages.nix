@@ -527571,6 +527571,8 @@ self: {
       ];
       description = "Portable regex library for Perl 5 compatible regular expressions";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 
@@ -587495,6 +587497,8 @@ self: {
       libraryPkgconfigDepends = [ pcre ];
       description = "PCRE Backend for \"Text.Regex\" (regex-base)";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 

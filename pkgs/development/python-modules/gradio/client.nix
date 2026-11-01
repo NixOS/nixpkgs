@@ -129,7 +129,7 @@ buildPythonPackage (finalAttrs: {
       doInstallCheck = false;
       doCheck = false;
       preCheck = "";
-      enabledTestPaths = [ ];
+      enabledTestPaths = null;
       disabledTestMarks = [ ];
       disabledTests = [ ];
       pythonImportsCheck = null;
