@@ -16,8 +16,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "wxwidgets-prusa3d-patched";
-  version = "3.1.4";
+  pname = "wxwidgets";
+  version = "3.1.4-unstable-2022-02-11";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
@@ -91,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "https://www.wxwidgets.org/";
-    description = "Cross-Platform C++ GUI Library";
+    homepage = "https://github.com/prusa3d/wxWidgets";
+    description = "Cross-Platform C++ GUI Library with Prusa patches";
     longDescription = ''
       wxWidgets gives you a single, easy-to-use API for writing GUI applications
       on multiple platforms that still utilize the native platform's controls
@@ -102,11 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
       online help, network programming, streams, clipboard and drag and drop,
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
+
+      This package includes patches made by Prusa to support Prusa Slicer.
     '';
-    license = with lib.licenses; [
-      lgpl2Plus
-      wxWindowsException31
-    ];
+    license = with lib.licenses; WITH lgpl2Plus wxWindowsException31;
     platforms = lib.platforms.unix;
   };
 })
