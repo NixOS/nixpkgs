@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.12.0";
+  version = "3.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-storage-v${version}";
-    hash = "sha256-4rmrRvYW9FOpvYY4a+vbDzQRcLXfFHGSCnv7yL6S1FM=";
+    hash = "sha256-VUlbpL1viPi+y/CPsB93yED6RFN13AhC4Knnvtjpceo=";
   };
 
   sourceRoot = "${src.name}/packages/google-cloud-storage";
