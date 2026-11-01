@@ -1,0 +1,55 @@
+diff --git a/Resources/Views/include_navbar.leaf b/Resources/Views/include_navbar.leaf
+index 8cf84d8..9f55edc 100644
+--- a/Resources/Views/include_navbar.leaf
++++ b/Resources/Views/include_navbar.leaf
+@@ -9,7 +9,6 @@
+         </button>
+         <div id="navbarSupportedContent" class="collapse navbar-collapse">
+           <ul class="navbar-nav">
+-            <li class="nav-item"><a class="nav-link" href="https://38c3.c3nav.de/l/tota" target="_blank">Map</a></li>
+             <li class="nav-item"><a class="nav-link" href="/#(common.namingTheme.referenceSlug)/">#(common.namingTheme.referencePlural)</a></li>
+             <li class="nav-item"><a class="nav-link" href="/user/">Users</a></li>
+             <li class="nav-item"><a class="nav-link" href="/spot/">Spots</a></li>
+diff --git a/Sources/App/configure.swift b/Sources/App/configure.swift
+index 8b87e30..31da2b2 100644
+--- a/Sources/App/configure.swift
++++ b/Sources/App/configure.swift
+@@ -9,7 +9,7 @@ import Vapor
+ public func configure(_ app: Application) async throws {
+ 	// uncomment to serve files from /Public folder
+ 	app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+-	
++
+ 	// TODO: read from config
+ 	app.namingTheme = NamingTheme(
+ 		activityName: "TOTA at 38C3",
+@@ -50,8 +50,6 @@ public func configure(_ app: Application) async throws {
+ 
+ #if DEBUG
+ 	app.migrations.add(SeedSampleData())
+-#else
+-	app.migrations.add(Seed38C3Data())
+ #endif
+ 
+ 	// Session handling
+@@ -132,20 +130,6 @@ func configureAwards(_ app: Application) async throws {
+ 	app.awardCheckers.append(AwardCheckerTrainee())
+ 
+ 	// 38C3 specific:
+-	app.awardCheckers.append(AwardCheckerBasementConnection())
+-	app.awardCheckers.append(AwardCheckerInHouseDX())
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 9))
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 0))
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 1))
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 2))
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 3))
+-	app.awardCheckers.append(AwardCheckerActivatedLevel(level: 4))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 9))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 0))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 1))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 2))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 3))
+-	app.awardCheckers.append(AwardCheckerHuntedLevel(level: 4))
+ 
+ }
+ 
