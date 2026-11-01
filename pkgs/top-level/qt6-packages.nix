@@ -62,8 +62,6 @@ makeScopeWithSplicing' {
 
       futuresql = callPackage ../development/libraries/futuresql { };
 
-      ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
-
       libiodata = callPackage ../development/libraries/libiodata { };
 
       libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
@@ -156,6 +154,9 @@ makeScopeWithSplicing' {
       ''; # Added 2026-11-01
       fcitx5-configtool = throw ''
         'qt6Packages.fcitx5-configtool' has been replaced by top-level 'fcitx5-configtool'.
+      ''; # Added 2026-11-01
+      ktactilefeedback = throw ''
+        'qt6Packages.ktactilefeedback' has been replaced by top-level 'ktactilefeedback'
       ''; # Added 2026-11-01
       kquickimageedit = throw ''
         'qt6Packages.kquickimageedit' has been replaced by 'kdePackages.kquickimageeditor'.

@@ -4,10 +4,7 @@
   fetchFromGitLab,
   unstableGitUpdater,
   cmake,
-  extra-cmake-modules,
-  qtbase,
-  qtdeclarative,
-  qtmultimedia,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    extra-cmake-modules
-    qtbase
-    qtmultimedia
+    kdePackages.extra-cmake-modules
+    kdePackages.qtbase
+    kdePackages.qtmultimedia
   ];
 
   # Library
@@ -48,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckTarget = "test";
   preInstallCheck = ''
-    export QML2_IMPORT_PATH=$out/${qtbase.qtQmlPrefix}:${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
+    export QML2_IMPORT_PATH=$out/${kdePackages.qtbase.qtQmlPrefix}:${lib.getBin kdePackages.qtdeclarative}/${kdePackages.qtbase.qtQmlPrefix}
   '';
 
   passthru.updateScript = unstableGitUpdater { };

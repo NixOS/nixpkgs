@@ -13,7 +13,7 @@
   glib,
   kdePackages,
   # Used on Qt6
-  ktactilefeedback ? null,
+  ktactilefeedback,
   libevdev,
   lttng-ust,
   mesa,
