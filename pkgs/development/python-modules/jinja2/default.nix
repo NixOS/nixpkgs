@@ -4,7 +4,7 @@
   python,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   babel,
   markupsafe,
   pytestCheckHook,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       --replace-fail ", \"trio\"" ""
   '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ markupsafe ];
 
