@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "objdiff";
-  version = "3.8.2";
+  version = "3.8.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "encounter";
     repo = "objdiff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fM7fQv0TguxohDvc3wDM9NEmnI2BfYkS1kYlQl3MOTM=";
+    hash = "sha256-KF37Y9D/vmGq1Y7017IjeoFZk/G7aK98vYYYQe5QxaU=";
   };
 
-  cargoHash = "sha256-AFIdMpkL8MFRqMwpwdOXOKW7EFyRJbdKW+BzdHLgvyc=";
+  cargoHash = "sha256-HERAeWyA8pDpMCGVAssY2r66i7AfbqmlvJ/4zbDDe2M=";
 
   nativeBuildInputs = [
     pkg-config

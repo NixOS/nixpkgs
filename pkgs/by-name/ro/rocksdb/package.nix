@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "10.10.1";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
     hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
-    changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/meta/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
     license =
       with lib.licenses;
       OR [

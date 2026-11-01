@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "evdenis";
+    owner = "linux-analysis";
     repo = "cvehound";
     tag = finalAttrs.version;
     hash = "sha256-UvjmlAm/8B4KfE9grvvgn37Rui+ZRfs2oTLqYYgqcUQ=";
@@ -54,9 +54,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tool to check linux kernel source dump for known CVEs";
-    homepage = "https://github.com/evdenis/cvehound";
-    changelog = "https://github.com/evdenis/cvehound/blob/${finalAttrs.src.rev}/ChangeLog";
-    # See https://github.com/evdenis/cvehound/issues/22
+    homepage = "https://github.com/linux-analysis/cvehound";
+    changelog = "https://github.com/linux-analysis/cvehound/blob/${finalAttrs.src.rev}/ChangeLog";
+    # See https://github.com/linux-analysis/cvehound/issues/22
     license = with lib.licenses; [
       gpl2Only
       gpl3Plus

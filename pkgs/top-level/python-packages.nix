@@ -2828,6 +2828,8 @@ self: super: with self; {
 
   bytesize = toPythonModule (pkgs.libbytesize.override { python3Packages = self; });
 
+  bytestruct = callPackage ../development/python-modules/bytestruct { };
+
   bytewax = callPackage ../development/python-modules/bytewax { };
 
   cache = callPackage ../development/python-modules/cache { };
@@ -9215,8 +9217,6 @@ self: super: with self; {
   kbnf = callPackage ../development/python-modules/kbnf { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
-
-  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
 
   kdl-py = callPackage ../development/python-modules/kdl-py { };
 

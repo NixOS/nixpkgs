@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "gh-tui-tools";
-    repo = "gh-review-conductor";
+    repo = "gh-review-responder";
     tag = "v${finalAttrs.version}";
     hash = "sha256-B6wjZoBGltfb/qsApzoPPFG1w1f7AyuCAvQVSVtkX4M=";
   };
@@ -33,8 +33,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "GitHub CLI extension to apply PR review comments and suggestions directly to your local code";
-    homepage = "https://github.com/gh-tui-tools/gh-review-conductor";
-    changelog = "https://github.com/gh-tui-tools/gh-review-conductor/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/gh-tui-tools/gh-review-responder";
+    changelog = "https://github.com/gh-tui-tools/gh-review-responder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       vdemeester

@@ -11,12 +11,12 @@
   python3,
 }:
 let
-  version = "24.8.0";
+  version = "27.2.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${version}";
-    hash = "sha256-HypTLf16HxL2Jile5ACulNJw8L6Xr+Bxgt6eNFRWYo8=";
+    hash = "sha256-esdKou1O5ZiJqUsd8bFVmz8mVqq7wJdV7Lj6FdxB7kY=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/expo/eas-cli/blob/main/package.json#L38
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-oSy6t6vDeFVfkUp6Dw5PNt1+6MXx2FQIEnzJCPW0ufw=";
+    hash = "sha256-cvr/hSI7VZepRt6uz7J2gkzPaWXq9kjJImTDM+dfOGs=";
   };
 
   nativeBuildInputs = [

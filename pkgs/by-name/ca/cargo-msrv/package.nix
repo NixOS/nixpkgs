@@ -4,8 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   rustup,
-  openssl,
-  stdenv,
+  aws-lc,
   makeWrapper,
   nix-update-script,
 }:
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [ aws-lc ];
 
   nativeBuildInputs = [
     pkg-config

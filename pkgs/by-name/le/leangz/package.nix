@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leangz";
@@ -19,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-n3iqdRbXcSsCL+8/vDcdOXwnbU9k7DTSKR14gZ4Zlxg=";
 
   __structuredAttrs = true;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
