@@ -14,27 +14,23 @@ ceph-python.pkgs.buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${ceph-src.name}/src/python-common";
 
-  postPatch =
-    # upstream hardcodes a placeholder version which does not track the Ceph release
-    ''
-      substituteInPlace setup.py \
-        --replace-fail \
-          "version='1.0.0'" \
-          "version='${finalAttrs.version}'"
-    '';
-
   build-system = with ceph-python.pkgs; [
     setuptools
   ];
 
   dependencies = with ceph-python.pkgs; [
     pyyaml
+    cryptography
   ];
 
   pythonImportsCheck = [ "ceph" ];
 
   nativeCheckInputs = with ceph-python.pkgs; [
     pytestCheckHook
+  ];
+
+  nativeBuildInputs = with ceph-python.pkgs; [
+    pyprojectVersionPatchHook
   ];
 
   disabledTests = [

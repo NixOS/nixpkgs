@@ -27,6 +27,7 @@
   babeltrace,
   ceph-boost,
   bzip2,
+  catch2_3,
   cryptsetup,
   cunit,
   e2fsprogs,
@@ -35,6 +36,7 @@
   gperf,
   graphviz,
   gnugrep,
+  grpc,
   gtest,
   icu,
   kmod,
@@ -52,6 +54,7 @@
   oath-toolkit,
   openldap,
   parted,
+  protobuf,
   ceph-python-env,
   rdkafka,
   ceph-rocksdb,
@@ -163,6 +166,9 @@ stdenv.mkDerivation {
     ceph-python-env
     ceph-python-env.pkgs.python # for the toPythonPath function
     ceph-python-env.pkgs.wrapPython
+    # `cmake/modules/Distutils.cmake` installs the Cython modules (e.g. `rados`, `rbd`)
+    # with `python -m pip install --no-build-isolation --no-deps`
+    ceph-python-env.pkgs.pip
     which
     (ensureNewerSourcesHook { year = "1980"; })
     # for building docs/man-pages presumably
@@ -177,6 +183,7 @@ stdenv.mkDerivation {
       babeltrace
       ceph-boost
       bzip2
+      catch2_3
       # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
       # This is important, otherwise the build system may not find the Python deps and then
       # silently skip installing ceph-volume and other Ceph python tools.
@@ -185,6 +192,7 @@ stdenv.mkDerivation {
       cunit
       e2fsprogs # according to `debian/control` file, `ceph-volume` is supposed to use it
       gperf
+      grpc
       gtest
       icu
       libcap
@@ -203,6 +211,7 @@ stdenv.mkDerivation {
       optLibs3
       optYasm
       parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
+      protobuf
       rdkafka
       ceph-rocksdb
       snappy
@@ -234,6 +243,17 @@ stdenv.mkDerivation {
     ];
 
   inherit (ceph-python-env) sitePackages;
+
+  # `systemd/CMakeLists.txt` takes the unit dir from `pkg-config` with
+  # `pkg_get_variable()`, which sets a normal variable that shadows the
+  # `SYSTEMD_SYSTEM_UNIT_DIR` cache variable (CMake policy `CMP0126` is `NEW`
+  # since upstream requires CMake >= 3.22), so `-DSYSTEMD_SYSTEM_UNIT_DIR=...` is ignored,
+  # and the units would be installed into systemd's own store path.
+  # Overriding the `pkg-config` variables instead works.
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMD_SYSTEM_UNIT_DIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  };
 
   # Picked up, amongst others, by `wrapPythonPrograms`.
   pythonPath = [
@@ -280,13 +300,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeOptionType "path" "CMAKE_INSTALL_DATADIR" "${placeholder "lib"}/lib")
+    # avoid grpc conflicts, see https://github.com/protocolbuffers/protobuf/issues/18307#issuecomment-2813940391
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
 
     (lib.cmakeBool "WITH_CEPHFS_SHELL" true)
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
-    # Providing a type with this (as is the case with `lib.cmakeOptionType`) triggers an edge case.
-    # This requires an upstream fix/patch as soon as upstream raises the minimum CMake version to 3.21 or higher.
-    # See also: https://github.com/NixOS/nixpkgs/pull/494583#issuecomment-4195176699
-    "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
     # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
     #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
     #     Command failed: 2
@@ -311,6 +329,7 @@ stdenv.mkDerivation {
     # Use our own libraries, where possible
     (lib.cmakeBool "WITH_SYSTEM_ARROW" true) # Only used if other options enable Arrow support.
     (lib.cmakeBool "WITH_SYSTEM_BOOST" true)
+    (lib.cmakeBool "WITH_SYSTEM_CATCH2" true)
     (lib.cmakeBool "WITH_SYSTEM_GTEST" true)
     (lib.cmakeBool "WITH_SYSTEM_ROCKSDB" true)
     (lib.cmakeBool "WITH_SYSTEM_UTF8PROC" true)
