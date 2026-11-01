@@ -20,12 +20,19 @@ in
     virtualisation.vlans = [ ];
   };
 
+  containers.no-x = {
+    imports = [ ../common/x11.nix ];
+    virtualisation.vlans = [ ];
+    systemd.services.display-manager.enable = false;
+  };
+
   # Run a nested interactive driver under Xvfb, type into the container through
   # TigerVNC, and check that closing the viewer leaves the container running.
   testScript = ''
     import datetime as dt
     import os
     import subprocess
+    import time
     from collections.abc import Generator
     from contextlib import contextmanager
 
@@ -45,11 +52,33 @@ in
 
         retry(can_connect, timeout=dt.timedelta(seconds=30))
 
-    def wait_for_viewer() -> str:
-        return xdotool(
-            "search", "--sync", "--onlyvisible", "--name",
-            r"machine \(nspawn\)",
+    def search_viewer(*options: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [
+                "${lib.getExe hostPkgs.xdotool}", "search", *options,
+                "--onlyvisible", "--name", r"machine \(nspawn\)",
+            ],
+            stdout=subprocess.PIPE,
+            text=True,
+            timeout=30,
         )
+
+    def wait_for_viewer() -> str:
+        result = search_viewer("--sync")
+        result.check_returncode()
+        return result.stdout.strip()
+
+    def wait_for_viewer_to_close() -> None:
+        def is_closed(_last_try: bool) -> bool:
+            return search_viewer().returncode == 1
+
+        retry(is_closed)
+
+    def assert_stays_stopped(machine: NspawnMachine) -> None:
+        # Allow background retries time to expose an unwanted restart.
+        for _ in range(3):
+            time.sleep(1)
+            assert not machine.is_up(), "container restarted after shutdown"
 
     def open_guest_terminal(machine: NspawnMachine) -> None:
         # Keep the shell prompt from replacing the terminal's window title.
@@ -121,5 +150,28 @@ in
                 xdotool("windowclose", window)
                 machine.wait_until_fails("pgrep -x x11vnc")
                 machine.succeed("test -s /tmp/viewer-input")
+
+            with subtest("shutdown closes the viewer"):
+                machine.shutdown()
+                machine.start()
+                wait_for_viewer()
+                machine.shutdown()
+                wait_for_viewer_to_close()
+                assert_stays_stopped(machine)
+
+            with subtest("guest shutdown closes the viewer"):
+                machine.start()
+                wait_for_viewer()
+                machine.execute("systemctl poweroff")
+                machine.wait_for_shutdown()
+                wait_for_viewer_to_close()
+                assert_stays_stopped(machine)
+
+            with subtest("cleanup while waiting for X11 keeps the container stopped"):
+                no_x = next(m for m in interactive.machines_nspawn if m.name == "no-x")
+                no_x.start()
+                no_x.wait_for_unit("multi-user.target")
+                no_x.release()
+                assert_stays_stopped(no_x)
   '';
 }
