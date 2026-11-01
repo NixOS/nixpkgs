@@ -6,9 +6,6 @@
   versionCheckHook,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
   vulkan-loader,
   libxkbcommon,
   libx11,
@@ -38,29 +35,29 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vectorcraft";
-  version = "0.17.0";
+  version = "0.21.0";
 
   __structuredAttrs = true;
   strictDeps = true;
-
-  env = {
-    CRAFT_FONTS_DIR = "${craft-fonts}";
-    CRAFT_FONTS_REQUIRED = "1";
-  };
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "vectorcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5kfG3C6aKii2ov0j9N8K44LFiEY261saNSmJzvbyLhU=";
+    hash = "sha256-jHdKEfQK+O4WnEkyRnXuQ22248H4YVbrpWfnYz1xSgs=";
   };
 
-  cargoHash = "sha256-WtoC67BVtmNh0YFsDXVVrXV9qcdFYkSC2VBJ/zZlACo=";
+  cargoHash = "sha256-YXuVyRwq8dIT/KlBv/8Bkv1p+zJtPZC01b4pYUIpD8s=";
 
   cargoBuildFlags = [
     "--package=vectorcraft"
     "--package=vectorcraft-cli"
   ];
+
+  env = {
+    CRAFT_FONTS_DIR = craft-fonts;
+    CRAFT_FONTS_REQUIRED = "1";
+  };
 
   # The `vectorcraft` crate runs live GPU tests; software rendering in CI is too slow.
   cargoTestFlags = [
@@ -69,60 +66,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    patchelf
-    copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.vectorcraft";
-      desktopName = "VectorCraft";
-      genericName = "Vector Graphics Editor";
-      comment = "Draw and edit vector illustrations, SVG and PDF";
-      exec = "vectorcraft %F";
-      tryExec = "vectorcraft";
-      icon = "ai.storyteller.vectorcraft";
-      terminal = false;
-      startupNotify = true;
-      startupWMClass = "ai.storyteller.vectorcraft";
-      keywords = [
-        "vector"
-        "illustration"
-        "svg"
-        "pdf"
-        "drawing"
-        "bezier"
-      ];
-      mimeTypes = [
-        "image/svg+xml"
-        "application/pdf"
-        "application/x-vectorcraft"
-        "image/svg+xml-compressed"
-        "application/illustrator"
-        "application/x-ai-template"
-        "image/png"
-        "image/jpeg"
-        "image/gif"
-        "image/webp"
-        "image/tiff"
-        "image/bmp"
-        "application/x-vectorcraft-template"
-        "image/vnd.dxf"
-        "image/emf"
-        "image/wmf"
-        "image/x-eps"
-        "application/x-affinity"
-      ];
-      categories = [
-        "Graphics"
-        "2DGraphics"
-        "VectorGraphics"
-      ];
-    })
-  ];
+  # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.vectorcraft.mime.xml $out/share/mime/packages/ai.storyteller.vectorcraft.xml
+    install -Dm644 packaging/linux/ai.storyteller.vectorcraft.desktop \
+      $out/share/applications/ai.storyteller.vectorcraft.desktop
+    install -Dm644 packaging/linux/ai.storyteller.vectorcraft.mime.xml \
+      $out/share/mime/packages/ai.storyteller.vectorcraft.xml
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
   '';
@@ -139,7 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Vector illustration, a native Illustrator-style editor for SVG and PDF";
     homepage = "https://github.com/storytold/vectorcraft";
-    changelog = "https://github.com/storytold/vectorcraft/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/storytold/vectorcraft/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
