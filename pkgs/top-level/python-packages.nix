@@ -1579,6 +1579,8 @@ self: super: with self; {
 
   attacut = callPackage ../development/python-modules/attacut { };
 
+  attn-gym = callPackage ../development/python-modules/attn-gym { };
+
   attr = callPackage ../development/python-modules/attr { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
@@ -7315,6 +7317,8 @@ self: super: with self; {
   gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
 
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
+
+  grain = callPackage ../development/python-modules/grain { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -14124,6 +14128,8 @@ self: super: with self; {
 
   pricehist = callPackage ../development/python-modules/pricehist { };
 
+  prime-pydantic-config = callPackage ../development/python-modules/prime-pydantic-config { };
+
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
   primepy = callPackage ../development/python-modules/primepy { };
@@ -18189,6 +18195,8 @@ self: super: with self; {
 
   rendercv-fonts = callPackage ../development/python-modules/rendercv-fonts { };
 
+  renderers = callPackage ../development/python-modules/renderers { };
+
   reno = callPackage ../development/python-modules/reno { };
 
   renson-endura-delta = callPackage ../development/python-modules/renson-endura-delta { };
@@ -21113,6 +21121,8 @@ self: super: with self; {
   torch-no-triton = self.torch.override { tritonSupport = false; };
 
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
+
+  torch-remat = callPackage ../development/python-modules/torch-remat { };
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 

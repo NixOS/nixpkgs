@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -20,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torch-checkpointing";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,8 +29,13 @@ buildPythonPackage (finalAttrs: {
     owner = "meta-pytorch";
     repo = "torch_checkpointing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2D9iJVLPKUp5jAnqUHr/cdv0rb+mvWVr8AVkEM3qUjw=";
+    hash = "sha256-gIvPI2s4l7th1RQocCku7NVf+3dledsc64Snbb8QL1E=";
   };
+
+  # The version was not bumped in pyproject.toml for the v0.1.1 tag
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     setuptools
@@ -50,6 +56,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: Expected to see a memory spike of 256 MiB but only saw 160.91015625 MiB
+    "test_serving_a_request_releases_its_shared_memory"
+
     # RuntimeError: Unexpected response from worker process: Traceback (most recent call last):
     # TypeError: timedout_subprocess_init_fn() takes 0 positional arguments but 2 were given
     "test_subprocess_initialization_timeout"

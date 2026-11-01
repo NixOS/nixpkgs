@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spmd-types";
-  version = "0.2.5";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "meta-pytorch";
     repo = "spmd_types";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5N3EcZu9MsQM9Gzow+zt9GY89zd10Y8mpAgS/agGdpM=";
+    hash = "sha256-e5Qsu9bAMftWPDY1ZgLHfCf+xD74Q8GPjktlO7mFJso=";
   };
 
   postPatch = ''
