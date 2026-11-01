@@ -314,7 +314,12 @@ stdenv.mkDerivation (finalAttrs: {
     knownVulnerabilities = [
       "Immich 2.x.x will not receive further updates. Immich 3.x.x is available in NixOS 26.11 (unstable at the time of writing)"
       "CVE-2026-59258"
+      "CVE-2026-77439"
       "CVE-2026-82272"
+      "CVE-2026-104867"
+      "CVE-2026-119328"
+      "CVE-2026-119329"
+      "CVE-2026-119330"
     ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
