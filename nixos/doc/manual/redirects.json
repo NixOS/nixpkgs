@@ -937,12 +937,8 @@
     "index.html#module-services-garage"
   ],
   "module-services-garage-upgrade-scenarios": [
-    "index.html#module-services-garage-upgrade-scenarios"
-  ],
-  "module-services-garage-advanced-upgrades": [
-    "index.html#module-services-garage-advanced-upgrades"
-  ],
-  "module-services-garage-maintainer-info": [
+    "index.html#module-services-garage-upgrade-scenarios",
+    "index.html#module-services-garage-advanced-upgrades",
     "index.html#module-services-garage-maintainer-info"
   ],
   "module-services-youtrack": [
