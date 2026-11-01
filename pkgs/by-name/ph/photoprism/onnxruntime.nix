@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "photoprism-onnxruntime";
   version = "1.31.0";
 
+  __structuredAttrs = true;
+
   # photoprism uses yalue/onnxruntime_go which expressly requires finding a version
   # of onnxruntime whose API version matches exactly what was found at build time.
   # for ease of packaging and maximum compatibility, we'll use on photoprism's own

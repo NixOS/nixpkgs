@@ -99,6 +99,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
   ];

@@ -29,6 +29,8 @@ buildGo127Module {
   inherit src version;
   pname = "photoprism-backend";
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -53,9 +55,10 @@ buildGo127Module {
 
   subPackages = [ "cmd/photoprism" ];
 
-  CGO_CFLAGS = "-I${libtensorflow}/include";
-
-  CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+  env = {
+    CGO_CFLAGS = "-I${libtensorflow}/include";
+    CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
+  };
 
   passthru.updateScript = nix-update-script { };
 
