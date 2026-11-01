@@ -1,42 +1,37 @@
-{ lib, ... }:
-
-{
+{ hostPkgs, lib, ... }: {
   name = "unpackerr";
   meta.maintainers = with lib.maintainers; [
     connor-grady
     Wekuz
   ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      environment.systemPackages = with pkgs; [ zip ];
+  nodes.machine = {
+    systemd.tmpfiles.settings.unpackerr."/srv/unpackerr".d.user = "unpackerr";
 
-      systemd.tmpfiles.settings."10-unpackerr"."/srv/unpackerr".d = {
-        mode = "0775";
-        user = "unpackerr";
-        group = "users";
-      };
-
-      services.unpackerr = {
-        enable = true;
-        group = "users";
-        settings = {
-          start_delay = "15s";
-          folder = [
-            {
-              path = "/srv/unpackerr";
-            }
-          ];
-        };
+    services.unpackerr = {
+      enable = true;
+      settings = {
+        start_delay = "15s";
+        folder.downloads.path = "/srv/unpackerr";
       };
     };
+  };
 
-  testScript = ''
-    machine.wait_for_unit("unpackerr.service")
-    machine.wait_until_succeeds("journalctl -u unpackerr.service --grep '\\[Folder\\] Watching \\(fsnotify\\)'", timeout=60)
-    machine.succeed("echo unpackerr-test > /tmp/file.txt && cd /tmp && zip /srv/unpackerr/test.zip ./file.txt && rm ./file.txt")
-    machine.wait_until_succeeds("[[ -d /srv/unpackerr/test ]]", timeout=120)
-    machine.succeed("""[[ 'unpackerr-test' == "$(< /srv/unpackerr/test/file.txt)" ]]""")
-  '';
+  testScript =
+    let
+      archive = hostPkgs.runCommand "unpackerr-test.zip" { nativeBuildInputs = [ hostPkgs.zip ]; } ''
+        echo unpackerr-test > file.txt
+        zip -b "$TMPDIR" "$out" file.txt
+      '';
+    in
+    ''
+      with subtest("Unpackerr watches the configured folder"):
+        machine.wait_for_unit("unpackerr.service")
+        machine.wait_until_succeeds("journalctl --unit unpackerr.service --invocation 0 --grep 'Watching \\(fsnotify\\): /srv/unpackerr$'")
+
+      with subtest("Unpackerr extracts an archive added to the folder"):
+        machine.succeed("cp ${archive} /srv/unpackerr/test.zip")
+        machine.wait_for_file("/srv/unpackerr/test/file.txt")
+        assert machine.succeed("cat /srv/unpackerr/test/file.txt") == "unpackerr-test\n"
+    '';
 }
