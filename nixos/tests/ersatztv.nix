@@ -2,7 +2,10 @@
 
 {
   name = "ersatztv";
-  meta.maintainers = with lib.maintainers; [ allout58 ];
+  meta.maintainers = with lib.maintainers; [
+    allout58
+    font44
+  ];
 
   nodes.basic =
     { ... }:

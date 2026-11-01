@@ -65,7 +65,10 @@ buildDotnetModule rec {
     description = "Stream custom live channels using your own media";
     homepage = "https://ersatztv.org/";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ allout58 ];
+    maintainers = with lib.maintainers; [
+      allout58
+      font44
+    ];
     mainProgram = "ErsatzTV";
     platforms = dotnet-runtime.meta.platforms;
   };

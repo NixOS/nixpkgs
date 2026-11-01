@@ -133,5 +133,8 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ allout58 ];
+  meta.maintainers = with maintainers; [
+    allout58
+    font44
+  ];
 }
