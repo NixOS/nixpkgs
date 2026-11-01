@@ -6,7 +6,7 @@ diff --git a/setuptools/version.py b/setuptools/version.py
 -
 -try:
 -    __version__ = metadata.version('setuptools') or '0.dev0+unknown'
--except Exception:
+-except Exception:  # noqa: BLE001 # intentional broad fallback
 -    __version__ = '0.dev0+unknown'
 +# Hardcoded for reproducible builds
 +# This avoids runtime metadata queries that can vary between builds

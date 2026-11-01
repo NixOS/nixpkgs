@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "setuptools";
-  version = "83.0.0";
+  version = "84.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gn2gH2LnsgeX1MvDRBbnFnI6WjkjBFItU4SelowkjBc=";
+    hash = "sha256-obgIUthGkB2A3DrxtiQDh2wf2BStaDtPdqOPIX52P+c=";
   };
 
   patches = [
