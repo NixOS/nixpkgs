@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   # install dependencies
   pytest,
   vcrpy,
@@ -25,6 +26,17 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
   };
+
+  patches = [
+    # fixes test_pytest_vcr_incompatibility test
+    (fetchpatch {
+      url = "https://github.com/kiwicom/pytest-recording/pull/211.patch";
+      excludes = [
+        ".github/workflows/build.yml"
+      ];
+      hash = "sha256-rQnS4Z26jdQ5qKpMmsF/TU/jpdgxu7eCqgDB7GOmLpE=";
+    })
+  ];
 
   build-system = [ hatchling ];
 
