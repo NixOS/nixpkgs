@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "toxvpn";
-  version = "0-unstable-2024-08-21";
+  version = "0-unstable-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "cleverca22";
     repo = "toxvpn";
-    rev = "c727451eb871b43855b825ff93dc48fa0d3320b6";
-    sha256 = "sha256-UncU0cpoyy9Z0TCChGmaHpyhW9ctz32gU7n3hgpOEwU=";
+    rev = "300991571421d6bbcbc9786c8e7a479b7b24d82b";
+    sha256 = "sha256-7kJ/vLJ+xYD2A4DaDGrW0NScByU/etINhPhZRRnS6Yw=";
   };
 
   buildInputs = [
@@ -37,11 +37,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DSYSTEMD=1" ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
-  '';
 
   # https://nodes.tox.chat/json
   postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/bootstrap.json";
