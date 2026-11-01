@@ -9280,8 +9280,11 @@ with pkgs;
 
   ### GAMES
 
-  inherit (callPackages ../games/fteqw { })
-    fteqw
+  inherit
+    ({
+      fteqw-dedicated = callPackage ../by-name/ft/fteqw/fteqw-dedicated.nix { };
+      fteqcc = callPackage ../by-name/ft/fteqw/fteqcc.nix { };
+    })
     fteqw-dedicated
     fteqcc
     ;
