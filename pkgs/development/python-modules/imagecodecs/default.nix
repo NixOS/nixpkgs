@@ -30,18 +30,15 @@
   pytestCheckHook,
 }:
 
-let
-  version = "2026.10.10";
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imagecodecs";
-  inherit version;
+  version = "2026.10.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgohlke";
     repo = "imagecodecs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PGctU16wv0bisjJ8JwZxfUrIMzU9lR0A+pnvoBl2SY4=";
   };
 
@@ -111,8 +108,8 @@ buildPythonPackage rec {
   meta = {
     description = "Image transformation, compression, and decompression codecs";
     homepage = "https://github.com/cgohlke/imagecodecs";
-    changelog = "https://github.com/cgohlke/imagecodecs/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/cgohlke/imagecodecs/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})
