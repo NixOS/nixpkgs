@@ -46,6 +46,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/librelane/libparse-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ gonsolo ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
