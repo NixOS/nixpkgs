@@ -10,6 +10,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "ktactilefeedback";
   version = "0-unstable-2025-07-25";
+  strictDeps = true;
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
