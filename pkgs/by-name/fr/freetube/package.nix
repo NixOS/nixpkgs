@@ -9,27 +9,27 @@
   nodejs,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_10_latest,
+  pnpm_11,
   makeShellWrapper,
   copyDesktopItems,
   darwin,
-  electron_42,
+  electron_44,
   nixosTests,
 }:
 let
   description = "Open Source YouTube app for privacy";
-  pnpm = pnpm_10_latest;
-  electron = electron_42;
+  pnpm = pnpm_11;
+  electron = electron_44;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.25.3";
+  version = "0.25.3-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
-    tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-eaf10W8dBMJDlqOFd57hsqQqRcBOYAMavLrfmkuRbSw=";
+    rev = "59cdc37fe76128732a65d7567bb4a1141f87dd76";
+    hash = "sha256-C8/UCKfENOekXLNYCPwfERW3qmIaFGjd/5iAa2/mPTc=";
   };
 
   __structuredAttrs = true;
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-rsgDxK6X2EzgPwIb9A9I+STkKI882i8jDuL4pO5kJHU=";
+    hash = "sha256-lr79nLk/zdKlE9fmmmipp1jqLqJu1oPjXGP4JFuWNts=";
   };
 
   nativeBuildInputs = [
