@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxmu
   ];
 
+  strictDeps = true;
+
   sourceRoot = "${finalAttrs.src.name}/Sil/src";
 
   makefile = "Makefile.std";
