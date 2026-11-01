@@ -438,6 +438,7 @@ mapAliases {
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
   modeled = throw "'modeled' has been removed because it is unmaintained"; # Added 2026-01-19
   monarchmoney = throw "'monarchmoney' has been renamed to/replaced by 'monarchmoneycommunity'"; # Added 2026-03-05
+  monero = throw "'monero' has been removed due to being archived upstream"; # added 2026-11-03
   monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
   more-properties = throw "'more-properties' has been removed to due lack of upstream maintenance"; # Added 2026-07-14
   moretools = throw "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
