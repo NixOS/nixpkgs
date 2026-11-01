@@ -22,6 +22,10 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
+  postInstall = ''
+    rm "$out/bin/anko_test.log"
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   meta = {
