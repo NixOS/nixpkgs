@@ -110,7 +110,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pulsar";
-  version = "1.133.0";
+  version = "1.133.1";
 
   src =
     finalAttrs.passthru.srcs.${stdenv.hostPlatform.system}
@@ -119,11 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
-      hash = "sha256-8FBt+sR6LO9TrP07jViGHlFL0P2JczHEhMRxKOFfBZA=";
+      hash = "sha256-zJtdZQFEJnQ4PUNwOiZKphsHbLV0QbJ8XT+AxSWN3tk=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
-      hash = "sha256-mvgHu3RVBc1QFNViTOalZkTQFkURzxbYmSM0i9M27Ss=";
+      hash = "sha256-hH0/z+zUB/1EBIVClBJIhWhpb/Gdg0WhC65fUq43f1Y=";
     };
   };
 
