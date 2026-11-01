@@ -4253,7 +4253,7 @@ with pkgs;
   # Python package sets.
   python311Packages = python311.pkgs;
   python312Packages = python312.pkgs;
-  python313Packages = recurseIntoAttrs python313.pkgs;
+  python313Packages = python313.pkgs;
   python314Packages = recurseIntoAttrs python314.pkgs;
   python315Packages = python315.pkgs;
   python316Packages = python316.pkgs;
