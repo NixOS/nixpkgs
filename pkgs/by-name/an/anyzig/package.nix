@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Universal zig executable that lets you run any version of zig";
     homepage = "https://github.com/marler8997/anyzig";
-    changelog = "https://github.com/marler8997/anyzig/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/marler8997/anyzig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zig";
