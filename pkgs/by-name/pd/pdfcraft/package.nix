@@ -36,19 +36,30 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdfcraft";
-  version = "0.14.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "pdfcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UCTQr6j4TqPXQWH410cF6DZC0vK59QFv1FAWzxdDjwA=";
+    hash = "sha256-agLr61nG0/s786ZYj2AS2uw8hhH7a20TcCEjedHyygk=";
   };
 
-  cargoHash = "sha256-L0fC96fLlwTq0Gu0CSL9swKzZe4lcgLFsMsaIk3CxuY=";
+  cargoHash = "sha256-fE6KX6KMyc22kdiJiqJLnCnVXTxHNWlhtEf/0vqCf88=";
 
-  # rten-gemm uses AVX512-VNNI intrinsics that fail to compile with nixpkgs rustc.
-  postPatch = lib.optionalString stdenv.hostPlatform.isx86_64 ''
+  # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail $'egui_demo_lib = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' "" \
+      --replace-fail $'egui_inspection = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' "" \
+      --replace-fail $'egui_system_font_provider = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' ""
+
+    # Until https://github.com/storytold/craft-libs/issues/492: startup update UI does not work on NixOS.
+    substituteInPlace apps/pdfcraft/src/main.rs \
+      --replace-fail 'app.set_startup_update_check(true);' 'app.set_startup_update_check(false);'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isx86_64 ''
+        # rten-gemm uses AVX512-VNNI intrinsics that fail to compile with nixpkgs rustc.
         substituteInPlace "$cargoDepsCopy"/source-registry-0/rten-gemm-*/src/i8dot.rs \
           --replace-fail \
           '            if let Some(isa) = x86_64::Avx512VnniIsa::new() {
@@ -100,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Open-source PDF workbench for reading, organizing, and securing documents";
     homepage = "https://github.com/storytold/pdfcraft";
-    changelog = "https://github.com/storytold/pdfcraft/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/storytold/pdfcraft/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
