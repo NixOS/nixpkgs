@@ -149,9 +149,9 @@ let
         hicolor-icon-theme
         libx11
         webkitgtk_4_1
+        libspnav
       ]
-      ++ lib.optional withSystemd systemdLibs
-      ++ [ libspnav ];
+      ++ lib.optional withSystemd systemdLibs;
 
       strictDeps = true;
 
