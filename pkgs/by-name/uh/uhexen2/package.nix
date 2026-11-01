@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     rev = "4ef664bc41e3998b0d2a55ff1166dadf34c936be";
   };
 
+  nativeBuildInputs = [
+    SDL # for sdl-config
+  ];
+
   buildInputs = [
     SDL
     alsa-lib
@@ -30,6 +34,8 @@ stdenv.mkDerivation {
     libmad
     xdelta
   ];
+
+  strictDeps = true;
 
   makeFiles = [
     "engine/hexen2 glh2"
