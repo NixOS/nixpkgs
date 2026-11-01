@@ -10,7 +10,45 @@ let
   cfg = config.programs.fish;
 
   fishAbbrs = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (k: v: "abbr -a ${k} -- ${lib.escapeShellArg v}") cfg.shellAbbrs
+    lib.mapAttrsToList (
+      k: v:
+      let
+        isOpts = lib.isAttrs v;
+        name = if isOpts && v.name != null then v.name else k;
+        modifiers =
+          if !isOpts then
+            ""
+          else
+            lib.cli.toCommandLineShell
+              (optionName: {
+                option = "--${optionName}";
+                sep = if optionName == "set-cursor" || optionName == "description" then "=" else null;
+                explicitBool = false;
+                formatArg = lib.generators.mkValueStringDefault { };
+              })
+              {
+                position = v.position or null;
+                regex = v.regex or null;
+                command = v.command or null;
+                function = v.function or null;
+                description = v.description or null;
+                set-cursor = v.setCursor;
+              };
+        expansion = if isOpts then v.expansion else v;
+      in
+      lib.concatStringsSep " " (
+        [
+          "abbr"
+          "--add"
+        ]
+        ++ lib.optionals (modifiers != "") [ modifiers ]
+        ++ [
+          "--"
+          name
+        ]
+        ++ lib.optionals (expansion != null) [ (lib.escapeShellArg expansion) ]
+      )
+    ) cfg.shellAbbrs
   );
 
   fishAliases = lib.concatStringsSep "\n" (
@@ -33,6 +71,89 @@ let
         '';
     }
   );
+
+  abbrModule = lib.types.submodule {
+    options = {
+      name = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          The abbreviation name. Defaults to the attribute name.
+        '';
+      };
+
+      expansion = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          The command the abbreviation expands to. May not be combined with
+          {option}`function`.
+        '';
+      };
+
+      position = lib.mkOption {
+        type =
+          with lib.types;
+          nullOr (enum [
+            "command"
+            "anywhere"
+          ]);
+        default = null;
+        example = "anywhere";
+        description = ''
+          Where the abbreviation may occur. Maps to fish's
+          {command}`abbr --position` flag.
+        '';
+      };
+
+      regex = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          A regular expression the abbreviation matches, instead of the literal
+          name. Maps to fish's {command}`abbr --regex` flag.
+        '';
+      };
+
+      command = lib.mkOption {
+        type = with lib.types; nullOr (either str (listOf str));
+        default = null;
+        description = ''
+          Commands within which the abbreviation expands. Maps to fish's
+          {command}`abbr --command` flag (fish >= 4.0.0).
+        '';
+      };
+
+      setCursor = lib.mkOption {
+        type = with lib.types; either bool str;
+        default = false;
+        description = ''
+          Place the cursor at a `%` marker in the expansion instead of at its
+          end. `true` uses fish's default marker, a string sets a custom one.
+          Maps to fish's {command}`abbr --set-cursor` flag.
+        '';
+      };
+
+      function = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          Name of a fish function that produces the expansion, instead of
+          {option}`expansion`. Maps to fish's {command}`abbr --function` flag.
+          May not be combined with {option}`expansion`.
+        '';
+      };
+
+      description = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          Description shown in the completion pager. Maps to fish's
+          {command}`abbr --description` flag (fish >= 4.9.0).
+        '';
+      };
+    };
+  };
 
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
@@ -135,11 +256,26 @@ in
         example = {
           gco = "git checkout";
           npu = "nix-prefetch-url";
+          gcm = {
+            setCursor = true;
+            expansion = "git commit -m \"%\"";
+          };
+          gc = {
+            position = "anywhere";
+            command = "git";
+            expansion = "git checkout";
+          };
+          lsd = {
+            description = "List files with details";
+            expansion = "ls -lah";
+          };
         };
         description = ''
-          Set of fish abbreviations.
+          Set of fish abbreviations. Each attribute maps an abbreviation name
+          to either a string expansion or an attribute set of options
+          (see {option}`programs.fish.shellAbbrs.*` for details).
         '';
-        type = with lib.types; attrsOf str;
+        type = with lib.types; attrsOf (either str abbrModule);
       };
 
       shellAliases = lib.mkOption {
@@ -239,6 +375,38 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
+
+    assertions = lib.concatMap (
+      name:
+      let
+        def = cfg.shellAbbrs.${name};
+      in
+      lib.optionals (lib.isAttrs def) (
+        [
+          {
+            assertion = ((def.function or null) == null) != ((def.expansion or null) == null);
+            message = "programs.fish.shellAbbrs.${name}: exactly one of `function` and `expansion` must be set.";
+          }
+          {
+            assertion = !((def.position or null) == "command" && (def.command or null) != null);
+            message = "programs.fish.shellAbbrs.${name}: `command` cannot be combined with `position = \"command\"`.";
+          }
+        ]
+        ++
+          lib.optional ((def.command or null) != null && !(lib.versionAtLeast cfg.package.version "4.0.0"))
+            {
+              assertion = false;
+              message = "programs.fish.shellAbbrs.${name}: `command` requires fish >= 4.0.0 (you have ${cfg.package.version}).";
+            }
+        ++
+          lib.optional
+            ((def.description or null) != null && !(lib.versionAtLeast cfg.package.version "4.9.0"))
+            {
+              assertion = false;
+              message = "programs.fish.shellAbbrs.${name}: `description` requires fish >= 4.9.0 (you have ${cfg.package.version}).";
+            }
+      )
+    ) (lib.attrNames cfg.shellAbbrs);
 
     # Required for man completions
     documentation.man.cache.enable = lib.mkDefault true;
