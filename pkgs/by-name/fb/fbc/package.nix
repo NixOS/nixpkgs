@@ -13,13 +13,13 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fbc";
   version = "1.10.1";
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
-    url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
+    url = "https://github.com/freebasic/fbc/releases/download/${finalAttrs.version}/FreeBASIC-${finalAttrs.version}-source-bootstrap.tar.xz";
     hash = "sha256-LBROv3m1DrEfSStMbNuLC+fldYNfSS+D09bJyNMNPP0=";
   };
 
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     libxpm
     libxrandr
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -91,7 +93,7 @@ stdenv.mkDerivation rec {
     make clean
 
     echo Compile patched host everything with previous patched stage
-    buildFlagsArray+=("FBC=$PWD/patched-fbc/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc")
+    buildFlags+=("FBC=$PWD/patched-fbc/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc")
   '';
 
   installFlags = [
@@ -121,11 +123,13 @@ stdenv.mkDerivation rec {
 
     # Run check targets in series, else the logs are a mess
     for target in $checkTarget; do
-      make $target -j$checkJobs $makeFlags $checkFlags
+      make $target -j$checkJobs "''${makeFlags[@]}" "''${checkFlags[@]}"
     done
 
     runHook postCheck
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.freebasic.net/";
@@ -141,4 +145,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = with lib.platforms; windows ++ linux;
   };
-}
+})

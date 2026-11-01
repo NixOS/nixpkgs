@@ -20,8 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkTargets = [ "installcheck" ];
-
   meta = {
     description = "Fortran source code formatter";
     homepage = "https://sourceforge.net/projects/findent/";

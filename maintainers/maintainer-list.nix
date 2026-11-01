@@ -31828,12 +31828,6 @@
       }
     ];
   };
-  wizeman = {
-    email = "rcorreia@wizy.org";
-    github = "wizeman";
-    githubId = 168610;
-    name = "Ricardo M. Correia";
-  };
   wjohnsto = {
     name = "Will Johnston";
     github = "wjohnsto";

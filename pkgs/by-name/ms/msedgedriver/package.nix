@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
-  version = "156.0.4314.50";
+  version = "156.0.4314.58";
 
   src =
     let
@@ -28,9 +28,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_${driverArch}.zip";
       hash =
         {
-          mac64_m1 = "sha256-PfG14CoVbkhyC5BJz8m9YRhVunaDG8GZULflNJmgHy0=";
-          mac64 = "sha256-MWz3QkPPiEJV5zq7ZwjlCZZOBCOeU43dbMhWer/nJ44=";
-          linux64 = "sha256-M3+Ynr4Xu4YUm6u/un6Dj3qaw2QSTqz/J9f6qw3xpis=";
+          mac64_m1 = "sha256-msyInRs4Q0rATTG8l/O3nQnEmOElYef/DgPYDtPE5KE=";
+          mac64 = "sha256-dolGGG/VZILREF6ffGs9xJ2qBOdSS0OZFxB5ggirqB8=";
+          linux64 = "sha256-lrahImZ6LLD7NosEEf1MPhvZcPTNGcu1NHSRHxHrZBM=";
         }
         .${driverArch};
       stripRoot = false;
