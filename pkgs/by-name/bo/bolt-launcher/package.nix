@@ -25,8 +25,16 @@
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
+  # Extra packages for the FHS environment, e.g. the libraries the RS3 client
+  # needs, see https://wiki.nixos.org/wiki/Bolt-launcher
+  extraPkgs ? pkgs: [ ],
   enableRS3 ? false,
 }:
+assert lib.assertMsg (!enableRS3) ''
+  bolt-launcher: `enableRS3` has been removed, as the RS3 client needs OpenSSL 1.1
+  and GTK 2, which are end of life. To use RS3, add `openssl_1_1` and `gtk2-x11`
+  from nixos-26.05 with `extraPkgs`.
+'';
 let
   cef = cef-binary.override {
     version = "141.0.7";
@@ -132,13 +140,7 @@ buildFHSEnv {
       libGL
       libnotify
     ])
-    ++ lib.optionals enableRS3 (
-      with pkgs;
-      [
-        gtk2-x11
-        # openssl_1_1
-      ]
-    );
+    ++ extraPkgs pkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
@@ -156,7 +158,8 @@ buildFHSEnv {
     changelog = "https://codeberg.org/Adamcake/Bolt/releases/tag/${bolt.version}";
     description = "Alternative launcher for RuneScape";
     longDescription = ''
-      Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
+      Bolt Launcher supports HDOS/RuneLite. The RS3 client needs end-of-life
+      libraries (OpenSSL 1.1, GTK 2), which can be added with `extraPkgs`.
     '';
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
@@ -166,8 +169,5 @@ buildFHSEnv {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bolt-launcher";
-  }
-  // (lib.optionalAttrs enableRS3 {
-    problems.broken.message = "OpenSSL 1.1 has been end of life since 2023 and will be removed soon.";
-  });
+  };
 }
