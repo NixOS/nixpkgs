@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
 
   # reverse dependencies
   mashumaro,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-L1BRIDYz0YqYE4geKTxIkbCbzTGz7AtrbpB5vR8T4dw=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   pythonImportsCheck = [ "typing_extensions" ];
 
