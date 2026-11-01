@@ -27788,6 +27788,11 @@
     githubId = 9720532;
     name = "Else Someone";
   };
+  someplaceguy = {
+    name = "Ricardo Correia";
+    github = "someplaceguy";
+    githubId = 138138196;
+  };
   sontek = {
     email = "sontek@gmail.com";
     github = "sontek";
