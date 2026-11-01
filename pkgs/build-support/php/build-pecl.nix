@@ -63,7 +63,7 @@ stdenv.mkDerivation (
     checkPhase = ''
       runHook preCheck
 
-      NO_INTERACTON=yes make test
+      NO_INTERACTON=yes make test TESTS="--show-diff"
 
       runHook postCheck
     '';
