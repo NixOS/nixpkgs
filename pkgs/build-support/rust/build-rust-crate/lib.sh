@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 echo_build_heading() {
   if (( $# == 1 )); then
     echo_colored "Building $1"

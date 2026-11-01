@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook to use for pip projects
 # shellcheck shell=bash
 

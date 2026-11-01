@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # See pkgs/build-support/setup-hooks/role.bash
 getHostRole
 

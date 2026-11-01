@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addToEmacsLoadPath() {
   local lispDir="$1"
   if [[ -d $lispDir && ${EMACSLOADPATH-} != *"$lispDir":* ]] ; then

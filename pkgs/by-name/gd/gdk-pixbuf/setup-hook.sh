@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 findGdkPixbufLoaders() {
 
     # choose the longest loaders.cache

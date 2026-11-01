@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 mkdir unzipped
 pushd unzipped
 unzip $src || true

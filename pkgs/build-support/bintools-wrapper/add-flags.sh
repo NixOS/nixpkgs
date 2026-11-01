@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # See cc-wrapper for comments.
 var_templates_list=(
     NIX_IGNORE_LD_THROUGH_GCC

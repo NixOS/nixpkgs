@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Clean up __init__.py's found in namespace directories
 # shellcheck shell=bash
 

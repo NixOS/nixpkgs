@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils gnugrep gnused
+# shellcheck shell=bash
 
 ################################################################################
 # nix-diff.sh                                                                  #

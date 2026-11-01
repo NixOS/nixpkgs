@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addAdaObjectsPath() {
     local role_post
     getHostRoleEnvHook

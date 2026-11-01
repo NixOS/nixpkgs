@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook strips libraries and executables in the fixup phase.
 
 fixupOutputHooks+=(_doStrip)

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # pkg-config Wrapper hygiene
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.

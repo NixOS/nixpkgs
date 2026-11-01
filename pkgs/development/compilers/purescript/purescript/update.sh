@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnused jq -I nixpkgs=.
+# shellcheck shell=bash
 #
 # This script will update the purescript derivation to the latest version.
 

@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p common-updater-scripts python3
+# shellcheck shell=bash
 
 set -ueo pipefail
 

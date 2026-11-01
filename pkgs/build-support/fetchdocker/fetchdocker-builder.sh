@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "exporting ${repository}/${imageName} (tag: ${tag}) into ${out}"
 mkdir -p "${out}"
 

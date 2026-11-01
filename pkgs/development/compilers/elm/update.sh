@@ -1,6 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../..
 #!nix-shell --pure -p nix cacert cabal2nix elm2nix nixfmt -i bash ../../../..
+# shellcheck shell=bash
 
 set -o errexit
 set -o nounset

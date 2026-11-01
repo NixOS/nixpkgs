@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
     tail -n +$skip $src | bsdtar xvf -

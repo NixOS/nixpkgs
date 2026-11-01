@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl jq git gnused gnugrep
+# shellcheck shell=bash
 
 
 # executing this script without arguments will

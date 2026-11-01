@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 mkdir -p $out
 
 mkdir root

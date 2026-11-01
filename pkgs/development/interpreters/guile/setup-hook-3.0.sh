@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addGuileLibPath () {
     if test -d "$1/share/guile/site/3.0"; then
         addToSearchPath GUILE_LOAD_PATH "$1/share/guile/site/3.0"

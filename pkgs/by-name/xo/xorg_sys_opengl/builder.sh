@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 mkdir -p $out/lib
 
 ln -s /usr/lib/libGL.so.1 $out/lib/

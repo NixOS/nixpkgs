@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 local oldOpts="-u"
 shopt -qo nounset || oldOpts="+u"
 set +u

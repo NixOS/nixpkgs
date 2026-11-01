@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addGstreamer1LibPath () {
     if test -d "$1/lib/gstreamer-1.0"
     then

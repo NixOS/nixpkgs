@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 LXQtCMakePostHook() {
   cmakeFlagsArray+=(
     -DLXQT_LIBRARY_NAME=lxqt

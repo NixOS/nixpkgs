@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 findTarball() {
     local suffix i
     if [ -d "$1/tarballs/" ]; then

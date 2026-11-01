@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 venvShellHook() {
     echo "Executing venvHook"
     runHook preShellHook

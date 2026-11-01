@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for writing octave packages that are run-time dependencies for
 # another package to a nix-support file.
 # `echo`s the full path name to the package derivation that is required.

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl -p unzip
+# shellcheck shell=bash
 
 set -eu
 set -o pipefail

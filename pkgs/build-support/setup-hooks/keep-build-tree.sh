@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 appendToVar prePhases moveBuildDir
 
 moveBuildDir() {

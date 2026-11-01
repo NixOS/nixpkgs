@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # tested so far with:
 # - no revision specified and remote has a HEAD which is used
 # - revision specified and remote has a HEAD

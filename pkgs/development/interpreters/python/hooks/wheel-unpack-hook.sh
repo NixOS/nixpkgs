@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook to use in case a wheel is fetched
 echo "Sourcing wheel setup hook"
 

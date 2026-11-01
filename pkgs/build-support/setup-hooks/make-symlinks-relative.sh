@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # symlinks are often created in postFixup
 # don't use fixupOutputHooks, it is before postFixup
 if [[ -z "${dontRewriteSymlinks-}" ]]; then

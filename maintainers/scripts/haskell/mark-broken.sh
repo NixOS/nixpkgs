@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p coreutils git -I nixpkgs=.
+# shellcheck shell=bash
 
 # This script uses the data pulled with
 # maintainers/scripts/haskell/hydra-report.hs get-report to produce a list of

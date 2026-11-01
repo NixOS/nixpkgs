@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook moves $out/{man,doc,info} to $out/share.
 
 preFixupHooks+=(_moveToShare)

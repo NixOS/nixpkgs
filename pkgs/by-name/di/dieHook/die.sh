@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Exit with backtrace and error message
 #
 # Usage: die "Error message"

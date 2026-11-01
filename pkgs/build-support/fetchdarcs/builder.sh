@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 runHook preFetch
 
 tagtext=""

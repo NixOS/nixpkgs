@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 gettextDataDirsHook() {
     # See pkgs/build-support/setup-hooks/role.bash
     getHostRoleEnvHook

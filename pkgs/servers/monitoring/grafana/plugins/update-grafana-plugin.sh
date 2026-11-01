@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash --packages nix curl jq
+# shellcheck shell=bash
 
 set -o errexit -o nounset -o pipefail
 

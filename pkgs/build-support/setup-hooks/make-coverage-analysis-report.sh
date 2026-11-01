@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 appendToVar postPhases coverageReportPhase
 
 coverageReportPhase() {

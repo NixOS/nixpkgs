@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 unpackPhase="unpackGog"
 
 unpackGog() {

@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p bash bundix bundler
+# shellcheck shell=bash
 
 set -e
 

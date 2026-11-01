@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This hook ensures that we do the following in post-fixup:
 # * wrap any installed executables with a wrapper that configures TCLLIBPATH
 # * write a setup hook that extends the TCLLIBPATH of any anti-dependencies

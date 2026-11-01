@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for setuptools.
 # shellcheck shell=bash
 

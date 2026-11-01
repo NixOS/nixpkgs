@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "Cloning Fossil $url [$rev] into $out"
 
 # Fossil, bless its adorable little heart, wants to write global configuration

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Unconditionally adding in platform version flags will result in warnings that
 # will be treated as errors by some packages. Add any missing flags here.
 

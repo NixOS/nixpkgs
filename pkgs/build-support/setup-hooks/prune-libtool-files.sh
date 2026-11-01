@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Clear dependency_libs in libtool files for shared libraries.
 
 # Shared libraries already encode their dependencies with locations.  .la

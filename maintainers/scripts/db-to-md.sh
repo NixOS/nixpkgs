@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=. -i bash -p pandoc
+# shellcheck shell=bash
 
 # This script is temporarily needed while we transition the manual to
 # CommonMark. It converts DocBook files into our CommonMark flavour.

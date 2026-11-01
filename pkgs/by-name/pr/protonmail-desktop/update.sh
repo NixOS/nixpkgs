@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils jq
 
-# shellcheck disable=SC1008
+# shellcheck shell=bash
 
 set -eu -o pipefail
 

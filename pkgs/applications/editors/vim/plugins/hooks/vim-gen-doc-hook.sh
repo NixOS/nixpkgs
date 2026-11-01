@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 echo "Sourcing vim-gen-doc-hook"
 
 # the doc folder is copied via the copy_directories entry of the rockspec
@@ -27,4 +28,3 @@ vimPluginGenTags() {
 }
 
 preFixupHooks+=(vimPluginGenTags)
-

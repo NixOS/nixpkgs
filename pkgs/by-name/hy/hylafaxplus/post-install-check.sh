@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # check if the package contains all the files needed
 for x in faxq faxquit hfaxd faxcron faxqclean faxgetty
 do

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook to use in case a conda binary package is installed
 echo "Sourcing conda install hook"
 

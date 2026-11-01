@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -p coreutils -i bash
+# shellcheck shell=bash
 
 scriptDir=$(cd "`dirname "$0"`"; pwd)
 echo "scriptDir='$scriptDir'"

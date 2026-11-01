@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p busybox unbound
+# shellcheck shell=bash
 
 TMP=`mktemp`
 unbound-anchor -a "$TMP"

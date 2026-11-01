@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 boot_bin=$out/bin/boot
 
 mkdir -pv $(dirname $boot_bin)

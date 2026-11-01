@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 appendToVar postPhases cleanupBuildDir
 
 # Force GCC to build with coverage instrumentation.  Also disable

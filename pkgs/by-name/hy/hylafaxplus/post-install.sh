@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Parts of the `install` make target don't
 # dare to set file modes (or owners), but put the
 # needed commands in a new file called `root.sh`.

@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # fixQtModulePaths
 #
 # Usage: fixQtModulePaths _dir_

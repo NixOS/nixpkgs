@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -p coreutils curl.out nix jq gnused -i bash
+# shellcheck shell=bash
 
 # Usage:
 # ./update.sh [PRODUCT]

@@ -1,4 +1,5 @@
 #! @shell@
+# shellcheck shell=bash
 
 systemConfig=@systemConfig@
 

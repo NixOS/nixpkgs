@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Setup hook for recompiling bytecode.
 # https://github.com/NixOS/nixpkgs/issues/81441
 echo "Sourcing python-recompile-bytecode-hook.sh"

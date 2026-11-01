@@ -1,4 +1,5 @@
 #! @runtimeShell@ -e
+# shellcheck shell=bash
 
 # skip this if there are no modems at all
 if ! stat -t "@spoolAreaPath@"/etc/config.* >/dev/null 2>&1

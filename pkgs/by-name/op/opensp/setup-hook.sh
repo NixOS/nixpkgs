@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 addSGMLCatalogs () {
       if test -d $1/sgml/dtd; then
           for i in $(find $1/sgml/dtd -name docbook.cat); do

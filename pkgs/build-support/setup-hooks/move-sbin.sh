@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # This setup hook, for each output, moves everything in $output/sbin
 # to $output/bin, and replaces $output/sbin with a symlink to
 # $output/bin.
