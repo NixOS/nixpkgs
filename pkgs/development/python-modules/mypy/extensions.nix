@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   pythonAtLeast,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-HNAFsWX4tU9hfZkKxLNJn1J+H3uTesQflbRPlo3GQ4k=";
   };
 
-  dependencies = [ flit-core ];
+  dependencies = [ flit-core_3 ];
 
   # make the testsuite run with pytest, so we can disable individual tests
   nativeCheckInputs = [ pytestCheckHook ];
