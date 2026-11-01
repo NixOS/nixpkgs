@@ -9280,11 +9280,9 @@ with pkgs;
 
   ### GAMES
 
-  inherit (callPackages ../games/fteqw { })
-    fteqw
-    fteqw-dedicated
-    fteqcc
-    ;
+  fteqw-dedicated = callPackage ../by-name/ft/fteqw/fteqw-dedicated.nix { };
+
+  fteqcc = callPackage ../by-name/ft/fteqw/fteqcc.nix { };
 
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
