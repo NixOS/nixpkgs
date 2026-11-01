@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxy";
-  version = "1.0.4";
+  version = "1.0.5";
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Skd0r+gcoraNlijXJ5WXONkmlWb0TZq7/7vfQcKumOY=";
+    hash = "sha256-BpScQFek0T+lHjjtfXyOZDOVfEWOGpLwSkPVtljzqMc=";
   };
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
-  cargoHash = "sha256-GO0WsEwfeISbIlbywdV0Y6ThqDQjRHL2uv0zfVlvi5g=";
+  cargoHash = "sha256-UTTGTxzi0y1T3+SnSNrKRCus0lnoODCtN5qRknZJ1HE=";
   # `Result::unwrap()` on an `Err` value: Tls("platform verifier: unexpected error: No CA certificates were loaded from the system")
   nativeCheckInputs = [
     cacert
