@@ -23,9 +23,9 @@
   pnpmConfigHook,
   pnpm_11,
   rustPlatform,
-  # speechd-minimal,
   wrapGAppsHook3,
   xdg-utils,
+  xz,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
@@ -118,7 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    cef-binary
     gtk3
     librsvg
     openssl
@@ -133,6 +132,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxrandr
   ];
 
+  env.CEF_PATH = finalAttrs.passthru.cefPath;
+
   preBuild = ''
     # Assert that `cef-dll-sys` and `cef-binary`'s major versions are the same
     cefMajor=$(
@@ -144,14 +145,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       echo "readest: Cargo.lock wants CEF major '$cefMajor', but cef-binary is ${cef-binary.version}" >&2
       exit 1
     fi
-
-    export CEF_PATH="$NIX_BUILD_TOP/cef"
-    mkdir -p "$CEF_PATH"
-
-    # The Rust bindings expect the runtime libraries and resources in one directory.
-    # https://github.com/chromiumembedded/cef/blob/be1e15d/tools/distrib/linux/README.minimal.txt
-    ln -s ${cef-binary}/Release/* ${cef-binary}/Resources/* "$CEF_PATH/"
-    ln -s ${cef-binary}/include "$CEF_PATH/include"
 
     # Set up pdf.js assets.
     pnpm setup-vendors
@@ -165,50 +158,48 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Remove once cargo-tauri includes https://github.com/tauri-apps/tauri/pull/15929.
     substituteInPlace "$out/share/applications/readest.desktop" \
       --replace-fail $'Exec=readest\n' $'Exec=readest %U\n'
-
-    mkdir -p $out/lib/readest
-    mv $out/bin/readest $out/lib/readest/readest
-
-    ln -s ../lib/readest/readest $out/bin/readest
-
-    # CEF's runtime libraries and resources belong next to the executable.
-    # https://github.com/chromiumembedded/cef/blob/be1e15d/tools/distrib/linux/README.minimal.txt
-    ln -s ${cef-binary}/Release/* ${cef-binary}/Resources/* "$out/lib/readest/"
   '';
 
   preFixup = ''
-    # CEF dlopens PulseAudio; ANGLE needs libGL and GPU drivers.
-    # The shared CEF libraries are symlinks, so our fixup hooks skip them.
-    # Use the wrapper's search path for loads originating in those libraries.
+    addAutoPatchelfSearchPath --no-recurse ${finalAttrs.passthru.cefPath}
+
     gappsWrapperArgs+=(
       # Preserve cargo-tauri.hook's NVIDIA explicit-sync workaround because
       # dontTauriFixup = true disables the hook's entire fixup script.
       --set-default __NV_DISABLE_EXPLICIT_SYNC 1
+
       # The opener plugin uses xdg-open to launch the browser for OAuth.
       --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+
+      # CEF dlopens PulseAudio; ANGLE needs libGL and GPU drivers.
+      # Provide search paths for loads originating in the separate CEF libraries.
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           addDriverRunpath.driverLink
           libGL
           libpulseaudio
-          # Uncomment when CEF enables its Speech Dispatcher backend for local
-          # Web Speech voices; a configured Speech Dispatcher service is also required.
-          # speechd-minimal
         ]
       }"
     )
-
-    # CEF locates ICU data relative to the loaded libcef.so. Load it through
-    # our symlink next to the resources, after autoPatchelf has set its RUNPATH.
-    fixCefRunpath() {
-      patchelf --set-rpath \
-        '$ORIGIN:'"$(patchelf --print-rpath "$out/lib/readest/readest")" \
-        "$out/lib/readest/readest"
-    }
-    postFixupHooks+=(fixCefRunpath)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    cefPath = cef-binary.overrideAttrs {
+      pname = "cef-path";
+
+      postInstall = ''
+        find $out -mindepth 1 -delete
+        strip ./Release/*.so*
+        mv ./Release/* $out/
+        mv ./Resources/* $out/
+        mv ./include $out/
+
+        ${xz}/bin/xz -9 -e -c ./CREDITS.html > "$out/CREDITS.html.xz"
+      '';
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Modern, feature-rich ebook reader";
