@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.chezmoi.io/";
     changelog = "https://github.com/twpayne/chezmoi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "chezmoi";
   };
 })
