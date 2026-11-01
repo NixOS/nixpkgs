@@ -144,10 +144,6 @@ makeScopeWithSplicing' {
       sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
       sddm = callPackage ../applications/display-managers/sddm { };
 
-      sierra-breeze-enhanced =
-        kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
-          { };
-
       signond = callPackage ../development/libraries/signond { };
 
       timed = callPackage ../applications/system/timed { };
@@ -163,6 +159,9 @@ makeScopeWithSplicing' {
       ''; # Added 2026-11-01
       kquickimageedit = throw ''
         'qt6Packages.kquickimageedit' has been replaced by 'kdePackages.kquickimageeditor'.
+      ''; # Added 2026-11-01
+      sierra-breeze-enhanced = throw ''
+        'qt6Packages.sierra-breeze-enhanced' has been replaced by top-level 'sierra-breeze-enhanced'
       ''; # Added 2026-11-01
       qt6gtk2 = throw "'qt6Packages.qt6gtk2' has been removed, as it relies on gtk2 libraries"; # Added 2026-09-21
       qwlroots = throw ''

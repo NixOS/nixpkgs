@@ -2,9 +2,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  kwin,
+  kdePackages,
   lib,
   fetchpatch2,
 }:
@@ -28,10 +26,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.wrapQtAppsHook
   ];
-  buildInputs = [ kwin ];
+  buildInputs = [ kdePackages.kwin ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out"
