@@ -4,6 +4,9 @@
   buildGoModule,
   fetchFromGitHub,
   fetchPnpmDeps,
+  applyPatches,
+  jq,
+  yq,
   nodejs,
   pnpm_10,
   pnpmConfigHook,
@@ -25,7 +28,26 @@ buildGoModule (finalAttrs: {
 
   frontend = stdenvNoCC.mkDerivation (finalFrontendAttrs: {
     pname = "${finalAttrs.pname}-frontend";
-    inherit (finalAttrs) version src;
+    inherit (finalAttrs) version;
+
+    src = applyPatches {
+      inherit (finalAttrs) src;
+      nativeBuildInputs = [
+        jq
+        yq
+      ];
+      postPatch = ''
+        pushd internal/frontend
+        jq 'del(.devEngines.runtime)' package.json > package.json.tmp
+        mv package.json.tmp package.json
+        yq -yi '
+          del(.importers["."].devDependencies.node)
+          | del(.packages | .[keys[] | select(startswith("node@runtime:"))])
+          | del(.snapshots | .[keys[] | select(startswith("node@runtime:"))])
+        ' pnpm-lock.yaml
+        popd
+      '';
+    };
 
     pnpmRoot = "internal/frontend";
 
@@ -34,7 +56,7 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalFrontendAttrs.src.name}/internal/frontend";
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-EOxHcL6h9vg31jI/DkkiJvdOsl3VyLY31D8jznjrMH8=";
+      hash = "sha256-onQyMpGWs+FQbKoPQQrm62ZcenKc7O6Pqiu2LqvZgpI=";
     };
 
     nativeBuildInputs = [
@@ -42,10 +64,6 @@ buildGoModule (finalAttrs: {
       pnpm_10
       pnpmConfigHook
     ];
-
-    preBuild = ''
-      ln -sf ${lib.getExe nodejs} internal/frontend/node_modules/.bin/node
-    '';
 
     buildPhase = ''
       runHook preBuild
