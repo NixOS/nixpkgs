@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       readline
     ];
+  strictDeps = true;
 
   preConfigure = ''
     patchShebangs scripts/bpf_doc.py
