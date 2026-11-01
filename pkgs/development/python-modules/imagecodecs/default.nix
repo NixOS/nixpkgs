@@ -21,15 +21,17 @@
   libpng,
   libtiff,
   libwebp,
+  openjph,
   xz,
   zlib,
 
   # tests
+  pytest-run-parallel,
   pytestCheckHook,
 }:
 
 let
-  version = "2026.6.26";
+  version = "2026.10.10";
 in
 buildPythonPackage rec {
   pname = "imagecodecs";
@@ -40,7 +42,7 @@ buildPythonPackage rec {
     owner = "cgohlke";
     repo = "imagecodecs";
     tag = "v${version}";
-    hash = "sha256-0o4zSf1iCzxph9tQ+b2nShaRWeCBuszf/r85Zg1BGTY=";
+    hash = "sha256-PGctU16wv0bisjJ8JwZxfUrIMzU9lR0A+pnvoBl2SY4=";
   };
 
   build-system = [
@@ -66,6 +68,7 @@ buildPythonPackage rec {
     libwebp
     pkgs.lz4
     openjpeg
+    openjph
     xz # liblzma
     zlib
     pkgs.zstd
@@ -82,7 +85,23 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytest-run-parallel
     pytestCheckHook
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r imagecodecs
+  '';
+
+  disabledTests = [
+    # alpha channel not supported by codec
+    "jpeg8-rgba"
+    "jpeg8-uint8-rgba"
+    # lossless mode not supported by legacy JPEG codec
+    "test_imread_imwrite"
+    # we don't package liblzf
+    "test_lzf_exceptions"
   ];
 
   pythonImportsCheck = [
