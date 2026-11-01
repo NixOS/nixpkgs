@@ -66,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     cd tools/bpf
     substituteInPlace ./bpftool/Makefile \
-      --replace '/usr/local' "$out" \
-      --replace '/usr'       "$out" \
-      --replace '/sbin'      '/bin'
+      --replace-fail '/usr/local' "$out" \
+      --replace-fail '/usr'       "$out" \
+      --replace-fail '/sbin'      '/bin'
   '';
 
   buildFlags = [
@@ -85,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 -t $out/bin bpf_asm
     install -Dm755 -t $out/bin bpf_dbg
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/libbpf/bpftool";
