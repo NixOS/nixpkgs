@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanosvg-fltk";
@@ -19,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple stupid SVG parser";
