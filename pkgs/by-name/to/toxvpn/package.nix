@@ -43,7 +43,8 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/";
+  # https://nodes.tox.chat/json
+  postInstall = "cp ${./bootstrap.json} $out/share/toxvpn/bootstrap.json";
 
   installCheckPhase = "$out/bin/toxvpn -h";
   doInstallCheck = true;
