@@ -3760,6 +3760,11 @@
     githubId = 1010174;
     name = "Ben Gamari";
   };
+  bglgwyng = {
+    github = "bglgwyng";
+    githubId = 19142113;
+    name = "bgl gwyng";
+  };
   bhall = {
     email = "brendan.j.hall@bath.edu";
     github = "brendan-hall";
