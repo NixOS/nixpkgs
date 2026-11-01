@@ -7,7 +7,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "spnego-http-auth";
-  version = "1.1.1-unstable-2023-04-14";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "stnoonan";
