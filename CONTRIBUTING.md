@@ -927,6 +927,7 @@ Automation without any manual review must not be used as the sole arbiter of whe
 ## Use of LLM output in prose
 
 In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
+Manually selected quotes of relevant code, discussion, or documentation (e.g. from an upstream) are exempt from this.
 
 ## Transparency
 
