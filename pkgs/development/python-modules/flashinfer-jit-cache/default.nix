@@ -34,6 +34,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
+  patches = [
+    # The FP4 KV dequantization module only supports SM >= 8.0, but is added unconditionally.
+    # Building the sm75 provider fails with:
+    #   RuntimeError: No supported CUDA architectures found for major versions [8, 9, 10, 11, 12].
+    ./fp4-kv-dequantization-sm8x-guard.patch
+  ];
+
   build-system = [
     apache-tvm-ffi
     numpy

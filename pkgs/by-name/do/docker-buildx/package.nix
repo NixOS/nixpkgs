@@ -2,47 +2,54 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-buildx";
-  version = "0.35.0";
+  version = "0.38.1";
+
+  subPackages = [ "cmd/buildx" ];
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
-    rev = "v${version}";
-    hash = "sha256-Q4f7tejn0LO4eiEq+ske53WJ1oe5JxtCVZA2Im+7dv8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-prQ+ab+TMK6vZ5Kk9ozBd8Y5/ek1Ia8HgoBWDSYkdPU=";
   };
-
-  doCheck = false;
 
   vendorHash = null;
 
   ldflags = [
-    "-w"
-    "-s"
-    "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
-    "-X github.com/docker/buildx/version.Version=v${version}"
+    "-X github.com/docker/buildx/version.Version=v${finalAttrs.version}"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D $GOPATH/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx
+  doCheck = false;
 
-    mkdir -p $out/bin
-    ln -s $out/libexec/docker/cli-plugins/docker-buildx $out/bin/docker-buildx
-    runHook postInstall
+  postInstall = ''
+    mkdir -p $out/libexec/docker/cli-plugins
+    mv $out/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx
+    ln -s ../libexec/docker/cli-plugins/docker-buildx $out/bin/docker-buildx
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
-    mainProgram = "docker-buildx";
     homepage = "https://github.com/docker/buildx";
+    changelog = "https://github.com/docker/buildx/releases/tag/${finalAttrs.src.tag}";
+    mainProgram = "docker-buildx";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ivan-babrou
       developer-guy
     ];
   };
-}
+})

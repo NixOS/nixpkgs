@@ -548,6 +548,7 @@ def install_bootloader() -> None:
     timeout = config("timeout")
     editor_enabled = bool_to_yes_no(config("enableEditor"))
     hash_mismatch_panic = bool_to_yes_no(config("panicOnChecksumMismatch"))
+    graphics = bool_to_yes_no(config("style", "graphicalTerminal", "enable"))
 
     last_gen = get_gens()[-1]
     last_gen_json = json.load(
@@ -560,7 +561,7 @@ def install_bootloader() -> None:
         timeout: {timeout}
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
-        graphics: yes
+        graphics: {graphics}
         default_entry: {3 if len(last_gen_boot_spec.specialisations.items()) > 0 else 2}
     """)
 
@@ -590,36 +591,37 @@ def install_bootloader() -> None:
     config_file += option_from_config(
         "interface_help_hidden", ["style", "interface", "helpHidden"]
     )
-    config_file += option_from_config(
-        "term_font_scale", ["style", "graphicalTerminal", "font", "scale"]
-    )
-    config_file += option_from_config(
-        "term_font_spacing", ["style", "graphicalTerminal", "font", "spacing"]
-    )
-    config_file += option_from_config(
-        "term_palette", ["style", "graphicalTerminal", "palette"]
-    )
-    config_file += option_from_config(
-        "term_palette_bright", ["style", "graphicalTerminal", "brightPalette"]
-    )
-    config_file += option_from_config(
-        "term_foreground", ["style", "graphicalTerminal", "foreground"]
-    )
-    config_file += option_from_config(
-        "term_background", ["style", "graphicalTerminal", "background"]
-    )
-    config_file += option_from_config(
-        "term_foreground_bright", ["style", "graphicalTerminal", "brightForeground"]
-    )
-    config_file += option_from_config(
-        "term_background_bright", ["style", "graphicalTerminal", "brightBackground"]
-    )
-    config_file += option_from_config(
-        "term_margin", ["style", "graphicalTerminal", "margin"]
-    )
-    config_file += option_from_config(
-        "term_margin_gradient", ["style", "graphicalTerminal", "marginGradient"]
-    )
+    if config("style", "graphicalTerminal", "enable"):
+        config_file += option_from_config(
+            "term_font_scale", ["style", "graphicalTerminal", "font", "scale"]
+        )
+        config_file += option_from_config(
+            "term_font_spacing", ["style", "graphicalTerminal", "font", "spacing"]
+        )
+        config_file += option_from_config(
+            "term_palette", ["style", "graphicalTerminal", "palette"]
+        )
+        config_file += option_from_config(
+            "term_palette_bright", ["style", "graphicalTerminal", "brightPalette"]
+        )
+        config_file += option_from_config(
+            "term_foreground", ["style", "graphicalTerminal", "foreground"]
+        )
+        config_file += option_from_config(
+            "term_background", ["style", "graphicalTerminal", "background"]
+        )
+        config_file += option_from_config(
+            "term_foreground_bright", ["style", "graphicalTerminal", "brightForeground"]
+        )
+        config_file += option_from_config(
+            "term_background_bright", ["style", "graphicalTerminal", "brightBackground"]
+        )
+        config_file += option_from_config(
+            "term_margin", ["style", "graphicalTerminal", "margin"]
+        )
+        config_file += option_from_config(
+            "term_margin_gradient", ["style", "graphicalTerminal", "marginGradient"]
+        )
 
     config_file += textwrap.dedent(f"""
         # {config("distroName")} boot entries start here

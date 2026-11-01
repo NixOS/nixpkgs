@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
 
   # tests
   addBinToPathHook,
@@ -22,6 +23,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-u9yxjYNQrtYtFtUh5tTJ1mGmGB+Ry+FRupli8RzRu3c=";
   };
+
+  patches = [
+    # Fix test_find_names on Python 3.14
+    (fetchpatch {
+      url = "https://github.com/hauntsaninja/pyp/commit/536464aad4752aac3d43d253139c7761bda076d3.patch";
+      hash = "sha256-TUXTkpBTrlns/ItLxTQvkssTEtbCwaAQMh5NfIjrTeE=";
+    })
+  ];
 
   build-system = with python3Packages; [
     flit-core

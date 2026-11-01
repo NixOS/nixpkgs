@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
@@ -8,9 +8,9 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "zvm";
-  version = "0.9.1";
+  version = "0.9.4";
 
   __structuredAttrs = true;
 
@@ -23,10 +23,10 @@ buildGoModule (finalAttrs: {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J6LDlXkTAdHvtQZimVJ3EPgAzSCvSnVSy+eZe3OwhPg=";
+    hash = "sha256-cv9O9fUiYNYvSqH8RXcBXEhErK9lObqzHK9QBERJV7Y=";
   };
 
-  vendorHash = "sha256-ouRaZ/mrB84e0T2aGJwYPsLoB3a1/kk7WS5rlKBfImU=";
+  vendorHash = "sha256-YIhYRq55WWcXz50DDRgMzzXNKbA16vlfKqlrgziD1qA=";
 
   ldflags = [
     "-s"

@@ -134,7 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch=master"
+      "--version-regex=v_(.*)"
+    ];
+  };
 
   meta = {
     description = "Linux port of FAR Manager v2 with enhanced plugin support";

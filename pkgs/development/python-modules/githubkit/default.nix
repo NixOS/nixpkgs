@@ -44,44 +44,44 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "githubkit";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zVUJWwmRx/2phkDWwWyazhPdwthsMMcE0S7E4R1TebQ=";
+    hash = "sha256-B7E6UioiZArydnmTZmA8DJ0FDkoB362T/u+74iq3MEM=";
   };
 
   passthru.schemas = {
     githubkit-schemas = mkGithubkitSchema {
       pname = "githubkit-schemas";
-      version = "26.6.14";
+      version = "26.10.28";
       inherit (finalAttrs) src;
     };
 
     githubkit-schemas-2022-11-28 = mkGithubkitSchema {
       pname = "githubkit-schemas-2022-11-28";
-      version = "26.6.14";
+      version = "26.10.28";
       inherit (finalAttrs) src;
     };
 
     githubkit-schemas-2026-03-10 = mkGithubkitSchema {
       pname = "githubkit-schemas-2026-03-10";
-      version = "26.6.14";
+      version = "26.10.28";
       inherit (finalAttrs) src;
     };
 
     githubkit-schemas-ghec-2022-11-28 = mkGithubkitSchema {
       pname = "githubkit-schemas-ghec-2022-11-28";
-      version = "26.6.14";
+      version = "26.10.28";
       inherit (finalAttrs) src;
     };
 
     githubkit-schemas-ghec-2026-03-10 = mkGithubkitSchema {
       pname = "githubkit-schemas-ghec-2026-03-10";
-      version = "26.6.14";
+      version = "26.10.28";
       inherit (finalAttrs) src;
     };
   };

@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "bootmac";
     rev = "v${finalAttrs.version}";
     hash = "sha256-GWvZUC8LKPpOWt1oCr93JHg5+W+0CCiYT63VhpSH1ko=";

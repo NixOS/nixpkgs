@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   version = "1.17.1";
 
   src = fetchFromGitHub {
-    owner = "mgechev";
+    owner = "revive-lint";
     repo = "revive";
     tag = "v${finalAttrs.version}";
     hash = "sha256-3s12X7DhTSXzipkvBRlpMuAitS+mcx2GiKTd0drYapQ=";
@@ -68,7 +68,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "revive";
     longDescription = "Drop-in replacement for golint. Revive provides a framework for development of custom rules, and lets you define a strict preset for enhancing your development & code review processes";
     homepage = "https://revive.run";
-    downloadPage = "https://github.com/mgechev/revive";
+    downloadPage = "https://github.com/revive-lint/revive";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andrewfield ];
   };

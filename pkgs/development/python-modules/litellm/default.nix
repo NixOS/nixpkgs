@@ -12,6 +12,7 @@
   backoff,
   boto3,
   buildPythonPackage,
+  certifi,
   click,
   cryptography,
   detect-secrets,
@@ -20,6 +21,7 @@
   fastapi-sso,
   fastuuid,
   fetchFromGitHub,
+  fetchpatch2,
   filelock,
   google-cloud-iam,
   google-cloud-kms,
@@ -77,14 +79,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "litellm";
-  version = "1.106.2";
+  version = "1.106.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WZP27aJWtGpvCTHQShE/ufqp/MerqTM2dTTVj1T9EfI=";
+    hash = "sha256-0fgMRYOqCQJuoH7UHyuTmB89Kpu3wTb5Rv5xW+kvcPA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -101,12 +103,24 @@ buildPythonPackage (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-jOR+k7iKF+/TTx2qc7vLBvIoew+bPY8c/tXeFGBywgM=";
+    hash = "sha256-Qf6LV9p6Acy1wewcqrSvJf7CMyus94CNqWtq2CMALso=";
   };
 
   patches = [
     # fix import race when offline
     ./model-cost-map-retry-wait-for-import.patch
+    (fetchpatch2 {
+      # fix: support Python 3.15
+      url = "https://github.com/BerriAI/litellm/pull/48359.patch?full_index=1";
+      hash = "sha256-VTj6ak0UfJZXw+mLVaP/i0xaY/u3WunY/9dO/sXJmW0=";
+      includes = [ "pyproject.toml" ];
+    })
+    (fetchpatch2 {
+      # build: allow filelock 4.x and sync package metadata
+      url = "https://github.com/BerriAI/litellm/pull/49137.patch?full_index=1";
+      hash = "sha256-zgljfII+N22BsZ2KI9vz+23yAxYEA3bZbvUvF7gJBHE=";
+      includes = [ "pyproject.toml" ];
+    })
   ];
 
   postPatch = ''
@@ -117,6 +131,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     boto3
+    certifi
     click
     fastuuid
     filelock
@@ -210,6 +225,7 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "aiohttp"
     "boto3"
+    "certifi"
     "click"
     "importlib-metadata"
     "jsonschema"

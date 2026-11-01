@@ -9,7 +9,7 @@
 
   # dependencies
   click,
-  httpx,
+  httpx2,
   pydantic,
   pydantic-settings,
   questionary,
@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.2.7";
+  version = "1.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-fqbh1Ul1TzB2/HkTTlGFoUO6/hLNLNykcXjNb6I+Kpc=";
+    hash = "sha256-yg4LrqyTos7xJFu29m9E3BGx21kMFsviZD9L2uQWxXI=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    httpx
+    httpx2
     pydantic
     pydantic-settings
     questionary
@@ -79,6 +79,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "bumpversion" ];
+
+  disabledTests = [
+    # Tests want  echo
+    "test_no_shell_expansion_of_args"
+  ];
 
   meta = {
     description = "Small command line tool to update version";

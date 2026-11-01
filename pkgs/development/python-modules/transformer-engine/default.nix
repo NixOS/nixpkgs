@@ -3,6 +3,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   python,
   cudaPackages,
@@ -38,7 +39,9 @@
   onnxscript,
 
   # passthru
+  pytestCheckHook,
   transformer-engine,
+  writableTmpDirAsHomeHook,
 
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ?
@@ -60,6 +63,7 @@ let
     getInclude
     getLib
     optional
+    optionalAttrs
     optionalString
     optionals
     strings
@@ -107,15 +111,32 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     hash = "sha256-YXo0LIq13HNVrYa19npDoLRrB2NY4IjZb3E+asblBnQ=";
   };
 
-  patches = optionals cudaSupport [
-    (replaceVars ./cuda-libs-paths.patch {
-      libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
-      libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
-      libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
+  patches =
+    # Never destroy cuda_driver::call's symbol caches, the KernelManager (which unloads its NVRTC modules) or the
+    # fused-attention graph caches (which destroy cuDNN plans retained by CUDA graphs). Without these, processes that ran
+    # an NVRTC kernel or captured fused attention into a CUDA graph can segfault at exit.
+    # https://github.com/NVIDIA/TransformerEngine/pull/3733 (merged after 2.20.2); drop it once a release contains it.
+    [
+      (fetchpatch {
+        name = "never-destroy-exit-statics.patch";
+        url = "https://github.com/NVIDIA/TransformerEngine/commit/dd628d3a11b7b52908ea5b7bba7d38d739df6f55.patch";
+        includes = [
+          "transformer_engine/common/fused_attn/graph_cache.h"
+          "transformer_engine/common/util/cuda_driver.h"
+          "transformer_engine/common/util/rtc.cpp"
+        ];
+        hash = "sha256-96O66tXnfVMWw7L39if1ME4GTlTvSAroOyh+fRFIIC8=";
+      })
+    ]
+    ++ optionals cudaSupport [
+      (replaceVars ./cuda-libs-paths.patch {
+        libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
+        libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
+        libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
 
-      cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
-    })
-  ];
+        cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
+      })
+    ];
 
   postPatch =
     # Patch build-system requirements:
@@ -302,13 +323,75 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   # Almost all tests require GPU access
   doCheck = false;
 
-  passthru.tests = {
-    withOutNcclEp = transformer-engine.override { withNcclEp = false; };
-    withMpi = transformer-engine.override { withMpi = true; };
-    withPytorch = transformer-engine.override { withPytorch = true; };
-    withJax = transformer-engine.override { withJax = true; };
-    withNvshmem = transformer-engine.override { withNvshmem = true; };
-    withCusolvermp = transformer-engine.override { withCusolvermp = true; };
+  passthru = {
+    tests = {
+      withOutNcclEp = transformer-engine.override { withNcclEp = false; };
+      withMpi = transformer-engine.override { withMpi = true; };
+      withPytorch = transformer-engine.override { withPytorch = true; };
+      withJax = transformer-engine.override { withJax = true; };
+      withNvshmem = transformer-engine.override { withNvshmem = true; };
+      withCusolvermp = transformer-engine.override { withCusolvermp = true; };
+    };
+  }
+  // optionalAttrs withPytorch {
+    # Runs some of upstream's PyTorch tests against this build, without rebuilding it:
+    # - fused attention, checked against the unfused implementation;
+    # - fused attention captured in a CUDA graph, and the cache of cuDNN graphs fused attention uses;
+    # - torch.compile.
+    # Without FusedAttention those tests would skip or run on another backend instead of failing, so
+    # the check first requires it on GPUs that support it (compute capability 8.0 and newer).
+    # A crash at process exit also fails the check.
+    gpuCheck = backendStdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-gpu-check";
+      inherit (finalAttrs) version src;
+
+      requiredSystemFeatures = [ "cuda" ];
+
+      nativeBuildInputs = [ (python.withPackages (_: [ finalAttrs.finalPackage ])) ];
+
+      dontConfigure = true;
+      dontBuild = true;
+
+      installPhase = ''
+        touch "$out"
+      '';
+
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [
+        pytestCheckHook
+        writableTmpDirAsHomeHook
+      ];
+
+      # pytestCheckHook runs preCheck, not preInstallCheck.
+      # From the source root, `python -m pytest` would import the source's `transformer_engine`
+      # instead of the installed one.
+      preCheck = ''
+        cd tests/pytorch
+      ''
+      # Fail, rather than skip, when FusedAttention is unavailable on a GPU that supports it
+      + ''
+        ${python.interpreter} - <<'EOF'
+        import torch
+        from utils import ModelConfig, get_available_attention_backends
+
+        if torch.cuda.get_device_capability() >= (8, 0):
+            (_, fused, _), _, fused_backends = get_available_attention_backends(
+                ModelConfig(2, 512, 8, 64), qkv_dtype=torch.bfloat16, qkv_layout="bshd_bshd_bshd"
+            )
+            assert fused and fused_backends, "FusedAttention is unavailable for a BF16 config it supports on sm80+"
+        EOF
+      '';
+
+      enabledTestPaths = [
+        "test_cuda_graphs.py::test_make_graphed_callables_with_dot_product_attention"
+        "test_torch_compile.py"
+        # test_dot_product_attention leaves NVTE_{FLASH,FUSED,UNFUSED}_ATTN set for the last backend
+        # it ran, which test_cuda_graphs.py would otherwise run with, so it comes last. Upstream runs
+        # each test file in its own pytest process.
+        "attention/test_attention.py::test_fused_attn_graph_cache"
+        "attention/test_attention.py::test_dot_product_attention"
+      ];
+    };
   };
 
   meta = {

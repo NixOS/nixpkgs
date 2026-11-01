@@ -19,7 +19,6 @@ let
     packageOverrides = self: super: {
       chardet = super.chardet_5;
       django = super.django_5;
-      djangorestframework = super.djangorestframework_3_17;
       django-oauth-toolkit = super.django-oauth-toolkit_2;
 
       stripe = super.stripe.overridePythonAttrs rec {
@@ -42,14 +41,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.8.0";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6/9Q8IxLdKb7p3LJUe+blLhETE0tI7zLUFdgrphieGo=";
+    hash = "sha256-PnCZbfGjp9aRrRld68KSqhawys0mynrNRdjfQPJ+iZA=";
   };
 
   patches = [
@@ -63,9 +62,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    # unused
-    sed -i "/setuptools-rust/d" pyproject.toml
-
     # unbreak dependency relaxation
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
@@ -79,7 +75,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-iHtQrZLqjz9RbcIAhFrY+mrIe5pqzE9vCOH0u7cC4MU=";
+    hash = "sha256-hh/VZCmM8PXsSnzueSaw4PcUrtSjMIQIqNhbl8tXbxQ=";
   };
 
   nativeBuildInputs = [
@@ -216,6 +212,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pyjwt"
     "pypdf"
     "python-bidi"
+    "python-dateutil"
     "qrcode"
     "redis"
     "reportlab"

@@ -60,6 +60,14 @@ let
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+  havePython3 =
+    # Python is not available for the following reasons:
+    # static build on aarch64-darwin breaks with:
+    # configure: error: C compiler cannot create executables
+    !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
+    &&
+      # mingw patches only apply to Python 3.11 currently
+      !stdenv.hostPlatform.isWindows;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -130,7 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optionals
-      (!stdenv.hostPlatform.useLLVM && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic))
+      # python3 is only used to patch shebangs for helper scripts, only include it if possible
+      (havePython3 && !stdenv.hostPlatform.useLLVM)
       [
         python3 # FIXME: infinite recursion for pkgsLLVM
       ]

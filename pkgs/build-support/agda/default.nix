@@ -31,6 +31,7 @@ let
     ;
 
   isMikan = Agda.meta.mainProgram == "mikan";
+  supportsParallel = isMikan || lib.versionAtLeast Agda.version "2.9.0";
 
   mkLibraryFile =
     pkgs:
@@ -147,7 +148,7 @@ let
         else
           ''
             runHook preBuild
-            ${lib.getExe agdaWithPkgs} --build-library
+            ${lib.getExe agdaWithPkgs} --build-library${optionalString supportsParallel " -j$NIX_BUILD_CORES"}
             runHook postBuild
           '';
 

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "diffyml";
-  version = "1.8.2";
+  version = "1.8.3";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "szhekpisov";
     repo = "diffyml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ddPpq615/oRE//6CJ1C4UcXgWnfbeEd6aJcEDiPpvoU=";
+    hash = "sha256-sIZujFk6SH+4e5iBmQkEy8gmaN9LCSU6mnrkB6FHqYo=";
   };
 
   vendorHash = "sha256-vjGhS7nhjXlms1ZsRG6Qy/7ategUIgwiBwk943cz9Lk=";

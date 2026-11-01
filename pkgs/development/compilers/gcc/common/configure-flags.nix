@@ -111,7 +111,7 @@ let
             if targetPlatform.isUnix then
               "posix"
             else if targetPlatform.isWindows then
-              (threadsCross.model or "win32")
+              (threadsCross.threadModel or "win32")
             else
               "single"
           }"

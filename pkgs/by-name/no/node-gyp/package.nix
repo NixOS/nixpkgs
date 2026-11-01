@@ -31,7 +31,11 @@ buildNpmPackage rec {
 
   # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
   # This is important when build nodejs packages in sandbox.
-  makeWrapperArgs = [ "--set npm_config_nodedir ${nodejs}" ];
+  makeWrapperArgs = [
+    "--set"
+    "npm_config_nodedir"
+    nodejs
+  ];
 
   passthru.updateScript = ./update.sh;
 

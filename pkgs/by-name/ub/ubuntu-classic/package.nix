@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchgit,
   gitUpdater,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,12 +16,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-GrpBVgisVu7NklFYqkEqYi0hui/pCHlsM3Ky4mEUq90=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype/ubuntu *.ttf
-
-    runHook postInstall
+  # Hinting sources such as sources/VTT/Ubuntu-B-hinting.ttf are not fonts to install
+  preInstall = ''
+    rm -r sources
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "import/"; };

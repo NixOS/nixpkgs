@@ -17,7 +17,7 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.21.0";
+  version = "1.21.2";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildGo127Module (finalAttrs: {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/RIYG1ScuDm5fz3DcmGo6bgtecnX5upDSJxfI9c/96c=";
+    hash = "sha256-9TUFOcDITpC86/Fe+tbPzIp6Q3D117qVEhb29zkRR8E=";
   };
 
   postUnpack = lib.optionalString withBeyla (
@@ -80,7 +80,7 @@ buildGo127Module (finalAttrs: {
   modRoot = "collector";
 
   proxyVendor = true;
-  vendorHash = "sha256-PmVzCrp7UmUQrPPjoa422SPoHhbDROcGPYbh8inl3wk=";
+  vendorHash = "sha256-PvTmwj4YsOjrvB8JmgT5B+Yt9GuwTpk53hYl3OW+2e0=";
 
   subPackages = [ "." ];
 

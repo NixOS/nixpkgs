@@ -129,8 +129,7 @@ in
           "AF_INET"
           "AF_INET6"
         ];
-        SocketBindDeny = "any";
-        SocketBindAllow = toString cfg.port;
+        # cloudflared's QUIC transport requires binding dynamically allocated UDP ports.
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"

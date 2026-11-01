@@ -12,6 +12,8 @@
 
   defaultGemConfig,
   ruby_3_4,
+  pkg-config,
+  oniguruma,
   fetchzip,
   gzip,
   gnutar,
@@ -250,8 +252,13 @@ let
           nativeBuildInputs = [
             cargo
             rustc
+            pkg-config
             rustPlatform.cargoSetupHook
             rustPlatform.bindgenHook
+          ];
+
+          buildInputs = [
+            oniguruma
           ];
 
           disallowedReferences = [

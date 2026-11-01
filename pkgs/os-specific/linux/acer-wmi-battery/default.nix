@@ -24,7 +24,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pahole ];
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/platform/x86"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -33,13 +38,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
-    install -Dm444 -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/platform/x86 *.ko
-
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Driver for the Acer WMI battery health control interface";

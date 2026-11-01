@@ -29,17 +29,17 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "13.2.0";
+  version = "13.2.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2P3lWzC3yxcyiBltFDC1dwwv8Xx2XxEGSa16MdjnV38=";
+    hash = "sha256-/Cu4Zc00OdvwojfTah6NIH/S0sowGyyh0RXcBmfvi9M=";
   };
 
-  vendorHash = "sha256-iyXO3LYTr4v1OoD9PS5ksEDIkCIq8hgwgtkLR0bzUZg=";
+  vendorHash = "sha256-6ao0x5rPZmyrvvGVLTSTjtrV3UbTqeUeV0OpHDqriHc=";
 
   nativeBuildInputs = [ makeWrapper ];
 

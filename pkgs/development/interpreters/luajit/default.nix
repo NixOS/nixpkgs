@@ -172,6 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
       badPlatforms = [
         "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
+        "s390x-linux" # See https://github.com/LuaJIT/LuaJIT/issues/43
         # `#error "No support for PPC64"`
         "powerpc64-linux"
         "powerpc64le-linux"

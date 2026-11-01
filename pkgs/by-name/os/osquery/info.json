@@ -1,13 +1,13 @@
 {
     "openssl": {
-        "hash": "sha256-sb/tzVson/Iq7ofJ1gD1FXZ+v0X3cWjLbWTyMfUYqC4=",
-        "url": "https://www.openssl.org/source/openssl-3.6.1.tar.gz"
+        "hash": "sha256-ohV8KDDv3sN4iTmwDJsGODBtPwu7dtxIMu5QO7OX35g=",
+        "url": "https://www.openssl.org/source/openssl-3.6.5.tar.gz"
     },
     "osquery": {
         "fetchSubmodules": true,
-        "hash": "sha256-UeA3xnaNkOLFmNq4mgZM4f2BX0cidtantaSxgy/ahlk=",
+        "hash": "sha256-x0UrksRVyU78h6g+Bs3l82kQQsjv+AIwHe8GAHmlpSc=",
         "owner": "osquery",
         "repo": "osquery",
-        "rev": "5.23.1"
+        "rev": "5.24.0"
     }
 }

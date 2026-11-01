@@ -11,18 +11,20 @@ let
   # These names are how they are designated in https://xanmod.org.
 
   # NOTE: When updating these, please also take a look at the changes done to
-  # kernel config in the xanmod version commit
+  # kernel config in the xanmod version commit at
+  # https://gitlab.com/xanmod/linux/-/blob/${version}/CONFIGS/x86_64/config
+  # where version is majorMinor, e.g. 6.18 or 7.2
   variants = {
     # ./update-xanmod.sh lts
     lts = {
-      version = "6.18.58";
-      hash = "sha256-qb/wngB9sURju6P+tq9/cyV3DpDDkRPSeBmFmTVUSJ4=";
+      version = "6.18.60";
+      hash = "sha256-Cr00tBcTVqTccLQ3Ptxx0AvxGs7vvfFT70syY+u+uUc=";
       isLTS = true;
     };
     # ./update-xanmod.sh main
     main = {
-      version = "7.2.12";
-      hash = "sha256-Z+JTKbWyaD8TOfzcAnmPLRI1hIGeK/QscmnCK2GFS8s=";
+      version = "7.2.14";
+      hash = "sha256-G1c+7IOkTr+TiMdLo3eIRboiSaWDij0dVb61clH40vY=";
     };
   };
 
@@ -88,6 +90,10 @@ let
             # x86 features
             X86_FRED = yes;
             X86_POSTED_MSI = yes;
+
+            # Canonical's Android Binder IPC driver, built as module
+            ANDROID_BINDER_IPC = lib.mkOverride 60 module;
+            ANDROID_BINDERFS = lib.mkOverride 60 module;
           }
           // lib.optionalAttrs (lib.versionOlder (lib.versions.majorMinor version) "7.0") {
             PREEMPT_VOLUNTARY = lib.mkOverride 60 no;

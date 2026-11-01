@@ -153,9 +153,10 @@ in
 
     services.avahi = {
       enable = mkDefault true;
-      publish = {
-        enable = mkDefault true;
-        userServices = mkDefault true;
+      settings.publish = {
+        disable-publishing = mkDefault false;
+        disable-user-service-publishing = mkDefault false;
+        publish-addresses = mkDefault true;
       };
     };
 

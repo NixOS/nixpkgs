@@ -24,30 +24,40 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-gallery-app";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-gallery-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5/mZszPEsSZqgioJ+Mc7+0gEcpUKr7n/LgyXJ20P2Zg=";
+    hash = "sha256-DdZzLhkOu9ZevcFasAVTRE1ocYvhvTz9jX8U0QnwCig=";
   };
 
-  postPatch = ''
+  postPatch =
     # Make splash path in desktop file relative
-    substituteInPlace desktop/lomiri-gallery-app.desktop.in.in \
-      --replace-fail 'X-Lomiri-Splash-Image=@SPLASH@' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-gallery-app.svg'
-
+    ''
+      substituteInPlace desktop/lomiri-gallery-app.desktop.in.in \
+        --replace-fail \
+          'X-Lomiri-Splash-Image=@SPLASH@' \
+          'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-gallery-app.svg'
+    ''
     # Tried to open videos via 'gio open video://', don't know how this is supposed to be set up yet
     # Just leave it as file:// schema, which resolves fine
-    substituteInPlace rc/qml/MediaViewer/SingleMediaViewer.qml \
-      --replace-fail '"file://", "video://"' '"file://", "file://"'
-
+    + ''
+      substituteInPlace rc/qml/Components/SingleMediaViewer.qml \
+        --replace-fail \
+          '"file://", "video://"' \
+          '"file://", "file://"'
+    ''
     # This makes it harder to see what went wrong in the tests
-    substituteInPlace tests/unittests/mediaobjectfactory/CMakeLists.txt \
-      --replace-fail ' -xunitxml -o test_mediaobjectfactory.xml' ""
-  '';
+    + ''
+      substituteInPlace tests/unittests/mediaobjectfactory/CMakeLists.txt \
+        --replace-fail \
+          ' -xunitxml -o test_mediaobjectfactory.xml' \
+          ""
+    '';
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -75,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "CLICK_MODE" false)
-    (lib.cmakeBool "INSTALL_TESTS" false)
-    (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
+    (lib.strings.cmakeBool "CLICK_MODE" false)
+    (lib.strings.cmakeBool "INSTALL_TESTS" false)
+    (lib.strings.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

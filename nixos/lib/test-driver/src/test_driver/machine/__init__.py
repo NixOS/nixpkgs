@@ -1353,7 +1353,7 @@ class QemuMachine(BaseMachine):
 
             assert self.shell
 
-            tic = time.time()
+            tic = time.monotonic()
 
             for _ in range(10):
                 if shell_ready(timeout=dt.timedelta(seconds=30)):
@@ -1374,7 +1374,7 @@ class QemuMachine(BaseMachine):
                 if b"Spawning backdoor root shell..." in chunk:
                     break
 
-            toc = time.time()
+            toc = time.monotonic()
 
             self.log("connected to guest root shell")
             self.log(f"(connecting took {toc - tic:.2f} seconds)")

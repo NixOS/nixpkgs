@@ -4,30 +4,28 @@
   buildPythonPackage,
   deprecated,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   requests,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvicare";
-  version = "2.63.0";
+  version = "2.64.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
     tag = finalAttrs.version;
-    hash = "sha256-axJhzF21lwMRp5OIZBJhwE1hNkX5KdcZvqCCbLQvoNc=";
+    hash = "sha256-Gl/CYWMongvhoGk6xAHMFrl4jy8Nra9yjA+fxIaHtFs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.1.0"' 'version = "${finalAttrs.version}"'
-  '';
+  build-system = [ hatchling ];
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     authlib

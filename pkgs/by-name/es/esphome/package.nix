@@ -120,7 +120,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
+    "${placeholder "out"}/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
 
     "--prefix"
     "LD_LIBRARY_PATH"
@@ -129,12 +129,12 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
     "--set"
     "ESPHOME_USE_SUBPROCESS"
-    "''"
+    ""
 
     # https://github.com/NixOS/nixpkgs/issues/362193
     "--set"
     "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"
-    "'python'"
+    "python"
   ];
 
   # Needed for tests

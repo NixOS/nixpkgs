@@ -11,7 +11,6 @@
   stdenv,
   cmake,
   ninja,
-  fetchpatch,
   python3,
   pkg-config,
   zstd,
@@ -21,7 +20,7 @@
   opencl-headers,
   libxml2,
   libedit,
-  llvmPackages_22,
+  llvmPackages_23,
   parallel-hashmap,
   spirv-headers,
   spirv-tools,
@@ -115,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
-    llvmPackages_22.bintools # For lld
+    llvmPackages_23.bintools # For lld
     pkg-config
     zlib
   ]
@@ -163,13 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     # they cause cycles in the outputs and break the build,
     # so we simply exclude them.
     ./sycl-jit-exclude-cmake-files.patch
-
-    # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
-    # The same patch is applied in d5b6cbf (llvmPackages_{18,19,20,21}.compiler-rt: backport santizier fix for Linux)
-    (fetchpatch {
-      url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
-      hash = "sha256-BJwFPeYCBO+PnUMMC/3GSYPgn0vczkkbdw5qcnURPbI=";
-    })
+    # These unqualified calls also find the other ipc::*::put overloads through
+    # the friend declarations on ipc::handle, which GCC rejects as ambiguous in
+    # C++20 mode, breaking any host code that includes <sycl/sycl.hpp>.
+    # Upstream PR: https://github.com/intel/llvm/pull/23628
+    ./ambiguous-ipc-put.patch
   ];
 
   postPatch = ''
@@ -182,6 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libdevice/cmake/modules/SYCLLibdevice.cmake \
       --replace-fail "\''${clang_exe}" "${ccWrapperStub}/bin/clang++"
 
+    # The driver links the SYCL runtime (libsycl.so, libsycl-devicelib-host.a)
+    # by absolute path from <bindir>/../lib, but they're installed into $lib.
+    substituteInPlace clang/lib/Driver/ToolChains/SYCL.cpp \
+      --replace-fail 'SYCLRTLibPath = DriverDir;' 'SYCLRTLibPath = "${placeholder "lib"}/lib";'
+
     # When running without this, their CMake code copies files from the Nix store.
     # As the Nix store is read-only and COPY copies permissions by default,
     # this will lead to the copied files also being read-only.
@@ -193,19 +195,16 @@ stdenv.mkDerivation (finalAttrs: {
     # See also: https://github.com/intel/llvm/issues/19635#issuecomment-3134830708
     sed -i '/file(COPY / { /NO_SOURCE_PERMISSIONS/! s/)\s*$/ NO_SOURCE_PERMISSIONS)/ }' \
       unified-runtime/cmake/FetchLevelZero.cmake \
-      sycl/CMakeLists.txt \
-      sycl/cmake/modules/FetchEmhash.cmake
+      sycl/CMakeLists.txt
   ''
-  # v7.0.0 half-applied an upstream rename of libclc's AMD target. Without this patch,
-  # The compiler builds and links fully, but the final compiler will lack the device libraries
-  # needed for compilating to AMD.
-  # Build `pkgsRocm.intel-llvm.tests.sycl-compile-amdgcn-amd-amdhsa` to check; it fails without this patch.
-  # TODO: It's likely that we can drop this on the next update.
+  # configure.py names the AMD libclc runtime target "amdgcn-amd-amdhsa-llvm", so libclc
+  # installs libspirv under lib/clang/N/lib/amdgcn-amd-amdhsa-llvm/, but the SYCL driver
+  # looks under the device triple (amdgcn-amd-amdhsa) and can't find it.
+  # Build `pkgsRocm.intel-llvm.tests.sycl-compile-amdgcn-amd-amdhsa` to check.
+  # https://github.com/intel/llvm/issues/23531
   + lib.optionalString rocmSupport ''
-    substituteInPlace libclc/CMakeLists.txt \
-      --replace-fail $'  amdgcn-amd-amdhsa\n' $'  amdgcn-amd-amdhsa\n  amdgcn--amdhsa\n' \
-      --replace-fail 'set( amdgcn-amd-amdhsa_devices none )' \
-        $'set( amdgcn-amd-amdhsa_devices none )\nset( amdgcn--amdhsa_devices none )'
+    substituteInPlace buildbot/configure.py \
+      --replace-fail '";amdgcn-amd-amdhsa-llvm"' '";amdgcn-amd-amdhsa"'
   ''
   # These libdevice compiles target sm_75 (since v7.0.0), which needs PTX >= 6.3.
   # clang picks the PTX ISA from the CUDA version it detects, if it detects nothing it falls back to `+ptx42`.
@@ -285,6 +284,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_BUILD_DOCS" enableManpages)
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" enableManpages)
     (lib.cmakeBool "SPHINX_OUTPUT_MAN" enableManpages)
+    (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+    (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
 
     # The buildbot script always enables level-zero no matter what.
     # To allow disabling level-zero, we override its flag here,
@@ -295,9 +296,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ unified-runtime.cmakeFlags;
 
-  # This hardening option causes compilation errors when compiling for amdgcn, spirv and others
-  # Must be disabled during intel-llvm's own build (especially for libdevice)
-  hardeningDisable = [ "zerocallusedregs" ];
+  hardeningDisable = [
+    # This hardening option causes compilation errors when compiling for amdgcn, spirv and others
+    # Must be disabled during intel-llvm's own build (especially for libdevice)
+    "zerocallusedregs"
+    # LLVM_ENABLE_ASSERTIONS already defines _LIBCPP_HARDENING_MODE (as extensive),
+    # and the redefinition is an error in sycl-jit, which is built with -Werror
+    "libcxxhardeningfast"
+  ];
 
   requiredSystemFeatures = [ "big-parallel" ];
   enableParallelBuilding = true;
@@ -329,6 +335,15 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/clang/${llvmMajorVersion}" "$lib"
     substituteInPlace "$dev/include/clang/Config/config.h" \
       --replace-fail "../lib/clang/${llvmMajorVersion}" "$lib/lib/clang/${llvmMajorVersion}"
+
+    # The SYCL driver only looks for its device libraries (libsycl-*.bc) under
+    # <bindir>/../lib/dpcpp-<major>/sycl, but they're installed into $lib.
+    # Without them it silently skips linking them, leaving unresolved calls
+    # (e.g. bf16 conversions, cmath) in device code.
+    mkdir -p $out/lib
+    for dir in $lib/lib/dpcpp-*; do
+      ln -s "$dir" "$out/lib/$(basename "$dir")"
+    done
   '';
 
   passthru = {
@@ -341,7 +356,7 @@ stdenv.mkDerivation (finalAttrs: {
     # This is for easily referencing version-compatible LLVM libraries
     # and tools that aren't built in this derivation,
     # as well as nix tooling, such as the stdenv.
-    baseLlvm = llvmPackages_22;
+    baseLlvm = llvmPackages_23;
 
     inherit llvmMajorVersion;
 

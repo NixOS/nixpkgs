@@ -101,6 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
   # basel BUILD file on case-insensitive filesystems.
   preConfigure = ''
     rm -vf BUILD
+  ''
+  # grpc forces -msse2 on 32-bit x86, which changes the abseil swiss-table
+  # ABI and no longer matches our abseil-cpp/protobuf builds.
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-msse2' ""
   '';
 
   # When natively compiling, grpc_cpp_plugin is executed from the build directory,

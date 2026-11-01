@@ -24,7 +24,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
-  version = "2.9.0";
+  version = "2.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DLR-RM";
     repo = "stable-baselines3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vKbILFjQuD2gAkl3J3RA/vEo5UYqWttJ99kZdlEsqkY=";
+    hash = "sha256-OCJiWsnUeaQ7yz0R+DmmYR76tOuzEQYHn3dSDpVRMBk=";
   };
 
   build-system = [ setuptools ];

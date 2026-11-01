@@ -52,6 +52,7 @@ let
       libsodium,
       msgpack-cxx,
       zeromq,
+      git,
       withStorageRocks ? true,
       withEmbedded ? false,
       withNuma ? false,
@@ -298,6 +299,7 @@ let
             judy
             libevent
             libxml2
+            git
           ]
           ++ lib.optional withNuma numactl
           ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
@@ -423,8 +425,8 @@ self: {
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.12";
-    hash = "sha256-WreIPbUZv86/3SqsCbxVRKEs4yjznt1G0L8BaQYV72w=";
+    version = "11.4.13";
+    hash = "sha256-G7JUsQbQp8qHHPoY+m4Y1LgKdDD57J0VcexCcaE975Y=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04

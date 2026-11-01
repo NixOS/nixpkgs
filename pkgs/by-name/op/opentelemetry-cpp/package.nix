@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   gtest,
   protobuf,
@@ -30,24 +29,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.29.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-md4JwlqxMM7zAz0/v9/S3hSj1S0cwXXn4sWT8UWK0Dw=";
+    hash = "sha256-AsdN70T8PBKBR674/MXoCwm7b8iI1wtqLlZLktq54hc=";
   };
 
-  patches = [
-    ./0001-Disable-tests-requiring-network-access.patch
-    (fetchpatch2 {
-      # Add missing cstdint include to predicate_factory.h
-      url = "https://github.com/open-telemetry/opentelemetry-cpp/commit/e62f627ccb220e9c72eaebf32b246ec0bf98d60f.patch?full_index=1";
-      hash = "sha256-YCg0kHP8QW9FFivNWYqJvwKLVUvY+grTsev5nJY6xjY=";
-    })
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
+  patches = lib.optional stdenv.hostPlatform.isDarwin ./0001-Disable-segfaulting-test-on-Darwin.patch;
 
   nativeBuildInputs = [
     cmake

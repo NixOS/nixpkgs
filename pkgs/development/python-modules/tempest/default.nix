@@ -5,7 +5,7 @@
   cliff,
   debtcollector,
   defusedxml,
-  fetchPypi,
+  fetchFromGitHub,
   fixtures,
   hacking,
   jsonschema,
@@ -31,17 +31,25 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tempest";
   version = "46.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "tempest";
+    tag = finalAttrs.version;
+    hash = "sha256-FwWMIfLjI7ZMb5/B9SXLNNv+XeGr7UTblpCybcRD7dk=";
   };
 
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include tempest *" > MANIFEST.in
+
     substituteInPlace tempest/lib/common/http.py \
       --replace-fail 'getheaders()' 'headers'
   '';
@@ -104,7 +112,10 @@ buildPythonPackage rec {
     "tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token"
   ];
 
-  pythonImportsCheck = [ "tempest" ];
+  pythonImportsCheck = [
+    "tempest"
+    "tempest.lib.services.compute"
+  ];
 
   meta = {
     description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
@@ -113,4 +124,4 @@ buildPythonPackage rec {
     mainProgram = "tempest";
     teams = [ lib.teams.openstack ];
   };
-}
+})

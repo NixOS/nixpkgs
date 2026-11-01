@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xml2rfc";
-  version = "3.34.1";
+  version = "3.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9rY99oSick9kQIDTZhdsprCussljctGW0HCeHkXiHug=";
+    hash = "sha256-H2k9MgIlqhs1CpAkn3Q+BYitodkkeS1zA0lMt1/toss=";
   };
 
   pythonRelaxDeps = [ "lxml" ];

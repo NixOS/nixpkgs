@@ -26,7 +26,7 @@ in
     import datetime as dt
     import os
     import subprocess
-    from collections.abc import Iterator
+    from collections.abc import Generator
     from contextlib import contextmanager
 
     from test_driver.driver import Driver, load_driver_configuration
@@ -75,7 +75,7 @@ in
         xdotool("key", "Return")
 
     @contextmanager
-    def test_display() -> Iterator[None]:
+    def test_display() -> Generator[None]:
         # Keep the viewer visible while debugging the outer test interactively.
         if driver.interactive and os.environ.get("DISPLAY"):
             yield

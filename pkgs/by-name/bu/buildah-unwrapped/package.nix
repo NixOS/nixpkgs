@@ -20,6 +20,8 @@ buildGoModule (finalAttrs: {
   pname = "buildah";
   version = "1.46.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "podman-container-tools";
     repo = "buildah";

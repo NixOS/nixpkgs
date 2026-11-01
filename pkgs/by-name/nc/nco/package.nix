@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # fixes libm.so.6: error adding symbols: DSO missing from command line
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
 

@@ -15,10 +15,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0hm08nyab376ix98d2mb6ka47q9qzzg4ylzn0bn8bp3p1a77zb2g";
+      sha256 = "0724q26k3q2wswg1mwwxhfl1zfgx7363ml1knj8ykgbxhfmwcxh9";
       type = "gem";
     };
-    version = "0.6.20260902";
+    version = "0.7.20261007";
   };
   ffi = {
     groups = [ "default" ];
@@ -86,10 +86,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1pqrpn0wkxvhcrwm4i0z9ailjj7if45zkkih0hij2k1q25xpwvcf";
+      sha256 = "1n1v9rhb19cnf1a89s6yvvhw394jy8qnqx9sg8bn12g5zpwcrrrw";
       type = "gem";
     };
-    version = "3.0.2";
+    version = "3.1.0";
   };
   llhttp-ffi = {
     dependencies = [
@@ -130,10 +130,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1w1q5a1njb86mnxc8yla093qmz9kpjacrwgiv3nlk4f980i94gj9";
+      sha256 = "0fqsrfmcyfq3c92awb507rgczqvdg2m3akbgkxgdpzrmws2aglvn";
       type = "gem";
     };
-    version = "0.2.1";
+    version = "0.3.0";
   };
   openssl = {
     groups = [ "default" ];

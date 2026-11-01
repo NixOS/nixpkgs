@@ -53,8 +53,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://velero.io/";
     changelog = "https://github.com/velero-io/velero/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      mbode
-    ];
+    maintainers = [ ];
   };
 })

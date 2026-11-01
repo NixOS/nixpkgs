@@ -14,10 +14,7 @@ stdenvNoCC.mkDerivation (
       overrideCC stdenv (
         stdenv.cc.override (old: {
           cc = old.cc.override {
-            threadsCross = {
-              model = "win32";
-              package = null;
-            };
+            threadsCross = null;
           };
         })
       );

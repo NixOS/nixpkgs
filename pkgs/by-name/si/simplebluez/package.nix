@@ -10,13 +10,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "simplebluez";
 
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "simpleble";
     repo = "SimpleBLE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yA/InInNmK77/VxIX8CH0Nkqy9MJZr0Ci6xrVo76DK4=";
+    hash = "sha256-avak9ySg2DAhkCsUVoBJbQO3iS17BRgmYk/S/ORrd7s=";
   };
 
   outputs = [

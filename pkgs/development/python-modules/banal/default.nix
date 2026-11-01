@@ -1,20 +1,27 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
+  hatchling,
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "banal";
-  version = "1.0.6";
-  format = "setuptools";
+  version = "1.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-L+AskwX1MWhEGUj0oD37+i6sxz2zDbSpMwkIPLDiUKU=";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "pudo";
+    repo = "banal";
+    tag = finalAttrs.version;
+    hash = "sha256-+G4zSKJangqV1RBJcuK16gAJmpPQQmPg3vEkO9HSFss=";
   };
 
-  # no tests
-  doCheck = false;
+  build-system = [ hatchling ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "banal" ];
 
@@ -24,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bloodyad";
-  version = "2.5.5";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J4vQX8z6mqSkwnonNOVYJZGyA63p5QdIkRAiiSld6yg=";
+    hash = "sha256-Z/yvjraALxhodCFQtLPmyXEz0qT3BBC7Nq5Qlv2OM2s=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];

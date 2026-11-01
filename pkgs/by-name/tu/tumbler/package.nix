@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tumbler";
   version = "4.20.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
@@ -40,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     xfce4-dev-tools
     wrapGAppsNoGuiHook
+    gdk-pixbuf # setup hook
   ];
 
   buildInputs = [
@@ -52,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgepub # optional EPUB thumbnailer support
     libgsf
     libopenraw
+    librsvg
     poppler # technically the glib binding
   ];
 
@@ -62,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeSearchPath "share" [
           libheif.out
           libjxl
-          librsvg
           webp-pixbuf-loader
         ]
       }"

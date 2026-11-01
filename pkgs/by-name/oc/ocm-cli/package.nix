@@ -10,16 +10,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "ocm-cli";
-  version = "0.52.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "open-component-model";
     repo = "ocm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cZxRMYXa40I5yS3dPdY10PoQeWSbnEpJgTGNG1mUBRE=";
+    hash = "sha256-BJ1tbAM/+78sx/ihJ4T8C8eNEQBtm53uZ6TTYxMcJD4=";
   };
 
-  vendorHash = "sha256-uomRE3RQ5wf2HxfGihTvt6RWzQD9/UTyuE0Jhj+o2MQ=";
+  vendorHash = "sha256-+rAOvHUq/E8d38iSce/9yW8esKD4Q/4EZ33+3JW9YcM=";
 
   subPackages = [
     "cmds/ocm"

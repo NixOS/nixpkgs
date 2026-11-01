@@ -13,8 +13,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.4.1";
-  source.sha256 = "sha256-2BZgu3vybhpoScScq42yr80DYI343vqlQVQv2AOG48I=";
+  version = "3.4.2";
+  source.sha256 = "sha256-MPkHdXFC2Moqfy0ZzlmiTRRlE7JjRrYOLBv6IAPU7kw=";
 
   erubi = buildRubyGem rec {
     inherit ruby;

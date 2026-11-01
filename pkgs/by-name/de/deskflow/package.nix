@@ -113,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doCheck = true;
+  # LoggerTests and ComputerTests share tmp/test/Deskflow.conf: https://github.com/deskflow/deskflow/issues/10352
+  enableParallelChecking = false;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

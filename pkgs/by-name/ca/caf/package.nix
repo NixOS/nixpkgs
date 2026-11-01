@@ -34,9 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${finalAttrs.version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [
-      bobakker
-      tobim
-    ];
+    maintainers = with lib.maintainers; [ tobim ];
   };
 })

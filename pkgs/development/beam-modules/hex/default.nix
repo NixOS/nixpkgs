@@ -19,13 +19,13 @@ let
     self:
     stdenv.mkDerivation rec {
       pname = "hex";
-      version = "2.5.4";
+      version = "2.6.0";
 
       src = fetchFromGitHub {
         owner = "hexpm";
         repo = "hex";
         rev = "v${version}";
-        sha256 = "sha256-lOoD6mzctGk9xHNJiribDMVWQ9xrr2N5eluJalirESk=";
+        sha256 = "sha256-13WsOshHhGK+Df/Lr6GqaOFvttcLrk7cbTS1NsQXMvY=";
       };
 
       postPatch = ''

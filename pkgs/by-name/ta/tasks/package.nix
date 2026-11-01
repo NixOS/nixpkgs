@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
-    repo = "tasks";
+    repo = "cosmic-ext-tasks";
     tag = finalAttrs.version;
     hash = "sha256-gW9e+iYscJgwBdFf7QmYjnydUxrfAuS4VAoVce24eyk=";
   };
@@ -54,9 +54,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/cosmic-utils/tasks/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/cosmic-utils/cosmic-ext-tasks/releases/tag/${finalAttrs.version}";
     description = "Simple task management application for the COSMIC desktop";
-    homepage = "https://github.com/cosmic-utils/tasks";
+    homepage = "https://github.com/cosmic-utils/cosmic-ext-tasks";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage

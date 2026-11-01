@@ -2193,6 +2193,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  bacpypes3 = callPackage ../development/python-modules/bacpypes3 { };
+
   badauth = callPackage ../development/python-modules/badauth { };
 
   badges = callPackage ../development/python-modules/badges { };
@@ -2826,6 +2828,8 @@ self: super: with self; {
 
   bytesize = toPythonModule (pkgs.libbytesize.override { python3Packages = self; });
 
+  bytestruct = callPackage ../development/python-modules/bytestruct { };
+
   bytewax = callPackage ../development/python-modules/bytewax { };
 
   cache = callPackage ../development/python-modules/cache { };
@@ -2868,6 +2872,8 @@ self: super: with self; {
   cairosvg = callPackage ../development/python-modules/cairosvg { };
 
   caldav = callPackage ../development/python-modules/caldav { };
+
+  calendaring-config = callPackage ../development/python-modules/calendaring-config { };
 
   callee = callPackage ../development/python-modules/callee { };
 
@@ -6215,6 +6221,8 @@ self: super: with self; {
 
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
+  fla-core = callPackage ../development/python-modules/fla-core { };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
@@ -6578,7 +6586,7 @@ self: super: with self; {
 
   fressnapftracker = callPackage ../development/python-modules/fressnapftracker { };
 
-  freud = callPackage ../development/python-modules/freud { };
+  freud-analysis = callPackage ../development/python-modules/freud-analysis { };
 
   frictionless = callPackage ../development/python-modules/frictionless { };
 
@@ -9205,8 +9213,6 @@ self: super: with self; {
   kbnf = callPackage ../development/python-modules/kbnf { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
-
-  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
 
   kdl-py = callPackage ../development/python-modules/kdl-py { };
 
@@ -12334,6 +12340,8 @@ self: super: with self; {
 
   nrf-ota = callPackage ../development/python-modules/nrf-ota { };
 
+  nrf802154-sniffer = callPackage ../development/python-modules/nrf802154-sniffer { };
+
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
@@ -12426,11 +12434,17 @@ self: super: with self; {
     callPackage ../development/python-modules/nvidia-cutlass-dsl-libs-base
       { };
 
+  nvidia-cutlass-operators = callPackage ../development/python-modules/nvidia-cutlass-operators { };
+
+  nvidia-dali = callPackage ../development/python-modules/nvidia-dali { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };
 
   nvidia-dlprofviewer = callPackage ../development/python-modules/nvidia-dlprofviewer { };
+
+  nvidia-matmul-heuristics = callPackage ../development/python-modules/nvidia-matmul-heuristics { };
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
@@ -12439,9 +12453,9 @@ self: super: with self; {
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
   nvtx = callPackage ../development/python-modules/nvtx {
-    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source build, while earlier
-    # ones (possibly the default cudaPackages) use the redistributable.
-    nvtx = pkgs.cudaPackages_13.nvtx;
+    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source
+    # build, while earlier ones (possibly the default cudaPackages) use the redistributable.
+    inherit (pkgs.cudaPackages) nvtx;
   };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
@@ -12582,6 +12596,8 @@ self: super: with self; {
   omorfi = callPackage ../development/python-modules/omorfi { };
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
+
+  omsdk = callPackage ../development/python-modules/omsdk { };
 
   oncalendar = callPackage ../development/python-modules/oncalendar { };
 
@@ -13329,7 +13345,7 @@ self: super: with self; {
 
   parsley = callPackage ../development/python-modules/parsley { };
 
-  parsnip = callPackage ../development/python-modules/parsnip { };
+  parsnip-cif = callPackage ../development/python-modules/parsnip-cif { };
 
   parso = callPackage ../development/python-modules/parso { };
 
@@ -17151,6 +17167,10 @@ self: super: with self; {
 
   python-libnmap = callPackage ../development/python-modules/python-libnmap { };
 
+  python-libpcap = callPackage ../development/python-modules/python-libpcap {
+    inherit (pkgs) libpcap;
+  };
+
   python-linkplay = callPackage ../development/python-modules/python-linkplay { };
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
@@ -17761,6 +17781,20 @@ self: super: with self; {
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
+
+  pyzfs_2_3 = toPythonModule (
+    pkgs.zfs_2_3.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
+
+  pyzfs_2_4 = toPythonModule (
+    pkgs.zfs_2_4.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
 
   pyzhuyin = callPackage ../development/python-modules/pyzhuyin { };
 
@@ -20503,8 +20537,6 @@ self: super: with self; {
 
   systembridgeconnector = callPackage ../development/python-modules/systembridgeconnector { };
 
-  systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
-
   systemd-python = callPackage ../development/python-modules/systemd-python {
     inherit (pkgs) systemd;
   };
@@ -21024,6 +21056,8 @@ self: super: with self; {
   tokenspeed-triton-bin = callPackage ../development/python-modules/tokenspeed-triton/bin.nix { };
 
   tokentrim = callPackage ../development/python-modules/tokentrim { };
+
+  toktok-rs = callPackage ../development/python-modules/toktok-rs { };
 
   tololib = callPackage ../development/python-modules/tololib { };
 

@@ -282,6 +282,7 @@ in
           xreader
           xed-editor
           pix
+          superlight
 
           # external apps shipped with linux-mint
           celluloid

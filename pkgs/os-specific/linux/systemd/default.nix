@@ -846,7 +846,6 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
-          systemd-nspawn-configfile
           systemd-oomd
           systemd-portabled
           systemd-pstore

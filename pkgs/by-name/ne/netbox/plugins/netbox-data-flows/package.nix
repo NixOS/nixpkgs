@@ -10,14 +10,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-data-flows";
-  version = "1.5.4";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Alef-Burzmali";
     repo = "netbox-data-flows";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RJrS0B5MZBshSWl4ZL53kz1nK6UvUYmL8JSA4NEAzRo=";
+    hash = "sha256-20HxlFDssPFDPzAigZwoWlqjLEvANnAYZYokE0lssfo=";
   };
 
   build-system = [ setuptools ];

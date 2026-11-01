@@ -80,6 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     # can be found across outputs.
     substituteInPlace cmake/siriusConfig.cmake.in \
       --replace-fail "NO_DEFAULT_PATH" ""
+
+    # src/CMakeLists.txt uses ''${CMAKE_CUDA_ARCHITECTURES} unquoted in
+    # set_target_properties, which breaks when multiple architectures are
+    # set (semicolon-separated list splits into separate arguments).
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'CUDA_ARCHITECTURES ''${CMAKE_CUDA_ARCHITECTURES}' 'CUDA_ARCHITECTURES "''${CMAKE_CUDA_ARCHITECTURES}"'
   '';
 
   outputs = [

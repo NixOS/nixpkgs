@@ -19,14 +19,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromForgejo {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    hash = "sha256-yQcvmoqKepL5l1YbWsgTBN0XGKSBLF4Rz9n+SJTcfo0=";
+    hash = "sha256-oXMg6NJZZW8aQu8AONaqgty6JYp2C9uB6NK7LaM0Zpc=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];

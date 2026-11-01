@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "2026.10.05";
+  version = "2026.10.12";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "directvt";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SQL3fBA7/PcHFt603y3f/q0wzhD+0VynTouOuNMrCM4=";
+    hash = "sha256-5iarTge0IZkO8IuwgtwU+v7CmNJTsJ+/9T6BXRkV3hU=";
   };
 
   nativeBuildInputs = [

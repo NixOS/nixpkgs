@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ panicgh ];
     license = lib.licenses.bsd3;
   };
 })

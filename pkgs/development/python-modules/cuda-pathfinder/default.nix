@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cuda-pathfinder";
-  version = "1.8.3";
+  version = "1.8.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
       sed -i 's/^ref-names: .*$/ref-names: tag: cuda-pathfinder-v${finalAttrs.version}/' "$out/.git_archival.txt"
       grep -qx 'ref-names: tag: cuda-pathfinder-v${finalAttrs.version}' "$out/.git_archival.txt"
     '';
-    hash = "sha256-QpfjtVZpNAa8R5ZyGJO7W0PGorWE/wnpUKCEyBQbYI8=";
+    hash = "sha256-gfnensDuY7PnwGlzKx6wiCW1Pe0UZVMM40XmooQfa2o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_pathfinder";

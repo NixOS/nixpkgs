@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules/
     pnpm install --offline --prod --filter="@astrojs/language-server..."
     mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
     cp -r ./node_modules $out/lib/node_modules/astro-language-server

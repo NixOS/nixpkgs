@@ -21,6 +21,8 @@ buildGoModule rec {
   pname = "skopeo";
   version = "1.24.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "podman-container-tools";

@@ -20,13 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "wmbusmeters";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "wmbusmeters";
     repo = "wmbusmeters";
     tag = "${finalAttrs.version}";
-    hash = "sha256-kguAEWFRzdjsqgiXC7wrAkkR8qvE2ksOOhT7VrDzqc4=";
+    hash = "sha256-Gvd9zQiBjMx7uThb+OKUa2wyPtsWmGb06MHxy7YkSmM=";
 
     # need to fetch revision from git
     leaveDotGit = true;

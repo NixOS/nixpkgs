@@ -14,7 +14,7 @@ let
   version = "0.2.1";
 
   src = fetchFromGitHub {
-    owner = "arg274";
+    owner = "rokkhonorg";
     repo = "cambia";
     rev = "bef0975f72e15b925d881ab70d3bc556ecf4ff7f";
     hash = "sha256-4/GKvU3r4JpOKgkLgSOKEHnSoIsjgjQU6pay2deiIng=";
@@ -22,7 +22,7 @@ let
 
   meta = {
     description = "Compact disc ripper log checking utility";
-    homepage = "https://github.com/arg274/cambia";
+    homepage = "https://github.com/rokkhonorg/cambia";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
@@ -58,10 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-dNgFQiJrakdP0ynyVcak6cKU02Z5dcw2nhh9XhlWsOg=";
 
   cargoPatches = [
-    # https://github.com/arg274/cambia/pull/5
+    # https://github.com/rokkhonorg/cambia/pull/5
     (fetchpatch {
       name = "cargo.lock.patch";
-      url = "https://github.com/arg274/cambia/commit/b47944fbaf4e631ede25c560a4d7e684a2ad5014.patch";
+      url = "https://github.com/rokkhonorg/cambia/commit/b47944fbaf4e631ede25c560a4d7e684a2ad5014.patch";
       hash = "sha256-y9WkEmzBaFJ0eHWK0hVmB6+IdWespp79N9lSuteZZAI=";
     })
   ];

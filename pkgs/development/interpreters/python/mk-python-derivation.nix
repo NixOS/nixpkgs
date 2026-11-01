@@ -35,6 +35,7 @@
 let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
+    concatMapStrings
     elem
     extendDerivation
     fixedWidthString
@@ -121,9 +122,6 @@ lib.extendMkDerivation {
     "dependencies"
     "optional-dependencies"
     "build-system"
-
-    # Deprecated arguments
-    "pytestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -272,7 +270,7 @@ lib.extendMkDerivation {
                 * If ${theirName} provides executables that are called at run time, pass its
                   bin path to makeWrapperArgs:
 
-                      makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv} ] }" ];
+                      makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ ${getName drv} ]) ];
 
               ${optionalLocation}
             '';
@@ -401,6 +399,10 @@ lib.extendMkDerivation {
       nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
       installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
 
+      # If given use the specified checkPhase, otherwise use the setup hook.
+      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+      ${if attrs ? checkPhase then "installCheckPhase" else null} = attrs.checkPhase;
+
       inherit dontWrapPythonPrograms;
 
       postFixup =
@@ -469,10 +471,79 @@ lib.extendMkDerivation {
                   posString = lib.optionalString (pos != null) "At ${pos.file}:${toString pos.line}\n";
                 in
                 ''
-                  buildPythonPackage: ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                  ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
                     Add/remove `meta.problems.unsupportedPython` instead.
                 ''
                 + posString;
+            };
+
+          # Any of enabledTest* is an empty list (internal)
+          ${
+            if
+              # `enabledTestPaths` is the most common,
+              # and then `enabledTests`,
+              # `enabledTestMarks` being the least common.
+              finalAttrs ? enabledTestPaths && finalAttrs.enabledTestPaths == [ ]
+              || finalAttrs ? enabledTests && finalAttrs.enabledTests == [ ]
+              || finalAttrs ? enabledTestMarks && finalAttrs.enabledTestMarks == [ ]
+            then
+              "buildPythonPackage-internal-enabledTests-empty"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message = ''
+                ${finalAttrs.name}: Unexpected empty list found in enabledTest* attributes:
+              ''
+              +
+                # Cold path, use more compact expression.
+                concatMapStrings
+                  (
+                    n:
+                    let
+                      pos = if attrs.${n} or null != [ ] then unsafeGetAttrPos n attrs else null;
+                      posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                    in
+                    optionalString (finalAttrs.${n} or null == [ ]) "- ${n}${posString}\n"
+                  )
+                  [
+                    "enabledTestMark"
+                    "enabledTestPath"
+                    "enabledTests"
+                  ]
+              + ''
+                Defining these attributes as empty lists is ambiguous.
+                To opt out from whitelisting, omit them, or set them as `null` when overriding.
+              '';
+            };
+
+          # Deprecated pytestFlagsArray (internal)
+          ${
+            if
+              finalAttrs ? pytestFlagsArray
+              && finalAttrs.pytestFlagsArray != null
+              && finalAttrs.pytestFlagsArray != [ ]
+            then
+              "buildPythonPackage-internal-pytestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos =
+                    if attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ] then
+                      unsafeGetAttrPos "pytestFlagsArray" attrs
+                    else
+                      null;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument pytestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
             };
 
           # Deprecated argument stdenv (internal)
@@ -484,44 +555,13 @@ lib.extendMkDerivation {
                 posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
               in
               ''
-                `buildPythonPackage`/`buildPythonApplication`: Deprecated argument `stdenv` found${posString}
+                ${finalAttrs.name}: Deprecated argument `stdenv` found${posString}
                   Override `stdenv` with `buildPythonPackage.override` or `buildPythonApplication.override` instead.
               '';
           };
         };
       };
-    }
-    // optionalAttrs (attrs ? checkPhase) {
-      # If given use the specified checkPhase, otherwise use the setup hook.
-      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
-    }
-    // (
-      let
-        deprecatedFlagNotEmpty =
-          attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
-        pos = builtins.unsafeGetAttrPos "pytestFlagsArray" attrs;
-      in
-      {
-        ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
-          buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
-            Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
-        '';
-      }
-    )
-    //
-      lib.mapAttrs
-        (
-          name: value:
-          lib.throwIf (
-            attrs.${name} == [ ]
-          ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
-        )
-        {
-          ${if attrs ? enabledTestMarks then "enabledTestMarks" else null} = attrs.enabledTestMarks;
-          ${if attrs ? enabledTestPaths then "enabledTestPaths" else null} = attrs.enabledTestPaths;
-          ${if attrs ? enabledTests then "enabledTests" else null} = attrs.enabledTests;
-        };
+    };
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.

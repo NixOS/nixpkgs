@@ -7,6 +7,8 @@
   bruno,
   pkg-config,
   pango,
+  jq,
+  moreutils,
   testers,
   bruno-cli,
 }:
@@ -20,7 +22,12 @@ buildNpmPackage {
   # since they only make releases and git tags for bruno,
   # we lie about bruno-cli's version and say it's the same as bruno's
   # to keep them in sync with easier maintenance
-  inherit (bruno) version src npmDepsHash;
+  inherit (bruno)
+    version
+    src
+    npmDepsHash
+    npmDepsFetcherVersion
+    ;
 
   # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;
@@ -37,9 +44,14 @@ buildNpmPackage {
     pango
   ];
 
+  postPatch = ''
+    # prevent 'prepare' from invoking tsx before patchShebangs fixes the interpreter
+    ${jq}/bin/jq 'del(.scripts.prepare)' packages/bruno-sqlite/package.json | ${moreutils}/bin/sponge packages/bruno-sqlite/package.json
+  '';
+
   postConfigure = ''
-    # sh: line 1: /build/source/packages/bruno-converters/node_modules/.bin/rimraf: cannot execute: required file not found
-    patchShebangs packages/*/node_modules
+    # patch shebangs for node_modules binaries (rollup, tsx) to prevent bad interpreter errors
+    patchShebangs node_modules packages/*/node_modules
   '';
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -127,6 +139,7 @@ buildNpmPackage {
       kashw2
       mattpolzin
       water-sucks
+      samirbgno
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

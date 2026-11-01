@@ -27,13 +27,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vikunja";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Gy6LRbD6LfWjKwuzj+EBAiSkZluChFVC4qhZgQbeZc8=";
+    hash = "sha256-2al0tCOrqHrbAO+sEXFq3F/Z9OxWhsMhI0/pRjUSE/o=";
   };
 
   nativeBuildInputs =
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-  vendorHash = "sha256-NLtp+2QyfS06W/Puuo5MEqalpLc9NodoPqtDJPBbOH4=";
+  vendorHash = "sha256-KNULERGXkog/W3kGck+B/kwN4+CZxqavvI0RKYIj/V4=";
 
   frontend = callPackage ./frontend.nix {
     inherit (finalAttrs) src version;

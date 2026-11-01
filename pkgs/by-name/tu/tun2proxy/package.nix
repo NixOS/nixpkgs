@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tun2proxy";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchCrate {
     pname = "tun2proxy";
     inherit (finalAttrs) version;
-    hash = "sha256-RUmDCLJkeJX/8k2HVAkZaom3xKRtYF8KY0I15jJHyEs=";
+    hash = "sha256-UeMf110Y8M4mvqtqqU4wlLUsrSN0gM6XugoXC+VCjS0=";
   };
 
-  cargoHash = "sha256-nYEiTt7535H/OHbxhXrhAATopSHy5fS73+1mjmQd3bk=";
+  cargoHash = "sha256-KRKNXOR0QdWNhOUQr4AVKKnbkcqfGVoad6DVECSIcCk=";
 
   env.GIT_HASH = "000000000000000000000000000000000000000000000000000";
 

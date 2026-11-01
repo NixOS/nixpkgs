@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "spirit";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "spirit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QU1CWDXryWDwoUwPNFfm2BJtXyzleV5iBAb0GSAl7Jo=";
+    hash = "sha256-cyB+8B2RF3brBcPnkdk9jnu/qYk+vTv+QSLXhKRi+f0=";
   };
 
-  vendorHash = "sha256-TNrHUAHE1+J1mvi5jpXEAG62a9wSukl7c1T9rxcGFEY=";
+  vendorHash = "sha256-7hELRPyRVsmiCCnoPFZEY4sI/3bWSwzAmPV/kUMgEMI=";
 
   subPackages = [ "cmd/spirit" ];
 

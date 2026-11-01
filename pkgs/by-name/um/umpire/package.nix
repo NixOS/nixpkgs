@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals cudaSupport [
       "-DENABLE_CUDA=ON"
       (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+      # The bundled camp test resource_aware_pool_tests.cpp uses brace-
+      # initialization syntax that nvcc cannot compile.
+      "-DENABLE_TESTS=OFF"
     ]
     ++ lib.optionals rocmSupport [
       "-DENABLE_HIP=ON"

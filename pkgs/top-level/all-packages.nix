@@ -288,8 +288,6 @@ with pkgs;
         ''
       );
 
-  alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound;
@@ -1001,8 +999,6 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
-  openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
-
   openusd = python3Packages.openusd.override {
     withTools = true;
     withUsdView = true;
@@ -1270,6 +1266,8 @@ with pkgs;
       callPackage ../stdenv/freebsd/make-bootstrap-tools.nix { }
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
+
+  craftos-pc-accelerated = craftos-pc.override { enableLuaJIT = true; };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
@@ -1636,9 +1634,7 @@ with pkgs;
     rainloop-standard
     ;
 
-  roundcube = callPackage ../servers/roundcube { };
-
-  roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
+  roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
 
@@ -1655,10 +1651,6 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  b2sum = callPackage ../tools/security/b2sum {
-    inherit (llvmPackages) openmp;
-  };
-
   beamerpresenter-mupdf = beamerpresenter;
   beamerpresenter-poppler = beamerpresenter.override {
     useMupdf = false;
@@ -1666,8 +1658,6 @@ with pkgs;
   };
 
   binlore = callPackage ../development/tools/analysis/binlore { };
-
-  bzip2 = callPackage ../tools/compression/bzip2 { };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -1983,8 +1973,6 @@ with pkgs;
     guiSupport = false;
   };
 
-  gnused = callPackage ../tools/text/gnused { };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
@@ -2110,8 +2098,6 @@ with pkgs;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
 
-  hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
-
   hyphen = callPackage ../development/libraries/hyphen { };
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
@@ -2223,8 +2209,6 @@ with pkgs;
   logstash = logstash7;
 
   lagrange-tui = lagrange.override { enableTUI = true; };
-
-  kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
@@ -2382,8 +2366,6 @@ with pkgs;
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
   };
-
-  mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
   molecule = with python3Packages; toPythonApplication molecule;
 
@@ -2704,10 +2686,6 @@ with pkgs;
 
   rpatool = with python3Packages; toPythonApplication rpatool;
 
-  rpm = callPackage ../tools/package-management/rpm {
-    lua = lua5_4;
-  };
-
   rubocop = rubyPackages.rubocop;
 
   ruby-lsp = rubyPackages.ruby-lsp;
@@ -2921,10 +2899,6 @@ with pkgs;
   };
 
   zellijPlugins = recurseIntoAttrs (callPackage ../by-name/ze/zellij/plugins { });
-
-  zstd = callPackage ../tools/compression/zstd {
-    cmake = buildPackages.cmakeMinimal;
-  };
 
   ### SHELLS
 
@@ -4020,7 +3994,7 @@ with pkgs;
       libcxx ? null,
       extraPackages ? lib.optional (
         cc.isGNU or false && stdenv.targetPlatform.isMinGW
-      ) targetPackages.threads.package,
+      ) targetPackages.threads,
       nixSupport ? { },
       ...
     }@extraArgs:
@@ -4439,8 +4413,6 @@ with pkgs;
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
   bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
-  bundler-audit = callPackage ../tools/security/bundler-audit { };
-
   solargraph = rubyPackages.solargraph;
 
   inherit
@@ -4608,6 +4580,7 @@ with pkgs;
     electron_42-bin
     electron_43-bin
     electron_44-bin
+    electron_45-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -4617,6 +4590,7 @@ with pkgs;
     electron-chromedriver_42
     electron-chromedriver_43
     electron-chromedriver_44
+    electron-chromedriver_45
     ;
 
   inherit
@@ -4639,10 +4613,7 @@ with pkgs;
         electron_39 = electron_39-bin;
         electron_40 = electron_40-bin;
         electron_41 = electron_41-bin;
-        electron_42 = getElectronPkg {
-          src = electron-source.electron_42;
-          bin = electron_42-bin;
-        };
+        electron_42 = electron_42-bin;
         electron_43 = getElectronPkg {
           src = electron-source.electron_43;
           bin = electron_43-bin;
@@ -4650,6 +4621,10 @@ with pkgs;
         electron_44 = getElectronPkg {
           src = electron-source.electron_44;
           bin = electron_44-bin;
+        };
+        electron_45 = getElectronPkg {
+          src = electron-source.electron_45;
+          bin = electron_45-bin;
         };
       }
     )
@@ -4659,6 +4634,7 @@ with pkgs;
     electron_42
     electron_43
     electron_44
+    electron_45
     ;
   electron = electron_43;
   electron-bin = electron_43-bin;
@@ -5203,8 +5179,6 @@ with pkgs;
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
-  astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
-
   attr = callPackage ../development/libraries/attr { };
 
   # Not moved to aliases while we decide if we should split the package again.
@@ -5518,14 +5492,23 @@ with pkgs;
     else
       throw "Unknown libc ${libc}";
 
+  # An optional threading library to be used by GCC's runtime libraries.
+  #
+  # When non-null, this package will be used for that purpose. When null, libc
+  # will be used instead.
+  #
+  # The package (like libc, for the sake of the fallback case when this is
+  # null) declares its model as `passthru.threadModel`.
+  #
+  # On MinGW the libc offers only `win32`; `windows.mcfgthreads` gives `mcf`,
+  # and `windows.pthreads` would give `posix`. `windows.mcfgthreads` is our
+  # default there because it is both fast / minimally diverged from native and
+  # featureful.
   threads =
-    lib.optionalAttrs (stdenv.hostPlatform.isMinGW && !(stdenv.hostPlatform.useLLVM or false))
-      {
-        # other possible values: win32 or posix
-        model = "mcf";
-        # For win32 or posix set this to null
-        package = windows.mcfgthreads;
-      };
+    if stdenv.hostPlatform.isMinGW && !(stdenv.hostPlatform.useLLVM or false) then
+      windows.mcfgthreads
+    else
+      null;
 
   # Only supported on Linux and only on glibc
   glibcLocales =
@@ -6152,7 +6135,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_3_5
-    openssl_3_6
     openssl_4_1
     ;
 
@@ -6264,7 +6246,6 @@ with pkgs;
         pkgsHostTarget
         kdePackages
         ;
-      inherit stdenv;
     }
   );
 
@@ -6298,7 +6279,7 @@ with pkgs;
     pname = "rocksdb";
     version = "9.10.0";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
@@ -6309,7 +6290,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.11.4";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
@@ -6320,7 +6301,7 @@ with pkgs;
     pname = "rocksdb";
     version = "8.3.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
@@ -6331,7 +6312,7 @@ with pkgs;
     pname = "rocksdb";
     version = "7.10.2";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
@@ -6342,7 +6323,7 @@ with pkgs;
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
-      owner = "facebook";
+      owner = "meta";
       repo = pname;
       rev = "v${version}";
       hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
@@ -6360,8 +6341,6 @@ with pkgs;
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     avrlibc = pkgsCross.avr.libc;
   };
-
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
 
   skawarePackages = recurseIntoAttrs (callPackage ../development/skaware-packages { });
 
@@ -7038,10 +7017,6 @@ with pkgs;
     kanidmWithSecretProvisioning_1_11
     ;
 
-  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
-
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
-
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
@@ -7118,15 +7093,6 @@ with pkgs;
       packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
-
-  # We should move to dynamic modules and create a nginxFull package with all modules
-  nginxShibboleth = nginxStable.override {
-    modules = [
-      nginxModules.rtmp
-      nginxModules.moreheaders
-      nginxModules.shibboleth
-    ];
-  };
 
   nsdiff = perlPackages.nsdiff;
 
@@ -7415,8 +7381,7 @@ with pkgs;
       util-linux = util-linuxMinimal;
     }
   );
-  fuse = fuse2;
-  fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
+  fuse = fuse3;
   fuse3 = lowPrio (
     if stdenv.hostPlatform.isDarwin then
       macfuse-stubs.override { isFuse3 = true; }
@@ -8689,12 +8654,6 @@ with pkgs;
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
-  pidginPackages = recurseIntoAttrs (
-    callPackage ../applications/networking/instant-messengers/pidgin/pidgin-plugins { }
-  );
-
-  inherit (pidginPackages) pidgin;
-
   puredata-with-plugins =
     plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
 
@@ -9209,18 +9168,6 @@ with pkgs;
     gbmSupport = true;
   };
 
-  xdg-desktop-portal-hyprland =
-    callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
-      {
-        stdenv = gcc16Stdenv;
-        inherit (qt6)
-          qtbase
-          qttools
-          qtwayland
-          wrapQtAppsHook
-          ;
-      };
-
   xpdf = qt6.callPackage ../applications/misc/xpdf { };
 
   xmobar = haskellPackages.xmobar.bin;
@@ -9614,9 +9561,9 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome48Extensions
     gnome49Extensions
     gnome50Extensions
+    gnome51Extensions
     ;
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });

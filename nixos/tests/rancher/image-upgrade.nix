@@ -14,13 +14,6 @@
   ...
 }:
 let
-  containerdSocket =
-    {
-      k3s = "/run/k3s/containerd/containerd.sock";
-      rke2 = "/run/rke2/containerd/containerd.sock";
-    }
-    .${rancherDistro};
-
   # Build a Docker image with a fixed name but an auto-generated tag based on
   # the derivation hash. Two derivations with different contents produce
   # different tags, so the cluster treats them as distinct images.
@@ -49,8 +42,6 @@ in
   nodes.machine =
     { pkgs, ... }:
     {
-      imports = [ ../../modules/profiles/base.nix ];
-
       environment.systemPackages = with pkgs; [
         kubectl
         cri-tools
@@ -63,12 +54,7 @@ in
         enable = true;
         role = "server";
         package = rancherPackage;
-        disable =
-          {
-            k3s = lib.remove "traefik" disabledComponents;
-            rke2 = lib.remove "rke2-ingress-nginx" disabledComponents;
-          }
-          .${rancherDistro};
+        disable = disabledComponents;
         images =
           coreImages ++ lib.optional (rancherDistro == "k3s") rancherPackage.airgap-images ++ [ testImageV1 ];
       };
@@ -89,7 +75,7 @@ in
     };
 
   testScript =
-    { nodes, ... }:
+    { nodes, ... }: # python
     ''
       def switch_to_v2():
           toplevel = "${nodes.machine.system.build.toplevel}"
@@ -98,8 +84,8 @@ in
       machine.wait_for_unit("${serviceName}")
 
       with subtest("v1 image is imported and runs"):
-          machine.wait_until_succeeds("crictl -r ${containerdSocket} img | grep 'test\\.local/test'")
-          machine.wait_until_succeeds("kubectl get sa default")
+          machine.wait_until_succeeds("crictl -r /run/k3s/containerd/containerd.sock img | grep 'test\\.local/test'")
+          machine.wait_until_succeeds("kubectl get serviceaccount default")
           machine.succeed("kubectl create job test-job --image=${testImageV1.imageName}:${testImageV1.imageTag}")
           machine.wait_until_succeeds("kubectl wait --for=condition=complete job/test-job --timeout=180s")
           v1_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=test-job --tail=-1").rstrip()

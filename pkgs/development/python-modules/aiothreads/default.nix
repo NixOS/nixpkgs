@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiothreads";
-  version = "1.1.1";
+  version = "1.1.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mosquito";
     repo = "aiothreads";
     tag = finalAttrs.version;
-    hash = "sha256-dK9aDfrIfoFbqq2mvzysy3xAyE/Qhs6cbTmxGzc72hU=";
+    hash = "sha256-5s1CGoq7z78Fq9YPiTI+XcPKqsE/lBcv8XL+xhv00KY=";
   };
 
   build-system = [ hatchling ];

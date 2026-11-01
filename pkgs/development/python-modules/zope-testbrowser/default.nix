@@ -20,19 +20,19 @@
 
 buildPythonPackage rec {
   pname = "zope-testbrowser";
-  version = "8.0";
+  version = "8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testbrowser";
     tag = version;
-    hash = "sha256-CcNlK7EKYng0GKYTZ2U2slkyQ9wTqwzOXGHt9S5p3L0=";
+    hash = "sha256-Hh4U3706ewuSywizxmZoZO+0EW7lGU7GXU6VZFqPwFY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools ==" "setuptools >="
+      --replace-fail "setuptools >= 78.1.1,< 82" setuptools
 
     # remove test that requires network access
     substituteInPlace src/zope/testbrowser/tests/test_doctests.py \

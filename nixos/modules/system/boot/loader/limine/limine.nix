@@ -372,6 +372,14 @@ in
         };
       };
       graphicalTerminal = {
+        enable = lib.mkEnableOption null // {
+          default = true;
+          example = false;
+          description = ''
+            Whether to enable the graphical terminal. Set it to false to force text mode.
+          '';
+        };
+
         font = {
           scale = lib.mkOption {
             default = null;

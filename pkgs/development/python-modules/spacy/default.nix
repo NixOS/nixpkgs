@@ -49,7 +49,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.16";
+  version = "3.8.19";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-EFzzb9hMBjFh3hD+xId7uxkTVsg92WNiUaCKBRa0bnw=";
+    hash = "sha256-NpW6QrtmG/2X6AVWBw0W+P38ZcXOfESYAdy8N6VMirc=";
   };
 
   build-system = [

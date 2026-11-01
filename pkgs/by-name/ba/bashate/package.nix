@@ -1,18 +1,23 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bashate";
   version = "2.1.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "bashate";
+    tag = finalAttrs.version;
+    hash = "sha256-e38KiGjdj7iY+7YuCyApxem2GAKHRNVFzO04QJOFC/Q=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -38,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.openstack ];
   };
-}
+})

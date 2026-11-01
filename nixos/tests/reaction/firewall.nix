@@ -9,6 +9,7 @@
   nodes.machine =
     { config, pkgs, ... }:
     {
+      networking.useDHCP = false;
       services.reaction = {
         enable = true;
         stopForFirewall = true; # with this enabled restarting firewall will restart reaction
@@ -29,6 +30,8 @@
 
   testScript = # py
     ''
+      from datetime import timedelta
+
       start_all()
 
       machine.wait_for_unit("multi-user.target")
@@ -37,7 +40,7 @@
 
       def check_reaction_in_iptables(context = ""):
         with subtest("check reaction chain exists"):
-          machine.sleep(3)
+          machine.sleep(duration=timedelta(seconds=3))
           output = machine.succeed("iptables -nvL")
           assert "reaction" in output, f"error: reaction chain missing in iptables, {context}"
 
@@ -59,7 +62,7 @@
 
       with subtest("stop reaction manually and verify chains are cleaned up"):
         machine.succeed("systemctl stop reaction")
-        machine.sleep(3)
+        machine.sleep(duration=timedelta(seconds=3))
         output = machine.succeed("iptables -nvL")
         assert "reaction" not in output, "reaction chain still exists after the service was stopped"
 

@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dsmr-parser";
-  version = "1.11.2";
+  version = "1.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ndokter";
     repo = "dsmr_parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MIiJwCRIUSrmp+wfJrfCPW0JY22ATfA66uENgPySgCc=";
+    hash = "sha256-eL3kyfJY+/PKjWMoRj4dYLMd9AgNP/TUArZDmdBf0Fc=";
   };
 
   pythonRelaxDeps = [ "dlms_cosem" ];

@@ -57,6 +57,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    broken = true; # stuck on fuse2
     homepage = "https://www.darlinghq.org/";
     description = "FUSE module for .dmg files (containing an HFS+ filesystem)";
     mainProgram = "darling-dmg";

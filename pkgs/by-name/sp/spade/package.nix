@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     python314
   ];
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python314}/lib/python3.14/config-3.14-darwin -lpython3.14";
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python314}/lib/${python314.libPrefix}/config-${python314.pythonVersion}-darwin -lpython${python314.pythonVersion}";
 
   cargoBuildFlags = [
     "--workspace"

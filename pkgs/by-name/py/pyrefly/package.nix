@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "pyrefly";
     tag = finalAttrs.version;
     hash = "sha256-Uid4IpymX9+3TtLlLjl1B1nqAczgfgjphe0cuk0neVE=";
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Fast type checker and IDE for Python";
-    homepage = "https://github.com/facebook/pyrefly";
+    homepage = "https://github.com/meta/pyrefly";
     license = lib.licenses.mit;
     mainProgram = "pyrefly";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

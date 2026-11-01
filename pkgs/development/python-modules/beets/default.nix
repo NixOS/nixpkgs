@@ -173,15 +173,12 @@ buildPythonPackage (finalAttrs: {
     cp extra/_beet $out/share/zsh/site-functions/
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
+    makeWrapperArgs+=(--set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
   makeWrapperArgs = [
-    "--set"
-    "GI_TYPELIB_PATH"
-    "$GI_TYPELIB_PATH"
-
-    "--set"
-    "GST_PLUGIN_SYSTEM_PATH_1_0"
-    "$GST_PLUGIN_SYSTEM_PATH_1_0"
-
     "--prefix"
     "PATH"
     ":"

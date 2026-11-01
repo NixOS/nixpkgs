@@ -1,8 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchPypi,
   fetchurl,
+  python,
   setuptools,
 }:
 let
@@ -53,6 +55,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
+
+  postInstall = ''
+    rm $out/${python.sitePackages}/pex/vendor/_vendored/pip/pip/_vendor/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python.sitePackages}/pex/vendor/_vendored/pip/pip/_vendor/certifi/cacert.pem
+  '';
 
   # A few more dependencies I don't want to handle right now...
   doCheck = false;

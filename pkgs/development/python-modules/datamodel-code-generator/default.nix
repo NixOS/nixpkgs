@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "koxudaxi";
+    owner = "datamodel-code-generator";
     repo = "datamodel-code-generator";
     tag = finalAttrs.version;
     hash = "sha256-0vh/iynZzmMzvdUXNScb+JWANdSrzPLT1qt+jyKleg4=";
@@ -130,8 +130,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
-    homepage = "https://github.com/koxudaxi/datamodel-code-generator";
-    changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/datamodel-code-generator/datamodel-code-generator";
+    changelog = "https://github.com/datamodel-code-generator/datamodel-code-generator/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "datamodel-codegen";

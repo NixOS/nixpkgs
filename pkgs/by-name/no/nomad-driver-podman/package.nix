@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nomad-driver-podman";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad-driver-podman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZUZr992bK4e08bh6peYN5B35N7PEVTOSySUWwQ132iA=";
+    sha256 = "sha256-Zxi3VNEPrGYibQSRfCxy7T85yJUyC8yLlJNnPfHq3UE=";
   };
 
-  vendorHash = "sha256-AmG4YQNW20wRfNHl9l8RkByrTIfmAjBxnWvndf1jqYU=";
+  vendorHash = "sha256-QgKTk3HPsldu0SVIyVq18e7MMJlDUTTpzcd6NO0UNic=";
 
   subPackages = [ "." ];
 

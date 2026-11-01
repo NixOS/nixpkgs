@@ -51,7 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  passthru.updateScript = nix-update-script { };
+  mesonBuildType = "release";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)(?<!pre)$"
+    ];
+  };
 
   meta = {
     description = "A Bitwarden compatible client designed for mobile Linux ";

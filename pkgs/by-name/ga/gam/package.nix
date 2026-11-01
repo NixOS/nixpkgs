@@ -57,15 +57,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "GAM_CA_FILE"
     "${cacert}/etc/ssl/certs/ca-bundle.crt"
     "--run"
-    "'export GAMCFGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "export GAMCFGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\""
     "--run"
-    "'export GAMUSERCONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "export GAMUSERCONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\""
     "--run"
-    "'export GAMSITECONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "export GAMSITECONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\""
     "--run"
-    "'export GAMCACHEDIR=\"\${XDG_CACHE_HOME:-$HOME/.cache}/gam\"'"
+    "export GAMCACHEDIR=\"\${XDG_CACHE_HOME:-$HOME/.cache}/gam\""
     "--run"
-    "'export GAMDRIVEDIR=\"$PWD\"'"
+    "export GAMDRIVEDIR=\"$PWD\""
   ];
 
   pythonImportsCheck = [ "gam" ];

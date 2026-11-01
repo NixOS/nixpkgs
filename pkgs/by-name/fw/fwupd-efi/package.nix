@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd-efi";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "fwupd";
     repo = "fwupd-efi";
     rev = "${finalAttrs.version}";
-    hash = "sha256-resmgi+t1YahXWxt1ZPgAXW3L0ejBclwcA8W8AS31is=";
+    hash = "sha256-yjNlai7NhHYCACdIiCvWEBfweN6U86g/kGHNNji/vnE=";
   };
 
   nativeBuildInputs = [

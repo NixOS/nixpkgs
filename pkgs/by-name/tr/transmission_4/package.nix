@@ -65,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     tag = finalAttrs.version;
-    hash = "sha256-4349gc7+1k0y5CwHTQe8bLQsuNW5w7pckR0MCeulIEE=";
+    hash = "sha256-gkb0Hl+ZVBhQCQSMapllRhoz4uK/lSv6o+Abpvxpyrs=";
     fetchSubmodules = true;
   };
 

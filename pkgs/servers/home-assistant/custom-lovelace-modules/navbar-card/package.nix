@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "navbar-card";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "joseluis9595";
     repo = "lovelace-navbar-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UR3jclUzvDkwWgn60gaaLgCuLDbfIIx/tXWqAigRyMs=";
+    hash = "sha256-v9qXY/oRZ5CZjUcPH31jznQQtS/A6RjkMCTv0eTH1uQ=";
   };
 
   node_modules = stdenv.mkDerivation {

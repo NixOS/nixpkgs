@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.fontsquirrel.com/fonts/poly";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ relrod ];
+    maintainers = [ ];
   };
 }

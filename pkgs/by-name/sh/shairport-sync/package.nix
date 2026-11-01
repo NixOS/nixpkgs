@@ -57,13 +57,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.6";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-w0MPdlPNxLjBoVdGsFbK8MQlj6YRG/FuSaE8Hbl0fNI=";
+    hash = "sha256-JiiZLgeYFoZ+Xq6tn1+KqW6Ewo+j+5JmxJ0Wm3dXqoE=";
   };
 
   nativeBuildInputs = [
@@ -148,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";
+    changelog = "https://github.com/mikebrady/shairport-sync/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [

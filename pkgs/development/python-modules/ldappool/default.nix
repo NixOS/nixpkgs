@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  stdenv,
   pbr,
   python-ldap,
   prettytable,
@@ -43,6 +44,13 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "ldappool" ];
+
+  disabledTests = lib.optionals stdenv.buildPlatform.isDarwin [
+    # very flaky on aarch64-darwin, especially under high system load
+    # always fails at this assertion:
+    #   https://opendev.org/openstack/ldappool/src/commit/322e0d753f20a9eb7f9bd27afe2271b33c6aedbb/ldappool/tests/test_ldappool.py#L203
+    "test_pool_full"
+  ];
 
   meta = {
     description = "Simple connector pool for python-ldap";

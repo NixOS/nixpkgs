@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "q6voiced";
     tag = finalAttrs.version;
     hash = "sha256-VvhDaejcvCERU8oDgsjl3IuV5a8RjkA+pH8PJRHJWJs=";
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Userspace daemon for the QDSP6 voice call audio driver";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/q6voiced";
+    homepage = "https://gitlab.nura.eco/nura/q6voiced";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "q6voiced";

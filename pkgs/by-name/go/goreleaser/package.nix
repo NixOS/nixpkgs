@@ -12,6 +12,8 @@ buildGo126Module (finalAttrs: {
   pname = "goreleaser";
   version = "2.17.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "goreleaser";

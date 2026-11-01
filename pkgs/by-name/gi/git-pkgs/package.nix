@@ -9,6 +9,8 @@ buildGoModule rec {
   pname = "git-pkgs";
   version = "0.21.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "git-pkgs";
     repo = "git-pkgs";

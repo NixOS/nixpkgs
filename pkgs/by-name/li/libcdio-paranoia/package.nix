@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcdio-paranoia";
-  version = "2.0.2";
+  version = "10.2+2.0.2";
 
   src = fetchFromGitHub {
     owner = "libcdio";
     repo = "libcdio-paranoia";
-    rev = "release-10.2+${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-n05PSVgh6z7BFPq4CjJa5DqCO7Huj8Bsg0x3HQPsbeI=";
   };
 

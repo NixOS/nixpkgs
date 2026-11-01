@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
-  pcre,
+  pcre2,
   dune-configurator,
 }:
 
@@ -17,9 +17,10 @@ buildDunePackage (finalAttrs: {
 
   buildInputs = [ dune-configurator ];
 
-  propagatedBuildInputs = [ pcre ];
+  propagatedBuildInputs = [ pcre2 ];
 
   meta = {
+    broken = true; # stuck on legacy pcre
     homepage = "https://mmottl.github.io/pcre-ocaml";
     description = "Efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = lib.licenses.lgpl21Plus;

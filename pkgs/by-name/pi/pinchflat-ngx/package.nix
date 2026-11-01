@@ -15,13 +15,13 @@
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat-ngx";
-  version = "2026.10.15";
+  version = "2026.10.20";
 
   src = fetchFromGitHub {
     owner = "TheBadFella";
     repo = "Pinchflat-NGX";
     tag = version;
-    hash = "sha256-a6Clfi1jib7nCGRjhDXSPIQFF6n7NAOJtQxsr2WHszQ=";
+    hash = "sha256-B48H/7WdURt/YIo4C4NvrHp+TtFuheJ523S5kJlZA9o=";
   };
 
   # force compile exqlite using our version
@@ -34,7 +34,7 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-LHUCZkC9ELiVKJvyhwmnEKcmMOmnfG81k5v+q36rN1Q=";
+    hash = "sha256-d6QNGBakyoeOrMZFIUkedacOY4porClARdM5swVX2fc=";
   };
   removeCookie = false;
 

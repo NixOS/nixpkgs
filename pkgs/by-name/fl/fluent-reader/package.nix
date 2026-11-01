@@ -6,10 +6,10 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "fluent-reader";
-  version = "1.3.0";
+  version = "1.3.1";
   src = fetchurl {
     url = "https://github.com/yang991178/fluent-reader/releases/download/v${finalAttrs.version}/Fluent.Reader.${finalAttrs.version}.AppImage";
-    hash = "sha256-glpe0zEpZ9+tcUSK2BI+AWAwcdt2RNQYnSDbGQV20eQ=";
+    hash = "sha256-EQt8N2EaPqypLOfhdJkDdsWqkk93wa0OqBfqZ0qSLws=";
   };
 
   extraInstallCommands = ''

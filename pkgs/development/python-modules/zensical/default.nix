@@ -10,6 +10,7 @@
   deepmerge,
   jinja2,
   markdown,
+  pathspec,
   pygments,
   pymdown-extensions,
   pyyaml,
@@ -18,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zensical";
-  version = "0.0.62";
+  version = "0.0.72";
   pyproject = true;
 
   # We fetch from PyPi, because GitHub repo does not contain all sources.
@@ -26,12 +27,12 @@ buildPythonPackage (finalAttrs: {
   # We could combine sources, but then nix-update won't work.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-JEkTXqwWHrBTvxE435lLGHlOerQg9zlBplumbkOzdhM=";
+    hash = "sha256-KAH82Lrsbk0UraET4DpvtMbsLvolGNwK6U7lTtcclPE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ic8dAm55ib4X3fJ0ckOwp1fchpq2t1gN0DRVnrSiXUg=";
+    hash = "sha256-jedNaGBR3sjVt5CrNlTgDax0KmFnqJEgkMsBiGWHhPc=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -44,6 +45,7 @@ buildPythonPackage (finalAttrs: {
     deepmerge
     jinja2
     markdown
+    pathspec
     pygments
     pymdown-extensions
     pyyaml

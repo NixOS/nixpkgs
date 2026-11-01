@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.1-unstable-2024-12-16";
 
   src = fetchFromGitHub {
-    owner = "Etaash-mathamsetty";
+    owner = "BananaWorks07";
     repo = "trigger-control";
     rev = "ed9b6f994b050e8890cb73e7d2997723fdd0ca2c";
     hash = "sha256-pwI6hHae3yJpUx3v4yVLUW2t4LKQcWqiMPM9Q9NjY3Q=";
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";
-    homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
+    homepage = "https://github.com/BananaWorks07/trigger-control";
     license = lib.licenses.mit;
     mainProgram = "trigger-control";
     maintainers = with lib.maintainers; [ azuwis ];

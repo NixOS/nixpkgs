@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "10.2.1";
+  version = "10.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-Bwnm4FevQkOGWr3CPLpHVO9r83MuBY7g3Ik7MBK5+ao=";
+    hash = "sha256-Y8DXmuoQHXA3dtnQVGjp0sQX3R4NYjQVU2JtpsorqRQ=";
   };
 
   postPatch = ''

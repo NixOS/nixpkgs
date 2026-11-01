@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-contract";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlebreuil";
     repo = "netbox-contract";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0k47bxj58kNEIG/wGq1UtpUImV1ZKcqreCBlIvVUnCA=";
+    hash = "sha256-bsRCZ/BFvysmdZmO+OChBYIOKFQFokVZw+xJivIcETs=";
   };
 
   build-system = [ setuptools ];

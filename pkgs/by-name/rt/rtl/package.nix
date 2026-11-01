@@ -14,13 +14,13 @@ buildNpmPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "rtl";
-  version = "0.15.15";
+  version = "0.15.16";
 
   src = fetchFromGitHub {
     owner = "Ride-The-Lightning";
     repo = "RTL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Se93VGIkrSvkSOyFsp4K9dJslXsT8Tm5jXyKNnex7Y8=";
+    hash = "sha256-GYggyQfb/OPjvanMe1PvFxxug7NR+7ulaOkv9OsfGgY=";
 
     # Upstream's lockfile omits resolved URLs and integrity hashes for most dependencies.
     postFetch = ''
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
   # Match upstream's Docker image and its supported Node.js versions.
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-l+/1YNGfg1xKzBpA6+MnCjNssNyfofcrWBzam4xb83Q=";
+  npmDepsHash = "sha256-f/eZkZCVHX4yOIqp1Rnzjm4NlTWwYARkMaK7IxMdfJA=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = "buildfrontend";
 
