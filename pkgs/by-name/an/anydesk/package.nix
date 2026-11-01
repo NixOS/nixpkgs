@@ -142,10 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" \
-      $out/bin/anydesk
+    # AnyDesk ships a non-PIE (ET_EXEC) binary. Passing both --set-interpreter
+    # and --set-rpath in a single patchelf invocation corrupts its program
+    # headers, so the result crashes with SIGSEGV in the dynamic loader.
+    # Patch the RPATH and the interpreter in two separate passes instead.
+    patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" $out/bin/anydesk
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
       --prefix PATH : ${
