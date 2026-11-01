@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    ./reproducible-wheel.patch
+    ./reproducible-wheel_80.patch
   ];
 
   # Drop dependency on coherent.license, which in turn requires coherent.build
