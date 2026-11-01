@@ -7328,6 +7328,8 @@ self: super: with self; {
 
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
+  grain = callPackage ../development/python-modules/grain { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
