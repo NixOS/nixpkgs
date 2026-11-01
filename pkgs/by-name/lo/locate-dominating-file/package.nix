@@ -59,7 +59,7 @@ resholve.mkDerivation {
 
   solutions.default = {
     scripts = [ "bin/locate-dominating-file" ];
-    interpreter = "${lib.getExe bash}";
+    interpreter = lib.getExe bash;
     inputs = [
       coreutils
       getopt

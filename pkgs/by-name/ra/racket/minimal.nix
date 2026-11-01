@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       writers.makeScriptWriter (
         removeAttrs config [ "libraries" ]
         // {
-          interpreter = "${lib.getExe finalAttrs.finalPackage}";
+          interpreter = lib.getExe finalAttrs.finalPackage;
         }
       ) nameOrPath;
     writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";

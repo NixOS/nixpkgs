@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${resholve.phraseSolution "lesspipe.sh" {
       scripts = [ "bin/lesspipe.sh" ];
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         file
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     }}
     ${resholve.phraseSolution "lesscomplete" {
       scripts = [ "bin/lesscomplete" ];
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         file

@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableZfs [
     (replaceVars ./0002-substitute-zfs-and-zpool-commands.patch {
-      zfs = "${lib.getExe zfs}";
+      zfs = lib.getExe zfs;
       zpool = "${zfs}/bin/zpool";
     })
   ];

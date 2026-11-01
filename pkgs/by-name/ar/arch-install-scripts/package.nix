@@ -73,7 +73,7 @@ resholve.mkDerivation (finalAttrs: {
       ];
 
       # "none" for no shebang, "${lib.getExe bash}" for bash, etc.
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
 
       # packages resholve should resolve executables from
       inputs = [

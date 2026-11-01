@@ -8,7 +8,7 @@ let
   writeCheckedBashBin =
     name:
     let
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
     in
     writers.makeScriptWriter {
       inherit interpreter;

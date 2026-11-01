@@ -31,7 +31,7 @@ resholve.mkDerivation (finalAttrs: {
     scripts = [
       "bin/pdfmm"
     ];
-    interpreter = "${lib.getExe bash}";
+    interpreter = lib.getExe bash;
     inputs = [
       coreutils
       ghostscript

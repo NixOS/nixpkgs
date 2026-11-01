@@ -31,7 +31,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  env.PROTOC = "${lib.getExe buildPackages.protobuf}";
+  env.PROTOC = lib.getExe buildPackages.protobuf;
 
   dependencies = [
     httpx

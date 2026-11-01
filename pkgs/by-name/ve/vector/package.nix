@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUST_MIN_STACK = 33554432;
 
     # needed for internal protobuf c wrapper library
-    PROTOC = "${lib.getExe protobuf}";
+    PROTOC = lib.getExe protobuf;
     RUSTONIG_SYSTEM_LIBONIG = true;
 
     # upstream forces openssl/vendored

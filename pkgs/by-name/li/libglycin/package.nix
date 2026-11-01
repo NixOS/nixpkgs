@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
         }
         (
           replaceVars ./patch-vendor-hook.sh {
-            bwrap = "${lib.getExe bubblewrap}";
+            bwrap = lib.getExe bubblewrap;
             jq = "${buildPackages.jq}/bin/jq";
             sponge = "${buildPackages.moreutils}/bin/sponge";
           }

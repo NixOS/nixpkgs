@@ -134,7 +134,7 @@ stdenv.mkDerivation {
           wrapperName
           ;
         inherit (targetPlatform) darwinMinVersion;
-        expandResponseParams = "${lib.getExe expand-response-params}";
+        expandResponseParams = lib.getExe expand-response-params;
       };
 
     in

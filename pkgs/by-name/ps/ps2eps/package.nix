@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
   };
   patches = [
     (replaceVars ./hardcode-deps.patch {
-      gs = "${lib.getExe ghostscript}";
+      gs = lib.getExe ghostscript;
       # bbox cannot be substituted here because replaceVars doesn't know what
       # will be the $out path of the main derivation
       bbox = null;

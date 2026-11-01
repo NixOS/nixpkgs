@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   env = {
-    PROTOC = "${lib.getExe protobuf}";
+    PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
   };
 

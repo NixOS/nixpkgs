@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (replaceVars ./fix-paths.patch {
       false = "${coreutils}/bin/false";
-      mdadm = "${lib.getExe mdadm}";
-      sed = "${lib.getExe gnused}";
+      mdadm = lib.getExe mdadm;
+      sed = lib.getExe gnused;
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
       true = "${coreutils}/bin/true";

@@ -33,13 +33,13 @@ buildPythonPackage rec {
       # hardcode paths to aplay and notify-send
       (replaceVars ./linux-paths.patch {
         aplay = "${alsa-utils}/bin/aplay";
-        notifysend = "${lib.getExe libnotify}";
+        notifysend = lib.getExe libnotify;
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # hardcode path to which
       (replaceVars ./darwin-paths.patch {
-        which = "${lib.getExe which}";
+        which = lib.getExe which;
       })
     ];
 

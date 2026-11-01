@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ yt-dlp ]}
   '';
 
-  env.FFMPEG_BIN = "${lib.getExe ffmpeg-headless}";
+  env.FFMPEG_BIN = lib.getExe ffmpeg-headless;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

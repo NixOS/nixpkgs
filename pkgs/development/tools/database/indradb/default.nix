@@ -35,7 +35,7 @@ in
 
     buildAndTestSubdir = "server";
 
-    env.PROTOC = "${lib.getExe protobuf}";
+    env.PROTOC = lib.getExe protobuf;
 
     nativeBuildInputs = [
       rustfmt
@@ -54,7 +54,7 @@ in
 
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
 
-    env.PROTOC = "${lib.getExe protobuf}";
+    env.PROTOC = lib.getExe protobuf;
 
     nativeBuildInputs = [
       rustfmt

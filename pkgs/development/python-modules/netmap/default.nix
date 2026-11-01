@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
 
   patches = [
     (replaceVars ./nmap-path.patch {
-      nmap = "${lib.getExe nmap}";
+      nmap = lib.getExe nmap;
     })
   ];
 

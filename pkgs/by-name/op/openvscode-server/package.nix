@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     npm_config_progress = false;
 
     # for --fixup-lockfile
-    prefetchNpmDeps = "${lib.getExe prefetch-npm-deps}";
+    prefetchNpmDeps = lib.getExe prefetch-npm-deps;
     forceGitDeps = true;
 
   };

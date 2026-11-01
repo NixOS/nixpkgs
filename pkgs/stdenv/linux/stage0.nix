@@ -95,7 +95,7 @@ if minbootSupported then
             libc
             ;
           bintools = minimal-bootstrap.binutils-static;
-          runtimeShell = "${lib.getExe minimal-bootstrap.bash}";
+          runtimeShell = lib.getExe minimal-bootstrap.bash;
         };
         coreutils = minimal-bootstrap.coreutils-static;
         gnugrep = minimal-bootstrap.gnugrep-static;

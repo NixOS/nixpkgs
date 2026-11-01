@@ -65,7 +65,7 @@ bootBash.runCommand "${pname}-${version}"
       derivationWithMeta (
         {
           inherit name buildCommand;
-          builder = "${lib.getExe bash}";
+          builder = lib.getExe bash;
           args = [
             "-e"
             (builtins.toFile "bash-builder.sh" ''
@@ -86,7 +86,7 @@ bootBash.runCommand "${pname}-${version}"
           ];
           passAsFile = [ "buildCommand" ];
 
-          SHELL = "${lib.getExe bash}";
+          SHELL = lib.getExe bash;
           PATH =
             if !env ? nativeBuildInputs then
               defaultBinPath

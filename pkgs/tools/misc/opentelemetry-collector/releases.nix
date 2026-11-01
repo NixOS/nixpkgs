@@ -12,7 +12,7 @@
 }:
 let
   # This is the tool OTEL uses to build their distributions.
-  builder = "${lib.getExe opentelemetry-collector-builder}";
+  builder = lib.getExe opentelemetry-collector-builder;
 
   # Keep the version in sync with the builder.
   version = "0.155.0";

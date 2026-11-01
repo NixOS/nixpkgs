@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      bc = "${lib.getExe bc}";
+      bc = lib.getExe bc;
     })
   ];
 

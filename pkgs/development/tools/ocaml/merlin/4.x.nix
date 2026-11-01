@@ -76,8 +76,8 @@ buildDunePackage {
     in
     [
       (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
-        dot-merlin-reader = "${lib.getExe dot-merlin-reader}";
-        dune = "${lib.getExe dune}";
+        dot-merlin-reader = lib.getExe dot-merlin-reader;
+        dune = lib.getExe dune;
       })
     ];
 

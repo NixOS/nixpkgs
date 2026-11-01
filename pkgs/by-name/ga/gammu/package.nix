@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./bashcomp-dir.patch
     ./systemd.patch
     (replaceVars ./gammu-config-dialog.patch {
-      dialog = "${lib.getExe dialog}";
+      dialog = lib.getExe dialog;
     })
   ];
 

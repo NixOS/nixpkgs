@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f6iA/nHpKnm3BALoQq8SzdcSzJLCFSferEf69SpgD2Y=";
   };
 
-  server = "${lib.getExe caddy}";
-  linkcheck = "${lib.getExe linkchecker}";
+  server = lib.getExe caddy;
+  linkcheck = lib.getExe linkchecker;
 
   nativeBuildInputs = [ asciidoctor ];
 

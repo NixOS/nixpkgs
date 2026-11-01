@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./paths.patch {
-      ffmpeg = "${lib.getExe ffmpeg}";
+      ffmpeg = lib.getExe ffmpeg;
       libopus = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

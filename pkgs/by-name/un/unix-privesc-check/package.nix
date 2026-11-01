@@ -35,7 +35,7 @@ resholve.mkDerivation (finalAttrs: {
   solutions = {
     unix-privesc-check = {
       scripts = [ "bin/unix-privesc-check" ];
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
       inputs = [
         gawk
         bash

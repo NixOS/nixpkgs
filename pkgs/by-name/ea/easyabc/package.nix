@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication {
     (replaceVars ./hardcoded-paths.patch {
       fluidsynth = "${fluidsynth}/lib/libfluidsynth.so";
       soundfont = "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2";
-      ghostscript = "${lib.getExe ghostscript}";
+      ghostscript = lib.getExe ghostscript;
     })
   ];
 
