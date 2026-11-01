@@ -75,6 +75,8 @@ buildNpmPackage (finalAttrs: {
     shopt -u globstar
     # Save closure size by pruning all non-production dependencies before installation
     npm prune --omit=dev --offline --ignore-scripts --legacy-peer-deps
+    # Delete all JS sourcemaps, since they are unnneeded.
+    find . -type f -name '*.map' -delete
   '';
 
   postInstall = ''
