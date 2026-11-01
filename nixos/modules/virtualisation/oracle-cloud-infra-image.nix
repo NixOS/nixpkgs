@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.oci;
+  cfg = config.oracleCloudInfra;
 in
 {
   imports = [
-    ./oci-common.nix
+    ./oracle-cloud-infra-common.nix
     ../image/file-options.nix
   ];
 
@@ -22,13 +22,17 @@ in
 
     system.nixos.tags = [ "oci" ];
     image.extension = "qcow2";
-    system.build.image = config.system.build.OCIImage;
-    system.build.OCIImage = import ../../lib/make-disk-image.nix {
+    system.build.image = config.system.build.oracleCloudInfraImage;
+    system.build.OCIImage =
+      lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2611)
+        "system.build.OCIImage was renamed to system.build.oracleCloudInfraImage."
+        config.system.build.oracleCloudInfraImage;
+    system.build.oracleCloudInfraImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
       inherit (config.virtualisation) diskSize;
       name = "oci-image";
       baseName = config.image.baseName;
-      configFile = ./oci-config-user.nix;
+      configFile = ./oracle-cloud-infra-config-user.nix;
       format = "qcow2";
       partitionTableType = if cfg.efi then "efi" else "legacy";
     };

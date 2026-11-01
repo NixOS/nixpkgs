@@ -6,12 +6,12 @@
 }:
 
 let
-  cfg = config.oci;
+  cfg = config.oracleCloudInfra;
 in
 {
   imports = [ ../profiles/qemu-guest.nix ];
 
-  # Taken from /proc/cmdline of Ubuntu 20.04.2 LTS on OCI
+  # Taken from /proc/cmdline of Ubuntu 20.04.2 LTS on Oracle Cloud Infrastructure
   boot.kernelParams = [
     "nvme.shutdown_timeout=10"
     "nvme_core.shutdown_timeout=10"

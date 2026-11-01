@@ -18,9 +18,9 @@ let
     linode = ../virtualisation/linode-image.nix;
     lxc = ../virtualisation/lxc-container.nix;
     lxc-metadata = ../virtualisation/lxc-image-metadata.nix;
-    oci = ../virtualisation/oci-image.nix;
     openstack = ../../maintainers/scripts/openstack/openstack-image.nix;
     openstack-zfs = ../../maintainers/scripts/openstack/openstack-image-zfs.nix;
+    oracle-cloud-infra = ../virtualisation/oracle-cloud-infra-image.nix;
     proxmox = ../virtualisation/proxmox-image.nix;
     proxmox-lxc = ../virtualisation/proxmox-lxc.nix;
     qemu-efi = ../virtualisation/disk-image.nix;
