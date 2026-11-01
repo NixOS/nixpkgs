@@ -43,11 +43,11 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mercurial${lib.optionalString fullBuild "-full"}";
-  version = "7.2.2";
+  version = "7.2.4";
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/mercurial-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8uyOfu7wUAWRcG03RVXwzrEYgiBo51+jsyvgfdIYT2w=";
+    hash = "sha256-hYOeDznmy4k6iJMqo272YXWfPFxd5FUa0mvZ31PLcaI=";
   };
 
   pyproject = false;
