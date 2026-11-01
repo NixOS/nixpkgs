@@ -42,5 +42,6 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+    teams = [ lib.teams.python ];
   };
 }
