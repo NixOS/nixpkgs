@@ -11273,8 +11273,6 @@ self: super: with self; {
 
   monarchmoneycommunity = callPackage ../development/python-modules/monarchmoneycommunity { };
 
-  monero = callPackage ../development/python-modules/monero { };
-
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
