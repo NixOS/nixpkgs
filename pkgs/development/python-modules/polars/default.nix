@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
+  mold,
   build,
   buildPythonPackage,
   cargo,
@@ -39,13 +41,14 @@
 }:
 
 let
+  stdenv' = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { stdenv = stdenv'; } (finalAttrs: {
   pname = "polars";
   version = "2.1.0";
   pyproject = true;
@@ -78,7 +81,8 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoInstallHook
     rustPlatform.maturinBuildHook
     rustc
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ mold ];
 
   buildInputs = [
     polarsMemoryAllocator
@@ -95,6 +99,9 @@ buildPythonPackage (finalAttrs: {
     RUSTFLAGS = lib.concatStringsSep " " (
       lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
         "--cfg allocator=\"mimalloc\""
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        "-C link-arg=-fuse-ld=mold"
       ]
     );
     RUST_BACKTRACE = true;
