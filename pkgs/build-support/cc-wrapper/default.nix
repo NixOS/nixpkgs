@@ -783,6 +783,12 @@ stdenvNoCC.mkDerivation {
       + optionalString includeFortifyHeaders' ''
         include "${fortifyIncludeFlag}" "${fortify-headers}/include" >> $out/nix-support/libc-cflags
       ''
+      # Hey, don’t merge this until Emily has written a really great
+      # comment here. It would be so embarrassing. Seriously, do you
+      # want this to end up in the Git log for all of eternity?
+      + optionalString (targetPlatform.libc == "glibc" && targetPlatform.is32bit) ''
+        echo '-D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64' >> $out/nix-support/libc-cflags
+      ''
     )
 
     ##
