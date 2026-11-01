@@ -11,17 +11,19 @@
   libiberty,
   readline,
   versionCheckHook,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcc";
-  version = "0.0.11";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cg8rf8R3xYNJTJhrDfIdVAUR/OOd6JjB0NYHRosUzvU=";
+    hash = "sha256-hwmMj4K21xcFOmJNo96KXdG0xFeMqN9iCCkjmxGXfLs=";
     fetchSubmodules = true;
   };
 
@@ -38,18 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     libelf
     libiberty
     readline
+    zstd
+    zlib
   ];
 
   patches = [
     # The upstream forgot to bump WVERSION in header before tagging `v0.0.11`.
+    # Did it again in `v0.0.13` :)
     (fetchpatch2 {
-      url = "https://github.com/endrazine/wcc/commit/4bea2dac8b49d82e4f72e42027d74fc654380f7b.patch?full_index=1";
-      hash = "sha256-RK0ue8hdK/G+njwGmWpaewclRHprO8aBdZ9vBGQIQOc=";
-    })
-    # Fix build with gcc 15: function pointer requires explicit arguments
-    (fetchpatch2 {
-      url = "https://github.com/endrazine/wcc/commit/3dfd28cb53b4766032e1113cf508bf2f5dce87d5.patch?full_index=1";
-      hash = "sha256-7RsU3XJvJ2gvNsB1O/pvOrmd+3/wNfoOZj0JVlgJA8o=";
+      url = "https://github.com/endrazine/wcc/commit/0db1624a96e4b838bf2b0206f0b54d60c545eb7d.patch?full_index=1";
+      hash = "sha256-M5urrE43b0V3jTbPUpoUU1iiPOj4mC7IMzMhoDrCfBI=";
     })
   ];
 
@@ -58,9 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
       -e "s#/usr/share/wcc#$out/share/wcc#"
 
-    sed -i -e '/stropts.h>/d' src/wsh/include/libwitch/wsh.h
-
     sed -i '/wsh-static/d' src/wsh/Makefile
+
+    sed -i src/wcc/Makefile src/wld/Makefile \
+      -e 's/:libbfd.a/bfd/' \
+      -e 's/:libsframe.a/sframe/'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
