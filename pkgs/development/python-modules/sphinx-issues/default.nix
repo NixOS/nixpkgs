@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   sphinx,
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
       --replace-fail 'Path(sys.executable).parent.joinpath("sphinx-build")' '"${lib.getExe' sphinx "sphinx-build"}"'
   '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ sphinx ];
 
