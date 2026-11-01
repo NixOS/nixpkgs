@@ -14164,6 +14164,8 @@ self: super: with self; {
 
   pricehist = callPackage ../development/python-modules/pricehist { };
 
+  prime-pydantic-config = callPackage ../development/python-modules/prime-pydantic-config { };
+
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
   primepy = callPackage ../development/python-modules/primepy { };
