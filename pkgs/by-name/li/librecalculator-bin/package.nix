@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "librecalculator-bin";
   version = "0.1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/tonyzedginidze/librecalculator/releases/download/v${finalAttrs.version}/Libre.Calculator_${finalAttrs.version}_amd64.deb";
     sha256 = "f4cebcae62a68de1a0fc062a7d9e2abbb3b14a096ca731ceed79018e27f73d24";
