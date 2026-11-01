@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     "shell_integration"
     "terminfo"
     "vim"
+    "lib"
+    "dev"
   ];
 
   src = fetchFromGitHub {
@@ -124,18 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
     fontDirectories = [ ];
   };
 
-  # FIXME: Ghostty currently unconditionally builds libghostty-vt,
-  # even though that should really be built as its own package.
-  # Having the libghostty-vt binaries around also bloats our runtime
-  # closure immensely (from ~1 GiB to ~1.8 GiB) since the static library
-  # references glibc.dev, the Zig compiler and the dependency cache.
-  #
-  # The GUI app doesn't need any of this so we just nuke all -vt related
-  # output files for now.
   postInstall = ''
-    rm -r $out/include/ghostty/{vt.h,vt}
-    rm $out/lib/libghostty-vt.*
-    rm $out/share/pkgconfig/libghostty-vt*.pc
+    moveToOutput "lib/*.so*" "$lib"
+    moveToOutput "lib/*.a" "$dev"
   '';
 
   /**
@@ -178,6 +171,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/share/applications/com.mitchellh.ghostty.desktop \
       --replace-fail "Exec=$out/bin/ghostty" "Exec=ghostty"
+
+    substituteInPlace "$dev/share/pkgconfig/libghostty-vt.pc" \
+      --replace-fail "$out" "$lib"
+    substituteInPlace "$dev/share/pkgconfig/libghostty-vt-static.pc" \
+      --replace-fail "$out" "$dev"
   '';
 
   nativeInstallCheckInputs = [
