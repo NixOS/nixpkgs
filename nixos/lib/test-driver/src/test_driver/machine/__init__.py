@@ -139,7 +139,22 @@ XDOTOOL_MODIFIER_ALIASES = {
 def xdotool_key_sequence(key: str) -> str:
     """Translate a QEMU-style key chord to xdotool syntax.
 
-    For example, "ctrl-alt-ret" becomes "ctrl+alt+Return".
+    >>> xdotool_key_sequence("ctrl-alt-ret")
+    'ctrl+alt+Return'
+    >>> xdotool_key_sequence("meta_l-x")
+    'super+x'
+    >>> xdotool_key_sequence("alt-f4")
+    'alt+F4'
+
+    A modifier on its own is a regular key:
+
+    >>> xdotool_key_sequence("shift")
+    'Shift_L'
+
+    A "-" that follows a modifier is the key itself, not a separator:
+
+    >>> xdotool_key_sequence("ctrl--")
+    'ctrl+-'
     """
     parts = key.split("-")
     modifiers = []
@@ -154,6 +169,13 @@ def xdotool_key_sequence(key: str) -> str:
 
 
 def make_command(args: list) -> str:
+    """Join arguments into a shell command, quoting each one as a single word.
+
+    >>> make_command(["echo", "a b", 1])
+    "echo 'a b' 1"
+    >>> make_command(["ls", "*"])
+    "ls '*'"
+    """
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
@@ -217,6 +239,13 @@ class QemuStartCommand:
         These Nix commands have the particular characteristic that the
         machine name can be extracted out of them via a regex match.
         (Admittedly a _very_ implicit contract, TODO fix this eventually.)
+
+        >>> QemuStartCommand("/nix/store/hash-nixos-vm/bin/run-foo-vm").machine_name
+        'foo'
+        >>> QemuStartCommand("run-foo-bar-vm").machine_name
+        'foo-bar'
+        >>> QemuStartCommand("/some/script").machine_name
+        'machine'
         """
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
@@ -1690,7 +1719,19 @@ class NspawnMachine(BaseMachine):
     vnc: NspawnVnc | None
 
     @staticmethod
-    def machine_name_from_start_command(start_command: str) -> str:
+    def _machine_name_from_start_command(start_command: str) -> str:
+        """Extract the machine name from a start script of a container.
+
+        >>> NspawnMachine._machine_name_from_start_command(
+        ...     "/nix/store/hash-container/bin/run-foo-nspawn"
+        ... )
+        'foo'
+        >>> NspawnMachine._machine_name_from_start_command("run-foo-bar-nspawn")
+        'foo-bar'
+        >>> NspawnMachine._machine_name_from_start_command("/some/script")
+        Traceback (most recent call last):
+        AssertionError: Could not extract node name from /some/script
+        """
         match = re.search("run-(.+)-nspawn", os.path.basename(start_command))
         assert match is not None, f"Could not extract node name from {start_command}"
         return match.group(1)
@@ -1710,7 +1751,7 @@ class NspawnMachine(BaseMachine):
         # See analogous TODO in `QemuStartCommand::machine_name`.
         super().__init__(
             out_dir=out_dir,
-            name=name or self.machine_name_from_start_command(start_command),
+            name=name or self._machine_name_from_start_command(start_command),
             logger=logger,
             callbacks=callbacks,
             tmp_dir=tmp_dir,
