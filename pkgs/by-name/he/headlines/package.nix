@@ -2,53 +2,49 @@
   lib,
   stdenv,
   cmake,
+  glib,
+  glib-networking,
   pkg-config,
-  libmicrohttpd,
-  curl,
   openssl,
   jsoncpp,
   libxml2,
   gst_all_1,
-  boost,
-  websocketpp,
   libadwaita,
-  gtkmm4,
   libsecret,
+  libsoup_3,
+  webkitgtk_6_0,
   fetchFromGitLab,
   wrapGAppsHook4,
   xdg-utils,
-  youtube-dl,
-  ffmpeg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "headlines";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     owner = "caveman250";
     repo = "Headlines";
     rev = version;
-    hash = "sha256-wamow0UozX5ecKbXWOgsWCerInL4J0gK0+Muf+eoO9k=";
+    hash = "sha256-zXGIGbqeljq3rN1p8MxAjqmxmGf95uPAlcFr3QOy3oE=";
   };
 
   nativeBuildInputs = [
     cmake
+    glib
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    libmicrohttpd
-    curl
+    glib-networking
     openssl
     jsoncpp
     libxml2
-    boost
-    websocketpp
     libadwaita
-    gtkmm4
     libsecret
+    libsoup_3
+    webkitgtk_6_0
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -58,15 +54,11 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
+  cmakeFlags = [ (lib.cmakeBool "DIST_BUILD" true) ];
+
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${
-        lib.makeBinPath [
-          xdg-utils
-          youtube-dl
-          ffmpeg
-        ]
-      }"
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
     )
   '';
 
