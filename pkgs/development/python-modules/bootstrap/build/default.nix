@@ -6,7 +6,6 @@
   installer,
   packaging,
   pyproject-hooks,
-  tomli,
   makeWrapper,
 }:
 let
@@ -48,8 +47,6 @@ let
 
   bootstrap-pyproject-hooks = buildBootstrapPythonModule pyproject-hooks { };
 
-  bootstrap-tomli = buildBootstrapPythonModule tomli { };
-
   sitePkgs = python.sitePackages;
 in
 buildBootstrapPythonModule build {
@@ -71,7 +68,6 @@ buildBootstrapPythonModule build {
       --prefix PYTHONPATH : "$out/${sitePkgs}" \
       --prefix PYTHONPATH : "${bootstrap-pyproject-hooks}/${sitePkgs}" \
       --prefix PYTHONPATH : "${bootstrap-packaging}/${sitePkgs}" \
-      --prefix PYTHONPATH : "${bootstrap-tomli}/${sitePkgs}"
 
     runHook postInstall
   '';
