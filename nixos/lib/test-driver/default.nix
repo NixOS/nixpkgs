@@ -2,24 +2,14 @@
   lib,
   stdenv,
 
-  buildPythonApplication,
-  colorama,
+  python3Packages,
   coreutils,
   imagemagick_light,
-  ipython,
-  junit-xml,
-  ptpython,
-  pydantic,
-  python,
-  ovmfvartool,
-  remote-pdb,
-  ruff,
-  ty,
+  libtiff,
 
   netpbm,
   vhost-device-vsock,
   nixosTests,
-  setuptools,
   socat,
   systemd,
   tesseract4,
@@ -31,27 +21,33 @@
   extraPythonPackages ? (_: [ ]),
 }:
 
-buildPythonApplication {
+let
+  imagemagick_light = imagemagick_light.override { inherit libtiff; };
+  tesseract4 = tesseract4.override { enableLanguages = [ "eng" ]; };
+in
+python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
   pyproject = true;
 
   src = ./src;
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
-    colorama
-    ipython
-    junit-xml
-    ptpython
-    pydantic
-    ovmfvartool
-    remote-pdb
-  ]
-  ++ extraPythonPackages python.pkgs;
+  dependencies =
+    with python3Packages;
+    [
+      colorama
+      ipython
+      junit-xml
+      ptpython
+      pydantic
+      ovmfvartool
+      remote-pdb
+    ]
+    ++ extraPythonPackages python3Packages;
 
   propagatedBuildInputs = [
     coreutils
@@ -79,7 +75,7 @@ buildPythonApplication {
 
   doCheck = true;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     ruff
     ty
   ];
