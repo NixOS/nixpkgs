@@ -927,9 +927,6 @@ Automation without any manual review must not be used as the sole arbiter of whe
 ## Use of LLM output in prose
 
 In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
-However, LLMs may be used to generate the summary (first line) of a commit message.
-Additionally, any form of automation may be used to add Git trailers (e.g. `Assisted-by: ...`).
-Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
 
 ## Transparency
 
@@ -959,6 +956,10 @@ The following situations are fully or partially exempt:
   This does not waive any other requirement.
 
 * Use of automated tools to develop upstream software packaged inside Nixpkgs is not in scope.
+
+* Any form of automation (including LLMs) may be used to generate the summary (first line) or trailers (e.g. `Changelog: ...`, `Assisted-by: ...`) of a commit message.
+  Disclosure of this is not required.
+  Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
 
 ## Enforcement
 
