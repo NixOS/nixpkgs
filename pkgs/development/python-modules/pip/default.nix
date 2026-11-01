@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
   installShellFiles,
   stdenv,
   buildPackages,
@@ -53,7 +53,7 @@ let
     '';
 
     nativeBuildInputs = [
-      flit-core
+      flit-core_3
       installShellFiles
     ]
     ++ lib.optionals sphinxSupported [
