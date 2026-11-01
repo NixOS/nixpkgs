@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Information on the repo is untrustworthy.
     # This is a fork from the original np2, which lacked any licensing information for most of its code -> Unfree
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "sdlnp21kai";
     platforms = lib.platforms.x86;
   };
