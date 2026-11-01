@@ -1,58 +1,71 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  addDriverRunpath,
+  dbus,
   fetchgit,
+  ffmpeg,
+  gitUpdater,
+  libdrm,
+  libglvnd,
+  libjpeg_turbo,
+  libpulseaudio,
+  libva,
+  libxcomposite,
+  libxdamage,
+  libxfixes,
+  libxi,
+  libxrandr,
   makeWrapper,
   meson,
   ninja,
-  addDriverRunpath,
+  nixosTests,
+  pipewire,
   pkg-config,
-  libxcomposite,
-  libpulseaudio,
-  dbus,
-  ffmpeg,
+  versionCheckHook,
+  vulkan-headers,
   wayland,
   wayland-scanner,
-  vulkan-headers,
-  pipewire,
-  libdrm,
-  libva,
-  libglvnd,
-  libxdamage,
-  libxi,
-  libxrandr,
-  libxfixes,
-  libjpeg_turbo,
-  versionCheckHook,
   wrapperDir ? "/run/wrappers/bin",
-  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "6.1.4";
+  version = "6.1.6";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-Xs+H/jb6ngeXwDD5eNkZLTmXqdo6R3ZAPz8Tliba8pA=";
+    hash = "sha256-Y2u+C0ioSORKkEiKRLAABGzTSAnoFU3J7OIlNOC4MAQ=";
   };
 
-  postPatch = ''
-    substituteInPlace src/capture/v4l2.c src/image_writer.c \
-      --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
-  '';
+  postPatch =
+    let
+      nv-codec-headers = lib.findFirst (p: p.pname or "" == "nv-codec-headers") null ffmpeg.buildInputs;
+    in
+    ''
+      substituteInPlace src/capture/v4l2.c src/image_writer.c \
+        --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ''
+    # upstream guesses the NVENC API from libavcodec's major version
+    + lib.optionalString (nv-codec-headers != null) ''
+      substituteInPlace src/codec_query/nvenc.c \
+        --replace-fail "#if defined(GSR_FFMPEG_STATIC)" \
+          $'#if 1\n#define FFMPEG_REQUIRED_NVENC_API_VERSION NVENCAPI_PACKED_VERSION(${lib.versions.major nv-codec-headers.version}, ${lib.versions.minor nv-codec-headers.version})\n#elif defined(GSR_FFMPEG_STATIC)'
+    '';
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
+    addDriverRunpath
     pkg-config
     makeWrapper
     meson
     ninja
     wayland-scanner
   ];
-
-  depsBuildBuild = [ pkg-config ];
-
   buildInputs = [
     libxcomposite
     libpulseaudio
@@ -69,17 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
   ];
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-
+  mesonBuildType = "release";
   mesonFlags = [
     # Install the upstream systemd unit
     (lib.mesonBool "systemd" true)
     # Enable Wayland support
     (lib.mesonBool "portal" true)
+    # Record audio from single applications
+    (lib.mesonBool "app_audio" true)
     # Handle by the module
     (lib.mesonBool "capabilities" false)
     (lib.mesonBool "nvidia_suspend_fix" false)
@@ -91,30 +101,35 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin/.wrapped
     mv $out/bin/gpu-screen-recorder $out/bin/.wrapped/
     makeWrapper "$out/bin/.wrapped/gpu-screen-recorder" "$out/bin/gpu-screen-recorder" \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libglvnd
-          addDriverRunpath.driverLink
-        ]
-      }" \
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
     substituteInPlace $out/lib/systemd/user/gpu-screen-recorder.service \
       --replace-fail "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.wrapped/gpu-screen-recorder
+    addDriverRunpath $out/bin/.wrapped/gpu-screen-recorder
+  '';
+
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
     license = lib.licenses.gpl3Only;
-    mainProgram = "gpu-screen-recorder";
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
       keenanweaver
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "gpu-screen-recorder";
   };
 })
