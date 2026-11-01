@@ -2613,6 +2613,8 @@ self: super: with self; {
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
+  bodhi-client = callPackage ../development/python-modules/bodhi-client { };
+
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
@@ -9328,6 +9330,8 @@ self: super: with self; {
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
   knx-telegram-store = callPackage ../development/python-modules/knx-telegram-store { };
+
+  koji = callPackage ../development/python-modules/koji { };
 
   kokoro = callPackage ../development/python-modules/kokoro { };
 
@@ -18561,6 +18565,8 @@ self: super: with self; {
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
 
   rpi-lgpio = callPackage ../development/python-modules/rpi-lgpio { };
+
+  rpkg = callPackage ../development/python-modules/rpkg { };
 
   rplcd = callPackage ../development/python-modules/rplcd { };
 
