@@ -30047,6 +30047,12 @@
     githubId = 38566841;
     name = "Anthony Butt";
   };
+  tonyzedginidze = {
+    email = "tony@boringdystopia.ai";
+    github = "tonyzedginidze";
+    githubId = 119799979;
+    name = "Tony Zedginidze";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
@@ -31827,12 +31833,6 @@
         fingerprint = "A1D3 A2B4 E14B D7C0 445B  B749 A576 7B54 367C FBDF";
       }
     ];
-  };
-  wizeman = {
-    email = "rcorreia@wizy.org";
-    github = "wizeman";
-    githubId = 168610;
-    name = "Ricardo M. Correia";
   };
   wjohnsto = {
     name = "Will Johnston";
