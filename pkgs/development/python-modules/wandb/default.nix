@@ -155,6 +155,8 @@ let
     pname = "wandb-core";
     inherit src version;
 
+    __structuredAttrs = true;
+
     sourceRoot = "${src.name}/core";
 
     postPatch =
