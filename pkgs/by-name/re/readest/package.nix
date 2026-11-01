@@ -53,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Select upstream's CEF lockfile and matching Tauri/Cargo overrides.
     cp "$sourceRoot/../../Cargo.cef.lock" \
-         "$sourceRoot/../../Cargo.lock"
+       "$sourceRoot/../../Cargo.lock"
 
     cp "$sourceRoot/src-tauri/.cargo/cef.toml" \
-      "$sourceRoot/src-tauri/.cargo/config.toml"
+       "$sourceRoot/src-tauri/.cargo/config.toml"
   '';
 
   pnpmRoot = "../..";
@@ -124,13 +124,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  # Winit's X11 backend loads these dynamically; autoPatchelf cannot discover them.
   runtimeDependencies = [
+    # Loaded by Winit's X11 backend
     libx11
     libxcursor
     libxi
-    libxrandr
     libxkbcommon
+    libxrandr
   ];
 
   preBuild = ''
