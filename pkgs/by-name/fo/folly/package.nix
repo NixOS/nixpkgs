@@ -8,6 +8,7 @@
   cmake,
   ninja,
   pkg-config,
+  buildPackages,
 
   double-conversion,
   fast-float,
@@ -106,7 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
     (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/folly")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
-  ];
+  ]
+  ++
+    lib.optionals
+      (
+        !stdenv.buildPlatform.canExecute stdenv.hostPlatform
+        && stdenv.hostPlatform.emulatorAvailable buildPackages
+      )
+      [ (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages)) ];
 
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
     [
