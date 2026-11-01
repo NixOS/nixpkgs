@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libamplsolver";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ampl";
     repo = "asl";
     rootDir = "src/solvers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D1hB5z6r4n6+u1oWclhIst1mXDvObmOsh1j0uocairQ=";
+    hash = "sha256-2vgs92Kv4WjEo2sRyn0zR/1lO7bq5Xm7Po4e1EF6u+0=";
   };
 
   patches = [
