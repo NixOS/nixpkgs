@@ -298,6 +298,7 @@
   ./programs/npm.nix
   ./programs/ns-usbloader.nix
   ./programs/nushell.nix
+  ./programs/nvbroadcast.nix
   ./programs/nvrs.nix
   ./programs/nxdumpclient.nix
   ./programs/oblogout.nix
