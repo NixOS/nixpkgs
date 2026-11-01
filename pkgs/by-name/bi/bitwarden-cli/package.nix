@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   perl,
   xcbuild,
   writableTmpDirAsHomeHook,
@@ -28,7 +27,6 @@ buildNpmPackage (finalAttrs: {
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
 
   npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
