@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_98,
   fetchFromGitHub,
   pkg-config,
   bzip2,
@@ -9,7 +9,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_98.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-binstall";
   version = "1.26.2";
 
