@@ -1,15 +1,13 @@
 {
-  callPackage,
+  cataclysmDDA,
   fetchFromGitHub,
-  pkgs,
-  attachPkgs,
   tiles ? true,
   debug ? false,
   useXdgDir ? false,
 }:
 
 let
-  common = callPackage ./common.nix {
+  common = cataclysmDDA.callPackage ./common.nix {
     inherit tiles debug useXdgDir;
   };
 
@@ -35,4 +33,4 @@ let
   });
 in
 
-attachPkgs pkgs self
+cataclysmDDA.attachPkgs cataclysmDDA.pkgs self

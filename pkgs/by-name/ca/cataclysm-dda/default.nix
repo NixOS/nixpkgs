@@ -4,7 +4,7 @@ let
   callPackage = newScope self;
 
   stable = rec {
-    tiles = callPackage ./stable.nix { };
+    tiles = callPackage ./package.nix { };
 
     curses = tiles.override { tiles = false; };
   };
