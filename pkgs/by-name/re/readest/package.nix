@@ -224,9 +224,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       eljamm
       kasifrasi
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = cef-binary.meta.platforms;
   };
 })
