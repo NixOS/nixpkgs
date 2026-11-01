@@ -1,23 +1,24 @@
 {
   config,
-  pkgs,
   lib,
+  pkgs,
   utils,
   ...
 }:
-
 let
+  inherit (lib)
+    getExe
+    getExe'
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    ;
+  inherit (lib.types) passwdEntry str;
+
   cfg = config.services.unpackerr;
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "unpackerr.conf" cfg.settings;
-  inherit (lib)
-    mkEnableOption
-    mkOption
-    mkPackageOption
-    mkIf
-    getExe
-    types
-    ;
 in
 {
   options = {
@@ -28,18 +29,14 @@ in
         type = configFormat.type;
         default = { };
         example = {
-          radarr = [
-            {
-              url = "http://127.0.0.1:8989";
-              api_key = "0123456789abcdef0123456789abcdef";
-            }
-          ];
-          sonarr = [
-            {
-              url = "http://127.0.0.1:7878";
-              api_key = "0123456789abcdef0123456789abcdef";
-            }
-          ];
+          radarr.main = {
+            api_key = "filepath:/run/secrets/radarr/api-key";
+            url = "http://127.0.0.1:7878";
+          };
+          sonarr.main = {
+            api_key = "0123456789abcdef0123456789abcdef";
+            url = "http://127.0.0.1:8989";
+          };
         };
         description = ''
           Unpackerr TOML configuration as a Nix attribute set.
@@ -49,13 +46,13 @@ in
       };
 
       user = mkOption {
-        type = types.str;
+        type = passwdEntry str;
         default = "unpackerr";
         description = "User account under which Unpackerr runs.";
       };
 
       group = mkOption {
-        type = types.str;
+        type = passwdEntry str;
         default = "unpackerr";
         description = "Group under which Unpackerr runs.";
       };
@@ -65,36 +62,33 @@ in
   };
 
   config = mkIf cfg.enable {
-    # Upstream service: https://github.com/Unpackerr/unpackerr/blob/main/init/systemd/unpackerr.service
     systemd = {
       services.unpackerr = {
-        description = "Unpackerr - archive extraction daemon";
-        wants = [ "network.target" ];
+        description = "Unpackerr Archive Extractor";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "exec";
           User = cfg.user;
           Group = cfg.group;
+          ExecReload = "${getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
           ExecStart = utils.escapeSystemdExecArgs [
             (getExe cfg.package)
             "--config=${configFile}"
           ];
           Restart = "always";
-          RestartSec = 10;
         };
       };
     };
 
-    users.users = mkIf (cfg.user == "unpackerr") {
-      unpackerr = {
-        inherit (cfg) group;
-        isSystemUser = true;
+    users = {
+      groups = mkIf (cfg.group == "unpackerr") { unpackerr = { }; };
+      users = mkIf (cfg.user == "unpackerr") {
+        unpackerr = {
+          inherit (cfg) group;
+          isSystemUser = true;
+        };
       };
-    };
-
-    users.groups = mkIf (cfg.group == "unpackerr") {
-      unpackerr = { };
     };
   };
 
