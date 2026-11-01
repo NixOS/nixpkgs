@@ -13,11 +13,13 @@ let
     imap0
     isAttrs
     isList
+    literalMD
     mergeAttrsList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
+    optional
     optionalAttrs
     toUpper
     ;
@@ -26,9 +28,11 @@ let
   inherit (lib.types)
     attrsOf
     bool
+    externalPath
     float
     int
     listOf
+    nullOr
     oneOf
     passwdEntry
     str
@@ -79,7 +83,25 @@ in
       enable = mkEnableOption "Unpackerr";
 
       settings = mkOption {
-        type = submodule { freeformType = settingsType; };
+        type = submodule {
+          freeformType = settingsType;
+          options = {
+            log_file = mkOption {
+              default = if isNull cfg.logDir then null else "%L/%N/unpackerr.log";
+              defaultText = literalMD "`/var/log/unpackerr/unpackerr.log` if [](#opt-services.unpackerr.logDir) is set, otherwise `null`";
+              description = "Path of Unpackerr's log file, derived from [](#opt-services.unpackerr.logDir).";
+              readOnly = true;
+              type = nullOr str;
+            };
+            webserver.log_file = mkOption {
+              default = if isNull cfg.logDir then null else "%L/%N/http.log";
+              defaultText = literalMD "`/var/log/unpackerr/http.log` if [](#opt-services.unpackerr.logDir) is set, otherwise `null`";
+              description = "Path of Unpackerr's HTTP log file, derived from [](#opt-services.unpackerr.logDir).";
+              readOnly = true;
+              type = nullOr str;
+            };
+          };
+        };
         default = { };
         example = {
           radarr.main = {
@@ -111,12 +133,47 @@ in
         description = "Group under which Unpackerr runs.";
       };
 
+      dataDir = mkOption {
+        default = "/var/lib/unpackerr";
+        description = ''
+          Directory for the config file saved by the web UI,
+          and for the history if [](#opt-services.unpackerr.logDir) is `null`.
+          If not `/var/lib/unpackerr`, it is bind-mounted there.
+        '';
+        type = externalPath;
+      };
+
+      logDir = mkOption {
+        default = null;
+        description = ''
+          Directory for the log files and the history,
+          or `null` to log only to the journal.
+          If not `/var/log/unpackerr`, it is bind-mounted there.
+        '';
+        example = "/var/log/unpackerr";
+        type = nullOr externalPath;
+      };
+
       package = mkPackageOption pkgs "unpackerr" { };
     };
   };
 
   config = mkIf cfg.enable {
     systemd = {
+      mounts =
+        optional (cfg.dataDir != "/var/lib/unpackerr") {
+          options = "bind";
+          wantedBy = [ "local-fs.target" ];
+          what = cfg.dataDir;
+          where = "/var/lib/unpackerr";
+        }
+        ++ optional (!isNull cfg.logDir && cfg.logDir != "/var/log/unpackerr") {
+          options = "bind";
+          wantedBy = [ "local-fs.target" ];
+          what = cfg.logDir;
+          where = "/var/log/unpackerr";
+        };
+
       services.unpackerr = {
         description = "Unpackerr Archive Extractor";
         after = [ "network.target" ];
@@ -130,6 +187,7 @@ in
           ExecStart = "${getExe cfg.package} ${
             toCommandLineShellGNU { } { config = "%S/%N/unpackerr.toml"; }
           }";
+          LogsDirectory = mkIf (!isNull cfg.logDir) "%N";
           StateDirectory = "%N";
           Restart = "always";
         };
