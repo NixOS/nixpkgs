@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "9.1.1";
+  version = "9.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EIj73o8rSdlaVJoZVwevp6dqPOm8rcJrbXHw/9pf4xM=";
+    hash = "sha256-l8TzsfPHQUqjZGXgm4Ig8dA2J5k71RsSguGTdTyAVXs=";
   };
 
   outputs = [
