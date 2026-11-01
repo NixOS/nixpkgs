@@ -63,7 +63,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     rev = "version_${finalAttrs.version}";
   };
 
-  # only applies to prusa slicer because super-slicer overrides *all* patches
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
@@ -75,8 +74,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./catch2_3_15.patch
   ];
 
-  # (not applicable to super-slicer fork)
-  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") (
+  postPatch = (
     # Patch required for GCC 14, but breaks on clang
     lib.optionalString clangStdenv.cc.isGNU ''
       substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
@@ -205,9 +203,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     fi
 
     # Fix resources folder location on macOS
-    substituteInPlace src/${
-      if finalAttrs.pname == "prusa-slicer" then "CLI/Setup.cpp" else "PrusaSlicer.cpp"
-    } \
+    substituteInPlace src/CLI/Setup.cpp \
       --replace-fail "#ifdef __APPLE__" "#if 0"
   '';
 
