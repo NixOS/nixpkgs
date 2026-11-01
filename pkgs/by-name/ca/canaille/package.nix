@@ -177,6 +177,11 @@ python.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
+    problems.broken.message = ''
+      Canaille 0.2.7 is incompatible with authlib 1.9.1 (which was backported
+      for security reasons), but we can't update Canaille either since it
+      would require backporting too many changes to python3Packages.
+    '';
   };
 
 }
