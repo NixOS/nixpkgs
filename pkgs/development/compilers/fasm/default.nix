@@ -1,11 +1,14 @@
 {
-  stdenv,
   lib,
-  fasm-bin,
-  isx86_64,
+  stdenv,
+  pkgsi686Linux,
+  isx86_64 ? stdenv.hostPlatform.isx86_64,
 }:
 
-stdenv.mkDerivation {
+let
+  inherit (pkgsi686Linux) fasm-bin;
+in
+pkgsi686Linux.stdenv.mkDerivation {
   inherit (fasm-bin) version src meta;
 
   pname = "fasm";
