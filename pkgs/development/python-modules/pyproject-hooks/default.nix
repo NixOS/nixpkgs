@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyproject-hooks";
-  version = "1.2.0";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_hooks";
     inherit version;
-    hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";
+    hash = "sha256-3v2hm4VPoNO9T3bqTdy6ir19z83VhaZpCt4FB0T8X0M=";
   };
 
   nativeBuildInputs = [ flit-core ];
