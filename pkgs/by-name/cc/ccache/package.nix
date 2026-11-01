@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
           isClang = unwrappedCC.isClang or false;
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
+          inherit unwrappedCC;
         }
         // builtins.intersectAttrs {
           hardeningUnsupportedFlagsByTargetPlatform = null;

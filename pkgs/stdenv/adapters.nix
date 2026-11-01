@@ -324,6 +324,7 @@ rec {
       throw "Mold can't be used to emit Mach-O (Darwin) binaries"
     else
       let
+        unwrappedCC = stdenv.cc.cc.unwrappedCC or stdenv.cc.cc;
         bintools = stdenv.cc.bintools.override {
           extraBuildCommands = ''
             pushd $out/bin
@@ -348,7 +349,7 @@ rec {
         }
         //
           lib.optionalAttrs
-            (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12"))
+            (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast unwrappedCC.version "12"))
             {
               mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
                 env = (args.env or { }) // {
