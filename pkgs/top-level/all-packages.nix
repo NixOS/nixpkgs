@@ -9424,12 +9424,10 @@ with pkgs;
 
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
-  openraPackages_2019 = import ../games/openra_2019 {
+  openraPackages_2019 = import ../by-name/op/openra_2019 {
     inherit lib;
     pkgs = pkgs.__splicedPackages;
   };
-
-  openra_2019 = openraPackages_2019.engines.release;
 
   openraPackages = recurseIntoAttrs (callPackage ../by-name/op/openra/engines { });
 
