@@ -7,37 +7,38 @@ when no certificate file was supplied explicitly.
 
 --- a/Meta/CMake/compile_options.cmake
 +++ b/Meta/CMake/compile_options.cmake
-@@ -210,7 +210,6 @@
+@@ -232,7 +232,6 @@
  endif()
 
  if (APPLE)
 -    list(APPEND CMAKE_PREFIX_PATH /opt/homebrew)
      add_cxx_link_options(LINKER:-dead_strip)
- endif()
 
+     # The debug info of LTO code lives in the objects the linker generates, which it deletes after linking unless told
 --- a/UI/CMakeLists.txt
 +++ b/UI/CMakeLists.txt
-@@ -31,10 +31,6 @@
-         # This makes the bundle in the build directory *NOT* relocatable
+@@ -81,9 +81,6 @@
          add_custom_command(TARGET ${target_name} POST_BUILD
              COMMAND "${CMAKE_COMMAND}" -E create_symlink "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" "${bundle_dir}/Contents/lib"
--        )
--
--        add_custom_command(TARGET ${target_name} POST_BUILD
--            COMMAND codesign -s - -v -f --entitlements "${LADYBIRD_ENTITLEMENTS_FILE}" "${bundle_dir}"
          )
+-
+-        ladybird_codesign_command(codesign_command "${target_name}" "${LADYBIRD_ENTITLEMENTS_FILE}" -v "${bundle_dir}")
+-        add_custom_command(TARGET ${target_name} POST_BUILD COMMAND ${codesign_command} VERBATIM)
      endif()
 
-@@ -113,17 +109,6 @@
+     if (APPLE)
+@@ -161,19 +158,6 @@
  if (APPLE)
      set_helper_process_properties(WebDriver)
 
 -    # WebDriver and the helpers can link into the bundle after ladybird has signed it — and that leaves the seal stale
 -    # until something later relinks ladybird. Sign once more with everything in place.
 -    set(bundle_signed_stamp "${CMAKE_CURRENT_BINARY_DIR}/ladybird_bundle_signed.stamp")
+-    ladybird_codesign_command(codesign_command ladybird-bundle "${LADYBIRD_ENTITLEMENTS_FILE}" -v "$<TARGET_BUNDLE_DIR:ladybird>")
+-
 -    add_custom_command(
 -        OUTPUT "${bundle_signed_stamp}"
--        COMMAND codesign -s - -v -f --entitlements "${LADYBIRD_ENTITLEMENTS_FILE}" "$<TARGET_BUNDLE_DIR:ladybird>"
+-        COMMAND ${codesign_command}
 -        COMMAND "${CMAKE_COMMAND}" -E touch "${bundle_signed_stamp}"
 -        DEPENDS ladybird WebDriver ${ladybird_helper_processes} "${LADYBIRD_ENTITLEMENTS_FILE}"
 -        VERBATIM
@@ -48,9 +49,9 @@ when no certificate file was supplied explicitly.
  if(NOT CMAKE_SKIP_INSTALL_RULES)
 --- a/Services/RequestServer/main.cpp
 +++ b/Services/RequestServer/main.cpp
-@@ -77,6 +77,10 @@
-     if (auto result = Core::Platform::set_current_thread_qos(Core::Platform::ThreadQoS::UserInitiated); result.is_error())
-         warnln("Could not set main thread QoS: {}", result.error());
+@@ -92,6 +92,10 @@
+     if (enable_test_mode)
+         RequestServer::DNSInfo::the().loopback_domains.append("test"sv);
 
 +    // Pass the default CA bundle through the sandbox allowlist as well as to curl.
 +    if (certificates.is_empty())
@@ -61,12 +62,14 @@ when no certificate file was supplied explicitly.
          RequestServer::set_default_certificate_path(certificates.first());
 --- a/Meta/CMake/ladybird_helper_processes.cmake
 +++ b/Meta/CMake/ladybird_helper_processes.cmake
-@@ -43,7 +43,7 @@
-     file(WRITE "${entitlements_file}" "${plist}")
+@@ -54,6 +54,8 @@
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${target}.release.entitlements" DESTINATION entitlements
+         COMPONENT ladybird_Runtime)
 
-     add_custom_command(TARGET ${target} POST_BUILD
--        COMMAND codesign -s - -f -o runtime --entitlements "${entitlements_file}" "$<TARGET_FILE:${target}>"
+-    ladybird_codesign_command(codesign_command "${target}" "${entitlements_file}" -o runtime "$<TARGET_FILE:${target}>")
+-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${codesign_command} VERBATIM)
++    add_custom_command(TARGET ${target} POST_BUILD
 +        COMMAND rcodesign sign --code-signature-flags runtime --entitlements-xml-file "${entitlements_file}" "$<TARGET_FILE:${target}>"
-         VERBATIM
-     )
++        VERBATIM
++    )
  endfunction()
