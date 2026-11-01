@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   makeDesktopItem,
-  wxwidgets_3_1,
+  wxwidgets-prusa3d,
   prusa-slicer,
   libspnav,
   opencascade-occt_7_6,
@@ -25,28 +25,13 @@ let
     ./no-ilmbase.patch
   ];
 
-  wxwidgets_3_1-prusa = wxwidgets_3_1.overrideAttrs (old: {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.1.4";
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "489f6118256853cf5b299d595868641938566cdb";
-      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
-      fetchSubmodules = true;
-    };
-    patches = [
-      ./0001-fix-assertion-using-hide-in-destroy.patch
-    ];
-  });
-
   versions = {
     stable = {
       version = "2.5.59.13";
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
       overrides = {
-        wxGTK-override = wxwidgets_3_1-prusa;
+        wxGTK-override = wxwidgets-prusa3d;
       };
     };
     latest = {
@@ -54,7 +39,7 @@ let
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
       overrides = {
-        wxGTK-override = wxwidgets_3_1-prusa;
+        wxGTK-override = wxwidgets-prusa3d;
       };
     };
     beta = {
