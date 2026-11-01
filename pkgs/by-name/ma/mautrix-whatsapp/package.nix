@@ -1,6 +1,7 @@
 {
   lib,
   nix-update-script,
+  nixosTests,
   buildGoModule,
   fetchFromGitHub,
   olm,
@@ -37,6 +38,7 @@ buildGoModule rec {
   ];
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.mautrix-whatsapp = nixosTests.mautrix-whatsapp;
 
   meta = {
     homepage = "https://github.com/mautrix/whatsapp";

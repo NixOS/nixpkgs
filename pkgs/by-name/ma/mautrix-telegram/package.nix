@@ -37,6 +37,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.mautrix-telegram = nixosTests.mautrix-telegram;
   };
 
   tags = lib.optional withGoolm "goolm";
