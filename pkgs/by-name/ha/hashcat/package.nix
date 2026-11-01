@@ -22,22 +22,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hashcat";
-  version = "7.1.2";
+  version = "8.0.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${finalAttrs.version}.tar.gz";
-    hash = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
+    hash = "sha256-1qdTPh4lCiNqi5nQtyXN122P3OdEx+6ssr9CIQ/kdhs=";
   };
 
   postPatch = ''
-     # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
+     # MACOSX_DEPLOYMENT_TARGET is defined by the environment
      # Remove hardcoded paths on darwin
     substituteInPlace src/Makefile \
       --replace-fail "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
-      --replace-fail "/usr/bin/ar" "ar" \
       --replace-fail "/usr/bin/sed" "sed" \
       --replace-fail '-i ""' '-i'
   '';
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     (python3.withPackages (
       ps: with ps; [
-        # leveldb # Required for bitwarden2hashcat.py, broken since python 3.12 https://github.com/NixOS/nixpkgs/pull/342756
+        leveldb # Required for bitwarden2hashcat.py, leveldb-0.201 not supported for interpreter python3.14
         protobuf
         pyasn1
         pycryptodome
