@@ -9,7 +9,6 @@
   pkg-config,
   pkgs, # zstd hidden by python3Packages.zstd
   pytestCheckHook,
-  pytest-codspeed ? null, # Not in Nixpkgs
   pytest-cov-stub,
   pytest-xdist,
   pytest-benchmark,
@@ -48,19 +47,19 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "polars";
-  version = "1.42.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${finalAttrs.version}";
-    hash = "sha256-xHO+3mgwKvRRQZiAnThwkKFDvfe3ehkifBPINi101Ws=";
+    hash = "sha256-ZC1jP88FbteIRTTsVbCemfqeuNBwpCt2S/8Lmx6mLKE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EHtQ5BzG6EFJD7e8NMajqNEXlAU/QyyIFLil1irfaqo=";
+    hash = "sha256-P9KaMG0QMYjbkZOufvmCTAr9FMnWQw+PyC3LgwCM6fk=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
