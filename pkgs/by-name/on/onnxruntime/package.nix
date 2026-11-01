@@ -3,10 +3,10 @@
   config,
   stdenv,
   fetchFromGitHub,
+  applyPatches,
   abseil-cpp,
   buildPackages,
   cmake,
-  cpuinfo,
   eigen,
   flatbuffers_23,
   glibcLocales,
@@ -53,6 +53,14 @@ let
     hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
+  cpuinfo-src = fetchFromGitHub {
+    name = "cpuinfo-src";
+    owner = "pytorch";
+    repo = "cpuinfo";
+    rev = "66ee79c038d70dad9f08705b2c9b3e58f6d8f512";
+    hash = "sha256-A+kTj3GthwmO2kKeG3gG/zjvvt45OmuEvAtRLzwfEyM=";
+  };
+
   safeint-src = fetchFromGitHub {
     name = "safeint-src";
     owner = "dcleblanc";
@@ -65,16 +73,24 @@ let
     name = "onnx-src";
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.21.0";
-    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
+    tag = "v1.22.0";
+    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
   };
 
   cutlass-src = fetchFromGitHub {
     name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.4.2";
-    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
+    tag = "v4.7.0";
+    hash = "sha256-y8xejQ57FQH2NuyRdzrOQy11p3r40v8hrGoRTp265zU=";
+  };
+
+  deep_gemm-src = fetchFromGitHub {
+    name = "deep_gemm-src";
+    owner = "deepseek-ai";
+    repo = "DeepGEMM";
+    rev = "559d79fb6994a58b8a15b4b93bf13ccc16edf247";
+    hash = "sha256-g7mFyGrNqjS8I52Yu4c6Jf9SAUAToI9D7VbmfGMulEo=";
   };
 
   dlpack-src = fetchFromGitHub {
@@ -89,8 +105,8 @@ let
     name = "coremltools-src";
     owner = "apple";
     repo = "coremltools";
-    tag = "7.1";
-    hash = "sha256-kajQFHpl+4UK6fp+rM8TP0GiqIFYXPVFc2x1p19rBSw=";
+    tag = "9.0";
+    hash = "sha256-A2hwsJtLM2lSTVVZW+qI5ppMNMF9SKlWZs/1wC9YAxs=";
   };
 
   fp16-src = fetchFromGitHub {
@@ -113,14 +129,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.27.1";
+  version = "1.31.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
+    hash = "sha256-wATnI1v3De6+41fGYWS2458TCUWhBECNw2kBnfajKEo=";
   };
 
   patches = [
@@ -137,6 +156,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
     # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
     ./drop-orphaned-sharded-moe.patch
+
+    # Fix CUDA architecture gating for SM12x, family/arch-specific targets and -virtual entries
+    # https://github.com/microsoft/onnxruntime/pull/33373
+    ./fix-cuda-arch-gating.patch
+
+    # Add missing <cstdint> include (`uint32_t` is undefined with nvcc)
+    ./dynamic-sparse-attention-cstdint.patch
   ];
 
   postPatch = ''
@@ -195,9 +221,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     protobuf
     zlib
-  ]
-  ++ lib.optionals (lib.meta.availableOn effectiveStdenv.hostPlatform cpuinfo) [
-    cpuinfo
   ]
   ++ lib.optionals pythonSupport (
     with python3Packages;
@@ -286,7 +309,29 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${onnx-src}")
+    # Since 1.31.0, upstream patches onnx (e.g. LayerNormalization axis validation)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONNX" "${applyPatches {
+      name = "onnx-src-patched";
+      src = onnx-src;
+      patches = [ "${finalAttrs.src}/cmake/patches/onnx/onnx.patch" ];
+      patchFlags = [
+        "-p1"
+        "--ignore-whitespace"
+      ];
+    }}")
+    # Since 1.31.0, upstream no longer looks for a system cpuinfo and relies on its own patches
+    # (e.g. thread-safe deinitialization, https://github.com/pytorch/cpuinfo/pull/400)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO" "${applyPatches {
+      name = "cpuinfo-src-patched";
+      src = cpuinfo-src;
+      patches =
+        lib.optionals effectiveStdenv.hostPlatform.isLinux [
+          "${finalAttrs.src}/cmake/patches/cpuinfo/fix_missing_sysfs_fallback.patch"
+        ]
+        ++ [
+          "${finalAttrs.src}/cmake/patches/cpuinfo/enable_deinit_refcounting.patch"
+        ];
+    }}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SAFEINT" "${safeint-src}")
     (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
@@ -329,6 +374,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass-src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DEEP_GEMM" "${deep_gemm-src}")
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
@@ -410,15 +456,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ../include/onnxruntime/core/providers/coreml/coreml_provider_factory.h
   '';
 
-  strictDeps = true;
-
   # See comments in `cudaPackages.nccl`
   postFixup = lib.optionalString cudaSupport ''
     remove-references-to -t "${lib.getBin cuda_nvcc}" ''${!outputLib}/lib/libonnxruntime_providers_cuda.so
   '';
   disallowedRequisites = lib.optionals cudaSupport [ (lib.getBin cuda_nvcc) ];
-
-  __structuredAttrs = true;
 
   passthru = {
     inherit cudaSupport cudaPackages ncclSupport; # for the python module

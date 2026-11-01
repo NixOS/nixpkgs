@@ -1,0 +1,13 @@
+diff --git a/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h b/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h
+index d60bc7b9c6..e3a1d4c109 100644
+--- a/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h
++++ b/onnxruntime/contrib_ops/cuda/bert/dynamic_sparse_attention_impl.h
+@@ -3,6 +3,8 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
++
+ #include <cuda_runtime.h>
+ 
+ #include "contrib_ops/cpu/bert/dynamic_sparse_attention_parameters.h"
