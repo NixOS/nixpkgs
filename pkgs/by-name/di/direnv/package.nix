@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-3ojb8iLIzhjUZa7Gt+gJjOFy9qm4LOrFBLZ6fk5x1HM=";
 
   # we have no bash at the moment for windows
-  env.BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
+  env.BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${lib.getExe bash}";
 
   # Build a static executable to avoid environment runtime impurities
   env.CGO_ENABLED = 0;

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./static-pandoc-path.patch {
-      pandoc = "${lib.getBin pandoc}/bin/pandoc";
+      pandoc = "${lib.getExe pandoc}";
       pandocVersion = pandoc.version;
     })
     ./skip-tests.patch

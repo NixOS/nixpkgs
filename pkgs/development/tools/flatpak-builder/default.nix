@@ -73,14 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Hardcode paths
     (replaceVars ./fix-paths.patch {
-      brz = "${breezy}/bin/brz";
+      brz = "${lib.getExe breezy}";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
-      tar = "${gnutar}/bin/tar";
+      tar = "${lib.getExe gnutar}";
       bsdunzip = "${libarchive}/bin/bsdunzip";
       rpm2cpio = "${rpm}/bin/rpm2cpio";
-      cpio = "${cpio}/bin/cpio";
-      git = "${gitMinimal}/bin/git";
+      cpio = "${lib.getExe cpio}";
+      git = "${lib.getExe gitMinimal}";
       rofilesfuse = "${ostree}/bin/rofiles-fuse";
       strip = "${binutils}/bin/strip";
       eustrip = "${elfutils}/bin/eu-strip";

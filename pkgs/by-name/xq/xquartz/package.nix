@@ -254,7 +254,7 @@ stdenv.mkDerivation {
 
     ${xcbuild}/bin/PlistBuddy $out/Applications/XQuartz.app/Contents/Info.plist <<EOF
     Add :LSEnvironment dictionary
-    Add :LSEnvironment:XQUARTZ_DEFAULT_CLIENT string "${xterm}/bin/xterm"
+    Add :LSEnvironment:XQUARTZ_DEFAULT_CLIENT string "${lib.getExe xterm}"
     Add :LSEnvironment:XQUARTZ_DEFAULT_SHELL string "${shell}"
     Add :LSEnvironment:XQUARTZ_DEFAULT_STARTX string "$defaultStartX"
     Add :LSEnvironment:FONTCONFIG_FILE string "$fontsConfPath"
@@ -271,7 +271,7 @@ stdenv.mkDerivation {
     cp ${./10-fontdir.sh} $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh
     substituteInPlace $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh \
       --subst-var-by "SYSTEM_FONTS" "${fonts}/share/X11-fonts/" \
-      --subst-var-by "XSET"         "${xset}/bin/xset"
+      --subst-var-by "XSET"         "${lib.getExe xset}"
 
     cp ${./98-user.sh} $out/etc/X11/xinit/xinitrc.d/98-user.sh
 

@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./bubblewrap-paths.patch {
-      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
+      bubblewrap_bin = "${lib.getExe bubblewrap}";
       inherit (builtins) storeDir;
     })
   ];

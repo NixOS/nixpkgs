@@ -96,7 +96,7 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm755 "$src/templates/yandex-music.sh" "$out/bin/yandex-music"
     substituteInPlace "$out/bin/yandex-music"                                  \
-      --replace-fail "%electron_path%" "${electron}/bin/electron"              \
+      --replace-fail "%electron_path%" "${lib.getExe electron}"              \
       --replace-fail "%asar_path%" "$out/share/nodejs/yandex-music.asar"
 
     wrapProgram "$out/bin/yandex-music"                                        \

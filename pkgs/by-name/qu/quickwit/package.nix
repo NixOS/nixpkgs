@@ -86,7 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
     # needed for internal protobuf c wrapper library
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = "${lib.getExe protobuf}";
     PROTOC_INCLUDE = "${protobuf}/include";
   };
 

@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       substituteInPlace ../99prltoolsd-hibernate \
-        --replace-fail "/bin/bash" "${bash}/bin/bash"
+        --replace-fail "/bin/bash" "${lib.getExe bash}"
 
       install -Dm644 ../99prltoolsd-hibernate $out/etc/pm/sleep.d
     )

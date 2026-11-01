@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     popd
 
     substituteInPlace "$out/bin/i7" \
-      --replace "/usr/bin/perl" "${perl}/bin/perl"
+      --replace "/usr/bin/perl" "${lib.getExe perl}"
   '';
 
   meta = {

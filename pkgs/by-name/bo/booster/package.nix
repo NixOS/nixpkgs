@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-uI6TvBtky7Bpt4SbbtwT3vdMYbI/Awy3wgPfOla1qMw=";
 
   postPatch = ''
-    substituteInPlace init/main.go --replace "/usr/bin/fsck" "${unixtools.fsck}/bin/fsck"
+    substituteInPlace init/main.go --replace "/usr/bin/fsck" "${lib.getExe unixtools.fsck}"
   '';
 
   # integration tests are run against the current kernel

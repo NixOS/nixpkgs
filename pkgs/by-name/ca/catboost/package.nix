@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
-      --replace-fail  "\''${RAGEL_BIN}" "${ragel}/bin/ragel" \
+      --replace-fail  "\''${RAGEL_BIN}" "${lib.getExe ragel}" \
       --replace-fail "\''${YASM_BIN}" "${yasm}/bin/yasm"
 
     shopt -s globstar

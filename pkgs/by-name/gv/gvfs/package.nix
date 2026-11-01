@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./hardcode-ssh-path.patch {
-      ssh_program = "${lib.getBin openssh}/bin/ssh";
+      ssh_program = "${lib.getExe openssh}";
     })
   ];
 

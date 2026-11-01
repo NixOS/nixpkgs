@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
         ln -s ${externals} $out/third_party/externals
       '';
 
-    SKIA_GN_COMMAND = "${gn}/bin/gn";
+    SKIA_GN_COMMAND = "${lib.getExe gn}";
     SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
   };
 

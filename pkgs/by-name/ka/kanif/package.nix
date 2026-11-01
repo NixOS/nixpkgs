@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
-    substituteInPlace ./kanif --replace-fail "/usr/bin/perl" "${perl}/bin/perl"
-    substituteInPlace ./kanif --replace-fail '$taktuk_command = "taktuk";' '$taktuk_command = "${taktuk}/bin/taktuk";'
+    substituteInPlace ./kanif --replace-fail "/usr/bin/perl" "${lib.getExe perl}"
+    substituteInPlace ./kanif --replace-fail '$taktuk_command = "taktuk";' '$taktuk_command = "${lib.getExe taktuk}";'
     # Newer pod2man requires text after =item; a bare number is rejected.
     substituteInPlace ./kanif.pod --replace-fail '=item 0' '=item B<0>'
     substituteInPlace ./kanif.pod --replace-fail '=item 1' '=item B<1>'

@@ -156,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for exe in "$out"/bin/*.exe; do
       substituteInPlace "$exe" \
-        --replace-fail 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
+        --replace-fail 'WINELOADER="wine"' 'WINELOADER="${lib.getExe wine}"'
     done
   '';
 

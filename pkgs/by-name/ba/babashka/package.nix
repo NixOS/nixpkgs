@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
   babashka-unwrapped,
   callPackage,
@@ -24,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s -t $out/clojure_tools ${clojureToolsBabashka}/*.edn
     ln -s -t $out/clojure_tools ${clojureToolsBabashka}/libexec/*
 
-    makeWrapper "${babashka-unwrapped}/bin/bb" "$out/bin/bb" \
+    makeWrapper "${lib.getExe babashka-unwrapped}" "$out/bin/bb" \
       --inherit-argv0 \
       --set NIX_DEPS_CLJ_TOOLS_DIR $out/clojure_tools \
       --set-default JAVA_HOME ${jdkBabashka}

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace rmate \
       --replace-fail \
         'echo "hostname"' \
-        'echo "${hostname}/bin/hostname"'
+        'echo "${lib.getExe hostname}"'
     patsh -f rmate -s ${builtins.storeDir} --path "$HOST_PATH"
 
     runHook postBuild

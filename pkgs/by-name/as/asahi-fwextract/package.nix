@@ -24,8 +24,8 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace asahi_firmware/img4.py \
       --replace-fail 'liblzfse.so' '${lzfse}/lib/liblzfse.so'
     substituteInPlace asahi_firmware/update.py \
-      --replace-fail '"tar"' '"${gnutar}/bin/tar"' \
-      --replace-fail '"xf"' '"-x", "-I", "${gzip}/bin/gzip", "-f"'
+      --replace-fail '"tar"' '"${lib.getExe gnutar}"' \
+      --replace-fail '"xf"' '"-x", "-I", "${lib.getExe gzip}", "-f"'
   '';
 
   build-system = [ python3.pkgs.setuptools ];

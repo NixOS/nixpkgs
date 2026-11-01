@@ -4,7 +4,7 @@
   stdenvNoCC,
   coreutils,
   bash,
-  binSh ? "${bash}/bin/bash",
+  binSh ? "${lib.getExe bash}",
   gnused,
   less,
 }:

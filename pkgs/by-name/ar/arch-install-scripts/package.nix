@@ -72,8 +72,8 @@ resholve.mkDerivation (finalAttrs: {
         "bin/pacstrap"
       ];
 
-      # "none" for no shebang, "${bash}/bin/bash" for bash, etc.
-      interpreter = "${bash}/bin/bash";
+      # "none" for no shebang, "${lib.getExe bash}" for bash, etc.
+      interpreter = "${lib.getExe bash}";
 
       # packages resholve should resolve executables from
       inputs = [
@@ -106,7 +106,7 @@ resholve.mkDerivation (finalAttrs: {
         "$pid_unshare"
         "$mount_unshare"
         "$sd_args"
-        "${pacman}/bin/pacman"
+        "${lib.getExe pacman}"
       ];
     };
   };

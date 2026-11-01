@@ -57,7 +57,7 @@ buildNpmPackage rec {
     substituteInPlace $out/share/applications/VacuumTube.desktop \
       --replace-fail 'Exec=startvacuumtube' 'Exec=VacuumTube'
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/VacuumTube" \
+    makeWrapper "${lib.getExe electron}" "$out/bin/VacuumTube" \
       --add-flags "$out/opt/VacuumTube/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 

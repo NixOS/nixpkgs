@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    makeWrapper "${proot}/bin/proot" "$out/bin/${finalAttrs.meta.mainProgram}" \
+    makeWrapper "${lib.getExe proot}" "$out/bin/${finalAttrs.meta.mainProgram}" \
       --add-flags "-b" \
       --add-flags "$out/app:/app" \
       --add-flags "$out/app/bin/eidguiV2" \

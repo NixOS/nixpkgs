@@ -85,7 +85,7 @@ let
 
   user = "zoneminder";
   dirName = "zoneminder";
-  perlBin = "${perl}/bin/perl";
+  perlBin = "${lib.getExe perl}";
 
 in
 stdenv.mkDerivation rec {

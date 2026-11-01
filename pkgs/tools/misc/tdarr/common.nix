@@ -82,7 +82,7 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${jellyfin-ffmpeg}/bin/ffmpeg"
+      "${lib.getExe jellyfin-ffmpeg}"
       "--set-default"
       "ffprobePath"
       "${jellyfin-ffmpeg}/bin/ffprobe"
@@ -91,13 +91,13 @@ let
       "${mkvtoolnix}/bin/mkvpropedit"
       "--set-default"
       "ccextractorPath"
-      "${ccextractor}/bin/ccextractor"
+      "${lib.getExe ccextractor}"
     ]
     # ! Handbrake is currently marked as broken on darwin
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "--set-default"
       "handbrakePath"
-      "${handbrake}/bin/HandBrakeCLI"
+      "${lib.getExe handbrake}"
     ]
   );
 in

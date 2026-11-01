@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace config/apx.json \
-      --replace-fail "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
+      --replace-fail "/usr/share/apx/distrobox/distrobox" "${lib.getExe distrobox}" \
       --replace-fail "/usr/share/apx" "$out/share/apx"
     substituteInPlace settings/config.go \
       --replace-fail "/usr/share/apx/" "$out/share/apx/"

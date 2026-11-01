@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
       --replace-fail "/usr/bin/cut" "${coreutils}/bin/cut" \
       --replace-fail "/usr/bin/Xephyr" "${xorg-server}/bin/Xepyhr" \
-      --replace-fail "/usr/bin/Xwayland" "${xwayland}/bin/Xwayland" \
+      --replace-fail "/usr/bin/Xwayland" "${lib.getExe xwayland}" \
       --replace-fail "secon" "${policycoreutils}/bin/secon"
     substituteInPlace sandbox \
       --replace-fail "/usr/sbin/seunshare" "$out/bin/seunshare" \
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/openbox" "${openbox}/bin/openbox" \
       --replace-fail "#!/bin/sh" "#!${bash}/bin/sh" \
       --replace-fail "dbus-" "${dbus}/bin/dbus-" \
-      --replace-fail "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
+      --replace-fail "/usr/bin/xmodmap" "${lib.getExe xmodmap}" \
       --replace-fail "/usr/bin/shred" "${coreutils}/bin/shred" \
       --replace-fail "/usr/bin/test" "${coreutils}/bin/test"
     patchShebangs --host sandboxX.sh sandbox start sandbox.init

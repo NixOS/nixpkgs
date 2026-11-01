@@ -32,11 +32,11 @@ buildPythonPackage (finalAttrs: {
   # Set absolute nix store paths to the executables that pypass uses
   patches = [
     (replaceVars ./mark-executables.patch {
-      git_exec = "${gitMinimal}/bin/git";
-      grep_exec = "${gnugrep}/bin/grep";
+      git_exec = "${lib.getExe gitMinimal}";
+      grep_exec = "${lib.getExe gnugrep}";
       gpg_exec = "${gnupg}/bin/gpg2";
-      tree_exec = "${tree}/bin/tree";
-      xclip_exec = "${xclip}/bin/xclip";
+      tree_exec = "${lib.getExe tree}";
+      xclip_exec = "${lib.getExe xclip}";
     })
   ];
 

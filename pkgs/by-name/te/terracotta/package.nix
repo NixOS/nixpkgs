@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use easytier from inputs instead
     (replaceVars ./0002-nix-use-easytier-from-nix-input.patch {
       TERRACOTTA_ET_PATH = easytier;
-      TERRACOTTA_ET_EXE = "${easytier}/bin/easytier-core";
+      TERRACOTTA_ET_EXE = "${lib.getExe easytier}";
       TERRACOTTA_ET_CLI = "${easytier}/bin/easytier-cli";
     })
   ];

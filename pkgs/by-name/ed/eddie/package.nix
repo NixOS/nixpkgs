@@ -119,7 +119,7 @@ buildDotnetModule (finalAttrs: {
       $out/share/{applications/eddie-ui.desktop,polkit-1/actions/org.airvpn.eddie.ui.elevated.policy} \
       --replace-fail /usr $out
 
-    makeWrapper "${mono}/bin/mono" $out/bin/eddie-ui \
+    makeWrapper "${lib.getExe mono}" $out/bin/eddie-ui \
       --add-flags $out/lib/eddie-ui/App.Forms.Linux.exe \
       --prefix LD_LIBRARY_PATH : ${finalAttrs.runtimeInputs} \
       ''${makeWrapperArgs[@]}

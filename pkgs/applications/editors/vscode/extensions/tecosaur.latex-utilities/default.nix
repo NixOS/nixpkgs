@@ -24,7 +24,7 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   postInstall = ''
     cd "$out/$installPrefix"
     echo -n ${finalAttrs.version} > VERSION
-    jq '.contributes.configuration.properties."latex-utilities.countWord.path".default = "${texlivePackages.texcount}/bin/texcount"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."latex-utilities.countWord.path".default = "${lib.getExe texlivePackages.texcount}"' package.json | sponge package.json
   '';
 
   meta = {

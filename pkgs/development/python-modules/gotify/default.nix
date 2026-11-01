@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   # tests require gotify-server to be located in ./tests/test-server/gotify-linux-{arch}
   postPatch = ''
-    ln -s "${gotify-server}/bin/server" ./tests/test-server/gotify-linux-386
-    ln -s "${gotify-server}/bin/server" ./tests/test-server/gotify-linux-amd64
-    ln -s "${gotify-server}/bin/server" ./tests/test-server/gotify-linux-arm-7
-    ln -s "${gotify-server}/bin/server" ./tests/test-server/gotify-linux-arm64
+    ln -s "${lib.getExe gotify-server}" ./tests/test-server/gotify-linux-386
+    ln -s "${lib.getExe gotify-server}" ./tests/test-server/gotify-linux-amd64
+    ln -s "${lib.getExe gotify-server}" ./tests/test-server/gotify-linux-arm-7
+    ln -s "${lib.getExe gotify-server}" ./tests/test-server/gotify-linux-arm64
   '';
 
   nativeCheckInputs = [

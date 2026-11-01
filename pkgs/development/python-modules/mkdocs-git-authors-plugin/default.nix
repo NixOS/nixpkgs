@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/mkdocs_git_authors_plugin/git/command.py \
-      --replace-fail 'args = ["git"]' 'args = ["${gitMinimal}/bin/git"]'
+      --replace-fail 'args = ["git"]' 'args = ["${lib.getExe gitMinimal}"]'
   '';
 
   build-system = [

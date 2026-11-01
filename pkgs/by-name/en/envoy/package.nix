@@ -104,8 +104,8 @@ buildBazelPackage rec {
     mkdir -p bazel/nix/
     substitute ${./bazel_nix.BUILD.bazel} bazel/nix/BUILD.bazel \
       --subst-var-by bash "$(type -p bash)"
-    ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
-    ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
+    ln -sf "${lib.getExe cargo}" bazel/nix/cargo
+    ln -sf "${lib.getExe rustc}" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
     ln -sf "${rustc.unwrapped}" bazel/nix/rustcroot
     substituteInPlace bazel/dependency_imports.bzl \

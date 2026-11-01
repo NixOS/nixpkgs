@@ -22,9 +22,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     jq -e '
       .contributes.configuration.properties."alejandra.program".default =
-        "${alejandra}/bin/alejandra" |
+        "${lib.getExe alejandra}" |
       .contributes.configurationDefaults."alejandra.program" =
-        "${alejandra}/bin/alejandra"
+        "${lib.getExe alejandra}"
     ' \
     < package.json \
     | sponge package.json

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # replace the execvp call to ghostscript
-    sed -e '/exec_gs/ {n; s|"gs"|"${lib.getBin ghostscript}/bin/gs"|}' \
+    sed -e '/exec_gs/ {n; s|"gs"|"${lib.getExe ghostscript}"|}' \
         -i src/GsWidget.cxx
   '';
 

@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r . $out/share/follow
     rm -rf $out/share/follow/{.vscode,.github}
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/follow" \
+    makeWrapper "${lib.getExe electron}" "$out/bin/follow" \
       --inherit-argv0 \
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

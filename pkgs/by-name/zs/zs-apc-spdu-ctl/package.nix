@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/confent.cxx \
-      --replace /usr/sbin/fping "${fping}/bin/fping"
+      --replace /usr/sbin/fping "${lib.getExe fping}"
   '';
 
   meta = {

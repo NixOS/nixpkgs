@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       --replace-fail 'if test $HEPMC_VERSION -le 310; then' 'if false; then'
     substituteInPlace bin/rivet-build.in \
       --replace-fail 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
-      --replace-fail 'which' '"${which}/bin/which"' \
+      --replace-fail 'which' '"${lib.getExe which}"' \
       --replace-fail 'mycxx=' 'mycxx=${stdenv.cc}/bin/${
         if stdenv.cc.isClang or false then "clang++" else "g++"
       }  #' \
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace bin/make-plots \
-      --replace-fail '"which"' '"${which}/bin/which"' \
+      --replace-fail '"which"' '"${lib.getExe which}"' \
       --replace-fail '"latex"' '"'$latex'/bin/latex"' \
       --replace-fail '"dvips"' '"'$latex'/bin/dvips"' \
       --replace-fail '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       --replace-fail '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
       --replace-fail '"convert"' '"${graphicsmagick-imagemagick-compat.out}/bin/convert"'
     substituteInPlace bin/rivet \
-      --replace-fail '"less"' '"${less}/bin/less"'
+      --replace-fail '"less"' '"${lib.getExe less}"'
     substituteInPlace bin/rivet-mkhtml-tex \
       --replace-fail '"make-plots"' \"$out/bin/make-plots\" \
       --replace-fail '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \

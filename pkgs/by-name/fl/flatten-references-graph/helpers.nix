@@ -1,4 +1,5 @@
 {
+  lib,
   bash,
   writers,
   python3Packages,
@@ -7,7 +8,7 @@ let
   writeCheckedBashBin =
     name:
     let
-      interpreter = "${bash}/bin/bash";
+      interpreter = "${lib.getExe bash}";
     in
     writers.makeScriptWriter {
       inherit interpreter;

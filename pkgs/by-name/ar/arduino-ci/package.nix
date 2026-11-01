@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   fixupPhase = ''
-    substituteInPlace $out/bin/arduino-ci --replace "/usr/bin/env nix-shell" "${ruby}/bin/ruby"
+    substituteInPlace $out/bin/arduino-ci --replace "/usr/bin/env nix-shell" "${lib.getExe ruby}"
     wrapProgram $out/bin/arduino-ci --prefix PATH ":" "${runtimePath}"
   '';
 

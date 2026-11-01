@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then
       ''
-        export XSEL_PATH="${xsel}/bin/xsel"
+        export XSEL_PATH="${lib.getExe xsel}"
       ''
     else
       ''
-        export XCLIP_PATH="${xclip}/bin/xclip"
+        export XCLIP_PATH="${lib.getExe xclip}"
       ''
   );
 

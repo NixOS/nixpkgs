@@ -88,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     echo 'MD5="${coreutils}/bin/md5sum"' >> $out/etc/kamailio/kamctlrc
     echo 'AWK="${gawk}/bin/awk"' >> $out/etc/kamailio/kamctlrc
-    echo 'GDB="${gdb}/bin/gdb"' >> $out/etc/kamailio/kamctlrc
+    echo 'GDB="${lib.getExe gdb}"' >> $out/etc/kamailio/kamctlrc
     echo 'GREP="${gnugrep}/bin/grep "' >> $out/etc/kamailio/kamctlrc
     echo 'EGREP="${gnugrep}/bin/grep -E"' >> $out/etc/kamailio/kamctlrc
-    echo 'SED="${gnused}/bin/sed"' >> $out/etc/kamailio/kamctlrc
+    echo 'SED="${lib.getExe gnused}"' >> $out/etc/kamailio/kamctlrc
     echo 'LAST_LINE="${coreutils}/bin/tail -n 1"' >> $out/etc/kamailio/kamctlrc
     echo 'EXPR="${gnugrep}/bin/expr"' >> $out/etc/kamailio/kamctlrc
   '';

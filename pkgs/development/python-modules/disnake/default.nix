@@ -42,7 +42,7 @@ buildPythonPackage rec {
     substituteInPlace "disnake/opus.py" \
       --replace-fail 'ctypes.util.find_library("opus")' "'${libopus}/lib/libopus.so.0'"
     substituteInPlace "disnake/player.py" \
-      --replace-fail 'executable: str = "ffmpeg"' 'executable: str="${ffmpeg}/bin/ffmpeg"'
+      --replace-fail 'executable: str = "ffmpeg"' 'executable: str="${lib.getExe ffmpeg}"'
   '';
 
   nativeCheckInputs = [

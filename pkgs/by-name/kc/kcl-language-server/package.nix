@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-FulW9qNVVZtOoRfm+NPwQENJU9Ib1GBzcjHxk5QS70g=";
 
   env = {
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = "${lib.getExe protobuf}";
     PROTOC_INCLUDE = "${protobuf}/include";
   };
 

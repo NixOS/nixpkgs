@@ -26,8 +26,8 @@ buildDunePackage rec {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_2}/bin/dune";
+      dot-merlin-reader = "${lib.getExe dot-merlin-reader}";
+      dune = "${lib.getExe dune_2}";
     })
     # https://github.com/ocaml/merlin/pull/1798
     (fetchpatch {

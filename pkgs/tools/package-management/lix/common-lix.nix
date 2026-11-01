@@ -417,7 +417,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "dtrace-probes" withDtrace)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+    (lib.mesonOption "sandbox-shell" "${lib.getExe busybox-sandbox-shell}")
   ]
   ++
     lib.optionals

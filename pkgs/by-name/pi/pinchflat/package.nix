@@ -60,12 +60,12 @@ beamPackages.mixRelease rec {
     # phoenixframework expects platform-specific tailwind/esbuild binaries in a specific location:
     # tailwind: https://github.com/phoenixframework/tailwind/blob/194ab0f979782e4ccf2fe796042bf8e20967df93/lib/tailwind.ex#L243-L251
     for target in linux-x64 linux-arm64 macos-x64 macos-arm64; do
-      ln -s "${tailwindcss}/bin/tailwindcss" "_build/tailwind-$target"
+      ln -s "${lib.getExe tailwindcss}" "_build/tailwind-$target"
     done
 
     # esbuild: https://github.com/phoenixframework/esbuild/blob/v0.10.0/lib/esbuild.ex#L270-L300
     for target in linux-x64 linux-arm64 darwin-x64 darwin-arm64; do
-      ln -s "${esbuild}/bin/esbuild" "_build/esbuild-$target"
+      ln -s "${lib.getExe esbuild}" "_build/esbuild-$target"
     done
 
     mix do deps.loadpaths --no-deps-check, tailwind default --minify + esbuild default --minify + phx.digest

@@ -83,16 +83,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'run_command("journalctl",'  'run_command("${systemdMinimal}/bin/journalctl",'
 
     substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'Command::new("sh")' 'Command::new("${bashNonInteractive}/bin/bash")'
+      --replace-fail 'Command::new("sh")' 'Command::new("${lib.getExe bashNonInteractive}")'
 
     substituteInPlace lact-daemon/src/server/handler.rs \
-      --replace-fail 'Command::new("clinfo")' 'Command::new("${clinfo}/bin/clinfo")'
+      --replace-fail 'Command::new("clinfo")' 'Command::new("${lib.getExe clinfo}")'
 
     substituteInPlace lact-daemon/src/server/vulkan.rs \
       --replace-fail 'Command::new("vulkaninfo")' 'Command::new("${vulkan-tools}/bin/vulkaninfo")'
 
     substituteInPlace lact-daemon/src/server/opencl.rs \
-      --replace-fail 'Command::new("clinfo")' 'Command::new("${clinfo}/bin/clinfo")'
+      --replace-fail 'Command::new("clinfo")' 'Command::new("${lib.getExe clinfo}")'
 
 
     substituteInPlace lact-daemon/src/socket.rs \

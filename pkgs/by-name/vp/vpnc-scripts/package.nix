@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/bin/vpnc-script \
-      --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf"
+      --replace "/sbin/resolvconf" "${lib.getExe openresolv}"
   ''
   + lib.optionalString withSystemd ''
     substituteInPlace $out/bin/vpnc-script \

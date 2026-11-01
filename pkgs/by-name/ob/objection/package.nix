@@ -138,7 +138,7 @@ python3Packages.buildPythonApplication {
 
   postFixup = ''
     mkdir -p "$out/bin-wrapped"
-    ln -s "${aapt}/bin/aapt2" "$out/bin-wrapped/aapt"
+    ln -s "${lib.getExe aapt}" "$out/bin-wrapped/aapt"
     BUILD_TOOLS_PATH="${androidComposition.androidsdk}/libexec/android-sdk/build-tools"
     if [ -d "$BUILD_TOOLS_PATH" ]; then
       LATEST_BUILD_TOOLS=$(ls -d "$BUILD_TOOLS_PATH"/* 2>/dev/null | sort -V | tail -1)

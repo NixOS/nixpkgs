@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./paths.patch {
-      pngquant = "${pngquant}/bin/pngquant";
+      pngquant = "${lib.getExe pngquant}";
     })
   ];
 

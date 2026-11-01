@@ -9,7 +9,7 @@ makeSetupHook {
   name = "nodejs-install-manuals";
   propagatedBuildInputs = [ installShellFiles ];
   substitutions = {
-    jq = "${jq}/bin/jq";
+    jq = "${lib.getExe jq}";
   };
   meta.license = lib.licenses.mit;
 } ./hook.sh

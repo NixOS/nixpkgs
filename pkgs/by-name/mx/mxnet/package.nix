@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace 3rdparty/mkldnn/tests/CMakeLists.txt \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
 
     # Build against the system version of OpenMP.
     # https://github.com/apache/incubator-mxnet/pull/12160

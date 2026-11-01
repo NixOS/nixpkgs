@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Make typelibs available in the extension
     (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
-      gjs = "${gjs}/bin/gjs";
+      gjs = "${lib.getExe gjs}";
       # Replaced in postPatch
       typelibPath = null;
     })

@@ -28,14 +28,14 @@ python3Packages.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace namespaced-openvpn \
-      --replace-fail "/usr/sbin/openvpn" "${openvpn}/bin/openvpn" \
+      --replace-fail "/usr/sbin/openvpn" "${lib.getExe openvpn}" \
       --replace-fail "/sbin/ip" "${iproute2}/bin/ip" \
       --replace-fail "/usr/bin/nsenter" "${util-linux}/bin/nsenter" \
       --replace-fail "/bin/mount" "${util-linux}/bin/mount" \
       --replace-fail "/bin/umount" "${util-linux}/bin/umount"
 
     substituteInPlace seal-unseal-gateway \
-      --replace-fail "/sbin/iptables" "${iptables}/bin/iptables"
+      --replace-fail "/sbin/iptables" "${lib.getExe iptables}"
   '';
 
   dontBuild = true;

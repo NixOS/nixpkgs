@@ -63,9 +63,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace plugins/src/scripts/mod.rs \
         --replace-fail '/usr/lib/pop-launcher' "$out/share/pop-launcher"
     substituteInPlace plugins/src/calc/mod.rs \
-        --replace-fail 'Command::new("qalc")' 'Command::new("${libqalculate}/bin/qalc")'
+        --replace-fail 'Command::new("qalc")' 'Command::new("${lib.getExe libqalculate}")'
     substituteInPlace plugins/src/find/mod.rs \
-        --replace-fail 'spawn("fd")' 'spawn("${fd}/bin/fd")'
+        --replace-fail 'spawn("fd")' 'spawn("${lib.getExe fd}")'
     substituteInPlace plugins/src/terminal/mod.rs \
         --replace-fail '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';

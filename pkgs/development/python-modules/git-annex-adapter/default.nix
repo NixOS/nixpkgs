@@ -40,7 +40,7 @@ buildPythonPackage rec {
       hash = "sha256-UcRTKzD3sbXGIuxj4JzZDnvjTYyWVkfeWgKiZ1rAlus=";
     })
     (replaceVars ./git-annex-path.patch {
-      gitAnnex = "${git-annex}/bin/git-annex";
+      gitAnnex = "${lib.getExe git-annex}";
     })
   ];
 

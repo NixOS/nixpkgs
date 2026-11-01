@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace systemdspawner/systemdspawner.py \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
   build-system = [ setuptools ];

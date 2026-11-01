@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     for module in "vmmon-only" "vmnet-only"; do
       substituteInPlace "./$module/Makefile" \
         --replace '/lib/modules/' "${kernel.dev}/lib/modules/" \
-        --replace /bin/grep "${gnugrep}/bin/grep"
+        --replace /bin/grep "${lib.getExe gnugrep}"
     done
   '';
 

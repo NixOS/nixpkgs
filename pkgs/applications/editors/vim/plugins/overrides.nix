@@ -1110,7 +1110,7 @@ assertNoAdditions {
     patches = [ ./patches/cornelis/0001-Unconditionally-use-global-binary.patch ];
     postInstall = ''
       substituteInPlace $out/ftplugin/agda.vim \
-        --subst-var-by CORNELIS "${lib.getBin cornelis}/bin/cornelis"
+        --subst-var-by CORNELIS "${lib.getExe cornelis}"
     '';
   };
 
@@ -2619,9 +2619,9 @@ assertNoAdditions {
   minimap-vim = super.minimap-vim.overrideAttrs {
     preFixup = ''
       substituteInPlace $out/plugin/minimap.vim \
-        --replace-fail "code-minimap" "${code-minimap}/bin/code-minimap"
+        --replace-fail "code-minimap" "${lib.getExe code-minimap}"
       substituteInPlace $out/bin/minimap_generator.sh \
-        --replace-fail "code-minimap" "${code-minimap}/bin/code-minimap"
+        --replace-fail "code-minimap" "${lib.getExe code-minimap}"
     '';
 
     doInstallCheck = true;
@@ -5768,7 +5768,7 @@ assertNoAdditions {
     postPatch = old.postPatch or "" + ''
       substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
         'g:stylish_haskell_command = "stylish-haskell"' \
-        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+        'g:stylish_haskell_command = "${lib.getExe stylish-haskell}"'
     '';
   });
 

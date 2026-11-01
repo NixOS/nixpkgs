@@ -15,7 +15,7 @@ makeSetupHook {
   ];
   substitutions = {
     hostNode = "${nodejs}/bin/node";
-    jq = "${jq}/bin/jq";
+    jq = "${lib.getExe jq}";
   };
   meta.license = lib.licenses.mit;
 } ./hook.sh

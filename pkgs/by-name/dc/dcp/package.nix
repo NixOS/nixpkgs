@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     make generate \
       SHELL="${bash}/bin/bash -o pipefail" \
-      PROTOC="${protobuf}/bin/protoc" \
+      PROTOC="${lib.getExe protobuf}" \
       CONTROLLER_GEN="${kubernetes-controller-tools}/bin/controller-gen"
   '';
 

@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [
     "-awk"
-    "${gawk}/bin/gawk"
+    "${lib.getExe gawk}"
   ];
 
   doCheck = (stdenv.system != "aarch64-darwin");

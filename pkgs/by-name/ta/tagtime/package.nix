@@ -63,7 +63,7 @@ stdenv.mkDerivation {
       --replace '"__ED__ +"' \
                 '$ENV{"EDITOR"}' \
       --replace '"__XT__"' \
-                '"${xterm}/bin/xterm"'
+                '"${lib.getExe xterm}"'
 
     runHook postInstall
   '';

@@ -160,7 +160,7 @@ symlinkJoin {
   postBuild = ''
     # wrapProgram can't operate on symlinks
     rm "$out/bin/mpv"
-    makeWrapper "${mpv-unwrapped}/bin/mpv" "$out/bin/mpv" ${mostMakeWrapperArgs}
+    makeWrapper "${lib.getExe mpv-unwrapped}" "$out/bin/mpv" ${mostMakeWrapperArgs}
     rm "$out/bin/umpv"
     makeWrapper "${mpv-unwrapped}/bin/umpv" "$out/bin/umpv" ${umpvWrapperArgs}
   ''

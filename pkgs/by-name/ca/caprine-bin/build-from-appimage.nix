@@ -1,4 +1,5 @@
 {
+  lib,
   fetchurl,
   appimageTools,
   lndir,
@@ -29,7 +30,7 @@ in
 
   extraInstallCommands = ''
     mkdir -p $out/share
-    "${lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
+    "${lib.getExe lndir}" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
     mkdir $out/share/applications
     cp ${extracted}/caprine.desktop $out/share/applications/

@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = "${lib.getExe protobuf}";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
 

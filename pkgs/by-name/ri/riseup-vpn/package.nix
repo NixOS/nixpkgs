@@ -150,7 +150,7 @@ buildGoModule (finalAttrs: {
       postPatch = ''
         substituteInPlace bitmask-root \
           --replace 'swhich("ip")' '"${iproute2}/bin/ip"' \
-          --replace 'swhich("iptables")' '"${iptables}/bin/iptables"' \
+          --replace 'swhich("iptables")' '"${lib.getExe iptables}"' \
           --replace 'swhich("ip6tables")' '"${iptables}/bin/ip6tables"' \
           --replace 'swhich("sysctl")' '"${procps}/bin/sysctl"' \
           --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn

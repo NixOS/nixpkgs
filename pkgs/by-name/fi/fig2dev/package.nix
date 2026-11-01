@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
-  env.GSEXE = "${ghostscript}/bin/gs";
+  env.GSEXE = "${lib.getExe ghostscript}";
 
   configureFlags = [ "--enable-transfig" ];
 

@@ -109,7 +109,7 @@ rec {
     in
     ''
       ${genStubsScript} \
-        "${ruby}/bin/ruby" \
+        "${lib.getExe ruby}" \
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
         "${bundler}/${ruby.gemPath}/gems/bundler-${bundler.version}" \

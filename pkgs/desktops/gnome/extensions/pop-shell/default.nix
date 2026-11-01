@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     for file in */main.js; do
-      substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      substituteInPlace $file --replace "gjs" "${lib.getExe gjs}"
     done
   '';
 

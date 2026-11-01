@@ -945,7 +945,10 @@ rec {
       (removeAttrs args [ "libraries" ])
       // {
         interpreter =
-          if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
+          if libraries == [ ] then
+            "${lib.getExe ruby}"
+          else
+            "${(ruby.withPackages (ps: libraries))}/bin/ruby";
         # Rubocop doesn't seem to like running in this fashion.
         #check = (writeDash "rubocop.sh" ''
         #  exec ${lib.getExe buildRubyPackages.rubocop} "$1"

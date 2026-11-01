@@ -14,7 +14,7 @@
 }:
 
 let
-  dropboxd = "${dropbox}/bin/dropbox";
+  dropboxd = "${lib.getExe dropbox}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "caja-dropbox";

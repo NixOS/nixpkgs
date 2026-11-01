@@ -111,7 +111,7 @@ let
           mkdir -p "$out"/bin
           commandName="$(basename -s .exe "$(echo "$exe" | tr "[A-Z]" "[a-z]")")"
           makeWrapper \
-            "${mono}/bin/mono" \
+            "${lib.getExe mono}" \
             "$out"/bin/"$commandName" \
             --add-flags "\"$exe\"" \
             ''${makeWrapperArgs}

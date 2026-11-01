@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace lib/ClusterShell/Worker/Ssh.py \
-      --replace-fail '"ssh"' '"${openssh}/bin/ssh"' \
+      --replace-fail '"ssh"' '"${lib.getExe openssh}"' \
       --replace-fail '"scp"' '"${openssh}/bin/scp"'
 
     substituteInPlace lib/ClusterShell/Worker/fastsubprocess.py \

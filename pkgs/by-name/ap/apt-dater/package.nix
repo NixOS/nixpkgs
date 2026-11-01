@@ -51,13 +51,13 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace-fail "/usr/bin/screen" "${screen}/bin/screen" \
+      --replace-fail "/usr/bin/screen" "${lib.getExe screen}" \
       --replace-fail "/usr/bin/xsltproc" "${libxslt}/bin/xsltproc" \
       --replace-fail "man/Makefile" "" # Need /usr/share/xml/docbook/stylesheet/nwalsh can't find in nixpkgs
     substituteInPlace Makefile.am \
       --replace-fail "man" ""
     substituteInPlace build/screen_sockpath \
-      --replace-fail "/usr/bin/screen" "${screen}/bin/screen"
+      --replace-fail "/usr/bin/screen" "${lib.getExe screen}"
   '';
 
   postInstall = ''

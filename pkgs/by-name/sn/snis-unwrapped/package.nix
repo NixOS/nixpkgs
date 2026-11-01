@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
     substituteInPlace snis_text_to_speech.sh \
       --replace-fail "pico2wave" "${sox}/bin/pico2wave" \
-      --replace-fail "espeak" "${espeak-classic}/bin/espeak" \
+      --replace-fail "espeak" "${lib.getExe espeak-classic}" \
       --replace-fail "aplay" "${alsa-utils}/bin/aplay" \
       --replace-fail "play" "${sox}/bin/play" \
       --replace-fail "/bin/rm" "${coreutils}/bin/rm"

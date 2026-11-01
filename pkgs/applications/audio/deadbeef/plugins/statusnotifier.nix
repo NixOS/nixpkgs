@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace tools/glib-mkenums \
-      --replace /usr/bin/perl "${perl}/bin/perl"
+      --replace /usr/bin/perl "${lib.getExe perl}"
   '';
 
   installPhase = ''

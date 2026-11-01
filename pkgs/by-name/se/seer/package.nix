@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace src/{SeerGdbConfigPage,SeerMainWindow,SeerGdbWidget}.cpp \
-      --replace-fail "/usr/bin/gdb" "${gdb}/bin/gdb"
+      --replace-fail "/usr/bin/gdb" "${lib.getExe gdb}"
   '';
 
   buildInputs = with kdePackages; [

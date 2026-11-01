@@ -113,18 +113,18 @@ stdenv.mkDerivation rec {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/bin/fido2-manage-gui \
       --replace-fail "./fido2-manage.sh" "$out/bin/fido2-manage" \
-      --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
+      --replace-fail "x-terminal-emulator" "${lib.getExe xterm}" \
       --replace-fail "tk.Tk()" "tk.Tk(className='fido2-manage')" \
       --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
 
     substituteInPlace $out/bin/fido2-manage \
-      --replace-fail "grep" "${gnugrep}/bin/grep"
+      --replace-fail "grep" "${lib.getExe gnugrep}"
 
     sed -i '1i #!${pythonEnv.interpreter}' $out/bin/fido2-manage-gui
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace $out/bin/fido2-manage \
-      --replace-fail "ggrep" "${gnugrep}/bin/grep"
+      --replace-fail "ggrep" "${lib.getExe gnugrep}"
   '';
 
   meta = {

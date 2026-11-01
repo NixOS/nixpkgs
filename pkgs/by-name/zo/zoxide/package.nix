@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = lib.optionalString withFzf ''
     substituteInPlace src/util.rs \
-      --replace '"fzf"' '"${fzf}/bin/fzf"'
+      --replace '"fzf"' '"${lib.getExe fzf}"'
   '';
 
   cargoHash = "sha256-5Be/eIMn3JurFIhoPK6B5L054lLPek9CR93zTJzJS6w=";

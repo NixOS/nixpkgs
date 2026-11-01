@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
      --subst-var-by pname taoup
     substituteInPlace taoup-fortune \
       --subst-var-by out $out \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
   dontConfigure = true;

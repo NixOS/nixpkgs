@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/qtpass.cpp \
-      --replace-fail "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
+      --replace-fail "/usr/bin/qrencode" "${lib.getExe qrencode}"
   '';
 
   buildInputs = [
