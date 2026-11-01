@@ -34,11 +34,13 @@ let
     libxcursor
     libxi
     libxrandr
+    pipewire
+    libpulseaudio
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "spotifast";
-  version = "0.14.2";
+  version = "0.17.1";
 
   __structuredAttrs = true;
 
@@ -46,10 +48,10 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "spotifast";
     tag = "v${version}";
-    hash = "sha256-LdhBPj7ZrXXMvQpM/DqYH5m7zH7duTZ/tZbHO3XI5CQ=";
+    hash = "sha256-6BJpFjv0xSSQnk9/xRtsShsKUHup7uRDACPQLSKdwgg=";
   };
 
-  cargoHash = "sha256-q6wmUeh102dRN4yIwPogq726Zx4AcefUT4lDiqhSnMU=";
+  cargoHash = "sha256-4ozZxNRENy6qd9+l46dQQIx3bw0Ig/A1G4TXIYq0kMI=";
 
   # projectm-sys only searches lib, while CMake may otherwise install to lib64.
   postPatch = ''
@@ -77,6 +79,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
 
+  # Orphan soloist process never appears in the Nix sandbox; upstream CI runs it outside Nix.
+  checkFlags = [
+    "--skip=soloist::tests::reclaims_a_leftover_soloist_from_this_installation"
+  ];
+
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
@@ -86,6 +93,10 @@ rustPlatform.buildRustPackage rec {
       libx11
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lclang_rt.osx"; # `soloist_audio` uses @available; needs compiler-rt on Darwin.
+  };
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
