@@ -6,11 +6,12 @@
   pkg-config,
   rustPlatform,
   buildNpmPackage,
+  ffmpeg-headless,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.8.3";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9bUfHSBXEEwU35J7zXdpS7zPKOFyCerQq5WQ6rO5tag=";
+    hash = "sha256-XTZm/uazuRvgwmzD3tg6iC2OlBxJIfFof3NUrjRXYxA=";
   };
 
-  cargoHash = "sha256-M3gl00jSvykx6+ewbvgEZiNL9bDDjfnq089nYXiwEiQ=";
+  cargoHash = "sha256-4ydOabvaY+bm8Dp5NIpRSnX4ss81rGzOzkmiuS2whEU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ openssl ];
 
-  cargoBuildFlags = [ "--bin=oxicloud" ];
+  env.OXICLOUD_VERSION = finalAttrs.version;
 
   postPatch = ''
     # Upstream pins `target-cpu=native`, making the binary non-portable
@@ -42,27 +43,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) version src;
     sourceRoot = "${frontFinalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-dn9vEk84AYaqfhBhf2obsfQBYUPkE5qyjXalFNNziXw=";
+    # vite.config.ts falls back to a build-timestamp, which is not reproducible
+    env.OXI_WORKER_VERSION = frontFinalAttrs.version;
 
-    postPatch = ''
-      substituteInPlace svelte.config.js \
-        --replace "'../static-dist'" "'static-dist'"
+    npmDepsHash = "sha256-a0N82bKqP8a1oTRkSxBkiBvW2T+OVsFcnNYuRba5nTk=";
+
+    # The frontend build writes into `../static-dist/`,
+    # which is outside of sourceRoot, so make it writable
+    postUnpack = ''
+      chmod u+w "$sourceRoot/.."
     '';
 
     installPhase = ''
       runHook preInstall
-      cp -r static-dist $out
+      cp -r ../static-dist $out
       runHook postInstall
     '';
   });
 
-  postInstall = ''
-    mkdir -p $out/share/oxicloud
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/oxicloud \
-      --set-default OXICLOUD_STATIC_PATH ${finalAttrs.oxicloud-front}
+      --set-default OXICLOUD_STATIC_PATH ${finalAttrs.oxicloud-front} \
+      --set-default OXICLOUD_FFMPEG_PATH ${lib.getExe' ffmpeg-headless "ffmpeg"}
   '';
 
   passthru.updateScript = nix-update-script {
