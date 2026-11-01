@@ -2,23 +2,76 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 let
   inherit (lib)
+    concatMapAttrs
+    elem
     getExe
     getExe'
+    imap0
+    isAttrs
+    isList
+    mergeAttrsList
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
+    optionalAttrs
+    toUpper
     ;
-  inherit (lib.types) passwdEntry str;
+  inherit (lib.cli) toCommandLineShellGNU;
+  inherit (lib.generators) mkValueStringDefault;
+  inherit (lib.types)
+    attrsOf
+    bool
+    float
+    int
+    listOf
+    oneOf
+    passwdEntry
+    str
+    submodule
+    ;
 
   cfg = config.services.unpackerr;
-  configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "unpackerr.conf" cfg.settings;
+
+  settingsType =
+    oneOf [
+      bool
+      int
+      float
+      str
+      (attrsOf settingsType)
+      (listOf settingsType)
+    ]
+    // {
+      description = "Unpackerr setting value";
+    };
+
+  mapSettings = [
+    "cmdhook"
+    "custom_ids"
+    "folder"
+    "headers"
+    "lidarr"
+    "radarr"
+    "readarr"
+    "roles"
+    "sonarr"
+    "webhook"
+  ];
+  toEnv =
+    keepCase: name: value:
+    if isAttrs value then
+      concatMapAttrs (
+        key: toEnv (!keepCase && elem key mapSettings) "${name}_${if keepCase then key else toUpper key}"
+      ) value
+    else if isList value then
+      mergeAttrsList (imap0 (index: toEnv false "${name}_${toString index}") value)
+    else
+      optionalAttrs (!isNull value) { ${name} = mkValueStringDefault { } value; };
 in
 {
   options = {
@@ -26,7 +79,7 @@ in
       enable = mkEnableOption "Unpackerr";
 
       settings = mkOption {
-        type = configFormat.type;
+        type = submodule { freeformType = settingsType; };
         default = { };
         example = {
           radarr.main = {
@@ -39,9 +92,10 @@ in
           };
         };
         description = ''
-          Unpackerr TOML configuration as a Nix attribute set.
-          Refer to [Unpackerr docs](https://unpackerr.zip/docs/install/configuration) for details.
-          For setting secrets refer to this [section](https://unpackerr.zip/docs/install/configuration/#secrets-and-passwords).
+          Unpackerr [settings](https://unpackerr.zip/docs/install/configuration),
+          passed as `UN_*` environment variables that override the config file saved by its web UI.
+          Names are a variable's segments with field names in lowercase,
+          e.g. `sonarr.main.paths = [ "/downloads" ]` sets `UN_SONARR_main_PATHS_0`.
         '';
       };
 
@@ -67,15 +121,16 @@ in
         description = "Unpackerr Archive Extractor";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment = toEnv false "UN" cfg.settings;
         serviceConfig = {
           Type = "exec";
           User = cfg.user;
           Group = cfg.group;
           ExecReload = "${getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
-          ExecStart = utils.escapeSystemdExecArgs [
-            (getExe cfg.package)
-            "--config=${configFile}"
-          ];
+          ExecStart = "${getExe cfg.package} ${
+            toCommandLineShellGNU { } { config = "%S/%N/unpackerr.toml"; }
+          }";
+          StateDirectory = "%N";
           Restart = "always";
         };
       };
