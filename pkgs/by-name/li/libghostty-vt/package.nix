@@ -10,7 +10,10 @@
   pkg-config,
   xcbuild,
   zig_0_17,
+
   testers,
+  runCommand,
+  nixfmt,
 
   optimize ? "ReleaseFast",
   simd ? true,
@@ -100,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
       deps = testers.testEqualContents {
         assertion = "vendored lockfile matches upstream lockfile";
         actual = ./deps.nix;
-        expected = "${finalAttrs.src}/deps/packages.nix";
+        expected = runCommand "${finalAttrs.pname}-formatted-deps/packages.nix-${finalAttrs.version}" {
+          nativeBuildInputs = [ nixfmt ];
+        } "nixfmt - < ${finalAttrs.src}/deps/packages.nix > $out";
       };
     };
   };

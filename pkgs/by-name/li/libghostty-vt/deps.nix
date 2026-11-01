@@ -15,7 +15,8 @@
   # directories now, so the override is not needed, and is taken here only so
   # that passing it is not an error.
   linkFarm ? null,
-}: let
+}:
+let
   # A git repository, checked out the way Zig reads it: every file as
   # committed. An ordinary checkout applies the repository's `.gitattributes`,
   # which can rewrite a file's line endings or run it through a filter, and
@@ -23,7 +24,8 @@
   # built-in empty tree for attributes turns them all off, and `core.autocrlf`
   # is turned off too, since it converts line endings even without them.
   # zon2nix computes the hash with exactly these settings.
-  fetchZigGit = args:
+  fetchZigGit =
+    args:
     fetchgit (
       args
       // {
@@ -75,7 +77,7 @@
       name = "gobject";
       url = "https://deps.files.ghostty.org/gobject-2026-10-02-38-1.tar.zst";
       hash = "sha256-6ZoDkMCK8ytMLp+Ha9b2jJXwIXDxixuZwy+lEzdMwak=";
-      nativeBuildInputs = [zstd];
+      nativeBuildInputs = [ zstd ];
     };
     "N-V-__8AALiNBAA-_0gprYr92CjrMj1I5bqNu0TSJOnjFNSr" = fetchzip {
       name = "gtk4_layer_shell";
@@ -247,27 +249,27 @@
   pathDependencyPackages = [
   ];
 in
-  # One directory holding every package the way Zig unpacks it -- filtered by
-  # its manifest's `.paths` and checked against its hash -- which is what
-  # `zig build --system` wants.
-  #
-  # They have to be real directories holding real files, not links into each
-  # package's own store path. Zig runs a dependency's build steps from inside
-  # it and counts its way back out through `..`, which lands in the wrong place
-  # when the directory is a symlink; and `installHeadersDirectory` copies only
-  # what the directory walk calls a file, so symlinked headers are skipped
-  # without a word. Building them all in one derivation gives real files from
-  # the start, without a second copy of everything.
-  #
-  # `runCommand` and not `runCommandLocal`: the result is worth taking from a
-  # binary cache. Building it locally means first fetching a whole Zig, and
-  # under 0.17 compiling its fetch build runner too, which is minutes on a small
-  # CI machine; `runCommandLocal` forbids substituting it, so every job that
-  # wants the packages builds them again even when a cache already holds them.
-  runCommand name
+# One directory holding every package the way Zig unpacks it -- filtered by
+# its manifest's `.paths` and checked against its hash -- which is what
+# `zig build --system` wants.
+#
+# They have to be real directories holding real files, not links into each
+# package's own store path. Zig runs a dependency's build steps from inside
+# it and counts its way back out through `..`, which lands in the wrong place
+# when the directory is a symlink; and `installHeadersDirectory` copies only
+# what the directory walk calls a file, so symlinked headers are skipped
+# without a word. Building them all in one derivation gives real files from
+# the start, without a second copy of everything.
+#
+# `runCommand` and not `runCommandLocal`: the result is worth taking from a
+# binary cache. Building it locally means first fetching a whole Zig, and
+# under 0.17 compiling its fetch build runner too, which is minutes on a small
+# CI machine; `runCommandLocal` forbids substituting it, so every job that
+# wants the packages builds them again even when a cache already holds them.
+runCommand name
   {
-    nativeBuildInputs = [zig_0_17];
-    passthru = {inherit pathDependencyPackages;};
+    nativeBuildInputs = [ zig_0_17 ];
+    passthru = { inherit pathDependencyPackages; };
   }
   ''
     mkdir "$out"
