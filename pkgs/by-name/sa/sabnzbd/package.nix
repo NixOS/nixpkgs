@@ -56,6 +56,8 @@ let
           version = sabctoolsVersion;
           hash = sabctoolsHash;
         };
+        # sabctools switched to scikit-build-core in 9.7.0
+        build-system = [ setuptools ];
       }))
       sabyenc3
       sgmllib3k
