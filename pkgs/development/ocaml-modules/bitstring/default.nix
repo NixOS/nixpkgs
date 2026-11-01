@@ -27,7 +27,12 @@ buildDunePackage (finalAttrs: {
   meta = {
     description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml";
     homepage = "https://github.com/xguerin/bitstring";
-    license = lib.licenses.lgpl21Plus;
+    license =
+      with lib.licenses;
+      AND [
+        lgpl21Plus
+        gpl2Plus
+      ];
     maintainers = [ lib.maintainers.maurer ];
   };
 })
