@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "tomli";
     rev = version;
-    hash = "sha256-MBcmp0SeK/wum3c2c/eu8VEofXDguolHI30QwKahAGE=";
+    hash = "sha256-wx75Pq+hY2DZl6qMA2hhcojlSJS3kfGM7NnwXGQ2Shk=";
   };
 
   nativeBuildInputs = [ flit-core ];
