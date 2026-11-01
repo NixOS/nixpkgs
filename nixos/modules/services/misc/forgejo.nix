@@ -344,9 +344,10 @@ in
             };
             mailer = {
               ENABLED = true;
-              PROTOCOL = "sendmail";
-              FROM = "do-not-reply@example.org";
-              SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
+              PROTOCOL = "smtps";
+              SMTP_ADDR = "smtp.example.org";
+              FROM = "Forgejo Service <do-not-reply@example.org>";
+              USER = "do-not-reply@example.org";
             };
             other = {
               SHOW_FOOTER_VERSION = false;
