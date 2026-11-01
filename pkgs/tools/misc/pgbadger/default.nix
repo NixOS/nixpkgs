@@ -1,18 +1,15 @@
 {
-  buildPerlPackage,
+  lib,
   bzip2,
   fetchFromGitHub,
-  JSONXS,
-  lib,
+  perlPackages,
   nix-update-script,
   pgbadger,
-  PodMarkdown,
   testers,
-  TextCSV_XS,
   which,
 }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   pname = "pgbadger";
   version = "13.2";
 
@@ -31,7 +28,7 @@ buildPerlPackage rec {
 
   env.PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
 
-  buildInputs = [
+  buildInputs = with perlPackages; [
     JSONXS
     PodMarkdown
     TextCSV_XS
