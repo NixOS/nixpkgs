@@ -962,6 +962,10 @@ The following situations are fully or partially exempt:
   Disclosure of this is not required.
   Whether automation is used or not, adhering to our [commit conventions](#commit-conventions) remains required.
 
+* Contributors may trigger LLM-using automated reviews on their own draft PRs.
+  Before marking their PR ready for review, they must summarise, in their own words, all issues raised by automated reviews that they judge to be still outstanding.
+  If possible, they must also mark as resolved or hide issues that they consider resolved, irrelevant, or otherwise not worth addressing.
+
 ## Enforcement
 
 If you believe that someone is using automation without appropriate disclosure and review, you can politely ask them if that’s the case and point them to this policy as appropriate.
