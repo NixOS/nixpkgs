@@ -149,9 +149,9 @@ let
         webkitgtk_4_1
         z3
         nlohmann_json
+        libspnav
       ]
-      ++ lib.optional withSystemd systemdLibs
-      ++ [ libspnav ];
+      ++ lib.optional withSystemd systemdLibs;
 
       strictDeps = true;
 
