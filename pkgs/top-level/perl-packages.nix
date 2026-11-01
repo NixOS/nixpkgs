@@ -31678,10 +31678,10 @@ with self;
 
   Starlet = buildPerlPackage {
     pname = "Starlet";
-    version = "0.32";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KA/KAZUHO/Starlet-0.32.tar.gz";
-      hash = "sha256-gZI9OmCX3YHH4Og9SBvuof89ZejgHY0f59yziFV1vY8=";
+      url = "mirror://cpan/authors/id/K/KA/KAZUHO/Starlet-0.33.tar.gz";
+      hash = "sha256-LaabtgipqwhjCjwYm0ZvfzZoEXMnC+F6iefihA1gdPs=";
     };
     buildInputs = [
       LWP
