@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noqtis";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "rootcoder007";
     repo = "noqtis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9FmT+llPATTc7M8ilUxMfWtwUhniwLOOl3XNv9EE9yw=";
+    hash = "sha256-D760c4/YzyE5TOlSKqIPNcWsxbAm3fbXyNO+XcPMPes=";
   };
 
   strictDeps = true;
