@@ -7,10 +7,11 @@
   pythonOlder,
 
   # nativeBuildInputs
+  pkg-config,
   protoc,
 
   # buildInputs
-  protobuf,
+  pkgsHostTarget,
 
   # dependencies
   cloudpickle,
@@ -49,11 +50,13 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
     protoc
   ];
 
   buildInputs = [
-    protobuf
+    pkgsHostTarget.protobuf
+    pkgsHostTarget.zstd
   ];
 
   dependencies = [
