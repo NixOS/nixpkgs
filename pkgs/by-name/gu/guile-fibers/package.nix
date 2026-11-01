@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
-  version = "1.4.3";
+  version = "2.0.0";
 
   src = fetchFromCodeberg {
     owner = "guile";
     repo = "fibers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RiZYHnlvUd1/LAJ7YpOdoMFGpwtGsnp+aDQjxoBPCuA=";
+    hash = "sha256-8SjXDkJ6iokC4xld1bUhCx2OIlVZopWy+xlpUvh4HbU=";
   };
 
   strictDeps = true;
