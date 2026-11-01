@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -34,7 +35,12 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests.prometheus) mcp;
+    };
+  };
 
   meta = {
     description = "MCP server for LLMs to interact with Prometheus";
