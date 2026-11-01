@@ -38,11 +38,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "14.5.1";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fi+k6MfJjo2BQGcfV3JUKvqqaszPvXRlBohrbYX3+NY=";
+    hash = "sha256-loU26avXgvB/eVQETAxAIBmfzdObQdIh7ELSo75KRN8=";
   };
 
   # This test fails reliably when executed through mesonCheckPhase but passes with
