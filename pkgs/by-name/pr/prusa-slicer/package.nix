@@ -22,7 +22,7 @@
   hidapi,
   libpng,
   mpfr,
-  nanosvg,
+  nanosvg-fltk,
   nlopt,
   nlohmann_json,
   opencascade-occt_7_6_1,
@@ -46,17 +46,6 @@
   opencascade-override ? null,
 }:
 let
-  nanosvg-fltk = nanosvg.overrideAttrs (old: {
-    pname = "nanosvg-fltk";
-    version = "unstable-2022-12-22";
-
-    src = fetchFromGitHub {
-      owner = "fltk";
-      repo = "nanosvg";
-      rev = "abcd277ea45e9098bed752cf9c6875b533c0892f";
-      hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
-    };
-  });
   wxGTK-override' = if wxGTK-override == null then wxwidgets_3_2 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
