@@ -18231,6 +18231,8 @@ self: super: with self; {
 
   rendercv-fonts = callPackage ../development/python-modules/rendercv-fonts { };
 
+  renderers = callPackage ../development/python-modules/renderers { };
+
   reno = callPackage ../development/python-modules/reno { };
 
   renson-endura-delta = callPackage ../development/python-modules/renson-endura-delta { };
