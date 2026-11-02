@@ -1072,7 +1072,12 @@ let
                   "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
             else
               { };
-
+          getSubModules = optOptions.type.getSubModules or null;
+          submodules =
+            if getSubModules != null then
+              map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
+            else
+              res.options;
         in
         if
           (res ? default && optOptions ? default)
@@ -1084,14 +1089,6 @@ let
           throw
             "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
         else
-          let
-            getSubModules = optOptions.type.getSubModules or null;
-            submodules =
-              if getSubModules != null then
-                map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
-              else
-                res.options;
-          in
           optOptions
           // res
           // {
