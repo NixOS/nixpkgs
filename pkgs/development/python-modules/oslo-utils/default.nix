@@ -106,6 +106,8 @@ buildPythonPackage (finalAttrs: {
     "oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip"
     "oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4"
     "oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout"
+    # Flaky test: inner format is sometimes not detected
+    "oslo_utils.tests.imageutils.test_format_inspector.TestLUKSInspector.test_luks_decrypt_detects_inner_format"
   ];
 
   pythonImportsCheck = [

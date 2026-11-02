@@ -47,6 +47,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    # Upper bound dropped upstream: https://github.com/langchain-ai/langchain/pull/41407
+    "huggingface-hub"
+  ];
   dependencies = [
     huggingface-hub
     langchain-core

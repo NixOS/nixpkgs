@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
     tag = "v${version}";
-    hash = "sha256-bH6VPue4P+XUGFaaBBChdc8lSHFjsGBIfNw4fznE72A=";
+    hash = "sha256-8yVWNpxwXE4yDBX0aN2OgJkrJGBfKgj75pFletRtL7E=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";

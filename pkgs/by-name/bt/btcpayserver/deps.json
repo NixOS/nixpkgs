@@ -61,13 +61,13 @@
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.7.13",
-    "hash": "sha256-038ETMvX3jSa6wea9tRuh6VNN2jGSx/JCWC1TXLWnk0="
+    "version": "1.7.14",
+    "hash": "sha256-dC4hz5tWCY1ilCxZBIZ8Lc3+JnD9fsV9/PJ9vxGONn4="
   },
   {
     "pname": "BTCPayServer.Lightning.CLightning",
-    "version": "1.7.9",
-    "hash": "sha256-QQjiWnNADGwsojtxFtgDUUJk71dSE6YzdS3z1d6qKZU="
+    "version": "1.7.10",
+    "hash": "sha256-KgQvei3S/xtLCQyEhLD3lQcg3d7gTrDcbutWT4oaTK0="
   },
   {
     "pname": "BTCPayServer.Lightning.Common",
@@ -76,28 +76,28 @@
   },
   {
     "pname": "BTCPayServer.Lightning.Common",
-    "version": "1.7.4",
-    "hash": "sha256-UMl/vAz6fYqZvXtwBdvkNPNZW0OrsU2XA1EXEaY/EFk="
+    "version": "1.7.5",
+    "hash": "sha256-qifQW9sAjNJNm44UBqNZydNLdZjUB5+dq/Eax75QVj8="
   },
   {
     "pname": "BTCPayServer.Lightning.Eclair",
-    "version": "1.7.4",
-    "hash": "sha256-D9ATUxibK+4YCw50+Pg+llkmddXAFuMhqGHNa7UvLI8="
+    "version": "1.7.5",
+    "hash": "sha256-XXXIElZQE25cx/R3Ah0HRidht+Xv2cXoXe1a0SUK79A="
   },
   {
     "pname": "BTCPayServer.Lightning.LND",
-    "version": "1.7.5",
-    "hash": "sha256-jTO2hjmUg6cBnCf6C9ESHyHXOMv7cHART9DtMpZ9oEw="
+    "version": "1.7.6",
+    "hash": "sha256-bD7IisjjoKp5SWlL34YxIIra0Oz/+7nBQxbjJ4ASW6w="
   },
   {
     "pname": "BTCPayServer.Lightning.LNDhub",
-    "version": "1.7.6",
-    "hash": "sha256-+am0ud+oezteBCAMHZq4slBpGze3OKbyO49a5t++IDk="
+    "version": "1.7.7",
+    "hash": "sha256-uh96Og/8kAhy1+PzIDLEnAUNuQjEK18aToF3U+cWbSE="
   },
   {
     "pname": "BTCPayServer.Lightning.Phoenixd",
-    "version": "1.7.5",
-    "hash": "sha256-Cy7H/CdatCnmN6HrOHR7cUy9zm2Jlunnn7TJewHaJxk="
+    "version": "1.7.6",
+    "hash": "sha256-xvCose2jPfb48Bw3JpUQY13sRNj+VFo7kFQb0pg+bzo="
   },
   {
     "pname": "BTCPayServer.NTag424",
@@ -516,13 +516,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "10.0.11",
-    "hash": "sha256-LvZLfW3MMr/eq5uN4SSWHDVdSysVH3N8XAutZeDeeoo="
+    "version": "10.0.17",
+    "hash": "sha256-aUmn6R+diAhVFAA/cmuBIxI++tYPrsX7q4lEei6ikoI="
   },
   {
     "pname": "NBitcoin",
-    "version": "10.0.17",
-    "hash": "sha256-aUmn6R+diAhVFAA/cmuBIxI++tYPrsX7q4lEei6ikoI="
+    "version": "10.0.19",
+    "hash": "sha256-OlwtlVGwzmB5eU/VXfPBeYkg+a2KEvbd3ATTE3UUOls="
   },
   {
     "pname": "NBitcoin.Altcoins",

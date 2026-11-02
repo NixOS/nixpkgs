@@ -19,9 +19,6 @@
   # optional dependencies
   accelerate,
   datasets,
-  flax,
-  jax,
-  jaxlib,
   jinja2,
   peft,
   protobuf,
@@ -43,23 +40,20 @@
   diffusers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diffusers";
-  version = "0.38.0";
+  version = "0.42.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
-    tag = "v${version}";
-    hash = "sha256-FyXQJh4i/m9lAD2Sz45YWc+KIFMA+xQLb3ErudO9voY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IVenXKmO+vOkYjkKnkHbm6LQ+4+ywqaCzzAAbdnmdyk=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [
-    "safetensors"
-  ];
 
   dependencies = [
     filelock
@@ -73,11 +67,6 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    flax = [
-      flax
-      jax
-      jaxlib
-    ];
     torch = [
       accelerate
       torch
@@ -108,7 +97,7 @@ buildPythonPackage rec {
     torchsde
     transformers
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck =
     let
@@ -168,8 +157,8 @@ buildPythonPackage rec {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
     mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
-    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/diffusers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

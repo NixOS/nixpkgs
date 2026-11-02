@@ -34,6 +34,13 @@ let
 
           # Account for divergences with the main `tokenizers` derivation:
           postPatch = "";
+          # datasets>=5 is incompatible with huggingface-hub_0
+          nativeCheckInputs = builtins.filter (p: (p.pname or "") != "datasets") oldAttrs.nativeCheckInputs;
+          disabledTestPaths = [
+            # ModuleNotFoundError: No module named 'datasets'
+            "benches/test_tiktoken.py"
+            "tests/documentation/test_tutorial_train_from_iterators.py"
+          ];
           disabledTests = [
             # PermissionError: [Errno 13] Permission denied: 'tests/data/small.txt'
             "TestUnigram"

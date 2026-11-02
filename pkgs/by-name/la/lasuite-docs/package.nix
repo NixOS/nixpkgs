@@ -52,6 +52,13 @@ let
         }
       );
       mcp = self.mcp_1;
+      # mistralai's MCP integration (unused here) requires mcp>=2
+      mistralai = super.mistralai.overridePythonAttrs (old: {
+        disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+          "src/mistralai/extra/tests/test_connectors_gateway.py"
+          "src/mistralai/extra/tests/test_mcp_streamable_http.py"
+        ];
+      });
     }
   );
 in

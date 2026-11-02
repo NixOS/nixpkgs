@@ -3,6 +3,7 @@
   c-ares,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   grpc,
   lib,
   mkNginxPlugin,
@@ -26,6 +27,14 @@ mkNginxPlugin (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-pGe+1nPH8zUQhcyVxH5/nxwNFMsoOYCUecuDVs1rS4o=";
   };
+
+  patches = [
+    # Fix build with GCC16 / C++20
+    (fetchpatch {
+      url = "https://github.com/nginx/nginx-otel/commit/e3b6c98b1556e4c82cec39acc7be91a62449fa84.patch";
+      hash = "sha256-wdV9gLfl6dETkVlo2pnA2v2iPG3jXHfAe2Zf47lqdoM=";
+    })
+  ];
 
   # nginx-otel can only be loaded dynamically.
   dynamic = true;

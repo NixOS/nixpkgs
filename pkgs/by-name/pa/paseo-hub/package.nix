@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  nodejs_22,
+  nodejs_26,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -25,7 +25,7 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace package-lock.json --replace-fail hubflare cloudflare
   '';
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
   npmDepsHash = "sha256-PwY5yyviELORn6N3Benr5vi7F7UtfocFnrMGZBd9/Vw=";
 
   passthru.updateScript = nix-update-script { };

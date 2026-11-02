@@ -49,6 +49,7 @@ in
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
             kernelPatches.libbpf_C23_compat
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -57,6 +58,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -65,6 +67,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -73,6 +76,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -81,6 +85,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -115,6 +120,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -126,6 +132,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
         linux_xanmod_stable = xanmodKernels {
@@ -133,6 +140,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
         linux_xanmod_latest = xanmodKernels {
@@ -140,6 +148,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
       }
@@ -313,6 +322,8 @@ in
         gasket = callPackage ../os-specific/linux/gasket { };
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
+
+        gpu-unlock = callPackage ../os-specific/linux/gpu-unlock { };
 
         gtp5g = callPackage ../os-specific/linux/gtp5g { };
 

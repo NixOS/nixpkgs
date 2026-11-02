@@ -236,6 +236,7 @@ buildPythonPackage (finalAttrs: {
     "boto3"
     "certifi"
     "click"
+    "huggingface-hub"
     "importlib-metadata"
     "jsonschema"
     "openai"

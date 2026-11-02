@@ -455,8 +455,7 @@ in
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
