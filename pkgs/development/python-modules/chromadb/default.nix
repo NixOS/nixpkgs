@@ -16,7 +16,6 @@
 
   # dependencies
   bcrypt,
-  build,
   fastapi,
   grpcio,
   httpx,
@@ -32,7 +31,6 @@
   opentelemetry-sdk,
   orjson,
   overrides,
-  posthog,
   pybase64,
   pydantic,
   pydantic-settings,
@@ -117,7 +115,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "fastapi"
-    "posthog"
   ];
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -152,7 +149,6 @@ buildPythonPackage (finalAttrs: {
     opentelemetry-sdk
     orjson
     overrides
-    posthog
     pybase64
     pydantic
     pydantic-settings

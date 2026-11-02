@@ -6937,10 +6937,15 @@ with pkgs;
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit callPackage;
-        directory = ../servers/home-assistant/custom-lovelace-modules;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ../servers/home-assistant/custom-lovelace-modules;
+        };
+
+        aliases = import ../servers/home-assistant/custom-lovelace-modules/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
 
