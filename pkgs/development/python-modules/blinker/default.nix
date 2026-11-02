@@ -4,7 +4,7 @@
   fetchPypi,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # tests
   pytestCheckHook,
@@ -21,7 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-tM4iZaer7ORefMiW6Y2+vmzq1WvPgFo9IxNtFF9URb8=";
   };
 
-  build-system = [ flit-core ];
+  patches = [
+    # set missing fixture loop scope
+    ./pytest-asyncio-compat.patch
+  ];
+
+  build-system = [ flit-core_3 ];
 
   pythonImportsCheck = [ "blinker" ];
 
