@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   markdown-it-py,
   pytest-regressions,
   pytestCheckHook,
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-rG9l45V+qsXZmBpRGkt1zuCRJVOsEC+Z2WrplQ1oGSo=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ markdown-it-py ];
 
