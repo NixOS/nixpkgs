@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
 
+  coreutils,
   cargo-tauri,
   jq,
   makeBinaryWrapper,
@@ -103,6 +104,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # (e.g. tauri 2.10 vs @tauri-apps/api 2.8). cargo tauri build errors on that;
   # the previous cargo-only packaging already shipped this combination.
   tauriBuildFlags = [ "--ignore-version-mismatches" ];
+
+  preCheck = ''
+    substituteInPlace \
+      src-tauri/src/services/mcp_connectivity/tests.rs \
+      src-tauri/src/session_manager/providers/mcode.rs \
+      src-tauri/src/commands/misc.rs \
+      --replace-warn '#!/bin/sh' '#!${stdenv.shell}' \
+      --replace-warn '/usr/bin/env' '${coreutils}/bin/env' \
+      --replace-warn '/bin/echo' '${coreutils}/bin/echo' \
+      --replace-warn 'Command::new("/bin/bash")' 'Command::new("${stdenv.shell}")' \
+      --replace-warn 'format!("{}:/usr/bin:/bin",' 'format!("{}:${lib.makeBinPath [ coreutils ]}:/usr/bin:/bin",'
+
+    substituteInPlace src-tauri/src/commands/misc.rs \
+      --replace-fail 'build_unix_launcher_script(&launch, "/bin/bash", None, &script, Some(&env_file))' 'build_unix_launcher_script(&launch, "${stdenv.shell}", None, &script, Some(&env_file))' \
+      --replace-fail ".replace(\"exec '/bin/bash'\", \"exit 0 #\")" ".replace(\"exec '${stdenv.shell}'\", \"exit 0 #\")"
+  '';
 
   # Proxy startup test binds to a local address, which the darwin sandbox blocks.
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
