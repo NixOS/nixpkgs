@@ -45,10 +45,9 @@ let
     owner = "xiph";
     repo = "opus";
     rev = "940d4e5af64351ca8ba8390df3f555484c567fbb";
+    nativeBuildInputs = [ cacert ];
     postFetch = ''
       cd $out
-      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
       dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"
       substituteInPlace autogen.sh \
         --replace-fail 'dnn/download_model.sh "4ed9445b96698bad25d852e912b41495ddfa30c8dbc8a55f9cde5826ed793453"' ""
@@ -65,11 +64,12 @@ let
     owner = "xiph";
     repo = "rnnoise";
     rev = "70f1d256acd4b34a572f999a05c87bf00b67730d";
-    nativeBuildInputs = [ wget ];
+    nativeBuildInputs = [
+      cacert
+      wget
+    ];
     postFetch = ''
       cd $out
-      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
       ./download_model.sh
       substituteInPlace autogen.sh \
         --replace-fail "./download_model.sh" ""
