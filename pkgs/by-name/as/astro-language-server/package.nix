@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pnpm_11,
-  nodejs-slim_22,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -11,9 +10,7 @@
   fetchpatch2,
 }:
 let
-  # pnpm 11's bundled Node.js 24 has a libuv/kqueue bug on macOS, workaround copied from openclaw package
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
-
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
