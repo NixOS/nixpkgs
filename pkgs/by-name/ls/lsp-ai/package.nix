@@ -14,6 +14,9 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lsp-ai";
   version = "0.7.1";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "SilasMarvin";
     repo = "lsp-ai";
@@ -65,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # use system oniguruma since the bundled one fails to build with gcc15
   env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
-  cargoBuildFlags = [ "-p lsp-ai" ];
+  cargoBuildFlags = [ "--package=lsp-ai" ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
