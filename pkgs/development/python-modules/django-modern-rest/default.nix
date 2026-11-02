@@ -48,7 +48,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-modern-rest";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     owner = "wemake-services";
     repo = "django-modern-rest";
     tag = finalAttrs.version;
-    hash = "sha256-MmN1eX6to6hqUgafJHPRC0gUXdDJBYcWDogSsA/3WJ4=";
+    hash = "sha256-7FaD9gvWE4OWaJq8m8DIVk6I49a6jDjoF5CUjRCyZdA=";
   };
 
   postPatch = ''
