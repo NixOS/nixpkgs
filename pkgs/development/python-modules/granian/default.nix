@@ -63,6 +63,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    cacert
     versionCheckHook
     pytestCheckHook
     pytest-asyncio
@@ -75,9 +76,6 @@ buildPythonPackage rec {
     # collides with the one installed in $out
     rm -rf granian/
   '';
-
-  # needed for checks
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   __darwinAllowLocalNetworking = true;
 
