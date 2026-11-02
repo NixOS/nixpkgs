@@ -8,7 +8,6 @@ let
   format = pkgs.formats.php { finalVariable = "config"; };
 
   cfg = config.services.filesender;
-  simpleSamlCfg = config.services.simplesamlphp.filesender;
   fpm = config.services.phpfpm.pools.filesender;
 
   filesenderConfigDirectory = pkgs.runCommand "filesender-config" { } ''
@@ -141,19 +140,12 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    services.simplesamlphp.filesender = {
-      phpfpmPool = "filesender";
-      localDomain = cfg.localDomain;
-      settings.baseurlpath = lib.mkDefault "https://${cfg.localDomain}/saml";
-    };
-
     services.phpfpm = {
       pools.filesender = {
         user = cfg.user;
         group = config.services.nginx.group;
         phpEnv = {
           FILESENDER_CONFIG_DIR = toString filesenderConfigDirectory;
-          SIMPLESAMLPHP_CONFIG_DIR = toString simpleSamlCfg.configDir;
         };
         settings = {
           "listen.owner" = config.services.nginx.user;
@@ -216,8 +208,6 @@ in
         db_type = "pgsql";
         db_username = cfg.database.user;
         db_database = cfg.database.name;
-        "auth_sp_saml_simplesamlphp_url" = "/saml";
-        "auth_sp_saml_simplesamlphp_location" = "${simpleSamlCfg.libDir}";
       }
     ];
 
@@ -235,7 +225,6 @@ in
       serviceConfig = {
         Environment = [
           "FILESENDER_CONFIG_DIR=${toString filesenderConfigDirectory}"
-          "SIMPLESAMLPHP_CONFIG_DIR=${toString simpleSamlCfg.configDir}"
         ];
         Type = "oneshot";
         Group = config.services.nginx.group;

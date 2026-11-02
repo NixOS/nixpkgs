@@ -26,22 +26,6 @@
         admin_email = "admin@localhost";
         email_reply_to = "noreply@localhost";
       };
-      services.simplesamlphp.filesender = {
-        settings = {
-          baseurlpath = "http://filesender/saml";
-          "module.enable".exampleauth = true;
-        };
-        authSources = {
-          admin = [ "core:AdminPassword" ];
-          default = format.lib.mkMixedArray [ "exampleauth:UserPass" ] {
-            "user:password" = {
-              uid = [ "user" ];
-              cn = [ "user" ];
-              mail = [ "user@nixos.org" ];
-            };
-          };
-        };
-      };
     };
 
   nodes.client =
