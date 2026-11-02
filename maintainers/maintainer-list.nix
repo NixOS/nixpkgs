@@ -503,12 +503,6 @@
     githubId = 806876;
     name = "Aaron Jheng";
   };
-  aaronschif = {
-    email = "aaronschif@gmail.com";
-    github = "aaronschif";
-    githubId = 2258953;
-    name = "Aaron Schif";
-  };
   aaschmid = {
     email = "service@aaschmid.de";
     github = "aaschmid";
