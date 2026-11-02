@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
   };
