@@ -1,4 +1,5 @@
 {
+  callPackage,
   cctools,
   copyDesktopItems,
   electron_44,
@@ -33,6 +34,8 @@ stdenv.mkDerivation (
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
     pnpm = pnpm_12;
+    browser = callPackage ./browser.nix { };
+    withBrowser = lib.meta.availableOn stdenv.hostPlatform browser;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -61,6 +64,16 @@ stdenv.mkDerivation (
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+    ''
+    + lib.optionalString withBrowser ''
+      if ! grep -Fq 'const VERSION = "${browser.version}";' apps/server/src/preview/PreviewBrowser.ts; then
+        echo "Update browser.nix to match PreviewBrowser.ts before updating T3 Code." >&2
+        exit 1
+      fi
+
+      substituteInPlace apps/server/src/preview/PreviewBrowser.ts \
+        --replace-fail 'const executable = path.join(installRoot, release.version, executableName);' \
+                       'const executable = "${lib.getExe browser}";'
     '';
 
     nativeBuildInputs = [
@@ -229,7 +242,8 @@ stdenv.mkDerivation (
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
       };
-    };
+    }
+    // lib.optionalAttrs withBrowser { inherit browser; };
 
     meta = {
       description = "Minimal web GUI for coding agents";
