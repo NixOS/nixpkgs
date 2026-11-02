@@ -74,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lisp-kernel/${finalAttrs.env.CCL_KERNEL}/Makefile \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-quiet "/bin/echo" "${coreutils}/bin/echo"
 
     substituteInPlace lisp-kernel/m4macros.m4 \
       --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
