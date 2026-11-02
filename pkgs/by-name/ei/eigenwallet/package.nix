@@ -25,14 +25,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eigenwallet";
-  version = "4.16.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "eigenwallet";
     repo = "core";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ymaKizCCjY8c8l0g1pEXf2GuBSa1ZMndtq3JuNOl2IA=";
+    hash = "sha256-D1FRp44VKx1PngKFmoVKvoyyQ21cc8oqZxrLtHR5Ikw=";
 
     # Remove after upstream updates to Yarn 4.15
     # (packageManager in src-gui/package.json)
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv tauri.conf.json.new src-tauri/tauri.conf.json
   '';
 
-  cargoHash = "sha256-oYala0uBjq+BWJA402p+mw1vEJk/M///cn/EPKpuMso=";
+  cargoHash = "sha256-C2N8lcpIcLq/phLbajWJJp7Oefu/mCcP/p/M/TF+foY=";
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
