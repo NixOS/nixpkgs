@@ -28,6 +28,7 @@
         enable = true;
         immichUrl = "http://localhost:2283";
         port = 8002;
+        publicBaseUrl = "https://photos.example.com";
         settings.ipp.responseHeaders."X-NixOS" = "Rules";
         upload.enable = true;
       };
@@ -105,8 +106,11 @@
     """ % share_key)
 
     # Access the share through the proxy
-    machine.succeed("""
+    res = machine.succeed("""
       curl -sf http://localhost:8002/share/%s
     """ % share_key)
+
+    # publicBaseUrl should be used for absolute URLs instead of the request's host
+    assert 'property="og:image" content="https://photos.example.com/share/' in res, res
   '';
 }
