@@ -27,9 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--package=zpm" ];
   cargoTestFlags = [ "--package=zpm" ];
 
-  env = {
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
+  nativeBuildInputs = [ cacert ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=http::tests::network_concurrency_permit_is_released_after_failure"
