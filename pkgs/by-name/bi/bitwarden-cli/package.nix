@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   perl,
   xcbuild,
   writableTmpDirAsHomeHook,
@@ -28,7 +27,6 @@ buildNpmPackage (finalAttrs: {
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
 
   npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
@@ -56,6 +54,11 @@ buildNpmPackage (finalAttrs: {
     "--ignore-scripts"
   ];
 
+  # The default `npm prune`` is scoped to npmWorkspace and leaves root devDependencies behind.
+  # Prune from the repository root before installing node_modules.
+  # Note, this is an issue with npm 11+, see https://github.com/npm/cli/issues/8277
+  dontNpmPrune = true;
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
@@ -70,6 +73,10 @@ buildNpmPackage (finalAttrs: {
     shopt -s globstar
     rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
     shopt -u globstar
+    # Save closure size by pruning all non-production dependencies before installation
+    npm prune --omit=dev --offline --ignore-scripts --legacy-peer-deps
+    # Delete all JS sourcemaps, since they are unnneeded.
+    find . -type f -name '*.map' -delete
   '';
 
   postInstall = ''
