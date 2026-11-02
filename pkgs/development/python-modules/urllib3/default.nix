@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "urllib3";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urllib3";
     repo = "urllib3";
     tag = finalAttrs.version;
-    hash = "sha256-iN59MS5gKgDxe2v4ILrZ/1y7wV4yB1tFs4ATKppYAAk=";
+    hash = "sha256-/EABIEAZDr5936K5Utjlx0nsGHWsHoimqC6dGDuOJAo=";
   };
 
   build-system = [
