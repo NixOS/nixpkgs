@@ -355,6 +355,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $opencl/etc/OpenCL/vendors/
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
+    mkdir -p $spirv2dxil
     moveToOutput bin/spirv2dxil $spirv2dxil
     moveToOutput "lib/libspirv_to_dxil*" $spirv2dxil
   '';
