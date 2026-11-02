@@ -94,6 +94,7 @@ buildPythonPackage (finalAttrs: {
         strictDeps = true;
         __structuredAttrs = true;
         nativeBuildInputs = [
+          cacert
           curl
         ];
         configurePhase = ''
@@ -109,7 +110,6 @@ buildPythonPackage (finalAttrs: {
               --cookie-jar cookies
               --user-agent "curl/$curlVersion Nixpkgs"
           )
-          export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
           mkdir -p $out/${_version}
         '';
         buildPhase =
