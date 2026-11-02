@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "linkify-it-py";
-  version = "2.0.3";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "linkify-it-py";
     tag = "v${version}";
-    hash = "sha256-BLwIityUZDVdSbvTpLf6QUlZUavWzG/45Nfffn18/vU=";
+    hash = "sha256-uFZBEBlM5IDN64ZydeNsUAZ2ssO4XRFPqPv5RoKEWwY=";
   };
 
   nativeBuildInputs = [ setuptools ];
