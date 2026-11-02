@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cf";
-  version = "1.0.0-beta.21";
+  version = "1.0.0-beta.27";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cloudflare";
     repo = "cf";
     tag = "cf@${finalAttrs.version}";
-    hash = "sha256-KlNsEzd4dxNBKUtcD8XiFLbAbOluq6PB5vB+pRcJ+mo=";
+    hash = "sha256-gFJ7kE7SPH7p4dx2939GBq8dlB9xhaJjLZmsmyy2Tgs=";
   };
 
   pnpmWorkspaces = [ "cf" ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 4;
     # Avoid pnpm's macOS clone probe leaving v11/links in the dependency archive.
     pnpmInstallFlags = [ "--package-import-method=copy" ];
-    hash = "sha256-+AIVKXMs2J62/VrwdMqqIGBjjvlXq2xAY02POQRSne0=";
+    hash = "sha256-NoNkfM9K7S4CaizUtEUh6bpgwkWIFfIMaG4gC5RqFYM=";
   };
 
   nativeBuildInputs = [
