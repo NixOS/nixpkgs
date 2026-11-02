@@ -19022,10 +19022,10 @@ with self;
 
   libnet = buildPerlPackage {
     pname = "libnet";
-    version = "3.15";
+    version = "3.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.15.tar.gz";
-      hash = "sha256-px9NtYDhp2fWk2+qW6848fpheCQ0LaB4tWEoPob49KI=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.16.tar.gz";
+      hash = "sha256-QUcrAEfLoCwgPT0CudTPcrQTRpl7JsebRZvmFZsMCHU=";
     };
     meta = {
       description = "Collection of network protocol modules";
