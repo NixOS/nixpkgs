@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pygments,
   pytestCheckHook,
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-p2WrFvCzHOuxPec9Wc1/xT6+fEUdcdDC1HTNmu5dm5Q=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ pygments ];
 
