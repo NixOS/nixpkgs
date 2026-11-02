@@ -34,6 +34,9 @@ in
   julia_111-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.11.9";
+      knownVulnerabilities = [
+        "Julia 1.11 is end-of-life and vendors outdated security dependencies (MbedTLS 2.28.6, curl 8.6.0). See https://julialang.org/downloads/."
+      ];
       sha256 = {
         x86_64-linux = "0dfy4wlrz6jbs7kd9r0bjk9d6sqgf4fakrxrnzwfl1bsdlsn6qxk";
         aarch64-linux = "0gk2zxkwz2yyg3im23jpgaxzixchyywm19nbh51szmniah31y1x2";
@@ -94,6 +97,9 @@ in
       (import ./generic.nix {
         version = "1.11.9";
         hash = "sha256-SX5jIfJfxQQfP2P5sCGtglFn+GZlOIyHgnQ3qrr8GSI=";
+        knownVulnerabilities = [
+          "Julia 1.11 is end-of-life and vendors outdated security dependencies (MbedTLS 2.28.6, curl 8.6.0). See https://julialang.org/downloads/."
+        ];
         patches = [
           # stackwalk: derive glibc longjmp pointer mangling
           # https://github.com/JuliaLang/julia/pull/62776
