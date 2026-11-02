@@ -9,6 +9,7 @@
   copyDesktopItems,
   runCommand,
   zip,
+  nix-update-script,
 }:
 
 let
@@ -94,6 +95,10 @@ buildNpmPackage {
       comment = "Tool to Manage Sieve Message Filters";
     })
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Activate, edit, delete and add Sieve scripts with a convenient interface";
