@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/Esri/lerc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "C++ library for Limited Error Raster Compression";
