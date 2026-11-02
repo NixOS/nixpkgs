@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  go,
-  llvm,
-  clang_20,
+  go_1_27,
+  llvm_22,
+  clang_22,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
@@ -13,18 +13,19 @@
   nix-update-script,
 }:
 let
-  # https://github.com/cilium/tetragon/issues/5389
-  clang = clang_20;
+  go = go_1_27;
+  llvm = llvm_22;
+  clang = clang_22;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ls+nEx5pGCpirhXve6taKW/5A1fiLGLMT7KjYPEiWHE=";
+    hash = "sha256-/UnmA3k3NcCEFA+JW19dbQCN9fUYAWkbKV+SGmRmdhw=";
   };
 
   nativeBuildInputs = [
