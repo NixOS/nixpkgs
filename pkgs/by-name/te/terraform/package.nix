@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   makeWrapper,
   runCommand,
@@ -12,7 +12,7 @@
 }:
 
 let
-  package = buildGo127Module rec {
+  package = buildGoModule rec {
     pname = "terraform";
     version = "1.17.0";
 
