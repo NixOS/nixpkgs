@@ -6638,12 +6638,16 @@ with pkgs;
   };
 
   # Clozure Common Lisp
-  ccl = wrapLisp {
-    pkg = callPackage ../development/compilers/ccl {
-      inherit (buildPackages.darwin) bootstrap_cmds;
+  ccl =
+    let
+      pkg = callPackage ../development/compilers/ccl {
+        inherit (buildPackages.darwin) bootstrap_cmds;
+      };
+    in
+    wrapLisp {
+      inherit pkg;
+      inherit (pkg) faslExt;
     };
-    faslExt = "lx64fsl";
-  };
 
   # Clasp Common Lisp
   clasp-common-lisp = wrapLisp {
