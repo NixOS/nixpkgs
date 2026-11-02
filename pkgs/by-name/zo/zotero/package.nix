@@ -259,6 +259,10 @@ buildNpmPackage (finalAttrs: {
     ; do
       sed -i -E "s|it(\([\"']$test.*[\"'])|it.skip\1|" test/tests/*.js
     done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace app/build.sh \
+      --replace-fail 'xargs -0 /usr/bin/codesign --force --sign -' 'xargs -0 -I {} true'
   '';
 
   buildPhase =
@@ -301,6 +305,17 @@ buildNpmPackage (finalAttrs: {
       ./app/build.sh -d "$build_dir" -c release -s \
         ${if stdenv.hostPlatform.isDarwin then "-p m" else "-p l -a ${zoteroArch stdenv.hostPlatform}"}
 
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      while IFS= read -r -d $'\0' helper; do
+        while IFS= read -r -d $'\0' binary; do
+          if isMachO "$binary"; then
+            ${lib.getExe' darwin.sigtool "codesign"} --force --sign - "$binary"
+          fi
+        done < <(find "$helper" -type f -print0)
+      done < <(find app/staging/Zotero.app/Contents/MacOS -maxdepth 1 -name '*.app' ! -name updater.app -print0)
+    ''
+    + ''
       runHook postBuild
     '';
 
