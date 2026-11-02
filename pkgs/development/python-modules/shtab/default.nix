@@ -3,6 +3,7 @@
   stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
+  click,
   installShellFiles,
   pytestCheckHook,
   pytest-cov-stub,
@@ -16,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.11.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tqdm";
     repo = "shtab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mbki7g0BuMfrSa107nXuvySbxp1AVhGfWFJSVQe6sYE=";
+    hash = "sha256-1WsgW7VB2VvmanosxGDM42NddBSbBU/fxJQdyqCWzmA=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     bashInteractive
+    click
     fish
     pytestCheckHook
     pytest-cov-stub
