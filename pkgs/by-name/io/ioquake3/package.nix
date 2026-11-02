@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ioquake3";
-  version = "0-unstable-2026-07-19";
+  version = "0-unstable-2026-10-12";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "588393618dbc82e7207c21c6ddecca229944a03a";
-    hash = "sha256-BiyBg+Jy8V2v119NqcX/YUwDb8zZdq7+FfjWNenaEA4=";
+    rev = "87a99d18206e878a20289f05ac3c16005dcae5c3";
+    hash = "sha256-C4ExSNdyWb1SyHjNygiTXatZjQ9KoeSwUS6nZx91Xms=";
   };
 
   nativeBuildInputs = [
