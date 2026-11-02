@@ -30,13 +30,13 @@ let
 in
 buildGo127Module (finalAttrs: {
   pname = "frankenphp";
-  version = "1.13.2";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f9kDrUmlNXntEZepM7bCjeOpM9yW7yGu5c3Vu6W+SsY=";
+    hash = "sha256-o5/WWa9T5WnjpJV+PGXZWHtkghbiYNQhRzy37YANEnU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGo127Module (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-ELSec+c6jITKWazfPNHdGExnXcupvSEwx/X2Tx7GQIU=";
+  vendorHash = "sha256-JAQL48CEwyGsCkrZis8Mi8Ewzxt4SoMe3BzV/m5J4J4=";
 
   buildInputs = [
     phpUnwrapped
@@ -54,9 +54,9 @@ buildGo127Module (finalAttrs: {
   ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [
     makeBinaryWrapper
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    pkg-config
     cctools
     darwin.autoSignDarwinBinariesHook
     libiconv
