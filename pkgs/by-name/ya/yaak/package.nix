@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wasm-pack
     wasm-bindgen-cli_0_2_121
     wrapGAppsHook3
+    cacert
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -89,13 +90,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  env.YAAK_CLI_NO_UPDATE_CHECK = "1";
-  # sqlite-wasm-rs compiles sqlite3.c to wasm at build time and requires a
-  # Clang with WebAssembly support. Use the unwrapped compiler to avoid Nix's
-  # hardening flags, which are not supported by the wasm32 target
-  env.CC_wasm32_unknown_unknown = "${llvmPackages.clang.cc}/bin/clang";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    YAAK_CLI_NO_UPDATE_CHECK = "1";
+    # sqlite-wasm-rs compiles sqlite3.c to wasm at build time and requires a
+    # Clang with WebAssembly support. Use the unwrapped compiler to avoid Nix's
+    # hardening flags, which are not supported by the wasm32 target
+    CC_wasm32_unknown_unknown = "${llvmPackages.clang.cc}/bin/clang";
+  };
 
   # Only auto-patchelf the prebuilt CLI used during the build.
   dontAutoPatchelf = true;
