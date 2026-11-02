@@ -116,14 +116,6 @@ buildGoModule (
     __structuredAttrs = true;
 
     passthru = {
-      inherit
-        enableSeccomp
-        enableSuid
-        externalLocalStateDir
-        removeCompat
-        starterSuidPath
-        ;
-      projectName = "apptainer";
     };
 
     nativeBuildInputs = [
@@ -279,7 +271,15 @@ buildGoModule (
     systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
     inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
     passthru = {
-      inherit sourceFilesWithDefaultPaths;
+      inherit
+        enableSeccomp
+        enableSuid
+        externalLocalStateDir
+        removeCompat
+        sourceFilesWithDefaultPaths
+        starterSuidPath
+        ;
+      projectName = "apptainer";
       tests = {
         image-hello-cowsay = singularity-tools.buildImage {
           name = "hello-cowsay";
