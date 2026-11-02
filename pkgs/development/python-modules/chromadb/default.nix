@@ -34,6 +34,7 @@
   pydantic-settings,
   pypika,
   pyyaml,
+  rich,
   tenacity,
   tokenizers,
   tqdm,
@@ -148,6 +149,7 @@ buildPythonPackage (finalAttrs: {
     pydantic-settings
     pypika
     pyyaml
+    rich
     tenacity
     tokenizers
     tqdm
