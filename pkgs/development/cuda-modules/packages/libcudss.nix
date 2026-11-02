@@ -1,6 +1,7 @@
 {
   backendStdenv,
   buildRedist,
+  cuda_nvrtc,
   lib,
   libcublas,
   mpi,
@@ -18,7 +19,10 @@ buildRedist {
     "static"
   ];
 
+  # NOTE: cuDSS links against NVRTC since 1.0.0:
+  # https://docs.nvidia.com/cuda/cudss/release_notes.html
   buildInputs = [
+    cuda_nvrtc
     libcublas
   ]
   # MPI brings in NCCL dependency by way of UCC/UCX.
@@ -59,9 +63,9 @@ buildRedist {
         'file(REAL_PATH "../../" _cudss_search_prefix BASE_DIRECTORY "''${_cudss_cmake_config_realpath}")' \
         "set(_cudss_search_prefix \"''${!outputDev:?}/lib;''${!outputLib:?}/lib;''${!outputInclude:?}/include\")"
 
-    nixLog "patching $PWD/cudss-static-targets.cmake to fix INTERFACE_LINK_DIRECTORIES for cublas"
+    nixLog "patching $PWD/cudss-static-targets.cmake to fix INTERFACE_LINK_DIRECTORIES for cublas and nvrtc"
     sed -Ei \
-      's|INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"|INTERFACE_LINK_DIRECTORIES "${lib.getLib libcublas}/lib"|g' \
+      's|INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"|INTERFACE_LINK_DIRECTORIES "${lib.getLib libcublas}/lib;${lib.getLib cuda_nvrtc}/lib"|g' \
       "$PWD/cudss-static-targets.cmake"
     if grep -Eq 'INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"' "$PWD/cudss-static-targets.cmake"; then
       nixErrorLog "failed to patch $PWD/cudss-static-targets.cmake"

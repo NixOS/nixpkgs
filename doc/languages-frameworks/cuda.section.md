@@ -165,6 +165,75 @@ To illustrate: support for Blackwell (e.g., `sm_100`) was added in CUDA 12.8. As
 
 The `pkgsForCudaArch` attribute set makes it possible to access packages built for a specific architecture without needing to manually call `pkgs.extend` and supply a new `config`. As an example, `pkgsForCudaArch.sm_89.python3Packages.torch` provides PyTorch built for Ada Lovelace GPUs.
 
+### Unlocking GeForce tensor core throughput {#cuda-gpu-unlock}
+
+[gpu-unlock](https://github.com/Zagitta/gpu-unlock) removes the tensor core
+throughput cap for FP16, BF16 and TF32 operations with FP32 accumulation on
+supported GeForce GPUs. Upstream considers Ampere (RTX 30) support stable and
+Turing (RTX 20) and Ada (RTX 40) support experimental; Blackwell (RTX 50) is
+unsupported. Check the upstream supported GPU list for your exact model.
+This does not improve gaming or ordinary FP32 CUDA performance.
+
+The kernel module is available as `config.boot.kernelPackages.gpu-unlock`, with
+its firmware in the package's `firmware` attribute. The firmware is unfree; allow
+`gpu-unlock-firmware` in your `nixpkgs.config.allowUnfreePredicate`, or enable
+`nixpkgs.config.allowUnfree`. The pinned firmware version is independent of your
+installed NVIDIA driver version.
+
+Add the following to a NixOS configuration that already enables the NVIDIA driver:
+
+```nix
+{ config, ... }:
+{
+  boot.extraModulePackages = [ config.boot.kernelPackages.gpu-unlock ];
+  hardware.firmware = [ config.boot.kernelPackages.gpu-unlock.firmware ];
+  boot.initrd.availableKernelModules = [ "gpu_unlock" ];
+  boot.kernelParams = [ "gpu_unlock.targets=all" ];
+
+  boot.initrd.systemd.services.gpu-unlock = {
+    description = "Unlock NVIDIA GPU tensor core throughput";
+    wantedBy = [ "sysinit.target" ];
+    before = [
+      "sysinit.target"
+      "systemd-modules-load.service"
+      "systemd-udevd.service"
+      "systemd-udev-trigger.service"
+    ];
+    unitConfig.DefaultDependencies = false;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "/bin/modprobe gpu_unlock";
+    };
+  };
+}
+```
+
+The initrd service must finish before udev or the normal module loader can load
+NVIDIA or another GPU driver. Merely adding `gpu_unlock` to
+`boot.initrd.kernelModules` does not ensure this ordering. The module's firmware
+declarations cause NixOS to include the required assets in the initrd.
+
+To select individual GPUs, replace `all` with full PCI addresses from `lspci -D`,
+for example `gpu_unlock.targets=0000:01:00.0,0000:02:00.0`. Already bound or
+powered-down cards are skipped. Loading the module after the NVIDIA driver has
+bound the card is too late.
+
+Apply the configuration with `sudo nixos-rebuild boot`, then reboot. Check
+`journalctl -k -b --grep=gpu_unlock` for an `unlocked` message for each selected
+GPU. `journalctl -b -u gpu-unlock.service` shows initrd service failures; a
+successful service exit alone does not mean a GPU was unlocked.
+
+The unlock is lost when a GPU loses power. Upstream attempts to reapply it after
+suspend to RAM before NVIDIA resumes the GPU; hibernation is not covered.
+Laptop runtime power management can also reset the unlock. See upstream's
+power-management guidance and check the kernel log after resume.
+
+To disable unlocking, remove `gpu_unlock.targets=...` from `boot.kernelParams`,
+rebuild the boot configuration, and reboot. For a single boot, remove the
+parameter in the bootloader editor. To uninstall, also remove the module,
+firmware, and initrd service settings above, rebuild, and reboot.
+
 ### Running Docker or Podman containers with CUDA support {#cuda-docker-podman}
 
 It is possible to run Docker or Podman containers with CUDA support. The recommended mechanism to perform this task is to use the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).

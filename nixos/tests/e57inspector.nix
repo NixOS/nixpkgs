@@ -44,9 +44,9 @@ in
     name = "e57inspector-screenshot-analysis";
     screenshot = "${vmTest}/screen.png";
     question = ''
-      Look at this screenshot of a desktop application.
+      Look at this screenshot of the e57inspector application.
       Answer: Does the application show that a file was loaded into it successfully?
-      For this, only scans matter, as there are no images in the file.
+      For this, only scans matter, as there are no images in the file, so an image count of 0 is fine.
       The inspector on the left should show child elements below 'Data 3D'.
     '';
   };

@@ -54,13 +54,13 @@
     "vendorHash": "sha256-/9AxZkWEXGtlEQ+p1utMhkC5z81XOkS1SCfp4ZgPT3g="
   },
   "aminueza_minio": {
-    "hash": "sha256-57IhDRu6YrJgXl2bkCeIeRIs4702wb0z/52eJoTAp70=",
+    "hash": "sha256-f8li8rvdRd6UDDqemerI0+nH+OtDCW3stT1H/fLDnDk=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v3.45.0",
+    "rev": "v3.45.1",
     "spdx": "AGPL-3.0",
-    "vendorHash": "sha256-hKSqgc+Gf0vzQuXKlErWVC/EbHatu/9oTW25PnRMyxQ="
+    "vendorHash": "sha256-ov+YA8Y9bl8oaeobh5m4ISba624h2lzlb7BtzcALIyI="
   },
   "archessmn_powerdns": {
     "hash": "sha256-gQRB8tnFHhXNId9J8947ffizIWTKEetOnc+QMnjaB48=",
@@ -310,11 +310,11 @@
     "vendorHash": "sha256-3o6YRDrq4rQhNAFyqiGJrAoxuAykWw85OExRGSE3kGI="
   },
   "datadog_datadog": {
-    "hash": "sha256-Sv/mzOMSerwMFiBFFcj+4bVaJvpAbHVj/MXXclhYpHA=",
+    "hash": "sha256-mWHyJtKODTnBcWCA0PKt6Dd7AJdyxONoVdA/ET63yrk=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v4.26.0",
+    "rev": "v4.27.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-dTbDKR03Inol1G4okCNDso5tZ45BEiUmkXOAmIrRcX0="
   },
@@ -391,13 +391,13 @@
     "vendorHash": "sha256-B8mYLd4VdADWoQLWiCM85VQrBfDdlYQ0wkCp9eUBQ4U="
   },
   "drfaust92_bitbucket": {
-    "hash": "sha256-m5Ya99ulMesUwl54sbHuvOYumbPcAhWMESVGbXIOJpE=",
+    "hash": "sha256-5clib4KME7L/wk5ptrKLXiY1/NZ9/+cajrHwNMkD00I=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.52.0",
+    "rev": "v2.54.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uokHd4hDvWl6mrBa062F/uZmYPnW3TIZZKZwKBVq+Lo="
+    "vendorHash": "sha256-gUKREx3NORuYAFqR/hUCuU1OXQw5NYn2LzcpeunEagE="
   },
   "e-breuninger_netbox": {
     "hash": "sha256-tbBCGOcbDhiOjdgyS9lSw6IbMgzZwnbM40/InvhUKCA=",
@@ -706,13 +706,13 @@
     "vendorHash": "sha256-t20uPPaKr43Al7ExOPD+cw1hVwaVwxljHHR0tVPmrYw="
   },
   "hashicorp_tls": {
-    "hash": "sha256-4XHSPKszjMjt62fYDsgB+/43AY6Ixk8nTGUQBShcNgA=",
+    "hash": "sha256-PhRtfxTJ9pKfGilXlWkYi2rr9T5jTQySCT1l0ySAGhI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tls",
     "owner": "hashicorp",
     "repo": "terraform-provider-tls",
-    "rev": "v4.4.1",
+    "rev": "v4.4.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QuRWNrwfBOk9V5IrvSaT5Qtl98HjBJvSX/0BmZiYTh4="
+    "vendorHash": "sha256-4iv5WwD1qX7Hq/JLNkFrouAVC3dQ75glJhvVz74CN7E="
   },
   "hashicorp_vault": {
     "hash": "sha256-Bd9ZALCqHcM4cn1knLXLyD3fpnBlw992xFeZCCREqk8=",
@@ -733,22 +733,22 @@
     "vendorHash": "sha256-47xWjlzpQ/EYzjbuuMKQiu5cfYAXdYkXRl+AOEP+sA4="
   },
   "heroku_heroku": {
-    "hash": "sha256-FnJn/kFnTOOcnJtVdlSFpZh9S+BZodhk6IcvG0DFaLg=",
+    "hash": "sha256-KipVqV1OT5tINSuNbbGzt6JaKVsc9pSkQhUCo3KspCs=",
     "homepage": "https://registry.terraform.io/providers/heroku/heroku",
     "owner": "heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.4.1",
+    "rev": "v5.4.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "hetznercloud_hcloud": {
-    "hash": "sha256-bK6oSiNa6W04IqsWYfgntpyTn1C/k1TpD+vmPWlsDFA=",
+    "hash": "sha256-aniX/TEZyZLE3F5hHWnlp2S+gbvVaNbf2QTcYgkutg8=",
     "homepage": "https://registry.terraform.io/providers/hetznercloud/hcloud",
     "owner": "hetznercloud",
     "repo": "terraform-provider-hcloud",
-    "rev": "v1.70.0",
+    "rev": "v1.70.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PVoHdzP8gtGobxDyB9g5Zi7pNoATgeQFrPEWki2y8TE="
+    "vendorHash": "sha256-BpcXnBC8Li53taP3dt9AlwivQ5nMSaUSgzVj365Lzz8="
   },
   "huaweicloud_huaweicloud": {
     "hash": "sha256-e9osIGnur2QtVByW4X93X4pqPxhbqNUPn8CSIZAo6Vk=",
@@ -1445,11 +1445,11 @@
     "vendorHash": "sha256-6ivj3olSo9t75jVnow2GvzVGE5JeVtTjWxYDirvSyFc="
   },
   "trozz_pocketid": {
-    "hash": "sha256-jRjM8uMpa5FBRqAJY8eM+Sjo72E1et/HyIGEIoK/rXg=",
+    "hash": "sha256-JZAUncvrj42sArGYQP2CSGxU48IBIsrgbzTl8BbrqB4=",
     "homepage": "https://registry.terraform.io/providers/Trozz/pocketid",
     "owner": "Trozz",
     "repo": "terraform-provider-pocketid",
-    "rev": "v2.4.2",
+    "rev": "v2.5.0",
     "spdx": "MIT",
     "vendorHash": "sha256-Xro8lh5wNsAyYQrM8zIbzcPPTIGE1x99jA3ZMXZXwyk="
   },

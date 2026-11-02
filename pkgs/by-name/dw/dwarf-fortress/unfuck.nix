@@ -82,7 +82,8 @@ stdenv.mkDerivation {
     sed -i "1i #include <cstdint>" g_src/files.h
   '';
 
-  cmakeFlags = [
+  # Only needed to find GTK 2, see below.
+  cmakeFlags = lib.optionals (versionOlder release.unfuckRelease "0.47.05") [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];

@@ -650,6 +650,7 @@ mapAliases {
   python-qt = throw "python-qt has been removed, because hard to maintain and not required by anything"; # Added 2025-01-14
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
+  python-twitter = throw "'python-twitter' has been removed because it is archived upstream"; # Added 2026-11-01
   python-u2flib-server = throw "'python-u2flib-server' has been removed, since it was broken and archived upstream"; # added 2025-11-08
   python-unrar = unrar; # Added 2026-08-25
   python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
@@ -845,6 +846,7 @@ mapAliases {
   xcaplib = warnAlias "'xcaplib' has been renamed to/replaced by 'python3-xcaplib'" python3-xcaplib; # added 2026-10-21
   xlib = python-xlib; # added 2026-06-21
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
+  xnatpy = xnat; # added 2026-11-01
   y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29
   yasi = throw "'yasi' has been removed as it is unmaintained upstream"; # Added 2026-01-31

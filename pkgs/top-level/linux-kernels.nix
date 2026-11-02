@@ -314,6 +314,8 @@ in
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
+        gpu-unlock = callPackage ../os-specific/linux/gpu-unlock { };
+
         gtp5g = callPackage ../os-specific/linux/gtp5g { };
 
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };

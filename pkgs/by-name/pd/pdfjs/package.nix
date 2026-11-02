@@ -6,14 +6,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pdfjs";
-  version = "6.4.299";
+  version = "6.5.438";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${finalAttrs.version}/pdfjs-${finalAttrs.version}-dist.zip";
-    hash = "sha256-UHMYW6fHRL7by4sP7NXE5NuTKtmUPfInK6KunbnP88w=";
+    hash = "sha256-KNYi+V7BD9yN6+YaJ8hvMncFMUBDEtRSQx7rVt2+TlI=";
     stripRoot = false;
   };
 
