@@ -10,7 +10,7 @@
 
   fetchYarnDeps,
   lib,
-  nodejs_22,
+  nodejs_26,
   stdenvNoCC,
   yarnBuildHook,
   yarnConfigHook,
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs_26
     yarnBuildHook
     yarnConfigHook
   ];
