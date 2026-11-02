@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
   pytest-asyncio,
@@ -12,19 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "4.2.4";
+  version = "4.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
     tag = finalAttrs.version;
-    hash = "sha256-oN4nr4p/vPpg5620LEpqYILofYl2rpaPN5lJqySR6ZE=";
+    hash = "sha256-JGmjNe6Q+QZ2cAxbhbZDCwT6u4AU+LVp5K0FJIlYHbk=";
   };
 
   build-system = [
-    hatch-vcs
+    hatch-fancy-pypi-readme
     hatchling
+    hatch-vcs
   ];
 
   nativeCheckInputs = [
