@@ -80,12 +80,13 @@ buildDotnetModule rec {
 
   # Help Dafny find z3 and dotnet SDK (needed for dafny run)
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        z3
-        dotnet-sdk
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      z3
+      dotnet-sdk
+    ])
   ];
 
   postFixup = ''

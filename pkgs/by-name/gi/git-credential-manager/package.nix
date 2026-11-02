@@ -36,15 +36,16 @@ buildDotnetModule rec {
 
   runtimeDeps = lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath (
-        [ git ]
-        ++ lib.optionals withGpgSupport [
-          gnupg
-          pass
-        ]
-      )
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath (
+      [ git ]
+      ++ lib.optionals withGpgSupport [
+        gnupg
+        pass
+      ]
+    ))
     "--inherit-argv0"
   ];
 
