@@ -503,12 +503,6 @@
     githubId = 806876;
     name = "Aaron Jheng";
   };
-  aaronschif = {
-    email = "aaronschif@gmail.com";
-    github = "aaronschif";
-    githubId = 2258953;
-    name = "Aaron Schif";
-  };
   aaschmid = {
     email = "service@aaschmid.de";
     github = "aaschmid";
@@ -7090,12 +7084,6 @@
     githubId = 7504556;
     name = "Dennis Bogers";
   };
-  derchris = {
-    email = "derchris@me.com";
-    github = "derchrisuk";
-    githubId = 706758;
-    name = "Christian Gerbrandt";
-  };
   derdennisop = {
     email = "dennish@wuitz.de";
     github = "DerDennisOP";
@@ -9029,12 +9017,6 @@
     github = "evax";
     githubId = 599997;
     name = "evax";
-  };
-  evck = {
-    email = "eric@evenchick.com";
-    github = "ericevenchick";
-    githubId = 195032;
-    name = "Eric Evenchick";
   };
   eveeifyeve = {
     name = "Eveeifyeve";
@@ -20161,12 +20143,6 @@
     githubId = 68467027;
     name = "Mshnwq";
   };
-  msiedlarek = {
-    email = "mikolaj@siedlarek.pl";
-    github = "msiedlarek";
-    githubId = 133448;
-    name = "Mikołaj Siedlarek";
-  };
   msladecek = {
     email = "martin.sladecek+nixpkgs@gmail.com";
     name = "Martin Sladecek";
@@ -28538,12 +28514,6 @@
     githubId = 850665;
     name = "Shaw Vrana";
   };
-  svsdep = {
-    email = "svsdep@gmail.com";
-    github = "svsdep";
-    githubId = 36695359;
-    name = "Vasyl Solovei";
-  };
   swaggeroo = {
     email = "swaggerooo@pm.me";
     github = "swaggeroo";
@@ -30177,12 +30147,6 @@
     github = "trev-dev";
     githubId = 28788713;
     name = "Trevor Richards";
-  };
-  trevorj = {
-    email = "nix@trevor.joynson.io";
-    github = "akatrevorjay";
-    githubId = 1312290;
-    name = "Trevor Joynson";
   };
   treyfortmuller = {
     email = "treyunofficial@gmail.com";
