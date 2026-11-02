@@ -13603,8 +13603,6 @@ self: super: with self; {
 
   pep440 = callPackage ../development/python-modules/pep440 { };
 
-  pep517 = callPackage ../development/python-modules/pep517 { };
-
   pep8 = callPackage ../development/python-modules/pep8 { };
 
   pep8-naming = callPackage ../development/python-modules/pep8-naming { };
