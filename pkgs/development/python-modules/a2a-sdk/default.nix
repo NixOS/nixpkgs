@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "a2a-sdk";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "a2aproject";
     repo = "a2a-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s6/Z4jzwnZWd3ZnowbH5w3AX5VkqPc31bT3ojIOHLYs=";
+    hash = "sha256-aos3BkqqGIP3BgfUEE4iTYUavPvw/V+xlIpfdypkMdw=";
   };
 
   build-system = [
