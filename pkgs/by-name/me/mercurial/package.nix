@@ -186,9 +186,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
             {
               inherit (mercurial) src;
 
-              SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt"; # needed for git
               MERCURIAL_BASE = mercurial;
               nativeBuildInputs = [
+                cacert
                 python
                 unzip
                 which
