@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pytestCheckHook,
 
   # large-rebuild downstream dependencies and applications
@@ -11,22 +10,22 @@
   magic-wormhole,
   mitmproxy,
   typer,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.4.2";
+  version = "8.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-66JFGGwPXeCU7Fbqsrsq3giv6qsea1ZKGmZYPu9rcog=";
+    hash = "sha256-VYdaEN9l2MRVz42I8t8IDOpG5XeDM8bf34dLZy3yf10=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
