@@ -6,6 +6,7 @@
   pillow,
   pytestCheckHook,
   python-dateutil,
+  python-stdnum,
   setuptools,
   typing-extensions,
   tzdata,
@@ -15,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "40.37.0";
+  version = "40.44.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qS3/fzEOYftUTGFyDhXtsudEi8M9FaMhqZ6at7lKv1Q=";
+    hash = "sha256-lyRaN1bcrzVBi4m+qfA65ogVV9sAMr8Eh0TCqu4qkQg=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     freezegun
     pillow
     pytestCheckHook
+    python-stdnum
     ukpostcodeparser
     validators
   ];
