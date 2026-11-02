@@ -47,6 +47,10 @@ in
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.12.7";
+      extraMeta.problems.removal = {
+        message = "Julia 1.12 has been superseded by 1.13 and receives infrequent updates. See https://julialang.org/downloads/.";
+        urls = [ "https://julialang.org/downloads/" ];
+      };
       sha256 = {
         x86_64-linux = "1s39x8l6rgp6jw3b4bj3phaszm5h77g7rrhd4lslililcrvrwzjf";
         aarch64-linux = "1whyfcdf7bncz2n1ixxzf3h30slildgfx8a06a401wy74jsw0hwj";
@@ -120,6 +124,10 @@ in
       (import ./generic.nix {
         version = "1.12.7";
         hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
+        extraMeta.problems.removal = {
+          message = "Julia 1.12 has been superseded by 1.13 and receives infrequent updates. See https://julialang.org/downloads/.";
+          urls = [ "https://julialang.org/downloads/" ];
+        };
         patches = [
           # stackwalk: derive glibc longjmp pointer mangling
           # https://github.com/JuliaLang/julia/pull/62777
