@@ -168,8 +168,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pytestFlags = [
-    "--reruns 3"
-    "--reruns-delay 5"
+    "--reruns=3"
+    "--reruns-delay=5"
   ];
 
   preCheck = ''
