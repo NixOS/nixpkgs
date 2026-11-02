@@ -917,6 +917,9 @@ This can be achieved by establishing confidence in the correctness of the toolin
 As the inner workings of LLM‐based AI tools cannot be sufficiently understood at present, only the latter two options are available when those are used; vibe coding without review is not permitted.
 When automation is used to verify output, the verification tooling itself must be disclosed and reviewed in line with this policy.
 
+Checkboxes, such as those in pull requests or new issue templates that ask whether this policy has been followed, must be checked.
+Non-use of LLM-based AI tools is in compliance with this policy.
+
 This policy applies equally to any further discussion of a contribution.
 Comments and reviews must separately satisfy the same requirements of understanding, review, and disclosure.
 Contributors are expected to be able to answer questions about their contribution and respond to feedback appropriately, without simply forwarding messages back and forth to automated tools.
