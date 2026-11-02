@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-magnumclient";
-  version = "4.10.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
     tag = finalAttrs.version;
-    hash = "sha256-kOnx2Fsx6WK7Z3z7O6so1LOjjyPiEB0jDFzOl7WlMS0=";
+    hash = "sha256-ZEDGXpXrTHcEzbRZF3cFVMVt8UN+x5jNCFHWJfL1M0o=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)

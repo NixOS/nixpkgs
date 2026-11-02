@@ -2,6 +2,7 @@
   meta,
   nodejs,
   npmDeps,
+  npmDepsFetcherVersion,
   src,
   version,
 
@@ -27,6 +28,7 @@ buildNpmPackage {
     src
     nodejs
     npmDeps
+    npmDepsFetcherVersion
     ;
 
   __structuredAttrs = true;

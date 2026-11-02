@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cliff";
-  version = "4.16.0";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "cliff";
     tag = finalAttrs.version;
-    hash = "sha256-YADr4oT2u/CavqD0Se7IvdHwPlbiGFNbhlnph/Vy5uQ=";
+    hash = "sha256-zHUWBNdfekEpAqvdY8K9uyFcJYYKB4Z8eAjR3O8080U=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
