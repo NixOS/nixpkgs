@@ -8364,6 +8364,8 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
+  apptainer-overridden-nixos = apptainer.tests.overridden-nixos;
+
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_19
     wlroots_0_20

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixos,
   replaceVars,
   # Native build inputs
   addDriverRunpath,
@@ -304,6 +305,28 @@ buildGoModule (
           memSize = 4096;
           singularity = finalAttrs.finalPackage;
         };
+        overridden-nixos =
+          # TODO(@ShamrockLee):
+          # * Rename the module to programs.apptainer
+          # * Fix the packageOverrid[d]en spelling.
+          (nixos {
+            programs.singularity = {
+              enable = true;
+              package = finalAttrs.finalPackage;
+            };
+          }).config.programs.singularity.packageOverriden.overrideAttrs
+            (oldAttrs: {
+              meta = oldAttrs.meta // {
+                description = "";
+                longDescription = ''
+                  This package produces identical store derivations to `pkgs.${projectName}`
+                  overridden and installed by the NixOS module `programs.singularity`
+                  with default configuration.
+
+                  This is for binary substitutes only. Use pkgs.${projectName} instead.
+                '';
+              };
+            });
       };
       gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
         # Should be in tests, but Ofborg would skip image-hello-cowsay because
