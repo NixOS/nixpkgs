@@ -36,10 +36,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     CLI_VERSION = finalAttrs.version;
   };
 
-  # cli/tsconfig.json compiles the SDK packages from client/js and
-  # incubating/account/js, which cannot see their dependencies in the isolated
-  # node_modules. Use the copies in node_modules instead, like for crypto.
   postPatch = ''
+    # Upstream does not allow newer bun versions, remove when they fix it.
+    substituteInPlace package.json --replace-fail '"bun": "1.' '"bun": "^1.'
+    # cli/tsconfig.json compiles the SDK packages from client/js and
+    # incubating/account/js, which cannot see their dependencies in the isolated
+    # node_modules. Use the copies in node_modules instead.
     substituteInPlace tsconfig.json \
       --replace-fail '"../client/js/src' '"./node_modules/@protontech/drive-sdk/src' \
       --replace-fail '"../incubating/account/js/src' '"./node_modules/proton-drive-sdk-account/src'
@@ -47,16 +49,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   configurePhase = ''
     runHook preConfigure
-    cp -R ${finalAttrs.passthru.nodeModules}/node_modules node_modules
-    runHook postConfigure
-  '';
-
-  # Upstream takes the bundled js SDK version from the latest js/v* git tag,
-  # which is not available here. Read it from the SDK changelog instead.
-  preBuild = ''
+    # Upstream takes the bundled js SDK version from the latest js/v* git tag,
+    # which is not available here. Read it from the SDK changelog instead.
     JS_VERSION=$(sed -n 's|^## js/v\([0-9.]*\) .*|\1|p' ../client/js/CHANGELOG.md | head -n1)
     [[ -n $JS_VERSION ]] || { echo "Could not determine JS_VERSION" >&2; exit 1; }
     export JS_VERSION
+    cp -R ${finalAttrs.passthru.nodeModules}/node_modules node_modules
+    runHook postConfigure
   '';
 
   buildPhase = ''
@@ -83,20 +82,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     nodeModules = stdenvNoCC.mkDerivation {
       pname = "${finalAttrs.pname}-node-modules";
-      inherit (finalAttrs) version src;
-      sourceRoot = "${finalAttrs.src.name}/cli";
-      strictDeps = true;
-      __structuredAttrs = true;
+      inherit (finalAttrs)
+        version
+        src
+        sourceRoot
+        strictDeps
+        __structuredAttrs
+        ;
       nativeBuildInputs = [
         bun
         writableTmpDirAsHomeHook
       ];
-      dontConfigure = true;
       dontFixup = true; # keeps the outputHash stable
+      postPatch = ''
+        # Prevent hoisted fallback for undeclared deps; unused here and its layout changed between bun versions.
+        printf '[install]\nhoist = false\n' >> bunfig.toml
+      '';
       buildPhase = ''
         runHook preBuild
-        # The isolated linker copies the file: dependencies (client/js,
-        # incubating/account/js) instead of symlinking them by absolute path,
+        # The isolated linker copies the "file:" dependencies instead of symlinking them by absolute path,
         # so the output does not depend on the build directory.
         bun install --force --no-progress --production \
                     --frozen-lockfile --ignore-scripts \
@@ -106,11 +110,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       installPhase = ''
         runHook preInstall
         mkdir -p $out
-        cp -R node_modules $out/
+        mv node_modules $out/
         runHook postInstall
       '';
       outputHashMode = "recursive";
-      outputHash = "sha256-0Rxuf8+gG1KzrWrmhH669p/OnG15WjGV//QWLcCE7V8=";
+      outputHash = "sha256-eRNZUYqqqy/LCQ3u4GNL6jvUjAxdnz4nwz8c1eTX6g4=";
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -129,7 +133,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lib.maintainers.linusemr618
       lib.maintainers.utopiatopia
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    inherit (bun.meta) platforms;
     mainProgram = "proton-drive";
   };
 })
