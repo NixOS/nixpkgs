@@ -4,7 +4,7 @@
   fetchPypi,
   flask,
   mock,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   propagatedBuildInputs = [
     flask
