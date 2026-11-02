@@ -23,7 +23,6 @@ let
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
     "openssl.cafile" = config.security.pki.caBundle;
-    catch_workers_output = "yes";
   };
 
   appStores = {
@@ -1315,6 +1314,7 @@ in
             upload_max_filesize = cfg.maxUploadSize;
             post_max_size = cfg.maxUploadSize;
             memory_limit = cfg.maxUploadSize;
+            error_log = "syslog";
           }
           (lib.mkIf cfg.caching.apcu {
             "apc.enable_cli" = "1";
