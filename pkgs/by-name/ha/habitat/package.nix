@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     protobuf
+    cacert
   ];
 
   buildInputs = [
@@ -45,7 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     OPENSSL_NO_VENDOR = true;
     SODIUM_USE_PKG_CONFIG = true;
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   meta = {
