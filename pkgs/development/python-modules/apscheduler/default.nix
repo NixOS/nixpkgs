@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-AhVlACRg0Xwy9XmFRl29of5uM2aJa5Gv2SzFuJXVCpE=";
   };
 
+  patches = [
+    # unclear how apscheduler could ever work since _offset has been removed from pytz for ages
+    ./pytz-offset.patch
+  ];
+
   postPatch = ''
     sed -i "/addopts/d" pyproject.toml
   '';
