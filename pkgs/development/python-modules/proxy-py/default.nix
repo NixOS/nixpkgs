@@ -14,7 +14,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   requests,
   setuptools-scm,
   typing-extensions,
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     pytest-xdist
-    pytestCheckHook
+    # pytest.PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+    pytest9_1CheckHook
     requests
   ];
 
