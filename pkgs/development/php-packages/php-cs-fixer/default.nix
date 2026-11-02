@@ -7,17 +7,17 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.95.1";
+  version = "3.95.27";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nQSVAEb57kcboaqTa344eIsDC7qRiCAA6M9x77hsTio=";
+    hash = "sha256-icYNEXf+OGXjrgYQiKEUztgIBSrjhvwRXsJsaVCztag=";
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-VIwZQutV2qlz0kZDQCncEM8Wa2zT9o+oM9O+FmhiTas=";
+  vendorHash = "sha256-14XYbzMYMcFgop53iPFlw9dKWGB1jmSWC0pKV+SIjKA=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
