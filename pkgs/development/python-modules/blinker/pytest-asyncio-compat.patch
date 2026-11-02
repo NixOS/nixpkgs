@@ -1,0 +1,12 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index c98fb02..18eeaad 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -41,6 +41,7 @@ filterwarnings = [
+     "error"
+ ]
+ asyncio_mode = "auto"
++asyncio_default_fixture_loop_scope = "function"
+ 
+ [tool.coverage.run]
+ branch = true
