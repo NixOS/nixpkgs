@@ -60,9 +60,7 @@ rustPlatform.buildRustPackage {
     "--skip=oauth::test_mobile_spoof_backend"
   ];
 
-  env = {
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
+  nativeBuildInputs = [ cacert ];
 
   passthru = {
     tests = nixosTests.redlib;
