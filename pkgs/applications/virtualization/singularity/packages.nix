@@ -68,7 +68,21 @@ let
         ];
 
         extraDescription = " (Sylabs Inc's fork of Singularity, a.k.a. SingularityCE)";
-        extraMeta.homepage = "https://sylabs.io/";
+        extraMeta = {
+          homepage = "https://sylabs.io/";
+          problems = {
+            deprecated = {
+              message = ''
+                Sylabs Inc. has discontinued its development of its fork SingularityCE and the commercial versin SingularityPRO.
+                SingularityCE 4.6.0 was the last release, which incorporates code that was previously part of SingularityPRO only.
+                Use Apptainer (`apptainer`) instead.
+              '';
+              urls = [
+                "https://sylabs.io/"
+              ];
+            };
+          };
+        };
       })
       {
         # Sylabs SingularityCE builders defaults to set the SUID flag
