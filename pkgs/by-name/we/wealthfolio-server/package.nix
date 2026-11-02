@@ -70,12 +70,10 @@ rustPlatform.buildRustPackage (
     buildAndTestSubdir = "apps/server";
     cargoHash = "sha256-zim5nmTBsxvZqU7iobPf5orM0MAJLoXq5rvNgeM8+LE=";
 
-    env = {
-      OPENSSL_NO_VENDOR = 1;
-      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    };
+    env.OPENSSL_NO_VENDOR = 1;
 
     nativeBuildInputs = [
+      cacert
       makeWrapper
       pkg-config
     ];
