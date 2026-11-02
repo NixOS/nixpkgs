@@ -29,19 +29,11 @@ let
     })
   ];
 
-  # Override dartsim to build with C++17 to avoid C++20 deprecation errors
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/581945 lands
-  dartsimC17 = dartsim.overrideAttrs (old: {
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
-      "-DCMAKE_CXX_STANDARD=17"
-      "-DCMAKE_CXX_STANDARD_REQUIRED=ON"
-    ];
-  });
 in
 
 stdenv.mkDerivation (_finalAttrs: {
   pname = "magnum-integration";
-  version = "0.0.0";
+  version = "2020.06-unstable-2026-10-07";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -62,7 +54,7 @@ stdenv.mkDerivation (_finalAttrs: {
     magnumWithPlugins
   ]
   ++ lib.optional withBulletIntegration bullet
-  ++ lib.optional withDartIntegration dartsimC17
+  ++ lib.optional withDartIntegration dartsim
   ++ lib.optional withEigenIntegration eigen
   ++ lib.optional withGlmIntegration glm
   ++ lib.optional withImguiIntegration imgui
@@ -84,7 +76,7 @@ stdenv.mkDerivation (_finalAttrs: {
   meta = with lib; {
     description = "Integration libraries for the Magnum C++11 graphics engine";
     homepage = "https://github.com/mosra/magnum-integration";
-    license = licenses.bsd2;
+    license = licenses.mit;
     maintainers = with maintainers; [ arntanguy ];
     platforms = platforms.all;
   };
