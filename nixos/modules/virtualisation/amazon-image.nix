@@ -14,6 +14,8 @@
 let
   inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
+  efiBoot = cfg.bootMode != "legacy-bios";
+  biosBoot = cfg.bootMode != "uefi";
 in
 
 {
@@ -29,7 +31,12 @@ in
 
   config = {
 
-    assertions = [ ];
+    assertions = [
+      {
+        assertion = biosBoot -> pkgs.stdenv.hostPlatform.isx86;
+        message = "ec2.bootMode = \"${cfg.bootMode}\" needs legacy BIOS, which only x86 instances have.";
+      }
+    ];
 
     boot.growPartition = true;
 
@@ -41,7 +48,7 @@ in
       }
     );
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
+    fileSystems."/boot" = mkIf (efiBoot || cfg.zfs.enable) (
       lib.mkDefault {
         # The ZFS image uses a partition labeled ESP whether or not we're
         # booting with EFI.
@@ -85,9 +92,9 @@ in
       "xen_fbfront"
     ];
 
-    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
-    boot.loader.grub.efiSupport = cfg.efi;
-    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.grub.device = if biosBoot then "/dev/xvda" else "nodev";
+    boot.loader.grub.efiSupport = efiBoot;
+    boot.loader.grub.efiInstallAsRemovable = efiBoot;
     boot.loader.timeout = 1;
     boot.loader.grub.extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
