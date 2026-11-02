@@ -64,8 +64,8 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.12";
-        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        version = "1.10.13";
+        hash = "sha256-DaPlMwiM2jQKgtJan6wyzs8t0Ta4GlWbjlHsD7cGEsE=";
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
@@ -74,13 +74,6 @@ in
             url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
-          })
-          # stackwalk: derive glibc longjmp pointer mangling
-          # https://github.com/JuliaLang/julia/pull/62775
-          # Probably not needed after the next release on this branch (1.10.13+)
-          (fetchpatch2 {
-            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch?full_index=1";
-            hash = "sha256-1Dq5gEo+MiBoIZq8xBHNONwDrwLLQ3Yr6qQh6EJKCCQ=";
           })
         ];
       })
