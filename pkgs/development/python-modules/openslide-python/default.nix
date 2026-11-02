@@ -8,15 +8,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "openslide";
+buildPythonPackage (finalAttrs: {
+  pname = "openslide-python";
   version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uo1jcfxbx9v9vNQGnzAhO4N/QKQycMh5y4ICWstnZA0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to the OpenSlide library for reading whole-slide microscopy images";
     homepage = "https://github.com/openslide/openslide-python";
-    changelog = "https://github.com/openslide/openslide-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/openslide/openslide-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
