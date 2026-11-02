@@ -25,7 +25,7 @@ let
         chmod -R u+w electron-dist
 
         cd electron-dist
-        zip -0Xqr $out/electron-v${electron.version}-darwin-${electronArch}.zip .
+        zip -0Xqry $out/electron-v${electron.version}-darwin-${electronArch}.zip .
       '';
 in
 
