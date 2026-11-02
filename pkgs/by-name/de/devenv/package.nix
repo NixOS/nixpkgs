@@ -11,6 +11,7 @@
   testers,
   cachix,
   nixVersions,
+  aws-lc,
   openssl,
   dbus,
   protobuf,
@@ -19,6 +20,7 @@
   glibcLocalesUtf8,
   boehmgc,
   libghostty-vt,
+  zstd,
   llvmPackages,
   nixd,
   bash,
@@ -68,7 +70,6 @@ buildRustPackage {
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -91,6 +92,7 @@ buildRustPackage {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     sqlite
     dbus
@@ -103,6 +105,7 @@ buildRustPackage {
     nix_components.nix-cmd-c
     nix_components.nix-fetchers-c
     nix_components.nix-main-c
+    zstd
   ];
 
   nativeCheckInputs = [
