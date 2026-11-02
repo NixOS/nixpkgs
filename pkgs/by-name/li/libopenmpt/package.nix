@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
   ];
 
+  strictDeps = true;
+
   configureFlags = [
     (lib.strings.withFeature usePulseAudio "pulseaudio")
   ];
