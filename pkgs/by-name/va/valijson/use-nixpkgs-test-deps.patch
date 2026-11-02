@@ -1,7 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4ef59c6..6312975 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -102,59 +102,20 @@ if(Qt${QT_VERSION_MAJOR}Core_FOUND)
+@@ -103,16 +103,6 @@ if(Qt${QT_VERSION_MAJOR}Core_FOUND)
      set(valijson_QT_CORE_TARGET Qt${QT_VERSION_MAJOR}::Core)
  endif()
  
@@ -15,21 +16,13 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 -target_include_directories(jsoncpp SYSTEM PRIVATE thirdparty/jsoncpp/include)
 -set_target_properties(jsoncpp PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/jsoncpp)
 -
--add_library(json11
--    thirdparty/json11/json11.cpp
--)
--
--target_include_directories(json11 SYSTEM PRIVATE thirdparty/json11)
--if(MSVC)
--    target_compile_options(json11 PRIVATE /FIcstdint)
--else()
--    target_compile_options(json11 PRIVATE
--        -include cstdint
--        $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wno-unqualified-std-cast-call>
--    )
--endif()
--set_target_properties(json11 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/json11)
--
+ if(NOT valijson_EXCLUDE_JSON11)
+     add_library(json11
+         thirdparty/json11/json11.cpp
+@@ -130,34 +120,19 @@ if(NOT valijson_EXCLUDE_JSON11)
+     set_target_properties(json11 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/thirdparty/json11)
+ endif()
+ 
 -# yaml-cpp library
 -file(GLOB yamlcpp_SOURCES "thirdparty/yaml-cpp/src/*.cpp")
 -add_library(yamlcpp ${yamlcpp_SOURCES})
@@ -64,17 +57,16 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 +    find_package(yaml-cpp REQUIRED)
 +    find_package(nlohmann_json REQUIRED)
 +    find_package(RapidJSON REQUIRED)
-+    find_package(json11 REQUIRED)
 +    find_package(picojson REQUIRED)
  
      set(TEST_SOURCES
          tests/test_adapter_comparison.cpp
-@@ -178,7 +139,7 @@ if(valijson_BUILD_TESTS)
+@@ -180,7 +155,7 @@ if(valijson_BUILD_TESTS)
          tests/test_utf8_utils.cpp
      )
  
--    set(TEST_LIBS gtest_main jsoncpp json11 yamlcpp)
-+    set(TEST_LIBS GTest::gtest_main JsonCpp::JsonCpp json11::json11 picojson::picojson yaml-cpp::yaml-cpp nlohmann_json::nlohmann_json RapidJSON)
+-    set(TEST_LIBS gtest_main jsoncpp yamlcpp)
++    set(TEST_LIBS GTest::gtest_main JsonCpp::JsonCpp picojson::picojson yaml-cpp::yaml-cpp nlohmann_json::nlohmann_json RapidJSON)
  
-     if(Boost_FOUND)
-         include_directories(${Boost_INCLUDE_DIRS})
+     if(NOT valijson_EXCLUDE_JSON11)
+         list(APPEND TEST_SOURCES tests/test_json11_adapter.cpp)

@@ -5,7 +5,6 @@
   cmake,
   boost,
   gtest,
-  json11,
   jsoncpp,
   nlohmann_json,
   picojson,
@@ -47,8 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     # Still present upstream as of this release. Upstream PR:
     # https://github.com/tristanpenman/valijson/pull/258
     ./qtjson-adapter-int64.patch
-    # test_suite otherwise builds jsoncpp/yaml-cpp/json11 from vendored
-    # submodule sources and vendors its own gtest/nlohmann-json/rapidjson via
+    # dropbox/json11 has been archived since 2020, so skip building/testing
+    # against it entirely (valijson_EXCLUDE_JSON11 below). Mirrors upstream's
+    # merged fix (https://github.com/tristanpenman/valijson/pull/259),
+    # re-derived against this release's pin: the real merge-commit diff
+    # doesn't apply as-is, since an unrelated intervening commit
+    # (4f27726, "Support hostname format") shifted the context it expects.
+    # Also gates tests/test_adapter_comparison.cpp, tests/test_validator.cpp
+    # and tests/test_validator_with_custom_regular_expression_engine.cpp's
+    # own uses of the json11 adapter behind VALIJSON_BUILD_JSON11_ADAPTER -
+    # as merged, PR #259 leaves these three unconditional, so setting
+    # valijson_EXCLUDE_JSON11 breaks the build. Upstream PR for this part:
+    # TODO: Upstream
+    ./json11-exclude.patch
+    # test_suite otherwise builds jsoncpp/yaml-cpp from vendored submodule
+    # sources and vendors its own gtest/nlohmann-json/rapidjson/picojson via
     # thirdparty/ instead of find_package(); point it at the nixpkgs
     # packages so the test suite doesn't need those submodules at all.
     ./use-nixpkgs-test-deps.patch
@@ -65,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "valijson_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "valijson_EXCLUDE_JSON11" true)
   ];
 
   # boost is already cheap/ubiquitous in nixpkgs, so pull in the
@@ -76,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     boost
     gtest
-    json11
     jsoncpp
     nlohmann_json
     picojson
