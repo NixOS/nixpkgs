@@ -8,6 +8,7 @@
   libx11,
   libxcursor,
   libxext,
+  libxi,
   libxrandr,
   stdenv,
   writeText,
@@ -64,6 +65,7 @@
             "${lib.getLib libx11}" \
             "${lib.getLib libxcursor}" \
             "${lib.getLib libxext}" \
+            "${lib.getLib libxi}" \
             "${lib.getLib libxrandr}"
         '';
       }
