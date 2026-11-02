@@ -25,28 +25,31 @@
   removeReferencesTo,
   xcbuild,
 
-  electron_42,
+  electron_43,
   libsecret,
 }:
 
 let
-  electron = electron_42;
+  electron = electron_43;
   pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-egierIhPRm3J8NL1gAcAMvynzFTzoSzpeGN6m0aOSSI=";
+    hash = "sha256-rsVjF5LywZoQda9w6mobfnOdbZWo56inz/27jNzUTmo=";
   };
 
   patches = [
     # disable app-managed logseq-cli installation
     ./logseq-cli-install.patch
+
+    # make node-abi recognize electron versions above 42
+    ./bump-node-abi.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -54,16 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src patches;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-vkR6AbgdYA3GFZ54/CtcWwMIx9LBTMaadEpzMn9vgiQ=";
-  };
-
-  uiPnpmDeps = fetchPnpmDeps {
-    pname = "${finalAttrs.pname}-${finalAttrs.version}-ui";
-    inherit (finalAttrs) src patches;
-    inherit pnpm;
-    postPatch = "cd packages/ui";
-    fetcherVersion = 3;
-    hash = "sha256-g6W7Gsj4EF8D5dAbckD9d9kPJnA3cO/p936gy3A228g=";
+    hash = "sha256-xdEEk5N/G0wGHBYvFLe8N2EL66DYUpVpCSHkvvbsIuE=";
   };
 
   cliPnpmDeps = fetchPnpmDeps {
@@ -73,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = "cd cli";
     pnpmInstallFlags = [ "--ignore-workspace" ];
     fetcherVersion = 3;
-    hash = "sha256-i5zJ+lvhcBF1CA1hFY4SlEg4p6IEfFrNPYTEYiFviiE=";
+    hash = "sha256-EWSyhc/6oJGMqz1vcfspJiOuQSzqTRS3Oyy/Fpg7Jrk=";
   };
 
   resourcesPnpmDeps = fetchPnpmDeps {
@@ -83,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = "cd resources";
     pnpmInstallFlags = [ "--ignore-workspace" ];
     fetcherVersion = 3;
-    hash = "sha256-URY5YPQCh2ariqOtaa97IiL2iObrvkDh5wEuFgLqRRI=";
+    hash = "sha256-qSpEC2gTLn785MbJIfqJhtVjN4PObhbk9UxGJDw1wjs=";
   };
 
   clojureHome = stdenv.mkDerivation {
@@ -143,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-CfeNntatIoDTCWlO532MXMzJvD2csgrN4kgJgOCIp5s=";
+    outputHash = "sha256-Iv/NFCmpMtkUHSlFAKGdZ4OHzQMMsOM7jTivYSTHgMQ=";
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
   };
@@ -202,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
   env.LOGSEQ_BUILD_TIME = "1970-01-01T00:00:00Z";
 
   postConfigure = ''
-    pnpmDeps=$uiPnpmDeps pnpmRoot=packages/ui pnpmConfigHook
     pnpmDeps=$cliPnpmDeps pnpmRoot=cli pnpmInstallFlags="--ignore-workspace" pnpmConfigHook
     pnpmDeps=$resourcesPnpmDeps pnpmRoot=resources pnpmInstallFlags="--ignore-workspace" pnpmConfigHook
 
@@ -226,10 +219,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     export npm_config_nodedir=${electron.headers}
-    pnpm --dir packages/ui run build:ui
     pnpm run release-electron
 
     pushd static
+
+    # ensure electron-builder thinks workspaceRoot=static
+    # TODO: figure out a better solution
+    touch pnpm-workspace.yaml
 
     pnpm exec electron-builder \
       --dir \
@@ -259,7 +255,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/logseq \
       --set ELECTRON_RUN_AS_NODE 1 \
-      --add-flag "$out/share/logseq/resources/app.asar/js/logseq-cli.js"
+      --add-flag "$out/share/logseq/resources/app.asar/logseq-cli.js"
 
     remove-references-to -t ${nodejs-slim} "$out/share/logseq/resources/app.asar"
   ''
@@ -271,7 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "$out/Applications/Logseq.app/Contents/MacOS/Logseq" "$out/bin/logseq" \
       --set ELECTRON_RUN_AS_NODE 1 \
-      --add-flag "$out/Applications/Logseq.app/Contents/Resources/app.asar/js/logseq-cli.js"
+      --add-flag "$out/Applications/Logseq.app/Contents/Resources/app.asar/logseq-cli.js"
 
     remove-references-to -t ${nodejs-slim} "$out/Applications/Logseq.app/Contents/Resources/app.asar"
   ''
@@ -307,12 +303,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
     melange-edn-melange = ocamlPackages.buildDunePackage {
       pname = "melange-edn-melange";
-      version = "0.5.0-unstable-2026-07-21";
+      version = "0.5.0-unstable-2026-08-06";
       src = fetchFromGitHub {
-        owner = "RCmerci";
+        owner = "logseq";
         repo = "melange-edn";
-        rev = "638b614d35d918a370643b43780c8e23ede96b41";
-        hash = "sha256-EUFORQk4GwqHBCBCwPrfhkNqBVlUyTjR+eymAgA9BeM=";
+        rev = "3cb79f278e972388a0a2b2ea1caec7a008a0b956";
+        hash = "sha256-mdkjo4csQrQw0uTYaQ2gjlGp2kHSjN3PL4ljFDDTwQ8=";
       };
       nativeBuildInputs = [ ocamlPackages.melange ];
       propagatedBuildInputs = [ ocamlPackages.melange ];
@@ -331,12 +327,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
     melange-transit-melange = ocamlPackages.buildDunePackage {
       pname = "melange-transit-melange";
-      version = "0.1.0-unstable-2026-06-28";
+      version = "0.1.0-unstable-2026-09-23";
       src = fetchFromGitHub {
-        owner = "RCmerci";
+        owner = "logseq";
         repo = "melange-transit";
-        rev = "99fb9f1c5bebf4ba5fa6d2378cfc97dbf14b5378";
-        hash = "sha256-RFUbOSFKR8VEqwpm70Aii5Qh4qq2eO7yt4WXW+z3rlc=";
+        rev = "38ca92e299cf34c897d9a44091fe86e55b1315ee";
+        hash = "sha256-zF5cku6WcBA/tfh0oJ1469ekyI3ObrBsGY/4b0WLXNI=";
       };
       nativeBuildInputs = [ ocamlPackages.melange ];
       propagatedBuildInputs = [
@@ -348,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "rrbvec";
       version = "0-unstable-2026-07-12";
       src = fetchFromGitHub {
-        owner = "RCmerci";
+        owner = "logseq";
         repo = "rrbvec";
         rev = "dd5ce904f91d53235b5136f7a771f3f074c3971d";
         hash = "sha256-zYT7cMMWJivVSB6H/vUDnaajvUOYddh0MF2Zu/wIGq0=";

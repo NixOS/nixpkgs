@@ -1,0 +1,64 @@
+diff --git a/resources/package.json b/resources/package.json
+index a000b73..b97cf54 100644
+--- a/resources/package.json
++++ b/resources/package.json
+@@ -64,7 +64,7 @@
+     "@zvec/zvec": "0.5.0"
+   },
+   "resolutions": {
+-    "node-abi": "4.28.0"
++    "node-abi": "4.40.0"
+   },
+   "pnpm": {
+     "onlyBuiltDependencies": [
+diff --git a/resources/pnpm-lock.yaml b/resources/pnpm-lock.yaml
+index 49d38e1..1d350ec 100644
+--- a/resources/pnpm-lock.yaml
++++ b/resources/pnpm-lock.yaml
+@@ -5,7 +5,7 @@ settings:
+   excludeLinksFromLockfile: false
+ 
+ overrides:
+-  node-abi: 4.28.0
++  node-abi: 4.40.0
+ 
+ importers:
+ 
+@@ -1333,8 +1333,8 @@ packages:
+   nice-try@1.0.5:
+     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
+ 
+-  node-abi@4.28.0:
+-    resolution: {integrity: sha512-Qfp5XZL1cJDOabOT8H5gnqMTmM4NjvYzHp4I/Kt/Sl76OVkOBBHRFlPspGV0hYvMoqQsypFjT/Yp7Km0beXW9g==}
++  node-abi@4.40.0:
++    resolution: {integrity: sha512-GuvqvtrOk+AC27RidBxBsMzVNkwNl7PjHgc4NXbmdvSVLgIUjpaqcG1FjNRYnt2Yn9Ytq+Ln37XsBaglUcte/w==}
+     engines: {node: '>=22.12.0'}
+ 
+   node-addon-api@4.3.0:
+@@ -2151,7 +2151,7 @@ snapshots:
+     dependencies:
+       '@malept/cross-spawn-promise': 2.0.0
+       debug: 4.4.3
+-      node-abi: 4.28.0
++      node-abi: 4.40.0
+       node-api-version: 0.2.1
+       node-gyp: 12.4.0
+       read-binary-file-arch: 1.0.6
+@@ -3482,7 +3482,7 @@ snapshots:
+ 
+   nice-try@1.0.5: {}
+ 
+-  node-abi@4.28.0:
++  node-abi@4.40.0:
+     dependencies:
+       semver: 7.7.4
+ 
+@@ -3657,7 +3657,7 @@ snapshots:
+       minimist: 1.2.8
+       mkdirp-classic: 0.5.3
+       napi-build-utils: 2.0.0
+-      node-abi: 4.28.0
++      node-abi: 4.40.0
+       pump: 3.0.4
+       rc: 1.2.8
+       simple-get: 4.0.1
