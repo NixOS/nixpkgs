@@ -42,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "9.1.0";
+  version = "9.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -58,18 +58,8 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-PgqjCeyHOhWtZjyzSZyvsPT0Q7yRyNDiW3x1fQq0K+8=";
+    hash = "sha256-+rtGXOc8U2hd0Z1N8Y+ZucdgYFpppequSZ8ph6jB8dA=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-test-stemmer.patch";
-      url = "https://github.com/sphinx-doc/sphinx/commit/c01b0eb640bbc3dbd8141f3ea08df9edaa78ab2c.patch?full_index=1";
-      hash = "sha256-Zi2WoYMSRg2xvbocj9XhEmXPAEebBokl9XyuSEpDaF0=";
-    })
-    # https://github.com/sphinx-doc/sphinx/pull/14611
-    ./pygments-2.21.0-compat.patch
-  ];
 
   build-system = [ flit-core ];
 
