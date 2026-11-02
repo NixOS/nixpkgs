@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   docutils,
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-lt2AECSVfakN63EcheYSdkHsQGl9pfcLhS9+lkMqQ7w=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   pythonRelaxDeps = [
     "markdown-it-py"
