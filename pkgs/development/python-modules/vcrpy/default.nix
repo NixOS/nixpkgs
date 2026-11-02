@@ -11,7 +11,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vcrpy";
   version = "9.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "vcrpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3XRxsPxy1aEuDQdFlhsBbhfjk8C0NO9OKKAfH9+cXk4=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
     homepage = "https://github.com/kevin1024/vcrpy";
-    changelog = "https://github.com/kevin1024/vcrpy/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/kevin1024/vcrpy/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
