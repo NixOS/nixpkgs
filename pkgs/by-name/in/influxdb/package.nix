@@ -10,7 +10,7 @@
 }:
 
 let
-  libflux_version = "0.196.1";
+  libflux_version = "0.200.0";
 
   # This is copied from influxdb2 with the required flux version
   flux = rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,12 +20,8 @@ let
       owner = "influxdata";
       repo = "flux";
       tag = "v${libflux_version}";
-      hash = "sha256-935aN2SxfNZvpG90rXuqZ2OTpSGLgiBDbZsBoG0WUvU=";
+      hash = "sha256-naQKGSYt+zI8N8ydFo0PBNUFnlkieW0Drz/VVeHlL0Q=";
     };
-    patches = [
-      # https://github.com/influxdata/flux/pull/5542
-      ./fix-unsigned-char.patch
-    ];
 
     # the `strict` feature, which is enabled by default, makes warnings fatal.
     # this often causes build failures when new compiler versions are released.
@@ -33,7 +29,7 @@ let
     buildFeatures = [ "cffi" ];
     sourceRoot = "${finalAttrs.src.name}/libflux";
 
-    cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
+    cargoHash = "sha256-E5A8PMblOIvZBWKcA+LkRmlSp8JR0pZy0bYMj7hftTg=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
@@ -59,16 +55,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "influxdb";
-  version = "1.12.2";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q05mKmAXxrk7IVNxUD8HHNKnWCxmNCdsr6NK7d7vOHM=";
+    hash = "sha256-RphVmI1bS5QSA+pgPanjoCS1/VpGJG1MpsPq1eh9Bb4=";
   };
 
-  vendorHash = "sha256-+6fOq/2YVz74Loy1pVLVRTr4OQm/fEBNtHy3+FQn51A=";
+  vendorHash = "sha256-a+yrF1dqMZAqRNq1Moj+zz9kIMPIHr2i4pgWnsbmwMw=";
 
   nativeBuildInputs = [ pkg-config ];
 
