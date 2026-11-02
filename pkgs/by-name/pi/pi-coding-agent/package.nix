@@ -60,8 +60,8 @@ buildNpmPackage (finalAttrs: {
     npm run build:offline
 
     pushd packages/coding-agent
-    bun build --compile --no-compile-autoload-bunfig \
-      ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
+    bun build --compile --no-compile-autoload-bunfig --no-compile-autoload-dotenv \
+      ./dist/bun/cli.js ./src/utils/image-resize-worker.ts ./src/extensions/codemode/worker.ts \
       --outfile $TMPDIR/pi
     popd
 
