@@ -361,6 +361,7 @@ let
     };
 
     nativeBuildInputs = runtimeDeps ++ [
+      cacert
       (postgresql.withPackages (ps: [
         ps.pgvector
       ]))
@@ -425,7 +426,6 @@ let
       # Patch before running postinstall hook script
       patchShebangs node_modules/
       patchShebangs --build frontend/
-      export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
 
