@@ -6,20 +6,27 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "filesender";
-  version = "2.57";
+  version = "3.15";
 
   src = fetchFromGitHub {
     owner = "filesender";
     repo = "filesender";
-    tag = "filesender-${finalAttrs.version}";
-    hash = "sha256-I/9Y64jWm7QdQ1yhjCHkLfkKrzV6y0Rp+wkZbDP86fw=";
+    tag = finalAttrs.version;
+    hash = "sha256-IK8r0wqP2tEo1gtH4fPF5/hfXtR7rSwVUJ/Yci98kiY=";
   };
 
   patches = [
-    # /nix/store is read-only, but filesender searches config and logs inside of installation directory.
-    # This patch changes search directories to FILESENDER_CONFIG_DIR and FILESENDER_LOG_DIR environment variables.
+    # /nix/store is read-only, but filesender searches config and logs inside
+    # of installation directory. This patch changes search directories to
+    # `FILESENDER_CONFIG_DIR` and `FILESENDER_LOG_DIR` environment variables.
     ./separate_mutable_paths.patch
   ];
+
+  postPatch = ''
+    # remove broken symlinks
+    rm docker/assets/etc/nginx/sites-enabled/default
+    rm docker/assets/usr/local/sbin/php-fpm-env
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -38,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Web application for sending large files to other users";
     homepage = "https://filesender.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nhnn ];
+    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
   };
 })
