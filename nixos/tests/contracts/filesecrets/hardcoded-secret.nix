@@ -24,6 +24,7 @@ test {
         # fails when the provider sets the owner before the user exists.
         test.owner = "secretowner";
         test.group = "secretgroup";
+        test.content = "a super secret secret!";
         testing.hardcoded-secret.fileSecrets.mysecret.providerOptions.content = config.test.content;
       }
     )
