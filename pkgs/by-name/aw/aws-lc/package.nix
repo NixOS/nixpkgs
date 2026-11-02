@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  env.${if stdenv.hostPlatform.isStatic then "GOFLAGS" else null} = "-ldflags=-linkmode=external";
+
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
     cmake
