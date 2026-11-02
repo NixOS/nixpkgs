@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  flit-core_3,
   flit-scm,
   pytestCheckHook,
   pythonAtLeast,
@@ -36,7 +37,10 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ flit-scm ];
+  build-system = [
+    flit-scm
+    flit-core_3
+  ];
 
   dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
