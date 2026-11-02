@@ -40,7 +40,12 @@ buildNpmPackage {
     hash = "sha256-u6mR8nAOP3Ee0j9tNcmq9oBe6/3x5xYl06KoTS7Tfbo=";
   };
 
-  npmDepsHash = "sha256-w2i7XsTx3hlsh/JbvShaxvDyFGcBpL66lMy7KL2tnzM=";
+  patches = [
+    # fsevents is missing, blocking npm clean-install on newer versions
+    ./package-lock.patch
+  ];
+
+  npmDepsHash = "sha256-eBc3l/9th329DU/Geg3tOYp/+i7kxb9qzmOSqcdMKdk=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
