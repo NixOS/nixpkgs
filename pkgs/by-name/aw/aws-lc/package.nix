@@ -20,6 +20,9 @@
   symbolPrefix ? "AWS_LC",
   # This option might lead to OpenSSL being silently swapped to AWS-LC. Only use it if you know what you are doing.
   withOpenSSLShim ? false,
+  # Testing
+  pkgsStatic,
+  pkgsCross,
 }:
 
 let
@@ -69,11 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  env.GOFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-ldflags=-linkmode=external";
+
+  depsBuildBuild = [ go ];
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
     cmake
     ninja
-    go
     perl
   ]
   ++ lib.optionals withRustBindings [
@@ -132,7 +137,13 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # Test packages
+      firecracker-static = pkgsStatic.firecracker;
+      static = pkgsStatic.aws-lc;
+      cross = pkgsCross.aarch64-multiplatform.aws-lc;
+    };
     updateScript = nix-update-script { };
   };
 
