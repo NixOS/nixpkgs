@@ -144,6 +144,7 @@ let
       oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
       denoland_deno = removed "denoland_deno" "2026/11";
       cloudfoundry-community_cloudfoundry = archived "cloudfoundry-community_cloudfoundry" "2026/07";
+      cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
     };
 
   # excluding aliases, used by terraform-full
