@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  nativeCheckInputs = [ cacert ];
+
   preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-    export SSL_CERT_DIR=${cacert}/etc/ssl/certs
     export CLICOLOR=0
     export TERM=dumb
     export NO_COLOR=1
