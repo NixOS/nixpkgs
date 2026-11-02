@@ -88,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build
     popd
 
+    pnpm prune --prod
+
     runHook postBuild
   '';
 
