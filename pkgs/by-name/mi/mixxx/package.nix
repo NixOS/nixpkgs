@@ -122,7 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
     wavpack
   ];
 
-  qtWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
+  qtWrapperArgs = [
+    "--set"
+    "LOCALE_ARCHIVE"
+    "${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall

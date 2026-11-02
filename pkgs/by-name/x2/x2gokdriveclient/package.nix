@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   meta = {

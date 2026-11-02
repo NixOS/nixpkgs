@@ -46,7 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     kio
   ]);
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ distrobox ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ distrobox ])
+  ];
 
   passthru.updateScript = nix-update-script { };
 
