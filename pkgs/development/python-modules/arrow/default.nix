@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   python-dateutil,
   types-python-dateutil,
   tzdata,
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-nK78Lo+7eitB+RS7BZkM+BNudviirAowc4a1uQdLC0w=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     python-dateutil
