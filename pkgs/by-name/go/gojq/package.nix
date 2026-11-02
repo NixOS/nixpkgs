@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gojq";
-  version = "0.12.19";
+  version = "0.12.20";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "gojq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-egaBNHKKzwDwaUN4GT+Xvt11Nz6ojNMSIrXbcEisyI4=";
+    hash = "sha256-Hg1q7xfzRzscehGkm4+N8j6ssaCrGuG9GbB2SlOhXg8=";
   };
 
-  vendorHash = "sha256-6UnX9YHh4RGcIFfqaJLxDPxuGQ6KO4UIOryXsoJUjFs=";
+  vendorHash = "sha256-/Grt8GUozoYu6GiVzHweyNmfnEmMoI+MrcSBw4hd5oI=";
 
   ldflags = [
     "-s"
