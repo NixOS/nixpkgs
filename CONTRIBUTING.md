@@ -918,7 +918,6 @@ As the inner workings of LLM‐based AI tools cannot be sufficiently understood 
 When automation is used to verify output, the verification tooling itself must be disclosed and reviewed in line with this policy.
 
 This policy applies equally to any further discussion of a contribution.
-Comments and reviews must separately satisfy the same requirements of understanding, review, and disclosure.
 Contributors are expected to be able to answer questions about their contribution and respond to feedback appropriately, without simply forwarding messages back and forth to automated tools.
 
 It is not permitted to submit automated contributions without any manual review or intervention, outside of standard community automation.
