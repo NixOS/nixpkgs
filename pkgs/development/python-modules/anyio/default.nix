@@ -41,6 +41,12 @@ buildPythonPackage rec {
     hash = "sha256-55tOEitGe9Fl76LR4RdP/1ixWI/HsQ1LxB6pY16uZvg=";
   };
 
+  postPatch = ''
+    # config option 'timeout' expects a float, got str: '20'
+    substituteInPlace pyproject.toml \
+      --replace-fail 'timeout = "20"' 'timeout = 20.0'
+  '';
+
   build-system = [ setuptools-scm ];
 
   dependencies = [
