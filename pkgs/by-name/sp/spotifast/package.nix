@@ -59,11 +59,6 @@ rustPlatform.buildRustPackage rec {
       '.define("CMAKE_INSTALL_LIBDIR", "lib").define("BUILD_SHARED_LIBS", build_shared_libs)'
   '';
 
-  # The proxy test needs a valid CA bundle.
-  preCheck = ''
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
-
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -75,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     icnsify
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
+  nativeCheckInputs = [ cacert ] ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
