@@ -148,6 +148,7 @@ let
       determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
       kislerdm_neon = archived "kislerdm_neon" "2026/09";
       oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
+      pablovarela_slack = archived "pablovarela_slack" "2026/02";
     };
 
   # excluding aliases, used by terraform-full
