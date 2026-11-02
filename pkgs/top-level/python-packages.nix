@@ -10952,8 +10952,6 @@ self: super: with self; {
 
   minari = callPackage ../development/python-modules/minari { };
 
-  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
-
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio { };
