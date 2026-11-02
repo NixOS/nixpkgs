@@ -142,18 +142,14 @@ let
     hash = "sha256-z/jASQGRj9fYwgyJKvzWgowG7j2zNKb3xeFUzYwwLQA=";
   };
 
-  # FlashMLA's Blackwell (SM100) kernels were developed against CUTLASS v3.9.0
-  # (since https://github.com/vllm-project/FlashMLA/commit/9c5dfab6d1746b4a27af14f440e7afd5c01ece68)
-  # and are currently incompatible with CUTLASS v4.x APIs. The rest of the vLLM
-  # build uses a newer CUTLASS, so we package both versions.
-  # See upstream issue: https://github.com/vllm-project/vllm/issues/27425
+  # FlashMLA pins its own CUTLASS version (git submodule), different from the one used by vLLM.
   # See git submodule commit at:
-  # https://github.com/vllm-project/FlashMLA/tree/${flashmla.src.rev}/csrc
+  # https://github.com/vllm-project/FlashMLA/tree/${flashmla.src.rev}/csrc/3rdparty
   cutlass-flashmla = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "147f5673d0c1c3dcf66f78d677fd647e4a020219";
-    hash = "sha256-dHQto08IwTDOIuFUp9jwm1MWkFi8v2YJ/UESrLuG71g=";
+    tag = "v4.3.5";
+    hash = "sha256-H8jTxjv2hXO3gmxBipacSJGYr46WO96NyWQfUHjcL1E=";
   };
 
   # grep for DEEPGEMM_UPSTREAM_TAG in the following file
@@ -161,8 +157,8 @@ let
   deepgemm = fetchFromGitHub {
     owner = "vllm-project";
     repo = "DeepGEMM";
-    rev = "1e1842a833699298f7afc02eefb2ed168fff6938";
-    hash = "sha256-IZDD9si9G+0/7CxwYgK7ldBm8qOaPWxvRXXLXmFPU7k=";
+    rev = "0820030756945b2daec208e8e8255268360f337d";
+    hash = "sha256-Qbup5RiPYdbREooAt8m2Gq5C/B8EB4ywkTJjFJIxRbU=";
     fetchSubmodules = true;
   };
 
@@ -177,16 +173,16 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "0eee43b12f034b657133cf2afca6a72ebb6efccf";
-      hash = "sha256-uqTjdPcvSjE3Wl479/ux7uOJyGDwlL/F1Guk+CQI+64=";
+      rev = "e2afa5fd8c220fbd05fe03fc24c9d5e64c24641b";
+      hash = "sha256-HN0iqHMYSXYb2XZ5/5QWYdZ9/Hi6DU9XdboPwFao9LU=";
     };
 
     dontConfigure = true;
 
     # flashmla normally relies on `git submodule update` to fetch cutlass
     buildPhase = ''
-      rm -rf csrc/cutlass
-      ln -sf ${cutlass-flashmla} csrc/cutlass
+      rm -rf csrc/3rdparty/cutlass
+      ln -sf ${cutlass-flashmla} csrc/3rdparty/cutlass
     '';
 
     installPhase = ''
@@ -266,8 +262,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "9cd61de38763d712bb6ce56e2a02cc2bf718c89f";
-      hash = "sha256-aix4Xh2qWXiFgpUXl3TbMKMdo+o0IaChbYR5D6uxiKk=";
+      rev = "b273a02621d3c94bc747df67204f591b67f38fae";
+      hash = "sha256-8qGtJl18nIo8Kd/jPYlDK8K83uuu4W1mZ0x0oTvXU8w=";
     };
 
     patches = [
@@ -397,7 +393,7 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -405,7 +401,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0PCIVC0PuW4uiKRoy159HmwIBg26Chq65XFiWyZ0CMM=";
+    hash = "sha256-I72HXJjBOCmNSwbuK/D3KB5/YGGJ0f1OY5BhWDevI/w=";
   };
 
   cargoRoot = "rust";
@@ -416,7 +412,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-4vcO3YoqQytvw+se2chd9tXzR9lM7P0DKIwsJVJPUaE=";
+    hash = "sha256-ZrTz69VrXIoEZLn0XAAYRuvTYi4Z8ALAkN9UG7EvPuo=";
   };
 
   patches = [

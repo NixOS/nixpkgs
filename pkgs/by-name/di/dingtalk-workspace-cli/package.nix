@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "dingtalk-workspace-cli";
-  version = "1.0.65";
+  version = "1.0.66";
 
   __structuredAttrs = true;
 
@@ -16,11 +16,11 @@ buildGoModule (finalAttrs: {
     owner = "DingTalk-Real-AI";
     repo = "dingtalk-workspace-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QGnZp8dqI1K/SgwmZBUr1Um3w70iScsjoNjd5+4viu0=";
+    hash = "sha256-PsiDPeU9yBAyJVPrjWwBuMhdD7jju/P/b5oYPTkzTJA=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-1zE2scTJ11veAaH/O8ZF0ETA2UE4lhegEkSt3p9ix+8=";
+  vendorHash = "sha256-RYQ78aqd64YNDGBkYXpSJZ1HJZeX5MzU7KytUnRpJmo=";
 
   subPackages = [ "cmd" ];
 
