@@ -26,14 +26,14 @@ in
 {
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.12";
+      version = "1.10.13";
       knownVulnerabilities = [
         "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0 in Julia 1.10.12, curl 8.7.1 in Julia 1.10.13). See https://julialang.org/downloads/."
       ];
       sha256 = {
-        x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
-        aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
-        aarch64-darwin = "0gvqmdnqgs2gv72zsnnppfhbsj7qynvimll9hm4nvm905bp2mcak";
+        x86_64-linux = "1gdqdxq8dyc8apjybph9jk2bgn6grnd9xxjhyadhmd99vf0a1gzj";
+        aarch64-linux = "0j6py6ygnl7sxllcr8757ig9g4jc9i1y47sfwq1nh8w4gci944gj";
+        aarch64-darwin = "0q55vjmdm5vixzkpismaxlhpc6vjvk15c4a47n55ivsxzbjzcfn9";
       };
     }) { }
   );
