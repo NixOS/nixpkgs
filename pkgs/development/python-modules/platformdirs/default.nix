@@ -3,6 +3,7 @@
   appdirs,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
   pytest-mock,
@@ -11,17 +12,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "platformdirs";
-  version = "4.11.3";
+  version = "4.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "platformdirs";
     tag = finalAttrs.version;
-    hash = "sha256-T98Ep64tBazYs2JtgsHtmzfVwU+dJC30xzrieVve3DI=";
+    hash = "sha256-zFUNzqU0i5nckkQMQwZyMw5J/IRmhqvQjqr65+AsjsY=";
   };
 
   build-system = [
+    hatch-fancy-pypi-readme
     hatchling
     hatch-vcs
   ];
