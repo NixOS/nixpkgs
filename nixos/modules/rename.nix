@@ -554,9 +554,6 @@ in
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
     '')
-    (mkRemovedOptionModule [ "services" "filesender" ] ''
-      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
-    '')
     (mkRemovedOptionModule [ "services" "pghero" ] ''
       services.pghero has been removed because the (unmaintained) package was removed from Nixpkgs.
     '')
