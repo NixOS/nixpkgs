@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  util-linux,
+  util-linuxMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace-fail '"unknown"' '"${finalAttrs.version}"'
 
     for i in triggers/*; do
-      substituteInPlace $i --replace-fail 'logger' '${util-linux}/bin/logger'
+      substituteInPlace $i --replace-fail 'logger' '${util-linuxMinimal}/bin/logger'
     done
   '';
 
