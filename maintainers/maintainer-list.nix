@@ -14518,6 +14518,12 @@
     githubId = 1189739;
     name = "Julio Borja Barra";
   };
+  judaew = {
+    name = "Vadym-Valdis Yudaiev";
+    github = "judaew";
+    githubId = 41125715;
+    keys = [ { fingerprint = "ABB7 9CDD 371D 1A36 AC91  B5E0 E85E F1C4 A188 CE00"; } ];
+  };
   jue89 = {
     email = "me@jue.yt";
     github = "jue89";
