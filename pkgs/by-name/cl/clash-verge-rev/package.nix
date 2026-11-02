@@ -3,6 +3,7 @@
   mihomo,
   callPackage,
   fetchFromGitHub,
+  dbip-asn-lite,
   dbip-country-lite,
   stdenv,
   wrapGAppsHook3,
@@ -13,13 +14,13 @@
 let
   pname = "clash-verge-rev";
   # Please keep service version in sync
-  version = "2.5.2";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-5Txjuzq91D+FfBHaXenES4eprIdIKHUFMOKtrHSdbw4=";
+    hash = "sha256-fN57Vrl4Zo5LsPIAjgnoI6fvce1QHR4scZFtEDqdnyQ=";
   };
 
   cargoPatches = [
@@ -29,8 +30,8 @@ let
     ./update-webpki.patch
   ];
 
-  pnpm-hash = "sha256-AS07hD3QqPJDLLUvNgArtXpH54ek14PmEjevP1WxTHs=";
-  vendor-hash = "sha256-SrBrMcAJ9bboFytioXXSQmKYytyHo7qOl98NmsEn7VA=";
+  pnpm-hash = "sha256-OeYevmcOVRL8Resq/q/ZRFqsjXk6doibUnjBDj5dxnw=";
+  vendor-hash = "sha256-2eXwUrm0IPMNtKbL80ECpMU9oSfQdpA53AVkbndF0Yg=";
 
   service = callPackage ./service.nix {
     inherit
@@ -91,6 +92,7 @@ stdenv.mkDerivation {
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
     ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+    ln -s ${dbip-asn-lite.mmdb} $out/lib/Clash\ Verge/resources/ASN.mmdb
 
     runHook postInstall
   '';

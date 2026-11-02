@@ -53,17 +53,17 @@ rustPlatform.buildRustPackage {
   };
 
   postPatch = ''
+    # This upstream patch is marked unused in Cargo.lock and is macOS-only.
+    # Cargo still tries to fetch it in offline Linux builds, so drop it here.
+    sed -i '/^tray-icon = { git = "https:\/\/github.com\/Tunglies\/tray-icon.git"/d' Cargo.toml
+
     # We disable the option to try to use the bleeding-edge version of mihomo
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
 
-    # Set service.sock path
+    # Set the service IPC path to the NixOS module's RuntimeDirectory.
     substituteInPlace $cargoDepsCopy/*/clash_verge_service_ipc-*/src/lib.rs \
-      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
-    # Set verge-mihomo.sock path
-    substituteInPlace src-tauri/src/utils/dirs.rs \
-      --replace-fail 'once("/tmp")' 'once(&std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string())))' \
-      --replace-fail 'join("verge")' 'join("clash-verge-rev")'
+      --replace-fail "/run/clash-verge-service/service.sock" "/run/clash-verge-rev/service.sock"
 
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
