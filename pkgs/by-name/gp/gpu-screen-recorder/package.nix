@@ -3,9 +3,9 @@
   stdenv,
   addDriverRunpath,
   dbus,
+  fetchFromGitHub,
   fetchgit,
-  ffmpeg,
-  gitUpdater,
+  ffmpeg_9,
   libdrm,
   libglvnd,
   libjpeg_turbo,
@@ -20,6 +20,7 @@
   meson,
   ninja,
   nixosTests,
+  nv-codec-headers-13,
   pipewire,
   pkg-config,
   versionCheckHook,
@@ -57,10 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
   buildInputs = [
+    finalAttrs.passthru.ffmpeg
     libxcomposite
     libpulseaudio
     dbus
-    ffmpeg
     pipewire
     wayland
     vulkan-headers
@@ -71,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxfixes
   ];
+
+  # Turns off the driver check, the patched ffmpeg negotiates the NVENC API at runtime
+  env.NIX_CFLAGS_COMPILE = "-DGSR_FFMPEG_STATIC";
 
   mesonBuildType = "release";
   mesonFlags = [
@@ -106,8 +110,29 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # Upstream's NVENC patch expects the versions in subprojects/{ffmpeg,nv-codec-headers}.wrap
+    nv-codec-headers = nv-codec-headers-13.overrideAttrs (
+      final: _: {
+        version = "13.0.19.0";
+        src = fetchFromGitHub {
+          owner = "FFmpeg";
+          repo = "nv-codec-headers";
+          tag = "n${final.version}";
+          hash = "sha256-nDlRBedssEiQ7WGtswFxER531jAcAmd1YA6a+pZc5gY=";
+        };
+      }
+    );
+    ffmpeg =
+      (ffmpeg_9.override {
+        nv-codec-headers-12 = finalAttrs.passthru.nv-codec-headers;
+      }).overrideAttrs
+        (old: {
+          patches = (old.patches or [ ]) ++ [
+            "${finalAttrs.src}/subprojects/packagefiles/ffmpeg-nvenc-runtime-api-version.patch"
+          ];
+        });
     tests.nixos = nixosTests.gpu-screen-recorder;
-    updateScript = gitUpdater { };
+    updateScript = ./update.sh;
   };
 
   meta = {
