@@ -63,11 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCargoParallelTests = true;
   checkFlags = [
     # skip tests that depend on networking
-    "--skip paging_stops_when_cursor_is_none"
-    "--skip apply_changed_updates_and_deletes"
+    "--skip=paging_stops_when_cursor_is_none"
+    "--skip=apply_changed_updates_and_deletes"
     # skip tests that looks for CA certificates
-    "--skip test_is_installed_with_no_dir"
-    "--skip test_mod_installer_new"
+    "--skip=test_is_installed_with_no_dir"
+    "--skip=test_mod_installer_new"
   ];
 
   nativeBuildInputs = [
