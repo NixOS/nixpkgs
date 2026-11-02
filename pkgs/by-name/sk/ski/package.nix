@@ -46,7 +46,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ski";
-  version = "0.4.7";
+  version = "0.4.8";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -55,10 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ilyamiro";
     repo = "Ski";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fE3lDJXOKVehsC/KT0OFg3c5yo0gc+AT2Pzqy9K86vI=";
+    hash = "sha256-bC9dFen8JivHpZ+UKMpFBlTDVLKPnY8e5Mi1lBYPqLw=";
   };
 
-  cargoHash = "sha256-aze8Na/RieS8uRZtyUxm4UxKrt9PSs+aJ+df6WeoG2s=";
+  cargoHash = "sha256-Q4tNxTz7B5n996Rz7ADtO38vY8SfaxtfBFApP1ZnV80=";
 
   nativeBuildInputs = [
     pkg-config
