@@ -6,25 +6,34 @@
   fetchFromGitHub,
   model-bakery,
   numpy,
+  polyfactory,
   pytest,
   pytest-xdist,
   pytestCheckHook,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "4.1.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pytest-randomly";
     owner = "pytest-dev";
     tag = version;
-    hash = "sha256-+T0iWmfC3+8k6bWme3SQtqaWM+++sFeSotJ+3vyevvI=";
+    hash = "sha256-vURwJ6jN/sxuaVFEYPZxd7qaaAWtv2WTOeSkxKRzEXo=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    ./pytest-9.2-compat.patch
+  ];
+
+  postPatch = ''
+    sed -Ei 's/(uv[-_]build)[<>=!~][^"]*/\1/' pyproject.toml
+  '';
+
+  build-system = [ uv-build ];
 
   buildInputs = [ pytest ];
 
@@ -33,6 +42,7 @@ buildPythonPackage rec {
     faker
     model-bakery
     numpy
+    polyfactory
     pytest-xdist
     pytestCheckHook
   ];
@@ -40,6 +50,11 @@ buildPythonPackage rec {
   # needs special invocation, copied from tox.ini
   pytestFlags = [
     "-pno:randomly"
+  ];
+
+  disabledTests = [
+    # Error importing plugin "xasdlkj": No module named 'xasdlkj'
+    "test_failing_import"
   ];
 
   pythonImportsCheck = [ "pytest_randomly" ];
