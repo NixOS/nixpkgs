@@ -92,9 +92,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
           outputHashMode = "recursive";
           inherit (finalAttrs) src;
           nativeBuildInputs = [
+            cacert
             curl
           ];
-          env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
         }
         ''
           mkdir $out
