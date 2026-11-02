@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  # Updated together with rtorrent through rtorrent's updateScript.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
