@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
-  openssl,
+  aws-lc,
 
   # tests
   cacert,
@@ -43,10 +43,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
   ];
-
-  env.OPENSSL_NO_VENDOR = 1;
 
   pythonImportsCheck = [ "hf_xet" ];
 
