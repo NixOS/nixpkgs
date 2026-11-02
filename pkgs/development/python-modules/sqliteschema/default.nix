@@ -29,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "typepy"
+  ];
+
   dependencies = [
     mbstrdecoder
     tabledata
