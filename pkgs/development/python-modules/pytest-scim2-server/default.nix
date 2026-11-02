@@ -32,13 +32,13 @@ buildPythonPackage rec {
     scim2-server
   ];
 
+  nativeBuildInputs = [ cacert ];
+
   nativeCheckInputs = [
     pytestCheckHook
     scim2-client
   ]
   ++ scim2-client.optional-dependencies.httpx;
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   pythonImportsCheck = [ "pytest_scim2_server" ];
 
