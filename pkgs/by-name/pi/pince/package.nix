@@ -23,6 +23,8 @@ let
     pname = "libptrscan";
     version = "0.7.4-unstable-2024-09-13";
 
+    __structuredAttrs = true;
+
     src = fetchFromGitHub {
       owner = "kekeimiku";
       repo = "PointerSearcher-X";
@@ -37,7 +39,7 @@ let
       chmod +w Cargo.lock
     '';
 
-    cargoBuildFlags = [ "-p libptrscan" ];
+    cargoBuildFlags = [ "--package=libptrscan" ];
 
     postInstall = ''
       install -Dm644 libptrscan/ptrscan.py -t "$out"/lib/
