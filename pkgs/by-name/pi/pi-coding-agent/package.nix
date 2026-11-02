@@ -91,11 +91,14 @@ buildNpmPackage (finalAttrs: {
               @earendil-works/pi-durable:packages/durable \
               @earendil-works/pi-env:packages/env \
               @earendil-works/pi-mcp:packages/mcp \
+              @earendil-works/pi-schema:packages/schema \
               @earendil-works/pi-telemetry:packages/telemetry \
               @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
-      rm "$nm/$pkg"
-      cp -r "$src" "$nm/$pkg"
+      if [ -e "$nm/$pkg" ] || [ -L "$nm/$pkg" ]; then
+        rm -rf "$nm/$pkg"
+        cp -r "$src" "$nm/$pkg"
+      fi
     done
 
     # Delete remaining workspace symlinks
