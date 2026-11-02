@@ -8,6 +8,8 @@
   mypy,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -28,14 +30,18 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     mypy
     filelock
   ];
 
-  # does not contain tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    mypy
+  ];
+
   pythonImportsCheck = [ "pytest_mypy" ];
 
   meta = {
