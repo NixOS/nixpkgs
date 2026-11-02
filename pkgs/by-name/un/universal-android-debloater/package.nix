@@ -2,12 +2,12 @@
   android-tools,
   clang,
   dbus,
-  expat,
   fetchFromGitHub,
   fontconfig,
   freetype,
   lib,
   stdenv,
+  vulkan-loader,
   libglvnd,
   libxkbcommon,
   makeWrapper,
@@ -51,7 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    expat
     fontconfig
     freetype
   ];
@@ -80,7 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           libxi
           libxrandr
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          vulkan-loader
+          wayland
+        ]
       )
     } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
