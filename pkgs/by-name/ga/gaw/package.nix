@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
         FNAME = "gaw3-${finalAttrs.version}.tar.gz";
 
         nativeBuildInputs = [
+          cacert
           htmlq
           curl
         ];
-        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
