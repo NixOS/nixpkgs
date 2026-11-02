@@ -8,6 +8,7 @@
   libx11,
   libxcursor,
   libxext,
+  libxfixes,
   libxi,
   libxrandr,
   stdenv,
@@ -65,6 +66,7 @@
             "${lib.getLib libx11}" \
             "${lib.getLib libxcursor}" \
             "${lib.getLib libxext}" \
+            "${lib.getLib libxfixes}" \
             "${lib.getLib libxi}" \
             "${lib.getLib libxrandr}"
         '';
