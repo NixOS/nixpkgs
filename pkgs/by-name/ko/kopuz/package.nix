@@ -56,10 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-lu1PaWf02D0dK+IV+fIzIKNr8ORfkSHFnRhnPdXaueI=";
 
-  env = {
-    RUSTY_V8_ARCHIVE = librustyV8;
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
+  env.RUSTY_V8_ARCHIVE = librustyV8;
 
   nativeBuildInputs = [
     pkg-config
@@ -67,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tailwindcss_4
     dioxus-cli
     git
+    cacert
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
