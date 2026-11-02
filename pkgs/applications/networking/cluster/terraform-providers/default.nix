@@ -147,6 +147,7 @@ let
       cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
       determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
       kislerdm_neon = archived "kislerdm_neon" "2026/09";
+      oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
     };
 
   # excluding aliases, used by terraform-full

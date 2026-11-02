@@ -1020,15 +1020,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-En3v9QjOLhTAiau/4oYya8laFEjq1JmuQIK49WW1UJo="
   },
-  "oktadeveloper_oktaasa": {
-    "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
-    "homepage": "https://registry.terraform.io/providers/oktadeveloper/oktaasa",
-    "owner": "oktadeveloper",
-    "repo": "terraform-provider-oktaasa",
-    "rev": "v1.0.1",
-    "spdx": "MPL-2.0",
-    "vendorHash": null
-  },
   "opennebula_opennebula": {
     "hash": "sha256-ClxUDFacloovD4qKumIWEL+QWyb7JD58w2WyFItPFM8=",
     "homepage": "https://registry.terraform.io/providers/OpenNebula/opennebula",
