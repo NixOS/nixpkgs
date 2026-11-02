@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal
     jq
     sops
+    cacert
   ];
 
   preCheck = ''
     export HOME="$TMPDIR"
     export NO_COLOR=1
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   # A test binds to localhost, which requires an explicit Darwin sandbox exception.
