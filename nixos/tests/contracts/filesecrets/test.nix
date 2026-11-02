@@ -37,9 +37,11 @@ in
           default = "0400";
         };
 
+        # Some providers generate the content, thus the test cannot know it.
+        # If `null`, the test does not check the content.
         content = mkOption {
-          type = types.str;
-          default = "a super secret secret!";
+          type = types.nullOr types.str;
+          default = null;
         };
       };
 
@@ -81,6 +83,8 @@ in
       if mode != wantedMode:
           raise Exception(f"Mode should be '{wantedMode}' but got '{mode}'")
 
+    ''
+    + lib.optionalString (cfg.test.content != null) ''
       content = machine.succeed("cat ${response.path}").strip()
       print(f"Got content {content}")
       if content != "${cfg.test.content}":
