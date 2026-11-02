@@ -45,6 +45,7 @@ let
         ];
         dependencies = old.dependencies ++ [
           self.chroma-hnswlib
+          self.posthog
         ];
 
         # The base package disables additional tests, so explicitly override
