@@ -36,6 +36,11 @@ buildPythonPackage rec {
       url = "https://github.com/pytest-dev/pytest-xdist/commit/0c984478f39d7a01aa24c061f2581bdfd071cb6a.patch";
       hash = "sha256-zxdKy7Z0m5UB4qwmdrolSYeBUTgMe2bQkkeX+M0RRHs=";
     })
+    (fetchpatch {
+      name = "pytest9.2-compat.patch";
+      url = "https://github.com/pytest-dev/pytest-xdist/commit/4616feb8dac8f7bc1df7567ed75010928a140a2f.patch";
+      hash = "sha256-QAiEwGUnGO+egNAZw1e3XYs0w68M5Fk6r5157XUEY3o=";
+    })
   ];
 
   build-system = [
