@@ -1,10 +1,24 @@
 1{
   /python/{
-    N;
-    # add script folder to path, unless we interfere with a docstring
-    /\nr"""/b skip-python-path-patch
-    # skip encoding declarations
-    /\n\s*#.*coding[=:]\s*[-a-zA-Z0-9_.]/N
+    N
+    # skip leading comments (including encoding declarations) and blank lines
+    :python-skip-comments
+    /\n[ \t]*\(#[^\n]*\)\?$/{
+      $!{
+        N
+        b python-skip-comments
+      }
+    }
+    # a module docstring or __future__ imports must come first:
+    # in that case, add the script folder before the first other top level import instead
+    /\n\([rRuUbB]\{0,2\}\("""\|'''\)\|from __future__ import\)[^\n]*$/{
+      :python-find-import
+      $b skip-python-path-patch
+      N
+      /\nfrom __future__ import[^\n]*$/b python-find-import
+      /\n\(import\|from\) [^\n]*$/!b python-find-import
+    }
+    # add script folder to path
     s!\n\([^\n]*\)$!\nimport sys; sys.path.insert(0,'@scriptsFolder@')\n\1!
     :skip-python-path-patch
   }
