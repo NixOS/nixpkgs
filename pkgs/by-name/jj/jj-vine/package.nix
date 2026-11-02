@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   checkFeatures = [ "no-e2e-tests" ];
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [ cacert ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
