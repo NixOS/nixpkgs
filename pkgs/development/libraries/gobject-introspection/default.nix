@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./absolute_shlib_path.patch {
       inherit nixStoreDir;
     })
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/gobject-introspection/-/raw/f0eda9fabec6cc830f03e9929d52fe7ba0c61487/debian/patches/tests-Mock-both-spawn-and-call-for-setuptools-84-compatib.patch";
+      hash = "sha256-+8+7mrmQbAFKOPyPCDlrDrur2WvClYip6SgKRuoTERo=";
+    })
   ]
   ++ lib.optionals x11Support [
     # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
