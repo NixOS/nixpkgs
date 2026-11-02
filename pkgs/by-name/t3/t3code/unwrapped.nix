@@ -35,6 +35,7 @@ stdenv.mkDerivation (
     nodejs = nodejs_26;
     pnpm = pnpm_12;
     browser = callPackage ./browser.nix { };
+    browserProfileName = "t3-nix-${builtins.baseNameOf (toString browser)}";
     withBrowser = lib.meta.availableOn stdenv.hostPlatform browser;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
@@ -74,6 +75,17 @@ stdenv.mkDerivation (
       substituteInPlace apps/server/src/preview/PreviewBrowser.ts \
         --replace-fail 'const executable = path.join(installRoot, release.version, executableName);' \
                        'const executable = "${lib.getExe browser}";'
+
+      # Key the profile by store path so setup also runs after browser updates
+      # or when an upstream cache-only profile is already installed.
+      substituteInPlace apps/server/src/preview/PreviewBrowserHost.ts \
+        --replace-fail 't3-chrome-headless-shell' '${browserProfileName}' \
+        --replace-fail '/**/tools/chrome-headless-shell/*/*/chrome-headless-shell' \
+                       '${browser}/libexec/t3code-browser/chrome-headless-shell'
+
+      substituteInPlace apps/server/src/cli/browser.ts \
+        --replace-fail 'const browser = yield* installedBrowser(baseDirPath);' \
+                       'const browser = Option.some("${lib.getExe browser}");'
     '';
 
     nativeBuildInputs = [
