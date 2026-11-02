@@ -131,16 +131,4 @@ rec {
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
     '';
   };
-
-  nomad_1_9 = generic {
-    buildGoModule = buildGo126Module;
-    version = "1.9.7";
-    hash = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
-    vendorHash = "sha256-9GnwqkexJAxrhW9yJFaDTdSaZ+p+/dcMuhlusp4cmyw=";
-    license = lib.licenses.bsl11;
-    passthru.tests.nomad = nixosTests.nomad;
-    preCheck = ''
-      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
-    '';
-  };
 }
