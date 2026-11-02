@@ -11,7 +11,6 @@ in
       mightyiam
       lucasew
     ];
-    teams = [ lib.teams.ngi ];
   };
 
   nodes = {
