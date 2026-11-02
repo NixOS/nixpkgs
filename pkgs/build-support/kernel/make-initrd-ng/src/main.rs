@@ -162,11 +162,10 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug>(
             // in the initrd: the linker via elf.interpreter above, and libc via
             // at least one binary's rpath. Suppress these known-benign cases.
             // See also: the ld*.so.? skip in stage-1.nix findLibs.
-            let is_glibc_runtime = sonames.len() == 1 && {
-                let soname = &sonames[0];
-                (soname.starts_with("ld-") && soname.contains(".so"))
-                    || soname.starts_with("libc.so")
-            };
+            let is_glibc_runtime = matches!(
+                sonames.as_slice(),
+                [s] if (s.starts_with("ld-") && s.contains(".so")) || s.starts_with("libc.so")
+            );
 
             if !is_glibc_runtime {
                 eprintln!(
