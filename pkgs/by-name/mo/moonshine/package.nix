@@ -2,6 +2,7 @@
   cmake,
   fetchFromGitHub,
   pkg-config,
+  makeBinaryWrapper,
   lib,
   libevdev,
   libgbm,
@@ -15,6 +16,7 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
+  xwayland,
   aws-lc,
   sqlite,
   bash,
@@ -57,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     cmake
     rustPlatform.bindgenHook
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -123,6 +126,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         libxres
       ]
     } "$out/bin/moonshine"
+
+    # xwayland is effectively mandatory; moonshine *can* technically
+    # run without it, but many games won't work.
+    wrapProgram "$out/bin/moonshine" --prefix PATH : ${lib.makeBinPath [ xwayland ]}
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

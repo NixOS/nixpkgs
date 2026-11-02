@@ -156,7 +156,7 @@ in
       description = "Streaming server using the NVIDIA GameStream / Moonlight protocol.";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.xwayland ] ++ cfg.extraPackages;
+      path = cfg.extraPackages;
       environment = {
         MOONSHINE_LOG = "moonshine=info";
       }
