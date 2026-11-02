@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z+0YKohmgSNnGtw6yDTrLsx4Q5LFOOyIUt0ji0x18BQ=";
+    hash = "sha256-HJb6Lae42XOMm6AEZrDRB7JT3Qr0128MibBfMpUEiAc=";
   };
 
-  cargoHash = "sha256-h/FWi+LmGObU6FEOC0yNRhN8wQS6UzYN7Gxe9YO8fos=";
+  cargoHash = "sha256-ph4z6XLFp8cO8FANFeDmoqaPfPQr5N4g3/Lwr3UrWL4=";
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
