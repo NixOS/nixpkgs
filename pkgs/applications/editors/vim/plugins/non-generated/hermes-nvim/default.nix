@@ -17,11 +17,11 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchzip {
     url = "https://github.com/Ruddickmg/hermes.nvim/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-QFrf8xe9beUznRCnClVLGTdMw9buFQk0QOAWED2+PQE=";
+    hash = "sha256-zKBnchG3smzgXF2oyUqHAHS6+vW6WZTOYHhIpItGS+U=";
   };
 
   dejavuFont = fetchzip {
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit version src;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-5dd/Z8GyXgR50LydWKz+8y4BWpR6bOoYu+5K9lRF4yc=";
+  cargoHash = "sha256-9gpMH1SwbvkjXynJ7FIBZ6VTcFIG9DUGukRP0Q3BIQw=";
 
   cargoBuildFeatures = [ "with-icons" ];
 
