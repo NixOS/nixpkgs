@@ -33,15 +33,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cacert
     hypothesis
     pytestCheckHook
   ];
-
-  preCheck = ''
-    # reqwest fails to build its HTTP client on Linux without a CA bundle
-    # ("No CA certificates were loaded from the system").
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
 
   # Need the official JSON Schema Test Suite, which is fetched as a git
   # submodule and not bundled in the sdist.
