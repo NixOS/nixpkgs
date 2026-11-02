@@ -4,6 +4,7 @@
   fetchFromGitHub,
 
   # build-system
+  hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
 
@@ -19,17 +20,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-discovery";
-  version = "1.6.4";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "python-discovery";
     tag = finalAttrs.version;
-    hash = "sha256-9CHK00PQ1x5L1OntVTSCmq08zFIR9FhHwEI+3jUobL4=";
+    hash = "sha256-pbBtcNLlBBc5DoseD1sMkNfvNjFy/rvihPfOp1xceXg=";
   };
 
   build-system = [
+    hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
