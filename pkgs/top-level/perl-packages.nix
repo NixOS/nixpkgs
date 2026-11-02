@@ -25976,10 +25976,10 @@ with self;
 
   NetIDNEncode = buildPerlModule {
     pname = "Net-IDN-Encode";
-    version = "2.590";
+    version = "2.600";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Net-IDN-Encode-2.590-TRIAL.tar.gz";
-      hash = "sha256-SQgTbv5V4Ov/WlU1ZezZenbao0Yn+ncs7seMjB5yTTs=";
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Net-IDN-Encode-2.600.tar.gz";
+      hash = "sha256-EE9WwCXKfJFHQb2GDQ+u6YgkK5+lBDiF/fAk6HDfe/M=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
