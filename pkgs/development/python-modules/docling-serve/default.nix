@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
 
   # build-system
-  hatchling,
+  setuptools,
 
   # dependencies
   docling-core,
@@ -28,8 +31,6 @@
   websockets,
 
   # optional-dependencies
-  # ui:
-  gradio,
   # tesserocr:
   tesserocr,
   # easyocr:
@@ -50,7 +51,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-serve";
-  version = "1.29.0";
+  version = "1.38.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -58,17 +59,11 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sYpi7vgeUH2xw2Jq8Rgou8SsS8aq+TWgq29gqv/xNnU=";
+    hash = "sha256-B71HuMIUQG+tSogW1pPlMtcBtZQ8kkWppKNdZDFwgEM=";
   };
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "opentelemetry-instrumentation-fastapi"
-    "websockets"
-  ];
-
   build-system = [
-    hatchling
+    setuptools
   ];
 
   dependencies = [
@@ -103,14 +98,10 @@ buildPythonPackage (finalAttrs: {
   ++ docling-jobkit.optional-dependencies.gdrive
   ++ fastapi.optional-dependencies.standard
   ++ uvicorn.optional-dependencies.standard
-  ++ lib.optionals withUI finalAttrs.passthru.optional-dependencies.ui
   ++ lib.optionals withTesserocr finalAttrs.passthru.optional-dependencies.tesserocr
   ++ lib.optionals withRapidocr finalAttrs.passthru.optional-dependencies.rapidocr;
 
   optional-dependencies = {
-    ui = [
-      gradio
-    ];
     tesserocr = [
       tesserocr
     ];
@@ -125,6 +116,25 @@ buildPythonPackage (finalAttrs: {
       flash-attn
     ];
   };
+
+  # Web UI bundle, served when DOCLING_SERVE_ENABLE_UI is set
+  nativeBuildInputs = lib.optionals withUI [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+  npmRoot = "ui";
+  npmDeps =
+    if withUI then
+      fetchNpmDeps {
+        name = "docling-serve-ui-${finalAttrs.version}-npm-deps";
+        src = "${finalAttrs.src}/ui";
+        hash = "sha256-lEKhwvkVMGuMVjk87/u19ridN/dQnFRh+I9G6s4eMBQ=";
+      }
+    else
+      null;
+  preBuild = lib.optionalString withUI ''
+    npm --prefix ui run build
+  '';
 
   pythonImportsCheck = [
     "docling_serve"
