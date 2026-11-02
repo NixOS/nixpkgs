@@ -15,7 +15,7 @@
   # tests
   pytest-asyncio_0,
   pytest-cov-stub,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -49,7 +49,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio_0
     pytest-cov-stub
-    pytestCheckHook
+    # AttributeError: 'FixtureManager' object has no attribute '_arg2fixturedefs'. Did you mean: '_arg2node2fixturedefs'?
+    pytest9_1CheckHook
   ];
 
   pythonImportsCheck = [ "aiohappyeyeballs" ];
