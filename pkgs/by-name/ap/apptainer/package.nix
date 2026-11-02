@@ -79,290 +79,293 @@
 }:
 
 let
-  pname = "apptainer";
-  version = "1.5.5";
-  projectName = "apptainer";
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
-(buildGoModule {
-  inherit pname version;
+buildGoModule (
+  finalAttrs:
+  let
+    # Internal use only; subject to changes.
+    # TODO: Remove and hardcode projectName as "apptainer"
+    # after `singularity` package removal.
+    projectName = finalAttrs.passthru.projectName;
+  in
+  {
+    pname = "apptainer";
+    version = "1.5.5";
 
-  src = fetchFromGitHub {
-    owner = "apptainer";
-    repo = "apptainer";
-    tag = "v${version}";
-    hash = "sha256-oV1LzCBYbMFbKGhli6eCbpMoyB1KeccnaEi+xHJ431g=";
-  };
+    src = fetchFromGitHub {
+      owner = "apptainer";
+      repo = "apptainer";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-oV1LzCBYbMFbKGhli6eCbpMoyB1KeccnaEi+xHJ431g=";
+    };
 
-  # Override vendorHash with overrideAttrs.
-  # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-  vendorHash = "sha256-k0HhLDImOs+nDn7B3VfxORnWRxTRlefi01YQiaNASeY=";
+    # Override vendorHash with overrideAttrs.
+    # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
+    vendorHash = "sha256-k0HhLDImOs+nDn7B3VfxORnWRxTRlefi01YQiaNASeY=";
 
-  patches = [
-    (replaceVars ./0001-ldCache-patch-for-driverLink.patch {
-      inherit (addDriverRunpath) driverLink;
-    })
-  ];
-
-  # go is used to compile extensions when building container images
-  allowGoReference = true;
-
-  __structuredAttrs = true;
-
-  passthru = {
-    inherit
-      enableSeccomp
-      enableSuid
-      externalLocalStateDir
-      projectName
-      removeCompat
-      starterSuidPath
-      ;
-  };
-
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    util-linux
-    which
-  ];
-
-  # Search inside the project sources
-  # and see the `control` file of the Debian package from upstream repos
-  # for build-time dependencies and run-time utilities
-  # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
-  # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
-
-  buildInputs = [
-    bash # To patch /bin/sh shebangs.
-    cryptsetup
-    gpgme
-    libuuid
-    openssl
-    squashfs-tools # Required at build time by SingularityCE
-  ]
-  # Optional dependencies.
-  # Formatting: Optional dependencies are likely to increase.
-  # Don't squash them into the same line.
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker
-  ++ lib.optional enableSeccomp libseccomp;
-
-  configureScript = "./mconfig";
-
-  configureFlags = [
-    "--localstatedir=${
-      if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
-    }"
-    "--runstatedir=/var/run"
-  ]
-  ++ lib.optional (!enableSeccomp) "--without-seccomp"
-  ++ lib.optional (enableSuid != defaultToSuid) (
-    if enableSuid then "--with-suid" else "--without-suid"
-  );
-
-  # causes redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
-
-  # Packages to provide fallback bin paths
-  # to the Apptainer/Singularity container runtime default PATHs.
-  # Override with `<pkg>.overrideAttrs`.
-  defaultPathInputs = [
-    bash
-    coreutils
-    cryptsetup # cryptsetup
-    fakeroot
-    fuse2fs # Mount ext3 filesystems
-    go
-    mount # mount
-    squashfs-tools # mksquashfs unsquashfs # Make / unpack squashfs image
-    squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
-  ]
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker;
-
-  postPatch = ''
-    if [[ ! -e .git || ! -e VERSION ]]; then
-      echo "${version}" > VERSION
-    fi
-
-    # Patch shebangs for script run during build
-    patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
-
-    # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
-      substituteInPlace ${lib.escapeShellArg fileName} \
-        ${lib.concatMapStringsSep " \\\n  " (
-          originalDefaultPath:
-          lib.concatStringsSep " " [
-            "--replace-fail"
-            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-            (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
-          ]
-        ) originalDefaultPaths}
-    '') sourceFilesWithDefaultPaths}
-  '';
-
-  postConfigure = ''
-    # set to empty if unset
-    : ''${configureFlags=}
-
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" "''${configureFlags[@]}"
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make -C builddir -j"$NIX_BUILD_CORES"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    make -C builddir install LOCALSTATEDIR="$out/var/lib"
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    substituteInPlace "$out/bin/run-singularity" \
-      --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
-
-    # Respect PATH from the environment/the user.
-    # Fallback to bin paths provided by Nixpkgs packages.
-    wrapProgram "$out/bin/${projectName}" \
-      --suffix PATH : "$systemDefaultPath" \
-      --suffix PATH : "$inputsDefaultPath"
-
-    # Make changes in the config file
-    ${lib.optionalString forceNvcCli ''
-      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
-    ''}
-    ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
-      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
-        --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
-    ''}
-    ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
-      unlink "$out/bin/singularity"
-      for file in "$out"/share/man/man?/singularity*.gz; do
-        if [[ -L "$file" ]]; then
-          unlink "$file"
-        fi
-      done
-      for file in "$out"/share/*-completion/completions/singularity; do
-        if [[ -e "$file" ]]
-        rm "$file"
-      done
-    ''}
-    ${lib.optionalString enableSuid (
-      lib.warnIf (starterSuidPath == null)
-        "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial."
-        ''
-          chmod +x $out/libexec/${projectName}/bin/starter-suid
-        ''
-    )}
-    ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
-      mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
-      ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
-    ''}
-  '';
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  doInstallCheck = true;
-
-  meta = {
-    description = "Application containers for linux";
-    longDescription = ''
-      Apptainer is a runtime for its squashfs-based container format SIF.
-      The SIF container itself is immutable at run time, all mutable parts are bind-mounted.
-      It doesn't isolate container processes from the outside environment,
-      and don't rely on a privileged daemon like Docker does.
-
-      For historical reasons below, Apptainer is also known as Singularity.
-
-      Naming history and its forks:
-      * Singularity, the former name of Apptainer, was born from a research project.
-        It was packaged in Nixpkgs as `singularity`.
-        * Kurtzer GM, Sochat V, Bauer MW (2017)
-          Singularity: Scientific containers for mobility of compute.
-          PLoS ONE 12(5): e0177459.
-          https://doi.org/10.1371/journal.pone.0177459
-      * One of the original Singularity developer found a company called Sylabs Inc.
-        to provided a central container repository Singularity Hub.
-        Its Python client was packaged in Nixpkgs as `spython`.
-      * Sylabs Inc. forked the community-maintained Singularity as SingularityCE,
-        and created their commercial version SingularityPRO
-      * Singularity renamed themselves to Apptainer
-        to distinguish themselves from a fork made by Sylabs Inc..
-        Nixpkgs name Apptainer as `apptainer` and SingularityCE as `singularity`.
-        * https://sylabs.io/2021/05/singularity-community-edition
-        * https://apptainer.org/news/community-announcement-20211130
-      * Sylabs merged SingularityPRO into SingulaityCE 4.6.0 and announced EOL of both forks.
-    '';
-    homepage = "https://apptainer.org";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      jbedo
-      ShamrockLee
+    patches = [
+      (replaceVars ./0001-ldCache-patch-for-driverLink.patch {
+        inherit (addDriverRunpath) driverLink;
+      })
     ];
-    mainProgram = projectName;
-  };
-}).overrideAttrs
-  (
-    finalAttrs: prevAttrs: {
-      systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
-      inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
-      passthru = prevAttrs.passthru or { } // {
-        inherit sourceFilesWithDefaultPaths;
-        tests = {
-          image-hello-cowsay = singularity-tools.buildImage {
-            name = "hello-cowsay";
-            contents = [
-              hello
-              cowsay
-            ];
-            # mksquashfs scales its memory requirement with the number of
-            # processors (all host CPUs by default). Give the build VM enough
-            # memory to cope with high core-count builders.
-            memSize = 4096;
-            singularity = finalAttrs.finalPackage;
-          };
-        };
-        gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
-          # Should be in tests, but Ofborg would skip image-hello-cowsay because
-          # saxpy is unfree.
-          image-saxpy = callPackage (
-            { singularity-tools, cudaPackages }:
-            singularity-tools.buildImage {
-              name = "saxpy";
-              contents = [ cudaPackages.saxpy ];
-              memSize = 2048;
-              diskSize = 2048;
-              singularity = finalAttrs.finalPackage;
-            }
-          ) { };
-          saxpy = callPackage (
-            { runCommand, writeShellScriptBin }:
-            let
-              unwrapped = writeShellScriptBin "apptainer-cuda-saxpy" ''
-                ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
-              '';
-            in
-            runCommand "run-apptainer-cuda-saxpy"
-              {
-                requiredSystemFeatures = [ "cuda" ];
-                nativeBuildInputs = [ unwrapped ];
-                passthru = {
-                  inherit unwrapped;
-                };
-              }
-              ''
-                apptainer-cuda-saxpy
-              ''
-          ) { };
+
+    # go is used to compile extensions when building container images
+    allowGoReference = true;
+
+    __structuredAttrs = true;
+
+    passthru = {
+      inherit
+        enableSeccomp
+        enableSuid
+        externalLocalStateDir
+        removeCompat
+        starterSuidPath
+        ;
+      projectName = "apptainer";
+    };
+
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+      util-linux
+      which
+    ];
+
+    # Search inside the project sources
+    # and see the `control` file of the Debian package from upstream repos
+    # for build-time dependencies and run-time utilities
+    # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
+    # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
+
+    buildInputs = [
+      bash # To patch /bin/sh shebangs.
+      cryptsetup
+      gpgme
+      libuuid
+      openssl
+      squashfs-tools # Required at build time by SingularityCE
+    ]
+    # Optional dependencies.
+    # Formatting: Optional dependencies are likely to increase.
+    # Don't squash them into the same line.
+    ++ lib.optional enableNvidiaContainerCli nvidia-docker
+    ++ lib.optional enableSeccomp libseccomp;
+
+    configureScript = "./mconfig";
+
+    configureFlags = [
+      "--localstatedir=${
+        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+      }"
+      "--runstatedir=/var/run"
+    ]
+    ++ lib.optional (!enableSeccomp) "--without-seccomp"
+    ++ lib.optional (enableSuid != defaultToSuid) (
+      if enableSuid then "--with-suid" else "--without-suid"
+    );
+
+    # causes redefinition of _FORTIFY_SOURCE
+    hardeningDisable = [ "fortify3" ];
+
+    # Packages to provide fallback bin paths
+    # to the Apptainer/Singularity container runtime default PATHs.
+    # Override with `<pkg>.overrideAttrs`.
+    defaultPathInputs = [
+      bash
+      coreutils
+      cryptsetup # cryptsetup
+      fakeroot
+      fuse2fs # Mount ext3 filesystems
+      go
+      mount # mount
+      squashfs-tools # mksquashfs unsquashfs # Make / unpack squashfs image
+      squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
+    ]
+    ++ lib.optional enableNvidiaContainerCli nvidia-docker;
+
+    postPatch = ''
+      if [[ ! -e .git || ! -e VERSION ]]; then
+        echo "${finalAttrs.version}" > VERSION
+      fi
+
+      # Patch shebangs for script run during build
+      patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
+
+      # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
+      ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
+        substituteInPlace ${lib.escapeShellArg fileName} \
+          ${lib.concatMapStringsSep " \\\n  " (
+            originalDefaultPath:
+            lib.concatStringsSep " " [
+              "--replace-fail"
+              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+              (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
+            ]
+          ) originalDefaultPaths}
+      '') sourceFilesWithDefaultPaths}
+    '';
+
+    postConfigure = ''
+      # set to empty if unset
+      : ''${configureFlags=}
+
+      $configureScript -V ${finalAttrs.version} "''${prefixKey:---prefix=}$prefix" "''${configureFlags[@]}"
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+      make -C builddir -j"$NIX_BUILD_CORES"
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      make -C builddir install LOCALSTATEDIR="$out/var/lib"
+      runHook postInstall
+    '';
+
+    postFixup = ''
+      substituteInPlace "$out/bin/run-singularity" \
+        --replace-fail "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+
+      # Respect PATH from the environment/the user.
+      # Fallback to bin paths provided by Nixpkgs packages.
+      wrapProgram "$out/bin/${projectName}" \
+        --suffix PATH : "$systemDefaultPath" \
+        --suffix PATH : "$inputsDefaultPath"
+
+      # Make changes in the config file
+      ${lib.optionalString forceNvcCli ''
+        substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+          --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+      ''}
+      ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+        substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+          --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+      ''}
+      ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
+        unlink "$out/bin/singularity"
+        for file in "$out"/share/man/man?/singularity*.gz; do
+          if [[ -L "$file" ]]; then
+            unlink "$file"
+          fi
+        done
+        for file in "$out"/share/*-completion/completions/singularity; do
+          if [[ -e "$file" ]]
+          rm "$file"
+        done
+      ''}
+      ${lib.optionalString enableSuid (
+        lib.warnIf (starterSuidPath == null)
+          "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial."
+          ''
+            chmod +x $out/libexec/${projectName}/bin/starter-suid
+          ''
+      )}
+      ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
+        mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
+        ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
+      ''}
+    '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
+    doInstallCheck = true;
+
+    systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
+    inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
+    passthru = {
+      inherit sourceFilesWithDefaultPaths;
+      tests = {
+        image-hello-cowsay = singularity-tools.buildImage {
+          name = "hello-cowsay";
+          contents = [
+            hello
+            cowsay
+          ];
+          # mksquashfs scales its memory requirement with the number of
+          # processors (all host CPUs by default). Give the build VM enough
+          # memory to cope with high core-count builders.
+          memSize = 4096;
+          singularity = finalAttrs.finalPackage;
         };
       };
-    }
-  )
+      gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
+        # Should be in tests, but Ofborg would skip image-hello-cowsay because
+        # saxpy is unfree.
+        image-saxpy = callPackage (
+          { singularity-tools, cudaPackages }:
+          singularity-tools.buildImage {
+            name = "saxpy";
+            contents = [ cudaPackages.saxpy ];
+            memSize = 2048;
+            diskSize = 2048;
+            singularity = finalAttrs.finalPackage;
+          }
+        ) { };
+        saxpy = callPackage (
+          { runCommand, writeShellScriptBin }:
+          let
+            unwrapped = writeShellScriptBin "apptainer-cuda-saxpy" ''
+              ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
+            '';
+          in
+          runCommand "run-apptainer-cuda-saxpy"
+            {
+              requiredSystemFeatures = [ "cuda" ];
+              nativeBuildInputs = [ unwrapped ];
+              passthru = {
+                inherit unwrapped;
+              };
+            }
+            ''
+              apptainer-cuda-saxpy
+            ''
+        ) { };
+      };
+    };
+
+    meta = {
+      description = "Application containers for linux";
+      longDescription = ''
+        Apptainer is a runtime for its squashfs-based container format SIF.
+        The SIF container itself is immutable at run time, all mutable parts are bind-mounted.
+        It doesn't isolate container processes from the outside environment,
+        and don't rely on a privileged daemon like Docker does.
+
+        For historical reasons below, Apptainer is also known as Singularity.
+
+        Naming history and its forks:
+        * Singularity, the former name of Apptainer, was born from a research project.
+          It was packaged in Nixpkgs as `singularity`.
+          * Kurtzer GM, Sochat V, Bauer MW (2017)
+            Singularity: Scientific containers for mobility of compute.
+            PLoS ONE 12(5): e0177459.
+            https://doi.org/10.1371/journal.pone.0177459
+        * One of the original Singularity developer found a company called Sylabs Inc.
+          to provided a central container repository Singularity Hub.
+          Its Python client was packaged in Nixpkgs as `spython`.
+        * Sylabs Inc. forked the community-maintained Singularity as SingularityCE,
+          and created their commercial version SingularityPRO
+        * Singularity renamed themselves to Apptainer
+          to distinguish themselves from a fork made by Sylabs Inc..
+          Nixpkgs name Apptainer as `apptainer` and SingularityCE as `singularity`.
+          * https://sylabs.io/2021/05/singularity-community-edition
+          * https://apptainer.org/news/community-announcement-20211130
+        * Sylabs merged SingularityPRO into SingulaityCE 4.6.0 and announced EOL of both forks.
+      '';
+      homepage = "https://apptainer.org";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
+        jbedo
+        ShamrockLee
+      ];
+      mainProgram = projectName;
+    };
+  }
+)
