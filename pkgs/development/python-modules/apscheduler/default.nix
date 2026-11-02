@@ -34,7 +34,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i "/addopts/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'addopts = "-rsx --tb=short"' ""
   '';
 
   build-system = [
