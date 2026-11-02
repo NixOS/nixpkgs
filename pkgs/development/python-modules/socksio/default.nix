@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchpatch,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   # remove coverage configuration
   preCheck = ''
