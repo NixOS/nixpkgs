@@ -316,6 +316,17 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   };
 
   patches = [
+    # AOTAutograd could put an input that is mutated in the graph and returned into the output
+    # slot of another input whose mutation is applied after the graph, which then silently got
+    # the wrong value (or failed with a size mismatch):
+    # https://github.com/pytorch/pytorch/issues/198609
+    # Fixed by https://github.com/pytorch/pytorch/pull/198622, in 2.15.0.
+    (fetchpatch {
+      name = "aot-autograd-input-mutated-in-graph-output-slot.patch";
+      url = "https://github.com/pytorch/pytorch/commit/acae41d5977f889dddf3a7b1b111bd2c9e1a99b3.patch";
+      hash = "sha256-jKXeomQGBxbN3RrUiPoujX+yscCmOVxG0icqaiMWLbQ=";
+    })
+
     ./clang19-template-warning.patch
   ]
   ++ lib.optionals cudaSupport [
