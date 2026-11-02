@@ -21524,8 +21524,6 @@ self: super: with self; {
 
   ty = callPackage ../development/python-modules/ty { inherit (pkgs) ty; };
 
-  type-infer = callPackage ../development/python-modules/type-infer { };
-
   typechecks = callPackage ../development/python-modules/typechecks { };
 
   typecode = callPackage ../development/python-modules/typecode { };
