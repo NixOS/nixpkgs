@@ -124,7 +124,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     bun run build
 
     # Package with electron-builder (unpacked directory mode)
-    cp -r "${electron.dist}" $HOME/.electron-dist
+    cp -r ${electron.dist} "$HOME/.electron-dist"
     chmod -R u+w $HOME/.electron-dist
 
     npx electron-builder --dir \
@@ -158,8 +158,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
       (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
         mkdir -p $out/Applications $out/bin
-        mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
-        makeWrapper "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
+        mv packages/desktop/dist/mac-*/OpenCode.app $out/Applications/OpenCode.app
+        makeWrapper $out/Applications/OpenCode.app/Contents/MacOS/OpenCode $out/bin/opencode-desktop
       '')
       (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
         mkdir -p $out/opt/opencode-desktop
@@ -195,7 +195,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    ${lib.getExe rcodesign} sign "$out/Applications/OpenCode.app"
+    ${lib.getExe rcodesign} sign $out/Applications/OpenCode.app
   '';
 
   meta = {
