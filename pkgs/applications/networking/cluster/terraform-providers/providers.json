@@ -1461,15 +1461,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-CnYLJAvhyx0NS+ng4qLCu/ZR774dMmw3iJjWt78FVHE="
   },
-  "vmware_wavefront": {
-    "hash": "sha256-yNNtOkodzwxKvHQq9GZlUicezGW6u2ih6ry/cOtJQGM=",
-    "homepage": "https://registry.terraform.io/providers/vmware/wavefront",
-    "owner": "vmware",
-    "repo": "terraform-provider-wavefront",
-    "rev": "v5.1.0",
-    "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
-  },
   "vpsfreecz_vpsadmin": {
     "hash": "sha256-1r2SqoRWJJhQej8D3LXHOEXT5RSxE4t6s7QuiNoIqpg=",
     "homepage": "https://registry.terraform.io/providers/vpsfreecz/vpsadmin",

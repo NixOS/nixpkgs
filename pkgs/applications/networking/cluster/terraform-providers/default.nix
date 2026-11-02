@@ -149,6 +149,7 @@ let
       kislerdm_neon = archived "kislerdm_neon" "2026/09";
       oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
       pablovarela_slack = archived "pablovarela_slack" "2026/02";
+      vmware_wavefront = archived "vmware_wavefront" "2026/01";
     };
 
   # excluding aliases, used by terraform-full
