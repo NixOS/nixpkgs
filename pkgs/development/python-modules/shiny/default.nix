@@ -97,6 +97,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "shiny" ];
 
+  nativeBuildInputs = [ cacert ];
+
   nativeCheckInputs = [
     anthropic
     google-generativeai
@@ -122,8 +124,6 @@ buildPythonPackage (finalAttrs: {
     "-o asyncio_mode=auto"
     "-o asyncio_default_fixture_loop_scope=function"
   ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   disabledTests = [
     # Requires unpackaged brand-yml
