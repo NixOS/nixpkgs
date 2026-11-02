@@ -224,7 +224,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "qtile";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      arjan-s
       sigmanificient
     ];
   };
