@@ -242,7 +242,7 @@ class TerminalLogger(AbstractLogger):
         elapsed = time.monotonic() - self._start_time
         if "machine" in attributes:
             message = f"{attributes['machine']}: {message}"
-        return f"[{elapsed:.2f}s] {message}"
+        return Style.DIM + f"[{elapsed:.2f}s]" + Style.RESET_ALL + f" {message}"  # ty: ignore[unsupported-operator]
 
     @staticmethod
     def _eprint(*args: object, **kwargs: Any) -> None:
