@@ -77,7 +77,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "sglang";
-  version = "0.5.12.post1";
+  version = "0.5.22";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sgl-project";
     repo = "sglang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ce7w5x4RBNZYTLduGgDi6Pr1y3CehoTQmOLkGqvOok=";
+    hash = "sha256-m5RsZDPGsUZ81+W4OVHB4SyEoLss0FZGtx5PSjl3K8Y=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
