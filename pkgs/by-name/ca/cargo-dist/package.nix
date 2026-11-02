@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-g5g6sOxHZCB8unb1+AD0r2c8M2zGAl0tf5y5R06OJ+o=";
 
   nativeBuildInputs = [
+    cacert
     pkg-config
   ];
 
@@ -41,10 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cacert
   ];
 
-  env = {
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   # remove tests that require internet access
   postPatch = ''
