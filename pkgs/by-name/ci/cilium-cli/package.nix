@@ -58,6 +58,7 @@ buildGoModule (finalAttrs: {
       humancalico
       qjoly
       ryan4yin
+      maxskokov
     ];
     mainProgram = "cilium";
   };
