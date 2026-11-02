@@ -11,21 +11,21 @@
   pytest-forked,
   pytest-randomly,
   pytest-timeout,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
   six,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "httplib2";
-  version = "0.32.0";
+  version = "0.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httplib2";
     repo = "httplib2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l+E3cADVb81SN3ME8qUqI8dfmT2e7S6p0nWOCu3CQWE=";
+    hash = "sha256-OK480dK4/n51OrW116FNv+EC37JFZMAK/nnIrG1R5ig=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     pytest-randomly
     pytest-timeout
     six
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
