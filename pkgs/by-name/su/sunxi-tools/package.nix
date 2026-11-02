@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }

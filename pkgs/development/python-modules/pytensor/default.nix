@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.4";
+  version = "3.3.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-b2CYHqjWtbugKotEfSjnU21m+P8RhoH+nelbc0whfqI=";
+    hash = "sha256-PqyEjcY8uuD+L/QgjJ5x/6umwBcZ7i+Zl7PCaBOcx3I=";
   };
 
   build-system = [

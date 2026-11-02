@@ -13,18 +13,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-let
-  pythonPackages = python3Packages.overrideScope (
-    final: prev: {
-      # Upstream pins mcp==1.28.1; v2's OAuthClientProvider subclasses httpx2.Auth,
-      # which httpx rejects as the auth of the MCP OAuth flow
-      mcp = final.mcp_1;
-    }
-  );
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.0.2";
+  version = "3.0.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +23,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LY9YJbJO8Id1AFGpJvyDSGB8vJtUPdQteLiYE1IWrwU=";
+    hash = "sha256-XWfJyl8QXLYKoDGkdqZyWYjxzAC6Gbmnx6AnJCsOfOQ=";
   };
 
   patches = [
@@ -81,13 +72,18 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   '';
 
   pythonRelaxDeps = true;
+  pythonRemoveDeps = [
+    # Not packaged in nixpkgs, and not imported by vibe
+    "opentelemetry-exporter-otlp-common"
+  ];
   dependencies =
-    with pythonPackages;
+    with python3Packages;
     [
       agent-client-protocol
       annotated-types
       anyio
       attrs
+      authlib
       beautifulsoup4
       cachetools
       certifi
@@ -103,31 +99,28 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       google-auth
       googleapis-common-protos
       h11
-      httpcore
-      httpx
-      httpx-sse
+      httpcore2
+      httpx2
       humanize
       idna
-      importlib-metadata
       jaraco-classes
       jaraco-context
       jaraco-functools
+      joserfc
       jsonpatch
       jsonpath-python
       jsonpointer
       jsonschema
       jsonschema-specifications
       keyring
-      linkify-it-py
-      markdown-it-py
       markdownify
       mcp
-      mdit-py-plugins
-      mdurl
+      mcp-types
       miniaudio
       mistralai
       more-itertools
       opentelemetry-api
+      opentelemetry-exporter-http-transport
       opentelemetry-exporter-otlp-proto-common
       opentelemetry-exporter-otlp-proto-http
       opentelemetry-proto
@@ -135,7 +128,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       opentelemetry-semantic-conventions
       packaging
       pexpect
-      platformdirs
       protobuf
       ptyprocess
       pyasn1
@@ -144,9 +136,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       pydantic
       pydantic-core
       pydantic-settings
-      pygments
       pyjwt
-      pyperclip
       python-dateutil
       python-dotenv
       python-multipart
@@ -154,29 +144,26 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       referencing
       requests
       rfc8785
-      rich
       rpds-py
       sentry-sdk
       setproctitle
       six
       smmap
+      socksio
       soupsieve
       sse-starlette
       starlette
-      textual
-      textual-speedups
       tomli-w
       tree-sitter
       tree-sitter-bash
       truststore
       typing-extensions
       typing-inspection
-      uc-micro-py
       urllib3
+      uuid-utils
       uvicorn
       watchfiles
       websockets
-      zipp
       zstandard
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -189,13 +176,15 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
     gitMinimal
-    pythonPackages.pyte
-    pythonPackages.pytest-asyncio
-    pythonPackages.pytest-textual-snapshot
-    pythonPackages.pytest-xdist
-    pythonPackages.pytestCheckHook
-    pythonPackages.respx
-    pythonPackages.tomlkit
+    # respx models its routes on HTTPX
+    python3Packages.httpx
+    python3Packages.pyte
+    python3Packages.pytest-asyncio
+    python3Packages.pytest-xdist
+    python3Packages.pytestCheckHook
+    python3Packages.respx
+    python3Packages.rich
+    python3Packages.tomlkit
     uv
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -210,6 +199,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # AssertionError: assert <MCPSourceStatus.UNAVAILABLE: 'unavailable'> is <MCPSourceStatus.ENABLED: 'enabled'>
     "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
+    "test_local_mcp_servers_stay_usable_when_connectors_reject_the_key"
 
     # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
     # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
@@ -235,11 +225,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # (device, inode, mtime, size) fingerprint does not change
     "test_changes_when_file_changes"
 
-    # Upstream pins mistralai==2.6.0, whose `create_or_update_user_credentials_async`
-    # was replaced by `create_credentials_async` in later versions
-    "test_connect_http_failure_reads_as_a_sentence_without_the_body"
-    "test_connect_turns_a_no_auth_connector_into_a_connected_one"
-    "test_connect_without_credentials_creates_the_default_user_connection"
+    # TypeError: OTLPSpanExporter.__init__() got an unexpected keyword argument '_transport'
+    # (requires opentelemetry-exporter-otlp-proto-http>=1.45.0)
+    "test_trace_export_swaps_each_batch_and_keeps_tenant_headers"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'alive' == 'gone'
@@ -257,9 +245,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # All snapshot tests use syrupy 4.8.0, which is not packaged here.
-    "tests/snapshots/"
-
     # These tests invoke uv run and fail to import the packaged pydantic extension.
     "tests/e2e/agent_loop_characterization/test_resume.py"
     "tests/e2e/agent_loop_characterization/test_subagents.py"
@@ -272,16 +257,15 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/e2e/test_cli_tui_streaming.py"
     "tests/e2e/test_cli_tui_tool_approval.py"
 
+    # Flaky: telemetry events are not received in the expected order
+    "tests/app_server/test_setup_oidc_telemetry.py"
+
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
 
     # The installer is run with a PATH restricted to /usr/bin:/bin, where the
     # sandbox provides no `bash`
     "tests/test_install_script.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # RuntimeError: Session lease file watcher did not start
-    "tests/app_server/test_session_lease_watch.py"
   ];
 
   __darwinAllowLocalNetworking = true;

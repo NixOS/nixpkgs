@@ -433,6 +433,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      iedame
       igorcafe
       thiagokokada
     ];

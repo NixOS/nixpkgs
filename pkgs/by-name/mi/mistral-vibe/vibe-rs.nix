@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/vibe/cli-rust";
 
-  cargoHash = "sha256-BlLq0rCFmDTK11f9dam8Fc/kJVNqa82C/L6UKKG0+M0=";
+  cargoHash = "sha256-FHAB/HXKgLOPvziyeF8huVLfZ3Jze48+10RkqHt2c/o=";
 
   nativeBuildInputs = [
     pkg-config

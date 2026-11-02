@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "numpy"
     "pillow"
     "rawpy"
@@ -66,6 +67,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # requires rclip to be built with uv before inspecting the artifacts
     "test_sdist_includes_compliance_inputs"
     "test_wheel_includes_clip_legal_files"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # NativeHeifDecodeError: macOS could not render the HEIF image (in the sandbox)
+    "test_decode_path_downscales_large_heic_to_min_side"
+    "test_decode_path_returns_the_full_frame_by_default"
+    "test_thumbnail_decode_matches_the_full_frame_decode"
   ];
 
   disabledTestPaths = [

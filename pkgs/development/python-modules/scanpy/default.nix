@@ -64,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.4";
+  version = "1.12.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-TToqDM4Ze5zdt9hQ/0G2SXsTmtZmzyZ7+etn1dqfH/U=";
+    hash = "sha256-uHXgLJv8ViBhShxfo7jAAm9mMuC3jtyj37JtE55zkxY=";
   };
 
   # Otherwise, several tests fail to be collected:

@@ -46,6 +46,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "huggingface_hub"
     "jsonlines"
     "numpy"
     "transformers"

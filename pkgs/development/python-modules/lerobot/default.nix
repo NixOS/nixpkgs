@@ -58,6 +58,18 @@ buildPythonPackage (finalAttrs: {
         --replace-fail \
           "int(video_stream.base_rate)" \
           "int(float(video_stream.base_rate))"
+    ''
+    # huggingface-hub 2.x compatibility, pending upstream inclusion:
+    # https://github.com/huggingface/lerobot/pull/5145
+    + ''
+      substituteInPlace src/lerobot/datasets/lerobot_dataset.py \
+        --replace-fail \
+          "hub_api.upload_large_folder(" \
+          "hub_api.upload_folder("
+      substituteInPlace src/lerobot/jobs/hf.py tests/jobs/test_hf.py \
+        --replace-fail \
+          "import httpx" \
+          "from huggingface_hub.utils import httpx"
     '';
 
   build-system = [
@@ -68,6 +80,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cmake"
+    "datasets"
+    "huggingface-hub"
     "numpy"
     "packaging"
     "setuptools"
