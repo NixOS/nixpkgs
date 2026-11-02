@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    cacert
   ];
 
   buildInputs = [
@@ -33,10 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     AWS_LC_SYS_USE_SYSTEM = true;
   };
-
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
