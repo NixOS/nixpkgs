@@ -184,6 +184,7 @@ mapAliases {
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
   databricks-cli = throw "'databricks-cli' has been removed from the Python package set. Use 'pkgs.databricks-cli' instead."; # Added 2026-09-04
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
+  dataprep-ml = throw "'dataprep-ml' has been removed due to lack of upstream maintenance."; # added 2026-11-02
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   datauri = warnAlias "'datauri' has been renamed to by 'python-datauri'" python-datauri; # Added 2026-07-28
