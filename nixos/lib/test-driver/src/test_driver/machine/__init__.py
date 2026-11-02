@@ -179,6 +179,32 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
+def parse_systemctl_property(line: str) -> tuple[str, str] | None:
+    """Split a line of `systemctl show` output into its property and value.
+
+    >>> parse_systemctl_property("Id=foo.service")
+    ('Id', 'foo.service')
+
+    Only the first "=" separates the two, and values can be empty:
+
+    >>> parse_systemctl_property("Environment=A=1 B=2")
+    ('Environment', 'A=1 B=2')
+    >>> parse_systemctl_property("Description=")
+    ('Description', '')
+
+    Lines that aren't properties yield `None`:
+
+    >>> parse_systemctl_property("") is None
+    True
+    >>> parse_systemctl_property("no property") is None
+    True
+    """
+    match = re.match(r"^([^=]+)=(.*)$", line)
+    if match is None:
+        return None
+    return match[1], match[2]
+
+
 def retry(
     fn: Callable,
     timeout_seconds: int | dt.timedelta | None = None,
@@ -426,6 +452,29 @@ class BaseMachine(ABC):
         """Shutdown the machine gracefully, waiting for it to exit."""
         ...
 
+    @staticmethod
+    def _systemctl_command(q: str, user: str | None = None) -> str:
+        r"""Build a `systemctl` command, or a `systemctl --user` one for `user`.
+
+        >>> print(BaseMachine._systemctl_command("list-jobs --no-pager"))
+        systemctl list-jobs --no-pager
+        >>> print(BaseMachine._systemctl_command("list-jobs --no-pager", "alice"))
+        su -l alice --shell /bin/sh -c $'XDG_RUNTIME_DIR=/run/user/`id -u` systemctl --user list-jobs --no-pager'
+
+        Single quotes survive the surrounding `$'...'`:
+
+        >>> print(BaseMachine._systemctl_command("show 'foo bar'", "alice"))
+        su -l alice --shell /bin/sh -c $'XDG_RUNTIME_DIR=/run/user/`id -u` systemctl --user show \'foo bar\''
+        """
+        if user is None:
+            return f"systemctl {q}"
+        escaped = q.replace("'", "\\'")
+        return (
+            f"su -l {user} --shell /bin/sh -c "
+            "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
+            f"systemctl --user {escaped}'"
+        )
+
     def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
         """
         Runs `systemctl` commands with optional support for
@@ -440,14 +489,7 @@ class BaseMachine(ABC):
         machine.systemctl("list-jobs --no-pager", "any-user")
         ```
         """
-        if user is not None:
-            q = q.replace("'", "\\'")
-            return self.execute(
-                f"su -l {user} --shell /bin/sh -c "
-                "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
-                f"systemctl --user {q}'"
-            )
-        return self.execute(f"systemctl {q}")
+        return self.execute(self._systemctl_command(q, user))
 
     def wait_for_unit(
         self,
@@ -496,17 +538,10 @@ class BaseMachine(ABC):
                 + f" failed with exit code {status}"
             )
 
-        line_pattern = re.compile(r"^([^=]+)=(.*)$")
-
-        def tuple_from_line(line: str) -> tuple[str, str]:
-            match = line_pattern.match(line)
-            assert match is not None
-            return match[1], match[2]
-
         return dict(
-            tuple_from_line(line)
+            parsed
             for line in lines.split("\n")
-            if line_pattern.match(line)
+            if (parsed := parse_systemctl_property(line)) is not None
         )
 
     def get_unit_property(
@@ -534,12 +569,12 @@ class BaseMachine(ABC):
             f"produced invalid output: {lines}"
         )
 
-        line_pattern = re.compile(r"^([^=]+)=(.*)$")
-        match = line_pattern.match(lines)
-        assert match is not None, invalid_output_message
+        parsed = parse_systemctl_property(lines)
+        assert parsed is not None, invalid_output_message
 
-        assert match[1] == property, invalid_output_message
-        return match[2]
+        name, value = parsed
+        assert name == property, invalid_output_message
+        return value
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
         """
@@ -1207,15 +1242,18 @@ class QemuMachine(BaseMachine):
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
-    def _execute(
-        self,
-        command: str,
-        check_return: bool = True,
-        check_output: bool = True,
-        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
-    ) -> tuple[int, str]:
-        self.connect()
+    @staticmethod
+    def _shell_command(command: str, timeout: dt.timedelta | None) -> str:
+        """Build the line that runs `command` over the shell of the machine.
 
+        The command runs with strict shell options, and its output gets
+        base64-encoded so that it can be read back as a single line:
+
+        >>> print(QemuMachine._shell_command("echo 'hi'", dt.timedelta(seconds=10)))
+        timeout 10.0 bash -c 'set -euo pipefail; echo '"'"'hi'"'"'' | (base64 -w 0; echo)
+        >>> print(QemuMachine._shell_command("true", None).strip())
+        bash -c 'set -euo pipefail; true' | (base64 -w 0; echo)
+        """
         # Always run command with shell opts
         command = f"set -euo pipefail; {command}"
 
@@ -1225,12 +1263,19 @@ class QemuMachine(BaseMachine):
 
         # While sh is bash on NixOS, this is not the case for every distro.
         # We explicitly call bash here to allow for the driver to boot other distros as well.
-        out_command = (
-            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)\n"
-        )
+        return f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)"
+
+    def _execute(
+        self,
+        command: str,
+        check_return: bool = True,
+        check_output: bool = True,
+        timeout: dt.timedelta | None = dt.timedelta(minutes=15),
+    ) -> tuple[int, str]:
+        self.connect()
 
         assert self.shell
-        self.shell.send(out_command.encode())
+        self.shell.send(f"{self._shell_command(command, timeout)}\n".encode())
 
         if not check_output:
             return (-2, "")
@@ -1784,6 +1829,33 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the X11 server"):
             retry(check_x, as_timedelta(timeout))
 
+    @staticmethod
+    def _xdotool_command(key: str) -> str:
+        """Build the xdotool command that presses a QEMU-style key.
+
+        Literal characters get typed to avoid key syntax, e.g. "+" as a chord
+        separator:
+
+        >>> print(NspawnMachine._xdotool_command("a"))
+        xdotool type --clearmodifiers --delay 0 -- a
+        >>> print(NspawnMachine._xdotool_command("+"))
+        xdotool type --clearmodifiers --delay 0 -- +
+
+        Everything else is a key chord:
+
+        >>> print(NspawnMachine._xdotool_command("ctrl-alt-ret"))
+        xdotool key --clearmodifiers ctrl+alt+Return
+        >>> print(NspawnMachine._xdotool_command("\\n"))
+        xdotool key --clearmodifiers Return
+        """
+        if len(key) == 1 and key.isprintable():
+            return make_command(
+                ["xdotool", "type", "--clearmodifiers", "--delay", 0, "--", key]
+            )
+        return make_command(
+            ["xdotool", "key", "--clearmodifiers", xdotool_key_sequence(key)]
+        )
+
     def send_key(
         self,
         key: str,
@@ -1793,25 +1865,7 @@ class NspawnMachine(BaseMachine):
         _warn_if_numeric_duration(delay, "send_key")
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
         with context:
-            # Type literal characters to avoid key syntax, e.g. "+" as a chord separator.
-            if len(key) == 1 and key.isprintable():
-                command = [
-                    "xdotool",
-                    "type",
-                    "--clearmodifiers",
-                    "--delay",
-                    0,
-                    "--",
-                    key,
-                ]
-            else:
-                command = [
-                    "xdotool",
-                    "key",
-                    "--clearmodifiers",
-                    xdotool_key_sequence(key),
-                ]
-            self.succeed(make_command(command))
+            self.succeed(self._xdotool_command(key))
             if delay is not None:
                 time.sleep(as_seconds(delay))
 
@@ -1877,6 +1931,28 @@ class NspawnMachine(BaseMachine):
     def is_up(self) -> bool:
         return self.process is not None
 
+    @staticmethod
+    def _parse_sd_notify(data: bytes) -> tuple[bool, int | None]:
+        """Extract readiness and the leader PID from an `sd_notify` datagram.
+
+        >>> NspawnMachine._parse_sd_notify(b"READY=1\\n")
+        (True, None)
+        >>> NspawnMachine._parse_sd_notify(b"X_NSPAWN_LEADER_PID=42\\n")
+        (False, 42)
+        >>> NspawnMachine._parse_sd_notify(b"X_NSPAWN_LEADER_PID=42\\nREADY=1\\n")
+        (True, 42)
+        >>> NspawnMachine._parse_sd_notify(b"STATUS=Starting up\\n")
+        (False, None)
+        """
+        ready = False
+        leader_pid = None
+        for line in data.decode(errors="replace").splitlines():
+            if line == "READY=1":
+                ready = True
+            if line.startswith("X_NSPAWN_LEADER_PID="):
+                leader_pid = int(line.split("=")[1])
+        return ready, leader_pid
+
     def _drain_notify_socket(self) -> None:
         """Continuously drain the container's `sd_notify` socket (NOTIFY_SOCKET)
         for the whole lifetime of the container, recording readiness and the
@@ -1907,13 +1983,7 @@ class NspawnMachine(BaseMachine):
                 continue
             except OSError:
                 break
-            ready = False
-            leader_pid = None
-            for line in data.decode(errors="replace").splitlines():
-                if line == "READY=1":
-                    ready = True
-                if line.startswith("X_NSPAWN_LEADER_PID="):
-                    leader_pid = int(line.split("=")[1])
+            ready, leader_pid = self._parse_sd_notify(data)
             if ready or leader_pid is not None:
                 with self._notify_lock:
                     if ready:
