@@ -71,7 +71,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::readme_example"
   ];
 
-  nativeCheckInputs = [ openssl ];
+  nativeCheckInputs = [
+    openssl
+    cacert
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -88,9 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "-out ca.pem -config /tmp/ca.conf" "-out ca.pem -config /tmp/ca.conf -extensions req_ext"
     rm -f tests/test-data/{ca.key,ca.pem,cert.key,cert.csr,cert.pem,cert.p12}
     bash scripts/gen_certs.sh
-
-    # integration tests spin up the server which needs a cert bundle
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     # skip some doctests that need network
     substituteInPlace crates/resolver/src/lib.rs --replace-fail '//! ```rust' '//! ```rust,no_run'
