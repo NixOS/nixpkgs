@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mutmut";
-  version = "3.8.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mutmut";
     owner = "boxed";
     tag = finalAttrs.version;
-    hash = "sha256-uPNPnGbCwPIlKjdvNUbClhkdKVoi2gSNBoP4xcb1AeI=";
+    hash = "sha256-M5OJ+b/+Ra8WEHLBgKMiINbTkRSuyjVGZqex2/alxcw=";
   };
 
   postPatch = ''
