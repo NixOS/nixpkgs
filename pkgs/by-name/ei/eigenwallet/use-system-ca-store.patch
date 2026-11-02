@@ -1,8 +1,8 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index 5af6b5d..01dc8f1 100644
+index c9ae0ca..1e88e2d 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -832,7 +832,6 @@ dependencies = [
+@@ -843,7 +843,6 @@ dependencies = [
   "async-trait",
   "bdk-macros",
   "bitcoin 0.29.2",
@@ -10,7 +10,7 @@ index 5af6b5d..01dc8f1 100644
   "getrandom 0.2.17",
   "js-sys",
   "log",
-@@ -886,7 +885,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -897,7 +896,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
  checksum = "b59a3f7fbe678874fa34354097644a171276e02a49934c13b3d61c54610ddf39"
  dependencies = [
   "bdk_core",
@@ -19,7 +19,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -2946,24 +2945,6 @@ dependencies = [
+@@ -3018,24 +3017,6 @@ dependencies = [
   "serde",
  ]
  
@@ -44,7 +44,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "electrum-client"
  version = "0.24.1"
-@@ -2974,10 +2955,9 @@ dependencies = [
+@@ -3046,10 +3027,9 @@ dependencies = [
   "byteorder",
   "libc",
   "log",
@@ -56,7 +56,7 @@ index 5af6b5d..01dc8f1 100644
   "winapi",
  ]
  
-@@ -4473,10 +4453,10 @@ dependencies = [
+@@ -4567,10 +4547,10 @@ dependencies = [
   "hyper-util",
   "log",
   "rustls 0.23.37",
@@ -69,7 +69,7 @@ index 5af6b5d..01dc8f1 100644
   "tower-service",
  ]
  
-@@ -5834,7 +5814,7 @@ dependencies = [
+@@ -5955,7 +5935,7 @@ dependencies = [
   "thiserror 1.0.69",
   "tracing",
   "url",
@@ -78,7 +78,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -6414,7 +6394,7 @@ dependencies = [
+@@ -6535,7 +6515,7 @@ dependencies = [
   "sqlx",
   "swap-serde",
   "tokio",
@@ -87,7 +87,7 @@ index 5af6b5d..01dc8f1 100644
   "tor-rtcompat",
   "tower-http",
   "tracing",
-@@ -6667,10 +6647,10 @@ dependencies = [
+@@ -6788,10 +6768,10 @@ dependencies = [
   "libc",
   "log",
   "openssl",
@@ -100,7 +100,7 @@ index 5af6b5d..01dc8f1 100644
   "security-framework-sys",
   "tempfile",
  ]
-@@ -7184,12 +7164,6 @@ dependencies = [
+@@ -7305,12 +7285,6 @@ dependencies = [
   "syn 2.0.117",
  ]
  
@@ -113,7 +113,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "openssl-probe"
  version = "0.2.1"
-@@ -8608,14 +8582,14 @@ dependencies = [
+@@ -8812,14 +8786,14 @@ dependencies = [
   "pin-project-lite",
   "quinn",
   "rustls 0.23.37",
@@ -130,7 +130,7 @@ index 5af6b5d..01dc8f1 100644
   "tokio-util",
   "tower",
   "tower-http",
-@@ -8654,7 +8628,7 @@ dependencies = [
+@@ -8858,7 +8832,7 @@ dependencies = [
   "serde_json",
   "sync_wrapper 1.0.2",
   "tokio",
@@ -139,7 +139,7 @@ index 5af6b5d..01dc8f1 100644
   "tokio-util",
   "tower",
   "tower-http",
-@@ -8896,31 +8870,6 @@ dependencies = [
+@@ -9100,31 +9074,6 @@ dependencies = [
   "windows-sys 0.61.2",
  ]
  
@@ -171,7 +171,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "rustls"
  version = "0.21.12"
-@@ -8930,7 +8879,7 @@ dependencies = [
+@@ -9134,7 +9083,7 @@ dependencies = [
   "log",
   "ring 0.17.14",
   "rustls-webpki 0.101.7",
@@ -180,7 +180,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -8949,28 +8898,16 @@ dependencies = [
+@@ -9153,28 +9102,16 @@ dependencies = [
   "zeroize",
  ]
  
@@ -211,7 +211,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -9004,10 +8941,10 @@ dependencies = [
+@@ -9208,10 +9145,10 @@ dependencies = [
   "log",
   "once_cell",
   "rustls 0.23.37",
@@ -224,7 +224,7 @@ index 5af6b5d..01dc8f1 100644
   "security-framework-sys",
   "webpki-root-certs 0.26.11",
   "windows-sys 0.59.0",
-@@ -9025,10 +8962,10 @@ dependencies = [
+@@ -9229,10 +9166,10 @@ dependencies = [
   "log",
   "once_cell",
   "rustls 0.23.37",
@@ -237,7 +237,7 @@ index 5af6b5d..01dc8f1 100644
   "security-framework-sys",
   "webpki-root-certs 1.0.6",
   "windows-sys 0.61.2",
-@@ -9227,16 +9164,6 @@ version = "1.0.9"
+@@ -9433,16 +9370,6 @@ version = "1.0.9"
  source = "registry+https://github.com/rust-lang/crates.io-index"
  checksum = "d68f2ec51b097e4c1a75b681a8bec621909b5e91f15bb7b840c4f2f7b01148b2"
  
@@ -254,7 +254,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "sct"
  version = "0.7.1"
-@@ -9373,19 +9300,6 @@ dependencies = [
+@@ -9579,19 +9506,6 @@ dependencies = [
   "quote",
  ]
  
@@ -274,7 +274,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "security-framework"
  version = "3.7.0"
-@@ -10113,8 +10027,6 @@ dependencies = [
+@@ -10318,8 +10232,6 @@ dependencies = [
   "once_cell",
   "paste",
   "percent-encoding",
@@ -283,7 +283,7 @@ index 5af6b5d..01dc8f1 100644
   "serde",
   "serde_json",
   "sha2",
-@@ -10125,7 +10037,6 @@ dependencies = [
+@@ -10330,7 +10242,6 @@ dependencies = [
   "tokio-stream",
   "tracing",
   "url",
@@ -291,7 +291,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -11708,17 +11619,6 @@ dependencies = [
+@@ -11926,17 +11837,6 @@ dependencies = [
   "tokio",
  ]
  
@@ -309,7 +309,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "tokio-rustls"
  version = "0.26.4"
-@@ -11760,13 +11660,11 @@ checksum = "511de3f85caf1c98983545490c3d09685fa8eb634e57eec22bb4db271f46cbd8"
+@@ -11978,13 +11878,11 @@ checksum = "511de3f85caf1c98983545490c3d09685fa8eb634e57eec22bb4db271f46cbd8"
  dependencies = [
   "futures-util",
   "log",
@@ -325,7 +325,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -13179,14 +13077,12 @@ dependencies = [
+@@ -13421,14 +13319,12 @@ dependencies = [
   "http 0.2.12",
   "httparse",
   "log",
@@ -341,7 +341,7 @@ index 5af6b5d..01dc8f1 100644
  ]
  
  [[package]]
-@@ -13995,26 +13891,6 @@ dependencies = [
+@@ -14261,26 +14157,6 @@ dependencies = [
   "system-deps",
  ]
  
@@ -368,7 +368,7 @@ index 5af6b5d..01dc8f1 100644
  [[package]]
  name = "webpki-root-certs"
  version = "0.26.11"
-@@ -14033,24 +13909,6 @@ dependencies = [
+@@ -14299,24 +14175,6 @@ dependencies = [
   "rustls-pki-types",
  ]
  
@@ -394,10 +394,10 @@ index 5af6b5d..01dc8f1 100644
  name = "webpki-roots"
  version = "0.25.4"
 diff --git a/Cargo.toml b/Cargo.toml
-index 3291217..ae5fcdf 100644
+index 720807c..7f690ca 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -32,7 +32,7 @@ members = [
+@@ -33,7 +33,7 @@ members = [
  
  [workspace.dependencies]
  # Bitcoin Dev Kit
@@ -407,7 +407,7 @@ index 3291217..ae5fcdf 100644
  bdk_core = "0.6.0"
  bdk_electrum = { version = "0.23.0", default-features = false }
 diff --git a/bitcoin-wallet/Cargo.toml b/bitcoin-wallet/Cargo.toml
-index f79793a..852272d 100644
+index 8bf5f0f..c3e1ab5 100644
 --- a/bitcoin-wallet/Cargo.toml
 +++ b/bitcoin-wallet/Cargo.toml
 @@ -10,7 +10,7 @@ backoff = { workspace = true }
@@ -472,7 +472,7 @@ index cee153f..14db721 100644
  tracing-subscriber = { workspace = true }
  url = { workspace = true }
 diff --git a/swap/Cargo.toml b/swap/Cargo.toml
-index 19ef6c0..49bdff4 100644
+index d7c8182..7cc0343 100644
 --- a/swap/Cargo.toml
 +++ b/swap/Cargo.toml
 @@ -118,7 +118,7 @@ strum = { workspace = true, features = ["derive"] }
