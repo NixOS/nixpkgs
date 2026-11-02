@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "17.0.1";
+  version = "17.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-websockets";
     repo = "websockets";
     tag = version;
-    hash = "sha256-7qY2u0rIHnwQNZtgZ59YOcO2EKCV++/lc9q1BHRdJr0=";
+    hash = "sha256-AO96jIF9l9/Z2GIgDlWTXjOGpipgu6PHy6Wcx36EpvA=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
