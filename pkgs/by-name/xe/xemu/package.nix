@@ -51,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     # also fetch required git submodules
     postFetch = ''
       cd "$out"
-      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
@@ -61,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   __structuredAttrs = true;
   nativeBuildInputs = [
+    cacert
     meson
     cmake
     ninja
