@@ -9,7 +9,6 @@
   config,
   writeText,
   autoPatchelfHook,
-  patchelfUnstable,
   alsa-lib,
 }:
 
@@ -30,7 +29,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = nativeBuildInputs ++ [
     autoPatchelfHook
-    patchelfUnstable
   ];
 
   buildInputs = [

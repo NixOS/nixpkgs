@@ -5,7 +5,6 @@
   fetchPypi,
   setuptools,
   numpy,
-  patchelfUnstable,
   pyyaml,
   nix-update-script,
 }:
@@ -24,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
   build-system = [
     setuptools
-    patchelfUnstable # Depends on --clear-execstack which is not in any tagged release yet
   ];
   dependencies = [
     numpy

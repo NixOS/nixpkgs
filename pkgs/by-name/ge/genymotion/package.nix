@@ -3,8 +3,6 @@
   lib,
   fetchurl,
   makeWrapper,
-  # instead of default patchelf, for bundled qemu binaries have non-contiguous PT_NOTE segments
-  patchelfUnstable,
   which,
   zlib,
   libGL,
@@ -73,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     which
     xdg-utils
-    patchelfUnstable
   ];
 
   unpackPhase = ''

@@ -24,7 +24,6 @@
   gnupg,
   runtimeShell,
   systemLocale ? config.i18n.defaultLocale or "en_US",
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   applicationName ? "Firefox",
   undmg,
 }:
@@ -78,7 +77,6 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     autoPatchelfHook
-    patchelfUnstable
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg

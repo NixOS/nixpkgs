@@ -5,7 +5,6 @@
   fetchFromGitHub,
   makeWrapper,
   autoPatchelfHook,
-  patchelfUnstable,
   fetchpatch,
   libjxl,
   brotli,
@@ -138,7 +137,6 @@ let
 
     nativeBuildInputs = [
       autoPatchelfHook
-      patchelfUnstable
       makeWrapper
     ];
     buildInputs = [

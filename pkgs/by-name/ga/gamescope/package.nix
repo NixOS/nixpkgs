@@ -188,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
-    ${lib.getExe buildPackages.patchelfUnstable} $out/bin/gamescope \
+    patchelf $out/bin/gamescope \
       --add-rpath ${vulkan-loader}/lib --add-needed libvulkan.so.1
 
     # --debug-layers flag expects these in the path

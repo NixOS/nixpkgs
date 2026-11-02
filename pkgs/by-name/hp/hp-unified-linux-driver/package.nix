@@ -6,7 +6,6 @@
   libxml2_13, # The uld library uses libxml2.so.2 which is provided only in the older version
   fetchurl,
   patchPpdFilesHook,
-  buildPackages,
   replaceVars,
 }:
 
@@ -122,7 +121,7 @@ stdenv.mkDerivation {
 
     echo fopen fopen_wrapper >> name_map
     echo opendir opendir_wrapper >> name_map
-    ${buildPackages.patchelfUnstable}/bin/patchelf \
+    patchelf \
       --rename-dynamic-symbols name_map \
       --add-needed ${wrapperLibName} \
       --set-rpath ${libPath} \

@@ -15,7 +15,6 @@
   pciutils,
   pipewire,
   adwaita-icon-theme,
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   applicationName ? "Firefox ESR",
   undmg,
 }:
@@ -65,7 +64,6 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     autoPatchelfHook
-    patchelfUnstable
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg

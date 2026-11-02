@@ -4,7 +4,6 @@
   lib,
   libfprint-tod,
   openssl,
-  patchelfUnstable,
   stdenv,
 }:
 
@@ -57,7 +56,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    patchelfUnstable # have to use patchelfUnstable to support --rename-dynamic-symbols
   ];
 
   installPhase = ''

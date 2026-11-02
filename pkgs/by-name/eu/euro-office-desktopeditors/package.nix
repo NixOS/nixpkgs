@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   buildFHSEnv,
-  patchelfUnstable,
   # Alphabetic ordering below
   alsa-lib,
   at-spi2-atk,
@@ -99,7 +98,6 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      patchelfUnstable
       wrapGAppsHook3
     ];
 

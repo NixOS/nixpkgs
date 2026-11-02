@@ -7,7 +7,6 @@
   makeWrapper,
   writeText,
   autoPatchelfHook,
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   wrapGAppsHook3,
   callPackage,
 
@@ -147,7 +146,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    patchelfUnstable
     copyDesktopItems
     makeWrapper
     wrapGAppsHook3

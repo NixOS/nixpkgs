@@ -26,7 +26,6 @@
   # linux dependencies
   writeText,
   autoPatchelfHook,
-  patchelfUnstable,
   alsa-lib,
   # darwin dependencies
   undmg,
@@ -135,7 +134,6 @@ else
       config
       writeText
       autoPatchelfHook
-      patchelfUnstable
       alsa-lib
       ;
   }

@@ -18,7 +18,6 @@
   mangohud,
   nix-update-script,
   p7zip,
-  patchelfUnstable,
   pciutils,
   polkit,
   procps,
@@ -54,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     fpc
     lazarus-qt6
-    patchelfUnstable
     qt6Packages.wrapQtAppsHook
     writableTmpDirAsHomeHook
   ];

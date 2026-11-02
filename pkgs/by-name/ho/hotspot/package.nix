@@ -3,7 +3,6 @@
   stdenv,
   binutils,
   cmake,
-  patchelfUnstable,
   elfutils,
   fetchFromGitHub,
   fetchpatch,
@@ -31,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
-    # stable patchelf corrupts the binary
-    patchelfUnstable
     qt6.wrapQtAppsHook
   ];
 

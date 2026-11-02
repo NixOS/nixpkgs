@@ -6,7 +6,6 @@
   throwSystem,
   stdenv,
   autoPatchelfHook,
-  patchelfUnstable,
 
   alsa-lib,
   at-spi2-atk,
@@ -44,7 +43,6 @@ let
 
     nativeBuildInputs = [
       autoPatchelfHook
-      patchelfUnstable
     ];
 
     buildInputs = [

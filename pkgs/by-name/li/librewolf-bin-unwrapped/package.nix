@@ -15,7 +15,6 @@
   pipewire,
   adwaita-icon-theme,
   writeText,
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
 }:
 
 let
@@ -55,7 +54,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     wrapGAppsHook3
     autoPatchelfHook
-    patchelfUnstable
   ];
 
   buildInputs = [

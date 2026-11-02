@@ -10,7 +10,6 @@
   makeBinaryWrapper,
   installShellFiles,
   autoPatchelfHook,
-  patchelfUnstable,
   cacert,
   nix-update-script,
   versionCheckHook,
@@ -56,9 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
-    # Older patchelf corrupts libvips's .init section when extending its RPATH.
-    # https://github.com/NixOS/patchelf/issues/639
-    patchelfUnstable
   ];
 
   # The npm distribution includes native workerd and sharp binaries.

@@ -4,7 +4,6 @@
   fetchurl,
   dpkg,
   autoPatchelfHook,
-  patchelfUnstable,
   openssl,
 }:
 
@@ -102,7 +101,7 @@ stdenv.mkDerivation {
   postFixup = ''
     echo fopen fopen_wrapper > fopen_name_map
     echo access access_wrapper > access_name_map
-    ${patchelfUnstable}/bin/patchelf \
+    patchelf \
       --rename-dynamic-symbols fopen_name_map \
       --rename-dynamic-symbols access_name_map \
       --add-needed ${wrapperLibName} \
