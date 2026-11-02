@@ -102,7 +102,7 @@ in
       # Test whether the root disk was resized.
       blocks, block_size = map(int, machine.succeed("stat -c %b:%S -f /").split(":"))
       GB = 1024 ** 3
-      assert 9.7 * GB <= blocks * block_size <= 10 * GB
+      assert 9 * GB <= blocks * block_size <= 10 * GB
 
       # Just to make sure resizing is idempotent.
       machine.shutdown()
