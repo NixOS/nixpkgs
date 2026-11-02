@@ -66,11 +66,8 @@ buildPythonPackage (finalAttrs: {
     git_dulwich = [ dulwich ];
   };
 
-  env = lib.optionalAttrs finalAttrs.doInstallCheck {
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
-
   nativeCheckInputs = [
+    cacert
     flaky
     pytest-asyncio
     pytest-httpbin
