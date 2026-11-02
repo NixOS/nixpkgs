@@ -44,10 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ cacert ];
 
-  env = {
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    OPENSSL_NO_VENDOR = 1;
-  };
+  env.OPENSSL_NO_VENDOR = 1;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
