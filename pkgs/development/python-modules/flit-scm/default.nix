@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  flit-core,
+  flit-core_3,
   setuptools-scm,
 }:
 
@@ -19,12 +19,11 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    flit-core
+    flit-core_3
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    flit-core
+  dependencies = [
     setuptools-scm
   ];
 
