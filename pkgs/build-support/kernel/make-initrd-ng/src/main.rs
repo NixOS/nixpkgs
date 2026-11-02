@@ -80,23 +80,6 @@ impl<T: Clone + Eq + Hash> NonRepeatingQueue<T> {
     }
 }
 
-fn find_library(
-    sonames: &[String],
-    rpaths: &[Box<Path>],
-    is_available: impl Fn(&Path) -> bool,
-) -> Option<PathBuf> {
-    for soname in sonames {
-        for rpath in rpaths {
-            let library = rpath.join(soname);
-            if is_available(&library) {
-                return Some(library);
-            }
-        }
-    }
-
-    None
-}
-
 fn add_dependencies<P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug>(
     source: P,
     elf: Elf,
@@ -162,10 +145,14 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug>(
         .map(|s| vec![s.to_string()])
         .chain(dlopen_libraries)
     {
-        if let Some(library) = find_library(&sonames, &rpaths_as_path, Path::exists) {
+        let library = sonames
+            .iter()
+            .flat_map(|soname| rpaths_as_path.iter().map(move |path| path.join(soname)))
+            .find(|lib| lib.exists());
+        if let Some(lib) = library {
             // No need to recurse. The queue will bring it back round.
             queue.push_back(StorePath {
-                path: library.into_boxed_path(),
+                path: lib.into_boxed_path(),
                 dlopen: dlopen.clone(),
             });
         } else {
