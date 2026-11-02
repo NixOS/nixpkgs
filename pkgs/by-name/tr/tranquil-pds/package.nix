@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
   protobuf,
   nixosTests,
 }:
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   # the tranquil test suite has shown itself virtually impossible to complete on most hardware thus stopping reviews.
