@@ -1,38 +1,45 @@
 {
   lib,
   buildNpmPackage,
+  common-updater-scripts,
+  esbuild,
   fetchFromGitHub,
+  fetchFromGitLab,
+  jq,
   makeBinaryWrapper,
-  nodejs_22,
-  nix-update-script,
+  nix,
+  nodejs,
+  nix-update,
   nixosTests,
+  writeShellApplication,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "send";
-  version = "3.4.27";
+  version = "3.5.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "timvisee";
     repo = "send";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
+    hash = "sha256-zdCyCAr7Ex983OzUwl+YTZSfopZRdpNLUISOlag5PuQ=";
   };
 
-  # @dannycoates/express-ws uses the unmaintained esm loader, which fails on nodejs_22.
-  postConfigure = ''
-    patch -p1 \
-      --directory=node_modules/@dannycoates \
-      < ${./dannycoates-express-ws-drop-esm-loader.patch}
-  '';
-
-  nodejs = nodejs_22;
-
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-QInXcYpZcAOJMS6QFtIapftyWsqA80ef+OiKJ9XEs98=";
+  npmDepsHash = "sha256-zYRl/8kMMiI6D2TARvqK6ebYBzICJFCgw3HaM8pPUcs=";
 
   nativeBuildInputs = [
+    esbuild
     makeBinaryWrapper
   ];
+
+  postConfigure = ''
+    esbuild ${finalAttrs.passthru.webcryptoCoreSrc}/src/index.ts \
+      --bundle --format=cjs --target=es2015 --external:tslib \
+      --outfile=node_modules/webcrypto-core/dist/webcrypto-core.js
+    esbuild ${finalAttrs.passthru.webcryptoCoreSrc}/src/index.ts \
+      --bundle --format=esm --target=es2015 --external:tslib \
+      --outfile=node_modules/webcrypto-core/dist/webcrypto-core.es.js
+  '';
 
   env = {
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
@@ -45,13 +52,39 @@ buildNpmPackage (finalAttrs: {
     cp -r dist $out/lib/node_modules/send/
     ln -s $out/lib/node_modules/send/dist/version.json $out/lib/node_modules/send/version.json
 
-    makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/send \
+    makeWrapper ${lib.getExe nodejs} $out/bin/send \
       --add-flags $out/lib/node_modules/send/server/bin/prod.js \
       --set "NODE_ENV" "production"
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    # The pinned fork adds HKDF support that the registry package lacks.
+    webcryptoCoreSrc = fetchFromGitHub {
+      owner = "dannycoates";
+      repo = "webcrypto-core";
+      rev = "8e0152a66d3ae6329cf080ccb3085eb06637070f";
+      hash = "sha256-J7ffgORz21qUeY2rc/SrGipkJuRWVPkG9RensfklsWE=";
+    };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "send-update";
+      runtimeInputs = [
+        common-updater-scripts
+        jq
+        nix
+        nix-update
+      ];
+      text = ''
+        nix-update send "$@"
+        src=$(nix-build --no-out-link -A send.src)
+        rev=$(jq -er '.packages["node_modules/webcrypto-core"].resolved | capture("#(?<rev>[0-9a-f]{40})$").rev' "$src/package-lock.json")
+        currentRev=$(nix-instantiate --eval --json -A send.webcryptoCoreSrc.rev | jq -r .)
+        if [[ "$rev" != "$currentRev" ]]; then
+          update-source-version send --ignore-same-version --source-key=webcryptoCoreSrc --rev="$rev"
+        fi
+      '';
+    });
+
     tests = {
       inherit (nixosTests) send;
     };
@@ -59,8 +92,8 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "File Sharing Experiment";
-    changelog = "https://github.com/timvisee/send/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/timvisee/send";
+    changelog = "https://gitlab.com/timvisee/send/-/tags/v${finalAttrs.version}";
+    homepage = "https://gitlab.com/timvisee/send";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       moraxyc
