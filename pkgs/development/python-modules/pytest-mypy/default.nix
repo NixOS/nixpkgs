@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-mypy";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_mypy";
     inherit (finalAttrs) version;
-    hash = "sha256-P1/K/3XIDczGtoz17MKOG75x6VMJRp63oov0CM5VwHQ=";
+    hash = "sha256-ufQjfAMR7sUHxImG3eLXdvOZyY/bktrlyT+WwZvK4OQ=";
   };
 
   nativeBuildInputs = [
