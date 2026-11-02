@@ -1,0 +1,131 @@
+From f76b115c1a89979590d84022443d5d1e0bd9fe77 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Wed, 28 Oct 2026 23:14:37 -0700
+Subject: [PATCH] fix(runtime): keep TRTEngine's layout independent of build
+ macros
+
+torch_tensorrt._C allocates core::runtime::TRTEngine objects in
+TensorRTBackend::compile (py/torch_tensorrt/csrc/tensorrt_backend.cpp) and
+runs libtorchtrt's out-of-line constructor on them, so both must agree on
+TRTEngine's layout. Two data members depended on macros that
+//core/runtime:runtime_base defines only for its Bazel dependents, and
+setup.py builds _C without them:
+
+- TRTRuntimeConfig::config, a std::shared_ptr that TRTEngine holds by
+  value, on TRT_HAS_IRUNTIME_CONFIG (defined everywhere except Jetpack);
+- TRTEngine::nccl_initialized, on ENABLE_TRT_NCCL_COLLECTIVES, which
+  USE_C10D_NCCL turns on with TensorRT 10.16 or later or TensorRT-RTX 1.5
+  or later.
+
+_C therefore allocates 16 bytes less than the constructor writes. The
+2.14.0 wheels on PyPI show this when disassembled: _C allocates 0x678
+bytes and libtorchtrt 0x688 on x86_64, 0x680 and 0x690 on aarch64, and
+_C.pyd 0x620 and torchtrt.dll 0x630 on Windows. In nixpkgs builds with
+the same mismatch, freeing an engine created through
+torch._C._jit_to_backend("tensorrt", ...) aborted in glibc. That is
+consistent with the double free test_to_backend_api.py was skipped for.
+
+Declare both members in every build, forward-declaring
+nvinfer1::IRuntimeConfig for TensorRT releases that lack it. The macros
+still gate every use of the members. Builds that define both macros keep
+their layout. Re-enable test_to_backend_api.py, which exercises the
+allocation.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ core/runtime/TRTEngine.h                        | 10 +++++++++-
+ core/runtime/TRTRuntimeConfig.h                 | 10 +++++++---
+ tests/py/ts/integrations/test_to_backend_api.py | 13 -------------
+ 3 files changed, 16 insertions(+), 17 deletions(-)
+
+diff --git a/core/runtime/TRTEngine.h b/core/runtime/TRTEngine.h
+index cec6d8ab7..aab038750 100644
+--- a/core/runtime/TRTEngine.h
++++ b/core/runtime/TRTEngine.h
+@@ -45,6 +45,11 @@
+ // Full TRT NCCL collectives support requires both:
+ // 1. PyTorch built with NCCL (USE_C10D_NCCL defined via Bazel)
+ // 2. A TensorRT exposing the native collectives API (TRT_HAS_NATIVE_NCCL above)
++//
++// These macros and TRT_HAS_IRUNTIME_CONFIG may gate code, but not data members.
++// Code built outside Bazel does not get Bazel's defines: torch_tensorrt._C,
++// built by setuptools, allocates TRTEngine objects that libtorchtrt's
++// constructor initializes, so both must see the same layout.
+ #if defined(USE_C10D_NCCL) && defined(TRT_HAS_NATIVE_NCCL)
+ #define ENABLE_TRT_NCCL_COLLECTIVES 1
+ #endif
+@@ -388,7 +393,6 @@ struct TRTEngine : torch::CustomClassHolder {
+ 
+ #ifdef ENABLE_TRT_NCCL_COLLECTIVES
+   const bool _native_nccl_support = true; // Support value that is mostly here to back the torchbind hooks
+-  bool nccl_initialized = false; // guards lazy one-shot NCCL setup in execute_engine
+ 
+   // Resolve ProcessGroup via group_name, fetch the NCCL comm from PyTorch,
+   // and bind it to exec_ctx.  Returns true on success.  Returns false (without
+@@ -405,6 +409,10 @@ struct TRTEngine : torch::CustomClassHolder {
+ #else
+   const bool _native_nccl_support = false;
+ #endif
++  // Declared in every build, so that the layout does not depend on
++  // ENABLE_TRT_NCCL_COLLECTIVES (see the note above its definition). Only used
++  // when it is defined.
++  bool nccl_initialized = false; // guards lazy one-shot NCCL setup in execute_engine
+ 
+   // TODO: Implement a call method
+   // c10::List<at::Tensor> Run(c10::List<at::Tensor> inputs);
+diff --git a/core/runtime/TRTRuntimeConfig.h b/core/runtime/TRTRuntimeConfig.h
+index fb2aaab00..43bd8551c 100644
+--- a/core/runtime/TRTRuntimeConfig.h
++++ b/core/runtime/TRTRuntimeConfig.h
+@@ -9,6 +9,10 @@
+ #include "NvInfer.h"
+ #include "core/runtime/RuntimeSettings.h"
+ 
++namespace nvinfer1 {
++class IRuntimeConfig; // TensorRT 10.11 and later; see TRTRuntimeConfig::config
++} // namespace nvinfer1
++
+ namespace torch_tensorrt {
+ namespace core {
+ namespace runtime {
+@@ -51,10 +55,10 @@ struct TRTRuntimeConfig {
+       nvinfer1::IExecutionContext* exec_ctx,
+       cudaStream_t stream) const;
+ 
+-#ifdef TRT_HAS_IRUNTIME_CONFIG
+-  // Lazy-constructed live config. `nullptr` until first `ensure_initialized`.
++  // Lazy-constructed live config. `nullptr` until first `ensure_initialized`,
++  // and always without TRT_HAS_IRUNTIME_CONFIG. Declared in every build, so
++  // that TRTEngine's layout does not depend on that macro (see TRTEngine.h).
+   std::shared_ptr<nvinfer1::IRuntimeConfig> config;
+-#endif
+ 
+  private:
+   RuntimeSettings settings_;
+diff --git a/tests/py/ts/integrations/test_to_backend_api.py b/tests/py/ts/integrations/test_to_backend_api.py
+index 7c75fbb55..fc7b95a1a 100644
+--- a/tests/py/ts/integrations/test_to_backend_api.py
++++ b/tests/py/ts/integrations/test_to_backend_api.py
+@@ -10,19 +10,6 @@ if importlib.util.find_spec("torchvision"):
+     import torchvision.models as models
+ 
+ 
+-# The legacy ``torch._C._jit_to_backend("tensorrt", ...)`` lowering path
+-# produces a correct engine and correct results, but the TorchScript
+-# LoweredModule's processed-state ``Dict<IValue, IValue>`` of engine handles
+-# double-frees during interpreter finalization on torch 2.14 nightlies (abort
+-# at ``_Py_Finalize`` after the test body has already passed). TorchScript
+-# (and with it this ``_jit_to_backend`` integration) is being removed in
+-# PyTorch 2.14, so rather than chase a shutdown-ordering fix in a path that is
+-# going away, skip it. See: https://github.com/pytorch/TensorRT/issues (track
+-# under TorchScript deprecation).
+-@unittest.skip(
+-    "Legacy torch._C._jit_to_backend path double-frees engine handles at "
+-    "interpreter shutdown; TorchScript is being removed in PyTorch 2.14."
+-)
+ @unittest.skipIf(
+     not torchtrt.ENABLED_FEATURES.torchscript_frontend,
+     "TorchScript Frontend is not available",
+-- 
+2.43.0
+

@@ -1,0 +1,43 @@
+---
+ easy_abc.py   | 4 ++++
+ fluidsynth.py | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/easy_abc.py b/easy_abc.py
+index 5be3e6a..40c999a 100644
+--- a/easy_abc.py
++++ b/easy_abc.py
+@@ -3960,6 +3960,8 @@ class MainFrame(wx.Frame):
+         else:
+             default_soundfont_path = '/usr/share/sounds/sf2/FluidR3_GM.sf2'
+
++        default_soundfont_path = '@soundfont@'
++
+         soundfont_path = settings.get('soundfont_path', default_soundfont_path)
+         self.uses_fluidsynth = False
+         if fluidsynth_available and soundfont_path and os.path.exists(soundfont_path):
+@@ -8367,6 +8369,8 @@ class MainFrame(wx.Frame):
+                 gs_path = '/usr/bin/pstopdf'
+                 settings['gs_path'] = gs_path
+
++            settings['gs_path'] = '@ghostscript@'
++
+         # 1.3.6.1 [SS] 2015-01-12 2015-01-22
+         gs_path = settings['gs_path'] #eliminate trailing \n
+         if gs_path and (os.path.exists(gs_path) == False):
+diff --git a/fluidsynth.py b/fluidsynth.py
+index 529ebbf..b5d9377 100644
+--- a/fluidsynth.py
++++ b/fluidsynth.py
+@@ -44,6 +44,8 @@ if platform.system() == 'Windows':
+ else:
+     lib_locations = ['./libfluidsynth.so.3', 'libfluidsynth.so.3', './libfluidsynth.so.2', 'libfluidsynth.so.2']
+
++lib_locations = ['@fluidsynth@']
++
+ i = 0
+ while i < len(lib_locations):
+     try:
+--
+2.38.5
+

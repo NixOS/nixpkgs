@@ -1,0 +1,21 @@
+directories:
+  output: dist_electron
+  buildResources: build
+  app: dist_electron/bundled
+files:
+  - filter:
+      - '**'
+extends: null
+appId: com.bambosh.unofficialhomestuckcollection
+productName: The Unofficial Homestuck Collection
+copyright: Copyright © 2025 GiovanH
+protocols:
+  name: Unofficial Homestuck Collection
+  role: Viewer
+  schemes:
+    - mspa
+linux:
+  asarUnpack:
+    - '**/*.node'
+  maintainer: GiovanH <uhscollection@icloud.com>
+  category: game

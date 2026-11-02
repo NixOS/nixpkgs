@@ -1,0 +1,47 @@
+diff --git a/minigalaxy/installer.py b/minigalaxy/installer.py
+index a68c2c8..2a34680 100644
+--- a/minigalaxy/installer.py
++++ b/minigalaxy/installer.py
+@@ -477,7 +477,7 @@ def postinstaller(game):
+     postinst_script = os.path.join(game.install_dir, "support", "postinst.sh")
+     if os.path.isfile(postinst_script):
+         os.chmod(postinst_script, 0o775)
+-        stdout, stderr, exitcode = _exe_cmd([postinst_script])
++        stdout, stderr, exitcode = _exe_cmd(["env", "PROTONPATH=umu-sniper", "@umurun@", postinst_script])
+         if exitcode not in [0]:
+             err_msg = "Postinstallation script failed: {}".format(postinst_script)
+     return err_msg
+diff --git a/minigalaxy/launch_command.py b/minigalaxy/launch_command.py
+index fc27c1a..cf9de5f 100644
+--- a/minigalaxy/launch_command.py
++++ b/minigalaxy/launch_command.py
+@@ -11,11 +11,15 @@ class LaunchCommand:
+     command: list[str]
+ 
+     def apply_game_launch_config(self, game: Game) -> None:
++        if self.name == "start.sh":
++            self.command.insert(0, "@umurun@")
+         if game.get_info(InfoKey.GAMEMODE) is True:
+             self.command.insert(0, "gamemoderun")
+         if game.get_info(InfoKey.MANGOHUD) is True:
+             self.command.insert(0, "mangohud")
+-            self.command.insert(1, "--dlsym")
++        if self.name == "start.sh":
++            self.command.insert(0, "PROTONPATH=umu-sniper")
++            self.command.insert(0, "env")
+ 
+         var_list = shlex.split(game.get_info(InfoKey.VARIABLES))
+         command_list = shlex.split(game.get_info(InfoKey.COMMAND))
+diff --git a/tests/test_installer.py b/tests/test_installer.py
+index 4b2fe1e..fd4dfef 100644
+--- a/tests/test_installer.py
++++ b/tests/test_installer.py
+@@ -440,7 +440,7 @@ class Test(TestCase):
+         mock_list_dir.return_value = ["data", "docs", "support", "gameinfo", "start.sh"]
+ 
+         result2 = installer.get_exec_line(game2)
+-        self.assertEqual('"/home/test/GOG Games/Blocks That Matter/start.sh"', result2)
++        self.assertEqual('env PROTONPATH=umu-sniper @umurun@ "/home/test/GOG Games/Blocks That Matter/start.sh"', result2)
+ 
+     @mock.patch('os.path.getsize')
+     @mock.patch('os.listdir')

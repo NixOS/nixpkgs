@@ -1,0 +1,12 @@
+diff --git a/Common/3dParty/v8/v8.pri b/Common/3dParty/v8/v8.pri
+index 11c7c72d1b..d4a55daa2f 100644
+--- a/Common/3dParty/v8/v8.pri
++++ b/Common/3dParty/v8/v8.pri
+@@ -5,7 +5,6 @@ v8_version_89 {
+     CONFIG += c++14
+     CONFIG += use_v8_monolith
+     DEFINES += V8_VERSION_89_PLUS
+-	DEFINES += V8_SUPPORT_SNAPSHOTS
+ 
+     core_win_32:CONFIG += build_platform_32
+     core_linux_32:CONFIG += build_platform_32

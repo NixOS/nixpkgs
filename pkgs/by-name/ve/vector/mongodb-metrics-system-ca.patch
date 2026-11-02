@@ -1,0 +1,16 @@
+--- a/src/sources/mongodb_metrics/mod.rs
++++ b/src/sources/mongodb_metrics/mod.rs
+@@ -197,6 +197,13 @@
+             "host" => client_options.hosts[0].to_string(),
+         );
+ 
++        if let Some(mongodb::options::Tls::Enabled(tls)) = client_options.tls.as_mut()
++            && tls.ca_file_path.is_none()
++            && let Some(path) = std::env::var_os("SSL_CERT_FILE")
++        {
++            tls.ca_file_path = Some(path.into());
++        }
++
+         Ok(Self {
+             client: Client::with_options(client_options).context(InvalidClientOptionsSnafu)?,
+             endpoint,

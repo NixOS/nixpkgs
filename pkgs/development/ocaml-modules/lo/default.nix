@@ -1,0 +1,39 @@
+{
+  lib,
+  fetchpatch,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  liblo,
+}:
+
+buildDunePackage (finalAttrs: {
+  pname = "lo";
+  version = "0.2.0";
+
+  minimalOCamlVersion = "4.06";
+
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "ocaml-lo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Iqt7rZaYF0PKHhP8O0bv+4Ij6GCFjkR+n7J7bZyBKFY=";
+  };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/savonet/ocaml-lo/commit/0b43bdf113c7e2c27d55c6a5f81f2fa4b30b5454.patch";
+      hash = "sha256-Y5xewkKgTX9WIpbmVA9uA6N7KOPPhNguTWvowgoAcNU=";
+    })
+  ];
+
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ liblo ];
+
+  meta = {
+    homepage = "https://github.com/savonet/ocaml-lo";
+    description = "Bindings for LO library";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
+  };
+})

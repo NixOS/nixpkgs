@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 5e4306f..9c975fc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -10,7 +10,7 @@ trash: $(SOURCE_FILES)
+ 	@echo
+ 	@echo ---- Compiling:
+ 	@echo ======================================
+-	$(CC) -O2 -Wall -Wextra -Wpartial-availability -Wno-unguarded-availability -force_cpusubtype_ALL -mmacosx-version-min=10.7 -arch i386 -arch x86_64 -framework AppKit -framework ScriptingBridge -o $@ $(SOURCE_FILES)
++	$(CC) -O2 -Wall -Wextra -Wpartial-availability -Wno-unguarded-availability -framework AppKit -framework ScriptingBridge -o $@ $(SOURCE_FILES)
+ 
+ analyze:
+ 	@echo

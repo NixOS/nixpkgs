@@ -1,0 +1,29 @@
+--- a/lib_pypy/_tkinter/tklib_build.py
++++ b/lib_pypy/_tkinter/tklib_build.py
+@@ -17,23 +17,14 @@ elif sys.platform == 'win32':
+     incdirs = []
+     linklibs = ['tcl85', 'tk85']
+     libdirs = []
+-elif sys.platform == 'darwin':
+-    # homebrew
+-    homebrew = os.environ.get('HOMEBREW_PREFIX', '')
+-    incdirs = ['/usr/local/opt/tcl-tk/include']
+-    linklibs = ['tcl8.6', 'tk8.6']
+-    libdirs = []
+-    if homebrew:
+-        incdirs.append(homebrew + '/include')
+-        libdirs.append(homebrew + '/opt/tcl-tk/lib')
+ else:
+     # On some Linux distributions, the tcl and tk libraries are
+     # stored in /usr/include, so we must check this case also
+-    libdirs = []
++    libdirs = ["@tcl@/lib", "@tk@/lib"]
+     found = False
+     for _ver in ['', '8.6', '8.5']:
+-        incdirs = ['/usr/include/tcl' + _ver]
+-        linklibs = ['tcl' + _ver, 'tk' + _ver]
++        incdirs = ['@tcl_dev@/include', '@tk_dev@/include']
++        linklibs = ['@tcl_libprefix@', '@tk_libprefix@']
+         if os.path.isdir(incdirs[0]):
+             found = True
+             break
