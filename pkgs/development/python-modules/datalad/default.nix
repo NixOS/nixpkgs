@@ -4,7 +4,6 @@
   setuptools,
   stdenv,
   fetchFromGitHub,
-  pythonAtLeast,
   installShellFiles,
   git,
   versioneer,
@@ -20,6 +19,7 @@
   annexremote,
   looseversion,
   git-annex,
+  giturlparse,
   # downloaders
   boto3,
   keyrings-alt,
@@ -48,15 +48,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.3.4";
+  version = "1.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-5PAHHN+dgMAxqUZn3vXWsoesw3lQMy6Q8nUJYa4SofM=";
+    hash = "sha256-Z29wsWG9+1aNwEezlDBmkUWC5O44CQJOucJxLzIyGng=";
   };
+
+  # Hash variance between Darwin and Linux
+  postFetch = ''
+    rm -rf docs
+    rm CLAUDE.md
+  '';
 
   postPatch = ''
     # Remove vendorized versioneer.py
@@ -79,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     ++ finalAttrs.passthru.optional-dependencies.publish;
 
   optional-dependencies = {
+    # order matches upstream pyproject.toml
     core = [
       platformdirs
       chardet
@@ -91,6 +98,7 @@ buildPythonPackage (finalAttrs: {
       tqdm
       annexremote
       looseversion
+      giturlparse
     ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ];
     downloaders = [
