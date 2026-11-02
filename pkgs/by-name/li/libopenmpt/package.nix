@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Cross-platform C++ and C library to decode tracked music files into a raw PCM audio stream";
     mainProgram = "openmpt123";
