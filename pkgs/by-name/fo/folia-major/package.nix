@@ -38,7 +38,12 @@ buildNpmPackage (finalAttrs: {
     owner = "chthollyphile";
     repo = "folia-major";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8I8ho3xu/sbecjAuCL7VXJuyv98LEUomoROHbdPTV6g=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse HEAD > "$out/COMMIT"
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+    hash = "sha256-GcRFIJpBlBdX7cUO9Yzp3oYXEx2QGz5WW4Yv1r0S2G4=";
   };
 
   npmDepsHash = "sha256-4T7zzNbG16pt+WniPayEdxQvYJ53Ebq44iODN2csZG4=";
@@ -57,12 +62,17 @@ buildNpmPackage (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     ELECTRON_DEV = "false";
     ELECTRON = "true";
+    # Build metadata read by vite.config.ts
+    FOLIA_BUILD_REPO = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+    VERCEL_GIT_COMMIT_REF = finalAttrs.src.rev;
   };
 
   postPatch = ''
     substituteInPlace vite.config.ts \
-      --replace-fail "git rev-parse --short HEAD" "echo unknown" \
-      --replace-fail "git rev-parse --abbrev-ref HEAD" "echo main"
+      --replace-fail "if (canResolveCommitName) {" "if (false) {" \
+      --replace-fail "JSON.stringify(buildKind.host ?? ''')" "JSON.stringify(buildKind.host ?? 'nixpkgs')"
+    substituteInPlace src/utils/buildProvenance.ts \
+      --replace-fail "'Unofficial build'" "'Unofficial build (nixpkgs)'"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # workaround for https://github.com/electron/electron/issues/31121
@@ -72,6 +82,8 @@ buildNpmPackage (finalAttrs: {
 
   # beforePack downloads ffmpeg and the models and builds MNN; stage them here instead
   preBuild = ''
+    export VERCEL_GIT_COMMIT_SHA=$(<COMMIT)
+
     jq 'del(.build.beforePack, .build.generateUpdatesFilesForAllChannels)' package.json > package.json.tmp
     mv package.json.tmp package.json
   ''
