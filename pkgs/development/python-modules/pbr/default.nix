@@ -3,19 +3,23 @@
   buildPythonPackage,
   callPackage,
   distutils,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pbr";
-  version = "7.1.2";
+  version = "7.1.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Rjm4fMkdDVhHG3vaHyi30ISbpD15NcTEgvPHT+9xmAQ=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "pbr";
+    tag = finalAttrs.version;
+    hash = "sha256-6u6xxeWFo19lXxO9L1OeBNIR+2qi3OR8+jwluf9pt5Q=";
   };
+
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -40,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
