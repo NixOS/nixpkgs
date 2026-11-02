@@ -41,11 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nettle
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
-  # Needed for avoiding "OpenSSL error" since 1.2.0
   preCheck = ''
     export HOME=$(mktemp -d)
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   env.ASSET_OUT_DIR = "target";
