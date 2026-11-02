@@ -5,9 +5,12 @@
   copyDesktopItems,
   makeDesktopItem,
   wrapGAppsHook3,
+  importNpmLock,
   asar,
+  biome,
   dpkg,
   electron,
+  nodejs,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverfort-client";
@@ -29,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     asar
+    biome
     copyDesktopItems
     dpkg
     wrapGAppsHook3
@@ -61,15 +65,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
+  npmDeps = importNpmLock.buildNodeModules {
+    inherit nodejs;
+    package = builtins.fromJSON (builtins.readFile ./package.json);
+    packageLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
+  };
+
   postPatch = ''
     asar extract "opt/Silverfort Client/resources/app.asar" $TMP/work
+
+    # Format minified JavaScript code
+    biome format --write "$TMP"/work/build/electron/main.js
 
     # By default, Silverfort will delete the envfile after it has been read one time.
     # This file is located at "~/.config/Silverfort Client/config.env" and can be configured
     # to store environment variables in JSON format.
     # For example: `{"SF_MESSAGING_URL":"https://example-sdms-server.net"}`
-    substituteInPlace $TMP/work/build/electron/main.js --replace-fail \
-      'try{await fsPromises.unlink(t,{force:!0})}catch(e){log.error(`failed to delete env file (''${t})`,e.toString())}' ""
+    patch -p1 -d "$TMP"/work/build/electron < ${./dont-delete-envfile.patch}
+
+    # Patch Silverfort to work behind corporate proxies
+    # by setting '$https_proxy' environment variable.
+    cp -r "${finalAttrs.npmDeps}"/node_modules/* "$TMP"/work/node_modules
+    patch -p1 -d "$TMP"/work/build/electron < ${./https-proxy-support.patch}
   '';
 
   installPhase = ''
