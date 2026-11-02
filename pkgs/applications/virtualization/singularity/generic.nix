@@ -15,7 +15,6 @@
 {
   lib,
   buildGoModule,
-  runCommandLocal,
   replaceVars,
   # Native build inputs
   addDriverRunpath,
