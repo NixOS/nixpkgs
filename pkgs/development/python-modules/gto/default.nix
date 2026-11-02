@@ -63,6 +63,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    cacert
     freezegun
     gitSetupHook
     pytest-cov-stub
@@ -71,11 +72,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   disabledTests = [
     # Tests want to do it with a remote repo
