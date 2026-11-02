@@ -65,28 +65,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-10-24";
+  version = "0-unstable-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7e15f8e935189b116dd178537849f2e1c94ed764";
-    hash = "sha256-xsvPE6mpbHreBvIfbmpONQywlUkE6uF6dZKzHU8M/eE=";
+    rev = "7ec8a4e31c2690dbede396ca5abee52c5050d895";
+    hash = "sha256-DMmHl2bV4aucB8BU9K3IHC/0ecF+JTyQpeqGj6aGWnw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-pPS3GJsDcvzZAEQina1v6SGPLmhtetXUX5+paTRY428=";
+    hash = "sha256-o4MoxCSyhKp8jtkyTnTgue0JvVbBqGQshb9+UvppICg=";
   };
 
-  patches = [
-    # https://github.com/LadybirdBrowser/ladybird/issues/11772
-    ./build-information-source-archive.patch
-    # https://github.com/LadybirdBrowser/ladybird/issues/12564
-    ./webgl-generation-order.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://github.com/LadybirdBrowser/ladybird/issues/11875
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/LadybirdBrowser/ladybird/issues/11891
     ./darwin-build.patch
   ];

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  singularity,
+  apptainer,
   python3Packages,
   testers,
   udocker,
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
   buildInputs = [
-    singularity
+    apptainer
   ];
 
   build-system = with python3Packages; [
