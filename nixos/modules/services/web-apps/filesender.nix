@@ -239,9 +239,12 @@ in
 
       wantedBy = [
         "multi-user.target"
+      ];
+      before = [
         "phpfpm-filesender.service"
       ];
-      after = [ "postgresql.target" ];
+      after = lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
 
       restartIfChanged = true;
 
