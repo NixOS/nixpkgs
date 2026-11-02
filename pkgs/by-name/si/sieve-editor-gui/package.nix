@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  nodejs_22,
   buildNpmPackage,
   fetchFromGitHub,
   electron,
@@ -33,9 +32,6 @@ in
 buildNpmPackage {
   pname = "sieve-editor-gui";
   version = "0.6.1-unstable-2026-04-21";
-
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "thsmi";
