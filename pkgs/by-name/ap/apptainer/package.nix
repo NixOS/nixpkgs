@@ -142,20 +142,23 @@ buildGoModule (
     # Optional dependencies.
     # Formatting: Optional dependencies are likely to increase.
     # Don't squash them into the same line.
-    ++ lib.optional enableNvidiaContainerCli nvidia-docker
-    ++ lib.optional enableSeccomp libseccomp;
+    ++ lib.optional finalAttrs.enableNvidiaContainerCli nvidia-docker
+    ++ lib.optional finalAttrs.enableSeccomp libseccomp;
 
     configureScript = "./mconfig";
 
     configureFlags = [
       "--localstatedir=${
-        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+        if finalAttrs.externalLocalStateDir != null then
+          finalAttrs.externalLocalStateDir
+        else
+          "${placeholder "out"}/var/lib"
       }"
       "--runstatedir=/var/run"
     ]
-    ++ lib.optional (!enableSeccomp) "--without-seccomp"
-    ++ lib.optional (enableSuid != defaultToSuid) (
-      if enableSuid then "--with-suid" else "--without-suid"
+    ++ lib.optional (!finalAttrs.enableSeccomp) "--without-seccomp"
+    ++ lib.optional (finalAttrs.enableSuid != finalAttrs.defaultToSuid) (
+      if finalAttrs.enableSuid then "--with-suid" else "--without-suid"
     );
 
     # causes redefinition of _FORTIFY_SOURCE
@@ -175,7 +178,11 @@ buildGoModule (
       squashfs-tools # mksquashfs unsquashfs # Make / unpack squashfs image
       squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
     ]
-    ++ lib.optional enableNvidiaContainerCli nvidia-docker;
+    ++ lib.optional finalAttrs.enableNvidiaContainerCli nvidia-docker;
+
+    prePatch = ''
+      systemDefaultPath=$(concatStringsSep ":" systemBinPaths)
+    '';
 
     postPatch = ''
       if [[ ! -e .git || ! -e VERSION ]]; then
@@ -196,7 +203,7 @@ buildGoModule (
               (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
             ]
           ) originalDefaultPaths}
-      '') sourceFilesWithDefaultPaths}
+      '') finalAttrs.sourceFilesWithDefaultPaths}
     '';
 
     postConfigure = ''
@@ -229,15 +236,15 @@ buildGoModule (
         --suffix PATH : "$inputsDefaultPath"
 
       # Make changes in the config file
-      ${lib.optionalString forceNvcCli ''
+      ${lib.optionalString finalAttrs.forceNvcCli ''
         substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
           --replace-fail "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
       ''}
-      ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+      ${lib.optionalString (finalAttrs.enableNvidiaContainerCli && projectName == "singularity") ''
         substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
           --replace-fail "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
       ''}
-      ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
+      ${lib.optionalString (finalAttrs.removeCompat && (projectName != "singularity")) ''
         unlink "$out/bin/singularity"
         for file in "$out"/share/man/man?/singularity*.gz; do
           if [[ -L "$file" ]]; then
@@ -249,16 +256,16 @@ buildGoModule (
           rm "$file"
         done
       ''}
-      ${lib.optionalString enableSuid (
-        lib.warnIf (starterSuidPath == null)
+      ${lib.optionalString finalAttrs.enableSuid (
+        lib.warnIf (finalAttrs.starterSuidPath == null)
           "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial."
           ''
             chmod +x $out/libexec/${projectName}/bin/starter-suid
           ''
       )}
-      ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
+      ${lib.optionalString (finalAttrs.enableSuid && (finalAttrs.starterSuidPath != null)) ''
         mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
-        ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
+        ln -s ${lib.escapeShellArg finalAttrs.starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
       ''}
     '';
 
@@ -268,17 +275,21 @@ buildGoModule (
     versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
     doInstallCheck = true;
 
-    systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
+    inherit
+      defaultToSuid
+      enableNvidiaContainerCli
+      enableSeccomp
+      enableSuid
+      externalLocalStateDir
+      forceNvcCli
+      removeCompat
+      sourceFilesWithDefaultPaths
+      starterSuidPath
+      systemBinPaths
+      ;
     inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
+
     passthru = {
-      inherit
-        enableSeccomp
-        enableSuid
-        externalLocalStateDir
-        removeCompat
-        sourceFilesWithDefaultPaths
-        starterSuidPath
-        ;
       projectName = "apptainer";
       tests = {
         image-hello-cowsay = singularity-tools.buildImage {
