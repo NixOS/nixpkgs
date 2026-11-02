@@ -3,7 +3,7 @@
   buildPythonPackage,
   commonmark,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   ipykernel,
   jupyter-sphinx,
   linkify-it-py,
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "linkify-it-py" ];
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [ mdurl ];
