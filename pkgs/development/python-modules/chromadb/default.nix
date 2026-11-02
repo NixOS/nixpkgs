@@ -16,7 +16,6 @@
 
   # dependencies
   bcrypt,
-  fastapi,
   grpcio,
   httpx,
   importlib-resources,
@@ -27,7 +26,6 @@
   onnxruntime,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-grpc,
-  opentelemetry-instrumentation-fastapi,
   opentelemetry-sdk,
   orjson,
   overrides,
@@ -45,6 +43,8 @@
 
   # optional dependencies
   chroma-hnswlib,
+  fastapi,
+  opentelemetry-instrumentation-fastapi,
 
   # tests
   hnswlib,
@@ -113,10 +113,6 @@ buildPythonPackage (finalAttrs: {
     "build"
   ];
 
-  pythonRelaxDeps = [
-    "fastapi"
-  ];
-
   build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
@@ -134,7 +130,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     bcrypt
-    fastapi
     grpcio
     httpx
     importlib-resources
@@ -145,7 +140,6 @@ buildPythonPackage (finalAttrs: {
     onnxruntime
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-grpc
-    opentelemetry-instrumentation-fastapi
     opentelemetry-sdk
     orjson
     overrides
@@ -163,11 +157,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    dev = [ chroma-hnswlib ];
+    dev = [
+      chroma-hnswlib
+      fastapi
+      opentelemetry-instrumentation-fastapi
+    ];
   };
 
   nativeCheckInputs = [
     chroma-hnswlib
+    fastapi
     hnswlib
     hypothesis
     pandas
@@ -177,6 +176,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sqlite
     starlette
+    opentelemetry-instrumentation-fastapi
     writableTmpDirAsHomeHook
   ];
 
