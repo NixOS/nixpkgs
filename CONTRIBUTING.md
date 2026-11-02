@@ -925,6 +925,7 @@ It is not permitted to submit automated contributions without any manual review 
 Automation without any manual review must not be used as the sole arbiter of whether to merge a change.
 
 ## Use of LLM output in prose
+[use-of-llm-output-in-prose]: #use-of-llm-output-in-prose
 
 In general, and subject to the exemptions below, prose in pull request descriptions, comments, and reviews, as well as in commit message bodies (after the first line), must not contain LLM output.
 Manually selected quotes of relevant code, discussion, or documentation (e.g. from an upstream) are exempt from this.
@@ -950,7 +951,7 @@ The following situations are fully or partially exempt:
 * Use of AI tools for research, testing, debugging, or private review is out of scope, if no substantial amount of their output is included in the resulting contribution.
   However, if these tools had a significant technical influence on your contribution, you are still responsible for it per the Accountability section, and are expected to disclose this where relevant.
 
-* Use of machine translation is exempt from the requirement to understand the translated output.
+* Use of machine translation is exempt from the requirement to understand the translated output, and from the ban in the ["Use of LLM output in prose" section above](#use-of-llm-output-in-prose).
   However, the requirements of appropriate confidence in the original text, responsibility, and disclosure still apply, and you are encouraged to additionally include the original untranslated contribution.
 
 * Use of automation in a contribution clearly marked as not being ready for merge (e.g. a draft pull request) is exempt from the requirement for full self‐review, as long as some amount of review has been done and it is expected that the requirements will be met by the time it is marked as ready.
