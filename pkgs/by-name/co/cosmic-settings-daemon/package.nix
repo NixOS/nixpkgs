@@ -13,6 +13,7 @@
   udev,
   libxkbcommon,
   wayland,
+  zstd,
   openssl,
   nixosTests,
   nix-update-script,
@@ -55,6 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
     libxkbcommon
     wayland
+    zstd
   ];
 
   dontUseJustBuild = true;
