@@ -46,14 +46,14 @@ let
   # Initial contents of root's nixos channel.
   # FIXME: merge with channel.nix / make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}" { } ''
-    mkdir -p $out
-    cp -prd ${lib.cleanSource pkgs.path} $out/nixos
-    chmod -R u+w $out/nixos
-    if [ ! -e $out/nixos/nixpkgs ]; then
-      ln -s . $out/nixos/nixpkgs
+    mkdir -p "$out"
+    cp -prd ${lib.cleanSource pkgs.path} "$out/nixos"
+    chmod -R u+w "$out/nixos"
+    if [ ! -e "$out/nixos/nixpkgs" ]; then
+      ln -s . "$out/nixos/nixpkgs"
     fi
-    rm -rf $out/nixos/.git
-    echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
+    rm -rf "$out/nixos/.git"
+    echo -n ${config.system.nixos.versionSuffix} > "$out/nixos/.version-suffix"
   '';
 
   storePaths = [
@@ -72,15 +72,15 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/nix-support
-      image=$out/${config.image.fileName}
+      mkdir -p "$out/nix-support"
+      image="$out/${config.image.fileName}"
       ${
         if cfg.format == "raw" then
-          "mv ${config.image.baseName}.raw $image"
+          ''mv ${config.image.baseName}.raw "$image"''
         else
-          "qemu-img convert -f raw -O ${cfg.format} ${config.image.baseName}.raw $image"
+          ''qemu-img convert -f raw -O ${cfg.format} ${config.image.baseName}.raw "$image"''
       }
-      echo "file ${cfg.format} $image" >> $out/nix-support/hydra-build-products
+      echo "file ${cfg.format} $image" >> "$out/nix-support/hydra-build-products"
 
       jq -n \
         --arg system_version ${lib.escapeShellArg config.system.nixos.version} \
@@ -88,7 +88,7 @@ let
         --arg logical_bytes "$(qemu-img info --output json "$image" | jq '."virtual-size"')" \
         --arg boot_mode "${bootMode}" \
         --arg file "$image" \
-         '{}
+        '{}
          | .label = $system_version
          | .boot_mode = $boot_mode
          | .system = $system
@@ -96,7 +96,7 @@ let
          | .file = $file
          | .disks.root.logical_bytes = $logical_bytes
          | .disks.root.file = $file
-         ' > $out/nix-support/image-info.json
+         ' > "$out/nix-support/image-info.json"
 
       runHook postInstall
     '';
@@ -152,7 +152,6 @@ let
           mkdir -p $root${efi.efiSysMountPoint}
           mount -L ESP $root${efi.efiSysMountPoint}
         ''}
-
         # GRUB lists the generations from the profile links.
         mkdir -p $root/nix/var/nix/profiles
         ln -s ${toplevel} $root/nix/var/nix/profiles/system-1-link
