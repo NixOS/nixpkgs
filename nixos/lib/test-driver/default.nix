@@ -10,6 +10,7 @@
   junit-xml,
   ptpython,
   pydantic,
+  pytestCheckHook,
   python,
   ovmfvartool,
   remote-pdb,
@@ -80,11 +81,12 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
+    pytestCheckHook
     ruff
     ty
   ];
 
-  checkPhase = ''
+  preCheck = ''
     echo -e "\x1b[32m## run ty\x1b[0m"
     # Installation adds the driver to PYTHONPATH; keep ty imports in the source tree.
     PYTHONPATH=".:$PYTHONPATH" ty check --error-on-warning test_driver extract-docstrings.py
