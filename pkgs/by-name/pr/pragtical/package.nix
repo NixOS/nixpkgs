@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
 
+    nativeBuildInputs = [ cacert ];
+
     # also fetch required git submodules
     postFetch = ''
       cd "$out"
-
-      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       substituteInPlace subprojects/ppm.wrap \
         --replace-fail 'revision = head' 'revision = ${finalAttrs.pluginManagerRev}'
