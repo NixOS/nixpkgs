@@ -8359,12 +8359,17 @@ with pkgs;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
-  inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
-    singularity
-    singularity-overriden-nixos
-    ;
+  singularity =
+    let
+      definitionRaw = import ../applications/virtualization/singularity;
+    in
+    callPackage {
+      __functionArgs = lib.functionArgs apptainer.override // lib.functionArgs definitionRaw;
+      __functor = _: definitionRaw;
+    } { };
 
   apptainer-overridden-nixos = apptainer.tests.overridden-nixos;
+  singularity-overridden-nixos = singularity.tests.overridden-nixos;
 
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_19
