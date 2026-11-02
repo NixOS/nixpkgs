@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-watcherclient";
-  version = "4.10.0";
+  version = "4.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
     tag = finalAttrs.version;
-    hash = "sha256-TYMV55uvTCvHKj5w5QA2zRqVr6pXCXh2Oc07Yo7epjs=";
+    hash = "sha256-/qjWKM+2VYvI1beMxexso3OPA5riywG8F67EJJRurJw=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)

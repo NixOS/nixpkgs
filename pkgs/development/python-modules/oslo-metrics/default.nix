@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oslo-metrics";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.metrics";
     tag = finalAttrs.version;
-    hash = "sha256-LV4NGHs0lBtktjzboOsPOnA56QqjnaKwtGGdy5WlW6Q=";
+    hash = "sha256-LleTAA66sMbvIFz8tZkjvKqfcecv4b710kVhbNOKx4Y=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)

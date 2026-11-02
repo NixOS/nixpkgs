@@ -45,7 +45,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "earth2studio";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "earth2studio";
     tag = finalAttrs.version;
-    hash = "sha256-10Q0d86pmQGlDSXFpYpson4k38HWSPz913BggkhRfa0=";
+    hash = "sha256-cNnQgs2DHTAmGBzgcktxRpW2lpe8Xe4A/68tThXHwMw=";
   };
 
   postPatch =
