@@ -1,6 +1,7 @@
 {
   callPackage,
   cctools,
+  chromium,
   copyDesktopItems,
   electron_44,
   fetchFromGitHub,
@@ -34,9 +35,12 @@ stdenv.mkDerivation (
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
     pnpm = pnpm_12;
-    browser = callPackage ./browser.nix { };
-    browserProfileName = "t3-nix-${builtins.baseNameOf (toString browser)}";
-    withBrowser = lib.meta.availableOn stdenv.hostPlatform browser;
+    browser = chromium;
+    browserProfileName = "t3-nix-${builtins.baseNameOf (toString browser.browser)}";
+    withBrowser = lib.elem stdenv.hostPlatform.system [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -67,11 +71,6 @@ stdenv.mkDerivation (
         .generated/third-party-licenses/spdx/v3.28.0
     ''
     + lib.optionalString withBrowser ''
-      if ! grep -Fq 'const VERSION = "${browser.version}";' apps/server/src/preview/PreviewBrowser.ts; then
-        echo "Update browser.nix to match PreviewBrowser.ts before updating T3 Code." >&2
-        exit 1
-      fi
-
       substituteInPlace apps/server/src/preview/PreviewBrowser.ts \
         --replace-fail 'const executable = path.join(installRoot, release.version, executableName);' \
                        'const executable = "${lib.getExe browser}";'
@@ -81,7 +80,7 @@ stdenv.mkDerivation (
       substituteInPlace apps/server/src/preview/PreviewBrowserHost.ts \
         --replace-fail 't3-chrome-headless-shell' '${browserProfileName}' \
         --replace-fail '/**/tools/chrome-headless-shell/*/*/chrome-headless-shell' \
-                       '${browser}/libexec/t3code-browser/chrome-headless-shell'
+                       '${browser.browser}/libexec/chromium/chromium'
 
       substituteInPlace apps/server/src/cli/browser.ts \
         --replace-fail 'const browser = yield* installedBrowser(baseDirPath);' \
@@ -255,7 +254,13 @@ stdenv.mkDerivation (
         extraArgs = [ "--use-github-releases" ];
       };
     }
-    // lib.optionalAttrs withBrowser { inherit browser; };
+    // lib.optionalAttrs withBrowser {
+      inherit browser;
+      tests.browser = callPackage ./browser-test.nix {
+        inherit browser;
+        t3code = finalAttrs.finalPackage;
+      };
+    };
 
     meta = {
       description = "Minimal web GUI for coding agents";
