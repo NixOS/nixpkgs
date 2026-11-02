@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpcore2";
-  version = "2.13.1";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
+    hash = "sha256-2wvTzI8E+/QLzlwPKWLqI6uxgGTP6/9Sb2/q4u872tw=";
   };
 
   postPatch = ''
