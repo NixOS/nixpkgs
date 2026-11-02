@@ -68,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/ddd";
     license = lib.licenses.gpl3Only;
     mainProgram = "ddd";
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      evanwporter
+    ];
     platforms = lib.platforms.unix;
   };
 })
