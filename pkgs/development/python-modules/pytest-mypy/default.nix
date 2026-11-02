@@ -47,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
+    changelog = "https://github.com/realpython/pytest-mypy/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
