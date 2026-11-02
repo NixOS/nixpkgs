@@ -1,20 +1,7 @@
-# Configurations that should only be overridden by
-# overrideAttrs
-{
-  pname,
-  version,
-  src,
-  projectName, # "apptainer" or "singularity"
-  vendorHash ? null,
-  deleteVendor ? false,
-  proxyVendor ? false,
-  extraConfigureFlags ? [ ],
-  extraDescription ? "",
-  extraMeta ? { },
-}:
 {
   lib,
   buildGoModule,
+  fetchFromGitHub,
   replaceVars,
   # Native build inputs
   addDriverRunpath,
@@ -25,7 +12,6 @@
   # Build inputs
   bash,
   callPackage,
-  conmon,
   coreutils,
   cryptsetup,
   e2fsprogs,
@@ -58,7 +44,7 @@
   # When equal to enableSuid, it suppress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
-  defaultToSuid ? true,
+  defaultToSuid ? null,
   # Whether to compile with SUID support
   enableSuid ? false,
   starterSuidPath ? null,
@@ -85,25 +71,39 @@
   # {
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
-  sourceFilesWithDefaultPaths ? { },
+  sourceFilesWithDefaultPaths ? {
+    "cmd/internal/cli/actions.go" = [ "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin" ];
+    "e2e/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+    "internal/pkg/util/env/env.go" = [ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" ];
+  },
 }:
 
 let
+  pname = "apptainer";
+  version = "1.5.5";
+  projectName = "apptainer";
+
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
-  inherit pname version src;
+  inherit pname version;
 
-  patches = lib.optionals (projectName == "apptainer") [
-    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
+  src = fetchFromGitHub {
+    owner = "apptainer";
+    repo = "apptainer";
+    tag = "v${version}";
+    hash = "sha256-oV1LzCBYbMFbKGhli6eCbpMoyB1KeccnaEi+xHJ431g=";
+  };
+
+  # Override vendorHash with overrideAttrs.
+  # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
+  vendorHash = "sha256-k0HhLDImOs+nDn7B3VfxORnWRxTRlefi01YQiaNASeY=";
+
+  patches = [
+    (replaceVars ./0001-ldCache-patch-for-driverLink.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];
-
-  # Override vendorHash with the output got from
-  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
-  # or with `null` when using vendored source tarball.
-  inherit vendorHash deleteVendor proxyVendor;
 
   # go is used to compile extensions when building container images
   allowGoReference = true;
@@ -136,7 +136,6 @@ in
 
   buildInputs = [
     bash # To patch /bin/sh shebangs.
-    conmon
     cryptsetup
     gpgme
     libuuid
@@ -160,8 +159,7 @@ in
   ++ lib.optional (!enableSeccomp) "--without-seccomp"
   ++ lib.optional (enableSuid != defaultToSuid) (
     if enableSuid then "--with-suid" else "--without-suid"
-  )
-  ++ extraConfigureFlags;
+  );
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -274,14 +272,35 @@ in
   doInstallCheck = true;
 
   meta = {
-    description = "Application containers for linux" + extraDescription;
+    description = "Application containers for linux";
     longDescription = ''
-      Singularity (the upstream) renamed themselves to Apptainer
-      to distinguish themselves from a fork made by Sylabs Inc.. See
+      Apptainer is a runtime for its squashfs-based container format SIF.
+      The SIF container itself is immutable at run time, all mutable parts are bind-mounted.
+      It doesn't isolate container processes from the outside environment,
+      and don't rely on a privileged daemon like Docker does.
 
-      https://sylabs.io/2021/05/singularity-community-edition
-      https://apptainer.org/news/community-announcement-20211130
+      For historical reasons below, Apptainer is also known as Singularity.
+
+      Naming history and its forks:
+      * Singularity, the former name of Apptainer, was born from a research project.
+        It was packaged in Nixpkgs as `singularity`.
+        * Kurtzer GM, Sochat V, Bauer MW (2017)
+          Singularity: Scientific containers for mobility of compute.
+          PLoS ONE 12(5): e0177459.
+          https://doi.org/10.1371/journal.pone.0177459
+      * One of the original Singularity developer found a company called Sylabs Inc.
+        to provided a central container repository Singularity Hub.
+        Its Python client was packaged in Nixpkgs as `spython`.
+      * Sylabs Inc. forked the community-maintained Singularity as SingularityCE,
+        and created their commercial version SingularityPRO
+      * Singularity renamed themselves to Apptainer
+        to distinguish themselves from a fork made by Sylabs Inc..
+        Nixpkgs name Apptainer as `apptainer` and SingularityCE as `singularity`.
+        * https://sylabs.io/2021/05/singularity-community-edition
+        * https://apptainer.org/news/community-announcement-20211130
+      * Sylabs merged SingularityPRO into SingulaityCE 4.6.0 and announced EOL of both forks.
     '';
+    homepage = "https://apptainer.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -289,8 +308,7 @@ in
       ShamrockLee
     ];
     mainProgram = projectName;
-  }
-  // extraMeta;
+  };
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {
