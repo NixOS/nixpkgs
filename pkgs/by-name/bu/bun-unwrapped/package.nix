@@ -258,13 +258,13 @@ stdenv.mkDerivation (finalAttrs: {
     go
     perl
     gitMinimal
-    nasm
     llvmPackages.clang
     llvmPackages.llvm
     llvmPackages.lld
     rustcWithLibSrc
     cargo
   ]
+  ++ lib.optional hostPlatform.isx86_64 nasm
   ++ lib.optionals isDarwin [
     cctools
     darwin.bootstrap_cmds
