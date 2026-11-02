@@ -31,6 +31,12 @@ let
     postPatch = ''
       substituteInPlace flux-core/src/lib.rs \
         --replace-fail "deny(warnings, missing_docs))]" "deny(warnings), allow(dead_code, mismatched_lifetime_syntaxes, unused_assignments))]"
+
+      # `usize::max_value()` is deprecated and fails the build here because
+      # flux-core defaults to its `strict` feature, i.e. deny(warnings).
+      # Replace the single remaining call with the `MAX` associated constant.
+      substituteInPlace flux-core/src/semantic/sub.rs \
+        --replace-fail "usize::max_value()" "usize::MAX"
     '';
     sourceRoot = "${finalAttrs.src.name}/libflux";
 
