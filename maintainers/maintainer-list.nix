@@ -2353,6 +2353,11 @@
     githubId = 11192354;
     name = "Elliot Speck";
   };
+  arcbaseproject = {
+    name = "Stormz";
+    github = "arcbaseproject";
+    githubId = 261682970;
+  };
   archer-65 = {
     email = "mario.liguori.056@gmail.com";
     github = "archer-65";
