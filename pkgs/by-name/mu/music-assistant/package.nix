@@ -82,7 +82,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.8";
+  version = "2.10.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -90,7 +90,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-czoI/RdZ/hUQQbw7NmS//7DSujawwMahTWaDV+jchsw=";
+    hash = "sha256-li2rdPMT4Jn6DCK6Rc+GJD9l2ggiHFvM3WRcy1eU7fw=";
   };
 
   patches = [
@@ -130,9 +130,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     #                          ^^^^^^^^^^^^^^^
     # E   IndexError: tuple index out of range
     ./fix-webserver-tests-in-sandbox.patch
-
-    # Avoid Sendspin port collisions in parallel test run.
-    ./fix-sendspin-tests-parallel.patch
 
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
