@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytest,
   sphinx,
   defusedxml,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-z71IrUr3e2oAPeZMjUBwMwy2SkoAA3oxtK4+iR9vLEc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   propagatedBuildInputs = [ sphinx ];
 
