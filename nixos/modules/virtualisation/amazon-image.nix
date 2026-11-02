@@ -48,7 +48,7 @@ in
       }
     );
 
-    fileSystems."/boot" = mkIf (efiBoot || cfg.zfs.enable) (
+    fileSystems.${config.boot.loader.efi.efiSysMountPoint} = mkIf (efiBoot || cfg.zfs.enable) (
       lib.mkDefault {
         # The ZFS image uses a partition labeled ESP whether or not we're
         # booting with EFI.
