@@ -85,12 +85,10 @@ let
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
             nativeBuildInputs = [
+              cacert
               curl
               jq
             ];
-
-            # ENV VARS
-            SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
             # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
             REFERID = "263d62f31cbb49e0868005059abcb0c9";
