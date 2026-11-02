@@ -81,9 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       done
     '';
 
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert.out}/etc/ssl/certs/ca-bundle.crt
-  '';
+  nativeCheckInputs = [ cacert ];
 
   __darwinAllowLocalNetworking = true;
 
