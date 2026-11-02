@@ -28978,9 +28978,6 @@ with self;
       : for sandbox builds.
       rm -f run_network_tests
 
-      : Certs are required if not running in a sandbox.
-      export SSL_CERT_FILE=${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt
-
       : The following flag enables extra tests not normally performed.
       export RELEASE_TESTING=1
 
