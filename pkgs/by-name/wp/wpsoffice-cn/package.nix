@@ -50,12 +50,12 @@ let
           outputHash = hash;
 
           nativeBuildInputs = [
+            cacert
             curl
             coreutils
           ];
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
         }
         ''
           readonly SECURITY_KEY="7f8faaaa468174dc1c9cd62e5f218a5b"
