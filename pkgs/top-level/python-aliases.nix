@@ -525,6 +525,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   peakrdl = throw "'peakrdl' has been renamed to/replaced by 'peakrdl-cli'"; # added 2026-07-14
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
+  pep517 = throw "'pep517' has been renamed to pyproject-hooks (low-level) and build (high-level)"; # Added 2026-11-02
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
   piano-transcription-inference = throw "'piano-transcription-inference' has been removed, because its upstream repo was archived in 2025."; # added 2026-08-13
   pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06

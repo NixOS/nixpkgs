@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   git,
-  pep517,
   pytestCheckHook,
   setuptools,
 }:
@@ -31,7 +30,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     build
-    pep517
     setuptools
   ];
 
