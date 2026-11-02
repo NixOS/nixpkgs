@@ -36,9 +36,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "tests/acceptance/"
   ];
 
-  # Tests require certificates
-  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [ cacert ];
 
   pythonImportsCheck = [ "nix_playground" ];
 
