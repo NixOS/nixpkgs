@@ -46,6 +46,7 @@ buildGo127Module rec {
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
+    cacert
   ];
 
   overrideModAttrs = _: {
@@ -75,7 +76,6 @@ buildGo127Module rec {
 
   preBuild = ''
     export PATH="$PWD/node_modules/.bin:$PATH"
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     make ui
   '';
 
