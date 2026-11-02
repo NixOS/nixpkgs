@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command Line Interactive for sprites, stateful sandbox environments with checkpoint & restore";
     homepage = "https://sprites.dev";
     license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "sprite";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ drawbu ];
