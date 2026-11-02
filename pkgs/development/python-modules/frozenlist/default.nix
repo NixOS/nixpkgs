@@ -4,7 +4,6 @@
   cython,
   expandvars,
   fetchFromGitHub,
-  pep517,
   pytestCheckHook,
   setuptools,
   wheel,
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     expandvars
     cython
-    pep517
     setuptools
     wheel
   ];
