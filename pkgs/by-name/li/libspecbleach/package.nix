@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspecbleach";
-  version = "0.3.1";
+  version = "0.4.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lucianodato";
     repo = "libspecbleach";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l8qVSE8ZBb/IWDcN7wJALtOtjnXk6/FqjTi0xI6TlSk=";
+    hash = "sha256-rZdlrsTeVNZ6hzUBe57fWx4NqQYL/MdVUiYmQUDeoJQ=";
   };
 
   nativeBuildInputs = [
