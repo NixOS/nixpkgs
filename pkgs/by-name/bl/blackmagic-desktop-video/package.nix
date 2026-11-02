@@ -35,12 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
         nativeBuildInputs = [
+          cacert
           curl
           jq
         ];
-
-        # ENV VARS
-        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
         DOWNLOADSURL = "https://www.blackmagicdesign.com/api/support/us/downloads.json";
 
