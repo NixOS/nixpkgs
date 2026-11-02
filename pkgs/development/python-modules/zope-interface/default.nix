@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "zope-interface";
-  version = "8.2";
+  version = "8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.interface";
     tag = version;
-    hash = "sha256-hOcg41lcdVWfmT2DqaYzzu4bJZYiG2y5boylJevBv6k=";
+    hash = "sha256-VIK5FiYpsF6mSWFiK5beZHcZ3Fkno5YDiceWbwGNauE=";
   };
 
   build-system = [ setuptools ];
