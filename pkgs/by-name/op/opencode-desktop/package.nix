@@ -1,4 +1,5 @@
 {
+  actool,
   autoPatchelfHook,
   bun,
   copyDesktopItems,
@@ -63,6 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    actool
     darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
@@ -188,6 +190,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         runHook postInstall
       ''
     ];
+
+  stripDebugList = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    "Applications/OpenCode.app/Contents/MacOS"
+  ];
 
   meta = {
     description = "AI coding agent desktop client";

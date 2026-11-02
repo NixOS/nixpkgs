@@ -26,10 +26,7 @@ bundlerEnv {
     '';
     homepage = "https://github.com/technicalpickles/homesick";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      aaronschif
-      nicknovitski
-    ];
+    maintainers = with lib.maintainers; [ nicknovitski ];
     platforms = lib.platforms.unix;
     mainProgram = "homesick";
   };
