@@ -17,8 +17,8 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ nhnn ];
     doc = ./filesender.md;
+    teams = with lib.teams; [ ngi ];
   };
 
   options.services.filesender = with lib; {
@@ -146,6 +146,7 @@ in
         group = config.services.nginx.group;
         phpEnv = {
           FILESENDER_CONFIG_DIR = toString filesenderConfigDirectory;
+          FILESENDER_LOG_DIR = "/var/log/filesender";
         };
         settings = {
           "listen.owner" = config.services.nginx.user;
@@ -208,6 +209,10 @@ in
         db_type = "pgsql";
         db_username = cfg.database.user;
         db_database = cfg.database.name;
+
+        tmp_path = lib.mkDefault "/var/lib/filesender/tmp";
+        storage_filesystem_path = lib.mkDefault "/var/lib/filesender/files";
+        storage_filesystem_shred_path = lib.mkDefault "/var/lib/filesender/shredfiles";
       }
     ];
 
@@ -216,15 +221,19 @@ in
 
       wantedBy = [
         "multi-user.target"
+      ];
+      before = [
         "phpfpm-filesender.service"
       ];
-      after = [ "postgresql.target" ];
+      after = lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
 
       restartIfChanged = true;
 
       serviceConfig = {
         Environment = [
           "FILESENDER_CONFIG_DIR=${toString filesenderConfigDirectory}"
+          "FILESENDER_LOG_DIR=/var/log/filesender"
         ];
         Type = "oneshot";
         Group = config.services.nginx.group;
@@ -239,5 +248,12 @@ in
       createHome = true;
       isSystemUser = true;
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/filesender 0750 ${cfg.user} ${config.services.nginx.group} -"
+      "d /var/lib/filesender/files 0750 ${cfg.user} ${config.services.nginx.group} -"
+      "d /var/lib/filesender/tmp 0750 ${cfg.user} ${config.services.nginx.group} -"
+      "d /var/log/filesender 0750 ${cfg.user} ${config.services.nginx.group} -"
+    ];
   };
 }
