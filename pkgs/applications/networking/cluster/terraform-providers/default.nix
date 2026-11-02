@@ -145,6 +145,7 @@ let
       denoland_deno = removed "denoland_deno" "2026/11";
       cloudfoundry-community_cloudfoundry = archived "cloudfoundry-community_cloudfoundry" "2026/07";
       cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
+      determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
     };
 
   # excluding aliases, used by terraform-full
