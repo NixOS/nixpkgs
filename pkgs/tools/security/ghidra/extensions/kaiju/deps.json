@@ -122,6 +122,11 @@
    "module": "sha256-HehRQa+fWBU+JFdQaaE3X7vt169dhEy+MoeWU0nLofc=",
    "pom": "sha256-LflCCmsk5fTzFCNeAc2cO49kYoXbL26C2G7gbvevTiQ="
   },
+  "org/junit/platform#junit-platform-launcher/1.9.2": {
+   "jar": "sha256-7vE56wnJjpzdNYts5MbN1ZswxqiAluNpwzupbmft8OQ=",
+   "module": "sha256-t30YqS/F8EVCknmbaqWUgiUgfyVJs85/EVHM9ea2hoY=",
+   "pom": "sha256-zpFImYqO8d5n5aj0QHnAPhdS6rUqI6H3bgeoFH8sGY4="
+  },
   "org/junit/vintage#junit-vintage-engine/5.9.2": {
    "jar": "sha256-QeFt0yyPRiu8AysrefI5RBkbMuw5jQWFi6212r/9BhI=",
    "module": "sha256-jMz93WRdDOdyFmeJhOtqEruXJQk0SVgOepIxTIxj0qQ=",
@@ -134,30 +139,30 @@
   "org/sonatype/oss#oss-parent/7": {
    "pom": "sha256-tR+IZ8kranIkmVV/w6H96ne9+e9XRyL+kM5DailVlFQ="
   },
-  "systems/manifold#manifold-core-parent/2023.1.28": {
-   "pom": "sha256-ahN15Fn/32/sBPQOta1Tp+cScHjqREz7iUUTtPCfdJA="
+  "systems/manifold#manifold-core-parent/2026.1.16": {
+   "pom": "sha256-iyDhGR1l2YWetm5Znigz1/RgOd9pvxX1hwIXYGR0bUg="
   },
-  "systems/manifold#manifold-deps-parent/2023.1.28": {
-   "pom": "sha256-DE+CPr0aN18k0zh2D7G5WreDvyrnO5Wd0wDt88AJbkY="
+  "systems/manifold#manifold-deps-parent/2026.1.16": {
+   "pom": "sha256-OkoI8b9a3HOPT3qZZfoKgGe2xtuwbJqrhP+4qSwd0vE="
   },
-  "systems/manifold#manifold-parent/2023.1.28": {
-   "pom": "sha256-J0ChX+GyGJ9xJMda85n+tR1IfdE6Ij0hhtaHYSOtU6w="
+  "systems/manifold#manifold-parent/2026.1.16": {
+   "pom": "sha256-VUQ9YU2lKJ5mjEQuq4vMJUQc59N7wxTwVKf7sPrMjsk="
   },
-  "systems/manifold#manifold-preprocessor/2023.1.28": {
-   "jar": "sha256-vRIrrVT6SX3zuMVcfSwhL9nHE0oqfrtMNXuKzli2UB8=",
-   "pom": "sha256-Ov7/Z6wWQo+0mSc5K9t4Yw0aehDcnQEBDSpy9fnGMiU="
+  "systems/manifold#manifold-preprocessor/2026.1.16": {
+   "jar": "sha256-fslf7udbAK8UjzUfO1VZg2plgC2GICQ932pa7icQK+s=",
+   "pom": "sha256-uFauVgjCce60DGAHKTCmuK356NeULxQKB8X9vh4zRKw="
   },
-  "systems/manifold#manifold-rt/2023.1.28": {
-   "jar": "sha256-4cn28jDYci2C2tUEizvJkdv6LRe/BrLwypEC6N0sGl0=",
-   "pom": "sha256-SAJid1Td0/ltrFi7w2YDNDlWhggDxFB+jynCG/rYaok="
+  "systems/manifold#manifold-rt/2026.1.16": {
+   "jar": "sha256-BP1aGu29IQhznuOLoe6SAh0lGCiiozwqEMo23SpG2UI=",
+   "pom": "sha256-E1Gr+LibY+TSWWtaqKpkOQlfqjqtQlSWK42DftglnTk="
   },
-  "systems/manifold#manifold-util/2023.1.28": {
-   "jar": "sha256-WjY+1jmh4gvUHjvEbreQqoIB54HBfoNoOIILZs3IT80=",
-   "pom": "sha256-CF4FlMbIuKBRMfa1OjcnIQ7EVgulP739XXFkui2/JR0="
+  "systems/manifold#manifold-util/2026.1.16": {
+   "jar": "sha256-KlVZys5Aliy3XgwKoWqj12xoes/RDY55owEy/i0eXz4=",
+   "pom": "sha256-M/Gc26eqUYg9oMgAYAaKoSG1R7EV4YU54p+R/tczSxM="
   },
-  "systems/manifold#manifold/2023.1.28": {
-   "jar": "sha256-kPQeNEgFGZkZPz3zejWHU9+npn6RYRpMgOftt+bksRw=",
-   "pom": "sha256-R2kHxQVkoYLTSSIm/jJhjeRx4uObTuHlTSWVp+jBkpw="
+  "systems/manifold#manifold/2026.1.16": {
+   "jar": "sha256-bsQ7eBoWGiAKh/ejNHxwdDouTX8ebhQjQBcU48utbfg=",
+   "pom": "sha256-R/Z2rmbnC4YHYB5OHr5KkK1HKKQ1Zv6z1xHP5oITfc0="
   }
  }
 }

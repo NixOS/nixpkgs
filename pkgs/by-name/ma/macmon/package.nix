@@ -8,16 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macmon";
-  version = "0.8.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "macmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tdWuxpV+AAN189etks6LVo4OYDYQNd9dzfopECFgoR8=";
+    hash = "sha256-/nZTmnM2OT/iDB+vmVd5SptCOCUUF4yn2/Yu45At/0E=";
   };
 
-  cargoHash = "sha256-U71Qrplz2CY5CiYpDjFrtWQOy1J4HE3tMhnRbLXUD7k=";
+  cargoHash = "sha256-hk3PCNLfUrOT+wT8ZLWd2KZWTYK7Kv8+2a1jBIO7Ti8=";
+
+  checkFlags = [
+    # Reads launchd through /bin/ps, which is unavailable in the sandbox
+    "--skip=procs::tests::samples_current_process"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
