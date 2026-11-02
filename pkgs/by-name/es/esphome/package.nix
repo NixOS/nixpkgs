@@ -197,6 +197,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "tests/unit_tests/test_main.py::test_upload_using_esptool_arduino_toolchain"
     # we are not always on apple silicon
     "tests/unit_tests/test_platformio_pch_script.py::test_pch_script_gcc10_wrapper_on_apple_silicon"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: No username set in the environment
+    "tests/unit_tests/test_main.py::test_check_permissions_unreadable_port"
   ];
 
   passthru = {
