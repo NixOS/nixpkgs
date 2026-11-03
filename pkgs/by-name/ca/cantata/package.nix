@@ -203,7 +203,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
   qtWrapperArgs = lib.optionals (withHttpStream && !withLibVlc) [
-    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst}"
+    "--prefix"
+    "GST_PLUGIN_PATH"
+    ":"
+    (lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst)
   ];
 
   meta = {
