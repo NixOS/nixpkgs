@@ -7331,12 +7331,12 @@ with self;
 
   CryptPassphrase = buildPerlPackage {
     pname = "Crypt-Passphrase";
-    version = "0.016";
+    version = "0.024";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.016.tar.gz";
-      hash = "sha256-TOtPi1SsM/PYHJq0euTPoejDbzhJ76ghcDycMH46T8c=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.024.tar.gz";
+      hash = "sha256-bPnN+2m+Y4KHS9A96RliPtpf1k+jpPUoeCRElzh67Qg=";
     };
-    propagatedBuildInputs = [ CryptURandom ];
+    propagatedBuildInputs = [ CryptSysRandom ];
     meta = {
       description = "Module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [
