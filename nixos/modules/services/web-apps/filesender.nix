@@ -1,7 +1,7 @@
 {
   config,
-  lib,
   pkgs,
+  lib,
   ...
 }:
 let
@@ -93,7 +93,11 @@ in
         options = {
           site_url = mkOption {
             type = types.str;
-            description = "Site URL. Used in emails, to build URLs for logging in, logging out, build URL for upload endpoint for web workers, to include scripts etc.";
+            description = ''
+              Site URL. Used in emails, to build URLs for logging in, logging
+              out, build URL for upload endpoint for web workers, to include
+              scripts etc.
+            '';
           };
           admin = mkOption {
             type = types.commas;
@@ -112,19 +116,36 @@ in
           };
           storage_filesystem_path = mkOption {
             type = types.nullOr types.str;
-            description = "When using storage type filesystem this is the absolute path to the file system where uploaded files are stored until they expire. Your FileSender storage root.";
+            description = ''
+              FileSender storage root.
+
+              When using a storage-type filesystem, this is the absolute path
+              to the file system where uploaded files are stored until they
+              expire.
+            '';
           };
           log_facilities = mkOption {
             type = format.type;
             default = [ { type = "error_log"; } ];
-            description = "Defines where FileSender logging is sent. You can sent logging to a file, to syslog or to the default PHP log facility (as configured through your webserver's PHP module). The directive takes an array of one or more logging targets. Logging can be sent to multiple targets simultaneously. Each logging target is a list containing the name of the logging target and a number of attributes which vary per log target. See below for the exact definiation of each log target.";
+            description = ''
+              Defines where FileSender logging is sent.
+
+              You can sent logging to a file, to syslog or to the default PHP
+              log facility (as configured through your webserver's PHP module).
+
+              The directive takes an array of one or more logging targets.
+              Logging can be sent to multiple targets simultaneously, each a
+              list containing the name of the logging target and a number of
+              attributes which vary per log target.
+            '';
           };
         };
       };
       default = { };
       description = ''
         Configuration options used by FileSender.
-        See [](https://docs.filesender.org/filesender/v2.0/admin/configuration/)
+
+        See [](https://docs.filesender.org/filesender/v3.0/admin/configuration/)
         for available options.
       '';
     };
@@ -155,7 +176,10 @@ in
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for FileSender's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for FileSender's PHP pool.
+
+        See the documentation on `php-fpm.conf` for details on configuration
+        directives.
       '';
     };
     auth = {
@@ -209,7 +233,7 @@ in
         issuer = mkOption {
           type = types.str;
           default = "";
-          example = "https://idp.example.org/realms/filesender";
+          example = "https://login.example.com/realms/yourrealm";
           description = "OIDC issuer URL.";
         };
         clientID = mkOption {
@@ -223,8 +247,16 @@ in
           example = "/run/keys/filesender-oidc-client-secret";
           description = ''
             File containing the OIDC client secret.
+
             Use a runtime path such as /run/keys/... so the secret is not copied
             into the Nix store.
+          '';
+        };
+        idpAttribute = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            IdP identification for audit/statistics.
           '';
         };
         scopes = mkOption {
@@ -234,30 +266,47 @@ in
             "profile"
             "email"
           ];
+          description = ''
+            OIDC scopes to request during authentication.
+            This allows customization of the information requested from the
+            identity provider.
+          '';
         };
         uidAttribute = mkOption {
           type = types.str;
           default = "sub";
+          description = ''
+            Name of the claim that contains the user's unique identifier.
+          '';
         };
         emailAttribute = mkOption {
           type = types.str;
           default = "email";
+          description = ''
+            Name of the claim that contains the user's email address.
+          '';
         };
         nameAttribute = mkOption {
           type = types.str;
           default = "name";
+          description = ''
+            Name of the claim that contains the user's full name.
+          '';
         };
         groupsClaim = mkOption {
           type = types.str;
           default = "groups";
+          description = ''
+            Name of the claim that contains the user's groups.
+          '';
         };
         requiredGroups = mkOption {
           type = types.listOf types.str;
           default = [ ];
-        };
-        idpAttribute = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          description = ''
+            List of group names that users must belong to in order to access
+            FileSender.
+          '';
         };
       };
     };
