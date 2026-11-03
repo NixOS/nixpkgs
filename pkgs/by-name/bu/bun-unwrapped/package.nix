@@ -233,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     # host tool discovery.
     ./support-nix-build-environment.patch
 
-    # The pinned nightly's type_info::of helper is not available in Rust 1.99.
+    # Rust 1.99 lacks type_info::of and Once's Default implementation.
     ./rust-1.99-compat.patch
 
     # Keep this bridge in sync with build() and provides() in webkit.ts.

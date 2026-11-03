@@ -1,34 +1,34 @@
 {
-  "version": "1.4.3",
-  "revision": "c6da4a4d3010e5553438c60f6bd76d981976867c",
-  "sourceHash": "sha256-NXKOmxQHguwkGIuq9z5kFrektrxPEmFzjoBHWyOlovU=",
-  "cargoHash": "sha256-041/YqOJ8Tm5gfnRtac5yDSmdyKyQnKdO5rv8FUeOoc=",
+  "version": "1.4.4",
+  "revision": "38afee6c84fcf48c0edb2466aa4b27d287a59c30",
+  "sourceHash": "sha256-8O2D3HL+3Mp74yNzx68LT6Mc2ar4PFTwUWI8iA/idr8=",
+  "cargoHash": "sha256-+ZSnARdGQBVSmKwkmm5xgt08zOKcl9E2bHMeEAciIYQ=",
   "bootstrapAssets": {
     "aarch64-darwin": {
       "name": "bun-darwin-aarch64",
-      "hash": "sha256-gK/UwGm0am+o8+xSC+vHUKeEPkqNW5WD0prUNsAKNAM="
+      "hash": "sha256-wkDX8My5DCY6hJ/NsJt+5iYw2SE0jtaq/ahrnVd7xRA="
     },
     "aarch64-linux": {
       "name": "bun-linux-aarch64",
-      "hash": "sha256-76mBPaXtckI7+Ef5FujSxHwNd2rdlyNUAmp14Q2pqiE="
+      "hash": "sha256-uqa7NvUdblhWHgK76oJQOKnfRU9nPW13bou/hvjHhQ4="
     },
     "aarch64-linux-musl": {
       "name": "bun-linux-aarch64-musl",
-      "hash": "sha256-jeigADzCcHu1VYh+PUUOJOHt8/YF9JE5PontYaiFNCA="
+      "hash": "sha256-V/AbAqxxE8Yck18o84wuq4SePJcNqyH4tkCoex72UAk="
     },
     "x86_64-linux": {
       "name": "bun-linux-x64-baseline",
-      "hash": "sha256-H8LtrIQxApCeOhvh2NmALMYHHPB05n6IIx9P/g+LOXs="
+      "hash": "sha256-4ERutVmVdy65iUvrrppr42jZhai5Jx7hJEhvmUbu3XY="
     },
     "x86_64-linux-musl": {
       "name": "bun-linux-x64-musl-baseline",
-      "hash": "sha256-S1sLVQP26/FRYejFbrWiYxNMBc2YqG3BHuQ6xb2phi4="
+      "hash": "sha256-bpw3CYspOSCu0ov7UaskDibSO/3Zu/7LOtQorBZlSbw="
     }
   },
   "nodeModulesHashes": {
-    "aarch64-darwin": "sha256-cMY9sk0wiEP77jLvqg7dd6mKk5sfUtrQowAPQJQDUTA=",
-    "aarch64-linux": "sha256-WBVogHQ9VG32Fpn2tTrxQnSx1RBYJe93g5stEUV5ziw=",
-    "x86_64-linux": "sha256-lXuuA9NAw+UqTAkHfzSB6ng5iHrHqGsox1CVTZjFEU4="
+    "aarch64-darwin": "sha256-NrFnj+BuXtdQN13HdRLM5BRYcOsGMJIBaBkkChZ+Hyg=",
+    "aarch64-linux": "sha256-ZHFgUaw1q2dBKApNfmZRyeDoEEM5Uw3mnwVkrvPD3X8=",
+    "x86_64-linux": "sha256-PncRz9AfubyfDkvJUaMYb39ceMftHc5xipG8yqqUukU="
   },
   "downloads": [
     {
@@ -48,8 +48,8 @@
     },
     {
       "name": "brotli",
-      "url": "https://github.com/google/brotli/archive/028fb5a23661f123017c060daa546b55cf4bde29.tar.gz",
-      "hash": "sha256-Cv4JpTyLrZhhyN0fwShDCNVPGdKXm6NUHP3MmwX+Ng8="
+      "url": "https://github.com/google/brotli/archive/db24a98aed38a16de78cc05ca15cdd8dc2a0d92d.tar.gz",
+      "hash": "sha256-ETuWhd/BTdLzNg0HcoMmbuwvvfsP4+VgDxG+FR2g1o4="
     },
     {
       "name": "libdeflate",
@@ -138,9 +138,9 @@
     }
   ],
   "webkit": {
-    "rev": "0c06faadf65bf8e8c8ad3a5a8aca83e1e9ed653f",
-    "version": "0-unstable-2026-10-06",
-    "hash": "sha256-K+V3yJTPuUAS8EIXF5NO1kvSMkgr1e5kz9pWrww1I0Q=",
+    "rev": "d6375c72affe0f70222cdcb45012b10f0bf3a9d5",
+    "version": "0-unstable-2026-10-21",
+    "hash": "sha256-4DYGZfawinUre+Wo/JgpiR1ipXwtxxnqqFD6gRv+YAI=",
     "sparseCheckout": [
       "Configurations",
       "Source/cmake",
