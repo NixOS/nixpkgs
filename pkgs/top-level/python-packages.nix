@@ -5041,6 +5041,8 @@ self: super: with self; {
 
   django-waffle = callPackage ../development/python-modules/django-waffle { };
 
+  django-watchfiles = callPackage ../development/python-modules/django-watchfiles { };
+
   django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
