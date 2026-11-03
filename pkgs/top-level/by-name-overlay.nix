@@ -29,12 +29,8 @@ let
   # Type: String -> String -> AttrsOf Path
   namesForShard =
     shard: type:
-    let
-      result = readDir (baseDirectory + "/${shard}");
-    in
-    if type != "directory" || result == { } then
-      # Ignore all non-directories and empty directories
-      # Technically only README.md is allowed as a file in the base directory, so we could alternatively:
+    if type != "directory" then
+      # Ignore all non-directories. Technically only README.md is allowed as a file in the base directory, so we could alternatively:
       # - Assume that README.md is the only file and change the condition to `shard == "README.md"` for a minor performance improvement.
       #   This would however cause very poor error messages if there's other files.
       # - Ensure that README.md is the only file, throwing a better error message if that's not the case.
@@ -42,7 +38,9 @@ let
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
       { }
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") result;
+      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
+        readDir (baseDirectory + "/${shard}")
+      );
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
