@@ -22,6 +22,7 @@
   jemalloc,
   rust-jemalloc-sys,
   polarsMemoryAllocator ? polarsJemalloc, # mimalloc (see meta.problems),
+  aws-lc,
   polarsJemalloc ?
     let
       jemalloc' = rust-jemalloc-sys.override {
@@ -92,6 +93,7 @@ buildPythonPackage.override { stdenv = stdenv'; } (finalAttrs: {
     # compiled & used regardless.
     polarsMemoryAllocator
     (pkgs.__splicedPackages.zstd or pkgs.zstd)
+    aws-lc
   ];
 
   env = {
