@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sslpsk-pmd3";
-  version = "1.0.3";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "sslpsk-pmd3";
     tag = "v${version}";
-    hash = "sha256-ZOPrMZhtHIpE7QMEYGti+ZjqVv93jzb74rG5Fwhjgyw=";
+    hash = "sha256-+0js1tvV9ulCkGSF1zzjIa+UuJZJTMjPO+jhwRsX3x4=";
   };
 
   build-system = [
