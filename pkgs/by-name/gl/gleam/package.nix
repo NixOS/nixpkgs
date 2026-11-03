@@ -5,6 +5,7 @@
   fetchFromGitHub,
   git,
   pkg-config,
+  aws-lc,
   beamPackages,
   nodejs,
   bun,
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  buildInputs = [ aws-lc ];
 
   nativeCheckInputs = [
     # used by several tests
