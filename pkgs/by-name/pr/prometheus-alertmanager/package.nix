@@ -20,19 +20,19 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.33.1";
+  version = "0.34.2";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LGjBuZ7kbtABunEk2YyCKILsPS/0FlS/6Mf/2qVpseI=";
+    hash = "sha256-iOtR8wA9N63fop6ZqGN7AeJgGmSaUwUn552T8WHxtYc=";
   };
 
   postPatch = ''
     cp -r ${elmUi}/. ui/app/dist
   '';
-  vendorHash = "sha256-t5jQtccln3dfcHlnEOnLQHfjzfU9kY9Y7q+r4AigvBE=";
+  vendorHash = "sha256-YtFwsrlRVoMX4w7PoKpBbYq21lEOtzQt3jnLOdXk7VI=";
 
   subPackages = [
     "cmd/alertmanager"
