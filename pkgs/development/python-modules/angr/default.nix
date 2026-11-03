@@ -48,7 +48,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "angr";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
-  version = "10.0.4";
+  version = "10.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -57,17 +57,19 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "angr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7XPOH5kGpSychDk17jBz7jK7nv9zRsy+dPWaCYCNx50=";
+    hash = "sha256-memxffALYmcDNm1MgzgBom+5FNFKI4ympOJvY/NsHAg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-kVDd3sXTyGZPPXg5rFZZqfC3UNqq6AxxHoZdhzMBKyo=";
+    hash = "sha256-rlztS1GC5GCBHdr9VaeGNOp5ni0qcA8ot1RSJlXFuMI=";
   };
 
   pythonRelaxDeps = [
     "cxxheaderparser"
     "lmdb"
+    "pycparser"
+    "pypcode"
     "z3-solver"
   ];
 
