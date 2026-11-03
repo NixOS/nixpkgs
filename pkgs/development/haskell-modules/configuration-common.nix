@@ -839,6 +839,7 @@ with haskellLib;
   heph-aligned-storable = dontCheckIf self.tasty-inspection-testing.meta.broken super.heph-aligned-storable;
   infinite-list = dontCheckIf self.tasty-inspection-testing.meta.broken super.infinite-list;
   random = dontCheckIf self.tasty-inspection-testing.meta.broken super.random;
+  text_2_1_4 = dontCheckIf self.tasty-inspection-testing.meta.broken super.text_2_1_4;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
