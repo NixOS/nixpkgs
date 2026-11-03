@@ -185,6 +185,7 @@ in
         )}
         ${lib.optionalString (cfg.environmentFile != null) ''
           ${lib.getExe pkgs.envsubst} -i ${lib.escapeShellArg cfg.configFile} -o /run/weewx/weewx.conf
+          chmod 0600 /run/weewx/weewx.conf
         ''}
         ${lib.optionalString cfg.checkConfig ''
           ${weewxPackage}/bin/weectl debug --config=${activeConfigFile} --output=/dev/null
@@ -200,7 +201,6 @@ in
           ]
           ++ cfg.extraArgs
         );
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
         Restart = "on-failure";
