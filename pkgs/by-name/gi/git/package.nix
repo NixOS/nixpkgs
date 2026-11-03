@@ -3,6 +3,7 @@
   lib,
   stdenv,
   buildPackages,
+  autoconf,
   curl,
   openssl,
   zlib-ng,
@@ -123,6 +124,41 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   enableParallelInstalling = true;
 
+  # Update makeFlags with values that need to be computed during the build
+  # before doing more-or-less anything else.  Typically this would be in a
+  # preBuild hook, but because we want to run `make` commands with these values
+  # in earlier phases, we set things up now.
+  prePhases = [ "dynamicMakeFlagPhase" ];
+  dynamicMakeFlagPhase = ''
+    makeFlags+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
+  '';
+
+  # Before running the configure script, we want to generate it with `make
+  # configure`.  This isn't strictly necessary when using an upstream release
+  # tarball, as that includes a pre-generated configure file, but it does no
+  # harm, and is necessary for building from a source repository, e.g. if `src`
+  # is overridden to build from Git's own Git repository.
+  #
+  # Just using the standard Nixpkgs autoreconfHook here isn't good enough: the
+  # Makefile recipe in Git does some additional work.  We could emulate that
+  # additional work in a preAutoreconfHook step to allow us to use
+  # autoreconfHook, but that's of similar complexity to just calling `make`
+  # here.  Further, the Git `INSTALL` documentation specifically documents
+  # using `make` to generate the configure file, so we can treat that as a
+  # supported approach in a way that calling `autoreconf` plus the extra
+  # necessary manual steps wouldn't be.
+  preConfigure = ''
+    # Set up the flags array for make in the same way as for the main build
+    # phase from stdenv.
+    local flagsArray=(
+        ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
+        SHELL="$SHELL"
+    )
+    concatTo flagsArray makeFlags buildFlags
+    echoCmd 'build flags' "''${flagsArray[@]}";
+    make ''${makefile:+-f $makefile} "''${flagsArray[@]}" configure
+  '';
+
   patches = [
     # This patch does two things: (1) use the right name for `docbook2texi',
     # and (2) make sure `gitman.info' isn't produced since it's broken
@@ -163,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    autoconf
     deterministic-host-uname
     gettext
     perlPackages.perl
@@ -229,10 +266,6 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
   ];
-
-  preBuild = ''
-    makeFlags+=( perllibdir=$out/$(perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}') )
-  '';
 
   makeFlags = [
     "prefix=\${out}"
