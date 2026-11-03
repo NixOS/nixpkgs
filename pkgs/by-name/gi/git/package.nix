@@ -67,7 +67,6 @@ assert svnSupport -> perlSupport;
 assert withBreakingChanges -> rustSupport;
 
 let
-  version = "2.56.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -104,16 +103,16 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (
       !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2
     ) "-minimal";
-  inherit version;
+  version = "2.56.1";
 
   src = fetchurl {
     url =
-      if lib.strings.hasInfix "-rc" version then
+      if lib.strings.hasInfix "-rc" finalAttrs.version then
         "https://www.kernel.org/pub/software/scm/git/testing/git-${
-          builtins.replaceStrings [ "-" ] [ "." ] version
+          builtins.replaceStrings [ "-" ] [ "." ] finalAttrs.version
         }.tar.xz"
       else
-        "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+        "https://www.kernel.org/pub/software/scm/git/git-${finalAttrs.version}.tar.xz";
     hash = "sha256-8LC/iSZLm9LhxkA2PnUpZDmJ2nYoFgBHPFB0XNNKYH8=";
   };
 
@@ -676,7 +675,7 @@ stdenv.mkDerivation (finalAttrs: {
       git-svn-version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "git svn --version";
-        version = "git-svn version ${version}";
+        version = "git-svn version ${finalAttrs.version}";
       };
     }
     // tests.fetchgit;
@@ -697,7 +696,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git-scm.com/";
     description = "Distributed version control system";
     license = lib.licenses.gpl2Only;
-    changelog = "https://github.com/git/git/blob/v${version}/Documentation/RelNotes/${version}.adoc";
+    changelog = "https://github.com/git/git/blob/v${finalAttrs.version}/Documentation/RelNotes/${finalAttrs.version}.adoc";
 
     longDescription = ''
       Git, a popular distributed version control system designed to
