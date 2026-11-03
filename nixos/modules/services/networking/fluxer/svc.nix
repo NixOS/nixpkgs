@@ -11,7 +11,6 @@
   defaultPort ? 8090,
 }:
 {
-  pkgs,
   config,
   lib,
   ...
@@ -19,6 +18,7 @@
 let
   inherit (lib) mkIf;
   cfg = config.services.fluxer;
+  fluxer-server = cfg.package;
   hasFluxerUserDef = cfg.${name}.shard ? user && cfg.${name}.shard.user == "fluxer";
   hasUserDef = cfg.${name}.shard ? user && cfg.${name}.shard.user != null;
 in
@@ -71,7 +71,7 @@ in
 
           script = ''
             set -u
-            ${lib.getExe pkgs.fluxer-server.${name}}
+            ${fluxer-server}/bin/fluxer-${name}
           '';
 
           serviceConfig = {
@@ -102,7 +102,7 @@ in
 
           script = ''
             set -u
-            ${lib.getExe pkgs.fluxer-server.${name}}
+            ${fluxer-server}/bin/fluxer-${name}
           '';
 
           serviceConfig = {

@@ -6,13 +6,13 @@
 }:
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 let
   inherit (lib) mkIf;
   cfg = config.services.fluxer;
+  fluxer-server = cfg.package;
 in
 {
   config = {
@@ -47,9 +47,7 @@ in
 
           script = ''
             set -u
-            export PATH=$PATH:${pkgs.gawk}/bin:${pkgs.gnugrep}/bin:${pkgs.coreutils}/bin
-
-            ${lib.getExe pkgs.fluxer-server.gateway}
+            ${fluxer-server}/bin/fluxer-gateway
           '';
 
           serviceConfig = {

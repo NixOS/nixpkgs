@@ -6,13 +6,13 @@
 }:
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 let
   inherit (lib) mkIf;
   cfg = config.services.fluxer;
+  fluxer-server = cfg.package;
 in
 {
   config = {
@@ -39,7 +39,7 @@ in
 
           script = ''
             set -u
-            ${lib.getExe pkgs.fluxer-server.app-proxy}
+            ${fluxer-server}/bin/fluxer-app-proxy
           '';
 
           serviceConfig = {
