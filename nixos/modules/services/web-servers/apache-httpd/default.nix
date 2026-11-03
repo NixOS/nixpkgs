@@ -248,6 +248,8 @@ let
       </VirtualHost>
     '';
 
+  escapeFileName = replaceString "/" "-";
+
   mkVHostCommonConf =
     hostOpts:
     let
@@ -281,8 +283,8 @@ let
     in
     ''
       ${optionalString cfg.logPerVirtualHost ''
-        ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
-        CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
+        ErrorLog ${cfg.logDir}/error-${escapeFileName hostOpts.hostName}.log
+        CustomLog ${cfg.logDir}/access-${escapeFileName hostOpts.hostName}.log ${hostOpts.logFormat}
       ''}
 
       ${optionalString (hostOpts.robotsEntries != "") ''

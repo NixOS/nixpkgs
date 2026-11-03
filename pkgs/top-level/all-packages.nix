@@ -6406,10 +6406,6 @@ with pkgs;
     tk-9_1
     ;
 
-  tpm2-tss = callPackage ../development/libraries/tpm2-tss {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   unixodbcDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
@@ -6937,10 +6933,15 @@ with pkgs;
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit callPackage;
-        directory = ../servers/home-assistant/custom-lovelace-modules;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ../servers/home-assistant/custom-lovelace-modules;
+        };
+
+        aliases = import ../servers/home-assistant/custom-lovelace-modules/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
 

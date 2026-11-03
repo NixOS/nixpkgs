@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
         format-jpg
         format-png
         ;
+      inherit (nixosTests.lomiri) desktop-appinteractions;
     };
     updateScript = gitUpdater { rev-prefix = "v"; };
   };

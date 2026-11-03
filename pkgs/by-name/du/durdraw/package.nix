@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "durdraw";
-  version = "0.31.0";
+  version = "0.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "durdraw";
     repo = "durdraw";
     tag = finalAttrs.version;
-    hash = "sha256-jbyCmqCIWAxirKciqeHMvVcvJKEcKNHHkHHrcEXak7M=";
+    hash = "sha256-aOLpRFxguxZpeV1MkPQzposknDion3Np+izIsYVBcSA=";
   };
 
   build-system = with python3Packages; [ setuptools ];

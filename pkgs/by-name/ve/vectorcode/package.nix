@@ -45,6 +45,9 @@ let
         ];
         dependencies = old.dependencies ++ [
           self.chroma-hnswlib
+          self.fastapi
+          self.posthog
+          self.opentelemetry-instrumentation-fastapi
         ];
 
         # The base package disables additional tests, so explicitly override

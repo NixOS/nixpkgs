@@ -10,20 +10,16 @@
   prefetch-npm-deps,
   rsync,
   stdenv,
-  nodejs_22,
   rustPlatform,
   cacert,
   cargo,
 }:
 let
   electron = electron_44;
-  nodejs = nodejs_22;
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
   version = "19.3.1";
-
-  inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "super-productivity";

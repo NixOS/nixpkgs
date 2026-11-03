@@ -399,6 +399,7 @@ mapAliases {
   b43FirmwareCutter = warnAlias "'b43FirmwareCutter' has been renamed to 'b43-fwcutter'" b43-fwcutter; # Added 2026-02-08
   backlight-auto = throw "'backlight-auto' has been removed as it relies on Zig 0.12 which has been dropped."; # Added 2025-08-22
   badtouch = throw "'badtouch' has been renamed to/replaced by 'authoscope'"; # Converted to throw 2025-10-27
+  balatro-mod-manager = throw "'balatro-mod-manager' has been removed as it was discontinued"; # Added 2026-11-02
   banana-vera = throw "'banana-vera' has been removed as it relies on python3.10"; # Added 2026-02-09
   bandwidth = throw "'bandwidth' has been removed due to lack of maintenance"; # Added 2025-09-01
   banking = saldo; # Added 2025-08-29
@@ -872,6 +873,7 @@ mapAliases {
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
   fastpotify = warnAlias "'fastpotify' has been renamed to 'spotifast'" spotifast; # Added 2026-09-15
+  fauna-shell = throw "'fauna-shell' has been removed as it is not compatible with Node.js 24 or newer."; # Added 2026-11-01
   faust2alsa = throw "'faust2alsa' has been removed as it depends on GTK2, which is deprecated."; # Added 2026-08-08
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
   faustStk = throw "'faustStk' has been renamed to/replaced by 'faustPhysicalModeling'"; # Converted to throw 2025-10-27
