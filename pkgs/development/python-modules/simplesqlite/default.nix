@@ -26,6 +26,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "typepy" ];
+
   dependencies = [
     dataproperty
     mbstrdecoder
