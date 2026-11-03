@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
 
+  # the embedded audio-capture.node has no RUNPATH, so libasound is looked up via the executable's DT_RPATH, not DT_RUNPATH.
+  # LD_LIBRARY_PATH would leak into every subprocess.
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  patchelfFlags = [ "--force-rpath" ];
+
   strictDeps = true;
 
   installPhase = ''
@@ -68,9 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
             fi
           ''} \
         ''
-      }${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
-      ''}--prefix PATH : ${
+      }--prefix PATH : ${
         lib.makeBinPath (
           [
             # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
