@@ -1,0 +1,32 @@
+From 8c6fc1175b4badac48d224d66498b458da5f71ae Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Mon, 2 Nov 2026 19:53:04 -0500
+Subject: [PATCH] dix: Avoid resetting after rejecting the first client
+
+ShouldDisconnectRemainingClients returns true for an empty client list,
+causing a rejected initial connection to reset or terminate the server.
+Return false when there are no authorized clients; CloseDownClient
+already handles the last authorized client disconnecting.
+
+Fixes: e167299f6050 ("xfixes: Add ClientDisconnectMode")
+---
+ dix/dispatch.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/dix/dispatch.c b/dix/dispatch.c
+index eaac39b7c..0d008e82f 100644
+--- a/dix/dispatch.c
++++ b/dix/dispatch.c
+@@ -437,6 +437,12 @@ ShouldDisconnectRemainingClients(void)
+ {
+     int i;
+ 
++    /* Closing the last authorized client already handles the zero-client case.
++     * Rejecting an unauthorized connection must not trigger a reset.
++     */
++    if (nClients == 0)
++        return FALSE;
++
+     for (i = 1; i < currentMaxClients; i++) {
+         if (clients[i]) {
+             if (!XFixesShouldDisconnectClient(clients[i]))

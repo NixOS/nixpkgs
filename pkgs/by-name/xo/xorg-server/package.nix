@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/a10192e7c3237a707e9bb712a566e2f14415dddd.patch";
       hash = "sha256-vtloUZrdtQ9L56KhNy7m3praW9KmeMmwVGM+rX5EmUw=";
     })
+    ./avoid-reset-after-rejected-client.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin/bundle_main.patch
