@@ -6,25 +6,20 @@
   protobuf,
   setuptools,
   zeroconf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "14.0.10";
+  version = "14.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pychromecast";
     tag = version;
-    hash = "sha256-m9rucHSiApT0Xqkf4sjVRehcGGgvbaoGgbT/s3SLxKI=";
+    hash = "sha256-XoJUo/tTicv3jIzhgXovu+EBPVftRutkha4ZfdUWLvw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-       --replace-fail "setuptools>=65.6,<83.0" setuptools \
-       --replace-fail "wheel>=0.37.1,<0.47.0" wheel
-  '';
 
   build-system = [ setuptools ];
 
@@ -34,8 +29,9 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  # no tests available
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pychromecast" ];
 
