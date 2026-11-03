@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-IkwCa+MioL2F3fiUYm3HQOeO2yb+58YQzM9YJ2oILj4=";
-  cargoExtraArgs = "-p nix-weather";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
