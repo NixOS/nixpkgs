@@ -108,6 +108,13 @@ buildPythonPackage (finalAttrs: {
 
     # ModuleNotFoundError: No module named 'livekit'
     "src/mistralai/extra/tests/voice_agents/"
+  ]
+  ++ lib.optionals (lib.versionOlder mcp.version "2.2") [
+    # Upstream requires mcp>=2.2,<3 and these test modules import mcp>=2.2 APIs
+    # (MCPError, mcp.client._transport) that are absent from older versions such
+    # as mcp_1, used by some application scopes (e.g. oterm for fastmcp-slim).
+    "src/mistralai/extra/tests/test_connectors_gateway.py"
+    "src/mistralai/extra/tests/test_mcp_streamable_http.py"
   ];
 
   meta = {
