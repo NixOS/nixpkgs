@@ -1,0 +1,114 @@
+diff --git a/src/collections/lib.rs b/src/collections/lib.rs
+index 22edbb9..aa28c75 100644
+--- a/src/collections/lib.rs
++++ b/src/collections/lib.rs
+@@ -1,6 +1,7 @@
+ //! bun_collections — crate root. Thin re-export hub.
+ 
+ #![feature(
++    core_intrinsics,
+     type_info,
+     adt_const_params,
+     unsized_const_params,
+@@ -8,7 +9,7 @@
+     const_trait_impl,
+     allocator_api
+ )]
+-#![allow(incomplete_features)]
++#![allow(incomplete_features, internal_features)]
+ #![warn(unused_must_use)]
+ 
+ pub mod hive_array;
+diff --git a/src/collections/multi_array_list.rs b/src/collections/multi_array_list.rs
+index 1f53d67..bdf7fa3 100644
+--- a/src/collections/multi_array_list.rs
++++ b/src/collections/multi_array_list.rs
+@@ -47,7 +47,7 @@
+ 
+ use core::alloc::Layout;
+ use core::marker::PhantomData;
+-use core::mem::type_info;
++use core::intrinsics::type_id;
+ use core::mem::{ManuallyDrop, MaybeUninit};
+ use core::ptr::{self, NonNull};
+ use std::alloc::{Allocator, Global};
+@@ -253,7 +253,7 @@ use crate::const_str_eq;
+ 
+ // The reflection methods on `TypeId` are compile-time-only functions: they can
+ // be called from a `const` item or an inline `const { }` block, not from a
+-// `const fn` body. `type_info::of::<F>()` is `TypeId::of` without the `'static`
++// `const fn` body. `type_id::<F>()` is `TypeId::of` without the `'static`
+ // bound — reflected field ids are not `'static`-restricted, and column callers
+ // routinely use lifetime-carrying field types (`&'a [u8]`, `Ref<'a>`).
+ 
+@@ -318,7 +318,7 @@ impl<T> Reflected<T> {
+     /// fields cannot sum past `size_of::<T>()`). A single-variant enum with an
+     /// explicit `#[repr(int)]` still passes; its tag would never be written.
+     const COUNT: usize = {
+-        let id = type_info::of::<T>();
++        let id = type_id::<T>();
+         assert!(
+             id.variants() == 1,
+             "MultiArrayList<T>: T must be a struct with named fields",
+@@ -352,7 +352,7 @@ impl<T> Reflected<T> {
+ 
+     /// `[FieldMeta; COUNT]` in declaration order.
+     const META: [FieldMeta; MAX_FIELDS] = {
+-        let id = type_info::of::<T>();
++        let id = type_id::<T>();
+         let n = Self::COUNT;
+         assert!(
+             n <= MAX_FIELDS,
+@@ -443,7 +443,7 @@ impl<T> Reflected<T> {
+     #[cfg(test)]
+     const fn index_of<const NAME: &'static str>() -> usize {
+         const {
+-            let id = type_info::of::<T>();
++            let id = type_id::<T>();
+             let mut i = 0;
+             while i < Self::COUNT {
+                 if const_str_eq(id.field(0, i).name(), NAME) {
+@@ -466,12 +466,12 @@ impl<T> Reflected<T> {
+     /// rejected.
+     const fn check<const NAME: &'static str, F>() -> usize {
+         const {
+-            let id = type_info::of::<T>();
++            let id = type_id::<T>();
+             let mut i = 0;
+             while i < Self::COUNT {
+                 let f = id.field(0, i);
+                 if const_str_eq(f.name(), NAME) {
+-                    if !(f.type_id() == type_info::of::<F>()) {
++                    if !(f.type_id() == type_id::<F>()) {
+                         assert!(
+                             Self::META[i].size == core::mem::size_of::<F>(),
+                             "MultiArrayList: column type does not match field type",
+diff --git a/src/runtime/cli/lint_js.rs b/src/runtime/cli/lint_js.rs
+index e4a2a09..b6802ce 100644
+--- a/src/runtime/cli/lint_js.rs
++++ b/src/runtime/cli/lint_js.rs
+@@ -407,7 +407,6 @@ fn end_vm(frees: bool) {
+ }
+ 
+ /// Startup state that all VMs share.
+-#[derive(Default)]
+ struct Start {
+     initialize: std::sync::Once,
+     /// Set if the run won't have more than a few VMs. Stays unset if a VM starts before the files are known.
+@@ -415,6 +414,16 @@ struct Start {
+     memory: std::sync::OnceLock<usize>,
+ }
+ 
++impl Default for Start {
++    fn default() -> Self {
++        Self {
++            initialize: std::sync::Once::new(),
++            is_for_few: AtomicBool::new(false),
++            memory: std::sync::OnceLock::new(),
++        }
++    }
++}
++
+ impl Start {
+     /// [`memory_for_engines`]
+     fn memory(&self) -> usize {
