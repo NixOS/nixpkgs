@@ -43,14 +43,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.54";
+  version = "2.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-sAVr3h7c+S30p4SVTmz/cWCKqMlDG+H33vPHIMMlEns=";
+    hash = "sha256-yp1ZqbqSijpOvsueuu1QkeBx9B74ouDOu+ri5VL/zos=";
   };
 
   postPatch = ''
@@ -101,7 +101,6 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # typing correctness, not interesting
-    "test/ext/mypy"
     "test/typing"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
