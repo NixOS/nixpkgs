@@ -44,13 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        fscrypt
-        gocryptfs
-        sshfs
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      fscrypt
+      gocryptfs
+      sshfs
+    ])
   ];
 
   doCheck = true;

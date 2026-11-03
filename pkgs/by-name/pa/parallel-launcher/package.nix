@@ -102,22 +102,25 @@ stdenv.mkDerivation (
     ];
 
     qtWrapperArgs = [
-      "--prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          dosfstools
-          findutils
-          xdg-utils
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [
+        coreutils
+        dosfstools
+        findutils
+        xdg-utils
+      ])
+
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath (
+        [
+          vulkan-loader
         ]
-      }"
-      "--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath (
-          [
-            vulkan-loader
-          ]
-          ++ lib.optional withDiscordRpc discord-rpc
-        )
-      }"
+        ++ lib.optional withDiscordRpc discord-rpc
+      ))
     ];
 
     qmakeFlags = [

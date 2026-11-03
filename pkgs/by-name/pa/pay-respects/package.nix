@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
   version = "0.8.8";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
@@ -27,15 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoBuildFlags = [
-    "-p pay-respects"
+    "--package=pay-respects"
   ]
-  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
-  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+  ++ lib.optional withRuntimeRules "--package=pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "--package=pay-respects-module-request-ai";
   cargoTestFlags = [
-    "-p pay-respects"
+    "--package=pay-respects"
   ]
-  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
-  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+  ++ lib.optional withRuntimeRules "--package=pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "--package=pay-respects-module-request-ai";
 
   nativeBuildInputs = [ installShellFiles ];
 

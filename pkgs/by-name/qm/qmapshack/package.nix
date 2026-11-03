@@ -50,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        gdal
-        routino
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      gdal
+      routino
+    ])
   ];
 
   meta = {

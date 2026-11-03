@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--set-default LEOCAD_LIB ${parts}"
+    "--set-default"
+    "LEOCAD_LIB"
+    parts
   ];
 
   passthru = {

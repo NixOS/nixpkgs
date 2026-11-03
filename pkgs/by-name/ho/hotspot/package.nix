@@ -64,12 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        perf
-        binutils
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      perf
+      binutils
+    ])
   ];
 
   preFixup = ''

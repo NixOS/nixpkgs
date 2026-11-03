@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     qt6.qtbase
     qt6.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtdeclarative
 
-    kdePackages.extra-cmake-modules
     kdePackages.kcoreaddons
     kdePackages.ki18n
     kdePackages.kirigami

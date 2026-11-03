@@ -61,8 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DUSE_STATIC_MPVQT=OFF";
 
   qtWrapperArgs = [
-    "--set QT_STYLE_OVERRIDE Fusion"
-    "--set NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
+    "--set"
+    "QT_STYLE_OVERRIDE"
+    "Fusion"
+
+    "--set"
+    "NIX_SSL_CERT_FILE"
+    "${cacert}/etc/ssl/certs/ca-bundle.crt"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
