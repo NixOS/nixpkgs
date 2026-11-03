@@ -14801,10 +14801,10 @@ with self;
 
   Furl = buildPerlModule {
     pname = "Furl";
-    version = "3.14";
+    version = "3.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Furl-3.14.tar.gz";
-      hash = "sha256-Nd29iIDXHxniAkM+F2H9EXc4XmML9QaFvEi2t6y4V7k=";
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Furl-3.15.tar.gz";
+      hash = "sha256-3HfJVVkzaza7gjjfwQ1A3YEfxjwwbzM7g/AXmwOIrjE=";
     };
     propagatedBuildInputs = [
       ClassAccessorLite
