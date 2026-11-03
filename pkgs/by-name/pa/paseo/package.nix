@@ -7,7 +7,7 @@
   libuv,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs_26,
   python3,
   stdenv,
 }:
@@ -26,9 +26,10 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-gtmTf6gbCczT18jk4ZYrNhcW3b6it1yVCnvZqa6gOsA=";
   };
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_26;
 
-  npmDepsHash = "sha256-6C4Rjh0mRVrC9akBVGK0NZaCaLJhwKObT7HrgPmcvyw=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-uIw3h6ObE0ojmKDFzZlNJjGyxHUPYXN0xKLjlcrrIws=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -107,6 +108,7 @@ buildNpmPackage (finalAttrs: {
         meta
         nodejs
         npmDeps
+        npmDepsFetcherVersion
         src
         version
         ;

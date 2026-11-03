@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-65ImwbtYh07BeztkXd/wbiYMTFRg8yYRmJcrLyjU1V0=";
+    hash = "sha256-2EMl8aYmH5mIiKagID5Hl4xOVQ1tcI9HQC/mhB5DqlU=";
   };
 
   build-system = [ setuptools ];
@@ -87,21 +87,28 @@ buildPythonPackage (finalAttrs: {
     "test_LabelAccuracyEvaluator"
     "test_ParaphraseMiningEvaluator"
     "test_TripletEvaluator"
+    "test_binary_classification_evaluator_csv_columns_are_aligned"
     "test_cmnrl_same_grad"
+    "test_csv_output_has_one_line_per_row"
     "test_default_weights_when_none"
     "test_dense_load_and_save_in_other_precisions"
     "test_dimension_exceeds_model_dimension_raises_error"
     "test_dimensions_sorted_descending"
+    "test_embedding_similarity_evaluator_csv_columns_are_aligned"
+    "test_embedding_similarity_evaluator_precisions"
     "test_empty_matryoshka_dims_raises_error"
     "test_encode_document_with_lambda_pooling"
     "test_encode_document_with_pooling_kwarg"
     "test_encode_document_with_pooling_shrinks_token_counts"
+    "test_explicit_score_functions_survive_reuse"
     "test_forward"
+    "test_hf_tokenizer_preprocess_returns_token_id_lists"
     "test_initialization_with_embedding_dim"
     "test_initialization_with_embedding_weights"
     "test_loading_model2vec"
     "test_metrics_are_independent_of_corpus_chunk_size"
     "test_mine_hard_negatives_with_prompt"
+    "test_mismatched_pairs_still_count_as_wrong"
     "test_model_card_base"
     "test_model_card_renders_query_and_document_lengths"
     "test_model_card_reuse"
@@ -111,6 +118,7 @@ buildPythonPackage (finalAttrs: {
     "test_negative_dimension_raises_error"
     "test_pairwise_angle_sim_even_and_odd_sparse_embeddings"
     "test_paraphrase_mining"
+    "test_pooling_encode_and_saved_pipeline"
     "test_pooling_pools_queries_when_opted_in"
     "test_pooling_prompt_attention_mask_respects_include_prompt"
     "test_pooling_prompt_exclusion_is_idempotent"
@@ -119,6 +127,9 @@ buildPythonPackage (finalAttrs: {
     "test_pretrained_model"
     "test_real_query_token_slice_with_query_expansion"
     "test_real_query_token_slice_with_query_prompt"
+    "test_repeated_sentences_count_as_correct_matches"
+    "test_reranking_evaluator_string_documents"
+    "test_reused_evaluator_follows_the_model_similarity"
     "test_router_as_middle_module"
     "test_router_backwards_compatibility"
     "test_router_encode"
@@ -138,6 +149,8 @@ buildPythonPackage (finalAttrs: {
     "test_trainer"
     "test_trainer_invalid_column_names"
     "test_trainer_multi_dataset_errors"
+    "test_triplet_evaluator_csv_columns_are_aligned"
+    "test_triplet_evaluator_main_similarity_function_is_evaluated"
     "test_unsupported_modality"
     "test_valid_initialization_no_warnings"
     "test_valid_initialization_with_weights"
@@ -169,11 +182,31 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
     # RuntimeError: Failed to initialize cpuinfo!
+    "test_batch_triplet_losses_keep_finite_loss_and_gradients"
+    "test_cosent_low_precision_scores_use_float32_reduction"
+    "test_hierarchical_batched_normalization_without_pooling"
+    "test_hierarchical_normalization_without_merging"
+    "test_hierarchical_normalization_zero_centroid"
     "test_hps_collapses_spurious_ties"
+    "test_load_model2vec_mapping_and_weights"
+    "test_load_model2vec_small_weights"
     "test_low_precision_scores_match_float32_reference"
+    "test_model_dtypes"
+    "test_normalize_sparse_embeddings_backward"
+    "test_normalize_sparse_embeddings_half_precision"
+    "test_normalize_sparse_embeddings_preserves_dtype"
     "test_pairwise_scores_are_float32_for_low_precision_inputs"
+    "test_pooling_long_sequences_preserve_precision"
+    "test_pooling_mean_external_normalizer_dtype"
     "test_pooling_supports_low_precision_dtypes"
+    "test_pooling_weightedmean_low_precision"
+    "test_scalar_quantize_float16_tensor"
     "test_scores_are_float32_for_low_precision_inputs"
+    "test_semantic_search_cos_sim_matches_generic_score_function"
+    "test_triplet_distance_matches_full_precision"
+
+    # AssertionError: Tensor-likes are not close!
+    "test_word_embeddings_encode_empty_tokens_batch_invariance"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # These sparse tests also time out, on x86_64-darwin.
@@ -219,6 +252,13 @@ buildPythonPackage (finalAttrs: {
     "tests/sparse_encoder/test_opensearch_models.py"
     "tests/sparse_encoder/test_pretrained.py"
     "tests/util/test_hard_negatives.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Distributed tests can't bind to localhost in the sandbox:
+    # PermissionError: [Errno 1] Operation not permitted
+    # RuntimeError: Cannot resolve 127.0.0.1 to a (local) address
+    "tests/base/test_distributed_evaluation.py"
+    "tests/base/test_gradcache_distributed.py"
   ];
 
   meta = {

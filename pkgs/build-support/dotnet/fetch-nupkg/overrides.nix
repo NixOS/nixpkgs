@@ -7,6 +7,10 @@
   libsm,
   libx11,
   libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
   stdenv,
   writeText,
 }:
@@ -60,7 +64,11 @@
             "${lib.getLib libice}" \
             "${lib.getLib libsm}" \
             "${lib.getLib libx11}" \
-            "${lib.getLib libxcursor}"
+            "${lib.getLib libxcursor}" \
+            "${lib.getLib libxext}" \
+            "${lib.getLib libxfixes}" \
+            "${lib.getLib libxi}" \
+            "${lib.getLib libxrandr}"
         '';
       }
     );

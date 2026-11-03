@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ]
   ++ lib.optionals enablePython [
+    python3Packages.build
     python3Packages.pip
     python3Packages.setuptools
     python3Packages.wheel

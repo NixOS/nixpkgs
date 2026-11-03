@@ -9,6 +9,7 @@
   jinja2,
   markdown2,
   poetry-core,
+  pyprojectVersionPatchHook,
   pygments,
   pytestCheckHook,
   pytz,
@@ -29,6 +30,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     click

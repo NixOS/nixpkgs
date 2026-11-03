@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.4.3";
+  version = "1.0.0";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "saschagrunert";
     repo = "kubernix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFGxtilivR/131dmbbjsXcnQ9Yw/mXws+JC0jSHKI6M=";
+    hash = "sha256-guXoQ09tZ/qOEQomlIODED2f01DDFSQyyDNl7vLzahI=";
   };
 
-  cargoHash = "sha256-WPJ7EvaAbZ6hFXWnkFs8x5nzzcYTkinWRPYB4Fo5gbw=";
+  cargoHash = "sha256-AYWbXxCdtkKePmHTj6MkbLMsW060eB5Ym/o1Hus4FDw=";
 
   # Tests require network access
   doCheck = false;

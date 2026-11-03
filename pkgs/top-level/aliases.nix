@@ -398,6 +398,7 @@ mapAliases {
   b43FirmwareCutter = warnAlias "'b43FirmwareCutter' has been renamed to 'b43-fwcutter'" b43-fwcutter; # Added 2026-02-08
   backlight-auto = throw "'backlight-auto' has been removed as it relies on Zig 0.12 which has been dropped."; # Added 2025-08-22
   badtouch = throw "'badtouch' has been renamed to/replaced by 'authoscope'"; # Converted to throw 2025-10-27
+  balatro-mod-manager = throw "'balatro-mod-manager' has been removed as it was discontinued"; # Added 2026-11-02
   banana-vera = throw "'banana-vera' has been removed as it relies on python3.10"; # Added 2026-02-09
   bandwidth = throw "'bandwidth' has been removed due to lack of maintenance"; # Added 2025-09-01
   banking = saldo; # Added 2025-08-29
@@ -871,6 +872,7 @@ mapAliases {
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-27
   fastpotify = warnAlias "'fastpotify' has been renamed to 'spotifast'" spotifast; # Added 2026-09-15
+  fauna-shell = throw "'fauna-shell' has been removed as it is not compatible with Node.js 24 or newer."; # Added 2026-11-01
   faust2alsa = throw "'faust2alsa' has been removed as it depends on GTK2, which is deprecated."; # Added 2026-08-08
   faustPhysicalModeling = warnAlias "'faustPhysicalModeling' has been renamed to 'faust-physicalmodeling'" faust-physicalmodeling; # Added 2026-02-08
   faustStk = throw "'faustStk' has been renamed to/replaced by 'faustPhysicalModeling'"; # Converted to throw 2025-10-27
@@ -1323,6 +1325,7 @@ mapAliases {
   jitsi = throw "'jitsi' has been removed as it relies on gtk2 libraries"; # Added 2026-07-24
   jmtpfs = throw "'jmtpfs' has been removed, as it is unmaintained"; # Added 2026-06-06
   joplin = joplin-cli; # Added 2025-11-03
+  journalist = throw "'journalist' has been removed due to being archived upstream."; # Added 2026-11-01
   jp-zip-codes = throw "'jp-zip-codes' has been removed as there are no more packages that depend on it"; # Added 2026-06-14
   jpegrescan = throw "'jpegrescan' has been removed due to being archived upstream. Use mozjpeg instead."; # Added 2026-09-18
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
@@ -1354,6 +1357,7 @@ mapAliases {
   keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   keeweb = throw "'keeweb' has been removed because it was using an EOL electron version"; # Added 2026-09-17
+  kega-fusion = throw "'kega-fusion' has been removed, as it is unmaintained and depends on GTK 2. Consider using `mednafen` instead."; # Added 2026-11-01
   keydb = throw "'keydb' has been removed as it was broken, vulnerable, and unmaintained upstream"; # Added 2025-11-08
   kgraphviewer = throw "'kgraphviewer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
@@ -2849,7 +2853,7 @@ mapAliases {
   wasabiwallet = throw "'wasabiwallet' has been removed as it vendored ancient openssl and was unmaintained in nixpkgs. Consider using the upstream flake instead."; # Added 2026-10-16
   wasistlos = throw "'wasistlos' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Added 2026-04-13
   wasm3 = throw "'wasm3' has been removed as it is unmaintained upstream and has many known vulnerabilities"; # Added 2026-06-03
-  wasm-bindgen-cli = wasm-bindgen-cli_0_2_129;
+  wasm-bindgen-cli = wasm-bindgen-cli_0_2_130;
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wasynth = throw "'wasynth' has been removed as it was discontinued upstream."; # Added 2026-09-04
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24

@@ -1108,8 +1108,6 @@ with pkgs;
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
-
   mame-tools = lib.addMetaAttrs {
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
@@ -1637,10 +1635,6 @@ with pkgs;
   roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
-
-  mcelog = callPackage ../os-specific/linux/mcelog {
-    util-linux = util-linuxMinimal;
-  };
 
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
@@ -6435,10 +6429,6 @@ with pkgs;
     tk-9_1
     ;
 
-  tpm2-tss = callPackage ../development/libraries/tpm2-tss {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   unixodbcDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
@@ -6966,10 +6956,15 @@ with pkgs;
   home-assistant-custom-lovelace-modules = recurseIntoAttrs (
     lib.makeExtensible (
       self:
-      lib.packagesFromDirectoryRecursive {
-        inherit callPackage;
-        directory = ../servers/home-assistant/custom-lovelace-modules;
-      }
+      let
+        packages = lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ../servers/home-assistant/custom-lovelace-modules;
+        };
+
+        aliases = import ../servers/home-assistant/custom-lovelace-modules/aliases.nix self;
+      in
+      packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
 
@@ -7005,14 +7000,20 @@ with pkgs;
       kanidm_1_11 = callPackage ../servers/kanidm/1_11.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_11;
       };
+      kanidm_1_12 = callPackage ../servers/kanidm/1_12.nix {
+        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_12;
+      };
 
       kanidmWithSecretProvisioning_1_10 = kanidm_1_10.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_11 = kanidm_1_11.override { enableSecretProvisioning = true; };
+      kanidmWithSecretProvisioning_1_12 = kanidm_1_12.override { enableSecretProvisioning = true; };
     })
     kanidm_1_10
     kanidm_1_11
+    kanidm_1_12
     kanidmWithSecretProvisioning_1_10
     kanidmWithSecretProvisioning_1_11
+    kanidmWithSecretProvisioning_1_12
     ;
 
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
@@ -9211,6 +9212,8 @@ with pkgs;
 
   zathuraPkgs = recurseIntoAttrs (callPackage ../applications/misc/zathura { });
   zathura = zathuraPkgs.zathuraWrapper;
+  zathura_mupdf = zathura.override { useMupdf = true; };
+  zathura_poppler = zathura.override { useMupdf = false; };
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
@@ -9322,9 +9325,9 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
-  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
+  dwarf-fortress-packages = recurseIntoAttrs (callPackage ../by-name/dw/dwarf-fortress { });
 
-  inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
+  inherit (dwarf-fortress-packages) dwarf-fortress-full dwarf-therapist;
 
   dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 

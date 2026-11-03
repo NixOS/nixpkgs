@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-troveclient";
-  version = "8.10.0";
+  version = "8.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-troveclient";
     tag = finalAttrs.version;
-    hash = "sha256-ayNRhT337eG6NJM2ugAqiH6st+2s4gySIeNQ4jJb8nU=";
+    hash = "sha256-myvuNPxizql6q2FMGo2n1tp0jlzsdxQYx4k3vMZ1Im8=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)

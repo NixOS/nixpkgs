@@ -2411,6 +2411,8 @@ self: super: with self; {
 
   better-exceptions = callPackage ../development/python-modules/better-exceptions { };
 
+  better-optimize = callPackage ../development/python-modules/better-optimize { };
+
   betterproto = callPackage ../development/python-modules/betterproto { };
 
   betterproto-rust-codec = callPackage ../development/python-modules/betterproto-rust-codec { };
@@ -2612,6 +2614,8 @@ self: super: with self; {
   bnunicodenormalizer = callPackage ../development/python-modules/bnunicodenormalizer { };
 
   boa-api = callPackage ../development/python-modules/boa-api { };
+
+  bodhi-client = callPackage ../development/python-modules/bodhi-client { };
 
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
@@ -5067,6 +5071,8 @@ self: super: with self; {
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
 
   dlinfo = callPackage ../development/python-modules/dlinfo { };
+
+  dllist = callPackage ../development/python-modules/dllist { };
 
   dllogger = callPackage ../development/python-modules/dllogger { };
 
@@ -9331,6 +9337,8 @@ self: super: with self; {
 
   knx-telegram-store = callPackage ../development/python-modules/knx-telegram-store { };
 
+  koji = callPackage ../development/python-modules/koji { };
+
   kokoro = callPackage ../development/python-modules/kokoro { };
 
   kombu = callPackage ../development/python-modules/kombu { };
@@ -12847,6 +12855,10 @@ self: super: with self; {
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
   opentelemetry-distro = callPackage ../development/python-modules/opentelemetry-distro { };
+
+  opentelemetry-exporter-http-transport =
+    callPackage ../development/python-modules/opentelemetry-exporter-http-transport
+      { };
 
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
@@ -17245,7 +17257,9 @@ self: super: with self; {
 
   python-mpd2 = callPackage ../development/python-modules/python-mpd2 { };
 
-  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
+  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc {
+    inherit (pkgs) mpv;
+  };
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
 
@@ -17416,8 +17430,6 @@ self: super: with self; {
   python-tsp = callPackage ../development/python-modules/python-tsp { };
 
   python-twitch-client = callPackage ../development/python-modules/python-twitch-client { };
-
-  python-twitter = callPackage ../development/python-modules/python-twitter { };
 
   python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
 
@@ -18561,6 +18573,8 @@ self: super: with self; {
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
 
   rpi-lgpio = callPackage ../development/python-modules/rpi-lgpio { };
+
+  rpkg = callPackage ../development/python-modules/rpkg { };
 
   rplcd = callPackage ../development/python-modules/rplcd { };
 
@@ -21112,6 +21126,12 @@ self: super: with self; {
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
+  torch-tensorrt = callPackage ../development/python-modules/torch-tensorrt {
+    torch-tensorrt = pkgs.torch-tensorrt.override {
+      python3Packages = self;
+    };
+  };
+
   torchWithCuda = self.torch.override {
     triton = self.triton-cuda;
     cudaSupport = true;
@@ -23049,7 +23069,7 @@ self: super: with self; {
 
   xmpppy = callPackage ../development/python-modules/xmpppy { };
 
-  xnatpy = callPackage ../development/python-modules/xnatpy { };
+  xnat = callPackage ../development/python-modules/xnat { };
 
   xnd = callPackage ../development/python-modules/xnd { };
 

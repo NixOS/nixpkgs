@@ -53,11 +53,11 @@ in
   );
   julia_113-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.13.2";
+      version = "1.13.3";
       sha256 = {
-        x86_64-linux = "01vxs4ckil94q8n2jpdx7n9lm852bf8lqh4jvmgmc2mbj2cgrk9f";
-        aarch64-linux = "0a3ich81hyizibfrq18dhgq1kiyyhxs3jdi4x1rb4hid2riaqrmk";
-        aarch64-darwin = "11q3401j5nqdnk711z2inpra61705bl6k85ln0v100k5mdsrfc33";
+        x86_64-linux = "1r33bkw1657h37nns4d1lk597h6sypi7jxsfa2ivab1k815wnqaw";
+        aarch64-linux = "00yz3lbsz16xzjjh33dcizzvgag3bn9ddbs0pn4q3yvdxqxhbsww";
+        aarch64-darwin = "0r9pmp20lkq8z1z5sw5z65d6d4wrq0gzlhwb7sm95cxw1x2yiw5r";
       };
     }) { }
   );
@@ -141,8 +141,8 @@ in
   julia_113 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.13.2";
-        hash = "sha256-M3A6vzCiP13Sfk4a23/GbHwDrpiWE3bpwEZhyE04kik=";
+        version = "1.13.3";
+        hash = "sha256-E8TNBnli1sgf6mAIGSW+nimSpCBCicww3uPd2Wks8xs=";
         patches = [
           # Upstream only sets CMAKE_BUILD_RPATH on Darwin (JuliaLang/julia#63103).
           # On Linux in the Nix sandbox, intermediate build tools like llvm-min-tblgen

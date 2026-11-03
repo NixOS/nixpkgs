@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "iniparse";
-  version = "0.5";
+  version = "0.5.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ky5SOdUm56y1BAF7twe+ZwGaxCimkyNo5oUWkQk6qEI=";
+    hash = "sha256-T0/QCdSeQpCnIem8VxZxnpp2fJx/3D1+vEA+8zedYSk=";
   };
 
   checkPhase = ''

@@ -31,8 +31,8 @@
   },
   {
     "pname": "diskann-garnet",
-    "version": "4.0.4",
-    "hash": "sha256-R1MB/9HGe9clojNjFnfQKsUe7Vf81iuGbo4FQVNf1Uo="
+    "version": "8.0.0",
+    "hash": "sha256-KliiKj8atdH/71Dgh+hK2odKxZuCqUT4/gjX68aBoUY="
   },
   {
     "pname": "KeraLua",
@@ -180,11 +180,6 @@
     "hash": "sha256-ZWVhuw3IRk9rZXkXERhesEET2KMMzHjUH/HDI288WK8="
   },
   {
-    "pname": "System.Diagnostics.DiagnosticSource",
-    "version": "10.0.5",
-    "hash": "sha256-yVXEbpbQRF+B4oYUJEWUgMUmOvZTFZzK3CWrr9pynVY="
-  },
-  {
     "pname": "System.IdentityModel.Tokens.Jwt",
     "version": "8.17.0",
     "hash": "sha256-DmAmWVosgwWlKGJm/0wFVbeV19YD2rT+gp8utjY0n0Q="
@@ -193,11 +188,6 @@
     "pname": "System.IO.Hashing",
     "version": "10.0.1",
     "hash": "sha256-k8EHcxnLitXo0CxoDZAxFmUlJJdKZVsZJ2+9zDMYB94="
-  },
-  {
-    "pname": "System.IO.Pipelines",
-    "version": "10.0.5",
-    "hash": "sha256-zV+G9x2d3ugEaq7ClmZbMhQe0901hxj0WtleEEglpcE="
   },
   {
     "pname": "System.Memory.Data",
@@ -213,15 +203,5 @@
     "pname": "System.Security.Cryptography.ProtectedData",
     "version": "4.5.0",
     "hash": "sha256-Z+X1Z2lErLL7Ynt2jFszku6/IgrngO3V1bSfZTBiFIc="
-  },
-  {
-    "pname": "System.Text.Encodings.Web",
-    "version": "10.0.5",
-    "hash": "sha256-8dXorb9rjnaqD8EpGlyHkvKrwgcxZblQdzeLYDdk6lw="
-  },
-  {
-    "pname": "System.Text.Json",
-    "version": "10.0.5",
-    "hash": "sha256-Phy+3UAOvqk8U0yeCSpr4n6H7JjKMTHdrHlV2bZfiUU="
   }
 ]

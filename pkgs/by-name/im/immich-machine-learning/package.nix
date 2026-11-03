@@ -27,6 +27,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "huggingface-hub"
     "onnx"
   ];
 

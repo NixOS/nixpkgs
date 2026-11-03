@@ -253,7 +253,6 @@ buildFHSEnv {
       SDL2
       curl
       graphite2
-      gtk2
       gtk3
       udev
       ncurses

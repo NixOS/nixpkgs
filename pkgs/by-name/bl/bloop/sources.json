@@ -1,6 +1,6 @@
 {
   "repo": "scalacenter/bloop",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "completions": {
     "bash": {
       "asset": "bash-completions",
@@ -18,11 +18,11 @@
   "assets": {
     "aarch64-darwin": {
       "asset": "bloop-aarch64-apple-darwin",
-      "hash": "sha256-Y3jY50vaJufHNUm4msSbJRrtLT2eB9fSlrwfm8qjem0="
+      "hash": "sha256-WtTWaErgffqT3aDI8YFRyLpZufflvUSPN0+Z6LNZ5AI="
     },
     "x86_64-linux": {
       "asset": "bloop-x86_64-pc-linux",
-      "hash": "sha256-p9bUqeCMxH1A9JAyObTgPagcJAE4HMDhZFtQQLEjWXE="
+      "hash": "sha256-Dchau/s2v0x/W4qO8HscsGe7ipwWatZaLzJFCyakteI="
     }
   }
 }

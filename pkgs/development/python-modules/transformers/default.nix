@@ -84,7 +84,6 @@
   gitpython,
   urllib3,
   libcst,
-  tomli,
   # opentelemetry
   opentelemetry-api,
   opentelemetry-exporter-otlp,
@@ -93,7 +92,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.17.0";
+  version = "5.22.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -101,7 +100,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zPVsX4i4Qe7yMW3gmTysPsIvXZ4cQWU0gITA/1vSlEw=";
+    hash = "sha256-mAo8RhoEWOkCI7XD5LDdN8fiptAN2ljWwd1RR6MGLyo=";
   };
 
   build-system = [ setuptools ];
@@ -191,7 +190,6 @@ buildPythonPackage (finalAttrs: {
       urllib3
       libcst
       rich
-      tomli
     ];
     docs = [
       # hf-docs-builder

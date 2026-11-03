@@ -3,7 +3,7 @@
   fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
-  nodejs_22,
+  nodejs,
   npmHooks,
   python3,
   templ,
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
     templ

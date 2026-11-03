@@ -3,9 +3,9 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_9,
   makeBinaryWrapper,
-  openjdk21,
+  openjdk25,
   unzip,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,9 +18,11 @@
 }:
 
 let
+  gradle = gradle_9;
+  openjdk = openjdk25;
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "12.1.4";
+  version = "12.2";
 
   isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
@@ -30,7 +32,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-EeB3wHE2fbGhvC9Aik83ekGoeXxaA5ZWBSvRi9qLRQc=";
+    hash = "sha256-cShsTAyn96ChXr776ViQ8ij7ddx53F/YXuu4XVdbHW4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -125,13 +127,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # fallback to ipv4 during build on darwin to ensure match with sandbox
+  # profile rule
+  #  https://github.com/anthropics/sandbox-runtime/blob/bcad38810efcc2b7342bbc6ec26d15b7bbbabcfb/src/sandbox/macos-sandbox-utils.ts#L1098-L1115
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
+
   mitmCache = gradle.fetchDeps {
     inherit pname;
     data = ./deps.json;
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${openjdk21}"
+    "-Dorg.gradle.java.home=${openjdk}"
   ]
   ++ lib.optionals isMacArm64 [
     # For some reason I haven't been able to figure out yet, ghidra builds for
@@ -148,6 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
     gradle -I gradle/support/fetchDependencies.gradle
   '';
@@ -186,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk ]}
   '';
 
   passthru = {
@@ -219,6 +230,5 @@ stdenv.mkDerivation (finalAttrs: {
       roblabla
       vringar
     ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

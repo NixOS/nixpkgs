@@ -6951,6 +6951,7 @@ self: {
       ];
       description = "Utility functions for using the chart library with GTK";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -7107,6 +7108,7 @@ self: {
       ];
       description = "Tests of the Charts library";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "chart-harness";
     }
   ) { };
@@ -18310,6 +18312,7 @@ self: {
       description = "HFuse is a binding for the Linux FUSE library";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      hydraPlatforms = lib.platforms.none;
       broken = true;
     }
   ) { inherit (pkgs) fuse; };
@@ -83667,6 +83670,7 @@ self: {
       ];
       description = "Automatic Rule-Based Time Tracker";
       license = lib.licenses.gpl2Only;
+      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.rvl ];
     }
   ) { };
@@ -112653,6 +112657,7 @@ self: {
       ];
       description = "A lousy Prelude replacement by a lousy dude";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -122124,6 +122129,7 @@ self: {
       ];
       description = "Bugsnag error reporter for Haskell";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -122307,6 +122313,7 @@ self: {
       ];
       description = "WAI integration for Bugsnag error reporting for Haskell";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -122338,6 +122345,7 @@ self: {
       ];
       description = "Yesod integration for Bugsnag error reporting for Haskell";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -131850,6 +131858,7 @@ self: {
       ];
       description = "A template for building new GUI applications using GTK and Cairo";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "cairo-appbase";
     }
   ) { };
@@ -178988,6 +178997,7 @@ self: {
       ];
       description = "A simple HTTP server framework";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -198339,6 +198349,7 @@ self: {
       ];
       description = "Backend for rendering diagrams directly to GTK windows";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -234833,6 +234844,7 @@ self: {
       ];
       description = "Library for producing fake data";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -240726,6 +240738,7 @@ self: {
       ];
       description = "Takes a Haskell source-code file and outputs its modules";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "file-modules";
     }
   ) { };
@@ -242650,6 +242663,7 @@ self: {
       ];
       description = "A simple HTTP server framework";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -266417,6 +266431,7 @@ self: {
       ];
       description = "Display GHC's core and assembly output in a pager";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "ghc-core";
     }
   ) { };
@@ -295560,6 +295575,7 @@ self: {
       libraryPkgconfigDepends = [ gtk2 ];
       description = "Binding to the Gtk+ graphical user interface library";
       license = lib.meta.getLicenseFromSpdxId "LGPL-2.1-only";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { inherit (pkgs) gtk2; };
 
@@ -295616,6 +295632,7 @@ self: {
       ];
       description = "A simple custom form widget for gtk which allows inputing of JSON values";
       license = lib.licenses.gpl3Only;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -295769,6 +295786,7 @@ self: {
       ];
       description = "A simple custom form widget for gtk which allows single LOC creation/updating of list views";
       license = lib.licenses.gpl3Only;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -295916,6 +295934,7 @@ self: {
       ];
       description = "A simple custom form widget for gtk which allows single LOC creation/updating of toggle button lists";
       license = lib.licenses.gpl3Only;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -327146,6 +327165,7 @@ self: {
       ];
       description = "Easily convert between latitude/longitude, UTM and OSGB";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "hcoord-exe";
     }
   ) { };
@@ -328672,6 +328692,7 @@ self: {
       testToolDepends = [ hspec-discover ];
       description = "License Header Manager";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "headroom";
     }
   ) { };
@@ -329098,6 +329119,7 @@ self: {
       ];
       description = "Compression and decompression using heatshrink";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -329811,6 +329833,7 @@ self: {
       ];
       description = "Use 'fakedata' with 'hedgehog'";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -339757,6 +339780,7 @@ self: {
       ];
       description = "source code highlighting";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -355016,6 +355040,7 @@ self: {
       ];
       description = "Ensure the code coverage is above configured thresholds";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "hpc-threshold";
     }
   ) { };
@@ -359444,6 +359469,7 @@ self: {
       ];
       description = "OpenTelemetry instrumentation for persistent-mysql";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -376059,6 +376085,7 @@ self: {
       executableHaskellDepends = [ base ];
       description = "Tracking http redirects";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "http-trace";
     }
   ) { };
@@ -393539,6 +393566,7 @@ self: {
       ];
       description = "Indian Language Font Converter";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -411222,6 +411250,7 @@ self: {
       ];
       description = "Manage users in MariaDB >= 10.1.1";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "juandelacosa";
     }
   ) { };
@@ -420859,6 +420888,7 @@ self: {
       testToolDepends = [ hspec-discover ];
       description = "Krank checks issue tracker link status in your source code";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "krank";
       maintainers = [ lib.maintainers.sternenseemann ];
     }
@@ -422936,6 +422966,7 @@ self: {
       ];
       description = "Lambdabot is a development tool and advanced IRC bot";
       license = "GPL";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "lambdabot";
     }
   ) { };
@@ -423250,6 +423281,7 @@ self: {
       ];
       description = "Novelty plugins for Lambdabot";
       license = "GPL";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -433090,6 +433122,7 @@ self: {
       ];
       description = "A lensy interface to regular expressions";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -435912,6 +435945,7 @@ self: {
       librarySystemDepends = [ libnotify ];
       description = "Bindings to libnotify library";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { inherit (pkgs) libnotify; };
 
@@ -447604,6 +447638,7 @@ self: {
       ];
       description = "Import, export etc. for TPTP, a syntax for first-order logic";
       license = "GPL";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -466212,6 +466247,7 @@ self: {
       ];
       description = "A Microformats 2 parser";
       license = lib.licenses.publicDomain;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -470149,6 +470185,7 @@ self: {
       ];
       description = "fortune-mod clone";
       license = lib.meta.getLicenseFromSpdxId "MIT";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -490289,6 +490326,7 @@ self: {
       ];
       description = "Using MySQL to store id-to-json tables";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "mysql-json-table-test";
     }
   ) { };
@@ -490456,6 +490494,7 @@ self: {
       ];
       description = "A mid-level MySQL client library";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -493183,6 +493222,7 @@ self: {
       ];
       description = "CPU load and memory usage indicators for i3bar";
       license = lib.licenses.asl20;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "nc-indicators";
     }
   ) { };
@@ -519525,6 +519565,7 @@ self: {
       ];
       description = "Show keys pressed with an on-screen display (Linux only)";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "osdkeys";
     }
   ) { };
@@ -531409,6 +531450,7 @@ self: {
       ];
       description = "A regexp (regex) library on top of pcre-light you can actually use";
       license = lib.licenses.publicDomain;
+      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.mpscholten ];
     }
   ) { };
@@ -531431,6 +531473,7 @@ self: {
       ];
       description = "Nicer interface to regex-pcre";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -531464,6 +531507,8 @@ self: {
       ];
       description = "Portable regex library for Perl 5 compatible regular expressions";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 
@@ -535339,6 +535384,7 @@ self: {
       ];
       description = "Backend for the persistent library using MySQL database server";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -538880,6 +538926,7 @@ self: {
       testHaskellDepends = [ base ];
       description = "Library for checking if a given link is in a phishtank json file";
       license = lib.licenses.gpl3Only;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -574846,6 +574893,7 @@ self: {
       ];
       description = "Pure Haskell QR encoder library and command line tool";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "cqr";
     }
   ) { };
@@ -578074,6 +578122,7 @@ self: {
       ];
       description = "Helper to build generators with Text.StringRandom";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -579873,6 +579922,7 @@ self: {
         warp
       ];
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "r3x-haskell-sdk-exe";
     }
   ) { };
@@ -592034,6 +592084,7 @@ self: {
       ];
       description = "sugar for regex-pcre";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -592277,6 +592328,8 @@ self: {
       libraryPkgconfigDepends = [ pcre ];
       description = "PCRE Backend for \"Text.Regex\" (regex-base)";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
   ) { pcre = null; };
 
@@ -600202,6 +600255,7 @@ self: {
       ];
       description = "A quasi-quoter for typeful results of regex captures";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -619504,6 +619558,7 @@ self: {
       testToolDepends = [ hspec-discover ];
       description = "Composable status line builder";
       license = lib.meta.getLicenseFromSpdxId "ISC";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "sectile";
     }
   ) { };
@@ -644541,6 +644596,7 @@ self: {
       ];
       description = "Recursively show space (size and i-nodes) used in subdirectories";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "sizes";
     }
   ) { };
@@ -678441,6 +678497,7 @@ self: {
       ];
       description = "A library for generating random string from a regular experession";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "hstrrand";
       maintainers = [ lib.maintainers.mpscholten ];
     }
@@ -692215,6 +692272,7 @@ self: {
       ];
       description = "Library for tagging data";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -703085,6 +703143,7 @@ self: {
       ];
       description = "Testing framework";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "test-karya-generate";
     }
   ) { };
@@ -711436,6 +711495,7 @@ self: {
       ];
       description = "Haskell implementation of tiktoken";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -731378,6 +731438,7 @@ self: {
       ];
       description = "A library for parsing User-Agent strings, official Haskell port of ua-parser";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -742428,6 +742489,7 @@ self: {
       ];
       description = "Input validation combinator library";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -784208,6 +784270,7 @@ self: {
       ];
       description = "Yi editor";
       license = lib.licenses.gpl2Only;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "yi";
     }
   ) { };
@@ -784460,6 +784523,7 @@ self: {
       ];
       description = "Pango frontend for Yi editor";
       license = lib.licenses.gpl2Only;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 

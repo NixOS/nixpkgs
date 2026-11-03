@@ -50,6 +50,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "datasets"
     "spmd_types"
   ];
   dependencies = [
