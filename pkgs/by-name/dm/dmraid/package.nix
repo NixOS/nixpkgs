@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  lvm2,
+  lvm2_dmeventd,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd */";
 
-  buildInputs = [ lvm2 ];
+  buildInputs = [ lvm2_dmeventd ];
 
   # Hand-written Makefile does not have full dependencies to survive
   # parallel build:
