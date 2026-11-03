@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "activemq";
-  version = "6.2.4";
+  version = "6.4.0";
 
   src = fetchurl {
     url = "mirror://apache/activemq/${finalAttrs.version}/apache-activemq-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-/jvyO8cDQ666i8J53SXPS5WyBmN5GZwK6TVaDxXxJhM=";
+    hash = "sha256-ddDGy/Mqk4G4decOWfTOhVv4CUj6BSD4p8SuOMMepq8=";
   };
 
   installPhase = ''
