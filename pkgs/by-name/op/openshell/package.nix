@@ -4,8 +4,11 @@
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   cacert,
+  coreutils,
   gitMinimal,
+  openssh,
   pkg-config,
   z3,
 }:
@@ -33,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     gitMinimal
+    openssh
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
@@ -42,6 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # only build openshell-cli crate
     substituteInPlace Cargo.toml \
       --replace-fail 'members = ["crates/*"]' 'members = ["crates/openshell-cli"]'
+    # test fixtures exec tools at FHS paths absent from the build sandbox
+    substituteInPlace crates/openshell-core/src/e2fsprogs.rs \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}' \
+      --replace-fail '/bin/dd' '${lib.getExe' coreutils "dd"}'
   '';
 
   env = {
