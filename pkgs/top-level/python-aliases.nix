@@ -180,6 +180,7 @@ mapAliases {
   crontab = throw "'crontab' has been removed, migrate to either 'python-crontab' or 'parse-crontab'"; # Added 2026-08-25
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  cypherpunkpay = throw "'cypherpunkpay' was removed because it is abandoned upstream"; # added 2026-11-03
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
   databricks-cli = throw "'databricks-cli' has been removed from the Python package set. Use 'pkgs.databricks-cli' instead."; # Added 2026-09-04
