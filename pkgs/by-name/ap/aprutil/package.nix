@@ -24,11 +24,11 @@ assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apr-util";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "mirror://apache/apr/apr-util-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-lt4d1vagR20tLnlkkm2MHdw7sOIQ4bGBLTulpFSjkuI=";
+    sha256 = "sha256-qnfdJfA2cxtyRqu/vr5syBO0J5m2LIdLyCvU4fkPKRg=";
   };
 
   patches = [
