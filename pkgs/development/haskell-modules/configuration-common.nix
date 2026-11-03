@@ -822,6 +822,7 @@ with haskellLib;
   polysemy = dontCheckIf self.inspection-testing.meta.broken super.polysemy;
   polysemy-plugin = dontCheckIf self.inspection-testing.meta.broken super.polysemy-plugin;
   postgresql-simple = dontCheckIf self.inspection-testing.meta.broken super.postgresql-simple;
+  prolens = dontCheckIf self.inspection-testing.meta.broken super.prolens;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
