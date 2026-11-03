@@ -31,19 +31,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typesetter";
-  version = "0.16.5";
+  version = "0.16.8";
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "haydn";
     repo = "typesetter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fEjA8BlVsjqj9Nng9nCfmPtN3B1E+SOS6wMxbyaTEIY=";
+    hash = "sha256-biovB5HQ7LdGco+5J5LK9jQPU5wE6U0qgOUB7HCEI3I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-arLIL1ftluVpGNI4owAHMXmcNDHMb9IxZTmlrGESn3A=";
+    hash = "sha256-palaxwqWEaN+t2itGjK66CPihKQuGsmt3xoyA+tE1MI=";
   };
 
   # Upstream does not install desktop/MIME files on darwin, so the corresponding post-install hooks
