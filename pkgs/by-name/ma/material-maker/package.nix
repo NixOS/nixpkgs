@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "material-maker";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "RodZill4";
     repo = "material-maker";
     rev = finalAttrs.version;
-    hash = "sha256-/oBAbdYNfIeNKnv1NGP05Nk5G8gov1yqRsG0jnFMW/Y=";
+    hash = "sha256-/5VYiHtidBmonLrkcZeu2ZZErMptYQyfEIyRwOfYWsk=";
   };
 
   nativeBuildInputs = [ godot ];
