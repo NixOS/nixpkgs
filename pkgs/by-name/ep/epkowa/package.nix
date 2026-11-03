@@ -116,7 +116,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/etc/sane.d
     cp backend/epkowa.conf $out/etc/sane.d
-    echo "epkowa" > $out/etc/sane.d/dll.conf
     ln -s ${iscan-data}/share/iscan-data $out/share/iscan-data
     mkdir -p $out/lib/iscan
   ''
@@ -135,7 +134,10 @@ stdenv.mkDerivation rec {
     '') plugins'
   );
 
-  passthru.plugins = callPackages ./plugins.nix { inherit common_meta; };
+  passthru = {
+    plugins = callPackages ./plugins.nix { inherit common_meta; };
+    saneBackendNames = [ "epkowa" ];
+  };
 
   meta = common_meta // {
     description = "sane-epkowa backend for some epson scanners";

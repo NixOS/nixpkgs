@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-LgheG67QVH9gcXLCgrmpXvE39n3H6ub1k4PYTpcGDxM=";
   };
 
+  passthru.saneBackendNames = [ "airscan" ];
+
   meta = {
     homepage = "https://github.com/alexpevzner/sane-airscan";
     description = "Scanner Access Now Easy - Apple AirScan (eSCL) driver";
