@@ -13,6 +13,7 @@
 
   # optionals
   arabic-reshaper,
+  brotli,
   cryptography,
   fonttools,
   pillow,
@@ -23,7 +24,9 @@
   pytestCheckHook,
   pytest-timeout,
 }:
-
+let
+  brotliPackage = brotli;
+in
 buildPythonPackage (finalAttrs: {
   pname = "pypdf";
   version = "6.21.4";
@@ -57,7 +60,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = rec {
-    full = crypto ++ fonts ++ image ++ rtl_text;
+    full = crypto ++ fonts ++ image ++ rtl_text ++ brotli;
+    brotli = [ brotliPackage ];
     crypto = [ cryptography ];
     fonts = [ fonttools ];
     image = [ pillow ];
