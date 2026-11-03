@@ -204,7 +204,7 @@ in
         Group = cfg.group;
         Restart = "on-failure";
         RestartSec = "30s";
-        UMask = "0077";
+        UMask = "0022";
 
         # Standard directories
         StateDirectory = "weewx";
