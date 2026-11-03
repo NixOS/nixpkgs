@@ -5,11 +5,14 @@
   ...
 }:
 let
-  pkg = config.hardware.sane.backends-package.override {
-    scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
-    scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
+  cfg = config.hardware.sane;
+  sanedCfg = config.services.saned;
+
+  pkg = cfg.backends-package.override {
+    scanSnapDriversUnfree = cfg.drivers.scanSnap.enable;
+    scanSnapDriversPackage = cfg.drivers.scanSnap.package;
   };
-  enabled = config.hardware.sane.enable || config.services.saned.enable;
+  enabled = cfg.enable || sanedCfg.enable;
 
   dllConf =
     let
@@ -20,7 +23,7 @@ let
     in
     pkgs.runCommand "sane-dll.conf" { } ''
       cp ${pkg}/etc/sane.d/dll.conf $out
-      ${lib.concatMapStrings disableBackend config.hardware.sane.disabledDefaultBackends}
+      ${lib.concatMapStrings disableBackend cfg.disabledDefaultBackends}
     '';
 
   getBackendNames =
@@ -31,7 +34,7 @@ let
       If this package comes from nixpkgs, please report an issue; otherwise set `passthru.saneBackendNames`
       to a list of SANE backend names it provides.
     '');
-  extraBackendNames = builtins.concatMap getBackendNames config.hardware.sane.extraBackends;
+  extraBackendNames = builtins.concatMap getBackendNames cfg.extraBackends;
 in
 
 {
@@ -153,28 +156,28 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf enabled {
-      environment.systemPackages = [ pkg ] ++ config.hardware.sane.extraBackends;
+      environment.systemPackages = [ pkg ] ++ cfg.extraBackends;
       environment.etc = {
-        "sane.d/dll.conf" = lib.mkIf (config.hardware.sane.disabledDefaultBackends != [ ]) {
+        "sane.d/dll.conf" = lib.mkIf (cfg.disabledDefaultBackends != [ ]) {
           source = dllConf;
         };
-        "sane.d/net.conf" = lib.mkIf (config.hardware.sane.netConf != "" || config.services.saned.enable) {
+        "sane.d/net.conf" = lib.mkIf (cfg.netConf != "" || sanedCfg.enable) {
           text = ''
-            ${lib.optionalString config.services.saned.enable "localhost"}
-            ${config.hardware.sane.netConf}
+            ${lib.optionalString sanedCfg.enable "localhost"}
+            ${cfg.netConf}
           '';
         };
-        "sane.d/saned.conf" = lib.mkIf config.services.saned.enable {
+        "sane.d/saned.conf" = lib.mkIf sanedCfg.enable {
           text = ''
             localhost
-            ${config.services.saned.extraConfig}
+            ${sanedCfg.extraConfig}
           '';
         };
         "sane.d/dll.d/nixos.conf" = lib.mkIf (extraBackendNames != [ ]) {
           text = lib.concatStringsSep "\n" extraBackendNames;
         };
       };
-      services.udev.packages = [ pkg ] ++ config.hardware.sane.extraBackends;
+      services.udev.packages = [ pkg ] ++ cfg.extraBackends;
       # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
       # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
       # does not have a real logind seat, so `uaccess` is not enough.
@@ -183,14 +186,14 @@ in
       '';
 
       users.groups.scanner.gid = config.ids.gids.scanner;
-      networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];
+      networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 8612 ];
 
       systemd.tmpfiles.rules = [
         "d /var/lock/sane 0770 root scanner - -"
       ];
     })
 
-    (lib.mkIf config.services.saned.enable {
+    (lib.mkIf sanedCfg.enable {
       networking.firewall.connectionTrackingModules = [ "sane" ];
 
       systemd.services."saned@" = {
