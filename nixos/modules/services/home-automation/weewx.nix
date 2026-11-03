@@ -171,7 +171,7 @@ in
         done
         ${lib.concatStringsSep "\n" (
           lib.mapAttrsToList (name: path: ''
-            ln -sfn -T ${lib.escapeShellArg "${path}"} "/var/lib/weewx/skins/${lib.escapeShellArg name}"
+            ln -sfn -T ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "/var/lib/weewx/skins/${name}"}
           '') cfg.skins
         )}
         mkdir -p /var/lib/weewx/bin/user
@@ -179,7 +179,7 @@ in
         ${pkgs.findutils}/bin/find /var/lib/weewx/bin/user -maxdepth 1 -type l -delete
         ${lib.concatStringsSep "\n" (
           lib.mapAttrsToList (name: path: ''
-            ln -sfn -T ${lib.escapeShellArg "${path}"} "/var/lib/weewx/bin/user/${lib.escapeShellArg name}"
+            ln -sfn -T ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "/var/lib/weewx/bin/user/${name}"}
           '') cfg.userModules
         )}
         ${lib.optionalString (cfg.environmentFile != null) ''
