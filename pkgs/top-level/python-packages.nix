@@ -3731,6 +3731,10 @@ self: super: with self; {
 
   copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
 
+  copier-template-extensions =
+    callPackage ../development/python-modules/copier-template-extensions
+      { };
+
   copr = callPackage ../development/python-modules/copr { };
 
   copykitten = callPackage ../development/python-modules/copykitten { };
