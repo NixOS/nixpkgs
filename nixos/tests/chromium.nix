@@ -65,6 +65,12 @@ mapAttrs (
         ];
         virtualisation.memorySize = 2047;
         test-support.displayManager.auto.user = user;
+        programs.chromium = {
+          enable = true;
+          homepageLocation = "https://example.org";
+          extraOpts.BrowserSignin = 0;
+          extraOptsRecommended.SpellcheckEnabled = true;
+        };
         environment = {
           systemPackages = [ chromiumPkg ];
           variables."XAUTHORITY" = "/home/alice/.Xauthority";
@@ -195,6 +201,11 @@ mapAttrs (
 
 
         machine.wait_for_x()
+
+        for browser in ("chromium", "opt/chrome", "brave"):
+            for policy in ("managed/default.json", "managed/extra.json", "recommended/extra.json"):
+                path = f"/etc/{browser}/policies/{policy}"
+                machine.succeed(f"test -f {path} && test ! -L {path} && test $(stat -c %a {path}) = 644")
 
         launch_browser()
 
