@@ -815,6 +815,7 @@ with haskellLib;
   hkt = dontCheckIf self.inspection-testing.meta.broken super.hkt;
   large-hashable = dontCheckIf self.inspection-testing.meta.broken super.large-hashable;
   linear-base = dontCheckIf self.inspection-testing.meta.broken super.linear-base;
+  linear-base_0_7_0 = dontCheckIf self.inspection-testing.meta.broken super.linear-base_0_7_0;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
