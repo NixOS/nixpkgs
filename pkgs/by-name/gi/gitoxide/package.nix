@@ -56,10 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line application for interacting with git repositories";
     homepage = "https://github.com/GitoxideLabs/gitoxide";
     changelog = "https://github.com/GitoxideLabs/gitoxide/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ hythera ];
     # NB: `ein` is also provided by this package, but `nix run
     # nixpkgs#gitoxide` doesn't work at all without this set.

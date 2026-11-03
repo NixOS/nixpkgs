@@ -64,10 +64,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-semver-checks";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
     changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       matthiasbeyer
       chrjabs
