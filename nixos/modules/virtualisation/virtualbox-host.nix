@@ -155,6 +155,7 @@ in
             message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
           }
         ];
+        virtualisation.virtualbox.host.enableHardening = lib.mkDefault false;
       })
       (lib.mkIf (!cfg.enableKvm) {
         boot.kernelModules = [
