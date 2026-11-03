@@ -1,25 +1,17 @@
 #compdef sops
 
-## based on https://github.com/urfave/cli/blob/v2.3.0/autocomplete/zsh_autocomplete
+local -a opts
+local cur=${words[CURRENT]}
+local ret=1
 
-_cli_zsh_autocomplete() {
+if [[ $cur == -* ]]; then
+  opts=("${(@f)$(_CLI_ZSH_AUTOCOMPLETE_HACK=1 ${words[1,CURRENT-1]} $cur --generate-bash-completion)}")
+  _describe 'flags' opts && ret=0
+else
+  opts=("${(@f)$(_CLI_ZSH_AUTOCOMPLETE_HACK=1 ${words[1,CURRENT-1]} --generate-bash-completion)}")
+  opts=(${opts:#-*})
+  (( $#opts )) && _describe 'commands' opts && ret=0
+  _files && ret=0
+fi
 
-  local -a opts
-  local cur
-  cur=${words[-1]}
-  if [[ "$cur" == "-"* ]]; then
-    opts=("${(@f)$(_CLI_ZSH_AUTOCOMPLETE_HACK=1 ${words[@]:0:#words[@]-1} ${cur} --generate-bash-completion)}")
-  else
-    opts=("${(@f)$(_CLI_ZSH_AUTOCOMPLETE_HACK=1 ${words[@]:0:#words[@]-1} --generate-bash-completion)}")
-  fi
-
-  if [[ "${opts[1]}" != "" ]]; then
-    _describe 'values' opts
-  else
-    _files
-  fi
-
-  return
-}
-
-compdef _cli_zsh_autocomplete sops
+return ret
