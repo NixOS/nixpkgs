@@ -31,6 +31,7 @@ in
         "PATH= /usr/bin/env --version",
         "PATH= test -e /usr/bin/sh",
         "PATH= test -e /usr/bin/env",
+        "PATH= /bin/sh --version",
         # also picks up PATH that was set after execve
         "! /usr/bin/hello",
         "PATH=${pkgs.hello}/bin /usr/bin/hello",
@@ -43,5 +44,7 @@ in
     out = machine.succeed("PATH=${pkgs.bash}/bin ${bashShebang}")
     print(out)
     assert out == "OK\n"
+
+    assert "Tainted" not in machine.succeed("systemctl status")
   '';
 }
