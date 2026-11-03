@@ -810,6 +810,7 @@ with haskellLib;
   generic-lens = dontCheckIf self.inspection-testing.meta.broken super.generic-lens;
   generic-lens_2_3_0_0 = dontCheckIf self.inspection-testing.meta.broken super.generic-lens_2_3_0_0;
   generic-optics = dontCheckIf self.inspection-testing.meta.broken super.generic-optics;
+  generic-optics_2_3_0_0 = dontCheckIf self.inspection-testing.meta.broken super.generic-optics_2_3_0_0;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
