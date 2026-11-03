@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "plantuml-markdown";
-  version = "3.11.2";
+  version = "3.11.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mikitex70";
     repo = "plantuml-markdown";
     tag = version;
-    hash = "sha256-GyV9EHEyW75OWj4iG4MsNV5wEvygaBz4GpyxOzIB8oY=";
+    hash = "sha256-8ya3szd26PJUmkDQW7m1SmlQOca25ekbOG740X0pRbE=";
   };
 
   postPatch = ''
