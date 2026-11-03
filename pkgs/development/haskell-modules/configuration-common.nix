@@ -805,6 +805,7 @@ with haskellLib;
   algebraic-graphs_0_8 = dontCheckIf self.inspection-testing.meta.broken super.algebraic-graphs_0_8;
   data-elevator = dontCheckIf self.inspection-testing.meta.broken super.data-elevator;
   fin = dontCheckIf self.inspection-testing.meta.broken super.fin;
+  fused-effects = dontCheckIf self.inspection-testing.meta.broken super.fused-effects;
   generic-lens = dontCheckIf self.inspection-testing.meta.broken super.generic-lens;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
