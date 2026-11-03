@@ -4701,6 +4701,8 @@ self: super: with self; {
 
   django-elasticsearch-dsl = callPackage ../development/python-modules/django-elasticsearch-dsl { };
 
+  django-embed-video = callPackage ../development/python-modules/django-embed-video { };
+
   django-encrypted-model-fields =
     callPackage ../development/python-modules/django-encrypted-model-fields
       { };
@@ -15400,8 +15402,6 @@ self: super: with self; {
   pyiss = callPackage ../development/python-modules/pyiss { };
 
   pyisy = callPackage ../development/python-modules/pyisy { };
-
-  pyitachip2ir = callPackage ../development/python-modules/pyitachip2ir { };
 
   pyitachip2ir2 = callPackage ../development/python-modules/pyitachip2ir2 { };
 

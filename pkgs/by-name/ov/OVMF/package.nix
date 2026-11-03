@@ -9,7 +9,7 @@
   llvmPackages,
   fetchFromGitLab,
   python3,
-  pexpect,
+  python3Packages,
   xorriso,
   qemu,
   dosfstools,
@@ -199,7 +199,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   ]
   ++ lib.optionals msVarsTemplate [
     python3
-    pexpect
+    python3Packages.pexpect
     xorriso
     qemu
     dosfstools

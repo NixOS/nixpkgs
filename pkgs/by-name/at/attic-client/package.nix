@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage {
   pname = "attic";
   version = "0-unstable-2026-07-06";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
@@ -46,7 +48,7 @@ rustPlatform.buildRustPackage {
     zstd
   ];
 
-  cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
+  cargoBuildFlags = map (c: "--package=${c}") crates;
   cargoHash = "sha256-UGgM78QEWJ2QgbQhxEI+yLYXH6T4ey+1oenPTMlJ3GU=";
 
   env = {
