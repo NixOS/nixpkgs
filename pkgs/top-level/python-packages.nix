@@ -7871,6 +7871,8 @@ self: super: with self; {
 
   html-text = callPackage ../development/python-modules/html-text { };
 
+  html-to-markdown = callPackage ../development/python-modules/html-to-markdown { };
+
   html-void-elements = callPackage ../development/python-modules/html-void-elements { };
 
   html2image = callPackage ../development/python-modules/html2image { };
