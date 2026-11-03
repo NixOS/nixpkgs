@@ -21,7 +21,7 @@
     "cutensor"
     "nppplus"
     "nvcomp"
-    # "nvidia-driver",  # NOTE: Some of the earlier manifests don't follow our scheme.
+    "nvidia-driver" # NOTE: only cuda_compat (CUDA 13.4+); the manifests are made by hand
     "nvjpeg2000"
     "nvpl"
     "nvtiff"
