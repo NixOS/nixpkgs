@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openccu-loom-client";
-  version = "2026.10.9";
+  version = "2026.10.11";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "openccu-loom-client";
     tag = finalAttrs.version;
-    hash = "sha256-Y1zqO1ELIcyZaIhdiELBKUsbLEop4a8t/r87+U9F69E=";
+    hash = "sha256-pKJ+rkeexSNQkp74uDEXpVMUWmia3tC4FGUAzQqBUwo=";
   };
 
   build-system = [ setuptools ];
