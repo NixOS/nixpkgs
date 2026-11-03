@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tantivy";
-  version = "0.26.2";
+  version = "0.27.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,12 +23,12 @@ buildPythonPackage (finalAttrs: {
     owner = "quickwit-oss";
     repo = "tantivy-py";
     tag = finalAttrs.version;
-    hash = "sha256-yxRwN4rR9RQKvXxPcg1bTOfmtt9bV4y8dMn54qKuUi8=";
+    hash = "sha256-S3wB5etg9ZPSCXLqEeMCjWHvXr8IhVFZMiBXebG4cV0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uzhP5DoAiZ9cUuxmE9l805q26XHZh70eREFqpxHEIWg=";
+    hash = "sha256-ICz3hRuE5gNv73ea8iWK+5TDavgI4r6Pv2NGugPFork=";
   };
 
   nativeBuildInputs = [
