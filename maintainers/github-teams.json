@@ -808,13 +808,15 @@
     "name": "nixpkgs-merge-bot"
   },
   "node": {
-    "description": "Maintains Node.js runtimes and build tooling.\r\n\r\n\"JS is hecked, thanks for coming to my TED Talk\" - @lilyinstarlight",
+    "description": "Maintains Node.js runtimes and build tooling.",
     "id": 7309872,
     "maintainers": {
-      "lilyinstarlight": 298109,
       "winterqt": 78392041
     },
-    "members": {},
+    "members": {
+      "Scrumplex": 11587657,
+      "aduh95": 14309773
+    },
     "name": "Node"
   },
   "ocaml": {
@@ -968,7 +970,9 @@
       "Mic92": 96200,
       "winterqt": 78392041
     },
-    "members": {},
+    "members": {
+      "whispersofthedawn": 78233879
+    },
     "name": "rust"
   },
   "scala": {

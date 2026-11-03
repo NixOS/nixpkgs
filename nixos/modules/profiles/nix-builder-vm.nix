@@ -208,11 +208,24 @@ in
           ''
         );
 
-        run-builder = hostPkgs.writeShellScriptBin "run-builder" ''
-          set -euo pipefail
-          KEYS="''${KEYS:-./keys}"
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '';
+        mkRunBuilder =
+          vm:
+          hostPkgs.writeShellScriptBin "run-builder" ''
+            set -euo pipefail
+            KEYS="''${KEYS:-./keys}"
+
+            temporaryDirectory="$(${hostPkgs.coreutils}/bin/mktemp -d)"
+            trap '${hostPkgs.coreutils}/bin/rm -rf "$temporaryDirectory"' EXIT
+
+            # The guest needs only the public key. Store imports are world-readable.
+            ${hostPkgs.coreutils}/bin/install -Dm444 \
+              "$KEYS/${user}_${keyType}.pub" \
+              "$temporaryDirectory/keys/${user}_${keyType}.pub"
+
+            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$temporaryDirectory/keys")" ${lib.getExe vm}
+          '';
+
+        run-builder = mkRunBuilder config.system.build.vm;
 
       in
       hostPkgs.writeTextFile {
@@ -279,6 +292,7 @@ in
         {
           from = "host";
           guest.port = 22;
+          host.address = "127.0.0.1";
           host.port = cfg.hostPort;
         }
       ];

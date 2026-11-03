@@ -9,6 +9,7 @@
   nodes.machine =
     { config, pkgs, ... }:
     {
+      networking.useDHCP = false;
       services.reaction = {
         enable = true;
         stopForFirewall = true; # with this enabled restarting firewall will restart reaction

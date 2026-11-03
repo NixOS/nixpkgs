@@ -27,14 +27,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "goupile";
-  version = "3.12.9";
+  version = "3.12.10";
 
   # https://github.com/Koromix/rygel/tags
   src = fetchFromGitHub {
     owner = "Koromix";
     repo = "rygel";
     tag = "goupile/${finalAttrs.version}";
-    hash = "sha256-VBphauxPRESpgzAyBAqScMq0fluvzgTbSAdfrdUV64w=";
+    hash = "sha256-rqixX9OrmDM3Kh/Zmr46OruOpB+M2b40CsfE2NaB+W4=";
   };
 
   nativeBuildInputs = [
