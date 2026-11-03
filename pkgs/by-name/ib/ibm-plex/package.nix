@@ -37,8 +37,11 @@ let
       #
       # Additionally, fonts with webfonts include complete and split forms.
       # Default to the complete forms.
+      #
+      # Some zips, e.g. "ibm-plex-mono-variable", also carry macOS metadata in
+      # __MACOSX, whose ._*.ttf files would otherwise be installed as fonts.
       preInstall = ''
-        find . -type d \( -name unhinted -or -name split \) -exec rm -rf {} +
+        find . -type d \( -name unhinted -or -name split -or -name __MACOSX \) -exec rm -rf {} +
       '';
 
       meta = meta // {
