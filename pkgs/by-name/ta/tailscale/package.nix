@@ -273,6 +273,7 @@ buildGo127Module (finalAttrs: {
           old:
           {
             pname = "${old.pname}-go-tests-${name}";
+            inherit (finalAttrs) goModules;
             outputs = [ "out" ];
             dontBuild = true;
             doCheck = true;
