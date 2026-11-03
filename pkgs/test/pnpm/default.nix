@@ -13,24 +13,24 @@
     pnpm = pnpm_11;
     fetcherVersion = 4;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-/CwMd6V9Bp2kZASbbJQaNOG1ksbfuOQbwPs0p+zgn1E=";
+    pnpmDepsHash = "sha256-jT7VRHQh3txgiX0Kbya4oMzZck2rxjrFGSddUWZyfNM=";
   };
   pnpm_12_v4 = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 4;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-P7cooRuXXB3qmSrw6nrWooM7HBTTtKpA/1H19YwZ6Ys=";
+    pnpmDepsHash = "sha256-4oBTHX0kewsdEK5+xodf+pcO8JOEVXq+VvvpbbyTJYM=";
   };
   pnpm_12_v5 = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-Ou2RWj/ddu6qGqRDGF8cx94N6IiH8NxNmxcI0cBGzdM=";
   };
   pnpm_12_v5_gvs = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = true;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-Ou2RWj/ddu6qGqRDGF8cx94N6IiH8NxNmxcI0cBGzdM=";
   };
 }
