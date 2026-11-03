@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gdb,
   ncurses,
   numpy,
@@ -25,14 +24,6 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-NuSEJSGfa287DLJZs5wxfe7oh/Pii5rMF1F1wWle0Ck=";
   };
-
-  patches = [
-    # https://github.com/cython/cython/issues/7942
-    (fetchpatch {
-      url = "https://github.com/cython/cython/pull/7970.patch";
-      hash = "sha256-dsc6Q7ySDt7m8zCJIaIRDvOM0T5HdMSBnv5JH1RwLoE=";
-    })
-  ];
 
   build-system = [
     setuptools
