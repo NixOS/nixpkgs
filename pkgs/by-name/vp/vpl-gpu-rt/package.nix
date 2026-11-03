@@ -6,6 +6,7 @@
   pkg-config,
   libdrm,
   libva,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libva
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=intel-onevpl-(.*)"
+    ];
+  };
 
   meta = {
     description = "oneAPI Video Processing Library Intel GPU implementation";
