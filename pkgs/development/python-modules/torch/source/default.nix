@@ -492,7 +492,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Use NCCL when cudaSupport is enabled and nccl is available.
     USE_NCCL = setBool useSystemNccl;
     USE_SYSTEM_NCCL = finalAttrs.env.USE_NCCL;
-    USE_STATIC_NCCL = finalAttrs.env.USE_NCCL;
+    # Only read by FindNCCL.cmake (CUDA). ROCm finds RCCL through External/rccl.cmake.
+    USE_STATIC_NCCL = setBool (useSystemNccl && cudaSupport);
 
     USE_NVSHMEM = setBool withNvshmem;
 
