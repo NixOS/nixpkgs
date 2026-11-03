@@ -4693,6 +4693,8 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
+  django-dirtyfields = callPackage ../development/python-modules/django-dirtyfields { };
+
   django-dynamic-preferences =
     callPackage ../development/python-modules/django-dynamic-preferences
       { };
