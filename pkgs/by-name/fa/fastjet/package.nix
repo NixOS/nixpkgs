@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet";
-  version = "3.5.1";
+  version = "3.5.3";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-mkFUFj5yBB3uP93pyyToFGJeF4CRqHNKatU3XlNxtCM=";
+    hash = "sha256-J5zOOOa6AYEbLxkT5YLlDDhFrPaOl/kkE+1FrEu43pw=";
   };
 
   postPatch = ''
