@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anchor";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "otter-sec";
     repo = "anchor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C8e0ELa0q8xOat1F8Br8+XPimxgUZ0sBu2MH8cVlzME=";
+    hash = "sha256-YcQWgNeT/2dvU1dnieo42z5VXnZRoZK9PMGmV/rFxFk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-0Eq3/WOO869fmk+N6o4/ZgXnpNPV5VFNxdaGStT6Zb4=";
+  cargoHash = "sha256-obD/QyRliNheBvcj2islxaZ6RgM60l8O69jLUmxlLyc=";
 
   # Only build the anchor-cli package
   cargoBuildFlags = [

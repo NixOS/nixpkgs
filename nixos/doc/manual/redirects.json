@@ -1747,6 +1747,12 @@
   "module-services-flatpak": [
     "index.html#module-services-flatpak"
   ],
+  "module-services-cassandra": [
+    "index.html#module-services-cassandra"
+  ],
+  "module-services-cassandra-diagnostics": [
+    "index.html#module-services-cassandra-diagnostics"
+  ],
   "module-services-tigerbeetle": [
     "index.html#module-services-tigerbeetle"
   ],

@@ -389,6 +389,9 @@
   "npm-install-hook-variables": [
     "index.html#npm-install-hook-variables"
   ],
+  "pkgConfigCheckHook": [
+    "index.html#pkgConfigCheckHook"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",
