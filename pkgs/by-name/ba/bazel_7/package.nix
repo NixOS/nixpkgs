@@ -9,7 +9,6 @@
   fetchpatch,
   writeShellApplication,
   makeBinaryWrapper,
-  autoPatchelfHook,
   buildFHSEnv,
   # this package (through the fixpoint glass)
   # TODO probably still need for tests at some point
@@ -133,8 +132,7 @@ let
     nativeBuildInputs = defaultShellUtils;
     buildInputs = [
       stdenv.cc.cc
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    ];
 
     dontUnpack = true;
     dontPatch = true;
@@ -149,10 +147,20 @@ let
       runHook postInstall
     '';
 
-    postFixup = ''
-      wrapProgram $out/bin/bazel \
-        --prefix PATH : ${lib.makeBinPath nativeBuildInputs}
-    '';
+    # The bootstrap binary is non-PIE (ET_EXEC). patchelf 0.19.2 corrupts the
+    # program headers of such binaries when the interpreter and the RPATH are
+    # set in a single invocation (as autoPatchelfHook does), leaving .dynamic
+    # mapped read-only and crashing ld.so. Patch them in two separate passes.
+    # See https://github.com/NixOS/patchelf/issues/674
+    postFixup =
+      lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+        patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc ]} $out/bin/bazel
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/bazel
+      ''
+      + ''
+        wrapProgram $out/bin/bazel \
+          --prefix PATH : ${lib.makeBinPath nativeBuildInputs}
+      '';
 
     meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
