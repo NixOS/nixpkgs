@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-weather";
   version = "0.0.4";
 
+  __structuredAttrs = true;
+
   # fetch from GitHub and not upstream forgejo because cafkafk doesn't want to
   # pay for bandwidth
   src = fetchFromGitHub {
