@@ -50,6 +50,12 @@ buildGo127Module (finalAttrs: {
       url = "https://github.com/tailscale/tailscale/commit/ebbf2d1980466043b3a9a41cbd6d7e50ab2da02b.patch?full_index=1";
       hash = "sha256-W5gdLkK+Es5boZ83psjGo4ELUWc/Y+uidVLDnNFvYIs=";
     })
+    # drive/driveimpl/compositedav: don't run ttlcache cleanup goroutines
+    # https://github.com/tailscale/tailscale/pull/21906
+    (fetchpatch2 {
+      url = "https://github.com/tailscale/tailscale/commit/a6cffd0a6d11ef8aa3a0ca0ddc15879d0845605d.patch?full_index=1";
+      hash = "sha256-wzWVZQvH28cbmUxoXq4Qq4xD6eR/YgNbCTrySKQ2UDg=";
+    })
   ];
 
   vendorHash = "sha256-RvaouD88naVNOPJBVcqMaAn+ovjXI4g83ShCdRiR5/Q=";
