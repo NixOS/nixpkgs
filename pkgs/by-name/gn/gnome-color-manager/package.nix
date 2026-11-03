@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   passthru = {
     updateScript = gnome.updateScript {
