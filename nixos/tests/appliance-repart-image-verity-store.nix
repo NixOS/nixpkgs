@@ -62,7 +62,7 @@
       # don't create /usr/bin/env
       # this would require some extra work on read-only /usr
       # and it is not a strict necessity
-      system.activationScripts.usrbinenv = lib.mkForce "";
+      environment.createUsrBinEnv = false;
     };
 
   nodes.machine = {
