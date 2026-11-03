@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     pnpm run electron:build
+    CI=true pnpm prune --prod --ignore-scripts
     runHook postBuild
   '';
 
