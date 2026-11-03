@@ -5,43 +5,33 @@
   ...
 }:
 let
-
   pkg = config.hardware.sane.backends-package.override {
     scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
     scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
   };
-
-  sanedConf = pkgs.writeTextFile {
-    name = "saned.conf";
-    destination = "/etc/sane.d/saned.conf";
-    text = ''
-      localhost
-      ${config.services.saned.extraConfig}
-    '';
-  };
-
-  netConf = pkgs.writeTextFile {
-    name = "net.conf";
-    destination = "/etc/sane.d/net.conf";
-    text = ''
-      ${lib.optionalString config.services.saned.enable "localhost"}
-      ${config.hardware.sane.netConf}
-    '';
-  };
-
-  backends = [
-    pkg
-    netConf
-  ]
-  ++ lib.optional config.services.saned.enable sanedConf
-  ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig {
-    paths = backends;
-    inherit (config.hardware.sane) disabledDefaultBackends;
-  };
-
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
+  dllConf =
+    let
+      disableBackend = backend: ''
+        grep -w -q '${backend}' $out || { echo '${backend} is not a default plugin in /etc/sane.d/dll.conf'; exit 1; }
+        sed -i 's/\b${backend}\b/# ${backend} disabled by nixos config/' $out
+      '';
+    in
+    pkgs.runCommand "sane-dll.conf" { } ''
+      cp ${pkg}/etc/sane.d/dll.conf $out
+      ${lib.concatMapStrings disableBackend config.hardware.sane.disabledDefaultBackends}
+    '';
+
+  getBackendNames =
+    backend:
+    backend.saneBackendNames or (throw ''
+      ${backend} is configured as a SANE backend, but does not set `passthru.saneBackendNames`.
+
+      If this package comes from nixpkgs, please report an issue; otherwise set `passthru.saneBackendNames`
+      to a list of SANE backend names it provides.
+    '');
+  extraBackendNames = builtins.concatMap getBackendNames config.hardware.sane.extraBackends;
 in
 
 {
@@ -75,6 +65,9 @@ in
       default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
+
+        The package needs to provide the `passthru.saneBackendNames` attribute,
+        containing a list of backend names.
 
         ::: {.note}
         The example contains the package for HP scanners, and the package for
@@ -160,9 +153,28 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf enabled {
-      environment.systemPackages = backends;
-      environment.etc."sane.d".source = "${saneConfig}/etc/sane.d";
-      services.udev.packages = backends;
+      environment.systemPackages = [ pkg ] ++ config.hardware.sane.extraBackends;
+      environment.etc = {
+        "sane.d/dll.conf" = lib.mkIf (config.hardware.sane.disabledDefaultBackends != [ ]) {
+          source = dllConf;
+        };
+        "sane.d/net.conf" = lib.mkIf (config.hardware.sane.netConf != "" || config.services.saned.enable) {
+          text = ''
+            ${lib.optionalString config.services.saned.enable "localhost"}
+            ${config.hardware.sane.netConf}
+          '';
+        };
+        "sane.d/saned.conf" = lib.mkIf config.services.saned.enable {
+          text = ''
+            localhost
+            ${config.services.saned.extraConfig}
+          '';
+        };
+        "sane.d/dll.d/nixos.conf" = lib.mkIf (extraBackendNames != [ ]) {
+          text = lib.concatStringsSep "\n" extraBackendNames;
+        };
+      };
+      services.udev.packages = [ pkg ] ++ config.hardware.sane.extraBackends;
       # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
       # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
       # does not have a real logind seat, so `uaccess` is not enough.
