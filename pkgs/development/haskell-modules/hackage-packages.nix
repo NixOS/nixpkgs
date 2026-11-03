@@ -215950,9 +215950,7 @@ self: {
       ];
       description = "Templating language with similar syntax and features to Liquid or Jinja2";
       license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "ede";
-      broken = true;
     }
   ) { };
 
@@ -625517,7 +625515,6 @@ self: {
       ];
       description = "Combinators for rendering EDE templates in servant web applications";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -659544,7 +659541,6 @@ self: {
       doHaddock = false;
       description = "Generate type-safe Haskell code from SQL via https://github.com/sqlc-dev/sqlc.";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "sqlc-hs";
     }
   ) { };
