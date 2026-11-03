@@ -1,6 +1,5 @@
 {
   lib,
-  go,
   buildGoModule,
   callPackage,
   fetchFromGitHub,
@@ -32,6 +31,10 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     cp -r ${elmUi}/. ui/app/dist
   '';
+
+  # don't copy elmUi into go vendor
+  overrideModAttrs.postPatch = "";
+
   vendorHash = "sha256-YtFwsrlRVoMX4w7PoKpBbYq21lEOtzQt3jnLOdXk7VI=";
 
   subPackages = [
@@ -49,7 +52,7 @@ buildGoModule (finalAttrs: {
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
-      "-X ${t}.GoVersion=${lib.getVersion go}"
+      "-X ${t}.GoVersion=${lib.getVersion finalAttrs.passthru.go}"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -84,8 +87,7 @@ buildGoModule (finalAttrs: {
         nixfmt elm-srcs.nix
         popd
 
-        nix-update prometheus-alertmanager --version "''${TAG#v}"
-        nix-update prometheus-alertmanager.elmUi
+        nix-update prometheus-alertmanager --version "''${TAG#v}" --subpackage elmUi
       '';
     });
   };
