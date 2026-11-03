@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "koji";
-  version = "1.36.0";
+  version = "1.36.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SBVSueyarVXjk8bF+S6DS8Iojh2gHqZ+5IymNGbEBJ4=";
+    hash = "sha256-j6KnXseGwQB83MLFWJVtxkY7axzI9oIBonsUUVZYZEQ=";
   };
 
   build-system = [ setuptools ];
