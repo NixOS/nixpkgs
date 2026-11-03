@@ -5,6 +5,18 @@
   libcosmicAppHook,
   pkg-config,
   fontconfig,
+  freetype,
+  gumbo,
+  harfbuzz,
+  jbig2dec,
+  lcms,
+  libjpeg,
+  openjpeg,
+  zlib,
+  leptonica,
+  tesseract,
+  libarchive,
+  brotli,
   versionCheckHook,
   nix-update-script,
 }:
@@ -30,7 +42,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     fontconfig
+    freetype
+    gumbo
+    harfbuzz
+    jbig2dec
+    lcms
+    libjpeg
+    openjpeg
+    zlib
+    leptonica
+    tesseract
+    libarchive
+    brotli
   ];
+
+  env = {
+    # https://github.com/messense/mupdf-rs/blob/d03a17106e0164fe84c6e7fbe415cda20297825f/mupdf-sys/make.rs#L93
+    CARGO_FEATURE_SYS_LIB_FREETYPE = true;
+    CARGO_FEATURE_SYS_LIB_GUMBO = true;
+    CARGO_FEATURE_SYS_LIB_HARFBUZZ = true;
+    CARGO_FEATURE_SYS_LIB_JBIG2DEC = true;
+    # CARGO_FEATURE_SYS_LIB_JPEGXR = true;
+    CARGO_FEATURE_SYS_LIB_LCMS2 = true;
+    CARGO_FEATURE_SYS_LIB_LIBJPEG = true;
+    CARGO_FEATURE_SYS_LIB_OPENJPEG = true;
+    CARGO_FEATURE_SYS_LIB_ZLIB = true;
+    CARGO_FEATURE_SYS_LIB_TESSERACT = true;
+    CARGO_FEATURE_SYS_LIB_LEPTONICA = true;
+    CARGO_FEATURE_SYS_LIB_LIBARCHIVE = true;
+    # CARGO_FEATURE_SYS_LIB_ZXINGCPP = true;
+    CARGO_FEATURE_SYS_LIB_BROTLI = true;
+  };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
