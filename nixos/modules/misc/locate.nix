@@ -10,6 +10,14 @@ let
   cfg = config.services.locate;
   isMLocate = lib.hasPrefix "mlocate" cfg.package.name;
   isPLocate = lib.hasPrefix "plocate" cfg.package.name;
+
+  # plocate has its default database path compiled in. Rebuild it with `output`
+  # so that manual `updatedb` and `locate` use the same database as the systemd unit.
+  package =
+    if isPLocate && cfg.package ? override then
+      cfg.package.override { dbPath = cfg.output; }
+    else
+      cfg.package;
 in
 {
   imports = [
@@ -64,6 +72,10 @@ in
       default = "/var/cache/locatedb";
       description = ''
         The database file to build.
+
+        When using plocate, this is also compiled in as the default database
+        of {command}`updatedb` and {command}`locate`, so changing it from the
+        default makes the package build locally instead of using the binary cache.
       '';
     };
 
@@ -214,11 +226,11 @@ in
         };
         mlocate = lib.mkIf isMLocate {
           group = "mlocate";
-          source = "${cfg.package}/bin/locate";
+          source = "${package}/bin/locate";
         };
         plocate = lib.mkIf isPLocate {
           group = "plocate";
-          source = "${cfg.package}/bin/plocate";
+          source = "${package}/bin/plocate";
         };
       in
       {
@@ -244,7 +256,7 @@ in
         PRUNE_BIND_MOUNTS="${lib.boolToYesNo cfg.pruneBindMounts}"
       '';
 
-      systemPackages = [ cfg.package ];
+      systemPackages = [ package ];
     };
 
     systemd.services.update-locatedb = {
@@ -269,7 +281,7 @@ in
           in
           utils.escapeSystemdExecArgs (
             [
-              (lib.getExe' cfg.package "updatedb")
+              (lib.getExe' package "updatedb")
               "--output"
               cfg.output
               "--prune-bind-mounts"
