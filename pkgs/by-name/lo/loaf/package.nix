@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, ninja
-, qt6
-, libGL
-, p7zip
-, zip
-, shared-mime-info
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  ninja,
+  qt6,
+  libGL,
+  p7zip,
+  zip,
+  shared-mime-info,
 }:
 
 let
@@ -18,9 +19,12 @@ let
     qt6.qtsvg
     qt6.qtwayland
   ];
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "loaf";
   version = "0.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "m-uvex";
@@ -52,7 +56,10 @@ in rustPlatform.buildRustPackage rec {
   QMAKE = "${qtEnv}/bin/qmake";
   QT_PLUGIN_PATH = "${qtEnv}/lib/qt-6/plugins";
   QML2_IMPORT_PATH = "${qtEnv}/lib/qt-6/qml";
-  LD_LIBRARY_PATH = "${lib.makeLibraryPath [ qtEnv libGL ]}";
+  LD_LIBRARY_PATH = "${lib.makeLibraryPath [
+    qtEnv
+    libGL
+  ]}";
   XDG_DATA_DIRS = "${shared-mime-info}/share";
 
   postInstall = ''
@@ -69,7 +76,7 @@ in rustPlatform.buildRustPackage rec {
     description = "Material 3 Expressive file manager in Rust and QML";
     homepage = "https://github.com/m-uvex/loaf-fm";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "loaf";
   };
