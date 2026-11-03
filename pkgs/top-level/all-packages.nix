@@ -7157,9 +7157,6 @@ with pkgs;
 
   qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF {
-    inherit (python3Packages) pexpect;
-  };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
     inherit (python3Packages) pexpect;
     secureBoot = true;
