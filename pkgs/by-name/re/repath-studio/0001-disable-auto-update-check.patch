@@ -5,11 +5,11 @@ Subject: [PATCH] disable auto update check
 
 Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
 ---
- src/electron/main.cljs | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ src/electron/main.cljs | 10 ----------
+ 1 file changed, 10 deletions(-)
 
 diff --git a/src/electron/main.cljs b/src/electron/main.cljs
-index 4075cbb..561239c 100644
+index 716dc5a..7383798 100644
 --- a/src/electron/main.cljs
 +++ b/src/electron/main.cljs
 @@ -5,7 +5,6 @@
@@ -20,17 +20,30 @@ index 4075cbb..561239c 100644
     ["os" :as os]
     ["path" :as path]
     ["url" :as url]
-@@ -164,9 +163,7 @@
-   (register-web-contents-events)
-   (register-ipc-on-events)
-   (register-ipc-handle-events)
--  (register-window-events)
--
--  (.checkForUpdatesAndNotify autoUpdater))
-+  (register-window-events))
+@@ -64,14 +63,6 @@
+   (.close ^js @loading-window)
+   (.initialize log)
  
- (defn init-loading-window! []
-   (reset! loading-window
+-  (set! (.-autoDownload autoUpdater) false)
+-
+-  (.on autoUpdater "update-available"
+-       (fn [^js info]
+-         (send-to-renderer "update-available" (.-version info))))
+-
+-  (.checkForUpdatesAndNotify autoUpdater)
+-
+   (send-to-renderer (if (.isMaximized ^js @main-window)
+                       "maximized"
+                       "unmaximized"))
+@@ -104,8 +95,7 @@
+      ["save-document" file/save]
+      ["save-document-as" file/save-as]
+      ["print" file/show-print-dialog]
+-     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]
+-     ["apply-update" #(.downloadUpdate autoUpdater)]]]
++     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]]]
+     (.handle ipcMain e #(f %2))))
+ 
+ (defn register-window-events []
 -- 
 2.55.0
-

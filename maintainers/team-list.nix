@@ -596,9 +596,7 @@ with lib.maintainers;
   };
 
   node = {
-    members = [ winter ];
-    scope = "Maintain Node.js runtimes and build tooling.";
-    shortName = "Node.js";
+    github = "node";
     enableFeatureFreezePing = true;
   };
 
