@@ -2,10 +2,10 @@
   lib,
   stdenv,
   cmake,
-  darwin,
   dbus,
   fetchFromGitHub,
   lcms2,
+  brotli,
   libGL,
   libffi,
   libxkbcommon,
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     lcms2
+    brotli
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DTEV_DEPLOY=1"
+    "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
   ];
 
   meta = {
