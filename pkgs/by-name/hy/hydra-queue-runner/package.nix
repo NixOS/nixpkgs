@@ -5,6 +5,10 @@
   pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  aws-lc,
+  sqlite,
+  zstd,
+  xz,
   nixosTests,
   withOtel ? false,
 }:
@@ -30,6 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     protobuf
     rust-jemalloc-sys
+    aws-lc
+    sqlite
+    zstd
+    xz
   ];
 
   # The unit tests spin up a PostgreSQL instance, which is not available in the sandbox.
