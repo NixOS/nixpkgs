@@ -10,13 +10,15 @@ let
   lib = import ../../lib;
 
   inherit (builtins)
+    attrNames
+    concatLists
+    listToAttrs
     readDir
     ;
 
   inherit (lib.attrsets)
     mapAttrs
     mapAttrsToList
-    mergeAttrsList
     ;
 
   inherit (lib.trivial)
@@ -25,8 +27,8 @@ let
 in
 baseDirectory:
 let
-  # Package files for a single shard
-  # Type: String -> String -> AttrsOf Path
+  # Package files for a single shard, as name-value pairs
+  # Type: String -> String -> [ { name :: String; value :: Path; } ]
   namesForShard =
     shard: type:
     if type != "directory" then
@@ -36,16 +38,19 @@ let
       # - Ensure that README.md is the only file, throwing a better error message if that's not the case.
       #   However this would make for a poor code architecture, because one type of error would have to be duplicated in the validity checks and here.
       # Additionally in either of those alternatives, we would have to duplicate the hardcoding of "README.md"
-      { }
+      [ ]
     else
-      mapAttrs (name: _: baseDirectory + "/${shard}/${name}/package.nix") (
-        readDir (baseDirectory + "/${shard}")
-      );
+      map (name: {
+        inherit name;
+        value = baseDirectory + "/${shard}/${name}/package.nix";
+      }) (attrNames (readDir (baseDirectory + "/${shard}")));
 
   # The attribute set mapping names to the package files defining them
   # This is defined up here in order to allow reuse of the value (it's kind of expensive to compute)
   # if the overlay has to be applied multiple times
-  packageFiles = mergeAttrsList (mapAttrsToList namesForShard (readDir baseDirectory));
+  # A single `listToAttrs` allocates less than merging per-shard attribute sets with `mergeAttrsList`,
+  # which copies every package's entry once per level of its merge tree.
+  packageFiles = listToAttrs (concatLists (mapAttrsToList namesForShard (readDir baseDirectory)));
 in
 self:
 let
