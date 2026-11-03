@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "confight";
-  version = "2.0";
+  version = "2.0.0-2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Avature";
     repo = "confight";
     tag = finalAttrs.version;
-    hash = "sha256-3tsTVCtnFk9qNv3oGg96OKoRIke0Q//pW3iZAdh1g4s=";
+    hash = "sha256-FudWRHk3rZGRSAE/yZr792CgD5i47ZwLlpgKUdy+5lQ=";
   };
 
   build-system = [ setuptools ];
