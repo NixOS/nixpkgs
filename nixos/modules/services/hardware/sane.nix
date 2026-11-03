@@ -57,12 +57,6 @@ in
 
     hardware.sane.backends-package = lib.mkPackageOption pkgs "sane-backends" { };
 
-    hardware.sane.snapshot = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Use a development snapshot of SANE scanner drivers.";
-    };
-
     hardware.sane.extraBackends = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
@@ -153,6 +147,13 @@ in
   };
 
   ###### implementation
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "hardware"
+      "sane"
+      "snapshot"
+    ] "`hardware.sane.snapshot` did nothing and was removed.")
+  ];
 
   config = lib.mkMerge [
     (lib.mkIf enabled {
