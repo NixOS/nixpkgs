@@ -86,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Native PDF viewer (Wayland/X11) with configurable keybindings";
     homepage = "https://github.com/vincent-uden/miro";
+    changelog = "https://github.com/vincent-uden/miro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "miro-pdf";
