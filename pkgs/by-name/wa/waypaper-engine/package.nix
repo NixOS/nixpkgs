@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    makeWrapper ${electron}/bin/electron $out/bin/waypaper-engine \
+    makeWrapper ${lib.getExe electron} $out/bin/waypaper-engine \
       --add-flags $out/libexec/waypaper-engine/apps/desktop/dist-electron/main.js
 
     makeWrapper ${finalAttrs.passthru.backend}/bin/daemon $out/bin/waypaper-daemon \
