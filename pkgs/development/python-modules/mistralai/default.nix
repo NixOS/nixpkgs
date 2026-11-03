@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
   # Upstream stopped tagging releases on GitHub after v3.2.0
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-HNEw2gGXnY7Nw3Soi7eogFJLMYor40tuaQE8ozHenXA=";
+    hash = "sha256-l8xSW43clvuLW7CPRm3T0i+QTyHd/kUQPadsJf5gG/I=";
   };
 
   build-system = [
