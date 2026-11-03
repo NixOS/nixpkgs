@@ -26,9 +26,9 @@ let
       llvmPackages = llvmPackages_21;
       hash = "sha256-2sTMhaasyrKoBnyH/hQrNCbi0Vh6HekIrpE4XkyQulQ=";
     };
-    "0.17.0" = {
+    "0.17.1" = {
       llvmPackages = llvmPackages_22;
-      hash = "sha256-dXy3DrGQHDpXCnr+Wi/1tPEktPm9bBDJQiQ/0VyiMaM=";
+      hash = "sha256-oC6L2B6kpxqLMZTOA7iScA3UrYF+T7t09ryfPeSwY5M=";
     };
   }
   // zigVersions;
