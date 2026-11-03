@@ -3,33 +3,27 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   libelf,
   libpcap,
   nix-update-script,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dynamips";
-  version = "0.2.23";
+  version = "0.2.25";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "dynamips";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+h+WsZ/QrDd+dNrR6CJb2uMG+vbUvK8GTxFJZOxknL0=";
+    hash = "sha256-ms7MtMeGbfPIzhfSgSj7KkTaFhr+fuLz1cOKFHrjchQ=";
   };
 
-  patches = [
-    # https://github.com/GNS3/dynamips/issues/305
-    (fetchpatch {
-      name = "cmake4-compat.patch";
-      url = "https://github.com/GNS3/dynamips/commit/fdbbb7d3887eaa5b024bbcbcc14215f420a7e989.patch";
-      hash = "sha256-CbiPGrIqn9KGnZEPUw7LiH8dkqzjfu4UxW1f7Fzbwro=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
-
-  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     libelf
