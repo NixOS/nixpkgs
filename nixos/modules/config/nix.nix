@@ -168,8 +168,15 @@ in
         default = pkgs.nix;
         defaultText = lib.literalExpression "pkgs.nix";
         description = ''
-          This option specifies the Nix package instance to use throughout the system.
+          This option specifies the Nix package to use throughout the system.
+          It can be used to set a specific version or alternative implementation.
         '';
+        example = [
+          "pkgs.nixVersions.git"
+          "pkgs.nixVersions.latest"
+          "pkgs.nixStatic"
+          "pkgs.lixPackageSets.git.lix"
+        ];
       };
 
       checkConfig = mkOption {
