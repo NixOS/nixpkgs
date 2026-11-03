@@ -812,6 +812,7 @@ with haskellLib;
   generic-optics = dontCheckIf self.inspection-testing.meta.broken super.generic-optics;
   generic-optics_2_3_0_0 = dontCheckIf self.inspection-testing.meta.broken super.generic-optics_2_3_0_0;
   ghc-justdoit = dontCheckIf self.inspection-testing.meta.broken super.ghc-justdoit;
+  hkt = dontCheckIf self.inspection-testing.meta.broken super.hkt;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
