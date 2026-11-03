@@ -9,6 +9,9 @@
   systemd,
   liburing,
   zstd,
+  # Absolute path of the database that updatedb writes and plocate reads by default.
+  # Compiled into the binaries, so it can't be changed at runtime.
+  dbPath ? "/var/cache/locatedb",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plocate";
@@ -45,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dsharedstatedir=/var/cache"
-    "-Ddbpath=locatedb"
+    "-Dsharedstatedir=${builtins.dirOf dbPath}"
+    "-Ddbpath=${builtins.baseNameOf dbPath}"
   ];
 
   meta = {
