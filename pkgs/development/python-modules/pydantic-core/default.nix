@@ -19,14 +19,14 @@
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.46.4";
+    version = "2.50.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic";
       tag = "core-v${version}";
-      hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
+      hash = "sha256-LxHj9qK0PQytn+9gnhHNvlyGEvkjJmOEoedctYbyWjk=";
     };
 
     sourceRoot = "${src.name}/pydantic-core";
@@ -38,7 +38,7 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-5L317YTV7/Bc/YJLLzc745oJntiYkcZupdeUxiQwcOU=";
+      hash = "sha256-OZHAXwddNTDTeJXy7LaHLwpPJBNbcpeiO/duZuc0im0=";
     };
 
     nativeBuildInputs = [
