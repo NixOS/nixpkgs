@@ -1,0 +1,36 @@
+diff --git a/src/httpx2/httpx2/websockets/_transport.py b/src/httpx2/httpx2/websockets/_transport.py
+index 852de65d..dccc95a6 100644
+--- a/src/httpx2/httpx2/websockets/_transport.py
++++ b/src/httpx2/httpx2/websockets/_transport.py
+@@ -54,6 +54,7 @@ class ASGIWebSocketAsyncNetworkStream:
+         self.connection = wsproto.WSConnection(wsproto.ConnectionType.SERVER)
+         self.connection.initiate_upgrade_connection(scope["headers"], scope["path"])
+         self._aentered = False
++        self._closed = False
+ 
+     async def __aenter__(
+         self,
+@@ -108,12 +109,15 @@ class ASGIWebSocketAsyncNetworkStream:
+ 
+     async def read(self, max_bytes: int, timeout: float | None = None) -> bytes:
+         import httpcore2
++        closed_before_read = self._closed
+ 
+         try:
+             message: Message = await self.receive(timeout=timeout)
+         except anyio.EndOfStream:
+             return b""
+         except anyio.ClosedResourceError as exc:
++            if not closed_before_read:
++                return b""
+             raise httpcore2.ReadError() from exc
+         type = message["type"]
+ 
+@@ -158,6 +162,7 @@ class ASGIWebSocketAsyncNetworkStream:
+             await self.send({"type": "websocket.disconnect"})
+         await self._receive_queue.aclose()
+         await self._send_queue.aclose()
++        self._closed = True
+ 
+     async def send(self, message: Message) -> None:
+         await self._receive_queue.send(message)
