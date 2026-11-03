@@ -216,25 +216,40 @@ lib.extendMkDerivation {
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
-      env = args.env or { } // {
-        inherit (stdenv.hostPlatform.go) GOOS GOARCH;
+      env =
+        args.env or { }
+        // (
+          let
+            CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
+          in
+          {
+            inherit (stdenv.hostPlatform.go) GOOS GOARCH;
 
-        GOTOOLCHAIN = "local";
+            GOTOOLCHAIN = "local";
 
-        CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
+            inherit CGO_ENABLED;
 
-        GOFLAGS = toString (
-          GOFLAGS
-          ++
-            lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
-              "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-              (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
-          ++
-            lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
-              "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-              (lib.optional (!finalAttrs.allowGoReference) "-trimpath")
+            GOFLAGS = toString (
+              GOFLAGS
+              ++
+                lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
+                  "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+                  (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+              ++
+                lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
+                  "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+                  (lib.optional (!finalAttrs.allowGoReference) "-trimpath")
+              ++
+                # Default to PIE binaries when CGo is enabled, and the output isn't static. Universally supporting PIE requires
+                # external linking, which requires CGo and by default causes dynamic loading. Under these conditions that's okay.
+                lib.optional (
+                  !(lib.any (lib.hasPrefix "-buildmode=") GOFLAGS)
+                  && CGO_ENABLED == 1
+                  && !stdenv.hostPlatform.isStatic
+                ) "-buildmode=pie"
+            );
+          }
         );
-      };
 
       inherit enableParallelBuilding;
 
