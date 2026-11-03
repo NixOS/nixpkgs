@@ -6,6 +6,7 @@
   pkg-config,
   ffmpeg,
   zlib,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,9 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ffms includes a built-in vapoursynth plugin, see:
   # https://github.com/FFMS/ffms2#avisynth-and-vapoursynth-plugin
+  # Note: in vapoursynth ≥ 74 plugins must be python packages
+  passthru.pythonModule = python3;
+  passthru.requiredPythonModules = [ ];
   postInstall = ''
-    mkdir $out/lib/vapoursynth
-    ln -s $out/lib/libffms2${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/vapoursynth/libffms2${stdenv.hostPlatform.extensions.sharedLibrary}
+    pluginsDir="$out/${python3.sitePackages}/vapoursynth/plugins"
+    mkdir -p "$pluginsDir"
+    ln -s "$out"/lib/libffms2${stdenv.hostPlatform.extensions.sharedLibrary} -t "$pluginsDir/"
   '';
 
   meta = {
