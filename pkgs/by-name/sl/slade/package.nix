@@ -6,7 +6,7 @@
   pkg-config,
   which,
   zip,
-  wxwidgets_3_2,
+  wxwidgets_3_3,
   gtk3,
   sfml_2,
   fluidsynth,
@@ -17,6 +17,12 @@
   mpg123,
   wrapGAppsHook3,
   libwebp,
+  glm,
+  libxmp,
+  libarchive,
+  cpptrace,
+  nlohmann_json,
+  md4c,
 }:
 
 let
@@ -25,14 +31,16 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slade";
-  version = "3.2.12";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     tag = finalAttrs.version;
-    hash = "sha256-HSfK4vBGoRlljJ7JEJLjzSLmevIqllTwJ6z8bXPUp0w=";
+    hash = "sha256-keh3dkgUovNwMyQRJvrMN2iZSBGrwKSsdeNbxaZQiE8=";
   };
+
+  patches = [ ./remove-fetchcontent.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -43,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxwidgets_3_2
+    wxwidgets_3_3
     gtk3
     sfml_2
     fluidsynth
@@ -53,11 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     lua
     mpg123
     libwebp
+    glm
+    libxmp
+    libarchive
+    cpptrace
+    nlohmann_json
+    md4c
   ];
 
   cmakeFlags = [
-    "-DwxWidgets_LIBRARIES=${wxwidgets_3_2}/lib"
-    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"))
+    "-DwxWidgets_LIBRARIES=${wxwidgets_3_3}/lib"
+    (lib.cmakeFeature "CL_WX_CONFIG" (lib.getExe' (lib.getDev wxwidgets_3_3) "wx-config"))
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
