@@ -16803,6 +16803,11 @@
     email = "nixos@lillecarl.com";
     matrix = "@lillecarl:matrix.org";
   };
+  lillian0x = {
+    github = "lillian0x";
+    githubId = 183957662;
+    name = "lillian0x";
+  };
   lillycham = {
     email = "lillycat332@gmail.com";
     github = "lillycham";
