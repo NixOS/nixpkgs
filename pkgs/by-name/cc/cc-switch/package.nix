@@ -6,6 +6,7 @@
 
   coreutils,
   cargo-tauri,
+  desktop-file-utils,
   jq,
   makeBinaryWrapper,
   moreutils,
@@ -104,6 +105,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # (e.g. tauri 2.10 vs @tauri-apps/api 2.8). cargo tauri build errors on that;
   # the previous cargo-only packaging already shipped this combination.
   tauriBuildFlags = [ "--ignore-version-mismatches" ];
+  
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ desktop-file-utils ]}"
+    )
+  '';
 
   preCheck = ''
     substituteInPlace \
