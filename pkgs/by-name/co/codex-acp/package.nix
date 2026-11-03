@@ -11,21 +11,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "codex-acp";
-  version = "2.1.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "codex-acp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSxt9vtFnIrdZDmFJdYAfqkgm4BrGYKe420RamPkZvg=";
+    hash = "sha256-e5EcyiQrayZ+FRUrVq0GC0XrSNn4BAM9lGVeroZyjIQ=";
   };
 
-  npmDepsHash = "sha256-7v7QE0cmYsd3JGu0VoT53yZ1rb9wYB+tXt05G1EEvz8=";
-
-  patches = [
-    # https://github.com/agentclientprotocol/codex-acp/pull/609
-    ./test-codex-path.patch
-  ];
+  npmDepsHash = "sha256-osqAy2cjtBbWNEZcMeVZxi2pVbCTReZY8Nd+KPJJRAo=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -39,7 +34,8 @@ buildNpmPackage (finalAttrs: {
       --set-default CODEX_PATH ${lib.getExe codex}
   '';
 
-  # Codex's managed preferences sync fails in the Darwin sandbox.
+  # Codex's managed preferences sync fails for Darwin build users with /var/empty homes.
+  # https://github.com/openai/codex/issues/50072
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
@@ -55,7 +51,9 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "ACP adapter for Codex CLI";
