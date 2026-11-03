@@ -1,7 +1,10 @@
 {
   lib,
+  build,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   setuptools,
   stevedore,
@@ -10,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.13.0";
+  version = "1.16.0";
   pyproject = true;
 
   # Tests are not available from PyPi
@@ -18,15 +21,17 @@ buildPythonPackage rec {
     owner = "localstack";
     repo = "plux";
     tag = "v${version}";
-    hash = "sha256-daAFv5tIekWDq0iI/yolmuak0MMXXVCfAcbHcYY7Qd4=";
+    hash = "sha256-+UszKVgXqfp5IpjpwBvbscD2W9MqER4LTNinSCZ/Q3w=";
   };
 
   build-system = [
-    setuptools
-    wheel
+    hatchling
+    hatch-vcs
   ];
 
-  dependencies = [ stevedore ];
+  dependencies = [
+    build
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -41,12 +46,12 @@ buildPythonPackage rec {
     "test_resolve_distribution_information"
   ];
 
-  pythonImportsCheck = [ "plugin.core" ];
+  pythonImportsCheck = [ "plux.core" ];
 
   meta = {
     description = "Dynamic code loading framework for building pluggable Python distributions";
     homepage = "https://github.com/localstack/plux";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.purcell ];
   };
 }
