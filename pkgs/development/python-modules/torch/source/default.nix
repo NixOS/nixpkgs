@@ -25,9 +25,9 @@
   magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
-  # Set to false to link libnccl.so dynamically (like the PyPI and NGC builds), so that extensions
+  # Link libnccl.so dynamically by default (like the PyPI and NGC builds), so that extensions
   # linking NCCL themselves (e.g. DeepEP) share the same NCCL instance as torch.
-  useStaticNccl ? true,
+  useStaticNccl ? false,
   withNvshmem ? (cudaSupport && cudaPackages.libnvshmem.meta.available),
   withCusparselt ? (cudaSupport && cudaPackages.libcusparse_lt.meta.available),
   withCufile ? (cudaSupport && cudaPackages.libcufile.meta.available),
