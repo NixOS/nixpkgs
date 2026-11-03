@@ -833,6 +833,9 @@ with haskellLib;
     broken = drv.broken or self.inspection-testing.meta.broken;
   }) super.tasty-inspection-testing;
 
+  # inspection-testing doesn't work on all archs & ABIs and tasty-inspection-testing uses it
+  fixed-vector = dontCheckIf self.tasty-inspection-testing.meta.broken super.fixed-vector;
+
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
