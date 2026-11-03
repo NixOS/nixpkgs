@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "steampipe-plugin-aws";
-  version = "1.33.0";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-aws";
     tag = "v${version}";
-    hash = "sha256-twMYi/t0PR5q1dvoXStWqPXYEoDITwDgQ/b9WBsK3f8=";
+    hash = "sha256-VM82348h5EYzV6cZwjm+MG9sd2uPjKOsurlrhC7oxxs=";
   };
 
-  vendorHash = "sha256-UJFm4l0BLatg19vW8k6f86ZCBU/Y5Yq2U5dRey5ORQA=";
+  vendorHash = "sha256-Hwb0xq2jbE14dFijFUEDAxxsqzdaIox2NxaPjNu0tBc=";
 
   ldflags = [
     "-s"
@@ -25,6 +25,19 @@ buildGoModule rec {
   ];
 
   doCheck = true;
+
+  checkFlags =
+    let
+      # Requires network access
+      skippedTests = [
+        "TestEndpointUrlSignsWithConnectionKeys"
+        "TestEndpointUrlUsesConnectionProfile"
+        "TestEndpointUrlAssumesRoleAtConnectionEndpoint"
+        "TestEndpointUrlBeatsServiceEndpointEnv"
+        "TestEndpointUrlFromEnvWhenNotConfigured"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   installPhase = ''
     runHook preInstall
