@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://rasm.wikidot.com/english-index:home";
+    changelog = "https://github.com/EdouardBERGE/rasm/releases/v${finalAttrs.version}";
     description = "Z80 assembler";
     mainProgram = "rasm";
     # use -n option to display all licenses
