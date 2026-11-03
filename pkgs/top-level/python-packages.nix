@@ -6580,6 +6580,8 @@ self: super: with self; {
 
   fqdn = callPackage ../development/python-modules/fqdn { };
 
+  fractional-indexing = callPackage ../development/python-modules/fractional-indexing { };
+
   free-proxy = callPackage ../development/python-modules/free-proxy { };
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
