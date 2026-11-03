@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   pythonOlder,
 
@@ -43,15 +44,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.13.1";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
+    hash = "sha256-2wvTzI8E+/QLzlwPKWLqI6uxgGTP6/9Sb2/q4u872tw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "anyio-4.16-compat.patch";
+      url = "https://github.com/pydantic/httpx2/commit/cabbaca8888c32f33371fc85fb86c46cfb571559.patch";
+      hash = "sha256-1X66DVHgQB3Ef1iyU2gg95qOR0n0gdTQUbbCWZd6tCU=";
+    })
+  ];
 
   postPatch = ''
     pushd src/httpx2
