@@ -129,7 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # display a black screen on wayland, so force XWayland for now.
   # Might be fixed when upstream will be ready for Qt6.
-  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM xcb";
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
+  ];
 
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''

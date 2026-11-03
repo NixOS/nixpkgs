@@ -3731,6 +3731,8 @@ self: super: with self; {
 
   copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
 
+  copr = callPackage ../development/python-modules/copr { };
+
   copykitten = callPackage ../development/python-modules/copykitten { };
 
   coq-tools = callPackage ../development/python-modules/coq-tools { };
@@ -4016,8 +4018,6 @@ self: super: with self; {
   cypari = callPackage ../development/python-modules/cypari { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
-
-  cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
 
   cyrtranslit = callPackage ../development/python-modules/cyrtranslit { };
 
@@ -11282,8 +11282,6 @@ self: super: with self; {
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
 
   monarchmoneycommunity = callPackage ../development/python-modules/monarchmoneycommunity { };
-
-  monero = callPackage ../development/python-modules/monero { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
 
@@ -22381,6 +22379,8 @@ self: super: with self; {
   vacuum-map-parser-roborock =
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
+
+  vacuum-map-parser-xiaomi = callPackage ../development/python-modules/vacuum-map-parser-xiaomi { };
 
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 

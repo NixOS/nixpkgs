@@ -34,12 +34,13 @@ mkKdeDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix PYTHONPATH : ${
-      python3Packages.makePythonPath [
-        python3Packages.pillow
-        python3Packages.lottie
-      ]
-    }"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    (python3Packages.makePythonPath [
+      python3Packages.pillow
+      python3Packages.lottie
+    ])
   ];
 
   passthru.tests.version = testers.testVersion {

@@ -57,7 +57,9 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
+    "--set"
+    "FREI0R_PATH"
+    "${frei0r}/lib/frei0r-1"
   ];
 
   meta.mainProgram = "kdenlive";

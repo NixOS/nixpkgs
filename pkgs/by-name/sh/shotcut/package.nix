@@ -68,13 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   qtWrapperArgs = [
-    "--set FREI0R_PATH ${
-      (frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })
-    }/lib/frei0r-1"
-    "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
-    }"
+    "--set"
+    "FREI0R_PATH"
+    "${(frei0r.override { opencv = opencv4.override { ffmpeg_8-headless = ffmpeg_8; }; })}/lib/frei0r-1"
+
+    "--set"
+    "LADSPA_PATH"
+    "${ladspaPlugins}/lib/ladspa"
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ]))
   ];
 
   preFixup = ''

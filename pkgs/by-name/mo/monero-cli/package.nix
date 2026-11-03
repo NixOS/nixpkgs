@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.5.1";
+  version = "0.18.5.4"; # update monero-gui as well
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-RxuhR+GH4Y5kSzNxsqJklRWMbq1K82K3A2V+6JqYR98=";
+    hash = "sha256-tJs55DvYwrp0e4T84eilBccntRPcns1aLYK3wLIrX7A=";
   };
 
   patches = [

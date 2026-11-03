@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-tbGNVyYrTRmxOqVM7mjNgwZXXcUY205mKuFjrptr+m4=";
+  cargoHash = "sha256-AyO5XgIicG9zs9RXg6JgrIvqgq7f7LGSWVUk9BCa7EM=";
 
   buildInputs = [
     hwdata
@@ -49,8 +49,8 @@ rustPlatform.buildRustPackage {
     cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
-    substituteInPlace daemon/src/repositories/utils.rs \
-      --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
+    substituteInPlace cc-detect/src/shell_command.rs \
+      --replace-fail 'SHELL: &str = "/bin/sh"' 'SHELL: &str = "${runtimeShell}"'
   '';
 
   postInstall = ''

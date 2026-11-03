@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-actions-lock";
-  version = "0.2.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-actions-lock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EzS0oBdWpmyOI5EEaSVSwwT2FPX3vDz+njZVjx2AtyY=";
+    hash = "sha256-9jU5NmBFZayhOX8ifc+aMDhaIQ4XVPlLI/dPUoQuzNw=";
   };
 
   # debug.ReadBuildInfo does not provide version information in buildGoModule.
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
       --replace-fail 'return info.Main.Version' 'return "v${finalAttrs.version}"'
   '';
 
-  vendorHash = "sha256-3+EtwkvhN42bce978L2t1vP9t0l+zIlf4jDIteWP93A=";
+  vendorHash = "sha256-MS0GDAo/COikI5LwfgNPR83MhY6fAFg+Lpmzkv86X3M=";
 
   ldflags = [
     "-s"

@@ -23,8 +23,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-ssNGy40KMJ9P33uEGyYOer92QRS2T6DQlKaf/3XMFwQ=";
 
-  doCheck = false;
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpcap
@@ -34,6 +32,8 @@ buildGoModule (finalAttrs: {
     libnfnetlink
     libnetfilter_queue
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Man in the middle tool";
@@ -45,8 +45,5 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.bettercap.org/";
     license = lib.licenses.gpl3Only;
     mainProgram = "bettercap";
-    # Broken on darwin for Go toolchain > 1.22, with error:
-    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

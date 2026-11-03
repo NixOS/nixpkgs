@@ -66,10 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${placeholder "out"}/lib"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
+      "--prefix"
+      "DYLD_LIBRARY_PATH"
+      ":"
+      "${placeholder "out"}/lib"
     ];
 
   installPhase = ''

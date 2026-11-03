@@ -91,7 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" "11.0"
   );
 
-  qtWrapperArgs = [ "--set FG_ROOT ${finalAttrs.passthru.data}/share/FlightGear" ];
+  qtWrapperArgs = [
+    "--set"
+    "FG_ROOT"
+    "${finalAttrs.passthru.data}/share/FlightGear"
+  ];
 
   postInstall = ''
     # Remove redundant AppImage artifacts
