@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gibberish-detector,
@@ -61,8 +60,10 @@ buildPythonPackage (finalAttrs: {
     "TestGetFilesToScan"
     "TestLineNumberChanges"
     "TestModifiesBaselineFromVersionChange"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # unidiff 1.0.1 stopped starting a new file at a "---" header inside an
+    # open "diff --git" block (matiasb/python-unidiff#144), so the parser is
+    # still on setup.py when this fixture's last block targets
+    # .secrets.baseline, and parsing the fixture raises UnidiffParseError.
     "test_filename_filters_are_invoked_first"
     "test_success"
   ];
