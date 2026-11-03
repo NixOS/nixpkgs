@@ -171,7 +171,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "optuna";
   };
 })
