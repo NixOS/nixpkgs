@@ -4362,6 +4362,7 @@ with pkgs;
     python315
     python316
     python3Minimal
+    python3MinimalForMeson
     pypy27
     pypy310
     pypy311
