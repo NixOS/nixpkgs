@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   cairo,
+  brotli,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     rustPlatform.bindgenHook
     cairo
+    brotli
   ];
+
+  env.CARGO_FEATURE_SYS_LIB_BROTLI = "1";
 
   # Tests depend on cpuprofiler, which is not packaged in nixpkgs
   doCheck = false;
