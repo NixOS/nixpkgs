@@ -271,7 +271,7 @@ async def resolve_providers(manifests) -> tuple[set, set]:
         providers.add(provider)
     if errors:
         print("\n - ", end="")
-        print("\n - ".join(errors))
+        print("\n - ".join(sorted(set(errors))))
 
     builtins = {manifest.domain for manifest in manifests if manifest.builtin}
 
