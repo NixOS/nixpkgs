@@ -5,6 +5,13 @@
   ...
 }:
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    ;
+
   format = pkgs.formats.php { finalVariable = "config"; };
 
   cfg = config.services.filesender;
@@ -21,7 +28,7 @@ in
     doc = ./filesender.md;
   };
 
-  options.services.filesender = with lib; {
+  options.services.filesender = {
     enable = mkEnableOption "FileSender";
     package = mkPackageOption pkgs "filesender" { };
     user = mkOption {
@@ -99,21 +106,6 @@ in
             default = [ { type = "error_log"; } ];
             description = "Defines where FileSender logging is sent. You can sent logging to a file, to syslog or to the default PHP log facility (as configured through your webserver's PHP module). The directive takes an array of one or more logging targets. Logging can be sent to multiple targets simultaneously. Each logging target is a list containing the name of the logging target and a number of attributes which vary per log target. See below for the exact definiation of each log target.";
           };
-          auth_sp_type = lib.mkOption {
-            type = lib.types.enum [
-              "fake"
-              "header"
-              "oidc"
-              "saml"
-              "shibboleth"
-            ];
-            description = ''
-              FileSender authentication backend.
-
-              Note that `saml` requires an external SimpleSAMLphp installation, which
-              is not provided by this module and `fake` is for testing only.
-            '';
-          };
         };
       };
       default = { };
@@ -152,6 +144,52 @@ in
       description = ''
         Options for FileSender's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
       '';
+    };
+    auth = {
+      backend = lib.mkOption {
+        type = lib.types.enum [
+          "fake"
+          "header"
+          "oidc"
+          "saml"
+          "shibboleth"
+        ];
+        default = "oidc";
+        description = ''
+          FileSender authentication backend.
+
+          Note that `saml` requires an external SimpleSAMLphp installation, which
+          is not provided by this module and `fake` is for testing only.
+        '';
+      };
+
+      # https://docs.filesender.org/filesender/v3.0/admin/configuration/#:~:text=Authentication%3A%20SP%5Ffake
+      fake = {
+        authenticated = mkOption {
+          internal = true;
+          type = types.bool;
+          default = true;
+          description = "Whether the fake user is authenticated.";
+        };
+        name = mkOption {
+          internal = true;
+          type = types.str;
+          default = "User";
+          description = "Fake user name.";
+        };
+        uid = mkOption {
+          internal = true;
+          type = types.str;
+          default = "user";
+          description = "Fake user UID.";
+        };
+        email = mkOption {
+          internal = true;
+          type = types.str;
+          default = "user@example.org";
+          description = "Fake user email.";
+        };
+      };
     };
   };
   config = lib.mkIf cfg.enable {

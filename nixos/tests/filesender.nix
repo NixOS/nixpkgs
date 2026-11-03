@@ -5,7 +5,7 @@
 }:
 {
   name = "FileSender";
-  meta.maintainers = lib.teams.ngi.maintainers;
+  meta.maintainers = lib.teams.ngi.members;
 
   nodes.filesender =
     { pkgs, lib, ... }:
@@ -13,13 +13,8 @@
       services.filesender = {
         enable = true;
         localDomain = "filesender";
+        auth.backend = "fake";
         settings = {
-          auth_sp_type = "fake";
-          auth_sp_fake_authenticated = true;
-          auth_sp_fake_uid = "user";
-          auth_sp_fake_email = "user@example.org";
-          auth_sp_fake_name = "User";
-
           storage_filesystem_path = "/var/lib/filesender/files";
           site_url = "http://filesender";
           force_ssl = false;
