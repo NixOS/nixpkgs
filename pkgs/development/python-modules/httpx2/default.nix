@@ -43,15 +43,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.13.1";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XgjFiSwc4xCyPJcTB/Exh838fUOKsT0JRrha7s70C50=";
+    hash = "sha256-oG7mYYb1ZdrcVcTAPUFZx/Ggge7E1Ng7HyrT8YCF+nE=";
   };
+
+  patches = [
+    # https://github.com/pydantic/httpx2/discussions/1309
+    ./anyio-4.16-compat.patch
+  ];
 
   postPatch = ''
     pushd src/httpx2
