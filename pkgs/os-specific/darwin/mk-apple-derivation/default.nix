@@ -1,7 +1,7 @@
 {
   lib,
   bootstrapStdenv,
-  meson,
+  mesonMinimal,
   ninjaMinimal,
   runCommand,
   sourceRelease,
@@ -70,7 +70,7 @@ lib.extendMkDerivation {
         inherit xcodeProject;
 
         nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-          meson
+          mesonMinimal
           ninjaMinimal
           xcodeProjectCheckHook
         ];
