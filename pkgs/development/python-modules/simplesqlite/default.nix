@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "SimpleSQLite";
   version = "1.5.4";
   pyproject = true;
@@ -20,15 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "SimpleSQLite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PObyZmmECxp6keRymYFGi4Uf07yNHu6rUIqSrRx2bPE=";
   };
 
+  build-system = [ setuptools ];
+
   pythonRelaxDeps = [ "typepy" ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     dataproperty
     mbstrdecoder
     pathvalidate
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ henrirosten ];
   };
-}
+})

@@ -7336,10 +7336,6 @@ with pkgs;
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
 
-  displaylink = callPackage ../os-specific/linux/displaylink {
-    inherit (linuxPackages) evdi;
-  };
-
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
   libuuid = if stdenv.hostPlatform.isLinux then util-linuxMinimal else null;

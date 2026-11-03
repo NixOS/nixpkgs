@@ -4,7 +4,7 @@
   unzip,
   util-linux,
   libusb1,
-  evdi,
+  linuxPackages,
   makeBinaryWrapper,
   requireFile,
 }:
@@ -23,7 +23,7 @@ let
     stdenv.cc.cc
     util-linux
     libusb1
-    evdi
+    linuxPackages.evdi
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
