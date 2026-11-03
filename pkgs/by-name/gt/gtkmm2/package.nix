@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       tutorial.
     '';
 
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gtkmm.gnome.org/";
 
     license = lib.licenses.lgpl2Plus;
 
