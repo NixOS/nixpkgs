@@ -49,6 +49,8 @@ let
   #   - 0.7.0 requires CUDA 12.8 or newer, so we keep 0.6.3 for CUDA 12.6.
   #   - 0.8.x supports CUDA 12.9 and newer, so we keep 0.7.1 for CUDA 12.8.
   #   - NVIDIA dropped CUDA 12 support with 0.9.0, so we keep 0.8.1 for CUDA 12.9.
+  # - nvidia-driver: only provides cuda_compat, which left the CUDA manifest with CUDA 13.4. We use the latest driver
+  #   release built for each CUDA release. Older CUDA releases keep the cuda_compat from their CUDA manifest.
 
   cudaPackages_12_6 = mkCudaPackages {
     cublasdx = "25.06.1";
@@ -212,6 +214,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
+    nvidia-driver = "615.71.10";
     nvjpeg2000 = "0.12.0";
     nvpl = "26.10";
     nvtiff = "0.9.0";
