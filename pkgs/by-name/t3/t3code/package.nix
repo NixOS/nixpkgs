@@ -70,7 +70,10 @@ let
       "--prefix"
       "PATH"
       ":"
-      (lib.makeBinPath [ desktop-file-utils xdg-utils ])
+      (lib.makeBinPath [
+        desktop-file-utils
+        xdg-utils
+      ])
     ];
 
 in
