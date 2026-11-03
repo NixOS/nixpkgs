@@ -3,7 +3,6 @@
   stdenv,
   clang_20,
   buildNpmPackage,
-  nodejs_22,
   bruno,
   pkg-config,
   pango,
@@ -29,9 +28,6 @@ buildNpmPackage {
     npmDepsFetcherVersion
     ;
 
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
-
   npmWorkspace = "packages/bruno-cli";
   npmFlags = [ "--legacy-peer-deps" ];
 
@@ -56,16 +52,7 @@ buildNpmPackage {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
-  preBuild = ''
-    # upstream keeps removing and adding back canvas, only patch it when it is present
-    if [[ -e node_modules/canvas/binding.gyp ]]; then
-      substituteInPlace node_modules/canvas/binding.gyp \
-        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-      npm rebuild
-    fi
-  '';
 
   buildPhase = ''
     runHook preBuild
