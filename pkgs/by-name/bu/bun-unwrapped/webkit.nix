@@ -107,6 +107,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_DISABLE_PRECOMPILE_HEADERS" true)
   ]
   ++ lib.optionals isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" llvmPackages.stdenv.hostPlatform.darwinMinVersion)
     (lib.cmakeFeature "CMAKE_OSX_SYSROOT" "")
     (lib.cmakeFeature "CMAKE_Swift_COMPILER" "${llvmPackages.stdenv.cc}/bin/clang")
     (lib.cmakeFeature "GPERF_EXECUTABLE" (lib.getExe gperf))

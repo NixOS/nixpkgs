@@ -1,5 +1,5 @@
 diff --git a/src/collections/lib.rs b/src/collections/lib.rs
-index 57539df..1583f64 100644
+index 22edbb9..aa28c75 100644
 --- a/src/collections/lib.rs
 +++ b/src/collections/lib.rs
 @@ -1,6 +1,7 @@
@@ -20,7 +20,7 @@ index 57539df..1583f64 100644
  
  pub mod hive_array;
 diff --git a/src/collections/multi_array_list.rs b/src/collections/multi_array_list.rs
-index fda15fa..a77e229 100644
+index 1f53d67..bdf7fa3 100644
 --- a/src/collections/multi_array_list.rs
 +++ b/src/collections/multi_array_list.rs
 @@ -47,7 +47,7 @@
@@ -83,3 +83,32 @@ index fda15fa..a77e229 100644
                          assert!(
                              Self::META[i].size == core::mem::size_of::<F>(),
                              "MultiArrayList: column type does not match field type",
+diff --git a/src/runtime/cli/lint_js.rs b/src/runtime/cli/lint_js.rs
+index e4a2a09..b6802ce 100644
+--- a/src/runtime/cli/lint_js.rs
++++ b/src/runtime/cli/lint_js.rs
+@@ -407,7 +407,6 @@ fn end_vm(frees: bool) {
+ }
+ 
+ /// Startup state that all VMs share.
+-#[derive(Default)]
+ struct Start {
+     initialize: std::sync::Once,
+     /// Set if the run won't have more than a few VMs. Stays unset if a VM starts before the files are known.
+@@ -415,6 +414,16 @@ struct Start {
+     memory: std::sync::OnceLock<usize>,
+ }
+ 
++impl Default for Start {
++    fn default() -> Self {
++        Self {
++            initialize: std::sync::Once::new(),
++            is_for_few: AtomicBool::new(false),
++            memory: std::sync::OnceLock::new(),
++        }
++    }
++}
++
+ impl Start {
+     /// [`memory_for_engines`]
+     fn memory(&self) -> usize {
