@@ -14806,6 +14806,12 @@ with self;
       url = "mirror://cpan/authors/id/S/SY/SYOHEX/Furl-3.15.tar.gz";
       hash = "sha256-3HfJVVkzaza7gjjfwQ1A3YEfxjwwbzM7g/AXmwOIrjE=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/tokuhirom/Furl/commit/aefd962428988265f687cea45511ad4942134cd9.patch";
+        hash = "sha256-wOO3b+V800wI+CzNZzaKSz3y8hweRx/u4Pra2wBdf7Q=";
+      })
+    ];
     propagatedBuildInputs = [
       ClassAccessorLite
       HTTPParserXS
