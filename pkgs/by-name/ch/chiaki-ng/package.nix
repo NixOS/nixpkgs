@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "chiaki-ng";
     repo = "chiaki-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-se60wu1rwk/w5QG+pFvdtKD+zsJQdOmBole2WY2KCxw=";
+    hash = "sha256-hp5CKtxiqShI/OQVs0EomjHkCL9xuqNrN2qKDnlGAbg=";
     fetchSubmodules = true;
   };
 
