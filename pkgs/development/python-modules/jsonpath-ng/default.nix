@@ -10,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
-  version = "1.8.0";
-  format = "setuptools";
-  # TODO: typo; change to pyproject = true;
-  pypropject = true;
+  version = "1.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsonpath-ng";
     repo = "jsonpath-ng";
     tag = "v${version}";
-    hash = "sha256-soCSMOHJpAM/tOaydvv8tGS/VewtSMBteDNipSPttI0=";
+    hash = "sha256-VGAIsdPjmOOgRvXbABm6CF/7jQLX+foKCKjAhorNN04=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +27,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    "tests/benchmarks"
   ];
 
   pythonImportsCheck = [ "jsonpath_ng" ];
