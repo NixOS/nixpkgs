@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  versionCheckHook,
   cairo,
   brotli,
 }:
@@ -21,7 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-lGbsb3hlFen0tXBVLbm8+CE5dddv6Ner4YSAvAd3/ug=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildFeatures = [
     "epub"
@@ -29,15 +35,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    rustPlatform.bindgenHook
     cairo
     brotli
   ];
 
   env.CARGO_FEATURE_SYS_LIB_BROTLI = "1";
 
-  # Tests depend on cpuprofiler, which is not packaged in nixpkgs
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "Tui-based PDF viewer";
