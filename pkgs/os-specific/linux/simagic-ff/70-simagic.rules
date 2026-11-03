@@ -1,0 +1,7 @@
+# Grant access before systemd's seat-late rules run.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="0522", TAG+="uaccess"
+SUBSYSTEM=="input", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="0522", TAG+="uaccess"
+
+# Simagic Evo wheelbases.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3670", ATTRS{idProduct}=="050[012]", TAG+="uaccess"
+SUBSYSTEM=="input", ATTRS{idVendor}=="3670", ATTRS{idProduct}=="050[012]", TAG+="uaccess"
