@@ -22,7 +22,7 @@ in
 
   options = {
     programs.chromium = {
-      enable = lib.mkEnableOption "policies for chromium based browsers like Chromium, Google Chrome or Brave";
+      enable = lib.mkEnableOption "policies for chromium based browsers like Chromium or Google Chrome";
 
       enablePlasmaBrowserIntegration = lib.mkEnableOption "Native Messaging Host for Plasma Browser Integration";
 
@@ -154,13 +154,6 @@ in
         text = builtins.toJSON defaultProfile;
       };
       "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
-        text = builtins.toJSON cfg.extraOpts;
-      };
-      # for brave
-      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
-        text = builtins.toJSON defaultProfile;
-      };
-      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
         text = builtins.toJSON cfg.extraOpts;
       };
     };
