@@ -6,13 +6,13 @@
 }:
 {
   config,
-  pkgs,
   lib,
   ...
 }:
 let
   inherit (lib) mkIf;
   cfg = config.services.fluxer;
+  fluxer-server = cfg.package;
 in
 {
   config = {
@@ -56,7 +56,7 @@ in
           script = ''
             export HOME="$STATE_DIRECTORY"
 
-            ${lib.getExe pkgs.fluxer-server.api}
+            ${fluxer-server}/bin/fluxer-api
           '';
 
           serviceConfig = {
@@ -106,7 +106,7 @@ in
             set -u
             export HOME="$STATE_DIRECTORY"
 
-            ${pkgs.fluxer-server.api}/bin/fluxer-api-worker
+            ${fluxer-server}/bin/fluxer-api-worker
           '';
 
           serviceConfig = {
