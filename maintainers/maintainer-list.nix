@@ -13402,6 +13402,12 @@
     matrix = "@jeremiahs:matrix.org";
     name = "Jeremiah Secrist";
   };
+  jeremyrempel = {
+    email = "git@jrempel.com";
+    github = "jeremyrempel";
+    githubId = 1776510;
+    name = "Jeremy Rempel";
+  };
   jeremyschlatter = {
     email = "github@jeremyschlatter.com";
     github = "jeremyschlatter";
