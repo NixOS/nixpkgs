@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.11.0b7";
+  version = "2.11.0b8";
   builtinProviders = [
     "builtin"
     "coverartarchive"
@@ -28,6 +28,7 @@
     sendspin_source = [ "sendspin" ];
     sonic_similarity = [ "sonic_analysis" ];
     subsonic_scrobble = [ "opensubsonic" ];
+    wled_audio_sync = [ "sendspin" ];
     yandex_ynison = [ "yandex_music" ];
   };
   providerPackages = {
@@ -87,6 +88,8 @@
       ps: with ps; [
         pyblu
       ];
+    bookorbit = _: [
+    ];
     bose_soundtouch =
       ps: with ps; [
         defusedxml
@@ -132,6 +135,8 @@
       ];
     filesystem_yandex_disk = _: [
     ]; # missing yadisk
+    fip = _: [
+    ];
     fully_kiosk =
       ps: with ps; [
         python-fullykiosk
@@ -181,6 +186,8 @@
         liblistenbrainz
       ];
     local_audio = _: [
+    ];
+    local_metadata = _: [
     ];
     loudness_analysis = _: [
     ];
@@ -394,6 +401,8 @@
         wiim
       ];
     wikipedia = _: [
+    ];
+    wled_audio_sync = _: [
     ];
     yandex_music =
       ps: with ps; [
