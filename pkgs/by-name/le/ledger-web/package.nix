@@ -2,7 +2,6 @@
   lib,
   bundlerApp,
   bundlerUpdateScript,
-  ruby_3_4,
   withPostgresql ? true,
   libpq,
   withSqlite ? false,
@@ -13,9 +12,6 @@ bundlerApp {
   pname = "ledger_web";
   gemdir = ./.;
   exes = [ "ledger_web" ];
-
-  # "Source locally installed gems is ignoring... because it is missing extensions"
-  ruby = ruby_3_4;
 
   buildInputs = lib.optional withPostgresql libpq ++ lib.optional withSqlite sqlite;
 
