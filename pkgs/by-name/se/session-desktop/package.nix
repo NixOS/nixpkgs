@@ -33,6 +33,13 @@ let
       hash = "sha256-jM070usyclJp59E/AIRu7IYGjIEFPJXCcL9SeYPwLgI=";
     };
 
+    patches = [
+      # On darwin `libcxxhardeningfast` turns dereferencing an std::optional without checking its value into a SIGTRAP
+      # This results in the app crashing when trying to send a message.
+      # https://github.com/NixOS/nixpkgs/blob/b1d9a62b561edeb70393d75fdcb7978f07e4ae61/doc/stdenv/stdenv.chapter.md#libcxxhardeningfast-libcxxhardeningfast
+      ./libsession-darwin-crash.patch
+    ];
+
     env.LIBSESSION_RUNTIME_VERSION = electron.version;
 
     nativeBuildInputs = [
