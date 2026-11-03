@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyzonneplan";
-  version = "0.2.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyzonneplan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uvNp/yP6k+qLlBXQmh0gM4kbFS8uAZfyonMGCvxbn38=";
+    hash = "sha256-sjE1Z2Odh5yC+kfGuEeF+n/gJyXtrWvFonfT4lM21T4=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
