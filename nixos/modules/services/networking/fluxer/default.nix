@@ -239,6 +239,7 @@ in
 
   options.services.fluxer = {
     enable = lib.mkEnableOption "Fluxer Instant Messaging and VoIP Platform";
+    package = lib.mkPackageOption pkgs "fluxer-server" { };
     openFirewall = lib.mkOption {
       description = ''
         Open the ports required for fluxer, specifically:
@@ -602,7 +603,7 @@ in
 
           @staticAssets path /web/* /emoji/* /libs/* /avatars/* /badges/* /desktop/*
           handle @staticAssets {
-            root * ${pkgs.fluxer-server.static}/share/fluxer-static
+            root * ${cfg.package}/share/fluxer-static
 
             @hidden path /.*
             respond @hidden "Not Found" 404
@@ -683,7 +684,7 @@ in
         };
 
         locations."~ ^/(web|emoji|libs|avatars|badges|desktop)/" = {
-          root = "${pkgs.fluxer-server.static}/share/fluxer-static/";
+          root = "${cfg.package}/share/fluxer-static/";
           extraConfig = ''
             add_header X-Content-Type-Options nosniff;
             add_header Referrer-Policy strict-origin-when-cross-origin;
