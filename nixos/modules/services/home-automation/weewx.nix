@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -192,10 +193,10 @@ in
 
       serviceConfig = {
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = lib.concatStringsSep " " (
+        ExecStart = utils.escapeSystemdExecArgs (
           [
             "${weewxPackage}/bin/weewxd"
-            "${activeConfigFile}"
+            activeConfigFile
           ]
           ++ cfg.extraArgs
         );
