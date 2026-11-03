@@ -9,6 +9,11 @@
   ripgrep,
   zip,
   fzf,
+  pkg-config,
+  bzip2,
+  zstd,
+  xz,
+  sqlite,
 }:
 
 let
@@ -40,6 +45,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     poppler-utils
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+    xz
+    bzip2
+    sqlite
   ];
 
   nativeCheckInputs = path;
