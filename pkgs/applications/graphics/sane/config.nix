@@ -7,12 +7,6 @@
 
 let
   installSanePath = path: ''
-    if [ -e "${path}/lib/sane" ]; then
-      find "${path}/lib/sane" -maxdepth 1 -not -type d | while read backend; do
-        symlink "$backend" "$out/lib/sane/$(basename "$backend")"
-      done
-    fi
-
     if [ -e "${path}/etc/sane.d" ]; then
       find "${path}/etc/sane.d" -maxdepth 1 -not -type d | while read conf; do
         name="$(basename $conf)"
@@ -48,7 +42,7 @@ stdenv.mkDerivation {
       ln -sfn "$target" "$linkname"
     }
 
-    mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
+    mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d
   ''
   + (lib.concatMapStrings installSanePath paths)
   + (lib.concatMapStrings disableBackend disabledDefaultBackends);

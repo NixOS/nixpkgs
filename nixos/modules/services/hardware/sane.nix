@@ -29,11 +29,6 @@ let
     '';
   };
 
-  env = {
-    SANE_CONFIG_DIR = "/etc/sane-config";
-    LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
-  };
-
   backends = [
     pkg
     netConf
@@ -96,14 +91,8 @@ in
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
-        See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
+        See `/etc/sane.d/dll.conf` for the list of possible names.
       '';
-    };
-
-    hardware.sane.configDir = lib.mkOption {
-      type = lib.types.str;
-      internal = true;
-      description = "The value of SANE_CONFIG_DIR.";
     };
 
     hardware.sane.netConf = lib.mkOption {
@@ -171,12 +160,8 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf enabled {
-      hardware.sane.configDir = lib.mkDefault "${saneConfig}/etc/sane.d";
-
       environment.systemPackages = backends;
-      environment.sessionVariables = env;
-      environment.etc."sane-config".source = config.hardware.sane.configDir;
-      environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
+      environment.etc."sane.d".source = "${saneConfig}/etc/sane.d";
       services.udev.packages = backends;
       # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
       # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
@@ -198,7 +183,6 @@ in
 
       systemd.services."saned@" = {
         description = "Scanner Service";
-        environment = lib.mapAttrs (name: val: toString val) env;
         serviceConfig = {
           User = "scanner";
           Group = "scanner";
