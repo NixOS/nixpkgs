@@ -824,6 +824,7 @@ with haskellLib;
   postgresql-simple = dontCheckIf self.inspection-testing.meta.broken super.postgresql-simple;
   prolens = dontCheckIf self.inspection-testing.meta.broken super.prolens;
   prospect = dontCheckIf self.inspection-testing.meta.broken super.prospect;
+  sized = dontCheckIf self.inspection-testing.meta.broken super.sized;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
