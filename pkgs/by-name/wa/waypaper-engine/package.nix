@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "process.resourcesPath" "\"$out/bin\""
 
     pnpm exec vite build
+    CI=true pnpm prune --prod --ignore-scripts
 
     runHook postBuild
   '';
