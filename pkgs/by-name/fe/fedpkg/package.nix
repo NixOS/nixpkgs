@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fedpkg";
-  version = "1.47";
+  version = "1.48";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://forge.fedoraproject.org/packaging/fedpkg";
     tag = finalAttrs.version;
-    hash = "sha256-8vWiBm7Bp3pOv1tqhM9TKi0VubSaUMpUe5LUT1FZVRk=";
+    hash = "sha256-mgAgCAkmxos6IaWJietGjz+ZcNkjvSf/L3Y6xAhvqcY=";
   };
 
   # fedpkg defaults to reading its config from /etc/rpkg, point it at the
