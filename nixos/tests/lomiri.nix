@@ -665,7 +665,7 @@ in
               mouse_click(540, 80)
 
               # Expect Gallery to be brought into the foreground, with its sharing page open
-              wait_for_text("Photos")
+              wait_for_text("Events")
 
               # If lomiri-content-hub encounters a problem, it may have crashed the original application issuing the request.
               # Check that it's still alive
