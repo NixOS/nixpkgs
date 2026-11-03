@@ -26,4 +26,9 @@ makeSetupHook {
         inherit lunasvg;
       };
   };
+
+  meta = {
+    description = "Validate pkg-config files";
+    license = lib.licenses.mit;
+  };
 } ./pkgConfigCheckHook.sh
