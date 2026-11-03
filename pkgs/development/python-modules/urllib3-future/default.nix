@@ -81,7 +81,7 @@ buildPythonPackage rec {
     # test connects to the internet
     "test/contrib/test_resolver.py::test_url_resolver"
 
-    # fail with Python 3.14.8
+    # fail on multiple Python versions due to upstream issues.
     "test/test_async_response.py::TestAsyncResponse::test_chunked_decoding_gzip_swallow_garbage"
     "test/test_response.py::TestResponse::test_chunked_decoding_gzip_swallow_garbage"
     "test/test_ssltransport.py::SingleTLSLayerTestCase::test_start_closed_socket"
