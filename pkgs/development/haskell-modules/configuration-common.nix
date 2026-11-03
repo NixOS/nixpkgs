@@ -803,6 +803,7 @@ with haskellLib;
   # inspection-testing doesn't work on all archs & ABIs
   aeson-modern-tojson = dontCheckIf self.inspection-testing.meta.broken super.aeson-modern-tojson;
   algebraic-graphs_0_8 = dontCheckIf self.inspection-testing.meta.broken super.algebraic-graphs_0_8;
+  data-elevator = dontCheckIf self.inspection-testing.meta.broken super.data-elevator;
   generic-lens = dontCheckIf self.inspection-testing.meta.broken super.generic-lens;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
