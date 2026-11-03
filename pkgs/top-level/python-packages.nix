@@ -4745,6 +4745,8 @@ self: super: with self; {
     callPackage ../development/python-modules/django-encrypted-model-fields
       { };
 
+  django-enumfield = callPackage ../development/python-modules/django-enumfield { };
+
   django-environ = callPackage ../development/python-modules/django-environ { };
 
   django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
