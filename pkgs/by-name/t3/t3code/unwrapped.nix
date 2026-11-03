@@ -140,6 +140,18 @@ stdenv.mkDerivation (
     # some dependencies' static foreign-platform binaries.
     noAuditTmpdir = true;
 
+    stripExclude = [
+      "*.js"
+      "*.mjs"
+      "*.cjs"
+      "*.ts"
+      "*.mts"
+      "*.cts"
+      "*.map"
+      "*.json"
+      "*.md"
+    ];
+
     installPhase = ''
       runHook preInstall
 
