@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   freezegun,
   pytest,
   pytestCheckHook,
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-WJGwkON/RAiUiGzNkeqjzch4CEr6mPXij5dqz1ncRXs=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   buildInputs = [ pytest ];
 
