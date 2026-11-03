@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
 
   # build-system, dependencies
   meson,
