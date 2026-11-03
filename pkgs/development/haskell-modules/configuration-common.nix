@@ -794,6 +794,9 @@ with haskellLib;
       || (isStatic && lib.versionAtLeast self.ghc.version "9.10");
   }) super.inspection-testing;
 
+  # inspection-testing doesn't work on all archs & ABIs
+  generic-lens = dontCheckIf self.inspection-testing.meta.broken super.generic-lens;
+
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
