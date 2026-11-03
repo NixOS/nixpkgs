@@ -11,6 +11,7 @@
   fontconfig,
   freetype,
   oniguruma,
+  zstd,
   nixosTests,
   nix-update-script,
 }:
@@ -53,6 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     freetype
     oniguruma
+    zstd
   ];
 
   dontUseJustBuild = true;

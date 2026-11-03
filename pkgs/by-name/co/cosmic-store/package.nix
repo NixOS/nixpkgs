@@ -6,9 +6,11 @@
   libcosmicAppHook,
   pkg-config,
   just,
+  aws-lc,
   glib,
   flatpak,
   openssl,
+  zstd,
   nix-update-script,
   nixosTests,
 }:
@@ -39,9 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     flatpak
     openssl
+    zstd
   ];
 
   dontUseJustBuild = true;
