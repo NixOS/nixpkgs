@@ -7,6 +7,7 @@
   libpcap,
   nix-update-script,
   pkg-config,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "DYNAMIPS_CODE" "stable")
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
