@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqliteschema";
   version = "2.0.1";
   pyproject = true;
@@ -20,16 +20,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "sqliteschema";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZGDzGfj78v8o0GvAHcP26JiJCOWPaIr2h1Lqzh5AuSg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "typepy"
+  ];
+
+  dependencies = [
     mbstrdecoder
     tabledata
     typepy
@@ -57,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ henrirosten ];
   };
-}
+})

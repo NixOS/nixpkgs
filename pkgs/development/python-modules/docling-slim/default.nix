@@ -10,6 +10,7 @@
   certifi,
   docling-core,
   filetype,
+  langcodes,
   pluggy,
   pydantic,
   pydantic-settings,
@@ -37,6 +38,8 @@
   # feat-ocr-tesserocr:
   pandas,
   tesserocr,
+  # feat-asr-transformers:
+  torchaudio,
   # format-audio:
   numba,
   openai-whisper,
@@ -44,6 +47,7 @@
   python-docx,
   # format-email:
   mail-parser,
+  python-oxmsg,
   # format-html:
   beautifulsoup4,
   # format-html-render:
@@ -78,23 +82,29 @@
   # models-remote:
   tritonclient,
   # models-vlm-inline:
+  einops,
+  open-clip-torch,
   peft,
+  timm,
   transformers,
   # service-client:
   httpx,
   websockets,
 
   # tests
+  fastapi,
   ffmpeg-headless,
   gitMinimal,
+  matplotlib,
   pytest-xdist,
   pytestCheckHook,
+  uvicorn,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-slim";
-  version = "2.118.0";
+  version = "2.145.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -102,7 +112,7 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-99XxwibuvorgXXvqZtHHjJ4wvjoQdTNC36S6GnQTMXQ=";
+    hash = "sha256-yjDXSiu6mgXYP2FcYTkNA62BcFr+IXjVDRLqm1Ebad4=";
   };
 
   build-system = [
@@ -113,6 +123,7 @@ buildPythonPackage (finalAttrs: {
     certifi
     docling-core
     filetype
+    langcodes
     pluggy
     pydantic
     pydantic-settings
@@ -135,6 +146,10 @@ buildPythonPackage (finalAttrs: {
     extract-core = convert-core ++ [
       polyfactory
     ];
+    feat-asr-transformers = format-audio ++ [
+      torchaudio
+      transformers
+    ];
     # docling-core[chunking], whose extra deps nixpkgs already ships unconditionally
     feat-chunking = [
       docling-core
@@ -145,6 +160,8 @@ buildPythonPackage (finalAttrs: {
     ];
     # ocrmac is darwin-only and not packaged in nixpkgs
     feat-ocr-mac = [ ];
+    # nemotron-ocr is not packaged in nixpkgs
+    feat-ocr-nemotron = [ ];
     feat-ocr-rapidocr = [
       rapidocr
     ];
@@ -166,12 +183,16 @@ buildPythonPackage (finalAttrs: {
     ];
     format-email = format-html ++ [
       mail-parser
+      python-oxmsg
     ];
     format-html = [
       beautifulsoup4
     ];
     format-html-render = [
       playwright
+    ];
+    format-iwork = [
+      defusedxml
     ];
     format-latex = [
       pylatexenc
@@ -192,6 +213,7 @@ buildPythonPackage (finalAttrs: {
       pypdfium2
     ];
     format-pptx = [
+      pylatexenc
       python-pptx
     ];
     # resemblyzer is not packaged in nixpkgs
@@ -230,7 +252,10 @@ buildPythonPackage (finalAttrs: {
     # qwen-vl-utils is not packaged in nixpkgs
     models-vlm-inline = [
       accelerate
+      einops
+      open-clip-torch
       peft
+      timm
       transformers
     ];
     service-client = [
@@ -247,6 +272,7 @@ buildPythonPackage (finalAttrs: {
       ++ feat-chunking
       ++ feat-ocr-rapidocr
       ++ format-email
+      ++ format-iwork
       ++ format-latex
       ++ format-office
       ++ format-pdf
@@ -277,20 +303,24 @@ buildPythonPackage (finalAttrs: {
     docling-ibm-models
     docling-parse
     easyocr
+    fastapi
     ffmpeg-headless
     gitMinimal
     mail-parser
     marko
+    matplotlib
     openpyxl
     pylatexenc
     pypdfium2
     pytest-xdist
     pytestCheckHook
     python-docx
+    python-oxmsg
     python-pptx
     rapidocr
     rtree
     scipy
+    uvicorn
     websockets
     writableTmpDirAsHomeHook
   ];
@@ -319,10 +349,9 @@ buildPythonPackage (finalAttrs: {
     "test_parser_backends"
     "test_pipeline_cache_after_initialize"
     "test_pipeline_cache_with_chart_extraction"
-    "test_threaded_and_standard_backends_convert_with_standard_pipeline"
-    "test_threaded_pipeline_multiple_documents"
-    "test_threaded_pipeline_page_range"
-    "test_threaded_pipeline_with_pypdfium_backend"
+    "test_pipeline_materializes_format_neutral_fields"
+    "test_rapidocr_detect_orientation_reads_rotated_text"
+    "test_rotated_page_ocr_text_reaches_default_export"
 
     # Require openai-whisper, which is too heavy a dependency to pull in just for these
     "test_asr_pipeline_conversion"
@@ -339,6 +368,13 @@ buildPythonPackage (finalAttrs: {
 
     # Needs LibreOffice on PATH to render DrawingML, and a Pillow with WMF support
     "test_e2e_docx_conversions"
+
+    # AttributeError: <class 'PIL.WmfImagePlugin.WmfStubImageFile'> has no attribute '_handler'
+    "test_pptx_emf_picture_survives_without_pillow_metafile_support"
+
+    # Failed: DID NOT RAISE ValueError (localhost resolution differs in the sandbox)
+    "test_fetch_refuses_non_public_host"
+    "test_fetch_refuses_redirect_to_non_public_host"
   ];
 
   disabledTestPaths = [
@@ -348,22 +384,32 @@ buildPythonPackage (finalAttrs: {
     "tests/test_conversion_result_json.py"
     "tests/test_document_picture_classifier.py"
     "tests/test_e2e_conversion.py"
+    "tests/test_e2e_table_structure_ocr.py"
     "tests/test_failed_pages.py"
     "tests/test_heading_hierarchy_pdf.py"
+    "tests/test_kserve_v2_ocr_remote_gate.py"
     "tests/test_layout_picture_table_overlap.py"
     "tests/test_pdf_password.py"
+    "tests/test_progress_events_pdf.py"
+    "tests/test_threaded_pipeline.py"
 
     # arelle-release is not packaged in nixpkgs
     "tests/test_backend_xbrl.py"
 
     # tesserocr is packaged without the tessdata it needs to initialize
     "tests/test_e2e_ocr_conversion.py"
+
+    # Require the tesseract binary or download models from HuggingFace
+    "tests/test_replace_broken_text_layer.py"
   ];
+
+  # Many tests spin up fake HTTP services on localhost
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Modular version of the Docling package";
     homepage = "https://github.com/docling-project/docling";
-    changelog = "https://github.com/docling-project/docling/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
