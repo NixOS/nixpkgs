@@ -26,9 +26,19 @@ stdenv.mkDerivation rec {
     tag = "v${version}";
     sha256 = "sha256-VzTBd+59tGDdgp1ykdqXuBpT2pVHTnR71bb9/EVyW5Q=";
   };
+
+  patches = [
+    ./copy.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.9)" "cmake_minimum_required(VERSION 3.25)"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/include/stratagus
+    cp -r /build/source/gameheaders $out/include/stratagus/gameheaders
   '';
 
   nativeBuildInputs = [
