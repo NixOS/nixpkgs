@@ -72,6 +72,10 @@ let
       options = callLibs ./options.nix;
       types = callLibs ./types.nix;
 
+      # contracts
+      contract = callLibs ./contracts;
+      contracts = callLibs ./contracts/definitions;
+
       # constants
       licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
@@ -264,6 +268,11 @@ let
         isAttrs
         intersectAttrs
         removeAttrs
+        isNestedAttrsLeaf
+        mapNestedAttrs'
+        mapNestedAttrsWith
+        concatMapNestedAttrsWith
+        concatMapNestedAttrs'
         ;
       inherit (self.lists)
         singleton

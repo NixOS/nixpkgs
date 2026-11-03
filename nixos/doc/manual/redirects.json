@@ -361,6 +361,39 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "contracts": [
+    "index.html#contracts"
+  ],
+  "contracts-consumers": [
+    "index.html#contracts-consumers"
+  ],
+  "contracts-providers": [
+    "index.html#contracts-providers"
+  ],
+  "contracts-connect": [
+    "index.html#contracts-connect"
+  ],
+  "contracts-types": [
+    "index.html#contracts-types"
+  ],
+  "contracts-routing": [
+    "index.html#contracts-routing"
+  ],
+  "contracts-chaining": [
+    "index.html#contracts-chaining"
+  ],
+  "contracts-cross-node": [
+    "index.html#contracts-cross-node"
+  ],
+  "contracts-rename-request": [
+    "index.html#contracts-rename-request"
+  ],
+  "contracts-rename-type": [
+    "index.html#contracts-rename-type"
+  ],
+  "module-contracts": [
+    "index.html#module-contracts"
+  ],
   "modular-service-composition": [
     "index.html#modular-service-composition"
   ],
