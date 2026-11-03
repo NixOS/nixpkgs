@@ -15,9 +15,34 @@
 # nix-build build.nix --argstr maintainer <yourname> --argstr system aarch64-linux
 
 let
-  nixpkgsArgs = removeAttrs args [
-    "maintainer"
-  ];
+  lib = import ../../lib;
+
+  # Git doesn't track directories, so switching branches can leave a `pkgs/by-name/xx/foo` directory
+  # behind that is empty or holds only untracked files. The by-name overlay would then call its
+  # nonexistent `package.nix` and fail evaluation of this whole script. Mask such entries here,
+  # rather than in `pkgs/top-level/by-name-overlay.nix`, so that every other evaluation of Nixpkgs
+  # doesn't pay for the check. See <https://github.com/NixOS/nixpkgs/issues/338227>.
+  byNameDir = ../../pkgs/by-name;
+  missingByNamePackages = lib.concatMapAttrs (
+    shard: type:
+    lib.optionalAttrs (type == "directory") (
+      lib.concatMapAttrs (
+        name: _:
+        lib.optionalAttrs (!builtins.pathExists (byNameDir + "/${shard}/${name}/package.nix")) {
+          ${name} = null;
+        }
+      ) (builtins.readDir (byNameDir + "/${shard}"))
+    )
+  ) (builtins.readDir byNameDir);
+
+  nixpkgsArgs =
+    removeAttrs args [
+      "maintainer"
+      "overlays"
+    ]
+    // {
+      overlays = [ (_: _: missingByNamePackages) ] ++ args.overlays or [ ];
+    };
 
   pkgs = import ./../../default.nix nixpkgsArgs;
 
