@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ripwire";
-  version = "0.6.8";
+  version = "0.6.9";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-et";
     repo = "ripwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F3jJkGOxlGtOgUYTgLyyQjpEu0RAmGDbkym7+JKm648=";
+    hash = "sha256-SvV3698FRFVf+6eaSmCGXcTNasxeFfI8KFm+JMshri0=";
   };
 
   # Unvendor tree-sitter
