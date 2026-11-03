@@ -39,7 +39,6 @@
   cargo,
   fast-float,
   ffmpeg,
-  fmt,
   fontconfig,
   rustPlatform,
   rustc,
@@ -155,7 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     cpptrace
     fast-float
     ffmpeg
-    fmt
     fontconfig
     harfbuzz
     libavif
@@ -180,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
     openssl
     qt6Packages.qtbase
-    qt6Packages.qtpositioning
     sdl3
     simdutf
     (skia.overrideAttrs (prev: {
@@ -210,6 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio.dev
     glib
     libdrm
+    qt6Packages.qtpositioning
     qt6Packages.qtwayland
     vulkan-headers
     vulkan-loader

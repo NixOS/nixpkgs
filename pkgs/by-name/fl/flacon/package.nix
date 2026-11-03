@@ -62,8 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   qtWrapperArgs = [
-    "--suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
-    "--prefix PATH : ${finalAttrs.bin_path}"
+    "--suffix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+
+    "--prefix"
+    "PATH"
+    ":"
+    finalAttrs.bin_path
   ];
 
   meta = {

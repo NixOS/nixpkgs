@@ -85,7 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     "QHULL_CFLAGS=-I${qhull}/include/libqhull_r"
   ]);
 
-  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ texliveSmall ])
+  ];
 
   enableParallelBuilding = true;
 

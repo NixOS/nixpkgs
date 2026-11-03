@@ -45,12 +45,13 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        wirelesstools
-        iw
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      wirelesstools
+      iw
+    ])
   ];
 
   meta = {

@@ -58,12 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        alsa-lib
-        pulseaudio
-      ]
-    }"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      alsa-lib
+      pulseaudio
+    ])
   ];
 
   nativeBuildInputs = [
