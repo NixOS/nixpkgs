@@ -12,14 +12,27 @@ let
     types
     ;
 
-  format = pkgs.formats.php { finalVariable = "config"; };
-
   cfg = config.services.filesender;
   fpm = config.services.phpfpm.pools.filesender;
 
+  format = pkgs.formats.php { finalVariable = "config"; };
+  formatPrivate = pkgs.formats.php { };
+
+  configFile = format.generate "config.php" cfg.settings;
+  configFilePrivate = formatPrivate.generate "config_private.php" {
+    auth_sp_oidc_client_id = cfg.auth.oidc.clientID;
+    auth_sp_oidc_client_secret = formatPrivate.lib.mkRaw ''
+      trim(file_get_contents("${cfg.auth.oidc.clientSecretFile}"))
+    '';
+  };
+
   filesenderConfigDirectory = pkgs.runCommand "filesender-config" { } ''
     mkdir $out
-    cp ${format.generate "config.php" cfg.settings} $out/config.php
+    cp ${configFile} $out/config.php
+
+    ${lib.optionalString (cfg.auth.backend == "oidc") ''
+      cp ${configFilePrivate} $out/config_private.php
+    ''}
   '';
 in
 {
@@ -190,9 +203,80 @@ in
           description = "Fake user email.";
         };
       };
+
+      # https://docs.filesender.org/filesender/v3.0/admin/configuration/#:~:text=Authentication%3A%20OpenIDConnectClient
+      oidc = {
+        issuer = mkOption {
+          type = types.str;
+          default = "";
+          example = "https://idp.example.org/realms/filesender";
+          description = "OIDC issuer URL.";
+        };
+        clientID = mkOption {
+          type = types.str;
+          default = "";
+          description = "OIDC client ID.";
+        };
+        clientSecretFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/keys/filesender-oidc-client-secret";
+          description = ''
+            File containing the OIDC client secret.
+            Use a runtime path such as /run/keys/... so the secret is not copied
+            into the Nix store.
+          '';
+        };
+        scopes = mkOption {
+          type = types.listOf types.str;
+          default = [
+            "openid"
+            "profile"
+            "email"
+          ];
+        };
+        uidAttribute = mkOption {
+          type = types.str;
+          default = "sub";
+        };
+        emailAttribute = mkOption {
+          type = types.str;
+          default = "email";
+        };
+        nameAttribute = mkOption {
+          type = types.str;
+          default = "name";
+        };
+        groupsClaim = mkOption {
+          type = types.str;
+          default = "groups";
+        };
+        requiredGroups = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+        };
+        idpAttribute = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+      };
     };
   };
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          cfg.auth.backend != "oidc"
+          || (
+            cfg.auth.oidc.issuer != "" && cfg.auth.oidc.clientID != "" && cfg.auth.oidc.clientSecretFile != null
+          );
+        message = ''
+          services.filesender.oidc.issuer, clientID and clientSecretFile are
+          required when services.filesender.settings.auth_sp_type = "oidc".
+        '';
+      }
+    ];
+
     services.phpfpm = {
       pools.filesender = {
         user = cfg.user;
@@ -257,6 +341,25 @@ in
         db_port = toString cfg.database.port;
         db_password = format.lib.mkRaw "file_get_contents('${cfg.database.passwordFile}')";
       })
+      (lib.mkIf (cfg.auth.backend == "oidc") {
+        # Without this, the session is started only after the auth check, so a
+        # successful OIDC callback is invisible to subsequent requests.
+        # See: https://docs.filesender.org/filesender/v3.0/admin/configuration/#auth_sp_force_session_start_first
+        auth_sp_force_session_start_first = true;
+
+        auth_sp_oidc_issuer = cfg.auth.oidc.issuer;
+        auth_sp_oidc_scopes = cfg.auth.oidc.scopes;
+        auth_sp_oidc_uid_attribute = cfg.auth.oidc.uidAttribute;
+        auth_sp_oidc_email_attribute = cfg.auth.oidc.emailAttribute;
+        auth_sp_oidc_name_attribute = cfg.auth.oidc.nameAttribute;
+        auth_sp_oidc_groups_claim = cfg.auth.oidc.groupsClaim;
+      })
+      (lib.mkIf (cfg.auth.backend == "oidc" && cfg.auth.oidc.requiredGroups != [ ]) {
+        auth_sp_oidc_required_groups = cfg.auth.oidc.requiredGroups;
+      })
+      (lib.mkIf (cfg.auth.backend == "oidc" && cfg.auth.oidc.idpAttribute != null) {
+        auth_sp_oidc_idp_attribute = cfg.auth.oidc.idpAttribute;
+      })
       {
         site_url = lib.mkDefault "https://${cfg.localDomain}";
         db_type = "pgsql";
@@ -267,8 +370,8 @@ in
         storage_filesystem_path = lib.mkDefault "/var/lib/filesender/files";
         storage_filesystem_shred_path = lib.mkDefault "/var/lib/filesender/shredfiles";
 
-        auth_sp_type = lib.mkDefault "header";
-        auth_remote_user_default_domain = lib.mkDefault "localhost.localdomain";
+        auth_sp_type = cfg.auth.backend;
+        auth_remote_user_default_domain = lib.mkDefault cfg.localDomain;
       }
     ];
 

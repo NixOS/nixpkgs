@@ -1,8 +1,10 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
-  lib,
+  php,
   nixosTests,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "filesender";
@@ -34,11 +36,24 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/
     cp -R . $out/
 
+    ln -s ${finalAttrs.passthru.oidcDeps}/share/php/filesender-oidc/vendor \
+      $out/optional-dependencies/oidc/vendor
+
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) filesender;
+  passthru = {
+    oidcDeps = php.buildComposerProject2 {
+      pname = "filesender-oidc";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/optional-dependencies/oidc";
+      vendorHash = "sha256-0ovOcWxzieEffmrhdC3P5Xh395G629cbfB2GbXgoU8M=";
+      composerStrictValidation = false;
+    };
+    tests = {
+      inherit (nixosTests) filesender;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
