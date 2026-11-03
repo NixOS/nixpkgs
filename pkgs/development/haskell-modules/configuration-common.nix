@@ -825,6 +825,7 @@ with haskellLib;
   prolens = dontCheckIf self.inspection-testing.meta.broken super.prolens;
   prospect = dontCheckIf self.inspection-testing.meta.broken super.prospect;
   sized = dontCheckIf self.inspection-testing.meta.broken super.sized;
+  subcategories = dontCheckIf self.inspection-testing.meta.broken super.subcategories;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
