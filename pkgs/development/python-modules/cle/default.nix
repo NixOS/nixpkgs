@@ -62,18 +62,16 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  preCheck =
-    let
-      binaries = fetchFromGitHub {
-        owner = "angr";
-        repo = "binaries";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-EfmNEokXDCbiBpxQLhM1XG2hI/+n+QIFS3eNlEMdbe4=";
-      };
-    in
-    ''
-      ln -s ${binaries} ../binaries
-    '';
+  preCheck = ''
+    ln -s ${finalAttrs.passthru.binaries} ../binaries
+  '';
+
+  passthru.binaries = fetchFromGitHub {
+    owner = "angr";
+    repo = "binaries";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EfmNEokXDCbiBpxQLhM1XG2hI/+n+QIFS3eNlEMdbe4=";
+  };
 
   disabledTests = [
     # Require the optional unfree pyxdia dependency.

@@ -4,6 +4,7 @@
   archinfo,
   buildPythonPackage,
   cachetools,
+  callPackage,
   capstone,
   cargo,
   cffi,
@@ -47,7 +48,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "angr";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
-  # nixpkgs-update: no auto update
   version = "10.0.4";
   pyproject = true;
 
@@ -147,6 +147,11 @@ buildPythonPackage (finalAttrs: {
     "pypcode"
     "pyvex"
   ];
+
+  passthru.updateScript = {
+    command = [ (lib.getExe (callPackage ./update.nix { })) ];
+    supportedFeatures = [ "commit" ];
+  };
 
   passthru.tests.smoke =
     runCommandCC "angr-smoke-test"
