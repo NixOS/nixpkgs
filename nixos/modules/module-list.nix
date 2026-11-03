@@ -1260,7 +1260,6 @@
   ./services/networking/firezone/relay.nix
   ./services/networking/firezone/server.nix
   ./services/networking/flannel.nix
-  ./services/networking/fluxer
   ./services/networking/freeradius.nix
   ./services/networking/frp.nix
   ./services/networking/frr.nix
@@ -1734,6 +1733,7 @@
   ./services/web-apps/flame.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
+  ./services/web-apps/fluxer/default.nix
   ./services/web-apps/freescout.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/froide-govplan.nix
