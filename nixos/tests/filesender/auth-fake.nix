@@ -12,11 +12,10 @@
     {
       services.filesender = {
         enable = true;
-        localDomain = "filesender";
+        localDomain = "localhost";
         auth.backend = "fake";
+
         settings = {
-          storage_filesystem_path = "/var/lib/filesender/files";
-          site_url = "http://filesender";
           force_ssl = false;
           admin = "user";
           admin_email = "admin@localhost";
