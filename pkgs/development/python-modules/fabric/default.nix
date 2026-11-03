@@ -4,6 +4,7 @@
   decorator,
   deprecated,
   fetchFromGitHub,
+  fetchpatch,
   icecream,
   invoke,
   mock,
@@ -25,6 +26,17 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-GbZQ6rFKQyJZXYfe9b4j6yjKgAB0ct8AD1xYG0yGZl8=";
   };
+
+  patches = [
+    # Support invoke >= 3, only on main (4.x) upstream.
+    # https://github.com/fabric/fabric/issues/2376
+    (fetchpatch {
+      url = "https://github.com/fabric/fabric/commit/7fa309db9dd5dac69079c1fb83b6f579555f7d53.patch";
+      hash = "sha256-HxdV1XbsytBYOHV8WqcpKMpqGRkbXD/UlmAFSrmsFTg=";
+    })
+  ];
+
+  pythonRelaxDeps = [ "invoke" ];
 
   build-system = [ setuptools ];
 
@@ -76,7 +88,5 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "fab";
-    # https://github.com/fabric/fabric/issues/2376
-    broken = lib.versionAtLeast invoke.version "3";
   };
 }
