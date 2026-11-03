@@ -4017,8 +4017,6 @@ self: super: with self; {
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
-  cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
-
   cyrtranslit = callPackage ../development/python-modules/cyrtranslit { };
 
   cyscale = callPackage ../development/python-modules/cyscale { };
@@ -11282,8 +11280,6 @@ self: super: with self; {
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
 
   monarchmoneycommunity = callPackage ../development/python-modules/monarchmoneycommunity { };
-
-  monero = callPackage ../development/python-modules/monero { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
 
