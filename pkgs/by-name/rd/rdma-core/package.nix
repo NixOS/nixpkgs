@@ -1,12 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   gitUpdater,
   cmake,
   pkg-config,
   docutils,
-  pandoc,
   libnl,
   udev,
   udevCheckHook,
@@ -19,11 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
   version = "65.0";
 
-  src = fetchFromGitHub {
-    owner = "linux-rdma";
-    repo = "rdma-core";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-cAaWVE6/JU8ezjx+XrxNI6Su6VKxb2Jxl29sxU/yepI=";
+  # Use release tarball instead of git sources (contains pre-built man pages and avoids Pandoc dependency)
+  src = fetchurl {
+    url = "https://github.com/linux-rdma/rdma-core/releases/download/v${finalAttrs.version}/rdma-core-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jrk8FHQBRuBMKKwlh04Qa2HH06tmo20HCZ6TiYXvBoA=";
   };
 
   __structuredAttrs = true;
@@ -46,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withManPages [
     docutils
-    pandoc
   ];
 
   buildInputs = [
@@ -88,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
+    url = "https://github.com/linux-rdma/rdma-core.git";
     rev-prefix = "v";
   };
 
