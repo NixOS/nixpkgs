@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "unicode-rbnf";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "unicode-rbnf";
     tag = "v${version}";
-    hash = "sha256-t5QHZVBIRVyhqmgVno3Nql6W0Q91DZ8sJA+nFBdKkj4=";
+    hash = "sha256-iM1Qjum7Z0b02TQZkRBh3fpm5hC46K6e+xc04lEE/FA=";
   };
 
   build-system = [ setuptools ];
