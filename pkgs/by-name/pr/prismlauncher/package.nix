@@ -1,6 +1,7 @@
 {
   addDriverRunpath,
   alsa-lib,
+  coreutils,
   flite,
   gamemode,
   glfw3-minecraft,
@@ -21,6 +22,7 @@
   libxkbcommon,
   libxrandr,
   libxxf86vm,
+  makeShellWrapper,
   openal,
   pciutils,
   pipewire,
@@ -57,7 +59,45 @@ assert lib.assertMsg (
 
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID; };
+
+  # Prism saves the path of each Java it detects, so give it links that outlive
+  # the store paths they point to. They are repointed on every launch. Entries
+  # without a derivation version to name a link after are passed through as-is.
+  jdkLinkName =
+    jdk:
+    let
+      major = builtins.match "([0-9]+).*" (lib.getVersion jdk);
+    in
+    if lib.isDerivation jdk && major != null then "${lib.getName jdk}-${lib.head major}" else null;
+
+  linkJdks = ''
+    jdkDir="''${XDG_DATA_HOME:-$HOME/.local/share}/PrismLauncher/nix-jdks"
+    ${coreutils}/bin/mkdir -p "$jdkDir" 2>/dev/null || true
+  ''
+  + lib.concatMapStrings (
+    jdk:
+    let
+      name = jdkLinkName jdk;
+    in
+    ''
+      jdk=${lib.escapeShellArg (toString jdk)}
+    ''
+    + lib.optionalString (name != null) ''
+      ${coreutils}/bin/ln -sfT "$jdk" "$jdkDir/${name}" 2>/dev/null && jdk="$jdkDir/${name}"
+    ''
+    + ''
+      PRISMLAUNCHER_JAVA_PATHS="$jdk/bin/java''${PRISMLAUNCHER_JAVA_PATHS:+:$PRISMLAUNCHER_JAVA_PATHS}"
+    ''
+  ) (lib.reverseList jdks)
+  + ''
+    export PRISMLAUNCHER_JAVA_PATHS
+    unset jdkDir jdk
+  '';
 in
+
+assert lib.assertMsg (lib.allUnique (
+  lib.remove null (map jdkLinkName jdks)
+)) "prismlauncher: each of jdks needs a distinct name and major version";
 
 symlinkJoin {
   pname = "prismlauncher";
@@ -67,6 +107,7 @@ symlinkJoin {
 
   nativeBuildInputs = [
     kdePackages.wrapQtAppsHook
+    makeShellWrapper
     wrapGAppsHook3
   ];
 
@@ -81,6 +122,9 @@ symlinkJoin {
     # Required for org.gtk.Settings.FileChooser
     gappsWrapperArgsHook
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # --run needs the shell wrapper, hence makeShellWrapper
+    qtWrapperArgs+=(--run ${lib.escapeShellArg linkJdks})
 
     wrapQtAppsHook
   '';
@@ -128,7 +172,6 @@ symlinkJoin {
     in
     [
       "--set NIX_LAUNCHER_WRAPPER ${placeholder "out"}/bin/prismlauncher"
-      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
