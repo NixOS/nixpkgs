@@ -65,6 +65,8 @@ in
         system path get access to the devices exposed by the kernel modules
         instead of all users in the vboxusers group.
 
+        For the KVM build this defaults to false.
+
         ::: {.important}
         Disabling this can put your system's security at risk, as local users
         in the vboxusers group can tamper with the VirtualBox device files.
@@ -155,6 +157,7 @@ in
             message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
           }
         ];
+        virtualisation.virtualbox.host.enableHardening = lib.mkDefault false;
       })
       (lib.mkIf (!cfg.enableKvm) {
         boot.kernelModules = [
