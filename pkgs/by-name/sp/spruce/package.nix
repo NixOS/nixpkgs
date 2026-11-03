@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "spruce";
-  version = "1.35.23";
+  version = "1.35.24";
 
   src = fetchFromGitHub {
     owner = "geofffranks";
     repo = "spruce";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tZDXiUbX5fW/dYR+X4tftW37Cmg6yD2rVMPpYZeCS5w=";
+    hash = "sha256-41tw7QmCDyfn5joKb4t8N/61Xum6f59fSfyiymLVkiM=";
   };
 
   vendorHash = null;
