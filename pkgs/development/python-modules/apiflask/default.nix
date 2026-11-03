@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apiflask";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apiflask";
     repo = "apiflask";
     tag = finalAttrs.version;
-    hash = "sha256-Q79Cwk3ZziR0cpu8rA8goPYaE0ZeDFK4h96WkOfLMCg=";
+    hash = "sha256-Rt8GOKJHTEB7dIu3SAvXczCdY4lxpxjsZJmWE91sC/4=";
   };
 
   build-system = [ setuptools ];
