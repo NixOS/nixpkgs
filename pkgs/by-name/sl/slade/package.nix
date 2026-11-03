@@ -3,26 +3,26 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  pkg-config,
-  which,
-  zip,
-  wxwidgets_3_3,
-  gtk3,
-  sfml_2,
-  fluidsynth,
+  cpptrace,
   curl,
+  fluidsynth,
   ftgl,
   glew,
-  lua5_5,
-  mpg123,
-  wrapGAppsHook3,
-  libwebp,
   glm,
-  libxmp,
+  gtk3,
   libarchive,
-  cpptrace,
-  nlohmann_json,
+  libwebp,
+  libxmp,
+  lua5_5,
   md4c,
+  mpg123,
+  nlohmann_json,
+  pkg-config,
+  sfml_2,
+  which,
+  wrapGAppsHook3,
+  wxwidgets_3_3,
+  zip,
 }:
 
 let
@@ -46,27 +46,27 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     which
-    zip
     wrapGAppsHook3
+    zip
   ];
 
   buildInputs = [
-    wxwidgets_3_3
-    gtk3
-    sfml_2
-    fluidsynth
+    cpptrace
     curl
+    fluidsynth
     ftgl
     glew
-    lua
-    mpg123
-    libwebp
     glm
-    libxmp
+    gtk3
     libarchive
-    cpptrace
-    nlohmann_json
+    libwebp
+    libxmp
+    lua
     md4c
+    mpg123
+    nlohmann_json
+    sfml_2
+    wxwidgets_3_3
   ];
 
   cmakeFlags = [
@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
+  # Force x11/xwayland to workaround the 3D view "spinning out" when running under wayland.
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GDK_BACKEND : x11
