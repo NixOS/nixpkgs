@@ -151,7 +151,7 @@ buildPythonPackage (finalAttrs: {
     # Times out
     "test_rerun_unrelated_nonrun_left_run_right"
 
-    # Top eight slowest (majority of total runtime)
+    # Top eight slowest in descending order
     "test_files_split"
     "test_gitannex_local"
     "test_save_hierarchy"
@@ -160,7 +160,6 @@ buildPythonPackage (finalAttrs: {
     "test_get_subdatasets"
     "test_gitrepo_save_all"
     "test_ria_postclonecfg"
-
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # pbcopy not found
