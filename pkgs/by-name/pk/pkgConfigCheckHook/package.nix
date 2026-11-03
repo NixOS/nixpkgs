@@ -1,7 +1,9 @@
 {
   lib,
+  callPackage,
   makeSetupHook,
   buildPackages,
+  lunasvg,
 }:
 
 makeSetupHook {
@@ -11,5 +13,17 @@ makeSetupHook {
 
   substitutions = {
     pkgconfig = lib.getExe buildPackages.pkg-config;
+  };
+
+  passthru = {
+    tests =
+      lib.packagesFromDirectoryRecursive {
+        inherit callPackage;
+        directory = ./tests;
+      }
+      // {
+        # few consumers that are good to test
+        inherit lunasvg;
+      };
   };
 } ./pkgConfigCheckHook.sh
