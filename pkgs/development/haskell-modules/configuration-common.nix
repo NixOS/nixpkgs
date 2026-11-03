@@ -818,6 +818,7 @@ with haskellLib;
   linear-base_0_7_0 = dontCheckIf self.inspection-testing.meta.broken super.linear-base_0_7_0;
   loopbreaker = dontCheckIf self.inspection-testing.meta.broken super.loopbreaker;
   mockcat_1_4_1_1 = dontCheckIf self.inspection-testing.meta.broken super.mockcat_1_4_1_1;
+  named_0_4_0_0 = dontCheckIf self.inspection-testing.meta.broken super.named_0_4_0_0;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
