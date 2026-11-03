@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspectrum";
-  version = "1.6.3";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/fuse-emulator/libspectrum-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-+kpeaMGrWGDc35n1SG7mMTmV2+MOhBYOn2mdD423fXY=";
+    sha256 = "sha256-OjMi+QbwVJhxY8LpcHFgt82jAu5G1kERx8tuwzrcnQQ=";
   };
 
   nativeBuildInputs = [
