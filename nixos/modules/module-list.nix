@@ -1553,7 +1553,6 @@
   ./services/scheduling/gocron.nix
   ./services/scheduling/prefect.nix
   ./services/scheduling/scx-loader.nix
-  ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
