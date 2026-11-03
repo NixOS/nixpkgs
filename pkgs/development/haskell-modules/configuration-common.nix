@@ -835,6 +835,7 @@ with haskellLib;
 
   # inspection-testing doesn't work on all archs & ABIs and tasty-inspection-testing uses it
   fixed-vector = dontCheckIf self.tasty-inspection-testing.meta.broken super.fixed-vector;
+  fixed-vector_2_1_1_0 = dontCheckIf self.tasty-inspection-testing.meta.broken super.fixed-vector_2_1_1_0;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
