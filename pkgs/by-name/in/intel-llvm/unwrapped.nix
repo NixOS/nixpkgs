@@ -9,6 +9,7 @@
   # Regular dependencies
   lib,
   stdenv,
+  fetchpatch,
   cmake,
   ninja,
   python3,
@@ -166,7 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     # the friend declarations on ipc::handle, which GCC rejects as ambiguous in
     # C++20 mode, breaking any host code that includes <sycl/sycl.hpp>.
     # Upstream PR: https://github.com/intel/llvm/pull/23628
-    ./ambiguous-ipc-put.patch
+    (fetchpatch {
+      url = "https://github.com/intel/llvm/commit/1e92a880fb2d85dfcd0046443cb938ccf4280049.patch";
+      hash = "sha256-JH5HUYvJFv2cdyNdDMi+46iR9gWuSij+mvPbdwPWr2E=";
+    })
   ];
 
   postPatch = ''

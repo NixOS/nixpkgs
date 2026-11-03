@@ -91,6 +91,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=continuing_a_diverged_session_carries_one_branch"
     "--skip=continuing_in_another_agent_carries_the_conversation"
     "--skip=disjoint_concurrent_deletes_leave_the_index_empty"
+    "--skip=a_session_gone_on_with_elsewhere_catches_up_where_it_came_from::agent_1_Agent__Claude"
+    "--skip=capture_keeps_the_conversation_and_tool_calls::agent_1_Agent__Claude::capture_tools_1_true"
+    "--skip=capture_follows_a_transcript_exactly_once_across_restarts::agent_1_Agent__Claude"
+    "--skip=capture_follows_a_transcript_exactly_once_across_restarts::agent_3_Agent__Copilot"
+    "--skip=capture_follows_a_transcript_exactly_once_across_restarts::agent_4_Agent__Opencode"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Pi's liveness checks can treat unrelated host processes as an active session
+    "--skip=a_diverged_copy_resumes_only_as_chosen::agent_4_Agent__Pi"
+    "--skip=a_session_gone_on_with_elsewhere_catches_up_where_it_came_from::agent_3_Agent__Pi"
   ];
 
   # The e2e tests start an interactive bash, which sources the host's

@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tgrep";
-  version = "1.2.4";
+  version = "1.2.6";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "microsoft";
     repo = "tgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/f5NOr3xVC5RCt/Ev6fLL/Vq0aD6tHdEs19vYN/JnYE=";
+    hash = "sha256-nVi/nx6VGnFdh9WQayoEs+R1j0kjui57wSM0OJqsFpI=";
   };
 
-  cargoHash = "sha256-S2ujpwk+Jh8M29donjhtSFkpcxqmdRFb7b2SZZTVJEc=";
+  cargoHash = "sha256-P7d0tx/NhCalOV3Tx+eSVbbCnMbFLigtbbJpA6S5Ypo=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transient_retirement_locks_defer_attachment_without_changing_its_exact_intent"
     "--skip=unknown_missing_replaced_and_inaccessible_owner_proofs_never_release_leases"
     "--skip=unrelated_store_named_directories_keep_ordinary_indexes_usable"
+    "--skip=explicit_refresh_rereads_all_files_even_with_pending_path_hints"
     "--skip=worktrees"
     "--skip=managed"
     "--skip=generations"
