@@ -19,16 +19,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inline-snapshot";
-  version = "0.34.2";
+  version = "0.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
-    tag = version;
-    hash = "sha256-4Uvc925/6RxJRHjP3SZaB7T+gqky5KlL9agHy/14Jd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jfsWt14Znx/0z7b+FYUZwSMkpIO+oJlXGkEd3zoeT4Q=";
   };
 
   build-system = [ hatchling ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   optional-dependencies = {
     black = [ black ];
@@ -61,6 +61,11 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "inline_snapshot" ];
+
+  disabledTests = [
+    # matches pytest output, which changes in 9.2
+    "test_pytest_diff_fix"
+  ];
 
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
@@ -72,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
-    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
