@@ -16,8 +16,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 ${finalAttrs.passthru.geoipDat} $out/share/v2ray/geoip.dat
-    install -Dm444 ${finalAttrs.passthru.geositeDat} $out/share/v2ray/geosite.dat
+    mkdir -p $out/share/v2ray
+    ln -s ${finalAttrs.passthru.geoipDat} $out/share/v2ray/geoip.dat
+    ln -s ${finalAttrs.passthru.geositeDat} $out/share/v2ray/geosite.dat
 
     runHook postInstall
   '';
