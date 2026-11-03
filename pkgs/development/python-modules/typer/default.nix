@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "typer";
-  version = "0.27.2";
+  version = "0.27.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = finalAttrs.version;
-    hash = "sha256-vBHSJoyIQawkqqhbPJGKzPjBPm42OR/Ref/k6XFJTi8=";
+    hash = "sha256-Rg5vFInHqLDObGTFQ8k86Yw45+lXGdLIcgVFV6Z/gB0=";
   };
 
   postPatch = ''
