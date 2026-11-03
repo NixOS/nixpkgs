@@ -6,6 +6,7 @@
   postgresql,
   protobuf,
   rust-jemalloc-sys,
+  aws-lc,
   nixosTests,
   withOtel ? false,
 }:
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     protobuf
     rust-jemalloc-sys
+    aws-lc
   ];
 
   # The tests start their own throwaway PostgreSQL instances.
