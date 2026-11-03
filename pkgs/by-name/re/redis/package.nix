@@ -46,6 +46,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
 
+  postPatch =
+    # tests/modules/Makefile hardcodes CC=gcc and LD=gcc on Linux, which breaks cross-compilation
+    # Use ?= so the environment CC is respected
+    # see https://github.com/redis/redis/issues/15395
+    # and https://github.com/redis/redis/pull/15458
+    ''
+      substituteInPlace tests/modules/Makefile \
+        --replace-fail 'CC = gcc' 'CC ?= gcc' \
+        --replace-fail 'LD = gcc' 'LD ?= gcc'
+    '';
+
   nativeBuildInputs = [
     pkg-config
     which
