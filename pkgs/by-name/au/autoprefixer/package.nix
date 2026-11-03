@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.6.1";
+  version = "10.6.2";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
     tag = finalAttrs.version;
-    hash = "sha256-RQmZrZDIeBej+yt4xN77opzxj5y0gI0wijdnLt/NeU0=";
+    hash = "sha256-yvIQqirAli3rEMr8z3UA3mvRB2e6QKsGP2LI8opPSeM=";
   };
 
   nativeBuildInputs = [
