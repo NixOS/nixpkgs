@@ -828,6 +828,11 @@ with haskellLib;
   subcategories = dontCheckIf self.inspection-testing.meta.broken super.subcategories;
   vec = dontCheckIf self.inspection-testing.meta.broken super.vec;
 
+  # inspection-testing doesn't work on all archs & ABIs
+  tasty-inspection-testing = overrideCabal (drv: {
+    broken = drv.broken or self.inspection-testing.meta.broken;
+  }) super.tasty-inspection-testing;
+
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
