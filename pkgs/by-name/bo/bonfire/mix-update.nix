@@ -36,7 +36,6 @@ beamPkgs.mixRelease (
     postPatch =
       packageAttrs.postPatch or ""
       + lib.concatStringsSep "\n" [
-        # Applies: manuals/Contributor/Why_to/develop/a_package/using_Elixir/with_deps_nix.md
         ''
           substituteInPlace mix.exs \
               --replace-fail \

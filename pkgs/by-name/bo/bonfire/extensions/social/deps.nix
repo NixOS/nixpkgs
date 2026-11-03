@@ -2541,8 +2541,8 @@ let
             src = fetchFromGitHub {
               owner = "code-supply";
               repo = "deps_nix";
-              rev = "8ecd7ff6ab480fb8ee10768d60c7bb8e08978c29";
-              hash = "sha256-i3pMoWrKzBRZo77xFcCmjck4BngChPO8xPNTokuSVIk=";
+              rev = "0738af602ab04d8fd1ad59ba4d765ec3222ff199";
+              hash = "sha256-c98zvGFsJVEK4QWTo+zQlN+vENewRNhecsTPaP0JPRo=";
             };
 
             beamDeps = [
@@ -6934,6 +6934,61 @@ let
           };
         in
         drv;
+
+      social =
+        let
+          version = "0.0.1";
+          drv = buildMix {
+            inherit version;
+            name = "social";
+            appConfigPath = ./config;
+
+            src = fetchFromGitHub {
+              owner = "bonfire-networks";
+              repo = "social";
+              rev = "1f41e113bf75c6418f82e4daf4dc0f277d13711a";
+              hash = "sha256-1eD5AlxDVIawxbcw51pUvpjP9tKuTsZf7aJxibQhzXM=";
+            };
+
+            beamDeps = [
+              ember
+              bonfire_messages
+              bonfire_ui_messages
+              bonfire_ui_reactions
+              bonfire_classify
+              bonfire_search
+              bonfire_invite_links
+              bonfire_data_shared_user
+              bonfire_api_graphql
+              bonfire_open_id
+              bonfire_articles
+              bonfire_poll
+              bonfire_geolocate
+              bonfire_translation
+              mfm_parser
+              forecastr
+              activity_pub
+              ecto_sparkles
+              needle
+              needle_uid
+              needle_ulid
+              ex_ulid
+              bonfire_community_rules
+              absinthe
+              eqrcode
+              geo_postgis
+              geo
+              phoenix
+              phoenix_live_view
+              owl
+              httpoison
+              poison
+              rustler_precompiled
+              igniter
+            ];
+          };
+        in
+        drv.override (workarounds.rustlerPrecompiled { } drv);
 
       solid =
         let

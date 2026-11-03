@@ -2174,8 +2174,8 @@ let
             src = fetchFromGitHub {
               owner = "code-supply";
               repo = "deps_nix";
-              rev = "8ecd7ff6ab480fb8ee10768d60c7bb8e08978c29";
-              hash = "sha256-i3pMoWrKzBRZo77xFcCmjck4BngChPO8xPNTokuSVIk=";
+              rev = "0738af602ab04d8fd1ad59ba4d765ec3222ff199";
+              hash = "sha256-c98zvGFsJVEK4QWTo+zQlN+vENewRNhecsTPaP0JPRo=";
             };
 
             beamDeps = [
@@ -2490,6 +2490,128 @@ let
           };
         in
         drv;
+
+      ember =
+        let
+          version = "0.0.1";
+          drv = buildMix {
+            inherit version;
+            name = "ember";
+            appConfigPath = ./config;
+
+            src = fetchFromGitHub {
+              owner = "bonfire-networks";
+              repo = "ember";
+              rev = "151925c7d9525588e58c3f61f8b0f8c2c9e9106c";
+              hash = "sha256-ssUM9tBs1sJfiCcswfaLtEClYEKLKPTZ05SYOWwDWTQ=";
+            };
+
+            beamDeps = [
+              bonfire_common
+              bonfire_ui_common
+              activity_pub
+              bonfire_mailer
+              bonfire_epics
+              bonfire_ecto
+              bonfire_fail
+              bonfire_data_assort
+              bonfire_boundaries
+              bonfire_ui_boundaries
+              bonfire_federate_activitypub
+              bonfire_data_access_control
+              bonfire_data_activity_pub
+              bonfire_data_identity
+              bonfire_data_social
+              bonfire_data_edges
+              bonfire_editor_milkdown
+              bonfire_articles
+              bonfire_me
+              bonfire_ui_me
+              bonfire_social
+              bonfire_social_graph
+              bonfire_posts
+              bonfire_ui_social
+              bonfire_ui_social_graph
+              bonfire_ui_posts
+              bonfire_ui_moderation
+              bonfire_ui_reactions
+              bonfire_tag
+              bonfire_classify
+              bonfire_notify
+              bonfire_files
+              ecto_sparkles
+              needle
+              needle_uid
+              needle_ulid
+              ex_ulid
+              untangle
+              iconify_ex
+              entrepot
+              entrepot_ecto
+              nodeinfo
+              emote
+              paginator
+              voodoo
+              paper_trail
+              arrows
+              ex_cldr
+              surface
+              phoenix
+              phoenix_live_view
+              phoenix_view
+              plug_crypto
+              plug_cowboy
+              cowboy
+              gettext
+              bandit
+              orion
+              ecto
+              ecto_sql
+              postgrex
+              ecto_psql_extras
+              db_connection
+              ex_aws_s3
+              ex_marcel
+              req
+              finch
+              httpoison
+              jason
+              poison
+              timex
+              solid
+              mime
+              oban
+              sourceror
+              owl
+              mogrify
+              cachex
+              sizeable
+              geo
+              recase
+              uniq
+              rustler_precompiled
+              decimal
+              floki
+              faker_fork
+              text
+              text_corpus_udhr
+              hackney
+              idna
+              opentelemetry_process_propagator
+              opentelemetry_exporter
+              opentelemetry_semantic_conventions
+              telemetry_metrics
+              telemetry
+              telemetry_poller
+              sentry
+              oban_web
+              absinthe
+              bonfire_api_graphql
+              absinthe_client
+            ];
+          };
+        in
+        drv.override (workarounds.rustlerPrecompiled { } drv);
 
       emote =
         let

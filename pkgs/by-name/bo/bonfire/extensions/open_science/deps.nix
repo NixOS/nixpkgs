@@ -2731,8 +2731,8 @@ let
             src = fetchFromGitHub {
               owner = "code-supply";
               repo = "deps_nix";
-              rev = "8ecd7ff6ab480fb8ee10768d60c7bb8e08978c29";
-              hash = "sha256-i3pMoWrKzBRZo77xFcCmjck4BngChPO8xPNTokuSVIk=";
+              rev = "0738af602ab04d8fd1ad59ba4d765ec3222ff199";
+              hash = "sha256-c98zvGFsJVEK4QWTo+zQlN+vENewRNhecsTPaP0JPRo=";
             };
 
             beamDeps = [
@@ -5921,6 +5921,64 @@ let
           };
         in
         drv;
+
+      open_science =
+        let
+          version = "0.0.1";
+          drv = buildMix {
+            inherit version;
+            name = "open_science";
+            appConfigPath = ./config;
+
+            src = fetchFromGitHub {
+              owner = "bonfire-networks";
+              repo = "open_science";
+              rev = "f1fd95e70bd943b6668a590df2aafed9bf294e1d";
+              hash = "sha256-/224GpK6OCUJXhPwM62S65+i8q16cXFSRLn6G+egbeA=";
+            };
+
+            beamDeps = [
+              ember
+              community
+              bonfire_open_science
+              bonfire_messages
+              bonfire_ui_messages
+              bonfire_ui_reactions
+              bonfire_classify
+              bonfire_search
+              bonfire_invite_links
+              bonfire_data_shared_user
+              bonfire_api_graphql
+              bonfire_open_id
+              bonfire_articles
+              bonfire_poll
+              bonfire_ui_groups
+              bonfire_ui_topics
+              bonfire_geolocate
+              bonfire_translation
+              mfm_parser
+              forecastr
+              activity_pub
+              ecto_sparkles
+              needle
+              needle_uid
+              needle_ulid
+              ex_ulid
+              bonfire_community_rules
+              absinthe
+              eqrcode
+              geo_postgis
+              geo
+              phoenix
+              phoenix_live_view
+              owl
+              httpoison
+              poison
+              rustler_precompiled
+            ];
+          };
+        in
+        drv.override (workarounds.rustlerPrecompiled { } drv);
 
       openid_connect =
         let

@@ -50,7 +50,9 @@ beamPkgs.mixRelease (
         WITH_AI = "1";
         WITH_IMAGE_VIX = "1";
         WITH_GIT_DEPS = "1";
-        WITH_FORKS = "0";
+        # Explanation: without this the extensions are not included in the `deps.nix`
+        # by deps_nix because the logic in `mix.exs` uses a `path` dependency instead of `git` one.
+        WITH_CLONES = "0";
         WITH_DOCKER = "no";
         COMPILE_ALL_LOCALES = "no";
 
