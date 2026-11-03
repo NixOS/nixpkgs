@@ -7430,8 +7430,6 @@ with pkgs;
     else
       unixtools.net-tools;
 
-  nftables = callPackage ../os-specific/linux/nftables { };
-
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
   pam =
