@@ -1,6 +1,6 @@
 {
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   exiftool,
   fetchurl,
   ffmpeg-headless,
@@ -16,8 +16,15 @@ let
       version = "8.1.0";
       appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
       srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
+      vendorHash = null;
     };
-    "34" = latestVersionForNc."33";
+    "34" = {
+      version = "11.0.2";
+      appHash = "sha256-ygV6UFNKOr5zUaSPtwcH/wIf7hfxbzj4kUTFoM0sxD8=";
+      srcHash = "sha256-Fp9tgiyHXnqEsS4xA+eEDGkl0ouXQhnHQn5eETyot+c=";
+      vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
+    };
+    "35" = latestVersionForNc."34";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
@@ -30,9 +37,9 @@ let
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 
-  go-vod = buildGoModule rec {
+  go-vod = buildGo127Module rec {
     pname = "go-vod";
-    inherit (currentVersionInfo) version;
+    inherit (currentVersionInfo) version vendorHash;
 
     src = fetchFromGitHub {
       owner = "pulsejet";
@@ -43,7 +50,7 @@ let
 
     sourceRoot = "${src.name}/go-vod";
 
-    vendorHash = null;
+    nativeCheckInputs = [ ffmpeg-headless ];
 
     meta = commonMeta // {
       description = "Extremely minimal on-demand video transcoding server in go";
