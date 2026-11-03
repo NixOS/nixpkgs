@@ -7,7 +7,7 @@
   nixosTests,
   nodejs,
   npmHooks,
-  ruby_3_4,
+  ruby_4_0,
   stdenv,
   tailwindcss_3,
   gemset ? import ./gemset.nix,
@@ -20,7 +20,7 @@
   },
 }:
 let
-  ruby = ruby_3_4;
+  ruby = ruby_4_0;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dawarich";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     postPatch = ''
       substituteInPlace ./Gemfile \
-        --replace-fail "ruby File.read('.ruby-version').strip" "ruby '>= 3.4.0'"
+        --replace-fail "ruby File.read('.ruby-version').strip" "ruby '>= 4.0.0'"
     '';
   };
 
