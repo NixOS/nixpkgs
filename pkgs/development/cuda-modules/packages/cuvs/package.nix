@@ -12,6 +12,7 @@
   cudaAtLeast,
   cudaMajorMinorVersion,
   cudaNamePrefix,
+  cudaOlder,
   cutlass,
   dlpack,
   fetchFromGitHub,
@@ -147,8 +148,9 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
     platformAssertions = [
       {
-        message = "RAPIDS 26.08 requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion})";
-        assertion = cudaAtLeast "13.4";
+        # rapids-cmake 26.08 finds CCCL with `EXACT`, so the CCCL 3.5.0 shipped with CUDA 13.5 is rejected.
+        message = "RAPIDS 26.08 requires CCCL 3.4.3, shipped with CUDA 13.4 (found ${cudaMajorMinorVersion})";
+        assertion = cudaAtLeast "13.4" && cudaOlder "13.5";
       }
       # https://docs.rapids.ai/install#system-req
       {
