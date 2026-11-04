@@ -8,7 +8,7 @@
   lib,
   multidict,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   requests,
   yarl,
 }:
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     ddt
     httpx
     pytest-asyncio
-    pytestCheckHook
+    pytest9_1CheckHook
     requests
   ];
 
