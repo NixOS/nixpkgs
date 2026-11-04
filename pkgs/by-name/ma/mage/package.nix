@@ -8,6 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "mage";
   version = "1.17.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "magefile";
     repo = "mage";
