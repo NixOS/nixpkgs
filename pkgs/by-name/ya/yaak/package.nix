@@ -97,6 +97,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
+
+    substituteInPlace src-tauri/yaak-templates/package.json \
+      --replace-fail '"build": "wasm-pack build --target bundler"' \
+      '"build": "CARGO_BUILD_TARGET=wasm32-unknown-unknown wasm-pack build --target bundler"'
   '';
 
   preBuild =

@@ -8918,7 +8918,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/docker-machine/hyperkit.nix
       { };
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
-  docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
   drawpile-server-headless = drawpile.override {
