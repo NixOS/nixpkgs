@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-timeout,
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_1CheckHook
     pytest-asyncio
     pytest-cov-stub
     pytest-timeout
