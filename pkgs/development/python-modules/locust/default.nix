@@ -22,20 +22,19 @@
   pyzmq,
   requests,
   retry,
-  tomli,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.43.1";
+  version = "2.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-+0B4S524UjvaYl7VTZ1IY7UuBuDjUBqOvjHu0UVOi6A=";
+    hash = "sha256-Zc/OTGsRTKjZOU2Ru00cDO5hu9loSu9J/8MXdHDjyBY=";
   };
 
   postPatch = ''
@@ -62,11 +61,9 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # version 0.7.0.dev0 is not considered to be >= 0.6.3
-    "flask-login"
     # version 6.0.1 is listed as 0.0.1 in the dependency check and 0.0.1 is not >= 3.0.10
     "flask-cors"
-    "requests"
+    "geventhttpclient"
   ];
 
   dependencies = [
@@ -81,7 +78,6 @@ buildPythonPackage rec {
     psutil
     pyzmq
     requests
-    tomli
     werkzeug
     pytest
   ];
