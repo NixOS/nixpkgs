@@ -31,6 +31,12 @@ in
       displayManager.lightdm.extraConfig = ''
         logind-check-graphical = false
       '';
+
+      # `wait_for_x()` establishing a connection that is being teared down
+      # before having any other connection to X11 causes the X server to reset
+      # itself. This flag prevents that behavior.
+      # Context: https://github.com/NixOS/nixpkgs/pull/578540#issuecomment-6593586095
+      displayManager.xserverArgs = lib.mkAfter [ "-noreset" ];
     })
   ];
 
