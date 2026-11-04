@@ -4,7 +4,6 @@
   fetchFromGitHub,
   git,
   mock,
-  pep440,
   pip,
   pytestCheckHook,
   setuptools,
@@ -37,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     git
     mock
-    pep440
     pip
     pytestCheckHook
     six
