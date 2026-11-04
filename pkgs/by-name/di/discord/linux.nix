@@ -285,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = binaryName;
+    exec = "${binaryName} --url -- %u";
     icon = pname;
     inherit desktopName;
     comment = meta.description;
