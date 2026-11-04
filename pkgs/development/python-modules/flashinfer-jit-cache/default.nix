@@ -18,6 +18,7 @@
   cudaPackages,
 
   # dependencies
+  flashinfer-cubin,
   flashinfer-python,
 
   # passthru
@@ -74,6 +75,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     CUDA_HOME = flashinfer-python.cudaHome;
     # Dependencies of the shim: one `flashinfer-jit-cache-smXX` provider per architecture
     FLASHINFER_JIT_CACHE_PROVIDER_ARCHS = lib.concatStringsSep " " cudaCapabilities;
+    # The trtllm-gen/DeepGEMM artifacts come from `flashinfer-cubin`: fail early if one is missing
+    # instead of retrying to download it in the sandbox
+    FLASHINFER_NO_DOWNLOAD = "1";
   };
   # Exposed as a bash array (`__structuredAttrs`) to build one provider per architecture
   inherit cudaCapabilities;
@@ -116,6 +120,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   hardeningDisable = [ "bindnow" ];
 
   dependencies = [
+    # Provides the trtllm-gen/DeepGEMM artifacts (headers, checksums.txt and cubins), both when
+    # building the AOT modules and at runtime
+    flashinfer-cubin
     flashinfer-python
   ];
 
@@ -166,7 +173,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     broken = !cudaSupport;
     description = "Pre-compiled JIT cache for FlashInfer";
     homepage = "https://github.com/flashinfer-ai/flashinfer/tree/main/flashinfer-jit-cache";
-    changelog = "https://github.com/flashinfer-ai/flashinfer/releases/tag/${finalAttrs.src.tag}";
+    inherit (flashinfer-python.meta) changelog;
     license = lib.licenses.asl20;
     teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
