@@ -547,18 +547,16 @@ let
               module = module;
               modules = collectedImports.modules;
               disabled =
-                (
-                  if module.disabledModules != [ ] then
-                    [
-                      {
-                        file = module._file;
-                        disabled = module.disabledModules;
-                      }
-                    ]
-                  else
-                    [ ]
-                )
-                ++ collectedImports.disabled;
+                if module.disabledModules != [ ] then
+                  [
+                    {
+                      file = module._file;
+                      disabled = module.disabledModules;
+                    }
+                  ]
+                  ++ collectedImports.disabled
+                else
+                  collectedImports.disabled;
             }
           ) initialModules
         );
