@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   tinycss2,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' pyproject.toml
   '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ tinycss2 ];
 
