@@ -401,7 +401,7 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
-        inherit (doCollect { }) graph;
+        graph = (doCollect { }).graph;
         inherit extendModules type class;
       };
     in
@@ -597,7 +597,7 @@ let
 
           toModuleGraph = structuredModule: {
             disabled = isDisabledModule structuredModule;
-            inherit (structuredModule) key;
+            key = structuredModule.key;
             file = structuredModule.module._file;
             imports = map toModuleGraph structuredModule.modules;
           };
@@ -830,7 +830,7 @@ let
             ''
           else
             mapAttrs (n: option: {
-              inherit (module) _file;
+              _file = module._file;
               pos = unsafeGetAttrPos n subtree;
               options = option;
             }) subtree
@@ -844,7 +844,7 @@ let
           mapAttrs (
             n: value:
             map (config: {
-              inherit (module) file;
+              file = module.file;
               config =
                 if isAttrs config then
                   config
@@ -865,7 +865,7 @@ let
         map (
           module:
           mapAttrs (n: value: {
-            inherit (module) file;
+            file = module.file;
             inherit value;
           }) module.config
         ) configs
@@ -1211,12 +1211,12 @@ let
         # yield a value computed from the definitions
         if opt ? apply then opt.apply res.mergedValue else res.mergedValue
       );
-      inherit (res.defsFinal') highestPrio;
+      highestPrio = res.defsFinal'.highestPrio;
       definitions = catAttrs "value" res.defsFinal;
       files = catAttrs "file" res.defsFinal;
       definitionsWithLocations = res.defsFinal;
-      inherit (res) isDefined;
-      inherit (res.checkedAndMerged) valueMeta;
+      isDefined = res.isDefined;
+      valueMeta = res.checkedAndMerged.valueMeta;
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
@@ -1277,7 +1277,7 @@ let
                 value
               else
                 {
-                  inherit (m) file;
+                  file = m.file;
                   inherit value;
                 }
             ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
@@ -1296,7 +1296,7 @@ let
         in
         {
           values = defsSorted;
-          inherit (defsFiltered) highestPrio;
+          highestPrio = defsFiltered.highestPrio;
         };
     defsFinal = defsFinal'.values;
 
@@ -1532,7 +1532,7 @@ let
           def
           // {
             value = def.value.content;
-            inherit (def.value) priority;
+            priority = def.value.priority;
           }
         else
           def;
@@ -1597,7 +1597,7 @@ let
       in
       {
         value = merging.mergedValue;
-        inherit (merging.defsFinal') highestPrio;
+        highestPrio = merging.defsFinal'.highestPrio;
       }
     ) defsByAttr;
 
