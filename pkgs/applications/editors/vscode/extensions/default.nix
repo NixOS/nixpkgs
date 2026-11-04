@@ -2114,6 +2114,23 @@ let
         };
       };
 
+      Grafana.vscode-jsonnet = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-jsonnet";
+          publisher = "Grafana";
+          version = "0.7.4";
+          hash = "sha256-oz+oRjea2/ZDZPHvOXRdmHMCingAWWzs3u1e1r0iUTw=";
+        };
+
+        meta = {
+          description = "Full code support (formatting, highlighting, navigation, debugging etc) for Jsonnet";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet";
+          homepage = "https://github.com/grafana/vscode-jsonnet";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.RadxaYuntian ];
+        };
+      };
+
       grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gc-excelviewer";
