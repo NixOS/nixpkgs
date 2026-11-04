@@ -1,0 +1,15 @@
+diff --git a/src/httpx2/httpx2/websockets/_transport.py b/src/httpx2/httpx2/websockets/_transport.py
+index 60484479..53b9414a 100644
+--- a/src/httpx2/httpx2/websockets/_transport.py
++++ b/src/httpx2/httpx2/websockets/_transport.py
+@@ -156,7 +156,9 @@ class ASGIWebSocketAsyncNetworkStream:
+         with contextlib.suppress(anyio.ClosedResourceError):
+             await self.send({"type": "websocket.disconnect"})
+         await self._receive_queue.aclose()
+-        await self._send_queue.aclose()
++        await self._send_queue.send_stream.aclose()
++        await anyio.lowlevel.checkpoint()
++        await self._send_queue.receive_stream.aclose()
+ 
+     async def send(self, message: Message) -> None:
+         await self._receive_queue.send(message)
