@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  runCommandLocal,
-  curl,
-  cacert,
+  fetchurl,
   jq,
 
   undmg,
@@ -47,26 +45,22 @@ let
 
     fetchqq =
       url: hash:
-      runCommandLocal (baseNameOf url)
-        {
-          outputHash = hash;
-          outputHashMode = "flat";
-          nativeBuildInputs = [
-            curl
-            jq
-            cacert
-          ];
-        }
-        ''
+      fetchurl {
+        inherit url hash;
+        nativeBuildInputs = [ jq ];
+        netrcPhase = ''
+          touch netrc
           # https://github.com/flathub/com.qq.QQ/issues/274#issuecomment-5512982615
           signedUrl=$(
-            curl -fsS --retry 3 -X POST "https://im.qq.com/http2rpc/gotrpc/noauth/trpc.qqntv2.urlsign.UrlSign/GetSign" \
+            curl -fsS --retry 3 --connect-timeout 15 --max-time 60 -X POST "https://im.qq.com/http2rpc/gotrpc/noauth/trpc.qqntv2.urlsign.UrlSign/GetSign" \
               -H "Content-Type: application/json" \
               -H 'x-oidb: {"uint32_command":"0x9b8e","uint32_service_type":1}' \
-              -d "{\"url\":\"${url}\"}" | jq -er '.data.url'
+              --data ${lib.escapeShellArg (lib.toJSON { inherit url; })} \
+              | jq -er '.data.url'
           )
-          curl -fL --retry 3 -o "$out" "$signedUrl"
+          urls=("$signedUrl")
         '';
+      };
 
     # nixpkgs-update: no auto update
     updateScript = ./update.sh;
