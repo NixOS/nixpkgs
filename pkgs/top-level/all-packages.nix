@@ -1745,6 +1745,8 @@ with pkgs;
     typing-booster = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster/wrapper.nix {
       typing-booster = ibus-engines.typing-booster-unwrapped;
     };
+
+    inherit vikey;
   };
 
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
