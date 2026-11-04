@@ -111,7 +111,7 @@ def parse_components(version: str = "master"):
                 components_with_tests.append(entry.name)
 
         sys.path.append(core_path)
-        from script.hassfest.model import Config, Integration  # type: ignore
+        from packages.hassfest.hassfest.model import Config, Integration  # type: ignore
 
         config = Config(
             root=pathlib.Path(core_path),
@@ -347,5 +347,4 @@ def main() -> None:
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
     run_sync(["ruff", "check", "--ignore=E501,EXE", __file__])
-    run_sync(["isort", __file__])
     main()
