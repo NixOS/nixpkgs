@@ -9,21 +9,21 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "burn-central-cli";
-  version = "0.4.2";
+  pname = "tracel-cli";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "tracel-ai";
     repo = "tracel-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1QXlN1cq5MKZAPgGx5mnf8Jy7o4CnKJDKi0sSith6n0=";
+    hash = "sha256-j+qnzz0tUdOtJJ00f4yWJZ5EK6hMRTtFlQR6arnD1Oo=";
   };
 
   __structuredAttrs = true;
 
-  buildAndTestSubdir = "crates/burn-central-cli";
+  buildAndTestSubdir = "crates/tracel-cli";
 
-  cargoHash = "sha256-c0DfH5wtm/aiK8Mcf7xqVqnFzByMKkbspF1reeGZNJw=";
+  cargoHash = "sha256-Pg7hPw2yx8o/ncbLg3ZgPzLbzhcb8ih74XCv227OWwc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,6 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Pulled in by flate2
     zlib
   ];
+
+  # For tests that compare stdout stuff
+  env.NO_COLOR = "1";
 
   passthru.updateScript = nix-update-script { };
 
@@ -51,6 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [ kilyanni ];
-    mainProgram = "burn";
+    mainProgram = "tracel";
   };
 })
