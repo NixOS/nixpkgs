@@ -757,6 +757,7 @@ mapAliases {
   sphinxcontrib_httpdomain = throw "'sphinxcontrib_httpdomain' has been renamed to/replaced by 'sphinxcontrib-httpdomain'"; # Converted to throw 2025-10-29
   sphinxcontrib_newsfeed = throw "'sphinxcontrib_newsfeed' has been renamed to/replaced by 'sphinxcontrib-newsfeed'"; # Converted to throw 2025-10-29
   sphinxcontrib_plantuml = throw "'sphinxcontrib_plantuml' has been renamed to/replaced by 'sphinxcontrib-plantuml'"; # Converted to throw 2025-10-29
+  spiderpy = throw "'spiderpy' has been removed as it is archived upstream and Spider is no longer available."; # Added 2026-11-04
   sqlalchemy-utc = throw "'sqlalchemy-utc' has been removed as it was unmaintained upstream"; # Added 2026-03-19
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_1_3 = throw "'sqlalchemy_1_3' has been removed because it was actually version 1.4.54"; # added 2026-07-20

@@ -19957,8 +19957,6 @@ self: super: with self; {
 
   sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
 
-  spiderpy = callPackage ../development/python-modules/spiderpy { };
-
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinners = callPackage ../development/python-modules/spinners { };
