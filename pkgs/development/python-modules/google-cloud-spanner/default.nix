@@ -30,6 +30,9 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
+
+  # update
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -39,10 +42,12 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-spanner";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-QWBl7X/cKGds617IrHKaIteOnqgwB83jgfi8j/ESUws=";
+    repo = "google-cloud-python";
+    tag = "google-cloud-spanner-v${finalAttrs.version}";
+    hash = "sha256-ZyKCjIpLz8nvUMrbJWlqfA+4OSsdww9RPL3AcpvdNYQ=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-spanner";
 
   build-system = [ setuptools ];
 
@@ -140,10 +145,24 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # The ATOM feed loses this update most of the time due to a high update volume,
+  # so query github directly.
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "google-cloud-spanner-v([0-9.]+)"
+        "--use-github-releases"
+      ];
+    };
+  };
+
   meta = {
     description = "Cloud Spanner API client library";
-    homepage = "https://github.com/googleapis/python-spanner";
-    changelog = "https://github.com/googleapis/python-spanner/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-spanner";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-spanner-v${finalAttrs.version}/packages/google-cloud-spanner/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
