@@ -55,10 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/BlitterStudio/amiberry";
+    changelog = "https://github.com/BlitterStudio/amiberry/releases/tag/v${finalAttrs.version}";
     description = "Optimized Amiga emulator for Linux/macOS";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
     mainProgram = "amiberry";
   };
 })
