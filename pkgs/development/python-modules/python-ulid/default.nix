@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-ulid";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdomke";
     repo = "python-ulid";
     tag = finalAttrs.version;
-    hash = "sha256-13yGd6vYnwzTi+KGJgoQ/z6Cy67FKVC4popaj2uPOlQ=";
+    hash = "sha256-6vWgJ9Y4m/JnR9YJtWjSy1BCCtVYP7LDxZYUOKJRvUY=";
   };
 
   build-system = [
