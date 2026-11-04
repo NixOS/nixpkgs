@@ -38,12 +38,12 @@
 
 let
   passthru = finalAttrs: {
-    sources = import ./sources.nix { };
+    sources = lib.importJSON ./sources.json;
     source =
       finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
         or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-    src = with finalAttrs.passthru; fetchqq source.url source.hash;
+    src = with finalAttrs.passthru; fetchqq source.src.url source.src.hash;
 
     fetchqq =
       url: hash:
