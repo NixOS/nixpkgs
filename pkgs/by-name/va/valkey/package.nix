@@ -94,6 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Skip some more flaky tests.
     # Skip test requiring custom jemalloc (unit/memefficiency, unit/type/string).
+    # Skip integration/valkey-benchmark: since 9.1.3, valkey warns on stderr when
+    # it can't read /sys/.../current_clocksource (no /sys in the sandbox), and
+    # these tests treat any stderr output as a failure.
     ./runtest \
       --no-latency \
       --timeout 2000 \
@@ -102,7 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
       --skipunit unit/memefficiency \
       --skipunit unit/type/string \
       --skipunit integration/failover \
-      --skipunit integration/aof-multi-part
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/valkey-benchmark
 
     runHook postCheck
   '';
