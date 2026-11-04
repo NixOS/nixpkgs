@@ -125,6 +125,10 @@ buildPythonPackage (finalAttrs: {
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"
     "samples/samples/"
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/unit/gapic/spanner_admin_database_v1/test_database_admin.py"
+    "tests/unit/gapic/spanner_admin_instance_v1/test_instance_admin.py"
+    "tests/unit/gapic/spanner_v1/test_spanner.py"
   ];
 
   pythonImportsCheck = [
