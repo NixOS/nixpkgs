@@ -10,7 +10,7 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytest-timeout,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
   yarl,
 }:
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-cov-stub
     pytest-timeout
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   pythonImportsCheck = [ "aiohasupervisor" ];
