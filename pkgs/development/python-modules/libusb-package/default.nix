@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libusb-package";
-  version = "1.0.26.3";
+  version = "1.0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "libusb-package";
     tag = "v${version}";
-    hash = "sha256-4zTyaidpSlledTcEztWzRgwj43oNV7xWrhMXCE9Qz3k=";
+    hash = "sha256-/Q1VovC2864Xu+LidL72Rh/FfyZqSJ8m21WS+FBkOrU=";
   };
 
   patches = [
