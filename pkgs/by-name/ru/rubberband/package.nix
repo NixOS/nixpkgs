@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromSourcehut,
   pkg-config,
   libsamplerate,
   libsndfile,
@@ -18,9 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rubberband";
   version = "4.0.0";
 
-  src = fetchurl {
-    url = "https://breakfastquay.com/files/releases/rubberband-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
+  src = fetchFromSourcehut {
+    vc = "hg";
+    owner = "~breakfastquay";
+    repo = "rubberband";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TjW+Op750ZzPVD3c/ybyYGM0G65nK5JgMBr/MMsQ8kw=";
   };
 
   patches = [
