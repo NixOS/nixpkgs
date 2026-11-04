@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tiny-proxy";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "tiny-proxy";
     tag = "v${version}";
-    hash = "sha256-59T09qcOstl/yfzQmNlTNxGerQethZntwDAHwz/5FFM=";
+    hash = "sha256-zE0SnO4IfX4KynCNQXWTJlHNe3TaZodg4eyriX2RRl8=";
   };
 
   nativeBuildInputs = [ setuptools ];
