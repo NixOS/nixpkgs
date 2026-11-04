@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "fastflix";
-  version = "6.2.1";
+  version = "6.3.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "cdgriffith";
     repo = "FastFlix";
     tag = version;
-    hash = "sha256-vlMS3Grqp6Ys1++711lwRuFC4LhcyrHtU/S3MGB4riY=";
+    hash = "sha256-VzqkuTc2Q8WwpvkttDo2u8Q7kpCGbjz7pNzjrr6Bny4=";
   };
 
   nativeBuildInputs = [
