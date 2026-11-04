@@ -37,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-spanner";
-  version = "3.63.0";
+  version = "3.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-spanner-v${finalAttrs.version}";
-    hash = "sha256-ZyKCjIpLz8nvUMrbJWlqfA+4OSsdww9RPL3AcpvdNYQ=";
+    hash = "sha256-vsJuqmG2/H5Lf/uGnEnkmBDBL2Mkxzk1z8gbGEpR0Eg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-spanner";
@@ -113,8 +113,13 @@ buildPythonPackage (finalAttrs: {
     "test_transaction_for_concurrent_statement_should_begin_one_transaction_with_read"
   ];
 
+  enabledTestPaths = [
+    "tests/"
+  ];
+
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/_async/test_database_api.py"
     "tests/system/test_backup_api.py"
     "tests/system/test_database_api.py"
     "tests/system/test_dbapi.py"
@@ -129,11 +134,10 @@ buildPythonPackage (finalAttrs: {
     "tests/unit/spanner_dbapi/test_connect.py"
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"
-    "samples/samples/"
-    # RuntimeError: There is no current event loop in thread 'MainThread'.
-    "tests/unit/gapic/spanner_admin_database_v1/test_database_admin.py"
-    "tests/unit/gapic/spanner_admin_instance_v1/test_instance_admin.py"
-    "tests/unit/gapic/spanner_v1/test_spanner.py"
+    # hangs
+    "tests/mockserver_tests/test_dbapi_inline_begin.py"
+    # Missing values in response, likely due to version mismatches
+    "tests/mockserver_tests/test_frontend_metrics.py"
   ];
 
   pythonImportsCheck = [
