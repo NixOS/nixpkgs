@@ -1102,9 +1102,9 @@ in
   mailman = runTest ./mailman.nix;
   mailpit = runTest ./mailpit.nix;
   man = runTest ./man.nix;
+  manyfold = runTest ./web-apps/manyfold.nix;
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
   marytts = runTest ./marytts.nix;
-  manyfold = runTest ./web-apps/manyfold.nix;
   mastodon = recurseIntoAttrs (handleTest ./web-apps/mastodon { inherit handleTestOn; });
   mate = runTest ./mate.nix;
   mate-wayland = runTest ./mate-wayland.nix;

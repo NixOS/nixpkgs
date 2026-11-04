@@ -8,7 +8,7 @@ let
   cfg = config.services.manyfold;
 in
 {
-  meta.maintainers = with lib.maintainers; [ prince213 ];
+  meta.teams = with lib.teams; [ ngi ];
 
   options.services.manyfold = {
     enable = lib.mkEnableOption "Manyfold, an ActivityPub-powered tool for storing and sharing 3D models";
@@ -72,6 +72,8 @@ in
 
       path = [
         pkgs.file
+        pkgs.f3d
+        pkgs.imagemagick
         cfg.package
       ];
 
@@ -81,6 +83,7 @@ in
           pkgs.assimp
           pkgs.libarchive
         ];
+        BUNDLE_WITHOUT = "development:test";
         RACK_ENV = "production";
         RAILS_ENV = "production";
         NODE_ENV = "production";
@@ -106,7 +109,9 @@ in
       users.${cfg.user} = {
         inherit (cfg) group;
         isSystemUser = true;
-        extraGroups = lib.optional (config.services.redis.servers.manyfold.port == 0) config.services.redis.servers.manyfold.group;
+        extraGroups = lib.optional (
+          config.services.redis.servers.manyfold.port == 0
+        ) config.services.redis.servers.manyfold.group;
       };
     };
 
