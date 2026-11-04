@@ -154,7 +154,7 @@ in
   # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
   # one year after the release of OpenBSD 7.9.
   libressl_4_3 = generic {
-    version = "4.3.2";
-    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
+    version = "4.3.4";
+    hash = "sha256-V8iy+Mb5UFWHq67dqwA+okPWFe237XGVeWgSH8Yxa9Y=";
   };
 }
