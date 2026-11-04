@@ -1,26 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  pyprojectVersionPatchHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wheezy.template";
-  version = "3.2.2";
-  format = "setuptools";
+  version = "3.2.5";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hknPXHGPPNjRAr0TYVosPaTntsjwQjOKZBCU+qFlIHw=";
+  src = fetchFromGitHub {
+    owner = "akornatskyy";
+    repo = "wheezy.template";
+    tag = finalAttrs.version;
+    hash = "sha256-idSF+FosxuiE8KUTS0YIh2Pzer3ra7H6JV3bX5qQwM8=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  build-system = [ setuptools ];
+
+  optional-dependencies.cython = [
+    cython
+    setuptools
+  ];
 
   pythonImportsCheck = [ "wheezy.template" ];
 
   meta = {
     homepage = "https://wheezytemplate.readthedocs.io/en/latest/";
+    changelog = "https://github.com/akornatskyy/wheezy.template/releases/tag/${finalAttrs.src.tag}";
     description = "Lightweight template library";
     mainProgram = "wheezy.template";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
