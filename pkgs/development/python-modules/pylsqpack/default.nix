@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.24";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jsRV9EYUIo+J441AwbHjeJViDiDsayHjtWL6i3miOJA=";
+    hash = "sha256-RnStwsgzwccKNkVPV3Tp3vlPwxCeSoRk2ASvKiAwlXo=";
   };
 
   build-system = [ setuptools ];
