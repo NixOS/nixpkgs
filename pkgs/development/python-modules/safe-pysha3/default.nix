@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "safe-pysha3";
-  version = "1.0.5";
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "safe_pysha3";
     inherit version;
-    hash = "sha256-iM6q1q9La97NL1SzGtDl5eIQ1PXsq7G9H9NTmtYbe/E=";
+    hash = "sha256-CsNAb743w8lh77RG8RferzBJQR0pim5XPMS66XMuGaE=";
   };
 
   build-system = [
