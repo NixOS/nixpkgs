@@ -4,6 +4,7 @@
 
   buildGo127Module,
   fetchFromGitHub,
+  fetchpatch2,
 
   makeWrapper,
   installShellFiles,
@@ -18,6 +19,7 @@
   # check phase tooling
   gitMinimal,
   openssh,
+  util-linux,
   # check phase tooling - darwin
   unixtools,
 
@@ -27,7 +29,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "tailscale";
-  version = "1.104.4";
+  version = "1.104.5";
 
   outputs = [
     "out"
@@ -38,8 +40,23 @@ buildGo127Module (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sJh3oXFarS1s+flMfm4ZAE+0ZSwp8F3Rib76+qBFVIw=";
+    hash = "sha256-aq4pBe75wNRFDEa3kSDa/pBLsZws5mOUOjHDUycpmXM=";
   };
+
+  patches = [
+    # ssh/tailssh: accept an empty --groups= in the incubator
+    # https://github.com/tailscale/tailscale/pull/22160
+    (fetchpatch2 {
+      url = "https://github.com/tailscale/tailscale/commit/ebbf2d1980466043b3a9a41cbd6d7e50ab2da02b.patch?full_index=1";
+      hash = "sha256-W5gdLkK+Es5boZ83psjGo4ELUWc/Y+uidVLDnNFvYIs=";
+    })
+    # drive/driveimpl/compositedav: don't run ttlcache cleanup goroutines
+    # https://github.com/tailscale/tailscale/pull/21906
+    (fetchpatch2 {
+      url = "https://github.com/tailscale/tailscale/commit/a6cffd0a6d11ef8aa3a0ca0ddc15879d0845605d.patch?full_index=1";
+      hash = "sha256-wzWVZQvH28cbmUxoXq4Qq4xD6eR/YgNbCTrySKQ2UDg=";
+    })
+  ];
 
   vendorHash = "sha256-RvaouD88naVNOPJBVcqMaAn+ovjXI4g83ShCdRiR5/Q=";
 
@@ -114,24 +131,8 @@ buildGo127Module (finalAttrs: {
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
 
-        # Run children with an environment that lacks PATH, so the commands
-        # they spawn (`cat`, `printenv`, `nohup`) are not found in the sandbox.
-        "TestMonitorExecEnvFD" # ssh/tailssh
-        "TestSpawnRPCChildEnvIsExplicit" # ssh/tailssh
-        "TestSessionMonitorTeardownKillsSamePgidStraggler" # ssh/tailssh
-
         # Agent forwarding dirs are only removed from a root-owned /tmp.
         "TestAgentForwardDirCleanup" # ssh/tailssh
-
-        # The incubator needs the session user's supplementary groups, but the
-        # build user has none: an empty --groups= does not parse, and as
-        # non-root setgroups(2) with any other list fails with EPERM.
-        "TestFwdChildHoldsOnlyDeclaredFds" # ssh/tailssh
-        "TestSessionChildDeclaredFdsIncludeOnlyEnvFD" # ssh/tailssh
-        "TestSessionMonitorExitStatusOrder" # ssh/tailssh
-        "TestSessionMonitorPTY" # ssh/tailssh
-        "TestSessionPTYMasterNotInheritedByLaterSessions" # ssh/tailssh
-        "TestSessionPtyTermWiring" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -223,8 +224,10 @@ buildGo127Module (finalAttrs: {
         kube = { };
         net = { };
         ssh = old: {
-          # TestSSH and TestExitCodePassthrough drive the server with an ssh client.
-          nativeCheckInputs = old.nativeCheckInputs ++ [ openssh ];
+          # TestSSH and TestExitCodePassthrough drive the server with an ssh client;
+          # TestShutdownWithLingeringDescendant runs `setsid`.
+          nativeCheckInputs =
+            old.nativeCheckInputs ++ [ openssh ] ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ];
           env = old.env // {
             # Skip the TestSSH subtests that upstream skips in its own CI;
             # TestSSH/env expects sessions to start in $HOME, which tailssh
@@ -236,11 +239,18 @@ buildGo127Module (finalAttrs: {
           preCheck = ''
             export TAILSCALE_SSH_DEFAULT_PATH="$PATH"
 
-            # The session monitor tests run children by absolute FHS paths.
-            substituteInPlace ssh/tailssh/monitor_test.go ssh/tailssh/monitor_lifecycle_test.go \
+            # The session monitor tests run children by absolute FHS paths, and
+            # with an empty environment, so give their shell the build's PATH.
+            # Once `ls` is found, the shell execs it in place unless it is not
+            # the last command, and lists the fd `ls` opens on /proc/$$/fd.
+            makeWrapper /bin/sh "$TMPDIR/sh" --set PATH "$PATH"
+            substituteInPlace ssh/tailssh/{fdleak,monitor,monitor_rpc,monitor_teardown_linux,monitor_termination,sessmonitor,tailssh_exitcodes,tailssh_frameorder}_test.go \
+              --replace-fail '"/bin/sh"' "\"$TMPDIR/sh\""
+            substituteInPlace ssh/tailssh/{monitor,monitor_lifecycle,monitor_teardown_linux,session_termination,sessmonitor}_test.go \
               --replace-fail '"/bin/sleep"' "\"$(type -P sleep)\""
             substituteInPlace ssh/tailssh/monitor_test.go \
-              --replace-fail '"/usr/bin/id"' "\"$(type -P id)\""
+              --replace-fail '"/usr/bin/id"' "\"$(type -P id)\"" \
+              --replace-fail 'ls -1 /proc/$$/fd"' 'ls -1 /proc/$$/fd; :"'
           '';
         };
         tsnet = { };
@@ -263,6 +273,7 @@ buildGo127Module (finalAttrs: {
           old:
           {
             pname = "${old.pname}-go-tests-${name}";
+            inherit (finalAttrs) goModules;
             outputs = [ "out" ];
             dontBuild = true;
             doCheck = true;
