@@ -121,6 +121,8 @@ buildPythonPackage (finalAttrs: {
     "test_client_decode_text_using_autodetect"
     "test_client_decode_text_using_explicit_encoding"
     "test_response_decode_text_using_autodetect"
+    # https://github.com/pydantic/httpx2/discussions/1309
+    "test_read_during_and_after_close"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # TODO?
