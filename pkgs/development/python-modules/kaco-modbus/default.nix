@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kaco-modbus";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "g4bri3lDev";
     repo = "kaco-modbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qI+cUKZTX8rf/KBPDM6X6HJWPnU0c3yGQh02akeTTtw=";
+    hash = "sha256-zGGz5bIDv4F5TkdczwgSv8Ah4nuZpZ5mXjXFTCEsLDA=";
   };
 
   build-system = [ hatchling ];
