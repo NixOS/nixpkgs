@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "cron-converter";
-  version = "1.3.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sonic0";
     repo = "cron-converter";
     rev = "v${version}";
-    hash = "sha256-zNDEBckvSwnqBfNyh5Gv7ICOsPaSx2NKl92ZlyDfukw=";
+    hash = "sha256-e5e5UqFu13WfKkRo9v6yFhDCiCi2Vj8U/fKZqFttcHE=";
   };
 
   postPatch = ''
