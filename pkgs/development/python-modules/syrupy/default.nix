@@ -22,6 +22,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-+WuG0UDxbAIVci+/IfRqvKr4YM3ewzvEAtk6PEiBcpw=";
   };
 
+  patches = [
+    ./pytest-9.2-compat.patch
+  ];
+
   build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
