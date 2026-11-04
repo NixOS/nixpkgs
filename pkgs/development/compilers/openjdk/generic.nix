@@ -102,6 +102,8 @@ let
   atLeast23 = lib.versionAtLeast featureVersion "23";
   atLeast25 = lib.versionAtLeast featureVersion "25";
 
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
   versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
@@ -329,6 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-zlib=system"
     "--with-giflib=system"
   ]
+  ++ lib.optional (atLeast11 && isCross) "--with-build-jdk=${jdk-bootstrap'.home}"
   ++ (
     if atLeast23 then
       [
