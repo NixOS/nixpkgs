@@ -1,0 +1,21 @@
+diff --git a/pxr/pxrConfig.cmake.in b/pxr/pxrConfig.cmake.in
+index 680d3c72c..632d0e942 100644
+--- a/pxr/pxrConfig.cmake.in
++++ b/pxr/pxrConfig.cmake.in
+@@ -78,6 +78,16 @@ if (@PXR_BUILD_IMAGING@) # if (PXR_BUILD_IMAGING)
+     endif()
+ endif()
+ 
++# Plugins link against the imported targets of these dependencies (hioOiio and
++# sdrOsl against OpenImageIO::OpenImageIO, hdEmbree against embree), so
++# consumers need to find them as well.
++if (@PXR_BUILD_OPENIMAGEIO_PLUGIN@ OR @PXR_ENABLE_OSL_SUPPORT@) # if (PXR_BUILD_OPENIMAGEIO_PLUGIN OR PXR_ENABLE_OSL_SUPPORT)
++    find_dependency(OpenImageIO CONFIG)
++endif()
++if (@PXR_BUILD_EMBREE_PLUGIN@) # if (PXR_BUILD_EMBREE_PLUGIN)
++    find_dependency(Embree 4 CONFIG)
++endif()
++
+ # If MaterialX support was enabled for this USD build, try to find the
+ # associated import targets by invoking the same FindMaterialX.cmake
+ # module that was used for that build. This can be overridden by
