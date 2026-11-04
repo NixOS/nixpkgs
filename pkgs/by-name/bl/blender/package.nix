@@ -17,6 +17,7 @@
   embree,
   fetchFromGitea,
   fetchFromGitHub,
+  fetchpatch2,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -29,6 +30,8 @@
   intel-llvm,
   jackaudioSupport ? false,
   jemalloc,
+  jolt-physics,
+  ktx-tools,
   level-zero,
   lib,
   libdecor,
@@ -56,6 +59,7 @@
   manifold,
   mesa,
   meshoptimizer,
+  minizip-ng,
   nix-update-script,
   oneapiSupport ? false,
   onetbb,
@@ -68,6 +72,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
+  opentimelineio,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openvdb,
   openxr-loader,
@@ -103,11 +108,35 @@ let
     # Blender uses private APIs, need to patch to expose them
     patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
   });
+
+  opentimelineio' = opentimelineio.overrideAttrs (old: {
+    src = old.src.override {
+      rev = "31e3101e750be2aa992274ac02c0679077872e57"; # version pinned by upstream
+      hash = "sha256-Rpx/PMqhmW1MNTaOLaALB/o47GNrCaWG0JbEeN2vHn8=";
+    };
+
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch2 {
+        url = "https://github.com/AcademySoftwareFoundation/OpenTimelineIO/commit/8ab0cf963624cfe3daf3c79c937cf603b4ef783b.patch?full_index=1";
+        hash = "sha256-EpE2c2ME36ryNMtQgiWwj8uis0Qwizm6mvmN72D0DdU=";
+      })
+    ];
+
+    buildInputs = old.buildInputs ++ [
+      minizip-ng
+      zlib
+    ];
+
+    cmakeFlags = old.cmakeFlags ++ [
+      "-DOTIO_FIND_MINIZIP_NG=1"
+    ];
+  });
 in
 
 let
   stdenv = stdenv';
   libdecor = libdecor';
+  opentimelineio = opentimelineio';
 
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
@@ -121,7 +150,25 @@ let
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
   });
 
-  # See build_files/config/pipeline_config.yaml in upstream source for version
+  # See build_files/buildbot/config/blender_version.cmake in upstream source for version
+  dlss = fetchFromGitHub {
+    name = "dlss-source";
+    owner = "NVIDIA";
+    repo = "DLSS";
+    tag = "v310.9.1";
+    sparseCheckout = [ "include" ];
+    hash = "sha256-dGxcmb8iLQLlIkWCr8PESeajMsn69DQZ/erOGO5h8H0=";
+
+    meta.license = {
+      shortName = "NVIDIA RTX SDKs";
+      fullName = "NVIDIA RTX SDKs";
+      url = "https://developer.download.nvidia.com/gameworks/NVIDIA-RTX-SDKs-License-23Jan2023.pdf";
+      free = false;
+      redistributable = false;
+    };
+  };
+
+  # See build_files/buildbot/config/blender_version.cmake in upstream source for version
   optix = fetchFromGitHub {
     name = "optix-dev-source";
     owner = "NVIDIA";
@@ -141,7 +188,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.2.3";
+  version = "5.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -153,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     forceFetchGit = true; # tarball downloads are behind anti-bot protection
     fetchLFS = true;
-    hash = "sha256-auBd3YaQ3NvzsMoI7rDcaI1m6XVT6o9p6heKtAzZnI4=";
+    hash = "sha256-1EGWzQcr9dhApXm/tHWQ6mGO7Ehu2shHIGD7n2f/LEA=";
   };
 
   patches = [
@@ -175,6 +222,17 @@ stdenv.mkDerivation (finalAttrs: {
     # GlfDrawTarget was removed in OpenUSD 26.11; the include is unused
     substituteInPlace source/blender/render/hydra/viewport_engine.cc \
       --replace-fail '#include <pxr/imaging/glf/drawTarget.h>' '#include <pxr/base/gf/vec4i.h>'
+  ''
+  # fmt 12.2 compat fix
+  + ''
+    for f in $(grep --recursive --files-with-matches --extended-regexp 'include <fmt/core\.h>' source); do
+      substituteInPlace "$f" \
+        --replace-fail '#include <fmt/core.h>' '#include <fmt/format.h>'
+    done
+    for f in $(grep --recursive --files-with-matches --extended-regexp 'include "fmt/core\.h"' source); do
+      substituteInPlace "$f" \
+        --replace-fail '#include "fmt/core.h"' '#include "fmt/format.h"'
+    done
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -218,9 +276,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_ONEAPI_BINARIES" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
-    (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
     (lib.cmakeBool "WITH_CYCLES_PARALLEL_DEVICE_KERNEL_BUILD" true)
+    (lib.cmakeBool "WITH_DLSS" cudaSupport)
+    (lib.cmakeBool "WITH_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
@@ -241,6 +300,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
+    (lib.cmakeFeature "DLSS_SDK_ROOT" "${dlss}")
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
@@ -306,6 +366,8 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     gmp
     jemalloc
+    jolt-physics
+    ktx-tools
     libepoxy
     libharu
     libjpeg
@@ -316,12 +378,14 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     manifold
     meshoptimizer
+    minizip-ng
     opencolorio
     openexr
     openimageio
     openjpeg
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
+    opentimelineio
     onetbb
     openvdb
     openxr-loader
@@ -501,6 +565,7 @@ stdenv.mkDerivation (finalAttrs: {
           + ''
             cat <<'EOF' >> tests/python/CMakeLists.txt
               set_tests_properties(cycles_pointcloud_cpu PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(geo_node_geometry_raycast PROPERTIES WILL_FAIL TRUE)
               set_tests_properties(geo_node_mesh_uv_unwrap PROPERTIES WILL_FAIL TRUE)
               set_tests_properties(imbuf_save PROPERTIES WILL_FAIL TRUE)
               set_tests_properties(script_bundled_modules PROPERTIES WILL_FAIL TRUE)
