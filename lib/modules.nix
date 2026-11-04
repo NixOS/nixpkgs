@@ -1399,24 +1399,35 @@ let
   */
   pushDownProperties =
     let
-      mapAttrsIfAttrs =
-        f: val:
-        if isAttrs val then
-          mapAttrs f val
+      pushDownContent =
+        f: content:
+        if content ? _type then
+          map (
+            val:
+            if isAttrs val then
+              mapAttrs f val
+            else
+              # This does not actually work, since arriving here means we have e.g.
+              # (lib.mkIf cond nonAttrs), while an attrset is expected. However,
+              # avoiding the mapAttrs call here gives better errors later.
+              val
+          ) (pushDownProperties content)
+        else if isAttrs content then
+          # Equivalent to the above `map`, but prevents extra primops and
+          # function calls on the hot path.
+          [ (mapAttrs f content) ]
         else
-          # This does not actually work, since arriving here means we have e.g.
-          # (lib.mkIf cond nonAttrs), while an attrset is expected. However,
-          # avoiding the mapAttrs call here gives better errors later.
-          val;
+          # See above comment on `lib.mkIf cond nonAttrs`
+          [ content ];
     in
     cfg:
     if cfg ? _type then
       if cfg._type == "if" then
-        map (mapAttrsIfAttrs (n: mkIf cfg.condition)) (pushDownProperties cfg.content)
+        pushDownContent (_: mkIf cfg.condition) cfg.content
       else if cfg._type == "merge" then
         concatMap pushDownProperties cfg.contents
       else if cfg._type == "override" then
-        map (mapAttrsIfAttrs (n: mkOverride cfg.priority)) (pushDownProperties cfg.content)
+        pushDownContent (_: mkOverride cfg.priority) cfg.content
       # FIXME: handle mkOrder?
       else
         [ cfg ]
