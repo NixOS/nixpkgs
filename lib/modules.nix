@@ -7,6 +7,7 @@ let
     any
     attrByPath
     attrNames
+    attrValues
     catAttrs
     concatLists
     concatMap
@@ -961,44 +962,47 @@ let
               (head optionDecls).options.type.description or "<no description>"
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
-          mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ])
+          let
+            nested = mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ]);
+          in
+          {
+            matchedOptions = nested.matchedOptions;
+            # Prefix here rather than in the parent, so that the parent can
+            # concatenate the (mostly empty) lists without a function call per name.
+            unmatchedDefns =
+              if nested.unmatchedDefns == [ ] then
+                [ ]
+              else
+                map (def: def // { prefix = [ name ] ++ def.prefix; }) nested.unmatchedDefns;
+          }
       ) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
-
-      # an attrset 'name' => list of unmatched definitions for 'name'
-      unmatchedDefnsByName =
-        # Propagate all unmatched definitions from nested option sets
-        mapAttrs (n: v: v.unmatchedDefns or [ ]) resultsByName
-        # Plus the definitions for the current prefix that don't have a matching option
-        // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in
     {
       inherit matchedOptions;
 
-      # Transforms unmatchedDefnsByName into a list of definitions
       unmatchedDefns =
         if configs == [ ] then
           # When no config values exist, there can be no unmatched config, so
           # we short circuit and avoid evaluating more _options_ than necessary.
           [ ]
         else
-          concatLists (
-            mapAttrsToList (
-              name: defs:
-              if defs == [ ] then
-                defs
-              else
-                map (
-                  def:
-                  def
-                  // {
-                    # Set this so we know when the definition first left unmatched territory
-                    prefix = [ name ] ++ (def.prefix or [ ]);
-                  }
-                ) defs
-            ) unmatchedDefnsByName
-          );
+          let
+            # Definitions for the current prefix that don't have a matching option
+            rawUnmatched = removeAttrs rawDefinitionsByName (attrNames declsByName);
+          in
+          if rawUnmatched == { } then
+            concatLists (catAttrs "unmatchedDefns" (attrValues resultsByName))
+          else
+            # Interleave by name, to keep the order stable.
+            concatLists (
+              attrValues (
+                mapAttrs (n: v: v.unmatchedDefns or [ ]) resultsByName
+                # Set this so we know when the definition first left unmatched territory
+                // mapAttrs (name: map (def: def // { prefix = [ name ]; })) rawUnmatched
+              )
+            );
     };
 
   throwDeclarationTypeError =
