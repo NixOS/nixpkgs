@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.4.5";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
-    hash = "sha256-KpododRJ+CYRGBR7Sr5cVBhJvUwh9YmPERd/DAJqEcY=";
+    hash = "sha256-S46M5nzBg4dhsb0xZVmeKIU5K9z5CtjmL9xa+vJ9fAw=";
   };
 
   build-system = [
