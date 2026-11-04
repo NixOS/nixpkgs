@@ -12,6 +12,7 @@
   scdoc,
   stdenv,
   gitUpdater,
+  procps,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.PKG_CONFIG_SYSTEMD_SYSTEMD_SYSTEM_UNIT_DIR = "${placeholder "out"}/lib/systemd/system";
 
   strictDeps = true;
+
+  postPatch = ''
+    substituteInPlace buffyboard/getty-buffyboard.conf \
+      --replace-fail "/usr/bin/kill" "${lib.getExe' procps "kill"}"
+  '';
 
   passthru.updateScript = gitUpdater { };
 
