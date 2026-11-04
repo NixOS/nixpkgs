@@ -291,7 +291,7 @@ in
 
     sha256 =
       {
-        cpu.x86_64-linux = "sha256-wbLvzCLpFw4+QF86zIBroAeFrwqUTe31aJV7tcjhSZE=";
+        cpu.x86_64-linux = "sha256-txFSc68BkaHhF71IFs5ZTUnuedwH1uD0LYVdP43XeuQ=";
         # This hash covers the selected manifests, not cudaCapabilities. Alternate
         # manifests need a caller-supplied deps outputHash/outputHashAlgo override.
         cuda.x86_64-linux = cudaHash;
