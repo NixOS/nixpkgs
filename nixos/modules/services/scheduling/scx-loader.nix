@@ -87,5 +87,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ccicnce113424 ];
+  meta.maintainers = with lib.maintainers; [ ccicnce113424 ] ++ pkgs.scx.full.meta.maintainers;
 }
