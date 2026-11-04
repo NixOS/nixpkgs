@@ -100,6 +100,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "A mod manager for the game Balatro";
     homepage = "https://balatro-mod-manager.dasguney.com/";
     license = lib.licenses.gpl3Plus;
+    problems.removal = {
+      message = ''
+        BMM has been discontinued as of Sep 29, 2026 and will be removed starting with Nixpkgs 26.11.
+        Please switch to r2modman as an alternative.
+      '';
+      urls = [
+        "https://github.com/skyline69/balatro-mod-manager/blob/c06dd673d960e855cdf0c5b2630448b062650627/README.md"
+      ];
+    };
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.aarch64);
     maintainers = with lib.maintainers; [
       mhdask

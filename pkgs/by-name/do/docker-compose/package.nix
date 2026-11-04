@@ -3,19 +3,21 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-compose";
-  version = "5.4.0";
+  version = "5.6.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
-    tag = "v${version}";
-    hash = "sha256-BLApJ1RWI2nUM3EDFLWBPwIbT+wUUCqxCRjc7QlkFd4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ytWNGOs7tWDEFXBU0OuldyCHM0Qr+1PKbYc9hYe9w10=";
   };
 
-  vendorHash = "sha256-NCHNe+aLNsJNtKdgQxyL6cMuu9XxA5ycleHf9gToEks=";
+  vendorHash = "sha256-ErD+4a2U+Zl+egI1O3sjXetfKGCw9xbZ+w8MRyttK3o=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -24,13 +26,18 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X github.com/docker/compose/v5/internal.Version=${version}"
+    "-X github.com/docker/compose/v5/internal.Version=${finalAttrs.version}"
     "-s"
-    "-w"
   ];
 
   doCheck = false;
   doInstallCheck = true;
+  excludedPackages = [
+    # New module `compose-relay` introduced in this release.
+    # Compiling compose-relay is unnecessary for `docker-compose`, hence the exclusion.
+    # See [the compose-relay README](https://github.com/docker/compose/blob/524a36d2cf2deaf9eed1c3671d7cb93f07671b48/relay/README.md).
+    "relay"
+  ];
   installPhase = ''
     runHook preInstall
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose
@@ -40,11 +47,14 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
+    changelog = "https://github.com/docker/compose/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ airone01 ];
   };
-}
+})
