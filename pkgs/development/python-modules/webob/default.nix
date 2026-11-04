@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "webob";
-  version = "1.8.10";
+  version = "1.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "webob";
     tag = version;
-    hash = "sha256-r3fURb+Je/XevpeMGb/XEF2xjj1q172P4pTAbGkeloY=";
+    hash = "sha256-K/Szik724N7Ok4R1G0CxjVjjCooOcwyo3ONTabW3pA0=";
   };
 
   build-system = [ setuptools ];
