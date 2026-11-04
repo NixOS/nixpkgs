@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "multidict";
-  version = "6.7.1";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HOQRfSxf0+HeXsV4ShwfUDjNVyg2SjNuE157JLRlAL0=";
+    hash = "sha256-qxBtZg04UED64H5QRBb1Hw5O3pY4I/Jy/N7HamgwKzM=";
   };
 
   postPatch = ''
@@ -41,6 +41,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-codspeed
     pytest-cov-stub
+  ];
+
+  disabledTests = [
+    # coverage
+    "test_leak"
   ];
 
   preCheck = ''
