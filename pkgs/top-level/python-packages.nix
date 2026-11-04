@@ -13187,6 +13187,8 @@ self: super: with self; {
 
   ouman-eh-800-api = callPackage ../development/python-modules/ouman-eh-800-api { };
 
+  ouilookup = callPackage ../development/python-modules/ouilookup { };
+
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
   outcome = callPackage ../development/python-modules/outcome { };
