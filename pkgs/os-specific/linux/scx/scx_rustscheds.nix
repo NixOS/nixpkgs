@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.tests.basic = nixosTests.scx;
+  passthru.tests.basic = nixosTests.scx-loader;
   passthru.updateScript = nix-update-script { };
   passthru.schedulers = [
     "scx_arena_libarena_selftests" # tool

@@ -1685,6 +1685,11 @@
     githubId = 26391003;
     name = "Amadej Kastelic";
   };
+  amaidurova = {
+    github = "amaidurova";
+    githubId = 295547583;
+    name = "An Mai";
+  };
   aman9das = {
     email = "amandas62640@gmail.com";
     github = "Aman9das";
@@ -30036,6 +30041,11 @@
     githubId = 1486805;
     name = "Toon Nolten";
   };
+  toothbrush = {
+    github = "toothbrush";
+    githubId = 423357;
+    name = "toothbrush";
+  };
   tophcodes = {
     email = "toki@toph.so";
     github = "tophcodes";
@@ -31038,6 +31048,12 @@
     github = "vinnymeller";
     githubId = 19894025;
     name = "Vinny Meller";
+  };
+  vinso = {
+    email = "8vinso8@gmail.com";
+    github = "8Vinso8";
+    githubId = 44764023;
+    name = "Vinso";
   };
   vinylen = {
     email = "victor@viclab.se";

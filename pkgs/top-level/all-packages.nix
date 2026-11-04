@@ -8030,9 +8030,6 @@ with pkgs;
 
   bitwig-studio = bitwig-studio6;
 
-  brave = (callPackage ../applications/networking/browsers/brave { }).brave;
-  brave-origin = (callPackage ../applications/networking/browsers/brave { }).brave-origin;
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
@@ -9447,6 +9444,10 @@ with pkgs;
     dreamweb
     flight-of-the-amazon-queen
     lure-of-the-temptress
+    mystery-house
+    nippon-safes-inc
+    sfinx
+    soltys
     ;
 
   sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {

@@ -63,10 +63,6 @@ in
         message = "SCX is only supported on kernel version 6.12 and above.";
       }
       {
-        assertion = !config.services.scx.enable;
-        message = "services.scx and services.scx_loader cannot be enabled simultaneously. Please enable only one of them.";
-      }
-      {
         assertion =
           cfg.config.default_sched == null || lib.elem cfg.config.default_sched ([ "" ] ++ schedulers);
         message = ''
