@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wit-bindgen";
   version = "0.63.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wit-bindgen";
