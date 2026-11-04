@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.22.1";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = "uvloop";
     tag = "v${version}";
-    hash = "sha256-9NJugzxFycr1LLZXiDKbpeVcIvlCPHHIcYMp8jmffuE=";
+    hash = "sha256-EfRhUx701JO0DR2VWKtCqjK5sbDwWc/6hW+mTcEWqQE=";
   };
 
   postPatch = ''
