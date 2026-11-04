@@ -99,11 +99,10 @@ let
       unzip
       which
       zip
-      makeWrapper
     ];
 
   # Bootstrap an existing Bazel so we can vendor deps with vendor mode
-  bazelBootstrap = stdenv.mkDerivation rec {
+  bazelBootstrap = stdenv.mkDerivation {
     name = "bazelBootstrap";
 
     src =
@@ -129,7 +128,7 @@ let
           hash = "sha256-4bRp4OvkRIvhpZ2r/eFJdwrByECHy3rncDEM1tClFYo=";
         };
 
-    nativeBuildInputs = defaultShellUtils;
+    nativeBuildInputs = [ makeWrapper ];
     buildInputs = [
       stdenv.cc.cc
     ];
@@ -159,7 +158,7 @@ let
       ''
       + ''
         wrapProgram $out/bin/bazel \
-          --prefix PATH : ${lib.makeBinPath nativeBuildInputs}
+          --prefix PATH : ${defaultShellPath}
       '';
 
     meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
