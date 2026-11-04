@@ -5,7 +5,7 @@
   dbus,
   fetchFromGitHub,
   poetry-core,
-  pytest,
+  pytest_9_1,
   pytest-asyncio,
   pytest-codspeed,
   pytest-cov-stub,
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    pytest
+    pytest_9_1
     pytest-asyncio
     pytest-codspeed
     pytest-cov-stub
