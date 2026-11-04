@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
+  gnumake,
   makeWrapper,
   iptables,
+  glibc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,28 +19,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mchSaqw6sOJ7+dydCM8juP7QMOVUrPL4MFA79Rvyjdo=";
   };
 
-  patches = [
-    # Add install target to CMakeLists.txt
-    # https://github.com/wangyu-/udp2raw/pull/469
-    (fetchpatch {
-      url = "https://github.com/wangyu-/udp2raw/commit/4559e6d47bb69fda0fbd3fb4b7d04ddb1cf5e2ae.patch";
-      hash = "sha256-2csZdXmMW89tjXhN5QIK0rnMSXlFjLvwGnmieeKRX90=";
-    })
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    iptables
+    glibc.static
   ];
 
   postPatch = ''
     echo 'const char *gitversion = "${finalAttrs.version}";' > git_version.h
-    # Adress sanitization crashes the application, reported upstream at https://github.com/wangyu-/udp2raw/issues/474
-    substituteInPlace CMakeLists.txt --replace "sanitize=address," "sanitize="
   '';
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
+  dontConfigure = true;
+
+  makeFlags = [
+    "-o"
+    "git_version"
+    "cc_local=${stdenv.cc}/bin/g++"
   ];
 
+  makeTarget = "all";
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 udp2raw "$out/bin/udp2raw"
+    runHook postInstall
+  '';
+
   postInstall = ''
-    wrapProgram "$out/bin/udp2raw" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
+    wrapProgram "$out/bin/udp2raw" \
+      --prefix PATH : "${lib.makeBinPath [ iptables ]}"
   '';
 
   meta = {
