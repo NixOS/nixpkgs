@@ -1056,10 +1056,11 @@ let
       (
         res: opt:
         let
+          optOptions = opt.options;
           typeSet =
-            if res ? type && opt.options ? type then
+            if res ? type && optOptions ? type then
               let
-                mergedType = res.type.typeMerge opt.options.type.functor;
+                mergedType = res.type.typeMerge optOptions.type.functor;
               in
               if mergedType != null then
                 {
@@ -1071,23 +1072,24 @@ let
                   "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
             else
               { };
-
-          bothHave = k: res ? ${k} && opt.options ? ${k};
+          getSubModules = optOptions.type.getSubModules or null;
+          submodules =
+            if getSubModules != null then
+              map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
+            else
+              res.options;
         in
-        if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
+        if
+          (res ? default && optOptions ? default)
+          || (res ? example && optOptions ? example)
+          || (res ? description && optOptions ? description)
+          || (res ? apply && optOptions ? apply)
+        then
           # Keep in sync with the same error above!
           throw
             "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
         else
-          let
-            getSubModules = opt.options.type.getSubModules or null;
-            submodules =
-              if getSubModules != null then
-                map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
-              else
-                res.options;
-          in
-          opt.options
+          optOptions
           // res
           // {
             declarations = res.declarations ++ [ opt._file ];

@@ -235,8 +235,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     # diagnostic banner that nvshmem-info and init.cu only print. Nix still counts the store paths, so
     # build-only inputs become runtime dependencies -- and the banner is substituted into an installed
     # header, so consumers inherit them too. Only the dev outputs and nvcc are stripped: gdrcopy and
-    # mpi appear in the same string but are genuine runtime dependencies. No disallowedRequisites
-    # guard here, unlike nccl and gdrcopy, because ucx and openmpi pull nvcc in on their own.
+    # mpi appear in the same string but are genuine runtime dependencies.
     + ''
       nixLog "removing build-time references baked into NVSHMEM_BUILD_VARS"
       remove-references-to ${
@@ -253,6 +252,9 @@ backendStdenv.mkDerivation (finalAttrs: {
         "$out"/include/non_abi/nvshmem_version.h \
         "$out"/share/src/*/include/non_abi/nvshmem_version.h
     '';
+
+  # C.f. remove-references-to above, and cuda_nvcc's nvlink wrapper for the device code.
+  disallowedRequisites = [ (getBin cuda_nvcc) ];
 
   doCheck = false;
 
