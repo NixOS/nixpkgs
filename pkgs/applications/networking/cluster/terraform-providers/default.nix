@@ -142,6 +142,14 @@ let
       sapcc_ccloud = removed "sapcc_ccloud" "2025/11. Try sap-cloud-infrastructure_sci instead.";
       argocd = removed "argocd" "2025/12. Try argoproj-labs_argocd instead.";
       oboukili_argocd = removed "oboukili_argocd" "2025/12. Try argoproj-labs_argocd instead.";
+      denoland_deno = removed "denoland_deno" "2026/11";
+      cloudfoundry-community_cloudfoundry = archived "cloudfoundry-community_cloudfoundry" "2026/07";
+      cullenmcdermott_porkbun = archived "cullenmcdermott_porkbun" "2025/11";
+      determinatesystems_hydra = archived "determinatesystems_hydra" "2026/05";
+      kislerdm_neon = archived "kislerdm_neon" "2026/09";
+      oktadeveloper_oktaasa = archived "oktadeveloper_oktaasa" "2025/11";
+      pablovarela_slack = archived "pablovarela_slack" "2026/02";
+      vmware_wavefront = archived "vmware_wavefront" "2026/01";
     };
 
   # excluding aliases, used by terraform-full

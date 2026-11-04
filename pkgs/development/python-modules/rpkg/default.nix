@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "rpkg";
-  version = "1.69";
+  version = "1.70";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F+EgJJYeIONhz9dn1UsQPzgAmQTo4dqXzPxFFDXNT8s=";
+    hash = "sha256-dAMhK1DhUxGMq36+LRp/L3OEaSfn0FwZq01yGRTZ2Uo=";
   };
 
   build-system = [ hatchling ];

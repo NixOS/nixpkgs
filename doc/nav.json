@@ -558,6 +558,10 @@
                   "file": "hooks/pkg-config.section.md"
                 },
                 {
+                  "id": "pkgconfigcheckhook",
+                  "file": "hooks/pkgConfigCheckHook.section.md"
+                },
+                {
                   "id": "postgresql-test-hook",
                   "file": "hooks/postgresql-test-hook.section.md"
                 },

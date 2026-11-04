@@ -3731,6 +3731,8 @@ self: super: with self; {
 
   copier-template-tester = callPackage ../development/python-modules/copier-template-tester { };
 
+  copr = callPackage ../development/python-modules/copr { };
+
   copykitten = callPackage ../development/python-modules/copykitten { };
 
   coq-tools = callPackage ../development/python-modules/coq-tools { };
@@ -3780,6 +3782,8 @@ self: super: with self; {
   cppe = callPackage ../development/python-modules/cppe { inherit (pkgs) cppe; };
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
+
+  cppimport = callPackage ../development/python-modules/cppimport { };
 
   cppy = callPackage ../development/python-modules/cppy { };
 
@@ -4016,8 +4020,6 @@ self: super: with self; {
   cypari = callPackage ../development/python-modules/cypari { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
-
-  cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
 
   cyrtranslit = callPackage ../development/python-modules/cyrtranslit { };
 
@@ -4698,6 +4700,8 @@ self: super: with self; {
       { };
 
   django-elasticsearch-dsl = callPackage ../development/python-modules/django-elasticsearch-dsl { };
+
+  django-embed-video = callPackage ../development/python-modules/django-embed-video { };
 
   django-encrypted-model-fields =
     callPackage ../development/python-modules/django-encrypted-model-fields
@@ -11283,8 +11287,6 @@ self: super: with self; {
 
   monarchmoneycommunity = callPackage ../development/python-modules/monarchmoneycommunity { };
 
-  monero = callPackage ../development/python-modules/monero { };
-
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
@@ -12458,6 +12460,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvidia-modelopt = callPackage ../development/python-modules/nvidia-modelopt { };
+
   nvidia-resiliency-ext = callPackage ../development/python-modules/nvidia-resiliency-ext { };
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
@@ -12644,6 +12648,8 @@ self: super: with self; {
   };
 
   onnx-asr = callPackage ../development/python-modules/onnx-asr { };
+
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
 
   onnx-ir = callPackage ../development/python-modules/onnx-ir { };
 
@@ -14004,6 +14010,8 @@ self: super: with self; {
   polyfactory = callPackage ../development/python-modules/polyfactory { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
+
+  polygraphy = callPackage ../development/python-modules/polygraphy { };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
@@ -15394,8 +15402,6 @@ self: super: with self; {
   pyiss = callPackage ../development/python-modules/pyiss { };
 
   pyisy = callPackage ../development/python-modules/pyisy { };
-
-  pyitachip2ir = callPackage ../development/python-modules/pyitachip2ir { };
 
   pyitachip2ir2 = callPackage ../development/python-modules/pyitachip2ir2 { };
 
@@ -21292,6 +21298,8 @@ self: super: with self; {
 
   travispy = callPackage ../development/python-modules/travispy { };
 
+  trayer = callPackage ../development/python-modules/trayer { };
+
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
@@ -22381,6 +22389,8 @@ self: super: with self; {
   vacuum-map-parser-roborock =
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
+
+  vacuum-map-parser-xiaomi = callPackage ../development/python-modules/vacuum-map-parser-xiaomi { };
 
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 

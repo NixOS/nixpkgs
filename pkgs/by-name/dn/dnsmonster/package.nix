@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   libpcap,
@@ -35,13 +34,14 @@ buildGoModule (finalAttrs: {
     "-X=github.com/mosajjal/dnsmonster/util.releaseVersion=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Passive DNS Capture and Monitoring Toolkit";
     homepage = "https://github.com/FenkoHQ/dnsmonster";
     changelog = "https://github.com/FenkoHQ/dnsmonster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "dnsmonster";
   };
 })

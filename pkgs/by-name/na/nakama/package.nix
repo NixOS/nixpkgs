@@ -6,13 +6,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "nakama";
-  version = "3.41.0";
+  version = "3.42.0";
 
   src = fetchFromGitHub {
     owner = "heroiclabs";
     repo = "nakama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ogc3Qqk8Eorz9ETvLqQa18QubvtwZ07fDJpZWVMPBA=";
+    hash = "sha256-hV0o+qv2HEgARpr8Xhc46B0hQLroq3A3PZcoyDysZdY=";
   };
 
   vendorHash = null;

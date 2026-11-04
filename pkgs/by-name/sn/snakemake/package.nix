@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "docutils"
     "packaging"
+    "smart-open"
     "sqlmodel"
   ];
   dependencies = with python3Packages; [

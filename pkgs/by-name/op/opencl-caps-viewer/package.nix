@@ -52,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${ocl-icd}/lib"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${ocl-icd}/lib"
   ];
 
   enableParallelBuilding = true;

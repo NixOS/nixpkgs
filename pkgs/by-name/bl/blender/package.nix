@@ -125,7 +125,7 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.2.2";
+  version = "5.2.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -133,7 +133,7 @@ stdenv'.mkDerivation (finalAttrs: {
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-r4XT6ZoVwMXieauP5jOC0DdfNOilTmkGu8JPMAFjuDs=";
+    hash = "sha256-umFiI2GnG54t9LQAKUpC2ZHVeq+oN5xmpOf4H+nql6M=";
   };
 
   patches = [

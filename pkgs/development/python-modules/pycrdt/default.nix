@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.14.10";
+  version = "0.14.13";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "y-crdt";
     repo = "pycrdt";
     tag = finalAttrs.version;
-    hash = "sha256-tkxjRq0hBJeP3+0/QyTn1P92HJVx9aw9KmIrzIe3T9Y=";
+    hash = "sha256-Ql6d+u4RpVRhOzI+oFz1bFMFozGlfk9xGGiJ0WxkRwE=";
   };
 
   postPatch = ''

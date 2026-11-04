@@ -60,7 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
 
-  qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ python3 ])
+  ];
 
   dontWrapGApps = true;
 

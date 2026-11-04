@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monero-gui";
-  version = "0.18.5.2";
+  version = "0.18.5.4"; # update monero-cli as well
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2FlenQtrsoHmRTfU+KhWtg3eVPzz9ktQ3dnOlWhOPC8=";
+    hash = "sha256-z/R7zUVxXr9VXRtRKPh0DX40NbSDcYP1B7yasFGFKvM=";
   };
 
   nativeBuildInputs = [
