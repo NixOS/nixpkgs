@@ -5,11 +5,14 @@
   packaging,
   pluggy,
   virtualenv,
+  docutils,
   filelock,
+  hatch-fancy-pypi-readme,
   hatchling,
   hatch-vcs,
   platformdirs,
   pyproject-api,
+  tomli-w,
   colorama,
   chardet,
   cachetools,
@@ -19,17 +22,19 @@
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.34.1";
+  version = "4.67.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     tag = version;
-    hash = "sha256-pfftPTY7n47tCQFGCZRwsq0vCWZUeukFZO99gj5mTeo=";
+    hash = "sha256-WdJDte3cSYCn2unnJNZ1gDe74ma8gYBgIZT+4jpFI6E=";
   };
 
   build-system = [
+    docutils
+    hatch-fancy-pypi-readme
     hatchling
     hatch-vcs
   ];
@@ -43,6 +48,7 @@ buildPythonPackage rec {
     platformdirs
     pluggy
     pyproject-api
+    tomli-w
     virtualenv
   ];
 
