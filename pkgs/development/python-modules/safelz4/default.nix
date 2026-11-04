@@ -7,32 +7,27 @@
   buildPythonPackage,
 
   # testing
-  hypothesis,
   pytestCheckHook,
-  pytest-benchmark,
-  setuptools-rust,
   xxhash,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "safelz4";
-  version = "0.1.0";
+  version = "0.2.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LVivona";
     repo = "safelz4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t4pCykt2WsR/Ij/ylwKHLY/NYBdDLlZjMY2BX3ld9T4=";
+    hash = "sha256-Nbvycbpt5TzwBZnbQT81savLprH9E0zq6eN3Qxi0/jI=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-lJeEdaeMSyG1egRbMPepPfVPI1dL7hZS2bObZ3Rhopw=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   build-system = [
     cargo
