@@ -12,6 +12,7 @@
   perl,
   luajit,
   python3,
+  pixman,
   # Setting withXcodePath makes it use that instead of the system-default Xcode.
   # This can be set to one of the `darwin.xcode_*` packages as well.
   # If set, this should be a path to Xcode.app, e.g. `"/Applications/Xcode.app"`.
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
     perl
     python3
+    pixman
   ];
 
   patches = [
@@ -117,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-perlinterp=yes"
     "--enable-rubyinterp=yes"
     "--enable-tclinterp=yes"
+    "--enable-pixman"
     "--without-local-dir"
     "--with-luajit"
     "--with-lua-prefix=${luajit}"
