@@ -5,11 +5,12 @@
   jsonpointer,
   pytestCheckHook,
   setuptools,
+  simplejson,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "jsonpatch";
-  version = "1.33";
+  version = "1.42";
 
   pyproject = true;
 
@@ -17,14 +18,17 @@ buildPythonPackage (finalAttrs: {
     owner = "stefankoegl";
     repo = "python-json-patch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JHBB64LExzHQVoFF2xcsqGlNWX/YeEBa1M/TmfeQLWI=";
+    hash = "sha256-VMRxdemWx9SeGhAWIe+YVAA6wfnJZ4in6l28428Q6aI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ jsonpointer ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    simplejson
+  ];
 
   pythonImportsCheck = [ "jsonpatch" ];
 
