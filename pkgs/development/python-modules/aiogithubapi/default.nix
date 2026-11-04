@@ -7,8 +7,7 @@
   fetchFromGitHub,
   hatchling,
   pytest-asyncio,
-  pytestCheckHook,
-  sigstore,
+  pytest9_1CheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -46,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
-    pytestCheckHook
+    pytest9_1CheckHook
     writableTmpDirAsHomeHook
   ];
 
