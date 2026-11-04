@@ -57,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "tests" finalAttrs.doCheck)
   ];
 
-  makeFlags = [ "AR:=$(AR)" ];
-
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = {
