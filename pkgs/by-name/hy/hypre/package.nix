@@ -11,6 +11,7 @@
   mpi,
   llvmPackages,
   mpiCheckPhaseHook,
+  runCommandCC,
   isILP64 ? false,
   mpiSupport ? true,
   precision ? "double",
@@ -47,8 +48,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # The relative `include` resolves to $out/include in the exported targets,
+    # but headers are installed to $dev/include.
+    substituteInPlace src/CMakeLists.txt src/config/cmake/HYPRE_CMakeUtilities.cmake \
+      --replace-fail '$<INSTALL_INTERFACE:include>' '$<INSTALL_INTERFACE:''${CMAKE_INSTALL_INCLUDEDIR}>'
+  ''
   # fix sequence check
-  postPatch = lib.optionalString (!mpiSupport) ''
+  + lib.optionalString (!mpiSupport) ''
     substituteInPlace src/test/CMakeLists.txt \
       --replace-fail ''\'''${MPIEXEC_EXECUTABLE} ''${MPIEXEC_NUMPROC_FLAG} 1' ""
   '';
@@ -98,6 +105,39 @@ stdenv.mkDerivation (finalAttrs: {
         moduleNames = [ "HYPRE" ];
         package = finalAttrs.finalPackage;
       };
+      # find_package alone doesn't validate the imported target's include
+      # directories, so link against HYPRE::HYPRE as well.
+      cmake-link =
+        runCommandCC "hypre-cmake-link-test"
+          {
+            nativeBuildInputs = [ cmake ];
+            buildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            cat > CMakeLists.txt <<EOF
+            cmake_minimum_required(VERSION 3.21)
+            project(HypreLinkTest C)
+            find_package(HYPRE REQUIRED CONFIG)
+            add_executable(test main.c)
+            target_link_libraries(test PRIVATE HYPRE::HYPRE)
+            EOF
+
+            cat > main.c <<EOF
+            #include <stdio.h>
+            #include "HYPRE_utilities.h"
+            int main(void) {
+              char *version;
+              HYPRE_Version(&version);
+              printf("%s\n", version);
+              return 0;
+            }
+            EOF
+
+            cmake -B build
+            cmake --build build
+            build/test | tee $out
+            grep -F ${finalAttrs.version} $out
+          '';
       ilp64 = hypre.override { isILP64 = true; };
       single = hypre.override { precision = "single"; };
       serial = hypre.override { mpiSupport = false; };
