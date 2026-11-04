@@ -69,11 +69,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Gel cli";
     homepage = "https://docs.geldata.com/reference/cli";
     changelog = "https://github.com/geldata/gel-cli/compare/v7.7.0...v7.10.2";
-    license = with lib.licenses; [
-      asl20
-      # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       ahirner
       kirillrdy

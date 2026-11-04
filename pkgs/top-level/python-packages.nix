@@ -3783,6 +3783,8 @@ self: super: with self; {
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
+  cppimport = callPackage ../development/python-modules/cppimport { };
+
   cppy = callPackage ../development/python-modules/cppy { };
 
   cpufeature = callPackage ../development/python-modules/cpufeature { };
@@ -12462,6 +12464,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvidia-modelopt = callPackage ../development/python-modules/nvidia-modelopt { };
+
   nvidia-resiliency-ext = callPackage ../development/python-modules/nvidia-resiliency-ext { };
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
@@ -12648,6 +12652,8 @@ self: super: with self; {
   };
 
   onnx-asr = callPackage ../development/python-modules/onnx-asr { };
+
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
 
   onnx-ir = callPackage ../development/python-modules/onnx-ir { };
 
@@ -14008,6 +14014,8 @@ self: super: with self; {
   polyfactory = callPackage ../development/python-modules/polyfactory { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
+
+  polygraphy = callPackage ../development/python-modules/polygraphy { };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
@@ -21297,6 +21305,8 @@ self: super: with self; {
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
   travispy = callPackage ../development/python-modules/travispy { };
+
+  trayer = callPackage ../development/python-modules/trayer { };
 
   trectools = callPackage ../development/python-modules/trectools { };
 

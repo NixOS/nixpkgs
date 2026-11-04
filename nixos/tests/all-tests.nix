@@ -799,6 +799,7 @@ in
   graylog = runTest ./graylog.nix;
   greenlight = runTest ./greenlight.nix;
   greetd-no-shadow = runTest ./greetd-no-shadow.nix;
+  grimmory = runTest ./grimmory.nix;
   grist = runTest ./grist.nix;
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
@@ -1661,8 +1662,7 @@ in
   schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
-  scx = runTest ./scx/default.nix;
-  scx-loader = runTest ./scx/loader.nix;
+  scx-loader = runTest ./scx-loader.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
   searx = runTest ./searx.nix;

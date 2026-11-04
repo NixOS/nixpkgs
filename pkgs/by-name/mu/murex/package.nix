@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "murex";
-  version = "7.3.1231";
+  version = "7.3.1232";
 
   src = fetchFromGitHub {
     owner = "lmorg";
     repo = "murex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HBJIPLqjtYmdkh2vONSlzfl4DfGrPkwDGsUwFvpPrRk=";
+    sha256 = "sha256-eehiXcUJNc/5FTjsIiJSW/r1hSHdqUFBAf4kEOQgKig=";
   };
 
   vendorHash = "sha256-NFujuX0lIse0DgcHl670CoPdpekKdjhJxwE8Jlb/atk=";
