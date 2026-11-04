@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aurral";
-  version = "2.12.0";
+  version = "2.13.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,23 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lklynet";
     repo = "aurral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-slnwPhWqQDEbtkV+gTiSHHMvOxJ4de3kR85YVdP5pO0=";
+    hash = "sha256-covP+bdzYNxAo+DFL2Ck2A3XCltsHz431PFdrs2cWO0=";
   };
 
-  # Test fixtures create executable scripts; /usr/bin/env is unavailable in the sandbox.
-  postPatch = relaxNodeVersion + ''
-    substituteInPlace .tests/share/share-links.test.ts \
-      .tests/download/ytdlp-song-search.test.ts \
-      .tests/download/ytdlp-runtime.test.ts \
-      --replace-fail '#!/usr/bin/env node' '#!${lib.getExe nodejs_26}'
-  '';
+  postPatch = relaxNodeVersion;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     postPatch = relaxNodeVersion;
     fetcherVersion = 5;
-    hash = "sha256-juz5YV5Vc0N24OfSjb7iltS+iLYEKUKVOML1mPS5s+0=";
+    hash = "sha256-WdhVTDDuuwCjC6izOWb6g0bmIR8RNKHvlw8bK1NoZEE=";
   };
 
   nativeBuildInputs = [
@@ -89,8 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   checkPhase = ''
     runHook preCheck
-    pnpm test
-    pnpm run test:integration
+    # Test forks start background workers, so bound their concurrency as well.
+    testWorkers=$((NIX_BUILD_CORES < 2 ? NIX_BUILD_CORES : 2))
+    pnpm test --maxWorkers="$testWorkers"
+    pnpm run test:integration --maxWorkers="$testWorkers"
     runHook postCheck
   '';
 
@@ -135,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
         exec node $out/lib/aurral/backend/scripts/resetAdminPassword.ts "\$@"
         ;;
         server|"")
-        exec node $out/lib/aurral/backend/server.ts
+        exec node --max-semi-space-size=4 $out/lib/aurral/backend/server.ts
         ;;
         -h|--help|*)
         echo "Usage: (server|resetAdminPassword)"
