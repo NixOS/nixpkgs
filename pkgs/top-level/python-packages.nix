@@ -8774,6 +8774,8 @@ self: super: with self; {
 
   ixia = callPackage ../development/python-modules/ixia { };
 
+  ixxy-email-logger = callPackage ../development/python-modules/ixxy-email-logger { };
+
   j2lint = callPackage ../development/python-modules/j2lint { };
 
   jack-client = callPackage ../development/python-modules/jack-client { };
