@@ -34,10 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line tool to generate, analyze, convert and manipulate colors";
     homepage = "https://github.com/sharkdp/pastel";
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
     mainProgram = "pastel";
   };

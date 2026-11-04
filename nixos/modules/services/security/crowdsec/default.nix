@@ -930,7 +930,7 @@ in
               value."f+" = {
                 user = cfg.user;
                 group = cfg.group;
-                argument = content;
+                argument = lib.replaceStrings [ "%" ] [ "%%" ] content;
               };
             };
 

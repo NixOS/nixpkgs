@@ -904,11 +904,11 @@
     "vendorHash": "sha256-8Zj4nrEJ38Tz0LOYtghlMnJZJnD2zJjsqawVMTEX0Wk="
   },
   "metio_migadu": {
-    "hash": "sha256-AIRdDcFCDjE4uPZS3aZk4HfZzBN5SsGnJnSBZ2vgIno=",
+    "hash": "sha256-oJlegaTk7XWjCMIzDUPmh3cRz65EtSNHY0zZST184wM=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
     "owner": "metio",
     "repo": "terraform-provider-migadu",
-    "rev": "2026.10.22",
+    "rev": "2026.10.29",
     "spdx": "0BSD",
     "vendorHash": "sha256-Z/Z5TvhAigUDxi7zvrgmmuoPwMoztAidFChmHWQ/Vc4="
   },
@@ -1120,11 +1120,11 @@
     "vendorHash": "sha256-6M6jTrukO0VhyZRdYbbICm22upbGyOkUSuHqMLTPcEM="
   },
   "rootlyhq_rootly": {
-    "hash": "sha256-uks+FF2JDC1ciMoQMree3hsRSnzeef+F4UDhTy+smWU=",
+    "hash": "sha256-Rr6CmH0n3DyFvTWOYEw2NMhVm2k6GyqyM+9fq7v5AbY=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v5.23.5",
+    "rev": "v5.24.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-wtVA37PIlxkZcGKD/Q7N6Se7IyuFTq6G6doyzN4SX70="
   },

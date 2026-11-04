@@ -3,8 +3,17 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  makeBinaryWrapper,
+  glib,
+  libsecret,
 }:
 
+let
+  libPath = lib.makeLibraryPath [
+    libsecret
+    glib
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
@@ -35,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+    makeBinaryWrapper
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -55,6 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -Dm755 $src $out/bin/sonar
     runHook postInstall
+  '';
+
+  # The binary dlopen()s libsecret-1.so.0, libgobject-2.0.so.0 and
+  # libglib-2.0.so.0 for keychain storage. Patching the ELF (RPATH/NEEDED)
+  # corrupts the Bun payload, so expose them via LD_LIBRARY_PATH.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/sonar \
+      --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
   doInstallCheck = true;

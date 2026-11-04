@@ -35,10 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = "https://github.com/flamegraph-rs/flamegraph";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       killercup
       matthiasbeyer
