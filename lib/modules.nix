@@ -456,22 +456,16 @@ let
             if isFunction contents then applyModuleArgs' (toString m) contents else contents
           );
 
-      checkModule =
-        if class != null then
-          m:
-          if m._class == null || m._class == class then
-            m
-          else
-            throw ''
-              The module `${m._file or m.key}` (class: ${lib.strings.escapeNixString m._class}) cannot be imported into a module evaluation that expects class ${lib.strings.escapeNixString class}.
+      throwClassMismatch =
+        m:
+        throw ''
+          The module `${m._file or m.key}` (class: ${lib.strings.escapeNixString m._class}) cannot be imported into a module evaluation that expects class ${lib.strings.escapeNixString class}.
 
-              Help:
-              - Ensure that you are importing the correct module.
-              - Verify that the module's `_class`, ${lib.strings.escapeNixString m._class} matches the expected `class` ${lib.strings.escapeNixString class}.
-              - If you are using a custom class, make sure it is correctly defined and used consistently across your modules.
-            ''
-        else
-          m: m;
+          Help:
+          - Ensure that you are importing the correct module.
+          - Verify that the module's `_class`, ${lib.strings.escapeNixString m._class} matches the expected `class` ${lib.strings.escapeNixString class}.
+          - If you are using a custom class, make sure it is correctly defined and used consistently across your modules.
+        '';
 
       # isDisabled :: String -> [ { disabled, file } ] -> StructuredModule -> bool
       #
@@ -528,20 +522,13 @@ let
           }
       */
       collectStructuredModules =
-        let
-          collectResults = modules: {
-            disabled = concatLists (catAttrs "disabled" modules);
-            inherit modules;
-          };
-        in
         parentFile: parentKey: initialModules:
-        collectResults (
-          genList (
+        let
+          modules = genList (
             i:
             let
-              module = checkModule (
-                loadModule parentFile "${parentKey}:anon-${toString (i + 1)}" (elemAt initialModules i)
-              );
+              m = loadModule parentFile "${parentKey}:anon-${toString (i + 1)}" (elemAt initialModules i);
+              module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
               collectedImports =
                 if module.imports != [ ] then
                   collectStructuredModules module._file module.key module.imports
@@ -564,8 +551,12 @@ let
                 else
                   (collectedImports.disabled or [ ]);
             }
-          ) (length initialModules)
-        );
+          ) (length initialModules);
+        in
+        {
+          disabled = concatLists (catAttrs "disabled" modules);
+          inherit modules;
+        };
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
