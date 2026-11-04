@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet, VecDeque};
+use std::collections::{BTreeMap, BTreeSet, HashSet, VecDeque};
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
@@ -42,6 +42,14 @@ struct StoreInput {
     source: String,
     target: Option<String>,
     dlopen: Option<DLOpenConfig>,
+}
+
+#[derive(Deserialize, Debug)]
+struct Input {
+    contents: Vec<StoreInput>,
+    // Symlinks to create as is, e.g. relative ones that don't point into the store.
+    #[serde(default)]
+    symlinks: BTreeMap<String, String>,
 }
 
 #[derive(PartialEq, Eq, Hash, Clone)]
@@ -314,7 +322,7 @@ fn main() -> eyre::Result<()> {
     let args: Vec<String> = env::args().collect();
     let contents =
         fs::read(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
-    let input = serde_json::from_slice::<Vec<StoreInput>>(&contents)
+    let input = serde_json::from_slice::<Input>(&contents)
         .wrap_err_with(|| {
             let text = String::from_utf8_lossy(&contents);
             format!("failed to parse JSON '{}' in {:?}",
@@ -329,7 +337,7 @@ fn main() -> eyre::Result<()> {
 
     let mut queue = NonRepeatingQueue::<StorePath>::new();
 
-    for sp in input {
+    for sp in input.contents {
         let obj_path = Path::new(&sp.source);
         queue.push_back(StorePath {
             path: Box::from(obj_path),
@@ -351,6 +359,16 @@ fn main() -> eyre::Result<()> {
     }
     while let Some(obj) = queue.pop_front() {
         handle_path(out_path, obj, &mut queue)?;
+    }
+
+    for (link, target) in &input.symlinks {
+        let link_path = Path::new(output).join(link.trim_start_matches('/'));
+        if let Some(parent) = link_path.parent() {
+            fs::create_dir_all(parent)
+                .wrap_err_with(|| format!("failed to create directories to {:?}", parent))?;
+        }
+        unix::fs::symlink(target, &link_path)
+            .wrap_err_with(|| format!("failed to symlink {:?} to {:?}", target, link_path))?;
     }
 
     Ok(())

@@ -246,7 +246,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
     ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
