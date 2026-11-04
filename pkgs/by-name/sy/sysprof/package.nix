@@ -70,6 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemdunitdir=lib/systemd/system"
     # In a separate libsysprof-capture package
     "-Dinstall-static=false"
+  ]
+  # FAILED: [code=1] src/libsysprof/tests/test-flatpak-info
+  # ld.bfd: src/libsysprof/tests/test-flatpak-info.p/test-flatpak-info.c.o: R_LARCH_ALIGN with offset 2 not aligned to instruction boundary
+  # ld.bfd: BFD (GNU Binutils) 2.46 assertion fail /build/binutils-with-gold-2.46/bfd/elfnn-loongarch.c:4355
+  # ld.bfd: src/libsysprof/tests/test-flatpak-info.p/test-flatpak-info.c.o: relocation R_LARCH_CALL36 right shift 2 error 0xffffffffffffeecb
+  ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    (lib.mesonBool "tests" false)
   ];
 
   passthru = {
