@@ -5661,6 +5661,8 @@ self: super: with self; {
 
   energyzero = callPackage ../development/python-modules/energyzero { };
 
+  enforced-permissions = callPackage ../development/python-modules/enforced-permissions { };
+
   enlighten = callPackage ../development/python-modules/enlighten { };
 
   enocean-async = callPackage ../development/python-modules/enocean-async { };
