@@ -904,7 +904,6 @@ let
         if all isOptionDecl decls then
           {
             matchedOptions = evalOptionValue loc (fixupOptionType loc (mergeOptionDecls loc decls)) defns';
-            unmatchedDefns = [ ];
           }
         # this may look like duplicate computations are performed, but testing
         # with a minimal NixOS config (defined below):
@@ -951,7 +950,6 @@ let
               matchedOptions = evalOptionValue loc (fixupOptionType loc (
                 mergeOptionDecls loc (map optionTreeToOption decls)
               )) defns';
-              unmatchedDefns = [ ];
             }
           else
             let
@@ -969,7 +967,7 @@ let
       # an attrset 'name' => list of unmatched definitions for 'name'
       unmatchedDefnsByName =
         # Propagate all unmatched definitions from nested option sets
-        mapAttrs (n: v: v.unmatchedDefns) resultsByName
+        mapAttrs (n: v: v.unmatchedDefns or [ ]) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
         // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in
