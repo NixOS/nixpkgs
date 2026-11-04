@@ -12244,6 +12244,8 @@ self: super: with self; {
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
 
+  nix-manipulator = callPackage ../development/python-modules/nix-manipulator { };
+
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nixl = callPackage ../development/python-modules/nixl {
@@ -19964,8 +19966,6 @@ self: super: with self; {
   sphinxext-rediraffe = callPackage ../development/python-modules/sphinxext-rediraffe { };
 
   sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
-
-  spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spidev = callPackage ../development/python-modules/spidev { };
 

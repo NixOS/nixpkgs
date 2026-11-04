@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclopts";
-  version = "4.25.3";
+  version = "5.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BlxlOegVi5V4XS1Mm52xpDvLoqCwC9IYEAkgNbTesfQ=";
+    hash = "sha256-/Ued5ds3kw++kQt07z9p5SzYTSrV6G9IZAsjN9bxT8k=";
   };
 
   pythonRelaxDeps = [ "rich-rst" ];
@@ -88,6 +88,16 @@ buildPythonPackage (finalAttrs: {
     "test_behavior[zsh-subcommand-prefix]"
     "test_path_completion_action"
     "test_requires_equals_eq_form_value_completion"
+    # zsh completion in the build sandbox returns the completion cancel
+    # character instead of the candidates
+    "test_e2e_option_value[zsh"
+    "test_e2e_option_value_prefix[zsh"
+    "test_e2e_descriptions[zsh"
+    "test_e2e_subcommand_named_like_path_executable[zsh"
+    "test_e2e_eq_form_option_value[zsh"
+    "test_e2e_dependent_completion[zsh"
+    "test_e2e_wire_protocol_forward_compat[zsh"
+    "test_e2e_default_completer_positional_with_subcommands[zsh"
   ];
 
   meta = {
