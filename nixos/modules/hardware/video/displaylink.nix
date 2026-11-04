@@ -10,8 +10,9 @@ let
 
   evdi = config.boot.kernelPackages.evdi;
 
+  # FIX: Replace inherit evdi; with the active linuxPackages set
   displaylink = pkgs.displaylink.override {
-    inherit evdi;
+    linuxPackages = config.boot.kernelPackages;
   };
 
 in
