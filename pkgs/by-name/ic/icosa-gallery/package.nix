@@ -1,81 +1,71 @@
 {
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
   makeWrapper,
-  python3,
+  nixosTests,
+  python3Packages,
 }:
-let
-  python3' = python3.override {
-    packageOverrides = final: prev: {
-      django = final.django_5;
-      django-admin-tools = final.callPackage ./django-admin-tools.nix { };
-      django-constance = final.callPackage ./django-constance.nix { };
-      django-honeypot = final.callPackage ./django-honeypot.nix { };
-      django-simple-math-captcha = final.callPackage ./django-simple-math-captcha.nix { };
-      ixxy-email-logger = final.callPackage ./ixxy-email-logger.nix { };
-    };
-  };
-  python3Packages = python3'.pkgs;
-in
+
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "icosa-gallery";
-  version = "0-unstable-2026-01-15";
+  version = "0-unstable-2026-11-04";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "icosa-foundation";
     repo = "icosa-gallery";
-    rev = "2fc0fe9505f682b8c11f1b282355790c7eb78e0c";
-    hash = "sha256-w/PF/65eIkg9OgIzWw8VEGKVuepEf8C/xXjeyiLzH+I=";
+    rev = "d070c1aa199535b6755eb230e805552d2e4c96e7";
+    hash = "sha256-f8cl03eGI0fyYKjSvd1p5OUWw8mH1ohHsQwpHyB/lsM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/django";
 
   patches = [
     ./BASE_DIR.patch
+    # See https://github.com/icosa-foundation/icosa-gallery/pull/200
+    ./0001-Fix-django-ninja-removed-Config.patch
   ];
 
   dependencies =
     with python3Packages;
     [
-      django-admin-tools
-      django-constance
-      django-honeypot
-      django-simple-math-captcha
-      ixxy-email-logger
-
       b2sdk
       bcrypt
       boto3
       botocore
+      django
+      django-async-extensions
       django-autocomplete-light
       django-axes
       django-compressor
+      django-constance
       django-cors-headers
       django-debug-toolbar
       django-extensions
-      django-ratelimit
-      django-redis
+      django-honeypot
       django-import-export
       django-libsass
       django-maintenance-mode
       django-ninja
-      django-silk
+      django-ratelimit
+      django-redis
+      django-simple-math-captcha
       django-storages
-      django
-      gevent
-      gunicorn
+      enforced-permissions
       huey
       ijson
+      ixxy-email-logger
       passlib
       pillow
-      psycopg2
+      psycopg
+      psycopg-pool
       pydantic
       pyjwt
       python-magic
       requests
       s3transfer
       sentry-sdk
+      uvicorn
     ]
     ++ django-import-export.optional-dependencies.all
     ++ pydantic.optional-dependencies.email
@@ -91,12 +81,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/opt/icosa-gallery
-    cp -r django_project icosa $out/opt/icosa-gallery
+    cp -r django_project icosa gunicorn_config $out/opt/icosa-gallery
 
     mkdir -p $out/bin
     cp -r manage.py $out/bin/icosa-gallery
 
-    ln -s ${lib.getExe python3Packages.gunicorn} $out/opt/icosa-gallery/gunicorn
+    ln -s ${lib.getExe python3Packages.uvicorn} $out/opt/icosa-gallery/uvicorn
 
     runHook postInstall
   '';
@@ -110,9 +100,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pythonPath = python3Packages.makePythonPath finalAttrs.finalPackage.dependencies;
     in
     ''
-      wrapProgram $out/opt/icosa-gallery/gunicorn \
+      wrapProgram $out/opt/icosa-gallery/uvicorn \
         --prefix PYTHONPATH : "$out/opt/icosa-gallery:${pythonPath}"
     '';
+
+  passthru.tests = {
+    inherit (nixosTests) icosa-gallery;
+  };
 
   meta = {
     description = "3D model hosting solution";

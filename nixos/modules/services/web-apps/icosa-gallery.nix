@@ -72,7 +72,6 @@ in
 
         networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
 
-        # https://docs.gunicorn.org/en/stable/deploy.html#systemd
         systemd.services.icosa-gallery = {
           description = "Icosa Gallery";
           wantedBy = [ "multi-user.target" ];
@@ -86,12 +85,11 @@ in
           // cfg.settings;
 
           serviceConfig = {
-            Type = "notify";
-            NotifyAccess = "main";
+            Type = "exec";
             DynamicUser = true;
             StateDirectory = "icosa-gallery";
             WorkingDirectory = "/var/lib/icosa-gallery";
-            ExecStart = "${cfg.package}/opt/icosa-gallery/gunicorn django_project.wsgi:application --bind ${cfg.host}:${toString cfg.port} --timeout 900";
+            ExecStart = "${cfg.package}/opt/icosa-gallery/uvicorn django_project.asgi:application --host ${cfg.host} --port ${toString cfg.port} --lifespan off";
             ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
             KillMode = "mixed";
             TimeoutStopSec = "5";
