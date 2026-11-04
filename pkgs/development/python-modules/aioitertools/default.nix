@@ -4,7 +4,7 @@
   fetchPypi,
 
   # native
-  flit-core,
+  flit-core_3,
 
   # tests
   unittestCheckHook,
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-YgvSQazAu7nsgZ8ashWGaHG0u9H3ODalX3mSAO6GlQw=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
