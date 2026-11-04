@@ -55,7 +55,6 @@ let
     zipAttrsWith
     ;
   inherit (lib.options)
-    isOption
     mkOption
     showDefs
     showFiles
@@ -276,11 +275,10 @@ let
 
       config =
         let
-
           # For definitions that have an associated option
           declaredConfig =
             let
-              recurse = mapAttrs (n: v: if isOption v then v.value else recurse v);
+              recurse = mapAttrs (n: v: if v._type or null == "option" then v.value else recurse v);
             in
             recurse options;
 
@@ -876,7 +874,7 @@ let
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption =
         decl:
-        if isOption decl.options then
+        if decl.options._type or null == "option" then
           decl
         else
           decl
@@ -957,7 +955,7 @@ let
             }
           else
             let
-              nonOptions = filter (m: !isOption m.options) decls;
+              nonOptions = filter (m: m.options._type or null != "option") decls;
             in
             throw "The option `${showOption loc}' in module `${(head optionDecls)._file}' would be a parent of the following options, but its type `${
               (head optionDecls).options.type.description or "<no description>"
