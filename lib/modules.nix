@@ -13,14 +13,15 @@ let
     concatMap
     concatStringsSep
     elem
+    elemAt
     filter
     foldl'
     functionArgs
     getAttrFromPath
     genericClosure
+    genList
     head
     id
-    imap1
     init
     isAttrs
     isBool
@@ -535,10 +536,12 @@ let
         in
         parentFile: parentKey: initialModules:
         collectResults (
-          imap1 (
-            n: x:
+          genList (
+            i:
             let
-              module = checkModule (loadModule parentFile "${parentKey}:anon-${toString n}" x);
+              module = checkModule (
+                loadModule parentFile "${parentKey}:anon-${toString (i + 1)}" (elemAt initialModules i)
+              );
               collectedImports =
                 if module.imports != [ ] then
                   collectStructuredModules module._file module.key module.imports
@@ -561,7 +564,7 @@ let
                 else
                   (collectedImports.disabled or [ ]);
             }
-          ) initialModules
+          ) (length initialModules)
         );
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
