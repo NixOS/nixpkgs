@@ -229,6 +229,8 @@ let
 
     inherit (_crubit) version cargoHash;
 
+    __structuredAttrs = true;
+
     src = fetchFromGitiles {
       url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
       # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/update_rust.py#48
