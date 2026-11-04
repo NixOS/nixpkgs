@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.51.0";
+  version = "0.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "uvicorn";
     tag = version;
-    hash = "sha256-VX5X2BY8eZc93r3zfJFhtz1vuXHvaqWB5rTj7zddSzU=";
+    hash = "sha256-tfRdlqiMQ/+LZBQyTIAY+g6szR+JWn0X7Fd1yP3dntM=";
   };
 
   outputs = [
