@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "dux-search";
-  version = "2.0.0";
+  version = "2.1.0";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "duxlabs-dev";
     repo = "dux-search";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GOnNob/tex//NBchfVXAjzk9Gw4K+GxyVmZBZqx0nLA=";
+    hash = "sha256-XIRwlBusj/6wk4+/0kk6RzseQgVoh56eA5TtWmqU2rk=";
   };
 
   vendorHash = "sha256-MkRBJPsHHgH2z/hTt8Z6SM/+KNQ8PuipBALW8qbJldE=";
@@ -51,6 +51,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     teams = [ lib.teams.duxlabs ];
     mainProgram = "dsearch";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 })
