@@ -5491,6 +5491,8 @@ self: super: with self; {
 
   edge-tts = callPackage ../development/python-modules/edge-tts { };
 
+  edgartools = callPackage ../development/python-modules/edgartools { };
+
   editables = callPackage ../development/python-modules/editables { };
 
   editdistance = callPackage ../development/python-modules/editdistance { };
