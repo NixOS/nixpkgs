@@ -4,31 +4,31 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "9bfb8122e2505aca17219018593c384a87166cfe860d11c7ae927e7f978eb05f",
+        "sha256": "1c5591cc6f252d5f440d96ab87c03e43504be552a3fa49d7cb7563f04c51fb0a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "110.0.0"
+      "version": "111.0.0"
     },
     "analyzer": {
       "dependency": "direct dev",
       "description": {
         "name": "analyzer",
-        "sha256": "74c36179c4de542efea24c9dff78324375e4b118a2c1e14e8a7659f457947f8d",
+        "sha256": "6c39bd5486a310e56217bed7cb1691377959f31be4227e41750107db7e6dd55c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "14.6.0"
+      "version": "14.7.0"
     },
     "archive": {
       "dependency": "direct dev",
       "description": {
         "name": "archive",
-        "sha256": "0d58d1fa1fddf6588251ccf2819f3fb3b6d0452c1b2813ac7413a05592bfbefe",
+        "sha256": "de5ac590b8155e4e676088d714bd41ea620449a6adc0f7950c5073874b287ddb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.5.2"
+      "version": "4.6.0"
     },
     "args": {
       "dependency": "direct main",
@@ -154,11 +154,11 @@
       "dependency": "direct dev",
       "description": {
         "name": "crypto",
-        "sha256": "c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf",
+        "sha256": "e3626ae6270383c9e3a549f34c9e4cd26c09ae6a9adaab2bf4737a00340efdc4",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.7"
+      "version": "3.0.8"
     },
     "csslib": {
       "dependency": "transitive",
@@ -484,11 +484,11 @@
       "dependency": "transitive",
       "description": {
         "name": "posix",
-        "sha256": "bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e",
+        "sha256": "613646d076944f3acc125830af935b48d4b8a57a388691547bbfd25b434f4d63",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.5.2"
+      "version": "6.5.4"
     },
     "protobuf": {
       "dependency": "direct main",
