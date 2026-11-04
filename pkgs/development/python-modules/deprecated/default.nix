@@ -2,43 +2,28 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonAtLeast,
-  setuptools_80,
+  hatchling,
   wrapt,
   pytestCheckHook,
-  sphinxHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "deprecated";
-  version = "1.3.1";
+  version = "3.0.1";
   pyproject = true;
-
-  outputs = [
-    "out"
-    "doc"
-  ];
 
   src = fetchFromGitHub {
     owner = "laurent-laporte-pro";
     repo = "deprecated";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1mB9aRZOsaW7Mqcu1SWIYTusQ7MlMvUucdTyfu++Nx8=";
+    hash = "sha256-cW2KHJ5MPyxWtZ792H/Whk0nIcUo1PDNkIzMMQ5d+ao=";
   };
 
-  build-system = [ setuptools_80 ];
-
-  nativeBuildInputs = [ sphinxHook ];
+  build-system = [ hatchling ];
 
   dependencies = [ wrapt ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # assertion text mismatch
-    "test_classic_deprecated_class_method__warns"
-    "test_sphinx_deprecated_class_method__warns"
-  ];
 
   pythonImportsCheck = [ "deprecated" ];
 
