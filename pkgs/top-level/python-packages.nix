@@ -4625,6 +4625,8 @@ self: super: with self; {
 
   django-async-backend = callPackage ../development/python-modules/django-async-backend { };
 
+  django-async-extensions = callPackage ../development/python-modules/django-async-extensions { };
+
   django-auditlog = callPackage ../development/python-modules/django-auditlog { };
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap {
