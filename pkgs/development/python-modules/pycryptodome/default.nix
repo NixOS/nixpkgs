@@ -3,7 +3,6 @@
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
-  gmp,
   setuptools,
 }:
 
@@ -12,20 +11,15 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.23.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
     tag = "v${version}";
-    hash = "sha256-x8QkRBwM/H/n7yHGjE8UfBhOzkGr0PBixe9g4EuZLUg=";
+    hash = "sha256-1ThtrGzKeKP+1iVEVRlnEh59+ArVCCtZpujafdxaf7k=";
   };
-
-  postPatch = ''
-    substituteInPlace lib/Crypto/Math/_IntegerGMP.py \
-      --replace-fail 'load_lib("gmp"' 'load_lib("${gmp}/lib/libgmp.so.10"'
-  '';
 
   build-system = [ setuptools ];
 
