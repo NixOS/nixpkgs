@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jopejoe1 ];
     platforms = lib.platforms.all;
   };
 })
