@@ -8,18 +8,20 @@
     {
       services.icosa-gallery = {
         enable = true;
-        openFirewall = true;
-        port = 8080;
         enableLocalDB = true;
+        openFirewall = true;
+        host = "0.0.0.0";
+        port = 8080;
         settings = {
-          # Do *NOT* do this in production!
+          # Do *NOT* do this in production, use https://wiki.nixos.org/wiki/Comparison_of_secret_managing_schemes, eg. sops-nix
           POSTGRES_PASSWORD = "icosa-gallery";
-          DJANGO_SECRET_KEY = "g3tu0@_-fvhdn&p09mv)x9+x6^7q58&&r9l*k61k-m2f72j&z";
-          JWT_SECRET_KEY = "sd2k+@tt0x22_))w9wtv(h1278bc#mkd7jna5nannws(4vr^7";
+          DJANGO_SECRET_KEY = "SnakeOilKEY";
+          JWT_SECRET_KEY = "SnakeOilKEY2";
 
           DJANGO_DISABLE_CACHE = "1";
           DEPLOYMENT_NO_SSL = "1";
           DEPLOYMENT_ENV = "local";
+          DEPLOYMENT_HOST_WEB = "localhost:8080";
         };
       };
 
@@ -40,4 +42,27 @@
       machine.wait_for_open_port(${port})
       machine.succeed("curl -v http://localhost:${port} >&2")
     '';
+
+  # Debug interactively with:
+  # - nix-build -A nixosTests.icosa-gallery.driverInteractive
+  # - ./result/bin/nixos-test-driver
+  # - run_tests()
+  interactive.sshBackdoor.enable = true;
+  interactive.nodes.machine =
+    { config, ... }:
+    let
+      port = config.services.icosa-gallery.port;
+    in
+    {
+      virtualisation.forwardPorts = [
+        {
+          from = "host";
+          host.port = port;
+          guest.port = port;
+        }
+      ];
+
+      # forwarded ports need to be accessible
+      networking.firewall.enable = false;
+    };
 }

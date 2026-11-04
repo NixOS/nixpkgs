@@ -1,6 +1,6 @@
 --- a/django_project/settings.py
 +++ b/django_project/settings.py
-@@ -12,7 +12,7 @@
+@@ -15,7 +15,7 @@
  from botocore.client import Config as BotoConfig
  
  # Build paths inside the project like this: BASE_DIR / 'subdir'.
