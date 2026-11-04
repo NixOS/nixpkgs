@@ -18,28 +18,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pendulum";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pendulum";
     repo = "pendulum";
     tag = finalAttrs.version;
-    hash = "sha256-zpBymeYhCy+yu6RPhOuN5xOVk6928hd3+oRsfiBPPuY=";
+    hash = "sha256-BZZhSvO9G9EIY3yEVmufZzPqIFfVlTZkPqJowhHCjdY=";
   };
-
-  patches = [
-    # Fix the build on Darwin.
-    #
-    # <https://github.com/python-pendulum/pendulum/pull/979>
-    ./delete-obsolete-cargo-toml.patch
-  ];
 
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/rust";
-    hash = "sha256-tC65lxI561ygOhBFujWzGk32XiQH6QB42nqboWSfQrg=";
+    hash = "sha256-Mkd5/UtxGppysFX3WoYtYqatHW4J3q7iH9MBN/jSfZM=";
   };
 
   nativeBuildInputs = [
