@@ -1,6 +1,6 @@
 {
   stdenv,
-  undmg,
+  _7zz,
 
   pname,
   passthru,
@@ -13,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (finalAttrs.passthru.source) version;
   inherit (finalAttrs.passthru) src;
 
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
+  # _7zz uses "-sns-" to avoid invalidating the code signature.
+  nativeBuildInputs = [ _7zz ];
 
   installPhase = ''
     runHook preInstall
@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  dontStrip = true;
 
   passthru = passthru finalAttrs;
   meta = meta finalAttrs;

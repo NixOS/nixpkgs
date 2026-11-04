@@ -4,7 +4,7 @@
   fetchurl,
   jq,
 
-  undmg,
+  _7zz,
   autoPatchelfHook,
   dpkg,
   makeShellWrapper,
