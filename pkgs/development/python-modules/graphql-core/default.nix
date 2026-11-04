@@ -2,40 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  uv-build,
+  anyio,
   pytest-describe,
   pytest-asyncio,
+  pytest-timeout,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "3.2.13";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-core";
     tag = "v${version}";
-    hash = "sha256-06oxzqUVgmfEQXGmJLgMKw3/gCIMNyyXpwIO4rj7FYc=";
+    hash = "sha256-oQwWSLt2KqFSYzsBNdavo51XBuYhXh3R4VrS7EO8gUU=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools>=59,<85"' ""
-
     # avoid big pytest-benchmark dependency
-    substituteInPlace setup.cfg \
-      --replace-fail "addopts = --benchmark-disable" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "addopts = \"--benchmark-disable\"" "" \
+      --replace-fail "uv_build>=0.12,<0.13" "uv_build"
   '';
 
   build-system = [
-    poetry-core
+    uv-build
   ];
 
   nativeCheckInputs = [
+    anyio
     pytest-asyncio
     pytest-describe
+    pytest-timeout
     pytestCheckHook
   ];
 
