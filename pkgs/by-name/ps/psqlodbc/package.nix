@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     driver = "lib/psqlodbcw.so";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
