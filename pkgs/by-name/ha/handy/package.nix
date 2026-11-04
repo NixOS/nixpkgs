@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   pkg-config,
   cmake,
@@ -36,6 +37,8 @@
   libx11,
   pipewire,
   alsa-plugins,
+  gsettings-desktop-schemas,
+  dotool,
   wrapGAppsHook4,
 
   # Cross-platform
@@ -66,6 +69,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-3j73ss9pwkcK4MfeNY/9PFp//Cbc0OSICDdlmHprSso=";
   };
+
+  patches = [
+    # Keep DMA-BUF rendering disabled by default, but honor an explicit
+    # WEBKIT_DISABLE_DMABUF_RENDERER so users can opt out with =0.
+    # https://github.com/cjpais/Handy/pull/2249
+    (fetchpatch {
+      name = "honor-webkit-disable-dmabuf-renderer.patch";
+      url = "https://github.com/cjpais/Handy/commit/48a3d8e9ee456c1c6a3b7223779271c457890b4d.patch";
+      includes = [ "src-tauri/src/main.rs" ];
+      hash = "sha256-Yo62689hWkdL/+u5FJiMQcdx+17vll1EZMQONEEgTv4=";
+    })
+  ];
 
   cargoRoot = "src-tauri";
   cargoHash = "sha256-I9OLUF96PgqdcYlycBICfl43rENkiyzZDLmtmnNX87A=";
@@ -143,6 +158,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-headers
     glib-networking
     libx11
+    gsettings-desktop-schemas
   ];
 
   ortLibLocation = "${lib.getLib onnxruntime}/lib";
@@ -196,10 +212,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set ALSA_PLUGIN_DIR "${finalAttrs.passthru.alsaPluginDirectory}"
       # Disable the in-app updater
       --set HANDY_DISABLE_UPDATER 1
+      # Handy shells out to dotool for paste and typing on Wayland
+      --prefix PATH : ${lib.makeBinPath [ dotool ]}
     )
   '';
 
