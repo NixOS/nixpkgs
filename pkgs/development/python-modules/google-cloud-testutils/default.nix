@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-testutils";
-  version = "1.7.1";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-test-utils";
+    repo = "google-cloud-python";
     tag = "google-cloud-testutils-v${finalAttrs.version}";
-    hash = "sha256-uUBId7RxVfOPtemZYUqJXd4hw2/CU2cogZL39MrKehk=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-testutils";
