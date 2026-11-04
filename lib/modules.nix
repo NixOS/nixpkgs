@@ -1412,11 +1412,11 @@ let
     cfg:
     if cfg ? _type then
       if cfg._type == "if" then
-        map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+        map (mapAttrsIfAttrs (n: mkIf cfg.condition)) (pushDownProperties cfg.content)
       else if cfg._type == "merge" then
         concatMap pushDownProperties cfg.contents
       else if cfg._type == "override" then
-        map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+        map (mapAttrsIfAttrs (n: mkOverride cfg.priority)) (pushDownProperties cfg.content)
       # FIXME: handle mkOrder?
       else
         [ cfg ]
