@@ -19,6 +19,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
+  # Updates should be correlated with arrow-adbc top-level attribute, so:
+  # nixpkgs-update: no auto update
   src = fetchPypi {
     pname = "adbc_driver_flightsql";
     inherit (finalAttrs) version;
