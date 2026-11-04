@@ -82,6 +82,12 @@ flutter329.buildFlutterApplication rec {
   strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
   env.OPENSSL_NO_VENDOR = true;
+  # upstream sets rpath = true, which keeps all of rustc in the closure
+  env.CARGO_PROFILE_RELEASE_RPATH = "false";
+
+  # buildDartApplication turns stripping off, and libapp.so has to stay as it is
+  dontStrip = false;
+  stripAllList = [ "app/rustdesk/lib/librustdesk.so" ];
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
