@@ -727,23 +727,28 @@ let
   applyModuleArgsIfFunction =
     key: f: args@{ config, ... }: if isFunction f then applyModuleArgs args key f else f;
 
+  # Module arguments are resolved in a strict manner when attribute set
+  # deconstruction is used.  As the arguments are now defined with the
+  # config._module.args option, the strictness used on the attribute
+  # set argument would cause an infinite loop, if the result of the
+  # option is given as argument.
+  #
+  # To work-around the strictness issue on the deconstruction of the
+  # attributes set argument, we create a new attribute set which is
+  # constructed to satisfy the expected set of attributes.  Thus calling
+  # a module will resolve strictly the attributes used as argument but
+  # not their values.  The values are forwarding the result of the
+  # evaluation of the option.
   applyModuleArgs =
     args@{ config, ... }:
     key: f:
-    let
-      # Module arguments are resolved in a strict manner when attribute set
-      # deconstruction is used.  As the arguments are now defined with the
-      # config._module.args option, the strictness used on the attribute
-      # set argument would cause an infinite loop, if the result of the
-      # option is given as argument.
-      #
-      # To work-around the strictness issue on the deconstruction of the
-      # attributes set argument, we create a new attribute set which is
-      # constructed to satisfy the expected set of attributes.  Thus calling
-      # a module will resolve strictly the attributes used as argument but
-      # not their values.  The values are forwarding the result of the
-      # evaluation of the option.
-      extraArgs = mapAttrs (
+    f (
+      # Note: we append in the opposite order such that we can add an error
+      # context on the explicit arguments of "args" too. This update
+      # operator is used to make the "args@{ ... }: with args.lib;" notation
+      # works.
+      args
+      // mapAttrs (
         name: _:
         addErrorContext ''while evaluating the module argument `${name}' in "${key}":'' (
           args.${name} or (addErrorContext
@@ -751,14 +756,8 @@ let
             config._module.args.${name}
           )
         )
-      ) (functionArgs f);
-
-      # Note: we append in the opposite order such that we can add an error
-      # context on the explicit arguments of "args" too. This update
-      # operator is used to make the "args@{ ... }: with args.lib;" notation
-      # works.
-    in
-    f (args // extraArgs);
+      ) (functionArgs f)
+    );
 
   /**
     Merge a list of modules.  This will recurse over the option
