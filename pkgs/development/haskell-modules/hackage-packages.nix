@@ -450956,7 +450956,7 @@ self: {
     {
       mkDerivation,
       base,
-      lua5_4,
+      lua,
       tasty,
       tasty-hunit,
     }:
@@ -450969,7 +450969,7 @@ self: {
         "-f-use-pkgconfig"
       ];
       libraryHaskellDepends = [ base ];
-      librarySystemDepends = [ lua5_4 ];
+      librarySystemDepends = [ lua ];
       testHaskellDepends = [
         base
         tasty
@@ -450978,7 +450978,7 @@ self: {
       description = "Lua, an embeddable scripting language";
       license = lib.meta.getLicenseFromSpdxId "MIT";
     }
-  ) { inherit (pkgs) lua5_4; };
+  ) { lua = null; };
 
   lua-arbitrary = callPackage (
     {
