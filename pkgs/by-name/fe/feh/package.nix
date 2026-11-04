@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeDesktopItem,
   makeWrapper,
   libxt,
   libxinerama,
@@ -53,6 +54,32 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "verscmp=0"
   ++ lib.optional enableAutoreload "inotify=1";
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "feh";
+      desktopName = "feh";
+      comment = "Light-weight image viewer";
+      exec = "feh %F";
+      icon = "feh";
+      noDisplay = true;
+      terminal = false;
+      mimeTypes = [
+        "image/avif"
+        "image/bmp"
+        "image/gif"
+        "image/heic"
+        "image/heif"
+        "image/jpeg"
+        "image/jxl"
+        "image/png"
+        "image/svg+xml"
+        "image/tiff"
+        "image/webp"
+      ];
+      categories = [ "Utility" ];
+    })
+  ];
 
   installTargets = [ "install" ];
   postInstall = ''
