@@ -1,0 +1,175 @@
+From 9844b0e1c309780e23103424dc0b5635a3aa5259 Mon Sep 17 00:00:00 2001
+From: Rahul-cs50 <rahulseervi.dev@gmail.com>
+Date: Wed, 21 Oct 2026 11:30:16 +0530
+Subject: [PATCH] Compute loadgroup group names from the final collection
+
+The worker built its list of group names in pytest_collection_modifyitems,
+but a later hook (for example a conftest hook with trylast=True) can still
+deselect, add or reorder items. The controller then received ids and group
+names that no longer lined up: a shorter collection failed the length assert
+in LoadGroupScheduling.add_node_collection with an INTERNALERROR, and a
+reordered one silently gave tests the wrong group.
+
+Build the group names in pytest_collection_finish from session.items, the
+same list the ids come from.
+
+Fixes #1399
+---
+ changelog/1399.bugfix.rst  |  1 +
+ src/xdist/remote.py        | 42 ++++++++++++++++++--------------------
+ testing/acceptance_test.py | 29 ++++++++++++++++++++++++++
+ testing/test_remote.py     | 33 ++++++++++++++++++++++++++++++
+ 4 files changed, 83 insertions(+), 22 deletions(-)
+ create mode 100644 changelog/1399.bugfix.rst
+
+diff --git a/changelog/1399.bugfix.rst b/changelog/1399.bugfix.rst
+new file mode 100644
+index 00000000..8dde3a85
+--- /dev/null
++++ b/changelog/1399.bugfix.rst
+@@ -0,0 +1 @@
++Fix ``--dist=loadgroup`` failing with an ``INTERNALERROR``, or giving tests the wrong group, when a later ``pytest_collection_modifyitems`` hook (such as one with ``trylast=True``) deselects or reorders tests.
+diff --git a/src/xdist/remote.py b/src/xdist/remote.py
+index ce535bc8..62fc7ed7 100644
+--- a/src/xdist/remote.py
++++ b/src/xdist/remote.py
+@@ -243,35 +243,33 @@ def _sleep_before_first_test(self) -> None:
+         if self.rampdelay > 0:
+             time.sleep(self.rampdelay)
+ 
+-    def pytest_collection_modifyitems(
+-        self,
+-        config: pytest.Config,
+-        items: list[pytest.Item],
+-    ) -> None:
+-        # Send group names separately so pytest owns test node IDs.
+-        if config.getvalue("loadgroup"):
+-            self._group_names: list[str | None] = []
+-            for item in items:
+-                gnames: set[str] = set()
+-                for mark in item.iter_markers("xdist_group"):
+-                    name = (
+-                        mark.args[0]
+-                        if len(mark.args) > 0
+-                        else mark.kwargs.get("name", "default")
+-                    )
+-                    gnames.add(str(name))
+-                if not gnames:
+-                    self._group_names.append(None)
+-                    continue
+-                self._group_names.append("_".join(sorted(gnames)))
++    @staticmethod
++    def _group_name(item: pytest.Item) -> str | None:
++        gnames: set[str] = set()
++        for mark in item.iter_markers("xdist_group"):
++            name = (
++                mark.args[0]
++                if len(mark.args) > 0
++                else mark.kwargs.get("name", "default")
++            )
++            gnames.add(str(name))
++        if not gnames:
++            return None
++        return "_".join(sorted(gnames))
+ 
+     @pytest.hookimpl
+     def pytest_collection_finish(self, session: pytest.Session) -> None:
++        # Send group names separately so pytest owns test node IDs. They are computed
++        # from the final session.items, after every pytest_collection_modifyitems hook
++        # (including trylast ones that deselect items) has run.
++        group_names = None
++        if self.config.getvalue("loadgroup"):
++            group_names = [self._group_name(item) for item in session.items]
+         self.sendevent(
+             "collectionfinish",
+             topdir=str(self.config.rootpath),
+             ids=[item.nodeid for item in session.items],
+-            group_names=getattr(self, "_group_names", None),
++            group_names=group_names,
+         )
+ 
+     @pytest.hookimpl
+diff --git a/testing/acceptance_test.py b/testing/acceptance_test.py
+index 0e53d192..80497719 100644
+--- a/testing/acceptance_test.py
++++ b/testing/acceptance_test.py
+@@ -1595,6 +1595,35 @@ def test_1():
+         b_1 = next(t[2] for t in res if "test_b.py::test_1" in t[2])
+         assert a_1[0] == b_1[0]
+ 
++    def test_late_deselection(self, pytester: pytest.Pytester) -> None:
++        """Group names match the items left after a late deselection (#1399)."""
++        pytester.makeconftest(
++            """
++            import pytest
++
++            @pytest.hookimpl(trylast=True)
++            def pytest_collection_modifyitems(config, items):
++                deselected = [items.pop(0)]
++                config.hook.pytest_deselected(items=deselected)
++        """
++        )
++        pytester.makepyfile(
++            """
++            import pytest
++
++            @pytest.mark.xdist_group("group")
++            def test_deselected():
++                pytest.fail("should have been deselected")
++
++            @pytest.mark.xdist_group("group")
++            def test_selected():
++                pass
++        """
++        )
++        result = pytester.runpytest("-n2", "--dist=loadgroup", "-v")
++        result.assert_outcomes(passed=1)
++        assert result.ret == 0
++
+ 
+ class TestLocking:
+     _test_content = """
+diff --git a/testing/test_remote.py b/testing/test_remote.py
+index 338432d6..5a0821d4 100644
+--- a/testing/test_remote.py
++++ b/testing/test_remote.py
+@@ -192,6 +192,39 @@ def test_ungrouped():
+         ]
+         assert ev.kwargs["group_names"] == ["group", None]
+ 
++    def test_loadgroup_group_names_follow_late_reorder(
++        self, worker: WorkerSetup
++    ) -> None:
++        worker.pytester.makeconftest(
++            """
++            import pytest
++
++            @pytest.hookimpl(trylast=True)
++            def pytest_collection_modifyitems(items):
++                items.reverse()
++            """
++        )
++        worker.pytester.makepyfile(
++            """
++            import pytest
++
++            @pytest.mark.xdist_group("group")
++            def test_grouped():
++                pass
++
++            def test_ungrouped():
++                pass
++            """
++        )
++        worker.setup("--dist=loadgroup")
++        ev = worker.popevent("collectionfinish")
++
++        assert ev.kwargs["ids"] == [
++            "test_loadgroup_group_names_follow_late_reorder.py::test_ungrouped",
++            "test_loadgroup_group_names_follow_late_reorder.py::test_grouped",
++        ]
++        assert ev.kwargs["group_names"] == [None, "group"]
++
+     def test_remote_collect_skip(
+         self, worker: WorkerSetup, unserialize_report: UnserializerReport
+     ) -> None:
