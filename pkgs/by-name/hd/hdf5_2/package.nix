@@ -41,7 +41,7 @@ let
   enableStatic = stdenv.hostPlatform.isStatic;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.0";
+  version = "2.2.0-unstable-2026-11-04";
   pname =
     "hdf5"
     + lib.optionalString cppSupport "-cpp"
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf5";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-Tp2f8jJjVst0Fd07Wt4+EzjHRRI+8TlD1uWD9sDTw4g=";
+    rev = "3447b0b751c346c14098a2d72d2f2aec38c8b8a0";
+    hash = "sha256-JwEfwMn4CmLPI/4T41U4h4FaFMegYOcZwb2MU4klCQ8=";
   };
 
   __structuredAttrs = true;
