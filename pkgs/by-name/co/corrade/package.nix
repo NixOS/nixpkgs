@@ -5,9 +5,9 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corrade";
-  version = "0.0.0";
+  version = "2020.06-unstable-2026-02-16";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,10 +21,9 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ ];
 
   cmakeFlags = [
-    (lib.cmakeBool "CORRADE_BUILD_TESTS" true)
+    (lib.cmakeBool "CORRADE_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = true;
@@ -59,10 +58,10 @@ stdenv.mkDerivation {
   # '';
 
   meta = with lib; {
-    description = "C++11 multiplatform utility library ";
-    homepage = "https://github.com/msora/corrade";
+    description = "C++11 multiplatform utility library";
+    homepage = "https://github.com/mosra/corrade";
     license = licenses.mit;
     maintainers = with maintainers; [ arntanguy ];
     platforms = platforms.all;
   };
-}
+})

@@ -19,7 +19,7 @@
   withEigenIntegration ? true,
   withGlmIntegration ? false,
   # FIXME
-  withYogaIntegration ? false, # needs magnum-extras, not packaged yet
+  withYogaIntegration ? false, # needs yoga, not packaged yet
 }:
 
 let

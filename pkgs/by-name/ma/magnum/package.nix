@@ -6,7 +6,7 @@
   cmake,
   corrade,
   libGL,
-  libX11,
+  libx11,
   openal,
   glfw,
   vulkan-loader,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw
   ]
   ++ lib.optional withVulkan vulkan-loader
-  ++ lib.optional withGlfwApplication libX11
+  ++ lib.optional withGlfwApplication libx11
   ++ lib.optional withSDL2Application SDL2;
 
   cmakeFlags = [

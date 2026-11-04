@@ -48,8 +48,7 @@
   withOpenDdl ? false, # gated by MAGNUM_BUILD_DEPRECATED, I think we can drop it
   withCgltfImporter ? false, # gated by MAGNUM_BUILD_DEPRECATED, I think we can drop it
 
-  # fails and gated by MAGNUM_BUILD_DEPRECATED, definitely drop it
-  withTinyGltfImporter ? false, # gated by MAGNUM_BUILD_DEPRECATED, I think we can drop it
+  # MAGNUM_WITH_TINYGLTFIMPORTER is not supported on purpose (deprecated + libgltf went hostile)
 }:
 
 let
@@ -87,9 +86,6 @@ assert lib.assertMsg (
 
 assert lib.assertMsg (!withCgltfImporter || (magnum.passthru.magnumBuildDeprecated))
   "magnum-plugins: withCgltfImporter requires magnum to be built with magnumBuildDeprecated = true (MAGNUM_BUILD_DEPRECATED=ON) enabled.";
-
-assert lib.assertMsg (!withTinyGltfImporter || (magnum.passthru.magnumBuildDeprecated))
-  "magnum-plugins: withTinyGltfImporter is currently unsupported : failing unit tests + requires magnum to be built with magnumBuildDeprecated = true (MAGNUM_BUILD_DEPRECATED=ON) enabled.";
 
 stdenv.mkDerivation (_finalAttrs: {
   pname = "magnum-plugins";
@@ -157,7 +153,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_STBIMAGEIMPORTER" withStbImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_STBTRUETYPEFONT" withStbTrueTypeFont)
     (lib.cmakeBool "MAGNUM_WITH_STBVORBISAUDIOIMPORTER" withStbVorbisAudioImporter)
-    (lib.cmakeBool "MAGNUM_WITH_TINYGLTFIMPORTER" withTinyGltfImporter)
     (lib.cmakeBool "MAGNUM_WITH_UVIMAGECONVERTER" withUvImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_GLTFIMPORTER" withGltfImporter)
     (lib.cmakeBool "MAGNUM_WITH_CGLTFIMPORTER" withCgltfImporter)
@@ -177,12 +172,10 @@ stdenv.mkDerivation (_finalAttrs: {
   # Failing tests are :
   # - AssimpImporter -> probably due to ASSIMP 6 not being fully supported upstream
   # - Faad2AudioImporter -> decoding error
-  postPatch = ''
-    substituteInPlace src/MagnumPlugins/AssimpImporter/CMakeLists.txt \
-      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
-    substituteInPlace src/MagnumPlugins/Faad2AudioImporter/CMakeLists.txt \
-      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
-  '';
+  disabledTests = [
+    "AssimpImporter"
+    "Faad2AudioImporter"
+  ];
 
   meta = with lib; {
     description = "Plugins for the Magnum C++11 graphics engine";

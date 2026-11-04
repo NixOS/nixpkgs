@@ -50,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  # Needed for unit tests trying to use Alsa, which is not available in the sandbox
   preCheck = ''
-    # Needed for unit tests trying to use Alsa, which is not available in the sandbox
     export ALSOFT_DRIVERS=null
   '';
 
