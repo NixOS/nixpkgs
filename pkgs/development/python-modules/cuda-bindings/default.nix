@@ -69,6 +69,9 @@ let
       "13.2" = import ./13_2.nix args;
       "13.3" = import ./13_3.nix args;
       "13.4" = import ./13_4.nix args;
+      # There is no cuda-bindings release for CUDA 13.5 yet. Since 13.4, the bindings are pre-generated, so 13.4.x
+      # builds against CUDA 13.5 and uses only the APIs of CUDA 13.4, which CUDA 13.5 still provides.
+      "13.5" = import ./13_4.nix args;
     }
     .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
 
