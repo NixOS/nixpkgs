@@ -208,18 +208,17 @@ let
 
   _crubit =
     {
-      "155" = {
-        # version string wrong on purpose because of a previous typo
-        version = "0-unstable-2026-09-11";
-        rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
-        hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
-        cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
-      };
       "156" = {
         version = "0-unstable-2026-09-09";
         rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
         hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
         cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
+      };
+      "157" = {
+        version = "0-unstable-2026-09-30";
+        rev = "20dc640430bd60ff2f7f8dbf69c311c5f807adde";
+        hash = "sha256-rfqmDsqdABuUIDHOu+pLjExbWMbhdvB5U82oxvCTBHA=";
+        cargoHash = "sha256-oTuGEb0NK+pC9X6kwt6C6qFW6sIWp6j+m5ySv3VXgVA=";
       };
     }
     .${lib.versions.major upstream-info.version};
@@ -235,23 +234,25 @@ let
       inherit (_crubit) rev hash;
     };
 
-    patches = [
-      (fetchpatch {
-        # needed for patch below
-        name = "partial-rustfmt.patch";
-        # https://github.com/google/crubit/pull/2151
-        url = "https://github.com/google/crubit/commit/3ed0fa613223e09172e22363953f6587fe5d8bb7.patch";
-        includes = [ "cc_bindings_from_rs/rustversion_impl.rs" ];
-        hash = "sha256-+JMYo6ujPF4lQNUUAXwV6D2A4Ss39y8fh+V9lv8BZ2I=";
-      })
-
-      (fetchpatch {
-        name = "fix-rust-1.99-compat.patch";
-        # https://github.com/google/crubit/pull/2204
-        url = "https://github.com/google/crubit/commit/943b515b25ca3868050b3ea3410b0b979ccc28a2.patch";
-        hash = "sha256-pgoAX+pjliRM230w2GS07hbrR2USe5heQP4ETjiacrA=";
-      })
-    ];
+    patches =
+      lib.optionals (!chromiumVersionAtLeast "157") [
+        (fetchpatch {
+          # needed for patch below
+          name = "partial-rustfmt.patch";
+          # https://github.com/google/crubit/pull/2151
+          url = "https://github.com/google/crubit/commit/3ed0fa613223e09172e22363953f6587fe5d8bb7.patch";
+          includes = [ "cc_bindings_from_rs/rustversion_impl.rs" ];
+          hash = "sha256-+JMYo6ujPF4lQNUUAXwV6D2A4Ss39y8fh+V9lv8BZ2I=";
+        })
+      ]
+      ++ [
+        (fetchpatch {
+          name = "fix-rust-1.99-compat.patch";
+          # https://github.com/google/crubit/pull/2204
+          url = "https://github.com/google/crubit/commit/943b515b25ca3868050b3ea3410b0b979ccc28a2.patch";
+          hash = "sha256-pgoAX+pjliRM230w2GS07hbrR2USe5heQP4ETjiacrA=";
+        })
+      ];
 
     buildInputs = [
       buildPackages.rustc.llvmPackages.llvm
@@ -289,11 +290,7 @@ let
         sourceRoot
         ;
       nativeBuildInputs = [ zstd ];
-      hash =
-        if chromiumVersionAtLeast "156" then
-          "sha256-hb/HSco4PeudjnZFGb2+IHw4rQ7ShI42XWqKOwdgrb4="
-        else
-          "sha256-RO1fJ4Qgt5CxcEwtZT+7SZx7XqiaAmURK3DdEnzIP2k=";
+      hash = "sha256-hb/HSco4PeudjnZFGb2+IHw4rQ7ShI42XWqKOwdgrb4=";
     };
 
     nativeBuildInputs = [
@@ -312,11 +309,11 @@ let
   # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
   _esbuild =
     {
-      "155" = {
+      "156" = {
         version = "0.28.2";
         hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
       };
-      "156" = {
+      "157" = {
         version = "0.28.2";
         hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
       };
@@ -413,12 +410,13 @@ let
   );
 
   bidi = fetchzip {
-    # https://chromium.googlesource.com/chromium/src/+/156.0.8078.47/third_party/chromium-bidi/DEPS#64
+    # https://chromium.googlesource.com/chromium/src/+/157.0.8103.38/third_party/chromium-bidi/DEPS#64
     # FIXME: We cannot use fetchNpmDeps here because the package-lock.json uses airlock-proxy.uplink.goog:999 a bunch of times
-    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/028c7baf9de02f6ae103b1911ab13d1aeb48f0ddd8fa702f9c150cdaf8cb5f5b";
+    # EDIT: We could probably use the same string replace we use for fetchNpmDeps in third_party/node
+    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/7da310bf46956828c164237a912a201d21f51220dfbe60df454188dbad75889c";
     extension = "tar.gz";
     stripRoot = false;
-    hash = "sha256-7QePRM3DcHkGKalADPYBiLDljJoWK5sEzgn+k9SqfHU=";
+    hash = "sha256-1g+AkeY+7SbP6ex0/dSVsg+ZE2K7G2m+ZiDVDM84ylg=";
   };
 
   base = rec {
@@ -443,6 +441,11 @@ let
         hash = upstream-info.deps.npmHash;
       }).overrideAttrs
         (p: {
+          # TODO: npmRegistryOverridesString does not appear to work for airlock-proxy.uplink.goog:999
+          postPatch = lib.optionalString (chromiumVersionAtLeast "157") ''
+            substituteInPlace package-lock.json \
+              --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+          '';
           nativeBuildInputs = p.nativeBuildInputs or [ ] ++ [ zstd ];
         });
 
@@ -830,7 +833,7 @@ let
       # both (all) architectures instead.
       ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !ungoogled) [
+    ++ lib.optionals (versionRange "151.0.7922.169" "157" && !ungoogled) [
       # Don't show misleading Terms of Service dialog on first run that literally says [^1]
       #
       # > This Space Intentionally Blank
@@ -842,6 +845,8 @@ let
       # actually worthwhile, we can drop this revert and update our VM test to handle this dialog.
       # Exclude ungoogled-chromium, as it ships its own variant of this patch.
       # [^1]: https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/components/resources/terms/terms_chromium.txt
+      #
+      # Fixed in M157+ thanks to https://chromium-review.googlesource.com/c/chromium/src/+/8500082
       (fetchpatch {
         name = "chromium-151-revert-Show-Linux-first-run-terms-of-service-dialog-by-default.patch";
         # https://chromium-review.googlesource.com/c/chromium/src/+/8257374
@@ -1071,6 +1076,10 @@ let
         cp -r ${bidi} third_party/chromium-bidi/node_modules
         patchShebangs third_party/chromium-bidi/node_modules
       ''
+      + lib.optionalString (!isElectron && chromiumVersionAtLeast "157") ''
+        substituteInPlace third_party/node/package-lock.json \
+          --replace-fail "http://airlock-proxy.uplink.goog:999/npm/artifact-foundry-prod/ah-3p-staging-npm/" "https://registry.npmjs.org/"
+      ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
           ''
@@ -1167,9 +1176,13 @@ let
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
-      // lib.optionalAttrs (chromiumVersionAtLeast "155") {
+      // lib.optionalAttrs (versionRange "155" "157") {
         # https://chromium-review.googlesource.com/c/v8/v8/+/8365609
         v8_use_metagen_instance_types = false;
+      }
+      // lib.optionalAttrs (chromiumVersionAtLeast "157") {
+        # https://chromium-review.googlesource.com/c/v8/v8/+/8524366
+        v8_use_metagen = false;
       }
       // lib.optionalAttrs (chromiumVersionAtLeast "150") {
         # ERROR at //build/modules/BUILD.gn:80:23: Directory does not exist: /usr/include/
