@@ -1,0 +1,41 @@
+Regression for https://github.com/prometheus/alertmanager/pull/5254,
+adapted to the released config.TelegramConfig type and test layout.
+
+diff --git a/notify/telegram/telegram_test.go b/notify/telegram/telegram_test.go
+index 7192d49..8d5c26a 100644
+--- a/notify/telegram/telegram_test.go
++++ b/notify/telegram/telegram_test.go
+@@ -213,3 +213,33 @@ func TestTelegramNotify(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func TestTelegramNotifyRedactsSendURL(t *testing.T) {
++	token := "secret-bot-token"
++	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
++	u, err := url.Parse(srv.URL)
++	require.NoError(t, err)
++	srv.Close()
++
++	notifier, err := New(
++		&config.TelegramConfig{
++			Message:    "test",
++			HTTPConfig: &commoncfg.HTTPClientConfig{},
++			APIUrl:     &amcommoncfg.URL{URL: u},
++			BotToken:   commoncfg.Secret(token),
++		},
++		test.CreateTmpl(t),
++		promslog.NewNopLogger(),
++	)
++	require.NoError(t, err)
++
++	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
++	defer cancel()
++	ctx = notify.WithGroupKey(ctx, "1")
++
++	retry, err := notifier.Notify(ctx, &types.Alert{Alert: model.Alert{Labels: model.LabelSet{"alertname": "test"}}})
++	require.True(t, retry)
++	require.Error(t, err)
++	require.NotContains(t, err.Error(), token)
++	require.Contains(t, err.Error(), "<redacted>")
++}

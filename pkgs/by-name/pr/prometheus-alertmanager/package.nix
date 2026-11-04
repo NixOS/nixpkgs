@@ -4,6 +4,7 @@
   buildGoModule,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   nixosTests,
   versionCheckHook,
@@ -29,6 +30,18 @@ buildGoModule (finalAttrs: {
     hash = "sha256-LGjBuZ7kbtABunEk2YyCKILsPS/0FlS/6Mf/2qVpseI=";
   };
 
+  patches = [
+    # https://github.com/prometheus/alertmanager/pull/5254
+    (fetchpatch {
+      url = "https://github.com/prometheus/alertmanager/commit/bccb5e5e9b97f7170712305691d2b6d652c97f83.patch";
+      includes = [ "notify/telegram/telegram.go" ];
+      # The released source predates this error-classification helper.
+      decode = "sed -e 's/wrapWithFailureReason(err)/err/g' -e 's/wrapWithFailureReason(notify.RedactURL(err))/notify.RedactURL(err)/g'";
+      hash = "sha256-DGbNdTOLyJOprzgf0DMv36cEVbnebWPWCTMcV7oRfsY=";
+    })
+    ./telegram-redact-send-url-test.patch
+  ];
+
   postPatch = ''
     cp -r ${elmUi}/. ui/app/dist
   '';
@@ -38,6 +51,14 @@ buildGoModule (finalAttrs: {
     "cmd/alertmanager"
     "cmd/amtool"
   ];
+
+  # subPackages limits checkPhase to cmd/, so run the backported regression test explicitly.
+  postCheck = ''
+    go test ./notify/telegram/ -run '^TestTelegramNotifyRedactsSendURL$'
+  '';
+
+  # The regression test binds an httptest server on loopback.
+  __darwinAllowLocalNetworking = true;
 
   ldflags =
     let
