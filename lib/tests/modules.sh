@@ -360,6 +360,20 @@ checkConfigOutput '"abc"' config.value ./importApply.nix
 # While this is excusable for the disabledModules aspect, it is not for the deduplication of modules.
 checkConfigOutput '"abc"' config.value ./importApply-disabling.nix
 
+# Check commandTree
+# A node imports the modules of its commands and sets `package`.
+checkConfigOutput '^true$' config.prog ./command-tree.nix
+checkConfigOutput '^true$' config.sub ./command-tree.nix
+checkConfigOutput '^true$' config.subsub ./command-tree.nix
+checkConfigOutput '^"a"$' config.package.name ./command-tree.nix
+# `commands` of a node has an attribute for each subcommand. Files that are not modules are not subcommands.
+checkConfigOutput '^\["sub"\]$' config.names ./command-tree.nix
+# A node does not import the modules of its subcommands.
+checkConfigOutput '^true$' config.sub ./command-tree-sub.nix
+checkConfigError "attribute 'subsub' in selection path 'config.subsub' not found" config.subsub ./command-tree-sub.nix
+# The nodes of two different packages conflict.
+checkConfigError 'The option .package. is defined multiple times' config.package ./command-tree-conflict.nix
+
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"

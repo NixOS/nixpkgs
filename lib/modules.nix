@@ -2279,6 +2279,106 @@ let
     modulePath: staticArg: lib.setDefaultModuleLocation modulePath (import modulePath staticArg);
 
   /**
+    Make a tree of the command line modules of a package.
+
+    `directory` contains a module for each program of the package, in
+    `<program>.nix`, and a module for each subcommand, in
+    `<program>/<subcommand>.nix`. A subcommand of a subcommand is in
+    `<program>/<subcommand>/<subcommand>.nix`, and so on. The module of a
+    subcommand imports the module of its command. The module of a program
+    declares the `package` option.
+
+    The result has an attribute for each program. Each node of the tree is
+    a module that imports its file and sets `package`. The `commands`
+    attribute of a node has a node for each of its subcommands. Thus a
+    consumer can use a node as a module, and `lib.attrNames` of `commands`
+    gives only the names of the subcommands.
+
+    Each node sets `package` in one module that has a `key`, thus a
+    consumer can import a node and its subcommands together. The key
+    contains the store path of `package`, thus the module system gives an
+    error when a consumer imports the nodes of two different packages.
+
+    # Inputs
+
+    Structured function argument
+
+    : `directory`
+
+      : The directory that contains the modules.
+
+      `package`
+
+      : The value of the `package` option.
+
+    # Type
+
+    ```
+    commandTree :: { directory :: Path, package :: Derivation } -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.modules.commandTree` usage example
+
+    ```nix
+    # package.nix
+    passthru.commandModules = lib.modules.commandTree {
+      directory = path + "/modules/generic/pkgs/by-name/ws/wstunnel/commands";
+      package = finalAttrs.finalPackage;
+    };
+
+    # A consumer
+    lib.evalModules {
+      modules = [
+        pkgs.wstunnel.commandModules.wstunnel.commands.client
+        {
+          connectTo = "wss://example.com";
+          settings.local-to-remote = [ "tcp://8080:localhost:80" ];
+        }
+      ];
+    }
+    ```
+
+    :::
+  */
+  commandTree =
+    { directory, package }:
+    let
+      # The key is a name, not a dependency, thus it has no string context.
+      packageModule = {
+        key = "lib.modules.commandTree:${toString directory}:${builtins.unsafeDiscardStringContext (toString package)}";
+        inherit package;
+      };
+
+      # `entries` is the result of `builtins.readDir dir`.
+      tree =
+        dir: entries:
+        lib.genAttrs
+          (map (lib.removeSuffix ".nix") (
+            lib.attrNames (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".nix" name) entries)
+          ))
+          (
+            name:
+            let
+              subdir = dir + "/${name}";
+            in
+            {
+              __functor = _: _: {
+                imports = [
+                  (dir + "/${name}.nix")
+                  packageModule
+                ];
+              };
+              commands = tree subdir (
+                if entries.${name} or null == "directory" then builtins.readDir subdir else { }
+              );
+            }
+          );
+    in
+    tree directory (builtins.readDir directory);
+
+  /**
     Use this function to import a JSON file as NixOS configuration.
 
     modules.importJSON :: path -> attrs
@@ -2459,6 +2559,7 @@ private
   #       are just needed by types.nix, but are not meant to be consumed
   #       externally.
   inherit
+    commandTree
     defaultOrderPriority
     defaultOverridePriority
     doRename
