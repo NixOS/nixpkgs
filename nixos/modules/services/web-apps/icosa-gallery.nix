@@ -68,7 +68,17 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment.systemPackages = [
+          cfg.package
+          (pkgs.writeShellScriptBin "icosa-gallery-manage" ''
+            ${lib.concatStringsSep "\n" (
+              lib.mapAttrsToList (
+                k: v: "export ${k}=${lib.escapeShellArg v}"
+              ) config.systemd.services.icosa-gallery.environment
+            )}
+            exec ${lib.getExe cfg.package} "$@"
+          '')
+        ];
 
         networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
 
@@ -123,6 +133,14 @@ in
               ensureDBOwnership = true;
             }
           ];
+          identMap = ''
+            icosa-users root ${cfg.database.user}
+            icosa-users ${cfg.database.user} ${cfg.database.user}
+            icosa-users postgres ${cfg.database.user}
+          '';
+          authentication = ''
+            local all ${cfg.database.user} peer map=icosa-users
+          '';
         };
       })
     ]
