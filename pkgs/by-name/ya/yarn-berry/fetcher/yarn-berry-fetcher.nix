@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-berry-${toString berryVersion}-fetcher";
   version = "1.3.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "cyberchaos.dev";
     owner = "yuka";
