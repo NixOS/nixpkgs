@@ -37,10 +37,55 @@
       port = toString nodes.machine.services.icosa-gallery.port;
     in
     ''
-      machine.start()
-      machine.wait_for_unit("icosa-gallery.service")
-      machine.wait_for_open_port(${port})
-      machine.succeed("curl -v http://localhost:${port} >&2")
+      endpoint = "http://localhost:${port}"
+
+      with subtest("Start system and wait for service"):
+          machine.wait_for_unit("icosa-gallery.service")
+          machine.wait_for_open_port(${port})
+
+      with subtest("Verify health check endpoint"):
+          machine.succeed(f"curl -fsS {endpoint}/health")
+
+      with subtest("Verify homepage and public pages"):
+          machine.succeed(f"curl -fsS {endpoint}/ | grep -q 'Icosa Gallery'")
+          machine.succeed(f"curl -fsS {endpoint}/explore/food")
+
+      with subtest("Verify API OpenAPI docs and assets endpoint"):
+          machine.succeed(f"curl -fsS {endpoint}/api/v1/docs | grep -q 'Icosa Gallery API'")
+          response = machine.succeed(f"curl -fsS {endpoint}/api/v1/assets/")
+          import json
+          data = json.loads(response)
+          assert "assets" in data
+
+      with subtest("Test login gate and enable via constance"):
+          # By default LOGIN_OPEN is False, so /login raises 404
+          machine.fail(f"curl -fsS {endpoint}/login")
+          # Open logins using icosa-gallery-manage CLI
+          machine.succeed("icosa-gallery-manage constance set LOGIN_OPEN True")
+          machine.succeed(f"curl -fsS {endpoint}/login | grep -qi 'login'")
+
+      with subtest("Create superuser and verify admin authentication"):
+          machine.succeed(
+              "DJANGO_SUPERUSER_PASSWORD=admin "
+              "icosa-gallery-manage createsuperuser --noinput --username admin --email admin@example.com"
+          )
+          # Admin login page renders
+          machine.succeed(f"curl -fsS {endpoint}/admin/login/ | grep -qi 'Django administration'")
+
+          # Authenticate to Django admin with superuser credentials
+          cookie_jar = "/tmp/admin_cookies.txt"
+          machine.succeed(f"""
+              csrf_token=$(curl -c {cookie_jar} -s {endpoint}/admin/login/ | grep -oP 'name="csrfmiddlewaretoken" value="\\K[^"]+')
+              curl -fsS -b {cookie_jar} -c {cookie_jar} \
+                  -H "Referer: {endpoint}/admin/login/" \
+                  -d "csrfmiddlewaretoken=$csrf_token" \
+                  -d "username=admin" \
+                  -d "password=admin" \
+                  -d "next=/admin/" \
+                  -X POST {endpoint}/admin/login/
+          """)
+          # Verify admin dashboard is accessible after login
+          machine.succeed(f"curl -fsS -b {cookie_jar} {endpoint}/admin/ | grep -qi 'Site administration'")
     '';
 
   # Debug interactively with:
