@@ -799,16 +799,7 @@ let
         m:
         map (config: {
           file = m._file;
-          config =
-            if isAttrs config then
-              config
-            else
-              throw (
-                messages.non_attrs_config {
-                  inherit config prefix;
-                  file = m._file;
-                }
-              );
+          inherit config;
         }) (pushDownProperties m.config)
       ) modules
     );
@@ -838,37 +829,22 @@ let
         ) modules
       );
 
-      # an attrset 'name' => list of submodules that define ‘name’.
-      pushedDownDefinitionsByName = zipAttrsWith (n: concatLists) (
-        map (
-          module:
-          mapAttrs (
-            n: value:
-            map (config: {
-              file = module.file;
-              config =
-                if isAttrs config then
-                  config
-                else
-                  throw (
-                    messages.non_attrs_config {
-                      inherit config;
-                      prefix = prefix ++ [ n ];
-                      file = module.file;
-                    }
-                  );
-            }) (pushDownProperties value)
-          ) module.config
-        ) configs
-      );
       # extract the definitions for each loc
       rawDefinitionsByName = zipAttrs (
         map (
-          module:
-          mapAttrs (n: value: {
-            file = module.file;
-            inherit value;
-          }) module.config
+          c:
+          if isAttrs c.config then
+            mapAttrs (n: value: {
+              file = c.file;
+              inherit value;
+            }) c.config
+          else
+            throw (
+              messages.non_attrs_config {
+                inherit (c) file config;
+                inherit prefix;
+              }
+            )
         ) configs
       );
 
@@ -963,7 +939,19 @@ let
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
           let
-            nested = mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ]);
+            # The definitions of 'name' with properties pushed down one level.
+            nested = mergeModules' loc decls (
+              if rawDefinitionsByName ? ${name} then
+                concatMap (
+                  def:
+                  map (config: {
+                    file = def.file;
+                    inherit config;
+                  }) (pushDownProperties def.value)
+                ) defns'
+              else
+                [ ]
+            );
           in
           {
             matchedOptions = nested.matchedOptions;
