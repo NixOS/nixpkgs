@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "websocket-client";
-  version = "1.9.0";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "websocket_client";
     inherit version;
-    hash = "sha256-noE2JLbrYZmZqX3HlYRpIXwxdjErOhakvRvH4IpG7Jg=";
+    hash = "sha256-D8tXVFhIvoaZLhKCGP2W3Yemdp/9salo3/eWMrhWBNA=";
   };
 
   build-system = [ setuptools ];
