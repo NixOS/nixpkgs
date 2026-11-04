@@ -9,7 +9,6 @@
   jsonschema,
   jupyter-core,
   traitlets,
-  pep440,
   pytestCheckHook,
   testpath,
 }:
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nbformat" ];
 
   nativeCheckInputs = [
-    pep440
     pytestCheckHook
     testpath
   ];
