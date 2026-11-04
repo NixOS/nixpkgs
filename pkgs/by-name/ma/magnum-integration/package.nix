@@ -5,13 +5,14 @@
   cmake,
   magnum,
   magnum-plugins,
+  magnum-extras,
   corrade,
   bullet,
   dartsim,
   eigen,
   glm,
   imgui,
-  yoga ? null,
+  yoga,
   # builds and tests
   withImguiIntegration ? true,
   withBulletIntegration ? false,
@@ -19,15 +20,18 @@
   withEigenIntegration ? true,
   withGlmIntegration ? false,
   # FIXME
-  withYogaIntegration ? false, # needs yoga, not packaged yet
+  withYogaIntegration ? true,
 }:
 
 let
-  magnumWithPlugins = magnum.withPlugins [
-    (magnum-plugins.override {
-      withAssimpImporter = withDartIntegration; # needed for tests
-    })
-  ];
+  magnumWithPlugins = magnum.withPlugins (
+    [
+      (magnum-plugins.override {
+        withAssimpImporter = withDartIntegration; # needed for tests
+      })
+    ]
+    ++ lib.optional withYogaIntegration magnum-extras
+  );
 
 in
 
