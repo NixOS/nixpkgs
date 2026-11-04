@@ -32,6 +32,53 @@ let
   inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
   inSystem = config.boot.supportedFilesystems.zfs or false;
 
+  # GPL-only kernel exports usable by ZFS
+  removeLinuxDRMSymbols = [
+    # Kernel crypto API
+    "crypto_aead_decrypt"
+    "crypto_aead_encrypt"
+    "crypto_aead_setauthsize"
+    "crypto_aead_setkey"
+    "crypto_alloc_aead"
+    "crypto_alloc_shash"
+    "crypto_destroy_tfm"
+    "crypto_req_done"
+    "crypto_shash_digest"
+    "crypto_shash_finup"
+    "crypto_shash_init"
+    "crypto_shash_setkey"
+    # Kernel NEON for SIMD on aarch64
+    "kernel_neon_begin"
+    "kernel_neon_end"
+  ];
+
+  # Generate patch from the kernel's source, using the method of
+  # makeHardcodeGsettingsPatch so that it doesn't break when surrounding code
+  # changes. Replaces EXPORT_SYMBOL_GPL with EXPORT_SYMBOL for each symbol in
+  # removeLinuxDRMSymbols.
+  removeLinuxDRMPatch =
+    kernel:
+    pkgs.runCommand "linux-${kernel.version}-zfs-remove-linux-drm.patch"
+      {
+        inherit (kernel) src;
+        nativeBuildInputs = [ pkgs.gitMinimal ];
+      }
+      ''
+        unpackPhase
+        cd "''${sourceRoot:-.}"
+        git init --quiet
+        git add --all --force
+
+        pattern='EXPORT_SYMBOL_GPL\((${lib.concatStringsSep "|" removeLinuxDRMSymbols})\)'
+        (git grep -z -l -E "$pattern" || true) | xargs -0 -r sed -i -E "s/$pattern/EXPORT_SYMBOL(\1)/"
+
+        git diff > $out
+        if [ ! -s $out ]; then
+          echo "boot.zfs.removeLinuxDRM: this kernel exports none of the symbols as GPL-only."
+          exit 1
+        fi
+      '';
+
   autosnapPkg = pkgs.zfstools.override {
     zfs = cfgZfs.package;
   };
@@ -432,11 +479,17 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Patch the kernel to change symbols needed by ZFS from
-          EXPORT_SYMBOL_GPL to EXPORT_SYMBOL.
+          Patch the kernel to change symbols usable by ZFS from
+          EXPORT_SYMBOL_GPL to EXPORT_SYMBOL. This currently includes:
 
-          Currently has no effect, but may again in future if a kernel
-          update breaks ZFS due to symbols being newly changed to GPL.
+          - Encryption through the kernel's crypto drivers. This enables
+            hardware-accelerated crypto on platforms unsupported by ZFS,
+            including aarch64 crypto extensions and dedicated crypto
+            accelerators on all architectures.
+          - Accelerated SIMD implementation of checksums and RAID-Z on
+            aarch64-linux.
+
+          Enabling this option rebuilds the kernel.
         '';
       };
     };
@@ -720,6 +773,11 @@ in
         extraModulePackages = [
           cfgZfs.modulePackage
         ];
+
+        kernelPatches = lib.optional cfgZfs.removeLinuxDRM {
+          name = "zfs-remove-linux-drm";
+          patch = removeLinuxDRMPatch config.boot.kernelPackages.kernel;
+        };
       };
 
       boot.initrd = lib.mkIf inInitrd {
