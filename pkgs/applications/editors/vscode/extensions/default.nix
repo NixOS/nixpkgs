@@ -118,8 +118,8 @@ let
         mktplcRef = {
           name = "better-comments";
           publisher = "aaron-bond";
-          version = "3.0.2";
-          sha256 = "850980f0f5a37f635deb4bf9100baaa83f0b204bbbb25acdb3c96e73778f8197";
+          version = "3.2.0";
+          sha256 = "sha256-JhzzgfgzsTz5Ieht4oy3EszzlL6eXxXYvxtFHT1nfUA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/aaron-bond.better-comments/changelog";
