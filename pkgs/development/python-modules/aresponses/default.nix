@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio_0,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest-asyncio_0
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest9_1CheckHook ];
 
   disabledTests = [
     # Disable tests which requires network access
