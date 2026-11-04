@@ -73,8 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ''
   + lib.optionalString lsfgSupport ''
     substituteInPlace faugus/path_manager.py \
-      --replace-fail "/usr/lib/extensions/vulkan/lsfgvk/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so" \
-      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lsfg-vk}/lib/liblsfg-vk-layer.so"
+      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lib.getLib lsfg-vk}/lib/liblsfg-vk-layer.so"
   '';
 
   preFixup = ''
