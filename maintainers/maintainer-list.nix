@@ -21318,6 +21318,12 @@
     name = "Guilhem Saurel";
     keys = [ { fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28"; } ];
   };
+  nimakalantar = {
+    name = "Nima Kalantar";
+    email = "nima.kalantar@focusrite.com";
+    github = "nimakalantar";
+    githubId = 113363856;
+  };
   nindouja = {
     email = "nindouja@proton.me";
     github = "Nindouja";
@@ -23685,6 +23691,11 @@
     name = "Peïo Thibault";
     github = "potb";
     githubId = 10779093;
+  };
+  potoo0 = {
+    name = "potoo0";
+    github = "potoo0";
+    githubId = 34411681;
   };
   pouya = {
     email = "me@pouyacode.net";

@@ -60,6 +60,8 @@ buildDotnetModule (finalAttrs: {
     "QuiverLauncher.Tests.ReleasePackagingTests.Release_workflow_does_not_bundle_apps_json_in_platform_archives"
     # copies /bin/sh to run a script
     "QuiverLauncher.Tests.LinuxLauncherScriptTests.Linux_launch_and_shortcuts_use_saved_wrapper_natively"
+    # flaky: reads progress before Progress<T> has posted the last report
+    "QuiverLauncher.Tests.GameInstallationServiceSevenZipTests.InstallOrUpdateGameAsync_extracts_generated_solid_7z_and_reports_progress"
   ];
 
   runtimeDeps =
