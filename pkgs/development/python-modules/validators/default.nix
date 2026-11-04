@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-validators";
     repo = "validators";
     tag = version;
-    hash = "sha256-b3kjKbqmfny6YnU0rlrralTgvYT06sUpckI4EDKDleA=";
+    hash = "sha256-uQ2jJJRljMegFZqPZZSffvKkgabxD0wwQXe1d1i5HtE=";
   };
 
   build-system = [ setuptools ];
