@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
     tag = "v${version}";
-    hash = "sha256-91jWZDqrd7ZZlM0D/3sDokJ26NiAQ3gdeBebTV1Lq8s=";
+    hash = "sha256-pyh3rK4jE+wnmP01NxgIgVoKAo5Vf4h6b44+MsKjn7w=";
   };
 
   build-system = [ setuptools ];
