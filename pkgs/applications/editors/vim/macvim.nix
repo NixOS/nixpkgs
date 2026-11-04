@@ -3,12 +3,11 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  apple-sdk_14,
   ncurses,
   gettext,
   pkg-config,
   cscope,
-  ruby_3_4,
+  ruby_4_0,
   tcl,
   perl,
   luajit,
@@ -21,8 +20,8 @@
 
 # Try to match MacVim's documented script interface compatibility
 let
-  # Ruby 3.4
-  ruby = ruby_3_4;
+  # Ruby 4.0
+  ruby = ruby_4_0;
 in
 
 let
@@ -31,7 +30,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "182";
+  version = "184";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
@@ -41,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
         releaseType = if lib.hasInfix "." finalAttrs.version then "prerelease" else "release";
       in
       "${releaseType}-${finalAttrs.version}";
-    hash = "sha256-JEb71wZcvFsz94vb3+gC83BhlEccjlPrpr9RCXDUEIo=";
+    hash = "sha256-1bsoqL5tQiRJT/bS9Usbzzl4ccsJ23lTrN4WlqHrSLc=";
   };
 
   enableParallelBuilding = true;
@@ -51,9 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     # MacVim references up to MAC_OS_VERSION_14_0 in its source
-    # Update this SDK if it adds APIs that use newer versions
+    # Add the SDK here if it adds APIs that use newer versions
     # (check both MAC_OS_VERSION_* and MAC_OS_X_VERSION_*)
-    apple-sdk_14
     gettext
     ncurses
     cscope
