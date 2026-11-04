@@ -2,7 +2,7 @@
 
 {
   name = "manyfold";
-  meta.maintainers = with lib.maintainers; [ prince213 ];
+  meta.teams = with lib.teams; [ ngi ];
 
   nodes = {
     machine =
