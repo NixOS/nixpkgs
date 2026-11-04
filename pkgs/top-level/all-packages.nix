@@ -7785,10 +7785,6 @@ with pkgs;
     kanidmWithSecretProvisioning_1_12
     ;
 
-  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
-
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
-
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
