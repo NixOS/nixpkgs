@@ -984,14 +984,17 @@ let
           concatLists (
             mapAttrsToList (
               name: defs:
-              map (
-                def:
-                def
-                // {
-                  # Set this so we know when the definition first left unmatched territory
-                  prefix = [ name ] ++ (def.prefix or [ ]);
-                }
-              ) defs
+              if defs == [ ] then
+                defs
+              else
+                map (
+                  def:
+                  def
+                  // {
+                    # Set this so we know when the definition first left unmatched territory
+                    prefix = [ name ] ++ (def.prefix or [ ]);
+                  }
+                ) defs
             ) unmatchedDefnsByName
           );
     };
