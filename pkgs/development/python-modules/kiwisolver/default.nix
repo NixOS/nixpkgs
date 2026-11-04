@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "kiwisolver";
-  version = "1.5.0";
+  version = "1.5.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1Bk/PZ3D9veartDlY39F2YhQ6/AffKIOaUV/PolGtmo=";
+    hash = "sha256-8TA+8u7IEmKktwjD6Fiv5Y18da2RwcBSZu2nZzNphZo=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
