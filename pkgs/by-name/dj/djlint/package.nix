@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "djlint";
-  version = "1.44.2";
+  version = "1.49.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "djlint";
     repo = "djlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PnTGd5/O66Yq/nP8IYUpSKiBr3ImJaL8XVUv3E/JLY8=";
+    hash = "sha256-38gZ7CgKsISDD5+wfV3PgHkvOeaHCj5PxKxjwXyRknk=";
   };
 
   build-system = with python3.pkgs; [
