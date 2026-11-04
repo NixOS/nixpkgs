@@ -796,11 +796,20 @@ let
     prefix: modules:
     mergeModules' prefix modules (
       concatMap (
-        m:
-        map (config: {
-          file = m._file;
-          inherit config;
-        }) (pushDownProperties m.config)
+        { _file, config, ... }:
+        # Fast path for the common case of no property to push down.
+        if config ? _type then
+          map (c: {
+            file = _file;
+            config = c;
+          }) (pushDownProperties config)
+        else
+          [
+            {
+              file = _file;
+              inherit config;
+            }
+          ]
       ) modules
     );
 
@@ -943,11 +952,17 @@ let
             nested = mergeModules' loc decls (
               if rawDefinitionsByName ? ${name} then
                 concatMap (
-                  def:
-                  map (config: {
-                    file = def.file;
-                    inherit config;
-                  }) (pushDownProperties def.value)
+                  { file, value }:
+                  # Fast path for the common case of no property to push down.
+                  if value ? _type then
+                    map (config: { inherit file config; }) (pushDownProperties value)
+                  else
+                    [
+                      {
+                        inherit file;
+                        config = value;
+                      }
+                    ]
                 ) defns'
               else
                 [ ]
