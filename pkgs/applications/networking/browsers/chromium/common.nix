@@ -327,6 +327,8 @@ let
     pname = "esbuild";
     inherit (_esbuild) version;
 
+    __structuredAttrs = true;
+
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
