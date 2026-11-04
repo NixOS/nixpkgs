@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/Deutsches-Klimarechenzentrum/libaec/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/Deutsches-Klimarechenzentrum/libaec";
