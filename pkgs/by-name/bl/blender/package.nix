@@ -149,10 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "projects.blender.org";
     owner = "blender";
     repo = "blender";
-    tag = "v${finalAttrs.version}";
+    rev = "7e7c173d45c8684c469aa688ba3f7744e88258f8";
     forceFetchGit = true; # tarball downloads are behind anti-bot protection
     fetchLFS = true;
-    hash = "sha256-auBd3YaQ3NvzsMoI7rDcaI1m6XVT6o9p6heKtAzZnI4=";
+    hash = "sha256-RAuULQ+c/5G4WkN77bvTWK2OhacizYIm9Y6Gf5X6GaI=";
   };
 
   patches = [
