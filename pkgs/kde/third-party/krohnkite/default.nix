@@ -3,7 +3,6 @@
   nix-update-script,
   buildNpmPackage,
   fetchFromCodeberg,
-  nodejs_22,
   kwin,
   kpackage,
   zip,
@@ -22,8 +21,6 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-6+meI602VKIzqunTOwNRLZOO7/LscjNm545icc2WN0c=";
 
   dontWrapQtApps = true;
-
-  nodejs = nodejs_22;
 
   nativeBuildInputs = [
     kpackage
