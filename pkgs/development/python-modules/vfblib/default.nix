@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.11.7";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
     tag = "v${version}";
-    hash = "sha256-q+k0C6bc81otH3PipbY3a54uZND9wuL5YBxbir3QszQ=";
+    hash = "sha256-QjGER9jlNc6sbbWGDrJ5Xa2qZLQgV9Pa3ENnOd4snuc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.1,<0.13" "uv_build"
+      --replace-fail "uv_build>=0.12.23,<0.13" "uv_build"
   '';
 
   build-system = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "ufonormalizer"
+    "fonttools"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
