@@ -54,6 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    (lib.mesonEnable "jni" true)
+    (lib.mesonEnable "ladspa" true)
+    (lib.mesonEnable "lv2" true)
+    (lib.mesonEnable "vamp" true)
+    (lib.mesonEnable "cmdline" true)
+    (lib.mesonOption "fft" "fftw")
+    (lib.mesonOption "resampler" "libsamplerate")
     (lib.mesonEnable "tests" finalAttrs.doCheck)
   ];
 
