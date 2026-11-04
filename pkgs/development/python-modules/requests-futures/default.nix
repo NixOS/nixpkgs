@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "requests-futures";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ross";
     repo = "requests-futures";
     tag = "v${version}";
-    hash = "sha256-eUu+M9rPyvc7OaOCCnUvGliK4gicYh6hfB0Jo19Yy1g=";
+    hash = "sha256-CtV8nXTxMz8sQOUm4Hy/rvRdWdP1VseU5QHZkiA9r9c=";
   };
 
   build-system = [ setuptools ];
