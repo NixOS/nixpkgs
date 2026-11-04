@@ -11,51 +11,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "multi-scrobbler";
-  version = "0.20.0";
+  version = "0.20.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FoxxMD";
     repo = "multi-scrobbler";
     tag = finalAttrs.version;
-    hash = "sha256-D5qU4cF647bB4kmjqnNSOoVoGaALtA/52cnjqDendfE=";
+    hash = "sha256-3WMMaMu5OfLa410gJTL2n6JHSuO6Fv4SBTez1sMrPsY=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-EJfFbkxTqtvJX4GD0wbuALwxgY9UpE9oBV647dvNvN4=";
+  npmDepsHash = "sha256-giuREugFenmlvX7ZGP3Tyiy9bonuxZOe/KSUPfqCOjA=";
 
   nativeBuildInputs = [ makeWrapper ];
-
-  # The docsite's OG-image plugin needs sharp's native binary, whose install
-  # hook downloads platform-specific binaries.
-  postPatch = ''
-    config=docsite/docusaurus.config.ts
-    tmpConfig=$(mktemp)
-
-    awk '
-      /^    \[$/ { block = $0 ORS; inBlock = 1; next }
-      inBlock {
-        block = block $0 ORS
-        if ($0 ~ /^    \],$/) {
-          if (block !~ /@bony_chops\/docusaurus-og/) {
-            printf "%s", block
-          }
-          block = ""
-          inBlock = 0
-          next
-        }
-        next
-      }
-      { print }
-    ' "$config" > "$tmpConfig"
-
-    if ! grep -q "@bony_chops/docusaurus-og" "$config" || grep -q "@bony_chops/docusaurus-og" "$tmpConfig"; then
-      echo "Could not remove docsite OG-image plugin config" >&2
-      exit 1
-    fi
-
-    mv "$tmpConfig" "$config"
-  '';
 
   # A storybook devDependency refuses to install outside of pnpm, and native
   # modules aren't needed regardless.
@@ -111,7 +80,7 @@ buildNpmPackage (finalAttrs: {
       name = "multi-scrobbler-docsite-npm-deps";
       src = "${finalAttrs.src}/docsite";
       fetcherVersion = finalAttrs.npmDepsFetcherVersion;
-      hash = "sha256-vs6C/I5NHMYlI09UNozr2SVnzZqMGfs8Aup9JoBOYhc=";
+      hash = "sha256-pLEGax8CyzDzLpOPI8bnctEtX5KP5+wiuM5nN5G85oA=";
     };
   };
 
