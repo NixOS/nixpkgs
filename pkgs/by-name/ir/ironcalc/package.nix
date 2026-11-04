@@ -156,7 +156,6 @@ let
 
   python = python3Packages.ironcalc;
   nodejs = callPackage ./nodejs.nix { };
-  docs = callPackage ./docs.nix { };
 in
 symlinkJoin {
   pname = "ironcalc";
@@ -177,7 +176,6 @@ symlinkJoin {
           widget
           server
           tools
-          docs
           wasm
           nodejs
           python
