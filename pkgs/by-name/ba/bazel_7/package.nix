@@ -243,6 +243,13 @@ let
         # see https://bazel.build/external/vendor#vendor-symlinks for more details
         rm vendor_dir/bazel-external
 
+        # rules_jvm_external records an absolute symlink into the build
+        # directory. That is always /build on Linux, but on Darwin it has a
+        # random name per build, making the output non-deterministic. Pin it
+        # to the Linux path; the main build re-points it at its own source.
+        ln -sfn /build/bazel_src/maven_install.json \
+          vendor_dir/rules_jvm_external~~maven~maven/imported_maven_install.json
+
         runHook postBuild
       '';
 
@@ -591,6 +598,9 @@ stdenv.mkDerivation rec {
     # Augment bundled repository_cache with our extra paths
     mkdir vendor_dir
     ${lndir}/bin/lndir ${bazelDeps}/vendor_dir vendor_dir
+    # See the matching comment in bazelDeps
+    ln -sfn "$PWD/bazel_src/maven_install.json" \
+      vendor_dir/rules_jvm_external~~maven~maven/imported_maven_install.json
     rm vendor_dir/VENDOR.bazel
     find vendor_dir -maxdepth 1 -type d -printf "pin(\"@@%P\")\n" > vendor_dir/VENDOR.bazel
   '';
