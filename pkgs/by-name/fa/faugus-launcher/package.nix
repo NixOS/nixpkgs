@@ -13,6 +13,7 @@
   libmanette,
   lsfg-vk,
   lsfgSupport ? false,
+  withGameMode ? true,
   meson,
   ninja,
   nix-update-script,
@@ -79,18 +80,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --set PYTHONPATH "$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
-      --set LD_PRELOAD "libgamemode.so:$LD_PRELOAD"
-      --set LD_LIBRARY_PATH "${lib.getLib gamemode}/lib:$LD_LIBRARY_PATH"
+      ${lib.optionalString withGameMode ''
+        --prefix LD_PRELOAD : libgamemode.so
+        --prefix LD_LIBRARY_PATH : "${lib.getLib gamemode}/lib"
+      ''}
       --suffix PATH : "${
-        lib.makeBinPath [
-          coreutils
-          gawk
-          gnugrep
-          icoextract
-          pciutils
-          umu-launcher
-          xdg-utils
-        ]
+        lib.makeBinPath (
+          [
+            coreutils
+            gawk
+            gnugrep
+            icoextract
+            pciutils
+            umu-launcher
+            xdg-utils
+          ]
+          ++ lib.optional withGameMode gamemode
+        )
       }"
     )
   '';
