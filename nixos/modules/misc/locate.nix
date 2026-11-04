@@ -11,13 +11,10 @@ let
   isMLocate = lib.hasPrefix "mlocate" cfg.package.name;
   isPLocate = lib.hasPrefix "plocate" cfg.package.name;
 
-  # plocate has its default database path compiled in. Rebuild it with `output`
-  # so that manual `updatedb` and `locate` use the same database as the systemd unit.
-  package =
-    if isPLocate && cfg.package ? override then
-      cfg.package.override { dbPath = cfg.output; }
-    else
-      cfg.package;
+  package = if isPLocate then 
+    cfg.package.override { dbPath = cfg.output; }
+  else
+    cfg.package;
 in
 {
   imports = [
@@ -74,8 +71,7 @@ in
         The database file to build.
 
         When using plocate, this is also compiled in as the default database
-        of {command}`updatedb` and {command}`locate`, so changing it from the
-        default makes the package build locally instead of using the binary cache.
+        of {command}`updatedb` and {command}`locate`.
       '';
     };
 

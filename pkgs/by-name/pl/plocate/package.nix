@@ -10,7 +10,6 @@
   liburing,
   zstd,
   # Absolute path of the database that updatedb writes and plocate reads by default.
-  # Compiled into the binaries, so it can't be changed at runtime.
   dbPath ? "/var/cache/locatedb",
 }:
 stdenv.mkDerivation (finalAttrs: {
