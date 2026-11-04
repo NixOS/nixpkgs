@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyrfc3339";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kurtraschke";
     repo = "pyRFC3339";
     tag = "v${version}";
-    hash = "sha256-pNtv60ecJ7kceS+dDMuKVCQGARf0SbNVBLqqTIzHDj0=";
+    hash = "sha256-LW8LA8ezhTG10nVmYl2gDawQZLzX9sUlqcF7QqGxw8c=";
   };
 
   build-system = [
