@@ -701,7 +701,11 @@ let
           disabledModules = m.disabledModules or [ ];
           imports = m.imports or [ ];
           options = m.options or { };
-          config = addFreeformType (addMeta (m.config or { }));
+          config =
+            if m ? meta || m ? freeformType then
+              addFreeformType (addMeta (m.config or { }))
+            else
+              m.config or { };
         }
     else
     # shorthand syntax
@@ -715,7 +719,11 @@ let
         disabledModules = m.disabledModules or [ ];
         imports = m.require or [ ] ++ m.imports or [ ];
         options = { };
-        config = addFreeformType (removeAttrs m shorthandAttrsToRemove);
+        config =
+          if m ? freeformType then
+            addFreeformType (removeAttrs m shorthandAttrsToRemove)
+          else
+            removeAttrs m shorthandAttrsToRemove;
       };
 
   # TODO: remove, now unused
