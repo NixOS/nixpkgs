@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vikunja-frontend";
   inherit version src;
 
+  __structuredAttrs = true;
+
   sourceRoot = "${finalAttrs.src.name}/frontend";
 
   pnpmDeps = fetchPnpmDeps {
