@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     meson
     ninja
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_32) [
     jdk_headless
   ];
 
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "jni" true)
+    (lib.mesonEnable "jni" (!stdenv.hostPlatform.isx86_32))
     (lib.mesonEnable "ladspa" true)
     (lib.mesonEnable "lv2" true)
     (lib.mesonEnable "vamp" true)
