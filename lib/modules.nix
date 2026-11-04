@@ -901,20 +901,24 @@ let
             m.options ? _type
             && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file);
         in
-        if all isOptionDecl decls then
+        # Fast path for the overwhelmingly common case: a single option declaration.
+        if length decls == 1 && (head decls).options._type or null == "option" then
           {
-            matchedOptions = evalOptionValue loc (fixupOptionType loc (mergeOptionDecls loc decls)) defns';
+            matchedOptions = evalSingleOptionDecl loc (head decls) defns';
           }
-        # this may look like duplicate computations are performed, but testing
-        # with a minimal NixOS config (defined below):
+        else if all isOptionDecl decls then
+          {
+            matchedOptions = evalOptionValue loc (mergeOptionDecls loc decls) defns';
+          }
+        # This may look like duplicate computations are performed,
+        # but testing with a minimal NixOS config (defined below):
         #
-        # 1. in 87% of cases, the above `all isOptionDecl decls` passes and we
-        # short-circuit
+        # 1. In 87% of cases, the fast path above applies
         # 2. In 12% of cases, there's only one decl and we short-circuit
-        # 3. in another 1% of cases, we loop again and short-circuit when
-        # `any isOptionDecl decls` fails
-        # 4. In the final case, we pass the `any` and have to refilter. This
-        # only triggers in 1 of the 48000 calls to this function.
+        # 3. In another 1% of cases, we loop again and short-circuit when
+        #    any isOptionDecl decls` fails
+        # 4. In the final case, we pass the `any` and have to refilter.
+        #    This only triggers in 2 of the 50000 calls to this function.
         #
         # The minimal config was defined with this expression:
         #
@@ -947,9 +951,7 @@ let
           # All of the above are merely syntax sugar though.
           then
             {
-              matchedOptions = evalOptionValue loc (fixupOptionType loc (
-                mergeOptionDecls loc (map optionTreeToOption decls)
-              )) defns';
+              matchedOptions = evalOptionValue loc (mergeOptionDecls loc (map optionTreeToOption decls)) defns';
             }
           else
             let
@@ -1040,6 +1042,9 @@ let
     'opts' is a list of modules.  Each module has an options attribute which
     correspond to the definition of 'loc' in 'opt.file'.
 
+    The submodules of all declarations are substituted into the merged
+    option's type, as by `fixupOptionType`.
+
     # Inputs
 
     `loc`
@@ -1052,31 +1057,7 @@ let
   */
   mergeOptionDecls =
     loc: decls:
-    if length decls == 1 then
-      let
-        opt = head decls;
-        optOptions = opt.options;
-        getSubModules = optOptions.type.getSubModules or null;
-      in
-      optOptions
-      // {
-        inherit loc;
-        declarations = [ opt._file ];
-        declarationPositions =
-          if opt.pos != null then
-            [ opt.pos ]
-          else
-            [
-              {
-                file = opt._file;
-                line = null;
-                column = null;
-              }
-            ];
-        options =
-          if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules else [ ];
-      }
-    else
+    fixupOptionType loc (
       foldl'
         (
           res: opt:
@@ -1145,7 +1126,70 @@ let
           declarationPositions = [ ];
           options = [ ];
         }
-        decls;
+        decls
+    );
+
+  # evalOptionValue loc (mergeOptionDecls loc [ decl ]) defs,
+  # but with a single attribute set update. Keep in sync with evalOptionValue.
+  evalSingleOptionDecl =
+    loc: decl: defs:
+    let
+      optOptions = decl.options;
+      getSubModules = optOptions.type.getSubModules or null;
+      type =
+        if getSubModules != null then
+          optOptions.type.substSubModules (map (setDefaultModuleLocation decl._file) getSubModules)
+        else
+          optOptions.type or types.unspecified;
+      defs' =
+        if optOptions ? default then
+          [
+            {
+              file = decl._file;
+              value = mkOptionDefault optOptions.default;
+            }
+          ]
+          ++ defs
+        else
+          defs;
+      res =
+        if optOptions.readOnly or false && length defs' > 1 then
+          throwReadOnly loc type defs'
+        else
+          mergeDefinitions loc type defs';
+
+      opt = optOptions // {
+        inherit loc type;
+        declarations = [ decl._file ];
+        declarationPositions = [
+          (
+            if decl.pos != null then
+              decl.pos
+            else
+              {
+                file = decl._file;
+                line = null;
+                column = null;
+              }
+          )
+        ];
+        options = [ ];
+        value = addErrorContext "while evaluating the option `${showOption loc}':" (
+          if optOptions ? apply then optOptions.apply res.mergedValue else res.mergedValue
+        );
+        highestPrio = res.defsFinal'.highestPrio;
+        definitions = catAttrs "value" res.defsFinal;
+        files = catAttrs "file" res.defsFinal;
+        definitionsWithLocations = res.defsFinal;
+        isDefined = res.isDefined;
+        valueMeta = res.checkedAndMerged.valueMeta;
+        __toString = _: showOption loc;
+      };
+    in
+    if type.deprecationMessage != null then
+      warn "The type `types.${type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${type.deprecationMessage}" opt
+    else
+      opt;
 
   /**
     Merge all the definitions of an option to produce the final
@@ -1547,7 +1591,7 @@ let
 
   # This calls substSubModules, whose entire purpose is only to ensure that
   # option declarations in submodules have accurate position information.
-  # TODO: Merge this into mergeOptionDecls
+  # mergeOptionDecls already applies it.
   fixupOptionType =
     loc: opt:
     # With no submodules left to substitute, there's nothing to fix up.

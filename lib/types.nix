@@ -72,7 +72,6 @@ let
 
   inherit (lib.modules)
     mergeDefinitions
-    fixupOptionType
     mergeOptionDecls
     defaultOrderPriority
     defaultOverridePriority
@@ -2072,7 +2071,7 @@ rec {
           ) defs;
           # Merges all the types into a single one, including submodule merging.
           # This also propagates file information to all submodules
-          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+          mergedOption = mergeOptionDecls loc optionModules;
         in
         mergedOption.type;
   };
