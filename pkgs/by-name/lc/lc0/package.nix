@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ _9glenda ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
 })
