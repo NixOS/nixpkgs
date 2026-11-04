@@ -179,4 +179,12 @@ in
       tls-default-ca-patch
     ];
   };
+
+  # 4.4 was released October 2026 and will become unsupported on October 20,
+  # 2027, one year after the release of OpenBSD 8.0.
+  libressl_4_4 = generic {
+    version = "4.4.0";
+    hash = "sha256-fQJSKtUHC5rbMuslPsq84YEYSjdQz2WrrAZ17pCGh8E=";
+    patches = [ ];
+  };
 }
