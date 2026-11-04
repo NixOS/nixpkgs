@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   python3,
   xcbuild,
   nix-update-script,
@@ -12,7 +11,6 @@
 buildNpmPackage rec {
   pname = "firebase-tools";
   version = "15.34.1";
-  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "firebase";
