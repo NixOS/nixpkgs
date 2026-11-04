@@ -4,28 +4,36 @@
   fetchFromGitHub,
   libargon2,
   cffi,
+  cmake,
+  ninja,
+  scikit-build-core,
   setuptools-scm,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "argon2-cffi-bindings";
-  version = "25.1.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "argon2-cffi-bindings";
     tag = version;
-    hash = "sha256-UDPxwqEpsmByAPM7lz3cxZz8jWwCEdghPlKXt8zQrfc=";
+    hash = "sha256-1938M2ALMcAIdTYTHCmJIAW1YyJPYhewZXOyFIJg/ZY=";
   };
 
   buildInputs = [ libargon2 ];
 
   build-system = [
-    setuptools-scm
     cffi
+    cmake
+    ninja
+    setuptools-scm
+    scikit-build-core
   ];
+
+  dontUseCmakeConfigure = true;
 
   dependencies = [ cffi ];
 
