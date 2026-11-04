@@ -1876,6 +1876,8 @@ let
 
         ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+        ppx_windtrap = callPackage ../development/ocaml-modules/windtrap/ppx.nix { };
+
         ppx_yojson_conv = callPackage ../development/ocaml-modules/ppx_yojson_conv { };
 
         ppx_yojson_conv_lib = callPackage ../development/ocaml-modules/ppx_yojson_conv_lib { };
