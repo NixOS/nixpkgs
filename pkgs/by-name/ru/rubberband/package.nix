@@ -12,6 +12,7 @@
   ladspa-header,
   meson,
   ninja,
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     jdk_headless
   ];
+
   buildInputs = [
     libsamplerate
     libsndfile
@@ -46,12 +48,18 @@ stdenv.mkDerivation (finalAttrs: {
     ladspa-header
     lv2
   ];
+
+  checkInputs = [
+    boost
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "tests" finalAttrs.doCheck)
+  ];
+
   makeFlags = [ "AR:=$(AR)" ];
 
-  # TODO: package boost-test, so we can run the test suite. (Currently it fails
-  # to find libboost_unit_test_framework.a.)
-  mesonFlags = [ "-Dtests=disabled" ];
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
