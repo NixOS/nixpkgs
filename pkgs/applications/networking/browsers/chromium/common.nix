@@ -275,6 +275,8 @@ let
     pname = "gnrt";
     version = "0-unstable";
 
+    __structuredAttrs = true;
+
     # TODO: Rework how chromium and electron pass src to gnrt or offload gnrt entirely
     src = upstream-info.gclientDeps."src".path or chromiumDeps."src";
     sourceRoot =
