@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
     "MODDESTDIR=${placeholder "out"}"
     "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=drivers/hwmon"
+    "INSTALL_MOD_DIR=updates"
   ];
 
   installTargets = [ "modules_install" ];
