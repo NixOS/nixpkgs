@@ -38,14 +38,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "voiceio";
-  version = "1.15.1";
+  version = "1.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hugo0";
     repo = "voiceio";
     tag = "v${version}";
-    hash = "sha256-Bh5YMT9ZHRRMJZX2i+altxj20ETUZH/aILw67s/urY8=";
+    hash = "sha256-AoPRNlkUsIFq9heXVfFLl/gFTaDzc8nYSWgQl7BUi2o=";
   };
 
   build-system = with python3Packages; [
