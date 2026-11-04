@@ -7,6 +7,7 @@
   darwin,
   electron_43,
   fetchFromGitHub,
+  fetchpatch,
   gnome-keyring,
   jq,
   makeDesktopItem,
@@ -44,6 +45,17 @@ buildNpmPackage (finalAttrs: {
     ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
+
+    # Cancel close synchronously when running in the background.
+    # Remove once a release includes https://github.com/bitwarden/clients/pull/23661.
+    (fetchpatch {
+      url = "https://github.com/bitwarden/clients/commit/6f1f1ea8d38b1a03783824dc1e6f632ea839ead3.patch";
+      includes = [
+        "apps/desktop/src/main/tray.main.ts"
+        "apps/desktop/src/main/tray.main.spec.ts"
+      ];
+      hash = "sha256-NV4CJdJSjMoJz42Ow7upM2O+XEzK1lh7F5472rZLVrk=";
+    })
   ];
 
   postPatch = ''
