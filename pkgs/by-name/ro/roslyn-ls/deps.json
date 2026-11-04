@@ -127,21 +127,21 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "12.0.0-beta.26505.2",
-    "hash": "sha256-7upVainmEk2roeZTrH9iN3sf/5vHhfs092maWvUK2v8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/12.0.0-beta.26505.2/microsoft.dotnet.arcade.sdk.12.0.0-beta.26505.2.nupkg"
+    "version": "11.0.0-beta.26514.2",
+    "hash": "sha256-hy9UlRRyWNPrR2NFkCf/aE8RNaoQW7sahjw93PyG5UM=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.26514.2/microsoft.dotnet.arcade.sdk.11.0.0-beta.26514.2.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.Helix.JobMonitor",
-    "version": "12.0.0-beta.26505.2",
-    "hash": "sha256-vF5GLeMMiSMd9e0mg6Vi8u1FaxfRWtIEBm5/zn1xst8=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.helix.jobmonitor/12.0.0-beta.26505.2/microsoft.dotnet.helix.jobmonitor.12.0.0-beta.26505.2.nupkg"
+    "version": "11.0.0-beta.26514.2",
+    "hash": "sha256-/NsFp1rFENazEdjM0WM408bxU2ZgmdoIw6wdCMIq4ZA=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.helix.jobmonitor/11.0.0-beta.26514.2/microsoft.dotnet.helix.jobmonitor.11.0.0-beta.26514.2.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "12.0.0-beta.26505.2",
-    "hash": "sha256-oiTi8Xz8ULCLkkgFymQEs1OQOz2Vz2jAOt4ZDrFsS4E=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/12.0.0-beta.26505.2/microsoft.dotnet.xlifftasks.12.0.0-beta.26505.2.nupkg"
+    "version": "11.0.0-beta.26514.2",
+    "hash": "sha256-zNoVbHQazZhRmogYy3JhNKmBnf9U7iFvPCnXP+dawvU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.26514.2/microsoft.dotnet.xlifftasks.11.0.0-beta.26514.2.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
