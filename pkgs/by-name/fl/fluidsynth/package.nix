@@ -42,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FluidSynth";
     repo = "fluidsynth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FsGVQlxH87P5FlCS087WQ40bA/sDlbVtG8giVZog0zM=";
+    hash = "sha256-k2KY7BWOX4b1agVfINmbbj5ENnH+KJ1U/gN8kYYPX5U=";
     fetchSubmodules = true;
+    postFetch = "rm -rf $out/test/manual"; # ~450 MB of manual test data
   };
 
   outputs = [
