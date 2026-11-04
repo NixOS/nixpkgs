@@ -346,6 +346,10 @@ let
 
         config-file = callPackage ../development/ocaml-modules/config-file { };
 
+        console = callPackage ../development/ocaml-modules/console { };
+
+        console-eio = callPackage ../development/ocaml-modules/console/eio.nix { };
+
         containers = callPackage ../development/ocaml-modules/containers { };
 
         containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
