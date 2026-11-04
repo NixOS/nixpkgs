@@ -7,6 +7,7 @@
   ninja,
   gfortran,
   mpi,
+  mpiCheckPhaseHook,
   jdk,
   libaec,
   zlib,
@@ -107,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     ctestCheckHook
   ]
-  ++ lib.optional fortranSupport gfortran;
+  ++ lib.optional fortranSupport gfortran
+  # FindMPI locates MPI through the mpicc compiler wrapper
+  ++ lib.optionals mpiSupport [
+    mpi
+    mpiCheckPhaseHook
+  ];
 
   buildInputs = lib.optional javaSupport jdk;
 
@@ -142,7 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
       with stdenv.hostPlatform; !(isDarwin && isx86_64)
     ))
   ]
-  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
+  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
+  ++ lib.optional mpiSupport (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "2");
 
   doCheck = true;
 
