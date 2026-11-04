@@ -12,6 +12,23 @@ logger = logging.getLogger(__name__)
 
 
 class QMPAPIError(RuntimeError):
+    """An error response from the QMP API.
+
+    >>> error = {"class": "GenericError", "desc": "boom"}
+    >>> print(QMPAPIError({"error": error, "id": 3}))
+    <QMP API error related to transaction 3 [GenericError]: boom>
+
+    The transaction id is absent from errors that the server hits before it
+    could read the id:
+
+    >>> print(QMPAPIError({"error": error}))
+    <QMP API error related to transaction None [GenericError]: boom>
+
+    >>> QMPAPIError({"error": {"class": "GenericError"}})
+    Traceback (most recent call last):
+    RuntimeError: Malformed QMP API error response
+    """
+
     def __init__(self, message: dict[str, Any]):
         assert "error" in message, "Not an error message!"
         error = message["error"]
