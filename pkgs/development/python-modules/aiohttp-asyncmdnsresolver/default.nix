@@ -6,7 +6,7 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytest-cov-stub,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
   zeroconf,
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cov-stub
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   pythonImportsCheck = [ "aiohttp_asyncmdnsresolver" ];
