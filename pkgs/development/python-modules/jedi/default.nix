@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jedi";
-  version = "0.20.0";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D0Zy8HJYq5l8Wp1M+J7p8Z+EBY/R5tYFa2uMYiqLIT8=";
+    hash = "sha256-s8ITHaV3cSpo0oMW7RmZ3PejmMoERC7RbNPcbIfWqA0=";
     fetchSubmodules = true;
   };
 
