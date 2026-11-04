@@ -1,0 +1,17 @@
+diff --git a/src/memray/reporters/module_tools.py b/src/memray/reporters/module_tools.py
+index e4aa992..b60d64a 100644
+--- a/src/memray/reporters/module_tools.py
++++ b/src/memray/reporters/module_tools.py
+@@ -31,6 +31,12 @@ def get_python_path_info() -> PathInfo:
+     # Get site-packages directories
+     site_packages: List[Path] = [Path(p) for p in site.getsitepackages()]
+ 
++    site_packages.extend(
++        Path(p)
++        for p in sys.path
++        if p and Path(p).name == "site-packages"
++    )
++
+     # Get user site-packages
+     user_site = site.getusersitepackages()
+     if Path(user_site).exists():
