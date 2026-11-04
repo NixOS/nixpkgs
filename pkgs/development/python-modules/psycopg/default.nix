@@ -34,14 +34,14 @@
 
 let
   pname = "psycopg";
-  version = "3.3.6";
+  version = "3.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-Pv13vV1x4wNQxm+KNdpCMaikCwGb/bAW3ZpT0xlD1uY=";
+    hash = "sha256-Y1qSWMNXkvJBOVhRtRXBwHe+Jzyx/NiO1nnUKR0Hygw=";
   };
 
   patches = [
