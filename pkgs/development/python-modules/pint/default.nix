@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.25.3";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";
     tag = version;
-    hash = "sha256-l2wbcS2mlamCBXr9KOWmq10WN5pNVH4Iu65UuZ0vQmU=";
+    hash = "sha256-y75u8MweNdYk2v4O6j6thX8zTuJ+60sy9MH3kWegr2c=";
   };
 
   build-system = [
