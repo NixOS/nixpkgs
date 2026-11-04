@@ -7,7 +7,7 @@
   bzip2,
   zstd,
   esbuild,
-  wasm-bindgen-cli_0_2_108,
+  wasm-bindgen-cli_0_2_129,
   wasm-pack,
   nodejs,
   typescript_7,
@@ -35,7 +35,7 @@ let
       binaryen
       pkg-config
       python3
-      wasm-bindgen-cli_0_2_108
+      wasm-bindgen-cli_0_2_129
       wasm-pack
       nodejs
       typescript_7
@@ -108,7 +108,7 @@ let
       echo '{"name": "@ironcalc/wasm", "version": "${ironcalc.version}"}' > ../../bindings/wasm/pkg/package.json
     '';
 
-    npmDepsHash = "sha256-jPnUUEOjW9WHVjpBH/qKB4P5RuMI0uvjog8C41cPQdY=";
+    npmDepsHash = "sha256-PEBcOScgBxcskT+vrjM8/MMhGAofYbTR2vN6gQLWRh4=";
 
     preConfigure = ''
       cp -rv ${wasm}/. ../../bindings/wasm/pkg/
@@ -152,7 +152,7 @@ let
         --replace-warn 'onInput={handleChange}' 'onChange={handleChange}'
     '';
 
-    npmDepsHash = "sha256-QVpUV3dxaqiWCF8RC1MR2ylYC500Lbp5pJgzzOrF20c=";
+    npmDepsHash = "sha256-MntYuLaw4svpAU+0JQE0GnKjLFfZnrdreUGbMdT2o+Y=";
 
     preBuild = ''
       # wasm resolution fix
