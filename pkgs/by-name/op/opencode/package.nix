@@ -77,7 +77,13 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-xfOVcw1+waLVNhFDwzOtzxrUSQEogvn88YomydOlhwc=";
+      outputHash =
+        if stdenv.hostPlatform.isLinux then
+          "sha256-prx9dX7kUvs/E3zopkaPk5LXh3xJAy5sZeum/W8L7cA="
+        else if stdenv.hostPlatform.isDarwin then
+          "sha256-dIveiaiPFGSItwLyeMuPDxTE9gpvvnlTCB/+nG24qCc="
+        else
+          throw "Unsupported platform";
       outputHashMode = "recursive";
     };
 in
