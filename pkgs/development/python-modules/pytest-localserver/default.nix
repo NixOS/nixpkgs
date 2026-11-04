@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-localserver";
-  version = "0.10.0";
+  version = "0.10.0.post0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_localserver";
     inherit (finalAttrs) version;
-    hash = "sha256-JgcZfzkJEqslUl0SmsQ8PIdQSSVzaLP+CbXNA9zFJq8=";
+    hash = "sha256-BsIaZmCdhitCvZy4FjNIIOaW6o93ys3f4VkSfUhkmFE=";
   };
 
   build-system = [ setuptools-scm ];
