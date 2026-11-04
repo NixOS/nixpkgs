@@ -201,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "regular-libdir-includedir.patch";
         url = "https://inbox.sourceware.org/gcc-patches/20250717174911.1536129-1-git@JohnEricson.me/raw";
-        hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
+        hash = "sha256-unPDAwW0F6ZSjSNLRiO3zcTHPKZKflK+2Yu8SYX1e8Q=";
       })
       (getVersionFile "libgcc/force-regular-dirs.patch")
     ];
