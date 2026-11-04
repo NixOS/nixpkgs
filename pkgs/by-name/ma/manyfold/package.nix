@@ -10,6 +10,7 @@
   stdenvNoCC,
   writeTextDir,
   yarn-berry_3,
+  nixosTests,
 }:
 let
   yarn-berry = yarn-berry_3;
@@ -100,6 +101,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) manyfold;
+  };
 
   meta = {
     description = "ActivityPub-powered tool for storing and sharing 3d models";
