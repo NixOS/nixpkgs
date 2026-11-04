@@ -72,6 +72,8 @@ in
 
       path = [
         pkgs.file
+        pkgs.f3d
+        pkgs.imagemagick
         cfg.package
       ];
 
