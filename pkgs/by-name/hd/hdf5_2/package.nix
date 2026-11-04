@@ -67,7 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/CMakeLists.txt fortran/src/CMakeLists.txt c++/src/CMakeLists.txt hl/c++/src/CMakeLists.txt hl/fortran/src/CMakeLists.txt hl/src/CMakeLists.txt \
       --replace-fail '\''${exec_prefix}/''${HDF5_INSTALL_LIB_DIR}' '"''${HDF5_INSTALL_LIB_DIR}"' \
-      --replace-fail '\''${prefix}/''${HDF5_INSTALL_INCLUDE_DIR}' '"''${HDF5_INSTALL_LIB_DIR}"'
+      --replace-fail '\''${prefix}/''${HDF5_INSTALL_INCLUDE_DIR}' '"''${HDF5_INSTALL_INCLUDE_DIR}"'
+
+    # HDF5_INSTALL_INCLUDE_DIR is absolute (CMAKE_INSTALL_INCLUDEDIR), so prefixing
+    # it with $<INSTALL_PREFIX> yields ''${_IMPORT_PREFIX}//nix/store/... in the
+    # exported targets. INSTALL_INTERFACE handles relative paths on its own.
+    for f in $(grep -rlF --include=CMakeLists.txt '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' .); do
+      substituteInPlace "$f" \
+        --replace-fail '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' "\''${HDF5_INSTALL_INCLUDE_DIR}"
+    done
+
+    # The hardcoded relative "include" is resolved against $out, which has no headers.
+    for f in $(grep -rlF --include=CMakeLists.txt 'INCLUDES DESTINATION include' .); do
+      substituteInPlace "$f" \
+        --replace-fail 'INCLUDES DESTINATION include' "INCLUDES DESTINATION \''${HDF5_INSTALL_INCLUDE_DIR}"
+    done
 
     # The install prefix variables are a mess and break with abolsute paths,
     # as well as don't seem to know what is what.
