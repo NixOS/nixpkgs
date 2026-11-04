@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.21.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "aiosqlite";
     tag = "v${version}";
-    hash = "sha256-3l/uR97WuLlkAEdogL9iYoXp89bsAcpH6XEtMELsX9o=";
+    hash = "sha256-voOOFo1OwaRQ3JsDHlBrngP+8ajf0kTNKXJyOaJiTs4=";
   };
 
   build-system = [ flit-core ];
