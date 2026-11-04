@@ -5,7 +5,7 @@
   fetchFromGitHub,
   lib,
   libarchive,
-  nodejs_22,
+  nodejs_24,
   ruby_3_4,
   stdenvNoCC,
   writeTextDir,
@@ -15,7 +15,7 @@
 let
   yarn-berry = yarn-berry_3;
   ruby = ruby_3_4;
-  gems = bundlerEnv rec {
+  gems = bundlerEnv {
     name = "manyfold-env";
     inherit ruby;
     gemdir = ./.;
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs_24
     gems.ruby
     yarn-berry
     yarn-berry.yarnBerryConfigHook
