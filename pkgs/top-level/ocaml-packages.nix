@@ -1064,6 +1064,8 @@ let
 
         ### K ###
 
+        k7 = callPackage ../development/ocaml-modules/k7 { };
+
         kafka = callPackage ../development/ocaml-modules/kafka { };
 
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
