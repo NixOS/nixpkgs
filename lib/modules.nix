@@ -1184,18 +1184,7 @@ let
       # Handle properties, check types, and merge everything together.
       res =
         if opt.readOnly or false && length defs' > 1 then
-          let
-            # For a better error message, evaluate all readOnly definitions as
-            # if they were the only definition.
-            separateDefs = map (
-              def:
-              def
-              // {
-                value = (mergeDefinitions loc opt.type [ def ]).mergedValue;
-              }
-            ) defs';
-          in
-          throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
+          throwReadOnly loc opt.type defs'
         else
           mergeDefinitions loc opt.type defs';
     in
@@ -1220,6 +1209,21 @@ let
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
+
+  throwReadOnly =
+    loc: type: defs:
+    let
+      # For a better error message, evaluate all readOnly definitions as
+      # if they were the only definition.
+      separateDefs = map (
+        def:
+        def
+        // {
+          value = (mergeDefinitions loc type [ def ]).mergedValue;
+        }
+      ) defs;
+    in
+    throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}";
 
   # Check that a type with v2 merge has a coherent check attribute.
   # Throws an error if the type uses an ad-hoc `type // { check }` override.
