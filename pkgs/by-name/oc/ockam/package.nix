@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ockam";
   version = "0.157.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "build-trust";
     repo = "ockam";
@@ -35,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # too many tests fail for now
   doCheck = false;
 
-  cargoBuildFlags = [ "-p ockam" ];
+  cargoBuildFlags = [ "--package=ockam" ];
 
   meta = {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";
