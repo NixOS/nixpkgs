@@ -111,6 +111,7 @@ stdenv.mkDerivation (_finalAttrs: {
     corrade
   ];
   propagatedBuildInputs = [
+    corrade
     magnum
   ]
   ++ lib.optionals withAssimpImporter [

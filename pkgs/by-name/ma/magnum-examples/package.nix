@@ -55,27 +55,33 @@
 }:
 
 let
+  magnumPlugins = magnum-plugins.override (
+    lib.optionalAttrs withAnimatedGifExample { withStbImageImporter = true; }
+    # FIXME: Text::FreeTypeFont::fillGlyphCache(): cannot fit 96 glyphs with a total area of 330719 pixels into a cache of size Vector(1024, 512, 1) and Vector(1024, 174, 1) filled so far
+    // lib.optionalAttrs withArealightsExample { withDdsImporter = true; }
+    // lib.optionalAttrs withAudioExample { withStbVorbisAudioImporter = true; }
+    # XXX: must be run with
+    # $ ./result/bin/magnum-cubemap ./result/share/magnum/examples/cubemap/
+    // lib.optionalAttrs withCubemapExample { withJpegImporter = true; }
+    # XXX: withDartIntegration in magnum-integration already needs this plugin, this should be transitive?
+    // lib.optionalAttrs withDartExample { withAssimpImporter = true; }
+    // lib.optionalAttrs withTexturedquadExample { withStbImageImporter = true; }
+  );
+
+  magnumIntegration = magnum-integration.override (
+    lib.optionalAttrs withBulletExample { withBulletIntegration = true; }
+    // lib.optionalAttrs withDartExample { withDartIntegration = true; }
+    // lib.optionalAttrs (
+      withImguiExample || withFluidsimulation2dExample || withFluidsimulation3dExample
+    ) { withImguiIntegration = true; }
+  );
+
+  magnumExtras = magnum-extras.override (lib.optionalAttrs withArealightsExample { withUi = true; });
+
   magnumWithPlugins = magnum.withPlugins [
-    (magnum-plugins.override (
-      lib.optionalAttrs withAnimatedGifExample { withStbImageImporter = true; }
-      # FIXME: Text::FreeTypeFont::fillGlyphCache(): cannot fit 96 glyphs with a total area of 330719 pixels into a cache of size Vector(1024, 512, 1) and Vector(1024, 174, 1) filled so far
-      // lib.optionalAttrs withArealightsExample { withDdsImporter = true; }
-      // lib.optionalAttrs withAudioExample { withStbVorbisAudioImporter = true; }
-      # XXX: must be run with
-      # ./result/bin/magnum-cubemap ./result/share/magnum/examples/cubemap/
-      // lib.optionalAttrs withCubemapExample { withJpegImporter = true; }
-      # XXX: withDartIntegration already needs this plugin, this should be transitive?
-      // lib.optionalAttrs withDartExample { withAssimpImporter = true; }
-      // lib.optionalAttrs withTexturedquadExample { withStbImageImporter = true; }
-    ))
-    (magnum-integration.override (
-      lib.optionalAttrs withBulletExample { withBulletIntegration = true; }
-      // lib.optionalAttrs withDartExample { withDartIntegration = true; }
-      // lib.optionalAttrs (
-        withImguiExample || withFluidsimulation2dExample || withFluidsimulation3dExample
-      ) { withImguiIntegration = true; }
-    ))
-    (magnum-extras.override (lib.optionalAttrs withArealightsExample { withUi = true; }))
+    magnumPlugins
+    magnumIntegration
+    magnumExtras
   ];
 in
 
@@ -106,16 +112,16 @@ stdenv.mkDerivation {
     cmake
     corrade # Makes corrade-rc accessible during build
   ];
-  propagatedBuildInputs = [
-    magnumWithPlugins
-  ]
-  ++ lib.optional withBox2dExample box2d
-  ++ lib.optional withBulletExample bullet # FIXME: this should be a propagatedBuildInputs since withBulletIntegration depends on it
-  ++ lib.optional withDartExample dartsim # FIXME: this should be a propagatedBuildInputs since withBulletIntegration depends on it
-  # same issue with these dependencies
-  ++ lib.optional (
-    withImguiExample || withFluidsimulation2dExample || withFluidsimulation3dExample
-  ) imgui;
+  propagatedBuildInputs =
+    let
+      prop = (
+        [
+          magnumWithPlugins
+        ]
+        ++ lib.optional withBox2dExample box2d
+      );
+    in
+    builtins.trace "magnum-examples: propagatedBuildInputs: ${toString prop}" prop;
 
   cmakeFlags = [
     (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)

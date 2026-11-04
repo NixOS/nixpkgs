@@ -12,6 +12,10 @@
   vulkan-loader,
   SDL2,
 
+  # The default options are chosen such that all plugins and extensions in magnum-examples
+  # build against the default magnum derivation. These are not incredibly heavy dependencies,
+  # so it should be light enough
+  #
   # keep-sorted start case=no numeric=no block=yes
   buildDeprecated ? false,
   withAnyImageImporter ? true,
@@ -111,14 +115,57 @@ stdenv.mkDerivation (finalAttrs: {
         ;
     };
 
+    ## The naive version of withPlugin with symlinkJoin does not propagate propagatedBuildInputs from 'extensions' derivations
+    ## (magnum-plugins, magnum-integration, magnum-extras)
+    #
+    # withPlugins =
+    #   extensions:
+    #   symlinkJoin {
+    #     name = "${finalAttrs.pname}-with-plugins-${finalAttrs.version}";
+    #     paths = [
+    #       finalAttrs.finalPackage
+    #     ]
+    #     ++ extensions;
+    #   };
+    #
+    # So instead try to wrap magnum with plugins into a real derivation
+    # and manually collect all propagatedBuildInputs
+    # It seems to work, but is it a good method?
     withPlugins =
       extensions:
-      symlinkJoin {
-        name = "${finalAttrs.pname}-with-plugins-${finalAttrs.version}";
-        paths = [
-          finalAttrs.finalPackage
-        ]
-        ++ extensions;
+      let
+        basePkg = finalAttrs.finalPackage;
+        # Collect all unique propagated inputs from base package and plugins
+        allPropagated = lib.unique (
+          [ basePkg ]
+          ++ extensions
+          ++ (basePkg.propagatedBuildInputs or [ ])
+          ++ lib.concatLists (map (p: p.propagatedBuildInputs or [ ]) extensions)
+        );
+
+        # Join the files together using symlinkJoin
+        joined = symlinkJoin {
+          name = "${finalAttrs.pname}-with-plugins-${finalAttrs.version}";
+          paths = [ basePkg ] ++ extensions;
+        };
+      in
+      # Wrap it in a lightweight stdenv.mkDerivation to guarantee propagatedBuildInputs are honored downstream
+      stdenv.mkDerivation rec {
+        name = "${joined.name}-wrapped";
+        src = null;
+        dontUnpack = true;
+        dontBuild = true;
+        propagatedBuildInputs = builtins.trace "${name} has propagatedBuildInputs: ${toString allPropagated}" allPropagated;
+        installPhase = ''
+          mkdir -p $out
+          # Link everything from the joined store path into this derivation output
+          cp -rs ${joined}/* $out/
+          # Remove the symlinked/read-only nix-support brought over by cp -rs
+          chmod -R +w $out/nix-support || true
+          rm -rf $out/nix-support
+          # Create a fresh, fully writable directory for Nix's fixup hook
+          mkdir -p $out/nix-support
+        '';
       };
   };
 
