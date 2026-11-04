@@ -24,9 +24,6 @@
   pytestCheckHook,
   pytest-timeout,
 }:
-let
-  brotliPackage = brotli;
-in
 buildPythonPackage (finalAttrs: {
   pname = "pypdf";
   version = "6.21.4";
@@ -59,17 +56,21 @@ buildPythonPackage (finalAttrs: {
     myst-parser
   ];
 
-  optional-dependencies = rec {
-    full = crypto ++ fonts ++ image ++ rtl_text ++ brotli;
-    brotli = [ brotliPackage ];
-    crypto = [ cryptography ];
-    fonts = [ fonttools ];
-    image = [ pillow ];
-    rtl_text = [
-      arabic-reshaper
-      python-bidi
-    ];
-  };
+  optional-dependencies =
+    let
+      deps = finalAttrs.passthru.optional-dependencies;
+    in
+    {
+      full = deps.crypto ++ deps.fonts ++ deps.image ++ deps.rtl_text ++ deps.brotli;
+      brotli = [ brotli ];
+      crypto = [ cryptography ];
+      fonts = [ fonttools ];
+      image = [ pillow ];
+      rtl_text = [
+        arabic-reshaper
+        python-bidi
+      ];
+    };
 
   pythonImportsCheck = [ "pypdf" ];
 
