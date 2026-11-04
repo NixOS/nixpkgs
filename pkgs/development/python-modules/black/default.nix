@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "black";
-  version = "26.5.1";
+  version = "26.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psf";
     repo = "black";
     tag = finalAttrs.version;
-    hash = "sha256-xALg9ta0U2V6i/b7VYiPKu0oNnHfg9T+XuK3CvqJmjs=";
+    hash = "sha256-vumVP4nzNTSkOT2Y2hY41WOF/39a6kIBHDaVFoKXYpk=";
   };
 
   build-system = [
