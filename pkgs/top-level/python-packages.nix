@@ -4779,6 +4779,8 @@ self: super: with self; {
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 
+  django-honeypot = callPackage ../development/python-modules/django-honeypot { };
+
   django-htmx = callPackage ../development/python-modules/django-htmx { };
 
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
