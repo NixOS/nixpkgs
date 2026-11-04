@@ -9,7 +9,7 @@
   pytestCheckHook,
   cairo,
   cffi,
-  flit-core,
+  flit-core_3,
   numpy,
   withXcffib ? false,
   xcffib,
@@ -38,9 +38,9 @@ buildPythonPackage rec {
     ./fix_test_scaled_font.patch
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cairo
     cffi
   ]
