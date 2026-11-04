@@ -1,0 +1,92 @@
+diff --git a/palace/CMakeLists.txt b/palace/CMakeLists.txt
+index af859a1..7c54564 100644
+--- a/palace/CMakeLists.txt
++++ b/palace/CMakeLists.txt
+@@ -555,16 +555,23 @@ else()
+   message(STATUS "Found METIS: ${METIS_VERSION}")
+ endif()
+ 
++# Palace does not call ParMETIS directly; it is only linked so that static
++# builds of the sparse direct solvers resolve. Make it optional so Palace can be
++# built against solvers configured without ParMETIS.
+ find_package(ParMETIS QUIET)
+ if(NOT TARGET ParMETIS::ParMETIS)
+-  find_library(PARMETIS_LIBRARY NAMES parmetis HINTS ${ParMETIS_ROOT}/lib REQUIRED)
+-  find_path(PARMETIS_INCLUDE_DIR NAMES parmetis.h HINTS ${ParMETIS_ROOT}/include REQUIRED)
+-  add_library(ParMETIS::ParMETIS UNKNOWN IMPORTED)
+-  set_target_properties(ParMETIS::ParMETIS PROPERTIES
+-    IMPORTED_LOCATION "${PARMETIS_LIBRARY}"
+-    INTERFACE_INCLUDE_DIRECTORIES "${PARMETIS_INCLUDE_DIR}"
+-    INTERFACE_LINK_LIBRARIES "METIS::METIS")
+-  message(STATUS "Found ParMETIS: ${PARMETIS_LIBRARY}")
++  find_library(PARMETIS_LIBRARY NAMES parmetis HINTS ${ParMETIS_ROOT}/lib)
++  find_path(PARMETIS_INCLUDE_DIR NAMES parmetis.h HINTS ${ParMETIS_ROOT}/include)
++  if(PARMETIS_LIBRARY AND PARMETIS_INCLUDE_DIR)
++    add_library(ParMETIS::ParMETIS UNKNOWN IMPORTED)
++    set_target_properties(ParMETIS::ParMETIS PROPERTIES
++      IMPORTED_LOCATION "${PARMETIS_LIBRARY}"
++      INTERFACE_INCLUDE_DIRECTORIES "${PARMETIS_INCLUDE_DIR}"
++      INTERFACE_LINK_LIBRARIES "METIS::METIS")
++    message(STATUS "Found ParMETIS: ${PARMETIS_LIBRARY}")
++  else()
++    message(STATUS "ParMETIS not found, building without it")
++  endif()
+ else()
+   message(STATUS "Found ParMETIS: ${ParMETIS_VERSION}")
+ endif()
+@@ -696,7 +703,10 @@ if(PALACE_WITH_CUDSS)
+ endif()
+ 
+ # Link METIS and ParMETIS (must come after SuperLU_DIST, STRUMPACK, MUMPS for static linking)
+-target_link_libraries(${LIB_TARGET_NAME} PUBLIC ParMETIS::ParMETIS METIS::METIS)
++if(TARGET ParMETIS::ParMETIS)
++  target_link_libraries(${LIB_TARGET_NAME} PUBLIC ParMETIS::ParMETIS)
++endif()
++target_link_libraries(${LIB_TARGET_NAME} PUBLIC METIS::METIS)
+ 
+ # Link SUNDIALS
+ if(PALACE_WITH_SUNDIALS)
+@@ -770,6 +780,9 @@ endif()
+ if(ZLIB_FOUND)
+   list(APPEND VERSION_DEFINITIONS PALACE_WITH_ZLIB)
+ endif()
++if(TARGET ParMETIS::ParMETIS)
++  list(APPEND VERSION_DEFINITIONS PALACE_WITH_PARMETIS)
++endif()
+ foreach(pkg zfp slate lapackpp blaspp)
+   if(PALACE_WITH_STRUMPACK AND ${pkg}_FOUND)
+     string(TOUPPER ${pkg} _pkg)
+diff --git a/palace/utils/versions.cpp b/palace/utils/versions.cpp
+index 819db1e..bd81a2e 100644
+--- a/palace/utils/versions.cpp
++++ b/palace/utils/versions.cpp
+@@ -11,7 +11,6 @@
+ #include <ceed.h>
+ #include <metis.h>
+ #include <mpi.h>
+-#include <parmetis.h>
+ #include <fmt/format.h>
+ #include <scn/fwd.h>
+ #include <nlohmann/json.hpp>
+@@ -46,6 +45,9 @@
+ #if defined(PALACE_WITH_CUDSS)
+ #include <cudss.h>
+ #endif
++#if defined(PALACE_WITH_PARMETIS)
++#include <parmetis.h>
++#endif
+ #if defined(PALACE_WITH_ZLIB)
+ #include <zlib.h>
+ #endif
+@@ -231,9 +233,11 @@ std::vector<std::pair<std::string, std::string>> GetDependencyVersions()
+ #endif
+   versions.emplace_back("METIS", fmt::format("{}.{}.{}", METIS_VER_MAJOR, METIS_VER_MINOR,
+                                              METIS_VER_SUBMINOR));
++#if defined(PALACE_WITH_PARMETIS)
+   versions.emplace_back("ParMETIS",
+                         fmt::format("{}.{}.{}", PARMETIS_MAJOR_VERSION,
+                                     PARMETIS_MINOR_VERSION, PARMETIS_SUBMINOR_VERSION));
++#endif
+ 
+ #if defined(MFEM_USE_CUDA)
+   int cuda_version = 0;
