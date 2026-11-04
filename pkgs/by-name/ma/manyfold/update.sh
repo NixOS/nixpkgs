@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update bundix nixfmt yarn-berry_3.yarn-berry-fetcher
+#!nix-shell -i bash -p nix-update bundix bundler nixfmt-rfc-style yarn-berry_3.yarn-berry-fetcher nix-prefetch-git ruby_3_4
 
 set -eux
 
@@ -18,7 +18,8 @@ yarn-berry-fetcher missing-hashes "$src/yarn.lock" >"$SCRIPT_DIR/missing-hashes.
 
 # Update ruby deps
 cp --recursive --no-preserve=mode "$src"/. .
-BUNDLE_FORCE_RUBY_PLATFORM=true bundix
+BUNDLE_FORCE_RUBY_PLATFORM=true bundle lock
+bundix
 nixfmt gemset.nix
 install -D ./{Gemfile,Gemfile.lock,gemset.nix} -t "$SCRIPT_DIR"
 popd

@@ -2,7 +2,9 @@
   assimp,
   bundlerEnv,
   dart-sass,
+  f3d,
   fetchFromGitHub,
+  imagemagick,
   lib,
   libarchive,
   nodejs_24,
@@ -25,7 +27,12 @@ let
       tzinfo-data.platforms = [ ];
       tzinfo.platforms = [ ];
     };
-    groups = [ "production" ];
+    groups = [
+      "production"
+      "sqlite3"
+      "postgres"
+      "mysql"
+    ];
     extraConfigPaths = [
       "${writeTextDir ".ruby-version" ruby.version}/.ruby-version"
     ];
@@ -33,23 +40,33 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "manyfold";
-  version = "0.134.0";
+  version = "0.153.0";
 
   src = fetchFromGitHub {
     owner = "manyfold3d";
     repo = "manyfold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JFPfJYzJuQJCpxbu6HVlBy1m+D8nyuTGeVt5G0jFAl4=";
+    hash = "sha256-hOt8IKAmvddnc4Wh0GxmNUymFPUA+soUzsSY26HDz+w=";
   };
 
   prePatch = ''
     echo ${gems.ruby.version} >.ruby-version
-    substituteInPlace Gemfile.lock \
-      --replace-fail '   ruby 3.4.8p72' "   ruby ${gems.ruby.version}" \
-      --replace-fail '   2.6.2' "   ${gems.bundler.version}"
+    cp -f ${./Gemfile.lock} Gemfile.lock
+    chmod +w Gemfile.lock
+
+    substituteInPlace app/lib/file_handlers/f3d_cli.rb \
+      --replace-fail '`f3d --list-readers`' '`${lib.getExe f3d} --list-readers`'
+    substituteInPlace app/lib/thumbnailers/f3d.rb \
+      --replace-fail 'Open3.capture3("f3d"' 'Open3.capture3("${lib.getExe f3d}"'
+    substituteInPlace app/uploaders/application_uploader.rb \
+      --replace-fail 'Open3.capture3("f3d"' 'Open3.capture3("${lib.getExe f3d}"'
+    substituteInPlace app/lib/file_handlers/image_magick.rb \
+      --replace-fail '`magick -list format`' '`${lib.getExe imagemagick} -list format`'
   '';
 
   nativeBuildInputs = [
+    f3d
+    imagemagick
     nodejs_24
     gems.ruby
     yarn-berry
@@ -59,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-poS/exOkwRVOrWS0jX711eD/gkheyKDBpw13+w02J40=";
+    hash = "sha256-iQxlmCWx91SGfhFqYzxH627XPgG0GNJzVtEw5HfoqGs=";
   };
 
   # dynamically loaded by ruby gems
