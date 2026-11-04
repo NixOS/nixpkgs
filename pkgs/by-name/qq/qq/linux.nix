@@ -5,12 +5,14 @@
   makeShellWrapper,
   wrapGAppsHook3,
   dpkg,
-  writeShellScript,
+  writeShellApplication,
 
   alsa-lib,
   at-spi2-core,
+  coreutils,
   cups,
   glib,
+  gnused,
   gtk3,
   libdrm,
   libpulseaudio,
@@ -91,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       "''${gappsWrapperArgs[@]}" ${lib.optionalString disableAutoUpdate ''
         \
         --set INTERNAL_VERSION "$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' $out/opt/QQ/resources/app/package.json)" \
-        --run '${finalAttrs.passthru.versionConfigScript} || true'
+        --run '${lib.getExe finalAttrs.passthru.versionConfigScript} || true'
       ''}
 
     # https://aur.archlinux.org/cgit/aur.git/commit/?h=linuxqq&id=f7644776ee62fa20e5eb30d0b1ba832513c77793
@@ -108,7 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = passthru finalAttrs // {
-    versionConfigScript = writeShellScript "qq-version-config.sh" (lib.readFile ./version-config.sh);
+    versionConfigScript = writeShellApplication {
+      name = "qq-version-config.sh";
+      runtimeInputs = [
+        coreutils
+        gnused
+      ];
+      text = lib.readFile ./version-config.sh;
+    };
   };
   meta = meta finalAttrs;
 })

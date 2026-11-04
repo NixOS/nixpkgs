@@ -1,6 +1,4 @@
-set -e
-
-if [[ -z "$INTERNAL_VERSION" ]]; then
+if [[ -z "${INTERNAL_VERSION:-}" ]]; then
   echo "INTERNAL_VERSION is not set, skipping version config management"
   exit 0
 fi
@@ -37,7 +35,7 @@ fi
 
 cat > "$CONFIG_PATH" << EOF
 {
-  "_comment": "This file is managed by the qq-version-config.sh to disable auto updates, do not edit it manually. Set the `disableAutoUpdate` option to false to disable this behavior.",
+  "_comment": "This file is managed by the qq-version-config.sh to disable auto updates, do not edit it manually. Set the \`disableAutoUpdate\` option to false to disable this behavior.",
   "baseVersion": "$INTERNAL_VERSION",
   "curVersion": "$INTERNAL_VERSION",
   "buildId": "${INTERNAL_VERSION##*-}"
