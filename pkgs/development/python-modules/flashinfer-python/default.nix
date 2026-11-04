@@ -49,7 +49,7 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flashinfer-python";
-  version = "0.7.2.post1";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -57,7 +57,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-a63PMJ/OE9214w7Alj+RTcMZhJ3aqqQeHFTNmfWaH0s=";
+    hash = "sha256-guOI+9MMisB/uvmLF5Gg7ZCJ8YLnGirJ867nz0AMnxo=";
   };
 
   build-system = [
