@@ -189,9 +189,21 @@ class HomeAssistant:
 
 
     async def update_core(self, old_version: str, new_version: str) -> None:
-        old_sdist_hash = str(await Nix.eval("home-assistant.sdist.outputHash"))
-        new_sdist_hash = await Nurl.prefetch("https://pypi.org/project/homeassistant/", new_version)
-        print(f"sdist: {old_sdist_hash} -> {new_sdist_hash}")
+        old_wheel_hash = str(await Nix.eval("home-assistant.wheel.outputHash"))
+        new_wheel_hash = await Nurl.prefetch(
+            "https://pypi.org/project/homeassistant/",
+            new_version,
+            "--arg-str",
+            "format",
+            "wheel",
+            "--arg-str",
+            "dist",
+            "py3",
+            "--arg-str",
+            "python",
+            "py3",
+        )
+        print(f"wheel: {old_wheel_hash} -> {new_wheel_hash}")
 
         old_git_hash = str(await Nix.eval("home-assistant.src.outputHash"))
         new_git_hash = await Nurl.prefetch("https://github.com/home-assistant/core/", new_version)
@@ -207,9 +219,15 @@ class HomeAssistant:
         new_hash = await Nurl.prefetch(
             "https://pypi.org/project/home_assistant_frontend/",
             new_version,
-            "-A", "format", "wheel",
-            "-A", "dist", "py3",
-            "-A", "python", "py3"
+            "--arg-str",
+            "format",
+            "wheel",
+            "--arg-str",
+            "dist",
+            "py3",
+            "--arg-str",
+            "python",
+            "py3",
         )
         print(f"frontend: {old_hash} -> {new_hash}")
 

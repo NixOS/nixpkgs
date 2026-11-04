@@ -1,0 +1,18 @@
+diff --git a/homeassistant/__main__.py b/homeassistant/__main__.py
+index 8a7772fcc27..ea8bb79536d 100644
+--- a/homeassistant/__main__.py
++++ b/homeassistant/__main__.py
+@@ -16,13 +16,6 @@ FAULT_LOG_FILENAME = "home-assistant.log.fault"
+ 
+ def validate_environment() -> None:
+     """Validate that Home Assistant is started from a container or a venv."""
+-    if not is_virtual_env() and not is_docker_env():
+-        print(
+-            "Home Assistant must be run in a Python virtual environment or a container.",
+-            file=sys.stderr,
+-        )
+-        sys.exit(1)
+-
+ 
+ def validate_os() -> None:
+     """Validate that Home Assistant is running in a supported operating system."""

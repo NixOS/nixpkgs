@@ -3,6 +3,7 @@
   lib,
   callPackage,
   coreutils,
+  unzip,
   fetchFromGitHub,
   fetchPypi,
   python314Packages,
@@ -11,6 +12,7 @@
   inetutils,
   nixosTests,
   home-assistant,
+  tzdata,
   versionCheckHook,
 
   # Look up dependencies of specified components in component-packages.nix
@@ -44,7 +46,31 @@ let
         postPatch = null;
       };
 
-      anthropic = self.anthropic_0;
+      aiobotocore = super.aiobotocore.overridePythonAttrs (oldAttrs: {
+        version = "3.7.0";
+        src = oldAttrs.src.override {
+          tag = "3.7.0";
+          hash = "sha256-aitC2Qgpy1BRujlHaVt8AhNYPnyzJjLRGXkakubvQvg=";
+        };
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with self; [ anthropic ]);
+        disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+          "tests/botocore_tests/unit/test_endpoint_provider.py"
+          "tests/botocore_tests/unit/test_utils.py"
+        ];
+      });
+
+      anthropic = super.anthropic.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = oldAttrs.src.override {
+          hash = "sha256-w/hQKC74BvWah8bDRgeNsmipk95p36K3J3fQPe/Jj4E=";
+        };
+
+        dependencies =
+          oldAttrs.dependencies
+          ++ (with self; [
+            opentelemetry-api
+          ]);
+      });
 
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
@@ -62,18 +88,6 @@ let
           self.pytz
         ];
       });
-
-      livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.25";
-        src = fetchFromGitHub {
-          owner = "planbnet";
-          repo = "livisi";
-          tag = "v${version}";
-          hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
-        };
-      });
-
-      mcp = self.mcp_1;
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
@@ -122,10 +136,12 @@ let
 
       # internal python packages only consumed by home-assistant itself
       gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
+      hassfest = self.callPackage ./python-modules/hassfest { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
       homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant = self.callPackage ./python-modules/pytest-homeassistant { };
       pytest-homeassistant-custom-component =
         self.callPackage ./pytest-homeassistant-custom-component.nix
           { };
@@ -152,7 +168,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.10.4";
+  hassVersion = "2026.11.0";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -173,13 +189,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-RMjpLX8zFslvCkR6jYeinBpbKKYdiC+gdff90S4Dz4w=";
+    hash = "sha256-NYGt64VZiAZSVViO6pgjx7fBk9YgIDMDmKLNSFVsw6Q=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-hBD+y0NKuUs/dyTNgFhAUPDO64VsFu5wICwkA31iI4o=";
+    hash = "sha256-Wl5q84B5PVOrN/2c5ben4ApAinJYkj/nXQYQ4xo5RGg=";
   };
 
   build-system = with python3Packages; [
@@ -195,6 +211,13 @@ python3Packages.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # Skip environment check
+    ./patches/skip-environment-check.patch
+
+    # Fix verify_event_loop_thread when HomeAssistant is patched
+    # based upon https://github.com/home-assistant/core/pull/188003
+    ./patches/verify-event-loop-thread.patch
+
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
@@ -260,7 +283,7 @@ python3Packages.buildPythonApplication rec {
     hass-nabucasa
     home-assistant-bluetooth
     home-assistant-intents
-    httpx
+    httpx2
     ifaddr
     infrared-protocols
     jinja2
@@ -275,6 +298,7 @@ python3Packages.buildPythonApplication rec {
     pyjwt
     pymicro-vad
     pyopenssl
+    pyserial
     pyspeex-noise
     python-slugify
     pyturbojpeg
@@ -285,6 +309,7 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     standard-aifc
     standard-telnetlib
+    truststore
     typing-extensions
     ulid-transform
     urllib3
@@ -306,10 +331,12 @@ python3Packages.buildPythonApplication rec {
 
   requirementsTest = with python3Packages; [
     # test infrastructure (selectively from requirement_test.txt)
+    hassfest
     freezegun
     pytest-asyncio
     pytest-aiohttp
     pytest-freezer
+    pytest-homeassistant
     pytest-socket
     pytest-timeout
     pytest-unordered
@@ -325,7 +352,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs =
     requirementsTest
-    ++ [ versionCheckHook ]
+    ++ [
+      versionCheckHook
+      # Needed by tests/util/test_logging.py::test_log_formatter_timestamp
+      tzdata
+    ]
     ++ (with python3Packages; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
@@ -337,6 +368,8 @@ python3Packages.buildPythonApplication rec {
       mypy
       # Used in tests/scripts/check_requirements/test_gate.py
       pygithub
+      # Used in tests/helpers/test_storage.py
+      sensor-state-data
     ])
     ++ lib.concatMap (component: getPackages component python3Packages) [
       # some components are needed even if tests in tests/components are disabled
@@ -357,10 +390,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
-    # we neither run nor distribute hassfest
-    "tests/hassfest"
     # we don't care about code quality
     "tests/pylint"
+    "tests/script"
+    # requires git
+    "tests/scripts/test_sync_custom_integrations.py::test_ensure_ignored_escapes_and_keeps_own_line"
     # redundant component import test, which would make debugpy & sentry expensive to review
     "tests/test_circular_imports.py"
     # don't bulk test all components
@@ -369,10 +403,10 @@ python3Packages.buildPythonApplication rec {
     "tests/test_config.py::test_merge"
     # checks whether pip is installed
     "tests/util/test_package.py::test_check_package_fragment"
+    # we patch that exact error case out
+    "tests/test_main.py::test_validate_environment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    # [2026.9.4] orjson error message mismatch
-    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''
