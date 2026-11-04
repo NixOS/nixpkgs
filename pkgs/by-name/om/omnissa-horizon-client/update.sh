@@ -2,7 +2,7 @@
 #!nix-shell -p curl -p jq -p common-updater-scripts -i bash
 set -e
 
-entryPointURL='https://customerconnect.omnissa.com/channel/public/api/v1.0/products/getRelatedDLGList?locale=en_US&category=desktop_end_user_computing&product=omnissa_horizon_clients&version=8&dlgType=PRODUCT_BINARY'
+entryPointURL='https://customerconnect.omnissa.com/channel/public/api/v1.0/products/getRelatedDLGList?locale=en_US&category=virtual_desktop_and_apps&product=omnissa_horizon_clients&version=8&dlgType=PRODUCT_BINARY'
 
 function getTarballMetaUrl {
     curl "$entryPointURL" | jq -r '
