@@ -6269,12 +6269,6 @@ with pkgs;
 
   reposilitePlugins = recurseIntoAttrs (callPackage ../by-name/re/reposilite/plugins.nix { });
 
-  inherit (import ../by-name/ro/rocksdb pkgs)
-    rocksdb_11_8
-    rocksdb_9_10
-    rocksdb_8_3
-    ;
-
   SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
