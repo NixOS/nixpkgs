@@ -5,6 +5,7 @@
   nixosTests,
   nix-update-script,
   versionCheckHook,
+  path,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       nixosTest = nixosTests.wstunnel;
+    };
+    commandModules = lib.modules.commandTree {
+      # In `modules`, not in this directory, so that the sandbox that builds the
+      # option documentation contains it. See "Modules of a package" in the
+      # Nixpkgs manual.
+      directory = path + "/modules/generic/pkgs/by-name/ws/wstunnel/commands";
+      package = finalAttrs.finalPackage;
     };
   };
 
