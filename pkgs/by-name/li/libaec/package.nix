@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   meta = {
