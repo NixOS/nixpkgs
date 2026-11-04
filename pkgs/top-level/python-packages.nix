@@ -4693,6 +4693,8 @@ self: super: with self; {
 
   django-configurations = callPackage ../development/python-modules/django-configurations { };
 
+  django-constance = callPackage ../development/python-modules/django-constance { };
+
   django-context-decorator = callPackage ../development/python-modules/django-context-decorator { };
 
   django-contrib-comments = callPackage ../development/python-modules/django-contrib-comments { };
