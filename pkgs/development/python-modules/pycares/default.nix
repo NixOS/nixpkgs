@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycares";
-  version = "5.0.1";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-WjwknIMEMmMUOYFfmoGEY0FvKoy9semI54dX3prnUIE=";
+    hash = "sha256-PontxWo3RQRmdiB5WL89vylxxd8NZN6feok+uovyVbQ=";
   };
 
   nativeBuildInputs = [ cmake ];
