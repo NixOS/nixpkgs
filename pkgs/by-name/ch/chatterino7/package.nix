@@ -28,7 +28,7 @@
 
       passthru.updateScript = gitUpdater {
         rev-prefix = "v";
-        ignoredVersions = "beta";
+        ignoredVersions = "beta|^7\\.";
       };
 
       meta = {
