@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.4";
+  version = "0.1.5";
   pname = "forbiddenfruit";
   pyproject = true;
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "clarete";
     repo = "forbiddenfruit";
     tag = version;
-    hash = "sha256-yHIZsVn2UVmWeBNIzWDE6AOwAXZilPqXo+bVtXqGkJk=";
+    hash = "sha256-0BXdtu66vWaJkFAAzN4AR0DaTSGaa1zfwHOYIYFNEr8=";
   };
 
   build-system = [ setuptools ];
