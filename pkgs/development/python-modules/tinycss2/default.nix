@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   webencodings,
   pytest-cov-stub,
   pytestCheckHook,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-ZVmdHrqfF5fvBvHLaG2B4m1zek4wfEYArkntWzOqhfM=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ webencodings ];
 
