@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-slugify";
-  version = "8.0.4";
+  version = "9.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-slugify";
     tag = "v${version}";
-    hash = "sha256-zReUMIkItnDot3XyYCoPUNHrrAllbClWFYcxdTy3A30=";
+    hash = "sha256-bCOsExVFv+R4T6HQcJK3biyIHOXf5Ax8ZA9jQfno8v4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,8 +29,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "slugify" ];
 
