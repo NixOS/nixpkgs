@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyaxencoapi";
-  version = "1.0.7";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AXENCO-FR";
     repo = "ha-py-axenco-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ml58+kstIpqQUXDt/jpZeR8ueu5U3nnH7hiUcZxveAM=";
+    hash = "sha256-23R+++92N83gQHuTjJQGjezJBVuIKzOsEOHeVwK5YuM=";
   };
 
   build-system = [ setuptools ];
