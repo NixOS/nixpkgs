@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.22";
+  version = "3.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
     tag = "v${version}";
-    hash = "sha256-/aAyylHOEjSmcjb+OKDNY0OOlR2JXepvVpVsfGbKSyw=";
+    hash = "sha256-1zjQBQ/19Fzx/V5DQr7mhSQZZHkONOMUnFWJnBc42tc=";
   };
 
   build-system = [ setuptools ];
