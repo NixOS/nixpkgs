@@ -15,10 +15,17 @@
 let
   yarn-berry = yarn-berry_3;
   ruby = ruby_3_4;
-  gems = bundlerEnv {
+  gems = bundlerEnv rec {
     name = "manyfold-env";
     inherit ruby;
     gemdir = ./.;
+    gemset = lib.recursiveUpdate (import ./gemset.nix) {
+      byebug.platforms = [ ];
+      concurrent-ruby.platforms = [ ];
+      tzinfo-data.platforms = [ ];
+      tzinfo.platforms = [ ];
+    };
+    groups = [ "production" ];
     extraConfigPaths = [
       "${writeTextDir ".ruby-version" ruby.version}/.ruby-version"
     ];
@@ -26,25 +33,25 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "manyfold";
-  version = "0.129.1";
+  version = "0.134.0";
 
   src = fetchFromGitHub {
     owner = "manyfold3d";
     repo = "manyfold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L/kM5A47DxypckTYRno9qK4hYYD9HC6CXxIzCRlOAWU=";
+    hash = "sha256-JFPfJYzJuQJCpxbu6HVlBy1m+D8nyuTGeVt5G0jFAl4=";
   };
 
   prePatch = ''
     echo ${gems.ruby.version} >.ruby-version
     substituteInPlace Gemfile.lock \
-      --replace-fail '   ruby 3.4.1p0' "   ruby ${gems.ruby.version}" \
+      --replace-fail '   ruby 3.4.8p72' "   ruby ${gems.ruby.version}" \
       --replace-fail '   2.6.2' "   ${gems.bundler.version}"
   '';
 
   nativeBuildInputs = [
     nodejs_22
-    ruby
+    gems.ruby
     yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
@@ -52,7 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Hrw7+1DOkKuoq4IUR/Gr/wMVjAPHGdI0nElYAgqAvnU=";
+    hash = "sha256-poS/exOkwRVOrWS0jX711eD/gkheyKDBpw13+w02J40=";
   };
 
   # dynamically loaded by ruby gems
@@ -102,8 +109,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) manyfold;
+  passthru = {
+    tests = {
+      inherit (nixosTests) manyfold;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -111,7 +121,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://manyfold.app/";
     downloadPage = "https://github.com/manyfold3d/manyfold";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ prince213 ];
     teams = [ lib.teams.ngi ];
   };
 })
