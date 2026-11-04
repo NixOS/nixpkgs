@@ -307,7 +307,7 @@ stdenv.mkDerivation (finalAttrs: {
   # JDK's build system attempts to specifically detect
   # and special-case WSL, and we don't want it to do that,
   # so pass the correct platform names explicitly
-  configurePlatforms = lib.optionals atLeast17 [
+  configurePlatforms = [
     "build"
     "host"
   ];
