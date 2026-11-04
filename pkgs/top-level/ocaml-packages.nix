@@ -1232,6 +1232,8 @@ let
 
         markup = callPackage ../development/ocaml-modules/markup { };
 
+        matrix = callPackage ../development/ocaml-modules/mosaic/matrix.nix { };
+
         mccs = callPackage ../development/ocaml-modules/mccs { };
 
         mdx = callPackage ../development/ocaml-modules/mdx {
@@ -1416,6 +1418,8 @@ let
             yojson = yojson_2;
           };
         };
+
+        mosaic = callPackage ../development/ocaml-modules/mosaic { };
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
@@ -2190,6 +2194,8 @@ let
         tls-miou-unix = callPackage ../development/ocaml-modules/tls/miou-unix.nix { };
 
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
+
+        toffee = callPackage ../development/ocaml-modules/mosaic/toffee.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
 
