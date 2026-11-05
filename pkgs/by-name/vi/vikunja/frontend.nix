@@ -5,7 +5,7 @@
   lib,
   stdenv,
   nodejs_24,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   dart-sass,
@@ -26,16 +26,16 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-sYExFie9w5lEzIx21Y6QNrdDAw0Bf3GWyosokIn1xhc=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-8Z1kV1sbrAYFVHSb6d4iB6gzPsxk7IDROeYMN9Mjueo=";
   };
 
   nativeBuildInputs = [
     nodejs_24
     dart-sass
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   postPatch = ''
