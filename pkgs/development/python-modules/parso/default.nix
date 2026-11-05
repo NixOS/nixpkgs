@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,6 +22,11 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.15") [
+    # Expected exception mismatches
+    "test_python_exception_matches"
+  ];
 
   meta = {
     description = "Python Parser";
