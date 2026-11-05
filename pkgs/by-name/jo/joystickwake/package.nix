@@ -17,6 +17,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-p2zhoOLO3WLyn5U6X1c4diywNBmOZNb7Y9l9RoZDlQo=";
   };
 
+  # Make the path relative to put it under $out instead of /etc
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "/etc/xdg/autostart" "etc/xdg/autostart"
+  '';
+
   build-system = with python3Packages; [
     setuptools
   ];
@@ -26,11 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyudev
     python-xlib
   ];
-
-  postInstall = ''
-    # autostart file
-    ln -s $out/${python3Packages.python.sitePackages}/etc $out/etc
-  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
