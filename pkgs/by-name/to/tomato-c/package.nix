@@ -2,64 +2,85 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  alsa-lib,
+  gnumake,
   libnotify,
+  libpulseaudio,
   makeWrapper,
-  mpv,
   ncurses,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomato-c";
-  version = "0-unstable-2025-11-11";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "gabrielzschmitz";
     repo = "Tomato.C";
-    rev = "590224cbbf0f53f09d33080c4e83797a11ad02d1";
-    hash = "sha256-TVvCqWWjfFHcFOMEO9frfrs9638cOjkV8yvqavdzdmI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-by6ed/lZ2XABCMxjWN/iTKIg3cUX5+B/3s2oe3tzo8I=";
   };
 
   nativeBuildInputs = [
+    gnumake
     makeWrapper
     pkg-config
   ];
 
   buildInputs = [
+    alsa-lib
     libnotify
-    mpv
+    libpulseaudio
     ncurses
   ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  buildPhase = ''
+    runHook preBuild
+    make -C build PREFIX="$out" DATAPREFIX="$out/share/tomato"
+    runHook postBuild
+  '';
 
-  installFlags = [
-    "CPPFLAGS=$NIX_CFLAGS_COMPILE"
-    "LDFLAGS=$NIX_LDFLAGS"
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postFixup = ''
-    for file in $out/bin/*; do
-      wrapProgram $file \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            libnotify
-            mpv
-          ]
-        }
-    done
+    install -Dm755 build/tomato "$out/bin/tomato"
+
+    wrapProgram "$out/bin/tomato" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          alsa-lib
+          libpulseaudio
+        ]
+      }
+
+    mkdir -p "$out/share/tomato/sprites" \
+             "$out/share/tomato/sounds" \
+             "$out/share/tomato/icons" \
+             "$out/share/applications"
+
+    install -m644 resources/sprites/*.asc        "$out/share/tomato/sprites/"
+    install -m644 resources/sounds/*.mp3         "$out/share/tomato/sounds/"
+    install -m644 resources/icons/tomato.png     "$out/share/tomato/icons/tomato.png"
+    install -m644 resources/icons/tomato.svg     "$out/share/tomato/icons/tomato.svg"
+    install -m644 sample_config.toml             "$out/share/tomato/sample_config.toml"
+
+    install -m644 tomato.desktop "$out/share/applications/tomato.desktop"
+    substituteInPlace "$out/share/applications/tomato.desktop" \
+      --replace-fail "Icon=tomato" "Icon=$out/share/tomato/icons/tomato.svg"
+
+    runHook postInstall
   '';
 
   strictDeps = true;
 
   meta = {
+    description = "Modular, extensible terminal-based Pomodoro timer in pure C";
     homepage = "https://github.com/gabrielzschmitz/Tomato.C";
-    description = "Pomodoro timer written in pure C";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+    changelog = "https://github.com/gabrielzschmitz/Tomato.C/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ gabrielzschmitz ];
     mainProgram = "tomato";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 })
