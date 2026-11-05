@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-about";
   version = "0.9.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
