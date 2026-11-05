@@ -1,22 +1,22 @@
 {
-  buildDotnetModule,
-  bash,
-  coreutils,
-  fetchFromGitHub,
   lib,
-  openal,
-  dotnetCorePackages,
+  fetchFromGitHub,
+  bash,
+  buildDotnetModule,
   copyDesktopItems,
+  coreutils,
+  dotnetCorePackages,
   makeDesktopItem,
   nix-update-script,
+  openal,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "knossosnet";
   version = "1.3.13";
 
-  strictDeps = true;
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
@@ -28,35 +28,14 @@ buildDotnetModule (finalAttrs: {
   patches = [ ./dotnet-8-upgrade.patch ];
 
   postPatch = ''
+    # Let appimages be executable
     substituteInPlace Knossos.NET/Classes/KnUtils.cs \
       --replace-fail "\"/bin/bash\"" "\"${lib.getExe bash}\"" \
       --replace-fail "\"chmod -R " "\"${lib.getExe' coreutils "chmod"} -R " \
       --replace-fail "\"chmod {permissions}" "\"${lib.getExe' coreutils "chmod"} {permissions}"
   '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  projectFile = "Knossos.NET/Knossos.NET.csproj";
-  nugetDeps = ./deps.json;
-  executables = [ "Knossos.NET" ];
-
-  # IO errors in build due to solution building race
-  enableParallelBuilding = false;
-
-  runtimeDeps = [ openal ];
-
   nativeBuildInputs = [ copyDesktopItems ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "knossos";
-      exec = "Knossos.NET";
-      icon = "knossos";
-      desktopName = "Knossos.NET";
-      comment = "Multi-platform launcher for Freespace 2 Open";
-      categories = [ "Game" ];
-      startupWMClass = "Knossos.NET";
-    })
-  ];
 
   postInstall = ''
     for size in 48 64 96 128 256 512; do
@@ -65,19 +44,40 @@ buildDotnetModule (finalAttrs: {
     done
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "knossos";
+      categories = [ "Game" ];
+      comment = "Multi-platform launcher for Freespace 2 Open";
+      desktopName = "Knossos.NET";
+      exec = "Knossos.NET";
+      icon = "knossos";
+      startupWMClass = "Knossos.NET";
+    })
+  ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  # IO errors in build due to solution building race
+  enableParallelBuilding = false;
+  executables = [ "Knossos.NET" ];
+  nugetDeps = ./deps.json;
+  projectFile = "Knossos.NET/Knossos.NET.csproj";
+
+  runtimeDeps = [ openal ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/KnossosNET/Knossos.NET/releases/tag/${finalAttrs.src.tag}";
     description = "Multi-platform launcher for Freespace 2 Open";
     homepage = "https://fsnebula.org/knossos/";
+    changelog = "https://github.com/KnossosNET/Knossos.NET/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
     ];
-    mainProgram = "Knossos.NET";
     maintainers = with lib.maintainers; [ cdombroski ];
     platforms = lib.platforms.unix;
+    mainProgram = "Knossos.NET";
   };
 })
