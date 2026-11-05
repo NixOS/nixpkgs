@@ -111,10 +111,12 @@ async def amain():
         loop.add_signal_handler(signal.SIGINT, lambda: proc.terminate())
         await proc.communicate()
 
+    return proc.returncode
+
 
 def main():
-    asyncio.run(amain())
+    return asyncio.run(amain())
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    exit(main())
