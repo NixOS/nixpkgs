@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
     # https://github.com/OHF-Voice/intents-package/issues/12
-    license = lib.licenses.cc-by-40;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
 })
