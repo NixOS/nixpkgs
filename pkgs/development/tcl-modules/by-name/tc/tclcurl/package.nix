@@ -8,13 +8,13 @@
 
 mkTclDerivation (finalAttrs: {
   pname = "tclcurl";
-  version = "7.22.1";
+  version = "7.23.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclcurl-fa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
+    hash = "sha256-vODXYDLFf/rNq6yWmEa/JFRVrYOGZxTw+IjzILzQpTY=";
   };
 
   nativeBuildInputs = [
