@@ -36,6 +36,7 @@
   deepspeed,
   diffusers,
   fire,
+  httpx,
   hydra-core,
   immutabledict,
   lief,
@@ -67,7 +68,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nvidia-modelopt";
-  version = "0.47.0";
+  version = "0.48.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -75,34 +76,10 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "Model-Optimizer";
     tag = finalAttrs.version;
-    hash = "sha256-kvvyPPZ8APbN8kvT7fOqX5uxuzA6MTWY/4CEEKbSh8U=";
+    hash = "sha256-yxG+FMxA0RS7BdaCclzQ/DyNBMXoAB9R1pKZpyrRXUc=";
   };
 
   patches = [
-    # Import requests and huggingface_hub only where they are used, so `import modelopt.torch` works without the hf
-    # extra (and without requests, which nothing declares)
-    # https://github.com/NVIDIA/Model-Optimizer/pull/2671
-    (fetchpatch2 {
-      name = "fix-import-without-hf-extra.patch";
-      url = "https://github.com/NVIDIA/Model-Optimizer/commit/d7cbff3486a3ffb1a357e32d9810da0bfc649709.patch?full_index=1";
-      excludes = [ "CHANGELOG.rst" ];
-      hash = "sha256-td8b9S+Ly13sI1i6GvdB085dbdC5o0efj4vej6fYBsY=";
-    })
-    # Run the column-major ONNX tests without onnxruntime's graph optimizations: since 1.25, onnxruntime fuses one graph
-    # into MatMulNBits, so the pair no longer computes the same thing
-    # https://github.com/NVIDIA/Model-Optimizer/pull/2809
-    (fetchpatch2 {
-      name = "column-major-tests-without-ort-fusions.patch";
-      url = "https://github.com/NVIDIA/Model-Optimizer/commit/786b84e4a5ecd26575f688595616653d9e4cf50c.patch?full_index=1";
-      includes = [ "tests/unit/onnx/quantization/test_qdq_utils.py" ];
-      hunks = [
-        1
-        2
-        3
-        4
-      ];
-      hash = "sha256-EsZu7917KV2DOVU6Ff3l4L+1ptvEbGb7bNszG++LoGg=";
-    })
     # Allow setuptools-scm 10, which Nixpkgs has, as a build requirement again
     # https://github.com/NVIDIA/Model-Optimizer/pull/3022
     (fetchpatch2 {
@@ -112,16 +89,22 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
+  # Don't apply upstream's per-test wall-clock timeouts (60s for unit tests): the ONNX tests that run a large Conv
+  # (test_conv_isinf_*) exceed them on busy builders.
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail \
+        "item.add_marker(pytest.mark.timeout(_DEFAULT_TIMEOUT[group]))" \
+        "pass"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
   ];
 
   # setuptools is a run-time dependency: torch.utils.cpp_extension, used to JIT-compile the CUDA kernels, imports it.
-  # huggingface-hub too, in 0.47.0: max calibration imports modelopt.torch.export, which imports it
-  # (https://github.com/NVIDIA/Model-Optimizer/pull/1828 removed that import for 0.48.0).
   dependencies = [
-    huggingface-hub
     ninja
     numpy
     nvidia-ml-py
@@ -153,15 +136,14 @@ buildPythonPackage (finalAttrs: {
       onnxslim
       polygraphy
     ];
-    # 0.47.0 is tested with transformers 4.57 to 5.14 and warns on import with newer ones. With 5.15 to 5.18, HF
-    # tensor-parallel quantization, Puzzletron's Qwen3-VL, Liger evaluation in ModelOpt's trainers and the llm_qat
-    # configs that set warmup_ratio need https://github.com/NVIDIA/Model-Optimizer/pull/2649 (in 0.48.0).
+    # 0.48.0 is tested with transformers 5.5 to 5.18 and warns on import with newer ones.
     # Left out: wonderwords, used to generate the RULER calibration dataset for sparse attention, isn't packaged.
     hf = [
       accelerate
       datasets
       deepspeed
       diffusers
+      httpx
       huggingface-hub
       nltk
       peft
@@ -237,13 +219,29 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
     # RuntimeError: Failed to initialize cpuinfo!
+    # (torch queries it to cast to float16 on the CPU, which the GGML formats do for their scales.)
     # This one also fails outside the sandbox on aarch64 (an NVIDIA GB10): oneDNN can't create a float16 convolution
     "tests/unit/torch/opt/test_chaining.py::test_chained_modes_preserve_forward_patching_during_quantize"
     "tests/unit/torch/quantization/test_forward_patching.py::test_quantize_calibration_calls_quantizers_with_runtime_forward_patch"
+    "tests/unit/torch/quantization/test_ggml_backend.py"
+    "tests/unit/torch/quantization/test_ggml_gptq.py"
+    "tests/unit/torch/quantization/test_int8_tensor.py::test_int8_compress_keeps_small_fp16_channel"
+    "tests/unit/torch/quantization/test_int8_tensor.py::test_int8_quantize_matches_fp32[layout0-weight0-dtype0]"
+    "tests/unit/torch/quantization/test_int8_tensor.py::test_int8_quantize_matches_fp32[layout1-weight1-dtype0]"
+    "tests/unit/torch/quantization/test_int8_tensor.py::test_int8_quantize_matches_fp32[layout2-weight2-dtype0]"
+    "tests/unit/torch/quantization/test_iq1_s.py"
+    "tests/unit/torch/quantization/test_iq2_xs.py"
+    "tests/unit/torch/quantization/test_iq_formats.py"
     "tests/unit/torch/quantization/test_lsq.py::TestEnableLSQ::test_learnable_amax_uses_input_dtype[dtype0]"
     "tests/unit/torch/quantization/test_lsq.py::TestLSQWeightIteration::test_multiple_singular_weight_quantizers_use_their_weight_dtypes"
+    "tests/unit/torch/quantization/test_q8_0.py"
     "tests/unit/torch/quantization/test_tensor_quant_cpu.py::TestFakeTensorQuantCPU::test_overflow_fp16"
+    "tests/unit/torch/quantization/test_tensor_quant_cpu.py::test_registered_cpu_quantize_matches_eager[block-dtype1]"
+    "tests/unit/torch/quantization/test_tensor_quant_cpu.py::test_registered_cpu_quantize_matches_eager[per_axis-dtype1]"
+    "tests/unit/torch/quantization/test_tensor_quant_cpu.py::test_registered_cpu_quantize_matches_eager[scalar-dtype1]"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     # nix-update's default source, the releases feed, also lists upstream's development tags (such as 0.48.0dev) as
