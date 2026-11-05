@@ -11805,7 +11805,7 @@
     githubId = 73709188;
   };
   highghlow = {
-    name = "Alex Kravchenko";
+    name = "Alex";
     github = "highghlow";
     githubId = 132668972;
   };
