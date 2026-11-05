@@ -642,7 +642,9 @@ in
   config = {
     systemd.targets."fluxer" = mkIf cfg.enable {
       enable = true;
-      wantedBy = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
     };
     systemd.targets."fluxer-svc" = mkIf cfg.enable {
       enable = true;
