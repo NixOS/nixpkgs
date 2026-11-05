@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vapier";
     repo = "ncompress";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
   patches = [
@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mv $out/bin/uncompress $out/bin/uncompress-ncompress
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://vapier.github.io/ncompress/";
