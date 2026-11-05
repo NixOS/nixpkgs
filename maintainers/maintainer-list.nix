@@ -447,6 +447,12 @@
     githubId = 241628;
     name = "Adam Russell";
   };
+  a2not = {
+    email = "a2not.dev@gmail.com";
+    github = "a2not";
+    githubId = 31874975;
+    name = "a2not";
+  };
   aacebedo = {
     email = "alexandre@acebedo.fr";
     github = "aacebedo";
