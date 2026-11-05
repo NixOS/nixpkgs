@@ -4,9 +4,8 @@ Before jumping in to the more complex idea of store backends, we'll go over how 
 
 1. The secret name (`user` in the previous example)
 2. The prompt name (`name` in the previous example)
-3. The prompt type
-4. The prompt label
-5. The prompt description
+3. The prompt label
+4. The prompt description
 
 The first two arguments are not necessarily meant to be displayed to the user. Instead, they're provided for use in scenarios like testing, such that the backend can identify precisely which prompt it is currently answering to (since labels & descriptions need not be unique!).
 
@@ -22,26 +21,15 @@ A very simple prompt backend would look something like this:
 
       # We do not care about $1 (the secret name) nor $2 (the prompt name).
 
-      prompt="$4"
-      if [[ ! -z "$5" ]]; then
-        prompt="$prompt ($5)"
+      prompt="$3"
+      if [[ ! -z "$4" ]]; then
+        prompt="$prompt ($4)"
       fi
 
-      if [[ "$3" == "line" ]]; then
-        read -rp "$prompt: " text
-        echo -n "$text" > "$out"
-      elif [[ "$3" == "hidden" ]]; then
-        read -srp "$prompt: " text
-        echo ""
-        echo -n "$text" > "$out"
-      elif [[ "$3" == "multiline" ]]; then
-        echo "<$prompt>" > "$out"
-        $EDITOR "$out"
-      else
-        exit 1
-      fi
+      read -rp "$prompt: " text
+      echo -n "$text" > "$out"
     '';
 }
 ```
 
-One thing to note is that prompt (and by extension, store) backends are not sandboxed (unlike generator scripts).
+Prompt (and by extension, store) backends are not sandboxed (unlike generator scripts).

@@ -121,6 +121,19 @@ Running fixup scripts:
 - Skipping 'plain' (no fixup script)
 ```
 
+Another thing to note is that store backends can also be configured on a
+per-file basis. For example:
+
+```
+{
+  secrets.store.derived = {
+    dependencies = [ "user" ];
+    files.cow-greeting.backend = "plain";
+    # ...
+  };
+}
+```
+
 ### Importing secrets from files
 
 Secrets can also be imported from files on disk. The files must be arranged in a directory that matches the structure of the files declared in the user's config:
@@ -166,7 +179,6 @@ It is often useful for generators to allow human (or otherwise external) input. 
       backend = "simple";
       label = "Your name";
       description = "The person to address the greeting to";
-      type = "line";
     };
 
     files.greeting = { };
@@ -182,7 +194,7 @@ It is often useful for generators to allow human (or otherwise external) input. 
 }
 ```
 
-The `label` and `description` fields offer the user information about what prompt they are currently filling in. The `type` field tells the backend what kind of input they should ask the user for. The supported types are currently `line`, `hidden`, and `multiline`.
+The `label` and `description` fields offer the user information about what prompt they are currently filling in.
 
 The `backend` field works similarly to the `backend` field used by secrets (although prompt and store backends are distinct concepts!). If absent, the module defaults to the `secrets.backends.defaults.prompt` option.
 
@@ -210,6 +222,38 @@ Prompts are ethereal, and do not get stored on disk. If prompt storage is desire
 The aforementioned technique can also be used for sharing a prompt across multiple secrets.
 
 Alternatively, one could write a prompt backend that caches the given values for a certain period of time. The possibilities are endless!
+
+## Putting it all together
+
+The following example combines everything we've learned so far in order to define a SSH-key generator that prompts the user for a passphrase and stores the private and public keys in separate backends:
+
+```
+{
+  secrets.store.ssh-split = {
+    files."ed25519.key".backend = "age";
+    files."ed25519.key.pub".backend = "plain";
+
+    prompts.passphrase = {
+      label = "Passphrase";
+      backend = "read-hidden";
+    };
+
+    generate =
+      { pkgs, ... }:
+      pkgs.writeShellScript "gen-ed25519" ''
+        export PATH="${
+          lib.makeBinPath [
+            pkgs.coreutils
+            pkgs.openssh
+          ]
+        }"
+
+        passphrase="$(cat "$prompts/passphrase")"
+        ssh-keygen -t ed25519 -f $out/ed25519.key -P "$passphrase"
+      '';
+  };
+}
+```
 
 ## Sandboxing
 

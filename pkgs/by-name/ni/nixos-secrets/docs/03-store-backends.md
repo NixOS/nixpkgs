@@ -129,6 +129,8 @@ We are not currently planning to ship a production-ready backend alongside the C
 
 The `nixos-secrets` CLI attaches additional metadata to each secret. The metadata is there in order to detect dependency changes, recover from crashes mid-generation, and so on. The metadata is stored in a file named `.nixos-secrets-metadata`. Store backends do not require special logic/scripts for handling metadata files. Indeed, to a backend, the metadata is merely another file associated with the given secret (although one the user hasn't manually declared).
 
+By default, `config.secrets.backends.defaults.meta` is used for storing the metadata, although this can be overridden on a per-secret basis using the `meta.backend` option.
+
 ### Failure modes
 
 The aforementioned metadata system should protect one's secrets from most crashes. Still, this system is not perfect. In particular, spooky things might happen if multiple instances of the CLI are invoked simultaneously (we should perhaps consider some sort of locking mechanism in the future, although that would complicate things a lot, especially when the CLI's instances are run from separate machines).
