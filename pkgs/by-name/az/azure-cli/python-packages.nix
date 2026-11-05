@@ -187,6 +187,18 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
 
+      # InvalidRequestContent: After parsing a value an unexpected character was encountered: $. Path 'location'
+      azure-mgmt-resource-deployments =
+        super.azure-mgmt-resource-deployments.overridePythonAttrs
+          (attrs: rec {
+            version = "1.0.0b1";
+            src = fetchPypi {
+              pname = "azure_mgmt_resource_deployments"; # Different from src.pname in the original package.
+              inherit version;
+              hash = "sha256-c1m0JliCbn5/8T5tuwxJDpX8yV28oiTSuFz3GtdTXx0=";
+            };
+          });
+
       # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
       azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
         pname = "azure-mgmt-resource-all";
