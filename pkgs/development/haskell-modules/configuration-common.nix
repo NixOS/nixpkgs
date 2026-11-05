@@ -2509,52 +2509,49 @@ with haskellLib;
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
-  postgrest =
-    lib.pipe
-      (super.postgrest.overrideScope (
-        self: super: {
-          # 2025-01-19: Upstream is stuck at hasql < 1.7
-          # Jailbreaking for newer postgresql-libpq, which seems to work fine
-          postgresql-binary = dontCheck (doJailbreak super.postgresql-binary_0_13_1_3);
-          hasql = dontCheck (doJailbreak super.hasql_1_6_4_4);
-          # Matching dependencies for hasql < 1.6.x
-          hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_5;
-          hasql-implicits = dontCheck super.hasql-implicits_0_1_1_3;
-          hasql-notifications = unmarkBroken (dontCheck super.hasql-notifications_0_2_2_2);
-          hasql-pool = dontCheck super.hasql-pool_1_0_1;
-          hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
-          text-builder = super.text-builder_0_6_10;
-          text-builder-dev = super.text-builder-dev_0_3_10;
-        }
-      ))
-      [
-        # 2023-12-20: New version needs extra dependencies
-        (addBuildDepends [
-          self.cache
-          self.extra
-          self.focus
-          self.fuzzyset_0_2_4
-          self.http-client
-          self.jose-jwt
-          self.neat-interpolation
-          self.prometheus-client
-          self.some
-          self.stm-hamt
-          self.timeit
-        ])
-        # 2022-12-02: Too strict bounds.
-        doJailbreak
-        # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
-        (overrideSrc rec {
-          version = "14.16";
-          src = pkgs.fetchFromGitHub {
-            owner = "PostgREST";
-            repo = "postgrest";
-            rev = "v${version}";
-            hash = "sha256-lIUXBBFrnMN5IIW2cAzaE4WlXPmdiQmpBcYklxS3rI4=";
-          };
-        })
-      ];
+  # 2026-11-05: current version on nixpkgs is still 0.3.0.2, but 0.4.2.0 is needed for PostgREST
+  aeson-jsonpath_0_4_2_0 = lib.pipe super.aeson-jsonpath [
+    (overrideSrc {
+      version = "0.4.2.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "taimoorzaeem";
+        repo = "aeson-jsonpath";
+        rev = "9bbb239a1d9188348a6fc734eb03c021902b01ec";
+        fetchSubmodules = true;
+        hash = "sha256-X/7B4YLK+B5xYabu8J33OIPHhSJgbAiSENlwi831Wb8=";
+      };
+    })
+    (addBuildDepends [ self.regex-tdfa ]) # Need this extra dependency for 0.4.2.0
+  ];
+
+  postgrest = lib.pipe super.postgrest [
+    # 2026-10-18: New version needs extra dependencies
+    (addBuildDepends [
+      self.aeson-jsonpath_0_4_2_0
+      self.extra
+      self.focus
+      self.fuzzyset_0_2_4
+      self.http-client
+      self.jose-jwt
+      self.neat-interpolation
+      self.prometheus-client
+      self.prometheus-metrics-ghc
+      self.some
+      self.stm-hamt
+    ])
+    # Too strict bounds.
+    doJailbreak
+    # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
+    (overrideSrc rec {
+      version = "16.5";
+      src = pkgs.fetchFromGitHub {
+        owner = "PostgREST";
+        repo = "postgrest";
+        rev = "v${version}";
+        hash = "sha256-By1o+PtM5Aw9KGFQWTVtu1TzmkbaU91cHqAycCcrRhY=";
+      };
+    })
+  ];
 
   # Too strict bounds on hspec < 2.11
   fuzzyset_0_2_4 = doJailbreak super.fuzzyset_0_2_4;
