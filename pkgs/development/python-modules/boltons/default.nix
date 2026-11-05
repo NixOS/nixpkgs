@@ -2,32 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "25.0.0";
+  version = "26.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
     tag = version;
-    hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
+    hash = "sha256-V6Kdamn2HHOjucKGrjCqjE/xExCJmyUAE11YwLjOkzI=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "pytest9-compat.patch";
-      url = "https://github.com/mahmoud/boltons/commit/a2af58548936c51a3d859f780e54ba170a6829bb.patch";
-      hash = "sha256-NRjfEKb0doJEtS5GyrF0dJYYr2u+ukogfUmmVnsHAwM=";
-    })
-  ];
-
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
