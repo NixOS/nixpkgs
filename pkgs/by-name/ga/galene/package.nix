@@ -21,7 +21,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
   preCheck = "export TZ=UTC";
 
@@ -36,7 +35,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.galene.basic;
+    tests = { inherit (nixosTests) galene; };
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex=galene-(.*)" ];
     };

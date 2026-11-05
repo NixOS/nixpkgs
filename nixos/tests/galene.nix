@@ -8,6 +8,7 @@ let
   galeneTestGroupAdminPassword = "1234";
 in
 {
+  recurseForDerivations = true;
   basic = runTest (
     { pkgs, lib, ... }:
     {
