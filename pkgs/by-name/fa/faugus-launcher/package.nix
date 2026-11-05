@@ -76,9 +76,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lib.getLib lsfg-vk}/lib/liblsfg-vk-layer.so"
   '';
 
-  preFixup = ''
+  dontWrapGApps = true;
+
+  postFixup = ''
     gappsWrapperArgs+=(
-      --set PYTHONPATH "$out/${python3Packages.python.sitePackages}:$PYTHONPATH"
+      --prefix PYTHONPATH : "$program_PYTHONPATH"
       ${lib.optionalString withGameMode ''
         --prefix LD_PRELOAD : libgamemode.so
         --prefix LD_LIBRARY_PATH : "${lib.getLib gamemode}/lib"
@@ -98,6 +100,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         )
       }"
     )
+    wrapGApp $out/bin/faugus-launcher
   '';
 
   # has no tests
