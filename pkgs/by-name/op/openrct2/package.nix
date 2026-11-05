@@ -195,6 +195,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
+        rm -r $out/lib
+
         wrapProgram $out/bin/openrct2 \
           --suffix PATH : ${lib.makeBinPath [ innoextract ]} \
           ${
