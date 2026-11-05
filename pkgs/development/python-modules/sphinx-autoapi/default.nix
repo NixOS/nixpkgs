@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   astroid,
@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-pEfyVwvAqIg/1F5kX7WLlhdD+5tq3422u8N6nBizRcA=";
+    hash = "sha256-alzDNvAkPpKaRJizUCp7XNoWx/m9dghE3ifxbZQ5eX0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     astroid
