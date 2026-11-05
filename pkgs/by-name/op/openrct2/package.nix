@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   fetchurl,
-  unzip,
-
+  fetchFromGitHub,
   SDL2,
   cmake,
   curl,
@@ -24,15 +22,15 @@
   nlohmann_json,
   openssl,
   pkg-config,
+  unzip,
   versionCheckHook,
   zlib,
   zstd,
-
-  withDiscordRpc ? false,
-  verifyAssets ? true,
   # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
   rct1Path ? null,
   rct2Path ? null,
+  verifyAssets ? true,
+  withDiscordRpc ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,29 +47,44 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pGBxQh4T0+zAj7ju8cP55HxW7wGpl5wyalf66VcIDxA=";
   };
 
-  objectsVersion = "1.8.0";
-  openmusicVersion = "1.6.1";
-  opensfxVersion = "1.0.6";
-  titleSequencesVersion = "0.5.6";
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # MACOS_BUNDLE (to build a .APP) is tied to MACOS_USE_DEPENDENCIES by default.
+    # Decouple the two variables so that we can use resources downloaded from Nix.
+    sed -i \
+      -e 's/^CMAKE_DEPENDENT_OPTION(MACOS_BUNDLE.*/option(MACOS_BUNDLE "Build macOS application bundle (OpenRCT2.app)" ON)/' \
+      -e '/"MACOS_USE_DEPENDENCIES; NOT DISABLE_GUI" OFF)/d' \
+      CMakeLists.txt
+    sed -i '/^if (MACOS_USE_DEPENDENCIES)$/i include(cmake/download.cmake)' CMakeLists.txt
 
-  assets = {
-    objects = fetchurl {
-      url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.objectsVersion}/objects.zip";
-      hash = "sha256-lJvuXKyelBvmO7kjt5JzilB8FVpv6nPtqwsjvt4h0wI=";
-    };
-    openmusic = fetchurl {
-      url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${finalAttrs.openmusicVersion}/openmusic.zip";
-      hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
-    };
-    opensfx = fetchurl {
-      url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${finalAttrs.opensfxVersion}/opensound.zip";
-      hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
-    };
-    title-sequences = fetchurl {
-      url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${finalAttrs.titleSequencesVersion}/title-sequences.zip";
-      hash = "sha256-N6womFuvGDuuJ69ycQYTWV9oPcJIksBZiftr/QFr210=";
-    };
-  };
+    # Clang 21 on Nixpkgs will provide a broken Foundation module, as of now.
+    # The Apple Obj-C modules requested are not explicitly required, so drop them.
+    substituteInPlace src/{openrct2,openrct2-ui}/CmakeLists.txt \
+        --replace-fail '-x objective-c++ -fmodules' \
+                       '-x objective-c++'
+
+    # `fixup_bundle` will inherit mismatched dependencies relative to compilation.
+    # Hence, disable `fixup_bundle` for Darwin builds.
+    substituteInPlace src/openrct2-ui/CMakeLists.txt \
+        --replace-fail 'fixup_bundle(''${CMAKE_BINARY_DIR}/''${MACOS_APP_NAME} \"\" \"\")' \
+                       '# fixup_bundle disabled for Nix builds'
+
+    # sdl2-compat is the default for SDL2 in Nixpkgs, which has issues on Darwin.
+    # Set OpenGL as the default renderer in Darwin to bypass them.
+    substituteInPlace src/openrct2/config/Config.cpp \
+        --replace-fail 'DrawingEngine::softwareWithHardwareDisplay, Enum_DrawingEngine)' \
+                       'DrawingEngine::openGL, Enum_DrawingEngine)'
+
+    # Wrapping with --rct*-data-path will not work on Darwin for OpenRCT2.app.
+    # This simply sets that data path as the default in source, if defined.
+    ${lib.optionalString (rct1Path != null) ''
+      substituteInPlace src/openrct2/config/Config.cpp \
+          --replace-fail 'GetString("rct1_path", "")' 'GetString("rct1_path", "${rct1Path}")'
+    ''}
+    ${lib.optionalString (rct2Path != null) ''
+      substituteInPlace src/openrct2/config/Config.cpp \
+          --replace-fail 'GetString("rct2_path", "")' 'GetString("rct2_path", "${rct2Path}")'
+    ''}
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -113,60 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MACOS_BUNDLE" true)
   ];
 
-  postUnpack = ''
-    export OPENRCT2_ASSETS_DIR=$sourceRoot/${if stdenv.hostPlatform.isDarwin then "build" else "data"}
-    mkdir -p $OPENRCT2_ASSETS_DIR/{object,sequence}
-    unzip -o ${finalAttrs.assets.objects} -d $OPENRCT2_ASSETS_DIR/object
-    unzip -o ${finalAttrs.assets.openmusic} -d $OPENRCT2_ASSETS_DIR
-    unzip -o ${finalAttrs.assets.opensfx} -d $OPENRCT2_ASSETS_DIR
-    unzip -o ${finalAttrs.assets.title-sequences} -d $OPENRCT2_ASSETS_DIR/sequence
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    printf '%s' "${finalAttrs.assets.objects.url}" > $sourceRoot/build/object/objects.zip.zipversion
-    printf '%s' "${finalAttrs.assets.title-sequences.url}" > $sourceRoot/build/sequence/title-sequences.zip.zipversion
-    printf '%s' "${finalAttrs.assets.opensfx.url}" > $sourceRoot/build/opensound.zip.zipversion
-    printf '%s' "${finalAttrs.assets.openmusic.url}" > $sourceRoot/build/openmusic.zip.zipversion
-  '';
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # MACOS_BUNDLE (to build a .APP) is tied to MACOS_USE_DEPENDENCIES by default.
-    # Decouple the two variables so that we can use resources downloaded from Nix.
-    sed -i \
-      -e 's/^CMAKE_DEPENDENT_OPTION(MACOS_BUNDLE.*/option(MACOS_BUNDLE "Build macOS application bundle (OpenRCT2.app)" ON)/' \
-      -e '/"MACOS_USE_DEPENDENCIES; NOT DISABLE_GUI" OFF)/d' \
-      CMakeLists.txt
-    sed -i '/^if (MACOS_USE_DEPENDENCIES)$/i include(cmake/download.cmake)' CMakeLists.txt
-
-    # Clang 21 on Nixpkgs will provide a broken Foundation module, as of now.
-    # The Apple Obj-C modules requested are not explicitly required, so drop them.
-    substituteInPlace src/{openrct2,openrct2-ui}/CmakeLists.txt \
-        --replace-fail '-x objective-c++ -fmodules' \
-                       '-x objective-c++'
-
-    # `fixup_bundle` will inherit mismatched dependencies relative to compilation.
-    # Hence, disable `fixup_bundle` for Darwin builds.
-    substituteInPlace src/openrct2-ui/CMakeLists.txt \
-        --replace-fail 'fixup_bundle(''${CMAKE_BINARY_DIR}/''${MACOS_APP_NAME} \"\" \"\")' \
-                       '# fixup_bundle disabled for Nix builds'
-
-    # sdl2-compat is the default for SDL2 in Nixpkgs, which has issues on Darwin.
-    # Set OpenGL as the default renderer in Darwin to bypass them.
-    substituteInPlace src/openrct2/config/Config.cpp \
-        --replace-fail 'DrawingEngine::softwareWithHardwareDisplay, Enum_DrawingEngine)' \
-                       'DrawingEngine::openGL, Enum_DrawingEngine)'
-
-    # Wrapping with --rct*-data-path will not work on Darwin for OpenRCT2.app.
-    # This simply sets that data path as the default in source, if defined.
-    ${lib.optionalString (rct1Path != null) ''
-      substituteInPlace src/openrct2/config/Config.cpp \
-          --replace-fail 'GetString("rct1_path", "")' 'GetString("rct1_path", "${rct1Path}")'
-    ''}
-    ${lib.optionalString (rct2Path != null) ''
-      substituteInPlace src/openrct2/config/Config.cpp \
-          --replace-fail 'GetString("rct2_path", "")' 'GetString("rct2_path", "${rct2Path}")'
-    ''}
-  '';
-
   preConfigure =
     # Verify that the correct version of each third party repository is used.
     lib.optionalString verifyAssets (
@@ -177,12 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
         '') finalAttrs.assets
       )
     );
-
-  doInstallCheck = true;
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
@@ -209,6 +162,50 @@ stdenv.mkDerivation (finalAttrs: {
           ) "--add-flag ${lib.escapeShellArg "--rct2-data-path=${rct2Path}"}"}
       '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  objectsVersion = "1.8.0";
+  openmusicVersion = "1.6.1";
+  opensfxVersion = "1.0.6";
+  titleSequencesVersion = "0.5.6";
+
+  assets = {
+    objects = fetchurl {
+      url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.objectsVersion}/objects.zip";
+      hash = "sha256-lJvuXKyelBvmO7kjt5JzilB8FVpv6nPtqwsjvt4h0wI=";
+    };
+    openmusic = fetchurl {
+      url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${finalAttrs.openmusicVersion}/openmusic.zip";
+      hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
+    };
+    opensfx = fetchurl {
+      url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${finalAttrs.opensfxVersion}/opensound.zip";
+      hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
+    };
+    title-sequences = fetchurl {
+      url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${finalAttrs.titleSequencesVersion}/title-sequences.zip";
+      hash = "sha256-N6womFuvGDuuJ69ycQYTWV9oPcJIksBZiftr/QFr210=";
+    };
+  };
+
+  postUnpack = ''
+    export OPENRCT2_ASSETS_DIR=$sourceRoot/${if stdenv.hostPlatform.isDarwin then "build" else "data"}
+    mkdir -p $OPENRCT2_ASSETS_DIR/{object,sequence}
+    unzip -o ${finalAttrs.assets.objects} -d $OPENRCT2_ASSETS_DIR/object
+    unzip -o ${finalAttrs.assets.openmusic} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.assets.opensfx} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.assets.title-sequences} -d $OPENRCT2_ASSETS_DIR/sequence
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    printf '%s' "${finalAttrs.assets.objects.url}" > $sourceRoot/build/object/objects.zip.zipversion
+    printf '%s' "${finalAttrs.assets.title-sequences.url}" > $sourceRoot/build/sequence/title-sequences.zip.zipversion
+    printf '%s' "${finalAttrs.assets.opensfx.url}" > $sourceRoot/build/opensound.zip.zipversion
+    printf '%s' "${finalAttrs.assets.openmusic.url}" > $sourceRoot/build/openmusic.zip.zipversion
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
@@ -234,15 +231,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://openrct2.io";
     changelog = "https://github.com/OpenRCT2/OpenRCT2/releases/tag/${finalAttrs.src.tag}";
-    downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       keenanweaver
       kylerisse
       schrobingus
     ];
-    mainProgram = "openrct2";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    mainProgram = "openrct2";
+    downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
   };
 })
