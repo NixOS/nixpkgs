@@ -165,6 +165,14 @@ stdenv.mkDerivation {
     ++ lib.optionals (lib.versionAtLeast version "9" && lib.versionOlder version "10") [
       ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
       ./vmr-compiler-opt-v9.patch
+
+      # fixes 'error : Object reference not set to an instance of an object.' when building MSBuildLocator.proj
+      (fetchpatch2 {
+        url = "https://github.com/NuGet/NuGet.Client/pull/7744.patch";
+        stripLen = 1;
+        extraPrefix = "src/nuget-client/";
+        hash = "sha256-Sz+IqjiuwW2aYpukWavRWPX7Ejrgf5bWtkOA65YlOo8=";
+      })
     ]
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
