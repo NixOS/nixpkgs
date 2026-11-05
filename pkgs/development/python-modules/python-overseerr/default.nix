@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -17,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-overseerr";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-overseerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9sJWglF1EqwXG0Cj1hOtNE2dYTmxIZoVWHYT5I4RQu0=";
+    hash = "sha256-tpwh84c9js79X85UXI01Hv5yr1+KUatyuTkY3nNQhxs=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
@@ -39,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-cov-stub
