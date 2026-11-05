@@ -81,6 +81,22 @@ $ nixos-rebuild build-vm
 $ ./result/bin/run-*-vm
 ```
 
+To use a compressed Nix store image for the VM, add the following to your configuration:
+
+```nix
+{
+  virtualisation.vmVariant = {
+    virtualisation.useNixStoreImage = true;
+    virtualisation.nixStoreImageCompression = "lz4";
+  };
+}
+```
+
+An algorithm name uses the compressor's default settings.
+To configure an algorithm, use an attribute set such as `{ zstd.level = 6; }`.
+Compression is disabled by default.
+QEMU creates the store image on each launch, so compression can reduce disk use at the cost of additional startup time.
+
 The VM does not have any data from your host system, so your existing
 user accounts and home directories will not be available unless you have
 set `mutableUsers = false`. Another way is to temporarily add the
