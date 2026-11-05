@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
-    changelog = "https://github.com/sphinx-contrib/openapi/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/sphinx-contrib/openapi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.flokli ];
   };
