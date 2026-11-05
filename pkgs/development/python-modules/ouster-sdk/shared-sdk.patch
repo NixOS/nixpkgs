@@ -1,0 +1,31 @@
+Use only the shared component when linking prebuilt SDK bindings.
+
+The shared library already absorbs mapping on Linux. Importing the static
+targets unnecessarily requires archives and their development dependencies.
+
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -62,7 +62,7 @@
+     endif()
+     message(STATUS "Python build: using pre-built OusterSDK from ${OUSTER_SDK_PREBUILT_DIR}")
+     find_package(OpenMP QUIET)
+-    find_package(OusterSDK CONFIG REQUIRED
++    find_package(OusterSDK CONFIG REQUIRED COMPONENTS Shared
+       PATHS "${OUSTER_SDK_PREBUILT_DIR}/lib/cmake/OusterSDK"
+       NO_DEFAULT_PATH)
+   else()
+@@ -188,13 +188,10 @@
+   #   - Windows: ouster_mapping objects are safe to absorb now that Ceres and
+   #     its heavy static deps live in ouster_ceres_deps.dll instead, avoiding
+   #     LNK1189 (>65 535 .lib members).
+-  # On Linux, ouster_mapping is linked separately.
++  # Linux also absorbs ouster_mapping into shared_library.
+   target_link_libraries(_bindings
+     PRIVATE
+       OusterSDK::shared_library)
+-  if(NOT APPLE AND NOT WIN32)
+-    target_link_libraries(_bindings PRIVATE OusterSDK::ouster_mapping)
+-  endif()
+   if(WIN32)
+     # Tell MSVC that OUSTER_API_VAR symbols (e.g. SDK_VERSION, LidarMode
+     # statics, enum string tables, viz palettes) come from shared_library.dll

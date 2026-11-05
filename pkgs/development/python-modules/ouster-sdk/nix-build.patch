@@ -1,0 +1,74 @@
+Build the public SDK with dependencies supplied by Nix.
+
+Skip the pip bootstrap and macOS architecture launcher (Nix selects the
+toolchain), omit the removed simple-viz entry point, and use the public
+source license rather than the private wheels' additional EULA.
+
+Size UDP test send buffers to 64 KiB; Darwin's default is too small.
+
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -223,7 +223,7 @@
+         self.cmake_log(f"CMake: Jobs: {self._jobs}")
+
+         for ext in self.extensions:
+-            self.install_deps(ext)
++            self._cmake_path = "cmake"
+             self.cmake_log(f"CMake: Extension: {ext.name} Build Dir: {ext.builddir}")
+             self.build_extension(ext)
+
+@@ -320,8 +320,6 @@
+         if extra_args:
+             cmake_args += shlex.split(extra_args)
+         run = []
+-        if platform.system() == "Darwin":
+-            run.extend(["arch", "-arch", platform.machine()])
+         run.extend([self._cmake_path, ext.sourcedir])
+         run.extend(cmake_args)
+         self.cmake_log(f"CMake: Extension: {ext.name} Config: {run}")
+@@ -507,7 +505,7 @@
+         author='Ouster Sensor SDK Developers',
+         author_email='oss@ouster.io',
+         description='Ouster Sensor SDK',
+-        license='BSD-3-Clause AND Ouster-Freeware-EULA (See project links)',
++        license='BSD-3-Clause',
+         ext_modules=[
+             CMakeExtension('ouster.*',
+                            os.path.join(OUSTER_SDK_PATH, "build", f"py{platform.python_version()}"))
+@@ -552,7 +550,7 @@
+         },
+         entry_points={'console_scripts':
+             [
+-                'simple-viz=ouster.sdk.simple_viz:main',                     # TODO[UN]: do we need to keep?
++                # TODO[UN]: do we need to keep?
+                 'ouster-cli=ouster.cli.core:run'
+             ]
+         }
+--- a/python/pyproject.toml
++++ b/python/pyproject.toml
+@@ -1,6 +1,6 @@
+ [build-system]
+ build-backend = "setuptools.build_meta"
+-requires = ["setuptools==69.2.0", "wheel==0.45.1", "flufl.lock", "pip", "nanobind==2.9.2", "numpy", "typing_extensions", "rosbags==0.9.23", "tree_sitter_cpp", "libclang", "tree_sitter"]
++requires = ["setuptools", "wheel", "nanobind==2.9.2", "numpy", "typing_extensions"]
+
+ [tool.pytest.ini_options]
+ testpaths = ["tests"]
+--- a/python/tests/test_core.py
++++ b/python/tests/test_core.py
+@@ -131,6 +131,7 @@
+         tmp_socket.close()
+         pf = PacketFormat(source.sensor_info[0])
+         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 64 * 1024)
+         data = np.random.randint(255,
+                                  size=pf.lidar_packet_size,
+                                  dtype=np.uint8)
+@@ -165,6 +166,7 @@
+         tmp_socket.close()
+         pf = PacketFormat.from_info(source.sensor_info[0])
+         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
++        sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 64 * 1024)
+         # send packet too small
+         sock.sendto(b"hello", ("127.0.0.1", source.sensor_info[0].config.udp_port_lidar))
+         with pytest.raises(ClientTimeout):
