@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   poetry-core,
@@ -55,6 +56,16 @@ buildPythonPackage (finalAttrs: {
     attrs
     pytestCheckHook
     which
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.15") [
+    # output mismatches
+    "test_inspect_builtin_function_except_python311"
+    "test_inspect_builtin_function_only_python311"
+    "test_inspect_integer_with_methods_python38_and_python39"
+    "test_inspect_integer_with_methods_python310only"
+    "test_inspect_integer_with_methods_python311"
+    "test_attrs_broken"
   ];
 
   pythonImportsCheck = [ "rich" ];
