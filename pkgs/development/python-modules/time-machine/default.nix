@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "time-machine";
-  version = "3.4.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "time-machine";
     tag = finalAttrs.version;
-    hash = "sha256-9ocj5RsjmHtXjcueDJE4v9QvpeFXgPSNam1Wct0q89o=";
+    hash = "sha256-J7SWJzjmpmiAw3S5xykI0MBFw4ysgPjKgTBexfMshXk=";
   };
 
   # Only use -mno-omit-leaf-frame-pointer where supported
@@ -57,6 +57,12 @@ buildPythonPackage (finalAttrs: {
     "test_destination_datetime_tzinfo_zoneinfo"
     "test_move_to_datetime_with_tzinfo_zoneinfo"
     "test_localtime_and_gmtime_match_datetime"
+    # EAT vs Africa
+    "test_move_to_naive_mode_error_keeps_timezone"
+    "test_move_to_naive_mode_local_uses_real_local_timezone"
+    "test_move_to_naive_string_uses_real_local_timezone"
+    "test_move_to_unsupported_destination_keeps_timezone"
+    "test_naive_datetime_modes"
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [
     # FIXME(time32)
