@@ -23,6 +23,7 @@ declare -A version_vars=(
   [openmusic]=openmusicVersion
   [opensfx]=opensfxVersion
   [title-sequences]=titleSequencesVersion
+  [replays]=replaysVersion
 )
 
 for asset in "${!version_vars[@]}"; do

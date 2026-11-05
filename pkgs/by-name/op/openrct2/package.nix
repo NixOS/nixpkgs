@@ -10,6 +10,7 @@
   flac,
   fontconfig,
   freetype,
+  gtest,
   icu,
   innoextract,
   libGL,
@@ -24,6 +25,7 @@
   pkg-config,
   unzip,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   zlib,
   zstd,
   # Paths to RCT1 and RCT2 installs can be specified to have them added as a wrapped argument
@@ -118,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DOWNLOAD_OPENMUSIC" false)
     (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DOWNLOAD_REPLAYS" false)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
     (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
     (lib.cmakeBool "DISABLE_VERSION_CHECKER" true)
   ]
@@ -136,6 +140,27 @@ stdenv.mkDerivation (finalAttrs: {
         '') finalAttrs.assets
       )
     );
+
+  doCheck = stdenv.hostPlatform.isLinux;
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  checkInputs = [
+    gtest
+  ];
+  preCheck = ''
+    mkdir -p data testdata/replays
+    cp -r ../data/. *.dat data/
+    unzip -q -o ${finalAttrs.assets.replays} -d testdata/replays
+  '';
+  postCheck = ''
+    rm -r data testdata/replays
+  '';
+  enableParallelChecking = false;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
@@ -162,16 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
           ) "--add-flag ${lib.escapeShellArg "--rct2-data-path=${rct2Path}"}"}
       '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
-  objectsVersion = "1.8.0";
-  openmusicVersion = "1.6.1";
-  opensfxVersion = "1.0.6";
-  titleSequencesVersion = "0.5.6";
-
   assets = {
     objects = fetchurl {
       url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.objectsVersion}/objects.zip";
@@ -185,11 +200,21 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${finalAttrs.opensfxVersion}/opensound.zip";
       hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
     };
+    replays = fetchurl {
+      url = "https://github.com/OpenRCT2/replays/releases/download/v${finalAttrs.replaysVersion}/replays.zip";
+      hash = "sha256-wyyT/qR5xh6Mz596/glUFoCmODNg85zWdCDCTX9zlJA=";
+    };
     title-sequences = fetchurl {
       url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${finalAttrs.titleSequencesVersion}/title-sequences.zip";
       hash = "sha256-N6womFuvGDuuJ69ycQYTWV9oPcJIksBZiftr/QFr210=";
     };
   };
+
+  objectsVersion = "1.8.0";
+  openmusicVersion = "1.6.1";
+  opensfxVersion = "1.0.6";
+  replaysVersion = "0.0.97";
+  titleSequencesVersion = "0.5.6";
 
   postUnpack = ''
     export OPENRCT2_ASSETS_DIR=$sourceRoot/${if stdenv.hostPlatform.isDarwin then "build" else "data"}
