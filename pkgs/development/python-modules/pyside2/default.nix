@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "5.15.17";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
+    url = "mirror://qt/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
     hash = "sha256-hKSzKPamAjW4cXrVIriKe2AAWSYMV6IYntAFEJ8kxSc=";
   };
 
