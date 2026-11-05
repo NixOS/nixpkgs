@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "findent";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/findent/findent-${finalAttrs.version}.tar.gz";
-    hash = "sha256-AFoKjLjiXIqrELo+BzWiawCDUoEEDuTTRTWAyoYE4Hg=";
+    hash = "sha256-N9ht5oJUO6VlXAOQfCiIwtZvKaBpndDZUffTJ7RnjSg=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
