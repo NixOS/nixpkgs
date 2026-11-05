@@ -223,6 +223,7 @@ buildPythonPackage (finalAttrs: {
     "boto3"
     "certifi"
     "click"
+    "filelock"
     "huggingface-hub"
     "importlib-metadata"
     "jsonschema"
