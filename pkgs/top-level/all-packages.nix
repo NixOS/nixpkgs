@@ -1944,11 +1944,6 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
-  dapl = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = false;
-    stdenv = stdenvNoCC;
-    jdk = jre;
-  };
   dapl-native = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = true;
     jdk = graalvmPackages.graalvm-ce;
