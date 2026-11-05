@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "BLAKE2 family of cryptographic hash functions";
     homepage = "https://blake2.net/";
