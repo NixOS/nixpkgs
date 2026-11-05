@@ -76,7 +76,7 @@ let
   inherit (frontend_packages)
     frontend
     wasm
-    widget
+    workbook
     ;
 
   tools = rustPlatform.buildRustPackage {
@@ -173,7 +173,7 @@ symlinkJoin {
       exports = {
         inherit
           frontend
-          widget
+          workbook
           server
           tools
           wasm
@@ -181,6 +181,7 @@ symlinkJoin {
           python
           wrapper
           ;
+        widget = workbook; # alias
       };
     in
     {
