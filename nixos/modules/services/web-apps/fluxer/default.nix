@@ -640,12 +640,12 @@ in
   };
 
   config = {
-    systemd.targets."fluxer" = {
-      enable = cfg.enable;
+    systemd.targets."fluxer" = mkIf cfg.enable {
+      enable = true;
       wantedBy = [ "network-online.target" ];
     };
-    systemd.targets."fluxer-svc" = {
-      enable = cfg.enable;
+    systemd.targets."fluxer-svc" = mkIf cfg.enable {
+      enable = true;
       wantedBy = [ "fluxer.target" ];
     };
 
