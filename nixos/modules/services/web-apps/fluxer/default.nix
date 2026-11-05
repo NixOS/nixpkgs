@@ -134,10 +134,6 @@ let
     map ({ path, ... }: lib.nameValuePair (pathToEnvVar path) "%d/${pathToEnvVar path}") secrets;
 
   standardSystemdSettings = {
-    confinement = {
-      #enable = true;
-    };
-
     unitConfig = {
       StartLimitBurst = "5";
       StartLimitIntervalSec = "2m";
@@ -403,6 +399,170 @@ in
                 example = 8085;
               };
             };
+
+            # Ephemeral secrets
+            setup_token.file = mkOption {
+              description = "Secret token gating the creation of the first admin user. Ephemeral, one-time-use.";
+              type = types.path;
+              default = "/run/fluxer/generated/setup_token";
+            };
+            erlang.cookie.file = mkOption {
+              description = "Erlang cookie for erlang node authentication. Ephemeral.";
+              type = types.path;
+              default = "/run/fluxer/generated/erlang_cookie";
+            };
+            profile_pseudonym_secret.file = mkOption {
+              description = "Derivation key for profile pseudonyms. Ephemeral unless you want persistent pseudonyms";
+              type = types.path;
+              default = "/run/fluxer/generated/pseudonym_secret";
+            };
+            gateway = {
+              rpc_auth_token.file = mkOption {
+                description = "Authentication key for RPC calls. Ephemeral.";
+                type = types.path;
+                default = "/run/fluxer/generated/rpc_auth_token";
+              };
+            };
+            admin = {
+              secret_key_base.file = mkOption {
+                description = "Admin session signining key. Ephemeral";
+                type = types.path;
+                default = "/run/fluxer/generated/admin_secret_key";
+              };
+              oauth_client_secret.file = mkOption {
+                description = "OAuth client secret that the admin panel uses to authenticate against fluxer. Ephemeral.";
+                type = types.path;
+                default = "/run/fluxer/generated/admin_oauth_secret";
+              };
+            };
+            media_proxy = {
+              secret_key.file = mkOption {
+                description = ''
+                  Signing key for media proxy `/external/` URLs for third-party media
+                  (link previews, embed images and icons, GIF results). 
+
+                  Ephemeral.
+                '';
+                type = types.path;
+                default = "/run/fluxer/generated/media_key";
+              };
+              upload_relay_secret_base64.file = mkOption {
+                description = "Signing key for media uploads. Minimum length 32 bytes, base64-encoded. Ephemeral";
+                type = types.path;
+                default = "/run/fluxer/generated/media_upload_secret";
+              };
+            };
+            search = {
+              api_key.file = mkOption {
+                description = "Meilisearch api key. Ephemeral";
+                type = types.path;
+                default = "/run/fluxer/generated/meilisearch_master_key";
+              };
+            };
+            s3 = {
+              access_key.file = mkOption {
+                description = "Access key for s3. Ephemeral";
+                type = types.path;
+                default = "/run/fluxer/generated/s3_access_key";
+              };
+              access_key_id.file = mkOption {
+                type = types.path;
+                readOnly = true;
+                internal = true;
+                default = cfg.settings.s3.access_key.file;
+              };
+              secret_key.file = mkOption {
+                description = "Secret key for s3. Ephemeral";
+                type = types.path;
+                default = "/run/fluxer/generated/s3_secret_key";
+              };
+              secret_access_key.file = mkOption {
+                type = types.path;
+                readOnly = true;
+                internal = true;
+                default = cfg.settings.s3.secret_key.file;
+              };
+            };
+            livekit = {
+              api_key.file = mkOption {
+                description = "API key for communication with livekit. Ephemeral.";
+                type = types.path;
+                default = "/run/fluxer/generated/livekit_api_key";
+              };
+              api_secret.file = mkOption {
+                description = "API secret for communication with livekit. Ephemeral.";
+                type = types.path;
+                default = "/run/fluxer/generated/livekit_api_secret";
+              };
+              all_livekit_keys.file = mkOption {
+                description = "YAML file containing a dictionary of api-key to api-secret. Ephemeral.";
+                type = types.path;
+                default = "/run/fluxer/generated/livekit_keys.yml";
+              };
+            };
+
+            # Persistent secrets
+            sudo_mode_secret.file = mkOption {
+              description = "Signing key for account authorization actions. Should be persisted";
+              type = types.path;
+              default = "/var/lib/fluxer/generated/sudo_mode_secret";
+            };
+            connection_initiation_secret.file = mkOption {
+              description = "Signing key for connection initiation tokens and data export links. Should be persisted";
+              type = types.path;
+              default = "/var/lib/fluxer/generated/connection_init_secret";
+            };
+            vapid = {
+              public_key.file = mkOption {
+                description = "Public key for push notifications. Should be persisted";
+                type = types.path;
+                default = "/var/lib/fluxer/generated/vapid_public_key";
+              };
+              private_key.file = mkOption {
+                description = "Private key for push notifications. Should be persisted";
+                type = types.path;
+                default = "/var/lib/fluxer/generated/vapid_private_key";
+              };
+            };
+            media_proxy = {
+              attachment_url_secrets_base64.file = mkOption {
+                description = ''
+                  Signing key for attachment urls. Multiple keys can be comma-separated.
+
+                  Minimum length 32 bytes, base-64 encoded. Should be persisted.
+                '';
+                type = types.path;
+                default = "/var/lib/fluxer/generated/media_attachment_secret";
+              };
+            };
+
+            nats = {
+              auth_token.file = mkOption {
+                description = ''
+                  Plain-text authentication token for nats.
+
+                  Since nats does not allow to read the auth token from a file,
+                  the token and its corresponding hashed version
+                  `settings.nats.auth_token_bcrypt` need to be manually generated.
+
+                  Generate a new token with `nix-shell -p natscli --run 'nats server passwd --generate'`.
+                '';
+                type = types.path;
+              };
+              auth_token_bcrypt = mkOption {
+                description = ''
+                  Bcrypt-hashed authentication token for nats, as a string.
+
+                  Since nats does not allow to read the auth token from a file,
+                  the hashed token and its corresponding plain text version
+                  `settings.nats.auth_token.file` need to be manually generated.
+
+                  Generate a new token with `nix-shell -p natscli --run 'nats server passwd --generate'`.
+                '';
+                type = types.str;
+                example = "$2a$11$4I9tIK1JVbttZYtn.F.Jse5iY5ves4EtYWIpjlwyvgVYHJc8yTvk.";
+              };
+            };
           };
         }
       );
@@ -451,16 +611,6 @@ in
     aux = {
       nats = {
         enable = lib.mkEnableOption "Nats for use with fluxer";
-        authTokenBcrypt = mkOption {
-          description = ''
-            The access token for nats, in bcrypt format. Use `nats server passwd` to generate.
-
-            Set `config.fluxer.settings.nats.auth_token.file` to a file containing the clear-text
-            version of this token.
-          '';
-          type = types.str;
-          example = "$2a$11$4I9tIK1JVbttZYtn.F.Jse5iY5ves4EtYWIpjlwyvgVYHJc8yTvk.";
-        };
       };
       pgsql.enable = lib.mkEnableOption ''
         Postgres for use with fluxer.
@@ -479,18 +629,10 @@ in
       '';
       meilisearch = {
         enable = lib.mkEnableOption "Meilisearch for use with fluxer.";
-        masterKeyFile = mkOption {
-          description = "Path to a file containing the authentication key for meilisearch.";
-          type = types.path;
-        };
       };
       seaweedfs.enable = lib.mkEnableOption "SeaweedFS for use with fluxer.";
       livekit = {
         enable = lib.mkEnableOption "Livekit for use with fluxer";
-        keyFile = mkOption {
-          description = "Path to a file containing the secrets for livekit. See `service.livekit.keyFile`";
-          type = types.path;
-        };
       };
       caddy.enable = lib.mkEnableOption "Caddy as reverse proxy for fluxer";
       nginx.enable = lib.mkEnableOption "Nginx as reverse proxy for fluxer";
@@ -511,7 +653,7 @@ in
       enable = true;
       jetstream = true;
       settings.host = "localhost";
-      settings.authorization.token = cfg.aux.nats.authTokenBcrypt;
+      settings.authorization.token = cfg.settings.nats.auth_token_bcrypt;
     };
 
     services.postgresql = mkIf (cfg.enable && cfg.aux.pgsql.enable) {
@@ -535,7 +677,7 @@ in
 
     services.meilisearch = mkIf (cfg.enable && cfg.aux.meilisearch.enable) {
       enable = true;
-      masterKeyFile = cfg.aux.meilisearch.masterKeyFile;
+      masterKeyFile = cfg.settings.search.api_key.file;
       settings = {
         experimental_dumpless_upgrade = true;
         # upgrade_db = true; # TODO for 26.11 and later
@@ -547,7 +689,7 @@ in
     services.livekit = mkIf (cfg.enable && cfg.aux.livekit.enable) {
       enable = true;
       openFirewall = cfg.openFirewall;
-      keyFile = cfg.aux.livekit.keyFile;
+      keyFile = cfg.settings.livekit.all_livekit_keys.file;
       settings = {
         port = 7880;
         log_level = "info";
@@ -588,9 +730,11 @@ in
             reverse_proxy ${cfg.settings.internal.media_proxy_endpoint}
           }
 
-          handle_path /livekit/* {
-            reverse_proxy ${cfg.settings.internal.livekit_endpoint}
-          }
+          ${lib.optionalString cfg.aux.livekit.enable ''
+            handle_path /livekit/* {
+              reverse_proxy ${cfg.settings.internal.livekit_endpoint}
+            }
+          ''}
 
           handle /admin {
             rewrite * /
@@ -671,7 +815,7 @@ in
           proxyPass = "${cfg.settings.internal.media_proxy_endpoint}/";
         };
 
-        locations."^~ /livekit/" = {
+        locations."^~ /livekit/" = mkIf cfg.aux.livekit.enable {
           recommendedProxySettings = true;
           proxyWebsockets = true;
           proxyPass = "${cfg.settings.internal.livekit_endpoint}/";
@@ -700,6 +844,95 @@ in
           proxyWebsockets = true;
           proxyPass = "${cfg.settings.internal.app_proxy_endpoint}/";
         };
+      };
+    };
+
+    systemd.services."fluxer-pregenerate-secrets" = mkIf cfg.enable {
+      enable = true;
+      wantedBy = [ "fluxer.target" ];
+      before = [
+        "fluxer.target"
+        "livekit.service"
+        "seaweedfs.service"
+        "nats.service"
+        "meilisearch.service"
+      ];
+
+      path = [
+        pkgs.uutils-coreutils-noprefix
+        pkgs.openssl
+        pkgs.livekit
+      ];
+
+      script = ''
+        set -u
+        set -o pipefail
+
+        # Ephemeral secrets
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/erlang_cookie
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/pseudonym_secret
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/rpc_auth_token
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/admin_secret_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/admin_oauth_secret
+        openssl rand -base64 64 | tr -d "\n" > $RUNTIME_DIRECTORY/media_upload_secret
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/media_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_access_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_secret_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/meilisearch_master_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/setup_token
+
+        livekit="$(livekit-server generate-keys)"
+        echo "$livekit" | head -n1 | cut -w -f3 > $RUNTIME_DIRECTORY/livekit_api_key
+        echo "$livekit" | tail -n1 | cut -w -f3 > $RUNTIME_DIRECTORY/livekit_api_secret
+        cat > $RUNTIME_DIRECTORY/livekit_keys.yml <<EOF
+        $(cat $RUNTIME_DIRECTORY/livekit_api_key): $(cat $RUNTIME_DIRECTORY/livekit_api_secret)
+        EOF
+
+        # Persistent secrets
+        [ -f $STATE_DIRECTORY/sudo_mode_secret ]        || openssl rand -hex 64 | tr -d "\n" > $STATE_DIRECTORY/sudo_mode_secret
+        [ -f $STATE_DIRECTORY/connection_init_secret ]  || openssl rand -hex 64 | tr -d "\n" > $STATE_DIRECTORY/connection_init_secret
+        [ -f $STATE_DIRECTORY/media_attachment_secret ] || openssl rand -base64 64 | tr -d "\n" > $STATE_DIRECTORY/media_attachment_secret
+
+        if [ ! -f "$STATE_DIRECTORY/vapid_public_key" ]; then
+          openssl ecparam \
+            -name prime256v1 \
+            -genkey \
+            -noout \
+            -out "$STATE_DIRECTORY/vapid_private_key.pem"
+          
+          openssl ec \
+            -in "$STATE_DIRECTORY/vapid_private_key.pem" \
+            -pubout \
+            -outform DER 2>/dev/null \
+            | tail -c 65 \
+            | base64 -w0 \
+            | tr "+/" "-_" \
+            | tr -d "=" \
+            > "$STATE_DIRECTORY/vapid_public_key"
+          
+          openssl ec \
+            -in "$STATE_DIRECTORY/vapid_private_key.pem" \
+            -outform DER 2>/dev/null \
+            | tail -c +8 \
+            | head -c 32 \
+            | base64 -w0 \
+            | tr "+/" "-_" \
+            | tr -d "=" \
+            > "$STATE_DIRECTORY/vapid_private_key"
+        fi
+
+        echo Secrets generated successfully
+        echo Check $RUNTIME_DIRECTORY/setup_token for your setup token
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        RuntimeDirectory = "fluxer/generated";
+        StateDirectory = "fluxer/generated";
+        RuntimeDirectoryPreserve = "true";
+        UMask = "0077";
+        DynamicUser = true;
       };
     };
 
@@ -778,7 +1011,6 @@ in
       search = mkIf cfg.aux.meilisearch.enable {
         engine = "meilisearch";
         url = "http://127.0.0.1:${toString config.services.meilisearch.listenPort}";
-        api_key.file = cfg.aux.meilisearch.masterKeyFile;
       };
     };
 

@@ -44,6 +44,8 @@ in
 
           serviceConfig = {
             LoadCredential = loadCredential cfg.app-proxy.settings;
+            StateDirectory = "fluxer/app-proxy";
+            RuntimeDirectory = "fluxer/app-proxy";
           };
         }
       ]

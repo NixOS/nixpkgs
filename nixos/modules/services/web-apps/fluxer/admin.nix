@@ -41,6 +41,7 @@ in
           serviceConfig = {
             LoadCredential = loadCredential cfg.admin.settings;
             StateDirectory = "fluxer/admin";
+            RuntimeDirectory = "fluxer/admin";
           };
         }
       ]

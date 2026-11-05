@@ -76,6 +76,8 @@ in
 
           serviceConfig = {
             LoadCredential = loadCredential cfg.${name}.router.settings;
+            StateDirectory = "fluxer/${name}/router";
+            RuntimeDirectory = "fluxer/${name}/router";
           };
         }
       ]
@@ -111,6 +113,9 @@ in
             ];
             LoadCredential = loadCredential cfg.${name}.shard.settings;
             User = mkIf hasUserDef cfg.${name}.shard.user;
+
+            StateDirectory = "fluxer/${name}/shard";
+            RuntimeDirectory = "fluxer/${name}/shard";
           };
         }
       ]
