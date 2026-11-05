@@ -56,7 +56,7 @@ def get_secret(
     file: SecretsFile,
     out: Path,
 ):
-    backend = config.storeBackends[generator.backend]
+    backend = config.storeBackends[file.backend]
     binary = build_binary(backend.get)
     try:
         env = os.environ.copy()
@@ -84,7 +84,7 @@ def set_secret(
     file: SecretsFile,
     at: Path,
 ):
-    backend = config.storeBackends[generator.backend]
+    backend = config.storeBackends[file.backend]
     binary = build_binary(backend.set)
     try:
         env = os.environ.copy()

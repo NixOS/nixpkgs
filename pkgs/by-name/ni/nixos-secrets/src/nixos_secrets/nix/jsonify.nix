@@ -130,12 +130,12 @@ else
     store = lib.mapAttrs' (_: secret: {
       inherit (secret) name;
       value = {
-        inherit (secret) dependencies backend;
+        inherit (secret) dependencies meta;
         generate = evalDeferredPackage secret.generate;
         files = lib.mapAttrs' (_: file: {
           inherit (file) name;
           value = {
-            inherit (file) deploy;
+            inherit (file) deploy backend;
           };
         }) secret.files;
         prompts = lib.mapAttrs' (_: prompt: {

@@ -41,10 +41,10 @@ def get_meta(
     files: SecretsFileList,
     secret: SecretsSecret,
 ) -> SecretsMetadata | None:
-    if not files.has(secret.backend, secret.name, meta_file_name):
+    if not files.has(secret.metaBackend, secret.name, meta_file_name):
         return None
 
-    meta_file = SecretsFile(name=meta_file_name)
+    meta_file = SecretsFile(name=meta_file_name, backend=secret.metaBackend)
     with tempfile.NamedTemporaryFile(mode="r") as file:
         out_path = Path(file.name)
 
@@ -71,4 +71,5 @@ def set_meta(
         raw = json.dumps(meta.to_json())
         file.write(raw)
         file.flush()
-        set_secret(args, config, secret, SecretsFile(name=meta_file_name), in_path)
+        meta_file = SecretsFile(name=meta_file_name, backend=secret.metaBackend)
+        set_secret(args, config, secret, meta_file, in_path)

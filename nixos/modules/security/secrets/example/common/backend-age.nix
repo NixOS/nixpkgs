@@ -145,7 +145,16 @@ in
 
   options.secrets.store = lib.mkOption {
     type = lib.types.attrsOf (
-      lib.types.submodule {
+      lib.types.submodule (secret: {
+        options.files = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule ({ config, ...}: {
+              path = lib.mkIf (config.backend == "age")
+                "${cfg.targetDirectory}/${secret.config.name}/${config.name}";
+            })
+          );
+        };
+
         options.age = {
           publicKeys = lib.mkOption {
             type = lib.types.listOf lib.types.str;
@@ -170,7 +179,7 @@ in
             '';
           };
         };
-      }
+      })
     );
   };
 
@@ -200,12 +209,6 @@ in
         '
       ''
     );
-
-    fileModule =
-      { secret, name, ... }:
-      {
-        path = "${cfg.targetDirectory}/${secret.name}/${name}";
-      };
   };
 
   # TODO: write a service that decrypts the files at runtime! (or something...)

@@ -60,17 +60,26 @@ in
     };
   };
 
+  options.secrets.store = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule (secret: {
+        options.files = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule ({ config, ...}: {
+              path = lib.mkIf (config.backend == "age")
+                "${cfg.targetDirectory}/${secret.config.name}/${config.name}";
+            })
+          );
+        };
+      })
+    );
+  };
+
   config.secrets.backends.store.plain = {
     get = { pkgs, ... }: backendScript pkgs "get";
     set = { pkgs, ... }: backendScript pkgs "set";
     list = { pkgs, ... }: backendScript pkgs "list";
     delete = { pkgs, ... }: backendScript pkgs "delete";
     deploy.local = { pkgs, ... }: backendScript pkgs "deploy-local";
-
-    fileModule =
-      { secret, name, ... }:
-      {
-        path = "${cfg.targetDirectory}/${secret.name}/${name}";
-      };
   };
 }

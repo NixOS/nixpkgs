@@ -105,28 +105,17 @@ let
           from environments live live CDs, where the target system is not yet
           up and running (even if nixos-install has successfully completed).
         '';
-
-        fileModule = lib.mkOption {
-          type = deferredModule;
-          internal = true;
-          default = { };
-          description = ''
-            A module to be imported in every
-            secrets.store.<name>.files.<name> submodule. Used by backends to
-            define the `path` attribute. The module will have the following
-            additional arguments passed to it:
-            - `secret`, containing the secret the file belongs to
-            - `backend`, containing the backend associated with said secret
-          '';
-        };
       };
     }
   );
 
   fileModule =
-    { name, backend, ... }:
+    secret:
+    { name, config, ... }:
+    let
+      backend = cfg.backends.store.${config.backend};
+    in
     {
-      imports = [ backend.fileModule ];
       options = {
         name = lib.mkOption {
           description = "name of the file";
@@ -149,14 +138,17 @@ let
           type = bool;
           default = true;
         };
+
+        backend = lib.mkOption {
+          type = str;
+          description = "The backend responsible for handling this file.";
+          default = secret.backend;
+        };
       };
     };
 
   secretModule = submodule (
     { name, config, ... }:
-    let
-      backend = cfg.backends.store.${config.backend};
-    in
     {
       options = {
         name = lib.mkOption {
@@ -172,8 +164,18 @@ let
 
         backend = lib.mkOption {
           type = str;
-          description = "The backend responsible for handling this secret.";
+          description = ''
+            The default backend responsible for handling this secret's files.
+          '';
           default = cfg.backends.defaults.store;
+        };
+
+        meta.backend = lib.mkOption {
+          type = str;
+          description = ''
+            The backend responsible for handling this secret's metadata.
+          '';
+          default = cfg.backends.defaults.meta;
         };
 
         prompts = lib.mkOption {
@@ -199,13 +201,7 @@ let
             produce exactly these files under $out.
           '';
           default = { };
-          type = attrsOf (submoduleWith {
-            modules = [ fileModule ];
-            specialArgs = {
-              inherit backend;
-              secret = config;
-            };
-          });
+          type = attrsOf (submodule (fileModule config));
         };
 
         generate = nullableDeferredPackage ''
@@ -326,6 +322,14 @@ in
         The default backend to use for secrets that do not specify one.
       '';
       type = str;
+    };
+
+    backends.defaults.meta = lib.mkOption {
+      description = ''
+        The default store backend to use for metadata storage.
+      '';
+      type = str;
+      default = cfg.backends.defaults.store;
     };
 
     backends.prompt = lib.mkOption {

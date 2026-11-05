@@ -109,7 +109,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
             if not regen:
                 for file in generator.files.values():
-                    if not files.has(generator.backend, generator.name, file.name):
+                    if not files.has(file.backend, generator.name, file.name):
                         print(f"Updating '{entry}' (file '{file.name}' is missing)")
                         regen = True
                         break
@@ -204,6 +204,13 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                                 "--ro-bind",
                                 "/usr/bin",
                                 "/usr/bin",
+                                # Required by ssh-keygen
+                                "--ro-bind",
+                                "/etc/passwd",
+                                "/etc/passwd",
+                                "--dev-bind",
+                                "/dev/null",
+                                "/dev/null",
                                 "--ro-bind",
                                 in_dir,
                                 in_dir,

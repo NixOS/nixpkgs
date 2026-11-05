@@ -65,6 +65,7 @@ class SecretsStoreBackend:
 @dataclass(frozen=True)
 class SecretsFile:
     name: str
+    backend: str
     deploy: bool = False
 
     @staticmethod
@@ -77,13 +78,17 @@ class SecretsFile:
         if name == meta_file_name:
             raise SecretsError(f"Files cannot use the reserved name '{meta_file_name}'")
 
-        return SecretsFile(name=name, deploy=json["deploy"])
+        return SecretsFile(
+          name=name,
+          backend=json["backend"],
+          deploy=json["deploy"]
+        )
 
 
 @dataclass(frozen=True)
 class SecretsSecret:
     name: str
-    backend: str
+    metaBackend: str
     generate: str | None
     dependencies: list[str]
     prompts: dict[str, SecretsPrompt]
@@ -98,7 +103,7 @@ class SecretsSecret:
 
         result = SecretsSecret(
             name=name,
-            backend=json["backend"],
+            metaBackend=json["meta"]["backend"],
             generate=json["generate"],
             dependencies=json["dependencies"],
             prompts={},
@@ -152,7 +157,9 @@ class SecretsConfig:
 
         for gen in result.generators.values():
             referencedGenerators.update(gen.dependencies)
-            referencedStoreBackends.add(gen.backend)
+            referencedStoreBackends.add(gen.metaBackend)
+            for file in gen.files.values():
+              referencedStoreBackends.add(file.backend)
 
         for secret in result.generators.values():
             for prompt in secret.prompts.values():
@@ -189,10 +196,10 @@ class SecretsConfig:
     ) -> list[tuple[str, str]]:
         files = []
         for generator in self.generators.values():
-            if generator.backend != backend.name:
-                continue
-
             for file in generator.files.values():
+                if file.backend != backend.name:
+                    continue
+
                 # Checks that deployed_only implies file.deploy
                 if not deployed_only or deployed_only and file.deploy:
                     files.append((generator.name, file.name))

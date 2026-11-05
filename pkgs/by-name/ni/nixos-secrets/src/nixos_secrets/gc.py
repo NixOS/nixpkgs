@@ -9,7 +9,7 @@ def collect_garbage(args: SecretsArgs, config: SecretsConfig):
     specified: set[SecretsFileListEntry] = set()
     for secret in config.generators.values():
         for file in secret.files.values():
-            specified.add(SecretsFileListEntry(secret.backend, secret.name, file.name))
+            specified.add(SecretsFileListEntry(file.backend, secret.name, file.name))
     unspecified = existing.entries - specified
 
     # The metadata file should only be removed if the secret is no longer part of the config.

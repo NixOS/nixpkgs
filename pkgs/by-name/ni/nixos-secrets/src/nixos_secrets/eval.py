@@ -66,6 +66,7 @@ def evaluate_config_raw(args: SecretsArgs) -> Any:
             "--strict",
             "--expr",
             "--read-write-mode",
+            "--show-trace",
             expr,
         ]
 

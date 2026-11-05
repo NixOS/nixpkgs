@@ -72,5 +72,18 @@
           cat $in/derived/cow-greeting > $out/cow-greeting-copy
         '';
     };
+
+    store.ssh-split = {
+      files."ed25519.key".backend = "age";
+      files."ed25519.key.pub".backend = "plain";
+      meta.backend = "age";
+
+      generate =
+        { pkgs, ... }:
+        pkgs.writeShellScript "gen-ed25519" ''
+          export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.openssh ]}"
+          ssh-keygen -t ed25519 -f $out/ed25519.key -P ""
+        '';
+    };
   };
 }
