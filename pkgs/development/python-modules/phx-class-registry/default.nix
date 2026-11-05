@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "class-registry";
-  version = "5.1.1";
+  pname = "phx-class-registry";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "todofixthis";
     repo = "class-registry";
     tag = version;
-    hash = "sha256-MI63b77ydmhQSbtKovla7BCEUjLF43DW80VABjAVEI0=";
+    hash = "sha256-lZxnZiCR2ZhEUTKH8Udmcp6VvISregGSBmwt5cqdQqo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
