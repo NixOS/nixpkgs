@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.43.79"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.43.124"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = "botocore";
     tag = version;
-    hash = "sha256-TfrwQiVf7Uc298xllNUcyjAk4btDcjSWVrXt2gfHGew=";
+    hash = "sha256-R80J5Hr+TP+tj0ucKOue4ytp/DeWybwwyMBis9LT7R8=";
   };
 
   postPatch = ''
@@ -45,6 +45,10 @@ buildPythonPackage rec {
     jmespath
     python-dateutil
     urllib3
+  ];
+
+  pythonRelaxDeps = [
+    "python-dateutil"
   ];
 
   nativeCheckInputs = [
