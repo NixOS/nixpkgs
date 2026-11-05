@@ -1,0 +1,33 @@
+diff --git a/org/antlr/Tool.java b/org/antlr/Tool.java
+--- a/org/antlr/Tool.java
++++ b/org/antlr/Tool.java
+@@ -1067 +1067 @@
+-        return new StringBuffer().append(sy).append("-").append(sm).append("-").append(sd).append(" ").append(sh).append(":").append(smin).append(":").append(ssec).toString();
++        return "1980-01-01 00:00:00";
+diff --git a/org/antlr/tool/CompositeGrammar.java b/org/antlr/tool/CompositeGrammar.java
+--- a/org/antlr/tool/CompositeGrammar.java
++++ b/org/antlr/tool/CompositeGrammar.java
+@@ -288 +288 @@
+-		Set<Rule> rules = new HashSet<Rule>();
++		Set<Rule> rules = new java.util.LinkedHashSet<Rule>();
+diff --git a/org/antlr/tool/Rule.java b/org/antlr/tool/Rule.java
+--- a/org/antlr/tool/Rule.java
++++ b/org/antlr/tool/Rule.java
+@@ -175 +175 @@
+-		throwsSpec = new HashSet<String>();
++		throwsSpec = new java.util.LinkedHashSet<String>();
+diff --git a/org/antlr/grammar/v3/DefineGrammarItemsWalker.java b/org/antlr/grammar/v3/DefineGrammarItemsWalker.java
+--- a/org/antlr/grammar/v3/DefineGrammarItemsWalker.java
++++ b/org/antlr/grammar/v3/DefineGrammarItemsWalker.java
+@@ -1783 +1783 @@
+-        	exceptions = new HashSet<String>();
++        	exceptions = new java.util.LinkedHashSet<String>();
+@@ -3483 +3483 @@
+-        			currentRewriteRule.rewriteRefsDeep = new HashSet<GrammarAST>();
++        			currentRewriteRule.rewriteRefsDeep = new java.util.LinkedHashSet<GrammarAST>();
+@@ -3622 +3622 @@
+-        		currentRewriteBlock.rewriteRefsShallow = new HashSet<GrammarAST>();
++        		currentRewriteBlock.rewriteRefsShallow = new java.util.LinkedHashSet<GrammarAST>();
+@@ -3623 +3623 @@
+-        		currentRewriteBlock.rewriteRefsDeep = new HashSet<GrammarAST>();
++        		currentRewriteBlock.rewriteRefsDeep = new java.util.LinkedHashSet<GrammarAST>();
