@@ -59,7 +59,10 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm444 $src/packaging/linux/knossos-512.png $out/share/icons/hicolor/512x512/apps/knossos.png
+    for size in 48 64 96 128 256 512; do
+      install -Dm444 packaging/linux/knossos-$size.png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/knossos.png
+    done
   '';
 
   passthru.updateScript = nix-update-script { };
