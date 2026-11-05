@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clingcon";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "clingcon";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-R2kgcw8VUwhOdvPXnsahT5gnoUd5DXLqfdH++8rFoAA=";
+    sha256 = "sha256-ZHqEMD/jDLdFmupH1PyxKvuXvV6wVtwVJjoCe8RJ734=";
   };
 
   postPatch = ''
