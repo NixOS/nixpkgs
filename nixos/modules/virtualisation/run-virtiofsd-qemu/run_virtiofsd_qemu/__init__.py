@@ -32,26 +32,27 @@ async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag
         "--translate-gid=host:65534:0:1",
     )
 
-    loop = asyncio.get_running_loop()
-    while not await loop.run_in_executor(None, lambda: socket_path.exists()):
-        if proc.returncode is not None:
-            fatal_error(f"virtiofsd process for '{tag}' failed to start. Aborting.")
-        await asyncio.sleep(1)
-
-    yield
-
     try:
-        proc.terminate()
-        async with asyncio.timeout(2):
+        loop = asyncio.get_running_loop()
+        while not await loop.run_in_executor(None, lambda: socket_path.exists()):
+            if proc.returncode is not None:
+                fatal_error(f"virtiofsd process for '{tag}' failed to start. Aborting.")
+            await asyncio.sleep(1)
+
+        yield
+    finally:
+        try:
+            proc.terminate()
+            async with asyncio.timeout(2):
+                await proc.communicate()
+        except ProcessLookupError:
+            pass
+        except subprocess.TimeoutExpired:
+            logger.warning(
+                f"virtiofsd process for '{tag}' still running after SIGTERM. Killing."
+            )
+            proc.kill()
             await proc.communicate()
-    except ProcessLookupError:
-        pass
-    except subprocess.TimeoutExpired:
-        logger.warning(
-            f"virtiofsd process for '{tag}' still running after SIGTERM. Killing."
-        )
-        proc.kill()
-        await proc.communicate()
 
 
 def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
