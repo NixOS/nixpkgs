@@ -2,7 +2,6 @@ import argparse
 import asyncio
 import logging
 import signal
-import subprocess
 from contextlib import AsyncExitStack, asynccontextmanager
 from os import environ
 from pathlib import Path
@@ -47,7 +46,7 @@ async def virtiofsd(virtiofs_dir: Path, tag: str, source: Path, cache: str, flag
                 await proc.communicate()
         except ProcessLookupError:
             pass
-        except subprocess.TimeoutExpired:
+        except TimeoutError:
             logger.warning(
                 f"virtiofsd process for '{tag}' still running after SIGTERM. Killing."
             )
