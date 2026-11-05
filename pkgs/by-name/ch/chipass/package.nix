@@ -60,6 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove on next version bump.
   patches = [
     ./0001-fix_qt6_keypad_removal.patch
+    # Botan 3.14 randomizes ECDSA signatures by default, which breaks
+    # TestPasskeys' hardcoded signatures; request RFC 6979 signatures again.
+    ./0002-botan-3.14-deterministic-ecdsa.patch
   ];
 
   # Upstream develops against a build of PCSC from Xcode.
