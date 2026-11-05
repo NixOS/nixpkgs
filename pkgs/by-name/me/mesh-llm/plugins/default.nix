@@ -4,6 +4,7 @@
 }:
 
 lib.makeScope newScope (self: {
+  agents = self.callPackage ./agents/package.nix { };
   blackboard = self.callPackage ./blackboard/package.nix { };
   capsules = self.callPackage ./capsules/package.nix { };
   flash-moe = self.callPackage ./flash-moe/package.nix { };
