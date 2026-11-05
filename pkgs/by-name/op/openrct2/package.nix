@@ -84,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     unzip
-    makeWrapper
     makeBinaryWrapper
     versionCheckHook
   ];
@@ -207,8 +206,14 @@ stdenv.mkDerivation (finalAttrs: {
     else
       ''
         wrapProgram $out/bin/openrct2 \
-          ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
-          ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
+          ${
+            lib.optionalString (
+              rct1Path != null
+            ) "--add-flag ${lib.escapeShellArg "--rct1-data-path=${rct1Path}"}"
+          } \
+          ${lib.optionalString (
+            rct2Path != null
+          ) "--add-flag ${lib.escapeShellArg "--rct2-data-path=${rct2Path}"}"}
       '';
 
   passthru.updateScript = ./update.sh;
