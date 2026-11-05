@@ -6,7 +6,7 @@
   mock,
   pyfakefs,
   pytest-forked,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     mock
     pyfakefs
     pytest-forked
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   disabledTestPaths = [
