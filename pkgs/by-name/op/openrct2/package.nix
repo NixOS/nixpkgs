@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
     (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
+    (lib.cmakeBool "DISABLE_VERSION_CHECKER" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "MACOS_USE_DEPENDENCIES" false)
