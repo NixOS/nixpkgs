@@ -28,19 +28,22 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "3.9.1";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-VlQS47FmjFHq3Q2VGa4nGPPnG7qhFgEVxovhCuh7rxI=";
+    hash = "sha256-2gkSadlmFexPGRXCTkmHNabWVzh0QwCWVlUFVo49J0s=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
   # the pinning used to match some `extras_require` we're not using.
-  pythonRelaxDeps = [ "botocore" ];
+  pythonRelaxDeps = [
+    "botocore"
+    "python-dateutil"
+  ];
 
   build-system = [
     hatch-fancy-pypi-readme
