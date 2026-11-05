@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromCodeberg,
+  installShellFiles,
   nix-update-script,
   versionCheckHook,
 }:
@@ -27,11 +28,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.docutils
+  ];
+
   dependencies = with python3Packages; [
     dbus-fast
     pyudev
     python-xlib
   ];
+
+  postInstall = ''
+    rst2man README.rst joystickwake.1
+    installManPage joystickwake.1
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
