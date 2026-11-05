@@ -91,20 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     # building the toolchain for hostPlatform (passed as GOOS/GOARCH above)
     CC_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     CXX_FOR_TARGET = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  }
-  // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.targetPlatform) {
-    # Prefer external linker for cross when CGO is supported, since
-    # we haven't taught go's internal linker to pick the correct ELF
-    # interpreter for cross
-    # When CGO is not supported we rely on static binaries being built
-    # since they don't need an ELF interpreter
-
-    # Without an equivalent, pkgsStatic builds fail. See for some extra context
-    # https://github.com/NixOS/nixpkgs/issues/582185
-
-    # TODO: Clean this up. Out-of-tree users should almost never be hitting this case,
-    # except through buildGoModule, so we have relative freedom in doing so.
-    GO_EXTLINK_ENABLED = finalAttrs.env.CGO_ENABLED;
   };
 
   buildPhase = ''
