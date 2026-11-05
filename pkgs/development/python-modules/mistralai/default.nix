@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
   # Upstream stopped tagging releases on GitHub after v3.2.0
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-HNEw2gGXnY7Nw3Soi7eogFJLMYor40tuaQE8ozHenXA=";
+    hash = "sha256-l8xSW43clvuLW7CPRm3T0i+QTyHd/kUQPadsJf5gG/I=";
   };
 
   build-system = [
@@ -108,6 +108,13 @@ buildPythonPackage (finalAttrs: {
 
     # ModuleNotFoundError: No module named 'livekit'
     "src/mistralai/extra/tests/voice_agents/"
+  ]
+  ++ lib.optionals (lib.versionOlder mcp.version "2.2") [
+    # Upstream requires mcp>=2.2,<3 and these test modules import mcp>=2.2 APIs
+    # (MCPError, mcp.client._transport) that are absent from older versions such
+    # as mcp_1, used by some application scopes (e.g. oterm for fastmcp-slim).
+    "src/mistralai/extra/tests/test_connectors_gateway.py"
+    "src/mistralai/extra/tests/test_mcp_streamable_http.py"
   ];
 
   meta = {

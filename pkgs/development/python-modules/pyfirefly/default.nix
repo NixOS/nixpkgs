@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyfirefly";
-  version = "0.1.16";
+  version = "0.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
     tag = "v${version}";
-    hash = "sha256-RrVjXhV42DBvmTcZMowmHXN5K4nZfKPT/CDbvf1tOAQ=";
+    hash = "sha256-JT9mJqkS8KVVtw3IhR72hYCQ5l1NHrA4tta2L0KMwpI=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

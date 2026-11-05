@@ -12,14 +12,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "angr-management";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.4";
+  version = "10.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr-management";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jK1ctIiLHUbZZs5A9lWF2Jsl8y91LrB4RAK2NAsQSHM=";
+    hash = "sha256-ST9vkSM8I3TbnmVpC1naB9S+5jZSxkU7GCKoVdKaPgM=";
   };
 
   pythonRelaxDeps = [

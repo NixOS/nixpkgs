@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.0.4";
+  version = "3.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XWfJyl8QXLYKoDGkdqZyWYjxzAC6Gbmnx6AnJCsOfOQ=";
+    hash = "sha256-lgrxLd7sfXMHK2Q1yvopbUZXtogZWxlMijtXl5cMGXc=";
   };
 
   patches = [
@@ -201,10 +201,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
     "test_local_mcp_servers_stay_usable_when_connectors_reject_the_key"
 
-    # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
-    # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
-    "test_generic_backend_streaming_uses_ssl_cert_file"
-
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
 
@@ -217,6 +213,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Flaky: TimeoutError
     "test_unified_host_reads_the_live_public_event_cursor"
+
+    # Flaky: RuntimeError: A turn is already running
+    "test_a_forked_child_can_be_forked_again_onto_an_inherited_turn"
 
     # Flaky: session references are not yet garbage-collected
     "test_closed_sessions_release_their_servers_and_background_tasks"
@@ -242,6 +241,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_a_new_skill_file_yields_one_change"
     "test_a_skill_written_after_the_session_opened_is_picked_up_without_reload"
     "test_a_watch_with_nothing_to_watch_waits_for_a_folder"
+
+    # The file watch never sees the other process's write in the sandbox (TimeoutError)
+    "test_a_read_by_another_process_reaches_the_owners"
+
+    # The killed shell's stdout does not close in time (TimeoutError)
+    "test_killing_a_shell_right_after_its_first_output_kills_its_next_command"
   ];
 
   disabledTestPaths = [

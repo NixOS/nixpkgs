@@ -14,7 +14,6 @@
   patchelf,
   python3,
   rdma-core,
-  removeReferencesTo,
   which,
   # passthru.updateScript
   gitUpdater,
@@ -99,7 +98,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_nvcc
     patchelf
     python3
-    removeReferencesTo
     which
   ];
 
@@ -150,17 +148,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     _overrideFirst outputStatic "static" "lib" "out"
     moveToOutput lib/libnccl_static.a "''${!outputStatic:?}"
   ''
-  # Since CUDA 12.8, the cuda_nvcc path leaks in:
-  # - libnccl.so's .nv_fatbin section
-  # - libnccl_static.a
-  # &devrt -L /nix/store/00000000000000000000000000000000-...nvcc-.../bin/...
-  # This string makes cuda_nvcc a runtime dependency of nccl.
-  # See https://github.com/NixOS/nixpkgs/pull/457803
-  + ''
-    remove-references-to -t "${lib.getBin cuda_nvcc}" \
-      ''${!outputLib}/lib/libnccl.so.* \
-      ''${!outputStatic}/lib/*.a
-  ''
   # makefiles/common.mk sets RDMA_CORE=0 and MLX5DV=0, so libibverbs/libmlx5/libgdrapi are dlopen'd
   # rather than DT_NEEDED and buildInputs would not reach the runpath. Losing them is quiet: NCCL
   # logs at INFO and falls back to the socket transport.
@@ -171,7 +158,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     }" "''${!outputLib:?}"/lib/libnccl.so.*.*
   '';
 
-  # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed
+  # nvlink records its library directories in libnccl's device code; cuda_nvcc's nvlink wrapper removes them.
   disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   passthru = {
