@@ -37,6 +37,8 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/hotdoc/hotdoc/commit/adf8518431fafb78c9b47862a0a9a58824b6a421.patch";
       hash = "sha256-5y50Yk+AjV3aSk8H3k9od/Yvy09FyQQOcVOAcstQnw8=";
     })
+
+    ./setuptools-84.0-compat.patch
   ];
 
   postPatch = ''
