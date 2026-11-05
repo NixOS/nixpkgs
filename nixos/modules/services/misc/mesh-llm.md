@@ -120,18 +120,22 @@ When [](#opt-services.mesh-llm.settings) is set, the service rewrites the config
 
 ## Add plugins {#module-services-mesh-llm-plugins}
 
-Add plugins as `[[plugin]]` entries in [](#opt-services.mesh-llm.settings), with `command` pointing at the plugin's executable.
+Add plugins from `pkgs.mesh-llmPlugins` to [](#opt-services.mesh-llm.plugins).
+Settings for a plugin go in a `plugin` entry of [](#opt-services.mesh-llm.settings) with the same `name`.
 Connect an existing OpenAI-compatible server with the `openai-endpoint` plugin:
 
 ```nix
+{ pkgs, ... }:
 {
-  services.mesh-llm.settings.plugin = [
-    {
-      name = "openai-endpoint";
-      command = "/path/to/openai-endpoint";
-      url = "http://127.0.0.1:8000/v1";
-    }
-  ];
+  services.mesh-llm = {
+    plugins = [ pkgs.mesh-llmPlugins.openai-endpoint ];
+    settings.plugin = [
+      {
+        name = "openai-endpoint";
+        url = "http://127.0.0.1:8000/v1";
+      }
+    ];
+  };
 }
 ```
 

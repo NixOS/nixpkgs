@@ -9,7 +9,31 @@ let
   cfg = config.services.mesh-llm;
 
   settingsFormat = pkgs.formats.toml { };
-  configFile = settingsFormat.generate "mesh-llm-config.toml" cfg.settings;
+  # Each package in `plugins` becomes a `[[plugin]]` entry. An entry with the
+  # same name in `settings.plugin` is merged into it, so per-plugin settings
+  # such as `url` stay in `settings`.
+  pluginName =
+    p:
+    p.pluginName
+      or (throw "services.mesh-llm.plugins: ${lib.getName p} has no passthru.pluginName; add it as a [[plugin]] entry in services.mesh-llm.settings instead");
+  manualPlugins = cfg.settings.plugin or [ ];
+  manualPlugin = name: lib.findFirst (entry: (entry.name or null) == name) { } manualPlugins;
+  packagedPlugins = map (
+    p:
+    {
+      name = pluginName p;
+      command = lib.getExe p;
+    }
+    // manualPlugin (pluginName p)
+  ) cfg.plugins;
+  packagedNames = map pluginName cfg.plugins;
+  finalSettings =
+    cfg.settings
+    // lib.optionalAttrs (cfg.plugins != [ ]) {
+      plugin =
+        packagedPlugins ++ lib.filter (entry: !(lib.elem (entry.name or null) packagedNames)) manualPlugins;
+    };
+  configFile = settingsFormat.generate "mesh-llm-config.toml" finalSettings;
 in
 {
   options.services.mesh-llm = {
@@ -19,6 +43,18 @@ in
       example = "mesh-llm-cuda";
       extraDescription = ''
         The native runtimes it bundles decide the GPU backends the node can use.
+      '';
+    };
+
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.mesh-llmPlugins.openai-endpoint ]";
+      description = ''
+        Plugin packages to run, such as those in `pkgs.mesh-llmPlugins`.
+        Each one becomes a `[[plugin]]` entry in the configuration; settings for
+        it go in a `plugin` entry of [](#opt-services.mesh-llm.settings) with the
+        same `name`.
       '';
     };
 
@@ -129,7 +165,7 @@ in
         MESH_LLM_NO_RUNTIME_DOWNLOAD = "1";
       };
 
-      preStart = lib.optionalString (cfg.settings != { }) ''
+      preStart = lib.optionalString (finalSettings != { }) ''
         install -D -m 0600 ${configFile} "$HOME/.mesh-llm/config.toml"
       '';
 
