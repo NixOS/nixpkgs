@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication {
     inherit (nixosTests)
       nixos-secrets-basic-generators
       nixos-secrets-failure-recovery
+      nixos-secrets-split-secrets
       ;
   };
 

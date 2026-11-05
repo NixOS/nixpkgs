@@ -32,7 +32,7 @@ let
           inherit (secret) name;
           value = {
             inherit (secret.age) publicKeys;
-            identity = { inherit (secret.age.identity) target host; };
+            identity = { inherit (secret.age.identity) host; };
           };
         }
       ))
@@ -116,6 +116,7 @@ in
       '';
 
       example = "/var/lib/nixos-secrets/age.key";
+      default = cfg.identity.host;
     };
 
     identity.host = lib.mkOption {

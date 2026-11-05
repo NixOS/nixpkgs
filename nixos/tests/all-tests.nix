@@ -1309,6 +1309,7 @@ in
   };
   nixos-secrets-basic-generators = runTest ./nixos-secrets/basic-generators;
   nixos-secrets-failure-recovery = runTest ./nixos-secrets/failure-recovery;
+  nixos-secrets-split-secrets = runTest ./nixos-secrets/split-secrets;
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
     pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
