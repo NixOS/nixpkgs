@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "faust-cchardet";
-  version = "2.2.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "cChardet";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-m/wa41dhLFmRg20iAn1YkXVCIubp5bT4PI+YuUIK3Wc=";
+    hash = "sha256-jXMf553NsgXgjuvEMKEst8s8k6nE5868DvUPV3Udvvk=";
   };
 
   build-system = [
