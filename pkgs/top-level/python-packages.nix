@@ -14851,6 +14851,8 @@ self: super: with self; {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodome_3 = callPackage ../development/python-modules/pycryptodome/3.nix { };
+
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
   pycsdr = callPackage ../development/python-modules/pycsdr { };
