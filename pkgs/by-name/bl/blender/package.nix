@@ -123,10 +123,19 @@ let
 
   # See build_files/config/pipeline_config.yaml in upstream source for version
   optix = fetchFromGitHub {
+    name = "optix-dev-source";
     owner = "NVIDIA";
     repo = "optix-dev";
     tag = "v8.0.0";
     hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
+
+    meta.license = {
+      shortName = "NVIDIA SDK EULA";
+      fullName = "SOFTWARE DEVELOPER KITS, SAMPLES AND TOOLS LICENSE AGREEMENT";
+      url = "https://developer.download.nvidia.com/designworks/DesignWorks_SDKs_Samples_Tools_License_distrib_use_rights_2017_06_13.pdf";
+      free = false;
+      redistributable = true;
+    };
   };
 in
 
@@ -538,8 +547,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
-    # OptiX, enabled with cudaSupport, is non-free.
-    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
+    license = with lib.licenses; [ gpl2Plus ];
     donationPage = "https://fund.blender.org/";
 
     platforms = [
