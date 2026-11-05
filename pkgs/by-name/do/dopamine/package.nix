@@ -3,10 +3,13 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  electron,
+  electron_43,
   python3,
   xcodebuild,
 }:
+let
+  electron = electron_43;
+in
 buildNpmPackage (finalAttrs: {
   pname = "dopamine";
   version = "3.0.9";
