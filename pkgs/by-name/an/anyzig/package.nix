@@ -4,6 +4,7 @@
   fetchFromGitHub,
   zig_0_17,
   nix-update-script,
+  anyzigExe ? "zig", # "zig" or "zls"
 }:
 
 let
@@ -11,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "anyzig";
+  pname = "any${anyzigExe}";
   version = "2026_11_03";
 
   __structuredAttrs = true;
@@ -27,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ zig ];
 
   zigDeps = zig.fetchDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs) version src;
+    pname = "anyzig";
     hash = "sha256-UHKvzdYb7akR87WucYdCa/hlfo+KQxV8BSug7BbIkHk=";
   };
 
@@ -35,14 +37,22 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
+  zigBuildFlags = lib.optionals (anyzigExe != "zig") [ "install-${anyzigExe}" ];
+
+  installPhase = ''
+    runHook preInstall
+    install -Dt $out/bin zig-out/bin/${anyzigExe}
+    runHook postInstall
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Universal zig executable that lets you run any version of zig";
+    description = "Universal ${anyzigExe} executable that lets you run any version of ${anyzigExe}";
     homepage = "https://github.com/marler8997/anyzig";
     changelog = "https://github.com/marler8997/anyzig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "zig";
+    mainProgram = anyzigExe;
   };
 })
