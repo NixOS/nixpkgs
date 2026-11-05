@@ -78,6 +78,11 @@ buildPythonPackage rec {
 
     # boost 1.91 made boost::optional's converting constructor explicit
     ./boost-1.91-optional.patch
+
+    # Fix build against SWIG >= 4.5
+    # Can be removed after updating to 0.9.0 or later.
+    # https://github.com/IfcOpenShell/IfcOpenShell/commit/3bb8b0cb9a30f7d9cc5287c2aec3620724dfd9b8
+    ./swig-4.5-compat.patch
   ];
 
   nativeBuildInputs = [
