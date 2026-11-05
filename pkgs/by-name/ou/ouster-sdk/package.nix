@@ -106,6 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ouster-lidar/ouster-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kylemanna ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

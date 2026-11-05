@@ -13201,6 +13201,10 @@ self: super: with self; {
 
   ourgroceries = callPackage ../development/python-modules/ourgroceries { };
 
+  ouster-sdk = callPackage ../development/python-modules/ouster-sdk {
+    inherit (pkgs) ouster-sdk;
+  };
+
   outcome = callPackage ../development/python-modules/outcome { };
 
   outdated = callPackage ../development/python-modules/outdated { };
