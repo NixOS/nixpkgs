@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ elfutils ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
