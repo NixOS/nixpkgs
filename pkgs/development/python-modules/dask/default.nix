@@ -38,7 +38,7 @@
   pytest-rerunfailures,
   pytest-timeout,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   versionCheckHook,
 }:
 
@@ -109,7 +109,7 @@ buildPythonPackage (finalAttrs: {
     pytest-rerunfailures
     pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest9_1CheckHook
     versionCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.array
