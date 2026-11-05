@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   configureFlags = lib.optional stdenv.hostPlatform.isx86 "--enable-fat=yes";
 
   enableParallelBuilding = true;
