@@ -1,29 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  six,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  hatch-vcs,
+  tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-dateutil";
-  version = "2.9.0.post0";
+  version = "4.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N91UII2n4c2HU4ghfV4A69QXkkn5D7ckN+kaNUWaCtM=";
+  src = fetchFromGitHub {
+    owner = "dateutil";
+    repo = "dateutil";
+    tag = finalAttrs.version;
+    hash = "sha256-rd49RRes+SeY1CLgGzLaj0uCfAMQ3FyWIQef6s1hzRs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools_scm<8.0" "setuptools_scm"
-  '';
+  build-system = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [ six ];
+  dependencies = [ tzdata ];
 
   # cyclic dependency: tests need freezegun, which depends on python-dateutil
   doCheck = false;
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dateutil/dateutil/blob/${version}/NEWS";
+    changelog = "https://github.com/dateutil/dateutil/blob/${finalAttrs.src.tag}/NEWS";
     description = "Powerful extensions to the standard datetime module";
     homepage = "https://github.com/dateutil/dateutil/";
     license = with lib.licenses; [
@@ -48,4 +51,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
