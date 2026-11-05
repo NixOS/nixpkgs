@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
         'cmake_minimum_required(VERSION 3.10)'
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Webfont compression reference code";
     homepage = "https://github.com/google/woff2";
