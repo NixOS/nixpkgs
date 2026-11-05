@@ -53,13 +53,13 @@ let
   # symlinkJoin does not run the copyDesktopItems hook, so the entry is
   # merged into `paths` instead.
   desktopItem = makeDesktopItem {
-    name = "t3code";
+    name = "com.t3tools.T3Code";
     desktopName = appName;
     comment = "Desktop agent harness control surface";
     exec = "t3code-desktop %U";
     terminal = false;
     icon = "t3code";
-    startupWMClass = "t3code";
+    startupWMClass = "com.t3tools.T3Code";
     categories = [ "Development" ];
     mimeTypes = [ "x-scheme-handler/t3code" ];
   };
