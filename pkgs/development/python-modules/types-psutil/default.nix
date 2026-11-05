@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-psutil";
-  version = "7.2.2.20260518";
+  version = "7.2.2.20260906";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_psutil";
     inherit (finalAttrs) version;
-    hash = "sha256-n4JfYxRjpbTSbxn2OuvJ7CXwEUDWVQJvOtimeEH5szE=";
+    hash = "sha256-k6vyLPmmK5Ffck5DO95wKZWsJ0hlQl/Up20dm1go2ho=";
   };
 
   build-system = [ setuptools ];
