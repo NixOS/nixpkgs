@@ -21,7 +21,7 @@
   acl,
   appstream,
   breezy,
-  binutils,
+  binutils-unwrapped,
   bzip2,
   coreutils,
   cpio,
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       cpio = "${cpio}/bin/cpio";
       git = "${gitMinimal}/bin/git";
       rofilesfuse = "${ostree}/bin/rofiles-fuse";
-      strip = "${binutils}/bin/strip";
+      strip = "${binutils-unwrapped}/bin/strip";
       eustrip = "${elfutils}/bin/eu-strip";
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
