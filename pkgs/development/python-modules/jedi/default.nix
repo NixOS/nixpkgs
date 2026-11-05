@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -19,6 +20,8 @@ buildPythonPackage (finalAttrs: {
   pname = "jedi";
   version = "0.20.1";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15"; # not yet supported by parso and jedi
 
   src = fetchFromGitHub {
     owner = "davidhalter";
