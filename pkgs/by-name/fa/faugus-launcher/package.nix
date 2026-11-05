@@ -1,33 +1,32 @@
 {
-  coreutils,
+  lib,
   fetchFromGitHub,
+  coreutils,
   gamemode,
   gawk,
   gnugrep,
   gobject-introspection,
   gst_all_1,
   icoextract,
-  lib,
   libadwaita,
   libgudev,
   libmanette,
   lsfg-vk,
-  lsfgSupport ? false,
-  withGameMode ? true,
   meson,
   ninja,
   nix-update-script,
-  python3Packages,
   pciutils,
+  python3Packages,
   umu-launcher,
   wrapGAppsHook4,
   xdg-utils,
+  lsfgSupport ? false,
+  withGameMode ? true,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
   version = "2.5.7";
-  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
@@ -35,6 +34,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-lB7/X7ilnoIc27Ggr+xCL/B0Gb9fTHWJNE9ajfYPccI=";
   };
+
+  postPatch = ''
+    substituteInPlace faugus-launcher \
+      --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
+
+    substituteInPlace faugus/path_manager.py \
+      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
+  ''
+  + lib.optionalString lsfgSupport ''
+    substituteInPlace faugus/path_manager.py \
+      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lib.getLib lsfg-vk}/lib/liblsfg-vk-layer.so"
+  '';
 
   nativeBuildInputs = [
     gobject-introspection
@@ -54,39 +65,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gstreamer
   ]);
 
-  dependencies = with python3Packages; [
-    pefile
-    pillow
-    psutil
-    pygobject3
-    requests
-    vdf
-  ];
-
-  postPatch = ''
-    substituteInPlace faugus-launcher \
-      --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
-
-    substituteInPlace faugus/path_manager.py \
-      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
-  ''
-  + lib.optionalString lsfgSupport ''
-    substituteInPlace faugus/path_manager.py \
-      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lib.getLib lsfg-vk}/lib/liblsfg-vk-layer.so"
-  '';
-
-  runtimeInputs = [
-    coreutils
-    gawk
-    gnugrep
-    icoextract
-    pciutils
-    umu-launcher
-    xdg-utils
-  ]
-  ++ lib.optional withGameMode gamemode;
-
-  dontWrapGApps = true;
+  # has no tests
+  doCheck = false;
 
   postFixup = ''
     gappsWrapperArgs+=(
@@ -100,10 +80,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wrapGApp $out/bin/faugus-launcher
   '';
 
-  # has no tests
-  doCheck = false;
+  dependencies = with python3Packages; [
+    pefile
+    pillow
+    psutil
+    pygobject3
+    requests
+    vdf
+  ];
 
+  dontWrapGApps = true;
+  pyproject = false;
   pythonImportsCheck = [ "faugus" ];
+
+  runtimeInputs = [
+    coreutils
+    gawk
+    gnugrep
+    icoextract
+    pciutils
+    umu-launcher
+    xdg-utils
+  ]
+  ++ lib.optional withGameMode gamemode;
 
   passthru.updateScript = nix-update-script { };
 
@@ -116,7 +115,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       RoGreat
       keenanweaver
     ];
-    mainProgram = "faugus-launcher";
     platforms = lib.platforms.linux;
+    mainProgram = "faugus-launcher";
   };
 })
