@@ -23,6 +23,7 @@ buildDotnetModule rec {
   patches = [ ./dotnet-8-upgrade.patch ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  projectFile = "Knossos.NET/Knossos.NET.csproj";
   nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
