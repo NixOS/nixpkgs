@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm444 $src/res/icons/icon.png $out/share/icons/hicolor/128x128/apps/oculante.png
     install -Dm444 $src/res/oculante.desktop -t $out/share/applications
+    install -Dm444 $src/res/flathub/io.github.woelper.Oculante.metainfo.xml -t $out/share/metainfo
     wrapProgram $out/bin/oculante \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath (

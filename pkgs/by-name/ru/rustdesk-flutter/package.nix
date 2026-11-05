@@ -209,6 +209,7 @@ flutter329.buildFlutterApplication rec {
     mkdir -p $out/share/polkit-1/actions $out/share/icons/hicolor/{256x256,scalable}/apps
     cp ../res/128x128@2x.png $out/share/icons/hicolor/256x256/apps/rustdesk.png
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
+    install -Dm644 ../flatpak/com.rustdesk.RustDesk.metainfo.xml -t $out/share/metainfo
   '';
 
   extraWrapProgramArgs = ''

@@ -53,6 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 surfer/assets/com.gitlab.surferproject.surfer.desktop -t $out/share/applications
+    install -Dm644 surfer/assets/com.gitlab.surferproject.surfer.metainfo.xml -t $out/share/metainfo
+    install -Dm644 surfer/assets/com.gitlab.surferproject.surfer.png -t $out/share/icons/hicolor/256x256/apps
+  '';
+
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/surfer \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}

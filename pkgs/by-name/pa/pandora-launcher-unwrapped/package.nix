@@ -98,6 +98,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       magick -background none package/windows.svg -resize "$geometry" \
         "$out/share/icons/hicolor/$geometry/apps/pandora_launcher.png"
     done
+
+    install -Dm644 package/flatpak/com.moulberry.PandoraLauncher.metainfo.xml -t $out/share/metainfo
   '';
 
   doInstallCheck = true;

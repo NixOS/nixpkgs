@@ -93,6 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/bin $out/share
     install -Dm755 target/x86_64-unknown-linux-gnu/release/mediaharbor $out/bin/
     cp -r target/x86_64-unknown-linux-gnu/release/bundle/deb/MediaHarbor_*/data/usr/share/* $out/share/ || true
+    install -Dm644 packaging/flatpak/org.mediaharbor.MediaHarbor.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {
