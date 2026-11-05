@@ -1,21 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
+  fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-jsmath";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-qZJeSkWHJH7SGRoi319pcGVsuMor1ihDCVePIVPgxLg=";
+  src = fetchFromGitHub {
+    owner = "sphinx-doc";
+    repo = "sphinxcontrib-jsmath";
+    tag = finalAttrs.version;
+    hash = "sha256-CPM+el3nBc3RFZrtjannVXy9NHqXmUwxl9DQmMGzmNQ=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
