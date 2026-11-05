@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pure-magic-rs";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,12 +16,12 @@ buildPythonPackage (finalAttrs: {
     owner = "qjerome";
     repo = "magic-rs";
     tag = "pure-magic-rs-v${finalAttrs.version}";
-    hash = "sha256-NeFqBdxB4cYSrhA44dnr8n7kcrF/CdCcejO3im5RcpQ=";
+    hash = "sha256-l8+mbMvX1Od/A2O0e4oaknCT48ON9juSPkkrY8Hu0B0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HFpI7kNKH4ctDyJtB1Rvg/3act5vwWcxLd2DJ4W9JbY=";
+    hash = "sha256-Tpj3mNH6QtnOy8fHoW+ckwEzfyxE4Q/5qESl1DAAAOE=";
   };
 
   buildAndTestSubdir = "python";
