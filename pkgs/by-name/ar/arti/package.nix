@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-28s2BnesadPGm1gQDxzIqSgGaUd8ZgoTpKK3WXBRU9Q=";
+    hash = "sha256-InCAlqPG2p5q049aiPgMZu32LWZQbaqd06amnxrKcEo=";
   };
 
   # Working around a bug in cargo that appears with cargo-auditable, see
@@ -31,10 +31,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"http"' '"dep:http"' \
       --replace-fail '"tokio-util"' '"dep:tokio-util"' \
       --replace-fail '"opentelemetry-appender-tracing",' ""
+
+    substituteInPlace crates/equix/Cargo.toml \
+      --replace-fail '"dep:visibility"' '"visibility"'
   '';
 
   buildAndTestSubdir = "crates/arti";
-  cargoHash = "sha256-g+t5X1t0koUzqoHpY8+lncqRobdDuZggXtD3HRk9ryE=";
+  cargoHash = "sha256-grgIqU1gw1UqeGgR4aR7cAOxBW91F12bHMgOj4pgLcY=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
