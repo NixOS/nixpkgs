@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # tests
   pytestCheckHook,
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   pythonImportsCheck = [
