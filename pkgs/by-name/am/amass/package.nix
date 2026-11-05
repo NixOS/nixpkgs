@@ -8,7 +8,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "amass";
-  version = "5.1.2";
+  version = "5.1.3";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpostalWithData ];
@@ -17,7 +17,7 @@ buildGo127Module (finalAttrs: {
     owner = "owasp-amass";
     repo = "Amass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcn2toApgVm9zYN/bw14fW7j0b3wJG54jm4cTEpuOmY=";
+    hash = "sha256-XypU8Z2RptwXM0vrLqsK+oglt8p4LVv7o9COIq261ro=";
   };
 
   vendorHash = "sha256-5gRMV65BmDepQyKSY78XHkxOybVav7MlRzqX7gSoi4A=";
