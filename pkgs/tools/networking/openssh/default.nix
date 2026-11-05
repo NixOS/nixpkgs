@@ -94,27 +94,21 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "10.4p1";
+    version = "10.6p2";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-72Am3SrqjVYFljjV0yYpAsiSzrqfiDlYNeDQbT+2Mjg=";
+      hash = "sha256-muRIcgkM8vBrPPn/FH5/FvMJZxNAdj7S+ZJIOYrinVs=";
     };
 
     extraPatches = [
       ./ssh-keysign-8.5.patch
 
       (fetchpatch {
-        name = "servconf-fix-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.4p1-1/debian/patches/servconf-fix-gssapi.patch";
-        hash = "sha256-ypyaoEhwxo7SYVpjMkCQnrcFgY2ouWJQlrbJy50Lidk=";
-      })
-
-      (fetchpatch {
         name = "gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.4p1-1/debian/patches/gssapi.patch";
-        hash = "sha256-K12AE4C0zMdRdMsRMQCMRIFvN+NhNvCgyt0NDZp7n24=";
+        url = "https://salsa.debian.org/ssh-team/openssh-gssapi/raw/debian/1%2510.6p1-1/debian/patches/gssapi.patch";
+        hash = "sha256-/gxGxXHyXo4xJXdoZiGSvKfej3Uws1vuzZUZXgZ2UwY=";
       })
     ];
 
