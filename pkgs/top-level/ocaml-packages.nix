@@ -1429,8 +1429,6 @@ let
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
-        mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
-
         mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
 
         msgpck = callPackage ../development/ocaml-modules/msgpck { };
