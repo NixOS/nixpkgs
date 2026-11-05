@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
