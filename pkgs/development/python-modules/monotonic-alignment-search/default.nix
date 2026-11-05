@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "monotonic-alignment-search";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eginhard";
     repo = "monotonic_alignment_search";
     tag = "v${version}";
-    hash = "sha256-XsQDRsgwwlZAmxpsISgNYbrgnMOQIVNvzJV4ZWxswCY=";
+    hash = "sha256-/a/hQW3LjpvbgjK/Z+nDeYkhEoIvdf1tRHesNIL1FWA=";
   };
 
   build-system = [
