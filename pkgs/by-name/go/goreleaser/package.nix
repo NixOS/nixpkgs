@@ -10,7 +10,7 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "goreleaser";
-  version = "2.19.0";
+  version = "2.20.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGo127Module (finalAttrs: {
     owner = "goreleaser";
     repo = "goreleaser";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J0KEUPPWIcV6SVo5qU/Dr+46vK6gNRoK61xRDbGUeX4=";
+    hash = "sha256-RVuLoFiApR4zYL1qlCtPO8Qm1iRtQVRYAFEUFrmKTXQ=";
   };
 
-  vendorHash = "sha256-rl11GsE/lH0IWUhMDoIJKPzmlZOp4PVVVXivtbmc/Fw=";
+  vendorHash = "sha256-d/WZfWzUVe2yJEbHuaMAuiJnuOCDsCfcnGFiQcMU954=";
 
   ldflags = [
     "-s"
