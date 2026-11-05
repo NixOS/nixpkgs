@@ -2,7 +2,7 @@
   lib,
   xsel,
   serve,
-  fetchzip,
+  fetchpatch,
   stdenvNoCC,
   makeWrapper,
   buildNpmPackage,
@@ -21,6 +21,21 @@ buildNpmPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-oYt+DG8lTAOY8MEZsJw2nkg7LGE/hEY7nw5UT9EQfZU=";
   };
+
+  patches = [
+    # fixes https://github.com/TeXlyre/texlyre/security/advisories/GHSA-gg75-v533-34cq
+    # remove on next release (> 0.13.0)
+    (fetchpatch {
+      name = "sanitize-icon.patch";
+      url = "https://github.com/TeXlyre/texlyre/commit/92b50ca050af8473f0fd51a048a7e1d60dcdb2dc.patch";
+      includes = [
+        "src/components/settings/ToolConfigCards.tsx"
+        "src/utils/toolConfigUtils.ts"
+        "tests/unit/utils/toolConfigUtils.test.ts"
+      ];
+      hash = "sha256-cgkHHL7zA4dJO+L0yRX6rpgf0MPlYUWijCDfG2vffVs=";
+    })
+  ];
 
   npmDepsHash = "sha256-MlxMej9huxgC73FUG8iifkxUnJHFWS9y50NaZ4C+aBE=";
 
