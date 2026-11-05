@@ -72,6 +72,10 @@ buildDotnetModule (finalAttrs: {
     description = "Multi-platform launcher for Freespace 2 Open";
     homepage = "https://fsnebula.org/knossos/";
     license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     mainProgram = "Knossos.NET";
     maintainers = with lib.maintainers; [ cdombroski ];
     platforms = lib.platforms.unix;
