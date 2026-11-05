@@ -101,11 +101,6 @@ writers.writePython3Bin "selenium-test"
     if not driver.find_element(By.CSS_SELECTOR, 'input#create-user-code-of-conduct-consent').is_selected():
         driver.find_element(By.CSS_SELECTOR, 'input#create-user-code-of-conduct-consent').click()
 
-    # Workaround "Welcome back!" hiding the "Create" button that needs to be click()ed
-    # Documentation: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/#elementclickinterceptedexception
-    welcome = driver.find_element(By.CSS_SELECTOR, 'div[data-id=flash_info]')
-    driver.execute_script("arguments[0].remove();", welcome)
-
     driver.find_element(By.CSS_SELECTOR, 'button[type=submit]').click()
 
     log("Waiting Home page")
