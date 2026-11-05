@@ -59,7 +59,7 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
     parser.add_argument(
         "--virtiofs-paths",
         nargs="+",
-        help="Paths to be exposed with virtiofsd in the format 'tag:source:mode:cache'",
+        help="Paths to be exposed with virtiofsd in the format 'tag:source:cache:mode'",
     )
 
     args, qemu_args = parser.parse_known_args()
@@ -69,7 +69,7 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
 
     if qemu_args[0] != "--":
         fatal_error(
-            "Usage error: expected command to run separated with '--' from the args pased to this program!"
+            "Usage error: expected command to run separated with '--' from the args passed to this program!"
         )
     qemu_args.pop(0)
     if not qemu_args:
@@ -81,7 +81,7 @@ def extract_arguments() -> tuple[list[tuple[str, Path, str, str]], list[str]]:
         args = defin.split(":")
         if len(args) != 4:
             fatal_error(
-                f"--virtio-paths definition '{defin}' doesn't have four params separated by ':'!"
+                f"--virtiofs-paths definition '{defin}' doesn't have four params separated by ':'!"
             )
         defs.append((args[0], Path(args[1]), args[2], args[3]))
 
