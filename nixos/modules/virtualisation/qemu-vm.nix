@@ -328,12 +328,15 @@ let
         ''
     )}
 
-    export NIX_VIRTIOFS_DIR=$(mktemp -d)
+    ${lib.optionalString useVirtiofs ''
+      export NIX_VIRTIOFS_DIR=$(mktemp -d)
+    ''}
 
     # Start QEMU.
-    exec ${lib.getExe runScript} \
+    exec ${lib.optionalString useVirtiofs ''
+      ${lib.getExe runScript} \
       ${
-        lib.optionalString (useVirtiofs && cfg.sharedDirectories != { })
+        lib.optionalString (cfg.sharedDirectories != { })
           "--virtiofs-paths ${
             lib.concatStringsSep " " (
               lib.mapAttrsToList (
@@ -344,6 +347,7 @@ let
           }"
       } \
       -- \
+    ''} \
       ${
         qemu-common.qemuBinaryWith {
           qemuPkg = qemu;
