@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.41.2";
+  version = "0.43.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kvesteri";
     repo = "sqlalchemy-utils";
     tag = version;
-    hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
+    hash = "sha256-d2yA22y+ntbpitaL+dka0XLhFVJLmunIV6kFxzJfiBk=";
   };
 
   patches = [ ./skip-database-tests.patch ];
