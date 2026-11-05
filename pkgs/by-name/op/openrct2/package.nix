@@ -233,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
       the game settings and specify the path to the data directory.
     '';
     homepage = "https://openrct2.io";
-    changelog = "https://github.com/OpenRCT2/OpenRCT2/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/OpenRCT2/OpenRCT2/releases/tag/${finalAttrs.src.tag}";
     downloadPage = "https://github.com/OpenRCT2/OpenRCT2/releases";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
