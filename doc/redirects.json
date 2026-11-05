@@ -266,8 +266,20 @@
   "modules-generic": [
     "index.html#modules-generic"
   ],
+  "modules-generic-command-line": [
+    "index.html#modules-generic-command-line"
+  ],
   "modules-generic-meta-maintainers": [
     "index.html#modules-generic-meta-maintainers"
+  ],
+  "modules-generic-pkgs": [
+    "index.html#modules-generic-pkgs"
+  ],
+  "modules-generic-pkgs-commands": [
+    "index.html#modules-generic-pkgs-commands"
+  ],
+  "modules-generic-pkgs-settings": [
+    "index.html#modules-generic-pkgs-settings"
   ],
   "neovim": [
     "index.html#neovim"
