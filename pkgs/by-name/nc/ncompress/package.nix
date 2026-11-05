@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+
   makeFlags = [ "PREFIX=$(out)" ];
   installTargets = "install_core";
 
