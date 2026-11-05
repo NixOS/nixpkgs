@@ -4,6 +4,8 @@
   fetchFromGitHub,
   perl,
   cryptography,
+  openssl,
+  pkg-config,
   rustPlatform,
   pretend,
   pytestCheckHook,
@@ -26,22 +28,22 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-YCn/MDSDgrntbFZBJ9eQ5KM74fx7+r0aMdW3jOGJ5+w=";
   };
 
-  pythonRelaxDeps = [
-    "cryptography"
-  ];
-
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    perl
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   dependencies = [
     cryptography
-    pretend
   ];
 
   nativeCheckInputs = [
+    pretend
     pytestCheckHook
   ];
 
