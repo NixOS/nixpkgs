@@ -56,31 +56,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tEwTrk0iYBco/N4fa7HEwDKRo/WJihQEzVevzul/nKg=";
   };
 
-  passthru = {
-    updateScript = ./update.sh;
+  objectsVersion = "1.8.0";
+  openmusicVersion = "1.6.1";
+  opensfxVersion = "1.0.6";
+  titleSequencesVersion = "0.5.6";
 
-    objects-version = "1.8.0";
-    openmusic-version = "1.6.1";
-    opensfx-version = "1.0.6";
-    title-sequences-version = "0.5.6";
-
-    assets = {
-      objects = fetchurl {
-        url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.passthru.objects-version}/objects.zip";
-        hash = "sha256-lJvuXKyelBvmO7kjt5JzilB8FVpv6nPtqwsjvt4h0wI=";
-      };
-      openmusic = fetchurl {
-        url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${finalAttrs.passthru.openmusic-version}/openmusic.zip";
-        hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
-      };
-      opensfx = fetchurl {
-        url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${finalAttrs.passthru.opensfx-version}/opensound.zip";
-        hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
-      };
-      title-sequences = fetchurl {
-        url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${finalAttrs.passthru.title-sequences-version}/title-sequences.zip";
-        hash = "sha256-N6womFuvGDuuJ69ycQYTWV9oPcJIksBZiftr/QFr210=";
-      };
+  assets = {
+    objects = fetchurl {
+      url = "https://github.com/OpenRCT2/objects/releases/download/v${finalAttrs.objectsVersion}/objects.zip";
+      hash = "sha256-lJvuXKyelBvmO7kjt5JzilB8FVpv6nPtqwsjvt4h0wI=";
+    };
+    openmusic = fetchurl {
+      url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${finalAttrs.openmusicVersion}/openmusic.zip";
+      hash = "sha256-mUs1DTsYDuHLlhn+J/frrjoaUjKEDEvUeonzP6id4aE=";
+    };
+    opensfx = fetchurl {
+      url = "https://github.com/OpenRCT2/OpenSoundEffects/releases/download/v${finalAttrs.opensfxVersion}/opensound.zip";
+      hash = "sha256-BrkPPhnCFnUt9EHVUbJqnj4bp3Vb3SECUEtzv5k2CL4=";
+    };
+    title-sequences = fetchurl {
+      url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${finalAttrs.titleSequencesVersion}/title-sequences.zip";
+      hash = "sha256-N6womFuvGDuuJ69ycQYTWV9oPcJIksBZiftr/QFr210=";
     };
   };
 
@@ -135,16 +131,16 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     export OPENRCT2_ASSETS_DIR=$sourceRoot/${if stdenv.hostPlatform.isDarwin then "build" else "data"}
     mkdir -p $OPENRCT2_ASSETS_DIR/{object,sequence}
-    unzip -o ${finalAttrs.passthru.assets.objects} -d $OPENRCT2_ASSETS_DIR/object
-    unzip -o ${finalAttrs.passthru.assets.openmusic} -d $OPENRCT2_ASSETS_DIR
-    unzip -o ${finalAttrs.passthru.assets.opensfx} -d $OPENRCT2_ASSETS_DIR
-    unzip -o ${finalAttrs.passthru.assets.title-sequences} -d $OPENRCT2_ASSETS_DIR/sequence
+    unzip -o ${finalAttrs.assets.objects} -d $OPENRCT2_ASSETS_DIR/object
+    unzip -o ${finalAttrs.assets.openmusic} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.assets.opensfx} -d $OPENRCT2_ASSETS_DIR
+    unzip -o ${finalAttrs.assets.title-sequences} -d $OPENRCT2_ASSETS_DIR/sequence
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    printf '%s' "${finalAttrs.passthru.assets.objects.url}" > $sourceRoot/build/object/objects.zip.zipversion
-    printf '%s' "${finalAttrs.passthru.assets.title-sequences.url}" > $sourceRoot/build/sequence/title-sequences.zip.zipversion
-    printf '%s' "${finalAttrs.passthru.assets.opensfx.url}" > $sourceRoot/build/opensound.zip.zipversion
-    printf '%s' "${finalAttrs.passthru.assets.openmusic.url}" > $sourceRoot/build/openmusic.zip.zipversion
+    printf '%s' "${finalAttrs.assets.objects.url}" > $sourceRoot/build/object/objects.zip.zipversion
+    printf '%s' "${finalAttrs.assets.title-sequences.url}" > $sourceRoot/build/sequence/title-sequences.zip.zipversion
+    printf '%s' "${finalAttrs.assets.opensfx.url}" > $sourceRoot/build/opensound.zip.zipversion
+    printf '%s' "${finalAttrs.assets.openmusic.url}" > $sourceRoot/build/openmusic.zip.zipversion
   '';
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -193,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.mapAttrsToList (assetName: asset: ''
           grep -qF '"${asset.url}"' assets.json \
             || (echo "${assetName} differs from expected version!"; exit 1)
-        '') finalAttrs.passthru.assets
+        '') finalAttrs.assets
       )
     );
 
@@ -214,6 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
           ${lib.optionalString (rct1Path != null) "--add-flags '--rct1-data-path=\"${rct1Path}\"'"} \
           ${lib.optionalString (rct2Path != null) "--add-flags '--rct2-data-path=\"${rct2Path}\"'"}
       '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open source re-implementation of RollerCoaster Tycoon 2";
