@@ -126,6 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
       mv mpv_identify mpv_identify.sh
       popd
     ''
+    # Fix location of vapoursynth libvsscript.so
+    ''
+      substituteInPlace video/filter/vf_vapoursynth.c --replace-fail libvsscript.so \
+        '${vapoursynth}/${vapoursynth.pythonModule.sitePackages}/vapoursynth/libvsscript.so'
+    ''
   ];
 
   mesonFlags = [
@@ -276,10 +281,6 @@ stdenv.mkDerivation (finalAttrs: {
       # The wrapper consults luaEnv and lua.version
       luaEnv
       lua
-      # In the wrapper, we want to reference vapoursynth which has the `python3`
-      # passthru attribute (which has the `sitePrefix` attribute). This way we'll
-      # be sure that in the wrapper we'll use the same python3.sitePrefix used to
-      # build vapoursynth.
       vapoursynthSupport
       vapoursynth
       ;
