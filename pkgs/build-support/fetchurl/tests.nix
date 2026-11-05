@@ -271,4 +271,29 @@ in
     '';
   });
 
+  retry = testers.invalidateFetcherByDrvHash fetchurl {
+    name = "retry-test";
+    urls = [
+      "google.com"
+      "https://github.com/BurntSushi/ripgrep/archive/refs/tags/15.2.0.tar.gz"
+    ];
+    hash = "sha256-dgUknT6w1fFw40FEmOM0Tiax56FHrsUYtXCQuAA2pWI=";
+  };
+
+  retry-512 = testers.invalidateFetcherByDrvHash fetchurl {
+    name = "retry-512";
+    urls = [
+      "google.com"
+      "https://github.com/BurntSushi/ripgrep/archive/refs/tags/15.2.0.tar.gz"
+    ];
+    hash = "sha512-/n48NsjM/cKS19Gsjalcq0Jktj/IkgnnoZVX7ynRxhiZK8XCQb5TQXqnhdyDSiOfEO7GxY2l+UOPD0qGDBhX1A==";
+  };
+
+  recursive-hash = testers.invalidateFetcherByDrvHash fetchurl {
+    # This hashes the NAR of the file rather than the file itself.
+    name = "recursive-test";
+    recursiveHash = true;
+    url = "https://github.com/BurntSushi/ripgrep/archive/refs/tags/15.2.0.tar.gz";
+    hash = "sha256-GA2Covm/Vlb3yyWS5Eh3jKWU/yDqlk+S83qcxp+hsik=";
+  };
 }

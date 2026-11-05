@@ -72,6 +72,40 @@ tryDownload() {
     done
 }
 
+getHash() {
+  local target="$1"
+  local hash_type hasher hash
+
+  if [[ "$outputHashMode" != "flat" || -n "$postFetch" || -n "${outputHashAlgo:-}" ]]; then
+    # postFetch can screw with it so we cannot check,
+    # and we are not recreating a nar file within here for recursive hash.
+    # we will only support retries with an sri hash
+    echo ""
+    return 0
+  fi
+
+  # Get the sri hash type
+  hash_type="${outputHash%%-*}"
+
+  case "$hash_type" in
+    sha256)
+      hasher=sha256sum
+      ;;
+    sha512)
+      hasher=sha512sum
+      ;;
+    *)
+      echo ""
+      return 0
+      ;;
+  esac
+
+  # We'll just only support sri hashes rather than
+  # make it more complicated
+  hash="$("$hasher" < "$target" | cut -d' ' -f1 | basenc --base16 -d | basenc --base64 -w0 || true)"
+
+  echo "$hash_type-$hash"
+}
 
 finish() {
     local skipPostFetch="$1"
@@ -195,8 +229,10 @@ fi
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
-success=
+last_success="$(mktemp -u)"
 for url in "${resolvedUrls[@]}"; do
+    success=
+
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)
@@ -210,8 +246,45 @@ for url in "${resolvedUrls[@]}"; do
        esac
     fi
     tryDownload "$url" "$downloadedFile"
-    if test -n "$success"; then finish; fi
+
+    # Empty output means we cannot even try
+    hash="$(getHash "$downloadedFile" || true)"
+    if [[ -z "$hash" || "$hash" == "$outputHash" ]]; then
+      # Either:
+      # 1. Unsupported hash, recusive or unsupported SRI, and we cannot do anything further
+      # 2. The hashes match
+      #
+      # So we should break to the end.
+      break
+    elif [[ -n "$success" ]]; then
+      # This occurs:
+      # 1. Flat hashing
+      # 2. Curl reported a successful download
+      # 3. The hash does not match
+      #
+      # Thus we should cache the download, and continue to the next attempt. The cache
+      # is for when `hash = ""` and `hash = lib.fakeHash`, so we must provide the successfully downloaded
+      # data for the trust-on-first-use case.
+      #
+      # We cannot leave the download location with what curl put in it, as the contents get
+      # messed up by curl attempting to resume the download.
+      mv -fT -- "$downloadedFile" "$last_success" || true
+      continue
+    fi
 done
+
+if [[ ! -f "$downloadedFile" && -f "$last_success" ]]; then
+  # This occurs when:
+  # 1. Flat hashing
+  # 2. There has been at least one successful download (curl succeeded)
+  # 3. None of the hashes have matched
+  # 4. The final download did not succeed
+  # So pull the cached download out and put it in place.
+  mv -fT -- "$last_success" "$downloadedFile"
+  success=1
+fi
+
+if test -n "$success"; then finish; fi
 
 # Restore globbing settings
 set +o noglob
