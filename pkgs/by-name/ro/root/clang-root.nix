@@ -1,37 +1,30 @@
 {
   stdenv,
   lib,
-  fetchgit,
+  fetchFromGitHub,
   apple-sdk,
   cmake,
-  git,
-  llvm_20,
-  pkg-config,
+  llvm_22,
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clang-root";
-  version = "20-20260616-01";
+  version = "22-20261028-01";
 
-  src = fetchgit {
-    url = "https://github.com/root-project/llvm-project";
-    tag = "ROOT-llvm${version}";
-    hash = "sha256-WRgM1vuK2vQ5CC/QkKnLtq6d61rfo1bCV9fIxPYWKiU=";
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "llvm-project";
+    tag = "ROOT-llvm${finalAttrs.version}";
+    hash = "sha256-Zp/I/sT0cfW2N/VobE5yX5XCDUnP/s5hjn4W7QFR+AM=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    git
-  ];
-  buildInputs = [
-    llvm_20
     python3
   ];
-
-  patches = [
-    ./Fix-find_package-LLVM-overwriting-LLVM_LINK_LLVM_DYLIB.patch
+  buildInputs = [
+    llvm_22
   ];
 
   preConfigure = ''
@@ -43,10 +36,9 @@ stdenv.mkDerivation rec {
     "-DCLANG_ENABLE_ARCMT=OFF"
     "-DCLANG_ENABLE_STATIC_ANALYZER=OFF"
     "-DCLANG_LINK_CLANG_DYLIB=OFF"
-    "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
     "-DLLVM_INCLUDE_TESTS=OFF"
     "-DLLVM_LINK_LLVM_DYLIB=OFF"
-    "-DLLVM_MAIN_SRC_DIR=${llvm_20.src}"
+    "-DLLVM_MAIN_SRC_DIR=${llvm_22.src}"
   ]
   ++ (
     if stdenv.hostPlatform.isDarwin then
@@ -54,4 +46,21 @@ stdenv.mkDerivation rec {
     else
       lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   );
-}
+
+  meta = {
+    description = "Clang with the patches required by ROOT's C++ interpreter";
+    homepage = "https://github.com/root-project/llvm-project";
+    # Same as for the LLVM packages in nixpkgs
+    license =
+      with lib.licenses;
+      AND [
+        ncsa
+        (WITH asl20 llvm-exception)
+      ];
+    platforms = lib.platforms.unix;
+    maintainers = [
+      lib.maintainers.guitargeek
+      lib.maintainers.veprbl
+    ];
+  };
+})
