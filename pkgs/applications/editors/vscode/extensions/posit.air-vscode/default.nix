@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "air-vscode";
     publisher = "posit";
-    version = "0.30.0";
-    hash = "sha256-RAyXl111qODYMN0CiN/F+i6O3W0MvKdoV8Ap4dDzdsA=";
+    version = "0.32.0";
+    hash = "sha256-T4EIe4ii/tBwJk84f6SiRVoXae95jlFCm31H3yx/CLM=";
   };
   patchPhase = ''
     runHook prePatch
