@@ -42,6 +42,8 @@ in
 
           serviceConfig = {
             LoadCredential = loadCredential cfg.push.settings;
+            StateDirectory = "fluxer/push";
+            RuntimeDirectory = "fluxer/push";
           };
         }
       ]

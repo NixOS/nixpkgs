@@ -52,6 +52,7 @@ in
 
           serviceConfig = {
             LoadCredential = loadCredential cfg.gateway.settings;
+            StateDirectory = "fluxer/gateway";
             RuntimeDirectory = "fluxer/gateway";
           };
         }

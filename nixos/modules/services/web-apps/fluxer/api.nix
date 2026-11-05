@@ -66,6 +66,7 @@ in
             ++ lib.optional (cfg.aux.valkey.enable) (dirOf config.services.redis.servers.fluxer.unixSocket);
 
             StateDirectory = "fluxer/api";
+            RuntimeDirectory = "fluxer/api";
             LoadCredential = loadCredential cfg.api.settings;
 
             User = mkIf (cfg.api.user != null) cfg.api.user;
@@ -116,6 +117,7 @@ in
             ++ lib.optional (cfg.aux.valkey.enable) (dirOf config.services.redis.servers.fluxer.unixSocket);
 
             StateDirectory = "fluxer/api-worker";
+            RuntimeDirectory = "fluxer/api-worker";
             LoadCredential = loadCredential cfg.api.settings;
 
             User = mkIf (cfg.api.user != null) cfg.api.user;
