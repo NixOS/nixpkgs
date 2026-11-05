@@ -44,10 +44,25 @@ let
     feature = null;
     libraries = ps: [ ps.torch ];
   };
+
+  tester-mps = callPackage ./mk-mps-check.nix {
+    libraries = ps: [
+      # needed to suppress the warning "No module named 'numpy'" when running
+      # the test
+      ps.numpy
+
+      ps.torch
+    ];
+  };
 in
 {
   inherit tester-compileCpu;
   compileCpu = tester-compileCpu.gpuCheck;
+
+  # Runs the MPS check inside the build so CI exercises it; meta.platforms on
+  # the tester restricts it to darwin.
+  inherit tester-mps;
+  mps = tester-mps.gpuCheck;
 
   mnist-example = callPackage ./mnist-example { };
 
