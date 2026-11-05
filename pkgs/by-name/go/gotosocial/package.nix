@@ -125,6 +125,7 @@ buildGoModule (finalAttrs: {
       blakesmith
       cherrykitten
     ];
+    teams = with lib.teams; [ ngi ];
     license = lib.licenses.agpl3Only;
   };
 })
