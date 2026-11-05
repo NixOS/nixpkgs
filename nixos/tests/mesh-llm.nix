@@ -28,10 +28,18 @@
               };
             }
           ];
+          # Merged by name into the entry for the packaged plugin below.
+          plugin = [
+            {
+              name = "openai-endpoint";
+              url = "http://127.0.0.1:8000/v1";
+            }
+          ];
         };
         meshPort = 7842;
         openFirewall = true;
         ownerKeyFile = "/etc/mesh-llm/owner-keystore.json";
+        plugins = [ pkgs.mesh-llmPlugins.openai-endpoint ];
       };
       environment.systemPackages = [
         pkgs.curl
@@ -74,6 +82,21 @@
 
     with subtest("settings are installed in the node's home"):
         machine.succeed("grep -qx 'version = 1' /var/lib/mesh-llm/.mesh-llm/config.toml")
+
+    with subtest("the packaged plugin starts with its settings"):
+        config = machine.succeed("cat /var/lib/mesh-llm/.mesh-llm/config.toml")
+        assert config.count("[[plugin]]") == 1, config
+        assert 'url = "http://127.0.0.1:8000/v1"' in config, config
+        assert "/bin/openai-endpoint" in config, config
+        plugin = "[.. | objects | select(.name? == \"openai-endpoint\")][0]"
+        try:
+            machine.wait_until_succeeds(
+                f"curl -fsS http://127.0.0.1:3131/api/plugins | jq -e '{plugin}.status == \"running\"'",
+                timeout=dt.timedelta(minutes=2),
+            )
+        except Exception:
+            print(machine.execute("curl -sS http://127.0.0.1:3131/api/plugins")[1])
+            raise
 
     with subtest("QUIC listens on the fixed mesh port, and the firewall allows it"):
         machine.wait_until_succeeds("ss -Hulnp | grep -q ':7842 '")
