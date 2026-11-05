@@ -1,5 +1,4 @@
 source "$NIX_ATTRS_SH_FILE"
-
 # This file will bring variables of the form "_mirror_<mirrorname>" into scope.
 # DO NOT USE the "_mirror" prefix for variables in this script to avoid
 # accidentally clobbering them.
@@ -72,6 +71,39 @@ tryDownload() {
     done
 }
 
+
+getHash() {
+  local target="$1"
+  local hash_type hasher
+
+  if [[ "$outputHashMode" != "flat" || -n "$postFetch" || -n "${outputHashAlgo:-}" ]]; then
+    # postFetch can screw with it so we cannot check,
+    # and we are not recreating a nar file within here for recursive hash.
+    # we will only support retries with an sri hash
+    echo ""
+    return 0
+  fi
+
+  # Get the sri hash type
+  hash_type="${outputHash%%-*}"
+
+  case "$hash_type" in
+    sha256)
+      hasher=sha256sum
+      ;;
+    sha512)
+      hasher=sha512sum
+      ;;
+    *)
+      echo ""
+      return 0
+      ;;
+  esac
+
+  # We'll just only support sri hashes rather than
+  # make it more complicated
+  $hasher < "$target" | cut -d' ' -f1 | basenc --base16 -d | basenc --base64 || true
+}
 
 finish() {
     local skipPostFetch="$1"
@@ -196,6 +228,7 @@ fi
 set -o noglob
 
 success=
+hash=
 for url in "${resolvedUrls[@]}"; do
     if [ -z "$postFetch" ]; then
        case "$url" in
@@ -210,6 +243,15 @@ for url in "${resolvedUrls[@]}"; do
        esac
     fi
     tryDownload "$url" "$downloadedFile"
+
+    # Empty output means we cannot even try
+    hash="$(getHash "$downloadedFile" || true)"
+    if [[ -n "$hash" && "$outputHash" != *"$hash"* ]]; then
+      # We get strange hashes if we do not delete between downloads.
+      rm "$downloadedFile" || true
+      continue
+    fi
+
     if test -n "$success"; then finish; fi
 done
 
