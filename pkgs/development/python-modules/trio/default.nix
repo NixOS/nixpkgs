@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "trio";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5ooFU1TP9CU0+dpIWs8cw+gHvBzntCnxejpBQn/QffE=";
+    hash = "sha256-jfFcnmm86I1MuKL0zNCzf2Ms3RUCFfGctJz52FPI6cU=";
   };
 
   build-system = [ setuptools ];
