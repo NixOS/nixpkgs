@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./ptrdiff.patch
     ./c++17.patch
+    ./c++20.patch
   ];
 
   postPatch = ''
