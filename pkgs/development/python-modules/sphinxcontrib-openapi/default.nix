@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-openapi";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "openapi";
     tag = finalAttrs.version;
-    hash = "sha256-PmT2GcOvO7KmWwjdqkuZ9cgoIZwbg82V21Opsfhz+mY=";
+    hash = "sha256-gGxAXkT3ClFRdwk0enfLERqlAs3PupqhiNknU1WSaSg=";
   };
 
   build-system = [
