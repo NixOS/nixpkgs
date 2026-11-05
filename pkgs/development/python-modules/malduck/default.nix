@@ -55,7 +55,7 @@ buildPythonPackage rec {
     description = "Helper for malware analysis";
     homepage = "https://github.com/CERT-Polska/malduck";
     changelog = "https://github.com/CERT-Polska/malduck/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "malduck";
   };
