@@ -11,6 +11,7 @@
   makeDesktopItem,
   copyDesktopItems,
   alsa-lib,
+  adwaita-icon-theme-legacy,
   fontconfig,
   makeFontsConf,
   dejavu_fonts,
@@ -70,6 +71,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The daemon's launch tests create an executable shell script.
     substituteInPlace crates/daemon/src/window/native.rs \
       --replace-fail '#!/bin/sh' '#!${runtimeShell}'
+
+    # Tray hosts may not resolve these names in their own icon theme.
+    substituteInPlace crates/daemon/src/tray/linux.rs \
+      --replace-fail '"user-offline"' '"${adwaita-icon-theme-legacy}/share/icons/AdwaitaLegacy/32x32/legacy/user-offline.png"' \
+      --replace-fail '"user-available"' '"${adwaita-icon-theme-legacy}/share/icons/AdwaitaLegacy/32x32/legacy/user-available.png"' \
+      --replace-fail '"mail-unread"' '"${adwaita-icon-theme-legacy}/share/icons/AdwaitaLegacy/32x32/legacy/mail-unread.png"'
 
     # Link against the maintained system Opus instead of the bundled copy.
     substituteInPlace $cargoDepsCopy/*/opusic-sys-*/Cargo.toml \
