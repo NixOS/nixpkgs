@@ -68,7 +68,7 @@ in
             lib.types.submodule (
               { config, ... }: {
                 path = lib.mkIf (
-                  config.backend == "age"
+                  config.backend == "plain"
                 ) "${cfg.targetDirectory}/${secret.config.name}/${config.name}";
               }
             )
