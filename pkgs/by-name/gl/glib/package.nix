@@ -24,6 +24,7 @@
   # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
   util-linuxMinimal,
   buildPackages,
+  pkgConfigFixupHook,
 
   # this is just for tests (not in the closure of any regular package)
   glib,
@@ -190,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    pkgConfigFixupHook
     perl
     python3
     gettext
