@@ -48,13 +48,14 @@ let
         mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
+        broken = true; # depends on ocaml_pcre
       };
     };
 
   combyKernel = mkCombyPackage {
     pname = "comby-kernel";
     extraBuildInputs = [
-      ocamlPackages.ocaml_pcre
+      # ocamlPackages.ocaml_pcre
       ocamlPackages.bigstringaf
     ];
     # tests cannot be built until all of comby is built
@@ -90,7 +91,7 @@ mkCombyPackage {
     ocamlPackages.conduit-lwt-unix
     ocamlPackages.lwt_react
     ocamlPackages.tar-unix
-    ocamlPackages.ocaml_pcre
+    # ocamlPackages.ocaml_pcre
     ocamlPackages.cstruct-lwt
     ocamlPackages.dune-configurator
     combyKernel
