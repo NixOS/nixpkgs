@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "volvocarsapi";
-  version = "0.4.4";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -20,8 +20,13 @@ buildPythonPackage rec {
     owner = "thomasddn";
     repo = "volvo-cars-api";
     tag = "v${version}";
-    hash = "sha256-8ASR7IE84Hrv+u4ORULMTSgBnn7TMIKwzFKiKWhQLIg=";
+    hash = "sha256-KxDgtGe7SrrYdj+dT4/C/xH85mkih9PDzFxj6QqFleU=";
   };
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "yarl"
+  ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook
