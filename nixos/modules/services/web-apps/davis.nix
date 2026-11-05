@@ -521,11 +521,6 @@ in
                     try_files $uri $uri/ /index.php$is_args$args;
                   '';
                 };
-                "~* ^/.well-known/(caldav|carddav)$" = {
-                  extraConfig = ''
-                    return 302 https://$host/dav/;
-                  '';
-                };
                 "~ ^(.+\\.php)(.*)$" = {
                   extraConfig = ''
                     try_files                $fastcgi_script_name =404;

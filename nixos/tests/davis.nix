@@ -77,9 +77,23 @@ in
         systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ "/srv/webdav" ];
       };
     };
-    standalone = {
+    standalone = { config, ... }: {
       imports = [ (node "sqlite") ];
-      services.davis.nginx = null;
+      services.davis = {
+        nginx = null;
+        poolConfig = {
+          "listen.owner" = "caddy";
+          "listen.group" = "caddy";
+        };
+      };
+      services.caddy = {
+        enable = true;
+        virtualHosts."http://davis.example.com".extraConfig = ''
+          root * ${config.services.davis.package}/public
+          php_fastcgi unix/${config.services.phpfpm.pools.davis.socket}
+          file_server
+        '';
+      };
     };
   };
 
@@ -269,6 +283,15 @@ in
           page = standalone.succeed(f"{' '.join(env)} ${pkgs.fcgi}/bin/cgi-fcgi -bind -connect ${config.nodes.standalone.services.phpfpm.pools.davis.socket}")
           assert "<title>Davis</title>" in page, page
           assert "Status: 500" not in page, page
+
+      with subtest("Davis handles CalDAV and CardDAV discovery behind nginx and Caddy"):
+          standalone.wait_for_unit("caddy.service")
+          for machine in [sqlite, standalone]:
+              for protocol in ["caldav", "carddav"]:
+                  response = request(machine, "/.well-known/" + protocol, "-D -", "301")
+                  # Relative redirects keep the client's scheme and host.
+                  assert re.search(r"(?im)^location: /dav/\r?$", response), response
+                  request(machine, "/.well-known/" + protocol, "-L", "401")
 
       with subtest("migration failure prevents PHP-FPM startup"):
           standalone.succeed("systemctl stop phpfpm-davis.service davis-db-migrate.service")
