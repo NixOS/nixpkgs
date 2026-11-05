@@ -57,6 +57,8 @@
   freetype,
   openssl,
   openxr-loader,
+  vulkan-headers,
+  vulkan-volk,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -74,6 +76,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
+  webkitgtk_6_0,
   directoryListingUpdater,
   fetchpatch,
 }:
@@ -200,6 +203,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     librice
     # For ENABLE_WEBXR
     openxr-loader
+    # For USE_VULKAN
+    vulkan-volk
+    # https://bugs.webkit.org/show_bug.cgi?id=327027
+    vulkan-headers
   ]
   ++ lib.optionals withLibsecret [
     libsecret
@@ -257,7 +264,13 @@ clangStdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      experimental = webkitgtk_6_0.override {
+        enableExperimental = true;
+        inherit gtk4;
+      };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = directoryListingUpdater { };
   };
 
