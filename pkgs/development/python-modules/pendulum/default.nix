@@ -52,6 +52,11 @@ buildPythonPackage (finalAttrs: {
     time-machine
   ];
 
+  disabledTests = [
+    # broke with tzdata 2026.6
+    "test_instance_with_aware_datetime_any_tzinfo"
+  ];
+
   disabledTestPaths = [
     "tests/benchmarks"
   ]
