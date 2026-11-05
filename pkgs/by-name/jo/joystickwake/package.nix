@@ -1,9 +1,11 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromCodeberg,
+  nix-update-script,
+  versionCheckHook,
 }:
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
   version = "1.0";
   pyproject = true;
@@ -15,11 +17,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-p2zhoOLO3WLyn5U6X1c4diywNBmOZNb7Y9l9RoZDlQo=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     dbus-fast
     pyudev
     python-xlib
@@ -27,8 +29,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postInstall = ''
     # autostart file
-    ln -s $out/${python3.sitePackages}/etc $out/etc
+    ln -s $out/${python3Packages.python.sitePackages}/etc $out/etc
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Joystick-aware screen waker";
@@ -38,6 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       This program works around the problem by suppressing screen blankers while joystick activity is detected.
     '';
     homepage = "https://codeberg.org/forestix/joystickwake";
+    changelog = "https://codeberg.org/forestix/joystickwake/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ bertof ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
