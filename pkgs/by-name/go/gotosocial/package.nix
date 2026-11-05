@@ -25,6 +25,8 @@ buildGoModule (finalAttrs: {
   pname = "gotosocial";
   version = "0.22.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
