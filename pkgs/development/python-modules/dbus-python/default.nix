@@ -1,15 +1,16 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitLab,
   buildPythonPackage,
-  fetchpatch,
   isPyPy,
   python,
 
   # build-system
   meson,
   meson-python,
+  ninja,
   pkg-config,
+  setuptools,
 
   # native dependencies
   dbus,
@@ -21,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dbus-python";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = isPyPy;
@@ -31,28 +32,13 @@ buildPythonPackage (finalAttrs: {
     "dev"
   ];
 
-  src = fetchPypi {
-    pname = "dbus-python";
-    inherit (finalAttrs) version;
-    hash = "sha256-mRZm5Jj2Db8+Sbi3Z49VWbimUDT99hquYs3s232Jx3A=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "dbus";
+    repo = "dbus-python";
+    tag = "dbus-python-${finalAttrs.version}";
+    hash = "sha256-wVU8wpm8e3AZUzeSLgMad+P5G53j0rhaQPh3IW3lBUQ=";
   };
-
-  patches = [
-    # reduce required dependencies
-    # https://gitlab.freedesktop.org/dbus/dbus-python/-/merge_requests/23
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/d5e19698a8d6e1485f05b67a5b2daa2392819aaf.patch";
-      hash = "sha256-Rmj/ByRLiLnIF3JsMBElJugxsG8IARcBdixLhoWgIYU=";
-    })
-
-    # Fix on Python 3.15, the patch did not achieve what it aimed for anyway.
-    # https://gitlab.freedesktop.org/dbus/dbus-python/-/work_items/59
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/ebecd1747c382a57ad8e47d0e32112cdbd454b40.patch";
-      hash = "sha256-Hg4o+FPJvQ1/RW9fd8UJg/YEeVOvbJCov7SS7bT0vvs=";
-      revert = true;
-    })
-  ];
 
   postPatch = ''
     # we provide patchelf natively, not through the python package
@@ -61,11 +47,13 @@ buildPythonPackage (finalAttrs: {
     patchShebangs test/*.sh
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     dbus # build systems checks for `dbus-run-session` in PATH
     meson
     meson-python
+    ninja
     pkg-config
+    setuptools
   ];
 
   buildInputs = [
