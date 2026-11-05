@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "golines";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golines";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NveivuTEy+lvgsu32YuBE9lHhV4aTcI04BkMlZiIEGw=";
+    sha256 = "sha256-3oLSlwKaJQVtM2INiU56WaCGsEzDVDLxiahBN+3IzkY=";
   };
 
-  vendorHash = "sha256-bn4C1d7EdAfBJZkWJByOQns+ng7F15eUs8BgYExB/g8=";
+  vendorHash = "sha256-MCoRDIG3M+xtgaY6/7W066ZxTarMV5bo/lUtxiHeNfs=";
 
   subPackages = [
     "."
