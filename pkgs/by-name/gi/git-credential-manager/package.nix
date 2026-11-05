@@ -61,15 +61,16 @@ buildDotnetModule rec {
     glib
   ];
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath (
-        [ git ]
-        ++ lib.optionals withGpgSupport [
-          gnupg
-          pass
-        ]
-      )
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath (
+      [ git ]
+      ++ lib.optionals withGpgSupport [
+        gnupg
+        pass
+      ]
+    ))
     "--inherit-argv0"
   ]
   ++ lib.optionals (!withMsalBrokerSupport) [
