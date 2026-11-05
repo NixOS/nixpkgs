@@ -13,22 +13,23 @@
 let
   self = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "awscli";
-    # N.B: if you change this, change botocore and boto3 to a matching version too
+    # N.B: if you change this, change boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.44.21";
+    version = "1.46.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "aws";
       repo = "aws-cli";
       tag = finalAttrs.version;
-      hash = "sha256-yQFK1YjehmACZGMXfMQLc5OiiIGDO08OtwFSpaRyi58=";
+      hash = "sha256-ztKkviGERrGra/hAq6y/K+MrxfGneA6pHZK55wETyBc=";
     };
 
     pythonRelaxDeps = [
       # botocore must not be relaxed
       "docutils"
       "rsa"
+      "python-dateutil"
     ];
 
     build-system = with python3Packages; [
@@ -36,12 +37,13 @@ let
     ];
 
     dependencies = with python3Packages; [
-      botocore
-      docutils
-      s3transfer
-      pyyaml
       colorama
+      docutils
+      jmespath
+      python-dateutil
+      pyyaml
       rsa
+      urllib3
 
       groff
       less
@@ -62,8 +64,7 @@ let
     installCheckPhase = ''
       runHook preInstallCheck
 
-      $out/bin/aws --version | grep "${python3Packages.botocore.version}"
-      $out/bin/aws --version | grep "${finalAttrs.version}"
+      $out/bin/aws --version | grep -q "${finalAttrs.version}"
 
       runHook postInstallCheck
     '';
