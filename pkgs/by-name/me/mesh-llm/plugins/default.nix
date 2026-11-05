@@ -9,4 +9,5 @@ lib.makeScope newScope (self: {
   flash-moe = self.callPackage ./flash-moe/package.nix { };
   metrics = self.callPackage ./metrics/package.nix { };
   openai-endpoint = self.callPackage ./openai-endpoint/package.nix { };
+  powermetrics = self.callPackage ./powermetrics/package.nix { };
 })
