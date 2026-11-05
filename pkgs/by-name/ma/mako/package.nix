@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  systemdMinimal,
+  systemdLibs,
   basu,
   elogind,
   pango,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     wayland
   ]
-  ++ lib.optional (busProvider == "libsystemd") systemdMinimal
+  ++ lib.optional (busProvider == "libsystemd") systemdLibs
   ++ lib.optional (busProvider == "libelogind") elogind
   ++ lib.optional (busProvider == "basu") basu;
 

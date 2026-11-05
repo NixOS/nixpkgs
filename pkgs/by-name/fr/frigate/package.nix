@@ -35,7 +35,7 @@ let
           # Account for divergences with the main `tokenizers` derivation:
           postPatch = "";
           # datasets>=5 is incompatible with huggingface-hub_0
-          nativeCheckInputs = builtins.filter (p: (p.pname or "") != "datasets") oldAttrs.nativeCheckInputs;
+          nativeCheckInputs = builtins.filter (p: p.pname or "" != "datasets") oldAttrs.nativeCheckInputs;
           disabledTestPaths = [
             # ModuleNotFoundError: No module named 'datasets'
             "benches/test_tiktoken.py"

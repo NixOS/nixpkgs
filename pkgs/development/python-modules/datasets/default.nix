@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "datasets";
   version = "5.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";

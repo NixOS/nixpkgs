@@ -51,5 +51,6 @@ buildGoModule (finalAttrs: {
       cypherpunk2140
       prusnak
     ];
+    mainProgram = "lnd";
   };
 })

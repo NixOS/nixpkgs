@@ -16,7 +16,7 @@ let
 
   link-grammar = stdenv.mkDerivation (finalAttrs: {
     pname = "link-grammar";
-    version = "5.13.0";
+    version = "5.13.2";
 
     outputs = [
       "bin"
@@ -27,7 +27,7 @@ let
 
     src = fetchurl {
       url = "https://www.gnucash.org/link-grammar/downloads/${finalAttrs.version}/link-grammar-${finalAttrs.version}.tar.gz";
-      hash = "sha256-5qDJBd+xdfNZefA1CgzzxnyzimgZ2fK3PGhN/nKpQd8=";
+      hash = "sha256-NvbIC25fJCDjiYgT8e/bxxHOruyapYRlKevLDGdHsl4=";
     };
 
     nativeBuildInputs = [

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.33";
+  version = "0.0.35";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wtPZ/zEY322rVYZ18Qox/4u5mawfiSHwDG3J6hmWHxg=";
+    hash = "sha256-oh6MT3OnkcPyNWHflnAUiMaRqxdJqSSHzJ5f7m6ghFU=";
   };
 
   build-system = [ hatchling ];

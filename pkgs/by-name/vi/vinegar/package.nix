@@ -94,6 +94,8 @@ buildGoModule (finalAttrs: {
   pname = "vinegar";
   version = "1.9.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";

@@ -43,12 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libsamplerate
     libsndfile
-    fftw
     vamp-plugin-sdk
     ladspa-header
     lv2
+  ];
+
+  propagatedBuildInputs = [
+    libsamplerate
+    fftw
   ];
 
   checkInputs = [
