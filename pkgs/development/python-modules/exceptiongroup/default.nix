@@ -52,6 +52,9 @@ buildPythonPackage rec {
     # RecursionError not raised
     "test_deep_split"
     "test_deep_subgroup"
+  ] ++ lib.optionals (pythonAtLeast "3.15") [
+    # Smarter AttributeError message that is not matched
+    "test_nameerror_suggestions_in_group"
   ];
 
   pythonImportsCheck = [ "exceptiongroup" ];
