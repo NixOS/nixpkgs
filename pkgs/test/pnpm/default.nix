@@ -26,13 +26,13 @@
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-LDDbmZSXmTUjPUBb6cg/K6Lb5rxc+yMDlByeQEDBA6k=";
   };
   pnpm_12_v5_gvs = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = true;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-LDDbmZSXmTUjPUBb6cg/K6Lb5rxc+yMDlByeQEDBA6k=";
   };
 
   # pnpm reverse dependencies that don't have a top-level package

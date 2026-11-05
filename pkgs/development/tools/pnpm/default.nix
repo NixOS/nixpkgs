@@ -53,12 +53,9 @@ let
       hash = "sha256-QKMlFaJVB/jyJt+74lOA4vBTlEwuzGTAwcuYtBy7ke8=";
     };
     "12" = {
-      version = "12.9.0";
-      srcHash = "sha256-lcs9nh9GIKfy5QYabUCj/pIpePAjLeeKBlu4UKm8zgM=";
-      cargoHash = "sha256-Kyow1HuClzc8qBh1GUUaboOB28ut321hUNVSzctyKEE=";
-      # webpki-root-certs 1.0.10 removes emSign ECC Root CA - G3.
-      # rustls-webpki 0.103.16 blocks the revoked eMudhra intermediates.
-      cargoPatches = [ ./12-bump-webpki.patch ];
+      version = "12.18.0";
+      srcHash = "sha256-4mN9hcQVZcOU8A7pU4FTRR+m6U1NJHKSs/AY+drZD3w=";
+      cargoHash = "sha256-zz3ypFc8XRkxeZf7x+cMXuMMdm9GGgFeilDE/4mh5D0=";
     };
   };
 
