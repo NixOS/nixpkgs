@@ -1,0 +1,17 @@
+--- a/pnpm/crates/cmd-shim/src/shim/sh.rs
++++ b/pnpm/crates/cmd-shim/src/shim/sh.rs
+@@ -265,9 +265,12 @@
+ # An empty PATH searches the current directory.
+ PATH=${helper_path:-/}
+ # A helper comes from PATH only when the default path lacks it and PATH has it.
+-# The bash 3.2 that macOS ships as sh answers `command -p -v` from PATH.
++# The bash 3.2 that macOS ships as sh answers `command -p -v` from PATH, so the
++# default path is checked by hand: /usr/bin and /bin are on every system's
++# default path. A helper the shell cannot reach there, as in the macOS Nix
++# build sandbox, counts as missing.
+ run_helper() {
+-  if command -p -v "$1" >/dev/null 2>&1 || ! command -v "$1" >/dev/null 2>&1; then command -p "$@"; else command "$@"; fi
++  if [ -x "/usr/bin/$1" ] || [ -x "/bin/$1" ] || ! command -v "$1" >/dev/null 2>&1; then command -p "$@"; else command "$@"; fi
+ }
+ link="$0"
+ # `${link%/*}` needs a separator to strip. A bare name came from a PATH lookup

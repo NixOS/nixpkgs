@@ -56,6 +56,12 @@ let
       version = "12.18.0";
       srcHash = "sha256-4mN9hcQVZcOU8A7pU4FTRR+m6U1NJHKSs/AY+drZD3w=";
       cargoHash = "sha256-zz3ypFc8XRkxeZf7x+cMXuMMdm9GGgFeilDE/4mh5D0=";
+      patches = [
+        # macOS bash 3.2 answers `command -p -v` from PATH, so bin shims run
+        # `command -p sed`, which the darwin sandbox denies.
+        # https://github.com/pnpm/pnpm/issues/17750
+        ./12-shim-darwin-sandbox.patch
+      ];
     };
   };
 
