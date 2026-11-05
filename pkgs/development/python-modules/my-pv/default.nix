@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "my-pv";
-  version = "0.0.13";
+  version = "0.0.16";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -21,8 +21,17 @@ buildPythonPackage (finalAttrs: {
     owner = "my-PV";
     repo = "py-mypv";
     tag = finalAttrs.version;
-    hash = "sha256-qzVm5L9C5dlaZA45kbrEGxWGDqFmM5HljU3b+YDk7C0=";
+    hash = "sha256-dwnklWA18a+oboOVrDHaQiU52wHxOfjxVlbQpmMJ0Cc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling>=1.32.4" "hatchling"
+  '';
+
+  pythonRelaxDeps = [
+    "aiohttp"
+  ];
 
   build-system = [
     hatch-vcs
