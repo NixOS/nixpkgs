@@ -50,6 +50,8 @@ in
 
           serviceConfig = {
             LoadCredential = loadCredential cfg.media-proxy.settings;
+            StateDirectory = "fluxer/media-proxy";
+            RuntimeDirectory = "fluxer/media-proxy";
           };
         }
       ]
