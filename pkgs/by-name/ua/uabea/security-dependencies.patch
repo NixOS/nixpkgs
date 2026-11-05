@@ -1,0 +1,62 @@
+Update ImageSharp and override vulnerable transitive dependencies consistently
+across the application and its plugins, including native font/image libraries.
+
+ImageSharp 3.2.0: https://github.com/SixLabors/ImageSharp/pull/3208
+HarfBuzz: https://github.com/harfbuzz/harfbuzz/security/advisories/GHSA-q4gc-p4hh-3765
+SkiaSharp: https://github.com/advisories/GHSA-j7hp-h8jx-5ppr
+Tmds.DBus.Protocol: https://github.com/advisories/GHSA-xrw6-gwf8-vvr9
+
+Retargeting to .NET 10 also removes the vulnerable System.Text.Json and
+System.Private.Uri packages, whose APIs are provided by the framework.
+
+UABEA is MIT-licensed and uses ImageSharp under the Apache-2.0 grant for
+open-source applications in its Split License. Exclude the NuGet build-time
+license-key tooling while retaining the compile/runtime assets.
+https://github.com/SixLabors/ImageSharp/blob/v3.2.0/LICENSE
+
+diff --git a/Directory.Build.props b/Directory.Build.props
+new file mode 100644
+--- /dev/null
++++ b/Directory.Build.props
+@@ -0,0 +1,17 @@
++<Project>
++  <PropertyGroup>
++    <!-- Solution builds need a RID on each project to generate apphosts. -->
++    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
++  </PropertyGroup>
++  <ItemGroup>
++    <!-- Override transitive packages in every project so publishing the solution
++         cannot overwrite a fixed assembly with an older one. -->
++    <PackageReference Include="HarfBuzzSharp" Version="14.4.0.100" />
++    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="14.4.0.100" />
++    <PackageReference Include="HarfBuzzSharp.NativeAssets.WebAssembly" Version="14.4.0.100" />
++    <PackageReference Include="SkiaSharp" Version="2.88.9" />
++    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.9" />
++    <PackageReference Include="SkiaSharp.NativeAssets.WebAssembly" Version="2.88.9" />
++    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
++  </ItemGroup>
++</Project>
+diff --git a/UABEAvalonia/UABEAvalonia.csproj b/UABEAvalonia/UABEAvalonia.csproj
+--- a/UABEAvalonia/UABEAvalonia.csproj
++++ b/UABEAvalonia/UABEAvalonia.csproj
+@@ -22,7 +22,7 @@
+     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
+     <PackageReference Include="Newtonsoft.Json" Version="13.0.3-beta1" />
+     <PackageReference Include="Samboy063.LibCpp2IL" Version="2022.0.7.2" />
+-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
++    <PackageReference Include="SixLabors.ImageSharp" Version="3.2.0" ExcludeAssets="build;buildTransitive" />
+   </ItemGroup>
+   <ItemGroup>
+     <AvaloniaResource Include="Assets\**" />
+diff --git a/TexturePlugin/TexturePlugin.csproj b/TexturePlugin/TexturePlugin.csproj
+--- a/TexturePlugin/TexturePlugin.csproj
++++ b/TexturePlugin/TexturePlugin.csproj
+@@ -17,7 +17,7 @@
+     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.1" />
+     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.1" />
+     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
+-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
++    <PackageReference Include="SixLabors.ImageSharp" Version="3.2.0" ExcludeAssets="build;buildTransitive" />
+   </ItemGroup>
+ 
+   <ItemGroup>
