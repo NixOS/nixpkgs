@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "narrowlink";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "narrowlink";
     repo = "narrowlink";
     rev = finalAttrs.version;
-    hash = "sha256-O66eihqSxwvrUfJj+VMrs7Vfndz2LPKQEnH7BDljvUg=";
+    hash = "sha256-tCnrbvgCFW+YxZuDauuZb2E48dwnzSZvUJQ9Nzqc3xw=";
   };
 
-  cargoHash = "sha256-NjL5A+HEz7WDsTcwAGj1g+Brs4JYsU1kl0OZfTfoBN0=";
+  cargoHash = "sha256-4S3mP8ZruFZtl/ZqVXKewIA0K3OcAspUpDz3eLBgcu8=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
