@@ -336,6 +336,10 @@ let
 
     Slice = "machine.slice";
     Delegate = true;
+    # As in systemd-nspawn@.service: nspawn starts in supervisor/, so helpers it
+    # forks (journal-remote for --forward-journal) can't block delegating
+    # controllers to payload/.
+    DelegateSubgroup = "supervisor";
 
     # We rely on systemd-nspawn turning a SIGTERM to itself into a shutdown
     # signal (SIGRTMIN+3) for the inner container.
