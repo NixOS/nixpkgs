@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/oneapi-src/level-zero/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.ziguana ];
+    maintainers = with lib.maintainers; [
+      ziguana
+      recutita
+    ];
   };
 })
