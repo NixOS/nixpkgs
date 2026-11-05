@@ -12,7 +12,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "anyzig";
-  version = "2026_10_23";
+  version = "2026_11_03";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aB3XGcyCQStxY2KDFxhcfmG5EzaBCBQ1AzkMPmRQ39s=";
+    hash = "sha256-ripM/SMZNvfRcQyq5hM+kcQH3yQik1WVmACAWhOK/eE=";
   };
 
   nativeBuildInputs = [ zig ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Universal zig executable that lets you run any version of zig";
     homepage = "https://github.com/marler8997/anyzig";
-    changelog = "https://github.com/marler8997/anyzig/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/marler8997/anyzig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zig";

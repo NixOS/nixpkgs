@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = "pysnooz";
     tag = "v${version}";
-    hash = "sha256-5QaLmwVTYlbztGgRVSdGFTFExsxDj6wtihNNv+qk1X4=";
+    hash = "sha256-sJ2/miVwRH2ggnFi3tLp3trrNJNIiKx66fYJKyuWMx4=";
   };
 
   postPatch = ''
