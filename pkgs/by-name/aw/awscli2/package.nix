@@ -5,6 +5,7 @@
   groff,
   less,
   fetchFromGitHub,
+  fetchPypi,
   fetchpatch,
   installShellFiles,
   nix-update-script,
@@ -15,7 +16,7 @@
 }:
 
 let
-  py = python3 // {
+  python = python3 // {
     pkgs = python3.pkgs.overrideScope (
       final: prev: {
         # https://github.com/NixOS/nixpkgs/issues/449266
@@ -30,13 +31,13 @@ let
         # backends/build_system/utils.py cannot parse PEP 440 version
         # for python-dateutil 2.9.0.post0 (eg. post0)
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
+          pname = "python-dateutil";
           version = "2.8.2";
-          format = "setuptools";
-          pyproject = null;
-          src = prev.src.override {
-            inherit version;
+          src = fetchPypi {
+            inherit pname version;
             hash = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
           };
+          dependencies = [ final.six ];
           patches = [
             # https://github.com/dateutil/dateutil/pull/1285
             (fetchpatch {
@@ -52,16 +53,16 @@ let
   };
 
 in
-py.pkgs.buildPythonApplication (finalAttrs: {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awscli2";
-  version = "2.36.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.39.4"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = finalAttrs.version;
-    hash = "sha256-OTLezXSBAlgyrd7O8MGWsylBSOYxb01ljINbpLhLWDE=";
+    hash = "sha256-W4xFaXqU0OYPHeKSFOFqz5+X/BJwaakNJ2psZn9UWtw=";
   };
 
   postPatch = ''
@@ -85,7 +86,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     # through PYTHONPATH
     sed -i '/pip>=/d' requirements/bootstrap.txt
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt awscli/botocore/cacert.pem
+    cp -v ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt awscli/botocore/cacert.pem
     cat ${./system-ca-bundle.py} >> awscli/botocore/httpsession.py
   '';
 
@@ -93,11 +94,11 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     installShellFiles
   ];
 
-  build-system = with py.pkgs; [
+  build-system = with python.pkgs; [
     flit-core
   ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python.pkgs; [
     awscrt
     colorama
     distro
@@ -122,7 +123,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     "PYTHONPATH"
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     addBinToPathHook
     jsonschema
     mock
@@ -168,6 +169,9 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
+
+    # missing localstub dependency
+    "tests/blackbox"
   ];
 
   disabledTests = [
@@ -177,14 +181,22 @@ py.pkgs.buildPythonApplication (finalAttrs: {
 
     # Disable slow tests
     "test_details_disabled_for_choice_wo_details"
+
+    # Fails to find CA bundle in test environment
+    # RuntimeError: 1173 (AWS_IO_TLS_ERROR_DEFAULT_TRUST_STORE_NOT_FOUND): Default TLS trust store not found on this system. Trusted CA certificates must be installed, or "override default trust store" must be used while creating the TLS context.
+    "test_upper_bound_matches_what_awscrt_accepts"
   ];
+
+  preCheck = ''
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt"
+  '';
 
   pythonImportsCheck = [
     "awscli"
   ];
 
   passthru = {
-    python = py; # for aws_shell
+    python = python; # for aws_shell
     updateScript = nix-update-script {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [
