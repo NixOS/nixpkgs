@@ -9,28 +9,21 @@
   cmake,
   curl,
   discord-rpc,
-  duktape,
-  expat,
   flac,
   fontconfig,
   freetype,
-  gbenchmark,
   icu,
   innoextract,
-  jansson,
-  libGLU,
+  libGL,
   libiconv,
   libogg,
   libpng,
-  libpthread-stubs,
   libvorbis,
   libzip,
-  makeWrapper,
   makeBinaryWrapper,
   nlohmann_json,
   openssl,
   pkg-config,
-  speexdsp,
   versionCheckHook,
   zlib,
   zstd,
@@ -85,30 +78,23 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     unzip
     makeBinaryWrapper
-    versionCheckHook
   ];
 
   buildInputs = [
     SDL2
     curl
-    duktape
-    expat
     flac
     fontconfig
     freetype
-    gbenchmark
     icu
-    jansson
-    libGLU
+    libGL
     libiconv
     libogg
     libpng
-    libpthread-stubs
     libvorbis
     libzip
     nlohmann_json
     openssl
-    speexdsp
     zlib
     zstd
   ]
@@ -192,6 +178,10 @@ stdenv.mkDerivation (finalAttrs: {
     );
 
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
