@@ -525,11 +525,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-F0Y/jgR0iNA9DrmmdwHcky8Yii6aB4QSpNguObaq7ow=",
+    "hash": "sha256-WEOhduXb/+QxThy7N+gTBS7xgPyQnU6vis3kcwBFGFU=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v5.11.0",
+    "rev": "v5.12.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1228,13 +1228,13 @@
     "vendorHash": "sha256-raw9hcAvzBKy8bLbUNM36JZTYYE//r7b3HdZ3qFLtPY="
   },
   "splunk-terraform_signalfx": {
-    "hash": "sha256-t096v7RCmJJTIoFYl/WoN9v4vq1X3PAIgUD57EIbM0Y=",
+    "hash": "sha256-IYvDyd1lbhiAQDLWUSt1H7geHaLBbX8xp+uFBrjaK+U=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.35.1",
+    "rev": "v9.36.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jEqN6WvPXKxk9UHKZrzXo1+L6tHVV1Wb+E0O22LfMl0="
+    "vendorHash": "sha256-UPEnosJe2ud712EZGqPOiZwpTGCh8fvjvr0kQnmcPsk="
   },
   "spotinst_spotinst": {
     "hash": "sha256-9sg3PYpEF974qpwDmTwJ/JnJvt1aPCG5VdMZSflpAOs=",
@@ -1300,11 +1300,11 @@
     "vendorHash": "sha256-MySaED4kj+F2rYaYu1rpw5qUQFBx9u2Prpn+nqvqqA0="
   },
   "temporalio_temporalcloud": {
-    "hash": "sha256-xIyYQ6882s1e+0Th26Atzg07I27WDAOBmgeI2WU3v/g=",
+    "hash": "sha256-nPStiYzPrZo7Gy0XJmEoSmCcZJ2ItkAfACxT8VV4q7c=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.9.0",
+    "rev": "v1.10.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-t799EW0oXtzzHVjbOv5dPQ5V070wg7Y8MZohQ1O70Pk="
   },

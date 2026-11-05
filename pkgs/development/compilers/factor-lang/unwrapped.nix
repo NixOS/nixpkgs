@@ -11,6 +11,7 @@
   # Version-specific attributes
   version,
   src,
+  patches ? [ ],
 }:
 
 let
@@ -45,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
         # Avoid using /sbin/ldconfig
         ./ld.so.cache-from-env-0.102.patch
       ]
-  );
+  )
+  ++ patches;
 
   nativeBuildInputs = [
     git

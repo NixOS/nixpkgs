@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple and adorable sysinfo utility written in Rust";
     homepage = "https://github.com/devraza/bunbun";
     changelog = "https://github.com/devraza/bunbun/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "bunbun";
   };
