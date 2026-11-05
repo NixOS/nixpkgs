@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-rds20140815";
-  version = "16.1.0";
+  version = "16.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "alibabacloud_rds20140815";
     inherit (finalAttrs) version;
-    hash = "sha256-yjtYg7UWFTSNEDOQlkcIMVGFXrJQqh3dOQT/8ARzKN8=";
+    hash = "sha256-3kFfMLz6XyiQQdJQxPMktIHiRLeeoJykFzInRWmgRUI=";
   };
 
   build-system = [ setuptools ];

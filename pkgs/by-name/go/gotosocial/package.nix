@@ -25,6 +25,8 @@ buildGoModule (finalAttrs: {
   pname = "gotosocial";
   version = "0.22.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "superseriousbusiness";
     repo = "gotosocial";
@@ -123,6 +125,7 @@ buildGoModule (finalAttrs: {
       blakesmith
       cherrykitten
     ];
+    teams = with lib.teams; [ ngi ];
     license = lib.licenses.agpl3Only;
   };
 })

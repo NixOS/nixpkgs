@@ -112,7 +112,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Type annotations for Pandas";
     homepage = "https://github.com/pandas-dev/pandas-stubs";
-    license = lib.licenses.mit;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ malo ];
   };
 })

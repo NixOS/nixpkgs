@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Like wc, but unicode-aware, and with per-line mode";
     mainProgram = "uwc";
     homepage = "https://github.com/dead10ck/uwc";
-    license = lib.licenses.mit;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
 })
