@@ -25,20 +25,27 @@ let
     # some gfx1100 kernels fail with error: branch size exceeds simm16
     # but build proceeds and those ops will fallback so it's ok
     "gfx1100"
-    "gfx1151"
+    "gfx1101"
+    "gfx1102"
+    "gfx1103"
     "gfx1150"
-    "gfx1201"
+    "gfx1151"
+    "gfx1152"
+    "gfx1153"
     "gfx1200"
+    "gfx1201"
+    "gfx1250"
   ] gpuTargets;
   anySupportedTargets = supportedTargets != [ ];
   # Pick a single arbitrary target to speed up shim build when we can't support our target
   supportedTargets' =
     if anySupportedTargets then lib.concatStringsSep ";" supportedTargets else "gfx1200";
   sourceRoot = "aotriton";
+  suffix = if !anySupportedTargets then "-shim" else "${clr.gpuArchSuffix}";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "aotriton${lib.optionalString (!anySupportedTargets) "-shim"}";
-  version = "0.12b";
+  pname = "aotriton${suffix}";
+  version = "0.13b";
   inherit sourceRoot;
 
   srcs = [
@@ -46,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "ROCm";
       repo = "aotriton";
       tag = finalAttrs.version;
-      hash = "sha256-KOc+xAoWABjokIEq5n9olpln3JUqVFYGADLwqV/H2Zc=";
+      hash = "sha256-yFOZ0DwpHZo26IxNO5izZlkfBfE0KNd5mYOdmts8Mg8=";
       # for reference false is the default, setting it here to document upstream has an unused triton submodule that is ~500MB we don't want to download.
       fetchSubmodules = false;
       name = sourceRoot;
@@ -67,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./aiter-no-git-checkout.patch
+    ./pip.patch
   ];
 
   cmakeBuildType = "RelWithDebInfo";
@@ -82,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS = "-w -g1 -gz -Wno-c++11-narrowing";
     CXXFLAGS = finalAttrs.env.CFLAGS;
     TRITON_STORE_BINARY_ONLY = 1; # reduce triton disk space usage
-    AOTRITON_GIT_TREESHA1 = "35bfbd0ebe2fd774e97cdc12421592c23f59abfe"; # git rev-parse 'HEAD^{tree}'
+    AOTRITON_GIT_TREESHA1 = "0a9c220761603465c794bc6522564452d43ebc23"; # git rev-parse 'HEAD^{tree}'
   };
 
   nativeBuildInputs = [
@@ -109,7 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
     pluggy
     pybind11
     pandas
+    pip
     triton
+    virtualenv
   ]);
 
   # Excerpt from README:
@@ -119,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This builds+installs
   installPhase = ''
     runHook preInstall
-    ninja install
+    ninja install -j$NIX_BUILD_CORES
     runHook postInstall
   '';
   # tests are intended to be ran manually as test/ python scripts and need accelerator
