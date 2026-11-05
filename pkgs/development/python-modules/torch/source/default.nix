@@ -126,6 +126,10 @@ let
 
   setBool = v: if v then "1" else "0";
 
+  # Compiler and build tool used at runtime by torch.compile and torch.utils.cpp_extension
+  cxx = lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++";
+  ninjaExe = lib.getExe targetPackages.ninja;
+
   # https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L2569-L2572
   supportedTorchCudaCapabilities =
     let
@@ -355,7 +359,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
     ''
       substituteInPlace torch/_inductor/codecache.py \
-        --replace-fail '"openssl"' '"${lib.getExe openssl}"'
+        --replace-fail \
+          '"openssl"' \
+          '"${lib.getExe openssl}"'
     ''
     + ''
       substituteInPlace cmake/public/cuda.cmake \
@@ -366,13 +372,17 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           "set(CUDAToolkit_ROOT" \
           "# Upstream: set(CUDAToolkit_ROOT"
       substituteInPlace third_party/gloo/cmake/Cuda.cmake \
-        --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
+        --replace-warn \
+          "find_package(CUDAToolkit 7.0" \
+          "find_package(CUDAToolkit"
     ''
     # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
     + ''
       sed -i -e "/from __future__ import/d" **.py
       substituteInPlace third_party/NNPACK/CMakeLists.txt \
-        --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
+        --replace-fail \
+          "PYTHONPATH=" \
+          'PYTHONPATH=$ENV{PYTHONPATH}:'
     ''
     # flag from cmakeFlags doesn't work, not clear why
     # setting it at the top of NNPACK's own CMakeLists does
@@ -389,25 +399,55 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Ensure that torch profiler unwind uses addr2line from nix
     + ''
       substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
-        --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
+        --replace-fail \
+          'addr2line_binary_ = "addr2line"' \
+          'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
     ''
     # Ensures torch compile can find and use compilers from nix.
     + ''
       substituteInPlace torch/_inductor/config.py \
-        --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
-        '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
+        --replace-fail \
+          '"clang++" if sys.platform == "darwin" else "g++"' \
+          '"${cxx}"'
+    ''
+    # cpp_extension: find the compiler and ninja without relying on PATH.
+    # Also add pybind11's headers, which upstream wheels vendor under torch/include.
+    + ''
+      substituteInPlace torch/utils/cpp_extension.py \
+        --replace-fail \
+          "compiler = os.environ.get('CXX', 'c++')" \
+          "compiler = os.environ.get('CXX', '${cxx}')" \
+        --replace-fail \
+          "['ninja', '--version']" \
+          "['${ninjaExe}', '--version']" \
+        --replace-fail \
+          "['ninja', '-v']" \
+          "['${ninjaExe}', '-v']" \
+        --replace-fail \
+          "os.path.join(lib_include, 'torch', 'csrc', 'api', 'include')," \
+          "os.path.join(lib_include, 'torch', 'csrc', 'api', 'include'), '${lib.getInclude pybind11}/include'," \
+        --replace-fail \
+          '"-I {}".format(sysconfig.get_path("include")),' \
+          '"-I {}".format(sysconfig.get_path("include")), "-I ${lib.getInclude pybind11}/include",'
     ''
     # Doesn't pick up the environment variable?
     + lib.optionalString rocmSupport ''
       substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
+        --replace-fail \
+          "\''$ENV{ROCM_SOURCE_DIR}" \
+          "${rocmtoolkit_joined}"
+
       patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
     ''
     # When possible, composable kernel as dependency, rather than built-in third-party
     + lib.optionalString (rocmSupport && !vendorComposableKernel) ''
       substituteInPlace aten/src/ATen/CMakeLists.txt \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
+        --replace-fail \
+          "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" \
+          "" \
+        --replace-fail \
+          "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" \
+          ""
     ''
     # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
     # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
