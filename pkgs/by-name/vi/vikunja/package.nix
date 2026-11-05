@@ -29,6 +29,8 @@ buildGoModule (finalAttrs: {
   pname = "vikunja";
   version = "2.7.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";

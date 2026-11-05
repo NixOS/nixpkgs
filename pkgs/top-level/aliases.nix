@@ -2491,6 +2491,7 @@ mapAliases {
   skeu = throw "'skeu' has been removed as its source is unavailable"; # Added 2025-12-23
   SkypeExport = throw "'skypeexport' was removed since Skype has been shut down in May 2025"; # Added 2025-09-15
   skypeexport = throw "'skypeexport' was removed since Skype has been shut down in May 2025"; # Added 2025-09-15
+  slade-unstable = slade; # Added 2026-11-04
   sladeUnstable = slade-unstable; # Added 2025-08-26
   slic3r = throw "'slic3r' has been removed because it is unmaintained"; # Added 2025-08-26
   sloccount = throw "'sloccount' has been removed because it is unmaintained. Consider migrating to 'loccount'"; # Added 2025-05-17
