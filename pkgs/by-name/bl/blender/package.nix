@@ -99,6 +99,16 @@
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
+  libdecor' = libdecor.overrideAttrs (old: {
+    # Blender uses private APIs, need to patch to expose them
+    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
+  });
+in
+
+let
+  stdenv = stdenv';
+  libdecor = libdecor';
+
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
@@ -111,11 +121,6 @@ let
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
   });
 
-  libdecor' = libdecor.overrideAttrs (old: {
-    # Blender uses private APIs, need to patch to expose them
-    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
-  });
-
   # See build_files/config/pipeline_config.yaml in upstream source for version
   optix = fetchFromGitHub {
     owner = "NVIDIA";
@@ -125,7 +130,7 @@ let
   };
 in
 
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "5.2.3";
 
@@ -355,7 +360,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
   ++ lib.optionals waylandSupport [
     dbus
-    libdecor'
+    libdecor
     libffi
     libxkbcommon
     wayland
