@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gbenchmark
     icu
-    innoextract
     jansson
     libGLU
     libiconv
@@ -206,6 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
     else
       ''
         wrapProgram $out/bin/openrct2 \
+          --suffix PATH : ${lib.makeBinPath [ innoextract ]} \
           ${
             lib.optionalString (
               rct1Path != null
