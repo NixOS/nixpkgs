@@ -545,7 +545,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "3D Creation/Animation/Publishing System";
+    description = "Free and open source 3D creation suite";
     homepage = "https://www.blender.org";
     license = with lib.licenses; [ gpl2Plus ];
     donationPage = "https://fund.blender.org/";
