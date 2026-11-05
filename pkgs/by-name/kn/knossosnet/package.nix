@@ -1,5 +1,7 @@
 {
   buildDotnetModule,
+  bash,
+  coreutils,
   fetchFromGitHub,
   lib,
   openal,
@@ -24,6 +26,13 @@ buildDotnetModule (finalAttrs: {
   };
 
   patches = [ ./dotnet-8-upgrade.patch ];
+
+  postPatch = ''
+    substituteInPlace Knossos.NET/Classes/KnUtils.cs \
+      --replace-fail "\"/bin/bash\"" "\"${lib.getExe bash}\"" \
+      --replace-fail "\"chmod -R " "\"${lib.getExe' coreutils "chmod"} -R " \
+      --replace-fail "\"chmod {permissions}" "\"${lib.getExe' coreutils "chmod"} {permissions}"
+  '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = "Knossos.NET/Knossos.NET.csproj";
