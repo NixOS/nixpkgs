@@ -63,7 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.galene.stream;
     updateScript = gitUpdater { };
   };
 
