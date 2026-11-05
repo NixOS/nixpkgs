@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "1.5.0";
+  version = "1.6.1";
 in
 python3Packages.buildPythonApplication {
   pname = "newelle";
@@ -32,12 +32,12 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-P+bwcqrF9BTKFb47vVBO1GzFaqb6zMpaeYlI2g9rhX4=";
+    hash = "sha256-myVEdqIcAKx+RAoy3h4rmhW+vYAlBwnXTa8uiwvLfiY=";
   };
 
   postPatch = ''
     substituteInPlace src/utility/pip.py \
-      --replace-fail "# Manage pip path locking" "return None"
+      --replace-fail "global PIP_INSTALLED" "return None"
   '';
 
   nativeBuildInputs = [
@@ -74,11 +74,16 @@ python3Packages.buildPythonApplication {
     tiktoken
     openai
     ollama
+    faiss-cpu
     llama-index-core
     llama-index-readers-file
+    llama-index-vector-stores-faiss
     google-genai
     anthropic
     mcp
+    ddgs
+    markdownify
+    huggingface-hub
   ];
 
   postInstallCheck = ''
