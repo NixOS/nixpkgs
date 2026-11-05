@@ -9,15 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pyjvcprojector";
-  version = "2.0.6";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pyjvcprojector";
     tag = "v${version}";
-    hash = "sha256-HFnaMIlF+C2fi8NlMtQKEMY35lAS15ij4QyFMFYhiU8=";
+    hash = "sha256-tA/Z0zBPf8aiSn4oEgMBaKOOFJ7S3St4bq3BA9VDSeE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==84.0.0" "setuptools"
+  '';
 
   build-system = [ setuptools ];
 
