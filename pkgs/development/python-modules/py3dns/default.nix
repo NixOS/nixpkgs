@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mGUugOzsFDxg948OazQWMcqadWDt2N3fyGTAKQJhijk=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   doCheck = false;
 
