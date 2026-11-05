@@ -1519,8 +1519,6 @@ let
 
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
 
-        ocaml_pcre = callPackage ../development/ocaml-modules/pcre { };
-
         ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
         ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
