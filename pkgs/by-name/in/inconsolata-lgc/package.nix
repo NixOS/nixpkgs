@@ -52,6 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/MihailJP/Inconsolata-LGC";
     maintainers = with lib.maintainers; [
       avnik
+      talal
     ];
     platforms = lib.platforms.all;
   };
