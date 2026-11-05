@@ -36,6 +36,7 @@ buildPythonPackage {
     "ROOT"
     "ROOT.Experimental"
     "ROOT.Math"
+    "ROOT.RDF"
     "ROOT.RooFit"
     "ROOT.std"
   ];

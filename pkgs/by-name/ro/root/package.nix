@@ -3,15 +3,16 @@
   lib,
   blas,
   callPackage,
+  cfitsio,
+  civetweb,
   curl,
   fetchFromGitHub,
   fetchurl,
+  linkFarm,
   makeWrapper,
-  writeText,
   apple-sdk,
   cmake,
   coreutils,
-  git,
   davix,
   fftw,
   ftgl,
@@ -23,7 +24,7 @@
   libGL,
   libxcrypt,
   libxml2,
-  llvm_20,
+  llvm_22,
   lsof,
   lz4,
   libxpm,
@@ -38,11 +39,13 @@
   pkg-config,
   procps,
   python3,
+  sqlite,
   which,
   xxhash,
   zlib,
   zstd,
   giflib,
+  git,
   libjpeg,
   libtiff,
   libpng,
@@ -56,25 +59,54 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.40.04";
+  # The last tag reachable from the v6-42-00-patches branch
+  version = "6.42.00-rc1-unstable-2026-11-06";
 
   passthru = {
-    tests = import ./tests { inherit callPackage; };
+    tests = import ./tests { inherit callPackage; } // {
+      # The Python package runs the import checks for the PyROOT bindings
+      pyroot = python3.pkgs.root;
+    };
   };
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
-    hash = "sha256-RK2iU7GTXTS2gBIiIy1Qcx/nxePLz6tHc0yFAxz75NM=";
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "root";
+    rev = "9c3c928cb60f73a8f89cb912b2f5f4d971fbcb88";
+    hash = "sha256-RADlmKCfQqMOzr1Xd93OZC8nqNLWQwg1bGz57e7Uneg=";
   };
 
-  clad_src = fetchFromGitHub {
-    owner = "vgvassilev";
-    repo = "clad";
-    # Make sure that this is the same tag as in the ROOT build files!
-    # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    tag = "v2.3";
-    hash = "sha256-gEJlQ2Vg9EUX1tslI4HaUnusvdSomsYHiE8mZMygEOw=";
-  };
+  # Hashes are checked at ROOT build time, so wrong downloads will not be silently accepted
+  builtin_downloads = linkFarm "root-builtin-downloads" [
+    {
+      name = "jsroot-7.12.0.tar.gz";
+      path = fetchurl {
+        url = "https://github.com/root-project/jsroot/releases/download/7.12.0/JsRoot7120.tar.gz";
+        hash = "sha256-5dgoiHUL2nAJCsS/81VzQAA3LJg6Pv8R1n76CfMNSwY=";
+      };
+    }
+    {
+      name = "openui5-runtime-1.152.0.zip";
+      path = fetchurl {
+        url = "https://github.com/UI5/openui5/releases/download/1.152.0/openui5-runtime-1.152.0.zip";
+        hash = "sha256-SIICPUdg7UwgYC423Rg7AqU4/H6Lv9pge24lvRy7zbE=";
+      };
+    }
+    {
+      name = "mathjax-3.2.0.tar.gz";
+      path = fetchurl {
+        url = "https://github.com/mathjax/MathJax/archive/refs/tags/3.2.0.tar.gz";
+        hash = "sha256-aEfxz92YCvvjG0ZkdNowGlarhZpn2ANUQrBS3UrC+gM=";
+      };
+    }
+    {
+      name = "clad-2.5.tar.gz";
+      path = fetchurl {
+        url = "https://github.com/vgvassilev/clad/archive/refs/tags/v2.5.tar.gz";
+        hash = "sha256-9Uig5Opphah/x7h484eR80+W7x3AakH/NdcFjXWvFBc=";
+      };
+    }
+  ];
 
   # ROOT requires a patched version of clang
   clang = (callPackage ./clang-root.nix { });
@@ -91,6 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.clang
     blas
+    cfitsio
+    (civetweb.override {
+      # ROOT requires civetweb with websocket, zlib and unix domain socket support
+      withWebSockets = true;
+      withZlib = true;
+      withUnixSockets = true;
+    })
     curl
     davix
     fftw
@@ -103,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxcrypt
     libxml2
-    llvm_20
+    llvm_22
     lz4
     openssl
     patchRcPathCsh
@@ -111,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchRcPathPosix
     pcre2
     python3
+    sqlite
     onetbb
     xrootd
     xxhash
@@ -131,40 +171,18 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
   ];
 
-  preConfigure = ''
-    for path in builtins/*; do
-      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
-        rm -rf "$path"
-      fi
-    done
-    substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
-
-    patchShebangs cmake/unix/
-  ''
-  +
-    lib.optionalString
-      (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
-      ''
-        MACOSX_DEPLOYMENT_TARGET=10.16
-      '';
-
   cmakeFlags = [
-    "-DCLAD_SOURCE_DIR=${finalAttrs.clad_src}"
     "-DClang_DIR=${finalAttrs.clang}/lib/cmake/clang"
     "-Dbuiltin_clang=OFF"
     "-Dbuiltin_llvm=OFF"
+    "-Dbuiltin_jsroot=ON"
+    "-Dbuiltin_mathjax=ON"
+    "-Dbuiltin_openui5=ON"
+    "-DROOT_DOWNLOAD_DIR=${finalAttrs.builtin_downloads}"
     "-Dfail-on-missing=ON"
     "-Dfftw3=ON"
-    "-Dfitsio=OFF"
     "-Dmathmore=ON"
-    "-Dsqlite=OFF"
     "-Dvdt=OFF"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
-    # fatal error: could not build module '_Builtin_intrinsics'
-    "-Druntime_cxxmodules=OFF"
   ];
 
   postInstall = ''
@@ -233,11 +251,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://root.cern/";
     description = "Data analysis framework";
+    changelog = "https://root.cern/doc/v${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}/release-notes.html";
     platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.guitargeek
       lib.maintainers.veprbl
     ];
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21Plus;
+    mainProgram = "root";
   };
 })
