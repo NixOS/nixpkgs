@@ -483,7 +483,7 @@ in
           ExecStart = [
             "${cfg.package}/bin/console cache:clear --no-debug"
             "${cfg.package}/bin/console cache:warmup --no-debug"
-            "${cfg.package}/bin/console doctrine:migrations:migrate"
+            "${cfg.package}/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration"
           ];
         };
         restartTriggers = [

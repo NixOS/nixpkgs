@@ -269,5 +269,18 @@ in
           page = standalone.succeed(f"{' '.join(env)} ${pkgs.fcgi}/bin/cgi-fcgi -bind -connect ${config.nodes.standalone.services.phpfpm.pools.davis.socket}")
           assert "<title>Davis</title>" in page, page
           assert "Status: 500" not in page, page
+
+      with subtest("migration failure prevents PHP-FPM startup"):
+          standalone.succeed("systemctl stop phpfpm-davis.service davis-db-migrate.service")
+          standalone.succeed("cp -p /var/lib/davis/davis.db /var/lib/davis/davis.db.backup")
+          standalone.succeed("printf 'not an SQLite database' > /var/lib/davis/davis.db")
+          standalone.fail("systemctl start phpfpm-davis.service")
+          standalone.succeed("systemctl is-failed davis-db-migrate.service")
+          standalone.fail("systemctl is-active phpfpm-davis.service")
+          standalone.succeed("mv /var/lib/davis/davis.db.backup /var/lib/davis/davis.db")
+          standalone.succeed("systemctl reset-failed davis-db-migrate.service phpfpm-davis.service")
+          standalone.succeed("systemctl start phpfpm-davis.service")
+          standalone.wait_for_unit("davis-db-migrate.service")
+          standalone.wait_for_unit("phpfpm-davis.service")
     '';
 }
