@@ -11,7 +11,7 @@
   copyDesktopItems,
   desktopToDarwinBundle,
   xcbuild,
-  protobuf,
+  protobuf_21,
   ghidra-extensions,
   python3,
   python3Packages,
@@ -23,6 +23,7 @@ let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
   version = "12.2";
+  protobuf = protobuf_21;
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";

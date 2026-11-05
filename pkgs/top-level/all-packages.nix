@@ -1532,10 +1532,6 @@ with pkgs;
 
   geekbench_7 = geekbench;
 
-  ghidra = callPackage ../tools/security/ghidra/build.nix {
-    protobuf = protobuf_21;
-  };
-
   ghidra-extensions = recurseIntoAttrs (callPackage ../tools/security/ghidra/extensions.nix { });
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
