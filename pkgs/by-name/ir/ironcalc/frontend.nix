@@ -96,8 +96,8 @@ let
     };
   };
 
-  widget = buildNpmPackage {
-    pname = "ironcalc-widget";
+  workbook = buildNpmPackage {
+    pname = "ironcalc-workbook";
     inherit version src;
     sourceRoot = "source";
 
@@ -127,7 +127,7 @@ let
     strictDeps = true;
 
     meta = ironcalc.meta // {
-      description = "Ironcalc frontend widget package";
+      description = "Ironcalc frontend workbook package";
     };
   };
 
@@ -145,7 +145,7 @@ let
       cp -rv ${wasm}/. ../../../bindings/wasm/pkg/
 
       rm -rf ../../IronCalc
-      cp -r ${widget} ../../IronCalc
+      cp -r ${workbook} ../../IronCalc
       chmod -R u+w ../../IronCalc
 
       substituteInPlace src/components/WorkbookTitle.tsx \
@@ -176,7 +176,7 @@ in
 {
   inherit
     wasm
-    widget
+    workbook
     frontend
     ;
 }
