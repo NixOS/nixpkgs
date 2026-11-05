@@ -15,6 +15,11 @@ buildPythonPackage rec {
     hash = "sha256-wtPZ/zEY322rVYZ18Qox/4u5mawfiSHwDG3J6hmWHxg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'hatchling>=1.21.0,<1.32' hatchling
+  '';
+
   build-system = [ hatchling ];
 
   pythonImportsCheck = [ "striprtf" ];
