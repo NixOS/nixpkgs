@@ -3,7 +3,7 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
   trio,
 }:
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-KTWNftj/nYoknBPyFfz//S2AwJNp1RCUT2QsTU3DISg=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ anyio ];
 
