@@ -1,9 +1,11 @@
 {
+  aws-lc,
   cmake,
   fetchFromCodeberg,
   installShellFiles,
   lib,
   lld,
+  pkg-config,
   rustPlatform,
   stdenv,
   versionCheckHook,
@@ -24,8 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     installShellFiles
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
+
+  buildInputs = [ aws-lc ];
 
   useNextest = true;
   # Skip tests that require networking.

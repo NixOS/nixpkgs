@@ -24,7 +24,9 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   makeWrapperArgs = [
-    "--set DOTNET_WEBROOT ${placeholder "out"}/lib/lubelogger/wwwroot"
+    "--set"
+    "DOTNET_WEBROOT"
+    "${placeholder "out"}/lib/lubelogger/wwwroot"
   ];
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
