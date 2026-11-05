@@ -23,7 +23,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-from functools import reduce
+from functools import cache, reduce
 from io import BytesIO
 from typing import Any
 from urllib.request import urlopen
@@ -149,6 +149,7 @@ def repository_root() -> str:
 
 
 # For a package attribute and an extra, check if the package exposes it via passthru.optional-dependencies
+@cache
 def has_extra(package: str, extra: str):
     cmd = [
         "nix-instantiate",
