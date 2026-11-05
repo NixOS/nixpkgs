@@ -9,7 +9,7 @@
 
   secrets = {
     backends.defaults.store = "plain";
-    backends.defaults.prompt = "simple";
+    backends.defaults.prompt = "read-hidden";
 
     settings.store.age.publicKeys = [
       "age13ar5t7vvsssmckjhjtngy3p5y0v4k896ecjrxveql9ysu8gxhe9sdar3k3" # Host
@@ -29,11 +29,10 @@
     settings.store.age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
     store.user = {
-      # This prompt will default to the "simple" backend we chose above.
       prompts.name = {
         label = "Your name";
         description = "the person to address the greeting to";
-        type = "multiline";
+        backend = "editor";
       };
 
       files.greeting.deploy = false;
@@ -78,11 +77,23 @@
       files."ed25519.key.pub".backend = "plain";
       meta.backend = "age";
 
+      prompts.passphrase = {
+        label = "Passphrase";
+        backend = "read-hidden";
+      };
+
       generate =
         { pkgs, ... }:
         pkgs.writeShellScript "gen-ed25519" ''
-          export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.openssh ]}"
-          ssh-keygen -t ed25519 -f $out/ed25519.key -P ""
+          export PATH="${
+            lib.makeBinPath [
+              pkgs.coreutils
+              pkgs.openssh
+            ]
+          }"
+
+          passphrase="$(cat "$prompts/passphrase")"
+          ssh-keygen -t ed25519 -f $out/ed25519.key -P "$passphrase"
         '';
     };
   };

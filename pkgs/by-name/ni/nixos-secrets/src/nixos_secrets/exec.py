@@ -222,7 +222,6 @@ def run_prompt(
             binary,
             secret.name,
             prompt.name,
-            prompt.type,
             prompt.label,
         ]
 

@@ -24,7 +24,6 @@ class SecretsPrompt:
     label: str
     description: str | None
     backend: str
-    type: str  # There's probably a way to type this properly..
 
     @staticmethod
     def from_json(name: str, json: Any) -> "SecretsPrompt":
@@ -33,7 +32,6 @@ class SecretsPrompt:
             label=json["label"],
             description=json["description"],
             backend=json["backend"],
-            type=json["type"],
         )
 
 

@@ -27,7 +27,12 @@
       generate =
         { pkgs, ... }:
         pkgs.writeShellScript "gen-ed25519" ''
-          export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.openssh ]}"
+          export PATH="${
+            lib.makeBinPath [
+              pkgs.coreutils
+              pkgs.openssh
+            ]
+          }"
           ssh-keygen -t ed25519 -f $out/ed25519.key -P ""
         '';
     };

@@ -144,7 +144,6 @@ else
             inherit (prompt)
               label
               description
-              type
               backend
               ;
           };

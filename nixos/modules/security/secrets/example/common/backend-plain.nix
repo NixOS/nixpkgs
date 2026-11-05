@@ -65,10 +65,13 @@ in
       lib.types.submodule (secret: {
         options.files = lib.mkOption {
           type = lib.types.attrsOf (
-            lib.types.submodule ({ config, ...}: {
-              path = lib.mkIf (config.backend == "age")
-                "${cfg.targetDirectory}/${secret.config.name}/${config.name}";
-            })
+            lib.types.submodule (
+              { config, ... }: {
+                path = lib.mkIf (
+                  config.backend == "age"
+                ) "${cfg.targetDirectory}/${secret.config.name}/${config.name}";
+              }
+            )
           );
         };
       })

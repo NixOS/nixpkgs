@@ -1,29 +1,39 @@
-# An example interactive prompt backend written in Bash.
+# A series of interactive prompt examples written in Bash.
 { lib, ... }:
+let
+  preamble = pkgs: ''
+    export PATH="${lib.makeBinPath [ pkgs.coreutils ]}:$PATH"
+    out=''${out:?} # Make shellcheck happy
+
+    prompt="$3"
+    if [[ ! -z "$4" ]]; then
+      prompt="$prompt ($4)"
+    fi
+  '';
+in
 {
-  secrets.backends.prompt.simple.ask =
+  secrets.backends.prompt.read-line.ask =
     { pkgs, ... }:
-    pkgs.writeShellScript "prompt-simple" ''
-      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}:$PATH"
-      out=''${out:?} # Make shellcheck happy
+    pkgs.writeShellScript "prompt-line" ''
+      ${preamble pkgs}
+      read -rp "$prompt: " text
+      echo -n "$text" > "$out"
+    '';
 
-      prompt="$4"
-      if [[ ! -z "$5" ]]; then
-        prompt="$prompt ($5)"
-      fi
+  secrets.backends.prompt.read-hidden.ask =
+    { pkgs, ... }:
+    pkgs.writeShellScript "prompt-hidden" ''
+      ${preamble pkgs}
+      read -srp "$prompt: " text
+      echo ""
+      echo -n "$text" > "$out"
+    '';
 
-      if [[ "$3" == "line" ]]; then
-        read -rp "$prompt: " text
-        echo -n "$text" > "$out"
-      elif [[ "$3" == "hidden" ]]; then
-        read -srp "$prompt: " text
-        echo ""
-        echo -n "$text" > "$out"
-      elif [[ "$3" == "multiline" ]]; then
-        echo "<$prompt>" > "$out"
-        $EDITOR "$out"
-      else
-        exit 1
-      fi
+  secrets.backends.prompt.editor.ask =
+    { pkgs, ... }:
+    pkgs.writeShellScript "prompt-editor" ''
+      ${preamble pkgs}
+      echo "<$prompt>" > "$out"
+      $EDITOR "$out"
     '';
 }
