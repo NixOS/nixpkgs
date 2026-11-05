@@ -9,7 +9,6 @@
   ripgrep,
   fd,
   makeBinaryWrapper,
-  stdenvNoCC,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
