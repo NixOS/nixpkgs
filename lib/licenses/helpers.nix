@@ -6,26 +6,10 @@ let
     any
     elem
     optionalAttrs
-    isList
-    isString
     ;
-
-  inherit (lib.licenses) mkLicense;
-
   handleComplexProperty =
     evaluateSubProperty: AND: OR: license:
-    if isList license then
-      AND evaluateSubProperty license
-    # TODO: Returning free in the case of a string is a bug that should be fixed.
-    # In a previous implementation of this function the function body
-    # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
-    # which always evaluates to `!true` for strings.
-    else if isString license then
-      evaluateSubProperty (mkLicense {
-        shortName = license;
-        deprecated = true;
-      })
-    else if license.licenseType == "compound" then
+    if license.licenseType == "compound" then
       if license.operator == "OR" then
         OR evaluateSubProperty license.licenses
       else if license.operator == "AND" then
@@ -37,7 +21,7 @@ let
     else if license.licenseType == "plus" then
       evaluateSubProperty license.license
     else
-      evaluateSubProperty (mkLicense license);
+      throw "Unknown license type or legacy license";
 in
 rec {
   /**
@@ -77,10 +61,7 @@ rec {
       evaluateComplexProperty = handleComplexProperty (evaluateProperty predicate permissive) AND OR;
     in
     license:
-    if license.licenseType or null == "simple" then
-      predicate license
-    else
-      evaluateComplexProperty license;
+    if license.licenseType == "simple" then predicate license else evaluateComplexProperty license;
 
   /**
     Evaluate a license expression for a given property name. The property must
@@ -120,10 +101,7 @@ rec {
       evaluateComplexProperty = handleComplexProperty (evaluateNamedProperty name permissive) AND OR;
     in
     license:
-    if license.licenseType or null == "simple" then
-      license.${name}
-    else
-      evaluateComplexProperty license;
+    if license.licenseType == "simple" then license.${name} else evaluateComplexProperty license;
 
   /**
     Check whether a license expression is free.
@@ -233,18 +211,16 @@ rec {
         x:
         if x.licenseType == "compound" || x.licenseType == "exception" then "(${toSPDX x})" else toSPDX x;
     in
-    if isList license then
-      lib.concatMapStringsSep " AND " mkBracket license
-    else if isString license then
-      "LicenseRef-${license}"
+    if license.licenseType == "simple" then
+      license.spdxId or "LicenseRef-nixos-${license.shortName}"
     else if license.licenseType == "compound" then
-      lib.concatMapStringsSep " ${license.operator} " mkBracket license.licenses
+      lib.concatMapStringsSep " ${license.operator} " (x: mkBracket x) license.licenses
     else if license.licenseType == "exception" then
       "${mkBracket license.license} ${license.operator} ${mkBracket license.exception}"
     else if license.licenseType == "plus" then
       "${mkBracket license.license}${license.operator}"
     else
-      license.spdxId or "LicenseRef-nixos-${license.shortName}";
+      throw "Unknown license type";
 
   /**
     Create a license.
