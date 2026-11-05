@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "2.24.1";
+  version = "2.25.4";
   pname = "wowup-cf";
 
   src = fetchurl {
     url = "https://github.com/WowUp/WowUp.CF/releases/download/v${version}/WowUp-CF-${version}.AppImage";
-    hash = "sha256-dK3fKTnS2jFAa3P0gI4WNjz8vbHaM7lOy+fBaD9vqxs=";
+    hash = "sha256-tKOFboaUo1wgLJ2xjLPOyqHrf8Do+oS0ZzL2fcs8Jc4=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
