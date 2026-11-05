@@ -69,13 +69,9 @@ let
     };
   };
 
-  frontend_packages = callPackage ./frontend.nix { };
-
-  inherit (frontend_packages)
-    frontend
-    wasm
-    workbook
-    ;
+  wasm = callPackage ./frontend/wasm.nix { };
+  workbook = callPackage ./frontend/workbook.nix { };
+  frontend = callPackage ./frontend/frontend.nix { };
 
   tools = rustPlatform.buildRustPackage {
     pname = "ironcalc-tools";
