@@ -37,8 +37,8 @@ let
 in
 {
   meta = {
-    maintainers = with lib.maintainers; [ nhnn ];
     doc = ./filesender.md;
+    teams = with lib.teams; [ ngi ];
   };
 
   options.services.filesender = {

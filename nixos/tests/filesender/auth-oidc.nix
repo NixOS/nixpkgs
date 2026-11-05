@@ -17,7 +17,7 @@ in
 
 {
   name = "FileSender with OIDC";
-  meta.maintainers = lib.teams.ngi.members;
+  meta.teams = with lib.teams; [ ngi ];
 
   nodes.filesender =
     { ... }:

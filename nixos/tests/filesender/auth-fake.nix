@@ -5,7 +5,7 @@
 }:
 {
   name = "FileSender";
-  meta.maintainers = lib.teams.ngi.members;
+  meta.teams = with lib.teams; [ ngi ];
 
   nodes.filesender =
     { pkgs, lib, ... }:
