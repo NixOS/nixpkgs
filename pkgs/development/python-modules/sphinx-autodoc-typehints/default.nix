@@ -2,30 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
   sphinx,
+  typing-extensions,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-autodoc-typehints";
-  version = "3.13.2";
+  version = "3.17.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "sphinx-autodoc-typehints";
     tag = finalAttrs.version;
-    hash = "sha256-UNTHt93FaQwFfROk0QEf9v30U8uHoC53oQu5iFVhINA=";
+    hash = "sha256-ZAac53Fre3ryGaCnk9EEFnN3/azKPNXsh01QCWS2UFM=";
   };
 
   build-system = [
+    hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  dependencies = [ sphinx ];
+  dependencies = [
+    sphinx
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
