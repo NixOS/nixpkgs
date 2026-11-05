@@ -179,8 +179,9 @@ in
                     type = lib.types.enum [
                       "stdout"
                       "file"
+                      "syslog"
                     ];
-                    default = "stdout";
+                    default = "syslog";
                     description = "Log media";
                   };
                 };
