@@ -77,5 +77,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pacu";
+    problems.removal = {
+      message = "pacu depends on AWS CLI v1 (`awscli`), which is deprecated and will be removed from Nixpkgs 27.05.";
+      urls = [ "https://github.com/RhinoSecurityLabs/pacu/issues/446" ];
+    };
   };
 })
