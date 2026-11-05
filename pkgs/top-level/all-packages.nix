@@ -1538,8 +1538,6 @@ with pkgs;
 
   ghidra-extensions = recurseIntoAttrs (callPackage ../tools/security/ghidra/extensions.nix { });
 
-  ghidra-bin = callPackage ../tools/security/ghidra { };
-
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
