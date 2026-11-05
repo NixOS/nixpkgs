@@ -7,6 +7,7 @@
   pkg-config,
   openssl,
   writableTmpDirAsHomeHook,
+  cacert,
   podman,
   docker-compose,
   gitMinimal,
@@ -16,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RUSYb5og2onduZ/FkSQn4PvcOYb6sm2HPKt14Is1K0g=";
+    hash = "sha256-wm0AtZr63kiuyQ7QfNFaGiSx48jbn2XkbDeE7VyvcOY=";
   };
 
-  cargoHash = "sha256-x7BHcMkbt9130T5Wwv/ujtp8+3cw9RcOroCafQZwFlQ=";
+  cargoHash = "sha256-hYnPz3aMS9iEWepJ3LEW0fr274LRgsWw2cnqCjsjDrQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -49,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
+    cacert
     podman
     docker-compose
     gitMinimal
