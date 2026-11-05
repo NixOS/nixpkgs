@@ -27,14 +27,9 @@
 }:
 
 let
-  binPath = lib.makeBinPath (
-    [
-      mpv-unwrapped.luaEnv
-    ]
-    ++ lib.optionals mpv-unwrapped.vapoursynthSupport [
-      mpv-unwrapped.vapoursynth.python3
-    ]
-  );
+  binPath = lib.makeBinPath [
+    mpv-unwrapped.luaEnv
+  ];
 
   # With some tools, we want to prioritize tools that are in PATH. For example, users may want
   # to quickly expose a newer version of yt-dlp through the nix shell because it needs to be
@@ -56,12 +51,6 @@ let
       "LUA_PATH"
       ";"
       "${mpv-unwrapped.luaEnv}/share/lua/${mpv-unwrapped.lua.luaversion}/?.lua"
-    ]
-    ++ lib.optionals mpv-unwrapped.vapoursynthSupport [
-      "--prefix"
-      "PYTHONPATH"
-      ":"
-      "${mpv-unwrapped.vapoursynth}/${mpv-unwrapped.vapoursynth.python3.sitePackages}"
     ]
     ++ lib.optionals (binPath != "") [
       "--prefix"
@@ -135,26 +124,34 @@ symlinkJoin {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  passthru.unwrapped = mpv-unwrapped;
+  passthru = {
+    unwrapped = mpv-unwrapped;
 
-  passthru.tests.mpv-scripts-should-not-collide = buildEnv {
-    name = "mpv-scripts-env";
-    paths = lib.pipe mpvScripts [
-      # filters "throw" aliases
-      (lib.filterAttrs (key: script: (builtins.tryEval (lib.isDerivation script)).success))
-      # filters "override" "overrideDerivation" "recurseForDerivations"
-      (lib.filterAttrs (key: script: lib.isDerivation script))
-      # filters mpv scripts that opt out of this check
-      (lib.filterAttrs (key: script: !(script.passthru.dontCollideCheck or false)))
-      # replaces unfree and meta.broken scripts with decent placeholders
-      (lib.mapAttrsToList (
-        key: script:
-        if (builtins.tryEval script.outPath).success then
-          script
-        else
-          writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
-      ))
-    ];
+    tests.mpv-scripts-should-not-collide = buildEnv {
+      name = "mpv-scripts-env";
+      paths = lib.pipe mpvScripts [
+        # filters "throw" aliases
+        (lib.filterAttrs (key: script: (builtins.tryEval (lib.isDerivation script)).success))
+        # filters "override" "overrideDerivation" "recurseForDerivations"
+        (lib.filterAttrs (key: script: lib.isDerivation script))
+        # filters mpv scripts that opt out of this check
+        (lib.filterAttrs (key: script: !(script.passthru.dontCollideCheck or false)))
+        # replaces unfree and meta.broken scripts with decent placeholders
+        (lib.mapAttrsToList (
+          key: script:
+          if (builtins.tryEval script.outPath).success then
+            script
+          else
+            writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
+        ))
+      ];
+    };
+  }
+  // lib.optionalAttrs mpv-unwrapped.vapoursynthSupport {
+    # Make mpv a python package, so it can be added to
+    # python3.withPackages to link vapoursynth plugins
+    pythonModule = mpv-unwrapped.vapoursynth.pythonModule;
+    requiredPythonModules = [ mpv-unwrapped.vapoursynth ];
   };
 
   postBuild = ''
