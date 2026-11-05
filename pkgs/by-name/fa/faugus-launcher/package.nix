@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]);
 
   dependencies = with python3Packages; [
-    dbus-python
     pefile
     pillow
     psutil
