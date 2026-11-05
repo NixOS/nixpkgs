@@ -51,12 +51,12 @@
     },
     "44": {
         "hashes": {
-            "aarch64-darwin": "40364a784c185c3a574dae04788b7ff86c1ecc8cdbd256c1960cc98889841948",
-            "aarch64-linux": "26533e5751b8d2284128f3fb1b450083d9affd214ffff7c35cac2cbbfde1a9be",
-            "headers": "01giz7ha44qa3c52yx04rn31hr28lpiv20j14rl2jkjx64rzkhmf",
-            "x86_64-linux": "5d0a6d00ef4b8abbe10c3325cef7669847fdf3816d8b2d58912eb4e7634a1c21"
+            "aarch64-darwin": "7567ec090a90b8e3eb5766c13243c92211792ebb5f70ad29d3277736c7f06326",
+            "aarch64-linux": "9500d2a8cfcfe0f7a4a80e0c6c99690652488f737daf34f0b7ef0c72002831c2",
+            "headers": "07nhjq46jq4xrgwcq9yl8xcijp2swp3vzml74ryhlz9kcvnjmm8v",
+            "x86_64-linux": "f230f6c64d2a4f4f018386c0ef0180bcbf7f30baf2cb509e6620db4759f6d353"
         },
-        "version": "44.10.1"
+        "version": "44.10.2"
     },
     "45": {
         "hashes": {
