@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 5d7f131..ae52f38 100644
+--- a/setup.py
++++ b/setup.py
+@@ -368,7 +368,7 @@ class FlexExtension (Extension):
+             cmd = ['flex', '-o', built_scanner_path]
+             for s in self.__flex_sources:
+                 cmd.append(s)
+-            spawn.spawn(cmd, verbose=1)
++            spawn.spawn(cmd)
+ 
+     def build_custom(self):
+         if self.__flex_sources:
