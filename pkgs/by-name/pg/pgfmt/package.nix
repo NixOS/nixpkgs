@@ -9,16 +9,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "pgfmt";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "pgfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JNlIrE+ppT6Vk/t0cy/7Nm+G4s6mHl32QeksR3Ec6CQ=";
+    hash = "sha256-DHSgmuqocrJoLsK1dU2jt2M4DiTupxAM42GvDx0VyI8=";
   };
 
-  cargoHash = "sha256-DQH54QOd0BS4uIYA70yV0BNEY3SHyc18qqKr1Jbebe8=";
+  cargoHash = "sha256-crpVd2xKBtKnFJhdzB3+t1qVXGDVjrf6adGZeAOQzPg=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

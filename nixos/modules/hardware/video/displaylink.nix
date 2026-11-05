@@ -11,7 +11,7 @@ let
   evdi = config.boot.kernelPackages.evdi;
 
   displaylink = pkgs.displaylink.override {
-    inherit evdi;
+    linuxPackages = config.boot.kernelPackages;
   };
 
 in

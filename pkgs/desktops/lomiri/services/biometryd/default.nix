@@ -13,6 +13,8 @@
   gtest,
   libapparmor,
   libelf,
+  libgbinder,
+  libglibutil,
   nlohmann_json,
   pkg-config,
   process-cpp,
@@ -30,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-3igUyiTI47I0lf5byypmHLigyopgEQQUYURiCb6HFeg=";
+    hash = "sha256-TVv8uow52UcZzgAZa0+dn32FIjrw/m5LgvUJLfm+wbQ=";
   };
 
   outputs = [
@@ -45,44 +47,51 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 0.4.0
+    # Remove when version > 0.4.1
     (fetchpatch {
-      name = "0001-biometryd-Fix-compatibility-with-Boost-1.87.patch";
-      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
-      hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
-    })
-
-    # Remove when version > 0.4.0
-    (fetchpatch {
-      name = "0002-biometryd-Fix-compatibility-with-gtest-1.18.patch";
-      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/1445ea904b192fbdd9f2aa20c8ee1eeb61f2ad1d.patch";
-      hash = "sha256-yKcbvJ9BTudOuN+R4eWmltH/fnjRV+4H2deIiNlVS8A=";
+      name = "0001-biometryd-tests-Fix-wrong-error-checking-with-aa_getcon.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/0a99a2187b9d8a2e0ebef251c13aacce49916a58.patch";
+      hash = "sha256-saO6ChhtTowfYnBCcOXg8B31llKFxNjWp+/mlT4PEDM=";
     })
   ];
 
   postPatch = ''
-    # Substitute systemd's prefix in pkg-config call
-    substituteInPlace data/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
-
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # For our automatic pkg-config output patcher to work, prefix must be used here
+      --replace-fail \
+        "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" \
+        "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
+      --replace-fail \
+        "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" \
+        "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # Substitute systemd's prefix in pkg-config call
+  + ''
+    substituteInPlace data/CMakeLists.txt \
+      --replace-fail \
+        'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' \
+        'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+  ''
+  # For our automatic pkg-config output patcher to work, prefix must be used here
+  + ''
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
-
-    # Suffix our QML2_IMPORT_PATH
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  ''
+  # Suffix our QML2_IMPORT_PATH
+  + ''
     substituteInPlace tests/CMakeLists.txt \
       --replace-fail \
         'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml;' \
         'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml:${qtQmlPaths};'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'add_subdirectory(tests)' \
+        'message (STATUS "Skipping tests")'
   '';
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -99,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-cpp
     libapparmor
     libelf
+    libgbinder
+    libglibutil
     nlohmann_json
     process-cpp
     properties-cpp
@@ -114,15 +125,16 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" withQt6)
-    (lib.cmakeBool "ENABLE_WERROR" true)
-    (lib.cmakeBool "WITH_HYBRIS" false)
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.strings.cmakeBool "ENABLE_WERROR" true)
+    (lib.strings.cmakeBool "WITH_GBINDER" true)
   ];
 
-  preBuild = ''
+  preBuild =
     # Generating plugins.qmltypes (also used in checkPhase?)
-    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
-  '';
+    ''
+      export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
+    '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

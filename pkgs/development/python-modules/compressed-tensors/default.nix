@@ -121,11 +121,11 @@ buildPythonPackage (finalAttrs: {
     "test_narrow_match_true_child_only"
     "test_narrow_match_with_explicit_module_argument"
     "test_no_mtp_tensors_raises"
+    "test_pack_fp4_non_contiguous"
     "test_pack_fp4_to_uint8"
     "test_parameter_and_module_consistency"
     "test_random_matrix_device_handling"
     "test_single_shard_dest_creates_index"
-
     # Float8_e4m3fn errors
     "test_compressed_model_inference_with_hook"
     "test_quantize_dequantize_matches_sequential"

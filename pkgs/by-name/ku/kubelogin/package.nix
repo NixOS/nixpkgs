@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "0.2.21";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "kubelogin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sZMFx8rv3SFEqfETtLm6WCVeGN4ia41egJwXLC8e/fI=";
+    hash = "sha256-lXNKb6F9Q+FA+WlqBZe9/fbcg7HgfcgTdI8A8WBoGuA=";
   };
 
   patches = [
