@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
-  version = "0.2.1-rc.3";
+  version = "0.2.2-rc.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "deepseek-ai";
     repo = "deepseek-harness";
     tag = "dsh-v${finalAttrs.version}";
-    hash = "sha256-jz2egrPfUQMdoZx8hzDx9ssN1Z5TXClP9CqtP3tGlJk=";
+    hash = "sha256-a14omiV5t2P8YeyV5fqVMGRqLQ71rF5wc6xLAW+Z2CQ=";
 
     # Capture the commit hash at fetch time to avoid git build dependency
     leaveDotGit = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-C9Aw9AS4r7zubaEuT6mLXQ+AhhMVlTxPZRKTpzRUkcU=";
+    hash = "sha256-D3dDgX55coJqEY31vwxiJuSFhlJeuEa3VfpN5Ooa+IE=";
   };
 
   nativeBuildInputs = [
