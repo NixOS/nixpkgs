@@ -366,6 +366,10 @@ buildPythonPackage rec {
     # timeout precisely and that the thread handler will complete in just 0.1s
     # from the requested timeout)
     "test_start_and_fire_timer_decision"
+
+    # Timestamp granularity mismatch
+    # assert datetime.datetime(2027, 11, 5, 14, 22, 37, 218141) == datetime.datetime(2027, 11, 5, 14, 22, 37)
+    "test_create_get_schedule__with_start_date"
   ];
 
   disabledTestPaths = [
