@@ -11,7 +11,7 @@
   protobuf,
   pytest-asyncio,
   pytest-mock,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   requests,
   setuptools,
 }:
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   pytestFlags = [
