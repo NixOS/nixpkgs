@@ -40,6 +40,9 @@ stdenv.mkDerivation {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
     homepage = "https://github.com/gglluukk/rtl8188eus";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ moni ];
+    maintainers = with lib.maintainers; [
+      moni
+      nix-julia
+    ];
   };
 }
