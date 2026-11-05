@@ -75,6 +75,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lib.getLib lsfg-vk}/lib/liblsfg-vk-layer.so"
   '';
 
+  runtimeInputs = [
+    coreutils
+    gawk
+    gnugrep
+    icoextract
+    pciutils
+    umu-launcher
+    xdg-utils
+  ]
+  ++ lib.optional withGameMode gamemode;
+
   dontWrapGApps = true;
 
   postFixup = ''
@@ -84,20 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         --prefix LD_PRELOAD : libgamemode.so
         --prefix LD_LIBRARY_PATH : "${lib.getLib gamemode}/lib"
       ''}
-      --suffix PATH : "${
-        lib.makeBinPath (
-          [
-            coreutils
-            gawk
-            gnugrep
-            icoextract
-            pciutils
-            umu-launcher
-            xdg-utils
-          ]
-          ++ lib.optional withGameMode gamemode
-        )
-      }"
+      --suffix PATH : ${lib.escapeShellArg (lib.makeBinPath finalAttrs.runtimeInputs)}
     )
     wrapGApp $out/bin/faugus-launcher
   '';
