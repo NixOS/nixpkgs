@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   pytestCheckHook,
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-aUqORMh2V8WSku3nKJHrkdNBMfZTFGOqswCRkcdzZKg=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
