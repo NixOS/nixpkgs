@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DOTIO_DEPENDENCIES_INSTALL=0"
     "-DOTIO_FIND_IMATH=1"
+    "-DOTIO_FIND_RAPIDJSON=1"
   ];
 
   meta = {
