@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.47.0";
+  version = "0.47.1";
   outputs = [
     "out"
     "doc"
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ggcah2btQD2Z8r34qOrlUFHQWU29TBszrNMYfWiiSq4=";
+    hash = "sha256-vyV2QpOlCnr8WUijJYYx7oVhMhEy+jRJxXe9rRBlowA=";
   };
 
-  cargoHash = "sha256-pVa1BESjxL9hTq+wI7wJkKyXTxw8GTYekavaxF6suMA=";
+  cargoHash = "sha256-1lJwKpI1NE3Q7RgEgWkdITHj7nt4WRLk9fC5yWndJKs=";
 
   nativeBuildInputs = [
     installShellFiles
