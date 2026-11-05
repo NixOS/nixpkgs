@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Async implementation of pyacaia";
     homepage = "https://github.com/zweckj/aioacaia";
     changelog = "https://github.com/zweckj/aioacaia/releases/tag/${src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

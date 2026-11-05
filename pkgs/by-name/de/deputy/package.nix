@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Language server for tools and package managers";
     homepage = "https://github.com/filiptibell/deputy";
     changelog = "https://github.com/filiptibell/deputy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "deputy";
   };

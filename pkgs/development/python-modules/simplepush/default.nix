@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "simplepush";
-  version = "3.8.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J/kP0D70Ry+Wq081SH/Mn9RLTjBDQ0h/UBFa8k0PMIU=";
+    hash = "sha256-xRYFvbrfhsd0qOLAH79sXKBVDdWxTq+cNGQni4783HA=";
   };
 
   build-system = [ hatchling ];

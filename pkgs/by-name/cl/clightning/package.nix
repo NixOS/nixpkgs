@@ -29,12 +29,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clightning";
-  version = "26.06.9";
+  version = "26.06.10";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
-    hash = "sha256-rDextsQbbGDPBt2M11APH6sEQRzy87wSaDjYyvq0U40=";
+    hash = "sha256-SRRWHm0QjazKAYPX5rOxwiTFgFl93Ls5cpnvWw/MMjA=";
   };
+
+  # Release archives can contain future-dated files (v26.06.10 used
+  # 2026-11-05 00:00 for every file). Until that time, a future-dated Makefile
+  # causes make to loop on ./configure --reconfigure without compiling.
+  # Normalize mtimes to avoid this in future releases and backports;
+  # a build after the archive's timestamp would hide the issue.
+  postUnpack = ''
+    find "$sourceRoot" -exec touch -h -d @1 {} +
+  '';
 
   # when building on darwin we need cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
@@ -85,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
-            substituteInPlace external/libwally-core/configure.ac --replace gsed sed
+          substituteInPlace external/libwally-core/tools/autogen.sh --replace-fail gsed sed && \
+            substituteInPlace external/libwally-core/configure.ac --replace-fail gsed sed
         ''
     );
 
