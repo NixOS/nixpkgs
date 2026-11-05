@@ -114,7 +114,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Faugus/faugus-launcher";
     changelog = "https://github.com/Faugus/faugus-launcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ RoGreat ];
+    maintainers = with lib.maintainers; [
+      RoGreat
+      keenanweaver
+    ];
     mainProgram = "faugus-launcher";
     platforms = lib.platforms.linux;
   };
