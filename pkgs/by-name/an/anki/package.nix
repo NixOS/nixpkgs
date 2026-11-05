@@ -38,11 +38,11 @@ let
   inherit (rustPackages_1_97) cargo rustc rustPlatform;
 
   pname = "anki";
-  version = "26.09.3";
+  version = "26.09.4";
   rev = "29bb700b951e3f0c0cb69b77c0180fc1fe33e6ba";
 
-  srcHash = "sha256-N55F8dDDRrCmA8GYP2QtfNs6QQrKhY7D2+yJO+4pqss=";
-  cargoHash = "sha256-2atsCtbtS+0T1h+KqUXI3aGHJFQbQsIaCXSi5KFUz5E=";
+  srcHash = "sha256-T2bDhOHnP2cZQdzZqXvuCK+LwNzWAZsBZcHxVWNvlXU=";
+  cargoHash = "sha256-WWulJOXZU7xxeVgznN1vrELjz7SK+c3nVKMPpOuyRXc=";
   yarnHash = "sha256-qT+N82wIv7I+gMGD86iRjQRhNbcqh9XOrnpPbLI+DXM=";
   pythonDeps =
     with python3Packages;
@@ -231,6 +231,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     UV_SYSTEM_PYTHON = true;
     UV_PYTHON_DOWNLOADS = "never";
     UV_OFFLINE = "1";
+    # Do not try to resolve the lockfile again if stale
+    UV_FROZEN = "1";
     UV_FIND_LINKS = "${uvWheels}";
   };
 
