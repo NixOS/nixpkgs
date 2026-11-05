@@ -12,6 +12,10 @@
         localDomain = "localhost";
       };
 
+      specialisation.tcp.configuration = {
+        services.dawarich.webPort = 3000;
+      };
+
       environment.etc.geojson.text =
         let
           # based on https://github.com/Freika/dawarich/raw/8c24764aa56a084e980e21bc2ffd13a72fd611db/spec/fixtures/files/geojson/export.json
@@ -56,7 +60,10 @@
 
     machine.wait_for_unit("dawarich.target")
 
-    machine.wait_for_open_port(3000) # Web
+    machine.wait_for_unit("dawarich-web.socket")
+    machine.wait_for_unit("dawarich-web.service")
+    machine.succeed("test -S /run/dawarich/web.sock")
+    machine.fail("curl --fail http://127.0.0.1:3000/")
     machine.succeed("curl --fail http://localhost/")
 
     # Get API key via ruby console
@@ -108,5 +115,14 @@
     # job runs in the background so doesn't update immediately
     res = machine.wait_until_succeeds(f"curl -f -H 'Authorization: Bearer {api_key}' http://localhost/api/v1/points | grep '\"id\":2'")
     assert len(json.loads(res)) == 11
+
+    with subtest("tcp"):
+      machine.succeed("/run/current-system/specialisation/tcp/bin/switch-to-configuration test")
+      machine.wait_for_open_port(3000)
+      machine.succeed("test -S /run/dawarich/web.sock")
+      machine.wait_until_succeeds(f"curl -f -H 'Authorization: Bearer {api_key}' http://127.0.0.1:3000/api/v1/users/me")
+      # the first request may have to wait for the web service to boot
+      res = machine.wait_until_succeeds(f"curl -f -H 'Authorization: Bearer {api_key}' http://localhost/api/v1/users/me")
+      assert json.loads(res)['user']['email'] == 'demo@dawarich.app'
   '';
 }

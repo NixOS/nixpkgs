@@ -50,7 +50,6 @@ let
     SMTP_PORT = toString cfg.smtp.port;
     SMTP_FROM = cfg.smtp.fromAddress;
     SMTP_USERNAME = cfg.smtp.user;
-    PORT = toString cfg.webPort;
   }
   // redisEnv
   // cfg.environment;
@@ -241,7 +240,7 @@ in
 
           `/ -> ''${pkgs.dawarich}/public`
 
-          `/ -> 127.0.0.1:{{ webPort }} `(If there was no file in the directory above.)
+          `/ -> 127.0.0.1:{{ webPort }}` or `/ -> unix:{{ unixSocket }}` (If there was no file in the directory above.)
 
           Make sure that websockets are forwarded properly. You might want to set up caching
           of some requests. Take a look at dawarich's provided reverse proxy configurations at
@@ -270,9 +269,30 @@ in
       };
 
       webPort = lib.mkOption {
-        description = "TCP port used by the dawarich web service.";
-        type = lib.types.port;
-        default = 3000;
+        description = ''
+          TCP port the dawarich web service listens on, on all IPv4 addresses.
+          Set to `null` to not listen on TCP.
+
+          Additional addresses can be added to `systemd.sockets.dawarich-web.listenStreams`.
+        '';
+        type = lib.types.nullOr lib.types.port;
+        default = if cfg.unixSocket == null then 3000 else null;
+        defaultText = lib.literalExpression "if config.${opt.unixSocket} == null then 3000 else null";
+      };
+
+      unixSocket = lib.mkOption {
+        description = ''
+          Unix socket the dawarich web service listens on. Set to `null` to not listen on a Unix socket.
+          It can be used together with {option}`${opt.webPort}`, nginx prefers the Unix socket.
+
+          The socket is owned by {option}`${opt.user}` and, if {option}`${opt.configureNginx}`
+          is enabled, the nginx group. Set `SocketUser`, `SocketGroup` and `SocketMode` in
+          `systemd.sockets.dawarich-web.socketConfig` to change its ownership and mode.
+        '';
+        type = lib.types.nullOr lib.types.path;
+        default = if cfg.configureNginx then "/run/dawarich/web.sock" else null;
+        defaultText = lib.literalExpression ''if config.${opt.configureNginx} then "/run/dawarich/web.sock" else null'';
+        example = "/run/dawarich/web.sock";
       };
 
       sidekiqThreads = lib.mkOption {
@@ -523,6 +543,14 @@ in
       {
         assertions = [
           {
+            assertion = config.systemd.sockets.dawarich-web.listenStreams != [ ];
+            message = "`systemd.sockets.dawarich-web.listenStreams` must not be empty. Set `services.dawarich.webPort` or `services.dawarich.unixSocket`.";
+          }
+          {
+            assertion = cfg.configureNginx -> cfg.webPort != null || cfg.unixSocket != null;
+            message = "`services.dawarich.configureNginx` requires `services.dawarich.webPort` or `services.dawarich.unixSocket` to be set.";
+          }
+          {
             assertion = !isRedisUnixSocket -> cfg.redis.port != 0;
             message = ''
               `services.dawarich.redis.port` needs to be configured if `services.dawarich.redis.host` is not a unix socket.
@@ -603,22 +631,56 @@ in
             ++ lib.optional cfg.redis.createLocally "redis-dawarich.service";
         };
 
+        systemd.sockets.dawarich-web = {
+          description = "Dawarich web socket";
+          wantedBy = [ "sockets.target" ];
+          listenStreams =
+            lib.optional (cfg.unixSocket != null) cfg.unixSocket
+            # Same address `rails server` binds to in production
+            ++ lib.optional (cfg.webPort != null) "0.0.0.0:${toString cfg.webPort}";
+          socketConfig = lib.mkIf (cfg.unixSocket != null) {
+            SocketUser = lib.mkDefault cfg.user;
+            SocketGroup = lib.mkDefault (if cfg.configureNginx then config.services.nginx.group else cfg.group);
+            SocketMode = lib.mkDefault "0660";
+          };
+        };
+
         systemd.services.dawarich-web = {
           after = [
             "network.target"
+            "dawarich-web.socket"
           ]
           ++ lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
           ++ commonUnits;
-          requires = lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service" ++ commonUnits;
+          requires = [
+            "dawarich-web.socket"
+          ]
+          ++ lib.optional needsGenCredentialsUnit "dawarich-init-credentials.service"
+          ++ commonUnits;
           wantedBy = [ "dawarich.target" ];
+          # switch-to-configuration ignores changed socket units, but restarts the
+          # sockets of a changed socket-activated service.
+          restartTriggers = [
+            (builtins.toJSON {
+              inherit (config.systemd.sockets.dawarich-web) listenStreams socketConfig;
+            })
+          ];
           description = "Dawarich web";
-          environment = env;
+          environment = env // {
+            # Unlike `rails server`, puma does not create tmp/pids
+            PIDFILE = "/run/dawarich-web/server.pid";
+          };
+          # exec keeps the PID systemd passes in LISTEN_PID
           script = ''
             ${loadCredentialsIntoEnv}
 
-            ${lib.getExe' cfg.package "rails"} server
+            exec ${lib.getExe' cfg.package "puma"} \
+              --config ${cfg.package}/config/puma.rb \
+              --bind-to-activated-sockets only
           '';
           serviceConfig = {
+            # puma sends READY=1 once booted when NOTIFY_SOCKET is set
+            Type = "notify";
             Restart = "always";
             RestartSec = 20;
             LoadCredential = loadCredentials;
@@ -647,7 +709,11 @@ in
             };
 
             locations."@proxy" = {
-              proxyPass = "http://127.0.0.1:${toString cfg.webPort}";
+              proxyPass =
+                if cfg.unixSocket != null then
+                  "http://unix:${cfg.unixSocket}"
+                else
+                  "http://127.0.0.1:${toString cfg.webPort}";
               recommendedProxySettings = true;
               proxyWebsockets = true;
             };
