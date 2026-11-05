@@ -335,12 +335,12 @@ in
       "sha256-3JYcWKFk0dKJg/qn+EBvxeAO5xh5PXCU3dTEWDr1oXI=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.123"
-      "sha256-66IeS6alo5yzbR9HDw4vTU212wGW1ZVKzSjxY3e5E94=";
+    buildMypyBoto3Package "connect" "1.43.124"
+      "sha256-KukBtNxHFIefJdTKfvXLZI/sVUtOOSSkgJnKMT/RMyQ=";
 
   mypy-boto3-connect-contact-lens =
-    buildMypyBoto3Package "connect-contact-lens" "1.43.79"
-      "sha256-pfKiLx6qZJxvFGY7Jm+355d1fT4knIoZYD52VtWn+ck=";
+    buildMypyBoto3Package "connect-contact-lens" "1.43.124"
+      "sha256-KNblj3FGYI6GfhZDGoB45B5dWVIOADLSvJhSU1V7l38=";
 
   mypy-boto3-connectcampaigns =
     buildMypyBoto3Package "connectcampaigns" "1.43.0"
@@ -431,8 +431,8 @@ in
       "sha256-LE8moRJrwRp3T4UGkj+vdRyq9Qw7t/UxcQm1Dw3/Dfs=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.43.116"
-      "sha256-Q7FYzbVjAEuwtuY695BVd1W7U8lunqu/25fCsOW8rco=";
+    buildMypyBoto3Package "dynamodb" "1.43.124"
+      "sha256-QIytzi1TqS7LHkEZgcHhj5/2rAGHeGXDhZ5PRJVZEpM=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.43.114"
@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.121"
-      "sha256-Eu03q+Xyjg3Qz2k3UhU7VD2cATztLTXaJxFUG9Izb+0=";
+    buildMypyBoto3Package "ec2" "1.43.124"
+      "sha256-OIb/pr6Gt0pqPccO0qvuc92tsMR5q9Nvr4KyJZ/FTJQ=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -459,8 +459,8 @@ in
       "sha256-02BUkAFhr9sT8ohkJJFPYNni0O9/UI/G0GUee/Kx5Dw=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.43.120"
-      "sha256-GohLG2Vk4y13RAxj6a1UgvOlFaQoLzZ6b6XF5UVq/eg=";
+    buildMypyBoto3Package "ecs" "1.43.124"
+      "sha256-9DoGqYTxALmqCL1Fcnd55YojP9ZtAvsG8XkiUl8R350=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.43.23"
@@ -479,8 +479,8 @@ in
       "sha256-EDUVLASVPlBJAAvEyw3OAMXfQB421ScG5tSpEC0b3bQ=";
 
   mypy-boto3-elasticbeanstalk =
-    buildMypyBoto3Package "elasticbeanstalk" "1.43.96"
-      "sha256-6h02RqoblvGg7wPqSFGYLwhTiA1ZdsRDltuygcbpHKo=";
+    buildMypyBoto3Package "elasticbeanstalk" "1.43.124"
+      "sha256-0uuEqTipoV4m8OsGLREenXnVuzYtAXXjHa0yIsyPN1s=";
 
   mypy-boto3-elastictranscoder =
     buildMypyBoto3Package "elastictranscoder" "1.42.3"
@@ -495,8 +495,8 @@ in
       "sha256-gwGI01weMHiIFmvWL7AM4Dva6Qu2k0o1jADy71MvKcQ=";
 
   mypy-boto3-emr =
-    buildMypyBoto3Package "emr" "1.43.50"
-      "sha256-D66oOKwsYwhgg9w7o4i9H1SIodq10uf+qif9kjKBfi8=";
+    buildMypyBoto3Package "emr" "1.43.124"
+      "sha256-/BHtLG4b1uLSuQkbJleHFof7/nkxvMqgdoR43CT+V8E=";
 
   mypy-boto3-emr-containers =
     buildMypyBoto3Package "emr-containers" "1.43.115"
@@ -678,8 +678,8 @@ in
       "sha256-han7AMRHtSLHVlPIBwAS2nGanHHiPTov2n/ayLZmC6c=";
 
   mypy-boto3-iotsitewise =
-    buildMypyBoto3Package "iotsitewise" "1.43.86"
-      "sha256-iFMN9NfxG/rWjiNLe0t4shJoaSNma0r2gKAJKoxvN+k=";
+    buildMypyBoto3Package "iotsitewise" "1.43.124"
+      "sha256-gWy8hxhnWVRPeSEfOwxN6Fi7xM8QYp24cgHTKgLgGT0=";
 
   mypy-boto3-iotthingsgraph =
     buildMypyBoto3Package "iotthingsgraph" "1.43.0"
@@ -810,8 +810,8 @@ in
       "sha256-RvGt4LSQf32ffwJhmjtrD69Afu6NqRKH6nsIxWl7NQg=";
 
   mypy-boto3-lookoutequipment =
-    buildMypyBoto3Package "lookoutequipment" "1.43.0"
-      "sha256-2LImXNFMIsFKasOZhZxAbVx4XiX0TiuffDRJ6LgJaHI=";
+    buildMypyBoto3Package "lookoutequipment" "1.43.124"
+      "sha256-TunBFv87lfEId9jf73z3CCgerO+JMVtfnaDODPY28dA=";
 
   mypy-boto3-lookoutmetrics =
     buildMypyBoto3Package "lookoutmetrics" "1.40.15"
@@ -906,8 +906,8 @@ in
       "sha256-V6xgiUn87wqIlWJGOpc7Zu24EDzROAspAn3qkRifsFU=";
 
   mypy-boto3-mgn =
-    buildMypyBoto3Package "mgn" "1.43.90"
-      "sha256-PFBWqPG2LK+SQQV3LLjXnW06/apkrBS+H8D1Cu4CgBY=";
+    buildMypyBoto3Package "mgn" "1.43.124"
+      "sha256-eXfCClOL+oYLnJqYjnZXbs+uqgz6PCH/jLQEZ/fEs/Q=";
 
   mypy-boto3-migration-hub-refactor-spaces =
     buildMypyBoto3Package "migration-hub-refactor-spaces" "1.43.0"
@@ -1046,8 +1046,8 @@ in
       "sha256-5bmcUB1MIxJ34XQSsE41OrGfhy8c614AZenIWM885v8=";
 
   mypy-boto3-polly =
-    buildMypyBoto3Package "polly" "1.43.117"
-      "sha256-yxFrsDxL+ibRTCa9RhW4OeHDEpWJxqYC9TlLE2qsedQ=";
+    buildMypyBoto3Package "polly" "1.43.124"
+      "sha256-I6qmV3fgbbyzsXbSJpW3nQQ+705tlWTvkCa36EnVsJE=";
 
   mypy-boto3-pricing =
     buildMypyBoto3Package "pricing" "1.43.0"
@@ -1082,8 +1082,8 @@ in
       "sha256-ZmYC3YQujmfSUK0pOGCGFwT7LrSa3oJfo9juUb+2Xpk=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.43.116"
-      "sha256-tRestcAXju83KaF9SGFdpmlYCLL83EdTZ/+ClULcWK4=";
+    buildMypyBoto3Package "rds" "1.43.124"
+      "sha256-mdtGs8qkT4GAT9oKbATHkspWbIoYPx40U+ENUmja32w=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.43.37"
@@ -1126,8 +1126,8 @@ in
       "sha256-jYAsZ1lMU9cl4rIvRO1UZLn4nIsuauWrNRwyB0j4HK0=";
 
   mypy-boto3-rolesanywhere =
-    buildMypyBoto3Package "rolesanywhere" "1.43.58"
-      "sha256-P3eG/eC4WOUAQ4phUPjN6uZrN9GBYiaGkgUsGIITgII=";
+    buildMypyBoto3Package "rolesanywhere" "1.43.124"
+      "sha256-jpwazUBq9BL0rJiGMgwAU3ohpxylMSiSpPselO8y/zs=";
 
   mypy-boto3-route53 =
     buildMypyBoto3Package "route53" "1.43.0"
@@ -1218,8 +1218,8 @@ in
       "sha256-Jl7i/d+dPkKuOWhWJft4YaU5EQ2OMkNyhHwOHL1mayA=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.43.113"
-      "sha256-O7hgLqMPz8aObnZMIOFOLgnfkUEgaImqdkJYK0unnAI=";
+    buildMypyBoto3Package "securityhub" "1.43.124"
+      "sha256-9O039/VSjRJHlGlfGw+t/R3SUzRvbOyX9Rn5DJBTEmA=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.43.0"
@@ -1422,8 +1422,8 @@ in
       "sha256-2glzIKBlui8YPvzI74bT4ADqEZ0lH9CuZqHtwz64Z3k=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.43.115"
-      "sha256-EJ9nqGiUJFzANcfZ709+8tNMkVxa20EGJ71BZqh5tV0=";
+    buildMypyBoto3Package "workspaces" "1.43.124"
+      "sha256-hcicF0u/IUnXuSQHfEMbUBfMIHHI0h1odnTE08S0bks=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.43.0"
