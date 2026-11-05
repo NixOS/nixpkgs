@@ -5,14 +5,14 @@
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "joystickwake";
-  version = "0.5.2";
+  version = "1.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "forestix";
     repo = "joystickwake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qIXXlwZec4CQk93gmY5O3mdGdlNCeXWTr/DDw4vwRUM=";
+    hash = "sha256-p2zhoOLO3WLyn5U6X1c4diywNBmOZNb7Y9l9RoZDlQo=";
   };
 
   build-system = with python3.pkgs; [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "joystickwake";
     longDescription = ''
       Linux gamers often find themselves unexpectedly staring at a blank screen, because their display server fails to recognize game controllers as input devices, allowing the screen blanker to activate during gameplay.
-      This program works around the problem by temporarily disabling screen blankers when joystick activity is detected.
+      This program works around the problem by suppressing screen blankers while joystick activity is detected.
     '';
     homepage = "https://codeberg.org/forestix/joystickwake";
     maintainers = with lib.maintainers; [ bertof ];
