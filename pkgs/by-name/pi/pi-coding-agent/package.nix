@@ -8,8 +8,11 @@
   writableTmpDirAsHomeHook,
   ripgrep,
   fd,
+  wl-clipboard,
+  xclip,
   makeBinaryWrapper,
   stdenvNoCC,
+  bun,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
@@ -49,6 +52,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    bun
   ];
 
   # Build workspace dependencies in order, then the coding-agent, using the
@@ -57,6 +61,12 @@ buildNpmPackage (finalAttrs: {
     runHook preBuild
 
     npm run build:offline
+
+    pushd packages/coding-agent
+    bun build --compile --no-compile-autoload-bunfig --no-compile-autoload-dotenv \
+      ./dist/bun/cli.js ./src/utils/image-resize-worker.ts ./src/extensions/codemode/worker.ts \
+      --outfile $TMPDIR/pi
+    popd
 
     runHook postBuild
   '';
@@ -81,11 +91,14 @@ buildNpmPackage (finalAttrs: {
               @earendil-works/pi-durable:packages/durable \
               @earendil-works/pi-env:packages/env \
               @earendil-works/pi-mcp:packages/mcp \
+              @earendil-works/pi-schema:packages/schema \
               @earendil-works/pi-telemetry:packages/telemetry \
               @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
-      rm "$nm/$pkg"
-      cp -r "$src" "$nm/$pkg"
+      if [ -e "$nm/$pkg" ] || [ -L "$nm/$pkg" ]; then
+        rm -rf "$nm/$pkg"
+        cp -r "$src" "$nm/$pkg"
+      fi
     done
 
     # Delete remaining workspace symlinks
@@ -93,6 +106,16 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+
+    # bun binary replaces node wrapper — bun-only
+    install -Dm755 $TMPDIR/pi $out/bin/pi
+
+    # bun binary needs package.json next to PI_PACKAGE_DIR for VERSION
+    mkdir -p $out/share/pi
+    cp packages/coding-agent/package.json $out/share/pi/package.json
+    cp -r packages/coding-agent/dist/modes/interactive/theme $out/share/pi/theme
+    cp -r packages/coding-agent/dist/modes/interactive/assets $out/share/pi/assets
+    cp -r packages/coding-agent/dist/core/export-html $out/share/pi/export-html
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
@@ -104,11 +127,18 @@ buildNpmPackage (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/pi --prefix PATH : ${
-      lib.makeBinPath [
-        ripgrep
-        fd
-      ]
+      lib.makeBinPath (
+        [
+          ripgrep
+          fd
+        ]
+        ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+          wl-clipboard
+          xclip
+        ]
+      )
     } \
+      --set PI_PACKAGE_DIR $out/share/pi \
       --set-default PI_SKIP_VERSION_CHECK 1 \
       --set-default PI_TELEMETRY 0
   '';
