@@ -75,6 +75,11 @@ in
       default = "/var/lib/bulwark/settings";
       description = "Directory for storing encrypted settings files.";
     };
+    plugin_secrets_dir = mkOption {
+      type = str;
+      default = "/var/lib/bulwark/plugin-secrets";
+      description = "Directory for credentials users save for plugins, encrypted.";
+    };
     admin_state_dir = mkOption {
       type = str;
       default = "/var/lib/bulwark/admin-state";
@@ -798,6 +803,7 @@ in
 
         HOSTNAME = cfg.hostname;
         PORT = toString cfg.port;
+        PLUGIN_SECRETS_DIR = cfg.plugin_secrets_dir;
         ADMIN_STATE_DIR = cfg.admin_state_dir;
         VERSION_CHECK_DATA_DIR = cfg.version_check_data_dir;
         # Read (and created) even with telemetry off to resolve consent state;
