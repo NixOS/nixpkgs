@@ -16155,6 +16155,12 @@
     githubId = 20408518;
     email = "kylelovestoad+nixpkgs@protonmail.com";
   };
+  kylemanna = {
+    name = "Kyle Manna";
+    email = "kyle@kylemanna.com";
+    github = "kylemanna";
+    githubId = 936367;
+  };
   kyleondy = {
     email = "kyle@ondy.org";
     github = "KyleOndy";
