@@ -1532,7 +1532,7 @@ with pkgs;
 
   geekbench_7 = geekbench;
 
-  ghidra-extensions = recurseIntoAttrs (callPackage ../tools/security/ghidra/extensions.nix { });
+  ghidra-extensions = recurseIntoAttrs (callPackage ../by-name/gh/ghidra/extensions.nix { });
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
