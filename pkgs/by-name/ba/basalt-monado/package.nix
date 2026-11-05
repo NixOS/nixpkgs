@@ -5,7 +5,7 @@
   bzip2,
   cereal,
   cmake,
-  eigen,
+  eigen_5,
   kdePackages,
   fetchFromGitLab,
   fmt,
@@ -31,14 +31,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "basalt-monado";
-  version = "0-unstable-2025-09-25";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mateosss";
     repo = "basalt";
-    rev = "5337898271f5c2ce523258e93e80fd870130be31";
-    hash = "sha256-IoXZlXyOc5y9aSHBU3WCNhHi4L9xzHmbv6VMEvX2ZeE=";
+    rev = "df6e970c8da7636eb401a09e3317fbeaaf829b9a";
+    hash = "sha256-3GS9LV0p3auXc/mELpUpm8J6UbiJLbF3rvlO+GHb29M=";
     fetchSubmodules = true;
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     boost
     bzip2
     cereal
-    eigen
+    eigen_5
     fmt
     freeglut
     glew
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     (lib.cmakeBool "BASALT_INSTANTIATIONS_DOUBLE" false)
     (lib.cmakeBool "BUILD_TESTS" false)
-    (lib.cmakeFeature "EIGEN_ROOT" "${eigen}/include/eigen3")
+    (lib.cmakeFeature "EIGEN_ROOT" "${eigen_5}/include/eigen3")
   ];
 
   passthru.updateScript = nix-update-script { };
