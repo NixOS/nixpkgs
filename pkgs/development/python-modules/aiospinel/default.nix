@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiospinel";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiospinel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AMIrm9AGFjRSDwJtDXcOH9HIBFiqszjjNma+egRa5Tw=";
+    hash = "sha256-l3RHQVpKJwMRRcC3+NUS650lEv1+gnLfrxjkeToa/I0=";
   };
 
   build-system = [
