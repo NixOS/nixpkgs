@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  strictDeps = true;
+
   # See https://trac.macports.org/ticket/60656
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDFLAGS = "-Wl,-w"; };
 
