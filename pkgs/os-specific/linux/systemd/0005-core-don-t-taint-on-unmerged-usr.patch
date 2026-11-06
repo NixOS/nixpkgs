@@ -17,10 +17,10 @@ See also: https://github.com/systemd/systemd/issues/24191
  1 file changed, 10 deletions(-)
 
 diff --git a/src/core/taint.c b/src/core/taint.c
-index 06a31e0..e42b537 100644
+index 9dca625..0492446 100644
 --- a/src/core/taint.c
 +++ b/src/core/taint.c
-@@ -43,16 +43,6 @@ char** taint_strv(void) {
+@@ -44,16 +44,6 @@ char** taint_strv(void) {
  
          _cleanup_free_ char *bin = NULL, *usr_sbin = NULL, *var_run = NULL;
  
