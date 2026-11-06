@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       baongoc124
+      jackrhoa
     ];
     platforms = lib.platforms.darwin;
   };
