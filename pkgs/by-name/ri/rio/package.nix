@@ -162,6 +162,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tornax
       otavio
       oluceps
+      ethancedwards8 # darwin
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";

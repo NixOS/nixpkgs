@@ -6,6 +6,7 @@
   anyio,
   authlib,
   bash,
+  certifi,
   cryptography,
   cyclopts,
   exceptiongroup,
@@ -56,7 +57,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
-  version = "9.0.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -64,7 +65,7 @@ buildPythonPackage (finalAttrs: {
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-aLLnVVMvJ30OIIAQVxFc5x/TJly6DWaw8Ni/QweBwYY=";
+    hash = "sha256-IlJ/wCXITsg0yl9fugeJBozZJ2jTPymWlkRfgqaNeOM=";
   };
 
   postPatch = ''
@@ -81,6 +82,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     anyio
     authlib
+    certifi
     cryptography
     cyclopts
     exceptiongroup

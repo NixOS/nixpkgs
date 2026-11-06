@@ -346,6 +346,10 @@ let
 
         config-file = callPackage ../development/ocaml-modules/config-file { };
 
+        console = callPackage ../development/ocaml-modules/console { };
+
+        console-eio = callPackage ../development/ocaml-modules/console/eio.nix { };
+
         containers = callPackage ../development/ocaml-modules/containers { };
 
         containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
@@ -1064,6 +1068,8 @@ let
 
         ### K ###
 
+        k7 = callPackage ../development/ocaml-modules/k7 { };
+
         kafka = callPackage ../development/ocaml-modules/kafka { };
 
         kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix {
@@ -1231,6 +1237,8 @@ let
         markdown = callPackage ../development/ocaml-modules/markdown { };
 
         markup = callPackage ../development/ocaml-modules/markup { };
+
+        matrix = callPackage ../development/ocaml-modules/mosaic/matrix.nix { };
 
         mccs = callPackage ../development/ocaml-modules/mccs { };
 
@@ -1416,6 +1424,8 @@ let
             yojson = yojson_2;
           };
         };
+
+        mosaic = callPackage ../development/ocaml-modules/mosaic { };
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
@@ -1876,6 +1886,8 @@ let
 
         ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+        ppx_windtrap = callPackage ../development/ocaml-modules/windtrap/ppx.nix { };
+
         ppx_yojson_conv = callPackage ../development/ocaml-modules/ppx_yojson_conv { };
 
         ppx_yojson_conv_lib = callPackage ../development/ocaml-modules/ppx_yojson_conv_lib { };
@@ -2188,6 +2200,8 @@ let
         tls-miou-unix = callPackage ../development/ocaml-modules/tls/miou-unix.nix { };
 
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
+
+        toffee = callPackage ../development/ocaml-modules/mosaic/toffee.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
 

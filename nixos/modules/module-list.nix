@@ -306,6 +306,7 @@
   ./programs/oddjobd.nix
   ./programs/onlyoffice.nix
   ./programs/opengamepadui.nix
+  ./programs/openlogi.nix
   ./programs/openvpn3.nix
   ./programs/partition-manager.nix
   ./programs/passless.nix

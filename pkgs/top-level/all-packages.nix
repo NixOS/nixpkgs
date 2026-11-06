@@ -2362,10 +2362,6 @@ with pkgs;
 
   molecule = with python3Packages; toPythonApplication molecule;
 
-  moreutils = callPackage ../tools/misc/moreutils {
-    docbook-xsl = docbook_xsl;
-  };
-
   mtr-gui = mtr.override { withGtk = true; };
 
   multitran = recurseIntoAttrs (

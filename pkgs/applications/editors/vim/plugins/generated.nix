@@ -15122,12 +15122,12 @@ final: prev: {
 
   pentatonic-nvim = buildVimPlugin {
     pname = "pentatonic.nvim";
-    version = "0-unstable-2026-10-31";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "farbzen";
       repo = "pentatonic.nvim";
-      rev = "fe3c350795baa9a7cabd1a9fa37198c6a4c30f05";
-      hash = "sha256-aahik42orj0OfyaSY43Ln14MaDosT92j8cWjUv6gyfI=";
+      tag = "v0.2.0";
+      hash = "sha256-uTggdO2ex1ryb9O/5T2p4Kq7+GKE4pvS7sOr42YPfDQ=";
     };
     meta.homepage = "https://github.com/farbzen/pentatonic.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
@@ -17449,12 +17449,12 @@ final: prev: {
 
   tacho-nvim = buildVimPlugin {
     pname = "tacho.nvim";
-    version = "0.1.0";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "farbzen";
       repo = "tacho.nvim";
-      tag = "v0.1.0";
-      hash = "sha256-lJbf9T6EsVYSadYn1aRprFgVWtwe7CEqdnCmUUE9K1M=";
+      tag = "v0.2.0";
+      hash = "sha256-cCYjC4zMUbdFKH7DOmqSd1MpTIX1BFZawkXVWKcag9w=";
     };
     meta.homepage = "https://github.com/farbzen/tacho.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
