@@ -10,11 +10,14 @@ Open TCP port:
 Open UDP port:
   nixos-firewall-tool open udp 51820
 
+Close TCP port:
+  nixos-firewall-tool close tcp 8888
+
+Close UDP port:
+  nixos-firewall-tool close udp 51820
+
 Show all firewall rules:
   nixos-firewall-tool show
-
-Close a temporarily opened port:
-  nixos-firewall-tool close tcp 8888
 
 Reset firewall configuration to system settings:
   nixos-firewall-tool reset
