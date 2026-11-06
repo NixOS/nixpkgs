@@ -277519,6 +277519,7 @@ self: {
       blake3,
       blaze-builder,
       bloomfilter,
+      botan-low,
       bytestring,
       Cabal,
       case-insensitive,
@@ -277621,6 +277622,7 @@ self: {
       configureFlags = [
         "-fassistant"
         "-f-benchmark"
+        "-fbotan"
         "-fcrypton"
         "-fdbus"
         "-f-debuglocks"
@@ -277655,6 +277657,7 @@ self: {
         blake3
         blaze-builder
         bloomfilter
+        botan-low
         bytestring
         case-insensitive
         clientsession
@@ -437298,7 +437301,7 @@ self: {
       )
       {
         c10 = null;
-        torch = null;
+        inherit (pkgs) torch;
         torch_cpu = null;
       };
 
