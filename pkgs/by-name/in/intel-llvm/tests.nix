@@ -32,6 +32,13 @@ let
       name = "spir64-new-offload-driver";
       flags = [ "--offload-new-driver" ];
     }
+    # Same compile as spir64, with the setup hook's NIX_CFLAGS_COMPILE cleared.
+    # cc-cflags has to provide <sycl/sycl.hpp> and <CL/cl.h> on its own.
+    {
+      name = "spir64-without-setup-cflags";
+      flags = [ ];
+      ignoreSetupHookCflags = true;
+    }
   ]
   ++ lib.optional (lib.elem "native_cpu" backends) {
     name = "native_cpu";
@@ -54,7 +61,11 @@ let
   };
 
   mkTest =
-    { name, flags }:
+    {
+      name,
+      flags,
+      ignoreSetupHookCflags ? false,
+    }:
     stdenv.mkDerivation {
       name = "intel-llvm-test-sycl-compile-${name}";
 
@@ -64,6 +75,10 @@ let
 
       buildPhase = ''
         echo "Checking if a SYCL program can be built for ${name}..."
+        ${lib.optionalString ignoreSetupHookCflags ''
+          export NIX_CFLAGS_COMPILE=
+          export NIX_CFLAGS_COMPILE_BEFORE=
+        ''}
         clang++ -fsycl ${lib.escapeShellArgs flags} $src -o test
       '';
 
