@@ -42,9 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/Esri/lerc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
