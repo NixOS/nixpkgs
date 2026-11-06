@@ -1,8 +1,9 @@
 {
   lib,
+  stdenvNoCC,
   python3,
   fetchFromGitLab,
-  fetchFromGitHub,
+  cacert,
   openldap,
   nixosTests,
   postgresql,
@@ -12,30 +13,50 @@ let
   python = python3.override {
     self = python;
     packageOverrides = _final: prev: {
-      # TODO remove when wtforms has a 3.3 stable release
-      wtforms = prev.wtforms.overridePythonAttrs (_old: rec {
-        version = "3.3.0b3";
-        src = fetchFromGitHub {
-          owner = "wtforms";
-          repo = "wtforms";
-          tag = version;
-          hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
-        };
-      });
+      wtforms = prev.wtforms_3_3;
     };
+  };
+  version = "0.4.3";
+  src = fetchFromGitLab {
+    owner = "yaal";
+    repo = "canaille";
+    tag = version;
+    hash = "sha256-n1CSpbl5KfB/IRXPbUOaFcrlKcEGhM7E4yGN0ulSB3Y=";
+  };
+  # Canaille uses it's own build hook to fetch NPM dependencies,
+  # so we just use that instead of fetchNpmDeps
+  frontendDependencies = stdenvNoCC.mkDerivation {
+    pname = "canaille-npm-deps";
+    inherit version src;
+
+    env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    nativeBuildInputs = [
+      (python.withPackages (ps: [ ps.hatchling ]))
+      cacert
+    ];
+
+    buildPhase = ''
+      python -c 'import hatch_build; hatch_build.vendor_static_files()'
+    '';
+
+    installPhase = ''
+      cp -r canaille/static/vendor $out
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-+Sc9/9ST81mIu2NzpDzEeYwzviUnJ7Q0e1JosvYhWBU=";
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "canaille";
-  version = "0.3.6";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "yaal";
-    repo = "canaille";
-    tag = finalAttrs.version;
-    hash = "sha256-Zn1MZa4TYNfdVrDmi6KHQxrdK9UfRxYqJpCXVbqnvII=";
-  };
+  inherit version src;
+
+  postPatch = ''
+    ln -s ${frontendDependencies} canaille/static/vendor
+  '';
 
   build-system = with python.pkgs; [
     hatchling
@@ -53,9 +74,12 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     flask-dramatiq
     flask-session
     flask-wtf
-    httpx
+    flask-wtforms-htmx
+    httpx2
     pydantic-settings
     wtforms
+    wtforms-htmx
+    wtforms-htmx-components
   ];
 
   nativeCheckInputs =
@@ -63,6 +87,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     [
       pytestCheckHook
       postgresql
+      cairosvg
       flask-webtest
       pyquery
       pytest-cov-stub
@@ -78,6 +103,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       faker
       time-machine
       pytest-scim2-server
+      pytest-mysql
     ]
     ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
 
@@ -99,6 +125,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   pytestFlags = [ "--numprocesses=4" ];
 
   disabledTests = [
+    # The NixOS module uses PostgreSQL, no interest in testing mariadb as a target for now
+    "sql:mariadb"
     # Tries to use DNS resolution
     "test_send_new_email_error"
     "test_send_test_email_ssl"
@@ -115,6 +143,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       flask-talisman
       flask-themer
       isodate
+      pillow
       pytz
       zxcvbn-rs-py
     ];
@@ -125,10 +154,11 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ];
     scim = [
       authlib
-      httpx
       scim2-client
       scim2-models
-    ];
+      scim2-server
+    ]
+    ++ scim2-client.optional-dependencies.httpx2;
     ldap = [
       ldappool
       python-ldap
