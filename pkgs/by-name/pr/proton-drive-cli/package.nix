@@ -39,10 +39,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # cli/tsconfig.json compiles the SDK packages from client/js and
   # incubating/account/js, which cannot see their dependencies in the isolated
   # node_modules. Use the copies in node_modules instead, like for crypto.
+  # Also relax the exact bun version check in package.json.
   postPatch = ''
     substituteInPlace tsconfig.json \
       --replace-fail '"../client/js/src' '"./node_modules/@protontech/drive-sdk/src' \
       --replace-fail '"../incubating/account/js/src' '"./node_modules/proton-drive-sdk-account/src'
+    substituteInPlace package.json \
+      --replace-fail '"bun": "' '"bun": ">='
   '';
 
   configurePhase = ''
