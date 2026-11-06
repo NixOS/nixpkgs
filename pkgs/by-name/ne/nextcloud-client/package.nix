@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "35.0.0";
+  version = "35.0.3";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DtdQ0PbICVYSBbUMGI/iYMjJym44E1yCAiD68oo+Cwc=";
+    hash = "sha256-yvgy8As5V+OeBed9wIOPGb0gkl7VezHK4HqoJ/PK0T8=";
   };
 
   __structuredAttrs = true;
