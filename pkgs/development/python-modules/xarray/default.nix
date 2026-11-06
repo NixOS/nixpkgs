@@ -114,16 +114,9 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.finalPackage.optional-dependencies.io
   ++ finalAttrs.finalPackage.optional-dependencies.accel
   ++ finalAttrs.finalPackage.optional-dependencies.etc
-  ++ finalAttrs.finalPackage.optional-dependencies.parallel
+  ++ finalAttrs.finalPackage.optional-dependencies.parallel;
   # Not adding optional-dependencies.viz because adding cartopy causes infinite
   # recursion, and doesn't cause more tests to be collected.
-  ;
-  pytestFlags = lib.optionals (!h5py.hdf5.szipSupport) [
-    "-k"
-    # Our h5py is built with hdf5 that is built without szip support, so we
-    # skip these tests
-    "not szip"
-  ];
 
   pythonImportsCheck = [ "xarray" ];
 
