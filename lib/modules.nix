@@ -1319,17 +1319,17 @@ let
         let
           # Process mkMerge and mkIf properties.
           defsNormalized = concatMap (
-            m:
+            { file, value, ... }:
             map (
-              value:
-              if value._type or null == "definition" then
-                value
+              v:
+              if v._type or null == "definition" then
+                v
               else
                 {
-                  file = m.file;
-                  inherit value;
+                  inherit file;
+                  value = v;
                 }
-            ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+            ) (addErrorContext "while evaluating definitions from `${file}':" (dischargeProperties value))
           ) defs;
 
           # Process mkOverride properties.
