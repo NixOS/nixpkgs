@@ -275,7 +275,7 @@ in
       nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
         virtualHosts."${cfg.nginx.domain}" = {
-          forceSSL = true;
+          forceSSL = lib.mkDefault true;
           locations = {
             "/" = {
               proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
