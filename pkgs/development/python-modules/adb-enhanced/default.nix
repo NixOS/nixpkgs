@@ -3,7 +3,6 @@
   buildPythonPackage,
   docopt,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   jdk11,
   psutil,
@@ -20,13 +19,6 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-RKMF2Cn3wd5p3SdC22BO5AeINaq8u3+1t+3QkXYjbpE=";
   };
-  patches = [
-    # psutil==7.2.1 -> psutil==7.2.2
-    (fetchpatch {
-      url = "https://github.com/ashishb/adb-enhanced/pull/337.patch";
-      hash = "sha256-BRpdgLS6CNkmyj+OwnIaqfkmz1jzZg/qtoiN32jUIog=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
