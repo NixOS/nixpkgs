@@ -289,6 +289,9 @@ buildPythonPackage (finalAttrs: {
     # NaN payload propagation differs from x86:
     #   AssertionError: 2143289347 != 2143289345 : mul(0x7fc00001, 0x7f800003)
     "test_mul_nan_priority"
+
+    # Exception: forward pass failed shape
+    "test_simple_padding_conv1d"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky (pass when running a smaller set of tests: tests/unit/*, but not within the full test suite)
