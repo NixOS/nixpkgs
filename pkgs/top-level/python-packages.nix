@@ -7601,6 +7601,8 @@ self: super: with self; {
 
   hass-splunk = callPackage ../development/python-modules/hass-splunk { };
 
+  hassette = callPackage ../development/python-modules/hassette { };
+
   hassette-client = callPackage ../development/python-modules/hassette-client { };
 
   hassette-wire = callPackage ../development/python-modules/hassette-wire { };
