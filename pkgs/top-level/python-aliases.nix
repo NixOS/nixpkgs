@@ -584,6 +584,7 @@ mapAliases {
   pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   pyhidra = throw "'pyhidra' has been removed as it was incorporated into upstream and renamed 'pyghidra'"; # Added 2026-04-21
   pyhiveapi = throw "'pyhiveapi' has been renamed to/replaced by 'pyhive-integration'"; # Converted to throw 2025-10-29
+  pyialarm = throw "'pyialarm' has been removed because it was unmaintained and Home Assistant switched to pyasyncialarm"; # Added 2026-11-06
   pyialarmxr = throw "'pyialarmxr' has been renamed to/replaced by 'pyialarmxr-homeassistant'"; # Converted to throw 2025-10-29
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
   pyitachip2ir = throw "'pyitachip2ir' has been removed in favor of 'pyitachip2ir2'"; # Added 2026-10-31
