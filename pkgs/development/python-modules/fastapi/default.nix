@@ -8,6 +8,7 @@
 
   # dependencies
   annotated-doc,
+  opentelemetry-api,
   starlette,
   pydantic,
   typing-extensions,
@@ -20,14 +21,17 @@
   flask,
   httpx2,
   inline-snapshot,
+  logfire,
   pwdlib,
   pyjwt,
   pytest-xdist,
   pytest-timeout,
   pytestCheckHook,
+  sentry-sdk,
 
   # optional-dependencies
   fastapi-cli,
+  gitMinimal,
   httpx,
   jinja2,
   itsdangerous,
@@ -37,28 +41,40 @@
   uvicorn,
   pydantic-settings,
   pydantic-extra-types,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp-proto-http,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi";
-  version = "0.141.1";
+  version = "0.162.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "fastapi";
     tag = finalAttrs.version;
-    hash = "sha256-5P9aDMS7gLti2CBlrucvjgl4Od1mti9ityPdqxI1RIM=";
+    hash = "sha256-SGTilW+Y6KZ+xHHdpeZbL3dFX5WfecD5yPDmX+K0UA8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'timeout = "20"' 'timeout = 20.0'
+  '';
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     annotated-doc
+    opentelemetry-api
     starlette
     pydantic
     typing-extensions
     typing-inspection
+  ];
+
+  pythonRelaxDeps = [
+    "opentelemetry-api"
   ];
 
   optional-dependencies = {
@@ -73,9 +89,15 @@ buildPythonPackage (finalAttrs: {
       uvicorn
       pydantic-settings
       pydantic-extra-types
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
     ]
     ++ fastapi-cli.optional-dependencies.standard
     ++ uvicorn.optional-dependencies.standard;
+    opentelemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
     standard = [
       fastapi-cli
       # FIXME package fastar
@@ -109,13 +131,16 @@ buildPythonPackage (finalAttrs: {
     a2wsgi
     dirty-equals
     flask
+    gitMinimal
     httpx2
     inline-snapshot
+    logfire
     pwdlib
     pyjwt
     pytestCheckHook
     pytest-xdist
     pytest-timeout
+    sentry-sdk
   ]
   ++ anyio.optional-dependencies.trio
   ++ finalAttrs.finalPackage.passthru.optional-dependencies.all;
@@ -123,6 +148,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Coverage test
     "test_fastapi_cli"
+    # Infinite recursion with opentelemetry-instrumentation-fastapi
+    "test_background_task_integrations"
+    "test_current_contrib"
+    "test_current_logfire"
   ];
 
   disabledTestPaths = [
