@@ -92,9 +92,36 @@ let
   terraform_plugins_test =
     let
       mainTf = writeText "main.tf" ''
+        terraform {
+          required_providers {
+            random = {
+              source  = "hashicorp/random"
+            }
+            local = {
+              source  = "hashicorp/local"
+            }
+          }
+        }
+
         resource "random_id" "test" {}
+        resource "local_file" "test2" {}
       '';
-      terraform = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
+      terraform =
+        ((pluggable package).withPlugins (
+          p:
+          # If hashicorp_random were to be bundled by default and then
+          # null-ed out in the package set, this test would need to switch
+          # to a different provider.
+          assert lib.isDerivation p.hashicorp_random;
+          [ p.hashicorp_random ]
+        )).withPlugins
+          (
+            p:
+            assert lib.isDerivation p.hashicorp_local;
+            [
+              p.hashicorp_local
+            ]
+          );
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox
