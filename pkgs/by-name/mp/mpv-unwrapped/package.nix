@@ -5,6 +5,7 @@
   alsa-lib,
   bash,
   buildPackages,
+  curl,
   docutils,
   fetchFromGitHub,
   ffmpeg,
@@ -67,6 +68,7 @@
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
+  curlSupport ? true,
   drmSupport ? stdenv.hostPlatform.isLinux,
   dvbinSupport ? stdenv.hostPlatform.isLinux,
   dvdnavSupport ? true,
@@ -132,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "default_library" "shared")
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libcurl" curlSupport)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)
     (lib.mesonEnable "dvbin" dvbinSupport)
@@ -178,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcdio-paranoia
   ]
   ++ lib.optionals cmsSupport [ lcms2 ]
+  ++ lib.optionals curlSupport [ curl ]
   ++ lib.optionals drmSupport [
     libdrm
     libdisplay-info
