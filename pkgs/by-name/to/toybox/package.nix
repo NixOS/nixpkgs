@@ -11,11 +11,6 @@
   enableMinimal ? false,
   extraConfig ? "",
 }:
-
-let
-  inherit (lib) optionals;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
   version = "0.8.15";
@@ -36,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
   buildInputs = [
     libxcrypt-legacy
   ]
-  ++ optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ]
-  ++ optionals (enableStatic && stdenv.cc.libc ? static) [
+  ++ lib.optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
   ];
@@ -74,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit extraConfig;
 
   configurePhase = ''
+    runHook preConfigure
+
     make ${
       if enableMinimal then
         "allnoconfig"
@@ -90,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv .config- .config
 
     make oldconfig
+
+    runHook postConfigure
   '';
 
   hardeningDisable = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)/bin"
     "CC=${stdenv.cc.targetPrefix}cc"
   ]
-  ++ optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (enableStatic && !stdenv.hostPlatform.isDarwin) [
     "LDFLAGS=--static"
   ];
 
@@ -116,9 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     export USER=$(id -un)
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-unused-result -Wno-discarded-qualifiers";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Lightweight implementation of some Unix command line utilities";
