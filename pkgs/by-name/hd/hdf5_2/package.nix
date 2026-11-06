@@ -7,6 +7,7 @@
   ninja,
   gfortran,
   mpi,
+  mpiCheckPhaseHook,
   jdk,
   libaec,
   zlib,
@@ -40,7 +41,7 @@ let
   enableStatic = stdenv.hostPlatform.isStatic;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.0";
+  version = "2.2.0-unstable-2026-11-04";
   pname =
     "hdf5"
     + lib.optionalString cppSupport "-cpp"
@@ -51,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf5";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-Tp2f8jJjVst0Fd07Wt4+EzjHRRI+8TlD1uWD9sDTw4g=";
+    rev = "3447b0b751c346c14098a2d72d2f2aec38c8b8a0";
+    hash = "sha256-JwEfwMn4CmLPI/4T41U4h4FaFMegYOcZwb2MU4klCQ8=";
   };
 
   __structuredAttrs = true;
@@ -66,7 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/CMakeLists.txt fortran/src/CMakeLists.txt c++/src/CMakeLists.txt hl/c++/src/CMakeLists.txt hl/fortran/src/CMakeLists.txt hl/src/CMakeLists.txt \
       --replace-fail '\''${exec_prefix}/''${HDF5_INSTALL_LIB_DIR}' '"''${HDF5_INSTALL_LIB_DIR}"' \
-      --replace-fail '\''${prefix}/''${HDF5_INSTALL_INCLUDE_DIR}' '"''${HDF5_INSTALL_LIB_DIR}"'
+      --replace-fail '\''${prefix}/''${HDF5_INSTALL_INCLUDE_DIR}' '"''${HDF5_INSTALL_INCLUDE_DIR}"'
+
+    # HDF5_INSTALL_INCLUDE_DIR is absolute (CMAKE_INSTALL_INCLUDEDIR), so prefixing
+    # it with $<INSTALL_PREFIX> yields ''${_IMPORT_PREFIX}//nix/store/... in the
+    # exported targets. INSTALL_INTERFACE handles relative paths on its own.
+    for f in $(grep -rlF --include=CMakeLists.txt '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' .); do
+      substituteInPlace "$f" \
+        --replace-fail '$<INSTALL_PREFIX>/''${HDF5_INSTALL_INCLUDE_DIR}' "\''${HDF5_INSTALL_INCLUDE_DIR}"
+    done
+
+    # The hardcoded relative "include" is resolved against $out, which has no headers.
+    for f in $(grep -rlF --include=CMakeLists.txt 'INCLUDES DESTINATION include' .); do
+      substituteInPlace "$f" \
+        --replace-fail 'INCLUDES DESTINATION include' "INCLUDES DESTINATION \''${HDF5_INSTALL_INCLUDE_DIR}"
+    done
 
     # The install prefix variables are a mess and break with abolsute paths,
     # as well as don't seem to know what is what.
@@ -107,7 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     ctestCheckHook
   ]
-  ++ lib.optional fortranSupport gfortran;
+  ++ lib.optional fortranSupport gfortran
+  # FindMPI locates MPI through the mpicc compiler wrapper
+  ++ lib.optionals mpiSupport [
+    mpi
+    mpiCheckPhaseHook
+  ];
 
   buildInputs = lib.optional javaSupport jdk;
 
@@ -142,7 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
       with stdenv.hostPlatform; !(isDarwin && isx86_64)
     ))
   ]
-  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
+  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion)
+  ++ lib.optional mpiSupport (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "2");
 
   doCheck = true;
 

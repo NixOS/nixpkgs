@@ -9,7 +9,7 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "facetimehd";
-  version = "0.7.0.2";
+  version = "0.7.2";
 
   # Note: When updating this revision:
   # 1. Also update pkgs/os-specific/linux/firmware/facetimehd-firmware/
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "patjak";
     repo = "facetimehd";
     rev = version;
-    sha256 = "sha256-6Z0mOmp+/IXx2pkcan85rvm5grxq+kGNayj9YDChdp4=";
+    sha256 = "sha256-l0bmbkjjqjTXpyAAP7jAxSafg9kQgv2BmK7Oki5n0Iw=";
   };
 
   preConfigure = ''

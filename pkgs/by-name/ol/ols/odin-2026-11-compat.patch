@@ -1,0 +1,21 @@
+From 78bf89118d626206da64f6aac46f5ec53b396361 Mon Sep 17 00:00:00 2001
+From: bennyyip <yebenmy@gmail.com>
+Date: Sun, 1 Nov 2026 15:36:02 +0800
+Subject: [PATCH] fix: io.write_quoted_string is changed
+
+Upstream: https://github.com/DanielGavin/ols/commit/78bf89118d626206da64f6aac46f5ec53b396361
+
+--- a/src/server/marshal.odin
++++ b/src/server/marshal.odin
+@@ -211,9 +211,9 @@
+ 	case runtime.Type_Info_String:
+ 		switch s in a {
+ 		case string:
+-			io.write_quoted_string(w, s, '"', nil, true) or_return
++			json.write_quoted_json_string(w, s) or_return
+ 		case cstring:
+-			io.write_quoted_string(w, string(s), '"', nil, true) or_return
++			json.write_quoted_json_string(w, string(s)) or_return
+ 		}
+ 
+ 	case runtime.Type_Info_Boolean:

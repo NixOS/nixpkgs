@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret2";
-  version = "1.0.6";
+  version = "1.0.7";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bol-van";
     repo = "zapret2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hDETz/EFqrIbtgg8cv0tK+yTsrN+dnkd3oobHmBBmRA=";
+    hash = "sha256-/zyxOmbpEsUJQ5u2JDCrBnK/zaP+DRgxorN1Yq+WeV0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"

@@ -2,7 +2,9 @@
   lib,
   stdenv,
   useMoldLinker,
+  applyPatches,
   fetchFromGitHub,
+  fetchpatch,
   gitMinimal,
   makeBinaryWrapper,
   cmake,
@@ -32,12 +34,23 @@ let
   devenvNixVersion = "2.35";
   devenvNixRev = "2a2ff1045ef7361212d7eac0c062534538968de6";
 
-  devenvNixSrc = fetchFromGitHub {
+  # Patch the source directly to keep Nix's version parseable by nix-bindings.
+  devenvNixSrc = applyPatches {
     name = "devenv-nix-${devenvNixVersion}-source";
-    owner = "cachix";
-    repo = "nix";
-    rev = devenvNixRev;
-    hash = "sha256-1CSuPNIbGyL2JJjOVg0KU7NWst1yZ6iXGDkiN/3bY5o=";
+    src = fetchFromGitHub {
+      name = "devenv-nix-${devenvNixVersion}-source";
+      owner = "cachix";
+      repo = "nix";
+      rev = devenvNixRev;
+      hash = "sha256-1CSuPNIbGyL2JJjOVg0KU7NWst1yZ6iXGDkiN/3bY5o=";
+    };
+    # Fix ignored nodiscard results when building the pinned Nix fork on Darwin.
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/cachix/nix/commit/34f5e5824de5025c63895ac64457c3a077548fb4.patch";
+        hash = "sha256-bYLhGWpAxyLd50HHt6s7sVlkDEFAJ72Z5fcfWeYxCOo=";
+      })
+    ];
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (

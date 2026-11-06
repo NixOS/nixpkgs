@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "oapi-codegen";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "oapi-codegen";
     repo = "oapi-codegen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lV9U4Ojy0g0YWL8/ye6U9jL4SvPFE2Q/D0S33FBGxxU=";
+    hash = "sha256-P9L2tf5AeGm7FJ3ocCxL+sRWFcD2L4kDDtG/GGXseas=";
   };
 
   vendorHash = "sha256-Oom7OcyWv+iXDb1AUsHXJ74eMYN9L7InrNuq4pfggYA=";
