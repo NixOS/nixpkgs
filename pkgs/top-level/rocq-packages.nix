@@ -100,7 +100,6 @@ let
       coq-hammer-tactics = callPackage ../development/rocq-modules/coq-hammer/tactics.nix { };
       CoqMatrix = callPackage ../development/rocq-modules/coq-matrix { };
       coq-haskell = callPackage ../development/rocq-modules/coq-haskell { };
-      coq-lsp = callPackage ../development/rocq-modules/coq-lsp { };
       coq-record-update = callPackage ../development/rocq-modules/coq-record-update { };
       coq-tactical = callPackage ../development/rocq-modules/coq-tactical { };
       coqeal = callPackage ../development/rocq-modules/coqeal (
@@ -220,6 +219,8 @@ let
       rewriter = callPackage ../development/rocq-modules/rewriter { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       coq-elpi = self.rocq-elpi;
+      rocq-lsp = callPackage ../development/rocq-modules/rocq-lsp { };
+      coq-lsp = self.rocq-lsp;
       rocqide-server = callPackage ../development/rocq-modules/rocqide-server { };
       rocqide = callPackage ../development/rocq-modules/rocqide { };
       rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };

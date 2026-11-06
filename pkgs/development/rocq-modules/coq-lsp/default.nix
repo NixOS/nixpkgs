@@ -9,7 +9,8 @@
 
 (mkCoqDerivation rec {
   pname = "coq-lsp";
-  owner = "ejgallego";
+  owner = "rocq-community";
+  repo = "rocq-lsp";
   namePrefix = [ ];
 
   useDune = true;
@@ -84,10 +85,10 @@
 
   meta = {
     description = "Language Server Protocol and VS Code Extension for Coq";
-    homepage = "https://github.com/ejgallego/coq-lsp";
-    changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
+    homepage = "https://github.com/rocq-community/rocq-lsp";
+    changelog = "https://github.com/rocq-community/rocq-lsp/blob/${defaultVersion}/CHANGES.md";
     maintainers = with lib.maintainers; [ alizter ];
-    license = lib.licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Plus;
   };
 }).overrideAttrs
   (
