@@ -13,6 +13,7 @@
   harfbuzz,
   faad2,
   zstd,
+  spirv-tools,
   # build and tests pass + tested with mc-rtc-magnum
   withAssimpImporter ? false,
   withStbImageImporter ? false,
@@ -42,6 +43,7 @@
   withGltfImporter ? false,
   withFaad2AudioImporter ? false,
   withDdsImporter ? false,
+  withSpirvToolsShaderConverter ? true,
 }:
 
 let
@@ -95,7 +97,8 @@ stdenv.mkDerivation (_finalAttrs: {
     freetype
   ]
   ++ lib.optional withFaad2AudioImporter faad2
-  ++ lib.optional (withBasisImageConverter || withBasisImporter) zstd;
+  ++ lib.optional (withBasisImageConverter || withBasisImporter) zstd
+  ++ lib.optional withSpirvToolsShaderConverter spirv-tools;
 
   cmakeFlags = [
     (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
@@ -126,6 +129,7 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_UVIMAGECONVERTER" withUvImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_GLTFIMPORTER" withGltfImporter)
     (lib.cmakeBool "MAGNUM_WITH_DDSIMPORTER" withDdsImporter)
+    (lib.cmakeBool "MAGNUM_WITH_SPIRVTOOLSSHADERCONVERTER" withSpirvToolsShaderConverter)
   ]
   ++ lib.optionals (withBasisImageConverter || withBasisImporter) [
     "-DBASIS_UNIVERSAL_DIR=${basis-universal-src}"

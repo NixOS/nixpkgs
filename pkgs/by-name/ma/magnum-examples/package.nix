@@ -32,8 +32,10 @@
   withShadowsExample ? true,
   withTextExample ? true, # XXX: strange scaling
   withTexturedquadExample ? true,
+  withTexturedtriangleVulkanExample ? true,
   withTriangleExample ? true,
   withTrianglePlainGlfwExample ? true,
+  withTriangleVulkanExample ? true,
   withViewerExample ? true,
   # keep-sorted end
 
@@ -44,11 +46,6 @@
   # MAGNUM_TARGET_GL=false and MAGNUM_WITH_GL=false
   # This should probably be built in another derivation
   withTriangleSokolExample ? false,
-
-  # FAILS
-  # unit tests for magnum's withVulkan fail
-  withTexturedtriangleVulkanExample ? false,
-  withTriangleVulkanExample ? false,
 }:
 
 let
@@ -57,7 +54,8 @@ let
     magnum.override { }
     // lib.optionalAttrs withTriangleExample { withSdl2Application = true; }
     // lib.optionalAttrs withTexturedtriangleVulkanExample { withVulkan = true; }
-    // lib.optionalAttrs withTrianglePlainGlfwExample { withGlxContext = true; };
+    // lib.optionalAttrs withTrianglePlainGlfwExample { withGlxContext = true; }
+    // lib.optionalAttrs withTriangleVulkanExample { withAnyImageConverter = true; };
 
   magnumPlugins = magnum-plugins.override (
     lib.optionalAttrs withAnimatedGifExample { withStbImageImporter = true; }
@@ -71,6 +69,10 @@ let
     # XXX: withDartIntegration in magnum-integration already needs this plugin, this should be transitive?
     // lib.optionalAttrs withDartExample { withAssimpImporter = true; }
     // lib.optionalAttrs withTexturedquadExample { withStbImageImporter = true; }
+    // lib.optionalAttrs withTriangleVulkanExample {
+      withSpirvToolsShaderConverter = true;
+      withPngImageConverter = true;
+    }
   );
 
   magnumIntegration = magnum-integration.override (

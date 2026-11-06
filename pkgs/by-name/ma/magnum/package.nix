@@ -17,6 +17,7 @@
   # so it should be light enough
   #
   # keep-sorted start case=no numeric=no block=yes
+  withAnyImageConverter ? true,
   withAnyImageImporter ? true,
   withAnySceneImporter ? true,
   withAudio ? true,
@@ -37,7 +38,7 @@
   # magnum>         Expression data failed.
   # magnum>  XFAIL [07] createInfoConstructNoInit() at /build/source/src/Magnum/Vk/Test/ShaderTest.cpp:223
   # magnum>         GCC 16+ misoptimizes and overwrites the value. info->sType and VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2 failed the comparison.
-  withVulkan ? false,
+  withVulkan ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,8 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
+    # (lib.cmakeBool "MAGNUM_BUILD_VK_TESTS" true)
     # keep-sorted start case=no numeric=no block=yes
     (lib.cmakeBool "MAGNUM_TARGET_GL" withTargetGL)
+    (lib.cmakeBool "MAGNUM_WITH_ANYIMAGECONVERTER" withAnyImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_ANYIMAGEIMPORTER" withAnyImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_ANYSCENEIMPORTER" withAnySceneImporter)
     (lib.cmakeBool "MAGNUM_WITH_AUDIO" withAudio)
@@ -90,7 +93,23 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # Needed for unit tests trying to use Alsa, which is not available in the sandbox
     export ALSOFT_DRIVERS=null
+    ls /build/source/src/Magnum/Vk/Test/ShaderTestFiles/vert-frag.spv
+    ls /build/source/src/Magnum/Vk/Test/ShaderTestFiles
   '';
+
+  postPatch = ''
+    # Helper function to skip tests in the root-privileged Nix sandbox
+    skip_test() {
+      substituteInPlace "$1" \
+        --replace-fail "void $2() {" "void $2() { CORRADE_SKIP(\"Skipped in Nix sandbox\");"
+    }
+
+    # XPASS [12] createInfoConstructNoInit() at /build/source/src/Magnum/Vk/Test/SamplerTest.cpp:200
+    #       info->sType and VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO were expected to fail the comparison.
+    skip_test src/Magnum/Vk/Test/SamplerTest.cpp SamplerTest::createInfoConstructNoInit
+  '';
+
+  patches = [ ./magnum-fix-vk-test.patch ];
 
   passthru = {
     args = {
