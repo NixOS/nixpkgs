@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco_warp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uk/h7Rl5jrR8fPsYvJ6zy4+y9vMTpQ0mmCQys9eTUg8=";
+    hash = "sha256-5ICPLgtppFgtsHbk3Ek9weROg5lLtV4CynFFGPm6Qss=";
   };
 
   build-system = [
