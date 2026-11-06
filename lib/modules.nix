@@ -1128,42 +1128,47 @@ let
   # evalOptionValue loc (mergeOptionDecls loc [ decl ]) defs,
   # but with a single attribute set update. Keep in sync with evalOptionValue.
   evalSingleOptionDecl =
-    loc: decl: defs:
+    loc:
+    {
+      _file,
+      pos,
+      options,
+    }:
+    defs:
     let
-      optOptions = decl.options;
-      getSubModules = optOptions.type.getSubModules or null;
+      getSubModules = options.type.getSubModules or null;
       type =
         if getSubModules != null then
-          optOptions.type.substSubModules (map (setDefaultModuleLocation decl._file) getSubModules)
+          options.type.substSubModules (map (setDefaultModuleLocation _file) getSubModules)
         else
-          optOptions.type or types.unspecified;
+          options.type or types.unspecified;
       defs' =
-        if optOptions ? default then
+        if options ? default then
           [
             {
-              file = decl._file;
-              value = mkOptionDefault optOptions.default;
+              file = _file;
+              value = mkOptionDefault options.default;
             }
           ]
           ++ defs
         else
           defs;
       res =
-        if optOptions.readOnly or false && length defs' > 1 then
+        if options.readOnly or false && length defs' > 1 then
           throwReadOnly loc type defs'
         else
           mergeDefinitions loc type defs';
 
-      opt = optOptions // {
+      opt = options // {
         inherit loc type;
-        declarations = [ decl._file ];
+        declarations = [ _file ];
         declarationPositions = [
           (
-            if decl.pos != null then
-              decl.pos
+            if pos != null then
+              pos
             else
               {
-                file = decl._file;
+                file = _file;
                 line = null;
                 column = null;
               }
@@ -1171,7 +1176,7 @@ let
         ];
         options = [ ];
         value = addErrorContext "while evaluating the option `${showOption loc}':" (
-          if optOptions ? apply then optOptions.apply res.mergedValue else res.mergedValue
+          if options ? apply then options.apply res.mergedValue else res.mergedValue
         );
         highestPrio = res.defsFinal'.highestPrio;
         definitions = catAttrs "value" res.defsFinal;
