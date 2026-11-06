@@ -156,6 +156,7 @@ stdenv.mkDerivation rec {
       shofius
       ryand56
     ];
+    knownVulnerabilities = [ "EOL vendored Electron 39.2.7" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
   };
