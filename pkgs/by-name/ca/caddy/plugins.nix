@@ -2,7 +2,6 @@
 {
   lib,
   stdenv,
-  go,
   xcaddy,
   cacert,
   git,
@@ -61,7 +60,7 @@ caddy.overrideAttrs (
       version = finalAttrs.version;
 
       nativeBuildInputs = [
-        go
+        caddy.go
         xcaddy
         cacert
         git

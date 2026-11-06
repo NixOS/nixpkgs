@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-tools";
   version = "1.263.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-tools";

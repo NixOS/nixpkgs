@@ -4,7 +4,7 @@
   fetchgit,
   libxml2,
   libxslt,
-  docbook-xsl,
+  docbook_xsl,
   docbook_xml_dtd_44,
   makeWrapper,
   parallel, # for its priority
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     libxml2
     libxslt
-    docbook-xsl
+    docbook_xsl
     docbook_xml_dtd_44
   ];
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "CC=${lib.getExe stdenv.cc}"
-    "DOCBOOKXSL=${docbook-xsl}/xml/xsl/docbook"
+    "DOCBOOKXSL=${docbook_xsl}/xml/xsl/docbook"
     "INSTALL_BIN=install"
     "PREFIX=${placeholder "out"}"
   ];

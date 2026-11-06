@@ -84,6 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "test";
 
+  # 1.3.5 stopped installing a threads META (mirage/ocaml-solo5#187)
+  # findlib 1.9.8 `ocamlfind ocamlopt` exits when no threads package is found
+  # which breaks C stubs built with it, e.g. mirage-solo5 bindings
+  # drop once findlib has ocaml/ocamlfind@aedee07
+  postInstall = ''
+    mkdir -p $out/lib/ocaml-solo5/lib/threads
+    echo 'type_of_threads = "posix"' > $out/lib/ocaml-solo5/lib/threads/META
+  '';
+
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck

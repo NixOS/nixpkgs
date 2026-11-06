@@ -4328,6 +4328,8 @@ self: super: with self; {
 
   defcon = callPackage ../development/python-modules/defcon { };
 
+  defeatbeta-api = callPackage ../development/python-modules/defeatbeta-api { };
+
   deform = callPackage ../development/python-modules/deform { };
 
   defusedcsv = callPackage ../development/python-modules/defusedcsv { };
@@ -13196,6 +13198,8 @@ self: super: with self; {
   otter-grader = callPackage ../development/python-modules/otter-grader { };
 
   otxv2 = callPackage ../development/python-modules/otxv2 { };
+
+  ouilookup = callPackage ../development/python-modules/ouilookup { };
 
   ouman-eh-800-api = callPackage ../development/python-modules/ouman-eh-800-api { };
 
