@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  procps,
   fetchurl,
   dpkg,
   writeShellScript,
@@ -9,6 +10,8 @@
   kmod,
   systemdMinimal,
   glib,
+  dbus,
+  pipewire,
   pulseaudio,
   libxext,
   libx11,
@@ -38,13 +41,18 @@
 }:
 
 let
-  version = "4.9.6.0";
+  version = "4.9.8.1";
   todesk-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "todesk-unwrapped";
     version = version;
     src = fetchurl {
-      url = "https://web.archive.org/web/20260908130616if_/https://dl.todesk.com/linux/todesk-v4.9.6.0-amd64.deb";
-      hash = "sha256-t+KgiUmW7k40/LPd+zlpLHKUPAWxM6c69J9IBD19rBY=";
+      url = "https://dl.todesk.com/linux/todesk-v${version}-amd64.deb";
+      hash = "sha256-oleRbDLKeSgm3RAnWWOVJ4JZBQ/uQsqP0KCqqIUZQOE=";
+      # The upstream CDN returns a JavaScript challenge for curl's default user agent.
+      curlOptsList = [
+        "--user-agent"
+        "Mozilla"
+      ];
     };
     nativeBuildInputs = [ dpkg ];
 
@@ -79,12 +87,16 @@ buildFHSEnv {
   pname = "todesk";
   targetPkgs = pkgs: [
     todesk-unwrapped
+    # Incoming sessions use ps to discover Xorg's -auth file.
+    procps
     pulseaudio
     nspr
     kmod
     libxi
     systemdMinimal
     glib
+    dbus
+    pipewire
     libz
     libx11
     libxext
