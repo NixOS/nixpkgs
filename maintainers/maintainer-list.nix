@@ -10638,6 +10638,12 @@
     githubId = 59704655;
     name = "Pintilie Sebastian";
   };
+  givikuna = {
+    name = "Givi Tsvariani";
+    github = "givikuna";
+    githubId = 44319836;
+    email = "gvtsvariani@gmail.com";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
