@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-rtsp-server";
-  version = "1.28.8";
+  version = "1.28.9";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WRge0hpbwFM/tPd8t7xgBdiTZeg0sMEpSvuatffZb+A=";
+    hash = "sha256-uH7VZNhXoiajE1vSxC6ue0DrZAMcucvOEkcir5LMi50=";
   };
 
   nativeBuildInputs = [
