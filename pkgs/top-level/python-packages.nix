@@ -20532,7 +20532,7 @@ self: super: with self; {
 
   symbex = callPackage ../development/python-modules/symbex { };
 
-  symbolic = callPackage ../development/python-modules/symbolic { };
+  symbolic = callPackage ../development/python-modules/symbolic { inherit (pkgs) zstd; };
 
   symengine = callPackage ../development/python-modules/symengine { inherit (pkgs) symengine; };
 
