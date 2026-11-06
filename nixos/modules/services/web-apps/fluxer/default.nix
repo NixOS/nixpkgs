@@ -623,19 +623,19 @@ in
         If postgres is enabled, then local services will attempt
         to connect via unix socket using peer authentication. If
         you would like to deviate from this, please configure
-        postgres manually.  
+        postgres manually
       '';
       valkey.enable = lib.mkEnableOption ''
         Valkey for use with fluxer.
 
         This internally uses the redis module with a package override
         for valkey. If you have other redis instances running, consider
-        leaving this option disabled and configuring valkey manually.
+        leaving this option disabled and configuring valkey manually
       '';
       meilisearch = {
-        enable = lib.mkEnableOption "Meilisearch for use with fluxer.";
+        enable = lib.mkEnableOption "Meilisearch for use with fluxer";
       };
-      seaweedfs.enable = lib.mkEnableOption "SeaweedFS for use with fluxer.";
+      seaweedfs.enable = lib.mkEnableOption "SeaweedFS for use with fluxer";
       livekit = {
         enable = lib.mkEnableOption "Livekit for use with fluxer";
       };
