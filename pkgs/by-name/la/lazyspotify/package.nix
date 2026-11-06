@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "lazyspotify";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      eConnah
+      notaclementine
     ];
   };
 })
