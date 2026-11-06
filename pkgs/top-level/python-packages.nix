@@ -13882,6 +13882,8 @@ self: super: with self; {
 
   plotext = callPackage ../development/python-modules/plotext { };
 
+  plotext_6 = callPackage ../development/python-modules/plotext/6.nix { };
+
   plotille = callPackage ../development/python-modules/plotille { };
 
   plotly = callPackage ../development/python-modules/plotly { };
