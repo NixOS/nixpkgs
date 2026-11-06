@@ -9,7 +9,7 @@
 
 buildGoLatestModule (finalAttrs: {
   pname = "dux-calendar";
-  version = "2.1.0";
+  version = "2.1.1";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildGoLatestModule (finalAttrs: {
     repo = "dux-calendar";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-g7Nb3Gtz0BW3ZtACd3Y7DAC6wKF3nKaQk1raCDs+EAE=";
+    hash = "sha256-tRNu6U4Qlmm/sw0dvERTlGo634ALP2hbVww+Aiv9bl0=";
   };
 
   modRoot = "core";
