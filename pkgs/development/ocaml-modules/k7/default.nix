@@ -54,7 +54,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (mdx.override { inherit logs; }).bin
+    (mdx.override { inherit logs; })
   ];
 
   checkInputs = [
