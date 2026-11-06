@@ -11,6 +11,7 @@
   writeText,
   terraform-providers,
   installShellFiles,
+  emptyFile,
 }:
 
 let
@@ -40,6 +41,7 @@ let
       inherit plugins;
       tests = {
         inherit opentofu_plugins_test;
+        eval = evalTests emptyFile;
       };
     };
 
@@ -119,6 +121,16 @@ let
       '';
     in
     test;
+
+  evalTests =
+    ok:
+    # overrideAttrs works on withPlugins and modifies the unwrapped derivation inside
+    # See https://github.com/NixOS/nixpkgs/issues/158620
+    assert
+      (((pluggable package).withPlugins (p: [ p.hashicorp_random ])).overrideAttrs { name = "squee"; })
+      .unwrapped.name == "squee";
+
+    ok;
 
   plugins = removeAttrs terraform-providers [
     "override"
