@@ -25,6 +25,7 @@ let
   hostPkgs = cfg.host.pkgs;
 
   useVirtiofs = hostPkgs.stdenv.hostPlatform.isLinux;
+  needsVirtiofs = useVirtiofs && cfg.sharedDirectories != { };
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
@@ -328,22 +329,23 @@ let
         ''
     )}
 
-    export NIX_VIRTIOFS_DIR=$(mktemp -d)
+    ${lib.optionalString needsVirtiofs ''
+      export NIX_VIRTIOFS_DIR=$(mktemp -d)
+    ''}
 
     # Start QEMU.
-    exec ${lib.getExe runScript} \
-      ${
-        lib.optionalString (useVirtiofs && cfg.sharedDirectories != { })
-          "--virtiofs-paths ${
-            lib.concatStringsSep " " (
-              lib.mapAttrsToList (
-                tag: share:
-                "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
-              ) cfg.sharedDirectories
-            )
-          }"
+    exec ${lib.optionalString needsVirtiofs ''
+      ${lib.getExe runScript} \
+      --virtiofs-paths ${
+        lib.concatStringsSep " " (
+          lib.mapAttrsToList (
+            tag: share:
+            "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
+          ) cfg.sharedDirectories
+        )
       } \
       -- \
+    ''} \
       ${
         qemu-common.qemuBinaryWith {
           qemuPkg = qemu;

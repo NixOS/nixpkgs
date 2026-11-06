@@ -153,5 +153,6 @@ python3.pkgs.buildPythonApplication {
     ];
     mainProgram = "tribler";
     platforms = lib.platforms.linux;
+    broken = true; # https://github.com/Tribler/tribler/issues/9108
   };
 }
