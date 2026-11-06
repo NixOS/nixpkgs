@@ -67,6 +67,7 @@ buildPythonPackage rec {
       ];
     maintainers = with lib.maintainers; [
       ilian
+      FKouhai
     ];
   };
 }
