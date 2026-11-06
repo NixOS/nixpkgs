@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "learnharness";
@@ -14,6 +18,6 @@ appimageTools.wrapType2 rec {
     homepage = "https://github.com/amosblomqvist/learnharness";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ "tiagoflopes" ];
+    maintainers = with maintainers; [ tiagoflopes ];
   };
 }
