@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   substitute,
-  gitMinimal,
+  dart-sass,
   yarn-berry_4,
   nodejs,
   npmHooks,
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "advanced-camera-card";
-  version = "7.27.4";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "advanced-camera-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I1dm7TZMK/eRF2Uld3e+r4PQBaL9oJc+NI+/5cxaGUs=";
+    hash = "sha256-9xOUMBOogrYhICsH4iBw3eZxHaMIvkX2942UzcEV8xI=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
@@ -36,11 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = [
-    # Drop hard dependency on .git repo during build
-    ./gitinfo.patch
-  ];
-
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail "0.0.0-dev" "${finalAttrs.version}"
@@ -51,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     name = "${finalAttrs.pname}-yarn-deps";
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-vbDX5TkUrNqqWLq465mLyGkQ4L8QWJtKv5aCR98P/SI=";
+    hash = "sha256-vqk1LCuLK3R6DgO/QWn1V96J3ZwRNeif+UAe0Bm6ndI=";
   };
 
   nativeBuildInputs = [
-    gitMinimal
+    dart-sass
     nodejs
     npmHooks.npmBuildHook
     yarn-berry_4
@@ -63,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   npmBuildScript = "build";
+
+  preBuild = ''
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail \
+        'exports.compilerCommand = (() => {' \
+        'exports.compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+  '';
 
   installPhase = ''
     runHook preInstall
