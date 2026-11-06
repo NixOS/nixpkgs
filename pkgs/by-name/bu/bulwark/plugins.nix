@@ -64,10 +64,10 @@ in
 
   calendar-agenda = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-calendar-agenda";
-    version = "1.2.1";
+    version = "1.4.5";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/calendar-agenda/${finalAttrs.version}";
-      hash = "sha256-p6RIndNGifU70JadAbWmTT5RE2kOgEVmXKCaa6CkFp0=";
+      hash = "sha256-noCpoXPEfwNbX6dkSFIrlGbF75CbDeRwo727sRu+87k=";
       extension = "zip";
       stripRoot = false;
     };
