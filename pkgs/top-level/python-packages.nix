@@ -4160,8 +4160,6 @@ self: super: with self; {
 
   datapoint = callPackage ../development/python-modules/datapoint { };
 
-  dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
-
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   datasalad = callPackage ../development/python-modules/datasalad { };
@@ -10973,8 +10971,6 @@ self: super: with self; {
   mim-solvers = callPackage ../development/python-modules/mim-solvers { inherit (pkgs) mim-solvers; };
 
   minari = callPackage ../development/python-modules/minari { };
-
-  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
 
   minexr = callPackage ../development/python-modules/minexr { };
 
@@ -21575,8 +21571,6 @@ self: super: with self; {
   txzmq = callPackage ../development/python-modules/txzmq { };
 
   ty = callPackage ../development/python-modules/ty { inherit (pkgs) ty; };
-
-  type-infer = callPackage ../development/python-modules/type-infer { };
 
   typechecks = callPackage ../development/python-modules/typechecks { };
 

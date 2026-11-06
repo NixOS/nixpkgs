@@ -605,6 +605,8 @@ let
       # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
       NOVA_CORE = whenAtLeast "6.15" no;
       DRM_NOVA = whenAtLeast "6.16" no;
+
+      ANDROID_BINDER_IPC_RUST = whenAtLeast "7.4" yes;
     };
 
     sound = {
@@ -1001,7 +1003,7 @@ let
       KVM_ASYNC_PF = lib.mkIf (with stdenv.hostPlatform; isS390 || isx86) yes;
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
       KVM_GUEST = lib.mkIf (with stdenv.hostPlatform; isPower || isx86) yes;
-      KVM_MMIO = yes;
+      KVM_MMIO = whenOlder "7.4" yes;
       KVM_VFIO = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
@@ -1441,11 +1443,11 @@ let
 
         FSL_MC_UAPI_SUPPORT = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
 
-        ANDROID_BINDER_IPC = {
+        ANDROID_BINDER_IPC = whenOlder "7.4" {
           optional = true;
           tristate = "y";
         };
-        ANDROID_BINDERFS = {
+        ANDROID_BINDERFS = whenOlder "7.4" {
           optional = true;
           tristate = "y";
         };
@@ -1482,8 +1484,9 @@ let
         WATCH_QUEUE = yes;
 
         # Enable coreboot firmware drivers.
-        # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
-        GOOGLE_FIRMWARE = yes;
+        # Before 7.4 these were called CONFIG_GOOGLE_*, but they apply to coreboot systems in general.
+        GOOGLE_FIRMWARE = whenOlder "7.4" yes;
+        COREBOOT_FIRMWARE = whenAtLeast "7.4" yes;
 
         # Disabled by default on POWER
         ATA_BMDMA = yes;
