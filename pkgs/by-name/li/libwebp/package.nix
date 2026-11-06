@@ -80,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals tiffSupport [ libtiff ]
     ++ lib.optionals gifSupport [ giflib ];
 
+  strictDeps = true;
+
   passthru.tests = {
     inherit
       gd
