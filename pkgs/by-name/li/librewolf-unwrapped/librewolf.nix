@@ -11,8 +11,6 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  extraPatches = [ "${source}/patches/pref-pane/pref-pane-small.patch" ];
-
   extraConfigureFlags = [
     "--with-unsigned-addon-scopes=app,system"
     "--disable-default-browser-agent"
@@ -31,6 +29,12 @@ rec {
 
   extraPostPatch = ''
     while read patch_name; do
+      # Assets (`librewolf.cfg`, `local-settings.js` and `policies.json) are being
+      # applied manually with `extraPrefsFiles` and `extraPoliciesFiles`.
+      if [ "$patch_name" = "patches/lw-dir.patch" ]; then
+        continue
+      fi
+
       echo "applying LibreWolf patch: $patch_name"
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
@@ -86,7 +90,7 @@ rec {
 
   extraPassthru = {
     librewolf = {
-      inherit src extraPatches;
+      inherit src;
     };
     inherit extraPrefsFiles extraPoliciesFiles;
   };
