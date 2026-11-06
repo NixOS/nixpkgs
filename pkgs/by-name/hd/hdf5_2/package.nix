@@ -18,6 +18,17 @@
   mpiSupport ? false,
   javaSupport ? false,
   threadsafe ? false,
+  ros3Support ? false,
+  curl,
+  aws-c-s3,
+  aws-c-auth,
+  aws-c-common,
+  aws-c-cal,
+  aws-c-io,
+  aws-c-http,
+  aws-c-compression,
+  aws-checksums,
+  s2n-tls,
   apiVersion ? null,
 }:
 
@@ -129,7 +140,20 @@ stdenv.mkDerivation (finalAttrs: {
     mpiCheckPhaseHook
   ];
 
-  buildInputs = lib.optional javaSupport jdk;
+  buildInputs =
+    lib.optional javaSupport jdk
+    ++ lib.optionals ros3Support [
+      curl
+      aws-c-s3
+      aws-c-auth
+      aws-c-common
+      aws-c-cal
+      aws-c-io
+      aws-c-http
+      aws-c-compression
+      aws-checksums
+      s2n-tls
+    ];
 
   # Need to propagate cmake deps
   propagatedBuildInputs = [
@@ -155,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF5_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "HDF5_ENABLE_THREADSAFE" threadsafe)
     (lib.cmakeBool "HDF5_BUILD_HL_LIB" (!threadsafe)) # high-level API and threadsafe is unsupported
+    (lib.cmakeBool "HDF5_ENABLE_ROS3_VFD" ros3Support)
 
     # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
     # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
