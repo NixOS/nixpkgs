@@ -9,26 +9,19 @@
   makeWrapper,
   wrapGAppsHook3,
   bzip2,
-  fontconfig,
-  freetype,
   libGL,
   libx11,
-  libxcursor,
-  libxrandr,
-  libxi,
   libxkbcommon,
+  libxcursor,
+  libxi,
+  libxcb,
   vulkan-loader,
   wayland,
-  zenity,
-  kdePackages,
-  cairo,
-  pango,
-  atkmm,
-  gdk-pixbuf,
-  dbus-glib,
   gtk3,
   glib,
   rclone,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -55,17 +48,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    fontconfig
-    freetype
-    libx11
-    libxcursor
-    libxrandr
-    libxi
-    cairo
-    pango
-    atkmm
-    gdk-pixbuf
     gtk3
+    bzip2
+    glib
+    sqlite
+    zstd
   ];
 
   postInstall = ''
@@ -90,31 +77,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     let
       libPath = lib.makeLibraryPath [
         libGL
-        bzip2
-        fontconfig
-        freetype
-        libx11
-        libxcursor
-        libxrandr
-        libxi
-        libxkbcommon
         vulkan-loader
+        libx11
+        libxkbcommon
         wayland
-        gtk3
-        dbus-glib
-        glib
+        libxcursor
+        libxi
+        libxcb
       ];
     in
     ''
-      patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${
-        lib.makeBinPath [
-          rclone
-          zenity
-          kdePackages.kdialog
-        ]
-      } \
-        "''${gappsWrapperArgs[@]}"
+      patchelf --add-rpath "${libPath}" "$out/bin/ludusavi"
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ rclone ]} "''${gappsWrapperArgs[@]}"
     '';
 
   meta = {
