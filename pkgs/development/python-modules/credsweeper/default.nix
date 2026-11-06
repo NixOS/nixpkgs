@@ -15,6 +15,7 @@
   humanfriendly,
   hypothesis,
   lxml,
+  lz4,
   numpy,
   odfpy,
   onnxruntime,
@@ -45,15 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.19.5";
+  version = "1.19.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QtParvUCqFOhEnXaWZcHZ6peF6Mrcli4epAuRZCCFZ8=";
+    hash = "sha256-ZVui8Dz9r2CAGL20UQ9XW/HmuqfsqjtNOfVSIdjrVK8=";
   };
 
   build-system = [ hatchling ];
@@ -68,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     gitpython
     humanfriendly
     lxml
+    lz4
     numpy
     odfpy
     onnxruntime
