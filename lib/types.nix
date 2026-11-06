@@ -1369,11 +1369,11 @@ rec {
     let
       # Push down position info.
       pushPositions = map (
-        def:
+        { file, value, ... }:
         mapAttrs (n: v: {
-          inherit (def) file;
+          inherit file;
           value = v;
-        }) def.value
+        }) value
       );
       binOp =
         lhs: rhs:
