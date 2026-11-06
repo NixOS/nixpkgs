@@ -17942,6 +17942,8 @@ self: super: with self; {
 
   quango = callPackage ../development/python-modules/quango { };
 
+  quantconnect-stubs = callPackage ../development/python-modules/quantconnect-stubs { };
+
   quantile-forest = callPackage ../development/python-modules/quantile-forest { };
 
   quantile-python = callPackage ../development/python-modules/quantile-python { };
