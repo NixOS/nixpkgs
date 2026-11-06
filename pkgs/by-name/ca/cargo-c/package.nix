@@ -24,7 +24,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-yqSrpBZUa0NmsPawYKKgywmbbG4zgguwfDF667s7zdo=";
   };
 
+  __structuredAttrs = true;
   cargoHash = "sha256-yeJWZtkgCRB0ipyTslsGcJi9Fi/XoWziuv74exRhAIk=";
+
+  # Not required, I just added it so it would yell at me
+  # if it didn't work.
+  env = {
+    LIBGIT2_NO_VENDOR = true;
+  };
+
+  rustNativeDeps = {
+    inherit (rustPlatform.native) git2;
+  };
 
   nativeBuildInputs = [
     pkg-config
