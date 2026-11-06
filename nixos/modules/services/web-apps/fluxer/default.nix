@@ -242,8 +242,8 @@ in
         - the livekit TCP and UDP ports
       '';
       type = types.bool;
-      default = true;
-      example = false;
+      default = false;
+      example = true;
     };
     log_level = mkOption {
       description = ''
