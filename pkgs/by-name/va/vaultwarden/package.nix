@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional (dbBackend == "mysql") libmysqlclient
   ++ lib.optional (dbBackend == "postgresql") libpq
-  ++ lib.optional (dbBackend == "sqlite_system") sqlite;
+  ++ lib.optional (dbBackend == "sqlite" || dbBackend == "sqlite_system") sqlite;
 
   buildFeatures = dbBackend;
 
