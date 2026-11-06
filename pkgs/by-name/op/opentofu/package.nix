@@ -166,6 +166,11 @@ let
             overrideDerivation = f: (pluggable (opentofu.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (opentofu.overrideAttrs f)).withPlugins plugins;
             override = x: (pluggable (opentofu.override x)).withPlugins plugins;
+
+            /**
+              The opentofu package before pinning the plugins with `withPlugins`
+            */
+            unwrapped = opentofu;
           };
         in
         # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
