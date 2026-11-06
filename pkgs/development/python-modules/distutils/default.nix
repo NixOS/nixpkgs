@@ -80,6 +80,10 @@ buildPythonPackage {
   ++ lib.optionals (pythonAtLeast "3.14") [
     #  AssertionError: assert '(?s:foo[^/]*)\\z' == '(?s:foo[^/]*)\\Z'
     "test_glob_to_re"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.15") [
+    # Missing _sysconfig.get_platform() for mocked Windows NT in test
+    "test_get_host_platform"
   ];
 
   meta = {
