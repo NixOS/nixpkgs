@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caido-schema-proxy";
-  version = "0.59.0";
+  version = "0.59.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "caido_schema_proxy";
     inherit (finalAttrs) version;
-    hash = "sha256-+Cqothi0ubsTVPLX6r2iHW/BhvOx5oLSwTpIkiCK3zY=";
+    hash = "sha256-89TzVL1vg6bGvc2HfRtTxSiEAQfdqYdhZRmo5iIWnWo=";
   };
 
   build-system = [ hatchling ];
