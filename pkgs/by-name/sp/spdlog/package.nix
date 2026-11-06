@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+
   passthru = {
     tests = {
       inherit bear tiledb;
