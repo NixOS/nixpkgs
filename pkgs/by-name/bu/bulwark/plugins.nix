@@ -80,10 +80,10 @@ in
   });
   external-link-warning = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-external-link-warning";
-    version = "1.2.1";
+    version = "2.0.0";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/external-link-warning/${finalAttrs.version}";
-      hash = "sha256-FHq3l5yhVpwcgzbXMI7L5l6+wVwRODm56SJSFQuaRAY=";
+      hash = "sha256-LU7GuFenFdgfUENhYi5aSxGtYUFnHdCzYJCnYmTimZE=";
       extension = "zip";
       stripRoot = false;
     };
