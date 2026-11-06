@@ -130,8 +130,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 4;
-    hash = "sha256-+ywpcwF4H2s6s+ls71S+sy6l3gikz62haXCBuI4z+f4=";
+    fetcherVersion = 5;
+    hash = "sha256-tJFBlGMEkHKFerk6ecw6X1VjxtFxtijBFepkUxbwJyw=";
   };
 
   postBuild = ''
