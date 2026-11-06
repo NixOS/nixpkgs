@@ -10,20 +10,20 @@
   lib,
   mashumaro,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.5.3";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
-    hash = "sha256-/FL1iRQAOb+4AdrRpRRkt8NsHpQt4fHfg6qO+aUUZeo=";
+    hash = "sha256-Gd11CP5wJME21Xpv8cSQyurZvY7pRtehIaPUHwloBnE=";
   };
 
   build-system = [
@@ -43,7 +43,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
-    pytestCheckHook
+    # AttributeError: 'FixtureManager' object has no attribute '_arg2fixturedefs'...
+    pytest9_1CheckHook
     syrupy
   ];
 
