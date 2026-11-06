@@ -372,6 +372,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tinygrad/tinygrad";
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 })
