@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "minikerberos";
-  version = "0.4.9";
+  version = "0.4.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CVqYChl2rf9Iw94fc9de/ps52nIU3HyJGiNjJAcWqec=";
+    hash = "sha256-yy7LUPdiptCMPOTjoNIy5VLY75I0FwYbXifu1BtiGT0=";
   };
 
   build-system = [ setuptools ];
