@@ -402,21 +402,25 @@ in
     ];
 
     systemd.services.zammad-websocket = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "./script/websocket-server.rb -b ${cfg.host} -p ${toString cfg.websocketPort} start";
+      };
     };
 
     systemd.services.zammad-worker = {
-      inherit serviceConfig environment;
+      inherit environment;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad background worker";
       wantedBy = [ "multi-user.target" ];
-      script = "./script/background-worker.rb start";
+      serviceConfig = serviceConfig // {
+        ExecStart = "./script/background-worker.rb start";
+      };
     };
   };
 
