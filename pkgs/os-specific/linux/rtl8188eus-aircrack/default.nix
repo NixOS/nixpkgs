@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
-  version = "${kernel.version}-unstable-2026-08-18";
+  version = "${kernel.version}-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "gglluukk";
     repo = "rtl8188eus";
-    rev = "f48878a7a66b1281e6eab0cf2b55e7149510daf2";
-    hash = "sha256-uothRY0G4FFKYDDhzoHTWnlLcuULBNWOz22Bps7yujw=";
+    rev = "2d93b74367ce42a96b8f75df303513d89dd0594b";
+    hash = "sha256-rG+mZZnfGcl9/3t5GgVzowvGgCoPR/moinJGFYAAqwY=";
   };
 
   prePatch = ''
@@ -34,10 +34,15 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
     homepage = "https://github.com/gglluukk/rtl8188eus";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ moni ];
+    maintainers = with lib.maintainers; [
+      moni
+      nix-julia
+    ];
   };
 }

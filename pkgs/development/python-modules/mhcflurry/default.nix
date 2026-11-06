@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.24";
+  version = "2.3.25";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-hnkb3xMbhf1RSKJMuCrQdJvYGTjb+uJsl3xtcsBc/9A=";
+    hash = "sha256-513yiFwGPzpE/b58A03+6OZW9TwiFIEKGCyw+1sH8wA=";
   };
 
   build-system = [
