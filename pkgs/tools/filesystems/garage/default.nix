@@ -115,11 +115,12 @@ let
       };
     };
 in
-rec {
+{
   garage_1 = generic {
     version = "1.3.1";
     hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
     cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
+    eol = true;
   };
 
   garage_2 = generic {
@@ -127,6 +128,4 @@ rec {
     hash = "sha256-5jWgH+hi0Ouqszapw00KOBHFjxlV/y4T7IB22IRaEHE=";
     cargoHash = "sha256-xk1lMNnGp4qWK7BvgdUKIvc+cR5HDw0GFfV6q64yMso=";
   };
-
-  garage = garage_1;
 }

@@ -6447,8 +6447,6 @@ self: super: with self; {
 
   flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
-  flipr-api = callPackage ../development/python-modules/flipr-api { };
-
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
