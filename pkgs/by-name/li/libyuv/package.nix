@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${./yuv.pc} $out/lib/pkgconfig/libyuv.pc
 
     substituteInPlace $out/lib/pkgconfig/libyuv.pc \
-      --replace "@PREFIX@" "$out" \
-      --replace "@VERSION@" "$version"
+      --replace-fail "@PREFIX@" "$out" \
+      --replace-fail "@VERSION@" "$version"
   '';
 
   # [==========] 3454 tests from 8 test suites ran.
@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
