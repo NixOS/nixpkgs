@@ -1009,6 +1009,7 @@ mapAliases {
   gamehub = throw "'gamehub' has been removed as it was archived upstream and depended on webkitgtk 4.0"; # Added 2026-06-07
   gandi-cli = throw "'gandi-cli' has been removed as it is unmaintained upstream"; # Added 2026-01-11
   ganv = throw "'ganv' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
+  garage = warnAlias "'garage' has been an alias for 'garage_1'." garage_1; # Added 2026-11-01
   garage-webui = throw "'garage-webui' has been removed as it is unmaintained upstream"; # Added 2026-06-23
   garage_0_8 = throw "'garage_0_8' has been removed as it is unmaintained upstream"; # Added 2025-06-23
   garage_0_8_7 = throw "'garage_0_8_7' has been removed as it is unmaintained upstream"; # Added 2025-06-23

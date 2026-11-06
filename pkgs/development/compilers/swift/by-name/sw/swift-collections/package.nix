@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-collections";
-  version = "1.7.3";
+  version = "1.7.5";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-collections";
     tag = finalAttrs.version;
-    hash = "sha256-2NgjGsOOwo+CZ1s92ftcdts4uk8a9JmP5SLvnmt7c6k=";
+    hash = "sha256-ELQN0pXbIr3HmOB6QvNOas2rMYEYdweKOMOm/tEzLRM=";
   };
 
   postPatch = ''

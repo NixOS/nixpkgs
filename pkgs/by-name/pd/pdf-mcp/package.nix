@@ -6,7 +6,15 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until fastmcp works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pdf-mcp";
   version = "1.21.0";
   pyproject = true;
@@ -18,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-/CuVdfkJkc95JkZZZMA5euvdysdPObRcww+zImhCY5M=";
   };
 
-  build-system = [ python3Packages.hatchling ];
+  build-system = [ pythonPackages.hatchling ];
 
   pythonRelaxDeps = [
     "click"
@@ -27,7 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "pydantic-settings"
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     click
     fastmcp
     httpx
@@ -54,7 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tesseract
     writableTmpDirAsHomeHook
   ]
-  ++ (with python3Packages; [
+  ++ (with pythonPackages; [
     pytestCheckHook
     pytest-asyncio
     pillow

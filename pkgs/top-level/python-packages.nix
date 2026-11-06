@@ -6447,8 +6447,6 @@ self: super: with self; {
 
   flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
-  flipr-api = callPackage ../development/python-modules/flipr-api { };
-
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
@@ -9764,6 +9762,10 @@ self: super: with self; {
   liblarch = callPackage ../development/python-modules/liblarch { };
 
   liblistenbrainz = callPackage ../development/python-modules/liblistenbrainz { };
+
+  libloot = callPackage ../development/python-modules/libloot {
+    libloot-native = pkgs.libloot;
+  };
 
   liblp = callPackage ../development/python-modules/liblp { };
 

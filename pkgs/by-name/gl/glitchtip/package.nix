@@ -16,6 +16,8 @@ let
       django = final.django_6;
       django-allauth-async = final.callPackage ./django-allauth-async.nix { };
       glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
+      # Necessary until glitchtip works with mcp 2.x
+      mcp = final.mcp_1;
     };
   };
 
