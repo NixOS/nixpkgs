@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Minegame YTB <53137994+minegameYTB@users.noreply.github.com>
+Date: Fri, 6 Nov 2026 22:00:00 +0100
+Subject: [PATCH] Fix window view sizing with newer Electron versions
+
+BaseWindow.getBounds() returns the outer window bounds, including the window
+frame. Sizing the WebContentsViews with those dimensions makes them extend
+past the client area, which hides the bottom of the Deezer view (the playback
+controls) on Electron 38 and newer.
+
+Use getContentBounds() instead. See upstream issue #86.
+---
+ src/main/bounds/load.ts | 4 ++--
+ src/main/zoom.ts        | 9 +++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/src/main/bounds/load.ts b/src/main/bounds/load.ts
+index 3e9eef4..0d75a6b 100644
+--- a/src/main/bounds/load.ts
++++ b/src/main/bounds/load.ts
+@@ -50,8 +50,7 @@ export const loadBounds = async (
+     window.maximize();
+   }
+ 
+-  const width = bounds.bounds.width ?? DEFAULT_BOUNDS.bounds.height;
+-  const height = bounds.bounds.height ?? DEFAULT_BOUNDS.bounds.width;
++  const { width, height } = window.getContentBounds();
+   const zoom = bounds.zoom ?? DEFAULT_BOUNDS.zoom;
+ 
+   view.setBounds({
+diff --git a/src/main/zoom.ts b/src/main/zoom.ts
+index 46145ad..a8c0b58 100644
+--- a/src/main/zoom.ts
++++ b/src/main/zoom.ts
+@@ -35,16 +35,17 @@ export const onDimensionsChange = (
+   view: WebContentsView
+ ) => {
+   const zoomFactor = mainView.webContents.getZoomFactor();
++  const { width, height } = mainWindow.getContentBounds();
+   mainView.setBounds({
+     x: 0,
+     y: 0,
+-    width: mainWindow.getBounds().width,
+-    height: mainWindow.getBounds().height,
++    width,
++    height,
+   });
+   view.setBounds({
+     x: 0,
+     y: NAVBAR_HEIGHT * zoomFactor,
+-    width: mainWindow.getBounds().width,
+-    height: mainWindow.getBounds().height - NAVBAR_HEIGHT * zoomFactor,
++    width,
++    height: height - NAVBAR_HEIGHT * zoomFactor,
+   });
+ };
+ 
+-- 
+2.51.0
