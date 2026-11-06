@@ -7,9 +7,8 @@
   hatchling,
 
   # dependencies
+  aiofiles,
   aiohttp,
-  pyserial-asyncio-fast,
-  pyserial,
 
   # tests
   mock,
@@ -29,9 +28,8 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
+    aiofiles
     aiohttp
-    pyserial
-    pyserial-asyncio-fast
   ];
 
   nativeCheckInputs = [
