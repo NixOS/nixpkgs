@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calls";
-  version = "50.0";
+  version = "51.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/calls/${lib.versions.major finalAttrs.version}/calls-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8ozMjm+8UHnnuLXRGlUZabtw2QXl7ZDRsdho8SBFxy8=";
+    hash = "sha256-uYuNBhJk7o6mURX6z80KP5eaC6zkP8/HH2A8dim5T+s=";
   };
 
   outputs = [
