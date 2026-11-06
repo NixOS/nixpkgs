@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-sqlite";
-  version = "3.1.1";
+  version = "3.1.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${finalAttrs.version}";
-    hash = "sha256-kM8GuUM556bI35FSy/YQsa3VvdTfLTTnkl46pLxWOPg=";
+    hash = "sha256-jxl220+EenNsck9Qc4oBHWUl4JDTaJ9ZRGcJO2J9cqs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/checkpoint-sqlite";
@@ -65,6 +65,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Failed: 'flaky' not found in `markers` configuration option
     "tests/test_ttl.py"
+    # Imports langgraph.checkpoint.compliance which isn't mature enough to package yet
+    "tests/test_conformance_delta.py"
   ];
 
   disabledTests = [
