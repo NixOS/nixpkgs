@@ -14,25 +14,25 @@
     pnpm = pnpm_11;
     fetcherVersion = 4;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-/CwMd6V9Bp2kZASbbJQaNOG1ksbfuOQbwPs0p+zgn1E=";
+    pnpmDepsHash = "sha256-DaTcLGWd6QxndFVsRRceCPGn+UiwspYL60N5jwP6Iq4=";
   };
   pnpm_12_v4 = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 4;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-P7cooRuXXB3qmSrw6nrWooM7HBTTtKpA/1H19YwZ6Ys=";
+    pnpmDepsHash = "sha256-A1p8RubUB32OgMaJrSWew6/DpydRUOMCrpmMI7Morew=";
   };
   pnpm_12_v5 = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = false;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-nnc+cFYZcP6aaxG5hjLEAJ7fv8tAYoVAlE/sAFc/bw4=";
   };
   pnpm_12_v5_gvs = callPackage ./integration/default.nix {
     pnpm = pnpm_12;
     fetcherVersion = 5;
     enableGlobalVirtualStore = true;
-    pnpmDepsHash = "sha256-5RGwG+P1C6XilXwvoeCYPBGAVCNp6puXMgV4CNNCzUw=";
+    pnpmDepsHash = "sha256-nnc+cFYZcP6aaxG5hjLEAJ7fv8tAYoVAlE/sAFc/bw4=";
   };
 
   # pnpm reverse dependencies that don't have a top-level package
