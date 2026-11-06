@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       dwt
       GabrielDougherty
+      baptiste0928
     ];
     mainProgram = "zmx";
     platforms = lib.platforms.unix;
