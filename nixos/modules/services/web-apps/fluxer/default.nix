@@ -93,6 +93,8 @@ let
   # we remap these to take advantage of LoadCredential
   isSecret = value: builtins.isAttrs value && value ? file;
 
+  valToString = val: if builtins.typeOf val == "bool" then lib.boolToString val else toString val;
+
   settingsToEnvVars =
     attrs:
     let
@@ -100,7 +102,7 @@ let
     in
     lib.listToAttrs (
       (lib.mapAttrsToListRecursiveCond (n: v: !lib.isDerivation v) (
-        path: value: lib.nameValuePair (pathToEnvVar path) (toString value)
+        path: value: lib.nameValuePair (pathToEnvVar path) (valToString value)
       ) nonSecretAttrs)
       ++ (remapSecretEnvVars attrs)
     )
