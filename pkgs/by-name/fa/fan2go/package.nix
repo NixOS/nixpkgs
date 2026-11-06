@@ -12,6 +12,8 @@ buildGoModule (finalAttrs: {
   pname = "fan2go";
   version = "0.15.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
