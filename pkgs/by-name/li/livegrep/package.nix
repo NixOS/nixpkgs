@@ -63,8 +63,8 @@ let
   };
 
   bazelDepsHashByBuildAndHost = {
-    x86_64-linux.x86_64-linux = "sha256-PastkoOioWqlmGFHZiZ2S1ahWZu1UBhqHIfD2M/ff6A=";
-    aarch64-linux.aarch64-linux = "sha256-mNWnpmk/dNQYKnP3YbfK5ott0+41I+49aH6RhWEMOGM=";
+    x86_64-linux.x86_64-linux = "sha256-VOFnbdgdVU83A3jGS6jFMgYKfCvcJzZf/B3qFkEquKs=";
+    aarch64-linux.aarch64-linux = "sha256-pmh22/eTK0BLQEpRZiMCI/ZuLvYklLCFIaE/3J/rVbY=";
   };
   bazelDepsHashByHost = bazelDepsHashByBuildAndHost.${stdenv.buildPlatform.system} or { };
   bazelDepsHash = bazelDepsHashByHost.${stdenv.hostPlatform.system} or "";
@@ -96,6 +96,8 @@ buildBazelPackage {
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+    # .bazelversion pins an exact release; use whatever bazel_7 we have
+    USE_BAZEL_VERSION = bazel_7.version;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     LIBTOOL = "${cctools}/bin/libtool";

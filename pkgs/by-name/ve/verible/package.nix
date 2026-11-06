@@ -65,9 +65,9 @@ buildBazelPackage {
     '';
     hash =
       {
-        aarch64-linux = "sha256-1jEiJJycHZ2LybV13AUCXjUbUTY1ZhH09aG9oVzOEto=";
-        x86_64-linux = "sha256-RXji3oV9ccUfje8+i73w7dox9e4wZH3KADJ+YecFgL4=";
-        aarch64-darwin = "sha256-mQM82RlRIyLRZeo5vQh+Bm7W+1eCmwj9yEYRe9blJFg=";
+        aarch64-linux = "sha256-BzlpIgekwv4KXCVv8E+Qn2qWxz0PliJEq+ZU7++IehU=";
+        x86_64-linux = "sha256-uaBpGgEQ3EpUCjxaCTVcF4pCJHH8IwpHBrNa5emS3tM=";
+        aarch64-darwin = "sha256-5Yn1LJbqPNS+79ewbJ0ExTBarqcMwzzyCzTwXriYwyA=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

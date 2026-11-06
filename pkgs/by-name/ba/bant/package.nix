@@ -50,8 +50,8 @@ buildBazelPackage rec {
     '';
     hash =
       {
-        aarch64-linux = "sha256-E70F3D7HGsyV0bPd0zbRTytx1UCHyEuNKObaG2eRy8A=";
-        x86_64-linux = "sha256-E9XAKrt16DOAne3/wY9PwWIM61YX0fWs8x1hqF3YJSU=";
+        aarch64-linux = "sha256-FvsIn1pIxPzhp5G6rUylPCIjBfPI6x7Mqz0Ixd/z58s=";
+        x86_64-linux = "sha256-zEr8t1QNV9nIO2U+WevsE1GfY7Qp65Os/TLnVPdlFtg=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
