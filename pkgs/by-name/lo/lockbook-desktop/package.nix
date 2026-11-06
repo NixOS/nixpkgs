@@ -60,7 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     name = "lockbook-desktop";
     comment = desc;
     icon = "lockbook";
-    exec = "lockbook-desktop";
+    exec = "lockbook-desktop %u";
+    mimeTypes = [ "x-scheme-handler/lb" ];
     categories = [
       "Office"
       "Documentation"
