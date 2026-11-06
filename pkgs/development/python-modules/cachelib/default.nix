@@ -3,7 +3,7 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pylibmc,
   pymongo,
   pytest-xprocess,
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-egAg0X4xpbvtiAXU6Cu/IIs8/GJAy5i73gLIkdnvOmc=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   optional-dependencies = {
     dynamodb = [ boto3 ];
