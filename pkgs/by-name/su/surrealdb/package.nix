@@ -18,7 +18,7 @@ assert lib.assertMsg (builtins.elem backend [
 ]) "surrealdb: backend must be one of [ \"rocksdb\" \"surrealkv\" ]";
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = if hasRocksDB then "surrealdb" else "surrealdb-surrealkv";
-  version = "3.0.0";
+  version = "3.3.5";
 
   __structuredAttrs = true;
 
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "surrealdb";
     repo = "surrealdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KDVc5BTkJ5OwxANeXOBnerJihnKU6y72Dw8h1ARcj3U=";
+    hash = "sha256-Wsv/cs1CDcJgGNX0GaOQkMgQ8yD+u44kw/WfQUPlwQ4=";
   };
 
-  cargoHash = "sha256-yemnwhcC5CsQgO29Qiau39QAVbGnrNsOG1dNen987HM=";
+  cargoHash = "sha256-ESfY5tdilbC1Ix6fjjxLyuwl5fsgrBkAJqY36RLZ/tc=";
 
   # Upstream hard-codes `aarch64-linux-gnu-gcc` in `.cargo/config.toml`.
   # Remove it so Cargo uses nixpkgs' wrapped C toolchain instead.
