@@ -202,12 +202,7 @@ with pkgs;
 
   inherit (nix-update) nix-update-script;
 
-  nixos-test-driver = pkgs.python3Packages.callPackage ../../nixos/lib/test-driver {
-    imagemagick_light = pkgs.imagemagick_light.override { inherit (pkgs) libtiff; };
-    tesseract4 = pkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
-    # We want `pkgs.systemd`, *not* `python3Packages.system`.
-    systemd = pkgs.systemd;
-  };
+  nixos-test-driver = callPackage ../../nixos/lib/test-driver { };
 
   ### Push NixOS tests inside the fixed point
 
@@ -348,7 +343,7 @@ with pkgs;
 
   dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
-  dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
+  dnf4 = callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
   inherit (gridlock) nyarr;
 
@@ -2441,7 +2436,7 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
+  pgbadger = callPackage ../tools/misc/pgbadger { };
 
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
@@ -3023,9 +3018,7 @@ with pkgs;
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
-  fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
-    inherit (stdenv.hostPlatform) isx86_64;
-  };
+  fasm = callPackage ../development/compilers/fasm { };
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
@@ -7154,7 +7147,7 @@ with pkgs;
 
   nagiosPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/nagios-plugins { });
 
-  qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
+  qboot = callPackage ../applications/virtualization/qboot { };
 
   inherit (import ../servers/sql/postgresql pkgs)
     postgresqlVersions

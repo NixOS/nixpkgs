@@ -1,24 +1,20 @@
 {
   lib,
-  stdenv,
-  meson,
-  ninja,
-  fetchFromGitHub,
-  nixosTests,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "qboot";
   version = "unstable-2022-09-19";
 
-  src = fetchFromGitHub {
+  src = pkgsi686Linux.fetchFromGitHub {
     owner = "bonzini";
     repo = "qboot";
     rev = "8ca302e86d685fa05b16e2b208888243da319941";
     hash = "sha256-YxVGFiyLdhq7yWaXARh7f0nBZgXfJuYvv1BxfyThupM=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with pkgsi686Linux; [
     meson
     ninja
   ];
@@ -33,7 +29,7 @@ stdenv.mkDerivation {
     "pic"
   ];
 
-  passthru.tests.qboot = nixosTests.qboot;
+  passthru.tests.qboot = pkgsi686Linux.nixosTests.qboot;
 
   meta = {
     description = "Simple x86 firmware for booting Linux";
