@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "powertop-macos";
-  version = "1.3.7";
+  version = "1.4.4";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/kDolphin/PowerTop/releases/download/v${finalAttrs.version}/PowerTop.zip";
-    hash = "sha256-rwzwCIwyXI9RKSFC4OaNGJZS16zeaw1WpY8ntctDssQ=";
+    hash = "sha256-sRfQzBWx94oFudxXQqzmUIRGLYZTuSLI7sp/NyeBop0=";
   };
 
   nativeBuildInputs = [
