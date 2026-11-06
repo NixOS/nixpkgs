@@ -7,7 +7,7 @@
   gtest,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libyuv";
   version = "1908"; # Defined in: include/libyuv/version.h
 
@@ -27,13 +27,18 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DUNIT_TEST=ON"
+    (lib.cmakeBool "UNIT_TEST" finalAttrs.finalPackage.doCheck)
   ];
 
   buildInputs = [
     libjpeg
+  ];
+
+  checkInputs = [
     gtest
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     mkdir -p $out/lib/pkgconfig
@@ -65,4 +70,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ leixb ];
     license = lib.licenses.bsd3;
   };
-}
+})
