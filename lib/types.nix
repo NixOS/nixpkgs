@@ -1039,16 +1039,17 @@ rec {
             evals = filter (x: x.optionalValue ? value) (
               concatLists (
                 imap1 (
-                  n: def:
+                  n:
+                  { file, value, ... }:
                   imap1 (
                     m: def':
                     (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
                       {
-                        inherit (def) file;
+                        inherit file;
                         value = def';
                       }
                     ])
-                  ) def.value
+                  ) value
                 ) defs
               )
             );
