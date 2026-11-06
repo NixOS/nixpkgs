@@ -1,0 +1,22 @@
+The options flow handler never runs `iCloud3_ConfigFlow.__init__`, so
+`self.AppleAcct` only exists once a login has succeeded; the error paths that
+read it raise AttributeError instead of reporting the login failure.
+
+Upstream fixed this in 3.8.0-beta.2 by initialising the attribute in the options
+flow, see
+https://github.com/gcobb321/icloud3/commit/5579a84511bd2420afc495a6ea21a8864eeb1780
+This patch can be dropped once the package ships 3.8.0 or newer.
+
+--- a/custom_components/icloud3/configure/screens/step_apple_acct.py
++++ b/custom_components/icloud3/configure/screens/step_apple_acct.py
+@@ -39,6 +39,10 @@
+ #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ 
+ class OptionsFlow_AppleAccount_Steps:
++    # `iCloud3_OptionsFlowHandler` never runs `iCloud3_ConfigFlow.__init__`, so
++    # `self.AppleAcct` does not exist until a login succeeds and the error paths
++    # that read it raise AttributeError.
++    AppleAcct = None
+ 
+ 
+ #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
