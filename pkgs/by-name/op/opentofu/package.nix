@@ -85,12 +85,31 @@ let
             random = {
               source  = "hashicorp/random"
             }
+            local = {
+              source  = "hashicorp/local"
+            }
           }
         }
 
         resource "random_id" "test" {}
+        resource "local_file" "test2" {}
       '';
-      opentofu = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
+      opentofu =
+        ((pluggable package).withPlugins (
+          p:
+          # If hashicorp_random were to be bundled by default and then
+          # null-ed out in the package set, this test would need to switch
+          # to a different provider.
+          assert lib.isDerivation p.hashicorp_random;
+          [ p.hashicorp_random ]
+        )).withPlugins
+          (
+            p:
+            assert lib.isDerivation p.hashicorp_local;
+            [
+              p.hashicorp_local
+            ]
+          );
       test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
         # make it fail outside of sandbox
         export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
