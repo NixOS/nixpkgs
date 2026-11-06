@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql-jdbc";
-  version = "42.7.7";
+  version = "42.7.13";
 
   src = fetchMavenArtifact {
     artifactId = "postgresql";
     groupId = "org.postgresql";
-    hash = "sha256-FXlj1grmbWB+CUZujAzfgIfpyyDQFZiZ/8qWvKJShGA=";
+    hash = "sha256-bg5MwtjK6QIIT4orGHKLBzpv2dH4fJ2L/48pjBgYW5M=";
     inherit (finalAttrs) version;
   };
 
