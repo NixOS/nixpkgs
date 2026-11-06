@@ -17,7 +17,6 @@
   pyramid-chameleon,
   readme-renderer,
   setuptools,
-  tomli,
   whoosh,
 
   # tests
@@ -29,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-web";
-  version = "5.1.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "web-${finalAttrs.version}";
-    hash = "sha256-PEQZlQIM8WVmF8d3LBKoVrFoIwdf0FY85p4jpoPQyyg=";
+    hash = "sha256-QDs3Ue4F5NzkqvB44R9PXctcMh1+2+CNING1l4yG2MU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/web";
@@ -59,7 +58,6 @@ buildPythonPackage (finalAttrs: {
     pyramid
     pyramid-chameleon
     readme-renderer
-    tomli
     whoosh
   ]
   ++ readme-renderer.optional-dependencies.md;
@@ -71,10 +69,14 @@ buildPythonPackage (finalAttrs: {
     webtest
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # https://github.com/devpi/devpi/issues/1136
+    "test_markdown_description_with_content_type"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/devpi/devpi/issues/1114
     "test_dont_index_deleted_mirror"
-  ];
+  ]);
 
   pythonImportsCheck = [ "devpi_web" ];
 

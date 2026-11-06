@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-ldap";
-  version = "2.1.1-unstable-2026-01-22";
+  version = "2.1.1-unstable-2026-05-08";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi-ldap";
-    rev = "5846e66a9206079c16321bd0f65c565ebe32be5f";
-    hash = "sha256-2LpreWmG6WMRrc5L7ylSej5Ce6VhfNDAW2eoJ76D49o=";
+    rev = "542db8a84ca4ee066b47c5266595b7a33b0d8a05";
+    hash = "sha256-T1POtNownu2xlGFI0Jz/Ki19GmW1P7R75/8AM3br/kE=";
   };
 
   postPatch = ''
