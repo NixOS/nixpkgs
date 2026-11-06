@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Xray otherwise looks for geoip.dat and geosite.dat beside the service binary.
     substituteInPlace service/server/xray.cpp \
-      --replace-fail 'qDebug() << "Xray::startXray()";' $'qDebug() << "Xray::startXray()";\n    qputenv("XRAY_LOCATION_ASSET", QByteArrayLiteral("${xray-rules-dat}/share/xray"));'
+      --replace-fail 'qDebug() << "Xray::startXray()";' $'qDebug() << "Xray::startXray()";\n    qputenv("XRAY_LOCATION_ASSET", QByteArrayLiteral("${xray-rules-dat}/share/v2ray"));'
 
     # Link the Nix-built bindings directly instead of using a Conan package.
     substituteInPlace service/server/CMakeLists.txt \

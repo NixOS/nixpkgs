@@ -1916,7 +1916,6 @@ with pkgs;
   };
 
   inherit (callPackages ../tools/filesystems/garage { })
-    garage
     garage_1
     garage_2
     ;

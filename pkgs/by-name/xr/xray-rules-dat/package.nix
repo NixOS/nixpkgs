@@ -25,9 +25,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/xray
-    ln -s ${finalAttrs.src}/geoip.dat $out/share/xray/geoip.dat
-    ln -s ${finalAttrs.src}/geosite.dat $out/share/xray/geosite.dat
+    mkdir -p $out/share/v2ray # Use the v2ray directory name for compatibility.
+    ln -s ${finalAttrs.src}/geoip.dat $out/share/v2ray/geoip.dat
+    ln -s ${finalAttrs.src}/geosite.dat $out/share/v2ray/geosite.dat
 
     runHook postInstall
   '';
