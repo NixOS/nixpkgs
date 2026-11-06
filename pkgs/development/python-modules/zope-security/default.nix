@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "zope-security";
-  version = "8.3";
+  version = "8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.security";
     tag = version;
-    hash = "sha256-iSWSBjtJe4iEvm+VUEWDvRCBdRz1R6m9mlfPLwh01Sk=";
+    hash = "sha256-C72iNEpfV333E/Sg49fdlBSsN05wO7KfbksbKV3ZQYs=";
   };
 
   build-system = [
