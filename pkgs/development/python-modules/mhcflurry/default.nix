@@ -10,6 +10,7 @@
   # dependencies
   ahocorasick-rs,
   appdirs,
+  argcomplete,
   matplotlib,
   mhcgnomes,
   numpy,
@@ -29,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mhcflurry";
-  version = "2.3.16";
+  version = "2.3.24";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "openvax";
     repo = "mhcflurry";
     tag = finalAttrs.version;
-    hash = "sha256-VPVNynEc4/moNf9WXP2LS7RIIEGfjYynxXgpzJ+R/4s=";
+    hash = "sha256-hnkb3xMbhf1RSKJMuCrQdJvYGTjb+uJsl3xtcsBc/9A=";
   };
 
   build-system = [
@@ -47,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     ahocorasick-rs
     appdirs
+    argcomplete
     matplotlib
     mhcgnomes
     numpy
@@ -69,6 +71,21 @@ buildPythonPackage (finalAttrs: {
     # The default `macosx` matplotlib backend aborts (SIGABRT) in the darwin sandbox
     MPLBACKEND = "Agg";
   };
+
+  # Test subprocesses override PYTHONPATH, hiding dependencies: extend it instead
+  postPatch = ''
+    substituteInPlace test/test_cli_completion.py \
+      --replace-fail \
+        'env["PYTHONPATH"] = str(REPO_DIR)' \
+        'env["PYTHONPATH"] = str(REPO_DIR) + os.pathsep + os.environ["PYTHONPATH"]'
+    substituteInPlace test/test_cli_startup.py \
+      --replace-fail \
+        "env['PYTHONPATH'] = root" \
+        "env['PYTHONPATH'] = root + os.pathsep + os.environ['PYTHONPATH']" \
+      --replace-fail \
+        "env['PYTHONPATH'] = str(Path(__file__).resolve().parents[1])" \
+        "env['PYTHONPATH'] = str(Path(__file__).resolve().parents[1]) + os.pathsep + os.environ['PYTHONPATH']"
+  '';
 
   disabledTests = [
     # RuntimeError: Missing MHCflurry downloadable file: /homeless-shelter/.local...
@@ -108,11 +125,6 @@ buildPythonPackage (finalAttrs: {
     "test_stdout_contains_only_parseable_csv"
     "test_training_is_reproducible_from_seed"
     "test_training_retains_noncanonical_allele_names"
-
-    # Subprocess overrides PYTHONPATH, hiding dependencies
-    # ModuleNotFoundError: No module named 'tqdm'
-    "test_catalogue_discovery_with_unknown_environment_release"
-    "test_discovery_does_not_import_numerical_stack"
 
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/pytest-.../fake_mhctools.py'
     # (`#!/usr/bin/env python3` shebang)
