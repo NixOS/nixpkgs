@@ -17449,12 +17449,12 @@ final: prev: {
 
   tacho-nvim = buildVimPlugin {
     pname = "tacho.nvim";
-    version = "0.1.0";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "farbzen";
       repo = "tacho.nvim";
-      tag = "v0.1.0";
-      hash = "sha256-lJbf9T6EsVYSadYn1aRprFgVWtwe7CEqdnCmUUE9K1M=";
+      tag = "v0.2.0";
+      hash = "sha256-cCYjC4zMUbdFKH7DOmqSd1MpTIX1BFZawkXVWKcag9w=";
     };
     meta.homepage = "https://github.com/farbzen/tacho.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
