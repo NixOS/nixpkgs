@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "segyio";
-  version = "1.9.14";
+  version = "1.9.15";
   pyproject = false; # Built with cmake
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "equinor";
     repo = "segyio";
     tag = "v${version}";
-    hash = "sha256-Gprxxz4wUDrThCghW1Z1dHTjeJCrcDxuwguVC+i+ydc=";
+    hash = "sha256-1qbpbJcyxgm//E+ehcij655lDoqGDbxyEVaBiso0P2c=";
   };
 
   nativeBuildInputs = [

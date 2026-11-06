@@ -359,6 +359,9 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
 If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
 
+`pnpmConfigHook` deletes `.modules.yaml` and `.pnpm-workspace-state-v1.json` from every output, since they hold a build timestamp and path.
+Set `dontPnpmStripInstallState = true;` to keep them.
+
 #### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
 
 The `pnpmBuildHook` in overrides the default build phase with `pnpm run <build-script>`.

@@ -15,7 +15,7 @@
 # Upstream requires Go 1.27, while the default buildGoModule still uses Go 1.26.
 buildGoLatestModule (finalAttrs: {
   pname = "dux-files";
-  version = "2.0.0";
+  version = "2.1.0";
 
   __structuredAttrs = true;
 
@@ -24,11 +24,11 @@ buildGoLatestModule (finalAttrs: {
     repo = "dux-files";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RH7H1mdX8Iswh69kcXOlfKw05MvBvqNC0UHaTr9VVso=";
+    hash = "sha256-6ZXNmYqOJ3i3WvBZkbb7qvCgQ94w3PqKyszl9ZWjr7g=";
   };
 
   modRoot = "core";
-  vendorHash = "sha256-FiRXQZtakQYiPn0ZqK+k+rG5ZcoaDm16T5t6Ankq/h8=";
+  vendorHash = "sha256-uB4NesNB5JYghElmF8fOns3qa0icZeLBCYhde5AnysE=";
 
   subPackages = [ "cmd/dfiles" ];
   tags = [ "withshell" ];
