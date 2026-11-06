@@ -24,13 +24,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ZGDzGfj78v8o0GvAHcP26JiJCOWPaIr2h1Lqzh5AuSg=";
   };
 
+  pythonRelaxDeps = [ "typepy" ];
+
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  pythonRelaxDeps = [
-    "typepy"
   ];
 
   dependencies = [

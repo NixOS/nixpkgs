@@ -18,19 +18,18 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages_22,
   gitMinimal,
   writableTmpDirAsHomeHook,
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.9.0";
+  version = "0.9.1";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  inherit (llvmPackages_22) llvm;
+  inherit (rustPlatform.rust.rustc.llvmPackages) llvm;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-tPW36leXKuJCaZYOXF0mTd+WYHfGnHNg8foSQ2N+8kU=";
+    hash = "sha256-eIx4T1oGmwRvb8vps2CfauSGW6MDPs1j3lN+TNKzRdM=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back

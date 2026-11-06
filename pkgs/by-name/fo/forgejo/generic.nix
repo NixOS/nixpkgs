@@ -26,6 +26,7 @@
   runCommand,
   stdenv,
   fetchFromCodeberg,
+  fetchpatch,
   buildNpmPackage,
   writableTmpDirAsHomeHook,
 }:
@@ -83,7 +84,18 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
+
+    (fetchpatch {
+      name = "go_1_27.patch";
+      url = "https://codeberg.org/forgejo/forgejo/commit/cb7b3bacd473302856f44db440f334e5bc4ff3c2.patch";
+      includes = [
+        "modules/avatar/hash_test.go"
+        "modules/packages/alpine/metadata_test.go"
+      ];
+      hash = "sha256-orSzsV7ophjmTC8EHjRgGanXNnGt07YazofLnIuqmcc=";
+    })
   ];
+
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
   '';

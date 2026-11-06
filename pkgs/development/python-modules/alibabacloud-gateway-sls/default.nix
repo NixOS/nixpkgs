@@ -19,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "alibabacloud_gateway_sls";
     inherit (finalAttrs) version;

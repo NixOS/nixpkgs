@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "doclang";
   version = "0.8.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "doclang-project";

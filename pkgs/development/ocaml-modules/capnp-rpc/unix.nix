@@ -50,7 +50,7 @@ buildDunePackage {
     (mdx.override { inherit logs; })
   ];
 
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   doCheck = true;
   __darwinAllowLocalNetworking = true;

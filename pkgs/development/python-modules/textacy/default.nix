@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "textacy";
   version = "0.13.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chartbeat-labs";

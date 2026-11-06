@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "openai-whisper";
   version = "20250625";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";

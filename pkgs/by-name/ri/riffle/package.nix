@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "riffle";
   version = "1.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Naved124";

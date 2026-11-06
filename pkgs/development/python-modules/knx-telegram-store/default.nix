@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.15.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "knx-telegram-store";

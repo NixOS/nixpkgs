@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fastspec";

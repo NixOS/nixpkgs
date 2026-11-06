@@ -5,11 +5,14 @@
   fetchFromGitHub,
 
   # buildInputs
+  aws-lc,
   rust-jemalloc-sys,
+  zstd,
 
   # nativeBuildInputs
   installShellFiles,
   makeBinaryWrapper,
+  pkg-config,
 
   buildPackages,
   versionCheckHook,
@@ -32,12 +35,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-spQmSFAjNs6pWnw2nd/d3ZysIMK9j+BjDjrwcnUCmWw=";
 
   buildInputs = [
+    aws-lc
     rust-jemalloc-sys
+    zstd
   ];
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
+    pkg-config
   ];
 
   cargoBuildFlags = [

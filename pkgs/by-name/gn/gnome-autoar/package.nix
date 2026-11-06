@@ -6,7 +6,6 @@
   ninja,
   pkg-config,
   gnome,
-  gtk3,
   glib,
   gobject-introspection,
   libarchive,
@@ -15,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-autoar";
-  version = "0.4.5";
+  version = "0.5.2";
 
   outputs = [
     "out"
@@ -24,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor finalAttrs.version}/gnome-autoar-${finalAttrs.version}.tar.xz";
-    hash = "sha256-g4xTBvw4v6ovI6viQmL0vxV3HjMD+13LdPW5x6YV2r4=";
+    hash = "sha256-bCC9Fsh6uhWGnlZERCRIH2MqwwKYmiA+jOTcxz3qM6U=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-  ];
-
-  buildInputs = [
-    gtk3
   ];
 
   propagatedBuildInputs = [

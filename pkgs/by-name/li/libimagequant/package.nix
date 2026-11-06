@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libimagequant";
   version = "4.4.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "libimagequant";

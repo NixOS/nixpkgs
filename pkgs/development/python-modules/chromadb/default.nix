@@ -68,7 +68,6 @@ buildPythonPackage (finalAttrs: {
   pname = "chromadb";
   version = "1.5.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";

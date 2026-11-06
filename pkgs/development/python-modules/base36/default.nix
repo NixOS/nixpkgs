@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tonyseek";
     repo = "python-base36";

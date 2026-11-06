@@ -7,8 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-security";
   version = "1.6.9";
   pyproject = true;

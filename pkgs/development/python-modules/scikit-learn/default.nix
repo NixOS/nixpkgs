@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
 
   # build-system
   cython,
@@ -25,24 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-learn";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit (finalAttrs) version;
-    hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
+    hash = "sha256-Ypyto+M+K5vzds3HYUpHpBQLiu3B2DZXnjWXNvvYKXc=";
   };
-
-  patches = [
-    # Fix HTML display performance when user has many features
-    # https://github.com/scikit-learn/scikit-learn/pull/34362
-    # TODO: remove when updating to the next release.
-    (fetchpatch {
-      url = "https://github.com/scikit-learn/scikit-learn/commit/aeadb51af96556dd0f884c0037c9dc9993449538.patch";
-      hash = "sha256-J7igLpK8pdcbgMwxFqaAGDEwm87VrLHb+ckg/pEh6IY=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "numpy"
@@ -54,10 +43,10 @@ buildPythonPackage (finalAttrs: {
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${finalAttrs.version}',"
     substituteInPlace pyproject.toml \
-      --replace-fail "cython>=3.1.2,<3.3.0" cython \
-      --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
-      --replace-fail "numpy>=2,<2.5.0" numpy \
-      --replace-fail "scipy>=1.10.0,<1.18.0" scipy
+      --replace-fail "cython>=3.1.2,<3.2.6" cython \
+      --replace-fail "meson-python>=0.17.1,<0.22.0" meson-python \
+      --replace-fail "numpy>=2,<2.6.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.19.0" scipy
   '';
 
   buildInputs = [
@@ -97,12 +86,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
-
-    # Fail due to new deprecation warnings in scipy
-    # FIXME: reenable when fixed upstream
-    "test_logistic_regression_path_convergence_fail"
-    "test_linalg_warning_with_newton_solver"
-    "test_newton_cholesky_fallback_to_lbfgs"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue

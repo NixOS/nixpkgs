@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "StreamController";
     repo = "streamcontroller-plugin-tools";

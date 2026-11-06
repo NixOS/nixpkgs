@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Bc9c0urg+iAKyjg9d2wwpLgq3EwJn4mJLl8oAB8PZD8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   meta = {
     description = "CommonMark-compatible GitHub Flavored Markdown parser and formatter";

@@ -43,7 +43,6 @@ buildPythonPackage {
   pname = "jax-cuda12-plugin";
   inherit version;
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jax_cuda12_plugin";

@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dspy";
   version = "3.2.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";

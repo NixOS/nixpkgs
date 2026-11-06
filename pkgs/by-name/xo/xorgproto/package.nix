@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X Window System unified protocol definitions";
     homepage = "https://gitlab.freedesktop.org/xorg/proto/xorgproto";

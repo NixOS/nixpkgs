@@ -37,8 +37,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiauto" ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Automation scripts for KiCad";
     homepage = "https://github.com/INTI-CMNB/KiAuto";

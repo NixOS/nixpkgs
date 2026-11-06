@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langgraph-cli";
   version = "0.4.40";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";

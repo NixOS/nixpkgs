@@ -87,6 +87,30 @@ def get_tmp_dir() -> Path:
 
 
 def pythonize_name(name: str) -> str:
+    """Turn a machine name into a valid Python identifier.
+
+    Names that already are valid identifiers stay the same:
+
+    >>> pythonize_name("node_1")
+    'node_1'
+
+    Every character that is not allowed in an identifier becomes "_":
+
+    >>> pythonize_name("my-vm")
+    'my_vm'
+    >>> pythonize_name("web.example.org")
+    'web_example_org'
+    >>> pythonize_name("münchen")
+    'm_nchen'
+
+    A leading digit is replaced rather than prefixed, so it gets lost, while
+    digits later in the name are kept:
+
+    >>> pythonize_name("1node")
+    '_node'
+    >>> pythonize_name("12node")
+    '_2node'
+    """
     return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 

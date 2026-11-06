@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchsummary";
   version = "1.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {

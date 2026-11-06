@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dm-control";
   version = "1.0.50";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";

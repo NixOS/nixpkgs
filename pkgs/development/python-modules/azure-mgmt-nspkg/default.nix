@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.0.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     extension = "zip";

@@ -13,6 +13,35 @@ class PollingConditionError(Exception):
 
 
 class PollingCondition:
+    """A condition that gets checked periodically while a test runs.
+
+    The description comes from the `description` argument. Without one, it
+    falls back to the docstring of the condition, and then to its name:
+
+    >>> from test_driver.logger import CompositeLogger
+    >>> logger = CompositeLogger([])
+    >>> def service_runs():
+    ...     "The service is running"
+    >>> def no_docstring():
+    ...     pass
+    >>> PollingCondition(service_runs, logger, description="custom").description
+    'custom'
+    >>> PollingCondition(service_runs, logger).description
+    'The service is running'
+    >>> PollingCondition(no_docstring, logger).description
+    'no_docstring'
+
+    Log messages include the description:
+
+    >>> condition = PollingCondition(service_runs, logger)
+    >>> condition.nested_message
+    "Checking polling condition 'The service is running'"
+    >>> condition.status_message(True)
+    'Polling condition succeeded: The service is running'
+    >>> condition.status_message(False)
+    'Polling condition failed: The service is running'
+    """
+
     condition: Callable[[], bool]
     interval: dt.timedelta
     description: str | None

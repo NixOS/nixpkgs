@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
   version = "4.12.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

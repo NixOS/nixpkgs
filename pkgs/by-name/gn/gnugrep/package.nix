@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
-  # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
   # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
   postPatch = lib.optionalString (stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin) ''
     substituteInPlace Makefile.in --replace-fail "gnulib-tests" ""
@@ -59,12 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
-  # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
   # aarch32: fails 'stack-overflow' when run on qemu under x86_64
   doCheck =
     !stdenv.hostPlatform.isCygwin
     && !stdenv.hostPlatform.isFreeBSD
-    && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
     && !stdenv.buildPlatform.isRiscV64
     && !stdenv.hostPlatform.isAarch32;
 

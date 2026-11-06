@@ -2,16 +2,18 @@
   lib,
   fetchCrate,
   rustPlatform,
-  clang,
   rustfmt,
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features
   rustfmt-nightly = rustfmt.override { asNightly = true; };
+  clang = rustPlatform.rust.rustc.llvmPackages.clang;
 in
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
   version = "0.72.1";
+
+  __structuredAttrs = true;
 
   src = fetchCrate {
     pname = "bindgen-cli";

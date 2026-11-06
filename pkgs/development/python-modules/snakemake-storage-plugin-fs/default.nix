@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-fs";
   version = "1.1.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

@@ -24,6 +24,7 @@
   yasm,
 
   # runtime deps
+  aws-lc,
   fontconfig,
   freetype,
   gst_all_1,
@@ -39,7 +40,10 @@
   libxcursor,
   libx11,
   libxcb,
+  rust-jemalloc-sys,
+  sqlite,
   zlib,
+  zstd,
 
   # tests
   nixosTests,
@@ -144,6 +148,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     freetype
     gst_all_1.gstreamer
@@ -154,7 +159,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     harfbuzz
     libunwind
     libGL
+    rust-jemalloc-sys
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland

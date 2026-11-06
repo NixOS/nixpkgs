@@ -1,6 +1,7 @@
 {
   lib,
   curl,
+  oniguruma,
   stdenv,
   fetchFromGitHub,
   rustPlatform,
@@ -18,10 +19,12 @@ rustPlatform.buildRustPackage rec {
   pname = "mdcat";
   version = "2.19.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
-    rev = "mdcat-${version}";
+    tag = "mdcat-${version}";
     hash = "sha256-DJa6NPO8P5AjtVh7AuEZSPFN5pGuis3SIZI7rX00Eik=";
   };
 
@@ -33,6 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     curl
+    oniguruma
     openssl
   ];
 

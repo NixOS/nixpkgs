@@ -25,7 +25,7 @@ buildDunePackage rec {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   meta = {

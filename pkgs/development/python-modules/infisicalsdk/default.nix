@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.17";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Infisical";
     repo = "python-sdk-official";

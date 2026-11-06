@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "cligj";

@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jmp";
   version = "0.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";

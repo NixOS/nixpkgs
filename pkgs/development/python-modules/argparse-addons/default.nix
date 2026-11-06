@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.12.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "argparse_addons";
     inherit (finalAttrs) version;

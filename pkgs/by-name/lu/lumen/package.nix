@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
+  libgit2,
   openssl,
   fzf,
   mdcat,
@@ -25,15 +26,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZXw7KEvf1sUHWIM5R4Th2SmekTX6rGXznAq3mtcf3Zo=";
 
-  # use the non-vendored openssl
-  env.OPENSSL_NO_VENDOR = 1;
-
   nativeBuildInputs = [
     makeWrapper
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/lumen --prefix PATH : ${

@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gilknocker";
   version = "0.4.2-post3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";

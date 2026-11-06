@@ -37,6 +37,7 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "pandas"
     "pydantic"
     "numpy"
   ];

@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pycrdt-websocket";
   version = "0.16.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";

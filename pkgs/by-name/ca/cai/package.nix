@@ -19,8 +19,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   version = "1.1.5-unstable-2026-06-05";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "aliasrobotics";
     repo = "cai";

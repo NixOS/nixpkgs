@@ -6,6 +6,7 @@
   pkg-config,
   libgit2,
   openssl,
+  sqlite,
   libiconv,
 }:
 
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

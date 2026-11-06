@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "disposable-email-domains";
   version = "0.0.287";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {

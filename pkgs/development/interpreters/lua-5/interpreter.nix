@@ -237,6 +237,7 @@ stdenv.mkDerivation (
       mainProgram = "lua";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "lua" finalAttrs.version;
     };
   }
 )

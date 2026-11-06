@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "onnx-ir";
   version = "1.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
