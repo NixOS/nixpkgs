@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
+  strictDeps = true;
+
   preAutoreconf =
     let
       reports = "https://github.com/tlwg/libdatrie/issues";
