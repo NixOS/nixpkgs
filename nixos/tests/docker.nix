@@ -4,6 +4,13 @@
   name = "docker";
 
   nodes = {
+    dockerApparmor =
+      { pkgs, ... }:
+      {
+        virtualisation.docker.enable = true;
+        security.apparmor.enable = true;
+      };
+
     docker =
       { pkgs, ... }:
       {
@@ -53,5 +60,13 @@
     docker.succeed("systemctl restart systemd-sysctl")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/all/forwarding")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/default/forwarding")
+
+    with subtest("containers are confined by the docker-default AppArmor profile"):
+        dockerApparmor.wait_for_unit("sockets.target")
+        dockerApparmor.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
+        out = dockerApparmor.succeed(
+            "docker run --rm -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/cat /proc/self/attr/current"
+        )
+        assert "docker-default (enforce)" in out, f"container not confined: {out!r}"
   '';
 }
