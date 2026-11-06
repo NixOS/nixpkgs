@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "asysocks";
-  version = "0.2.18";
+  version = "0.2.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zGGW6CyK3Is84jId3fY1UAx2AxbaS3zKMhtTLLs9/fU=";
+    hash = "sha256-yP+hVK18pGqqBsH4bzR7wg87jGlhhrCPxBk3kSErK+w=";
   };
 
   build-system = [ setuptools ];
