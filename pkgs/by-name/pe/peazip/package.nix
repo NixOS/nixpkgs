@@ -34,16 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
-  # The upstream Pascal source uses CRLF line endings.
-  prePatch = ''
-    sed -i 's/\r$//' dev/peach.pas
-  '';
-
-  patches = [ ./system-backend-default.patch ];
-
   postPatch = ''
     # set it to use compression programs from $PATH
-    substituteInPlace dev/peach.pas --replace-fail "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
+    substituteInPlace dev/peach.pas \
+      --replace-fail "  HSYSBIN       = 0;" "  HSYSBIN       = 2;" \
+      --replace-fail "sys7zlin:=0;" "sys7zlin:=HSYSBIN;"
   '';
 
   nativeBuildInputs = [
