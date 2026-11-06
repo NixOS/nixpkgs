@@ -6,7 +6,15 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until fastmcp works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mcp-clickhouse";
   version = "0.6.0";
   pyproject = true;
@@ -20,11 +28,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-IwtH6YWzMpLVKUt+62nwvOt91OklGlmi08VFIgi03X0=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     hatchling
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     cachetools
     clickhouse-connect
     fastmcp
