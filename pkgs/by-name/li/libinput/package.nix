@@ -13,7 +13,7 @@
   libwacom,
   documentationSupport ? false,
   doxygen,
-  graphviz,
+  graphviz-nox,
   runCommand,
   eventGUISupport ? false,
   cairo,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals documentationSupport [
     doxygen
-    graphviz
+    graphviz-nox
     sphinx-build
   ];
 
