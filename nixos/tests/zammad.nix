@@ -26,8 +26,6 @@
     machine.wait_for_unit("zammad-web.service")
     machine.wait_for_unit("zammad-websocket.service")
     machine.wait_for_unit("zammad-worker.service")
-    # wait for zammad to fully come up
-    machine.sleep(120)
 
     # without the grep the command does not produce valid utf-8 for some reason
     with subtest("welcome screen loads"):

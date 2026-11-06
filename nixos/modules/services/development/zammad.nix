@@ -330,6 +330,9 @@ in
       serviceConfig = serviceConfig // {
         # loading all the gems takes time
         TimeoutStartSec = 1200;
+        Type = "notify";
+        NotifyAccess = "all";
+        WatchdogSec = 30;
       };
       after = [
         "network.target"
