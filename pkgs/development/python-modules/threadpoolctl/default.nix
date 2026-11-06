@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "3.6.0";
+  version = "3.8.0";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "joblib";
     repo = "threadpoolctl";
     tag = version;
-    hash = "sha256-yICErKIHc9XKiWg9C9EH0il9zhbbkGntw6mlYDibr9g=";
+    hash = "sha256-JXOUNdHM9IwZWnSu7UppYHSXW3sLTDQiLX+qaD15OZQ=";
   };
 
   nativeBuildInputs = [ flit-core ];
