@@ -2366,8 +2366,6 @@ with pkgs;
     docbook-xsl = docbook_xsl;
   };
 
-  mtr-gui = mtr.override { withGtk = true; };
-
   multitran = recurseIntoAttrs (
     let
       callPackage = newScope pkgs.multitran;
