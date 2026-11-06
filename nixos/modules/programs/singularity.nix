@@ -93,7 +93,7 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.singularity.packageOverriden = (
-      cfg.package.override (
+      (if cfg.package.drvAttrs ? enableSuid then cfg.package.overrideAttrs else cfg.package.override) (
         {
           systemBinPaths = cfg.systemBinPaths;
         }
