@@ -26,7 +26,7 @@ in
           wantedBy = [ "fluxer.target" ];
           partOf = [ "fluxer.target" ];
           after = [
-            "api.service"
+            "fluxer-api.service"
             "nginx.service"
             "caddy.service"
           ];
