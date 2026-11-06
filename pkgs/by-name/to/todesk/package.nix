@@ -156,7 +156,10 @@ buildFHSEnv {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      c31io
+    ];
     mainProgram = "todesk";
   };
 }
