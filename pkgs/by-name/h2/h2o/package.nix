@@ -23,7 +23,6 @@
   liburing,
   withZstandard ? true,
   zstd,
-  withVendoredCACert ? false,
   nixosTests,
 }:
 
@@ -88,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram "$out/bin/h2olog" \
         --set "PERL5LIB" "$PERL5LIB"
-  ''
-  + lib.optionalString (!withVendoredCACert) ''
+
+    # Always use provided CA certs & not the one bundled with H2O
     rm $out/share/h2o/ca-bundle.crt
     ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/h2o/ca-bundle.crt
   '';
