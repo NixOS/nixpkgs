@@ -1,6 +1,6 @@
 --- a/features/src/lib.rs
 +++ b/features/src/lib.rs
-@@ -1055,7 +1055,7 @@
+@@ -1100,7 +1100,7 @@
          id: Feature::DaemonAutoStart,
          key: "daemon_auto_start",
          stage: Stage::Stable,
@@ -8,4 +8,4 @@
 +        default_enabled: false,
      },
      FeatureSpec {
-         id: Feature::AppServerWebSocketCompression,
+         id: Feature::TuiMultiBackend,
