@@ -5,19 +5,19 @@
   cmake,
   corrade,
   magnum,
+  magnum-plugins,
   withUi ? true,
   withUiGallery ? true,
-  withPlayer ? false,
+  withPlayer ? true,
 }:
 
-assert lib.assertMsg (
-  !(withUi && !magnum.args.withGlxApplication)
-) "magnum-extras: withUi=true requires magnum needs to be built with withGlxApplication=true";
-
-assert lib.assertMsg (
-  !(withUiGallery && !magnum.args.withGlxApplication)
-) "magnum-extras: withUi=true requires magnum needs to be built with withGlxApplication=true";
-
+let
+  magnumWithPlugins = magnum.withPlugins [
+    (magnum-plugins.override {
+      withFreetypeFont = withUiGallery;
+    })
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "magnum-extras";
   version = "2020.06-unstable-2026-10-07";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     corrade # Makes corrade-rc accessible during build
   ];
   propagatedBuildInputs = [
-    magnum
+    magnumWithPlugins
   ];
 
   cmakeFlags = [
@@ -51,15 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  # Needed for unit tests trying to use Alsa, which is not available in the sandbox
-  preCheck = ''
-    export ALSOFT_DRIVERS=null
-  '';
-
   meta = {
     description = "Extras for the Magnum C++11 graphics engine";
     homepage = "https://github.com/mosra/magnum-extras";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix ++ lib.plateforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

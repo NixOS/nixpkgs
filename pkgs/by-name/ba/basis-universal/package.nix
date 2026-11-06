@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "basis-universal";
   version = "2.50.0";
 
-  __structureAttrs = true;
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {

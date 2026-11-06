@@ -17,17 +17,16 @@
   # so it should be light enough
   #
   # keep-sorted start case=no numeric=no block=yes
-  buildDeprecated ? false,
   withAnyImageImporter ? true,
   withAnySceneImporter ? true,
-  withAssimpImporter ? true,
   withAudio ? true,
+  withGL ? true,
   withGlfwApplication ? true,
-  withGlxApplication ? true,
+  withGlxApplication ? false,
   withGlxContext ? true,
   withObjImporter ? true,
-  withSDL2Application ? true,
-  withStbImageImporter ? false,
+  withSdl2Application ? true,
+  withTargetGL ? true,
   withWindowlessGlxApplication ? true,
   # keep-sorted end
 
@@ -67,22 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withVulkan vulkan-loader
   ++ lib.optional withGlfwApplication libx11
-  ++ lib.optional withSDL2Application SDL2;
+  ++ lib.optional withSdl2Application SDL2;
 
   cmakeFlags = [
     (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
     # keep-sorted start case=no numeric=no block=yes
-    (lib.cmakeBool "MAGNUM_BUILD_DEPRECATED" buildDeprecated)
+    (lib.cmakeBool "MAGNUM_TARGET_GL" withTargetGL)
     (lib.cmakeBool "MAGNUM_WITH_ANYIMAGEIMPORTER" withAnyImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_ANYSCENEIMPORTER" withAnySceneImporter)
-    (lib.cmakeBool "MAGNUM_WITH_ASSIMPIMPORTER" withAssimpImporter)
     (lib.cmakeBool "MAGNUM_WITH_AUDIO" withAudio)
+    (lib.cmakeBool "MAGNUM_WITH_GL" withGL)
     (lib.cmakeBool "MAGNUM_WITH_GLFWAPPLICATION" withGlfwApplication)
     (lib.cmakeBool "MAGNUM_WITH_GLXAPPLICATION" withGlxApplication)
     (lib.cmakeBool "MAGNUM_WITH_GLXCONTEXT" withGlxContext)
     (lib.cmakeBool "MAGNUM_WITH_OBJIMPORTER" withObjImporter)
     (lib.cmakeBool "MAGNUM_WITH_SDL2APPLICATION" withGlfwApplication)
-    (lib.cmakeBool "MAGNUM_WITH_STBIMAGEIMPORTER" withStbImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_VK" withVulkan)
     (lib.cmakeBool "MAGNUM_WITH_WINDOWLESSGLXAPPLICATION" withWindowlessGlxApplication)
     # keep-sorted end
@@ -98,17 +96,14 @@ stdenv.mkDerivation (finalAttrs: {
     args = {
       inherit
         # keep-sorted start case=no numeric=no block=yes
-        buildDeprecated
         withAnyImageImporter
         withAnySceneImporter
-        withAssimpImporter
         withAudio
         withGlfwApplication
         withGlxApplication
         withGlxContext
         withObjImporter
-        withSDL2Application
-        withStbImageImporter
+        withSdl2Application
         withVulkan
         withWindowlessGlxApplication
         # keep-sorted end

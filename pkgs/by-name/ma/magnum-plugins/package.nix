@@ -24,7 +24,7 @@
   withJpegImporter ? false,
   withPngImageConverter ? false,
   withPngImporter ? true,
-  withHarfBuzzFont ? false,
+  withHarfBuzzFont ? true,
   withStanfordImporter ? false,
   withMiniExrImageConverter ? false,
   withKtxImporter ? false,
@@ -32,23 +32,16 @@
   withMeshOptimizer ? false, # no tests
   withPrimitiveImporter ? false,
   withUvImageConverter ? false,
-  withOpenGexImporter ? false,
   withDrFlacAudioImporter ? false,
   withDrMp3AudioImporter ? false,
   withDrWavAudioImporter ? false,
   withStbVorbisAudioImporter ? false,
   withBasisImageConverter ? false,
   withBasisImporter ? false,
-  withIcoImporter ? false, # needs withPngImporter=true and withStbImageImporter=true
+  withIcoImporter ? false,
   withGltfImporter ? false,
   withFaad2AudioImporter ? false,
   withDdsImporter ? false,
-
-  # works but gated by MAGNUM_BUILD_DEPRECATED, so we should drop it
-  withOpenDdl ? false, # gated by MAGNUM_BUILD_DEPRECATED, I think we can drop it
-  withCgltfImporter ? false, # gated by MAGNUM_BUILD_DEPRECATED, I think we can drop it
-
-  # MAGNUM_WITH_TINYGLTFIMPORTER is not supported on purpose (deprecated + libgltf went hostile)
 }:
 
 let
@@ -63,33 +56,13 @@ let
   };
 in
 
-# Real Nix assertions that evaluate immediately and throw an error if false
 assert lib.assertMsg (
-  !(withFreetypeFont && withHarfBuzzFont)
-) "magnum-plugins: withFreetypeFont and withHarfBuzzFont cannot be enabled at the same time.";
-
-assert lib.assertMsg (
-  !(withCgltfImporter && withGltfImporter)
-) "magnum-plugins: withCgltfImporter and withGltfImporter cannot be enabled at the same time.";
-
-assert lib.assertMsg (
-  !(withOpenDdl && withOpenGexImporter)
-) "magnum-plugins: withOpenDdl and withOpenGexImporter cannot be enabled at the same time.";
-
-assert lib.assertMsg (!withIcoImporter || (withPngImporter && withStbImageImporter))
-  "magnum-plugins: withIcoImporter requires both withPngImporter and withStbImageImporter to be enabled (at least for tests).";
-
-# Deprecated options gating checks
-assert lib.assertMsg (
-  !withOpenDdl || (magnum.passthru.magnumBuildDeprecated)
-) "magnum-plugins: withOpenDdl requires magnum to be built with MAGNUM_BUILD_DEPRECATED enabled.";
-
-assert lib.assertMsg (!withCgltfImporter || (magnum.passthru.magnumBuildDeprecated))
-  "magnum-plugins: withCgltfImporter requires magnum to be built with magnumBuildDeprecated = true (MAGNUM_BUILD_DEPRECATED=ON) enabled.";
+  withHarfBuzzFont && withFreetypeFont
+) "magnum-plugins: withHarfBuzzFont needs withFreetypeFont to be enabled";
 
 stdenv.mkDerivation (_finalAttrs: {
   pname = "magnum-plugins";
-  version = "2020.06-unstable-2026-10-17";
+  version = "2020.06-unstable-2026-11-05";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -98,8 +71,8 @@ stdenv.mkDerivation (_finalAttrs: {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum-plugins";
-    rev = "df8fd174820b17675d23d687cea43cb31f73ea6a";
-    hash = "sha256-CQY/3u3tj3lYCgAx/bMoxo82by5OVBuX6x4ZwBRM8cA=";
+    rev = "d4da56662318ba37f58c33d487100ea590c505ec";
+    hash = "sha256-OgBT5lPX4HndW836N+a2dQweHGRqxWkyjFNFnNp+Nl4=";
   };
 
   nativeBuildInputs = [
@@ -129,7 +102,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_ASSIMPIMPORTER" withAssimpImporter)
     (lib.cmakeBool "MAGNUM_WITH_BASISIMAGECONVERTER" withBasisImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_BASISIMPORTER" withBasisImporter)
-    (lib.cmakeBool "MAGNUM_WITH_CGLTFIMPORTER" withCgltfImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRFLACAUDIOIMPORTER" withDrFlacAudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRMP3AUDIOIMPORTER" withDrMp3AudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRWAVAUDIOIMPORTER" withDrWavAudioImporter)
@@ -143,8 +115,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_KTXIMPORTER" withKtxImporter)
     (lib.cmakeBool "MAGNUM_WITH_MESHOPTIMIZER" withMeshOptimizer)
     (lib.cmakeBool "MAGNUM_WITH_MINIEXRIMAGECONVERTER" withMiniExrImageConverter)
-    (lib.cmakeBool "MAGNUM_WITH_OPENDDL" withOpenDdl)
-    (lib.cmakeBool "MAGNUM_WITH_OPENGEXIMPORTER" withOpenGexImporter)
     (lib.cmakeBool "MAGNUM_WITH_PNGIMAGECONVERTER" withPngImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_PNGIMPORTER" withPngImporter)
     (lib.cmakeBool "MAGNUM_WITH_PRIMITIVEIMPORTER" withPrimitiveImporter)
@@ -155,7 +125,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_STBVORBISAUDIOIMPORTER" withStbVorbisAudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_UVIMAGECONVERTER" withUvImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_GLTFIMPORTER" withGltfImporter)
-    (lib.cmakeBool "MAGNUM_WITH_CGLTFIMPORTER" withCgltfImporter)
     (lib.cmakeBool "MAGNUM_WITH_DDSIMPORTER" withDdsImporter)
   ]
   ++ lib.optionals (withBasisImageConverter || withBasisImporter) [
@@ -163,19 +132,16 @@ stdenv.mkDerivation (_finalAttrs: {
     "-DKTX2_ZSTANDARD=ON"
   ];
 
-  preCheck = ''
-    # Point Corrade to the built plugins in the build directory
-    export CORRADE_PLUGIN_PATH="$buildDir/lib/magnum"
-  '';
-
   # FIXME:
   # Failing tests are :
   # - AssimpImporter -> probably due to ASSIMP 6 not being fully supported upstream
   # - Faad2AudioImporter -> decoding error
-  disabledTests = [
-    "AssimpImporter"
-    "Faad2AudioImporter"
-  ];
+  postPatch = ''
+    substituteInPlace src/MagnumPlugins/AssimpImporter/CMakeLists.txt \
+      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
+    substituteInPlace src/MagnumPlugins/Faad2AudioImporter/CMakeLists.txt \
+      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
+  '';
 
   meta = {
     description = "Plugins for the Magnum C++11 graphics engine";
