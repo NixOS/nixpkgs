@@ -5,13 +5,13 @@
 }:
 buildDubPackage (finalAttrs: {
   pname = "ddhx";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "dd86k";
     repo = "ddhx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WKwDxbim46r+nMwYfOR22SI6E62PwfsIknMkDHkCvIY=";
+    hash = "sha256-gO6oXVkEfcgWIA2phap3JOOh9t3JpKi+BINeXdcmFTA=";
   };
 
   dubLock.dependencies = { };
