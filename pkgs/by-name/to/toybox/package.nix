@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   which,
   buildPackages,
   libxcrypt,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (enableStatic && stdenv.cc.libc ? static) [
     stdenv.cc.libc
     stdenv.cc.libc.static
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # readahead is broken on Darwin
+    (fetchpatch {
+      url = "https://github.com/landley/toybox/commit/6a0c0ef5eeb2c43e4feef9781398c1718b8bddcb.patch";
+      hash = "sha256-D/HDQUe/kV+SwxJO9V1LZ4MUv3OfDBGEqqfIn0yXwmY=";
+    })
   ];
 
   postPatch = "patchShebangs .";
