@@ -72,6 +72,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       hythera
       anthr76
+      ddymko
     ];
   };
 })
