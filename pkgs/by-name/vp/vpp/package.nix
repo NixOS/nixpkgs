@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpp";
-  version = "26.02";
+  version = "26.10";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9yh1ZMP28SSzHNBdO7UnvVqsIqtXUcwYZUH1UdBUB0=";
+    hash = "sha256-00z2J6bR09KyZGlwoPxXGCjJJ4ksi4CyfuSTZ9sixi4=";
   };
 
   postPatch = ''
@@ -78,6 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=discarded-qualifiers"
+    "-Wno-error=maybe-uninitialized"
+  ];
+
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
