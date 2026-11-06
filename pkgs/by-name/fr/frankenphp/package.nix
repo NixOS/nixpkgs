@@ -125,7 +125,10 @@ buildGo127Module (finalAttrs: {
     homepage = "https://github.com/php/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = [ lib.maintainers.piotrkwiecinski ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      mykiwi
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
