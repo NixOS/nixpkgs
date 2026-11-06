@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  flit-core,
+  flit-core_3,
   dbus,
   pytest,
   pytest-trio,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-d8w/4PtDviTYDHO4EwaVbxlYk7CXtlv7vuR+o4LhfRs=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [
     dbus
