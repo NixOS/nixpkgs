@@ -16252,8 +16252,6 @@ self: super: with self; {
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
-  pyrituals = callPackage ../development/python-modules/pyrituals { };
-
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   pyro-api = callPackage ../development/python-modules/pyro-api { };

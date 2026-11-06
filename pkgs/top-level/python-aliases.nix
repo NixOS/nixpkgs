@@ -624,6 +624,7 @@ mapAliases {
   pyreadability = throw "'pyreadability' has been renamed to/replaced by 'readability-lxml'"; # Converted to throw 2025-10-29
   pyreaderwriterlock = throw "'pyreaderwriterlock' has been removed as it was unmaintained upstream"; # Added 2026-03-21
   pyRFC3339 = throw "'pyRFC3339' has been renamed to/replaced by 'pyrfc3339'"; # Converted to throw 2025-10-29
+  pyrituals = throw "'pyrituals' was removed because it was unmaintained and Home Assistant switched to ritualsgenie"; # Added 2026-11-06
   Pyro4 = throw "'Pyro4' has been renamed to/replaced by 'pyro4'"; # Converted to throw 2025-10-29
   Pyro5 = throw "'Pyro5' has been renamed to/replaced by 'pyro5'"; # Converted to throw 2025-10-29
   pyrogram = throw "'pyrogram' has been removed as it was archived upstream"; # Added 2026-03-21
