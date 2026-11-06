@@ -121,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "rygel";
-      versionPolicy = "odd-unstable";
     };
     noGtk = rygel.override { withGtk = false; };
   };
