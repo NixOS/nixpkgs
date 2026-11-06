@@ -4,6 +4,9 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
+  oniguruma,
+  pkg-config,
+  rust-jemalloc-sys-unprefixed,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,7 +27,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    oniguruma
+    rust-jemalloc-sys-unprefixed
+  ];
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
