@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit pnpm;
     postPatch = relaxNodeVersion;
     fetcherVersion = 5;
-    hash = "sha256-juz5YV5Vc0N24OfSjb7iltS+iLYEKUKVOML1mPS5s+0=";
+    hash = "sha256-h9mhnurc7L34yYsLsnsr17SCLP6wQO4IoNAN44ZH3Qc=";
   };
 
   nativeBuildInputs = [
