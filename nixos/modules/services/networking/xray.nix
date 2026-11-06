@@ -37,7 +37,7 @@ with lib;
 
           Either `settingsFile` or `settings` must be specified.
 
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
 
@@ -63,7 +63,7 @@ with lib;
 
           Either `settingsFile` or `settings` must be specified.
 
-          See <https://www.v2fly.org/en_US/config/overview.html>.
+          See <https://xtls.github.io/en/config/>.
         '';
       };
     };
