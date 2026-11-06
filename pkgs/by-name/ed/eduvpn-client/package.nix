@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eduvpn-client";
-  version = "4.7.2";
+  version = "4.7.3";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "linux-app";
     tag = finalAttrs.version;
-    hash = "sha256-vJZ2C4z5qB5wWwl9LPyaDj60Lne1jcbLml/4Q5tTC/o=";
+    hash = "sha256-bYIN05vhQKTSEXBxTam5pCjyHQZEQE5b+Q++L0H4e5w=";
   };
 
   nativeBuildInputs = [
