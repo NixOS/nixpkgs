@@ -65,9 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MfB9k1Da0/iWT9YTwxMJrBYP3vE9+sWd9v0ILeeNbo8=";
   };
 
-  # FIXME: This patch should be made unconditional the next time librsvg is
-  # updated.
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+  patches = [
     # Rebased copy of https://gitlab.gnome.org/GNOME/gtk-osx/-/blob/2c1492036ff92d1c87d7b7a4c3c5a7a3f042f825/patches/librsvg-libpixbufloader-install-names.patch.
     # Fixes https://gitlab.gnome.org/GNOME/librsvg/-/work_items/1161.
     ./librsvg-libpixbufloader-install-names.patch
