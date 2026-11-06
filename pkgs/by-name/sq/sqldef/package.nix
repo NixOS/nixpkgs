@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sqldef";
-  version = "3.11.27";
+  version = "3.11.29";
 
   src = fetchFromGitHub {
     owner = "sqldef";
     repo = "sqldef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VZtmbtrLzsH1mSNSoscQpwqRR1E3Aqa5nZW9nExtD8Y=";
+    hash = "sha256-vgAVU0wKhkSsvoS+E+HFi7lE4B98u7gcQbeHl8TMTFY=";
   };
 
   proxyVendor = true;

@@ -16000,7 +16000,9 @@ self: super: with self; {
 
   pypdf3 = callPackage ../development/python-modules/pypdf3 { };
 
-  pypdfium2 = callPackage ../development/python-modules/pypdfium2 { };
+  pypdfium2 = callPackage ../development/python-modules/pypdfium2 {
+    inherit (pkgs) jq;
+  };
 
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
