@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s dvdread $out/include/libdvdread
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "Library for reading DVDs";
