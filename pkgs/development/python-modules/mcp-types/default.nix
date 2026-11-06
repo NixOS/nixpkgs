@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     description = "Model Context Protocol wire types";
     homepage = "https://github.com/modelcontextprotocol/python-sdk/tree/main/src/mcp-types";
     inherit (mcp.meta) changelog license maintainers;
+    broken = lib.versionOlder mcp.version "2";
   };
 })

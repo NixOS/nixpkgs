@@ -2,12 +2,11 @@
   lib,
   aiohttp,
   aiointercept,
-  aioresponses,
   buildPythonPackage,
   deepdiff,
-  fastmcp,
   fetchFromGitHub,
   hatchling,
+  mcp,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -38,16 +37,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    aiointercept
     aiohttp
     deepdiff
-    fastmcp
+    mcp
     pycognito
     pyjwt
-  ];
+  ]
+  ++ mcp.optional-dependencies.cli;
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-aiohttp
     pytest-cov-stub
     pytest-freezegun
