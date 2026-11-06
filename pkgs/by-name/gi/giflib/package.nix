@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for reading and writing gif images";
     homepage = "https://giflib.sourceforge.net/";
