@@ -6,7 +6,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until gradio works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "obliteratus";
   version = "0.1.3";
   pyproject = true;
@@ -26,9 +34,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "wheel==0.45.1" "wheel"
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     accelerate
     bitsandbytes
     datasets
@@ -45,13 +53,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     transformers
   ];
 
-  optional-dependencies = with python3Packages; {
+  optional-dependencies = with pythonPackages; {
     spaces = [ gradio ];
   };
 
   pythonImportsCheck = [ "obliteratus" ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pythonPackages; [
     gradio
     hypothesis
     pytest-cov-stub
