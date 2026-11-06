@@ -56,8 +56,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "11960";
-  buildCommit = "8642541";
+  buildNumber = "12110";
+  buildCommit = "cd959ba";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
