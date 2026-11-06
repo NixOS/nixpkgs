@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "51.0";
+  version = "51.1";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IXm6sTrzU0JwZQlq+L89MNp7huDFFuW6hqFJmK+VdfY=";
+    hash = "sha256-wesI2WUaVn7V2bJ5E3HxiY5lfPRedeHYit77q4B5d9Y=";
   };
 
   patches = [
@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -161,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     json-glib
     libglycin
+    gnome-autoar
 
     # recording
     pipewire
@@ -176,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # for gnome-extension tool
     bash-completion
-    gnome-autoar
 
     # for tools
     pythonEnv
