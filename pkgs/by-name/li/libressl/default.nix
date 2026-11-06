@@ -177,8 +177,8 @@ in
   # 4.2 was released October 2025 and will become unsupported on October 22,
   # 2026, one year after the release of OpenBSD 7.8.
   libressl_4_2 = generic {
-    version = "4.2.1";
-    hash = "sha256-bVwvWFg1iOp5H0yGRQBAcdAN+lVKW/eIoAbKHrWr1ws=";
+    version = "4.2.3";
+    hash = "sha256-QGPmWbx5VzFG0PqrAa0odi9RQazcOd8pJH/CVarfGHw=";
     patches = [
       common-cmake-install-full-dirs-patch
       tls-default-ca-patch
@@ -188,10 +188,16 @@ in
   # 4.3 was released April 2026 and will become unsupported on May 19, 2027,
   # one year after the release of OpenBSD 7.9.
   libressl_4_3 = generic {
-    version = "4.3.2";
-    hash = "sha256-7fAa7iTGXWnmqe/LnUS82mgv+dTzu72V55Th36kIR7U=";
-    patches = [
-      tls-default-ca-patch
-    ];
+    version = "4.3.4";
+    hash = "sha256-V8iy+Mb5UFWHq67dqwA+okPWFe237XGVeWgSH8Yxa9Y=";
+    patches = [ ];
+  };
+
+  # 4.4 was released October 2026 and will become unsupported on October 20,
+  # 2027, one year after the release of OpenBSD 8.0.
+  libressl_4_4 = generic {
+    version = "4.4.0";
+    hash = "sha256-fQJSKtUHC5rbMuslPsq84YEYSjdQz2WrrAZ17pCGh8E=";
+    patches = [ ];
   };
 }
