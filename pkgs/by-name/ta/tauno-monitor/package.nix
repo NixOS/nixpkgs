@@ -14,7 +14,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauno-monitor";
-  version = "0.3.9";
+  version = ".0.3.9";
   pyproject = false;
 
   __structuredAttrs = true;
