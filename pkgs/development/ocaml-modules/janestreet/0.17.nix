@@ -1028,7 +1028,6 @@ with self;
     propagatedBuildInputs = [
       core_unix
       patience_diff
-      ocaml_pcre
     ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";

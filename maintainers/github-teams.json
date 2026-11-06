@@ -498,6 +498,7 @@
       "kalbasit": 87115
     },
     "members": {
+      "GraysonTinker": 146041509,
       "mfrw": 4929861
     },
     "name": "golang"
@@ -1065,7 +1066,7 @@
     "name": "systemd"
   },
   "tenstorrent": {
-    "description": "Maintain Tenstorrent-related packages ",
+    "description": "Maintain Tenstorrent-related packages",
     "id": 19876744,
     "maintainers": {
       "RossComputerGuy": 19699320,
