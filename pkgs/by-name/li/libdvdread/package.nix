@@ -25,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libdvdcss ];
 
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonEnable "libdvdcss" true)
   ];
