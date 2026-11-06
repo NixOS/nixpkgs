@@ -11,6 +11,7 @@
   gitMinimal,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 let
   go = go_1_27;
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
+    VERSION = finalAttrs.version;
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
     NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
@@ -91,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  versionCheckProgram = "${placeholder "out"}/bin/tetra";
+  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
