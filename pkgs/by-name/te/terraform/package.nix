@@ -6,6 +6,8 @@
   makeWrapper,
   runCommand,
   runtimeShell,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
   writeText,
   terraform-providers,
   installShellFiles,
@@ -19,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-/eQWz7J+u7Jt49difHhKqgC60jfLKNFZq25SMKJ16sk=";
     };
 
@@ -45,17 +47,6 @@ let
       "-X 'github.com/hashicorp/terraform/version.dev=no'"
     ];
 
-    postPatch = ''
-      # Between go 1.23 and 1.24 the following GODEBUG setting was removed, and a new
-      # similar one was added.
-      # https://github.com/golang/go/issues/72111
-      # The setting is configured upstream due to the following timeouts caused by
-      # the TLS handshake using post-quantum crypto with servers that don't support it
-      # https://tldr.fail/
-      substituteInPlace go.mod \
-        --replace-quiet 'godebug tlskyber=0' 'godebug tlsmlkem=0'
-    '';
-
     nativeBuildInputs = [ installShellFiles ];
 
     postInstall = ''
@@ -63,10 +54,15 @@ let
       installShellCompletion --bash --name terraform <(echo complete -C terraform terraform)
     '';
 
-    preCheck = ''
-      export HOME=$TMPDIR
-      export TF_SKIP_REMOTE_TESTS=1
-    '';
+    __darwinAllowLocalNetworking = true;
+
+    nativeCheckInputs = [
+      writableTmpDirAsHomeHook
+      versionCheckHook
+    ];
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "version";
 
     subPackages = [ "." ];
 
