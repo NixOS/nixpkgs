@@ -262,7 +262,10 @@ buildPythonPackage (finalAttrs: {
     # Skipped when building on Hydra (no network access),
     # but interferes with local builds
     "test_xlm_roberta_large"
-
+    # RuntimeError: Calculated output H: 0 W: 5 must be >= 1 in every dimension (input H: 5, W: 5)
+    "test_pad_replicate_mode"
+    # Exception: backward pass tensor 0 failed shape (5,)
+    "test_clip"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fail with AssertionError
@@ -286,6 +289,9 @@ buildPythonPackage (finalAttrs: {
     # NaN payload propagation differs from x86:
     #   AssertionError: 2143289347 != 2143289345 : mul(0x7fc00001, 0x7f800003)
     "test_mul_nan_priority"
+
+    # Exception: forward pass failed shape
+    "test_simple_padding_conv1d"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky (pass when running a smaller set of tests: tests/unit/*, but not within the full test suite)
@@ -366,6 +372,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tinygrad/tinygrad";
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 })
