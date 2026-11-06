@@ -1,0 +1,59 @@
+From 1427f83f5c0c6a22e4f0055b71abbb3aafceba2e Mon Sep 17 00:00:00 2001
+From: Walter McKelvie <walt@mckelvie.org>
+Date: Thu, 5 Nov 2026 15:55:31 -0500
+Subject: [PATCH v2] crypto: algif_aead - Allow gcm(aes) for privileged users
+
+iwd depends on the AF_ALG algorithm "gcm(aes)", although iwd's own
+source never mentions "gcm(aes)" or L_AEAD_CIPHER_AES_GCM.  The
+dependency is indirect, through the TLS implementation in libell (ell)
+that iwd uses for EAP-TLS, EAP-TTLS and EAP-PEAP: iwd's
+src/eap-tls-common.c hands the EAP tunnel to l_tls_new().  In ell, the
+TLS 1.2 cipher suite table in ell/tls-suites.c uses
+L_AEAD_CIPHER_AES_GCM for the eight *_WITH_AES_{128,256}_GCM_* suites,
+ell/cipher.c maps that to the AF_ALG name "gcm(aes)", and
+tls_change_cipher_spec() in ell/tls.c instantiates it with
+l_aead_cipher_new().  Before offering a suite, ell checks that its AEAD
+could be bound on an AF_ALG socket (l_aead_cipher_is_supported()) and
+drops the suites whose bind() failed.
+
+With af_alg_restrict=1 the bind of "gcm(aes)" fails even for iwd, which
+holds CAP_NET_ADMIN, so the AES-GCM suites silently disappear from
+iwd's ClientHello and EAP authentication fails against RADIUS servers
+that only accept GCM suites (common for eduroam deployments).  This
+contradicts the intent of commit 2f204fe718f5 ("crypto: af_alg - Add
+af_alg_restrict sysctl, defaulting to 1"), which was to keep iwd
+working under the default restriction level; the iwd algorithm list it
+was based on evidently did not account for the algorithms used by
+ell's TLS code.
+
+Add "gcm(aes)" to the privileged part of the AEAD allowlist.  It is
+the only AEAD that iwd actually uses: ell's TLS code has no CCM or
+ChaCha20-Poly1305 suites, and no other ell or iwd code creates an AEAD
+cipher.  (ell does bind "ccm(aes)" once at startup, in
+init_supported() in ell/cipher.c, to probe which AEADs are available,
+but nothing uses it, so its allowlist comment is left as is.)
+
+Fixes: 2f204fe718f5 ("crypto: af_alg - Add af_alg_restrict sysctl, defaulting to 1")
+Link: https://github.com/NixOS/nixpkgs/issues/583203
+Cc: stable@vger.kernel.org
+Signed-off-by: Walter McKelvie <walt@mckelvie.org>
+Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+---
+ crypto/algif_aead.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
+index 5574e2d70539..a5c9e29b64be 100644
+--- a/crypto/algif_aead.c
++++ b/crypto/algif_aead.c
+@@ -36,6 +36,7 @@
+ 
+ static const struct af_alg_allowlist_entry aead_allowlist[] = {
+ 	{ "ccm(aes)" }, /* bluez */
++	{ "gcm(aes)" }, /* iwd */
+ 	{},
+ };
+ 
+-- 
+2.55.0
+
