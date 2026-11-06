@@ -331,6 +331,9 @@ in
         # loading all the gems takes time
         TimeoutStartSec = 1200;
         ExecStart = "${package}/script/rails server -b ${cfg.host} -p ${toString cfg.port}";
+        Type = "notify";
+        NotifyAccess = "all";
+        WatchdogSec = 10;
       };
       after = [
         "network.target"
