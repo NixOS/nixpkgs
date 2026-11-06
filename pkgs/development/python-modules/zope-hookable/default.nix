@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zope-hookable";
-  version = "8.2";
+  version = "8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.hookable";
     tag = version;
-    hash = "sha256-pryx55dzvg+6jSUj4avskTnGKe6w1HkEh6v6OOlHIXY=";
+    hash = "sha256-anEXKanN1MUdXTegBucPUED+BDYBWADMLI9BnltCoUk=";
   };
 
   build-system = [ setuptools ];
