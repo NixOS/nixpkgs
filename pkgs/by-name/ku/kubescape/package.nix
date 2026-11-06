@@ -1,26 +1,27 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   git,
   installShellFiles,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+
+buildGo127Module (finalAttrs: {
   pname = "kubescape";
-  version = "4.0.17";
+  version = "4.0.19";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yEcj1F7xuwkVUNvYzMaBQpsrOYd5CvBbMyUqgxTJ+kg=";
+    hash = "sha256-/g+Wof8KHc9l9enBpZCfrX6cgQzaFXIenbcZLTEeW28=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-3KtguFYcLXPQAP1B1TooONFLaxcItTLtp/RZ7vjUAfg=";
+  vendorHash = "sha256-/+p/qo2f3t+VMZEjhg3b1iFLRJRE4iSilUgpn5jGSeY=";
 
   subPackages = [ "." ];
 

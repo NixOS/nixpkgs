@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "texlyre";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "TeXlyre";
     repo = "texlyre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XcrdxinWdC4FL+4Dxx6yZR7Ahsdhb2tkdEzO6KSt12M=";
+    hash = "sha256-JS4j+TXexPO1Ye/Sz0fxWGjaBjIqrA60F3a4VRUL2kE=";
   };
 
-  npmDepsHash = "sha256-EaSimh+e8/yfh3UzjEUDKFn51D8oA91oz+62sDfEmCY=";
+  npmDepsHash = "sha256-MNJo0A6y1PaifgpiFLyeVS2B6mBuDO9tjZFlZXGU9sQ=";
 
   postPatch = ''
     sed -i 's/"version": ".*"/"version": "${finalAttrs.version}"/' package.json

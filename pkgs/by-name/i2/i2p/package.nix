@@ -32,7 +32,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.14.0";
+  version = "2.14.1";
 
   src = fetchzip {
     urls = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-Bg6VunNI+nbNtFWjOUcOF23H568XV8KHsDDods/E8I4=";
+    hash = "sha256-azvroJaKUqhMMW+/Oua8cvhqluPuXgkdeRsvWb09sHY=";
   };
 
   strictDeps = true;
