@@ -639,8 +639,34 @@ in
       livekit = {
         enable = lib.mkEnableOption "Livekit for use with fluxer";
       };
-      caddy.enable = lib.mkEnableOption "Caddy as reverse proxy for fluxer";
-      nginx.enable = lib.mkEnableOption "Nginx as reverse proxy for fluxer";
+      caddy = {
+        enable = lib.mkEnableOption "Caddy as reverse proxy for fluxer";
+        virtualHost = lib.mkOption {
+          type = lib.types.submodule (
+            import ../../web-servers/caddy/vhost-options.nix { cfg = config.services.caddy; }
+          );
+          default = { };
+          example = lib.literalExpression ''
+            {
+              serverAliases = [ "fluxer.''${config.networking.domain}" ];
+            }
+          '';
+          description = "Extra configuration for the caddy reverse proxy for fluxer.";
+        };
+      };
+      nginx = {
+        enable = lib.mkEnableOption "Nginx as reverse proxy for fluxer";
+        virtualHost = lib.mkOption {
+          type = lib.types.submodule (import ../../web-servers/nginx/vhost-options.nix { inherit config lib; });
+          default = { };
+          example = lib.literalExpression ''
+            {
+              serverAliases = [ "fluxer.''${config.networking.domain}" ];
+            }
+          '';
+          description = "Extra configuration for the nginx reverse proxy for fluxer.";
+        };
+      };
     };
   };
 
@@ -714,144 +740,149 @@ in
 
     services.caddy = mkIf (cfg.enable && cfg.aux.caddy.enable) {
       enable = true;
-      virtualHosts.${cfg.settings.domain} = {
-        extraConfig = ''
-          encode ${cfg.settings.edge.encode or "zstd gzip"}
+      virtualHosts.${cfg.settings.domain} = lib.mkMerge [
+        cfg.aux.caddy.virtualHost
+        {
+          extraConfig = ''
+            encode ${cfg.settings.edge.encode or "zstd gzip"}
 
-          handle /_health { respond "OK" 200 }
+            handle /_health { respond "OK" 200 }
 
-          handle_path /api/* { 
-            reverse_proxy ${cfg.settings.internal.api_endpoint} 
-          }
-
-          handle /gateway {
-            rewrite * / 
-            reverse_proxy ${cfg.settings.internal.gateway_endpoint}
-          }
-
-          handle_path /gateway/* {
-            reverse_proxy ${cfg.settings.internal.gateway_endpoint}
-          }
-
-          handle_path /media/* {
-            reverse_proxy ${cfg.settings.internal.media_proxy_endpoint}
-          }
-
-          ${lib.optionalString cfg.aux.livekit.enable ''
-            handle_path /livekit/* {
-              reverse_proxy ${cfg.settings.internal.livekit_endpoint}
-            }
-          ''}
-
-          handle /admin {
-            rewrite * /
-            reverse_proxy ${cfg.settings.internal.admin_endpoint}
-          }
-
-          handle_path /admin/* {
-            reverse_proxy ${cfg.settings.internal.admin_endpoint}
-          }
-
-          @staticAssets path /web/* /emoji/* /libs/* /avatars/* /badges/* /desktop/*
-          handle @staticAssets {
-            root * ${cfg.package}/share/fluxer-static
-
-            @hidden path /.*
-            respond @hidden "Not Found" 404
-
-            header {
-              X-Content-Type-Options nosniff
-              Referrer-Policy strict-origin-when-cross-origin
-              X-Frame-Options DENY
-              Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
-              Access-Control-Allow-Origin *
-              Cache-Control "public, max-age=3600, must-revalidate"
-              -Server
+            handle_path /api/* { 
+              reverse_proxy ${cfg.settings.internal.api_endpoint} 
             }
 
-            file_server
-          }
+            handle /gateway {
+              rewrite * / 
+              reverse_proxy ${cfg.settings.internal.gateway_endpoint}
+            }
 
-          handle /.well-known/fluxer {
-            reverse_proxy ${cfg.settings.internal.api_endpoint}
-          }
+            handle_path /gateway/* {
+              reverse_proxy ${cfg.settings.internal.gateway_endpoint}
+            }
 
-          handle {
-            reverse_proxy ${cfg.settings.internal.app_proxy_endpoint}
-          }
-        '';
-      };
+            handle_path /media/* {
+              reverse_proxy ${cfg.settings.internal.media_proxy_endpoint}
+            }
+
+            ${lib.optionalString cfg.aux.livekit.enable ''
+              handle_path /livekit/* {
+                reverse_proxy ${cfg.settings.internal.livekit_endpoint}
+              }
+            ''}
+
+            handle /admin {
+              rewrite * /
+              reverse_proxy ${cfg.settings.internal.admin_endpoint}
+            }
+
+            handle_path /admin/* {
+              reverse_proxy ${cfg.settings.internal.admin_endpoint}
+            }
+
+            @staticAssets path /web/* /emoji/* /libs/* /avatars/* /badges/* /desktop/*
+            handle @staticAssets {
+              root * ${cfg.package}/share/fluxer-static
+
+              @hidden path /.*
+              respond @hidden "Not Found" 404
+
+              header {
+                X-Content-Type-Options nosniff
+                Referrer-Policy strict-origin-when-cross-origin
+                X-Frame-Options DENY
+                Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+                Access-Control-Allow-Origin *
+                Cache-Control "public, max-age=3600, must-revalidate"
+                -Server
+              }
+
+              file_server
+            }
+
+            handle /.well-known/fluxer {
+              reverse_proxy ${cfg.settings.internal.api_endpoint}
+            }
+
+            handle {
+              reverse_proxy ${cfg.settings.internal.app_proxy_endpoint}
+            }
+          '';
+        }
+      ];
     };
 
     services.nginx = mkIf (cfg.enable && cfg.aux.nginx.enable) {
       enable = true;
-      virtualHosts.${cfg.settings.domain} = {
-        forceSSL = true;
-        extraConfig = ''
-          client_max_body_size 512m;
-        '';
-
-        locations."= /_health" = {
-          return = "200 OK";
-        };
-
-        locations."= /.well-known/fluxer" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.api_endpoint}/.well-known/fluxer";
-        };
-
-        locations."^~ /api/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.api_endpoint}/";
-        };
-
-        locations."^~ /gateway" = {
+      virtualHosts.${cfg.settings.domain} = lib.mkMerge [
+        cfg.aux.nginx.virtualHost
+        {
           extraConfig = ''
-            rewrite .* / break;
+            client_max_body_size 512m;
           '';
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.gateway_endpoint}";
-        };
 
-        locations."^~ /media/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.media_proxy_endpoint}/";
-        };
+          locations."= /_health" = {
+            return = "200 OK";
+          };
 
-        locations."^~ /livekit/" = mkIf cfg.aux.livekit.enable {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.livekit_endpoint}/";
-        };
+          locations."= /.well-known/fluxer" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.api_endpoint}/.well-known/fluxer";
+          };
 
-        locations."^~ /admin/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.admin_endpoint}/";
-        };
+          locations."^~ /api/" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.api_endpoint}/";
+          };
 
-        locations."~ ^/(web|emoji|libs|avatars|badges|desktop)/" = {
-          root = "${cfg.package}/share/fluxer-static/";
-          extraConfig = ''
-            add_header X-Content-Type-Options nosniff;
-            add_header Referrer-Policy strict-origin-when-cross-origin;
-            add_header X-Frame-Options DENY;
-            add_header Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
-            add_header Access-Control-Allow-Origin *;
-            add_header Cache-Control "public, max-age=3600, must-revalidate";
-          '';
-        };
+          locations."^~ /gateway" = {
+            extraConfig = ''
+              rewrite .* / break;
+            '';
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.gateway_endpoint}";
+          };
 
-        locations."/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "${cfg.settings.internal.app_proxy_endpoint}/";
-        };
-      };
+          locations."^~ /media/" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.media_proxy_endpoint}/";
+          };
+
+          locations."^~ /livekit/" = mkIf cfg.aux.livekit.enable {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.livekit_endpoint}/";
+          };
+
+          locations."^~ /admin/" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.admin_endpoint}/";
+          };
+
+          locations."~ ^/(web|emoji|libs|avatars|badges|desktop)/" = {
+            root = "${cfg.package}/share/fluxer-static/";
+            extraConfig = ''
+              add_header X-Content-Type-Options nosniff;
+              add_header Referrer-Policy strict-origin-when-cross-origin;
+              add_header X-Frame-Options DENY;
+              add_header Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+              add_header Access-Control-Allow-Origin *;
+              add_header Cache-Control "public, max-age=3600, must-revalidate";
+            '';
+          };
+
+          locations."/" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "${cfg.settings.internal.app_proxy_endpoint}/";
+          };
+        }
+      ];
     };
 
     systemd.services."fluxer-pregenerate-secrets" = mkIf cfg.enable {
