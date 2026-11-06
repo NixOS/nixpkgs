@@ -49,6 +49,8 @@ in
   inherit tester-compileCpu;
   compileCpu = tester-compileCpu.gpuCheck;
 
+  cpp-extension = callPackage ./cpp-extension.nix { };
+
   mnist-example = callPackage ./mnist-example { };
 
   # Core packages from the torch ecosystem

@@ -48,7 +48,8 @@ buildDotnetModule (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--chdir ${placeholder "out"}/lib/immichframe"
+    "--chdir"
+    "${placeholder "out"}/lib/immichframe"
   ];
 
   passthru = {

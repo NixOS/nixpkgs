@@ -64,7 +64,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prod
     find packages/*/dist -type f \( -name "*.d.ts" -o -name "*.map" \) -delete
     find node_modules packages/*/node_modules -xtype l -delete
-    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''
