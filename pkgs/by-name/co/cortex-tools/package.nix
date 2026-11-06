@@ -12,6 +12,8 @@ buildGoModule (finalAttrs: {
   pname = "cortex-tools";
   version = "0.21.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cortexproject";
     repo = "cortex-tools";
