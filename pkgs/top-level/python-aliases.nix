@@ -856,6 +856,7 @@ mapAliases {
   vega_datasets = throw "'vega_datasets' has been renamed to/replaced by 'vega-datasets'"; # Converted to throw 2025-10-29
   ViennaRNA = throw "'ViennaRNA' has been renamed to/replaced by 'viennarna'"; # Converted to throw 2025-10-29
   vncdo = vncdotool; # Added 2026-06-30
+  volkswagencarnet = throw "'volkswagencarnet' was removed because Volkswagen turned off API access"; # added 2026-11-06
   volvooncall = throw "'volvooncall' was removed because Home Assistant dropped the integration"; # added 2026-07-20
   vqgan-jax = throw "'vqgan-jax' has been removed, as it was unmaintained upstream and has unclear license"; # Added 2026-08-07
   vulcan-api = throw "vulcan-api has been removed. Their API has changed and they don't allow access from unofficial software anymore."; # added 2025-09-05
