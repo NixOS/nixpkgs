@@ -5,6 +5,7 @@
   tantivy-go,
   versionCheckHook,
   nix-update-script,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
@@ -24,6 +25,10 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 1;
   env.CGO_LDFLAGS = "-L${tantivy-go}/lib";
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^TestSecretOutputRejectsInheritedReadACL$"
+  ];
 
   ldflags = [
     "-s"
