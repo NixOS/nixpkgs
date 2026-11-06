@@ -23,11 +23,11 @@ in
 {
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.12";
+      version = "1.10.13";
       sha256 = {
-        x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
-        aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
-        aarch64-darwin = "0gvqmdnqgs2gv72zsnnppfhbsj7qynvimll9hm4nvm905bp2mcak";
+        x86_64-linux = "1gdqdxq8dyc8apjybph9jk2bgn6grnd9xxjhyadhmd99vf0a1gzj";
+        aarch64-linux = "0j6py6ygnl7sxllcr8757ig9g4jc9i1y47sfwq1nh8w4gci944gj";
+        aarch64-darwin = "0q55vjmdm5vixzkpismaxlhpc6vjvk15c4a47n55ivsxzbjzcfn9";
       };
     }) { }
   );
@@ -64,8 +64,8 @@ in
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.12";
-        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        version = "1.10.13";
+        hash = "sha256-DaPlMwiM2jQKgtJan6wyzs8t0Ta4GlWbjlHsD7cGEsE=";
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
@@ -74,13 +74,6 @@ in
             url = "https://github.com/JuliaLang/julia/commit/0be37db8c5b5a440bd9a11960ae9c998027b7337.patch";
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
-          })
-          # stackwalk: derive glibc longjmp pointer mangling
-          # https://github.com/JuliaLang/julia/pull/62775
-          # Probably not needed after the next release on this branch (1.10.13+)
-          (fetchpatch2 {
-            url = "https://github.com/JuliaLang/julia/commit/cf08907c8fc7ffc64dc664e2dd7469707824b601.patch?full_index=1";
-            hash = "sha256-1Dq5gEo+MiBoIZq8xBHNONwDrwLLQ3Yr6qQh6EJKCCQ=";
           })
         ];
       })
