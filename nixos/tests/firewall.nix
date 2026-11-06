@@ -104,7 +104,7 @@
         ${testOpenPort}
 
         # Close the opened port.
-        nixos-firewall-tool close tcp 80
+        walled.succeed("nixos-firewall-tool close tcp 80")
         attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
       '';
     in
