@@ -4326,6 +4326,8 @@ self: super: with self; {
 
   defcon = callPackage ../development/python-modules/defcon { };
 
+  defeatbeta-api = callPackage ../development/python-modules/defeatbeta-api { };
+
   deform = callPackage ../development/python-modules/deform { };
 
   defusedcsv = callPackage ../development/python-modules/defusedcsv { };
