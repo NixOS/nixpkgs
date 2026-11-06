@@ -1,5 +1,5 @@
 {
-  fetchurl,
+  fetchgit,
   lib,
   stdenv,
   autoreconfHook,
@@ -10,12 +10,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libtirpc";
   version = "1.3.7";
 
-  src = fetchurl {
-    url = "https://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${
-      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
-    };sf=tgz";
-    hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
-    name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+  src = fetchgit {
+    url = "https://git.linux-nfs.org/cgit/steved/libtirpc.git";
+    tag = "libtirpc-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-ZO3TTDK2Nlz7ZiAErLCaUzt8eGXkI12r07u7YJvSCtA=";
   };
 
   outputs = [
