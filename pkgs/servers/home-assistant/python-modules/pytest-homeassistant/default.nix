@@ -60,6 +60,7 @@ buildPythonPackage {
   ];
 
   pythonRelaxDeps = [
+    "paho-mqtt"
     "pytest"
     "syrupy"
   ];
