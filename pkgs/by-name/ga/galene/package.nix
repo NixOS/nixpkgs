@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.galene.basic;
+    tests = nixosTests.galene;
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex=galene-(.*)" ];
     };
