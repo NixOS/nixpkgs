@@ -5,7 +5,6 @@
   fetchFromGitHub,
   gitMinimal,
   lib,
-  llvmPackages_18,
   mixNixDeps,
   patchelf,
   python3,
@@ -16,20 +15,9 @@
 }:
 
 let
-  # XLA requires clang 18 -- gcc and newer clang versions (e.g., 21) fail with
-  # stricter template syntax checks in xla/tsl/concurrency/async_value_ref.h
-  #
-  # ABI compatibility with other Nixpkgs stdenv-built packages can be confirmed
-  # by seeing that
-  #
-  #   ldd $(nix-build -A xla)/lib/libservice.so 2>/dev/null | grep -E '(libstdc\+\+|libc\+\+)'
-  #
-  # shows libstdc++ as being linked from gcc.
-  clangStdenv = llvmPackages_18.stdenv;
-
   pythonEnv = python3.withPackages (ps: with ps; [ numpy ]);
 in
-(buildBazelPackage.override { stdenv = clangStdenv; }) {
+buildBazelPackage {
   pname = "xla";
   version = "0.10.0";
 
@@ -64,6 +52,7 @@ in
     requiredSystemFeatures
     meta
     removeLocal
+    dontAddBazelOpts
     ;
   inherit (xla.deps)
     postPatch
@@ -82,16 +71,18 @@ in
     sha256 =
       {
         # Warning(reproducibility): ofborg's hash, can't reproduce it on makemake.ngi.nixos.org
-        x86_64-linux = "sha256-A/aXveEGL1uhhoWzReqO+dCRIHfv5QDrPeYNBM7tNpQ=";
+        x86_64-linux = "sha256-tkY+EjmrCHvz/MRLN/uFgcnzarLjSP8mHl7+kdcGkNE=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     inherit (xla.deps)
-      preInstall
+      preConfigure
+      installPhase
       ;
   };
 
   buildAttrs = {
     outputs = [ "out" ];
+    inherit (xla) dontAddBazelOpts buildInputs postConfigure;
 
     preConfigure = lib.concatStringsSep "\n" [
       # Explanation: already extracted by code prepended by `buildBazelPackage`,
@@ -107,8 +98,6 @@ in
       runHook preInstall
       tar xf bazel-bin/xla/extension/xla_extension.tar.gz
       mv xla_extension $out
-      cp --remove-destination $(realpath $out/lib/libxla_extension.so) \
-         $out/lib/libxla_extension.so
       runHook postInstall
     '';
   };

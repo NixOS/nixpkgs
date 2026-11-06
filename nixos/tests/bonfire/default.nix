@@ -65,6 +65,7 @@
   interactive = {
     # HowTo(debug):
     # nix -L run -f. nixosTests.bonfire.driverInteractive
+    # python> dump_machine_ssh()
     # python> start_all()
     # Then run the printed ssh command.
     sshBackdoor.enable = true;

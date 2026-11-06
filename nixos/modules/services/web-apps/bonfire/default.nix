@@ -27,7 +27,7 @@ let
   ];
   secrets = [ ];
 
-  elixirFormat = pkgs.formats.elixirConf { elixir = cfg.package.elixir; };
+  elixirFormat = pkgs.formats.elixirConf { elixir = cfg.package.beamPackages.elixir; };
   inherit (elixirFormat.lib) mkRaw mkTuple;
 
 in
