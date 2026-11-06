@@ -173,6 +173,11 @@ let
             overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
             override = x: (pluggable (terraform.override x)).withPlugins plugins;
+
+            /**
+              The terraform package before pinning the plugins with `withPlugins`
+            */
+            unwrapped = terraform;
           };
         in
         # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
