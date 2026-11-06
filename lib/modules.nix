@@ -826,22 +826,19 @@ let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName = zipAttrs (
         map (
-          module:
-          let
-            subtree = module.options;
-          in
-          if !(isAttrs subtree) then
+          { _file, options, ... }:
+          if !(isAttrs options) then
             throw ''
               An option declaration for `${concatStringsSep "." prefix}' has type
-              `${typeOf subtree}' rather than an attribute set.
+              `${typeOf options}' rather than an attribute set.
               Did you mean to define this outside of `options'?
             ''
           else
             mapAttrs (n: option: {
-              _file = module._file;
-              pos = unsafeGetAttrPos n subtree;
+              inherit _file;
+              pos = unsafeGetAttrPos n options;
               options = option;
-            }) subtree
+            }) options
         ) modules
       );
 
