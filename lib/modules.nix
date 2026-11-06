@@ -761,6 +761,12 @@ let
       ) (functionArgs f)
     );
 
+  # Push down the properties of a definition's value. In the common case
+  # of no property to push down, the definition is reused as-is.
+  pushDownDefinition =
+    { file, value }@def:
+    if value ? _type then map (value: { inherit file value; }) (pushDownProperties value) else [ def ];
+
   /**
     Merge a list of modules.  This will recurse over the option
     declarations in all modules, combining them into a single set.
@@ -800,15 +806,15 @@ let
         { _file, config, ... }:
         # Fast path for the common case of no property to push down.
         if config ? _type then
-          map (c: {
+          map (value: {
             file = _file;
-            config = c;
+            inherit value;
           }) (pushDownProperties config)
         else
           [
             {
               file = _file;
-              inherit config;
+              value = config;
             }
           ]
       ) modules
@@ -843,15 +849,16 @@ let
       rawDefinitionsByName = zipAttrs (
         map (
           c:
-          if isAttrs c.config then
+          if isAttrs c.value then
             mapAttrs (n: value: {
               file = c.file;
               inherit value;
-            }) c.config
+            }) c.value
           else
             throw (
               messages.non_attrs_config {
-                inherit (c) file config;
+                inherit (c) file;
+                config = c.value;
                 inherit prefix;
               }
             )
@@ -951,22 +958,7 @@ let
           let
             # The definitions of 'name' with properties pushed down one level.
             nested = mergeModules' loc decls (
-              if rawDefinitionsByName ? ${name} then
-                concatMap (
-                  { file, value }:
-                  # Fast path for the common case of no property to push down.
-                  if value ? _type then
-                    map (config: { inherit file config; }) (pushDownProperties value)
-                  else
-                    [
-                      {
-                        inherit file;
-                        config = value;
-                      }
-                    ]
-                ) defns'
-              else
-                [ ]
+              if rawDefinitionsByName ? ${name} then concatMap pushDownDefinition defns' else [ ]
             );
           in
           {
