@@ -29689,7 +29689,7 @@
     github = "tiagoflopes";
     githubId = 120393752;
     email = "tiago.jflopes@gmail.com";
-   };
+  };
   tiagolobocastro = {
     email = "tiagolobocastro@gmail.com";
     github = "tiagolobocastro";
