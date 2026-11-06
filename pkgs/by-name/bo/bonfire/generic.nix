@@ -34,7 +34,6 @@ beamPkgs.mixRelease (
     # Issue: https://github.com/NixOS/nixpkgs/pull/553428
     finalAttrs = {
       pname = "bonfire-${finalAttrs.env.FLAVOUR}";
-      inherit (finalAttrs.passthru.beamPackages) erlang elixir;
       version = "1.0.8-beta.9";
       src = fetchFromGitHub {
         owner = "bonfire-networks";
