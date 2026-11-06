@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/cracklib/cracklib";
     description = "Password checking library";
