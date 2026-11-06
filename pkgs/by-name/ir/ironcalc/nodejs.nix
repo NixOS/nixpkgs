@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   pnpmDeps = fetchPnpmDeps {
     inherit (ironcalc) src;
     pname = "ironcalc-nodejs";
-    hash = "sha256-WBISZTISqnti5MiI+/rECZw31YumSm7VPN+MYZNoS28=";
-    fetcherVersion = 4;
+    hash = "sha256-hVSsoYK+FE4vf7B7sYSeg5KHrFohuCNWlhqX4lkJJS4=";
+    fetcherVersion = 5;
     preInstall = ''
       cd bindings/nodejs
     '';
