@@ -23,6 +23,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-gE0j0P4BXVwntfvn7G3rHB0pnO/0RWkUDp+XWfRixLY=";
   };
 
+  pythonRelaxDeps = [ "mscerts" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
