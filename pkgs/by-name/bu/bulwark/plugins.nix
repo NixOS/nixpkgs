@@ -210,10 +210,10 @@ in
   });
   quick-notes = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-quick-notes";
-    version = "1.0.0";
+    version = "1.3.3";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/quick-notes/${finalAttrs.version}";
-      hash = "sha256-Hh9tTuL0OGSxZWUj2seYD6038ny1DubInpSdtAntOgU=";
+      hash = "sha256-a0tiHnkj+Qi/wOlYZwYwRuIc5BOFto+xTDvUKSnDTd0=";
       extension = "zip";
       stripRoot = false;
     };
