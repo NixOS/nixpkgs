@@ -31,8 +31,8 @@
   },
   {
     "pname": "diskann-garnet",
-    "version": "8.0.0",
-    "hash": "sha256-KliiKj8atdH/71Dgh+hK2odKxZuCqUT4/gjX68aBoUY="
+    "version": "9.0.0",
+    "hash": "sha256-K2vzQ3HOAUG7+WpjIO2eC4qLh3kXysk72Gl4EMhsST0="
   },
   {
     "pname": "KeraLua",
