@@ -1,0 +1,80 @@
+diff --git a/setup.py b/setup.py
+index 2ea059f..60b461f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -255,46 +255,6 @@ class InstallWithExtras(install):
+     def run(self) -> None:
+         super().run()
+ 
+-        build_ext_obj = self.distribution.get_command_obj("build_ext")
+-        assert isinstance(build_ext_obj, CMakeBuild)
+-        build_dir = Path(build_ext_obj.build_temp)
+-
+-        # NOTE: types-setuptools>=83 types install_platlib as `str | None`; it is populated by
+-        # super().run() above, so narrow it to str for the path arithmetic below.
+-        assert self.install_platlib is not None
+-
+-        # Install symengine
+-        # NOTE(aaron): We add symenginepy as a package down below, and the only remaining thing we
+-        # need is the compiled symengine_wrapper.so, which we move into place here.  This doesn't
+-        # include the additional Cython sources that symenginepy includes in their distributions,
+-        # but I'm honestly not sure why they include them or why you'd need them.
+-        self.copy_file(
+-            str(
+-                find_symengine_wrapper(
+-                    build_dir, build_ext_obj.get_ext_filename("symengine_wrapper")
+-                )
+-            ),
+-            Path.cwd()
+-            / self.install_platlib
+-            / "symengine"
+-            / "lib"
+-            / build_ext_obj.get_ext_filename("symengine_wrapper"),
+-        )
+-
+-        # Configure with install prefix
+-        subprocess.run(
+-            ["cmake", str(SOURCE_DIR), f"-DCMAKE_INSTALL_PREFIX={self.prefix}"],
+-            cwd=build_dir,
+-            check=True,
+-        )
+-
+-        # Install other libraries needed for cc_sym.so
+-        subprocess.run(
+-            ["cmake", "--build", ".", "--target", "install"],
+-            cwd=build_dir,
+-            check=True,
+-        )
+-
+ 
+ setup_requirements = [
+     "setuptools>=62.3.0",  # For package data globs
+@@ -371,11 +331,9 @@ if __name__ == "__main__":
+         # specifically).  We could also treat the others as namespace packages, but that makes it
+         # more annoying to exclude non-package directories.
+         packages=find_namespace_packages(where=".", include=["symforce*"])
+-        + find_packages(where=".", exclude=["symforce*"])
+-        + find_packages(where="third_party/symenginepy"),
++        + find_packages(where=".", exclude=["symforce*"]),
+         package_dir={
+             "symforce": "symforce",
+-            "symengine": "third_party/symenginepy/symengine",
+             "lcmtypes": "lcmtypes_build/lcmtypes",
+         },
+         package_data={
+@@ -400,14 +358,11 @@ if __name__ == "__main__":
+             develop=PatchDevelop,
+         ),
+         # Build C++ extension module
+-        ext_modules=[CMakeExtension("cc_sym"), CMakeExtension("lcmtypes")],
++        ext_modules=[CMakeExtension("lcmtypes")],
+         # Barebones packages needed to run symforce
+         install_requires=maybe_rewrite_local_dependencies(
+             [
+                 "ruff",
+-                # clang-format 21.1.3 and newer have this issue:
+-                # https://github.com/llvm/llvm-project/issues/170573
+-                "clang-format<21.1.3",
+                 "graphviz",
+                 "jinja2",
+                 "numpy",

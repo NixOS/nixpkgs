@@ -1,0 +1,15 @@
+diff --git a/cmake/install/Install.cmake b/cmake/install/Install.cmake
+index 1111111..2222222 100644
+--- a/cmake/install/Install.cmake
++++ b/cmake/install/Install.cmake
+@@ -64,7 +64,9 @@ qt_generate_deploy_qml_app_script(
+     ${deploy_exclude_plugins}
+ )
+
+-install(SCRIPT ${deploy_script})
++if(NOT LINUX)
++    install(SCRIPT ${deploy_script})
++endif()
+ message(STATUS "QGC: Qt deployment script: ${deploy_script}")
+
+ # Strip unused SQL-driver/TIFF plugins whose missing backing libs would abort

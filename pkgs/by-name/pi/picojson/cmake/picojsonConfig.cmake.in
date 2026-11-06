@@ -1,0 +1,4 @@
+add_library(picojson::picojson INTERFACE IMPORTED)
+set_target_properties(picojson::picojson PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "@out@/include"
+)

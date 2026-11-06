@@ -1,0 +1,14 @@
+diff --git a/src/Vehicle/MAVLinkLogManager.cc b/src/Vehicle/MAVLinkLogManager.cc
+index 5476f63..73a6633 100644
+--- a/src/Vehicle/MAVLinkLogManager.cc
++++ b/src/Vehicle/MAVLinkLogManager.cc
+@@ -193,8 +193,7 @@ QByteArray MAVLinkLogProcessor::_writeUlogMessage(QByteArray &data)
+     // Write ulog data w/o integrity checking, assuming data starts with a
+     // valid ulog message. returns the remaining data at the end.
+     while (data.length() > 2) {
+-        const uint8_t *const ptr = reinterpret_cast<const uint8_t*>(data.constData());
+-        const int message_length = ptr[0] + (ptr[1] * 256) + kUlogMessageHeader;
++        const int message_length = static_cast<uint8_t>(data.at(0)) + (static_cast<uint8_t>(data.at(1)) * 256) + kUlogMessageHeader;
+         if (message_length > data.length()) {
+             break;
+         }

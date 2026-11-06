@@ -1,0 +1,39 @@
+diff --git a/src/AutoPilotPlugins/APM/APMSensorsComponentController.cc b/src/AutoPilotPlugins/APM/APMSensorsComponentController.cc
+index ee4bf14..16211c2 100644
+--- a/src/AutoPilotPlugins/APM/APMSensorsComponentController.cc
++++ b/src/AutoPilotPlugins/APM/APMSensorsComponentController.cc
+@@ -682,7 +682,7 @@ void APMSensorsComponentController::_mavlinkMessageReceived(LinkInterface *link,
+ {
+     Q_UNUSED(link);
+ 
+-    if (message.sysid != _vehicle->id()) {
++    if (message.sysid != static_cast<uint32_t>(_vehicle->id())) {
+         return;
+     }
+ 
+diff --git a/src/Camera/QGCCameraManager.cc b/src/Camera/QGCCameraManager.cc
+index a79c500..0c4b1e8 100644
+--- a/src/Camera/QGCCameraManager.cc
++++ b/src/Camera/QGCCameraManager.cc
+@@ -162,7 +162,7 @@ void QGCCameraManager::_mavlinkMessageReceived(const mavlink_message_t &message)
+     // and camera-related messages proxied by the autopilot.
+     const bool fromAutopilot = message.compid == MAV_COMP_ID_AUTOPILOT1;
+     const bool fromCamera = (message.compid >= MAV_COMP_ID_CAMERA) && (message.compid <= MAV_COMP_ID_CAMERA6);
+-    if ((message.sysid == _vehicle->id()) && (fromAutopilot || fromCamera)) {
++    if ((message.sysid == static_cast<uint32_t>(_vehicle->id())) && (fromAutopilot || fromCamera)) {
+         switch (message.msgid) {
+         case MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS:
+             _handleCameraCaptureStatus(message);
+diff --git a/src/Vehicle/FTPManager.cc b/src/Vehicle/FTPManager.cc
+index 37a870f..f19746e 100644
+--- a/src/Vehicle/FTPManager.cc
++++ b/src/Vehicle/FTPManager.cc
+@@ -658,7 +658,7 @@ void FTPManager::_uploadComplete(const QString& errorMsg)
+ void FTPManager::_mavlinkMessageReceived(const mavlink_message_t& message)
+ {
+     if (message.msgid != MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL ||
+-            message.sysid != _vehicle->id() || message.compid != _ftpCompId) {
++            message.sysid != static_cast<uint32_t>(_vehicle->id()) || message.compid != _ftpCompId) {
+         return;
+     }
+ 

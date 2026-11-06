@@ -1,0 +1,219 @@
+diff -ruN xz-embedded-pristine/cmake/xz-embeddedConfig.cmake.in xz-embedded-src/cmake/xz-embeddedConfig.cmake.in
+--- xz-embedded-pristine/cmake/xz-embeddedConfig.cmake.in	1969-12-31 19:00:00.000000000 -0500
++++ xz-embedded-src/cmake/xz-embeddedConfig.cmake.in	2026-10-31 12:47:19.194328961 -0400
+@@ -0,0 +1,3 @@
++@PACKAGE_INIT@
++
++include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+diff -ruN xz-embedded-pristine/cmake/xz_roundtrip_test.c xz-embedded-src/cmake/xz_roundtrip_test.c
+--- xz-embedded-pristine/cmake/xz_roundtrip_test.c	1969-12-31 19:00:00.000000000 -0500
++++ xz-embedded-src/cmake/xz_roundtrip_test.c	2026-10-31 12:47:59.503344251 -0400
+@@ -0,0 +1,122 @@
++/* SPDX-License-Identifier: 0BSD */
++
++/*
++ * Round-trip correctness check for the vendored XZ Embedded decoder
++ * (xz_crc32.c, xz_crc64.c, xz_dec_lzma2.c, xz_dec_stream.c, built with
++ * XZ_DEC_ANY_CHECK and XZ_USE_CRC64 - exactly the files and compile
++ * definitions this package's CMakeLists.txt compiles, mirroring what
++ * QGroundControl itself vendors).
++ *
++ * xz-embedded implements only a decoder (see the top-level README) and
++ * ships no fixture data or automated test of its own to check it against
++ * (userspace/{buftest,bytetest,boottest}.c and
++ * linux/lib/xz/xz_dec_test.c are all manual tools that expect a .xz file
++ * or a loaded kernel module to feed data into by hand, not self-contained
++ * checks). So this embeds a single small .xz stream, generated once out
++ * of band by the reference xz-utils compressor from the plaintext below
++ * (xz --check=crc64 --lzma2=preset=6), and verifies the vendored decoder
++ * reproduces that exact plaintext - checking it against ground truth
++ * from an independent, trusted implementation rather than only against
++ * this decoder's own output.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "xz.h"
++
++static const uint8_t compressed[] = {
++  0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00, 0x00, 0x04, 0xe6, 0xd6, 0xb4, 0x46,
++  0x04, 0xc0, 0xe5, 0x02, 0xf4, 0x03, 0x21, 0x01, 0x16, 0x00, 0x00, 0x00,
++  0x00, 0x00, 0x00, 0x00, 0x92, 0xc0, 0xfe, 0x84, 0xe0, 0x01, 0xf3, 0x01,
++  0x5d, 0x5d, 0x00, 0x3c, 0x1e, 0x81, 0xa4, 0xea, 0x1e, 0xc2, 0xdc, 0x84,
++  0xf0, 0x35, 0xe5, 0x35, 0xa7, 0xac, 0x17, 0x6b, 0x6b, 0xfe, 0xb1, 0xc0,
++  0xda, 0x70, 0x4e, 0x7b, 0x30, 0x01, 0x99, 0x2a, 0x79, 0xf3, 0xdc, 0xaf,
++  0x9b, 0xe3, 0xcf, 0x86, 0x82, 0x0b, 0x67, 0x8b, 0x91, 0xb3, 0x82, 0xbd,
++  0xcd, 0x36, 0xa8, 0x20, 0xf2, 0xf9, 0xf6, 0x56, 0xe9, 0x6e, 0x35, 0x0b,
++  0xf9, 0xfc, 0x00, 0x2f, 0xec, 0xa7, 0x64, 0x2d, 0xd3, 0xdf, 0xec, 0xe2,
++  0x30, 0x99, 0x52, 0xda, 0xcd, 0x4e, 0x16, 0x45, 0x32, 0x28, 0xe1, 0xa1,
++  0x43, 0x14, 0xa0, 0xeb, 0x25, 0xfc, 0xc4, 0xa2, 0x53, 0xcb, 0x29, 0xcb,
++  0x17, 0xcb, 0xc8, 0xe4, 0xd6, 0xa5, 0x67, 0xc0, 0x84, 0xef, 0x4f, 0xaf,
++  0xba, 0xfa, 0x21, 0x18, 0x23, 0x84, 0xae, 0xc0, 0x2e, 0x4c, 0x83, 0xfe,
++  0x45, 0x9d, 0xc9, 0x29, 0x70, 0x5b, 0xf8, 0xc4, 0xc6, 0x3b, 0x52, 0x93,
++  0xc8, 0x4e, 0x2a, 0xf8, 0xb6, 0x2f, 0xfa, 0x3d, 0xa9, 0x4f, 0x56, 0xca,
++  0x6e, 0xae, 0xe0, 0x97, 0x8a, 0xfb, 0x8f, 0x91, 0x46, 0xc4, 0x4f, 0x7c,
++  0xed, 0xc8, 0x70, 0xc8, 0x8e, 0x77, 0xd6, 0xae, 0xfd, 0x02, 0x58, 0x59,
++  0x1a, 0x3f, 0xf4, 0x9d, 0x6a, 0xe8, 0xb5, 0x03, 0x9b, 0x3b, 0xeb, 0xca,
++  0x81, 0x74, 0x6b, 0x77, 0x71, 0xd8, 0x83, 0x49, 0x40, 0xc0, 0x10, 0xa7,
++  0x51, 0x9a, 0xb1, 0x16, 0xf5, 0x4e, 0xe2, 0x04, 0xf2, 0x8e, 0x7a, 0x56,
++  0xb1, 0x0f, 0x88, 0x51, 0x63, 0x6a, 0xbd, 0xa9, 0x62, 0x1f, 0xbc, 0x55,
++  0xcd, 0x02, 0x91, 0xd6, 0x03, 0xa3, 0x17, 0x86, 0x70, 0xd0, 0xa7, 0x84,
++  0xc4, 0x32, 0x7f, 0x71, 0x61, 0x9e, 0xd4, 0x95, 0x97, 0x66, 0x95, 0xd7,
++  0x5f, 0x69, 0x21, 0x1e, 0xce, 0x37, 0xe3, 0x60, 0x53, 0x37, 0xa0, 0x09,
++  0x93, 0x35, 0x72, 0x43, 0x35, 0x92, 0x57, 0xac, 0xb6, 0x29, 0x7d, 0x0f,
++  0x6d, 0x23, 0x37, 0x3d, 0x8f, 0x77, 0x14, 0x06, 0x1d, 0xe7, 0x4f, 0xc9,
++  0xa6, 0x9a, 0x43, 0x27, 0x6a, 0xa0, 0xf3, 0x21, 0x0b, 0xb1, 0xf9, 0x37,
++  0x5b, 0x94, 0xac, 0x31, 0x00, 0xa9, 0xc8, 0x40, 0xfb, 0x36, 0x79, 0x08,
++  0xbd, 0xc4, 0x2f, 0x9c, 0x53, 0xf9, 0xc3, 0x14, 0xbe, 0x78, 0xb2, 0x4a,
++  0x77, 0x6b, 0xb1, 0x62, 0xf8, 0xc9, 0x2b, 0xb0, 0x79, 0x2c, 0xdd, 0xfd,
++  0xca, 0xff, 0x57, 0x2a, 0x57, 0xe3, 0xfb, 0x35, 0x2c, 0x4d, 0x39, 0x09,
++  0x8c, 0x66, 0xfc, 0x0a, 0x34, 0x58, 0x78, 0x9b, 0x4b, 0x15, 0xfa, 0xd9,
++  0x4d, 0x4a, 0x52, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0xe0, 0x00, 0xa2,
++  0xa5, 0xbc, 0x98, 0x58, 0x00, 0x01, 0x81, 0x03, 0xf4, 0x03, 0x00, 0x00,
++  0xd9, 0x56, 0x5b, 0x5a, 0xb1, 0xc4, 0x67, 0xfb, 0x02, 0x00, 0x00, 0x00,
++  0x00, 0x04, 0x59, 0x5a
++};
++
++static const char expected[] =
++    "xz-embedded is a small, limited implementation of the .xz file format,\n"
++    "written for use in the Linux kernel but usable in other environments too.\n"
++    "This fixture exercises the vendored XZ Embedded LZMA2 decoder (the exact\n"
++    "subset of files QGroundControl vendors: xz_crc32.c, xz_crc64.c,\n"
++    "xz_dec_lzma2.c and xz_dec_stream.c) against a real .xz stream produced by\n"
++    "the reference xz command-line compressor, so the round trip is checked\n"
++    "against ground truth rather than only against this decoder's own output.\n";
++
++int main(void)
++{
++    struct xz_dec *s;
++    struct xz_buf b;
++    uint8_t out[sizeof(expected) + 64];
++    enum xz_ret ret;
++
++    xz_crc32_init();
++    xz_crc64_init();
++
++    s = xz_dec_init(XZ_SINGLE, 0);
++    if (s == NULL) {
++        fprintf(stderr, "xz_dec_init() failed\n");
++        return 1;
++    }
++
++    b.in = compressed;
++    b.in_pos = 0;
++    b.in_size = sizeof(compressed);
++    b.out = out;
++    b.out_pos = 0;
++    b.out_size = sizeof(out);
++
++    ret = xz_dec_run(s, &b);
++    xz_dec_end(s);
++
++    if (ret != XZ_STREAM_END) {
++        fprintf(stderr,
++                "xz_dec_run() returned %d, expected XZ_STREAM_END (%d)\n",
++                (int)ret, (int)XZ_STREAM_END);
++        return 1;
++    }
++
++    if (b.out_pos != sizeof(expected) - 1 ||
++        memcmp(out, expected, b.out_pos) != 0) {
++        fprintf(stderr,
++                "decoded %zu bytes but they do not match the expected "
++                "plaintext\n",
++                (size_t)b.out_pos);
++        return 1;
++    }
++
++    printf("xz-embedded: decoded %zu bytes, matches the reference xz "
++           "compressor's input exactly\n", (size_t)b.out_pos);
++    return 0;
++}
+diff -ruN xz-embedded-pristine/CMakeLists.txt xz-embedded-src/CMakeLists.txt
+--- xz-embedded-pristine/CMakeLists.txt	1969-12-31 19:00:00.000000000 -0500
++++ xz-embedded-src/CMakeLists.txt	2026-10-31 12:48:09.569457637 -0400
+@@ -0,0 +1,82 @@
++cmake_minimum_required(VERSION 3.16)
++project(xz-embedded VERSION 1.0 LANGUAGES C)
++
++set(CMAKE_C_STANDARD 99)
++set(CMAKE_C_STANDARD_REQUIRED ON)
++
++add_library(xz STATIC
++    linux/lib/xz/xz_crc32.c
++    linux/lib/xz/xz_crc64.c
++    linux/lib/xz/xz_dec_lzma2.c
++    linux/lib/xz/xz_dec_stream.c
++)
++
++target_include_directories(xz
++    PUBLIC
++        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/linux/include/linux>
++        $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
++    PRIVATE
++        linux/lib/xz
++        userspace
++)
++
++target_compile_definitions(xz
++    PRIVATE
++        XZ_DEC_ANY_CHECK
++    PUBLIC
++        XZ_USE_CRC64
++)
++
++set_target_properties(xz PROPERTIES POSITION_INDEPENDENT_CODE ON)
++
++add_library(${PROJECT_NAME}::xz ALIAS xz)
++
++# xz-embedded implements only a decoder and ships no fixture data or
++# automated test of its own (its userspace/*.c and
++# linux/lib/xz/xz_dec_test.c tools all expect a .xz file or kernel module
++# fed in by hand). Check the decoder we actually compile against a known
++# .xz stream from the reference xz-utils compressor instead.
++include(CTest)
++
++if(BUILD_TESTING)
++    add_executable(xz_roundtrip_test cmake/xz_roundtrip_test.c)
++    target_link_libraries(xz_roundtrip_test PRIVATE xz)
++    add_test(NAME xz_roundtrip COMMAND xz_roundtrip_test)
++endif()
++
++install(TARGETS xz
++    EXPORT ${PROJECT_NAME}Targets
++    ARCHIVE DESTINATION lib
++    LIBRARY DESTINATION lib
++    RUNTIME DESTINATION bin
++)
++
++install(FILES linux/include/linux/xz.h
++    DESTINATION include/${PROJECT_NAME}
++)
++
++install(EXPORT ${PROJECT_NAME}Targets
++    FILE ${PROJECT_NAME}Targets.cmake
++    NAMESPACE ${PROJECT_NAME}::
++    DESTINATION lib/cmake/${PROJECT_NAME}
++)
++
++include(CMakePackageConfigHelpers)
++
++write_basic_package_version_file(
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    VERSION ${PROJECT_VERSION}
++    COMPATIBILITY AnyNewerVersion
++)
++
++configure_package_config_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
++)
++
++install(FILES
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    DESTINATION lib/cmake/${PROJECT_NAME}
++)

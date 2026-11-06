@@ -1,0 +1,13 @@
+diff --git a/src/Vehicle/Vehicle.cc b/src/Vehicle/Vehicle.cc
+index f9ffe2e..8cbc6ed 100644
+--- a/src/Vehicle/Vehicle.cc
++++ b/src/Vehicle/Vehicle.cc
+@@ -524,7 +524,7 @@ void Vehicle::resetCounters()
+ 
+ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t message)
+ {
+-    if (message.sysid != _systemID && message.sysid != 0) {
++    if (message.sysid != static_cast<uint32_t>(_systemID) && message.sysid != 0) {
+         // We allow RADIO_STATUS messages which come from a link the vehicle is using to pass through and be handled
+         if (!(message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link))) {
+             return;

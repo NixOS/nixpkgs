@@ -1,0 +1,20 @@
+diff --git a/symforce/internal/symbolic.py b/symforce/internal/symbolic.py
+index 9e7ba1a..886da7b 100644
+--- a/symforce/internal/symbolic.py
++++ b/symforce/internal/symbolic.py
+@@ -89,7 +89,14 @@ if not T.TYPE_CHECKING and symforce.get_symbolic_api() == "symengine":
+     from symengine import LeviCivita
+     from symengine import Max
+     from symengine import Min
+-    from symengine import Mod
++
++    # Not a real symengine API: symforce's own (no longer used) vendored
++    # fork of symengine.py defined this itself (symengine_wrapper.in.pyx,
++    # "TODO(hayk): Actually put into C++") rather than it ever being part
++    # of upstream symengine.
++    def Mod(number: T.Any, divisor: T.Any) -> T.Any:
++        return number - (floor(number / divisor) * divisor)
++
+     from symengine import Mul
+     from symengine import Number
+     from symengine import Piecewise

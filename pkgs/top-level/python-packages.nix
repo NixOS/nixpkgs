@@ -16258,6 +16258,8 @@ self: super: with self; {
 
   pyroma = callPackage ../development/python-modules/pyroma { };
 
+  pyros-genmsg = callPackage ../development/python-modules/pyros-genmsg { };
+
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
@@ -19396,6 +19398,8 @@ self: super: with self; {
 
   skyfield = callPackage ../development/python-modules/skyfield { };
 
+  skymarshal = callPackage ../development/python-modules/skymarshal { };
+
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
   skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
@@ -20533,6 +20537,10 @@ self: super: with self; {
   symengine = callPackage ../development/python-modules/symengine { inherit (pkgs) symengine; };
 
   symfc = callPackage ../development/python-modules/symfc { };
+
+  symforce = callPackage ../development/python-modules/symforce { };
+
+  symforce-sym = callPackage ../development/python-modules/symforce-sym { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 

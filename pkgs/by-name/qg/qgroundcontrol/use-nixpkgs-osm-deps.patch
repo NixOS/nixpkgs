@@ -1,0 +1,66 @@
+diff --git a/src/Viewer3D/Providers/Osm/CMakeLists.txt b/src/Viewer3D/Providers/Osm/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/Viewer3D/Providers/Osm/CMakeLists.txt
++++ b/src/Viewer3D/Providers/Osm/CMakeLists.txt
+@@ -64,33 +64,13 @@
+ 
+ target_link_libraries(Osm3D PRIVATE expat)
+ 
+-# ----------------------------------------------------------------------------
+-# protozero — required by libosmium headers
+-# ----------------------------------------------------------------------------
+-
+-CPMAddPackage(
+-    NAME protozero
+-    GITHUB_REPOSITORY mapbox/protozero
+-    GIT_TAG v1.8.1
+-    DOWNLOAD_ONLY YES
+-)
+-
+-# ----------------------------------------------------------------------------
+-# libosmium — OSM data parsing (header-only, only OsmParserThread.cc consumes it)
+-# ----------------------------------------------------------------------------
+-
+-CPMAddPackage(
+-    NAME libosmium
+-    GITHUB_REPOSITORY osmcode/libosmium
+-    GIT_TAG v2.23.0
+-    DOWNLOAD_ONLY YES
+-)
+-
++# Neither has a CMake config of its own - point target_include_directories
++# directly at the real nixpkgs packages' include dirs instead of vendoring.
+ target_include_directories(Osm3D
+     SYSTEM
+     PRIVATE
+-        ${protozero_SOURCE_DIR}/include
+-        ${libosmium_SOURCE_DIR}/include
++        @PROTOZERO_INCLUDE_DIR@
++        @LIBOSMIUM_INCLUDE_DIR@
+ )
+ 
+ # ============================================================================
+@@ -111,21 +91,10 @@
+ 
+ # ----------------------------------------------------------------------------
+ # earcut.hpp — header-only polygon triangulation, only used by OsmParser.cc
+-# (which lives on the main target). EXCLUDE_FROM_ALL prevents earcut's
+-# unconditional "fixtures" object library from compiling.
++# (which lives on the main target).
+ # ----------------------------------------------------------------------------
+ 
+-CPMAddPackage(
+-    NAME earcut_hpp
+-    GITHUB_REPOSITORY mapbox/earcut.hpp
+-    GIT_TAG f36ced7e50254738c4e5af1a239f5fb7b1094007
+-    EXCLUDE_FROM_ALL YES
+-    OPTIONS
+-        "EARCUT_BUILD_TESTS OFF"
+-        "EARCUT_BUILD_BENCH OFF"
+-        "EARCUT_BUILD_VIZ OFF"
+-    SYSTEM YES
+-)
++find_package(earcut_hpp REQUIRED)
+ 
+ target_link_libraries(${CMAKE_PROJECT_NAME}
+     PRIVATE

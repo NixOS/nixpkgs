@@ -1,0 +1,135 @@
+diff --git a/src/Utilities/Parsing/CMakeLists.txt b/src/Utilities/Parsing/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/Utilities/Parsing/CMakeLists.txt
++++ b/src/Utilities/Parsing/CMakeLists.txt
+@@ -17,88 +17,12 @@
+ )
+ 
+ # ============================================================================
+-# libexif (vendored - autotools, built directly from source)
++# libexif
+ # ============================================================================
+ 
+-set(QGC_LIBEXIF_VERSION 0.6.26)
+-CPMAddPackage(
+-    NAME libexif
+-    VERSION ${QGC_LIBEXIF_VERSION}
+-    GITHUB_REPOSITORY libexif/libexif
+-    GIT_TAG v${QGC_LIBEXIF_VERSION}
+-    DOWNLOAD_ONLY YES
+-)
+-
+-qgc_require_cpm_added(libexif)
+-
+-add_library(exif STATIC
+-    ${libexif_SOURCE_DIR}/libexif/exif-byte-order.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-content.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-data.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-entry.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-format.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-gps-ifd.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-ifd.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-loader.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-log.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-mem.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-mnote-data.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-tag.c
+-    ${libexif_SOURCE_DIR}/libexif/exif-utils.c
+-    ${libexif_SOURCE_DIR}/libexif/canon/exif-mnote-data-canon.c
+-    ${libexif_SOURCE_DIR}/libexif/canon/mnote-canon-entry.c
+-    ${libexif_SOURCE_DIR}/libexif/canon/mnote-canon-tag.c
+-    ${libexif_SOURCE_DIR}/libexif/fuji/exif-mnote-data-fuji.c
+-    ${libexif_SOURCE_DIR}/libexif/fuji/mnote-fuji-entry.c
+-    ${libexif_SOURCE_DIR}/libexif/fuji/mnote-fuji-tag.c
+-    ${libexif_SOURCE_DIR}/libexif/olympus/exif-mnote-data-olympus.c
+-    ${libexif_SOURCE_DIR}/libexif/olympus/mnote-olympus-entry.c
+-    ${libexif_SOURCE_DIR}/libexif/olympus/mnote-olympus-tag.c
+-    ${libexif_SOURCE_DIR}/libexif/pentax/exif-mnote-data-pentax.c
+-    ${libexif_SOURCE_DIR}/libexif/pentax/mnote-pentax-entry.c
+-    ${libexif_SOURCE_DIR}/libexif/pentax/mnote-pentax-tag.c
+-)
+-
+-target_include_directories(exif
+-    PUBLIC
+-        ${libexif_SOURCE_DIR}
+-    PRIVATE
+-        ${libexif_SOURCE_DIR}/libexif
+-)
+-
+-set(LIBEXIF_CONFIG_H "${CMAKE_CURRENT_BINARY_DIR}/Exif/config.h")
+-file(WRITE ${LIBEXIF_CONFIG_H} "
+-#pragma once
+-#define PACKAGE \"libexif\"
+-#define PACKAGE_VERSION \"${QGC_LIBEXIF_VERSION}\"
+-#define VERSION \"${QGC_LIBEXIF_VERSION}\"
+-#define GETTEXT_PACKAGE \"libexif-12\"
+-")
+-
+-set(LIBEXIF_STDINT_DIR "${CMAKE_CURRENT_BINARY_DIR}/Exif/libexif")
+-file(MAKE_DIRECTORY ${LIBEXIF_STDINT_DIR})
+-file(WRITE "${LIBEXIF_STDINT_DIR}/_stdint.h" "
+-#pragma once
+-#include <stdint.h>
+-
+-/* ssize_t is POSIX, not available on Windows/MSVC */
+-#ifdef _MSC_VER
+-#include <BaseTsd.h>
+-typedef SSIZE_T ssize_t;
+-#else
+-#include <sys/types.h>
+-#endif
+-")
+-target_include_directories(exif PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/Exif)
+-
+-target_compile_definitions(exif PRIVATE HAVE_CONFIG_H)
+-set_target_properties(exif
+-    PROPERTIES
+-        C_STANDARD 99
+-        POSITION_INDEPENDENT_CODE ON
+-)
++pkg_check_modules(LibExif REQUIRED IMPORTED_TARGET GLOBAL libexif)
+ 
+-qgc_disable_dependency_warnings(exif)
++add_library(exif ALIAS PkgConfig::LibExif)
+ 
+ # ============================================================================
+ # ulog_cpp (PX4 ULog parsing)
+@@ -110,26 +34,23 @@
+     GIT_TAG v1.0.1
+ )
+ 
+-qgc_disable_dependency_warnings(ulog_cpp)
++qgc_disable_dependency_warnings(ulog_cpp::ulog_cpp)
+ 
+ # ============================================================================
+ # valijson (header-only JSON-Schema validator, native Qt-JSON adapter)
+ # ============================================================================
+ 
+-CPMAddPackage(
+-    NAME valijson
+-    GITHUB_REPOSITORY tristanpenman/valijson
+-    # Pinned to 1.1.0: 1.1.1 calls std::from_chars(double) unguarded, which AppleClang's
+-    # libc++ (macos-15/ios CI, pre-LLVM 20) lacks — valijson#239, fixed in 1.1.2.
+-    GIT_TAG v1.1.0
+-    EXCLUDE_FROM_ALL YES
+-    OPTIONS
+-        "valijson_BUILD_TESTS OFF"
+-        "valijson_BUILD_EXAMPLES OFF"
+-    # QtJsonAdapter isInteger()/getInteger() use 32-bit toInt(), so integral values
+-    # > INT_MAX (e.g. PX4 uint32 fileCrc) fail "type": "integer" checks or truncate.
+-    PATCHES valijson-qtjson-int64.patch
+-)
++# Upstream's own CMake install produces no valijsonConfigVersion.cmake at
++# all, so any version constraint here is unsatisfiable (find_package
++# rejects it as "version: unknown") - omit one; the QtJsonAdapter
++# int64-truncation fix QGC originally pinned >=1.1.2 for is applied
++# directly to the real nixpkgs valijson package instead (see
++# pkgs/by-name/va/valijson), independent of whichever version that is.
++find_package(valijson REQUIRED)
++
++# nixpkgs' valijson installs the bare "valijson" target (no ValiJSON::
++# namespace); alias it to match what QGCParsing links below.
++add_library(ValiJSON::valijson ALIAS valijson)
+ 
+ target_link_libraries(QGCParsing
+     PUBLIC

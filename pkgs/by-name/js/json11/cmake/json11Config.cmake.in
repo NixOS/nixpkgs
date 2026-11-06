@@ -1,0 +1,7 @@
+if(NOT TARGET json11::json11)
+    add_library(json11::json11 UNKNOWN IMPORTED)
+    set_target_properties(json11::json11 PROPERTIES
+        IMPORTED_LOCATION "@out@/lib/libjson11@libSuffix@"
+        INTERFACE_INCLUDE_DIRECTORIES "@out@/include"
+    )
+endif()

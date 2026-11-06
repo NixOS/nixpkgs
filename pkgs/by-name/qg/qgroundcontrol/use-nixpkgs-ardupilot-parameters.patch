@@ -1,0 +1,24 @@
+diff --git a/src/FirmwarePlugin/APM/CMakeLists.txt b/src/FirmwarePlugin/APM/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/FirmwarePlugin/APM/CMakeLists.txt
++++ b/src/FirmwarePlugin/APM/CMakeLists.txt
+@@ -37,14 +37,11 @@
+ )
+ 
+ #===========================================================================#
+-
+-CPMAddPackage(
+-    NAME              ArduPilotParams
+-    GITHUB_REPOSITORY ArduPilot/ParameterRepository
+-    GIT_TAG           main
+-    GIT_SHALLOW       TRUE
+-    DOWNLOAD_ONLY     TRUE
+-)
++# ArduPilot/ParameterRepository floats on `main` with no pin at all (not
++# even a CPMAddPackage GIT_TAG - QGC's own config literally says GIT_TAG
++# main); point directly at our own pinned, independently-updatable package
++# (pkgs/by-name/ar/ardupilot-parameters) instead of CPM vendoring it.
++set(ArduPilotParams_SOURCE_DIR "@ARDUPILOT_PARAMETERS_DIR@")
+ qgc_track_git_head(
+     REPO_PATH "${ArduPilotParams_SOURCE_DIR}"
+     GIT_REF   main

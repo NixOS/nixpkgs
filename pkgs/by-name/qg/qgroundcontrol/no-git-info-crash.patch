@@ -1,0 +1,24 @@
+diff --git a/cmake/modules/Git.cmake b/cmake/modules/Git.cmake
+index 1111111..2222222 100644
+--- a/cmake/modules/Git.cmake
++++ b/cmake/modules/Git.cmake
+@@ -12,8 +12,17 @@
+     set(QGC_GIT_BRANCH "unknown")
+     set(QGC_GIT_HASH "0000000")
+     set(QGC_GIT_DIRTY FALSE)
+-    set(QGC_APP_VERSION_STR "v0.0.0")
+-    set(QGC_APP_VERSION "0.0.0")
++    # Let a packager-provided cache variable (e.g. our QGC_APP_VERSION/
++    # QGC_APP_VERSION_STR cmakeFlags) win over this fallback instead of being
++    # silently shadowed by it: a plain set() here would otherwise shadow the
++    # cache value with "0.0.0" for the rest of configure, since this file is
++    # include()d into the top-level scope.
++    if(NOT DEFINED QGC_APP_VERSION_STR)
++        set(QGC_APP_VERSION_STR "v0.0.0")
++    endif()
++    if(NOT DEFINED QGC_APP_VERSION)
++        set(QGC_APP_VERSION "0.0.0")
++    endif()
+     set(QGC_APP_VERSION_MAJOR "0")
+     set(QGC_APP_VERSION_MINOR "0")
+     set(QGC_APP_VERSION_PATCH "0")

@@ -1,0 +1,30 @@
+diff --git a/symforce/internal/symbolic.py b/symforce/internal/symbolic.py
+index 0fb08ac..4b6317b 100644
+--- a/symforce/internal/symbolic.py
++++ b/symforce/internal/symbolic.py
+@@ -822,7 +822,25 @@ else:
+ # --------------------------------------------------------------------------------
+
+ if sympy.__package__ == "symengine":
+-    from symengine import DataBuffer
++    # Not a real symengine API: symforce's own (no longer used) vendored
++    # fork of symengine.py added DataBuffer/DataBufferElement as dedicated
++    # C++-backed node types itself, rather than them ever being part of
++    # upstream symengine. DataBufferElement (indexing into a buffer) isn't
++    # actually used anywhere in symforce's own codegen, so a plain
++    # Function call stands in for it; DataBuffer itself (used as a
++    # whole-buffer parameter type) only needs the name/shape a Symbol
++    # subclass already gives for free.
++    class DataBuffer(sympy.Symbol):  # type: ignore[misc, no-redef]
++        def __new__(cls, name: str, rows: T.Optional[T.Scalar] = None) -> DataBuffer:
++            return sympy.Symbol.__new__(cls, name)
++
++        def __init__(self, name: str, rows: T.Optional[T.Scalar] = None) -> None:
++            super().__init__(name)
++            self.shape = (rows, 1)
++
++        def __getitem__(self, i: T.Any) -> T.Any:
++            return Function(self.name)(i)
++
+ elif sympy.__package__ == "sympy":
+     from symforce.databuffer import DataBuffer
