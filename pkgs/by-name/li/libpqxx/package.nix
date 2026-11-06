@@ -3,11 +3,11 @@
   stdenv,
   gcc14Stdenv,
   fetchFromGitHub,
+  cmake,
   libpq,
-  python3,
   postgresql,
   postgresqlTestHook,
-  autoreconfHook,
+  testers,
 }:
 
 # Work around issue reported in https://github.com/NixOS/nixpkgs/issues/476278.
@@ -26,45 +26,51 @@
   outputs = [
     "out"
     "dev"
+    "doc"
   ];
 
-  nativeBuildInputs = [
-    # Needed because Makefile.am is patched to disable the tools/lint test.
-    autoreconfHook
-    python3
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    libpq
-  ];
+  buildInputs = [ libpq ];
 
   nativeCheckInputs = [
     postgresql
     postgresqlTestHook
   ];
 
-  postPatch = ''
-    # Disable linting step for tests, it tries to install packages with pip.
-    substituteInPlace Makefile.am \
-      --replace-fail "TESTS = tools/lint" ""
-
-    patchShebangs ./tools/splitconfig.py
-    # Needed for autoreconfHook
-    patchShebangs tools/*.py
-  '';
-
-  configureFlags = [
-    "--disable-documentation"
-    "--enable-shared"
+  cmakeFlags = [
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
-  doCheck = lib.meta.availableOn stdenv.hostPlatform postgresqlTestHook;
+  postInstall = ''
+    # cmake somehow messes up that file so make it manually
+    substitute $src/libpqxx.pc.in $out/lib/pkgconfig/libpqxx.pc \
+      --subst-var-by prefix ${placeholder "out"} \
+      --subst-var-by exec_prefix "''${prefix}" \
+      --subst-var-by libdir ${placeholder "out"}/lib \
+      --subst-var-by includedir ${placeholder "dev"}/include \
+      --subst-var-by VERSION ${finalAttrs.version}
+  '';
 
-  enableParallelBuilding = true;
+  checkPhase = ''
+    runHook preCheck
+    test/runner
+    runHook postCheck
+  '';
+
+  doCheck = lib.meta.availableOn stdenv.hostPlatform postgresqlTestHook;
 
   __structuredAttrs = true;
 
   strictDeps = true;
+
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libpqxx" ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/jtv/libpqxx/releases/tag/${finalAttrs.version}";
@@ -73,6 +79,7 @@
     homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    pkgConfigModules = [ "libpqxx" ];
     platforms = lib.platforms.unix;
   };
 })
