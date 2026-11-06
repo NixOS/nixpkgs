@@ -226,10 +226,10 @@ in
   });
   smime = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-smime";
-    version = "1.0.2";
+    version = "1.4.3";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/smime/${finalAttrs.version}";
-      hash = "sha256-BGOOkZu3EHCo4uM+g4B81B+6BoXGLlq++hfbevfpWVc=";
+      hash = "sha256-bMK9za3CmVl0FsjtioDZXhnp+rORvWbh28diQZGT56Q=";
       extension = "zip";
       stripRoot = false;
     };
