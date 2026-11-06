@@ -845,18 +845,17 @@ let
       # extract the definitions for each loc
       rawDefinitionsByName = zipAttrs (
         map (
-          c:
-          if isAttrs c.value then
-            mapAttrs (n: value: {
-              file = c.file;
-              inherit value;
-            }) c.value
+          { file, value }:
+          if isAttrs value then
+            mapAttrs (n: v: {
+              inherit file;
+              value = v;
+            }) value
           else
             throw (
               messages.non_attrs_config {
-                inherit (c) file;
-                config = c.value;
-                inherit prefix;
+                inherit file prefix;
+                config = value;
               }
             )
         ) configs
