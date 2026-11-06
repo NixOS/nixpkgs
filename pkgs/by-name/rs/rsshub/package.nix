@@ -4,7 +4,7 @@
   makeBinaryWrapper,
   nix-update-script,
   nodejs,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "2026.10.22-8467.7aaf947";
+  version = "2026.11.03-8565.53c4e54";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N7eYVu2CMFLrM862QsRU3DxczG+sFgCdAYi55uLLt4k=";
+    hash = "sha256-1TUmbdmVMEZ9C9vmd5I4GiGg1RqtjDUwODxhQT27Gc0=";
   };
 
   patches = [
@@ -29,16 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-D0m3kGgnSrL0KZ8dBNM2Ab7Kh8GqrIam1W/ImAUaMi4=";
-    pnpm = pnpm_10;
+    fetcherVersion = 5;
+    hash = "sha256-uypVk5hiymS6ZBchGo9r1XceADIqSHuBnyMIGHz7vnw=";
+    pnpm = pnpm_12;
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   buildPhase = ''
