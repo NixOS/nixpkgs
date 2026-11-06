@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pretend,
   pytestCheckHook,
   requests,
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-qO9zUjJ2ATpulFANJw7XJexIs71XXMuEB8C0acoDnxI=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ requests ];
 
