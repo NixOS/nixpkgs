@@ -1550,7 +1550,9 @@ let
   # TODO: Merge this into mergeOptionDecls
   fixupOptionType =
     loc: opt:
-    if opt.type.getSubModules or null == null then
+    # With no submodules left to substitute, there's nothing to fix up.
+    # This makes fixupOptionType idempotent.
+    if opt.type.getSubModules or null == null || opt.options or [ ] == [ ] then
       if opt ? type then opt else opt // { type = types.unspecified; }
     else
       opt
