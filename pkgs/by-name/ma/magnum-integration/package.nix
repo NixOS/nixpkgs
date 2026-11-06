@@ -77,11 +77,11 @@ stdenv.mkDerivation (_finalAttrs: {
 
   patches = lib.optional withImguiIntegration ./imgui_disable_tests.patch;
 
-  meta = with lib; {
+  meta = {
     description = "Integration libraries for the Magnum C++11 graphics engine";
     homepage = "https://github.com/mosra/magnum-integration";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arntanguy ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.arntanguy ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

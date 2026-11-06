@@ -56,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     export ALSOFT_DRIVERS=null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extras for the Magnum C++11 graphics engine";
-    homepage = "https://github.com/msora/magnum-extras";
-    license = licenses.mit;
-    platforms = platforms.all;
+    homepage = "https://github.com/mosra/magnum-extras";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix ++ lib.plateforms.windows;
   };
 })

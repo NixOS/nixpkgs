@@ -169,11 +169,11 @@ stdenv.mkDerivation (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and modular C++11 graphics middleware for games and data visualization ";
-    homepage = "https://github.com/msora/magnum";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arntanguy ];
-    platforms = platforms.all;
+    homepage = "https://github.com/mosra/magnum";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.arntanguy ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
   # export HOME=/root
   # '';
 
-  meta = with lib; {
+  meta = {
     description = "C++11 multiplatform utility library";
     homepage = "https://github.com/mosra/corrade";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arntanguy ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.arntanguy ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

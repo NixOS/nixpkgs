@@ -177,11 +177,11 @@ stdenv.mkDerivation (_finalAttrs: {
     "Faad2AudioImporter"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugins for the Magnum C++11 graphics engine";
-    homepage = "https://github.com/msora/magnum-plugins";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arntanguy ];
-    platforms = platforms.all;
+    homepage = "https://github.com/mosra/magnum-plugins";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.arntanguy ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

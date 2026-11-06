@@ -160,7 +160,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Examples for the Magnum C++11 graphics engine";
-    homepage = "https://github.com/msora/magnum-examples";
+    homepage = "https://github.com/mosra/magnum-examples";
     license = licenses.mit;
     platforms = platforms.all;
   };
