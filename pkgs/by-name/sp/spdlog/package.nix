@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ fmt ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "SPDLOG_BUILD_SHARED" (!staticBuild))
     (lib.cmakeBool "SPDLOG_BUILD_STATIC" staticBuild)
