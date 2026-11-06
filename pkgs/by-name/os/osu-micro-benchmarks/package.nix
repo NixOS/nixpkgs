@@ -11,11 +11,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osu-micro-benchmarks";
-  version = "7.5.2";
+  version = "7.5.3";
 
   src = fetchurl {
     url = "https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YY3j0LESL3OpIpF30toeXNYuQxGQWAy5FfJgWEnLu9w=";
+    hash = "sha256-q3+XBlnhTJJG8+rEOChXP1Geq/NP/5c05vgxqGLK6ms=";
   };
 
   nativeBuildInputs = [ mpi ];
