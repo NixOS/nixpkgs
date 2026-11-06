@@ -292,6 +292,7 @@ in
             };
             base_domain = mkOption {
               internal = true;
+              readOnly = true;
               default = subconfig.domain;
             };
             public_scheme = mkOption {
@@ -380,6 +381,7 @@ in
               };
               port = mkOption {
                 description = "The internal listening port of the app-proxy service";
+                type = types.port;
                 default = cfg.settings.api.port + 4;
                 defaultText = lib.literalExpression "cfg.settings.api.port + 4";
                 example = 8084;
@@ -396,6 +398,7 @@ in
                 description = ''
                   The internal listening port of the push notification service.
                 '';
+                type = types.port;
                 default = cfg.settings.api.port + 5;
                 defaultText = lib.literalExpression "cfg.settings.api.port + 5";
                 example = 8085;
