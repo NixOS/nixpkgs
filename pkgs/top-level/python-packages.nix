@@ -5927,6 +5927,8 @@ self: super: with self; {
 
   faicons = callPackage ../development/python-modules/faicons { };
 
+  fair-async-rlock = callPackage ../development/python-modules/fair-async-rlock { };
+
   fairscale = callPackage ../development/python-modules/fairscale { };
 
   fairseq = callPackage ../development/python-modules/fairseq { };
