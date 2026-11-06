@@ -203,6 +203,7 @@ in
 {
   inherit lib pkgs stdenv;
   inherit (python.passthru)
+    isFreeThreaded
     isPy311
     isPy312
     isPy313

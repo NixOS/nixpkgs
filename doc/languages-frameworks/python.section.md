@@ -27,6 +27,7 @@ Each interpreter has the following attributes:
 - `withPackages`. Simpler interface to `buildEnv`. See [](#python.withpackages-function) for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.10`.
+- `isFreeThreaded`. Whether the interpreter is a free-threaded build (`enableGIL = false`), e.g. `python314FreeThreading`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications {#building-packages-and-applications}

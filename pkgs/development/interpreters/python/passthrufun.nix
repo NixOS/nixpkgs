@@ -24,6 +24,7 @@
   pythonOnTargetForTarget,
   pythonAttr ? null,
   pythonABITags ? [ "none" ],
+  isFreeThreaded ? false,
   self, # is pythonOnHostForTarget
 }:
 let
@@ -127,6 +128,7 @@ rec {
   inherit
     executable
     implementation
+    isFreeThreaded
     libPrefix
     pythonVersion
     sitePackages
