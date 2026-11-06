@@ -441,6 +441,20 @@ stdenvNoCC.mkDerivation {
     ''
 
     ##
+    ## llvm-rc acting as windres can't find the wrapped compiler to
+    ## preprocess resource files with, so point it at the right one.
+    ##
+
+    + optionalString (isLLVM && targetPlatform.isWindows) ''
+      if [ -e $out/bin/${targetPrefix}windres ]; then
+        rm $out/bin/${targetPrefix}windres
+        wrap \
+          ${targetPrefix}windres ${./llvm-windres-wrapper.sh} \
+          "${bintools_bin}/bin/${targetPrefix}windres"
+      fi
+    ''
+
+    ##
     ## Extra custom steps
     ##
     + extraBuildCommands;

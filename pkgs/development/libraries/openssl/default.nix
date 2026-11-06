@@ -151,7 +151,7 @@ let
             else
               "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isMinGW then
-            "./Configure mingw${
+            "./Configure mingw${lib.optionalString stdenv.hostPlatform.isAarch64 "arm"}${
               lib.optionalString (stdenv.hostPlatform.parsed.cpu.bits != 32) (
                 toString stdenv.hostPlatform.parsed.cpu.bits
               )
@@ -388,6 +388,10 @@ let
         ];
         platforms = lib.platforms.all;
         identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "openssl" finalAttrs.version;
+        # Windows on ARM support was added in 3.6 and not backported to the 3.5 LTS
+        broken = (
+          lib.versionOlder version "3.6" && stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.isAarch64
+        );
       }
       // extraMeta;
     });
