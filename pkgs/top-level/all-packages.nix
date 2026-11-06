@@ -8431,6 +8431,8 @@ with pkgs;
 
   kubectl-convert = kubectl.convert;
 
+  learnharness = callPackage ../applications/misc/learnharness { };
+
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
