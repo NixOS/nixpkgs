@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdread";
-  version = "7.0.1";
+  version = "7.1.1";
 
   src = fetchurl {
     url = "https://get.videolan.org/libdvdread/${finalAttrs.version}/libdvdread-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Lj4EowXBXDljqgOuG5qDwdI5iAAD/PPd6YbTlDNV1Ac=";
+    hash = "sha256-oNR4dlSL7IBndLv42/ILsZuhOUZDgxVrMuuOWZFbkKk=";
   };
 
   nativeBuildInputs = [
