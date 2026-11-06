@@ -75,7 +75,7 @@ buildPythonPackage rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "pygobject";
-      attrPath = "python3.pkgs.pygobject3";
+      attrPath = "python3Packages.pygobject3";
       versionPolicy = "odd-unstable";
     };
   };
