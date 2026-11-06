@@ -46,6 +46,11 @@ buildPythonPackage (finalAttrs: {
     pexpect
   ];
 
+  pytestFlags = [
+    # This process (pid=XXX) is multi-threaded, use of forkpty() may lead to deadlocks in the child.
+    "-Wignore::DeprecationWarning"
+  ];
+
   meta = {
     homepage = "https://mpmath.org/";
     description = "Pure-Python library for multiprecision floating arithmetic";
