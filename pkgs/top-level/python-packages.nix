@@ -16282,8 +16282,6 @@ self: super: with self; {
     protoc = pkgs.protobuf;
   };
 
-  pysaj = callPackage ../development/python-modules/pysaj { };
-
   pysam = callPackage ../development/python-modules/pysam { };
 
   pysaml2 = callPackage ../development/python-modules/pysaml2 { inherit (pkgs) xmlsec; };

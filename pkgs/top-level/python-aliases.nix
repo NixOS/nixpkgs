@@ -630,6 +630,7 @@ mapAliases {
   pyrogram = throw "'pyrogram' has been removed as it was archived upstream"; # Added 2026-03-21
   pyrr = throw "pyrr has been removed because it is incompatible with NumPy 2.0+"; # Added 2026-02-18
   PyRSS2Gen = throw "'PyRSS2Gen' has been renamed to/replaced by 'pyrss2gen'"; # Converted to throw 2025-10-29
+  pysaj = throw "'pysaj' has been removed because it was unmaintained and Home Assistant switched to aiosaj"; # Added 2026-11-06
   pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
   pysidesix-frameless-window = throw "pysidesix-frameless-window has been removed, since it is unmaintained"; # added 2025-08-20
   pysigma-pipeline-crowdstrike = pysigma-backend-crowdstrike; # added 2026-08-17
