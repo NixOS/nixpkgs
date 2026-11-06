@@ -175,9 +175,17 @@ let
             # 3. Specifying overrides on the wrapper is unsupported.
             #
             # See nixpkgs#158620 for details.
-            overrideDerivation = f: (pluggable (opentofu.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (opentofu.overrideAttrs f)).withPlugins plugins;
-            override = x: (pluggable (opentofu.override x)).withPlugins plugins;
+
+            # It could be supported by getting the opentofu attribute through
+            # callPackage instead, but that wouldn't solve the undoing of
+            # overrideAttrs anyway.
+            # Until we have https://github.com/NixOS/nixpkgs/issues/273815, we're
+            # better off requiring override to go first and save the user
+            # potential headaches.
+            override = abort "(opentofu.withPlugins ...).override is not supported. Call .override before calling any other attributes.";
+            # Similarly, except overrideDerivation is on the way out.
+            overrideDerivation = abort "(opentofu.withPlugins ...).overrideDerivation is not supported. Use overrideAttrs instead.";
 
             /**
               The opentofu package before pinning the plugins with `withPlugins`
