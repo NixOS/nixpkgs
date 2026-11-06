@@ -1571,7 +1571,8 @@ class QemuMachine(BaseMachine):
             assert self.process
             sel = selectors.DefaultSelector()
             sel.register(sock, selectors.EVENT_READ)
-            for _ in range(60):
+            attempts = 0
+            while True:
                 readable = sel.select(1)
                 if readable:
                     conn, _ = sock.accept()
@@ -1584,9 +1585,11 @@ class QemuMachine(BaseMachine):
                     raise MachineError(
                         f"{self.name}: QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
                     )
-            raise MachineError(
-                f"{self.name}: Timed out waiting for QEMU connection on {name} socket"
-            )
+                attempts += 1
+                if attempts % 30 == 0:
+                    self.logger.warning(
+                        f"{self.name}: still waiting for QEMU connection on {name} socket (attempts={attempts})"
+                    )
 
         self.monitor = accept_or_fail(monitor_socket, "monitor")
         self.shell = accept_or_fail(shell_socket, "shell")
