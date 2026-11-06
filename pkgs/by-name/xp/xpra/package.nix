@@ -104,7 +104,7 @@ let
 in
 effectiveBuildPythonApplication (finalAttrs: {
   pname = "xpra";
-  version = "6.5.5";
+  version = "6.5.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -112,7 +112,7 @@ effectiveBuildPythonApplication (finalAttrs: {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/QtrpTcVPCUzcPPTR5YXD9jhcZ2Qg6XZ1K3RGQ2XmVo=";
+    hash = "sha256-yp38k2uKDz+3Z/sh2qDY0u9Gp3c32DsWvs9y6QOb1XE=";
   };
 
   patches = [
