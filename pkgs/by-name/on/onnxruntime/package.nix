@@ -304,6 +304,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # on a fix suggested by upstream at
     # https://github.com/microsoft/onnxruntime/pull/31346#issuecomment-5688923246
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-D_GLIBCXX_USE_OLD_GENERATE_CANONICAL")
+    # https://github.com/microsoft/onnxruntime/blob/main/docs/Privacy.md#private-builds
+    (lib.cmakeBool "onnxruntime_USE_TELEMETRY" false)
   ]
   ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
