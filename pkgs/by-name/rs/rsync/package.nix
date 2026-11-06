@@ -148,6 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
