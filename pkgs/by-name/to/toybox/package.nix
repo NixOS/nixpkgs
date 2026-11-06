@@ -5,7 +5,7 @@
   fetchpatch2,
   which,
   buildPackages,
-  libxcrypt,
+  libxcrypt-legacy,
   libiconv,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
   buildInputs = [
-    libxcrypt
+    libxcrypt-legacy
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -50,7 +50,26 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.libc.static
   ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    # the tar tests need the "sys" group to exist
+    rm tests/tar.test
+
+    # modify/skip tests that try to use setuid/setgid
+    substituteInPlace tests/chmod.test \
+      --replace-fail '[ "$(uname)" == Darwin ] && ' ""
+    substituteInPlace tests/install.test \
+      --replace-fail '2750' '750'
+  ''
+  + lib.optionalString enableStatic ''
+    # static sed builds don't handle null bytes properly
+    rm tests/sed.test
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # can't read /etc/ in the Darwin sandbox
+    sed -i -e '145,146d' tests/find.test
+  '';
 
   inherit extraConfig;
 
@@ -88,12 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ "install_flat" ];
 
-  # tests currently (as of 0.8.0) get stuck in an infinite loop...
-  # ...this is fixed in latest git, so doCheck can likely be enabled for next release
-  # see https://github.com/landley/toybox/commit/b928ec480cd73fd83511c0f5ca786d1b9f3167c3
-  #doCheck = true;
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+
+  doCheck = true;
   nativeCheckInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
+  preCheck = ''
+    export USER=$(id -un)
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
