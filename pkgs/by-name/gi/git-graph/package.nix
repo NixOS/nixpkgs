@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-graph";
-  version = "0.8.1";
+  version = "0.8.3";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "git-bahn";
     repo = "git-graph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NtgD2NxV1JREzBKCcytawuhKvgQz+vP2ginduzEr3jw=";
+    hash = "sha256-tBv47iXYQicwAuAeKshuW2qDwJrz9NBm0KVqrQc8mVg=";
   };
 
-  cargoHash = "sha256-ZQ3zJYtTCOLpFV/rQ08NtTfwUNQ0MEAOdK7j9c3uMgM=";
+  cargoHash = "sha256-+MAQ3TyfLrpbrgPIDT5KWrbwsfL49QnvIiVA0nsRMNU=";
 
   env.LIBGIT2_NO_VENDOR = 1;
 
