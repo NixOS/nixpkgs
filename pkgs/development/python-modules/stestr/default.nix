@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cliff,
   fixtures,
-  flit-core,
+  flit-core_3,
   python-subunit,
   testtools,
   tomlkit,
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
