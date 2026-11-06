@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-channel";
-  version = "0.4.1";
+  version = "0.5.2";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sivecano";
     repo = "channel";
     tag = finalAttrs.version;
-    hash = "sha256-AIP5SO7p2Z8fYeLSoIliSya2fQALV1xkkYfIRdHY6TQ=";
+    hash = "sha256-7okWgYaxybijX9/Ll0JGF12B8YiuQaUT8jNdUTa7tXM=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-RD/0GMhzh26P2Hxb/5ksLC4kvLNOG489ojbFwwscIr8=";
+    hash = "sha256-2ZvhTuV8Xakofc4mRiVsrPRXjVFykjZW8KkxZJK6wsA=";
   };
 
   postConfigure = ''
