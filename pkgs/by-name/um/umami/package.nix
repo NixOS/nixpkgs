@@ -129,8 +129,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-cd0r/fVYdRY1FfsiC0sCMRiEfm6cY8yI+Y9JJ17XmyY=";
+    fetcherVersion = 5;
+    hash = "sha256-OUdiyJmgH1jVZJjxXtPmJVP0ZT06F2r+f5u/iTi0KyQ=";
   };
 
   env.NODE_ENV = "production";
