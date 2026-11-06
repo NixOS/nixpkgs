@@ -18,6 +18,7 @@
   pnpmConfigHook,
   cacert,
   valkey,
+  bash,
   dataDir ? "/var/lib/zammad",
 }:
 
@@ -78,6 +79,7 @@ stdenvNoCC.mkDerivation {
     nodejs
     procps
     cacert
+    bash
   ];
 
   env.RAILS_ENV = "production";
@@ -110,6 +112,7 @@ stdenvNoCC.mkDerivation {
     kill $REDIS_PID
     pg_ctl stop -D postgres-work -m immediate
     rm -r redis-work postgres-work
+    bash ./script/build/cleanup.sh
 
     runHook postBuild
   '';
