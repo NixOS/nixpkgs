@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     fixDarwinDylibNames
   ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ]
