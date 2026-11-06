@@ -1,0 +1,37 @@
+Make the modules JSON cache live in the user's home directory.
+
+`lean.models` refreshes its catalogue of brokerages, data providers and plugins
+from the QuantConnect CDN once a day and stores it next to the package, which is
+read-only in the Nix store: the packaged CLI could never pick up new modules and
+every invocation would make a download attempt that was doomed to fail.
+
+Keep the refreshable copy in `~/.lean` (where the CLI already stores its config,
+credentials and cache) and fall back to the snapshot shipped with the package
+when there is no cache and no network.
+--- a/lean/models/__init__.py
++++ b/lean/models/__init__.py
+@@ -19,7 +19,11 @@
+ json_modules = {}
+ file_name = "modules-1.14.json"
+ directory = Path(__file__).parent
+-file_path = directory.parent / file_name
++# The Nix store is read-only, so the refreshable copy lives in the user's
++# ~/.lean directory alongside the CLI's other caches, and the copy shipped with
++# the package is the fallback when there is no cache and no network.
++bundled_file_path = directory.parent / file_name
++file_path = Path("~/.lean").expanduser() / file_name
+ 
+ # check if new file is available online
+ url = f"https://cdn.quantconnect.com/cli/{file_name}"
+@@ -48,7 +52,10 @@
+     error = str(e)
+     pass
+ 
+-# check if file exists
++# check if file exists, falling back to the copy bundled with the package
++if not Path(file_path).is_file():
++    file_path = bundled_file_path
++
+ if not Path(file_path).is_file():
+     error_message = f": {error}" if error is not None else ""
+     raise FileNotFoundError(
