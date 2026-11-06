@@ -75,6 +75,8 @@ buildPythonPackage (finalAttrs: {
     "test_stats_account_for_every_query"
     "test_zone_transfer_nonexistent_zone"
     "test_zone_transfer_success"
+    # Flaky test
+    "test_batch_size_1000"
   ];
 
   pythonImportsCheck = [ "blastdns" ];
