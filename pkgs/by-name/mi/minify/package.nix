@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "minify";
-  version = "2.24.23";
+  version = "2.24.25";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = "minify";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9OZB1OBZB2/alMrzlNZEYTP6LRnMleWZcqp+EOvd/x4=";
+    hash = "sha256-PA3bAgB+6sfUMV4E2ioDrDCuNveEBoebfF+U7tocwWs=";
   };
 
   vendorHash = "sha256-mUb7u4+jYQoRHoz5+IhSTxwq8l7jzkKayq8qyW9nBG8=";
