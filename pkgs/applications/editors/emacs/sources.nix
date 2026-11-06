@@ -126,6 +126,21 @@ in
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
         hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
       })
+      (fetchpatch {
+        name = "loaddefs-gen-compressed-el.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=47782e6b5bd81c837552de8291449cd53db80f6e";
+        hash = "sha256-U5pDIMoowrw0uO3w+HF0dQe0JV/H3hnRHd8+61swz30=";
+      })
+      (fetchpatch {
+        name = "loaddefs-gen-full-path.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=085e2d33a3a32649db6befded4ef658dc202fa1f";
+        hash = "sha256-UaGUCHqyQW8Kmq5UkxohL6lY4P/H7fxrG23jn9VX3dU=";
+      })
+      (fetchpatch {
+        name = "loaddefs-gen-full-path-regression.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=008a667120408ac53c9690c0c4cb12dd94ff1138";
+        hash = "sha256-WV2GDOfd18/UXrfjr3eNWzXIHe66WUBvqgr8qOe59P8=";
+      })
     ];
   });
 
