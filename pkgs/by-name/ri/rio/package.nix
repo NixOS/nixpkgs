@@ -65,13 +65,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
     ncurses
     scdoc
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
-    pkg-config
     autoPatchelfHook
     shaderc
   ];
