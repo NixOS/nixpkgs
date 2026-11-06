@@ -184,9 +184,17 @@ let
             # 3. Specifying overrides on the wrapper is unsupported.
             #
             # See nixpkgs#158620 for details.
-            overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
-            override = x: (pluggable (terraform.override x)).withPlugins plugins;
+
+            # It could be supported by getting the terraform attribute through
+            # callPackage instead, but that wouldn't solve the undoing of
+            # overrideAttrs anyway.
+            # Until we have https://github.com/NixOS/nixpkgs/issues/273815, we're
+            # better off requiring override to go first and save the user
+            # potential headaches.
+            override = abort "(terraform.withPlugins ...).override is not supported. Call .override before calling any other attributes.";
+            # Similarly, except overrideDerivation is on the way out.
+            overrideDerivation = abort "(terraform.withPlugins ...).overrideDerivation is not supported. Use overrideAttrs instead.";
 
             /**
               The terraform package before pinning the plugins with `withPlugins`
