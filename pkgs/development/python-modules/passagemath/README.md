@@ -20,9 +20,9 @@ If the user call a function requiring a missing native feature, it will result i
 
 Sometimes, giving native librairies during compilation time is not enough for a passagemath package to find its required executable/library.
 To address this, Sage modules uses the `sage.env.var(MY_DEPENDENCY)` (provided by `passagemath-environment`) function to fetch variables in this order of fallback :
-    1. Search inside the user's environment variables if `MY_DEPENDENCY` exists;
-    2. Search inside the `sage.config`, if `sage.config.MY_DEPENDENCY` exists;
-    3. Just return the fallback given by the calling Sage module, which is most likely a mix of searching through environment variables and common linux paths.
+1. Search inside the user's environment variables if `MY_DEPENDENCY` exists;
+2. Search inside the `sage.config`, if `sage.config.MY_DEPENDENCY` exists;
+3. Just return the fallback given by the calling Sage module, which is most likely a mix of searching through environment variables and common linux paths.
 
 Fallback n°2 is great to keep the user environment clean and not have to modify his `mkShell` with environment variables.
 It's the package manager's defined fallback.
