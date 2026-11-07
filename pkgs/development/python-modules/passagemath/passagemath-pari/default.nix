@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   callPackage,
   conway-polynomials,
@@ -72,5 +73,18 @@ buildPythonPackage rec {
     pname = "passagemath_pari";
     inherit version;
     hash = "sha256-kXS5ClhkZW4qJADSRMmDteBhbPMKon8Tu1rZkyr6+uM=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Number Theory with PARI/GP";
+    longDescription = ''
+      `passagemath-pari` provides Sage library modules that depend on
+      PARI/GP, the computer algebra system for fast computations in number
+      theory, including factorizations, algebraic number theory, elliptic
+      curves, modular forms, and L-functions.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

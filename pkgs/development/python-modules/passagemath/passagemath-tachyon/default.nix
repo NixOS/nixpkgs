@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   fetchPypi,
@@ -36,5 +37,16 @@ buildPythonPackage rec {
     pname = "passagemath_tachyon";
     inherit version;
     hash = "sha256-fVZr748zUWB1UPSuiO7Dn70EJl7mXQpmdwsYyO6ypvA=";
+  };
+
+  meta = {
+    description = "passagemath: Interface to the ray tracing system tachyon";
+    longDescription = ''
+      `passagemath-tachyon` provides an interface to the Tachyon ray
+      tracing system.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

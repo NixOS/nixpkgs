@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   cysignals,
   cython,
@@ -46,5 +47,17 @@ in
     src = fetchPypi {
       pname = snake_pname;
       inherit version hash;
+    };
+
+    meta = {
+      description = "passagemath: Sage objects, elements, parents, categories, coercion, metaclasses";
+      longDescription = ''
+        `passagemath-objects` provides a fundamental subset of the Sage
+        library, including Sage objects, the element/parent framework,
+        categories, the coercion system, and the related metaclasses.
+      '';
+      homepage = "https://passagemath.org";
+      sourceProvenance = [ lib.sourceTypes.fromSource ];
+      license = lib.licenses.gpl2Plus;
     };
   }

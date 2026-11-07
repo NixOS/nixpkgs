@@ -38,4 +38,15 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "primecountpy" ];
+
+  meta = {
+    description = "Cython interface for the primecount library";
+    longDescription = ''
+      `passagemath-primesieve-primecount` provides a Cython interface to the
+      C++ primecount library. It is a compatible fork of primecountpy.
+    '';
+    homepage = "https://github.com/passagemath/passagemath-primesieve-primecount";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+  };
 }

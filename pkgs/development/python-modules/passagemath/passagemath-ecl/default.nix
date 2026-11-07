@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: Embeddable Common Lisp";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

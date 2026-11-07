@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   fetchPypi,
@@ -27,5 +28,16 @@ buildPythonPackage rec {
     pname = "passagemath_pari_seadata_small";
     inherit version;
     hash = "sha256-b27PNbvH5xMUDWGfVcq9eWoVGzCW0s25GGtkFlOLLC4=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Number Theory with PARI/GP: seadata_small";
+    longDescription = ''
+      `passagemath-pari-seadata-small` provides the seadata_small files
+      for use with `passagemath-pari`.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

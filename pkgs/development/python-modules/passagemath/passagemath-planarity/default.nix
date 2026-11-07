@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   fetchPypi,
@@ -33,5 +34,16 @@ buildPythonPackage rec {
     pname = "passagemath_planarity";
     inherit version;
     hash = "sha256-ijDK98QNLF5GYoE10NjX/URhxcG/98ShjrIt3W+KtII=";
+  };
+
+  meta = {
+    description = "passagemath: Graph planarity with the edge addition planarity suite";
+    longDescription = ''
+      `passagemath-planarity` provides a Cython interface to John Boyer's
+      Edge Addition Planarity Suite for use with `passagemath-graphs`.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

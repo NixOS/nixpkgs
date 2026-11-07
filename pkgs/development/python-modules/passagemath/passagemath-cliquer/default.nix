@@ -43,7 +43,7 @@ buildPythonPackage rec {
       `passagemath-cliquer`` provides an interface to [cliquer](https://users.aalto.fi/~pat/cliquer.html), an exact branch-and-bound algorithm for finding cliques in an arbitrary weighted graph by Patric Östergård.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

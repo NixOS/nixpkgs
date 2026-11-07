@@ -63,7 +63,7 @@ buildPythonPackage rec {
       `passagemath-flint` provides Cython interfaces to the `MPFI` and `FLINT` libraries.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

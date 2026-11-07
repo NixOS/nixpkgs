@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   passagemath-runtime-fflas-ffpack,
   passagemath-runtime-gap,
@@ -29,5 +30,15 @@ buildPythonPackage {
     passagemath-runtime-singular
   ];
 
-  meta.description = "Runtime configuration packages for PassageMath";
+  meta = {
+    description = "Runtime configuration packages for PassageMath";
+    longDescription = ''
+      Collects the Nix runtime configuration packages for PassageMath, providing
+      the paths to FFLAS-FFPACK, GAP, Givaro, LinBox, and Singular through
+      `sage.config`.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.mit;
+  };
 }

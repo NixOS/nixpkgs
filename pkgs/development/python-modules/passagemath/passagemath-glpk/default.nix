@@ -61,7 +61,7 @@ buildPythonPackage rec {
       `passagemath-glpk` provides a backend for linear and mixed integer linear optimization backend using GLPK.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

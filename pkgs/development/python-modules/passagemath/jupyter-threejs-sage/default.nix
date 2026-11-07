@@ -30,7 +30,7 @@ standard Three.js with a number of scripts from `examples/jsm/`.
       The file is made available both as package data of a Python package `jupyter_threejs_sage` (for local access by SageMath) and as a Jupyter notebook extension (to be installed in the Jupyter notebook's Python environment).
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/jupyter-threejs-sage";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mit;
   };
 }

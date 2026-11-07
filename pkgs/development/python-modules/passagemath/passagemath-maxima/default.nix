@@ -1,4 +1,5 @@
 {
+  lib,
   fetchPypi,
   buildPythonPackage,
   cysignals,
@@ -39,5 +40,16 @@ buildPythonPackage rec {
     pname = "passagemath_maxima";
     inherit version;
     hash = "sha256-q7ITA6g3cc4Xo+l68cGIKMN3Xqkcr5gHOFCKGIJSUzg=";
+  };
+
+  meta = {
+    description = "passagemath: Symbolic calculus with maxima";
+    longDescription = ''
+      `passagemath-maxima` provides interfaces to the Maxima computer
+      algebra system for symbolic calculus.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

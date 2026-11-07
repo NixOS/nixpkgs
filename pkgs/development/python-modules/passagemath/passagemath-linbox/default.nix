@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   callPackage,
   fetchPypi,
@@ -71,5 +72,16 @@ buildPythonPackage rec {
     pname = "passagemath_linbox";
     inherit version;
     hash = "sha256-Ri1r+dkUePtbLwWHqT5qLRA1MqIujAwS+ISNErU2dMo=";
+  };
+
+  meta = {
+    description = "passagemath: Linear Algebra with Givaro, fflas-ffpack, LinBox";
+    longDescription = ''
+      `passagemath-linbox` provides Sage library modules for linear algebra
+      that depend on the LinBox suite, including Givaro and fflas-ffpack.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

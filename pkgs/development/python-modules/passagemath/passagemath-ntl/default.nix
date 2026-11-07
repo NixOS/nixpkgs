@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   callPackage,
@@ -46,5 +47,17 @@ buildPythonPackage rec {
     pname = "passagemath_ntl";
     inherit version;
     hash = "sha256-d3OOsfFEsuoQbkPNuZnzotYabZX7xnuZ1Bf/LOAnEJQ=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Number Theory with NTL";
+    longDescription = ''
+      `passagemath-ntl` provides Sage library modules that depend on NTL,
+      including finite fields of characteristic 2, p-adic extension elements,
+      and computations of Bernoulli numbers modulo primes.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

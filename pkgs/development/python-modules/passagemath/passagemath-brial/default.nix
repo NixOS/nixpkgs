@@ -50,7 +50,7 @@ buildPythonPackage rec {
      `passagemath-brial` provides a Boolean Ring Algebra implementation using binary decision diagrams, implemented by the BRiAl library, the successor to PolyBoRi.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -34,4 +35,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sage_setup"
   ];
+
+  meta = {
+    description = "passagemath: Build system of the Sage library";
+    longDescription = ''
+      `passagemath-setup` provides the build system of the Sage library,
+      based on setuptools.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+  };
 }

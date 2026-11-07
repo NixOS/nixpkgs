@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: Groups and Invariant Theory";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

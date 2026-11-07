@@ -69,11 +69,14 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "";
+    description = "passagemath: Computational Group Theory with GAP";
     longDescription = ''
+      `passagemath-gap` provides Cython and Pexpect interfaces to the GAP
+      system, together with Sage library modules for computational group theory
+      that depend on GAP.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

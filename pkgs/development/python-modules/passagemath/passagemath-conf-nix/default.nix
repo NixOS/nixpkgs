@@ -20,7 +20,7 @@ buildPythonPackage {
   meta = {
     description = "Nix specific's `passagemath-conf` implementation";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.mit;
   };
 }

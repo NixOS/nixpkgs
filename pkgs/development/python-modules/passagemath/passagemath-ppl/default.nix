@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -34,5 +35,17 @@ buildPythonPackage rec {
     pname = "passagemath_ppl";
     inherit version;
     hash = "sha256-YuJKEt7o+PzugLuCMcllLhfT8tcQwKKBXSaosHEWLqM=";
+  };
+
+  meta = {
+    description = "Python wrapper for the Parma Polyhedra Library (pplpy fork)";
+    longDescription = ''
+      `passagemath-ppl` provides a Python wrapper for the C++ Parma Polyhedra
+      Library (PPL). It is a compatible fork of pplpy, with support for polyhedra,
+      linear constraints, generators, and mixed integer programming problems.
+    '';
+    homepage = "https://github.com/passagemath/passagemath-ppl";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl3Plus;
   };
 }

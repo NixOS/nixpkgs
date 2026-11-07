@@ -61,4 +61,18 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-Vwb7Pc7qF5ikZ3L5BiEmlX2JS3cPzjQmaYCohasCoQs=";
   };
+
+  meta = {
+    description = "passagemath: Computer algebra, algebraic geometry, singularity theory with Singular";
+    longDescription = ''
+      `passagemath-singular` provides Cython and Pexpect interfaces to
+      Singular, the computer algebra system for polynomial computations with
+      an emphasis on commutative and non-commutative algebra, algebraic
+      geometry, and singularity theory. It also provides Sage library modules
+      that depend on Singular.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+  };
 }

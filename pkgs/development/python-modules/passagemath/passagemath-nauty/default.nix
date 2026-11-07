@@ -47,7 +47,7 @@ buildPythonPackage rec {
       `passagemath-nauty` provides an interface to nauty and traces, the programs for computing automorphism groups of graphs and digraphs by Brendan McKay and Adolfo Piperno.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

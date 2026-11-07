@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   callPackage,
@@ -55,5 +56,17 @@ buildPythonPackage rec {
     pname = "passagemath_plot";
     inherit version;
     hash = "sha256-MM2Xu2cLB7RMsdFeqyMac5oQ/S3cjXPbW51Y/v33QvY=";
+  };
+
+  meta = {
+    description = "passagemath: Plotting and graphics with Matplotlib, Three.JS, etc.";
+    longDescription = ''
+      `passagemath-plot` provides the `sage.plot` and `sage.plot.plot3d`
+      namespace packages for two-dimensional and three-dimensional graphics,
+      with plotting backends including Matplotlib and Three.js.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

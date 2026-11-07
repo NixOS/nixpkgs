@@ -54,7 +54,7 @@ buildPythonPackage rec {
       `passagemath-categories` provides a small subset of the modules of the Sage library ("sagelib", `passagemath-standard`) building on top of `passagemath-objects` (providing Sage objects, the element/parent framework, categories, the coercion system and the related metaclasses), making various additional categories available without introducing dependencies on additional mathematical libraries.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

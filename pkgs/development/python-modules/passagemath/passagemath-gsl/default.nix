@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: Numerics with the GNU Scientific Library";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

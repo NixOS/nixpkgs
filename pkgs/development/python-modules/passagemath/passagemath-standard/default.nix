@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -27,5 +28,16 @@ buildPythonPackage rec {
     pname = "passagemath_standard";
     inherit version;
     hash = "sha256-a3/gOoiXvp9a0hW4uOD8noq99n6WUn/LbbBI8AjlFA4=";
+  };
+
+  meta = {
+    description = "passagemath: Standard Python Library";
+    longDescription = ''
+      `passagemath-standard` is a metapackage that provides all standard
+      components of the Sage library.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

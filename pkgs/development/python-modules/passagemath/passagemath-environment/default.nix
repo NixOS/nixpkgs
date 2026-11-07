@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: System and software environment";
     homepage = "https://passagemath.org/";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

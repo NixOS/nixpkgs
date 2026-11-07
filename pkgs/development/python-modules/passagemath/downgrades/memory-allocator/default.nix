@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -20,5 +21,12 @@ buildPythonPackage rec {
     repo = "memory_allocator";
     tag = "v${version}";
     hash = "sha256-lwZgMTIkgRorSHZhm5J0s4UmReAw6ENt354fWivs2hA=";
+  };
+
+  meta = {
+    description = "Extension class to allocate memory easily with Cython";
+    homepage = "https://github.com/sagemath/memory_allocator/";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.lgpl3Plus;
   };
 }

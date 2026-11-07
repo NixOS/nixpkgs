@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -38,4 +39,16 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "sage.repl.preparse" ];
+
+  meta = {
+    description = "passagemath: IPython kernel, Sage preparser, doctester";
+    longDescription = ''
+      `passagemath-repl` provides a fundamental subset of the Sage library
+      for interactive use and testing, including the IPython kernel, Sage
+      preparser, and doctesting framework.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
+  };
 }

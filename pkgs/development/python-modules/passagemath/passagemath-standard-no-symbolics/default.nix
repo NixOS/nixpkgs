@@ -1,4 +1,5 @@
 {
+  lib,
   fetchPypi,
   buildPythonPackage,
   callPackage,
@@ -146,5 +147,18 @@ buildPythonPackage rec {
     pname = "passagemath_standard_no_symbolics";
     inherit version;
     hash = "sha256-T4GoMepkAF4kqJQWH6uf0ylWAe06QqUyKtAXha4Qb1Y=";
+  };
+
+  meta = {
+    description = "passagemath: Sage library without the symbolics subsystem";
+    longDescription = ''
+      `passagemath-standard-no-symbolics` provides the Sage library
+      without the symbolics subsystem. It is used by the modularization
+      project to test that large parts of the Sage library are independent
+      of that subsystem.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

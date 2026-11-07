@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   buildPythonPackage,
   callPackage,
@@ -57,5 +58,17 @@ buildPythonPackage rec {
     pname = "passagemath_schemes";
     inherit version;
     hash = "sha256-DVYop+iFnY5RGAMutjgUZ1p1GJrt1UvwzQXidL6gdnk=";
+  };
+
+  meta = {
+    description = "passagemath: Schemes, varieties, elliptic curves, algebraic Riemann surfaces, modular forms, arithmetic dynamics";
+    longDescription = ''
+      `passagemath-schemes` provides Sage library modules for schemes,
+      algebraic curves, elliptic and hyperelliptic curves, modular forms,
+      modular symbols, modular abelian varieties, and arithmetic dynamics.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

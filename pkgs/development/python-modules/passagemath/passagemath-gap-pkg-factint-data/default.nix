@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: Computational Group Theory with GAP: factint data";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

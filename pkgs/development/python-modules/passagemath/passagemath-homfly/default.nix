@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "passagemath: Homfly polynomials of knots/links with libhomfly";
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   callPackage,
   pkg-config,
@@ -62,5 +63,18 @@ buildPythonPackage rec {
     pname = "passagemath_modules";
     inherit version;
     hash = "sha256-EIsWJ3Ej1ubsYmjtAzIMrW3XPtyrJgfI2Day0X1dmQg=";
+  };
+
+  meta = {
+    description = "passagemath: Vectors, matrices, tensors, vector spaces, affine spaces, modules and algebras, additive groups, quadratic forms, root systems, homology, coding theory, matroids";
+    longDescription = ''
+      `passagemath-modules` provides a subset of the Sage library for
+      vectors, matrices, tensors, modules, algebras, and related structures.
+      It includes arbitrary precision real and complex arithmetic, quadratic
+      forms, root systems, homology, coding theory, and matroids.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }

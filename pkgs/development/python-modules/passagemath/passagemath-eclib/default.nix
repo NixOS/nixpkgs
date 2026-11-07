@@ -68,7 +68,7 @@ buildPythonPackage rec {
       `passagemath-eclib` provides the Cython interface to John Cremona's programs for enumerating and computing with elliptic curves defined over the rational numbers.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

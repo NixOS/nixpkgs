@@ -51,11 +51,13 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "";
+    description = "passagemath: Elliptic curve method for integer factorization using GMP-ECM";
     longDescription = ''
+      `passagemath-libecm` provides Python and Cython interfaces to GMP-ECM,
+      an implementation of the Elliptic Curve Method for integer factorization.
     '';
     homepage = "https://passagemath.org";
-    sourceProvenance = "https://github.com/passagemath/passagemath";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.gpl2Plus;
   };
 }

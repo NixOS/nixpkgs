@@ -1,4 +1,5 @@
 {
+  lib,
   fetchPypi,
   buildPythonPackage,
   libz,
@@ -57,5 +58,17 @@ buildPythonPackage rec {
     pname = "passagemath_symbolics";
     inherit version;
     hash = "sha256-pXlNwYClyz5M6IPpKFUPaaMIU3eSWRmb//LmDoCRNdY=";
+  };
+
+  meta = {
+    description = "passagemath: Symbolic calculus";
+    longDescription = ''
+      `passagemath-symbolics` provides Sage library modules for symbolic
+      calculus using Pynac, arithmetic and special functions, asymptotic
+      expansions, manifolds, and hyperbolic geometry.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.gpl2Plus;
   };
 }
