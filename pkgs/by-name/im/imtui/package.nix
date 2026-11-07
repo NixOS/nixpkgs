@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional withCurl curl
     ++ lib.optional withNcurses ncurses;
 
+  patches = [
+    # update for keyboard interaction in imgui >=1.91.5
+    # ref. https://github.com/ggerganov/imtui/pull/62
+    ./62_update-for-compatibility-with-modern-imgui.patch
+  ];
+
   postPatch = ''
     cp -r ${imgui.src}/* third-party/imgui/imgui
     chmod -R u+w third-party/imgui
