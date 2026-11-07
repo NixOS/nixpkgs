@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -7,6 +8,7 @@
   protobuf,
   cmake,
   cacert,
+  python3,
   geos,
   nodejs,
   pnpm_11,
@@ -19,21 +21,38 @@
 let
   pnpm = pnpm_11;
 in
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.32.2";
+  version = "0.35.7";
 
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b+HtxTg9UN5uvix9FkzRnRr7eP6dLVGz0v8UPqeTqaM=";
+    hash = "sha256-LMTL1pdfJIZ8yVeI4B2xQEK+id5jYT9NkvLYv1K2MaM=";
     fetchSubmodules = true;
+    fetchTags = true; # required for `git describe`. implies `leaveDotGit`
+    postFetch = ''
+      pushd $out
+      git describe --tags --match=v* --long > describe.txt
+      rm -rf .git
+      popd
+    '';
   };
 
-  cargoHash = "sha256-RUbP49jXJj8UC2Sww0UlH8uyEpkshi2gewNqZ7XYeG4=";
+  postPatch = ''
+    # `trail --version` prints the git tag, but we remove `.git` from fetchFromGitHub
+    substituteInPlace crates/build/src/version.rs \
+      --replace-fail \
+        'get_output("git", &["describe", "--tags", "--match=v*", "--long"])' \
+        "Some(\"$(cat describe.txt)\".to_string())"
+  '';
+
+  cargoHash = "sha256-TbLbs/OLqy5lR0BowyKhRWoWIXCIXUw4nUf6oPF4OQc=";
 
   patches = [ ./skip-pnpm-install.patch ];
 
@@ -53,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-ue2hqveVMWEIB9GUD3NCohPO2VW2G+17L/OqLhz6UeE=";
+    hash = "sha256-BYuL30m62vPoNdnJrsZxJK4G7+FlR/gsPSsxf9ZVsK8=";
   };
 
   # wasmtime's cargo-auditable build is broken:
@@ -72,13 +91,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ geos ];
 
-  postPatch = ''
-    # `trail --version` prints the git tag. fetchFromGitHub has no .git.
-    substituteInPlace crates/build/src/version.rs \
-      --replace-fail 'get_output("git", &["describe", "--tags", "--match=v*", "--long"])' \
-      'Some("v${finalAttrs.version}".to_string())'
-  '';
-
   cargoBuildFlags = [
     "--bin"
     "trail"
@@ -89,11 +101,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # reqwest/rustls refuses to build a client without a CA bundle,
   # even for the local HTTP OAuth mock.
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    python3
+  ];
 
   # Full client e2e needs a seeded depot, WASM guests, and email.
   # The NixOS test covers login + record CRUD against the packaged server.
-  checkFlags = [ "--skip=client_integration_test" ];
+  checkFlags = [
+    "--skip=login_anonymous_test" # fails with HttpStatus(500, None)
+    "--skip=register_test" # fails with HttpStatus(424, None)
+    "--skip=postgres" # requires Docker/testcontainers
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=test_https_serving" # only runs on Linux
+    "--skip=subscription_performance_test" # fails with no buffer space available
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -107,7 +130,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [ (lib.modules.importApply ./service.nix { }) ];
       trailbase.package = lib.mkDefault finalAttrs.finalPackage;
     };
-    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   meta = {
