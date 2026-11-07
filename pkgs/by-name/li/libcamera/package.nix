@@ -36,14 +36,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "camera";
     repo = "libcamera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
+    hash = "sha256-HPQZEzxH1QqmNpMVvKeYl2o7rxfNNP+npCyzYHYyFP8=";
   };
 
   outputs = [
