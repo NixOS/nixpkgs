@@ -4,7 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
 
+  aws-lc,
   openssl,
+  zstd,
   pkg-config,
   installShellFiles,
   buildPackages,
@@ -28,7 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # test requires network access
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ];
 
   nativeBuildInputs = [
