@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     # System paths
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "system_ca_path" "/etc/ssl/certs/ca-certificates.crt")
     (lib.mesonOption "systemdsystemunitdir" (
       if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
     ))
