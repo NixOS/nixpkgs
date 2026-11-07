@@ -1,0 +1,23 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 806e4b4a..a049e9cb 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -58,7 +58,6 @@ homepage = "https://github.com/chapmanjacobd/library#readme"
+ repository = "https://github.com/chapmanjacobd/library/"
+ 
+ [project.scripts]
+-lb = "xklb.__main__:library"
+ library = "xklb.__main__:library"
+ 
+ [tool.pdm]
+@@ -77,8 +76,8 @@ exclude = [
+   "example_dbs/",
+ ]
+ 
+-[tool.hatch.build.force-include]
+-"xklb/assets/" = "xklb/assets/"
++[tool.hatch.build.targets.wheel]
++packages = ["xklb/"]
+ 
+ [tool.black]
+ line-length = 120
