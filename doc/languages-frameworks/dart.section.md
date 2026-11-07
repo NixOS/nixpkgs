@@ -100,6 +100,9 @@ mkdir -p .dart_tool && cp --no-preserve=all "$packageConfig" .dart_tool/package_
 
 The function `buildFlutterApplication` builds Flutter applications.
 
+`targetFlutterPlatform` defaults to `"linux"` on Linux and `"macos"` on Darwin.
+It can also be set to `"web"` on either platform.
+
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
 `flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter335` and `flutter338`, instead of using `flutter` directly.
@@ -129,6 +132,62 @@ flutter335.buildFlutterApplication (finalAttrs: {
   gitHashes.fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
 })
 ```
+
+### macOS applications {#ssec-dart-flutter-macos}
+
+Build a macOS application from a source directory containing `pubspec.lock.json`:
+
+```nix
+{ flutter347, lib }:
+
+flutter347.buildFlutterApplication {
+  pname = "example";
+  version = "1.0.0";
+  src = ./.;
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+}
+```
+
+On Darwin, the builder selects `targetFlutterPlatform = "macos"`.
+The builder installs the application in `$out/Applications` and creates `$out/bin/example`.
+
+macOS builds require the full Apple Xcode toolchain.
+The builder uses `darwin.xcode_27` by default.
+Download Xcode from Apple and import it into the Nix store using the instructions printed by the Xcode package.
+Xcode is unfree; enable unfree packages in your Nixpkgs configuration.
+Override the builder's `xcode` argument to select another Xcode version.
+Nixpkgs' `xcbuild` does not implement the commands Flutter uses, including Swift package resolution.
+
+For sandboxed builds, set `sandbox = relaxed` in the Nix configuration.
+Xcode needs access to the LaunchServices file-type database (`com.apple.lsd.mapdb`).
+The builder adds a sandbox rule for that lookup.
+Nix rejects custom sandbox rules with `sandbox = true`.
+The builder does not set `__noChroot`.
+
+The builder signs applications ad hoc and overrides upstream team and provisioning-profile settings.
+Applications that require provisioned Apple capabilities, such as iCloud, need a separate signing setup.
+Hardened applications retain hardened runtime and receive the `com.apple.security.cs.disable-library-validation` entitlement so their ad hoc signed frameworks load without an Apple Team ID.
+The builder applies the same entitlement to hardened helper applications and app extensions.
+
+Supply pub dependencies through `pubspecLock`.
+Flutter selects CocoaPods, Swift Package Manager, or both from the SDK and project settings.
+The builder preserves existing Podfiles, local pod declarations, and install hooks.
+Shared Dart package source builders connect supported plugins to Nixpkgs libraries, including MDK, mpv, and SQLite.
+Supply additional native dependencies through Nix to keep builds offline.
+
+Use `swiftPackages` to map repository URLs in the application's Xcode project to Nix-fetched source directories.
+The builder replaces those remote references with local references and preserves the selected products.
+Provide dependencies of those Swift packages locally too.
+
+Native `preBuild` hooks use the Nix compiler and SDK.
+The builder selects the full Xcode toolchain when the Flutter build starts.
+Builds target the Nix host architecture.
+The builder raises deployment targets to the minimum required by Xcode or Nix stdenv and preserves higher project targets and application sandbox entitlements.
+
+Use `flutterMode` to select the build mode, as on Linux.
+The default mode is `release`.
+The builder writes Dart debug information to the `debug` output.
+Set project-specific flavors, such as `production`, through `flutterBuildFlags`.
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 

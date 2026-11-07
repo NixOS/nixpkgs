@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   callPackage,
   runCommand,
   makeWrapper,
+  writeText,
   wrapGAppsHook3,
   buildDartApplication,
   cacert,
@@ -10,16 +12,52 @@
   flutter,
   pkg-config,
   buildPackages,
+  cocoapods,
+  gitMinimal,
+  darwin,
+  rsync,
+  writeShellScriptBin,
+  xcode ? darwin.xcode_27,
 }:
 
-# absolutely no mac support for now
+let
+  defaultTargetFlutterPlatform = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
+  projectRuby = cocoapods.wrappedRuby;
+  writableRsync = writeShellScriptBin "rsync" ''
+    # Embedding vendored frameworks must not preserve read-only store permissions.
+    exec ${lib.getExe rsync} --chmod=u+w "$@"
+  '';
+  podTools = writeShellScriptBin "pod" ''
+    # Flutter chooses CocoaPods only when the project or its plugins need it.
+    # Prepare its generated Podfile immediately before installation.
+    for arg in "$@"; do
+      if [ "$arg" = install ]; then
+        ${projectRuby}/bin/ruby ${./setup-macos.rb} \
+          ${lib.escapeShellArg stdenv.hostPlatform.darwinMinVersion} --podfile
+        break
+      fi
+    done
+    exec ${cocoapods}/bin/pod "$@"
+  '';
+  xcodeTools = writeShellScriptBin "xcrun" ''
+    if [ "$1" = xcodebuild ]; then
+      shift
+      # SwiftPM's sandbox cannot be nested inside the Nix sandbox.
+      exec "${xcode}/Contents/Developer/usr/bin/xcodebuild" \
+        -IDEPackageSupportDisableManifestSandbox=1 \
+        -IDEPackageSupportDisablePluginExecutionSandbox=1 "$@"
+    fi
+    exec /usr/bin/xcrun "$@"
+  '';
+in
 
 lib.extendMkDerivation {
+  excludeDrvArgNames = [ "swiftPackages" ];
   constructDrv =
     argsFn:
     let
       evalArgs = lib.fix argsFn;
-      targetFlutterPlatform = evalArgs.targetFlutterPlatform or "linux";
+      targetFlutterPlatform = evalArgs.targetFlutterPlatform or defaultTargetFlutterPlatform;
 
       minimalFlutter = flutter.override {
         supportedTargetFlutterPlatforms = [
@@ -47,8 +85,9 @@ lib.extendMkDerivation {
     finalAttrs:
     args@{
       pubGetScript ? null,
+      swiftPackages ? { },
       flutterBuildFlags ? [ ],
-      targetFlutterPlatform ? "linux",
+      targetFlutterPlatform ? defaultTargetFlutterPlatform,
       extraWrapProgramArgs ? "",
       flutterMode ? null,
       ...
@@ -67,7 +106,8 @@ lib.extendMkDerivation {
       ++ (args.flutterBuildFlags or [ ])
       ++ flutterFlags;
 
-      universal = args // {
+      universal = removeAttrs args [ "swiftPackages" ] // {
+        inherit targetFlutterPlatform;
         flutterMode = flutterMode';
         flutterFlags = flutterFlags;
         flutterBuildFlags = flutterBuildFlags';
@@ -97,7 +137,15 @@ lib.extendMkDerivation {
 
           export HOME="$NIX_BUILD_TOP"
           flutter config $flutterFlags --no-analytics &>/dev/null # mute first-run
-          flutter config $flutterFlags --enable-linux-desktop >/dev/null
+          ${lib.optionalString
+            (builtins.elem targetFlutterPlatform [
+              "linux"
+              "macos"
+            ])
+            ''
+              flutter config $flutterFlags --enable-${targetFlutterPlatform}-desktop >/dev/null
+            ''
+          }
         '';
 
         pubGetScript =
@@ -229,6 +277,136 @@ lib.extendMkDerivation {
           ${extraWrapProgramArgs}
         '';
       };
+
+      macos =
+        assert stdenv.hostPlatform.isDarwin;
+        universal
+        // {
+          outputs = (universal.outputs or [ ]) ++ [ "debug" ];
+
+          nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
+            cocoapods
+            gitMinimal
+            darwin.DarwinTools
+          ];
+
+          sdkSetupScript = universal.sdkSetupScript;
+
+          # Xcode uses LaunchServices to identify .xcworkspace bundles.
+          sandboxProfile = (universal.sandboxProfile or "") + ''
+            (allow mach-lookup (global-name "com.apple.lsd.mapdb"))
+          '';
+
+          dontDartBuild = true;
+          buildPhase =
+            universal.buildPhase or ''
+              runHook preBuild
+
+              # xcbuild cannot build modern Flutter Xcode projects. Use the full
+              # Xcode toolchain, including its Swift compiler and SDK.
+              export DEVELOPER_DIR="${xcode}/Contents/Developer"
+              export PATH="${podTools}/bin:${writableRsync}/bin:${xcodeTools}/bin:$DEVELOPER_DIR/usr/bin:$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH"
+              export NIX_FLUTTER_SWIFT_PACKAGES=${
+                writeText "flutter-swift-packages.json" (builtins.toJSON (lib.mapAttrs (_: toString) swiftPackages))
+              }
+              export SDKROOT=macosx
+              export FLUTTER_XCODE_ARCHS="''${FLUTTER_XCODE_ARCHS:-${stdenv.hostPlatform.darwinArch}}"
+              # Xcode's LD setting expects a compiler driver, whereas stdenv's
+              # LD names the linker itself. Let Xcode select its own tools.
+              unset CC CXX LD LDPLUSPLUS AR AS NM RANLIB STRIP
+              # Foundation uses the account's home directory unless this is set;
+              # Nix build users have /var/empty as their home.
+              export CFFIXED_USER_HOME="$NIX_BUILD_TOP"
+              export XDG_CACHE_HOME="$NIX_BUILD_TOP/.cache"
+              export CLANG_MODULE_CACHE_PATH="$NIX_BUILD_TOP/clang-module-cache"
+              export SWIFTPM_MODULECACHE_OVERRIDE="$NIX_BUILD_TOP/swift-module-cache"
+              export COCOAPODS_DISABLE_STATS=true
+              # Xcode projects and podspecs can contain Unicode under Nix's C locale.
+              export RUBYOPT="''${RUBYOPT:+$RUBYOPT }-EUTF-8"
+              export FLUTTER_XCODE_CODE_SIGN_IDENTITY=-
+              export FLUTTER_XCODE_CODE_SIGNING_REQUIRED=NO
+              export FLUTTER_XCODE_DEVELOPMENT_TEAM=
+              export FLUTTER_XCODE_PROVISIONING_PROFILE=
+              export FLUTTER_XCODE_PROVISIONING_PROFILE_SPECIFIER=
+              export FLUTTER_XCODE_OTHER_CODE_SIGN_FLAGS=--deep
+
+              mkdir -p build/flutter_assets/fonts "$debug"
+              ${projectRuby}/bin/ruby ${./setup-macos.rb} \
+                ${lib.escapeShellArg stdenv.hostPlatform.darwinMinVersion}
+              flutter build macos -v --split-debug-info="$debug" $flutterBuildFlags
+
+              runHook postBuild
+            '';
+
+          dontDartInstall = true;
+          installPhase =
+            universal.installPhase or ''
+              runHook preInstall
+
+              mkdir -p "$out/Applications" "$out/bin"
+              # Configuration names may contain a flavor, and bundle names need
+              # not match pname. Only inspect the top-level build products.
+              shopt -s nullglob
+              apps=(build/macos/Build/Products/*/*.app)
+              if [ "''${#apps[@]}" -ne 1 ]; then
+                echo "Expected one macOS application bundle, found ''${#apps[@]}" >&2
+                exit 1
+              fi
+              appName=$(basename "''${apps[0]}")
+              mv "''${apps[0]}" "$out/Applications/$appName"
+              executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' \
+                "$out/Applications/$appName/Contents/Info.plist")
+              ln -s "$out/Applications/$appName/Contents/MacOS/$executable" "$out/bin/$pname"
+
+              runHook postInstall
+            '';
+
+          doInstallCheck = universal.doInstallCheck or true;
+          installCheckPhase =
+            universal.installCheckPhase or ''
+              runHook preInstallCheck
+
+              apps=("$out/Applications/"*.app)
+              test "''${#apps[@]}" -gt 0
+              for app in "''${apps[@]}"; do
+                executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app/Contents/Info.plist")
+                test -x "$app/Contents/MacOS/$executable"
+                /usr/bin/codesign --verify --deep --strict "$app"
+              done
+
+              runHook postInstallCheck
+            '';
+
+          postFixup =
+            (universal.postFixup or "")
+            + "\n"
+            + ''
+              # Flutter thins and edits the prebuilt engine framework. Refresh
+              # nested signatures after all fixups, preserving app entitlements.
+              for app in "$out/Applications/"*.app; do
+                /usr/bin/codesign --force --deep --sign - \
+                  --preserve-metadata=entitlements,flags,runtime "$app"
+                # Ad-hoc signatures have no Apple Team ID. Hardened apps must
+                # allow their Nix-built frameworks while retaining other flags.
+                while IFS= read -r -d "" bundle; do
+                  if /usr/bin/codesign --display --verbose "$bundle" 2>&1 | grep -q 'flags=.*runtime'; then
+                    entitlements=$(mktemp)
+                    /usr/bin/codesign --display --entitlements - --xml "$bundle" > "$entitlements" 2>/dev/null
+                    if [ ! -s "$entitlements" ]; then
+                      echo '<?xml version="1.0"?><plist version="1.0"><dict/></plist>' > "$entitlements"
+                    fi
+                    /usr/libexec/PlistBuddy -c 'Set :com.apple.security.cs.disable-library-validation true' "$entitlements" 2>/dev/null || \
+                      /usr/libexec/PlistBuddy -c 'Add :com.apple.security.cs.disable-library-validation bool true' "$entitlements"
+                    /usr/bin/codesign --force --sign - --entitlements "$entitlements" \
+                      --preserve-metadata=flags,runtime "$bundle"
+                  else
+                    /usr/bin/codesign --force --sign - \
+                      --preserve-metadata=entitlements,flags,runtime "$bundle"
+                  fi
+                done < <(find "$app" -depth -type d \( -name '*.app' -o -name '*.appex' \) -print0)
+              done
+            '';
+        };
 
       web = universal // {
         dontDartBuild = true;
