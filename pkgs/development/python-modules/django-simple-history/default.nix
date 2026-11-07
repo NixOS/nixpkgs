@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-simple-history";
-  version = "3.11.0";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-simple-history";
     tag = version;
-    hash = "sha256-pTWorV++YSr/oIdcShrJTBUFfn5ekJ29rNn6ltDhN5Q=";
+    hash = "sha256-5hYpA2ZRJVCbl47QCZY9TMB6QAFC4k7m/Y81Z2VWsf4=";
   };
 
   build-system = [
