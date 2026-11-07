@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "dermotduffy";
+    owner = "motioneye-project";
     repo = "motioneye-client";
     rev = "v${version}";
     hash = "sha256-YNeq0rmJWrOOW5zWAY+mshfB4EDXAXBHsC27O2EluGw=";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for motionEye";
-    homepage = "https://github.com/dermotduffy/motioneye-client";
+    homepage = "https://github.com/motioneye-project/motioneye-client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;

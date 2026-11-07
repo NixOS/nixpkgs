@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ome-zarr-models";
+    owner = "ome-zarr-py";
     repo = "ome-zarr-models-py";
     tag = "v${finalAttrs.version}";
     hash = "sha256-yC62hrlv3OOSXp6c3et3ZRa51iMHQkyXv1W7eyJCxlM=";
@@ -96,8 +96,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Minimal Python package for reading, writing and validating OME-Zarr (meta)data";
     homepage = "https://ome-zarr-models-py.readthedocs.io/en/stable";
-    downloadPage = "https://github.com/ome-zarr-models/ome-zarr-models-py";
-    changelog = "https://github.com/ome-zarr-models/ome-zarr-models-py/releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/ome-zarr-py/ome-zarr-models-py";
+    changelog = "https://github.com/ome-zarr-py/ome-zarr-models-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

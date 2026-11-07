@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jxnl";
+    owner = "567-labs";
     repo = "instructor";
     tag = "v${finalAttrs.version}";
     hash = "sha256-nBVjmd+Y/woAOtLU4pUQiKrVAtpSBng0PpDc8TLk8fE=";
@@ -120,8 +120,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Structured outputs for llm";
-    homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/567-labs/instructor";
+    changelog = "https://github.com/567-labs/instructor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

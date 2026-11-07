@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ThirVondukr";
+    owner = "notypecheck";
     repo = "passlib";
     tag = finalAttrs.version;
     hash = "sha256-d+iBTJrUzzLXAnbIJ56NHg8dZrv7Qd3ikNWOhXBiUzM=";
@@ -57,9 +57,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/ThirVondukr/passlib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/notypecheck/passlib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Comprehensive password hashing framework supporting over 30 schemes";
-    homepage = "https://github.com/ThirVondukr/passlib";
+    homepage = "https://github.com/notypecheck/passlib";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

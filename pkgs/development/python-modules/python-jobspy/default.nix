@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Bunsly";
+    owner = "speedyapply";
     repo = "JobSpy";
     tag = finalAttrs.version;
     hash = "sha256-iLtUIM7QBIl6UAcb1RvKt2uw5gHEIQXuo4z/OQu86wM=";
@@ -51,9 +51,9 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Jobs scraper library for job sites";
-    downloadPage = "https://github.com/Bunsly/JobSpy";
-    homepage = "https://github.com/Bunsly/JobSpy";
-    changelog = "https://github.com/Bunsly/JobSpy/releases/tag/${finalAttrs.src.rev}";
+    downloadPage = "https://github.com/speedyapply/JobSpy";
+    homepage = "https://github.com/speedyapply/JobSpy";
+    changelog = "https://github.com/speedyapply/JobSpy/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };

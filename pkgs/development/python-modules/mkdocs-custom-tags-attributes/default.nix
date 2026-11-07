@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Mara-Li";
+    owner = "Enveloppe";
     repo = "mkdocs-custom-tags-attributes";
     tag = "v${finalAttrs.version}";
     hash = "sha256-AtjUMk7v3+QI76nnPslqW/8LO11ld0YLSacHI6eaurs=";
@@ -34,8 +34,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "A mkdocs plugin to create custom attributes using hashtags";
-    homepage = "https://github.com/Mara-Li/mkdocs-custom-tags-attributes";
-    changelog = "https://github.com/Mara-Li/mkdocs-custom-tags-attributes/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Enveloppe/mkdocs-custom-tags-attributes";
+    changelog = "https://github.com/Enveloppe/mkdocs-custom-tags-attributes/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "mkdocs-custom-tags-attributes";

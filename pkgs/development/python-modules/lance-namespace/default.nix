@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lancedb";
+    owner = "lance-format";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Wnm9zQCVnlRECxiLZYjX46/+2rU8tpC/s/NKyoS5rO0=";
@@ -101,7 +101,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Open specification on top of the storage-based Lance table and file format to standardize access to a collection of Lance tables";
-    homepage = "https://github.com/lancedb/lance-namespace/tree/main/python/lance_namespace";
+    homepage = "https://github.com/lance-format/lance-namespace/tree/main/python/lance_namespace";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

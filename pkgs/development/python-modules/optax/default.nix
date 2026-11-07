@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "optax";
     tag = "v${finalAttrs.version}";
     hash = "sha256-dVmMacQx6V5lv0z4nWUTlekuEDqtIZlxJazAeA9UR+E=";
@@ -58,8 +58,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Gradient processing and optimization library for JAX";
-    homepage = "https://github.com/deepmind/optax";
-    changelog = "https://github.com/deepmind/optax/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/google-deepmind/optax";
+    changelog = "https://github.com/google-deepmind/optax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };

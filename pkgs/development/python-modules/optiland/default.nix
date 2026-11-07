@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "HarrisonKramer";
+    owner = "optiland";
     repo = "optiland";
     tag = "v${finalAttrs.version}";
     hash = "sha256-iyTvY+aqczzNCa13i/PnEiVAxXlqw9TWviqBANBV/sw=";
@@ -111,7 +111,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Comprehensive optical design, optimization, and analysis in Python, including GPU-accelerated and differentiable ray tracing via PyTorch";
-    homepage = "https://github.com/HarrisonKramer/optiland";
+    homepage = "https://github.com/optiland/optiland";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     # Intentionally not setting optiland meta.mainProgram, as it is not

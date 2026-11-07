@@ -14,8 +14,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "polkascan";
-    repo = "py-bip39-bindings";
+    owner = "JAMdotTech";
+    repo = "py-bip39";
     tag = "v${version}";
     hash = "sha256-jpBlupIjlH2LJkSm3tzxrH5wT2+eziugNMR4B01gSdE=";
   };
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the tiny-bip39 library";
-    homepage = "https://github.com/polkascan/py-bip39-bindings";
+    homepage = "https://github.com/JAMdotTech/py-bip39";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ stargate01 ];
   };

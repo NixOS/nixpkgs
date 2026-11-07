@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "facebookresearch";
+    owner = "hydra-ecosystem";
     repo = "hydra";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Z71H0kE/iRh88b71jX7iPW8B2W3nscCj+SyVNfMkoXw=";
@@ -40,10 +40,10 @@ buildPythonPackage (finalAttrs: {
     (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
-    # https://github.com/facebookresearch/hydra/pull/2731
+    # https://github.com/hydra-ecosystem/hydra/pull/2731
     (fetchpatch {
       name = "setuptools-67.5.0-test-compatibility.patch";
-      url = "https://github.com/facebookresearch/hydra/commit/25873841ed8159ab25a0c652781c75cc4a9d6e08.patch";
+      url = "https://github.com/hydra-ecosystem/hydra/commit/25873841ed8159ab25a0c652781c75cc4a9d6e08.patch";
       hash = "sha256-oUfHlJP653o3RDtknfb8HaaF4fpebdR/OcbKHzJFK/Q=";
     })
   ];
@@ -146,7 +146,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://hydra.cc";
-    changelog = "https://github.com/facebookresearch/hydra/blob/${finalAttrs.src.tag}/NEWS.md";
+    changelog = "https://github.com/hydra-ecosystem/hydra/blob/${finalAttrs.src.tag}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

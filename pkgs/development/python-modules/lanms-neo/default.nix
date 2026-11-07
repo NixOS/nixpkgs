@@ -15,7 +15,7 @@ buildPythonPackage {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "gen-ko";
+    owner = "yuanliu939";
     repo = "lanms-neo";
     rev = "6510e19e731a1e105d42b2fbda64de41c169ce2e";
     hash = "sha256-0fs4RNN1ptiir7GfR9B8HK0VqTkk5PbVJxgKiDId3po=";
@@ -30,7 +30,7 @@ buildPythonPackage {
 
   meta = {
     description = "Standalone module for Locality-Aware NMS";
-    homepage = "https://github.com/gen-ko/lanms-neo";
+    homepage = "https://github.com/yuanliu939/lanms-neo";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
