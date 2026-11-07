@@ -81,6 +81,9 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
+# FIXME: any condition?
+extraBefore+=('-z' 'pack-relative-relocs')
+
 if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
     extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
     extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
