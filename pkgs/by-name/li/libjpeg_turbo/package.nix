@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     openjdk
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC" enableStatic)
     (lib.cmakeBool "ENABLE_SHARED" enableShared)
@@ -103,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://libjpeg-turbo.org/";
