@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to access the X clipboard from a console application";
     homepage = "https://github.com/astrand/xclip";
     license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.all;
     mainProgram = "xclip";
   };
