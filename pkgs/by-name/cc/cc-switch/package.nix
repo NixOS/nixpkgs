@@ -4,7 +4,9 @@
   rustPlatform,
   fetchFromGitHub,
 
+  coreutils,
   cargo-tauri,
+  desktop-file-utils,
   jq,
   makeBinaryWrapper,
   moreutils,
@@ -26,7 +28,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch";
-  version = "3.16.5";
+  version = "4.0.25";
 
   __structuredAttrs = true;
 
@@ -34,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "farion1231";
     repo = "cc-switch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CrUoTfGAy+gi3gdcSlNyjwM2Rm4nahqDWdM6I9OQgPc=";
+    hash = "sha256-RSe/H51Wy42wNycK8jEauAQIzUfRHGzBX0taYdqNysk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -45,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-Vs+/KLICqciF7dnC3iRH9TFzNCtXDgOkWFPLxdwA0rE=";
+    hash = "sha256-W6c/GNYB1LaYYzeq4McnIw88W2/76yMrx4pVOF8GtT8=";
   };
 
   postPatch = ''
@@ -67,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-gX32xCiVKHQ0BIIB9GyWHessIW30zbTcMZLtPJycxn8=";
+  cargoHash = "sha256-Aw6F+Rdc5Lk2X2sLf8d+Wskq+UOBAVMleB4GD0gtA24=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -103,6 +105,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # (e.g. tauri 2.10 vs @tauri-apps/api 2.8). cargo tauri build errors on that;
   # the previous cargo-only packaging already shipped this combination.
   tauriBuildFlags = [ "--ignore-version-mismatches" ];
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ desktop-file-utils ]}"
+    )
+  '';
+
+  preCheck = ''
+    substituteInPlace \
+      src-tauri/src/services/mcp_connectivity/tests.rs \
+      src-tauri/src/session_manager/providers/mcode.rs \
+      src-tauri/src/commands/misc.rs \
+      --replace-warn '#!/bin/sh' '#!${stdenv.shell}' \
+      --replace-warn '/usr/bin/env' '${coreutils}/bin/env' \
+      --replace-warn '/bin/echo' '${coreutils}/bin/echo' \
+      --replace-warn 'Command::new("/bin/bash")' 'Command::new("${stdenv.shell}")' \
+      --replace-warn 'format!("{}:/usr/bin:/bin",' 'format!("{}:${lib.makeBinPath [ coreutils ]}:/usr/bin:/bin",'
+
+    substituteInPlace src-tauri/src/commands/misc.rs \
+      --replace-fail 'build_unix_launcher_script(&launch, "/bin/bash", None, &script, Some(&env_file))' 'build_unix_launcher_script(&launch, "${stdenv.shell}", None, &script, Some(&env_file))' \
+      --replace-fail ".replace(\"exec '/bin/bash'\", \"exit 0 #\")" ".replace(\"exec '${stdenv.shell}'\", \"exit 0 #\")"
+  '';
 
   # Proxy startup test binds to a local address, which the darwin sandbox blocks.
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
