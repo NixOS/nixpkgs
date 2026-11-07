@@ -10,6 +10,7 @@
   callPackage,
   ncVersion,
   nextcloud-notify_push,
+  nextcloud-whiteboard-server,
 }:
 
 let
@@ -53,6 +54,7 @@ let
         ) pkgs
         // {
           notify_push = nextcloud-notify_push.app;
+          whiteboard = nextcloud-whiteboard-server.app;
         }
       )
     ) generatedJson;
