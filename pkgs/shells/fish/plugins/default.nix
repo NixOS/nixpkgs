@@ -81,6 +81,8 @@ lib.makeScope newScope (
 
     pure = callPackage ./pure.nix { };
 
+    ros2-fish = callPackage ./ros2-fish.nix { };
+
     sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
 
     spark = callPackage ./spark.nix { };
