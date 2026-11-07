@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -15,6 +16,7 @@
   git,
   xdg-utils,
   makeBinaryWrapper,
+  libicns,
   writableTmpDirAsHomeHook,
   testers,
   versionCheckHook,
@@ -38,15 +40,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Disable upstream's rustflags overrides to avoid linker and CPU target issues
   postPatch = ''
     rm .cargo/config.toml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # gpui_ce_apple generates Metal shader bindings from its sibling gpui
+    # directory, but cargo vendoring stores that crate as gpui-ce-<version>.
+    for apple in "$cargoDepsCopy"/source-git-*/gpui_ce_apple-[0-9]*; do
+      apple_parent=$(dirname "$apple")
+      ln -s "$apple_parent"/gpui-ce-[0-9]* "$apple_parent/gpui"
+    done
   '';
 
   nativeBuildInputs = [
     pkg-config
     desktop-file-utils
     makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Required by gpui_ce_media, which generates CoreMedia bindings with bindgen
+    rustPlatform.bindgenHook
+    # Provides png2icns for the app bundle icon
+    libicns
   ];
 
-  buildInputs = [
+  # On Darwin, font-kit uses Core Text instead of fontconfig and FreeType
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
     freetype
     zlib
@@ -89,26 +106,74 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm644 "assets/linux/hicolor/''${size}x''${size}/apps/gitcomet.png" \
         "$out/share/icons/hicolor/''${size}x''${size}/apps/gitcomet.png"
     done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Unless it already runs from an app bundle, GitComet copies itself into
+    # one under ~/Library/Application Support/GitComet on every launch and
+    # relaunches from there.  Ship the bundle that upstream's
+    # scripts/package-macos.sh builds, and link the binary into it.
+    app=$out/Applications/GitComet.app
+    mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+    mv $out/bin/gitcomet "$app/Contents/MacOS/gitcomet"
+    ln -s "$app/Contents/MacOS/gitcomet" $out/bin/gitcomet
+    png2icns "$app/Contents/Resources/GitComet.icns" assets/gitcomet-512.png
+    cat > "$app/Contents/Info.plist" <<EOF
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>CFBundleDevelopmentRegion</key>
+      <string>en</string>
+      <key>CFBundleDisplayName</key>
+      <string>GitComet</string>
+      <key>CFBundleExecutable</key>
+      <string>gitcomet</string>
+      <key>CFBundleIdentifier</key>
+      <string>ai.autoexplore.gitcomet</string>
+      <key>CFBundleIconFile</key>
+      <string>GitComet.icns</string>
+      <key>CFBundleInfoDictionaryVersion</key>
+      <string>6.0</string>
+      <key>CFBundleName</key>
+      <string>GitComet</string>
+      <key>CFBundlePackageType</key>
+      <string>APPL</string>
+      <key>CFBundleShortVersionString</key>
+      <string>${finalAttrs.version}</string>
+      <key>CFBundleVersion</key>
+      <string>${finalAttrs.version}</string>
+      <key>LSMinimumSystemVersion</key>
+      <string>${stdenv.hostPlatform.darwinMinVersion}</string>
+      <key>NSHighResolutionCapable</key>
+      <true/>
+    </dict>
+    </plist>
+    EOF
   '';
 
-  postFixup = ''
-    patchelf $out/bin/gitcomet --add-rpath ${
-      lib.makeLibraryPath [
-        libGL
-        vulkan-loader
-        wayland
-      ]
-    }
-
-    wrapProgram $out/bin/gitcomet \
-      --prefix PATH : "${
-        lib.makeBinPath [
-          git
-          xdg-utils
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf $out/bin/gitcomet --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          vulkan-loader
+          wayland
         ]
-      }" \
-      --set-default GITCOMET_NO_UPDATE_CHECK 1
-  '';
+      }
+
+    ''
+    + ''
+      wrapProgram ${
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/GitComet.app/Contents/MacOS/gitcomet"
+        else
+          "$out/bin/gitcomet"
+      } \
+        --prefix PATH : "${
+          lib.makeBinPath ([ git ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ])
+        }" \
+        --set-default GITCOMET_NO_UPDATE_CHECK 1
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -144,6 +209,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       havunen
     ];
     mainProgram = "gitcomet";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
