@@ -113,7 +113,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Modern music player for GNOME";
     homepage = "https://gitlab.gnome.org/World/lollypop";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [
+      choco98
+      lovesegfault
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "lollypop";
   };
