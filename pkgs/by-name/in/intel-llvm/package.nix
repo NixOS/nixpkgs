@@ -13,6 +13,7 @@
   curl,
   jq,
   onedpl,
+  opencl-headers,
 }:
 let
   # This derivation uses makeScope to help with overriding.
@@ -117,6 +118,10 @@ let
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
         ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/include" "$rsrc"
         ln -s "${lib.getLib self.unwrapped}/lib/clang/${self.llvmMajorVersion}/lib" "$rsrc"
+        # extraPackages reaches these only through the setup hook, so
+        # `clang++ -fsycl` from `nix shell` never sees them. sycl/detail/cl.h includes <CL/cl.h>.
+        echo "-isystem ${self.unwrapped.dev}/include" >> $out/nix-support/cc-cflags
+        echo "-isystem ${opencl-headers}/include" >> $out/nix-support/cc-cflags
       ''
       + (lib.concatStrings (
         lib.mapAttrsToList (k: v: ''
@@ -133,7 +138,7 @@ let
       '');
 
       extraPackages =
-        # We need to explicitly link to the dev package to get headers like sycl.hpp
+        # SYCL runtime for stdenv. The headers are on cc-cflags above.
         [ self.unwrapped.dev ] # TODO: This needs to be from targetPackages once the package gets cross support
         # OpenCL and such need to be passed through
         ++ self.unwrapped.propagatedBuildInputs;
