@@ -1108,6 +1108,9 @@ in
   mautrix-discord = runTest ./matrix/mautrix-discord.nix;
   mautrix-meta-postgres = runTest ./matrix/mautrix-meta-postgres.nix;
   mautrix-meta-sqlite = runTest ./matrix/mautrix-meta-sqlite.nix;
+  mautrix-signal = runTest (import ./matrix/mautrix.nix { bridgeType = "signal"; });
+  mautrix-telegram = runTest (import ./matrix/mautrix.nix { bridgeType = "telegram"; });
+  mautrix-whatsapp = runTest (import ./matrix/mautrix.nix { bridgeType = "whatsapp"; });
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
   mediatomb = runTest ./mediatomb.nix;

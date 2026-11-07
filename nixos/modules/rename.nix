@@ -21,6 +21,21 @@ in
     (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
+    (mkRemovedOptionModule [ "services" "mautrix-signal" ]
+      "Use services.mautrix.bridges.signal with type = \"signal\". See the Mautrix migration guide in the NixOS manual."
+    )
+    (mkRemovedOptionModule [ "services" "mautrix-whatsapp" ]
+      "Use services.mautrix.bridges.whatsapp with type = \"whatsapp\". See the Mautrix migration guide in the NixOS manual."
+    )
+    (mkRemovedOptionModule [ "services" "mautrix-discord" ]
+      "Use services.mautrix.bridges.discord with type = \"discord\". See the Mautrix migration guide in the NixOS manual."
+    )
+    (mkRemovedOptionModule [ "services" "mautrix-telegram" ]
+      "Use services.mautrix.bridges.telegram with type = \"telegram\". See the Mautrix migration guide in the NixOS manual."
+    )
+    (mkRemovedOptionModule [ "services" "mautrix-meta" ]
+      "Use services.mautrix.bridges.<name> with type = \"facebook\" or \"instagram\". Use names meta-facebook and meta-instagram to preserve existing users and state paths. See the Mautrix migration guide in the NixOS manual."
+    )
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
       "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead."
     )
@@ -302,7 +317,7 @@ in
         "services"
         "matrix-appservice-discord"
       ]
-      "The matrix-appservice-discord package has been removed as it is no longer actively maintained upstream. Use `services.mautrix-discord` instead."
+      "The matrix-appservice-discord package has been removed as it is no longer actively maintained upstream. Use `services.mautrix.bridges.<name>` with type = \"discord\" instead."
     )
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]

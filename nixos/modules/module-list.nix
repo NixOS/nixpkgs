@@ -852,11 +852,7 @@
   ./services/matrix/matrix-alertmanager.nix
   ./services/matrix/matrix-authentication-service.nix
   ./services/matrix/maubot.nix
-  ./services/matrix/mautrix-discord.nix
-  ./services/matrix/mautrix-meta.nix
-  ./services/matrix/mautrix-signal.nix
-  ./services/matrix/mautrix-telegram.nix
-  ./services/matrix/mautrix-whatsapp.nix
+  ./services/matrix/mautrix.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/rust-federation-tester.nix
