@@ -8,6 +8,7 @@
   rustPlatform,
   rustc,
   sd,
+  symlinkJoin,
   wasm-bindgen-cli_0_2_125,
   wasm-pack,
   writeScript,
@@ -21,10 +22,24 @@
   enteMainUrl ? null,
   nixosTests,
 }:
-
+let
+  # Chromecast does not support WASM reference types. The cast module therefore
+  # rebuilds std with them disabled instead of using the precompiled library.
+  # wasm-pack expects the matching Rust sources in the compiler's sysroot.
+  rustcWithLibSrc = rustc.override {
+    sysroot = symlinkJoin {
+      name = "ente-web-rust-sysroot";
+      paths = [ rustc.unwrapped ];
+      postBuild = ''
+        mkdir -p $out/lib/rustlib/src/rust
+        ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
+      '';
+    };
+  };
+in
 buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.61";
+  version = "1.3.65";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -35,7 +50,7 @@ buildNpmPackage (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZLcjrauIdQdLCbMafYVpJVhc13DE7XBOt5awiQmnBnk=";
+    hash = "sha256-1THljsm/fET0kuVo4foZPDOdiS6qqjYWa9gX4ivWDOg=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -47,17 +62,32 @@ buildNpmPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-NMqkShAHqCcx25rlmWyvoZf/BqeIgzwWZT4Pzhajfr0=";
+    hash = "sha256-Luqg2g6aY2u6EY7G2KspNlsVU1x3zXfRgfMjoTR8s/o=";
   };
   cargoRoot = "../rust";
 
-  npmDepsHash = "sha256-7kE2tT7/vfJIoAbg3up+Uao2+fmP6ccr+bYNFXxU174=";
+  # Rebuilding std needs crates beyond the application's Cargo.lock.
+  # Add Rust's vendored crates here so the build can run offline, while leaving
+  # cargoDeps as a fixed-output derivation whose hash nix-update can refresh.
+  cargoDepsHook = ''
+    cargoDeps=${
+      symlinkJoin {
+        name = "${finalAttrs.pname}-cargo-deps-with-std";
+        paths = [ finalAttrs.cargoDeps ];
+        postBuild = ''
+          cp -rsn ${rustPlatform.rustVendorSrc}/* $out/source-registry-0/
+        '';
+      }
+    }
+  '';
+
+  npmDepsHash = "sha256-hhiWmNPSU2UDsRscfcdEawVB4ucqgk2T42upy5qCO0A=";
 
   nativeBuildInputs = [
     binaryen
     cargo
     rustPlatform.cargoSetupHook
-    rustc
+    rustcWithLibSrc
     rustc.llvmPackages.lld
     nodejs
     wasm-bindgen-cli_0_2_125
@@ -65,7 +95,12 @@ buildNpmPackage (finalAttrs: {
   ];
 
   # See: https://github.com/ente/ente/blob/main/web/apps/photos/.env
-  env = extraBuildEnv;
+  env = {
+    # Allow -Z build-std and std's unstable features with the stable Rust toolchain,
+    # so we do not need upstream's pinned nightly toolchain.
+    RUSTC_BOOTSTRAP = "1";
+  }
+  // extraBuildEnv;
 
   postPatch =
     # The Rust workspace lives in `../rust`, outside the `web` sourceRoot, so it
@@ -78,7 +113,7 @@ buildNpmPackage (finalAttrs: {
     # just a wrapper that tries to download the actual binary
     + ''
       substituteInPlace \
-        packages/wasm/package.json \
+        $(grep -lF 'wasm-pack ' packages/wasm/*/package.json) \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
     ''
     # Replace hardcoded links pointing to the public ente instance so that
@@ -137,7 +172,7 @@ buildNpmPackage (finalAttrs: {
       echo "Updated to version $new_version, checking wasm-bindgen..."
 
       # Fetch Cargo.lock from GitHub instead of cloning repository
-      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/rust/Cargo.lock"
+      cargo_lock_url="https://raw.githubusercontent.com/ente/ente/photos-v$new_version/rust/Cargo.lock"
 
       wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
 
