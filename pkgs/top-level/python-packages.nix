@@ -6399,8 +6399,6 @@ self: super: with self; {
 
   flask-unsign = callPackage ../development/python-modules/flask-unsign { };
 
-  flask-versioned = callPackage ../development/python-modules/flask-versioned { };
-
   flask-webtest = callPackage ../development/python-modules/flask-webtest { };
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
