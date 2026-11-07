@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "2.2.2";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
     tag = "v${version}";
-    hash = "sha256-/1oOouJjCCBCymfl9ps3eMDs099cqRY5f4j2jMKKBfE=";
+    hash = "sha256-c0AHqqb9nBKKccoEPx/jsUm4szGP/CEdBYQbFEAdEF4=";
   };
 
   build-system = [ setuptools ];
