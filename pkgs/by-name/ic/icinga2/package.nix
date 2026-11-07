@@ -14,6 +14,7 @@
   mariadb-connector-c,
   libpq,
   protobuf,
+  abseil-cpp,
   zlib,
   ctestCheckHook,
   tzdata,
@@ -90,7 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     systemdLibs
   ]
-  ++ lib.optional withOtel protobuf
+  ++ lib.optional withOtel (
+    # icinga2 forces C++17, but abseil-cpp built with C++20 (the GCC 16
+    # default) exposes std::*_ordering in its headers via protobuf.
+    protobuf.override {
+      abseil-cpp = abseil-cpp.override { cxxStandard = "17"; };
+    }
+  )
   ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
