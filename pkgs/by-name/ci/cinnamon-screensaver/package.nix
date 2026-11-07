@@ -14,7 +14,6 @@
   libxslt,
   gtk3,
   libgnomekbd,
-  caribou,
   libtool,
   wrapGAppsHook3,
   gobject-introspection,
@@ -83,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     cinnamon-desktop
     cinnamon
     libgnomekbd
-    caribou
   ];
 
   postPatch = ''
@@ -92,13 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x240}/share/iso-flags-png,g \
       {} +
-  '';
-
-  preFixup = ''
-    # https://github.com/NixOS/nixpkgs/issues/101881
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${caribou}/share"
-    )
   '';
 
   postFixup = ''
