@@ -1,12 +1,14 @@
 {
   lib,
   stdenvNoCC,
+  bubblewrap,
   bun,
   fetchFromGitHub,
   installShellFiles,
   makeBinaryWrapper,
   models-dev,
   nix-update-script,
+  nodejs,
   ripgrep,
   sysctl,
   versionCheckHook,
@@ -15,13 +17,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kilo";
-  version = "7.3.40";
+  version = "7.8.8";
 
   src = fetchFromGitHub {
     owner = "Kilo-Org";
     repo = "kilocode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jw2C8C7dFPwOGp8tg6ewcRXdVsJEDDFSe+xuF86Xwfc=";
+    hash = "sha256-7f2nzeiw2MhSIudG24hGmc2YlVDmptsN1/XOXt+r4is=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -68,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-Defmk7fN49UQtBpmWIFGnUiPlBpJtLp+8QaFFQCAY8k=";
+    outputHash = "sha256-WK3Z5p5zLahmLUeWGAmQfPSf7v18ZFrJj7cgM/49qT0=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -78,6 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installShellFiles
     makeBinaryWrapper
     models-dev
+    nodejs
     writableTmpDirAsHomeHook
   ];
 
@@ -106,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   env.KILO_CHANNEL = "latest";
   env.KILO_VERSION = finalAttrs.version;
+  env.KILO_SKIP_BUNDLED_BWRAP = "1";
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
 
   buildPhase = ''
@@ -125,6 +129,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s kilo $out/bin/kilocode
 
     wrapProgram $out/bin/kilo \
+      ${lib.optionalString stdenvNoCC.hostPlatform.isLinux "--set KILO_BWRAP_PATH ${bubblewrap}/bin/bwrap"} \
       --prefix PATH : ${
         lib.makeBinPath (
           [
@@ -191,7 +196,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    # Has been broken on all platforms for over a month: https://github.com/NixOS/nixpkgs/issues/542516. Maintainer is irresponsive, mark broken to prevent blocking upstream updates.
-    broken = true;
   };
 })
