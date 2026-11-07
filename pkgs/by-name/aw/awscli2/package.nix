@@ -190,7 +190,7 @@ py.pkgs.buildPythonApplication rec {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [
         "--version-regex"
-        "^(2\\.(.*))"
+        "^(2\\..*)"
       ];
     };
     tests.version = testers.testVersion {
