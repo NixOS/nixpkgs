@@ -639,6 +639,7 @@ rec {
           let
             depCrate = mkHostCrate {
               crateName = "bar";
+              links = "bar";
               src = symlinkJoin {
                 name = "build-script-and-include-dir-bar";
                 paths = [
@@ -652,6 +653,10 @@ rec {
                 ];
               };
             };
+            unlinkedCrate = mkHostCrate {
+              crateName = "unlinked";
+              src = depCrate.src;
+            };
           in
           {
             crateName = "foo";
@@ -662,12 +667,18 @@ rec {
                   fn main() { }
                 '')
                 (mkFile "build.rs" ''
-                  fn main() { assert!(std::env::var_os("DEP_BAR_INCLUDE_DIR").is_some()); }
+                  fn main() {
+                    assert!(std::env::var_os("DEP_BAR_INCLUDE_DIR").is_some());
+                    assert!(std::env::var_os("DEP_UNLINKED_INCLUDE_DIR").is_none());
+                  }
                 '')
               ];
             };
             buildDependencies = [ depCrate ];
-            dependencies = [ depCrate ];
+            dependencies = [
+              depCrate
+              unlinkedCrate
+            ];
           };
         # Support new invocation prefix for build scripts `cargo::`
         # https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
@@ -677,6 +688,7 @@ rec {
               buildRustCrate:
               mkCrate buildRustCrate {
                 crateName = "bar";
+                links = "native-library-sys";
                 src = mkFile "build.rs" ''
                   fn main() {
                     // Old invocation prefix
@@ -706,9 +718,9 @@ rec {
                 (mkFile "build.rs" ''
                   use std::env;
                   fn main() {
-                    assert!(env::var_os("DEP_BAR_KEY_OLD").expect("metadata key 'key_old' not set in dependency") == "value_old");
-                    assert!(env::var_os("DEP_BAR_KEY").expect("metadata key 'key' not set in dependency") == "value");
-                    assert!(env::var_os("DEP_BAR_KEY_COMPLEX").expect("metadata key 'key_complex' not set in dependency") == "complex(value)");
+                    assert!(env::var_os("DEP_NATIVE_LIBRARY_SYS_KEY_OLD").expect("metadata key 'key_old' not set in dependency") == "value_old");
+                    assert!(env::var_os("DEP_NATIVE_LIBRARY_SYS_KEY").expect("metadata key 'key' not set in dependency") == "value");
+                    assert!(env::var_os("DEP_NATIVE_LIBRARY_SYS_KEY_COMPLEX").expect("metadata key 'key_complex' not set in dependency") == "complex(value)");
 
                     println!("cargo::rustc-env=BUILDFOO=yes(check)");
                   }
