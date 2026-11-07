@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "genshi";
-  version = "0.7.11";
+  version = "0.7.12";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gsT5u/SwO+UWKiTW2OT9v+PtJgLT68v1BaMzUKN53Lc=";
+    hash = "sha256-S8ohpaJRXav5hRdr6Jels7YkYmtKn8tkhyC3xfq3Fic=";
   };
 
   build-system = [ setuptools_80 ];
