@@ -3779,6 +3779,10 @@ with pkgs;
 
   mono6 = callPackage ../development/compilers/mono/6.nix { };
 
+  monoBootstrap = recurseIntoAttrsWith { search = false; } (
+    callPackage ../development/compilers/mono/bootstrap { }
+  );
+
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
   buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
