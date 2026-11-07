@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   stdenv,
   gitMinimal,
   versionCheckHook,
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Kk5yKuNOEf3gu7XNzsQJ54tsCExg2uRzmp8LcVDAn0E=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   nativeCheckInputs = [ gitMinimal ];
 

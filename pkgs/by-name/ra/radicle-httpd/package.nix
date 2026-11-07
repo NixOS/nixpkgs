@@ -1,6 +1,9 @@
 {
   asciidoctor,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
+  zstd,
   git,
   installShellFiles,
   lib,
@@ -40,7 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     asciidoctor
     installShellFiles
     makeWrapper
+    pkg-config
   ];
+
+  buildInputs = [
+    libgit2
+    zstd
+  ];
+
   nativeCheckInputs = [ git ];
 
   doCheck = stdenv.hostPlatform.isLinux;
