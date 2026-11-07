@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   libGL,
   libGLU,
   libxxf86vm,
@@ -125,7 +125,7 @@ buildPythonPackage rec {
       EOF
     '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ pillow ];
 
