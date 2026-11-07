@@ -1,13 +1,19 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  jdk,
+  jre,
+  jdk ? jre,
   makeWrapper,
-  buildNativeImage ? true,
+  buildNativeImage ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if buildNativeImage then stdenv else stdenvNoCC;
+  jdk' = if buildNativeImage then jdk else jre;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "dapl" + lib.optionalString buildNativeImage "-native";
   version = "0.2.0+date=2021-10-16";
 
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    jdk
+    jdk'
     makeWrapper
   ];
 
@@ -36,7 +42,7 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString buildNativeImage ''
     native-image --report-unsupported-elements-at-runtime \
-      -H:CLibraryPath=${lib.getLib jdk}/lib -J-Dfile.encoding=UTF-8 \
+      -H:CLibraryPath=${lib.getLib jdk'}/lib -J-Dfile.encoding=UTF-8 \
       -jar APL.jar dapl
   ''
   + ''
@@ -55,11 +61,11 @@ stdenv.mkDerivation rec {
       ''
     else
       ''
-        mkdir -p $out/share/${pname}
-        mv APL.jar $out/share/${pname}/
+        mkdir -p $out/share/${finalAttrs.pname}
+        mv APL.jar $out/share/${finalAttrs.pname}/
 
-        makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
-          --add-flags "-jar $out/share/${pname}/APL.jar"
+        makeWrapper "${lib.getBin jdk'}/bin/java" "$out/bin/dapl" \
+          --add-flags "-jar $out/share/${finalAttrs.pname}/APL.jar"
       ''
   )
   + ''
@@ -74,8 +80,8 @@ stdenv.mkDerivation rec {
       "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
     license = lib.licenses.mit;
     maintainers = [ ];
-    inherit (jdk.meta) platforms;
+    inherit (jdk'.meta) platforms;
   };
-}
+})
 # TODO: Processing app
 # TODO: minimalistic JDK

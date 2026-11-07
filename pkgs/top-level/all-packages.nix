@@ -1943,16 +1943,6 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
-  dapl = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = false;
-    stdenv = stdenvNoCC;
-    jdk = jre;
-  };
-  dapl-native = callPackage ../development/interpreters/dzaima-apl {
-    buildNativeImage = true;
-    jdk = graalvmPackages.graalvm-ce;
-  };
-
   gnucap-full = gnucap.withPlugins (p: [ p.verilog ]);
 
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
