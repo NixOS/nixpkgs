@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  flit-core,
+  flit-core_3,
   unittestCheckHook,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-MnRWb9uQczkwikyorkS77PTpajCG6M/FZibm4ww+xC4=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [ flit-core_3 ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
