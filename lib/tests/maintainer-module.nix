@@ -1,9 +1,7 @@
 { lib, ... }:
 let
   inherit (lib) types;
-in
-{
-  options = {
+  baseDataOptions = {
     name = lib.mkOption {
       type = types.str;
     };
@@ -28,6 +26,24 @@ in
         }
       );
       default = [ ];
+    };
+  };
+  affiliationOptions = baseDataOptions // {
+    fallbackMaintainers = lib.mkOption {
+      type = types.listOf (types.submodule { options = baseDataOptions; });
+      default = [ ];
+    };
+    contactUnresponsive = lib.mkOption {
+      type = types.nullOr types.str;
+      default = null;
+    };
+  };
+in
+{
+  options = baseDataOptions // {
+    affiliation = lib.mkOption {
+      type = types.attrsOf (types.submodule { options = affiliationOptions; });
+      default = { };
     };
   };
 }
