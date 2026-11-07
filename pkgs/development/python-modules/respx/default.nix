@@ -2,9 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   flask,
   httpcore,
   httpx,
+  httpx2,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -25,13 +27,23 @@ buildPythonPackage rec {
     hash = "sha256-Fz3CS9rIm+H6axVIRErlFTTDgtAcTmGj4/wabLxDV2I=";
   };
 
+  patches = [
+    # prerequisite for the next patch
+    (fetchpatch {
+      url = "https://github.com/lundberg/respx/commit/06091fa7a48a4bbd9c060b16e5d82b0f4f20929c.patch";
+      hash = "sha256-lcZSuoJ7CmVJAklfg6wyjQbmz3mAcSqmk7isGqZcswY=";
+    })
+    # https://github.com/lundberg/respx/pull/317
+    ./httpx2-support.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ httpx ];
 
   nativeCheckInputs = [
     httpcore
-    httpx
+    httpx2
     flask
     pytest-asyncio
     pytest-cov-stub

@@ -1,0 +1,87 @@
+From 9e1ef9d254526a1d77a35a366f032bdcd69a6a90 Mon Sep 17 00:00:00 2001
+From: Jonas Lundberg <jonas@5monkeys.se>
+Date: Mon, 18 May 2026 11:50:30 +0200
+Subject: [PATCH] Support httpx2 via httpcore2
+
+---
+ noxfile.py          |  2 ++
+ respx/mocks.py      | 15 +++++++++++++++
+ tests/test_tools.py | 16 ++++++++++++++++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 tests/test_tools.py
+
+diff --git a/noxfile.py b/noxfile.py
+index 262ef14..88ae883 100644
+--- a/noxfile.py
++++ b/noxfile.py
+@@ -8,6 +8,8 @@
+ @nox.session(python=["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"])
+ def test(session):
+     deps = ["pytest", "pytest-asyncio", "pytest-cov", "trio", "starlette", "flask"]
++    if tuple(map(int, session.python.split("."))) >= (3, 10):
++        deps.append("httpx2")
+     session.install("--upgrade", *deps)
+     session.install("-e", ".")
+ 
+diff --git a/respx/mocks.py b/respx/mocks.py
+index ae0dad7..52fe3ea 100644
+--- a/respx/mocks.py
++++ b/respx/mocks.py
+@@ -76,6 +76,7 @@ def start(cls) -> None:
+             return
+ 
+         # Start patching target transports
++        patched = 0
+         for target in cls.targets:
+             for method in cls.target_methods:
+                 try:
+@@ -85,6 +86,13 @@ def start(cls) -> None:
+                     cls._patches.append(patch)
+                 except AttributeError:
+                     pass
++                except ModuleNotFoundError:  # pragma: no cover
++                    pass
++                else:
++                    patched += 1
++
++        if not patched:
++            raise ModuleNotFoundError("No http tool found to patch")  # pragma: no cover
+ 
+     @classmethod
+     def stop(cls, force: bool = False) -> None:
+@@ -268,6 +276,13 @@ class HTTPCoreMocker(AbstractRequestMocker):
+         "httpcore._async.connection.AsyncHTTPConnection",
+         "httpcore._async.connection_pool.AsyncConnectionPool",
+         "httpcore._async.http_proxy.AsyncHTTPProxy",
++        # Pydantic's httpx2 fork
++        "httpcore2._sync.connection.HTTPConnection",
++        "httpcore2._sync.connection_pool.ConnectionPool",
++        "httpcore2._sync.http_proxy.HTTPProxy",
++        "httpcore2._async.connection.AsyncHTTPConnection",
++        "httpcore2._async.connection_pool.AsyncConnectionPool",
++        "httpcore2._async.http_proxy.AsyncHTTPProxy",
+     ]
+     target_methods = ["handle_request", "handle_async_request"]
+ 
+diff --git a/tests/test_tools.py b/tests/test_tools.py
+new file mode 100644
+index 0000000..8b98f62
+--- /dev/null
++++ b/tests/test_tools.py
+@@ -0,0 +1,16 @@
++import sys
++
++import pytest
++
++import respx
++
++pytestmark = pytest.mark.skipif(sys.version_info < (3, 10), reason="Old python version")
++
++
++def test_httpx2_support():  # pragma: no cover
++    import httpx2  # type: ignore[import-not-found]
++
++    with respx.mock:
++        respx.get("https://example.com/httpx").respond(text="2")
++        response = httpx2.get("https://example.com/httpx")
++        assert response.text == "2"
