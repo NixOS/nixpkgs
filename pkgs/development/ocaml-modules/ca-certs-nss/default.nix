@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
+  cacert,
   digestif,
   mirage-ptime,
   x509,
@@ -35,6 +36,10 @@ buildDunePackage (finalAttrs: {
     bos
     cmdliner
   ];
+
+  postPatch = ''
+    ln -sf "${cacert.src}" lib/certdata.txt
+  '';
 
   doCheck = true;
   checkInputs = [ alcotest ];
