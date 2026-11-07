@@ -11855,6 +11855,12 @@
     githubId = 60099368;
     name = "Rafael Kienitz";
   };
+  huanghunr = {
+    email = "huanghunr@outlook.com";
+    github = "huanghunr";
+    githubId = 160948982;
+    name = "huanghunr";
+  };
   huantian = {
     name = "David Li";
     email = "davidtianli@gmail.com";
