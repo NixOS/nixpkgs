@@ -261,8 +261,11 @@ let
       enableParallelBuilding = true;
 
       doCheck = true;
+      checkFlags = [ "VERBOSE_FAILURE_PROGRESS=1" ];
+      checkTarget = "test"; # avoids setup.sh setting VERBOSE=y
       preCheck = ''
         patchShebangs util
+        export HARNESS_JOBS=''${enableParallelChecking:+$NIX_BUILD_CORES}
       '';
 
       __darwinAllowLocalNetworking = true;
