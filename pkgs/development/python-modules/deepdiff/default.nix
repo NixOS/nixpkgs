@@ -5,7 +5,7 @@
   stdenv,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   orderly-set,
@@ -30,18 +30,18 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "8.6.2";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qlustered";
     repo = "deepdiff";
     tag = version;
-    hash = "sha256-/XRPP8O2ykoXwOZ2ou/7Yoa1x7t45dCx6G3aq30o3Wc=";
+    hash = "sha256-+QHYYts6FGOrg01+SjUQTxW6kjbwIG3NVSKDYKWvels=";
   };
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
