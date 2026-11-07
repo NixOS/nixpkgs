@@ -1,18 +1,18 @@
 {
-  "version": "2026.2.4",
-  "buildNumber": "262.11879.98",
+  "version": "2026.3",
+  "buildNumber": "263.7307.206",
   "urls": {
     "x86_64-linux": {
-      "url": "https://download.jetbrains.com/python/pycharm-2026.2.4.tar.gz",
-      "hash": "sha256-h9Oa4RJfcpjo+MS5aqyDYEPrFQU/jcXXxSNW6qtXYqg="
+      "url": "https://download.jetbrains.com/python/pycharm-2026.3.tar.gz",
+      "hash": "sha256-cNRI7hqipgI0phNbfvmvZAP7aRwmRGET1YfM7gb2uBM="
     },
     "aarch64-linux": {
-      "url": "https://download.jetbrains.com/python/pycharm-2026.2.4-aarch64.tar.gz",
-      "hash": "sha256-nOBqlVHhfGildB7nCuQgPcxTCTX6XhBd8XHWAOVaK78="
+      "url": "https://download.jetbrains.com/python/pycharm-2026.3-aarch64.tar.gz",
+      "hash": "sha256-ETt3MXmQW9VBOkN82h5InPsnlO3+kkU4H9LfZfp2ohM="
     },
     "aarch64-darwin": {
-      "url": "https://download.jetbrains.com/python/pycharm-2026.2.4-aarch64.dmg",
-      "hash": "sha256-Vf0CR7kDu22nmj2hv0fawZ2svS9qvE/H34Dl2qps3xg="
+      "url": "https://download.jetbrains.com/python/pycharm-2026.3-aarch64.dmg",
+      "hash": "sha256-akuieJnY/2RivsDoSqglGBDRUSFWQ+82gGzUf5yJ3zI="
     }
   }
 }
