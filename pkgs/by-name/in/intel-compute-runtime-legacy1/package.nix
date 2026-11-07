@@ -85,7 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv.cc.cc
       ]
     } \
-      $out/lib/intel-opencl/libigdrcl.so
+      $out/lib/intel-opencl/libigdrcl.so \
+      $drivers/lib/libze_intel_gpu.so.1
   '';
 
   passthru.updateScript = gitUpdater {
