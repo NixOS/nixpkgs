@@ -596,7 +596,7 @@ in
     ++ lib.optionals cudaSupport ([ lib.licenses.nvidiaCudaRedist ] ++ cudaPackages.cudnn.meta.license);
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];
-    problems = lib.optionalAttrs (!(lib.hasAttr cudaManifestHash cudaHashes)) {
+    problems = lib.optionalAttrs (cudaSupport && !(lib.hasAttr cudaManifestHash cudaHashes)) {
       unsupported-cuda-toolkit = {
         message = ''
           Unsupported cuda version for XLA.
