@@ -1168,6 +1168,329 @@ Hook executed at the end of the distribution phase.
 ## Shell functions and utilities {#ssec-stdenv-functions}
 
 The standard environment provides a number of useful functions.
+You can explore these functions interactively in a development shell for any derivation that uses the standard environment.
+All following code examples, unless noted otherwise, run in the development shell of the GNU hello package.
+You can start the development shell using your currently configured nixpkgs channel like this:
+
+```bash
+nix-shell '<nixpkgs>' -A hello
+```
+
+If you're working with a checkout of the nixpkgs sources, run the following command instead:
+
+```bash
+nix-shell . -A hello
+```
+
+If, at any point inside the shell, you want to inspect a functions source code directly, run the following command:
+
+```bash
+declare -pf "$FUNCTION"
+# Concrete example:
+#    declare -pf runHook
+```
+
+
+### `getAllOutputNames` {#fun-getAllOutputNames}
+
+Get all outputs created by the derivation.
+
+See also [split derivations](#sec-multiple-outputs-).
+
+Here's an example usage:
+
+```shellSession
+$ getAllOutputNames
+out
+```
+
+
+### `runHook` \<hook\> {#fun-runHook}
+
+Execute \<hook\> and the values in the array associated with it.
+
+The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+Execution aborts on the first failing hook.
+For example, `runHook preBuild` runs, in order:
+
+- `preBuild`
+- each entry in `preBuildHooks`
+
+It stops at the first failure.
+
+Here's an example usage:
+
+```shellSession
+$ runHook preBuild
+
+$ preBuild="echo 1"
+$ runHook preBuild
+1
+$ preBuildHooks+=("echo 2" "return 1" "echo 3")
+$ runHook preBuild
+1
+2
+```
+
+
+### `runOneHook` \<hook\> {#fun-runOneHook}
+
+Run all hooks that [`runHook`](#fun-runHook) would, but exit after the first successful hook.
+
+Failing hooks are ignored.
+
+Here's an example usage:
+
+```shellSession
+$ runOneHook preBuild
+
+$ preBuildHooks+=("return 1" "echo 1" "echo 2")
+$ runOneHook preBuild
+1
+```
+
+
+### `echoCmd` \<cmd\> \<args...\> {#fun-echoCmd}
+
+Print a command without running it and mark word splits.
+
+Here's an example usage:
+
+```shellSession
+$ echoCmd find . -type f -name "has spaces*"
+find: . -type f -name has\ spaces\*
+```
+
+
+### `addToSearchPathWithCustomDelimiter` \<delimiter\> \<varName\> \<dir\> {#fun-addToSearchPathWithCustomDelimiter}
+
+Add an existing directory to a search-path-like variable using a custom delimiter.
+
+Here's an example usage:
+
+```shellSession
+$ MYPATH="a:b"
+$ addToSearchPathWithCustomDelimiter ":" MYPATH "/nix"
+$ echo "$MYPATH"
+a:b:/nix
+```
+
+Note that the directory to add must exist, otherwise the variable isn't modified:
+
+```shellSession
+$ MYPATH="a:b"
+$ addToSearchPathWithCustomDelimiter ":" MYPATH "nonexistent-dir"
+$ echo "$MYPATH"
+a:b
+```
+
+Empty variables are correctly handled, too:
+
+```shellSession
+$ unset MYPATH
+$ addToSearchPathWithCustomDelimiter ":" MYPATH "/nix"
+$ echo "$MYPATH"
+/nix
+```
+
+
+### `addToSearchPath` \<varName\> \<dir\> {#fun-addToSearchPath}
+
+Add an existing directory to a search-path-like variable.
+
+This behaves like [`addToSearchPathWithCustomDelimiter`](#fun-addToSearchPathWithCustomDelimiter) with the delimiter preconfigured as ":".
+
+Here's an example usage:
+
+```shellSession
+$ MYPATH="a:b"
+$ addToSearchPath MYPATH "/nix"
+$ echo "$MYPATH"
+a:b:/nix
+```
+
+
+### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
+
+Prepend elements to a variable.
+
+This function handles both array variables and space-separated strings.
+This makes it useful for generic setup code with must support both derivations with and without `__structuredAttrs` set.
+For code using `__structuredAttrs = true`, prefer using array notation directly.
+
+Here's an example usage for string variables:
+
+```shellSession
+$ unset configureFlags
+$ configureFlags="--disable-static"
+$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-dependency-tracking --enable-foo --disable-static
+```
+
+Likewise for an array variable:
+
+```shellSession
+$ unset configureFlags
+$ configureFlags=("--disable-static")
+$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo "${configureFlags[@]}"
+--disable-dependency-tracking --enable-foo --disable-static
+```
+
+
+### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
+
+Append elements to a variable.
+
+As with [`prependToVar`](#fun-prependToVar), both array variables and space-separated strings are supported.
+This makes it useful for generic setup code with must support both derivations with and without `__structuredAttrs` set.
+
+Here's an example usage for string variables:
+
+```shellSession
+$ unset configureFlags
+$ configureFlags="--disable-static"
+$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo $configureFlags
+--disable-static --disable-dependency-tracking --enable-foo
+```
+
+Likewise for an array variable:
+
+```shellSession
+$ unset configureFlags
+$ configureFlags=("--disable-static")
+$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
+$ echo "${configureFlags[@]}"
+--disable-static --disable-dependency-tracking --enable-foo
+```
+
+
+### `concatTo` \<arrayVar\> \<variable\[=default\]...\> {#fun-concatTo}
+
+Collect values from the named variables in an array variable.
+The first argument must name an array variable to collect results in.
+All following arguments are either plain names or name-value pairs defining variables to collect.
+If a name-value pair is given, the value is used as default value in case the named variable doesn't exist.
+
+Here's an example usage:
+
+```shellSession
+$ target=("my" "name" "is")
+$ interlude="and I live in"
+$ concatTo target USER=nobody interlude XXHOME=nowhere
+$ echo "${target[@]}"
+my name is nixos and I live in nowhere
+$ echo "With quotes for clarity: ${target[@]@Q}"
+With quotes for clarity: 'my' 'name' 'is' 'nixos' 'and' 'I' 'live' 'in' 'nowhere'
+```
+
+Arrays can be concatenated, too:
+
+```shellSession
+$ one_array=("a" "b")
+$ other_array=("c" "d")
+$ concatTo one_array other_array third_array="e f"
+$ echo "${one_array[@]}"
+a b c d e f
+```
+
+
+### `concatStringsSep` \<separator\> \<list\> {#fun-concatStringsSep}
+
+Concatenate a list of strings with a separator between each element.
+
+String variables are split on whitespace, as shown here:
+
+```shellSession
+$ flags="lorem ipsum dolor sit amet"
+$ concatStringsSep ";" flags
+lorem;ipsum;dolor;sit;amet
+```
+
+Array variables are also supported:
+
+```shellSession
+$ flags=("lorem ipsum" "dolor" "sit amet")
+$ concatStringsSep ";" flags
+lorem ipsum;dolor;sit amet
+```
+
+The separator can be a multi-character sequence:
+
+```shellSession
+$ flags=("lorem ipsum" "dolor" "sit amet")
+$ concatStringsSep " and " flags
+lorem ipsum and dolor and sit amet
+```
+
+
+### `isELF` \<file\> {#fun-isELF}
+
+Return success if the specified file is an ELF object.
+
+Here's an example usage:
+
+```shellSession
+$ isELF "$SHELL"
+$ echo $?
+0
+```
+
+
+### `isMachO` \<file\> {#fun-isMachO}
+
+Return success if the specified file is a Mach-O object.
+
+Here's an example usage:
+
+```shellSession
+$ isMachO "$SHELL"
+$ echo $?
+1
+```
+
+
+### `isScript` \<file\> {#fun-isScript}
+
+Return success if the specified file is a script starting with a shebang (`#!...`).
+
+Here's an example usage:
+
+```shellSession
+$ isScript "$SHELL"
+$ echo $?
+1
+```
+
+
+### `printLines` \<arg...\> {#fun-printLines}
+
+Print each argument on a separate line.
+
+Here's an example usage:
+
+```shellSession
+$ printLines a b c d
+a
+b
+c
+d
+```
+
+
+### `printWords` \<arg...\> {#fun-printWords}
+
+Print each argument separated by a space character.
+
+Here's an example usage:
+
+```shellSession
+$ printWords a "b c" d
+a b c d
+```
+
 
 ### `makeWrapper` \<executable\> \<wrapperfile\> \<args\> {#fun-makeWrapper}
 
@@ -1224,12 +1547,6 @@ Example removing all references to the compiler in the output:
   '';
 }
 ```
-
-### `runHook` \<hook\> {#fun-runHook}
-
-Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
-
-For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
@@ -1318,32 +1635,6 @@ someVar=$(stripHash $name)
 Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
-
-### `prependToVar` \<variableName\> \<elements...\> {#fun-prependToVar}
-
-Prepend elements to a variable.
-
-Example:
-
-```shellSession
-$ configureFlags="--disable-static"
-$ prependToVar configureFlags --disable-dependency-tracking --enable-foo
-$ echo $configureFlags
---disable-dependency-tracking --enable-foo --disable-static
-```
-
-### `appendToVar` \<variableName\> \<elements...\> {#fun-appendToVar}
-
-Append elements to a variable.
-
-Example:
-
-```shellSession
-$ configureFlags="--disable-static"
-$ appendToVar configureFlags --disable-dependency-tracking --enable-foo
-$ echo $configureFlags
---disable-static --disable-dependency-tracking --enable-foo
-```
 
 ## Package setup hooks {#ssec-setup-hooks}
 
