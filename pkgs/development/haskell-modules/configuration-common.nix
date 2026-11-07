@@ -292,8 +292,8 @@ with haskellLib;
       "vector-tests-O0"
       "vector-tests-O2"
     ];
-    # inspection-testing doesn't work on all archs & ABIs
-    doCheck = super.vector.doCheck && !self.inspection-testing.meta.broken;
+    # tasty-inspection-testing doesn't work on all archs & ABIs
+    doCheck = super.vector.doCheck && !self.tasty-inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -778,11 +778,17 @@ with haskellLib;
   ] super.turtle;
 
   # Allow inspection-testing >= 0.6 in test suite
-  algebraic-graphs = appendPatch (pkgs.fetchpatch2 {
-    name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
-    url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
-    hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
-  }) super.algebraic-graphs;
+  algebraic-graphs = lib.pipe super.algebraic-graphs [
+    (appendPatch (
+      pkgs.fetchpatch2 {
+        name = "algebraic-graphs-0.7-allow-inspection-testing-0.6.patch";
+        url = "https://github.com/snowleopard/alga/commit/d4e43fb42db05413459fb2df493361d5a666588a.patch";
+        hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
+      }
+    ))
+    # inspection-testing doesn't work on all archs & ABIs
+    (dontCheckIf self.inspection-testing.meta.broken)
+  ];
 
   inspection-testing = overrideCabal (drv: {
     broken =
@@ -793,6 +799,47 @@ with haskellLib;
       # We compile static with -fexternal-interpreter which is incompatible with plugins
       || (isStatic && lib.versionAtLeast self.ghc.version "9.10");
   }) super.inspection-testing;
+
+  # inspection-testing doesn't work on all archs & ABIs
+  aeson-modern-tojson = dontCheckIf self.inspection-testing.meta.broken super.aeson-modern-tojson;
+  algebraic-graphs_0_8 = dontCheckIf self.inspection-testing.meta.broken super.algebraic-graphs_0_8;
+  data-elevator = dontCheckIf self.inspection-testing.meta.broken super.data-elevator;
+  fin = dontCheckIf self.inspection-testing.meta.broken super.fin;
+  fused-effects = dontCheckIf self.inspection-testing.meta.broken super.fused-effects;
+  generic-labels = dontCheckIf self.inspection-testing.meta.broken super.generic-labels;
+  generic-lens = dontCheckIf self.inspection-testing.meta.broken super.generic-lens;
+  generic-lens_2_3_0_0 = dontCheckIf self.inspection-testing.meta.broken super.generic-lens_2_3_0_0;
+  generic-optics = dontCheckIf self.inspection-testing.meta.broken super.generic-optics;
+  generic-optics_2_3_0_0 = dontCheckIf self.inspection-testing.meta.broken super.generic-optics_2_3_0_0;
+  ghc-justdoit = dontCheckIf self.inspection-testing.meta.broken super.ghc-justdoit;
+  hkt = dontCheckIf self.inspection-testing.meta.broken super.hkt;
+  large-hashable = dontCheckIf self.inspection-testing.meta.broken super.large-hashable;
+  linear-base = dontCheckIf self.inspection-testing.meta.broken super.linear-base;
+  linear-base_0_7_0 = dontCheckIf self.inspection-testing.meta.broken super.linear-base_0_7_0;
+  loopbreaker = dontCheckIf self.inspection-testing.meta.broken super.loopbreaker;
+  mockcat_1_4_1_1 = dontCheckIf self.inspection-testing.meta.broken super.mockcat_1_4_1_1;
+  named_0_4_0_0 = dontCheckIf self.inspection-testing.meta.broken super.named_0_4_0_0;
+  polysemy = dontCheckIf self.inspection-testing.meta.broken super.polysemy;
+  polysemy-plugin = dontCheckIf self.inspection-testing.meta.broken super.polysemy-plugin;
+  postgresql-simple = dontCheckIf self.inspection-testing.meta.broken super.postgresql-simple;
+  prolens = dontCheckIf self.inspection-testing.meta.broken super.prolens;
+  prospect = dontCheckIf self.inspection-testing.meta.broken super.prospect;
+  sized = dontCheckIf self.inspection-testing.meta.broken super.sized;
+  subcategories = dontCheckIf self.inspection-testing.meta.broken super.subcategories;
+  vec = dontCheckIf self.inspection-testing.meta.broken super.vec;
+
+  # inspection-testing doesn't work on all archs & ABIs
+  tasty-inspection-testing = overrideCabal (drv: {
+    broken = drv.broken or self.inspection-testing.meta.broken;
+  }) super.tasty-inspection-testing;
+
+  # inspection-testing doesn't work on all archs & ABIs and tasty-inspection-testing uses it
+  fixed-vector = dontCheckIf self.tasty-inspection-testing.meta.broken super.fixed-vector;
+  fixed-vector_2_1_1_0 = dontCheckIf self.tasty-inspection-testing.meta.broken super.fixed-vector_2_1_1_0;
+  heph-aligned-storable = dontCheckIf self.tasty-inspection-testing.meta.broken super.heph-aligned-storable;
+  infinite-list = dontCheckIf self.tasty-inspection-testing.meta.broken super.infinite-list;
+  random = dontCheckIf self.tasty-inspection-testing.meta.broken super.random;
+  text_2_1_4 = dontCheckIf self.tasty-inspection-testing.meta.broken super.text_2_1_4;
 
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
@@ -1219,13 +1266,17 @@ with haskellLib;
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = doJailbreak (dontCheck super.tailfile-hinotify);
 
-  # 2025-09-01: Merged patch from upstream to fix bounds:
-  optics = appendPatch (fetchpatch {
-    name = "optics-fix-inspection-testing-bound";
-    url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
-    sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
-    relative = "optics";
-  }) super.optics;
+  optics = lib.pipe super.optics [
+    # 2025-09-01: Merged patch from upstream to fix bounds:
+    (appendPatch (fetchpatch {
+      name = "optics-fix-inspection-testing-bound";
+      url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
+      sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
+      relative = "optics";
+    }))
+    # inspection-testing doesn't work on all archs & ABIs
+    (dontCheckIf self.inspection-testing.meta.broken)
+  ];
 
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
