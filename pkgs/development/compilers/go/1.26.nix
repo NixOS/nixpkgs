@@ -180,6 +180,33 @@ stdenv.mkDerivation (finalAttrs: {
       go = finalAttrs.finalPackage;
       buildGoModule = buildGo126Module;
     };
+
+    # Tests whether this version of Go supports PIE when internally linking.
+    # Internally linking is required when CGo is disabled, so this can be used to
+    # determine if you should pass the flag enabling PIE.
+    internalPIESupported =
+      let
+        # Sourced from src/internal/platform/supported.go:InternalLinkPIESupported()
+        piePlatforms = {
+          android = [ "arm64" ];
+          darwin = [
+            "amd64"
+            "arm64"
+          ];
+          linux = [
+            "amd64"
+            "arm64"
+            "loong64"
+            "ppc64le"
+          ];
+          windows = [
+            "386"
+            "amd64"
+            "arm64"
+          ];
+        };
+      in
+      goAttrs: lib.elem goAttrs.GOARCH (piePlatforms.${goAttrs.GOOS} or [ ]);
   };
 
   __structuredAttrs = true;
