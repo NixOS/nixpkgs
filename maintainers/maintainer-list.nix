@@ -12368,6 +12368,11 @@
     githubId = 476346;
     name = "Ivan Mincik";
   };
+  imkarrer = {
+    github = "imkarrer";
+    githubId = 7797790;
+    name = "Isaac Karrer";
+  };
   imlonghao = {
     email = "nixos@esd.cc";
     github = "imlonghao";
