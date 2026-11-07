@@ -51,6 +51,8 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ python-dateutil ];
 
+  pythonRelaxDeps = [ "python-dateutil" ];
+
   nativeCheckInputs = [
     importlib-metadata
     numpy
