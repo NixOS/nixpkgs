@@ -11,6 +11,7 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -46,6 +47,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fuse3
     glib
     nautilus
+    # The crate graph uses `rusqlite` with the `bundled` feature, so SQLite
+    # itself is compiled from the vendored C amalgamation. However nixpkgs'
+    # cargoSetupHook exports `LIBSQLITE3_SYS_USE_PKG_CONFIG=1` for every Rust
+    # build, which makes libsqlite3-sys' build script take the *linked* code
+    # path instead of the bundled one: it then probes for sqlite3 with
+    # pkg-config and, when that fails, emits a bare
+    # `cargo:rustc-link-lib=dylib=sqlite3`. With no system sqlite in scope
+    # the final link of the `wusel` binary fails with "cannot find
+    # -lsqlite3".
+    #
+    # Providing the system sqlite makes the pkg-config probe succeed, which
+    # both resolves the link and gives the build a real libsqlite3 to link
+    # against.
+    sqlite
   ];
 
   # Linux-only: the FUSE mount, the Nautilus extension and the GNOME Shell
