@@ -6,10 +6,12 @@
   fetchFromGitHub,
   installShellFiles,
   llvmPackages,
+  pkg-config,
   protobuf,
   rustPlatform,
   xcbuild,
   zig_0_15,
+  zstd,
 }:
 let
   pname = "turbo-unwrapped";
@@ -43,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     capnproto
     installShellFiles
+    pkg-config
     protobuf
     zig_0_15.hook
   ]
@@ -53,6 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cctools
     xcbuild
   ];
+
+  buildInputs = [ zstd ];
 
   dontUseZigBuild = true;
   dontUseZigCheck = true;
