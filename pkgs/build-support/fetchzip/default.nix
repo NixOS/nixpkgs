@@ -15,6 +15,8 @@
 }:
 
 lib.extendMkDerivation {
+  calculateExpectDrvArgs = true;
+
   constructDrv = fetchurl;
 
   excludeDrvArgNames = [
