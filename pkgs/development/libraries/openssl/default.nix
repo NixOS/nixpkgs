@@ -114,9 +114,6 @@ let
         !stdenv.hostPlatform.isDarwin
         && !stdenv.hostPlatform.isAndroid
         && !(stdenv.hostPlatform.useLLVM or false)
-        # Avoids eager evaluation on isGNU up the chain since Meson uses Python
-        # which uses OpenSSL
-        && stdenv.targetPlatform.libc != "picolibc"
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
