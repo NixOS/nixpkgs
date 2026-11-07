@@ -5,22 +5,16 @@
   isabelle,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "isabelle-linter";
-  version = "2025-2-1.0.0";
+  version = "2025-2-1.1.0";
 
   src = fetchFromGitHub {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
-    rev = "Isabelle2025-2-v1.0.0";
-    hash = "sha256-V6Bnxyq/WI6U0sVBHA/vFOI0U3Vd5/GLCxbeWVitm8I=";
+    tag = "Isabelle2025-2-v1.1.0";
+    hash = "sha256-OfaISXdjLzg11fcOvikPEDlyWInp0xVwKtJSOiNXyZ0=";
   };
-
-  patches = [
-    # Isabelle2025-2 wraps markup in command_range; without the patch then the
-    # commands are ignored span and `isabelle lint` doesn't print anything
-    ./isabelle-linter-command-range.patch
-  ];
 
   nativeBuildInputs = [ isabelle ];
 
@@ -31,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    dir=$out/Isabelle${isabelle.version}/contrib/${pname}-${version}
+    dir=$out/Isabelle${isabelle.version}/contrib/${finalAttrs.pname}-${finalAttrs.version}
     mkdir -p $dir
     cp -r * $dir/
   '';
@@ -47,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})
