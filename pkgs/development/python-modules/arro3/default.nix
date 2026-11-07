@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
   pytestCheckHook,
   geoarrow-types,
   pyarrow,
@@ -39,6 +41,8 @@ let
       description,
       pythonImportsCheck,
       dependencies ? [ ],
+      nativeBuildInputs ? [ ],
+      buildInputs ? [ ],
     }:
     buildPythonPackage {
       inherit
@@ -48,16 +52,19 @@ let
         cargoDeps
         dependencies
         pythonImportsCheck
+        buildInputs
         ;
       pyproject = true;
 
       sourceRoot = "${src.name}/${subdir}";
       cargoRoot = "..";
 
-      nativeBuildInputs = with rustPlatform; [
-        cargoSetupHook
-        maturinBuildHook
-      ];
+      nativeBuildInputs =
+        (with rustPlatform; [
+          cargoSetupHook
+          maturinBuildHook
+        ])
+        ++ nativeBuildInputs;
 
       env = {
         CARGO_TARGET_DIR = "./target";
@@ -93,6 +100,8 @@ let
     description = "Rust-based readers and writers for Arrow in Python";
     pythonImportsCheck = [ "arro3.io" ];
     dependencies = [ arro3-core ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zstd ];
   };
 
   arro3-tests = buildPythonPackage {

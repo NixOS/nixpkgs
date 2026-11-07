@@ -1365,12 +1365,6 @@ self: super: with self; {
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
 
-  arro3-compute = (callPackage ../development/python-modules/arro3 { }).arro3-compute;
-
-  arro3-core = (callPackage ../development/python-modules/arro3 { }).arro3-core;
-
-  arro3-io = (callPackage ../development/python-modules/arro3 { }).arro3-io;
-
   arrow = callPackage ../development/python-modules/arrow { };
 
   arsenic = callPackage ../development/python-modules/arsenic { };
@@ -23436,6 +23430,15 @@ self: super: with self; {
   zstandard = callPackage ../development/python-modules/zstandard { };
 
   zstd = callPackage ../development/python-modules/zstd { inherit (pkgs) zstd; };
+
+  inherit
+    (callPackage ../development/python-modules/arro3 {
+      inherit (pkgs) zstd;
+    })
+    arro3-compute
+    arro3-core
+    arro3-io
+    ;
 
   zulip = callPackage ../development/python-modules/zulip { };
 
