@@ -20,7 +20,7 @@
 
   # tests
   addBinToPathHook,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pytest-mock,
   pytest-xdist,
   writableTmpDirAsHomeHook,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     addBinToPathHook
-    pytestCheckHook
+    pytest9_1CheckHook
     pytest-mock
     pytest-xdist
     writableTmpDirAsHomeHook
