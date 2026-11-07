@@ -2,7 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   installShellFiles,
+  oniguruma,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-sZiGeo2OhnyvwwSd86WGVo3UAZKLQt2g9zBecBQLzrQ=";
 
   nativeBuildInputs = [
+    pkg-config
     installShellFiles
+  ];
+  buildInputs = [
+    oniguruma
   ];
 
   postInstall = ''
@@ -27,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --fish completions/fish/neocmakelsp.fish
     installShellCompletion --zsh completions/zsh/_neocmakelsp
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
