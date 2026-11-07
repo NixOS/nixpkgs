@@ -17,6 +17,7 @@
   python3Packages,
   qt6,
   rustPlatform,
+  sqlite,
   umu-launcher,
   util-linux,
   versionCheckHook,
@@ -93,6 +94,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     version = "0.1.0";
     cargoHash = "sha256-PGyUuwwU44/0lHfHEipgi5TxGyXbdDPar/mDqHLFsgM=";
     sourceRoot = "${finalAttrs.src.name}/native/amethyst_filegraph";
+    buildInputs = [
+      sqlite
+    ];
   };
 
   dependencies =
