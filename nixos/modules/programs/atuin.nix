@@ -34,6 +34,11 @@ in
       defaultText = lib.literalExpression "config.programs.fish.enable";
     };
 
+    enableNushellIntegration = lib.mkEnableOption "Nushell integration" // {
+      default = config.programs.nushell.enable;
+      defaultText = lib.literalExpression "config.programs.nushell.enable";
+    };
+
     flags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -159,6 +164,15 @@ in
 
     programs.fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration ''
       ${lib.getExe cfg.package} init fish ${escapeShellArgs cfg.flags} | source
+    '';
+
+    programs.nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+      source ${
+        pkgs.runCommand "atuin-nushell-config.nu" { nativeBuildInputs = [ pkgs.writableTmpDirAsHomeHook ]; }
+          ''
+            ${lib.getExe cfg.package} init nu ${escapeShellArgs cfg.flags} > "$out"
+          ''
+      }
     '';
 
     systemd = lib.mkIf (cfg.daemon.enable && pkgs.stdenv.hostPlatform.isLinux) {
