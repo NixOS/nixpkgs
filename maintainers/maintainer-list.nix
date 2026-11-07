@@ -19806,6 +19806,11 @@
     githubId = 7831184;
     name = "John Mercier";
   };
+  mocchii2 = {
+    github = "mocchii2";
+    githubId = 25542236;
+    name = "mocchii2";
+  };
   mochienya = {
     name = "mochienya";
     github = "mochienya";
