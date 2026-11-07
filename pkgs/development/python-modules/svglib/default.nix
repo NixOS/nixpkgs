@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "2.2.0";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-veXF+bDgkfHiELiq/doHpJvY6/IcDpDWc4OmZcg1l6w=";
+    hash = "sha256-Yltiz0QKtX9d70LVvkeg1rc8AnEe+GqxVFZQqYrBrV8=";
   };
 
   build-system = [ hatchling ];
