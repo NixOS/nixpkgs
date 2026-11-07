@@ -1,5 +1,5 @@
-/* Brgen4 search for configuration under `/etc/opt/brother/scanner/brscan4`. This
-   LD_PRELOAD library intercepts execvp(), open and open64 calls to redirect them to
+/* Brgen4 search for configuration under `/opt/brother/scanner/brscan4`. This
+   LD_PRELOAD library intercepts various calls to redirect them to
    the corresponding location in $out. Also support specifying an alternate
    file name for `brsanenetdevice4.cfg` which otherwise is invariable
    created at `/etc/opt/brother/scanner/brscan4`*/
@@ -16,7 +16,7 @@
 #include <string.h>
 #include <dirent.h>
 
-char origDir [] = "/etc/opt/brother/scanner/brscan4";
+char origDir [] = "/opt/brother/scanner/brscan4";
 char realDir [] = OUT "/opt/brother/scanner/brscan4";
 
 char devCfgFileNameEnvVar [] = "BRSANENETDEVICE4_CFG_FILENAME";
@@ -98,11 +98,11 @@ const char* rewriteSystemCall(const char* command, char* buf, unsigned maxBuf)
     return result;
 }
 
-int execvp(const char * path, char * const argv[])
+int execve(const char *path, char *const argv[], char *const envp[])
 {
-    int (*_execvp) (const char *, char * const argv[]) = dlsym(RTLD_NEXT, "execvp");
+    int (*_execve) (const char *, char *const argv[], char *const envp[]) = dlsym(RTLD_NEXT, "execve");
     char buf[PATH_MAX];
-    return _execvp(rewrite(path, buf), argv);
+    return _execve(rewrite(path, buf), argv, envp);
 }
 
 
