@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       from it).
     '';
     license = lib.licenses.lsof;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
     platforms = lib.platforms.unix;
   };
 }
