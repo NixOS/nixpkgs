@@ -39,7 +39,6 @@ import ./make-test-python.nix (
           scope = "cluster1";
           name = "node${toString (index + 1)}";
           nodeIp = ip;
-          otherNodesIps = builtins.filter (h: h != ip) nodesIps;
           softwareWatchdog = true;
 
           settings = {
