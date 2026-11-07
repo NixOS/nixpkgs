@@ -19733,7 +19733,7 @@
     name = "Marek Mahut";
   };
   mmclinton = {
-    email = "nixpkg.concur071@simplelogin.com";
+    email = "github.mmc@pm.me";
     github = "mmclinton";
     githubId = 96266047;
     name = "Miller Clinton";
