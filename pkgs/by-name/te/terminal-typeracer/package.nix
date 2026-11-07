@@ -7,6 +7,7 @@
   openssl,
   sqlite,
   libiconv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
     LIBGIT2_NO_VENDOR = 0;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source terminal based version of Typeracer written in rust";
