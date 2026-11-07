@@ -20888,6 +20888,8 @@ self: super: with self; {
 
   tftpy = callPackage ../development/python-modules/tftpy { };
 
+  th1 = callPackage ../development/python-modules/th1 { };
+
   theben-conexa-smgw = callPackage ../development/python-modules/theben-conexa-smgw { };
 
   thefuzz = callPackage ../development/python-modules/thefuzz { };
@@ -21455,8 +21457,6 @@ self: super: with self; {
   trx-python = callPackage ../development/python-modules/trx-python { };
 
   trytond = callPackage ../development/python-modules/trytond { };
-
-  ts1-signatures = callPackage ../development/python-modules/ts1-signatures { };
 
   tsfresh = callPackage ../development/python-modules/tsfresh { };
 

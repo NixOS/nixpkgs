@@ -122,7 +122,7 @@ let
           pyyaml
           pytest-asyncio
           dpkt
-          ts1-signatures
+          th1
         ]
       }"
 
