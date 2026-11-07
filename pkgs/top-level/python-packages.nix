@@ -22939,6 +22939,8 @@ self: super: with self; {
 
   wolf-comm = callPackage ../development/python-modules/wolf-comm { };
 
+  wolframclient = callPackage ../development/python-modules/wolframclient { };
+
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
