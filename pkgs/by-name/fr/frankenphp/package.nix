@@ -30,13 +30,13 @@ let
 in
 buildGo127Module (finalAttrs: {
   pname = "frankenphp";
-  version = "1.13.4";
+  version = "1.13.5";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o5/WWa9T5WnjpJV+PGXZWHtkghbiYNQhRzy37YANEnU=";
+    hash = "sha256-QVDomvFyWS7/IvjRCP6OshuY4j78Awv8Anx7/LJS8Ok=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGo127Module (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-JAQL48CEwyGsCkrZis8Mi8Ewzxt4SoMe3BzV/m5J4J4=";
+  vendorHash = "sha256-zqnBEKHw0VPvIoP1eX6uKlhDaVCyjicxQlr7uXcEyeQ=";
 
   buildInputs = [
     phpUnwrapped
@@ -125,7 +125,10 @@ buildGo127Module (finalAttrs: {
     homepage = "https://github.com/php/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = [ lib.maintainers.piotrkwiecinski ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      mykiwi
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -1369,6 +1369,12 @@
     githubId = 49609151;
     name = "Popa Ioan Alexandru";
   };
+  alexandre-ros = {
+    email = "alexandre-ros@tuta.io";
+    github = "alexandre-ros";
+    githubId = 58669111;
+    name = "Alexandre Ros";
+  };
   AlexandreTunstall = {
     name = "Alex Tunstall";
     email = "alex@tunstall.xyz";
@@ -1431,12 +1437,6 @@
     github = "alexfmpe";
     githubId = 2335822;
     name = "Alexandre Esteves";
-  };
-  alexland7219 = {
-    email = "alexland7219@gmail.com";
-    github = "alexland7219";
-    githubId = 58669111;
-    name = "Alexandre Ros";
   };
   alexnabokikh = {
     email = "nabokikh@duck.com";
@@ -6550,6 +6550,11 @@
     github = "dariof4";
     githubId = 9992814;
   };
+  dark-siders = {
+    name = "Dark_Siders";
+    github = "dark-siders";
+    githubId = 29074260;
+  };
   darkalex = {
     email = "alex.j.tusa@gmail.com";
     github = "Dark-Alex-17";
@@ -9786,6 +9791,12 @@
     github = "fmthoma";
     githubId = 5918766;
     name = "Franz Thoma";
+  };
+  fnl = {
+    email = "nixos@finnloske.de";
+    github = "benular";
+    githubId = 136812920;
+    name = "Finn Loske";
   };
   fnune = {
     email = "fausto.nunez@mailbox.org";
@@ -20400,6 +20411,11 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mykiwi = {
+    github = "mykiwi";
+    githubId = 334432;
+    name = "Romain Gautier";
+  };
   mymindstorm = {
     name = "Brendan Early";
     email = "mymindstorm@evermiss.net";
@@ -20417,6 +20433,13 @@
     github = "Myrl";
     githubId = 9636071;
     name = "Myrl Hex";
+  };
+  mysaa = {
+    name = "Samy Avrillon";
+    email = "mysaa@hadoly.fr";
+    github = "MysaaJava";
+    githubId = 33335046;
+    keys = [ { fingerprint = "8803 52F5 FD83 DF24 F414  13CC 4E77 7255 80DA 73CE"; } ];
   };
   MysteryBlokHed = {
     name = "Adam Thompson-Sharpe";
@@ -28041,9 +28064,10 @@
   };
   ssnoer = {
     email = "ssnoer@proton.me";
-    github = "Seba244c";
+    github = "ssnoer";
     githubId = 23051740;
     name = "Sebastian August Snoer";
+    keys = [ { fingerprint = "8ECA 72D9 49EE 21AB 2A43 71A2 207C 0213 F7FE 56D0"; } ];
   };
   sstef = {
     email = "stephane@nix.frozenid.net";

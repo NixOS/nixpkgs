@@ -4158,8 +4158,6 @@ self: super: with self; {
 
   datapoint = callPackage ../development/python-modules/datapoint { };
 
-  dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
-
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   datasalad = callPackage ../development/python-modules/datasalad { };
@@ -4325,6 +4323,8 @@ self: super: with self; {
   defang = callPackage ../development/python-modules/defang { };
 
   defcon = callPackage ../development/python-modules/defcon { };
+
+  defeatbeta-api = callPackage ../development/python-modules/defeatbeta-api { };
 
   deform = callPackage ../development/python-modules/deform { };
 
@@ -6444,8 +6444,6 @@ self: super: with self; {
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   flightradarapi = callPackage ../development/python-modules/flightradarapi { };
-
-  flipr-api = callPackage ../development/python-modules/flipr-api { };
 
   flit = callPackage ../development/python-modules/flit { };
 
@@ -8678,6 +8676,8 @@ self: super: with self; {
 
   iso4217 = callPackage ../development/python-modules/iso4217 { };
 
+  iso4217parse = callPackage ../development/python-modules/iso4217parse { };
+
   iso639-lang = callPackage ../development/python-modules/iso639-lang { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
@@ -9760,6 +9760,10 @@ self: super: with self; {
   liblarch = callPackage ../development/python-modules/liblarch { };
 
   liblistenbrainz = callPackage ../development/python-modules/liblistenbrainz { };
+
+  libloot = callPackage ../development/python-modules/libloot {
+    libloot-native = pkgs.libloot;
+  };
 
   liblp = callPackage ../development/python-modules/liblp { };
 
@@ -10963,8 +10967,6 @@ self: super: with self; {
   mim-solvers = callPackage ../development/python-modules/mim-solvers { inherit (pkgs) mim-solvers; };
 
   minari = callPackage ../development/python-modules/minari { };
-
-  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
 
   minexr = callPackage ../development/python-modules/minexr { };
 
@@ -13188,6 +13190,8 @@ self: super: with self; {
   otter-grader = callPackage ../development/python-modules/otter-grader { };
 
   otxv2 = callPackage ../development/python-modules/otxv2 { };
+
+  ouilookup = callPackage ../development/python-modules/ouilookup { };
 
   ouman-eh-800-api = callPackage ../development/python-modules/ouman-eh-800-api { };
 
@@ -21559,8 +21563,6 @@ self: super: with self; {
   txzmq = callPackage ../development/python-modules/txzmq { };
 
   ty = callPackage ../development/python-modules/ty { inherit (pkgs) ty; };
-
-  type-infer = callPackage ../development/python-modules/type-infer { };
 
   typechecks = callPackage ../development/python-modules/typechecks { };
 

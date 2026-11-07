@@ -2,6 +2,8 @@
   version,
   hash,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
+  extraMeta ? { },
 }:
 
 {
@@ -194,6 +196,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    inherit knownVulnerabilities;
     description = "High-level performance-oriented dynamical language for technical computing";
     mainProgram = "julia";
     homepage = "https://julialang.org/";
@@ -209,5 +212,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-  };
+  }
+  // extraMeta;
 }

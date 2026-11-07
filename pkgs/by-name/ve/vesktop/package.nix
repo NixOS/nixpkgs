@@ -8,12 +8,12 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron_44,
+  electron_45,
   libicns,
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -26,17 +26,17 @@
   withSystemVencord ? false,
 }:
 let
-  electron = electron_44;
+  electron = electron_45;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K7vgEtHf8047mge06KsoAJeg0v2leHgGbADW0rSfoXQ=";
+    hash = "sha256-UBk3wp1wuMqyY8KMSvc/URAw9awZMFQZrJgQe59PYmA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_11;
-    fetcherVersion = 4;
-    hash = "sha256-7wzkmGaXx1t43zNAWsocKJy12ib9CUoDNN3d9unoahg=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-efgDw/4orFP9kSWjtkyXcfkXsfYLx4LGTVNKfZ5LhdM=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_11
+    pnpm_12
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

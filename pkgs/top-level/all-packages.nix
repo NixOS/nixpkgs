@@ -1916,7 +1916,6 @@ with pkgs;
   };
 
   inherit (callPackages ../tools/filesystems/garage { })
-    garage
     garage_1
     garage_2
     ;
@@ -2362,10 +2361,6 @@ with pkgs;
   };
 
   molecule = with python3Packages; toPythonApplication molecule;
-
-  moreutils = callPackage ../tools/misc/moreutils {
-    docbook-xsl = docbook_xsl;
-  };
 
   mtr-gui = mtr.override { withGtk = true; };
 
@@ -4339,7 +4334,7 @@ with pkgs;
     pythonAttr = "python315FreeThreading";
     enableGIL = false;
   };
-  python316FreeThreading = python315.override {
+  python316FreeThreading = python316.override {
     self = python316FreeThreading;
     pythonAttr = "python316FreeThreading";
     enableGIL = false;
@@ -5833,7 +5828,7 @@ with pkgs;
     libprom
     ;
 
-  libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
+  libtorrent-rasterbar = libtorrent-rasterbar-2_1_x;
 
   libubox-nossl = libubox.override { with_ustream_ssl = false; };
 

@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-country-lite";
-  version = "2026-10";
+  version = "2026-11";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-country-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-TNRFNt39QP7H7KlKIz99GfONRw5lIuZTy40nAB9f4Xc=";
+    hash = "sha256-df5DABD204qMQzHCAr8N9s4yIabm2CO55abZUeTPl1g=";
   };
 
   dontUnpack = true;

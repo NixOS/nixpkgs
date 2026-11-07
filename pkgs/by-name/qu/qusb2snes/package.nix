@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.darwin;
     mainProgram = "QUsb2Snes";
-    maintainers = with lib.maintainers; [ alexland7219 ];
+    maintainers = with lib.maintainers; [ alexandre-ros ];
   };
 })

@@ -5,6 +5,7 @@
   pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  aws-lc,
   nixosTests,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     protobuf
     rust-jemalloc-sys
+    aws-lc
   ];
 
   # The unit tests spin up a PostgreSQL instance, which is not available in the

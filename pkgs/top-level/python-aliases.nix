@@ -185,6 +185,7 @@ mapAliases {
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
   databricks-cli = throw "'databricks-cli' has been removed from the Python package set. Use 'pkgs.databricks-cli' instead."; # Added 2026-09-04
   dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
+  dataprep-ml = throw "'dataprep-ml' has been removed due to lack of upstream maintenance."; # added 2026-11-02
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   datauri = warnAlias "'datauri' has been renamed to by 'python-datauri'" python-datauri; # Added 2026-07-28
@@ -286,6 +287,7 @@ mapAliases {
   flask_testing = throw "'flask_testing' has been renamed to/replaced by 'flask-testing'"; # Converted to throw 2025-10-29
   flask_wtf = throw "'flask_wtf' has been renamed to/replaced by 'flask-wtf'"; # Converted to throw 2025-10-29
   flaskbabel = throw "'flaskbabel' has been renamed to/replaced by 'flask-babel'"; # Converted to throw 2025-10-29
+  flipr-api = throw "'flipr-api' has been removed as the upstream repository is archived"; # Added 2026-11-01
   flowlogs_reader = throw "'flowlogs_reader' has been renamed to/replaced by 'flowlogs-reader'"; # Converted to throw 2025-10-29
   flufl_bounce = throw "'flufl_bounce' has been renamed to/replaced by 'flufl-bounce'"; # Converted to throw 2025-10-29
   flufl_i18n = throw "'flufl_i18n' has been renamed to/replaced by 'flufl-i18n'"; # Converted to throw 2025-10-29
@@ -429,6 +431,7 @@ mapAliases {
   memory_profiler = throw "'memory_profiler' has been renamed to/replaced by 'memory-profiler'"; # Converted to throw 2025-10-29
   mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   mesonpep517 = throw "'mesonpep517' has been removed as it was broken and unmaintained."; # added 2025-11-08
+  mindsdb-evaluator = throw "'mindsdb-evaluator' has been removed as it was unmaintained upstream"; # added 2026-11-02
   minikerberos-bad = throw "'minikerberos-bad' has been renamed to/replaced by 'kerbad'"; # added 2025-11-06
   mir_eval = throw "'mir_eval' has been renamed to/replaced by 'mir-eval'"; # Converted to throw 2025-10-29
   mistune_2_0 = throw "'mistune_2_0' has been renamed to/replaced by 'mistune'"; # Converted to throw 2025-10-29
@@ -811,6 +814,7 @@ mapAliases {
   tvdb_api = throw "'tvdb_api' has been renamed to/replaced by 'tvdb-api'"; # Converted to throw 2025-10-29
   tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   twitter = throw "'twitter' has been removed because it was archived upstream"; # Added 2026-09-06
+  type-infer = throw "'type-infer' has been removed because it was unmaintained upstream"; # Added 2026-11-02
   typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   typedmonarchmoney = throw "'typedmonarchmoney' was removed because Home Assistant switched to 'monarchmoneycommunity'"; # added 2026-08-05
   typer-slim = warnAlias "typer-slim was an alias package of typer that only depended on it and has been removed." typer; # added 2026-02-16

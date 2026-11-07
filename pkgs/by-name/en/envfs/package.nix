@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envfs";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
     rev = finalAttrs.version;
-    hash = "sha256-hj/6zS9ebF0IDqgc1Dne59nWx80nk6jn2gj8BzQUFIQ=";
+    hash = "sha256-+RDJKyzF3jx/D5L45RybzivMjHOYe1Y4rIw9Y1G2z+g=";
   };
 
-  cargoHash = "sha256-dz3gpE464jnmSDsAsmJHcxUsEKeUURNoUjgGU2214Xg=";
+  cargoHash = "sha256-v3v0nGaBNCvDMVt6b5RqlgbW6uWiXHHwTGApX61abog=";
 
   postInstall = ''
     ln -s envfs $out/bin/mount.envfs

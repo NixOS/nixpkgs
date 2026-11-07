@@ -3,7 +3,7 @@
   stdenv,
   buildPackages,
   callPackage,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
@@ -13,9 +13,9 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "caddy";
-  version = "2.11.7";
+  version = "2.11.9";
 
   __structuredAttrs = true;
 
@@ -26,10 +26,10 @@ buildGoModule (finalAttrs: {
     repo = "caddy";
     tag = "v${finalAttrs.version}";
     # remember to update hashes for `dist` and `plugins` test!
-    hash = "sha256-6+USPwF6LzDWUjrNRL2ncxSz5KmqJM0L/6o03Lh8YD8=";
+    hash = "sha256-K7irjePU998bcbKANXpTf0npirSh+tkc8D3x4JmRdbg=";
   };
 
-  vendorHash = "sha256-kJOl5h9gSfEK6ROT/MYOkBUr6MhiNBlbZVZPqwNpbBk=";
+  vendorHash = "sha256-qjLumZHCyoM+lNZtWOTmMlHN5zgB36fv9CkIq3ncMlM=";
 
   ldflags = [
     "-s"
@@ -90,7 +90,7 @@ buildGoModule (finalAttrs: {
       owner = "caddyserver";
       repo = "dist";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-KvdaqiX06I1ft+p67J1ISgP512SoZ4syDzfe888ZqGI=";
+      hash = "sha256-v9VaNgkWekTPI5nt04QoyZeJRRvymK2q0o3JxygC2JA=";
     };
 
     updateScript = nix-update-script {

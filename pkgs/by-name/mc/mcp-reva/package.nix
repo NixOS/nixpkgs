@@ -4,7 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until mcp-reva works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mcp-reva";
   version = "7.3.1";
   pyproject = true;
@@ -21,12 +29,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # setuptools_scm derives the version from git tags, which the tarball lacks.
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     pyghidra
     mcp
     httpx

@@ -2167,8 +2167,7 @@
       ];
     "flipr" =
       ps: with ps; [
-        flipr-api
-      ];
+      ]; # missing inputs: flipr-api
     "flo" =
       ps: with ps; [
         aioflo
@@ -8735,7 +8734,6 @@
     "flexit"
     "flexit_bacnet"
     "flic"
-    "flipr"
     "flo"
     "flow_it"
     "flume"
