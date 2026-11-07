@@ -21,6 +21,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-xqj9USqVG7g2zT2P3VxDVt8fFDtyUnZOdT6gYZh4cRI=";
 
+  postPatch = ''
+    substituteInPlace "$cargoDepsCopy"/source-git-*/snui-*/src/context.rs \
+      --replace-fail " RadialGradient::new(" " tiny_skia::RadialGradient::new(" \
+      --replace-fail " LinearGradient::new(" " tiny_skia::LinearGradient::new("
+  '';
+
   nativeBuildInputs = [
     pkg-config
   ];
