@@ -179,27 +179,17 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
+  # FIXME: Tombstone. Remove when references have been replaced with `teams.cudaB`.
+  # TODO: Find out why.
   cuda = {
+    # aliases = [ "Nixpkgs CUDA", "NixOS CUDA", "Nix CUDA", "CUDA Team", "@NixOS/cuda-maintainers" ];
     shortName = "CUDA";
-    members = [
-      SomeoneSerge
-      connorbaker
-      GaetanLepage
-      YorikSar
-      # Kevin?
-      # samuela?
-      # Fridh?
-      # knedlesep?
-      # Jon?
-      # dfullmer?
-      # danieldk?
-      # zimbatm?
-      # tomberek?
-      # Whoever sent the email in "add NVIDIA licenses"
-      # et al.
-    ];
+    members = [ ];
 
     scope = ''
+      Nixpkgs CUDA Team has acknowledged its split on September 25th, 2026
+      during NixCon Krakow.
+
       Supporting GPU-Accelerated Scientific Computing.
       Package CUDA-enabled packages.
 
@@ -226,11 +216,14 @@ with lib.maintainers;
 
   # Starting late 2024
   cudaA = {
+    # aliases = [ "SciComp" ];
     shortName = "cudaA";
     members = [
       SomeoneSerge
     ];
     scope = ''
+      Currently inactive.
+
       Supporting GPU-Accelerated Scientific Computing.
       Towards self-employed maintainership.
 
@@ -243,6 +236,10 @@ with lib.maintainers;
     '';
   };
 
+  # FIXME: Choose a name.
+  # NOTE: SomeoneSerge suggests: "NV", "NVIDIA". SomeoneSerge asks to avoid
+  # occurrences of "CUDA" in the name so as to avoid the split having been
+  # ignored and forgotten, or creating the impression that `cudaB` is "the one true cuda team".
   cudaB = {
     shortName = "cudaB";
     members = [
