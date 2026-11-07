@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  valgrind,
+  versionCheckHook,
   testers,
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "lz4";
     owner = "lz4";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/dG1n59SKBaEBg72pAWltAtVmJ2cXxlFFhP+klrkTos=";
   };
 
@@ -31,9 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    valgrind
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+
+  strictDeps = true;
 
   outputs = [
     "dev"
@@ -45,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../build/cmake";
   cmakeBuildDir = "build-dist";
 
-  doCheck = false; # tests take a very long time
-  checkTarget = "test";
+  # Tests take a very long time, and require CMake trickery
+  # because they are implemented in a completely separate cmakeDir.
+  doInstallCheck = true;
 
   passthru.tests = {
     version = testers.testVersion {
@@ -58,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       moduleNames = [ "liblz4" ];
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Extremely fast compression algorithm";
