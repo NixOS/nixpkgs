@@ -88,6 +88,7 @@ let
         "mail"
         "mailman3"
         "mail-tlsa-check"
+        "mastodon"
         "mikrotik"
         "modemmanager"
         "mongodb"
