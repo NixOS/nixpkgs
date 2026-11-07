@@ -28,13 +28,13 @@ buildPythonPackage rec {
     hash = "sha256-N6dB1NP1uUED/DxAwuRSChQejV4lyHqI6U8B6gQ7paI=";
   };
 
-  pythonImportsChecks = [
+  pythonImportsCheck = [
     "sage"
     "sage.features"
     "sage.misc.package"
     "sage.misc.package_dir"
-    "sage.misc.temporary_dir"
-    "sage.misc.viewer"
+    "sage.misc.temporary_file"
+    # "sage.misc.viewer" # Module not found in passagemath's sources
   ];
 
   meta = {
