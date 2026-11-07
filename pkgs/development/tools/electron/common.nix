@@ -25,9 +25,12 @@
 let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
+  upstream-info = info.chromium // {
+    inherit gclientDeps;
+  };
 in
 
-((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
+((chromium.override { inherit upstream-info; }).mkDerivation (base: {
   packageName = "electron";
   inherit (info) version;
 
@@ -105,8 +108,13 @@ in
     base.patches
     ++
       # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
-      lib.optional (lib.versionAtLeast info.version "44")
-        ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
+      lib.optional (
+        lib.versions.major info.version == "44"
+      ) ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch
+    ++
+      # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
+      lib.optional (lib.versionAtLeast info.version "45")
+        ./0002-electron-45-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
 
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
