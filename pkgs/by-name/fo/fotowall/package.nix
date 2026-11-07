@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fotowall";
     repo = "fotowall";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9v8ybq+zKGiS5PT/88SYg9lXBclE3bj57FDL3uf4Eqc=";
   };
 
