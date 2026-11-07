@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 4;
-    hash = "sha256-+5hbR1nBInUKTalF7ZHMqPfi/etplR5aNsEE/a/ZASs=";
+    hash = "sha256-a8BKOdUiX0N615LjQetmpVv8Cyfu81NVEOu6fKJngE0=";
   };
 
   env.NUXT_TELEMETRY_DISABLED = "1";
