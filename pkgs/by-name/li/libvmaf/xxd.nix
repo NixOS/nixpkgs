@@ -1,10 +1,10 @@
-# Minimal `xxd --include` replacement for embedding binary files as C arrays.
+# Minimal `xxd -i` / `xxd --include` replacement for embedding binary files as C arrays.
 # Used instead of tinyxxd to avoid ~22k rebuilds via libaom -> ffmpeg -> everything.
 { writeShellScriptBin }:
 
 writeShellScriptBin "xxd" ''
-  if [ "$1" != "--include" ]; then
-    echo "xxd: only --include mode is supported" >&2
+  if [ "$1" != "-i" ] && [ "$1" != "--include" ]; then
+    echo "xxd: only -i / --include mode is supported" >&2
     exit 1
   fi
   input="$2"
