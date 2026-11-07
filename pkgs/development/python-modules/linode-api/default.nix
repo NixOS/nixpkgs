@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
-    repo = "python-linode-api";
+    repo = "linode_api4-python";
     tag = "v${version}";
     hash = "sha256-d9VgHHbyEcFHy3bM2KpuwUN3Su7ABYqYRWL+nOZ1Xd4=";
   };
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for the Linode API v4";
-    homepage = "https://github.com/linode/python-linode-api";
+    homepage = "https://github.com/linode/linode_api4-python";
     changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ glenns ];

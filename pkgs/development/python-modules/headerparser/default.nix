@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jwodder";
+    owner = "wheelodex";
     repo = "headerparser";
     tag = "v${version}";
     hash = "sha256-fn9Nlazte6r5JMmp9ynq0qmkLEoJGv8witgZlD7zJNM=";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
-    homepage = "https://github.com/jwodder/headerparser";
+    homepage = "https://github.com/wheelodex/headerparser";
     changelog = "https://github.com/wheelodex/headerparser/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];

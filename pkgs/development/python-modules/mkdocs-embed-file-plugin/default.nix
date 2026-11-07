@@ -21,8 +21,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ObsidianPublisher";
-    repo = "mkdocs-embed_file-plugin";
+    owner = "Enveloppe";
+    repo = "mkdocs-embed-file";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6FmMMaR+gyp5Gx0oXiDYvsr6uA8hwrV93YYrYkJsMNY=";
   };
@@ -58,8 +58,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "A way to embed a file present in your docs";
-    homepage = "https://github.com/ObsidianPublisher/mkdocs-embed_file-plugin";
-    changelog = "https://github.com/ObsidianPublisher/mkdocs-embed_file-plugin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Enveloppe/mkdocs-embed-file";
+    changelog = "https://github.com/Enveloppe/mkdocs-embed-file/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       agpl3Only
       agpl3Plus

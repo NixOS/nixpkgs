@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jcrist";
+    owner = "msgspec";
     repo = "msgspec";
     tag = version;
     # Note that this hash changes after some time after release because they
@@ -94,8 +94,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to handle JSON/MessagePack";
-    homepage = "https://github.com/jcrist/msgspec";
-    changelog = "https://github.com/jcrist/msgspec/releases/tag/${src.tag}";
+    homepage = "https://github.com/msgspec/msgspec";
+    changelog = "https://github.com/msgspec/msgspec/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

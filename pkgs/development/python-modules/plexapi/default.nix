@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pkkid";
+    owner = "pushingkarmaorg";
     repo = "python-plexapi";
     tag = version;
     hash = "sha256-mwmJUY2xdLe3NPdFkUZ3NmI71yuDMQ4oteR3rbrWc7g=";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the Plex API";
-    homepage = "https://github.com/pkkid/python-plexapi";
-    changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${src.tag}";
+    homepage = "https://github.com/pushingkarmaorg/python-plexapi";
+    changelog = "https://github.com/pushingkarmaorg/python-plexapi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

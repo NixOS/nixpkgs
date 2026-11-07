@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "zxdavb";
+    owner = "jbouwh";
     repo = "incomfort-client";
     tag = "v${finalAttrs.version}";
     hash = "sha256-OxrsRoP3HLHEE2YVLUEXA+VlYNoAJR+1Uph11M/Zv68=";
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python module to poll Intergas boilers via a Lan2RF gateway";
-    homepage = "https://github.com/zxdavb/incomfort-client";
+    homepage = "https://github.com/jbouwh/incomfort-client";
     changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
