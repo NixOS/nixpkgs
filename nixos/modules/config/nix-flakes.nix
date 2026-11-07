@@ -15,13 +15,12 @@ let
     mkIf
     mkOption
     types
+    isString
+    isPath
+    parseFlakeRef
     ;
 
   cfg = config.nix;
-
-  flakeRefFormat = ''
-    The format of flake references is described in {manpage}`nix3-flake(1)`.
-  '';
 
 in
 {
@@ -40,12 +39,31 @@ in
                   path
                   package
                 ]);
+              referenceType = types.oneOf [
+                types.path
+                types.str
+                referenceAttrs
+              ];
+              maybeParseFlakeRef =
+                x:
+                if isPath x then
+                  {
+                    type = "path";
+                    path = x;
+                  }
+                else if isString x then
+                  parseFlakeRef x
+                else
+                  x;
+              flakeRefFormat = ''
+                The format of flake references is described in {manpage}`nix3-flake(1)`.
+              '';
             in
             { config, name, ... }:
             {
               options = {
                 from = mkOption {
-                  type = referenceAttrs;
+                  type = referenceType;
                   example = {
                     type = "indirect";
                     id = "nixpkgs";
@@ -55,24 +73,22 @@ in
 
                     ${flakeRefFormat}
                   '';
+                  apply = maybeParseFlakeRef;
                 };
                 to = mkOption {
-                  type = referenceAttrs;
-                  example = {
-                    type = "github";
-                    owner = "my-org";
-                    repo = "my-nixpkgs";
-                  };
+                  type = referenceType;
+                  example = "github:my-org/my-nixpkgs";
                   description = ''
                     The flake reference {option}`from` is rewritten to.
 
                     ${flakeRefFormat}
                   '';
+                  apply = maybeParseFlakeRef;
                 };
                 flake = mkOption {
                   type = types.nullOr types.attrs;
                   default = null;
-                  example = literalExpression "nixpkgs";
+                  example = literalExpression "inputs.nixpkgs";
                   description = ''
                     The flake input {option}`from` is rewritten to.
                   '';
