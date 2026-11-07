@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  checkFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Broken since 0.9.4
     "--skip=actor::tests::test_rate_tracking"
   ];

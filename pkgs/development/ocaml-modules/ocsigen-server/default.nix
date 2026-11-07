@@ -30,30 +30,32 @@
 }:
 
 let
-  mkpath = p: "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
-in
-
-let
-  caml_ld_library_path = lib.concatMapStringsSep ":" mkpath [
-    bigstringaf
-    lwt
-    ssl
-    cstruct
-    mirage-crypto
-    zarith
-    mirage-crypto-ec
-    ptime
-    mirage-crypto-rng
-    mtime
-    ca-certs
-    cryptokit
-    re
-  ];
+  caml_ld_library_path =
+    lib.makeSearchPathOutput "dev" "lib/ocaml/${ocaml.version}/site-lib/stublibs"
+      [
+        bigstringaf
+        lwt
+        ssl
+        cstruct
+        mirage-crypto
+        zarith
+        mirage-crypto-ec
+        ptime
+        mirage-crypto-rng
+        mtime
+        ca-certs
+        cryptokit
+        re
+      ];
 in
 
 buildDunePackage (finalAttrs: {
   version = "7.0.0";
   pname = "ocsigenserver";
+
+  # ocsigenserver dynamically loads its extensions from its library directory,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
 
   src = fetchFromGitHub {
     owner = "ocsigen";

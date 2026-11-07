@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-oslc-handbook";
   version = "0.1.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hesa";

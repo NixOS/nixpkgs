@@ -9,7 +9,6 @@ buildPythonPackage {
   pname = "pyinputevent";
   version = "0.1-unstable-2015-10-18";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   # but targets the platform directly instead of universal binary + lipo.
   preBuild = ''
     swiftc \
-      -target ${stdenv.hostPlatform.darwinArch}-apple-macos11 \
+      -target ${stdenv.hostPlatform.swift.triple} \
       -emit-library \
       -module-name ankihelper \
       -O \

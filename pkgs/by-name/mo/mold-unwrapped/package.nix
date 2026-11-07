@@ -9,10 +9,12 @@
   mold,
   mold-unwrapped,
   nix-update-script,
+  pkg-config,
   runCommand,
   runCommandCC,
   rustPlatform,
   stdenv,
+  zstd,
   useMoldLinker,
   versionCheckHook,
 }:
@@ -31,9 +33,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-DgCFmTz+qulwXu1Oax8gBnc/6HIT6TlY8+xzBRGFvu0=";
 
   strictDeps = true;
+
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   # Upstream integration tests are way to finicky to keep around. Our internal
   # linking tests should suffice.

@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rnsapi";
   version = "0-unstable-2026-07-09";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "attermann";

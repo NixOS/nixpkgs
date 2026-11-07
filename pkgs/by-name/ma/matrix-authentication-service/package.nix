@@ -10,6 +10,7 @@
   pkg-config,
   sqlite,
   zstd,
+  aws-lc,
   stdenv,
   open-policy-agent,
   cctools,
@@ -63,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     sqlite
     zstd
+    aws-lc
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -87,19 +89,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail ./share/policy.wasm "$out/share/$pname/policy.wasm"
   '';
 
-  preBuild =
-    let
-      buildTarget = stdenv.buildPlatform.rust.rustcTarget;
-      buildTargetUnderscore = lib.replaceString "-" "_" buildTarget;
-    in
-    ''
-      make -C policies
-      (cd "$pnpmRoot" && npm run build)
-
-      # Fix aws-lc-sys cross-compilation
-      export CC_${buildTargetUnderscore}=$CC_FOR_BUILD
-      export CXX_${buildTargetUnderscore}=$CXX_FOR_BUILD
-    '';
+  preBuild = ''
+    make -C policies
+    (cd "$pnpmRoot" && npm run build)
+  '';
 
   # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''

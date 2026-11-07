@@ -16,8 +16,6 @@ buildPythonPackage {
   version = "0.6.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # move to fetchPyPi when https://github.com/capless/warrant/issues/97 is fixed
   src = fetchFromGitHub {
     owner = "capless";

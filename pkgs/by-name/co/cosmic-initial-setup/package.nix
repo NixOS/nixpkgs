@@ -4,11 +4,13 @@
   rustPlatform,
   fetchFromGitHub,
   just,
+  aws-lc,
   killall,
   libcosmicAppHook,
   libinput,
   openssl,
   udev,
+  zstd,
   nixosTests,
   nix-update-script,
 }:
@@ -58,10 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     killall
     libinput
     openssl
     udev
+    zstd
   ];
 
   dontUseJustBuild = true;

@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "niworkflows";
   version = "1.14.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";

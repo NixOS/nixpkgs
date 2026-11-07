@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";

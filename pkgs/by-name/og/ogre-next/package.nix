@@ -110,16 +110,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Framework bundles are incompatible with the Nix store
     (lib.cmakeBool "OGRE_BUILD_LIBS_AS_FRAMEWORKS" false)
+
+    # SIMD extension options are default-on, OGRE headers #error if SIMD requested but CPU arch not one that would have NEON/SSE2
+    # NEON on aarch64:
+    # /build/source/OgreMain/include/Math/Array/NEON/Single/OgreMathlibNEON.h:296:78: note: use '-flax-vector-conversions' to permit conversions between vectors with differing element types or numbers of subparts
+    #  296 |         static inline ArrayInt And( ArrayInt a, uint32 b ) { return vandq_s32( a, vdupq_n_u32( b ) ); }
+    #      |                                                                     ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+    # /build/source/OgreMain/include/Math/Array/NEON/Single/OgreMathlibNEON.h:296:94: error: cannot convert 'uint32x4_t' to 'int32x4_t'
+    #  296 |         static inline ArrayInt And( ArrayInt a, uint32 b ) { return vandq_s32( a, vdupq_n_u32( b ) ); }
+    #      |                                                                                   ~~~~~~~~~~~^~~~~
+    #      |                                                                                              |
+    #      |                                                                                              uint32x4_t
+    (lib.cmakeBool "OGRE_SIMD_NEON" false)
+    (lib.cmakeBool "OGRE_SIMD_SSE2" stdenv.hostPlatform.isx86_64)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # GL3Plus requires Khronos headers not available on darwin; Metal is the
     # primary render system on macOS
     (lib.cmakeBool "OGRE_BUILD_RENDERSYSTEM_GL3PLUS" false)
-  ]
-  # Both NEON and SSE2 SIMD cause build failures on aarch64
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    (lib.cmakeBool "OGRE_SIMD_NEON" false)
-    (lib.cmakeBool "OGRE_SIMD_SSE2" false)
   ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {

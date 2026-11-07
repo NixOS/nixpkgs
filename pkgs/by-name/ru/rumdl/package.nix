@@ -3,7 +3,10 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
   gitMinimal,
+  rust-jemalloc-sys,
+  aws-lc,
   stdenv,
   versionCheckHook,
   nix-update-script,
@@ -30,10 +33,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
 
   nativeCheckInputs = [
     gitMinimal
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
+
+  checkInputs = [
+    aws-lc
   ];
 
   __darwinAllowLocalNetworking = true;

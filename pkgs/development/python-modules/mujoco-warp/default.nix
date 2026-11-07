@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mujoco-warp";
   inherit (mujoco) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";

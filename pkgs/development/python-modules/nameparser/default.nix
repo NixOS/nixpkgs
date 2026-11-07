@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "derek73";
     repo = "python-nameparser";

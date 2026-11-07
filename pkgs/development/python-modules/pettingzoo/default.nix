@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pettingzoo";
   version = "1.27.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";

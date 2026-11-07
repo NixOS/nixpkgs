@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     gnupg
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals withGui [

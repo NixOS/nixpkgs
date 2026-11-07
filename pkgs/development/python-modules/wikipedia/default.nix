@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
@@ -29,7 +27,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests/ '*test.py'" ];
+  unittestFlags = [
+    "--start-directory=tests"
+    "--pattern=*test.py"
+  ];
 
   pythonImportsCheck = [ "wikipedia" ];
 

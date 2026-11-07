@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aiomysql";
   version = "0.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";

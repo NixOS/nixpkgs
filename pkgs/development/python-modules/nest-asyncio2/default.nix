@@ -9,15 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nest-asyncio2";
-  version = "1.7.2";
+  version = "1.7.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Chaoses-Ib";
     repo = "nest-asyncio2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7jUa4odhJZ1lpJjVmPrqur8ro2Iqccwf4khEb4ArGs=";
+    hash = "sha256-qNetaOdR4icUXWncat4vITwnjmx5MhAgUz0t61Bvztc=";
   };
 
   build-system = [

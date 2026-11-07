@@ -73,8 +73,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tests.maestral = nixosTests.maestral;
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     homepage = "https://maestral.app";

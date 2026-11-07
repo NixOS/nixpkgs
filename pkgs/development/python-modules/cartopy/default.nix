@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cartopy";
   version = "0.26.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SciTools";

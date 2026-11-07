@@ -13,11 +13,13 @@
   ninja,
   gnome,
   python,
+
+  withCairo ? true,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.56.3";
+  version = "3.58.0";
 
   outputs = [
     "out"
@@ -28,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${lib.versions.majorMinor version}/pygobject-${version}.tar.gz";
-    hash = "sha256-EnYOSg49BLbrleBveifjYsgm1WfqYTNzqSwAO2xw0tY=";
+    hash = "sha256-RQaGl94//kaEDKNpcF8jEYs0209962P27/B5pnNN3Mo=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -41,14 +43,18 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    cairo
     glib
+  ]
+  ++ lib.optionals withCairo [
+    cairo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
-    pycairo
     gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
+  ]
+  ++ lib.optionals withCairo [
+    pycairo
   ];
 
   # Fixes https://github.com/NixOS/nixpkgs/issues/378447
@@ -61,7 +67,9 @@ buildPythonPackage rec {
     # This is only used for figuring out what version of Python is in
     # use, and related stuff like figuring out what the install prefix
     # should be, but it does need to be able to execute Python code.
-    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
+    (lib.mesonOption "python" python.pythonOnBuildForHost.interpreter)
+
+    (lib.mesonEnable "pycairo" withCairo)
   ];
 
   passthru = {

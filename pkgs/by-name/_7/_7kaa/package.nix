@@ -71,7 +71,7 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
-  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "stackprotector"
   ];
 

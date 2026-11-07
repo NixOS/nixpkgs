@@ -50,7 +50,6 @@ buildPythonPackage (finalAttrs: {
   pname = "modal";
   version = "1.6.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";

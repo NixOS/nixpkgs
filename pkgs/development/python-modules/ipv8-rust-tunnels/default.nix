@@ -4,6 +4,8 @@
   fetchPypi,
   perl,
   rustPlatform,
+  pkg-config,
+  openssl,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,6 +34,11 @@ buildPythonPackage (finalAttrs: {
     cargoSetupHook
     maturinBuildHook
     perl
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   # Module has no tests

@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./CVE-2018-18384.patch
     ./dont-hardcode-cc.patch
     (fetchurl {
+      url = "https://sources.debian.org/data/main/u/unzip/6.0-31/debian/patches/cve-2018-1000035-unzip-buffer-overflow.patch";
+      name = "CVE-2018-1000035-unzip-buffer-overflow.patch";
+      hash = "sha256-TqvD+u3dVuvD1QU0hrYfh1jYQJAnJf1VXTRyz/sJRDc=";
+    })
+    (fetchurl {
       url = "https://github.com/madler/unzip/commit/41beb477c5744bc396fa1162ee0c14218ec12213.patch";
       name = "CVE-2019-13232-1.patch";
       sha256 = "04jzd6chg9fw4l5zadkfsrfm5llrd7vhd1dgdjjd29nrvkrjyn14";

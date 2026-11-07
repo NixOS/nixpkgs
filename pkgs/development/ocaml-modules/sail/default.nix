@@ -43,7 +43,7 @@ buildDunePackage {
     menhir
     lem
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
   ];
 
@@ -74,6 +74,10 @@ buildDunePackage {
     dune runtest ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
+  # sail loads its dune-site plugins, and the libraries they link against,
+  # through findlib at runtime, so the library can't be split into a
+  # separate "dev" output.
+  outputs = [ "out" ];
   installPhase = ''
     runHook preInstall
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR

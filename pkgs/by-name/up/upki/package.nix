@@ -9,6 +9,7 @@
   rustc,
   cacert,
   pkg-config,
+  aws-lc,
   openssl,
   cargo-c,
   validatePkgConfig,
@@ -42,7 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-c
     pkg-config
   ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+  ];
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

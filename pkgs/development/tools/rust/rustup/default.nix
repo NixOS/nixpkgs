@@ -7,6 +7,7 @@
   rustPlatform,
   makeBinaryWrapper,
   pkg-config,
+  aws-lc,
   openssl,
   curl,
   writableTmpDirAsHomeHook,
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     curl
     zlib

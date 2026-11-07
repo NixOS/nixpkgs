@@ -12,7 +12,6 @@
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
 
   pname = "ipydatawidgets";
   version = "4.3.5";

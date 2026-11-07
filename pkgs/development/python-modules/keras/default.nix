@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "keras";
   version = "3.15.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";

@@ -31,7 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     webrtcvad
   ];
 
-  __structuredAttrs = true;
   dontBuild = true;
   dontWrapPythonPrograms = true;
   pyproject = false;

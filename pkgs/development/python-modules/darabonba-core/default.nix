@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.10";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "darabonba_core";
     inherit (finalAttrs) version;

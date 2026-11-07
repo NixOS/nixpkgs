@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Luke Granger-Brown <git@lukegb.com>
+Date: Sat, 10 Oct 2026 01:27:10 +0100
+Subject: [PATCH] Fix compilation of kernel driver
+
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
+---
+ driver/linux/hevcapi.c    | 10 +++++-----
+ driver/linux/ntv2driver.c |  3 +--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/driver/linux/hevcapi.c b/driver/linux/hevcapi.c
+index 0dafc34a66dece7ee3593297ca3ba0ccd719287a..0eefc8730aa195ae59c706a167e1c4b2ec86b8b7 100644
+--- a/driver/linux/hevcapi.c
++++ b/driver/linux/hevcapi.c
+@@ -100,11 +100,11 @@ Ntv2Status hevcDeviceOpen(uint32_t devNum)
+ 			for(i = 0; i < FMB_VERSION_SIZE_HEVC_ENCODER_FIRM; i++) revStdMultiple[i] = ' ';
+ 			for(i = 0; i < FMB_VERSION_SIZE_HEVC_ENCODER_FIRM; i++) revUserSingle[i] = ' ';
+ 			for(i = 0; i < FMB_VERSION_SIZE_HEVC_ENCODER_FIRM; i++) revUserMultiple[i] = ' ';
+-			strncpy(revSystem, ">>> register read failed <<<", FMB_VERSION_SIZE_SYSTEM_FIRM-1);
+-			strncpy(revStdSingle, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
+-			strncpy(revStdMultiple, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
+-			strncpy(revUserSingle, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
+-			strncpy(revUserMultiple, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
++			strscpy(revSystem, ">>> register read failed <<<", FMB_VERSION_SIZE_SYSTEM_FIRM-1);
++			strscpy(revStdSingle, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
++			strscpy(revStdMultiple, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
++			strscpy(revUserSingle, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
++			strscpy(revUserMultiple, ">>> register read failed <<<", FMB_VERSION_SIZE_HEVC_ENCODER_FIRM-1);
+ 
+ 			hevcGetFirmwareVersion(devNum, revMCPU, revSystem,
+ 								   revStdSingle, revStdMultiple,
+diff --git a/driver/linux/ntv2driver.c b/driver/linux/ntv2driver.c
+index f9dba80d85fb76312eaedcc75389a3fe14a6b983..b969876552aceb6be820402bf8f1ab38f5d373f1 100644
+--- a/driver/linux/ntv2driver.c
++++ b/driver/linux/ntv2driver.c
+@@ -3155,8 +3155,7 @@ static int __init aja_ntv2_module_init(void)
+ 		getNTV2ModuleParams()->name, versionString);
+ 
+     // determine driver mode
+-    strncpy(versionString, DriverMode, STRMAX);
+-    versionString[STRMAX - 1] = '\0';
++    strscpy(versionString, DriverMode, STRMAX);
+     driverModeString = strstrip(versionString);
+     if (strcmp(driverModeString, "all") == 0)
+     {

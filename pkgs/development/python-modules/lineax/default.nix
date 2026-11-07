@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lineax";
   version = "0.1.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";

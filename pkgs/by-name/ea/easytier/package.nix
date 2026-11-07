@@ -5,6 +5,10 @@
   fetchpatch2,
   rustPlatform,
   protobuf,
+  pkg-config,
+  aws-lc,
+  zstd,
+  sqlite,
   nixosTests,
   nix-update-script,
   installShellFiles,
@@ -48,6 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
     installShellFiles
     mold
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+    sqlite
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;

@@ -3,19 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build-system
-  cmake,
   rustPlatform,
+  pkg-config,
 
   # dependencies
   opentelemetry-api,
+  pkgsHostTarget,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyqwest";
   version = "0.10.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "curioswitch";
@@ -40,18 +39,19 @@ buildPythonPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    # Only invoked by aws-lc-sys' build script; there is no top-level
-    # CMakeLists.txt to configure.
-    cmake
+    pkg-config
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
-  dontUseCmakeConfigure = true;
-
   dependencies = [
     opentelemetry-api
+  ];
+
+  buildInputs = [
+    pkgsHostTarget.aws-lc
+    pkgsHostTarget.zstd
   ];
 
   pythonImportsCheck = [ "pyqwest" ];

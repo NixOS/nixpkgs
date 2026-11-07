@@ -10,8 +10,11 @@
   pkg-config,
 
   # buildInputs
+  aws-lc,
   openssl,
   protobuf,
+  # for zstd
+  pkgsHostTarget,
 
   # dependencies
   lance-namespace,
@@ -39,7 +42,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pylance";
   version = "14.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
@@ -104,8 +106,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     protobuf
+    pkgsHostTarget.zstd
   ];
 
   pythonRelaxDeps = [

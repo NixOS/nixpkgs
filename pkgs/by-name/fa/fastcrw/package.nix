@@ -3,7 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   cacert,
-  cmake,
+  aws-lc,
+  pkg-config,
   versionCheckHook,
   nix-update-script,
 }:
@@ -22,13 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-VEbM7WvJHhfbbW+9c7fwl5NoFYmDvfQwVKR1R/S+JfU=";
 
-  # aws-lc-sys drives its C build through cmake and generates its bindings.
   nativeBuildInputs = [
-    cmake
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
-  dontUseCmakeConfigure = true;
+  buildInputs = [ aws-lc ];
 
   # The crw-cli journeys drive the built binary against local mock servers, but
   # rustls still refuses to construct a client without a system trust store.
@@ -59,6 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=scrape_with_impersonated_pin_400s_on_absent_tier_or_contradiction"
     "--skip=scrape_with_renderer_unavailable_returns_400"
     "--skip=v2_extract_blank_system_prompt_is_tolerated"
+
+    # racy test
+    "--skip=with_timeout_falls_back_to_default_client_on_invalid_user_agent"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

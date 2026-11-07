@@ -268,10 +268,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
-    ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # https://github.com/rust-lang/rust/issues/92173
-      "--set=rust.jemalloc"
-    ]
     ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
       # https://github.com/NixOS/nixpkgs/issues/311930
       "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
@@ -354,11 +350,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/299606
     substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
       --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    # See https://github.com/jemalloc/jemalloc/issues/1997
-    # Using a value of 48 should work on both emulated and native x86_64-darwin.
-    export JEMALLOC_SYS_WITH_LG_VADDR=48
   ''
   + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
     mkdir .cargo

@@ -59,7 +59,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.67.0";
   pname = "numba";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "numba";

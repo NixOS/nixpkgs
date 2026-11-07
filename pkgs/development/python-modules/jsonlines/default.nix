@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jsonlines";
   version = "4.0.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -30,11 +30,8 @@ buildSphinxPhase() {
         exit 1
     fi
 
-    if [ -n "${sphinxBuilders-}" ]; then
-        eval "__sphinxBuilders=($sphinxBuilders)"
-    else
-        __sphinxBuilders=(html)
-    fi
+    __sphinxBuilders=()
+    concatTo __sphinxBuilders sphinxBuilders=html
 
     for __builder in "${__sphinxBuilders[@]}"; do
         echo "Executing sphinx-build with ${__builder} builder"

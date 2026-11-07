@@ -26,7 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=("--prefix" "PATH" ":" "${lib.makeBinPath [ ffmpeg ]}")
   '';
 
-  __structuredAttrs = true;
   passthru.updateScript = nix-update-script { };
 
   meta = {

@@ -17,6 +17,7 @@
   rustc,
   rustPlatform,
   stdenv,
+  sqlite,
   xcbuild,
 }:
 
@@ -105,6 +106,10 @@ buildNpmPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = [
+    sqlite
   ];
 
   preBuild = ''

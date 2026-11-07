@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-scheduler-plugins";
   version = "2.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

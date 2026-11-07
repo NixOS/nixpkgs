@@ -21,8 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-OCwGaV4IsX2Tcd8vcCZ+hYrCHuq9ADm3O81UdH3roAA=";
   };
 
-  __structuredAttrs = true;
-
   build-system = [ python3Packages.setuptools ];
 
   dependencies = with python3Packages; [

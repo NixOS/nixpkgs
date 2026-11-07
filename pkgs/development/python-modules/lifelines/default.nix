@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lifelines";
   version = "0.30.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
