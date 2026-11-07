@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logbook";
-  version = "1.9.2";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
     tag = finalAttrs.version;
-    hash = "sha256-/oaBUIMsDwyxjQU57BpwXQfDMBNSDAI7fqtem/4QqKw=";
+    hash = "sha256-D71ZeRUTj9ykOzqIrf+zBmjC7EUhiBScjuyWmwRQeiY=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-xIjcK69rwtE86DfvD9qXEn8MDIvU0Dl+d4Fmw9BUuCM=";
+    hash = "sha256-t0QDTeXpej36MCQsSco0F41JfZGMPVcY2861cfJTwLk=";
   };
 
   optional-dependencies = {
