@@ -10345,6 +10345,12 @@
     githubId = 37017396;
     name = "gbtb";
   };
+  gburd = {
+    email = "greg@burd.me";
+    github = "gburd";
+    githubId = 6928;
+    name = "Greg Burd";
+  };
   gcleroux = {
     email = "guillaume@cleroux.dev";
     github = "gcleroux";
