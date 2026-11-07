@@ -419,6 +419,7 @@ mapAliases {
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
+  mallard-ducktype = throw "mallard-ducktype has been removed, as it has been unmaintained upstream since 2019 and is broken"; # added 2026-11-07
   Markups = throw "'Markups' has been renamed to/replaced by 'markups'"; # Converted to throw 2025-10-29
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   matlink-gpapi = throw "'matlink-gpapi' has been removed as it was broken and unmaintained"; # Added 2025-11-09

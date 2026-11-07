@@ -10542,8 +10542,6 @@ self: super: with self; {
 
   malduck = callPackage ../development/python-modules/malduck { };
 
-  mallard-ducktype = callPackage ../development/python-modules/mallard-ducktype { };
-
   mamba-ssm = callPackage ../development/python-modules/mamba-ssm { };
 
   mammoth = callPackage ../development/python-modules/mammoth { };
