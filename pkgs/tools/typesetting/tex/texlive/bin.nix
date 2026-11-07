@@ -539,7 +539,7 @@ rec {
 
   chktex = stdenv.mkDerivation {
     pname = "chktex";
-    inherit (texlive.pkgs.chktex) version;
+    inherit (tlpdb.chktex) version;
 
     inherit (common) src;
 
@@ -595,8 +595,10 @@ rec {
     version = "3.6";
 
     src =
-      assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
-        "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
+      assert lib.assertMsg (version == (tlpdb.dvisvgm.version or (toString tlpdb.dvisvgm.revision)))
+        "dvisvgm: TeX Live version (${
+          tlpdb.dvisvgm.version or (toString tlpdb.dvisvgm.revision)
+        }) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
         hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
@@ -632,7 +634,7 @@ rec {
 
   dvipng = stdenv.mkDerivation {
     pname = "dvipng";
-    inherit (texlive.pkgs.dvipng) version;
+    version = tlpdb.dvipng.version or (toString tlpdb.dvipng.revision);
 
     inherit (common) src;
 
@@ -673,8 +675,10 @@ rec {
     args.asymptote.overrideAttrs (
       finalAttrs: prevAttrs: {
         version =
-          assert lib.assertMsg (version == texlive.pkgs.asymptote.version)
-            "asymptote: TeX Live version (${texlive.pkgs.asymptote.version}) different from source in bin.nix (${version}), please update it";
+          assert lib.assertMsg (version == (tlpdb.asymptote.version or (toString tlpdb.asymptote.revision)))
+            "asymptote: TeX Live version (${
+              tlpdb.asymptote.version or (toString tlpdb.asymptote.revision)
+            }) different from source in bin.nix (${version}), please update it";
           version;
 
         # keep local src and patches even if duplicated in the top level asymptote
@@ -698,7 +702,7 @@ rec {
   bibtexu = bibtex8;
   bibtex8 = stdenv.mkDerivation {
     pname = "bibtex-x";
-    inherit (texlive.pkgs.bibtexu) version;
+    version = tlpdb.bibtexu.version or (toString tlpdb.bibtexu.revision);
 
     inherit (common) src;
 
@@ -720,7 +724,7 @@ rec {
 
   xdvi = stdenv.mkDerivation {
     pname = "xdvi";
-    inherit (texlive.pkgs.xdvi) version;
+    version = tlpdb.xdvi.version or (toString tlpdb.xdvi.revision);
 
     inherit (common) src;
 
@@ -757,7 +761,7 @@ rec {
 
   xpdfopen = stdenv.mkDerivation {
     pname = "xpdfopen";
-    inherit (texlive.pkgs.xpdfopen) version;
+    version = tlpdb.xpdfopen.version or (toString tlpdb.xpdfopen.revision);
 
     inherit (common) src;
 
@@ -772,7 +776,8 @@ rec {
   # we build this as a TeX package, but under texlive.bin to avoid exposing it in texlivePackages
   tex4htJar = stdenv.mkDerivation {
     pname = "tex4ht-jar";
-    inherit (texlive.pkgs.tex4ht) meta version;
+    inherit (texlive.pkgs.tex4ht) meta;
+    version = tlpdb.tex4ht.version or (toString tlpdb.tex4ht.revision);
 
     outputs = [ "tex" ];
 
@@ -830,7 +835,7 @@ rec {
 
       xindy = stdenv.mkDerivation {
         pname = "xindy";
-        inherit (texlive.pkgs.xindy) version;
+        version = tlpdb.xindy.version or (toString tlpdb.xindy.revision);
 
         inherit (common) src;
 
