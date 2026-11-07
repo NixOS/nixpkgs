@@ -460,7 +460,7 @@ in
       enable = true;
       group = "fossorial";
       dataDir = "${cfg.dataDir}/config/traefik";
-      staticConfigOptions = {
+      install.settings = {
         providers.http = {
           endpoint = "http://localhost:${toString finalSettings.server.internal_port}/api/v1/traefik-config";
           pollInterval = "5s";
@@ -498,7 +498,7 @@ in
           };
         };
       };
-      dynamicConfigOptions = {
+      routing.settings = {
         http = {
           middlewares.redirect-to-https.redirectScheme.scheme = "https";
           routers = {
