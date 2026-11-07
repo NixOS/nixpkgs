@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nab";
-  version = "0.0.22";
+  version = "0.0.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notatallshaw";
     repo = "nab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-72epflsXDGc+lmnYc+QE0UqCCP/2gsl4BCzdG6ktrs4=";
+    hash = "sha256-6HiGIiwmccCVC/JUISHytotVLI5Np6U8VlN5nR0GoG0=";
   };
 
   __darwinAllowLocalNetworking = true;
