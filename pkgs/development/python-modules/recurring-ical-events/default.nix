@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
   hatch-vcs,
   hatchling,
   icalendar,
@@ -43,6 +42,8 @@ buildPythonPackage rec {
     tzdata
     x-wr-timezone
   ];
+
+  pythonRelaxDeps = [ "python-dateutil" ];
 
   nativeCheckInputs = [
     pytestCheckHook
