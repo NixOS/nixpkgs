@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "26.08.0.153";
 
   src = requireFile rec {
-    name = "linuxx64-${finalAttrs.version}.tar.gz";
+    name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "17f0nlg18bz2b6qq86i04igm551b54nym41zi13m81906fzgi4h7";
 
     message = ''
