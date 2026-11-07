@@ -24,16 +24,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.36.2";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MdHCf3H4KQFPreaIGDfMByd3u4Tg56rbWd+HhwMhL1o=";
+    hash = "sha256-Q5RyGPHhCwamM2zexTCTmjMpIPrmZ/nsh1ZMeBhsO8I=";
   };
 
-  cargoHash = "sha256-3tS3P4CLoi5fUymYBomz4Ltmw6idzjflhfAIKfXIK8U=";
+  cargoHash = "sha256-HVBIcAO+xQtfQs3RwI9xC53iu+NbMj+atCH0nbh2xMY=";
 
   nativeBuildInputs = [
     pkg-config
