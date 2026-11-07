@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-place-names";
-  version = "0-unstable-2024-10-12";
+  version = "0-unstable-2026-10-02";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-place-names";
-    rev = "888a977a3f30451e8f286ef8eaf2f9be169234cb";
-    hash = "sha256-UL3ik/CxmRM7m0AXS+UNQEipCDS8pH+AheIMx6xqAaU=";
+    rev = "98cf8e9d7731695a52e5bc72ed633933c71d1913";
+    hash = "sha256-NIeV5iSTSJE867VqtUlcbyegMHpszFuZwOkHQlhJdhM=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-place-names.txt.tar.bz2
+    install -Dt $out mozcdic-ut-place-names.txt.bz2
 
     runHook postInstall
   '';
@@ -37,8 +37,5 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }
