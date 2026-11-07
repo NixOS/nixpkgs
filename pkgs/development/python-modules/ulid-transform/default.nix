@@ -30,13 +30,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-benchmark
     pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];
-
-  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ulid_transform" ];
 
