@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   cryptography,
   fetchFromGitHub,
   mock,
@@ -12,6 +13,7 @@
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
+  python,
   setuptools,
   six,
 }:
@@ -62,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     "test_timeout_subsequent"
     "test_connection_close"
   ];
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/httplib2/cacerts.txt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/httplib2/cacerts.txt
+  '';
 
   pythonImportsCheck = [ "httplib2" ];
 
