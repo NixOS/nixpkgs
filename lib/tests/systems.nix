@@ -43,19 +43,14 @@ lib.runTests (
   # just add it to the list of all systems in platforms/generate.nix, and then
   # regenerate the data.
   #
-  # This test just enforces that generating the doubles fresh gives the same
-  # result as the preprocessed doubles.
-  (
-    let
-      generatedPlatforms = import ../platforms/generate.nix { inherit lib; };
-    in
-    lib.mapAttrs' (name: generatedPlatform: {
-      name = "test" + name;
-      value = mseteq lib.platforms.${name} generatedPlatform;
-    }) generatedPlatforms
-  )
+  {
+    # The test below enforces that generating the platforms fresh gives exactly
+    # the preprocessed platforms.
+    test_platforms_match_generated = {
+      expr = lib.platforms;
+      expected = import ../platforms/generate.nix { inherit lib; };
+    };
 
-  // {
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
         lib.systems.elaborate "x86_64-linux"
