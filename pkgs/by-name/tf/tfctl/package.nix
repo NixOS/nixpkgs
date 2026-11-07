@@ -9,14 +9,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tfctl";
-  version = "0.16.5";
+  version = "0.16.6";
   src = fetchFromGitHub {
     owner = "flux-iac";
     repo = "tofu-controller";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I2gWdTJHmPXvuqomsoD2ufWdPGG95+8NNf6DOVw/W9c=";
+    hash = "sha256-0J3gDRKYkIwT6iKMIfGUz+dRocjXiYQHR3dsPknyJzs=";
   };
-  vendorHash = "sha256-6gwkIbvddIwKwvq7y6Oj90oMTeKgI0jDghLSQ1cVEe0=";
+  vendorHash = "sha256-49W9F4ILaliEPOipbEy9zzZjegY+VdIejgWLLLkCoos=";
 
   subPackages = [ "cmd/tfctl" ];
   ldflags = [
