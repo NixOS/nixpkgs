@@ -9,7 +9,7 @@
   useGeoIP ? false, # Require /var/lib/geoip-databases/GeoIP.dat
 }:
 let
-  version = "0.9.6";
+  version = "u094";
 in
 python3Packages.buildPythonApplication {
   pname = "tremc";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication {
     owner = "tremc";
     repo = "tremc";
     tag = version;
-    hash = "sha256-GbQ1x973M9sP9360gEzCypU7JlxwH/Uo/tUUQRlNfC8=";
+    hash = "sha256-nsznu4CaLtq3mhDKtDrx8IKbO5grr571YR6NT3EeMbQ=";
   };
 
   pythonPath =
