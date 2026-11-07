@@ -2,21 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  cmake,
+  ninja,
+  scikit-build-core,
   sabnzbd,
 }:
 
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "9.7.0";
+  version = "9.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2EuCwjjLp5JPXgmJu8ElgWpq6rGp8cFRBzyAPuVntA0=";
+    hash = "sha256-vAxV9WipR6n8oQp4XPwIZ+2vUlZbGzZTKal3aZYpz0s=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    ninja
+    scikit-build-core
+  ];
+
+  dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "sabctools" ];
 
