@@ -1,0 +1,86 @@
+From f454f45c7dde20a6a9693b0b7ff7a85ceda34f86 Mon Sep 17 00:00:00 2001
+From: Kajus Naujokaitis <kajusn@gmail.com>
+Date: Wed, 8 Jul 2026 11:55:24 +0300
+Subject: [PATCH] fix(killall): support nixos wrapped binaries
+
+Signed-off-by: Kajus Naujokaitis <kajusn@gmail.com>
+---
+diff --git a/src/killall.c b/src/killall.c
+index 81dcc4b..0d37089 100644
+--- a/src/killall.c
++++ b/src/killall.c
+@@ -574,6 +574,32 @@ create_pid_table(int *max_pids, int *pids)
+     return pid_table;
+ }
+ 
++/* NixOS wraps some binaries, running the actual executable as
++ * ".<name>-wrapped" while the wrapper script keeps the original name.
++ * Strip that pattern so "killall <name>" still matches the real process.
++ */
++static const char *
++unwrap_nixos_binary(const char *name, char *unwrapped, size_t unwrapped_len)
++{
++    size_t len;
++    const char *suffix;
++
++    if (name == NULL || name[0] != '.')
++        return name;
++    len = strlen(name);
++    if (len <= 1 + strlen("-wrapped"))
++        return name;
++    suffix = name + len - strlen("-wrapped");
++    if (strcmp(suffix, "-wrapped") != 0)
++        return name;
++    len -= strlen("-wrapped") + 1;
++    if (len >= unwrapped_len)
++        len = unwrapped_len - 1;
++    memcpy(unwrapped, name + 1, len);
++    unwrapped[len] = '\0';
++    return unwrapped;
++}
++
+ #define strcmp2(A,B,I) (I? strcasecmp((A),(B)):strcmp((A),(B)))
+ #define strncmp2(A,B,L,I) (I? strncasecmp((A),(B),(L)):strncmp((A),(B),(L)))
+ static int match_process_name(
+@@ -702,19 +728,27 @@ kill_all(int signal, int name_count, char **namelist, struct passwd *pwent,
+             if (load_proc_cmdline(pidfd, pid_table[i], comm, length, &command, &got_long) < 0)
+                 continue;
+ 
++        {
++            /* Match against the NixOS-unwrapped name too, e.g. ".foo-wrapped" -> "foo" */
++            char unwrapped_comm[COMM_LEN];
++            char unwrapped_command[COMM_LEN];
++            const char *match_comm = unwrap_nixos_binary(comm, unwrapped_comm, sizeof unwrapped_comm);
++            const char *match_command = unwrap_nixos_binary(command, unwrapped_command, sizeof unwrapped_command);
++            int match_length = (int)strlen(match_comm);
++
+         /* match by process name */
+         for (j = 0; j < name_count; j++)
+         {
+             if (reg)
+             {
+-                if (regexec (&reglist[j], got_long ? command : comm, 0, NULL, 0) != 0)
++                if (regexec (&reglist[j], got_long ? match_command : match_comm, 0, NULL, 0) != 0)
+                     continue;
+             }
+             else /* non-regex */
+             {
+                 if (!name_info[j].st.st_dev)
+                 {
+-                    if (!match_process_name(comm, length, command, namelist[j],
++                    if (!match_process_name(match_comm, match_length, match_command, namelist[j],
+                                             name_info[j].name_length, got_long))
+                         continue;
+ 
+@@ -743,7 +777,8 @@ kill_all(int signal, int name_count, char **namelist, struct passwd *pwent,
+             } /* non-regex */
+             found_name = j;
+             break;
+-        }  
++        }
++        }
+         if (name_count && found_name==-1)
+             continue;  /* match by process name faild */
+ 
+--
+2.54.0
