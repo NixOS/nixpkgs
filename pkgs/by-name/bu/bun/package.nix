@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   stdenvNoCC,
+  patchelf,
   fetchurl,
   autoPatchelfHook,
   unzip,
@@ -36,8 +38,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installShellFiles
     makeWrapper
   ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = [ openssl ];
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    autoPatchelfHook
+    patchelf
+  ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -49,6 +59,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s $out/bin/bun $out/bin/bunx
 
     runHook postInstall
+  '';
+
+  preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    patchelf --add-needed libstdc++.so.6 $out/bin/bun
   '';
 
   postPhases = [ "postPatchelf" ];
