@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "XStatic-jQuery-File-Upload";
+    pname = "xstatic_jquery_file_upload";
     inherit (finalAttrs) version;
     hash = "sha256-3p/FoprrGViy9x9iao7ooZ/YELl8AtEOnEis0rFyoEc=";
   };
