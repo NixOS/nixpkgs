@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "coolname";
-  version = "2.2.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexanderlukanin13";
     repo = "coolname";
     tag = version;
-    hash = "sha256-6po9SJGVvOEoSSBtRsbbFE59APFrSkF7uQqaJA8ejoU=";
+    hash = "sha256-3rQAcaZOVrYvjoeu9ttodLZVuVgg85KduNOm2KgitnE=";
   };
 
   build-system = [
