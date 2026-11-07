@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
   version = "0.63.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
@@ -42,8 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests requires network access
   doCheck = false;
   cargoBuildFlags = [
-    "--bin proto"
-    "--bin proto-shim"
+    "--bin=proto"
+    "--bin=proto-shim"
   ];
 
   postInstall = ''
