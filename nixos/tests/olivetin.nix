@@ -8,6 +8,8 @@
     services.olivetin = {
       enable = true;
       settings = {
+        # Keep the old spelling working.
+        ListenAddressSingleHTTPFrontend = "127.0.0.1:8001";
         actions = [
           {
             id = "hello_world";
@@ -28,13 +30,13 @@
   };
 
   interactive.nodes.machine = {
-    services.olivetin.settings.ListenAddressSingleHTTPFrontend = "0.0.0.0:8000";
-    networking.firewall.allowedTCPPorts = [ 8000 ];
+    services.olivetin.settings.listenAddressSingleHTTPFrontend = lib.mkForce "0.0.0.0:8001";
+    networking.firewall.allowedTCPPorts = [ 8001 ];
     virtualisation.forwardPorts = [
       {
         from = "host";
-        host.port = 8000;
-        guest.port = 8000;
+        host.port = 8001;
+        guest.port = 8001;
       }
     ];
   };
@@ -44,14 +46,14 @@
     import shlex
 
     machine.wait_for_unit("olivetin.service")
-    machine.wait_for_open_port(8000)
+    machine.wait_for_open_port(8001)
 
     def start_action(action):
       if "${config.nodes.machine.services.olivetin.package.releaseSeries}" == "2k":
-        cmd = f"curl http://localhost:8000/api/StartActionByGetAndWait/{action}"
+        cmd = f"curl http://localhost:8001/api/StartActionByGetAndWait/{action}"
       else:
         req = {"actionId": action}
-        cmd = f"curl -H 'Content-Type: application/json' http://localhost:8000/api/olivetin.api.v1.OliveTinApiService/StartActionAndWait -d {shlex.quote(json.dumps(req))}"
+        cmd = f"curl -H 'Content-Type: application/json' http://localhost:8001/api/olivetin.api.v1.OliveTinApiService/StartActionAndWait -d {shlex.quote(json.dumps(req))}"
 
       return json.loads(machine.succeed(cmd))
 
