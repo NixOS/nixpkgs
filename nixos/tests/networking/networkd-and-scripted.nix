@@ -1143,12 +1143,18 @@ let
           virtualOwner = "root";
           mtu = 1343;
         };
+        networking.interfaces.tun1 = {
+          virtual = true;
+          virtualOwner = null;
+          virtualGroup = "root";
+        };
       };
 
       testScript = ''
         targetList = """
         tap0: tap persist
         tun0: tun persist user 0
+        tun1: tun persist group 0
         """.strip()
 
         with subtest("Wait for networking to come up"):
@@ -1173,9 +1179,13 @@ let
             machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
         with subtest("Test virtualOwner are configured"):
-            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0")]:
+            for interface, expected_owner in [("tap0", "-1"), ("tun0", "0"), ("tun1", "-1")]:
                 actual_owner = machine.succeed(f"cat /sys/class/net/{interface}/owner").strip()
                 assert expected_owner == actual_owner, f"{interface} owner: expect {expected_owner}, got {actual_owner}"
+        with subtest("Test virtualGroup are configured"):
+            for interface, expected_group in [("tap0", "-1"), ("tun0", "-1"), ("tun1", "0")]:
+                actual_group = machine.succeed(f"cat /sys/class/net/{interface}/group").strip()
+                assert expected_group == actual_group, f"{interface} group: expect {expected_group}, got {actual_group}"
       '' # network-addresses-* only exist in scripted networking
       + lib.optionalString (!networkd) ''
         with subtest("Test interfaces' addresses clean up"):
@@ -1194,6 +1204,8 @@ let
             machine.succeed("systemctl stop tap0-netdev")
             machine.sleep(10)
             machine.succeed("systemctl stop tun0-netdev")
+            machine.sleep(10)
+            machine.succeed("systemctl stop tun1-netdev")
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (
