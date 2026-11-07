@@ -6006,6 +6006,8 @@ self: super: with self; {
 
   fastcan = callPackage ../development/python-modules/fastcan { };
 
+  fastcluster = callPackage ../development/python-modules/fastcluster { };
+
   fastcore = callPackage ../development/python-modules/fastcore { };
 
   fastcrc = callPackage ../development/python-modules/fastcrc { };
