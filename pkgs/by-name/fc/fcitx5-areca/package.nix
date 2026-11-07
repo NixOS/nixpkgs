@@ -2,22 +2,27 @@
   lib,
   stdenv,
   cmake,
+  dbus,
   fcitx5,
   fetchFromGitHub,
+  fontconfig,
   go,
-  pkg-config,
+  libinput,
   ninja,
   nix-update-script,
+  pkg-config,
+  sdl3,
+  udev,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-areca";
-  version = "4.0.3";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "xhkzeroone";
     repo = "ArecaIME";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tjNKRU3yTIOGxkpE2RSuTa7lLZtQvFcUQ0ELCQyinVc=";
+    hash = "sha256-ud7dwE912TN8z3CWtzuVxygYAB4xV5mBo83SyrUUt+0=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    dbus
     fcitx5
+    fontconfig
+    libinput
+    sdl3
+    udev
   ];
 
   preConfigure = ''
