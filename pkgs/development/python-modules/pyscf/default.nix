@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyscf";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9FyiN5VrFpZ6Q4JFvNn1gVQJq4KQysiL5Sz5E+fSC5U=";
+    hash = "sha256-l1/xuOW5dTisQbyO6uhaj9+Nal+xxqKDzHRq9muRiE8=";
   };
 
   postPatch = ''
