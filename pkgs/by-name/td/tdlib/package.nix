@@ -9,6 +9,7 @@
   stdenv,
   writeShellApplication,
   common-updater-scripts,
+  curl,
   jq,
   buildPackages,
 
@@ -20,6 +21,7 @@ let
     name = "update-tdlib";
 
     runtimeInputs = [
+      curl
       jq
       common-updater-scripts
     ];

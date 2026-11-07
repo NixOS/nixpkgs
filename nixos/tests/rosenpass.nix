@@ -175,7 +175,10 @@ in
         environment.systemPackages = [
           (pkgs.writeShellApplication {
             name = "gen-keys";
-            runtimeInputs = [ pkgs.rosenpass ];
+            runtimeInputs = [
+              pkgs.rosenpass
+              pkgs.openssh
+            ];
             text = ''
               HOST="$(hostname)"
               if [ "$HOST" == "server" ]
