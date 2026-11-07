@@ -3,6 +3,7 @@
   version,
   src,
   meta,
+  passthru ? { },
   appimageTools,
 }:
 
@@ -15,7 +16,12 @@ let
   };
 in
 appimageTools.wrapAppImage {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
 
   src = appimageContents;
 
