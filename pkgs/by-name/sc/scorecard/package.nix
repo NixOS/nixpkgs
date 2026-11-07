@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "scorecard";
-  version = "5.5.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = "scorecard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JoniiCPz6YvBXGZTxmrcka5zerzmJnb+bAKuIW6/evQ=";
+    hash = "sha256-Wx/WD5dStVxXP4zHsvjxnzJPh6xhKSA1VeX+wxA+ubQ=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   };
   vendorHash =
     if stdenv.hostPlatform.isLinux then
-      "sha256-MWliMIMjNR6cgkyi2KYemswtFitM8ypnz4qka/WoO0g="
+      "sha256-V/7svBDEakhUYFrXTXsC/G0NRCuDbw21S/2q8lVab7Q="
     else
       "sha256-y9URHMmKm4JnTHb7RkrL5LaCrcp6b7DOMwNnVrO1rvo=";
 
