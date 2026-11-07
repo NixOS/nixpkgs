@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_98,
   fetchFromGitHub,
   pkg-config,
   bzip2,
@@ -9,18 +9,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_98.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-binstall";
-  version = "1.19.1";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b4S8oPK1U84Oy3hhJSxJxToaFF5l4V2Tea0kGn3hW0A=";
+    hash = "sha256-nHDs3HoHKDzxKNH11X7wqUgD+8z9DWcjQYEShzzVuaw=";
   };
 
-  cargoHash = "sha256-E+exhtfJiOTQIZm44WyA0yptUn7wymXFRlDyAsshcKA=";
+  cargoHash = "sha256-xJkrMHjbyv/nnmQv2Amru0FZGBdKtQaRvMxsw6oeb1k=";
 
   nativeBuildInputs = [
     pkg-config
