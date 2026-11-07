@@ -18,19 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pip-tools";
-  version = "7.6.1";
+  version = "7.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
+    hash = "sha256-r5YqZ8FhCtbQ1i2niReYJsaMxwoDUZzgwONtsKDdnRk=";
   };
-
-  patches = [
-    ./fix-setup-py-bad-syntax-detection.patch
-  ];
 
   build-system = [ setuptools-scm ];
 
