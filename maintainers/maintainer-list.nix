@@ -7247,6 +7247,11 @@
     githubId = 17111639;
     name = "Devin Singh";
   };
+  devmobasa = {
+    github = "devmobasa";
+    githubId = 4170275;
+    name = "devmobasa";
+  };
   devoid = {
     name = "Scott Devoid";
     email = "nixpkgs-github@d3void.net";
