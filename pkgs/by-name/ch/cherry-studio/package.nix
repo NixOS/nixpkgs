@@ -3,18 +3,25 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  electron_40,
+  git,
+  electron_44,
   nodejs-slim,
-  pnpm_10_29_2,
+  pnpm_11,
   pnpmConfigHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
   copyDesktopItems,
   cctools,
+  swift,
+  swiftpm,
   autoPatchelfHook,
   pkg-config,
   makeDesktopItem,
   nix-update-script,
+  bun,
+  mise,
+  ripgrep,
+  uv,
   alsa-lib,
   libevdev,
   libx11,
@@ -22,39 +29,52 @@
   libxfixes,
   libxtst,
   wayland,
+  glib,
+  gdk-pixbuf,
+  dbus,
+  rust-jemalloc-sys,
+  aws-lc,
+  zstd,
+  openssl,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_40;
-  pnpm = pnpm_10_29_2;
+  electron = electron_44;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.9.11";
+  version = "2.1.10";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NbjFPHMh8LSqUv3wpXI/hBU9aJFe76l5UyoZ2XqX0hg=";
+    hash = "sha256-V7nyWxe0howJnJv1K/8dDw2AvCjP1ON3+QC6ogWU/FU=";
   };
 
+  patches = [
+    # Avoid network access and Docker in upstream's packaging hooks. External
+    # tools are bundled from nixpkgs, and native addons are built from source.
+    ./skip-binary-download.patch
+  ];
+
   postPatch = ''
-    substituteInPlace src/main/services/ConfigManager.ts \
-      --replace-fail "ConfigKeys.AutoUpdate, true" "ConfigKeys.AutoUpdate, false" \
-      --replace-fail "ConfigKeys.AutoUpdate, value" "ConfigKeys.AutoUpdate, false"
-    substituteInPlace src/main/services/AppUpdater.ts \
-      --replace-fail " = isActive" " = false"
-    substituteInPlace src/renderer/src/hooks/useSettings.ts \
-      --replace-fail "isAutoUpdate)" "false)"
+    substituteInPlace src/shared/data/preference/preferenceSchemas.ts \
+      --replace-fail "'app.dist.auto_update.enabled': true" "'app.dist.auto_update.enabled': false"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/main/core/paths/pathRegistry.ts src/main/data/migration/v2/core/MigrationPaths.ts \
+      --replace-fail "process.resourcesPath" "'$out/opt/cherry-studio/resources'"
   '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-9Vx4WzQjwNxPAkz+FjjqnMQxJviP4e0EhkQBN9Y+ujo=";
+    nativeBuildInputs = [ git ];
+    fetcherVersion = 5;
+    hash = "sha256-2Agq52MoN1RR/w60i2ThVdQbaBy4XP836sT0l9CBGB8=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+    swift
+    swiftpm
+  ]
   ++ lib.optionals stdenv.hostPlatform.isElf [
     autoPatchelfHook
     pkg-config
@@ -81,6 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     libxfixes
     wayland
+    glib
+    gdk-pixbuf
+    dbus
+    rust-jemalloc-sys
+    aws-lc
+    zstd
+    openssl
   ];
 
   autoPatchelfIgnoreMissingDeps = [
@@ -88,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -100,7 +132,22 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r "${electron.dist}" $HOME/.electron-dist
     chmod -R u+w $HOME/.electron-dist
 
+    pnpm run postinstall
     node_modules/.bin/electron-vite build
+    node_modules/.bin/electron-vite build --config electron.vite.entries.config.ts
+
+    bundledBinaries=resources/binaries/${stdenv.hostPlatform.node.platform}-${stdenv.hostPlatform.node.arch}
+    mkdir -p "$bundledBinaries"
+    ln -s ${lib.getExe mise} "$bundledBinaries/mise"
+    ln -s ${lib.getExe bun} "$bundledBinaries/bun"
+    ln -s ${lib.getExe uv} "$bundledBinaries/uv"
+    ln -s ${lib.getExe' uv "uvx"} "$bundledBinaries/uvx"
+    ln -s ${lib.getExe ripgrep} "$bundledBinaries/rg"
+    echo ${mise.version} > "$bundledBinaries/.mise-version"
+    echo ${bun.version} > "$bundledBinaries/.bun-version"
+    echo ${uv.version} > "$bundledBinaries/.uv-version"
+    echo ${ripgrep.version} > "$bundledBinaries/.rg-version"
+
     npm_config_nodedir=${electron.headers} npm_config_build_from_source=true node_modules/.bin/electron-builder --dir \
       --config=electron-builder.yml \
       --config.mac.identity=null \
@@ -142,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 build/icon.png $out/share/icons/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --add-flags "--no-sandbox" \
       --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
