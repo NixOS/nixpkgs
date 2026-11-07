@@ -18,12 +18,12 @@
 }:
 
 let
-  version = "1.11";
+  version = "1.12";
   src = fetchFromGitHub {
     owner = "OctopusET";
     repo = "sway-contrib";
     tag = version;
-    hash = "sha256-/gWL0hA8hDjpK5YJxuZqmvo0zuVRQkhAkgHlI4JzNP8=";
+    hash = "sha256-wEH5HwkNc1R52QhNerFixvRj9GwS7nZSWixD1ubKdMA=";
   };
 
   meta = {
