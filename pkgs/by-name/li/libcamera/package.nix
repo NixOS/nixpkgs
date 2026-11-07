@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
   version = "0.7.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "camera";
@@ -129,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags =
     lib.mapAttrsToList lib.mesonEnable {
       v4l2 = true;
-      tracing = true;
+      tracing = withTracing;
       pycamera = true;
       qcam = withQcam;
       apps-output-dng = withQcam;
