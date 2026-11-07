@@ -21,7 +21,7 @@ in
       (propagateDefaults 1500 cfg.settings)
       {
         media_proxy = {
-          host = "127.0.0.1"; # TODO verify
+          host = "127.0.0.1";
           mode = lib.mkDefault "upload";
           storage_backend = lib.mkDefault "s3";
         };

@@ -661,7 +661,19 @@ in
       meilisearch = {
         enable = lib.mkEnableOption "Meilisearch for use with fluxer";
       };
-      seaweedfs.enable = lib.mkEnableOption "SeaweedFS for use with fluxer";
+      seaweedfs = {
+        enable = lib.mkEnableOption "SeaweedFS for use with fluxer";
+        admin_user_file = lib.mkOption {
+          description = "File containing the admin username for seaweedfs. Ephemeral";
+          type = types.path;
+          default = "/run/fluxer/generated/s3_admin_user";
+        };
+        admin_pass_file = lib.mkOption {
+          description = "File containing the admin password for seaweedfs. Ephemeral";
+          type = types.path;
+          default = "/run/fluxer/generated/s3_admin_pass";
+        };
+      };
       livekit = {
         enable = lib.mkEnableOption "Livekit for use with fluxer";
       };
@@ -978,6 +990,8 @@ in
         openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/media_key
         openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_access_key
         openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_secret_key
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_admin_user
+        openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/s3_admin_pass
         openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/meilisearch_master_key
         openssl rand -hex 64 | tr -d "\n" > $RUNTIME_DIRECTORY/setup_token
 
@@ -1096,8 +1110,7 @@ in
         ssl = mkIf cfg.aux.pgsql.enable "false";
       };
       s3 = {
-        # TODO change when switching out seaweedfs module
-        endpoint = mkIf cfg.aux.seaweedfs.enable "http://192.168.0.130:8333";
+        endpoint = mkIf cfg.aux.seaweedfs.enable "http://127.0.0.1:8333";
         region = mkIf cfg.aux.seaweedfs.enable "local";
         read_signed = true;
         bucket = {
@@ -1106,8 +1119,6 @@ in
           reports = mkDefault "fluxer-reports";
           harvests = mkDefault "fluxer-harvests";
         };
-        #access_key_id = cfg.settings.s3.access_key;
-        #secret_access_key = cfg.settings.s3.secret_key;
       };
       search = mkIf cfg.aux.meilisearch.enable {
         engine = "meilisearch";
@@ -1123,11 +1134,6 @@ in
     # Because unfurl-shard uses different env vars for some reason
     services.fluxer.unfurl.shard.settings = {
       media_proxy.endpoint = cfg.settings.internal.media_proxy_endpoint;
-    };
-
-    # Because gifs-shard uses yet another different set of env vars
-    services.fluxer.gifs.shard.settings = {
-      #media.endpoint = cfg.settings.internal.media_proxy_endpoint;
     };
   };
 }

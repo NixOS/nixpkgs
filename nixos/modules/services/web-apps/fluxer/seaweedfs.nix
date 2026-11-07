@@ -1,5 +1,3 @@
-# TODO for testing, remove before merging
-# (and maybe wait for a seaweedfs module in nixos)
 {
   settingsToEnvVars,
   loadCredential,
@@ -21,9 +19,8 @@ in
       enable = true;
       wantedBy = [ "network-online.target" ];
       script = ''
-        set -ux
+        set -u
         set -o pipefail
-
 
         cat > $RUNTIME_DIRECTORY/config.json <<EOF
         {
@@ -42,8 +39,8 @@ in
         }
         EOF
 
-        ADMIN_USER="$(cat $CREDENTIALS_DIRECTORY/FLUXER_S3_ADMIN_USER_FILE)"
-        ADMIN_PASS="$(cat $CREDENTIALS_DIRECTORY/FLUXER_S3_ADMIN_PASS_FILE)"
+        ADMIN_USER="$(cat $CREDENTIALS_DIRECTORY/s3_admin_user)"
+        ADMIN_PASS="$(cat $CREDENTIALS_DIRECTORY/s3_admin_pass)"
 
         ${lib.getExe pkgs.seaweedfs} mini \
           -s3 \
@@ -62,7 +59,10 @@ in
         RuntimeDirectory = "seaweedfs";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;
-        LoadCredential = loadCredential cfg.settings;
+        LoadCredential = (loadCredential cfg.settings) ++ [
+          "s3_admin_user:${cfg.aux.seaweedfs.admin_user_file}"
+          "s3_admin_pass:${cfg.aux.seaweedfs.admin_pass_file}"
+        ];
       };
     };
   };
