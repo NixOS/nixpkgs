@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    updateScript = ./update.py;
+
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "furmark --version";
