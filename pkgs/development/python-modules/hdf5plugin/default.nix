@@ -26,6 +26,14 @@ let
   # H5Z-ZFP needs an 8-bit bitstream word so the compressed HDF5 data is byte-portable
   zfp' = zfp.override { bitStreamWordSize = 8; };
   c-blosc2' = c-blosc2.override { zfp = zfp'; };
+
+  h5z-zfp.src = fetchFromGitHub {
+    owner = "LLNL";
+    repo = "H5Z-ZFP";
+    # hdf5plugin vendors 1.0.1, we update it to support newer zfp version
+    tag = "v1.1.1";
+    hash = "sha256-8uKR62cJTQZaxMuIUlcL5Oupxf4BHD9OoDG6mPrpHfU=";
+  };
 in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
@@ -58,14 +66,18 @@ buildPythonPackage (finalAttrs: {
     zstd
   ];
 
-  # devendor
   postPatch = ''
+    # devendor
     rm -rf lib/c-blosc
     rm -rf lib/c-blosc2
     rm -rf lib/bzip2
     rm -rf lib/charls
     rm -rf lib/zfp
     rm -rf lib/zstd
+
+    # update
+    rm -rf src/H5Z-ZFP
+    cp --recursive --no-preserve=mode ${h5z-zfp.src} src/H5Z-ZFP
   '';
 
   # opt-in to use use system libs instead
