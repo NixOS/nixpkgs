@@ -643,7 +643,7 @@ in
         '';
         recommendedTuningOptions = lib.mkOption {
           description = ''
-            Set the tuning options recommended by fluxer upstream. 
+            Set the tuning options recommended by fluxer upstream.
             Note that this changes these settings globally.
           '';
           type = types.bool;
