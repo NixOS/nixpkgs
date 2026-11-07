@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
-  version = "1.3.0";
+  version = "1.7.1";
 
   src = fetchFromCodeberg {
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QkOJFjqZtAo4GqZ/khbx0MZQDB0Hh8S3H9r4ln5AxqM=";
+    hash = "sha256-pzhI2ob330S03Gff+Rj0R6DnmMbsk5c5Sb87SVlkG3Y=";
   };
 
-  cargoHash = "sha256-FA9C7Li4wtXvI8+jDTmdFjqsop6cvGNPByRpOfvQPzw=";
+  cargoHash = "sha256-Weh68NGrSB5O4mtmp0r8UeJcZZ63ZuiP/C7S2TwQCc8=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.
@@ -25,8 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  # NOTE: Disabled for version 0.1.1 outputs "0.1.0" when run `nu-lint --version` is run
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -34,7 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Linter for the Nu shell scripting language";
     homepage = "https://codeberg.org/wvhulle/nu-lint";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      wvhulle
+    ];
     platforms = lib.platforms.all;
     mainProgram = "nu-lint";
   };
