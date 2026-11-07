@@ -51,6 +51,33 @@ lib.runTests (
       expected = import ../platforms/generate.nix { inherit lib; };
     };
 
+    # These tests compare the generated lists with each other rather than with
+    # hand-written expectations, so adding a system doesn't require updating them.
+    # For example, testall fails if a system ends up in no kernel list, or in two.
+    testall =
+      with lib.systems.doubles;
+      mseteq all (
+        linux
+        ++ darwin
+        ++ freebsd
+        ++ openbsd
+        ++ netbsd
+        ++ illumos
+        ++ wasi
+        ++ windows
+        ++ cygwin
+        ++ embedded
+        ++ mmix
+        ++ js
+        ++ genode
+        ++ redox
+        ++ uefi
+      );
+    testgnu = with lib.systems.doubles; mseteq gnu linux; # ++ kfreebsd ++ ...
+    testunix =
+      with lib.systems.doubles;
+      mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
+
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
         lib.systems.elaborate "x86_64-linux"
