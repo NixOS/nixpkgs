@@ -288,4 +288,6 @@ in
   home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
 
   openscad = recurseIntoAttrs (callPackage ../build-support/openscad/tests { });
+
+  buildJavaPackage = callPackage ./build-java-package { };
 }
