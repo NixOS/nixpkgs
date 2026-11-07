@@ -367,6 +367,7 @@
   ./programs/vlc.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
+  ./programs/wayland/driftwm.nix
   ./programs/wayland/dux-shell.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
