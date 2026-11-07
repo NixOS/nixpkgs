@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/openstreetmap/merkaartor/commit/28cca84e9f5db0aaba87c2084ed32f9677598823.diff";
       hash = "sha256-so0La5djYhWF6NqLpShWa3vGl5A2jkS3Xwg5Pe1yse4=";
     })
+    # calls `app.setDesktopFileName` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
   ];
 
   # protobuf's headers pull in abseil, and the abseil in nixpkgs is built as
