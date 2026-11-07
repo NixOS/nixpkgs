@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  flit-core,
+  flit-core_3,
 }:
 buildPythonPackage rec {
   pname = "handy-archives";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-+6IRAf2eKdXjtygjJhqq4GuTUGhvDSBneG1k3Oc+s/Y=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
   ];
