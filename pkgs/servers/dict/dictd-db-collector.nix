@@ -37,20 +37,12 @@
       cd $out/share/dictd
       echo "${databases}" >databases.names
       echo "${accessSection}" > dictd.conf
-      for j in ${toString link_arguments}; do
-        name="$(egrep '  '"$j"\$ databases.names)"
-        name=''${name%  $j}
-        if test -d "$j"; then
-          if test -d "$j"/share/dictd ; then
-            echo "Got store path $j"
-            j="$j"/share/dictd
-          fi
-          echo "Directory reference: $j"
-          i=$(ls "$j""/"*.index)
-          i="''${i%.index}";
-        else
-          i="$j";
-        fi
+
+      # Process a single dictionary given its basename (path without the
+      # .index/.dict[.dz] extension) and the database name to register it under.
+      processDict() {
+        local i="$1" name="$2"
+        local locale base source_date
         echo "Basename is $i"
         locale=$(cat "$(dirname "$i")"/locale)
         base="$(basename "$i")"
@@ -74,6 +66,31 @@
         echo "  index_word $out/share/dictd/$base.word" >> dictd.conf
         echo "  index_suffix $out/share/dictd/$base.suffix" >> dictd.conf
         echo "}" >> dictd.conf
+      }
+
+      for j in ${toString link_arguments}; do
+        name="$(egrep '  '"$j"\$ databases.names)"
+        name=''${name%  $j}
+        if test -d "$j"; then
+          if test -d "$j"/share/dictd ; then
+            echo "Got store path $j"
+            j="$j"/share/dictd
+          fi
+          echo "Directory reference: $j"
+          # A directory may contain several dictionaries (e.g. the bundled
+          # mueller-eng-rus database ships abbrev/base/dict/geo/names), so
+          # process every .index file rather than assuming there is only one.
+          indexes=("$j"/*.index)
+          if test "''${#indexes[@]}" -eq 1; then
+            processDict "''${indexes[0]%.index}" "$name"
+          else
+            for idx in "''${indexes[@]}"; do
+              processDict "''${idx%.index}" "$(basename "''${idx%.index}")"
+            done
+          fi
+        else
+          processDict "$j" "$name"
+        fi
       done
     '';
 
