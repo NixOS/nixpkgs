@@ -7,6 +7,7 @@
   grpcio,
   grpcio-gcp,
   grpcio-status,
+  opentelemetry-api,
   proto-plus,
   protobuf,
   pytest-asyncio,
@@ -16,29 +17,35 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-api-core";
-  version = "2.29.0";
+  version = "2.43.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-api-core";
-    tag = "v${version}";
-    hash = "sha256-wqDGtCYAH2f+P3zUfXgiQTePLr7a0qzUTeEc6pdCGio=";
+    repo = "google-cloud-python";
+    tag = "google-api-core-v${finalAttrs.version}";
+    hash = "sha256-sCC5tXBWQt1eeCCJP8NmmGrQvQYI7Djh4YyLR82Sfp4=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-api-core";
 
   build-system = [ setuptools ];
 
   dependencies = [
     googleapis-common-protos
     google-auth
+    opentelemetry-api
     protobuf
     proto-plus
     requests
   ];
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "opentelemetry-api"
+    "protobuf"
+  ];
 
   optional-dependencies = {
     async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
@@ -88,11 +95,11 @@ buildPythonPackage rec {
       This library is not meant to stand-alone. Instead it defines common
       helpers used by all Google API clients.
     '';
-    homepage = "https://github.com/googleapis/python-api-core";
-    changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-api-core/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       sarahec
     ];
   };
-}
+})
