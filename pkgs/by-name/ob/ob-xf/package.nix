@@ -9,7 +9,6 @@
   freetype,
   fontconfig,
   libjack2,
-  libGL,
   libx11,
   libxcursor,
   libxext,
@@ -56,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     libjack2
-    libGL
     libx11
     libxcursor
     libxext
