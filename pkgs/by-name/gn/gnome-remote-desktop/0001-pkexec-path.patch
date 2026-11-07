@@ -1,0 +1,26 @@
+diff --git a/src/grd-ctl.c b/src/grd-ctl.c
+index 8bb1697..6d2c042 100644
+--- a/src/grd-ctl.c
++++ b/src/grd-ctl.c
+@@ -1115,7 +1115,7 @@ main (int   argc,
+
+       builder = g_strv_builder_new ();
+
+-      g_strv_builder_add (builder, "pkexec");
++      g_strv_builder_add (builder, "/run/wrappers/bin/pkexec");
+       g_strv_builder_add (builder, "--user");
+       g_strv_builder_add (builder, GRD_USERNAME);
+       g_strv_builder_add (builder, argv[0]);
+diff --git a/src/grd-utils.c b/src/grd-utils.c
+index e082fcf..2fb2faa 100644
+--- a/src/grd-utils.c
++++ b/src/grd-utils.c
+@@ -363,7 +363,7 @@ grd_toggle_systemd_unit (GrdRuntimeMode   runtime_mode,
+   builder = g_strv_builder_new ();
+
+   if (runtime_mode == GRD_RUNTIME_MODE_SYSTEM)
+-    g_strv_builder_add (builder, "pkexec");
++    g_strv_builder_add (builder, "/run/wrappers/bin/pkexec");
+
+   g_strv_builder_add (builder,
+                       GRD_LIBEXEC_DIR "/gnome-remote-desktop-enable-service");
