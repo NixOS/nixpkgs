@@ -10,8 +10,11 @@
   pkg-config,
 
   # buildInputs
+  aws-lc,
   openssl,
   protobuf,
+  # for zstd
+  pkgsHostTarget,
 
   # dependencies
   lance-namespace,
@@ -103,8 +106,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     protobuf
+    pkgsHostTarget.zstd
   ];
 
   pythonRelaxDeps = [
