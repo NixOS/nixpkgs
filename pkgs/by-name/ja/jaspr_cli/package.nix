@@ -10,14 +10,14 @@
 # Note: Removed jaspr_cli from arguments because we use finalAttrs.finalPackage for tests
 buildDartApplication (finalAttrs: {
   pname = "jaspr_cli";
-  version = "0.23.0";
+  version = "0.23.5";
 
   # Fetch the whole monorepo
   src = fetchFromGitHub {
     owner = "schultek";
     repo = "jaspr";
     tag = "jaspr_cli-v${finalAttrs.version}";
-    hash = "sha256-V+cmnO4I4hZEdxzjnycPCTQbWpBmjESJSG9cIoMIwjo=";
+    hash = "sha256-r+BjH4fhgD8bi3qS1hbL3Ck4QtDbOR7CbBRcVSls794=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/jaspr_cli";
