@@ -12854,7 +12854,9 @@ self: super: with self; {
 
   opensimplex = callPackage ../development/python-modules/opensimplex { };
 
-  openslide = callPackage ../development/python-modules/openslide { inherit (pkgs) openslide; };
+  openslide-python = callPackage ../development/python-modules/openslide-python {
+    inherit (pkgs) openslide;
+  };
 
   openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
 
