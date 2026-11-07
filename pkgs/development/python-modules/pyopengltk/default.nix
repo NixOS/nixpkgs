@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyopengltk";
-  version = "0.0.4";
+  version = "7ede18e";
   pyproject = true;
 
   src = fetchFromGitHub {
