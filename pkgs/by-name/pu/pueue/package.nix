@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pueue";
   version = "4.0.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
@@ -32,7 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    "--test client_tests"
+    "--test"
+    "client_tests"
     "--skip=test_single_huge_payload"
     "--skip=test_create_unix_socket"
   ];
