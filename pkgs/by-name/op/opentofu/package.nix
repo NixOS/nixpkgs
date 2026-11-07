@@ -11,6 +11,7 @@
   writeText,
   terraform-providers,
   installShellFiles,
+  emptyFile,
 }:
 
 let
@@ -40,6 +41,7 @@ let
       inherit plugins;
       tests = {
         inherit opentofu_plugins_test;
+        eval = evalTests emptyFile;
       };
     };
 
@@ -85,12 +87,31 @@ let
             random = {
               source  = "hashicorp/random"
             }
+            local = {
+              source  = "hashicorp/local"
+            }
           }
         }
 
         resource "random_id" "test" {}
+        resource "local_file" "test2" {}
       '';
-      opentofu = (pluggable package).withPlugins (p: [ p.hashicorp_random ]);
+      opentofu =
+        ((pluggable package).withPlugins (
+          p:
+          # If hashicorp_random were to be bundled by default and then
+          # null-ed out in the package set, this test would need to switch
+          # to a different provider.
+          assert lib.isDerivation p.hashicorp_random;
+          [ p.hashicorp_random ]
+        )).withPlugins
+          (
+            p:
+            assert lib.isDerivation p.hashicorp_local;
+            [
+              p.hashicorp_local
+            ]
+          );
       test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
         # make it fail outside of sandbox
         export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
@@ -100,6 +121,16 @@ let
       '';
     in
     test;
+
+  evalTests =
+    ok:
+    # overrideAttrs works on withPlugins and modifies the unwrapped derivation inside
+    # See https://github.com/NixOS/nixpkgs/issues/158620
+    assert
+      (((pluggable package).withPlugins (p: [ p.hashicorp_random ])).overrideAttrs { name = "squee"; })
+      .unwrapped.name == "squee";
+
+    ok;
 
   plugins = removeAttrs terraform-providers [
     "override"
@@ -144,9 +175,22 @@ let
             # 3. Specifying overrides on the wrapper is unsupported.
             #
             # See nixpkgs#158620 for details.
-            overrideDerivation = f: (pluggable (opentofu.overrideDerivation f)).withPlugins plugins;
             overrideAttrs = f: (pluggable (opentofu.overrideAttrs f)).withPlugins plugins;
-            override = x: (pluggable (opentofu.override x)).withPlugins plugins;
+
+            # It could be supported by getting the opentofu attribute through
+            # callPackage instead, but that wouldn't solve the undoing of
+            # overrideAttrs anyway.
+            # Until we have https://github.com/NixOS/nixpkgs/issues/273815, we're
+            # better off requiring override to go first and save the user
+            # potential headaches.
+            override = abort "(opentofu.withPlugins ...).override is not supported. Call .override before calling any other attributes.";
+            # Similarly, except overrideDerivation is on the way out.
+            overrideDerivation = abort "(opentofu.withPlugins ...).overrideDerivation is not supported. Use overrideAttrs instead.";
+
+            /**
+              The opentofu package before pinning the plugins with `withPlugins`
+            */
+            unwrapped = opentofu;
           };
         in
         # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
