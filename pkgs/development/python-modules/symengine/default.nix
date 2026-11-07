@@ -8,6 +8,7 @@
   symengine,
   pytest,
   sympy,
+  zlib,
   python,
 }:
 
@@ -41,6 +42,10 @@ buildPythonPackage rec {
 
   buildInputs = [
     symengine
+  ];
+
+  propagatedBuildInputs = [
+    zlib
   ];
 
   nativeCheckInputs = [
