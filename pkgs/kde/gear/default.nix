@@ -125,6 +125,7 @@
   kiriki = callPackage ./kiriki { };
   kiten = callPackage ./kiten { };
   kitinerary = callPackage ./kitinerary { };
+  kitinerary-workbench = callPackage ./kitinerary-workbench { };
   kjournald = callPackage ./kjournald { };
   kjumpingcube = callPackage ./kjumpingcube { };
   kldap = callPackage ./kldap { };
