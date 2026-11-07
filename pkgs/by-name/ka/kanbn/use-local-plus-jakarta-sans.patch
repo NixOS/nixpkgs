@@ -1,0 +1,29 @@
+Load Plus Jakarta Sans from a local TTF instead of next/font/google.
+
+The Nix build sandbox has no network access, so the default `next/font/google`
+call fails during `next build`. Swap it for `next/font/local` and reference a
+TTF that the package's postPatch drops into `apps/web/src/fonts/` from the
+plus-jakarta-sans nixpkg.
+
+--- a/apps/web/src/pages/_app.tsx
++++ b/apps/web/src/pages/_app.tsx
+@@ -4,7 +4,7 @@
+ import type { NextPage, Viewport } from "next";
+ import type { AppProps, AppType } from "next/app";
+ import type { ReactElement, ReactNode } from "react";
+-import { Plus_Jakarta_Sans } from "next/font/google";
++import localFont from "next/font/local";
+ import Script from "next/script";
+ import { env } from "next-runtime-env";
+ import { ThemeProvider } from "next-themes";
+@@ -19,8 +19,8 @@
+ import { PopupProvider } from "~/providers/popup";
+ import { api } from "~/utils/api";
+
+-const jakarta = Plus_Jakarta_Sans({
+-  subsets: ["latin"],
++const jakarta = localFont({
++  src: "../fonts/PlusJakartaSans.ttf",
+   display: "swap",
+ });
+
