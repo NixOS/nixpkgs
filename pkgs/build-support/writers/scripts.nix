@@ -986,11 +986,8 @@ rec {
     makeScriptWriter (
       (removeAttrs args [ "libraries" ])
       // {
-        interpreter = lua.interpreter;
-        # if libraries == []
-        # then lua.interpreter
-        # else (lua.withPackages (ps: libraries)).interpreter
-        # This should support packages! I just cant figure out why some dependency collision happens whenever I try to run this.
+        interpreter =
+          if libraries == [ ] then lua.interpreter else (lua.withPackages (_: libraries)).interpreter;
         check = (
           writeDash "luacheck.sh" ''
             exec ${buildLuaPackages.luacheck}/bin/luacheck "$1"
@@ -1008,8 +1005,8 @@ rec {
     ## `pkgs.writers.writeLua` usage example
 
     ```nix
-    writeLua "test_lua" { libraries = [ pkgs.luaPackages.say ]; } ''
-      s = require("say")
+    writeLua "test_lua" { libraries = [ pkgs.lua55Packages.say ]; } ''
+      local s = require("say")
       s:set_namespace("en")
 
       s:set('money', 'I have %s dollars')
@@ -1028,7 +1025,7 @@ rec {
 
     :::
   */
-  writeLua = makeLuaWriter pkgs.lua5_2_compat pkgs.lua52Packages buildPackages.lua52Packages;
+  writeLua = makeLuaWriter pkgs.lua5_5 pkgs.lua55Packages buildPackages.lua55Packages;
 
   writeLuaBin = name: writeLua "/bin/${name}";
 
