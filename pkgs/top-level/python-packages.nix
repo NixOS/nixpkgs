@@ -3723,6 +3723,8 @@ self: super: with self; {
 
   cookies = callPackage ../development/python-modules/cookies { };
 
+  cooler = callPackage ../development/python-modules/cooler { };
+
   coolname = callPackage ../development/python-modules/coolname { };
 
   coordinates = callPackage ../development/python-modules/coordinates { };
@@ -7740,6 +7742,8 @@ self: super: with self; {
   hibpwned = callPackage ../development/python-modules/hibpwned { };
 
   hickle = callPackage ../development/python-modules/hickle { };
+
+  hicmatrix = callPackage ../development/python-modules/hicmatrix { };
 
   hid = callPackage ../development/python-modules/hid { inherit (pkgs) hidapi; };
 
