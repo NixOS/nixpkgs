@@ -25,11 +25,11 @@ buildNpmPackage (finalAttrs: {
     # fixes node-addon-api errors with aarch64-darwin
     ./update-node-addon-api.patch
 
-    # bump better-sqlite3 to work with electron 41
+    # bump better-sqlite3 to work with newer electron
     ./bump-better-sqlite3.patch
   ];
 
-  npmDepsHash = "sha256-LaHqS36bMN/kkb6+3GpmTOTAEaEMH3yy04jM3OfR+1k=";
+  npmDepsHash = "sha256-ZaUf8c9Xuw0FcMD38SKHyw6EW9LiZyVm3wPZ2kvqCr4=";
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ distutils ]))
@@ -41,14 +41,12 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # needed for better-sqlite3 rebuild
-    export npm_config_nodedir="${electron.headers}"
-    export npm_config_target="${electron.version}"
-
-    npm rebuild --verbose --no-progress --offline
+    # build better-sqlite3 from source
+    pushd node_modules/better-sqlite3
+    rm -rf prebuilds
+    ../.bin/node-gyp rebuild --release --nodedir="${electron.headers}"
 
     # reduce better-sqlite3 size
-    pushd node_modules/better-sqlite3
     rm -rf src deps build/{deps,Release/{.deps,obj,obj.target,test_extension.node}}
     popd
 
