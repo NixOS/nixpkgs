@@ -8,7 +8,7 @@
   py,
   pytestCheckHook,
   pytest-html,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   setuptools,
   setuptools-scm,
 }:
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     py
     pytestCheckHook
     pytest-html
-    pytest-benchmark # Needed for the `--benchmark-skip` flag
+    pytest-benchmark-stub
   ];
 
   pytestFlags = [
