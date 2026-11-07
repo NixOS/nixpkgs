@@ -115,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableTests;
   checkTarget = "run_tests";
+  preCheck = "export AWS_LC_NUM_TEST_WORKERS=$NIX_BUILD_CORES";
 
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
