@@ -2564,6 +2564,12 @@
     githubId = 258112064;
     name = "Arthur Ficial";
   };
+  arthursonzogni = {
+    email = "sonzogniarthur@gmail.com";
+    github = "ArthurSonzogni";
+    githubId = 4759106;
+    name = "Arthur Sonzogni";
+  };
   arthurteisseire = {
     email = "arthurteisseire33@gmail.com";
     github = "arthurteisseire";
