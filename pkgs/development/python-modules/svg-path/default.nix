@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "7.0";
+  version = "7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "svg.path";
     tag = version;
-    hash = "sha256-x1u56O3HilA7Zmkrsot6Nh9E1e88qHwYnk1ySs08tbQ=";
+    hash = "sha256-1dHswQLJnpOINyMub0U95FLoN/CML04sVPCm6nZBU4o=";
   };
 
   build-system = [ setuptools ];
