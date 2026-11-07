@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtwebsockets
   ];
 
+  cmakeFlags = [ "-DWITH_SERVER=1" ];
+
   meta = {
     homepage = "https://github.com/Cockatrice/Cockatrice";
     description = "Cross-platform virtual tabletop for multiplayer card games";
