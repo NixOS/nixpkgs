@@ -8324,6 +8324,11 @@
     name = "Edvin Källström";
     githubId = 84442052;
   };
+  ekhh = {
+    name = "EKHH";
+    github = "ekhh";
+    githubId = 90589480;
+  };
   ekimber = {
     email = "ekimber@protonmail.com";
     github = "ekimber";

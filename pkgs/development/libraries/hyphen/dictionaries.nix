@@ -33,7 +33,10 @@ let
         description = "Hyphenation dictionary for ${shortDescription} from LibreOffice";
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ theCapypara ];
+        maintainers = with lib.maintainers; [
+          theCapypara
+          ekhh
+        ];
         platforms = lib.platforms.all;
       };
 
