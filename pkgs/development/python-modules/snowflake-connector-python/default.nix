@@ -1,8 +1,7 @@
 {
   lib,
-  aioboto3,
-  aiohttp,
   asn1crypto,
+  azure-identity,
   buildPythonPackage,
   boto3,
   botocore,
@@ -21,7 +20,6 @@
   pyarrow,
   pyjwt,
   pyopenssl,
-  pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
   pytz,
@@ -35,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "4.3.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-bJK6U5lomcPMGeKEmv+9m+uM5+3GJKKUA3dEwP/ynVo=";
+    hash = "sha256-Jz2HzSwio1RNx5Fl7QX+1AQ43DYsnLZHnC8BJTreLiU=";
   };
 
   build-system = [
@@ -73,6 +71,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    azure = [ azure-identity ];
     boto = [
       boto3
       botocore
@@ -89,10 +88,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    aioboto3
-    aiohttp
     numpy
-    pytest-asyncio
     pytest-xdist
     pytestCheckHook
     responses
@@ -104,6 +100,7 @@ buildPythonPackage rec {
     # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
     "test/extras/simple_select1.py"
     "test/integ"
+    "test/wif"
     # error getting schema from stream, error code: 0, error info: Expected to
     # be able to read 19504 bytes for message body but got 19503
     "test/unit/test_connection.py"
@@ -116,26 +113,19 @@ buildPythonPackage rec {
     "test/unit/test_programmatic_access_token.py"
     "test/unit/test_oauth_token.py"
     "test/unit/test_proxies.py"
-    "test/unit/aio/test_programmatic_access_token_async.py"
-    "test/unit/aio/test_oauth_token_async.py"
-    "test/unit/aio/test_proxies_async.py"
-    # aio tests that connect to the internet
-    "test/unit/aio/test_connection_async_unit.py::test_invalid_backoff_policy"
-    "test/unit/aio/test_ocsp.py"
-    "test/unit/aio/test_s3_util_async.py::test_download_retry_exceeded_error"
-    "test/unit/aio/test_s3_util_async.py::test_accelerate_in_china_endpoint"
-    "test/unit/aio/test_s3_util_async.py::test_get_header_expiry_error"
-    "test/unit/aio/test_s3_util_async.py::test_upload_expiry_error"
-    "test/unit/aio/test_s3_util_async.py::test_download_expiry_error"
-    # snowflake.connector.errors.ProgrammingError: 251008: 251008: Failed to load private key:
-    # argument 'password': Cannot convert "<class 'int'>" instance to a buffer.
-    "test/unit/aio/test_auth_keypair_async.py::test_auth_keypair"
+    "test/unit/test_redirect_retry.py"
+    "test/unit/test_auth_jwt_error_codes.py"
+    "test/unit/test_result_batch.py::test_qrmk_branch_does_not_log_qrmk_value_e2e"
+    # asyncio support is in preview upstream and its tests break frequently
+    "test/unit/aio"
   ];
 
   disabledTests = [
     # Tests connect to the internet
     "test_status_when_num_of_chunks_is_zero"
     "test_test_socket_get_cert"
+    "test_get_digest_does_not_compute_md5"
+    "test_compute_content_md5_is_noop_by_default"
     # Missing .wiremock/wiremock-standalone.jar
     "test_wiremock"
   ];
@@ -152,6 +142,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sarahec ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      vtimofeenko
+    ];
   };
 }
