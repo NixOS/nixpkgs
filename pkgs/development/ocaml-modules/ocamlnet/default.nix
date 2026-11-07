@@ -7,7 +7,6 @@
   ncurses,
   ocaml,
   findlib,
-  ocaml_pcre,
   camlzip,
   gnutls,
   nettle,
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     ncurses
-    ocaml_pcre
     camlzip
     gnutls
     nettle
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
       -bindir $out/bin
       -enable-gnutls
       -enable-zip
-      -enable-pcre
+      -disable-pcre
       -disable-gtk2
       -with-nethttpd
       -datadir $out/lib/ocaml/${ocaml.version}/ocamlnet
