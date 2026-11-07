@@ -116,6 +116,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "apprise"
     "certifi"
     "python-slugify"
     "websockets"

@@ -23,6 +23,10 @@ let
   };
 in
 {
+  icu79 = make-icu {
+    version = "79.1";
+    hash = "sha256-Bvpj7LUhBI+AgvEq2Yj2tnjZDL2IqvziTLyUkCsZHZk=";
+  };
   icu78 = make-icu {
     version = "78.3";
     hash = "sha256-Oi56R2BLpwLzRYeDCOb+/sphLuiVz0pfIi55Vfq/4MA=";

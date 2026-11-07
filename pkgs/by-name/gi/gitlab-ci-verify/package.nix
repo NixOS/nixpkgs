@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-ci-verify";
-  version = "2.11.12";
+  version = "2.11.14";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "timo-reymann";
     repo = "gitlab-ci-verify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m1sc/k11xLBy4wdDcD3NoCrGC8ggDvINtL/8E71YeOY=";
+    hash = "sha256-+il8saPB2nTDeGJmQ+gzlYx4bdBUDqFcBRXd/nlafxg=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-x282G+KDcyBjPiHLcU6q5bajZbJTvgRqUIpNFWUz/uc=";
+  vendorHash = "sha256-mlmEoRxZ5lVPClyN8mz0nEtoZtyH8+2UqoB1E7FJfQ8=";
 
   ldflags = [
     "-s"

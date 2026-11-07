@@ -1,21 +1,17 @@
 {
   lib,
   stdenv,
+  pinTolibcxx20 ? stdenv.hostPlatform.isDarwin, # libcxx21 makes FD tracking unreliable on Darwin
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
   buildNodejs = callPackage ./nodejs.nix (
-    {
-      inherit openssl;
-      python = python3;
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      # libcxx21 makes FD tracking unreliable on Darwin. Pinning to libcxx20:
+    args
+    // lib.optionalAttrs pinTolibcxx20 {
       stdenv = buildPackages.llvmPackages_20.libcxxStdenv;
     }
   );
