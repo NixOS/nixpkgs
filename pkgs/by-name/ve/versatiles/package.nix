@@ -3,6 +3,9 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  aws-lc,
+  zstd,
+  sqlite,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
@@ -27,6 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    aws-lc
+    zstd
+    sqlite
   ];
 
   # Needed to get openssl-sys to use pkg-config.
