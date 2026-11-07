@@ -14,7 +14,7 @@ and system settings.
 To generate a hardware report, run the following command as root on the target machine:
 
 ```console
-$ sudo nix-shell -p nixos-facter --run 'nixos-facter -o facter.json'
+$ nix-shell -p nixos-facter --run 'sudo nixos-facter -o facter.json'
 ```
 
 This scans your system and produces a JSON report containing:
