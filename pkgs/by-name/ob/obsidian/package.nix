@@ -6,7 +6,6 @@
   electron,
   makeDesktopItem,
   imagemagick,
-  asar,
   autoPatchelfHook,
   writeScript,
   _7zz,
@@ -86,20 +85,10 @@ let
       autoPatchelfHook
       makeWrapper
       imagemagick
-      asar
     ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-
-      # Mark Obsidian's app:// scheme `corsEnabled` to fix the internal PDF
-      # viewer; see https://github.com/NixOS/nixpkgs/pull/525772 for details.
-      # Remove once upstream registers the scheme with `corsEnabled`.
-      asar extract resources/app.asar app-src
-      substituteInPlace app-src/main.js \
-        --replace-fail "supportFetchAPI: true," "supportFetchAPI: true, corsEnabled: true,"
-      asar pack app-src resources/app.asar
-
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
