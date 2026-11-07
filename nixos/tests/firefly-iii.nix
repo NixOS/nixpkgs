@@ -24,6 +24,8 @@ in
           APP_KEY_FILE = "/etc/firefly-iii-appkey";
           LOG_CHANNEL = "stdout";
           SITE_OWNER = "mail@example.com";
+          APP_DEBUG = false;
+          SEND_ERROR_MESSAGE = true;
         };
       };
     };
@@ -101,7 +103,9 @@ in
     };
 
   testScript =
+    { nodes, ... }:
     let
+      cfg = nodes.fireflySqlite.services.firefly-iii;
       checkCron = node: ''
         ${node}.succeed(
             "curl -fsS -c /tmp/jar -b /tmp/jar -o /tmp/register.html http://localhost/register",
@@ -122,6 +126,13 @@ in
     ''
       fireflySqlite.wait_for_unit("phpfpm-firefly-iii.service")
       fireflySqlite.wait_for_unit("nginx.service")
+      fireflySqlite.succeed("""
+        ${cfg.package.phpPackage}/bin/php -r '
+          $config = require "${cfg.dataDir}/cache/config.php";
+          exit($config["app"]["debug"] === false
+            && $config["firefly"]["send_error_message"] === true ? 0 : 1);
+        '
+      """)
       fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
       fireflySqlite.succeed("curl -fvvv -Ls http://localhost/build/manifest.json")
       ${checkCron "fireflySqlite"}
