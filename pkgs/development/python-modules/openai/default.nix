@@ -109,6 +109,11 @@ buildPythonPackage (finalAttrs: {
   # including pandas-stubs would cause infinite recursion
   ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
 
+  disabledTests = [
+    # websockets.exceptions.SecurityError: more than 10 redirects
+    "test_sync_azure_websocket_does_not_follow_redirects"
+  ];
+
   disabledTestPaths = [
     # tests makes network requests
     "tests/api_resources"
