@@ -3,6 +3,7 @@
   cmake,
   curl,
   fetchFromGitHub,
+  fontconfig,
   freetype,
   lib,
   libGL,
@@ -16,12 +17,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhhyou-plugins-juce";
-  version = "0.1.0";
+  version = "0.2.0";
   src = fetchFromGitHub {
     owner = "ryukau";
     repo = "UhhyouPluginsJuce";
     tag = "UhhyouPluginsJuce${finalAttrs.version}";
-    hash = "sha256-oHxyOTiqEwdNUKGQNjjfdRkzMa+4TYX6Vf6ZS9BTcC0=";
+    hash = "sha256-arMXVzS2niKN3Wa2GTHuOHP3VoQ4ng/smBqkDsJ0R6I=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     curl
+    fontconfig
     freetype
     libGL
     libxcursor
@@ -49,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib/vst3
-    cp -r *_artefacts/Release/VST3/*.vst3 $out/lib/vst3/
+    find . -type d -name '*.vst3' -exec cp -r {} $out/lib/vst3/ \;
+
     runHook postInstall
   '';
 
