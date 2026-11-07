@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ORFIGjQD0S7RPgWJqDwPH2wI6Dnv4LvOZ0tMHpOtvPM=";
+    hash = "sha256-WPhxXHB4d+yGX/94GwEJa3HEYZhIq7ncDEMd+NeY7bQ=";
   };
 
   vendorHash = "sha256-08LGC+N0NjUAjo9b5JhKNr46CuIXMz/erw2RPRU17xo=";
@@ -26,14 +26,11 @@ buildGoModule (finalAttrs: {
   # required for TestHTTPHandlerReadWrite and other tests
   __darwinAllowLocalNetworking = true;
 
-  checkFlags =
-    let
-      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
-        "TestS3StoreGetChunk/recover" # sendfile is not permitted in Darwin sandbox
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  # sendfile(2) in XNU kernel does not set remote address when checking syscall against sandbox rules
+  # https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/uipc_syscalls.c#L3790-L3791
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow network-outbound (require-all (local ip) (require-not (remote ip))))
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd desync \
