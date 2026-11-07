@@ -14,14 +14,14 @@
   nix-update-script,
 }:
 
-flutter347.buildFlutterApplication rec {
+flutter347.buildFlutterApplication (finalAttrs: {
   pname = "yubioath-flutter";
   version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QBxb5xm2K7UaAhK7UwIlIrLQNkERc0jpBQEhv1/Z/9s=";
     fetchSubmodules = true;
   };
@@ -34,7 +34,7 @@ flutter347.buildFlutterApplication rec {
     rm -f pubspec.lock
 
     substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
+      --replace-fail "../build/linux/helper" "${finalAttrs.passthru.helper}/libexec/helper"
   '';
 
   nativeBuildInputs = [ removeReferencesTo ];
@@ -52,7 +52,7 @@ flutter347.buildFlutterApplication rec {
 
   postInstall = ''
     # Swap the authenticator-helper symlink with the correct symlink.
-    ln -fs "${passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
+    ln -fs "${finalAttrs.passthru.helper}/bin/authenticator-helper" "$out/app/$pname/helper/authenticator-helper"
 
     # Move the icon.
     install -Dm444 $out/app/$pname/linux_support/com.yubico.yubioath.png $out/share/icons/hicolor/128x128/apps/com.yubico.yubioath.png
@@ -74,17 +74,22 @@ flutter347.buildFlutterApplication rec {
   '';
 
   # Needed for QR scanning to work
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gnome-screenshot ])
+  ];
 
   passthru = {
-    helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
+    helper = python3Packages.callPackage ./helper.nix { inherit (finalAttrs) src version meta; };
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
+          strictDeps = true;
+          __structuredAttrs = true;
         }
         ''
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
@@ -114,4 +119,4 @@ flutter347.buildFlutterApplication rec {
       "aarch64-linux"
     ];
   };
-}
+})

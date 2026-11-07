@@ -37,14 +37,14 @@
   wayland-scanner,
 }:
 let
-  flutterRustBridge = rustPlatform.buildRustPackage rec {
+  flutterRustBridge = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "flutter_rust_bridge_codegen";
     version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.5.0/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
       repo = "flutter_rust_bridge";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-SbwqWapJbt6+RoqRKi+wkSH1D+Wz7JmnVbfcfKkjt8Q=";
     };
 
@@ -58,7 +58,7 @@ let
       "flutter_rust_bridge_codegen"
     ];
     doCheck = false;
-  };
+  });
 
   ffigen = callPackage ./ffigen {
     flutter = flutter329;
@@ -67,24 +67,23 @@ let
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter329.buildFlutterApplication rec {
+flutter329.buildFlutterApplication (finalAttrs: {
   pname = "rustdesk";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-1xa7X+swBIb8Lz3c6m8SeNZAiJWNCUpw+UbdSsMkeSk=";
   };
 
-  strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
   env.OPENSSL_NO_VENDOR = true;
 
   # Configure the Flutter/Dart build
-  sourceRoot = "${src.name}/flutter";
+  sourceRoot = "${finalAttrs.src.name}/flutter";
   # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.5.0/flutter/pubspec.lock | yq > pubspec.lock.json
   # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -93,7 +92,7 @@ flutter329.buildFlutterApplication rec {
   # Configure the Rust build
   cargoRoot = "..";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -211,10 +210,16 @@ flutter329.buildFlutterApplication rec {
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${addDriverRunpath.driverLink}/lib"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xdg-user-dirs ])
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -255,7 +260,7 @@ flutter329.buildFlutterApplication rec {
   meta = {
     description = "Virtual / remote desktop infrastructure for everyone! Open source TeamViewer / Citrix alternative";
     homepage = "https://rustdesk.com";
-    changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
+    changelog = "https://github.com/rustdesk/rustdesk/releases/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       das_j
@@ -265,4 +270,4 @@ flutter329.buildFlutterApplication rec {
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };
-}
+})
