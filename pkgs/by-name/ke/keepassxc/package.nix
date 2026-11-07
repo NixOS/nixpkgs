@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   qt6,
 
@@ -65,7 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  patches = [ ./darwin-remove-macdeployqt.patch ];
+  patches = [
+    ./darwin-remove-macdeployqt.patch
+    # Adapt Passkeys to allow deterministic and randomized signatures
+    (fetchpatch2 {
+      url = "https://github.com/keepassxreboot/keepassxc/commit/b111337c25d1ceae829ddfb6c618305f05137ede.patch?full_index=1";
+      hash = "sha256-92vcGxoB++qvZYc/Bkqnn6WykY0ODzTZv+2LHh1vhS4=";
+    })
+  ];
 
   # Upstream develops against a build of PCSC from Xcode.
   # The types are incompatible with nixpkgs pcsclite.

@@ -1,0 +1,27 @@
+--- a/src/browser/BrowserPasskeys.cpp
++++ b/src/browser/BrowserPasskeys.cpp
+@@ -33,6 +33,7 @@
+ #include <botan/pubkey.h>
+ #include <botan/rsa.h>
+ #include <botan/sodium.h>
++#include <botan/version.h>
+ 
+ #include <bitset>
+ 
+@@ -354,8 +355,16 @@
+         if (algName == "ECDSA") {
+             Botan::ECDSA_PrivateKey privateKey(algId, privateKeyBytes);
+ #ifdef WITH_BOTAN3
++            // Botan 3.14 made ECDSA signatures randomized by default, request RFC 6979 deterministic ones
++#if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(3, 14, 0)
++            Botan::PK_Signer signer(privateKey,
++                                    *randomGen()->getRng(),
++                                    "EMSA1(SHA-256),Deterministic",
++                                    Botan::Signature_Format::DerSequence);
++#else
+             Botan::PK_Signer signer(
+                 privateKey, *randomGen()->getRng(), "EMSA1(SHA-256)", Botan::Signature_Format::DerSequence);
++#endif
+ #else
+             Botan::PK_Signer signer(privateKey, *randomGen()->getRng(), "EMSA1(SHA-256)", Botan::DER_SEQUENCE);
+ #endif
