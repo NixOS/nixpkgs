@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gmp,
   installShellFiles,
+  xmltoman,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    xmltoman
     installShellFiles
   ];
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     sed -e s@/usr/@$out/@g -i Makefile
-    cp ssss.manpage.xml ssss.1
+    xmltoman ssss.manpage.xml >ssss.1
     mkdir -p $out/bin
     echo -e 'install:\n\tcp ssss-combine ssss-split '"$out"'/bin' >>Makefile
   '';
