@@ -54,7 +54,12 @@ in
             ++ (lib.optional cfg.aux.meilisearch.enable "meilisearch.service")
             ++ (lib.optional cfg.aux.seaweedfs.enable "seaweedfs.service")
             ++ [ "fluxer-svc.target" ];
-          environment = settingsToEnvVars cfg.api.settings;
+          environment = lib.mkMerge [
+            (settingsToEnvVars cfg.api.settings)
+            {
+              NODE_OPTIONS = "--max-old-space-size-percentage=60";
+            }
+          ];
 
           script = ''
             export HOME="$STATE_DIRECTORY"
@@ -104,7 +109,12 @@ in
             ++ (lib.optional cfg.aux.meilisearch.enable "meilisearch.service")
             ++ (lib.optional cfg.aux.seaweedfs.enable "seaweedfs.service")
             ++ [ "fluxer-svc.target" ];
-          environment = settingsToEnvVars cfg.api.settings;
+          environment = lib.mkMerge [
+            (settingsToEnvVars cfg.api.settings)
+            {
+              NODE_OPTIONS = "--max-old-space-size-percentage=55";
+            }
+          ];
 
           script = ''
             set -u

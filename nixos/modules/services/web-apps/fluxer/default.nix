@@ -141,6 +141,11 @@ let
     map ({ path, ... }: lib.nameValuePair (pathToEnvVar path) "%d/${pathToEnvVar path}") secrets;
 
   standardSystemdSettings = {
+    environment = {
+      TOKIO_WORKER_THREADS = mkDefault "2";
+      MALLOC_ARENA_MAX = mkDefault "2";
+    };
+
     unitConfig = {
       StartLimitBurst = "5";
       StartLimitIntervalSec = "2m";
@@ -627,14 +632,25 @@ in
       nats = {
         enable = lib.mkEnableOption "Nats for use with fluxer";
       };
-      pgsql.enable = lib.mkEnableOption ''
-        Postgres for use with fluxer.
+      pgsql = {
+        enable = lib.mkEnableOption ''
+          Postgres for use with fluxer.
 
-        If postgres is enabled, then local services will attempt
-        to connect via unix socket using peer authentication. If
-        you would like to deviate from this, please configure
-        postgres manually
-      '';
+          If postgres is enabled, then local services will attempt
+          to connect via unix socket using peer authentication. If
+          you would like to deviate from this, please configure
+          postgres manually
+        '';
+        recommendedTuningOptions = lib.mkOption {
+          description = ''
+            Set the tuning options recommended by fluxer upstream. 
+            Note that this changes these settings globally.
+          '';
+          type = types.bool;
+          default = false;
+          example = true;
+        };
+      };
       valkey.enable = lib.mkEnableOption ''
         Valkey for use with fluxer.
 
@@ -697,8 +713,14 @@ in
     services.nats = mkIf (cfg.enable && cfg.aux.nats.enable) {
       enable = true;
       jetstream = true;
-      settings.host = "localhost";
-      settings.authorization.token = cfg.settings.nats.auth_token_bcrypt;
+      settings = {
+        host = "localhost";
+        authorization.token = cfg.settings.nats.auth_token_bcrypt;
+        jetstream = {
+          max_memory_store = "64M";
+          max_file_store = "10G";
+        };
+      };
     };
 
     services.postgresql = mkIf (cfg.enable && cfg.aux.pgsql.enable) {
@@ -710,6 +732,32 @@ in
           ensureDBOwnership = true;
         }
       ];
+      settings = mkIf cfg.aux.pgsql.recommendedTuningOptions {
+        max_connections = 150;
+        shared_buffers = "512MB";
+        effective_cache_size = "2GB";
+        work_mem = "8MB";
+        maintenance_work_mem = "256MB";
+        autovacuum_work_mem = "128MB";
+        random_page_cost = 1.1;
+        effective_io_concurrency = 200;
+        default_statistics_target = 200;
+        min_wal_size = "80MB";
+        max_wal_size = "2GB";
+        wal_buffers = "16MB";
+        wal_compression = "zstd";
+        checkpoint_completion_target = 0.9;
+        bgwriter_delay = "50ms";
+        bgwriter_lru_maxpages = 1000;
+        autovacuum_vacuum_scale_factor = 0.05;
+        autovacuum_analyze_scale_factor = 0.02;
+        autovacuum_vacuum_cost_limit = 2000;
+        autovacuum_max_workers = 3;
+        max_parallel_workers_per_gather = 2;
+        max_parallel_workers = 8;
+        track_io_timing = true;
+        shared_preload_libraries = [ "pg_stat_statements" ];
+      };
     };
 
     services.redis = mkIf (cfg.enable && cfg.aux.valkey.enable) {
@@ -728,6 +776,8 @@ in
         # upgrade_db = true; # TODO for 26.11 and later
         no_analytics = true;
         env = "production";
+        max_indexing_memory = "256MB";
+        max_indexing_threads = 2;
       };
     };
 
@@ -1040,9 +1090,10 @@ in
         url = "nats://127.0.0.1:${toString config.services.nats.port}";
         jetstream.url = "nats://127.0.0.1:${toString config.services.nats.port}";
       };
-      postgres = mkIf cfg.aux.pgsql.enable {
-        url = "host=/run/postgresql user=fluxer sslmode=disable";
-        ssl = "false";
+      postgres = {
+        max_connections = 25;
+        url = mkIf cfg.aux.pgsql.enable "host=/run/postgresql user=fluxer sslmode=disable";
+        ssl = mkIf cfg.aux.pgsql.enable "false";
       };
       s3 = {
         # TODO change when switching out seaweedfs module
