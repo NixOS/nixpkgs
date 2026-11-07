@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.57.0";
+  version = "2.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-auth-v${version}";
-    hash = "sha256-0g0uTpt03BrFLJ7vGptrUy3pVx8EAOKYV+uB2bJTJNQ=";
+    hash = "sha256-j9btx76xsyhuiMOU8i3JVowoRkZysT+W7vkHtUR/wIw=";
   };
 
   sourceRoot = "${src.name}/packages/google-auth";
@@ -87,9 +87,6 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "system_tests/"
-
-    # cryptography 44 compat issue
-    "tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   pythonImportsCheck = [
