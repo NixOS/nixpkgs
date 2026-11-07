@@ -3,7 +3,9 @@
   darwin,
   lib,
   pkg-config,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   python3,
   doxygen,
   ncurses,
@@ -55,7 +57,9 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
+    autoconf
+    automake
+    libtool
   ]
   ++ lib.optionals pythonSupport [
     doxygen
@@ -112,7 +116,11 @@ stdenv'.mkDerivation (finalAttrs: {
       ln -s cygxml2mod.dll python/.libs/libxml2mod.dll
     '';
 
-  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+  # Uses `autoreconf -i` instead of autoreconfHook to avoid gettext dependency
+  preConfigure = ''
+    autoreconf -i
+  ''
+  + lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
