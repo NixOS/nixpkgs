@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyasn1";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyasn1";
     repo = "pyasn1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZtsHANVUGk+LF17dEjePDm8ofX61P4f2/BTHqlscNd0=";
+    hash = "sha256-8p1OmjqnGtMIsc2dXLRIJVEFSH2zseWR46HmmKtogFw=";
   };
 
   build-system = [ setuptools ];
