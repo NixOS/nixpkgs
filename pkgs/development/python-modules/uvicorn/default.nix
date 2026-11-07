@@ -67,6 +67,9 @@ buildPythonPackage rec {
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ wd15 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      wd15
+    ];
   };
 }
