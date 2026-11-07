@@ -1,0 +1,37 @@
+--- a/src/main/java/org/jetbrains/jpsBootstrap/JpsBootstrapMain.kt
++++ b/src/main/java/org/jetbrains/jpsBootstrap/JpsBootstrapMain.kt
+@@ -193,7 +193,6 @@
+     if (!classpathFileTargetString.isNullOrBlank()) {
+       writeClasspathFile(moduleRuntimeClasspath, Path.of(classpathFileTargetString))
+     }
+-    downloadRuntime()
+   }
+ 
+   private fun removeOpenedPackage(openedPackages: MutableList<String>, openedPackage: String, unknownPackages: MutableList<String>) {
+@@ -333,7 +333,6 @@
+     //
+     // In case of running from read-to-use classes we need all dependent libraries as well
+     // Instead of calculating what libraries are exactly required, download them all
+-    jpsBuild.resolveProjectDependencies()
+     if (manifestJsonUrl != null) {
+       info("Downloading project classes from $manifestJsonUrl")
+       ClassesFromCompileInc.downloadProjectClasses(model.project, communityHome, modulesSubset)
+
+--- a/jps-bootstrap-classpath.xml
++++ b/jps-bootstrap-classpath.xml
+@@ -106,6 +106,7 @@
+         <pathelement location="${jps.bootstrap.dir}/src/main/java"/>
+         <pathelement location="${jps.bootstrap.dir}/pom.xml"/>
+         <pathelement location="${community.home}/.idea/kotlinc.xml"/>
++        <pathelement location="${community.home}/platform/multiplatformSupport/src"/>
+       </inputs>
+ 
+       <outputs>
+@@ -127,6 +128,7 @@
+           <arg value="-classpath"/>
+           <arg pathref="classpath.buildscripts"/>
+           <arg path="${jps.bootstrap.dir}/src/main/java"/>
++          <arg path="${community.home}/platform/multiplatformSupport/src"/>
+           <arg value="-d"/>
+           <arg value="${classes.dir}"/>
+         </java>
