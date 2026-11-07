@@ -138,7 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ connornelson ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      philiptaron
+    ];
     mainProgram = "cf";
     # The CLI is built from source; npm supplies native binaries and WASM.
     sourceProvenance = with lib.sourceTypes; [
