@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "quango";
-  version = "3.3.8";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchgit {
     url = "https://forge.frm2.tum.de/review/frm2/tango/apps/quango";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0txeDVX8ohtZFoIm/5rAmdCz3JyNFIXr0X3E/1GN0G4=";
+    hash = "sha256-eMOc6fdWkAmGGpxq7mk8KmpcXOXXQ6H2nS8ldKkT2Uo=";
   };
 
   build-system = [
@@ -40,6 +40,11 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
   ];
+
+  postInstall = ''
+    install -Dm644 etc/quango.desktop -t $out/share/applications
+    install -Dm644 res/appicon.svg $out/share/icons/hicolor/scalable/apps/quango.svg
+  '';
 
   # wrapQTAppsHook seems to not find the python script.
   # Thus the manual preFixup step
