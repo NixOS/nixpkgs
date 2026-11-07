@@ -1,0 +1,87 @@
+From 74f99d6f5e9479aa10f6fba9631e3b46cc76e9ee Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 4/6] config: adapt Vec::extract_if signature for Rust 1.91
+
+---
+ src/config/mod.rs | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/config/mod.rs b/src/config/mod.rs
+index 2780e7b06..c1a4cf6b6 100644
+--- a/src/config/mod.rs
++++ b/src/config/mod.rs
+@@ -2120,7 +2120,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         self.cfg.update(change.clone())?;
+         let change_str = format!("{:?}", change);
+         let mut change: Vec<(String, ConfigValue)> = change.into_iter().collect();
+-        let cf_config = change.extract_if(|(name, _)| name.ends_with("cf"));
++        let cf_config = change.extract_if(.., |(name, _)| name.ends_with("cf"));
+         for (cf_name, cf_change) in cf_config {
+             if let ConfigValue::Module(mut cf_change) = cf_change {
+                 // defaultcf -> default
+@@ -2154,7 +2154,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(rate_bytes_config) = change
+-            .extract_if(|(name, _)| name == "rate_bytes_per_sec")
++            .extract_if(.., |(name, _)| name == "rate_bytes_per_sec")
+             .next()
+         {
+             let rate_bytes_per_sec: ReadableSize = rate_bytes_config.1.into();
+@@ -2163,7 +2163,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(rate_bytes_config) = change
+-            .extract_if(|(name, _)| name == "rate_limiter_auto_tuned")
++            .extract_if(.., |(name, _)| name == "rate_limiter_auto_tuned")
+             .next()
+         {
+             let rate_limiter_auto_tuned: bool = rate_bytes_config.1.into();
+@@ -2172,7 +2172,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(size) = change
+-            .extract_if(|(name, _)| name == "write_buffer_limit")
++            .extract_if(.., |(name, _)| name == "write_buffer_limit")
+             .next()
+         {
+             let size: ReadableSize = size.1.into();
+@@ -2180,14 +2180,14 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(f) = change
+-            .extract_if(|(name, _)| name == "write_buffer_flush_oldest_first")
++            .extract_if(.., |(name, _)| name == "write_buffer_flush_oldest_first")
+             .next()
+         {
+             self.db.set_flush_oldest_first(f.1.into())?;
+         }
+ 
+         if let Some(background_jobs_config) = change
+-            .extract_if(|(name, _)| name == "max_background_jobs")
++            .extract_if(.., |(name, _)| name == "max_background_jobs")
+             .next()
+         {
+             let max_background_jobs: i32 = background_jobs_config.1.into();
+@@ -2195,7 +2195,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(background_subcompactions_config) = change
+-            .extract_if(|(name, _)| name == "max_sub_compactions")
++            .extract_if(.., |(name, _)| name == "max_sub_compactions")
+             .next()
+         {
+             let max_subcompactions: u32 = background_subcompactions_config.1.into();
+@@ -2204,7 +2204,7 @@ impl<T: ConfigurableDb + Send + Sync> ConfigManager for DbConfigManger<T> {
+         }
+ 
+         if let Some(background_flushes_config) = change
+-            .extract_if(|(name, _)| name == "max_background_flushes")
++            .extract_if(.., |(name, _)| name == "max_background_flushes")
+             .next()
+         {
+             let max_background_flushes: i32 = background_flushes_config.1.into();
+-- 
+2.53.0
+
