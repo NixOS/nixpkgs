@@ -12,11 +12,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-vpn";
-  version = "6.5.1";
+  version = "6.5.2";
 
   src = fetchurl {
     url = "https://protonvpn.com/download/macos/${finalAttrs.version}/ProtonVPN_mac_v${finalAttrs.version}.dmg";
-    hash = "sha256-1QpJ8UxQsO+K1oqJ/JaF1WmbotT5LLTDQxcpG0JUNfg=";
+    hash = "sha256-Zi6pEnZKlfOxAOHCJpWj/CojZt4Q34F2Lzw2pTB+78A=";
   };
 
   __structuredAttrs = true;
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/Applications
-    cp -R ./ProtonVPN/ProtonVPN.app $out/Applications
+    cp -R "./Proton VPN/ProtonVPN.app" $out/Applications
 
     runHook postInstall
   '';
