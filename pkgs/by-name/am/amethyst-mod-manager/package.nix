@@ -1,14 +1,14 @@
 {
+  lib,
+  fetchFromGitHub,
   _7zz,
   bash,
   bubblewrap,
   cabextract,
   curl,
-  fetchFromGitHub,
   ffmpeg-headless,
   fuse-overlayfs,
   glib,
-  lib,
   libarchive,
   me3,
   meson,
@@ -21,14 +21,13 @@
   util-linux,
   vgmstream,
   winetricks,
-  withLoot ? true,
   xdg-utils,
+  withLoot ? true,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amethyst-mod-manager";
   version = "2.6.1";
-  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ChrisDKN";
@@ -37,9 +36,32 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-WBJD122Mff9BTqmSWtVTNAwDLQmnChq/fPNLoJsVZzQ=";
   };
 
+  __structuredAttrs = true;
+
   patches = [
     ./disable-update-notifications.diff
   ];
+
+  postPatch = ''
+    patchShebangs src/version.py
+
+    substituteInPlace amethyst-mod-manager amethyst-mod-manager-cli \
+        --replace-fail "exec python3" "exec ${python3Packages.python.interpreter}"
+
+    # amethyst_filegraph
+    install "$amethyst_filegraph"/lib/libamethyst_filegraph.so src/amethyst_filegraph.abi3.so
+
+    # get_tools_dir
+    substituteInPlace src/Utils/wine/protontricks.py \
+        --replace-fail '_get_tools_dir() / "winetricks"' 'Path("${lib.getExe winetricks}")' \
+        --replace-fail '_get_tools_dir() / "cabextract"' 'Path("${lib.getExe cabextract}")'
+
+    # --nxm %u
+    substituteInPlace src/Nexus/nxm_handler.py \
+        --replace-fail \
+            "f'{cls._quote_if_needed(exe)} {cls._quote_if_needed(script)} --nxm %u'" \
+            "'amethyst-mod-manager --nxm %u'"
+  '';
 
   nativeBuildInputs = [
     meson
@@ -50,6 +72,27 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     qt6.qtbase
   ];
+
+  # no tests
+  doCheck = false;
+
+  postFixup = ''
+    makeWrapperArgs+=(
+        --prefix PYTHONPATH : "$program_PYTHONPATH"
+        --suffix PATH : ${lib.escapeShellArg (lib.makeBinPath finalAttrs.runtimeInputs)}
+    )
+    wrapQtApp $out/bin/amethyst-mod-manager "''${makeWrapperArgs[@]}"
+    wrapProgram $out/bin/amethyst-mod-manager-cli "''${makeWrapperArgs[@]}"
+    rm -r $out/share/metainfo
+  '';
+
+  amethyst_filegraph = rustPlatform.buildRustPackage {
+    inherit (finalAttrs) src;
+    pname = "amethyst-filegraph";
+    version = "0.1.0";
+    cargoHash = "sha256-PGyUuwwU44/0lHfHEipgi5TxGyXbdDPar/mDqHLFsgM=";
+    sourceRoot = "${finalAttrs.src.name}/native/amethyst_filegraph";
+  };
 
   dependencies =
     with python3Packages;
@@ -74,26 +117,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ lib.optional withLoot libloot;
 
-  postPatch = ''
-    patchShebangs src/version.py
+  dontWrapQtApps = true;
 
-    substituteInPlace amethyst-mod-manager amethyst-mod-manager-cli \
-        --replace-fail "exec python3" "exec ${python3Packages.python.interpreter}"
+  pyproject = false;
 
-    # amethyst_filegraph
-    install "$amethyst_filegraph"/lib/libamethyst_filegraph.so src/amethyst_filegraph.abi3.so
-
-    # get_tools_dir
-    substituteInPlace src/Utils/wine/protontricks.py \
-        --replace-fail '_get_tools_dir() / "winetricks"' 'Path("${lib.getExe winetricks}")' \
-        --replace-fail '_get_tools_dir() / "cabextract"' 'Path("${lib.getExe cabextract}")'
-
-    # --nxm %u
-    substituteInPlace src/Nexus/nxm_handler.py \
-        --replace-fail \
-            "f'{cls._quote_if_needed(exe)} {cls._quote_if_needed(script)} --nxm %u'" \
-            "'amethyst-mod-manager --nxm %u'"
-  '';
+  pythonImportsCheck = [
+    "cli"
+    "run_qt"
+  ];
 
   runtimeInputs = [
     _7zz
@@ -111,36 +142,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     xdg-utils # xdg-open, xdg-mime, xdg-settings
   ];
 
-  dontWrapQtApps = true;
-
-  postFixup = ''
-    makeWrapperArgs+=(
-        --prefix PYTHONPATH : "$program_PYTHONPATH"
-        --suffix PATH : ${lib.escapeShellArg (lib.makeBinPath finalAttrs.runtimeInputs)}
-    )
-    wrapQtApp $out/bin/amethyst-mod-manager "''${makeWrapperArgs[@]}"
-    wrapProgram $out/bin/amethyst-mod-manager-cli "''${makeWrapperArgs[@]}"
-    rm -r $out/share/metainfo
-  '';
-
-  # no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "cli"
-    "run_qt"
-  ];
-
-  __structuredAttrs = true;
-
-  amethyst_filegraph = rustPlatform.buildRustPackage {
-    inherit (finalAttrs) src;
-    pname = "amethyst-filegraph";
-    version = "0.1.0";
-    sourceRoot = "${finalAttrs.src.name}/native/amethyst_filegraph";
-    cargoHash = "sha256-PGyUuwwU44/0lHfHEipgi5TxGyXbdDPar/mDqHLFsgM=";
-  };
-
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
@@ -156,7 +157,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/ChrisDKN/Amethyst-Mod-Manager/blob/${finalAttrs.src.tag}/Changelog.txt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ RoGreat ];
-    mainProgram = "amethyst-mod-manager";
     platforms = lib.platforms.linux;
+    mainProgram = "amethyst-mod-manager";
   };
 })
