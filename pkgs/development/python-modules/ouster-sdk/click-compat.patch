@@ -1,0 +1,42 @@
+Adapt command lookup and CLI tests to Click 8.4.
+
+Ouster keys its command map by IoType, so Click's generic command
+suggestions fail for unknown commands. Report the usage error directly.
+
+--- a/python/src/ouster/cli/plugins/source.py
++++ b/python/src/ouster/cli/plugins/source.py
+@@ -2138,7 +2138,7 @@
+             else:
+                 ctx.invoked_command_names.append(name)
+                 return command_list[name]
+-        return None
++        raise click.exceptions.UsageError(f"No such command '{name}'.", click_ctx)
+
+     def invoke(self, click_ctx: click.core.Context):
+         """Called when the source command is invoked.
+--- a/python/tests/documentation/test_cli_commands.py
++++ b/python/tests/documentation/test_cli_commands.py
+@@ -132,7 +132,7 @@
+
+ @pytest.fixture
+ def runner():
+-    return CliRunner(mix_stderr=False)
++    return CliRunner()
+
+
+ @pytest.fixture
+--- a/python/tests/test_cli.py
++++ b/python/tests/test_cli.py
+@@ -164,10 +164,10 @@
+     assert result.exit_code == 0
+
+     result = runner.invoke(core.cli, ['--traceback', 'util'])
+-    assert result.exit_code == 0
++    assert result.exit_code == 2
+
+     result = runner.invoke(core.cli, ['--sdk-log-level', 'debug', 'util'])
+-    assert result.exit_code == 0
++    assert result.exit_code == 2
+
+
+ def test_mapping_help(runner, has_mapping):

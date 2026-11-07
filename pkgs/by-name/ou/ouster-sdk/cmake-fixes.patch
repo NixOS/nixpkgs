@@ -1,0 +1,68 @@
+Include the public perception stub in shared builds on Unix, discover the
+OpenGL dependency exported by the visualizer, and allow repeated component
+discovery. The shared target has its own importer, so keep it out of the
+static export set to permit finding Shared before Static.
+
+Use GNUInstallDirs paths for separate library and development prefixes.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -217,6 +217,7 @@
+
+ # ==== Install ====
+ include(CMakePackageConfigHelpers)
++include(GNUInstallDirs)
+ write_basic_package_version_file(
+   OusterSDKConfigVersion.cmake
+   VERSION ${PACKAGE_VERSION}
+--- a/ouster_library/CMakeLists.txt
++++ b/ouster_library/CMakeLists.txt
+@@ -168,7 +168,7 @@
+     target_sources(shared_library PRIVATE
+       $<TARGET_OBJECTS:ouster_perception_private>
+     )
+-  elseif(TARGET ouster_perception AND WIN32)
++  elseif(TARGET ouster_perception)
+     # Stub build (no ouster_perception_private): absorb ouster_perception and
+     # ouster_perception_stub so their objects are compiled with
+     # BUILD_SHARED_LIBS_EXPORT and OUSTER_API_FUNCTION symbols such as
+@@ -297,7 +297,6 @@
+
+ if(BUILD_SHARED_LIBRARY)
+   install(TARGETS shared_library
+-        EXPORT ouster-sdk-targets
+         LIBRARY DESTINATION lib
+         ARCHIVE DESTINATION lib
+         RUNTIME DESTINATION lib
+--- a/cmake/OusterSDKConfig.cmake.in
++++ b/cmake/OusterSDKConfig.cmake.in
+@@ -7,8 +7,8 @@
+
+ include(CMakeFindDependencyMacro)
+
+-get_filename_component(OUSTER_LINK_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../" ABSOLUTE)
+-get_filename_component(OUSTER_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../../include/" ABSOLUTE)
++set(OUSTER_LINK_DIRS "@CMAKE_INSTALL_FULL_LIBDIR@")
++set(OUSTER_INCLUDE_DIRS "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+
+ set(BUILD_SHARED_LIBRARY "@BUILD_SHARED_LIBRARY@")
+ set(BUILD_OSF "@BUILD_OSF@")
+@@ -55,6 +55,9 @@
+   find_package(Threads REQUIRED)
+   find_package(ZLIB REQUIRED)
+   find_package(PNG REQUIRED)
++  if(@BUILD_VIZ@)
++    find_dependency(OpenGL)
++  endif()
+   # Transitive deps for ouster_mapping and thirdparty targets (e.g. zpng).
+   # These are optional: targets using them will fail to link if absent, but
+   # cmake should not hard-error here so callers that do not use those targets
+@@ -70,7 +73,7 @@
+   include("${CMAKE_CURRENT_LIST_DIR}/OusterSDKTargets.cmake")
+ endif()
+
+-if(OUSTER_SDK_COMPONENT_SHARED)
++if(OUSTER_SDK_COMPONENT_SHARED AND NOT TARGET OusterSDK::shared_library)
+   SET(OUSTER_SKIP_FIND_PACKAGE_STANDARD TRUE)
+   include("${CMAKE_CURRENT_LIST_DIR}/FindEigen3.cmake")
+   SET(OUSTER_SKIP_FIND_PACKAGE_STANDARD FALSE)
