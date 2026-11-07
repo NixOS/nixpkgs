@@ -33,11 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    OPENSSL_NO_VENDOR = true;
-  };
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 

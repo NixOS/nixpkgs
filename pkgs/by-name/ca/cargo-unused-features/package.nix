@@ -30,10 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     description = "Tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";

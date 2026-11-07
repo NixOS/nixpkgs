@@ -42,11 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ git ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;

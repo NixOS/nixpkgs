@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ libgit2 ];
 
-  env.LIBGIT2_NO_VENDOR = "1";
-
   # The workspace also holds a Neovim FFI crate, a C library and Python/Node
   # bindings; none of them are wanted here.
   cargoBuildFlags = [

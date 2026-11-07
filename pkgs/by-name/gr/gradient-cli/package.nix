@@ -36,11 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional withEval gradient.nix;
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

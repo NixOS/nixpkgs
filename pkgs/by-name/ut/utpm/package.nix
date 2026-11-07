@@ -27,10 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Le0rVPHgtEbB3UjqUXn3NWthI2cVGH28qZSJz0o6Vlg=";
 
-  env.OPENSSL_NO_VENDOR = 1;
-
-  env.LIBGIT2_NO_VENDOR = 1;
-
   buildInputs = [
     openssl
     libgit2

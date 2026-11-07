@@ -56,10 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }
   '';
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     # last successful hydra build on darwin was in 2024
     broken = stdenv.hostPlatform.isDarwin;

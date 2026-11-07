@@ -44,12 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "diff_subcommand_with_staged_changes_quits_cleanly_in_pseudo_tty"
   ] (test: "--skip=${test}");
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-    LIBGIT2_NO_VENDOR = 1;
-    LIBSSH2_SYS_USE_PKG_CONFIG = 1;
-  };
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 

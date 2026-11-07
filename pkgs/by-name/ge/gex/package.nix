@@ -29,10 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   cargoHash = "sha256-FdxBYDgDxpZqqYzjX+lWP+uP2jUD3Y5Rzyx+JasAgIY=";
 
   meta = {
