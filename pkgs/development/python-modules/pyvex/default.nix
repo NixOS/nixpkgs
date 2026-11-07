@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pyvex";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.4";
+  version = "10.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,9 +26,17 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "pyvex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3w7A9xYSYHh/o1JXpUllR4aUrW2MdUVdDR1ua7/gpCU=";
+    hash = "sha256-3tYpSYdPZQ1aKAVonG9sMHZSjAguGIXQwNFSgL9J6bY=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    sed -Ei 's/(scikit-build-core)\s?[<>=!~][^"]*/\1/' pyproject.toml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace vex/Makefile-gcc \
+      --replace-fail '/usr/bin/ar' 'ar'
+  '';
 
   build-system = [
     cffi
@@ -48,11 +56,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dontUseCmakeConfigure = true;
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace vex/Makefile-gcc \
-      --replace-fail '/usr/bin/ar' 'ar'
-  '';
 
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
