@@ -9,6 +9,16 @@ let
   cfg = config.services.calibre-web;
   dataDir = if lib.hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 
+  # Calibre-Web registers its Kobo endpoints only when their Python
+  # dependencies import.
+  package =
+    if cfg.options.enableKoboSync then
+      cfg.package.overridePythonAttrs (old: {
+        dependencies = old.dependencies ++ old.optional-dependencies.kobo;
+      })
+    else
+      cfg.package;
+
   inherit (lib)
     concatStringsSep
     mkEnableOption
@@ -103,6 +113,8 @@ in
 
         enableKepubify = mkEnableOption "kepub conversion support";
 
+        enableKoboSync = mkEnableOption "syncing the library to Kobo e-readers";
+
         enableBookUploading = mkOption {
           type = types.bool;
           default = false;
@@ -144,7 +156,7 @@ in
       let
         appDb = "${dataDir}/app.db";
         gdriveDb = "${dataDir}/gdrive.db";
-        calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+        calibreWebCmd = "${package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
         settings = concatStringsSep ", " (
           [
@@ -167,6 +179,7 @@ in
             "config_binariesdir = '${cfg.calibrePackage}/bin/'"
           ]
           ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
+          ++ optional cfg.options.enableKoboSync "config_kobo_sync = 1"
         );
       in
       {
