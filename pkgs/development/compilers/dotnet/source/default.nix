@@ -13,6 +13,7 @@
   bootstrapSdk ? null,
   depsFile ? dir + "/deps.json",
   pkgsBuildBuild,
+  pkgsReverseCross,
   buildDotnetSdk,
   withBinary ? true,
   combinePackages,
@@ -76,7 +77,19 @@ let
           depsFile
           ;
         bootstrapSdk =
-          (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs
+          (
+            (
+              if
+                # TODO: clean this mess up
+                lib.meta.availableOn stdenvNoCC.buildPlatform
+                  (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk
+              then
+                pkgsBuildBuild
+              else
+                pkgsReverseCross.gnu64.pkgsBuildBuild
+            ).dotnetCorePackages.buildDotnetSdk
+              bootstrapSdkFile
+          ).sdk.overrideAttrs
             (old: {
               passthru = old.passthru or { } // {
                 inherit artifacts;

@@ -207,6 +207,13 @@ let
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem: nixpkgsFun { inherit crossSystem; }) lib.systems.examples;
+    pkgsReverseCross = lib.mapAttrs (
+      n: localSystem:
+      nixpkgsFun {
+        inherit localSystem;
+        crossSystem = stdenv.hostPlatform;
+      }
+    ) lib.systems.examples;
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
