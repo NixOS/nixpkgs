@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   pytest,
   pytestCheckHook,
   nix-update-script,
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6S41EjP8o9MRl7XMDF/P4MrTh6AMaQ9HsPDTm345NbA=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   buildInputs = [ pytest ];
 
