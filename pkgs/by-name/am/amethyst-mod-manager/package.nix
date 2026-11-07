@@ -19,6 +19,7 @@
   rustPlatform,
   umu-launcher,
   util-linux,
+  versionCheckHook,
   vgmstream,
   winetricks,
   xdg-utils,
@@ -73,8 +74,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     qt6.qtbase
   ];
 
-  # no tests
-  doCheck = false;
+  # no upstream tests; only run the version check
+  nativeCheckInputs = [ versionCheckHook ];
 
   postFixup = ''
     makeWrapperArgs+=(
@@ -142,6 +143,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     vgmstream # vgmstream-cli
     xdg-utils # xdg-open, xdg-mime, xdg-settings
   ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/amethyst-mod-manager-cli";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script {
