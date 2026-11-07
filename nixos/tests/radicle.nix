@@ -65,8 +65,9 @@ in
     seed = { pkgs, config, ... }: {
       imports = [ commonHostConfig ];
 
-      virtualisation.credentials = {
-        "dev.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+      virtualisation.credentials."dev.radicle.node.secret" = {
+        source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+        mechanism = "fw_cfg";
       };
 
       services.radicle = {
