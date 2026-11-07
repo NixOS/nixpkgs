@@ -1,0 +1,53 @@
+diff --git a/gradle/hasPythonPackage.gradle b/gradle/hasPythonPackage.gradle
+--- a/gradle/hasPythonPackage.gradle
++++ b/gradle/hasPythonPackage.gradle
+@@ -71,2 +71,49 @@ task buildPyPackage {
+ 	}
++	doLast {
++		def epoch = System.getenv("SOURCE_DATE_EPOCH")
++		if (!epoch) throw new GradleException("SOURCE_DATE_EPOCH is not set")
++
++		def runTar = { args ->
++			def output = providers.exec {
++				commandLine(["tar"] + args)
++				ignoreExitValue = true
++			}
++			if (output.result.get().exitValue != 0) {
++				throw new GradleException("tar failed: " + output.standardError.asText.get().strip())
++			}
++		}
++
++		fileTree("build/pypkg/dist").matching {
++			include "*.tar.gz"
++		}.files.each { archive ->
++			def workDir = file("$buildDir/pypkg/reproducible-${archive.name}")
++			delete(workDir)
++			mkdir(workDir)
++			runTar(["-xzf", archive.absolutePath, "-C", workDir.absolutePath])
++
++			def entries = workDir.listFiles()
++			if (entries.size() != 1 || !entries[0].isDirectory()) {
++				throw new GradleException("Expected one top-level directory in ${archive.name}")
++			}
++
++			def normalized = file("$buildDir/pypkg/${archive.name}.normalized")
++			runTar([
++				"-I", "gzip -n", "-cf", normalized.absolutePath,
++				"--sort=name",
++				"--mtime=@${epoch}",
++				"--owner=0",
++				"--group=0",
++				"--numeric-owner",
++				"-C", workDir.absolutePath,
++				entries[0].name
++			])
++
++			java.nio.file.Files.move(
++				normalized.toPath(),
++				archive.toPath(),
++				java.nio.file.StandardCopyOption.REPLACE_EXISTING
++			)
++			delete(workDir)
++		}
++	}
+ }
