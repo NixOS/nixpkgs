@@ -121,7 +121,17 @@ in
       '';
     };
 
-    networking.nftables.flushRuleset = lib.mkEnableOption "flushing the entire ruleset on each reload";
+    networking.nftables.flushRuleset = lib.mkOption {
+      type = lib.types.bool;
+      description = "flushing the entire ruleset on each reload";
+      default =
+        lib.versionOlder config.system.stateVersion "23.11"
+        || (cfg.rulesetFile != null || cfg.ruleset != "");
+      defaultText = lib.literalExpression ''
+        lib.versionOlder config.system.stateVersion "23.11"
+        || (config.networking.nftables.rulesetFile != null || config.networking.nftables.ruleset != "")
+      '';
+    };
 
     networking.nftables.extraDeletions = lib.mkOption {
       type = lib.types.lines;
@@ -187,7 +197,7 @@ in
         The ruleset to be used with nftables.  Should be in a format that
         can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
         Note that if the tables should be cleaned first, either:
-        - networking.nftables.flushRuleset = true; needs to be set (flushes all tables)
+        - networking.nftables.flushRuleset = true; needs to be set, and will be by default when this rulset is defined.
         - networking.nftables.extraDeletions needs to be set
         - or networking.nftables.tables can be used, which will clean up the table automatically
       '';
@@ -276,11 +286,6 @@ in
   config = lib.mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
-    # versionOlder for backportability, remove afterwards
-    networking.nftables.flushRuleset = lib.mkDefault (
-      lib.versionOlder config.system.stateVersion "23.11"
-      || (cfg.rulesetFile != null || cfg.ruleset != "")
-    );
     systemd.services.nftables = {
       description = "nftables firewall";
       after = [ "sysinit.target" ];
