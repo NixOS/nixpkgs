@@ -4,15 +4,11 @@
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix args;
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
