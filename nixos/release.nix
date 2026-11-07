@@ -11,7 +11,9 @@ with import ../lib;
     "x86_64-linux"
     "aarch64-linux"
   ],
-  configuration ? { },
+  configuration ?
+    with (builtins.tryEval (import (maybeEnv "NIXOS_CONFIG" <nixos-config>)));
+    if success then value else { },
 
   # This flag, if set to true, causes the resulting tree of attributes
   # to *not* have a ".${system}" suffixed upon every job name like Hydra
