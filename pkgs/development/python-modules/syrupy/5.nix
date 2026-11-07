@@ -5,7 +5,7 @@
   hatchling,
   hypothesis,
   pydantic,
-  pytest,
+  pytest_9_1,
   pytest-xdist,
   invoke,
 }:
@@ -24,13 +24,13 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest_9_1 ];
 
   nativeCheckInputs = [
     hypothesis
     invoke
     pydantic
-    pytest
+    pytest_9_1
     pytest-xdist
   ];
 
