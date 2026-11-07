@@ -231,7 +231,7 @@
 #            platforms = [
 #              "x86_64-linux"
 #            ];
-#            attrPaths = (builtins.fromJSON (builtins.readFile ./release-attrPaths.json)).attrPaths;
+#            attrPaths = (builtins.fromJSON (builtins.readFile ../release-attrPaths.json)).attrPaths;
 #          in
 #          lib.foldl' (
 #            acc: path:

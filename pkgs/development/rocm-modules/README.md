@@ -27,3 +27,11 @@ Bulk updates can be triggered by using:
 ```shell
 nix-shell <nixpkgs-src-root> maintainers/scripts/update.nix --argstr team rocm  --arg keep-going true --argstr max-workers 4
 ```
+
+Hydra jobsets should also be updated using:
+
+```shell
+cd <nixpkgs-src-root>
+pkgs/development/rocm-modules/release-attrPaths-gen.sh
+```
+
