@@ -1017,7 +1017,7 @@
   };
 
   glimmer-typescript = {
-    version = "0-unstable-2025-04-01";
+    version = "0.3.0-tree-sitter-glimmer-typescript-unstable-2025-04-01";
     url = "github:ember-tooling/tree-sitter-glimmer-typescript";
     rev = "12d98944c1d5077b957cbdb90d663a7c4d50118c";
     hash = "sha256-3cJI6vcbU62kUIhphprNeAl9RyY9TThrzVeArdLfxnI=";
