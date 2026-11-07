@@ -11,13 +11,13 @@
 
 haskellPackages.mkDerivation rec {
   pname = "echidna";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     tag = "v${version}";
-    sha256 = "sha256-Zopkqc01uUccJzdjP+qmHHZzB2iXK0U0fQi6EhgCRKg=";
+    sha256 = "sha256-ufVFbAmgxAv98GkNCmV7nTcS5PqeAo4RCNeoulMOQp4=";
   };
 
   isExecutable = true;
