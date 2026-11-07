@@ -342,6 +342,9 @@ in
           "sd_mod"
           "sr_mod"
 
+          # USB Attached SCSI
+          "uas"
+
           # SD cards and internal eMMC drives.
           "mmc_block"
 
