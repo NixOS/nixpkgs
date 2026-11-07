@@ -1,0 +1,69 @@
+Find desktop entries and icons through XDG_DATA_DIRS.
+
+applications-rs searches $XDG_DATA_DIRS for desktop entries but forgets the
+applications suffix, so nothing is found through them. And it looks for icons
+only under the hardcoded /usr/share/icons. On systems where /usr/share is not
+populated (like NixOS) that leaves it with almost no applications and no icons.
+
+The patch fixes these problematic behaviours:
+  - desktop entries are collected from the $XDG_DATA_DIRS entries themselves
+    instead of the applications subdirectory they live in
+  - icons are only looked up under /usr/share/icons
+  - the icon walk does not follow symlinks
+  - icon sizes are parsed from a fixed path component index that only lines up
+    for paths as deep as /usr/share/icons
+
+See https://github.com/HuakunShen/applications-rs/pull/18 for a PR to upstream
+a more polished version of these changes.
+
+diff --git a/vendors/applications-rs/src/platforms/linux.rs b/vendors/applications-rs/src/platforms/linux.rs
+index 2172cf2..86fc5d8 100644
+--- a/vendors/applications-rs/src/platforms/linux.rs
++++ b/vendors/applications-rs/src/platforms/linux.rs
+@@ -127,7 +127,7 @@ pub fn get_all_apps(extra_search_paths: &Vec<SearchPath>) -> Result<Vec<App>> {
+         .cloned()
+         .collect::<HashSet<&str>>()
+         .into_iter()
+-        .map(|s| SearchPath::new(PathBuf::from(s), 1))
++        .map(|s| SearchPath::new(PathBuf::from(s).join("applications"), 1))
+         .collect();
+ 
+     // get home dir of current user
+@@ -192,8 +192,11 @@ pub fn get_all_apps(extra_search_paths: &Vec<SearchPath>) -> Result<Vec<App>> {
+ }
+ 
+ pub fn find_all_app_icons() -> Result<HashMap<String, Vec<AppIcon>>> {
+-    let hicolor_path: PathBuf = PathBuf::from("/usr/share/icons");
+-    let search_dirs = vec![hicolor_path];
++    let xdg_data_dirs = std::env::var("XDG_DATA_DIRS").unwrap_or("/usr/share".to_string());
++    let search_dirs: Vec<PathBuf> = xdg_data_dirs
++        .split(':')
++        .map(|s| PathBuf::from(s).join("icons"))
++        .collect();
+     // filter out search_dirs that do not exist
+     let search_dirs: Vec<PathBuf> = search_dirs.into_iter().filter(|dir| dir.exists()).collect();
+ 
+@@ -205,7 +208,7 @@ pub fn find_all_app_icons() -> Result<HashMap<String, Vec<AppIcon>>> {
+             continue;
+         }
+ 
+-        for entry in WalkDir::new(dir.clone()) {
++        for entry in WalkDir::new(dir.clone()).follow_links(true) {
+             if entry.is_err() {
+                 continue;
+             }
+@@ -216,11 +219,9 @@ pub fn find_all_app_icons() -> Result<HashMap<String, Vec<AppIcon>>> {
+                     if ext == "png" {
+                         let path_str = path.to_string_lossy().to_string();
+                         let split: Vec<&str> = path_str.split("/").collect();
+-                        let dim_str = if split.len() < 6 {
+-                            None
+-                        } else {
+-                            split[5].split("x").last()
+-                        };
++                        let dim_str = split.iter().rev().copied().find_map(|c| {
++                            c.split_once('x').filter(|(w, h)| w == h).map(|(w, _)| w)
++                        });
+                         let dim = match dim_str {
+                             Some(dim) => match dim.parse::<u16>() {
+                                 Ok(dim) => Some(dim),
