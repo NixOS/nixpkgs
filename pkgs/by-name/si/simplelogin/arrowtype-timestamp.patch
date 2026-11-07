@@ -1,0 +1,137 @@
+diff --git a/app/account_linking.py b/app/account_linking.py
+index 13359da..72d437c 100644
+--- a/app/account_linking.py
++++ b/app/account_linking.py
+@@ -73 +73 @@ def send_user_plan_changed_event(
+-        event = UserPlanChanged(plan_end_time=subscription_end.timestamp)
++        event = UserPlanChanged(plan_end_time=subscription_end.timestamp())
+diff --git a/app/admin/manual_subscription.py b/app/admin/manual_subscription.py
+index 222ce2a..99db430 100644
+--- a/app/admin/manual_subscription.py
++++ b/app/admin/manual_subscription.py
+@@ -58 +58 @@ class ManualSubscriptionAdmin(SLModelView):
+-                    user_plan_change=UserPlanChanged(plan_end_time=sub.end_at.timestamp)
++                    user_plan_change=UserPlanChanged(plan_end_time=sub.end_at.timestamp())
+diff --git a/app/admin/user.py b/app/admin/user.py
+index e5d65bd..53b8ea8 100644
+--- a/app/admin/user.py
++++ b/app/admin/user.py
+@@ -69 +69 @@ def manual_upgrade(way: str, ids: list[int], is_giveaway: bool):
+-                        plan_end_time=manual_sub.end_at.timestamp
++                        plan_end_time=manual_sub.end_at.timestamp()
+@@ -90 +90 @@ def manual_upgrade(way: str, ids: list[int], is_giveaway: bool):
+-                        plan_end_time=manual_sub.end_at.timestamp
++                        plan_end_time=manual_sub.end_at.timestamp()
+diff --git a/app/alias_delete.py b/app/alias_delete.py
+index ac7b587..0484ad0 100644
+--- a/app/alias_delete.py
++++ b/app/alias_delete.py
+@@ -163 +163 @@ def __perform_alias_restore(user: User, alias: Alias) -> None:
+-                created_at=int(alias.created_at.timestamp),
++                created_at=int(alias.created_at.timestamp()),
+diff --git a/app/alias_utils.py b/app/alias_utils.py
+index 13c58ea..6b13fbb 100644
+--- a/app/alias_utils.py
++++ b/app/alias_utils.py
+@@ -562 +562 @@ def transfer_alias(alias: Alias, new_user: User, new_mailboxes: [Mailbox]):
+-                created_at=int(alias.created_at.timestamp),
++                created_at=int(alias.created_at.timestamp()),
+@@ -580 +580 @@ def change_alias_status(
+-        created_at=int(alias.created_at.timestamp),
++        created_at=int(alias.created_at.timestamp()),
+diff --git a/app/api/serializer.py b/app/api/serializer.py
+index c9ffe21..f16cce7 100644
+--- a/app/api/serializer.py
++++ b/app/api/serializer.py
+@@ -45 +45 @@ def serialize_alias_info(alias_info: AliasInfo) -> dict:
+-        "creation_timestamp": alias_info.alias.created_at.timestamp,
++        "creation_timestamp": alias_info.alias.created_at.timestamp(),
+@@ -61 +61 @@ def serialize_alias_info_v2(alias_info: AliasInfo) -> dict:
+-        "creation_timestamp": alias_info.alias.created_at.timestamp,
++        "creation_timestamp": alias_info.alias.created_at.timestamp(),
+@@ -85 +85 @@ def serialize_alias_info_v2(alias_info: AliasInfo) -> dict:
+-            "timestamp": email_log.created_at.timestamp,
++            "timestamp": email_log.created_at.timestamp(),
+@@ -100 +100 @@ def serialize_contact(contact: Contact, existed=False) -> dict:
+-        "creation_timestamp": contact.created_at.timestamp,
++        "creation_timestamp": contact.created_at.timestamp(),
+@@ -113 +113 @@ def serialize_contact(contact: Contact, existed=False) -> dict:
+-        res["last_email_sent_timestamp"] = email_log.created_at.timestamp
++        res["last_email_sent_timestamp"] = email_log.created_at.timestamp()
+diff --git a/app/api/views/alias.py b/app/api/views/alias.py
+index ce825b7..d8c06d9 100644
+--- a/app/api/views/alias.py
++++ b/app/api/views/alias.py
+@@ -239 +239 @@ def get_alias_activities(alias_id):
+-            "timestamp": alias_log.when.timestamp,
++            "timestamp": alias_log.when.timestamp(),
+diff --git a/app/api/views/custom_domain.py b/app/api/views/custom_domain.py
+index 56046d1..ea06492 100644
+--- a/app/api/views/custom_domain.py
++++ b/app/api/views/custom_domain.py
+@@ -19 +19 @@ def custom_domain_to_dict(custom_domain: CustomDomain):
+-        "creation_timestamp": custom_domain.created_at.timestamp,
++        "creation_timestamp": custom_domain.created_at.timestamp(),
+@@ -56 +56 @@ def get_custom_domain_trash(custom_domain_id: int):
+-                "deletion_timestamp": dda.created_at.timestamp,
++                "deletion_timestamp": dda.created_at.timestamp(),
+diff --git a/app/api/views/mailbox.py b/app/api/views/mailbox.py
+index ad9c5ec..0d724cb 100644
+--- a/app/api/views/mailbox.py
++++ b/app/api/views/mailbox.py
+@@ -21 +21 @@ def mailbox_to_dict(mailbox: Mailbox):
+-        "creation_timestamp": mailbox.created_at.timestamp,
++        "creation_timestamp": mailbox.created_at.timestamp(),
+diff --git a/app/api/views/user_info.py b/app/api/views/user_info.py
+index 2f72759..773a1ae 100644
+--- a/app/api/views/user_info.py
++++ b/app/api/views/user_info.py
+@@ -35 +35 @@ def user_to_dict(user: User) -> dict:
+-        "trial_end_timestamp": user.trial_end.timestamp if user.trial_end else None,
++        "trial_end_timestamp": user.trial_end.timestamp() if user.trial_end else None,
+diff --git a/app/coupon_utils.py b/app/coupon_utils.py
+index c1bf71b..6f2cdff 100644
+--- a/app/coupon_utils.py
++++ b/app/coupon_utils.py
+@@ -94 +94 @@ def redeem_coupon(coupon_code: str, user: User) -> Optional[Coupon]:
+-            user_plan_change=UserPlanChanged(plan_end_time=sub.end_at.timestamp)
++            user_plan_change=UserPlanChanged(plan_end_time=sub.end_at.timestamp())
+diff --git a/app/jobs/event_jobs.py b/app/jobs/event_jobs.py
+index 0d48aa1..7e1f61d 100644
+--- a/app/jobs/event_jobs.py
++++ b/app/jobs/event_jobs.py
+@@ -30 +30 @@ def send_alias_creation_events_for_user(
+-                created_at=int(alias.created_at.timestamp),
++                created_at=int(alias.created_at.timestamp()),
+diff --git a/app/jobs/sync_subscription_job.py b/app/jobs/sync_subscription_job.py
+index c42f467..9d5561f 100644
+--- a/app/jobs/sync_subscription_job.py
++++ b/app/jobs/sync_subscription_job.py
+@@ -46 +46 @@ class SyncSubscriptionJob:
+-                content = UserPlanChanged(plan_end_time=plan_end.timestamp)
++                content = UserPlanChanged(plan_end_time=plan_end.timestamp())
+diff --git a/app/jose_utils.py b/app/jose_utils.py
+index 7771d53..29dd851 100644
+--- a/app/jose_utils.py
++++ b/app/jose_utils.py
+@@ -38,3 +38,3 @@ def make_id_token(
+-        "exp": arrow.now().shift(hours=1).timestamp,
+-        "iat": arrow.now().timestamp,
+-        "auth_time": arrow.now().timestamp,
++        "exp": arrow.now().shift(hours=1).timestamp(),
++        "iat": arrow.now().timestamp(),
++        "auth_time": arrow.now().timestamp(),
+diff --git a/app/models.py b/app/models.py
+index 4f6aebc..dfc9b6d 100644
+--- a/app/models.py
++++ b/app/models.py
+@@ -1872 +1872 @@ class Alias(Base, ModelMixin):
+-            created_at=int(new_alias.created_at.timestamp),
++            created_at=int(new_alias.created_at.timestamp()),
+diff --git a/app/subscription_webhook.py b/app/subscription_webhook.py
+index 8239548..6a9871e 100644
+--- a/app/subscription_webhook.py
++++ b/app/subscription_webhook.py
+@@ -13 +13 @@ def execute_subscription_webhook(user: User):
+-        sl_subscription_end = subscription_end.timestamp
++        sl_subscription_end = subscription_end.timestamp()

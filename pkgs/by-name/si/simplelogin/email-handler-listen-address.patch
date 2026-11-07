@@ -1,0 +1,19 @@
+diff --git a/email_handler.py b/email_handler.py
+index 89b11c2..ff75b95 100644
+--- a/email_handler.py
++++ b/email_handler.py
+@@ -2489 +2489 @@ class MailHandler:
+-def main(port: int):
++def main(port: int, host: str = "0.0.0.0"):
+@@ -2493 +2493 @@ def main(port: int):
+-        hostname="0.0.0.0",
++        hostname=host,
+@@ -2511,0 +2512,3 @@ if __name__ == "__main__":
++    parser.add_argument(
++        "-H", "--host", help="SMTP address to listen on", default="0.0.0.0"
++    )
+@@ -2517,2 +2520,2 @@ if __name__ == "__main__":
+-    LOG.i("Listen for port %s", args.port)
+-    main(port=args.port)
++    LOG.i("Listen for %s:%s", args.host, args.port)
++    main(host=args.host, port=args.port)

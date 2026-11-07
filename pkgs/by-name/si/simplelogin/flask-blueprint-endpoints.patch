@@ -1,0 +1,377 @@
+--- a/app/admin/base.py
++++ b/app/admin/base.py
+@@ -214 +214 @@
+-        return redirect_destination or redirect(url_for("admin.email_search.index"))
++        return redirect_destination or redirect(url_for("email_search.index"))
+--- a/app/admin/custom_domain_search.py
++++ b/app/admin/custom_domain_search.py
+@@ -269 +269 @@
+-            return redirect(url_for("admin.custom_domain_search.index"))
++            return redirect(url_for("custom_domain_search.index"))
+@@ -275 +275 @@
+-            return redirect(url_for("admin.custom_domain_search.index"))
++            return redirect(url_for("custom_domain_search.index"))
+@@ -280 +280 @@
+-            return redirect(url_for("admin.custom_domain_search.index"))
++            return redirect(url_for("custom_domain_search.index"))
+@@ -291 +291 @@
+-                url_for("admin.custom_domain_search.index", query=domain_name)
++                url_for("custom_domain_search.index", query=domain_name)
+@@ -315 +315 @@
+-        return redirect(url_for("admin.custom_domain_search.index", query=domain_name))
++        return redirect(url_for("custom_domain_search.index", query=domain_name))
+--- a/app/admin/email_search.py
++++ b/app/admin/email_search.py
+@@ -750 +750 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -755 +755 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -759 +759 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -765 +765 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -773 +773 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -795 +795 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -802 +802 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -807 +807 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -811 +811 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -815 +815 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -825 +825 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -834 +834 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -837 +837 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -844 +844 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -848 +848 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -853 +853 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -869 +869 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -878 +878 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -881 +881 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -888 +888 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -892 +892 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -897 +897 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -913 +913 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -924 +924 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -927 +927 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -933 +933 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -938 +938 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -942 +942 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -950 +950 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -961 +961 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -964 +964 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -970 +970 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -975 +975 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -979 +979 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -987 +987 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -995 +995 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1001 +1001 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1006 +1006 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -1013 +1013 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -1048 +1048 @@
+-        return redirect(url_for("admin.email_search.index", query=user.email))
++        return redirect(url_for("email_search.index", query=user.email))
+@@ -1057 +1057 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1063 +1063 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1068 +1068 @@
+-            return redirect(url_for("admin.email_search.index", query=user_id))
++            return redirect(url_for("email_search.index", query=user_id))
+@@ -1076 +1076 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -1081 +1081 @@
+-            return redirect(url_for("admin.email_search.index", query=user.email))
++            return redirect(url_for("email_search.index", query=user.email))
+@@ -1102 +1102 @@
+-        return redirect(url_for("admin.email_search.index"))
++        return redirect(url_for("email_search.index"))
+@@ -1111 +1111 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1117 +1117 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1122 +1122 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1128 +1128 @@
+-                    "admin.email_search.index", query=alias.email, search_type="alias"
++                    "email_search.index", query=alias.email, search_type="alias"
+@@ -1165 +1165 @@
+-            url_for("admin.email_search.index", query=alias.email, search_type="alias")
++            url_for("email_search.index", query=alias.email, search_type="alias")
+@@ -1176 +1176 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1182 +1182 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1187 +1187 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1193 +1193 @@
+-                    "admin.email_search.index", query=alias.email, search_type="alias"
++                    "email_search.index", query=alias.email, search_type="alias"
+@@ -1204 +1204 @@
+-                    "admin.email_search.index", query=alias_email, search_type="alias"
++                    "email_search.index", query=alias_email, search_type="alias"
+@@ -1233 +1233 @@
+-                    "admin.email_search.index", query=user_email, search_type="email"
++                    "email_search.index", query=user_email, search_type="email"
+@@ -1236 +1236 @@
+-        return redirect(url_for("admin.email_search.index"))
++        return redirect(url_for("email_search.index"))
+@@ -1246 +1246 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1252 +1252 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1257 +1257 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1264 +1264 @@
+-                    "admin.email_search.index", query=mailbox.email, search_type="email"
++                    "email_search.index", query=mailbox.email, search_type="email"
+@@ -1277 +1277 @@
+-                "admin.email_search.index", query=mailbox.email, search_type="email"
++                "email_search.index", query=mailbox.email, search_type="email"
+@@ -1289 +1289 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1295 +1295 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1300 +1300 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1318 +1318 @@
+-                "admin.email_search.index", query=mailbox.email, search_type="email"
++                "email_search.index", query=mailbox.email, search_type="email"
+@@ -1330 +1330 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1336 +1336 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1341 +1341 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1359 +1359 @@
+-                "admin.email_search.index", query=mailbox.email, search_type="email"
++                "email_search.index", query=mailbox.email, search_type="email"
+@@ -1369 +1369 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1375 +1375 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1380 +1380 @@
+-            return redirect(url_for("admin.email_search.index"))
++            return redirect(url_for("email_search.index"))
+@@ -1386 +1386 @@
+-                    "admin.email_search.index", query=mailbox.email, search_type="email"
++                    "email_search.index", query=mailbox.email, search_type="email"
+@@ -1396 +1396 @@
+-                    "admin.email_search.index", query=mailbox.email, search_type="email"
++                    "email_search.index", query=mailbox.email, search_type="email"
+@@ -1429,3 +1429,3 @@
+-                "admin.email_search.index", query=mailbox.email, search_type="email"
+-            )
+-        )
++                "email_search.index", query=mailbox.email, search_type="email"
++            )
++        )
+--- a/app/admin/index.py
++++ b/app/admin/index.py
+@@ -44 +44 @@
+-    admin.add_view(EmailSearchAdmin(name="Email Search", endpoint="admin.email_search"))
++    admin.add_view(EmailSearchAdmin(name="Email Search", endpoint="email_search"))
+@@ -47 +47 @@
+-            name="Custom domain search", endpoint="admin.custom_domain_search"
++            name="Custom domain search", endpoint="custom_domain_search"
+@@ -51 +51 @@
+-        AbuserLookupAdmin(name="Abuser Lookup", endpoint="admin.abuser_lookup")
++        AbuserLookupAdmin(name="Abuser Lookup", endpoint="abuser_lookup")
+@@ -53 +53 @@
+-    admin.add_view(DomainCheckAdmin(name="Domain Check", endpoint="admin.domain_check"))
++    admin.add_view(DomainCheckAdmin(name="Domain Check", endpoint="domain_check"))
+--- a/templates/admin/abuser_lookup.html
++++ b/templates/admin/abuser_lookup.html
+@@ -26 +26 @@
+-            <a href="/admin/admin.email_search/?query={{ bundle.get("user").email }}">{{ bundle.get("user").email }}</a>
++            <a href="/admin/email_search/?query={{ bundle.get("user").email }}">{{ bundle.get("user").email }}</a>
+--- a/templates/admin/custom_domain_search.html
++++ b/templates/admin/custom_domain_search.html
+@@ -448 +448 @@
+-            <a href="{{ url_for('admin.email_search.index', query=user.email, search_type='email') }}">
++            <a href="{{ url_for('email_search.index', query=user.email, search_type='email') }}">
+@@ -821 +821 @@
+-                            <a href="{{ url_for('admin.email_search.index', query=alias.email, search_type='alias') }}">{{ alias.email }}</a>
++                            <a href="{{ url_for('email_search.index', query=alias.email, search_type='alias') }}">{{ alias.email }}</a>
+@@ -837 +837 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: alias_page - 1}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: alias_page - 1}) }}">
+@@ -851 +851 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: page_num}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: page_num}) }}">
+@@ -859 +859 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: alias_page + 1}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'alias_page_' ~ domain.id: alias_page + 1}) }}">
+@@ -927 +927 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: deleted_alias_page - 1}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: deleted_alias_page - 1}) }}">
+@@ -941 +941 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: page_num}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: page_num}) }}">
+@@ -949 +949 @@
+-                        <a class="page-link" href="{{ url_for('admin.custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: deleted_alias_page + 1}) }}">
++                        <a class="page-link" href="{{ url_for('custom_domain_search.index', query=query, **{'deleted_alias_page_' ~ domain.id: deleted_alias_page + 1}) }}">
+@@ -995 +995 @@
+-          <form action="{{ url_for('admin.custom_domain_search.delete_custom_domain') }}"
++          <form action="{{ url_for('custom_domain_search.delete_custom_domain') }}"
+--- a/templates/admin/email_search.html
++++ b/templates/admin/email_search.html
+@@ -299 +299 @@
+-              <form action="{{ url_for('admin.email_search.disable_2fa') }}"
++              <form action="{{ url_for('email_search.disable_2fa') }}"
+@@ -320 +320 @@
+-              <form action="{{ url_for('admin.email_search.stop_user_deletion') }}"
++              <form action="{{ url_for('email_search.stop_user_deletion') }}"
+@@ -415 +415 @@
+-        <form action="{{ url_for('admin.email_search.mark_abuser') }}"
++        <form action="{{ url_for('email_search.mark_abuser') }}"
+@@ -463 +463 @@
+-        <form action="{{ url_for('admin.email_search.unmark_abuser') }}"
++        <form action="{{ url_for('email_search.unmark_abuser') }}"
+@@ -512 +512 @@
+-          <form action="{{ url_for('admin.email_search.delete_partner_link') }}"
++          <form action="{{ url_for('email_search.delete_partner_link') }}"
+@@ -582 +582 @@
+-        <form action="{{ url_for('admin.email_search.delete_user') }}"
++        <form action="{{ url_for('email_search.delete_user') }}"
+@@ -650 +650 @@
+-        <form action="{{ url_for('admin.email_search.update_subdomain_quota') }}"
++        <form action="{{ url_for('email_search.update_subdomain_quota') }}"
+@@ -686 +686 @@
+-        <form action="{{ url_for('admin.email_search.update_directory_quota') }}"
++        <form action="{{ url_for('email_search.update_directory_quota') }}"
+@@ -767 +767 @@
+-          <form action="{{ url_for('admin.email_search.toggle_alias_status') }}"
++          <form action="{{ url_for('email_search.toggle_alias_status') }}"
+@@ -830 +830 @@
+-          <form action="{{ url_for('admin.email_search.toggle_alias_status') }}"
++          <form action="{{ url_for('email_search.toggle_alias_status') }}"
+@@ -892 +892 @@
+-        <form action="{{ url_for('admin.email_search.delete_alias') }}"
++        <form action="{{ url_for('email_search.delete_alias') }}"
+@@ -1065 +1065 @@
+-          <form action="{{ url_for('admin.email_search.update_subdomain_quota') }}"
++          <form action="{{ url_for('email_search.update_subdomain_quota') }}"
+@@ -1088 +1088 @@
+-          <form action="{{ url_for('admin.email_search.update_directory_quota') }}"
++          <form action="{{ url_for('email_search.update_directory_quota') }}"
+@@ -1244 +1244 @@
+-                      <form action="{{ url_for('admin.email_search.set_default_mailbox') }}"
++                      <form action="{{ url_for('email_search.set_default_mailbox') }}"
+@@ -1288 +1288 @@
+-                      <form action="{{ url_for('admin.email_search.admin_reenable_mailbox') }}"
++                      <form action="{{ url_for('email_search.admin_reenable_mailbox') }}"
+@@ -1339 +1339 @@
+-                      <form action="{{ url_for('admin.email_search.send_mailbox_disable_warning') }}"
++                      <form action="{{ url_for('email_search.send_mailbox_disable_warning') }}"
+@@ -1388 +1388 @@
+-                      <form action="{{ url_for('admin.email_search.admin_disable_mailbox') }}"
++                      <form action="{{ url_for('email_search.admin_disable_mailbox') }}"
+@@ -1822 +1822 @@
+-                    <a href="{{ url_for('admin.custom_domain_search.index', query=domain.domain) }}">{{ domain.domain }}</a>{{ copy_btn(domain.domain) }}
++                    <a href="{{ url_for('custom_domain_search.index', query=domain.domain) }}">{{ domain.domain }}</a>{{ copy_btn(domain.domain) }}
+--- a/templates/admin/mailbox_domain_search.html
++++ b/templates/admin/mailbox_domain_search.html
+@@ -28 +28 @@
+-          <a href="{{ url_for('admin.email_search.index', query=user.email) }}">{{ user.email }}</a>
++          <a href="{{ url_for('email_search.index', query=user.email) }}">{{ user.email }}</a>
+@@ -68 +68 @@
+-                action="{{ url_for('admin.email_search.update_subdomain_quota') }}"
++                action="{{ url_for('email_search.update_subdomain_quota') }}"
+@@ -92 +92 @@
+-                  action="{{ url_for('admin.email_search.delete_partner_link') }}"
++                  action="{{ url_for('email_search.delete_partner_link') }}"
+@@ -107 +107 @@
+-                  action="{{ url_for('admin.email_search.stop_user_deletion') }}"
++                  action="{{ url_for('email_search.stop_user_deletion') }}"
