@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   packaging,
@@ -51,6 +52,18 @@ in
 buildPythonPackage {
   pname = "rucio";
   inherit version src;
+
+  # Fix authorisation bypass on the /credentials/signurl REST API endpoint
+  # (CVE-2026-58273, GHSA-5j9r-fx4x-rpvg)
+  # https://github.com/rucio/rucio/commit/8d9ba31514e6f5dca32b8c1db4738582cb37ec3a
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-58273.patch";
+      url = "https://github.com/rucio/rucio/commit/8d9ba31514e6f5dca32b8c1db4738582cb37ec3a.patch?full_index=1";
+      hash = "sha256-QX+xbnEWGjo+TZqsv+0Px9DCmrQBLfwAsL9Z7qpx+aw=";
+    })
+  ];
+
   pyproject = true;
 
   pythonRelaxDeps = true;
