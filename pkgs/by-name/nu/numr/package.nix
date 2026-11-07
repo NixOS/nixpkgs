@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -47,6 +48,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       matthiasbeyer
     ];
     badPlatforms = [ "aarch64-darwin" ];
+    # the crate `...` requires panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "numr";
   };
 })
