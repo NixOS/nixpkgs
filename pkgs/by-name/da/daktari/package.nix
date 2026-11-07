@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "daktari";
-  version = "0.0.360";
+  version = "0.0.363";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "genio-learn";
     repo = "daktari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-edzX0cOnfPNdhwgBHYvGHKdfp3hGhvM3PlZQEOf9gKI=";
+    hash = "sha256-ZiCs6NMXpceOY6Xsk7BdRU/cum58fM2yfoo1h1l7sCE=";
   };
 
   patches = [ ./optional-pyclip.patch ];
