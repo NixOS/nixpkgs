@@ -15,6 +15,7 @@
   libjpeg,
   libpng,
   libwebp,
+  libdrm,
 
   # build-system
   cmake,
@@ -112,7 +113,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       libnpp # nppicc
       libnvjpeg # nvjpeg.h
     ]
-  );
+  )
+  ++ lib.optionals rocmSupport [ libdrm ];
 
   build-system = [
     cmake
