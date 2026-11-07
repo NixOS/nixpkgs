@@ -8,6 +8,7 @@
   prisma_7,
   prisma-engines_7,
   runtimeShell,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -126,5 +127,9 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "ghostfolio";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) ghostfolio;
   };
 })

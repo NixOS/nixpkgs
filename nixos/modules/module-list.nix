@@ -1741,6 +1741,7 @@
   ./services/web-apps/gancio.nix
   ./services/web-apps/geoserver.nix
   ./services/web-apps/gerrit.nix
+  ./services/web-apps/ghostfolio.nix
   ./services/web-apps/glance.nix
   ./services/web-apps/glitchtip.nix
   ./services/web-apps/go-httpbin.nix
