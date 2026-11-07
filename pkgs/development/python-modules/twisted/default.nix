@@ -5,7 +5,6 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   python,
 
   # build-system
@@ -38,6 +37,7 @@
   glibcLocales,
   pyhamcrest,
   hypothesis,
+  openssh,
 
   # for passthru.tests
   cassandra-driver,
@@ -56,28 +56,15 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "26.4.0";
+  version = "26.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "twisted";
     tag = "twisted-${version}";
-    hash = "sha256-D6vDa+8qwjryKnElPBZgXCNokMX2l3i2bMdtk4FhEp4=";
+    hash = "sha256-o+wTcaUDByZFs63fu4/h5HLt1LFXGjBgh1yK+B/9VPM=";
   };
-
-  patches = [
-    # pyOpenSSL 26.3.0 dropped some deprecated APIs, which breaks various
-    # functionality in twisted. We include the patch which replaces these
-    # with equivalent functionality from pyca/cryptography.
-    # https://github.com/twisted/twisted/issues/12660
-    # https://github.com/twisted/twisted/pull/12661
-    (fetchpatch {
-      name = "twisted-replace-pyopenssl-x509req-with-cryptography-csr.patch";
-      url = "https://github.com/twisted/twisted/commit/5b4601c9965ffc92d6aa952b8c05127d5ac37307.patch";
-      hash = "sha256-mbSZOvzinfUolfOHJl+vEdAEGjy8OF2S/SrTsAbvjIw=";
-    })
-  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -218,6 +205,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     gitMinimal
     glibcLocales
+    openssh
   ]
   ++ optional-dependencies.test
   ++ optional-dependencies.conch
