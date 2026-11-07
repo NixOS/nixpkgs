@@ -28,6 +28,12 @@ buildPythonPackage rec {
       url = "https://github.com/python-tap/pytest-tap/commit/056a44a632b1af19d9ba4b5044768bde3dd6a764.patch";
       hash = "sha256-P52NqgXtnO2SthDwVbT+NVPeBNhjGS/8Vsbe/WLCc3A=";
     })
+    (fetchpatch {
+      name = "pytest-9.2-compat.patch";
+      url = "https://github.com/python-tap/pytest-tap/commit/b5cda048aa374c45cc29074dcd8639cf90b6c44c.patch";
+      excludes = [ "uv.lock" ];
+      hash = "sha256-hWwhvPEXAS7oUkICBG2lSm+Yfy1ADohpj6lIRjB1LGg=";
+    })
   ];
 
   build-system = [ hatchling ];
