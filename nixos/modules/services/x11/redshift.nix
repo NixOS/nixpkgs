@@ -117,8 +117,8 @@ in
     environment.systemPackages = [ cfg.package ];
 
     services.geoclue2.appConfig.redshift = {
-      isAllowed = true;
-      isSystem = true;
+      allowed = true;
+      system = true;
     };
 
     systemd.user.services.redshift =

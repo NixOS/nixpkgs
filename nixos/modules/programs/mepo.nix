@@ -41,8 +41,8 @@ in
     services.geoclue2 = lib.mkIf cfg.locationBackends.geoclue {
       enable = true;
       appConfig.where-am-i = {
-        isAllowed = true;
-        isSystem = false;
+        allowed = true;
+        system = false;
       };
     };
 
