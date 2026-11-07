@@ -46,6 +46,18 @@
           description = ''
             Enable dynamic CDI configuration for Nvidia devices by running
             nvidia-container-toolkit on boot.
+
+            Containers that run through `nvidia-container-runtime` and request
+            GPUs with {env}`NVIDIA_VISIBLE_DEVICES`, as NVIDIA's Kubernetes
+            device plugin does, fail to start in the runtime's default `auto`
+            mode: the runtime generates its own specification for such requests
+            and cannot locate the driver libraries on NixOS. Set `mode = "cdi"`
+            in the `[nvidia-container-runtime]` section of
+            {file}`/etc/nvidia-container-runtime/config.toml` so that it uses
+            the specification generated here instead. Requests by CDI device
+            name, such as `nvidia.com/gpu=all`, already use it in `auto` mode.
+            This module only writes that file when the deprecated
+            {option}`virtualisation.docker.enableNvidia` is set.
           '';
         };
 
@@ -61,6 +73,12 @@
             passed to `nvidia-ctk cdi generate`. This will affect how
             you reference the device using `nvidia.com/gpu=` in
             the container runtime.
+
+            In `cdi` mode, `nvidia-container-runtime` looks up each ID in
+            {env}`NVIDIA_VISIBLE_DEVICES` as `nvidia.com/gpu=<ID>`. NVIDIA's
+            Kubernetes device plugin passes GPU UUIDs by default, so either
+            use `"uuid"` here or run the plugin with `DEVICE_ID_STRATEGY=index`.
+            `NVIDIA_VISIBLE_DEVICES=all` works with any strategy.
           '';
         };
 
