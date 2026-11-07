@@ -7,11 +7,14 @@
 
   nodes = {
     psqlTest = {
+      # qcluster workers + gunicorn + postgres exceed the 1 GiB default
+      virtualisation.memorySize = 2048;
       services.inventree = {
         enable = true;
       };
     };
     mysqlTest = {
+      virtualisation.memorySize = 2048;
       services.inventree = {
         enable = true;
         database.dbtype = "mysql";
