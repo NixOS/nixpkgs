@@ -22,17 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uXKvv/QRbYknqsLGlPFxSH7KLh0CucLjq4XEFFcieWw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-  buildInputs = [
-    libad9361
-    libiio
-    libusb1
-    soapysdr
-  ];
-
   patches = [
     # CMake < 3.5.0 fixes. Remove as soon as https://github.com/pothosware/SoapyPlutoSDR/pull/72 is merged and we do the next version bump.
     (fetchpatch {
@@ -43,6 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/pothosware/SoapyPlutoSDR/commit/4a01ddf1ae2fd0de86c6774ff35aa51f9b4f0b5a.patch";
       hash = "sha256-XgyCWSAlKqCXxH5vtijYqub6656xYkWaY6+B0dkfsGA=";
     })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libad9361
+    libiio
+    libusb1
+    soapysdr
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
