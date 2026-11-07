@@ -1,0 +1,68 @@
+From 6a37df00ece82f6c9c73b07a77c22c918fc3257c Mon Sep 17 00:00:00 2001
+From: johan0A <arnaudchesse@outlook.com>
+Date: Sat, 14 Mar 2026 21:25:59 +0100
+Subject: [PATCH] Config.resolve: don't error on explicit dynamic linker for
+ Lib/Obj outputs
+
+---
+ src/Compilation/Config.zig | 9 +--------
+ src/main.zig               | 2 --
+ 2 files changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/src/Compilation/Config.zig b/src/Compilation/Config.zig
+index b7f6df90..0c508b2e 100644
+--- a/src/Compilation/Config.zig
++++ b/src/Compilation/Config.zig
+@@ -123,7 +123,6 @@ pub const ResolveError = error{
+     WasiExecModelRequiresWasi,
+     SharedMemoryIsWasmOnly,
+     ObjectFilesCannotShareMemory,
+-    ObjectFilesCannotSpecifyDynamicLinker,
+     SharedMemoryRequiresAtomicsAndBulkMemory,
+     ThreadsRequireSharedMemory,
+     EmittingLlvmModuleRequiresLlvmBackend,
+@@ -132,7 +131,6 @@ pub const ResolveError = error{
+     EmittingBinaryRequiresLlvmLibrary,
+     LldIncompatibleObjectFormat,
+     LldCannotIncrementallyLink,
+-    LldCannotSpecifyDynamicLinkerForSharedLibraries,
+     LtoRequiresLld,
+     SanitizeThreadRequiresLibCpp,
+     LibCRequiresLibUnwind,
+@@ -421,12 +419,7 @@ pub fn resolve(options: Options) ResolveError!Config {
+             // linking to any shared libraries.
+             if (link_mode == .dynamic) return error.DynamicLinkingWithLldRequiresSharedLibraries;
+         },
+-        .Lib => if (use_lld and options.resolved_target.is_explicit_dynamic_linker) {
+-            return error.LldCannotSpecifyDynamicLinkerForSharedLibraries;
+-        },
+-        .Obj => if (options.resolved_target.is_explicit_dynamic_linker) {
+-            return error.ObjectFilesCannotSpecifyDynamicLinker;
+-        },
++        .Lib, .Obj => {},
+     }
+ 
+     const use_new_linker = b: {
+diff --git a/src/main.zig b/src/main.zig
+index 95ee9a82..cc3ed331 100644
+--- a/src/main.zig
++++ b/src/main.zig
+@@ -4144,7 +4144,6 @@ fn createModule(
+             error.WasiExecModelRequiresWasi => fatal("only WASI OS targets support execution model", .{}),
+             error.SharedMemoryIsWasmOnly => fatal("only WebAssembly CPU targets support shared memory", .{}),
+             error.ObjectFilesCannotShareMemory => fatal("object files cannot share memory", .{}),
+-            error.ObjectFilesCannotSpecifyDynamicLinker => fatal("object files cannot specify --dynamic-linker", .{}),
+             error.SharedMemoryRequiresAtomicsAndBulkMemory => fatal("shared memory requires atomics and bulk_memory CPU features", .{}),
+             error.ThreadsRequireSharedMemory => fatal("threads require shared memory", .{}),
+             error.EmittingLlvmModuleRequiresLlvmBackend => fatal("emitting an LLVM module requires using the LLVM backend", .{}),
+@@ -4153,7 +4152,6 @@ fn createModule(
+             error.EmittingBinaryRequiresLlvmLibrary => fatal("producing machine code via LLVM requires using the LLVM library", .{}),
+             error.LldIncompatibleObjectFormat => fatal("using LLD to link {s} files is unsupported", .{@tagName(target.ofmt)}),
+             error.LldCannotIncrementallyLink => fatal("self-hosted backends do not support linking with LLD", .{}),
+-            error.LldCannotSpecifyDynamicLinkerForSharedLibraries => fatal("LLD does not support --dynamic-linker on shared libraries", .{}),
+             error.LtoRequiresLld => fatal("LTO requires using LLD", .{}),
+             error.SanitizeThreadRequiresLibCpp => fatal("thread sanitization is (for now) implemented in C++, so it requires linking libc++", .{}),
+             error.LibCRequiresLibUnwind => fatal("libc of the specified target requires linking libunwind", .{}),
+-- 
+2.53.0
+
