@@ -1,13 +1,18 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  srcOnly,
-  cmake,
-  unzip,
+  pkgsi686Linux,
 }:
 
+let
+  inherit (pkgsi686Linux)
+    cmake
+    fetchFromGitHub
+    fetchzip
+    srcOnly
+    stdenv
+    unzip
+    ;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wibo";
   version = "0.6.14";
