@@ -454,7 +454,7 @@ in
               secret_key.file = mkOption {
                 description = ''
                   Signing key for media proxy `/external/` URLs for third-party media
-                  (link previews, embed images and icons, GIF results). 
+                  (link previews, embed images and icons, GIF results).
 
                   Ephemeral.
                 '';
@@ -667,7 +667,9 @@ in
       nginx = {
         enable = lib.mkEnableOption "Nginx as reverse proxy for fluxer";
         virtualHost = lib.mkOption {
-          type = lib.types.submodule (import ../../web-servers/nginx/vhost-options.nix { inherit config lib; });
+          type = lib.types.submodule (
+            import ../../web-servers/nginx/vhost-options.nix { inherit config lib; }
+          );
           default = { };
           example = lib.literalExpression ''
             {
@@ -758,12 +760,12 @@ in
 
             handle /_health { respond "OK" 200 }
 
-            handle_path /api/* { 
-              reverse_proxy ${cfg.settings.internal.api_endpoint} 
+            handle_path /api/* {
+              reverse_proxy ${cfg.settings.internal.api_endpoint}
             }
 
             handle /gateway {
-              rewrite * / 
+              rewrite * /
               reverse_proxy ${cfg.settings.internal.gateway_endpoint}
             }
 
@@ -947,7 +949,7 @@ in
             -genkey \
             -noout \
             -out "$STATE_DIRECTORY/vapid_private_key.pem"
-          
+
           openssl ec \
             -in "$STATE_DIRECTORY/vapid_private_key.pem" \
             -pubout \
@@ -957,7 +959,7 @@ in
             | tr "+/" "-_" \
             | tr -d "=" \
             > "$STATE_DIRECTORY/vapid_public_key"
-          
+
           openssl ec \
             -in "$STATE_DIRECTORY/vapid_private_key.pem" \
             -outform DER 2>/dev/null \
