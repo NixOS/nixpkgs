@@ -9,7 +9,7 @@
   makeWrapper,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "influxdb3";
   version = "3.8.3";
   src = fetchFromGitHub {
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
+    INFLUXDB3_BUILD_VERSION = "Core";
     GIT_HASH = "000000000000000000000000000000000000000000000000000";
     GIT_HASH_SHORT = "0000000";
     PYO3_PYTHON = lib.getExe python3;
@@ -42,8 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # We provide GIT_HASH and GIT_HASH_SHORT ourselves
     rm influxdb3_process/build.rs
   '';
-
-  env.INFLUXDB3_BUILD_VERSION = finalAttrs.version;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -84,4 +83,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "influxdb3";
   };
-})
+}
