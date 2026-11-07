@@ -14,6 +14,7 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://ofiwg.github.io/libfabric/";
     description = "Open Fabric Interfaces";
@@ -75,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bzizou ];
+    mainProgram = "fi_info";
   };
 })
