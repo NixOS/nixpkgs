@@ -102,7 +102,6 @@
   ungoogled ? false,
   ungoogled-chromium,
   # Optional dependencies:
-  libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
 }:
@@ -534,10 +533,7 @@ let
       libevdev
     ]
     ++ lib.optional systemdSupport systemdLibs
-    ++ lib.optionals cupsSupport [
-      libgcrypt
-      cups
-    ]
+    ++ lib.optional cupsSupport cups
     ++ [
       libpulseaudio
     ];
@@ -592,10 +588,7 @@ let
       libevdev
     ]
     ++ lib.optional systemdSupport systemdLibs
-    ++ lib.optionals cupsSupport [
-      libgcrypt
-      cups
-    ]
+    ++ lib.optional cupsSupport cups
     ++ [
       libpulseaudio
     ];
