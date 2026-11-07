@@ -21357,7 +21357,9 @@ self: super: with self; {
 
   tree-sitter-json = callPackage ../development/python-modules/tree-sitter-json { };
 
-  tree-sitter-language-pack = callPackage ../development/python-modules/tree-sitter-language-pack { };
+  tree-sitter-language-pack = callPackage ../development/python-modules/tree-sitter-language-pack {
+    inherit (pkgs) zstd;
+  };
 
   tree-sitter-languages = callPackage ../development/python-modules/tree-sitter-languages { };
 
