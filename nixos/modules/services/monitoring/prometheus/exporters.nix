@@ -94,6 +94,7 @@ let
         "mqtt"
         "mysqld"
         "nats"
+        "netzservice-swka"
         "nextcloud"
         "nginx"
         "nginxlog"
