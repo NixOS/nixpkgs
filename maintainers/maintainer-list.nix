@@ -32409,6 +32409,11 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  yanmaani = {
+    github = "yanmaani";
+    githubId = 68476452;
+    name = "Yanmaani";
+  };
   yannham = {
     github = "yannham";
     githubId = 6530104;
