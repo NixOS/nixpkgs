@@ -17,6 +17,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-JWeCwsPFbQWI60i60GFSQcy7MJ0nDraRb0xf1t4H8RY=";
 
+  # The web UI is for `GOOS=js` only.
+  excludedPackages = [ "web" ];
+
   ldflags = [
     "-s"
     "-w"
