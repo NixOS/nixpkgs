@@ -1,25 +1,28 @@
 {
-  lib,
-  fetchPypi,
   buildPythonPackage,
-  libz,
-  gmpy2,
+  callPackage,
   cysignals,
+  cython,
+  fetchPypi,
+  gmpy2,
+  lib,
   numpy,
-  sympy,
   passagemath-categories,
   passagemath-environment,
-  passagemath-ntl,
-  passagemath-gsl,
   passagemath-flint,
+  passagemath-gsl,
   passagemath-modules,
+  passagemath-ntl,
+  passagemath-setup,
+  pkgconfig,
   pkgs,
   setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
+  sympy,
   ...
 }:
+let
+  mpmath = callPackage ../downgrades/mpmath { };
+in
 buildPythonPackage rec {
   pname = "passagemath-symbolics";
   version = "10.8.13";
@@ -44,7 +47,8 @@ buildPythonPackage rec {
     gmpy2
     cysignals
     numpy
-    sympy
+    (sympy.override { inherit mpmath; })
+    mpmath
 
     passagemath-categories
     passagemath-environment
