@@ -1,8 +1,8 @@
 [
   {
     "pname": "Avalonia",
-    "version": "12.1.2",
-    "hash": "sha256-mZh0FMY6w5kzRqhKhSAG35Y/+Dn5bRQFV+4x+IUNsI8="
+    "version": "12.1.4",
+    "hash": "sha256-kM+WOg5f7X/A5c2c7+PBWbeN4IYnLD3d6Ux1y4P5xKw="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -21,8 +21,8 @@
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "12.1.2",
-    "hash": "sha256-wsNZFYW6jH9D8fx54xwAEsbpjqGsxzwbGlj+MVf2ZHo="
+    "version": "12.1.4",
+    "hash": "sha256-XaV99PVtMvOJRHXahp01ValoCF9dk7c7P1ron3ClzVg="
   },
   {
     "pname": "Avalonia.Diagnostics",
@@ -31,23 +31,23 @@
   },
   {
     "pname": "Avalonia.Fonts.Inter",
-    "version": "12.1.2",
-    "hash": "sha256-Arv2YbLBb7mDoeiTPk5KukrmThsTj/KvxfEcfH0D0Kg="
+    "version": "12.1.4",
+    "hash": "sha256-ttm0xKYJcJlilVO0AIUeEhJ2d8FBGOgsBC/3rtN6VIs="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "12.1.2",
-    "hash": "sha256-Esxo2rYv/MSVmdWqY5nu1Vd4YcAr87mg4o56maQaaSs="
+    "version": "12.1.4",
+    "hash": "sha256-5ol5EzhTOUOiRtNSIFXttEIpqhnreoIzgB8Niftj2nI="
   },
   {
     "pname": "Avalonia.FreeDesktop.AtSpi",
-    "version": "12.1.2",
-    "hash": "sha256-XMWyVgn3S5x9Z0fzffD2lSQvhJKMCjLDUlFizUqp4aQ="
+    "version": "12.1.4",
+    "hash": "sha256-2NKWgMF65G6Id3XmhA+Ww35oAW+e2su7e2LUU+VoVkk="
   },
   {
     "pname": "Avalonia.HarfBuzz",
-    "version": "12.1.2",
-    "hash": "sha256-M2+qSEJk3MncUvFQmA5I5S+Vjf7o5aHnpgXqbbrVT2s="
+    "version": "12.1.4",
+    "hash": "sha256-9S5cG2oAiG70aBbtL8miwohEKJsa8wvX6iR+Ig0gwMs="
   },
   {
     "pname": "Avalonia.HtmlRenderer",
@@ -56,8 +56,8 @@
   },
   {
     "pname": "Avalonia.Native",
-    "version": "12.1.2",
-    "hash": "sha256-46paePGddiQlQqvy6fg/QLmlKaV6B1tDbckd/pRYWMk="
+    "version": "12.1.4",
+    "hash": "sha256-QY2/RSUnSMUpWpSENtZG7ZDVSlhy6DUkZ9GBWHvBtR0="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
@@ -66,18 +66,18 @@
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "12.1.2",
-    "hash": "sha256-IPuepoUzVR+llgU9CInvkrTYW00CVHdzewzE6QYcZV0="
+    "version": "12.1.4",
+    "hash": "sha256-4RX1FD7w/HRc8XG7kmrRCD7UyDPKl3oOsRvbDEFgX1w="
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "12.1.2",
-    "hash": "sha256-K4vnkvwFFGdbPKzpfD+MCKbY3fmmCMroSzJanPVlI0A="
+    "version": "12.1.4",
+    "hash": "sha256-9C4S0G35KuEW5bqqxeAxnOwJDZkKMD7cGv0OfCAqbmk="
   },
   {
     "pname": "Avalonia.Themes.Fluent",
-    "version": "12.1.2",
-    "hash": "sha256-wBngLXs5jn3Pk+UWz+uz9ftGPOStpt++NQTHswsvPr8="
+    "version": "12.1.4",
+    "hash": "sha256-CywxfuTbybEsnLVk1PmbEIcrZVpFDJGmasBj2QVqPDg="
   },
   {
     "pname": "Avalonia.Themes.Simple",
@@ -86,18 +86,18 @@
   },
   {
     "pname": "Avalonia.Wayland",
-    "version": "12.1.2",
-    "hash": "sha256-C7Ra0Dsz8F6d7ap2b0mqvj8vf+JZzbvWjnOAcLPgbic="
+    "version": "12.1.4",
+    "hash": "sha256-jEDPZ6daemkYRReyupe6bnvkcBzf5nJbkaaCdMm6dwA="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "12.1.2",
-    "hash": "sha256-vcVvzUkvG7ByiuTKuN0ZhrRZYyW8ynNIdVkHkLUZYII="
+    "version": "12.1.4",
+    "hash": "sha256-dDq+riEPKHuEakLSkrLYzIWzRb743xOgHkgdJSCQuBs="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "12.1.2",
-    "hash": "sha256-lu2v/wUT7MGeCood/qfjizTrf8Bq1Nd/wpjcrrdMWOw="
+    "version": "12.1.4",
+    "hash": "sha256-wQF50to9DX36dbppioBnSjvtm1Gk06ROyCmDLGjm1pY="
   },
   {
     "pname": "CSharpier.MsBuild",
@@ -138,6 +138,11 @@
     "pname": "ini-parser",
     "version": "2.5.2",
     "hash": "sha256-IGUP2iEBuL8QpcllvPfeuqn7O908H16Kg0oOrXUUJ3Y="
+  },
+  {
+    "pname": "LZMA-SDK",
+    "version": "22.1.1",
+    "hash": "sha256-PI79dMSrLSmoJzQLSFxgfhDqdkyNvdlzFhxWbdrMKXs="
   },
   {
     "pname": "MicroCom.Runtime",
@@ -375,6 +380,11 @@
     "hash": "sha256-VNVCqzq3HwPSRK/GrcBkbdhb2iRYrqoeDBvGnPNyrbA="
   },
   {
+    "pname": "RVZSharp",
+    "version": "1.1.1",
+    "hash": "sha256-UU85O93tDHYNAGayuSAO+88eN4kqGYKAutU/0Il0J6k="
+  },
+  {
     "pname": "Semver",
     "version": "3.0.0",
     "hash": "sha256-nX5ka27GY6pz9S73H6sLSQCrnAyyI9xDVdzrtlMp4BQ="
@@ -408,6 +418,11 @@
     "pname": "SharpCompress",
     "version": "0.48.1",
     "hash": "sha256-Y1lH1TrxBua3Ux6trRUQGeSfYjE3qld6TQDz/ABy6Ws="
+  },
+  {
+    "pname": "SharpZipLib",
+    "version": "1.4.2",
+    "hash": "sha256-/giVqikworG2XKqfN9uLyjUSXr35zBuZ2FX2r8X/WUY="
   },
   {
     "pname": "ShimSkiaSharp",
@@ -533,5 +548,10 @@
     "pname": "YamlDotNet",
     "version": "17.1.0",
     "hash": "sha256-Zdlw62rVud2U94BQKqrp5OFQiDcQ9rRrKeaVnNxREjY="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.8",
+    "hash": "sha256-9nlxkt7r9FNfBgHCJz51DaDAIGLjCj5KPEARuawiQDo="
   }
 ]
