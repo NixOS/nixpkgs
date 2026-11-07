@@ -23,6 +23,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-eiLnNTkBanoJkBthOLsblL0VEWNUKtGV1c2obMuUXJA=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ""hatchling>=1.27,<1.32"]" "hatchling"
+  '';
+
   build-system = [ hatchling ];
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
