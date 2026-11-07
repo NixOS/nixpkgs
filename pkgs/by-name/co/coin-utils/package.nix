@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,10 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     license = lib.licenses.epl20;
     homepage = "https://github.com/coin-or/CoinUtils";
     description = "Collection of classes and helper functions that are generally useful to multiple COIN-OR projects";
     maintainers = with lib.maintainers; [ tmarkus ];
+    pkgConfigModules = [ "coinutils" ];
   };
 })
