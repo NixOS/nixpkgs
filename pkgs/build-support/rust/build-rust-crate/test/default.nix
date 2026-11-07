@@ -3,6 +3,7 @@
   buildPackages,
   buildRustCrate,
   callPackage,
+  jq,
   releaseTools,
   runCommand,
   runCommandCC,
@@ -96,11 +97,13 @@ let
         removeAttrs crateArgs [
           "expectedTestOutputs"
           "expectedTestBinaries"
+          "expectedTestManifest"
         ]
       );
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
       expectedTestBinaries = crateArgs.expectedTestBinaries or [ ];
+      expectedTestManifest = crateArgs.expectedTestManifest or [ ];
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
       crateName = crateArgs.crateName or "nixtestcrate";
@@ -122,7 +125,10 @@ let
 
     runCommand "run-buildRustCrate-${crateName}-test"
       {
-        nativeBuildInputs = [ crate ];
+        nativeBuildInputs = [
+          crate
+          jq
+        ];
       }
       (
         if !hasTests then
@@ -145,6 +151,15 @@ let
               b:
               "test -x ${crate}/tests/${lib.escapeShellArg b} || { echo 'expected test binary \"${b}\" not found in:'; ls ${crate}/tests; exit 23; }"
             ) expectedTestBinaries}
+            ${lib.optionalString (expectedTestManifest != [ ]) ''
+              test -f ${crate}/tests/.target-manifest.json || { echo 'manifest missing'; exit 23; }
+              ${lib.concatMapStringsSep "\n" (e: ''
+                jq -e --arg kind ${lib.escapeShellArg e.kind} --arg target ${lib.escapeShellArg e.target} --arg bin ${lib.escapeShellArg e.bin} \
+                  '.[] | select(.kind == $kind and .target == $target and .bin == $bin)' \
+                  ${crate}/tests/.target-manifest.json > /dev/null \
+                  || { echo 'manifest missing entry: ${builtins.toJSON e}'; cat ${crate}/tests/.target-manifest.json; exit 23; }
+              '') expectedTestManifest}
+            ''}
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
             done
@@ -455,6 +470,18 @@ rec {
           expectedTestBinaries = [
             "foo"
             "bar"
+          ];
+          expectedTestManifest = [
+            {
+              kind = "test";
+              target = "foo";
+              bin = "foo";
+            }
+            {
+              kind = "test";
+              target = "bar";
+              bin = "bar";
+            }
           ];
           expectedTestOutputs = [
             "test src_main ... ok"
