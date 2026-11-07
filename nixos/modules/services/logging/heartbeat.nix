@@ -23,7 +23,7 @@ in
       enable = lib.mkEnableOption "heartbeat, uptime monitoring";
 
       package = lib.mkPackageOption pkgs "heartbeat" {
-        example = "heartbeat7";
+        example = "heartbeat8";
       };
 
       name = lib.mkOption {
