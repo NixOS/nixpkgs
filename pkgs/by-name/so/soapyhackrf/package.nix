@@ -9,18 +9,14 @@
   soapysdr,
 }:
 
-let
-  version = "0.3.4";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyhackrf";
-  inherit version;
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyHackRF";
-    rev = "soapy-hackrf-${version}";
+    rev = "soapy-hackrf-${finalAttrs.version}";
     sha256 = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
   };
 
@@ -49,4 +45,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})
