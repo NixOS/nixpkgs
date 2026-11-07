@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyjnius";
-  version = "1.7.0";
+  version = "1.9.0";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-n4FwhISwqE6tPrC6hOU6xXnkxDyhDHRvmJip891Q9U0=";
+    hash = "sha256-A4URhIyKTGqFuHiCdLfuxLLHjs1WUc0FuOqGSkLCLWQ=";
   };
 
   postPatch = ''
