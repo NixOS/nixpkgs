@@ -90,6 +90,12 @@ python3Packages.buildPythonApplication rec {
       felixsinger
       kacper-uminski
     ];
+    knownVulnerabilities = [
+      "Codechecker 6.28.x will not receive further updates. Codechecker 6.29.x is available in NixOS 26.11 (unstable at the time of writing)"
+      "CVE-2026-84164"
+      "CVE-2026-84161"
+      "CVE-2026-84155"
+    ];
     mainProgram = "CodeChecker";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
