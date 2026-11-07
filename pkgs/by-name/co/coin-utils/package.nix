@@ -8,6 +8,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.11.13";
   pname = "coinutils";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CoinUtils";
