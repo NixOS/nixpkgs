@@ -1,0 +1,13 @@
+diff --git a/tests/http3/test_http_receiver.py b/tests/http3/test_http_receiver.py
+index 9641791b..64032041 100644
+--- a/tests/http3/test_http_receiver.py
++++ b/tests/http3/test_http_receiver.py
+@@ -48,7 +48,7 @@ def generate_protocol(app):
+     connection._ack_delay = 0
+     connection._loss = Mock()
+     connection._loss.spaces = []
+-    connection._loss.get_loss_detection_time = lambda: None
++    connection._loss.get_loss_detection_time = lambda amplification_limited=False: None
+     connection.datagrams_to_send = Mock(return_value=[])  # type: ignore
+     return Http3Protocol(
+         connection,
