@@ -9,6 +9,7 @@
   # nativeBuildInputs
   autoAddDriverRunpath,
   cuda_nvcc,
+  removeReferencesTo,
   which,
 
   # buildInputs
@@ -40,6 +41,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoAddDriverRunpath
     cuda_nvcc
+    removeReferencesTo
     which
   ];
 
@@ -75,6 +77,12 @@ backendStdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # nvcc leaves its library path in the device code, see cudaPackages.nccl.
+  postFixup = ''
+    remove-references-to -t "${lib.getBin cuda_nvcc}" "$out"/lib/libnccl_ep.{so.*,a}
+  '';
+  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
 
   meta = {
     description = "Expert-parallelism (MoE dispatch/combine) extension library for NCCL";
