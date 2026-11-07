@@ -5,6 +5,7 @@
   makeWrapper,
   nodejs_22,
   nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jellystat";
@@ -58,6 +59,7 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) jellystat; };
   };
 
   meta = with lib; {
