@@ -78,7 +78,9 @@ let
 
   inherit (release-lib.lib)
     collect
+    concatLists
     elem
+    filter
     genAttrs
     hasInfix
     hasSuffix
@@ -90,6 +92,10 @@ let
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
 
   supportDarwin = elem "aarch64-darwin" supportedSystems;
+
+  onSupported = x: map (system: x.${system}) supportedSystems;
+  onSupportedLinux = x: map (system: x.${system}) (filter (hasSuffix "-linux") supportedSystems);
+  onSupportedDarwin = x: map (system: x.${system}) (filter (hasSuffix "-darwin") supportedSystems);
 
   nonPackageJobs = {
     tarball = import ./make-tarball.nix {
@@ -164,29 +170,38 @@ let
     unstable = pkgs.releaseTools.aggregate {
       name = "nixpkgs-${jobs.tarball.version}";
       meta.description = "Release-critical builds for the Nixpkgs unstable channel";
-      constituents = [
-        jobs.tarball
-        jobs.release-checks
-        jobs.metrics
-        jobs.manual
-        jobs.tests.lib-tests.x86_64-linux
-        jobs.tests.pkgs-lib.formats-tests.x86_64-linux
-        jobs.stdenv.x86_64-linux
-        jobs.cargo.x86_64-linux
-        jobs.go.x86_64-linux
-        jobs.linux.x86_64-linux
-        jobs.nix.x86_64-linux
-        jobs.pandoc.x86_64-linux
-        jobs.python3.x86_64-linux
+      constituents = concatLists [
+        [
+          jobs.tarball
+          jobs.release-checks
+          jobs.metrics
+          jobs.manual
+        ]
+        (collect isDerivation jobs.stdenvBootstrapTools)
+        (onSupported jobs.tests.lib-tests)
+        (onSupported jobs.tests.pkgs-lib.formats-tests)
+        (onSupported jobs.stdenv)
+        (onSupported jobs.cargo)
+        (onSupported jobs.go)
+        (onSupportedLinux jobs.linux)
+        (onSupported jobs.nix)
+        (onSupported jobs.pandoc)
+        (onSupported jobs.python3)
         # Needed by contributors to test PRs (by inclusion of the PR template)
-        jobs.nixpkgs-review.x86_64-linux
+        (onSupported jobs.nixpkgs-review)
         # Needed for support
-        jobs.nix-info.x86_64-linux
-        jobs.nix-info-tested.x86_64-linux
+        (onSupported jobs.nix-info)
+        (onSupported jobs.nix-info-tested)
         # Ensure that X11/GTK are in order.
-        jobs.firefox-unwrapped.x86_64-linux
-        jobs.cachix.x86_64-linux
-        jobs.devenv.x86_64-linux
+        (onSupportedLinux jobs.firefox-unwrapped)
+        (onSupported jobs.cachix)
+        (onSupported jobs.devenv)
+        (onSupported jobs.git)
+        (onSupported jobs.mariadb)
+        (onSupported jobs.vim)
+        (onSupported jobs.inkscape)
+        (onSupported jobs.qt5.qtmultimedia)
+        (onSupportedDarwin jobs.darwin.linux-builder)
 
         /*
           TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
@@ -201,32 +216,6 @@ let
           jobs.tests.cc-multilib-clang.x86_64-linux
           jobs.tests.stdenv-inputs.x86_64-linux
           jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
-        */
-      ]
-      ++ collect isDerivation jobs.stdenvBootstrapTools
-      ++ optionals supportDarwin [
-        jobs.stdenv.aarch64-darwin
-        jobs.cargo.aarch64-darwin
-        jobs.cachix.aarch64-darwin
-        jobs.devenv.aarch64-darwin
-        jobs.go.aarch64-darwin
-        jobs.python3.aarch64-darwin
-        jobs.nixpkgs-review.aarch64-darwin
-        jobs.nix.aarch64-darwin
-        jobs.nix-info.aarch64-darwin
-        jobs.nix-info-tested.aarch64-darwin
-        jobs.git.aarch64-darwin
-        jobs.mariadb.aarch64-darwin
-        jobs.vim.aarch64-darwin
-        jobs.inkscape.aarch64-darwin
-        jobs.qt5.qtmultimedia.aarch64-darwin
-        jobs.darwin.linux-builder.aarch64-darwin
-        /*
-          jobs.tests.cc-wrapper.default.aarch64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
-          jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
-          jobs.tests.stdenv-inputs.aarch64-darwin
-          jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
         */
       ];
     };
