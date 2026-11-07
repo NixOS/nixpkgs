@@ -869,8 +869,10 @@ in
           "$CREDENTIALS_DIRECTORY/velocity-secret" "${cfg.dataDir}/pumpkin.toml"
       ''
       + lib.optionalString (cfg.whitelist.entries != [ ]) ''
-        if [ ! -e "${cfg.dataDir}/whitelist.json" ]; then
-          install -m600 ${whitelistFile} "${cfg.dataDir}/whitelist.json"
+        # Pumpkin reads whitelist.json from its data/ subdirectory (DATA_FOLDER).
+        mkdir -p "${cfg.dataDir}/data"
+        if [ ! -e "${cfg.dataDir}/data/whitelist.json" ]; then
+          install -m600 ${whitelistFile} "${cfg.dataDir}/data/whitelist.json"
         fi
       '';
 
