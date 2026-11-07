@@ -17,10 +17,11 @@ python3Packages.buildPythonPackage rec {
   };
 
   build-system = with python3Packages; [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = with python3Packages; [
+    setuptools_80
     rich
   ];
 
