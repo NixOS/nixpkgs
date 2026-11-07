@@ -52,8 +52,6 @@ perlPackages.buildPerlPackage rec {
 
   nativeCheckInputs = [ openssl ] ++ (with perlPackages; [ TestDeep ]);
 
-  strictDeps = true;
-
   postPatch = ''
     patchShebangs script/convos
   '';
@@ -115,8 +113,6 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru.tests = nixosTests.convos;
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://convos.chat";
