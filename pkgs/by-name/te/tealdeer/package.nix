@@ -20,6 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # "rustls-with-webpki-roots" is enabled by default
+  # Enforce native roots so tealdeer uses system cacert updates
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "rustls-with-native-roots"
+  ];
+
   postInstall = ''
     installShellCompletion --cmd tldr \
       --bash completion/bash_tealdeer \
@@ -28,7 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   # Disable tests that require Internet access:
-  checkFeatures = [ "ignore-online-tests" ];
+  checkFeatures = [
+    "ignore-online-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
   # tealdeer requires --test-threads=1
   dontUseCargoParallelTests = true;
 
