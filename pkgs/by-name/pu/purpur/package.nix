@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "purpur";
-  version = "1.21.10r2535";
+  version = "26.3r2655";
 
   src = fetchurl {
     url = "https://api.purpurmc.org/v2/purpur/${
       builtins.replaceStrings [ "r" ] [ "/" ] finalAttrs.version
     }/download";
-    sha256 = "sha256-QVl4Nnewi2OVeC5hUMsoZGxw7ZiLeUjAngGqWl6Q9Ug=";
+    sha256 = "sha256-1feff23a8c060b51d8732814a429d0eb1d0cecd4dc8f934cb2b139dfc4e69e57=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
