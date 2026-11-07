@@ -15,6 +15,7 @@
   gdk-pixbuf,
   makeWrapper,
   gtest,
+  rav1e,
 }:
 
 let
@@ -56,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DAVIF_CODEC_AOM=SYSTEM" # best encoder (slow but small)
+    "-DAVIF_CODEC_AOM=SYSTEM" # reference encoder (slow but small)
+    "-DAVIF_CODEC_RAV1E=SYSTEM" # advanced encoder (required for large images)
     "-DAVIF_CODEC_DAV1D=SYSTEM" # best decoder (fast)
     "-DAVIF_BUILD_APPS=ON"
     "-DAVIF_BUILD_GDK_PIXBUF=ON"
@@ -87,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     dav1d
     libaom
     libyuv
+    rav1e
   ];
 
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;
