@@ -39,13 +39,13 @@ let
     h2
   ];
 
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "calibrain";
     repo = "shelfmark";
     tag = "v${version}";
-    hash = "sha256-Q1fsrcF1TbBUvC8z4ofYuDvzcMTSiRVwzqqxz0LL9/g=";
+    hash = "sha256-bE2MSlBwi8OtUSVjAcWQuXCFFdJHB2zCFIK0Zm2jJ64=";
   };
 
   frontend = buildNpmPackage (finalAttrs: {
@@ -54,7 +54,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/src/frontend";
 
-    npmDepsHash = "sha256-nRCQhm++Ftpt0Xy5umouLjkRBWP97+3eixiRQ5NE6nI=";
+    npmDepsHash = "sha256-BoJemoTe1IKjb6rlczV8B6LDi1FIyxVDrntqrJcZi+o=";
 
     installPhase = ''
       runHook preInstall
