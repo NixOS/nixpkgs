@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "TASEmulators";
     repo = "fceux";
     rev = "fceux-${finalAttrs.version}";
-    hash = "sha256-SJ9axFIW3T8PykPnN6Itvxl6tkXKfrmbF880TtpcOVg=";
+    hash = "sha256-DZYSBLATbJSKIx3ZqR7K7H/zfVqrJLn/vFSN0Y64/xg=";
   };
 
   nativeBuildInputs = [
