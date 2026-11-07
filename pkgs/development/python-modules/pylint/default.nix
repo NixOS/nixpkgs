@@ -47,6 +47,11 @@ buildPythonPackage (finalAttrs: {
     tomlkit
   ];
 
+  pythonRelaxDeps = [
+    "astroid"
+    "isort"
+  ];
+
   nativeCheckInputs = [
     gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
