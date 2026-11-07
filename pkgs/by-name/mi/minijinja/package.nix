@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "minijinja";
   version = "3.0.5";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "minijinja";
@@ -20,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The tests relies on the presence of network connection
   doCheck = false;
 
-  cargoBuildFlags = "--bin minijinja-cli";
+  cargoBuildFlags = [ "--bin=minijinja-cli" ];
 
   meta = {
     description = "Command Line Utility to render MiniJinja/Jinja2 templates";
