@@ -40,7 +40,7 @@
     };
 
   testScript = ''
-    machine.start(allow_reboot = True)
+    machine.start_and_allow_reboot()
 
     machine.wait_for_unit("multi-user.target")
     machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
