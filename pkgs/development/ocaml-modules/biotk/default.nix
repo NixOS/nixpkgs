@@ -21,13 +21,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "biotk";
-  version = "0.3";
+  version = "0.4";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/pveber/biotk/releases/download/v${finalAttrs.version}/biotk-${finalAttrs.version}.tbz";
-    hash = "sha256-9eRd3qYteUxu/xNEUER/DHodr6cTCuPtSKr38x32gig=";
+    hash = "sha256-+yijCw1M+7qzoJyMm6NCW74M64lZgGD3Zmtp0NNT7gI=";
   };
 
   nativeBuildInputs = [ ocaml-crunch ];
