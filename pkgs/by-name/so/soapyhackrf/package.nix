@@ -20,6 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pothosware/SoapyHackRF/commit/143ff5e7e0f786e341df8846c04e8273c5183c26.patch";
+      hash = "sha256-8tMN6uEWUt1sUC45kBM6WHXDd/oTFyo6u+NpVPg+z5Q=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -27,13 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hackrf
     soapysdr
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapyHackRF/commit/143ff5e7e0f786e341df8846c04e8273c5183c26.patch";
-      hash = "sha256-8tMN6uEWUt1sUC45kBM6WHXDd/oTFyo6u+NpVPg+z5Q=";
-    })
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
