@@ -5,11 +5,11 @@ set -e
 projucerConfigurePhase() {
   runHook preConfigure
 
-  Projucer --set-global-search-path linux defaultJuceModulePath @src@/modules
+  Projucer --set-global-search-path linux defaultJuceModulePath @juce@/modules
   if [ -n "${jucerUserModules-}" ]; then
     Projucer --set-global-search-path linux defaultUserModulePath "$jucerUserModules"
   fi
-  Projucer --resave "${jucerFile:-$pname.jucer}"
+  Projucer --resave "${jucerFile:-$pname.jucer}" --fix-missing-dependencies
 
   runHook postConfigure
 }
