@@ -1,0 +1,40 @@
+diff --git c/pyroaring/croaring.pxd i/pyroaring/croaring.pxd
+index 9b94de5..aae5cd6 100644
+--- c/pyroaring/croaring.pxd
++++ i/pyroaring/croaring.pxd
+@@ -1,7 +1,7 @@
+ from libc.stdint cimport uint8_t, int32_t, uint32_t, uint64_t, int64_t
+ from libcpp cimport bool
+ 
+-cdef extern from "roaring.h":
++cdef extern from "roaring/roaring.h":
+     ctypedef struct roaring_array_t:
+         pass
+     ctypedef struct roaring_bitmap_t:
+diff --git c/setup.py i/setup.py
+index 270a9cf..1c779e2 100755
+--- c/setup.py
++++ i/setup.py
+@@ -64,20 +64,11 @@ else:
+         'pyroaring',
+         sources=[os.path.join(PKG_DIR, 'pyroaring.pyx')],
+         extra_compile_args=compile_args + ["-std=c++11"],
++        libraries=['roaring'],
+         language='c++',
+     )
+ 
+-    # Because we compile croaring with a c compiler with sometimes incompatible arguments,
+-    # define croaring compilation with an extra argument for the c11 standard, which is
+-    # required for atomic support.
+-    croaring = (
+-        'croaring',
+-        {
+-            'sources': [os.path.join(PKG_DIR, 'roaring.c')],
+-            "extra_compile_args": compile_args + ["-std=c11"],
+-        },
+-    )
+-    libraries = [croaring]
++    libraries = None
+ 
+ setup(
+     name='pyroaring',
