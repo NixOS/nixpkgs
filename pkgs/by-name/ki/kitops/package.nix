@@ -8,16 +8,16 @@
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "kitops";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "kitops-ml";
     repo = "kitops";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YunOq5loW+fmfWKPHZDWIpsQjrMJRs66zF1+w0iJz9I=";
+    hash = "sha256-0zOjheg7ZJwhhlxyVR7k4DzL1smKUd3NHYmIvNfKqvI=";
   };
 
-  vendorHash = "sha256-zSAB58nR7cFbYzFHoaq4CJdzmHbxLtyGSpQ8U/Pjcn8=";
+  vendorHash = "sha256-OzgpGWczXA2dQiAEOoMAOFmGLhEfZo0vd83Gh1ZEdtQ=";
 
   subPackages = [ "." ];
 
