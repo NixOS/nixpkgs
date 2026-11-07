@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     mv $(ls */*.jar) $out/share/java
 
+    # The launcher runs the nixpkgs jre, so drop the unused bundled JRE and its stale CA keystore
+    rm -r $out/share/java/jre
+
     makeWrapper $out/share/java/frostwire $out/bin/frostwire \
       --prefix PATH : ${jre}/bin \
       --prefix LD_LIBRARY_PATH : $out/share/java \
