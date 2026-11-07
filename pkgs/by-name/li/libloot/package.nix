@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libloot";
-  version = "0.29.6";
+  version = "0.29.7";
 
   outputs = [
     "out"
@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "loot";
     repo = "libloot";
     tag = finalAttrs.version;
-    hash = "sha256-Pz13z0uQfTeo47NJORfZ8n8ucqZdoLVGNIsrf2+OOGA=";
+    hash = "sha256-DJ1beJwErLgbX/ya5VXi1YJl/rmrtWndJIEQGhhXIlo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-IQowGdrol/JFoh+hGfhwoJ2FumkvbuZsp8Xx/V2hFdw=";
+    hash = "sha256-FBxCRJdxG8ATaRDwVDGSUH8tufNKMoY6vVAs1K3rQ5o=";
   };
 
   strictDeps = true;
