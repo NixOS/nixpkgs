@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytz";
-  version = "2026.5";
+  version = "2026.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytz";
     inherit (finalAttrs) version;
-    hash = "sha256-+iNyS5xIZUO5/1SjJ+51aayDreVLua/Q/BhnZiBAHIY=";
+    hash = "sha256-Ow/CcncHZj1uUXk29ET9ioskDx/DL0v37gMnQkWUUoQ=";
   };
 
   postPatch = ''
