@@ -4,7 +4,8 @@
   lib,
   stdenv,
   ocamlPackages,
-  coqPackages,
+  coqPackages ? coqPackages_8_20,
+  coqPackages_8_20,
   rubber,
   hevea,
   emacs,
@@ -13,19 +14,19 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "why3";
   inherit version;
 
   src = fetchurl {
-    url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
+    url = "https://why3.gitlabpages.inria.fr/releases/why3-${finalAttrs.version}.tar.gz";
     hash =
       {
         "1.8.2" = "sha256-t9ES7dW8zmvM4AI9K8g06yrhocQteupE/6Ek1km1C+o=";
         "1.7.2" = "sha256-VaSG/FiO2MDdSSFXGJJrIylQx0LPwtT8AF7TpPVZhCQ=";
         "1.6.0" = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
       }
-      ."${version}";
+      ."${finalAttrs.version}";
   };
 
   strictDeps = true;
@@ -114,4 +115,4 @@ stdenv.mkDerivation rec {
       vbgl
     ];
   };
-}
+})
