@@ -16,6 +16,7 @@
   roboto,
   treefmt,
   nixosOptionsDoc,
+  pandoc,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -106,6 +107,7 @@ stdenvNoCC.mkDerivation (
         ${documentation-highlighter}/loader.js
 
       cp -t out ./style.css ./anchor.min.js ./anchor-use.js
+      ${pandoc}/bin/pandoc --include-in-header=${./style-guide-style.html} --include-before-body=${./header-styleguide.html} ${../styleguide.md}  > out/styleguide.html
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
@@ -141,6 +143,7 @@ stdenvNoCC.mkDerivation (
 
       mkdir -p $out/nix-support/
       echo "doc manual $dest index.html" >> $out/nix-support/hydra-build-products
+      echo "styleguide.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
 
       runHook postInstall
