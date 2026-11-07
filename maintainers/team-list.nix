@@ -179,8 +179,42 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
+  # Restoration for 2022
   cuda = {
-    github = "cuda-maintainers";
+    shortName = "CUDA";
+    members = [
+      SomeoneSerge
+      # samuela?
+      # Fridh?
+      # knedlesep?
+      # Jon?
+      # dfullmer?
+      # danieldk?
+      # zimbatm?
+      # tomberek?
+      # Whoever sent the email in "add NVIDIA licenses"
+      # et al.
+    ];
+
+    scope = ''
+      Supporting GPU-Accelerated Scientific Computing
+
+      Resolve patchelf exception and NVIDIA ghosting problems.
+      Resolve unfree cache problem.
+      Resolve untested SciComp, HPC, GPGPU, and unfree software problem.
+      Resolve hardware access, SLURM-like resource allocation, scheduling affinity in derivations.
+      Resolve libcuda.problem on NixOS, non-NixOS problem.
+      Resolve cudart-libcuda forward- and backward-compat problem.
+      Resolve stdenv and cc-wrapper compatibility problems, libcuda-libstdc++ problems.
+      Resolve pytorch, tensorflow being unmaintainable.
+      Resolve unaffordable bootstrap problem, rebuild frequency problems.
+      Resolve cudatoolkit and closure size problems.
+      Resolve cmake support problems.
+      Resolve cross problems.
+      Resolve old HPC clusters problems: network fs, no namespaces, no chroot, stat storm.
+      Resolve ld.so "dependency injection"/resolution order, LD_LIBRARY_PATH, RPATH v. RUNPATH, "LD_LIBRARY_OVERRIDE", "LD_LIBRARY_FALLBACK".
+      Et c.
+    '';
   };
 
   darwin = {
