@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huey";
-  version = "2.6.0";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "huey";
     tag = finalAttrs.version;
-    hash = "sha256-vXp8xISf8g1VjIus/Xr4wKFFaVg5x4CXgP8IUUKYl+o=";
+    hash = "sha256-FFBRi0W37KuIJjif132za74XcYxXquP5gCLny4Ii29s=";
   };
 
   build-system = [ setuptools ];
