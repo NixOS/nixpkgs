@@ -1,0 +1,23 @@
+diff --git a/lib/discourse_vips/worker_process.rb b/lib/discourse_vips/worker_process.rb
+index 966dd60dbbe..489d413d6ec 100644
+--- a/lib/discourse_vips/worker_process.rb
++++ b/lib/discourse_vips/worker_process.rb
+@@ -25,7 +25,7 @@ module DiscourseVips
+     attr_reader :pid, :socket_path
+ 
+     def self.shared_socket_path
+-      Rails.root.join("tmp", "discourse-vips-worker", Rails.env, "socket").to_s
++      "/run/discourse/sockets/vips.sock"
+     end
+ 
+     def initialize(socket_path: nil)
+@@ -105,8 +105,7 @@ module DiscourseVips
+     def prepare_socket_path
+       if @socket_path
+         socket_directory = File.dirname(@socket_path)
+-        FileUtils.mkdir_p(socket_directory, mode: 0o700)
+-        File.chmod(0o700, socket_directory)
++        File.chmod(0o750, socket_directory)
+         FileUtils.rm_f(@socket_path)
+       else
+         socket_directory = Dir.mktmpdir("vips-")

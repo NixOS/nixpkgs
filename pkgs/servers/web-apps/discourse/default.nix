@@ -42,7 +42,7 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
@@ -56,16 +56,16 @@
 }:
 
 let
-  version = "2026.9.1";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-j3JjLYNcv3lluoCekyUUKMfkSX/ExeDsa8zrQ+pDrwg=";
+    hash = "sha256-xEVEkFJWVcmIWjCZc+P2zbbA0jN9XbCxMdjGibpK2t0=";
   };
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_12;
 
   ruby = ruby_3_4;
 
@@ -356,8 +356,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
       inherit version src pnpm;
-      fetcherVersion = 3;
-      hash = "sha256-oahr5SJzHfIfcB7NFxeeEYDf3Q4m/iC/JMpNjlEWgSE=";
+      fetcherVersion = 4;
+      hash = "sha256-gi0mf6NtwhjeDE7zb5inCUg28V+bcbqq7AfuNWCOOYI=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -531,7 +531,14 @@ let
       ./optimize-image-fix.patch
 
       # Skip voice plugin asset symlink removal/recreation at runtime.
-      ./voice-plugin-assets.patch
+      ./live-plugin-assets.patch
+
+      # Change the location of the vips worker socket to
+      # /run/discourse/sockets/vips.sock because otherwise it tries to allocate
+      # it in the Nix store, which exceeds the maximum length (108 bytes) for
+      # UNIX socket path. Also prevents the code that spawn the socket from
+      # restricting permissions to the sockets directory
+      ./vips-socket-path.patch
     ];
 
     postPatch = ''
@@ -580,10 +587,10 @@ let
       # The voice plugin creates its asset symlink below its source tree. That
       # works during the asset build, but the package source tree is read-only
       # at runtime..
-      mkdir -p $out/share/discourse/plugins/voice/public/javascripts
+      mkdir -p $out/share/discourse/plugins/live/public/javascripts
       ln -sf \
         ${voiceAssets}/lib/ruby/gems/${rubyEnv.ruby.version.libDir}/gems/discourse_voice_assets-${voiceAssets.version}/vendor \
-        $out/share/discourse/plugins/voice/public/javascripts/${voiceAssets.version}
+        $out/share/discourse/plugins/live/public/javascripts/${voiceAssets.version}
 
       runHook postInstall
     '';
