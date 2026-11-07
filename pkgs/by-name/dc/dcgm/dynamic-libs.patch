@@ -1,40 +1,70 @@
 diff --git a/cmake/FindJsoncpp.cmake b/cmake/FindJsoncpp.cmake
-index abedf7bb85..d7a52f5c7b 100644
+index 908dba4..261223a 100644
 --- a/cmake/FindJsoncpp.cmake
 +++ b/cmake/FindJsoncpp.cmake
-@@ -16,8 +16,8 @@
+@@ -16,10 +16,10 @@
  
- if (NOT TARGET JsonCpp::JsonCpp)
-     find_package(jsoncpp REQUIRED CONFIG)
+ find_package(jsoncpp REQUIRED CONFIG)
+ 
+-if (TARGET jsoncpp_static)
++if (TARGET jsoncpp_lib)
+     set(Jsoncpp_FOUND TRUE)
 -    set(JSONCPP_STATIC_LIBS jsoncpp_static)
 -    set(JSONCPP_INCLUDE_PATH $<TARGET_PROPERTY:jsoncpp_static,INTERFACE_INCLUDE_DIRECTORIES>)
-+    set(JSONCPP_STATIC_LIBS jsoncpp)
-+    set(JSONCPP_INCLUDE_PATH $<TARGET_PROPERTY:jsoncpp,INTERFACE_INCLUDE_DIRECTORIES>)
- endif()
- # set(Jsoncpp_PATH_PREFIXES /usr/local "${Jsoncpp_ROOT}" "$ENV{HOME}")
- # foreach(prefix ${Jsoncpp_PATH_PREFIXES})
++    set(JSONCPP_STATIC_LIBS jsoncpp_lib)
++    set(JSONCPP_INCLUDE_PATH $<TARGET_PROPERTY:jsoncpp_lib,INTERFACE_INCLUDE_DIRECTORIES>)
+     mark_as_advanced(JSONCPP_INCLUDE_PATH JSONCPP_STATIC_LIBS)
+ else()
+     set(Jsoncpp_FOUND FALSE)
 diff --git a/cmake/FindLibevent.cmake b/cmake/FindLibevent.cmake
-index 354d6f9b99..38aca9534e 100644
+index 93ef27c..28d4555 100644
 --- a/cmake/FindLibevent.cmake
 +++ b/cmake/FindLibevent.cmake
-@@ -26,16 +26,12 @@
- endforeach()
+@@ -28,7 +28,7 @@ if (Libevent_INCLUDE_DIR)
+     # TODO: Add dispatching based on ``Libevent_USE_STATIC_LIBS`` variable
  
- find_path(LIBEVENT_INCLUDE_DIR evhttp.h event.h PATHS ${Libevent_INCLUDE_PATHS})
--find_library(LIBEVENT_STATIC_LIB NAMES libevent.a libevent_core.a libevent_extra.a PATHS ${Libevent_LIB_PATHS})
--find_library(LIBEVENT_PTHREAD_STATIC_LIB NAMES libevent_pthreads.a PATHS ${Libevent_LIB_PATHS})
-+find_library(LIBEVENT_STATIC_LIB NAMES libevent.so libevent_core.so libevent_extra.so PATHS ${Libevent_LIB_PATHS})
-+find_library(LIBEVENT_PTHREAD_STATIC_LIB NAMES libevent_pthreads.so PATHS ${Libevent_LIB_PATHS})
+     set(_Libevent_LIBRARY_PREFIX ${CMAKE_STATIC_LIBRARY_PREFIX})
+-    set(_Libevent_LIBRARY_SUFFIX ${CMAKE_STATIC_LIBRARY_SUFFIX})
++    set(_Libevent_LIBRARY_SUFFIX ${CMAKE_SHARED_LIBRARY_SUFFIX})
  
--if (LIBEVENT_INCLUDE_DIR AND LIBEVENT_STATIC_LIB AND LIBEVENT_PTHREAD_STATIC_LIB)
-+if (LIBEVENT_INCLUDE_DIR AND LIBEVENT_STATIC_LIB)
-     set(Libevent_FOUND TRUE)
--    add_library(libevent_event_static STATIC IMPORTED)
--    set_target_properties(libevent_event_static PROPERTIES IMPORTED_LOCATION ${LIBEVENT_STATIC_LIB})
--    add_library(libevent_event_pthread STATIC IMPORTED)
--    set_target_properties(libevent_event_pthread PROPERTIES IMPORTED_LOCATION ${LIBEVENT_PTHREAD_STATIC_LIB})
--    set(LIBEVENT_STATIC_LIBS libevent_event_static libevent_event_pthread)
-+    set(LIBEVENT_STATIC_LIBS ${LIBEVENT_STATIC_LIB} ${LIBEVENT_PTHREAD_STATIC_LIB})
- else ()
-     set(Libevent_FOUND FALSE)
- endif ()
+     find_library(Libevent_core_LIBRARY
+         NAMES ${_Libevent_LIBRARY_PREFIX}event_core${_Libevent_LIBRARY_SUFFIX}
+diff --git a/common/CMakeLists.txt b/common/CMakeLists.txt
+index d4b5ae0..2997ac0 100644
+--- a/common/CMakeLists.txt
++++ b/common/CMakeLists.txt
+@@ -110,7 +110,7 @@ target_sources(dcgm_common PRIVATE
+     EnvConfig.cpp)
+ 
+ target_link_libraries(dcgm_common PUBLIC
+-    jsoncpp_static
++    jsoncpp_lib
+     childprocess
+     buildinfo_objects
+     common_interface
+diff --git a/nvvs/plugin_src/test_common/CMakeLists.txt b/nvvs/plugin_src/test_common/CMakeLists.txt
+index 2326fc7..dd6e472 100644
+--- a/nvvs/plugin_src/test_common/CMakeLists.txt
++++ b/nvvs/plugin_src/test_common/CMakeLists.txt
+@@ -23,7 +23,7 @@ target_include_directories(testing_cuda_stubs
+ target_link_libraries(testing_cuda_stubs
+     PUBLIC
+         nvvs_interface
+-        jsoncpp_static
++        jsoncpp_lib
+     PRIVATE
+         nvvs_plugins_common_interface)
+ 
+diff --git a/nvvs/plugin_src/CMakeLists.txt b/nvvs/plugin_src/CMakeLists.txt
+index 5fc9aa9..bf40981 100644
+--- a/nvvs/plugin_src/CMakeLists.txt
++++ b/nvvs/plugin_src/CMakeLists.txt
+@@ -13,7 +13,7 @@
+ # limitations under the License.
+ 
+ target_include_directories(nvvs_plugins_interface INTERFACE include)
+-target_link_libraries(nvvs_plugins_interface INTERFACE jsoncpp_static)
++target_link_libraries(nvvs_plugins_interface INTERFACE jsoncpp_lib)
+ 
+ macro(declare_nvvs_plugin plugin_name dirpath)
+     target_include_directories(nvvs_plugins_${plugin_name}_interface INTERFACE ${dirpath})
