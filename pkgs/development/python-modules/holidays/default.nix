@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "holidays";
-  version = "0.107";
+  version = "0.108";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DPp8gejmRsOYhIT0BZRrYsFHEQGpyWbH+K6BpWEecTE=";
+    hash = "sha256-wyI7pO6L99goad1z8CBqC5LTrY/GXQndj2SHUQHkDWc=";
   };
 
   build-system = [
@@ -50,6 +50,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   dependencies = [ python-dateutil ];
+
+  pythonRelaxDeps = [ "python-dateutil" ];
 
   nativeCheckInputs = [
     importlib-metadata
