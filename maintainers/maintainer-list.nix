@@ -19028,6 +19028,11 @@
     github = "messemar";
     githubId = 22659757;
   };
+  metafab = {
+    name = "Fabrice Marguerie";
+    github = "metafab";
+    githubId = 2544998;
+  };
   metalmatze = {
     email = "mail@matthiasloibl.com";
     name = "Matthias Loibl";
