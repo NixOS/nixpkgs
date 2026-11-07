@@ -13,6 +13,7 @@ buildGo127Module (finalAttrs: {
   version = "0.9.4";
 
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   outputs = [
     "out"
