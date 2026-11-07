@@ -157,7 +157,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/ChrisDKN/Amethyst-Mod-Manager";
     changelog = "https://github.com/ChrisDKN/Amethyst-Mod-Manager/blob/${finalAttrs.src.tag}/Changelog.txt";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ RoGreat ];
+    maintainers = with lib.maintainers; [
+      RoGreat
+      keenanweaver
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "amethyst-mod-manager";
   };
