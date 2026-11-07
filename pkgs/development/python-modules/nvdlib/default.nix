@@ -10,20 +10,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nvdlib";
-  version = "0.8.3";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Vehemont";
     repo = "nvdlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FjeYJMMccao9KJMcJBKtt5QhpQEEbcPyNunj+VqMdx0=";
+    hash = "sha256-VsI9benBDlqPyAbm3Vfto4MTF+9sPpWv37DtLJYkV/0=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "version='0.8.2'," "version = '${finalAttrs.version}',"
-  '';
 
   build-system = [ setuptools ];
 
