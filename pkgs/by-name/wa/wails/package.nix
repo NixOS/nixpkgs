@@ -8,7 +8,6 @@
   go,
   nodejs,
   zlib,
-  nix-update-script,
   # Linux specific dependencies
   gtk3,
   webkitgtk_4_1,
@@ -85,8 +84,6 @@ buildGoModule (finalAttrs: {
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Build desktop applications using Go & Web Technologies";
