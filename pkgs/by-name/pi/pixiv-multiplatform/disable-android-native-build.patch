@@ -1,0 +1,26 @@
+--- a/lib/gif/build.gradle.kts
++++ b/lib/gif/build.gradle.kts
+@@ -24,11 +24,6 @@
+ 
+     defaultConfig {
+         minSdk = prop("MIN_SDK").toInt()
+-        externalNativeBuild {
+-            cmake {
+-                targets += "cargo-build_gif_rust"
+-            }
+-        }
+         ndk {
+             // 只支持arm64和x64
+             abiFilters += listOf("arm64-v8a", "x86_64")
+@@ -45,11 +40,6 @@
+         }
+     }
+ 
+-    externalNativeBuild {
+-        cmake {
+-            path = File("src/rust/CMakeLists.txt")
+-        }
+-    }
+ }
+ 
+ val kotlinArchToRustArch = mapOf(
