@@ -8,13 +8,9 @@
   avahi,
 }:
 
-let
-  version = "0.5.2-unstable-2024-01-24";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyremote";
-  inherit version;
+  version = "0.5.2-unstable-2024-01-24";
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -50,4 +46,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "SoapySDRServer";
   };
-}
+})
