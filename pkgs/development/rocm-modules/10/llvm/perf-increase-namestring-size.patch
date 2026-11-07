@@ -1,0 +1,28 @@
+From a57eb548d46a37e4aed33eefccc9e6374b579ff9 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Mon, 16 Dec 2024 13:58:54 -0800
+Subject: [PATCH] [AMDGPU] TargetMachine: increase NameString size to 256
+
+128 is too small a default for compilers used to build
+AMD's rocBLAS, composable_kernel and similar libs because
+they use very long symbol names such as
+device_gemm_xdl_universal_bf16_bf16_bf16_mk_nk_mn_comp_default_instance
+
+This fixes spending ~10% of compile time in malloc inside this function.
+---
+ llvm/lib/Target/TargetMachine.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/llvm/lib/Target/TargetMachine.cpp b/llvm/lib/Target/TargetMachine.cpp
+index abd0fdf2390c0..86ce468b75643 100644
+--- a/lib/Target/TargetMachine.cpp
++++ b/lib/Target/TargetMachine.cpp
+@@ -270,7 +270,7 @@ MCSymbol *TargetMachine::getSymbol(const GlobalValue *GV) const {
+   if (MCSymbol *TargetSymbol = TLOF->getTargetSymbol(GV, *this))
+     return TargetSymbol;
+ 
+-  SmallString<128> NameStr;
++  SmallString<256> NameStr;
+   getNameWithPrefix(NameStr, GV, TLOF->getMangler());
+   return TLOF->getContext().getOrCreateSymbol(NameStr);
+ }
