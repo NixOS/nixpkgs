@@ -60,6 +60,14 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     hash = "sha256-guOI+9MMisB/uvmLF5Gg7ZCJ8YLnGirJ867nz0AMnxo=";
   };
 
+  patches = [
+    # The trtllm-gen routing module creates a symlink inside FLASHINFER_CUBIN_DIR, which is the
+    # read-only `flashinfer-cubin` package when installed:
+    #   PermissionError: [Errno 13] Permission denied: '.../flashinfer_cubin/cubins/flashinfer'
+    # Use FLASHINFER_GEN_SRC_DIR instead, like the other trtllm-gen modules.
+    ./trtllm-gen-routing-symlink-in-gen-src-dir.patch
+  ];
+
   build-system = [
     apache-tvm-ffi
     packaging
