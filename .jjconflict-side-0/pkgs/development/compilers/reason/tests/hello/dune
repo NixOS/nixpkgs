@@ -1,0 +1,4 @@
+(executable
+ (name helloreason)
+ (public_name helloreason)
+ (libraries reason))

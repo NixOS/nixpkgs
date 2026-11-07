@@ -1,0 +1,22 @@
+From ec22fc4da8cc081c53da7b3aaaa2d5095b7abdec Mon Sep 17 00:00:00 2001
+From: Marcel Telka <marcel@telka.sk>
+Date: Mon, 13 Nov 2023 16:18:28 +0100
+Subject: [PATCH] Fix deprecation warning
+
+---
+ pytest_relaxed/plugin.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pytest_relaxed/plugin.py b/pytest_relaxed/plugin.py
+index 562a597..28798d3 100644
+--- a/pytest_relaxed/plugin.py
++++ b/pytest_relaxed/plugin.py
+@@ -37,7 +37,7 @@ def pytest_collect_file(file_path, parent):
+     return SpecModule.from_parent(parent=parent, path=file_path)
+ 
+ 
+-@pytest.mark.trylast  # So we can be sure builtin terminalreporter exists
++@pytest.hookimpl(trylast=True)  # Be sure builtin terminalreporter exists
+ def pytest_configure(config):
+     # TODO: we _may_ sometime want to do the isatty/slaveinput/etc checks that
+     # pytest-sugar does?

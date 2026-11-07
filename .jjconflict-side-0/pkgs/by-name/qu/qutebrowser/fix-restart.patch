@@ -1,0 +1,19 @@
+diff --git a/quitter.py b/quitter.py
+index a42b9d0..f544ccb 100644
+--- a/qutebrowser/misc/quitter.py
++++ b/qutebrowser/misc/quitter.py
+@@ -112,13 +112,7 @@ class Quitter(QObject):
+         Return:
+             The commandline as a list of strings.
+         """
+-        if os.path.basename(sys.argv[0]) == 'qutebrowser':
+-            # Launched via launcher script
+-            args = [sys.argv[0]]
+-        elif hasattr(sys, 'frozen'):
+-            args = [sys.executable]
+-        else:
+-            args = [sys.executable, '-m', 'qutebrowser']
++        args = ['@qutebrowser@']
+ 
+         # Add all open pages so they get reopened.
+         page_args = []  # type: typing.MutableSequence[str]

@@ -1,0 +1,45 @@
+diff --git a/src/parsing.c b/src/parsing.c
+index 8d97a7e..786a536 100644
+--- a/src/parsing.c
++++ b/src/parsing.c
+@@ -348,8 +348,8 @@ void io_getLevels(level** ls, char* fn){
+   memset(io_cs, 0, sizeof(color) * CHAR_MAX);
+   *ls = salloc(sizeof(level) * CHAR_MAX);
+   memset(*ls, 0, sizeof(level *) * CHAR_MAX);
+-  char c;
+-  char name = '\0';
++  int c;
++  int name = '\0';
+   while((c = fgetc(f)) != EOF){
+     if (c == 'C' || c == 'O' || c == 'L') {
+       name = fgetc(f);
+diff --git a/src/parsing.h b/src/parsing.h
+index d4be0a0..ae485ae 100644
+--- a/src/parsing.h
++++ b/src/parsing.h
+@@ -16,9 +16,9 @@ int io_getFont(bool**, char*);
+ 
+ void io_getColor(FILE*, color*);
+ 
+-void io_getLevel(FILE*, level*, obj[127]);
++void io_getLevel(FILE*, level*, obj[CHAR_MAX]);
+ 
+-void io_getObj(FILE*, obj*, char, color[127]);
++void io_getObj(FILE*, obj*, char, color[CHAR_MAX]);
+ 
+ // TODO: this is named terribly. There should be another function io_readLevels that's exposed. this should be private and take in FILE*
+ void io_getLevels(level**, char*);
+diff --git a/src/visual_sounds.c b/src/visual_sounds.c
+index 067e2e3..5e5cdc4 100644
+--- a/src/visual_sounds.c
++++ b/src/visual_sounds.c
+@@ -921,6 +921,9 @@ void vs_mainPlay(int snd) {
+ }
+ 
+ void vs_mainStop() {
++  if (vs_mainVisual == SND_none) {
++    return;
++  }
+   vs_sounds[vs_mainVisual].cur = NULL;
+   vs_mainVisual = SND_none;
+ }

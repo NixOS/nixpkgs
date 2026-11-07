@@ -1,0 +1,12 @@
+--- a/z3.pc.cmake.in
++++ b/z3.pc.cmake.in
+@@ -1,7 +1,7 @@
+ prefix=${pcfiledir}/@Z3_PKGCONFIG_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: z3
+ Description: The Z3 Theorem Prover

@@ -1,0 +1,23 @@
+diff -ruN nagios-4.0.7.orig/configure nagios-4.0.7/configure
+--- nagios-4.0.7.orig/configure	2014-06-03 10:41:42.000000000 -0400
++++ nagios-4.0.7/configure	2014-06-12 00:30:17.516468583 -0400
+@@ -6014,7 +6014,8 @@
+ #define DEFAULT_NAGIOS_GROUP "$nagios_grp"
+ _ACEOF
+ 
+-INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
++#INSTALL_OPTS="-o $nagios_user -g $nagios_grp"
++INSTALL_OPTS=""
+ 
+ 
+ 
+@@ -6035,7 +6036,8 @@
+ 
+ 
+ 
+-COMMAND_OPTS="-o $command_user -g $command_grp"
++#COMMAND_OPTS="-o $command_user -g $command_grp"
++COMMAND_OPTS=""
+ 
+ 
+ MAIL_PROG=no

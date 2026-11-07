@@ -1,0 +1,203 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromCodeberg,
+  cmake,
+  pkg-config,
+  protobuf,
+  fontconfig,
+  openssl,
+  sqlite,
+  zlib,
+  zstd,
+  libxkbcommon,
+  wayland,
+  libxcb,
+  stdenv,
+  libGL,
+  vulkan-loader,
+  envsubst,
+  nix-update-script,
+  versionCheckHook,
+  cargo-bundle,
+  git,
+  testers,
+  writableTmpDirAsHomeHook,
+
+  buildRemoteServer ? true,
+  buildExtensionCli ? true,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "gram";
+  version = "3.4.1";
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildRemoteServer [
+    "remote_server"
+  ]
+  ++ lib.optionals buildExtensionCli [
+    "extension_cli"
+  ];
+
+  src = fetchFromCodeberg {
+    owner = "GramEditor";
+    repo = "gram";
+    tag = finalAttrs.version;
+    hash = "sha256-+arejkex6DnnIVivt4ACuGUUNfePIXC0Y5WRGIBB9Hw=";
+  };
+
+  cargoHash = "sha256-0sTtUSCtjvdJPkpzNgd4Rk0g7Fn3w8uttfuEtl53kbQ=";
+
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+    rustPlatform.bindgenHook
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    openssl
+    sqlite
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    libxcb
+    libxkbcommon
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    git
+  ];
+
+  cargoBuildFlags = [
+    "--package=gram"
+    "--package=cli"
+  ]
+  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ]
+  ++ lib.optionals buildExtensionCli [ "--package=extension_cli" ];
+
+  env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
+    ALLOW_MISSING_LICENSES = true;
+    OPENSSL_NO_VENDOR = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+    RELEASE_VERSION = finalAttrs.version;
+    GRAM_UPDATE_EXPLANATION = "Updates are handled by nixpkgs";
+  };
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  useNextest = true;
+
+  remoteServerExecutableName = "gram-remote-server-stable-${finalAttrs.version}";
+  installPhase = ''
+    runHook preInstall
+
+    release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # cargo-bundle expects the binary in target/release
+    mv $release_target/gram target/release/gram
+
+    pushd crates/gram
+    # Select the stable bundle and migrate its macOS keys to cargo-bundle 0.12's schema.
+    substituteInPlace Cargo.toml \
+          --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]' \
+          --replace-fail 'osx_minimum_system_version' 'osx.minimum_system_version' \
+          --replace-fail 'osx_info_plist_exts' 'osx.info_plist_exts' \
+          --replace-fail 'osx_url_schemes' 'osx.url_schemes'
+    export CARGO_BUNDLE_SKIP_BUILD=true
+    app_path=$(cargo bundle --release --format osx | xargs)
+    popd
+
+    mkdir -p $out/Applications $out/bin
+    # Gram expects git next to its own binary
+    ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+    mv $release_target/cli $app_path/Contents/MacOS/cli
+    mv $app_path $out/Applications/
+
+    # Physical location of the CLI must be inside the app bundle as this is used
+    # to determine which app to start
+    ln -s $out/Applications/Gram.app/Contents/MacOS/cli $out/bin/gram
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm755 $release_target/gram $out/libexec/gram-editor
+    install -Dm755 $release_target/cli $out/bin/gram
+
+    install -Dm644 $src/crates/gram/resources/app.liten.Gram.svg $out/share/icons/hicolor/scalable/apps/app.liten.Gram.svg
+    install -Dm644 $src/crates/gram/resources/app.liten.Gram-symbolic.svg $out/share/icons/hicolor/scalable/apps/app.liten.Gram-symbolic.svg
+
+    # See https://codeberg.org/GramEditor/gram/src/branch/main/crates/gram/resources/gram.desktop.in
+    (
+      export DO_STARTUP_NOTIFY="true"
+      export APP_CLI="gram"
+      export APP_ICON="app.liten.Gram"
+      export APP_NAME="Gram"
+      export APP_ARGS="%U"
+      mkdir -p "$out/share/applications"
+      ${lib.getExe envsubst} < "crates/gram/resources/gram.desktop.in" > "$out/share/applications/app.liten.Gram.desktop"
+    )
+  ''
+  + lib.optionalString buildRemoteServer ''
+    install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
+  ''
+  + lib.optionalString buildExtensionCli ''
+    install -Dm755 $release_target/gram-extension $extension_cli/bin/gram-extension
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/libexec/gram-editor --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        vulkan-loader
+        wayland
+      ]
+    }
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      remoteServerVersion = testers.testVersion {
+        package = finalAttrs.finalPackage.remote_server;
+        command = "${finalAttrs.remoteServerExecutableName} version";
+      };
+    };
+  };
+
+  meta = {
+    description = "Powerful and modern source code editor";
+    homepage = "https://gram-editor.com";
+    changelog = "https://codeberg.org/GramEditor/gram/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      niklaskorz
+    ];
+    mainProgram = "gram";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
+})

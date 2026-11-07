@@ -1,0 +1,81 @@
+diff --git a/configure b/configure
+index 00d4c94..5a91c76 100755
+--- a/configure
++++ b/configure
+@@ -7146,74 +7146,8 @@ fi
+ 
+ 
+ 
+-cf_openssl_basedir=""
+-cf_openssl_libdir=""
+-if test "$with_openssl_path" != "auto"; then
+-    cf_openssl_basedir="`echo ${with_openssl_path} | sed 's/\/$//'`"
+-  cf_openssl_libdir="${cf_openssl_basedir}/lib"
+-else
+-    if test -f "/usr/include/openssl/opensslv.h" && test -f "/usr/lib64/libssl.so"; then
+-      cf_openssl_libdir="/usr/lib64"
+-      cf_openssl_basedir="/usr"
+-  else
+-    for dirs in /usr/local/ssl /usr/pkg /usr/local /usr/local/openssl; do
+-      if test -f "${dirs}/include/openssl/opensslv.h" && test -f "${dirs}/lib/libssl.so"; then
+-        cf_openssl_basedir="${dirs}"
+-        cf_openssl_libdir="${cf_openssl_basedir}/lib"
+-        break
+-      fi
+-    done
+-    unset dirs
+-  fi
+-fi
+-if test ! -z "$cf_openssl_basedir"; then
+-  if test -f "${cf_openssl_basedir}/include/openssl/opensslv.h" && test -f "${cf_openssl_libdir}/libssl.so"; then
+-    SSL_INCLUDES="-I${cf_openssl_basedir}/include"
+-    SSL_LIBS="-L${cf_openssl_libdir}"
+-  else
+-        cf_openssl_basedir=""
+-    cf_openssl_libdir=""
+-  fi
+-else
+-    if test -f "/usr/include/openssl/opensslv.h" ; then
+-    cf_openssl_basedir="/usr"
+-    cf_openssl_libdir="/usr/lib"
+-  fi
+-fi
+-SSL_INCLUDES="${SSL_INCLUDES} -DOPENSSL_API_COMPAT=0x10000000L"
+-
+-if test ! -z "$cf_openssl_basedir"; then
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $cf_openssl_basedir" >&5
+-printf "%s\n" "$cf_openssl_basedir" >&6; }
+-else
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+-printf "%s\n" "not found" >&6; }
+-  as_fn_error 1 "OpenSSL is required." "$LINENO" 5
+-fi
+-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for path to OpenSSL Lib" >&5
+-printf %s "checking for path to OpenSSL Lib... " >&6; }
+-
+-
+-# Check whether --with-openssl was given.
+-if test ${with_openssl+y}
+-then :
+-  withval=$with_openssl; with_openssl_path=$withval
+-else $as_nop
+-  with_openssl_path=auto
+-fi
+-
+-
+-if test ! -z "${cf_openssl_libdir}"; then
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${cf_openssl_libdir}" >&5
+-printf "%s\n" "${cf_openssl_libdir}" >&6; }
+-else
+-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: not found" >&5
+-printf "%s\n" "not found" >&6; }
+-  as_fn_error 1 "OpenSSL is required." "$LINENO" 5
+-fi
+-SSL_LIBDIR="${cf_openssl_libdir}"
+-unset cf_openssl_basedir
+-unset cf_openssl_libdir
++SSL_INCLUDES="-I@openssl-include@ -DOPENSSL_API_COMPAT=0x10000000L"
++SSL_LIBS="-L@openssl-lib@"
+ 
+ save_CXX="$CXX"
+ CXX="$CXX $SSL_INCLUDES"

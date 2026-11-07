@@ -1,0 +1,109 @@
+diff --git a/libsofia-sip-ua-glib/su-glib/Makefile.am b/libsofia-sip-ua-glib/su-glib/Makefile.am
+index 6f54d34..c5bfd82 100644
+--- a/libsofia-sip-ua-glib/su-glib/Makefile.am
++++ b/libsofia-sip-ua-glib/su-glib/Makefile.am
+@@ -20,12 +20,12 @@ AM_CPPFLAGS =		-I$(S_BASE)/su -I$(B_BASE)/su $(GLIB_CFLAGS) \
+ 
+ noinst_LTLIBRARIES = 	libsu-glib.la
+ 
+-check_PROGRAMS = 	su_source_test torture_su_glib_timer
++check_PROGRAMS =
+ 
+ # ----------------------------------------------------------------------
+ # Tests
+ 
+-TESTS = 		su_source_test torture_su_glib_timer
++TESTS =
+ 
+ # ----------------------------------------------------------------------
+ # Rules for building the targets
+diff --git a/libsofia-sip-ua/nta/Makefile.am b/libsofia-sip-ua/nta/Makefile.am
+index c450fd1..4f322c3 100644
+--- a/libsofia-sip-ua/nta/Makefile.am
++++ b/libsofia-sip-ua/nta/Makefile.am
+@@ -26,9 +26,9 @@ AM_CPPFLAGS = 		-I$(srcdir)/../ipt -I../ipt \
+ noinst_LTLIBRARIES = 	libnta.la
+ 
+ check_PROGRAMS = 	check_nta test_nta_api test_nta portbind
+-dist_noinst_SCRIPTS =	run_test_nta_api run_test_nta
++dist_noinst_SCRIPTS =	run_test_nta_api
+ 
+-TESTS =			run_check_nta run_test_nta_api run_test_nta
++TESTS =			run_test_nta_api
+ 
+ TESTS_ENVIRONMENT =	$(SHELL)
+ 
+diff --git a/libsofia-sip-ua/nua/Makefile.am b/libsofia-sip-ua/nua/Makefile.am
+index 6b6dfaa..73ffd70 100644
+--- a/libsofia-sip-ua/nua/Makefile.am
++++ b/libsofia-sip-ua/nua/Makefile.am
+@@ -17,8 +17,8 @@ check_PROGRAMS =
+ TESTS =
+ 
+ if HAVE_CHECK
+-check_PROGRAMS +=	check_nua
+-TESTS += 		check_nua
++check_PROGRAMS +=
++TESTS +=
+ endif
+ 
+ # ----------------------------------------------------------------------
+diff --git a/libsofia-sip-ua/su/Makefile.am b/libsofia-sip-ua/su/Makefile.am
+index db3a331..0a31c72 100644
+--- a/libsofia-sip-ua/su/Makefile.am
++++ b/libsofia-sip-ua/su/Makefile.am
+@@ -20,7 +20,7 @@ check_PROGRAMS = 	torture_su torture_su_port \
+ 			torture_su_alloc torture_su_time torture_su_tag \
+ 			test_htable test_htable2 torture_rbtree torture_heap \
+ 			test_memmem torture_su_bm \
+-			torture_su_root torture_su_timer \
++			torture_su_timer \
+ 			test_su su_proxy test_poll $(OSXPROGS)
+ 
+ # ----------------------------------------------------------------------
+@@ -30,8 +30,8 @@ TESTS = 		torture_su torture_su_port \
+ 			torture_su_alloc torture_su_time torture_su_tag \
+ 			test_htable test_htable2 torture_rbtree torture_heap \
+ 			test_memmem torture_su_bm \
+-			torture_su_root torture_su_timer \
+-			run_addrinfo run_localinfo run_test_su \
++			torture_su_timer \
++			run_localinfo run_test_su \
+ 			$(OSXTESTS)
+ 
+ # ----------------------------------------------------------------------
+@@ -98,7 +98,7 @@ LDADD = 		libsu.la
+ # Install and distribution rules
+ 
+ EXTRA_DIST += 		su.docs \
+-			run_addrinfo run_localinfo run_test_su
++			run_localinfo run_test_su
+ 
+ dist_pkgdata_SCRIPTS = 	tag_dll.awk
+ 
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index cabc2b5..0184017 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -5,8 +5,8 @@
+ # Contact: Pekka Pessi <pekka.pessi@nokia.com>
+ # Licensed under LGPL. See file COPYING.
+ 
+-TESTS = test_nua
+-check_PROGRAMS = test_nua
++TESTS =
++check_PROGRAMS =
+ 
+ EXTRA_DIST = check_sofia.h check_sofia.c suite_for_nua.c
+ 
+@@ -33,8 +33,8 @@ libtestproxy_a_SOURCES = test_proxy.h test_proxy.c
+ libtestnat_a_SOURCES =	test_nat.h test_nat.c test_nat_tags.c
+ 
+ if HAVE_CHECK
+-TESTS += check_dlopen_sofia check_sofia
+-check_PROGRAMS += check_dlopen_sofia check_sofia
++TESTS += check_dlopen_sofia
++check_PROGRAMS += check_dlopen_sofia
+ endif
+ 
+ check_sofia_CFLAGS = @CHECK_CFLAGS@

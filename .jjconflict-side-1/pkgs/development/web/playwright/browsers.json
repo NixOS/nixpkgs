@@ -1,0 +1,28 @@
+{
+  "comment": "This file is kept up to date via update.sh",
+  "browsers": {
+    "chromium": {
+      "revision": "1243",
+      "browserVersion": "153.0.8010.12",
+      "title": "Chrome for Testing"
+    },
+    "chromium-headless-shell": {
+      "revision": "1243",
+      "browserVersion": "153.0.8010.12",
+      "title": "Chrome Headless Shell"
+    },
+    "firefox": {
+      "revision": "1543",
+      "browserVersion": "155.0",
+      "title": "Firefox"
+    },
+    "webkit": {
+      "revision": "2359",
+      "browserVersion": "26.6",
+      "title": "WebKit"
+    },
+    "ffmpeg": {
+      "revision": "1011"
+    }
+  }
+}

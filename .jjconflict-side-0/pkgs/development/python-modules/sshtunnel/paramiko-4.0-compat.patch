@@ -1,0 +1,117 @@
+commit 46d08c8eefc18d22e9d893a627cc6d73b43cdb9a
+Author: Martin Weinelt <hexa@gaia.lossy.network>
+Date:   Mon Aug 11 00:48:21 2025 +0200
+
+    sshtunnel: remove DSA support
+    
+    The support for DSA keys was removed[1] in Paramiko 4.0.
+    
+    [1] https://www.paramiko.org/changelog.html#4.0.0
+
+diff --git a/README.rst b/README.rst
+index 7400816..ff27733 100644
+--- a/README.rst
++++ b/README.rst
+@@ -255,9 +255,9 @@ CLI usage
+       -k SSH_HOST_KEY, --ssh_host_key SSH_HOST_KEY
+                             Gateway's host key
+       -K KEY_FILE, --private_key_file KEY_FILE
+-                            RSA/DSS/ECDSA private key file
++                            RSA/ECDSA private key file
+       -S KEY_PASSWORD, --private_key_password KEY_PASSWORD
+-                            RSA/DSS/ECDSA private key password
++                            RSA/ECDSA private key password
+       -t, --threaded        Allow concurrent connections to each tunnel
+       -v, --verbose         Increase output verbosity (default: ERROR)
+       -V, --version         Show version number and quit
+diff --git a/sshtunnel.py b/sshtunnel.py
+index c48e330..e6442da 100644
+--- a/sshtunnel.py
++++ b/sshtunnel.py
+@@ -1090,7 +1090,6 @@ class SSHTunnelForwarder(object):
+             host_pkey_directories = [DEFAULT_SSH_DIRECTORY]
+ 
+         paramiko_key_types = {'rsa': paramiko.RSAKey,
+-                              'dsa': paramiko.DSSKey,
+                               'ecdsa': paramiko.ECDSAKey}
+         if hasattr(paramiko, 'Ed25519Key'):
+             # NOQA: new in paramiko>=2.2: http://docs.paramiko.org/en/stable/api/keys.html#module-paramiko.ed25519key
+@@ -1286,7 +1285,7 @@ class SSHTunnelForwarder(object):
+ 
+         Arguments:
+             pkey_file (str):
+-                File containing a private key (RSA, DSS or ECDSA)
++                File containing a private key (RSA or ECDSA)
+         Keyword Arguments:
+             pkey_password (Optional[str]):
+                 Password to decrypt the private key
+@@ -1295,7 +1294,7 @@ class SSHTunnelForwarder(object):
+             paramiko.Pkey
+         """
+         ssh_pkey = None
+-        key_types = (paramiko.RSAKey, paramiko.DSSKey, paramiko.ECDSAKey)
++        key_types = (paramiko.RSAKey, paramiko.ECDSAKey)
+         if hasattr(paramiko, 'Ed25519Key'):
+             # NOQA: new in paramiko>=2.2: http://docs.paramiko.org/en/stable/api/keys.html#module-paramiko.ed25519key
+             key_types += (paramiko.Ed25519Key, )
+@@ -1805,7 +1804,7 @@ def _parse_arguments(args=None):
+         dest='ssh_private_key',
+         metavar='KEY_FILE',
+         type=str,
+-        help='RSA/DSS/ECDSA private key file'
++        help='RSA/ECDSA private key file'
+     )
+ 
+     parser.add_argument(
+@@ -1813,7 +1812,7 @@ def _parse_arguments(args=None):
+         dest='ssh_private_key_password',
+         metavar='KEY_PASSWORD',
+         type=str,
+-        help='RSA/DSS/ECDSA private key password'
++        help='RSA/ECDSA private key password'
+     )
+ 
+     parser.add_argument(
+diff --git a/tests/test_forwarder.py b/tests/test_forwarder.py
+index 40662d0..02af175 100644
+--- a/tests/test_forwarder.py
++++ b/tests/test_forwarder.py
+@@ -81,11 +81,9 @@ open_tunnel = partial(
+ 
+ SSH_USERNAME = get_random_string()
+ SSH_PASSWORD = get_random_string()
+-SSH_DSS = b'\x44\x78\xf0\xb9\xa2\x3c\xc5\x18\x20\x09\xff\x75\x5b\xc1\xd2\x6c'
+ SSH_RSA = b'\x60\x73\x38\x44\xcb\x51\x86\x65\x7f\xde\xda\xa2\x2b\x5a\x57\xd5'
+ ECDSA = b'\x25\x19\xeb\x55\xe6\xa1\x47\xff\x4f\x38\xd2\x75\x6f\xa5\xd5\x60'
+ FINGERPRINTS = {
+-    'ssh-dss': SSH_DSS,
+     'ssh-rsa': SSH_RSA,
+     'ecdsa-sha2-nistp256': ECDSA,
+ }
+@@ -1202,7 +1200,7 @@ class AuxiliaryTest(unittest.TestCase):
+                 '-P={0}'.format(SSH_PASSWORD),  # GW password
+                 '-R', '10.0.0.1:8080', '10.0.0.2:8080',  # remote bind list
+                 '-L', ':8081', ':8082',  # local bind list
+-                '-k={0}'.format(SSH_DSS),  # hostkey
++                '-k={0}'.format(SSH_RSA),  # hostkey
+                 '-K={0}'.format(__file__),  # pkey file
+                 '-S={0}'.format(SSH_PASSWORD),  # pkey password
+                 '-t',  # concurrent connections (threaded)
+@@ -1232,7 +1230,7 @@ class AuxiliaryTest(unittest.TestCase):
+              '--password={0}'.format(SSH_PASSWORD),  # GW password
+              '--remote_bind_address', '10.0.0.1:8080', '10.0.0.2:8080',
+              '--local_bind_address', ':8081', ':8082',  # local bind list
+-             '--ssh_host_key={0}'.format(SSH_DSS),  # hostkey
++             '--ssh_host_key={0}'.format(SSH_RSA),  # hostkey
+              '--private_key_file={0}'.format(__file__),  # pkey file
+              '--private_key_password={0}'.format(SSH_PASSWORD),
+              '--threaded',  # concurrent connections (threaded)
+@@ -1254,7 +1252,7 @@ class AuxiliaryTest(unittest.TestCase):
+                              [('10.0.0.1', 8080), ('10.0.0.2', 8080)])
+         self.assertListEqual(parser['local_bind_addresses'],
+                              [('', 8081), ('', 8082)])
+-        self.assertEqual(parser['ssh_host_key'], str(SSH_DSS))
++        self.assertEqual(parser['ssh_host_key'], str(SSH_RSA))
+         self.assertEqual(parser['ssh_private_key'], __file__)
+         self.assertEqual(parser['ssh_private_key_password'], SSH_PASSWORD)
+         self.assertTrue(parser['threaded'])

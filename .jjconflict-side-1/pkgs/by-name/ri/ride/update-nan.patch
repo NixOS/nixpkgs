@@ -1,0 +1,31 @@
+diff --git a/package-lock.json b/package-lock.json
+index cc8b8bd..13b4bed 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -8190,9 +8190,10 @@
+       "dev": true
+     },
+     "node_modules/nan": {
+-      "version": "2.17.0",
+-      "resolved": "https://registry.npmjs.org/nan/-/nan-2.17.0.tgz",
+-      "integrity": "sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==",
++      "version": "2.24.0",
++      "resolved": "https://registry.npmjs.org/nan/-/nan-2.24.0.tgz",
++      "integrity": "sha512-Vpf9qnVW1RaDkoNKFUvfxqAbtI8ncb8OJlqZ9wwpXzWPEsvsB1nvdUi6oYrHIkQ1Y/tMDnr1h4nczS0VB9Xykg==",
++      "license": "MIT",
+       "optional": true
+     },
+     "node_modules/nanomatch": {
+@@ -18572,9 +18573,9 @@
+       "dev": true
+     },
+     "nan": {
+-      "version": "2.17.0",
+-      "resolved": "https://registry.npmjs.org/nan/-/nan-2.17.0.tgz",
+-      "integrity": "sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==",
++      "version": "2.24.0",
++      "resolved": "https://registry.npmjs.org/nan/-/nan-2.24.0.tgz",
++      "integrity": "sha512-Vpf9qnVW1RaDkoNKFUvfxqAbtI8ncb8OJlqZ9wwpXzWPEsvsB1nvdUi6oYrHIkQ1Y/tMDnr1h4nczS0VB9Xykg==",
+       "optional": true
+     },
+     "nanomatch": {

@@ -1,0 +1,62 @@
+From 3a891c0450c4968afbe76c594c22347354bd8834 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 3 Jan 2026 13:41:55 +0800
+Subject: [PATCH] Rename fsqrt to _fsqrt to avoid conflict
+
+---
+ mupen64plus-core/src/r4300/hacktarux_dynarec/assemble.h   | 2 +-
+ .../src/r4300/hacktarux_dynarec/hacktarux_dynarec.c       | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/mupen64plus-core/src/r4300/hacktarux_dynarec/assemble.h b/mupen64plus-core/src/r4300/hacktarux_dynarec/assemble.h
+index 8161292..e256dd9 100644
+--- a/mupen64plus-core/src/r4300/hacktarux_dynarec/assemble.h
++++ b/mupen64plus-core/src/r4300/hacktarux_dynarec/assemble.h
+@@ -1650,7 +1650,7 @@ static INLINE void fchs(void)
+ }
+ 
+ 
+-static INLINE void fsqrt(void)
++static INLINE void _fsqrt(void)
+ {
+    put8(0xD9);
+    put8(0xFA);
+diff --git a/mupen64plus-core/src/r4300/hacktarux_dynarec/hacktarux_dynarec.c b/mupen64plus-core/src/r4300/hacktarux_dynarec/hacktarux_dynarec.c
+index 89fb982..2fc70d1 100644
+--- a/mupen64plus-core/src/r4300/hacktarux_dynarec/hacktarux_dynarec.c
++++ b/mupen64plus-core/src/r4300/hacktarux_dynarec/hacktarux_dynarec.c
+@@ -6317,13 +6317,13 @@ void gensqrt_d(void)
+ #ifdef __x86_64__
+    mov_xreg64_m64rel(RAX, (uint64_t *)(&reg_cop1_double[dst->f.cf.fs]));
+    fld_preg64_qword(RAX);
+-   fsqrt();
++   _fsqrt();
+    mov_xreg64_m64rel(RAX, (uint64_t *)(&reg_cop1_double[dst->f.cf.fd]));
+    fstp_preg64_qword(RAX);
+ #else
+    mov_eax_memoffs32((unsigned int *)(&reg_cop1_double[dst->f.cf.fs]));
+    fld_preg32_qword(EAX);
+-   fsqrt();
++   _fsqrt();
+    mov_eax_memoffs32((unsigned int *)(&reg_cop1_double[dst->f.cf.fd]));
+    fstp_preg32_qword(EAX);
+ #endif
+@@ -7301,13 +7301,13 @@ void gensqrt_s(void)
+ #ifdef __x86_64__
+    mov_xreg64_m64rel(RAX, (uint64_t *)(&reg_cop1_simple[dst->f.cf.fs]));
+    fld_preg64_dword(RAX);
+-   fsqrt();
++   _fsqrt();
+    mov_xreg64_m64rel(RAX, (uint64_t *)(&reg_cop1_simple[dst->f.cf.fd]));
+    fstp_preg64_dword(RAX);
+ #else
+    mov_eax_memoffs32((unsigned int *)(&reg_cop1_simple[dst->f.cf.fs]));
+    fld_preg32_dword(EAX);
+-   fsqrt();
++   _fsqrt();
+    mov_eax_memoffs32((unsigned int *)(&reg_cop1_simple[dst->f.cf.fd]));
+    fstp_preg32_dword(EAX);
+ #endif
+-- 
+2.52.0
+

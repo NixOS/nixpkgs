@@ -1,0 +1,86 @@
+{
+  lib,
+  buildPythonPackage,
+  cliff,
+  fetchFromGitHub,
+  keystoneauth1,
+  openstacksdk,
+  oslo-i18n,
+  oslo-utils,
+  pbr,
+  requests,
+  requests-mock,
+  setuptools,
+  stdenv,
+  stestrCheckHook,
+  stevedore,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "osc-lib";
+  version = "4.7.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "osc-lib";
+    tag = finalAttrs.version;
+    hash = "sha256-GVjzDPmASEItGsZCjH+tjgP8bRf5WgEOoDr+uOhQtws=";
+  };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include osc_lib *" > MANIFEST.in
+  '';
+
+  build-system = [
+    pbr
+    setuptools
+  ];
+
+  dependencies = [
+    cliff
+    keystoneauth1
+    openstacksdk
+    oslo-i18n
+    oslo-utils
+    requests
+    stevedore
+  ];
+
+  nativeCheckInputs = [
+    requests-mock
+    stestrCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+  ];
+
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
+
+  meta = {
+    description = "OpenStackClient Library";
+    homepage = "https://github.com/openstack/osc-lib";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
+  };
+})

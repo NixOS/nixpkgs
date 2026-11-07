@@ -1,0 +1,39 @@
+From 5165992002f211fe85175bcbb4f9a60d5e90fdac Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Sun, 25 Jan 2026 02:05:23 +0100
+Subject: [PATCH] Fix pytest 9 compatibility
+
+The path argument has been deprecated in favor of the collection_path
+argument beecause the former uses the deprecated py library, where the
+latter uses pathlib.
+---
+ tests/linux/conftest.py   | 2 +-
+ tests/windows/conftest.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/linux/conftest.py b/tests/linux/conftest.py
+index 038203f..3283724 100644
+--- a/tests/linux/conftest.py
++++ b/tests/linux/conftest.py
+@@ -8,7 +8,7 @@
+ 
+ 
+ # ignore all tests in this folder if not on linux
+-def pytest_ignore_collect(path, config):
++def pytest_ignore_collect(collection_path, config):
+     if not sys.platform.startswith("linux"):
+         return True
+ 
+diff --git a/tests/windows/conftest.py b/tests/windows/conftest.py
+index 492d7d7..e0264e8 100644
+--- a/tests/windows/conftest.py
++++ b/tests/windows/conftest.py
+@@ -4,7 +4,7 @@
+ 
+ 
+ # ignore all tests in this folder if not on windows
+-def pytest_ignore_collect(path, config):
++def pytest_ignore_collect(collection_path, config):
+     if sys.platform not in ("win32", "cygwin"):
+         return True
+ 

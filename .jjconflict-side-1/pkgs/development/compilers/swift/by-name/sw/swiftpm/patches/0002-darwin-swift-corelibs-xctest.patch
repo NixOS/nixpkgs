@@ -1,0 +1,102 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:57:10 -0500
+Subject: [PATCH 02/11] darwin-swift-corelibs-xctest
+
+---
+ .../Commands/Utilities/TestingSupport.swift   | 65 -------------------
+ 1 file changed, 65 deletions(-)
+
+diff --git a/Sources/Commands/Utilities/TestingSupport.swift b/Sources/Commands/Utilities/TestingSupport.swift
+index 81b329613..536babca5 100644
+--- a/Sources/Commands/Utilities/TestingSupport.swift
++++ b/Sources/Commands/Utilities/TestingSupport.swift
+@@ -29,46 +29,6 @@ import func TSCBasic.withTemporaryFile
+ /// Note: In the long term this should be factored into a reusable module that
+ /// can run and report results on tests from both CLI and libSwiftPM API.
+ enum TestingSupport {
+-    /// Locates XCTestHelper tool inside the libexec directory and bin directory.
+-    /// Note: It is a fatalError if we are not able to locate the tool.
+-    ///
+-    /// - Returns: Path to XCTestHelper tool.
+-    static func xctestHelperPath(swiftCommandState: SwiftCommandState) throws -> AbsolutePath {
+-        var triedPaths = [AbsolutePath]()
+-
+-        func findXCTestHelper(swiftBuildPath: AbsolutePath) -> AbsolutePath? {
+-            // XCTestHelper tool is installed in libexec.
+-            let maybePath = swiftBuildPath.parentDirectory.parentDirectory.appending(
+-                components: "libexec", "swift", "pm", "swiftpm-xctest-helper"
+-            )
+-            if swiftCommandState.fileSystem.isFile(maybePath) {
+-                return maybePath
+-            } else {
+-                triedPaths.append(maybePath)
+-                return nil
+-            }
+-        }
+-
+-        if let firstCLIArgument = CommandLine.arguments.first {
+-            let runningSwiftBuildPath = try AbsolutePath(validating: firstCLIArgument, relativeTo: swiftCommandState.originalWorkingDirectory)
+-            if let xctestHelperPath = findXCTestHelper(swiftBuildPath: runningSwiftBuildPath) {
+-                return xctestHelperPath
+-            }
+-        }
+-
+-        // This will be true during swiftpm development or when using swift.org toolchains.
+-        let xcodePath = try AsyncProcess.checkNonZeroExit(args: "/usr/bin/xcode-select", "--print-path").spm_chomp()
+-        let installedSwiftBuildPath = try AsyncProcess.checkNonZeroExit(
+-            args: "/usr/bin/xcrun", "--find", "swift-build",
+-            environment: ["DEVELOPER_DIR": xcodePath]
+-        ).spm_chomp()
+-        if let xctestHelperPath = findXCTestHelper(swiftBuildPath: try AbsolutePath(validating: installedSwiftBuildPath)) {
+-            return xctestHelperPath
+-        }
+-
+-        throw InternalError("XCTestHelper binary not found, tried \(triedPaths.map { $0.pathString }.joined(separator: ", "))")
+-    }
+-
+     static func getTestSuites(
+         in testProducts: [BuiltTestProduct],
+         swiftCommandState: SwiftCommandState,
+@@ -112,30 +72,6 @@ enum TestingSupport {
+     ) throws -> [TestSuite] {
+         // Run the correct tool.
+         var args = [String]()
+-        #if os(macOS)
+-        let data: String = try withTemporaryFile { tempFile in
+-            args = [try Self.xctestHelperPath(swiftCommandState: swiftCommandState).pathString, path.pathString, tempFile.path.pathString]
+-            let env = try Self.constructTestEnvironment(
+-                toolchain: try swiftCommandState.getTargetToolchain(),
+-                destinationBuildParameters: swiftCommandState.buildParametersForTest(
+-                    enableCodeCoverage: enableCodeCoverage,
+-                    shouldSkipBuilding: shouldSkipBuilding,
+-                    experimentalTestOutput: experimentalTestOutput
+-                ).productsBuildParameters,
+-                sanitizers: sanitizers,
+-                library: .xctest
+-            )
+-            try Self.runProcessWithExistenceCheck(
+-                path: path,
+-                fileSystem: swiftCommandState.fileSystem,
+-                args: args,
+-                env: env
+-            )
+-
+-            // Read the temporary file's content.
+-            return try swiftCommandState.fileSystem.readFileContents(AbsolutePath(tempFile.path))
+-        }
+-        #else
+         let env = try Self.constructTestEnvironment(
+             toolchain: try swiftCommandState.getTargetToolchain(),
+             destinationBuildParameters: swiftCommandState.buildParametersForTest(
+@@ -152,7 +88,6 @@ enum TestingSupport {
+             args: args,
+             env: env
+         )
+-        #endif
+         // Parse json and return TestSuites.
+         return try TestSuite.parse(jsonString: data, context: args.joined(separator: " "))
+     }
+-- 
+2.54.0
+

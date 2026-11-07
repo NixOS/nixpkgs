@@ -1,0 +1,18 @@
+diff --git a/service.py b/service.py
+index 5d588682..99123b4b 100644
+--- a/service.py
++++ b/service.py
+@@ -323,12 +323,7 @@ if not sys.argv[2]:
+     xbmcaddon.Addon().openSettings()
+     exit()
+ 
+-# Use the chosen resolver while forcing to use youtube_dl on legacy python 2 systems (dlp is python 3.6+)
+-if xbmcplugin.getSetting(int(sys.argv[1]),"resolver") == "0" or sys.version_info[0] == 2:
+-    from youtube_dl import YoutubeDL
+-else:
+-   # import lib.yt_dlp as yt_dlp
+-    from yt_dlp import YoutubeDL
++from yt_dlp import YoutubeDL
+ 
+ # patch broken strptime (see above)
+ patch_strptime()

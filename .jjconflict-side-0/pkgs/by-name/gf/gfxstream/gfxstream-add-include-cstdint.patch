@@ -1,0 +1,49 @@
+diff --git a/host/BorrowedImage.h b/host/BorrowedImage.h
+index ed2890568..51ea2b6b1 100644
+--- a/host/BorrowedImage.h
++++ b/host/BorrowedImage.h
+@@ -12,6 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#include <cstdint>
+ #pragma once
+ 
+ namespace gfxstream {
+diff --git a/host/compressedTextureFormats/AstcCpuDecompressor.h b/host/compressedTextureFormats/AstcCpuDecompressor.h
+index 4823ee255..3af0bdc64 100644
+--- a/host/compressedTextureFormats/AstcCpuDecompressor.h
++++ b/host/compressedTextureFormats/AstcCpuDecompressor.h
+@@ -15,6 +15,7 @@
+ 
+ #include <memory>
+ #include <string>
++#include <cstdint>
+ 
+ namespace gfxstream {
+ namespace vk {
+diff --git a/host/magma/DrmContext.h b/host/magma/DrmContext.h
+index db3ef45e4..5030c7dd6 100644
+--- a/host/magma/DrmContext.h
++++ b/host/magma/DrmContext.h
+@@ -16,6 +16,7 @@
+ 
+ #include <memory>
+ #include <optional>
++#include <cstdint>
+ 
+ #include "aemu/base/Compiler.h"
+ 
+diff --git a/host/vulkan/BufferVk.h b/host/vulkan/BufferVk.h
+index 9016fd745..a8a3fe3eb 100644
+--- a/host/vulkan/BufferVk.h
++++ b/host/vulkan/BufferVk.h
+@@ -14,6 +14,7 @@
+ 
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace gfxstream {
+ namespace vk {
+

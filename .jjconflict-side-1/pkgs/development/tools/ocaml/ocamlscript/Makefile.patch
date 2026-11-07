@@ -1,0 +1,67 @@
+diff --git a/Makefile b/Makefile
+index 894e94d..9adc44b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ ifndef BINDIR
+ endif
+ export BINDIR
+ 
+-PACKS = unix str
++PACKS = unix str findlib
+ # PP = camlp4o -I . -parser pa_opt.cmo
+ # export PP
+ 
+diff --git a/main.ml b/main.ml
+index 288526a..b67c5e9 100644
+--- a/main.ml
++++ b/main.ml
+@@ -247,6 +247,11 @@ let write_header ~pos ~source ~source_option ~verbose ~prog_file lines =
+ 		    Sys.getcwd ())
+     | `File script_name -> "", get_dir script_name in
+ 
++  let findlibdir =
++    Filename.(
++      concat (Findlib.package_directory "findlib") parent_dir_name
++    ) in
++
+   let file, oc = Filename.open_temp_file "meta" ".ml" in
+   fprintf oc "\
+ #%i %S;;
+@@ -255,6 +260,7 @@ let () =
+   try Topdirs.dir_directory (Sys.getenv \"OCAML_TOPLEVEL_PATH\")
+   with Not_found -> ()
+ ;;
++#directory \"%s\";;
+ #use \"topfind\";;
+ #require \"ocamlscript\";;
+ Ocamlscript.Common.verbose := %s;;
+@@ -263,7 +269,7 @@ Ocamlscript.Common.script_dir := %S;;
+ open Ocamlscript;;
+ open Utils;;
+ #%i %S;;\n"
+-    pos source verbose script_dir extra_args trash pos source;
++    pos source findlibdir verbose script_dir extra_args trash pos source;
+ 
+   List.iter (output_line oc) lines;
+ 
+@@ -550,6 +556,7 @@ let main () =
+       exit compilation_status
+ 
+ let _ =
++  Findlib.init ();
+   try main ()
+   with Failure s ->
+     eprintf "ocamlscript: %s\n%!" s;
+diff --git a/ocaml.ml b/ocaml.ml
+index a1824c6..b8f287e 100644
+--- a/ocaml.ml
++++ b/ocaml.ml
+@@ -14,7 +14,7 @@ let ocamlfind = ref "ocamlfind"
+ let packs = ref []         (* findlib packages *)
+ let sources = ref []       (* extra sources *)
+ let use_ocamllex = ref false (* preprocess with ocamllex before camlp4 *)
+-let use_camlp4 = ref true  (* by default camlp4 is used *)
++let use_camlp4 = ref false  (* by default camlp4 is not used *)
+ let use_ocamlc = ref false (* by default we want native code *)
+ let use_ocamlfind = ref false (* used only if necessary *)
+ let revised = ref false    (* use this to use the revised syntax *)

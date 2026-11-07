@@ -1,0 +1,85 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  getopt,
+  ip2location-c,
+  openssl,
+  perl,
+  fetchpatch,
+  libmaxminddb ? null,
+  geolite-legacy ? null,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ipv6calc";
+  version = "4.4.0";
+
+  src = fetchFromGitHub {
+    owner = "pbiering";
+    repo = "ipv6calc";
+    rev = finalAttrs.version;
+    sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
+  };
+
+  buildInputs = [
+    libmaxminddb
+    geolite-legacy
+    getopt
+    ip2location-c
+    openssl
+    perl
+  ];
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/pbiering/ipv6calc/commit/9b6aebd3690d93b6c2f9efa9346ec72540b1a718.patch";
+      hash = "sha256-Y/XBMWdG2/Pfr/vZ2+RGYGj2JS3mWJwQGkXnKvXHArg=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs *.sh */*.sh
+    for i in {,databases/}lib/Makefile.in; do
+      substituteInPlace $i --replace "/sbin/ldconfig" "ldconfig"
+    done
+  '';
+
+  configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--libdir=${placeholder "out"}/lib"
+    "--datadir=${placeholder "out"}/share"
+    "--disable-bundled-getopt"
+    "--disable-bundled-md5"
+    "--disable-dynamic-load"
+    "--enable-shared"
+  ]
+  ++ lib.optionals (libmaxminddb != null) [
+    "--enable-mmdb"
+  ]
+  ++ lib.optionals (geolite-legacy != null) [
+    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+  ]
+  ++ lib.optionals (ip2location-c != null) [
+    "--enable-ip2location"
+  ];
+
+  enableParallelBuilding = true;
+
+  meta = {
+    description = "Calculate/manipulate (not only) IPv6 addresses";
+    longDescription = ''
+      ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
+      is able to do other tricky things. Intentions were converting a given
+      IPv6 address into compressed format, converting a given IPv6 address into
+      the same format like shown in /proc/net/if_inet6 and (because it was not
+      difficult) migrating the Perl program ip6_int into.
+      Now only one utility is needed to do a lot.
+    '';
+    homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+  };
+})

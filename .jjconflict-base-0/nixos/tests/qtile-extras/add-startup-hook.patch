@@ -1,0 +1,22 @@
+--- a/config.py	2025-08-03 00:37:13.058374602 +0200
++++ b/config.py	2025-08-03 00:45:51.869382363 +0200
+@@ -24,10 +24,18 @@
+ # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ # SOFTWARE.
+ 
+-from libqtile import bar, layout, qtile, widget
++from libqtile import bar, layout, qtile, widget, hook
+ from libqtile.config import Click, Drag, Group, Key, Match, Screen
+ from libqtile.lazy import lazy
+ from libqtile.utils import guess_terminal
++from libqtile.log_utils import logger
++
++
++@hook.subscribe.startup
++def print_ready():
++    logger.warning("ready!") # warning to make it always visible
++
++
+ 
+ mod = "mod4"
+ terminal = guess_terminal()

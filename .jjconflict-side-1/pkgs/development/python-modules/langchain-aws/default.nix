@@ -1,0 +1,117 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  boto3,
+  langchain-core,
+  numpy,
+  pydantic,
+
+  # tests
+  langchain,
+
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
+
+  # tests
+  langchain-openai,
+  langchain-tests,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+
+  # passthru
+  gitUpdater,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "langchain-aws";
+  version = "1.7.8";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain-aws";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-WIa2LWG21WEV4O58K172FGMOpJLfdHj/8+UWabGBKdw=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--snapshot-warn-unused" ""
+  '';
+
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
+
+  build-system = [ hatchling ];
+
+  dependencies = [
+    boto3
+    langchain-core
+    numpy
+    pydantic
+  ];
+
+  pythonRelaxDeps = [
+    # Boto3 spec has outstripped the version requirement
+    "boto3"
+  ];
+
+  optional-dependencies = {
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
+      langchain-anthropic
+    ];
+  };
+
+  nativeCheckInputs = [
+    anthropic
+    langchain
+    langchain-openai
+    langchain-tests
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    # Requires aws-bedrock-token-generator (not packaged)
+    "test_bedrock_api_key_provider"
+    "test_installed_provider_mints_token_when_called"
+    # botocore added new content block keys
+    "test__bedrock_content_block_keys_match_botocore"
+  ];
+
+  pythonImportsCheck = [ "langchain_aws" ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-aws==";
+      ignoredVersions = "a|b|dev|rc";
+    };
+  };
+
+  meta = {
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
+    description = "Build LangChain application on AWS";
+    homepage = "https://github.com/langchain-ai/langchain-aws/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
+  };
+})

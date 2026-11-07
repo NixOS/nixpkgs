@@ -1,0 +1,32 @@
+--- a/src/gnuplot/gnuplot.lisp
++++ b/src/gnuplot/gnuplot.lisp
+@@ -24,8 +24,13 @@
+ 
+ (in-package :math/gnuplot)
+ 
+-(defparameter *default-gnuplot-direcroty*
+-  (ensure-directories-exist #P"~/gnuplot/"))
++
++
++(defun default-gnuplot-directory ()
++  (let ((directory (merge-pathnames
++                    (make-pathname :directory '(:relative "gnuplot"))
++                    (user-homedir-pathname))))
++    (ensure-directories-exist directory)))
+ 
+ ;;;; (directory-namestring *default-gnuplot-direcroty*)
+ 
+@@ -33,9 +38,9 @@
+   (assert (stringp f-name))
+   (assert (stringp f-ext))
+   (if (string= "" f-ext)
+-      (concatenate 'string (directory-namestring *default-gnuplot-direcroty*)
++      (concatenate 'string (directory-namestring (default-gnuplot-directory))
+                    f-name f-ext)
+-      (concatenate 'string (directory-namestring *default-gnuplot-direcroty*)
++      (concatenate 'string (directory-namestring (default-gnuplot-directory))
+                    f-name "." f-ext)))
+ 
+ (defun find-font-family (&key (family "Times New Roman"))
+
+Diff finished.  Fri Mar 10 20:05:26 2023

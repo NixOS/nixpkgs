@@ -1,0 +1,130 @@
+From bfe0ff68d1b1c9601a7a4bf4b6ce8aded1ea0c9e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mark=C3=A9ta=20Cal=C3=A1bkov=C3=A1?=
+ <meggy.calabkova@gmail.com>
+Date: Wed, 24 Sep 2025 12:33:18 +0200
+Subject: [PATCH 1/2] use `asyncio.new_event_loop` in tests for compatibility
+ with Python 3.14
+
+---
+ tests/hamcrest_unit_test/core/future_test.py | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/tests/hamcrest_unit_test/core/future_test.py b/tests/hamcrest_unit_test/core/future_test.py
+index 7963d9e..147286e 100644
+--- a/tests/hamcrest_unit_test/core/future_test.py
++++ b/tests/hamcrest_unit_test/core/future_test.py
+@@ -40,13 +40,13 @@ async def test():
+                 await resolved(raise_exception()),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfActualIsNotAFuture(self):
+         async def test():
+             self.assert_does_not_match("Not a future", future_raising(TypeError), 23)
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfFutureIsNotDone(self):
+         future = asyncio.Future()
+@@ -69,7 +69,7 @@ async def test():
+                 expected_message, future_raising(TypeError), await resolved(raise_exception())
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testMatchesIfFutureHasASubclassOfTheExpectedException(self):
+         async def test():
+@@ -79,7 +79,7 @@ async def test():
+                 await resolved(raise_exception()),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfFutureDoesNotHaveException(self):
+         async def test():
+@@ -87,7 +87,7 @@ async def test():
+                 "No exception", future_raising(ValueError), await resolved(no_exception())
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchExceptionIfRegularExpressionDoesNotMatch(self):
+         async def test():
+@@ -102,7 +102,7 @@ async def test():
+                 await resolved(raise_exception()),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testMatchesRegularExpressionToStringifiedException(self):
+         async def test():
+@@ -118,7 +118,7 @@ async def test():
+                 await resolved(raise_exception(3, 1, 4)),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testMachesIfExceptionMatchesAdditionalMatchers(self):
+         async def test():
+@@ -128,7 +128,7 @@ async def test():
+                 await resolved(raise_exception_with_properties(prip="prop")),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfAdditionalMatchersDoesNotMatch(self):
+         async def test():
+@@ -143,7 +143,7 @@ async def test():
+                 await resolved(raise_exception_with_properties(prip="prop")),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfNeitherPatternOrMatcherMatch(self):
+         async def test():
+@@ -162,4 +162,4 @@ async def test():
+                 await resolved(raise_exception_with_properties(prip="prop")),
+             )
+ 
+-        asyncio.get_event_loop().run_until_complete(test())
++        asyncio.new_event_loop().run_until_complete(test())
+
+From 5f5ca0424cc9315504e8445cae2076e55764859b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mark=C3=A9ta=20Cal=C3=A1bkov=C3=A1?=
+ <meggy.calabkova@gmail.com>
+Date: Wed, 24 Sep 2025 12:58:33 +0200
+Subject: [PATCH 2/2] create loop in asyncio.Future
+
+---
+ tests/hamcrest_unit_test/core/future_test.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/hamcrest_unit_test/core/future_test.py b/tests/hamcrest_unit_test/core/future_test.py
+index 147286e..3ddde49 100644
+--- a/tests/hamcrest_unit_test/core/future_test.py
++++ b/tests/hamcrest_unit_test/core/future_test.py
+@@ -49,11 +49,11 @@ async def test():
+         asyncio.new_event_loop().run_until_complete(test())
+ 
+     def testDoesNotMatchIfFutureIsNotDone(self):
+-        future = asyncio.Future()
++        future = asyncio.Future(loop=asyncio.new_event_loop())
+         self.assert_does_not_match("Unresolved future", future_raising(TypeError), future)
+ 
+     def testDoesNotMatchIfFutureIsCancelled(self):
+-        future = asyncio.Future()
++        future = asyncio.Future(loop=asyncio.new_event_loop())
+         future.cancel()
+         self.assert_does_not_match("Cancelled future", future_raising(TypeError), future)
+ 
+

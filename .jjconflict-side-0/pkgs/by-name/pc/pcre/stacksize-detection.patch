@@ -1,0 +1,16 @@
+diff --git a/pcre_exec.c b/pcre_exec.c
+--- a/pcre_exec.c
++++ b/pcre_exec.c
+@@ -509,6 +509,12 @@
+                  (e.g. stopped by repeated call or recursion limit)
+ */
+ 
++#ifdef __GNUC__
++static int
++match(REGISTER PCRE_PUCHAR eptr, REGISTER const pcre_uchar *ecode,
++  PCRE_PUCHAR mstart, int offset_top, match_data *md, eptrblock *eptrb,
++  unsigned int rdepth) __attribute__((noinline,noclone));
++#endif
+ static int
+ match(REGISTER PCRE_PUCHAR eptr, REGISTER const pcre_uchar *ecode,
+   PCRE_PUCHAR mstart, int offset_top, match_data *md, eptrblock *eptrb,

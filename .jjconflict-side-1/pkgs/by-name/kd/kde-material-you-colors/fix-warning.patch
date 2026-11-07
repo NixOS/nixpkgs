@@ -1,0 +1,22 @@
+diff --git a/src/plasmoid/package/contents/ui/FullRepresentation.qml b/src/plasmoid/package/contents/ui/FullRepresentation.qml
+index 1b321c0..17e777e 100644
+--- a/src/plasmoid/package/contents/ui/FullRepresentation.qml
++++ b/src/plasmoid/package/contents/ui/FullRepresentation.qml
+@@ -29,7 +29,7 @@ ColumnLayout {
+ 
+     property string execName: 'kde-material-you-colors'
+     property string execPath: ""
+-    property string checkBackendCommand: 'ps -o user:256,pid,cmd -C ' + execName + ' --no-headers | grep -e "' + username + '" | grep -v "<defunct>" | grep -ve "--version" | awk \'{print $2}\''
++    property string checkBackendCommand: 'ps -o user:256,pid,cmd -C .kde-material-you-colors-wrapped --no-headers | grep -e "' + username + '" | grep -v "<defunct>" | grep -ve "--version" | awk \'{print $2}\''
+     property string startBackendCommand: execPath
+     property string autoStartBackendCommand: execPath + ' --autostart;' + execPath
+     property string backendVersionCommand: execPath + ' --version'
+@@ -644,7 +644,7 @@ ColumnLayout {
+                             type: Kirigami.MessageType.Error
+                             visible: !backendRunning
+ 
+-                            text: qsTr("Backend is not running. This Plasmoid requires <a href=\"https://github.com/luisbocanegra/kde-material-you-colors\">kde-material-you-colors</a> to be installed and running to work.")
++                            text: qsTr("Backend is not running.")
+ 
+                             onLinkActivated: link => Qt.openUrlExternally(link)
+ 

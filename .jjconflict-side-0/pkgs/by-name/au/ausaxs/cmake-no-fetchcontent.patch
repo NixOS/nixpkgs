@@ -1,0 +1,45 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,12 +48,7 @@
+ 		message(FATAL_ERROR "BS.thread_pool headers not found")
+ 	endif()
+ else()
+-	FetchContent_Declare(
+-		thread_pool
+-		GIT_REPOSITORY https://github.com/bshoshany/thread-pool
+-	)
+-	FetchContent_MakeAvailable(thread_pool)
+-	set(BS_THREAD_POOL_INCLUDE_DIR ${thread_pool_SOURCE_DIR}/include)
++	set(BS_THREAD_POOL_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/thread_pool/include)
+ endif()
+ 
+ if (POCKETFFT)
+@@ -63,13 +58,7 @@
+ 			message(FATAL_ERROR "pocketfft headers not found")
+ 		endif()
+ 	else()
+-		FetchContent_Declare(
+-			pocketfft
+-			GIT_REPOSITORY https://github.com/mreineck/pocketfft
+-			GIT_TAG c90e55b3d529f8efa40ed01a20de22405f45fc65 # the header-only C++ version lives on the "cpp" branch, which carries no tags
+-		)
+-		FetchContent_MakeAvailable(pocketfft)
+-		set(POCKETFFT_INCLUDE_DIR ${pocketfft_SOURCE_DIR})
++		set(POCKETFFT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/pocketfft)
+ 	endif()
+ 	add_compile_definitions("POCKETFFT_AVAILABLE")
+ endif()
+@@ -81,12 +70,7 @@
+ 		message(FATAL_ERROR "GCEM headers not found")
+ 	endif()
+ else()
+-	FetchContent_Declare(
+-		gcem
+-		GIT_REPOSITORY https://github.com/klytje/gcem
+-	)
+-	FetchContent_MakeAvailable(GCEM)
+-	set(GCEM_INCLUDE_DIR ${gcem_SOURCE_DIR}/include)
++	set(GCEM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/gcem/include)
+ endif()
+ 
+ set_property(

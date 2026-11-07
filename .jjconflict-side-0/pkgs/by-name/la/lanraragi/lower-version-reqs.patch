@@ -1,0 +1,13 @@
+diff --git a/tools/cpanfile b/tools/cpanfile
+index e70c6e7..1fb5860 100644
+--- a/tools/cpanfile
++++ b/tools/cpanfile
+@@ -33,7 +33,7 @@ requires 'Test::Harness',    3.42;
+ requires 'Test::MockObject', 1.20200122;
+ requires 'Test::Trap',       0.3.4;
+ requires 'Test::Deep',       1.130;
+-requires 'Test::MockModule', 0.180;
++requires 'Test::MockModule', 0.177;
+ 
+ # Mojo stuff
+ requires 'Mojolicious',                          9.39;

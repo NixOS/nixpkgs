@@ -1,0 +1,80 @@
+diff --git a/Bibata_Ghost/cursors/diamond_cross b/Bibata_Ghost/cursors/diamond_cross
+deleted file mode 120000
+index f406d83..0000000
+--- a/Bibata_Ghost/cursors/diamond_cross
++++ /dev/null
+@@ -1 +0,0 @@
+-diamond_cross
+\ No newline at end of file
+diff --git a/Bibata_Ghost/cursors/draft_large b/Bibata_Ghost/cursors/draft_large
+index 1ab4059..490f177 120000
+--- a/Bibata_Ghost/cursors/draft_large
++++ b/Bibata_Ghost/cursors/draft_large
+@@ -1 +1 @@
+-daft
+\ No newline at end of file
++draft
+\ No newline at end of file
+diff --git a/Bibata_Ghost/cursors/ew-resize b/Bibata_Ghost/cursors/ew-resize
+index c5694de..572e2ca 120000
+--- a/Bibata_Ghost/cursors/ew-resize
++++ b/Bibata_Ghost/cursors/ew-resize
+@@ -1 +1 @@
+-side_hor
+\ No newline at end of file
++size-hor
+\ No newline at end of file
+diff --git a/Bibata_Spirit/cursors/diamond_cross b/Bibata_Spirit/cursors/diamond_cross
+deleted file mode 120000
+index f406d83..0000000
+--- a/Bibata_Spirit/cursors/diamond_cross
++++ /dev/null
+@@ -1 +0,0 @@
+-diamond_cross
+\ No newline at end of file
+diff --git a/Bibata_Spirit/cursors/draft_large b/Bibata_Spirit/cursors/draft_large
+index 1ab4059..490f177 120000
+--- a/Bibata_Spirit/cursors/draft_large
++++ b/Bibata_Spirit/cursors/draft_large
+@@ -1 +1 @@
+-daft
+\ No newline at end of file
++draft
+\ No newline at end of file
+diff --git a/Bibata_Spirit/cursors/ew-resize b/Bibata_Spirit/cursors/ew-resize
+index c5694de..572e2ca 120000
+--- a/Bibata_Spirit/cursors/ew-resize
++++ b/Bibata_Spirit/cursors/ew-resize
+@@ -1 +1 @@
+-side_hor
+\ No newline at end of file
++size-hor
+\ No newline at end of file
+diff --git a/Bibata_Tinted/cursors/diamond_cross b/Bibata_Tinted/cursors/diamond_cross
+deleted file mode 120000
+index f406d83..0000000
+--- a/Bibata_Tinted/cursors/diamond_cross
++++ /dev/null
+@@ -1 +0,0 @@
+-diamond_cross
+\ No newline at end of file
+diff --git a/Bibata_Tinted/cursors/draft_large b/Bibata_Tinted/cursors/draft_large
+index 1ab4059..490f177 120000
+--- a/Bibata_Tinted/cursors/draft_large
++++ b/Bibata_Tinted/cursors/draft_large
+@@ -1 +1 @@
+-daft
+\ No newline at end of file
++draft
+\ No newline at end of file
+diff --git a/Bibata_Tinted/cursors/ew-resize b/Bibata_Tinted/cursors/ew-resize
+index c5694de..572e2ca 120000
+--- a/Bibata_Tinted/cursors/ew-resize
++++ b/Bibata_Tinted/cursors/ew-resize
+@@ -1 +1 @@
+-side_hor
+\ No newline at end of file
++size-hor
+\ No newline at end of file
+-- 
+2.50.1

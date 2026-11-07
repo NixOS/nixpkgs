@@ -1,0 +1,76 @@
+{
+  "llvm-project": {
+    "hash": "sha256-b+0G3b5f/i+4SgLV0nsZte5pc/tHd9fVIOPAxWInQXs="
+  },
+  "sourcekit-lsp": {
+    "hash": "sha256-vjVcsxFCg1s8L96HSllgGGVpOQeHAWfVnLmUcP05F/o=",
+    "swiftpmDeps": {
+      "hash": "sha256-tH0dajTSHa7/wwJFA8CVsuB/9Lhojsb4fmx+reIpR88="
+    }
+  },
+  "swift": {
+    "hash": "sha256-7/jT/U0sOsr4iWnCluyUWjnD/XH5CnPyAG9EQ+Nq+tI="
+  },
+  "swift-build": {
+    "hash": "sha256-UW6OD3WyAuN1/vkzlANfWr9lJ2x9mLFgdYC8pwbVqjE="
+  },
+  "swift-corelibs-foundation": {
+    "hash": "sha256-Dm/oYkNRevXBBP1+xOgZm3/QjRLQBjk58mXt9N/sPAY="
+  },
+  "swift-corelibs-libdispatch": {
+    "hash": "sha256-7UxacHkvbyt51I1WT2wWR1GDrHdknlnYWF9yF8GusQc="
+  },
+  "swift-corelibs-xctest": {
+    "hash": "sha256-68OKhvLKwXPZNvuFkcZsqyeVE4YlLXp5+sHfns3EGKM="
+  },
+  "swift-docc": {
+    "hash": "sha256-wRHy4yeq+LAUU7dDPc3kUT1BP9ZONl1qmfrYffuR5tQ=",
+    "swiftpmDeps": {
+      "hash": "sha256-DxF71QOqtWv9slEiE2u8dy7tT7wWl0bbkWkNVCFbUk8="
+    }
+  },
+  "swift-docc-render": {
+    "hash": "sha256-pF+sot+YDT/AjeMrNmdG3/T5VlhPewDcpG6B+Q9dLRk=",
+    "npmDeps": {
+      "hash": "sha256-10RbVbf8lA4Glqw9NZGRCFmpE660UfbTBllIKJYQ+U8="
+    },
+    "rev": "2d3a3b924f889fa3d5ea7d8eb8b0daad211acc21"
+  },
+  "swift-driver": {
+    "hash": "sha256-XilPErlnLI7JOnEQM3zEieyo+0/7q2hYfHfnDBtP7qE="
+  },
+  "swift-experimental-string-processing": {
+    "hash": "sha256-ENnaw/1UN9PnVLTZujtpfGs5d1e3Z+5Z6EjiwM/8alU="
+  },
+  "swift-format": {
+    "hash": "sha256-YkOsFWaQJU786L9OB/n9jOL5G303cz0q62dw3yFWkA0=",
+    "swiftpmDeps": {
+      "hash": "sha256-7Og56LggJPO8G7GVNCBhbLg/8iv+aR5L0Zi9bSELSM8="
+    }
+  },
+  "swift-foundation": {
+    "hash": "sha256-sXlA1n7SmgneUxsS7+/xNwbIOyGvLmofNXxrIG1Pq9w="
+  },
+  "swift-foundation-icu": {
+    "hash": "sha256-+Syca40t4KYTs6Y0qgfntziUebEmHdq1tNNbLau4bwc="
+  },
+  "swift-llbuild": {
+    "hash": "sha256-w+pZRXiGSHsxK+ewMdfX49rAJYfZ9wOql/vUGLXpJvo="
+  },
+  "swift-package-manager": {
+    "hash": "sha256-34mm8hYEvYuvmtkEBQDzluJSHsiwzmGWuO3ZgWnFjzg="
+  },
+  "swift-syntax": {
+    "hash": "sha256-zr+2MlGncEu1bEQwUUxlySDx4XOyK+LnX1SRbtm9ERc="
+  },
+  "swift-testing": {
+    "hash": "sha256-lXeFJcKRzoRpUYLrQT+5MITb36hSH/dXjBm4w0RispI="
+  },
+  "swift-tools-protocols": {
+    "hash": "sha256-q/S95ozgWkzYm3awDmAC5Obnur4OQp8aO2gstrwCOnE=",
+    "version": "0.0.9"
+  },
+  "swift-tools-support-core": {
+    "hash": "sha256-LAboqDVEoz2Sgp3BIrasS2DVmiug89yAioJ/mFIVIjA="
+  }
+}

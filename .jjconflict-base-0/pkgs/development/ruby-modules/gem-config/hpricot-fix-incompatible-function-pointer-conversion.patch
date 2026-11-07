@@ -1,0 +1,48 @@
+diff --git a/ext/fast_xs/fast_xs.c b/ext/fast_xs/fast_xs.c
+index 11ef71f..d5eb8d8 100644
+--- a/ext/fast_xs/fast_xs.c
++++ b/ext/fast_xs/fast_xs.c
+@@ -144,7 +144,7 @@ static VALUE unpack_utf8(VALUE self)
+ 	return rb_funcall(self, unpack_id, 1, U_fmt);
+ }
+ 
+-static VALUE unpack_uchar(VALUE self)
++static VALUE unpack_uchar(VALUE self, VALUE _exn)
+ {
+ 	return rb_funcall(self, unpack_id, 1, C_fmt);
+ }
+diff --git a/ext/hpricot_scan/hpricot_scan.c b/ext/hpricot_scan/hpricot_scan.c
+index f11cbb5..161ebd4 100644
+--- a/ext/hpricot_scan/hpricot_scan.c
++++ b/ext/hpricot_scan/hpricot_scan.c
+@@ -22,7 +22,7 @@ struct hpricot_struct {
+ #define RSTRING_PTR(str) RSTRING(str)->ptr
+ #endif
+ 
+-VALUE hpricot_css(VALUE, VALUE, VALUE, VALUE, VALUE);
++VALUE hpricot_css(VALUE, VALUE, VALUE, VALUE);
+ 
+ #define NO_WAY_SERIOUSLY "*** This should not happen, please file a bug report with the HTML you're parsing at http://github.com/hpricot/hpricot/issues.  So sorry!"
+ 
+diff --git a/ext/hpricot_scan/hpricot_scan.rl b/ext/hpricot_scan/hpricot_scan.rl
+index 0f17f11..8b00a38 100644
+--- a/ext/hpricot_scan/hpricot_scan.rl
++++ b/ext/hpricot_scan/hpricot_scan.rl
+@@ -20,7 +20,7 @@ struct hpricot_struct {
+ #define RSTRING_PTR(str) RSTRING(str)->ptr
+ #endif
+ 
+-VALUE hpricot_css(VALUE, VALUE, VALUE, VALUE, VALUE);
++VALUE hpricot_css(VALUE, VALUE, VALUE, VALUE);
+ 
+ #define NO_WAY_SERIOUSLY "*** This should not happen, please file a bug report with the HTML you're parsing at http://github.com/hpricot/hpricot/issues.  So sorry!"
+ 
+@@ -806,7 +806,7 @@ make_hpricot_struct(VALUE members, VALUE (*alloc)(VALUE klass))
+   for (i = 0; i < len; i++) {
+     ID id = SYM2ID(rb_ary_entry(members, i));
+     const char* name = rb_id2name(id);
+-    int len = strlen(name);
++    size_t len = strlen(name);
+ 
+     memcpy(attr_set, name, strlen(name));
+     attr_set[len] = '=';

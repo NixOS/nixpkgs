@@ -1,0 +1,111 @@
+From 3c902c5144ff29f5d92f2d5924bb38ec3c882983 Mon Sep 17 00:00:00 2001
+From: Xi Ruoyao <xry111@xry111.site>
+Date: Mon, 31 Aug 2026 16:18:12 +0800
+Subject: [PATCH] LoongArch: fix miscompile of both_non_zero{,_subreg} when
+ operands[0] == operands[2] [PR 127153]
+
+Here operands[0] is written before the instruction is finished using
+operands[2] so it cannot lie in a register that is read by the
+instruction.  Thus it should be an earlyclobber operand.  As operands[1]
+is only used before the early result is written, it can be tied to the
+earlyclobber operand so explicitly allow doing so.
+
+Defer the split after reload as constrants do not apply to pseudos.
+
+	PR target/127153
+
+gcc/
+
+	* config/loongarch/loongarch.md (both_non_zero): Defer the split
+	post reload and add constraint to ensure operands[0] and
+	operands[2] are in different hard registers.
+	(both_non_zero_subreg): Likewise.
+
+gcc/testsuite/
+
+	* c-c++-common/pr127153.c: New test.
+
+(cherry picked from commit 85c39785487e242162cdc28675b334ad23951edb)
+---
+ gcc/config/loongarch/loongarch.md     | 12 +++++------
+ gcc/testsuite/c-c++-common/pr127153.c | 31 +++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+), 6 deletions(-)
+ create mode 100644 gcc/testsuite/c-c++-common/pr127153.c
+
+diff --git a/gcc/config/loongarch/loongarch.md b/gcc/config/loongarch/loongarch.md
+index e9f8c808448c9..6c20984492bbf 100644
+--- a/gcc/config/loongarch/loongarch.md
++++ b/gcc/config/loongarch/loongarch.md
+@@ -2723,14 +2723,14 @@
+    (set_attr "mode" "<GPR:MODE>")])
+ 
+ (define_insn_and_split "both_non_zero"
+-  [(set (match_operand:DI 0 "register_operand" "=r")
+-	(and:DI (ne:DI (match_operand:DI 1 "register_operand" "r")
++  [(set (match_operand:DI 0 "register_operand" "=&r")
++	(and:DI (ne:DI (match_operand:DI 1 "register_operand" "r0")
+ 		       (const_int 0))
+ 		(ne:DI (match_operand:DI 2 "register_operand" "r")
+ 		       (const_int 0))))]
+   "TARGET_64BIT"
+   "#"
+-  "&& true"
++  "&& reload_completed"
+   [(set (match_dup 0)
+ 	(ne:DI (match_dup 1) (const_int 0)))
+    (set (match_dup 0)
+@@ -2739,14 +2739,14 @@
+ 			 (const_int 0)))])
+ 
+ (define_insn_and_split "both_non_zero_subreg"
+-  [(set (match_operand:DI 0 "register_operand" "=r")
+-	(and:DI (subreg:DI (ne:SI (match_operand:DI 1 "register_operand" "r")
++  [(set (match_operand:DI 0 "register_operand" "=&r")
++	(and:DI (subreg:DI (ne:SI (match_operand:DI 1 "register_operand" "r0")
+ 				  (const_int 0)) 0)
+ 		(subreg:DI (ne:SI (match_operand:DI 2 "register_operand" "r")
+ 				  (const_int 0)) 0)))]
+   "TARGET_64BIT"
+   "#"
+-  "&& true"
++  "&& reload_completed"
+   [(set (match_dup 0)
+ 	(ne:DI (match_dup 1) (const_int 0)))
+    (set (match_dup 0)
+diff --git a/gcc/testsuite/c-c++-common/pr127153.c b/gcc/testsuite/c-c++-common/pr127153.c
+new file mode 100644
+index 0000000000000..5c8422d9b5642
+--- /dev/null
++++ b/gcc/testsuite/c-c++-common/pr127153.c
+@@ -0,0 +1,31 @@
++/* { dg-do run } */
++/* { dg-options "-O2" } */
++
++__attribute__ ((noipa)) static int
++a ()
++{
++  return 0;
++}
++
++__attribute__ ((noipa)) static int
++b ()
++{
++  return 1;
++}
++
++__attribute__ ((noipa)) static int
++calc (int cond)
++{
++  int v = a ();
++  if (cond)
++    return b () && v;
++  return v;
++}
++
++int
++main ()
++{
++  int r = calc (1);
++  if (r)
++    __builtin_trap ();
++}

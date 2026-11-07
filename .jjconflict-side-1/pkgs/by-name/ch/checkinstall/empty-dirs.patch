@@ -1,0 +1,49 @@
+diff -rc checkinstall-orig/checkinstall checkinstall/checkinstall
+*** checkinstall-orig/checkinstall	2009-03-12 13:40:24.000000000 +0100
+--- checkinstall/checkinstall	2009-03-27 14:51:55.000000000 +0100
+***************
+*** 1635,1644 ****
+  
+  	# Find regular files first
+  	[ $DEBUG -gt 0 ] && echo "debug: BASE_TMP_DIR: $BASE_TMP_DIR"
+! 	cat /${TMP_DIR}/newfiles.tmp | egrep -v '^[-0-9][0-9]*[[:space:]]*(unlink|access)' | cut -f 3 | egrep -v "^(/dev|$BASE_TMP_DIR|/tmp)" | sort -u > /${TMP_DIR}/newfiles
+  
+  	# symlinks are next
+! 	cat /${TMP_DIR}/newfiles.tmp | egrep -v '^[-0-9][0-9]*[[:space:]]*(unlink|access)' | cut -f 4 | egrep -v "^(/dev|$BASE_TMP_DIR|/tmp)" | grep -v "#success" | sort -u  >> /${TMP_DIR}/newfiles
+          # Create another list of modified files that exclude all files the
+          # install script wanted to create but did not, e.g because they already
+          # existed.
+--- 1635,1648 ----
+  
+  	# Find regular files first
+  	[ $DEBUG -gt 0 ] && echo "debug: BASE_TMP_DIR: $BASE_TMP_DIR"
+! 	cat /${TMP_DIR}/newfiles.tmp | egrep -v '^[-0-9][0-9]*[[:space:]]*(unlink|access|mkdir)' | cut -f 3 | egrep -v "^(/dev|$BASE_TMP_DIR|/tmp)" | sort -u > /${TMP_DIR}/newfiles
+  
+  	# symlinks are next
+! 	cat /${TMP_DIR}/newfiles.tmp | egrep -v '^[-0-9][0-9]*[[:space:]]*(unlink|access|mkdir)' | cut -f 4 | egrep -v "^(/dev|$BASE_TMP_DIR|/tmp)" | grep -v "#success" | sort -u  >> /${TMP_DIR}/newfiles
+!         
+! 	# And finally newly created directories.
+! 	cat /${TMP_DIR}/newfiles.tmp | egrep '^0[[:space:]]+mkdir[[:space:]]+' | cut -f 3 | egrep -v "^(/dev|$BASE_TMP_DIR|/tmp)" | sort -u >> /${TMP_DIR}/newfiles
+!         
+          # Create another list of modified files that exclude all files the
+          # install script wanted to create but did not, e.g because they already
+          # existed.
+***************
+*** 1738,1746 ****
+  	cd /
+  
+  	( cat /${TMP_DIR}/newfiles | while read i; do 
+! 	      if [ ! -d "${TRANSLROOT}${i}" -o -L "${TRANSLROOT}${i}" ]; then
+! 	      echo ".${i}"
+! 	   fi
+  	done ) > /${TMP_DIR}/newfiles-tar
+  
+          # Here it gets tricky: we need to copy all new files to our build dir,
+--- 1742,1748 ----
+  	cd /
+  
+  	( cat /${TMP_DIR}/newfiles | while read i; do 
+! 	    echo ".${i}"
+  	done ) > /${TMP_DIR}/newfiles-tar
+  
+          # Here it gets tricky: we need to copy all new files to our build dir,

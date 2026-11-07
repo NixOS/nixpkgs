@@ -1,0 +1,243 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+
+  pkg-config,
+
+  dbus,
+
+  writableTmpDirAsHomeHook,
+  gitMinimal,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nono";
+  version = "0.79.0";
+
+  __darwinAllowLocalNetworking = true; # required for tests
+
+  src = fetchFromGitHub {
+    owner = "nolabs-ai";
+    repo = "nono";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YDl52T2xY0XbBO5YdNa5uGvvvk7mqr1JtAQOLTXspFw=";
+  };
+  cargoHash = "sha256-ffwJDKFoDMfZYYNWO4SWezdbD5Y8SR7S+a+qSQEgG9w=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    dbus
+  ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    gitMinimal
+  ];
+
+  checkFlags = map (t: "--skip=${t}") (
+    [
+      # fails to initialize the sandbox under '/build'
+      "test_all_profiles_signal_mode_resolves"
+      "test_restrict_execute_does_not_break_rename_into_new_subdir"
+      # panic
+      "build_run_profile_patch_merges_read_and_write_to_allow_file"
+      "prepare_profile_save_from_patch_updates_existing_user_profile"
+      "create_audit_state_creates_session_when_enabled"
+
+      # keystore
+      # needs /usr/bin/touch
+      "load_secrets_sanitizes_path_against_known_outer_caps"
+
+      # audit_attestation
+      # needs /bin/pwd
+      "audit_verify_reports_signed_attestation_with_pinned_public_key"
+      "rollback_signed_session_verifies_from_audit_dir_bundle"
+
+      # audit_ledger
+      # needs /bin/pwd
+      "corrupt_audit_ledger_downgrades_only_a_clean_exit"
+      "corrupt_audit_ledger_is_reported_on_every_run_and_left_untouched"
+
+      # exec_strategy::clone_files
+      # needs /usr/bin/python3
+      "closed_stdio_and_unshare_fallback"
+      "explicit_network_backends_with_af_unix"
+      "fd_churn_signals_and_late_descriptors"
+      "full_cli_supervisor_combined_path"
+      "proxy_and_combined_notifications"
+      "pty_cgroup_write_and_supervisor_inheritance"
+      "tool_gate_with_combined_notifications"
+
+      # execution_strategy_run
+      # needs /usr/bin/env
+      "direct_workdir_overrides_untrusted_host_pwd"
+      "direct_workdir_sets_child_pwd_from_uncovered_launch_dir"
+      "supervised_workdir_overrides_untrusted_host_pwd"
+      "supervised_workdir_sets_child_pwd_from_uncovered_launch_dir"
+      # needs /bin/cat and a bash readable inside the sandbox
+      "command_policies_allows_same_fs_rename_from_child_dir"
+      # needs /bin/cat and /usr/bin/printf
+      "command_policies_allows_immutable_store_shebang_wrapper"
+
+      # nono-cli
+      # fails to initialize the sandbox under '/build'
+      # has also failed due to running on darwin despite testing the linux only
+      # landlock sandboxing
+      "policy::tests::test_all_groups_no_deny_within_allow_overlap"
+      # not relevant for us, requires `git`
+      "lint_docs_script_passes"
+      # want to run `git`
+      "lint_docs_accepts_clean_tree"
+      "lint_docs_rejects_quoted_override_deny_outside_allowlist"
+      # need /bin/cat
+      "granted_path_exits_zero"
+      "env_credentials_with_command_policies_non_shim_entry_succeeds"
+      # glob_access_run
+      # need /bin/cat
+      "bypass_protection_glob_requires_paired_allow"
+      "read_glob_grants_read_not_write"
+
+      # symlink_hop_run_linux
+      # need /bin/cat
+      "multi_hop_symlinked_leaf_resolves_through_symlinked_directory"
+
+      # tool_sandbox::linux
+      # needs /usr/bin
+      "outer_exec_gate_does_not_break_same_fs_rename_from_child_dir"
+      # needs /usr/bin/env
+      "outer_exec_gate_rejects_an_env_shebang_target_writable_by_outer_caps"
+
+      # tool_sandbox::policy::intercept_tests
+      # needs /usr/bin/touch
+      "load_command_credential_source_skips_trojan_in_writable_path_dir"
+
+      # url_open
+      # needs /usr/bin/touch
+      "open_url_in_browser_skips_trojan_in_writable_path_dir"
+
+      # wiring
+      # cannot set the setuid bit in the build sandbox
+      "write_file_atomic_strips_setuid_bit"
+
+      # sandbox_state
+      # overrides $TMPDIR with a tempdir it deletes, so parallel tests
+      # calling `tempfile::tempdir()` intermittently get ENOENT
+      "test_validate_accepts_file_when_reading_tmpdir_differs"
+
+      # nono-proxy
+      # fails to prepare TLS bundle inside build sandbox
+      "server::tests::test_intercept_lifecycle_end_to_end"
+      "server::tests::test_route_diagnostics_summarises_each_route"
+      "tls_intercept::bundle::tests::bundle_contains_ephemeral_and_system_roots"
+      "tls_intercept::bundle::tests::bundle_file_has_restrictive_permissions"
+      # fail due to credential capture not configured
+      "proxy_runtime::tests::capture_helper_with_interaction_stdin_true_inherits_terminal_stdin"
+      "proxy_runtime::tests::capture_helper_with_stdio_true_receives_null_not_terminal_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_captures_and_caches"
+      "proxy_runtime::tests::proxy_credential_capture_backend_parses_json_headers"
+      "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
+      "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # needs /bin/cat
+      "proxy_runtime::tests::proxy_credential_capture_backend_runs_provider_protocol"
+      # needs /usr/bin/touch
+      "proxy_runtime::tests::load_command_credential_source_skips_trojan_in_writable_path_dir"
+      # panic
+      "server::tests::reactive_proxy_auth_retry_answered_after_407"
+      "server::tests::test_oauth_capture_routes_activate_intercept"
+      "server::tests::test_route_diagnostics_groups_credential_and_endpoint_routes"
+
+      # nono's ELF dependency resolution cannot find `libc.so.6` for libgcc_s.so.1
+      # command_policies are broken on nixos without this support
+      "command_policies_allows_compiled_binary_exec_in_writable_grant_dir"
+      "command_policies_allows_script_exec_in_writable_grant_dir"
+
+      # tool_sandbox_shim_env
+      # the `sh` command policy resolves to a shim that cannot execute inside
+      # the build sandbox, and the `env` policy is not found on PATH
+      "real_broker_mediates_nested_commands_without_discovery_variables"
+      "real_url_broker_preserves_origin_policy_without_discovery_variables"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # panics with "exact-path fallback must not recursively cover descendants"
+      "capability_ext::tests::test_from_profile_allow_file_falls_back_to_exact_directory_when_present"
+
+      # nono-cli
+      # wants access to /var/folders
+      "sandbox_state::cap_file_validation_tests::test_acceptable_temp_roots_includes_var_folders_on_macos"
+      "sandbox_state::cap_file_validation_tests::test_validate_rejects_path_outside_temp"
+      # doesn't work inside of the /nix dir, which build-dir is under
+      "shell_dry_run_rejects_block_net_with_upstream_proxy"
+      "run_launch_plan_rejects_block_net_with_upstream_proxy"
+      "why_self_reports_active_profile_deny_before_covering_allow"
+
+      # env_vars
+      # doesn't work inside of the /nix dir, which build-dir is under
+      # Sandbox initialization failed: Refusing to grant '/nix' (source: group:system_read_macos) because it overlaps protected nono state root '/nix/build/nix-<ID>/.home/.nono'.
+      "allow_net_overrides_profile_upstream_proxy"
+      "cli_flag_overrides_env_var"
+      "env_nono_allow_comma_separated"
+      "env_nono_block_net"
+      "env_nono_block_net_accepts_true"
+      "env_nono_network_profile"
+      "env_nono_profile"
+      "env_nono_upstream_bypass_comma_separated"
+      "env_nono_upstream_proxy"
+      "environment_allow_vars_bare_star"
+      "environment_allow_vars_default_allows_all"
+      "environment_allow_vars_prefix_patterns"
+      "environment_allow_vars_with_profile"
+
+      "tool_sandbox::macos::tests::executable_shape_baseline_grants_env_shebang_target_interpreter"
+      "tool_sandbox::macos::tests::macos_runtime_baseline_does_not_grant_system_volumes_data"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_attributes_when_helper_names_the_daemon"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_cache_prunes_dead_entries"
+      "tool_sandbox::macos::tests::daemon_pid_lineage_denies_when_helper_names_a_different_pid"
+      "tool_sandbox::macos::tests::run_daemon_pid_source_verify_mode_round_trips_candidate_pid"
+      # spawn /bin/sleep, which the darwin build sandbox denies
+      "tool_sandbox::macos::tests::resolve_caller_denies_stale_session_after_pid_reuse"
+      "tool_sandbox::macos::tests::resolve_caller_resolves_ordinary_orphan_via_session_lineage"
+      "tool_sandbox::macos::tests::resolve_caller_session_lineage_uses_launch_caller_for_self_invocation"
+      "tool_sandbox::macos::tests::resolve_url_open_command_resolves_ordinary_orphan_via_session_lineage"
+      "tool_sandbox::macos::tests::session_lineage_evicts_unpinned_entry_whose_leader_pid_was_recycled"
+      "tool_sandbox::macos::tests::session_lineage_re_record_after_eviction_outlives_older_fillers"
+      "tool_sandbox::macos::tests::session_lineage_resolve_refreshes_recency_for_lru_eviction"
+      "tool_sandbox::macos::tests::session_lineage_resolves_entry_recorded_without_an_identity_pin"
+      "tool_sandbox::macos::tests::track_child_records_session_lineage_for_an_already_exited_launcher"
+      "env_nono_capability_elevation_accepts_truthy"
+      "env_nono_trust_override_accepts_truthy"
+      "env_nono_trust_proxy_ca_accepts_truthy"
+      "dry_run_does_not_modify_workspace"
+      "rollback_restores_file_after_write"
+
+      # doesn't work inside of the /nix dir, which build-dir is under
+      "write_glob_grants_write_not_read"
+      "manifest_custom_credential_does_not_unknown_service"
+      "mediated_keychain_filesystem_access_respects_outer_bypasses"
+
+      # `git init` intermittently fails with ENOENT, most likely because a
+      # concurrent test mutates PATH under the shared env lock
+      "tool_sandbox::dynamic_providers::tests::git_read_main_worktree_returns_main_repo_root_in_linked_worktree"
+    ]
+  );
+
+  passthru.updateScript = nix-update-script { };
+  meta = {
+    description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
+    homepage = "https://github.com/nolabs-ai/nono";
+    changelog = "https://github.com/nolabs-ai/nono/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      jk
+    ];
+    mainProgram = "nono";
+    # https://github.com/nolabs-ai/nono#platform-support
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+  };
+})

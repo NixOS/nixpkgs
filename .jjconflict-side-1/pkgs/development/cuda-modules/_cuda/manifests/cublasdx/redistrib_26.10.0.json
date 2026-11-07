@@ -1,0 +1,15 @@
+{
+  "release_label": "26.10.0",
+  "release_product": "mathdx",
+  "mathdx": {
+    "name": "NVIDIA MathDx",
+    "license": "MathDx",
+    "version": "26.10.0",
+    "linux-all": {
+      "md5": "1cca694b5afd75746c73052eaadd771c",
+      "relative_path": "cublasdx/cuda13/nvidia-mathdx-26.10.0-cuda13.tar.gz",
+      "sha256": "09c24eea52010b494ad786cfa2bdbbae24906aa75ca8e85dbb0730a5a647688a",
+      "size": "39289739"
+    }
+  }
+}

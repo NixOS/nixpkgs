@@ -1,0 +1,40 @@
+From b4ed8e73401968bcad749afb0e636dd3ec205ca7 Mon Sep 17 00:00:00 2001
+From: Jim Meyering <meyering@meta.com>
+Date: Mon, 21 Sep 2026 01:42:18 -0700
+Subject: [PATCH] build: avoid failure to build on linux aarch64
+
+* gzip.c: Include gzip.h only after all system headers.
+gzip.h's "head" definition affected a subsequent signal.h-
+included system struct member named "head".
+Reported by Adam Sampson in https://bugs.gnu.org/81904
+---
+ gzip.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gzip.c b/gzip.c
+index 220f6fc..6c0af7f 100644
+--- a/gzip.c
++++ b/gzip.c
+@@ -58,7 +58,6 @@ static char const license_msg[] =
+ 
+ #include "tailor.h"
+ 
+-#include "gzip.h"
+ #include "lzw.h"
+ #include "revision.h"
+ #include "version.h"
+@@ -99,6 +98,11 @@ static char const license_msg[] =
+ #  include <utimens.h>
+ #endif
+ 
++/* Include this only after all system headers. Otherwise, its definition
++   of "head" conflicts with member names in linux-headers 7.2.6's
++   asm/sigcontext.h pulled in via <signal.h>.  */
++#include "gzip.h"
++
+ #ifndef MAX_PATH_LEN
+ #  define MAX_PATH_LEN   1024 /* max pathname length */
+ #endif
+-- 
+2.55.0
+

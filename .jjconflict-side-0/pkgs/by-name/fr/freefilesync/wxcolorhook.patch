@@ -1,0 +1,50 @@
+diff --git a/include/wx/settings.h b/include/wx/settings.h
+index 3967b98b46..8d7f3d2870 100644
+--- a/include/wx/settings.h
++++ b/include/wx/settings.h
+@@ -13,6 +13,8 @@
+ #include "wx/colour.h"
+ #include "wx/font.h"
+ 
++#include <memory>
++
+ class WXDLLIMPEXP_FWD_CORE wxWindow;
+ 
+ // possible values for wxSystemSettings::GetFont() parameter
+@@ -241,9 +243,28 @@ public:
+ // include the declaration of the real platform-dependent class
+ // ----------------------------------------------------------------------------
+ 
++struct wxColorHook
++{
++    virtual ~wxColorHook() {}
++    virtual wxColor getColor(wxSystemColour index) const = 0;
++};
++WXDLLIMPEXP_CORE inline std::unique_ptr<wxColorHook>& refGlobalColorHook()
++{
++    static std::unique_ptr<wxColorHook> globalColorHook;
++    return globalColorHook;
++}
++
+ class WXDLLIMPEXP_CORE wxSystemSettings : public wxSystemSettingsNative
+ {
+ public:
++    static wxColour GetColour(wxSystemColour index)
++    {
++        if (refGlobalColorHook())
++			return refGlobalColorHook()->getColor(index);
++
++        return wxSystemSettingsNative::GetColour(index);
++    }
++
+ #ifdef __WXUNIVERSAL__
+     // in wxUniversal we want to use the theme standard colours instead of the
+     // system ones, otherwise wxSystemSettings is just the same as
+@@ -264,7 +285,6 @@ public:
+ 
+     // Value
+     static wxSystemScreenType ms_screen;
+-
+ };
+ 
+ #endif
