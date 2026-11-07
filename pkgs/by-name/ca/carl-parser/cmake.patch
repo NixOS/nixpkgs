@@ -1,0 +1,150 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 88cb1e6..fd3532f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -63,14 +63,10 @@ message(STATUS "Using carl ${carl_VERSION} from ${carlLOCATION}.")
+ include(ExternalProject)
+ SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/resources)
+ 
+-set(ANTLR_VERSION "4.7.2")
+-if (BUILD_JAR)
+-    message(STATUS "Built jar file of ANTLR ${ANTLR_VERSION}")
+-else()
+-    message(STATUS "Use shipped jar file of ANTLR ${ANTLR_VERSION}")
+-endif()
+-include(resources/antlr4.cmake)
++find_package(antlr4-runtime REQUIRED)
+ 
++include_directories("${EIGEN3_INCLUDE_DIR}")
++include_directories("${ANTLR4_INCLUDE_DIR}")
+ # Add actual sources
+ add_subdirectory(src)
+ 
+@@ -85,11 +81,36 @@ export(TARGETS ${EXPORT_TARGETS} FILE "${PROJECT_BINARY_DIR}/carlparserTargets.c
+ message(STATUS "Registered with cmake")
+ export(PACKAGE carlparser)
+ 
++include(GNUInstallDirs)
++set(CMAKE_INSTALL_DIR lib/cmake/carlparser CACHE PATH "Installation directory for executables")
++
++# 1) Install the library itself
++install(
++  TARGETS carl-parser
++  EXPORT carlparserTargets           # makes this target available for export
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}   # .so/.dylib on Unix/macOS
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}   # .a/.lib
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}   # .dll or executables
++)
++
++# 3) Export the target for downstream find_package()
++install(
++  EXPORT carlparserTargets
++  FILE   carlparserTargets.cmake
++  NAMESPACE carlparser::             # so users do find_package(carlparser) & target_link_libraries(... carlparser::carl-parser)
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/carlparser
++)
++
++# 4) Install the config file you already generate
++install(
++  FILES ${PROJECT_BINARY_DIR}/install/carlparserConfig.cmake
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/carlparser
++)
++
+ set(INCLUDE_DIR include/)
+ include(CMakePackageConfigHelpers)
+ include(cmake/export_target.cmake)
+ 
+-export_target(DEP_TARGETS antlr4shared)
+ set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src")
+ configure_package_config_file(
+         cmake/carlparserConfig.cmake.in
+@@ -98,7 +119,13 @@ configure_package_config_file(
+         PATH_VARS INCLUDE_DIR
+ )
+ 
+-
++set(CONF_INCLUDE_DIRS "${CMAKE_INSTALL_INCLUDEDIR}/carl-parser")
++configure_package_config_file(
++        cmake/carlparserConfig.cmake.in
++        ${PROJECT_BINARY_DIR}/install/carlparserConfig.cmake
++        INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
++        PATH_VARS INCLUDE_DIR
++)
+ if (APPLE)
+     message(WARNING "If tests are unsuccessful or errors occur, try running 'cmake ..' and 'make' once again.")
+ endif()
+diff --git a/cmake/carlparserConfig.cmake.in b/cmake/carlparserConfig.cmake.in
+index 845aae8..4858314 100644
+--- a/cmake/carlparserConfig.cmake.in
++++ b/cmake/carlparserConfig.cmake.in
+@@ -1,6 +1,6 @@
+ ## Our library dependencies (contains definitions for IMPORTED targets)
+ 
+-include("@PROJECT_BINARY_DIR@/carlparserTargets.cmake")
++include("${CMAKE_CURRENT_LIST_DIR}/carlparserTargets.cmake")
+ 
+ @DEP_TARGETS@
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 014495b..c40739c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -11,17 +11,6 @@ function(create_antlr_targets)
+         set(ANTLR_generated_include "" PARENT_SCOPE)
+         set(ANTLR_generated_sources "" PARENT_SCOPE)
+ 
+-		set(ANTLR_JAR "${PROJECT_SOURCE_DIR}/resources/lib/antlr-${ANTLR_VERSION}-complete.jar")
+-
+-		if (BUILD_JAR)
+-			add_custom_command(OUTPUT ${ANTLR_JAR}
+-				COMMAND ${CMAKE_COMMAND} --build . --target ANTLR-jar
+-				COMMAND mkdir -p ${CMAKE_SOURCE_DIR}/lib/
+-				COMMAND cp ${SOURCE_DIR}/tool/target/antlr4-${ANTLR_VERSION}-complete.jar ${ANTLR_JAR}
+-				WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+-			)
+-		endif()
+-
+         foreach(file ${antlr_grammars})
+                 get_filename_component(DIR ${file} DIRECTORY)
+                 file(RELATIVE_PATH DIR ${CMAKE_SOURCE_DIR}/src "${DIR}")
+@@ -43,8 +32,8 @@ function(create_antlr_targets)
+                 add_custom_command(
+                         OUTPUT ${generated_sources}
+                         COMMAND ${CMAKE_COMMAND} -E make_directory ${DESTDIR}
+-                        COMMAND ${Java_JAVA_EXECUTABLE} -jar ${ANTLR_JAR} -Werror -Dlanguage=Cpp -listener -visitor -o ${DESTDIR} -package carlparser ${file}
+-                        DEPENDS ${file} ${ANTLR_JAR}
++                        COMMAND antlr -Werror -Dlanguage=Cpp -listener -visitor -o ${DESTDIR} -package carlparser ${file}
++                        DEPENDS ${file}
+                         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src
+                 )
+         endforeach()
+@@ -57,15 +46,25 @@ create_antlr_targets()
+ #set(CMAKE_DEBUG_TARGET_PROPERTIES INCLUDE_DIRECTORIES)
+ 
+ add_library(carl-parser SHARED ${CMAKE_CURRENT_SOURCE_DIR}/carl-parser/ParseTreeVisitor.cpp ${CMAKE_CURRENT_SOURCE_DIR}/carl-parser/Parser.cpp ${ANTLR_generated_sources})
+-target_include_directories(carl-parser PUBLIC ${ANTLR_generated_include})
+-target_link_libraries(carl-parser PUBLIC lib_carl PRIVATE antlr4shared)
++target_link_libraries(carl-parser PUBLIC lib_carl PRIVATE antlr4-runtime)
+ 
+ set(PARSER_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/)
+-list(APPEND PARSER_INCLUDES ${ANTLR_generated_include})
+ 
++# 2) Install all public headers (the handwritten ones and the generated ones)
++#    adjust paths if your headers live elsewhere
++install(
++  DIRECTORY
++      ${CMAKE_CURRENT_SOURCE_DIR}/carl-parser
++      ${ANTLR_generated_include}/carl-parser
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++  FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
++)
++
++list(APPEND PARSER_INCLUDES ${ANTLR_generated_include})
+ 
++message(WARNING "PARSER_INCLUDES: ${PARSER_INCLUDES}")
+ 
+ target_include_directories( carl-parser PUBLIC
+-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/src>
++        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/carl-parser>
+         "$<BUILD_INTERFACE:${PARSER_INCLUDES}>"
+         )
