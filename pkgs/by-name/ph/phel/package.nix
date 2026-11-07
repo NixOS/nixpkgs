@@ -7,16 +7,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phel";
-  version = "0.51.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "phel-lang";
     repo = "phel-lang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z3pTEIi37FzMzPPDNDIWz49/SMKkFWHUOOIib3ZQWG4=";
+    hash = "sha256-TJaQWdCTmpM5DAQf2qdHyDzZvNdctNRoeVT74lBoZPk=";
   };
 
-  vendorHash = "sha256-4Pwzv/6njVwKeCK8WPZSDxWRxMsir3t/d/pbrY4qyFg=";
+  vendorHash = "sha256-s4GM2M1s7zV78XLWoipSQzm1eNzW+TQhhMVFCKfCLlc=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -27,6 +27,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phel-lang/phel-lang";
     license = lib.licenses.mit;
     mainProgram = "phel";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Chemaclass ];
   };
 })
