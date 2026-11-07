@@ -14,7 +14,8 @@ if [ -z "$NIXOS_ENTER_REEXEC" ]; then
     fi
     exec unshare --fork --mount --uts --mount-proc $extraFlags -- "$0" "$@"
 else
-    mount --make-rprivate /
+    # Allow nixos-enter to tolerate the unsupported private-remount operation on an already-private initrd rootfs
+    mount --make-rprivate / || test "$(findmnt -n -o FSTYPE,PROPAGATION /)" = "rootfs private"
 fi
 
 mountPoint=/mnt
