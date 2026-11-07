@@ -1,16 +1,18 @@
 {
-  pkgs,
   buildPythonPackage,
   callPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
   cysignals,
-  passagemath-objects,
+  cython,
+  ecm,
+  fetchPypi,
+  gmp,
+  lib,
   passagemath-categories,
+  passagemath-environment,
+  passagemath-objects,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 let
@@ -28,10 +30,12 @@ buildPythonPackage rec {
     passagemath-setup
     passagemath-environment
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     gmp
     ecm
   ];
+
   dependencies = [
     memory-allocator
     cysignals
@@ -44,5 +48,14 @@ buildPythonPackage rec {
     pname = "passagemath_libecm";
     inherit version;
     hash = "sha256-M5uz4EKiPQy1+hr0MYVZolkqWx0AL2oxapvOb4Q42+Q=";
+  };
+
+  meta = {
+    description = "";
+    longDescription = ''
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,15 +1,14 @@
 {
-  pkgs,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
-  passagemath-objects,
-  passagemath-categories,
+  cliquer,
   cysignals,
+  cython,
+  fetchPypi,
+  lib,
+  passagemath-categories,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -21,20 +20,30 @@ buildPythonPackage rec {
     setuptools
     pkgconfig
     passagemath-setup
-    passagemath-categories
-    passagemath-environment
-    passagemath-objects
     cython
   ];
-  buildInputs = with pkgs; [
+  buildInputs = [
     cliquer
   ];
 
-  dependencies = [ cysignals ];
+  dependencies = [
+    cysignals
+    passagemath-categories
+  ];
 
   src = fetchPypi {
     pname = "passagemath_cliquer";
     inherit version;
     hash = "sha256-VO/KTJVxsqA4XQqABKeYW4hV99lbYxSxfS55KgeZccw=";
+  };
+
+  meta = {
+    description = "passagemath: Finding cliques in graphs with cliquer";
+    longDescription = ''
+      `passagemath-cliquer`` provides an interface to [cliquer](https://users.aalto.fi/~pat/cliquer.html), an exact branch-and-bound algorithm for finding cliques in an arbitrary weighted graph by Patric Östergård.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

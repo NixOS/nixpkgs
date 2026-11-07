@@ -5,6 +5,7 @@
   fetchPypi,
   flint,
   iml,
+  lib,
   passagemath-environment,
   passagemath-flint,
   passagemath-modules,
@@ -47,5 +48,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sage.env"
   ];
+
+  meta = {
+    description = "passagemath: Linear Algebra with IML";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
+  };
 }
 

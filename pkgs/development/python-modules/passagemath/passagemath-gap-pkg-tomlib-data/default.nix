@@ -1,11 +1,10 @@
 {
-  pkgs,
-  python,
   buildPythonPackage,
   fetchPypi,
+  lib,
+  passagemath-environment,
   passagemath-setup,
   setuptools,
-  passagemath-environment,
   ...
 }:
 buildPythonPackage rec {
@@ -13,6 +12,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup
@@ -26,5 +26,12 @@ buildPythonPackage rec {
     pname = "passagemath_gap_pkg_tomlib_data";
     inherit version;
     hash = "sha256-c927q/6dCkK44DAp9v1xS5Sj0MD5fkYhtau51o/qNE0=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Group Theory with GAP: tomlib data";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

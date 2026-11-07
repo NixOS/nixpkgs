@@ -2,13 +2,15 @@
   buildPythonPackage,
   cysignals,
   cython,
+  ecl,
   fetchPypi,
+  gmp,
   lib,
+  libffi,
   passagemath-categories,
   passagemath-environment,
   passagemath-setup,
   pkgconfig,
-  pkgs,
   setuptools,
   ...
 }:
@@ -17,20 +19,24 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup
     pkgconfig
     cython
   ];
-  nativeBuildInputs = with pkgs; [
+
+  nativeBuildInputs = [
     ecl
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     ecl
     gmp
     libffi
   ];
+
   dependencies = [
     cysignals
     passagemath-categories

@@ -4,6 +4,7 @@
   cysignals,
   cython,
   fetchPypi,
+  gmp,
   gmpy2,
   lib,
   passagemath-categories,
@@ -12,6 +13,7 @@
   pkgconfig,
   pkgs,
   setuptools,
+  symmetrica,
   ...
 }:
 let
@@ -29,10 +31,12 @@ buildPythonPackage rec {
     passagemath-setup
     passagemath-environment
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     gmp
     symmetrica
   ];
+
   dependencies = [
     gmpy2
     cysignals
@@ -46,7 +50,7 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-NL041IFFaWhfnXd47xHGwULzXJx1Il1WMCZAc6qqDFE=";
   };
-  
+
   meta = {
     description = "passagemath: Algebraic combinatorics, combinatorial representation theory";
     homepage = "https://passagemath.org";

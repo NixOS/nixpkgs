@@ -2,13 +2,18 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
+  glpk,
+  gmp,
+  libmpc,
+  mpfr,
+  lib,
+  libz,
   passagemath-setup,
   setuptools,
   passagemath-environment,
   cython,
   pkgconfig,
   passagemath-categories,
-  pkgs,
   passagemath-objects,
   cysignals,
   ...
@@ -30,7 +35,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  buildInputs = with pkgs; [
+  buildInputs =[
     glpk
     gmp
     libmpc
@@ -48,5 +53,15 @@ buildPythonPackage rec {
     pname = "passagemath_glpk";
     inherit version;
     hash = "sha256-7VNjIRAALpu0SuuUh+taNzOxxJp1rM2SndGykSm6fDY=";
+  };
+
+  meta = {
+    description = "passagemath: Linear and mixed integer linear optimization backend using GLPK";
+    longDescription = ''
+      `passagemath-glpk` provides a backend for linear and mixed integer linear optimization backend using GLPK.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

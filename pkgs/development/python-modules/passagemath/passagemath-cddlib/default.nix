@@ -1,13 +1,15 @@
 {
-  pkgs,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
+  cddlib,
   cysignals,
+  cython,
+  fetchPypi,
+  gmp,
+  lib,
+  passagemath-environment,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     pkgconfig
     passagemath-setup
   ];
-  buildInputs = with pkgs; [
+  buildInputs = [
     cddlib
     gmp
   ];
@@ -34,5 +36,15 @@ buildPythonPackage rec {
     pname = "passagemath_cddlib";
     inherit version;
     hash = "sha256-X49ApHhjEYayupnCTppzwXO2RGDWOrYUzH9+Vz5gfGU=";
+  };
+
+  meta = {
+    description = "passagemath: Polyhedral computation with cddlib";
+    longDescription = ''
+      `passagemath-cddlib` provides an interface to [cddlib](https://github.com/cddlib/cddlib), the library for polyhedral representation conversion using the double description method.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

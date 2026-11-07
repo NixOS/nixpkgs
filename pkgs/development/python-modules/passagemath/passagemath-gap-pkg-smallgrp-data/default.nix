@@ -1,11 +1,10 @@
 {
-  pkgs,
-  python,
   buildPythonPackage,
   fetchPypi,
+  lib,
+  passagemath-environment,
   passagemath-setup,
   setuptools,
-  passagemath-environment,
   ...
 }:
 buildPythonPackage rec {
@@ -26,5 +25,12 @@ buildPythonPackage rec {
     pname = "passagemath_gap_pkg_smallgrp_data";
     inherit version;
     hash = "sha256-liY6rLjeCls9kV0wuugNwDj0yD27NkM7Gj+N/qgRJmU=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Group Theory with GAP: smallgrp data";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

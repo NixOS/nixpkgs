@@ -1,16 +1,19 @@
 {
-  pkgs,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
   cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
+  fetchPypi,
+  flint,
+  gap,
+  gmp,
+  lib,
   passagemath-categories,
+  passagemath-environment,
+  passagemath-flint,
   passagemath-gap,
   passagemath-modules,
-  passagemath-flint,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -18,6 +21,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup
@@ -26,11 +30,13 @@ buildPythonPackage rec {
     passagemath-environment
     passagemath-flint
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     flint
     gap
     gmp
   ];
+
   dependencies = [
     passagemath-categories
     passagemath-gap
@@ -41,5 +47,12 @@ buildPythonPackage rec {
     pname = "passagemath_groups";
     inherit version;
     hash = "sha256-69dE3LSzdRyHbTZ9uM7cRP6RMErT+D7/62xCOcjlXys=";
+  };
+
+  meta = {
+    description = "passagemath: Groups and Invariant Theory";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

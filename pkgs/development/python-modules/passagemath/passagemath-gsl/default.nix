@@ -1,18 +1,21 @@
 {
-  pkgs,
   buildPythonPackage,
   callPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
-  jinja2,
   cysignals,
+  cython,
+  fetchPypi,
+  gmp,
+  gsl,
+  jinja2,
+  lib,
+  mpfr,
   numpy,
   passagemath-categories,
+  passagemath-environment,
   passagemath-modules,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 let
@@ -31,7 +34,7 @@ buildPythonPackage rec {
     passagemath-environment
     jinja2
   ];
-  buildInputs = with pkgs; [
+  buildInputs = [
     gsl
     gmp
     mpfr
@@ -49,5 +52,12 @@ buildPythonPackage rec {
     pname = "passagemath_gsl";
     inherit version;
     hash = "sha256-zA19Y3wJUGdU6gOWX3w1iXYG9WyWZq8LjvkCuuKGBEs=";
+  };
+
+  meta = {
+    description = "passagemath: Numerics with the GNU Scientific Library";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

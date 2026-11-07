@@ -12,6 +12,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup

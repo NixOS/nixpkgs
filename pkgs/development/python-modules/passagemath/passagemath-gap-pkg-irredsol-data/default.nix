@@ -1,11 +1,10 @@
 {
-  pkgs,
-  python,
   buildPythonPackage,
   fetchPypi,
+  lib,
+  passagemath-environment,
   passagemath-setup,
   setuptools,
-  passagemath-environment,
   ...
 }:
 buildPythonPackage rec {
@@ -26,5 +25,12 @@ buildPythonPackage rec {
     pname = "passagemath_gap_pkg_irredsol_data";
     inherit version;
     hash = "sha256-hzjUxL7/WsekcXItBBfB0iRhfb2vvsbaHNuvHhUaf9s=";
+  };
+
+  meta = {
+    description = "passagemath: Computational Group Theory with GAP: irredsol data";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

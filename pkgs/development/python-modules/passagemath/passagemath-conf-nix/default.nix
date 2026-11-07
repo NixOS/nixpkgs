@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
+  lib,
   setuptools,
-  writeText,
   ...
 }:
 let
@@ -16,4 +16,11 @@ buildPythonPackage {
   build-system = [
       setuptools
     ];
+
+  meta = {
+    description = "Nix specific's `passagemath-conf` implementation";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.mit;
+  };
 }

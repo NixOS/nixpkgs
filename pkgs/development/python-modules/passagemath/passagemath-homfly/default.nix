@@ -1,14 +1,16 @@
 {
-  pkgs,
+  boehmgc,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
   cysignals,
+  cython,
+  fetchPypi,
+  lib,
+  libhomfly,
+  passagemath-environment,
   passagemath-objects,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -16,6 +18,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup
@@ -24,10 +27,12 @@ buildPythonPackage rec {
     cython
     pkgconfig
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     libhomfly
     boehmgc
   ];
+
   dependencies = [
     cysignals
   ];
@@ -36,5 +41,12 @@ buildPythonPackage rec {
     pname = "passagemath_homfly";
     inherit version;
     hash = "sha256-fvrkxYRmVbDbCNBnaxy+yMw+bQ50sPZuWq4GdNN4Gks=";
+  };
+
+  meta = {
+    description = "passagemath: Homfly polynomials of knots/links with libhomfly";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

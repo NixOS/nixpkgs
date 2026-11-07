@@ -1,16 +1,18 @@
 {
-  pkgs,
   buildPythonPackage,
   callPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
   cysignals,
-  passagemath-objects,
+  cython,
+  fetchPypi,
+  highs,
+  lib,
+  libz,
   passagemath-categories,
+  passagemath-environment,
+  passagemath-objects,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 let
@@ -21,6 +23,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     pkgconfig
@@ -29,10 +32,12 @@ buildPythonPackage rec {
     passagemath-environment
     cython
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     highs
     libz
   ];
+
   dependencies = [
     passagemath-objects
     memory-allocator
@@ -43,5 +48,12 @@ buildPythonPackage rec {
     pname = "passagemath_highs";
     inherit version;
     hash = "sha256-qhRPvx7g2q+w7KwKqL2Y2GhCHqOtgV2fj3qWHBpp3h8=";
+  };
+
+  meta = {
+    description = "passagemath: Linear and mixed integer linear optimization backend using HiGHS";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

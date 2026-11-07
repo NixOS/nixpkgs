@@ -6,7 +6,11 @@
   dot2tex,
   fetchPypi,
   gap,
+  gmp,
   gmpy2,
+  lib,
+  libmpc,
+  mpfr,
   passagemath-categories,
   passagemath-environment,
   passagemath-gap-pkg-factint-data,
@@ -17,7 +21,6 @@
   passagemath-setup,
   pexpect,
   pkgconfig,
-  pkgs,
   setuptools,
   ...
 }:
@@ -29,6 +32,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     passagemath-setup
@@ -37,12 +41,14 @@ buildPythonPackage rec {
     gmpy2
     pkgconfig
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     gmp
     mpfr
     gap
     libmpc
   ];
+
   dependencies = [
     cysignals
     dot2tex
@@ -60,5 +66,14 @@ buildPythonPackage rec {
     pname = "passagemath_gap";
     inherit version;
     hash = "sha256-V65670IxOhm/If+vV+95GqUPpNxQOzkBoE2plVlC7bo=";
+  };
+
+  meta = {
+    description = "";
+    longDescription = ''
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

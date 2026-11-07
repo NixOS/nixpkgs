@@ -1,16 +1,23 @@
 {
-  pkgs,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
   cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
+  fetchPypi,
+  flint,
+  gmp,
+  gsl,
+  lib,
+  libz,
+  mpfi,
+  mpfr,
+  ntl,
   numpy,
-  passagemath-ntl,
   passagemath-categories,
+  passagemath-environment,
   passagemath-modules,
+  passagemath-ntl,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -18,6 +25,7 @@ buildPythonPackage rec {
   version = "10.8.13";
 
   pyproject = true;
+
   build-system = [
     setuptools
     cython
@@ -26,7 +34,8 @@ buildPythonPackage rec {
     passagemath-environment
     passagemath-modules
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     flint
     gmp
     libz
@@ -35,6 +44,7 @@ buildPythonPackage rec {
     ntl
     mpfi
   ];
+
   dependencies = [
     numpy
     passagemath-ntl
@@ -45,5 +55,15 @@ buildPythonPackage rec {
     pname = "passagemath_flint";
     inherit version;
     hash = "sha256-T0cjq9zrgvKQ/SC5vXMXhwj1t3IeY6e8ZT3Lzw6kEGc=";
+  };
+
+  meta = {
+    description = "passagemath: Fast computations with MPFI and FLINT";
+    longDescription = ''
+      `passagemath-flint` provides Cython interfaces to the `MPFI` and `FLINT` libraries.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

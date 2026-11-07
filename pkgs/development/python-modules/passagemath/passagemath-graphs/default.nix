@@ -1,16 +1,20 @@
 {
-  pkgs,
+  boost,
   buildPythonPackage,
   callPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
-  gmpy2,
   cysignals,
+  cython,
+  fetchPypi,
+  gmp,
+  gmpy2,
+  lib,
+  libmpc,
+  mpfr,
   passagemath-categories,
+  passagemath-environment,
+  passagemath-setup,
+  pkgconfig,
+  setuptools,
   ...
 }:
 let
@@ -28,12 +32,14 @@ buildPythonPackage rec {
     passagemath-setup
     passagemath-environment
   ];
-  buildInputs = with pkgs; [
+
+  buildInputs = [
     gmp
     mpfr
     libmpc
     boost
   ];
+
   dependencies = [
     gmpy2
     memory-allocator
@@ -46,5 +52,12 @@ buildPythonPackage rec {
     pname = "passagemath_graphs";
     inherit version;
     hash = "sha256-unnjdZnN+Yuml26WBcNLfHmbXXDGROGAyMqmkbxsRKE=";
+  };
+
+  meta = {
+    description = "passagemath: Graphs, posets, hypergraphs, designs, abstract complexes, combinatorial polyhedra, abelian sandpiles, quivers";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

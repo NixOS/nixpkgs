@@ -28,17 +28,19 @@ buildPythonPackage rec {
     hash = "sha256-N6dB1NP1uUED/DxAwuRSChQejV4lyHqI6U8B6gQ7paI=";
   };
 
-  meta = {
-    description = "Runtime environment configuration for the modular SageMath library";
-    longDescription = ''
-      This module defines variables inside python, consummed by Sage packages.
-      Sage packages define each variables in this fallback order:
-        1. Takes value of an environment variable of the same name if it exists;
-        2. Takes value of what is defined in the sage.config module (which is pkgs.python3Packages.passagemath-conf)
-        3. Takes the value of what the Sage package decide.
-    '';
+  pythonImportsChecks = [
+    "sage"
+    "sage.features"
+    "sage.misc.package"
+    "sage.misc.package_dir"
+    "sage.misc.temporary_dir"
+    "sage.misc.viewer"
+  ];
 
+  meta = {
+    description = "passagemath: System and software environment";
     homepage = "https://passagemath.org/";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
     license = lib.licenses.gpl2Plus;
   };
 }

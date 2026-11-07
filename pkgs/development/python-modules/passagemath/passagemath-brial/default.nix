@@ -8,6 +8,7 @@
   passagemath-setup,
   cysignals,
   passagemath-categories,
+  lib,
   ...
 }:
 buildPythonPackage rec {
@@ -41,5 +42,15 @@ buildPythonPackage rec {
     pname = "passagemath_brial";
     inherit version;
     hash = "sha256-HGCdG76KdKR/Us+Nd6pN5rD6VK1gS9OquaKsFniBjQY=";
+  };
+
+  meta = {
+    description = "passagemath: Boolean Ring Algebra with BRiAl";
+    longDescription = ''
+     `passagemath-brial` provides a Boolean Ring Algebra implementation using binary decision diagrams, implemented by the BRiAl library, the successor to PolyBoRi.
+    '';
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }

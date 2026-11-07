@@ -1,13 +1,14 @@
 {
-  pkgs,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  pkgconfig,
-  passagemath-setup,
-  passagemath-environment,
   cysignals,
+  cython,
+  fetchPypi,
+  lib,
+  passagemath-environment,
+  passagemath-setup,
+  pkgconfig,
+  pkgs,
+  setuptools,
   ...
 }:
 buildPythonPackage rec {
@@ -33,5 +34,12 @@ buildPythonPackage rec {
     pname = "passagemath_libbraiding";
     inherit version;
     hash = "sha256-3av3c7KSk6K9CuvFJb4fJYXNSSFl4CFPKNDpKq7hlXA=";
+  };
+
+  meta = {
+    description = "passagemath: Braid computations with libbraiding";
+    homepage = "https://passagemath.org";
+    sourceProvenance = "https://github.com/passagemath/passagemath";
+    license = lib.licenses.gpl2Plus;
   };
 }
