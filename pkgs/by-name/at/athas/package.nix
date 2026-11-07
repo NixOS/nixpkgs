@@ -1,160 +1,154 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  wrapGAppsHook3,
+  fetchFromGitHub,
   nix-update-script,
-  glib,
-  gtk3,
-  gdk-pixbuf,
-  cairo,
-  pango,
-  atk,
-  at-spi2-core,
-  nss,
-  nspr,
-  dbus,
-  cups,
-  expat,
-  zlib,
-  xz,
-  alsa-lib,
-  libxkbcommon,
-  libgbm,
-  mesa,
-  libGL,
-  libdrm,
-  fontconfig,
-  freetype,
-  systemdLibs,
-  libx11,
-  libxcb,
-  libxcomposite,
-  libxdamage,
-  libxext,
-  libxfixes,
-  libxrandr,
-  libxrender,
-  libxcursor,
-  libxi,
-  libxtst,
-  libxscrnsaver,
-  libxshmfence,
+  rustPlatform,
+  cargo-tauri,
+  bun,
+  nodejs,
+  writableTmpDirAsHomeHook,
+  pkg-config,
+  wrapGAppsHook4,
+  jq,
+  glib-networking,
+  libayatana-appindicator,
+  openssl,
+  webkitgtk_4_1,
 }:
 
-let
-  # Prebuilt Linux release tarballs published by upstream. Athas bundles a
-  # CEF/Chromium runtime, so building from source in nixpkgs is impractical;
-  # the release artifacts are wrapped instead.
-  sources = {
-    x86_64-linux = {
-      arch = "x86_64";
-      hash = "sha256-0E+N59njEy3n3QAnUTBTH3p5fELFEnt/caBAOshiT+Y=";
-    };
-    aarch64-linux = {
-      arch = "aarch64";
-      hash = "sha256-kRGg6rWkB6xE+y8K8qn9xouAklixSHODOXc1bPdGcXE=";
-    };
-  };
-
-  source =
-    sources.${stdenv.hostPlatform.system}
-      or (throw "athas: unsupported system ${stdenv.hostPlatform.system}");
-
-  runtimeLibs = [
-    glib
-    gtk3
-    gdk-pixbuf
-    cairo
-    pango
-    atk
-    at-spi2-core
-    nss
-    nspr
-    dbus
-    cups
-    expat
-    zlib
-    xz
-    alsa-lib
-    libxkbcommon
-    libgbm
-    mesa
-    libGL
-    libdrm
-    fontconfig
-    freetype
-    systemdLibs
-    libx11
-    libxcb
-    libxcomposite
-    libxdamage
-    libxext
-    libxfixes
-    libxrandr
-    libxrender
-    libxcursor
-    libxi
-    libxtst
-    libxscrnsaver
-    libxshmfence
-  ];
-in
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "athas";
-  version = "0.7.2";
+  version = "0.17.0";
 
-  src = fetchurl {
-    url = "https://github.com/athasdev/athas/releases/download/v${finalAttrs.version}/Athas_${finalAttrs.version}_linux-${source.arch}.tar.gz";
-    inherit (source) hash;
+  src = fetchFromGitHub {
+    owner = "athasdev";
+    repo = "athas";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YZB5yOu1VrCILUYlxWOYfvOGzmlZu6R6/V8zwfKFF0g=";
   };
 
-  sourceRoot = "athas.app";
+  buildAndTestSubdir = "src-tauri";
 
-  strictDeps = true;
+  cargoHash = "sha256-8aBp2JtfpS7P1x7av1cq88BuYunZ7BjMHnBZLUJ9sNA=";
+
+  doCheck = false;
+
   __structuredAttrs = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    wrapGAppsHook3
-  ];
+  node_modules = stdenv.mkDerivation {
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
-  buildInputs = runtimeLibs;
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-  dontWrapGApps = true;
+    nativeBuildInputs = [
+      bun
+      nodejs
+      writableTmpDirAsHomeHook
+    ];
 
-  # chrome-sandbox needs a setuid bit that the Nix store cannot provide; the
-  # launcher runs with --no-sandbox, so Vulkan is disabled and skipped during
-  # autoPatchelf too.
-  autoPatchelfIgnoreMissingDeps = [ "libvulkan.so.1" ];
+    dontConfigure = true;
 
-  installPhase = ''
-    runHook preInstall
+    buildPhase = ''
+      runHook preBuild
 
-    mkdir -p $out/libexec $out/lib $out/share
-    cp -r libexec/. $out/libexec/
-    cp -r lib/. $out/lib/
-    cp -r share/. $out/share/
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install \
+        --backend=copyfile \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
 
-    makeWrapper $out/libexec/athas $out/bin/athas \
-      --add-flags "--no-sandbox --ozone-platform=x11 --disable-vulkan --disable-features=Vulkan" \
-      --prefix LD_LIBRARY_PATH : "$out/libexec:${lib.makeLibraryPath runtimeLibs}" \
-      "''${gappsWrapperArgs[@]}"
+      runHook postBuild
+    '';
 
-    runHook postInstall
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+      # Remove Windows executables fetched by --os="*"
+      find $out -type f -name '*.exe' -delete
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+    outputHash = "sha256-jplT9Y1ra4fS97HFbruai03MD77aP6Uimgm2rDLht+M=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
+  postPatch = ''
+    cp -R ${finalAttrs.node_modules}/. .
+    find . -type d -name node_modules -exec chmod -R u+rw {} \;
+    find . -path "*/node_modules/.bin" -type d -exec chmod -R u+x {} \;
+    patchShebangs .
+
+    # Disable updater artifact generation in cargo-tauri build
+    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json > src-tauri/tauri.conf.json.tmp
+    mv src-tauri/tauri.conf.json.tmp src-tauri/tauri.conf.json
+
+    # Fix libayatana-appindicator path
+    libappindicatorSys=$(find $cargoDepsCopy -path '*/libappindicator-sys-*/src/lib.rs' -print -quit)
+    if [ -n "$libappindicatorSys" ]; then
+      substituteInPlace "$libappindicatorSys" \
+        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    fi
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    # Disable in-app updater; updates are handled by Nix
+    touch "$out/bin/managed-by-package-manager"
+  '';
+
+  # Tauri runs beforeBuildCommand (`vp build`) via plain sh, so
+  # node_modules/.bin must be on PATH for the vite-plus CLI to resolve.
+  preBuild = ''
+    export PATH="$PWD/node_modules/.bin:$PATH"
+  '';
+
+  nativeBuildInputs = [
+    cargo-tauri.hook
+    bun
+    nodejs
+    writableTmpDirAsHomeHook
+    pkg-config
+    wrapGAppsHook4
+    jq
+  ];
+
+  buildInputs = [
+    glib-networking
+    libayatana-appindicator
+    openssl
+    webkitgtk_4_1
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
+
+  passthru = {
+    inherit (finalAttrs) node_modules;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage=node_modules"
+        "--use-github-releases"
+      ];
+    };
+  };
 
   meta = {
-    description = "Fast and extensible code editor";
+    description = "Lightweight code editor with Git, a terminal and AI agents";
     homepage = "https://github.com/athasdev/athas";
     changelog = "https://github.com/athasdev/athas/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ _0x4bs3nt ];
     mainProgram = "athas";
     platforms = [
