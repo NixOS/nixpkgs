@@ -6,6 +6,7 @@
   python3Packages,
   perl,
   ffmpeg,
+  versionCheckHook,
 }:
 
 let
@@ -22,7 +23,7 @@ let
     requests-mock
     ;
 
-  version = "4.199";
+  version = "4.211";
 
 in
 
@@ -35,7 +36,7 @@ buildPythonApplication {
     owner = "spaam";
     repo = "svtplay-dl";
     tag = version;
-    hash = "sha256-anPYRC/BDJnLtuVBaGHmU4K6e4xw/ZvDeUMXes508Kg=";
+    hash = "sha256-EJEvQvfKzEvNN9b+TFtXnT3tzZj9i2nZo3uFkwvZ0Os=";
   };
 
   build-system = [ setuptools ];
@@ -54,10 +55,12 @@ buildPythonApplication {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
+    pytestCheckHook
     requests-mock
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   pytestFlags = [
     "--doctest-modules"
@@ -74,10 +77,6 @@ buildPythonApplication {
   postInstall = ''
     installManPage svtplay-dl.1
     makeWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}")
-  '';
-
-  postInstallCheck = ''
-    $out/bin/svtplay-dl --help > /dev/null
   '';
 
   passthru.updateScript = nix-update-script { };
