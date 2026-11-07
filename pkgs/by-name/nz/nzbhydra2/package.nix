@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "9.1.1";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "theotherp";
     repo = "nzbhydra2";
     tag = "v${version}";
-    hash = "sha256-z1qyT6B//skWFGKysvOauZcFAJyul6ouAL2uwSANFqk=";
+    hash = "sha256-i20bWwPCZE81CLTfxL3kuXvsTtxlPyeOl1YMwCwoOlk=";
   };
 
   # Skip some plugins not required for NixOS packaging to reduce required dependencies.
@@ -54,7 +54,7 @@ let
 
     nodejs = nodejs_26;
 
-    npmDepsHash = "sha256-WwjJ6hDfl/aQWQ4yQNB+H6hD78k5iKuGB/rdqx7PQxk=";
+    npmDepsHash = "sha256-qG6LMORc2Gr9sxOR4zdnxDnNX10RIW3xukF8V42y71g=";
 
     installPhase = ''
       runHook preInstall
@@ -75,7 +75,7 @@ maven.buildMavenPackage {
   pname = "nzbhydra2";
   inherit version src;
 
-  mvnHash = "sha256-J/yRwJIfonXFOMCuQAQyaDoggpAqSCQ90E0VNb8Cx0k=";
+  mvnHash = "sha256-PE4dN7LMOpZJSch1ZAk/E1e3ayxuX5t2A2+N9/LOMaI=";
 
   # The fetch runs core's tests too, and WebConfigurationTest needs the UI bundle on the classpath.
   mvnFetchExtraArgs.preBuild = ''
