@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.98.2";
+  version = "2.101.11";
 
   src = fetchFromGitHub {
     owner = "ttlequals0";
     repo = "MinusPod";
     tag = "v${version}";
-    hash = "sha256-VhKEUoFTgaH9LrQbU9gmzhCajbz7gSr0OPIZr8eYEmg=";
+    hash = "sha256-cvIWLZjdzoohf4VogKKXBhujHmqdE+jpo5crOtl2qWo=";
   };
 
   frontend = callPackage ./frontend.nix {
@@ -114,7 +114,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   passthru = {
     inherit frontend;
     tests.basic = nixosTests.minuspod;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--subpackage=frontend" ];
+    };
   };
 
   meta = {
