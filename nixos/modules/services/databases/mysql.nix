@@ -375,6 +375,21 @@ in
           example = "mariabackup";
         };
 
+        sstCompression = lib.mkOption {
+          type = lib.types.nullOr (
+            lib.types.enum [
+              "gzip"
+              "zstd"
+            ]
+          );
+          default = null;
+          example = "zstd";
+          description = ''
+            Set tool to compress the state snapshot transfer stream. Requires {option}`services.mysql.galeraCluster.sstMethod` to be `mariabackup`.
+            Configure the same algorithm on all cluster nodes. When null, no compression commands are configured.
+          '';
+        };
+
         localName = lib.mkOption {
           type = lib.types.str;
           description = "The unique name that identifies this particular node within the cluster. Each node must have a different name.";
@@ -431,6 +446,11 @@ in
     ]
     # galeraCluster options checks
     ++ lib.optionals cfg.galeraCluster.enable [
+      {
+        assertion =
+          cfg.galeraCluster.sstCompression == null || cfg.galeraCluster.sstMethod == "mariabackup";
+        message = "services.mysql.galeraCluster.sstCompression requires sstMethod = mariabackup.";
+      }
       {
         assertion =
           cfg.galeraCluster.localAddress != ""
@@ -501,6 +521,18 @@ in
       binlog_format = "ROW";
       innodb_autoinc_lock_mode = 2;
     };
+
+    services.mysql.settings.sst =
+      lib.mkIf (cfg.galeraCluster.enable && cfg.galeraCluster.sstCompression != null)
+        (
+          let
+            compressor = lib.getExe pkgs.${cfg.galeraCluster.sstCompression};
+          in
+          {
+            compressor = lib.mkDefault "${compressor} -c";
+            decompressor = lib.mkDefault "${compressor} -d -c";
+          }
+        );
 
     users.users = lib.optionalAttrs (cfg.user == "mysql") {
       mysql = {
