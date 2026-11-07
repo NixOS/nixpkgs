@@ -48,6 +48,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.gnome.org/GNOME/pyatspi2";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ jtojnar ];
+    teams = [ lib.teams.gnome ];
     platforms = with lib.platforms; unix;
   };
 }
