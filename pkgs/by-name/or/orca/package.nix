@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     (replaceVars ./fix-paths.patch {
       pgrep = "${procps}/bin/pgrep";
-      xkbcomp = "${xkbcomp}/bin/xkbcomp";
+      xkbcomp = lib.getExe xkbcomp;
     })
   ];
 

@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      unzip = "${lib.getBin unzip}/bin/unzip";
+      unzip = lib.getExe unzip;
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection

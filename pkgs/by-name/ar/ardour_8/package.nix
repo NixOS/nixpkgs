@@ -101,7 +101,7 @@ stdenv.mkDerivation (
       sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
       patchShebangs ./tools/
       substituteInPlace libs/ardour/video_tools_paths.cc \
-        --replace-fail 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+        --replace-fail 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${lib.getExe ffmpeg}");' \
         --replace-fail 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
     '';
 

@@ -1,4 +1,5 @@
 {
+  lib,
   runtimeShell,
   symlinkJoin,
   writeShellScriptBin,
@@ -19,7 +20,7 @@ let
       chmod 644 levels/*
     fi
     echo "Now calling npush"
-    exec "${npush}/bin/npush"
+    exec "${lib.getExe npush}"
   '';
 in
 symlinkJoin {

@@ -51,7 +51,7 @@ resholve.mkDerivation (finalAttrs: {
   solutions = {
     git-ftp = {
       scripts = [ "bin/git-ftp" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         git

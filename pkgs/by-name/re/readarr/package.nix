@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}/.
-    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Readarr \
+    makeWrapper "${lib.getExe dotnet-runtime}" $out/bin/Readarr \
       --add-flags "$out/share/${pname}-${version}/Readarr.dll" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [

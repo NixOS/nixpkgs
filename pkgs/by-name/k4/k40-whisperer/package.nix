@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace svg_reader.py \
-      --replace '"/usr/bin/inkscape"' '"${inkscape}/bin/inkscape"'
+      --replace '"/usr/bin/inkscape"' '"${lib.getExe inkscape}"'
   '';
 
   buildPhase = "";

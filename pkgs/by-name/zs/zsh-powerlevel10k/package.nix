@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./gitstatusd.patch {
-      gitstatusdPath = "${gitstatus}/bin/gitstatusd";
+      gitstatusdPath = lib.getExe gitstatus;
     })
   ];
 

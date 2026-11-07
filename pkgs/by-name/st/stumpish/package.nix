@@ -29,9 +29,9 @@ stdenv.mkDerivation {
 
   patches = [
     (replaceVars ./paths.patch {
-      sed = "${gnused}/bin/sed";
-      xprop = "${xprop}/bin/xprop";
-      rlwrap = "${rlwrap}/bin/rlwrap";
+      sed = lib.getExe gnused;
+      xprop = lib.getExe xprop;
+      rlwrap = lib.getExe rlwrap;
       tput = "${ncurses}/bin/tput";
     })
   ];

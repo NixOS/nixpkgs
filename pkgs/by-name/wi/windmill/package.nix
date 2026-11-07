@@ -187,18 +187,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       } \
       --set PYTHON_PATH "${python312}/bin/python3" \
-      --set GO_PATH "${go}/bin/go" \
-      --set DENO_PATH "${deno}/bin/deno" \
-      --set NSJAIL_PATH "${nsjail}/bin/nsjail" \
-      --set FLOCK_PATH "${flock}/bin/flock" \
-      --set BASH_PATH "${bash}/bin/bash" \
-      --set POWERSHELL_PATH "${powershell}/bin/pwsh" \
-      --set BUN_PATH "${bun}/bin/bun" \
-      --set UV_PATH "${uv}/bin/uv" \
-      --set DOTNET_PATH "${dotnet-sdk_9}/bin/dotnet" \
+      --set GO_PATH "${lib.getExe go}" \
+      --set DENO_PATH "${lib.getExe deno}" \
+      --set NSJAIL_PATH "${lib.getExe nsjail}" \
+      --set FLOCK_PATH "${lib.getExe flock}" \
+      --set BASH_PATH "${lib.getExe bash}" \
+      --set POWERSHELL_PATH "${lib.getExe powershell}" \
+      --set BUN_PATH "${lib.getExe bun}" \
+      --set UV_PATH "${lib.getExe uv}" \
+      --set DOTNET_PATH "${lib.getExe dotnet-sdk_9}" \
       --set DOTNET_ROOT "${dotnet-sdk_9}/share/dotnet" \
-      --set PHP_PATH "${php}/bin/php" \
-      --set CARGO_PATH "${cargo}/bin/cargo"
+      --set PHP_PATH "${lib.getExe php}" \
+      --set CARGO_PATH "${lib.getExe cargo}"
   '';
 
   passthru.web-ui = buildNpmPackage {

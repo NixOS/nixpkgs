@@ -71,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./fix-paths.patch {
-      xsel = "${xsel}/bin/xsel";
-      xprop = "${xprop}/bin/xprop";
-      xdotool = "${xdotool}/bin/xdotool";
+      xsel = lib.getExe xsel;
+      xprop = lib.getExe xprop;
+      xdotool = lib.getExe xdotool;
       uname = "${coreutils}/bin/uname";
-      whereis = "${unixtools.whereis}/bin/whereis";
+      whereis = lib.getExe unixtools.whereis;
       gsettings = "${glib}/bin/gsettings";
     })
   ];
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rv $outputFiles "$target"
 
     makeWrapper \
-      "${mono}/bin/mono" \
+      "${lib.getExe mono}" \
       "$out/bin/keepass" \
       --add-flags "$target/KeePass.exe" \
       --prefix PATH : "$binPaths" \

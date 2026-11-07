@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       'return "${tinyprog}/bin/tinyprog --libusb --program"'
     substituteInPlace apio/util.py --replace-fail \
       '_command = apio_bin_dir / "tinyprog"' \
-      '_command = "${tinyprog}/bin/tinyprog"'
+      '_command = "${lib.getExe tinyprog}"'
 
     # semantic-version seems to not support version numbers like the one of tinyprog in Nixpkgs (1.0.24.dev114+gxxxxxxx).
     # See https://github.com/rbarrois/python-semanticversion/issues/47.

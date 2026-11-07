@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
 }:
 
@@ -14,7 +15,7 @@ let
   mkKernelSpec = std: {
     displayName = builtins.replaceStrings [ "c++" ] [ "C++ " ] std;
     argv = [
-      "${xeus-cpp}/bin/xcpp"
+      "${lib.getExe xeus-cpp}"
       "-std=${std}"
       "-f"
       "{connection_file}"

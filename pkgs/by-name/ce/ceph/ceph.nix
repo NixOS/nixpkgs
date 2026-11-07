@@ -259,7 +259,7 @@ stdenv.mkDerivation {
       --replace-fail "char command[128];" "char command[256];" \
       --replace-fail "/sbin/modinfo"  "${kmod}/bin/modinfo" \
       --replace-fail "/sbin/modprobe" "${kmod}/bin/modprobe" \
-      --replace-fail "/bin/grep" "${gnugrep}/bin/grep"
+      --replace-fail "/bin/grep" "${lib.getExe gnugrep}"
 
     # Patch remount to use full path to mount(8), otherwise ceph-fuse fails when run
     # from a systemd unit for example.

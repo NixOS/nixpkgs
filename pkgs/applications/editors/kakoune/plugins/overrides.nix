@@ -34,7 +34,7 @@ self: super: {
 
   fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: {
     preFixup = ''
-      if [[ -x "${fzf}/bin/fzf" ]]; then
+      if [[ -x "${lib.getExe fzf}" ]]; then
         fzfImpl='${fzf}/bin/fzf'
       else
         fzfImpl='${fzf}/bin/sk'

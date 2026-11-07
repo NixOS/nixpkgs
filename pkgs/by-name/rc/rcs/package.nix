@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_CFLAGS_COMPILE = "-std=c99";
-    ac_cv_path_ED = "${ed}/bin/ed";
+    ac_cv_path_ED = lib.getExe ed;
     DIFF = "${diffutils}/bin/diff";
     DIFF3 = "${diffutils}/bin/diff3";
   };

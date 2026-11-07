@@ -44,7 +44,7 @@ buildGo127Module (finalAttrs: {
         jukebox/jukebox.go \
         --replace-fail \
           '"mpv"' \
-          '"${lib.getBin mpv}/bin/mpv"'
+          '"${lib.getExe mpv}"'
     ''
     + ''
       substituteInPlace server/ctrlsubsonic/testdata/test* \

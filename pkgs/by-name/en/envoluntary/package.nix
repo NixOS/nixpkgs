@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-AXWOU8UduQZxZWcTaOyxilbdz4BMnZlrJEFTUakFa4w=";
 
   preCheck = ''
-    export NIX_BIN_BASH="${bash}/bin/bash"
+    export NIX_BIN_BASH="${lib.getExe bash}"
   '';
 
   meta = {

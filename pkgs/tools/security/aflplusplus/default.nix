@@ -109,11 +109,11 @@ let
       # Replace LLVM_BINDIR with a non-existing path to give a hard error when it's used.
       substituteInPlace src/afl-cc.c \
         --replace-fail "CLANGPP_BIN" '"${clang}/bin/clang++"' \
-        --replace-fail "CLANG_BIN" '"${clang}/bin/clang"' \
-        --replace-fail '"gcc"' '"${gcc}/bin/gcc"' \
+        --replace-fail "CLANG_BIN" '"${lib.getExe clang}"' \
+        --replace-fail '"gcc"' '"${lib.getExe gcc}"' \
         --replace-fail '"g++"' '"${gcc}/bin/g++"' \
         --replace-fail 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")" \
-        --replace-fail '#ifndef "${clang}/bin/clang"' '#ifndef CLANG_BIN'
+        --replace-fail '#ifndef "${lib.getExe clang}"' '#ifndef CLANG_BIN'
 
       substituteInPlace src/afl-ld-lto.c \
         --replace-fail 'LLVM_BINDIR' '"/nixpkgs-patched-does-not-exist"'
@@ -124,7 +124,7 @@ let
         --replace-fail 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
 
       substituteInPlace GNUmakefile.llvm \
-        --replace-fail "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+        --replace-fail "\$(LLVM_BINDIR)/clang" "${lib.getExe clang}"
     ''
     + lib.optionalString withNyx ''
       patchShebangs nyx_mode/build_nyx_support.sh

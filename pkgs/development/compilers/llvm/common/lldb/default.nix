@@ -137,7 +137,7 @@ stdenv.mkDerivation (
       (lib.cmakeBool "LLDB_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
       (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
       (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
-      (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
+      (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lib.getExe lit}")
       (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

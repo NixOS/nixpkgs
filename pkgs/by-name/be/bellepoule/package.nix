@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Use system php
-    substituteInPlace ./sources/common/network/web_server.cpp --replace-fail "php7.4" "${php}/bin/php"
+    substituteInPlace ./sources/common/network/web_server.cpp --replace-fail "php7.4" "${lib.getExe php}"
 
     # FixUp desktop templates to point to our own output
     substituteInPlace ./build/BellePoule/debian/bellepoule.desktop.template --replace-fail "/usr" "$out"

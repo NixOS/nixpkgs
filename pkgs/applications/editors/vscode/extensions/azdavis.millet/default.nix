@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/millet-ls"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."millet.server.path".default = "${lib.getExe millet}"' package.json | sponge package.json
   '';
   meta = {
     description = "Standard ML support for VS Code";

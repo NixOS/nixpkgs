@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       cp $script $out/bin/
 
       substituteInPlace $out/bin/$script \
-        --replace-fail '$editor = "vim";' '$editor = "${nano}/bin/nano";'
+        --replace-fail '$editor = "vim";' '$editor = "${lib.getExe nano}";'
 
       wrapProgram $out/bin/$script \
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.CDDB_get ]}" \

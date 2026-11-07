@@ -1,4 +1,4 @@
-{ ark }:
+{ lib, ark }:
 
 # Jupyter notebook:
 # nix shell --impure --expr 'with import ./. {}; [ (jupyter.override { definitions.r = r-ark-kernel.definition; }) ]' -c jupyter-notebook
@@ -7,7 +7,7 @@
   definition = {
     displayName = "Ark R Kernel";
     argv = [
-      "${ark}/bin/ark"
+      "${lib.getExe ark}"
       "--connection_file"
       "{connection_file}"
       "--session-mode"

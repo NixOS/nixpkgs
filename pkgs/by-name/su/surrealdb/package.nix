@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optional hasRocksDB "storage-rocksdb";
 
   env = {
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
   }
   // lib.optionalAttrs hasRocksDB {

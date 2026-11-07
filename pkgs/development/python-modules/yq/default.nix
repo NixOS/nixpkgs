@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   patches = [
     (replaceVars ./jq-path.patch {
-      jq = "${lib.getBin jq}/bin/jq";
+      jq = lib.getExe jq;
     })
   ];
 

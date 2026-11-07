@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (
             mv ./{resources,LICENSE*} $out/lib/${binName}/
             install -Dm644 "${finalAttrs.githubSourceCode}/packages/frontend/apps/electron/resources/icons/icon_${buildType}_64x64.png" $out/share/icons/hicolor/64x64/apps/${binName}.png
 
-            makeWrapper "${electron}/bin/electron" $out/bin/${binName} \
+            makeWrapper "${lib.getExe electron}" $out/bin/${binName} \
               --inherit-argv0 \
               --add-flags $out/lib/${binName}/resources/app.asar \
               --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication {
         --replace-fail 'COMMAND="zenmap"' \
                       'COMMAND="'"$out/bin/zenmap"'"' \
         --replace-fail 'xterm' \
-                      '"${xterm}/bin/xterm"'
+                      '"${lib.getExe xterm}"'
   '';
 
   checkPhase = ''

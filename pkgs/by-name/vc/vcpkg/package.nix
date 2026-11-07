@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt,vcpkg-bundle.json} "$out/share/vcpkg/"
 
     ${lib.optionalString doWrap ''
-      makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
+      makeWrapper "${lib.getExe vcpkg-tool}" "$out/bin/vcpkg" \
         --set-default VCPKG_ROOT "$out/share/vcpkg"
     ''}
 

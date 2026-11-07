@@ -1,9 +1,10 @@
 {
+  lib,
   runCommand,
   flang,
 }:
 let
-  flangExe = "${flang}/bin/flang";
+  flangExe = lib.getExe flang;
   writeHello = ''
     cat > hello.f90 <<'EOF'
     program hello

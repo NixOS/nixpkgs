@@ -300,7 +300,7 @@ let
                 "vim.g.loaded_${prog}_provider=0";
           in
           lib.concatStringsSep ";" [
-            (genProviderCommand "node" finalAttrs.withNodeJs "${neovim-node-client}/bin/neovim-node-host")
+            (genProviderCommand "node" finalAttrs.withNodeJs "${lib.getExe neovim-node-client}")
             (genProviderCommand "perl" finalAttrs.withPerl "${perlEnv}/bin/perl")
             (genProviderCommand "ruby" finalAttrs.withRuby "${finalAttrs.rubyEnv}/bin/neovim-ruby-host")
             (genProviderCommand "python3" finalAttrs.withPython3 "${hostPython3}/bin/nvim-python3")
@@ -313,7 +313,7 @@ let
         # wrapper with most arguments we need, excluding those that cause problems to
         # generate rplugin.vim, but still required for the final wrapper.
         finalMakeWrapperArgs = [
-          "${neovim-unwrapped}/bin/nvim"
+          "${lib.getExe neovim-unwrapped}"
           "${placeholder "out"}/bin/nvim"
         ]
         ++ [
@@ -388,7 +388,7 @@ let
           + lib.optionalString (manifestRc != null) (
             let
               manifestWrapperArgs = [
-                "${neovim-unwrapped}/bin/nvim"
+                "${lib.getExe neovim-unwrapped}"
                 "${placeholder "out"}/bin/nvim-wrapper"
               ]
               ++ finalAttrs.generatedWrapperArgs;

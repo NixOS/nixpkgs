@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h \
-      --replace-fail "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
-      --replace-fail "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace-fail "/usr/bin/lspci"      "${lib.getExe pciutils}" \
+      --replace-fail "/usr/sbin/dmidecode" "${lib.getExe dmidecode}" \
       --replace-fail "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
 
     substituteInPlace src/lib/src/fwts_devicetree.c \

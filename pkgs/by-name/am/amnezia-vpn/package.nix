@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Upstream expects these helper executables next to the application binaries.
     substituteInPlace client/core/utils/utilities.cpp \
-      --replace-fail 'Utils::executable("openvpn", true)' 'Utils::executable("${openvpn}/bin/openvpn", false)' \
+      --replace-fail 'Utils::executable("openvpn", true)' 'Utils::executable("${lib.getExe openvpn}", false)' \
       --replace-fail 'Utils::usrExecutable("wg-quick")' 'Utils::executable("${wireguard-tools}/bin/wg-quick", false)' \
       --replace-fail 'Utils::executable("tun2socks", true)' 'Utils::executable("${tun2socks-pinned}/bin/tun2socks", false)'
 

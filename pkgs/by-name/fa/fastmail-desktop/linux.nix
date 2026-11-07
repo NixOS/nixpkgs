@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
         "$out/share/icons/hicolor/$resdir/apps/fastmail.png"
     done
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/fastmail" \
+    makeWrapper "${lib.getExe electron}" "$out/bin/fastmail" \
       --add-flags "$out/opt/fastmail/app.asar.unpacked" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ (lib.getLib stdenv.cc.cc) ]}" \

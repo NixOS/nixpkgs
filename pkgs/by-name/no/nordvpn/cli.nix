@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
 
     # hardcode the openvpn path
     old_ovpn_path='filepath.Join(internal.AppDataPathStatic, "openvpn")'
-    new_ovpn_path='"${openvpn}/bin/openvpn"'
+    new_ovpn_path='"${lib.getExe openvpn}"'
     substituteInPlace daemon/vpn/openvpn/config.go \
         --replace-fail "$old_ovpn_path" "$new_ovpn_path"
   '';

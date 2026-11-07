@@ -31,7 +31,7 @@ let
 
     patches = [
       (replaceVars ./paths.patch {
-        git = "${lib.getBin git}/bin/git";
+        git = lib.getExe git;
       })
       ./pytest-9.1-compat.patch
       ./setuptools-82-compat.patch

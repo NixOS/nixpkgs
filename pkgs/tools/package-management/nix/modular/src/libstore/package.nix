@@ -30,7 +30,7 @@
     || (lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD),
   sandboxShell ?
     if stdenv.hostPlatform.isLinux then
-      "${busybox-sandbox-shell}/bin/busybox"
+      "${lib.getExe busybox-sandbox-shell}"
     else if stdenv.hostPlatform.isFreeBSD then
       "${pkgsStatic.bash}/bin/bash"
     else

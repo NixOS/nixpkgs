@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "HIPFORT_COMPILER" "${gfortran}/bin/gfortran")
+    (lib.cmakeFeature "HIPFORT_COMPILER" "${lib.getExe gfortran}")
     (lib.cmakeFeature "HIPFORT_AR" "${gfortran.cc}/bin/gcc-ar")
     (lib.cmakeFeature "HIPFORT_RANLIB" "${gfortran.cc}/bin/gcc-ranlib")
     # Manually define CMAKE_INSTALL_<DIR>

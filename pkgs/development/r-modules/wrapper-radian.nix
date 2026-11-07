@@ -36,7 +36,7 @@ runCommand (radian.name + "-wrapper")
   }
   (
     ''
-      makeWrapper "${radian}/bin/radian" "$out/bin/radian" \
+      makeWrapper "${lib.getExe radian}" "$out/bin/radian" \
         --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
     ''
     + lib.optionalString wrapR ''

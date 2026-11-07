@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${perl}/bin/perl"
+    substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${lib.getExe perl}"
   '';
 
   postInstall = ''

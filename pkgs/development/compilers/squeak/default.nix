@@ -207,7 +207,7 @@ stdenv.mkDerivation {
     fi
 
     substituteInPlace ./platforms/unix/config/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
     cd ./"build.$vmBuild"/squeak.cog.spur/build
     substituteInPlace ./mvm \
       --replace 'read a' 'a=y' \

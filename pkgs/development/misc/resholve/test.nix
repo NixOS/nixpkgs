@@ -177,7 +177,7 @@ rec {
       install conjure.sh $out/bin/conjure.sh
       ${resholve.phraseSolution "conjure" {
         scripts = [ "bin/conjure.sh" ];
-        interpreter = "${bash}/bin/bash";
+        interpreter = lib.getExe bash;
         inputs = [ module1 ];
         fake = {
           external = [
@@ -221,7 +221,7 @@ rec {
     PKG_PARSED = "${lib.makeBinPath parsed_packages}";
 
     # explicit interpreter for demo suite; maybe some better way...
-    INTERP = "${bash}/bin/bash";
+    INTERP = lib.getExe bash;
 
     checkPhase = ''
       echo removing parse tests matching no${stdenv.buildPlatform.uname.system}
@@ -252,7 +252,7 @@ rec {
     resholve.writeScript "resholved-script"
       {
         inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
+        interpreter = lib.getExe bash;
       }
       ''
         echo "Hello"
@@ -262,7 +262,7 @@ rec {
     resholve.writeScriptBin "resholved-script-bin"
       {
         inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
+        interpreter = lib.getExe bash;
       }
       ''
         echo "Hello"

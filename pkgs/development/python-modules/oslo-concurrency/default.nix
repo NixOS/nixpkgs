@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
 
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
       --replace-fail "/usr" "" \
-      --replace-fail "/bin/bash" "${bash}/bin/bash" \
+      --replace-fail "/bin/bash" "${lib.getExe bash}" \
       --replace-fail "/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/bin/env" "${coreutils}/bin/env"
 

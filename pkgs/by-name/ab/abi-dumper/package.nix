@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace abi-dumper.pl \
       --replace-fail eu-readelf ${elfutils}/bin/eu-readelf \
       --replace-fail vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
-      --replace-fail '"ctags"' '"${ctags}/bin/ctags"'
+      --replace-fail '"ctags"' '"${lib.getExe ctags}"'
   '';
 
   buildInputs = [

@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "1 a imports.package._findEffectiveEntryPointName = () => 're.sonny.Junction';" src/bin.js
 
     # /usr/bin/env is not accessible in build environment
-    substituteInPlace troll/gjspack/bin/gjspack --replace "/usr/bin/env -S gjs" "${gjs}/bin/gjs"
+    substituteInPlace troll/gjspack/bin/gjspack --replace "/usr/bin/env -S gjs" "${lib.getExe gjs}"
   '';
 
   postInstall = ''

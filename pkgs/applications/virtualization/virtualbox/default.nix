@@ -353,7 +353,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
-      "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EOF
+      "${lib.getExe fakeroot}" "${stdenv.shell}" <<EOF
       "$libexec/VBoxExtPackHelperApp" install \
         --base-dir "$share/ExtensionPacks" \
         --cert-dir "$share/ExtPackCertificates" \

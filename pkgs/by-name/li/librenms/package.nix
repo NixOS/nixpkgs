@@ -77,7 +77,7 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
       --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
       --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
+      --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${lib.getExe ipmitool}",' \
       --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
@@ -86,7 +86,7 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
       --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
-      --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
+      --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${lib.getExe system-sendmail}",'
 
     if grep -q /usr/bin $out/resources/definitions/config_definitions.json; then
       echo "Please patch the extra /usr/bin paths found above!"

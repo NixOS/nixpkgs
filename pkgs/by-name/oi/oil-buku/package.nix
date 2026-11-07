@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
       "LIBDIR=/usr/local/lib/oil" "LIBDIR=${placeholder "out"}/lib"
 
     substituteInPlace src/json-to-line.jq --replace \
-      "/usr/bin/env -S jq" "${jq}/bin/jq"
+      "/usr/bin/env -S jq" "${lib.getExe jq}"
 
     substituteInPlace src/format-columns.awk --replace \
       "/usr/bin/env -S awk" "${gawk}/bin/awk"

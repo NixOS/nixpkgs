@@ -38,10 +38,10 @@ buildPecl {
       --replace-fail 'run-tests.php' 'run-tests.php -q --offline'
     substituteInPlace tests/gnupg_res_init_file_name.phpt \
       --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${lib.getExe gnupg}")})'
     substituteInPlace tests/gnupg_oo_init_file_name.phpt \
       --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
+      --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${lib.getExe gnupg}")})'
     # Suppress warnings from unlinking socket files that gpg-agent may have
     # already removed during shutdown (TOCTOU race in cleanup code).
     substituteInPlace tests/gnupgt.inc \

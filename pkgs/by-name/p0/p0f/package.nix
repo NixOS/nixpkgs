@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     substituteInPlace config.h --replace "p0f.fp" "$out/etc/p0f.fp"
-    substituteInPlace build.sh --replace "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace build.sh --replace "/bin/bash" "${lib.getExe bash}"
     ./build.sh
     cd tools && make && cd ..
   '';

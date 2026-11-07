@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  env.RUSTFMT = "${rustfmt}/bin/rustfmt";
+  env.RUSTFMT = lib.getExe rustfmt;
 
   # Integration tests try to access the ZeroTier API which requires an API token.
   # https://github.com/zerotier/zeronsd/blob/v0.5.2/tests/service/network.rs#L10

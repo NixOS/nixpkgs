@@ -189,7 +189,7 @@ let
 
                 # Create a wrapper for opentofu to point it to the plugins dir.
                 mkdir -p $out/bin/
-                makeWrapper "${opentofu}/bin/tofu" "$out/bin/tofu" \
+                makeWrapper "${lib.getExe opentofu}" "$out/bin/tofu" \
                   --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                   --prefix PATH : "${lib.makeBinPath wrapperInputs}"
               '';

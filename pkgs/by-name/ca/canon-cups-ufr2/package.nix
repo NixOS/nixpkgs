@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
         --set NIX_REDIRECTS /usr/share/cnsetuputil2=$out/usr/share/cnsetuputil2
     )
 
-    makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
+    makeWrapper "${lib.getExe ghostscript}" "$out/bin/gs" \
       --prefix LD_LIBRARY_PATH ":" "$out/lib" \
       --prefix PATH ":" "$out/bin"
 

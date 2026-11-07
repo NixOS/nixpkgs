@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./lib/petsc/bin
 
     substituteInPlace config/example_template.py \
-      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${lib.getExe bash}"
 
     substituteInPlace config/BuildSystem/config/packages/petsc4py.py \
       --replace-fail "installLibPath = os.path.join(self.installDir, 'lib')" \

@@ -60,7 +60,7 @@ let
   solutions = [
     {
       scripts = [ "bin/xdg-desktop-icon" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ xdg-user-dirs ];
       execer = [
         "cannot:${xdg-user-dirs}/bin/xdg-user-dir"
@@ -76,7 +76,7 @@ let
 
     {
       scripts = [ "bin/xdg-desktop-menu" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ gawk ];
       fake.external = commonFakes;
       keep."$KDE_SESSION_VERSION" = true;
@@ -85,7 +85,7 @@ let
 
     {
       scripts = [ "bin/xdg-email" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         gawk
         glib.bin
@@ -117,7 +117,7 @@ let
 
     {
       scripts = [ "bin/xdg-icon-resource" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps;
       fake.external = commonFakes;
       keep."$KDE_SESSION_VERSION" = true;
@@ -126,7 +126,7 @@ let
 
     {
       scripts = [ "bin/xdg-mime" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         file
         gawk
@@ -165,7 +165,7 @@ let
 
     {
       scripts = [ "bin/xdg-open" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         hostname
         glib.bin
@@ -205,7 +205,7 @@ let
 
     {
       scripts = [ "bin/xdg-screensaver" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         hostname
         perl
@@ -245,7 +245,7 @@ let
 
     {
       scripts = [ "bin/xdg-settings" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         jq
         "${placeholder "out"}/bin"
@@ -275,7 +275,7 @@ let
 
     {
       scripts = [ "bin/xdg-terminal" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [
         bash
         glib.bin

@@ -574,7 +574,7 @@ in
     dontBuild = false;
     postPatch = ''
       substituteInPlace bin/gollum \
-        --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
+        --replace "/usr/bin/env -S ruby" "${lib.getExe ruby}"
     '';
   };
 

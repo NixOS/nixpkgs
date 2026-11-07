@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     substituteInPlace configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
   '';
 
   configureFlags = [

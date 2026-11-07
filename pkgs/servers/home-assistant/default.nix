@@ -209,7 +209,7 @@ python3Packages.buildPythonApplication rec {
 
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
-      ffmpeg = "${lib.getExe ffmpeg-headless}";
+      ffmpeg = lib.getExe ffmpeg-headless;
     })
 
     (replaceVars ./patches/coreutils-path.patch {

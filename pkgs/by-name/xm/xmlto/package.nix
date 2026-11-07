@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs xmlif/test/run-test
 
     substituteInPlace "xmlto.in" \
-      --replace-fail "@XMLTO_BASH_PATH@" "${bash}/bin/bash" \
-      --replace-fail "@FIND@" "${findutils}/bin/find" \
-      --replace-fail "@GETOPT@" "${getopt}/bin/getopt" \
-      --replace-fail "@GREP@" "${gnugrep}/bin/grep" \
+      --replace-fail "@XMLTO_BASH_PATH@" "${lib.getExe bash}" \
+      --replace-fail "@FIND@" "${lib.getExe findutils}" \
+      --replace-fail "@GETOPT@" "${lib.getExe getopt}" \
+      --replace-fail "@GREP@" "${lib.getExe gnugrep}" \
       --replace-fail "@MKTEMP@" "$(type -P mktemp)" \
-      --replace-fail "@SED@" "${gnused}/bin/sed" \
+      --replace-fail "@SED@" "${lib.getExe gnused}" \
       --replace-fail "@TAIL@" "${coreutils}/bin/tail"
 
     for f in format/docbook/* xmlto.in; do

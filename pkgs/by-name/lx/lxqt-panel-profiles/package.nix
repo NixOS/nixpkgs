@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     --replace-fail 'cp -r /usr/share/lxqt-panel-profiles/layouts $XDG_DATA_HOME/lxqt-panel-profiles' 'cp -r /usr/share/lxqt-panel-profiles/layouts $XDG_DATA_HOME/lxqt-panel-profiles; chmod -R u+w,g+w $XDG_DATA_HOME/lxqt-panel-profiles;'
 
     substituteInPlace usr/bin/lxqt-panel-profiles \
-    --replace-fail "/bin/bash" "${bash}/bin/bash" \
+    --replace-fail "/bin/bash" "${lib.getExe bash}" \
     --replace-fail "/usr/lib/" "$out/lib/" \
     --replace-fail "python3" "${pythonWithPyqt6}/bin/python"
 

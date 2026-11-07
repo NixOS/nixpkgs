@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       AWK=$(type -p gawk)
       CC=$(type -p cc)
       CXX=$(type -p c++)
-      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
+      FC="${lib.getExe gfortran}" F77="${lib.getExe gfortran}"
       ${if enableJava then "JAVA_HOME='${jdk}'" else "--disable-java"}
       RANLIB=$(type -p ranlib)
       CURL_CONFIG="${lib.getExe' (lib.getDev curl) "curl-config"}"

@@ -42,11 +42,11 @@ buildGoModule (finalAttrs: {
 
   patches = [
     (replaceVars ./plugin-host-python.patch {
-      python3-path = "${lib.getExe python3}";
+      python3-path = lib.getExe python3;
       plugin-host-python = "${finalAttrs.passthru.plugin-host-python}/bin/.run-wrapped";
     })
     (replaceVars ./plugin-host-nodejs.patch {
-      nodejs-path = "${lib.getExe nodejs}";
+      nodejs-path = lib.getExe nodejs;
       plugin-host-nodejs = "${finalAttrs.passthru.plugin-host-nodejs}/node-host.js";
     })
   ];

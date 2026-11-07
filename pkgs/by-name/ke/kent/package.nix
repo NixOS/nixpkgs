@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
       --replace-fail "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     makeWrapper \
-      "${mono}/bin/mono" \
+      "${lib.getExe mono}" \
       "$out/bin/nuget" \
       --add-flags "$out/lib/${finalAttrs.pname}/nuget.exe"
 

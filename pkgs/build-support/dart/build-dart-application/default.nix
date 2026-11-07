@@ -57,7 +57,7 @@ lib.extendMkDerivation {
         if dartOutputType == "aot-snapshot" then
           "${dart}/bin/dartaotruntime"
         else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then
-          "${dart}/bin/dart"
+          "${lib.getExe dart}"
         else if dartOutputType == "js" then
           "${nodejs}/bin/node"
         else

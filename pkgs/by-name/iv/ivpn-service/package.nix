@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     substituteInPlace daemon/service/platform/platform_linux.go \
       --replace-fail 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
-      'openVpnBinaryPath = "${openvpn}/bin/openvpn"' \
+      'openVpnBinaryPath = "${lib.getExe openvpn}"' \
       --replace-fail 'routeCommand = "/sbin/ip route"' \
       'routeCommand = "${iproute2}/bin/ip route"'
 
@@ -60,11 +60,11 @@ buildGoModule (finalAttrs: {
       --replace-fail 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
       'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
       --replace-fail 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
-      'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
+      'wgToolBinaryPath = "${lib.getExe wireguard-tools}"' \
       --replace-fail 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-      'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
+      'dnscryptproxyBinPath = "${lib.getExe dnscrypt-proxy}"' \
       --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
-      'v2rayBinaryPath = "${v2ray}/bin/v2ray"' \
+      'v2rayBinaryPath = "${lib.getExe v2ray}"' \
       --replace-fail 'kemHelperBinaryPath = path.Join(installDir, "kem/kem-helper")' \
       'kemHelperBinaryPath = "${placeholder "out"}/bin/kem-helper"'
   '';

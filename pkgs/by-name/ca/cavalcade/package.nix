@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace cavalcade/cava.py \
-      --replace-fail '"cava"' '"${cava}/bin/cava"'
+      --replace-fail '"cava"' '"${lib.getExe cava}"'
   '';
 
   build-system = [ python3Packages.setuptools ];

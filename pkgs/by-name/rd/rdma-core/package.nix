@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     for pls in ibfindnodesusing.pl ibidsverify.pl check_lft_balance.pl; do
       echo "wrapping $pls"
       substituteInPlace $out/bin/$pls \
-        --replace-fail "${perl}/bin/perl" "${perl}/bin/perl -I $scripts/${perl.libPrefix}"
+        --replace-fail "${lib.getExe perl}" "${perl}/bin/perl -I $scripts/${perl.libPrefix}"
       moveToOutput bin/$pls "$scripts"
     done
   '';

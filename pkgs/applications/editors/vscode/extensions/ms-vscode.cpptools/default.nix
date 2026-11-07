@@ -37,7 +37,7 @@
 */
 
 let
-  gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
+  gdbDefaultsTo = if gdbUseFixed then "${lib.getExe gdb}" else "gdb";
   isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
   isDarwin = stdenv.hostPlatform.isDarwin;
   supported = {

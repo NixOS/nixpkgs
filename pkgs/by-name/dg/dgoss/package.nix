@@ -24,7 +24,7 @@ resholve.mkDerivation (finalAttrs: {
   solutions = {
     default = {
       scripts = [ "bin/dgoss" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         gnused

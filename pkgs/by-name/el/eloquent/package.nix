@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace troll/gjspack/bin/gjspack \
-      --replace-fail "/usr/bin/env -S gjs" "${gjs}/bin/gjs"
+      --replace-fail "/usr/bin/env -S gjs" "${lib.getExe gjs}"
 
     substituteInPlace src/languagetool.js \
       --replace-fail "/app/LanguageTool/languagetool-server.jar" "${languagetool}/share/languagetool-server.jar" \

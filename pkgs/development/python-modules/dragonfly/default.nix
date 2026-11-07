@@ -36,11 +36,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
-      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
+      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${lib.getExe xdotool}"'
     substituteInPlace dragonfly/windows/x11_window.py \
-      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
-      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xprop}/bin/xprop"' \
-      --replace-fail 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
+      --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${lib.getExe xdotool}"' \
+      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${lib.getExe xprop}"' \
+      --replace-fail 'wmctrl = "wmctrl"'${" "}'wmctrl = "${lib.getExe wmctrl}"'
   '';
 
   pythonRemoveDeps = [ "lark-parser" ];

@@ -302,7 +302,7 @@ stdenv'.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs perlSupport { PERL = lib.getExe perl; }
   // lib.optionalAttrs pythonSupport { PYTHON = lib.getExe python3; }
-  // lib.optionalAttrs tclSupport { TCLSH = "${lib.getBin tcl}/bin/tclsh"; };
+  // lib.optionalAttrs tclSupport { TCLSH = lib.getExe tcl; };
 
   configureFlags =
     let

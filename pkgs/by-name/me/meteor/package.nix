@@ -88,7 +88,7 @@ stdenv.mkDerivation {
           zlib
         ]
       }" \
-      --replace-fail "@PATCHELF@" "${patchelf}/bin/patchelf"
+      --replace-fail "@PATCHELF@" "${lib.getExe patchelf}"
 
     # Patch node.
     patchelf \

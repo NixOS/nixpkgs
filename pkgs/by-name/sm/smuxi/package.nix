@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-message-buffer" \
+    makeWrapper "${lib.getExe mono}" "$out/bin/smuxi-message-buffer" \
       --add-flags "$out/lib/smuxi/smuxi-message-buffer.exe" \
       --prefix ${runtimeLoaderEnvVariableName} : ${
         lib.makeLibraryPath [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
         ]
       }
 
-    makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-server" \
+    makeWrapper "${lib.getExe mono}" "$out/bin/smuxi-server" \
       --add-flags "$out/lib/smuxi/smuxi-server.exe" \
       --prefix ${runtimeLoaderEnvVariableName} : ${
         lib.makeLibraryPath [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
         ]
       }
 
-    makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-frontend-stfl" \
+    makeWrapper "${lib.getExe mono}" "$out/bin/smuxi-frontend-stfl" \
       --add-flags "$out/lib/smuxi/smuxi-frontend-stfl.exe" \
       --prefix ${runtimeLoaderEnvVariableName} : ${
         lib.makeLibraryPath [
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
         ]
       }
 
-    makeWrapper "${mono}/bin/mono" "$out/bin/smuxi-frontend-gnome" \
+    makeWrapper "${lib.getExe mono}" "$out/bin/smuxi-frontend-gnome" \
       --add-flags "$out/lib/smuxi/smuxi-frontend-gnome.exe" \
       --prefix ${runtimeLoaderEnvVariableName} : ${
         lib.makeLibraryPath [
