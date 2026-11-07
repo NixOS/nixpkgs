@@ -1,0 +1,28 @@
+diff --git a/src/main.rs b/src/main.rs
+index ead056d..4e1b46d 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -149,6 +149,14 @@ fn setup_logger(level: &str) -> Result<(), fern::InitError> {
+         "error" => log::LevelFilter::Error,
+         _ => log::LevelFilter::Info, // Default to Info for invalid values
+     };
++    let log_path = match dirs::home_dir() {
++        Some(home) => {
++            let app_dir = home.join(format!(".{}", env!("CARGO_PKG_NAME")));
++            std::fs::create_dir_all(&app_dir)?;
++            app_dir.join("app.log")
++        }
++        None => std::path::PathBuf::from("app.log"),
++    };
+     Dispatch::new()
+         .format(|out, message, record| {
+             out.finish(format_args!(
+@@ -159,7 +167,7 @@ fn setup_logger(level: &str) -> Result<(), fern::InitError> {
+             ))
+         })
+         .level(log_level)
+-        .chain(fern::log_file("app.log")?) // Guarda en logs/app.log
++        .chain(fern::log_file(&log_path)?)
+         .apply()?;
+     Ok(())
+ }
