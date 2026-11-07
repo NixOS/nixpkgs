@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.galene.basic;
+    tests = nixosTests.galene;
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex=galene-(.*)" ];
     };
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
-    changelog = "https://github.com/jech/galene/raw/${finalAttrs.src.tag}/CHANGES";
+    changelog = "https://github.com/jech/galene/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.ngi ];

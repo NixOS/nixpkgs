@@ -155,7 +155,6 @@ lib.makeOverridable (
 
     configfile = stdenv.mkDerivation {
       inherit
-        ignoreConfigErrors
         autoModules
         preferBuiltin
         kernelArch
@@ -181,7 +180,10 @@ lib.makeOverridable (
         rustc-unwrapped
       ];
 
-      env.RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+      env = {
+        RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+        inherit ignoreConfigErrors;
+      };
 
       makeFlags = import ./common-flags.nix {
         inherit
@@ -215,17 +217,16 @@ lib.makeOverridable (
           export buildRoot="''${buildRoot:-build}"
 
           # Get a basic config file for later refinement with $generateConfig.
-          make $makeFlags \
+          make "''${makeFlags[@]}" \
               -C . O="$buildRoot" ${kernelBaseConfig} \
               ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
-              $makeFlags
 
           # Create the config file.
           echo "generating kernel configuration..."
           ln -s "${kernelIntermediateConfig}" "$buildRoot/kernel-config"
           DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
             KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
-            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
+            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="''${makeFlags[*]@Q}" \
             perl -w $generateConfig
         ''
         + lib.optionalString stdenv.cc.isClang ''
@@ -250,6 +251,9 @@ lib.makeOverridable (
       installPhase = "mv $buildRoot/.config $out";
 
       enableParallelBuilding = true;
+
+      __structuredAttrs = true;
+      strictDeps = true;
 
       passthru = rec {
         module = import ../../../../nixos/modules/system/boot/kernel_config.nix;
