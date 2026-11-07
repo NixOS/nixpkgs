@@ -78,10 +78,16 @@ buildPythonPackage {
     '';
 
   nativeBuildInputs = [
+    pkgs.pkg-config
     pkgs.protobuf # for protoc
     rerun
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    # zstd-sys is told to use the system zstd by the cargo setup hook (`ZSTD_SYS_USE_PKG_CONFIG`)
+    pkgs.zstd
   ];
 
   dependencies = [
@@ -135,6 +141,7 @@ buildPythonPackage {
 
     # ConnectionError: Connection: connecting to server: transport error
     "test_batch_shape"
+    "test_catalog_client_accepts_http_url"
     "test_isolated_streams"
     "test_roundtrip_parity"
     "test_send_dataframe_roundtrip"
