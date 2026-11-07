@@ -40,6 +40,11 @@ in
       done
 
       ${old.postPatch or ""}
+
+      # Avoid a collision with libc++'s <version> on case-insensitive filesystems.
+      mv VERSION{,.bak}
+      substituteInPlace ffbuild/version.sh \
+        --replace-fail "cat VERSION" "cat VERSION.bak"
     '';
 
     meta = {
