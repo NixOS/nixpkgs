@@ -3,44 +3,40 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
+  jinxed,
   wcwidth,
-  six,
+  pytest-codspeed,
+  pytest-cov-stub,
+  pytest-xdist,
   pytestCheckHook,
-  mock,
-  glibcLocales,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "blessed";
-  # We need https://github.com/jquast/blessed/pull/311 to fix 3.13
-  version = "1.25-unstable-2025-12-05";
+  version = "1.52";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jquast";
     repo = "blessed";
-    rev = "cee680ff7fb3ad31f42ae98582ba74629f1fd6b0";
-    hash = "sha256-4K1W0LXJKkb2wKE6D+IkX3oI5KxkpKbO661W/VTHgts=";
+    tag = finalAttrs.version;
+    hash = "sha256-pAa6AY9lWUbjjGF0v0+7ChfCDxwNQFDV7WM7P5rfLVQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
+    jinxed
     wcwidth
-    six
   ];
 
   nativeCheckInputs = [
+    pytest-codspeed
+    pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
-    mock
-    glibcLocales
   ];
-
-  # Default tox.ini parameters not needed
-  preCheck = ''
-    rm tox.ini
-  '';
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fail with several AssertionError
@@ -49,8 +45,9 @@ buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/jquast/blessed";
+    changelog = "https://github.com/jquast/blessed/releases/tag/${finalAttrs.src.tag}";
     description = "Thin, practical wrapper around terminal capabilities in Python";
     maintainers = with lib.maintainers; [ eqyiel ];
     license = lib.licenses.mit;
   };
-}
+})
