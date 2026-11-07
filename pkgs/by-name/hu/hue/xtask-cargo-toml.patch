@@ -1,0 +1,8 @@
+--- hue2/xtask/Cargo.toml	2025-07-23 20:30:32.660982867 +0900
++++ hue/xtask/Cargo.toml	2025-07-23 19:51:44.673426936 +0900
+@@ -6,4 +6,4 @@
+ # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+ 
+ [dependencies]
+-nih_plug_xtask = { git = "https://github.com/robbert-vdh/nih-plug.git" }
++nih_plug_xtask = { git = "https://github.com/robbert-vdh/nih-plug.git", rev = "efdffbd24589c4e8cbe4677e861bbd08e71c7145" }
