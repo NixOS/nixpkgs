@@ -5805,10 +5805,6 @@ with pkgs;
 
   libidn2 = callPackage ../development/libraries/libidn2 { };
 
-  libinput = callPackage ../development/libraries/libinput {
-    graphviz = graphviz-nox;
-  };
-
   # also known as libturbojpeg
   libjpeg = libjpeg_turbo;
   libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };

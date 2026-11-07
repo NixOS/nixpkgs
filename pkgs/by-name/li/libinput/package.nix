@@ -13,7 +13,7 @@
   libwacom,
   documentationSupport ? false,
   doxygen,
-  graphviz,
+  graphviz-nox,
   runCommand,
   eventGUISupport ? false,
   cairo,
@@ -51,7 +51,7 @@ let
     '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libinput";
   version = "1.31.3";
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libinput";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-2l+YGD1AFTwJRouMg0d3nQX+2me6A4yOB4g2WE2H//g=";
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals documentationSupport [
     doxygen
-    graphviz
+    graphviz-nox
     sphinx-build
   ];
 
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ]
   ++ lib.optionals stdenv.hostPlatform.isBSD [
-    "-Depoll-dir=${epoll-shim}"
+    (lib.mesonOption "epoll-dir" epoll-shim)
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
@@ -163,12 +163,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
-    changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${finalAttrs.src.tag}";
     badPlatforms = [
       # Mandatory shared library.
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})
