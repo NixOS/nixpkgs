@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -92,6 +93,9 @@ buildPythonPackage rec {
     "tests/unittest/test_websockets.py::test_on_data_callback"
     "tests/unittest/test_websockets.py::test_hello_twice_async"
   ];
+
+  # scipy tests segfault on riscv64 so skip its tests on riscv64.
+  doCheck = !stdenv.hostPlatform.isRiscV64;
 
   disabledTests = [
     # FIXME ImpersonateError: Impersonating chrome136 is not supported
