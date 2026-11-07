@@ -42,7 +42,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/DigitalTrustCenter/PGPy_dtc";
     changelog = "https://github.com/DigitalTrustCenter/PGPy_dtc/releases/tag/${src.tag}";
     description = "Pretty Good Privacy for Python";
-    license = lib.licenses.eupl12;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ networkexception ];
   };
 }
