@@ -1,0 +1,24 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index c48bfb9f..91eaa338 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -15,11 +15,14 @@ set(YOGA_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
+ include(${YOGA_ROOT}/cmake/project-defaults.cmake)
+ 
+ # Fetch GTest
+-FetchContent_Declare(
+-  googletest
+-  URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+-)
+-FetchContent_MakeAvailable(googletest)
++find_package(GTest QUIET)
++if(NOT GTest_FOUND)
++  FetchContent_Declare(
++    googletest
++    URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
++  )
++  FetchContent_MakeAvailable(googletest)
++endif()
+ 
+ add_subdirectory(${YOGA_ROOT}/yoga ${CMAKE_CURRENT_BINARY_DIR}/yoga)
+ 

@@ -1,0 +1,28 @@
+diff --git a/src/Magnum/Vk/Test/CMakeLists.txt b/src/Magnum/Vk/Test/CMakeLists.txt
+index a9606770d..af407cef9 100644
+--- a/src/Magnum/Vk/Test/CMakeLists.txt
++++ b/src/Magnum/Vk/Test/CMakeLists.txt
+@@ -29,17 +29,17 @@
+ # property that would have to be set on each target separately.
+ set(CMAKE_FOLDER "Magnum/Vk/Test")
+ 
++if(CORRADE_TARGET_ANDROID)
++    set(VK_TEST_DIR ".")
++else()
++    set(VK_TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR})
++endif()
++
+ # Inputs to configure.h needed only by Vulkan tests
+ if(MAGNUM_BUILD_VK_TESTS)
+     # Otherwise CMake complains that Corrade::PluginManager is not found, wtf
+     find_package(Corrade REQUIRED PluginManager)
+ 
+-    if(CORRADE_TARGET_ANDROID)
+-        set(VK_TEST_DIR ".")
+-    else()
+-        set(VK_TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+-    endif()
+-
+     if(NOT MAGNUM_BUILD_PLUGINS_STATIC)
+         if(MAGNUM_WITH_ANYIMAGEIMPORTER)
+             set(ANYIMAGEIMPORTER_PLUGIN_FILENAME $<TARGET_FILE:AnyImageImporter>)
