@@ -23,13 +23,13 @@
 
 let
   pname = "quickwit";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "quickwit-oss";
     repo = "quickwit";
     tag = "v${version}";
-    hash = "sha256-ABSh/g6CU0hu8WJRSPM/vsh0qAVyuHKHRF4rJDHtj/w=";
+    hash = "sha256-6PpnpacZjycTlbwgTtyHmY7PRFzPHq6yxYQnLZRAO6o=";
   };
 
   quickwit-ui = stdenv.mkDerivation (finalAttrs: {
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   sourceRoot = "${src.name}/quickwit";
-  cargoHash = "sha256-nLZ3xTkp075qHzmPe4Zpdsn7MBxDHD0RGNkvQgmxAq8=";
+  cargoHash = "sha256-bjDoBdpJg4o7djFoy7YOK7BCdLioL6MHDWFgtczf1sw=";
 
   # matches workflow for building docker images closest
   cargoBuildFlags = [
