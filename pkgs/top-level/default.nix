@@ -96,7 +96,7 @@ let
     If you use flakes, switch your flake input:
 
         inputs.nixpkgs = {
-          url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
+          url = "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst";
         };
 
     See the release notes for more information and alternatives:
