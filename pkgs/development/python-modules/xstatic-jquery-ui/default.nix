@@ -12,7 +12,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "XStatic-jquery-ui";
+    pname = "xstatic_jquery_ui";
     inherit (finalAttrs) version;
     hash = "sha256-EbKqfqoa1pxuWUyuEagXqPoXHOyc64KuLKS6fpPVrkM=";
   };
