@@ -4,6 +4,7 @@
   enableMultilib,
   targetConfig,
   hostIsTarget,
+  dejagnu,
 }:
 
 let
@@ -21,6 +22,42 @@ originalAttrs:
   // {
     passthru = (originalAttrs.passthru or { }) // {
       inherit forceLibgccToBuildCrtStuff;
+
+      tests.withCheck = finalAttrs.finalPackage.overrideAttrs {
+        doCheck = true;
+
+        nativeCheckInputs = [
+          dejagnu
+        ];
+
+        checkPhase = ''
+          runHook preCheck
+
+          glibcLib=${lib.getLib stdenv.cc.libc}/lib
+
+          mkdir -p boards
+          cat > boards/unix.exp <<EOF
+              load_generic_config "unix"
+              set_board_info cflags  "-B$glibcLib"
+              set_board_info ldflags "-Wl,-rpath,$glibcLib"
+          EOF
+
+          export DEJAGNU="$PWD/site.exp"
+          cat > site.exp <<EOF
+              lappend boards_dir "$PWD/boards"
+          EOF
+
+          make -j$NIX_BUILD_CORES check-gcc \
+              RUNTESTFLAGS="compile.exp execute.exp dg.exp old-deja.exp --target_board=unix -v"
+
+          # make is not returning a non-zero exit code when tests fail, so we have to check the output ourselves
+          if grep -E '^(FAIL|XPASS|UNRESOLVED|ERROR):' gcc/testsuite/*/*.sum; then
+              exit 1
+          fi
+
+          runHook postCheck
+        '';
+      };
     };
     preUnpack = ''
       oldOpts="$(shopt -po nounset)" || true
