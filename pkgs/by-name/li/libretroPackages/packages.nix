@@ -86,6 +86,8 @@ lib.makeScope newScope (self: {
 
   gearcoleco = self.callPackage ./cores/gearcoleco.nix { };
 
+  gearsystem = self.callPackage ./cores/gearsystem.nix { };
+
   gpsp = self.callPackage ./cores/gpsp.nix { };
 
   gw = self.callPackage ./cores/gw.nix { };
