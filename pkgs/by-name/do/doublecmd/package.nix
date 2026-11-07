@@ -15,41 +15,51 @@
 
 let
   lua = lua5_5;
+  widgetset = if stdenv.hostPlatform.isDarwin then "cocoa" else "qt5";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UuwE4ptOdrh00Rec7CjPPJoA9Qo4S19GwSbLNQn+Uac=";
+    hash = "sha256-kgobIF/2lUwnALTSvy4nz+iWY5+QUTW5mKeOpiSZrBQ=";
   };
 
   nativeBuildInputs = [
     fpc
     getopt
     lazarus
-    libsForQt5.wrapQtAppsHook
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
     dbus
     glib
     libx11
-    libsForQt5.libqtpas
-  ];
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libsForQt5.libqtpas;
 
-  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_LDFLAGS+=" -syslibroot $SDKROOT"
+  '';
 
   postPatch = ''
     # Double Commander saves this default into the user's configuration, so use
     # the symlink installed next to the executable instead of a store path.
     substituteInPlace src/platform/lua.pas \
       --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/platform/lua.pas \
+        --replace-fail "LuaDLL = 'liblua5.1.dylib';" "LuaDLL = '%COMMANDER_PATH%/liblua.dylib';"
+      patchShebangs install/darwin/install.sh
+    ''}
     patchShebangs build.sh install/linux/install.sh
     substituteInPlace build.sh \
       --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
@@ -60,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build.sh release qt5
+    ./build.sh release ${widgetset}
 
     runHook postBuild
   '';
@@ -68,14 +78,27 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install/linux/install.sh -I $out
-
-    cd $out/lib64/doublecmd
-
-    ln -vs ${lib.getLib lua}/lib/liblua.so.${lua.version}
-
-    ln -vs ./liblua.so.${lua.version} ./liblua.so
-    ln -vs ./liblua.so.${lua.version} ./liblua.so.${lib.versions.majorMinor lua.version}
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          rm -f doublecmd.app/Contents/MacOS/doublecmd
+          install/darwin/install.sh "$TMPDIR"
+          mkdir -p $out
+          mv "$TMPDIR/doublecmd.app" $out/
+          cd $out/doublecmd.app/Contents/MacOS
+          ln -vs ${lib.getLib lua}/lib/liblua.${lua.version}.dylib ./liblua.dylib
+          mkdir -p $out/bin
+          ln -s $out/doublecmd.app/Contents/MacOS/doublecmd $out/bin/doublecmd
+        ''
+      else
+        ''
+          install/linux/install.sh -I $out
+          cd $out/lib64/doublecmd
+          ln -vs ${lib.getLib lua}/lib/liblua.so.${lua.version}
+          ln -vs ./liblua.so.${lua.version} ./liblua.so
+          ln -vs ./liblua.so.${lua.version} ./liblua.so.${lib.versions.majorMinor lua.version}
+        ''
+    }
 
     runHook postInstall
   '';
@@ -86,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "doublecmd";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
 # TODO: deal with other platforms too
