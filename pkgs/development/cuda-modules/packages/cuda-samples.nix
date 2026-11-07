@@ -114,6 +114,20 @@ backendStdenv.mkDerivation (finalAttrs: {
           "add_subdirectory(graphConditionalNodes)" \
           "# add_subdirectory(graphConditionalNodes)"
     ''
+    # CCCL 3.5 (CUDA 13.5) no longer includes thrust/tuple.h from the Thrust headers these samples include, so they
+    # fail with errors like `namespace "thrust" has no member "make_tuple"`.
+    + lib.optionalString (cudaAtLeast "13.5") ''
+      for file in \
+        2_Concepts_and_Techniques/particles/particleSystem_cuda.cu \
+        2_Concepts_and_Techniques/particles/particles_kernel_impl.cuh \
+        2_Concepts_and_Techniques/segmentationTreeThrust/segmentationTree.cu \
+        5_Domain_Specific/smokeParticles/ParticleSystem_cuda.cu \
+        5_Domain_Specific/smokeParticles/particles_kernel_device.cuh; do
+        nixLog "including thrust/tuple.h in Samples/$file"
+        sed -i '1i #include <thrust/tuple.h>' "$NIX_BUILD_TOP/$sourceRoot/Samples/$file"
+      done
+      unset -v file
+    ''
     # For some reason this sample requires a static library, which we don't propagate by default due to size.
     + ''
       nixLog "patching sample 4_CUDA_Libraries/simpleCUFFT_callback to use dynamic library"

@@ -69,6 +69,7 @@ let
       "13.2" = import ./13_2.nix args;
       "13.3" = import ./13_3.nix args;
       "13.4" = import ./13_4.nix args;
+      "13.5" = import ./13_5.nix args;
     }
     .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
 
@@ -103,7 +104,7 @@ buildPythonPackage (finalAttrs: {
     versionSpecificAttrs.nvidiaLibsPatch
   ];
 
-  sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
+  sourceRoot = "${finalAttrs.src.name}/${versionSpecificAttrs.sourceDir or "cuda_bindings"}";
 
   postPatch =
     # Since 13.4, libcuda is loaded from driver_linux.pyx, handled by nvidiaLibsPatch
@@ -211,12 +212,14 @@ buildPythonPackage (finalAttrs: {
     "tests/"
   ];
 
-  disabledTestPaths = lib.optionals (cudaOlder "13.0") [
-    # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
-    # error:
-    # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
-    "tests/test_nvjitlink.py"
-  ];
+  disabledTestPaths =
+    lib.optionals (cudaOlder "13.0") [
+      # The current driver shipped in NixOS (590.48.01) advertises CUDA 13.1, causing the following
+      # error:
+      # cuda.bindings._internal.utils.NotSupportedError: only CUDA 12 driver is supported
+      "tests/test_nvjitlink.py"
+    ]
+    ++ (versionSpecificAttrs.disabledTestPaths or [ ]);
 
   disabledTests = versionSpecificAttrs.disabledTests or [ ];
 

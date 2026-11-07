@@ -67,12 +67,14 @@ Up to CUDA 13.3, `cuda_compat` is part of the CUDA manifest. Starting with CUDA
 https://developer.download.nvidia.com/compute/nvidia-driver/redist/cuda_compat/<redistSystem>/cuda_compat-<redistSystem>-<driverVersion>_cuda<major.minor>-archive.tar.xz
 ```
 
-The driver manifests do not list these archives, so we maintain hand-made
-manifests in [`_cuda/manifests/nvidia-driver`](./_cuda/manifests/nvidia-driver/README.md).
-Package sets select one with the `nvidia-driver` key in
-[cuda-packages.nix](../../top-level/cuda-packages.nix), and `cuda_compat` uses
-it when the CUDA manifest has no `cuda_compat` entry. We pick the latest driver
-release built for each CUDA release (e.g. 615.71.10 for CUDA 13.4).
+The driver manifests list these archives only from driver 620.70.06 (CUDA 13.5)
+on, so we maintain manifests containing only `cuda_compat` in
+[`_cuda/manifests/nvidia-driver`](./_cuda/manifests/nvidia-driver/README.md),
+made by hand for older drivers. Package sets select one with the `nvidia-driver`
+key in [cuda-packages.nix](../../top-level/cuda-packages.nix), and `cuda_compat`
+uses it when the CUDA manifest has no `cuda_compat` entry. We pick the latest
+driver release built for each CUDA release (e.g. 615.71.10 for CUDA 13.4 and
+620.70.06 for CUDA 13.5).
 
 #### Functioning
 
