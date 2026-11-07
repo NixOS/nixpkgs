@@ -13,6 +13,7 @@
   aws-lc,
   writableTmpDirAsHomeHook,
   runCommand,
+  enableTests ? true,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
   withRustBindings ? true,
   symbolPrefix ? "AWS_LC",
@@ -22,6 +23,7 @@
 
 let
   aws-lc' = aws-lc.override {
+    enableTests = false;
     useSharedLibraries = false;
     symbolPrefix = null;
   };
@@ -111,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BORINGSSL_PREFIX_SYMBOLS" (toString symbols))
   ];
 
-  doCheck = true;
+  doCheck = enableTests;
   checkTarget = "run_tests";
 
   postInstall = ''
