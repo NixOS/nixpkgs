@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beancount-black";
-  version = "1.0.5";
+  version = "1.0.6";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "LaunchPlatform";
     repo = "beancount-black";
     tag = finalAttrs.version;
-    hash = "sha256-vo11mlgDhyc8YFnULJ4AFrANWmGpAMNX5jJ6QaUNqk0=";
+    hash = "sha256-fi6HCPgjQUC2PDYlpcB9rDDzDJ6wb1GyVNQWnx92hkA=";
   };
 
   buildInputs = [ poetry-core ];
