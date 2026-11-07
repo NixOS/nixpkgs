@@ -1,0 +1,105 @@
+Support the integrated LLVM assembler and LLD for the x86 kernel.
+
+Custom assembly sections need explicit ELF flags; LLD also requires absolute
+addresses for bitwise operations in linker-script expressions.
+
+--- a/seL4/src/arch/x86/64/head.S
++++ b/seL4/src/arch/x86/64/head.S
+@@ -27,9 +27,9 @@
+ #define IA32_EFER_MSR 0xC0000080
+ #define IA32_APIC_BASE_MSR 0x01B
+ #define APIC_ID_OFFSET 0x020
+
+-.section .phys.text
++.section .phys.text, "ax", @progbits
+
+ .code32
+
+ BEGIN_FUNC(print_string)
+@@ -305,9 +305,9 @@
+     jmp *%rax
+ END_FUNC(_start64)
+
+
+-.section .phys.data
++.section .phys.data, "aw", @progbits
+ .align 16
+ _gdt64:
+     .quad 0x0000000000000000
+     .word   0
+@@ -327,14 +327,14 @@
+ _gdt64_ptr:
+     .word (3 * 8) - 1
+     .long _gdt64
+
+-.section .phys.bss
++.section .phys.bss, "aw", @nobits
+ .align 4096
+ _boot_pd:
+     .fill 16384
+
+-.section .boot.text
++.section .boot.text, "ax", @progbits
+
+ BEGIN_FUNC(_entry_64)
+     /* Update our stack pointer. */
+     movq $0xffffffff80000000, %rax
+@@ -352,9 +352,9 @@
+     push %rax
+     jmp boot_sys
+ END_FUNC(_entry_64)
+
+-.section .phys.text
++.section .phys.text, "ax", @progbits
+
+ #ifdef ENABLE_SMP_SUPPORT
+
+ BEGIN_FUNC(boot_cpu_start)
+@@ -414,9 +414,9 @@
+
+ .global boot_cpu_end
+ boot_cpu_end:
+
+-.section .boot.text
++.section .boot.text, "ax", @progbits
+
+ BEGIN_FUNC(_entry_ap64)
+     /* Get the index of this cpu. */
+     movq smp_aps_index, %rcx
+--- a/seL4/src/arch/x86/multiboot.S
++++ b/seL4/src/arch/x86/multiboot.S
+@@ -40,9 +40,9 @@
+ #ifndef CONFIG_MULTIBOOT_GRAPHICS_MODE_DEPTH
+ #define CONFIG_MULTIBOOT_GRAPHICS_MODE_DEPTH 0
+ #endif
+
+-.section .mbh
++.section .mbh, "a", @progbits
+ #ifdef CONFIG_MULTIBOOT1_HEADER
+     /* MultiBoot header */
+     .align  4
+     .long   MULTIBOOT_HEADER_MAGIC; /*magic*/
+--- a/seL4/src/plat/pc99/linker.lds
++++ b/seL4/src/plat/pc99/linker.lds
+@@ -57,9 +57,9 @@
+         *(.phys.bss)
+     } :phys
+
+     . = ALIGN(4K) + KERNEL_OFFSET;
+-    . = . + ((ADDR(.phys) + SIZEOF(.phys)) & (4K - 1));
++    . = . + (ABSOLUTE(ADDR(.phys) + SIZEOF(.phys)) & (4K - 1));
+     .boot . : AT(ADDR(.boot) - KERNEL_OFFSET)
+     {
+         *(.boot.text)
+         *(.boot.data)
+@@ -83,9 +83,9 @@
+
+     ki_boot_end = .;
+     ki_skim_start = .;
+
+-    . = . + ((ADDR(.boot) + SIZEOF(.boot)) & (8K - 1));
++    . = . + (ABSOLUTE(ADDR(.boot) + SIZEOF(.boot)) & (8K - 1));
+
+
+
+     .text . : AT(ADDR(.text) - KERNEL_OFFSET)
