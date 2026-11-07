@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ libgit2 ];
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   nativeCheckInputs = [ git ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 

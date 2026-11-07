@@ -34,11 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
   buildAndTestSubdir = "core";
 
-  env = {
-    LIBGIT2_NO_VENDOR = true;
-    OPENSSL_NO_VENDOR = true;
-  };
-
   __darwinAllowLocalNetworking = true;
 
   meta = {

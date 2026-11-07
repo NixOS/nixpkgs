@@ -51,7 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     HK_REQUIRE_EMBEDDED_PKL = "1";
-    LIBGIT2_NO_VENDOR = 1;
   };
 
   nativeCheckInputs = [

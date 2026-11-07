@@ -59,10 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::tests::should_canonicalize"
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";

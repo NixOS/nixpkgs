@@ -58,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     BIOME_VERSION = finalAttrs.version;
-    LIBGIT2_NO_VENDOR = 1;
     INSTA_UPDATE = "no";
   };
 

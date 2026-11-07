@@ -42,10 +42,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     mainProgram = "cargo-dephell";

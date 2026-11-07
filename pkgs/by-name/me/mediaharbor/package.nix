@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  env.LIBGIT2_NO_VENDOR = true;
 
   cargoHash = "sha256-GoyY4dSeDO3ue0c/5QdRGFFHegJID4DWGGbcuCAZeOc=";
 

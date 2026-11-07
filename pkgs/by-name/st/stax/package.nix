@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ItRt0J2nR94nmg9L6Pion/OB7wW7mmMFE5CHZmr2Yvs=";
   };
 
-  env.LIBGIT2_NO_VENDOR = 1;
-
   postPatch = ''
     # Remove darwin linker override that breaks nix builds
     rm -f .cargo/config.toml

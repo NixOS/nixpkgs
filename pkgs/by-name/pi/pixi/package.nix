@@ -37,11 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    OPENSSL_NO_VENDOR = 1;
-  };
-
   # As the version is updated, the number of failed tests continues to grow.
   doCheck = false;
 

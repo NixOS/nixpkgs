@@ -56,10 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage man/*.1
   '';
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";

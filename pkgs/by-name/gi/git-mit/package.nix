@@ -32,10 +32,6 @@ rustPlatform.buildRustPackage {
     zlib
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";
     homepage = "https://github.com/PurpleBooth/git-mit";

@@ -32,11 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional (!withTelemetry) "disable-telemetry";
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-    LIBGIT2_NO_VENDOR = 1;
-  };
-
   nativeBuildInputs = [
     pkg-config
     cacert

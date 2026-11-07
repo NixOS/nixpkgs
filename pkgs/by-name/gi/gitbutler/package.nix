@@ -162,9 +162,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     TUBRO_BINARY_PATH = lib.getExe turbo;
     TURBO_TELEMETRY_DISABLED = 1;
-
-    OPENSSL_NO_VENDOR = true;
-    LIBGIT2_NO_VENDOR = 1;
   };
 
   preBuild = ''

@@ -54,12 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  env = {
-    LIBGIT2_NO_VENDOR = 1;
-    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   useNextest = true;
   checkFeatures = [ "gradient-daemon/mock" ];
   nativeCheckInputs = [
