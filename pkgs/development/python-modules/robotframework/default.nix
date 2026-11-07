@@ -3,28 +3,38 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  docutils,
   jsonschema,
+  markdown,
   python,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.4.2";
+  version = "7.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "robotframework";
     tag = "v${version}";
-    hash = "sha256-SSjVrbe3uBqCMEUYjrk2lxHpxzdU6QK2xvEFszhT6lc=";
+    hash = "sha256-z7qJy7sUqTIIjz6nMNiCl2cBAeqsfU/O32YceryNRpY=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ jsonschema ];
+  nativeCheckInputs = [
+    docutils
+    jsonschema
+    markdown
+    pyyaml
+  ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} utest/run.py
+    runHook postCheck
   '';
 
   meta = {
