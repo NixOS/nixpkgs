@@ -1,5 +1,22 @@
 {
-  callPackage,
-  useWheel ? true,
-}@pkgs:
-callPackage (if useWheel then (import ./build-wheel.nix) else (import ./build-native.nix)) { }
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  ...
+}:
+buildPythonPackage {
+  name = "mpmath";
+  version = "1.3.0";
+  pyproject = true;
+
+  build-system = [
+    setuptools
+  ];
+
+  src = fetchFromGitHub {
+    owner = "mpmath";
+    repo = "mpmath";
+    tag = "1.3.0";
+    hash = "sha256-9BGcaC3TyolGeO65/H42T/WQY6z5vc1h+MA+8MGFChU=";
+  };
+}
