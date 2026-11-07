@@ -4697,6 +4697,8 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
+  django-dirtyfields = callPackage ../development/python-modules/django-dirtyfields { };
+
   django-dynamic-preferences =
     callPackage ../development/python-modules/django-dynamic-preferences
       { };
@@ -4708,6 +4710,8 @@ self: super: with self; {
   django-encrypted-model-fields =
     callPackage ../development/python-modules/django-encrypted-model-fields
       { };
+
+  django-enumfield = callPackage ../development/python-modules/django-enumfield { };
 
   django-environ = callPackage ../development/python-modules/django-environ { };
 
@@ -5000,6 +5004,8 @@ self: super: with self; {
   django-vtasks = callPackage ../development/python-modules/django-vtasks { };
 
   django-waffle = callPackage ../development/python-modules/django-waffle { };
+
+  django-watchfiles = callPackage ../development/python-modules/django-watchfiles { };
 
   django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
 
@@ -6576,6 +6582,8 @@ self: super: with self; {
 
   fqdn = callPackage ../development/python-modules/fqdn { };
 
+  fractional-indexing = callPackage ../development/python-modules/fractional-indexing { };
+
   free-proxy = callPackage ../development/python-modules/free-proxy { };
 
   freebox-api = callPackage ../development/python-modules/freebox-api { };
@@ -7868,6 +7876,8 @@ self: super: with self; {
   html-tag-names = callPackage ../development/python-modules/html-tag-names { };
 
   html-text = callPackage ../development/python-modules/html-text { };
+
+  html-to-markdown = callPackage ../development/python-modules/html-to-markdown { };
 
   html-void-elements = callPackage ../development/python-modules/html-void-elements { };
 
@@ -20620,6 +20630,10 @@ self: super: with self; {
   tailscale = callPackage ../development/python-modules/tailscale { };
 
   takethetime = callPackage ../development/python-modules/takethetime { };
+
+  talon = callPackage ../development/python-modules/talon { };
+
+  talon-core = talon;
 
   tami4edgeapi = callPackage ../development/python-modules/tami4edgeapi { };
 

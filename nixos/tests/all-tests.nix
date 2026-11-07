@@ -948,6 +948,7 @@ in
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
   kapla = runTest ./kapla.nix;
   karakeep = runTest ./web-apps/karakeep.nix;
+  karrot = runTest ./web-apps/karrot.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
