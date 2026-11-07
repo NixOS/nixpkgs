@@ -28,6 +28,7 @@
   setuptools-rust,
 
   # buildInputs
+  elfutils,
   onednn,
   numactl,
   llvmPackages,
@@ -90,6 +91,7 @@
   py-libnuma,
   # cuda-only
   cupy,
+  flashinfer-jit-cache,
   flashinfer-python,
   nvidia-ml-py,
   tokenspeed-mla,
@@ -273,7 +275,26 @@ let
         url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
         hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
       })
+      # fix build with newer CUTLASS
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
+        hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
+      })
+      # fix build with newer CUTLASS
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/c75d019dea9d910312974417bc28f190dfdda6d9.patch";
+        hash = "sha256-1cPuB1nF2Oi8bAkfgxx2tkeHB03ICQjn9SZ+ssnKDkI=";
+      })
     ];
+
+    # Ignore the python version check because it hard-codes minor versions and
+    # is often out-of-date
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'set(PYTHON_SUPPORTED_VERSIONS' \
+          'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    '';
 
     dontConfigure = true;
 
@@ -496,6 +517,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport (
     mergedCudaLibraries
+    ++ [
+      elfutils
+    ]
     ++ (with cudaPackages; [
       nccl
       cudnn
@@ -553,6 +577,10 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # Not packaged in nixpkgs. Fork of openai-harmony (which we use instead) providing the same
     # `openai_harmony` module, but with embedded tiktoken vocabularies.
     "oss-harmony"
+
+    # CUDA-only, not packaged in nixpkgs
+    "PyNvVideoCodec"
+    "nvtx"
 
     # ROCm-only, not packaged in nixpkgs
     "mooncake-transfer-engine-rocm"
@@ -621,6 +649,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cupy
+    flashinfer-jit-cache
     flashinfer-python
     nvidia-ml-py
     tokenspeed-mla
@@ -651,7 +680,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   cmakeFlags = [
   ]
   ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "DEEPGEMM_SRC_DIR" (lib.getDev deepgemm).outPath)
     (lib.cmakeFeature "DEEPSELECT_SRC_DIR" (lib.getDev deepselect).outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" (lib.getDev cutlass).outPath)
     (lib.cmakeFeature "FLASH_KDA_SRC_DIR" (lib.getDev flashkda).outPath)
@@ -702,6 +730,11 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # See: https://github.com/vllm-project/vllm/blob/v0.7.1/setup.py#L75-L109
     # There's also NVCC_THREADS but Nix/Nixpkgs doesn't really have this concept.
     export MAX_JOBS="$NIX_BUILD_CORES"
+  ''
+  # DeepGEMM is built in-place, so need to copy it into src
+  + lib.optionalString cudaSupport ''
+    cp -r --no-preserve=mode ${(lib.getDev deepgemm).outPath} deepgemm-src
+    export DEEPGEMM_SRC_DIR=deepgemm-src
   '';
 
   pythonImportsCheck = [ "vllm" ];
@@ -714,6 +747,15 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       "--set"
       "VLLM_NCCL_SO_PATH"
       "${cudaPackages.nccl}/lib/libnccl.so"
+    ]
+    ++ lib.optionals cudaSupport [
+      "--set"
+      "CUDA_HOME"
+      "${cudaPackages.cudatoolkit}"
+
+      "--set"
+      "CUDA_PATH"
+      "${cudaPackages.cudatoolkit}"
     ]
     ++ lib.optionals rocmSupport [
       "--set"
@@ -754,6 +796,5 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       #   RISC-V support.
       "aarch64-darwin"
     ];
-    broken = cudaSupport;
   };
 })
