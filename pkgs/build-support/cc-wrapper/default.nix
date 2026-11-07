@@ -417,6 +417,14 @@ let
   useMacroPrefixMap = !isGNU && !isFlang;
   systemIncludeFlag = if isFlang || isArocc then "-I" else "-idirafter";
   fortifyIncludeFlag = if isFlang then "-I" else "-isystem";
+
+  hasUnsupportedGnuSuffix = isClang && hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
+  clangCompatibleConfig =
+    if hasUnsupportedGnuSuffix then
+      removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
+    else
+      targetPlatform.config;
+  explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -454,6 +462,8 @@ stdenvNoCC.mkDerivation {
       nativePrefix
       isGNU
       isClang
+      clangCompatibleConfig
+      explicitAbiValue
       isZig
       ;
 
@@ -995,24 +1005,13 @@ stdenvNoCC.mkDerivation {
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
-    + optionalString isClang (
-      let
-        hasUnsupportedGnuSuffix = hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
-        clangCompatibleConfig =
-          if hasUnsupportedGnuSuffix then
-            removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
-          else
-            targetPlatform.config;
-        explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
-      in
-      ''
-        # Escape twice: once for this script, once for the one it gets substituted into.
-        export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
-        export defaultTarget=${clangCompatibleConfig}
-        export explicitAbiValue=${explicitAbiValue}
-        substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
-      ''
-    )
+    + optionalString isClang ''
+      # Escape twice: once for this script, once for the one it gets substituted into.
+      export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
+      export defaultTarget=${clangCompatibleConfig}
+      export explicitAbiValue=${explicitAbiValue}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+    ''
 
     ##
     ## Extra custom steps
