@@ -21041,6 +21041,8 @@ self: super: with self; {
     inherit (pkgs.tclPackages.override { inherit (tkinter) tcl tk; }) tkgl;
   };
 
+  tkinterdnd2 = callPackage ../development/python-modules/tkinterdnd2 { };
+
   tld = callPackage ../development/python-modules/tld { };
 
   tldextract = callPackage ../development/python-modules/tldextract { };
