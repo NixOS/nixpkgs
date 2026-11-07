@@ -2387,13 +2387,7 @@ let
 
     Rhdf5lib =
       let
-        hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
-          cmakeFlags = (attrs.cmakeFlags or [ ]) ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
-          buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.curl ];
-          postInstall = (attrs.postInstall or "") + ''
-            cp src/libhdf5.settings $dev/lib
-          '';
-        });
+        hdf5 = pkgs.hdf5.override { ros3Support = true; };
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
         propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ [

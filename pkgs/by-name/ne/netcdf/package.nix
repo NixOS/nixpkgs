@@ -7,7 +7,6 @@
   bzip2,
   libzip,
   zstd,
-  szipSupport ? hdf5.szipSupport,
   libaec,
   libxml2,
   m4,
@@ -50,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     hdf5
     libxml2
+    libaec
     bzip2
     libzip
     zstd
   ]
-  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
@@ -74,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
     "--disable-dap-remote-tests"
     "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
+    # HDF5 2.x no longer exports the H5Z_SZIP symbol that configure probes for
+    # to detect szip support in HDF5.
+    "ac_cv_func_H5Z_SZIP=yes"
   ]
   ++ (lib.optionals mpiSupport [
     "--enable-parallel-tests"
