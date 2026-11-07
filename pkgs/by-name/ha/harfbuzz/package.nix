@@ -13,9 +13,9 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withRaster ? false,
-  withVector ? false,
-  withGPU ? false,
+  withRaster ? true,
+  withVector ? true,
+  withGPU ? true,
   withCairo ? false,
   cairo,
   icu,
