@@ -15,8 +15,9 @@
   dbus,
   draco,
   embree,
+  fetchFromGitea,
   fetchFromGitHub,
-  fetchzip,
+  fetchpatch2,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -29,6 +30,8 @@
   intel-llvm,
   jackaudioSupport ? false,
   jemalloc,
+  jolt-physics,
+  ktx-tools,
   level-zero,
   lib,
   libdecor,
@@ -56,6 +59,7 @@
   manifold,
   mesa,
   meshoptimizer,
+  minizip-ng,
   nix-update-script,
   oneapiSupport ? false,
   onetbb,
@@ -68,6 +72,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
+  opentimelineio,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openvdb,
   openxr-loader,
@@ -90,12 +95,48 @@
   wayland-protocols,
   wayland-scanner,
   waylandSupport ? stdenv.hostPlatform.isLinux,
+  weston,
+  writableTmpDirAsHomeHook,
   zlib,
   zstd,
 }:
 
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
+  libdecor' = libdecor.overrideAttrs (old: {
+    # Blender uses private APIs, need to patch to expose them
+    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
+  });
+
+  opentimelineio' = opentimelineio.overrideAttrs (old: {
+    src = old.src.override {
+      rev = "31e3101e750be2aa992274ac02c0679077872e57"; # version pinned by upstream
+      hash = "sha256-Rpx/PMqhmW1MNTaOLaALB/o47GNrCaWG0JbEeN2vHn8=";
+    };
+
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch2 {
+        url = "https://github.com/AcademySoftwareFoundation/OpenTimelineIO/commit/8ab0cf963624cfe3daf3c79c937cf603b4ef783b.patch?full_index=1";
+        hash = "sha256-EpE2c2ME36ryNMtQgiWwj8uis0Qwizm6mvmN72D0DdU=";
+      })
+    ];
+
+    buildInputs = old.buildInputs ++ [
+      minizip-ng
+      zlib
+    ];
+
+    cmakeFlags = old.cmakeFlags ++ [
+      "-DOTIO_FIND_MINIZIP_NG=1"
+    ];
+  });
+in
+
+let
+  stdenv = stdenv';
+  libdecor = libdecor';
+  opentimelineio = opentimelineio';
 
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
@@ -109,31 +150,55 @@ let
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
   });
 
-  libdecor' = libdecor.overrideAttrs (old: {
-    # Blender uses private APIs, need to patch to expose them
-    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
-  });
+  # See build_files/buildbot/config/blender_version.cmake in upstream source for version
+  dlss = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "DLSS";
+    tag = "v310.9.1";
+    sparseCheckout = [ "include" ];
+    hash = "sha256-dGxcmb8iLQLlIkWCr8PESeajMsn69DQZ/erOGO5h8H0=";
 
-  # See build_files/config/pipeline_config.yaml in upstream source for version
+    meta.license = {
+      shortName = "NVIDIA RTX SDKs";
+      fullName = "NVIDIA RTX SDKs";
+      url = "https://developer.download.nvidia.com/gameworks/NVIDIA-RTX-SDKs-License-23Jan2023.pdf";
+      free = false;
+      redistributable = false;
+    };
+  };
+
+  # See build_files/buildbot/config/blender_version.cmake in upstream source for version
   optix = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "optix-dev";
     tag = "v8.0.0";
     hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
+
+    meta.license = {
+      shortName = "NVIDIA SDK EULA";
+      fullName = "SOFTWARE DEVELOPER KITS, SAMPLES AND TOOLS LICENSE AGREEMENT";
+      url = "https://developer.download.nvidia.com/designworks/DesignWorks_SDKs_Samples_Tools_License_distrib_use_rights_2017_06_13.pdf";
+      free = false;
+      redistributable = true;
+    };
   };
 in
 
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.2.3";
+  version = "5.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = fetchzip {
-    name = "source";
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-umFiI2GnG54t9LQAKUpC2ZHVeq+oN5xmpOf4H+nql6M=";
+  src = fetchFromGitea {
+    domain = "projects.blender.org";
+    owner = "blender";
+    repo = "blender";
+    rev = "7e7c173d45c8684c469aa688ba3f7744e88258f8";
+    forceFetchGit = true; # tarball downloads are behind anti-bot protection
+    fetchLFS = true;
+    hash = "sha256-RAuULQ+c/5G4WkN77bvTWK2OhacizYIm9Y6Gf5X6GaI=";
   };
 
   patches = [
@@ -151,6 +216,21 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail \
         'static const char *static_libs_path = PREFIX "/" BLENDER_INSTALL_LIBDIR;' \
         'static const char *static_libs_path = BLENDER_INSTALL_LIBDIR;'
+
+    # GlfDrawTarget was removed in OpenUSD 26.11; the include is unused
+    substituteInPlace source/blender/render/hydra/viewport_engine.cc \
+      --replace-fail '#include <pxr/imaging/glf/drawTarget.h>' '#include <pxr/base/gf/vec4i.h>'
+  ''
+  # fmt 12.2 compat fix
+  + ''
+    for f in $(grep --recursive --files-with-matches --extended-regexp 'include <fmt/core\.h>' source); do
+      substituteInPlace "$f" \
+        --replace-fail '#include <fmt/core.h>' '#include <fmt/format.h>'
+    done
+    for f in $(grep --recursive --files-with-matches --extended-regexp 'include "fmt/core\.h"' source); do
+      substituteInPlace "$f" \
+        --replace-fail '#include "fmt/core.h"' '#include "fmt/format.h"'
+    done
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -194,9 +274,10 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_ONEAPI_BINARIES" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
-    (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
     (lib.cmakeBool "WITH_CYCLES_PARALLEL_DEVICE_KERNEL_BUILD" true)
+    (lib.cmakeBool "WITH_DLSS" cudaSupport)
+    (lib.cmakeBool "WITH_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_HYDRA" openUsdSupport)
     (lib.cmakeBool "WITH_INSTALL_PORTABLE" false)
     (lib.cmakeBool "WITH_JACK" jackaudioSupport)
@@ -217,6 +298,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
+    (lib.cmakeFeature "DLSS_SDK_ROOT" "${dlss}")
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
@@ -282,6 +364,8 @@ stdenv'.mkDerivation (finalAttrs: {
     glew
     gmp
     jemalloc
+    jolt-physics
+    ktx-tools
     libepoxy
     libharu
     libjpeg
@@ -292,12 +376,14 @@ stdenv'.mkDerivation (finalAttrs: {
     libwebp
     manifold
     meshoptimizer
+    minizip-ng
     opencolorio
     openexr
     openimageio
     openjpeg
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
+    opentimelineio
     onetbb
     openvdb
     openxr-loader
@@ -345,7 +431,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
   ++ lib.optionals waylandSupport [
     dbus
-    libdecor'
+    libdecor
     libffi
     libxkbcommon
     wayland
@@ -420,35 +506,84 @@ stdenv'.mkDerivation (finalAttrs: {
       };
 
     tests = {
-      render = runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; } ''
-        set -euo pipefail
-        cat <<'PYTHON' > scene-config.py
-        import bpy
-        bpy.context.scene.eevee.taa_render_samples = 32
-        bpy.context.scene.cycles.samples = 32
-        if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
-            bpy.context.scene.cycles.use_denoising = False
-        bpy.context.scene.render.resolution_x = 100
-        bpy.context.scene.render.resolution_y = 100
-        bpy.context.scene.render.threads_mode = 'FIXED'
-        bpy.context.scene.render.threads = 1
-        PYTHON
+      basicRender =
+        runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; }
+          ''
+            set -euo pipefail
+            cat <<'PYTHON' > scene-config.py
+            import bpy
+            bpy.context.scene.eevee.taa_render_samples = 32
+            bpy.context.scene.cycles.samples = 32
+            if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
+                bpy.context.scene.cycles.use_denoising = False
+            bpy.context.scene.render.resolution_x = 100
+            bpy.context.scene.render.resolution_y = 100
+            bpy.context.scene.render.threads_mode = 'FIXED'
+            bpy.context.scene.render.threads = 1
+            PYTHON
 
-        mkdir $out
-        for engine in BLENDER_EEVEE_NEXT CYCLES; do
-          echo "Rendering with $engine..."
-          # Beware that argument order matters
-          ${lib.getExe finalAttrs.finalPackage} \
-            --background \
-            -noaudio \
-            --factory-startup \
-            --python-exit-code 1 \
-            --python scene-config.py \
-            --engine "$engine" \
-            --render-output "$out/$engine" \
-            --render-frame 1
-        done
-      '';
+            mkdir $out
+            for engine in BLENDER_EEVEE_NEXT CYCLES; do
+              echo "Rendering with $engine..."
+              # Beware that argument order matters
+              ${lib.getExe finalAttrs.finalPackage} \
+                --background \
+                -noaudio \
+                --factory-startup \
+                --python-exit-code 1 \
+                --python scene-config.py \
+                --engine "$engine" \
+                --render-output "$out/$engine" \
+                --render-frame 1
+            done
+          '';
+
+      blenderTests = blender.overrideAttrs (old: {
+        pname = "blender-tests";
+
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          python3Packages.docutils
+        ];
+
+        cmakeFlags = old.cmakeFlags ++ [
+          (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${lib.getBin blender}/bin") # Test against already-built blender
+          (lib.cmakeBool "WITH_INSTALL_PORTABLE" true)
+        ];
+
+        postPatch =
+          old.postPatch
+          # alembic_root is the dev output, but this needs the exe
+          + ''
+            substituteInPlace tests/python/alembic_export_tests.py \
+              --replace-fail \
+                'cls.alembic_root = pathlib.Path(args.alembic_root)' \
+                'cls.alembic_root = pathlib.Path("${alembic}")'
+          ''
+          # disable failing tests (but make them complain if they start passing)
+          + ''
+            cat <<'EOF' >> tests/python/CMakeLists.txt
+              set_tests_properties(cycles_pointcloud_cpu PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(geo_node_geometry_raycast PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(geo_node_mesh_uv_unwrap PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(imbuf_save PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(script_bundled_modules PROPERTIES WILL_FAIL TRUE)
+            EOF
+          '';
+
+        dontBuild = true;
+        installPhase = "touch $out";
+        dontFixup = true;
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          weston
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          TBB_ENABLE_SANITIZERS=1 ctest --test-dir . --output-on-failure
+        '';
+      });
+
       tester-cudaAvailable = cudaPackages.writeGpuTestPython { } ''
         import subprocess
         subprocess.run([${
@@ -473,10 +608,9 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "3D Creation/Animation/Publishing System";
+    description = "Free and open source 3D creation suite";
     homepage = "https://www.blender.org";
-    # OptiX, enabled with cudaSupport, is non-free.
-    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
+    license = with lib.licenses; [ gpl2Plus ];
     donationPage = "https://fund.blender.org/";
 
     platforms = [
