@@ -9,6 +9,7 @@
   yarnInstallHook,
   grunt-cli,
   fetchzip,
+  cacert,
 }:
 let
   version = "1.7.2";
@@ -59,6 +60,11 @@ php.buildComposerProject2 (finalAttrs: {
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
     rm -r $out/{composer.json,composer.lock,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
+
+    for f in application/config/cacert.pem vendor/stripe/stripe-php/data/ca-certificates.crt; do
+      rm $out/$f
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/$f
+    done
   '';
 
   passthru.tests = {
