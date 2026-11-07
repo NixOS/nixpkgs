@@ -12838,6 +12838,8 @@ self: super: with self; {
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
+  openqasm3 = callPackage ../development/python-modules/openqasm3 { inherit (pkgs) antlr4; };
+
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
@@ -17903,6 +17905,8 @@ self: super: with self; {
   qiskit-nature = callPackage ../development/python-modules/qiskit-nature { };
 
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
+
+  qiskit-qasm3-import = callPackage ../development/python-modules/qiskit-qasm3-import { };
 
   qnapstats = callPackage ../development/python-modules/qnapstats { };
 
