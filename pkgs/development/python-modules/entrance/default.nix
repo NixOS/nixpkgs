@@ -3,12 +3,15 @@
   fetchPypi,
   buildPythonPackage,
   routerFeatures,
-  setuptools,
+  hatchling,
   janus,
   ncclient,
   paramiko,
   pyyaml,
-  sanic,
+  websockets,
+  ujson,
+  fastapi,
+  uvicorn,
 }:
 
 let
@@ -48,11 +51,14 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    fastapi
     pyyaml
-    sanic
+    ujson
+    uvicorn
+    websockets
   ]
   ++ opts.extraBuildInputs;
 
