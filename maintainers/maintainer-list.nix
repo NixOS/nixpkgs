@@ -4182,14 +4182,6 @@
     githubId = 115711;
     name = "bpaulin";
   };
-  bpeetz = {
-    name = "Benedikt Peetz";
-    email = "benedikt.peetz@b-peetz.de";
-    matrix = "@soispha:vhack.eu";
-    github = "bpeetz";
-    githubId = 140968250;
-    keys = [ { fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26"; } ];
-  };
   bpmct = {
     name = "Ben Potter";
     email = "ben@coder.com";
@@ -27794,6 +27786,13 @@
     github = "SohamG";
     githubId = 7116239;
     keys = [ { fingerprint = "E067 520F 5EF2 C175 3F60  50C0 BA46 725F 6A26 7442"; } ];
+  };
+  soispha = {
+    name = "Soispha Peetz";
+    email = "soispha@b-peetz.de";
+    matrix = "@soispha:vhack.eu";
+    github = "soispha";
+    githubId = 132207423;
   };
   Soliprem = {
     email = "me@soliprem.eu";
