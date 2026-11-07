@@ -2,11 +2,13 @@
   lib,
   fetchFromGitHub,
   fetchPnpmDeps,
+  nix-update-script,
   nodejs,
   pnpm_10,
   pnpmConfigHook,
   rustPlatform,
   stdenv,
+  versionCheckHook,
 }:
 
 let
@@ -48,7 +50,7 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "pitchfork";
-    version = "2.24.0";
+    version = "2.32.2";
 
     __structuredAttrs = true;
 
@@ -56,10 +58,10 @@ rustPlatform.buildRustPackage (
       owner = "jdx";
       repo = "pitchfork";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-T8VB47SdwIVSjoZLr5gxL7BXC1TVehicmTSjqUQRIGA=";
+      hash = "sha256-uWyhsGCr3vSdy8EwLj0Orb8br+pQEH19r1+CbvVTrQw=";
     };
 
-    cargoHash = "sha256-01rGoLun4cfyBn5rPwTPd2iGDUlyBJV2e1/5Xbsfobc=";
+    cargoHash = "sha256-0UBgpmDFUouT9vtw0G/StZBgICCQiP5jfEUqtac5kM8=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) pname src version;
@@ -71,7 +73,7 @@ rustPlatform.buildRustPackage (
       inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 3;
-      hash = "sha256-zh0JlHe6NDpsuDKsGq5Eto8Rx7gGLc7ayxV/NIhm4EQ=";
+      hash = "sha256-/XbMChPNLO9aHly6PATVRpaMTpvQz01fNQbG7vsraMo=";
     };
 
     preBuild = ''
@@ -81,13 +83,21 @@ rustPlatform.buildRustPackage (
 
     doCheck = false;
 
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
+
+    passthru.updateScript = nix-update-script { };
+
     meta = {
       homepage = "https://pitchfork.jdx.dev";
       description = "Daemons with DX";
       changelog = "https://github.com/jdx/pitchfork/blob/${finalAttrs.src.tag}/CHANGELOG.md";
       license = lib.licenses.mit;
       mainProgram = "pitchfork";
-      maintainers = with lib.maintainers; [ esteve ];
+      maintainers = with lib.maintainers; [
+        esteve
+        anish
+      ];
     };
   }
 )
