@@ -1,0 +1,24 @@
+Do not leak a GIL state when shutting Python down.
+
+`PythonInitializer.Shutdown` acquires the GIL into a local that is never
+disposed, so `Py.GILState`'s finalizer later runs on the GC's finalizer thread
+and throws
+
+    GIL must always be released, and it must be released from the same thread
+    that acquired it
+
+which aborts the process after the backtest has finished (exit code 134). It
+does not show up under the container's Python 3.11, but it does under the
+Python 3.12 used here. `PythonEngine.Shutdown` takes the GIL itself, so the
+extra acquisition is redundant.
+
+--- a/Common/Python/PythonInitializer.cs
++++ b/Common/Python/PythonInitializer.cs
+@@ -82,7 +82,6 @@
+ 
+                 try
+                 {
+-                    var pyLock = Py.GIL();
+                     Log.Trace($"PythonInitializer.Shutdown(): calling engine shutdown...");
+                     PythonEngine.Shutdown();
+                 }
