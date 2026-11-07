@@ -12,7 +12,7 @@
   pkg-config,
   rdma-core,
   withBluez ? false,
-  withRdma ? lib.meta.availableOn stdenv.hostPlatform rdma-core,
+  withRdma ? false,
   withRemote ? false,
 
   # for passthru.tests
