@@ -1,6 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  alembic,
+  aiosqlite,
   black,
   jinja2,
   dirty-equals,
@@ -15,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlmodel";
-  version = "0.0.42";
+  version = "0.0.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
     tag = finalAttrs.version;
-    hash = "sha256-fhj3mWep7Wdw9AYu9ibIWY5plKe+w6F6PghiUsb6z5o=";
+    hash = "sha256-qvbU9gatlVNgkRTc3WESn+neD79nE+I8gw3+uKOJYo4=";
   };
 
   build-system = [ pdm-backend ];
@@ -33,6 +35,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    alembic
+    aiosqlite
     black
     jinja2
     dirty-equals
