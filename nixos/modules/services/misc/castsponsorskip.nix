@@ -16,7 +16,7 @@ in
         type = (pkgs.formats.yaml { }).type;
         default = { };
         example = {
-          CSS_SKIP_SPONSORS = false;
+          skip-sponsors = false;
         };
         description = "Configuration for the service. List of options all options <https://github.com/gabe565/CastSponsorSkip/blob/main/docs/envs.md>.";
       };
@@ -28,7 +28,7 @@ in
         # Needed, even if empty, to avoid searching for a file in
         # the user home directory, which doesn't exist for
         # dynamic users
-        config = (pkgs.formats.yaml cfg.config).generate "config.yaml" { };
+        config = (pkgs.formats.yaml { }).generate "config.yaml" cfg.config;
       in
       {
         description = "Skip YouTube ads and sponsorships on all local Google Cast devices";
