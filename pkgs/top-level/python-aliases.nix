@@ -238,6 +238,7 @@ mapAliases {
   dns = throw "'dns' has been renamed to/replaced by 'dnspython'"; # Converted to throw 2025-10-29
   docker_pycreds = throw "'docker_pycreds' has been renamed to/replaced by 'docker-pycreds'"; # Converted to throw 2025-10-29
   dogpile_cache = throw "'dogpile_cache' has been renamed to/replaced by 'dogpile-cache'"; # Converted to throw 2025-10-29
+  dragonfly = warnAlias "'dragonfly' has been renamed to 'dragonfly2'" dragonfly2; # Added 2026-11-07
   duckduckgo-search = throw "duckduckgo-search was renamed to ddgs, use ddgs instead"; # added 2025-10-20
   duct-py = duct; # added 2026-10-13
   dukpy = throw "'dukpy' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
