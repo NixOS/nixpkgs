@@ -9,18 +9,14 @@
   soapysdr,
 }:
 
-let
-  version = "0.4.2";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapybladerf";
-  inherit version;
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyBladeRF";
-    rev = "soapy-bladerf-${version}";
+    rev = "soapy-bladerf-${finalAttrs.version}";
     sha256 = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
   };
 
@@ -49,4 +45,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})
