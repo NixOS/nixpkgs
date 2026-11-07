@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsystemtap";
-  version = "5.5";
+  version = "5.6";
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-olN98hjIYZmQvI7Fn1v5ZwRl7yaCAPRGr2g33oMq7VQ=";
+    hash = "sha256-4COcitD0EwfxRcXIfIFVvwgIsgCfOULvhyWl23z/mxg=";
   };
 
   dontBuild = true;
