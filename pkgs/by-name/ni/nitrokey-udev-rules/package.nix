@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nitrokey-udev-rules";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-udev-rules";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LKpd6O9suAc2+FFgpuyTClEgL/JiZiokH3DV8P3C7Aw=";
+    hash = "sha256-e++vva7Y+1zjzRznzFjemm94CMTHQBne94FGRZlvn8Q=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       robinkrahl
+      liamthexpl0rer
     ];
   };
 })
