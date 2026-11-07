@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ bashNonInteractive ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
