@@ -5,12 +5,12 @@
   libglut,
   glew,
   libxext,
-  linuxPackages,
+  nvidiaPackages,
   lib,
 }:
 
 let
-  inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
+  inherit (nvidiaPackages.stable.settings) libXNVCtrl;
 in
 
 stdenv.mkDerivation {
