@@ -7,16 +7,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "timescaledb-parallel-copy";
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-parallel-copy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vd+2KpURyVhcVf2ESHcyZLJCw+z+WbnTJX9Uy4ZAPoE=";
+    name = "timescaledb-parallel-copy-v0.12.0-source";
+    hash = "sha256-ICy1Z3ePydHN7yTNwL+Zj9tlK2L/w1xa1mPFTZzlmFY=";
   };
 
-  vendorHash = "sha256-MRso2uihMUc+rLwljwZZR1+1cXADCNg+JUpRcRU918g=";
+  vendorHash = "sha256-EB/9U2RROC9IFDkVXe5fPm+pOQUKlse262OQdhZrtn8=";
+
+  #Upstream forgot to bump the hardcoded version string in 0.12.0.
+  #This hack can be removed once they update the version in cmd/timescaledb-parallel-copy/main.go.
+  postPatch = ''
+    substituteInPlace cmd/timescaledb-parallel-copy/main.go \
+      --replace-fail 'version    = "v0.11.0"' 'version    = "v${finalAttrs.version}"'
+  '';
 
   checkFlags =
     let
@@ -24,13 +32,14 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         "TestWriteDataToCSV"
         "TestErrorAtRow"
-        "TestErrorAtRowWithHeader"
         "TestWriteReportProgress"
         "TestFailedBatchHandler"
-        "TestFailedBatchHandlerFailure"
+        "TestTransaction"
+        "TestAtomicity"
+        "TestBatchConflict"
       ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [ "-skip=^(${builtins.concatStringsSep "|" skippedTests})" ];
 
   doInstallCheck = true;
 
