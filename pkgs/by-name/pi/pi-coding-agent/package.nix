@@ -80,6 +80,7 @@ buildNpmPackage (finalAttrs: {
               @earendil-works/pi-durable:packages/durable \
               @earendil-works/pi-env:packages/env \
               @earendil-works/pi-mcp:packages/mcp \
+              @earendil-works/pi-schema:packages/schema \
               @earendil-works/pi-telemetry:packages/telemetry \
               @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
