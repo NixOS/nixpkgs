@@ -184,6 +184,8 @@ with lib.maintainers;
     members = [
       SomeoneSerge
       connorbaker
+      GaetanLepage
+      YorikSar
       # Kevin?
       # samuela?
       # Fridh?
@@ -219,6 +221,40 @@ with lib.maintainers;
       Resolve old HPC clusters problems: network fs, no namespaces, no chroot, stat storm.
       Resolve ld.so "dependency injection"/resolution order, LD_LIBRARY_PATH, RPATH v. RUNPATH, "LD_LIBRARY_OVERRIDE", "LD_LIBRARY_FALLBACK".
       Et c.
+    '';
+  };
+
+  # Starting late 2024
+  cudaA = {
+    shortName = "cudaA";
+    members = [
+      SomeoneSerge
+      connorbaker
+      GaetanLepage # Starting Autumn 2025
+    ];
+    scope = ''
+      Supporting GPU-Accelerated Scientific Computing.
+      Towards self-employed maintainership.
+
+      Make it possible for self-employed maintainers derive or combine with running profitable SMEs from Nixpkgs maintainership.
+      Force Nixpkgs CUDA and Nixpkgs to behave as "ruthless capitalist" entities
+      when negotiating with Big Tech, Finance, "AI", or Military consumers.
+      Reduce maintainers' perverse incentives and COIs
+      rooted in their material conditions: employment, sedentism, non-ownership and lack of assets,
+      inability to afford to lose a source of income, inability to cross borders.
+    '';
+  };
+
+  cudaB = {
+    shortName = "cudaB";
+    members = [
+      YorikSar # Starting Autumn 2025
+      # MODUS
+    ];
+    scope = ''
+      Package CUDA-enabled packages.
+
+      Make it possible for non-owner employees to participate in maintainership and governance.
     '';
   };
 
