@@ -1,0 +1,41 @@
+diff --git a/src/support_data/ossimNitfGenericTag.cpp b/src/support_data/ossimNitfGenericTag.cpp
+index 9aa0519..4bd2583 100644
+--- a/src/support_data/ossimNitfGenericTag.cpp
++++ b/src/support_data/ossimNitfGenericTag.cpp
+@@ -13,8 +13,8 @@
+ #include <ossim/support_data/ossimNitfCommon.h>
+ #include <ossim/base/ossimKeywordlist.h>
+ #include <ossim/base/ossimNotify.h>
+-#include <base/ossimException.h>
+-#include <base/ossimTrace.h>
++#include <ossim/base/ossimException.h>
++#include <ossim/base/ossimTrace.h>
+ 
+ #include <istream>
+ #include <iostream>
+diff --git a/src/support_data/ossimNitfRegisteredDesFactory.cpp b/src/support_data/ossimNitfRegisteredDesFactory.cpp
+index 6609d9a..a007409 100644
+--- a/src/support_data/ossimNitfRegisteredDesFactory.cpp
++++ b/src/support_data/ossimNitfRegisteredDesFactory.cpp
+@@ -17,7 +17,7 @@
+ #include <ossim/support_data/ossimNitfCscsdbDes.h>
+ #include <ossim/support_data/ossimNitfCssfabDes.h>
+ 
+-#include "support_data/ossimNitfCsephbDes.h"
++#include <ossim/support_data/ossimNitfCsephbDes.h>
+ 
+ RTTI_DEF1(ossimNitfRegisteredDesFactory, "ossimNitfRegisteredDesFactory", ossimNitfDesFactory);
+ 
+diff --git a/src/support_data/ossimNitfXmlTag.cpp b/src/support_data/ossimNitfXmlTag.cpp
+index aefdddc..59e2b7f 100644
+--- a/src/support_data/ossimNitfXmlTag.cpp
++++ b/src/support_data/ossimNitfXmlTag.cpp
+@@ -14,7 +14,7 @@
+ #include <ossim/support_data/ossimNitfXmlTag.h>
+ #include <iomanip>
+ #include <sstream>
+-#include <base/ossimPreferences.h>
++#include <ossim/base/ossimPreferences.h>
+ 
+ ossimNitfXmlTag::ossimNitfXmlTag(ossimString tagName)
+    : ossimNitfRegisteredTag(tagName, 0)
