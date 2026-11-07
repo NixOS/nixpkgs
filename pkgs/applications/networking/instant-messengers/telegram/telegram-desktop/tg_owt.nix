@@ -44,6 +44,12 @@ stdenv.mkDerivation {
   };
 
   patches = [
+    # See: https://github.com/desktop-app/tg_owt/pull/181
+    ./tg_owt-system-ca.patch
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "TG_OWT_USE_SYSTEM_SSL_ROOT_CERTS" true)
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

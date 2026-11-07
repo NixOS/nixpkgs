@@ -1,0 +1,72 @@
+From bbc03ee5b9b9e778fbc2d6f15dd3ceea2f7281e5 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 24 Oct 2026 03:42:08 +0800
+Subject: [PATCH] Add optional support for OpenSSL system CA trust store
+
+---
+ CMakeLists.txt                  | 13 +++++++++++++
+ src/rtc_base/openssl_adapter.cc | 14 ++++++++++++--
+ 2 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 30ddea65d3d0d9cc2f0cb2c85467915fd09407f7..a4b525344ba856da19b59a551e28fb87e7823733 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,6 +23,8 @@ cmake_dependent_option(TG_OWT_USE_X11 "Use X11 for desktop capture." ON "UNIX; N
+ cmake_dependent_option(TG_OWT_USE_PIPEWIRE "Use pipewire for desktop capture." ON "UNIX; NOT APPLE" OFF)
+ cmake_dependent_option(TG_OWT_DLOPEN_PIPEWIRE "dlopen pipewire for desktop capture." ${not_packaged_build} TG_OWT_USE_PIPEWIRE OFF)
+ option(TG_OWT_BUILD_AUDIO_BACKENDS "Build webrtc audio backends." OFF)
++option(TG_OWT_USE_SYSTEM_SSL_ROOT_CERTS
++    "Use OpenSSL's default trust store instead of the bundled CA roots." OFF)
+ 
+ if (BUILD_SHARED_LIBS)
+     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+@@ -82,6 +84,17 @@ endif()
+ add_library(tg_owt)
+ init_target(tg_owt)
+ 
++if (TG_OWT_USE_SYSTEM_SSL_ROOT_CERTS)
++    if (NOT TG_OWT_PACKAGED_BUILD)
++        message(FATAL_ERROR
++            "TG_OWT_USE_SYSTEM_SSL_ROOT_CERTS requires a packaged build using system OpenSSL.")
++    endif()
++    target_compile_definitions(tg_owt PRIVATE
++        WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS
++        WEBRTC_USE_SYSTEM_SSL_ROOT_CERTS
++    )
++endif()
++
+ generate_field_trials(tg_owt)
+ 
+ if (TG_OWT_USE_PIPEWIRE)
+diff --git a/src/rtc_base/openssl_adapter.cc b/src/rtc_base/openssl_adapter.cc
+index e48cdf43bd32381d54d34ebd884f54fe96d9a62a..1bc4af95bc2b15e58ec8b1590a254021eb65ebfe 100644
+--- a/src/rtc_base/openssl_adapter.cc
++++ b/src/rtc_base/openssl_adapter.cc
+@@ -973,14 +973,24 @@ SSL_CTX* OpenSSLAdapter::CreateContext(SSLMode mode, bool enable_cache) {
+     return nullptr;
+   }
+ 
+-#ifndef WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS
++#if defined(WEBRTC_USE_SYSTEM_SSL_ROOT_CERTS)
++#if defined(OPENSSL_IS_BORINGSSL)
++#error "WEBRTC_USE_SYSTEM_SSL_ROOT_CERTS requires OpenSSL, not BoringSSL"
++#endif
++  if (SSL_CTX_set_default_verify_paths(ctx) != 1) {
++    RTC_LOG(LS_ERROR) << "SSL_CTX creation failed: Failed to set the default "
++                         "SSL certificate verification paths.";
++    SSL_CTX_free(ctx);
++    return nullptr;
++  }
++#elif !defined(WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS)
+   if (!openssl::LoadBuiltinSSLRootCertificates(ctx)) {
+     RTC_LOG(LS_ERROR) << "SSL_CTX creation failed: Failed to load any trusted "
+                          "ssl root certificates.";
+     SSL_CTX_free(ctx);
+     return nullptr;
+   }
+-#endif  // WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS
++#endif  // WEBRTC_USE_SYSTEM_SSL_ROOT_CERTS
+ 
+ #if !defined(NDEBUG)
+   SSL_CTX_set_info_callback(ctx, SSLInfoCallback);
