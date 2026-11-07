@@ -40,7 +40,7 @@
   pytest-asyncio,
   pytest-examples,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pyyaml,
   trio,
   zensical,
@@ -103,7 +103,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-examples
     pytest-xdist
-    pytestCheckHook
+    pytest9_1CheckHook
     pyyaml
     trio
     zensical
