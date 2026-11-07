@@ -12,6 +12,8 @@
   sortedcontainers,
   dill,
   casadi,
+  neuralfoil,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -20,13 +22,12 @@ buildPythonPackage (finalAttrs: {
   format = "wheel";
 
   src = fetchPypi {
-    pname = "AeroSandbox";
-    inherit (finalAttrs) version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
 
     python = "py3";
     dist = "py3";
-    hash = "sha256-usUf1Fdz0h0rdoSLj8Nm984KLZ88Eo+RoTBA7ppJkyM=";
+    hash = "sha256-QvS1tKZ/go+LiTAzuqkJOEw9e8O+cA1bPFWrahjB810=";
   };
 
   build-system = [ setuptools ];
@@ -42,10 +43,14 @@ buildPythonPackage (finalAttrs: {
     casadi
   ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   pythonImportsCheck = [ "aerosandbox" ];
 
+  optional-dependencies.neuralfoil = [ neuralfoil ];
+
   pythonRemoveDeps = [
-    # infinite recursion
+    # NeuralFoil depends on AeroSandbox; select both in the Python environment.
     "neuralfoil"
     # not pypa-installed, so no metadata
     # good candidate for https://github.com/NixOS/nixpkgs/pull/518530
