@@ -4288,7 +4288,7 @@ self: super: with self; {
 
   dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
 
-  deebot-client = callPackage ../development/python-modules/deebot-client { };
+  deebot-client = callPackage ../development/python-modules/deebot-client { inherit (pkgs) zstd; };
 
   deemix = callPackage ../development/python-modules/deemix { };
 
