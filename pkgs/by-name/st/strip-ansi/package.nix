@@ -13,7 +13,7 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "strip-ansi";
-  version = "0.1.0-unstable-2024-09-01";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
