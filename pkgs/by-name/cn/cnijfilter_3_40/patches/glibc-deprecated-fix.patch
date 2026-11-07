@@ -1,0 +1,12 @@
+diff -Naur a/cngpijmon/cnijnpr/cnijnpr/cnijnpr.c b/cngpijmon/cnijnpr/cnijnpr/cnijnpr.c
+--- a/cngpijmon/cnijnpr/cnijnpr/cnijnpr.c	2021-10-18 14:36:56.794504642 +0300
++++ b/cngpijmon/cnijnpr/cnijnpr/cnijnpr.c	2021-10-18 14:31:39.904508312 +0300
+@@ -33,7 +33,7 @@
+ #include <signal.h>
+ #include <sys/ioctl.h>
+ #include <net/if.h>
+-#include <sys/sysctl.h>
++#include <unistd.h>
+ #include <config.h>
+ 
+ #include <dlfcn.h>

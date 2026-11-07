@@ -1,0 +1,21 @@
+--- a/pstocanonij/filter/pstocanonij.c	2010-02-23 04:57:49.000000000 +0100
++++ b/pstocanonij/filter/pstocanonij.c	2026-09-08 07:02:45.713666015 +0200
+@@ -1064,6 +1064,18 @@
+ 				if( !strcasecmp(value, "True") )
+ 					param_list_add(&p_list, opt_key, "", 1);	/* not overwrite */
+ 			}
++			/* CNGrayscale: like Duplex, --grayscale is a bare flag (no
++			   argument) in cifXXXX's option parser, so only emit it when
++			   the PPD boolean is True. Passing the value through like a
++			   normal option (the default "else" branch below) leaves a
++			   stray "true"/"false" token on cifXXXX's command line, which
++			   it then misreads as an input filename instead of reading
++			   the raster data from stdin -- silently producing no output. */
++			else if( !strcmp(p_cups_opt->name, "CNGrayscale") )
++			{
++				if( !strcasecmp(value, "True") )
++					param_list_add(&p_list, opt_key, "", 1);
++			}
+ 			else
+ 			{
+ 				/* Ver.2.90ÅFfor Borderless */
