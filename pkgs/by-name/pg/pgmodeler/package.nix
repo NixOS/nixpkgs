@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cmake,
   copyDesktopItems,
   fetchFromGitHub,
   makeDesktopItem,
@@ -13,44 +14,48 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgmodeler";
-  version = "1.2.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "nullptrlabs";
     repo = "pgmodeler";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WA3EOJm9RrKk7DrzdrpiihW+LhJOvvE2uajGwPCsBIk=";
+    sha256 = "sha256-4xXtUnvW8mhUYPsICrXDIMM9+tHdq7qdRdsI7Irjw2E=";
   };
 
   nativeBuildInputs = [
+    cmake
     pkg-config
-    qt6.qmake
+    qt6.qttools
     qt6.wrapQtAppsHook
     copyDesktopItems
   ];
 
-  qmakeFlags = [
-    "pgmodeler.pro"
-    "CONFIG+=release"
+  postPatch = ''
+    patchShebangs getbuildnum.sh
+    substituteInPlace BuildConfs.cmake \
+      --replace-fail 'set(CMAKE_C_COMPILER /usr/bin/clang)' "" \
+      --replace-fail 'set(CMAKE_CXX_COMPILER /usr/bin/clang++)' ""
+  '';
+
+  cmakeFlags = [
+    "-DPGM_PREFIX=${placeholder "out"}${lib.optionalString stdenv.hostPlatform.isDarwin "/Applications/pgModeler.app/Contents"}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "PGSQL_INC=${lib.getDev libpq}/include"
-    "PGSQL_LIB=${lib.getLib libpq}/lib/libpq.dylib"
-    "XML_INC=${libxml2.dev}/include/libxml2"
-    "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
-    "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
+    "-DPGSQL_INC=${lib.getDev libpq}/include"
+    "-DPGSQL_LIBS=${lib.getLib libpq}/lib/libpq.dylib"
+    "-DXML2_INC=${libxml2.dev}/include/libxml2"
+    "-DXML2_LIBS=${libxml2.out}/lib/libxml2.dylib"
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
     libpq
+    libxml2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cups
-    libxml2
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -66,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm444 apps/pgmodeler/res/windows_ico.ico $out/share/icons/hicolor/256x256/apps/pgmodeler.ico
+    install -Dm444 ${finalAttrs.src}/apps/pgmodeler/res/pgmodeler.ico $out/share/icons/hicolor/256x256/apps/pgmodeler.ico
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
