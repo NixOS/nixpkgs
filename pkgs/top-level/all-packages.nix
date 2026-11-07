@@ -9247,9 +9247,7 @@ with pkgs;
     inherit (python3Packages) beancount beancount-plugin-utils;
   };
 
-  cataclysmDDA = callPackage ../games/cataclysm-dda { };
-
-  cataclysm-dda = cataclysmDDA.stable.tiles;
+  cataclysmDDA = callPackage ../by-name/ca/cataclysm-dda { };
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
