@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "dnscontrol";
   version = "5.7.2";
 
