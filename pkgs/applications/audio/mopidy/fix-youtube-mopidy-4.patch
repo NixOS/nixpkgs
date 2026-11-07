@@ -1,0 +1,81 @@
+From: Gerhard Schwanzer <geri@sdf.org>
+Subject: [PATCH] Restore Mopidy 4 cache metadata serialization
+Upstream-Status: Submitted [https://github.com/natumbri/mopidy-youtube/pull/265]
+
+diff --git a/mopidy_youtube/youtube.py b/mopidy_youtube/youtube.py
+index 4a988d0..d02d9e6 100644
+--- a/mopidy_youtube/youtube.py
++++ b/mopidy_youtube/youtube.py
+@@ -733,13 +733,16 @@ def my_hook(d):
+                         with open(
+                             os.path.join(cache_location, f"{self.id}.json"), "w"
+                         ) as outfile:
+-                            json.dump(
+-                                convert_video_to_track(
+-                                    self, bitrate=int(info.get("tbr", 0))
+-                                ),
+-                                cls=ModelJSONEncoder,
+-                                fp=outfile,
+-                            )
++                            if ModelJSONEncoder:
++                                # Mopidy < 4.0
++                                json.dump(track, cls=ModelJSONEncoder, fp=outfile)
++                            else:
++                                # Mopidy >= 4.0
++                                outfile.write(
++                                    track.model_dump_json(
++                                        by_alias=True, exclude_none=True
++                                    )
++                                )
+                 else:
+                     with youtube_dl.YoutubeDL(ytdl_options) as ydl:
+                         info = ydl.extract_info(
+diff --git a/tests/test_extension.py b/tests/test_extension.py
+index 4c9ab45..85b900a 100644
+--- a/tests/test_extension.py
++++ b/tests/test_extension.py
+@@ -26,7 +26,7 @@ def test_get_config_schema():
+     assert "api_enabled" in schema
+     assert "channel_id" in schema
+     assert "musicapi_enabled" in schema
+-    assert "musicapi_cookie" in schema
++    assert "musicapi_cookiefile" in schema
+     assert "autoplay_enabled" in schema
+     assert "strict_autoplay" in schema
+     assert "max_autoplay_length" in schema
+diff --git a/tests/test_youtube.py b/tests/test_youtube.py
+index c1ec385..ba27c4a 100644
+--- a/tests/test_youtube.py
++++ b/tests/test_youtube.py
+@@ -1,3 +1,5 @@
++import json
++
+ import pytest
+
+ from mopidy_youtube import youtube
+@@ -84,20 +86,20 @@ def test_audio_url(api, config, headers, youtube_dl_mock_with_video):
+
+ @pytest.mark.parametrize("api", apis)
+ def test_audio_url_with_cache_metadata(
+-    api, config, headers, youtube_dl_mock_with_video, tmp_path
++    api, config, headers, youtube_dl_mock_with_video, tmp_path, monkeypatch
+ ):
+     setup_entry_api(api, config, headers)
+     youtube.Video.proxy = None
+-    youtube.cache_location = str(tmp_path)
++    monkeypatch.setattr(youtube, "cache_location", str(tmp_path))
+     video = youtube.Video.get("e1YqueG2gtQ")
+
+     (tmp_path / f"{video.id}.webm").write_bytes(b"cached audio")
+     (tmp_path / f"{video.id}.webp").write_bytes(b"cached image")
+
+     assert video.audio_url.get()
+-    assert (tmp_path / f"{video.id}.json").exists()
+-
+-    youtube.cache_location = None
++    with (tmp_path / f"{video.id}.json").open() as metadata_file:
++        metadata = json.load(metadata_file)
++    assert metadata["uri"] == f"youtube:video:{video.id}"
+
+
+ @pytest.mark.parametrize("api", apis)

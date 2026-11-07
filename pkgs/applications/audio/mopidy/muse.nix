@@ -23,6 +23,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.pykka
+    # Provides pkg_resources; remove when upstream replaces it.
+    pythonPackages.setuptools_80
   ];
 
   pythonImportsCheck = [ "mopidy_muse" ];
