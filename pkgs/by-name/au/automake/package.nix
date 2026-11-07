@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "automake";
-  version = "1.19";
+  version = "1.20";
 
   src = fetchurl {
     url = "mirror://gnu/automake/automake-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4+LC46vzeJgTjbW2wdHcNckWDFl4vnlH0sdBcFJR1EU=";
+    hash = "sha256-b3rkyQtOibX39QqcO/IFoQ8YtgwmWdPW8EQ1G9iijV0=";
   };
 
   strictDeps = true;
@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    branch = "1.19";
+    branch = "1.20";
     homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       GNU Automake is a tool for automatically generating
       `Makefile.in' files compliant with the GNU Coding
