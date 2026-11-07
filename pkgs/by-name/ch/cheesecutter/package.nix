@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    for exe in {ccutter,ct2util}; do
+    for exe in ccutter ct2util; do
       install -D $exe $out/bin/$exe
     done
 
