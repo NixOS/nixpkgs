@@ -1569,6 +1569,10 @@ with pkgs;
 
   kaggle = with python3Packages; toPythonApplication kaggle;
 
+  mesonMinimal = meson.override {
+    minimal = true;
+  };
+
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
   # example of an error which this fixes
@@ -4347,6 +4351,7 @@ with pkgs;
     python315
     python316
     python3Minimal
+    python3MinimalForMeson
     pypy27
     pypy310
     pypy311
@@ -4943,6 +4948,10 @@ with pkgs;
   nexusmods-app-unfree = nexusmods-app.override {
     pname = "nexusmods-app-unfree";
     _7zz = _7zz-rar;
+  };
+
+  ninjaMinimal = ninja.override {
+    minimal = true;
   };
 
   nwjs-sdk = nwjs.override {

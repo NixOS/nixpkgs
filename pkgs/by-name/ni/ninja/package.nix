@@ -3,17 +3,24 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  installShellFiles,
+  python3Minimal,
+  buildPackages,
+
+  minimal ? false,
+  re2c,
+
+  buildDocs ? !minimal,
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
-  installShellFiles,
   libxslt,
-  python3,
-  re2c,
-  buildPackages,
-  buildDocs ? true,
+
   nix-update-script,
   ninjaRelease ? "latest",
+
+  # for passthru.tests
+  ninjaMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,10 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  disallowedReferences = [
+    python3Minimal
+  ];
+
   nativeBuildInputs = [
-    python3
-    re2c
+    python3Minimal
     installShellFiles
+  ]
+  ++ lib.optionals (!minimal) [
+    # used to regenerate src/depfile_parser.cc src/lexer.cc
+    # optional since upstream ships generated files
+    re2c
   ]
   ++ lib.optionals buildDocs [
     asciidoc
@@ -115,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit ninjaMinimal;
+  };
 
   __structuredAttrs = true;
 

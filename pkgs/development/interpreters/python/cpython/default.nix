@@ -30,6 +30,7 @@
   withSqlite ? !withMinimalDeps,
   sqlite,
   xz,
+  withZlib ? !withMinimalDeps,
   zlib,
   withZstd ? !withMinimalDeps,
   zstd,
@@ -268,13 +269,15 @@ let
       ];
 
   buildInputs = lib.filter (p: p != null) (
-    optionals (!withMinimalDeps) [
+    optionals withZlib [
+      zlib
+    ]
+    ++ optionals (!withMinimalDeps) [
       bzip2
       libffi
       libuuid
       ncurses
       xz
-      zlib
     ]
     ++ optionals withLibxcrypt [
       libxcrypt
