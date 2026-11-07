@@ -1,3 +1,60 @@
+diff --git a/lib/xattr-at.c b/lib/xattr-at.c
+--- a/lib/xattr-at.c
++++ b/lib/xattr-at.c
+@@ -36,2 +36,2 @@
+-/* setxattrat */
+-#define AT_FUNC_NAME setxattrat
++/* tar_setxattrat */
++#define AT_FUNC_NAME tar_setxattrat
+@@ -60,2 +60,2 @@
+-/* getxattrat */
+-#define AT_FUNC_NAME getxattrat
++/* tar_getxattrat */
++#define AT_FUNC_NAME tar_getxattrat
+@@ -88,2 +88,2 @@
+-/* listxattrat */
+-#define AT_FUNC_NAME listxattrat
++/* tar_listxattrat */
++#define AT_FUNC_NAME tar_listxattrat
+diff --git a/lib/xattr-at.h b/lib/xattr-at.h
+--- a/lib/xattr-at.h
++++ b/lib/xattr-at.h
+@@ -35,2 +35,2 @@
+-   "at" suffix.  For example, setxattrat (AT_FDCWD, path, name, value, size,
+-   flags &c) is usually equivalent to setxattr (file, name, value, size,
++   "at" suffix.  For example, tar_setxattrat (AT_FDCWD, path, name, value,
++   size, flags &c) is usually equivalent to setxattr (file, name, value, size,
+@@ -44,2 +44,2 @@
+-int setxattrat (int dir_fd, const char *path, const char *name,
+-                const void *value, size_t size, int flags);
++int tar_setxattrat (int dir_fd, const char *path, const char *name,
++                    const void *value, size_t size, int flags);
+@@ -47 +47 @@
+-/* dir-fd-relative lsetxattr.  This function is just like setxattrat,
++/* dir-fd-relative lsetxattr.  This function is just like tar_setxattrat,
+@@ -49 +49 @@
+-   symlink, while the setxattrat operates on the referent of the symlink.  */
++   symlink, while tar_setxattrat operates on the referent of the symlink.  */
+@@ -57,2 +57,2 @@
+-ssize_t getxattrat (int dir_fd, const char *path, const char *name,
+-                    void *value, size_t size);
++ssize_t tar_getxattrat (int dir_fd, const char *path, const char *name,
++                        void *value, size_t size);
+@@ -60 +60 @@
+-/* dir-fd-relative lgetxattr.  This function is just like getxattrat,
++/* dir-fd-relative lgetxattr.  This function is just like tar_getxattrat,
+@@ -62 +62 @@
+-   symlink, while the getxattrat operates on the referent of the symlink.  */
++   symlink, while tar_getxattrat operates on the referent of the symlink.  */
+@@ -68 +68 @@
+-ssize_t listxattrat (int dir_fd, const char *path, char *list, size_t size);
++ssize_t tar_listxattrat (int dir_fd, const char *path, char *list, size_t size);
+@@ -70 +70 @@
+-/* dir-fd-relative llistxattr.  This function is just like listxattrat,
++/* dir-fd-relative llistxattr.  This function is just like tar_listxattrat,
+@@ -72 +72 @@
+-   symlink, while the listxattrat operates on the referent of the symlink.  */
++   symlink, while tar_listxattrat operates on the referent of the symlink.  */
 diff --git a/src/xattrs.c b/src/xattrs.c
 index 86a7e59cbc..c872ae308d 100644
 --- a/src/xattrs.c
@@ -70,16 +127,13 @@ index 86a7e59cbc..c872ae308d 100644
  	      file_name));
  
    acl_free (acl);
-@@ -357,10 +357,10 @@
-   char *val = NULL;
-   acl_t acl;
- 
+@@ -360 +360 @@
 -  if (!(acl = acl_get_file_at (parentfd, file_name, type)))
 +  if (!(acl = tar_acl_get_file_at (parentfd, file_name, type)))
-     {
-       if (errno != ENOTSUP)
+@@ -363 +363 @@
 -        call_arg_warn ("acl_get_file_at", file_name);
 +        call_arg_warn ("tar_acl_get_file_at", file_name);
-       return;
-     }
+@@ -624 +624 @@
+-        ret = setxattrat (chdir_fd, file_name, attr, ptr, len, 0);
++        ret = tar_setxattrat (chdir_fd, file_name, attr, ptr, len, 0);
  
