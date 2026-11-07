@@ -4,6 +4,13 @@
   writeText,
   fetchurl,
   buildcatrust,
+  # CA names (or `buildcatrust` keys) to distrust.
+  # The build fails if one of them matches no certificate in the store.
+  blocklistFailOnNonMatching ? [ ],
+  # Like `blocklistFailOnNonMatching`, but names that match no certificate in the store
+  # (e.g. because upstream removed it) only produce a build-time warning.
+  blocklistIgnoreNonMatching ? [ ],
+  # Legacy name; behaves like `blocklistFailOnNonMatching`.
   blacklist ? [ ],
   extraCertificateFiles ? [ ],
   extraCertificateStrings ? [ ],
@@ -15,7 +22,12 @@
 }:
 
 let
-  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
+  blocklistFailOnNonMatchingFile = writeText "cacert-blocklist.txt" (
+    lib.concatStringsSep "\n" (blacklist ++ blocklistFailOnNonMatching)
+  );
+  blocklistIgnoreNonMatchingFile = writeText "cacert-blocklist-ignore-nonmatching.txt" (
+    lib.concatStringsSep "\n" blocklistIgnoreNonMatching
+  );
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
@@ -79,7 +91,8 @@ stdenv.mkDerivation {
       --ca_bundle_input "${extraCertificatesBundle}" ${
         lib.escapeShellArgs (map (arg: "${arg}") extraCertificateFiles)
       } \
-      --blocklist "${blocklist}" \
+      --blocklist_input "${blocklistFailOnNonMatchingFile}" \
+      --blocklist_ignoring_nonmatching_input "${blocklistIgnoreNonMatchingFile}" \
       --ca_bundle_output ca-bundle.crt \
       --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
@@ -176,6 +189,41 @@ stdenv.mkDerivation {
                   })
                 ''
               )}
+
+              touch "$out"
+            '';
+
+        # Test that `blocklistIgnoreNonMatching` distrusts the existing CAs and ignores nonexistent ones.
+        blocklist-ignore-nonmatching =
+          let
+            caName = "CFCA EV ROOT";
+            caFingerprint = "5C:C3:D7:8E:4E:1D:5E:45:54:7A:04:E6:87:3E:64:F9:0C:F9:53:6D:1C:CC:2E:F8:00:F3:55:C4:C5:FD:70:FD";
+          in
+          runCommand "verify-the-cacert-filter-ignore-nonmatching-output"
+            {
+              cacert = cacert.unbundled;
+              cacertWithExcludes =
+                (cacert.override {
+                  blocklistIgnoreNonMatching = [
+                    caName
+                    "This CA does not exist in the NSS store"
+                  ];
+                }).unbundled;
+
+              nativeBuildInputs = [ openssl ];
+            }
+            ''
+              ${isTrusted}
+
+              isTrusted "$cacert" "${caName}" "${caFingerprint}" || ({
+                echo "CA fingerprint ${caFingerprint} (${caName}) is missing from the CA bundle. Consider picking a different CA for the blacklist test." >&2
+                exit 1
+              })
+
+              isTrusted "$cacertWithExcludes" "${caName}" "${caFingerprint}" && ({
+                echo "CA fingerprint ${caFingerprint} (${caName}) is present in the cacertWithExcludes bundle." >&2
+                exit 1
+              })
 
               touch "$out"
             '';
