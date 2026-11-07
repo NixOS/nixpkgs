@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calamares";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromCodeberg {
     owner = "Calamares";
     repo = "calamares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/foh3NKXTaNmP+x18t+GeAz7qv4e/TyspSEln8mMH4I=";
+    hash = "sha256-ftodSqhgf2Y5B7ZMiBS0Z1IvGq6fBYF7439O/Mi7XWo=";
   };
 
   patches = [
