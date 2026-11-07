@@ -23,19 +23,19 @@
   # tests
   pytest-asyncio,
   pytest-console-scripts,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
     tag = "v${version}";
-    hash = "sha256-l/u0XRP6mjqXywVzRXTWSm4E5a6o2oCdOBGGzLb85Ek=";
+    hash = "sha256-OTZW3Ax5y4cO/q9UA6k6an2E+HfYctuNNDvKmch8Etg=";
   };
 
   build-system = [ hatchling ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-console-scripts
-    pytestCheckHook
+    pytest9_1CheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
