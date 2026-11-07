@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "timofurrer";
+    owner = "kennethreitz";
     repo = "maya";
     tag = "v${version}";
     hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
@@ -52,14 +52,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "maya" ];
 
   disabledTests = [
-    # https://github.com/timofurrer/maya/issues/202
+    # https://github.com/kennethreitz/maya/issues/202
     "test_parse_iso8601"
   ];
 
   meta = {
     description = "Datetimes for Humans";
-    homepage = "https://github.com/timofurrer/maya";
-    changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
+    homepage = "https://github.com/kennethreitz/maya";
+    changelog = "https://github.com/kennethreitz/maya/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

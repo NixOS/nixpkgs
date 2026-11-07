@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pinecone-io";
-    repo = "pinecone-python-client";
+    repo = "python-sdk";
     tag = "v${version}";
     hash = "sha256-cb0AO4F0x4RAzLA+wI1BCQ0GCrlPZg0oijqTHUwT2qQ=";
   };
