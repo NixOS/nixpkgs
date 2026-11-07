@@ -7132,8 +7132,6 @@ self: super: with self; {
 
   google-cloud-iam-logging = callPackage ../development/python-modules/google-cloud-iam-logging { };
 
-  google-cloud-iot = callPackage ../development/python-modules/google-cloud-iot { };
-
   google-cloud-kms = callPackage ../development/python-modules/google-cloud-kms { };
 
   google-cloud-language = callPackage ../development/python-modules/google-cloud-language { };
