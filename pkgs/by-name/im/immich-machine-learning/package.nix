@@ -16,9 +16,12 @@ python.pkgs.buildPythonApplication rec {
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   pythonRelaxDeps = [
     "huggingface-hub"
     "numpy"
+    "onnx"
     "pillow"
     "pydantic-settings"
   ];
