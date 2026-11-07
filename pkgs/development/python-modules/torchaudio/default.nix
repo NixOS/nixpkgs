@@ -38,14 +38,14 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
-  version = "2.11.0";
+  version = "2.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TncROn9wfn5HOaIvupS2/KD9JCgwfHyfnbZRc+SiqJ0=";
+    hash = "sha256-LAjAxHA1P5ZLI6SB8NeOW/8grkIwZa/O6nt1FQMkPHA=";
   };
 
   env = {
@@ -119,6 +119,34 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   disabledTestPaths = [
     # Require internet access
     "test/integration_tests"
+
+    # torch>=2.15 annotates `FunctionCtx.input_grad_buffers` with `tuple[Tensor | None, ...]`,
+    # which TorchScript cannot parse when scripting filters built on `autograd.Function`:
+    # RuntimeError: Expression of type dots cannot be used in a type expression
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_allpass"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_band_with_noise"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_band_without_noise"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_bandpass_with_csg"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_bandpass_without_csg"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_bandreject"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_bass"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_deemph"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_deemphasis"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_equalizer"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_filtfilt"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_highpass"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_lfilter"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_lowpass"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_measure_loudness"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_perf_biquad_filtering"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_riaa"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_rnnt_loss"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat32::test_treble"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat64::test_deemphasis"
+    "test/torchaudio_unittest/functional/torchscript_consistency_cpu_test.py::TestFunctionalFloat64::test_filtfilt"
+    "test/torchaudio_unittest/transforms/torchscript_consistency_cpu_test.py::TestTransformsFloat32::test_deemphasis"
+    "test/torchaudio_unittest/transforms/torchscript_consistency_cpu_test.py::TestTransformsFloat32::test_rnnt_loss"
+    "test/torchaudio_unittest/transforms/torchscript_consistency_cpu_test.py::TestTransformsFloat64::test_deemphasis"
   ];
 
   disabledTests = [
