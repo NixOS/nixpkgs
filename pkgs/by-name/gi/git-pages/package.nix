@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromCodeberg,
-  fetchpatch,
   nix-update-script,
   versionCheckHook,
   formats,
@@ -12,29 +11,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-pages";
-  version = "0.9.1";
+  version = "0.10.1";
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "git-pages";
     repo = "git-pages";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4yQ3RRJbOfMaqjJJ6CRRN7TuaYY8ScLXxMZPd4tWPwk=";
+    hash = "sha256-8FWb7cXCyx7Rt+UetmyNo3TTiF778JxlHGWyLpcUBfI=";
   };
-
-  patches = [
-    # bugfix to avoid creating parent directory on start
-    # remove when https://codeberg.org/git-pages/git-pages/pulls/258 is available in the release
-    (fetchpatch {
-      name = "mkdirall-parent-dir-create.patch";
-      url = "https://codeberg.org/git-pages/git-pages/commit/507e57edbcfc0ec933a877bf26b1756ca0a61870.patch";
-      hash = "sha256-1CjU4yGmDOmYsxo3U44Cg2xLJkrmUOX5ZXTycdLs6OE=";
-    })
-  ];
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-NNIkzgRki2rtCVUnnhT44rEBcMZYiJPmsXySpxiHYR0=";
+  vendorHash = "sha256-Q6uFwlFP7p/Nh88Fever0QDG9/YXO3r6dkGcgKr+35E=";
 
   ldflags = [
     "-s"
