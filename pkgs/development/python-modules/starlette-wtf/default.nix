@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-wtf";
-  version = "0.4.5";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "muicss";
     repo = "starlette-wtf";
     tag = version;
-    hash = "sha256-88zU2NAsdty2OhHauwQ5+6LazuRDYPoqN9IIipI1t2Q=";
+    hash = "sha256-IVkDD3da7fjQmjXKY0HL2Br8ARHFDf854AkTNQ+Nr7A=";
   };
 
   nativeBuildInputs = [ setuptools ];
