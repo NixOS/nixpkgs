@@ -26193,6 +26193,12 @@
     githubId = 32001364;
     name = "Sam";
   };
+  samiuens = {
+    email = "nixpkgs@samiuensay.org";
+    github = "samiuens";
+    githubId = 192653549;
+    name = "samiuens";
+  };
   samlich = {
     email = "nixos@samli.ch";
     github = "samlich";
