@@ -459,8 +459,6 @@ mapAliases {
   bower2nix = throw "bower2nix has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   boxfs = throw "'boxfs' has been removed, as it depends on unsupported fuse2 and unmaintained upstream"; # Added 2026-05-30
   brasero-original = throw "'brasero-original' has been renamed to/replaced by 'brasero-unwrapped'"; # Converted to throw 2025-10-27
-  brave = throw "brave has been removed from nixpkgs, as there were no committers among its maintainers to unblock security issues"; # Added 2026-11-03
-  brave-origin = throw "brave-origin has been removed from nixpkgs, as there were no committers among its maintainers to unblock security issues"; # Added 2026-11-03
   breads-ad = throw "'breads-ad' has been removed because its source is no longer available"; # Added 2025-12-20
   break-time = throw "'break-time' has been removed because it is not maintained upstream and has insecure dependencies."; # Added 2025-12-01
   breath-theme = throw "'breath-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
@@ -772,6 +770,7 @@ mapAliases {
   dotnetfx40 = throw "'dotnetfx40' has been removed because it was unmaintained in Nixpkgs"; # Added 2026-01-27
   dotty = throw "'dotty' has been renamed to/replaced by 'scala_3'"; # Converted to throw 2025-10-27
   dovecot_fts_xapian = throw "'dovecot_fts_xapian' has been removed because it was unmaintained in Nixpkgs. Consider using dovecot-fts-flatcurve instead"; # Added 2025-08-16
+  dra-cla = throw "'dra-cla' has been removed due to its GitHub [repo being taken down](https://github.com/github/dmca/blob/master/2026/03/2026-03-12-dramacool.md)"; # Added 2026-05-25
   dragmap = throw "'dragmap' doesn't build with latest glibc anymore and upstream repo is archived"; # Added 2026-09-03
   drone-runner-exec = throw "'drone-runner-exec' has been removed as it was deprecated and archived upstream."; # Added 2026-07-20
   dsd = throw "dsd has been removed, as it was broken and lack of upstream maintenance"; # Added 2025-08-25
@@ -1225,6 +1224,7 @@ mapAliases {
   haxe_4_1 = throw "'haxe_4_1' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
   haxor-news = throw "'haxor-news' has been removed as it is unmaintained"; # Added 2026-06-16
   hdhomerun-config-gui = throw "'hdhomerun-config-gui' has been removed as its support was discontinued: https://forum.silicondust.com/forum/viewtopic.php?p=399766#p399766"; # Added 2026-08-30
+  hednsextractor = throw "'hednsextractor' is unmaintained and has been removed"; # Added 2026-05-25
   helix-gpt = throw "helix-gpt was deprecated in January 2026 and has been since removed"; # Added 2026-02-05
   heptabase = throw "'heptabase' bas been removed due to lack of maintenance."; # Added 2026-05-31
   hexchat = throw "'hexchat' has been removed due to being archived upstream and relying on gtk2."; # Added 2026-07-28
@@ -1980,6 +1980,7 @@ mapAliases {
   nixfmt-rfc-style = warnAlias "nixfmt-rfc-style is now the same as pkgs.nixfmt which should be used instead." nixfmt; # Added 2025-07-14
   nixForLinking = throw "nixForLinking has been removed, use `nixVersions.nixComponents_<version>` instead"; # Added 2025-08-14
   nixnote2 = throw "'nixnote2' has been removed as upstream has been unmaintained since 2017"; # Added 2026-04-26
+  nixops-dns = throw "'nixops-dns' is unmaintained and has been removed"; # Added 2026-05-25
   nixos-rebuild = nixos-rebuild-ng; # Added 2025-12-02
   nixosTest = throw "'nixosTest' has been renamed to/replaced by 'testers.nixosTest'"; # Converted to throw 2025-10-27
   nixStable = throw "'nixStable' has been renamed to/replaced by 'nixVersions.stable'"; # Converted to throw 2025-10-27
@@ -2365,6 +2366,7 @@ mapAliases {
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
   react-static = throw "'react-static' has been removed due to lack of maintenance upstream"; # Added 2025-11-04
+  recapp = throw "'recapp' is unmaintained and has been removed"; # Added 2026-05-25
   recurseIntoAttrs = warnAlias "'recurseIntoAttrs' has been removed from pkgs, use `lib.recurseIntoAttrs` instead" lib.recurseIntoAttrs; # Added 2025-10-30
   redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
@@ -2661,7 +2663,13 @@ mapAliases {
   tclvfs = throw "'tclvfs' has been renamed to/replaced by 'tclPackages.tclvfs'"; # Converted to throw 2025-10-27
   tclx = throw "'tclx' has been renamed to/replaced by 'tclPackages.tclx'"; # Converted to throw 2025-10-27
   tcp-cutter = throw "tcp-cutter has been removed because it fails to compile and the source url is dead"; # Added 2025-05-25
+  tcpkali = throw "'tcpkali' is unmaintained and has been removed"; # Added 2026-05-25
   tcptrace = throw "tcptrace has been removed as it was broken and upstream is gone"; # Added 2026-02-02
+  tdarr-node = warnAlias "'tdarr-node' has been moved to 'tdarr.node'" tdarr.node; # Added 2026-10-11
+  tdarr-server = warnAlias "'tdarr-server' has been moved to 'tdarr.server'" tdarr.server; # Added 2026-10-11
+  tdarrPackages =
+    warnAlias "'tdarrPackages' has been removed, use 'tdarr.server' and 'tdarr.node' instead"
+      { inherit (tdarr) server node; }; # Added 2026-10-11
   tdesktop = throw "'tdesktop' has been renamed to/replaced by 'telegram-desktop'"; # Converted to throw 2025-10-27
   tdfgo = throw "'tdfgo' has been removed because it was removed from upstream"; # Added 2025-12-18
   tdlib-purple = throw "'tdlib-purple' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05

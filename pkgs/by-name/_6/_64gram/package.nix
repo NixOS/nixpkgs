@@ -11,13 +11,13 @@ telegram-desktop.override {
   inherit withWebkit;
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (old: rec {
     pname = "64gram-unwrapped";
-    version = "1.2.10";
+    version = "1.2.11";
 
     src = fetchFromGitHub {
       owner = "TDesktop-x64";
       repo = "tdesktop";
       tag = "v${version}";
-      hash = "sha256-EOXEkXuLJ2p9Y4BBekK7sz5/zkXS570r1npIX6o+o4E=";
+      hash = "sha256-8Q6OtgIoSHSRC8MN6row/rx4lQVgQ3eQZmijskPsTBg=";
       fetchSubmodules = true;
     };
 

@@ -186,7 +186,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://docs.snowflake.com/en/developer-guide/snowflake-cli-v2/index";
     description = "Command-line tool explicitly designed for developer-centric workloads in addition to SQL operations";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ vtimofeenko ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      vtimofeenko
+    ];
     mainProgram = "snow";
   };
 })

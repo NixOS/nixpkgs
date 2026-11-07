@@ -605,6 +605,9 @@ in
       services.castopod has been removed together with pkgs.castopod.
     '')
     (mkRemovedOptionModule [ "services" "scx" ] "Please migrate to services.scx-loader instead.")
+    (mkRemovedOptionModule [ "services" "nixops-dns" ] ''
+      services.nixops-dns has been removed together with pkgs.nixops-dns.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

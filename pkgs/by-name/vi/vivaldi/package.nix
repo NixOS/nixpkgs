@@ -192,9 +192,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share"
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace-fail /usr/bin/vivaldi "$out"/bin/vivaldi
-    substituteInPlace "$out"/share/applications/*.desktop \
-      --replace-fail vivaldi-stable vivaldi
+      --replace-fail /usr/bin/vivaldi-stable vivaldi
     local d
     for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
@@ -232,6 +230,7 @@ stdenv.mkDerivation rec {
       marcusramberg
       max06
       wineee
+      brw
     ];
     platforms = [
       "x86_64-linux"
