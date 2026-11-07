@@ -11,7 +11,7 @@
   SDL2,
   libevdev,
   udev,
-  curlFull,
+  curl,
   hidapi,
   json_c,
   fftw,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtwebengine
     protobuf
     SDL2
-    curlFull
+    curl
     hidapi
     json_c
     fftw
