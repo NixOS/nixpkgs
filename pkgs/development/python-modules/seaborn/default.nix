@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  flit-core,
+  flit-core_3,
   matplotlib,
   pytest-xdist,
   pytest8_3CheckHook,
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     matplotlib
