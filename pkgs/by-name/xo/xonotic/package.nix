@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchzip,
   makeWrapper,
   runCommand,
   makeDesktopItem,
@@ -216,58 +215,43 @@ let
   };
 
 in
-rec {
-  xonotic-data = fetchzip {
-    name = "xonotic-data";
-    url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    hash = "sha256-Lhjpyk7idmfQAVn4YUb7diGyyKZQBfwNXxk2zMOqiZQ=";
-    postFetch = ''
-      cd $out
-      rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
-    '';
-    meta.hydraPlatforms = [ ];
-    inherit version pname;
-  };
-
-  xonotic =
-    runCommand "xonotic${variant}-${version}"
-      {
-        inherit xonotic-unwrapped version;
-        pname = "${pname}${variant}";
-        nativeBuildInputs = [
-          makeWrapper
-          copyDesktopItems
-        ];
-        desktopItems = [ desktopItem ];
-        meta = meta // {
-          hydraPlatforms = [ ];
-          mainProgram = if withSDL || withGLX then "xonotic" else "xonotic-dedicated";
-        };
-      }
-      (
-        ''
-          mkdir -p $out/bin
-        ''
-        + lib.optionalString withDedicated ''
-          ln -s ${xonotic-unwrapped}/bin/xonotic-dedicated $out/bin/
-        ''
-        + lib.optionalString withGLX ''
-          ln -s ${xonotic-unwrapped}/bin/xonotic-glx $out/bin/xonotic-glx
-          ln -s $out/bin/xonotic-glx $out/bin/xonotic
-        ''
-        + lib.optionalString withSDL ''
-          ln -s ${xonotic-unwrapped}/bin/xonotic-sdl $out/bin/xonotic-sdl
-          ln -sf $out/bin/xonotic-sdl $out/bin/xonotic
-        ''
-        + lib.optionalString (withSDL || withGLX) ''
-          mkdir -p $out/share
-          ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
-          copyDesktopItems
-        ''
-        + ''
-          for binary in $out/bin/xonotic-*; do
-            wrapProgram $binary --add-flags "-basedir ${xonotic-data}" --prefix LD_LIBRARY_PATH : "${xonotic-unwrapped}/lib"
-          done
-        ''
-      );
-}
+runCommand "xonotic${variant}-${version}"
+  {
+    inherit xonotic-unwrapped version;
+    pname = "${pname}${variant}";
+    nativeBuildInputs = [
+      makeWrapper
+      copyDesktopItems
+    ];
+    desktopItems = [ desktopItem ];
+    meta = meta // {
+      hydraPlatforms = [ ];
+      mainProgram = if withSDL || withGLX then "xonotic" else "xonotic-dedicated";
+    };
+  }
+  (
+    ''
+      mkdir -p $out/bin
+    ''
+    + lib.optionalString withDedicated ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-dedicated $out/bin/
+    ''
+    + lib.optionalString withGLX ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-glx $out/bin/xonotic-glx
+      ln -s $out/bin/xonotic-glx $out/bin/xonotic
+    ''
+    + lib.optionalString withSDL ''
+      ln -s ${xonotic-unwrapped}/bin/xonotic-sdl $out/bin/xonotic-sdl
+      ln -sf $out/bin/xonotic-sdl $out/bin/xonotic
+    ''
+    + lib.optionalString (withSDL || withGLX) ''
+      mkdir -p $out/share
+      ln -s ${xonotic-unwrapped}/share/icons $out/share/icons
+      copyDesktopItems
+    ''
+    + ''
+      for binary in $out/bin/xonotic-*; do
+        wrapProgram $binary --add-flags "-basedir ${xonotic-data}" --prefix LD_LIBRARY_PATH : "${xonotic-unwrapped}/lib"
+      done
+    ''
+  )
