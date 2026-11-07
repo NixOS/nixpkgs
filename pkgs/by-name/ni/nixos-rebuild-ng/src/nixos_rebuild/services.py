@@ -18,7 +18,7 @@ from .models import (
     Profile,
 )
 from .process import Remote, cleanup_ssh
-from .utils import tabulate
+from .utils import Args, tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
 NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
@@ -48,7 +48,7 @@ def reexec(
         drv = nix.build(
             NIXOS_REBUILD_ATTR,
             build_attr,
-            grouped_nix_args.build_flags | {"no_out_link": True},
+            build_flags=grouped_nix_args.build_flags | {"no_out_link": True},
         )
 
     if drv:
@@ -198,10 +198,23 @@ def _build_system(
                 copy_flags=grouped_nix_args.copy_flags,
             )
         case (None, None):
+            # Extracting the version from <nixpkgs> is not always accurate, depending
+            # if the user is evaluating its own nixpkgs inside the configuration or not,
+            # but this is the closest we have and matches the legacy behavior
+            nixpkgs_path = nix.find_file("nixpkgs", grouped_nix_args.build_flags)
+            nixpkgs_rev = nix.get_nixpkgs_rev(nixpkgs_path)
+            version_args: Args = {}
+            if nixpkgs_rev:
+                version_args = {"argstr": [["nixosVersionSuffix", nixpkgs_rev]]}
+
             path_to_config = nix.build(
                 attr,
                 build_attr,
-                build_flags={"no_out_link": no_link, "dry_run": dry_run}
+                build_flags={
+                    **version_args,
+                    "no_out_link": no_link,
+                    "dry_run": dry_run,
+                }
                 | grouped_nix_args.build_flags,
             )
 
@@ -406,16 +419,3 @@ def repl(
         )
     else:
         nix.repl(build_attr, grouped_nix_args.build_flags)
-
-
-def write_version_suffix(grouped_nix_args: GroupedNixArgs) -> None:
-    nixpkgs_path = nix.find_file("nixpkgs", grouped_nix_args.build_flags)
-    rev = nix.get_nixpkgs_rev(nixpkgs_path)
-    if nixpkgs_path and rev:
-        try:
-            (nixpkgs_path / ".version-suffix").write_text(rev)
-        except OSError as error:
-            logger.debug(
-                "ignoring error while writing '.version-suffix' to nixpkgs: %s",
-                error,
-            )

@@ -266,6 +266,9 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
                 "<nixos-system>",
                 "--attr",
                 "config.system.build.toplevel",
+                "--argstr",
+                "nixosVersionSuffix",
+                ".git.nixpkgs-rev",
                 "--no-out-link",
                 "-vvv",
             ],
@@ -402,6 +405,20 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
         ),
         call(
             [
+                "nix-instantiate",
+                "--find-file",
+                "nixpkgs",
+                "--include",
+                "nixos-config=./configuration.nix",
+                "--include",
+                "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            ],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
                 "nix-build",
                 "<nixpkgs/nixos>",
                 "--attr",
@@ -450,6 +467,12 @@ def test_execute_nix_build_vm_with_bootloader_and_specialisation(
     assert mock_run.mock_calls == [
         call(
             ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
             check=False,
             capture_output=True,
             **DEFAULT_RUN_KWARGS,
@@ -518,6 +541,12 @@ def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
             ],
             check=True,
             stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
+            check=False,
+            capture_output=True,
             **DEFAULT_RUN_KWARGS,
         ),
         call(
@@ -602,6 +631,12 @@ def test_execute_nix_build_image_and_specialisation(
             ],
             check=True,
             stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
+            check=False,
+            capture_output=True,
             **DEFAULT_RUN_KWARGS,
         ),
         call(
@@ -970,20 +1005,6 @@ def test_execute_nix_switch_build_target_host_custom_profile(
     assert mock_run.mock_calls == [
         call(
             ["nix-instantiate", "--find-file", "nixos-system"],
-            check=False,
-            capture_output=True,
-            **DEFAULT_RUN_KWARGS,
-        ),
-        call(
-            [
-                "nix-instantiate",
-                "--find-file",
-                "nixpkgs",
-                "--include",
-                "nixos-config=./configuration.nix",
-                "--include",
-                "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
-            ],
             check=False,
             capture_output=True,
             **DEFAULT_RUN_KWARGS,
@@ -1472,18 +1493,9 @@ def test_execute_nix_switch_flake_build_host(
 
 
 @patch("subprocess.run", autospec=True)
-def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
-    nixpkgs_path = tmp_path / "nixpkgs"
-    (nixpkgs_path / ".git").mkdir(parents=True)
-
+def test_execute_switch_rollback(mock_run: Mock) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix-instantiate" and "nixos-system" in args:
-            return CompletedProcess([], 1)
-        elif args[0] == "nix-instantiate":
-            return CompletedProcess([], 0, str(nixpkgs_path))
-        elif args[0] == "git":
-            return CompletedProcess([], 0, "")
-        elif args[0] == "test":
+        if args[0] in ("nix-instantiate", "test"):
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
@@ -1506,25 +1518,6 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
             ["nix-instantiate", "--find-file", "nixos-system"],
             capture_output=True,
             check=False,
-            **DEFAULT_RUN_KWARGS,
-        ),
-        call(
-            ["nix-instantiate", "--find-file", "nixpkgs"],
-            check=False,
-            capture_output=True,
-            **DEFAULT_RUN_KWARGS,
-        ),
-        call(
-            [
-                "git",
-                "-C",
-                nixpkgs_path,
-                "rev-parse",
-                "--short",
-                "HEAD",
-            ],
-            check=False,
-            capture_output=True,
             **DEFAULT_RUN_KWARGS,
         ),
         call(
@@ -1556,12 +1549,20 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
 
 @patch("subprocess.run", autospec=True)
 def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
+    nixpkgs_path = tmp_path / "nixpkgs"
+    (nixpkgs_path / ".git").mkdir(parents=True)
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
         # nix-instantiate --find-file nixos-system
         CompletedProcess([], 1),
-        # nixos_build_flake
+        # nix-instantiate --find-file nixpkgs
+        CompletedProcess([], 0, str(nixpkgs_path)),
+        # git rev-parse --short HEAD
+        CompletedProcess([], 0, "0f7c82403fd6\n"),
+        # git diff --quiet
+        CompletedProcess([], 1),
+        # nix-build
         CompletedProcess([], 0, str(config_path)),
     ]
 
@@ -1575,11 +1576,31 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
             **DEFAULT_RUN_KWARGS,
         ),
         call(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["git", "-C", nixpkgs_path, "diff", "--quiet"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
             [
                 "nix-build",
                 "<nixpkgs/nixos>",
                 "--attr",
                 "config.system.build.toplevel",
+                "--argstr",
+                "nixosVersionSuffix",
+                ".git.0f7c82403fd6M",
             ],
             check=True,
             stdout=PIPE,
@@ -1810,7 +1831,7 @@ def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    # --store-path skips build and write_version_suffix, so only activation calls
+    # --store-path skips building, so only activation calls
     assert mock_run.mock_calls == [
         call(
             ["nix-instantiate", "--find-file", "nixos-system"],
@@ -1887,7 +1908,7 @@ def test_execute_switch_store_path_target_host(
         ]
     )
 
-    # --store-path skips build and write_version_suffix, so only copy/activation calls
+    # --store-path skips building, so only copy/activation calls
     assert mock_run.mock_calls == [
         call(
             ["nix-instantiate", "--find-file", "nixos-system"],

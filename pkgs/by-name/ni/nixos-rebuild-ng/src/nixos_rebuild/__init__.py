@@ -363,18 +363,13 @@ def execute(argv: list[str]) -> None:
         nix.upgrade_channels(args.upgrade_all, args.elevator)
 
     action = Action(args.action)
-    # Only run shell scripts from the Nixpkgs tree if the action is
-    # "switch", "boot", or "test". With other actions (such as "build"),
-    # the user may reasonably expect that no code from the Nixpkgs tree is
-    # executed, so it's safe to run nixos-rebuild against a potentially
-    # untrusted tree.
-    can_run = (
+
+    can_reexec = (
         action in (Action.SWITCH, Action.BOOT, Action.TEST) and not args.store_path
     )
-
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if can_run and not args.no_reexec:
+    if can_reexec and not args.no_reexec:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
@@ -389,9 +384,6 @@ def execute(argv: list[str]) -> None:
 
     if flake and (args.upgrade or args.upgrade_all):
         logger.warning("'--upgrade(-all)' flag has no effect for flake-based systems")
-
-    if can_run and not flake:
-        services.write_version_suffix(grouped_nix_args)
 
     match action:
         case (
