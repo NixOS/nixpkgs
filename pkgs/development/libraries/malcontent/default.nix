@@ -17,11 +17,16 @@
   python3,
   nixosTests,
   malcontent-ui,
+  gi-docgen,
+  libgsystemservice,
+  tinycdb,
+  libsoup_3,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.13.1";
+  version = "0.14.0";
 
   outputs = [
     "bin"
@@ -38,7 +43,8 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = "malcontent";
     rev = version;
-    hash = "sha256-ekRi4yXu8u8t1AjyS3bD6tdqqnqtKyI6yZs+28LnfRY=";
+    hash = "sha256-r0tNWP2zbCyDH3G6OBiGc81CnUcwtXIlwbHPxNwqDRQ=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -55,6 +61,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     wrapGAppsNoGuiHook
+    gi-docgen
   ];
 
   buildInputs = [
@@ -63,6 +70,9 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
+    libgsystemservice
+    libsoup_3
+    systemd
     (python3.withPackages (
       pp: with pp; [
         pygobject3
@@ -87,6 +97,20 @@ stdenv.mkDerivation rec {
       --replace-fail "/bin/true" "${coreutils}/bin/true" \
       --replace-fail "/usr/bin/false" "${coreutils}/bin/false" \
       --replace-fail "/bin/false" "${coreutils}/bin/false"
+
+    tar -xzf ${tinycdb.src} -C subprojects
+    cp -r subprojects/packagefiles/tinycdb/* subprojects/tinycdb-0.81/
+
+    substituteInPlace malcontent-timerd/meson.build \
+      malcontent-timer-extension-agent/meson.build \
+      malcontent-webd/meson.build \
+      --replace-fail "dependency('systemd').get_variable(pkgconfig: 'sysusersdir')" "'${placeholder "out"}/lib/sysusers.d'"
+
+    substituteInPlace malcontent-timerd/meson.build \
+      malcontent-timer-extension-agent/meson.build \
+      malcontent-webd/meson.build \
+      malcontent-webd-update/meson.build \
+      --replace-fail "dependency('systemd').get_variable(pkgconfig: 'systemdsystemunitdir')" "'${placeholder "out"}/lib/systemd/system'"
   '';
 
   postInstall = ''
