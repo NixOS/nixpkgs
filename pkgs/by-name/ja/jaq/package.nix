@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
@@ -21,6 +22,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-zU7LNHoUK1H+BoK5KvOF59lyfc1Vy2TxbaaCiQ6/H9E=";
+
+  # `fd-lock` (file history) and `mimalloc` do not support WASI.
+  # `jaq-play` needs `wasm-bindgen`.
+  ${if stdenv.hostPlatform.isWasi then "postPatch" else null} = ''
+    substituteInPlace jaq/Cargo.toml \
+      --replace-fail ', features = ["with-file-history"]' ""
+  '';
+  ${if stdenv.hostPlatform.isWasi then "buildNoDefaultFeatures" else null} = true;
+  ${if stdenv.hostPlatform.isWasi then "cargoBuildFlags" else null} = [
+    "-p"
+    "jaq"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
