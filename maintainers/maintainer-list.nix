@@ -26898,6 +26898,14 @@
     name = "sg-qwt";
     githubId = 115715554;
   };
+  sgme = {
+    name = "Joel Hooimeyer";
+    github = "sgmedev";
+    githubId = 30369708;
+    email = "me@sgme.dev";
+    matrix = "@me:sgme.dev";
+    keys = [ { fingerprint = "1564 7B74 F2A8 5ABF 612A  9FE3 DCFB C76B 68FD 635F"; } ];
+  };
   sgo = {
     email = "stig@stig.io";
     github = "stigtsp";
