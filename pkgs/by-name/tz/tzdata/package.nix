@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2026e";
+  version = "2026f";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-smiCgF8mqsWdWyIpeOZYBIS4NMzcmL6J3y8FptxTplI=";
+      hash = "sha256-AbSpHOxRZ+1IwR6Kt48gSM6teM6UsMr8rQroxaMETT0=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-zD0nyioNg5lQRVG5IJcNgK+Dv7nCFugIKhVJGSGTXVQ=";
+      hash = "sha256-WhjaATk2ee8lWSFNxodWP389BWkfb1i3+8AWbz55bNY=";
     })
   ];
 
@@ -104,6 +104,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$dev/include"
     cp tzfile.h "$dev/include/tzfile.h"
+  '';
+
+  preCheck = ''
+    # Releases 2026e and 2026f fail if built on or after 2026-11-01
+    # Mitigate this and potential future issues by testing with the release timestamp
+    # See: https://lists.iana.org/hyperkitty/list/tz@iana.org/message/WCIAEEDCPA5HT3LLJK6YQ6FH7ND5ORIK/
+    release_timestamp=$(awk '/^Release /{print $4, $5, $6; exit}' NEWS)
+    release_time_t=$(date -d"$release_timestamp" +%s)
+    checkFlagsArray+=(
+      "CHECK_NOW_TIMESTAMP=$release_time_t"
+    )
   '';
 
   setupHook = ./tzdata-setup-hook.sh;
