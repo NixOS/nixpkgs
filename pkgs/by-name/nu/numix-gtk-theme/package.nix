@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "numix-gtk-theme";
-  version = "0-unstable-2021-06-08";
+  version = "2.6.7-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     owner = "numixproject";
