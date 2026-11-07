@@ -66,9 +66,14 @@ let
       "strictActionEnv"
     ]
     // {
+      bazelFlags =
+        lib.optionals (!useNixHacks) [
+          "--repository_cache="
+          "--incompatible_strict_action_env=${lib.boolToString strictActionEnv}"
+        ]
+        ++ bazelFlags;
       inherit
         name
-        bazelFlags
         bazelBuildFlags
         bazelTestFlags
         bazelRunFlags
@@ -99,11 +104,6 @@ let
     lib.optionalString (targets != [ ]) ''
       concatTo bazelFlagsArray bazelFlags
 
-      vendorFlags=()
-      if [ -d "$bazelUserRoot/vendor_dir" ]; then
-        vendorFlags=( "--vendor_dir=$bazelUserRoot/vendor_dir" )
-      fi
-
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
@@ -113,9 +113,6 @@ let
         --output_user_root="$bazelUserRoot" \
         ${cmd} \
         --curses=no \
-        --repository_cache= \
-        --incompatible_strict_action_env=${lib.boolToString strictActionEnv} \
-        "''${vendorFlags[@]}" \
         "''${copts[@]}" \
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
@@ -348,6 +345,18 @@ stdenv.mkDerivation (
         fi
         echo "pin(\"@@$name\")" >> "$bazelUserRoot/vendor_dir/VENDOR.bazel"
       done
+      bazelFlagsArray+=( "--vendor_dir=$bazelUserRoot/vendor_dir" )
+
+      # Ensure Bazel extracts its embedded binaries and patch their shebangs
+      # (e.g. tools/test/test-setup.sh and tools/test/generate-xml.sh).
+      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+      USER=homeless-shelter \
+      bazel \
+        --batch \
+        --output_base="$bazelOut" \
+        --output_user_root="$bazelUserRoot" \
+        info install_base >/dev/null
+      patchShebangs "$bazelUserRoot/install" >/dev/null
     '';
 
     buildPhase =
@@ -378,17 +387,6 @@ stdenv.mkDerivation (
             host_linkopts+=( "--host_linkopt=-Wl,$flag" )
           done
         fi
-
-        # Ensure Bazel extracts its embedded binaries and patch their shebangs
-        # (e.g. tools/test/test-setup.sh and tools/test/generate-xml.sh).
-        BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        USER=homeless-shelter \
-        bazel \
-          --batch \
-          --output_base="$bazelOut" \
-          --output_user_root="$bazelUserRoot" \
-          info install_base >/dev/null
-        patchShebangs "$bazelUserRoot/install" >/dev/null
 
         ${bazelCmd {
           cmd = "test";
