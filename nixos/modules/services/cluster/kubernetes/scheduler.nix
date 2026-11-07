@@ -9,6 +9,14 @@ let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
   cfg = top.scheduler;
+
+  # --flag=value form; interpolate path literals so they end up in the store
+  optionFormat = option: {
+    option = "--${option}";
+    sep = "=";
+    explicitBool = true;
+    formatArg = v: if builtins.isPath v then "${v}" else lib.generators.mkValueStringDefault { } v;
+  };
 in
 {
   ###### interface
@@ -68,23 +76,22 @@ in
       after = [ "kube-apiserver.service" ];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''
-          ${top.package}/bin/kube-scheduler \
-                    --bind-address=${cfg.address} \
-                    ${
-                      lib.optionalString (cfg.featureGates != { })
-                        "--feature-gates=${
-                          lib.concatStringsSep "," (
-                            builtins.attrValues (lib.mapAttrs (n: v: "${n}=${lib.trivial.boolToString v}") cfg.featureGates)
-                          )
-                        }"
-                    } \
-                    --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
-                    --leader-elect=${lib.boolToString cfg.leaderElect} \
-                    --secure-port=${toString cfg.port} \
-                    ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-                    ${cfg.extraOpts}
-        '';
+        ExecStart = lib.concatStringsSep " " [
+          "${top.package}/bin/kube-scheduler"
+          (lib.cli.toCommandLineShell optionFormat {
+            bind-address = cfg.address;
+            feature-gates =
+              if cfg.featureGates == { } then
+                null
+              else
+                lib.concatStringsSep "," (lib.mapAttrsToList (n: v: "${n}=${lib.boolToString v}") cfg.featureGates);
+            kubeconfig = top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig;
+            leader-elect = cfg.leaderElect;
+            secure-port = cfg.port;
+            v = cfg.verbosity;
+          })
+          cfg.extraOpts
+        ];
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
         Group = "kubernetes";
