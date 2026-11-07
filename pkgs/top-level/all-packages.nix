@@ -9383,17 +9383,7 @@ with pkgs;
 
   pokerth-server = pokerth.override { target = "server"; };
 
-  inherit (import ../games/quake3 pkgs.callPackage)
-    quake3wrapper
-    quake3arenadata
-    quake3demodata
-    quake3pointrelease
-    quake3arena
-    quake3arena-hires
-    quake3demo
-    quake3demo-hires
-    quake3hires
-    ;
+  quake3wrapper = callPackage ../by-name/qu/quake3arena/wrapper.nix { };
 
   inherit (callPackage ../by-name/sc/scummvm/games.nix { })
     beneath-a-steel-sky
