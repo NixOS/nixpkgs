@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   meson,
   ninja,
   vala,
@@ -44,6 +45,15 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
+  patches = [
+    # Cherry-picked from upstream to fix test failure. Drop for ver >= 0.106
+    (fetchpatch2 {
+      name = "libmsi-open-0-byte-streams-with-libgsf-1.14.59.patch";
+      url = "https://gitlab.gnome.org/GNOME/msitools/-/commit/fc2daea77a1186a946304c930727223333266a1b.patch?full_index=1";
+      hash = "sha256-SomD7V5pb8Ai9io7FLS7W3MnqsRxMsPwLlNVBwmgerY=";
+    })
+  ];
+
   # WiX tests fail on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -67,7 +77,10 @@ stdenv.mkDerivation rec {
       # Tools
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ PlushBeaver ];
+    maintainers = with lib.maintainers; [
+      kanru
+      PlushBeaver
+    ];
     platforms = lib.platforms.unix;
   };
 }
