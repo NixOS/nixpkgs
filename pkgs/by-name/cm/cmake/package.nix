@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage, # for tests
   fetchurl,
   replaceVars,
   buildPackages,
@@ -97,7 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
 
   setupHooks = [
-    ./setup-hook.sh
+    (buildPackages.replaceVars ./setup-hook.sh {
+      GenJSONCollectionRC = "${./GenJSONCollectionRC.cmake}";
+      OperateJSONArray = "${./OperateJSONArray.cmake}";
+      OperateJSONAttr = "${./OperateJSONAttr.cmake}";
+    })
     ./check-pc-files-hook.sh
   ];
 
@@ -210,10 +215,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
-  passthru.updateScript = gitUpdater {
-    url = "https://gitlab.kitware.com/cmake/cmake.git";
-    rev-prefix = "v";
-    ignoredVersions = "-"; # -rc1 and friends
+  passthru = {
+    tests = {
+      main-setup-hook = callPackage ./test/main-setup-hook.nix {
+        inherit lib stdenv;
+        cmake = finalAttrs.finalPackage;
+      };
+    };
+
+    updateScript = gitUpdater {
+      url = "https://gitlab.kitware.com/cmake/cmake.git";
+      rev-prefix = "v";
+      ignoredVersions = "-"; # -rc1 and friends
+    };
   };
 
   __structuredAttrs = true;
