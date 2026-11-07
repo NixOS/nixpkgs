@@ -16232,7 +16232,7 @@ self: super: with self; {
 
   pyrepetierng = callPackage ../development/python-modules/pyrepetierng { };
 
-  pyreqwest = callPackage ../development/python-modules/pyreqwest { };
+  pyreqwest = callPackage ../development/python-modules/pyreqwest { zstd-c = pkgs.zstd; };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
