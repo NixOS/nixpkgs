@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "promptfoo";
-  version = "0.118.14";
+  version = "0.125.1";
 
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
     tag = finalAttrs.version;
-    hash = "sha256-MyK533JOVCuO613XWFc2tHLdc4v4IEF8H1xCpS/XxUE=";
+    hash = "sha256-fQYnzVK1qeMYV21tK/S3VJeBtcHj0HwqLqwJgJyMPoM=";
   };
 
-  npmDepsHash = "sha256-mpe00J5iRwaH7hJIDP3fDuJSUOKk01COpOOvF1YJMyg=";
+  npmDepsHash = "sha256-gq0va/1TXDKoxbeyiehdhSfksWD0LjpH3mc/KRdJiME=";
 
   # don't fetch playwright binary
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
