@@ -3,6 +3,7 @@
   stdenvNoCC,
   cacert,
   yarn-berry,
+  yarnBuildHook,
   nodejs-slim, # no need for npm
   fetchFromGitHub,
   nix-update-script,
@@ -31,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
     yarn-berry
     yarn-berry.yarnBerryConfigHook
+    yarnBuildHook
   ];
   buildInputs = [
     nodejs
@@ -57,13 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail 'require.resolve(`corepack/package.json`)' "'$out/package.json'"
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    yarn build
-
-    runHook postBuild
-  '';
+  yarnBuildGlobalFlags = " "; # override the default `--offline` which is not supported by Yarn Berry
 
   installPhase = ''
     runHook preInstall
