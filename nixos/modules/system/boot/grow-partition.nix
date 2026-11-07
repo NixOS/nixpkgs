@@ -9,22 +9,40 @@
   ...
 }:
 
-with lib;
+let
+  cfg = config.boot.growPartition;
+  rootIsBtrfs = config.fileSystems.${cfg.mountPoint}.fsType or null == "btrfs";
+in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+    (lib.mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" "enable" ])
   ];
 
   options = {
-    boot.growPartition = mkEnableOption "growing the root partition on boot";
+    boot.growPartition = {
+      enable = lib.mkEnableOption "growing the root partition on boot";
+
+      mountPoint = lib.mkOption {
+        default = "/";
+        example = "/nix";
+        type = lib.types.str;
+        description = ''
+          This is the mount point of your rootDevice. Used when building a stateless image.
+        '';
+      };
+    };
   };
 
-  config = mkIf config.boot.growPartition {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.repart.enable && !config.systemd.repart.enable;
         message = "systemd-repart already grows the root partition and thus you should not use boot.growPartition";
+      }
+      {
+        assertion = lib.hasAttr cfg.mountPoint config.fileSystems;
+        message = "your rootDevice on the mount point ${cfg.mountPoint} does not exists";
       }
     ];
     systemd.services.growpart = {
@@ -33,6 +51,7 @@ with lib;
       before = [
         "systemd-growfs-root.service"
         "shutdown.target"
+        "mkswap-.service"
       ];
       conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
@@ -43,9 +62,9 @@ with lib;
         # growpart returns 1 if the partition is already grown
         SuccessExitStatus = "0 1";
       };
-
+      path = with pkgs; [ cloud-utils.guest ] ++ lib.optional rootIsBtrfs btrfs-progs;
       script = ''
-        rootDevice="${config.fileSystems."/".device}"
+        rootDevice="${config.fileSystems.${cfg.mountPoint}.device}"
         rootDevice="$(readlink -f "$rootDevice")"
         parentDevice="$rootDevice"
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
@@ -55,7 +74,10 @@ with lib;
         if [ "''${parentDevice%[0-9]p}" != "''${parentDevice}" ] && [ -b "''${parentDevice%p}" ]; then
           parentDevice="''${parentDevice%p}"
         fi
-        "${pkgs.cloud-utils.guest}/bin/growpart" "$parentDevice" "$partNum"
+        growpart "$parentDevice" "$partNum"
+      ''
+      + lib.optionalString rootIsBtrfs ''
+        btrfs filesystem resize max ${cfg.mountPoint}
       '';
     };
   };
