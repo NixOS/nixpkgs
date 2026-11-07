@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "check50";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "check50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3WxFdXECIjbTxHK65BFnxOroEYzu7iOJwm15gIjitLA=";
+    hash = "sha256-Eh0dH/CRdNK9TAuM5oIYUZvSKkLhk+GniSZZJDJjgWQ=";
   };
 
   build-system = [
