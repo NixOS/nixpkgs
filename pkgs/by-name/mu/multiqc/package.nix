@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     humanize
     importlib-metadata
     jinja2
-    kaleido
+    kaleido_0
     markdown
     natsort
     numpy

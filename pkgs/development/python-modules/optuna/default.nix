@@ -44,23 +44,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optuna";
-  version = "4.9.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
+    hash = "sha256-0x1xbljBPW8tZNS+XkLls9IuxAjEBPENsKc5ybKDpgY=";
   };
 
-  patches = [
-    # Fix test for pytest logger behavior changes
-    (fetchpatch {
-      url = "https://github.com/optuna/optuna/commit/ba57cff4a1990f3943cf250edc32d34e6ddd436d.patch";
-      hash = "sha256-SGsZcl+F62JN7LEAfmyanswl/tUZfZv4doh3lS5JSkQ=";
-    })
-  ];
+  # patches = [
+  #   # Fix test for pytest logger behavior changes
+  #   (fetchpatch {
+  #     url = "https://github.com/optuna/optuna/commit/ba57cff4a1990f3943cf250edc32d34e6ddd436d.patch";
+  #     hash = "sha256-SGsZcl+F62JN7LEAfmyanswl/tUZfZv4doh3lS5JSkQ=";
+  #   })
+  # ];
 
   build-system = [
     setuptools
@@ -149,7 +149,11 @@ buildPythonPackage (finalAttrs: {
     "test_plot_terminator_improvement"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # fail in the sandbox (chroium needs system resources, choreographer async test issues)
+    "tests/visualization_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 13] Permission denied: '/tmp/optuna_find_free_port.lock'
     "tests/storages_tests/journal_tests/test_combination_with_grpc.py"
     "tests/storages_tests/test_grpc.py"
@@ -170,7 +174,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "optuna";
   };
 })
