@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyAudio";
-    rev = "soapy-audio-${finalAttrs.version}";
-    sha256 = "0minlsc1lvmqm20vn5hb4im7pz8qwklfy7sbr2xr73xkrbqdahc0";
+    tag = "soapy-audio-${finalAttrs.version}";
+    hash = "0minlsc1lvmqm20vn5hb4im7pz8qwklfy7sbr2xr73xkrbqdahc0";
   };
 
   strictDeps = true;
