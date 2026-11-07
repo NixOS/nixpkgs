@@ -20,6 +20,21 @@
   "module-services-jellystat-troubleshooting": [
     "index.html#module-services-jellystat-troubleshooting"
   ],
+  "module-services-fluxer": [
+    "index.html#module-services-fluxer"
+  ],
+  "module-services-fluxer-configuration": [
+    "index.html#module-services-fluxer-configuration"
+  ],
+  "module-services-fluxer-distributed-setup": [
+    "index.html#module-services-fluxer-distributed-setup"
+  ],
+  "module-services-fluxer-getting-started": [
+    "index.html#module-services-fluxer-getting-started"
+  ],
+  "module-services-fluxer-secrets": [
+    "index.html#module-services-fluxer-secrets"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],

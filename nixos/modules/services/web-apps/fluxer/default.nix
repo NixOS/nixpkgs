@@ -784,9 +784,6 @@ in
       enable = true;
       masterKeyFile = cfg.settings.search.api_key.file;
       settings = {
-        experimental_dumpless_upgrade = true;
-        # upgrade_db = true; # TODO for 26.11 and later
-        no_analytics = true;
         env = "production";
         max_indexing_memory = "256MB";
         max_indexing_threads = 2;
@@ -1135,5 +1132,12 @@ in
     services.fluxer.unfurl.shard.settings = {
       media_proxy.endpoint = cfg.settings.internal.media_proxy_endpoint;
     };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      strangeglyph
+    ];
+    doc = ./fluxer.md;
   };
 }
