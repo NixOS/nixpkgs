@@ -2,7 +2,7 @@
   buildPythonPackage,
   chardet,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   lib,
   pytestCheckHook,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   # expect chardet.detect to return None
   patches = [ ./chardet6-compat.patch ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     chardet
