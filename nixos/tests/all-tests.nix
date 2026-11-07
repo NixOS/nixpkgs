@@ -1658,6 +1658,7 @@ in
   scanservjs = runTest ./scanservjs.nix;
   schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
+  scroll = runTest ./scroll.nix;
   scrutiny = runTest ./scrutiny.nix;
   scx-loader = runTest ./scx-loader.nix;
   sddm = import ./sddm.nix { inherit runTest; };
