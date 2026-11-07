@@ -21,6 +21,9 @@
 buildGoModule (finalAttrs: {
   pname = "${provider}-vpn";
   version = "0.24.8";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
