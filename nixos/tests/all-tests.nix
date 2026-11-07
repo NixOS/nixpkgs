@@ -1925,6 +1925,7 @@ in
   turn-rs = runTest ./turn-rs.nix;
   tusd = runTest ./tusd/default.nix;
   tuxguitar = runTest ./tuxguitar.nix;
+  twenty = runTest ./web-apps/twenty.nix;
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
   typesense = runTest ./typesense.nix;
