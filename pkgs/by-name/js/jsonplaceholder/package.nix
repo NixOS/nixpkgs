@@ -9,7 +9,7 @@
 
 buildNpmPackage {
   pname = "jsonplaceholder";
-  version = "0.3.3-unstable-2021-06-14";
+  version = "0-unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "typicode";
