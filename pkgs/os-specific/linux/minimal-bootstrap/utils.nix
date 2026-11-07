@@ -31,31 +31,30 @@ rec {
       passthru = attrs.passthru or { };
       validity = assertValidity { inherit meta attrs; };
       meta = commonMeta { inherit validity attrs; };
-      baseDrv = derivation (
-        {
-          inherit (buildPlatform) system;
-          # redefining from meta to avoid forcing the thunk until it's used
-          name = attrs.name or "${attrs.pname}-${attrs.version}";
-        }
-        // maybeContentAddressed
-        // (removeAttrs attrs removedAttributeNames)
-      );
+      baseDrvAttrs = {
+        inherit (buildPlatform) system;
+        # redefining from meta to avoid forcing the thunk until it's used
+        name = attrs.name or "${attrs.pname}-${attrs.version}";
+      }
+      // maybeContentAddressed
+      // (removeAttrs attrs removedAttributeNames);
       passthru' =
         if passthru ? tests then
           passthru
           // {
-            tests = lib.mapAttrs (_: f: f baseDrv) passthru.tests;
+            tests = lib.mapAttrs (_: f: f final) passthru.tests;
           }
         else
           passthru;
+      final = lib.checkedDerivation validity.handled (
+        {
+          inherit meta;
+          passthru = passthru';
+        }
+        // passthru'
+      ) baseDrvAttrs;
     in
-    lib.extendDerivation validity.handled (
-      {
-        inherit meta;
-        passthru = passthru';
-      }
-      // passthru'
-    ) baseDrv;
+    final;
 
   writeTextFile =
     let
