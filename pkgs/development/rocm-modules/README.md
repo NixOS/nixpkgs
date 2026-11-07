@@ -2,9 +2,11 @@
 
 To introduce `rocmPackages_10` as part of https://github.com/NixOS/nixpkgs/issues/563157 existing code in `pkgs/development/rocm-modules/` is duplicated
 into `pkgs/development/rocm-modules/7` and `pkgs/development/rocm-modules/10`. All code in `7` remains unchanged from the `7.2.4` release.
-The new code in `10` starts as a duplicate of `7` to work around github's generally poor support for rename/move in PR's. There is
-one exeception: to start `pkgs/development/rocm-modules/10/default.nix` is emptied of contents so `7.2.4` packages cannot be accidentally
-built via the toplevel `rocmPackages_10` reference.
+The new code in `10` starts as a duplicate of `7` to work around GitHub's generally poor support for rename/move in PR's. There is
+one exception: to start `pkgs/development/rocm-modules/10/default.nix` is emptied of contents so `7.2.4` packages cannot be accidentally
+built via the top level `rocmPackages_10` reference.
+
+Changes meant to be consumed on master should be made in `/7` while `pkgs/top-level/all-packages.nix` has `rocmPackages = rocmPackages_7;`
 
 # Local build notes
 
@@ -27,3 +29,11 @@ Bulk updates can be triggered by using:
 ```shell
 nix-shell <nixpkgs-src-root> maintainers/scripts/update.nix --argstr team rocm  --arg keep-going true --argstr max-workers 4
 ```
+
+Hydra job sets should also be updated using:
+
+```shell
+cd <nixpkgs-src-root>
+pkgs/development/rocm-modules/release-attrPaths-gen.sh
+```
+
