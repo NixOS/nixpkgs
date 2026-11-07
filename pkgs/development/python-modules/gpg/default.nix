@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "gpgme";
+  pname = "gpg";
   version = "2.0.0";
   pyproject = true;
 
