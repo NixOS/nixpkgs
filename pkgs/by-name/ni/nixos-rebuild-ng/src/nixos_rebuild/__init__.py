@@ -325,6 +325,7 @@ def parse_args(
         Action.DRY_ACTIVATE.value,
         Action.BUILD_VM.value,
         Action.BUILD_VM_WITH_BOOTLOADER.value,
+        Action.LIST_GENERATIONS.value,
     ):
         parser.error(
             f"--target-host/--build-host is not supported with '{args.action}'"
