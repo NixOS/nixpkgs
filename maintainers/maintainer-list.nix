@@ -14933,6 +14933,14 @@
     github = "KangaZero";
     githubId = 107836643;
   };
+  kanru = {
+    name = "Kan-Ru Chen";
+    github = "kanru";
+    githubId = 17571;
+    email = "kanru@kanru.info";
+    matrix = "@kanru:wara.tw";
+    keys = [ { fingerprint = "374F F2AD 0A12 935F D0B0  C84F 1B13 2E01 CEC6 AD46"; } ];
+  };
   kaptcha0 = {
     name = "J'C Kabunga";
     github = "kaptcha0";
