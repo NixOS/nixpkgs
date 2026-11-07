@@ -40,6 +40,8 @@ buildGoModule (finalAttrs: {
   pname = "tinygo";
   version = "0.43.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
@@ -102,7 +104,7 @@ buildGoModule (finalAttrs: {
     export PATH=${bootstrapTools}:$PATH
     export HOME=$TMPDIR
 
-    ldflags=("''$ldflags[@]/\"-buildid=\"")
+    ldflags=("''${ldflags[@]/-buildid=}")
   '';
 
   postBuild = ''
