@@ -13,6 +13,7 @@
   freetype,
   libxcb,
   libxkbcommon,
+  zstd,
   libGL,
   wayland,
   vulkan-loader,
@@ -60,10 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
     # ghostty-sys runs bindgen with clang's builtin headers when clang is on
     # PATH; otherwise it uses Zig's, and bindgen then finds no stdint.h.
     clang
@@ -72,7 +73,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Ghostty combines its static archives with Apple's `libtool -static`.
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
     freetype
     libxcb
