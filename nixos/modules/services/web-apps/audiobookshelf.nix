@@ -9,6 +9,7 @@ with lib;
 
 let
   cfg = config.services.audiobookshelf;
+  dataDirAbs = if hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 in
 {
   options = {
@@ -18,8 +19,12 @@ in
       package = mkPackageOption pkgs "audiobookshelf" { };
 
       dataDir = mkOption {
-        description = "Path to Audiobookshelf config and metadata inside of /var/lib.";
-        default = "audiobookshelf";
+        description = ''
+          Path to Audiobookshelf config and metadata.
+
+          Relative paths are placed under /var/lib.
+        '';
+        default = "/var/lib/audiobookshelf";
         type = types.str;
       };
 
@@ -67,18 +72,21 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = cfg.dataDir;
-        WorkingDirectory = "/var/lib/${cfg.dataDir}";
+        WorkingDirectory = dataDirAbs;
         ExecStart = "${cfg.package}/bin/audiobookshelf --host ${cfg.host} --port ${toString cfg.port}";
         Restart = "on-failure";
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d ${dataDirAbs} 0750 ${cfg.user} ${cfg.group} - -"
+    ];
+
     users.users = mkIf (cfg.user == "audiobookshelf") {
       audiobookshelf = {
         isSystemUser = true;
         group = cfg.group;
-        home = "/var/lib/${cfg.dataDir}";
+        home = dataDirAbs;
       };
     };
 
