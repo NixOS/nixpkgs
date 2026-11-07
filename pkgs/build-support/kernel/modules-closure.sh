@@ -2,12 +2,20 @@
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
 if ! test -d "$kernel/lib/modules"; then
-    if test -z "$rootModules" || test -n "$allowMissing"; then
+    if (test -z "$rootModules" || test -n "$allowMissing") && test -n "$allowEmpty"; then
         mkdir -p "$out"
         exit 0
     else
-        echo "Required modules: $rootModules"
-        echo "Can not derive a closure of kernel modules because no modules were provided."
+        (
+        echo "Required modules:"
+        # Make list easier to grasp by limiting lines to 10 modules.
+        printf "    %s %s %s %s %s %s %s\n" $rootModules
+        echo
+        echo 'ERROR: The `kernel` argument to `makeModulesClosure` is missing the `/lib/modules` folder.'
+        echo '       Aborting since this would produce an empty output.'
+        echo '       If this is desired, pass `allowEmpty = true;` to `makeModulesClosure`.'
+        # Subshell used to lazily prefix all lines.
+        ) | sed -e 's/^/[makeModulesClosure] /'
         exit 1
     fi
 fi
