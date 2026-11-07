@@ -46,7 +46,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.04";
+  version = "26.06";
 
   src = fetchFromGitHub {
     owner = "ip7z";
@@ -54,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableUnfree then
-        "sha256-JLLbkrptKzC4UuEaA0X9rXBFPH5v4n6a2jSF2E3yEv8="
+        "sha256-uHLCTqFPJdFG8RwSISiGAwSwNs3xN7tkofqMFlSwc5s="
       else
-        "sha256-DDe8nMgzzciZ+SroHYqaEtOXg/MoT3RYnXvN1YC1Znc=";
+        "sha256-N9NDcem1+lHEusM23oi/XW1QTNRvCDsMiYZXReYE7k4=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
