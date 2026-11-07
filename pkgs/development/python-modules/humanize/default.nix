@@ -6,7 +6,7 @@
   gettext,
   hatch-vcs,
   hatchling,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
   python,
 }:
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     freezegun
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 
