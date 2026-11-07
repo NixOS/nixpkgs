@@ -48,13 +48,11 @@ fetch_and_convert() {
 echo "Fetching hashes for server version $LATEST_VERSION..." >&2
 server_linux_x64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/linux_x64/Tdarr_Server.zip")
 server_linux_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/linux_arm64/Tdarr_Server.zip")
-server_darwin_x64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/darwin_x64/Tdarr_Server.zip")
 server_darwin_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/darwin_arm64/Tdarr_Server.zip")
 
 echo "Fetching hashes for node version $LATEST_VERSION..." >&2
 node_linux_x64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/linux_x64/Tdarr_Node.zip")
 node_linux_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/linux_arm64/Tdarr_Node.zip")
-node_darwin_x64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/darwin_x64/Tdarr_Node.zip")
 node_darwin_arm64=$(fetch_and_convert "https://storage.tdarr.io/versions/$LATEST_VERSION/darwin_arm64/Tdarr_Node.zip")
 
 # Update common.nix version
@@ -71,12 +69,11 @@ echo "Updated version in $COMMON_FILE" >&2
 
 # Update server.nix hashes
 tmpfile=$(mktemp)
-awk -v lx64="$server_linux_x64" -v la64="$server_linux_arm64" -v dx64="$server_darwin_x64" -v da64="$server_darwin_arm64" '
+awk -v lx64="$server_linux_x64" -v la64="$server_linux_arm64" -v da64="$server_darwin_arm64" '
 /^  hashes = {$/ {
     print $0
     getline; print "    linux_x64 = \"" lx64 "\";"
     getline; print "    linux_arm64 = \"" la64 "\";"
-    getline; print "    darwin_x64 = \"" dx64 "\";"
     getline; print "    darwin_arm64 = \"" da64 "\";"
     getline; print $0
     next
@@ -88,12 +85,11 @@ echo "Updated hashes in $SERVER_FILE" >&2
 
 # Update node.nix hashes
 tmpfile=$(mktemp)
-awk -v lx64="$node_linux_x64" -v la64="$node_linux_arm64" -v dx64="$node_darwin_x64" -v da64="$node_darwin_arm64" '
+awk -v lx64="$node_linux_x64" -v la64="$node_linux_arm64" -v da64="$node_darwin_arm64" '
 /^  hashes = {$/ {
     print $0
     getline; print "    linux_x64 = \"" lx64 "\";"
     getline; print "    linux_arm64 = \"" la64 "\";"
-    getline; print "    darwin_x64 = \"" dx64 "\";"
     getline; print "    darwin_arm64 = \"" da64 "\";"
     getline; print $0
     next
@@ -108,16 +104,10 @@ echo "Successfully updated tdarr to version $LATEST_VERSION" >&2
 cat << EOF
 [
   {
-    "attrPath": "tdarr-server",
+    "attrPath": "tdarr",
     "oldVersion": "$CURRENT_VERSION",
     "newVersion": "$LATEST_VERSION",
-    "files": ["$COMMON_FILE", "$SERVER_FILE"]
-  },
-  {
-    "attrPath": "tdarr-node",
-    "oldVersion": "$CURRENT_VERSION",
-    "newVersion": "$LATEST_VERSION",
-    "files": ["$COMMON_FILE", "$NODE_FILE"]
+    "files": ["$COMMON_FILE", "$SERVER_FILE", "$NODE_FILE"]
   }
 ]
 EOF
