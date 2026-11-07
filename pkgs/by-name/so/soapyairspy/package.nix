@@ -19,12 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "0g23yybnmq0pg2m8m7dbhif8lw0hdsmnnjym93fdyxfk5iln7fsc";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    airspy
-    soapysdr
-  ];
-
   patches = [
     (fetchpatch {
       url = "https://github.com/pothosware/SoapyAirspy/commit/1be30c33b394fc4d2aeea4287e8df8701adad5a0.patch";
@@ -35,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/pothosware/SoapyAirspy/pull/31/commits/0ee4a5e8edff9f2bbea60dd069d2cc958e314a3e.patch";
       hash = "sha256-TQs4rDw+kRmxnuUwhhq9ioCsbKKniwuspSk/c7wazMM=";
     })
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    airspy
+    soapysdr
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
