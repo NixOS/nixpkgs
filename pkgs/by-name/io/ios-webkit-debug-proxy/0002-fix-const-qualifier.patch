@@ -1,0 +1,6 @@
+diff --git a/src/ios_webkit_debug_proxy.c b/src/ios_webkit_debug_proxy.c
+--- a/src/ios_webkit_debug_proxy.c
++++ b/src/ios_webkit_debug_proxy.c
+@@ -1974 +1974 @@
+-    char *fext = strrchr(path, '.');
++    const char *fext = strrchr(path, '.');

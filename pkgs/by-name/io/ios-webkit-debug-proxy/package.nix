@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Examples compilation breaks with --disable-static, see https://github.com/google/ios-webkit-debug-proxy/issues/399
     ./0001-Don-t-compile-examples.patch
+
+    # Fix build failure with recent GCC versions, see https://github.com/google/ios-webkit-debug-proxy/issues/432
+    ./0002-fix-const-qualifier.patch
   ];
 
   nativeBuildInputs = [
