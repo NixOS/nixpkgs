@@ -11,7 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "7.5.5";
 
   src = fetchurl {
-    url = "https://waterlan.home.xs4all.nl/dos2unix/dos2unix-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://waterlander.net/dos2unix/files/dos2unix-${finalAttrs.version}.tar.gz"
+      "mirror://sourceforge/project/dos2unix/dos2unix/${finalAttrs.version}/dos2unix-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-dfaSuEhMjCRXmi/9h98WuclCjtlUl+M5OiHRugaXrDM=";
   };
 
@@ -23,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa";
-    homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
+    homepage = "https://waterlander.net/dos2unix/";
     changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${finalAttrs.version}/tree/dos2unix/NEWS.txt?format=raw";
     license = lib.licenses.bsd2;
     maintainers = [ ];
