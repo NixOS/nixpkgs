@@ -192,6 +192,11 @@ in
         Directory for jupyterhub state (token + database)
       '';
     };
+
+    automaticMigrations = mkEnableOption
+      (lib.mdDoc "automatic migrations for database schema and data") // {
+        default = true;
+      };
   };
 
   config = lib.mkMerge [
@@ -209,6 +214,12 @@ in
           StateDirectory = cfg.stateDirectory;
           WorkingDirectory = "/var/lib/${cfg.stateDirectory}";
         };
+
+        preStart = lib.mkBefore (
+          lib.optionalString cfg.automaticMigrations ''
+            ${cfg.jupyterhubEnv}/bin/jupyterhub upgrade-db --config ${jupyterhubConfig}
+          ''
+        );
       };
     })
   ];
