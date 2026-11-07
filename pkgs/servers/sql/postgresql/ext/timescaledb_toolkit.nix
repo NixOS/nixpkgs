@@ -12,16 +12,16 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_18_0;
 
   pname = "timescaledb_toolkit";
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-we2w2rYGRC9Did9oocgCWbIUxb8a/g0BlCHXQUe1f8I=";
+    hash = "sha256-f4SX6F1qj8iBsIBGFZEwN1QMUAtrWs1NcgBFuRnjycw=";
   };
 
-  cargoHash = "sha256-R6daWAQssopVps+IqF94dGBcZMC/u1J4eEg6WouAwOo=";
+  cargoHash = "sha256-KCz1PBv4sMJfxZbHG7rP1BR8W9Pss4F9OgdZP+QYzzM=";
   buildAndTestSubdir = "extension";
 
   postInstall = ''
