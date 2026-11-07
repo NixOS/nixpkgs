@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
-  fetchpatch,
   flex,
   db4,
   gettext,
@@ -34,24 +33,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-pam";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "linux-pam";
     repo = "linux-pam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V3XQqolinh+MqUefMDYJF9zP4fBJTHc7YKN+NEGjx1g=";
+    hash = "sha256-K/LgnUNQSInQRNOxkw46yOOXhjd7zIV2T6GB1KrYZso=";
   };
 
   __structuredAttrs = true;
-
-  patches = [
-    (fetchpatch {
-      name = "secure-opendir-fix-error-handling.patch";
-      url = "https://github.com/linux-pam/linux-pam/commit/dd62bac17221911106de165607c6925ea54b18d1.patch?full_index=1";
-      hash = "sha256-ddgDYdVfdXfTaMFV1hO3RJX9w1NHmE7yi3PxsHOdpvY=";
-    })
-  ];
 
   # patching unix_chkpwd is required as the nix store entry does not have the necessary bits
   postPatch = ''
