@@ -6,7 +6,6 @@
   gsettings-desktop-schemas,
   glib,
   gtk3,
-  libgda5,
   libxml2,
   libxslt,
   makeWrapper,
@@ -45,12 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libgda5
     libxml2
     libxslt
     glib
     gsettings-desktop-schemas
     gtk3
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "database-gda" false)
   ];
 
   postInstall = ''
