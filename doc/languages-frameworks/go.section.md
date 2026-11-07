@@ -256,7 +256,7 @@ The Go build can be further tweaked by setting environment variables via the `en
 ### `env.CGO_ENABLED` {#var-go-CGO_ENABLED}
 
 When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As a consequence, the build
-program can't link against C libraries anymore, and the resulting binary is statically linked.
+program can't link against C libraries anymore.
 
 When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
 even when the target code does not explicitly call into C dependencies. With `env.CGO_ENABLED = 0;`, Go
@@ -264,6 +264,9 @@ will always use the Go native implementation of these internal packages. For ref
 [net](https://pkg.go.dev/net#hdr-Name_Resolution) and [os/user](https://pkg.go.dev/os/user#pkg-overview) packages.
 Notice that the decision whether these packages should use native Go implementation or not can also be controlled
 on a per package level using build tags (`tags`). In case CGO is disabled, these tags have no additional effect.
+
+Disabling CGO doesn't necessarily result in a static output.
+If this is required, use `pkgsStatic` instead, with or without CGO.
 
 When a Go program depends on C libraries, place those dependencies in `buildInputs`:
 
