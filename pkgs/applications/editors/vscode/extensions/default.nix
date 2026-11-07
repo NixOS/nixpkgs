@@ -3875,6 +3875,23 @@ let
 
       posit.air-vscode = callPackage ./posit.air-vscode { };
 
+      posit.shiny = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "shiny";
+          publisher = "Posit";
+          version = "1.4.3";
+          hash = "sha256-OAkpU8CTXIL8RFSUhUFZ5QnzC8nr1qLQ4RJNe+HCRwk=";
+        };
+        meta = {
+          changelog = "https://github.com/posit-dev/shiny-vscode/blob/main/CHANGELOG.md";
+          description = "VSCode extension to help launch Shiny applications";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Posit.shiny";
+          homepage = "https://github.com/posit-dev/shiny-vscode/";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.chvp ];
+        };
+      };
+
       prettier.prettier-vscode = callPackage ./prettier.prettier-vscode { };
 
       prince781.vala = callPackage ./prince781.vala { };
