@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=P4Merge
+Version=@version@
+Name[en_GB]=P4Merge
+GenericName=Perforce Merge Tool
+GenericName[en_GB]=Perforce Merge Tool
+Comment=Diff and merge files
+Type=Application
+Exec=@out@/bin/p4merge %U
+TryExec=@out@/bin/p4merge
+Icon=@out@/share/icons/p4merge.png
+Terminal=false
+Categories=Development;RevisionControl;Qt;
