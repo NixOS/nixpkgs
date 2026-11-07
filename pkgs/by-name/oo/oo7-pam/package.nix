@@ -3,6 +3,8 @@
   meson,
   ninja,
   oo7,
+  oo7-server,
+  pam,
   pkg-config,
   rustPlatform,
   rustc,
@@ -30,7 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    pam
     systemdLibs
+  ];
+
+  # oo7-pam requires oo7-daemon-login, which is part of oo7-server
+  mesonFlags = [
+    "--libexecdir=${oo7-server}/libexec"
   ];
 
   meta = {
