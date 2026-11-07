@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmocka
   ];
   preCheck = ''
+    export ISC_TASK_WORKERS=$NIX_BUILD_CORES
     # skip timezone-related tests, they are flaky inside the nix sandbox
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
     sed -i '/^ISC_TEST_ENTRY(isc_time_formattimestamp_test/d' tests/isc/time_test.c
