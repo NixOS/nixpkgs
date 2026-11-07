@@ -4,6 +4,7 @@
   autoPatchelfHook,
   fetchurl,
   makeBinaryWrapper,
+  nodejs_24,
 }:
 
 let
@@ -45,11 +46,12 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/trilium-server"
 
     cp -r ./* "$out/share/trilium-server/"
+    rm -r $out/share/trilium-server/node/bin
 
     # Unused musl prebuilds confuse autoPatchelfHook (glibc-only).
     rm -f "$out/share/trilium-server/node_modules/better-sqlite3/prebuilds"/linuxmusl-*.node
 
-    makeWrapper "$out/share/trilium-server/node/bin/node" "$out/bin/trilium-server" \
+    makeWrapper ${lib.getExe nodejs_24} "$out/bin/trilium-server" \
       --chdir "$out/share/trilium-server" \
       --add-flags "main.mjs"
 

@@ -78,6 +78,13 @@ stdenv.mkDerivation {
     libayatana-appindicator
   ];
 
+  # Microsoft.AI.Foundry.Local.Core.so dlopen()s libssl; its RUNPATH is only $ORIGIN,
+  # and autoPatchelf replaces it, so re-add $ORIGIN for the bundled libonnxruntime.so.
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
+    "$ORIGIN"
+    "${lib.getLib openssl_3_5}/lib"
+  ];
+
   dontStrip = true;
   strictDeps = true;
   __structuredAttrs = true;

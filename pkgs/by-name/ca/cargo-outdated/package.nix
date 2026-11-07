@@ -5,6 +5,7 @@
   pkg-config,
   libgit2,
   openssl,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-outdated";
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    sqlite
   ];
 
   meta = {
