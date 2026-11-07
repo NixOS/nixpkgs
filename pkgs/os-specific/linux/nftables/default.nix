@@ -12,7 +12,6 @@
   docbook_xsl,
   libmnl,
   libnftnl,
-  libpcap,
   gmp,
   jansson,
   autoreconfHook,
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmnl
     libnftnl
-    libpcap
     gmp
     jansson
   ]
