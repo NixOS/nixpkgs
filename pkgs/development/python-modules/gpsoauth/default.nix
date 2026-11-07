@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "gpsoauth";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-njt2WmpOA2TewbxBV70+1+XsMGZYnihdC0aYaRCqa9I=";
+    hash = "sha256-6gbP6uMqc5HIeKsdJ1wCTAfDwyvFmbKf0o+AyCsxODU=";
   };
 
   nativeBuildInputs = [
