@@ -28076,6 +28076,12 @@
     name = "Sebastian August Snoer";
     keys = [ { fingerprint = "8ECA 72D9 49EE 21AB 2A43 71A2 207C 0213 F7FE 56D0"; } ];
   };
+  ssnoer = {
+    email = "ssnoer@proton.me";
+    github = "Seba244c";
+    githubId = 23051740;
+    name = "Sebastian August Snoer";
+  };
   sstef = {
     email = "stephane@nix.frozenid.net";
     github = "haskelious";
