@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "headphones-toolbox";
     maintainers = with lib.maintainers; [
       flacks
-      knarkzel
       nyabinary
     ];
     platforms = lib.platforms.linux;
