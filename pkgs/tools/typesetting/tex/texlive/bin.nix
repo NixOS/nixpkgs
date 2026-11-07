@@ -98,7 +98,6 @@ let
     "fontware"
     "gregoriotex"
     "gsftopk"
-    "hitex"
     "kpathsea"
     "lacheck"
     "lcdftypetools"
@@ -132,6 +131,8 @@ let
     "xml2pmx"
   ];
   coreBigPackages = [
+    # since TeX Live 2026, HiTeX links against harfbuzz
+    "hitex"
     "metafont"
     "mflua"
     "metapost"
@@ -139,21 +140,17 @@ let
     "luahbtex"
     "upmendex"
     "xetex"
+    # new in TeX Live 2026, links against the bundled lua53
+    "xdvipsk"
   ]
   ++ lib.optional withLuaJIT "luajittex";
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
-    # initial TeX Live 2025 release
-    # src = fetchurl {
-    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
-    #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
-    # };
-
-    # 2025.2 update
+    # initial TeX Live 2026 release
     src = fetchurl {
-      url = "https://github.com/TeX-Live/texlive-source/archive/refs/tags/svn74917.tar.gz";
-      hash = "sha256-QgUN5LOFeD6Jt0ENF6Uwi516D8PH+TXZ+MCO8bCTHqE=";
+      url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0301-source.tar.xz";
+      hash = "sha256-yxINMU086yOsYIrxfd0sYjr88CMx9ACg8l7q1bisHXA=";
     };
 
     prePatch = ''
@@ -270,12 +267,10 @@ rec {
       with texlive.bin.core;
       [
         # configure: error: tangle was not found but is required when cross-compiling.
-        # dev (himktables) is used when building hitex to generate the additional source file hitables.c
         web # tangle
         cweb # ctangle
         omegaware # otangle
         tie # tie see "Building TeX Live" 6.4.2 Cross problems
-        dev # himktables
       ]
     );
 
@@ -298,7 +293,7 @@ rec {
     preConfigure = ''
       rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
         libs/{lua53,luajit,mpfr,pixman,pplib,teckit,zlib,zziplib} \
-        texk/{bibtex-x,chktex,dvipng,dvisvgm,upmendex,xdvik} \
+        texk/{bibtex-x,chktex,dvipng,dvisvgm,upmendex,xdvik,xdvipsk} \
         utils/{asymptote,texdoctk,xindy,xpdfopen}
       mkdir WorkDir
       cd WorkDir
@@ -314,6 +309,8 @@ rec {
         "chktex"
         "dvisvgm"
         "dvipng" # ghostscript dependency
+        "hitex" # needs harfbuzz since TeX Live 2026, built in core-big
+        "texprof" # part of the hitex package, built in core-big
         "luatex"
         "luajittex"
         "luahbtex"
@@ -340,12 +337,7 @@ rec {
 
     # TODO: perhaps improve texmf.cnf search locations
     postInstall =
-      # install himktables in separate output for use in cross compilation
-      ''
-        mkdir -p $dev/bin
-        cp texk/web2c/.libs/himktables $dev/bin/himktables
-      ''
-      + common.moveBins
+      common.moveBins
       # remove redundant texmf-dist (content provided by TeX Live packages)
       + ''
         rm -frv "$out"/share/texmf-dist
@@ -355,7 +347,7 @@ rec {
       ''
       # remove broken symlinks
       + ''
-        rm "$out"/bin/{eptex,ptex,uptex}
+        rm "$out"/bin/{eptex,uptex}
         rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
       '';
 
@@ -419,11 +411,15 @@ rec {
     hardeningDisable = [ "format" ];
 
     inherit (core) depsBuildBuild;
-    nativeBuildInputs = core.nativeBuildInputs ++ [
-      autoconf
-      automake
-      libtool
-    ];
+    nativeBuildInputs =
+      core.nativeBuildInputs
+      ++ [
+        autoconf
+        automake
+        libtool
+      ]
+      # dev (himktables) is used when building hitex to generate the additional source file hitables.c
+      ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) texlive.bin.core-big.dev;
     buildInputs = core.buildInputs ++ [
       core
       cairo
@@ -487,7 +483,6 @@ rec {
               "uptex"
               "euptex"
               "aleph"
-              "hitex"
               "pdftex"
               "web-progs"
               "synctex"
@@ -503,9 +498,13 @@ rec {
         "--disable-all-pkgs"
         "--enable-upmendex"
         "--enable-web2c"
+        "--enable-xdvipsk"
       ]
       # kpathsea requires specifying the kpathsea location manually
       ++ [ "--with-kpathsea-includes=${core.dev}/include" ];
+
+    # the xdvipsk man page is generated from kpathsea/paths.h, which is expected in the build tree
+    makeFlags = [ "KPATHSEA_PATHS_H=${core.dev}/include" ];
 
     configureScript = "../configure";
 
@@ -534,7 +533,13 @@ rec {
       "tie"
       "web"
     ];
-    postInstall = common.moveBins;
+    postInstall =
+      # install himktables in separate output for use in cross compilation
+      ''
+        mkdir -p $dev/bin
+        cp texk/web2c/himktables $dev/bin/himktables
+      ''
+      + common.moveBins;
   };
 
   chktex = stdenv.mkDerivation {
@@ -562,8 +567,8 @@ rec {
   # https://github.com/gucci-on-fleek/context-packaging
   context =
     let
-      version = "2.11.08";
-      level = "20260217";
+      version = "2.11.10";
+      level = "20260909";
     in
     stdenv.mkDerivation {
       pname = "luametatex";
@@ -668,7 +673,7 @@ rec {
 
   asymptote =
     let
-      version = "3.09";
+      version = "3.12";
     in
     args.asymptote.overrideAttrs (
       finalAttrs: prevAttrs: {
@@ -681,7 +686,7 @@ rec {
         # so that top level updates do not break texlive
         src = fetchurl {
           url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-          hash = "sha256-unM6mfyq8MCajo8wtG/ksr4E6mQNK/A03gGIa9Fxeuc=";
+          hash = "sha256-6uwel0Y+8hOjk8OI1GanNHiwgY+UA8liuRJAZZybjxs=";
         };
 
         texContainer = texlive.pkgs.asymptote.tex;
