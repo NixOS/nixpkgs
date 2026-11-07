@@ -6,9 +6,13 @@
   fetchFromGitHub,
   installShellFiles,
   alsa-lib,
+  bash,
   bubblewrap,
+  cacert,
   clang,
   cmake,
+  coreutils,
+  curl,
   gitMinimal,
   gst_all_1,
   libcap,
@@ -116,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package"
     "codex-voice-host"
   ];
-  cargoCheckFlags = [
+  cargoTestFlags = [
     "--package"
     "codex-cli"
     "--package"
@@ -125,6 +129,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals supportsVoice [
     "--package"
     "codex-voice-host"
+  ];
+
+  # Integration fixtures require debug assertions for temporary homes and HTTP.
+  checkType = "ci-test";
+
+  checkFlags = [
+    # WebRTC peer tests require multicast, unavailable in the build sandbox.
+    "--skip=transport::tests::negotiates_real_ordered_channel_over_udp_and_tcp"
+    "--skip=transport::tests::negotiates_after_early_packet_loss_and_slow_tcp_connect"
+    "--skip=transport::tests::rejects_excess_or_invalid_candidates_before_mutating_peer"
+    "--skip=transport::tests::invalid_answer_is_redacted_and_peer_can_close"
+    "--skip=devices::capture_worker::tests::capture_reaches_remote_rtp_and_mute_discards_queued_and_partial_audio"
+
+    # Local package installation fixtures assume a development version without auto-updates.
+    "--skip=packaged_daemon_"
   ];
 
   patches = [
@@ -155,6 +174,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'codegen-units = 4' ""
 
     sed -i '1i#![recursion_limit = "256"]' chatgpt/src/lib.rs
+
+    substituteInPlace utils/cargo-bin/src/executable.rs \
+      --replace-fail '/bin/cp' '${lib.getExe' coreutils "cp"}'
+    substituteInPlace cli/tests/exec_server.rs \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+    substituteInPlace cli/tests/exec_server/pid_namespace_tests.rs \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}' \
+      --replace-fail '/bin/bash' '${lib.getExe bash}'
+    substituteInPlace cli/tests/app_server_daemon{,/support}.rs \
+      --replace-fail '/bin/ps' '${lib.getExe ps}'
   '';
 
   nativeBuildInputs = [
@@ -210,13 +239,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' lld "ld64.lld"}";
   };
 
-  # NOTE: part of the test suite requires access to networking, local shells,
-  # apple system configuration, etc. since this is a very fast moving target
-  # (for now), with releases happening every other day, constantly figuring out
-  # which tests need to be skipped, or finding workarounds, was too burdensome,
-  # and in practice not adding any real value. this decision may be reversed in
-  # the future once this software stabilizes.
-  doCheck = false;
+  # Darwin integration tests require additional sandbox and fixture adaptations.
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    # HTTP clients validate SSL_CERT_FILE even when talking to local test servers.
+    cacert
+    ps
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    bubblewrap
+    curl
+  ];
 
   # codex-voice-host is moved out of bin/ before fixup; strip it too, or its
   # debug info keeps gcc and glibc.dev in the runtime closure.
