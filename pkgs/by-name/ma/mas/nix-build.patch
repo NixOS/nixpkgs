@@ -1,0 +1,24 @@
+Disable the build-info plugin, which requires Git metadata unavailable in
+source archives. The package generates fixed build information instead.
+
+Remove the host private-framework search path so the Nix Apple SDK hook
+can supply the framework paths.
+
+--- a/Package.swift
++++ b/Package.swift
+@@ -29,6 +29,5 @@
+ 	],
+ 	targets: [
+-		.plugin(name: "MASBuildToolPlugin", capability: .buildTool()),
+ 		.target(name: "PrivateFrameworks"),
+ 		.executableTarget(
+ 			name: "mas",
+@@ -43,8 +42,6 @@
+ 				"SwiftSoup",
+ 			],
+ 			swiftSettings: swiftSettings,
+-			linkerSettings: [.unsafeFlags(["-F", "/System/Library/PrivateFrameworks"])],
+-			plugins: [.plugin(name: "MASBuildToolPlugin")],
+ 		),
+ 		.testTarget(
+ 			name: "MASTests",
