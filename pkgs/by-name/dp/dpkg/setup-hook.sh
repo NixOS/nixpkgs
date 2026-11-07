@@ -7,6 +7,6 @@ _tryDpkgDeb() {
     #
     # We instead only use dpkg-deb to extract the tarfile containing the files
     # we want from the .deb, then finish extracting with tar directly.
-    mkdir root
+    mkdir -p root
     dpkg-deb --fsys-tarfile "$curSrc" | tar --extract --directory=root
 }
