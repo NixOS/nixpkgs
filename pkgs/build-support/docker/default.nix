@@ -171,8 +171,10 @@ rec {
           inherit outputHash outputHashAlgo;
           outputHashMode = "flat";
 
-          nativeBuildInputs = [ skopeo ];
-          SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
+          nativeBuildInputs = [
+            cacert
+            skopeo
+          ];
 
           sourceURL = "docker://${imageName}@${imageDigest}";
           destNameTag = "${finalImageName}:${finalImageTag}";

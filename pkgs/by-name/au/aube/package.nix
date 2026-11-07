@@ -23,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vYbbnEpVWG6kjnycl1kk3D+lXuzTzOKuilA0ImBHYAI=";
 
-  nativeBuildInputs = [ cmake ]; # libz-ng-sys
+  nativeBuildInputs = [
+    cmake # libz-ng-sys
+    cacert
+  ];
 
   nativeCheckInputs = [
     gitMinimal
@@ -44,8 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

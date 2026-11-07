@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    cacert
   ];
 
   buildInputs = [
@@ -45,7 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     VECTORSCAN_BUILD_FROM_SOURCE = "1";
   };
 

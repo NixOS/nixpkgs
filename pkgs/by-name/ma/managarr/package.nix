@@ -21,9 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-A0gA56I+3vsGH0i6joXCsZiLjGct9m1F/Wx/pT2Mjws=";
 
-  nativeBuildInputs = [ perl ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [
+    perl
+    cacert
+  ];
 
   __darwinAllowLocalNetworking = true;
 

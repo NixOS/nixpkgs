@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
         outputHash = hash;
 
         nativeBuildInputs = [
+          cacert
           curl
           coreutils
         ];
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
-        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       }
       ''
         curl \

@@ -29,11 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ cacert ];
 
-  # rust library: reqwest panicks without a bundle present
-  preCheck = ''
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
-
   checkFlags = [
     # skip since output check includes git commit hash
     "--skip=cmd_version::version_success"

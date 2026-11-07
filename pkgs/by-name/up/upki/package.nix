@@ -38,13 +38,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=upki-cli"
   ];
 
+  nativeCheckInputs = [ cacert ];
+
   nativeBuildInputs = [
     cargo-c
     pkg-config
   ];
-  buildInputs = [ openssl ];
 
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  buildInputs = [ openssl ];
 
   postBuild = ''
     ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen \

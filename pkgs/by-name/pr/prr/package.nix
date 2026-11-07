@@ -21,11 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
+  nativeCheckInputs = [ cacert ];
+
   nativeBuildInputs = [ pkg-config ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  checkInputs = [ cacert ];
 
   meta = {
     description = "Tool that brings mailing list style code reviews to GitHub PRs";

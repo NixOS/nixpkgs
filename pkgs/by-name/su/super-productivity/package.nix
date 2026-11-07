@@ -38,6 +38,7 @@ buildNpmPackage (finalAttrs: {
       inherit (finalAttrs) version src;
 
       nativeBuildInputs = [
+        cacert
         prefetch-npm-deps
         rsync
       ];
@@ -51,7 +52,6 @@ buildNpmPackage (finalAttrs: {
         # this flag.
         FORCE_EMPTY_CACHE = true;
         NPM_FETCHER_VERSION = "2";
-        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       };
 
       buildPhase = ''

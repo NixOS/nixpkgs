@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
   ];
 
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [ cacert ];
 
   versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 

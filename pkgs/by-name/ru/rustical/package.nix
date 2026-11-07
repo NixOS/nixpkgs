@@ -23,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pXUOmBDwKofd5YDep8KAKzBSwuqMB4q/WzwR5kn9Z6c=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    cacert
+  ];
 
   buildInputs = [
     aws-lc
@@ -33,7 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     AWS_LC_SYS_USE_SYSTEM = true;
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   passthru.tests = {

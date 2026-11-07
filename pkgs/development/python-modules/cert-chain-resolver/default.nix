@@ -26,13 +26,13 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ cryptography ];
 
+  nativeBuildInputs = [ cacert ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     six
   ];
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   disabledTests = [
     # Tests require network access

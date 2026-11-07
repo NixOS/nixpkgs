@@ -23,11 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  __darwinAllowLocalNetworking = true;
+  nativeCheckInputs = [ cacert ];
 
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.

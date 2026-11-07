@@ -64,9 +64,7 @@ let
     ];
 
     env = {
-      NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
       DEPOT_TOOLS_UPDATE = "0";
       DEPOT_TOOLS_COLLECT_METRICS = "0";
       PYTHONDONTWRITEBYTECODE = "1";

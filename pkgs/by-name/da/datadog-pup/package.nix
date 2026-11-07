@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
+    cacert
   ];
 
   checkFlags = [
@@ -50,10 +51,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
-
-  preCheck = ''
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   passthru.updateScript = nix-update-script { };
 

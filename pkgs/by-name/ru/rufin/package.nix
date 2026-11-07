@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
+    cacert
   ];
 
   buildInputs = [
@@ -65,8 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   doCheck = false;
-
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   cmakeFlags = [
     (lib.cmakeFeature "RUFIN_BUILD_IDENTITY" "stable")
