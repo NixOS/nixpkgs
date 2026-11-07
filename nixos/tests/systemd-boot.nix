@@ -18,7 +18,7 @@ let
               title = "NixOS"
 
           conf_files = machine.succeed(
-              f"grep --files-with-matches 'version Generation {generation} NixOS' /boot/loader/entries/nixos-*.conf | xargs grep --line-regexp --fixed-strings --files-with-matches 'title {title}'"
+              f"grep --line-regexp --fixed-strings --files-with-matches 'version {generation}' /boot/loader/entries/nixos-*.conf | xargs grep --fixed-strings --files-with-matches 'title {title} (Generation {generation} NixOS'"
           ).split("\n")
 
           suffix = ""
@@ -233,7 +233,7 @@ let
             ''}
             machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
             machine.fail(
-              "grep --files-with-matches 'version Generation 1 NixOS' /boot/loader/entries/nixos-*.conf"
+              "grep --line-regexp --fixed-strings --files-with-matches 'version 1' /boot/loader/entries/nixos-*.conf"
             )
             check_generation(2)
           '';
@@ -265,6 +265,9 @@ in
           conf_file = check_generation(1)[0]
 
           machine.succeed(f"grep 'sort-key nixos' {conf_file}")
+
+          bootctl_list = machine.succeed("bootctl list 2>&1")
+          assert "is not a valid version" not in bootctl_list, bootctl_list
 
           # Ensure we actually booted using systemd-boot
           # Magic number is the vendor UUID used by systemd-boot.
