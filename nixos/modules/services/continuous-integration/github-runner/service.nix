@@ -455,8 +455,6 @@
               "AF_NETLINK"
             ];
 
-            BindPaths = lib.optionals (cfg.workDir != null) [ cfg.workDir ];
-
             # Needs network access
             PrivateNetwork = lib.mkDefault false;
             # Cannot be true due to Node
