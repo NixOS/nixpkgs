@@ -10,13 +10,13 @@
 }:
 ghidra.buildGhidraExtension (finalAttrs: {
   pname = "ghidra-delinker-extension";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "ghidra-delinker-extension";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zb/ynjIOzM+LDVpA1DXKz/oz/63J6yJvvoDN40+JLBc=";
+    hash = "sha256-7C8hVqYx8Q10SqMoZWicqi5SVNP1BQh33ENxaigDjzM=";
   };
 
   patches = [
