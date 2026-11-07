@@ -62,6 +62,12 @@ Compiled PassageMath packages do not depend on these runtime configuration packa
 **Security note:** Since the `passagemath-runtime-*` packages write real python code, it should be reviewed with care for future PRs, even though code injection is greatly reduced via `builtins.toJSON`.
 [Here is the definition of `mkSageRuntimeConfig.](./mk-sage-runtime-config.nix)
 
+## Cython include paths
+
+PassageMath normally uses `sage_include_directories(use_sources=True)` to locate headers in the Sage source tree ([code here](./passagemath-setup/__init__.py#L172)).
+However, Nix builds each PassageMath distribution separately, with dependencies installed in different Nix store paths. To support this modular layout, `passagemath-setup` is patched to also include directories from `sage_include_directories(use_sources=False)`, which discovers installed Sage namespace packages.
+These paths are also passed to Cython's `include_path` so that `.pxd` files from other PassageMath distributions can be resolved during compilation.
+
 ## Sources from Pypi
 
 Most of the sources uses fetchFromPypi.
