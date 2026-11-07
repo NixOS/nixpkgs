@@ -6,7 +6,6 @@
   hatchling,
   jmespath,
   lxml,
-  packaging,
   psutil,
   pytestCheckHook,
   sybil,
@@ -15,12 +14,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "parsel";
-  version = "1.11.0";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-WSX+CH6xb8QEp+2R4x4sHiqbIw2ktk802BNYwNDifog=";
+    hash = "sha256-9SbfhG86keE/VJkVbqPnVRFINM0Sa2LNHXhO9VjzpxM=";
   };
 
   build-system = [ hatchling ];
@@ -29,7 +28,6 @@ buildPythonPackage (finalAttrs: {
     cssselect
     jmespath
     lxml
-    packaging
     w3lib
   ];
 
