@@ -1,5 +1,7 @@
 {
+  callPackage,
   cctools,
+  chromium,
   copyDesktopItems,
   electron_44,
   fetchFromGitHub,
@@ -33,6 +35,12 @@ stdenv.mkDerivation (
     # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
     nodejs = nodejs_26;
     pnpm = pnpm_12;
+    browser = chromium;
+    browserProfileName = "t3-nix-${builtins.baseNameOf (toString browser.browser)}";
+    withBrowser = lib.elem stdenv.hostPlatform.system [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -61,6 +69,22 @@ stdenv.mkDerivation (
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+    ''
+    + lib.optionalString withBrowser ''
+      substituteInPlace apps/server/src/preview/PreviewBrowser.ts \
+        --replace-fail 'const executable = path.join(installRoot, release.version, executableName);' \
+                       'const executable = "${lib.getExe browser}";'
+
+      # Key the profile by store path so setup also runs after browser updates
+      # or when an upstream cache-only profile is already installed.
+      substituteInPlace apps/server/src/preview/PreviewBrowserHost.ts \
+        --replace-fail 't3-chrome-headless-shell' '${browserProfileName}' \
+        --replace-fail '/**/tools/chrome-headless-shell/*/*/chrome-headless-shell' \
+                       '${browser.browser}/libexec/chromium/chromium'
+
+      substituteInPlace apps/server/src/cli/browser.ts \
+        --replace-fail 'const browser = yield* installedBrowser(baseDirPath);' \
+                       'const browser = Option.some("${lib.getExe browser}");'
     '';
 
     nativeBuildInputs = [
@@ -228,6 +252,13 @@ stdenv.mkDerivation (
       updateScript = nix-update-script {
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
+      };
+    }
+    // lib.optionalAttrs withBrowser {
+      inherit browser;
+      tests.browser = callPackage ./browser-test.nix {
+        inherit browser;
+        t3code = finalAttrs.finalPackage;
       };
     };
 
