@@ -9,7 +9,7 @@
   h2,
   multidict,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   setuptools,
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest9_1CheckHook
     pytest-asyncio
     async-timeout
     faker
