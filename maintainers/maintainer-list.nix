@@ -29388,6 +29388,12 @@
     github = "thefossguy";
     githubId = 44400303;
   };
+  thegrayarea = {
+    name = "thegrayarea";
+    matrix = "@tga__:matrix.org";
+    github = "tgarea";
+    githubId = 156913787;
+  };
   thegu5 = {
     name = "Gus";
     email = "gus+nix@gu5.org";
