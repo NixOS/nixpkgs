@@ -13,6 +13,7 @@
   zlib,
   testers,
   ctestCheckHook,
+  szipSupport ? true,
   cppSupport ? true,
   fortranSupport ? false,
   mpiSupport ? false,
@@ -134,8 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Need to propagate cmake deps
   propagatedBuildInputs = [
     zlib
-    libaec
   ]
+  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   cmakeFlags = [
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_STATIC_EXECS" enableStatic)
     (lib.cmakeBool "HDF5_ONLY_SHARED_LIBS" enableShared)
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
-    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" true)
+    (lib.cmakeBool "HDF5_ENABLE_SZIP_SUPPORT" szipSupport)
     (lib.cmakeBool "HDF5_ENABLE_ZLIB_SUPPORT" true)
     (lib.cmakeBool "HDF5_BUILD_WITH_INSTALL_NAME" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "HDF5_BUILD_CPP_LIB" cppSupport)
