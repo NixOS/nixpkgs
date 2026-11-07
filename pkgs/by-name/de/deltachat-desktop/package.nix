@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       "InstantMessaging"
       "Chat"
     ];
-    startupWMClass = "DeltaChat";
+    startupWMClass = "deltachat-desktop";
     mimeTypes = [
       "application/x-webxdc"
       "x-scheme-handler/openpgp4fpr"
