@@ -6501,6 +6501,12 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  daniellaing = {
+    email = "daniel@daniellaing.com";
+    github = "daniellaing";
+    githubId = 60107449;
+    name = "Daniel Laing";
+  };
   danielrolls = {
     email = "daniel.rolls.27@googlemail.com";
     github = "danielrolls";
