@@ -17,6 +17,12 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
   nativeBuildInputs = [ swift ];
 
+  # Rewrite upstream version to match main Anki version
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.1.1"' 'version = "${finalAttrs.version}"'
+  '';
+
   # This is intended to emulate github:ankitects/anki/qt/mac/helper_build.py,
   # but targets the platform directly instead of universal binary + lipo.
   preBuild = ''

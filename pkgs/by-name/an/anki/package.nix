@@ -3,7 +3,6 @@
   stdenv,
 
   writableTmpDirAsHomeHook,
-  cargo,
   fetchFromGitHub,
   installShellFiles,
   lame,
@@ -18,7 +17,7 @@
   python3Packages,
   qt6,
   rsync,
-  rustPlatform,
+  rustPackages_1_97,
   uv,
   writeShellScriptBin,
   yarn,
@@ -35,14 +34,16 @@
 
 let
   yarn-berry = yarn-berry_4;
+  # Upstream requires Rust 1.97
+  inherit (rustPackages_1_97) cargo rustc rustPlatform;
 
   pname = "anki";
-  version = "25.09.4";
-  rev = "d52ca669f6deac5966b1c5035bc2dc77c78d3260";
+  version = "26.09.3";
+  rev = "29bb700b951e3f0c0cb69b77c0180fc1fe33e6ba";
 
-  srcHash = "sha256-brwJjsqjiCd+QDZoB9Pv3TJxTTAfDm8KtYFvJhJpELk=";
-  cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
-  yarnHash = "sha256-wi8e9B0EtRMoyH6KhRBNDHM/ffJ+/0Y4f4AZ7eUcXmA=";
+  srcHash = "sha256-N55F8dDDRrCmA8GYP2QtfNs6QQrKhY7D2+yJO+4pqss=";
+  cargoHash = "sha256-2atsCtbtS+0T1h+KqUXI3aGHJFQbQsIaCXSi5KFUz5E=";
+  yarnHash = "sha256-qT+N82wIv7I+gMGD86iRjQRhNbcqh9XOrnpPbLI+DXM=";
   pythonDeps =
     with python3Packages;
     [
@@ -59,11 +60,11 @@ let
       beautifulsoup4
       flask
       jsonschema
-      pip-system-certs
       pyqt6
       pyqt6-sip
       pyqt6-webengine
       send2trash
+      truststore
       waitress
 
       # build-system deps (needed by uv for editable installs)
@@ -75,6 +76,7 @@ let
       trove-classifiers
 
       # transitive deps
+      asgiref
       attrs
       blinker
       certifi
@@ -93,7 +95,6 @@ let
       soupsieve
       urllib3
       werkzeug
-      wrapt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       anki-audio
@@ -171,6 +172,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     uv
     cargo
+    rustc
     installShellFiles
     jq
     ninja
@@ -196,6 +198,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytest
+    pytest-mock
     mock
     astroid
   ];
@@ -276,6 +279,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
+  # TODO: switch to pytestCheckHook. see also https://github.com/attoknot/nixpkgs/tree/anki-pytestCheckHook
   checkPhase =
     let
       disabledTestsString =
@@ -289,6 +293,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
             (lib.concatStringsSep " and ")
             lib.escapeShellArg
           ];
+      # qt/tests/test_installer.py is for the installer.
+      # those tests use the package `briefcase` which isn't on nixpkgs yet
+      # and isn't included in this derivation, so they fail
 
     in
     ''
@@ -297,7 +304,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
-        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString}
+        pytest -p no:cacheprovider qt/tests -k ${disabledTestsString} --ignore qt/tests/test_installer.py
       runHook postCheck
     '';
 
@@ -312,14 +319,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/438598
     mv $lib/bin $out/bin
 
-    install -D -t $out/share/applications qt/launcher/lin/anki.desktop
+    ankilinux='qt/installer/linux-template/{{ cookiecutter.format }}/{{ cookiecutter.app_name }}'
+
+    install -D -t $out/share/applications "$ankilinux"/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
-    install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
+    install -D -t $out/share/mime/packages "$ankilinux"/anki.xml
 
     mkdir -p $out/share/icons/hicolor/{32x32,128x128}/apps
-    magick qt/launcher/lin/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
-    magick qt/launcher/lin/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
-    installManPage qt/launcher/lin/anki.1
+    magick "$ankilinux"/anki.xpm $out/share/icons/hicolor/32x32/apps/anki.png
+    magick "$ankilinux"/anki.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/anki.png
+    installManPage "$ankilinux"/anki.1
 
     runHook postInstall
   '';
