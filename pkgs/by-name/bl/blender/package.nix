@@ -151,6 +151,10 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail \
         'static const char *static_libs_path = PREFIX "/" BLENDER_INSTALL_LIBDIR;' \
         'static const char *static_libs_path = BLENDER_INSTALL_LIBDIR;'
+
+    # GlfDrawTarget was removed in OpenUSD 26.11; the include is unused
+    substituteInPlace source/blender/render/hydra/viewport_engine.cc \
+      --replace-fail '#include <pxr/imaging/glf/drawTarget.h>' '#include <pxr/base/gf/vec4i.h>'
   ''
   + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     : > build_files/cmake/platform/platform_apple_xcode.cmake
