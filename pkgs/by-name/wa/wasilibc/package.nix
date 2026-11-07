@@ -24,7 +24,7 @@ let
 in
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
-  version = "32";
+  version = "34";
 
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     owner = "WebAssembly";
     repo = "wasi-libc";
     tag = "wasi-sdk-${finalAttrs.version}";
-    hash = "sha256-7SL/205NkcbJvGsNYX3tjOjwM418y7z0QCUe4WDu4ls=";
+    hash = "sha256-eEXLBbh5lNvvf8M846BaBliV9qYc+nvNeAgbWYFs3MA=";
     # We don't use `fetchSubmodules` here to avoid a cycle between `gitMinimal` -> `rustc` -> LLVM -> bintools -> rustc
   };
 
