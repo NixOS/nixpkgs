@@ -33,20 +33,22 @@ let
   klib = fetchFromGitHub {
     owner = "attractivechaos";
     repo = "klib";
-    rev = "cdb7e9236dc47abf8da7ebd702cc6f7f21f0c502";
-    hash = "sha256-+GaI5nXz4jYI0rO17xDhNtFpLlGL2WzeSVLMfB6Cl6E=";
+    rev = "97a0fcb790b43b9e5da8994f4671021fec036f19";
+    hash = "sha256-YSN+Vo7Mzf55R2PodDgIwIzkt4BDUVdlet3Xtc21rDI=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "criterion";
-  version = "2.4.3";
+  version = "2.5.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
     tag = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-X4m/uCyanS7HLtf6GyK4XuaT5i+HQt1PZC7gd813IVQ=";
+    hash = "sha256-vJ2b1bvwcdDgU23DrDfv73sg7nzrF7gF64gi6/4a1VQ=";
   };
 
   nativeBuildInputs = [
@@ -93,19 +95,25 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.tests.version =
-    let
-      tester = callPackage ./tests/001-version.nix { };
-    in
-    testers.testVersion {
-      package = criterion;
-      command = "${lib.getExe tester} --version";
-      version = "v${finalAttrs.version}";
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
+    version =
+      let
+        tester = callPackage ./tests/001-version.nix { };
+      in
+      testers.testVersion {
+        package = criterion;
+        command = "${lib.getExe tester} --version";
+        version = "v${finalAttrs.version}";
+      };
+  };
 
   meta = {
     description = "Cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
+    pkgConfigModules = [ "criterion" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thesola10
