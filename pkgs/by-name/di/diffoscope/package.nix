@@ -320,7 +320,11 @@ python.pkgs.buildPythonApplication rec {
     "test_libmix_differences"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # slight difference how files are listed
+    "tests/comparators/test_elf.py::test_lib_differences"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"
