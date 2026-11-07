@@ -13,7 +13,7 @@
   pytest-cov-stub,
   pytest-forked,
   pytest-services,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   python-memcached,
   pythonAtLeast,
   requests-toolbelt,
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-forked
     pytest-services
-    pytestCheckHook
+    pytest9_1CheckHook
     requests-toolbelt
   ];
 
