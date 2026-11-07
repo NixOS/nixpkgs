@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fixDarwinDylibNames,
   gklib,
   metis,
   mpi,
@@ -24,7 +25,8 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  # The custom configurePhase bypasses the CMake hook's install name dir.
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   enableParallelBuilding = true;
   buildInputs = [
     gklib

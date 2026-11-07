@@ -53,7 +53,6 @@
   vulkan-memory-allocator,
   xbyak,
   xxhash,
-  zarchive,
   zstd,
   zlib,
   nix-update-script,
@@ -63,13 +62,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-xf8m8mVP1YyfocLLsH4YhBzVpkOQQQTtq2SDkyuI5EU=";
+    hash = "sha256-RY6MJdyY/fAESDp8HusNYLVgZrZNbt1j76I22CZIyoE=";
 
     postCheckout = ''
       git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
@@ -91,7 +90,8 @@ clangStdenv.mkDerivation (finalAttrs: {
         spdlog \
         libressl \
         ImGuiFileDialog \
-        protobuf
+        protobuf \
+        zarchive
     '';
   };
 
@@ -172,7 +172,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
     xbyak
     xxhash
-    zarchive
     zstd
     zlib
   ];

@@ -2171,6 +2171,13 @@
     matrix = "@anthonyrsl:matrix.org";
     keys = [ { fingerprint = "472D 368A F107 F443 F3A5  C712 9DC4 987B 1A55 E75E"; } ];
   };
+  anthr76 = {
+    email = "hello@anthonyrabbito.com";
+    github = "anthr76";
+    githubId = 25143877;
+    name = "Anthony Rabbito";
+    matrix = "@anthr76:mozilla.org";
+  };
   antipatico = {
     email = "code@bootkit.dev";
     github = "antipatico";
