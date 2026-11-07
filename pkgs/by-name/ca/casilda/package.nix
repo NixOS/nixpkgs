@@ -14,11 +14,12 @@
   wayland-scanner,
   wlroots_0_20,
   libxkbcommon,
+  linuxHeaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "1.2.2";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-JMDS+fx0vUZnfNz5bzmTy8/4BkgMypWBp+qjorTVmK4=";
+    hash = "sha256-bGhfi3AFEG0RxzpLiwxxlTRQy3boZqlWJXCvG0ZPCUA=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -51,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wlroots_0_20
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${linuxHeaders}/include/drm";
 
   propagatedBuildInputs = [ gtk4 ];
 
