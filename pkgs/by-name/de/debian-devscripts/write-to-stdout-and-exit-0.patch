@@ -1,0 +1,212 @@
+From d76aaa05cb44a6ba741c74a83a319fcabf493865 Mon Sep 17 00:00:00 2001
+From: Anders Kaseorg <andersk@mit.edu>
+Date: Mon, 20 Apr 2026 13:59:02 -0700
+Subject: [PATCH 1/5] dpkg-genbuilddeps: exit 0 for --help, --version
+
+Signed-off-by: Anders Kaseorg <andersk@mit.edu>
+---
+ scripts/dpkg-genbuilddeps.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/dpkg-genbuilddeps.sh b/scripts/dpkg-genbuilddeps.sh
+index 04cb048d..dd140ea7 100755
+--- a/scripts/dpkg-genbuilddeps.sh
++++ b/scripts/dpkg-genbuilddeps.sh
+@@ -14,12 +14,12 @@ Options:
+    -h, --help     This help
+    -v, --version  Report version and exit
+ EOF
+-	    exit 1
++	    exit 0
+ 	    ;;
+ 	-v|--version)
+ 	    echo "$PROGNAME wrapper for dpkg-depcheck:"
+ 	    dpkg-depcheck --version
+-	    exit 1
++	    exit 0
+ 	    ;;
+     esac
+ fi
+-- 
+GitLab
+
+
+From 183ed0a70f6f72dc6bf4d9765285c62b8c7e8629 Mon Sep 17 00:00:00 2001
+From: Anders Kaseorg <andersk@mit.edu>
+Date: Mon, 20 Apr 2026 14:04:43 -0700
+Subject: [PATCH 2/5] debchange: Use ###VERSION###
+
+Signed-off-by: Anders Kaseorg <andersk@mit.edu>
+---
+ scripts/debchange.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/debchange.pl b/scripts/debchange.pl
+index adae33d9..0b60b0b2 100755
+--- a/scripts/debchange.pl
++++ b/scripts/debchange.pl
+@@ -250,7 +250,7 @@ EOF
+ 
+ sub version () {
+     print <<"EOF";
+-This is $progname, from the Debian devscripts package, version 2.17.10
++This is $progname, from the Debian devscripts package, version ###VERSION###
+ This code is copyright 1999-2003 by Julian Gilbey, all rights reserved.
+ Based on code by Christoph Lameter.
+ This program comes with ABSOLUTELY NO WARRANTY.
+-- 
+GitLab
+
+
+From 73625a57909ea3fd7c5cdea3115c9d16f87668a9 Mon Sep 17 00:00:00 2001
+From: Anders Kaseorg <andersk@mit.edu>
+Date: Mon, 20 Apr 2026 14:12:18 -0700
+Subject: [PATCH 3/5] hardening-check: exit 0 for --help
+
+Signed-off-by: Anders Kaseorg <andersk@mit.edu>
+---
+ scripts/hardening-check.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/hardening-check.pl b/scripts/hardening-check.pl
+index 1a2b2dfa..433c1ca6 100755
+--- a/scripts/hardening-check.pl
++++ b/scripts/hardening-check.pl
+@@ -46,7 +46,7 @@ GetOptions(
+     "help|h|?"               => \$help,
+     "man|H"                  => \$man,
+ ) or pod2usage(2);
+-pod2usage(1)                                                if $help;
++pod2usage(0)                                                if $help;
+ pod2usage(-exitstatus => 0, -verbose => 2, -noperldoc => 1) if $man;
+ 
+ my $overall = 0;
+-- 
+GitLab
+
+
+From e8fb22f6d8d7a916f66ca87fa252d03af6270105 Mon Sep 17 00:00:00 2001
+From: Anders Kaseorg <andersk@mit.edu>
+Date: Mon, 20 Apr 2026 14:46:50 -0700
+Subject: [PATCH 4/5] who-permits-upload: Write to stdout, exit 0 for --help
+
+Signed-off-by: Anders Kaseorg <andersk@mit.edu>
+---
+ scripts/who-permits-upload.pl | 44 ++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 21 deletions(-)
+
+diff --git a/scripts/who-permits-upload.pl b/scripts/who-permits-upload.pl
+index 99e3e1df..60b4a1f9 100755
+--- a/scripts/who-permits-upload.pl
++++ b/scripts/who-permits-upload.pl
+@@ -189,39 +189,41 @@ if ($TYPE eq 'package') {
+ } elsif ($TYPE eq 'sponsor') {
+     $TYPE = TYPE_SPONSOR;
+ } else {
+-    usage();
++    usage(*STDERR);
++    exit 2;
+ }
+ 
+ if ($HELP) {
+-    usage();
++    usage(*STDOUT);
++    exit 0;
+ }
+ 
+ if (not @ARGUMENTS) {
+-    usage();
++    usage(*STDERR);
++    exit 2;
+ }
+ 
+ sub usage {
+-    print STDERR (
++    my ($fh) = @_;
++    print $fh (
+ "Usage: $0 [-h][-s KEYRING][-d DM_URL][-s SEARCH_TYPE] QUERY [QUERY ...]\n"
+     );
+-    print STDERR "Retrieve permissions granted to Debian Maintainers (DM)\n";
+-    print STDERR "\n";
+-    print STDERR "-h, --help\n";
+-    print STDERR "\t\t\tDisplay this usage summary and exit\n";
+-    print STDERR "-k, --keyring=KEYRING\n";
+-    print STDERR
++    print $fh "Retrieve permissions granted to Debian Maintainers (DM)\n";
++    print $fh "\n";
++    print $fh "-h, --help\n";
++    print $fh "\t\t\tDisplay this usage summary and exit\n";
++    print $fh "-k, --keyring=KEYRING\n";
++    print $fh
+       "\t\t\tUse the supplied keyring file(s) instead of the default\n";
+-    print STDERR "\t\t\tkeyring. Separate arguments by a colon (\":\")\n";
+-    print STDERR "-d, --dmfile=DM_URL\n";
+-    print STDERR "\t\t\tRetrieve DM permissions from the supplied URL.\n";
+-    print STDERR "\t\t\tDefault is https://ftp-master.debian.org/dm.txt\n";
+-    print STDERR "-s, --search=SEARCH_TYPE\n";
+-    print STDERR "\t\t\tSupplied QUERY arguments are interpreted as:\n";
+-    print STDERR
+-      "\t\t\tpackage name when SEARCH_TYPE is \"package\" (default)\n";
+-    print STDERR "\t\t\tDM user name id when SEARCH_TYPE is \"uid\"\n";
+-    print STDERR "\t\t\tsponsor user id when SEARCH_TYPE is \"sponsor\"\n";
+-    exit 2;
++    print $fh "\t\t\tkeyring. Separate arguments by a colon (\":\")\n";
++    print $fh "-d, --dmfile=DM_URL\n";
++    print $fh "\t\t\tRetrieve DM permissions from the supplied URL.\n";
++    print $fh "\t\t\tDefault is https://ftp-master.debian.org/dm.txt\n";
++    print $fh "-s, --search=SEARCH_TYPE\n";
++    print $fh "\t\t\tSupplied QUERY arguments are interpreted as:\n";
++    print $fh "\t\t\tpackage name when SEARCH_TYPE is \"package\" (default)\n";
++    print $fh "\t\t\tDM user name id when SEARCH_TYPE is \"uid\"\n";
++    print $fh "\t\t\tsponsor user id when SEARCH_TYPE is \"sponsor\"\n";
+ }
+ 
+ sub leave {
+-- 
+GitLab
+
+
+From d91e190604da139b2b492efcdeb55a099467dd03 Mon Sep 17 00:00:00 2001
+From: Anders Kaseorg <andersk@mit.edu>
+Date: Mon, 20 Apr 2026 15:36:22 -0700
+Subject: [PATCH 5/5] cowpoke: Write to stdout for --help
+
+Signed-off-by: Anders Kaseorg <andersk@mit.edu>
+---
+ scripts/cowpoke.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/cowpoke.sh b/scripts/cowpoke.sh
+index 54dd9fc2..f7756322 100755
+--- a/scripts/cowpoke.sh
++++ b/scripts/cowpoke.sh
+@@ -111,7 +111,7 @@ GNU General Public License."
+ }
+ 
+ usage() {
+-    cat 1>&2 <<EOF
++    cat <<EOF
+ 
+ cowpoke [options] package.dsc
+ 
+@@ -258,7 +258,7 @@ for arg; do
+ 
+ 	*)
+ 	    echo "ERROR: unrecognised option '$arg'"
+-	    usage 1
++	    usage 1 >&2
+ 	    ;;
+     esac
+ done
+@@ -269,7 +269,7 @@ if [ -z "$REMOTE_SCRIPT" ]; then
+ fi
+ if [ -z "$DSC" ]; then
+     echo "ERROR: No package .dsc specified"
+-    usage 1
++    usage 1 >&2
+ fi
+ if ! [ -r "$DSC" ]; then
+     echo "ERROR: '$DSC' not found."
+-- 
+GitLab
+

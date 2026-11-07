@@ -1,0 +1,12 @@
+diff --git a/tensilelite/Tensile/Toolchain/Source.py b/tensilelite/Tensile/Toolchain/Source.py
+index c9862e6c..dfa5ba40 100644
+--- a/tensilelite/Tensile/Toolchain/Source.py
++++ b/tensilelite/Tensile/Toolchain/Source.py
+@@ -102,6 +102,7 @@ def buildSourceCodeObjectFiles(
+     coPaths= []
+ 
+     objPath = str(tmpObjDir / objFilename)
++    compiler.default_args += ["-parallel-jobs=8"]
+     compiler(str(includeDir), cmdlineArchs, str(kernelPath), objPath)
+ 
+     for target in bundler.targets(objPath):

@@ -1,0 +1,52 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  versionCheckHook,
+  nix-update-script,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "presenterm";
+  version = "0.16.1";
+
+  src = fetchFromGitHub {
+    owner = "mfontanini";
+    repo = "presenterm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mIJktrgBweaaLD2YaRcs0vP5hKRy/kMN/HEnwO323DA=";
+  };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
+
+  cargoHash = "sha256-OlZXf8Wg32mXGDGbavLVf1ELoqqSmc8z9DNpvGOfAJ8=";
+
+  checkFlags = [
+    # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
+    "--skip=external_snippet"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Terminal based slideshow tool";
+    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/mfontanini/presenterm";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mikaelfangel
+    ];
+    mainProgram = "presenterm";
+  };
+})

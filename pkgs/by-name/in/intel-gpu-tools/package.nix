@@ -1,0 +1,119 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+
+  # build time
+  bison,
+  docbook_xsl,
+  docutils,
+  flex,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  util-macros,
+
+  # runtime
+  alsa-lib,
+  cairo,
+  curl,
+  elfutils,
+  glib,
+  gsl,
+  jansson,
+  json_c,
+  kmod,
+  libdrm,
+  liboping,
+  libpciaccess,
+  libunwind,
+  libx11,
+  libxext,
+  libxrandr,
+  libxv,
+  openssl,
+  peg,
+  pciutils,
+  procps,
+  python3,
+  udev,
+  valgrind,
+  xmlrpc_c,
+  xorgproto,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "intel-gpu-tools";
+  version = "2.6";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "drm";
+    repo = "igt-gpu-tools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bm6CF8XsonQaWgNK+dN2hHJQ+xug7IM1SmQHybkizGQ=";
+  };
+
+  nativeBuildInputs = [
+    bison
+    docbook_xsl
+    docutils
+    flex
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    util-macros
+  ];
+
+  buildInputs = [
+    alsa-lib
+    cairo
+    curl
+    elfutils
+    glib
+    gsl
+    jansson
+    json_c
+    kmod
+    libdrm
+    liboping
+    libpciaccess
+    libunwind
+    libx11
+    libxext
+    libxrandr
+    libxv
+    openssl
+    peg
+    pciutils
+    procps
+    python3
+    udev
+    valgrind
+    xmlrpc_c
+    xorgproto
+  ];
+
+  preConfigure = ''
+    patchShebangs docs lib man scripts tests
+  '';
+
+  hardeningDisable = [ "bindnow" ];
+
+  meta = {
+    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${finalAttrs.version}/NEWS";
+    homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
+    description = "Tools for development and testing of the Intel DRM driver";
+    license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      pSub
+      ilkecan
+    ];
+  };
+})

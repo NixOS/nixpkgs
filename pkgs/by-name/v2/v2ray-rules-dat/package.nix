@@ -1,0 +1,45 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "v2ray-rules-dat";
+  version = "202610272204";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = null;
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/v2ray
+    ln -s ${finalAttrs.passthru.geoipDat} $out/share/v2ray/geoip.dat
+    ln -s ${finalAttrs.passthru.geositeDat} $out/share/v2ray/geosite.dat
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    geoipDat = fetchurl {
+      url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geoip.dat";
+      hash = "sha256-picdPJY2HZYVbm0/fPFVDvIbANL5Ud63cvRk25HomsU=";
+    };
+    geositeDat = fetchurl {
+      url = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${finalAttrs.version}/geosite.dat";
+      hash = "sha256-IGp2OYxTzsLIT5bFAntvKe6MA/Mzf8LkpxEsVU/bfsU=";
+    };
+    updateScript = ./update.sh;
+  };
+
+  meta = {
+    description = "Enhanced edition of V2Ray rules dat files";
+    homepage = "https://github.com/Loyalsoldier/v2ray-rules-dat";
+    changelog = "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nix-julia ];
+  };
+})

@@ -1,0 +1,13 @@
+diff --git a/deltachat2/transport.py b/deltachat2/transport.py
+index c8b4a9c..a89994c 100644
+--- a/deltachat2/transport.py
++++ b/deltachat2/transport.py
+@@ -44,7 +44,7 @@ class IOTransport:
+     def __init__(
+         self,
+         accounts_dir: Optional[str] = None,
+-        rpc_executable: str = "deltachat-rpc-server",
++        rpc_executable: str = "@deltachatrpcserver@",
+         **kwargs,
+     ):
+         """The given arguments will be passed to subprocess.Popen()"""

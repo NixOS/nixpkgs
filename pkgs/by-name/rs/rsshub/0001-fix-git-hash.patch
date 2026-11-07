@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Guanran Wang <guanran928@outlook.com>
+Date: Tue, 9 Jul 2024 16:49:41 +0800
+Subject: [PATCH] fix git hash
+
+---
+ lib/utils/git-hash.ts | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
+
+diff --git a/lib/utils/git-hash.ts b/lib/utils/git-hash.ts
+--- a/lib/utils/git-hash.ts
++++ b/lib/utils/git-hash.ts
+@@ -1,20 +1,4 @@
+-import { execSync } from 'node:child_process';
+-
+-// without git, or outside a repository (as installed from npm), git's complaint is left unprinted
+-const git = (command: string) =>
+-    execSync(command, { stdio: ['ignore', 'pipe', 'ignore'] })
+-        .toString()
+-        .trim();
+-
+-let gitHash = process.env.HEROKU_SLUG_COMMIT?.slice(0, 8) || process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8);
+-let gitDate: Date | undefined;
+-if (!gitHash) {
+-    try {
+-        gitHash = git('git rev-parse HEAD').slice(0, 8);
+-        gitDate = new Date(git('git log -1 --format=%cd'));
+-    } catch {
+-        gitHash = 'unknown';
+-    }
+-}
++let gitHash = '@GIT_HASH@'.slice(0, 8);
++let gitDate = new Date('Thu Jan 1 00:00:00 1970 +0000');
+ 
+ export { gitDate, gitHash };

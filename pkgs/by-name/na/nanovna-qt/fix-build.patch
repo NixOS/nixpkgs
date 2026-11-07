@@ -1,0 +1,36 @@
+diff --git a/libxavna/xavna_mock_ui/xavna_mock_ui.H b/libxavna/xavna_mock_ui/xavna_mock_ui.H
+index 333f9ed..819a019 100644
+--- a/libxavna/xavna_mock_ui/xavna_mock_ui.H
++++ b/libxavna/xavna_mock_ui/xavna_mock_ui.H
+@@ -2,6 +2,7 @@
+ #define XAVNA_MOCK_UI_H
+ 
+ #include <functional>
++#include <string>
+ using namespace std;
+ typedef function<void(string dut_name, double cableLen1, double cableLen2)> xavna_ui_changed_cb;
+ 
+diff --git a/vna_qt/firmwareupdater.H b/vna_qt/firmwareupdater.H
+index 7654211..8b61dfb 100644
+--- a/vna_qt/firmwareupdater.H
++++ b/vna_qt/firmwareupdater.H
+@@ -3,6 +3,7 @@
+ #include <string>
+ #include <functional>
+ #include <pthread.h>
++#include <cstdint>
+ using namespace std;
+ 
+ class FirmwareUpdater
+diff --git a/vna_qt/polarview.C b/vna_qt/polarview.C
+index 8bde6e3..5800463 100644
+--- a/vna_qt/polarview.C
++++ b/vna_qt/polarview.C
+@@ -3,6 +3,7 @@
+ #include <cmath>
+ #include <QPaintEvent>
+ #include <QPainter>
++#include <QPainterPath>
+ PolarView::PolarView(QWidget *parent) : QWidget(parent)
+ {
+ 

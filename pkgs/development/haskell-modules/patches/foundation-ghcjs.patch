@@ -1,0 +1,14 @@
+diff --git a/foundation.cabal b/foundation.cabal
+index d33d874..654488b 100644
+--- a/foundation.cabal
++++ b/foundation.cabal
+@@ -169,7 +169,8 @@ library
+                      Foundation.System.Bindings.Hs
+ 
+   include-dirs:      cbits
+-  c-sources:         cbits/foundation_random.c
++  if !os(ghcjs)
++    c-sources:       cbits/foundation_random.c
+                      cbits/foundation_network.c
+                      cbits/foundation_time.c
+                      cbits/foundation_utf8.c

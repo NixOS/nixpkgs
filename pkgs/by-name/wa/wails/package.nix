@@ -1,0 +1,99 @@
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  go,
+  nodejs,
+  zlib,
+  nix-update-script,
+  # Linux specific dependencies
+  gtk3,
+  webkitgtk_4_1,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "wails";
+  version = "3.1.0";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "wailsapp";
+    repo = "wails";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Eqi2QEOdgjeJXYRtFJSYgqovDXn8PFoF5QExwhFg/+8=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/v2";
+
+  vendorHash = "sha256-jvj8M8bXcxyOkoxfnYaTuG7Zk7+O6f1mdnpws2AHvto=";
+
+  proxyVendor = true;
+
+  subPackages = [ "cmd/wails" ];
+
+  # These packages are needed to build wails
+  # and will also need to be used when building a wails app.
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+
+  # Wails apps are built with Go, so we need to be able to
+  # add it in propagatedBuildInputs.
+  allowGoReference = true;
+
+  # Following packages are required when wails used as a builder.
+  propagatedBuildInputs = [
+    pkg-config
+    go
+    stdenv.cc
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    webkitgtk_4_1
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  # As Wails calls a compiler, certain apps and libraries need to be made available.
+  postFixup = ''
+    wrapProgram $out/bin/wails \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          pkg-config
+          go
+          stdenv.cc
+          nodejs
+        ]
+      } \
+      --suffix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (
+          lib.optionals stdenv.hostPlatform.isLinux [
+            gtk3
+            webkitgtk_4_1
+          ]
+        )
+      }" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
+      --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Build desktop applications using Go & Web Technologies";
+    homepage = "https://wails.io";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thtrf ];
+    mainProgram = "wails";
+    platforms = lib.platforms.unix;
+  };
+})

@@ -1,0 +1,86 @@
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nix-update-script,
+}:
+
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until posthog works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
+  pname = "adscan";
+  version = "13.2.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "ADScanPro";
+    repo = "adscan";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5sMoN+aH+u9Fp+AWorhrm4TlKaIWTwjVhuvO33SnMGg=";
+  };
+
+  pythonRelaxDeps = [ "credsweeper" ];
+
+  build-system = with pythonPackages; [ setuptools ];
+
+  dependencies = with pythonPackages; [
+    aardwolf
+    aiosmb
+    badldap
+    certifi
+    credsweeper
+    dnspython
+    graphviz
+    impacket
+    jinja2
+    kerbad
+    markitdown
+    netifaces
+    packaging
+    playwright
+    posthog
+    prompt-toolkit
+    psutil
+    pydantic-ai-slim
+    pydantic-settings
+    pypsrp
+    pypykatz
+    python-docx
+    python-magic
+    questionary
+    redis
+    requests
+    rich
+    scapy
+    selenium
+    sentry-sdk
+    textual
+    weasyprint
+    winacl
+  ];
+
+  pythonImportsCheck = [
+    "adscan_core"
+    "adscan_launcher"
+  ];
+
+  # Project has no tests
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Active Directory pentesting tool for Linux";
+    homepage = "https://github.com/ADScanPro/adscan";
+    changelog = "https://github.com/ADScanPro/adscan/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "adscan";
+  };
+})

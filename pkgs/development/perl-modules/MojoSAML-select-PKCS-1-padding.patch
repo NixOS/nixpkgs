@@ -1,0 +1,44 @@
+From 7dcb837f5f953206eead3d28144c3d0e2af85c2c Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Mon, 20 Jul 2026 22:48:38 -0400
+Subject: [PATCH] Select PKCS#1 padding for XML signatures
+
+The rsa-sha* XML Signature algorithms require RSASSA-PKCS1-v1_5.
+Select that padding explicitly instead of relying on the RSA module's
+signing default, which is PSS in recent releases.
+
+Require Crypt::OpenSSL::RSA 0.38, the first release whose signing path
+honors the explicit padding choice.
+
+Assisted-by: Codex
+---
+ cpanfile           | 2 +-
+ lib/Mojo/XMLSig.pm | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cpanfile b/cpanfile
+index 6c56caf..149f4a6 100644
+--- a/cpanfile
++++ b/cpanfile
+@@ -1,5 +1,5 @@
+ requires 'Mojolicious', '7.78'; # tag_to_html
+-requires 'Crypt::OpenSSL::RSA';
++requires 'Crypt::OpenSSL::RSA', '0.38';
+ requires 'Crypt::OpenSSL::X509';
+ requires 'Data::GUID';
+ requires 'Digest::SHA';
+diff --git a/lib/Mojo/XMLSig.pm b/lib/Mojo/XMLSig.pm
+index 3ee9db3..2498bbe 100644
+--- a/lib/Mojo/XMLSig.pm
++++ b/lib/Mojo/XMLSig.pm
+@@ -91,6 +91,7 @@ my $set_algo = sub {
+     unless $key->$isa('Crypt::OpenSSL::RSA');
+   Carp::croak 'Unsupported RSA algorithm'
+     unless my $method = $key->can("use_${algo}_hash");
++  $key->use_pkcs1_padding;
+   $key->$method;
+   return $key;
+ };
+-- 
+2.54.0
+

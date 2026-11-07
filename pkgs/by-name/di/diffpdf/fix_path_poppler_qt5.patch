@@ -1,0 +1,16 @@
+diff -uNr diffpdf-2.1.3/diffpdf.pro diffpdf-2.1.3-new/diffpdf.pro
+--- diffpdf-2.1.3/diffpdf.pro	2013-10-15 09:01:22.000000000 +0200
++++ diffpdf-2.1.3-new/diffpdf.pro	2015-07-07 23:13:36.445572148 +0200
+@@ -47,9 +47,9 @@
+ 	INCLUDEPATH += /c/poppler_lib/include/poppler/qt5
+ 	LIBS += -Wl,-rpath -Wl,/c/poppler_lib/bin -Wl,-L/c/poppler_lib/bin
+     } else {
+-	exists(/usr/include/poppler/qt5) {
+-	    INCLUDEPATH += /usr/include/poppler/cpp
+-	    INCLUDEPATH += /usr/include/poppler/qt5
++	exists(@@NIX_POPPLER_QT5@@/include/poppler/qt5) {
++	    INCLUDEPATH += @@NIX_POPPLER_QT5@@/include/poppler/cpp
++	    INCLUDEPATH += @@NIX_POPPLER_QT5@@/include/poppler/qt5
+ 	} else {
+ 	    INCLUDEPATH += /usr/local/include/poppler/cpp
+ 	    INCLUDEPATH += /usr/local/include/poppler/qt5

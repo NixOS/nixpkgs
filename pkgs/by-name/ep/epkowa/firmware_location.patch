@@ -1,0 +1,21 @@
+Explanation:
+in libesci-interpreter-gt-f720.so in
+libesci_interpreter_gt_f720_342::libesci_interpreter_gt_f720_348 at 0xdf74: the
+binary blob esfw8b.bin is searched either in /usr/share/esci/ or in
+$ESCI_FIRMWARE_DIR. But since this library is to be used wia libsane.so in
+every binary in the system, we can't wrapProgram the relevant executables to
+set this environment variable. Instead, we patch iscan to set this variable
+before loading libesci-interpreter-gt-f720.so.
+--- backend/channel-usb.c.orig	2017-08-14 11:24:27.669582456 +0200
++++ backend/channel-usb.c	2017-08-14 11:31:40.509010897 +0200
+@@ -169,6 +169,10 @@
+ {
+   SANE_Status s;
+ 
++  setenv("ESCI_FIRMWARE_DIR", NIX_ESCI_PREFIX, 1);
++  setenv("ISCAN_FW_DIR", NIX_ESCI_PREFIX, 1);
++  setenv("ISCAN_FIRMWARE_DIR", NIX_ESCI_PREFIX, 1);
++
+   s = sanei_usb_open (self->name, &self->fd);
+ 
+   if (SANE_STATUS_GOOD == s)

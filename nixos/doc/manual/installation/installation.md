@@ -1,0 +1,3 @@
+# Getting started {#ch-installation}
+
+This section describes how to obtain, install, and configure NixOS for first-time use.

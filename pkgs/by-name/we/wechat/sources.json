@@ -1,0 +1,33 @@
+{
+  "aarch64-darwin": {
+    "version": "4.1.15.55-270135",
+    "src": {
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.1.15.55_270135.dmg",
+      "hash": "sha256-zuo1XVyTQZZY93f90QEPmxnRT6ttxVKvnCCM3a1/JI8="
+    }
+  },
+  "x86_64-linux": {
+    "version": "4.1.13.26",
+    "src": {
+      "url": "https://web.archive.org/web/20261012092649id_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb",
+      "hash": "sha256-oNuMru6NHmz+CqXOWHECcPjXSpD/SSD1Oj/CKqCVb+k="
+    },
+    "upstream": {
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb",
+      "x-cos-hash-crc64ecma": "10867328176854818451",
+      "x-cos-version-id": "MTg0NDQ5NTIyNzg5NTUwNjk2Nzk"
+    }
+  },
+  "aarch64-linux": {
+    "version": "4.1.13.26",
+    "src": {
+      "url": "https://web.archive.org/web/20261012095035id_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb",
+      "hash": "sha256-N0cy7aiKbzp+TrMV5k5frHPvF5I9UE0kKWTxntG4DHU="
+    },
+    "upstream": {
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb",
+      "x-cos-hash-crc64ecma": "14009050578420750826",
+      "x-cos-version-id": "MTg0NDQ5NTIyNzg5MzMyNjI0NTY"
+    }
+  }
+}

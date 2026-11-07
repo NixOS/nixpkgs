@@ -1,0 +1,10 @@
+prefix=@dev@
+includedir=${prefix}/include
+libdir=@lib@/lib
+
+Name: tcpdirect
+Description: Low latency, zero-copy TCP and UDP stack for SolarFlare NICs
+URL: http://www.xilinx.com
+Version: @version@
+Cflags: -isystem${includedir}
+Libs: -L${libdir} -Wl,-rpath,${libdir} @dash_l@

@@ -1,0 +1,78 @@
+{
+  "indexstore-db": {
+    "hash": "sha256-okJrYhn2LmRNV+Wn/QM1W6yxbt/s1X7L2kmUccxD74o="
+  },
+  "llvm-project": {
+    "hash": "sha256-EzSgVCdEYtrrC9fjqUVu4ALp8FmtwgLfLzL/pMQKb/4="
+  },
+  "sourcekit-lsp": {
+    "hash": "sha256-/uAkOzNRRFkUC+qYntBytcEcWWBEpH5hsko0LR3Skhs="
+  },
+  "swift": {
+    "hash": "sha256-X3jFUJiASISZmqVR1aiHF0nDL15fiIupsIUMjOTtBCM="
+  },
+  "swift-build": {
+    "hash": "sha256-LWsynfSRHsDD7YLUyRJwbSejHYQZsAi6h3b8eB6DRYw="
+  },
+  "swift-corelibs-foundation": {
+    "hash": "sha256-6CfeV+h9/o/o5rQIirbO4FvvD5qvr/b/BhCeN2OITGk="
+  },
+  "swift-corelibs-libdispatch": {
+    "hash": "sha256-PMm98aW2yJsUDysZ0CJFRyZ8/UZ5uJ14UytQ9KNBUeE="
+  },
+  "swift-corelibs-xctest": {
+    "hash": "sha256-eRBwBuC9Wyfib7n+t+hIhbOXmoc4TrdLXsdKC/1XC24="
+  },
+  "swift-docc": {
+    "hash": "sha256-WtoAQHb+vT6QzsoYFnaotZxCQrgAteyfHsUWFi9nNXg=",
+    "swiftpmDeps": {
+      "hash": "sha256-6cGV6UdJ/uqJjCutg+YIqT3uMpcsLgLvYPVFCoK1L0E="
+    }
+  },
+  "swift-docc-render": {
+    "hash": "sha256-QMCtOWour2tfPIujtIZ/da/JS61U1tl4nR3KR6jm7M4=",
+    "npmDeps": {
+      "hash": "sha256-DDBIWmxzsDm5pShHNIC9rC0ThN3CU1cabZIdiKI46Yo="
+    },
+    "rev": "5a0395a50f0bd8b7df71a10f2558c1689809b8e9"
+  },
+  "swift-driver": {
+    "hash": "sha256-xqzjR+YdhbB8wN6OfzMPDh0lXj//dVd811gBJ3EwNL0="
+  },
+  "swift-experimental-string-processing": {
+    "hash": "sha256-PG9BZPzK13jw8XeVbcgzxYTlc9UJhKheXPDRm8NheEM="
+  },
+  "swift-format": {
+    "hash": "sha256-cn7YyQHXsphl1M4kv0mo0F/G9pH8BVBMPtZWPkqIGTk=",
+    "swiftpmDeps": {
+      "hash": "sha256-p4YCMFzNL43AE36YJyRVwrx6z06HCUH0BRQ4dJsneic="
+    }
+  },
+  "swift-foundation": {
+    "hash": "sha256-0l1v6XrXw6kVFeKVWWAMNEvSJDFrkmAgmTmSZb3MQYw="
+  },
+  "swift-foundation-icu": {
+    "hash": "sha256-+Syca40t4KYTs6Y0qgfntziUebEmHdq1tNNbLau4bwc="
+  },
+  "swift-llbuild": {
+    "hash": "sha256-w4P8eMRe+9pMuRQURmku7Z6MrPlLSDqMXuvVkUJHfiw="
+  },
+  "swift-lmdb": {
+    "hash": "sha256-gTCzlvrrQhTsl9FI04nU9vkv7ZB2kEGz487r+r+0w40="
+  },
+  "swift-package-manager": {
+    "hash": "sha256-Gu5NFuowFzdZuj/qraR3RjBFCsrvDWjGoiSNYHJTY5g="
+  },
+  "swift-syntax": {
+    "hash": "sha256-qRs7x0c8RSIC7yXjUDnF6HaEhkWsXPeAoLa9Tc538cI="
+  },
+  "swift-testing": {
+    "hash": "sha256-xxXEcYf89+gbO1IQgaqQCXZ5he9apihTRe/PMaaDI7g="
+  },
+  "swift-tools-protocols": {
+    "hash": "sha256-qhBb54P5aJ/BB1dEQcy78crxV/jGld25jNsusq3pVMw="
+  },
+  "swift-tools-support-core": {
+    "hash": "sha256-7gZxQOlklLEVjyxsPp543gajJm/I9F7AxbLYzbJJMQo="
+  }
+}

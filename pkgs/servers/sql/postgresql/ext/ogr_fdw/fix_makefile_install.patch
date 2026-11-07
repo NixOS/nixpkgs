@@ -1,0 +1,25 @@
+From cbe17df3c3cd0f22bb9754f63f501b0fb7db30ab Mon Sep 17 00:00:00 2001
+From: Augustin Trancart <augustin.trancart@oslandia.com>
+Date: Fri, 9 Oct 2026 16:06:48 +0200
+Subject: [PATCH] Fix install directory for ogr_fdw_info
+
+---
+ Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 51ab3e100ebe0998470519ec311ac5af7dacf563..30208914427ea95f4ad81a728108f0237f398ccd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -83,7 +83,10 @@ ogr_fdw_info$(X): ogr_fdw_info.o ogr_fdw_common.o stringbuffer.o
+ clean-exe:
+ 	rm -f ogr_fdw_info$(X) ogr_fdw_info.o stringbuffer.o
+ 
+-install-exe: all
++$(DESTDIR)$(bindir):
++	mkdir -p $(DESTDIR)$(bindir)
++
++install-exe: all $(DESTDIR)$(bindir)
+ 	$(INSTALL_PROGRAM) ogr_fdw_info$(X) '$(DESTDIR)$(bindir)'
+ 
+ all: ogr_fdw_info$(X)

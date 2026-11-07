@@ -1,0 +1,158 @@
+diff --git a/include/_ctype.h b/include/_ctype.h
+index 91e6b1d14f6b..a6896b598da3 100644
+--- a/include/_ctype.h
++++ b/include/_ctype.h
+@@ -44,7 +44,7 @@
+ #define	__CTYPE_H_
+ 
+ #include <sys/cdefs.h>
+-#include <sys/_types.h>
++#include <sys/types.h>
+ 
+ #define	_CTYPE_A	0x00000100L		/* Alpha */
+ #define	_CTYPE_C	0x00000200L		/* Control */
+diff --git a/lib/libc/locale/collate.h b/lib/libc/locale/collate.h
+index 2d3723b49f5b..6bbff732b9d7 100644
+--- a/lib/libc/locale/collate.h
++++ b/lib/libc/locale/collate.h
+@@ -36,6 +36,7 @@
+ #ifndef _COLLATE_H_
+ #define        _COLLATE_H_
+ 
++#include <stdint.h>
+ #include <sys/types.h>
+ #include <limits.h>
+ #include "xlocale_private.h"
+diff --git a/usr.bin/localedef/charmap.c b/usr.bin/localedef/charmap.c
+index 44b7e3292eae..79c30b7cf372 100644
+--- a/usr.bin/localedef/charmap.c
++++ b/usr.bin/localedef/charmap.c
+@@ -31,6 +31,7 @@
+ /*
+  * CHARMAP file handling for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <sys/types.h>
+ #include <sys/tree.h>
+diff --git a/usr.bin/localedef/collate.c b/usr.bin/localedef/collate.c
+index 2a080773a95e..3f0030c638f5 100644
+--- a/usr.bin/localedef/collate.c
++++ b/usr.bin/localedef/collate.c
+@@ -31,6 +31,7 @@
+ /*
+  * LC_COLLATE database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <sys/types.h>
+ #include <sys/tree.h>
+diff --git a/usr.bin/localedef/ctype.c b/usr.bin/localedef/ctype.c
+index ab7b76e57b2d..846c6d6480a8 100644
+--- a/usr.bin/localedef/ctype.c
++++ b/usr.bin/localedef/ctype.c
+@@ -32,6 +32,7 @@
+ /*
+  * LC_CTYPE database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <sys/tree.h>
+ 
+diff --git a/usr.bin/localedef/localedef.c b/usr.bin/localedef/localedef.c
+index 5ff146d6f655..ed69aa1f0c0e 100644
+--- a/usr.bin/localedef/localedef.c
++++ b/usr.bin/localedef/localedef.c
+@@ -32,7 +32,7 @@
+  * POSIX localedef.
+  */
+ #include <sys/cdefs.h>
+-#include <sys/endian.h>
++#include <endian.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ 
+diff --git a/usr.bin/localedef/messages.c b/usr.bin/localedef/messages.c
+index 6b8eb9d684dd..0155821d0e56 100644
+--- a/usr.bin/localedef/messages.c
++++ b/usr.bin/localedef/messages.c
+@@ -31,6 +31,7 @@
+ /*
+  * LC_MESSAGES database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/usr.bin/localedef/monetary.c b/usr.bin/localedef/monetary.c
+index 7a77ac7e256c..7636c4deca1f 100644
+--- a/usr.bin/localedef/monetary.c
++++ b/usr.bin/localedef/monetary.c
+@@ -31,6 +31,7 @@
+ /*
+  * LC_MONETARY database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/usr.bin/localedef/numeric.c b/usr.bin/localedef/numeric.c
+index 5533b7c10e1a..9c47494f815c 100644
+--- a/usr.bin/localedef/numeric.c
++++ b/usr.bin/localedef/numeric.c
+@@ -31,6 +31,7 @@
+ /*
+  * LC_NUMERIC database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/usr.bin/localedef/parser.y b/usr.bin/localedef/parser.y
+index 23b3b54f8a6e..e01330f0152d 100644
+--- a/usr.bin/localedef/parser.y
++++ b/usr.bin/localedef/parser.y
+@@ -33,6 +33,7 @@
+  * POSIX localedef grammar.
+  */
+ 
++#include <stdint.h>
+ #include <wchar.h>
+ #include <stdio.h>
+ #include <limits.h>
+diff --git a/usr.bin/localedef/scanner.c b/usr.bin/localedef/scanner.c
+index c6d45a993f28..b17670ef4b4a 100644
+--- a/usr.bin/localedef/scanner.c
++++ b/usr.bin/localedef/scanner.c
+@@ -32,6 +32,7 @@
+  * This file contains the "scanner", which tokenizes the input files
+  * for localedef for processing by the higher level grammar processor.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/usr.bin/localedef/time.c b/usr.bin/localedef/time.c
+index 7a56e244c921..0e409a742d0a 100644
+--- a/usr.bin/localedef/time.c
++++ b/usr.bin/localedef/time.c
+@@ -31,6 +31,7 @@
+ /*
+  * LC_TIME database generation routines for localedef.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+diff --git a/usr.bin/localedef/wide.c b/usr.bin/localedef/wide.c
+index 062e120e6912..a199cddb198d 100644
+--- a/usr.bin/localedef/wide.c
++++ b/usr.bin/localedef/wide.c
+@@ -34,6 +34,7 @@
+  * to the wide character forms used internally by libc.  Unfortunately,
+  * this approach means that we need a method for each and every encoding.
+  */
++#include <stdint.h>
+ #include <sys/cdefs.h>
+ #include <ctype.h>
+ #include <stdlib.h>

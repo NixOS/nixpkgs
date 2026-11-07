@@ -1,0 +1,12 @@
+diff '--color=auto' -u -r old/sycl-info/cli_config.hpp new/sycl-info/cli_config.hpp
+--- old/sycl-info/cli_config.hpp	2025-08-28 01:01:14.403357414 +0800
++++ new/sycl-info/cli_config.hpp	2025-08-28 01:02:11.256702715 +0800
+@@ -42,7 +42,7 @@
+     auto cli = make_cli();
+     auto result = cli.parse(lyra::args(argc, argv));
+     if (!result) {
+-      raise_error(result.errorMessage(), cli);
++      raise_error(result.message(), cli);
+     }
+   }
+ 

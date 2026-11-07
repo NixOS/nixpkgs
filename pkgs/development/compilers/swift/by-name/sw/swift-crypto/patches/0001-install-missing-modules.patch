@@ -1,0 +1,64 @@
+From fad5e514f44a546b9f41d68f8a99d1a9beab2066 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 18 Dec 2025 20:58:24 -0500
+Subject: [PATCH] install-missing-modules
+
+---
+ Sources/CMakeLists.txt                     |  1 +
+ Sources/CryptoBoringWrapper/CMakeLists.txt |  1 +
+ Sources/CryptoExtras/CMakeLists.txt        |  1 +
+ Sources/_CryptoExtras/CMakeLists.txt       | 13 +++++++++++++
+ 4 files changed, 16 insertions(+)
+ create mode 100644 Sources/_CryptoExtras/CMakeLists.txt
+
+diff --git a/Sources/CMakeLists.txt b/Sources/CMakeLists.txt
+index 4616a1f..caf7440 100644
+--- a/Sources/CMakeLists.txt
++++ b/Sources/CMakeLists.txt
+@@ -19,3 +19,4 @@ add_subdirectory(CXKCPShims)
+ add_subdirectory(CryptoBoringWrapper)
+ add_subdirectory(Crypto)
+ add_subdirectory(CryptoExtras)
++add_subdirectory(_CryptoExtras)
+diff --git a/Sources/CryptoBoringWrapper/CMakeLists.txt b/Sources/CryptoBoringWrapper/CMakeLists.txt
+index 980f33c..0c852bf 100644
+--- a/Sources/CryptoBoringWrapper/CMakeLists.txt
++++ b/Sources/CryptoBoringWrapper/CMakeLists.txt
+@@ -36,4 +36,5 @@ target_compile_options(CryptoBoringWrapper PRIVATE ${SWIFT_CRYPTO_COMPILE_OPTION
+ set_target_properties(CryptoBoringWrapper PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
++_install_target(CryptoBoringWrapper)
+ set_property(GLOBAL APPEND PROPERTY SWIFT_CRYPTO_EXPORTS CryptoBoringWrapper)
+diff --git a/Sources/CryptoExtras/CMakeLists.txt b/Sources/CryptoExtras/CMakeLists.txt
+index e081070..89ce053 100644
+--- a/Sources/CryptoExtras/CMakeLists.txt
++++ b/Sources/CryptoExtras/CMakeLists.txt
+@@ -102,4 +102,5 @@ target_link_options(CryptoExtras PRIVATE
+ set_target_properties(CryptoExtras PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
++_install_target(CryptoExtras)
+ set_property(GLOBAL APPEND PROPERTY SWIFT_CRYPTO_EXPORTS CryptoExtras)
+diff --git a/Sources/_CryptoExtras/CMakeLists.txt b/Sources/_CryptoExtras/CMakeLists.txt
+new file mode 100644
+index 0000000..5e6c283
+--- /dev/null
++++ b/Sources/_CryptoExtras/CMakeLists.txt
+@@ -0,0 +1,13 @@
++add_library(_CryptoExtras STATIC
++  Exports.swift
++)
++
++target_link_libraries(_CryptoExtras PUBLIC
++  CryptoExtras)
++
++
++set_target_properties(_CryptoExtras PROPERTIES
++  INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
++
++_install_target(_CryptoExtras)
++set_property(GLOBAL APPEND PROPERTY SWIFT_CRYPTO_EXPORTS _CryptoExtras)
+-- 
+2.50.1
+

@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -997,6 +997,8 @@ set_target_properties(vampire PROPERTIES
+   )
+ configure_file(version.cpp.in version.cpp)
+ 
++install(TARGETS vampire)
++
+ if(CMAKE_BUILD_TYPE STREQUAL Release AND IPO)
+   message(STATUS "compiling Vampire with IPO: this might take a while")
+   set_property(TARGET obj PROPERTY INTERPROCEDURAL_OPTIMIZATION true)

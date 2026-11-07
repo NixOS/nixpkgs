@@ -1,0 +1,84 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  readline,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cdecl";
+  version = "18.7.2";
+
+  src = fetchFromGitHub {
+    owner = "paul-j-lucas";
+    repo = "cdecl";
+    tag = "cdecl-${finalAttrs.version}";
+    hash = "sha256-j6NEKnc/2j4Btlo1fzTWoO0DdqRNV9iksRQCADaW3w8=";
+  };
+
+  strictDeps = true;
+
+  # Manually generate lexer.c to avoid triggering the broken ylwrap logic
+  preBuild = ''
+    flex -o src/lexer.c src/lexer.l
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+  ];
+  buildInputs = [ readline ];
+
+  enableParallelBuilding = true;
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-DBSD"
+        "-DUSE_READLINE"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        "-Wno-error=int-conversion"
+        "-Wno-error=incompatible-function-pointer-types"
+      ]
+    );
+    NIX_LDFLAGS = "-lreadline";
+  };
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/man1"
+    "CATDIR=${placeholder "out"}/cat1"
+  ];
+
+  doCheck = true;
+  checkTarget = "test";
+
+  preInstall = ''
+    mkdir -p $out/bin;
+  '';
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
+    description = "Composing and deciphering C (or C++) declarations or casts, aka 'gibberish'";
+    homepage = "https://github.com/paul-j-lucas/cdecl";
+    changelog = "https://github.com/paul-j-lucas/cdecl/blob/cdecl-${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      zirancumin
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "cdecl";
+  };
+})
