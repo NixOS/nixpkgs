@@ -199,6 +199,14 @@ in
       QT_STYLE_OVERRIDE = lib.mkIf (cfg.style != null) cfg.style;
     };
 
+    # Link color scheme files into the profiles so they are locatable via
+    # `QStandardPaths::locate(GenericDataLocation, "color-schemes")`.
+    # Used by e.g. plasma-integration (the platform theme set by
+    # `platformTheme = "kde"`) to resolve the scheme named in `kdeglobals`
+    # — falling back to BreezeLight with a warning otherwise — and by
+    # KColorSchemeModel to list available schemes in KDE applications.
+    environment.pathsToLink = [ "/share/color-schemes" ];
+
     environment.profileRelativeSessionVariables =
       let
         qtVersions = with pkgs; [
