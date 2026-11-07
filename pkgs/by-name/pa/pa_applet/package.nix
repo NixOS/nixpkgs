@@ -43,7 +43,10 @@ stdenv.mkDerivation {
   '';
 
   # work around a problem related to gtk3 updates
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=unused-but-set-variable"
+  ];
 
   postInstall = "";
 
