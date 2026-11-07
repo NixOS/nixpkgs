@@ -10,6 +10,8 @@ let
     expected = lib.sort lib.lessThan y;
   };
 
+  platformsContaining = system: lib.attrNames (lib.filterAttrs (_: lib.elem system) lib.platforms);
+
   /*
     Try to convert an elaborated system back to a simple string. If not possible,
     return null. So we have the property:
@@ -77,6 +79,44 @@ lib.runTests (
     testunix =
       with lib.systems.doubles;
       mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
+
+    # These tests guard against broken generation logic that moves a
+    # primary system into or out of a list erroneously.
+    test_platforms_containing_x86_64-linux = {
+      expr = platformsContaining "x86_64-linux";
+      expected = [
+        "all"
+        "gnu"
+        "linux"
+        "littleEndian"
+        "unix"
+        "x86"
+        "x86_64"
+      ];
+    };
+    test_platforms_containing_aarch64-linux = {
+      expr = platformsContaining "aarch64-linux";
+      expected = [
+        "aarch"
+        "aarch64"
+        "all"
+        "gnu"
+        "linux"
+        "littleEndian"
+        "unix"
+      ];
+    };
+    test_platforms_containing_aarch64-darwin = {
+      expr = platformsContaining "aarch64-darwin";
+      expected = [
+        "aarch"
+        "aarch64"
+        "all"
+        "darwin"
+        "littleEndian"
+        "unix"
+      ];
+    };
 
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
