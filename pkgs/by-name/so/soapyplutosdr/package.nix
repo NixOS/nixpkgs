@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyPlutoSDR";
-    rev = "soapy-plutosdr-${finalAttrs.version}";
+    tag = "soapy-plutosdr-${finalAttrs.version}";
     hash = "sha256-uXKvv/QRbYknqsLGlPFxSH7KLh0CucLjq4XEFFcieWw=";
   };
 
