@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>BundleProgram</key>
+  <string>Contents/Library/LoginItems/OpenLogi Agent.app/Contents/MacOS/openlogi-agent</string>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>Label</key>
+  <string>org.openlogi.agent.service</string>
+</dict>
+</plist>
