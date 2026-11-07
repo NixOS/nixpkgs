@@ -6,10 +6,13 @@ use DBD::SQLite;
 use String::ShellQuote;
 use Config;
 
+if (@ARGV < 1) {
+    print STDERR "command-not-found expects at least one argument.\n";
+    exit 127;
+}
 my $program = $ARGV[0];
 
 my $dbPath = "@dbPath@";
-
 if (! -e $dbPath) {
     print STDERR "$program: command not found\n";
     print STDERR "\n";
@@ -21,7 +24,8 @@ if (! -e $dbPath) {
     print STDERR "If you are using nix-channels you can run:\n";
     print STDERR "    sudo nix-channel --update\n";
     print STDERR "\n";
-    print STDERR "If you are using flakes, see nix-index and nix-index-database.\n";
+    print STDERR "If you are using flakes, see nix-index, nix-index-database, or use a channel tarball release.";
+    print STDERR "Channel tarball releases include the database `command-not-found' requires.\n";
     print STDERR "\n";
     print STDERR "If you would like to disable this message you can set:\n";
     print STDERR "    programs.command-not-found.enable = false;\n";
