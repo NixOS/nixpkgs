@@ -8,17 +8,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpff";
-  version = "20231205";
+  version = "20260926";
 
+  # fetchFromGitHub is not used because they're pre-processing the code before
+  # pushing the zip to releases (something to do with Microsoft vcprojs).
+  # If we don't do fetchzip, it won't compile.
   src = fetchzip {
     url = "https://github.com/libyal/libpff/releases/download/${finalAttrs.version}/libpff-alpha-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VrdfZRC2iwTfv3YrObQvIH9QZPTi9pUQoAyUcBVJyes=";
+    hash = "sha256-4lddoTUBmGXBFx1fvuki0IYxpal+pR6JC808ctFcckw=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
   ];
+
   outputs = [
     "bin"
     "dev"
