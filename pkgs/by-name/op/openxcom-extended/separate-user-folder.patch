@@ -1,0 +1,42 @@
+--- a/src/Engine/CrossPlatform.cpp
++++ b/src/Engine/CrossPlatform.cpp
+@@ -411,20 +411,20 @@
+ 	// Get user folders
+ 	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+  	{
+-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
++		snprintf(path, MAXPATHLEN, "%s/openxcom-extended/", xdg_data_home);
+  	}
+  	else
+  	{
+ #ifdef __APPLE__
+-		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
++		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom Extended/", home);
+ #else
+-		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
++		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom-extended/", home);
+ #endif
+  	}
+ 	list.push_back(path);
+ 
+ 	// Get old-style folder
+-	snprintf(path, MAXPATHLEN, "%s/.openxcom/", home);
++	snprintf(path, MAXPATHLEN, "%s/.openxcom-extended/", home);
+ 	list.push_back(path);
+ 
+ 	// Get working directory
+@@ -457,12 +457,12 @@
+ 	// Get config folders
+ 	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
+ 	{
+-		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
++		snprintf(path, MAXPATHLEN, "%s/openxcom-extended/", xdg_config_home);
+ 		return path;
+ 	}
+ 	else
+ 	{
+-		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
++		snprintf(path, MAXPATHLEN, "%s/.config/openxcom-extended/", home);
+ 		return path;
+ 	}
+ #endif
