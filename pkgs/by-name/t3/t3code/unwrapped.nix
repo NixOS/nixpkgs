@@ -1,6 +1,7 @@
 {
   cctools,
   copyDesktopItems,
+  desktop-file-utils,
   electron_44,
   fetchFromGitHub,
   installShellFiles,
@@ -18,6 +19,7 @@
   stdenv,
   writeDarwinBundle,
   xcbuild,
+  xdg-utils,
   fetchPnpmDeps,
   pnpm_12,
   pnpmConfigHook,
@@ -61,6 +63,9 @@ stdenv.mkDerivation (
       mkdir -p .generated/third-party-licenses/spdx/v3.28.0
       cp ${spdx-license-list-data.json}/json/details/*.json \
         .generated/third-party-licenses/spdx/v3.28.0
+
+      # The public identifiers are baked into the web client at build time.
+      cp .env.example .env
     '';
 
     nativeBuildInputs = [
@@ -168,7 +173,13 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0
+        --inherit-argv0 \
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix PATH : "${
+          lib.makeBinPath [
+            desktop-file-utils
+            xdg-utils
+          ]
+        }"''}
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
@@ -221,6 +232,7 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
+        mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];
 
