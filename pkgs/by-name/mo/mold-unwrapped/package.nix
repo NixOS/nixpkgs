@@ -42,8 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/{,ld.}mold
 
-    mkdir -p $out/lib/mold
-    mv $out/lib/mold-wrapper.so $out/lib/mold
+    ${lib.optionalString stdenv.targetPlatform.isLinux ''
+      mkdir -p $out/lib/mold
+      mv $out/lib/mold-wrapper.so $out/lib/mold
+    ''}
 
     installManPage docs/mold.1
     ln -s $out/share/man/man1/{,ld.}mold.1.gz
@@ -54,11 +56,55 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests =
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       let
         emulator = stdenv.hostPlatform.emulator buildPackages;
+        helloTest =
+          name: helloMold:
+          let
+            command = "$READELF -p .comment ${lib.getExe helloMold}";
+          in
+          runCommandCC "mold-${name}-test" { passthru = { inherit helloMold; }; } ''
+            echo "Testing running the 'hello' binary which should be linked with 'mold'" >&2
+            ${emulator} ${lib.getExe helloMold}
+
+            echo "Checking for mold in the '.comment' section" >&2
+            if output=$(${command} 2>&1); then
+              if grep -Fw -- "mold" - <<< "$output"; then
+                touch $out
+              else
+                echo "No mention of 'mold' detected in the '.comment' section" >&2
+                echo "The command was:" >&2
+                echo "${command}" >&2
+                echo "The output was:" >&2
+                echo "$output" >&2
+                exit 1
+              fi
+            else
+              echo -n "${command}" >&2
+              echo " returned a non-zero exit code." >&2
+              echo "$output" >&2
+              exit 1
+            fi
+          '';
       in
       {
+        adapter-gcc = helloTest "adapter-gcc" (
+          hello.override (old: {
+            stdenv = useMoldLinker gccStdenv;
+          })
+        );
+        adapter-llvm = helloTest "adapter-llvm" (
+          hello.override (old: {
+            stdenv = useMoldLinker clangStdenv;
+          })
+        );
+        wrapped = helloTest "wrapped" (
+          hello.overrideAttrs (previousAttrs: {
+            nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ mold ];
+            env.NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+          })
+        );
         run = runCommand "mold-run-test" { } ''
           ${emulator} ${lib.getExe mold-unwrapped} -run true
           if [[ "$?" == 0 ]]; then
@@ -66,56 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           fi
         '';
       }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux (
-        let
-          helloTest =
-            name: helloMold:
-            let
-              command = "$READELF -p .comment ${lib.getExe helloMold}";
-            in
-            runCommandCC "mold-${name}-test" { passthru = { inherit helloMold; }; } ''
-              echo "Testing running the 'hello' binary which should be linked with 'mold'" >&2
-              ${emulator} ${lib.getExe helloMold}
-
-              echo "Checking for mold in the '.comment' section" >&2
-              if output=$(${command} 2>&1); then
-                if grep -Fw -- "mold" - <<< "$output"; then
-                  touch $out
-                else
-                  echo "No mention of 'mold' detected in the '.comment' section" >&2
-                  echo "The command was:" >&2
-                  echo "${command}" >&2
-                  echo "The output was:" >&2
-                  echo "$output" >&2
-                  exit 1
-                fi
-              else
-                echo -n "${command}" >&2
-                echo " returned a non-zero exit code." >&2
-                echo "$output" >&2
-                exit 1
-              fi
-            '';
-        in
-        {
-          adapter-gcc = helloTest "adapter-gcc" (
-            hello.override (old: {
-              stdenv = useMoldLinker gccStdenv;
-            })
-          );
-          adapter-llvm = helloTest "adapter-llvm" (
-            hello.override (old: {
-              stdenv = useMoldLinker clangStdenv;
-            })
-          );
-          wrapped = helloTest "wrapped" (
-            hello.overrideAttrs (previousAttrs: {
-              nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ mold ];
-              env.NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
-            })
-          );
-        }
-      );
+    );
   };
 
   meta = {
