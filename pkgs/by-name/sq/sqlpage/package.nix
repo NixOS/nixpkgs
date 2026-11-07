@@ -2,6 +2,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
+  nix-update-script,
   nodejs,
   npmHooks,
   pkg-config,
@@ -47,13 +48,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
     downloadPage = "https://github.com/sqlpage/SQLpage";
     homepage = "https://sql-page.com";
     changelog = "https://github.com/sqlpage/SQLpage/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hythera ];
+    maintainers = with lib.maintainers; [
+      _81reap
+      hythera
+    ];
     mainProgram = "sqlpage";
   };
 })
