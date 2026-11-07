@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.9.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_cosmosdb";
     inherit version;
-    hash = "sha256-Rni/BCvcIIqiT8pxdnrCm28qJyKseHJgg3Glki87bDc=";
+    hash = "sha256-+fXpy8mErTzz+b37hT7D6Giw6J6cJZfeTUKfpmAsqNk=";
   };
 
   build-system = [ setuptools ];
