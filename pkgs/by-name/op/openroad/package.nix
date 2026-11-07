@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   yaml-cpp,
 
   # nativeBuildInputs
@@ -44,7 +43,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openroad";
-  version = "26Q3";
+  version = "26Q4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "OpenROAD";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-jElAb8mM2lhGwa8wTONfQgs7esL9p1beAReJXAWns9o=";
+    hash = "sha256-6DTXTlgRysxhphUx3TyZvC5p8rZ/XkHxJriLHLD8V20=";
   };
 
   nativeBuildInputs = [
@@ -109,18 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
-
-  patches = [
-    # Fix UB in OpenSTA dcalc tests: fake Pin* pointers dereference via
-    # PinIdLess comparator, crashing with GCC 15's hardened vector bounds check.
-    # https://github.com/The-OpenROAD-Project/OpenSTA/pull/346
-    (fetchpatch {
-      url = "https://github.com/gonsolo/OpenSTA/commit/0e40b4f8a1c4b6af7225da31cd88a1d29d8a04a2.patch";
-      hash = "sha256-W9USjqp/hL1s3w3nKVMo/a5aSkeQ4Lp7gqASbZSlo9Y=";
-      stripLen = 1;
-      extraPrefix = "src/sta/";
-    })
-  ];
 
   postPatch = ''
     patchShebangs etc/
@@ -183,6 +170,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase = ''
     runHook preCheck
+    # New in 26Q4: several gui.*_headless tests start a real QApplication,
+    # which needs a Qt platform plugin even though the sandbox has no display.
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix}
     make test
     runHook postCheck
   '';
