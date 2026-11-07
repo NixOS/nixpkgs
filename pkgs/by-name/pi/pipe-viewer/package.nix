@@ -52,6 +52,9 @@ perlPackages.buildPerlModule rec {
     hash = "sha256-24y/4NfGAyGkn9kUnuEoibkzUPBkgabE/Jp7NUNIHco=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
   buildInputs = [
