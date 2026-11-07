@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  callPackage,
   steam-unwrapped,
   buildFHSEnv,
   writeShellScript,
@@ -142,68 +144,71 @@ let
       }
     );
 in
-buildRuntimeEnv {
-  pname = "steam";
-  inherit (steam-unwrapped) version meta;
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { }
+else
+  buildRuntimeEnv {
+    pname = "steam";
+    inherit (steam-unwrapped) version meta;
 
-  extraPkgs = pkgs: [ steam-unwrapped ] ++ extraPkgs pkgs;
-  inherit
-    extraLibraries
-    extraProfile
-    extraPreBwrapCmds
-    extraBwrapArgs
-    extraEnv
-    privateTmp
-    ;
+    extraPkgs = pkgs: [ steam-unwrapped ] ++ extraPkgs pkgs;
+    inherit
+      extraLibraries
+      extraProfile
+      extraPreBwrapCmds
+      extraBwrapArgs
+      extraEnv
+      privateTmp
+      ;
 
-  runScript = writeShellScript "steam-wrapped" ''
-    exec steam ${extraArgs} "$@"
-  '';
+    runScript = writeShellScript "steam-wrapped" ''
+      exec steam ${extraArgs} "$@"
+    '';
 
-  extraInstallCommands = ''
-    ln -s ${steam-unwrapped}/share $out/share
-  '';
+    extraInstallCommands = ''
+      ln -s ${steam-unwrapped}/share $out/share
+    '';
 
-  passthru =
-    let
-      makeSteamRun =
-        package:
-        buildRuntimeEnv {
-          inherit (steam-unwrapped) version;
-          pname = "steam-run";
+    passthru =
+      let
+        makeSteamRun =
+          package:
+          buildRuntimeEnv {
+            inherit (steam-unwrapped) version;
+            pname = "steam-run";
 
-          extraPkgs = pkgs: package ++ extraPkgs pkgs;
+            extraPkgs = pkgs: package ++ extraPkgs pkgs;
 
-          inherit
-            extraLibraries
-            extraProfile
-            extraPreBwrapCmds
-            extraBwrapArgs
-            extraEnv
-            privateTmp
-            ;
+            inherit
+              extraLibraries
+              extraProfile
+              extraPreBwrapCmds
+              extraBwrapArgs
+              extraEnv
+              privateTmp
+              ;
 
-          runScript = writeShellScript "steam-run" ''
-            if [ $# -eq 0 ]; then
-              echo "Usage: steam-run command-to-run args..." >&2
-              exit 1
-            fi
+            runScript = writeShellScript "steam-run" ''
+              if [ $# -eq 0 ]; then
+                echo "Usage: steam-run command-to-run args..." >&2
+                exit 1
+              fi
 
-            exec "$@"
-          '';
+              exec "$@"
+            '';
 
-          meta = {
-            description = "Run commands in the same FHS environment that is used for Steam";
-            mainProgram = "steam-run";
-            name = "steam-run";
-            license = lib.licenses.mit;
+            meta = {
+              description = "Run commands in the same FHS environment that is used for Steam";
+              mainProgram = "steam-run";
+              name = "steam-run";
+              license = lib.licenses.mit;
+            };
           };
-        };
-    in
-    {
-      inherit buildRuntimeEnv;
+      in
+      {
+        inherit buildRuntimeEnv;
 
-      run = makeSteamRun [ steam-unwrapped ];
-      run-free = makeSteamRun [ ];
-    };
-}
+        run = makeSteamRun [ steam-unwrapped ];
+        run-free = makeSteamRun [ ];
+      };
+  }
