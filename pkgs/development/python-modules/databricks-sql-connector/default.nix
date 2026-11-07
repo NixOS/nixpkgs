@@ -21,19 +21,20 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "4.2.4";
+  version = "4.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
     tag = "v${version}";
-    hash = "sha256-QoauhA2Zx2UvlCuKe9mxaOFJKpglVHQmPVVS56np4A0=";
+    hash = "sha256-ostwH82yth1ho8gfWty33NoxU1KipYsMvXf7yHLDauc=";
   };
 
   pythonRelaxDeps = [
     "pandas"
     "pyarrow"
+    "python-dateutil"
     "thrift"
   ];
 
@@ -60,6 +61,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   enabledTestPaths = [ "tests/unit" ];
+
+  disabledTests = [
+    # AssertionError: A fake module is shadowing the native kernel
+    "test_async_cursor_refetch_preserves_session"
+    "test_async_cursor_reads_overlap_owner_poll"
+  ];
 
   pythonImportsCheck = [ "databricks" ];
 
