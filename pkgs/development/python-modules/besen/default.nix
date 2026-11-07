@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "besen";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moryoav";
     repo = "besen";
     tag = "library-v${finalAttrs.version}";
-    hash = "sha256-qXvp0tP+KoSdm+Hbq+TAFodvEJK8M0x1YrZiMYv5CPY=";
+    hash = "sha256-ST1tyU83wEvHjOG873mnZJXQgwnaCUaFtizITBo66n0=";
   };
 
   build-system = [ setuptools ];
