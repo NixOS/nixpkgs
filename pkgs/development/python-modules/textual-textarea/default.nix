@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
-  version = "0.18.5";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Te4CJHRavdaQuSPhmR2KhuLJL1dASC30b2r0MiiCy0g=";
+    hash = "sha256-ZDB7gUr86aYLr0LasGXwkeiXETQkghlXUrBfOs6KQMQ=";
   };
 
   build-system = [ hatchling ];
