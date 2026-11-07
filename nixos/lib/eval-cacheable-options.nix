@@ -12,10 +12,15 @@ let
   modulesPath = "${nixosPath}/modules";
   # dummy pkgs set that contains no packages, only `pkgs.lib` from the full set.
   # not having `pkgs.lib` causes all users of `pkgs.formats` to fail.
-  pkgs = import pkgsLibPath {
-    inherit lib;
-    pkgs = null;
-  };
+  # The set is its own `pkgs`, so that `pkgs.configFiles` can use
+  # `pkgs.generatedFiles`, and give `formats` to its `moduleFiles`.
+  pkgs = lib.fix (
+    self:
+    import pkgsLibPath {
+      inherit lib;
+      pkgs = self;
+    }
+  );
   utils = import "${nixosPath}/lib/utils.nix" {
     inherit config lib;
     pkgs = null;
