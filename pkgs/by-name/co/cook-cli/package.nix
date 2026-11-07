@@ -24,6 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "sync"
+    "server"
+    "import"
+    "lsp"
+  ];
 
   nativeBuildInputs = [
     pkg-config
