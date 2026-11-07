@@ -1,20 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  build,
+  callPackage,
 
   # build-system
-  apache-tvm-ffi,
-  numpy,
-  nvidia-ml-py,
-  packaging,
-  requests,
   setuptools,
+  wheel,
   torch,
-  tqdm,
 
-  # nativeBuildInputs
-  ninja,
   cudaPackages,
 
   # dependencies
@@ -28,13 +21,7 @@
   cudaCapabilities ? torch.cudaCapabilities,
 }:
 
-buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
-  pname = "flashinfer-jit-cache";
-  # flashinfer requires the exact same version for the jit cache
-  inherit (flashinfer-python) version src;
-  pyproject = true;
-  __structuredAttrs = true;
-
+let
   # Same source as flashinfer-python: also apply its patches
   inherit (flashinfer-python) patches;
 
@@ -49,78 +36,42 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
           "if has_sm80 or has_sm90 or has_sm100 or has_sm103 or has_sm107 or has_sm110 or has_sm120 or has_sm121: jit_specs.append(gen_fp4_kv_dequantization_module())"
     '';
 
+  # The `flashinfer-jit-cache` distribution is only a shim discovering the per-architecture
+  # providers (`flashinfer-jit-cache-smXX`) which contain the AOT-compiled kernels.
+  # Each provider is built in its own derivation, so that they build in parallel.
+  providers = lib.genAttrs cudaCapabilities (
+    cudaCapability: callPackage ./provider.nix { inherit cudaCapability patches postPatch; }
+  );
+in
+buildPythonPackage (finalAttrs: {
+  pname = "flashinfer-jit-cache";
+  # flashinfer requires the exact same version for the jit cache
+  inherit (flashinfer-python) version src;
+  pyproject = true;
+  __structuredAttrs = true;
+
+  inherit patches postPatch;
+
   build-system = [
-    apache-tvm-ffi
-    numpy
-    nvidia-ml-py
-    packaging
-    requests
     setuptools
-    torch
-    tqdm
-  ];
-
-  nativeBuildInputs = [
-    build
-    ninja
-    (lib.getBin cudaPackages.cuda_nvcc)
-  ];
-
-  buildInputs = with cudaPackages; [
-    cccl
-    cuda_cudart
-    libcublas
-    libcurand
+    wheel
   ];
 
   env = {
-    # The JIT compiler expects a regular CUDA toolkit layout (`bin/nvcc`, `include`, `lib64`)
-    CUDA_HOME = flashinfer-python.cudaHome;
     # Dependencies of the shim: one `flashinfer-jit-cache-smXX` provider per architecture
     FLASHINFER_JIT_CACHE_PROVIDER_ARCHS = lib.concatStringsSep " " cudaCapabilities;
-    # The trtllm-gen/DeepGEMM artifacts come from `flashinfer-cubin`: fail early if one is missing
-    # instead of retrying to download it in the sandbox
-    FLASHINFER_NO_DOWNLOAD = "1";
   };
-  # Exposed as a bash array (`__structuredAttrs`) to build one provider per architecture
-  inherit cudaCapabilities;
 
-  preBuild =
-    # Otherwise, fails at build time with:
-    #   PermissionError: [Errno 13] Permission denied: '/homeless-shelter'
-    ''
-      export FLASHINFER_WORKSPACE_BASE=$(mktemp -d)
-    ''
-    # Otherwise, ninja uses all the available cores
-    + ''
-      export MAX_JOBS=$NIX_BUILD_CORES
-    ''
-    # The `flashinfer-jit-cache` distribution is only a shim discovering the per-architecture
-    # providers (`flashinfer-jit-cache-smXX`) which contain the AOT-compiled kernels.
-    # Build one provider wheel per architecture, all installed alongside the shim, as they share the
-    # `flashinfer_jit_cache` python package.
-    + ''
-      for arch in "''${cudaCapabilities[@]}"; do
-        nixLog "Building flashinfer-jit-cache provider for CUDA architecture $arch"
-
-        FLASHINFER_JIT_CACHE_PROVIDER_ARCH="$arch" \
-          pyproject-build --no-isolation --skip-dependency-check --wheel --outdir dist/ \
-          flashinfer-jit-cache-provider
-
-        # Do not leak build artifacts into the next provider
-        rm -rf \
-          flashinfer-jit-cache-provider/build \
-          flashinfer-jit-cache-provider/*.egg-info \
-          flashinfer-jit-cache-provider/flashinfer_jit_cache_provider/jit_cache \
-          flashinfer-jit-cache-provider/flashinfer_jit_cache_provider/manifest.json
-      done
-    '';
+  # Only the (pure metadata) shim is built here. The providers' wheels are installed alongside it,
+  # as `pypaInstallPhase` installs every wheel in dist/.
+  preBuild = ''
+    mkdir -p dist
+  ''
+  + lib.concatMapStrings (provider: ''
+    cp ${provider}/*.whl dist/
+  '') (lib.attrValues providers);
 
   pypaBuildFlags = [ "flashinfer-jit-cache" ];
-
-  # The AOT modules reference template instantiations that are never called (nor compiled).
-  # This only works with lazy binding, which `bindnow` (`-z now`) breaks: "undefined symbol".
-  hardeningDisable = [ "bindnow" ];
 
   dependencies = [
     # Provides the trtllm-gen/DeepGEMM artifacts (headers, checksums.txt and cubins), both when
@@ -129,7 +80,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     flashinfer-python
   ];
 
-  # The shim only depends on the providers, which are built (but not yet installed) alongside it
+  # The shim only depends on the providers, which are installed alongside it
   dontCheckRuntimeDeps = true;
 
   pythonImportsCheck = [ "flashinfer_jit_cache" ];
@@ -143,6 +94,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     assert len(providers) == ${toString (lib.length cudaCapabilities)}, providers
     EOF
   '';
+
+  passthru.providers = providers;
 
   passthru.gpuCheck =
     (cudaPackages.writeGpuTestPython
