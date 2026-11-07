@@ -6,7 +6,7 @@
 }:
 
 python3Packages.buildPythonPackage rec {
-  pname = "sosreport";
+  pname = "sos";
   version = "4.11.2";
   pyproject = true;
 
