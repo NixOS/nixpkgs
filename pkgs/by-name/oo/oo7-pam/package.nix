@@ -3,6 +3,7 @@
   meson,
   ninja,
   oo7,
+  pam,
   pkg-config,
   rustPlatform,
   rustc,
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    pam
     systemdLibs
   ];
 
