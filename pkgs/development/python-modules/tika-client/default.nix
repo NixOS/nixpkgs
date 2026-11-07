@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
     tag = version;
-    hash = "sha256-ZXtNHjdbAzur6lRZIom+wDMhXgpqQxvHPQMxjXJDwlw=";
+    hash = "sha256-yJvjT2VFxGEmszNxtNuiUNMP9gtlvM7WoULW9cSL5Lg=";
   };
 
   build-system = [ hatchling ];
