@@ -1,61 +1,86 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "brig";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "sahib";
+    owner = "brig-sh";
     repo = "brig";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0gi39jmnzqrgj146yw8lcmgmvzx7ii1dgw4iqig7kx8c0jiqi600";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HPkr/fHTi8QHIR09PVTDMAPefdtV6K9kYXVLdtbPupY=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-513twbhAd5XxpvGisWoCGwmIFtK0fypViOOBpMNjNEQ=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  subPackages = [
+    "cmd/brig"
+    "cmd/brigd"
+    "cmd/brig-broker"
+  ];
 
-  subPackages = [ "." ];
+  env.CGO_ENABLED = 0;
 
+  # The binary reads the tag and commit the Go toolchain embeds from a git
+  # checkout. A tarball carries none, so the values are passed here, the way
+  # the upstream Makefile does for a worktree. Without them `brig version`
+  # prints "dev".
   ldflags = [
     "-s"
     "-w"
-  ]
-  ++ lib.mapAttrsToList (n: v: "-X github.com/sahib/brig/version.${n}=${v}") {
-    Major = lib.versions.major finalAttrs.version;
-    Minor = lib.versions.minor finalAttrs.version;
-    Patch = lib.versions.patch finalAttrs.version;
-    ReleaseType = "";
-    BuildTime = "1970-01-01T00:00:00+0000";
-    GitRev = finalAttrs.src.rev;
-  };
+    "-X github.com/brig-sh/brig/internal/buildinfo.gitCommit=8059e00a8a8741a94177aa19626886f63eb396e1"
+    "-X github.com/brig-sh/brig/internal/buildinfo.gitCommitTime=2026-10-31T12:08:40Z"
+    "-X github.com/brig-sh/brig/internal/buildinfo.gitDescribe=v${finalAttrs.version}-0-g8059e00"
+  ];
 
-  postInstall = ''
-    installShellCompletion --cmd brig \
-      --bash $src/autocomplete/bash_autocomplete \
-      --zsh $src/autocomplete/zsh_autocomplete
+  nativeBuildInputs = [ installShellFiles ];
+
+  # The tests are written for a source checkout: one of them expects a test
+  # binary built from a tarball to carry no commit. The stamped values above
+  # are for the shipped binaries only.
+  preCheck = ''
+    ldflags="-s -w"
   '';
 
-  # There are no tests for the brig executable.
-  doCheck = false;
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd brig \
+      --bash <($out/bin/brig completion bash) \
+      --fish <($out/bin/brig completion fish) \
+      --zsh <($out/bin/brig completion zsh)
+  '';
+
+  # On darwin the secret store tests write to the real login keychain.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "File synchronization on top of IPFS with a git-like interface and a FUSE filesystem";
+    description = "Run coding agents in a microVM sandbox";
     longDescription = ''
-      brig is a distributed and secure file synchronization tool with a version
-      control system. It is based on IPFS, written in Go and will feel familiar
-      to git users. Think of it as a swiss army knife for file synchronization
-      or as a peer to peer alternative to Dropbox.
+      Brig boots a coding agent in a microVM and hands it a project directory
+      and named credentials, nothing else. This package holds the brig CLI,
+      the brigd session daemon and the brig-broker credential broker. It does
+      not include a runtime: on Linux Brig drives nerdctl with the urunc shim,
+      on macOS the hull runtime. `brig doctor` reports what is missing, and
+      https://brig.sh/docs/install/ says how to install the runtime.
     '';
-    homepage = "https://brig.readthedocs.io";
-    changelog = "https://github.com/sahib/brig/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    homepage = "https://brig.sh";
+    changelog = "https://github.com/brig-sh/brig/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     mainProgram = "brig";
+    maintainers = with lib.maintainers; [ pmoust ];
+    platforms = lib.platforms.unix;
   };
 })
