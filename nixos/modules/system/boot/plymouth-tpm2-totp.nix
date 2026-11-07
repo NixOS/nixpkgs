@@ -20,6 +20,7 @@ in
   meta = {
     maintainers = with lib.maintainers; [ majiir ];
     doc = ./plymouth-tpm2-totp.md;
+    # tested by nixosTests.tpm2-totp.plymouth
   };
 
   config = lib.mkIf cfg.enable {
