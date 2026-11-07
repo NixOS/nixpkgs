@@ -20,9 +20,7 @@ let
   opts =
     if routerFeatures then
       {
-        prePatch = ''
-          substituteInPlace ./setup.py --replace-fail "extra_deps = []" "extra_deps = router_feature_deps"
-        '';
+        prePatch = "";
         extraBuildInputs = [
           janus
           ncclient
