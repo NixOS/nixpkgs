@@ -60,7 +60,7 @@ buildVscode {
     description = "Agentic development platform, evolving the IDE into the agent-first era";
     homepage = "https://antigravity.google/product/antigravity-ide";
     downloadPage = "https://antigravity.google/download#antigravity-ide";
-    changelog = "https://antigravity.google/changelog";
+    changelog = "https://antigravity.google/docs/changelog?tab=ide";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
