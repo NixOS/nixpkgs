@@ -37,13 +37,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       TERRACOTTA_ET_EXE = "${easytier}/bin/easytier-core";
       TERRACOTTA_ET_CLI = "${easytier}/bin/easytier-cli";
     })
+    # TODO: Remove once upstream bundles EasyTier > 2.7.0 with the fix.
+    # EasyTier 2.7.0+ treats CLI-based configurations as read-only, causing
+    # Terracotta to panic when dynamically adding port forwarding rules.
+    ./writable-easytier-config.patch
   ];
 
   postPatch = ''
     # remove android-specific git dependency
     sed -i '/EasyTier.git/d' Cargo.toml
 
-    ln -s ${./Cargo.lock} Cargo.lock
+    cp ${./Cargo.lock} Cargo.lock
+    chmod u+w Cargo.lock
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     daemon_plist="$out/Library/LaunchAgents/org.nixos.terracotta.daemon.plist"
