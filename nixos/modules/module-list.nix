@@ -778,6 +778,7 @@
   ./services/home-automation/matter-server.nix
   ./services/home-automation/matterjs-server.nix
   ./services/home-automation/openthread-border-router.nix
+  ./services/home-automation/weewx.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix
   ./services/home-automation/wyoming/piper.nix
