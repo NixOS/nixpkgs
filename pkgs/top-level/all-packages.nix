@@ -2054,11 +2054,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5-threadsafe = hdf5.override {
-    cppSupport = false;
-    threadsafe = true;
-  };
-
   host = bind.host;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
