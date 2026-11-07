@@ -131,7 +131,7 @@ in
               CertPath = "/path/to/cert.pem";
               KeyPath = "/path/to/cert.key";
             };
-            Database.cockroach.Host = "db.example.com";
+            Database.postgres.Host = "db.example.com";
           };
         '';
         description = ''
