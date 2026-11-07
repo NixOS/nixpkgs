@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rapids-cmake";
-  version = "26.08.00";
+  version = "26.10.00";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "rapidsai";
     repo = "rapids-cmake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bkdeEr7nXL59WTv5x6EsHENuFft41mC4hD3Ke73NVjA=";
+    hash = "sha256-6w90XfVJPL05pMyVV2AaCi9PRkECfMDz3qM3Lfb3pc0=";
   };
 
   dontConfigure = true;
