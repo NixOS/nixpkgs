@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pylint,
   pylint-plugin-utils,
   pytestCheckHook,
   setuptools,
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    pylint
     pylint-plugin-utils
   ];
 
