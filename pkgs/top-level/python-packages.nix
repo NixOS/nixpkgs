@@ -20645,6 +20645,8 @@ self: super: with self; {
 
   tatsu-lts = callPackage ../development/python-modules/tatsu-lts { };
 
+  tavily-python = callPackage ../development/python-modules/tavily-python { };
+
   taxi = callPackage ../development/python-modules/taxi { };
 
   taxii2-client = callPackage ../development/python-modules/taxii2-client { };
