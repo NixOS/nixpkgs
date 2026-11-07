@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dparse";
-  version = "0.6.4";
+  version = "0.6.4.dev42";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "dparse";
     tag = version;
-    hash = "sha256-LnsmJtWLjV3xoSjacfR9sUwPlOjQTRBWirJVtIJSE8A=";
+    hash = "sha256-9xX9OYIRyDU2d/gk2e4lDwgMbjGd2QMAk3OllhtPw38=";
   };
 
   build-system = [ hatchling ];
