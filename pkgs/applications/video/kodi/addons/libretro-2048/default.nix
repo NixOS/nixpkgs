@@ -19,10 +19,10 @@ buildKodiBinaryAddon rec {
   };
 
   extraCMakeFlags = [
-    "-D2048_LIB=${twenty-fortyeight}/lib/retroarch/cores/2048_libretro.so"
+    "-D2048_LIB=${lib.getLib twenty-fortyeight}/lib/retroarch/cores/2048_libretro.so"
   ];
 
-  extraBuildInputs = [ twenty-fortyeight ];
+  extraBuildInputs = [ (lib.getLib twenty-fortyeight) ];
   propagatedBuildInputs = [
     libretro
   ];
