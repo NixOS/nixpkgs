@@ -54,23 +54,21 @@ in
     };
   };
 
-  nodes.alice =
-    { pkgs, ... }:
-    {
-      environment.etc."gitconfig".text = ''
-        [init]
-          defaultBranch = main
-        [user]
-          email = root@alice
-          name = alice
-      '';
+  nodes.alice = { pkgs, ... }: {
+    environment.etc."gitconfig".text = ''
+      [init]
+        defaultBranch = main
+      [user]
+        email = root@alice
+        name = alice
+    '';
 
-      environment.systemPackages = with pkgs; [
-        gitMinimal
-        radicle-node
-        radicle-job
-      ];
-    };
+    environment.systemPackages = with pkgs; [
+      gitMinimal
+      radicle-node
+      radicle-job
+    ];
+  };
 
   interactive.sshBackdoor.enable = true;
   interactive.defaults.virtualisation.graphics = false;
