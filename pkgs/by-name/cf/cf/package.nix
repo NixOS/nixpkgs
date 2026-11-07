@@ -9,6 +9,8 @@
   nodejs,
   makeBinaryWrapper,
   installShellFiles,
+  jq,
+  moreutils,
   autoPatchelfHook,
   patchelfUnstable,
   cacert,
@@ -51,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     makeBinaryWrapper
     installShellFiles
+    jq
+    moreutils
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -77,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     pnpm config set --location=project injectWorkspacePackages true
     pnpm --filter cf --prod deploy $out/lib/cf
+    # pnpm deploy writes these in a nondeterministic order. The workspace
+    # file only holds build settings and is not read at runtime.
+    rm $out/lib/cf/pnpm-workspace.yaml
+    jq '.dependencies |= (to_entries | sort_by(.key) | from_entries)' \
+      $out/lib/cf/package.json | sponge $out/lib/cf/package.json
     # Replace workerd's postinstall copy with a link to its platform package.
     for workerd in $out/lib/cf/node_modules/.pnpm/workerd@*/node_modules/workerd; do
       ln -sfr "$workerd"/../@cloudflare/workerd-*/bin/workerd "$workerd/bin/workerd"
