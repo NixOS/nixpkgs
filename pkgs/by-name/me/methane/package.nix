@@ -73,6 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "methane";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })
