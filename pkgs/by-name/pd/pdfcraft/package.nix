@@ -17,6 +17,8 @@
   wayland,
   dbus,
   craft-fonts,
+  xcbuild,
+  rcodesign,
 
   nix-update-script,
 }:
@@ -74,14 +76,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     patchelf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.pdfcraft.desktop \
-      $out/share/applications/ai.storyteller.pdfcraft.desktop
-    mkdir -p $out/share/icons
-    cp -R assets/app-icon/hicolor $out/share/icons/
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 packaging/linux/ai.storyteller.pdfcraft.desktop \
+        $out/share/applications/ai.storyteller.pdfcraft.desktop
+      mkdir -p $out/share/icons
+      cp -R assets/app-icon/hicolor $out/share/icons/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/PdfCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/pdfcraft $out/Applications/PdfCraft.app/Contents/MacOS/PdfCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/pdfcraft.icns $APP/Contents/Resources/PdfCraft.icns
+      cp $NIX_BUILD_TOP/source/NOTICE $NIX_BUILD_TOP/source/packaging/macos/Credits.rtf $APP/Contents/Resources/
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/PdfCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/pdfcraft
