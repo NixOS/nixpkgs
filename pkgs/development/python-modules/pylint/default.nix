@@ -13,7 +13,7 @@
   pyprojectVersionPatchHook,
   pytest-timeout,
   pytest-xdist,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonAtLeast,
   requests,
   setuptools,
@@ -47,13 +47,18 @@ buildPythonPackage (finalAttrs: {
     tomlkit
   ];
 
+  pythonRelaxDeps = [
+    "astroid"
+    "isort"
+  ];
+
   nativeCheckInputs = [
     gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     py
     pytest-timeout
     pytest-xdist
-    pytest7CheckHook
+    pytestCheckHook
     requests
     typing-extensions
     writableTmpDirAsHomeHook
