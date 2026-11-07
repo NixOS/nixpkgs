@@ -22,5 +22,8 @@
     "@unrs/resolver-binding-darwin-x64": "^1.12.2",
     "@unrs/resolver-binding-linux-x64-gnu": "^1.12.2",
     "@unrs/resolver-binding-win32-arm64-msvc": "^1.12.2"
+  },
+  "dependencies": {
+    "tinydate": "github:lukeed/tinydate#v1.3.0"
   }
 }
