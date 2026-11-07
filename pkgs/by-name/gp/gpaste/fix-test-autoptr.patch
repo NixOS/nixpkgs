@@ -1,0 +1,11 @@
+--- a/tests/clipboard/test-clipboard.c
++++ b/tests/clipboard/test-clipboard.c
+@@ -7,7 +7,7 @@
+ content_for (gboolean images_support,
+              ...)
+ {
+-    g_autoptr (GdkContentFormatsBuilder) builder = gdk_content_formats_builder_new ();
++    GdkContentFormatsBuilder *builder = gdk_content_formats_builder_new ();
+     va_list types;
+ 
+     va_start (types, images_support);
