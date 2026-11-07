@@ -614,7 +614,7 @@ rec {
         "babashka"
       ])
       // {
-        interpreter = "${lib.getExe babashka}";
+        interpreter = "${lib.getExe babashka} --config nil";
       }
     ) name;
 
