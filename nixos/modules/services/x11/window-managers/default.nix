@@ -39,6 +39,7 @@ in
     ./spectrwm.nix
     ./tinywm.nix
     ./twm.nix
+    ./twmx.nix
     ./windowmaker.nix
     ./wmderland.nix
     ./wmii.nix
