@@ -7,12 +7,13 @@
   opencv-python,
   lxml,
   xmljson,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "imantics";
-  version = "0.1.12";
+  version = "0.1.12-unstable-2020-09-17";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,6 +30,11 @@ buildPythonPackage {
     opencv-python
     lxml
     xmljson
+  ];
+
+  nativeBuildInputs = [
+    # The 'imantics' derivation has version '0.1.12' but .dist-info/METADATA specifies version '0.1.13'.
+    pyprojectVersionPatchHook
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
