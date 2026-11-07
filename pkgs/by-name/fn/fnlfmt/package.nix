@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnlfmt";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = "fnlfmt";
     tag = finalAttrs.version;
-    hash = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
+    hash = "sha256-8ZDT7CVWWKaFclU4yCgT9JUR+jCwMrA+6F11os65JHQ=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
