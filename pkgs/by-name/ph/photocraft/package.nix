@@ -20,6 +20,8 @@
   vulkan-loader,
   wayland,
   nix-update-script,
+  xcbuild,
+  rcodesign,
 }:
 
 let
@@ -70,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchelf
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    rcodesign
   ];
 
   desktopItems = [
@@ -128,11 +134,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.photocraft.mime.xml $out/share/mime/packages/ai.storyteller.photocraft.xml
-    mkdir -p $out/share/icons
-    cp -R assets/app-icon/hicolor $out/share/icons/
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 packaging/linux/ai.storyteller.photocraft.mime.xml $out/share/mime/packages/ai.storyteller.photocraft.xml
+      mkdir -p $out/share/icons
+      cp -R assets/app-icon/hicolor $out/share/icons/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP="$out/Applications/PhotoCraft.app"
+
+      mkdir -p $APP/Contents/{MacOS,Resources}
+
+      ln -s $out/bin/photocraft $out/Applications/PhotoCraft.app/Contents/MacOS/PhotoCraft
+
+      cp $NIX_BUILD_TOP/source/assets/app-icon/photocraft.icns $APP/Contents/Resources/PhotoCraft.icns
+      cp $NIX_BUILD_TOP/source/NOTICE $NIX_BUILD_TOP/source/ATTRIBUTION.md $APP/Contents/Resources/
+
+      sed -e "s/@VERSION@/${finalAttrs.version}/g" -e "s/@SHORT_VERSION@/${finalAttrs.version}/g" \
+        -e "s/@BUILD_SHA@/unknown}/g" \
+        "$NIX_BUILD_TOP/source/packaging/macos/Info.plist.in" >"$APP/Contents/Info.plist"
+      plutil -lint "$APP/Contents/Info.plist"
+
+      printf 'APPL????' >"$APP/Contents/PkgInfo"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP/Contents/MacOS/PhotoCraft"
+      rcodesign sign \
+        --code-signature-flags runtime \
+        --entitlements-xml-file "$NIX_BUILD_TOP/source/packaging/macos/entitlements.plist" \
+        "$APP"
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${lib.makeLibraryPath runtimeDeps} $out/bin/photocraft
