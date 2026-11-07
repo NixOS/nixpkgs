@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
+  pythonAtLeast,
   setuptools,
 
   # passthru tests
@@ -14,6 +15,8 @@ buildPythonPackage (finalAttrs: {
   pname = "dill";
   version = "0.4.1";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
