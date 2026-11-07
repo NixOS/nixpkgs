@@ -27,13 +27,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amethyst-mod-manager";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "ChrisDKN";
     repo = "Amethyst-Mod-Manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WBJD122Mff9BTqmSWtVTNAwDLQmnChq/fPNLoJsVZzQ=";
+    hash = "sha256-uF7B/lJIy96d9yKMLP/80FR5LgyX34MnxarMlSvx2Y0=";
   };
 
   __structuredAttrs = true;
@@ -99,6 +99,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       # requirements-vendor.txt
       py7zr
+      rarfile
       pillow
       lz4
       zstandard
