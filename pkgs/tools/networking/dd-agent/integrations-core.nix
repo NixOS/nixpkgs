@@ -57,8 +57,9 @@ let
     python3Packages.buildPythonPackage (
       args
       // {
-        inherit src version;
-        name = "datadog-integration-${pname}-${version}";
+        inherit src;
+        version = args.version or version;
+        name = "datadog-integration-${pname}-${args.version or version}";
         pyproject = true;
 
         sourceRoot = "${src.name}/${args.sourceRoot or pname}";
@@ -72,7 +73,8 @@ let
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
-    pname = "checks-base";
+    pname = "datadog-checks-base";
+    version = "37.18.1";
     sourceRoot = "datadog_checks_base";
 
     dependencies = with python3Packages; [
