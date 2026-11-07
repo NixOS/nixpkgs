@@ -162,6 +162,8 @@ in
   );
   fetchPypiLegacy = recurseIntoAttrs (callPackages ../build-support/fetchpypilegacy/tests.nix { });
 
+  generate-shell-completions = recurseIntoAttrs pkgs.generateShellCompletions.passthru.tests;
+
   install-shell-files = recurseIntoAttrs (callPackage ./install-shell-files { });
 
   checkpointBuildTools = callPackage ./checkpointBuild { };
