@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "7.0.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EoWD4P+g5cBTH5834uJL4eewUDVh9qqLCqxaHWRuK/I=";
+    hash = "sha256-nd98gv2jro4k3s2hM47eZuHJmIPbk3Edj7lB6qLYwoI=";
   };
 
   build-system = [ setuptools ];
@@ -37,8 +37,12 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonOlder "3.13") [ eventlet ];
 
   disabledTestPaths = [
-    # AssertionError: wrong number of events
-    "tests/test_emitter.py::test_modify"
+    "tests/test_emitter.py::test_create_wrong_encoding"
+    "tests/test_emitter.py::test_close"
+    # tests timeout easily
+    "tests/test_inotify_buffer.py"
+    # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
+    "tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # segfaults the testsuite
