@@ -64,6 +64,16 @@ symlinkJoin (
         stdenv.cc.cc.lib
       ];
 
+      postPatch = ''
+        # discovery.rs hardcodes the system provider scan path to
+        # /usr/lib/rosec/providers. Repoint it at this derivation's output so
+        # providers baked into $out are discovered. This is a text
+        # substitution before compilation, so the store-path length is not a
+        # problem.
+        substituteInPlace rosec-wasm/src/discovery.rs \
+          --replace-fail '/usr/lib/rosec/providers' "$out/lib/rosec/providers"
+      '';
+
       preCheck = ''
         export $(dbus-launch --config-file=${dbus}/share/dbus-1/session.conf)
         # rosec-vault sidecar tests require writable xdg data directory
@@ -77,6 +87,15 @@ symlinkJoin (
         mkdir -p $out/share/systemd/user
 
         mv $out/bin/rosec-pam-unlock $out/libexec/rosec/
+
+        # Bake any caller-supplied providers into the system provider dir that
+        # SYSTEM_PLUGIN_DIR (patched in postPatch) now points at, so the daemon
+        # discovers them without any user-dir copies.
+        for p in ${builtins.toString provider}; do
+          for f in "$p"/lib/rosec/providers/*; do
+            ln -s "$f" "$out/lib/rosec/providers/"
+          done
+        done
 
         # `rosec enable` writes the D-Bus, systemd user unit and xdg portal
         # registrations to $XDG_CONFIG_HOME and $XDG_DATA_HOME, which are
@@ -92,8 +111,7 @@ symlinkJoin (
     paths = [
       rosecCore
       rosecPam
-    ]
-    ++ provider;
+    ];
 
     __structuredAttrs = true;
     strictDeps = true;
