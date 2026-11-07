@@ -4,68 +4,75 @@ rec {
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "53a4c8934bf7335d27c694e9fdac9ae1b180c0d2";
-    hash = "sha256-oHfCBWW11tEs/mM2oX0+yNX1AS3Ch5TLR6e/39nxYmQ=";
+    rev = "c9f1e2871ccbb0b0564c4a33e359801144f6b7c1";
+    hash = "sha256-Fa9zWl9BvQaroAjg5aL1CTPsp3yzxKTV7bjuhQV8t+8=";
   };
 
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "715c8500e7cd67f2eba9e60e98852a1ed49d2f15";
-    hash = "sha256-vSbMdTjlRVvYLi5ZvTVmfe76oAQ4AhqyD+ohvkvIYIs=";
+    rev = "2ff6f609379ce43c4291c732cf6a19dd2461a680";
+    hash = "sha256-sctbgPFzMiIrsQ4f2NxesGd57U5IxU3cHUnUtGi9+Wk=";
   };
 
   jsoncpp = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = "9059f5cad030ba11d37818847443a53918c327b1";
-    hash = "sha256-m0tz8w8HbtDitx3Qkn3Rxj/XhASiJVkThdeBxIwv3WI=";
+    rev = "89e2973c754a9c02a49974d839779b151e95afd6";
+    hash = "sha256-3msc3B8NyF8PUlNaAHdUDfCpcUmz8JVW2X58USJ5HRw=";
   };
 
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "6dd7ba990830f7c15ac1345ff3b43ef6ffdad216";
-    hash = "sha256-UKBVs2s05hP+paPq1dZFaUEQQ9Kx9acHxYUyJVx22eY=";
+    rev = "cb42dec3830d3ac67fa449ecdc0c0f73d5e74498";
+    hash = "sha256-hZ2+H9M55rdvu/MZrrOsZCUXDWbLMDMHyUjDWz/1L7I=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "2d14d2e76aa7de72404b17078eda15c20a6a0389";
-    hash = "sha256-8Xtzq8WOdFEw+uEJqMW39LLHt2m165K9OJsIFZuifoM=";
+    rev = "1d0401cd2b68ae34cda9ff625bedd1be4ed6214a";
+    hash = "sha256-4kbPbbhTk5Ao6HBiCmEn7LBk1/3Yv2Hqp4HzNA1NbgY=";
   };
 
   video_generator = fetchFromGitHub {
     owner = "Igalia";
     repo = "video_generator";
-    rev = "426300e12a5cc5d4676807039a1be237a2b68187";
-    hash = "sha256-zdYYpX3hed7i5onY7c60LnM/e6PLa3VdrhXTV9oSlvg=";
+    rev = "v0.1.1";
+    hash = "sha256-1Cz74OverbR08zak121viJtExX4UqNIxYGeH2cy1zdA=";
   };
 
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "6019efe93eca7bfa7a692316d91a9465eb457d60";
-    hash = "sha256-zZOxL3XOCzlTsCuAm/+5SrDk6jPJpTY+nAL6H9knyPU=";
+    rev = "01aaacd99480487bf63830959513c5ca8ceb996d";
+    hash = "sha256-kqtByJUk58MtEAmS6PV2JGNP1w1+l3dKaDoTwhFETJQ=";
   };
 
   vulkan-validationlayers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "eb51484e6039752b56e8f70b5c33f04874224bfb";
-    hash = "sha256-fwFG0UdhgDUsCpp/n6iwjxTPlgxfnI8X2ZmAHbG+ZZ8=";
+    rev = "1a06355117c974d9d8034e27e08e45f96b80b24f";
+    hash = "sha256-rlvvtOI7OzOdFgTp0ij4KX54apnxZFNmj8mijw14tvA=";
   };
 
   vulkan-video-samples = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Video-Samples";
-    rev = "v0.3.9";
-    hash = "sha256-SyW/OzDGPdRPYGG7jgFMp8AkvpZq8Yi/7QZKZugXKho=";
+    rev = "a193f6496760d69afcd39eab4ae63bf32ec8b5e1";
+    hash = "sha256-nb/CXEw1oBy8pZMQqvmTwSjHjO7vr9DK98dO748ykTY=";
+  };
+
+  vulkansc-pcutil = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "VulkanSC-pcutil";
+    rev = "f67d9e8e1c04f179ebeb837d21ab06192ad43fa0";
+    hash = "sha256-INdsOxFvN9qjYFkUlhOtqNPGf8mROya8F6AgdgSKBR0=";
   };
 
   prePatch = ''
-    mkdir -p external/amber external/glslang external/jsoncpp external/spirv-headers external/spirv-tools external/video_generator external/vulkan-docs external/vulkan-validationlayers external/vulkan-video-samples
+    mkdir -p external/amber external/glslang external/jsoncpp external/spirv-headers external/spirv-tools external/video_generator external/vulkan-docs external/vulkan-validationlayers external/vulkan-video-samples external/vulkansc-pcutil
 
     cp -r ${amber} external/amber/src
     cp -r ${glslang} external/glslang/src
@@ -76,5 +83,6 @@ rec {
     cp -r ${vulkan-docs} external/vulkan-docs/src
     cp -r ${vulkan-validationlayers} external/vulkan-validationlayers/src
     cp -r ${vulkan-video-samples} external/vulkan-video-samples/src
+    cp -r ${vulkansc-pcutil} external/vulkansc-pcutil/src
   '';
 }
