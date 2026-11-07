@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [
     ];
-    platforms = lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64;
+    platforms =
+      lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.riscv64;
   };
 })
