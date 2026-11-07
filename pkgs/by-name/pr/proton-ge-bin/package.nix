@@ -37,8 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir $steamcompattool
     ln -s $src/* $steamcompattool
-    rm $steamcompattool/compatibilitytool.vdf
-    cp $src/compatibilitytool.vdf $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf $steamcompattool/proton
+    cp $src/compatibilitytool.vdf $src/proton $steamcompattool
 
     runHook postInstall
   '';
@@ -46,6 +46,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
       --replace-fail "$toolName" "$steamDisplayName"
+
+    # wineboot re-applies wine.inf when its mtime differs from .update-timestamp.
+    # Every file in the Nix store has the same mtime, so that never happens and
+    # upgraded prefixes miss anything new in wine.inf, such as new services.
+    # Removing the timestamp when the prefix version changes restores the behaviour
+    # of a normal install.
+    substituteInPlace "$steamcompattool/proton" \
+      --replace-fail "            self.upgrade_pfx(old_ver)" \
+                     "            self.upgrade_pfx(old_ver)
+                if old_ver != CURRENT_PREFIX_VERSION and file_exists(self.prefix_dir + '.update-timestamp', follow_symlinks=False):
+                    os.remove(self.prefix_dir + '.update-timestamp')"
   '';
 
   passthru = {
