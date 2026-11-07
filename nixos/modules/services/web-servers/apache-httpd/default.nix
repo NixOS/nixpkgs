@@ -123,7 +123,9 @@ let
       cfg.logFormat == "custom"
     ) "LogFormat ${lib.strings.escapeNixString cfg.customLogFormat} custom"}
 
-    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+    ${optionalString (
+      cfg.logFormat != "none"
+    ) "CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}"}
   '';
 
   browserHacks = ''
