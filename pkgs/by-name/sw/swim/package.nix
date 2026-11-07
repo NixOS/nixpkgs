@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   spade,
+  zstd,
   git,
 }:
 
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    zstd
   ];
 
   nativeCheckInputs = [
