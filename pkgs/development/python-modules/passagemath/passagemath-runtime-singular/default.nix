@@ -1,9 +1,12 @@
 {
+  callPackage,
   lib,
-  mkSageRuntimeConfig,
   singular,
 }:
 
+let
+  mkSageRuntimeConfig = callPackage ../mk-sage-runtime-config.nix { };
+in
 mkSageRuntimeConfig {
   pname = "passagemath-runtime-singular";
 

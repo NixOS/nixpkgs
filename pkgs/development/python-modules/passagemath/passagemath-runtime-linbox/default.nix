@@ -1,9 +1,12 @@
 {
+  callPackage,
   lib,
   linbox,
-  mkSageRuntimeConfig,
 }:
 
+let
+  mkSageRuntimeConfig = callPackage ../mk-sage-runtime-config.nix { };
+in
 mkSageRuntimeConfig {
   pname = "passagemath-runtime-linbox";
 

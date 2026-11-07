@@ -1,9 +1,12 @@
 {
+  callPackage,
   fflas-ffpack,
   lib,
-  mkSageRuntimeConfig,
 }:
 
+let
+  mkSageRuntimeConfig = callPackage ../mk-sage-runtime-config.nix { };
+in
 mkSageRuntimeConfig {
   pname = "passagemath-runtime-fflas-ffpack";
 
