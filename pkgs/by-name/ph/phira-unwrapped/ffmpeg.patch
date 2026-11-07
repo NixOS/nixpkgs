@@ -1,33 +1,28 @@
 diff --git a/prpr-avc/Cargo.toml b/prpr-avc/Cargo.toml
 --- a/prpr-avc/Cargo.toml
 +++ b/prpr-avc/Cargo.toml
-@@ -9,6 +9,9 @@
- thiserror = "2.0.18"
+@@ -10,6 +10,7 @@
  tracing = { workspace = true }
  
-+[build-dependencies]
+ [build-dependencies]
 +pkg-config = "0.3"
-+
- [target.'cfg(target_env = "ohos")'.dependencies]
- sasa = { workspace = true, default-features = false, features = ["ohos"] }
- 
+ flate2 = "1"
+ tar = "0.4"
+ ureq = "2"
 diff --git a/prpr-avc/build.rs b/prpr-avc/build.rs
 --- a/prpr-avc/build.rs
 +++ b/prpr-avc/build.rs
-@@ -1,10 +1,5 @@
--use std::path::Path;
--
+@@ -8,8 +8,8 @@
+ const EXPECTED_LIBS: &[&str] = &["libavcodec.a", "libavformat.a", "libavutil.a", "libswresample.a", "libswscale.a"];
+
  fn main() {
--    let libs_dir = std::env::var("PRPR_AVC_LIBS").unwrap_or_else(|_| format!("{}/static-lib", std::env::var("CARGO_MANIFEST_DIR").unwrap()));
--    let libs_path = Path::new(&libs_dir).join(std::env::var("TARGET").unwrap());
--    let libs_path = libs_path.display();
--    println!("cargo:rustc-link-search={libs_path}");
--    println!("cargo:rustc-link-lib=z");
--    println!("cargo:rerun-if-changed={libs_path}");
+-    if let Err(err) = run() {
+-        panic!("[prpr-avc] {err}");
 +    for lib in ["libavformat", "libavcodec", "libavutil", "libswscale", "libswresample"] {
 +        pkg_config::Config::new().statik(false).probe(lib).unwrap();
-+    }
+     }
  }
+
 diff --git a/prpr-avc/src/ffi.rs b/prpr-avc/src/ffi.rs
 --- a/prpr-avc/src/ffi.rs
 +++ b/prpr-avc/src/ffi.rs
@@ -55,7 +50,7 @@ diff --git a/prpr-avc/src/ffi.rs b/prpr-avc/src/ffi.rs
  extern "C" {
      pub fn avcodec_find_decoder(id: AVCodecID) -> *mut AVCodec;
      pub fn avcodec_alloc_context3(codec: *const AVCodec) -> *mut AVCodecContext;
-@@ -61,7 +58,6 @@
+@@ -62,7 +59,6 @@
      pub fn avcodec_flush_buffers(avctx: *mut AVCodecContext);
  }
  
@@ -63,7 +58,7 @@ diff --git a/prpr-avc/src/ffi.rs b/prpr-avc/src/ffi.rs
  extern "C" {
      pub fn sws_getContext(
          srcW: ::std::os::raw::c_int,
-@@ -86,7 +82,6 @@
+@@ -87,7 +83,6 @@
      ) -> ::std::os::raw::c_int;
  }
  
