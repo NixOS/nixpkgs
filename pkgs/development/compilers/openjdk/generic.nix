@@ -133,6 +133,22 @@ let
   # should concat to this list below instead
   patchesForVersion = lib.concatAttrValues (builtins.mapAttrs findApplicable allPatches);
 
+  isNativeBuild = stdenv.buildPlatform == stdenv.hostPlatform;
+
+  supportedPlatforms = [
+    "i686-linux"
+    "x86_64-linux"
+    "aarch64-linux"
+  ]
+  ++ lib.optionals atLeast11 [
+    "armv7l-linux"
+    "armv6l-linux"
+    "powerpc64le-linux"
+  ]
+  ++ lib.optionals atLeast17 [
+    "riscv64-linux"
+  ];
+
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
   versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
@@ -570,19 +586,16 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.java ];
     mainProgram = "java";
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-linux"
-    ]
-    ++ lib.optionals atLeast11 [
-      "armv7l-linux"
-      "armv6l-linux"
-      "powerpc64le-linux"
-    ]
-    ++ lib.optionals atLeast17 [
-      "riscv64-linux"
-    ];
+
+    # Cross builds only need a bootstrap JDK for the build platform.
+    platforms =
+      if isNativeBuild then
+        lib.intersectLists jdk-bootstrap.meta.platforms supportedPlatforms
+      else if lib.meta.availableOn stdenv.buildPlatform jdk-bootstrap then
+        supportedPlatforms
+      else
+        [ ];
+
     # OpenJDK 8 was broken for musl at 2024-01-17. Tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/281618
     # error: ‘isnanf’ was not declared in this scope
