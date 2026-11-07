@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           cp cubiomes-viewer $out/bin
 
-          mkdir -p $out/share/{pixmaps,applications}
-          cp rc/icons/map.png $out/share/pixmaps/com.github.cubitect.cubiomes-viewer.png
+          mkdir -p $out/share/{icons/hicolor/34x29/apps,applications}
+          cp rc/icons/map.png $out/share/icons/hicolor/34x29/apps/com.github.cubitect.cubiomes-viewer.png
           cp etc/com.github.cubitect.cubiomes-viewer.desktop $out/share/applications
         ''
     }
