@@ -158,7 +158,12 @@ stdenv'.mkDerivation (finalAttrs: {
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
       substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
-    '');
+    '')
+    + ''
+      # GlfDrawTarget was removed in OpenUSD 26.11; the include is unused
+      substituteInPlace source/blender/render/hydra/viewport_engine.cc \
+        --replace-fail '#include <pxr/imaging/glf/drawTarget.h>' '#include <pxr/base/gf/vec4i.h>'
+    '';
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
