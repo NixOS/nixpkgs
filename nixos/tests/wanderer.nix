@@ -10,8 +10,9 @@
       enable = true;
       settings.ORIGIN = "http://localhost:3000";
       secrets = {
-        POCKETBASE_ENCRYPTION_KEY = pkgs.writeText "encryption-key" "12345678901234567890123456789012";
-        POCKETBASE_PROXY_SECRET = pkgs.writeText "proxy-secret" "proxy-secret";
+        shared.POCKETBASE_PROXY_SECRET = pkgs.writeText "proxy-secret" "proxy-secret";
+        backend.POCKETBASE_ENCRYPTION_KEY = pkgs.writeText "encryption-key" "12345678901234567890123456789012";
+        web.PROTOMAPS_API_KEY = pkgs.writeText "protomaps-api-key" "protomaps-api-key";
       };
       plugins = [ pkgs.wanderer.plugins.komoot ];
       about = ''
@@ -42,6 +43,19 @@
               if encoding != "identity":
                   assert f"content-encoding: {encoding}" in headers.lower(), headers
               machine.succeed(f"curl -fsS --compressed -H 'Accept-Encoding: {encoding}' http://localhost:3000/md/about.md | grep -x nixos-about-marker")
+
+      with subtest("secrets only reach the services they are meant for"):
+          def env_of(unit):
+              pid = machine.succeed(f"systemctl show -p MainPID --value {unit}").strip()
+              return machine.succeed(f"tr '\\0' '\\n' < /proc/{pid}/environ")
+          web_env = env_of("wanderer-web.service")
+          backend_env = env_of("wanderer.service")
+          assert "PROTOMAPS_API_KEY=protomaps-api-key" in web_env, web_env
+          assert "POCKETBASE_PROXY_SECRET=proxy-secret" in web_env, web_env
+          assert "POCKETBASE_ENCRYPTION_KEY" not in web_env, web_env
+          assert "PROTOMAPS_API_KEY" not in backend_env, backend_env
+          assert "POCKETBASE_PROXY_SECRET=proxy-secret" in backend_env, backend_env
+          assert "POCKETBASE_ENCRYPTION_KEY=" in backend_env, backend_env
 
       with subtest("plugins are discovered"):
           credentials = json.dumps({"username": "test", "email": "test@example.com", "password": "password1234", "passwordConfirm": "password1234"})
