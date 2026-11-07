@@ -22,6 +22,7 @@
   textlint-rule-preset-ai-words-ja,
   textlint-rule-preset-ja-spacing,
   textlint-rule-preset-ja-technical-writing,
+  textlint-rule-preset-japanese,
   textlint-rule-prh,
   textlint-rule-stop-words,
   textlint-rule-terminology,
@@ -161,6 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
         textlint-rule-preset-ai-words-ja
         textlint-rule-preset-ja-spacing
         textlint-rule-preset-ja-technical-writing
+        textlint-rule-preset-japanese
         textlint-rule-prh
         textlint-rule-stop-words
         textlint-rule-terminology
