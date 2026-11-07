@@ -10,9 +10,10 @@
 
 buildGo127Module (finalAttrs: {
   pname = "zvm";
-  version = "0.9.4";
+  version = "0.9.5";
 
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   outputs = [
     "out"
@@ -23,7 +24,7 @@ buildGo127Module (finalAttrs: {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cv9O9fUiYNYvSqH8RXcBXEhErK9lObqzHK9QBERJV7Y=";
+    hash = "sha256-slvzX4w1ZWB2j4EHaNT/saAaeuuCNkicPut2/YNURuM=";
   };
 
   vendorHash = "sha256-YIhYRq55WWcXz50DDRgMzzXNKbA16vlfKqlrgziD1qA=";
