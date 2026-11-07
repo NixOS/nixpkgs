@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # propagates
   aiofiles,
@@ -30,17 +30,17 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-1rwkrxxk79EB8gkeXNvT2hR37it4H6RqewPxYny/VIs=";
+    hash = "sha256-AFocee/xYXsd88jlL3wttJ+iGXwYZKSPhiFHYUVpHWQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     aiofiles
