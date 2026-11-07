@@ -8,10 +8,11 @@
   deprecated,
   dirtyjson,
   fetchFromGitHub,
+  fetchurl,
   filetype,
   fsspec,
   hatchling,
-  jsonpath-ng,
+  httpx,
   llama-index-workflows,
   nest-asyncio,
   networkx,
@@ -21,21 +22,30 @@
   openai,
   pandas,
   pillow,
+  platformdirs,
+  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyvis,
   pyyaml,
   requests,
-  spacy,
+  setuptools,
   sqlalchemy,
   tenacity,
   tinytag,
   tiktoken,
-  tree-sitter,
+  tqdm,
+  typing-extensions,
   typing-inspect,
+  wrapt,
 }:
 
+let
+  cl100kBase = fetchurl {
+    url = "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken";
+    hash = "sha256-Ijkht27pm96ZW3/3OFE+7xAPtR0YyTWXoRO8/+hlsqc=";
+  };
+in
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
   version = "0.14.25";
@@ -50,24 +60,15 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
-  # When `llama-index` is imported, it uses `nltk` to look for the following files and tries to
-  # download them if they aren't present.
-  # https://github.com/run-llama/llama_index/blob/6efa53cebd5c8ccf363582c932fffde44d61332e/llama-index-core/llama_index/core/utils.py#L59-L67
-  # Setting `NLTK_DATA` to a writable path can also solve this problem, but it needs to be done in
-  # every package that depends on `llama-index-core` for `pythonImportsCheck` not to fail, so this
-  # solution seems more elegant.
+  # llama_index.core.utils looks up NLTK and tiktoken data in _static, the
+  # directories upstream's wheel bundles, and downloads whatever is missing.
+  # tiktoken keys its on-disk cache by the sha1 of the download URL.
   postPatch = ''
-    mkdir -p llama_index/core/_static/nltk_cache/corpora/stopwords/
-    cp -r ${nltk-data.stopwords}/corpora/stopwords/* llama_index/core/_static/nltk_cache/corpora/stopwords/
-
-    mkdir -p llama_index/core/_static/nltk_cache/tokenizers/punkt/
-    cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
+    mkdir -p llama_index/core/_static/{nltk_cache/corpora,nltk_cache/tokenizers,tiktoken_cache}
+    cp -r ${nltk-data.stopwords}/corpora/stopwords llama_index/core/_static/nltk_cache/corpora/
+    cp -r ${nltk-data.punkt-tab}/tokenizers/punkt_tab llama_index/core/_static/nltk_cache/tokenizers/
+    cp ${cl100kBase} llama_index/core/_static/tiktoken_cache/9b5ad71b2ce5302211f9c61530b329a4922fc6a4
   '';
-
-  pythonRelaxDeps = [
-    "setuptools"
-    "tenacity"
-  ];
 
   build-system = [ hatchling ];
 
@@ -80,85 +81,90 @@ buildPythonPackage (finalAttrs: {
     dirtyjson
     filetype
     fsspec
-    jsonpath-ng
+    httpx
     llama-index-workflows
     nest-asyncio
     networkx
     nltk
     numpy
-    openai
-    pandas
     pillow
-    pyvis
+    platformdirs
+    pydantic
     pyyaml
     requests
-    spacy
+    setuptools
     sqlalchemy
     tenacity
     tinytag
     tiktoken
+    tqdm
+    typing-extensions
     typing-inspect
-  ];
+    wrapt
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
-    tree-sitter
+    openai
+    pandas
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
+  # get_tokenizer only sets the cache for its own call; pool workers and tests
+  # calling tiktoken directly would download.
+  preCheck = ''
+    export TIKTOKEN_CACHE_DIR=$PWD/llama_index/core/_static/tiktoken_cache
+  '';
+
   pythonImportsCheck = [ "llama_index" ];
 
   disabledTestPaths = [
-    # Tests require network access
-    "tests/agent/"
-    "tests/base/llms/"
-    "tests/callbacks/"
-    "tests/chat_engine/"
-    "tests/evaluation/"
-    "tests/indices/"
-    "tests/ingestion/"
-    "tests/llms/"
-    "tests/memory/"
-    "tests/multi_modal_llms/"
-    "tests/node_parser/"
-    "tests/objects/"
-    "tests/playground/"
-    "tests/postprocessor/"
-    "tests/prompts/"
-    "tests/query_engine/"
-    "tests/question_gen/"
-    "tests/response_synthesizers/"
-    "tests/retrievers/"
-    "tests/schema/"
-    "tests/selectors/"
-    "tests/test_prompt_helper_empty_input.py"
-    "tests/test_utils.py"
-    "tests/text_splitter/"
-    "tests/token_predictor/"
-    "tests/tools/"
-  ];
-
-  disabledTests = [
-    # Tests require network access
-    "test_context_extraction_basic"
-    "test_context_extraction_custom_prompt"
-    "test_context_extraction_oversized_document"
-    "test_document_block_from_b64"
-    "test_document_block_from_bytes"
-    "test_document_block_from_path"
-    "test_document_block_from_url"
-    "test_from_namespaced_persist_dir"
-    "test_from_persist_dir"
-    "test_mimetype_raw_data"
-    "test_multiple_documents_context"
-    "test_predict_and_call_via_react_agent"
-    "test_resource"
-    # asyncio.exceptions.InvalidStateError: invalid state
-    "test_workflow_context_to_dict_mid_run"
-    "test_SimpleDirectoryReader"
-    # RuntimeError
-    "test_str"
+    # Tests fetch PDFs, images, or other files over the network
+    "tests/base/llms/test_types.py::test_chat_message_aestimate_tokens"
+    "tests/base/llms/test_types.py::test_chat_message_amerge"
+    "tests/base/llms/test_types.py::test_chat_message_asplit_non_recursive_types"
+    "tests/base/llms/test_types.py::test_chat_message_asplit_recursive_types"
+    "tests/base/llms/test_types.py::test_chat_message_atruncate_multiple_multimodal_blocks"
+    "tests/base/llms/test_types.py::test_chat_message_atruncate_recursive"
+    "tests/base/llms/test_types.py::test_chat_message_atruncate_simple"
+    "tests/base/llms/test_types.py::test_chat_message_format"
+    "tests/base/llms/test_types.py::test_citable_block_aestimate_tokens"
+    "tests/base/llms/test_types.py::test_citable_block_amerge"
+    "tests/base/llms/test_types.py::test_citable_block_asplit"
+    "tests/base/llms/test_types.py::test_citable_block_atruncate"
+    "tests/base/llms/test_types.py::test_citable_block_format"
+    "tests/base/llms/test_types.py::test_document_block_aestimate_tokens"
+    "tests/base/llms/test_types.py::test_document_block_amerge"
+    "tests/base/llms/test_types.py::test_document_block_asplit"
+    "tests/base/llms/test_types.py::test_document_block_atruncate"
+    "tests/base/llms/test_types.py::test_document_block_format"
+    "tests/base/llms/test_types.py::test_document_block_from_b64"
+    "tests/base/llms/test_types.py::test_document_block_from_bytes"
+    "tests/base/llms/test_types.py::test_document_block_from_path"
+    "tests/base/llms/test_types.py::test_document_block_from_url"
+    "tests/indices/test_prompt_helper.py::test_chat_prompt_helper_atruncate_multimodal"
+    "tests/indices/test_prompt_helper.py::test_chat_prompt_helper_chat_prompt_template_repack_arbitrary"
+    "tests/indices/test_prompt_helper.py::test_prompt_helper_get_biggest_chat_prompt_text_multimodal"
+    "tests/multi_modal_llms/test_generic_utils.py::test_complete_workflow"
+    "tests/multi_modal_llms/test_generic_utils.py::test_image_documents_to_base64_failed_url"
+    "tests/multi_modal_llms/test_generic_utils.py::test_image_documents_to_base64_multiple_sources"
+    "tests/multi_modal_llms/test_generic_utils.py::test_load_image_urls"
+    "tests/multi_modal_llms/test_generic_utils.py::test_set_base64_and_mimetype_for_image_docs"
+    "tests/prompts/test_rich.py::test_prompt_with_chat_message"
+    "tests/prompts/test_rich.py::test_prompt_with_chat_messages"
+    "tests/prompts/test_rich.py::test_prompt_with_document_blocks"
+    "tests/schema/test_image_document.py::test_real_image_path"
+    "tests/schema/test_image_document.py::test_real_image_url"
+    "tests/schema/test_media_resource.py::test_mimetype_raw_data"
+    "tests/schema/test_schema.py::test_image_document_path"
+    "tests/schema/test_schema.py::test_image_document_path_serialization"
+    "tests/schema/test_schema.py::test_image_document_url"
+    # Tests download the gpt2 encoding
+    "tests/text_splitter/test_sentence_splitter.py::test_edge_case"
+    "tests/text_splitter/test_token_splitter.py::test_split_long_token"
+    "tests/text_splitter/test_token_splitter.py::test_split_with_metadata"
   ];
 
   meta = {
