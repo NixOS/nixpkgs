@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
   clang-tools,
   cmake,
@@ -10,20 +9,15 @@
   hypothesis,
   jbig2dec,
   jsonschema,
-  deprecated,
   lxml,
   withMupdf ? false,
   mupdf-headless,
   nanobind,
   ninja,
-  numpy,
   packaging,
   pillow,
-  psutil,
   pytest-xdist,
   pytestCheckHook,
-  python-dateutil,
-  python-xmp-toolkit,
   qpdf,
   referencing,
   replaceVars,
@@ -80,19 +74,13 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
-    attrs
     hypothesis
-    numpy
     pytest-xdist
-    psutil
     pytestCheckHook
-    python-dateutil
-    python-xmp-toolkit
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   dependencies = [
-    deprecated
     lxml
     packaging
     pillow
