@@ -280,6 +280,36 @@ lib.runTests (
         }).parsed.cpu.arch;
       expected = "i686";
     };
+    test_rustc_target_canonicalization = {
+      expr = lib.mapAttrs (_: system: (lib.systems.elaborate system).rust.rustcTargetSpec) {
+        armv6l-netbsd = "armv6l-netbsd";
+        armv7l-netbsd = "armv7l-netbsd";
+        mips64-linux = "mips64-linux";
+        mips64el-linux = "mips64el-linux";
+        riscv32-none = "riscv32-none";
+        riscv32-embedded = lib.systems.examples.riscv32-embedded;
+        x86_64-solaris = "x86_64-solaris";
+      };
+      expected = {
+        armv6l-netbsd = "armv6-unknown-netbsd-eabihf";
+        armv7l-netbsd = "armv7-unknown-netbsd-eabihf";
+        mips64-linux = "mips64-unknown-linux-gnuabi64";
+        mips64el-linux = "mips64el-unknown-linux-gnuabi64";
+        riscv32-none = "riscv32imac-unknown-none-elf";
+        riscv32-embedded = "riscv32imac-unknown-none-elf";
+        x86_64-solaris = "x86_64-pc-solaris";
+      };
+    };
+    test_rustc_target_override = {
+      expr =
+        (
+          lib.systems.elaborate {
+            system = "riscv32-none";
+            rust.rustcTarget = "riscv32i-unknown-none-elf";
+          }
+        ).rust.rustcTargetSpec;
+      expected = "riscv32i-unknown-none-elf";
+    };
     test_equals_reelaborate_overridden_platform = {
       expr =
         let
