@@ -19,19 +19,19 @@ let
   description = "OpenGL and Vulkan Benchmark and Stress Test";
 
   versions = {
-    "x86_64-linux" = "2.10.2";
-    "aarch64-linux" = "2.10.1";
+    "x86_64-linux" = "2.11.0.4";
+    "aarch64-linux" = "2.11.0.4";
     "i686-linux" = "2.0.16";
   };
 
   sources = {
     "x86_64-linux" = {
-      url = "https://gpumagick.com/downloads/files/2025/fm2/2_10_dbc69dd0a08da5ff09169a4fc759ddaa/FurMark_${versions.x86_64-linux}_linux64.7z";
-      hash = "sha256-s9AEj9r7kBhPGPU365HgxS9tEyrm7UjLtoxD21pCrts=";
+      url = "https://gpumagick.com/downloads/files/2026/fm2/FurMark_2.11.0.4_linux64.7z";
+      hash = "sha256-Jl5uOwblyxMR8/HuuULTR9JhyAmsv02cW4To7UcKHKw=";
     };
     "aarch64-linux" = {
-      url = "https://gpumagick.com/downloads/files/2025/fm2/2_10_dbc69dd0a08da5ff09169a4fc759ddaa/FurMark_${versions.aarch64-linux}_arm64.7z";
-      hash = "sha256-XQuK6UgZOjwqpENkHVYsoiG9zyZAbNjR+65hj9dvAY8=";
+      url = "https://gpumagick.com/downloads/files/2026/fm2/FurMark_2.11.0.4_arm64.7z";
+      hash = "sha256-HhxxNHXQlNHXuvaYisKv4Vhiv0u7wt6PbzdEU1833Wo=";
     };
     "i686-linux" = {
       url = "https://gpumagick.com/downloads/files/2024/furmark2/FurMark_${versions.i686-linux}_linux32.zip";
