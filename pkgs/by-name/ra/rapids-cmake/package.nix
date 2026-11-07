@@ -20,6 +20,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-bkdeEr7nXL59WTv5x6EsHENuFft41mC4hD3Ke73NVjA=";
   };
 
+  # rapids_cpm_cccl looks for exactly the CCCL release in versions.json (3.4.3 for 26.08), which CUDA 13.4 ships, so
+  # the RAPIDS libraries fail to configure with a newer CUDA, whose CCCL is newer. CCCL's package version file accepts
+  # any newer release with the same major version, so drop EXACT and accept those.
+  postPatch = ''
+    substituteInPlace rapids-cmake/cpm/cccl.cmake \
+      --replace-fail \
+        "CPM_ARGS FIND_PACKAGE_ARGUMENTS EXACT \''${cpm_find_info}" \
+        "CPM_ARGS \''${cpm_find_info}"
+  '';
+
   dontConfigure = true;
   dontBuild = true;
 
