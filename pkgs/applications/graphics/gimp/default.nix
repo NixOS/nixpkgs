@@ -83,7 +83,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.2.6";
+  version = "3.2.8";
 
   outputs = [
     "out"
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QLFekK0MDGMbdto8Rn6phH+lwk83QTrFtJKASGCijNg=";
+    hash = "sha256-FqJpbK3J4Dou+XzLiV4GL2VMsrghH7VwdNuF8mZGyEc=";
   };
 
   patches = [
