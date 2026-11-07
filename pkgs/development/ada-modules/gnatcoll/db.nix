@@ -50,7 +50,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "25.0.0";
+  version = "26.0.0";
   # executables don't adhere to the string gnatcoll-* scheme
   pname =
     if onlyExecutable then
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0q35ii0aa4hh59v768l5cilg1b30a4ckcvlbfy0lkcbp3rcfnbz3";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XkJLD2t7LelfDxZKEPCK1xkG19CSd8OnN3jOfdbfekg=";
   };
 
   # Link executables dynamically unless specified by the platform,
@@ -105,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNAT Components Collection - Database packages";
     homepage = "https://github.com/AdaCore/gnatcoll-db";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.all;
   };
 })
