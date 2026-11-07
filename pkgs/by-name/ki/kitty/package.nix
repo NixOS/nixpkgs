@@ -41,7 +41,7 @@
   fish,
   nixosTests,
   go_1_26,
-  buildGo126Module,
+  fetchGoModules,
   nix-update-script,
   makeBinaryWrapper,
   darwin,
@@ -62,12 +62,11 @@ buildPythonApplication rec {
     hash = "sha256-CSSjL931OLZ9wwz9E3rAfMcm+TpczVJzJh9MPfuKmVU=";
   };
 
-  goModules =
-    (buildGo126Module {
-      pname = "kitty-go-modules";
-      inherit src version;
-      vendorHash = "sha256-Oo5ehjdq4HcTxZcKi/rwz8dDZYGxdSS8cqIkbdLBrb8=";
-    }).goModules;
+  goModules = fetchGoModules {
+    pname = "kitty-go-modules";
+    inherit src version;
+    hash = "sha256-Oo5ehjdq4HcTxZcKi/rwz8dDZYGxdSS8cqIkbdLBrb8=";
+  };
 
   buildInputs = [
     harfbuzz
