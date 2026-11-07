@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyHackRF";
-    rev = "soapy-hackrf-${finalAttrs.version}";
-    sha256 = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
+    tag = "soapy-hackrf-${finalAttrs.version}";
+    hash = "sha256-fzPYHJAPX8FkFxPXpLlUagTd/NoamRX0YnxHwkbV1nI=";
   };
 
   nativeBuildInputs = [
