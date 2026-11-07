@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  flit-core,
+  flit-core_3,
 }:
 
 buildPythonPackage {
@@ -18,7 +18,7 @@ buildPythonPackage {
     hash = "sha256-TzhiZ4LCFZX75h3YRrEFO5kRVc5VwTOJd+1VFW3LsaQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   doCheck = false; # no tests
 
