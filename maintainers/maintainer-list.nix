@@ -2171,6 +2171,13 @@
     matrix = "@anthonyrsl:matrix.org";
     keys = [ { fingerprint = "472D 368A F107 F443 F3A5  C712 9DC4 987B 1A55 E75E"; } ];
   };
+  anthr76 = {
+    email = "hello@anthonyrabbito.com";
+    github = "anthr76";
+    githubId = 25143877;
+    name = "Anthony Rabbito";
+    matrix = "@anthr76:mozilla.org";
+  };
   antipatico = {
     email = "code@bootkit.dev";
     github = "antipatico";
@@ -28064,9 +28071,10 @@
   };
   ssnoer = {
     email = "ssnoer@proton.me";
-    github = "Seba244c";
+    github = "ssnoer";
     githubId = 23051740;
     name = "Sebastian August Snoer";
+    keys = [ { fingerprint = "8ECA 72D9 49EE 21AB 2A43 71A2 207C 0213 F7FE 56D0"; } ];
   };
   sstef = {
     email = "stephane@nix.frozenid.net";

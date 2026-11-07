@@ -1,5 +1,4 @@
 diff --git a/src/m_pd.h b/src/m_pd.h
-index c658fa5..a3a506c 100644
 --- a/src/m_pd.h
 +++ b/src/m_pd.h
 @@ -8,6 +8,8 @@
@@ -9,5 +8,5 @@ index c658fa5..a3a506c 100644
 +extern void error(const char* fmt, ...);
 +
  #define PD_MAJOR_VERSION 0
- #define PD_MINOR_VERSION 54
- #define PD_BUGFIX_VERSION 1
+ #define PD_MINOR_VERSION 56
+ #define PD_BUGFIX_VERSION 5

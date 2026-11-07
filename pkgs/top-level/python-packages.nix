@@ -4158,8 +4158,6 @@ self: super: with self; {
 
   datapoint = callPackage ../development/python-modules/datapoint { };
 
-  dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
-
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   datasalad = callPackage ../development/python-modules/datasalad { };
@@ -10970,8 +10968,6 @@ self: super: with self; {
 
   minari = callPackage ../development/python-modules/minari { };
 
-  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
-
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio { };
@@ -11457,7 +11453,9 @@ self: super: with self; {
 
   mtcnn = callPackage ../development/python-modules/mtcnn { };
 
-  mujoco = callPackage ../development/python-modules/mujoco { inherit (pkgs) mujoco; };
+  mujoco = callPackage ../development/python-modules/mujoco { };
+
+  mujoco-core = callPackage ../development/python-modules/mujoco-core { inherit (pkgs) mujoco; };
 
   mujoco-mjx = callPackage ../development/python-modules/mujoco-mjx { mujoco-main = pkgs.mujoco; };
 
@@ -21567,8 +21565,6 @@ self: super: with self; {
   txzmq = callPackage ../development/python-modules/txzmq { };
 
   ty = callPackage ../development/python-modules/ty { inherit (pkgs) ty; };
-
-  type-infer = callPackage ../development/python-modules/type-infer { };
 
   typechecks = callPackage ../development/python-modules/typechecks { };
 

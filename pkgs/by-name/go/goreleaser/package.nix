@@ -65,6 +65,7 @@ buildGo127Module (finalAttrs: {
       sarcasticadmin
       techknowlogick
       caarlos0
+      anthr76
     ];
     license = lib.licenses.mit;
     mainProgram = "goreleaser";
