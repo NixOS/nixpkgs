@@ -14,7 +14,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "google-drive-ocamlfuse";
-  version = "0.9.0";
+  version = "0.9.1";
 
   minimalOCamlVersion = "4.13";
 
@@ -22,7 +22,7 @@ buildDunePackage (finalAttrs: {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nTZdE9F6ufQ/O/Ck6fzoK65uZ0ylMR6HkwKsBNRDjMs=";
+    hash = "sha256-Si2SLrXZ3QbpIJwE8UHyhqXhR7c/UUAgtXns9aJc5xU=";
   };
 
   doCheck = lib.versionAtLeast ocaml.version "4.14";
