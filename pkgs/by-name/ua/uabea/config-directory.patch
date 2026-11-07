@@ -1,0 +1,31 @@
+diff --git a/UABEAvalonia/Config/ConfigurationManager.cs b/UABEAvalonia/Config/ConfigurationManager.cs
+--- a/UABEAvalonia/Config/ConfigurationManager.cs
++++ b/UABEAvalonia/Config/ConfigurationManager.cs
+@@ -7,10 +7,14 @@ namespace UABEAvalonia
+     public static class ConfigurationManager
+     {
+         public const string CONFIG_FILENAME = "config.json";
++        private static readonly string ConfigDirectory = Path.Combine(
++            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData,
++                Environment.SpecialFolderOption.DoNotVerify), "UABEA");
++        private static readonly string ConfigPath = Path.Combine(ConfigDirectory, CONFIG_FILENAME);
+         public static ConfigurationSettings Settings { get; }
+         static ConfigurationManager()
+         {
+-            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CONFIG_FILENAME);
++            string configPath = ConfigPath;
+             if (!File.Exists(configPath))
+             {
+                 Settings = new ConfigurationSettings()
+@@ -28,9 +32,10 @@ namespace UABEAvalonia
+ 
+         public static void SaveConfig()
+         {
+-            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, CONFIG_FILENAME);
++            string configPath = ConfigPath;
+             if (Settings != null) // ConfigLoaded
+             {
++                Directory.CreateDirectory(ConfigDirectory);
+                 string configText = JsonConvert.SerializeObject(Settings);
+                 File.WriteAllText(configPath, configText);
+             }
