@@ -145,38 +145,39 @@ in
 
       ops = lib.mkOption {
         type = lib.types.attrsOf (
-            lib.types.submodule (
-              { name, ... }:
-              {
-                options = {
-                  name = lib.mkOption {
-                    type = lib.types.str;
-                    default = name;
-                    defaultText = "<name>";
-                    description = "Username of the operator";
-                  };
-
-                  uuid = lib.mkOption {
-                    type = minecraftUUID;
-                    default = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
-                    description = "UUID of the operator";
-                  };
-
-                  level = lib.mkOption {
-                    type = lib.types.ints.between 0 4;
-                    default = cfg.serverProperties.op-permission-level or 4;
-                    description = "Permission level of the operator";
-                  };
-
-                  bypassesPlayerLimit = lib.mkOption {
-                    type = lib.types.bool;
-                    default = false;
-                    description = "Can join full server";
-                  };
+          lib.types.submodule (
+            { name, ... }:
+            {
+              options = {
+                name = lib.mkOption {
+                  type = lib.types.str;
+                  default = name;
+                  defaultText = "<name>";
+                  description = "Username of the operator";
                 };
-              }
-            )
-          );
+
+                uuid = lib.mkOption {
+                  type = minecraftUUID;
+                  default = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+                  description = "UUID of the operator";
+                };
+
+                level = lib.mkOption {
+                  type = lib.types.ints.between 0 4;
+                  default = cfg.serverProperties.op-permission-level or 4;
+                  defaultText = lib.literalExpression "config.services.minecraft-server.serverProperties.op-permission-level or 4";
+                  description = "Permission level of the operator";
+                };
+
+                bypassesPlayerLimit = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Can join full server";
+                };
+              };
+            }
+          )
+        );
         default = { };
         description = ''
           Operators, only has an effect when
@@ -325,10 +326,12 @@ in
               ln -sf ${whitelistFile} whitelist.json
               cp -f ${serverPropertiesFile} server.properties
 
-              ${if cfg.ops != { } then # provide a valid upgrade path for people with a stateful ops file but declarative properties
-                "ln -sf ${opsFile} ops.json"
-              else
-                ""}
+              ${
+                if cfg.ops != { } then # provide a valid upgrade path for people with a stateful ops file but declarative properties
+                  "ln -sf ${opsFile} ops.json"
+                else
+                  ""
+              }
 
             else
 
