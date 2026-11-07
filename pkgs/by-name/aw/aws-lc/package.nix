@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "5.12.0";
+  version = "5.13.0";
 
   patches = [
     ./fix-dynamic-loading-test.patch
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aws";
     repo = "aws-lc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O+0UG6Zk6U9b73B9qDSZ9aC32WL1anJIgH0TRgVpONI=";
+    hash = "sha256-O7wghkubdB9RoIOH9cKvpTqk1rU8y6LnH9hFdp+2ZVU=";
   };
 
   outputs = [
