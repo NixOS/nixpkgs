@@ -55,6 +55,9 @@
   libvaSupport ? mediaSupport,
   libva,
 
+  speechSynthesisSupport ? stdenv.hostPlatform.isLinux,
+  speechd-minimal,
+
   # Whether to use IPC for communicating with Tor
   useIPCTorService ? false,
   # Whether to disable multiprocess support
@@ -100,6 +103,7 @@ let
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
     ++ lib.optionals mediaSupport [ ffmpeg_8 ]
+    ++ lib.optionals speechSynthesisSupport [ speechd-minimal ]
   );
 
   version = "16.0";
