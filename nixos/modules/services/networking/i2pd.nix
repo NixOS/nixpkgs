@@ -262,12 +262,10 @@ in
         '';
       };
 
-      # Server/generic tunnels
-      serverTunnels = lib.mkOption {
+      tunnels = lib.mkOption {
         description = ''
-          Free-form "server" tunnels. Options are passed to `tunnels.conf`.
-          Mnemonic: we serving some service to others.
-          See <https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#servergeneric-tunnels>
+          Free-form tunnels. Options are passed to `tunnels.conf`.
+          See <https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/>
         '';
         type = types.attrsOf (
           types.submodule {
@@ -275,53 +273,11 @@ in
             options = {
               type = lib.mkOption {
                 type = types.str;
-                default = "server";
                 description = ''
-                  Type of server tunnel.
+                  Type of the tunnel.
                   See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
                 '';
-              };
-              host = lib.mkOption {
-                type = types.either types.str credType;
-                description = "IP address of server (on this address i2pd will send data from I2P)";
-              };
-              port = lib.mkOption {
-                type = types.port;
-                description = "Port of server tunnel (on this port i2pd will send data from I2P)";
-              };
-              inherit (templates) signaturetype i2cp i2p;
-            };
-          }
-        );
-        default = { };
-      };
-
-      # Client tunnels
-      clientTunnels = lib.mkOption {
-        description = ''
-          Free-form "client" tunnels. Options are passed to `tunnels.conf`.
-          Mnemonic: we connect to someone as a client.
-          See <https://i2pd.readthedocs.io/en/latest/user-guide/tunnels/#client-tunnels>
-        '';
-        type = types.attrsOf (
-          types.submodule {
-            inherit freeformType;
-            options = {
-              type = lib.mkOption {
-                type = types.str;
-                default = "client";
-                description = ''
-                  Type of client tunnel.
-                  See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
-                '';
-              };
-              port = lib.mkOption {
-                type = types.port;
-                description = "Port of client tunnel (on this port i2pd will receive data)";
-              };
-              destination = lib.mkOption {
-                type = types.either types.str credType;
-                description = "Remote endpoint, I2P hostname or b32.i2p address";
+                example = "client";
               };
               inherit (templates) signaturetype i2cp i2p;
             };
@@ -333,6 +289,7 @@ in
         example = lib.literalExpression ''
           {
             "irc-ilita" = {
+              type = "client";
               address = "127.0.0.1";
               port = 6668;
               destination = "irc.ilita.i2p";
@@ -360,11 +317,20 @@ in
   imports =
     let
       option = option: lib.splitString "." "services.i2pd.${option}";
-      rename = from: to: lib.mkRenamedOptionModule (option from) (option to);
+      change =
+        from: to: tunnelType:
+        lib.mkChangedOptionModule (option from) (option to) (
+          config:
+          lib.mapAttrs (k: v: v // { type = v.type or tunnelType; }) (
+            lib.getAttrFromPath (option from) config
+          )
+        );
     in
     [
-      (rename "inTunnels" "serverTunnels")
-      (rename "outTunnels" "clientTunnels")
+      (change "inTunnels" "tunnels" "server")
+      (change "outTunnels" "tunnels" "client")
+      (change "serverTunnels" "tunnels" "server")
+      (change "clientTunnels" "tunnels" "client")
     ];
 
   ###### Implementation ######
@@ -426,12 +392,7 @@ in
 
       gen = attr: settings: {
         conf = genConfig "i2pd.conf" (credSubstituteRec attr settings);
-        tunconf = genTunnels "i2pd-tunnels.conf" (
-          lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" v) (credSubstituteRec attr cfg.clientTunnels)
-          // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" v) (
-            credSubstituteRec attr cfg.serverTunnels
-          )
-        );
+        tunconf = genTunnels "i2pd-tunnels.conf" (credSubstituteRec attr cfg.tunnels);
       };
 
       i2pdConfig = gen "id" cfg.settings;
@@ -453,8 +414,7 @@ in
       # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
       credentials = credCollectRec [
         cfg.settings
-        cfg.clientTunnels
-        cfg.serverTunnels
+        cfg.tunnels
       ];
 
       loadCredentialsScript =
