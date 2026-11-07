@@ -16,6 +16,7 @@
   libiberty_static,
   runtimeShell,
   gitUpdater,
+  nixosTests,
   sysconfDir ? "", # set this parameter to override the default value $out/etc
   static ? false,
 }:
@@ -97,6 +98,7 @@ let
           fi
         '');
 
+      tests.nixos = nixosTests.distccd;
       updateScript = gitUpdater {
         rev-prefix = "v";
       };
