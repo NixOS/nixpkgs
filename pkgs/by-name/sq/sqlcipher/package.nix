@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sqlcipher";
     homepage = "https://www.zetetic.net/sqlcipher/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ enovamaker ];
     platforms = lib.platforms.unix;
   };
 })
