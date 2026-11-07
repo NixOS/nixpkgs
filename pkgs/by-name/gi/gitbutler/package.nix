@@ -15,6 +15,7 @@
   moreutils,
   nix-update-script,
   nodejs,
+  oniguruma,
   openssl,
   pkg-config,
   fetchPnpmDeps,
@@ -22,6 +23,7 @@
   pnpm_10,
   rust,
   rustPlatform,
+  sqlite,
   turbo,
   webkitgtk_4_1,
   wrapGAppsHook4,
@@ -84,7 +86,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libgit2
+    oniguruma
     openssl
+    sqlite
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin curl
   ++ lib.optionals stdenv.hostPlatform.isLinux [
