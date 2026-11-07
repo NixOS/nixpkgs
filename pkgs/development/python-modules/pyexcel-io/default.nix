@@ -18,11 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-UPUMj9x6Vbecht6K/TfkM3/BZeTSnIoS2k74YYVSVWI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'VERSION = "0.6.7"' 'VERSION = "${version}"'
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ lml ];
