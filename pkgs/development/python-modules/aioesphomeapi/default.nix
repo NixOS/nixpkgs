@@ -29,15 +29,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "46.23.0"; # must track the major version that home-assistant pins
+  version = "46.27.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7n6K+MY0s2oOvnbUXrZA/PCamfpel1jYZr4RXzH+Y6s=";
+    hash = "sha256-IRV6yZqP56+3JiY84BQHFsuyj+gOO9gCOvj63uzo+IE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools>=84.2.0' setuptools
+  '';
 
   build-system = [
     setuptools

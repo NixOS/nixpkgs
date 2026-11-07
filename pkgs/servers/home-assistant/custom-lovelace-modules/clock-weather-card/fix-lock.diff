@@ -1,0 +1,13 @@
+diff --git a/yarn.lock b/yarn.lock
+index 54b0693..d1d212e 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -239,7 +239,7 @@ __metadata:
+   resolution: "@formatjs/intl-utils@npm:3.8.4"
+   dependencies:
+     emojis-list: "npm:^3.0.0"
+-  checksum: 10c0/737d5e796c46da0efc956a31a73a754e4e368fa1d7d7190a6c5a10192f6bab93569437a3165669fb0d435f6f054e0651f30e511f3d14bab467fd79384d0e2062
++  checksum: 10c0/b6afae90723c109f52940b3740be4833441373596a17f73b34c6f681da0e688dbfc97513b3d0a1f22c568d3f08b29ff90e49244f18ff9d30c29999c319b1cec5
+   languageName: node
+   linkType: hard
+ 

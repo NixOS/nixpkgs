@@ -15,22 +15,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovodafone";
-  version = "3.3.5";
+  version = "3.3.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AOE4fM+RH3Ls7p2QPdLLq78b5hnxvmqBfib8u/gykfA=";
+    hash = "sha256-k8DaYuff0rZYVLppVagPphUu/WCoza0IOSp+uoD5oCI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=84.2.1" "setuptools"
+  '';
+
+  # all deps are needlessly pinned to very recent versions
+  pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     beautifulsoup4
-    cryptography
     orjson
     pycryptodome
     segno

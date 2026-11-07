@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.16.1";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-0o9J57KNMG6KXvrRYx+p/jG9CClHjMciNOUPBVCiqbs=";
+    hash = "sha256-UnFvBOZ/nPlmMc/pkDcBBSGozHaVdsjCYiPn1usqf3A=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ buildHomeAssistantComponent rec {
   postPatch = ''
     # avoid dependency on rather big pytest-timeout
     substituteInPlace pyproject.toml \
-      --replace-fail '"--timeout=60",' ""
+      --replace-fail '"--timeout=120",' ""
   '';
 
   dependencies = httpx.optional-dependencies.http2;

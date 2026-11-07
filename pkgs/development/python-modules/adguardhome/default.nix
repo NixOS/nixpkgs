@@ -1,28 +1,40 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aiointercept,
+  awesomeversion,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   poetry-core,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  rich,
+  syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "adguardhome";
-  version = "0.8.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-adguardhome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pc7UfR/0mQZ98FyomQErz5hePHy6KE2h9UhJ9lFGtFA=";
+    hash = "sha256-UpRr1HTh7BMNWL4ml6pWe+AsIy4MEgTpa4HgdzH36oQ=";
   };
+
+  patches = [
+    # https://github.com/frenck/python-adguardhome/pull/1870
+    ./typer-0.26.patch
+  ];
 
   build-system = [ poetry-core ];
 
@@ -30,16 +42,36 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiohttp
+    awesomeversion
+    mashumaro
+    orjson
     yarl
   ];
+
+  optional-dependencies = {
+    cli = [
+      rich
+      typer
+    ];
+  };
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    aresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    syrupy
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
+
+  disabledTests = [
+    # fixture formatting differs
+    "test_config"
+    "test_get"
+    "test_stats"
+    "test_status"
   ];
 
   pythonImportsCheck = [ "adguardhome" ];

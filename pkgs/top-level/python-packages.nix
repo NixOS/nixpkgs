@@ -4288,7 +4288,7 @@ self: super: with self; {
 
   dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
 
-  deebot-client = callPackage ../development/python-modules/deebot-client { };
+  deebot-client = callPackage ../development/python-modules/deebot-client { inherit (pkgs) zstd; };
 
   deemix = callPackage ../development/python-modules/deemix { };
 
@@ -15187,8 +15187,6 @@ self: super: with self; {
 
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
-  pyfronius = callPackage ../development/python-modules/pyfronius { };
-
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
@@ -15225,6 +15223,8 @@ self: super: with self; {
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygatt = callPackage ../development/python-modules/pygatt { };
+
+  pygbl = callPackage ../development/python-modules/pygbl { };
 
   pygccxml = callPackage ../development/python-modules/pygccxml { };
 
@@ -15352,8 +15352,6 @@ self: super: with self; {
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
-
-  pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
 
@@ -16248,8 +16246,6 @@ self: super: with self; {
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
-  pyrituals = callPackage ../development/python-modules/pyrituals { };
-
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   pyro-api = callPackage ../development/python-modules/pyro-api { };
@@ -16279,8 +16275,6 @@ self: super: with self; {
   pysail = callPackage ../development/python-modules/pysail {
     protoc = pkgs.protobuf;
   };
-
-  pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 
@@ -22591,8 +22585,6 @@ self: super: with self; {
   voip-utils = callPackage ../development/python-modules/voip-utils { };
 
   volatile = callPackage ../development/python-modules/volatile { };
-
-  volkswagencarnet = callPackage ../development/python-modules/volkswagencarnet { };
 
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 

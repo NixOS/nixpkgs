@@ -1,28 +1,34 @@
 {
   lib,
+  aiomqtt,
   buildPythonPackage,
   click,
   fetchFromGitHub,
   mashumaro,
   orjson,
-  paho-mqtt,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
   tabulate,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.9.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
     tag = version;
-    hash = "sha256-63PqNmJC0IWPPMVyZdKoZikvBA4phMcYxlTBk/m1cq0=";
+    hash = "sha256-7E68w7BDmERCCQjdB79vw60Xy/nAQKH2ym8qzPOAU2I=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.5,<0.13.0" "uv_build"
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -30,10 +36,14 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "orjson" ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    uv-build
+  ];
+
+  dependencies = [
+    aiomqtt
     mashumaro
     orjson
-    paho-mqtt
   ];
 
   optional-dependencies.cli = [
@@ -48,7 +58,12 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires network access
+    "tests/test_client.py"
+    "tests/test_commands.py"
     "tests/test_discovery.py"
+    "tests/test_robustness.py"
+    "tests/test_supervisor.py"
+    "tests/test_watch.py"
   ];
 
   disabledTests = [

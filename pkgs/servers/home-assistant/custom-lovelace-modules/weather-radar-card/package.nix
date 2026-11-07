@@ -7,23 +7,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "weather-radar-card";
-  version = "3.13.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "jpettitt";
     repo = "weather-radar-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbaHls0pvsFZppNX8EtFluNZ7QUnWdapuECCAHM/oLU=";
+    hash = "sha256-bt757cl8S3rPQbZbcCj2Icxm+ojtlCeaj3xBX/j4xi8=";
   };
 
   postPatch = ''
-    substituteInPlace src/marker-icon.ts src/radar-toolbar.ts src/weather-radar-card.ts \
+    substituteInPlace src/marker-icon.ts src/radar-toolbar.ts src/vector-basemap.ts \
       --replace-fail "/local/community/weather-radar-card/" "/local/nixos-lovelace-modules/"
   '';
 
   npmDepsFetcherVersion = 2;
   npmFlags = [ "--legacy-peer-deps" ];
-  npmDepsHash = "sha256-6zs7AflM9ZqXXK2Tvm+1R8W+Ejyg7k7Tc8IpG4/3vFA=";
+  npmDepsHash = "sha256-pTs3PrXipuoJWAhCFx8I/diprSkl3o0wwbQmNIkuaSE=";
 
   installPhase = ''
     runHook preInstall
@@ -39,7 +39,7 @@ buildNpmPackage (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "Rrain radar card using the tiled images from RainViewer";
+    description = "Rain radar card using the tiled images from RainViewer";
     homepage = "https://github.com/jpettitt/weather-radar-card";
     changelog = "https://github.com/jpettitt/weather-radar-card/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

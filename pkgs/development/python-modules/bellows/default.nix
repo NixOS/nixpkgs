@@ -7,6 +7,7 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
+  serialx,
   setuptools,
   voluptuous,
   zigpy,
@@ -14,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bellows";
-  version = "1.1.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     tag = finalAttrs.version;
-    hash = "sha256-Qozk8DraiFcKYtI5bh0/6wa+sbAF3dgnGmP1pIE+9H0=";
+    hash = "sha256-5Ysj5mHoUdlSapYwW07qqsLH7svYCtUb9tNzHzi/KB8=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     click
     click-log
+    serialx
     voluptuous
     zigpy
   ];

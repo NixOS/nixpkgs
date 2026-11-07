@@ -11,7 +11,6 @@
   pytest-mockservers,
   pytest-resource-path,
   pytestCheckHook,
-  pythonAtLeast,
   pytz,
   time-machine,
 }:
@@ -60,15 +59,6 @@ buildPythonPackage (finalAttrs: {
     "test_schedule_parser_with_a_daily_recurring_enabled_schedule_data"
     "test_schedule_parser_with_a_partial_daily_recurring_enabled_schedule_data"
     "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    # AssertionError: Expected <'I' format requires 0 <= number <= 4294967295> to be equal to <argument out of range>, but was not.
-    "test_minutes_to_hexadecimal_seconds_with_a_negative_value_should_throw_an_error"
-    "test_current_timestamp_to_hexadecimal_with_errornous_value_should_throw_an_error"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # AssertionError: Expected <hour must be in 0..23, not -1> to be equal
-    "test_seconds_to_iso_time_with_a_nagative_value_should_throw_an_error"
   ];
 
   pythonImportsCheck = [ "aioswitcher" ];

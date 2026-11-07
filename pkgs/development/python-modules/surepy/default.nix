@@ -1,56 +1,40 @@
 {
   lib,
-  aiodns,
   aiohttp,
-  async-timeout,
-  attrs,
-  brotlipy,
   buildPythonPackage,
-  faust-cchardet,
   click,
-  colorama,
   fetchFromGitHub,
-  halo,
   poetry-core,
-  requests,
+  pytest-asyncio,
+  pytest-cov,
+  pytestCheckHook,
   rich,
 }:
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benleb";
     repo = "surepy";
     tag = "v${version}";
-    hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
+    hash = "sha256-b93SqZr+9VKYHoFxkutZ01LsuvtGiDO5FrHIrZvho94=";
   };
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "async-timeout"
-    "rich"
-  ];
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    aiodns
     aiohttp
-    async-timeout
-    attrs
-    brotlipy
     click
-    colorama
-    faust-cchardet
-    halo
-    requests
     rich
-  ];
+  ]
+  ++ aiohttp.optional-dependencies.speedups;
 
-  # Project has no tests
+  # tests require to configure a token
   doCheck = false;
 
   pythonImportsCheck = [ "surepy" ];

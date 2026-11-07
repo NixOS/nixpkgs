@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aio-wattwaechter";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmartCircuits-GmbH";
     repo = "WattWaechter-PyPI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hM2DGQBEUr1HYd0CDdjRdFA7+HKaF2kLVFrAWCjP+CU=";
+    hash = "sha256-jpLyBjgjtqFn9BNNOXs7cR4uk6y174HKjulYFf0sDj4=";
   };
 
   build-system = [ setuptools ];

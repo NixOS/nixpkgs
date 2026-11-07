@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "lg-webos-remote-control";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "madmicio";
     repo = "LG-WebOS-Remote-Control";
     rev = version;
-    hash = "sha256-Da/43D2PPL7ElwukJ6VR+O/c3z1UPnxrDW4oMWbWwr0=";
+    hash = "sha256-WPaT9ZxNjhm53+9PQnx50GGkI46IIhcHEriyE125fV0=";
   };
 
   npmDepsHash = "sha256-kN+i0ic1JWs6kqnAliiO4yVMDXwfZaQsRGKeV9A0MxE=";

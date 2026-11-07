@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xknx";
-  version = "3.20.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";
     tag = finalAttrs.version;
-    hash = "sha256-/KUFf1d2+IcqGiLyX5mls7sMhfHU9KBgK1c/t2835WA=";
+    hash = "sha256-Axgh/ld4vbTktZxLcF2Gkk5Ojfduxgbk4oRDcIYzYmM=";
   };
 
   build-system = [ setuptools ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "eurotronic-cometblue-ha";
-  version = "1.4.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rikroe";
     repo = "eurotronic-cometblue";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j3UuN0Cmb2mOo3QGqy0wu19+vRyMahclXKyka2Vy10w=";
+    hash = "sha256-9tWrogfv6veRRokrOs017yDnmVoAb5mt5M9yY6QJhrc=";
   };
 
   build-system = [ pdm-backend ];
