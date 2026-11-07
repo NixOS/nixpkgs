@@ -25,6 +25,7 @@ let
   c-blosc' = c-blosc.override { snappySupport = true; };
   # H5Z-ZFP needs an 8-bit bitstream word so the compressed HDF5 data is byte-portable
   zfp' = zfp.override { bitStreamWordSize = 8; };
+  c-blosc2' = c-blosc2.override { zfp = zfp'; };
 in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
@@ -48,7 +49,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     c-blosc'
-    c-blosc2
+    c-blosc2'
     bzip2
     charls
     lz4
