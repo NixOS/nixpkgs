@@ -263,10 +263,16 @@ in
           ]) greeterUsers
         )
       )
-      ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
-        # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-        "f /run/gdm/gdm.ran-initial-setup 0711 gdm gdm - yes"
-      ];
+      ++
+        lib.optionals
+          (
+            config.services.gnome.gnome-initial-setup.enable
+            && lib.versionOlder config.system.stateVersion "26.11"
+          )
+          [
+            # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+            "f /run/gdm/gdm.ran-initial-setup 0711 gdm gdm - yes"
+          ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = [
@@ -413,7 +419,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
@@ -433,7 +439,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
@@ -461,7 +467,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
