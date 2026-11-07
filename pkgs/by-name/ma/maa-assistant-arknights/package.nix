@@ -4,33 +4,39 @@
   callPackage,
   stdenv,
   fetchFromGitHub,
-  asio,
+  boost,
   cmake,
-  libcpr,
+  nlohmann_json,
   onnxruntime,
   opencv,
-  isBeta ? false,
+  zlib,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
 
 let
-  fastdeploy = callPackage ./fastdeploy-ppocr.nix { };
-  sources = lib.importJSON ./pin.json;
+  fastdeploy = callPackage ./fastdeploy-ppocr.nix {
+    inherit cudaSupport cudaPackages;
+  };
+  source = lib.importJSON ./pin.json;
+  maaUtils = fetchFromGitHub {
+    owner = "MaaXYZ";
+    repo = "MaaUtils";
+    inherit (source.maaUtils) rev hash;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
-  version = if isBeta then sources.beta.version else sources.stable.version;
+  pname = "maa-assistant-arknights";
+  version = source.version;
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "MaaAssistantArknights";
     rev = "v${finalAttrs.version}";
-    hash = if isBeta then sources.beta.hash else sources.stable.hash;
+    hash = source.hash;
   };
 
   nativeBuildInputs = [
-    asio
     cmake
     fastdeploy.cmake
   ]
@@ -38,9 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fastdeploy
-    libcpr
+    boost
+    nlohmann_json
     onnxruntime
     opencv
+    zlib
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
@@ -62,14 +70,33 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "INSTALL_FLATTEN" false)
     (lib.cmakeBool "INSTALL_PYTHON" true)
     (lib.cmakeBool "INSTALL_RESOURCE" true)
-    (lib.cmakeBool "USE_MAADEPS" false)
-    (lib.cmakeFeature "MAA_VERSION" "v${finalAttrs.version}")
+    (lib.cmakeBool "WITH_RPATH_LIBRARY" false)
+    (lib.cmakeFeature "MAA_HASH_VERSION" "v${finalAttrs.version}")
+  ];
+
+  postUnpack = ''
+    mkdir -p "$sourceRoot/src/MaaUtils"
+    cp -r --no-preserve=mode ${maaUtils}/. "$sourceRoot/src/MaaUtils/"
+  '';
+
+  patches = [
+    ./use-system-dependencies.patch
+    ./boost-process-v1.patch
+    ./missing-unordered-map-include.patch
   ];
 
   passthru.updateScript = ./update.sh;
 
   postPatch = ''
-    cp -v ${fastdeploy.cmake}/Findonnxruntime.cmake cmake/
+    substituteInPlace src/MaaCore/Config/OnnxSessions.cpp \
+      --replace-fail '#if __has_include(<onnxruntime/coreml_provider_factory.h>)' '#if defined(__APPLE__) && __has_include(<onnxruntime/coreml_provider_factory.h>)'
+    substituteInPlace src/MaaUtils/cmake/config.cmake \
+      --replace-fail '-Werror;' ""
+    cp ${fastdeploy.cmake}/Findonnxruntime.cmake src/MaaUtils/cmake/modules/
+    substituteInPlace src/MaaUtils/MaaUtils.cmake \
+      --replace-fail 'find_package(ONNXRuntime REQUIRED)' 'find_package(onnxruntime REQUIRED)'
+    substituteInPlace src/MaaCore/CMakeLists.txt \
+      --replace-fail 'ONNXRuntime::ONNXRuntime' 'onnxruntime::onnxruntime'
   '';
 
   postInstall = ''
@@ -81,7 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Arknights assistant";
     homepage = "https://github.com/MaaAssistantArknights/MaaAssistantArknights";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ Cryolitia ];
+    maintainers = with lib.maintainers; [
+      Cryolitia
+      wangl-cc
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
