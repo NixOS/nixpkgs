@@ -20,6 +20,7 @@
   libglycin,
   libxml2,
   openssl,
+  aws-lc,
   sqlite,
   webkitgtk_6_0,
   glib-networking,
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     libxml2
     openssl
+    aws-lc
     sqlite
     webkitgtk_6_0
 
