@@ -13215,6 +13215,13 @@
     github = "jbiel";
     githubId = 961717;
   };
+  jblik = {
+    email = "jacob@steenblik.ch";
+    matrix = "@jblik:matrix.org";
+    github = "jblik";
+    githubId = 88430125;
+    name = "Jacob Steenblik";
+  };
   jboy = {
     email = "jboy+nixos@bius.moe";
     githubId = 2187261;
