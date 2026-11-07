@@ -17,7 +17,7 @@
   pytest-benchmark,
   pytest-cov-stub,
   pytest-lazy-fixtures,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   redis,
   typing-extensions,
   valkey,
@@ -76,11 +76,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flaky
     hiro
+    pytest9_1CheckHook
     pytest-asyncio
     pytest-benchmark
     pytest-cov-stub
     pytest-lazy-fixtures
-    pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
