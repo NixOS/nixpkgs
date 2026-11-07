@@ -525,6 +525,38 @@ stdenv.mkDerivation (
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/c54710db21c1827dbc3e47658a562525af0fe528.patch";
           hash = "sha256-ENpPDEHtl3kj/UF52hfV+LwvO7CUaK8UvTy+OAYlWFw=";
         })
+      ]
+      ++ optionals (lib.versions.major version == "9") [
+        # Security fixes from master. Remove when a 9.0.x release includes them.
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24384
+        (fetchpatch2 {
+          name = "CVE-2026-107675.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/2b822b7fb6ed195546bc9fd9bdb794e98222bdce.patch";
+          hash = "sha256-6fPflS8cFmK75HBAHwcdypGk0bIm8v9RTx1gLCcOyuw=";
+        })
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24590
+        (fetchpatch2 {
+          name = "CVE-2026-107676.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/2c2f6e96e31795ae95a8f8323a493ffbc493111f.patch";
+          hash = "sha256-2k13kIv6ROpNpP6BJg9D7k7uFCJMZrtWOh/pAY+rfAw=";
+        })
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24592
+        (fetchpatch2 {
+          name = "CVE-2026-107677-1.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e.patch";
+          hash = "sha256-SidmDp5Tb4gdBMwEv5+5n1oAcLkwgatpNMopiGV4nlI=";
+        })
+        (fetchpatch2 {
+          name = "CVE-2026-107677-2.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/403dd2ee396dbafc727fc7bf552ff41233811316.patch";
+          hash = "sha256-7mZe4c5gflcKOzSe+P0Rq0dRBXMidaw4t8Wdr7AjIaA=";
+        })
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24902
+        (fetchpatch2 {
+          name = "CVE-2026-107696.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/f5d4fd186c68913240c4f6e9cda98443e1518b34.patch";
+          hash = "sha256-AQxSyIxnwwf/iFP6jJW1Uv6YvufJ2iC8XDv+JssO2yI=";
+        })
       ];
 
     configurePlatforms = [ ];
