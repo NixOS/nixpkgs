@@ -19,8 +19,9 @@ in
   meta.maintainers = lib.teams.radicle.members;
 
   nodes.seed = {
-    virtualisation.credentials = {
-      "dev.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+    virtualisation.credentials."dev.radicle.node.secret" = {
+      source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+      mechanism = "fw_cfg";
     };
 
     services.radicle = {
