@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fuc";
   version = "3.2.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
@@ -23,8 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "--workspace"
-    "--bin cpz"
-    "--bin rmz"
+    "--bin=cpz"
+    "--bin=rmz"
   ];
 
   nativeCheckInputs = [
