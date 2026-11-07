@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,7 +19,19 @@ buildGoModule (finalAttrs: {
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-CnQvMhaXZ2IY1K8dMQRsvd7KzLb4F4xczLTieX477Ig=";
 
+  # gosnowflake 1.6.19 panics at startup with Go >= 1.23, which rejects the negative serial
+  # of one of its bundled CA certificates. Drop once upstream bumps gosnowflake:
+  # https://github.com/golang-migrate/migrate/issues/1268
+  postPatch = ''
+    echo "godebug x509negativeserial=1" >> go.mod
+  '';
+
   subPackages = [ "cmd/migrate" ];
+
+  ldflags = [
+    "-s"
+    "-X main.Version=${finalAttrs.version}"
+  ];
 
   tags = [
     "cassandra"
@@ -45,6 +58,9 @@ buildGoModule (finalAttrs: {
     "testing"
     "yugabytedb"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://github.com/golang-migrate/migrate";
