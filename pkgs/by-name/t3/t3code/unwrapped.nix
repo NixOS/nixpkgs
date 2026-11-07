@@ -14,6 +14,7 @@
   nodejs_26,
   pkg-config,
   python3,
+  runCommand,
   spdx-license-list-data,
   stdenv,
   writeDarwinBundle,
@@ -140,14 +141,40 @@ stdenv.mkDerivation (
     # some dependencies' static foreign-platform binaries.
     noAuditTmpdir = true;
 
+    stripExclude = [
+      "*.js"
+      "*.mjs"
+      "*.cjs"
+      "*.ts"
+      "*.mts"
+      "*.cts"
+      "*.map"
+      "*.json"
+      "*.md"
+    ];
+
     installPhase = ''
       runHook preInstall
 
+      node --input-type=module > runtime-dependencies.json <<'JS'
+      import fs from 'node:fs';
+      import { selectCliRuntimeExternalDependencies } from './scripts/lib/cli-external-packages.ts';
+      import { selectDesktopRuntimeExternalDependencies } from './scripts/lib/desktop-external-packages.ts';
+
+      const server = JSON.parse(fs.readFileSync('apps/server/package.json', 'utf8'));
+      const desktop = JSON.parse(fs.readFileSync('apps/desktop/package.json', 'utf8'));
+      console.log(JSON.stringify({
+        'apps/server': Object.keys(selectCliRuntimeExternalDependencies(server.dependencies)),
+        'apps/desktop': Object.keys(selectDesktopRuntimeExternalDependencies(desktop.dependencies)),
+      }));
+      JS
+
+      python3 ${./stage-runtime.py} . "$out/libexec/t3code" runtime-dependencies.json
+
       mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
-      cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
-      cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
+      cp --recursive --no-preserve=mode apps/server/dist "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode \
-        apps/desktop/{package.json,node_modules,dist-electron} \
+        apps/desktop/{package.json,dist-electron} \
         "$out"/libexec/t3code/apps/desktop
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
@@ -225,6 +252,13 @@ stdenv.mkDerivation (
     ];
 
     passthru = {
+      tests.runtime-dependencies = runCommand "t3code-runtime-dependencies-test" { } ''
+        cp ${./stage-runtime.py} stage-runtime.py
+        cp ${./test-stage-runtime.py} test-stage-runtime.py
+        ${lib.getExe python3} test-stage-runtime.py
+        touch "$out"
+      '';
+
       updateScript = nix-update-script {
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
