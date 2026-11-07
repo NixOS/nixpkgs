@@ -67,11 +67,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "17.2";
+  version = "18.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/gdb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HANsDXLks9H7XJTIhjKt1vnXb018TS6nk8EqnxmjIow=";
+    hash = "sha256-zZ/D/itHdDhA5CwVktPYf4MC6xhjnAuLS6CJgALiNI8=";
   };
 
   postPatch =
