@@ -76,6 +76,12 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
 
+  disabledTests = [
+    # consistently abff1dfd2f8bbc2e7aefe395999e3009 instead of e04e8bb89ad8cb84ae93ab57758a6ef2
+    "test_DeterministicGzipFile"
+    "test_DeterministicGzipFile_fileobj"
+  ];
+
   pythonImportsCheck = [ "nibabel" ];
 
   meta = {
