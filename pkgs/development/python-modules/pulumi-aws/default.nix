@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independent of pulumi's.
-  version = "7.43.0";
+  version = "7.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
     tag = "v${version}";
-    hash = "sha256-TAwRlBMtP/HnasaEb4Pl4LAzhwugbo/jKcZ4Z+cadJM=";
+    hash = "sha256-t3piE6ffS9hRUPwQDkqUXlAV8yvAmUnOdSIDyK1OwEk=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
