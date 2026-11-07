@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoPatchelfHook,
   puredata,
   pkg-config,
   cmake,
@@ -11,20 +12,23 @@
   opusfile,
   ffmpeg,
   zlib,
+  libxcursor,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pd-else";
-  version = "1.0-rc13";
+  version = "1.0-rc14";
 
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-else";
     tag = "v.${version}";
-    hash = "sha256-WebjdozcFup2xk3cS9LPTiA6m0l1sR6sj3hHlt6ScfU=";
+    hash = "sha256-F4pMBw/Ps11pPBfaIS9SNUoTls5TR0+s/PjQotKuHpQ=";
   };
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     cmake
   ];
@@ -37,6 +41,8 @@ stdenv.mkDerivation rec {
     opusfile
     ffmpeg
     zlib
+    libxcursor
+    libxext
   ];
 
   # Set up Pure Data headers and configure with system libraries
@@ -61,9 +67,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/include/ $out/lib/
   '';
 
+  # Only the prebuilt tkdnd libraries bundled with ELSE need patching. The
+  # externals are linked here and already get a correct RUNPATH.
+  dontAutoPatchelf = true;
+
   postFixup = ''
-    interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
-    find $out -type f -executable -exec patchelf --set-interpreter "$interpreter" --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
+    autoPatchelf $out/else/tkdnd
   '';
 
   meta = {
@@ -76,9 +85,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/porres/pd-else";
     license = lib.licenses.wtfpl;
     platforms = lib.platforms.unix;
-    # pd-else 1.0-rc13 doesn't build against puredata >= 0.56: pdlua.c calls
-    # glist_findrtext, which was renamed to glist_getrtext. Fixed in 1.0-rc14.
-    broken = true;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ lib.maintainers.kugland ];
   };
 }
