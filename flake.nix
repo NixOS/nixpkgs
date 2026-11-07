@@ -205,21 +205,33 @@
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
 
-        The "legacy" in `legacyPackages` doesn't imply that the packages exposed
-        through this attribute are "legacy" packages. Instead, `legacyPackages`
-        is used here as a substitute attribute name for `packages`. The problem
-        with `packages` is that it makes operations like `nix flake show
-        nixpkgs` unusably slow due to the sheer number of packages the Nix CLI
-        needs to evaluate. But when the Nix CLI sees a `legacyPackages`
-        attribute it displays `omitted` instead of evaluating all packages,
-        which keeps `nix flake show` on Nixpkgs reasonably fast, though less
-        information rich.
+        The "legacy" in `legacyPackages` means that the packages exposed
+        through this attribute are "original" packages, rather than "old"
+        packages. In fact, `legacyPackages` is an alternative to the `packages`
+        output attribute of `flake.nix` files with added special handling (See
+        <https://github.com/NixOS/nix/blob/8fd18d36f67c7b23013dc1115019103423784fba/src/nix/flake.cc#L1393-L1429>).
 
-        The reason why finding the tree structure of `legacyPackages` is slow,
-        is that for each attribute in the tree, it is necessary to check whether
-        the attribute value is a package or a package set that needs further
-        evaluation. Evaluating the attribute value tends to require a significant
-        amount of computation, even considering lazy evaluation.
+        It exists for the following reasons:
+
+        1. The tree structure of the nixpkgs repository (e.g. in
+          `rustPackages.*` or `pkgsCross.*`) requires strict separation from
+           the flakes `output.packages` attribute. The children of the
+           `outputs.packages` flake attribute must follow the schema of
+           `packages.<system>.<name>`. The `<name>` portion allows no further
+           nesting, so tree structures would require flattening. The
+           `outputs.legacyPackages` attribute imposes no such restrictions. See
+           also <https://github.com/NixOS/nix/commit/3488fa7c6cef487d3f9501e89894f9e632e678db>.
+        2. In addition, the tree structure of nixpkgs slows down evaluation.
+           That is because for each attribute in the tree, it is necessary to
+           check whether the attribute value is a package or a package set that
+           needs further evaluation. Evaluating the attribute values tends to
+           require a significant amount of computation, even considering lazy
+           evaluation.
+        3. When calling `nix flake show nixpkgs`, the flakes `outputs.*`
+           attributes are fully evaluated. `outputs.legacyPackages` is omitted
+           in the output and not evaluated unless the special `--legacy` CLI
+           flag is provided. This keeps the nix CLI from stalling while still
+           allowing package introspection if desired.
       */
       legacyPackages =
         let
