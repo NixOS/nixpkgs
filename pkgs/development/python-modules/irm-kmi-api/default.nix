@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "irm-kmi-api";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdejaegh";
     repo = "irm-kmi-api";
     tag = version;
-    hash = "sha256-RJMIXisgG4ybynsm7kCrN8zOU0EJv7a1Q74l+edxH/E=";
+    hash = "sha256-KMPD6uvQ/GEbhdOPr34Ixb1qaNFtVUfvKOaorjS9mUg=";
   };
 
   build-system = [ setuptools ];
