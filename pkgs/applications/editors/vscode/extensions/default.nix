@@ -2134,8 +2134,8 @@ let
         mktplcRef = {
           name = "vscode-graphql";
           publisher = "GraphQL";
-          version = "0.13.4";
-          hash = "sha256-zPc+jNbXfuXMWXxbKhaOpjgDu96jg5C+CCQ3HXEQ7fw=";
+          version = "1.0.0";
+          hash = "sha256-2avtR+jLyO/qHWXUanzZh4N/EggXyoQLGBJX9hkX4GI=";
         };
         meta = {
           description = "GraphQL extension for VSCode built with the aim to tightly integrate the GraphQL Ecosystem with VSCode for an awesome developer experience";
