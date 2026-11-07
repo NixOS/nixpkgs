@@ -230,7 +230,9 @@ with lib.maintainers;
     members = [
       SomeoneSerge
       connorbaker
-      GaetanLepage # Starting Autumn 2025
+      # dhoffer
+      # zimbatm?
+      # SC (part)?
     ];
     scope = ''
       Supporting GPU-Accelerated Scientific Computing.
@@ -249,7 +251,8 @@ with lib.maintainers;
     shortName = "cudaB";
     members = [
       YorikSar # Starting Autumn 2025
-      # MODUS
+      GaetanLepage # Starting Winter 2026?
+      # Ron, Flox, Foundation, MODUS, Funders
     ];
     scope = ''
       Package CUDA-enabled packages.
