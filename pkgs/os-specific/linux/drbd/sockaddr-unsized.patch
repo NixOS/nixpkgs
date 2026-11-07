@@ -1,0 +1,76 @@
+Backport the bind() changes from upstream commit
+57c336f7b6ae66039f6787fa74576c83f23e633a:
+https://github.com/LINBIT/drbd/commit/57c336f7b6ae66039f6787fa74576c83f23e633a
+
+Linux 6.18.57 backported sockaddr_unsized for bind(), but not connect().
+Keep the connect() calls unchanged and detect the new type so older kernels
+continue to use sockaddr.
+
+diff --git a/drbd/drbd-kernel-compat/cocci/struct_sockaddr_unsized__no_present.cocci b/drbd/drbd-kernel-compat/cocci/struct_sockaddr_unsized__no_present.cocci
+new file mode 100644
+--- /dev/null
++++ b/drbd/drbd-kernel-compat/cocci/struct_sockaddr_unsized__no_present.cocci
+@@ -0,0 +1,4 @@
++@@
++@@
++- struct sockaddr_unsized
+++ struct sockaddr
+diff --git a/drbd/drbd-kernel-compat/gen_patch_names.c b/drbd/drbd-kernel-compat/gen_patch_names.c
+--- a/drbd/drbd-kernel-compat/gen_patch_names.c
++++ b/drbd/drbd-kernel-compat/gen_patch_names.c
+@@ -668,6 +668,9 @@ int main(int argc, char **argv)
+ 	patch(1, "timer_container_of", true, false,
+ 	      COMPAT_HAVE_TIMER_CONTAINER_OF, "present");
+ 
++	patch(1, "struct_sockaddr_unsized", true, false,
++	      COMPAT_HAVE_STRUCT_SOCKADDR_UNSIZED, "present");
++
+ /* #define BLKDEV_ISSUE_ZEROOUT_EXPORTED */
+ /* #define BLKDEV_ZERO_NOUNMAP */
+ 
+diff --git a/drbd/drbd-kernel-compat/tests/have_struct_sockaddr_unsized.c b/drbd/drbd-kernel-compat/tests/have_struct_sockaddr_unsized.c
+new file mode 100644
+--- /dev/null
++++ b/drbd/drbd-kernel-compat/tests/have_struct_sockaddr_unsized.c
+@@ -0,0 +1,3 @@
++#include <linux/socket.h>
++
++struct sockaddr_unsized x;
+diff --git a/drbd/drbd_transport_lb-tcp.c b/drbd/drbd_transport_lb-tcp.c
+--- a/drbd/drbd_transport_lb-tcp.c
++++ b/drbd/drbd_transport_lb-tcp.c
+@@ -624,6 +624,6 @@ dtl_try_connect(struct drbd_transport *transport, struct dtl_path *path, struct
+ 	 */
+ 	what = "bind before connect";
+-	err = sock->ops->bind(sock, (struct sockaddr *) &my_addr, path->path.my_addr_len);
++	err = sock->ops->bind(sock, (struct sockaddr_unsized *) &my_addr, path->path.my_addr_len);
+ 	if (err < 0)
+ 		goto out;
+ 
+@@ -1079,6 +1079,6 @@ static int dtl_init_listener(struct drbd_transport *transport,
+ 		: sizeof(struct sockaddr_in);
+ 
+-	err = s_listen->ops->bind(s_listen, (struct sockaddr *)&my_addr, addr_len);
++	err = s_listen->ops->bind(s_listen, (struct sockaddr_unsized *)&my_addr, addr_len);
+ 	if (err < 0) {
+ 		what = "bind before listen";
+ 		goto out;
+diff --git a/drbd/drbd_transport_tcp.c b/drbd/drbd_transport_tcp.c
+--- a/drbd/drbd_transport_tcp.c
++++ b/drbd/drbd_transport_tcp.c
+@@ -496,6 +496,6 @@ static int dtt_try_connect(struct dtt_path *path, struct socket **ret_socket)
+ 	*/
+ 	what = "bind before connect";
+-	err = socket->ops->bind(socket, (struct sockaddr *) &my_addr, path->path.my_addr_len);
++	err = socket->ops->bind(socket, (struct sockaddr_unsized *) &my_addr, path->path.my_addr_len);
+ 	if (err < 0)
+ 		goto out;
+ 
+@@ -1031,6 +1031,6 @@ static int dtt_init_listener(struct drbd_transport *transport,
+ 		: sizeof(struct sockaddr_in);
+ 
+-	err = s_listen->ops->bind(s_listen, (struct sockaddr *)&my_addr, addr_len);
++	err = s_listen->ops->bind(s_listen, (struct sockaddr_unsized *)&my_addr, addr_len);
+ 	if (err < 0) {
+ 		what = "bind before listen";
+ 		goto out;
