@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "setuptools-gettext";
-  version = "0.1.19";
+  version = "0.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0JFpoIUAZy89YVDAB1pb+x5tUO/Lo0DZzU5fNOLjm74=";
+    hash = "sha256-eJ86Z9b33uD3qnp79FbUT0lzbK8LBJni6rmubSXPunM=";
   };
 
   build-system = [ setuptools ];
