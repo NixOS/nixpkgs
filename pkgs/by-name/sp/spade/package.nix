@@ -11,7 +11,9 @@
   pkg-config,
   openssl,
   python314,
+  rust-jemalloc-sys,
   swim,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,6 +56,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    rust-jemalloc-sys
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     python314
