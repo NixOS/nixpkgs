@@ -158,6 +158,8 @@ If set to `true`, removes the pre-existing vendor directory. This should only be
 ### `subPackages` {#var-go-subPackages}
 
 Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+The builder skips a child package that has no Go files for the host platform.
+The build fails if a child package imports a package that has no Go files for the host platform.
 
 Many Go projects keep the main package in a `cmd` directory.
 Following example could be used to only build the example-cli and example-server binaries:
