@@ -84,6 +84,7 @@ lib.extendMkDerivation {
 
       pubspecLockFile = builtins.toJSON pubspecLock;
       pubspecLockData = pub2nix.readPubspecLock {
+        targetFlutterPlatform = args.targetFlutterPlatform or null;
         inherit
           src
           packageRoot
