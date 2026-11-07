@@ -16,6 +16,7 @@
       "*.patch"
       "*.diff"
       "package-lock.json"
+      "pnpm-lock.yaml"
       "go.mod"
       "go.sum"
       ".gitattributes"
