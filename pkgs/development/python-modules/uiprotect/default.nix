@@ -30,7 +30,7 @@
   asttokens,
   ffmpeg,
   pytest-asyncio,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
@@ -87,7 +87,7 @@ buildPythonPackage (finalAttrs: {
     asttokens
     ffmpeg # Required for command ffprobe
     pytest-asyncio
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-cov-stub
     pytest-timeout
     pytest-xdist

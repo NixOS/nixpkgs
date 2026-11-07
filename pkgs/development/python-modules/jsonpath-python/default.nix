@@ -4,7 +4,7 @@
   hatchling,
   lib,
   pytestCheckHook,
-  pytest-benchmark,
+  pytest-benchmark-stub,
 }:
 buildPythonPackage rec {
   pname = "jsonpath-python";
@@ -17,10 +17,9 @@ buildPythonPackage rec {
   };
   build-system = [ hatchling ];
   nativeCheckInputs = [
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
-  ]
-  ++ pytest-benchmark.optional-dependencies.histogram;
+  ];
   pythonImportsCheck = [ "jsonpath" ];
 
   meta = {
