@@ -368,11 +368,10 @@ rec {
   };
 
   # mingw-64 back compat
-  # TODO: Warn after 26.05, and remove after 26.11.
-  mingw32 = mingw-msvcrt-i686;
-  mingwW64 = mingw-msvcrt-x86_64;
-  ucrt64 = mingw-ucrt-x86_64;
-  ucrtAarch64 = mingw-ucrt-aarch64;
+  mingw32 = lib.warnOnInstantiate "mingw32 has been replaced by mingw-msvcrt-i686" mingw-msvcrt-i686;
+  mingwW64 = lib.warnOnInstantiate "mingwW64 has been replaced by mingw-msvcrt-x86_64" mingw-msvcrt-x86_64;
+  ucrt64 = lib.warnOnInstantiate "ucrt64 has been replaced by mingw-ucrt-x86_64" mingw-ucrt-x86_64;
+  ucrtAarch64 = lib.warnOnInstantiate "ucrtAarch64 has been replaced by mingw-ucrt-aarch64" mingw-ucrt-aarch64;
 
   # Target the MSVC ABI
   x86_64-windows = {
