@@ -65,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail '$ac_configure_args' "" \
+      --replace-fail '$pdns_configure_args' ""
+  '';
+
   passthru.tests = {
     inherit (nixosTests) pdns-recursor ncdns;
   };
