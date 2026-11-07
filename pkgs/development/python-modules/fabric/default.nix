@@ -14,16 +14,22 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "fabric";
-  version = "3.2.3";
+
+  # Using an unstable version to add support for invoke v3: Nixpkgs only
+  # provides that version, but fabric doesn't support invoke v3 in any released
+  # version.
+  # https://github.com/fabric/fabric/issues/2376
+  version = "3.2.3-unstable-2026-04-07";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabric";
     repo = "fabric";
-    tag = version;
-    hash = "sha256-GbZQ6rFKQyJZXYfe9b4j6yjKgAB0ct8AD1xYG0yGZl8=";
+    rev = "cc098ad475dbbe2e10aba72692d83aee58919570";
+    hash = "sha256-Z1tGcjdLrzbqcbS6XwapSgDNpyLbBiO21yeqi7XhbpQ=";
   };
 
   patches = [
