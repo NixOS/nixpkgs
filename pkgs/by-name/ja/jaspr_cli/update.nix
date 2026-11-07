@@ -25,7 +25,9 @@ writeShellApplication {
 
     main() {
       old_version="''${UPDATE_NIX_OLD_VERSION:-$(get_version)}"
-      nix-update "$pname" --version stable --version-regex "$pname-v([0-9.]+(:?\\+[0-9]+)?)"
+      # Anchor the regex so pre-release tags such as jaspr_cli-v0.24.0-beta.0
+      # are not mistaken for the stable release 0.24.0.
+      nix-update "$pname" --version stable --version-regex "$pname-v([0-9]+\\.[0-9]+\\.[0-9]+(\\+[0-9]+)?)$"
       new_version=$(get_version)
       if [[ "$new_version" == "$old_version" ]]; then
         exit 0
