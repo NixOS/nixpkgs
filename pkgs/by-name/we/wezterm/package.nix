@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fontconfig,
   installShellFiles,
+  callPackage,
+  libgit2,
   libGL,
   libx11,
   libxcb,
@@ -16,6 +18,7 @@
   python3,
   runCommand,
   rustPlatform,
+  sqlite,
   vulkan-loader,
   wayland,
   wezterm,
@@ -24,6 +27,7 @@
   libxcb-keysyms,
   libxcb-wm,
   zlib,
+  zstd,
   rcodesign,
 }:
 
@@ -74,8 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     fontconfig
+    libgit2
     openssl
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
@@ -136,14 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
-    headless = import ./headless.nix {
-      inherit
-        openssl
-        pkg-config
-        rustPlatform
-        wezterm
-        ;
-    };
+    headless = callPackage ./headless.nix { };
 
     terminfo =
       runCommand "wezterm-terminfo"

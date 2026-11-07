@@ -7,13 +7,13 @@
 
 buildMix (finalAttrs: {
   name = "hex";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "hexpm";
     repo = "hex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-13WsOshHhGK+Df/Lr6GqaOFvttcLrk7cbTS1NsQXMvY=";
+    hash = "sha256-6KZCiU+Loypar3z/Iy5A1FDxuvtqlXUKtC7Iy54wUTU=";
   };
 
   # Hex must bootstrap without depending on itself.
