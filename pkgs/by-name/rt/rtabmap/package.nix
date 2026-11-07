@@ -32,6 +32,7 @@
   vtkWithQt6,
   zed-open-capture,
   hidapi,
+  openni2,
 
   # passthru
   gitUpdater,
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     zed-open-capture
     hidapi
+    openni2
   ];
 
   # Configure environment variables
