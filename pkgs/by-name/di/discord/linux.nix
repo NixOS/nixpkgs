@@ -7,7 +7,6 @@
   desktopName,
   passthru,
   moduleSrcs,
-  moduleManifest,
   # Package utilities
   disableBreakingUpdates,
   stageModules,
@@ -217,13 +216,16 @@ stdenv.mkDerivation (finalAttrs: {
     # The module directory layout must match what Discord's node runtime
     # expects: modules/<name>/ (the moduleUpdater extracts zips into
     # path.join(moduleInstallPath, moduleName) see processUnzipQueue)
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: src: ''
-        mkdir -p $out/opt/${binaryName}/modules/${name}
-        brotli -d < ${src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
-      '') moduleSrcs
-    )}
-    echo ${lib.escapeShellArg moduleManifest} > $out/opt/${binaryName}/modules/installed.json
+    ${lib.concatMapAttrsStringSep "\n" (name: mod: ''
+      mkdir -p $out/opt/${binaryName}/modules/${name}
+      brotli -d < ${mod.src} | tar xf - --strip-components=1 -C $out/opt/${binaryName}/modules/${name}
+    '') moduleSrcs}
+
+    echo ${
+      lib.escapeShellArg (
+        builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod.version; }) moduleSrcs)
+      )
+    } > $out/opt/${binaryName}/modules/installed.json
 
     # The updater creates pending even when module updates are disabled
     mkdir -p $out/opt/${binaryName}/modules/{pending,discord_krisp/KMS/logs}

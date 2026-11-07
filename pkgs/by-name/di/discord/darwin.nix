@@ -5,9 +5,9 @@
   meta,
   binaryName,
   desktopName,
+  hostVersion,
   passthru,
   moduleSrcs,
-  moduleManifest,
   # Package utilities
   disableBreakingUpdates,
   stageModules,
@@ -27,6 +27,7 @@
   stdenv,
   makeWrapper,
   brotli,
+  jq,
   python3,
   writeScript,
   fetchurl,
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     brotli
+    jq
     makeWrapper
   ];
 
@@ -96,26 +98,51 @@ stdenv.mkDerivation (finalAttrs: {
       # Discord's distro tarballs store symlinks with mode 000, which makes
       # them unreadable on Darwin. Recreate them with normal permissions.
       ${fixDistroSymlinks} "$tarball" "$dest"
+
+      tar xfO "$tarball" delta_manifest.json
+
       rm "$tarball"
     }
 
-    extractDistro "$src" "$out/Applications"
+    host=$(mktemp)
 
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: src: ''
-        mkdir -p "$out/share/${pname}/modules/${name}"
-        extractDistro ${src} "$out/share/${pname}/modules/${name}"
-      '') moduleSrcs
-    )}
+    extractDistro "$src" "$out/Applications" \
+      | jq '{ host_version: ${builtins.toJSON hostVersion}, distro_manifest: ., install_state: "Installed" }' \
+      > "$host"
+
+    modules=$(mktemp)
+
+    ${lib.concatMapAttrsStringSep "\n" (
+      name:
+      { src, version }:
+      let
+        module_version = {
+          inherit version;
+          module = {
+            inherit name;
+            host_version = hostVersion;
+          };
+        };
+      in
+      ''
+        mkdir -p "$out/share/${pname}/modules/${name}-${toString version}/${name}"
+        extractDistro ${src} "$out/share/${pname}/modules/${name}-${toString version}/${name}" \
+          | jq '{ module_version: ${builtins.toJSON module_version}, distro_manifest: ., install_state: "Installed" }' \
+          >> "$modules"
+      ''
+    ) moduleSrcs}
+
     # The updater creates pending even when module updates are disabled
     mkdir -p "$out/share/${pname}/modules/pending"
-    echo ${lib.escapeShellArg moduleManifest} > "$out/share/${pname}/modules/installed.json"
+
+    jq --slurpfile modules "$modules" '[. + { $modules }]' "$host" > "$out/share/${pname}/deltas.json"
+    rm "$host" "$modules"
 
     # wrap executable to $out/bin
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
-      ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
-      --run "${finalAttrs.stageModules} \"$out/share/${pname}/modules\"" \
+      ${lib.strings.optionalString disableUpdates "--run \"${lib.getExe finalAttrs.disableBreakingUpdates} &\""} \
+      --run "${finalAttrs.stageModules} \"$out/share/${pname}/modules\" \"$out/share/${pname}/deltas.json\"" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

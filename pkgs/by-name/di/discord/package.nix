@@ -31,6 +31,7 @@
   callPackage,
   fetchurl,
   python3,
+  sqlite,
   # Discord mods
   openasar,
   vencord,
@@ -39,13 +40,14 @@
 }@args:
 
 let
-  inherit (stdenv.hostPlatform) isLinux;
+  inherit (stdenv.hostPlatform) isLinux isDarwin;
 
   metadata = (callPackage ./metadata.nix { }).${pname};
   inherit (metadata)
     meta
     binaryName
     desktopName
+    hostVersion
     self
     branch
     ;
@@ -59,6 +61,7 @@ let
     "runCommand"
     "callPackage"
     "python3"
+    "sqlite"
   ];
 
   discordMods = [
@@ -70,13 +73,12 @@ let
 
   inherit (source) version;
 
-  moduleSrcs = lib.mapAttrs (_: mod: fetchurl { inherit (mod) url hash; }) source.modules;
+  moduleSrcs = lib.mapAttrs (_: mod: {
+    inherit (mod) version;
+    src = fetchurl { inherit (mod) url hash; };
+  }) source.modules;
 
   moduleVersions = lib.mapAttrs (_: mod: mod.version) source.modules;
-
-  moduleManifest = builtins.toJSON (
-    lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions
-  );
 
   configDir =
     if isLinux then
@@ -90,17 +92,67 @@ let
   # Link the whole directory so Discord's native module boundary check sees
   # the same real path for the module root and the modules it contains
   # See https://github.com/NixOS/nixpkgs/issues/580512
-  stageModules = writeShellScript "discord-stage-modules" ''
-    store_modules="$1"
-    modules_dir="${configDir}/${version}/modules"
-    rm -rf "$modules_dir"
-    mkdir -p "$(dirname "$modules_dir")"
-    ln -s "$store_modules" "$modules_dir"
-  '';
+  stageModules = writeShellScript "discord-stage-modules" (
+    ''
+      store_modules="$1"
+      modules_dir="${configDir}/${lib.optionalString isDarwin "app-" + version}/modules"
+      rm -rf "$modules_dir"
+      mkdir -p "$(dirname "$modules_dir")"
+      ln -s "$store_modules" "$modules_dir"
+    ''
+    + lib.optionalString isDarwin ''
+      deltas="$2"
+      ${lib.getExe sqlite} "${configDir}/installer.db" "
+        CREATE TABLE IF NOT EXISTS key_values (
+            key TEXT NOT NULL PRIMARY KEY,
+            value TEXT NOT NULL
+        );
+        REPLACE INTO key_values VALUES('host/app/${branch}/osx/arm64', CAST(readfile('$deltas') AS TEXT));
+      "
+    ''
+  );
 
   disableBreakingUpdates =
+    let
+      manifest = { url, hash }: {
+        full = {
+          inherit url;
+          host_version = hostVersion.version;
+          package_sha256 = builtins.convertHash {
+            inherit hash;
+            toHashFormat = "base16";
+          };
+        };
+        deltas = [ ];
+      };
+
+      moduleManifest =
+        _:
+        {
+          url,
+          hash,
+          version,
+        }:
+        lib.recursiveUpdate (manifest { inherit url hash; }) { full.module_version = version; };
+
+      serveDir = runCommand "discord-pinned-update" { } ''
+        mkdir -p "$out/distributions/app/manifests"
+        echo ${
+          lib.escapeShellArg (
+            builtins.toJSON (
+              manifest source.distro
+              // {
+                modules = builtins.mapAttrs moduleManifest source.modules;
+                required_modules = builtins.attrNames source.modules;
+              }
+            )
+          )
+        } > "$out/distributions/app/manifests/latest"
+      '';
+    in
     runCommand "disable-breaking-updates.py"
       {
+        inherit serveDir;
         pythonInterpreter = python3.interpreter;
         configDirName = lib.toLower binaryName;
         meta.mainProgram = "disable-breaking-updates.py";
@@ -112,16 +164,19 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 
-  # Remove arguments not supported by the Darwin package.
-  platformPkgArgs =
+  # Remove arguments not supported by the package.
+  platformPkgArgs = removeAttrs pkgArgs (
     if isLinux then
-      pkgArgs
+      [
+        "hostVersion"
+      ]
     else
-      removeAttrs pkgArgs [
+      [
         "withTTS"
         "enableAutoscroll"
         "useFHSEnv"
-      ];
+      ]
+  );
   finalUnwrapped =
     if unwrappedDiscord != null then
       unwrappedDiscord
@@ -135,7 +190,6 @@ let
             disableBreakingUpdates
             stageModules
             moduleSrcs
-            moduleManifest
             ;
         }
       );
