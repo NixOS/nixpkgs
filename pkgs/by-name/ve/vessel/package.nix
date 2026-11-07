@@ -1,13 +1,18 @@
 {
   lib,
-  stdenv,
-  requireFile,
-  SDL,
-  libpulseaudio,
-  alsa-lib,
-  runtimeShell,
+  pkgsi686Linux,
 }:
 
+let
+  inherit (pkgsi686Linux)
+    stdenv
+    requireFile
+    SDL
+    libpulseaudio
+    alsa-lib
+    runtimeShell
+    ;
+in
 stdenv.mkDerivation rec {
   pname = "vessel";
   version = "12082012";
