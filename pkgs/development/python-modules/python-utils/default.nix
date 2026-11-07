@@ -2,32 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  uv-build,
   loguru,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest-cov-stub,
+  pytest9_1CheckHook,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.9.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = "python-utils";
     tag = "v${version}";
-    hash = "sha256-lzLzYI5jShfIwQqvfA8UtPjGawXE80ww7jb/gPzpeDo=";
+    hash = "sha256-09srwxTzDJ12MB8qCyt9SXa9zB+nWRx+x9wWjEUIngE=";
   };
 
-  postPatch = ''
-    sed -i pytest.ini \
-      -e '/--cov/d' \
-      -e '/--mypy/d'
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [ typing-extensions ];
 
@@ -37,7 +32,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytestCheckHook
+    pytest-cov-stub
+    pytest9_1CheckHook
   ]
   ++ optional-dependencies.loguru;
 
