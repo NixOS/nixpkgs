@@ -1,16 +1,8 @@
-commit 9d7d15533d52971601b738335c40a4f01353c369
-Author: Emery Hemingway <ehmry@posteo.net>
-Date:   2023-09-30 11:11:05 +0100
-
-    Do not load openssl with dlopen
-
-diff --git a/lib/wrappers/openssl.nim b/lib/wrappers/openssl.nim
-index e659746ee..dfb2d3cf2 100644
 --- a/lib/wrappers/openssl.nim
 +++ b/lib/wrappers/openssl.nim
-@@ -105,8 +105,11 @@ else:
+@@ -106,8 +106,11 @@
  
- import dynlib
+ import std/dynlib
  
 -{.pragma: lcrypto, cdecl, dynlib: DLLUtilName, importc.}
 -{.pragma: lssl, cdecl, dynlib: DLLSSLName, importc.}
@@ -22,7 +14,7 @@ index e659746ee..dfb2d3cf2 100644
  
  type
    SslStruct {.final, pure.} = object
-@@ -274,7 +277,7 @@ const
+@@ -275,7 +278,7 @@
    BIO_C_DO_STATE_MACHINE = 101
    BIO_C_GET_SSL = 110
  
@@ -31,7 +23,7 @@ index e659746ee..dfb2d3cf2 100644
  
  # TLS_method(), TLS_server_method(), TLS_client_method() are introduced in 1.1.0
  # and support SSLv3, TLSv1, TLSv1.1 and TLSv1.2
-@@ -286,26 +289,26 @@ when useStaticLink:
+@@ -287,26 +290,26 @@
    # Static linking
  
    when defined(openssl10):
@@ -66,7 +58,7 @@ index e659746ee..dfb2d3cf2 100644
  
      proc getOpenSSLVersion*(): culong =
        ## Return OpenSSL version as unsigned long
-@@ -321,19 +324,19 @@ when useStaticLink:
+@@ -322,19 +325,19 @@
        discard
  
    when defined(libressl) or defined(openssl10):
@@ -93,7 +85,7 @@ index e659746ee..dfb2d3cf2 100644
  
  else:
    # Here we're trying to stay compatible between openssl versions. Some
-@@ -472,54 +475,52 @@ else:
+@@ -476,55 +479,50 @@
        theProc = cast[typeof(theProc)](sslSymThrows("SSL_CTX_set_ciphersuites"))
      result = theProc(ctx, str)
  
@@ -110,28 +102,30 @@ index e659746ee..dfb2d3cf2 100644
 +proc SSL_CTX_set_session_id_context*(context: SslCtx, sid_ctx: string, sid_ctx_len: int){.cdecl, importc.}
 +proc SSL_get0_verified_chain*(ssl: SslPtr): PSTACK {.cdecl,
      importc.}
- proc SSL_CTX_new*(meth: PSSL_METHOD): SslCtx{.cdecl,
+-proc SSL_CTX_new*(meth: PSSL_METHOD): SslCtx{.cdecl,
 -    dynlib: DLLSSLName, importc.}
-+    importc.}
++proc SSL_CTX_new*(meth: PSSL_METHOD): SslCtx{.cdecl, importc.}
  proc SSL_CTX_load_verify_locations*(ctx: SslCtx, CAfile: cstring,
 -    CApath: cstring): cint{.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_CTX_free*(arg0: SslCtx){.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_CTX_set_verify*(s: SslCtx, mode: int, cb: proc (a: int, b: pointer): int {.cdecl.}){.cdecl, dynlib: DLLSSLName, importc.}
+-proc SSL_get_verify_mode*(ssl: SslPtr): cint {.cdecl, dynlib: DLLSSLName, importc.}
+-proc SSL_get_verify_result*(ssl: SslPtr): int{.cdecl,
+-    dynlib: DLLSSLName, importc.}
 +    CApath: cstring): cint{.cdecl, importc.}
 +proc SSL_CTX_free*(arg0: SslCtx){.cdecl, importc.}
 +proc SSL_CTX_set_verify*(s: SslCtx, mode: int, cb: proc (a: int, b: pointer): int {.cdecl.}){.cdecl, importc.}
- proc SSL_get_verify_result*(ssl: SslPtr): int{.cdecl,
--    dynlib: DLLSSLName, importc.}
-+    importc.}
++proc SSL_get_verify_mode*(ssl: SslPtr): cint {.cdecl, importc.}
++proc SSL_get_verify_result*(ssl: SslPtr): int{.cdecl, importc.}
  
 -proc SSL_CTX_set_cipher_list*(s: SslCtx, ciphers: cstring): cint{.cdecl, dynlib: DLLSSLName, importc.}
--proc SSL_CTX_use_certificate_file*(ctx: SslCtx, filename: cstring, typ: cint): cint{.
--    stdcall, dynlib: DLLSSLName, importc.}
--proc SSL_CTX_use_certificate_chain_file*(ctx: SslCtx, filename: cstring): cint{.
--    stdcall, dynlib: DLLSSLName, importc.}
 +proc SSL_CTX_set_cipher_list*(s: SslCtx, ciphers: cstring): cint{.cdecl, importc.}
-+proc SSL_CTX_use_certificate_file*(ctx: SslCtx, filename: cstring, typ: cint): cint{.stdcall, importc.}
-+proc SSL_CTX_use_certificate_chain_file*(ctx: SslCtx, filename: cstring): cint{.stdcall, importc.}
+ proc SSL_CTX_use_certificate_file*(ctx: SslCtx, filename: cstring, typ: cint): cint{.
+-    stdcall, dynlib: DLLSSLName, importc.}
++    stdcall, importc.}
+ proc SSL_CTX_use_certificate_chain_file*(ctx: SslCtx, filename: cstring): cint{.
+-    stdcall, dynlib: DLLSSLName, importc.}
++    stdcall, importc.}
  proc SSL_CTX_use_PrivateKey_file*(ctx: SslCtx,
 -    filename: cstring, typ: cint): cint{.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_CTX_check_private_key*(ctx: SslCtx): cint{.cdecl, dynlib: DLLSSLName,
@@ -142,13 +136,9 @@ index e659746ee..dfb2d3cf2 100644
 -proc SSL_CTX_get_ex_new_index*(argl: clong, argp: pointer, new_func: pointer, dup_func: pointer, free_func: pointer): cint {.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_CTX_set_ex_data*(ssl: SslCtx, idx: cint, arg: pointer): cint {.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_CTX_get_ex_data*(ssl: SslCtx, idx: cint): pointer {.cdecl, dynlib: DLLSSLName, importc.}
-+proc SSL_CTX_get_ex_new_index*(argl: clong, argp: pointer, new_func: pointer, dup_func: pointer, free_func: pointer): cint {.cdecl, importc.}
-+proc SSL_CTX_set_ex_data*(ssl: SslCtx, idx: cint, arg: pointer): cint {.cdecl, importc.}
-+proc SSL_CTX_get_ex_data*(ssl: SslCtx, idx: cint): pointer {.cdecl, importc.}
- 
+-
 -proc SSL_set_fd*(ssl: SslPtr, fd: SocketHandle): cint{.cdecl, dynlib: DLLSSLName, importc.}
-+proc SSL_set_fd*(ssl: SslPtr, fd: SocketHandle): cint{.cdecl, importc.}
- 
+-
 -proc SSL_shutdown*(ssl: SslPtr): cint{.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_set_shutdown*(ssl: SslPtr, mode: cint) {.cdecl, dynlib: DLLSSLName, importc: "SSL_set_shutdown".}
 -proc SSL_get_shutdown*(ssl: SslPtr): cint {.cdecl, dynlib: DLLSSLName, importc: "SSL_get_shutdown".}
@@ -158,6 +148,19 @@ index e659746ee..dfb2d3cf2 100644
 -proc SSL_get_error*(s: SslPtr, ret_code: cint): cint{.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_accept*(ssl: SslPtr): cint{.cdecl, dynlib: DLLSSLName, importc.}
 -proc SSL_pending*(ssl: SslPtr): cint{.cdecl, dynlib: DLLSSLName, importc.}
+-
+-proc BIO_new_mem_buf*(data: pointer, len: cint): BIO{.cdecl,
+-    dynlib: DLLUtilName, importc.}
+-proc BIO_new_ssl_connect*(ctx: SslCtx): BIO{.cdecl,
+-    dynlib: DLLSSLName, importc.}
+-proc BIO_ctrl*(bio: BIO, cmd: cint, larg: int, arg: cstring): int{.cdecl,
+-    dynlib: DLLUtilName, importc.}
++proc SSL_CTX_get_ex_new_index*(argl: clong, argp: pointer, new_func: pointer, dup_func: pointer, free_func: pointer): cint {.cdecl, importc.}
++proc SSL_CTX_set_ex_data*(ssl: SslCtx, idx: cint, arg: pointer): cint {.cdecl, importc.}
++proc SSL_CTX_get_ex_data*(ssl: SslCtx, idx: cint): pointer {.cdecl, importc.}
++
++proc SSL_set_fd*(ssl: SslPtr, fd: SocketHandle): cint{.cdecl, importc.}
++
 +proc SSL_shutdown*(ssl: SslPtr): cint{.cdecl, importc.}
 +proc SSL_set_shutdown*(ssl: SslPtr, mode: cint) {.cdecl, importc: "SSL_set_shutdown".}
 +proc SSL_get_shutdown*(ssl: SslPtr): cint {.cdecl, importc: "SSL_get_shutdown".}
@@ -167,20 +170,14 @@ index e659746ee..dfb2d3cf2 100644
 +proc SSL_get_error*(s: SslPtr, ret_code: cint): cint{.cdecl, importc.}
 +proc SSL_accept*(ssl: SslPtr): cint{.cdecl, importc.}
 +proc SSL_pending*(ssl: SslPtr): cint{.cdecl, importc.}
- 
- proc BIO_new_mem_buf*(data: pointer, len: cint): BIO{.cdecl,
--    dynlib: DLLUtilName, importc.}
-+    importc.}
- proc BIO_new_ssl_connect*(ctx: SslCtx): BIO{.cdecl,
--    dynlib: DLLSSLName, importc.}
-+    importc.}
- proc BIO_ctrl*(bio: BIO, cmd: cint, larg: int, arg: cstring): int{.cdecl,
--    dynlib: DLLUtilName, importc.}
-+    importc.}
++
++proc BIO_new_mem_buf*(data: pointer, len: cint): BIO{.cdecl, importc.}
++proc BIO_new_ssl_connect*(ctx: SslCtx): BIO{.cdecl, importc.}
++proc BIO_ctrl*(bio: BIO, cmd: cint, larg: int, arg: cstring): int{.cdecl, importc.}
  proc BIO_get_ssl*(bio: BIO, ssl: ptr SslPtr): int =
    return BIO_ctrl(bio, BIO_C_GET_SSL, 0, cast[cstring](ssl))
  proc BIO_set_conn_hostname*(bio: BIO, name: cstring): int =
-@@ -529,30 +530,30 @@ proc BIO_do_handshake*(bio: BIO): int =
+@@ -534,30 +532,30 @@
  proc BIO_do_connect*(bio: BIO): int =
    return BIO_do_handshake(bio)
  
@@ -223,7 +220,7 @@ index e659746ee..dfb2d3cf2 100644
  
  proc d2i_X509*(b: string): PX509 =
    ## decode DER/BER bytestring into X.509 certificate struct
-@@ -591,24 +592,21 @@ else:
+@@ -597,24 +595,21 @@
    proc CRYPTO_malloc_init*() =
      discard
  
@@ -252,7 +249,7 @@ index e659746ee..dfb2d3cf2 100644
    ## Retrieve the server name requested in the client hello. This can be used
    ## in the callback set in `SSL_CTX_set_tlsext_servername_callback` to
    ## implement virtual hosting. May return `nil`.
-@@ -635,16 +633,16 @@ type
+@@ -641,16 +636,16 @@
    PskServerCallback* = proc (ssl: SslPtr;
      identity: cstring; psk: ptr uint8; max_psk_len: cint): cuint {.cdecl.}
  
@@ -273,7 +270,7 @@ index e659746ee..dfb2d3cf2 100644
    ## Get PSK identity.
  
  proc SSL_CTX_set_ecdh_auto*(ctx: SslCtx, onoff: cint): cint {.inline.} =
-@@ -656,62 +654,62 @@ proc SSL_CTX_set_ecdh_auto*(ctx: SslCtx, onoff: cint): cint {.inline.} =
+@@ -662,62 +657,62 @@
    else:
      result = 1
  
@@ -365,7 +362,7 @@ index e659746ee..dfb2d3cf2 100644
  
  # sha types
  proc EVP_md_null*(): EVP_MD   {.lcrypto.}
-@@ -753,9 +751,9 @@ when defined(macosx) or defined(windows):
+@@ -759,9 +754,9 @@
    proc EVP_MD_CTX_cleanup*(ctx: EVP_MD_CTX): cint {.lcrypto.}
  else:
    # some times you will need this instead:
@@ -378,7 +375,7 @@ index e659746ee..dfb2d3cf2 100644
  
  # <openssl/md5.h>
  type
-@@ -770,7 +768,7 @@ type
+@@ -776,7 +771,7 @@
      data: array[MD5_LBLOCK, MD5_LONG]
      num: cuint
  
@@ -387,7 +384,7 @@ index e659746ee..dfb2d3cf2 100644
  proc md5_Init*(c: var MD5_CTX): cint{.importc: "MD5_Init".}
  proc md5_Update*(c: var MD5_CTX; data: pointer; len: csize_t): cint{.importc: "MD5_Update".}
  proc md5_Final*(md: cstring; c: var MD5_CTX): cint{.importc: "MD5_Final".}
-@@ -835,11 +833,11 @@ when not defined(nimDisableCertificateValidation) and not defined(windows):
+@@ -841,11 +836,11 @@
    # SSL_get_peer_certificate removed in 3.0
    # SSL_get1_peer_certificate added in 3.0
    when useOpenssl3:
@@ -401,41 +398,36 @@ index e659746ee..dfb2d3cf2 100644
    else:
      proc SSL_get_peer_certificate*(ssl: SslCtx): PX509 =
        let methodSym = sslSymNullable("SSL_get_peer_certificate", "SSL_get1_peer_certificate")
-@@ -848,26 +846,24 @@ when not defined(nimDisableCertificateValidation) and not defined(windows):
+@@ -854,21 +849,21 @@
        let method2Proc = cast[proc(ssl: SslCtx): PX509 {.cdecl, gcsafe, raises: [].}](methodSym)
        return method2Proc(ssl)
  
--  proc X509_get_subject_name*(a: PX509): PX509_NAME{.cdecl, dynlib: DLLSSLName, importc.}
+-  proc X509_get_subject_name*(a: PX509): PX509_NAME{.cdecl, dynlib: DLLUtilName, importc.}
 +  proc X509_get_subject_name*(a: PX509): PX509_NAME{.cdecl, importc.}
  
 -  proc X509_get_issuer_name*(a: PX509): PX509_NAME{.cdecl, dynlib: DLLUtilName, importc.}
 +  proc X509_get_issuer_name*(a: PX509): PX509_NAME{.cdecl, importc.}
  
--  proc X509_NAME_oneline*(a: PX509_NAME, buf: cstring, size: cint): cstring {.
--    cdecl, dynlib:DLLSSLName, importc.}
-+  proc X509_NAME_oneline*(a: PX509_NAME, buf: cstring, size: cint): cstring {.cdecl, importc.}
+   proc X509_NAME_oneline*(a: PX509_NAME, buf: cstring, size: cint): cstring {.
+-    cdecl, dynlib:DLLUtilName, importc.}
++    cdecl, importc.}
  
--  proc X509_NAME_get_text_by_NID*(subject:cstring, NID: cint, buf: cstring, size: cint): cint{.
--    cdecl, dynlib:DLLSSLName, importc.}
-+  proc X509_NAME_get_text_by_NID*(subject:cstring, NID: cint, buf: cstring, size: cint): cint{.cdecl, importc.}
+   proc X509_NAME_get_text_by_NID*(subject:cstring, NID: cint, buf: cstring, size: cint): cint{.
+-    cdecl, dynlib:DLLUtilName, importc.}
++    cdecl, importc.}
  
--  proc X509_check_host*(cert: PX509, name: cstring, namelen: cint, flags:cuint, peername: cstring): cint {.cdecl, dynlib: DLLSSLName, importc.}
-+  proc X509_check_host*(cert: PX509, name: cstring, namelen: cint, flags:cuint, peername: cstring): cint {.cdecl, importc.}
+-  proc X509_check_host*(cert: PX509, name: cstring, namelen: cint, flags:cuint, peername: cstring): cint {.cdecl, dynlib: DLLUtilName, importc.}
++  proc X509_check_host*(cert: PX509, name: cstring, namelen: cint, flags:cuint, peername: cstring): cint{.cdecl, dynlib: DLLUtilName, importc.}
  
--  proc X509_free*(cert: PX509) {.cdecl, dynlib: DLLSSLName, importc.}
-+  proc X509_free*(cert: PX509) {.cdecl, importc.}
+-  proc X509_check_ip_asc*(cert: PX509, address: cstring, flags: cuint): cint {.cdecl, dynlib: DLLUtilName, importc.}
++  proc X509_check_ip_asc*(cert: PX509, address: cstring, flags: cuint): cint{.cdecl, dynlib: DLLUtilName, importc.}
+ 
+-  proc X509_free*(cert: PX509) {.cdecl, dynlib: DLLUtilName, importc.}
++  proc X509_free*(cert: PX509){.cdecl, dynlib: DLLUtilName, importc.}
  
    # Certificates store
  
-   type PX509_STORE* = SslPtr
-   type PX509_OBJECT* = SslPtr
- 
--  {.push callconv:cdecl, dynlib:DLLUtilName, importc.}
-+  {.push callconv:cdecl, importc.}
- 
-   proc X509_OBJECT_new*(): PX509_OBJECT
-   proc X509_OBJECT_free*(a: PX509_OBJECT)
-@@ -897,12 +893,12 @@ when not defined(nimDisableCertificateValidation) and not defined(windows):
+@@ -905,12 +900,12 @@
  # Available in at least OpenSSL 1.1.1 and later, not sure if earlier
  # --Iced Quinn
  
