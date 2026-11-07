@@ -102,6 +102,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qf0xb ];
   };
 }
