@@ -62,12 +62,12 @@ let
   # Amnezia Gateway (AGW) public keys for premium server list verification.
   # These build-time values are not published in the source repository and
   # were extracted from the official 5.0.0.5 Linux binary.
-  dev-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (builtins.readFile ./dev_agw_public_key);
+  dev-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (lib.removeSuffix "\n" (builtins.readFile ./dev_agw_public_key));
   dev-agw-endpoint = "http://gw.dev.amzsvc.com:80/";
   dev-s3-endpoint = "https://s3.eu-north-1.amazonaws.com/amnezia-dev/";
 
   prod-agw-public-key = lib.replaceStrings [ "\n" ] [ "\\n" ] (
-    builtins.readFile ./prod_agw_public_key
+    lib.removeSuffix "\n" (builtins.readFile ./prod_agw_public_key)
   );
   prod-s3-endpoint = lib.concatStringsSep ", " [
     "https://s3.eu-north-1.amazonaws.com/amnezia/"
