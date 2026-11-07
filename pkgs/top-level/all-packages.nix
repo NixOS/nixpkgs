@@ -8384,6 +8384,17 @@ with pkgs;
 
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
+  inherit
+    ({
+      jprofiler14 = callPackage ../by-name/jp/jprofiler/14.nix { };
+      jprofiler15 = callPackage ../by-name/jp/jprofiler/15.nix { };
+      jprofiler16 = callPackage ../by-name/jp/jprofiler/16.nix { };
+    })
+    jprofiler14
+    jprofiler15
+    jprofiler16
+    ;
+
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_34
     k3s_1_35
