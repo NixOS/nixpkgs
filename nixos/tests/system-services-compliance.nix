@@ -49,6 +49,12 @@ let
         _class = "nixosTest";
         inherit name;
         nodes.machine.system.services = services;
+        # Services run as distinct users (per-service identity is the default
+        # on platforms that support users); each of them creates its own
+        # subdirectory of sharedDir, so it must be writable by all of them.
+        nodes.machine.systemd.tmpfiles.rules = [
+          "d ${sharedDir} 1777 root root -"
+        ];
         testScript = ''
           machine.wait_for_unit("multi-user.target")
           machine.succeed("${testExe}")

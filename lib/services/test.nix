@@ -303,6 +303,33 @@ let
         };
       };
 
+    # Portable identity options: the values are requests. Without a service
+    # manager resolving them, unset values stay null and set values are kept.
+    assert
+      (lib.evalModules {
+        modules = [
+          {
+            options.myServices = mkOption {
+              type = types.attrsOf configured.serviceSubmodule;
+            };
+          }
+          {
+            myServices.my-service.identity = {
+              user = "app-account";
+              groups = [ "extra" ];
+            };
+          }
+        ];
+      }).config.myServices.my-service.identity == {
+        gid = null;
+        group = null;
+        gids = null;
+        groups = [ "extra" ];
+        sameUser = null;
+        uid = null;
+        user = "app-account";
+      };
+
     assert
       portable-lib.getWarnings [ "service1" ] exampleEval.config.services.service1 == [
         "in service1: The `foo' service is deprecated and will go away soon!"

@@ -44,6 +44,7 @@ in
   imports = [
     ../modules/generic/meta-maintainers.nix
     ../modules/generic/assertions.nix
+    ./identity.nix
     (lib.modules.importApply ./config-data.nix { inherit pkgs; })
   ];
   options = {
