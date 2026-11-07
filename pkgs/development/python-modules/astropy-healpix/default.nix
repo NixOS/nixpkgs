@@ -15,13 +15,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "astropy-healpix";
-  version = "1.1.3";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "astropy_healpix";
-    hash = "sha256-9SDYOr6CFdPo4aN7K9kRce42pvVfEQ1aLbhj112Bs7c=";
+    hash = "sha256-Dj8clAZMRdp3mQDLkMk433rvmakkq7I+64k7FlQOd+Y=";
   };
 
   build-system = [
