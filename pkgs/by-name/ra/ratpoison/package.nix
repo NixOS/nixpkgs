@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   autoreconfHook,
   fontconfig,
   freetype,
@@ -21,11 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ratpoison";
-  version = "1.4.9";
+  version = "1.4.9-unstable-2021-05-27";
 
-  src = fetchurl {
-    url = "mirror://savannah/ratpoison/ratpoison-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2Y+kvgJezKRTxAf/MRqzlJ8p8g1tir7fjwcWuF/I0fE=";
+  src = fetchgit {
+    url = "https://git.savannah.nongnu.org/git/ratpoison.git";
+    rev = "db94d4971d8dcae736cf5246ef7d0454aa345ac0";
+    sha256 = "sha256-YRzSQVLZ1W4usRWi4xTTQweYj9tNslUidw02V47VkP4=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ vitrial ];
     inherit (libx11.meta) platforms;
   };
 })
