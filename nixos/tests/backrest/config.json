@@ -1,0 +1,22 @@
+{
+    "version": 6,
+    "instance": "nixos-test",
+    "repos": [
+        {
+            "id": "local-repo",
+            "uri": "/var/lib/backrest/restic-repo",
+            "password": "testpass",
+            "prunePolicy": {},
+            "auto_initialize": true
+        }
+    ],
+    "plans": [
+        {
+            "id": "test-backup",
+            "repo": "local-repo",
+            "paths": [
+                "/srv/backup-source"
+            ]
+        }
+    ]
+}
