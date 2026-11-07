@@ -64,7 +64,7 @@ build_bin() {
     if [ -f "$out_dir/$crate_name_.wasm" ]; then
       mv "$out_dir/$crate_name_.wasm" "$out_dir/$crate_name.wasm"
     else
-      mv "$out_dir/$crate_name_" "$out_dir/$crate_name"
+      mv "$out_dir/$crate_name_$BIN_EXT" "$out_dir/$crate_name$BIN_EXT"
     fi
   fi
 }

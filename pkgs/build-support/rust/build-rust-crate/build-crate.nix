@@ -113,6 +113,7 @@ in
   RUSTC_DRIVER="${if useClippy then "clippy-driver" else "rustc"}"
   LIB_RUSTC_OPTS="${libRustcOpts}"
   BIN_RUSTC_OPTS="${binRustcOpts}"
+  BIN_EXT="${stdenv.hostPlatform.extensions.executable}"
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
   LIB_PATH="${libPath}"
   LIB_NAME="${libName}"
@@ -250,7 +251,7 @@ in
   ''}
 
   if [[ ''${#BINS[@]} -gt 0 ]]; then
-    export BIN_RUSTC_OPTS LINK EXTRA_LINK_ARGS EXTRA_LINK_ARGS_BINS EXTRA_LIB \
+    export BIN_RUSTC_OPTS BIN_EXT LINK EXTRA_LINK_ARGS EXTRA_LINK_ARGS_BINS EXTRA_LIB \
            BUILD_OUT_DIR EXTRA_BUILD EXTRA_FEATURES EXTRA_RUSTC_FLAGS CAP_LINTS
     export -f build_bin build_bin_test echo_build_heading noisily echo_colored echo_error
     # Generate a Makefile and pipe it to make, which handles parallel execution
