@@ -85,6 +85,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -98,12 +99,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
   };
 
   meta = {
