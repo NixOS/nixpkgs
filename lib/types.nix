@@ -72,7 +72,6 @@ let
 
   inherit (lib.modules)
     mergeDefinitions
-    fixupOptionType
     mergeOptionDecls
     defaultOrderPriority
     defaultOverridePriority
@@ -1040,16 +1039,17 @@ rec {
             evals = filter (x: x.optionalValue ? value) (
               concatLists (
                 imap1 (
-                  n: def:
+                  n:
+                  { file, value, ... }:
                   imap1 (
                     m: def':
                     (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
                       {
-                        inherit (def) file;
+                        inherit file;
                         value = def';
                       }
                     ])
-                  ) def.value
+                  ) value
                 ) defs
               )
             );
@@ -1370,11 +1370,11 @@ rec {
     let
       # Push down position info.
       pushPositions = map (
-        def:
+        { file, value, ... }:
         mapAttrs (n: v: {
-          inherit (def) file;
+          inherit file;
           value = v;
-        }) def.value
+        }) value
       );
       binOp =
         lhs: rhs:
@@ -2072,7 +2072,7 @@ rec {
           ) defs;
           # Merges all the types into a single one, including submodule merging.
           # This also propagates file information to all submodules
-          mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
+          mergedOption = mergeOptionDecls loc optionModules;
         in
         mergedOption.type;
   };
