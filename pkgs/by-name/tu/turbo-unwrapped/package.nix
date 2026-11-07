@@ -1,15 +1,18 @@
 {
   lib,
   stdenv,
+  aws-lc,
   capnproto,
   cctools,
   fetchFromGitHub,
   installShellFiles,
   llvmPackages,
+  pkg-config,
   protobuf,
   rustPlatform,
   xcbuild,
   zig_0_15,
+  zstd,
 }:
 let
   pname = "turbo-unwrapped";
@@ -43,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     capnproto
     installShellFiles
+    pkg-config
     protobuf
     zig_0_15.hook
   ]
@@ -52,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   dontUseZigBuild = true;
