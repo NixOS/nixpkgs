@@ -22,15 +22,24 @@ let
     regInfoPath
     ;
 
-  # Host-built erofs store image, named by closure hash so only a changed guest rebuilds it.
-  # A derivation is not an option: it would need the Linux builder this VM provides.
+  # Building the image in a derivation would require this VM's Linux builder.
   storeClosureInfo = hostPkgs.closureInfo {
     rootPaths = [
       config.system.build.toplevel
       regInfo
     ];
   };
-  storeImageName = "store-${lib.head (lib.splitString "-" (baseNameOf (toString storeClosureInfo)))}.img";
+  storeImageName = "store-${
+    if cfg.nixStoreImageCompression == null then
+      lib.head (lib.splitString "-" (baseNameOf (toString storeClosureInfo)))
+    else
+      builtins.hashString "sha256" (
+        builtins.toJSON {
+          closure = toString storeClosureInfo;
+          compression = cfg.nixStoreImageCompression;
+        }
+      )
+  }.img";
 
   toplevel = config.system.build.toplevel;
 
@@ -80,7 +89,10 @@ let
   staticConfigFile = hostPkgs.writeText "vzvm-config.json" (builtins.toJSON staticConfig);
 in
 {
-  imports = [ ./vm-base.nix ];
+  imports = [
+    ./vm-base.nix
+    ./nix-store-image.nix
+  ];
 
   options = {
 
@@ -337,6 +349,8 @@ in
 
                 ${import ../../lib/erofs-store-image.nix {
                   inherit hostPkgs;
+                  compression = cfg.nixStoreImageCompression;
+                  kernelConfig = config.boot.kernelPackages.kernel.configfile;
                   storePaths = "${storeClosureInfo}/store-paths";
                   label = "nix-store";
                   destination = ''"$storeImageTmp"'';
