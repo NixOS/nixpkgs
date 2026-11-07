@@ -12,6 +12,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "delta-icon-theme";
   version = "2026.08.09+27029645";
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Delta-Icons";
     repo = "linux";
