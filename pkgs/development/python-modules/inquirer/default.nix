@@ -43,6 +43,37 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Blessed 1.40+ XTGETTCAP terminal queries block in pexpect-based PTY tests.
+    # https://github.com/jquast/blessed/pull/375
+    "test_autocomplete"
+    "test_backspace"
+    "test_backspace_limit"
+    "test_change_selection"
+    "test_default_input"
+    "test_default_invert_selection_with_ctrl_i"
+    "test_default_selection"
+    "test_invalid_phone"
+    "test_locked_option_left_key"
+    "test_locked_option_space"
+    "test_locked_with_another_option"
+    "test_minimal_input"
+    "test_other_blank_input"
+    "test_other_input"
+    "test_other_select_choice"
+    "test_out_of_bounds_down"
+    "test_out_of_bounds_up"
+    "test_reset_with_ctrl_r"
+    "test_select_all_with_ctrl_a"
+    "test_select_last"
+    "test_select_one_more"
+    "test_select_the_third"
+    "test_select_with_arrows"
+    "test_shortcuts"
+    "test_unselect"
+    "test_unselect_with_arrows"
+  ];
+
   pythonImportsCheck = [ "inquirer" ];
 
   meta = {
