@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "faac";
-  version = "1.50";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faac";
     tag = "faac-${finalAttrs.version}";
-    hash = "sha256-264+OHyqG5Ccwx15cHhDqsk+9Z6UsdYr0bvrPWHP5xw=";
+    hash = "sha256-K3cQSSIj4MJIezb4PjeDzQGMHztEunLPlNcI3S+Fkr8=";
   };
 
   nativeBuildInputs = [
