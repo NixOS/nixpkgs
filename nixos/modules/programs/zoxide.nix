@@ -33,6 +33,9 @@ in
     enableXonshIntegration = mkEnableOption "Xonsh integration" // {
       default = true;
     };
+    enableNushellIntegration = mkEnableOption "Nushell integration" // {
+      default = true;
+    };
 
     flags = mkOption {
       type = listOf str;
@@ -60,6 +63,13 @@ in
       '');
       fish.interactiveShellInit = mkIf cfg.enableFishIntegration (mkAfter ''
         ${getExe cfg.package} init fish ${cfgFlags} | source
+      '');
+      nushell.interactiveShellInit = mkIf cfg.enableNushellIntegration (mkAfter ''
+        source ${
+          pkgs.runCommand "zoxide-nushell-config.nu" { } ''
+            ${getExe cfg.package} init nushell ${cfgFlags} > "$out"
+          ''
+        }
       '');
       xonsh.config = ''
         execx($(${getExe cfg.package} init xonsh ${cfgFlags}), 'exec', __xonsh__.ctx, filename='zoxide')
