@@ -23,7 +23,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dragonfly";
+  pname = "dragonfly2";
   version = "0.35.0";
   pyproject = true;
 

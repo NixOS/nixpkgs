@@ -5260,7 +5260,7 @@ self: super: with self; {
 
   draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
 
-  dragonfly = callPackage ../development/python-modules/dragonfly { };
+  dragonfly2 = callPackage ../development/python-modules/dragonfly2 { };
 
   dragonmapper = callPackage ../development/python-modules/dragonmapper { };
 
