@@ -17381,6 +17381,8 @@ self: super: with self; {
 
   python-roborock = callPackage ../development/python-modules/python-roborock { };
 
+  python-rpm-spec = callPackage ../development/python-modules/python-rpm-spec { };
+
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
