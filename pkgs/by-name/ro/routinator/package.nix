@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   nixosTests,
+  pkg-config,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,6 +19,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-mlY9tFNTKf25VM4hJNegc1grxtZ/iJmlNmBd5SBellc=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ aws-lc ];
 
   meta = {
     description = "RPKI Validator written in Rust";
