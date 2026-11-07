@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pylibftdi";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4iKbwQ0HfwGMvnsrSQInsrU4ZD+m97/xMs3hVUnKEps=";
+    hash = "sha256-ARNh/dnv3FLY0/7aOnkXaD8TaOf7XFmtVQ79ZRmwP5k=";
   };
 
   build-system = [ setuptools ];
