@@ -11,10 +11,13 @@ in
 {
   imports = [
     ./oci-common.nix
+    ../image/config-file-option.nix
     ../image/file-options.nix
   ];
 
   config = {
+    virtualisation.configFile = lib.mkDefault ./oci-config-user.nix;
+
     # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
     # to avoid breaking existing configs using that.
     virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
@@ -28,7 +31,7 @@ in
       inherit (config.virtualisation) diskSize;
       name = "oci-image";
       baseName = config.image.baseName;
-      configFile = ./oci-config-user.nix;
+      inherit (config.virtualisation) configFile;
       format = "qcow2";
       partitionTableType = if cfg.efi then "efi" else "legacy";
     };
