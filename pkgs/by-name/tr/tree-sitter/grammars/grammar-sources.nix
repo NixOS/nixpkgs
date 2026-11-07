@@ -2691,9 +2691,9 @@
   };
 
   rshtml = {
-    version = "0.1.6";
+    version = "0.1.7";
     url = "github:rshtml/tree-sitter-rshtml";
-    hash = "sha256-7RzjvJEMhtWDRnaoLki7FjTK9Y7+ZECE5gIqGUlx6DE=";
+    hash = "sha256-9/YNo/hoCPrbBO3Y9OofdXXzvdFzNeqPcHimUJHZ8qE=";
     meta.license = lib.licenses.mit;
   };
 
