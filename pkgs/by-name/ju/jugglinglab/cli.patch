@@ -1,0 +1,40 @@
+diff --git a/src/main/java/jugglinglab/JugglingLab.java b/src/main/java/jugglinglab/JugglingLab.java
+index 1f292b9..c8fe2cb 100644
+--- a/src/main/java/jugglinglab/JugglingLab.java
++++ b/src/main/java/jugglinglab/JugglingLab.java
+@@ -59,11 +59,10 @@ public class JugglingLab {
+         isWindows = osname.startsWith("windows");
+         isLinux = osname.startsWith("linux");
+ 
+-        // Decide on a base directory for file operations. First look for
+-        // working directory set by an enclosing script, which indicates Juggling
+-        // Lab is running from the command line.
+         String working_dir = System.getenv("JL_WORKING_DIR");
+-        isCLI = (working_dir != null);
++        // nixpkgs-specific env-var to simplify the distinction between CLI mode and normal mode
++        String isCLIStr = System.getenv("JL_IS_CLI");
++        isCLI = isCLIStr != null && isCLIStr.equals("1");
+ 
+         if (working_dir == null) {
+             // If not found, then see if there is a base directory set in the
+@@ -107,14 +106,12 @@ public class JugglingLab {
+         // want no command line arguments to run the full application, so that
+         // it launches when the user double-clicks on the jar.
+ 
+-        boolean run_application = true;
+-        String firstarg = null;
+-
+-        if (args.length > 0) {
+-            jlargs = new ArrayList<String>(Arrays.asList(args));
+-            firstarg = jlargs.remove(0).toLowerCase();
+-            run_application = firstarg.equals("start");
+-        }
++        jlargs = new ArrayList<String>(Arrays.asList(args));
++        // We don't use the upstream wrapper script in nixpkgs, which automatically
++        // adds "help" as the first argument when running as a CLI tool
++        if (jlargs.isEmpty()) jlargs.add(isCLI ? "help" : "start");
++        String firstarg = jlargs.remove(0).toLowerCase();
++        boolean run_application = firstarg.equals("start");
+ 
+         if (run_application) {
+             SwingUtilities.invokeLater(new Runnable() {
