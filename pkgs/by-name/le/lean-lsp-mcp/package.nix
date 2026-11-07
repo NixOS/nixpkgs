@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lean-lsp-mcp";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oOo0oOo";
     repo = "lean-lsp-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LUjOgJTGFRcthGjBM3wyeSNAsqziGxTSDA9X1Fjpg8c=";
+    hash = "sha256-G5f4B8xxuEGkkN8+nQfoBaNd8MylbfCU3bllVHBwrvo=";
   };
 
   build-system = with python3Packages; [ setuptools ];
