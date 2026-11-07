@@ -356,6 +356,7 @@
   ./programs/trippy.nix
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
+  ./programs/uboot-fwenv.nix
   ./programs/udevil.nix
   ./programs/unifi-endpoint.nix
   ./programs/upki.nix
