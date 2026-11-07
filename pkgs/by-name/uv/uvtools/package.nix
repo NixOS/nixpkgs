@@ -9,6 +9,7 @@
   autoPatchelfHook,
   copyDesktopItems,
   makeDesktopItem,
+  perl,
   emgucv,
   fontconfig,
   freetype,
@@ -30,7 +31,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "uvtools";
-  version = "7.0.3";
+  version = "7.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -39,7 +40,7 @@ buildDotnetModule (finalAttrs: {
     owner = "sn4k3";
     repo = "UVtools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ViCOAgKHOCWSBhknXgPnJnL6rxqS7bM+7NB1Hshp9UQ=";
+    hash = "sha256-QQBB/GCnF//UaWiL+Uae1g+sKvHdgDmWikoDoLpIiFQ=";
   };
 
   # UVtools.Core reaches OpenCV through Emgu.CV, whose native half upstream
@@ -48,7 +49,7 @@ buildDotnetModule (finalAttrs: {
   postPatch = ''
     # libcvextern.so and the managed Emgu.CV assembly have to come from the
     # same Emgu CV release to be compatible
-    if ! grep -q 'Include="Emgu.CV" Version="${emgucv.version}\.' UVtools.Core/UVtools.Core.csproj; then
+    if ! grep -q "<EmguCvVersion>${emgucv.version}\\." Directory.Build.props; then
       echo "Emgu.CV does not match emgucv ${emgucv.version}; the emgucv package needs updating alongside this one." >&2
       exit 1
     fi
@@ -57,7 +58,12 @@ buildDotnetModule (finalAttrs: {
     install -Dm444 ${lib.getLib emgucv}/lib/libcvextern.so \
       build/platforms/${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}/libcvextern.so
 
-    sed -i '/Emgu\.CV\.runtime\.mini/d' UVtools.Core/UVtools.Core.csproj
+    # v7.1 declares multi-line platform runtime references and a Linux x64
+    # copy rule.  Replace all of them with libcvextern.so built from source.
+    perl -0pi -e '
+      s{\s*<PackageReference\s+Include="Emgu\.CV\.runtime\.mini\.[^"]+".*?/\>\s*}{}gs;
+      s{\s*<ItemGroup\b(?:(?!</ItemGroup>).)*PkgEmgu_CV_runtime_mini_ubuntu-24_04-x64(?:(?!</ItemGroup>).)*</ItemGroup>\s*}{}gs;
+    ' UVtools.Core/UVtools.Core.csproj
   '';
 
   projectFile = [
@@ -93,6 +99,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
+    perl
   ];
 
   buildInputs = [
