@@ -179,11 +179,12 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
-  # Restoration for 2022
   cuda = {
     shortName = "CUDA";
     members = [
       SomeoneSerge
+      connorbaker
+      # Kevin?
       # samuela?
       # Fridh?
       # knedlesep?
@@ -197,7 +198,10 @@ with lib.maintainers;
     ];
 
     scope = ''
-      Supporting GPU-Accelerated Scientific Computing
+      Supporting GPU-Accelerated Scientific Computing.
+      Package CUDA-enabled packages.
+
+      Accidental: find out whether non-owner employee maintainers are compatible with volunteer maintainers.
 
       Resolve patchelf exception and NVIDIA ghosting problems.
       Resolve unfree cache problem.
