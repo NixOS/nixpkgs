@@ -1,7 +1,9 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   ninja,
   stdenv,
   swift-corelibs-foundation,
@@ -51,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    createToolchainStubsHook
+    fixUnhelpfulCmakeRpathsHook
     ninja
     swift
   ];

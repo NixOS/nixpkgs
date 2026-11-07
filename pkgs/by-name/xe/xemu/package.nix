@@ -110,9 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # As seen in the official build script ($src/build.sh)
     "--disable-cocoa"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "--enable-hvf"
   ];
 
   buildFlags = [ "qemu-system-i386" ];
@@ -153,14 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
-  postBuild =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # Needed for HVF acceleration
-      codesign --entitlements $src/accel/hvf/entitlements.plist -f -s - qemu-system-i386-unsigned
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mv qemu-system-i386-unsigned qemu-system-i386
-    '';
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv qemu-system-i386-unsigned qemu-system-i386
+  '';
 
   installPhase = ''
     runHook preInstall

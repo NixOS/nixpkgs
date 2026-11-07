@@ -15,8 +15,6 @@ buildPythonPackage {
   version = "1.0-unstable-2022-07-27";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "openai";
     repo = "clip";

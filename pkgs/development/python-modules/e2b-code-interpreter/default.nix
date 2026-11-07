@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "e2b-code-interpreter";
   version = "2.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "e2b-dev";

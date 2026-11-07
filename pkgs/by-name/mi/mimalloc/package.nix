@@ -34,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ];
+
+  strictDeps = true;
+
   cmakeFlags = lib.mapAttrsToList lib.cmakeBool {
     MI_INSTALL_TOPLEVEL = true;
     MI_SECURE = secureBuild;
@@ -78,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Compact, fast, general-purpose memory allocator";

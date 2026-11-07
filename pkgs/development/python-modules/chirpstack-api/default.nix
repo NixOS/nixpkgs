@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.20.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack";

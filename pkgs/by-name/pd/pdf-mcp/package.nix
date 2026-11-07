@@ -14,16 +14,15 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pdf-mcp";
   version = "1.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jztan";
     repo = "pdf-mcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/CuVdfkJkc95JkZZZMA5euvdysdPObRcww+zImhCY5M=";
   };
 
@@ -88,10 +87,10 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "MCP server that lets AI agents work through large PDFs without overflowing their context";
     homepage = "https://github.com/jztan/pdf-mcp";
-    changelog = "https://github.com/jztan/pdf-mcp/releases/tag/v${version}";
+    changelog = "https://github.com/jztan/pdf-mcp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
     mainProgram = "pdf-mcp";
     platforms = lib.platforms.unix;
   };
-}
+})

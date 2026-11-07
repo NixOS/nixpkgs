@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "perrygeo";
     repo = "simanneal";

@@ -7,6 +7,8 @@
   rustc,
   cargo,
   milksnake,
+  pkg-config,
+  zstd,
   cffi,
   pytestCheckHook,
   nix-update-script,
@@ -37,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     rustc
     cargo
     milksnake
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
   ];
 
   dependencies = [ cffi ];

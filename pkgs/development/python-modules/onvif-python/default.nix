@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.7";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nirsimetri";
     repo = "onvif-python";

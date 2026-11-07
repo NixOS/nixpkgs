@@ -11,6 +11,7 @@
   # deps
   dbus,
   dri-pkgconfig-stub,
+  fetchpatch,
   font-util,
   libdrm,
   libepoxy,
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
   # necessary, these can be moved out of lockstep in order to merge updates
   # quickly.
-  version = "21.1.24";
+  version = "21.1.25";
 
   outputs = [
     "out"
@@ -69,10 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gk6zbKZcw7G5NlZtZ3qXhuE8Ec1YBulRrFXz9c45hK8=";
+    hash = "sha256-atTjx7WaMJsyyS5cFc4SZxEPnhPxrHjaYjYaYo2hoOs=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+  patches = [
+    # Revert "damage: Unlink a damage from the list it was actually inserted on"
+    # Upstream broke AMD drivers see issue below.
+    # https://gitlab.freedesktop.org/xorg/xserver/-/issues/1930
+    (fetchpatch {
+      name = "revert-damage-unlink-abi-break.patch";
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/a10192e7c3237a707e9bb712a566e2f14415dddd.patch";
+      hash = "sha256-vtloUZrdtQ9L56KhNy7m3praW9KmeMmwVGM+rX5EmUw=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin/bundle_main.patch
     ./darwin/find-cpp.patch
     ./darwin/stub.patch

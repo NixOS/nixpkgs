@@ -8,7 +8,10 @@
   rustPlatform,
   versionCheckHook,
   stdenv,
+  pkg-config,
+  aws-lc,
   cacert,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +29,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=zpm" ];
   cargoTestFlags = [ "--package=zpm" ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
+  ];
 
   env = {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";

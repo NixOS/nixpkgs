@@ -353,7 +353,25 @@ in
           };
         }
       ]
+      ++ lib.optionals (!config.security.pam.p11.enable) [
+        {
+          settings."org/gnome/login-screen" = {
+            enable-smartcard-authentication = false;
+          };
+        }
+      ]
       ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
+
+    programs.dconf.profiles.user.databases = [
+      {
+        settings."org/gnome/login-screen" = {
+          enable-smartcard-authentication = config.security.pam.p11.enable;
+
+          # We currently don't provide a `gdm-switchable-auth` PAM service.
+          enable-switchable-authentication = false;
+        };
+      }
+    ];
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
@@ -624,6 +642,85 @@ in
               name = "fprintd";
               control = "required";
               modulePath = "${pkgs.fprintd}/lib/security/pam_fprintd.so";
+            }
+            {
+              name = "env";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            {
+              name = "gdm";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "[success=ok default=1]";
+              modulePath = "${gdm}/lib/security/pam_gdm.so";
+            }
+            {
+              name = "gnome_keyring";
+              enable = pamLogin.enable && pamLogin.enableGnomeKeyring;
+              control = "optional";
+              modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+            }
+          ];
+
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+
+          password = utils.pam.autoOrderRules [
+            {
+              name = "deny";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
+            }
+          ];
+
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
+      };
+
+      # Do not attempt to authenticate via smartcard when the login option
+      # "Password" is selected (gdm-password).
+      login.p11Auth = lib.mkIf config.security.pam.p11.enable false;
+
+      gdm-smartcard = lib.mkIf config.security.pam.p11.enable {
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "nologin";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
+            }
+            {
+              name = "faillock";
+              control = "requisite";
+              modulePath = "${config.security.pam.package}/lib/security/pam_faillock.so";
+              settings.preauth = true;
+            }
+            {
+              name = "p11";
+              control = "required";
+              modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so";
+              args = [
+                "${pkgs.opensc}/lib/opensc-pkcs11.so"
+              ];
+            }
+            {
+              name = "shells";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_shells.so";
             }
             {
               name = "env";

@@ -32,7 +32,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   pname = "cuda-cccl";
   version = "1.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

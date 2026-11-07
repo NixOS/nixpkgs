@@ -2,12 +2,16 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "nix-check-deps";
   version = "0-unstable-2025-04-09";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "GrimmTheShrimp";
@@ -17,6 +21,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-1fazKGz3PtyTvcIW+PY/LwYc6JlErSO9ZFisTUXJdhc=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   passthru.updateScript = unstableGitUpdater { };
 

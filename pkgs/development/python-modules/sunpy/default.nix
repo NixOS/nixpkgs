@@ -63,7 +63,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sunpy";
   version = "8.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";

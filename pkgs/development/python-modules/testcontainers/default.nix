@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "testcontainers";
   version = "4.15.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";

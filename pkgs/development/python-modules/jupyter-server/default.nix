@@ -45,7 +45,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-server";
   version = "2.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Using the pypi archive to avoid building the node artifacts from source
   src = fetchPypi {

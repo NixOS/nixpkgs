@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     with ocamlPackages;
     [
-      crunch.bin
+      crunch
       findlib
       mirage
       ocaml

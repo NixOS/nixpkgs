@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XML-XCB protocol descriptions used by libxcb for the X11 protocol & extensions";
     homepage = "https://gitlab.freedesktop.org/xorg/proto/xcbproto";

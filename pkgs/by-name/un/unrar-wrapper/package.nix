@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "unrar_wrapper";

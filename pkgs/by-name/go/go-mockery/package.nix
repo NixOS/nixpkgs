@@ -3,7 +3,6 @@
   # version that mockery supports rather than buildGoLatestModule.
   # This should be bumped when a mockery release includes support for a new version of Go.
   lib,
-  stdenv,
   buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
@@ -82,12 +81,6 @@ buildGo127Module (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ${
-      # TestRemoteTemplates/schema_validation_OK fails only on x86_64-darwin
-      (lib.optionalString (
-        stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86
-      ) "rm -rf e2e/test_remote_templates/")
-    }
     # run unit tests and e2e tests plus pre-gen necessary mocks
     task test.ci
 

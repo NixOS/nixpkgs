@@ -25,10 +25,15 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
 let
   sslPkgs = {
     inherit
-      aws-lc
       libressl
       openssl
       ;
+    aws-lc = aws-lc.override {
+      # HAProxy wants to link against -lssl and -lcrypto
+      withOpenSSLShim = true;
+      # HAProxy gets confused with symbol prefixing enabled
+      symbolPrefix = null;
+    };
   };
   sslPkg = sslPkgs.${sslLibrary};
 in

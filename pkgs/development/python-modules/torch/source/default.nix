@@ -91,7 +91,7 @@
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
   # this is also what official pytorch build does
-  mklDnnSupport ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  mklDnnSupport ? !stdenv.hostPlatform.isDarwin,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -301,7 +301,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   # Don't forget to update torch-bin to the same version.
   version = "2.14.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   outputs = [
     "out" # output standard python package

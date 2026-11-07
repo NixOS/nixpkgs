@@ -38,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.9";
   pyproject = false;
 
-  __structuredAttrs = true;
-
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
     hash = "sha256-gSqzV1yuE91vqtluTZMnl6enGoRICh6su4dPLrr8fGk=";

@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rns";
   version = "1.5.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "rns";

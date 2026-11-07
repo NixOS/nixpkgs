@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jsonmerge";
   version = "1.9.2";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {

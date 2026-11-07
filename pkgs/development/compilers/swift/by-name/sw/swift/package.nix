@@ -3,10 +3,13 @@
   config,
   apple-sdk_14,
   apple-sdk_26,
+  apple-sdk_27,
   callPackage,
+  indexstore-db,
   llvmPackages,
   llvmPackages_upstream,
   patchelf,
+  sourcekit-lsp,
   stdenv,
   stdlib,
   swift-corelibs-foundation,
@@ -20,13 +23,18 @@
   symlinkJoin,
   swift_release,
   enableRepl ? true, # Whether to build and include LLDB for the Swift REPL.
+  enableSourceKitLSP ? true, # Whether to include sourcekit-lsp, which is expected to be in the toolchain.
 }:
 
 let
   includeTesting = swiftc.supportsMacros && swift-testing != null;
 
   # Need to use an older SDK if `swiftc` does not support macros.
-  propagated-sdk = if swiftc.supportsMacros then apple-sdk_26 else apple-sdk_14;
+  propagated-sdk =
+    if swiftc.supportsMacros then
+      (if lib.versions.majorMinor swift_release == "6.2" then apple-sdk_26 else apple-sdk_27)
+    else
+      apple-sdk_14;
 
   # The toolchain needs to propagate libdispatch with and without the Swift overlay to make sure it propagates
   # both the non-Swift shared libraries and the Swift overlay shared library.
@@ -43,21 +51,20 @@ let
       # LLDB is used by `swift repl` to provide the REPL.
       llvmPackages.lldb.out
     ]
+    ++ lib.optionals enableSourceKitLSP [
+      sourcekit-lsp.out
+      indexstore-db.out
+    ]
     ++ lib.optionals includeTesting [
       swift-corelibs-xctest.dev
-      swift-corelibs-xctest.out
       swift-testing.dev
-      swift-testing.out
     ]
     ++ lib.optionals (stdlib != null) [
       stdlib.dev
-      stdlib.out
       swiftc.dev
     ]
     ++ lib.optionals (swift-driver != null) [
       swift-driver.out
-      swift-driver.dev
-      swift-driver.lib
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && swift-foundation != null) [
       # Needed for FoundationMacros, which is otherwise not part of the SDK on Darwin.
@@ -65,17 +72,13 @@ let
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
       lib.optionals (swift-corelibs-libdispatch != null) [
-        swift-corelibs-libdispatch.out
         swift-corelibs-libdispatch.dev
-        swift-corelibs-libdispatch-no-overlay.out
         swift-corelibs-libdispatch-no-overlay.dev
       ]
       ++ lib.optionals (swift-foundation != null) [
-        swift-corelibs-foundation.out
         swift-corelibs-foundation.dev
         swift-foundation-icu.out
         swift-foundation.dev
-        swift-foundation.out
       ]
     );
   };
@@ -173,6 +176,12 @@ stdenv.mkDerivation (finalAttrs: {
       done
     fi
 
+    # Swift Build expects to find and load libclang from the toolchain.
+    ln -s ${lib.escapeShellArg (lib.getLib llvmPackages.libclang)}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary} "$out/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}"
+
+    # Swift Build and SwiftPM need to load IndexStoreDB for Swift Testing support to work.
+    ln -s ${lib.escapeShellArg (lib.getLib llvmPackages.libclang)}/lib/libIndexStore${stdenv.hostPlatform.extensions.sharedLibrary} "$out/lib/libIndexStore${stdenv.hostPlatform.extensions.sharedLibrary}"
+
     # Propagated inputs in `$dev/nix-support` have to be substituted to use this derivation instead of swiftc.
     for f in "$out/nix-support/"*; do
       orig=$(readlink "$f")
@@ -193,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail @objdump@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-objdump")} \
         --replace-fail @install_name_tool@ ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.llvm "llvm-install-name-tool")} \
         --replace-fail @stdlibPath@ ${lib.escapeShellArg stdlib.out} \
+        --replace-fail @store-dir@ ${lib.escapeShellArg builtins.storeDir} \
         --replace-fail @swiftPath@ "$out" \
         --replace-fail @swiftPlatform@ ${stdenv.hostPlatform.swift.platform}
     ''}

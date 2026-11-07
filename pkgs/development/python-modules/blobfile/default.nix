@@ -14,8 +14,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "christopher-hesse";
     repo = "blobfile";

@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "perplexityai";
   version = "0.42.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "perplexityai";

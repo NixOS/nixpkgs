@@ -49,6 +49,7 @@ in
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
             kernelPatches.libbpf_C23_compat
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -57,6 +58,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -65,6 +67,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -73,14 +76,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.2";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -115,6 +111,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
 
@@ -126,6 +123,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
         linux_xanmod_stable = xanmodKernels {
@@ -133,6 +131,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
         linux_xanmod_latest = xanmodKernels {
@@ -140,6 +139,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.tools_128bit_types
           ];
         };
       }
@@ -163,6 +163,7 @@ in
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
         linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
         linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
+        linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -626,7 +627,6 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
     linux_7_3 = recurseIntoAttrs (packagesFor kernels.linux_7_3);
   }
   // lib.optionalAttrs config.allowAliases {
@@ -645,6 +645,7 @@ in
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
     linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
     linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
+    linux_7_2 = throw "linux 7.2 was removed because it has reached its end of life upstream";
   };
 
   packages = recurseIntoAttrs (

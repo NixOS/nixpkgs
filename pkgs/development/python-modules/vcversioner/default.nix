@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.16.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "vcversioner";
     inherit (finalAttrs) version;

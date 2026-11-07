@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-common";
   version = "1.23.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fireworks-ai";
   version = "1.2.26";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fw-ai-external";

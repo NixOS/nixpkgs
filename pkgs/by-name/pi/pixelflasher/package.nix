@@ -61,11 +61,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildPhase =
     let
-      specFile =
-        if stdenv.hostPlatform.isDarwin then
-          if stdenv.hostPlatform.isAarch64 then "build-on-mac" else "build-on-mac-intel-only"
-        else
-          "build-on-linux";
+      specFile = if stdenv.hostPlatform.isDarwin then "build-on-mac" else "build-on-linux";
     in
     ''
       runHook preBuild

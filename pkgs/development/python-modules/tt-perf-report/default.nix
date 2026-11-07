@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tt-perf-report";
   version = "1.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";

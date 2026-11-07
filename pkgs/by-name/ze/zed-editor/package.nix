@@ -6,6 +6,7 @@
   pkg-config,
   protobuf,
   fontconfig,
+  aws-lc,
   libgit2,
   openssl,
   sqlite,
@@ -155,6 +156,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
+    aws-lc
     libgit2
     sqlite
     zlib

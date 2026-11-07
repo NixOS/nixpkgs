@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyhomepilot";
   version = "0.0.3";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.12.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "stackit_resourcemanager";
     inherit (finalAttrs) version;

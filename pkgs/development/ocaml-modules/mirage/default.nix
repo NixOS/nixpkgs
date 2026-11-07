@@ -1,6 +1,5 @@
 {
   buildDunePackage,
-  ocaml,
   mirage-runtime,
   astring,
   bos,
@@ -20,11 +19,6 @@ buildDunePackage (finalAttrs: {
 
   minimalOCamlVersion = "4.13";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   propagatedBuildInputs = [
     astring
     bos
@@ -40,12 +34,6 @@ buildDunePackage (finalAttrs: {
 
   # Tests need opam-monorepo
   doCheck = false;
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix=$out --libdir=$dev/lib/ocaml/${ocaml.version}/site-lib/ mirage
-    runHook postInstall
-  '';
 
   meta = mirage-runtime.meta // {
     description = "MirageOS library operating system";

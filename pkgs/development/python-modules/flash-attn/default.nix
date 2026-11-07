@@ -32,7 +32,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-attn";
   version = "2.8.3.post2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";

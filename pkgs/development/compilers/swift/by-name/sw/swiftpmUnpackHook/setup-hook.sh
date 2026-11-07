@@ -33,7 +33,7 @@ swiftpmUnpackDeps() {
            },
            "version": 7
          }
-       ' "$swiftpmDeps/workspace-state.json" <(swift package dump-package --package-path "$NIX_BUILD_TOP/$sourceRoot") \
+       ' "$swiftpmDeps/workspace-state.json" <(swift package --disable-sandbox dump-package --package-path "$NIX_BUILD_TOP/$sourceRoot") \
          > "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json~"
        mv "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json~" "$NIX_BUILD_TOP/$sourceRoot/.build/workspace-state.json"
 

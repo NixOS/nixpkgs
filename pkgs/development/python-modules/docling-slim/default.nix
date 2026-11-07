@@ -106,7 +106,6 @@ buildPythonPackage (finalAttrs: {
   pname = "docling-slim";
   version = "2.145.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   rustPlatform,
-  openssl,
+  aws-lc,
 
   # tests
   cacert,
@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hf-xet";
   version = "1.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -44,10 +43,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
   ];
-
-  env.OPENSSL_NO_VENDOR = 1;
 
   pythonImportsCheck = [ "hf_xet" ];
 

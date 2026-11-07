@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp";
   version = "0.5.22";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "software-compliance-org";

@@ -60,6 +60,11 @@ buildDunePackage {
   inherit pname;
   inherit version;
   minimalOCamlVersion = "4.14";
+
+  # melc needs melange's standard library at runtime,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
+
   src = fetchurl {
     url = "https://github.com/melange-re/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     inherit hash;

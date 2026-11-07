@@ -2,22 +2,20 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf,
-  automake,
-  libtool,
+  meson,
+  ninja,
   removeReferencesTo,
   gitUpdater,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.5.1";
+  version = "3.0.8";
 
   # fetchFromGitHub isn't used because it's unavailable during bootstrapping
   src = fetchurl {
     url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
+    hash = "sha256-RPZ83agZLv7Nm+n43y/lTwh/jIQGLd/wAnEz+UVDv4o=";
   };
 
   outputs = [
@@ -29,14 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    automake
-    autoconf
-    libtool
+    meson
+    ninja
     removeReferencesTo
-    autoreconfHook
   ];
 
-  enableParallelBuilding = true;
+  strictDeps = true;
 
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
@@ -63,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/pkgconf/pkgconf";
     rev-prefix = "pkgconf-";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/pkgconf/pkgconf";

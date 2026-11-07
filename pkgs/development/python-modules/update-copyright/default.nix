@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "update-copyright";

@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitlabform";
   version = "6.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gitlabform";

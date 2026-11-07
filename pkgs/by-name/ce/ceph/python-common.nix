@@ -10,7 +10,6 @@ ceph-python.pkgs.buildPythonPackage (finalAttrs: {
   src = ceph-src;
 
   pyproject = true;
-  __structuredAttrs = true;
 
   sourceRoot = "${ceph-src.name}/src/python-common";
 

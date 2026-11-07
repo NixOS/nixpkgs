@@ -14,8 +14,7 @@
   libffi,
   libxml2,
   fixDarwinDylibNames,
-  withLLVM ?
-    stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64),
+  withLLVM ? stdenv.hostPlatform.isLinux,
   withV8 ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64),
 }:
 
@@ -38,7 +37,7 @@ let
           "v8-linux-musl.tar.xz"
         else if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
           "v8-linux-amd64.tar.xz"
-        else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+        else if stdenv.hostPlatform.isDarwin then
           "v8-darwin-aarch64.tar.xz"
         else
           throw "withV8 = true is not supported on ${stdenv.hostPlatform.system}";

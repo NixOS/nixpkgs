@@ -32,8 +32,6 @@ buildPythonPackage rec {
   version = "1.12.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";

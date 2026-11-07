@@ -19,8 +19,6 @@
   merve,
   nbytes,
   nghttp2,
-  nghttp3,
-  ngtcp2,
   openssl,
   simdjson,
   simdutf,
@@ -134,26 +132,10 @@ let
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
-    # TODO: remove this on staging and land with https://github.com/NixOS/nixpkgs/pull/576792
-    brotli =
-      if majorVersion == "24" then
-        brotli
-      else
-        brotli.overrideAttrs (old: {
-          patches = old.patches ++ [
-            # Fix for CVE-2026-111497
-            (fetchurl {
-              url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
-              hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
-            })
-          ];
-        });
-
     inherit
+      brotli
       libuv
       nghttp2
-      nghttp3
-      ngtcp2
       openssl
       uvwasi
       zlib
@@ -202,14 +184,6 @@ let
   });
 
   sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
-
-  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
-  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
-  libHeadersForGYP = [
-    libuv
-    openssl
-    zlib
-  ];
 
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
@@ -279,7 +253,10 @@ let
         # -dev outputs in the runtime closure. The cc wrapper already passes these
         # paths, so have pkgconf treat them as system paths and omit them.
         PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
-        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.makeSearchPathOutput "dev" "lib" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.concatStringsSep ":" [
+          (lib.makeSearchPathOutput "dev" "lib" sharedLibInputs)
+          (lib.makeLibraryPath sharedLibInputs)
+        ];
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
         # these are used in the --cross-compiling case. see comment at postConfigure.
@@ -344,10 +321,7 @@ let
       ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
-      ++ lib.concatMap (name: [
-        "--shared-${name}"
-        "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-      ]) (builtins.attrNames sharedLibDeps);
+      ++ map (name: "--shared-${name}") (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
 
@@ -424,26 +398,7 @@ let
       checkFlags = [
         # Do not create __pycache__ when running tests.
         "PYTHONDONTWRITEBYTECODE=1"
-      ]
-      ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-        # Python 3.12 introduced a warning for calling `os.fork()` in a
-        # multi‐threaded program. For some reason, the Node.js
-        # `tools/pseudo-tty.py` program used for PTY‐related tests
-        # triggers this warning on Hydra, on `x86_64-darwin` only,
-        # despite not creating any threads itself. This causes the
-        # Node.js test runner to misinterpret the warnings as part of the
-        # test output and fail. It does not reproduce reliably off Hydra
-        # on Intel Macs, or occur on the `aarch64-darwin` builds.
-        #
-        # This seems likely to be related to Rosetta 2, but it could also
-        # be some strange x86‐64‐only threading behaviour of the Darwin
-        # system libraries, or a bug in CPython, or something else
-        # haunted about the Nixpkgs/Hydra build environment. We silence
-        # the warnings in the hope that closing our eyes will make the
-        # ghosts go away.
-        "PYTHONWARNINGS=ignore::DeprecationWarning"
-      ]
-      ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+
         "FLAKY_TESTS=skip"
         # Skip some tests that are not passing in this context
         "CI_SKIP_TESTS=${
@@ -452,13 +407,16 @@ let
               # Tests don't work in sandbox.
               "test-child-process-exec-env"
               "test-child-process-uid-gid"
-              "test-fs-write-stream-eagain"
               "test-process-euid-egid"
-              "test-process-initgroups"
-              "test-process-setgroups"
               "test-process-uid-gid"
-              # This is a bit weird, but for some reason fs watch tests fail with
-              # sandbox.
+            ]
+            ++ lib.optional (majorVersion == "22") "test-runner-watch-mode"
+            ++ lib.optionals stdenv.hostPlatform.is32bit [
+              # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+              "test-fs-utimes-y2K38"
+            ]
+            ++ lib.optionals stdenv.buildPlatform.isDarwin [
+              # Disable tests that don’t work under macOS sandbox.
               "test-fs-promises-watch"
               "test-fs-watch"
               "test-fs-watch-encoding"
@@ -474,35 +432,10 @@ let
               "test-fs-watch-recursive-sync-write"
               "test-fs-watch-recursive-update-file"
               "test-fs-watchfile"
-              "test-runner-run"
-              "test-runner-watch-mode"
-              "test-watch-mode-files_watcher"
-
-              # fail on openssl 3.6.0
-              "test-http2-server-unknown-protocol"
-              "test-tls-ocsp-callback"
-            ]
-            ++ lib.optionals (!lib.versionAtLeast version "22") [
-              "test-tls-multi-key"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.is32bit [
-              # utime (actually utimensat) fails with EINVAL on 2038 timestamp
-              "test-fs-utimes-y2K38"
-            ]
-            ++ lib.optionals stdenv.buildPlatform.isDarwin [
-              # Disable tests that don’t work under macOS sandbox.
-              # uv_os_setpriority returned EPERM (operation not permitted)
               "test-os"
               "test-os-process-priority"
-
-              # Debugger tests failing on macOS 15.4
-              "test-debugger-extract-function-name"
-              "test-debugger-random-port-with-inspect-port"
-              "test-debugger-launch"
-              "test-debugger-pid"
-
-              # Those are annoyingly flaky, but not enough to be marked as such upstream.
-              "test-wasi"
+              "test-runner-run"
+              "test-watch-mode-files_watcher"
 
               # This is failing on newer macOS versions, no fix has yet been provided upstream:
               "test-cluster-dgram-1"
@@ -510,17 +443,6 @@ let
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
               "test-dns-set-default-order"
-            ]
-            ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-              # These tests fail on x86_64-darwin (even without sandbox).
-              # TODO: revisit at a later date.
-              "test-fs-readv"
-              "test-fs-readv-sync"
-              "test-vm-memleak"
-
-              # Those are annoyingly flaky, but not enough to be marked as such upstream.
-              "test-tick-processor-arguments"
-              "test-set-raw-mode-reset-signal"
             ]
             # These network/fetch/inspector tests fail on riscv64
             ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
@@ -545,18 +467,11 @@ let
               "test-wasm-web-api"
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
-            ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
             ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
-            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
-            # OpenSSL reports different errors
-            # https://github.com/nodejs/node/pull/62629
-            # patch does not apply
-            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
-            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
@@ -569,9 +484,7 @@ let
           ]
           ++ lib.optional bundlesCorepack "corepack";
           # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
-          disallowedRequisites = map (dep: dep.dev) (
-            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
-          );
+          disallowedRequisites = map (dep: dep.dev) (lib.filter (dep: dep ? dev) sharedLibInputs);
         };
         corepack = {
           disallowedReferences = [
@@ -640,9 +553,15 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          ln -s ${
-            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
-          } $out/include/node/
+          ${
+            # node-gyp expects these headers in node_prefix (i.e. $out); the list matches
+            # upstream's tools/install.py. Copied rather than linked so $out does
+            # not depend on the -dev outputs (and through them zlib-static, openssl-bin).
+            ''
+              cp -R ${lib.getDev libuv}/include/* $out/include/node/
+              cp -R ${lib.getDev openssl}/include/openssl $out/include/node/
+              cp ${lib.getDev zlib}/include/{zconf,zlib}.h $out/include/node/
+            ''}
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib
