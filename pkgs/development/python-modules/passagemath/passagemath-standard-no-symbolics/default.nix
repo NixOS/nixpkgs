@@ -1,13 +1,13 @@
 {
   fetchPypi,
   buildPythonPackage,
+  callPackage,
   passagemath-tachyon,
   cysignals,
   cython,
   gmpy2,
   jupyter-core,
   lrcalc-python,
-  memory-allocator,
   numpy,
   pkgconfig,
   passagemath-ppl,
@@ -61,6 +61,9 @@
   passagemath-environment,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-standard-no-symbolics";
   version = "10.8.13";

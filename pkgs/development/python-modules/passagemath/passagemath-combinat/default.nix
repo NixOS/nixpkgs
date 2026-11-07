@@ -1,11 +1,11 @@
 {
   buildPythonPackage,
+  callPackage,
   cysignals,
   cython,
   fetchPypi,
   gmpy2,
   lib,
-  memory-allocator,
   passagemath-categories,
   passagemath-environment,
   passagemath-setup,
@@ -14,6 +14,9 @@
   setuptools,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-combinat";
   version = "10.8.13";

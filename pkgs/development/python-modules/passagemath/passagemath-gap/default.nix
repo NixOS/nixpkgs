@@ -1,12 +1,12 @@
 {
   buildPythonPackage,
+  callPackage,
   cysignals,
   cython,
   dot2tex,
   fetchPypi,
   gap,
   gmpy2,
-  memory-allocator,
   passagemath-categories,
   passagemath-environment,
   passagemath-gap-pkg-factint-data,
@@ -21,7 +21,9 @@
   setuptools,
   ...
 }:
-
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-gap";
   version = "10.8.13";

@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
@@ -7,7 +8,6 @@
   passagemath-setup,
   passagemath-environment,
   cysignals,
-  memory-allocator,
   passagemath-categories,
   passagemath-iml,
   passagemath-m4ri-m4rie,
@@ -26,6 +26,9 @@
   python,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-linbox";
   version = "10.8.13";

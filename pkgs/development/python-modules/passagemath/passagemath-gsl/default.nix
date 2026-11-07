@@ -1,6 +1,7 @@
 {
   pkgs,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
@@ -9,12 +10,14 @@
   passagemath-environment,
   jinja2,
   cysignals,
-  memory-allocator,
   numpy,
   passagemath-categories,
   passagemath-modules,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-gsl";
   version = "10.8.13";

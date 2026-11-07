@@ -1,6 +1,7 @@
 {
   pkgs,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
@@ -10,7 +11,6 @@
   gmpy2,
   cysignals,
   fpylll,
-  memory-allocator,
   scipy,
   passagemath-modules,
   passagemath-flint,
@@ -18,6 +18,9 @@
   passagemath-singular,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-schemes";
   version = "10.8.13";

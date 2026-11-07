@@ -1,6 +1,7 @@
 {
   pkgs,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
@@ -9,7 +10,6 @@
   passagemath-environment,
   cysignals,
   gmpy2,
-  memory-allocator,
   numpy,
   scipy,
   pillow,
@@ -19,6 +19,9 @@
   passagemath-modules,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-plot";
   version = "10.8.13";

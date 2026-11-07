@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   passagemath-setup,
   setuptools,
@@ -9,10 +10,12 @@
   passagemath-categories,
   pkgs,
   passagemath-objects,
-  memory-allocator,
   cysignals,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-glpk";
   version = "10.8.13";

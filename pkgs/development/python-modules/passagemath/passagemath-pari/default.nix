@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   conway-polynomials,
   cysignals,
   cython,
@@ -10,9 +11,7 @@
   gmp,
   gsl,
   libmpc,
-  memory-allocator,
   mpfr,
-  mpmath,
   ntl,
   pari,
   passagemath-categories,
@@ -25,6 +24,10 @@
   setuptools,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+  mpmath = callPackage ../downgrades/mpmath { };
+in
 buildPythonPackage rec {
   pname = "passagemath-pari";
   version = "10.8.13";

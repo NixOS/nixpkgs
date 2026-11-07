@@ -1,11 +1,11 @@
 {
   buildPythonPackage,
+  callPackage,
   cysignals,
   cython,
   fetchPypi,
   gmpy2,
   lib,
-  memory-allocator,
   passagemath-environment,
   passagemath-glpk,
   passagemath-modules,
@@ -16,6 +16,9 @@
   setuptools,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-polyhedra";
   version = "10.8.13";

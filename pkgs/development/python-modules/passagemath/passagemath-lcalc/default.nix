@@ -1,6 +1,7 @@
 {
   pkgs,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
@@ -8,12 +9,14 @@
   passagemath-setup,
   passagemath-environment,
   cysignals,
-  memory-allocator,
   passagemath-objects,
   passagemath-categories,
   passagemath-modules,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-lcalc";
   version = "10.8.13";

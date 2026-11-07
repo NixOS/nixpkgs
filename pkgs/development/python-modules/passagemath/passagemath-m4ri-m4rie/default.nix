@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   passagemath-setup,
   setuptools,
@@ -9,11 +10,13 @@
   passagemath-categories,
   pkgs,
   cysignals,
-  memory-allocator,
   passagemath-modules,
   numpy,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-m4ri-m4rie";
   version = "10.8.13";

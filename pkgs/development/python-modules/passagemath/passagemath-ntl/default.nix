@@ -1,18 +1,21 @@
 {
   pkgs,
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
   pkgconfig,
   passagemath-setup,
   passagemath-environment,
-  memory-allocator,
   cysignals,
   passagemath-categories,
   passagemath-modules,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-ntl";
   version = "10.8.13";

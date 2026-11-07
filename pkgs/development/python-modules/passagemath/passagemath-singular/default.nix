@@ -1,10 +1,10 @@
 {
   buildPythonPackage,
+  callPackage,
   cysignals,
   cython,
   fetchPypi,
   lib,
-  memory-allocator,
   passagemath-categories,
   passagemath-environment,
   passagemath-flint,
@@ -18,6 +18,9 @@
   singular,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-singular";
   version = "10.8.13";

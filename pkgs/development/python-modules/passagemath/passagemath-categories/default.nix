@@ -1,11 +1,11 @@
 {
   buildPythonPackage,
+  callPackage,
   cython,
   fetchPypi,
   gmp,
   jinja2,
   libmpc,
-  memory-allocator,
   mpfr,
   passagemath-objects,
   passagemath-setup,
@@ -13,6 +13,9 @@
   setuptools,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+in
 buildPythonPackage rec {
   pname = "passagemath-categories";
   version = "10.8.13";

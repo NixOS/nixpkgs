@@ -1,13 +1,16 @@
 {
   buildPythonPackage,
+  callPackage,
   fetchPypi,
   setuptools,
   cython,
   cysignals,
-  primecount,
   primesieve,
   lib,
 }:
+let
+  primecount = callPackage ../downgrades/primecount { };
+in
 buildPythonPackage rec {
   pname = "passagemath-primesieve-primecount";
   version = "0.1.1.2";

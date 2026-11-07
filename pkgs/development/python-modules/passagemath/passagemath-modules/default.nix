@@ -1,5 +1,6 @@
 {
   buildPythonPackage,
+  callPackage,
   pkg-config,
   gmp,
   libmpc,
@@ -11,9 +12,7 @@
   passagemath-setup,
   passagemath-environment,
   cysignals,
-  memory-allocator,
   numpy,
-  mpmath,
   passagemath-categories,
   gmpy2,
   jinja2,
@@ -21,6 +20,10 @@
   passagemath-flint,
   ...
 }:
+let
+  memory-allocator = callPackage ../downgrades/memory-allocator { };
+  mpmath = callPackage ../downgrades/mpmath { };
+in
 buildPythonPackage rec {
   pname = "passagemath-modules";
   version = "10.8.13";
