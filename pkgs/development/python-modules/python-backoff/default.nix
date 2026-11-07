@@ -5,7 +5,7 @@
   hatchling,
   lib,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   requests,
   responses,
 }:
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     dirty-equals
     pytest-asyncio
-    pytestCheckHook
+    pytest9_1CheckHook
     requests
     responses
   ];
