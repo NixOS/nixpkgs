@@ -1,0 +1,13 @@
+diff --git a/build.zig b/build.zig
+index d5ca7ce..b9de9c5 100644
+--- a/build.zig
++++ b/build.zig
+@@ -19,6 +19,8 @@ pub fn build(b: *std.Build) void {
+         .target = target,
+         .optimize = optimize,
+     });
++    translate_c.addIncludePath(expat_dep.artifact("expat").getEmittedIncludeTree());
++    translate_c.linkSystemLibrary("curl", .{});
+     if (curl_include_path) |path| {
+         translate_c.addIncludePath(.{ .cwd_relative = path });
+     }
