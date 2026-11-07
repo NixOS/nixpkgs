@@ -14160,7 +14160,7 @@ self: super: with self; {
 
   primer3-py = callPackage ../development/python-modules/primer3-py { };
 
-  primp = callPackage ../development/python-modules/primp { };
+  primp = callPackage ../development/python-modules/primp { zstd-c = pkgs.zstd; };
 
   print-color = callPackage ../development/python-modules/print-color { };
 
