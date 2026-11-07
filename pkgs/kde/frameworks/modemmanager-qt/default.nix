@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  lib,
   pkg-config,
   modemmanager,
 }:
@@ -8,4 +9,6 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraPropagatedBuildInputs = [ modemmanager ];
+
+  meta.badPlatforms = lib.platforms.darwin;
 }

@@ -5,6 +5,8 @@
   kauth,
   acl,
   attr,
+  lib,
+  stdenv,
 }:
 mkKdeDerivation {
   pname = "kio";
@@ -18,6 +20,8 @@ mkKdeDerivation {
     qt5compat
     qttools
     kauth
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     acl
     attr
   ];

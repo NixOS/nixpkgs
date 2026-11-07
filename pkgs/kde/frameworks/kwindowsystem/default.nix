@@ -4,6 +4,8 @@
   qtdeclarative,
   qtwayland,
   pkg-config,
+  lib,
+  stdenv,
 }:
 mkKdeDerivation {
   pname = "kwindowsystem";
@@ -14,6 +16,8 @@ mkKdeDerivation {
   ];
   extraBuildInputs = [
     qtdeclarative
+  ]
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     qtwayland
   ];
 }

@@ -15,7 +15,7 @@ ecmPostHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.
     # Keep this in sync with https://github.com/KDE/extra-cmake-modules/blob/master/kde-modules/KDEInstallDirs6.cmake
     if [ "$(uname)" = "Darwin" ]; then
-        appendToVar cmakeFlags "-DKDE_INSTALL_BUNDLEDIR=${!outputBin}/Applications/KDE"
+        appendToVar cmakeFlags "-DKDE_INSTALL_BUNDLEDIR=${!outputBin}/Applications"
     fi
 
     appendToVar cmakeFlags "-DKDE_INSTALL_EXECROOTDIR=${!outputBin}"
