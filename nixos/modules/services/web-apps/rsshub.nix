@@ -49,7 +49,7 @@ in
         {
           REQUEST_TIMEOUT = "3000";
           REQUEST_RETRY = "10";
-          PUPPETEER_EXECUTABLE_PATH = lib.getExe pkgs.chromium";
+          CHROMIUM_EXECUTABLE_PATH = lib.getExe pkgs.chromium;
         }
       '';
       description = ''
