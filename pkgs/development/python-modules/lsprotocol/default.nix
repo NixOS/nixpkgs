@@ -4,7 +4,7 @@
   buildPythonPackage,
   cattrs,
   fetchFromGitHub,
-  flit-core,
+  flit-core_3,
   importlib-resources,
   jsonschema,
   pyhamcrest,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/packages/python";
 
   build-system = [
-    flit-core
+    flit-core_3
   ];
 
   dependencies = [
