@@ -1,0 +1,139 @@
+diff --git a/FEBioLib/getapppath.cpp b/FEBioLib/getapppath.cpp
+index 50b5d11..6a7d63a 100644
+--- a/FEBioLib/getapppath.cpp
++++ b/FEBioLib/getapppath.cpp
+@@ -28,6 +28,7 @@ SOFTWARE.*/
+ 
+ #include "stdafx.h"
+ #include "febio.h"
++#include <cstdint>
+ 
+ #ifdef WIN32
+ #include "windows.h"
+diff --git a/FECore/DomainDataRecord.cpp b/FECore/DomainDataRecord.cpp
+index 07e4a6f..ece21e8 100644
+--- a/FECore/DomainDataRecord.cpp
++++ b/FECore/DomainDataRecord.cpp
+@@ -28,6 +28,7 @@ SOFTWARE.*/
+ #include "FECoreKernel.h"
+ #include "FEModel.h"
+ #include "FEDomain.h"
++#include <algorithm>
+ 
+ //-----------------------------------------------------------------------------
+ void FEDomainDataRecord::SetData(const char* szexpr)
+diff --git a/FECore/XMLReader.cpp b/FECore/XMLReader.cpp
+index d3c292f..f1d619d 100644
+--- a/FECore/XMLReader.cpp
++++ b/FECore/XMLReader.cpp
+@@ -28,6 +28,7 @@ SOFTWARE.*/
+ #include <stdarg.h>
+ #include <fstream>
+ #include <sstream>
++#include <cstdint>
+ using namespace std;
+ 
+ //=============================================================================
+diff --git a/FECore/XMLReader.h b/FECore/XMLReader.h
+index a5db885..c08199f 100644
+--- a/FECore/XMLReader.h
++++ b/FECore/XMLReader.h
+@@ -33,6 +33,7 @@ SOFTWARE.*/
+ #include <stdexcept>
+ #include <assert.h>
+ #include "fecore_api.h"
++#include <cstdint>
+ 
+ //-------------------------------------------------------------------------
+ // forward declaration
+diff --git a/febcode/compiler.cpp b/febcode/compiler.cpp
+index a11c28a..a88b7d4 100644
+--- a/febcode/compiler.cpp
++++ b/febcode/compiler.cpp
+@@ -2,6 +2,8 @@
+ #include "scanner.h"
+ #include "parser.h"
+ #include "resolver.h"
++#include <algorithm>
++#include <cstdint>
+ 
+ using namespace febcode;
+ 
+diff --git a/febcode/modifier.cpp b/febcode/modifier.cpp
+index fd1e59e..0ec2a06 100644
+--- a/febcode/modifier.cpp
++++ b/febcode/modifier.cpp
+@@ -1,4 +1,5 @@
+ #include "modifier.h"
++#include <algorithm>
+ using namespace febcode;
+ 
+ ExprPtr Modifier::Call(const std::string& name, const std::vector<ExprPtr>& args) 
+diff --git a/febcode/program.h b/febcode/program.h
+index 2da791b..dba0467 100644
+--- a/febcode/program.h
++++ b/febcode/program.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ #include "types.h"
+ #include "ast.h"
++#include <cstdint>
+ 
+ namespace febcode {
+ 
+diff --git a/febcode/simplifier.cpp b/febcode/simplifier.cpp
+index e58dc1a..8cd87ec 100644
+--- a/febcode/simplifier.cpp
++++ b/febcode/simplifier.cpp
+@@ -1,4 +1,5 @@
+ #include "simplifier.h"
++#include <algorithm>
+ using namespace febcode;
+ 
+ Simplifier::Simplifier(Program& prg) : Modifier(prg) 
+diff --git a/febcode/types.cpp b/febcode/types.cpp
+index 0ecdd04..4d89f36 100644
+--- a/febcode/types.cpp
++++ b/febcode/types.cpp
+@@ -1,4 +1,5 @@
+ #include "types.h"
++#include <algorithm>
+ using namespace febcode;
+ 
+ 
+diff --git a/febcode/types.h b/febcode/types.h
+index b564cf9..63e4650 100644
+--- a/febcode/types.h
++++ b/febcode/types.h
+@@ -7,6 +7,7 @@
+ #include <cstring>
+ #include <cmath>
+ #include <assert.h>
++#include <cstdint>
+ 
+ namespace febcode
+ {
+diff --git a/febcode/vm.cpp b/febcode/vm.cpp
+index f122fdb..82f29de 100644
+--- a/febcode/vm.cpp
++++ b/febcode/vm.cpp
+@@ -1,6 +1,7 @@
+ #include "vm.h"
+ #include <iostream>
+ #include <iomanip>
++#include <cstdint>
+ 
+ using namespace febcode;
+ 
+diff --git a/febcode/vm.h b/febcode/vm.h
+index 74a812e..b5eddd5 100644
+--- a/febcode/vm.h
++++ b/febcode/vm.h
+@@ -6,6 +6,7 @@
+ #include <cstring>
+ #include "compiler.h"
+ #include <assert.h>
++#include <cstdint>
+ 
+ namespace febcode
+ {
