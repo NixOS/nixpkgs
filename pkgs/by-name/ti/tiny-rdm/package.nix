@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
   pname = "tiny-rdm";
   version = "1.2.7";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tiny-craft";
     repo = "tiny-rdm";
@@ -33,13 +35,14 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-DaD/NM1ZNVt0X/CJuaGfHqeS9ySTWFd0y5bzog6Yn+E=";
 
+  npmDeps = fetchNpmDeps {
+    src = "${finalAttrs.src}/frontend";
+    hash = "sha256-DUYUk4OK5UWDanSR5hSVDYloYX4fYD41omYThzi/700=";
+  };
+  npmRoot = "frontend";
+
   env = {
     CGO_ENABLED = 1;
-    npmDeps = fetchNpmDeps {
-      src = "${finalAttrs.src}/frontend";
-      hash = "sha256-DUYUk4OK5UWDanSR5hSVDYloYX4fYD41omYThzi/700=";
-    };
-    npmRoot = "frontend";
   };
 
   nativeBuildInputs = [
