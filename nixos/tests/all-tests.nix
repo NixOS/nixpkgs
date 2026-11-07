@@ -2062,6 +2062,7 @@ in
   yggdrasil = runTest ./yggdrasil.nix;
   yopass = import ./web-apps/yopass.nix { inherit pkgs runTest; };
   your_spotify = runTest ./your_spotify.nix;
+  yugabyte = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./yugabyte.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;
   zenohd = runTest ./zenohd.nix;
