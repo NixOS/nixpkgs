@@ -3,10 +3,11 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  ninja,
   openssl,
+  ctestCheckHook,
   nix,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
   version = "1.7.12";
@@ -18,31 +19,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2DbRhS4TQCK8ttFLVlIL9QYa1LHMJSoZWF9q7qVqGaY=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
   outputs = [
     "out"
     "dev"
   ];
 
-  buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
-
   strictDeps = true;
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMips64 [
-    # See https://github.com/aws/s2n-tls/issues/1592 and https://github.com/aws/s2n-tls/pull/1609
-    "-DS2N_NO_PQ=ON"
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
+
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" true) ];
+
+  doCheck = true;
+  dontUseNinjaCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
+  # attempt to access system cert store paths, which doesn't work in the sandbox
+  disabledTests = [
+    "s2n_config_test"
+    "s2n_x509_validator_test"
+  ];
+
   postInstall = ''
+    moveToOutput lib/s2n/cmake "$dev"
+
     # Glob for 'shared' or 'static' subdir
-    for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
+    for f in $dev/lib/s2n/cmake/*/s2n-targets.cmake; do
       substituteInPlace "$f" \
         --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
@@ -57,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
+    changelog = "https://github.com/aws/s2n-tls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
