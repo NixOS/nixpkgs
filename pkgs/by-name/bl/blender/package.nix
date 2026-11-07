@@ -15,8 +15,8 @@
   dbus,
   draco,
   embree,
+  fetchFromGitea,
   fetchFromGitHub,
-  fetchzip,
   ffmpeg_7,
   fftw,
   fftwFloat,
@@ -130,10 +130,14 @@ stdenv'.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = fetchzip {
-    name = "source";
-    url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-umFiI2GnG54t9LQAKUpC2ZHVeq+oN5xmpOf4H+nql6M=";
+  src = fetchFromGitea {
+    domain = "projects.blender.org";
+    owner = "blender";
+    repo = "blender";
+    tag = "v${finalAttrs.version}";
+    forceFetchGit = true; # tarball downloads are behind anti-bot protection
+    fetchLFS = true;
+    hash = "sha256-auBd3YaQ3NvzsMoI7rDcaI1m6XVT6o9p6heKtAzZnI4=";
   };
 
   patches = [
