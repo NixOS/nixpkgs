@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -16,6 +17,8 @@ let
 in
 {
   config = {
+    services.fluxer.app-proxy.settings = propagateDefaults 1500 cfg.settings;
+
     systemd.services.fluxer-app-proxy = mkIf (cfg.enable && cfg.app-proxy.enable) (
       lib.mkMerge [
         standardSystemdSettings

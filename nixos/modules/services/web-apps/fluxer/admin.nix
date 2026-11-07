@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -16,6 +17,8 @@ let
 in
 {
   config = {
+    services.fluxer.admin.settings = propagateDefaults 1500 cfg.settings;
+
     systemd.services.fluxer-admin = mkIf (cfg.enable && cfg.admin.enable) (
       lib.mkMerge [
         standardSystemdSettings

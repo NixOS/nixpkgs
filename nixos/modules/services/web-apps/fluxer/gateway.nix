@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -16,12 +17,15 @@ let
 in
 {
   config = {
-    services.fluxer.gateway.settings = {
-      gateway = {
-        media_proxy_endpoint = cfg.settings.media.endpoint;
-        static_cdn_endpoint = cfg.settings.static_cdn.endpoint or cfg.settings.public_origin;
-      };
-    };
+    services.fluxer.gateway.settings = lib.mkMerge [
+      (propagateDefaults 1500 cfg.settings)
+      {
+        gateway = {
+          media_proxy_endpoint = cfg.settings.media.endpoint;
+          static_cdn_endpoint = cfg.settings.static_cdn.endpoint or cfg.settings.public_origin;
+        };
+      }
+    ];
 
     systemd.services.fluxer-gateway = mkIf (cfg.enable && cfg.gateway.enable) (
       lib.mkMerge [
