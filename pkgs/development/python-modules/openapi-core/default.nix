@@ -20,7 +20,7 @@
   poetry-core,
   pytest-aiohttp,
   pytest-cov-stub,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   responses,
   requests,
   starlette,
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     httpx
     pytest-aiohttp
     pytest-cov-stub
-    pytestCheckHook
+    pytest9_1CheckHook
     responses
     webob
   ]
