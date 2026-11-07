@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyAirspy";
-    rev = "soapy-airspy-${finalAttrs.version}";
-    sha256 = "0g23yybnmq0pg2m8m7dbhif8lw0hdsmnnjym93fdyxfk5iln7fsc";
+    tag = "soapy-airspy-${finalAttrs.version}";
+    hash = "0g23yybnmq0pg2m8m7dbhif8lw0hdsmnnjym93fdyxfk5iln7fsc";
   };
 
   nativeBuildInputs = [ cmake ];
