@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   stdenv,
+  aws-lc,
   libxkbcommon,
   wayland,
   openssl,
@@ -30,11 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # assuming a cargo debug-build layout (target/debug/cargo-bundle)
   patches = [ ./tests-env.patch ];
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
 
     # linked by the winit dev-dependency when tests build
