@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fotowall";
     repo = "fotowall";
     rev = "v${version}";
-    hash = "sha256-1aFHHt1DtjtEF5NievhlzVR1JbUS+3W98Klfi5bcPSk=";
+    hash = "sha256-9v8ybq+zKGiS5PT/88SYg9lXBclE3bj57FDL3uf4Eqc=";
   };
 
   nativeBuildInputs = [
