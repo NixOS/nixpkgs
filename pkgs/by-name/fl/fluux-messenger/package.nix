@@ -20,7 +20,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.18.1";
+  version = "0.18.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3hOe7pEs9QMuAX4K3SGrDRFIjpWK4PEsR3KuQVbGr9Y=";
+    hash = "sha256-AFtf5GIrecR/MKDMq6Mh858TJXow9pNDgqnlQriI1T8=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-mKGzLzgMtdY09x/pHBd1R1HZbUccofl1Ho0xE1hYuMw=";
+    hash = "sha256-OFJqWMLYPQfkp3pcENkJCwVEM8cv1uZgODOuNB3eFdc=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "run('/usr/bin/xcrun', ['lipo'," "run('lipo', ["
   '';
 
-  cargoHash = "sha256-BEhToIykuf4ZMHlYETzZ3hdaVcjbp25FLSflLawcj6s=";
+  cargoHash = "sha256-7xLyxDMHfU3yBENE+lDTS9TMu3YeXE6B/+TKBYqGeLA=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
