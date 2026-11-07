@@ -54,6 +54,7 @@ autoPatchelf() {
     done
 
     concatTo ignoreMissingDepsArray autoPatchelfIgnoreMissingDeps
+    concatTo ignoreFilesArray autoPatchelfIgnoreFiles
     concatTo appendRunpathsArray appendRunpaths
     concatTo runtimeDependenciesArray runtimeDependencies
     concatTo patchelfFlagsArray patchelfFlags
@@ -74,6 +75,7 @@ autoPatchelf() {
     auto-patchelf                                                       \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
+        --ignore-files "${ignoreFilesArray[@]}"                         \
         --paths "$@"                                                    \
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
