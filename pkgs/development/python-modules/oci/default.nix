@@ -1,42 +1,59 @@
 {
   lib,
   buildPythonPackage,
+  aiohttp,
   certifi,
   circuitbreaker,
+  crc32c,
   cryptography,
   fetchFromGitHub,
+  pyjwt,
   pyopenssl,
   python-dateutil,
+  python-pkcs11,
   pytz,
   setuptools,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.165.1";
+  version = "2.190.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
     tag = "v${version}";
-    hash = "sha256-pF3+0Hogk4FmPOp20ROVb3304+mGs0iUYeiNkszCGPY=";
+    hash = "sha256-FaKjwSV+d1+Syv8OwbDTRUJK8JYf7MJZGcZVv5STtvE=";
   };
+
+  postPatch = ''
+    sed -Ei 's/(setuptools)[<>=!~][^"]*/\1/' pyproject.toml
+  '';
 
   pythonRelaxDeps = [
     "cryptography"
     "pyOpenSSL"
+    "python-dateutil"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiohttp
     certifi
     circuitbreaker
+    crc32c
     cryptography
+    pyjwt
     pyopenssl
     python-dateutil
+    python-pkcs11
     pytz
+    urllib3
+    six
   ];
 
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
