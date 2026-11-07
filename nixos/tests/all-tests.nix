@@ -648,6 +648,7 @@ in
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
   filebrowser = runTest ./filebrowser.nix;
+  filesender = import ./filesender { inherit runTest; };
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
