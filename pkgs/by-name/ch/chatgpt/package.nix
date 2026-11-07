@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchurl,
+  buildEnv,
 
   # hooks
   autoPatchelfHook,
@@ -50,6 +51,7 @@
 
   # runtime deps
   bubblewrap,
+  bashInteractive,
   coreutils,
   gitMinimal,
   libGL,
@@ -68,6 +70,16 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
   inherit (stdenv.hostPlatform.node) arch platform;
+  # Remote clients send absolute /bin/cat and /bin/cp commands. The file
+  # search installer also deliberately restricts PATH to FHS directories.
+  remoteBin = buildEnv {
+    name = "chatgpt-remote-bin";
+    paths = [
+      bashInteractive
+      coreutils
+    ];
+    pathsToLink = [ "/bin" ];
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatgpt";
@@ -202,6 +214,22 @@ stdenv.mkDerivation (finalAttrs: {
         ln -sf ${lib.getExe' codex "codex-code-mode-host"} "$resources/codex-code-mode-host"
       ''
       + ''
+        # Keep compatibility paths private to Codex and its children, including
+        # when using the bundled CLI (codex = null). Preserve its helper siblings.
+        wrapProgramShell "$resources/codex" \
+          --run '
+            # Do not mount over /bin on merged-/usr hosts.
+            if [[ ! -L /bin ]]; then
+              for tool in cat cp uname mkdir chmod mv sha256sum; do
+                if [[ ! -x "/bin/$tool" ]]; then
+                  exec ${lib.getExe bubblewrap} \
+                    --dev-bind / / --ro-bind ${remoteBin}/bin /bin \
+                    -- "$0" "$@"
+                fi
+              done
+            fi
+          '
+
         # The launcher assumes this bundled-plugin resource layout.
         for resource in codex codex-code-mode-host cua_node native rg tectonic plugins; do
           if [[ ! -e "$resources/$resource" ]]; then
@@ -230,18 +258,13 @@ stdenv.mkDerivation (finalAttrs: {
           lsb-release
           nodejs-slim
           nodejs-slim.npm
+          ripgrep
           xdg-utils
         ]
       } \
       --set-default CODEX_BROWSER_USE_NODE_PATH ${lib.getExe nodejs-slim} \
       --set-default NODE_REPL_NODE_PATH ${lib.getExe nodejs-slim} \
-      ${lib.escapeShellArgs (
-        lib.optionals (codex != null) [
-          "--set-default"
-          "CODEX_CLI_PATH"
-          (lib.getExe codex)
-        ]
-      )}
+      --set-default CODEX_CLI_PATH "$out/lib/chatgpt/resources/codex"
   '';
 
   dontStrip = true;
