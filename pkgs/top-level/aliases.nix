@@ -3283,6 +3283,7 @@ mapAliases {
   xtreemfs = throw "'xtreemfs' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-05
   xulrunner = throw "'xulrunner' has been renamed to/replaced by 'firefox-unwrapped'"; # Converted to throw 2025-10-27
   xwinmosaic = throw "'xwinmosaic' has been removed due to gtk2 dependence"; # Added 2026-08-04
+  xxe-pe = throw "'xxe-pe' has been removed, as it was unmaintained in nixpkgs, and will be discontinued after April 3, 2027: https://www.xmlmind.com/eol.html"; # Added 2026-11-04
   xxgdb = throw "'xxgdb' seems inactive and doesn't compile with glibc 2.42"; # Added 2025-09-28
   xxHash = warnAlias "'xxHash' has been renamed to 'xxhash'" xxhash; # Added 2026-02-12
   xzgv = throw "'xzgv' has been removed, as it depended on GTK 2. Consider using 'geeqie' or 'gthumb' instead."; # Added 2026-05-22
