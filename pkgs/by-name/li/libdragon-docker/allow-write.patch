@@ -1,0 +1,13 @@
+diff --git a/pack.mjs b/pack.mjs
+index 9aed1c2..3dc3255 100644
+--- a/pack.mjs
++++ b/pack.mjs
+@@ -63,6 +63,8 @@ if (process.platform === 'win32') {
+   await $`codesign --remove-signature ${executablePath}`.nothrow();
+ }
+ 
++await $`chmod +w ${executablePath}`;
++
+ await $([
+   `npx postject ${executablePath} NODE_SEA_BLOB ${path.join(
+     'build',
