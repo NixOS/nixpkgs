@@ -353,6 +353,14 @@
     meta.license = lib.licenses.asl20;
   };
 
+  confetti = {
+    version = "0.1.0";
+    url = "github:unclechu/tree-sitter-confetti";
+    rev = "v0.1.0";
+    hash = "sha256-TIN1qJlk++FZgZJxxgEL2ZnfqBQHTzeSUVccaNiJgUQ=";
+    meta.license = lib.licenses.unlicense;
+  };
+
   cpon = {
     version = "0-unstable-2023-06-06";
     url = "github:fvacek/tree-sitter-cpon";
