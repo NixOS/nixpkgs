@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywebcopy";
-  version = "7.1";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rajatomar788";
     repo = "pywebcopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ee8uGg4PU1uch8cyiU7QfvdYFUVDz7obq9oC8fKkf1s=";
+    hash = "sha256-XTPk3doF9dqImsLtTB03YKMWLzQrJpJtjNXe+691rZo=";
   };
 
   build-system = [ setuptools ];
