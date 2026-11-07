@@ -48,10 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __structuredAttrs = true;
+
   outputs = [
     "out"
-    "doc"
+  ]
+  ++ lib.optionals (withKeePassDocs && stdenv.hostPlatform.isLinux) [
     "man"
+    "doc"
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -135,10 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.concatLines [
-    ''
+    (lib.optionalString (withKeePassDocs && stdenv.hostPlatform.isLinux) ''
       mkdir -p $doc/share/doc
       mv $out/share/keepassxc/docs/ $doc/share/doc/keepassxc
-    ''
+    '')
 
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/bin"
