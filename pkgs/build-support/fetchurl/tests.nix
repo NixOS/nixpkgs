@@ -271,4 +271,15 @@ in
     '';
   });
 
+  retry = testers.invalidateFetcherByDrvHash fetchurl {
+    name = "retry-test";
+    urls = [
+      "google.com"
+      "https://github.com/mullvad/mullvad-browser/releases/download/15.0.26/mullvad-browser-linux-x86_64-15.0.26.tar.xz"
+    ];
+    hash = "sha256-MKkfpXnigxoyCEHwhhMT/aj7XncmdUmARpWWaN4ngHk=";
+    # postFetch = ''
+    #     echo "this should fail"
+    #   '';
+  };
 }
