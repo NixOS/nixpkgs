@@ -8,17 +8,18 @@
   fmt,
   jsonm,
   ke,
+  bstr,
   lib,
   ptime,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "prettym";
-  version = "0.0.3";
+  version = "0.0.5";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/prettym/releases/download/${finalAttrs.version}/prettym-${finalAttrs.version}.tbz";
-    hash = "sha256-kXDxoRref02YpYSlvlK7a5FBX5ccbnWJQzG0axi5jwk=";
+    hash = "sha256-2sFZmW8HqSTF9UQZU6lcxipLX17txJwxZZIRr/CT1GI=";
   };
 
   duneVersion = "3";
@@ -27,6 +28,7 @@ buildDunePackage (finalAttrs: {
   propagatedBuildInputs = [
     bigarray-overlap
     bigstringaf
+    bstr
     fmt
     ke
   ];
@@ -43,6 +45,7 @@ buildDunePackage (finalAttrs: {
     description = "Simple bounded encoder to serialize human readable values and respect the 80-column constraint";
     license = lib.licenses.mit;
     homepage = "https://github.com/dinosaure/prettym";
-    maintainers = [ ];
+    changelog = "https://github.com/dinosaure/prettym/releases/tag/${finalAttrs.version}";
+    maintainers = [ lib.maintainers.skyesoss ];
   };
 })
