@@ -67,10 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/tomboy-notes/tomboy-ng/blob/619da85e4e11a7d20cd7f050b6b9d960a0e11a38/scripts/PKGBUILD.Qt6#L74
   preBuild = ''
     touch Qt6
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Set here rather than in `env` so the shell expands `$SDKROOT`.
-    export NIX_LDFLAGS+=" -F${lib.getLib qt6Packages.libqtpas}/lib -syslibroot $SDKROOT"
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -86,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     COMPILER = lib.getExe' fpc "fpc";
     LAZ_DIR = "${lazarus-qt6}/share/lazarus";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-F${lib.getLib qt6Packages.libqtpas}/lib";
   };
 
   meta = {
