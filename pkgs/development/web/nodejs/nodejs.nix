@@ -4,7 +4,7 @@
   fetchurl,
   fetchpatch2,
   fetchFromGitHub,
-  python,
+  python3,
   abseil-cpp,
   ada,
   brotli,
@@ -272,7 +272,7 @@ let
         installShellFiles
         ninja
         pkgconf
-        python
+        python3
       ]
       ++ lib.optionals stdenv.buildPlatform.isDarwin [
         # gyp checks `sysctl -n hw.memsize` if `sys.platform == "darwin"`.
@@ -327,7 +327,7 @@ let
 
       dontDisableStatic = true;
 
-      configureScript = "${python.pythonOnBuildForHost.interpreter} configure.py";
+      configureScript = "${python3.pythonOnBuildForHost.interpreter} configure.py";
 
       # In order to support unsupported cross configurations, we copy some intermediate executables
       # from a native build and replace all the build-system tools with a script which simply touches
@@ -652,7 +652,7 @@ let
         knownVulnerabilities = lib.optional (lib.versionOlder version "22") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
-      passthru.python = python; # to ensure nodeEnv uses the same version
+      passthru.python = python3; # to ensure nodeEnv uses the same version
     }
   );
 in
