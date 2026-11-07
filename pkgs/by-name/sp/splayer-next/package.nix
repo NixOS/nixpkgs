@@ -17,6 +17,7 @@
   libpulseaudio,
   pipewire,
   dbus,
+  aws-lc,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     pipewire
     dbus
+    aws-lc
   ];
 
   env = {
