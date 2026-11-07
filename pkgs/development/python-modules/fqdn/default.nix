@@ -3,19 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fqdn";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ypcrts";
     repo = "fqdn";
-    rev = "v${version}";
-    hash = "sha256-T0CdWWr8p3JVhp3nol5hyxsrD3951JE2EDpFt+m+3bE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NwWX4qJWBQuP4gdPOuGVnx56IH2b6cfaBXIIK9uvi98=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -24,7 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "RFC-compliant FQDN validation and manipulation";
     homepage = "https://github.com/ypcrts/fqdn";
+    changelog = "https://github.com/ypcrts/fqdn/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
