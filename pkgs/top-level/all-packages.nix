@@ -1390,8 +1390,6 @@ with pkgs;
     charles5
     ;
 
-  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
-
   behave = with python3Packages; toPythonApplication behave;
 
   blockdiag = with python3Packages; toPythonApplication blockdiag;
@@ -2589,11 +2587,6 @@ with pkgs;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
   tabview = with python3Packages; toPythonApplication tabview;
-
-  tdarrPackages = callPackage ../tools/misc/tdarr { };
-
-  tdarr-server = tdarrPackages.server;
-  tdarr-node = tdarrPackages.node;
 
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_10_29_2
@@ -7997,6 +7990,9 @@ with pkgs;
 
   bitwig-studio = bitwig-studio6;
 
+  brave = (callPackage ../applications/networking/browsers/brave { }).brave;
+  brave-origin = (callPackage ../applications/networking/browsers/brave { }).brave-origin;
+
   breezy = with python3Packages; toPythonApplication breezy;
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
@@ -9437,8 +9433,6 @@ with pkgs;
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
-
-  vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 

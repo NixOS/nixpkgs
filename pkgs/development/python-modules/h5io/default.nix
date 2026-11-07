@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "h5io";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h5io";
     repo = "h5io";
     tag = "h5io-${version}";
-    hash = "sha256-ZkG9e7KtDvoRq9XCExYseE+Z7tMQTWcSiwsSrN5prdI=";
+    hash = "sha256-y3QLTsC9Vv+lttgp8gSsGPPG4iPywsMRnyc8hMLUN38=";
   };
 
   build-system = [ setuptools-scm ];
