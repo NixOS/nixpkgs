@@ -345,7 +345,7 @@ let
             script = ''
               ip tuntap add dev "${i.name}" mode "${i.virtualType}" ${
                 lib.optionalString (i.virtualOwner != null) ''user "${i.virtualOwner}"''
-              }
+              } ${lib.optionalString (i.virtualGroup != null) ''group "${i.virtualGroup}"''}
             '';
             postStop = ''
               ip link del dev ${i.name} || true
