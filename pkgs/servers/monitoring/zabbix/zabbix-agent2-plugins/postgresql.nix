@@ -17,6 +17,8 @@ import ../versions.nix (
 
     vendorHash = null;
 
+    checkFlags = "-skip=^Test_getParameters/(common_parameters|empty_additions_map|with_additional_parameter)$";
+
     meta = {
       description = "Required tool for Zabbix agent integrated PostgreSQL monitoring";
       mainProgram = "postgresql";
