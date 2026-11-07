@@ -16,6 +16,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-GIWmeOmiRWSDntXRcRwAMXNft95/C17YjVUOXUWo1Pk=";
   };
 
+  # uv_build specified with lower and upper bounds, but we're past the upper bound
+  postPatch = ''
+    sed -i 's/uv_build[<>=0-9.,]*[0-9]/uv_build/g' pyproject.toml
+  '';
+
   build-system = [
     uv-build
   ];
