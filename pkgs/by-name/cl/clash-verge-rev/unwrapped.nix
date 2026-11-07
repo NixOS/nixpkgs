@@ -10,18 +10,19 @@
 
   rustPlatform,
   cargo-tauri,
+  autoPatchelfHook,
   jq,
   moreutils,
   nodejs,
   pkg-config,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
+  stdenv,
 
   glib,
   kdePackages,
   libayatana-appindicator,
-  libsForQt5,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
@@ -43,7 +44,7 @@ rustPlatform.buildRustPackage {
       version
       src
       ;
-    pnpm = pnpm_11;
+    pnpm = pnpm_12;
     fetcherVersion = 4;
     hash = pnpm-hash;
   };
@@ -57,13 +58,7 @@ rustPlatform.buildRustPackage {
     # If you need a newer version, you can override the mihomo input of the wrapped package
     sed -i -e '/Mihomo Alpha/d' ./src/components/setting/mods/clash-core-viewer.tsx
 
-    # Set service.sock path
-    substituteInPlace $cargoDepsCopy/*/clash_verge_service_ipc-*/src/lib.rs \
-      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock"
-    # Set verge-mihomo.sock path
-    substituteInPlace src-tauri/src/utils/dirs.rs \
-      --replace-fail 'once("/tmp")' 'once(&std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string())))' \
-      --replace-fail 'join("verge")' 'join("clash-verge-rev")'
+    patch -d $cargoDepsCopy/*/clash_verge_service_ipc-* -p1 < ${./patch-execution-lock.patch}
 
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -86,22 +81,34 @@ rustPlatform.buildRustPackage {
     jq 'del(.bundle.externalBin)' src-tauri/tauri.linux.conf.json | sponge src-tauri/tauri.linux.conf.json
   '';
 
+  preBuild = ''
+    # tsrs ships a prebuilt binary which still has the traditional Linux
+    # interpreter path baked in, so patch it before it is executed by the
+    # web build.
+    autoPatchelf node_modules/.pnpm/@tsrs+linux-*
+  '';
+
   nativeBuildInputs = [
+    autoPatchelfHook
     cargo-tauri.hook
     jq
     moreutils
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_11
+    pnpm_12
   ];
 
   buildInputs = [
     libayatana-appindicator
     libsoup_3
     openssl
+    stdenv.cc.cc.lib
     webkitgtk_4_1
   ];
+
+  # Skip the output scan; tsrs is patched explicitly in preBuild.
+  dontAutoPatchelf = true;
 
   # make sure the .desktop file name does not contain whitespace,
   # so that the service can register it as an auto-start item
