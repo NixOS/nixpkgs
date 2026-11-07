@@ -29,7 +29,9 @@ in
           Additional nftables rules to be appended to the input-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
 
@@ -41,7 +43,9 @@ in
           Additional nftables rules to be appended to the forward-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
         '';
       };
 
@@ -53,7 +57,26 @@ in
           Additional nftables rules to be appended to the rpfilter-allow
           chain.
 
+          ::: {.warning}
           This option only works with the nftables based firewall.
+          :::
+        '';
+      };
+
+      extraTableDefinitions = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = ''
+          define link_wan = {
+            ppp0
+          }
+        '';
+        description = ''
+          Additional definitions prepended to the `nixos-fw` inet table.
+
+          ::: {.warning}
+          This option only works with the nftables based firewall.
+          :::
         '';
       };
     };
@@ -83,6 +106,8 @@ in
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
+      ${cfg.extraTableDefinitions}
+
       set temp-ports {
         comment "Temporarily opened ports"
         type inet_proto . inet_service
