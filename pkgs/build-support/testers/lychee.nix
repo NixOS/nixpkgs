@@ -74,8 +74,7 @@ let
         online = writeShellApplication {
           name = "run-lychee-online";
           runtimeInputs = [ finalAttrs.passthru.lychee ];
-          # Comment out to run shellcheck:
-          checkPhase = "";
+          runShellCheck = false;
           text = ''
             site=${finalAttrs.site}
             configFile=${finalAttrs.configFile}
