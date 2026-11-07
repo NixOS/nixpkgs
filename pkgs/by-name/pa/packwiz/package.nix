@@ -4,22 +4,24 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule {
   pname = "packwiz";
-  version = "0-unstable-2026-02-18";
+  version = "0-unstable-2026-10-14";
 
   src = fetchFromGitHub {
     owner = "packwiz";
     repo = "packwiz";
-    rev = "dfd8b68a4796c763e25bad50265ea1f1233e24f1";
-    sha256 = "sha256-QK8sY7e6QHhg+GH8NiiePGFlsQBI0jjUlsgBuq1Yopc=";
+    rev = "170b22d785959dda5876b54b7f16e1b807a57fb6";
+    sha256 = "sha256-GGOa5GtoeFNgGzZ4lrNDIp8NHxk9P9P6bze+c2FQC8M=";
   };
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
-  vendorHash = "sha256-ChUE4hWl+UyPpbzK0GbJTD0AoBCogI7qGstga4+WujI=";
+  vendorHash = "sha256-qvRlOxxvHffnsXy4MhbGIBGCDPtok/ymS/sUAJ5sGR0=";
 
   nativeBuildInputs = [
     installShellFiles
