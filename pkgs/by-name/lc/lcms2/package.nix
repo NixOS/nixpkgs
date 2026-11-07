@@ -7,12 +7,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcms2";
   version = "2.19.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lcms/lcms2-${version}.tar.gz";
+    url = "mirror://sourceforge/lcms/lcms2-${finalAttrs.version}.tar.gz";
     hash = "sha256-v8VPe6tZ+8khASAUqAMuTLpKvUbbR9RrdkFqjAsoFcg=";
   };
 
@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  strictDeps = true;
+
   # See https://trac.macports.org/ticket/60656
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDFLAGS = "-Wl,-w"; };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Color management engine";
@@ -37,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})
