@@ -10206,9 +10206,7 @@ with pkgs;
     inherit (stdenv) mkDerivation;
   };
 
-  znc = callPackage ../applications/networking/znc { };
-
-  zncModules = recurseIntoAttrs (callPackage ../applications/networking/znc/modules.nix { });
+  zncModules = recurseIntoAttrs (callPackage ../by-name/zn/znc/modules.nix { });
 
   inherit
     ({
