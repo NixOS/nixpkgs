@@ -5,8 +5,8 @@
   autoreconfHook,
   perl,
   readline,
-  rsh,
-  ssh,
+  rsh ? true,
+  openssh,
   slurm,
   slurmSupport ? false,
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     perl
     readline
-    ssh
+    openssh
   ]
   ++ (lib.optional slurmSupport slurm);
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--mandir=$out/share/man"
     "--with-machines=/etc/pdsh/machines"
     (if readline == null then "--without-readline" else "--with-readline")
-    (if ssh == null then "--without-ssh" else "--with-ssh")
+    (if openssh == null then "--without-ssh" else "--with-ssh")
     (if rsh == false then "--without-rsh" else "--with-rsh")
     (if slurmSupport then "--with-slurm" else "--without-slurm")
     "--with-dshgroups"
