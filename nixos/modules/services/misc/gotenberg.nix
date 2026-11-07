@@ -301,6 +301,12 @@ in
         # Needed for LibreOffice to work correctly.
         # https://github.com/NixOS/nixpkgs/issues/349123#issuecomment-2418330936
         HOME = "/run/gotenberg";
+        # Same defaults as the official image; without a collector on
+        # localhost:4318 every export attempt logs an error.
+        # https://github.com/gotenberg/gotenberg/blob/v8.36.0/build/Dockerfile#L207-L209
+        OTEL_TRACES_EXPORTER = lib.mkDefault "none";
+        OTEL_METRICS_EXPORTER = lib.mkDefault "none";
+        OTEL_LOGS_EXPORTER = lib.mkDefault "none";
       };
       serviceConfig = {
         Type = "simple";
