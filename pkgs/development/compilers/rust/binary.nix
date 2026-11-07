@@ -97,7 +97,9 @@ rec {
     passthru = rec {
       targetPlatformsWithHostTools = [
         # Platforms with host tools from
-        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-1-with-host-tools
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-2-with-host-tools
+        "x86_64-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -125,7 +127,7 @@ rec {
       ];
       targetPlatforms = targetPlatformsWithHostTools ++ [
         # Platforms without host tools from
-        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-2-without-host-tools
         "armv5tel-linux"
         "armv7a-linux"
         "m68k-linux"
@@ -140,6 +142,7 @@ rec {
         "riscv32-none"
         "x86_64-redox"
         "wasm32-wasip1"
+        "x86_64-uefi"
       ];
       badTargetPlatforms = [
         # Rust is currently unable to target the n32 ABI
