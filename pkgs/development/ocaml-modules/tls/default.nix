@@ -21,11 +21,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "tls";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${finalAttrs.version}/tls-${finalAttrs.version}.tbz";
-    hash = "sha256-kNBOBvogamm10TewF+URwUG5WeXHkp58uKFRVTIkej8=";
+    hash = "sha256-daywrvutN095hvFGbZPWYgUSqNU2vfyJbE3FCBtjHgU=";
   };
 
   propagatedBuildInputs = [
