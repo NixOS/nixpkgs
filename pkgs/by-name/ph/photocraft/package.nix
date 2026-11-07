@@ -2,13 +2,9 @@
   lib,
   stdenv,
   rustPlatform,
-  rustc,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
   makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
   versionCheckHook,
   craft-fonts,
   dbus,
@@ -37,7 +33,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "photocraft";
-  version = "0.16.0";
+  version = "0.20.2";
 
   __structuredAttrs = true;
 
@@ -45,10 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "photocraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uaZmzQb4B1zZ2XrZHjHzI/uEVGdoYRFeh10GHIxzjDA=";
+    hash = "sha256-GIaCBK5zDpnOwNbefv+igBbQSVhC1KfRTP9OJj2zPYI=";
   };
 
-  cargoHash = "sha256-O1tUKAWSvLmOEUbpVub8bczHpoXH6XxXKSPGRVkjsHs=";
+  cargoHash = "sha256-FYHbqEMhmLkQ/h1CAK9pZe/Rkn+jTNB0waiD+bu8uX0=";
 
   cargoBuildFlags = [
     "--package=photocraft"
@@ -56,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    CRAFT_FONTS_DIR = "${craft-fonts}";
+    CRAFT_FONTS_DIR = craft-fonts;
     CRAFT_FONTS_REQUIRED = "1";
   };
 
@@ -67,69 +63,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    patchelf
     makeWrapper
-    copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.photocraft";
-      desktopName = "PhotoCraft";
-      genericName = "Image Editor";
-      comment = "Edit photos and layered PSD documents";
-      exec = "photocraft %F";
-      tryExec = "photocraft";
-      icon = "ai.storyteller.photocraft";
-      terminal = false;
-      startupNotify = false;
-      startupWMClass = "ai.storyteller.photocraft";
-      categories = [
-        "Graphics"
-        "2DGraphics"
-        "RasterGraphics"
-        "Photography"
-      ];
-      keywords = [
-        "photo"
-        "image"
-        "editor"
-        "psd"
-        "layers"
-        "retouch"
-        "paint"
-      ];
-      mimeTypes = [
-        "application/x-krita"
-        "application/x-photocraft"
-        "image/avif"
-        "image/bmp"
-        "image/gif"
-        "image/jpeg"
-        "image/openraster"
-        "image/png"
-        "image/qoi"
-        "image/tiff"
-        "image/vnd.adobe.photoshop"
-        "image/vnd.microsoft.icon"
-        "image/vnd.radiance"
-        "image/webp"
-        "image/x-exr"
-        "image/x-icon"
-        "image/x-paintnet"
-        "image/x-portable-anymap"
-        "image/x-portable-bitmap"
-        "image/x-portable-graymap"
-        "image/x-portable-pixmap"
-        "image/x-psb"
-        "image/x-psd"
-        "image/x-tga"
-      ];
-    })
-  ];
+  # [[patch.unused]] egui fork entries in Cargo.toml break cargo --offline in the sandbox.
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 packaging/linux/ai.storyteller.photocraft.mime.xml $out/share/mime/packages/ai.storyteller.photocraft.xml
+    install -Dm644 packaging/linux/ai.storyteller.photocraft.desktop \
+      $out/share/applications/ai.storyteller.photocraft.desktop
+    install -Dm644 packaging/linux/ai.storyteller.photocraft.mime.xml \
+      $out/share/mime/packages/ai.storyteller.photocraft.xml
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
   '';
@@ -167,6 +113,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     maintainers = with lib.maintainers; [ cleboost ];
     mainProgram = "photocraft";
-    platforms = rustc.meta.platforms;
   };
 })
