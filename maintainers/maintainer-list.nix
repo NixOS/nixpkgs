@@ -2583,6 +2583,11 @@
     matrix = "@artify:artify.zone";
     name = "Richard Tichy";
   };
+  artogahr = {
+    github = "artogahr";
+    githubId = 22445057;
+    name = "Arto Gahr";
+  };
   artturin = {
     email = "artturin@artturin.com";
     matrix = "@artturin:matrix.org";
