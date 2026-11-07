@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       (cmakeBool "USE_SYSTEM_LUA" true)
       (cmakeBool "USE_SYSTEM_OPENSSL" true)
       (cmakeBool "ENABLE_UPDATE_OVER_GUI" false)
+      (cmakeBool "GENERATE_APPDATA" true)
     ];
 
   nativeBuildInputs = [
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Those are not program libs, just some Qt5 libs that the build system leaks for some reason
     rm -rf $out/{include,lib}
+    mv $out/share/metainfo/{gittyup.appdata.xml,com.github.Murmele.Gittyup.metainfo.xml}
   '';
 
   meta = {

@@ -72,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DTOR_VERSION=${tor.version}"
   ];
 
+  postInstall = ''
+    install -Dm644 ../contrib/flatpak/share/metainfo/org.featherwallet.Feather.metainfo.xml -t $out/share/metainfo
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = ''

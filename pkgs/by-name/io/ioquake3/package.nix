@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm644 ${finalAttrs.src}/misc/quake3.svg \
       $out/share/icons/hicolor/scalable/apps/ioquake3.svg
+    install -Dm644 ${finalAttrs.src}/misc/linux/org.ioquake3.ioquake3.metainfo.xml -t $out/share/metainfo
     makeWrapper $out/share/ioquake3/ioq3ded $out/bin/ioq3ded
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

@@ -55,10 +55,14 @@ stdenv.mkDerivation {
     (lib.cmakeBool "CHATTERINO_UPDATER" false)
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/chatterino.app $out/Applications
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../resources/com.chatterino.chatterino.appdata.xml -t $out/share/metainfo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/bin/chatterino.app $out/Applications
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/Applications/chatterino.app/Contents/MacOS/chatterino $out/bin/chatterino

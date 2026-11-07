@@ -117,6 +117,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
+    install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.metainfo.xml.in $out/share/metainfo/net.pcsx2.PCSX2.metainfo.xml
+    # The release date comes from git, which is not available here
+    substituteInPlace $out/share/metainfo/net.pcsx2.PCSX2.metainfo.xml \
+      --replace-fail '<release version="@GIT_VERSION@" date="@GIT_DATE@" />' "" \
+      --replace-fail '@GIT_HASH@' '${finalAttrs.src.tag}'
 
     zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/share/PCSX2/resources/patches.zip

@@ -97,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_GUI" withGUI) ];
 
+  postInstall = ''
+    install -Dm644 ../satdump.appdata.xml $out/share/metainfo/org.satdump.satdump.metainfo.xml
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

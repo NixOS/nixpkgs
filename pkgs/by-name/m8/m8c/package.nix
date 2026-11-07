@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     libserialport
   ];
 
+  postInstall = ''
+    install -Dm644 ../package/appimage/m8c.appdata.xml -t $out/share/metainfo
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
