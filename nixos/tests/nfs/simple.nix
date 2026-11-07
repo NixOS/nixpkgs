@@ -1,5 +1,6 @@
 import ../make-test-python.nix (
   {
+    lib,
     pkgs,
     version ? 4,
     ...
@@ -13,9 +14,9 @@ import ../make-test-python.nix (
         virtualisation.fileSystems = {
           "/data" = {
             # nfs4 exports the export with fsid=0 as a virtual root directory
-            device = if (version == 4) then "server:/" else "server:/data";
-            fsType = "nfs";
-            options = [ "vers=${toString version}" ];
+            device = if version == 4 then "server:/" else "server:/data";
+            fsType = if version == 4 then "nfs4" else "nfs";
+            options = lib.mkIf (version != 4) [ "vers=${toString version}" ];
           };
         };
         networking.firewall.enable = false; # FIXME: only open statd
