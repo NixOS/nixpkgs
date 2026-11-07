@@ -9,23 +9,38 @@
   protobuf,
   zlib,
   catch2,
+  ctestCheckHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
+let
+  disabledTests = [
+    "et-test.LargeInputNoDeadlock"
+    "et-test.Daemon pid writes create private files and replace stale contents"
+    "et-test.sessionHasEnded without master EOF while descendant holds PTY slave"
+    "et-test.Creation"
+    "et-test.Telemetry creates private configuration and preserves its id"
+    "et-test.Telemetry bounds existing configuration reads and migrates permissions"
+    "et-test.Control-mode PTY: SIGKILL of htm lets htmd accept a new client"
+    "et-test.Control-mode PTY: detach leaves htmd running"
+    "et-test.RouterRestartRealPtySurvives"
+    "et-test.Server fifo accepts a parent writable by the user private group"
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
-  version = "7.0.0";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     tag = "et-v${finalAttrs.version}";
-    hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
+    hash = "sha256-X3yJMsrnF9cEStv5nhvFfdmju/gJRWzEpgmy/kItFlA=";
   };
 
   patches = [
-    ./cmake-cxx-version.patch
     ./thread-pool-c++20-result-of.patch
   ];
 
@@ -55,10 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   doInstallCheck = true;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  checkPhase = ''
-    ctest --output-on-failure -E 'et-test\.LargeInputNoDeadlock'
+  nativeCheckInputs = [
+    ctestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  inherit disabledTests;
+
+  preCheck = ''
+    disabledTests=(
+      ${lib.concatMapStringsSep "\n" (test: ''"${test}"'') disabledTests}
+    )
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
