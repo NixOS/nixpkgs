@@ -1,0 +1,10 @@
+ACTION=="remove", GOTO="ventoy_end"
+SUBSYSTEM!="block", GOTO="ventoy_end"
+
+ENV{DEVTYPE}=="disk", IMPORT{program}+="@ventoy-compat-protocol@ udev $devnode"
+
+# You can't match a property against another property, so we have to pass them to a program that can do it.
+ENV{DEVTYPE}=="partition", ENV{ID_VENTOY}=="1", IMPORT{program}+="@ventoy-compat-protocol@ udev-part-match $env{ID_VENTOY_PARTNUM} $env{PARTN}"
+ENV{ID_VENTOY_PART}=="1", SYMLINK+="ventoy"
+
+LABEL="ventoy_end"
