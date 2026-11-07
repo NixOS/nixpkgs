@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtatsu";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libtatsu";
     tag = finalAttrs.version;
-    hash = "sha256-vf4xBTTGDJCTj4TMLOhojjAfzSbkx+ogGBnf+UeumG0=";
+    hash = "sha256-dGQnkXBA57ZtWBb86MDAPjMtcRQHrpmjZ/+VrNyRomc=";
   };
 
   preAutoreconf = ''
