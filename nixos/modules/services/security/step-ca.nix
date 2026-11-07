@@ -102,12 +102,12 @@ in
         unitConfig = {
           ConditionFileNotEmpty = ""; # override upstream
         };
+        environment.HOME = "%S/step-ca";
         serviceConfig = {
           Type = "notify";
           User = "step-ca";
           Group = "step-ca";
           UMask = "0077";
-          Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
           ReadWritePaths = ""; # override upstream
 
