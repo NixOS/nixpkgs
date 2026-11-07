@@ -6,7 +6,7 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "shibboleth";
-  version = "2.0.1-unstable-2020-09-04";
+  version = "20150121";
 
   src = fetchFromGitHub {
     owner = "nginx-shib";
