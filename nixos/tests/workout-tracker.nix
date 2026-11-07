@@ -3,7 +3,7 @@
 {
   name = "workout-tracker";
 
-  meta.maintainers = with lib.maintainers; [ bhankas ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { config, ... }:
