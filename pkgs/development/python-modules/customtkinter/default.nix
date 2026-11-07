@@ -8,19 +8,17 @@
   packaging,
   typing-extensions,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "customtkinter";
-  version = "5.2.2";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TomSchimansky";
     repo = "CustomTkinter";
-    tag = "v${version}";
-    hash = "sha256-1g2wdXbUv5xNnpflFLXvU39s16kmwvuegKWd91E3qm4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rRkqyyWxWmJqXS9dT/T5K99+AGY6xDjtrKLRG/Yo7tc=";
   };
 
   build-system = [
@@ -34,7 +32,10 @@ buildPythonPackage {
     typing-extensions
   ];
 
-  patches = [ ./0001-Add-Missing-Cfg-Packages.patch ];
+  patches = [
+    ./0001-Add-Missing-Cfg-Packages.patch
+    ./0002-Fix-Copying-Fonts.patch
+  ];
 
   pythonImportsCheck = [ "customtkinter" ];
 
@@ -55,4 +56,4 @@ buildPythonPackage {
     '';
     maintainers = with lib.maintainers; [ _4evy ];
   };
-}
+})
