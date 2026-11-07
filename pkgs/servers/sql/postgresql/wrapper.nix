@@ -74,4 +74,6 @@ buildEnv (finalAttrs: {
 
     withPackages = f': recurse (ps: installedExtensions ++ f' ps);
   };
+
+  meta.license = postgresql.meta.license;
 })
