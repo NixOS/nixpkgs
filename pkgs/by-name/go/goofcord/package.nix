@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/lib/goofcord"
-    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/goofcord"
+    cp -r ./dist/*-unpacked/resources "$out/share/lib/goofcord"
 
     install -Dm644 "assets/gf_icon.png" "$out/share/icons/hicolor/256x256/apps/goofcord.png"
 

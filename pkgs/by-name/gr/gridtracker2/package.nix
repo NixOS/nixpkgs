@@ -74,8 +74,6 @@ buildNpmPackage (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dvm644 -t "$out/share/gridtracker2/resources" \
      ./dist/linux*/resources/*
-    install -Dvm644 -t "$out/share/gridtracker2/locales" \
-      ./dist/linux*/locales/*
     install -Dvm644 ./resources/icon.png \
       "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
 

@@ -63,12 +63,8 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-
-    pushd dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Penpot
-    cp -r locales resources{,.pak} $out/opt/Penpot
-    popd
+    cp -r dist/*-unpacked/resources $out/opt/Penpot
 
     makeWrapper '${lib.getExe electron}' "$out/bin/penpot-desktop" \
       --add-flags $out/opt/Penpot/resources/app.asar \

@@ -95,7 +95,7 @@ buildNpmPackage (finalAttrs: {
       else
         ''
           mkdir -p $out/share/folia-major
-          cp -r release/*-unpacked/{locales,resources{,.pak}} $out/share/folia-major/
+          cp -r release/*-unpacked/resources $out/share/folia-major/
 
           install -D build/icon.png $out/share/icons/hicolor/512x512/apps/folia-major.png
 
