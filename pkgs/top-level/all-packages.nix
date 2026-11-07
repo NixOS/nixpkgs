@@ -9286,32 +9286,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  factorio-experimental = factorio.override {
-    releaseType = "alpha";
-    experimental = true;
-  };
-
-  factorio-headless = factorio.override { releaseType = "headless"; };
-
-  factorio-headless-experimental = factorio.override {
-    releaseType = "headless";
-    experimental = true;
-  };
-
-  factorio-demo = factorio.override { releaseType = "demo"; };
-
-  factorio-demo-experimental = factorio.override {
-    releaseType = "demo";
-    experimental = true;
-  };
-
-  factorio-space-age = factorio.override { releaseType = "expansion"; };
-
-  factorio-space-age-experimental = factorio.override {
-    releaseType = "expansion";
-    experimental = true;
-  };
-
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
   freeciv_sdl2 = freeciv.override {
