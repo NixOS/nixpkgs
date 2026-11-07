@@ -10536,6 +10536,8 @@ self: super: with self; {
 
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
+  mailmerge = callPackage ../development/python-modules/mailmerge { };
+
   mailsuite = callPackage ../development/python-modules/mailsuite { };
 
   maison = callPackage ../development/python-modules/maison { };
