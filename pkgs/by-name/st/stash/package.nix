@@ -12,18 +12,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "stash";
-  version = "0.31.1";
-  appDate = "2026-04-13 01:48:00";
-  gitHash = "4de2351e";
+  version = "0.32.0";
+  appDate = "2026-11-02 16:51:05";
+  gitHash = "9e9ad972";
 
   src = fetchFromGitHub {
     owner = "stashapp";
     repo = "stash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YGWf2aJaVn2kdICkFhvaoPq0OW+jHF8IgLLf8/duqIo=";
+    hash = "sha256-sRyS/ZIjBUakZQGqrjR1v2D0tk3/gIcZgXNccO/RSJ8=";
   };
 
-  vendorHash = "sha256-fqnbOB3ZbU2i8op/wfyt7lEpEOEAtTdgiHbDfbd6qtQ=";
+  vendorHash = "sha256-1PvnJqHs3SWuInjAtrHx2lXGfw88iyqMsy12BhbgKUQ=";
 
   ldflags = [
     "-s"
@@ -67,7 +67,7 @@ buildGoModule (finalAttrs: {
           ;
         pnpm = pnpm_10;
         fetcherVersion = 4;
-        hash = "sha256-YWZBvUsJH0tt5YOzynNRNtL3ag1j6eDEJzuQNETqIWQ=";
+        hash = "sha256-PkBQH3MNIpqivdXBBimkjHlfj48MdeAzqPfaRyF8ekg=";
       };
 
       nativeBuildInputs = [
