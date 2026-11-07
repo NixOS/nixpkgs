@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maccy";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "https://github.com/p0deje/Maccy/releases/download/${finalAttrs.version}/Maccy.app.zip";
-    hash = "sha256-84iu403gmgx1MWMTA3hdmTi++akhMOIc4QScj1aq0Hc=";
+    hash = "sha256-5oThzgxg18/9OisYLcN71+iMKZZ6ZKQxoscb5lsdJ+A=";
   };
 
   dontUnpack = true;
@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       emilytrau
       baongoc124
+      jackrhoa
     ];
     platforms = lib.platforms.darwin;
   };
