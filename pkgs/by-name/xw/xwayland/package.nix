@@ -56,11 +56,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwayland";
-  version = "24.1.14";
+  version = "26.0.99.903";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xwayland-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Tra5jWeCmaS5YTjYhjRbKUEwaVdgNF74RZYiWoIkB4o=";
+    hash = "sha256-+gevVz/25vS0plbJWLFu53yv6ygYmox6TzhChBZbAgs=";
   };
 
   postPatch = ''
