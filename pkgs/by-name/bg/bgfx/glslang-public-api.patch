@@ -1,0 +1,34 @@
+Use the installed public glslang API for WGSL uniform block reflection.
+The internal type headers are not installed by the packaged glslang.
+shaderc collects numeric uniforms into UniformBlock. The public
+getUniformBlockIndex API maps a uniform to its containing block, whose size
+can then be queried without depending on the internal TType definition.
+Upstream status: not submitted upstream.
+
+--- a/bgfx/tools/shaderc/shaderc_wgsl.cpp
++++ b/bgfx/tools/shaderc/shaderc_wgsl.cpp
+@@ -22,8 +22,6 @@
+ #include <spirv_reflect.hpp>
+ 
+ #define ENABLE_OPT 1
+-#include <BaseTypes.h>
+-#include <Types.h>
+ #include <ShaderLang.h>
+ #include <ResourceLimits.h>
+ #include <SPIRV/GlslangToSpv.h>
+@@ -662,12 +660,10 @@
+ 				uint32_t blockIndex = 0;
+ 				for (uint32_t ii = 0, num = program->getNumUniformVariables(); ii < num; ++ii)
+ 				{
+-					const glslang::TType* type = program->getUniformBlockTType(ii);
+-					if (NULL != type
+-					&&  glslang::EbtBlock   == type->getBasicType()
+-					&&  glslang::EvqUniform == type->getQualifier().storage)
++					const int index = program->getUniformBlockIndex(ii);
++					if (index >= 0)
+ 					{
+-						blockIndex = ii;
++						blockIndex = uint32_t(index);
+ 						break;
+ 					}
+ 				}
