@@ -42,6 +42,7 @@
   gtk3,
   gtk4,
   qt6,
+  kdePackages,
   libx11,
   libxscrnsaver,
   libxcomposite,
@@ -163,6 +164,9 @@ let
     libkrb5
     vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
+    qt6.qtwayland
+    kdePackages.plasma-integration
+    kdePackages.breeze
   ]
   ++ optional pulseSupport libpulseaudio
   ++ optional libvaSupport libva;
@@ -303,6 +307,14 @@ stdenv.mkDerivation {
         ]
       }
       --set CHROME_WRAPPER ${pname}
+      # Put Brave's own Qt plugins first so that a Qt version mismatch with the
+      # session (e.g. Plasma from an older release) cannot make Qt load
+      # incompatible platform or shell-integration plugins and abort.
+      --prefix QT_PLUGIN_PATH : ${qt6.qtbase}/lib/qt-6/plugins
+      --prefix QT_PLUGIN_PATH : ${qt6.qtwayland}/lib/qt-6/plugins
+      --prefix QT_PLUGIN_PATH : ${kdePackages.plasma-integration}/lib/qt-6/plugins
+      --prefix QT_PLUGIN_PATH : ${kdePackages.breeze}/lib/qt-6/plugins
+      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : ${qt6.qtwayland}/lib/qt-6/qml
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
