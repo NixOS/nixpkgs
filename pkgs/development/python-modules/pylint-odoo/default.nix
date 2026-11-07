@@ -7,7 +7,7 @@
   pytestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylint-odoo";
   version = "10.0.8";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OCA";
     repo = "pylint-odoo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dCc3jwZOWlwMG0jn1d2rAK4oFQlqTMmvYu9ucR/ORfU=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})
