@@ -5,7 +5,7 @@
   colorama,
   fetchFromGitHub,
   fetchpatch,
-  flit-core,
+  flit-core_3,
   freezegun,
   pytest-mypy-plugins,
   pytest-xdist,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   nativeCheckInputs = [
     pytestCheckHook
