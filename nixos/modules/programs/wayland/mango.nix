@@ -22,35 +22,36 @@ in
     (lib.mkRenamedOptionModule [ "programs" "mangowc" ] [ "programs" "mango" ])
   ];
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [ cfg.package ];
 
-    # Necessary Wayland plumbing
-    xdg.portal = {
-      enable = true;
+        # Necessary Wayland plumbing
+        xdg.portal = {
+          enable = true;
 
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-gtk
-      ];
+          config.mango = {
+            default = [
+              "gtk"
+            ];
 
-      config.mango = {
-        default = [
-          "gtk"
-        ];
+            "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+            "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
+            "org.freedesktop.impl.portal.ScreenShot" = [ "wlr" ];
 
-        "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
-        "org.freedesktop.impl.portal.ScreenCast" = [ "wlr" ];
-        "org.freedesktop.impl.portal.ScreenShot" = [ "wlr" ];
+            # wlr does not have this interface, let gtk handle
+            "org.freedesktop.impl.portal.Inhibit" = [ "gtk" ];
+          };
+        };
 
-        # wlr does not have this interface, let gtk handle
-        "org.freedesktop.impl.portal.Inhibit" = [ "gtk" ];
-      };
-    };
+        meta.maintainers = with lib.maintainers; [ yvnth ];
 
-    meta.maintainers = with lib.maintainers; [ yvnth ];
+        # Set up the session for Display Managers (GDM, SDDM, etc.)
+        services.displayManager.sessionPackages = [ cfg.package ];
+      }
 
-    # Set up the session for Display Managers (GDM, SDDM, etc.)
-    services.displayManager.sessionPackages = [ cfg.package ];
-  };
+      (import ./wayland-session.nix { inherit lib pkgs; })
+    ]
+  );
 }
