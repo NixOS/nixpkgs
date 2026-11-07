@@ -7,6 +7,7 @@
   openssl,
   sqlite,
   zlib,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     sqlite
     zlib
+    aws-lc
   ];
 
   env = {
