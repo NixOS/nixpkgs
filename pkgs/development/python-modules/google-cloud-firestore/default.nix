@@ -13,7 +13,7 @@
   proto-plus,
   protobuf,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   pythonAtLeast,
   pythonOlder,
   pyyaml,
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     google-cloud-testutils
     mock
     pytest-asyncio
-    pytestCheckHook
+    pytest9_1CheckHook
     pyyaml
   ]
   ++ lib.optionals (pythonOlder "3.14") [ aiounittest ];
