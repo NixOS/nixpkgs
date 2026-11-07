@@ -1,0 +1,103 @@
+diff --git a/src/global/mail_run.c b/src/global/mail_run.c
+index f376434..7aff361 100644
+--- a/src/global/mail_run.c
++++ b/src/global/mail_run.c
+@@ -144,7 +144,11 @@ NORETURN mail_run_replace(const char *dir, char **argv)
+ {
+     char   *path;
+ 
+-    path = concatenate(dir, "/", argv[0], (char *) 0);
+-    execv(path, argv);
++    if (dir == NULL) {
++      execvp(argv[0], argv);
++    } else {
++      path = concatenate(dir, "/", argv[0], (char *) 0);
++      execv(path, argv);
++    }
+     msg_fatal("execv %s: %m", path);
+ }
+diff --git a/src/global/mail_stream.c b/src/global/mail_stream.c
+index 46cc87e..e391d6a 100644
+--- a/src/global/mail_stream.c
++++ b/src/global/mail_stream.c
+@@ -487,6 +487,7 @@ MAIL_STREAM *mail_stream_command(const char *command)
+      * is being executed except by duplicating a lot of existing code.
+      */
+     export_env = mail_parm_split(VAR_EXPORT_ENVIRON, var_export_environ);
++    argv_add(export_env, "PATH", (char *) 0);
+     while ((stream = vstream_popen(O_RDWR,
+ 				   CA_VSTREAM_POPEN_COMMAND(command),
+ 				   CA_VSTREAM_POPEN_EXPORT(export_env->argv),
+diff --git a/src/sendmail/sendmail.c b/src/sendmail/sendmail.c
+index 83ccc14..e403072 100644
+--- a/src/sendmail/sendmail.c
++++ b/src/sendmail/sendmail.c
+@@ -791,7 +791,7 @@ static void enqueue(const int flags, const char *encoding,
+      */
+     errno = 0;
+     postdrop_command = vstring_alloc(1000);
+-    vstring_sprintf(postdrop_command, "%s/postdrop -r", var_command_dir);
++    vstring_strcat(postdrop_command, "postdrop -r");
+     for (level = 0; level < msg_verbose; level++)
+ 	vstring_strcat(postdrop_command, " -v");
+     if ((handle = mail_stream_command(STR(postdrop_command))) == 0)
+@@ -1485,7 +1485,7 @@ int     main(int argc, char **argv)
+ 	    for (n = 0; n < msg_verbose; n++)
+ 		argv_add(ext_argv, "-v", (char *) 0);
+ 	    argv_terminate(ext_argv);
+-	    mail_run_replace(var_command_dir, ext_argv->argv);
++	    mail_run_replace(NULL, ext_argv->argv);
+ 	    /* NOTREACHED */
+ 	} else if (id_to_flush) {
+ 	    if (argv[OPTIND])
+@@ -1495,7 +1495,7 @@ int     main(int argc, char **argv)
+ 	    for (n = 0; n < msg_verbose; n++)
+ 		argv_add(ext_argv, "-v", (char *) 0);
+ 	    argv_terminate(ext_argv);
+-	    mail_run_replace(var_command_dir, ext_argv->argv);
++	    mail_run_replace(NULL, ext_argv->argv);
+ 	    /* NOTREACHED */
+ 	} else {
+ 	    enqueue(flags, encoding, dsn_envid, dsn_ret, dsn_notify,
+@@ -1513,7 +1513,7 @@ int     main(int argc, char **argv)
+ 	for (n = 0; n < msg_verbose; n++)
+ 	    argv_add(ext_argv, "-v", (char *) 0);
+ 	argv_terminate(ext_argv);
+-	mail_run_replace(var_command_dir, ext_argv->argv);
++	mail_run_replace(NULL, ext_argv->argv);
+ 	/* NOTREACHED */
+     case SM_MODE_FLUSHQ:
+ 	if (argv[OPTIND])
+@@ -1524,7 +1524,7 @@ int     main(int argc, char **argv)
+ 	for (n = 0; n < msg_verbose; n++)
+ 	    argv_add(ext_argv, "-v", (char *) 0);
+ 	argv_terminate(ext_argv);
+-	mail_run_replace(var_command_dir, ext_argv->argv);
++	mail_run_replace(NULL, ext_argv->argv);
+ 	/* NOTREACHED */
+     case SM_MODE_DAEMON:
+ 	if (argv[OPTIND])
+diff --git a/src/util/vstream_popen.c b/src/util/vstream_popen.c
+index d00d49e..9d74dfe 100644
+--- a/src/util/vstream_popen.c
++++ b/src/util/vstream_popen.c
+@@ -88,6 +88,7 @@
+ 
+ #include <sys_defs.h>
+ #include <sys/wait.h>
++#include <sys/auxv.h>
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <errno.h>
+@@ -240,8 +241,9 @@ VSTREAM *vstream_popen(int flags,...)
+ 	 */
+ 	if (args.export)
+ 	    clean_env(args.export);
+-	if (setenv("PATH", _PATH_DEFPATH, 1))
+-	    msg_fatal("%s: setenv: %m", myname);
++        if (getauxval(AT_SECURE))
++          if (setenv("PATH", _PATH_DEFPATH, 1))
++              msg_fatal("%s: setenv: %m", myname);
+ 	if (args.env)
+ 	    for (cpp = args.env; *cpp; cpp += 2)
+ 		if (setenv(cpp[0], cpp[1], 1))
