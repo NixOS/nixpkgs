@@ -43,6 +43,8 @@ lib.makeOverridable (
     nativeBuildInputs ? [ ],
     buildInputs ? [ ],
     meta ? { },
+    # The license names in the gemspec, which `bundix` writes to `gemset.nix`.
+    licenses ? [ ],
     patches ? [ ],
     gemPath ? [ ],
     dontStrip ? false,
@@ -106,10 +108,21 @@ lib.makeOverridable (
 
     documentFlag = if document == [ ] then "-N" else "--document ${lib.concatStringsSep "," document}";
 
+    # The gemspec licenses that are SPDX identifiers. Gemspecs can contain other
+    # names, such as "Apache 2.0" or "BSD": a name with spaces is tried with
+    # dashes, and a name that does not match is ignored, because nixpkgs
+    # considers an unknown license to be unfree.
+    knownLicenses = lib.filter (license: license != null) (
+      map (name: lib.getLicenseFromSpdxIdOr (lib.replaceStrings [ " " ] [ "-" ] name) null) licenses
+    );
+
   in
 
   stdenv.mkDerivation (
-    (removeAttrs attrs [ "source" ])
+    (removeAttrs attrs [
+      "source"
+      "licenses"
+    ])
     // {
       inherit ruby;
       inherit dontBuild;
@@ -309,6 +322,7 @@ lib.makeOverridable (
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
       }
+      // lib.optionalAttrs (knownLicenses != [ ]) { license = knownLicenses; }
       // meta;
     }
   )
