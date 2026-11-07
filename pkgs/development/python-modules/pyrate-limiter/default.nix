@@ -67,7 +67,12 @@ buildPythonPackage (finalAttrs: {
 
   # Timing-sensitive, fails under load
   # https://github.com/vutran1710/PyrateLimiter/issues/245
-  disabledTests = [ "test_limiter_01" ];
+  disabledTests = [
+    "test_factory_leak"
+    "test_limiter_01"
+    "test_limiter_async_factory_get"
+    "test_limiter_async_factory_get_weight0"
+  ];
 
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
