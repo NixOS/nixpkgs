@@ -8,6 +8,7 @@
   openssl,
   pkg-config,
   which,
+  systemd,
   iproute2,
   gnused,
   coreutils,
@@ -46,16 +47,17 @@ let
       }
       .${firewall};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniupnpd";
   version = "2.3.10";
 
   src = fetchurl {
-    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
+    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-+cNO02MvtgzSSN1Yl72YR5oQOnVoiwVsovBp5oqzKYc=";
   };
 
   buildInputs = [
+    systemd
     iptables-legacy
     libuuid
     openssl
@@ -79,6 +81,8 @@ stdenv.mkDerivation rec {
     "--host-os-version=${linuxHeaders.version}"
     "--host-machine=${stdenv.hostPlatform.uname.processor}"
     "--firewall=${firewall}"
+    "--disable-fork"
+    "--systemd"
     # allow using various config options
     "--ipv6"
     "--igd2"
@@ -121,8 +125,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
+    changelog = "https://github.com/miniupnp/miniupnp/blob/master/miniupnpd/Changelog.txt";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
+    maintainers = with lib.maintainers; [ liff ];
   };
-}
+})
