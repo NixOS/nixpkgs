@@ -22884,6 +22884,12 @@
     githubId = 12677991;
     name = "Ryota Ikezawa";
   };
+  pavelzw = {
+    name = "Pavel Zwerschke";
+    github = "pavelzw";
+    githubId = 29506042;
+    email = "pavelzw@gmail.com";
+  };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";
     github = "pawelchcki";
@@ -32682,6 +32688,12 @@
     github = "ysnt-yes";
     githubId = 85800291;
     email = "yes@ysnt.live";
+  };
+  ytausch = {
+    name = "Yannik Tausch";
+    github = "ytausch";
+    githubId = 25906270;
+    email = "dev@ytausch.de";
   };
   yuannan = {
     email = "brandon@emergence.ltd";
