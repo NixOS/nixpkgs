@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
     makeWrapper
     ninja
-    (python3.pythonOnBuildForHost.withPackages (p: [ p.jinja2 ]))
+    (python3.withPackages (p: [ p.jinja2 ]))
     pkg-config
   ];
   buildInputs = [ fuse3 ];

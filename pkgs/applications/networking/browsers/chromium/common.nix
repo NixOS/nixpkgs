@@ -110,7 +110,7 @@
 buildFun:
 
 let
-  python3WithPackages = python3.pythonOnBuildForHost.withPackages (
+  python3WithPackages = python3.withPackages (
     ps: with ps; [
       ply
       jinja2

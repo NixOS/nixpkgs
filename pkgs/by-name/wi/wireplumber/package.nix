@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (enableDocs || enableGI) [
     doxygen
-    (python3.pythonOnBuildForHost.withPackages (
+    (python3.withPackages (
       ps:
       with ps;
       lib.optionals enableDocs [

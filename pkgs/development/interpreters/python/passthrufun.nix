@@ -121,7 +121,10 @@ rec {
     python = self;
     inherit (pythonPackages) requiredPythonModules;
   };
-  withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages; };
+  withPackages = import ./with-packages.nix {
+    inherit lib buildEnv pythonPackages;
+    python = self;
+  };
   pkgs = pythonPackages;
   interpreter = "${self}/bin/${executable}";
   inherit
