@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "petsctools";
-  version = "2026.0";
+  version = "2026.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "petsctools";
     tag = finalAttrs.version;
-    hash = "sha256-IMDPjhyehOkyifSJ7nOJQbZu21w6Xyyz9fv/WLDpEgQ=";
+    hash = "sha256-XfovdSahXTPRk22w+falRg+7Z+3hqb3Hd8Jsx9zxf/I=";
   };
 
   build-system = [
