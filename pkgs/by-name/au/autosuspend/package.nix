@@ -9,6 +9,9 @@
   withMan ? true,
 }:
 
+let
+  enabledSphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
+in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autosuspend";
   version = "11.3.0";
@@ -40,7 +43,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ++ finalAttrs.passthru.optional-dependencies.docs
   );
 
-  sphinxBuilders = lib.optionals withDocs [ "html" ] ++ lib.optionals withMan [ "man" ];
+  # TODO: use a list when the structuredAttrs sphinxHook fix is on master.
+  sphinxBuilders = [ (lib.concatStringsSep " " enabledSphinxBuilders) ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -65,6 +69,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     docs = with python3.pkgs; [
       furo
       recommonmark
+      sphinx
       sphinx-autodoc-typehints
       sphinx-issues
       sphinxcontrib-plantuml
@@ -73,6 +78,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     dbus
+    docutils
     freezegun
     pytest-cov-stub
     pytest-datadir
@@ -80,7 +86,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytest-mock
     pytestCheckHook
     python-dbusmock
+    sphinx
   ];
+
+  pythonImportsCheck = [ "autosuspend" ];
 
   # Disable tests that need root
   disabledTests = [
