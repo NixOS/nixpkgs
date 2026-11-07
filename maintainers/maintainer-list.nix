@@ -9996,6 +9996,11 @@
     githubId = 11352905;
     name = "Friedrich Altheide";
   };
+  frinfo702 = {
+    github = "frinfo702";
+    githubId = 121755762;
+    name = "Kenichiro Goto";
+  };
   frlan = {
     email = "frank@frank.uvena.de";
     github = "frlan";
