@@ -30614,6 +30614,12 @@
     githubId = 20206121;
     name = "umlx5h";
   };
+  unazikx = {
+    name = "Aziz Kurbonov";
+    github = "unazikx";
+    githubId = 189107707;
+    email = "xfalwa@gmail.com";
+  };
   uncenter = {
     name = "uncenter";
     email = "uncenter@uncenter.dev";
