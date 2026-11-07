@@ -1,21 +1,66 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl common-updater-scripts
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl dpkg gnugrep gnused coreutils jq nix
+# shellcheck shell=bash
 
 set -euo pipefail
 
-# Scrape the pool directory since Microsoft doesn't keep Packages.gz up to date
-pool_url="https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/"
-pool_listing=$(curl -sL "$pool_url")
+nixpkgs="$(git rev-parse --show-toplevel)"
+path="$nixpkgs/pkgs/by-name/mi/microsoft-identity-broker/package.nix"
+repository_root="https://packages.microsoft.com/ubuntu"
+package_path="prod/pool/main/m/microsoft-identity-broker"
 
-# Extract version from filenames like: microsoft-identity-broker_2.5.0-noble_amd64.deb
-latest_version=$(echo "$pool_listing" \
-    | grep -oP 'microsoft-identity-broker_\K[0-9]+\.[0-9]+\.[0-9]+' \
-    | sort -V \
-    | tail -n1)
+old_ubuntu_version=$(sed -nE 's/^[[:space:]]*ubuntuVersion = "([^"]+)";.*/\1/p' "$path")
+old_version=$(sed -nE 's/^[[:space:]]*version = "([^"]+)";.*/\1/p' "$path")
 
-if [[ -z "$latest_version" ]]; then
-    echo "Failed to find any versions" >&2
+# update-source-version cannot discover or update the Ubuntu repository version,
+# so inspect every published Ubuntu repository and update both fields together.
+mapfile -t ubuntu_versions < <(
+    curl -fsSL "$repository_root/" \
+        | sed -nE 's@.*href="([0-9]+\.[0-9]+)/".*@\1@p' \
+        | sort -Vr
+)
+
+new_ubuntu_version=""
+new_version=""
+new_upstream_version=""
+
+for ubuntu_version in "${ubuntu_versions[@]}"; do
+    if ! package_index=$(curl -fsSL "$repository_root/$ubuntu_version/$package_path/" 2>/dev/null); then
+        continue
+    fi
+
+    while IFS= read -r candidate; do
+        candidate_upstream_version="${candidate%%-*}"
+        if [[ -z "$new_version" ]] || dpkg --compare-versions "$candidate_upstream_version" gt "$new_upstream_version"; then
+            new_ubuntu_version="$ubuntu_version"
+            new_version="$candidate"
+            new_upstream_version="$candidate_upstream_version"
+        fi
+    done < <(
+        printf '%s\n' "$package_index" \
+            | sed -nE 's@.*href="microsoft-identity-broker_([^"]+)_amd64\.deb".*@\1@p'
+    )
+done
+
+if [[ -z "$new_ubuntu_version" || -z "$new_version" ]]; then
+    echo "Error: Could not resolve a Microsoft Identity Broker release" >&2
     exit 1
 fi
 
-update-source-version microsoft-identity-broker "$latest_version" --file="$(dirname "$0")/package.nix"
+if [[ "$old_ubuntu_version" == "$new_ubuntu_version" && "$old_version" == "$new_version" ]]; then
+    echo "Current Ubuntu $old_ubuntu_version package $old_version is up-to-date"
+    exit 0
+fi
+
+url="$repository_root/$new_ubuntu_version/$package_path/microsoft-identity-broker_${new_version}_amd64.deb"
+new_hash=$(nix store prefetch-file --json "$url" | jq -er .hash)
+
+echo "Updating microsoft-identity-broker: Ubuntu $old_ubuntu_version/$old_version -> Ubuntu $new_ubuntu_version/$new_version"
+
+sed -i \
+    -e "s|ubuntuVersion = \"$old_ubuntu_version\";|ubuntuVersion = \"$new_ubuntu_version\";|" \
+    -e "s|version = \"$old_version\";|version = \"$new_version\";|" \
+    -e "s|hash = \"sha256-[^\"]*\";|hash = \"$new_hash\";|" \
+    "$path"
+
+echo "Updated microsoft-identity-broker to Ubuntu $new_ubuntu_version package $new_version"
