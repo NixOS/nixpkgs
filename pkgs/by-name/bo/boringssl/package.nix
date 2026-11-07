@@ -83,5 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd3
     ];
+    platforms = lib.platforms.all;
   };
 })
