@@ -74,5 +74,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
+    upgradeGroup = lib.upgradeGroups.cosmic;
   };
 })
