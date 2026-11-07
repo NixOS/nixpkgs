@@ -1,0 +1,13 @@
+diff --git a/src/apscheduler/util.py b/src/apscheduler/util.py
+index caf56b8..cccb492 100644
+--- a/src/apscheduler/util.py
++++ b/src/apscheduler/util.py
+@@ -115,7 +115,7 @@ def astimezone(obj):
+             if obj.zone:
+                 return ZoneInfo(obj.zone)
+ 
+-            return timezone(obj._offset)
++            return timezone(obj._utcoffset)
+ 
+         return obj
+ 
