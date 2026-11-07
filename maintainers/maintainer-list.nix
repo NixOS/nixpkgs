@@ -18665,6 +18665,13 @@
     githubId = 92341177;
     name = "Maximilian Canez Fernandes";
   };
+  maximiliennaveau = {
+    email = "maximilien.naveau@gmail.com";
+    github = "MaximilienNaveau";
+    githubId = 5736679;
+    keys = [ { fingerprint = "D50C 6E06 0C44 5F2D D551  3CB0 B083 5727 0308 E49F"; } ];
+    name = "Maximilien Naveau";
+  };
   maximsmol = {
     email = "maximsmol@gmail.com";
     github = "maximsmol";
