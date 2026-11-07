@@ -33,6 +33,7 @@
   langObjC,
   langObjCpp,
   langJit,
+  jitBintools ? null,
   langRust ? false,
   hostIsTarget,
   disableBootstrap ? (!hostIsTarget),
@@ -127,6 +128,53 @@ let
         ) "--with-newlib"
         ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
+
+  # libgccjit links a copy of the gcc driver into libgccjit.so and runs it
+  # in-process to assemble and link the code it has just compiled
+  # (invoke_embedded_driver in gcc/jit/jit-playback.cc).  No executable is
+  # involved, so unlike the gcc and ld we install there is no wrapper to tell
+  # it where the assembler, the linker and the C library are.  Bake the
+  # locations in instead.  Otherwise every client of libgccjit has to pass the
+  # same list of -B options through gcc_jit_context_add_driver_option (cf. the
+  # native-comp-driver-options patch in pkgs/applications/editors/emacs).
+  # Options a client does pass take precedence over these.
+  #
+  # The driver also fails to find this derivation's own directories.
+  # It locates its installation by relocating the configured prefix relative
+  # to argv[0], and the embedded copy is run with argv[0] set to
+  # GCC_DRIVER_NAME, a bare program name that is not on PATH; libiberty's
+  # make_relative_prefix then yields "../lib/gcc/", relative to whatever the
+  # process's working directory is (compare -print-search-dirs between `gcc`
+  # and `exec -a x86_64-unknown-linux-gnu-gcc-N.N.N gcc`).  On an FHS system
+  # the /lib and /usr/lib fallbacks hide this; here they are gone.
+  # So list lib/gcc (crt*.o, libgcc.a), lib (libgcc_s; see libgcc.nix for
+  # why it is kept for langJit) and libexec/gcc (collect2) as well.
+  #
+  # The bintools come from the caller (jitBintools) rather than from
+  # `binutils` or `targetPackages.stdenv.cc.bintools`: for the gcc that
+  # ends up in the final stdenv those refer to the bootstrap stage that
+  # built it, and we would be baking a bootstrap-only binutils into every
+  # libgccjit user's closure.  (stdenv.cc.libc is the final libc, because
+  # the dynamic linker path baked into gcc comes from it too.)
+  #
+  # Only the native case is handled: a JIT that targets another platform
+  # makes no sense, and Darwin would need the SDK's libSystem as well.
+  embedJitDriverPaths =
+    langJit && jitBintools != null && hostIsTarget && !withoutTargetLibc && !targetPlatform.isDarwin;
+  jitDriverFlags = [
+    "--with-as=${jitBintools}/bin/${targetPrefix}as"
+    "--with-ld=${jitBintools}/bin/${targetPrefix}ld"
+    # Added to the driver's self specs, so processed like -B options given
+    # on every command line.
+    "--with-specs=${
+      lib.concatMapStringsSep " " (dir: "-B${dir}") [
+        "${placeholder "out"}/lib/gcc"
+        "${placeholder "out"}/lib"
+        "${placeholder "out"}/libexec/gcc"
+        "${lib.getLib stdenv.cc.libc}/lib"
+      ]
+    }"
+  ];
 
   configureFlags =
     # Basic dependencies
@@ -283,6 +331,7 @@ let
     ++ lib.optionals langJit [
       "--enable-host-shared"
     ]
+    ++ lib.optionals embedJitDriverPaths jitDriverFlags
     ++ lib.optionals targetPlatform.isAlpha [
       # Workaround build failures like:
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
