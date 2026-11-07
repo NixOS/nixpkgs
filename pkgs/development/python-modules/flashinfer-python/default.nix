@@ -66,6 +66,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   PermissionError: [Errno 13] Permission denied: '.../flashinfer_cubin/cubins/flashinfer'
     # Use FLASHINFER_GEN_SRC_DIR instead, like the other trtllm-gen modules.
     ./trtllm-gen-routing-symlink-in-gen-src-dir.patch
+
+    # trtllmGen_gemm_export/GemmInterface.h misses `#include <functional>`:
+    #   error: incomplete type "std::reference_wrapper<...::ModuleCache>" is not allowed
+    ./gemm-interface-include-functional.patch
   ];
 
   build-system = [
