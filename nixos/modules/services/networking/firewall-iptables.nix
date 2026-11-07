@@ -150,6 +150,16 @@ let
       ip46tables -A nixos-fw -i ${iface} -j nixos-fw-accept
     '')}
 
+    # Allow DHCP server requests from systemd virtual network interfaces.
+    # ve-+: nspawn --network-veth
+    ip46tables -A nixos-fw -i ve-+ -p udp --dport 67 -j nixos-fw-accept
+    # vz-+: nspawn --network-zone
+    ip46tables -A nixos-fw -i vz-+ -p udp --dport 67 -j nixos-fw-accept
+    # vt-+: vmspawn TAP
+    ip46tables -A nixos-fw -i vt-+ -p udp --dport 67 -j nixos-fw-accept
+    # ns-+: nsresourced network namespaces.
+    ip46tables -A nixos-fw -i ns-+ -p udp --dport 67 -j nixos-fw-accept
+
     # Accept packets from established or related connections.
     ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
 
