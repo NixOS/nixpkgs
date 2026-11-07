@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  openssl,
+  aws-lc,
   pkg-config,
   rustPlatform,
   buildNpmPackage,
   ffmpeg-headless,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     makeBinaryWrapper
   ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   env.OXICLOUD_VERSION = finalAttrs.version;
 
