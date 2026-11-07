@@ -16,6 +16,9 @@
   gnused,
   ps,
   nixosTests,
+
+  cruise-control,
+  enableCruiseControl ? false,
 }:
 
 let
@@ -67,6 +70,9 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
     done
     chmod +x $out/bin\/*
+  ''
+  + lib.optionalString enableCruiseControl ''
+    ln -s ${lib.getLib cruise-control}/share/java/*.jar $out/libs/
   '';
 
   passthru = {
