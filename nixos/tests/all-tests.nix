@@ -2054,6 +2054,7 @@ in
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
+  yaml-schema-lint = runTest ./yaml-schema-lint.nix;
   yarr = runTest ./yarr.nix;
   yb = pkgs.callPackage ./yb.nix { inherit (pkgs.yb.passthru) ybPivHarnessTests; };
   ydotool = import ./ydotool.nix {
