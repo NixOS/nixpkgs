@@ -3,6 +3,7 @@
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
+  llvmPackages,
   osqp-eigen,
   pinocchio,
   proxsuite,
@@ -36,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     jrl-cmakemodules
-  ];
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs = [
     eiquadprog
