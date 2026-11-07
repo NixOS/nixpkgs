@@ -256,8 +256,7 @@ in
     })
 
     (lib.mkIf cfg.subIDsIntegration {
-      system.nssDatabases.subuid = [ "sss" ];
-      system.nssDatabases.subgid = [ "sss" ];
+      system.nssDatabases.subid = "sss";
     })
   ];
 
