@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "asyncapi";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "asyncapi";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SMjxuMI2PL8NG4MaC8jLMMzNAt6Bry1zeZYj7FZMEnY=";
+    hash = "sha256-koaqVsTcfV/LhowKLKtWFZ5PpTcxwPVhLOr9raK9p4I=";
   };
 
-  npmDepsHash = "sha256-BqLXJX3rkaY+bKaR8sYAUSe1LgkugsAZ3iFCBuCseeo=";
+  npmDepsHash = "sha256-NPqK2x4I4rfniVcLU56qNXwF1AY0dOhayai7Uc7ajc8=";
 
   env.PUPPETEER_SKIP_DOWNLOAD = "true";
 
