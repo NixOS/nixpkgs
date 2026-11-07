@@ -20,6 +20,8 @@ import ./versions.nix (
     pname = "zabbix-agent2";
     inherit version;
 
+    __structuredAttrs = true;
+
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
       inherit hash;
