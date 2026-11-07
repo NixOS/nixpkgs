@@ -10291,6 +10291,12 @@
     github = "luna-spirito";
     githubId = 29687558;
   };
+  garrettgr = {
+    name = "Garrett Gonzalez-Rivas";
+    email = "ggonzalez-rivas@acm.org";
+    github = "garrettgr";
+    githubId = 46307948;
+  };
   garrison = {
     email = "jim@garrison.cc";
     github = "garrison";
