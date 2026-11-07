@@ -1,0 +1,486 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c9ae0ca..1e88e2d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -843,7 +843,6 @@ dependencies = [
+  "async-trait",
+  "bdk-macros",
+  "bitcoin 0.29.2",
+- "electrum-client 0.12.1",
+  "getrandom 0.2.17",
+  "js-sys",
+  "log",
+@@ -897,7 +896,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b59a3f7fbe678874fa34354097644a171276e02a49934c13b3d61c54610ddf39"
+ dependencies = [
+  "bdk_core",
+- "electrum-client 0.24.1",
++ "electrum-client",
+ ]
+ 
+ [[package]]
+@@ -3018,24 +3017,6 @@ dependencies = [
+  "serde",
+ ]
+ 
+-[[package]]
+-name = "electrum-client"
+-version = "0.12.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a8e1e1e452aef3ee772d19cc6272ef642f22ce0f4a9fb715ffe98010934e2ae1"
+-dependencies = [
+- "bitcoin 0.29.2",
+- "byteorder",
+- "libc",
+- "log",
+- "rustls 0.20.9",
+- "serde",
+- "serde_json",
+- "webpki 0.22.4",
+- "webpki-roots 0.22.6",
+- "winapi",
+-]
+-
+ [[package]]
+ name = "electrum-client"
+ version = "0.24.1"
+@@ -3046,10 +3027,9 @@ dependencies = [
+  "byteorder",
+  "libc",
+  "log",
+- "rustls 0.23.37",
++ "openssl",
+  "serde",
+  "serde_json",
+- "webpki-roots 0.25.4",
+  "winapi",
+ ]
+ 
+@@ -4567,10 +4547,10 @@ dependencies = [
+  "hyper-util",
+  "log",
+  "rustls 0.23.37",
+- "rustls-native-certs 0.8.3",
++ "rustls-native-certs",
+  "rustls-pki-types",
+  "tokio",
+- "tokio-rustls 0.26.4",
++ "tokio-rustls",
+  "tower-service",
+ ]
+ 
+@@ -5955,7 +5935,7 @@ dependencies = [
+  "thiserror 1.0.69",
+  "tracing",
+  "url",
+- "webpki-roots 0.25.4",
++ "webpki-roots",
+ ]
+ 
+ [[package]]
+@@ -6535,7 +6515,7 @@ dependencies = [
+  "sqlx",
+  "swap-serde",
+  "tokio",
+- "tokio-rustls 0.26.4",
++ "tokio-rustls",
+  "tor-rtcompat",
+  "tower-http",
+  "tracing",
+@@ -6788,10 +6768,10 @@ dependencies = [
+  "libc",
+  "log",
+  "openssl",
+- "openssl-probe 0.2.1",
++ "openssl-probe",
+  "openssl-sys",
+  "schannel",
+- "security-framework 3.7.0",
++ "security-framework",
+  "security-framework-sys",
+  "tempfile",
+ ]
+@@ -7305,12 +7285,6 @@ dependencies = [
+  "syn 2.0.117",
+ ]
+ 
+-[[package]]
+-name = "openssl-probe"
+-version = "0.1.6"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d05e27ee213611ffe7d6348b942e8f942b37114c00cc03cec254295a4a17852e"
+-
+ [[package]]
+ name = "openssl-probe"
+ version = "0.2.1"
+@@ -8812,14 +8786,14 @@ dependencies = [
+  "pin-project-lite",
+  "quinn",
+  "rustls 0.23.37",
+- "rustls-native-certs 0.8.3",
++ "rustls-native-certs",
+  "rustls-pki-types",
+  "serde",
+  "serde_json",
+  "serde_urlencoded",
+  "sync_wrapper 1.0.2",
+  "tokio",
+- "tokio-rustls 0.26.4",
++ "tokio-rustls",
+  "tokio-util",
+  "tower",
+  "tower-http",
+@@ -8858,7 +8832,7 @@ dependencies = [
+  "serde_json",
+  "sync_wrapper 1.0.2",
+  "tokio",
+- "tokio-rustls 0.26.4",
++ "tokio-rustls",
+  "tokio-util",
+  "tower",
+  "tower-http",
+@@ -9100,31 +9074,6 @@ dependencies = [
+  "windows-sys 0.61.2",
+ ]
+ 
+-[[package]]
+-name = "rustls"
+-version = "0.19.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "35edb675feee39aec9c99fa5ff985081995a06d594114ae14cbe797ad7b7a6d7"
+-dependencies = [
+- "base64 0.13.1",
+- "log",
+- "ring 0.16.20",
+- "sct 0.6.1",
+- "webpki 0.21.4",
+-]
+-
+-[[package]]
+-name = "rustls"
+-version = "0.20.9"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1b80e3dec595989ea8510028f30c408a4630db12c9cbb8de34203b89d6577e99"
+-dependencies = [
+- "log",
+- "ring 0.16.20",
+- "sct 0.7.1",
+- "webpki 0.22.4",
+-]
+-
+ [[package]]
+ name = "rustls"
+ version = "0.21.12"
+@@ -9134,7 +9083,7 @@ dependencies = [
+  "log",
+  "ring 0.17.14",
+  "rustls-webpki 0.101.7",
+- "sct 0.7.1",
++ "sct",
+ ]
+ 
+ [[package]]
+@@ -9153,28 +9102,16 @@ dependencies = [
+  "zeroize",
+ ]
+ 
+-[[package]]
+-name = "rustls-native-certs"
+-version = "0.5.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5a07b7c1885bd8ed3831c289b7870b13ef46fe0e856d288c30d9cc17d75a2092"
+-dependencies = [
+- "openssl-probe 0.1.6",
+- "rustls 0.19.1",
+- "schannel",
+- "security-framework 2.11.1",
+-]
+-
+ [[package]]
+ name = "rustls-native-certs"
+ version = "0.8.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "612460d5f7bea540c490b2b6395d8e34a953e52b491accd6c86c8164c5932a63"
+ dependencies = [
+- "openssl-probe 0.2.1",
++ "openssl-probe",
+  "rustls-pki-types",
+  "schannel",
+- "security-framework 3.7.0",
++ "security-framework",
+ ]
+ 
+ [[package]]
+@@ -9208,10 +9145,10 @@ dependencies = [
+  "log",
+  "once_cell",
+  "rustls 0.23.37",
+- "rustls-native-certs 0.8.3",
++ "rustls-native-certs",
+  "rustls-platform-verifier-android",
+  "rustls-webpki 0.103.10",
+- "security-framework 3.7.0",
++ "security-framework",
+  "security-framework-sys",
+  "webpki-root-certs 0.26.11",
+  "windows-sys 0.59.0",
+@@ -9229,10 +9166,10 @@ dependencies = [
+  "log",
+  "once_cell",
+  "rustls 0.23.37",
+- "rustls-native-certs 0.8.3",
++ "rustls-native-certs",
+  "rustls-platform-verifier-android",
+  "rustls-webpki 0.103.10",
+- "security-framework 3.7.0",
++ "security-framework",
+  "security-framework-sys",
+  "webpki-root-certs 1.0.6",
+  "windows-sys 0.61.2",
+@@ -9433,16 +9370,6 @@ version = "1.0.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d68f2ec51b097e4c1a75b681a8bec621909b5e91f15bb7b840c4f2f7b01148b2"
+ 
+-[[package]]
+-name = "sct"
+-version = "0.6.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b362b83898e0e69f38515b82ee15aa80636befe47c3b6d3d89a911e78fc228ce"
+-dependencies = [
+- "ring 0.16.20",
+- "untrusted 0.7.1",
+-]
+-
+ [[package]]
+ name = "sct"
+ version = "0.7.1"
+@@ -9579,19 +9506,6 @@ dependencies = [
+  "quote",
+ ]
+ 
+-[[package]]
+-name = "security-framework"
+-version = "2.11.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "897b2245f0b511c87893af39b033e5ca9cce68824c4d7e7630b5a1d339658d02"
+-dependencies = [
+- "bitflags 2.11.0",
+- "core-foundation 0.9.4",
+- "core-foundation-sys",
+- "libc",
+- "security-framework-sys",
+-]
+-
+ [[package]]
+ name = "security-framework"
+ version = "3.7.0"
+@@ -10318,8 +10232,6 @@ dependencies = [
+  "once_cell",
+  "paste",
+  "percent-encoding",
+- "rustls 0.21.12",
+- "rustls-pemfile",
+  "serde",
+  "serde_json",
+  "sha2",
+@@ -10330,7 +10242,6 @@ dependencies = [
+  "tokio-stream",
+  "tracing",
+  "url",
+- "webpki-roots 0.25.4",
+ ]
+ 
+ [[package]]
+@@ -11926,17 +11837,6 @@ dependencies = [
+  "tokio",
+ ]
+ 
+-[[package]]
+-name = "tokio-rustls"
+-version = "0.22.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bc6844de72e57df1980054b38be3a9f4702aba4858be64dd700181a8a6d0e1b6"
+-dependencies = [
+- "rustls 0.19.1",
+- "tokio",
+- "webpki 0.21.4",
+-]
+-
+ [[package]]
+ name = "tokio-rustls"
+ version = "0.26.4"
+@@ -11978,13 +11878,11 @@ checksum = "511de3f85caf1c98983545490c3d09685fa8eb634e57eec22bb4db271f46cbd8"
+ dependencies = [
+  "futures-util",
+  "log",
++ "native-tls",
+  "pin-project",
+- "rustls 0.19.1",
+  "tokio",
+- "tokio-rustls 0.22.0",
++ "tokio-native-tls",
+  "tungstenite",
+- "webpki 0.21.4",
+- "webpki-roots 0.21.1",
+ ]
+ 
+ [[package]]
+@@ -13421,14 +13319,12 @@ dependencies = [
+  "http 0.2.12",
+  "httparse",
+  "log",
++ "native-tls",
+  "rand 0.8.5",
+- "rustls 0.19.1",
+- "rustls-native-certs 0.5.0",
+  "sha-1",
+  "thiserror 1.0.69",
+  "url",
+  "utf-8",
+- "webpki 0.21.4",
+ ]
+ 
+ [[package]]
+@@ -14261,26 +14157,6 @@ dependencies = [
+  "system-deps",
+ ]
+ 
+-[[package]]
+-name = "webpki"
+-version = "0.21.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b8e38c0608262c46d4a56202ebabdeb094cef7e560ca7a226c6bf055188aa4ea"
+-dependencies = [
+- "ring 0.16.20",
+- "untrusted 0.7.1",
+-]
+-
+-[[package]]
+-name = "webpki"
+-version = "0.22.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ed63aea5ce73d0ff405984102c42de94fc55a6b75765d621c65262469b3c9b53"
+-dependencies = [
+- "ring 0.17.14",
+- "untrusted 0.9.0",
+-]
+-
+ [[package]]
+ name = "webpki-root-certs"
+ version = "0.26.11"
+@@ -14299,24 +14175,6 @@ dependencies = [
+  "rustls-pki-types",
+ ]
+ 
+-[[package]]
+-name = "webpki-roots"
+-version = "0.21.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "aabe153544e473b775453675851ecc86863d2a81d786d741f6b76778f2a48940"
+-dependencies = [
+- "webpki 0.21.4",
+-]
+-
+-[[package]]
+-name = "webpki-roots"
+-version = "0.22.6"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b6c71e40d7d2c34a5106301fb632274ca37242cd0c9d3e64dbece371a40a2d87"
+-dependencies = [
+- "webpki 0.22.4",
+-]
+-
+ [[package]]
+ name = "webpki-roots"
+ version = "0.25.4"
+diff --git a/Cargo.toml b/Cargo.toml
+index 720807c..7f690ca 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -33,7 +33,7 @@ members = [
+ 
+ [workspace.dependencies]
+ # Bitcoin Dev Kit
+-bdk = "0.28"
++bdk = { version = "0.28", default-features = false, features = ["std", "key-value-db"] }
+ bdk_chain = "0.23.0"
+ bdk_core = "0.6.0"
+ bdk_electrum = { version = "0.23.0", default-features = false }
+diff --git a/bitcoin-wallet/Cargo.toml b/bitcoin-wallet/Cargo.toml
+index 8bf5f0f..c3e1ab5 100644
+--- a/bitcoin-wallet/Cargo.toml
++++ b/bitcoin-wallet/Cargo.toml
+@@ -10,7 +10,7 @@ backoff = { workspace = true }
+ bdk = { workspace = true }
+ bdk_chain = { workspace = true }
+ bdk_core = { workspace = true }
+-bdk_electrum = { workspace = true, features = ["use-rustls-ring"] }
++bdk_electrum = { workspace = true, features = ["use-openssl"] }
+ bdk_wallet = { workspace = true, features = ["rusqlite", "test-utils"] }
+ bitcoin = { workspace = true }
+ derive_builder = "0.20.2"
+diff --git a/electrum-pool/Cargo.toml b/electrum-pool/Cargo.toml
+index 61fb96d..1585e29 100644
+--- a/electrum-pool/Cargo.toml
++++ b/electrum-pool/Cargo.toml
+@@ -5,7 +5,7 @@ authors = ["eigenwallet Team <help@unstoppableswap.net>"]
+ edition = "2024"
+ 
+ [dependencies]
+-bdk_electrum = { workspace = true, features = ["use-rustls-ring"] }
++bdk_electrum = { workspace = true, features = ["use-openssl"] }
+ bitcoin = { workspace = true }
+ futures = { workspace = true }
+ once_cell = { workspace = true }
+diff --git a/monero-rpc-pool/Cargo.toml b/monero-rpc-pool/Cargo.toml
+index 4179a0c..f78a0f4 100644
+--- a/monero-rpc-pool/Cargo.toml
++++ b/monero-rpc-pool/Cargo.toml
+@@ -43,7 +43,7 @@ serde_json = { workspace = true }
+ typeshare = { workspace = true }
+ 
+ # Database
+-sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "sqlite", "chrono", "migrate"] }
++sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "chrono", "migrate"] }
+ 
+ # Web framework and HTTP
+ axum = { version = "0.8.4", features = ["macros"] }
+diff --git a/monero-sys/Cargo.toml b/monero-sys/Cargo.toml
+index dbfbcf6..b51c8c8 100644
+--- a/monero-sys/Cargo.toml
++++ b/monero-sys/Cargo.toml
+@@ -9,7 +9,7 @@ backoff = { workspace = true }
+ chrono = { version = "0.4", features = ["serde"] }
+ cxx = "1.0.137"
+ serde = { workspace = true }
+-sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-rustls", "macros", "chrono"] }
++sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio", "macros", "chrono"] }
+ thiserror = "2.0.17"
+ tokio = { workspace = true, features = ["sync", "time", "rt"] }
+ tracing = { workspace = true }
+diff --git a/swap-feed/Cargo.toml b/swap-feed/Cargo.toml
+index cee153f..14db721 100644
+--- a/swap-feed/Cargo.toml
++++ b/swap-feed/Cargo.toml
+@@ -20,7 +20,7 @@ serde = { workspace = true }
+ serde_json = { workspace = true }
+ thiserror = { workspace = true }
+ tokio = { workspace = true }
+-tokio-tungstenite = { version = "0.15", features = ["rustls-tls"] }
++tokio-tungstenite = { version = "0.15", features = ["native-tls"] }
+ tracing = { workspace = true }
+ tracing-subscriber = { workspace = true }
+ url = { workspace = true }
+diff --git a/swap/Cargo.toml b/swap/Cargo.toml
+index d7c8182..7cc0343 100644
+--- a/swap/Cargo.toml
++++ b/swap/Cargo.toml
+@@ -118,7 +118,7 @@ strum = { workspace = true, features = ["derive"] }
+ typeshare = { workspace = true }
+ 
+ # Database
+-sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-rustls"] }
++sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio"] }
+ 
+ [dev-dependencies]
+ bitcoin-harness = { git = "https://github.com/eigenwallet/bitcoin-harness-rs", branch = "master" }
