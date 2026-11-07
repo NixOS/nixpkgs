@@ -559,6 +559,11 @@ in
         kind = "removal";
         handler = "warn";
       }
+      # Throw upon package removal to please CI evaluation.
+      (lib.mkIf config.allowAliases {
+        kind = "removal";
+        handler = "error";
+      })
       (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
         kind = "maintainerless";
         handler = "warn";
