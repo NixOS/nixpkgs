@@ -5,6 +5,7 @@
   dpkg,
   autoPatchelfHook,
   makeWrapper,
+  python3,
   nss,
   libxtst,
   libxrandr,
@@ -236,6 +237,7 @@ stdenv.mkDerivation {
     dpkg
     autoPatchelfHook
     makeWrapper
+    python3
   ];
 
   buildInputs = [
@@ -302,9 +304,7 @@ stdenv.mkDerivation {
       # cmp rdi, 0 -> cmp r12, 0, at co_jump_to_link to address coroutine context resume issue
       echo -ne '\x49\x83\xfc\x00' | dd of=$out/app/wemeet/lib/libwemeet_base.so bs=1 seek=$((0x94c833)) conv=notrunc
     '';
-    aarch64-linux = ''
-      # I don't know if aarch64-linux version needs similar patch, I don't have aarch64 device.
-    '';
+    aarch64-linux = "";
   };
 
   # set LP_NUM_THREADS limit the number of cores used by rendering
@@ -338,7 +338,30 @@ stdenv.mkDerivation {
         ${lib.concatStringsSep " " commonWrapperArgs}
       makeWrapper $out/app/wemeet/bin/wemeetapp $out/bin/wemeet-xwayland \
         ${lib.concatStringsSep " " xwaylandWrapperArgs}
-    '';
+    ''
+    + selectSystem {
+      x86_64-linux = "";
+      aarch64-linux = ''
+        # Vendor arm64 libs (libImSDK.so, others once autoPatchelfHook grows
+        # their dynamic section) have 4K-aligned PT_LOAD segments; glibc
+        # checks alignment against the runtime page size, not p_align, so
+        # they fail to load on 16K-page kernels (Apple Silicon/Asahi;
+        # Android 15+ on many devices) with "ELF load command
+        # address/offset not page-aligned". patchelf can't fix this -- it
+        # only aligns segments it adds itself. Must run after
+        # autoPatchelfHook (postFixupHooks, not plain postFixup, which runs
+        # before it), since autoPatchelf's own appended segment can also
+        # end up misaligned.
+        postFixupHooks+=(fixWemeetElfPageAlignment)
+        fixWemeetElfPageAlignment() {
+          find "$out" -type f -print0 | while IFS= read -r -d "" f; do
+            if head -c4 "$f" | grep -q $'\x7fELF'; then
+              ${python3.interpreter} ${./elf-16k-align-fix.py} "$f"
+            fi
+          done
+        }
+      '';
+    };
 
   meta = {
     description = "Tencent Video Conferencing";
