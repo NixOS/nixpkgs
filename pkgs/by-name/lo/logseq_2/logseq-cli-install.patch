@@ -1,0 +1,14 @@
+diff --git a/src/electron/electron/cli_install.cljs b/src/electron/electron/cli_install.cljs
+index 314819c..aeb9e16 100644
+--- a/src/electron/electron/cli_install.cljs
++++ b/src/electron/electron/cli_install.cljs
+@@ -64,6 +64,9 @@
+   (try
+     (let [cli-dir (if cli-dir! (cli-dir!) cli-dir)]
+       (cond
++        true
++        (log-warn! :cli/install (str "CLI script installation skipped, because it is already part of the nixpkgs package"))
++
+         (not (exists? cli-path))
+         (throw (js/Error. (str "Missing CLI script at " cli-path)))
+ 
