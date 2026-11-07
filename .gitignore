@@ -8,6 +8,7 @@
 .nixos-test-history
 .vscode/
 .helix/
+.zed/
 outputs/
 result-*
 result
