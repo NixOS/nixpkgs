@@ -27387,6 +27387,11 @@
     github = "sinavir";
     githubId = 36380103;
   };
+  sincorchetes = {
+    name = "Álvaro Castillo";
+    github = "sincorchetes";
+    githubId = 31448043;
+  };
   sinelaw = {
     name = "Noam Lewis";
     github = "sinelaw";
