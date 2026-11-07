@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ffmpeg_7,
   libaom,
+  libgit2,
   nasm,
   nix-update-script,
   pkg-config,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     ffmpeg_7
+    libgit2
     vapoursynth
   ];
 
