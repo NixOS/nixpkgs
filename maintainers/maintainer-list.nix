@@ -32477,6 +32477,11 @@
     githubId = 73759599;
     name = "Yaya";
   };
+  yazeed = {
+    github = "yazeed";
+    githubId = 191483;
+    name = "Yazeed Al Oyoun";
+  };
   yboettcher = {
     name = "Yannik Böttcher";
     github = "yboettcher";
