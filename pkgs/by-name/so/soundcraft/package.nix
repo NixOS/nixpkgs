@@ -4,8 +4,6 @@
   rustPlatform,
   rustc,
   pkg-config,
-  copyDesktopItems,
-  makeDesktopItem,
   patchelf,
   alsa-lib,
   libx11,
@@ -23,21 +21,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "soundcraft";
-  version = "0.12.1";
+  version = "0.15.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "soundcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KiNJ/iVR8QHW6z6BBTS3n1TCGsFsWkY2N+OMyywjND0=";
+    hash = "sha256-v13TTYa7Q9uF/fU7/RlzwP27EqPw+nWvetkbQ0FKRsk=";
   };
 
-  cargoHash = "sha256-JHI2cqHfGYMn9e8QmRDt16sKc5mdIbjo/ajSnGMGpLA=";
+  cargoHash = "sha256-hqofenEF+XMoI2us1OpK0/ykIAW1rGvUEnWfuN9PclQ=";
+
+  # [[patch.unused]] in Cargo.lock: cargo --offline validates every [patch.crates-io] line
+  # against the git tree, but fetchCargoVendor only vendors crates in the dependency graph.
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail $'egui_demo_lib = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' "" \
+      --replace-fail $'egui_inspection = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' "" \
+      --replace-fail $'egui_extras = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' "" \
+      --replace-fail $'egui_system_font_provider = { git = "https://github.com/storytold/egui.git", rev = "6d518fc799681571963842f95b55a6b68431b15a" }\n' ""
+  '';
 
   nativeBuildInputs = [
     pkg-config
-    copyDesktopItems
   ];
 
   buildInputs = [
@@ -68,6 +75,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
+    install -Dm644 packaging/linux/ai.storyteller.soundcraft.desktop \
+      $out/share/applications/ai.storyteller.soundcraft.desktop
+    install -Dm644 packaging/linux/ai.storyteller.soundcraft.mime.xml \
+      $out/share/mime/packages/ai.storyteller.soundcraft.xml
+
     # Install under the hicolor theme and publish an index.theme; without one, GTK/KDE icon
     # lookups cannot see the icons (upstream ships no index.theme).
     install -d $out/share/icons
@@ -91,51 +103,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }" \
       $out/bin/soundcraft
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "soundcraft";
-    desktopName = "SoundCraft";
-    genericName = "Digital Audio Workstation";
-    icon = "ai.storyteller.soundcraft";
-    tryExec = "soundcraft";
-    exec = "soundcraft";
-    comment = "Record, edit and mix audio and MIDI";
-    mimeTypes = [
-      "application/x-soundcraft-session"
-      "audio/x-wav"
-      "audio/wav"
-      "audio/vnd.wave"
-      "audio/x-aiff"
-      "audio/aiff"
-      "audio/flac"
-      "audio/x-flac"
-      "audio/mpeg"
-      "audio/midi"
-      "audio/x-midi"
-    ];
-    categories = [
-      "AudioVideo"
-      "Audio"
-      "Midi"
-      "Mixer"
-      "Sequencer"
-      "Recorder"
-    ];
-    startupNotify = true;
-    startupWMClass = "ai.storyteller.soundcraft";
-    keywords = [
-      "daw"
-      "audio"
-      "mixer"
-      "recording"
-      "multitrack"
-      "midi"
-      "editor"
-      "music"
-    ];
-  };
-
-  desktopItems = [ finalAttrs.desktopItem ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
