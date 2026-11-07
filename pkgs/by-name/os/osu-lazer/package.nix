@@ -7,18 +7,22 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  makeBinaryWrapper,
   ffmpeg,
-  alsa-lib,
   SDL2,
   sdl3,
-  lttng-ust,
-  numactl,
   libglvnd,
-  libxi,
-  udev,
   vulkan-loader,
   nix-update-script,
+  icnsify,
   nativeWayland ? false,
+
+  # Linux-only dependencies
+  lttng-ust,
+  alsa-lib,
+  numactl,
+  libxi,
+  udev,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -39,17 +43,25 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [
-    copyDesktopItems
     makeWrapper
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    icnsify
+    makeBinaryWrapper
   ];
 
   runtimeDeps = [
     ffmpeg
-    alsa-lib
     SDL2
     sdl3
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     lttng-ust
     numactl
+    alsa-lib
 
     # needed to avoid:
     # Failed to create SDL window. SDL Error: Could not initialize OpenGL / GLES library
@@ -69,19 +81,88 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "osu!" ];
 
+  makeWrapperArgs = [
+    "--set"
+    "OSU_EXTERNAL_UPDATE_PROVIDER"
+    "1"
+  ]
+  ++ lib.optionals (nativeWayland && stdenvNoCC.hostPlatform.isLinux) [
+    "--set"
+    "SDL_VIDEODRIVER"
+    "wayland"
+  ];
+
   fixupPhase = ''
     runHook preFixup
 
-    wrapProgram $out/bin/osu! \
-      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
-      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
+    ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      for i in 16 32 48 64 96 128 256 512 1024; do
+        install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
+      done
 
-    for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
-    done
+      ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+      ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ''}
 
-    ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      OSU_CONTENTS="$out/Applications/osu!.app/Contents"
+      mkdir -p "$OSU_CONTENTS/Resources"
+
+      # Keep the published apphost and its companion files beside one another
+      # inside the bundle. This preserves the bundle identity for the process
+      # launched by Launch Services and leaves the CLI path available.
+      mv "$out/lib/osu-lazer" "$OSU_CONTENTS/MacOS"
+      ln -s "$OSU_CONTENTS/MacOS" "$out/lib/osu-lazer"
+
+      # Generate a proper macOS Info.plist (osu.iOS/Info.plist is iOS-only with LSRequiresIPhoneOS)
+      cat > "$OSU_CONTENTS/Info.plist" <<EOF
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0"><dict>
+        <key>CFBundleName</key><string>osu!</string>
+        <key>CFBundleDisplayName</key><string>osu!</string>
+        <key>CFBundleIdentifier</key><string>sh.ppy.osu.lazer</string>
+        <key>CFBundleVersion</key><string>${finalAttrs.version}</string>
+        <key>CFBundleShortVersionString</key><string>${finalAttrs.version}</string>
+        <key>CFBundlePackageType</key><string>APPL</string>
+        <key>CFBundleSignature</key><string>????</string>
+        <key>CFBundleExecutable</key><string>osu!</string>
+        <key>CFBundleIconFile</key><string>AppIcon</string>
+        <key>NSHighResolutionCapable</key><true/>
+        <key>LSMinimumSystemVersion</key><string>11.0</string>
+        <key>CFBundleDocumentTypes</key><array>
+          <dict>
+            <key>CFBundleTypeName</key><string>osu! beatmap</string>
+            <key>CFBundleTypeExtensions</key><array><string>osz</string><string>osk</string></array>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Owner</string>
+          </dict>
+          <dict>
+            <key>CFBundleTypeName</key><string>osu! replay</string>
+            <key>CFBundleTypeExtensions</key><array><string>osr</string></array>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Owner</string>
+          </dict>
+        </array>
+        <key>CFBundleURLTypes</key><array>
+          <dict><key>CFBundleURLSchemes</key><array><string>osu</string><string>osump</string></array><key>CFBundleTypeRole</key><string>Editor</string></dict>
+        </array>
+      </dict></plist>
+      EOF
+
+      icnsify ./assets/lazer.png --output "$OSU_CONTENTS/Resources/AppIcon.icns"
+
+      # Keep the actual apphost in Contents/MacOS so NSBundle resolves the app
+      # identity. Reuse the dotnet hook's runtime environment wrapper, then put
+      # the compiled launcher at CFBundleExecutable for Launch Services.
+      mv "$OSU_CONTENTS/MacOS/osu!" "$OSU_CONTENTS/MacOS/.osu!-wrapped"
+      wrapDotnetProgram \
+        "$OSU_CONTENTS/MacOS/.osu!-wrapped" \
+        "$OSU_CONTENTS/MacOS/.osu!-shell-wrapper"
+      makeBinaryWrapper \
+        "$OSU_CONTENTS/MacOS/.osu!-shell-wrapper" \
+        "$OSU_CONTENTS/MacOS/osu!"
+    ''}
 
     runHook postFixup
   '';
@@ -117,11 +198,9 @@ buildDotnetModule (finalAttrs: {
       gepbird
       thiagokokada
       Guanran928
+      philocalyst
     ];
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "osu!";
   };
 })
