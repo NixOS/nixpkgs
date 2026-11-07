@@ -8,11 +8,13 @@
   go,
   perl,
   rust-bindgen,
+  versionCheckHook,
   testers,
   nix-update-script,
   aws-lc,
   writableTmpDirAsHomeHook,
   runCommand,
+  enableTests ? true,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
   withRustBindings ? true,
   symbolPrefix ? "AWS_LC",
@@ -22,6 +24,7 @@
 
 let
   aws-lc' = aws-lc.override {
+    enableTests = false;
     useSharedLibraries = false;
     symbolPrefix = null;
   };
@@ -44,7 +47,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "5.12.0";
+  version = "5.13.0";
 
   patches = [
     ./fix-dynamic-loading-test.patch
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aws";
     repo = "aws-lc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O+0UG6Zk6U9b73B9qDSZ9aC32WL1anJIgH0TRgVpONI=";
+    hash = "sha256-O7wghkubdB9RoIOH9cKvpTqk1rU8y6LnH9hFdp+2ZVU=";
   };
 
   outputs = [
@@ -111,8 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BORINGSSL_PREFIX_SYMBOLS" (toString symbols))
   ];
 
-  doCheck = true;
+  doCheck = enableTests;
   checkTarget = "run_tests";
+  preCheck = "export AWS_LC_NUM_TEST_WORKERS=$NIX_BUILD_CORES";
 
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
@@ -122,30 +126,14 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/rust "$dev"
   '';
 
-  # AWS-LC's generated *-targets.cmake files hardcode _IMPORT_PREFIX to $out
-  # and set INTERFACE_INCLUDE_DIRECTORIES to "$out/include", but headers live
-  # in $dev/include under multi-output splitting. Clear the broken claim so
-  # consumers fall back to stdenv's normal include-path propagation via
-  # buildInputs (which correctly resolves to $dev/include).
-  postFixup = ''
-    for f in $out/lib/{crypto,ssl}/cmake/*/*-targets.cmake; do
-      substituteInPlace "$f" \
-        --replace-fail \
-          'INTERFACE_INCLUDE_DIRECTORIES "\$<\$<BOOL:1>:>;''${_IMPORT_PREFIX}/include"' \
-          'INTERFACE_INCLUDE_DIRECTORIES ""'
-    done
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "aws-lc-bssl version";
-      };
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
