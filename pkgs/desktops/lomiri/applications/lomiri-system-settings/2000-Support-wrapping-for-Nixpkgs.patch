@@ -87,10 +87,10 @@ index 0f5133ce..e2f0bf84 100644
          searchPaths.append(dir.entryInfoList());
      }
 diff --git a/src/plugin.cpp b/src/plugin.cpp
-index 133821af..6a1a152c 100644
+index 133821af..0bcdf384 100644
 --- a/src/plugin.cpp
 +++ b/src/plugin.cpp
-@@ -36,9 +36,16 @@
+@@ -36,9 +36,20 @@
  #include <LomiriSystemSettings/ItemBase>
  #include <LomiriSystemSettings/PluginInterface>
  
@@ -101,14 +101,18 @@ index 133821af..6a1a152c 100644
 -static const QLatin1String pluginModuleDir{PLUGIN_MODULE_DIR};
 +const QLatin1String getWrapperPrefix()
 +{
-+    const QLatin1String pluginWrapperPrefix {qEnvironmentVariableIsSet("NIX_LSS_PREFIX") ? qgetenv("NIX_LSS_PREFIX") : NIX_FALLBACK_PREFIX};
++    const QLatin1String pluginWrapperPrefix {
++        qEnvironmentVariableIsSet("NIX_LSS_PREFIX")
++        ? qgetenv("NIX_LSS_PREFIX")
++        : NIX_FALLBACK_PREFIX
++    };
 +    return pluginWrapperPrefix;
 +}
 +static const QLatin1String pluginModuleDirRelative{NIX_PLUGIN_MODULE_DIR_RELATIVE};
  static const QLatin1String pluginQmlDir{QML_DIR};
  
  namespace LomiriSystemSettings {
-@@ -89,6 +96,11 @@ PluginPrivate::PluginPrivate(Plugin *q, const QFileInfo &manifest):
+@@ -89,6 +100,11 @@ PluginPrivate::PluginPrivate(Plugin *q, const QFileInfo &manifest):
  
      m_data = json.toVariant().toMap();
      m_dataPath = manifest.absolutePath();
@@ -120,7 +124,7 @@ index 133821af..6a1a152c 100644
  }
  
  bool PluginPrivate::ensureLoaded() const
-@@ -110,8 +122,11 @@ bool PluginPrivate::ensureLoaded() const
+@@ -110,8 +126,11 @@ bool PluginPrivate::ensureLoaded() const
          ctx->contextProperty("mountPoint").value<QByteArray>() :
          "";
  
@@ -134,34 +138,34 @@ index 133821af..6a1a152c 100644
      m_loader.setFileName(name);
      if (Q_UNLIKELY(!m_loader.load())) {
 diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
-index c10b2e2d..a998b641 100644
+index 09ce558b..2a7fb888 100644
 --- a/tests/CMakeLists.txt
 +++ b/tests/CMakeLists.txt
-@@ -9,13 +9,23 @@ include_directories(
- set(XVFB_CMD xvfb-run -a -s "-screen 0 640x480x24")
+@@ -10,6 +10,12 @@ function(add_qml_test qmlfile)
+     )
+ endfunction()
  
- add_definitions(-DI18N_DOMAIN="lomiri-system-settings")
--add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR="${PLUGIN_PRIVATE_MODULE_DIR}")
--add_definitions(-DPLUGIN_MODULE_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-+
-+add_definitions(-DNIX_FALLBACK_PREFIX="${CMAKE_CURRENT_BINARY_DIR}")
-+
 +add_definitions(-DI18N_DIRECTORY=do_not_use_me)
-+add_definitions(-DNIX_I18N_DIRECTORY_RELATIVE="")
 +add_definitions(-DPLUGIN_PRIVATE_MODULE_DIR=do_not_use_me)
-+add_definitions(-DNIX_PLUGIN_PRIVATE_MODULE_DIR_RELATIVE="")
 +add_definitions(-DPLUGIN_MODULE_DIR=do_not_use_me)
-+add_definitions(-DNIX_PLUGIN_MODULE_DIR_RELATIVE="")
 +add_definitions(-DPLUGIN_MANIFEST_DIR=do_not_use_me)
-+add_definitions(-DNIX_PLUGIN_MANIFEST_DIR_RELATIVE="../../tests/data")
 +add_definitions(-DPLUGIN_QML_DIR=do_not_use_me)
-+add_definitions(-DNIX_PLUGIN_QML_DIR_RELATIVE="")
 +
- add_definitions(-DMANIFEST_DIR="data")
--add_definitions(-DPLUGIN_MANIFEST_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
- add_definitions(-DQML_TEST_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
- add_definitions(-DQML_DIR="${CMAKE_CURRENT_BINARY_DIR}")
--add_definitions(-DPLUGIN_QML_DIR="${CMAKE_CURRENT_BINARY_DIR}")
- add_definitions(-DSYSTEM_IMAGE_DBUS_TEMPLATE="${CMAKE_SOURCE_DIR}/tests/autopilot/lomiri_system_settings/tests/systemimage.py")
+ add_subdirectory(mocks)
  
- add_library(test-plugin SHARED test-plugin.cpp test-plugin.h)
+ add_subdirectory(arguments)
+diff --git a/tests/plugin_manager/CMakeLists.txt b/tests/plugin_manager/CMakeLists.txt
+index 6f843986..9e22eefa 100644
+--- a/tests/plugin_manager/CMakeLists.txt
++++ b/tests/plugin_manager/CMakeLists.txt
+@@ -21,7 +21,9 @@ target_include_directories(tst_plugins PRIVATE
+ )
+ target_compile_definitions(tst_plugins PRIVATE
+     MANIFEST_DIR="data"
+-    PLUGIN_MODULE_DIR="${CMAKE_CURRENT_BINARY_DIR}"
++    NIX_FALLBACK_PREFIX="${CMAKE_CURRENT_BINARY_DIR}"
++    NIX_I18N_DIRECTORY_RELATIVE=""
++    NIX_PLUGIN_MODULE_DIR_RELATIVE=""
+     QML_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+ target_link_libraries(tst_plugins Qt::Core Qt::Qml Qt::Test LomiriSystemSettings ${GLIB_LDFLAGS})
+ add_test(tst_plugins tst_plugins)
