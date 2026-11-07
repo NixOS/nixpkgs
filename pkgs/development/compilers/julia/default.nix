@@ -12,11 +12,14 @@ let
 
   wrapJulia =
     julia:
-    julia.overrideAttrs (oldAttrs: {
-      passthru = (oldAttrs.passthru or { }) // {
-        withPackages = juliaWithPackages.override { inherit julia; };
-      };
-    });
+    julia.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          bundledDepot = "${finalAttrs.finalPackage}/share/julia";
+          withPackages = juliaWithPackages.override { julia = finalAttrs.finalPackage; };
+        };
+      }
+    );
 
 in
 
