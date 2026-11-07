@@ -29,7 +29,7 @@ buildGoLatestModule (
   in
   {
     pname = "dux-shell";
-    version = "2.1.0";
+    version = "2.1.1";
 
     __structuredAttrs = true;
 
@@ -38,12 +38,12 @@ buildGoLatestModule (
       repo = "dux-shell";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-Qp3Md/8UWjzUdC78IbgwKABY+1F2sOGmzWwavWEVS3o=";
+      hash = "sha256-up4L+ETx/igTj8c6gPGkSBr9W602/ck2DUNGNqaIQB8=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";
 
-    vendorHash = "sha256-TZVq/BHFu6brw8MMdGDZWUiZUxtjNjKRKxR8SSV7W50=";
+    vendorHash = "sha256-VP9hmrJwlnjISkLGPjn5Qd7DTbnZrv0KqlgclzXE1Bw=";
 
     tags = [ "withshell" ];
 
