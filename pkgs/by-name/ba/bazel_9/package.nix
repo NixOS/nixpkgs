@@ -29,7 +29,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "9.2.0",
+  version ? "9.3.2",
 }:
 
 let
@@ -90,7 +90,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-sL6fIV2K/00nx1+SrQTWnsPqfg6amHx4053UZNwgg0o=";
+    hash = "sha256-LfryPPv6H5uDKS7sAy0zh4wZu+u+3FkXoJdyqdOGDwQ=";
     stripRoot = false;
   };
 
@@ -297,10 +297,11 @@ stdenv.mkDerivation rec {
     #       to disassemble Jar (slow) or hardcode known references
     mkdir -p $out/nix-support
     INSTALL_BASE=$(./output/bazel --batch info install_base)
-    find "$INSTALL_BASE" -type f -exec \
-       ${gnugrep}/bin/grep --text --only-matching --no-filename "$NIX_STORE/[^/]*" '{}' \; \
-    | sort -u >> $out/nix-support/depends
-
+    {
+      find "$INSTALL_BASE" -type f -exec \
+        ${gnugrep}/bin/grep --text --only-matching --no-filename "$NIX_STORE/[^/]*" '{}' \;
+      unzip -p "$INSTALL_BASE/A-server.jar" | ${gnugrep}/bin/grep --text --only-matching "$NIX_STORE/[^/]*"
+    } | sort -u >> $out/nix-support/depends
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel if
