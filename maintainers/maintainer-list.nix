@@ -26541,6 +26541,12 @@
     githubId = 12714892;
     name = "Thomas Jasny";
   };
+  scratch-net = {
+    email = "telego.support@proton.me";
+    github = "Scratch-net";
+    githubId = 7219414;
+    name = "Alex";
+  };
   screendriver = {
     email = "nix@echooff.de";
     github = "screendriver";
