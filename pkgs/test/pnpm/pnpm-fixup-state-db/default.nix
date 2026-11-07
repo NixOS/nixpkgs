@@ -19,5 +19,5 @@ testers.runCommand {
     cp ./store/index.db $out
   '';
 
-  hash = "sha256-tjpKgdMvDcs0X65PENIsiHELYPzVupEH3jS4PyLsF40=";
+  hash = "sha256-BgIrbZRsJQJP8pEpCUsz7193zYW5eje0kE5jMgaSbw8=";
 }
