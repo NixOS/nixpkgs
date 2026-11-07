@@ -2998,7 +2998,7 @@ mapAliases {
   xhtml1 = throw "'xhtml1' has been removed because it was superseded in 2018"; # Added 2026-07-24
   xhyve = throw "'xhyve' has been removed because x86_64-darwin is no longer supported"; # Added 2026-10-26
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
-  xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
+  xjump = throw "'xjump' has been removed as it is unmaintained, consider using its reimplementation xjump-sdl"; # Added 2025-08-22
   xkeyboardconfig = xkeyboard-config; # Added 2026-02-04
   xkeyboardconfig_custom = xkeyboard-config_custom; # Added 2026-01-19
   xloadimage = throw "'xloadimage' has been removed as it was unmaintained upstream"; # Added 2026-05-05
