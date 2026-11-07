@@ -89,6 +89,10 @@ buildGoModule (finalAttrs: {
     hash = "sha256-NIYOIc0Q7FLLKZCKVhCfGSojbS3Rux8dxPg6Mq0A/cs=";
   };
 
+  patches = lib.optionals (componentName == "combined") [
+    ./auth-dex-config.patch
+  ];
+
   overrideModAttrs = final: prev: {
     # override output name so that we don't download the same modules every time
     # for every component of the monorepo
