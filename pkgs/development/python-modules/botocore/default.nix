@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt botocore/cacert.pem
+    cat ${./system-ca-bundle.py} >> botocore/httpsession.py
   '';
 
   build-system = [
