@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   mullvad,
-  nodejs_22,
   replaceVars,
   electron,
   copyDesktopItems,
@@ -17,7 +16,6 @@ buildNpmPackage (finalAttrs: {
   pname = "mullvad-vpn";
   inherit (mullvad) src version;
 
-  nodejs = nodejs_22;
   npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
 
   __structuredAttrs = true;

@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "mc-monitor";
-  version = "1.18.2";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "itzg";
     repo = "mc-monitor";
     tag = finalAttrs.version;
-    hash = "sha256-juHtv/6IAueimFul0LdhrWUnomfhhWmiMp2gK0/MfT8=";
+    hash = "sha256-0BOoCgIP/T0uFZza3VBjS5FxlGQQVx1JIZiRN1Aemp4=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-kbhQVMu7RZ5R2prQ5yVeIFA/QXl/vRwRdWGNlHkUg3A=";
+  vendorHash = "sha256-eH+QGA2lcNGy9RngZr7HYYRP6pcUHJdmKm7SmNUKlJk=";
 
   # Upstream tests require network access
   doCheck = false;
