@@ -2724,6 +2724,8 @@ self: super: with self; {
 
   broadlink = callPackage ../development/python-modules/broadlink { };
 
+  broadlink-async = callPackage ../development/python-modules/broadlink-async { };
+
   brother = callPackage ../development/python-modules/brother { };
 
   brother-ql-next = callPackage ../development/python-modules/brother-ql-next { };
