@@ -38,10 +38,6 @@ buildNpmPackage {
 
   patches = [ ./fix-paths.patch ];
 
-  postPatch = ''
-    substituteInPlace public/utils.js --replace-fail KOPIA ${lib.getExe kopia}
-  '';
-
   buildPhase = ''
     runHook preBuild
     cp -r ${electron.dist} electron-dist
@@ -60,7 +56,7 @@ buildNpmPackage {
     cp -r ../dist/kopia-ui/*-unpacked/{locales,resources{,.pak}} $out/share/kopia
     install -Dm644 $src/icons/kopia.svg $out/share/icons/hicolor/scalable/apps/kopia.svg
     makeWrapper ${lib.getExe electron} $out/bin/kopia-ui \
-      --prefix PATH : ${lib.makeBinPath [ kopia ]} \
+      --set-default KOPIA_EXECUTABLE ${lib.getExe kopia} \
       --add-flags $out/share/kopia/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
