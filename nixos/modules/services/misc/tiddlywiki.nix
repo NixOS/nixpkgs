@@ -10,7 +10,7 @@ let
   listenParams = lib.concatStrings (
     lib.mapAttrsToList (n: v: " '${n}=${toString v}' ") cfg.listenOptions
   );
-  exe = lib.getExe pkgs.tiddlywiki;
+  exe = lib.getExe cfg.package;
   name = "tiddlywiki";
   dataDir = "/var/lib/" + name;
 
@@ -20,6 +20,8 @@ in
   options.services.tiddlywiki = {
 
     enable = lib.mkEnableOption "TiddlyWiki nodejs server";
+
+    package = lib.mkPackageOption pkgs "tiddlywiki" { };
 
     listenOptions = lib.mkOption {
       type = lib.types.attrs;
