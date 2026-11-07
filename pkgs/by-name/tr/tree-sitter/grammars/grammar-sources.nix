@@ -214,9 +214,9 @@
   };
 
   c3 = {
-    version = "0.11.0";
+    version = "0.13.0";
     url = "github:c3lang/tree-sitter-c3";
-    hash = "sha256-EADHh63Sf4VlffQX3gH/9kodiws4lQsG+cyMwg1dFp8=";
+    hash = "sha256-qQgAMK2BmE2w1MgzJvLqJq0C22yEGWEF3E9D+kl60xU=";
     excludeBrokenTreeSitterJson = true;
     meta.license = lib.licenses.mit;
   };
