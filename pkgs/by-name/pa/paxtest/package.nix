@@ -38,10 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "DESTDIR=\"\"" ];
 
   meta = {
-    description = "Test various memory protection measures";
+    description = "Memory protection and randomization tests";
+    homepage = "https://github.com/opensrcsec/paxtest";
+    changelog = "https://github.com/opensrcsec/paxtest/blob/${finalAttrs.src.tag}/ChangeLog";
     mainProgram = "paxtest";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
