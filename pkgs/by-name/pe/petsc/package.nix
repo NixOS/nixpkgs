@@ -91,7 +91,7 @@ let
     blas = self.callPackage blas.override { };
     lapack = self.callPackage lapack.override { };
     hdf5 = self.callPackage hdf5.override {
-      fortran = gfortran;
+      inherit gfortran;
       cppSupport = !mpiSupport;
     };
     metis = self.callPackage metis.override { };
