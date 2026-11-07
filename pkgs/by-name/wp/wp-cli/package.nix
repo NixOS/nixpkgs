@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   formats,
+  buildEnv,
   installShellFiles,
   makeWrapper,
   versionCheckHook,
@@ -56,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm444 ${finalAttrs.src} $out/share/wp-cli/wp-cli.phar
-    install -Dm444 ${ini}            $out/etc/${ini.name}
+    install -Dm444 ${ini}            $out/share/wp-cli/${ini.name}
     installShellCompletion --bash --name wp ${completion}
 
     makeWrapper ${lib.getExe php} $out/bin/${finalAttrs.meta.mainProgram} \
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       --run 'export WP_CLI_CONFIG_PATH=''${WP_CLI_CONFIG_PATH-"$XDG_CONFIG_HOME/wp-cli"}' \
       --run 'export WP_CLI_PACKAGES_DIR=''${WP_CLI_PACKAGES_DIR-"$XDG_DATA_HOME/wp-cli"}' \
       --run 'export WP_CLI_CACHE_DIR=''${WP_CLI_CACHE_DIR-"$XDG_CACHE_HOME/wp-cli"}' \
-      --add-flags "-c $out/etc/${ini.name}" \
+      --add-flags "-c $out/share/wp-cli/${ini.name}" \
       --add-flags "-f $out/share/wp-cli/wp-cli.phar" \
       --add-flags "--"
 
@@ -83,6 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit completion;
+
+    tests.with-php = buildEnv {
+      name = "wp-cli-with-php";
+      paths = [
+        finalAttrs.finalPackage
+        php
+      ];
+    };
+
     updateScript = writeScript "update-wp-cli" ''
       ${lib.getExe nix-update}
       version=$(nix-instantiate --eval -E "with import ./. {}; wp-cli.version or (lib.getVersion wp-cli)" | tr -d '"')
