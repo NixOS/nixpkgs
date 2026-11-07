@@ -19372,6 +19372,8 @@ self: super: with self; {
 
   sjcl = callPackage ../development/python-modules/sjcl { };
 
+  skan = callPackage ../development/python-modules/skan { };
+
   skein = callPackage ../development/python-modules/skein { };
 
   skggm = callPackage ../development/python-modules/skggm { };
