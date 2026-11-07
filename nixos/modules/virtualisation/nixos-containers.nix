@@ -369,6 +369,37 @@ let
           type = types.bool;
           description = "Determine whether the mounted path will be accessed in read-only mode.";
         };
+        idMapping = mkOption {
+          default = "noidmap";
+          type = types.enum [
+            "noidmap"
+            "idmap"
+            "rootidmap"
+            "owneridmap"
+          ];
+          description = ''
+            ID mapping applied to this bind mount, passed as a mount option
+            to the generated `--bind=`/`--bind-ro=` flag. Using anything other
+            than `noidmap` requires support for ID mapped mounts by the source
+            filesystem.
+
+            Only relevant when `privateUsers` is enabled; otherwise container
+            UIDs/GIDs equal host UIDs/GIDs. By default (`noidmap`) host files
+            not owned by an ID in the container's range show up as
+            `nobody:nogroup`.
+
+            - `noidmap`: no ID mapping. Container ID `z` maps to host ID
+              `x + z`, with `x` being the container's UID/GID range offset.
+            - `idmap`: container ID `z` maps to the same host ID `z`. This is
+              the recommended option for most purposes.
+            - `rootidmap`: container root (ID 0) maps to the owner of the
+              bind mount source on the host.
+            - `owneridmap`: the owner of the target directory inside the
+              container maps to the owner of the bind mount source on the host.
+
+            See the "Mount Options" section of {manpage}`systemd-nspawn(1)` for details.
+          '';
+        };
       };
 
       config = {
@@ -403,9 +434,11 @@ let
     d:
     let
       flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
-      mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
+      idMappingSuffix = optionalString (d.idMapping != "noidmap") ":${d.idMapping}";
+      # Mount options are only valid in the `source:destination:options` triple form
+      mountstr = "${if d.hostPath != null then d.hostPath else d.mountPoint}:${d.mountPoint}";
     in
-    flagPrefix + mountstr;
+    flagPrefix + mountstr + idMappingSuffix;
 
   mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
 
