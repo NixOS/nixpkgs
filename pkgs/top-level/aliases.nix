@@ -1769,6 +1769,7 @@ mapAliases {
   mailnag = throw "mailnag has been removed because it has been marked as broken since 2022."; # Added 2025-10-12
   mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
   makeOverridable = warnAlias "'makeOverridable' has been removed from pkgs, use `lib.makeOverridable` instead" lib.makeOverridable; # Added 2025-10-30
+  mallard-ducktype = throw "mallard-ducktype has been removed, as it has been unmaintained upstream since 2019 and is broken"; # Added 2026-11-07
   manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
   mangowc = mango; # Added 2026-06-23
   manrope = throw "'manrope' has been removed because its source has been pulled"; # Added 2025-12-20
