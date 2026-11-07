@@ -3,8 +3,8 @@
   python3,
   python3Packages,
   fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
+  wrapGAppsHook4,
+  gtk4,
   gobject-introspection,
   libappindicator,
   librsvg,
@@ -16,29 +16,29 @@
   libusb1,
   udev,
   udevCheckHook,
-  gtk-layer-shell,
+  gtk4-layer-shell,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sc-controller";
-  version = "0.7.2";
+  version = "1.0.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sp7sds+FoAOaSCwJuTxCijO5ZIU4JXhL47MGbAf/k1s=";
+    hash = "sha256-ZrKimU9Dc3rdQ4EW+SzSu3PD+kybmXg2MBeRdASdo1w=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook3
+    wrapGAppsHook4
     gobject-introspection
     udevCheckHook
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     libappindicator
     librsvg
   ];
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ioctl-opt
     ]
     ++ [
-      gtk-layer-shell
+      gtk4-layer-shell
       python3Packages.libusb1
     ];
 
@@ -63,12 +63,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.toml
   ];
 
-  patches = [ ./scc_osd_keyboard.patch ];
-
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
+    substituteInPlace scc/gui/app.py --replace /lib /run/current-system/kernel-modules/lib
+    substituteInPlace scc/version.py --replace 0.0.0+unknown ${finalAttrs.version}
   '';
 
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -78,6 +78,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libusb1
     udev
     bluez
+    gtk4-layer-shell
   ];
 
   preFixup = ''
