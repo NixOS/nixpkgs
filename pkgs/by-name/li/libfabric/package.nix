@@ -6,9 +6,14 @@
   autoreconfHook,
   enablePsm2 ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux),
   libpsm2,
-  enableOpx ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux),
+  enableOpx ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux && !cudaSupport),
   libuuid,
   numactl,
+  rdma-core,
+  enableEfa ? stdenv.hostPlatform.isLinux,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,11 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
       libuuid
       numactl
     ]
-    ++ lib.optionals enablePsm2 [ libpsm2 ];
+    ++ lib.optionals enablePsm2 [ libpsm2 ]
+    ++ lib.optionals enableEfa [ rdma-core ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        cuda_nvml_dev
+      ]
+    );
 
   configureFlags = [
-    (if enablePsm2 then "--enable-psm2=${libpsm2}" else "--disable-psm2")
-    (if enableOpx then "--enable-opx" else "--disable-opx")
+    (lib.enableFeatureAs enablePsm2 "psm2" libpsm2)
+    (lib.enableFeature enableOpx "opx")
+    (lib.enableFeature enableEfa "efa")
+    (lib.enableFeature cudaSupport "cuda-dlopen")
+    (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
   ];
 
   meta = {
