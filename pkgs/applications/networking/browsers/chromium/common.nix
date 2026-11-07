@@ -228,6 +228,8 @@ let
 
     inherit (_crubit) version cargoHash;
 
+    __structuredAttrs = true;
+
     src = fetchFromGitiles {
       url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
       # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/update_rust.py#48
@@ -273,6 +275,8 @@ let
   gnrt = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "gnrt";
     version = "0-unstable";
+
+    __structuredAttrs = true;
 
     # TODO: Rework how chromium and electron pass src to gnrt or offload gnrt entirely
     src = upstream-info.gclientDeps."src".path or chromiumDeps."src";
@@ -323,6 +327,8 @@ let
   esbuild = buildGoModule (finalAttrs: {
     pname = "esbuild";
     inherit (_esbuild) version;
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "evanw";
