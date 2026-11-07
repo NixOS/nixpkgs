@@ -8,6 +8,7 @@
   go,
   perl,
   rust-bindgen,
+  versionCheckHook,
   testers,
   nix-update-script,
   aws-lc,
@@ -125,16 +126,14 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/rust "$dev"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "aws-lc-bssl version";
-      };
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
