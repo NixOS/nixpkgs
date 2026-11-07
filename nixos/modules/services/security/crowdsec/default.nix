@@ -881,6 +881,18 @@ in
                 "crowdsec-setup.service"
               ];
 
+              reloadTriggers = [
+                cfg.user
+                cfg.group
+                cfg.package
+                cfg.extraGroups
+                cfg.name
+                cfg.readOnlyPaths
+
+                (builtins.toJSON cfg.hub)
+                (builtins.toJSON cfg.settings)
+              ];
+
               environment = {
                 LANG = "C";
                 LC_ALL = "C";
