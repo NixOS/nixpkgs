@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awscurl";
-  version = "0.44";
+  version = "0.45";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "okigan";
     repo = "awscurl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XMPvAQ7O42HCdVHABe9GENNLIKrYzrpCdfh7dcym2Y8=";
+    hash = "sha256-hOFlARS6aWXgvwSGMw+Z6/Mpjy1xoC2Cbz054P9Qsfo=";
   };
 
   build-system = with python3Packages; [
