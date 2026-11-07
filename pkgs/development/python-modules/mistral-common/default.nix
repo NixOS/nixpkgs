@@ -39,7 +39,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.12.0";
+  version = "1.13.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XrSlPG7t1BJ+kcoMlZMwVRnKfNS656GlnatebgapRMY=";
+    hash = "sha256-BUX9ZkitJnqaFipMozFPOYvxhuxj9eOmemYyrYUD+Hg=";
   };
 
   build-system = [
