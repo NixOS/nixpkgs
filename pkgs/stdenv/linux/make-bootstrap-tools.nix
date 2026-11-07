@@ -59,6 +59,7 @@ rec {
   bootGCC = pkgs.gcc.cc.override {
     enableLTO = false;
     isl = null;
+    enableHostPie = pkgs.lib.versionAtLeast pkgs.gcc.cc.version "14";
   };
 
   bootBinutils = pkgs.binutils.bintools.override {
