@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   redisTestHook,
 
   hatchling,
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytest9_1CheckHook
     redisTestHook
     valkey
   ];
