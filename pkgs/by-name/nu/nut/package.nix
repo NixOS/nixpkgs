@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
       libmodbus = "${modbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
+
+    ./hardcode-systemd-analyze.patch
   ];
 
   buildInputs = [
