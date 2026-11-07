@@ -67,11 +67,9 @@ in
         --nut.server=${cfg.nutServer} \
         --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" \
         ${optionalString (cfg.nutUser != "") "--nut.username=${cfg.nutUser}"} \
-        ${
-          optionalString (
-            cfg.nutVariables != [ ]
-          ) "--nut.vars_enable=${concatStringsSep "," cfg.nutVariables}"
-        } \
+        "--nut.vars_enable=${
+          if cfg.nutVariables != [ ] then (concatStringsSep "," cfg.nutVariables) else " "
+        }" \
         ${concatStringsSep " " cfg.extraFlags}
     '';
   };
