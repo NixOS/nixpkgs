@@ -102,10 +102,13 @@ rec {
 
     dependencies = with python3Packages; [
       aw-core
-      qt6.qtbase
-      qt6.qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
+    ];
+
+    buildInputs = [
+      qt6.qtbase
+      qt6.qtsvg # Rendering icons in the trayicon menu
     ];
 
     nativeBuildInputs = [
