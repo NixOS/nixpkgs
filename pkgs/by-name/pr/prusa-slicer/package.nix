@@ -22,7 +22,7 @@
   hidapi,
   libpng,
   mpfr,
-  nanosvg,
+  nanosvg-fltk,
   nlopt,
   nlohmann_json,
   opencascade-occt_7_6_1,
@@ -41,25 +41,7 @@
   udevCheckHook,
   z3,
   nix-update-script,
-  wxGTK-override ? null,
-  opencascade-override ? null,
 }:
-let
-  nanosvg-fltk = nanosvg.overrideAttrs (old: {
-    pname = "nanosvg-fltk";
-    version = "unstable-2022-12-22";
-
-    src = fetchFromGitHub {
-      owner = "fltk";
-      repo = "nanosvg";
-      rev = "abcd277ea45e9098bed752cf9c6875b533c0892f";
-      hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
-    };
-  });
-  wxGTK-override' = if wxGTK-override == null then wxwidgets_3_2 else wxGTK-override;
-  opencascade-override' =
-    if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
-in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
   version = "2.9.6";
@@ -73,7 +55,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     rev = "version_${finalAttrs.version}";
   };
 
-  # only applies to prusa slicer because super-slicer overrides *all* patches
   patches = [
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
@@ -85,8 +66,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./catch2_3_15.patch
   ];
 
-  # (not applicable to super-slicer fork)
-  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") (
+  postPatch = (
     # Patch required for GCC 14, but breaks on clang
     lib.optionalString clangStdenv.cc.isGNU ''
       substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
@@ -117,7 +97,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wrapGAppsHook3
-    wxGTK-override'
+    wxwidgets_3_2
     udevCheckHook
   ];
 
@@ -141,11 +121,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     mpfr
     nanosvg-fltk
     nlopt
-    opencascade-override'
+    opencascade-occt_7_6_1
     openvdb
     qhull
     onetbb
-    wxGTK-override'
+    wxwidgets_3_2
     libx11
     libbgcode
     heatshrink
@@ -198,9 +178,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     fi
 
     # Fix resources folder location on macOS
-    substituteInPlace src/${
-      if finalAttrs.pname == "prusa-slicer" then "CLI/Setup.cpp" else "PrusaSlicer.cpp"
-    } \
+    substituteInPlace src/CLI/Setup.cpp \
       --replace-fail "#ifdef __APPLE__" "#if 0"
   '';
 
