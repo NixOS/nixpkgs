@@ -3100,6 +3100,11 @@
     githubId = 22575913;
     name = "Anish Lakhwara";
   };
+  ayush5harma = {
+    name = "Ayush Sharma";
+    github = "ayush5harma";
+    githubId = 47772616;
+  };
   ayushthoren = {
     email = "ayushthoren@gmail.com";
     github = "ayushthoren";
