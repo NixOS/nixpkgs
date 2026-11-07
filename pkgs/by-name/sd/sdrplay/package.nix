@@ -6,12 +6,12 @@
 }:
 
 let
-  version = "3.15.1";
+  version = "3.15.2";
 
   sources = rec {
     x86_64-linux = {
       url = "https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-${version}.run";
-      hash = "sha256-CTcyv10Xz9G2LqHh4qOW9tKBEcB+rztE2R7xJIU4QBQ=";
+      hash = "sha256-OpfKdkJju+dvsPIiDmQIlCNX6IZMGeFAim1ph684L+M=";
     };
 
     aarch64-darwin = {
@@ -20,6 +20,8 @@ let
     };
 
     aarch64-linux = x86_64-linux;
+
+    armv7l-linux = x86_64-linux;
   };
 
   platforms = lib.attrNames sources;
