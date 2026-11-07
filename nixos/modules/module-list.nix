@@ -1303,6 +1303,7 @@
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/iscsi/initiator.nix
   ./services/networking/iscsi/target.nix
+  ./services/networking/isponsorblocktv.nix
   ./services/networking/ivpn.nix
   ./services/networking/iwd.nix
   ./services/networking/jibri/default.nix
