@@ -354,8 +354,6 @@ lib.extendMkDerivation {
           (
             finalAttrs ? "pname"
             && finalAttrs ? "version"
-            # We don't care about the METADATA of Python applications.
-            && isPythonModule finalAttrs.passthru
             # METADATA is unlikely to be correct if pyproject is false or null.
             && pyproject == true
             && !isBootstrapPackage
