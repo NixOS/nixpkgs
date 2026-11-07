@@ -255,6 +255,7 @@ pipe
           exit 1
         fi
       ''
+      + optionalString (stdenv.hostPlatform.system == "x86_64-linux") "# FIXME: temporary force-rebuild"
       # This should kill all the stdinc frameworks that gcc and friends like to
       # insert into default search paths.
       + optionalString hostPlatform.isDarwin ''

@@ -117,6 +117,8 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
+
+    ./split-prefix.patch
   ];
 
   postPatch = ''
@@ -134,12 +136,6 @@ qtModule {
 
     substituteInPlace cmake/Functions.cmake \
       --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
-
-    # Patch library paths in sources
-    substituteInPlace src/core/web_engine_library_info.cpp \
-      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
 
     substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
