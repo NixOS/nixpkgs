@@ -1,0 +1,6 @@
+[project]
+name = "mrs-update-script"
+version = "1.0.0"
+
+[project.scripts]
+mrs-update-script = "updater:main"
