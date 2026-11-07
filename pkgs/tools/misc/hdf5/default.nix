@@ -8,7 +8,7 @@
   removeReferencesTo,
   cppSupport ? true,
   fortranSupport ? false,
-  fortran,
+  gfortran,
   zlibSupport ? true,
   zlib,
   szipSupport ? true,
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     inherit
       cppSupport
       fortranSupport
-      fortran
       zlibSupport
       zlib
       szipSupport
@@ -64,6 +63,7 @@ stdenv.mkDerivation rec {
       mpiSupport
       mpi
       ;
+    fortran = gfortran;
   };
 
   outputs = [
@@ -77,10 +77,10 @@ stdenv.mkDerivation rec {
     cmake
   ]
   ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-  ++ optional fortranSupport fortran;
+  ++ optional fortranSupport gfortran;
 
   buildInputs =
-    optional fortranSupport fortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
+    optional fortranSupport gfortran ++ optional szipSupport libaec ++ optional javaSupport jdk;
 
   propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     mv $out/mod/shared $dev/include
     rm -r $out/mod
 
-    find "$out" -type f -exec remove-references-to -t ${fortran} '{}' +
+    find "$out" -type f -exec remove-references-to -t ${gfortran} '{}' +
   '';
 
   enableParallelBuilding = true;
