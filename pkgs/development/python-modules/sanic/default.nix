@@ -36,8 +36,12 @@ buildPythonPackage rec {
     hash = "sha256-0P5UyLi9W5maoR1EpRxfhysckDWpjgmqndgxsVHm47c=";
   };
 
-  # test compat for testing with pytest-asyncio
-  patches = [ ./pytest9-compat.patch ];
+  patches = [
+    # test compat for testing with pytest-asyncio
+    ./pytest9-compat.patch
+    # api compat with aioquic 1.7
+    ./aioquic-1.7-compat.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -53,6 +57,8 @@ buildPythonPackage rec {
     uvloop
     websockets
   ];
+
+  pythonRelaxDeps = [ "multidict" ];
 
   optional-dependencies = {
     ext = [ sanic-ext ];
