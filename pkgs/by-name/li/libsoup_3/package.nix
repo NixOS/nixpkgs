@@ -91,8 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: For some reason the pkg-config setup hook does not pick this up.
   env.PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
-  # HSTS tests fail.
-  doCheck = false;
+  # the darwin sandbox does not allow the protocols required for many of these tests
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  disabledTests = [
+    "hsts-test"
+    "hsts-db-test"
+  ];
+
   separateDebugInfo = true;
 
   postPatch = ''
