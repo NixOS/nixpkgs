@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "odl-renderer";
-  version = "0.5.12";
+  version = "0.5.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenDisplay";
     repo = "odl-renderer";
     tag = "odl-renderer-v${finalAttrs.version}";
-    hash = "sha256-3XTP5ymW6kbNnBQV9UysCG2O4gqQ6+4TmrIpTiu7JJ0=";
+    hash = "sha256-ho6UW+P3nKyxCQVF8GtGTuJ18Sk0UtUjx2ZK2nFTi8M=";
   };
 
   build-system = [
