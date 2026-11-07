@@ -22,6 +22,8 @@ let
     )
   );
 
+  opsFile = pkgs.writeText "ops.json" (builtins.toJSON (lib.attrValues cfg.ops));
+
   cfgToString = v: if builtins.isBool v then lib.boolToString v else toString v;
 
   serverPropertiesFile = pkgs.writeText "server.properties" (
@@ -61,6 +63,12 @@ let
       cfg.serverProperties."query.port" or 25565
     else
       null;
+
+  minecraftUUID =
+    lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    // {
+      description = "Minecraft UUID";
+    };
 
 in
 {
@@ -115,15 +123,7 @@ in
       };
 
       whitelist = lib.mkOption {
-        type =
-          let
-            minecraftUUID =
-              lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-              // {
-                description = "Minecraft UUID";
-              };
-          in
-          lib.types.attrsOf minecraftUUID;
+        type = lib.types.attrsOf minecraftUUID;
         default = { };
         description = ''
           Whitelisted players, only has an effect when
@@ -139,6 +139,60 @@ in
           {
             username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+          };
+        '';
+      };
+
+      ops = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule (
+            { name, ... }:
+            {
+              options = {
+                name = lib.mkOption {
+                  type = lib.types.str;
+                  default = name;
+                  defaultText = "<name>";
+                  description = "Username of the operator";
+                };
+
+                uuid = lib.mkOption {
+                  type = minecraftUUID;
+                  default = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+                  description = "UUID of the operator";
+                };
+
+                level = lib.mkOption {
+                  type = lib.types.ints.between 0 4;
+                  default = cfg.serverProperties.op-permission-level or 4;
+                  defaultText = lib.literalExpression "config.services.minecraft-server.serverProperties.op-permission-level or 4";
+                  description = "Permission level of the operator";
+                };
+
+                bypassesPlayerLimit = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Can join full server";
+                };
+              };
+            }
+          )
+        );
+        default = { };
+        description = ''
+          Operators, only has an effect when
+          {option}`services.minecraft-server.declarative` is
+          `true`.
+          This is a mapping from Minecraft usernames to UUIDs.
+          You can use <https://mcuuid.net/> to get a
+          Minecraft UUID for a username.
+        '';
+        example = lib.literalExpression ''
+          {
+            username1 = {
+              uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+              level = 4;
+            }
           };
         '';
       };
@@ -272,10 +326,18 @@ in
               ln -sf ${whitelistFile} whitelist.json
               cp -f ${serverPropertiesFile} server.properties
 
+              ${
+                if cfg.ops != { } then # provide a valid upgrade path for people with a stateful ops file but declarative properties
+                  "ln -sf ${opsFile} ops.json"
+                else
+                  ""
+              }
+
             else
 
               # Declarative for the first time, backup stateful files
               ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+              ln -sb --suffix=.stateful ${opsFile} ops.json
               cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
               # server.properties must have write permissions, because every time
