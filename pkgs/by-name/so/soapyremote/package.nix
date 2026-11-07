@@ -19,17 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-uekElbcbX2P5TEufWEoP6tgUM/4vxgSQZu8qaBCSo18=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    soapysdr
-    avahi
-  ];
-
   patches = [
     (fetchpatch {
       url = "https://github.com/pothosware/SoapyRemote/commit/40c3ef9053b63885b7444ce7e9ef00d2c7964c9d.patch";
       hash = "sha256-kEx4gge+AQW/LSUyo+aWXlqDzXjoxCfn3pi2mk5xsNI=";
     })
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    soapysdr
+    avahi
   ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
