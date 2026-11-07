@@ -142,6 +142,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sarahec ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      vtimofeenko
+    ];
   };
 }
