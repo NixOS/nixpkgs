@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation rec {
     in
     ''
       install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
+      install -Dm444 -t $out/etc/fonts/conf.d ${./conf.d}/*.conf
     '';
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
