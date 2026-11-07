@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   passthru = {
     inherit
       cppSupport
