@@ -405,16 +405,18 @@ def boot_file(
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
     build_date = datetime.datetime.fromtimestamp(build_time).strftime("%F")
 
-    title = "{name}{profile}{specialisation}".format(
+    title = "{name}{profile}{specialisation} (Generation {generation} {label}, built on {build_date})".format(
         name=DISTRO_NAME,
         profile=" [" + profile + "]" if profile else "",
         specialisation=" (%s)" % specialisation if specialisation else "",
+        generation=generation,
+        label=bootspec.label,
+        build_date=build_date,
     )
-    description = f"Generation {generation} {bootspec.label}, built on {build_date}"
     boot_entry = (
         [
             f"title {title}",
-            f"version {description}",
+            f"version {generation}",
             f"linux /{str(kernel.path)}",
             f"initrd /{str(initrd.path)}",
         ]
