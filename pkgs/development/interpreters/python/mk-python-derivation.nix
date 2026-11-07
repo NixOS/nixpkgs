@@ -170,8 +170,9 @@ lib.extendMkDerivation {
       # generated binaries.
       makeWrapperArgs ? [ ],
 
-      # Skip wrapping of python programs altogether
-      dontWrapPythonPrograms ? false,
+      # Skip wrapping of python programs altogether.
+      # The default is true on WASI: WASI has no shell, thus a wrapper script cannot run.
+      dontWrapPythonPrograms ? python.stdenv.hostPlatform.isWasi,
 
       # Don't use Pip to install a wheel
       # Note this is actually a variable for the pipInstallPhase in pip's setupHook.
@@ -300,7 +301,11 @@ lib.extendMkDerivation {
 
       nativeBuildInputs = [
         python
+      ]
+      ++ optionals (!python.stdenv.hostPlatform.isWasi) [
         wrapPython
+      ]
+      ++ [
         ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
         pythonRemoveTestsDirHook
       ]

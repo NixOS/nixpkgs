@@ -281,7 +281,11 @@ lib.warnIf (withDocs != null)
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
-      badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
+      badPlatforms = [
+        lib.systems.inspect.patterns.isMinGW
+      ]
+      # WASI has no processes.
+      ++ lib.systems.inspect.patterns.isWasi;
       maintainers = with lib.maintainers; [ infinisil ];
       teams = [ lib.teams.security-review ];
       mainProgram = "bash";
