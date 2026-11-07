@@ -354,7 +354,8 @@ in
           your configured kernel.
 
           For custom versions, you can use `nvidiaPackages.mkDriver`; see
-          `pkgs/os-specific/linux/nvidia-x11/default.nix` for examples.
+          `pkgs/os-specific/linux/nvidia-x11/README.md` for an example and how
+          to obtain the hashes.
         '';
       };
 
@@ -458,10 +459,10 @@ in
           services.udev.extraRules = ''
             # nvidia-modprobe honors the driver's device-file parameters.
             ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia|nvidia_modeset|nvidia_uvm", RUN+="${pkgs.coreutils}/bin/mkdir -m 755 -p /dev/char"
-            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -c 255"
-            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do ${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -c $${i} || exit; done'"
-            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_modeset", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -m"
-            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_uvm", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -u -c 0"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${lib.getExe cfg.package.modprobe} -c 255"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do ${lib.getExe cfg.package.modprobe} -c $${i} || exit; done'"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_modeset", RUN+="${lib.getExe cfg.package.modprobe} -m"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_uvm", RUN+="${lib.getExe cfg.package.modprobe} -u -c 0"
           '';
           hardware.graphics =
             let
