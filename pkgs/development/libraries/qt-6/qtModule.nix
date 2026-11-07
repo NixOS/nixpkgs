@@ -5,6 +5,7 @@
   cmake,
   ninja,
   perl,
+  pkg-config,
   moveBuildTree,
   srcs,
   patches ? [ ],
@@ -31,6 +32,7 @@ stdenv.mkDerivation (
         cmake
         ninja
         perl
+        pkg-config
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
     propagatedBuildInputs =

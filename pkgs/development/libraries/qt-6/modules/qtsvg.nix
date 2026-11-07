@@ -5,7 +5,6 @@
   jasper,
   libmng,
   zlib,
-  pkg-config,
   lib,
   stdenv,
 }:
@@ -23,5 +22,4 @@ qtModule {
     libmng
     zlib
   ];
-  nativeBuildInputs = [ pkg-config ];
 }

@@ -3,7 +3,6 @@
   qtbase,
   qtdeclarative,
   qtserialport,
-  pkg-config,
   openssl,
 }:
 
@@ -14,6 +13,5 @@ qtModule {
     qtdeclarative
     qtserialport
   ];
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 }

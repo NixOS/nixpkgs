@@ -4,7 +4,6 @@
   qtdeclarative,
   qtsvg,
   hunspell,
-  pkg-config,
 }:
 
 qtModule {
@@ -15,5 +14,4 @@ qtModule {
     qtsvg
     hunspell
   ];
-  nativeBuildInputs = [ pkg-config ];
 }
