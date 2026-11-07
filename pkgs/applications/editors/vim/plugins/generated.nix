@@ -4015,6 +4015,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  confetti-vim-syntax = buildVimPlugin {
+    pname = "confetti-vim-syntax";
+    version = "0.1.0";
+    src = fetchFromGitHub {
+      owner = "unclechu";
+      repo = "confetti-vim-syntax";
+      tag = "v0.1.0";
+      hash = "sha256-1aUmEG2x+WsrjL+6Tixoh4rzx1PeCBw2JxyWuh6qxjA=";
+    };
+    meta.homepage = "https://github.com/unclechu/confetti-vim-syntax/";
+    meta.license = getLicenseFromSpdxId "Unlicense";
+    meta.hydraPlatforms = [ ];
+  };
+
   conflict-marker-vim = buildVimPlugin {
     pname = "conflict-marker.vim";
     version = "0-unstable-2024-05-20";
