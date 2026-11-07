@@ -35,6 +35,7 @@
   greenback,
   hatchling,
   httpx,
+  httpx2,
   importlib-metadata,
   isoduration,
   itsdangerous,
@@ -49,6 +50,7 @@
   natsort,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
+  opentelemetry-proto,
   packaging,
   pathspec,
   pendulum,
@@ -82,6 +84,7 @@
   tomli,
   tomlkit,
   trove-classifiers,
+  truststore,
   types-requests,
   typing-extensions,
   universal-pathlib,
@@ -116,7 +119,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-+f/AcJSQyvu3YCT6p4wvbNXz/xM0WN8N+MWT7iLlFEk=";
+        hash = "sha256-u49NEcNSlqMYKqWaoJFEhdFXijmCCPHR6Itz+hXCHg0=";
       };
 
       buildPhase = ''
@@ -149,7 +152,7 @@ buildPythonPackage (
         pnpm = pnpm_10;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
-        hash = "sha256-jLCTKdBdKQufVWQ1XRzOVN4jVC0YAcP+jnz5R966zUY=";
+        hash = "sha256-9Csd+CHZHEkC+lebFhYBCCEf7pnVrD5useBQONgf6PY=";
       };
 
       buildPhase = ''
@@ -254,10 +257,11 @@ buildPythonPackage (
         asgiref
         attrs
         babel
+        cadwyn
         colorlog
         fsspec
         greenback
-        httpx
+        httpx2
         isoduration
         jinja2
         jsonschema
@@ -272,11 +276,10 @@ buildPythonPackage (
         pydantic
         pygtrie
         python-dateutil
-        requests
-        retryhttp
+        pyyaml
         structlog
         tenacity
-        types-requests
+        truststore
         typing-extensions
       ];
     };
@@ -338,8 +341,9 @@ buildPythonPackage (
         deprecated
         dill
         fastapi
-        httpx
+        httpx2
         importlib-metadata
+        isoduration
         itsdangerous
         jinja2
         jsonschema
@@ -352,6 +356,7 @@ buildPythonPackage (
         natsort
         opentelemetry-api
         opentelemetry-exporter-otlp
+        opentelemetry-proto
         packaging
         pathspec
         pendulum
@@ -395,13 +400,13 @@ buildPythonPackage (
   in
   {
     pname = "apache-airflow";
-    version = "3.3.2";
+    version = "3.4.0";
 
     src = fetchFromGitHub {
       owner = "apache";
       repo = "airflow";
       tag = finalAttrs.version;
-      hash = "sha256-iWr1LYq+lThZU7b7CmrIWFbg20bFy+SghrBpE6asgrg=";
+      hash = "sha256-kR2IAaldwkA2zzKPX2kUfObUFZ1FyRh+29Rhzb9jNig=";
     };
 
     pyproject = true;

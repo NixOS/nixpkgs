@@ -20,6 +20,7 @@ PKG_SET = "apache-airflow.pythonPackages"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "anthropic": "anthropic",
     "dnspython": "dnspython",
     "elasticsearch-dsl": "elasticsearch-dsl",
     "google-api-python-client": "google-api-python-client",
