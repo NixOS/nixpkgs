@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mendableai";
+    owner = "firecrawl";
     repo = "firecrawl";
     # The Python SDK version is decoupled from the firecrawl monorepo tags.
     tag = "v2.11.226";
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Turn entire websites into LLM-ready markdown or structured data. Scrape, crawl and extract with a single API";
     homepage = "https://firecrawl.dev";
-    changelog = "https://github.com/mendableai/firecrawl/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/firecrawl/firecrawl/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "alephdata";
+    owner = "opensanctions";
     repo = "fingerprints";
     tag = version;
     hash = "sha256-Q+XCsuGMHPtOqB0SauVuYInR5FGMuG6aNhqiAwTJvSI=";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library to generate entity fingerprints";
-    homepage = "https://github.com/alephdata/fingerprints";
+    homepage = "https://github.com/opensanctions/fingerprints";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

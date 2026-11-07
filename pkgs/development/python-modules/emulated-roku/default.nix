@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mindigmarton";
+    owner = "martonperei";
     repo = "emulated_roku";
     tag = version;
     hash = "sha256-KwDEajkrEEgobORetM/rROMDLZvw9AJmmr1jmXAJJbk=";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/martonperei/emulated_roku/releases/tag/${src.tag}";
     description = "Library to emulate a roku server to serve as a proxy for remotes such as Harmony";
-    homepage = "https://github.com/mindigmarton/emulated_roku";
+    homepage = "https://github.com/martonperei/emulated_roku";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

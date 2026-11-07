@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-oauth";
     repo = "django-oauth-toolkit";
     tag = finalAttrs.version;
     hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
@@ -64,8 +64,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "OAuth2 goodies for the Djangonauts";
-    homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    changelog = "https://github.com/jazzband/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/django-oauth/django-oauth-toolkit";
+    changelog = "https://github.com/django-oauth/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
