@@ -8,7 +8,7 @@
   httplib2,
   mock,
   pytest-localserver,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flask
     mock
-    pytestCheckHook
+    pytest9_1CheckHook
     pytest-localserver
   ];
 
