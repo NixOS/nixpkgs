@@ -107,6 +107,15 @@ stdenv.mkDerivation (finalAttrs: {
           nativeBuildInputs = [ nixfmt ];
         } "nixfmt - < ${finalAttrs.src}/deps/packages.nix > $out";
       };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        versionCheck = true;
+      };
+      cmake-config = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        moduleNames = [ "ghostty-vt" ];
+        versionCheck = true;
+      };
     };
   };
 
