@@ -79,8 +79,9 @@ let
 
       outputHash =
         if stdenv.hostPlatform.isLinux then
-          "sha256-UOF9owEBSuVKX/hBhef7Wr4ymlNgTL21BiVBr+9a8Zo="
+          "sha256-e8mDIxjjiSQ9AZEZJ6WL2FxrH62iX7WIwQnfvgFD3H0="
         else if stdenv.hostPlatform.isDarwin then
+	  # It likely needs replacing too, but I have no idea how to test it.
           "sha256-6VvzodSiEko+Q9UldOJ0V4eV2Gd6JelpYNUMBnI5W/c="
         else
           throw "Unsupported platform";
