@@ -77,6 +77,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/devpi/devpi/blob/client-${finalAttrs.version}/client/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      confus
       lewo
       makefu
     ];
