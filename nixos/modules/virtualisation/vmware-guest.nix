@@ -77,7 +77,7 @@ in
         unitConfig.ConditionVirtualization = "vmware";
         what = getExe' cfg.package "vmware-vmblock-fuse";
         where = "/run/vmblock-fuse";
-        type = "fuse";
+        type = "fuse3";
         options = "subtype=vmware-vmblock,default_permissions,allow_other";
         wantedBy = [ "multi-user.target" ];
       }
