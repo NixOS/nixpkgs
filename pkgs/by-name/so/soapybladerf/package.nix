@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyBladeRF";
-    rev = "soapy-bladerf-${finalAttrs.version}";
-    sha256 = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
+    tag = "soapy-bladerf-${finalAttrs.version}";
+    hash = "sha256-lhTiu+iCdlLTY5ceND+F8HzKf2K9afuTi3cme6nGEMo=";
   };
 
   patches = [
