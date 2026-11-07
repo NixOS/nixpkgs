@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pywfa";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kcleal";
     repo = "pywfa";
     tag = "v${version}";
-    hash = "sha256-TeJ7Jq4LR+I1+zeMeBtHZa9dR+CRJJG5sT99tB227P8=";
+    hash = "sha256-VMKQFlVvTDGBhV+NuwQAVDQLtxlYqYh/GwerPq7IweU=";
   };
 
   nativeBuildInputs = [
