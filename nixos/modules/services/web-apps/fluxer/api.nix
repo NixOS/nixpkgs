@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -16,6 +17,8 @@ let
 in
 {
   config = {
+    services.fluxer.api.settings = propagateDefaults 1500 cfg.settings;
+
     users = mkIf (cfg.enable && cfg.api.enable && cfg.api.user == "fluxer") {
       users.fluxer = {
         isSystemUser = true;

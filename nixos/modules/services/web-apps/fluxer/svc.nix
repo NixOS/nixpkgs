@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -25,23 +26,32 @@ in
 {
   config = {
     services.fluxer.${name} = {
-      settings = {
-        svc = {
-          name = name;
-          shard_count = lib.mkDefault 1;
-          listen_host = lib.mkDefault "127.0.0.1";
-          nats.url = cfg.settings.nats.url;
-        };
-      };
-      router.settings = {
-        svc.mode = "router";
-        svc.port = lib.mkDefault defaultPort;
-      };
-      shard.settings = {
-        svc.mode = "shard";
-        svc.shard_id = 0;
-        svc.port = lib.mkDefault (defaultPort + 1);
-      };
+      settings = lib.mkMerge [
+        (propagateDefaults 1500 cfg.settings)
+        {
+          svc = {
+            name = name;
+            shard_count = lib.mkDefault 1;
+            listen_host = lib.mkDefault "127.0.0.1";
+            nats.url = cfg.settings.nats.url;
+          };
+        }
+      ];
+      router.settings = lib.mkMerge [
+        (propagateDefaults 1500 cfg.${name}.settings)
+        {
+          svc.mode = "router";
+          svc.port = lib.mkDefault defaultPort;
+        }
+      ];
+      shard.settings = lib.mkMerge [
+        (propagateDefaults 1500 cfg.${name}.settings)
+        {
+          svc.mode = "shard";
+          svc.shard_id = 0;
+          svc.port = lib.mkDefault (defaultPort + 1);
+        }
+      ];
     };
 
     users = mkIf (hasFluxerUserDef && cfg.enable && cfg.${name}.shard.enable) {

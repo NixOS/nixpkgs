@@ -2,6 +2,7 @@
   settingsToEnvVars,
   loadCredential,
   standardSystemdSettings,
+  propagateDefaults,
   ...
 }:
 {
@@ -16,13 +17,16 @@ let
 in
 {
   config = {
-    services.fluxer.media-proxy.settings = {
-      media_proxy = {
-        host = "127.0.0.1"; # TODO verify
-        mode = lib.mkDefault "upload";
-        storage_backend = lib.mkDefault "s3";
-      };
-    };
+    services.fluxer.media-proxy.settings = lib.mkMerge [
+      (propagateDefaults 1500 cfg.settings)
+      {
+        media_proxy = {
+          host = "127.0.0.1"; # TODO verify
+          mode = lib.mkDefault "upload";
+          storage_backend = lib.mkDefault "s3";
+        };
+      }
+    ];
 
     systemd.services.fluxer-media-proxy = mkIf (cfg.enable && cfg.media-proxy.enable) (
       lib.mkMerge [

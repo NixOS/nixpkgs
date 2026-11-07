@@ -16,6 +16,7 @@ let
 
   cfg = config.services.fluxer;
   settingsType = (pkgs.formats.json { }).type; # Not really json but a useful shorthand for supported values
+
   mkPartEnableOption =
     name:
     lib.mkOption {
@@ -24,8 +25,9 @@ let
       default = cfg.enable;
       defaultText = "config.services.fluxer.enable";
     };
+
   mkPartSettingsOptions =
-    name: default:
+    name:
     lib.mkOption {
       description = ''
         Configuration for ${name}. See https://docs.fluxer.app/operator/configuration/
@@ -43,30 +45,30 @@ let
       '';
       type = types.submodule {
         freeformType = settingsType;
-        config = default; # Put here so we don't accidentally overwrite the entirety of the defaults
       };
       default = { };
     };
+
   mkSvcOptions = name: {
-    settings = mkPartSettingsOptions name cfg.settings;
+    settings = mkPartSettingsOptions name;
     router = {
       enable = mkPartEnableOption "fluxer-${name} router";
-      settings = mkPartSettingsOptions "fluxer-${name} router" cfg.${name}.settings;
+      settings = mkPartSettingsOptions "fluxer-${name} router";
     };
     shard = {
       enable = mkPartEnableOption "fluxer-${name} shard";
-      settings = mkPartSettingsOptions "fluxer-${name} shard" cfg.${name}.settings;
+      settings = mkPartSettingsOptions "fluxer-${name} shard";
     };
   };
   mkSvcOptionsWithUser = name: {
-    settings = mkPartSettingsOptions name cfg.settings;
+    settings = mkPartSettingsOptions name;
     router = {
       enable = mkPartEnableOption "${name} router";
-      settings = mkPartSettingsOptions "${name} router" cfg.${name}.settings;
+      settings = mkPartSettingsOptions "${name} router";
     };
     shard = {
       enable = mkPartEnableOption "${name} shard";
-      settings = mkPartSettingsOptions "${name} shard" cfg.${name}.settings;
+      settings = mkPartSettingsOptions "${name} shard";
       user = mkOption {
         description = ''
           The user to run the fluxer-messages shard service as.
@@ -111,6 +113,7 @@ let
       RUST_LOG = mkIf (cfg.log_level != null) cfg.log_level;
       DISCOVERY_UPSTREAM_URL = "${cfg.settings.internal.api_endpoint}/.well-known/fluxer";
     };
+
   collectSecrets =
     pathSoFar: value:
     if lib.isDerivation value || !builtins.isAttrs value then
@@ -122,12 +125,14 @@ let
       }
     else
       lib.flatten (lib.mapAttrsToList (name: inner: collectSecrets (pathSoFar ++ [ name ]) inner) value);
+
   loadCredential =
     attrs:
     let
       secrets = collectSecrets [ ] attrs;
     in
     map ({ path, value }: "${pathToEnvVar path}:${value}") secrets;
+
   remapSecretEnvVars =
     attrs:
     let
@@ -187,11 +192,16 @@ let
     };
   };
 
+  propagateDefaults =
+    prio: attrs:
+    lib.mapAttrsRecursiveCond (v: !lib.isDerivation v) (_path: v: lib.mkOverride prio v) attrs;
+
   settingsTools = {
     inherit
       settingsToEnvVars
       loadCredential
       standardSystemdSettings
+      propagateDefaults
       ;
   };
 
@@ -584,27 +594,27 @@ in
         default = if cfg.aux.pgsql.enable then "fluxer" else null;
         defaultText = "'fluxer', if automatic postgres is enabled, otherwise null";
       };
-      settings = mkPartSettingsOptions "fluxer-api" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-api";
     };
     admin = {
       enable = mkPartEnableOption "fluxer-admin";
-      settings = mkPartSettingsOptions "fluxer-admin" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-admin";
     };
     gateway = {
       enable = mkPartEnableOption "fluxer-gateway";
-      settings = mkPartSettingsOptions "fluxer-gateway" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-gateway";
     };
     media-proxy = {
       enable = mkPartEnableOption "fluxer-media-proxy";
-      settings = mkPartSettingsOptions "fluxer-media-proxy" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-media-proxy";
     };
     push = {
       enable = mkPartEnableOption "fluxer-push";
-      settings = mkPartSettingsOptions "fluxer-push" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-push";
     };
     app-proxy = {
       enable = mkPartEnableOption "fluxer-app-proxy";
-      settings = mkPartSettingsOptions "fluxer-app-proxy" cfg.settings;
+      settings = mkPartSettingsOptions "fluxer-app-proxy";
     };
 
     gifs = mkSvcOptions "gifs";
