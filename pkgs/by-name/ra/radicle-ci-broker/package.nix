@@ -10,6 +10,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -61,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) radicle-ci-broker; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
