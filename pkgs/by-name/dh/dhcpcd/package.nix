@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
+    substituteInPlace hooks/dhcpcd-run-hooks.in --replace-fail /bin/sh ${runtimeShell}
   '';
 
   configureFlags = [
