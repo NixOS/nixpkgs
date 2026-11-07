@@ -32,10 +32,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-about
     cargo-tauri.hook
+    makeBinaryWrapper
     nodejs
     npmHooks.npmConfigHook
-    wrapGAppsHook4
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -44,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     libsoup_3
-    makeBinaryWrapper
     webkitgtk_4_1
   ];
 
@@ -52,12 +54,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
 
-  postInstall = ''
-    install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
-    for size in 32x32 64x64 128x128 128x128@2x; do
-      install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
-    done
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
+      for size in 32x32 64x64 128x128 128x128@2x; do
+        install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper $out/Applications/ALCOM.app/Contents/MacOS/ALCOM $out/bin/ALCOM
+    '';
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
@@ -75,7 +81,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Scrumplex
       ImSapphire
     ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "ALCOM";
   };
 })
