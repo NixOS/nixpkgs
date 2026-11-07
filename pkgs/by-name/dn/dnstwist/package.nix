@@ -23,10 +23,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     dnspython
     geoip
+    idna
     ppdeep
-    requests
     tld
-    whois
   ];
 
   # Project has no tests
