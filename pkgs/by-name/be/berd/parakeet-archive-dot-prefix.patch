@@ -1,0 +1,65 @@
+Adapted from https://github.com/block/berd/pull/461 (c5890859): on main the crate is
+berd-call, in 0.6.4 it is still berd-voice.
+
+diff --git a/src-tauri/crates/berd-voice/src/local_assets.rs b/src-tauri/crates/berd-voice/src/local_assets.rs
+index 94d1ee3e5..aa29e6360 100644
+--- a/src-tauri/crates/berd-voice/src/local_assets.rs
++++ b/src-tauri/crates/berd-voice/src/local_assets.rs
+@@ -739,6 +739,8 @@ pub(crate) fn extract_exact_tar_bz2(
+             )
+         })?;
+         let Some(relative) = path
++            .strip_prefix(".")
++            .unwrap_or(&path)
+             .strip_prefix(archive_directory)
+             .ok()
+             .and_then(|path| path.to_str())
+@@ -1132,6 +1134,48 @@ mod tests {
+         assert!(!destination.join("unknown").exists());
+     }
+ 
++    #[test]
++    fn archive_extraction_accepts_entries_under_a_leading_current_directory() {
++        use bzip2::write::BzEncoder;
++        use bzip2::Compression;
++
++        // sherpa-onnx release archives name entries `./<directory>/<file>`.
++        let root = tempfile::tempdir().expect("temporary directory");
++        let archive_path = root.path().join("fixture.tar.bz2");
++        let archive_file = fs::File::create(&archive_path).expect("create archive");
++        let encoder = BzEncoder::new(archive_file, Compression::fast());
++        let mut archive = tar::Builder::new(encoder);
++        let mut header = tar::Header::new_gnu();
++        let name = b"./bundle/keep";
++        header.as_gnu_mut().expect("gnu header").name[..name.len()].copy_from_slice(name);
++        header.set_size(4);
++        header.set_mode(0o644);
++        header.set_entry_type(tar::EntryType::Regular);
++        header.set_cksum();
++        archive
++            .append(&header, &b"keep"[..])
++            .expect("append pinned entry");
++        let encoder = archive.into_inner().expect("finish tar");
++        encoder.finish().expect("finish compression");
++
++        let destination = root.path().join("output");
++        super::extract_exact_tar_bz2(
++            &archive_path,
++            &destination,
++            "bundle",
++            &[(
++                "keep",
++                4,
++                "6ca7ea2feefc88ecb5ed6356ed963f47dc9137f82526fdd25d618ea626d0803f",
++            )],
++        )
++        .expect("extract dot-prefixed manifest");
++        assert_eq!(
++            fs::read(destination.join("keep")).expect("pinned output"),
++            b"keep"
++        );
++    }
++
+     #[tokio::test]
+     async fn bounded_download_rejects_a_response_larger_than_the_manifest() {
+         let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
