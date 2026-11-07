@@ -201,7 +201,8 @@ with lib.maintainers;
       Supporting GPU-Accelerated Scientific Computing.
       Package CUDA-enabled packages.
 
-      Accidental: find out whether non-owner employee maintainers are compatible with volunteer maintainers.
+      Find out whether non-owner employee maintainers are compatible with volunteer maintainers.
+      Find out whether non-owner employee maintainers are compatible with self-employed maintainers.
 
       Resolve patchelf exception and NVIDIA ghosting problems.
       Resolve unfree cache problem.
