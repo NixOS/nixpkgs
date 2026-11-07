@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installFonts,
   installShellFiles,
   cmake,
   pkg-config,
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    installFonts
     installShellFiles
     pkg-config
     makeWrapper
@@ -63,7 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 assets/icon.svg \
       "$out/share/icons/hicolor/scalable/apps/com.mtkennerly.ludusavi.svg"
     install -Dm644 "assets/linux/com.mtkennerly.ludusavi.desktop" -t "$out/share/applications/"
-    install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
     install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
