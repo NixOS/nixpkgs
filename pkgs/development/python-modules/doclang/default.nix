@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "doclang";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doclang-project";
     repo = "doclang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c/T1igyUVPoK5WC5NjQEHP8fLsNO473bgaAcUjrRiFw=";
+    hash = "sha256-1F7K3atGFMky8yhAOoODnrIIgHxuwpv2gOLg1CVINdo=";
   };
 
   build-system = [
