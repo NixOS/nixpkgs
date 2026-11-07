@@ -6,6 +6,7 @@
   qtbase,
   wrapQtAppsHook,
   doxygen,
+  graphviz,
 }:
 
 stdenv.mkDerivation {
@@ -23,6 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     qmake
     doxygen
+    graphviz
     wrapQtAppsHook
   ];
 
