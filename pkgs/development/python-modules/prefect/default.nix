@@ -92,20 +92,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prefect";
-  version = "3.9.0";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "prefect";
     tag = finalAttrs.version;
-    hash = "sha256-RVcUkRauNZW3zU5SA1SMVGMYDyLTv2r8PuQeP5wvDDg=";
+    hash = "sha256-P99agVyJ7frOKP8JI4ZiGkd3WaV7mmPVCCrvK1yAxxQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail \
-        'default-version = "3.6.24+nogit"' \
+        'default-version = "3.9.0+nogit"' \
         'default-version = "${finalAttrs.version}"'
   ''
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
@@ -120,7 +120,6 @@ buildPythonPackage (finalAttrs: {
     "certifi"
     "python-slugify"
     "websockets"
-    "whenever"
   ];
 
   nativeBuildInputs = [
