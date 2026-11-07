@@ -48,10 +48,15 @@ in
   config = lib.mkMerge [
 
     (lib.mkIf cfg.enable {
-      systemd.additionalUpstreamSystemUnits = [
-        "systemd-coredump.socket"
-        "systemd-coredump@.service"
-      ];
+      systemd = {
+        additionalUpstreamSystemUnits = [
+          "systemd-coredump.socket"
+          "systemd-coredump@.service"
+          "systemd-coredump-register.service"
+          "systemd-coredumpd.service"
+        ];
+        services.systemd-coredumpd.wantedBy = [ "sysinit.target" ];
+      };
 
       environment.etc = {
         "systemd/coredump.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
