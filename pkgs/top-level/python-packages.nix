@@ -3533,6 +3533,8 @@ self: super: with self; {
 
   columnize = callPackage ../development/python-modules/columnize { };
 
+  comet-maths = callPackage ../development/python-modules/comet-maths { };
+
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
@@ -12517,6 +12519,8 @@ self: super: with self; {
 
   objsize = callPackage ../development/python-modules/objsize { };
 
+  obsarray = callPackage ../development/python-modules/obsarray { };
+
   obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
 
   obsidian-media = callPackage ../development/python-modules/obsidian-media { };
@@ -14379,6 +14383,8 @@ self: super: with self; {
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
   pulumiverse-talos = pkgs.pulumiPackages.pulumiverse-talos.sdks.python;
+
+  punpy = callPackage ../development/python-modules/punpy { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
