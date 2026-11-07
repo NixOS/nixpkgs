@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3a";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-BcGAFFq3UEj4o7nNQ9aStueKmeDNIqSIqkYWhs2Tnqg=";
+    hash = "sha256-1xK2zau675gTWdEcOicBX3CxfenNnukuVXVA6FZpI+E=";
   };
 
   build-system = [
