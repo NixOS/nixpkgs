@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "boto3";
-  inherit (botocore) version; # N.B: botocore, boto3, awscli needs to be updated in lockstep, bump botocore version for updating these.
+  inherit (botocore) version; # N.B: botocore and boto3 needs to be updated in lockstep, bump botocore version for updating these.
   pyproject = true;
 
   src = fetchFromGitHub {

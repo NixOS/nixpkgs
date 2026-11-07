@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.43.79"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.43.79"; # N.B: if you change this, change boto3 to a matching version
   pyproject = true;
 
   src = fetchFromGitHub {
