@@ -7,6 +7,7 @@
 {
   bson = callPackage ./bson/package.nix { };
   dbus = callPackage ./dbus/package.nix { inherit dbus; };
+  file = callPackage ./file/package.nix { };
   desktop_notifications = callPackage ./desktop_notifications/package.nix { };
   formats = callPackage ./formats/package.nix { };
   gstat = callPackage ./gstat/package.nix { };
