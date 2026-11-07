@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.20";
+  version = "2.0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tableau";
     repo = "tabcmd";
     tag = "v${version}";
-    hash = "sha256-BviaCIav8rz37ac126KS4p54gbxzd6vs1p5kTy42bv4=";
+    hash = "sha256-Bg0D0v4UDz4E8di7MAaUGilq66+ptEyyu2gXDil26uY=";
   };
 
   prePatch = ''
