@@ -17,11 +17,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "enpass-mac";
-  version = "6.11.20.2229";
+  version = "6.12.7.2787";
 
   src = fetchurl {
     url = "https://dl.enpass.io/stable/mac/package/${finalAttrs.version}/Enpass.pkg";
-    hash = "sha256-o4IHDeuoOtZ6gvvfxrPFXCou0nkLOpcMnip/+f6eVkU=";
+    hash = "sha256-99U/7FgmK7aHSbKniktg8SXnL7pvX/Qzzo2iAOvq1A8=";
   };
 
   dontPatch = true;
@@ -64,8 +64,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
+      userAgent="Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
       url="https://www.enpass.io/download/macos/website/stable"
-      version=$(curl -Ls -o /dev/null -w "%{url_effective}" "$url" | awk -F'/' '{print $7}')
+      version=$(curl -Lsf --user-agent "$userAgent" -o /dev/null -w "%{url_effective}" "$url" | awk -F'/' '{print $7}')
       update-source-version enpass-mac "$version"
     '';
   });
