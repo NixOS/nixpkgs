@@ -7,56 +7,46 @@
 
 version:
 builtins.getAttr version {
-  "3.8.0" = {
-    x86_64-linux-310 = {
-      name = "triton-3.8.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      hash = "sha256-VEby/cXDzsEFR84Sz/rVCZHMOcW94uz4k2THxIrxsao=";
-    };
+  "3.9.0" = {
     x86_64-linux-311 = {
-      name = "triton-3.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      hash = "sha256-2INSEjsrBbRu/3RGThJCDEXg1txevSeQRsmUyI8Bq8o=";
+      name = "triton-3.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      hash = "sha256-FiIRigOLDG4W+koDBdpiyLPBWQTuHMTU5lhGollp5B4=";
     };
     x86_64-linux-312 = {
-      name = "triton-3.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      hash = "sha256-B6iLE+T36LF2kJQjirdRCaXbKoFgok3cScJNLvpEy1g=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      hash = "sha256-XlKrTi8dZPCsSUyapyNpe3k/gakcTK5MNmCMoLxCZ78=";
     };
     x86_64-linux-313 = {
-      name = "triton-3.8.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      hash = "sha256-Rgj/oRgkYeszzR1lXPEiIl+xTU0FWn51Sad5ptDpSwQ=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      hash = "sha256-XlKrTi8dZPCsSUyapyNpe3k/gakcTK5MNmCMoLxCZ78=";
     };
     x86_64-linux-314 = {
-      name = "triton-3.8.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
-      hash = "sha256-SJ7+VmQeG8XT3zyfO6m8x7uN7kBpGuiMz1STiHN5UaI=";
-    };
-    aarch64-linux-310 = {
-      name = "triton-3.8.0-cp310-cp310-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp310-cp310-linux_aarch64.whl";
-      hash = "sha256-bWAD+dhvY9ukYhyBuDubxM8K64qERb7jBRYNrN10huk=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl";
+      hash = "sha256-XlKrTi8dZPCsSUyapyNpe3k/gakcTK5MNmCMoLxCZ78=";
     };
     aarch64-linux-311 = {
-      name = "triton-3.8.0-cp311-cp311-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp311-cp311-linux_aarch64.whl";
-      hash = "sha256-GXsFdsvPNU8noqva5jjHLAPZPyV0hEBSiHsMmP2Pjhw=";
+      name = "triton-3.9.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      hash = "sha256-/qrsE1eMqEMB1WHQNMsIs64pPX8Lera43bstZ5Y2NxY=";
     };
     aarch64-linux-312 = {
-      name = "triton-3.8.0-cp312-cp312-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp312-cp312-linux_aarch64.whl";
-      hash = "sha256-vDTLC/ScB0zowSRwFp8MQ0muxYipGo9nfZXM2ReXb3E=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      hash = "sha256-VUL0MoRy/YJ9ux7EOHM2TCiUaCzD9dHHSmQ3YpAOJD4=";
     };
     aarch64-linux-313 = {
-      name = "triton-3.8.0-cp313-cp313-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp313-cp313-linux_aarch64.whl";
-      hash = "sha256-wYhLpekPxBCP2BkSOby4MF3nUyUf7jpY2mOBuHTyNMs=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      hash = "sha256-VUL0MoRy/YJ9ux7EOHM2TCiUaCzD9dHHSmQ3YpAOJD4=";
     };
     aarch64-linux-314 = {
-      name = "triton-3.8.0-cp314-cp314-linux_aarch64.whl";
-      url = "https://download.pytorch.org/whl/triton-3.8.0-cp314-cp314-linux_aarch64.whl";
-      hash = "sha256-9NoIqNpk/evM/u16gz5HPPt8Zw9YWi/h+vjUm+qz4b0=";
+      name = "triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      url = "https://download.pytorch.org/whl/triton-3.9.0-cp312-abi3-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl";
+      hash = "sha256-VUL0MoRy/YJ9ux7EOHM2TCiUaCzD9dHHSmQ3YpAOJD4=";
     };
   };
 }

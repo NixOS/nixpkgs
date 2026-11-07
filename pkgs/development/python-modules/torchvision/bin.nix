@@ -19,17 +19,16 @@
 }:
 
 let
-  pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.29.1";
+  version = "0.29.2";
 in
 buildPythonPackage {
   pname = "torchvision";
   inherit version;
   format = "wheel";
 
-  src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
+  src = fetchurl srcs.${stdenv.system} or unsupported;
 
   disabled = pythonAtLeast "3.15";
 
