@@ -38,13 +38,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.41.0";
+  version = "3.47.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery";
     inherit version;
-    hash = "sha256-IhfkiLR+1XY2DJsswH1Z2IOlS4MWfA7zf5FcJrAaBv4=";
+    hash = "sha256-vKel/1IyYXLcjCkuRZKltGtJG2hyAQ0kLXZj2OqJsS8=";
   };
 
   build-system = [ setuptools ];
@@ -62,6 +62,8 @@ buildPythonPackage rec {
     requests
   ]
   ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "python-dateutil" ];
 
   optional-dependencies = {
     bqstorage = [
@@ -103,6 +105,7 @@ buildPythonPackage rec {
     "test_bigquery_magic"
     "test_context_with_no_query_cache_from_context"
     "test_dry_run"
+    "test_insert_rows_json_ssl_error_no_retry"
     "test_list_rows_empty_table"
     "test_list_rows_page_size"
     "test_list_rows_range"
@@ -133,6 +136,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests require credentials
+    "tests/system/test_arrow.py"
     "tests/system/test_job_retry.py"
     "tests/system/test_pandas.py"
     "tests/system/test_query.py"
