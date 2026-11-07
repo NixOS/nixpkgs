@@ -16,15 +16,26 @@
         "diskSize"
       ];
     })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2611;
+      from = [
+        "oci"
+        "efi"
+      ];
+      to = [
+        "oracleCloudInfra"
+        "efi"
+      ];
+    })
   ];
 
   options = {
-    oci = {
+    oracleCloudInfra = {
       efi = lib.mkOption {
         default = true;
         internal = true;
         description = ''
-          Whether the OCI instance is using EFI.
+          Whether the Oracle Cloud Infrastructure instance is using EFI.
         '';
       };
     };
