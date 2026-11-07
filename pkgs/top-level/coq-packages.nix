@@ -27,13 +27,10 @@ let
   mkCoqPackages' =
     self: coq:
     let
-      callPackage = self.callPackage;
-      rocqPackages = self // {
-        recurseForDerivations = false;
-      };
+      callPackage = self.newScope { rocqPackages = self; };
     in
     {
-      inherit rocqPackages lib;
+      inherit lib;
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
