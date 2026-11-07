@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-0Or83zod1RIx7Dm+3+EuyV8gP4Ip3ziOuS2if0ThzAQ=";
+    hash = "sha256-TlRqIaxUeyNJHyH3FBNJLTroG3NRGUacY5ZrnaBaAb4=";
   };
 
   build-system = [ hatchling ];
@@ -43,6 +43,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Requires pytest-benchmark
+    "tests/benchmark"
+  ];
 
   pythonImportsCheck = [ "beanhub_import" ];
 
