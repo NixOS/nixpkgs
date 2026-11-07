@@ -3,7 +3,6 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   pymodbus,
-  pyyaml,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
@@ -13,18 +12,17 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "anker-charging";
   domain = "anker_solix_official";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "anker-charging";
     repo = "ha-anker-solix-official";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zYjC4z+IMUgOfwmpWAqmmUyMDeS9IqchNAtg4EPo1wQ=";
+    hash = "sha256-nhrf1BC3zOOQ91n5hwhQKX3dF08Aub28aAUIAsCZcR0=";
   };
 
   dependencies = [
     pymodbus
-    pyyaml
   ];
 
   nativeCheckInputs = [
