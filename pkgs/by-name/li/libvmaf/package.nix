@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.callPackage ./xxd.nix { })
   ];
 
+  strictDeps = true;
+
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
   '';
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       moduleNames = [ "libvmaf" ];
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
