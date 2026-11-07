@@ -48,12 +48,9 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     make install PREFIX=$out
+    rm -rf "$out/share/fish"
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    rm -rf "$out/share/fish"
   '';
 
   nativeCheckInputs = [
