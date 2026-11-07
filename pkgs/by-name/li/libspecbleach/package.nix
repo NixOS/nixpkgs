@@ -8,7 +8,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspecbleach";
-  version = "0.3.1";
+  # Must track the version pinned by noise-repellent's CMakeLists.txt.
+  # Updated together with noise-repellent via its update.sh.
+  # nixpkgs-update: no auto update
+  version = "0.4.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,8 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lucianodato";
     repo = "libspecbleach";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l8qVSE8ZBb/IWDcN7wJALtOtjnXk6/FqjTi0xI6TlSk=";
+    hash = "sha256-rZdlrsTeVNZ6hzUBe57fWx4NqQYL/MdVUiYmQUDeoJQ=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        '"libdir=\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}\n"' \
+        '"libdir=''${CMAKE_INSTALL_FULL_LIBDIR}\n"' \
+      --replace-fail \
+        '"includedir=\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}\n"' \
+        '"includedir=''${CMAKE_INSTALL_FULL_INCLUDEDIR}\n"'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -30,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_FFTW" true)
     (lib.cmakeBool "ENABLE_EXAMPLES" false)
+    (lib.cmakeBool "SPECBLEACH_BUILD_EXTRAS" true)
   ];
 
   meta = {
