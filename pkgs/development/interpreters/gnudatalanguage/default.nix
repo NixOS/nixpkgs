@@ -176,22 +176,24 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: with ps; [ numpy ]))
   ];
 
-  cmakeFlags = [ "-DSZIPDIR=${libaec}" ]
-    ++ lib.optional (!enableHDF4) "-DHDF=OFF"
-    ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]
-    ++ lib.optional (!enableNetCDF) "-DNETCDF=OFF"
-    ++ lib.optional (!enablePlplotDrivers) "-DINTERACTIVE_GRAPHICS=OFF"
-    ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
-    ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
-    ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
-    ++ lib.optionals enableXWin [
-      "-DX11=ON"
-      "-DX11DIR=${plplot-with-drivers.libx11}"
-    ]
-    ++ lib.optionals enableMPI [
-      "-DMPI=ON"
-      "-DMPIDIR=${mpi}"
-    ];
+  cmakeFlags = [
+    "-DSZIPDIR=${libaec}"
+  ]
+  ++ lib.optional (!enableHDF4) "-DHDF=OFF"
+  ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]
+  ++ lib.optional (!enableNetCDF) "-DNETCDF=OFF"
+  ++ lib.optional (!enablePlplotDrivers) "-DINTERACTIVE_GRAPHICS=OFF"
+  ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
+  ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
+  ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
+  ++ lib.optionals enableXWin [
+    "-DX11=ON"
+    "-DX11DIR=${plplot-with-drivers.libx11}"
+  ]
+  ++ lib.optionals enableMPI [
+    "-DMPI=ON"
+    "-DMPIDIR=${mpi}"
+  ];
 
   # Tests are failing on Hydra:
   # ./src/common/dpycmn.cpp(137): assert ""IsOk()"" failed in GetClientArea(): invalid wxDisplay object
