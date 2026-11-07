@@ -1983,6 +1983,7 @@ in
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
+  vernissage = runTest ./vernissage.nix;
   veroroute = runTest ./veroroute.nix;
   victorialogs = import ./victorialogs { inherit runTest; };
   victoriametrics = import ./victoriametrics { inherit runTest; };
