@@ -57,5 +57,6 @@ stdenv.mkDerivation {
   meta = {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.kamadorueda ];
   };
 }
