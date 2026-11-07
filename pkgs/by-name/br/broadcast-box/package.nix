@@ -7,20 +7,20 @@
 }:
 let
   name = "broadcast-box";
-  version = "0-unstable-2025-06-04";
+  version = "2.0.2-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     repo = "broadcast-box";
     owner = "Glimesh";
-    rev = "a091f147f750759084a2c9d25a12e815e2feebf8";
-    hash = "sha256-Evhye+DYtFM/VjxqmhH5kU32khvEFUxTUgH9DXytIbo=";
+    rev = "97db1f64d247478571d6500aaab72a7a997b4c75";
+    hash = "sha256-QFGInrjPWsIXaFJjQkHZcERAPA8VsKZV4wsLl0scDbc=";
   };
 
   frontend = buildNpmPackage {
     inherit version;
     pname = "${name}-web";
     src = "${src}/web";
-    npmDepsHash = "sha256-e1cCezmF20Q6JEXwPb1asRSXuC/GGaR+ImvrTabLl5c=";
+    npmDepsHash = "sha256-lvW8iyfGprhaegWEXqfwYzPKeieVJ/6O/ka9H5R5a0Y=";
     preBuild = ''
       # The VITE_API_PATH environment variable is needed
       cp "${src}/.env.production" ../
@@ -34,12 +34,11 @@ in
 buildGoModule {
   inherit version src frontend;
   pname = name;
-  vendorHash = "sha256-Jpee7UmG9AB9SOoTv2fPP2l5BmkDPPdciGFu9Naq9h8=";
+  vendorHash = "sha256-NQoDxuuYsIvUGf2W+bShEhgCrWrliz45c8+v48tHKp0=";
   proxyVendor = true; # fixes darwin/linux hash mismatch
 
-  patches = [ ./allow-no-env.patch ];
   postPatch = ''
-    substituteInPlace main.go \
+    substituteInPlace internal/environment/environment.go \
       --replace-fail './web/build' '${placeholder "out"}/share'
   '';
 
@@ -47,7 +46,7 @@ buildGoModule {
     runHook preInstall
 
     mkdir -p $out/share
-    cp -r $frontend/build/* $out/share
+    ln -s $frontend/build/* $out/share
 
     install -Dm755 $GOPATH/bin/broadcast-box -t $out/bin
 
