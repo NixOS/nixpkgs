@@ -6,6 +6,7 @@
   config,
   lib,
   hostPkgs,
+  bootMode,
   ...
 }:
 
@@ -24,6 +25,9 @@ let
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
         {
+          ec2.bootMode = lib.mkIf (bootMode != null) bootMode;
+          # The default variant already covers the channel.
+          nix.channel.enable = bootMode != "uefi";
           amazonImage.format = "qcow2";
 
           # In a NixOS test the serial console is occupied by the "backdoor"
@@ -62,7 +66,9 @@ let
 
 in
 {
-  name = "ec2-image";
+  _module.args.bootMode = lib.mkDefault null;
+
+  name = "ec2-image" + lib.optionalString (bootMode == "uefi") "-systemd-boot";
   meta = {
     maintainers = with lib.maintainers; [
       roberth
@@ -194,8 +200,11 @@ in
               + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
           )
 
+          # nixosTests.ec2-nixops covers the BIOS boot of the same image.
           start_command = (
               f"{QEMU}/bin/qemu-kvm -m 1024"
+              + " -drive if=pflash,format=raw,unit=0,readonly=on,file=${hostPkgs.OVMF.firmware}"
+              + " -drive if=pflash,format=raw,unit=1,readonly=on,file=${hostPkgs.OVMF.variables}"
               + f" -drive file={disk_image},if=virtio,werror=report"
               + vlan_net
               + metadata_net
@@ -295,7 +304,17 @@ in
               assert "Hello from test-instance" in ssh_result, f"Unexpected SSH result: {ssh_result}"
 
           with subtest("Basic EC2 functionality"):
+              machine.succeed("test -d /sys/firmware/efi")
+              machine.succeed("findmnt ${imageCfg.boot.loader.efi.efiSysMountPoint}")
               machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+
+          with subtest("Store paths and profiles set up on first boot"):
+              machine.succeed("nix-store --check-validity ${imageCfg.system.build.toplevel}")
+              machine.succeed("test $(readlink -f /nix/var/nix/profiles/system) = ${imageCfg.system.build.toplevel}")
+              machine.fail("test -e /nix/var/nix/profiles/system-2-link")
+              ${lib.optionalString imageCfg.nix.channel.enable ''
+                machine.succeed("test -e /root/.nix-defexpr/channels/nixos/default.nix")
+              ''}
 
           with subtest("Decompression of gzip-compressed user-data"):
               import gzip as gzip_mod
