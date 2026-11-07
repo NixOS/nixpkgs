@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "nolar";
     repo = "kopf";
     tag = finalAttrs.version;
-    hash = "sha256-ffBdauplO1WkrXcsJuCKBhlkXpoinFqRU24uSoDQIm0=";
+    hash = "sha256-TwNkfUHaBM7gfRHZlAXBj+Iundr6Bmf6X6CFxQZuN5E=";
   };
 
   build-system = [
