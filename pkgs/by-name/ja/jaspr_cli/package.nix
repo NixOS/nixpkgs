@@ -39,6 +39,15 @@ buildDartApplication (finalAttrs: {
 
   doInstallCheck = true;
 
+  # `buildDartApplication` symlinks `$pubspecLockFilePath` to `pubspec.lock`,
+  # but that variable comes from `passAsFile`, whose value is inlined into the
+  # attribute instead of being written to a file when `__structuredAttrs` is
+  # enabled. Point it at the lockfile imported above, which is the same data
+  # the builder would have serialised.
+  preConfigure = ''
+    export pubspecLockFilePath=${./pubspec.lock.json}
+  '';
+
   # Remove the resolution: workspace section.
   # Workspace dependencies break the Nix build which expects
   # all dependencies to be resolved via the lockfile.
