@@ -6,10 +6,10 @@
 }:
 appimageTools.wrapType2 (finalAttrs: {
   pname = "artisan";
-  version = "4.2.0";
+  version = "5.0.0";
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-linux-${finalAttrs.version}.AppImage";
-    hash = "sha256-4vhdx97Y8ntj4HU2T/pHq/ZgioeY0yi+ydVcDFrHRrQ=";
+    hash = "sha256-mgnviWpJG0f3GeRTGnHNjPoddYL7VaKbYuHxzvMPEic=";
   };
 
   extraInstallCommands = ''
