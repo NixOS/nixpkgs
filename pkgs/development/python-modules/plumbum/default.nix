@@ -24,7 +24,7 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-timeout,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -79,14 +79,14 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-mock
     pytest-timeout
-    pytestCheckHook
+    pytest9_1CheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pytestFlags = [
+  disabledTestPaths = [
     # broken in nix env
-    "--deselect=tests/test_local.py::TestLocalMachine::test_local"
+    "tests/test_local.py::TestLocalMachine::test_local"
   ];
 
   meta = {
