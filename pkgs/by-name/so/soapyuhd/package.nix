@@ -9,7 +9,7 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyuhd";
   version = "0.4.1-unstable-2026-09-25";
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})
