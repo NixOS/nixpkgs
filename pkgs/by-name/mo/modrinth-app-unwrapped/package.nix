@@ -19,9 +19,11 @@
   replaceVars,
   runCommand,
   rustPlatform,
+  sqlite,
   turbo,
   webkitgtk_4_1,
   xcbuild,
+  zstd,
 }:
 
 let
@@ -96,7 +98,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xcbuild
   ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+  buildInputs = [
+    openssl
+    sqlite
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1
+  ++ lib.optional stdenv.hostPlatform.isDarwin zstd;
 
   gradleFlags = [
     "-Dfile.encoding=utf-8"
