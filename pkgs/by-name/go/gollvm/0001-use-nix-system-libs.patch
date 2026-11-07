@@ -1,0 +1,113 @@
+From a04dbb2a6c484e85c5c1c08f6f0a8a1c3a31f9f0 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 20:10:00 -0500
+Subject: [PATCH 1/10] cmake: allow using preinstalled GMP, MPFR, and MPC
+
+Gollvm normally downloads and builds GMP, MPFR, and MPC with
+ExternalProject. That is convenient for ad hoc builds, but it does not
+work well for Nix packaging: dependencies must already be present in
+the store and builds must not fetch sources from the network.
+
+Teach the build to accept an existing prefix for these libraries. When
+the prefix is set, reuse its include and library directories, replace
+the ExternalProject targets with empty compatibility targets, and link
+against the preinstalled libraries. The old in-tree download path stays
+unchanged when the cache variable is not provided.
+---
+ CMakeLists.txt                       | 14 ++++++++++++++
+ driver-main/CMakeLists.txt           |  2 +-
+ unittests/BackendCore/CMakeLists.txt |  3 ++-
+ unittests/Driver/CMakeLists.txt      |  2 +-
+ 4 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f5b8baa64c28..0462943bb1eb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,6 +25,11 @@ include(AddGollvm)
+ processorcount(PROCESSOR_COUNT)
+ 
+ set(EXTINSTALLDIR ${CMAKE_CURRENT_BINARY_DIR}/external/install)
++set(GOLLVM_SYSTEM_EXTINSTALLDIR "" CACHE PATH
++  "Existing prefix containing include/ and lib/ directories for GMP, MPFR, and MPC")
++if(NOT "${GOLLVM_SYSTEM_EXTINSTALLDIR}" STREQUAL "")
++  set(EXTINSTALLDIR "${GOLLVM_SYSTEM_EXTINSTALLDIR}")
++endif()
+ set(EXTLIBDIR "${EXTINSTALLDIR}/lib")
+ set(EXTINCLUDEDIR "${EXTINSTALLDIR}/include")
+ set(EXTCPPFLAGS "CFLAGS=-I${EXTINCLUDEDIR}")
+@@ -36,6 +41,8 @@ if(LLVM_ENABLE_PIC)
+ endif()
+ set(EXTLDFLAGS "LDFLAGS=-L${EXTLIBDIR}")
+ set(EXTCC "CC=${CMAKE_C_COMPILER}" "CXX=${CMAKE_CXX_COMPILER}")
++set(GOLLVM_EXTLIB_LINK_FLAGS
++  "-L${EXTLIBDIR}" "-Wl,--push-state" "-Wl,-Bstatic" "-lmpc" "-lmpfr" "-lgmp" "-Wl,--pop-state")
+ 
+ set(gollvm_binroot "${CMAKE_CURRENT_BINARY_DIR}")
+ 
+@@ -54,6 +61,12 @@ else()
+   message(SEND_ERROR "Arch ${llarch} not yet supported")
+ endif()
+ 
++if(NOT "${GOLLVM_SYSTEM_EXTINSTALLDIR}" STREQUAL "")
++  add_custom_target(libgmp)
++  add_custom_target(libmpfr DEPENDS libgmp)
++  add_custom_target(libmpc DEPENDS libgmp libmpfr)
++  set(GOLLVM_EXTLIB_LINK_FLAGS "-L${EXTLIBDIR}" "-lmpc" "-lmpfr" "-lgmp")
++else()
+ externalproject_add(libgmp
+   URL https://gmplib.org/download/gmp/gmp-6.2.0.tar.bz2 https://mirrors.kernel.org/gnu/gmp/gmp-6.2.0.tar.bz2
+   URL_MD5 c24161e0dd44cae78cd5f67193492a21
+@@ -95,6 +108,7 @@ externalproject_add(libmpc
+   LOG_BUILD 1
+   LOG_INSTALL 1
+   )
++endif()
+ 
+ # Top level targets for building, installing
+ add_custom_target(gollvm ALL)
+diff --git a/driver-main/CMakeLists.txt b/driver-main/CMakeLists.txt
+index c3c59aa76294..7a491e9df051 100644
+--- a/driver-main/CMakeLists.txt
++++ b/driver-main/CMakeLists.txt
+@@ -40,7 +40,7 @@ add_dependencies(llvm-goc libmpfr libmpc libgmp)
+ # Add in the libraries for the llvm-goc dependencies.
+ target_link_libraries(llvm-goc
+   PRIVATE
+-  "-L${EXTLIBDIR}" "-Wl,--push-state" "-Wl,-Bstatic" "-lmpc" "-lmpfr" "-lgmp" "-Wl,--pop-state"
++  ${GOLLVM_EXTLIB_LINK_FLAGS}
+   )
+ 
+ # Create a "compiler built" file each time llvm-goc is built.
+diff --git a/unittests/BackendCore/CMakeLists.txt b/unittests/BackendCore/CMakeLists.txt
+index 96182d316166..3c9de03ff6d0 100644
+--- a/unittests/BackendCore/CMakeLists.txt
++++ b/unittests/BackendCore/CMakeLists.txt
+@@ -30,6 +30,7 @@ add_gobackend_unittest(GoBackendCoreTests
+   )
+ 
+ include_directories(${unittest_testutils_src})
++include_directories(${EXTINSTALLDIR}/include)
+ include_directories(${MPCINSTALL}/include)
+ include_directories(${MPFRINSTALL}/include)
+ include_directories(${GMPINSTALL}/include)
+@@ -41,5 +42,5 @@ add_dependencies(GoBackendCoreTests libmpfr libmpc libgmp)
+ target_link_libraries(GoBackendCoreTests
+   PRIVATE
+   GoUnitTestUtils
+-  "-L${EXTLIBDIR}" "-Wl,--push-state" "-Wl,-Bstatic" "-lmpc" "-lmpfr" "-lgmp" "-Wl,--pop-state"
++  ${GOLLVM_EXTLIB_LINK_FLAGS}
+   )
+diff --git a/unittests/Driver/CMakeLists.txt b/unittests/Driver/CMakeLists.txt
+index 0fc07e4196c0..e3bae5df70cf 100644
+--- a/unittests/Driver/CMakeLists.txt
++++ b/unittests/Driver/CMakeLists.txt
+@@ -33,5 +33,5 @@ add_dependencies(DriverTests libmpfr libmpc libgmp)
+ target_link_libraries(DriverTests
+   PRIVATE
+   GoUnitTestUtils
+-  "-L${EXTLIBDIR}" "-Wl,--push-state" "-Wl,-Bstatic" "-lmpc" "-lmpfr" "-lgmp" "-Wl,--pop-state"
++  ${GOLLVM_EXTLIB_LINK_FLAGS}
+   )
+-- 
+2.50.1
