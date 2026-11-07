@@ -67,6 +67,7 @@ let
     remediateOutputsToInstall
     remediate_allowlist
     remediate_predicate
+    remediate_list_or_predicate
     remediate_insecure
     getNameWithVersion
     ;
@@ -376,7 +377,9 @@ let
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
-        remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
+        remediation = remediate_allowlist "Unfree" (
+          remediate_list_or_predicate "allowUnfreePackages" "allowUnfreePredicate" attrs
+        );
       }
     else if nonEmptyBlocklist && hasBlocklistedLicense attrs then
       {

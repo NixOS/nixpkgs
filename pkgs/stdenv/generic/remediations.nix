@@ -81,6 +81,33 @@ in
         ];
       }
   '';
+  remediate_list_or_predicate =
+    listAttr: predicateAttr: pkg:
+    let
+      pkgName = getName pkg;
+      # split the blocked package's name into individual words so we can
+      # make a good "match against prefix" example in the error message
+      attrsWords = lib.splitStringBy (
+        prev: curr:
+        elem curr [
+          "-"
+          "_"
+          " "
+        ]
+      ) false pkgName;
+    in
+    ''
+
+      Alternatively, you can specify a list of individual packages to allow:
+        { nixpkgs.config.${listAttr} = [ "${pkgName}" ]; }
+
+      To get more control, you can configure a predicate to allow specific packages:
+        { nixpkgs.config.${predicateAttr} = pkg:
+            lib.hasPrefix "${lib.head attrsWords}" (lib.getName pkg)
+        }
+
+      Note: If both are set, a package will be accepted if it is allowed by at least one of these.
+    '';
   remediate_allowlist = allow_attr: rebuild_amendment: ''
     a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
        for a single invocation of the nix tools.
