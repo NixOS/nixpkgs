@@ -24,16 +24,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.36.2";
+  version = "0.40.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MdHCf3H4KQFPreaIGDfMByd3u4Tg56rbWd+HhwMhL1o=";
+    hash = "sha256-Q5RyGPHhCwamM2zexTCTmjMpIPrmZ/nsh1ZMeBhsO8I=";
   };
 
-  cargoHash = "sha256-3tS3P4CLoi5fUymYBomz4Ltmw6idzjflhfAIKfXIK8U=";
+  cargoHash = "sha256-HVBIcAO+xQtfQs3RwI9xC53iu+NbMj+atCH0nbh2xMY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -64,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   prePatch = ''
     substituteInPlace src/util.rs \
-      --replace "/usr/share/i3status-rust" "$out/share"
+      --replace "/usr/share" "$out/share"
   '';
 
   postBuild = ''
@@ -72,8 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -R examples files/* $out/share
+    mkdir -p $out/share/i3status-rust
+    cp -R examples files/* $out/share/i3status-rust
     installManPage man/*
   '';
 
