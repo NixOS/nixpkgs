@@ -113,8 +113,14 @@ in
 
         security.wrappers =
           let
+            # VBoxHeadless/VirtualBoxVM keep their /dev/vboxdrv handle after
+            # dropping privileges, so VBOX_NIX_APP_SHARE_DIR must not be
+            # user-controlled.  Force it with --set, not --set-default.
             mkSuid = program: {
-              source = "${virtualbox}/libexec/virtualbox/${program}";
+              source = pkgs.runCommand program { nativeBuildInputs = [ pkgs.makeBinaryWrapper ]; } ''
+                makeBinaryWrapper "${virtualbox}/libexec/virtualbox/${program}" $out \
+                  --set VBOX_NIX_APP_SHARE_DIR "${virtualbox}/share/virtualbox"
+              '';
               owner = "root";
               group = "vboxusers";
               setuid = true;
@@ -131,14 +137,7 @@ in
               "VirtualBoxVM"
             ]);
           in
-          lib.mkIf cfg.enableHardening (
-            builtins.listToAttrs (
-              map (x: {
-                name = x;
-                value = mkSuid x;
-              }) executables
-            )
-          );
+          lib.mkIf cfg.enableHardening (lib.genAttrs executables mkSuid);
 
         users.groups.vboxusers.gid = config.ids.gids.vboxusers;
 
@@ -156,6 +155,7 @@ in
             message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
           }
         ];
+        virtualisation.virtualbox.host.enableHardening = lib.mkDefault false;
       })
       (lib.mkIf (!cfg.enableKvm) {
         boot.kernelModules = [
