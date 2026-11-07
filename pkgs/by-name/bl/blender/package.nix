@@ -90,6 +90,8 @@
   wayland-protocols,
   wayland-scanner,
   waylandSupport ? stdenv.hostPlatform.isLinux,
+  weston,
+  writableTmpDirAsHomeHook,
   zlib,
   zstd,
 }:
@@ -424,35 +426,83 @@ stdenv'.mkDerivation (finalAttrs: {
       };
 
     tests = {
-      render = runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; } ''
-        set -euo pipefail
-        cat <<'PYTHON' > scene-config.py
-        import bpy
-        bpy.context.scene.eevee.taa_render_samples = 32
-        bpy.context.scene.cycles.samples = 32
-        if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
-            bpy.context.scene.cycles.use_denoising = False
-        bpy.context.scene.render.resolution_x = 100
-        bpy.context.scene.render.resolution_y = 100
-        bpy.context.scene.render.threads_mode = 'FIXED'
-        bpy.context.scene.render.threads = 1
-        PYTHON
+      basicRender =
+        runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; }
+          ''
+            set -euo pipefail
+            cat <<'PYTHON' > scene-config.py
+            import bpy
+            bpy.context.scene.eevee.taa_render_samples = 32
+            bpy.context.scene.cycles.samples = 32
+            if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
+                bpy.context.scene.cycles.use_denoising = False
+            bpy.context.scene.render.resolution_x = 100
+            bpy.context.scene.render.resolution_y = 100
+            bpy.context.scene.render.threads_mode = 'FIXED'
+            bpy.context.scene.render.threads = 1
+            PYTHON
 
-        mkdir $out
-        for engine in BLENDER_EEVEE_NEXT CYCLES; do
-          echo "Rendering with $engine..."
-          # Beware that argument order matters
-          ${lib.getExe finalAttrs.finalPackage} \
-            --background \
-            -noaudio \
-            --factory-startup \
-            --python-exit-code 1 \
-            --python scene-config.py \
-            --engine "$engine" \
-            --render-output "$out/$engine" \
-            --render-frame 1
-        done
-      '';
+            mkdir $out
+            for engine in BLENDER_EEVEE_NEXT CYCLES; do
+              echo "Rendering with $engine..."
+              # Beware that argument order matters
+              ${lib.getExe finalAttrs.finalPackage} \
+                --background \
+                -noaudio \
+                --factory-startup \
+                --python-exit-code 1 \
+                --python scene-config.py \
+                --engine "$engine" \
+                --render-output "$out/$engine" \
+                --render-frame 1
+            done
+          '';
+
+      blenderTests = blender.overrideAttrs (old: {
+        pname = "blender-tests";
+
+        nativeBuildInputs = old.nativeBuildInputs ++ [
+          python3Packages.docutils
+        ];
+
+        cmakeFlags = old.cmakeFlags ++ [
+          (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${lib.getBin blender}/bin") # Test against already-built blender
+          (lib.cmakeBool "WITH_INSTALL_PORTABLE" true)
+        ];
+
+        postPatch =
+          old.postPatch
+          # alembic_root is the dev output, but this needs the exe
+          + ''
+            substituteInPlace tests/python/alembic_export_tests.py \
+              --replace-fail \
+                'cls.alembic_root = pathlib.Path(args.alembic_root)' \
+                'cls.alembic_root = pathlib.Path("${alembic}")'
+          ''
+          # disable failing tests (but make them complain if they start passing)
+          + ''
+            cat <<'EOF' >> tests/python/CMakeLists.txt
+              set_tests_properties(cycles_pointcloud_cpu PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(geo_node_mesh_uv_unwrap PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(imbuf_save PROPERTIES WILL_FAIL TRUE)
+              set_tests_properties(script_bundled_modules PROPERTIES WILL_FAIL TRUE)
+            EOF
+          '';
+
+        dontBuild = true;
+        installPhase = "touch $out";
+        dontFixup = true;
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          weston
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          TBB_ENABLE_SANITIZERS=1 ctest --test-dir . --output-on-failure
+        '';
+      });
+
       tester-cudaAvailable = cudaPackages.writeGpuTestPython { } ''
         import subprocess
         subprocess.run([${
