@@ -5,6 +5,8 @@
   autoPatchelfHook,
   qt5,
   libusb1,
+  libxrandr,
+  libxtst,
   pname,
   version,
   url,
@@ -28,6 +30,10 @@ stdenv.mkDerivation {
   buildInputs = [
     qt5.qtbase
     libusb1
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "4") [
+    libxrandr
+    libxtst
   ];
 
   dontConfigure = true;

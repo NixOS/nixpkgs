@@ -12,8 +12,8 @@
   };
   xppen_4 = callPackage ./generic.nix {
     pname = "xppen_4";
-    version = "4.0.7-250117";
-    url = "https://www.xp-pen.com/download/file.html?id=3652&pid=1211&ext=gz";
-    hash = "sha256-sH05Qquo2u0npSlv8Par/mn1w/ESO9g42CCGwBauHhU=";
+    version = "4.0.15-260422";
+    url = "https://download01.xp-pen.com/file/2026/04/XPPenLinux4.0.15-260422.tar.gz";
+    hash = "sha256-vM1Lf2Nh/KqnENIZuhG8HehByv+XIukLtmpPlsIU9x0=";
   };
 }
