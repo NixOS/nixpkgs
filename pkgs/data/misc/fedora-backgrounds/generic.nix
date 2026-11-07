@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   coreutils,
+  imagemagick,
 }:
 
 {
@@ -17,17 +18,21 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  nativeBuildInputs = [
+    imagemagick
+  ];
+
   postPatch = ''
-    for f in default/Makefile extras/Makefile; do
+    for f in $(find . -name 'Makefile*'); do
       substituteInPlace $f \
-        --replace-fail "usr/share" "share" \
-        --replace-fail "/usr/bin/" "" \
-        --replace-fail "/bin/" ""
+        --replace-warn "usr/share" "share" \
+        --replace-warn "/usr/bin/" "" \
+        --replace-warn "/bin/" ""
     done
 
     for f in $(find . -name '*.xml'); do
       substituteInPlace $f \
-        --replace-fail "/usr/share" "$out/share"
+        --replace-warn "/usr/share" "$out/share"
     done;
   '';
 
