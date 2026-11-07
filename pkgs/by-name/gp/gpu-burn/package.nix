@@ -37,6 +37,9 @@ backendStdenv.mkDerivation {
       --replace-fail \
         '#define COMPARE_KERNEL "compare.fatbin"' \
         '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.fatbin"'
+    # The Jetson-only code path uses std::stringstream, which GCC 16 no longer pulls in through other headers.
+    substituteInPlace gpu_burn-drv.cpp \
+      --replace-fail '#include <regex>' $'#include <regex>\n#include <sstream>'
     substituteInPlace Makefile \
       --replace-fail \
         '${"\${CUDAPATH}/bin/nvcc"}' \
