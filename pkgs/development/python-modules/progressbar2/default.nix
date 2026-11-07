@@ -3,6 +3,8 @@
   buildPythonPackage,
   dill,
   fetchPypi,
+  freezegun,
+  markupsafe,
   pytest-freezegun,
   pytestCheckHook,
   python-utils,
@@ -12,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/kjIlVqEQor3e/8mQrpHBB4bj3yGelt8yU+LwlWo8M8=";
+    hash = "sha256-9BIkObANykFCT3h+pRSEeGhdJldCB4wcfD7eMfBr0AE=";
   };
 
   postPatch = ''
     sed -i "/-cov/d" pytest.ini
+
+    # replace unwrapped interpreter call with wrapped entrypoint
+    substituteInPlace tests/test_progressbar_command.py \
+      --replace-fail "sys.executable, '-m', 'progressbar'" "'progressbar'"
   '';
 
   build-system = [
@@ -29,15 +35,26 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ python-utils ];
+  dependencies = [ python-utils ];
 
   nativeCheckInputs = [
     dill
+    markupsafe
+    freezegun
     pytest-freezegun
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "progressbar" ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
+
+  disabledTests = [
+    # overhead isn't always low on build infra
+    "test_iterator_overhead_is_low"
+  ];
 
   disabledTestPaths = [
     # Doesn't work in the sandbox
