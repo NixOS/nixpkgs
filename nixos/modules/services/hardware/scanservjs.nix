@@ -143,11 +143,7 @@ in
         imagemagick
         tesseract
       ];
-      environment = {
-        NIX_SCANSERVJS_CONFIG_PATH = configFile;
-        SANE_CONFIG_DIR = "/etc/sane-config";
-        LD_LIBRARY_PATH = "/etc/sane-libs";
-      };
+      environment.NIX_SCANSERVJS_CONFIG_PATH = configFile;
       serviceConfig = {
         ExecStart = lib.getExe package;
         Restart = "always";

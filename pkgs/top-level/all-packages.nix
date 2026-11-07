@@ -10130,8 +10130,6 @@ with pkgs;
 
   sane-drivers = callPackage ../applications/graphics/sane/drivers.nix { };
 
-  mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
-
   selinuxPackages = recurseIntoAttrs (callPackage ../os-specific/linux/selinux { });
 
   snscrape = with python3Packages; toPythonApplication snscrape;
