@@ -16,13 +16,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store";
-  version = "2.42.5";
+  version = "2.44.5";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store";
     tag = finalAttrs.version;
-    hash = "sha256-JP5cwINQfdXK4JySCSJEDyG6dHlyXI4Nx3BWQ5Rj2ko=";
+    hash = "sha256-Z4iFVoW4+zRfVkJ8wVmnUWmCGzeT9tFiUgfRlGnEtWQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
@@ -32,6 +32,12 @@ buildNpmPackage (finalAttrs: {
     pnpm
   ];
 
+  postPatch = ''
+    substituteInPlace pnpm-lock.yaml \
+      --replace-fail 'resolution: {tarball: https://github.com/Delusions6515/shoutrrr-ts/releases/download/v0.2.0/shoutrrr-ts-0.2.0.tgz}' \
+        'resolution: {integrity: sha512-K/Cj26Dbg1epa163VfprhsP50aFmGTi71ocI9ch0uSZFdUr+P11bgLGdk88bX2w/w/nlwm8jZJ5dCugfYhqDUw==, tarball: https://github.com/Delusions6515/shoutrrr-ts/releases/download/v0.2.0/shoutrrr-ts-0.2.0.tgz}'
+  '';
+
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -39,10 +45,11 @@ buildNpmPackage (finalAttrs: {
       version
       src
       sourceRoot
+      postPatch
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-EhLZOQGjc3A3wLsJyeV9P0woAewK8GWpQnyIRIYVgB8=";
+    hash = "sha256-KPH5h9ofuyu0PZlSSE0PjI/0yYFTKs72Q10h0y+KF74=";
   };
 
   npmConfigHook = pnpmConfigHook;
