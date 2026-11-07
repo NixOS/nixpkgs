@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       hustlerone
       samiser
       yvnth
+      ryand56
     ];
     platforms = lib.platforms.linux;
   };
