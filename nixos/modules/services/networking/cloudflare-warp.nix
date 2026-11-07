@@ -6,6 +6,15 @@
 }:
 let
   cfg = config.services.cloudflare-warp;
+
+  logFilterPattern = "~^[0-9-]+T[0-9:.]+Z +(${
+    {
+      info = "TRACE|DEBUG";
+      warn = "TRACE|DEBUG|INFO";
+      error = "TRACE|DEBUG|INFO|WARN";
+    }
+    .${cfg.logLevel}
+  })";
 in
 {
   options.services.cloudflare-warp = {
@@ -33,6 +42,22 @@ in
 
     openFirewall = lib.mkEnableOption "opening UDP ports in the firewall" // {
       default = true;
+    };
+
+    logLevel = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "info"
+          "warn"
+          "error"
+        ]
+      );
+      default = null;
+      example = "warn";
+      description = ''
+        Minimum level of warp-svc events to keep in the journal, or `null` to
+        keep all of them.
+      '';
     };
   };
 
@@ -79,7 +104,12 @@ in
           AmbientCapabilities = caps;
           Restart = "always";
           RestartSec = 5;
-          Environment = [ "RUST_BACKTRACE=full" ];
+          Environment = [
+            "RUST_BACKTRACE=full"
+            # Keep ANSI color codes out of the journal.
+            "NO_COLOR=1"
+          ];
+          LogFilterPatterns = lib.mkIf (cfg.logLevel != null) logFilterPattern;
           WorkingDirectory = cfg.rootDir;
 
           # See the systemd.exec docs for the canonicalized paths, the service
