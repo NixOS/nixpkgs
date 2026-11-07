@@ -2439,8 +2439,6 @@ with pkgs;
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
 
-  pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
-
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
