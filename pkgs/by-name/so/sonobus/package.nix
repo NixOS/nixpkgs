@@ -87,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-ffat-lto-objects"
   ];
 
+  patches = [
+    ./versioninfo-gcc15.patch
+  ];
+
   postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     patchShebangs linux/install.sh
   '';

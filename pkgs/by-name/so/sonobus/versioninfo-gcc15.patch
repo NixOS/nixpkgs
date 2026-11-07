@@ -1,0 +1,26 @@
+--- sonobus-1.7.2/Source/VersionInfo.h  2023-12-11 00:32:23.000000000 -0500
++++ ./VersionInfo.h 2026-05-11 15:17:45.721022734 -0400
+@@ -27,6 +27,12 @@
+     const std::vector<Asset> assets;
+
+ private:
++    VersionInfo (String version, String notes, std::vector<Asset> parsedAssets)
++        : versionString (std::move (version)),
++          releaseNotes (std::move (notes)),
++          assets (std::move (parsedAssets))
++    {}
++
+     VersionInfo() = default;
+
+     static std::unique_ptr<VersionInfo> fetch (const String&);
+--- sonobus-1.7.2/Source/VersionInfo.cpp    2023-12-11 00:32:23.000000000 -0500
++++ ./VersionInfo.cpp   2026-05-11 15:17:45.721022734 -0400
+@@ -116,5 +116,6 @@
+         }
+     }
+
+-    return std::unique_ptr<VersionInfo> (new VersionInfo ({ versionString, releaseNotes, std::move (parsedAssets) }));
++    return std::unique_ptr<VersionInfo> (
++        new VersionInfo (std::move (versionString), std::move (releaseNotes), std::move (parsedAssets)));
+ }
+
