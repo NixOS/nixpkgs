@@ -61,6 +61,7 @@ maven.buildMavenPackage {
         };
       };
       icon = "forge-mtg";
+      startupWMClass = "forge";
       comment = "Magic: the Gathering card game with rules enforcement";
       desktopName = "Forge MTG";
       genericName = "Card Game";
@@ -100,6 +101,12 @@ maven.buildMavenPackage {
     mkdir -p $out/share/icons/hicolor/128x128/apps
     magick AppIcon.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/forge-mtg.png
 
+    # Build a Java agent to set WM_CLASS for proper window icon matching on Linux.
+    ${openjdk}/bin/javac ${./WmClassAgent.java} -d $TMPDIR/wm-class-agent
+    echo "Premain-Class: WmClassAgent" > $TMPDIR/wm-class-agent/MANIFEST.MF
+    ${openjdk}/bin/jar cfm $out/share/forge/wm-class-agent.jar \
+      $TMPDIR/wm-class-agent/MANIFEST.MF -C $TMPDIR/wm-class-agent WmClassAgent.class
+
     runHook postInstall
   '';
 
@@ -128,6 +135,7 @@ maven.buildMavenPackage {
         } \
         --set JAVA_HOME ${openjdk}/lib/openjdk \
         --set SENTRY_DSN "" \
+        --set JDK_JAVA_OPTIONS "--add-opens java.desktop/sun.awt.X11=ALL-UNNAMED -javaagent:$out/share/forge/wm-class-agent.jar=forge" \
         $PREFIX_CMD
     done
   '';
