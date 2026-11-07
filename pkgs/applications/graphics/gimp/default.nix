@@ -317,11 +317,6 @@ stdenv.mkDerivation (finalAttrs: {
     --suffix XDG_DATA_DIRS : "${adwaita-icon-theme}/share")
   '';
 
-  postFixup = ''
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc" "$devdoc"
-  '';
-
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
