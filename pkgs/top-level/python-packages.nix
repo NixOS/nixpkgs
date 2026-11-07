@@ -9076,7 +9076,7 @@ self: super: with self; {
 
   jupyter-themes = callPackage ../development/python-modules/jupyter-themes { };
 
-  jupyter-threejs-sage = callPackage ../development/python-modules/jupyter-threejs-sage/default.nix { };
+  jupyter-threejs-sage = callPackage ../development/python-modules/passagemath/jupyter-threejs-sage/default.nix { };
 
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
