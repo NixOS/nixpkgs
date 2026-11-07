@@ -75,6 +75,12 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
+  pytestFlags = [
+    # Fixes:
+    #   DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [
     "cross_web"
   ];
