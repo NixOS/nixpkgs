@@ -418,7 +418,7 @@ in
     assertions = [
       {
         assertion = !(hasAttr "bolt-path" cfg.settings) && !(hasAttr "engine-path" cfg.settings);
-        message = "services.influxdb2.config: bolt-path and engine-path should not be set as they are managed by systemd";
+        message = "services.influxdb2.settings: bolt-path and engine-path should not be set as they are managed by systemd";
       }
     ]
     ++ flatten (
