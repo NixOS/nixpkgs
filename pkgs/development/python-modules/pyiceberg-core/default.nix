@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5l9pmXbQsiFCtDVop4Dq+FnAfiUBj4qFUMz7njx7/b0=";
+    hash = "sha256-mNlMnIHEdp5HozBJ4wDHbg186HOg09btD4dhsLZmI/I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-0ZdjkQfOotd/Clxc/g14kYgAh4bUcKaa1+YVIgGydoI=";
+    hash = "sha256-HYrwozAfgqUa3eY9HCF5zumC3JsJFhYN6KnuDwVJHr8=";
   };
 
   nativeBuildInputs = [
