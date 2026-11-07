@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libvalkey";
-  version = "4.1.0";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     repo = "libvalkey-py";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-L8qbJxMbYL/0fujzm5aRQAD/gm8UO8USgiwsLeMs6Ag=";
+    hash = "sha256-stIm8+RN/qO2NB9QQg4jw6zMvpwGwg9DN5VKIoRzbrg=";
   };
 
   build-system = [ setuptools ];
