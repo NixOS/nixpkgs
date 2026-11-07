@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   aws-lc,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
@@ -28,11 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=fetch::tests::test_build_crypto_prices_request_skips_api_key_for_non_coingecko_url"
     "--skip=fetch::tests::test_build_crypto_prices_request_uses_demo_api_key_header"
     "--skip=fetch::tests::test_build_crypto_prices_request_uses_pro_api_key_header"
+    # "Operation not permitted"
+    "--skip=persistence::tests::private_overwrite_preserves_file_and_existing_directory_modes"
   ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ aws-lc ];
+
+  # "No CA certificates were loaded from the system"
+  nativeCheckInputs = [ cacert ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
