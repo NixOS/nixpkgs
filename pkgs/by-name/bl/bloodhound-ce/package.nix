@@ -1,45 +1,60 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchurl,
   lib,
   makeWrapper,
-  nodejs_22,
+  nodejs_26,
   p7zip,
   python3,
   stdenv,
-  yarn-berry_3,
+  substitute,
+  versionCheckHook,
+  yarn-berry_4,
 }:
 let
-  inherit (lib) concatLines pipe;
+  inherit (lib)
+    concatLines
+    mapAttrs'
+    mapAttrsToList
+    pipe
+    ;
   inherit (lib.versions) major minor patch;
 
   # reference: https://github.com/SpecterOps/BloodHound/blob/main/dockerfiles/bloodhound.Dockerfile
 
   pname = "bloodhound-ce";
-  version = "8.3.1";
+  version = "9.9.0";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "BloodHound";
     tag = "v${version}";
-    hash = "sha256-mIoQkxUxv2BktFGSLKo5RVEF/7JByiyCWC2o9GWS9w4=";
+    hash = "sha256-SP8KnnL5VhZLM+Uow1DofAt8tqulFB0OoH9VWFs0/K0=";
+
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
-  yarn-berry = yarn-berry_3;
+  yarn-berry = yarn-berry_4;
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "bloodhound-ce-frontend";
-    inherit version src;
-
-    patches = [
-      # cmd/ui/package.json includes "git@github.com:BloodHoundAD/dagre.git"
-      # which requires a valid SSH credential to fetch
-      ./fetch-dagrejs-via-https.patch
-    ];
+    inherit src version;
 
     nativeBuildInputs = [
-      nodejs_22
+      nodejs_26
       yarn-berry
       yarn-berry.yarnBerryConfigHook
 
@@ -54,9 +69,13 @@ let
     missingHashes = ./missing-hashes.json;
 
     offlineCache = yarn-berry.fetchYarnBerryDeps {
-      inherit (finalAttrs) src patches missingHashes;
-      hash = "sha256-0OXOZ9QVpOxqE4r1Gj0dOlEijY+JAqOvanntp5D5t1M=";
+      inherit (finalAttrs) missingHashes src;
+      hash = "sha256-FSydgrjBrgRVO0XnlAwv5G0kzxiRUsFNvenQ3k/c42I=";
     };
+
+    prePatch = ''
+      sed -i '/npmMinimalAgeGate/d' .yarnrc.yml
+    '';
 
     preConfigure = ''
       export JOBS=$NIX_BUILD_CORES
@@ -75,84 +94,58 @@ let
     '';
   });
 
-  collectors =
-    let
-      azver = "v2.8.1";
-      shver = "v2.8.0";
+  azurehoundVersion = "3.1.3";
+  sharphoundVersion = "2.17.1";
 
-      sharphound = fetchurl {
-        url = "https://github.com/SpecterOps/SharpHound/releases/download/${shver}/sharphound_${shver}_windows_x86.zip";
-        hash = "sha256-BjBOxjhQYpqD/qUy9EsuXplK8JAuPU/LE2O0Ooxr+r4=";
-      };
-    in
-    pipe
-      [
-        {
-          os = "darwin";
-          arch = "amd64";
-          hash = "sha256-HD5vMc6vt71wj5ST6On417iY3DJZQXdG8Il73H22m9Q=";
-        }
-        {
-          os = "darwin";
-          arch = "arm64";
-          hash = "sha256-57i+/9gV17pqQqqnEianJdJ6Jtg4DsExMkfAEqaeNns=";
-        }
-        {
-          os = "linux";
-          arch = "amd64";
-          hash = "sha256-8wrEef0+ik5WAsIV7tInyUlNnsUBw6Ux9LE7gVS3Fhs=";
-        }
-        {
-          os = "linux";
-          arch = "arm64";
-          hash = "sha256-23lokcbd2Yp9pWibsb5SNW/YE/eHpHCFZv2PbBlw0Xo=";
-        }
-        {
-          os = "windows";
-          arch = "amd64";
-          hash = "sha256-IkEfEh2VFNTnuUAez6/vMY7sMv4rtDR3Paerev/xoqs=";
-        }
-        {
-          os = "windows";
-          arch = "arm64";
-          hash = "sha256-qEgmO7oNy/pUXH7lbOoJxNznl2mPofj2R5RGBZdOoUI=";
-        }
-      ]
-      [
-        (map (
-          x:
-          "cp ${
-            fetchurl {
-              url = "https://github.com/SpecterOps/AzureHound/releases/download/${azver}/azurehound_${azver}_${x.os}_${x.arch}.zip";
-              inherit (x) hash;
-            }
-          } azurehound_${azver}_${x.os}_${x.arch}.zip"
-        ))
-        concatLines
-        (
-          copyAzurehoundZips:
-          stdenv.mkDerivation {
-            pname = "bloodhound-ce-collectors";
-            inherit version src;
+  azurehoundHashes = {
+    darwin_amd64 = "sha256-O2Lzta29cZOA6lbUKIyEQm8jRNqFwd0iShqYrmiauZ4=";
+    darwin_arm64 = "sha256-PedhEv5X8PKw3tXVjrIlOmGlj1T2fkkFCW+a+stQ4kc=";
+    linux_amd64 = "sha256-uBQRaphQZY7za+VMP44tFWCgVgyjdwUiBt76wGTlpo0=";
+    linux_arm64 = "sha256-5Btf42b8R+Tp+z0EVBd4Q/bZL86la0AK8KJW6bzFWvo=";
+    windows_amd64 = "sha256-1sVDq+C3NkDSuDn9G9MN1V88D+qDcL7wYgCpBzyxZvw=";
+    windows_arm64 = "sha256-TWk8ciZU8H7gfbUS8jvf/5S5DWS5VOWNXnltQt3CBSk=";
+  };
 
-            nativeBuildInputs = [ p7zip ];
+  azurehoundSources = mapAttrs' (name: hash: {
+    name = "azurehound_${name}";
+    value = fetchurl {
+      url = "https://github.com/SpecterOps/AzureHound/releases/download/v${azurehoundVersion}/azurehound_v${azurehoundVersion}_${name}.zip";
+      inherit hash;
+    };
+  }) azurehoundHashes;
 
-            installPhase = ''
-              mkdir -p $out/{azurehound,sharphound}
+  sharphoundSource = fetchurl {
+    url = "https://github.com/SpecterOps/SharpHound/releases/download/v${sharphoundVersion}/sharphound_v${sharphoundVersion}_windows_x86.zip";
+    hash = "sha256-Y41tQI+HBnpmSzge/BHa5ddry/tFFFJFMUX5Y8cJsko=";
+  };
 
-              ${copyAzurehoundZips}
-              7z x 'azurehound_*.zip' '-oartifacts/*'
-              (cd artifacts; 7z a -tzip -mx9 $out/azurehound/azurehound-${azver}.zip *)
+  collectors = pipe azurehoundSources [
+    (mapAttrsToList (_: x: "cp ${x} ${baseNameOf x.url}"))
+    concatLines
+    (
+      copyAzurehoundZips:
+      stdenv.mkDerivation {
+        pname = "bloodhound-ce-collectors";
+        inherit src version;
 
-              cp ${sharphound} $out/sharphound/sharphound-${shver}.zip
-              for i in $out/*/*.zip; do sha256sum "$i" > "$i.sha256"; done
-            '';
-          }
-        )
-      ];
+        nativeBuildInputs = [ p7zip ];
+
+        installPhase = ''
+          mkdir -p $out/{azure,sharp}hound
+
+          ${copyAzurehoundZips}
+          7z x 'azurehound_*.zip' '-oartifacts/*'
+          (cd artifacts; 7z a -tzip -mx9 $out/azurehound/azurehound-${azurehoundVersion}.zip *)
+
+          cp ${sharphoundSource} $out/sharphound/sharphound-${sharphoundVersion}.zip
+          for i in $out/*/*.zip; do sha256sum "$i" > "$i.sha256"; done
+        '';
+      }
+    )
+  ];
 in
-buildGoModule {
-  inherit pname version src;
+buildGo127Module {
+  inherit pname src version;
 
   nativeBuildInputs = [
     makeWrapper
@@ -160,7 +153,6 @@ buildGoModule {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/specterops/bloodhound/cmd/api/src/version.majorVersion=${major version}"
     "-X github.com/specterops/bloodhound/cmd/api/src/version.minorVersion=${minor version}"
     "-X github.com/specterops/bloodhound/cmd/api/src/version.patchVersion=${patch version}"
@@ -170,7 +162,11 @@ buildGoModule {
     "cmd/api/src/cmd/bhapi"
   ];
 
-  vendorHash = "sha256-Lm6g0pxGVIuns6mUwnkbnBQQQp1V0TvEakX5fAo8qMo=";
+  vendorHash = "sha256-HY5bQ4+SXJ4KBvn6rEWZYFHZcO8dk2DS7yi+TtLUnv8=";
+
+  overrideModAttrs = {
+    preBuild = ""; # go modules shouldn't depend on frontend
+  };
 
   preBuild = ''
     rm -rf            cmd/api/src/api/static/assets
@@ -184,8 +180,20 @@ buildGoModule {
       --set BHE_COLLECTORS_BASE_PATH ${collectors}
   '';
 
-  passthru = {
-    inherit frontend collectors;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru = azurehoundSources // {
+    inherit
+      azurehoundVersion
+      sharphoundVersion
+      sharphoundSource
+      collectors
+      frontend
+      ;
+
+    updateScript = ./update.sh;
   };
 
   meta = {
