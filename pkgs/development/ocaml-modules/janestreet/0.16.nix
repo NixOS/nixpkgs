@@ -703,27 +703,6 @@ with self;
     ];
   };
 
-  janestreet_csv = janePackage {
-    pname = "janestreet_csv";
-    hash = "sha256-XLyHxVlgBvMIBrG2wzOudbKqy+N12Boheb3K+6o9y1o=";
-    propagatedBuildInputs = [
-      async
-      bignum
-      core_kernel
-      core_unix
-      csvfields
-      delimited_parsing
-      fieldslib
-      numeric_string
-      ppx_jane
-      re2
-      textutils
-      tyxml
-      ocaml_pcre
-    ];
-    meta.description = "Tools for working with CSVs on the command line";
-  };
-
   jane_rope = janePackage {
     pname = "jane_rope";
     hash = "sha256-MpjbwV+VS3qRuW8kxhjGzsITEdrPeWyr0V+LiKR6U8U=";

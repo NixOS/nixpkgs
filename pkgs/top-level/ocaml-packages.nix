@@ -1429,8 +1429,6 @@ let
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
-        mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
-
         mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
 
         msgpck = callPackage ../development/ocaml-modules/msgpck { };
@@ -1520,8 +1518,6 @@ let
         ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic { };
 
         ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
-
-        ocaml_pcre = callPackage ../development/ocaml-modules/pcre { };
 
         ocaml-print-intf = callPackage ../development/ocaml-modules/ocaml-print-intf { };
 
