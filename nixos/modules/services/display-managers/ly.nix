@@ -11,6 +11,7 @@ let
   xcfg = config.services.xserver;
   xdmcfg = xcfg.displayManager;
   cfg = config.services.displayManager.ly;
+  kmsconCfg = config.services.kmscon;
   xEnv = config.systemd.services.display-manager.environment;
 
   ly = cfg.package.override { x11Support = cfg.x11Support; };
@@ -60,11 +61,20 @@ let
 
   cfgFile = iniFmt.generate "config.ini" { globalSection = finalConfig; };
 
+  lyCommand = "exec ${lib.optionalString cfg.useKmscon "${lib.getExe kmsconCfg.package} --vt=tty${toString finalConfig.tty} --no-switchvt --no-libseat --login -- "}${lib.getExe ly}${lib.optionalString cfg.useKmscon " --use-kmscon-vt"}";
+
 in
 {
   options = {
     services.displayManager.ly = {
       enable = mkEnableOption "ly as the display manager";
+      useKmscon = mkOption {
+        description = "Whether to run Ly inside kmscon";
+        type = lib.types.bool;
+        default = kmsconCfg.enable;
+        defaultText = lib.literalExpression "config.services.kmscon.enable";
+      };
+
       x11Support = mkOption {
         description = "Whether to enable support for X11";
         type = lib.types.bool;
@@ -94,6 +104,12 @@ in
         assertion = dmcfg.autoLogin.enable -> dmcfg.sessionData.autologinSession != null;
         message = ''
           ly auto-login requires that services.displayManager.defaultSession is set.
+        '';
+      }
+      {
+        assertion = cfg.useKmscon -> kmsconCfg.enable;
+        message = ''
+          services.displayManager.ly.useKmscon requires services.kmscon.enable.
         '';
       }
     ];
@@ -202,7 +218,7 @@ in
         enable = true;
         generic = {
           enable = true;
-          execCmd = "exec /run/current-system/sw/bin/ly";
+          execCmd = lyCommand;
         };
 
         # Set this here instead of 'defaultConfig' so users get eval
@@ -225,12 +241,19 @@ in
           "plymouth-quit-wait.service"
         ];
 
+        environment = lib.mkIf cfg.useKmscon {
+          XKB_CONFIG_ROOT = config.services.xserver.xkb.dir;
+        };
+
         serviceConfig = {
           Type = "idle";
           StandardInput = "tty";
           TTYPath = "/dev/tty${toString finalConfig.tty}";
           TTYReset = "yes";
           TTYVHangup = "yes";
+        }
+        // optionalAttrs cfg.useKmscon {
+          TTYVTDisallocate = "yes";
         };
       };
     };
