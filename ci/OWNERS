@@ -85,6 +85,7 @@
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
+/pkgs/build-support/proton @Mistyttm
 
 # Nix, the package manager
 # @raitobezarius is not "code owner", but is listed here to be notified of changes

@@ -368,6 +368,10 @@
                 {
                   "id": "checkpoint-build",
                   "file": "build-helpers/special/checkpoint-build.section.md"
+                },
+                {
+                  "id": "mkprotonbinderivation",
+                  "file": "build-helpers/special/mkprotonbinderivation.section.md"
                 }
               ]
             },

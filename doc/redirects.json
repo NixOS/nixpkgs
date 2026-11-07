@@ -2513,6 +2513,24 @@
   "sec-checkpoint-build-example": [
     "index.html#sec-checkpoint-build-example"
   ],
+  "sec-pkgs-mkProtonBinDerivation": [
+    "index.html#sec-pkgs-mkProtonBinDerivation"
+  ],
+  "sec-pkgs-mkProtonBinDerivation-inputs": [
+    "index.html#sec-pkgs-mkProtonBinDerivation-inputs"
+  ],
+  "sec-pkgs-mkProtonBinDerivation-update-script": [
+    "index.html#sec-pkgs-mkProtonBinDerivation-update-script"
+  ],
+  "sec-pkgs-mkProtonBinDerivation-examples": [
+    "index.html#sec-pkgs-mkProtonBinDerivation-examples"
+  ],
+  "ex-pkgs-mkProtonBinDerivation": [
+    "index.html#ex-pkgs-mkProtonBinDerivation"
+  ],
+  "ex-pkgs-mkProtonBinDerivation-steamDisplayName": [
+    "index.html#ex-pkgs-mkProtonBinDerivation-steamDisplayName"
+  ],
   "sec-redisTestHook": [
     "index.html#sec-redisTestHook"
   ],
