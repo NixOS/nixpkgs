@@ -1,7 +1,4 @@
 {
-  fetchFromGitHub,
-  fetchpatch,
-  fetchPypi,
   python3,
 
   # Extra airflow providers to enable
@@ -9,17 +6,13 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = pySelf: pySuper: {
-      apache-airflow = pySelf.callPackage ./python-package.nix { inherit enabledProviders; };
-    };
+  apache-airflow = python3.pkgs.callPackage ./python-package.nix {
+    inherit enabledProviders;
   };
 in
 # See note in ./python-package.nix for
 # instructions on manually testing the web UI
-with python.pkgs;
-(toPythonApplication apache-airflow).overrideAttrs (previousAttrs: {
+(python3.pkgs.toPythonApplication apache-airflow).overrideAttrs (previousAttrs: {
   # Provide access to airflow's modified python package set
   # for the cases where external scripts need to import
   # airflow modules, though *caveat emptor* because many of
@@ -27,6 +20,6 @@ with python.pkgs;
   # not work at all due to the unexpected version overrides
   # here.
   passthru = (previousAttrs.passthru or { }) // {
-    pythonPackages = python.pkgs;
+    pythonPackages = python3.pkgs;
   };
 })
