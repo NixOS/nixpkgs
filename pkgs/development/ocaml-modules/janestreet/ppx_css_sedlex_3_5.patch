@@ -1,0 +1,24 @@
+Make the vendored CSS lexer compatible with sedlex >= 3.5.
+
+sedlex 3.5 restricts character-literal intervals to ASCII endpoints
+(https://github.com/ocaml-community/sedlex/pull/127, commit
+c7605dab330cee27b66a3546b97ae98be0bdcbb7, released in 3.5):
+'\160' .. '\255' is now rejected with
+"this pattern is not a valid ASCII interval regexp".  Respell the
+interval using code points, which sedlex accepts for any range and
+which denotes exactly the same character set.
+
+Upstream ppx_css master (unreleased) has restructured the vendored
+parser and defines non_ascii as the complement of the ASCII range
+instead; this minimal respelling keeps v0.17.0 semantics unchanged.
+
+--- a/vendor/css_parser/src/lexer.ml
++++ b/vendor/css_parser/src/lexer.ml
+@@ -93,7 +93,7 @@
+ let ws = [%sedlex.regexp? Star white_space]
+ let hex_digit = [%sedlex.regexp? '0' .. '9' | 'a' .. 'f' | 'A' .. 'F']
+ let digit = [%sedlex.regexp? '0' .. '9']
+-let non_ascii = [%sedlex.regexp? '\160' .. '\255']
++let non_ascii = [%sedlex.regexp? 0xA0 .. 0xFF]
+ let up_to_6_hex_digits = [%sedlex.regexp? Rep (hex_digit, 1 .. 6)]
+ let unicode = [%sedlex.regexp? '\\', up_to_6_hex_digits, Opt white_space]
