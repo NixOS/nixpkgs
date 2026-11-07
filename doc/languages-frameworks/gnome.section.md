@@ -148,7 +148,13 @@ You can also pass additional arguments to `makeWrapper` using `gappsWrapperArgs`
 
 ## Updating GNOME packages {#ssec-gnome-updating}
 
-Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running `nix-shell maintainers/scripts/update.nix --argstr package nautilus` or even en masse with `nix-shell maintainers/scripts/update.nix --argstr path gnome`. Read the package’s `NEWS` file to see what changed.
+Most GNOME package offer [`updateScript`](#var-passthru-updateScript), it is therefore possible to update to latest source tarball by running
+- `nix-shell maintainers/scripts/update.nix --argstr package nautilus` for a single package,
+- `nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'` for all packages using the `updateScript`.
+
+Read the package’s `NEWS` file to see what changed.
+
+For a full GNOME update, you can run `pkgs/desktops/gnome/updateGnome.py <VERSIONS> ...`. See the header of the script for additional usage information, or pass `--help`.
 
 ## Frequently encountered issues {#ssec-gnome-common-issues}
 
