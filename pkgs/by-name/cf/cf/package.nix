@@ -41,10 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_12;
-    fetcherVersion = 4;
-    # Avoid pnpm's macOS clone probe leaving v11/links in the dependency archive.
-    pnpmInstallFlags = [ "--package-import-method=copy" ];
-    hash = "sha256-cpi//8CVaU9KHJHetNKk0xW+YW6Lfo/d/KQZeGKX/Rs=";
+    fetcherVersion = 5;
+    hash = "sha256-9Wc9WV1aKSBjvyqVAH0kixBES+60KwudvrkwVpV/opo=";
   };
 
   nativeBuildInputs = [
