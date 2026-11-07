@@ -13,23 +13,24 @@
   rustc,
   rustPlatform,
   syrupy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-api-client-common";
-  version = "0.15.0";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-rust";
     tag = "common/v${version}";
-    hash = "sha256-ksB71Vd9PbKAHll2Y5VrCspsyUyhXwthHl2yVl6MQ7U=";
+    hash = "sha256-60WzBbvkb+71VaIlgh6Nw/CN4B2e3qEPqpXUeiv6lrc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-QvMeCzpHGMVjqYs0i3gpzY6Zk4rGiXyTopzaQMLWBcA=";
+    hash = "sha256-KOWEQtF7uveE7AgguuXlksDAQDZ9GhctP1OQhTjCQwk=";
   };
 
   buildAndTestSubdir = "qcs-api-client-common";
@@ -56,9 +57,14 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     syrupy
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+  disabledTests = [
+    # LoadError
+    "test_sync_method_from_async_context"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
     # asyncio.Future() in sync fixture has no implicit event loop on 3.14
     "test_refresh_interceptor"
   ];
