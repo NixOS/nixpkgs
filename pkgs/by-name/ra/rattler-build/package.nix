@@ -18,6 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rattler-build";
   version = "0.77.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "rattler-build";
@@ -40,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  cargoBuildFlags = [ "--bin rattler-build" ]; # other bin like `generate-cli-docs` shouldn't be distributed.
+  cargoBuildFlags = [ "--bin=rattler-build" ]; # other bin like `generate-cli-docs` shouldn't be distributed.
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
