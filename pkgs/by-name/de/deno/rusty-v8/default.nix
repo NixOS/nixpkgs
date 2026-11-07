@@ -70,26 +70,27 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-v8";
-  version = "149.3.0";
+  version = "150.4.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "rusty_v8";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hQfSDpdQBeQrOerXi+fI6mGCXkFH2ro90eWZX7xcwjA=";
+    hash = "sha256-dzFIzoMgs5UmUcCnl2XiGBBjPnPuVhvT6JS56y+xvoo=";
   };
 
   patches = [
     ./librusty_v8_no_downloads.patch
     ./llvm22.patch
     ./gn_inputs_fix.patch
+    ./c_additional_outputs.patch
   ]
   ++ lib.optionals stdenv.targetPlatform.isDarwin [
     ./librusty_v8-darwin-fix-__rust_no_alloc_shim_is_unstable_v2.patch
   ];
 
-  cargoHash = "sha256-ROz8f+o/OVNKSm4Hp1z4eCI2pmlNTUpBZ5447uvVXUk=";
+  cargoHash = "sha256-OSHGZLGO1UKf8HQVV9iH+XanCOJoc301UvoI8jXoygw=";
 
   nativeBuildInputs = [
     llvmPackages.clang
