@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gitpython";
-  version = "3.1.62";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
     tag = finalAttrs.version;
-    hash = "sha256-g7qZSFFWAa7iJSn+HAxCTfNZfrYZsZRJGUIZGYQjoUI=";
+    hash = "sha256-LqHpvJLe5LqPca6FIH3NoOXVdV7LPojixg4sLPgLC8Q=";
   };
 
   postPatch = ''
