@@ -36,6 +36,12 @@ let
       sed -i -e "s|ruby 3.4.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
       sed -i -e "s|3.4.[0-9]\+|${ruby.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
+
+      # tmp/ is a symlink into the data directory. Resolve it, otherwise the
+      # gpg-agent socket path below the nix store exceeds the 108 byte limit
+      # for unix sockets and the agent fails to start.
+      substituteInPlace lib/secure_mailing/pgp/tool/exec.rb \
+        --replace-fail "Rails.root.join('tmp')" "File.realpath(Rails.root.join('tmp'))"
     '';
   };
 
