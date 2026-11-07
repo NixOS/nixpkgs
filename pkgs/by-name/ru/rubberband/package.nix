@@ -33,6 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-an-error-with-libcxx-21.patch
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     meson
