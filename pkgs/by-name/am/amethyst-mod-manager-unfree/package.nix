@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   _7zz-rar,
   amethyst-mod-manager,
