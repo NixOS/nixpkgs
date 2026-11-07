@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   openssl,
   pkg-config,
@@ -57,6 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::io::data_reader_http::tests::read_range_googleapis"
     "--skip=io::data_reader_http::tests::read_range_git"
     "--skip=io::data_reader_http::tests::read_range_googleapis"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Skip tests that require `sysctl` (unavailable on macOS)
+    "--skip=tools::mosaic_tools::assemble::cli::tests::test_parse_buffer_size"
+    "--skip=tools::mosaic_tools::assemble::cli::tests::test_parse_buffer_size_boundary_percentage"
   ];
 
   nativeInstallCheckInputs = [
