@@ -28,13 +28,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.10";
+  version = "1.2.10rc1";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z68vflYgO3cWeOkb417Gyco1Fqb98ulyRgI+OS+B4is=";
+    hash = "sha256-/Yl8wijvHxqWQ6IgkiWARpw3HphRW8J3suDlxdhAO8w=";
   };
 
   postPatch = ''
