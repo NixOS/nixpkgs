@@ -16,8 +16,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "CiscoDevNet";
-    repo = "webexteamssdk";
+    owner = "WebexCommunity";
+    repo = "WebexPythonSDK";
     tag = "v${version}";
     hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python module for Webex Teams APIs";
-    homepage = "https://github.com/CiscoDevNet/webexteamssdk";
+    homepage = "https://github.com/WebexCommunity/WebexPythonSDK";
     changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

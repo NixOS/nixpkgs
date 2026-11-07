@@ -13,9 +13,9 @@ buildPythonPackage {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "iskandr";
+    owner = "openvax";
     repo = "serializable";
-    # See https://github.com/iskandr/serializable/issues/7. As of 2023-07-13,
+    # See https://github.com/openvax/serializable/issues/7. As of 2023-07-13,
     # they do no have version tags.
     rev = "ed309a6f8f2590b525fc0f93c00549223c8c944f";
     hash = "sha256-AXlgIc1B7bkR+joXn6ZSxk/t848CWlgVZp8WIsSZFKQ=";
@@ -31,7 +31,7 @@ buildPythonPackage {
 
   meta = {
     description = "Base class with serialization methods for user-defined Python objects";
-    homepage = "https://github.com/iskandr/serializable";
+    homepage = "https://github.com/openvax/serializable";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
   };

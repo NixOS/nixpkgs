@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
+    owner = "pylint-dev";
     repo = "pylint-plugin-utils";
     tag = finalAttrs.version;
     hash = "sha256-8C6vJDu60uSb6G0kvwiO0RAY9dU0yf955mAJAKhIkaQ=";
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Utilities and helpers for writing Pylint plugins";
-    homepage = "https://github.com/PyCQA/pylint-plugin-utils";
+    homepage = "https://github.com/pylint-dev/pylint-plugin-utils";
     changelog = "https://github.com/pylint-dev/pylint-plugin-utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "opcode81";
+    owner = "oraios";
     repo = "sensAI-utils";
     tag = "v${version}";
     hash = "sha256-E/9pCkSvKeGW1wlO6+YD0glbPrt4aJ7NZ0Kss2VbGdE=";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Utilities from sensAI, the Python library for sensible AI";
-    homepage = "https://github.com/opcode81/sensAI-utils";
-    changelog = "https://github.com/opcode81/sensAI-utils/releases/tag/${src.tag}";
+    homepage = "https://github.com/oraios/sensAI-utils";
+    changelog = "https://github.com/oraios/sensAI-utils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

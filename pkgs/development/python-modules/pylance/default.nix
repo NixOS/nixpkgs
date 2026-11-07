@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lancedb";
+    owner = "lance-format";
     repo = "lance";
     tag = "v${finalAttrs.version}";
     hash = "sha256-EGj0kF4x3+Oor1mD/E+QxgViCU7X8okX3cSOUNy7KD4=";
@@ -207,8 +207,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python wrapper for Lance columnar format";
-    homepage = "https://github.com/lancedb/lance";
-    changelog = "https://github.com/lancedb/lance/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/lance-format/lance";
+    changelog = "https://github.com/lance-format/lance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

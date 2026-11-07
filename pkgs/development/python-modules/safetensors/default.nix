@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "huggingface";
+    owner = "safetensors";
     repo = "safetensors";
     tag = "v${finalAttrs.version}";
     hash = "sha256-jD12fRcQ9mPQVr3M1G5pP9rC3cPE5Eu9m9Ga5N9Tsqg=";
@@ -123,9 +123,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "safetensors" ];
 
   meta = {
-    homepage = "https://github.com/huggingface/safetensors";
+    homepage = "https://github.com/safetensors/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
-    changelog = "https://github.com/huggingface/safetensors/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/safetensors/safetensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

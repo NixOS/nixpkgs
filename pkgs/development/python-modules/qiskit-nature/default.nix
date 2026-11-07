@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Qiskit";
+    owner = "qiskit-community";
     repo = "qiskit-nature";
     tag = finalAttrs.version;
     hash = "sha256-ONSeZx83y2FCikPKxcITdGvSrJf5XhmcrrcejZPJ9u0=";
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
-    downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
+    downloadPage = "https://github.com/qiskit-community/qiskit-nature/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     sourceProvenance = with lib.sourceTypes; [
       fromSource

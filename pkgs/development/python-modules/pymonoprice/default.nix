@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "etsinko";
+    owner = "OnFreund";
     repo = "pymonoprice";
     tag = "v${version}";
     hash = "sha256-UwP2R3gpu2gNgIEzyA9QSvPx40HfPALXFwHy4aJS6XA=";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python 3 interface implementation for Monoprice 6 zone amplifier";
-    homepage = "https://github.com/etsinko/pymonoprice";
-    changelog = "https://github.com/etsinko/pymonoprice/releases/tag/${version}";
+    homepage = "https://github.com/OnFreund/pymonoprice";
+    changelog = "https://github.com/OnFreund/pymonoprice/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
