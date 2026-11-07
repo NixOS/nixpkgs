@@ -7,13 +7,13 @@
   nixosTests,
 }:
 let
-  version = "0.19.0";
+  version = "0.20.0-preprod";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "drive";
     tag = "v${version}";
-    hash = "sha256-y9lvGYTIxpuTA0mFDl616JxX+RF5+5Ea8k/NWlLjrZk=";
+    hash = "sha256-4NrcvxaAzIJFyEt7d93ucEKXYx4hb2k/34aEYG7HbTs=";
   };
 
   meta = {
