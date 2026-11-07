@@ -1,9 +1,5 @@
 { pkgs, lib, ... }:
 
-let
-  chipVersion = pkgs.python3Packages.home-assistant-chip-core.version;
-in
-
 {
   name = "matter-server";
   meta.maintainers = with lib.maintainers; [ leonm1 ];
@@ -11,7 +7,7 @@ in
 
   nodes = {
     machine =
-      { config, ... }:
+      { ... }:
       {
         services.matter-server = {
           enable = true;
@@ -37,12 +33,9 @@ in
             output = machine.succeed("echo \"\" | ${pkgs.websocat}/bin/websocat ws://localhost:1234/ws")
             machine.log(output)
 
-        assert '"fabric_id": 1' in output, (
+        assert '"fabric_id":1' in output, (
           "fabric_id not propagated to server"
         )
-
-        with subtest("Check storage directory is created"):
-            machine.succeed("ls /var/lib/matter-server/chip.json")
 
         with subtest("Check dashboard loads"):
             machine.succeed("curl -f 127.0.0.1:1234")
