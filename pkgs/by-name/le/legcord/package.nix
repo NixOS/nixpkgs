@@ -6,24 +6,28 @@
   pnpmConfigHook,
   pnpm_10_latest,
   nodejs,
-  electron,
+  electron_44,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   autoPatchelfHook,
   pipewire,
   libpulseaudio,
+  jq,
   nix-update-script,
 }:
+let
+  electron = electron_44;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nai8lcimEts/E3bwUyQufLYIHhUK83IH431PUQFtQJI=";
+    hash = "sha256-6G/x4k6HYmjWyFo11iqAG7MWminaesIODjgjqgs0VpU=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # legcord uses venmic, which is a shipped as a prebuilt node module
     # and needs to be patched
     autoPatchelfHook
+    jq
   ];
 
   buildInputs = [
@@ -49,8 +54,22 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10_latest;
     fetcherVersion = 4;
-    hash = "sha256-a0FvNwEAEAltQltgUf4tX0IGSdcYHkSodx4b9v5QQcg=";
+    hash = "sha256-o5Ycy2QHY7GefXDBxvg1J1h4if6yp2+DdGNa5yX4EQQ=";
   };
+
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
+
+    # electron builds must be writable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -76,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist="${electron.dist}" \
+      -c.electronDist=electron-dist \
       -c.electronVersion="${electron.version}"
 
     runHook postBuild

@@ -212,6 +212,15 @@ in
       galeneStreamSrtPort = 9710;
       galeneStreamFeedImage = "galene-stream-feed.png";
       galeneStreamFeedLabel = "Example";
+
+      # Firefox obfuscates ICE host candidates as mDNS .local names.
+      # Galene's Pion server disables mDNS, so it cannot resolve them and the
+      # WebRTC transport never completes (the stream stays black).
+      firefoxWithWebrtc = pkgs.firefox.override {
+        extraPrefs = ''
+          defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
+        '';
+      };
     in
     {
       name = "galene-stream-works";
@@ -255,7 +264,7 @@ in
 
             systemPackages = with pkgs; [
               ffmpeg
-              firefox
+              firefoxWithWebrtc
               galene-stream
             ];
           };
@@ -318,6 +327,11 @@ in
             machine.send_key("alt-f10")
             machine.wait_for_text(r"(Galène|Username|Password|Connect)")
             machine.screenshot("galene-group-test-join")
+
+            # Reload the page, else the stream feed label doesn't show up
+            # TODO: figure out why
+            machine.send_key("f5")
+            machine.sleep(5)
 
             # Log in as anon
             machine.send_key("ret")
