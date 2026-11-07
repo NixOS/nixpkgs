@@ -34,6 +34,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   inherit (flashinfer-python) version src;
   pyproject = true;
 
+  # Same source as flashinfer-python: also apply its patches
+  inherit (flashinfer-python) patches;
+
   postPatch =
     # The FP4 KV dequantization module only supports SM >= 8.0, but is added unconditionally.
     # Building the sm75 provider fails with:
