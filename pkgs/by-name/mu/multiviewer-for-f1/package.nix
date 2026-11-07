@@ -30,16 +30,13 @@
   libxcb,
   writeScript,
 }:
-let
-  id = "518116281";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "2.8.4";
+  version = "2.12.0";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.app/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-CTaFtxoV8XEBhD9b8dPLPqHloc1MoHKuEBYt7EJy9U0=";
+    url = "https://releases.multiviewer.app/v/2.12.0/1/96R-0C1s8UqDUXq5RCvEsGVBneRwcCF0/multiviewer_2.12.0_amd64.deb";
+    hash = "sha256-eppdmS5ZdZDwwSvMDB3TZbXbbns0NvlSbCj0ydnR36A=";
   };
 
   nativeBuildInputs = [
@@ -104,11 +101,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     set -eu -o pipefail
 
     # Get latest API for packages, store so we only make one request
-    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest/")
+    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest?channel=stable")
 
     # From the downloaded JSON extract the url, version and id
     link=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").url')
-    id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
     version=$(echo $latest | jq -r '.version')
 
     if [ "$version" != "${finalAttrs.version}" ]
@@ -116,9 +112,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # Pre-calculate package hash
       hash=$(nix-hash --type sha256 --to-sri $(nix-prefetch-url --type sha256 $link))
 
-      # Update ID and version in source
-      sed -i "s/id = \"[0-9]*\"/id = \"$id\"/" ${__curPos.file}
-      update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
+      # Update URL and version in source
+      update-source-version ${finalAttrs.pname} "$version" "$hash" "$link" --system=x86_64-linux
     fi
   '';
 
@@ -127,7 +122,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ babeuh ];
+    maintainers = with lib.maintainers; [
+      babeuh
+      eprovst
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "multiviewer";
   };
