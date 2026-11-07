@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -224,5 +225,8 @@ in
       '';
     };
 
+    warnings =
+      lib.optional (config.environment.defaultPackages != [ ])
+        "`environment.defaultPackages` is set to a non-empty value in ${(lib.elemAt options.environment.defaultPackages.definitionsWithLocations 0).file}. It is highly recommended to set it to `[]`. The `environment.defaultPackages` option will be removed in a future release.";
   };
 }

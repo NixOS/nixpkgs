@@ -1,7 +1,9 @@
 {
   name = "simple-vm";
 
-  nodes.machine = { };
+  nodes.machine.environment.defaultPackages = [
+    # Temporary workaround for #263295/#263289
+  ];
 
   testScript = ''
     start_all()
