@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-MpCgK1JnQ/Etp0EyH5z6iknrQeJ4Wn6rwBw2EjgVAic=";
+    hash = "sha256-M6Kc/iawWFnNy1gIGOq+L+JV/v3PaWCCJ6agPfvBCWQ=";
   };
 
   postPatch =
