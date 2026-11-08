@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "agustif";
+    owner = "llm-lmstudio";
     repo = "llm-lmstudio";
     rev = "v${version}";
     hash = "sha256-dPrkvoVLDIk/JxUhvUUyjMzovH+Q/O13eTdA6qvdKxY=";
@@ -51,8 +51,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Plugin to use local models via LM Studio API with https://llm.datasette.io";
-    homepage = "https://github.com/agustif/llm-lmstudio";
-    changelog = "https://github.com/agustif/llm-lmstudio/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/llm-lmstudio/llm-lmstudio";
+    changelog = "https://github.com/llm-lmstudio/llm-lmstudio/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dwt ];
   };

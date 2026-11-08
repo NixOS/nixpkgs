@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-bloom";
     tag = "v${version}";
     hash = "sha256-WrBLFICPyb+1bIitHZ172A1p1VYqLR75YfJ5/IBqDr8=";
@@ -43,8 +43,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Implementation of the Ethereum bloom filter";
-    homepage = "https://github.com/ethereum/eth-bloom";
-    changelog = "https://github.com/ethereum/eth-bloom/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/ApeWorX/eth-bloom";
+    changelog = "https://github.com/ApeWorX/eth-bloom/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };

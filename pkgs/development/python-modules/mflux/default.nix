@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "filipstrand";
+    owner = "mflux-community";
     repo = "mflux";
     tag = "v.${finalAttrs.version}";
     hash = "sha256-rubwj4/XCUajnr1wp64rnzbvS+yXt9zbG6eT+DXEdko=";
@@ -152,8 +152,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "MLX native implementations of state-of-the-art generative image models";
-    homepage = "https://github.com/filipstrand/mflux";
-    changelog = "https://github.com/filipstrand/mflux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/mflux-community/mflux";
+    changelog = "https://github.com/mflux-community/mflux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

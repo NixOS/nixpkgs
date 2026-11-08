@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "jax-ml";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
-  # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
+  # https://github.com/jax-ml/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
   env.JAX_RELEASE = "1";
 
   dependencies = [
@@ -115,7 +115,7 @@ buildPythonPackage (finalAttrs: {
   preCheck =
     # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
     # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
-    # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+    # See https://github.com/jax-ml/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
     # NOTE: this doesn't seem to be an issue on linux
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
@@ -131,7 +131,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals usingMKL [
     # See
-    #  * https://github.com/google/jax/issues/9705
+    #  * https://github.com/jax-ml/jax/issues/9705
     #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
     #  * https://github.com/NixOS/nixpkgs/issues/161960
     "test_custom_linear_solve_cholesky"

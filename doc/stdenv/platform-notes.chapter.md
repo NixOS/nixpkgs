@@ -87,6 +87,10 @@ stdenv.mkDerivation {
 }
 ```
 
+Free Pascal's macOS configuration fixes `-XR` to its `apple-sdk` input; environment variables and downstream SDK inputs do not change it.
+Select another SDK with `-XR` or `fpc.override { apple-sdk = pkgs.apple-sdk_27; }`.
+When bypassing the packaged configuration (e.g., with `-n`), supply `-XR` explicitly.
+
 #### What is a “deployment target” (or minimum version)? {#sec-darwin-troubleshooting-using-deployment-targets}
 
 The “deployment target” refers to the minimum version of macOS that is expected to run an application.

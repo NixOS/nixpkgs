@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "bdraco";
+    owner = "Bluetooth-Devices";
     repo = "fnv-hash-fast";
     tag = "v${finalAttrs.version}";
     hash = "sha256-yDEgVNaSqZ1AJivpkpinZznKlPEXH6mjXBe5aVp/3hQ=";
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Fast version of fnv1a";
-    homepage = "https://github.com/bdraco/fnv-hash-fast";
+    homepage = "https://github.com/Bluetooth-Devices/fnv-hash-fast";
     changelog = "https://github.com/Bluetooth-Devices/fnv-hash-fast/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];

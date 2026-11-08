@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fastai";
+    owner = "AnswerDotAI";
     repo = "ghapi";
     tag = finalAttrs.version;
     hash = "sha256-K5+m6MKBhX+v/IdAJQZ5s0YkKSELv3YV4PrE1RMfzGA=";
@@ -35,8 +35,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python interface to GitHub's API";
-    homepage = "https://github.com/fastai/ghapi";
-    changelog = "https://github.com/fastai/ghapi/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/AnswerDotAI/ghapi";
+    changelog = "https://github.com/AnswerDotAI/ghapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "niccokunzmann";
+    owner = "PyCalendar";
     repo = "icalendar_compatibility";
     tag = "v${version}";
     hash = "sha256-rHx4wuLKSBI3/3ShxtpyyuK+iWULpbzfDN8DCNUryHg=";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # https://github.com/niccokunzmann/icalendar_compatibility/issues/5
+    # https://github.com/PyCalendar/icalendar_compatibility/issues/5
     "test_geo_location_is_also_escaped"
   ];
 

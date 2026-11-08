@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts jq ripgrep
+#!nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl common-updater-scripts jq
 
 set -euo pipefail
 
@@ -16,48 +16,28 @@ fi
 
 echo "$package updating from $current_version to $latest_version"
 
-echo "Getting new asset versions ..."
-
 latest_assets=$(curl -fsSL "https://raw.githubusercontent.com/OpenRCT2/OpenRCT2/refs/tags/v${latest_version}/assets.json")
 
-current_objects_version="$(rg -oP 'objects-version\s*=\s*"\K[^"]+' "$package_file")"
-current_openmusic_version="$(rg -oP 'openmusic-version\s*=\s*"\K[^"]+' "$package_file")"
-current_opensfx_version="$(rg -oP 'opensfx-version\s*=\s*"\K[^"]+' "$package_file")"
-current_title_sequences_version="$(rg -oP 'title-sequences-version\s*=\s*"\K[^"]+' "$package_file")"
+declare -A version_vars=(
+  [objects]=objectsVersion
+  [openmusic]=openmusicVersion
+  [opensfx]=opensfxVersion
+  [title-sequences]=titleSequencesVersion
+  [replays]=replaysVersion
+)
 
-declare -A new_versions
-declare -A new_sris
-
-for asset in objects openmusic opensfx title-sequences; do
-  url=$(echo "$latest_assets" | jq -r --arg a "$asset" '.[$a].url')
-  hex=$(echo "$latest_assets" | jq -r --arg a "$asset" '.[$a].sha256')
-  version=$(echo "$url" | grep -oP '(?<=/download/v)[^/]+')
+for asset in "${!version_vars[@]}"; do
+  url=$(jq -er --arg a "$asset" '.[$a].url' <<<"$latest_assets")
+  hex=$(jq -er --arg a "$asset" '.[$a].sha256' <<<"$latest_assets")
+  version=$(sed -E 's|.*/download/v([^/]+)/.*|\1|' <<<"$url")
   sri=$(nix hash convert --hash-algo sha256 --from base16 --to sri "$hex")
 
-  new_versions[$asset]="$version"
-  new_sris[$asset]="$sri"
-
   echo "$asset version: $version | sri: $sri"
+
+  sed -i \
+    -e "s|${version_vars[$asset]} = \"[^\"]*\"|${version_vars[$asset]} = \"$version\"|" \
+    -e "/^ *$asset = fetchurl {/,/};/ s|hash = \"[^\"]*\"|hash = \"$sri\"|" \
+    "$package_file"
 done
 
-# Update version strings
-sed -i \
-  -e "s|objects-version = \"${current_objects_version}\"|objects-version = \"${new_versions[objects]}\"|" \
-  -e "s|openmusic-version = \"${current_openmusic_version}\"|openmusic-version = \"${new_versions[openmusic]}\"|" \
-  -e "s|opensfx-version = \"${current_opensfx_version}\"|opensfx-version = \"${new_versions[opensfx]}\"|" \
-  -e "s|title-sequences-version = \"${current_title_sequences_version}\"|title-sequences-version = \"${new_versions[title-sequences]}\"|" \
-  "$package_file"
-
-declare -A asset_url_fragments
-asset_url_fragments[objects]="objects.zip"
-asset_url_fragments[openmusic]="openmusic.zip"
-asset_url_fragments[opensfx]="opensound.zip"
-asset_url_fragments[title-sequences]="title-sequences.zip"
-
-for asset in objects openmusic opensfx title-sequences; do
-  old_sri=$(rg -A2 "${asset_url_fragments[$asset]}" "$package_file" | rg -oP 'sha256-[^"]+')
-  sed -i "s|$old_sri|${new_sris[$asset]}|" "$package_file"
-done
-
-echo "Updating $package from $current_version to $latest_version ..."
 update-source-version "$package" "$latest_version"

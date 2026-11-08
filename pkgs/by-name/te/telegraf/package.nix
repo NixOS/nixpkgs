@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
   stdenv,
@@ -8,7 +8,7 @@
   telegraf,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "telegraf";
   version = "1.40.3";
 

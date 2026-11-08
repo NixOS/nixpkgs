@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Blaizzy";
+    owner = "Neywa-Labs";
     repo = "mlx-vlm";
     tag = "v${finalAttrs.version}";
     hash = "sha256-08cSwN8IkERxUaXyT9qAg9vmLw7FvU5qDygAkDsOxpU=";
@@ -92,8 +92,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Inference and fine-tuning of Vision Language Models (VLMs) on your Mac using MLX";
-    homepage = "https://github.com/Blaizzy/mlx-vlm";
-    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/Neywa-Labs/mlx-vlm";
+    changelog = "https://github.com/Neywa-Labs/mlx-vlm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     broken = true;

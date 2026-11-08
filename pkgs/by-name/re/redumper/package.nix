@@ -12,7 +12,7 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
-  version = "770";
+  version = "772";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,7 +21,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-TW2Pf1w2nzgc8r/k+jT8AbmxLK0b+a9MBFV0oGi00XA=";
+    hash = "sha256-CTxJ/ANhxDQeCMys/xTzv3VvW+Y7D72LLXEdMvEQojU=";
   };
 
   patches = [

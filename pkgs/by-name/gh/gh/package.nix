@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo127Module,
+  buildGoModule,
   installShellFiles,
   stdenv,
   versionCheckHook,
@@ -12,7 +12,7 @@
   openssh,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gh";
   version = "2.103.3";
 

@@ -16,6 +16,7 @@
   glib-networking,
   webkitgtk_4_1,
   openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     glib-networking

@@ -1,4 +1,5 @@
 {
+  aws-lc,
   buildPythonPackage,
   cacert,
   dirty-equals,
@@ -7,6 +8,7 @@
   granian,
   httpx,
   lib,
+  pkg-config,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
@@ -16,6 +18,7 @@
   syrupy,
   trustme,
   yarl,
+  zstd-c,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,6 +41,13 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd-c
   ];
 
   pythonImportsCheck = [ "pyreqwest" ];

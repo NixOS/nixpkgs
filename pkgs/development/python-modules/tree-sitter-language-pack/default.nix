@@ -4,11 +4,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  pkg-config,
   python,
   pytestCheckHook,
   rustPlatform,
   stdenv,
   tree-sitter,
+  zstd,
 }:
 
 let
@@ -72,9 +74,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     buildPackages.zstd
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
