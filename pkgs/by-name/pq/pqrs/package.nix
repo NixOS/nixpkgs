@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  zstd,
+  pkg-config,
   versionCheckHook,
 }:
 
@@ -21,6 +23,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-P3yTmECj0K0mjWUiWlQCwuQVbnbVR1xFV5cE8Uo3U90=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
+
   doInstallCheck = true;
 
   meta = {
