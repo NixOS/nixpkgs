@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "agoose77";
+    owner = "jupyterlab";
     repo = "hatch-nodejs-version";
     tag = "v${version}";
     hash = "sha256-Oe07HFzhhnAGTWM51xSgRmpJgIZg0oMIxkmMxKRPMwI=";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Plugins for dealing with NodeJS versions";
-    homepage = "https://github.com/agoose77/hatch-nodejs-version";
+    homepage = "https://github.com/jupyterlab/hatch-nodejs-version";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };

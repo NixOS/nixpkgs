@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Danielhiversen";
+    owner = "lightinglibs";
     repo = "flux_led";
     tag = version;
     hash = "sha256-+i+/WMHdz4HPKDlRPV1Aq9QqrTo5gZiulSc7Hinn+kI=";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to communicate with the flux_led smart bulbs";
-    homepage = "https://github.com/Danielhiversen/flux_led";
-    changelog = "https://github.com/Danielhiversen/flux_led/releases/tag/${version}";
+    homepage = "https://github.com/lightinglibs/flux_led";
+    changelog = "https://github.com/lightinglibs/flux_led/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "flux_led";

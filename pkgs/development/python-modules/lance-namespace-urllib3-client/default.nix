@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lancedb";
+    owner = "lance-format";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Wnm9zQCVnlRECxiLZYjX46/+2rU8tpC/s/NKyoS5rO0=";
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Lance namespace OpenAPI specification";
-    homepage = "https://github.com/lancedb/lance-namespace/tree/main/python/lance_namespace_urllib3_client";
+    homepage = "https://github.com/lance-format/lance-namespace/tree/main/python/lance_namespace_urllib3_client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

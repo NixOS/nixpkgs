@@ -3,12 +3,15 @@
   fetchPypi,
   buildPythonPackage,
   routerFeatures,
-  setuptools,
+  hatchling,
   janus,
   ncclient,
   paramiko,
   pyyaml,
-  sanic,
+  websockets,
+  ujson,
+  fastapi,
+  uvicorn,
 }:
 
 let
@@ -17,9 +20,7 @@ let
   opts =
     if routerFeatures then
       {
-        prePatch = ''
-          substituteInPlace ./setup.py --replace-fail "extra_deps = []" "extra_deps = router_feature_deps"
-        '';
+        prePatch = "";
         extraBuildInputs = [
           janus
           ncclient
@@ -48,11 +49,14 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    fastapi
     pyyaml
-    sanic
+    ujson
+    uvicorn
+    websockets
   ]
   ++ opts.extraBuildInputs;
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
-    owner = "ionrock";
+    owner = "psf";
     repo = "cachecontrol";
     tag = "v${version}";
     hash = "sha256-627SqJocVOO0AfI8vswPqOr15MA/Lx7RLAdRAXzWu84=";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Httplib2 caching for requests";
     mainProgram = "doesitcache";
-    homepage = "https://github.com/ionrock/cachecontrol";
+    homepage = "https://github.com/psf/cachecontrol";
     changelog = "https://github.com/psf/cachecontrol/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];

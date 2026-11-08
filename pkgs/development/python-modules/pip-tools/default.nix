@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "pypa";
     repo = "pip-tools";
     tag = "v${finalAttrs.version}";
     hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
@@ -99,8 +99,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Keeps your pinned dependencies fresh";
-    homepage = "https://github.com/jazzband/pip-tools/";
-    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/pypa/pip-tools/";
+    changelog = "https://github.com/pypa/pip-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zimbatm ];
   };

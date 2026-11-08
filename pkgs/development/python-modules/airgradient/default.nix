@@ -21,8 +21,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "airgradienthq";
-    repo = "python-airgradient";
+    owner = "Open-Air-Foundation";
+    repo = "integration-home-assistant-python";
     tag = "v${finalAttrs.version}";
     hash = "sha256-OlCCImVvoDqOA/LiSShCXwQACHw5Hmwc10BXaMz1DD8=";
   };
@@ -50,8 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module for AirGradient";
-    homepage = "https://github.com/airgradienthq/python-airgradient";
-    changelog = "https://github.com/airgradienthq/python-airgradient/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/Open-Air-Foundation/integration-home-assistant-python";
+    changelog = "https://github.com/Open-Air-Foundation/integration-home-assistant-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "vacanza";
-    repo = "python-holidays";
+    repo = "holidays";
     tag = "v${finalAttrs.version}";
     hash = "sha256-DPp8gejmRsOYhIT0BZRrYsFHEQGpyWbH+K6BpWEecTE=";
   };
@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Generate and work with holidays in Python";
-    homepage = "https://github.com/vacanza/python-holidays";
+    homepage = "https://github.com/vacanza/holidays";
     changelog = "https://github.com/vacanza/holidays/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

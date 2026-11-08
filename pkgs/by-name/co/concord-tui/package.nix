@@ -10,6 +10,7 @@
   pipewire,
   libva,
   mesa,
+  zstd,
   lib,
   stdenv,
   nix-update-script,
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
     libva
     mesa
+    zstd
   ];
   nativeBuildInputs = [
     cmake

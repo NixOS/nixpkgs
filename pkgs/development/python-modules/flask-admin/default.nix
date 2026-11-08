@@ -56,7 +56,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "flask-admin";
+    owner = "pallets-eco";
     repo = "flask-admin";
     tag = "v${version}";
     hash = "sha256-lRLyGvCat6nBixFKkrn4NxeVF52Hl32admAL37mf9wc=";
@@ -151,8 +151,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Admin interface framework for Flask";
-    homepage = "https://github.com/flask-admin/flask-admin/";
-    changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
+    homepage = "https://github.com/pallets-eco/flask-admin/";
+    changelog = "https://github.com/pallets-eco/flask-admin/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };

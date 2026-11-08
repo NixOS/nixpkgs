@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/chasinglogic/licensure";
     license = lib.licenses.gpl3Plus;
     mainProgram = "licensure";
-    maintainers = [ lib.maintainers.bpeetz ];
+    maintainers = [ lib.maintainers.soispha ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
