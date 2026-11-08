@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/lsdvd/";
     description = "Display information about audio, video, and subtitle tracks on a DVD";
     license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ booxter ];
     platforms = lib.platforms.unix;
     mainProgram = "lsdvd";
   };
