@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
     license = lib.licenses.lgpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
