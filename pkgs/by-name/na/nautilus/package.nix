@@ -41,6 +41,10 @@
   gnome-user-share,
   gobject-introspection,
   glycin-loaders,
+  withMinimal ? false,
+  withSelinux ? !withMinimal,
+  withCloudproviders ? !withMinimal,
+  withExtensions ? !withMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withExtensions [
     "devdoc"
   ];
 
@@ -67,34 +73,29 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     desktop-file-utils
     gettext
-    gobject-introspection
     meson
     ninja
     pkg-config
-    gi-docgen
-    docbook-xsl-nons
     wayland-scanner
     wrapGAppsHook4
+  ]
+  ++ lib.optionals withExtensions [
+    gobject-introspection
+    gi-docgen
+    docbook-xsl-nons
   ];
 
   buildInputs = [
-    gexiv2_0_16
-    glib-networking
     icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas
-    gnome-user-share
     gst_all_1.gst-plugins-base
     gtk4
     libadwaita
     libportal-gtk4
     libexif
-    libnotify
     libseccomp
-    libselinux
-    gdk-pixbuf
-    libcloudproviders
     shared-mime-info
     tinysparql
     localsearch
@@ -102,6 +103,21 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     libglycin-gtk4
     glycin-loaders
+  ]
+  ++ lib.optionals withExtensions [
+    gdk-pixbuf
+    gexiv2_0_16
+  ]
+  ++ lib.optionals withSelinux [
+    libselinux
+  ]
+  ++ lib.optionals withCloudproviders [
+    libcloudproviders
+  ]
+  ++ lib.optionals (!withMinimal) [
+    libnotify
+    glib-networking
+    gnome-user-share
   ];
 
   propagatedBuildInputs = [
@@ -109,8 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Ddocs=true"
-    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
+    (lib.mesonBool "docs" withExtensions)
+    (lib.mesonBool "extensions" withExtensions)
+    (lib.mesonBool "introspection" withExtensions)
+    (lib.mesonOption "tests" (if finalAttrs.finalPackage.doCheck then "all" else "none"))
+    (lib.mesonEnable "selinux" withSelinux)
+    (lib.mesonEnable "cloudproviders" withCloudproviders)
   ];
 
   preFixup = ''
@@ -124,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withExtensions ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
