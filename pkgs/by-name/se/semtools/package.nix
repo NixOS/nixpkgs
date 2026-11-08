@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   openssl,
+  oniguruma,
+  zstd,
   pkg-config,
   protobuf,
 }:
@@ -11,6 +13,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "semtools";
   version = "3.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
@@ -26,7 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    oniguruma
+    zstd
+  ];
 
   checkFlags = [
     # Require network
@@ -39,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Semantic search and document parsing tools for the command line";
     homepage = "https://github.com/run-llama/semtools";
-    changelog = "https://github.com/run-llama/semtools/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/run-llama/semtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
