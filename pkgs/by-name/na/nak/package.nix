@@ -2,8 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  pkg-config,
-  fuse3,
   versionCheckHook,
   nix-update-script,
 }:
@@ -27,16 +25,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    fuse3
-  ];
-
-  tags = [ "fuse3" ];
-  env.CGO_CFLAGS = "-I${lib.getDev fuse3}/include/fuse3";
+  subPackages = [ "." ];
 
   # Integration tests fail (requires connection to relays)
   doCheck = false;
