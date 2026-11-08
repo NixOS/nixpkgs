@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/patroclos/PAmix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "pamix";
   };
 })
