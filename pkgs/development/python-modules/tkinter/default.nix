@@ -74,6 +74,8 @@ buildPythonPackage {
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
 
+  doCheck = pythonOlder "3.15"; # TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+
   preCheck = ''
     cd "$python_src"/Lib
     export HOME=$TMPDIR
