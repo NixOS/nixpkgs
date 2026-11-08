@@ -5,14 +5,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nexusd";
-  version = "3.3.1";
+  version = "3.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gammazero";
     repo = "nexus";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Cp7gOtvpheSsCRbTxXReA7oNdftosjwXrs8Kjd+hHro=";
+    sha256 = "sha256-vndK935rdMZZg+dwZhravmED1nErdYzL3nXp/DjJomo=";
   };
 
   vendorHash = "sha256-3GewVMHh8CD89gBLUDhh705z0LvCtG2l46s7BpxvK/U=";
