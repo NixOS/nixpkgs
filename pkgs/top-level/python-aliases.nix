@@ -238,6 +238,7 @@ mapAliases {
   dns = throw "'dns' has been renamed to/replaced by 'dnspython'"; # Converted to throw 2025-10-29
   docker_pycreds = throw "'docker_pycreds' has been renamed to/replaced by 'docker-pycreds'"; # Converted to throw 2025-10-29
   dogpile_cache = throw "'dogpile_cache' has been renamed to/replaced by 'dogpile-cache'"; # Converted to throw 2025-10-29
+  dragonfly = dragonfly2; # Added 2026-11-07
   duckduckgo-search = throw "duckduckgo-search was renamed to ddgs, use ddgs instead"; # added 2025-10-20
   duct-py = duct; # added 2026-10-13
   dukpy = throw "'dukpy' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
@@ -524,6 +525,7 @@ mapAliases {
   piano-transcription-inference = throw "'piano-transcription-inference' has been removed, because its upstream repo was archived in 2025."; # added 2026-08-13
   pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
+  pillowfight = throw "'pillowfight' has been removed, as its upstream repository has been archived since 2021"; # Added 2026-11-08
   pinecone-client = warnAlias "'pinecone-client' has been renamed to 'pinecone'" pinecone; # added 2026-07-22
   pinecone-plugin-assistant = throw "'pinecone-plugin-assistant' has been integrated into 'pinecone-client'"; # Added 2026-07-22
   pinecone-plugin-interface = throw "'pinecone-plugin-interface' has been removed because the plugin discovery system was retired in 'pinecone-client' 9"; # Added 2026-07-22
@@ -838,6 +840,7 @@ mapAliases {
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unifiled = throw "'unifiled' has been removed because Home Assistant dropped the integration"; # Added 2026-06-04
   unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22
+  upass = throw "'upass' has been removed, as its upstream repository has been archived"; # Added 2026-11-08
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
   uranium = throw "'uranium' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   vcver = throw "vcver has been removed, since it was an unused leaf package"; # added 2025-08-25

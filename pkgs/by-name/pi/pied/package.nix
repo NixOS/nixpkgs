@@ -1,19 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutter347,
   gst_all_1,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter347.buildFlutterApplication rec {
   pname = "pied";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Elleo";
     repo = "pied";
     tag = "v${version}";
-    hash = "sha256-STeSpto70b4m03ExikUrIwsHCqj1QH2jvVZ8G/ybw28=";
+    hash = "sha256-5QnlbhsOmQx8DiKdTLQe0DAmKedHgUWZkEEWuls0Kz4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

@@ -2,12 +2,16 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  oniguruma,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polarity";
   version = "0-unstable-2026-08-10";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
@@ -17,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-7vBLZwUpZ/LQ4MO1JZhpErFvh5EQyS+7IN1U5wyAP/E=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
