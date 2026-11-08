@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  oniguruma,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-3XzTbrEDFzCf2rsvJu/foiDYEoO4lLMsr+4t9nDYv34=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   passthru.updateScript = nix-update-script { };
 

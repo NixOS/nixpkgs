@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pictures collage & creativity tool";
     homepage = "https://github.com/fotowall/fotowall";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.arntanguy ];
     platforms = lib.platforms.linux;
     mainProgram = "fotowall";
   };
