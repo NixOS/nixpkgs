@@ -102,6 +102,7 @@ buildPythonPackage (finalAttrs: {
     "numpy"
     "objsize"
     "protobuf"
+    "pillow" # remove after 2.78.0 update
   ];
 
   build-system = [
