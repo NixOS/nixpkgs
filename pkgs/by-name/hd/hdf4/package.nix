@@ -8,8 +8,7 @@
   uselibtirpc ? stdenv.hostPlatform.isLinux,
   libtirpc,
   zlib,
-  szipSupport ? false,
-  szip,
+  libaec,
   javaSupport ? false,
   jdk,
   fortranSupport ? false,
@@ -36,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libjpeg
+    libaec
     zlib
   ]
   ++ lib.optional javaSupport jdk
-  ++ lib.optional szipSupport szip
   ++ lib.optional uselibtirpc libtirpc;
 
   cmakeFlags = [
@@ -51,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HDF4_ENABLE_Z_LIB_SUPPORT" true)
     (lib.cmakeBool "HDF4_ENABLE_NETCDF" netcdfSupport)
     (lib.cmakeBool "HDF4_BUILD_FORTRAN" fortranSupport)
-    (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
-    (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
+    (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" true)
+    (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" true)
     (lib.cmakeBool "HDF4_BUILD_JAVA" javaSupport)
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ]
@@ -87,8 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       uselibtirpc
       libtirpc
-      szipSupport
-      szip
       javaSupport
       jdk
       ;

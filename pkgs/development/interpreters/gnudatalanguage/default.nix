@@ -25,6 +25,7 @@
   libtiff,
   libgeotiff,
   libjpeg,
+  libaec,
   qhull,
   # eccodes is broken on darwin
   enableGRIB ? stdenv.hostPlatform.isLinux,
@@ -38,10 +39,7 @@
   enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
   mpi,
-  # Unfree optional dependency for hdf4 and hdf5
-  enableSzip ? false,
-  szip,
-  libaec,
+  # optional dependency for hdf4 and hdf5
   enableHDF4 ? true,
   hdf4,
   hdf4-forced ? null,
@@ -73,8 +71,6 @@ let
     else
       hdf4.override {
         uselibtirpc = enableLibtirpc;
-        szipSupport = enableSzip;
-        inherit szip;
       };
   hdf5-custom =
     if hdf5-forced != null then
@@ -84,8 +80,6 @@ let
         {
           mpiSupport = enableMPI;
           inherit mpi;
-          szipSupport = enableSzip;
-          inherit libaec;
         }
         // lib.optionalAttrs enableMPI {
           cppSupport = false;
@@ -169,36 +163,37 @@ stdenv.mkDerivation (finalAttrs: {
     hdf5-custom
     netcdf-custom
     plplot-with-drivers
+    libaec
   ]
   ++ lib.optional enableXWin plplot-with-drivers.libx11
   ++ lib.optional enableGRIB eccodes
   ++ lib.optional enableGLPK glpk
   ++ lib.optional enableWX wxwidgets_3_2
   ++ lib.optional enableMPI mpi
-  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-  ++ lib.optional enableSzip szip;
+  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))
   ];
 
-  cmakeFlags =
-    lib.optional (!enableHDF4) "-DHDF=OFF"
-    ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]
-    ++ lib.optional (!enableNetCDF) "-DNETCDF=OFF"
-    ++ lib.optional (!enablePlplotDrivers) "-DINTERACTIVE_GRAPHICS=OFF"
-    ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
-    ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
-    ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
-    ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
-    ++ lib.optionals enableXWin [
-      "-DX11=ON"
-      "-DX11DIR=${plplot-with-drivers.libx11}"
-    ]
-    ++ lib.optionals enableMPI [
-      "-DMPI=ON"
-      "-DMPIDIR=${mpi}"
-    ];
+  cmakeFlags = [
+    "-DSZIPDIR=${libaec}"
+  ]
+  ++ lib.optional (!enableHDF4) "-DHDF=OFF"
+  ++ [ (if enableHDF5 then "-DHDF5DIR=${hdf5-custom}" else "-DHDF5=OFF") ]
+  ++ lib.optional (!enableNetCDF) "-DNETCDF=OFF"
+  ++ lib.optional (!enablePlplotDrivers) "-DINTERACTIVE_GRAPHICS=OFF"
+  ++ lib.optional (!enableGRIB) "-DGRIB=OFF"
+  ++ lib.optional (!enableGLPK) "-DGLPK=OFF"
+  ++ lib.optional (!enableWX) "-DWXWIDGETS=OFF"
+  ++ lib.optionals enableXWin [
+    "-DX11=ON"
+    "-DX11DIR=${plplot-with-drivers.libx11}"
+  ]
+  ++ lib.optionals enableMPI [
+    "-DMPI=ON"
+    "-DMPIDIR=${mpi}"
+  ];
 
   # Tests are failing on Hydra:
   # ./src/common/dpycmn.cpp(137): assert ""IsOk()"" failed in GetClientArea(): invalid wxDisplay object
@@ -232,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
       enableMPI
       mpi
       useHdf5v110Api
-      enableSzip
       enableWX
       enableXWin
       ;
