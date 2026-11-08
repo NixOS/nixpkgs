@@ -6,14 +6,16 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rexi";
-  version = "1.2.0";
+  version = "1.2.1-unstable-2026-06-23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "royreznik";
     repo = "rexi";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-tag2/QTM6tDCU3qr4e1GqRYAZgpvEgtA+FtR4P7WdiU=";
+    #tag = "v${finalAttrs.version}";
+    # https://github.com/royreznik/rexi/pull/38
+    rev = "d7f5793e57e522b02cbb69dc5da567587fcf3cab";
+    hash = "sha256-RVY239SyQadbxtyyw4guzE2Q7a1Oxu5C4XBv0H3wd3E=";
   };
 
   # AttributeError: 'Static' object has no attribute 'renderable'.
@@ -32,6 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     colorama
     typer
     textual
+    click
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -43,6 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "textual"
     "typer"
+    "click"
   ];
 
   meta = {
