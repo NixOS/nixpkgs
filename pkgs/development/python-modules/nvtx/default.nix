@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvtx";
   version = nvtx.pythonVersion;
   pyproject = true;
-  __structuredAttrs = true;
 
   # Built from python/ in the NVTX source, against the C headers in c/include next to it; nothing from the C/C++ build
   # is used.
