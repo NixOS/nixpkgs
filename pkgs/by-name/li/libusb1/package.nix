@@ -21,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qgs8h1vSqJg2muBDWN5nJlvaMjGYZnwMg1m07rqzHco=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qgs8h1vSqJg2muBDWN5nJlvaMjGYZnwMg1m07rqzHco=";
   };
 
   outputs = [
@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r examples/.libs/* $out/examples/bin
     ln -s $out/examples/bin/fxload $out/sbin/fxload
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://libusb.info/";
