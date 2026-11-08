@@ -154,7 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--add-flags"
     "${placeholder "out"}/share/heroic/resources/app.asar"
     "--add-flags"
-    "\${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    # Electron >= 38 runs natively on Wayland by default, so don't gate on NIXOS_OZONE_WL.
+    "\${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     "--suffix"
