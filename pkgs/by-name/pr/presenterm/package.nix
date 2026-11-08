@@ -4,12 +4,16 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
   version = "0.16.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mfontanini";
@@ -18,9 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-mIJktrgBweaaLD2YaRcs0vP5hKRy/kMN/HEnwO323DA=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
   ];
+
+  buildInputs = [ oniguruma ];
 
   cargoHash = "sha256-OlZXf8Wg32mXGDGbavLVf1ELoqqSmc8z9DNpvGOfAJ8=";
 
