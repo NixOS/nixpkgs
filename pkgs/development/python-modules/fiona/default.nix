@@ -101,6 +101,8 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # UserWarning: The parameter --where is used more than once. Remove its duplicate as parameters should be unique.
     "-Wignore::UserWarning"
+    # DeprecationWarning: 'get_text_stream' is deprecated and will be removed in Click 9.0.
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
