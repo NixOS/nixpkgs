@@ -40,6 +40,7 @@
   systemdLibs,
   udevCheckHook,
   z3,
+  libjpeg,
   nix-update-script,
   wxGTK-override ? null,
   opencascade-override ? null,
@@ -111,31 +112,34 @@ clangStdenv.mkDerivation (finalAttrs: {
         'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
         'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
     ''
+    # src/slic3r/GUI/GUI_App.hpp:337:67: error: only virtual member functions can be marked 'override'
+    + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/slic3r/GUI/GUI_App.hpp \
+        --replace-fail \
+        'void            OSXStoreOpenFiles(const wxArrayString &files) override;' \
+        'void            OSXStoreOpenFiles(const wxArrayString &files);'
+    ''
   );
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
     wxGTK-override'
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
     udevCheckHook
   ];
 
   buildInputs = [
-    binutils
     boost186 # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
     cereal
     cgal_5
     curl
-    dbus
     eigen
     expat
     glew
-    glib
-    glib-networking
     gmp
-    gtk3
-    hicolor-icon-theme
     hidapi
     libpng
     mpfr
@@ -146,23 +150,34 @@ clangStdenv.mkDerivation (finalAttrs: {
     qhull
     onetbb
     wxGTK-override'
-    libx11
     libbgcode
     heatshrink
     catch2_3
-    webkitgtk_4_1
     z3
     nlohmann_json
   ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    binutils
+    dbus
+    glib
+    glib-networking
+    gtk3
+    hicolor-icon-theme
+    libx11
+    webkitgtk_4_1
+  ]
   ++ lib.optionals withSystemd [
     systemdLibs
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libjpeg
   ];
 
   strictDeps = true;
 
   separateDebugInfo = true;
 
-  doInstallCheck = true;
+  doInstallCheck = clangStdenv.hostPlatform.isLinux;
 
   env = {
     # The build system uses custom logic - defined in
@@ -174,6 +189,9 @@ clangStdenv.mkDerivation (finalAttrs: {
   // lib.optionalAttrs withSystemd {
     # prusa-slicer uses dlopen on `libudev.so` at runtime
     NIX_LDFLAGS = "-ludev";
+  }
+  // lib.optionalAttrs clangStdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework WebKit";
   };
 
   prePatch = ''
@@ -214,25 +232,30 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
-  postInstall = ''
-    ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
+  postInstall =
+    lib.optionalString clangStdenv.hostPlatform.isLinux ''
+      ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
 
-    mkdir -p "$out/lib"
-    mv -v $out/bin/*.* $out/lib/
+      mkdir -p "$out/lib"
+      mv -v $out/bin/*.* $out/lib/
 
-    mkdir -p "$out"/share/mime/packages
-    cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-      <mime-type type="application/x-bgcode">
-        <comment xml:lang="en">Binary G-code file</comment>
-        <glob pattern="*.bgcode"/>
-      </mime-type>
-    </mime-info>
-    EOF
-  '';
+      mkdir -p "$out"/share/mime/packages
+      cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+        <mime-type type="application/x-bgcode">
+          <comment xml:lang="en">Binary G-code file</comment>
+          <glob pattern="*.bgcode"/>
+        </mime-type>
+      </mime-info>
+      EOF
+    ''
+    + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
+      # remove unused files
+      rm $out/bin/*.a
+    '';
 
-  preFixup = ''
+  preFixup = lib.optionalString clangStdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib"
     )
