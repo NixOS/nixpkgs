@@ -34,8 +34,9 @@ let
 
   epic-integration = callPackage ./epic-integration.nix { };
 
+  # Heroic looks up helpers by Node's arch name (x64, arm64).
   helpersDir = "$out/share/heroic/resources/app.asar.unpacked/build/bin";
-  linuxHelpersDir = "${helpersDir}/x64/linux";
+  linuxHelpersDir = "${helpersDir}/${stdenv.hostPlatform.node.arch}/linux";
   linuxHelpers = lib.concatMapStringsSep " " lib.getExe [
     comet-gog_heroic
     gogdl
