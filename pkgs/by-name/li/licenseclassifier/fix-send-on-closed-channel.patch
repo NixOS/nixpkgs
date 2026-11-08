@@ -1,0 +1,20 @@
+The deferred function of `analyze` called `wg.Done()` before it put its
+slot back into `task`. After the last `wg.Done()`, the goroutine that waits
+on `wg` can close `task` before that send, which panics with "send on closed
+channel". Put the slot back first: `task` has room for it, so the send does
+not block.
+
+Upstream: https://github.com/google/licenseclassifier/pull/76
+
+--- a/tools/identify_license/backend/backend.go
++++ b/tools/identify_license/backend/backend.go
+@@ -82,8 +82,8 @@ func (b *ClassifierBackend) ClassifyLicenses(numTasks int, filenames []string, h
+ 	var wg sync.WaitGroup
+ 	analyze := func(filename string) {
+ 		defer func() {
+-			wg.Done()
+ 			task <- true
++			wg.Done()
+ 		}()
+ 		if err := b.classifyLicense(filename, headers); err != nil {
+ 			errs <- err
