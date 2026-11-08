@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  rustPackages_1_98,
   fetchFromGitHub,
 
   # buildInputs
@@ -19,7 +19,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_98.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
   version = "0.13.7";
   __structuredAttrs = true;
