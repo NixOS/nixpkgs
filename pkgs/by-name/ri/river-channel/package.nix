@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       OulipianSummer
       atemu
+      evanwporter
     ];
     mainProgram = "channel";
   };
