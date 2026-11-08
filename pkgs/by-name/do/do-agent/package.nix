@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/digitalocean/do-agent";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
