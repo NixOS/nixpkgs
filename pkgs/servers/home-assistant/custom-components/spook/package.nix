@@ -3,9 +3,10 @@
   buildHomeAssistantComponent,
   cronsim,
   fetchFromGitHub,
+  home-assistant,
   pytest-cov-stub,
   pytest-freezer,
-  pytest-homeassistant-custom-component,
+  pytest-homeassistant,
   pytestCheckHook,
 }:
 buildHomeAssistantComponent rec {
@@ -20,7 +21,11 @@ buildHomeAssistantComponent rec {
     hash = "sha256-LO4WnmsPlvc26e4Sx/RxrZVIgEUak1oVm7Qa+SKkYUo=";
   };
 
-  patches = [ ./remove-sub-integration-symlink-hack.patch ];
+  patches = [
+    ./remove-sub-integration-symlink-hack.patch
+    # https://github.com/frenck/spook/pull/2070
+    ./home-assistant-2026-11.patch
+  ];
 
   postPatch = ''
     substituteInPlace custom_components/spook/manifest.json \
@@ -32,9 +37,10 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
+    home-assistant
     pytest-cov-stub
     pytest-freezer
-    pytest-homeassistant-custom-component
+    pytest-homeassistant
     pytestCheckHook
   ];
 

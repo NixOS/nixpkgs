@@ -1,0 +1,1647 @@
+From fa628f1c759cb9851e6e5b4a012515a7cbd32fcc Mon Sep 17 00:00:00 2001
+From: Paulus Schoutsen <balloob@gmail.com>
+Date: Thu, 5 Nov 2026 22:42:43 -0500
+Subject: [PATCH] Migrate tests to pytest-homeassistant
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 7465b88e9..67766db51 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -119,7 +119,8 @@ disable = [
+ ]
+ 
+ [tool.pytest.ini_options]
+-addopts = "--cov=custom_components/spook --cov-report=term-missing --cov-report=xml"
++asyncio_default_fixture_loop_scope = "function"
++addopts = "-p no:respx --cov=custom_components/spook --cov-report=term-missing --cov-report=xml"
+ asyncio_mode = "auto"
+ 
+ [tool.coverage.run]
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 696639d98..53b7b4fe0 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -2,13 +2,10 @@
+ 
+ from __future__ import annotations
+ 
+-from pathlib import Path
+-import shutil
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import get_test_config_dir
+-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
++from pytest_homeassistant.syrupy import HomeAssistantSnapshotExtension
+ 
+ from homeassistant import config_entries, loader, setup
+ from homeassistant.helpers import translation
+@@ -16,6 +13,8 @@
+ from custom_components.spook.const import DOMAIN
+ 
+ if TYPE_CHECKING:
++    from pathlib import Path
++
+     from syrupy.assertion import SnapshotAssertion
+ 
+     from homeassistant.core import HomeAssistant
+@@ -76,45 +75,10 @@ async def spook_translations(hass: HomeAssistant) -> None:
+     hass.config.components.add(DOMAIN)
+ 
+ 
+-# What every sub-integration Spook brings is called, and so every link the
+-# sub-integration tests make into a config dir.
+-_SUB_INTEGRATION_PREFIX = "spook_"
+-
+-
+ @pytest.fixture(scope="session")
+ def private_config_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+-    """Return a test config dir of this test process alone.
+-
+-    The one the plugin hands out lives in the virtual environment, shared by
+-    every test process using it: the workers of one run, and every other
+-    checkout testing at the same time. The sub-integration tests link their
+-    code into its custom_components, and a worker relinking or another
+-    checkout pointing a link at its own copy makes an integration go missing
+-    halfway through a test, or load somebody else's code.
+-
+-    The links left behind by earlier runs are not copied: they point at
+-    whatever checkout made them, which may not even be around anymore. Left
+-    out by name, not by what they are at the moment of copying: another
+-    checkout can swap a link for a fresh one right then, and the copy would
+-    follow it into that checkout's code.
+-    """
+-    config_dir = tmp_path_factory.mktemp("config")
+-
+-    def _skip_links(directory: str, names: list[str]) -> set[str]:
+-        return {
+-            name
+-            for name in names
+-            if name.startswith(_SUB_INTEGRATION_PREFIX)
+-            or (Path(directory) / name).is_symlink()
+-        }
+-
+-    shutil.copytree(
+-        get_test_config_dir(),
+-        config_dir,
+-        ignore=_skip_links,
+-        dirs_exist_ok=True,
+-    )
+-    return config_dir
++    """Give each test process its own directory for sub-integration links."""
++    return tmp_path_factory.mktemp("config")
+ 
+ 
+ @pytest.fixture
+diff --git a/tests/ectoplasms/automation/repairs/test_never_true_templates.py b/tests/ectoplasms/automation/repairs/test_never_true_templates.py
+index 3b42edd54..2c1cac24f 100644
+--- a/tests/ectoplasms/automation/repairs/test_never_true_templates.py
++++ b/tests/ectoplasms/automation/repairs/test_never_true_templates.py
+@@ -8,7 +8,7 @@
+ from typing import TYPE_CHECKING, Any
+ from unittest.mock import patch
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import yaml
+ 
+diff --git a/tests/ectoplasms/automation/repairs/test_template_device_references.py b/tests/ectoplasms/automation/repairs/test_template_device_references.py
+index 4ce2d46ee..6beb979ec 100644
+--- a/tests/ectoplasms/automation/repairs/test_template_device_references.py
++++ b/tests/ectoplasms/automation/repairs/test_template_device_references.py
+@@ -8,7 +8,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.automation.repairs.unknown_device_references import (
+     SpookRepair as AutomationSpookRepair,
+diff --git a/tests/ectoplasms/automation/repairs/test_template_registry_lookups.py b/tests/ectoplasms/automation/repairs/test_template_registry_lookups.py
+index d8251df52..88f102fc6 100644
+--- a/tests/ectoplasms/automation/repairs/test_template_registry_lookups.py
++++ b/tests/ectoplasms/automation/repairs/test_template_registry_lookups.py
+@@ -22,7 +22,7 @@
+ )
+ from homeassistant.helpers.template import Template
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.entity_filtering import (
+     async_template_areas_not_found,
+diff --git a/tests/ectoplasms/automation/repairs/test_turned_off.py b/tests/ectoplasms/automation/repairs/test_turned_off.py
+index 9a1e7c9c6..3d5af4693 100644
+--- a/tests/ectoplasms/automation/repairs/test_turned_off.py
++++ b/tests/ectoplasms/automation/repairs/test_turned_off.py
+@@ -5,7 +5,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.const import ATTR_ENTITY_ID
+ from homeassistant.setup import async_setup_component
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_attribute_references.py b/tests/ectoplasms/automation/repairs/test_unknown_attribute_references.py
+index 0decf809b..cea423da9 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_attribute_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_attribute_references.py
+@@ -7,8 +7,8 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.common import async_fire_time_changed
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_config_entry_references.py b/tests/ectoplasms/automation/repairs/test_unknown_config_entry_references.py
+index 3e4fc8b87..3446f7876 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_config_entry_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_config_entry_references.py
+@@ -10,7 +10,7 @@
+ from homeassistant.helpers import issue_registry as ir
+ from homeassistant.helpers.service import async_set_service_schema
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.action_extraction import (
+     ActionDescriptionsUnavailableError,
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_device_references.py b/tests/ectoplasms/automation/repairs/test_unknown_device_references.py
+index 1d827ae4d..05b163ede 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_device_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_device_references.py
+@@ -6,7 +6,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.automation.repairs.unknown_device_references import (
+     SpookRepair,
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_entity_references.py b/tests/ectoplasms/automation/repairs/test_unknown_entity_references.py
+index bb703f2fe..3a88f3fba 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_entity_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_entity_references.py
+@@ -22,7 +22,7 @@
+ from homeassistant.helpers.entity_component import DATA_INSTANCES
+ from homeassistant.helpers.trigger import Trigger
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockModule,
+     mock_integration,
+     mock_platform,
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_state_references.py b/tests/ectoplasms/automation/repairs/test_unknown_state_references.py
+index 023a71474..35b8eff6a 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_state_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_state_references.py
+@@ -7,8 +7,8 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.common import async_fire_time_changed
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_state_references_attribute_values.py b/tests/ectoplasms/automation/repairs/test_unknown_state_references_attribute_values.py
+index 2d51a83cd..ff8361395 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_state_references_attribute_values.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_state_references_attribute_values.py
+@@ -8,7 +8,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ from sqlalchemy import update
+diff --git a/tests/ectoplasms/automation/repairs/test_unknown_user_references.py b/tests/ectoplasms/automation/repairs/test_unknown_user_references.py
+index f6ca9253a..7cc431b55 100644
+--- a/tests/ectoplasms/automation/repairs/test_unknown_user_references.py
++++ b/tests/ectoplasms/automation/repairs/test_unknown_user_references.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.util import dt as dt_util
+ 
+diff --git a/tests/ectoplasms/automation/services/test_snooze.py b/tests/ectoplasms/automation/services/test_snooze.py
+index f81cd06b1..cf4aa58e2 100644
+--- a/tests/ectoplasms/automation/services/test_snooze.py
++++ b/tests/ectoplasms/automation/services/test_snooze.py
+@@ -9,7 +9,7 @@
+ from homeassistant.core import Context, CoreState
+ from homeassistant.exceptions import ServiceValidationError
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/automation/services/test_turn_on_for.py b/tests/ectoplasms/automation/services/test_turn_on_for.py
+index 5f4116da7..cf60441f8 100644
+--- a/tests/ectoplasms/automation/services/test_turn_on_for.py
++++ b/tests/ectoplasms/automation/services/test_turn_on_for.py
+@@ -8,7 +8,7 @@
+ 
+ from homeassistant.core import Context, CoreState, State
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     async_fire_time_changed,
+     mock_restore_cache,
+ )
+diff --git a/tests/ectoplasms/blueprint/conftest.py b/tests/ectoplasms/blueprint/conftest.py
+index cf30cf3d3..afe317631 100644
+--- a/tests/ectoplasms/blueprint/conftest.py
++++ b/tests/ectoplasms/blueprint/conftest.py
+@@ -14,7 +14,7 @@
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import yaml as yaml_util
+ import pytest
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -268,12 +268,11 @@ async def async_set_up(
+     assert await async_setup_component(hass, "script", {"script": {}})
+     await hass.async_block_till_done()
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.UPDATE])
+-        return True
+ 
+-    async def _unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+-        return await hass.config_entries.async_unload_platforms(
++    async def _unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
++        await hass.config_entries.async_unload_platforms(
+             entry,
+             [Platform.UPDATE],
+         )
+diff --git a/tests/ectoplasms/blueprint/test_update.py b/tests/ectoplasms/blueprint/test_update.py
+index 944aafc2d..c2b6f7dfb 100644
+--- a/tests/ectoplasms/blueprint/test_update.py
++++ b/tests/ectoplasms/blueprint/test_update.py
+@@ -29,7 +29,7 @@
+ import aiohttp
+ import pytest
+ import voluptuous as vol
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_fire_time_changed,
+     mock_restore_cache,
+@@ -89,7 +89,7 @@
+     from collections.abc import Callable
+ 
+     from freezegun.api import FrozenDateTimeFactory
+-    from pytest_homeassistant_custom_component.typing import (
++    from pytest_homeassistant.typing import (
+         MockHAClientWebSocket,
+         WebSocketGenerator,
+     )
+diff --git a/tests/ectoplasms/calendar/services/conftest.py b/tests/ectoplasms/calendar/services/conftest.py
+index 31b1a83f3..f612c8f9a 100644
+--- a/tests/ectoplasms/calendar/services/conftest.py
++++ b/tests/ectoplasms/calendar/services/conftest.py
+@@ -14,7 +14,7 @@
+ from homeassistant.config_entries import ConfigEntry, ConfigFlow
+ from homeassistant.const import Platform
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -166,9 +166,8 @@ async def async_set_up_calendars(hass: HomeAssistant) -> dict[str, Any]:
+         READ_ONLY: ReadOnlyCalendar("holidays"),
+     }
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.CALENDAR])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/climate/services/test_step_temperature.py b/tests/ectoplasms/climate/services/test_step_temperature.py
+index 90c5816c8..24576af21 100644
+--- a/tests/ectoplasms/climate/services/test_step_temperature.py
++++ b/tests/ectoplasms/climate/services/test_step_temperature.py
+@@ -16,7 +16,7 @@
+ from homeassistant.const import ATTR_TEMPERATURE, Platform, UnitOfTemperature
+ from homeassistant.exceptions import ServiceNotSupported
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -128,9 +128,8 @@ async def _setup(
+     """Set up these thermostats and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.CLIMATE])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/cover/services/test_step_position.py b/tests/ectoplasms/cover/services/test_step_position.py
+index edd975323..f4889074f 100644
+--- a/tests/ectoplasms/cover/services/test_step_position.py
++++ b/tests/ectoplasms/cover/services/test_step_position.py
+@@ -15,7 +15,7 @@
+ from homeassistant.const import Platform
+ from homeassistant.exceptions import ServiceNotSupported
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -78,9 +78,8 @@ async def _setup(
+     """Set up these covers and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.COVER])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/group/repairs/test_unknown_members.py b/tests/ectoplasms/group/repairs/test_unknown_members.py
+index 8c79960a6..de75d8326 100644
+--- a/tests/ectoplasms/group/repairs/test_unknown_members.py
++++ b/tests/ectoplasms/group/repairs/test_unknown_members.py
+@@ -6,7 +6,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.data_entry_flow import FlowResultType
+ from homeassistant.helpers.entity_platform import DATA_ENTITY_PLATFORM
+diff --git a/tests/ectoplasms/group/services/test_members.py b/tests/ectoplasms/group/services/test_members.py
+index 2b10da593..9c967d169 100644
+--- a/tests/ectoplasms/group/services/test_members.py
++++ b/tests/ectoplasms/group/services/test_members.py
+@@ -5,7 +5,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.components.group.config_flow import GroupConfigFlowHandler
+ from homeassistant.exceptions import HomeAssistantError
+diff --git a/tests/ectoplasms/homeassistant/repairs/test_empty_areas.py b/tests/ectoplasms/homeassistant/repairs/test_empty_areas.py
+index 1438e0b1d..5ab8041bb 100644
+--- a/tests/ectoplasms/homeassistant/repairs/test_empty_areas.py
++++ b/tests/ectoplasms/homeassistant/repairs/test_empty_areas.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.data_entry_flow import FlowResultType
+ from homeassistant.setup import async_setup_component
+diff --git a/tests/ectoplasms/homeassistant/repairs/test_min_max_unknown_sources.py b/tests/ectoplasms/homeassistant/repairs/test_min_max_unknown_sources.py
+index fa573a671..70fb4358c 100644
+--- a/tests/ectoplasms/homeassistant/repairs/test_min_max_unknown_sources.py
++++ b/tests/ectoplasms/homeassistant/repairs/test_min_max_unknown_sources.py
+@@ -5,7 +5,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.data_entry_flow import FlowResultType
+ from homeassistant.setup import async_setup_component
+diff --git a/tests/ectoplasms/homeassistant/repairs/test_unknown_customized_entities.py b/tests/ectoplasms/homeassistant/repairs/test_unknown_customized_entities.py
+index 3c7f7692f..8df58ffc6 100644
+--- a/tests/ectoplasms/homeassistant/repairs/test_unknown_customized_entities.py
++++ b/tests/ectoplasms/homeassistant/repairs/test_unknown_customized_entities.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.core_config import DATA_CUSTOMIZE
+ from homeassistant.helpers.entity_values import EntityValues
+diff --git a/tests/ectoplasms/homeassistant/repairs/test_unknown_helper_source_references.py b/tests/ectoplasms/homeassistant/repairs/test_unknown_helper_source_references.py
+index 21fc073a8..8ced95997 100644
+--- a/tests/ectoplasms/homeassistant/repairs/test_unknown_helper_source_references.py
++++ b/tests/ectoplasms/homeassistant/repairs/test_unknown_helper_source_references.py
+@@ -5,7 +5,7 @@
+ 
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ import pytest
+ 
+ from custom_components.spook import repairs
+diff --git a/tests/ectoplasms/homeassistant/repairs/test_unknown_icons.py b/tests/ectoplasms/homeassistant/repairs/test_unknown_icons.py
+index a614e68d9..30b801d16 100644
+--- a/tests/ectoplasms/homeassistant/repairs/test_unknown_icons.py
++++ b/tests/ectoplasms/homeassistant/repairs/test_unknown_icons.py
+@@ -7,7 +7,7 @@
+ import threading
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.core_config import DATA_CUSTOMIZE
+ from homeassistant.helpers import (
+diff --git a/tests/ectoplasms/homeassistant/services/test_config_entries_by_domain.py b/tests/ectoplasms/homeassistant/services/test_config_entries_by_domain.py
+index 29d234c66..d2ef707ff 100644
+--- a/tests/ectoplasms/homeassistant/services/test_config_entries_by_domain.py
++++ b/tests/ectoplasms/homeassistant/services/test_config_entries_by_domain.py
+@@ -9,7 +9,7 @@
+ from homeassistant.exceptions import ServiceValidationError
+ from homeassistant.setup import async_setup_component
+ import pytest
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     mock_integration,
+@@ -27,14 +27,12 @@
+ pytestmark = pytest.mark.usefixtures("spook_translations")
+ 
+ 
+-async def _async_setup_entry(_hass: HomeAssistant, _entry: MockConfigEntry) -> bool:
++async def _async_setup_entry(_hass: HomeAssistant, _entry: MockConfigEntry) -> None:
+     """Set up nothing, successfully."""
+-    return True
+ 
+ 
+-async def _async_unload_entry(_hass: HomeAssistant, _entry: MockConfigEntry) -> bool:
++async def _async_unload_entry(_hass: HomeAssistant, _entry: MockConfigEntry) -> None:
+     """Unload nothing, successfully."""
+-    return True
+ 
+ 
+ @pytest.fixture(name="entries")
+diff --git a/tests/ectoplasms/homeassistant/services/test_device.py b/tests/ectoplasms/homeassistant/services/test_device.py
+index 7c7cf2716..eba243f61 100644
+--- a/tests/ectoplasms/homeassistant/services/test_device.py
++++ b/tests/ectoplasms/homeassistant/services/test_device.py
+@@ -6,7 +6,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.components.homeassistant import DOMAIN
+ from homeassistant.config_entries import ConfigEntryDisabler
+diff --git a/tests/ectoplasms/homeassistant/services/test_label_services.py b/tests/ectoplasms/homeassistant/services/test_label_services.py
+index a48363b6b..25895f2bb 100644
+--- a/tests/ectoplasms/homeassistant/services/test_label_services.py
++++ b/tests/ectoplasms/homeassistant/services/test_label_services.py
+@@ -13,7 +13,7 @@
+ )
+ from homeassistant.setup import async_setup_component
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.homeassistant.services import (
+     add_label_to_area,
+diff --git a/tests/ectoplasms/homeassistant/services/test_update_device.py b/tests/ectoplasms/homeassistant/services/test_update_device.py
+index 6a54c2cf1..f50879de9 100644
+--- a/tests/ectoplasms/homeassistant/services/test_update_device.py
++++ b/tests/ectoplasms/homeassistant/services/test_update_device.py
+@@ -9,7 +9,7 @@
+ from homeassistant.exceptions import HomeAssistantError, Unauthorized
+ from homeassistant.helpers.device_registry import DeviceEntryDisabler
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ import voluptuous as vol
+ 
+ import pytest
+diff --git a/tests/ectoplasms/homekit/repairs/test_unknown_entity_references.py b/tests/ectoplasms/homekit/repairs/test_unknown_entity_references.py
+index 5f4822b8b..7bade372c 100644
+--- a/tests/ectoplasms/homekit/repairs/test_unknown_entity_references.py
++++ b/tests/ectoplasms/homekit/repairs/test_unknown_entity_references.py
+@@ -10,7 +10,7 @@
+     SOURCE_USER,
+     ConfigEntryDisabler,
+ )
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.entity_filtering import (
+     async_setup_all_entity_ids_cache_invalidation,
+diff --git a/tests/ectoplasms/humidifier/services/test_step_humidity.py b/tests/ectoplasms/humidifier/services/test_step_humidity.py
+index 13fd6f8af..5b7fe3092 100644
+--- a/tests/ectoplasms/humidifier/services/test_step_humidity.py
++++ b/tests/ectoplasms/humidifier/services/test_step_humidity.py
+@@ -13,7 +13,7 @@
+ import pytest
+ import voluptuous as vol
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -67,11 +67,10 @@ async def _setup(
+     """Set up these humidifiers and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(
+             entry, [Platform.HUMIDIFIER]
+         )
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/light/services/conftest.py b/tests/ectoplasms/light/services/conftest.py
+index 25deb4c51..705715604 100644
+--- a/tests/ectoplasms/light/services/conftest.py
++++ b/tests/ectoplasms/light/services/conftest.py
+@@ -9,7 +9,7 @@
+ from homeassistant.config_entries import ConfigEntry, ConfigFlow
+ from homeassistant.const import Platform
+ from homeassistant.helpers.group import IntegrationSpecificGroup
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -183,9 +183,8 @@ async def async_set_up_lights(hass: HomeAssistant, parallel_updates: int = 0) ->
+     way plenty of integrations with a slow or fragile connection do.
+     """
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.LIGHT])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/light/services/test_one_call_at_a_time.py b/tests/ectoplasms/light/services/test_one_call_at_a_time.py
+index b071fcf95..07647ee33 100644
+--- a/tests/ectoplasms/light/services/test_one_call_at_a_time.py
++++ b/tests/ectoplasms/light/services/test_one_call_at_a_time.py
+@@ -23,7 +23,7 @@
+ from .conftest import BRIGHT, COLOUR, DIM, WHITES, async_set_up_lights
+ 
+ if TYPE_CHECKING:
+-    from pytest_homeassistant_custom_component.common import MockUser
++    from pytest_homeassistant.common import MockUser
+ 
+     from homeassistant.core import HomeAssistant
+     from homeassistant.helpers import (
+diff --git a/tests/ectoplasms/lovelace/repairs/dashboard_helpers.py b/tests/ectoplasms/lovelace/repairs/dashboard_helpers.py
+index 0998f279a..57bc09d65 100644
+--- a/tests/ectoplasms/lovelace/repairs/dashboard_helpers.py
++++ b/tests/ectoplasms/lovelace/repairs/dashboard_helpers.py
+@@ -6,7 +6,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.util import dt as dt_util
+ 
+diff --git a/tests/ectoplasms/lovelace/repairs/test_resource_watching.py b/tests/ectoplasms/lovelace/repairs/test_resource_watching.py
+index d6384e60e..665cd897a 100644
+--- a/tests/ectoplasms/lovelace/repairs/test_resource_watching.py
++++ b/tests/ectoplasms/lovelace/repairs/test_resource_watching.py
+@@ -14,7 +14,7 @@
+ 
+ from homeassistant.components.lovelace.resources import RESOURCE_STORAGE_KEY
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ 
+ from custom_components.spook.const import DOMAIN
+diff --git a/tests/ectoplasms/lovelace/repairs/test_unknown_attribute_references.py b/tests/ectoplasms/lovelace/repairs/test_unknown_attribute_references.py
+index 90b37d224..56032b756 100644
+--- a/tests/ectoplasms/lovelace/repairs/test_unknown_attribute_references.py
++++ b/tests/ectoplasms/lovelace/repairs/test_unknown_attribute_references.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/lovelace/repairs/test_unknown_state_references.py b/tests/ectoplasms/lovelace/repairs/test_unknown_state_references.py
+index 85e28cebe..3bfc831c1 100644
+--- a/tests/ectoplasms/lovelace/repairs/test_unknown_state_references.py
++++ b/tests/ectoplasms/lovelace/repairs/test_unknown_state_references.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/lovelace/repairs/test_unknown_theme_references.py b/tests/ectoplasms/lovelace/repairs/test_unknown_theme_references.py
+index 86d29e181..bef3648b9 100644
+--- a/tests/ectoplasms/lovelace/repairs/test_unknown_theme_references.py
++++ b/tests/ectoplasms/lovelace/repairs/test_unknown_theme_references.py
+@@ -8,7 +8,7 @@
+ from typing import TYPE_CHECKING, Any
+ from unittest.mock import patch
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.components.frontend import DATA_THEMES
+ from homeassistant.components.lovelace.const import ConfigNotFound
+@@ -709,7 +709,7 @@ async def test_reloading_themes_clears_and_raises_the_issue(
+ 
+     with_starlight = {"frontend": {"themes": {**_THEMES, "Starlight": {}}}}
+     with patch(
+-        "homeassistant.components.frontend.async_hass_config_yaml",
++        "homeassistant.components.frontend.services.async_hass_config_yaml",
+         return_value=with_starlight,
+     ):
+         await hass.services.async_call("frontend", "reload_themes", blocking=True)
+@@ -718,7 +718,7 @@ async def test_reloading_themes_clears_and_raises_the_issue(
+     assert async_issue_about(issue_registry, _ISSUE) is None
+ 
+     with patch(
+-        "homeassistant.components.frontend.async_hass_config_yaml",
++        "homeassistant.components.frontend.services.async_hass_config_yaml",
+         return_value={"frontend": {"themes": _THEMES}},
+     ):
+         await hass.services.async_call("frontend", "reload_themes", blocking=True)
+diff --git a/tests/ectoplasms/lovelace/repairs/test_unknown_user_references.py b/tests/ectoplasms/lovelace/repairs/test_unknown_user_references.py
+index 2f3a1ff47..beb6cf7a4 100644
+--- a/tests/ectoplasms/lovelace/repairs/test_unknown_user_references.py
++++ b/tests/ectoplasms/lovelace/repairs/test_unknown_user_references.py
+@@ -7,7 +7,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.util import dt as dt_util
+ 
+diff --git a/tests/ectoplasms/media_player/services/test_step_volume.py b/tests/ectoplasms/media_player/services/test_step_volume.py
+index b2f3cbd11..23eb560bd 100644
+--- a/tests/ectoplasms/media_player/services/test_step_volume.py
++++ b/tests/ectoplasms/media_player/services/test_step_volume.py
+@@ -15,7 +15,7 @@
+ from homeassistant.const import Platform
+ from homeassistant.exceptions import ServiceNotSupported
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -75,11 +75,10 @@ async def _setup(
+     """Set up these media players and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(
+             entry, [Platform.MEDIA_PLAYER]
+         )
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/number/services/test_increment_decrement.py b/tests/ectoplasms/number/services/test_increment_decrement.py
+index 85ccfba91..6daaa0d8b 100644
+--- a/tests/ectoplasms/number/services/test_increment_decrement.py
++++ b/tests/ectoplasms/number/services/test_increment_decrement.py
+@@ -13,7 +13,7 @@
+ from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util.unit_system import US_CUSTOMARY_SYSTEM
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -29,7 +29,7 @@
+ if TYPE_CHECKING:
+     from homeassistant.core import HomeAssistant
+     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+-    from pytest_homeassistant_custom_component.typing import WebSocketGenerator
++    from pytest_homeassistant.typing import WebSocketGenerator
+ 
+ 
+ pytestmark = pytest.mark.usefixtures("spook_translations")
+@@ -236,9 +236,8 @@ async def _setup_charger(
+     """
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.NUMBER])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/proximity/repairs/conftest.py b/tests/ectoplasms/proximity/repairs/conftest.py
+index 22592c3e1..07ce79ff7 100644
+--- a/tests/ectoplasms/proximity/repairs/conftest.py
++++ b/tests/ectoplasms/proximity/repairs/conftest.py
+@@ -12,7 +12,7 @@
+ )
+ from homeassistant.const import CONF_ZONE
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ if TYPE_CHECKING:
+     from homeassistant.config_entries import ConfigEntry
+diff --git a/tests/ectoplasms/recorder/repairs/test_orphaned_statistics.py b/tests/ectoplasms/recorder/repairs/test_orphaned_statistics.py
+index 6b9d96ea9..4db6083f5 100644
+--- a/tests/ectoplasms/recorder/repairs/test_orphaned_statistics.py
++++ b/tests/ectoplasms/recorder/repairs/test_orphaned_statistics.py
+@@ -10,7 +10,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.helpers import issue_registry as ir
+ from homeassistant.helpers.recorder import DATA_INSTANCE
+diff --git a/tests/ectoplasms/script/repairs/test_unknown_attribute_references.py b/tests/ectoplasms/script/repairs/test_unknown_attribute_references.py
+index 8620e9fe4..420fcc7ba 100644
+--- a/tests/ectoplasms/script/repairs/test_unknown_attribute_references.py
++++ b/tests/ectoplasms/script/repairs/test_unknown_attribute_references.py
+@@ -6,7 +6,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/script/repairs/test_unknown_state_references.py b/tests/ectoplasms/script/repairs/test_unknown_state_references.py
+index efc1a7bff..573f0f569 100644
+--- a/tests/ectoplasms/script/repairs/test_unknown_state_references.py
++++ b/tests/ectoplasms/script/repairs/test_unknown_state_references.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/script/repairs/test_unknown_user_references.py b/tests/ectoplasms/script/repairs/test_unknown_user_references.py
+index 96d589d19..9b4bfa0f0 100644
+--- a/tests/ectoplasms/script/repairs/test_unknown_user_references.py
++++ b/tests/ectoplasms/script/repairs/test_unknown_user_references.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+diff --git a/tests/ectoplasms/spook/conditions/test_cooldown.py b/tests/ectoplasms/spook/conditions/test_cooldown.py
+index b4531af1d..681867406 100644
+--- a/tests/ectoplasms/spook/conditions/test_cooldown.py
++++ b/tests/ectoplasms/spook/conditions/test_cooldown.py
+@@ -11,7 +11,7 @@
+ from homeassistant.helpers.condition import ConditionConfig
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import mock_restore_cache
++from pytest_homeassistant.common import mock_restore_cache
+ import voluptuous as vol
+ 
+ from custom_components.spook.condition import async_get_conditions
+diff --git a/tests/ectoplasms/spook/triggers/test_cron.py b/tests/ectoplasms/spook/triggers/test_cron.py
+index cedfffd0e..b96411a54 100644
+--- a/tests/ectoplasms/spook/triggers/test_cron.py
++++ b/tests/ectoplasms/spook/triggers/test_cron.py
+@@ -10,7 +10,7 @@
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/spook/triggers/test_debounce.py b/tests/ectoplasms/spook/triggers/test_debounce.py
+index 52c6f3665..13c7046f9 100644
+--- a/tests/ectoplasms/spook/triggers/test_debounce.py
++++ b/tests/ectoplasms/spook/triggers/test_debounce.py
+@@ -13,7 +13,7 @@
+ from homeassistant.helpers import trigger as trigger_helper
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/spook/triggers/test_device_added.py b/tests/ectoplasms/spook/triggers/test_device_added.py
+index 6214c9090..5dada8243 100644
+--- a/tests/ectoplasms/spook/triggers/test_device_added.py
++++ b/tests/ectoplasms/spook/triggers/test_device_added.py
+@@ -9,7 +9,7 @@
+ from homeassistant.helpers import device_registry as dr
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ # Importing Spook puts it in `sys.modules`, which is what lets Home Assistant's
+ # loader resolve the integration when it goes looking for the trigger platform.
+diff --git a/tests/ectoplasms/spook/triggers/test_device_discovered.py b/tests/ectoplasms/spook/triggers/test_device_discovered.py
+index 0362d84da..715dea666 100644
+--- a/tests/ectoplasms/spook/triggers/test_device_discovered.py
++++ b/tests/ectoplasms/spook/triggers/test_device_discovered.py
+@@ -9,7 +9,7 @@
+ from homeassistant.config_entries import SOURCE_IMPORT, SOURCE_ZEROCONF
+ from homeassistant.core import CoreState
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockModule,
+     mock_config_flow,
+     mock_integration,
+diff --git a/tests/ectoplasms/spook/triggers/test_integration_added.py b/tests/ectoplasms/spook/triggers/test_integration_added.py
+index 85b3a98e9..65e380e83 100644
+--- a/tests/ectoplasms/spook/triggers/test_integration_added.py
++++ b/tests/ectoplasms/spook/triggers/test_integration_added.py
+@@ -13,7 +13,7 @@
+     ConfigEntryState,
+ )
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     mock_integration,
+@@ -36,8 +36,8 @@ def _integration(hass: HomeAssistant) -> None:
+         hass,
+         MockModule(
+             _DOMAIN,
+-            async_setup_entry=AsyncMock(return_value=True),
+-            async_unload_entry=AsyncMock(return_value=True),
++            async_setup_entry=AsyncMock(return_value=None),
++            async_unload_entry=AsyncMock(return_value=None),
+         ),
+     )
+     mock_platform(hass, f"{_DOMAIN}.config_flow", None)
+diff --git a/tests/ectoplasms/spook/triggers/test_integration_failed.py b/tests/ectoplasms/spook/triggers/test_integration_failed.py
+index 9e63439da..681f08266 100644
+--- a/tests/ectoplasms/spook/triggers/test_integration_failed.py
++++ b/tests/ectoplasms/spook/triggers/test_integration_failed.py
+@@ -9,7 +9,7 @@
+ from homeassistant.config_entries import ConfigEntryState
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_fire_time_changed,
+ )
+diff --git a/tests/ectoplasms/spook/triggers/test_repair_issues.py b/tests/ectoplasms/spook/triggers/test_repair_issues.py
+index f75732137..9aef5d4c2 100644
+--- a/tests/ectoplasms/spook/triggers/test_repair_issues.py
++++ b/tests/ectoplasms/spook/triggers/test_repair_issues.py
+@@ -327,6 +327,7 @@ async def test_the_condition_ignores_an_issue_waiting_to_be_confirmed(
+         "data": {
+             "issues": [
+                 {
++                    "config_entry_id": None,
+                     "created": "2026-08-01T12:00:00+00:00",
+                     "dismissed_version": None,
+                     "domain": "demo",
+diff --git a/tests/ectoplasms/spook/triggers/test_script_started.py b/tests/ectoplasms/spook/triggers/test_script_started.py
+index e10683e2f..5ab049dc4 100644
+--- a/tests/ectoplasms/spook/triggers/test_script_started.py
++++ b/tests/ectoplasms/spook/triggers/test_script_started.py
+@@ -11,7 +11,7 @@
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+ import pytest
+-from pytest_homeassistant_custom_component.common import async_capture_events
++from pytest_homeassistant.common import async_capture_events
+ import voluptuous as vol
+ 
+ from custom_components.spook.ectoplasms.spook.triggers.script_started import (
+diff --git a/tests/ectoplasms/spook/triggers/test_sequence.py b/tests/ectoplasms/spook/triggers/test_sequence.py
+index f1367404d..f05268860 100644
+--- a/tests/ectoplasms/spook/triggers/test_sequence.py
++++ b/tests/ectoplasms/spook/triggers/test_sequence.py
+@@ -12,7 +12,7 @@
+ from homeassistant.exceptions import HomeAssistantError
+ from homeassistant.helpers import selector, trigger as trigger_helper
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/spook/triggers/test_stale.py b/tests/ectoplasms/spook/triggers/test_stale.py
+index 262c1c866..431891b47 100644
+--- a/tests/ectoplasms/spook/triggers/test_stale.py
++++ b/tests/ectoplasms/spook/triggers/test_stale.py
+@@ -11,7 +11,7 @@
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/spook/triggers/test_state_changed.py b/tests/ectoplasms/spook/triggers/test_state_changed.py
+index 6bbbbcd32..f3c033f25 100644
+--- a/tests/ectoplasms/spook/triggers/test_state_changed.py
++++ b/tests/ectoplasms/spook/triggers/test_state_changed.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_fire_time_changed_exact,
+ )
+diff --git a/tests/ectoplasms/spook/triggers/test_update_installed.py b/tests/ectoplasms/spook/triggers/test_update_installed.py
+index 1068d481e..0ace4b3e9 100644
+--- a/tests/ectoplasms/spook/triggers/test_update_installed.py
++++ b/tests/ectoplasms/spook/triggers/test_update_installed.py
+@@ -16,7 +16,7 @@
+ from homeassistant.helpers.trigger import TriggerConfig
+ from homeassistant.setup import async_setup_component
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ import voluptuous as vol
+ 
+ from custom_components.spook.ectoplasms.spook.triggers.update_installed import (
+diff --git a/tests/ectoplasms/spook/triggers/test_watchdog.py b/tests/ectoplasms/spook/triggers/test_watchdog.py
+index 2ac89e8eb..4bc1e4fc9 100644
+--- a/tests/ectoplasms/spook/triggers/test_watchdog.py
++++ b/tests/ectoplasms/spook/triggers/test_watchdog.py
+@@ -14,7 +14,7 @@
+ from homeassistant.exceptions import HomeAssistantError
+ from homeassistant.helpers import selector, trigger as trigger_helper
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/spook/triggers/test_while.py b/tests/ectoplasms/spook/triggers/test_while.py
+index 301063716..ce760e58b 100644
+--- a/tests/ectoplasms/spook/triggers/test_while.py
++++ b/tests/ectoplasms/spook/triggers/test_while.py
+@@ -9,7 +9,7 @@
+ from homeassistant.core import Context
+ from homeassistant.helpers import selector
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_attribute_references.py b/tests/ectoplasms/template/repairs/test_unknown_attribute_references.py
+index 90b99a25e..bd365a74d 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_attribute_references.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_attribute_references.py
+@@ -10,11 +10,11 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_fire_time_changed,
+ )
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_attribute_references_yaml.py b/tests/ectoplasms/template/repairs/test_unknown_attribute_references_yaml.py
+index 11884aa4c..8863c074d 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_attribute_references_yaml.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_attribute_references_yaml.py
+@@ -10,7 +10,7 @@
+ from unittest.mock import patch
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.setup import async_setup_component
+ 
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_entity_references.py b/tests/ectoplasms/template/repairs/test_unknown_entity_references.py
+index a5935920b..5ab7f959e 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_entity_references.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_entity_references.py
+@@ -8,7 +8,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.template.repairs.unknown_entity_references import (
+     SpookRepair,
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_entity_references_yaml.py b/tests/ectoplasms/template/repairs/test_unknown_entity_references_yaml.py
+index ee631598c..a65c3328c 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_entity_references_yaml.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_entity_references_yaml.py
+@@ -10,7 +10,7 @@
+ from unittest.mock import patch
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.setup import async_setup_component
+ 
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_service_references.py b/tests/ectoplasms/template/repairs/test_unknown_service_references.py
+index e00979a91..f4692749a 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_service_references.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_service_references.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING
+ from types import SimpleNamespace
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     mock_integration,
+diff --git a/tests/ectoplasms/template/repairs/test_unknown_service_references_yaml.py b/tests/ectoplasms/template/repairs/test_unknown_service_references_yaml.py
+index 597867f96..ae2c2b588 100644
+--- a/tests/ectoplasms/template/repairs/test_unknown_service_references_yaml.py
++++ b/tests/ectoplasms/template/repairs/test_unknown_service_references_yaml.py
+@@ -12,7 +12,7 @@
+ from unittest.mock import patch
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.setup import async_setup_component
+ 
+diff --git a/tests/ectoplasms/todo/services/test_move_item.py b/tests/ectoplasms/todo/services/test_move_item.py
+index 1cf388bcc..b8e6e8572 100644
+--- a/tests/ectoplasms/todo/services/test_move_item.py
++++ b/tests/ectoplasms/todo/services/test_move_item.py
+@@ -15,7 +15,7 @@
+ from homeassistant.const import Platform
+ from homeassistant.exceptions import ServiceNotSupported, ServiceValidationError
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -86,9 +86,8 @@ async def _setup(hass: HomeAssistant, *lists: TodoListEntity) -> None:
+     """Set up these lists and the action."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.TODO])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/valve/services/test_step_position.py b/tests/ectoplasms/valve/services/test_step_position.py
+index 64b1476dd..8aa317dd0 100644
+--- a/tests/ectoplasms/valve/services/test_step_position.py
++++ b/tests/ectoplasms/valve/services/test_step_position.py
+@@ -11,7 +11,7 @@
+ from homeassistant.const import Platform
+ from homeassistant.exceptions import ServiceNotSupported
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -74,9 +74,8 @@ async def _setup(
+     """Set up these valves and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(entry, [Platform.VALVE])
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ectoplasms/water_heater/services/test_step_temperature.py b/tests/ectoplasms/water_heater/services/test_step_temperature.py
+index 55a801b13..2097edb08 100644
+--- a/tests/ectoplasms/water_heater/services/test_step_temperature.py
++++ b/tests/ectoplasms/water_heater/services/test_step_temperature.py
+@@ -14,7 +14,7 @@
+ from homeassistant.const import ATTR_TEMPERATURE, Platform, UnitOfTemperature
+ from homeassistant.exceptions import ServiceNotSupported
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     MockModule,
+     MockPlatform,
+@@ -84,11 +84,10 @@ async def _setup(
+     """Set up these water heaters and both actions."""
+     assert await async_setup_component(hass, "homeassistant", {})
+ 
+-    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
++    async def _setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+         await hass.config_entries.async_forward_entry_setups(
+             entry, [Platform.WATER_HEATER]
+         )
+-        return True
+ 
+     async def _setup_platform(
+         _hass: HomeAssistant,
+diff --git a/tests/ha_dev.py b/tests/ha_dev.py
+index a3807483c..b25d24129 100644
+--- a/tests/ha_dev.py
++++ b/tests/ha_dev.py
+@@ -47,7 +47,7 @@ def _patch_restore_cache_helpers() -> None:
+     from homeassistant.helpers import restore_state  # noqa: PLC0415
+     from homeassistant.helpers.json import JSONEncoder  # noqa: PLC0415
+     from homeassistant.util import dt as dt_util  # noqa: PLC0415
+-    from pytest_homeassistant_custom_component import common  # noqa: PLC0415
++    from pytest_homeassistant import common  # noqa: PLC0415
+ 
+     if hasattr(common, "_mock_restore_cache") or not hasattr(
+         restore_state.RestoreStateData, "_async_load_stored_states"
+diff --git a/tests/integrations/spook_calibration/test_sensor.py b/tests/integrations/spook_calibration/test_sensor.py
+index 973db970c..30cd6f58f 100644
+--- a/tests/integrations/spook_calibration/test_sensor.py
++++ b/tests/integrations/spook_calibration/test_sensor.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant import config_entries
+ from homeassistant.const import (
+diff --git a/tests/integrations/spook_inverse/test_config_flow.py b/tests/integrations/spook_inverse/test_config_flow.py
+index ac7627533..ebf637a9d 100644
+--- a/tests/integrations/spook_inverse/test_config_flow.py
++++ b/tests/integrations/spook_inverse/test_config_flow.py
+@@ -5,7 +5,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant import config_entries
+ from homeassistant.const import CONF_ENTITY_ID, CONF_NAME, Platform
+diff --git a/tests/integrations/spook_inverse/test_cover.py b/tests/integrations/spook_inverse/test_cover.py
+index 4771e705e..ac2064ed8 100644
+--- a/tests/integrations/spook_inverse/test_cover.py
++++ b/tests/integrations/spook_inverse/test_cover.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_mock_service,
+ )
+diff --git a/tests/integrations/spook_inverse/test_following.py b/tests/integrations/spook_inverse/test_following.py
+index 58f821e15..f3188ff7a 100644
+--- a/tests/integrations/spook_inverse/test_following.py
++++ b/tests/integrations/spook_inverse/test_following.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.const import CONF_ENTITY_ID, STATE_OFF, STATE_ON, STATE_UNAVAILABLE
+ from homeassistant.helpers import entity_registry as er
+diff --git a/tests/integrations/spook_inverse/test_init.py b/tests/integrations/spook_inverse/test_init.py
+index f991b44ea..30b1062c2 100644
+--- a/tests/integrations/spook_inverse/test_init.py
++++ b/tests/integrations/spook_inverse/test_init.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.const import CONF_ENTITY_ID, Platform
+ from homeassistant.helpers import device_registry as dr, entity_registry as er
+diff --git a/tests/integrations/spook_inverse/test_sources.py b/tests/integrations/spook_inverse/test_sources.py
+index aa7185418..950e658a3 100644
+--- a/tests/integrations/spook_inverse/test_sources.py
++++ b/tests/integrations/spook_inverse/test_sources.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_mock_service,
+ )
+diff --git a/tests/integrations/spook_inverse/test_valve.py b/tests/integrations/spook_inverse/test_valve.py
+index 9237b79eb..4d332bfd1 100644
+--- a/tests/integrations/spook_inverse/test_valve.py
++++ b/tests/integrations/spook_inverse/test_valve.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_mock_service,
+ )
+diff --git a/tests/integrations/spook_time_in_state/test_sensor.py b/tests/integrations/spook_time_in_state/test_sensor.py
+index 2fd95ed20..98a1c00a6 100644
+--- a/tests/integrations/spook_time_in_state/test_sensor.py
++++ b/tests/integrations/spook_time_in_state/test_sensor.py
+@@ -5,7 +5,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     mock_restore_cache_with_extra_data,
+ )
+diff --git a/tests/test_attribute_checking.py b/tests/test_attribute_checking.py
+index cb772ab57..e162c0d52 100644
+--- a/tests/test_attribute_checking.py
++++ b/tests/test_attribute_checking.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ from sqlalchemy.exc import OperationalError
+@@ -86,7 +86,7 @@ async def test_domain_enum_is_read_from_core(hass: HomeAssistant) -> None:
+     assert "supported_color_modes" in light
+ 
+     assert "operation_mode" in await async_domain_attributes(hass, "water_heater")
+-    assert await async_domain_attributes(hass, "sun") == frozenset()
++    assert "elevation" in await async_domain_attributes(hass, "sun")
+     assert await async_domain_attributes(hass, "not_a_domain") == frozenset()
+ 
+ 
+diff --git a/tests/test_attribute_value_checking.py b/tests/test_attribute_value_checking.py
+index a0220773f..08ad6a31e 100644
+--- a/tests/test_attribute_value_checking.py
++++ b/tests/test_attribute_value_checking.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ 
+diff --git a/tests/test_condition_watching.py b/tests/test_condition_watching.py
+index 7decdc960..76c8896a9 100644
+--- a/tests/test_condition_watching.py
++++ b/tests/test_condition_watching.py
+@@ -12,7 +12,7 @@
+ from homeassistant.exceptions import HomeAssistantError
+ from homeassistant.helpers import selector
+ from homeassistant.util import dt as dt_util
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ import pytest
+ import voluptuous as vol
+ 
+diff --git a/tests/test_config_flow.py b/tests/test_config_flow.py
+index 8d55c885b..098e05f8e 100644
+--- a/tests/test_config_flow.py
++++ b/tests/test_config_flow.py
+@@ -6,7 +6,7 @@
+ from unittest.mock import AsyncMock
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant import config_entries
+ from homeassistant.data_entry_flow import FlowResultType
+diff --git a/tests/test_core_compat.py b/tests/test_core_compat.py
+index 2f5d9faa7..dc9d66684 100644
+--- a/tests/test_core_compat.py
++++ b/tests/test_core_compat.py
+@@ -6,7 +6,7 @@
+ from typing import TYPE_CHECKING, Any
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.helpers.service import (
+     async_get_cached_service_description,
+diff --git a/tests/test_core_references.py b/tests/test_core_references.py
+index 65a0b124a..215c6726c 100644
+--- a/tests/test_core_references.py
++++ b/tests/test_core_references.py
+@@ -14,7 +14,7 @@
+ import logging
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.helpers import (
+     area_registry as ar,
+diff --git a/tests/test_device_id_shape.py b/tests/test_device_id_shape.py
+index e421553db..78f10f79f 100644
+--- a/tests/test_device_id_shape.py
++++ b/tests/test_device_id_shape.py
+@@ -12,7 +12,7 @@
+ from typing import TYPE_CHECKING
+ 
+ from homeassistant.helpers.script import Script
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ import pytest
+ import yaml
+ 
+diff --git a/tests/test_diagnostics.py b/tests/test_diagnostics.py
+index ac6a61820..76ec47877 100644
+--- a/tests/test_diagnostics.py
++++ b/tests/test_diagnostics.py
+@@ -5,7 +5,7 @@
+ from typing import TYPE_CHECKING
+ import json
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.config_entries import ConfigEntryDisabler, ConfigEntryState
+ from homeassistant.helpers import issue_registry as ir
+diff --git a/tests/test_dismissals.py b/tests/test_dismissals.py
+index f6ca2159c..99418ace0 100644
+--- a/tests/test_dismissals.py
++++ b/tests/test_dismissals.py
+@@ -9,7 +9,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.helpers import issue_registry as ir
+ from homeassistant.util import dt as dt_util
+diff --git a/tests/test_e2e_repairs.py b/tests/test_e2e_repairs.py
+index 4dbcdfe07..f0ae3b45d 100644
+--- a/tests/test_e2e_repairs.py
++++ b/tests/test_e2e_repairs.py
+@@ -13,7 +13,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     MockConfigEntry,
+     async_fire_time_changed,
+ )
+diff --git a/tests/test_entity_filtering.py b/tests/test_entity_filtering.py
+index 743edb2ec..e47c0f0bd 100644
+--- a/tests/test_entity_filtering.py
++++ b/tests/test_entity_filtering.py
+@@ -4,7 +4,7 @@
+ 
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.config_entries import ConfigEntryDisabler
+ from homeassistant.helpers import (
+diff --git a/tests/test_ha_dev.py b/tests/test_ha_dev.py
+index 5ff52db3c..1c8ffee7e 100644
+--- a/tests/test_ha_dev.py
++++ b/tests/test_ha_dev.py
+@@ -5,7 +5,7 @@
+ from typing import TYPE_CHECKING
+ 
+ from homeassistant.core import State
+-from pytest_homeassistant_custom_component import common
++from pytest_homeassistant import common
+ import pytest
+ 
+ if TYPE_CHECKING:
+diff --git a/tests/test_helper_source_repairs_smoke.py b/tests/test_helper_source_repairs_smoke.py
+index 0a1e91719..ce3e6a7f3 100644
+--- a/tests/test_helper_source_repairs_smoke.py
++++ b/tests/test_helper_source_repairs_smoke.py
+@@ -10,7 +10,7 @@
+ 
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.homeassistant.repairs.unknown_helper_source_references import (
+     SpookRepair,
+diff --git a/tests/test_llm.py b/tests/test_llm.py
+index ac377c3ef..655487356 100644
+--- a/tests/test_llm.py
++++ b/tests/test_llm.py
+@@ -9,7 +9,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import MockConfigEntry, MockUser
++from pytest_homeassistant.common import MockConfigEntry, MockUser
+ 
+ from homeassistant.components.light import LightEntity
+ from homeassistant.core import Context, ServiceCall
+diff --git a/tests/test_not_entity_ids.py b/tests/test_not_entity_ids.py
+index b1f1c48e7..72929b0cb 100644
+--- a/tests/test_not_entity_ids.py
++++ b/tests/test_not_entity_ids.py
+@@ -21,7 +21,7 @@
+ from homeassistant.helpers.entity_component import DATA_INSTANCES
+ from homeassistant.helpers.template import Template
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.draft_checking import async_check_draft
+ from custom_components.spook.ectoplasms.automation.repairs import (
+diff --git a/tests/test_platform_forwarding.py b/tests/test_platform_forwarding.py
+index 7604be2cc..bb40918a8 100644
+--- a/tests/test_platform_forwarding.py
++++ b/tests/test_platform_forwarding.py
+@@ -9,7 +9,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components import spook
+ from custom_components.spook import setup_helpers
+diff --git a/tests/test_repairs_cleanup.py b/tests/test_repairs_cleanup.py
+index 33ac6c72f..e4e9be635 100644
+--- a/tests/test_repairs_cleanup.py
++++ b/tests/test_repairs_cleanup.py
+@@ -10,7 +10,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.exceptions import HomeAssistantError
+ from homeassistant.helpers import issue_registry as ir
+diff --git a/tests/test_repairs_first_inspections.py b/tests/test_repairs_first_inspections.py
+index afc401e90..b671d86a3 100644
+--- a/tests/test_repairs_first_inspections.py
++++ b/tests/test_repairs_first_inspections.py
+@@ -9,7 +9,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.const import EVENT_COMPONENT_LOADED
+ from homeassistant.helpers import entity_registry as er
+diff --git a/tests/test_repairs_registry_updates.py b/tests/test_repairs_registry_updates.py
+index 78d131631..4a7918644 100644
+--- a/tests/test_repairs_registry_updates.py
++++ b/tests/test_repairs_registry_updates.py
+@@ -6,7 +6,7 @@
+ from datetime import timedelta
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_fire_time_changed
++from pytest_homeassistant.common import async_fire_time_changed
+ 
+ from homeassistant.helpers import entity_registry as er
+ 
+diff --git a/tests/test_setup.py b/tests/test_setup.py
+index 89c10f9be..495fb5723 100644
+--- a/tests/test_setup.py
++++ b/tests/test_setup.py
+@@ -15,7 +15,7 @@
+ import sys
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from homeassistant.config_entries import (
+     SOURCE_USER,
+diff --git a/tests/test_setup_isolation.py b/tests/test_setup_isolation.py
+index b36350b12..6355a84f7 100644
+--- a/tests/test_setup_isolation.py
++++ b/tests/test_setup_isolation.py
+@@ -11,7 +11,7 @@
+ from types import SimpleNamespace
+ from typing import TYPE_CHECKING, Any
+ 
+-from pytest_homeassistant_custom_component.common import async_mock_service
++from pytest_homeassistant.common import async_mock_service
+ 
+ from custom_components.spook import setup_helpers
+ from custom_components.spook.repairs import AbstractSpookRepair, SpookRepairManager
+diff --git a/tests/test_shadowed_states.py b/tests/test_shadowed_states.py
+index 2648e05c7..633d3d9d4 100644
+--- a/tests/test_shadowed_states.py
++++ b/tests/test_shadowed_states.py
+@@ -20,7 +20,7 @@
+ from homeassistant.components.script import UnavailableScriptEntity
+ from homeassistant.helpers.entity_component import DATA_INSTANCES
+ from homeassistant.setup import async_setup_component
+-from pytest_homeassistant_custom_component.common import MockConfigEntry
++from pytest_homeassistant.common import MockConfigEntry
+ 
+ from custom_components.spook.ectoplasms.automation.repairs import (
+     unknown_entity_references as automation_entities,
+diff --git a/tests/test_state_checking.py b/tests/test_state_checking.py
+index 39e86ec15..10eb20671 100644
+--- a/tests/test_state_checking.py
++++ b/tests/test_state_checking.py
+@@ -7,7 +7,7 @@
+ from typing import TYPE_CHECKING
+ 
+ import pytest
+-from pytest_homeassistant_custom_component.components.recorder.common import (
++from pytest_homeassistant.components.recorder.common import (
+     async_wait_recording_done,
+ )
+ from sqlalchemy import update
+diff --git a/tests/test_timed_states.py b/tests/test_timed_states.py
+index 6db991f34..a5594dace 100644
+--- a/tests/test_timed_states.py
++++ b/tests/test_timed_states.py
+@@ -28,7 +28,7 @@
+ from homeassistant.setup import async_setup_component
+ from homeassistant.util import dt as dt_util
+ import pytest
+-from pytest_homeassistant_custom_component.common import (
++from pytest_homeassistant.common import (
+     async_fire_time_changed,
+     mock_restore_cache,
+ )
