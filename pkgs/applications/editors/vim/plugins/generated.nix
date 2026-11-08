@@ -5769,6 +5769,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  embers-nvim = buildVimPlugin {
+    pname = "embers.nvim";
+    version = "0-unstable-2026-11-08";
+    src = fetchFromGitHub {
+      owner = "EralpCelebi";
+      repo = "embers.nvim";
+      rev = "89f82989f337f0a1e6be5512fc22c9b8a02b324b";
+      hash = "sha256-nEwoYzDF65QCJ3O4ewxS2DpYauXa7pxt+p85eaUzHOM=";
+    };
+    meta.homepage = "https://github.com/EralpCelebi/embers.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   emmet-vim = buildVimPlugin {
     pname = "emmet-vim";
     version = "0-unstable-2026-03-24";
