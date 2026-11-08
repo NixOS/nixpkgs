@@ -3327,6 +3327,9 @@ mapAliases {
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = warnAlias "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
   zed = throw "'zed' has been removed. Use 'super' instead."; # Added 2026-09-04
+  zeroad = throw "'zeroad' has been removed, as it depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
+  zeroad-data = throw "'zeroad-data' has been removed, as 'zeroad' depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
+  zeroad-unwrapped = throw "'zeroad-unwrapped' has been removed, as it depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
   zeroadPackages.zeroad = throw "'zeroadPackages.zeroad' has been renamed to/replaced by 'zeroad'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27
