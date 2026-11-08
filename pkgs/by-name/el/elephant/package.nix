@@ -78,7 +78,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/elephant \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+      --prefix PATH : "${lib.makeBinPath runtimeDeps}" \
       --set ELEPHANT_PROVIDER_DIR "$out/lib/elephant/providers"
   '';
 
