@@ -22,8 +22,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "loot" ];
 
-  __structuredAttrs = true;
-
   meta = {
     inherit (libloot-native.meta) license platforms;
     description = "Experimental Python wrapper around libloot";
