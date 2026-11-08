@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-c";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
+    cmakeFlags+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
   '';
 
   nativeBuildInputs = [
@@ -104,6 +104,8 @@ stdenv.mkDerivation {
     ln -sv libmariadb.pc $dev/lib/pkgconfig/mysqlclient.pc
     install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Client library that can be used to connect to MySQL or MariaDB";
