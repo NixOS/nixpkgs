@@ -6,6 +6,8 @@
   libredirect,
   bzip2,
   zstd,
+  aws-lc,
+  rust-jemalloc-sys,
   stdenv,
   rocksdb,
   nix-update-script,
@@ -120,7 +122,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     zstd
+    aws-lc
   ]
+  ++ lib.optional enableJemalloc (rust-jemalloc-sys.override { unprefixed = true; })
   ++ lib.optional enableLiburing liburing;
 
   env = {
