@@ -11467,6 +11467,8 @@ self: super: with self; {
 
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
+  multi-demangle = callPackage ../development/python-modules/multi-demangle { };
+
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
   multiaddr = callPackage ../development/python-modules/multiaddr { };
