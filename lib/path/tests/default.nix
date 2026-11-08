@@ -7,6 +7,8 @@
     inherit system;
   },
   nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; },
+  # Useful override for ../../tests/test-with-nix.nix
+  nix ? nixVersions.stable,
   libpath ? ../..,
   # Random seed
   seed ? null,
@@ -15,7 +17,7 @@
 pkgs.runCommand "lib-path-tests"
   {
     nativeBuildInputs = [
-      nixVersions.stable
+      nix
     ]
     ++ (with pkgs; [
       jq
