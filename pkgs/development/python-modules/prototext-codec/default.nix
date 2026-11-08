@@ -11,7 +11,6 @@ buildPythonPackage {
   pname = "prototext-codec";
   inherit (reproto) src version cargoDeps;
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Built from reproto's source, at its version, with its vendored crates:

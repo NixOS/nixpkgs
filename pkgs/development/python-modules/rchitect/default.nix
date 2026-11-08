@@ -25,8 +25,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-/p77OoEJWc7aME7itWkwZAHJW7sNEB1iAUwvbCis//U=";
   };
 
-  __structuredAttrs = true;
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""

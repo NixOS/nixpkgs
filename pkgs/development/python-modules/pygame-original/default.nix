@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pygame";
   version = "2.6.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # https://github.com/NixOS/nixpkgs/pull/475917
   disabled = pythonAtLeast "3.14";

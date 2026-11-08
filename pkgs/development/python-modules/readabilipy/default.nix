@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix test failures with Python 3.13.6
+    # Fix test failures with Python 3.13.6, with removed >200 KiB test updates to reduce bloat
     # https://github.com/alan-turing-institute/ReadabiliPy/pull/116
     ./python3.13.6-compatibility.patch
   ];
@@ -76,6 +76,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Exclude benchmarks
     "tests/test_benchmarking.py"
+    # see compatability patch comment above:
+    # required changes to test files removed from patch due to bloat (> 200 KiB)
+    "tests/test_article_extraction.py"
   ];
 
   disabledTests = [

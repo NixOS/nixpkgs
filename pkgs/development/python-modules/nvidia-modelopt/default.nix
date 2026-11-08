@@ -70,7 +70,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-modelopt";
   version = "0.48.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

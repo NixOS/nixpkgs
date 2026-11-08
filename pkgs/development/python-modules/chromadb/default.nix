@@ -12,6 +12,7 @@
   protobuf,
   rustc,
   rustPlatform,
+  rust-jemalloc-sys,
   zstd-c,
 
   # dependencies
@@ -125,6 +126,8 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
+    rust-jemalloc-sys
     zstd-c
   ];
 

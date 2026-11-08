@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
   inherit (opentelemetry-instrumentation) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit (opentelemetry-api) src;
 

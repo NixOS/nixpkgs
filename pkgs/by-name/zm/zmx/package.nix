@@ -5,15 +5,16 @@
   apple-sdk,
   installShellFiles,
   writeShellScriptBin,
-  zig_0_16,
+  zig_0_17,
   nix-update-script,
+  bashInteractive,
   bats,
   python3,
   unixtools,
   versionCheckHook,
 }:
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 
   sdkRoot = apple-sdk.sdkroot;
   # Ghostty's Zig build asks Zig to discover the native Darwin SDK via
@@ -28,7 +29,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmx";
-  version = "0.8.1";
+  version = "1.0.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -36,14 +37,26 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neurosnap";
     repo = "zmx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0gxaoup7boFMm4NQCQ8mHusX1oS8h/MacFxhSPLi2XM=";
+    hash = "sha256-aud/azC9TpnKs4jJrXBWO0LXWUFgu7u6Gg2z9jgc79g=";
   };
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-W1vKzna0dYSBdTb8evGErec6ukemFy/9Fhz5uSJeaj0=";
+    hash = "sha256-3nLzn3Ara/7tZwcmWTnbEGnddfqz5kWTz+GLP36scwo=";
   };
+
+  # `zmx write` drops chunks of large files on Darwin: https://github.com/neurosnap/zmx/issues/309
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/session.bats --replace-fail \
+      '@test "write: a file larger than the PTY input buffer arrives whole" {' \
+      '@test "write: a file larger than the PTY input buffer arrives whole" { skip "broken on Darwin"'
+  '';
+
+  # zmx needs a writable state directory, including for `zmx completions`
+  preConfigure = ''
+    export ZMX_DIR="$TMPDIR/zmx"
+  '';
 
   postConfigure = ''
     # Zig may write cache metadata next to fetched dependencies while checking them.
@@ -64,14 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     # only needed for postCheck
+    bashInteractive
     bats
     python3
     unixtools.hostname
   ];
-
-  preCheck = ''
-    export ZMX_DIR="$TMPDIR/zmx-test"
-  '';
 
   postCheck = ''
     bats test
@@ -102,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       dwt
       GabrielDougherty
+      baptiste0928
     ];
     mainProgram = "zmx";
     platforms = lib.platforms.unix;

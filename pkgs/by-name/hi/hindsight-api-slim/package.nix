@@ -17,7 +17,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "hindsight-api-slim";
   version = "1.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vectorize-io";

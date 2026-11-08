@@ -3,31 +3,29 @@
   lib,
   pkg-config,
   cmake,
-  fetchurl,
+  fetchFromGitHub,
   zlib,
   bzip2,
   file,
   elfutils,
   libarchive,
+  libcap_ng,
   readline,
   audit,
   popt,
   xz,
   python3,
-  lua5_4,
+  lua5_5,
   llvmPackages,
   sqlite,
   zstd,
   libcap,
-  darwinMinVersionHook,
-  openssl,
   #, libselinux
   rpm-sequoia,
   gettext,
   systemd,
-  bubblewrap,
-  autoconf,
   gnupg,
+  scdoc,
 
   # Disable the unshare RPM plugin, which can be useful if
   # RPM is ran within the Nix sandbox.
@@ -35,25 +33,25 @@
 }:
 
 let
-  lua = lua5_4;
+  lua = lua5_5;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpm";
-  version = "4.20.1";
+  version = "6.1.0";
 
-  src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
+  src = fetchFromGitHub {
+    owner = "rpm-software-management";
+    repo = "rpm";
+    tag = "rpm-${finalAttrs.version}-release";
+    hash = "sha256-+ugPW3dJ2qULYTIkgS1g6MU5otnF26SJe8ltsFrpUiE=";
   };
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' python/CMakeLists.txt
     sed -i 's#PATHS ENV MYPATH#PATHS ENV PATH#' CMakeLists.txt
-  ''
-  # clang: error: unknown argument: '-fhardened'
-  + lib.optionalString stdenv.cc.isClang ''
+    # Compat symlinks assume CMAKE_INSTALL_BINDIR is relative
     substituteInPlace CMakeLists.txt \
-      --replace-fail "-fhardened" ""
+      --replace-fail "../../\''${CMAKE_INSTALL_BINDIR}" "\''${CMAKE_INSTALL_FULL_BINDIR}"
   '';
 
   outputs = [
@@ -68,11 +66,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoconf
     python3
     gettext
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
+    scdoc
+  ];
   buildInputs = [
     bzip2
     zlib
@@ -82,7 +79,6 @@ stdenv.mkDerivation rec {
     xz
     lua
     sqlite
-    openssl
     readline
     rpm-sequoia
     gnupg
@@ -92,10 +88,7 @@ stdenv.mkDerivation rec {
     libcap
     audit
     systemd
-  ];
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./sighandler_t-macos.patch
+    libcap_ng
   ];
 
   cmakeFlags = [
@@ -105,13 +98,7 @@ stdenv.mkDerivation rec {
 
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DMKTREE_BACKEND=rootfs"
-  ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    # Test suite rely on either podman or bubblewrap
-    "-DENABLE_TESTSUITE=OFF"
-
     "-DWITH_CAP=OFF"
     "-DWITH_AUDIT=OFF"
     "-DWITH_ACL=OFF"
@@ -131,6 +118,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   enableParallelBuilding = true;
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.rpm.org/";
@@ -142,4 +130,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

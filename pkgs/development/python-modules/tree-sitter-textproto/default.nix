@@ -9,7 +9,6 @@ buildPythonPackage {
   pname = "tree-sitter-textproto";
   inherit (reproto) src version;
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Built from reproto's source, at its version, with its vendored crates:
