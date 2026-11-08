@@ -8,19 +8,17 @@ let
   cfg = config.services.isponsorblocktv;
   systemd-run = lib.getExe' pkgs.systemd "systemd-run";
   isponsorblocktv-pkg = lib.getExe cfg.package;
-  # The setup package needs to be run manually. See https://github.com/dmunozv04/iSponsorBlockTV#usage
+
+  # The setup service needs to be run manually. See https://github.com/dmunozv04/iSponsorBlockTV#usage
   isponsorblocktv-setup = ''
     exec ${systemd-run} \
       --pty \
       --wait \
-      --unit=isponsorblocktv-setup \
       --description="iSponsorBlockTV CLI configurator" \
-      --property=User=isponsorblocktv \
-      --property=Group=isponsorblocktv \
+      --property=DynamicUser=yes \
       --property=WorkingDirectory=/var/lib/isponsorblocktv \
       --property=StateDirectory=isponsorblocktv \
       --property=StateDirectoryMode=0700 \
-      --property=ReadWritePaths=/var/lib/isponsorblocktv \
       --property=ProtectSystem=strict \
       --property=ProtectHome=yes \
       --property=PrivateTmp=yes \
@@ -61,14 +59,6 @@ in
       (pkgs.writeShellScriptBin "isponsorblocktv-setup" isponsorblocktv-setup)
     ];
 
-    users.users.isponsorblocktv = {
-      isSystemUser = true;
-      group = "isponsorblocktv";
-      description = "iSponsorBlockTV service account";
-    };
-
-    users.groups.isponsorblocktv = { };
-
     systemd.services.isponsorblocktv = {
       description = "iSponsorBlockTV - SponsorBlock client for YouTube TV";
       documentation = [ "https://github.com/dmunozv04/iSponsorBlockTV" ];
@@ -83,12 +73,9 @@ in
         ExecStart = "${isponsorblocktv-pkg} --data /var/lib/isponsorblocktv";
         WorkingDirectory = "/var/lib/isponsorblocktv";
 
-        User = "isponsorblocktv";
-        Group = "isponsorblocktv";
-
+        DynamicUser = true;
         StateDirectory = "isponsorblocktv"; # /var/lib/isponsorblocktv
         StateDirectoryMode = "0700";
-        RuntimeDirectoryMode = "0700";
 
         Restart = "always";
         RestartSec = "10s";
@@ -99,7 +86,6 @@ in
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
-        ReadWritePaths = [ "/var/lib/isponsorblocktv" ];
 
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
