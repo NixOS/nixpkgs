@@ -13738,8 +13738,6 @@ self: super: with self; {
 
   pillow-jxl-plugin = callPackage ../development/python-modules/pillow-jxl-plugin { };
 
-  pillowfight = callPackage ../development/python-modules/pillowfight { };
-
   pims = callPackage ../development/python-modules/pims { };
 
   pinboard = callPackage ../development/python-modules/pinboard { };
