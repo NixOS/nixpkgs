@@ -21,7 +21,6 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/thomasddn/ha-volvo-cars";
     description = "Volvo Cars Home Assistant integration";
     maintainers = with lib.maintainers; [
-      matteopacini
       seberm
     ];
     license = lib.licenses.gpl3Only;

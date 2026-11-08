@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "nzbhydra2";
-  meta.maintainers = with lib.maintainers; [ matteopacini ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:

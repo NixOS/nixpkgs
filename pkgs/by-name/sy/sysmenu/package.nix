@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/System64fumo/sysmenu";
     license = lib.licenses.wtfpl;
     mainProgram = "sysmenu";
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

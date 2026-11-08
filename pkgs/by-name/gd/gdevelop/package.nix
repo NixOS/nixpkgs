@@ -14,7 +14,6 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       tombert
-      matteopacini
     ];
     mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
