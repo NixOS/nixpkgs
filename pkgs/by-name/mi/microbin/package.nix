@@ -6,6 +6,8 @@
   pkg-config,
   rustPlatform,
   nix-update-script,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     oniguruma
     openssl
+    sqlite
+    zstd
   ];
 
   env = {

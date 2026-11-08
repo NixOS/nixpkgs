@@ -7,9 +7,11 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
+  sqlite,
   stdenv,
 }:
 
@@ -41,7 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = lib.optional nativeTls openssl;
+  buildInputs = [
+    libgit2
+    sqlite
+  ]
+  ++ lib.optionals nativeTls [
+    openssl
+  ];
 
   postInstall =
     let

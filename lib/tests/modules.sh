@@ -172,8 +172,11 @@ checkConfigError() {
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
 checkConfigError "In module .*test-push-down-non-attrs.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config ./test-push-down-non-attrs.nix
+checkConfigError "In module .*test-push-down-non-attrs-nested.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option\n\s*\`a\.b'!" config.a.b.c ./test-push-down-non-attrs-nested.nix
+checkConfigOutput '^1$' config.a.b.x ./options-lazy-in-unmatched-defns.nix
 
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
+checkConfigOutput '^true$' config.result ./test-fixupOptionType-idempotent.nix
 
 # Check that a module argument is passed, also when a default is available
 # (but not needed)
