@@ -4,6 +4,7 @@
   fetchCrate,
   libxml2,
   ncurses,
+  rust-jemalloc-sys,
   zlib,
   features ? [
     "use_jemalloc"
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libxml2
     ncurses
+    rust-jemalloc-sys
     zlib
   ];
 
