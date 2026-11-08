@@ -36,6 +36,8 @@ let
 in
 appimageTools.wrapAppImage {
   inherit pname version;
+  # Keep update tools from treating the wrapper as the source package.
+  pos = __curPos;
   src = appimageContents;
 
   extraInstallCommands = ''
