@@ -1,54 +1,60 @@
 {
   lib,
-  fetchFromGitHub,
-  flutter335,
+  fetchFromCodeberg,
+  flutter347,
   runCommand,
-  yq,
-  sly,
+  yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter347.buildFlutterApplication (finalAttrs: {
   pname = "sly";
-  version = "1.0.0";
+  version = "1.1.2";
 
-  src = fetchFromGitHub {
-    owner = "kra-mo";
+  src = fetchFromCodeberg {
+    owner = "Sly";
     repo = "Sly";
-    tag = "v${version}";
-    hash = "sha256-pFTP+oDY3pCSgO26ZtqUR+puMJSFZAEdbM2AqmfkNX8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jOC8mZdBRC7T/eEgPXlUAC44IcknlUk+TWNDdR0m4Ng=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   postInstall = ''
-    install -Dm0644 packaging/linux/page.kramo.Sly.svg $out/share/icons/hicolor/scalable/apps/page.kramo.Sly.svg
-    install -Dm0644 packaging/linux/page.kramo.Sly.desktop $out/share/applications/sly.desktop
+    install -Dm0644 linux/page.kramo.Sly.desktop $out/share/applications/page.kramo.Sly.desktop
+    install -Dm0644 linux/flatpak/page.kramo.Sly.svg $out/share/icons/hicolor/scalable/apps/page.kramo.Sly.svg
+    install -Dm0644 linux/flatpak/page.kramo.Sly-symbolic.svg $out/share/icons/hicolor/symbolic/apps/page.kramo.Sly-symbolic.svg
   '';
 
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          nativeBuildInputs = [ yq ];
-          inherit (sly) src;
+          inherit (finalAttrs) src;
+          nativeBuildInputs = [ yq-go ];
         }
         ''
-          cat $src/pubspec.lock | yq > $out
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "sly.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "sly.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
     ];
   };
 
   meta = {
     description = "Friendly image editor";
-    homepage = "https://github.com/kra-mo/Sly";
+    homepage = "https://codeberg.org/Sly/Sly";
+    changelog = "https://codeberg.org/Sly/Sly/releases/tag/v${finalAttrs.version}";
     mainProgram = "sly";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
