@@ -78,7 +78,10 @@ stdenv.mkDerivation {
     cmakeFlagsArray+=("-DCMAKE_INSTALL_NAME_DIR=$out/lib/mariadb")
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    curl # for propagated krb5-config
+  ];
   propagatedBuildInputs = [
     curl
     openssl
@@ -86,6 +89,8 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional isVer33 zstd;
   buildInputs = [ libiconv ];
+
+  strictDeps = true;
 
   postInstall = ''
     moveToOutput bin/mariadb_config "$dev"
