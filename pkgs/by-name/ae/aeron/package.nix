@@ -8,21 +8,21 @@
 
 let
   pname = "aeron";
-  version = "1.50.2";
+  version = "1.54.0";
   groupId = "io.aeron";
 
   aeronAll = fetchMavenArtifact {
     inherit groupId;
     inherit version;
     artifactId = "aeron-all";
-    hash = "sha256-+H43UbfLvDcjYS5VRYea8v5PA3/d8SPYivd/aasv4wQ=";
+    hash = "sha256-7tn61RB3ivVcacvltD3ce6dU95+NWSJoxj/DrZ0lcHs=";
   };
 
   aeronSamples = fetchMavenArtifact {
     inherit groupId;
     inherit version;
     artifactId = "aeron-samples";
-    hash = "sha256-mn07b6P8HcNuwRUcbzfXkCpP/7cPChZJVx5VbyT5xrw=";
+    hash = "sha256-DlvjcSjdL8WnL4SjnyODZPzt8nKIwzqPfStRr3F5KaA=";
   };
 
 in
@@ -57,6 +57,10 @@ stdenv.mkDerivation {
     function wrap {
       makeWrapper "${jdk17}/bin/java" "$out/bin/$1" \
         --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/jdk.internal.misc=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/java.util.zip=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/java.lang=ALL-UNNAMED" \
         --add-flags "--class-path ${aeronAll.jar}" \
         --add-flags "$2"
     }
