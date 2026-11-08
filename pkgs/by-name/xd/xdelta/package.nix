@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "xdelta3";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
