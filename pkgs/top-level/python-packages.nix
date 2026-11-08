@@ -22695,6 +22695,8 @@ self: super: with self; {
 
   wasabi = callPackage ../development/python-modules/wasabi { };
 
+  wasm-tools = callPackage ../development/python-modules/wasm-tools { inherit (pkgs) jq; };
+
   inherit (self.wasmerPackages)
     wasmer
     wasmer-compiler-cranelift
