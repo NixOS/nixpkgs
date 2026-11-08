@@ -51,7 +51,6 @@ buildPythonPackage (finalAttrs: {
     ;
 
   format = "wheel";
-  __structuredAttrs = true;
 
   dontUseWheelUnpack = true;
 
