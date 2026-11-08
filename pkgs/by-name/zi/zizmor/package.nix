@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aws-lc,
   rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
@@ -23,10 +25,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-b7tcTvECEFb1fBVSo6y+NL4YognKuOBjAVMIyrCXZGQ=";
 
   buildInputs = [
+    aws-lc
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
   ];
 
