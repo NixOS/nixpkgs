@@ -2763,8 +2763,8 @@ var $elm$core$String$split = F2(
 var $elm$json$Json$Decode$indent = function (str) {
 	return A2(
 		$elm$core$String$join,
-		'\n    ',
-		A2($elm$core$String$split, '\n', str));
+		'\u000A    ',
+		A2($elm$core$String$split, '\u000A', str));
 };
 var $elm$core$List$foldl = F3(
 	function (func, acc, list) {
@@ -2855,7 +2855,7 @@ var $elm$core$List$reverse = function (list) {
 var $elm$core$String$uncons = _String_uncons;
 var $elm$json$Json$Decode$errorOneOf = F2(
 	function (i, error) {
-		return '\n\n(' + ($elm$core$String$fromInt(i + 1) + (') ' + $elm$json$Json$Decode$indent(
+		return '\u000A\u000A(' + ($elm$core$String$fromInt(i + 1) + (') ' + $elm$json$Json$Decode$indent(
 			$elm$json$Json$Decode$errorToString(error))));
 	});
 var $elm$json$Json$Decode$errorToString = function (error) {
@@ -2880,7 +2880,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 							return $elm$core$Char$isAlpha(_char) && A2($elm$core$String$all, $elm$core$Char$isAlphaNum, rest);
 						}
 					}();
-					var fieldName = isSimple ? ('.' + f) : ('[\'' + (f + '\']'));
+					var fieldName = isSimple ? ('.' + f) : ('[\u0027' + (f + '\u0027]'));
 					var $temp$error = err,
 						$temp$context = A2($elm$core$List$cons, fieldName, context);
 					error = $temp$error;
@@ -2931,7 +2931,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 								$elm$core$List$length(errors)) + ' ways:'));
 							return A2(
 								$elm$core$String$join,
-								'\n\n',
+								'\u000A\u000A',
 								A2(
 									$elm$core$List$cons,
 									introduction,
@@ -2943,16 +2943,16 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					var json = error.b;
 					var introduction = function () {
 						if (!context.b) {
-							return 'Problem with the given value:\n\n';
+							return 'Problem with the given value:\u000A\u000A';
 						} else {
 							return 'Problem with the value at json' + (A2(
 								$elm$core$String$join,
 								'',
-								$elm$core$List$reverse(context)) + ':\n\n    ');
+								$elm$core$List$reverse(context)) + ':\u000A\u000A    ');
 						}
 					}();
 					return introduction + ($elm$json$Json$Decode$indent(
-						A2($elm$json$Json$Encode$encode, 4, json)) + ('\n\n' + msg));
+						A2($elm$json$Json$Encode$encode, 4, json)) + ('\u000A\u000A' + msg));
 			}
 		}
 	});
@@ -3313,7 +3313,7 @@ var $elm$core$String$replace = F3(
 			A2($elm$core$String$split, before, string));
 	});
 var $jfmengels$elm_review$Path$makeOSAgnostic = function (path) {
-	return A3($elm$core$String$replace, '\\', '/', path);
+	return A3($elm$core$String$replace, '\u005C', '/', path);
 };
 var $elm$core$Basics$not = _Basics_not;
 var $jfmengels$elm_review$Review$Exceptions$addDirectories = F2(
@@ -3470,7 +3470,7 @@ var $jfmengels$elm_review_documentation$Docs$ReviewAtDocs$errorsForDocsForNonExp
 					$jfmengels$elm_review$Review$Rule$error,
 					{
 						g0: _List_fromArray(
-							['I couldn\'t find this element among the module\'s exposed elements. Maybe you removed or renamed it recently.', 'Please remove the @docs reference or update the reference to the new name.']),
+							['I couldn\u0027t find this element among the module\u0027s exposed elements. Maybe you removed or renamed it recently.', 'Please remove the @docs reference or update the reference to the new name.']),
 						de: 'Found @docs reference for non-exposed `' + (name + '`')
 					},
 					range);
@@ -3852,7 +3852,7 @@ var $jfmengels$elm_review_documentation$Docs$ReviewAtDocs$errorsForDocsInDeclara
 										$jfmengels$elm_review$Review$Rule$error,
 										{
 											g0: _List_fromArray(
-												['@docs can only be used in the module\'s documentation. You should remove this @docs and move it there.']),
+												['@docs can only be used in the module\u0027s documentation. You should remove this @docs and move it there.']),
 											de: 'Found usage of @docs in a ' + (declarationType + ' documentation')
 										},
 										range)
@@ -4046,7 +4046,7 @@ var $jfmengels$elm_review_documentation$Docs$ReviewAtDocs$errorsForExposedElemen
 					$jfmengels$elm_review$Review$Rule$error,
 					{
 						g0: _List_fromArray(
-							['There is no @docs reference for this element. Maybe you exposed or renamed it recently.', 'Please add a @docs reference to it the module documentation (the one at the top of the module) like this:', '{-|\n@docs ' + (name + '\n-}')]),
+							['There is no @docs reference for this element. Maybe you exposed or renamed it recently.', 'Please add a @docs reference to it the module documentation (the one at the top of the module) like this:', '{-|\u000A@docs ' + (name + '\u000A-}')]),
 						de: 'Missing @docs reference for exposed `' + (name + '`')
 					},
 					range);
@@ -6470,7 +6470,7 @@ var $jfmengels$elm_review$Review$Rule$fromProjectRuleSchema = function (_v0) {
 						'This rule requested additional files, but did so by specifying globs that I could not make sense of:',
 						A2(
 						$elm$core$String$join,
-						'\n',
+						'\u000A',
 						A2(
 							$elm$core$List$indexedMap,
 							F2(
@@ -7356,8 +7356,8 @@ var $jfmengels$elm_review_common$NoConfusingPrefixOperator$expressionVisitor = f
 			var operator = _v2.a;
 			if (A2($elm$core$Set$member, operator, $jfmengels$elm_review_common$NoConfusingPrefixOperator$nonCommutativeOperators)) {
 				var simpleOp = '`a ' + (operator + ' b`');
-				var suggestion = ($elm$core$List$length(restOfArgs) !== 2) ? ('`\\b -> a ' + (operator + ' b`')) : simpleOp;
-				var inverseLambda = '`\\a -> b ' + (operator + ' a`');
+				var suggestion = ($elm$core$List$length(restOfArgs) !== 2) ? ('`\u005Cb -> a ' + (operator + ' b`')) : simpleOp;
+				var inverseLambda = '`\u005Ca -> b ' + (operator + ' a`');
 				return _List_fromArray(
 					[
 						A2(
@@ -7888,8 +7888,8 @@ var $jfmengels$elm_review_common$NoExposingEverything$declarationListVisitor = F
 						$jfmengels$elm_review$Review$Rule$errorWithFix,
 						{
 							g0: _List_fromArray(
-								['Modules should have hidden implementation details with an explicit API so that the module is used in a proper and controlled way. The users of this module should not have to know about what is inside a module it is using, and they shouldn\'t need to access its internal details. Therefore, the API should be explicitly defined and ideally as small as possible.']),
-							de: 'Module exposes everything implicitly \"(..)\"'
+								['Modules should have hidden implementation details with an explicit API so that the module is used in a proper and controlled way. The users of this module should not have to know about what is inside a module it is using, and they shouldn\u0027t need to access its internal details. Therefore, the API should be explicitly defined and ideally as small as possible.']),
+							de: 'Module exposes everything implicitly \u0022(..)\u0022'
 						},
 						{
 							e2: {dt: range.e2.dt + 1, dZ: range.e2.dZ},
@@ -11504,7 +11504,7 @@ var $jfmengels$elm_review_common$NoPrematureLetComputation$indent = F2(
 		var paddingStr = A2($elm$core$String$repeat, padding, ' ');
 		return A2(
 			$elm$core$String$join,
-			'\n',
+			'\u000A',
 			A2(
 				$elm$core$List$map,
 				function (line) {
@@ -11600,12 +11600,12 @@ var $jfmengels$elm_review_common$NoPrematureLetComputation$fix = F4(
 						return _List_fromArray(
 							[
 								$jfmengels$elm_review$Review$Fix$removeRange(range),
-								A2($jfmengels$elm_review$Review$Fix$insertAt, insert, '\n' + source)
+								A2($jfmengels$elm_review$Review$Fix$insertAt, insert, '\u000A' + source)
 							]);
 					} else {
 						var declarations = _v1;
 						var startColumn = declared.bQ.jn.fF.dt;
-						var spacing = _Utils_eq(insert.dZ, nextExpr.dZ) ? ' ' : ('\n' + A2($elm$core$String$repeat, startColumn - 1, ' '));
+						var spacing = _Utils_eq(insert.dZ, nextExpr.dZ) ? ' ' : ('\u000A' + A2($elm$core$String$repeat, startColumn - 1, ' '));
 						var endOfPrevious = A3(
 							$jfmengels$elm_review_common$NoPrematureLetComputation$findMapWithAcc,
 							F2(
@@ -11628,7 +11628,7 @@ var $jfmengels$elm_review_common$NoPrematureLetComputation$fix = F4(
 								A2(
 									$jfmengels$elm_review_common$NoPrematureLetComputation$indent,
 									nextExpr.dt - startColumn,
-									('\n' + (A2($elm$core$String$repeat, startColumn - 1, ' ') + ('let' + context.hf(range)))) + (spacing + 'in')))
+									('\u000A' + (A2($elm$core$String$repeat, startColumn - 1, ' ') + ('let' + context.hf(range)))) + (spacing + 'in')))
 							]);
 					}
 				}
@@ -12384,7 +12384,7 @@ var $jfmengels$elm_review_code_style$NoSimpleLetBody$fix = F4(
 						A2(
 						$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 						{e2: toCopy.fF, fF: previousEnd},
-						'\n' + (indentation + ('in\n' + indentation))),
+						'\u000A' + (indentation + ('in\u000A' + indentation))),
 						$jfmengels$elm_review$Review$Fix$removeRange(
 						{e2: nodeRange.e2, fF: toCopy.e2})
 					]);
@@ -13412,7 +13412,7 @@ var $jfmengels$elm_review_unused$NoUnused$CustomTypeConstructors$errorInformatio
 						_Utils_Tuple2($jfmengels$elm_review_unused$NoUnused$CustomTypeConstructors$defaultDetails, true),
 						_Utils_Tuple2('I found it used in comparisons, but since it is never created anywhere, all of those can be evaluated to False (for (==), True for (/=)).', wasUsedInComparisons),
 						_Utils_Tuple2('The only locations where I found it being created require already having one.', wasUsedInLocationThatNeedsItself),
-						_Utils_Tuple2('This type looks like it might be used for phantom types. If that\'s the case, consider adding `Never` to as an argument. See https://package.elm-lang.org/packages/jfmengels/elm-review-unused/latest/NoUnused-CustomTypeConstructors#phantom-types for more information.', looksLikePhantomType)
+						_Utils_Tuple2('This type looks like it might be used for phantom types. If that\u0027s the case, consider adding `Never` to as an argument. See https://package.elm-lang.org/packages/jfmengels/elm-review-unused/latest/NoUnused-CustomTypeConstructors#phantom-types for more information.', looksLikePhantomType)
 					])),
 			de: 'Type constructor `' + (name + '` is not used.')
 		};
@@ -15579,7 +15579,7 @@ var $jfmengels$elm_review_unused$NoUnused$Exports$errorsForModule = F3(
 								{
 									g0: A2(
 										$elm$core$List$cons,
-										'This exposed element is only used in files you have marked as non-production code (e.g. the tests folder), and should therefore be removed along with the places it\'s used in. This will help reduce the amount of code you will need to maintain.',
+										'This exposed element is only used in files you have marked as non-production code (e.g. the tests folder), and should therefore be removed along with the places it\u0027s used in. This will help reduce the amount of code you will need to maintain.',
 										function () {
 											if (exceptionExplanation.$ === 1) {
 												return _List_fromArray(
@@ -19005,7 +19005,7 @@ var $jfmengels$elm_review_unused$NoUnused$Parameters$recursiveParameterError = F
 	function (functionName, arg) {
 		var details = {
 			g0: _List_fromArray(
-				['This parameter is only used to be passed as an argument to \'' + (functionName + '\', but its value is never read or used.'), 'You should either use this parameter somewhere, or remove it at the location I pointed at.']),
+				['This parameter is only used to be passed as an argument to \u0027' + (functionName + '\u0027, but its value is never read or used.'), 'You should either use this parameter somewhere, or remove it at the location I pointed at.']),
 			de: 'Parameter `' + (arg.eD + '` is only used in recursion')
 		};
 		var _v0 = arg.ac;
@@ -19745,10 +19745,10 @@ var $jfmengels$elm_review_unused$NoUnused$Patterns$writePattern = function (patt
 			return '()';
 		case 2:
 			var c = pattern.a;
-			return '\'' + ($elm$core$String$fromChar(c) + '\'');
+			return '\u0027' + ($elm$core$String$fromChar(c) + '\u0027');
 		case 3:
 			var s = pattern.a;
-			return '\"' + (A3($elm$core$String$replace, '\"', '\\\"', s) + '\"');
+			return '\u0022' + (A3($elm$core$String$replace, '\u0022', '\u005C\u0022', s) + '\u0022');
 		case 5:
 			var hex = pattern.a;
 			return '0x' + $jfmengels$elm_review_unused$NoUnused$Patterns$hexToString(hex);
@@ -19894,9 +19894,9 @@ var $jfmengels$elm_review_unused$NoUnused$Patterns$isAllPattern = function (patt
 	}
 };
 var $jfmengels$elm_review_unused$NoUnused$Patterns$redundantDetails = _List_fromArray(
-	['This pattern is redundant and should be replaced with \'_\'.']);
+	['This pattern is redundant and should be replaced with \u0027_\u0027.']);
 var $jfmengels$elm_review_unused$NoUnused$Patterns$singularReplaceDetails = _List_fromArray(
-	['You should either use this value somewhere or replace it with \'_\'.']);
+	['You should either use this value somewhere or replace it with \u0027_\u0027.']);
 var $jfmengels$elm_review_unused$NoUnused$Patterns$findPatterns = F3(
 	function (use, patterns, acc) {
 		findPatterns:
@@ -20217,7 +20217,7 @@ var $jfmengels$elm_review_unused$NoUnused$Patterns$recordErrors = F2(
 					$jfmengels$elm_review$Review$Rule$errorWithFix,
 					{
 						g0: _List_fromArray(
-							['This pattern is redundant and should be replaced with \'_\'.']),
+							['This pattern is redundant and should be replaced with \u0027_\u0027.']),
 						de: 'Record pattern is not needed'
 					},
 					recordRange,
@@ -23174,8 +23174,8 @@ var $jfmengels$elm_review_unused$NoUnused$Variables$letDeclarationEnterVisitor =
 								$jfmengels$elm_review$Review$Rule$errorWithFix,
 								{
 									g0: _List_fromArray(
-										['This value has been computed but isn\'t assigned to any variable, which makes the value unusable. You should remove it at the location I pointed at.']),
-									de: 'Pattern doesn\'t introduce any variables'
+										['This value has been computed but isn\u0027t assigned to any variable, which makes the value unusable. You should remove it at the location I pointed at.']),
+									de: 'Pattern doesn\u0027t introduce any variables'
 								},
 								$stil4m$elm_syntax$Elm$Syntax$Node$range(pattern),
 								_List_fromArray(
@@ -23342,7 +23342,7 @@ var $jfmengels$elm_review_simplify$Simplify$errorForUnknownIgnoredConstructor = 
 	return $jfmengels$elm_review$Review$Rule$globalError(
 		{
 			g0: _List_fromArray(
-				['I expected to find these custom types in the dependencies, but I could not find them.', 'Please check whether these types and have not been removed, and if so, remove them from the configuration of this rule.', 'If you find that these types have been moved or renamed, please update your configuration.', 'Note that I may have provided fixes for things you didn\'t wish to be fixed, so you might want to undo the changes I have applied.', 'Also note that the configuration for this rule changed in v2.0.19: types that are custom to your project are ignored by default, so this configuration setting can only be used to avoid simplifying case expressions that use custom types defined in dependencies.']),
+				['I expected to find these custom types in the dependencies, but I could not find them.', 'Please check whether these types and have not been removed, and if so, remove them from the configuration of this rule.', 'If you find that these types have been moved or renamed, please update your configuration.', 'Note that I may have provided fixes for things you didn\u0027t wish to be fixed, so you might want to undo the changes I have applied.', 'Also note that the configuration for this rule changed in v2.0.19: types that are custom to your project are ignored by default, so this configuration setting can only be used to avoid simplifying case expressions that use custom types defined in dependencies.']),
 			de: 'Could not find type names: ' + A2(
 				$elm$core$String$join,
 				', ',
@@ -24616,8 +24616,8 @@ var $jfmengels$elm_review_simplify$Simplify$accessingRecordWithKnownFieldsChecks
 				m: A2($jfmengels$elm_review_simplify$Simplify$replaceBySubExpressionFix, checkInfo.x, setter),
 				w: {
 					g0: _List_fromArray(
-						['You can replace accessing this record by just that field\'s value.']),
-					de: 'Accessing a field of a record where we know that field\'s value will return that field\'s value'
+						['You can replace accessing this record by just that field\u0027s value.']),
+					de: 'Accessing a field of a record where we know that field\u0027s value will return that field\u0027s value'
 				}
 			});
 	} else {
@@ -26114,7 +26114,7 @@ var $jfmengels$elm_review_simplify$Simplify$appliedLambdaError = function (check
 		return $jfmengels$elm_review_simplify$Simplify$appliedLambdaIgnoredPatternsCheck(checkInfo);
 	}
 };
-var $jfmengels$elm_review_simplify$Simplify$leftPipeExample = '\nBefore: (fn3 << fn2) <| fn1 <| data\nAfter:   fn3 <| fn2  <| fn1 <| data';
+var $jfmengels$elm_review_simplify$Simplify$leftPipeExample = '\u000ABefore: (fn3 << fn2) <| fn1 <| data\u000AAfter:   fn3 <| fn2  <| fn1 <| data';
 var $jfmengels$elm_review_simplify$Simplify$offsetInStringToLocation = function (config) {
 	var _v0 = $elm$core$List$reverse(
 		$elm$core$String$lines(
@@ -26282,7 +26282,7 @@ var $jfmengels$elm_review_simplify$Simplify$pipingIntoCompositionChecksHelp = F3
 				return $elm$core$Maybe$Nothing;
 		}
 	});
-var $jfmengels$elm_review_simplify$Simplify$rightPipeExample = '\nBefore: data |> fn1 |> (fn2 >> fn3)\nAfter:  data |> fn1 |>  fn2 |> fn3';
+var $jfmengels$elm_review_simplify$Simplify$rightPipeExample = '\u000ABefore: data |> fn1 |> (fn2 >> fn3)\u000AAfter:  data |> fn1 |>  fn2 |> fn3';
 var $jfmengels$elm_review_simplify$Simplify$callingCompositionChecks = F3(
 	function (context, fixesFromParent, expressionNode) {
 		var targetAndReplacement = function () {
@@ -28551,7 +28551,7 @@ var $stil4m$structured_writer$StructuredWriter$writeIndented = F2(
 				var post = _v1.c;
 				var differentLines = w.b;
 				var items = w.c;
-				var seperator = differentLines ? ('\n' + ($stil4m$structured_writer$StructuredWriter$asIndent(indent_) + sep)) : sep;
+				var seperator = differentLines ? ('\u000A' + ($stil4m$structured_writer$StructuredWriter$asIndent(indent_) + sep)) : sep;
 				return $elm$core$String$concat(
 					_List_fromArray(
 						[
@@ -28572,13 +28572,13 @@ var $stil4m$structured_writer$StructuredWriter$writeIndented = F2(
 				var items = w.a;
 				return A2(
 					$elm$core$String$join,
-					'\n' + $stil4m$structured_writer$StructuredWriter$asIndent(indent_),
+					'\u000A' + $stil4m$structured_writer$StructuredWriter$asIndent(indent_),
 					A2(
 						$elm$core$List$concatMap,
 						A2(
 							$elm$core$Basics$composeR,
 							$stil4m$structured_writer$StructuredWriter$writeIndented(0),
-							$elm$core$String$split('\n')),
+							$elm$core$String$split('\u000A')),
 						items));
 			case 2:
 				var s = w.a;
@@ -28778,24 +28778,24 @@ var $stil4m$elm_syntax$Elm$Writer$writeChar = function (c) {
 	var escape = function () {
 		switch (c) {
 			case '\t':
-				return '\'\\';
+				return '\u0027\u005C';
 			case '\'':
-				return '\'\\';
+				return '\u0027\u005C';
 			case '\\':
-				return '\'\\';
+				return '\u0027\u005C';
 			default:
-				return '\'';
+				return '\u0027';
 		}
 	}();
 	return $stil4m$structured_writer$StructuredWriter$string(
-		escape + ($elm$core$String$fromChar(c) + '\''));
+		escape + ($elm$core$String$fromChar(c) + '\u0027'));
 };
 var $stil4m$elm_syntax$Elm$Writer$writeDocumentation = A2($elm$core$Basics$composeR, $stil4m$elm_syntax$Elm$Syntax$Node$value, $stil4m$structured_writer$StructuredWriter$string);
 var $stil4m$elm_syntax$Elm$Writer$writeModuleName = function (moduleName) {
 	return $stil4m$structured_writer$StructuredWriter$string(
 		A2($elm$core$String$join, '.', moduleName));
 };
-var $stil4m$elm_syntax$Elm$Writer$escapeString = A2($elm$core$String$replace, '\"', '\\\"');
+var $stil4m$elm_syntax$Elm$Writer$escapeString = A2($elm$core$String$replace, '\u0022', '\u005C\u0022');
 var $stil4m$structured_writer$StructuredWriter$parensComma = $stil4m$structured_writer$StructuredWriter$Sep(
 	_Utils_Tuple3('(', ', ', ')'));
 var $stil4m$elm_syntax$Elm$Writer$writeQualifiedNameRef = function (_v0) {
@@ -28826,7 +28826,7 @@ var $stil4m$elm_syntax$Elm$Writer$writePattern = function (_v0) {
 		case 3:
 			var s = p.a;
 			return $stil4m$structured_writer$StructuredWriter$string(
-				'\"' + ($stil4m$elm_syntax$Elm$Writer$escapeString(s) + '\"'));
+				'\u0022' + ($stil4m$elm_syntax$Elm$Writer$escapeString(s) + '\u0022'));
 		case 5:
 			var h = p.a;
 			return $stil4m$structured_writer$StructuredWriter$join(
@@ -29241,7 +29241,7 @@ var $stil4m$elm_syntax$Elm$Writer$writeExpression = function (_v3) {
 					$stil4m$elm_syntax$Elm$Writer$writeExpression(x));
 			case 11:
 				var s = inner.a;
-				return $stil4m$structured_writer$StructuredWriter$string('\"' + (s + '\"'));
+				return $stil4m$structured_writer$StructuredWriter$string('\u0022' + (s + '\u0022'));
 			case 12:
 				var c = inner.a;
 				return $stil4m$elm_syntax$Elm$Writer$writeChar(c);
@@ -29329,7 +29329,7 @@ var $stil4m$elm_syntax$Elm$Writer$writeExpression = function (_v3) {
 							$stil4m$structured_writer$StructuredWriter$join(
 							_List_fromArray(
 								[
-									$stil4m$structured_writer$StructuredWriter$string('\\'),
+									$stil4m$structured_writer$StructuredWriter$string('\u005C'),
 									$stil4m$structured_writer$StructuredWriter$spaced(
 									A2($elm$core$List$map, $stil4m$elm_syntax$Elm$Writer$writePattern, lambda.lx))
 								])),
@@ -30879,7 +30879,7 @@ var $jfmengels$elm_review_simplify$Simplify$singleCharConstruct = A2(
 	$jfmengels$elm_review_simplify$Simplify$fnCallConstructWithOneValueProperties,
 	$jfmengels$elm_review_simplify$Simplify$A('single-char string'),
 	$jfmengels$elm_review_simplify$Fn$String$fromChar);
-var $jfmengels$elm_review_simplify$Simplify$AstHelpers$emptyStringAsString = '\"\"';
+var $jfmengels$elm_review_simplify$Simplify$AstHelpers$emptyStringAsString = '\u0022\u0022';
 var $jfmengels$elm_review_simplify$Simplify$isEmptyString = function (_v0) {
 	isEmptyString:
 	while (true) {
@@ -31053,7 +31053,7 @@ var $jfmengels$elm_review_simplify$Simplify$caseElementCountOf0Checks = function
 											e2: $stil4m$elm_syntax$Elm$Syntax$Node$range(firstCaseResult).fF,
 											fF: $stil4m$elm_syntax$Elm$Syntax$Node$range(checkInfo.b7.he).e2
 										},
-										' then\n' + A2(
+										' then\u000A' + A2(
 											$elm$core$String$repeat,
 											$stil4m$elm_syntax$Elm$Syntax$Node$range(firstCaseResult).fF.dt - 1,
 											' ')),
@@ -31063,7 +31063,7 @@ var $jfmengels$elm_review_simplify$Simplify$caseElementCountOf0Checks = function
 											e2: $stil4m$elm_syntax$Elm$Syntax$Node$range(lastCaseResult).fF,
 											fF: $stil4m$elm_syntax$Elm$Syntax$Node$range(firstCaseResult).e2
 										},
-										'\n\n' + (A2($elm$core$String$repeat, thisCaseKeywordRange.fF.dt - 1, ' ') + ('else\n' + A2(
+										'\u000A\u000A' + (A2($elm$core$String$repeat, thisCaseKeywordRange.fF.dt - 1, ' ') + ('else\u000A' + A2(
 											$elm$core$String$repeat,
 											$stil4m$elm_syntax$Elm$Syntax$Node$range(lastCaseResult).fF.dt - 1,
 											' '))))
@@ -32301,7 +32301,7 @@ var $jfmengels$elm_review_simplify$Simplify$destructuringCaseOfChecks = function
 							A2(
 							$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 							{e2: bodyRange.fF, fF: exprRange.e2},
-							'\n' + (caseIndentation + ('in\n' + bodyIndentation)))
+							'\u000A' + (caseIndentation + ('in\u000A' + bodyIndentation)))
 						])));
 		} else {
 			return $elm$core$Maybe$Nothing;
@@ -32670,7 +32670,7 @@ var $jfmengels$elm_review_simplify$Simplify$accessingRecordCompositionChecks = f
 													[
 														'This composition will construct a record where we known the value of the field ' + ($jfmengels$elm_review_simplify$Simplify$wrapInBackticks(accessFunctionFieldName) + '. This exact field is then immediately accessed which means you can replace this composition by `always` with that value.')
 													]),
-												de: 'Accessing a field of a record where we know that field\'s value will return that field\'s value'
+												de: 'Accessing a field of a record where we know that field\u0027s value will return that field\u0027s value'
 											},
 											$stil4m$elm_syntax$Elm$Syntax$Node$range(checkInfo.e.kN),
 											A2(
@@ -32945,7 +32945,7 @@ var $jfmengels$elm_review_simplify$Simplify$alwaysReturnsLastArgError = F3(
 					default:
 						var atLeast2 = _v1;
 						return function (res) {
-							return '(\\' + (A2($elm$core$String$repeat, atLeast2, '_ ') + ('-> ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+							return '(\u005C' + (A2($elm$core$String$repeat, atLeast2, '_ ') + ('-> ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 								A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Basics$identity, res)) + ')')));
 						};
 				}
@@ -33275,7 +33275,7 @@ var $jfmengels$elm_review_simplify$Simplify$alwaysResultsInConstantError = F3(
 						A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Basics$always, res)) + (' ' + (config.jp ? ('(' + (config.mV(res) + ')')) : config.mV(res)));
 				default:
 					var atLeast2 = remainingArgCount;
-					return '(\\' + (A2($elm$core$String$repeat, atLeast2, '_ ') + ('-> ' + (config.mV(res) + ')')));
+					return '(\u005C' + (A2($elm$core$String$repeat, atLeast2, '_ ') + ('-> ' + (config.mV(res) + ')')));
 			}
 		};
 		return A3(
@@ -34360,7 +34360,7 @@ var $jfmengels$elm_review_simplify$Simplify$onConversionFnCallCanBeCombinedCheck
 									[
 										'Using ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' directly is meant for this exact purpose and will also be faster.')
 									]),
-								de: 'To ' + (config.bJ + (', you don\'t need to ' + config.cV))
+								de: 'To ' + (config.bJ + (', you don\u0027t need to ' + config.cV))
 							},
 							checkInfo.d,
 							A2(
@@ -34395,7 +34395,7 @@ var $jfmengels$elm_review_simplify$Simplify$onConversionFnCallCanBeCombinedCheck
 							[
 								'Using ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' directly is meant for this exact purpose and will also be faster.')
 							]),
-						de: 'To ' + (config.bJ + (', you don\'t need to ' + config.cV))
+						de: 'To ' + (config.bJ + (', you don\u0027t need to ' + config.cV))
 					}
 				}) : $elm$core$Maybe$Nothing;
 		}
@@ -35787,7 +35787,7 @@ var $jfmengels$elm_review_simplify$Simplify$wrapInApplicationFix = function (con
 			$jfmengels$elm_review$Review$Fix$insertAt,
 			$stil4m$elm_syntax$Elm$Syntax$Node$range(config.T).fF,
 			'(' + (config.md + ((($jfmengels$elm_review_simplify$Simplify$rangeSpansMultipleLines(
-				$stil4m$elm_syntax$Elm$Syntax$Node$range(config.T)) || A2($elm$core$String$contains, '\n', config.md)) ? ('\n' + A2(
+				$stil4m$elm_syntax$Elm$Syntax$Node$range(config.T)) || A2($elm$core$String$contains, '\u000A', config.md)) ? ('\u000A' + A2(
 				$elm$core$String$repeat,
 				$stil4m$elm_syntax$Elm$Syntax$Node$range(config.T).fF.dt - 1,
 				' ')) : ' ') + (elementToRepeatArgNeedsParens ? '(' : '')))),
@@ -38555,7 +38555,7 @@ var $jfmengels$elm_review_simplify$Simplify$dictFoldrChecks = $jfmengels$elm_rev
 					}() ? $elm$core$Maybe$Just(
 						A2(
 							$jfmengels$elm_review_simplify$Simplify$operationWithSpecificArgsIsEquivalentToFnError,
-							{a7: $jfmengels$elm_review_simplify$Fn$Dict$values, d_: '(\\_ v vs -> v :: vs) []'},
+							{a7: $jfmengels$elm_review_simplify$Fn$Dict$values, d_: '(\u005C_ v vs -> v :: vs) []'},
 							checkInfo)) : (function () {
 						var _v3 = A2($jfmengels$elm_review_simplify$Simplify$getFunctionIgnoringSecondIncoming, checkInfo, checkInfo.b);
 						if (_v3.$ === 1) {
@@ -38567,7 +38567,7 @@ var $jfmengels$elm_review_simplify$Simplify$dictFoldrChecks = $jfmengels$elm_rev
 					}() ? $elm$core$Maybe$Just(
 						A2(
 							$jfmengels$elm_review_simplify$Simplify$operationWithSpecificArgsIsEquivalentToFnError,
-							{a7: $jfmengels$elm_review_simplify$Fn$Dict$keys, d_: '(\\k _ ks -> k :: ks) []'},
+							{a7: $jfmengels$elm_review_simplify$Fn$Dict$keys, d_: '(\u005Ck _ ks -> k :: ks) []'},
 							checkInfo)) : (function () {
 						var _v4 = A2($jfmengels$elm_review_simplify$Simplify$getFunctionWithFirstAndSecondIncomingAsTuple, checkInfo, checkInfo.b);
 						if (_v4.$ === 1) {
@@ -38579,7 +38579,7 @@ var $jfmengels$elm_review_simplify$Simplify$dictFoldrChecks = $jfmengels$elm_rev
 					}() ? $elm$core$Maybe$Just(
 						A2(
 							$jfmengels$elm_review_simplify$Simplify$operationWithSpecificArgsIsEquivalentToFnError,
-							{a7: $jfmengels$elm_review_simplify$Fn$Dict$toList, d_: '(\\k v kvs -> ( k, v ) :: kvs) []'},
+							{a7: $jfmengels$elm_review_simplify$Fn$Dict$toList, d_: '(\u005Ck v kvs -> ( k, v ) :: kvs) []'},
 							checkInfo)) : $elm$core$Maybe$Nothing))) : $elm$core$Maybe$Nothing;
 				}
 			},
@@ -39182,13 +39182,13 @@ var $jfmengels$elm_review_simplify$Simplify$dictFromListOnRepeatCheck = function
 									$jfmengels$elm_review_simplify$Simplify$needsParens(
 										$stil4m$elm_syntax$Elm$Syntax$Node$value(repeatFnCall.b)),
 									checkInfo.hf(
-										$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatFnCall.b))) + (' >= 1 then\n' + branchIndentation))),
+										$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatFnCall.b))) + (' >= 1 then\u000A' + branchIndentation))),
 							A2(
 								$elm$core$List$cons,
 								A2(
 									$jfmengels$elm_review$Review$Fix$insertAt,
 									checkInfo.c.e2,
-									'\n\n' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ('else\n' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+									'\u000A\u000A' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ('else\u000A' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 										A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Dict$empty, checkInfo)) + ')'))))),
 								$jfmengels$elm_review_simplify$Simplify$keepOnlyAndSurroundWithFix(
 									{
@@ -39421,7 +39421,7 @@ var $jfmengels$elm_review_simplify$Simplify$dictMemberOnFromListToListAnyChecks 
 								{
 									g0: _List_fromArray(
 										[
-											'You can replace these calls by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$List$any) + ' comparing the key which is both simpler and faster. The automatic fix suggests Tuple.first >> (==) ... to only evaluate the member to check for once. However, if it is a variable, a simpler alternative might be using a lambda like \\( k, _ ) -> k == ...')
+											'You can replace these calls by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$List$any) + ' comparing the key which is both simpler and faster. The automatic fix suggests Tuple.first >> (==) ... to only evaluate the member to check for once. However, if it is a variable, a simpler alternative might be using a lambda like \u005C( k, _ ) -> k == ...')
 										]),
 									de: $jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.a) + (' on ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$Dict$fromList) + ' can be replaced by List.any with a function comparing the key'))
 								},
@@ -39439,7 +39439,7 @@ var $jfmengels$elm_review_simplify$Simplify$dictMemberOnFromListToListAnyChecks 
 											$jfmengels$elm_review$Review$Fix$insertAt,
 											needleArgRange.fF,
 											'(' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
-												A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Tuple$first, checkInfo)) + (' >> (==)' + (_Utils_eq(needleArgRange.fF.dZ, needleArgRange.e2.dZ) ? ' ' : ('\n' + A2($elm$core$String$repeat, needleArgRange.fF.dt - 1, ' ')))))),
+												A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Tuple$first, checkInfo)) + (' >> (==)' + (_Utils_eq(needleArgRange.fF.dZ, needleArgRange.e2.dZ) ? ' ' : ('\u000A' + A2($elm$core$String$repeat, needleArgRange.fF.dt - 1, ' ')))))),
 										A2(
 											$elm$core$List$cons,
 											A2($jfmengels$elm_review$Review$Fix$insertAt, needleArgRange.e2, ')'),
@@ -39473,13 +39473,13 @@ var $jfmengels$elm_review_simplify$Simplify$dictMemberOnFromListToListAnyChecks 
 								$jfmengels$elm_review$Review$Fix$insertAt,
 								needleArgRange.fF,
 								'(' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
-									A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Tuple$first, checkInfo)) + (' >> (==) (' + (_Utils_eq(needleArgRange.fF.dZ, needleArgRange.e2.dZ) ? '' : ('\n' + A2($elm$core$String$repeat, needleArgRange.fF.dt - 1, ' ')))))),
+									A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Tuple$first, checkInfo)) + (' >> (==) (' + (_Utils_eq(needleArgRange.fF.dZ, needleArgRange.e2.dZ) ? '' : ('\u000A' + A2($elm$core$String$repeat, needleArgRange.fF.dt - 1, ' ')))))),
 								A2($jfmengels$elm_review$Review$Fix$insertAt, needleArgRange.e2, '))')
 							]),
 						w: {
 							g0: _List_fromArray(
 								[
-									'You can replace this composition by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$List$any) + ' comparing the key which is both simpler and faster. The automatic fix suggests Tuple.first >> (==) ... to only evaluate the member to check for once. However, if it is a variable, a simpler alternative might be using a lambda like \\( k, _ ) -> k == ...')
+									'You can replace this composition by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$List$any) + ' comparing the key which is both simpler and faster. The automatic fix suggests Tuple.first >> (==) ... to only evaluate the member to check for once. However, if it is a variable, a simpler alternative might be using a lambda like \u005C( k, _ ) -> k == ...')
 								]),
 							de: $jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.e.a) + (' on ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString($jfmengels$elm_review_simplify$Fn$Dict$fromList) + ' can be replaced by List.any with a function comparing the key'))
 						}
@@ -40889,7 +40889,7 @@ var $jfmengels$elm_review_simplify$Simplify$mapNOrFirstEmptyConstructionChecks =
 							};
 						default:
 							var atLeast2 = _v1;
-							var lambdaStart = '\\' + (A2($elm$core$String$repeat, atLeast2, '_ ') + '-> ');
+							var lambdaStart = '\u005C' + (A2($elm$core$String$repeat, atLeast2, '_ ') + '-> ');
 							return {
 								b9: lambdaStart + ('with ' + A2($jfmengels$elm_review_simplify$Simplify$typeSubsetDescriptionDefinite, 'the first', emptiable.g)),
 								m: A2(
@@ -40975,7 +40975,7 @@ var $jfmengels$elm_review_simplify$Simplify$mapNOrFirstEmptyConstructionChecks =
 								};
 							default:
 								var atLeast2 = _v2;
-								var lambdaStart = '\\' + (A2($elm$core$String$repeat, atLeast2, '_ ') + '-> ');
+								var lambdaStart = '\u005C' + (A2($elm$core$String$repeat, atLeast2, '_ ') + '-> ');
 								return {
 									b9: lambdaStart + ('with ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(replacementMap) + (' with the same arguments until ' + A2($jfmengels$elm_review_simplify$Simplify$typeSubsetDescriptionDefinite, 'the first', emptiable.g)))),
 									m: _List_fromArray(
@@ -42217,7 +42217,7 @@ var $jfmengels$elm_review_simplify$Simplify$dropOnSmallerCollectionCheck = F3(
 				return (_Utils_cmp(config.f1, elementCountMax) > -1) ? $elm$core$Maybe$Just(
 					A3(
 						$jfmengels$elm_review_simplify$Simplify$alwaysResultsInUnparenthesizedConstantError,
-						$jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.a) + (' with a count greater than or equal to the given ' + (collection.l + '\'s length')),
+						$jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.a) + (' with a count greater than or equal to the given ' + (collection.l + '\u0027s length')),
 						{mV: collection.g.n.E},
 						checkInfo)) : $elm$core$Maybe$Nothing;
 			}
@@ -42276,7 +42276,7 @@ var $jfmengels$elm_review_simplify$Simplify$dropOnLargerConstructionFromListLite
 									[
 										'You can remove the first ' + ($elm$core$String$fromInt(config.f1) + (' elements from the ' + ($jfmengels$elm_review_simplify$Simplify$constructionFromListOnLiteralDescription(constructibleFromList.cr) + '.')))
 									]),
-								de: $jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.a) + (' with a count less than the given ' + (constructibleFromList.l + '\'s length will remove these elements'))
+								de: $jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(checkInfo.a) + (' with a count less than the given ' + (constructibleFromList.l + '\u0027s length will remove these elements'))
 							},
 							checkInfo.d,
 							A2(
@@ -42722,7 +42722,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 												[
 													'You can replace these calls by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and split the incoming entry tuple pattern into separate key and value patterns in the reduce function.')
 												]),
-											de: 'To fold over dict entries, you don\'t need to convert to a list'
+											de: 'To fold over dict entries, you don\u0027t need to convert to a list'
 										},
 										checkInfo.d,
 										A2(
@@ -42757,7 +42757,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 												[
 													'You can replace these calls by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and ignore the second incoming value in the reduce function.')
 												]),
-											de: 'To fold over dict keys, you don\'t need to convert to a list'
+											de: 'To fold over dict keys, you don\u0027t need to convert to a list'
 										},
 										checkInfo.d,
 										A2(
@@ -42789,7 +42789,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 												[
 													'You can replace these calls by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and ignore the first incoming value in the reduce function.')
 												]),
-											de: 'To fold over dict values, you don\'t need to convert to a list'
+											de: 'To fold over dict values, you don\u0027t need to convert to a list'
 										},
 										checkInfo.d,
 										A2(
@@ -42841,7 +42841,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 												[
 													'You can replace this composition by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and ignore the first incoming value in the reduce function.')
 												]),
-											de: 'To fold over dict values, you don\'t need to convert to a list'
+											de: 'To fold over dict values, you don\u0027t need to convert to a list'
 										}
 									});
 							case 'keys':
@@ -42864,7 +42864,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 												[
 													'You can replace this composition by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and ignore the second incoming value in the reduce function.')
 												]),
-											de: 'To fold over dict keys, you don\'t need to convert to a list'
+											de: 'To fold over dict keys, you don\u0027t need to convert to a list'
 										}
 									});
 							case 'toList':
@@ -42892,7 +42892,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldOnDictEntryPartListChecks = 
 													[
 														'You can replace this composition by ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' and split the incoming entry tuple pattern into separate key and value patterns in the reduce function.')
 													]),
-												de: 'To fold over dict entries, you don\'t need to convert to a list'
+												de: 'To fold over dict entries, you don\u0027t need to convert to a list'
 											}
 										});
 								}
@@ -43171,7 +43171,7 @@ var $jfmengels$elm_review_simplify$Simplify$listFoldrChecks = $jfmengels$elm_rev
 					return ($jfmengels$elm_review_simplify$Simplify$isEmptyString(initialArg) && A2($jfmengels$elm_review_simplify$Simplify$isStringAppendFunction, checkInfo, checkInfo.b)) ? $elm$core$Maybe$Just(
 						A2(
 							$jfmengels$elm_review_simplify$Simplify$operationWithSpecificArgsIsEquivalentToFnError,
-							{a7: $jfmengels$elm_review_simplify$Fn$String$concat, d_: '(++) \"\"'},
+							{a7: $jfmengels$elm_review_simplify$Fn$String$concat, d_: '(++) \u0022\u0022'},
 							checkInfo)) : (($jfmengels$elm_review_simplify$Simplify$isEmptyList(initialArg) && A2($jfmengels$elm_review_simplify$Simplify$isListAppendFunction, checkInfo, checkInfo.b)) ? $elm$core$Maybe$Just(
 						A2(
 							$jfmengels$elm_review_simplify$Simplify$operationWithSpecificArgsIsEquivalentToFnError,
@@ -43266,14 +43266,14 @@ var $jfmengels$elm_review_simplify$Simplify$onRepeatReturnsWrapElementIfCountIsP
 											$jfmengels$elm_review_simplify$Simplify$needsParens(
 												$stil4m$elm_syntax$Elm$Syntax$Node$value(repeatFnCall.b)),
 											checkInfo.hf(
-												$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatFnCall.b))) + (' >= 1 then\n' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+												$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatFnCall.b))) + (' >= 1 then\u000A' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 											A2($jfmengels$elm_review_simplify$Simplify$qualify, config.d6, checkInfo)) + ' '))))),
 									A2(
 										$elm$core$List$cons,
 										A2(
 											$jfmengels$elm_review$Review$Fix$insertAt,
 											checkInfo.c.e2,
-											'\n\n' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ('else\n' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+											'\u000A\u000A' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ('else\u000A' + (branchIndentation + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 												A2($jfmengels$elm_review_simplify$Simplify$qualify, config.dz, checkInfo)) + ')'))))),
 										A2($jfmengels$elm_review_simplify$Simplify$replaceBySubExpressionFix, checkInfo.c, elementToRepeatArg)))));
 					} else {
@@ -43301,8 +43301,8 @@ var $jfmengels$elm_review_simplify$Simplify$onRepeatReturnsWrapElementIfCountIsP
 										$jfmengels$elm_review_simplify$Simplify$needsParens(
 											$stil4m$elm_syntax$Elm$Syntax$Node$value(repeatCountArg)),
 										checkInfo.hf(
-											$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatCountArg))) + (' >= 1 then\n' + (ifIndentation + ('    ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
-										A2($jfmengels$elm_review_simplify$Simplify$qualify, config.d6, checkInfo)) + ('\n\n' + (ifIndentation + ('else\n' + (ifIndentation + ('    ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+											$stil4m$elm_syntax$Elm$Syntax$Node$range(repeatCountArg))) + (' >= 1 then\u000A' + (ifIndentation + ('    ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
+										A2($jfmengels$elm_review_simplify$Simplify$qualify, config.d6, checkInfo)) + ('\u000A\u000A' + (ifIndentation + ('else\u000A' + (ifIndentation + ('    ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 										A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Basics$always, checkInfo)) + (' ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 										A2($jfmengels$elm_review_simplify$Simplify$qualify, config.dz, checkInfo)) + ')'))))))))))))))
 								]),
@@ -44144,7 +44144,7 @@ var $jfmengels$elm_review_simplify$Simplify$containsElementOnConversionFnCallCan
 										[
 											'Using ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' directly is meant for this exact purpose and will also be faster.')
 										]),
-									de: 'To ' + (config.bJ + (', you don\'t need to convert to ' + config.g_))
+									de: 'To ' + (config.bJ + (', you don\u0027t need to convert to ' + config.g_))
 								},
 								checkInfo.d,
 								A2(
@@ -44180,7 +44180,7 @@ var $jfmengels$elm_review_simplify$Simplify$containsElementOnConversionFnCallCan
 							[
 								'Using ' + ($jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(config.k) + ' directly is meant for this exact purpose and will also be faster.')
 							]),
-						de: 'To ' + (config.bJ + (', you don\'t need to convert to ' + config.g_))
+						de: 'To ' + (config.bJ + (', you don\u0027t need to convert to ' + config.g_))
 					}
 				}) : $elm$core$Maybe$Nothing;
 		}
@@ -46294,7 +46294,7 @@ var $jfmengels$elm_review_simplify$Simplify$setUnionChecks = $jfmengels$elm_revi
 								$jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
 									A2($jfmengels$elm_review_simplify$Simplify$qualify, $jfmengels$elm_review_simplify$Fn$Set$insert, checkInfo)),
 								_Utils_ap(
-									_Utils_eq(insertedElementRange.fF.dZ, insertedElementRange.e2.dZ) ? ' ' : ('\n' + A2($elm$core$String$repeat, insertedElementRange.fF.dt - 2, ' ')),
+									_Utils_eq(insertedElementRange.fF.dZ, insertedElementRange.e2.dZ) ? ' ' : ('\u000A' + A2($elm$core$String$repeat, insertedElementRange.fF.dt - 2, ' ')),
 									$jfmengels$elm_review_simplify$Simplify$needsParens(
 										$stil4m$elm_syntax$Elm$Syntax$Node$value(setSingletonCall.b)) ? ('(' + (checkInfo.hf(insertedElementRange) + ')')) : checkInfo.hf(insertedElementRange)));
 							return A3(
@@ -46380,7 +46380,7 @@ var $jfmengels$elm_review_simplify$Simplify$stringFromFloatChecks = $jfmengels$e
 		var _v0 = $stil4m$elm_syntax$Elm$Syntax$Node$value(checkInfo.b);
 		if (_v0.$ === 9) {
 			var f = _v0.a;
-			var str = '\"' + ($elm$core$String$fromFloat(f) + '\"');
+			var str = '\u0022' + ($elm$core$String$fromFloat(f) + '\u0022');
 			return $elm$core$Maybe$Just(
 				A3(
 					$jfmengels$elm_review$Review$Rule$errorWithFix,
@@ -46403,7 +46403,7 @@ var $jfmengels$elm_review_simplify$Simplify$stringFromIntChecks = $jfmengels$elm
 		var _v0 = $stil4m$elm_syntax$Elm$Syntax$Node$value(checkInfo.b);
 		if (_v0.$ === 7) {
 			var i = _v0.a;
-			var str = '\"' + ($elm$core$String$fromInt(i) + '\"');
+			var str = '\u0022' + ($elm$core$String$fromInt(i) + '\u0022');
 			return $elm$core$Maybe$Just(
 				A3(
 					$jfmengels$elm_review$Review$Rule$errorWithFix,
@@ -46482,7 +46482,7 @@ var $jfmengels$elm_review_simplify$Simplify$stringLinesChecks = $jfmengels$elm_r
 		$jfmengels$elm_review_simplify$Simplify$callOnEmptyReturnsCheck,
 		{
 			_: function (_v0) {
-				return '[ \"\" ]';
+				return '[ \u0022\u0022 ]';
 			}
 		},
 		$jfmengels$elm_review_simplify$Simplify$stringCollection));
@@ -46737,7 +46737,7 @@ var $jfmengels$elm_review_simplify$Simplify$stringWordsChecks = $jfmengels$elm_r
 		$jfmengels$elm_review_simplify$Simplify$callOnEmptyReturnsCheck,
 		{
 			_: function (_v0) {
-				return '[ \"\" ]';
+				return '[ \u0022\u0022 ]';
 			}
 		},
 		$jfmengels$elm_review_simplify$Simplify$stringCollection));
@@ -47414,9 +47414,9 @@ var $jfmengels$elm_review_simplify$Simplify$tuplePartChecks = function (partConf
 								$jfmengels$elm_review$Review$Rule$errorWithFix,
 								{
 									g0: _List_fromArray(
-										['You can replace this call by the tuple\'s ' + (partConfig.b9 + ' part.')]),
+										['You can replace this call by the tuple\u0027s ' + (partConfig.b9 + ' part.')]),
 									de: $jfmengels$elm_review_simplify$Simplify$AstHelpers$qualifiedToString(
-										A2($jfmengels$elm_review_simplify$Simplify$qualify, checkInfo.a, $jfmengels$elm_review_simplify$Simplify$defaultQualifyResources)) + (' on a known tuple will result in the tuple\'s ' + (partConfig.b9 + ' part'))
+										A2($jfmengels$elm_review_simplify$Simplify$qualify, checkInfo.a, $jfmengels$elm_review_simplify$Simplify$defaultQualifyResources)) + (' on a known tuple will result in the tuple\u0027s ' + (partConfig.b9 + ' part'))
 								},
 								checkInfo.d,
 								A3(
@@ -47435,7 +47435,7 @@ var $jfmengels$elm_review_simplify$Simplify$tuplePartChecks = function (partConf
 						A2($jfmengels$elm_review_simplify$Simplify$AstHelpers$getTuple2, checkInfo.ah, checkInfo.b));
 				}),
 				$jfmengels$elm_review_simplify$Simplify$unnecessarySpecificFnBeforeCheck(
-				{a: partConfig.i4, ax: 2, ay: 'tuple', av: 'Changing a tuple part which ultimately isn\'t accessed is unnecessary'}),
+				{a: partConfig.i4, ax: 2, ay: 'tuple', av: 'Changing a tuple part which ultimately isn\u0027t accessed is unnecessary'}),
 				$jfmengels$elm_review_simplify$Simplify$tuplePartOnMapPartCheck(partConfig.as),
 				$jfmengels$elm_review_simplify$Simplify$tuplePartMapOnMapBothCheck(
 				{fQ: partConfig.i3})
@@ -47514,15 +47514,15 @@ var $jfmengels$elm_review_simplify$Simplify$tuplePairChecks = $jfmengels$elm_rev
 									A2(
 									$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 									{e2: firstRange.fF, fF: checkInfo.c.fF},
-									'(\n' + A2($elm$core$String$repeat, firstRange.fF.dt - 1, ' ')),
+									'(\u000A' + A2($elm$core$String$repeat, firstRange.fF.dt - 1, ' ')),
 									A2(
 									$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 									{e2: secondRange.fF, fF: firstRange.e2},
-									'\n' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + (',\n' + A2($elm$core$String$repeat, secondRange.fF.dt - 1, ' ')))),
+									'\u000A' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + (',\u000A' + A2($elm$core$String$repeat, secondRange.fF.dt - 1, ' ')))),
 									A2(
 									$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 									{e2: checkInfo.c.e2, fF: secondRange.e2},
-									'\n' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ')'))
+									'\u000A' + (A2($elm$core$String$repeat, checkInfo.c.fF.dt - 1, ' ') + ')'))
 								]) : _List_fromArray(
 								[
 									A2(
@@ -48478,7 +48478,7 @@ var $jfmengels$elm_review_simplify$Simplify$ifChecks = function (checkInfo) {
 									{
 										g0: _List_fromArray(
 											['The expression can be replaced by the condition.']),
-										de: 'The if expression\'s value is the same as the condition'
+										de: 'The if expression\u0027s value is the same as the condition'
 									},
 									$jfmengels$elm_review_simplify$Simplify$targetIfKeyword(checkInfo.x),
 									A2($jfmengels$elm_review_simplify$Simplify$replaceBySubExpressionFix, checkInfo.x, checkInfo.fV)));
@@ -48494,7 +48494,7 @@ var $jfmengels$elm_review_simplify$Simplify$ifChecks = function (checkInfo) {
 									{
 										g0: _List_fromArray(
 											['The expression can be replaced by the condition wrapped by `not`.']),
-										de: 'The if expression\'s value is the inverse of the condition'
+										de: 'The if expression\u0027s value is the inverse of the condition'
 									},
 									$jfmengels$elm_review_simplify$Simplify$targetIfKeyword(checkInfo.x),
 									A2(
@@ -48523,7 +48523,7 @@ var $jfmengels$elm_review_simplify$Simplify$ifChecks = function (checkInfo) {
 							$jfmengels$elm_review$Review$Rule$errorWithFix,
 							{
 								g0: _List_fromArray(
-									['The expression can be replaced by what is inside the \'' + (branch.eD + '\' branch.')]),
+									['The expression can be replaced by what is inside the \u0027' + (branch.eD + '\u0027 branch.')]),
 								de: 'The condition will always evaluate to ' + $jfmengels$elm_review_simplify$Simplify$AstHelpers$boolToString(determinedConditionResultIsTrue)
 							},
 							$jfmengels$elm_review_simplify$Simplify$targetIfKeyword(checkInfo.x),
@@ -49111,7 +49111,7 @@ var $jfmengels$elm_review_simplify$Simplify$letInChecks = function (letBlock) {
 								A2(
 								$jfmengels$elm_review$Review$Fix$replaceRangeBy,
 								{e2: letRange.e2, fF: lastDeclRange.e2},
-								'\n')
+								'\u000A')
 							]);
 					} else {
 						return _List_Nil;
@@ -50368,7 +50368,7 @@ var $jfmengels$elm_review_simplify$Simplify$multiplyChecks = function (checkInfo
 							$jfmengels$elm_review$Review$Rule$errorWithFix,
 							{
 								g0: _List_fromArray(
-									['Multiplying by 0 will turn finite numbers into 0 and keep NaN and (-)Infinity', 'Most likely, multiplying by 0 was unintentional and you had a different factor in mind.', 'If you do want the described behavior, though, make your intention clear for the reader\nby explicitly checking for `Basics.isNaN` and `Basics.isInfinite`.', 'Basics.isNaN: https://package.elm-lang.org/packages/elm/core/latest/Basics#isNaN\nBasics.isInfinite: https://package.elm-lang.org/packages/elm/core/latest/Basics#isInfinite']),
+									['Multiplying by 0 will turn finite numbers into 0 and keep NaN and (-)Infinity', 'Most likely, multiplying by 0 was unintentional and you had a different factor in mind.', 'If you do want the described behavior, though, make your intention clear for the reader\u000Aby explicitly checking for `Basics.isNaN` and `Basics.isInfinite`.', 'Basics.isNaN: https://package.elm-lang.org/packages/elm/core/latest/Basics#isNaN\u000ABasics.isInfinite: https://package.elm-lang.org/packages/elm/core/latest/Basics#isInfinite']),
 								de: 'Multiplication by 0 should be replaced'
 							},
 							$stil4m$elm_syntax$Elm$Syntax$Range$combine(
@@ -50591,7 +50591,7 @@ var $jfmengels$elm_review_simplify$Simplify$usesTripleQuotes = F2(
 	function (extractSourceCode, range) {
 		return A2(
 			$elm$core$String$startsWith,
-			'\"\"\"',
+			'\u0022\u0022\u0022',
 			extractSourceCode(range));
 	});
 var $jfmengels$elm_review_simplify$Simplify$appendStringLiteralsCheck = F2(
@@ -50635,13 +50635,13 @@ var $jfmengels$elm_review_simplify$Simplify$appendStringLiteralsCheck = F2(
 							$jfmengels$elm_review_simplify$Simplify$CoreHelpers$consIf,
 							(!leftUsesTripleQuotes) && rightUsesTripleQuotes,
 							function (_v3) {
-								return A2($jfmengels$elm_review$Review$Fix$insertAt, leftRange.fF, '\"\"');
+								return A2($jfmengels$elm_review$Review$Fix$insertAt, leftRange.fF, '\u0022\u0022');
 							},
 							A3(
 								$jfmengels$elm_review_simplify$Simplify$CoreHelpers$consIf,
 								leftUsesTripleQuotes && (!rightUsesTripleQuotes),
 								function (_v2) {
-									return A2($jfmengels$elm_review$Review$Fix$insertAt, rightRange.e2, '\"\"');
+									return A2($jfmengels$elm_review$Review$Fix$insertAt, rightRange.e2, '\u0022\u0022');
 								},
 								_List_fromArray(
 									[
@@ -50938,12 +50938,12 @@ var $jfmengels$elm_review_simplify$Simplify$reversedCompositionChecks = F3(
 							[
 								'Mixing chains of functions with ' + (targetOp + ' in a direct function call with arguments positioned at the other end is confusing.'),
 								'To make it more idiomatic in Elm and generally easier to read, please use ' + (replacement + ' instead. You may need to remove some parentheses to do this.'),
-								'Here is an example:\n' + function () {
+								'Here is an example:\u000A' + function () {
 								var _v4 = checkInfo.lV;
 								if (!_v4) {
-									return 'Before: data |> (fn1 >> fn2)\nAfter:  data |> fn1 |> fn2';
+									return 'Before: data |> (fn1 >> fn2)\u000AAfter:  data |> fn1 |> fn2';
 								} else {
-									return 'Before: (fn2 << fn1) data\nAfter:   fn2 <| fn1  data';
+									return 'Before: (fn2 << fn1) data\u000AAfter:   fn2 <| fn1  data';
 								}
 							}()
 							]),
@@ -52536,7 +52536,7 @@ var $author$project$Elm$Review$Reporter$codeExtract = F3(
 				var lineContent = getRowWithLineNumber(start.dZ - 1);
 				return A2(
 					$author$project$Elm$Review$Text$join,
-					'\n',
+					'\u000A',
 					A2(
 						$elm$core$List$filter,
 						A2($elm$core$Basics$composeL, $elm$core$Basics$not, $elm$core$List$isEmpty),
@@ -52569,7 +52569,7 @@ var $author$project$Elm$Review$Reporter$codeExtract = F3(
 				endLineContent);
 			return A2(
 				$author$project$Elm$Review$Text$join,
-				'\n',
+				'\u000A',
 				A2(
 					$elm$core$List$filter,
 					A2($elm$core$Basics$composeL, $elm$core$Basics$not, $elm$core$List$isEmpty),
@@ -52592,7 +52592,7 @@ var $author$project$Elm$Review$Reporter$codeExtract = F3(
 							messageAfterCarets),
 							A2(
 							$author$project$Elm$Review$Text$join,
-							'\n',
+							'\u000A',
 							A2(
 								$elm$core$List$map,
 								function (middleLine) {
@@ -52607,7 +52607,7 @@ var $author$project$Elm$Review$Reporter$codeExtract = F3(
 											getRowWithLineNumber(middleLine)),
 										A2(
 											$elm$core$List$cons,
-											$author$project$Elm$Review$Text$from('\n'),
+											$author$project$Elm$Review$Text$from('\u000A'),
 											A2($author$project$Elm$Review$Reporter$underlineWholeLine, gutterLength, line)));
 								},
 								linesBetweenStartAndEnd)),
@@ -52732,7 +52732,7 @@ var $author$project$Elm$Review$Reporter$problemToString = function (p) {
 	switch (p.$) {
 		case 0:
 			var s = p.a;
-			return 'Expecting \'' + (s + '\'');
+			return 'Expecting \u0027' + (s + '\u0027');
 		case 1:
 			return 'Expecting int';
 		case 2:
@@ -52749,10 +52749,10 @@ var $author$project$Elm$Review$Reporter$problemToString = function (p) {
 			return 'Expecting variable';
 		case 8:
 			var s = p.a;
-			return 'Expecting symbol \'' + (s + '\'');
+			return 'Expecting symbol \u0027' + (s + '\u0027');
 		case 9:
 			var s = p.a;
-			return 'Expecting keyword \'' + (s + '\'');
+			return 'Expecting keyword \u0027' + (s + '\u0027');
 		case 10:
 			return 'Expecting end';
 		case 11:
@@ -52770,7 +52770,7 @@ var $author$project$Elm$Review$Reporter$deadEndToString = function (deadend) {
 var $author$project$Elm$Review$Reporter$deadEndsToString = function (deadEnds) {
 	return A2(
 		$elm$core$String$join,
-		'\n',
+		'\u000A',
 		A2($elm$core$List$map, $author$project$Elm$Review$Reporter$deadEndToString, deadEnds));
 };
 var $author$project$Elm$Review$Reporter$locationAsString = function (location) {
@@ -52782,12 +52782,12 @@ var $author$project$Elm$Review$Reporter$rangeAsString = function (_v0) {
 	return '{ start = ' + ($author$project$Elm$Review$Reporter$locationAsString(start) + (', end = ' + ($author$project$Elm$Review$Reporter$locationAsString(end) + ' }')));
 };
 var $author$project$Elm$Review$Reporter$wrapInDoubleOrTripleQuotes = function (string) {
-	return A2($elm$core$String$contains, '\"', string) ? ('\"\"\"' + (string + '\"\"\"')) : ('\"' + (string + '\"'));
+	return A2($elm$core$String$contains, '\u0022', string) ? ('\u0022\u0022\u0022' + (string + '\u0022\u0022\u0022')) : ('\u0022' + (string + '\u0022'));
 };
 var $author$project$Elm$Review$Reporter$editToFix = function (_v0) {
 	var replacement = _v0.mV;
 	var range = _v0.jn;
-	return (replacement === '') ? ('Review.Fix.removeRange\n         ' + $author$project$Elm$Review$Reporter$rangeAsString(range)) : (_Utils_eq(range.fF, range.e2) ? ('Review.Fix.insertAt\n         ' + ($author$project$Elm$Review$Reporter$locationAsString(range.fF) + ('\n         ' + $author$project$Elm$Review$Reporter$wrapInDoubleOrTripleQuotes(replacement)))) : ('Review.Fix.replaceRangeBy\n         ' + ($author$project$Elm$Review$Reporter$rangeAsString(range) + ('\n         ' + $author$project$Elm$Review$Reporter$wrapInDoubleOrTripleQuotes(replacement)))));
+	return (replacement === '') ? ('Review.Fix.removeRange\u000A         ' + $author$project$Elm$Review$Reporter$rangeAsString(range)) : (_Utils_eq(range.fF, range.e2) ? ('Review.Fix.insertAt\u000A         ' + ($author$project$Elm$Review$Reporter$locationAsString(range.fF) + ('\u000A         ' + $author$project$Elm$Review$Reporter$wrapInDoubleOrTripleQuotes(replacement)))) : ('Review.Fix.replaceRangeBy\u000A         ' + ($author$project$Elm$Review$Reporter$rangeAsString(range) + ('\u000A         ' + $author$project$Elm$Review$Reporter$wrapInDoubleOrTripleQuotes(replacement)))));
 };
 var $author$project$Elm$Review$Reporter$printCycle = function (moduleNames) {
 	return A2(
@@ -52797,11 +52797,11 @@ var $author$project$Elm$Review$Reporter$printCycle = function (moduleNames) {
 			[
 				_List_fromArray(
 				[
-					$author$project$Elm$Review$Text$from('    ┌─────┐\n    │    ')
+					$author$project$Elm$Review$Text$from('    ┌─────┐\u000A    │    ')
 				]),
 				A2(
 				$elm$core$List$intersperse,
-				$author$project$Elm$Review$Text$from('\n    │     ↓\n    │    '),
+				$author$project$Elm$Review$Text$from('\u000A    │     ↓\u000A    │    '),
 				A2(
 					$elm$core$List$map,
 					function (moduleName) {
@@ -52811,7 +52811,7 @@ var $author$project$Elm$Review$Reporter$printCycle = function (moduleNames) {
 					moduleNames)),
 				_List_fromArray(
 				[
-					$author$project$Elm$Review$Text$from('\n    └─────┘')
+					$author$project$Elm$Review$Text$from('\u000A    └─────┘')
 				])
 			]));
 };
@@ -52845,19 +52845,19 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 			return _List_fromArray(
 				[
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it resulted in the same source code.\n\nAfter applying the fixes, ' + filePath)),
+					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it resulted in the same source code.\u000A\u000AAfter applying the fixes, ' + filePath)),
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('\n\nHere are the individual edits for the file:')),
-					$author$project$Elm$Review$Text$from('\n\n    '),
+					$author$project$Elm$Review$Text$from('\u000A\u000AHere are the individual edits for the file:')),
+					$author$project$Elm$Review$Text$from('\u000A\u000A    '),
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(
 						A3(
 							$author$project$Elm$Review$Reporter$wrapIn,
 							'[ ',
-							'\n    ]',
+							'\u000A    ]',
 							A2(
 								$elm$core$String$join,
-								'\n    , ',
+								'\u000A    , ',
 								A2(
 									$elm$core$List$map,
 									A2($elm$core$Basics$composeR, $jfmengels$elm_review$Review$Fix$toRecord, $author$project$Elm$Review$Reporter$editToFix),
@@ -52884,11 +52884,11 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 							$author$project$Elm$Review$Text$from(invalid.l9)),
 							$author$project$Elm$Review$Text$inYellow(
 							$author$project$Elm$Review$Text$from(' being invalid Elm code:')),
-							$author$project$Elm$Review$Text$from('\n\n'),
+							$author$project$Elm$Review$Text$from('\u000A\u000A'),
 							$author$project$Elm$Review$Text$inYellow(
 							$author$project$Elm$Review$Text$from(
 								$author$project$Elm$Review$Reporter$deadEndsToString(invalid.kS))),
-							$author$project$Elm$Review$Text$from('\n\n')
+							$author$project$Elm$Review$Text$from('\u000A\u000A')
 						]),
 						A3(
 						$author$project$Elm$Review$Reporter$codeExtract,
@@ -52901,19 +52901,19 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 							$author$project$Elm$Review$Reporter$problemToString(firstParsingError.jk))),
 						_List_fromArray(
 						[
-							$author$project$Elm$Review$Text$from('\n\n'),
+							$author$project$Elm$Review$Text$from('\u000A\u000A'),
 							$author$project$Elm$Review$Text$inYellow(
 							$author$project$Elm$Review$Text$from('Here are the individual edits for the file:')),
-							$author$project$Elm$Review$Text$from('\n\n    '),
+							$author$project$Elm$Review$Text$from('\u000A\u000A    '),
 							$author$project$Elm$Review$Text$inYellow(
 							$author$project$Elm$Review$Text$from(
 								A3(
 									$author$project$Elm$Review$Reporter$wrapIn,
 									'[ ',
-									'\n    ]',
+									'\u000A    ]',
 									A2(
 										$elm$core$String$join,
-										'\n    , ',
+										'\u000A    , ',
 										A2(
 											$elm$core$List$map,
 											A2($elm$core$Basics$composeR, $jfmengels$elm_review$Review$Fix$toRecord, $author$project$Elm$Review$Reporter$editToFix),
@@ -52933,24 +52933,24 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 					$author$project$Elm$Review$Text$from(filePath)),
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(' being invalid Elm code:')),
-					$author$project$Elm$Review$Text$from('\n\n'),
+					$author$project$Elm$Review$Text$from('\u000A\u000A'),
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(
 						'    ' + $elm$json$Json$Decode$errorToString(decodingError))),
-					$author$project$Elm$Review$Text$from('\n\n'),
+					$author$project$Elm$Review$Text$from('\u000A\u000A'),
 					$author$project$Elm$Review$Text$from(source),
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('\n\nHere are the individual edits for the file:')),
-					$author$project$Elm$Review$Text$from('\n\n    '),
+					$author$project$Elm$Review$Text$from('\u000A\u000AHere are the individual edits for the file:')),
+					$author$project$Elm$Review$Text$from('\u000A\u000A    '),
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(
 						A3(
 							$author$project$Elm$Review$Reporter$wrapIn,
 							'[ ',
-							'\n    ]',
+							'\u000A    ]',
 							A2(
 								$elm$core$String$join,
-								'\n    , ',
+								'\u000A    , ',
 								A2(
 									$elm$core$List$map,
 									A2($elm$core$Basics$composeR, $jfmengels$elm_review$Review$Fix$toRecord, $author$project$Elm$Review$Reporter$editToFix),
@@ -52963,9 +52963,9 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 				[
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(
-						'I failed to apply the automatic fix because some edits for ' + (filePath + (' collide:\n\n    ' + A2(
+						'I failed to apply the automatic fix because some edits for ' + (filePath + (' collide:\u000A\u000A    ' + A2(
 							$elm$core$String$join,
-							'\n\n    ',
+							'\u000A\u000A    ',
 							A2(
 								$elm$core$List$map,
 								A2($elm$core$Basics$composeR, $jfmengels$elm_review$Review$Fix$toRecord, $author$project$Elm$Review$Reporter$editToFix),
@@ -52978,7 +52978,7 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 				[
 					$author$project$Elm$Review$Text$inYellow(
 					$author$project$Elm$Review$Text$from(
-						'I failed to apply the automatic fix because I have found an edit for ' + (filePath + (' where the start is positioned after the end:\n\n  ' + $author$project$Elm$Review$Reporter$editToFix(
+						'I failed to apply the automatic fix because I have found an edit for ' + (filePath + (' where the start is positioned after the end:\u000A\u000A  ' + $author$project$Elm$Review$Reporter$editToFix(
 							$jfmengels$elm_review$Review$Fix$toRecord(edit))))))
 				]);
 		case 5:
@@ -52989,21 +52989,21 @@ var $author$project$Elm$Review$Reporter$detailedReasonFromProblem = function (pr
 					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it resulted in an import cycle.')),
 				A2(
 					$elm$core$List$cons,
-					$author$project$Elm$Review$Text$from('\n\n'),
+					$author$project$Elm$Review$Text$from('\u000A\u000A'),
 					$author$project$Elm$Review$Reporter$printCycle(cycle)));
 		case 6:
 			var filePath = problem.a;
 			return _List_fromArray(
 				[
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it attempted to remove ' + (filePath + ' which is unknown to me.\nThis should not be possible in theory, so please open an issue so this can be fixed.')))
+					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it attempted to remove ' + (filePath + ' which is unknown to me.\u000AThis should not be possible in theory, so please open an issue so this can be fixed.')))
 				]);
 		default:
 			var problemDescription = problem.a;
 			return _List_fromArray(
 				[
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix.\n\n' + problemDescription))
+					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix.\u000A\u000A' + problemDescription))
 				]);
 	}
 };
@@ -53065,14 +53065,14 @@ var $author$project$Elm$Review$Reporter$succinctReasonFromProblem = function (pr
 			return _List_fromArray(
 				[
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it attempted to remove ' + (filePath + ' which is unknown to me.\nThis should not be possible in theory, so please open an issue so this can be fixed.')))
+					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix because it attempted to remove ' + (filePath + ' which is unknown to me.\u000AThis should not be possible in theory, so please open an issue so this can be fixed.')))
 				]);
 		default:
 			var problemDescription = problem.a;
 			return _List_fromArray(
 				[
 					$author$project$Elm$Review$Text$inYellow(
-					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix.\n\n' + problemDescription))
+					$author$project$Elm$Review$Text$from('I failed to apply the automatic fix.\u000A\u000A' + problemDescription))
 				]);
 	}
 };
@@ -53093,7 +53093,7 @@ var $author$project$Elm$Review$Reporter$formatErrorWithExtract = F5(
 					var problem = _v3.a;
 					return A2(
 						$elm$core$List$cons,
-						$author$project$Elm$Review$Text$from('\n\n'),
+						$author$project$Elm$Review$Text$from('\u000A\u000A'),
 						A2($author$project$Elm$Review$Reporter$reasonFromProblem, fixExplanation, problem));
 				} else {
 					return _List_Nil;
@@ -53106,10 +53106,10 @@ var $author$project$Elm$Review$Reporter$formatErrorWithExtract = F5(
 			if (!detailsMode) {
 				return A2(
 					$elm$core$List$cons,
-					$author$project$Elm$Review$Text$from('\n\n'),
+					$author$project$Elm$Review$Text$from('\u000A\u000A'),
 					A2(
 						$elm$core$List$intersperse,
-						$author$project$Elm$Review$Text$from('\n\n'),
+						$author$project$Elm$Review$Text$from('\u000A\u000A'),
 						A2($elm$core$List$map, $author$project$Elm$Review$Text$from, error.g0)));
 			} else {
 				return _List_Nil;
@@ -53123,7 +53123,7 @@ var $author$project$Elm$Review$Reporter$formatErrorWithExtract = F5(
 				var sourceCodeExtract = _v0;
 				return A2(
 					$elm$core$List$cons,
-					$author$project$Elm$Review$Text$from('\n\n'),
+					$author$project$Elm$Review$Text$from('\u000A\u000A'),
 					sourceCodeExtract);
 			}
 		}();
@@ -53264,15 +53264,15 @@ var $author$project$Elm$Review$Reporter$fileSeparator = F2(
 		return _List_fromArray(
 			[
 				$author$project$Elm$Review$Text$from(
-				'\n\n' + A2(
+				'\u000A\u000A' + A2(
 					$elm$core$String$repeat,
 					73 - $elm$core$String$length(
 						$author$project$Elm$Review$Reporter$filePathToString(pathAbove)),
 					' ')),
 				$author$project$Elm$Review$Text$inRed(
 				$author$project$Elm$Review$Text$from(
-					($author$project$Elm$Review$Reporter$filePathToString(pathAbove) + '  ↑') + ('\n====o======================================================================o====' + ('\n    ↓  ' + $author$project$Elm$Review$Reporter$filePathToString(pathBelow))))),
-				$author$project$Elm$Review$Text$from('\n\n\n')
+					($author$project$Elm$Review$Reporter$filePathToString(pathAbove) + '  ↑') + ('\u000A====o======================================================================o====' + ('\u000A    ↓  ' + $author$project$Elm$Review$Reporter$filePathToString(pathBelow))))),
+				$author$project$Elm$Review$Text$from('\u000A\u000A\u000A')
 			]);
 	});
 var $author$project$Elm$Review$Reporter$compareRange = F2(
@@ -53311,14 +53311,14 @@ var $author$project$Elm$Review$Reporter$formatReportForFileWithExtract = F4(
 	function (detailsMode, fixExplanation, mode, file) {
 		return A2(
 			$author$project$Elm$Review$Text$join,
-			'\n\n',
+			'\u000A\u000A',
 			A2(
 				$elm$core$List$indexedMap,
 				F2(
 					function (index, error) {
 						return A2(
 							$author$project$Elm$Review$Text$join,
-							'\n\n',
+							'\u000A\u000A',
 							_List_fromArray(
 								[
 									_List_fromArray(
@@ -53396,7 +53396,7 @@ var $author$project$Elm$Review$Reporter$formatConfigurationErrors = function (_v
 	return $author$project$Elm$Review$Text$simplify(
 		A2(
 			$author$project$Elm$Review$Text$join,
-			'\n\n',
+			'\u000A\u000A',
 			_List_fromArray(
 				[
 					A4($author$project$Elm$Review$Reporter$formatReports, detailsMode, 0, mode, filesWithErrors),
@@ -53702,17 +53702,17 @@ var $author$project$Elm$Review$Main$unknownRulesFilterMessage = function (_v0) {
 	var ruleNames = _v0.k0;
 	var unknownRulesMessage = A2(
 		$elm$core$String$join,
-		'\n\n',
+		'\u000A\u000A',
 		A2(
 			$elm$core$List$map,
 			function (filterName) {
-				return '- ' + (filterName + ('. Did you mean:\n  - ' + A2(
+				return '- ' + (filterName + ('. Did you mean:\u000A  - ' + A2(
 					$elm$core$String$join,
-					'\n  - ',
+					'\u000A  - ',
 					A2($author$project$Elm$Review$Main$closestNames, ruleNames, filterName))));
 			},
 			filterNames));
-	return {de: 'You requested to only run several rules, but I could not find some of them.\n\n' + unknownRulesMessage, gN: 'UNKNOWN FILTERED RULE(S)'};
+	return {de: 'You requested to only run several rules, but I could not find some of them.\u000A\u000A' + unknownRulesMessage, gN: 'UNKNOWN FILTERED RULE(S)'};
 };
 var $jfmengels$elm_review$Review$Rule$withRuleId = F2(
 	function (id, _v0) {
@@ -53733,7 +53733,7 @@ var $author$project$Elm$Review$Main$init = function (rawFlags) {
 			return _Utils_Tuple2(
 				{bM: 1, ef: false, cq: 0, dy: $elm$core$Maybe$Nothing, bP: $author$project$Elm$Review$Main$Mode_DontFix, dB: false, hn: _List_Nil, ho: _List_Nil, hB: $author$project$Elm$Review$CliCommunication$dummy, di: 0, hY: $elm$core$Maybe$Nothing, cR: $author$project$Elm$Review$UnsuppressMode$UnsuppressNone, eU: false},
 				$author$project$Elm$Review$Main$abort(
-					'Problem decoding the flags when running the elm-review runner:\n  ' + $elm$json$Json$Decode$errorToString(error)));
+					'Problem decoding the flags when running the elm-review runner:\u000A  ' + $elm$json$Json$Decode$errorToString(error)));
 		}
 	}();
 	var flags = _v0.a;
@@ -53774,7 +53774,7 @@ var $author$project$Elm$Review$Main$init = function (rawFlags) {
 		function () {
 			if ($elm$core$List$isEmpty($author$project$ReviewConfig$config)) {
 				return $author$project$Elm$Review$Main$abortWithDetails(
-					{de: 'Your configuration contains no rules. You can add rules by editing the ReviewConfig.elm file.\n\nI recommend you take a look at the following documents:\n  - How to configure elm-review: https://github.com/jfmengels/elm-review/#Configuration\n  - When to write or enable a rule: https://github.com/jfmengels/elm-review/#when-to-write-or-enable-a-rule', gN: 'CONFIGURATION IS EMPTY'});
+					{de: 'Your configuration contains no rules. You can add rules by editing the ReviewConfig.elm file.\u000A\u000AI recommend you take a look at the following documents:\u000A  - How to configure elm-review: https://github.com/jfmengels/elm-review/#Configuration\u000A  - When to write or enable a rule: https://github.com/jfmengels/elm-review/#when-to-write-or-enable-a-rule', gN: 'CONFIGURATION IS EMPTY'});
 			} else {
 				if (!$elm$core$List$isEmpty(filterNames)) {
 					return $author$project$Elm$Review$Main$abortWithDetails(
@@ -54579,7 +54579,7 @@ var $stil4m$elm_syntax$ParserFast$charOrEnd = F2(
 	function (offset, string) {
 		var actualChar = A3($elm$core$String$slice, offset, offset + 1, string);
 		switch (actualChar) {
-			case '\n':
+			case '\u000A':
 				return -2;
 			case '':
 				return -1;
@@ -54593,7 +54593,7 @@ var $stil4m$elm_syntax$ParserFast$skipWhileHelp = F6(
 		while (true) {
 			var actualChar = A3($elm$core$String$slice, offset, offset + 1, src);
 			if (A2($elm$core$String$any, isGood, actualChar)) {
-				if (actualChar === '\n') {
+				if (actualChar === '\u000A') {
 					var $temp$isGood = isGood,
 						$temp$offset = offset + 1,
 						$temp$row = row + 1,
@@ -55466,12 +55466,12 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$escapedCharValueMap = function (charToR
 		$stil4m$elm_syntax$ParserFast$oneOf7,
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbol,
-			'\'',
+			'\u0027',
 			charToRes('\'')),
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbol,
-			'\"',
-			charToRes('\"')),
+			'\u0022',
+			charToRes('"')),
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbol,
 			'n',
@@ -55483,10 +55483,10 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$escapedCharValueMap = function (charToR
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbol,
 			'r',
-			charToRes('\u000D')),
+			charToRes('\r')),
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbol,
-			'\\',
+			'\u005C',
 			charToRes('\\')),
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
@@ -55546,10 +55546,10 @@ var $stil4m$elm_syntax$ParserFast$oneOf2MapWithStartRowColumnAndEndRowColumn = F
 var $stil4m$elm_syntax$Elm$Parser$Tokens$characterLiteralMapWithRange = function (rangeAndCharToRes) {
 	return A2(
 		$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-		'\'',
+		'\u0027',
 		A2(
 			$stil4m$elm_syntax$ParserFast$followedBySymbol,
-			'\'',
+			'\u0027',
 			A4(
 				$stil4m$elm_syntax$ParserFast$oneOf2MapWithStartRowColumnAndEndRowColumn,
 				F5(
@@ -55564,7 +55564,7 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$characterLiteralMapWithRange = function
 					}),
 				A2(
 					$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-					'\\',
+					'\u005C',
 					$stil4m$elm_syntax$Elm$Parser$Tokens$escapedCharValueMap($elm$core$Basics$identity)),
 				F5(
 					function (startRow, startColumn, _char, endRow, endColumn) {
@@ -55925,7 +55925,7 @@ var $stil4m$elm_syntax$ParserFast$skipWhileWhitespaceHelp = F5(
 					src = $temp$src;
 					indent = $temp$indent;
 					continue skipWhileWhitespaceHelp;
-				case '\n':
+				case '\u000A':
 					var $temp$offset = offset + 1,
 						$temp$row = row + 1,
 						$temp$col = 1,
@@ -56091,7 +56091,7 @@ var $stil4m$elm_syntax$Elm$Parser$Comments$singleLineComment = A2(
 		$stil4m$elm_syntax$ParserFast$whileMapWithRange,
 		function (c) {
 			switch (c) {
-				case '\u000D':
+				case '\r':
 					return false;
 				case '\n':
 					return false;
@@ -56213,17 +56213,17 @@ var $stil4m$elm_syntax$ParserFast$atLeastOneWhileWithoutLinebreak = function (is
 };
 var $stil4m$elm_syntax$Elm$Parser$Tokens$singleQuotedStringLiteralAfterDoubleQuote = A5(
 	$stil4m$elm_syntax$ParserFast$loopUntil,
-	A2($stil4m$elm_syntax$ParserFast$symbol, '\"', 0),
+	A2($stil4m$elm_syntax$ParserFast$symbol, '\u0022', 0),
 	A2(
 		$stil4m$elm_syntax$ParserFast$oneOf2,
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-			'\\',
+			'\u005C',
 			$stil4m$elm_syntax$Elm$Parser$Tokens$escapedCharValueMap($elm$core$String$fromChar)),
 		$stil4m$elm_syntax$ParserFast$atLeastOneWhileWithoutLinebreak(
 			function (c) {
 				switch (c) {
-					case '\"':
+					case '"':
 						return false;
 					case '\\':
 						return false;
@@ -56239,18 +56239,18 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$singleQuotedStringLiteralAfterDoubleQuo
 	$elm$core$Basics$identity);
 var $stil4m$elm_syntax$Elm$Parser$Tokens$tripleQuotedStringLiteralOfterTripleDoubleQuote = A5(
 	$stil4m$elm_syntax$ParserFast$loopUntil,
-	A2($stil4m$elm_syntax$ParserFast$symbol, '\"\"\"', 0),
+	A2($stil4m$elm_syntax$ParserFast$symbol, '\u0022\u0022\u0022', 0),
 	A3(
 		$stil4m$elm_syntax$ParserFast$oneOf3,
-		A2($stil4m$elm_syntax$ParserFast$symbol, '\"', '\"'),
+		A2($stil4m$elm_syntax$ParserFast$symbol, '\u0022', '\u0022'),
 		A2(
 			$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-			'\\',
+			'\u005C',
 			$stil4m$elm_syntax$Elm$Parser$Tokens$escapedCharValueMap($elm$core$String$fromChar)),
 		$stil4m$elm_syntax$ParserFast$atLeastOneWhile(
 			function (c) {
 				switch (c) {
-					case '\"':
+					case '"':
 						return false;
 					case '\\':
 						return false;
@@ -56267,7 +56267,7 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$tripleQuotedStringLiteralOfterTripleDou
 var $stil4m$elm_syntax$Elm$Parser$Tokens$singleOrTripleQuotedStringLiteralMapWithRange = function (rangeAndStringToRes) {
 	return A2(
 		$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-		'\"',
+		'\u0022',
 		A4(
 			$stil4m$elm_syntax$ParserFast$oneOf2MapWithStartRowColumnAndEndRowColumn,
 			F5(
@@ -56280,7 +56280,7 @@ var $stil4m$elm_syntax$Elm$Parser$Tokens$singleOrTripleQuotedStringLiteralMapWit
 						},
 						string);
 				}),
-			A2($stil4m$elm_syntax$ParserFast$symbolFollowedBy, '\"\"', $stil4m$elm_syntax$Elm$Parser$Tokens$tripleQuotedStringLiteralOfterTripleDoubleQuote),
+			A2($stil4m$elm_syntax$ParserFast$symbolFollowedBy, '\u0022\u0022', $stil4m$elm_syntax$Elm$Parser$Tokens$tripleQuotedStringLiteralOfterTripleDoubleQuote),
 			F5(
 				function (startRow, startColumn, string, endRow, endColumn) {
 					return A2(
@@ -57030,7 +57030,7 @@ var $stil4m$elm_syntax$Elm$Parser$Expression$multiRecordAccessMap = function (fi
 				$elm$core$List$reverse(reversed));
 		});
 };
-var $stil4m$elm_syntax$Elm$Parser$Expression$negationWhitespaceProblem = $stil4m$elm_syntax$ParserFast$problem('if a negation sign is not preceded by whitespace, it\'s considered subtraction');
+var $stil4m$elm_syntax$Elm$Parser$Expression$negationWhitespaceProblem = $stil4m$elm_syntax$ParserFast$problem('if a negation sign is not preceded by whitespace, it\u0027s considered subtraction');
 var $stil4m$elm_syntax$Elm$Parser$Tokens$equal = A2($stil4m$elm_syntax$ParserFast$symbol, '=', 0);
 var $stil4m$elm_syntax$Elm$Syntax$Pattern$ParenthesizedPattern = function (a) {
 	return {$: 14, a: a};
@@ -60492,7 +60492,7 @@ function $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$letDestructuringDeclara
 function $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$lambdaExpression() {
 	return A2(
 		$stil4m$elm_syntax$ParserFast$symbolFollowedBy,
-		'\\',
+		'\u005C',
 		A7(
 			$stil4m$elm_syntax$ParserFast$map6WithStartLocation,
 			F7(
@@ -60794,7 +60794,7 @@ function $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$subExpression() {
 			function (offset, source) {
 				var _v4 = A3($elm$core$String$slice, offset, offset + 1, source);
 				switch (_v4) {
-					case '\"':
+					case '\u0022':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$literalExpression;
 					case '(':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$tupledExpressionIfNecessaryFollowedByRecordAccess();
@@ -60804,7 +60804,7 @@ function $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$subExpression() {
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$recordExpressionFollowedByRecordAccess();
 					case 'c':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$caseOrUnqualifiedReferenceExpression();
-					case '\\':
+					case '\u005C':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$lambdaExpression();
 					case 'l':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$letOrUnqualifiedReferenceExpression();
@@ -60814,7 +60814,7 @@ function $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$subExpression() {
 						return $stil4m$elm_syntax$Elm$Parser$Expression$recordAccessFunctionExpression;
 					case '-':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$cyclic$negationOperation();
-					case '\'':
+					case '\u0027':
 						return $stil4m$elm_syntax$Elm$Parser$Expression$charLiteralExpression;
 					default:
 						return $stil4m$elm_syntax$Elm$Parser$Expression$referenceOrNumberExpression;
@@ -63145,7 +63145,7 @@ var $elm$project_metadata_utils$Elm$Version$decoderHelp = function (string) {
 		var version = _v0.a;
 		return $elm$json$Json$Decode$succeed(version);
 	} else {
-		return $elm$json$Json$Decode$fail('I need a valid version like \"2.0.1\"');
+		return $elm$json$Json$Decode$fail('I need a valid version like \u00222.0.1\u0022');
 	}
 };
 var $elm$project_metadata_utils$Elm$Version$decoder = A2($elm$json$Json$Decode$andThen, $elm$project_metadata_utils$Elm$Version$decoderHelp, $elm$json$Json$Decode$string);
@@ -63203,7 +63203,7 @@ var $elm$project_metadata_utils$Elm$Project$verifyDepNames = F2(
 					pairs = $temp$pairs;
 					continue verifyDepNames;
 				} else {
-					return $elm$json$Json$Decode$fail('\"' + (key + '\" is not a valid package name.'));
+					return $elm$json$Json$Decode$fail('\u0022' + (key + '\u0022 is not a valid package name.'));
 				}
 			}
 		}
@@ -63358,7 +63358,7 @@ var $elm$project_metadata_utils$Elm$Constraint$decoderHelp = function (string) {
 		var constraint = _v0.a;
 		return $elm$json$Json$Decode$succeed(constraint);
 	} else {
-		return $elm$json$Json$Decode$fail('I need a valid constraint like \"1.0.0 <= v < 2.0.0\"');
+		return $elm$json$Json$Decode$fail('I need a valid constraint like \u00221.0.0 <= v < 2.0.0\u0022');
 	}
 };
 var $elm$project_metadata_utils$Elm$Constraint$decoder = A2($elm$json$Json$Decode$andThen, $elm$project_metadata_utils$Elm$Constraint$decoderHelp, $elm$json$Json$Decode$string);
@@ -63386,8 +63386,8 @@ var $elm$project_metadata_utils$Elm$License$osiApprovedSpdxLicenses = _List_from
 		A2($elm$project_metadata_utils$Elm$License$License, 'Artistic-2.0', 'Artistic License 2.0'),
 		A2($elm$project_metadata_utils$Elm$License$License, 'AAL', 'Attribution Assurance License'),
 		A2($elm$project_metadata_utils$Elm$License$License, 'BSL-1.0', 'Boost Software License 1.0'),
-		A2($elm$project_metadata_utils$Elm$License$License, 'BSD-2-Clause', 'BSD 2-clause \"Simplified\" License'),
-		A2($elm$project_metadata_utils$Elm$License$License, 'BSD-3-Clause', 'BSD 3-clause \"New\" or \"Revised\" License'),
+		A2($elm$project_metadata_utils$Elm$License$License, 'BSD-2-Clause', 'BSD 2-clause \u0022Simplified\u0022 License'),
+		A2($elm$project_metadata_utils$Elm$License$License, 'BSD-3-Clause', 'BSD 3-clause \u0022New\u0022 or \u0022Revised\u0022 License'),
 		A2($elm$project_metadata_utils$Elm$License$License, '0BSD', 'BSD Zero Clause License'),
 		A2($elm$project_metadata_utils$Elm$License$License, 'CECILL-2.1', 'CeCILL Free Software License Agreement v2.1'),
 		A2($elm$project_metadata_utils$Elm$License$License, 'CNRI-Python', 'CNRI Python License'),
@@ -63495,7 +63495,7 @@ var $elm$project_metadata_utils$Elm$Package$decoderHelp = function (string) {
 		var name = _v0.a;
 		return $elm$json$Json$Decode$succeed(name);
 	} else {
-		return $elm$json$Json$Decode$fail('I need a valid package name like \"elm/core\"');
+		return $elm$json$Json$Decode$fail('I need a valid package name like \u0022elm/core\u0022');
 	}
 };
 var $elm$project_metadata_utils$Elm$Package$decoder = A2($elm$json$Json$Decode$andThen, $elm$project_metadata_utils$Elm$Package$decoderHelp, $elm$json$Json$Decode$string);
@@ -63530,7 +63530,7 @@ var $elm$project_metadata_utils$Elm$Project$checkExposedDict = function (dict) {
 		return $elm$json$Json$Decode$succeed(dict);
 	} else {
 		var badHeader = _v0.a;
-		return $elm$json$Json$Decode$fail('The \"' + (badHeader + '\" header is too long. Twenty characters max!'));
+		return $elm$json$Json$Decode$fail('The \u0022' + (badHeader + '\u0022 header is too long. Twenty characters max!'));
 	}
 };
 var $elm$project_metadata_utils$Elm$Module$Name = $elm$core$Basics$identity;
@@ -63560,7 +63560,7 @@ var $elm$project_metadata_utils$Elm$Module$decoderHelp = function (string) {
 		var name = _v0.a;
 		return $elm$json$Json$Decode$succeed(name);
 	} else {
-		return $elm$json$Json$Decode$fail('I need a valid module name like \"Json.Decode\"');
+		return $elm$json$Json$Decode$fail('I need a valid module name like \u0022Json.Decode\u0022');
 	}
 };
 var $elm$project_metadata_utils$Elm$Module$decoder = A2($elm$json$Json$Decode$andThen, $elm$project_metadata_utils$Elm$Module$decoderHelp, $elm$json$Json$Decode$string);
@@ -63582,7 +63582,7 @@ var $elm$project_metadata_utils$Elm$Project$exposedDecoder = $elm$json$Json$Deco
 		]));
 var $elm$json$Json$Decode$map8 = _Json_map8;
 var $elm$project_metadata_utils$Elm$Project$summaryCheck = function (summary) {
-	return ($elm$core$String$length(summary) < 80) ? $elm$json$Json$Decode$succeed(summary) : $elm$json$Json$Decode$fail('The \"summary\" field must have fewer than 80 characters.');
+	return ($elm$core$String$length(summary) < 80) ? $elm$json$Json$Decode$succeed(summary) : $elm$json$Json$Decode$fail('The \u0022summary\u0022 field must have fewer than 80 characters.');
 };
 var $elm$project_metadata_utils$Elm$Project$summaryDecoder = A2($elm$json$Json$Decode$andThen, $elm$project_metadata_utils$Elm$Project$summaryCheck, $elm$json$Json$Decode$string);
 var $elm$project_metadata_utils$Elm$Project$packageDecoder = A9(
@@ -63610,7 +63610,7 @@ var $elm$project_metadata_utils$Elm$Project$decoderHelp = function (tipe) {
 			return A2($elm$json$Json$Decode$map, $elm$project_metadata_utils$Elm$Project$Package, $elm$project_metadata_utils$Elm$Project$packageDecoder);
 		default:
 			var other = tipe;
-			return $elm$json$Json$Decode$fail('The "type" field must be either "application" or "package", so ' + ('\"' + (other + '\" is not acceptable.')));
+			return $elm$json$Json$Decode$fail('The \u0022type\u0022 field must be either \u0022application\u0022 or \u0022package\u0022, so ' + ('\u0022' + (other + '\u0022 is not acceptable.')));
 	}
 };
 var $elm$project_metadata_utils$Elm$Project$decoder = A2(
@@ -66939,7 +66939,7 @@ var $author$project$Elm$Review$Reporter$formatNoErrors = F3(
 						[
 							_List_fromArray(
 							[
-								$author$project$Elm$Review$Text$from('\n\nThere ' + (are + ' still ')),
+								$author$project$Elm$Review$Text$from('\u000A\u000AThere ' + (are + ' still ')),
 								$author$project$Elm$Review$Text$inOrange(
 								$author$project$Elm$Review$Text$from(
 									$elm$core$String$fromInt(numberOfSuppressedErrors) + (' suppressed ' + A2($author$project$Elm$Review$Reporter$pluralizeEnding, numberOfSuppressedErrors, 'error')))),
@@ -67022,7 +67022,7 @@ var $author$project$Elm$Review$Reporter$formatTally = F3(
 var $author$project$Elm$Review$Reporter$listFailingRules = F3(
 	function (ruleName, rulePackage, initial) {
 		var base = $author$project$Elm$Review$Text$inYellow(
-			$author$project$Elm$Review$Text$from('\n- ' + ruleName));
+			$author$project$Elm$Review$Text$from('\u000A- ' + ruleName));
 		if (!rulePackage.$) {
 			var rulePackageName = rulePackage.a;
 			return A2(
@@ -67117,7 +67117,7 @@ var $author$project$Elm$Review$Reporter$formatReport = F2(
 			return $author$project$Elm$Review$Text$simplify(
 				A2(
 					$author$project$Elm$Review$Text$join,
-					'\n\n',
+					'\u000A\u000A',
 					A2(
 						$elm$core$List$filterMap,
 						$elm$core$Basics$identity,
@@ -67129,7 +67129,7 @@ var $author$project$Elm$Review$Reporter$formatReport = F2(
 								_List_fromArray(
 									[
 										$author$project$Elm$Review$Text$inOrange(
-										$author$project$Elm$Review$Text$from('Errors marked with (unsuppressed) were previously suppressed, but you introduced new errors for the same rule and file. There are now more of those than what I previously allowed. Please fix them until you have at most as many errors as before. Maybe fix a few more while you\'re there?'))
+										$author$project$Elm$Review$Text$from('Errors marked with (unsuppressed) were previously suppressed, but you introduced new errors for the same rule and file. There are now more of those than what I previously allowed. Please fix them until you have at most as many errors as before. Maybe fix a few more while you\u0027re there?'))
 									])) : $elm$core$Maybe$Nothing,
 								hasIgnoredFixableErrors ? $elm$core$Maybe$Just(
 								_List_fromArray(
@@ -67145,12 +67145,12 @@ var $author$project$Elm$Review$Reporter$formatReport = F2(
 										_List_fromArray(
 											[
 												$author$project$Elm$Review$Text$inBlue(
-												$author$project$Elm$Review$Text$from('Errors marked with (fix removes files) can be fixed automatically by\nalso using `--allow-remove-files`.'))
+												$author$project$Elm$Review$Text$from('Errors marked with (fix removes files) can be fixed automatically by\u000Aalso using `--allow-remove-files`.'))
 											])) : $elm$core$Maybe$Just(
 										_List_fromArray(
 											[
 												$author$project$Elm$Review$Text$inBlue(
-												$author$project$Elm$Review$Text$from('Errors marked with (fix removes files) can be fixed automatically\nusing `elm-review --fix --allow-remove-files`.'))
+												$author$project$Elm$Review$Text$from('Errors marked with (fix removes files) can be fixed automatically\u000Ausing `elm-review --fix --allow-remove-files`.'))
 											]))) : $elm$core$Maybe$Nothing;
 								}
 							}(),
@@ -67161,13 +67161,13 @@ var $author$project$Elm$Review$Reporter$formatReport = F2(
 									return (!$elm$core$Dict$isEmpty(rulesWithInvalidFixes)) ? $elm$core$Maybe$Just(
 										A2(
 											$author$project$Elm$Review$Text$join,
-											'\n\n',
+											'\u000A\u000A',
 											_List_fromArray(
 												[
 													A2(
 													$elm$core$List$cons,
 													$author$project$Elm$Review$Text$inYellow(
-														$author$project$Elm$Review$Text$from('I tried applying some fixes but they failed in ways the author(s) didn\'t expect. Please let the author(s) of the following rules know:')),
+														$author$project$Elm$Review$Text$from('I tried applying some fixes but they failed in ways the author(s) didn\u0027t expect. Please let the author(s) of the following rules know:')),
 													A3($elm$core$Dict$foldr, $author$project$Elm$Review$Reporter$listFailingRules, _List_Nil, rulesWithInvalidFixes)),
 													_List_fromArray(
 													[
@@ -67403,7 +67403,7 @@ var $author$project$Elm$Review$RefusedErrorFixes$errorKey = function (error) {
 				$jfmengels$elm_review$Review$Rule$errorMessage(error),
 				A2(
 				$elm$core$String$join,
-				'\n',
+				'\u000A',
 				$jfmengels$elm_review$Review$Rule$errorDetails(error)),
 				A2(
 				$elm$core$String$join,
@@ -68295,7 +68295,7 @@ var $author$project$Elm$Review$Reporter$formatDiff = F2(
 	function (before, after) {
 		return A2(
 			$elm$core$List$intersperse,
-			$author$project$Elm$Review$Text$from('\n'),
+			$author$project$Elm$Review$Text$from('\u000A'),
 			A2(
 				$elm$core$List$map,
 				$author$project$Elm$Review$Reporter$extractValueFromChange,
@@ -68330,7 +68330,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 					[
 						A2(
 						$author$project$Elm$Review$Text$join,
-						'\n\n',
+						'\u000A\u000A',
 						_List_fromArray(
 							[
 								A4(
@@ -68363,7 +68363,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 											$author$project$Elm$Review$Reporter$formatFilePathForSingleFix(path),
 											A2(
 												$elm$core$List$cons,
-												$author$project$Elm$Review$Text$from('\n\n'),
+												$author$project$Elm$Review$Text$from('\u000A\u000A'),
 												A2($author$project$Elm$Review$Reporter$formatDiff, before, after))) : A2($author$project$Elm$Review$Reporter$formatDiff, before, after);
 									} else {
 										return (!_Utils_eq(
@@ -68371,7 +68371,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 											file.mL)) ? _List_fromArray(
 											[
 												$author$project$Elm$Review$Reporter$formatFilePathForSingleFix(path),
-												$author$project$Elm$Review$Text$from('\n\n'),
+												$author$project$Elm$Review$Text$from('\u000A\u000A'),
 												$author$project$Elm$Review$Text$inRed(
 												$author$project$Elm$Review$Text$from('    REMOVE FILE'))
 											]) : _List_fromArray(
@@ -68384,7 +68384,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 									var numberOfDiffs = $elm$core$List$length(diffs);
 									return A2(
 										$author$project$Elm$Review$Text$join,
-										'\n\n',
+										'\u000A\u000A',
 										A2(
 											$elm$core$List$indexedMap,
 											F2(
@@ -68396,7 +68396,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 														A3($author$project$Elm$Review$Reporter$formatFilePathForSingleFixWith, index + 1, numberOfDiffs, path),
 														A2(
 															$elm$core$List$cons,
-															$author$project$Elm$Review$Text$from('\n\n'),
+															$author$project$Elm$Review$Text$from('\u000A\u000A'),
 															function () {
 																if (!diff.$) {
 																	var after = diff.a.ih;
@@ -68430,7 +68430,7 @@ var $author$project$Elm$Review$Reporter$formatSingleFixProposal = F6(
 							])),
 						_List_fromArray(
 						[
-							$author$project$Elm$Review$Text$from('\n')
+							$author$project$Elm$Review$Text$from('\u000A')
 						])
 					])));
 	});
@@ -68512,7 +68512,7 @@ var $author$project$Elm$Review$Reporter$formatFileDiff = F3(
 		var path = _v0.mL;
 		return A2(
 			$author$project$Elm$Review$Text$join,
-			'\n\n',
+			'\u000A\u000A',
 			_List_fromArray(
 				[
 					_List_fromArray(
@@ -68529,7 +68529,7 @@ var $author$project$Elm$Review$Reporter$formatFileDiff = F3(
 						function (error) {
 							return A2(
 								$elm$core$List$cons,
-								$author$project$Elm$Review$Text$from('\n'),
+								$author$project$Elm$Review$Text$from('\u000A'),
 								A2(
 									$author$project$Elm$Review$Reporter$formatErrorTitle,
 									$author$project$Elm$Review$Reporter$Fixing(fileRemovalFixesEnabled),
@@ -68574,7 +68574,7 @@ var $author$project$Elm$Review$Reporter$formatFileDiffs = F3(
 							A3($author$project$Elm$Review$Reporter$formatFileDiff, fileRemovalFixesEnabled, errorsForFile, firstDiff),
 							_List_fromArray(
 							[
-								$author$project$Elm$Review$Text$from('\n')
+								$author$project$Elm$Review$Text$from('\u000A')
 							]),
 							A2(
 							$author$project$Elm$Review$Reporter$fileSeparator,
@@ -68624,7 +68624,7 @@ var $author$project$Elm$Review$Reporter$formatFixProposals = F3(
 					var path = _v0.mL;
 					return _List_fromArray(
 						[
-							$author$project$Elm$Review$Text$from('\n  '),
+							$author$project$Elm$Review$Text$from('\u000A  '),
 							$author$project$Elm$Review$Text$inYellow(
 							$author$project$Elm$Review$Text$from('- ' + path))
 						]);
@@ -68632,7 +68632,7 @@ var $author$project$Elm$Review$Reporter$formatFixProposals = F3(
 				diffs));
 		var body = A2(
 			$author$project$Elm$Review$Text$join,
-			'\n\n',
+			'\u000A\u000A',
 			_List_fromArray(
 				[
 					_List_fromArray(
@@ -68651,7 +68651,7 @@ var $author$project$Elm$Review$Reporter$formatFixProposals = F3(
 				body,
 				_List_fromArray(
 					[
-						$author$project$Elm$Review$Text$from('\n')
+						$author$project$Elm$Review$Text$from('\u000A')
 					])));
 	});
 var $author$project$Elm$Review$Main$sendFixPromptForMultipleFixes = F4(
@@ -68982,7 +68982,7 @@ var $author$project$Elm$Review$RefusedErrorFixes$errorKeyUsingRecord = function 
 				error.jr,
 				error.l9,
 				error.de,
-				A2($elm$core$String$join, '\n', error.g0),
+				A2($elm$core$String$join, '\u000A', error.g0),
 				A2(
 				$elm$core$String$join,
 				'-',
@@ -69444,7 +69444,7 @@ var $jfmengels$elm_review$Review$Rule$duplicateModulesGlobalError = function (du
 		A2(
 			$elm$core$List$map,
 			function (s) {
-				return '\n  - ' + s;
+				return '\u000A  - ' + s;
 			},
 			$elm$core$List$sort(duplicate.mM)));
 	return $jfmengels$elm_review$Review$Rule$errorToReviewError(
@@ -69454,14 +69454,14 @@ var $jfmengels$elm_review$Review$Rule$duplicateModulesGlobalError = function (du
 					[
 						'I found several modules with the name `' + (A2($elm$core$String$join, '.', duplicate.hH) + '`. Depending on how I choose to resolve this, I might give you different reports. Since this is a compiler error anyway, I require this problem to be solved. Please fix this then try running `elm-review` again.'),
 						'Here are the paths to some of the files that share a module name:' + paths,
-						'It is possible that you requested me to look at several projects, and that modules from each project share the same name. I don\'t recommend reviewing several projects at the same time, as I can only handle one `elm.json`. I instead suggest running `elm-review` twice, once for each project.'
+						'It is possible that you requested me to look at several projects, and that modules from each project share the same name. I don\u0027t recommend reviewing several projects at the same time, as I can only handle one `elm.json`. I instead suggest running `elm-review` twice, once for each project.'
 					]),
 				de: 'Found several modules named `' + (A2($elm$core$String$join, '.', duplicate.hH) + '`'),
 				jr: 'Incorrect project'
 			}));
 };
 var $jfmengels$elm_review$Review$ImportCycle$wrapInCycle = function (string) {
-	return '    ┌─────┐\n    │    ' + (string + '\n    └─────┘');
+	return '    ┌─────┐\u000A    │    ' + (string + '\u000A    └─────┘');
 };
 var $jfmengels$elm_review$Ansi$noColor = '\u001B[39m';
 var $jfmengels$elm_review$Ansi$applyColor = F2(
@@ -69475,7 +69475,7 @@ var $jfmengels$elm_review$Review$ImportCycle$printCycle = function (moduleNames)
 	return $jfmengels$elm_review$Review$ImportCycle$wrapInCycle(
 		A2(
 			$elm$core$String$join,
-			'\n    │     ↓\n    │    ',
+			'\u000A    │     ↓\u000A    │    ',
 			A2(
 				$elm$core$List$map,
 				function (name) {
@@ -70470,7 +70470,7 @@ var $jfmengels$elm_review$Review$Rule$parsingError = function (path) {
 	return $jfmengels$elm_review$Review$Error$ReviewError$fromBaseError(
 		{
 			g0: _List_fromArray(
-				['I could not understand the content of this file, and this prevents me from analyzing it. It is highly likely that the contents of the file is not correct Elm code.', 'I need this file to be fixed before analyzing the rest of the project. If I didn\'t, I would potentially report incorrect things.', 'Hint: Try running `elm make`. The compiler should give you better hints on how to resolve the problem.']),
+				['I could not understand the content of this file, and this prevents me from analyzing it. It is highly likely that the contents of the file is not correct Elm code.', 'I need this file to be fixed before analyzing the rest of the project. If I didn\u0027t, I would potentially report incorrect things.', 'Hint: Try running `elm make`. The compiler should give you better hints on how to resolve the problem.']),
 			l9: path,
 			kh: $elm$core$Maybe$Nothing,
 			gf: $jfmengels$elm_review$Review$Error$Fixes$none,
@@ -70732,7 +70732,7 @@ var $jfmengels$elm_review$Review$Fix$Internal$applyEdits = F3(
 	function (filePath, edits, sourceCode) {
 		var resultAfterEdit = A2(
 			$elm$core$String$join,
-			'\n',
+			'\u000A',
 			A3(
 				$jfmengels$elm_review$Review$Fix$Internal$applyIndividualEdits,
 				$elm$core$String$lines(sourceCode),
@@ -73870,7 +73870,7 @@ var $jfmengels$elm_review$Review$Rule$takeNLines = F3(
 					var rest = lines.b;
 					var $temp$n = n - 1,
 						$temp$lines = rest,
-						$temp$linesTaken = linesTaken + ('\n' + line);
+						$temp$linesTaken = linesTaken + ('\u000A' + line);
 					n = $temp$n;
 					lines = $temp$lines;
 					linesTaken = $temp$linesTaken;
@@ -73902,7 +73902,7 @@ var $jfmengels$elm_review$Review$Rule$extractSourceCode = F2(
 						function () {
 							if (!lastLine.$) {
 								var lastLine_ = lastLine.a;
-								return '\n' + A2($jfmengels$elm_review$Unicode$left, end.dt - 1, lastLine_);
+								return '\u000A' + A2($jfmengels$elm_review$Unicode$left, end.dt - 1, lastLine_);
 							} else {
 								return '';
 							}
@@ -75190,7 +75190,7 @@ var $author$project$Elm$Review$Main$update = F2(
 							'I need a valid module name like',
 							$elm$json$Json$Decode$errorToString(decodeError)) ? $author$project$Elm$Review$Main$abortWithDetails(
 							{
-								de: 'I encountered an error when reading the dependencies of the project. It seems due to dependencies with modules containing `_` in their names. Unfortunately, this is an error I have no control over and I am waiting in one of the libraries I depend on. What I propose you do, is to re-run elm-review like this:\n\n    elm-review --ignore-problematic-dependencies\n\nThis will ignore the problematic dependencies, and can GIVE YOU INCORRECT RESULTS! This is a temporary measure.\n\nIf I am mistaken about the nature of problem, please open a bug report at https://github.com/jfmengels/node-elm-review/issues:\n\n' + $elm$json$Json$Decode$errorToString(decodeError),
+								de: 'I encountered an error when reading the dependencies of the project. It seems due to dependencies with modules containing `_` in their names. Unfortunately, this is an error I have no control over and I am waiting in one of the libraries I depend on. What I propose you do, is to re-run elm-review like this:\u000A\u000A    elm-review --ignore-problematic-dependencies\u000A\u000AThis will ignore the problematic dependencies, and can GIVE YOU INCORRECT RESULTS! This is a temporary measure.\u000A\u000AIf I am mistaken about the nature of problem, please open a bug report at https://github.com/jfmengels/node-elm-review/issues:\u000A\u000A' + $elm$json$Json$Decode$errorToString(decodeError),
 								gN: 'FOUND PROBLEMATIC DEPENDENCIES'
 							}) : $author$project$Elm$Review$Main$abortWithDetails(
 							{
