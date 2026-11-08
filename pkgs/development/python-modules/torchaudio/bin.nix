@@ -21,15 +21,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchaudio";
-  version = "2.11.0";
+  version = "2.11.1";
   format = "wheel";
 
   src =
     let
-      pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
       unsupported = throw "Unsupported system";
-      srcs =
-        (import ./binary-hashes.nix finalAttrs.version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
+      srcs = (import ./binary-hashes.nix finalAttrs.version).${stdenv.system} or unsupported;
     in
     fetchurl srcs;
 

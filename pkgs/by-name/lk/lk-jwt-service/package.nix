@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   nixosTests,
+  pkg-config,
+  aws-lc,
   cacert,
 }:
 
@@ -20,6 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-fWaeKuE9nr+yKT8ZInR79LDwwg1VsA2jdN/wdhtgln8=";
+
+  buildInputs = [
+    aws-lc
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   # Tests spawn a local webserver
   __darwinAllowLocalNetworking = true;

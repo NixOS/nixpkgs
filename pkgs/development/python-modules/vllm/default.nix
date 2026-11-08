@@ -90,7 +90,9 @@
   py-libnuma,
   # cuda-only
   cupy,
+  flashinfer-cubin,
   flashinfer-python,
+  nvidia-cudnn-frontend,
   nvidia-ml-py,
   tokenspeed-mla,
   # cuda or rocm only
@@ -535,8 +537,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
   pythonRemoveDeps = [
     # Not packaged in nixpkgs.
-    "flashinfer-cubin"
-    "nvidia-cudnn-frontend"
     "apache-tvm-ffi" # vllm does not depend on it directly, its version is only pinned for compatibility with tilelang (also removed).
     "tilelang"
     "fastsafetensors"
@@ -621,7 +621,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cupy
+    flashinfer-cubin
     flashinfer-python
+    nvidia-cudnn-frontend
     nvidia-ml-py
     tokenspeed-mla
   ]

@@ -6279,6 +6279,8 @@ self: super: with self; {
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
+  flashinfer-cubin = callPackage ../development/python-modules/flashinfer-cubin { };
+
   flashinfer-jit-cache = callPackage ../development/python-modules/flashinfer-jit-cache { };
 
   flashinfer-python = callPackage ../development/python-modules/flashinfer-python { };
