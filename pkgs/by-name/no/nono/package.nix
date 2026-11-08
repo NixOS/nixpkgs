@@ -12,6 +12,7 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   nix-update-script,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
   ];
 
