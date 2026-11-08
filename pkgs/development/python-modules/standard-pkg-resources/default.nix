@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
   jaraco-text,
   packaging,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
