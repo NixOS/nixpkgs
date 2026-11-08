@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/shenwei356/rush";
     changelog = "https://github.com/shenwei356/rush/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "rush";
   };
 })
