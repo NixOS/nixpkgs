@@ -3,17 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  httpx,
+  httpx2,
 }:
 
 buildPythonPackage rec {
   pname = "safehttpx";
-  version = "0.1.7";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2yAcCXjEHt24u0gPPu5Z3WcwT92RZGA16dmnIASanSM=";
+    hash = "sha256-vWmKWhcwd3BAzP2sCu96e9sQ9ZkxeWxMmcAD3JDf8oE=";
   };
 
   build-system = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    httpx
+    httpx2
   ];
 
   pythonImportsCheck = [ "safehttpx" ];
