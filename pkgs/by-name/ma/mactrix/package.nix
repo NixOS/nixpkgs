@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mactrix";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/viktorstrate/mactrix/releases/download/v${version}/Mactrix.app.zip";
-    hash = "sha256-Y4ydihGSGKNXDatzW/cpJYS1lwjnkIdhVtdr+Y5eaa0=";
+    hash = "sha256-siBdw6g0llaoE2g+N7193idyaIR/Iw5vjYrjW9cxbdc=";
   };
 
   strictDeps = true;
