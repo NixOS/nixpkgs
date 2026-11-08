@@ -15,14 +15,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "buildstream-plugins-community";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "buildstream";
     repo = "buildstream-plugins-community";
     tag = finalAttrs.version;
-    hash = "sha256-bwcVwYgC2cRHjZwHEwFfz8VMxi9qJ0uPq7QWQcbMpv8=";
+    hash = "sha256-Ti77M9S4QzOBrENl4jRufwiqWLLdbr/w4ZQaJc7JEDA=";
   };
 
   build-system = [
