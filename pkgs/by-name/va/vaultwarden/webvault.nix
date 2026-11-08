@@ -50,6 +50,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/vaultwarden
+    find apps/web/build -name '*.map' -delete
     mv apps/web/build $out/share/vaultwarden/vault
     runHook postInstall
   '';
