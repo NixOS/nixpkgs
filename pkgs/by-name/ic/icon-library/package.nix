@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icon-library";
-  version = "0.0.22";
+  version = "0.0.23";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "design";
     repo = "icon-library";
     tag = finalAttrs.version;
-    hash = "sha256-XpvD7AYFx3GRcYqdDBrMo7vQIUYaE3zxtsoSgLNDDzU=";
+    hash = "sha256-HQw8xq444dw2KKynr7CHTwyU+ot+dGHwRTW+jL4tJks=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-OkVUAQnui0PzYXjoC6nTcLNqD/TLkz5pVtjV+7KSUq4=";
+    hash = "sha256-vyr86WF/GgXiKhibCwsKAfv6svtGayz2RsdYs1+rXSw=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
