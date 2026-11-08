@@ -6,11 +6,11 @@
 
 let
   pname = "mapillary-desktop-uploader";
-  version = "5.0.3";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "https://tools.mapillary.com/uploader/download/mapillary-uploader-${version}.AppImage";
-    hash = "sha256-hpWdfeuhYylO+SFD3BsKI0s/xtObCDd5OcuJ6i/aEuI=";
+    hash = "sha256-DAgR4J/A8LBl7nbLRL8J11UcOiN9ZEyHtXKcjLmkfdE=";
   };
 
   appimageContents = appimageTools.extract {
