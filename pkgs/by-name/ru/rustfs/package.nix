@@ -7,8 +7,10 @@
   pnpmConfigHook,
   nodejs,
   rustPlatform,
+  pkg-config,
   protobuf,
-  cacert,
+  zstd,
+  aws-lc,
   nix-update,
   nixosTests,
   writeShellApplication,
@@ -74,8 +76,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-8CRM2FdAmpx6rL3FMMj1caSBaf+//lQu6uHxBa/DynU=";
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
-    cacert
+  ];
+
+  buildInputs = [
+    zstd
+    aws-lc
   ];
 
   inherit console;
