@@ -67,7 +67,10 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      unitConfig.ConditionPathExists = "/var/lib/isponsorblocktv/config.json";
+      unitConfig = {
+        ConditionPathExists = "/var/lib/isponsorblocktv/config.json";
+        StartLimitIntervalSec = "120s";
+      };
 
       serviceConfig = {
         ExecStart = "${isponsorblocktv-pkg} --data /var/lib/isponsorblocktv";
@@ -80,7 +83,6 @@ in
         Restart = "always";
         RestartSec = "10s";
         StartLimitBurst = 5;
-        StartLimitIntervalSec = "120s";
 
         ProtectSystem = "strict";
         ProtectHome = true;
