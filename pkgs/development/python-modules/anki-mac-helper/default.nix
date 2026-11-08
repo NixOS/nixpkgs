@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "anki_mac_helper" ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Small support library for Anki on Macs";
     homepage = "https://github.com/ankitects/anki";
