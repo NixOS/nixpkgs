@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshcore-cli";
-  version = "1.6.6";
+  version = "1.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fyk1YAHRLGzxBHVmsqlX6KkW0RIfUtzSspTeHETTPlQ=";
+    hash = "sha256-FwqlVbhV7bWHaBA9dgr/G8e40q+H07a7PLNxbIHrXas=";
   };
 
   build-system = [ hatchling ];
