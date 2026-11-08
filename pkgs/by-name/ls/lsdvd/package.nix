@@ -1,21 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
+  autoreconfHook,
   libdvdread,
+  libxml2,
   pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsdvd";
-  version = "0.17";
-  src = fetchurl {
-    url = "mirror://sourceforge/lsdvd/lsdvd-${finalAttrs.version}.tar.gz";
-    sha256 = "1274d54jgca1prx106iyir7200aflr70bnb1kawndlmcckcmnb3x";
+  version = "0.21";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/lsdvd/git";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-NCMd0gj8jF0xpixMz3Vp77O+vG/Qso98HxFwoB+b3Zc=";
   };
 
-  buildInputs = [ libdvdread ];
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libdvdread
+    libxml2
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://sourceforge.net/projects/lsdvd/";
