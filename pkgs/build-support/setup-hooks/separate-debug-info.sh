@@ -62,15 +62,20 @@ _separateDebugInfo() {
         fi
 
 
-        # Extract the debug info.
-        echo "separating debug info from $i (build ID $id)"
-
         local debuginfoDir="$dst/${id:0:2}"
         local buildIdPrefix="$debuginfoDir/${id:2}"
         local debuginfoFile="$buildIdPrefix.debug"
         local executableSymlink="$buildIdPrefix.executable"
         local sourceSymlink="$buildIdPrefix.source"
         local sourceOverlaySymlink="$buildIdPrefix.sourceoverlay"
+
+        if [ -f "$debuginfoFile" ] && [ "$i" -ef "$executableSymlink" ]; then
+            ln -sfn "$debuginfoFile" "$dst/../$(basename "$i")"
+            continue
+        fi
+
+        # Extract the debug info.
+        echo "separating debug info from $i (build ID $id)"
 
         mkdir -p "$debuginfoDir"
 
@@ -82,7 +87,7 @@ _separateDebugInfo() {
         # architecture than we're building for.  (This happens with
         # firmware blobs in QEMU.)
         if $OBJCOPY --only-keep-debug "$i" "$debuginfoFile"; then
-            # If we succeeded, also a create a symlink <original-name>.debug.
+            # If we succeeded, also create a symlink <original-name>.
             ln -sfn "$debuginfoFile" "$dst/../$(basename "$i")"
             # also create a symlink mapping the build-id to the original elf file and the source
             # debuginfod protocol relies on it
