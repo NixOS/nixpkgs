@@ -298,7 +298,7 @@ in
         in
         #python
         ''
-          machine.start(allow_reboot=True)
+          machine.start_and_allow_reboot()
           machine.wait_for_unit("multi-user.target")
 
           machine.succeed("sbctl create-keys")
@@ -835,7 +835,7 @@ in
           bad = "${bad}"
           unused = "${unused}"
 
-          machine.start(allow_reboot=True)
+          machine.start_and_allow_reboot()
 
           # Ensure we booted using an entry with counters enabled
           machine.succeed(

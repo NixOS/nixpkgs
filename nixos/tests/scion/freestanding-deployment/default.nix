@@ -145,7 +145,10 @@ in
       # Functions to avoid many for loops
       def start(allow_reboot=False):
           for i in vms:
-              i.start(allow_reboot=allow_reboot)
+              if allow_reboot:
+                  i.start_and_allow_reboot()
+              else:
+                  i.start()
 
       def wait_for_unit(service_name):
           for i in vms:
