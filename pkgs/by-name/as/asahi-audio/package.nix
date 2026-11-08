@@ -71,7 +71,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AsahiLinux/asahi-audio";
     changelog = "https://github.com/AsahiLinux/asahi-audio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      flokli
+      sempiternal-aurora
+    ];
     platforms = [ "aarch64-linux" ];
   };
 })
