@@ -22267,8 +22267,6 @@ self: super: with self; {
 
   uonet-request-signer-hebe = callPackage ../development/python-modules/uonet-request-signer-hebe { };
 
-  upass = callPackage ../development/python-modules/upass { };
-
   upb-lib = callPackage ../development/python-modules/upb-lib { };
 
   upcloud-api = callPackage ../development/python-modules/upcloud-api { };
