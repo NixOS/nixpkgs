@@ -112,6 +112,8 @@ buildPythonPackage rec {
     "test_login"
   ];
 
+  pytestFlags = [ "-vvv" ];
+
   passthru.tests = { inherit dj-rest-auth; };
 
   meta = {
