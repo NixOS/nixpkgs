@@ -2,7 +2,7 @@ diff --git a/rpython/translator/platform/darwin.py b/rpython/translator/platform
 index 8c824a8459..f407fb6c07 100644
 --- a/rpython/translator/platform/darwin.py
 +++ b/rpython/translator/platform/darwin.py
-@@ -26,12 +26,12 @@ class Darwin(posix.BasePosix):
+@@ -26,7 +26,7 @@ class Darwin(posix.BasePosix):
      standalone_only = ('-mdynamic-no-pic',)
      shared_only = ()
  
@@ -11,7 +11,10 @@ index 8c824a8459..f407fb6c07 100644
      cflags = ('-O3',
                '-fomit-frame-pointer',
                # The parser turns 'const char *const *includes' into 'const const char **includes'
-               '-Wno-duplicate-decl-specifier',
+@@ -32,8 +32,8 @@
+               # library and pthread_jit_write_protect_np only runs on arm64
+               # (always macOS 11+), so silence -Wunguarded-availability-new.
+               '-Wno-unguarded-availability-new',
 -              DARWIN_VERSION_MIN,)
 +              )
  

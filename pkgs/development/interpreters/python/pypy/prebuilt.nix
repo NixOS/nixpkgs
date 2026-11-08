@@ -58,9 +58,9 @@ let
   majorVersion = lib.versions.major pythonVersion;
 
   downloadUrls = {
-    aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.bz2";
-    x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
-    aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.bz2";
+    aarch64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-aarch64.tar.gz";
+    x86_64-linux = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-linux64.tar.gz";
+    aarch64-darwin = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-macos_arm64.tar.gz";
   };
 
 in
