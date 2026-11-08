@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=17"
     "-DBUILD_SHARED_LIBS=ON"
     "-DDISABLE_RUST_IN_BUILD=ON"
     "-DWARNINGS_AS_ERRORS=OFF"
