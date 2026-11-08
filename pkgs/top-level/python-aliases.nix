@@ -524,6 +524,7 @@ mapAliases {
   piano-transcription-inference = throw "'piano-transcription-inference' has been removed, because its upstream repo was archived in 2025."; # added 2026-08-13
   pilight = throw "'pilight' has been removed, because it is unmaintained since 2019 and the integration was removed from Home Assistant."; # added 2026-05-06
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
+  pillowfight = throw "'pillowfight' has been removed, as its upstream repository has been archived since 2021"; # Added 2026-11-08
   pinecone-client = warnAlias "'pinecone-client' has been renamed to 'pinecone'" pinecone; # added 2026-07-22
   pinecone-plugin-assistant = throw "'pinecone-plugin-assistant' has been integrated into 'pinecone-client'"; # Added 2026-07-22
   pinecone-plugin-interface = throw "'pinecone-plugin-interface' has been removed because the plugin discovery system was retired in 'pinecone-client' 9"; # Added 2026-07-22
