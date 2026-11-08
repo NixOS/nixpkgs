@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mtools";
-  version = "4.0.49";
+  version = "4.0.50";
 
   src = fetchurl {
     url = "mirror://gnu/mtools/mtools-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-b+UZNYPW58Wdp15j1yNPdsCwfK8zsQOJT0b2aocf/J8=";
+    hash = "sha256-86WObPwmNLA8JARCVI47ABA2kjV6/Cjh5xBHRN1keLU=";
   };
 
   outputs = [
