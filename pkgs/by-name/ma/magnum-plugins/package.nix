@@ -3,47 +3,81 @@
   lib,
   fetchFromGitHub,
   cmake,
-  magnum,
-  corrade,
+
+  # keep-sorted start case=no numeric=no block=yes
   assimp,
-  libz,
-  freetype,
-  libjpeg, # compatible with libjepg8?
-  libpng,
-  harfbuzz,
+  corrade,
   faad2,
-  zstd,
+  freetype,
+  glslang,
+  harfbuzz,
+  libavif,
+  libjpeg,
+  libpng,
+  libspng,
+  libwebp,
+  libz,
+  lunasvg,
+  magnum,
+  meshoptimizer,
+  openexr,
+  plutosvg,
+  resvg,
   spirv-tools,
-  # build and tests pass + tested with mc-rtc-magnum
-  withAssimpImporter ? false,
-  withStbImageImporter ? false,
-  # builds and tests pass
-  withStbImageConverter ? false,
-  withStbTrueTypeFont ? true,
-  withFreetypeFont ? true,
-  withJpegImageConverter ? false,
-  withJpegImporter ? false,
-  withPngImageConverter ? false,
-  withPngImporter ? true,
-  withHarfBuzzFont ? true,
-  withStanfordImporter ? false,
-  withMiniExrImageConverter ? false,
-  withKtxImporter ? false,
-  withKtxImageConverter ? false,
-  withMeshOptimizer ? false, # no tests
-  withPrimitiveImporter ? false,
-  withUvImageConverter ? false,
-  withDrFlacAudioImporter ? false,
-  withDrMp3AudioImporter ? false,
-  withDrWavAudioImporter ? false,
-  withStbVorbisAudioImporter ? false,
+  zstd,
+  # keep-sorted end
+
+  # keep-sorted start case=no numeric=no block=yes
+  withAssimpImporter ? true,
+  withAstcImporter ? false,
+  withAvifImporter ? false,
   withBasisImageConverter ? false,
   withBasisImporter ? false,
-  withIcoImporter ? false,
-  withGltfImporter ? false,
+  withBcdeImageConverter ? false,
+  withDdsImporter ? true,
+  withDrFlacAudioImporter ? false,
+  withDrMp3AudioImporter ? false,
+  withDrWavAudioImporter ? true,
+  withEtcDecImageConverter ? false,
   withFaad2AudioImporter ? false,
-  withDdsImporter ? false,
+  withFreetypeFont ? false,
+  withGlslangShaderConverter ? false,
+  withGltfImporter ? true,
+  withGltfSceneConverter ? true,
+  withHarfBuzzFont ? false,
+  withIcoImporter ? false,
+  withJpegImageConverter ? true,
+  withJpegImporter ? true,
+  withKtxImageConverter ? false,
+  withKtxImporter ? false,
+  withLunaSvgImporter ? false,
+  withMeshOptimizer ? false,
+  withMeshOptimizerSceneConverter ? false,
+  withMiniExrImageConverter ? false,
+  withOpenExrImageConverter ? true,
+  withOpenExrImporter ? true,
+  withPlutoSvgImporter ? false,
+  withPngImageConverter ? true,
+  withPngImporter ? true,
+  withPrimitiveImporter ? false,
+  withResvgImporter ? false,
   withSpirvToolsShaderConverter ? true,
+  withSpngImporter ? false,
+  withStanfordImporter ? false,
+  withStanfordSceneConverter ? false,
+  withStbdxImageConverter ? false,
+  withStbImageConverter ? true,
+  withStbImageImporter ? true,
+  withStbResizeImageConverter ? false,
+  withStbTrueTypeFont ? true,
+  withStbVorbisAudioImporter ? true,
+  withUfbxImporter ? false,
+  withWebpImageConverter ? true,
+  withWebpImporter ? true,
+  # keep-sorted end
+
+  # Not supported yet
+  withDevilImageImporter ? false, # XXX devil dependency missing https://openil.sourceforge.net/
 }:
 
 let
@@ -59,12 +93,12 @@ let
 in
 
 assert lib.assertMsg (
-  withHarfBuzzFont && withFreetypeFont
+  !(withHarfBuzzFont && withFreetypeFont)
 ) "magnum-plugins: withHarfBuzzFont needs withFreetypeFont to be enabled";
 
 stdenv.mkDerivation (_finalAttrs: {
   pname = "magnum-plugins";
-  version = "2020.06-unstable-2026-11-05";
+  version = "2020.06-unstable-2026-11-07";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -73,8 +107,8 @@ stdenv.mkDerivation (_finalAttrs: {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum-plugins";
-    rev = "d4da56662318ba37f58c33d487100ea590c505ec";
-    hash = "sha256-OgBT5lPX4HndW836N+a2dQweHGRqxWkyjFNFnNp+Nl4=";
+    rev = "b99e314c51ed2e47eb408d6b921f802d90102ecb";
+    hash = "sha256-dMCWKFXZHtrX/ybVXXfuC4n0vOruHX1H86osLTlYpWM=";
   };
 
   nativeBuildInputs = [
@@ -98,18 +132,36 @@ stdenv.mkDerivation (_finalAttrs: {
   ]
   ++ lib.optional withFaad2AudioImporter faad2
   ++ lib.optional (withBasisImageConverter || withBasisImporter) zstd
-  ++ lib.optional withSpirvToolsShaderConverter spirv-tools;
+  ++ lib.optional withSpirvToolsShaderConverter spirv-tools
+  ++ lib.optional withGlslangShaderConverter glslang
+  ++ lib.optional withMeshOptimizerSceneConverter meshoptimizer
+  ++ lib.optional (withOpenExrImporter || withOpenExrImageConverter) openexr
+  ++ lib.optional withResvgImporter resvg
+  ++ lib.optional withSpngImporter libspng
+  ++ lib.optional withAvifImporter libavif
+  ++ lib.optional (withWebpImporter || withWebpImageConverter) libwebp
+  ++ lib.optional withPlutoSvgImporter plutosvg
+  ++ lib.optional withLunaSvgImporter lunasvg;
 
   cmakeFlags = [
+    # keep-sorted start case=no numeric=no block=yes
     (lib.cmakeBool "MAGNUM_BUILD_TESTS" true)
     (lib.cmakeBool "MAGNUM_WITH_ASSIMPIMPORTER" withAssimpImporter)
+    (lib.cmakeBool "MAGNUM_WITH_ASSTCIMPORTER" withAstcImporter)
+    (lib.cmakeBool "MAGNUM_WITH_AVIFIMPORTER" withAvifImporter)
     (lib.cmakeBool "MAGNUM_WITH_BASISIMAGECONVERTER" withBasisImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_BASISIMPORTER" withBasisImporter)
+    (lib.cmakeBool "MAGNUM_WITH_BCDECIMAGECONVERTER" withBcdeImageConverter)
+    (lib.cmakeBool "MAGNUM_WITH_DDSIMPORTER" withDdsImporter)
+    (lib.cmakeBool "MAGNUM_WITH_DEVILIMAGEIMPORTER" withDevilImageImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRFLACAUDIOIMPORTER" withDrFlacAudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRMP3AUDIOIMPORTER" withDrMp3AudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_DRWAVAUDIOIMPORTER" withDrWavAudioImporter)
+    (lib.cmakeBool "MAGNUM_WITH_ETCDECIMAGECONVERTER" withEtcDecImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_FAAD2AUDIOIMPORTER" withFaad2AudioImporter)
     (lib.cmakeBool "MAGNUM_WITH_FREETYPEFONT" withFreetypeFont)
+    (lib.cmakeBool "MAGNUM_WITH_GLTFIMPORTER" withGltfImporter)
+    (lib.cmakeBool "MAGNUM_WITH_GLTFSCENECONVERTER" withGltfSceneConverter)
     (lib.cmakeBool "MAGNUM_WITH_HARFBUZZFONT" withHarfBuzzFont)
     (lib.cmakeBool "MAGNUM_WITH_ICOIMPORTER" withIcoImporter)
     (lib.cmakeBool "MAGNUM_WITH_JPEGIMAGECONVERTER" withJpegImageConverter)
@@ -117,19 +169,28 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_KTXIMAGECONVERTER" withKtxImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_KTXIMPORTER" withKtxImporter)
     (lib.cmakeBool "MAGNUM_WITH_MESHOPTIMIZER" withMeshOptimizer)
+    (lib.cmakeBool "MAGNUM_WITH_MESHOPTIMIZERSCENECONVERTER" withMeshOptimizerSceneConverter)
     (lib.cmakeBool "MAGNUM_WITH_MINIEXRIMAGECONVERTER" withMiniExrImageConverter)
+    (lib.cmakeBool "MAGNUM_WITH_OPENEXRIMAGECONVERTER" withOpenExrImageConverter)
+    (lib.cmakeBool "MAGNUM_WITH_PLUTOSVGIMPORTER" withPlutoSvgImporter)
     (lib.cmakeBool "MAGNUM_WITH_PNGIMAGECONVERTER" withPngImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_PNGIMPORTER" withPngImporter)
     (lib.cmakeBool "MAGNUM_WITH_PRIMITIVEIMPORTER" withPrimitiveImporter)
+    (lib.cmakeBool "MAGNUM_WITH_SPIRVTOOLSSHADERCONVERTER" withGlslangShaderConverter)
+    (lib.cmakeBool "MAGNUM_WITH_SPIRVTOOLSSHADERCONVERTER" withSpirvToolsShaderConverter)
+    (lib.cmakeBool "MAGNUM_WITH_SPNGIMPORTER" withSpngImporter)
     (lib.cmakeBool "MAGNUM_WITH_STANFORDIMPORTER" withStanfordImporter)
+    (lib.cmakeBool "MAGNUM_WITH_STANFORDSCENECONVERTER" withStanfordSceneConverter)
+    (lib.cmakeBool "MAGNUM_WITH_STBDXIMAGECONVERTER" withStbdxImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_STBIMAGECONVERTER" withStbImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_STBIMAGEIMPORTER" withStbImageImporter)
+    (lib.cmakeBool "MAGNUM_WITH_STBRESIZEIMAGECONVERTER" withStbResizeImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_STBTRUETYPEFONT" withStbTrueTypeFont)
     (lib.cmakeBool "MAGNUM_WITH_STBVORBISAUDIOIMPORTER" withStbVorbisAudioImporter)
-    (lib.cmakeBool "MAGNUM_WITH_UVIMAGECONVERTER" withUvImageConverter)
-    (lib.cmakeBool "MAGNUM_WITH_GLTFIMPORTER" withGltfImporter)
-    (lib.cmakeBool "MAGNUM_WITH_DDSIMPORTER" withDdsImporter)
-    (lib.cmakeBool "MAGNUM_WITH_SPIRVTOOLSSHADERCONVERTER" withSpirvToolsShaderConverter)
+    (lib.cmakeBool "MAGNUM_WITH_UFBXIMPORTER" withUfbxImporter)
+    (lib.cmakeBool "MAGNUM_WITH_WEBPIMAGECONVERTER" withWebpImageConverter)
+    (lib.cmakeBool "MAGNUM_WITH_WEBPIMPORTER" withWebpImporter)
+    # keep-sorted end
   ]
   ++ lib.optionals (withBasisImageConverter || withBasisImporter) [
     "-DBASIS_UNIVERSAL_DIR=${basis-universal-src}"
@@ -138,11 +199,8 @@ stdenv.mkDerivation (_finalAttrs: {
 
   # FIXME:
   # Failing tests are :
-  # - AssimpImporter -> probably due to ASSIMP 6 not being fully supported upstream
   # - Faad2AudioImporter -> decoding error
   postPatch = ''
-    substituteInPlace src/MagnumPlugins/AssimpImporter/CMakeLists.txt \
-      --replace "add_subdirectory(Test" "#add_subdirectory(Test"
     substituteInPlace src/MagnumPlugins/Faad2AudioImporter/CMakeLists.txt \
       --replace "add_subdirectory(Test" "#add_subdirectory(Test"
   '';
