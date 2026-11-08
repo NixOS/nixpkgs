@@ -3,11 +3,16 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
+  pkg-config,
+  oniguruma,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-spellcheck";
   version = "0.15.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "drahnr";
@@ -18,11 +23,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-0TsDcdO7qCVcj6eNVu/lcehwsO2IhpNzW1C9zLbXXJs=";
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [ oniguruma ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
-  preCheck = "HOME=$(mktemp -d)";
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     "--skip=checker::hunspell::tests::hunspell_binding_is_sane"
@@ -34,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Checks rust documentation for spelling and grammar mistakes";
     mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
-    changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/drahnr/cargo-spellcheck/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license =
       with lib.licenses;
       OR [
