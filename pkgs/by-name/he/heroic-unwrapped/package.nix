@@ -151,9 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--set"
     "ELECTRON_FORCE_IS_PACKAGED"
     "1"
-    # Works around https://github.com/electron/electron/issues/32317
-    "--add-flags"
-    "--disable-gpu-compositing"
     "--add-flags"
     "${placeholder "out"}/share/heroic/resources/app.asar"
     "--add-flags"
