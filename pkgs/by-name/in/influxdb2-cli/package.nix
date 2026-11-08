@@ -4,16 +4,17 @@
   installShellFiles,
   lib,
   stdenv,
+  versionCheckHook,
 }:
 
 let
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
-    rev = "v${version}";
-    sha256 = "sha256-3DCvWaiGLw9OSs/b9za1jgrPDo2Txw5b5h46ElTMEks=";
+    tag = "v${version}";
+    sha256 = "sha256-4bXA7d3DXiUQNBNEYMK+6RzlsKwAjl9ju6qHTL4qP8E=";
   };
 
 in
@@ -24,7 +25,7 @@ buildGoModule {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-NsOkQwMH/AANUBReXmGR0fFQAtosA9iSla5JXyhrPYE=";
+  vendorHash = "sha256-SH9QYuk5i3n3E2HaukJ6X75vQYQHZag+DeB4aIYHTPI=";
   subPackages = [ "cmd/influx" ];
 
   ldflags = [
@@ -37,6 +38,10 @@ buildGoModule {
       --bash <($out/bin/influx completion bash) \
       --zsh  <($out/bin/influx completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "CLI for managing resources in InfluxDB v2";
