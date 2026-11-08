@@ -6,7 +6,9 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
   rust-jemalloc-sys,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
@@ -23,7 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-snm1x7OKC5Sz12C8MyAf7ph0O01ghFWWlk6lpHujR7c=";
 
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

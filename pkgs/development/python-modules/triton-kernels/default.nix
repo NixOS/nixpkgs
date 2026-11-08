@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   # since its introduction; use Triton's version to tell the releases apart.
   inherit (triton) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit (triton) src;
 

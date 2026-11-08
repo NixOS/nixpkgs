@@ -1796,6 +1796,7 @@ mapAliases {
   matrix-gtk-theme = throw "'matrix-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   matrix-synapse-tools.rust-synapse-compress-state = throw "'matrix-synapse-tools.rust-synapse-compress-state' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   matrix-synapse-tools.synadm = throw "'matrix-synapse-tools.synadm' has been renamed to/replaced by 'synadm'"; # Converted to throw 2025-10-27
+  matter-compiler = throw "'matter-compiler' has been removed as it was archived upstream in 2019."; # Added 2026-10-29
   mbedtls_2 = throw "'mbedtls_2' has been removed as it reached its end of life. Migrate to 'mbedtls'.";
   mcomix3 = throw "'mcomix3' has been renamed to/replaced by 'mcomix'"; # Converted to throw 2025-10-27
   mcphost = throw "'mcphost' has been removed as it was marked discontinued upstream"; # Added 2026-07-08
@@ -2360,6 +2361,8 @@ mapAliases {
   ragnarwm = throw "'ragnarwm' has been removed as it was broken"; # Added 2026-04-21
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
   rainbowstream = throw "'rainbowstream' has been removed because the Twitter streaming API it depends on was retired"; # Added 2026-09-06
+  rainloop-community = throw "'rainloop-community' has been removed because RainLoop is archived upstream; consider the maintained SnappyMail successor."; # Added 2026-09-02
+  rainloop-standard = throw "'rainloop-standard' has been removed because RainLoop is archived upstream; consider the maintained SnappyMail successor."; # Added 2026-09-02
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rapidsvn = throw "'rapidsvn' has been removed because upstream archived the project after development stopped in August 2021"; # Added 2026-09-02
@@ -2514,6 +2517,7 @@ mapAliases {
   solarc-gtk-theme = throw "'solarc-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   soldat-unstable = throw "'soldat-unstable' has been renamed to/replaced by 'opensoldat'"; # Converted to throw 2025-10-27
   somatic-sniper = throw "somatic-sniper has been removed as it was archived in 2020 and fails to build."; # Added 2025-10-14
+  sonixd = throw "'sonixd' has been removed as it is archived upstream and unmaintained. Consider using 'feishin', which is a rewrite by the original author."; # Added 2026-10-30
   sonusmix = throw "'sonusmix' has been removed due to lack of maintenance"; # Added 2025-08-27
   sosreport = warnAlias "'sosreport' has been renamed to 'sos'" sos; # Added 2026-11-07
   soulseekqt = throw "'soulseekqt' has been removed due to lack of maintenance in Nixpkgs in a long time. Consider using 'nicotine-plus' or 'slskd' instead."; # Added 2025-06-07

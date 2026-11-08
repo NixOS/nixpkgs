@@ -38,8 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-uF7B/lJIy96d9yKMLP/80FR5LgyX34MnxarMlSvx2Y0=";
   };
 
-  __structuredAttrs = true;
-
   patches = [
     ./disable-update-notifications.diff
   ];

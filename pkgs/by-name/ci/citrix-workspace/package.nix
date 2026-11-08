@@ -111,17 +111,17 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citrix-workspace";
-  version = "26.08.0.153";
+  version = "26.08.0.225";
 
   src = requireFile rec {
     name = "linuxx64-${finalAttrs.version}.tar.gz";
-    sha256 = "17f0nlg18bz2b6qq86i04igm551b54nym41zi13m81906fzgi4h7";
+    sha256 = "185sbj67b12iz2s49g0q1ixby79r8c2xflsvl2fghmh6ap1d8ca2";
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
       the 64-bit binaries, .tar.gz from:
 
-      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html
+      https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html
 
       (if you do not find version ${finalAttrs.version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
@@ -468,6 +468,6 @@ stdenv.mkDerivation (finalAttrs: {
       khaneliman
       flacks
     ];
-    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html";
+    homepage = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
   };
 })

@@ -1625,11 +1625,6 @@ with pkgs;
 
   steampipePackages = recurseIntoAttrs (callPackage ../tools/misc/steampipe-packages { });
 
-  inherit (callPackages ../servers/rainloop { })
-    rainloop-community
-    rainloop-standard
-    ;
-
   roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
@@ -5192,7 +5187,7 @@ with pkgs;
 
   certbot-full = certbot.withPlugins (
     cp: with cp; [
-      # FIXME unbreak certbot-dns-cloudflare
+      certbot-dns-cloudflare
       certbot-dns-google
       certbot-dns-inwx
       certbot-dns-ovh

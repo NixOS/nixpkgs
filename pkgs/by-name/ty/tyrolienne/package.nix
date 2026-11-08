@@ -2,6 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
+  aws-lc,
   cargo-bundle,
   copyDesktopItems,
   fetchFromGitea,
@@ -39,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-bundle
   ];
 
-  buildInputs = [ libadwaita ];
+  buildInputs = [
+    aws-lc
+    libadwaita
+  ];
 
   # Tests are disabled because there are none, avoids having to recompile everything twice
   doCheck = false;

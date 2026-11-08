@@ -1,10 +1,13 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   installShellFiles,
+  libgit2,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
@@ -33,14 +36,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-  # TODO: Upstream also provides Elvish and PowerShell completions,
-  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
-  postInstall = ''
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ libgit2 ];
+
+  # TODO: Upstream also provides Elvish completions,
+  # but `installShellCompletion` only has support for Bash, Zsh, Powershell and Fish at the moment.
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd air-formatter \
       --bash <($out/bin/air generate-shell-completion bash) \
       --fish <($out/bin/air generate-shell-completion fish) \
-      --zsh  <($out/bin/air generate-shell-completion zsh)
+      --zsh  <($out/bin/air generate-shell-completion zsh) \
+      --powershell <($out/bin/air generate-shell-completion powershell)
   '';
 
   meta = {

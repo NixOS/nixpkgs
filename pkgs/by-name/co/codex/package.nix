@@ -6,6 +6,7 @@
   fetchFromGitHub,
   installShellFiles,
   alsa-lib,
+  aws-lc,
   bubblewrap,
   clang,
   cmake,
@@ -23,13 +24,16 @@
   linkFarm,
   lld,
   nix-update-script,
+  oniguruma,
   pkg-config,
   openssl,
   ps,
   replaceVars,
   ripgrep,
+  sqlite,
   versionCheckHook,
   writeText,
+  zstd,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   _experimental-update-script-combinators,
 }:
@@ -166,8 +170,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libclang
+    oniguruma
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals supportsVoice [
     gst_all_1.gstreamer

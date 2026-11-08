@@ -8,6 +8,8 @@
   makeBinaryWrapper,
   libgit2,
   openssl,
+  aws-lc,
+  zstd,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    aws-lc
+    zstd
   ];
 
   env = {
