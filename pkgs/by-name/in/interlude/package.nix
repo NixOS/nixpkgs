@@ -1,21 +1,24 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
-  fetchpatch,
   dotnetCorePackages,
   copyDesktopItems,
   makeDesktopItem,
+  desktopToDarwinBundle,
   nix-update-script,
   imagemagick,
   libbass,
   libbass_fx,
   glfw,
   alsa-lib,
+  gtk3,
+  glib,
 }:
 
 let
-  version = "0.7.28.2";
+  version = "0.7.28.9";
 in
 buildDotnetModule {
   pname = "interlude";
@@ -26,26 +29,24 @@ buildDotnetModule {
     repo = "YAVSRG";
     tag = "interlude-v${version}";
     fetchSubmodules = true;
-    hash = "sha256-39GhnQcp5yaHC2fGnXkjny7e7QphBYih+PUuj3GR6qA=";
+    hash = "sha256-1MYuP52o5EETc9Fh6tO7h308ftenqOvuvMNkIIZ4tvM=";
   };
 
-  patches = [
-    # Fallback game dir when the executable dir is not writable
-    # https://github.com/YAVSRG/YAVSRG/pull/65
-    (fetchpatch {
-      name = "log-path.patch";
-      url = "https://github.com/YAVSRG/YAVSRG/commit/6e56a3d78caf4cbc8e17190fea3adb4d061d5284.patch";
-      hash = "sha256-eyvq2GIAZuHYhtAdYLe0csJxHZCrw9soXmRl2eJA7Bg=";
-    })
+  strictDeps = true;
 
-    # Looking for bass and bass_fx in LD_LIBRARY_PATH
+  patches = [
+    # Store game data outside the read-only Nix store
+    # https://github.com/YAVSRG/YAVSRG/pull/65
+    # Skip bundled audio library checks; runtimeDeps provides the libraries
     # https://github.com/YAVSRG/YAVSRG/pull/66
-    (fetchpatch {
-      name = "library-path.patch";
-      url = "https://github.com/YAVSRG/YAVSRG/commit/911a8b7f3931823d9fee99f0cb679a3c03298286.patch";
-      hash = "sha256-WUbI38EMGvlVl8h7YLJLPsGczhX5PWMLTmy94IRxaBM=";
-    })
+    ./fix-paths.patch
   ];
+
+  postPatch = ''
+    # support .NET 10.0
+    find . -name '*.fsproj' -exec sed -i \
+      's|<TargetFramework>net9[.]0</TargetFramework>|<TargetFramework>net10.0</TargetFramework>|g' {} +
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -54,8 +55,8 @@ buildDotnetModule {
 
   projectFile = "interlude/src/Interlude.fsproj";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   runtimeDeps = [
     # replaced bundled ones in engine/lib/linux-x64
@@ -63,9 +64,13 @@ buildDotnetModule {
     libbass_fx
     # replace the bundled one by OpenTK
     glfw
-    # not sure why this is needed but no audio devices can be found by libbass without this
-    alsa-lib
-  ];
+    # NativeFileDialogSharp
+    gtk3
+    glib
+  ]
+  # not sure why this is needed but no audio devices can be found by libbass without this
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   executables = [ "Interlude" ];
 
@@ -99,7 +104,9 @@ buildDotnetModule {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=interlude-v(.+)" ];
+  };
 
   meta = {
     description = "Keyboard rhythm game built for fun, part of the YAVSRG project";
@@ -110,7 +117,9 @@ buildDotnetModule {
       mit
     ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
+    # runtimeDeps doesn't work on darwin: https://github.com/NixOS/nixpkgs/issues/530072#issuecomment-4929467982
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "Interlude";
   };
 }
