@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   flask,
@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.6.3-unstable-2024-06-18";
+  version = "0.6.3-unstable-2025-08-27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = "flask-login";
-    rev = "30675c56b651389d47b47eeb1ad114decb35b8fc";
-    hash = "sha256-mIEYZnYWerjCetQuV2HRcmerMh2uLWNvHV7tfo5j4PU=";
+    rev = "c8bba84b9ba6768e878317fc46c54bd13fa1ac07";
+    hash = "sha256-kXpNJ1GKrymHF//0q0NMJZ3DdJ0MFKft3dOAyn9QD2A=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [
     flask
