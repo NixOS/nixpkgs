@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nativeBuildInputs = [
       meson
       ninja
-      pkgsCross.mingwW64.buildPackages.gcc
+      pkgsCross.mingw-msvcrt-x86_64.buildPackages.gcc
     ];
 
     mesonFlags = [

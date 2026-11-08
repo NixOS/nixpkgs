@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "0.0" "${finalAttrs.version}"
   ''
   # There is broken and complicated logic when setting X265_LATEST_TAG for
-  # mingwW64 builds. This bypasses the logic by setting it at the end of the
+  # mingw-msvcrt-x86_64 builds. This bypasses the logic by setting it at the end of the
   # file
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     echo 'set(X265_LATEST_TAG "${finalAttrs.version}")' >> ./cmake/Version.cmake
