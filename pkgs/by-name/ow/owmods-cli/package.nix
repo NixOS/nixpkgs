@@ -11,7 +11,6 @@
   makeWrapper,
   mono,
   wrapWithMono ? true,
-  openssl,
   aws-lc,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,9 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
     aws-lc
     libsoup_3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
   ];
 
   env = {
