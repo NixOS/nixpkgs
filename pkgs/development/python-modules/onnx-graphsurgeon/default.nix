@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   # 0.6.2 is only on GitHub; PyPI's latest is 0.6.1 (https://github.com/NVIDIA/TensorRT/issues/4895).
   version = "0.6.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   # cudaPackages.tensorrt-samples's source, the TensorRT OSS release of cudaPackages.tensorrt, so that Nixpkgs has one
   # TensorRT OSS tree
