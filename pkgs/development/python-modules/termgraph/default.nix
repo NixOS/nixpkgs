@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "termgraph";
-  version = "0.7.6";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkaz";
     repo = "termgraph";
     tag = "v${version}";
-    hash = "sha256-ruztSbouRpi88fMB6kijbHFZzS3ZvwqP/BBmTE3DlDs=";
+    hash = "sha256-a1Tq0zJKhD1EJN4EDDajsIVbBLP8eVXJvhEY9TsXZ4Q=";
   };
 
   build-system = [ hatchling ];
