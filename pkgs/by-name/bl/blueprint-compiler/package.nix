@@ -93,8 +93,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     };
   };
 
-  strictDeps = true;
-
   meta = {
     description = "Markup language for GTK user interface files";
     mainProgram = "blueprint-compiler";
