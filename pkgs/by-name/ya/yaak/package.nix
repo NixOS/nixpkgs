@@ -12,6 +12,8 @@
   glib,
   gtk3,
   openssl,
+  libgit2,
+  sqlite,
   pango,
   cairo,
   pixman,
@@ -78,6 +80,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gtk3
     openssl
+    libgit2
+    sqlite
     pango
     cairo
     pixman
