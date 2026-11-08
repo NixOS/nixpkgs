@@ -4,7 +4,11 @@ import json
 import subprocess
 import urllib.request
 
-fonts_file = "fonts.nix"
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+fonts_file = SCRIPT_DIR / "fonts.nix"
 fonts_data = json.loads(
     subprocess.check_output(["nix", "eval", "--json", "-f", fonts_file])
 )
