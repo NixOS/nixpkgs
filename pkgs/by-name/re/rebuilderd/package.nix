@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     openssl
     shared-mime-info
