@@ -4596,6 +4596,11 @@
     github = "c4f3z1n";
     githubId = 22820003;
   };
+  c4i0b = {
+    name = "Caio";
+    github = "c4i0b";
+    githubId = 274943357;
+  };
   c4patino = {
     name = "Ceferino Patino";
     email = "c4patino@gmail.com";
