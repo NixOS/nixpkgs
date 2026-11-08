@@ -5,12 +5,15 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
   version = "4.7";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.15";
 
   src = fetchFromGitHub {
     owner = "fox-it";
