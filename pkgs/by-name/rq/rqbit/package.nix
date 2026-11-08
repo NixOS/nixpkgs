@@ -8,6 +8,7 @@
   openssl,
   buildNpmPackage,
   nodejs,
+  cacert,
   nix-update-script,
   nixosTests,
   versionCheckHook,
@@ -15,13 +16,13 @@
 let
   pname = "rqbit";
 
-  version = "9.0.1";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-biF8AtHl2aYdxmuu0UNqN3Id2R0WoCOb5nKpdhCnKNY=";
+    hash = "sha256-qY40Yx+OyiwNP/pht0RFMJhgcFsKPz4rymUmANEJOBw=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -46,7 +47,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-BnHAv1PnsNmqVNxiA7KRHvl89cHISUMhITQ8DZu73zA=";
+  cargoHash = "sha256-nG2phD/dwNxas5fGtSqtRxpAniXjv1KbvVDuRF7fiSg=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -76,6 +77,9 @@ rustPlatform.buildRustPackage {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  # Required by test `tests::e2e_padded_files::test_e2e_download_duplicate_pad_filenames`
+  nativeCheckInputs = [ cacert ];
 
   checkFlags = [
     # skip these tests since they require internet access
