@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtklock-playerctl-module";
-  version = "5.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = "gtklock-playerctl-module";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eTCeLIwpyURHoJ7VPDv6uMuDXbs5bS0ZGWnQ0i3SgA0=";
+    hash = "sha256-+O3sZR0BA/EU5yFss0iDT+r6j7Zz4nKJdfymOE/nudg=";
   };
 
   nativeBuildInputs = [
