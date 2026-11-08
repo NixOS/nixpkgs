@@ -205,13 +205,13 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DSLIC3R_STATIC=0"
-    "-DSLIC3R_FHS=1"
-    "-DSLIC3R_GTK=3"
-    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
+    (lib.cmakeFeature "SLIC3R_STATIC" "0")
+    (lib.cmakeFeature "SLIC3R_FHS" "1")
+    (lib.cmakeFeature "SLIC3R_GTK" "3")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_LOG_DYN_LINK")
     # there is many different min versions set across different
     # Find*.cmake files, substituting them all is not viable
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   postInstall = ''
