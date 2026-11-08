@@ -54,7 +54,6 @@ buildPythonPackage (finalAttrs: {
   # the same change.
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # cudaPackages.cutlass's source, so that Nixpkgs has one CUTLASS
   inherit (cudaPackages.cutlass) src;
