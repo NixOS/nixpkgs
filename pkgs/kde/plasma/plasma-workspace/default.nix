@@ -54,6 +54,8 @@ mkKdeDerivation {
   '';
 
   extraCmakeFlags = [
+    # autodetected from the build host, conflicts with GLIBC_LOCALE_PREGENERATED
+    "-DUBUNTU_PACKAGEKIT=OFF"
     "-DGLIBC_LOCALE_GEN=OFF"
     "-DGLIBC_LOCALE_PREGENERATED=ON"
   ];
