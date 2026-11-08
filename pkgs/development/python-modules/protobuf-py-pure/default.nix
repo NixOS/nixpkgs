@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "protobuf-py-pure";
   version = "0.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "protobuf_py_pure";
