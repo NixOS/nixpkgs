@@ -22,13 +22,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ALYL407mWi8DCY+rLcURuPE1imPmcXfEFCn9ryp35Fo=";
+    hash = "sha256-FW6D9iI+loJq2jiwgj5FmsRCXHlD3zRgBrQkctDmBmE=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  cargoHash = "sha256-2z7EfGwdSBaW8qhcPXrhknAkRRf8pH6D7kVRY4ZV1bg=";
+  cargoHash = "sha256-QpzxJSoB3C98F++0wfaUFHZ7outXmtavn2kkcqofuBA=";
 
   nativeBuildInputs = [
     pkg-config
