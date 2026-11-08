@@ -4,6 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
+  # system libs
+  pkg-config,
+  pkgsHostTarget,
   # Deps
   arro3-core,
   protobuf,
@@ -49,12 +52,17 @@ buildPythonPackage rec {
 
   buildAndTestSubdir = "vegafusion-python";
 
-  buildInputs = [ protobuf ];
-
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  buildInputs = [
+    protobuf
+    pkgsHostTarget.zstd
   ];
+
+  nativeBuildInputs =
+    (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ])
+    ++ [ pkg-config ];
 
   dependencies = [
     arro3-core
