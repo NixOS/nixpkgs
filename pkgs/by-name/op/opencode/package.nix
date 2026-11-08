@@ -77,6 +77,7 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
+      # NOTE2: It’s likely that the Darwin hash will also need to be changed, but I have an idea of ​​how to test it
       outputHash =
         if stdenv.hostPlatform.isLinux then
           "sha256-e8mDIxjjiSQ9AZEZJ6WL2FxrH62iX7WIwQnfvgFD3H0="
