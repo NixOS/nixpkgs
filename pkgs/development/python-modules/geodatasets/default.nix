@@ -2,24 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
 
-  geopandas,
-  pooch,
-  pyogrio,
+  # build-system
   setuptools-scm,
+
+  # dependencies
+  pooch,
+
+  # tests
+  geopandas,
+  pyogrio,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geodatasets";
-  version = "2026.10.0";
+  version = "2026.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
-    tag = version;
-    hash = "sha256-Kh1Cvjlfq+GAPhYPjQCNt8mHJFeSrdUfg74NoSQm618=";
+    tag = finalAttrs.version;
+    hash = "sha256-TbDuFAJxaze/ehU3iuIPCRzlZsm6XwHokpawNtKU6EQ=";
   };
 
   build-system = [ setuptools-scm ];
@@ -30,11 +36,8 @@ buildPythonPackage rec {
     geopandas
     pyogrio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTestMarks = [
     # disable tests which require network access
@@ -49,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})
