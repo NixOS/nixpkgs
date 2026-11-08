@@ -15,7 +15,7 @@
   scour,
   tinycss2,
   gobject-introspection,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   gtk3,
 }:
 
@@ -67,7 +67,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     gobject-introspection
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   checkInputs = [
