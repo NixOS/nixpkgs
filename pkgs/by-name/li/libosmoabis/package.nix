@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     echo "${finalAttrs.version}" > .tarball-version
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
