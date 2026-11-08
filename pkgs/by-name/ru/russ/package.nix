@@ -2,11 +2,15 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "russ";
   version = "0.5.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ckampfe";
@@ -16,6 +20,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-G2s/IggPXfi7FXOoM5s9I9PEphYHjEdg9W1LCAxIk1M=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   # tests are network based :(
   doCheck = false;
