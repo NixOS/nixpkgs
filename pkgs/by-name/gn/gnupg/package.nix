@@ -27,7 +27,8 @@
   withPcsc ? !enableMinimal,
   pcsclite,
   guiSupport ? stdenv.hostPlatform.isDarwin,
-  pinentry,
+  pinentry-gnome3,
+  pinentry_mac,
   withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal,
   tpm2-tss,
   nixosTests,
@@ -35,6 +36,9 @@
 
 assert guiSupport -> !enableMinimal;
 
+let
+  pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gnome3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnupg";
   version = "2.4.9";
