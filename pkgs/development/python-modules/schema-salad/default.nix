@@ -1,51 +1,40 @@
 {
   lib,
-  ast-serialize,
-  black,
   buildPythonPackage,
+  black,
   cachecontrol,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   mistune,
   mypy-extensions,
   mypy,
+  pytest-xdist,
   pytestCheckHook,
   rdflib,
   requests,
   rich-argparse,
   ruamel-yaml,
-  setuptools-scm,
-  types-dataclasses,
-  types-requests,
-  types-setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "schema-salad";
-  version = "8.10.20260825112551";
+  version = "8.10.20261106141337";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = finalAttrs.version;
-    hash = "sha256-KQfrJd/TbW3LQzJ5Bm65srpyjhouZ9iohwYCMM8TCVg=";
+    hash = "sha256-dd1ZmD0BsJhRkNfdYr2B5ifkHwJH8Heq5umvjzqLFjg=";
   };
 
-  pythonRelaxDeps = [ "mistune" ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<11"]' '["setuptools_scm"]'
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm[toml]>=8.0.4,<11"' '"setuptools_scm[toml]"' \
-      --replace-fail "mypy[mypyc]==2.3.1" "mypy"
-    sed -i "/black>=/d" pyproject.toml
-  '';
-
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
-    ast-serialize
     cachecontrol
     mistune
     mypy
@@ -54,20 +43,18 @@ buildPythonPackage (finalAttrs: {
     requests
     rich-argparse
     ruamel-yaml
-    types-dataclasses
-    types-requests
-    types-setuptools
   ]
   ++ cachecontrol.optional-dependencies.filecache;
 
+  optional-dependencies = {
+    pycodegen = [ black ];
+  };
+
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
-
-  preCheck = ''
-    rm tox.ini
-  '';
 
   disabledTests = [
     "test_load_by_yaml_metaschema"
@@ -81,10 +68,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "schema_salad" ];
-
-  optional-dependencies = {
-    pycodegen = [ black ];
-  };
 
   meta = {
     description = "Semantic Annotations for Linked Avro Data";
