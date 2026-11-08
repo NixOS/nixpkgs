@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixport";
   version = "0.2.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "aiv-tmc";
     repo = "nixport";
