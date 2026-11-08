@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   pkg-config,
   openssl,
+  oniguruma,
   gitMinimal,
   python3,
   nix-update-script,
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    oniguruma
   ];
 
   preBuild = ''
