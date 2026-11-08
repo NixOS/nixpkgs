@@ -8,6 +8,8 @@
   oniguruma,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  oniguruma,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
