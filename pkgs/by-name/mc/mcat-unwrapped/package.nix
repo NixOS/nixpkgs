@@ -4,8 +4,11 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  aws-lc,
   buildPackages,
   nix-update-script,
+  oniguruma,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcat-unwrapped";
@@ -22,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    oniguruma
   ];
 
   checkFlags = [
