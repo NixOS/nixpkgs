@@ -9218,12 +9218,6 @@ with pkgs;
 
   ### GAMES
 
-  inherit (callPackages ../games/fteqw { })
-    fteqw
-    fteqw-dedicated
-    fteqcc
-    ;
-
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
 
   vanillara = vanillatd.override { appName = "vanillara"; };
