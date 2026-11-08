@@ -2,6 +2,8 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  pkg-config,
+  sqlite,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,7 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-WflCwLK4GI0UOzpJGnZBpNd1EDoxn/+wTgNz4HXfbaY=";
   };
+
   cargoHash = "sha256-zWL9LH83iz/bgodo19Pfitiuqj5Q5M93AgMOFwRErxk=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -25,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Terminal User Interface (TUI) budget tracker";
     changelog = "https://github.com/Feromond/budget-tracker-tui/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "Budget_Tracker";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tomasrivera ];
   };
 })
