@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/applicative-systems/vzvm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tfc ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "vzvm";
   };

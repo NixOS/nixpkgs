@@ -338,7 +338,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     homepage = "https://github.com/NVIDIA/warp";
     changelog = "https://github.com/NVIDIA/warp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
 })

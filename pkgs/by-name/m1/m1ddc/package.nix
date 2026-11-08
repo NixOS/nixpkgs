@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "m1ddc";
     maintainers = [ lib.maintainers.amarshall ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

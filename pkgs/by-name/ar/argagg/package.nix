@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = lib.platforms.darwin;
   };
 })

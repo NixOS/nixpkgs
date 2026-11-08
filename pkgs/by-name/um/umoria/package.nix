@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
       language by James E. Wilson in 1988, and released a Umoria.
     '';
     platforms = lib.platforms.unix;
-    badPlatforms = [ "aarch64-darwin" ];
+    badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       aciceri
       kenran

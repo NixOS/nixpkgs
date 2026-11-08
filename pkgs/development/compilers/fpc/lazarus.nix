@@ -165,6 +165,6 @@ stdenv.mkDerivation {
     homepage = "https://www.lazarus.freepascal.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
