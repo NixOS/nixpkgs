@@ -33,7 +33,7 @@
   pytest-forked,
   pytest-postgresql,
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_1CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -81,7 +81,7 @@ buildPythonPackage rec {
     pytest-forked
     pytest-postgresql
     pytest-xdist
-    pytestCheckHook
+    pytest9_1CheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
