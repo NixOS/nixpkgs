@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  flit-core_3,
   sphinx,
   pytestCheckHook,
   lxml,
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-+L4Weu31ZwvXyBLvUVlo/0cXxjz8nLTfXzS1T9VknDc=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ sphinx ];
 
