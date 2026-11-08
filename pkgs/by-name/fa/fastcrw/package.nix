@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastcrw";
-  version = "0.37.2";
+  version = "0.42.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastcrw";
     repo = "crw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zgzyCHSHqpN7lxkRxH78AZLcAqWacniPmDJDqTNmrcw=";
+    hash = "sha256-kmzUhdHp/h0/iWyO2ACYbPpYtp/i8n4rH7qsxughzQ8=";
   };
 
-  cargoHash = "sha256-VEbM7WvJHhfbbW+9c7fwl5NoFYmDvfQwVKR1R/S+JfU=";
+  cargoHash = "sha256-Z2/C76zSbml0HXxbNN0ufSD4RwTgtpuE/qsC0Wg84o0=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
