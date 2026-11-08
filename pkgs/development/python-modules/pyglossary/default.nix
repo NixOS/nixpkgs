@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyglossary";
-  version = "5.4.2";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ilius";
     repo = "pyglossary";
     tag = finalAttrs.version;
-    hash = "sha256-Q2QS/Kg4iN1WMFTADfoqN9UC9da/5Bcp7ZjiZ5V3InM=";
+    hash = "sha256-1paJ3P83vNvUALi+3HMF4O11RaNc8o33uFjKPJMYYuw=";
   };
 
   build-system = [
