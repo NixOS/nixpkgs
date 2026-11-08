@@ -27,6 +27,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://elfinfo.roboticoverlords.org/";
     changelog = "https://github.com/xyproto/elfinfo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
