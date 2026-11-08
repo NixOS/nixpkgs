@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # dependencies
   sphinx,
@@ -34,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-NlAAIw8X2gW2ejeSHcFrxj7Jl6OgnpZIXPK16yzxxRQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ sphinx ];
 
