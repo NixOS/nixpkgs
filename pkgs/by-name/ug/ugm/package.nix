@@ -36,6 +36,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ugm";
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })
