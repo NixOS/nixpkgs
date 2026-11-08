@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fedpkg";
   version = "1.48";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://forge.fedoraproject.org/packaging/fedpkg";

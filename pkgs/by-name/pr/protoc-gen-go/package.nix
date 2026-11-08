@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -11,13 +12,16 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-go";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1jaQXOwy5x2Yqzkkb5l/kbOhFVUgZ0N1yemDhgq32VE=";
   };
 
   vendorHash = "sha256-EAkrbx9pTBhZ0y0ub14PnMINrk1M6yEgnGapzpgXqBU=";
 
   subPackages = [ "cmd/protoc-gen-go" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Go support for Google's protocol buffers";

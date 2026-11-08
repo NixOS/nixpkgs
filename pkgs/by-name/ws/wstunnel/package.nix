@@ -1,8 +1,10 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   rustPlatform,
   nixosTests,
+  pkg-config,
   nix-update-script,
   versionCheckHook,
 }:
@@ -22,7 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 
-  nativeBuildInputs = [ versionCheckHook ];
+  nativeBuildInputs = [
+    pkg-config
+    versionCheckHook
+  ];
+  buildInputs = [ aws-lc ];
   doInstallCheck = true;
 
   checkFlags = [

@@ -15,7 +15,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "django-embed-video";
   version = "1.4.11";
-  __structuredAttrs = true;
 
   pyproject = true;
 

@@ -32,7 +32,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   # flashinfer requires the exact same version for the jit cache
   inherit (flashinfer-python) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch =
     # The FP4 KV dequantization module only supports SM >= 8.0, but is added unconditionally.
