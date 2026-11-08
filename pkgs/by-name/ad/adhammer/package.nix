@@ -40,6 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Active Directory security-assessment toolkit";
     homepage = "https://github.com/icedracon/adhammer";
