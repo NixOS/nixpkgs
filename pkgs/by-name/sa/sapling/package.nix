@@ -7,8 +7,10 @@
   curl,
   gettext,
   libclang,
+  libgit2,
   pkg-config,
   openssl,
+  zstd,
   rustPlatform,
   rustc,
   fetchYarnDeps,
@@ -152,7 +154,9 @@ python312Packages.buildPythonApplication {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ gettext ];
 
   buildInputs = [
+    libgit2
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
