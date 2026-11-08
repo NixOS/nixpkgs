@@ -5187,7 +5187,7 @@ with pkgs;
 
   certbot-full = certbot.withPlugins (
     cp: with cp; [
-      # FIXME unbreak certbot-dns-cloudflare
+      certbot-dns-cloudflare
       certbot-dns-google
       certbot-dns-inwx
       certbot-dns-ovh
