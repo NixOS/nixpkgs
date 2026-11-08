@@ -24,6 +24,7 @@
   blueprint-compiler,
   glycin-loaders,
   libglycin,
+  aws-lc,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
@@ -65,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libglycin
     glycin-loaders
+    aws-lc
   ]
   ++ (with gst_all_1; [
     gstreamer
