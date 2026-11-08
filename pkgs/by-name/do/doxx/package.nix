@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -9,6 +11,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "doxx";
   version = "0.1.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
@@ -19,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Eix63WAxOdK4//WBDfAdqMrtHCM1VSepSy841hCndeI=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
   # https://github.com/bgreenwell/doxx/issues/65
   checkFlags = [ "--skip=terminal_image::tests::test_renderer_creation" ];
 
@@ -27,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
