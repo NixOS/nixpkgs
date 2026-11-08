@@ -73,6 +73,9 @@ Example: [repology.org/maintainer/pbsds](https://repology.org/maintainer/pbsds%4
 
 [nixpk.gs/pr-tracker](https://nixpk.gs/pr-tracker.html) and [nixpkgs-tracker.ocfox.me](https://nixpkgs-tracker.ocfox.me/) can visualize the release status of any nixpkgs pull request.
 
+[nixpkgs-ctl.kamadorueda.com](https://nixpkgs-ctl.kamadorueda.com/) lists the open update pull requests of the packages you maintain, your review requests, and the pull requests you can merge with the nixpkgs-merge-bot (or the rule that blocks it).
+It also lists packages without a maintainer.
+
 ## Reviewing contributions
 
 ### Individual maintainer list
