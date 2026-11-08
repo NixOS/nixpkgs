@@ -11,6 +11,7 @@
   nodejs,
   python3,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   # Electron updates can break Heroic, so try to use same version as upstream.
   # If the used electron version is higher than upstream's then the node-abi package might need to be updated
   electron_43,
@@ -59,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
@@ -81,6 +84,18 @@ stdenv.mkDerivation (finalAttrs: {
       -c.extraMetadata.desktopName=com.heroicgameslauncher.hgl.desktop
 
     runHook postBuild
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    # Tests create directories two levels above tmpdir(), so use the hook's nested $HOME.
+    export TMPDIR="$HOME"
+    pnpm --offline test:ci
+
+    runHook postCheck
   '';
 
   # --disable-gpu-compositing is to work around upstream bug
