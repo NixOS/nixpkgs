@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "prettytable";
     repo = "prettytable";
     tag = version;
     hash = "sha256-Wx3mt6b+tg3yz0f6r9NVFduLKWr8GBXXJI99RBc1VO4=";
@@ -43,8 +43,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Display tabular data in a visually appealing ASCII table format";
-    homepage = "https://github.com/jazzband/prettytable";
-    changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
+    homepage = "https://github.com/prettytable/prettytable";
+    changelog = "https://github.com/prettytable/prettytable/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

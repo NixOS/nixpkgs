@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Arfey";
+    owner = "django-async";
     repo = "django-async-backend";
     tag = "v${version}";
     hash = "sha256-pfcqTtyV37bZFSZaRcFIt9cgR8XZ7PDijVC18lMziRU=";
@@ -66,8 +66,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "True async Django ORM and PostgreSQL backend with connection pooling and async transactions";
-    homepage = "https://github.com/Arfey/django-async-backend";
-    changelog = "https://github.com/Arfey/django-async-backend/releases/tag/${src.tag}";
+    homepage = "https://github.com/django-async/django-async-backend";
+    changelog = "https://github.com/django-async/django-async-backend/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     broken = lib.versionOlder (lib.versions.major django.version) "6";

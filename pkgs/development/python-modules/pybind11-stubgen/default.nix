@@ -13,7 +13,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   src = fetchFromGitHub {
-    owner = "sizmailov";
+    owner = "pybind";
     repo = "pybind11-stubgen";
     tag = "v${finalAttrs.version}";
     hash = "sha256-J2LydgkiNQp+2/agwBCSTtr+Ci4zONLkHmnMLFBww24=";
@@ -28,9 +28,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pybind11_stubgen" ];
 
   meta = {
-    changelog = "https://github.com/sizmailov/pybind11-stubgen/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/pybind/pybind11-stubgen/releases/tag/v${finalAttrs.version}";
     description = "Generates stubs for python modules";
-    homepage = "https://github.com/sizmailov/pybind11-stubgen";
+    homepage = "https://github.com/pybind/pybind11-stubgen";
     license = lib.licenses.bsd3Lbnl;
     maintainers = with lib.maintainers; [ qbisi ];
   };

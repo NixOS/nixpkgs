@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "openstenoproject";
+    owner = "opensteno";
     repo = "plover_stroke";
     tag = finalAttrs.version;
     hash = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
@@ -49,8 +49,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Helper class for working with steno strokes";
-    homepage = "https://github.com/openstenoproject/plover_stroke";
-    license = lib.licenses.gpl2Plus; # https://github.com/openstenoproject/plover_stroke/issues/4
+    homepage = "https://github.com/opensteno/plover_stroke";
+    license = lib.licenses.gpl2Plus; # https://github.com/opensteno/plover_stroke/issues/4
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
 })

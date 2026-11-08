@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 buildPythonPackage {
-  pname = "ts1-signatures";
+  pname = "th1";
   version = "0-unstable-2024-08-10";
   pyproject = true;
 

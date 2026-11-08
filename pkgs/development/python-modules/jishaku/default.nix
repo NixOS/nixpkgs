@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Gorialis";
+    owner = "scarletcafe";
     repo = "jishaku";
     tag = finalAttrs.version;
     hash = "sha256-8kSdzrut7LYjglpHc5dToOIQTrPsW4lVAeIWY4rzdmU=";
@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Debugging and testing cog for discord.py bots";
     homepage = "https://jishaku.readthedocs.io/en/latest";
-    changelog = "https://github.com/Gorialis/jishaku/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/scarletcafe/jishaku/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     mainProgram = "jishaku";
     license = lib.licenses.mit;

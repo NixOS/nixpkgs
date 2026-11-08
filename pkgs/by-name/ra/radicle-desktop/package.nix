@@ -9,6 +9,7 @@
   fetchNpmDeps,
   npmHooks,
   lib,
+  libgit2,
   libsoup_3,
   nodejs,
   openssh,
@@ -83,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     glib
     gtk3
+    libgit2
     libsoup_3
     openssl
   ]

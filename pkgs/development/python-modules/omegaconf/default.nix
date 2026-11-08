@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "omry";
+    owner = "hydra-ecosystem";
     repo = "omegaconf";
     tag = "v${version}";
     hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
 
-    # https://github.com/omry/omegaconf/pull/1137
+    # https://github.com/hydra-ecosystem/omegaconf/pull/1137
     ./0000-add-support-for-dataclasses_missing_type.patch
   ];
 
@@ -80,8 +80,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Framework for configuring complex applications";
-    homepage = "https://github.com/omry/omegaconf";
-    changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
+    homepage = "https://github.com/hydra-ecosystem/omegaconf";
+    changelog = "https://github.com/hydra-ecosystem/omegaconf/blob/v${version}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

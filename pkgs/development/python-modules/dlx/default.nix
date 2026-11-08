@@ -13,7 +13,7 @@ buildPythonPackage {
   # untagged releases
   src = fetchFromGitHub {
     owner = "sraaphorst";
-    repo = "dlx_python";
+    repo = "dlx-python";
     rev = "02d1ed534df60513095633da07e67a6593b9e9b4";
     hash = "sha256-E5bdXwybaahHdjEEIgemp7FRTwm34zSzN73y6xddzTA=";
   };
@@ -28,7 +28,7 @@ buildPythonPackage {
 
   meta = {
     description = "Implementation of Donald Knuth's Dancing Links algorithm";
-    homepage = "https://github.com/sraaphorst/dlx_python";
+    homepage = "https://github.com/sraaphorst/dlx-python";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
