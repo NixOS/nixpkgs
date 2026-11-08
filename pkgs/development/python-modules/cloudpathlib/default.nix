@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  flit-core_3,
 
   # optional-dependencies
   azure-storage-blob,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
         --replace-fail "--report-log reportlog.jsonl" ""
     '';
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   optional-dependencies = {
     all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;
