@@ -466,7 +466,7 @@ class Driver:
         self.test_script()
         # TODO: Collect coverage data
         for machine in self.machines:
-            if machine.is_up():
+            if machine.requires_sync() and machine.is_up():
                 machine.execute("sync")
 
     def start_all(self) -> None:
