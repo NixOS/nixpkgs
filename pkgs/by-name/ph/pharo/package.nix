@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
-    changelog = "https://github.com/pharo-project/pharo/releases/";
+    changelog = "https://github.com/pharo-project/pharo-vm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
@@ -96,5 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ samirbgno ];
   };
 })
