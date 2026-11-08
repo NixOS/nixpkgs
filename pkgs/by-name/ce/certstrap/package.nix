@@ -2,24 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "certstrap";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "certstrap";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/KdlGm3rpvvJpQcwR2GiJkkdd0Pb7BP8VyKPtIRjh7M=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-5w79prxZrmB7KazOagmdJH9e5GM7iybQy8ttWxVNTMU=";
   };
 
-  vendorHash = "sha256-Xdq+Lp7IpwrbaPwlni1KT2KDKb9nsHIYSWJ/nDyqm94=";
+  vendorHash = "sha256-wIEr8du0aQvcvQ4VXL6VdhtNUMo/bWVH32gaRQktSA0=";
 
   subPackages = [ "." ];
 
   ldflags = [ "-X main.release=${finalAttrs.version}" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
