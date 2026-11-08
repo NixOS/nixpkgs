@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutecosmic";
-  version = "0.2.0-unstable-2026-08-15";
+  version = "0.2.0-unstable-2026-11-08";
 
   src = fetchFromGitHub {
     owner = "IgKh";
     repo = "cutecosmic";
-    rev = "5fa7c228ce04c5310c61dd975e940397711e3cef";
-    hash = "sha256-OjoJ7z8HZmyrd7UTZJ3n1jqGRTSuN0PviOwHl5WwJZw=";
+    rev = "707244c52a578d4766205ab4cdb03561cb5b306f";
+    hash = "sha256-3/ILsK8PBKjRynZEiGWj6TfvPdXS2UUmnCWo+ZEJdIg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/bindings";
-    hash = "sha256-WInS4yY43OlRzGLXYdXUlelzpm+sjBHiyfQNQ+IAM8M=";
+    hash = "sha256-vFShpb87LYOdPR0APgUL0M28nXWN9Gvmf2q45VKwSYA=";
   };
 
   cargoRoot = "bindings";
@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace platformtheme/CMakeLists.txt \
       --replace-fail "\''${QT_INSTALL_PLUGINS}/platformthemes" \
       "${qt6.qtbase.qtPluginPrefix}/platformthemes"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${QT_INSTALL_LIBS}/cutecosmic" \
+      "${builtins.placeholder "out"}/lib"
   '';
 
   passthru = {
