@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   boost,
   cacert,
   cmake,
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     boost
     libgit2
     openssl
