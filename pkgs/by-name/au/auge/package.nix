@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Arthur-Ficial/auge/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Br1ght0ne ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     mainProgram = "auge";
     sourceProvenance = [
       lib.sourceTypes.binaryNativeCode

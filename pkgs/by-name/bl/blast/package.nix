@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
     license = lib.licenses.publicDomain;
 
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       luispedro
       mulatta

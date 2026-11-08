@@ -1,5 +1,6 @@
 {
   stdenvNoCC,
+  lib,
   fetchurl,
   _7zz,
   makeWrapper,
@@ -43,6 +44,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = meta // {
     changelog = "https://proxyman.com/changelog";
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

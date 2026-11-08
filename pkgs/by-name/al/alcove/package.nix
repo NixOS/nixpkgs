@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/henrikruscon/alcove-releases/releases/tag/${finalAttrs.version}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ delafthi ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

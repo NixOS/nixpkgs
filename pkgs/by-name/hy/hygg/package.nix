@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://terminaltrove.com/hygg";
     downloadPage = "https://github.com/kruseio/hygg";
     license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.FKouhai ];
   };
 })

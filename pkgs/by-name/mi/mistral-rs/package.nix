@@ -280,7 +280,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       if cudaSupport then
         lib.platforms.linux
       else if metalSupport then
-        [ "aarch64-darwin" ]
+        lib.platforms.darwin
       else if mklSupport then
         [ "x86_64-linux" ]
       else

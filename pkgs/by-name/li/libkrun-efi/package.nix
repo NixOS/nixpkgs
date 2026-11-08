@@ -146,6 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/containers/libkrun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ quinneden ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 })

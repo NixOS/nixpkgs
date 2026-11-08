@@ -48,6 +48,6 @@ buildPythonPackage rec {
       kinnrai
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.darwin;
   };
 }
