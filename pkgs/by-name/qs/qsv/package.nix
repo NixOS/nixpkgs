@@ -5,6 +5,8 @@
   lib,
   pkg-config,
   rustPlatform,
+  aws-lc,
+  rust-jemalloc-sys,
   sqlite,
   zstd,
   cmake,
@@ -47,6 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Pm4VilMxVcm/BiZ3dZw3YJnhSsdrcmu4oSz7y1WiijM=";
 
   buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
     file
     sqlite
     zstd
