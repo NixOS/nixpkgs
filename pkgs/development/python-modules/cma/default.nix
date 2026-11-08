@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cma";
   version = "4.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CMA-ES";
