@@ -47,7 +47,6 @@
 
   liberation_ttf,
   cacert,
-  jre-generate-cacerts,
 
   nixpkgs-openjdk-updater,
 
@@ -133,6 +132,8 @@ let
   # should concat to this list below instead
   patchesForVersion = lib.concatAttrValues (builtins.mapAttrs findApplicable allPatches);
 
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
   versionSplit = builtins.match (if atLeast11 then "(.+)+(.+)" else "(.+)-b(.+)") version;
@@ -202,10 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!atLeast11) [
     lndir
   ]
-  ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    # Certificates generated using keytool in `installPhase`
-    buildPackages.jdk8
-  ]
   ++ lib.optionals atLeast21 [
     ensureNewerSourcesForZipFilesHook
   ]
@@ -257,7 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
   # JDK's build system attempts to specifically detect
   # and special-case WSL, and we don't want it to do that,
   # so pass the correct platform names explicitly
-  configurePlatforms = lib.optionals atLeast17 [
+  configurePlatforms = [
     "build"
     "host"
   ];
@@ -279,6 +276,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-zlib=system"
     "--with-giflib=system"
   ]
+  ++ lib.optional (atLeast11 && isCross) "--with-build-jdk=${jdk-bootstrap'.home}"
   ++ (
     if atLeast23 then
       [
@@ -345,14 +343,15 @@ stdenv.mkDerivation (finalAttrs: {
       configureFlags+=("--with-jobs=''${NIX_BUILD_CORES}")
     ''
     # Build lib/security/cacerts from cacert instead of the bundled CA list.
-    # It goes into the java.base jmod, so jlink images also get it.
-    # Like upstream, write a PKCS12 store without a password: the JDK opens
+    # JDK 8's keytool writes its default JKS format for this list.
+    # For JDK 11+ it goes into the java.base jmod, so jlink images also get it.
+    # Like upstream it is a PKCS12 store without a password: the JDK opens
     # cacerts without one, and cannot read password-protected certificates.
-    + lib.optionalString atLeast11 ''
+    + ''
       mkdir "$NIX_BUILD_TOP/cacerts-gen"
       pushd "$NIX_BUILD_TOP/cacerts-gen"
       JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
-        ${jre-generate-cacerts} ${jdk-bootstrap'.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+        ${buildPackages.jre-generate-cacerts} ${lib.getExe' jdk-bootstrap' "keytool"} ${cacert}/etc/ssl/certs/ca-bundle.crt
       popd
       configureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
     '';
@@ -507,17 +506,6 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
         fi
       done
-    ''
-    # Generate certificates.
-    + ''
-      cd $jre/lib/openjdk/jre/lib/security
-      rm cacerts
-      ${jre-generate-cacerts} ${
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          "$jre/lib/openjdk/jre/bin/keytool"
-        else
-          "keytool"
-      } ${cacert}/etc/ssl/certs/ca-bundle.crt
     ''
   );
 
