@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+      flokli
+      sempiternal-aurora
       yuka
     ];
     platforms = lib.platforms.linux;
