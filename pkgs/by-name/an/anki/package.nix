@@ -11,6 +11,8 @@
   ninja,
   callPackage,
   nixosTests,
+  nix-update-script,
+  _experimental-update-script-combinators,
   nodejs,
   jq,
   protobuf_31,
@@ -353,6 +355,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     inherit python;
     withAddons = ankiAddons: callPackage ./with-addons.nix { inherit ankiAddons; };
     tests.anki-sync-server = nixosTests.anki-sync-server;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      python.pkgs.anki-mac-helper.updateScript
+    ];
   };
 
   meta = {
