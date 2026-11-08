@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-ug79p75Oa5lsd9COWO2aIx3jN7de1QZggMFiOPAN5kQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   meta = {
     description = "Tool to detect open source licenses from texts";
