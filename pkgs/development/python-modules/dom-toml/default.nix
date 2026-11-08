@@ -4,9 +4,7 @@
   buildPythonPackage,
   domdf-python-tools,
   fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  setuptools,
+  flit-core_3,
   tomli-w,
 }:
 
@@ -22,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-ukRnQecbgZBdTHhyEBIoHUwGTwQVJxo+u7Dqg4Kjvsw=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ flit-core_3 ];
 
   dependencies = [ domdf-python-tools ];
 
