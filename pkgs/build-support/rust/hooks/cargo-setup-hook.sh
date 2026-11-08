@@ -146,6 +146,11 @@ cargoUseSystemLibs() {
 
   # https://github.com/tikv/jemallocator/blob/a181911517adff5331e43dfd9804086f7c392a25/jemalloc-sys/build.rs#L132
   export JEMALLOC_OVERRIDE="${JEMALLOC_OVERRIDE:-"$sentinel_dir/lib/libjemalloc"}"
+
+  # https://github.com/google/shaderc-rs/blob/78e480d4ef3471b0ddec5ff093c52fdcdd90cadf/shaderc-sys/build/build.rs#L204-L205
+  # Note that this does not prevent shaderc from being built, as the presence
+  # of CARGO_FEATURE_BUILD_FROM_SOURCE takes precedence
+  export SHADERC_LIB_DIR="${SHADERC_LIB_DIR:-"$sentinel_dir/lib/shaderc"}"
 }
 
 # Cargo defaults to one job per host CPU. Limit builds that invoke Cargo
