@@ -10,6 +10,7 @@
   ffmpeg_8,
   alsa-lib,
   gtk3,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     # The handwritten FFI bindings in prpr-avc target FFmpeg 8.
     ffmpeg_8
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for crate alsa-sys
