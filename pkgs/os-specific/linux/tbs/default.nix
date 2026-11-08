@@ -13,22 +13,22 @@ let
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "3f1faba3930568fd2d472a2fe8c57af8d7084672";
-    hash = "sha256-tq92yqJVJgAYy7PTY/nk0Q6sWJ0kdSrw38JEOOhfwGQ=";
+    rev = "2ce787de9f6e81b4294692a45de15596ae2e1322";
+    hash = "sha256-mY+InJqBIdZYkPnHPiNQiGkpmxvfdJITsUpRe3+jfUQ=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "bc02baf59046b02e3eb71653d8aa8d98e79dc4e1";
-    hash = "sha256-P0ASmWro3j3dk7LZQbUKXcGL+2c9fdjM7RgEfk0iDMs=";
+    rev = "ff326ab69e786d447a0e0e967cb45acb5d5ca9ff";
+    hash = "sha256-wRmTVyBSHzVGUWYB//B7Q/ewtZJvP7+GlA6tPcACYjw=";
   };
 
 in
 stdenv.mkDerivation {
   pname = "tbs";
-  version = "20250510-${kernel.version}";
+  version = "20260724-${kernel.version}";
 
   srcs = [
     media
