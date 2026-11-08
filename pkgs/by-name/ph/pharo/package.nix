@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pharo";
-  version = "10.3.4+3.884643b";
+  version = "10.3.12";
 
   src = fetchzip {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
-    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-v${finalAttrs.version}-Linux-x86_64-c-src.zip";
-    hash = "sha256-JBN0gPVMIUFzrdLqrCnCvf4cbZMfpluO2/jCxk3U+M8=";
+    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-v${finalAttrs.version}+0.4b06224-Linux-x86_64-c-src.zip";
+    hash = "sha256-xdSuGrTsETSf0ECOYM2zV1KONXOfeWJLGnehqYXX+/k=";
   };
 
   strictDeps = true;
@@ -54,16 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Prevents CMake from trying to download stuff.
     "-DBUILD_BUNDLE=OFF"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-incompatible-pointer-types"
-  ];
-
-  # Fix missing version.info
-  preBuild = ''
-    mkdir -p /build/source/build/
-    echo "${finalAttrs.version}" > /build/source/build/version.info
-  '';
 
   installPhase = ''
     runHook preInstall
