@@ -24,6 +24,17 @@ in
       description = "URL of the Immich instance";
     };
 
+    publicBaseUrl = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "https://photos.example.com";
+      description = ''
+        The public URL of IPP, used to generate absolute URLs such as the `og:image` preview metadata.
+        If unset, IPP derives it from the host header of each request, which is what you want when serving
+        the same instance under multiple domains.
+      '';
+    };
+
     port = mkOption {
       type = types.port;
       default = 3000;
@@ -78,6 +89,9 @@ in
         IMMICH_URL = cfg.immichUrl;
         IPP_PORT = toString cfg.port;
         IPP_CONFIG = "${format.generate "config.json" cfg.settings}";
+      }
+      // lib.optionalAttrs (cfg.publicBaseUrl != null) {
+        PUBLIC_BASE_URL = cfg.publicBaseUrl;
       };
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
