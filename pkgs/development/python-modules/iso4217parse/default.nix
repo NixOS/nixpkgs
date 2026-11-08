@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "iso4217parse";
   version = "0.6.2-unstable-2026-09-08";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tammoippen";
