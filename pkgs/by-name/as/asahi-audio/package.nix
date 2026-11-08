@@ -9,13 +9,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "asahi-audio";
-  version = "4.1";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "asahi-audio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4UOng1M/nVE/2OkKf+kqCdea4mUCvktW2M0x5Um4CPI=";
+    hash = "sha256-pa7a4nu2QN32LxOoU2jy4mm11scfUELaGfuDo5Ggroo=";
   };
 
   makeFlags = [
@@ -52,27 +52,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       purpose with a little bit of effort.
 
       Currently Supported Devices (speakers)
-        - MacBook Air (13-inch, M1, 2020)
-        - MacBook Air (13-inch, M2, 2022)
-        - MacBook Air (15-inch, M2, 2023)
+        - MacBook Air (13-inch, M1-M3)
+        - MacBook Air (15-inch, M2-M3)
         - MacBook Pro (13-inch, M1/M2, 2020/2022)
-        - MacBook Pro (14-inch, M1/M2 Pro/Max, 2021/2023)
-        - MacBook Pro (16-inch, M1/M2 Pro/Max, 2021/2023)
-        - Mac mini (M1/M2/M2 Pro, 2020/2023)
-        - Mac Studio (M1/M2 Max/Ultra, 2022/2023)
+        - MacBook Pro (14-inch, M3, M1-M3 Pro/Max)
+        - MacBook Pro (16-inch, M1-M3 Pro/Max)
+        - Mac mini (M1/M2/M2 Pro)
+        - Mac Studio (M1-M3 Max/Ultra)
 
       Currently Supported Devices (microphones)
-        - MacBook Air (13-inch, M1, 2020)
-        - MacBook Air (13-inch, M2, 2022)
-        - MacBook Air (15-inch, M2, 2023)
+        - MacBook Air (13-inch, M1-M3)
+        - MacBook Air (15-inch, M2-M3)
         - MacBook Pro (13-inch, M1/M2, 2020/2022)
-        - MacBook Pro (14-inch, M1/M2 Pro/Max, 2021/2023)
-        - MacBook Pro (16-inch, M1/M2 Pro/Max, 2021/2023)
+        - MacBook Pro (14-inch, M3, M1-M3 Pro/Max)
+        - MacBook Pro (16-inch, M1-M3 Pro/Max)
+
     '';
     homepage = "https://github.com/AsahiLinux/asahi-audio";
     changelog = "https://github.com/AsahiLinux/asahi-audio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      flokli
+      sempiternal-aurora
+    ];
     platforms = [ "aarch64-linux" ];
   };
 })
