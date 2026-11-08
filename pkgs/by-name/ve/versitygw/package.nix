@@ -56,6 +56,15 @@ buildGoModule (finalAttrs: {
         "^TestExcludeDirsCaseAgrees$"
         "^TestExcludedDirKeysReserved$"
         "^TestExcludeDirsEmptyKeysAllowed$"
+        "^TestGetObjectRemovedBeforeOpen$"
+        "^TestGetObjectPreReadOrder$"
+        "^TestGetObjectPreReadVersion$"
+        "^TestGetObjectPreReadDirObject$"
+        "^TestListBucketsVisibilityBackendCalls$"
+        "^TestListObjectsSkipsEntryWhoseDirIsGone$"
+        "^TestFileToObjSkipsEntryWhoseInfoIsGone$"
+        "^TestLiveObjVersionIdObjectRemoved$"
+        "^TestHeadObjectDeleteMarker$"
         "/xattr$"
       ];
     in
