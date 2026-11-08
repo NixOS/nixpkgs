@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://lists.iana.org/hyperkitty/list/tz@iana.org/message/WCIAEEDCPA5HT3LLJK6YQ6FH7ND5ORIK/
     release_timestamp=$(awk '/^Release /{print $4, $5, $6; exit}' NEWS)
     release_time_t=$(date -d"$release_timestamp" +%s)
-    checkFlagsArray+=(
+    checkFlags+=(
       "CHECK_NOW_TIMESTAMP=$release_time_t"
     )
   '';
