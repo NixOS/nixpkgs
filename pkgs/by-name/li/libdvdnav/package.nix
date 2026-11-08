@@ -4,11 +4,21 @@
   fetchurl,
   pkg-config,
   libdvdread,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdnav";
   version = "6.1.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://get.videolan.org/libdvdnav/${finalAttrs.version}/libdvdnav-${finalAttrs.version}.tar.bz2";
@@ -24,7 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "dvdnav"
+    ];
   };
 
-  passthru = { inherit libdvdread; };
+  passthru = {
+    inherit libdvdread;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage.dev;
+        versionCheck = true;
+      };
+    };
+  };
 })
