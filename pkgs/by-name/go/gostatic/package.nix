@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     description = "Fast static site generator";
     homepage = "https://github.com/sansolovyov/gostatic";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "gostatic";
   };
 })
