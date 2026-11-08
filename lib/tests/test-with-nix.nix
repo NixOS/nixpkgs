@@ -34,7 +34,6 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
     datadir="${nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
     export HOME=$(mktemp -d)
-    export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix

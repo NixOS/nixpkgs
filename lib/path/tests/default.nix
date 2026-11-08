@@ -27,7 +27,6 @@ pkgs.runCommand "lib-path-tests"
   ''
     # Needed to make Nix evaluation work
     export TEST_ROOT=$(pwd)/test-tmp
-    export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
     export NIX_LOCALSTATE_DIR=$TEST_ROOT/var
     export NIX_LOG_DIR=$TEST_ROOT/var/log/nix
