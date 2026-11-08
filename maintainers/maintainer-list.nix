@@ -18466,12 +18466,6 @@
     githubId = 155063357;
     name = "Matteo Bongiovanni";
   };
-  matteopacini = {
-    email = "m@matteopacini.me";
-    github = "matteo-pacini";
-    githubId = 3139724;
-    name = "Matteo Pacini";
-  };
   mattfield = {
     email = "matt@mild.systems";
     github = "mattfield";

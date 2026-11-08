@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hughobrien
-      matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
