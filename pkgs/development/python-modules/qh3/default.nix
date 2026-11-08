@@ -9,7 +9,7 @@
   pkg-config,
   pytest-asyncio,
   pytest-mock,
-  pytestCheckHook,
+  pytest9_1CheckHook,
   rustPlatform,
   stdenv,
 }:
@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
     dnspython
     pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytest9_1CheckHook
   ];
 
   __darwinAllowLocalNetworking = true;
