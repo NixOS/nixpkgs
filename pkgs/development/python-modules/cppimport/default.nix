@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cppimport";
   version = "26.04.17";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tbenthompson";
