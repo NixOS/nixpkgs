@@ -5,26 +5,14 @@ set -eou pipefail
 
 version=$1
 
-linux_cuda_version="cu130"
+linux_cuda_version="cu132"
 linux_bucket="https://download.pytorch.org/whl/${linux_cuda_version}"
 cpu_bucket="https://download.pytorch.org/whl/cpu"
 
 url_and_key_list=(
-  "x86_64-linux-310 $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-cp310-cp310-manylinux_2_28_x86_64.whl torchvision-${version}-cp310-cp310-linux_x86_64.whl"
-  "x86_64-linux-311 $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-cp311-cp311-manylinux_2_28_x86_64.whl torchvision-${version}-cp311-cp311-linux_x86_64.whl"
-  "x86_64-linux-312 $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-cp312-cp312-manylinux_2_28_x86_64.whl torchvision-${version}-cp312-cp312-linux_x86_64.whl"
-  "x86_64-linux-313 $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-cp313-cp313-manylinux_2_28_x86_64.whl torchvision-${version}-cp313-cp313-linux_x86_64.whl"
-  "x86_64-linux-314 $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-cp314-cp314-manylinux_2_28_x86_64.whl torchvision-${version}-cp314-cp314-linux_x86_64.whl"
-  "aarch64-darwin-310 $cpu_bucket/torchvision-${version}-cp310-cp310-macosx_14_0_arm64.whl torchvision-${version}-cp310-cp310-macosx_14_0_arm64.whl"
-  "aarch64-darwin-311 $cpu_bucket/torchvision-${version}-cp311-cp311-macosx_14_0_arm64.whl torchvision-${version}-cp311-cp311-macosx_14_0_arm64.whl"
-  "aarch64-darwin-312 $cpu_bucket/torchvision-${version}-cp312-cp312-macosx_14_0_arm64.whl torchvision-${version}-cp312-cp312-macosx_14_0_arm64.whl"
-  "aarch64-darwin-313 $cpu_bucket/torchvision-${version}-cp313-cp313-macosx_14_0_arm64.whl torchvision-${version}-cp313-cp313-macosx_14_0_arm64.whl"
-  "aarch64-darwin-314 $cpu_bucket/torchvision-${version}-cp314-cp314-macosx_14_0_arm64.whl torchvision-${version}-cp314-cp314-macosx_14_0_arm64.whl"
-  "aarch64-linux-310 $cpu_bucket/torchvision-${version}%2Bcpu-cp310-cp310-manylinux_2_28_aarch64.whl torchvision-${version}-cp310-cp310-linux_aarch64.whl"
-  "aarch64-linux-311 $cpu_bucket/torchvision-${version}%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl torchvision-${version}-cp311-cp311-linux_aarch64.whl"
-  "aarch64-linux-312 $cpu_bucket/torchvision-${version}%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl torchvision-${version}-cp312-cp312-linux_aarch64.whl"
-  "aarch64-linux-313 $cpu_bucket/torchvision-${version}%2Bcpu-cp313-cp313-manylinux_2_28_aarch64.whl torchvision-${version}-cp313-cp313-linux_aarch64.whl"
-  "aarch64-linux-314 $cpu_bucket/torchvision-${version}%2Bcpu-cp314-cp314-manylinux_2_28_aarch64.whl torchvision-${version}-cp314-cp314-linux_aarch64.whl"
+  "x86_64-linux $linux_bucket/torchvision-${version}%2B${linux_cuda_version}-py3-none-manylinux_2_28_x86_64.whl torchvision-${version}-py3-none-linux_x86_64.whl"
+  "aarch64-darwin $cpu_bucket/torchvision-${version}-py3-none-macosx_14_0_arm64.whl torchvision-${version}-py3-none-macosx_14_0_arm64.whl"
+  "aarch64-linux $cpu_bucket/torchvision-${version}%2Bcpu-py3-none-manylinux_2_28_aarch64.whl torchvision-${version}-py3-none-linux_aarch64.whl"
 )
 
 hashfile="binary-hashes-$version.nix"
