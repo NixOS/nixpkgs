@@ -51,7 +51,6 @@
   withKtxImageConverter ? false,
   withKtxImporter ? false,
   withLunaSvgImporter ? false,
-  withMeshOptimizer ? false,
   withMeshOptimizerSceneConverter ? false,
   withMiniExrImageConverter ? false,
   withOpenExrImageConverter ? true,
@@ -168,7 +167,6 @@ stdenv.mkDerivation (_finalAttrs: {
     (lib.cmakeBool "MAGNUM_WITH_JPEGIMPORTER" withJpegImporter)
     (lib.cmakeBool "MAGNUM_WITH_KTXIMAGECONVERTER" withKtxImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_KTXIMPORTER" withKtxImporter)
-    (lib.cmakeBool "MAGNUM_WITH_MESHOPTIMIZER" withMeshOptimizer)
     (lib.cmakeBool "MAGNUM_WITH_MESHOPTIMIZERSCENECONVERTER" withMeshOptimizerSceneConverter)
     (lib.cmakeBool "MAGNUM_WITH_MINIEXRIMAGECONVERTER" withMiniExrImageConverter)
     (lib.cmakeBool "MAGNUM_WITH_OPENEXRIMAGECONVERTER" withOpenExrImageConverter)
