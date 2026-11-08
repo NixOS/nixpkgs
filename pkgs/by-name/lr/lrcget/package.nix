@@ -16,6 +16,7 @@
 
   alsa-lib,
   openssl,
+  sqlite,
   webkitgtk_4_1,
 
   nix-update-script,
@@ -133,6 +134,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     alsa-lib
     openssl
+    sqlite
     webkitgtk_4_1
   ];
 
