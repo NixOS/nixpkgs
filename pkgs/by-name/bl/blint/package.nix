@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
@@ -8,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blint";
-  version = "3.0.5";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "blint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RloxQlnhl4zCto6QO09UZs+29QRCpL0/PJCzYrVi8ng=";
+    hash = "sha256-bNPJjH3L0r4KXrKA4nVhykRe3arKCxPZVYtPvKVwR60=";
   };
 
   build-system = [
@@ -23,7 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    pyyaml
+    apkinspector
     appdirs
     apsw
     ar
@@ -31,17 +32,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     defusedxml
     email-validator
     lief
+    multi-demangle
     oras
     orjson
     packageurl-python
     pydantic
+    pyyaml
     rich
     symbolic
+    wasm-tools
   ];
 
   pythonRelaxDeps = [
     "apsw"
-    "symbolic"
   ];
 
   pythonImportsCheck = [
@@ -54,9 +57,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # only runs on windows and fails, obviously
   disabledTests = [
+    # only runs on windows and fails, obviously
     "test_demangle"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # `/bin/ls` and `/usr/lib/libgmalloc.dylib` are not available when testing
+    # inside the sandbox
+    "test_macho_metadata_exposes_filetype"
+
+    # The test expects Apple's `strip`, whereas in Nixpkgs it's `llvm-strip`,
+    # so the results differ and it fails
+    "test_universal_binary_attributes_properties_per_slice"
   ];
 
   passthru.tests = { inherit (nixosTests) blint; };
