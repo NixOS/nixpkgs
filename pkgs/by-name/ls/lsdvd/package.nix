@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NCMd0gj8jF0xpixMz3Vp77O+vG/Qso98HxFwoB+b3Zc=";
   };
 
+  patches = [
+    ./fix-clang-build.patch
+  ];
+
   buildInputs = [
     libdvdread
     libxml2
@@ -33,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/lsdvd/";
     description = "Display information about audio, video, and subtitle tracks on a DVD";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "lsdvd";
   };
 })
