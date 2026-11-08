@@ -282,7 +282,7 @@ let
         );
     in
     ''
-      ${optionalString cfg.logPerVirtualHost ''
+      ${optionalString (cfg.logPerVirtualHost && cfg.logFormat != "none") ''
         ErrorLog ${cfg.logDir}/error-${escapeFileName hostOpts.hostName}.log
         CustomLog ${cfg.logDir}/access-${escapeFileName hostOpts.hostName}.log ${hostOpts.logFormat}
       ''}
