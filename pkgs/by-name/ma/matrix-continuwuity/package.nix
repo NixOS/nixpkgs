@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bzip2
     zstd
     rust-jemalloc-sys-unprefixed
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     liburing
   ];
 
