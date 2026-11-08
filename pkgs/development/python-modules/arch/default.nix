@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "arch";
   version = "8.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bashtage";
