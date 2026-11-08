@@ -27,6 +27,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-l8zTzr2y8i2ENb8iadIBz59YLmNwfDZcrbUqIUibFqg=";
 
+  # See https://github.com/NixOS/nixpkgs/issues/415328
+  # Remove reqwest's "native-tls" feature and use the default "rustls" backend.
+  # On macOS with sandbox = true, fails with errSSLBadCert (-9808 / "bad certificate format")
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail ', features = ["native-tls"]' ""
+  '';
+
   env.YARN_ZIP_SUPPORTED_CACHE_VERSION = berryCacheVersion;
   env.LIBZIP_SYS_USE_PKG_CONFIG = 1;
 
