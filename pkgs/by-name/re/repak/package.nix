@@ -2,12 +2,17 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repak";
   version = "0.2.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "trumank";
@@ -18,16 +23,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-1jpjVQ+EiDUnGaTwDHMpLwLA/CkVGdZ+iLiWEkEpAwg=";
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
   checkFlags = [
     "--skip=test::test_oodle"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unreal Engine .pak file library and CLI in rust";
     homepage = "https://github.com/trumank/repak";
-    changelog = "https://github.com/trumank/repak/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/trumank/repak/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit
       asl20
