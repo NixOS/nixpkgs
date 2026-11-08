@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromCodeberg,
-  zig,
+  zig_0_17,
   pkg-config,
   wayland-scanner,
   wayland-protocols,
@@ -12,6 +12,9 @@
   nix-update-script,
 }:
 
+let
+  zig = zig_0_17;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-channel";
   version = "0.5.2";
