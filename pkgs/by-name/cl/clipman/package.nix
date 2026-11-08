@@ -20,6 +20,13 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-H/a5n396U0+guxj/bTGf6R1LkPtGV0YnX7ETdC+pDTo=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.version=${finalAttrs.version}"
+  ];
+
   outputs = [
     "out"
     "man"
