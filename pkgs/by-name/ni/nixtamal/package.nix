@@ -18,21 +18,85 @@
   nix-prefetch-pijul,
   testers,
   nixtamal,
+  withTUI ? ocamlPackages ? console && stdenv.hostPlatform.parsed.cpu.bits >= 64,
 }:
 
-ocamlPackages.buildDunePackage (finalAttrs: {
+let
+  ocPkgs = ocamlPackages.overrideScope (
+    _: prev: {
+      jsont = prev.jsont.override {
+        withBrr = false;
+        withBytesrw = true;
+        withTypegist = false;
+      };
+    }
+  );
+in
+ocPkgs.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "2.4.0";
+  version = "3.0.0";
   release_year = 2026;
 
-  minimalOCamlVersion = "5.3";
+  minimalOCamlVersion = "5.4";
 
   src = fetchdarcs {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-XHIs3CW94++3p2tQlDGYYG9eCmqIyV5ofNuPWEAsElI=";
+    hash = "sha256-CSnmSN8TD0a8TKbJPs0vggh11XMqf9GpKP/Du04a1b8=";
   };
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    removeReferencesTo
+    installShellFiles
+    # Compile-time preprocessing
+    ocPkgs.ppx_deriving
+    # Completions
+    ocPkgs.cmdliner
+    # For manpages
+    python3Packages.docutils
+    python3Packages.pygments
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
+
+  buildInputs = with ocPkgs; [
+    cmdliner
+    fmt
+  ];
+
+  propagatedBuildInputs =
+    (with ocPkgs; [
+      camomile
+      eio
+      eio_main
+      eio_posix
+      jingoo
+      (jsont.override {
+        withBrr = false;
+        withBytesrw = true;
+        withTypegist = false;
+      })
+      ppx_blob
+      kdl
+      logs
+      saturn
+      stdint
+      xdg
+    ])
+    ++ lib.optional withTUI ocPkgs.console;
+
+  nativeCheckInputs = [
+    nix
+  ];
+
+  checkInputs = with ocPkgs; [
+    alcotest
+    ppx_deriving_qcheck
+    qcheck
+    qcheck-alcotest
+    qcheck-core
+  ];
 
   outputs = [
     "bin"
@@ -43,55 +107,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     "out"
   ];
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-    removeReferencesTo
-    installShellFiles
-    # Compile-time preprocessing
-    ocamlPackages.ppx_deriving
-    # Completions
-    ocamlPackages.cmdliner
-    # For manpages
-    python3Packages.docutils
-    python3Packages.pygments
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
-
-  buildInputs = with ocamlPackages; [
-    cmdliner
-    fmt
-  ];
-
-  propagatedBuildInputs = with ocamlPackages; [
-    camomile
-    eio
-    eio_main
-    eio_posix
-    jingoo
-    (jsont.override {
-      withBrr = false;
-      withBytesrw = true;
-      withTypegist = false;
-    })
-    ppx_blob
-    kdl
-    logs
-    saturn
-    stdint
-    xdg
-  ];
-
-  nativeCheckInputs = [
-    nix
-  ];
-
-  checkInputs = with ocamlPackages; [
-    alcotest
-    ppx_deriving_qcheck
-    qcheck
-    qcheck-alcotest
-    qcheck-core
-  ];
+  env = {
+    DUNE_CACHE = "disabled";
+  };
 
   postPatch = ''
     substituteInPlace bin/main.ml --subst-var version
@@ -105,18 +123,17 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
     dune install \
        -j "$NIX_BUILD_CORES" \
-       --cache="disabled" \
        --prefix="$out" \
        --bindir="$bin/bin" \
        --datadir="$data/share" \
        --docdir="$doc/share/doc" \
        --mandir="$man/share/man" \
-       --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
+       --libdir="$lib/lib/ocaml/${ocPkgs.ocaml.version}/site-lib" \
        nixtamal
 
     cp -r "$src/meta" "$src/ncl" "$data/share"/*/
 
-    for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"; do
+    for dep in "${ocPkgs.ocaml}" "${ocPkgs.camomile}"; do
        remove-references-to -t "$dep" "$bin/bin/nixtamal"
     done
 
