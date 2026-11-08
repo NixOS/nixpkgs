@@ -10,13 +10,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "mtheli";
   domain = "philips_sonicare_ble";
-  version = "0.32.1";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "philips_sonicare_ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kVrWDjTwi7fi3ZyrmrRzqKuzkAQFNZIkDsvRtrBlQPY=";
+    hash = "sha256-RSW5NA/TemBYtlhUFl2hEgAAgc2nenA1YFS7VCVTDLQ=";
   };
 
   nativeCheckInputs = [
