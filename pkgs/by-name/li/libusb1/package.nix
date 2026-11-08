@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Checking these by propagated hook might improve discoverability
   propagatedNativeBuildInputs = lib.optional enableUdev udevCheckHook;
 
+  strictDeps = true;
+
   dontDisableStatic = withStatic;
 
   # libusb-1.0.rc:11: fatal error: opening dependency file .deps/libusb-1.0.Tpo: No such file or directory
