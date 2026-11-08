@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drumkv1";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/drumkv1-${finalAttrs.version}.tar.gz";
-    hash = "sha256-tMzNLWclKkYStICOn4ztb2vcYnA2WniSPSjZNk9TmqQ=";
+    hash = "sha256-bRNoPtO1nwDA12nY+2EimUsNQe1YB3/ZIhK4elR62jY=";
   };
 
   buildInputs = [
