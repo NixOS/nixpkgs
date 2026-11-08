@@ -7094,6 +7094,8 @@ self: super: with self; {
 
   google-air-quality-api = callPackage ../development/python-modules/google-air-quality-api { };
 
+  google-analytics-data = callPackage ../development/python-modules/google-analytics-data { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
