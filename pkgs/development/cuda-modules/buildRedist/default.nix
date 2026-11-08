@@ -20,6 +20,7 @@
   stdenv,
   stdenvNoCC,
   zstd,
+  pkgConfigCheckHook,
   testers,
 }:
 let
@@ -147,6 +148,7 @@ extendMkDerivation {
       # Checking
       doInstallCheck ? true,
       allowFHSReferences ? false,
+      nativeInstallCheckInputs ? [ ],
 
       # Fixups
       appendRunpaths ? [ ],
@@ -375,6 +377,15 @@ extendMkDerivation {
             "${getDev removeStubsFromRunpathHook}"
         '';
 
+      # most redist .pc files supply the first two digits yet our $version
+      # often has three digits
+      dontPkgConfigCheckVersion = true;
+      nativeInstallCheckInputs =
+        lib.optionals (finalAttrs ? pkgConfigModules) [
+          pkgConfigCheckHook
+        ]
+        ++ nativeInstallCheckInputs;
+
       passthru = passthru // {
         inherit redistName release;
 
@@ -398,11 +409,6 @@ extendMkDerivation {
           passthru.tests or { }
           // optionalAttrs (meta ? cmakeConfigModules) {
             cmake-config = testers.hasCmakeConfigModules {
-              package = finalAttrs.finalPackage;
-            };
-          }
-          // optionalAttrs (meta ? pkgConfigModules) {
-            pkg-config = testers.hasPkgConfigModules {
               package = finalAttrs.finalPackage;
             };
           };
