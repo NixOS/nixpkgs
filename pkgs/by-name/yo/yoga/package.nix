@@ -23,13 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gtest ];
   nativeBuildInputs = [ cmake ];
 
-  patches = [ ./yoga-find-gtest.patch ];
-
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=array-bounds"
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
+
   ];
 
   doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./tests/yogatests
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Yoga is an embeddable layout engine targeting web standards.";
