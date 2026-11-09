@@ -352,6 +352,7 @@
   ./programs/throne.nix
   ./programs/thunar.nix
   ./programs/thunderbird.nix
+  ./programs/tlog.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
   ./programs/trippy.nix
