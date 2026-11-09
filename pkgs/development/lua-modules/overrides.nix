@@ -49,6 +49,8 @@
   pkg-config,
   readline,
   ripgrep,
+  rust-analyzer,
+  rustc,
   rustPlatform,
   sqlite,
   tree-sitter,
@@ -57,6 +59,7 @@
   util-linux,
   versionCheckHook,
   vimPlugins,
+  vscode-extensions,
   yajl,
   zip,
   zlib,
@@ -1183,14 +1186,25 @@ in
     ];
   };
 
-  rustaceanvim = prev.rustaceanvim.overrideAttrs {
+  rustaceanvim = prev.rustaceanvim.overrideAttrs (old: {
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace spec/integration/lsp_spec.lua \
+        --replace-fail '#[cfg(target_os = "linux")]' '#[cfg(any(target_os = "linux", target_os = "macos"))]'
+    '';
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
       final.nlua
       final.bustedCheckHook
       writableTmpDirAsHomeHook
+      rust-analyzer
+      cargo
+      rustc
+      vscode-extensions.vadimcn.vscode-lldb.adapter
     ];
-  };
+    preCheck = ''
+      LUA_PATH="${vimPlugins.nvim-dap}/lua/?.lua;${vimPlugins.nvim-dap}/lua/?/init.lua;$LUA_PATH"
+    '';
+  });
 
   sofa = prev.sofa.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs ++ [
