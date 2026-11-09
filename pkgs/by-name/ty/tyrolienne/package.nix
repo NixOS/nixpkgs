@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/tyrolienne target/release/tyrolienne
 
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     mkdir -p $out/Applications
     mv $app_path $out/Applications/
 
