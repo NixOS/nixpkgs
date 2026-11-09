@@ -33,7 +33,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snowflake-connector-python";
   version = "4.3.0";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bJK6U5lomcPMGeKEmv+9m+uM5+3GJKKUA3dEwP/ynVo=";
   };
 
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Tests require encrypted secrets, see
@@ -150,8 +150,8 @@ buildPythonPackage rec {
   meta = {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
-    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${finalAttrs.src.tag}/DESCRIPTION.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})
