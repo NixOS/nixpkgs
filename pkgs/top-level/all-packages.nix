@@ -1951,11 +1951,6 @@ with pkgs;
 
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
-  gnupgMinimal = gnupg.override {
-    enableMinimal = true;
-    guiSupport = false;
-  };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
