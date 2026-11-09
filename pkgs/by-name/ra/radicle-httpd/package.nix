@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
   version = "0.31.0";
 
+  __structuredAttrs = true;
+
   env.RADICLE_HTTPD_VERSION = finalAttrs.version;
 
   src = fetchFromRadicle {
