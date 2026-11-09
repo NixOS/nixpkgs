@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+    substituteInPlace configure.ac \
+      --replace-fail "AM_INIT_AUTOMAKE([-Wall -Werror])" "AM_INIT_AUTOMAKE([-Wall])"
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
