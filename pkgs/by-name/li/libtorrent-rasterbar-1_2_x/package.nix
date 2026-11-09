@@ -48,6 +48,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  env.SETUPTOOLS_USE_DISTUTILS = "stdlib";
+
   nativeBuildInputs = [
     autoreconfHook
     boost-build
