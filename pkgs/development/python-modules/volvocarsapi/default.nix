@@ -8,7 +8,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "volvocarsapi";
   version = "0.5.0";
   pyproject = true;
@@ -16,17 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thomasddn";
     repo = "volvo-cars-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KxDgtGe7SrrYdj+dT4/C/xH85mkih9PDzFxj6QqFleU=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -36,15 +32,13 @@ buildPythonPackage rec {
   # Package has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "volvocarsapi"
-  ];
+  pythonImportsCheck = [ "volvocarsapi" ];
 
   meta = {
     description = "Python client for the Volvo Cars API";
     homepage = "https://github.com/thomasddn/volvo-cars-api";
-    changelog = "https://github.com/thomasddn/volvo-cars-api/releases/tag/v${version}";
+    changelog = "https://github.com/thomasddn/volvo-cars-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})
