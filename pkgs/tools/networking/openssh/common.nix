@@ -71,7 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
-
+  ]
+  ++ lib.optionals (!linkOpenssl) [
+    # TODO: make unconditional on staging-26.05.
     # Fix the build with --without-openssl (linkOpenssl = false) in 10.6p2.
     (fetchpatch {
       name = "openssh-auth-passwd-include-stdlib.patch";
