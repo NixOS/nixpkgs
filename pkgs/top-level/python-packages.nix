@@ -12075,7 +12075,9 @@ self: super: with self; {
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
 
-  nemo-relay = callPackage ../development/python-modules/nemo-relay { };
+  nemo-relay = callPackage ../development/python-modules/nemo-relay {
+    inherit (pkgs) zstd;
+  };
 
   nemosis = callPackage ../development/python-modules/nemosis { };
 
