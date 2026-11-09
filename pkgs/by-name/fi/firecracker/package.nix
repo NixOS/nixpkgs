@@ -105,6 +105,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      iamanaws
       usertam
       thoughtpolice
       qjoly
