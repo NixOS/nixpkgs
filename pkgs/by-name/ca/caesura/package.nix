@@ -7,6 +7,8 @@
   lame,
   makeBinaryWrapper,
   sox_ng,
+  pkg-config,
+  aws-lc,
 }:
 let
   runtimeDeps = [
@@ -28,8 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-/l4A1uI71aJsFwhST4xr/vrY3K2wmZHGeICk5Kq9C5g=";
 
+  buildInputs = [ aws-lc ];
   nativeBuildInputs = [
     makeBinaryWrapper
+    pkg-config
   ];
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
