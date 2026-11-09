@@ -3,9 +3,11 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  libgit2,
   libz,
   openssl,
   git,
+  bash,
   nix-update-script,
   stdenv, # for meta.broken
 }:
@@ -32,9 +34,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    libgit2
     libz
     openssl
   ];
+
+  postPatch = ''
+    substituteInPlace tests/pr.rs \
+      --replace-fail '#!/bin/bash' '#!${lib.getExe bash}'
+  '';
 
   nativeCheckInputs = [ git ];
 
