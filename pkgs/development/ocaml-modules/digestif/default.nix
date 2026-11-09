@@ -10,11 +10,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "digestif";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${finalAttrs.version}/digestif-${finalAttrs.version}.tbz";
-    hash = "sha256-2amLFiGWUd7965lsedGr7tOv8wm6wDlMmPkfog8rjvk=";
+    hash = "sha256-Df+Aeg5vN1Kh0Hx5aCDEpnMN47pHiclxC+/ZYFE40y4=";
   };
 
   propagatedBuildInputs = [ eqaf ];
