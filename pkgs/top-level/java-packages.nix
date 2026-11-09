@@ -8,7 +8,12 @@ let
     ;
 in
 {
-  inherit (pkgs) openjfx17 openjfx21 openjfx25;
+  inherit (pkgs)
+    openjfx17
+    openjfx21
+    openjfx25
+    openjfx27
+    ;
   compiler = lib.recurseIntoAttrs (
     let
       # merge meta.platforms of both packages so that dependent packages and hydra build them
