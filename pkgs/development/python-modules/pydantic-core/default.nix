@@ -8,6 +8,7 @@
   hypothesis,
   inline-snapshot,
   pytest-benchmark,
+  pytest-examples,
   pytest-run-parallel,
   pytest-timeout,
   pytest-mock,
@@ -19,14 +20,14 @@
 let
   pydantic-core = buildPythonPackage rec {
     pname = "pydantic-core";
-    version = "2.46.4";
+    version = "2.50.4";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic";
       tag = "core-v${version}";
-      hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
+      hash = "sha256-Q5dvfgbbYw3QeB1nY+eUIBoVsUpxgLKE8jTX6CJV+Zs=";
     };
 
     sourceRoot = "${src.name}/pydantic-core";
@@ -38,7 +39,7 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-5L317YTV7/Bc/YJLLzc745oJntiYkcZupdeUxiQwcOU=";
+      hash = "sha256-AHOFlhGY5ka6wFl4LmhBbmie1einzoyMde7YJ5yWhzw=";
     };
 
     nativeBuildInputs = [
@@ -65,6 +66,7 @@ let
       pytest-timeout
       dirty-equals
       pytest-benchmark
+      pytest-examples
       pytest-mock
       pytest-run-parallel
       typing-inspection
