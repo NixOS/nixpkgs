@@ -7,17 +7,7 @@
 let
   cfg = config.services.nostr-rs-relay;
   settingsFormat = pkgs.formats.toml { };
-  configFile = settingsFormat.generate "config.toml" (
-    cfg.settings
-    // {
-      database = {
-        data_directory = config.services.nostr-rs-relay.dataDir;
-      };
-      network = {
-        port = config.services.nostr-rs-relay.port;
-      };
-    }
-  );
+  configFile = settingsFormat.generate "config.toml" cfg.settings;
 in
 {
   options.services.nostr-rs-relay = {
@@ -45,6 +35,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.nostr-rs-relay.settings = {
+      database.data_directory = lib.mkDefault cfg.dataDir;
+      network.port = lib.mkDefault cfg.port;
+    };
+
     systemd.services.nostr-rs-relay = {
       description = "nostr-rs-relay";
       wants = [ "network.target" ];
@@ -56,7 +51,7 @@ in
         Restart = "on-failure";
         Type = "simple";
 
-        ReadWritePaths = [ cfg.dataDir ];
+        ReadWritePaths = [ cfg.settings.database.data_directory ];
 
         RuntimeDirectory = "nostr-rs-relay";
         StateDirectory = "nostr-rs-relay";
