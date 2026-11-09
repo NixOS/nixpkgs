@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vowpal-wabbit";
-  version = "9.11.2";
+  version = "9.11.9";
 
   __structuredAttrs = true;
 
@@ -23,14 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
     tag = finalAttrs.version;
-    hash = "sha256-A1Eqj843QidqVlADi6qEKFuw+T0h1FxkRwJ9oRTZgeU=";
+    hash = "sha256-4TvvTV51d4PjvRXOXFyJOpRJlPwulL+qIz62oig9P9g=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4916
-    ./add-missing-includes.patch
-  ];
 
   postPatch = ''
     # Avoid duplicate add RapidJSON
