@@ -3112,6 +3112,8 @@ self: super: with self; {
 
   chardet_5 = callPackage ../development/python-modules/chardet/5.nix { };
 
+  chardet_7 = callPackage ../development/python-modules/chardet/7.nix { };
+
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };
 
   chat-downloader = callPackage ../development/python-modules/chat-downloader { };
