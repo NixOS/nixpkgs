@@ -30,6 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # The tests pick free ports in a racy way when run in parallel.
+  dontUseCargoParallelTests = true;
+
   preCheck = ''
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
