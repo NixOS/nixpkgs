@@ -14,20 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywebtransport";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wtransport";
     repo = "pywebtransport";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VHkQffB9LC9/GJGMHfSrGixXtmAgEROUVgQexCWGvMY=";
+    hash = "sha256-saZmQCON7QQrgct720hFQ53r9mD/fo5rIBUsHl8DcYY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     cargoRoot = "crates";
-    hash = "sha256-WfSiNZZFTYSUh5wR1yBfb0SAmngqt/XbtgH9Ycpe+wA=";
+    hash = "sha256-hOkBNzvdDNmXcDiNaK4+zxpMT2Zc2I6ekfcMma5arcM=";
   };
 
   build-system = with rustPlatform; [
