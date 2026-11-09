@@ -17,13 +17,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kilo";
-  version = "7.3.40";
+  version = "7.8.27";
 
   src = fetchFromGitHub {
     owner = "Kilo-Org";
     repo = "kilocode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jw2C8C7dFPwOGp8tg6ewcRXdVsJEDDFSe+xuF86Xwfc=";
+    hash = "sha256-xbCJNC8hLrX4lX+ECoTvdew7C+xONxhHVQdE6b3lxKM=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-Defmk7fN49UQtBpmWIFGnUiPlBpJtLp+8QaFFQCAY8k=";
+    outputHash = "sha256-Xhpd7CEUEzYm+A6oadupBflk1Lh72RGzAAxTPiiqcmE=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
