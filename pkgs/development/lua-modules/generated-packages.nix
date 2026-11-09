@@ -6190,21 +6190,23 @@ final: prev: {
       fetchzip,
       luaAtLeast,
       luaOlder,
+      luarocks-build-luke,
     }:
     buildLuarocksPackage {
       pname = "std.normalize";
-      version = "3-1";
+      version = "5.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/std.normalize-3-1.rockspec";
-          sha256 = "0b1f570ccidj85c2xp1zzkr5s808ff68absp2f95az25bzzaignc";
+          url = "mirror://luarocks/std.normalize-5.1-1.rockspec";
+          sha256 = "0ddg05bwvwqq4srmpwrb0qm97i2yzxzhyfsm1ygfy8yvl8k47ig7";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lua-stdlib/normalize/archive/v3.zip";
-        sha256 = "0iqmbkk5180pdn6d4j3lnv6iljlfv2ddkiwv7549n7pbmfx8ixs4";
+        url = "https://github.com/lua-stdlib/normalize/archive/v5.1.zip";
+        sha256 = "194n8y9r1m6rzg2cs48jx31qcjgz2b2wjy57yywp4fn5brcazmlv";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
+      nativeBuildInputs = [ luarocks-build-luke ];
 
       meta = {
         homepage = "https://lua-stdlib.github.io/normalize";
