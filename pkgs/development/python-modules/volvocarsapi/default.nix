@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyprojectVersionPatchHook,
-  pythonOlder,
   aiohttp,
   yarl,
   hatchling,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "volvocarsapi";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "thomasddn";
