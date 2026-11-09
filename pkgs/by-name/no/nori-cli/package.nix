@@ -59,10 +59,10 @@ buildFHSEnv (
     targetPkgs =
       pkgs:
       fhsDefaults.targetPkgs pkgs
-      ++ ([
+      ++ [
         alsa-lib
         webkitgtk_4_1
-      ]);
+      ];
 
     profile = ''
       export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
