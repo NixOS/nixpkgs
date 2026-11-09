@@ -29,8 +29,6 @@ stdenv.mkDerivation {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
     "RUST_LIB_SRC=${rustPlatform.rustLibSrc}"
-    # remove references to kernel.dev, which was added by rustc
-    "KRUSTFLAGS=--remap-path-prefix=${kernel.dev}/="
   ];
 
   # Modules are installed compressed, so the generic strip hooks skip them.
