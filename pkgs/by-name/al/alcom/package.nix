@@ -1,4 +1,5 @@
 {
+  aws-lc,
   cargo-about,
   cargo-tauri,
   fetchFromGitHub,
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
