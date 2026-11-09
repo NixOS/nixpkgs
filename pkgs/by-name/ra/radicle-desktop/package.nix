@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.17.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.dev";
-    repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
-    tag = "releases/${finalAttrs.version}";
+    seed = "oak.radicle.garden";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    tag = "releases/desktop/${finalAttrs.version}";
     hash = "sha256-xp9+pAi529B5WAznRRVJExOlZp/qhPWztZJ5/NyxsIY=";
     leaveDotGit = true;
     postFetch = ''
@@ -130,8 +130,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
-    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/oak.radicle.garden/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/desktop";
+    changelog = "https://radicle.network/nodes/oak.radicle.garden/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/desktop/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.radicle ];
