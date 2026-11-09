@@ -15,6 +15,7 @@
   pkg-config,
   soundtouch,
   zlib,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dopenal=true"
     "-Dwifi=true"
+    "-Dgdb-stub=true"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.github.com/TASEmulators/desmume/";
@@ -81,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       demo nds roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
+    mainProgram = "desmume";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
