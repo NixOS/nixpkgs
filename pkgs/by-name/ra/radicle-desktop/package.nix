@@ -29,6 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
   version = "0.18.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromRadicle {
     # seed.radicle.dev currently doesn't update its canonical release tags correctly
     seed = "oak.radicle.garden";
