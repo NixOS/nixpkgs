@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lacuscore";
-  version = "1.26.1";
+  version = "1.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OHnpE1670A/J/FmtuVnLTdDaNU9nfZPaPlyguFT4UiM=";
+    hash = "sha256-yTo44GknpBNQgnAMwYeoX2B14IBKh3vw/IglhIRcV1A=";
   };
 
   pythonRelaxDeps = [
