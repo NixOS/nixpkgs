@@ -54,6 +54,8 @@ let
         cacert
       ];
 
+      __darwinAllowLocalNetworking = true;
+
       env = {
         SODIUM_USE_PKG_CONFIG = true;
         LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
@@ -111,7 +113,7 @@ let
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
         mainProgram = "garage";
-        platforms = lib.platforms.linux;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 in
