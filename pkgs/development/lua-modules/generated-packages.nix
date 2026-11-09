@@ -3646,24 +3646,26 @@ final: prev: {
       fetchzip,
       luaAtLeast,
       luaOlder,
+      luarocks-build-luke,
     }:
     buildLuarocksPackage {
       pname = "luaposix";
-      version = "37.0-1";
+      version = "38-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaposix-37.0-1.rockspec";
-          sha256 = "0g3f5dh811hk35wm257wcfcbzpmgankpw578vf461kpa0jg84xph";
+          url = "mirror://luarocks/luaposix-38-1.rockspec";
+          sha256 = "1p2qm3nqwlgmn0h2r5b38zzs8y763sn61wm3qqyfdwfc4zvwwvay";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/luaposix/luaposix/archive/v37.0.zip";
-        sha256 = "0kr2r9mmpfpzmps4n5fb8acd7nr615mbs7f9b3fg7z6igfx4jllv";
+        url = "https://github.com/luaposix/luaposix/archive/v38.zip";
+        sha256 = "1rrkgng07lrcahjaavlhk03v42hrq4jpj8d1risvcsn0j1mf833z";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
+      nativeBuildInputs = [ luarocks-build-luke ];
 
       meta = {
-        homepage = "http://github.com/luaposix/luaposix/";
+        homepage = "https://github.com/luaposix/luaposix/";
         maintainers = with lib.maintainers; [ lblasc ];
         license = lib.licenses.AND [
           lib.licenses.mit
