@@ -6,6 +6,7 @@
   rustPlatform,
   perl,
   nix-update-script,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
