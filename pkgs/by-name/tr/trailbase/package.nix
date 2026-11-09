@@ -3,12 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
   fetchPnpmDeps,
+  aws-lc,
   pkg-config,
   protobuf,
   cmake,
   cacert,
   geos,
   nodejs,
+  sqlite,
+  zstd,
   pnpm_11,
   pnpmConfigHook,
   versionCheckHook,
@@ -23,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
   version = "0.32.2";
 
+  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -70,7 +74,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ geos ];
+  buildInputs = [
+    aws-lc
+    geos
+    sqlite
+    zstd
+  ];
 
   postPatch = ''
     # `trail --version` prints the git tag. fetchFromGitHub has no .git.
