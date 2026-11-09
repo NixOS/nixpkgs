@@ -4556,15 +4556,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lz.n";
-      version = "3.1.1-1";
+      version = "3.2.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lz.n-3.1.1-1.rockspec";
-          sha256 = "0wl3g8rf7wi22cbz0knpwsw71nqqp8x09p187843m0mdfygdmrs4";
+          url = "mirror://luarocks/lz.n-3.2.0-1.rockspec";
+          sha256 = "0zxnkzwy0jnvl4svl0196as7qj9wk48rx6g442qa3nzhbnjfpzd7";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lumen-oss/lz.n/archive/v3.1.1.zip";
-        sha256 = "0wz6darkc668i8kivi1c5r9rgix5sddsbxppnk830cwvdvyc857g";
+        url = "https://github.com/lumen-oss/lz.n/archive/v3.2.0.zip";
+        sha256 = "1j3xf4p0b0qcpzn5j6rfllcr97k1bq412pf97cb0r58jfwlnp22h";
       };
 
       disabled = lua.luaversion != "5.1";
