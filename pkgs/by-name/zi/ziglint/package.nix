@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ziglint";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "rockorager";
     repo = "ziglint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fSxmXLqtdqr6t8WFGs5hxGIQkkTAkdJezU8dFjs2X74=";
+    hash = "sha256-v2tKVu7sBOPwSFHtwfeCZMFkmTHJY3Qa5XAZoNcguZg=";
   };
 
   postPatch = ''
