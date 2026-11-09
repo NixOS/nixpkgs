@@ -8,8 +8,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirth";
-  version = "0-unstable-2026-10-28";
-  gitRev = "966c78fd600ac9b87184c12aec5551ba31233b86";
+  version = "0-unstable-2026-11-08";
+  gitRev = "0e81709995b272b514ec7bb9b69b2a0320f54b89";
   __structuredAttrs = true;
 
   src = fetchzip {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/mirth-lang/mirth/archive/${finalAttrs.gitRev}.zip"
       "https://git.sr.ht/~typeswitch/mirth/archive/${finalAttrs.gitRev}.tar.gz"
     ];
-    hash = "sha256-ir/dscN1eQmCFyEU8MMUUGgxsa6NGl8pcQ4sQKAAUQo=";
+    hash = "sha256-FSldpgTCtn7S2bDA6oOCaL+hkutqdLvU0WXy4soSE2o=";
   };
 
   postPatch =
