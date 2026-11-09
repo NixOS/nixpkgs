@@ -57,19 +57,30 @@ in
 
       # pnpm 11 writes its store index through `node:sqlite`, which links against the system SQLite.
       # Rebuild Node with the pinned SQLite for pnpm and pnpm-fixup-state-db.
+      withPinnedSqlite =
+        nodejs:
+        if lib.functionArgs nodejs.override ? callPackage then
+          # if its called with with `nodejs-slim = nodejs-slim_*`
+          nodejs.override {
+            callPackage =
+              fn: fnArgs:
+              callPackage fn (
+                lib.optionalAttrs (lib.functionArgs (if lib.isFunction fn then fn else import fn) ? sqlite) {
+                  sqlite = sqlite';
+                }
+                // fnArgs
+              );
+          }
+        else
+          # if its called with with `nodejs-slim = nodejs_*`
+          nodejs.override (old: {
+            nodejs-slim = withPinnedSqlite old.nodejs-slim;
+          });
+
       pnpm' =
         if lib.versionAtLeast pnpm.version "11" then
           pnpm.override {
-            nodejs-slim = pnpm.nodejs-slim.override {
-              callPackage =
-                fn: fnArgs:
-                callPackage fn (
-                  lib.optionalAttrs (lib.functionArgs (if lib.isFunction fn then fn else import fn) ? sqlite) {
-                    sqlite = sqlite';
-                  }
-                  // fnArgs
-                );
-            };
+            nodejs-slim = withPinnedSqlite pnpm.nodejs-slim;
           }
         else
           pnpm;
