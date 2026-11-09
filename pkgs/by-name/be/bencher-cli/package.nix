@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher-cli";
-  version = "0.6.14";
+  version = "0.6.16";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bencherdev";
     repo = "bencher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xs+NX589bI0ORTJCxvzGnK3DOWpKzKsDAalil6mSto4=";
+    hash = "sha256-00ciVT9j50DAf+W7h2uSeb9KOErrzzLtal2qMvxYzzw=";
   };
 
-  cargoHash = "sha256-BBBAeb3iOzH3o3mHnByYpWkHFsf193mDb2K/8VelMYw=";
+  cargoHash = "sha256-nXP175Ix8YOEAgHBJzq+QvandMcN1AMgdNpt+5MRqi4=";
 
   nativeBuildInputs = [
     pkg-config
