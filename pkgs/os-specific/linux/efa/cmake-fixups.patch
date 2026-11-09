@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f30f7c4..471d6c8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,19 +6,18 @@ project(efa C)
+ 
+ set(KERNEL_VER "" CACHE STRING "Kernel version to build for")
+ if(NOT KERNEL_VER)
+-  execute_process(COMMAND uname -r OUTPUT_VARIABLE uname_r
+-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  set(KERNEL_DIR "/lib/modules/${uname_r}/build")
+-else()
+-  set(KERNEL_DIR "/lib/modules/${KERNEL_VER}/build")
++  message(FATAL_ERROR "Nix build requires KERNEL_VER to be set.")
+ endif()
+ 
+-unset(KERNEL_MAKEFILE CACHE)
+-find_file(KERNEL_MAKEFILE Makefile PATHS ${KERNEL_DIR} NO_DEFAULT_PATH)
++set(KERNEL_DIR "" CACHE STRING "Kernel version to build for")
++if(NOT KERNEL_DIR)
++  message(FATAL_ERROR "Nix build requires KERNEL_DIR to be set.")
++endif()
++
++set(KERNEL_MAKEFILE "" CACHE STRING "Kernel Makefile to use")
+ if(NOT KERNEL_MAKEFILE)
+-  message(FATAL_ERROR "No kernel Makefile")
++  message(FATAL_ERROR "Nix build requires KERNEL_MAKEFILE to be set.")
+ endif()
+-message("-- Kernel directory - ${KERNEL_DIR}")
+ 
+ set(GCOV_PROFILE OFF CACHE BOOL "Enable GCOV profiling")
+ set(ENABLE_P2P ON CACHE BOOL "Enable Peer-to-peer memory")
