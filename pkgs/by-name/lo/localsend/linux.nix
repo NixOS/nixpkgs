@@ -13,9 +13,12 @@
   # nativeBuildInputs
   copyDesktopItems,
   makeDesktopItem,
+  pkg-config,
+  autoPatchelfHook,
 
   # buildInputs
   libayatana-appindicator,
+  zlib,
 
   # passthru
   nixosTests,
@@ -47,9 +50,16 @@ flutter341.buildFlutterApplication (finalAttrs: {
       --replace-fail 'Exec=''${Platform.resolvedExecutable}' "Exec=localsend_app"
   '';
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+    autoPatchelfHook
+  ];
 
-  buildInputs = [ libayatana-appindicator ];
+  buildInputs = [
+    libayatana-appindicator
+    zlib
+  ];
 
   customSourceBuilders.rust_lib_localsend_app =
     { version, src, ... }:

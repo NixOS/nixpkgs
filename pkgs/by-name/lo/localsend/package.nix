@@ -12,9 +12,12 @@
   makeBinaryWrapper,
   makeDesktopItem,
   undmg,
+  pkg-config,
+  autoPatchelfHook,
 
   # buildInputs
   libayatana-appindicator,
+  zlib,
 
   # passthru
   nixosTests,
@@ -69,8 +72,11 @@ else
 
       copyDesktopItems
       makeDesktopItem
+      pkg-config
+      autoPatchelfHook
 
       libayatana-appindicator
+      zlib
 
       nixosTests
       ;
