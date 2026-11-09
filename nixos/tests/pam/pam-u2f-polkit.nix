@@ -5,7 +5,7 @@
 
   qemu.package = hostPkgs.qemu_test.override { u2fEmuSupport = true; };
 
-  nodes.machine =
+  nodes.globalU2f =
     { pkgs, ... }:
     {
       virtualisation.qemu.options = [
@@ -22,13 +22,24 @@
       ];
     };
 
+  nodes.polkitU2f = {
+    security.polkit.enable = true;
+    security.pam.services.polkit-1.u2f.enable = true;
+  };
+
+  nodes.globalU2fPolkitOff = {
+    security.polkit.enable = true;
+    security.pam.u2f.enable = true;
+    security.pam.services.polkit-1.u2f.enable = false;
+  };
+
   testScript = ''
-    machine.wait_for_unit("multi-user.target")
+    globalU2f.wait_for_unit("multi-user.target")
 
     # The upstream polkit-agent-helper@.service has PrivateDevices=yes and
     # DevicePolicy=strict with only /dev/null allowed. This blocks hidraw.
     # Verify that: run a command under the upstream defaults and show it fails.
-    machine.fail(
+    globalU2f.fail(
         "systemd-run --wait --pipe "
         "--property=PrivateDevices=yes "
         "--property=DevicePolicy=strict "
@@ -38,14 +49,14 @@
 
     # The PR overrides PrivateDevices=no and adds DeviceAllow for hidraw.
     # Verify that the actual polkit-agent-helper@ unit got these overrides.
-    props = machine.succeed("systemctl show polkit-agent-helper@dummy.service")
+    props = globalU2f.succeed("systemctl show polkit-agent-helper@dummy.service")
     assert "PrivateDevices=no" in props, f"Expected PrivateDevices=no, got: {props}"
     assert "ProtectHome=read-only" in props, f"Expected ProtectHome=read-only, got: {props}"
 
     # Run fido2-token under the same constraints as the fixed service.
     # This proves the device is not just visible but actually usable
     # inside the polkit-agent-helper@ sandbox.
-    machine.succeed(
+    globalU2f.succeed(
         "systemd-run --wait --pipe "
         "--property=PrivateDevices=no "
         "--property=DevicePolicy=strict "
@@ -76,7 +87,7 @@
 
     # Also verify that pamu2fcfg can register a credential inside the sandbox
     # (needs hidraw + urandom access)
-    machine.succeed(
+    globalU2f.succeed(
         "systemd-run --wait --pipe "
         "--property=PrivateDevices=no "
         "--property=DevicePolicy=strict "
@@ -86,5 +97,15 @@
         "--property=ProtectHome=read-only "
         "pamu2fcfg"
     )
+
+    polkitU2f.wait_for_unit("multi-user.target")
+    props = polkitU2f.succeed("systemctl show polkit-agent-helper@dummy.service")
+    assert "PrivateDevices=no" in props, f"Expected PrivateDevices=no, got: {props}"
+    assert "ProtectHome=read-only" in props, f"Expected ProtectHome=read-only, got: {props}"
+
+    globalU2fPolkitOff.wait_for_unit("multi-user.target")
+    props = globalU2fPolkitOff.succeed("systemctl show polkit-agent-helper@dummy.service")
+    assert "PrivateDevices=yes" in props, f"Expected PrivateDevices=yes, got: {props}"
+    assert "ProtectHome=yes" in props, f"Expected ProtectHome=yes, got: {props}"
   '';
 }
