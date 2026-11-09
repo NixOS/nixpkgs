@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "lib"
-    "bin"
     "doc"
     "examples"
   ];
@@ -78,17 +77,17 @@ stdenv.mkDerivation (finalAttrs: {
     bin/mirth2 src/main.mth --docs "$doc/share/doc/mirth" -c
     install -Dm644 LICENSE README.md -t "$doc/share/doc/mirth"
 
-    # stages 0–2 aren’t needed anymore
-    install -Dm755 bin/mirth3 "$bin/bin/mirthc"
+    # stages 0–2 aren’t needed anymore; the unwrapped compiler is kept for
+    # users wrapping Mirth with their own stdlib & other packages
+    install -Dm755 bin/mirth3 "$out/bin/mirth3"
 
     runHook postInstall
   '';
 
-  # The raw binary @ $bin needs wrapping to get the stdlib @ $lib. By wrapping
-  # it here, it will be more flexible towards allowing users to wrap the Mirth
-  # binary with their own stdlib & other packages.
+  # `mirthc` is the wrapped user entry point: the raw compiler + stdlib search
+  # path, so it works from any cwd
   postFixup = ''
-    makeBinaryWrapper "$bin/bin/mirthc" "$out/bin/mirthc" \
+    makeBinaryWrapper "$out/bin/mirth3" "$out/bin/mirthc" \
       --add-flags "-P $lib/lib/mirth"
   '';
 
