@@ -22432,7 +22432,7 @@ self: super: with self; {
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
-  vapoursynth = callPackage ../development/python-modules/vapoursynth { inherit (pkgs) vapoursynth; };
+  vapoursynth = callPackage ../development/python-modules/vapoursynth { };
 
   variants = callPackage ../development/python-modules/variants { };
 
