@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "simp-sexp";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "simp_sexp";
     inherit (finalAttrs) version;
-    hash = "sha256-/oX60pEHmrW8oYHCKCguJbwN9wdBwN7lk6Qha4eYC1o=";
+    hash = "sha256-Xo7inlsq4sdyec8OdgFP+uIaVLV7ExWgcAnn1PjkEgs=";
   };
 
   build-system = [ setuptools ];
