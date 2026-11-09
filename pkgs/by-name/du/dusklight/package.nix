@@ -88,6 +88,8 @@ let
       rm build.rs
     '';
     cargoHash = "sha256-LH6AC5vCpLHhjTP6GMhxczB+sQT0Y7z6D1VJRPdswDI=";
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zstd ];
     meta = {
       description = "Symbol exports and link manifest generator for game modding";
       mainProgram = "symgen";
