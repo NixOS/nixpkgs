@@ -19,5 +19,8 @@ buildRedist {
       commonly used in deep learning and hyperscale multimedia applications.
     '';
     homepage = "https://docs.nvidia.com/cuda/nvjpeg";
+    pkgConfigModules = [
+      "nvjpeg"
+    ];
   };
 }
