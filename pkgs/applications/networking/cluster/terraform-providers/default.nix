@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -107,6 +108,9 @@ let
     dmacvicar_libvirt = automated-providers.dmacvicar_libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
+    hashicorp_helm = automated-providers.hashicorp_helm.override {
+      mkProviderGoModule = buildGo126Module;
+    };
     aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
     # proxyVendor is necessary because enabling CGO causes `go mod vendor` to include
     # platform-specific files leading to vendorHash varying across platforms.
