@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jix";
   version = "0.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hencjo";
     repo = "jix";
