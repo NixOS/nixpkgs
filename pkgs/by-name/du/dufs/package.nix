@@ -1,8 +1,10 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
   nixosTests,
   stdenv,
   cacert,
@@ -22,6 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-DFJjJ8e3EdNC+4AcSXwNPOvJ6rbb7wZR44gmyZzDI2o=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ pkg-config ];
+  checkInputs = [ aws-lc ];
 
   __darwinAllowLocalNetworking = true;
 
