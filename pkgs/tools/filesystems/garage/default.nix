@@ -107,6 +107,7 @@ let
           _0x4A6F
           teutat3s
           herbetom
+          anish
         ];
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
