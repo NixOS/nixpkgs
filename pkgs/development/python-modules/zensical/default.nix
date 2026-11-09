@@ -69,7 +69,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://zensical.org";
     changelog = "https://github.com/zensical/zensical/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aljazerzen ];
+    maintainers = with lib.maintainers; [
+      aljazerzen
+      zowoq
+    ];
     mainProgram = "zensical";
   };
 })
