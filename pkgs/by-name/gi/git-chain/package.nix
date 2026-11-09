@@ -9,7 +9,6 @@
   git,
   bash,
   nix-update-script,
-  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
