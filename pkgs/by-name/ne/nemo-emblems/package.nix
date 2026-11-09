@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nemo-emblems";
-  version = "6.6.0";
+  version = "6.8.0";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = finalAttrs.version;
-    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+    hash = "sha256-dadQnR6YNm6rC6qT0MGssSXu37ST1kZQVGIupB0nA7Q=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-emblems";
