@@ -20,22 +20,23 @@ stdenv.mkDerivation {
     hash = "sha256-+UDY9B6ZjwkDNbVoYhpwAiZ+cLd72/LMp/mQ6LJN5+0=";
   };
 
+  prePatch = ''
+    substituteInPlace ./Makefile \
+      --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace-fail /sbin/depmod \# \
+      --replace-fail 'install -p -m 644 $(MODULE_NAME).ko  $(MODDESTDIR)' \
+        '$(MAKE) -C $(KSRC) M=$(shell pwd) modules_install'
+  '';
+
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
   makeFlags = kernelModuleMakeFlags ++ [
-    "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    "INSTALL_MOD_PATH=$(out)"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
   ];
-
-  prePatch = ''
-    substituteInPlace ./Makefile \
-      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace /sbin/depmod \#
-  '';
-
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
 
   enableParallelBuilding = true;
 
