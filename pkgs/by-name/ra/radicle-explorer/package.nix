@@ -10,28 +10,36 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  version = "0-unstable-2026-10-23";
+  version = "0-unstable-2026-11-09";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    rev = "196ddbf47e20f266a4942ba817f14bea2d7d7a19";
-    rootDir = "explorer";
-    hash = "sha256-CCa4ZNSMGgk5F4wFdjxzD7WOqNA0Px3O+oAETH0Kq10=";
+    rev = "11cf896b903fafc8ff860f8547394d98664ecd99";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/explorer"
+      "/package-lock.json"
+      "/package.json"
+      "/shared"
+    ];
+    hash = "sha256-aCmK3J+/wnjYFBBXM7vHOPXBnfaqNzC5z9dYIK5+b/4=";
   };
 
-  npmDepsHash = "sha256-fwUyhjxnlW2n/HHv2KvXmkqTP+jvn+0cg52EtX2xYMU=";
+  npmDepsHash = "sha256-Cz6HoYGzMhVRwPUbw6S7Dh7FwNEO3r2xj7L8k332ZnE=";
+
+  npmWorkspace = "explorer";
 
   preBuild = ''
     if [[ $configFile ]]; then
-      cp "$configFile" config/local.json
+      cp "$configFile" explorer/config/local.json
     fi
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mv build $out
+    mv explorer/build $out
 
     runHook postInstall
   '';
