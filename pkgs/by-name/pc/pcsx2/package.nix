@@ -167,7 +167,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       _0david0mp
       govanify
-      matteopacini
     ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
   };

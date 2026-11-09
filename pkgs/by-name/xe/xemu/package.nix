@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xemu";
     maintainers = with lib.maintainers; [
       marcin-serwin
-      matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

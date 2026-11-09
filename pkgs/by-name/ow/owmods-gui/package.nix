@@ -16,6 +16,7 @@
   makeBinaryWrapper,
   mono,
   jq,
+  aws-lc,
   wrapWithMono ? true,
   nix-update-script,
 }:
@@ -75,14 +76,17 @@ rustPlatform.buildRustPackage {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     libsoup_3
     glib
     librsvg
     glib-networking
     webkitgtk_4_1
-  ];
+  ]);
 
   buildAndTestSubdir = "owmods_gui/backend";
 

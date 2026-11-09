@@ -10195,6 +10195,12 @@
     githubId = 39974571;
     name = "Gabriel Maguire";
   };
+  gabrielzschmitz = {
+    email = "gabrielzschmitz@protonmail.com";
+    github = "gabrielzschmitz";
+    githubId = 58743811;
+    name = "gabrielzschmitz";
+  };
   gabyx = {
     email = "gnuetzi@gmail.com";
     github = "gabyx";
@@ -18465,12 +18471,6 @@
     github = "matteobongio";
     githubId = 155063357;
     name = "Matteo Bongiovanni";
-  };
-  matteopacini = {
-    email = "m@matteopacini.me";
-    github = "matteo-pacini";
-    githubId = 3139724;
-    name = "Matteo Pacini";
   };
   mattfield = {
     email = "matt@mild.systems";
@@ -32099,6 +32099,12 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
+  };
+  wvhulle = {
+    email = "willemvanhulle@protonmail.com";
+    github = "wvhulle";
+    githubId = 7688680;
+    name = "Willem Vanhulle";
   };
   wykurz = {
     email = "wykurz@gmail.com";

@@ -19,6 +19,9 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail "elm-tooling install" "true"
+
+    substituteInPlace generator/elm.json \
+      --replace-fail '"elm-version": "0.19.1"' '"elm-version": "0.19.2"'
   '';
 
   npmDepsHash = "sha256-Fx0ylqXHdu48mZSMtedyLyb4+Ssn4DrQ34pTJAy2x7c=";

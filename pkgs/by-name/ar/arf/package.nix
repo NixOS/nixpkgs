@@ -8,6 +8,8 @@
   coreutils,
   writableTmpDirAsHomeHook,
   air-formatter,
+  pkg-config,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
+  nativeBuildInputs = [ pkg-config ];
+
   # The tests spawn R and the R packages `dplyr`/`askpass` (plus their
   # transitive dependencies). `R` in `buildInputs` is needed so that R's setup
   # hook populates `R_LIBS_SITE`; `R` in `nativeCheckInputs` is needed so that
@@ -43,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     R
     rPackages.askpass
     rPackages.dplyr
+    sqlite
   ];
 
   nativeCheckInputs = [

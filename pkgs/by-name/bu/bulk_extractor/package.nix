@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  # expat 2.9.0 deprecated XML_GetCurrentLineNumber; upstream builds with -Werror
+  # https://github.com/libexpat/libexpat/pull/1323
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   nativeBuildInputs = [
     pkg-config
     python3

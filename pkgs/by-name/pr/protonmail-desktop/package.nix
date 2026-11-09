@@ -87,7 +87,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rsniezek
-      matteopacini
     ];
     platforms = [
       "x86_64-linux"

@@ -4,7 +4,10 @@
   fetchFromGitHub,
   gitMinimal,
   versionCheckHook,
+  libgit2,
   nix-update-script,
+  oniguruma,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-+HbzMHq3OCuF+RCGXaLSbN4+xcFTYyKUI54advFKcEU=";
+
+  buildInputs = [
+    libgit2
+    oniguruma
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   nativeCheckInputs = [
     gitMinimal

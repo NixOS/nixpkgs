@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1611";
+  version = "2.0.0.1612";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "afa8e834b2e2774016ca244a5f19f67ed0bd7d3b";
-    hash = "sha256-pSW/YUVzGd1kmB36QnWJdDhZ1KeirymVzgsEsQjS5Zc=";
+    rev = "cc7ee7c0d00bd2aa691a574a7d429d5cd13c858b";
+    hash = "sha256-qc01N3sv2cd4spBrxXn+vR8kgiEWv7NaZsHOh/d+OwQ=";
   };
 
   buildInputs = [
