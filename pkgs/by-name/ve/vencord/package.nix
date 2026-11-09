@@ -6,7 +6,7 @@
   lib,
   nix-update,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
@@ -18,7 +18,7 @@
   buildWebExtension ? false,
 }:
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-HS8uZNepvDefjrsG3buVLFCVv7sHvazcwdpcT3EQ/78=";
+    fetcherVersion = 5;
+    hash = "sha256-A+Lzd7LSCkC7Ia7uvxcXG1NsfjlXWIi8FqQ+DeCZafU=";
   };
 
   nativeBuildInputs = [
