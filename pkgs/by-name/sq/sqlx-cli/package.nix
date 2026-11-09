@@ -10,6 +10,7 @@
   testers,
   sqlx-cli,
   nix-update-script,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -46,6 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
+    ]
+    ++ [
+      sqlite
     ];
 
   postInstall = ''
