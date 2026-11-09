@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_ROCRTEST=ON"
     "-DRSMI_INC_DIR=${rocm-smi}/include"
     "-DRSMI_LIB_DIR=${rocm-smi}/lib"
-    "-DGRPC_ROOT=${grpc}"
+    "-DGRPC_ROOT=${lib.getDev grpc}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
