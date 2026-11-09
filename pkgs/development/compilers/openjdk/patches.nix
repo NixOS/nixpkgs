@@ -15,7 +15,12 @@
 {
   "fix-java-home.patch" = [
     {
+      atLeast = "27";
+      path = ./27;
+    }
+    {
       atLeast = "25";
+      before = "27";
       path = ./25;
     }
     {
@@ -62,7 +67,12 @@
   ];
   "increase-javadoc-heap.patch" = [
     {
+      atLeast = "27";
+      path = ./27;
+    }
+    {
       atLeast = "17";
+      before = "27";
       path = ./17;
     }
     {
@@ -120,6 +130,7 @@
   "make-4.4.1.patch" = [
     {
       atLeast = "25";
+      before = "27";
       path = ./25;
     }
     {

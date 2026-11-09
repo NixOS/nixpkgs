@@ -3597,6 +3597,11 @@ with pkgs;
   jdk25 = openjdk25;
   jdk25_headless = openjdk25_headless;
 
+  openjdk27 = javaPackages.compiler.openjdk27;
+  openjdk27_headless = javaPackages.compiler.openjdk27.headless;
+  jdk27 = openjdk27;
+  jdk27_headless = openjdk27_headless;
+
   # default JDK
   jdk = jdk21;
   jdk_headless = jdk21_headless;
@@ -3629,6 +3634,14 @@ with pkgs;
         jdk = jdk25;
         jdkOnBuild = buildPackages.jdk25;
       };
+      jre27_minimal =
+        (callPackage ../development/compilers/openjdk/jre.nix {
+          jdk = jdk27;
+          jdkOnBuild = buildPackages.jdk27;
+        }).overrideAttrs
+          {
+            __structuredAttrs = true;
+          };
       jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
         jdkOnBuild = buildPackages.jdk;
       };
@@ -3637,6 +3650,7 @@ with pkgs;
     jre17_minimal
     jre21_minimal
     jre25_minimal
+    jre27_minimal
     jre_minimal
     ;
 
