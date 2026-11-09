@@ -2563,6 +2563,7 @@ mapAliases {
   speed_dreams = speed-dreams; # Added 2026-01-19
   spidermonkey_91 = throw "'spidermonkey_91 is EOL since 2022/09"; # Added 2025-08-26
   spidermonkey_115 = throw "'spidermonkey_115 is EOL since 2024/09"; # Added 2026-07-06
+  spidermonkey_128 = throw "'spidermonkey_128 has been removed, as it is end-of-life since since September 2025"; # Added 2026-11-08
   splayer = warnAlias "'splayer' has been replaced by 'splayer-next'" splayer-next; # Added 2026-08-12
   spoof = throw "'spoof' has been removed, as it is broken with the latest MacOS versions and is unmaintained upstream"; # Added 2025-11-14
   spotify-unwrapped = throw "'spotify-unwrapped' has been renamed to/replaced by 'spotify'"; # Converted to throw 2025-10-27
@@ -3327,6 +3328,9 @@ mapAliases {
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = warnAlias "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
   zed = throw "'zed' has been removed. Use 'super' instead."; # Added 2026-09-04
+  zeroad = throw "'zeroad' has been removed, as it depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
+  zeroad-data = throw "'zeroad-data' has been removed, as 'zeroad' depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
+  zeroad-unwrapped = throw "'zeroad-unwrapped' has been removed, as it depended on a long end-of-life SpiderMonkey"; # Added 2026-11-08
   zeroadPackages.zeroad = throw "'zeroadPackages.zeroad' has been renamed to/replaced by 'zeroad'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27

@@ -9,7 +9,6 @@
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "direnv";
   version = "2.38.2";
@@ -38,11 +37,20 @@ buildGoModule (finalAttrs: {
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
+    runHook preBuild
+
     make BASH_PATH=$BASH_PATH
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
+    rm -rf "$out/share/fish"
+
+    runHook postInstall
   '';
 
   nativeCheckInputs = [
@@ -57,10 +65,6 @@ buildGoModule (finalAttrs: {
     make test-go test-bash test-fish test-zsh
 
     runHook postCheck
-  '';
-
-  postInstall = ''
-    rm -rf "$out/share/fish"
   '';
 
   passthru.updateScript = nix-update-script { };

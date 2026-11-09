@@ -56,7 +56,7 @@ buildHomeAssistantComponent rec {
     changelog = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy/releases/tag/v${version}";
     description = "Unofficial Home Assistant integration for interacting with Octopus Energy";
     homepage = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy";
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 

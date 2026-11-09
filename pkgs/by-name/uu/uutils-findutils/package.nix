@@ -2,8 +2,10 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  nix-update-script,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-6M3kLNtvZ1nsCAkVJExQBWV72Bf9Kq5iei7SVpYsYio=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   postInstall = ''
     rm $out/bin/testing-commandline

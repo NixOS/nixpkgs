@@ -289,10 +289,11 @@ stdenv.mkDerivation rec {
         "gerbview"
         "pcb_calculator"
         "pl_editor"
-        "bitmap2component"
         "kicad-cli"
-      ];
-      utils = [
+      ]
+      # removed upstream after 10.0
+      ++ optionals stable [ "bitmap2component" ];
+      utils = optionals stable [
         "dxf2idf"
         "idf2vrml"
         "idfcyl"

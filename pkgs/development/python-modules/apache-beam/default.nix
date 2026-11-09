@@ -98,12 +98,6 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "  copy_tests_from_docs()" ""
   '';
 
-  pythonRelaxDeps = [
-    "numpy"
-    "objsize"
-    "protobuf"
-  ];
-
   build-system = [
     cython
     distlib
@@ -117,6 +111,12 @@ buildPythonPackage (finalAttrs: {
     yapf
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "objsize"
+    "pillow"
+    "protobuf"
+  ];
   dependencies = [
     beartype
     crcmod

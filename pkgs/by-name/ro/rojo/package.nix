@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-zp30mMv5n43iPccIx+oSP/T/za3mLP4+Nr4ZyQQnxbk=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
   env.OPENSSL_NO_VENDOR = true;

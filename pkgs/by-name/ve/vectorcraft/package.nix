@@ -35,7 +35,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vectorcraft";
-  version = "0.21.0";
+  version = "0.22.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "storytold";
     repo = "vectorcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jHdKEfQK+O4WnEkyRnXuQ22248H4YVbrpWfnYz1xSgs=";
+    hash = "sha256-4Cb7wS6IxhGsQ8O4CdbjDJtYu8Z3NoHhUzxbRWziYYA=";
   };
 
-  cargoHash = "sha256-YXuVyRwq8dIT/KlBv/8Bkv1p+zJtPZC01b4pYUIpD8s=";
+  cargoHash = "sha256-wXaN0TDkhMT6SgOH5HO1NSVsvB3vT1bghEomOF3BYkc=";
 
   cargoBuildFlags = [
     "--package=vectorcraft"

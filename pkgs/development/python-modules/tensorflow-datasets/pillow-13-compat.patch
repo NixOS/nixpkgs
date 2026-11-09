@@ -1,0 +1,19 @@
+--- a/tensorflow_datasets/core/utils/image_utils.py
++++ b/tensorflow_datasets/core/utils/image_utils.py
+@@ -181,11 +181,13 @@
+   postprocess = _postprocess_noop
+   if c == 1:
+     ex = ex.squeeze(axis=-1)
++    # Pillow>=13 rejects a `mode` which does not match the array dtype, so let
++    # it infer the mode and convert afterwards.
++    mode = None
+     if ex.dtype == np.uint16:
+-      mode = 'I;16'
+       postprocess = _postprocess_convert_rgb
+-    else:
+-      mode = 'L'
++    elif ex.dtype != np.uint8:
++      postprocess = lambda img: img.convert('L')
+   elif ex.dtype == np.uint16:
+     # PIL.Image.fromarray doesn't support uint16 for >1 channels.
+     # https://github.com/python-pillow/Pillow/blob/11.0.0/src/PIL/Image.py#L3225
