@@ -6,7 +6,6 @@
   gobject-introspection,
   gtk3,
   hicolor-icon-theme,
-  intltool,
   libnotify,
   librsvg,
   runtimeShell,
@@ -22,18 +21,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "variety";
-  version = "0.9.0-b1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
     tag = finalAttrs.version;
-    hash = "sha256-uDQZfWY0RuTsdD/IxpjzSTMMtNq632VAwAjB+CeUIbw=";
+    hash = "sha256-RIbGBlsaI87F+FSfoww8OxXSqA9G6sEkjHwZc6rUBu4=";
   };
 
   nativeBuildInputs = [
-    intltool
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -58,14 +56,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       beautifulsoup4
       configobj
       dbus-python
-      distutils-extra
       httplib2
       lxml
+      packaging
       pillow
       pycairo
       pygobject3
       requests
-      setuptools
     ]
     ++ lib.optional fehSupport feh
     ++ lib.optional imagemagickSupport imagemagick;
@@ -91,7 +88,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/share/applications
-    intltool-merge --desktop-style po variety.desktop.in $out/share/applications/variety.desktop
+    cp variety.desktop $out/share/applications/variety.desktop
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp variety/data/icons/scalable/apps/variety.svg $out/share/icons/hicolor/scalable/apps/variety.svg
@@ -115,7 +112,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       Variety also includes a range of image effects, such as oil painting and
       blur, as well as options to layer quotes and a clock onto the background.
     '';
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
