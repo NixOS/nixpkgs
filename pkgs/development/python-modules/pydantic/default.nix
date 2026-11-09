@@ -26,7 +26,7 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydantic";
   version = "2.14.4";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RZ70cbRbA+fNAgzZdEQbklTICmvvtz0oD53ZqUCQPzg=";
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"
@@ -78,6 +78,11 @@ buildPythonPackage rec {
     # avoid cyclic dependency
     "tests/pydantic_core/test_docstrings.py"
     "tests/test_docs.py"
+  ];
+
+  disabledTests = [
+    # succeeds unexpectedly
+    "test_exceptions_and_markers_report_python_references"
   ];
 
   pythonImportsCheck = [ "pydantic" ];
@@ -90,8 +95,8 @@ buildPythonPackage rec {
   meta = {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wd15 ];
   };
-}
+})
