@@ -1489,8 +1489,6 @@ let
 
         ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-        ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
-
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
