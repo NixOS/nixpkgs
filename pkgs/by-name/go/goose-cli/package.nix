@@ -4,12 +4,16 @@
   callPackage,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cmake,
   dbus,
   libxcb,
+  oniguruma,
   pkg-config,
   protobuf,
   openssl,
+  sqlite,
+  zstd,
   versionCheckHook,
   nix-update-script,
   llvmPackages,
@@ -58,8 +62,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
+    oniguruma
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
