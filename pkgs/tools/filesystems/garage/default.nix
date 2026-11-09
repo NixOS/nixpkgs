@@ -111,7 +111,7 @@ let
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
         mainProgram = "garage";
-        platforms = lib.platforms.linux;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 in
