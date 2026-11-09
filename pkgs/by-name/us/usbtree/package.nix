@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usbtree";
-  version = "0.1.1";
+  version = "0.1.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gnomeria";
     repo = "usbtree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-780SdrC2vaLQKJElabevYifBSv1WUOwjqYfbj7Fsm3E=";
+    hash = "sha256-jpOFKNauivxE+gs7geqgyoCYUS1/4MYkzs20BxeJAQQ=";
   };
 
-  cargoHash = "sha256-6uP2YuPeZVZa+AKOyki+hgvE28+yWkPvpt+QifFOxgo=";
+  cargoHash = "sha256-eo2+4PnXX9hi+BJVepXpme2INZDhRxDY5EV3wRIruGY=";
 
   passthru.updateScript = nix-update-script { };
 
