@@ -18,6 +18,7 @@
   pango,
   bash,
   openssl,
+  sqlite,
 }:
 
 let
@@ -73,6 +74,8 @@ buildNpmPackage (finalAttrs: {
     pixman
     cairo
     pango
+    # libquery_engine.node links against system sqlite
+    sqlite
     stdenv.cc.cc.lib
     vips
   ];
