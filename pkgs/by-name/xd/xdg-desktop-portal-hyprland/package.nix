@@ -15,9 +15,11 @@
   hyprtoolkit,
   hyprutils,
   hyprwayland-scanner,
+  libGL,
   libdrm,
   libgbm,
   libuuid,
+  pango,
   pipewire,
   sdbus-cpp_2,
   slurp,
@@ -56,9 +58,11 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
     hyprlang
     hyprtoolkit
     hyprutils
+    libGL
     libdrm
     libgbm
     libuuid
+    pango
     pipewire
     sdbus-cpp_2
     wayland
