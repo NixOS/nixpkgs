@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
   clang-tools,
   cmake,
@@ -10,20 +9,15 @@
   hypothesis,
   jbig2dec,
   jsonschema,
-  deprecated,
   lxml,
   withMupdf ? false,
   mupdf-headless,
   nanobind,
   ninja,
-  numpy,
   packaging,
   pillow,
-  psutil,
   pytest-xdist,
   pytestCheckHook,
-  python-dateutil,
-  python-xmp-toolkit,
   qpdf,
   referencing,
   replaceVars,
@@ -32,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.17.0";
+  version = "10.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-r8r/WZ2mUox+rODGUOFXVgldKw8FwqeD94xKRmOlB1k=";
+    hash = "sha256-QhjsuXTO28SNFSneqwOXGdjqRuFQWoSHhbvZeMlFR3g=";
   };
 
   patches = [
@@ -80,19 +74,13 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
-    attrs
     hypothesis
-    numpy
     pytest-xdist
-    psutil
     pytestCheckHook
-    python-dateutil
-    python-xmp-toolkit
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   dependencies = [
-    deprecated
     lxml
     packaging
     pillow
