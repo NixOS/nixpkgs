@@ -6363,8 +6363,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "40aedd8a68c78a656a10a8d62d80c54af59420fb";
-        hash = "sha256-Ci7D8aTUhh9DwwHvEV8Pndma8b/iwylUcoDKrIKVYN4=";
+        rev = "1e1bab730218eaf97fce743be3f56e51075928ac";
+        hash = "sha256-BuUst7wheKSL9dJztoB2zU1EFc90Q3YwdBCCNuNjF9c=";
       };
 
       disabled = lua.luaversion != "5.1";
