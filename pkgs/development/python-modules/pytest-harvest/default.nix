@@ -31,6 +31,11 @@ buildPythonPackage rec {
   postPatch = ''
     echo "version = '${version}'" > pytest_harvest/_version.py
 
+    substituteInPlace setup.py \
+      --replace-fail "import pkg_resources" "" \
+      --replace-fail 'pkg_resources.require("setuptools>=39.2")' "" \
+      --replace-fail 'pkg_resources.require("setuptools_scm")' ""
+
     substituteInPlace pytest_harvest/tests/test_lazy_and_harvest.py \
       --replace-fail "from distutils.version import LooseVersion" "from packaging.version import parse" \
       --replace-fail "LooseVersion" "parse"
