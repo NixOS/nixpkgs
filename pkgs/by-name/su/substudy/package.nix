@@ -5,6 +5,7 @@
 
   ffmpeg,
   makeWrapper,
+  sqlite,
   writableTmpDirAsHomeHook,
 }:
 
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-S+/Oh1Cwulw8FyakF+d2E51AioFuQBGMAOG3y27YM2Q=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ sqlite ];
 
   nativeCheckInputs = [
     ffmpeg
