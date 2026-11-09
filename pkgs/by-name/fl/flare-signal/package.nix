@@ -20,6 +20,9 @@
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
+  aws-lc,
+  sqlcipher,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,12 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     gtksourceview5
     libadwaita
     libsecret
     libspelling
     openssl
     protobuf
+    sqlcipher
+    sqlite
 
     # To reproduce audio messages
     gst_all_1.gstreamer
