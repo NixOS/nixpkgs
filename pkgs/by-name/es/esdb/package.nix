@@ -118,7 +118,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Spell checker oriented word lists";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        # non-AU scowl wordlists
+        (mkLicense {
+          shortName = "scowl";
+          fullName = "SCOWL License";
+          url = "https://github.com/en-wl/wordlist/blob/rel-${finalAttrs.version}/Copyright";
+        })
+        # AU scowl wordlists
+        # SPDX HPND-sell-variant, but with "this array" instead of "this software"
+        (mkLicense {
+          shortName = "scowl-au";
+          fullName = "SCOWL Australian English License (Titze)";
+          url = "https://github.com/en-wl/wordlist/blob/rel-${finalAttrs.version}/Copyright";
+        })
+        advancedCrypticsDictionary
+        # hunspell dictionaries
+        bsdMarkModifications
+      ];
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     homepage = "https://wordlist.aspell.net/";
