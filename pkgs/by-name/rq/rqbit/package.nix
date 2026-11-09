@@ -6,6 +6,7 @@
   installShellFiles,
   pkg-config,
   openssl,
+  aws-lc,
   buildNpmPackage,
   nodejs,
   nix-update-script,
@@ -15,13 +16,13 @@
 let
   pname = "rqbit";
 
-  version = "9.0.1";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-biF8AtHl2aYdxmuu0UNqN3Id2R0WoCOb5nKpdhCnKNY=";
+    hash = "sha256-qY40Yx+OyiwNP/pht0RFMJhgcFsKPz4rymUmANEJOBw=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -46,14 +47,17 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-BnHAv1PnsNmqVNxiA7KRHvl89cHISUMhITQ8DZu73zA=";
+  cargoHash = "sha256-nG2phD/dwNxas5fGtSqtRxpAniXjv1KbvVDuRF7fiSg=";
 
   nativeBuildInputs = [
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
