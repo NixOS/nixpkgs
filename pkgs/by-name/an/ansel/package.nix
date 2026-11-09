@@ -64,13 +64,13 @@
 }:
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2026-10-30";
+  version = "0-unstable-2026-11-06";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "11fe9d529a18ff4f23c440939f53593eb74212b1";
-    hash = "sha256-REOmcSQ5RpeBpkwk6Z4Rgul6OMELf4+bpAhZGSwr4w4=";
+    rev = "3ce1ec6716455897d9f064a279129ca3337af01f";
+    hash = "sha256-8IuypI9F++8TU+UPl+9NiGLvUe62tXLta/bOmkuPA6g=";
     fetchSubmodules = true;
   };
 

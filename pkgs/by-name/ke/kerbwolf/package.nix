@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kerbwolf";
-  version = "0.4.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StrongWind1";
     repo = "KerbWolf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZeczB/LgPe/F9MXfuF9bVYB0odnSRzV3FEkXNtN0BUM=";
+    hash = "sha256-OkqtvxmVoY+sRujn82J9QBVIpacW7QX8sjIBldHBSs0=";
   };
 
   build-system = with python3Packages; [ hatchling ];

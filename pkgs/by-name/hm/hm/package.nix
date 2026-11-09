@@ -10,27 +10,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hm";
-  version = "18.0";
+  version = "19.0";
 
   src = fetchFromGitLab {
     domain = "vcgit.hhi.fraunhofer.de";
     owner = "jvet";
     repo = "HM";
     tag = "HM-${finalAttrs.version}";
-    hash = "sha256-zWBwrnCNKi2sIopdu2XQj/7IoTsJQzlcIFNNKM0glDQ=";
+    hash = "sha256-WrERof59/UOC1SRx7NIptKSCuMUMQ/1DRQStBDkUPKo=";
   };
-
-  patches = [
-    # GCC 16 has better analysis of unused variables than previous versions.
-    # Since HM builds with -Werror by default, this causes a build failure, so
-    # we fetch the commit that fixed this issue upstream until it makes it into
-    # a release.
-    (fetchpatch {
-      name = "gcc16-unused-variable.patch";
-      url = "https://vcgit.hhi.fraunhofer.de/jvet/HM/-/commit/884d704b9d04ac1728b2c6049174e47eb04987d2.patch";
-      hash = "sha256-UqZf7XFTEOpfE0Uyyrq+ydScR9GzMgR+JQVeZGFjc1c=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

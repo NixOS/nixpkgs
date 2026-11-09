@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
+  pkg-config,
+  zstd,
   versionCheckHook,
   writeShellApplication,
   curl,
@@ -38,6 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-S3mgeYujRLvEoJYLG8Np1f1JYuftF3lZlptG33QqbNM=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

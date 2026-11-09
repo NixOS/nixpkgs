@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
   writableTmpDirAsHomeHook,
 }:
 
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs = [ zstd ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   cargoHash = "sha256-D91n+sx8qwkn/rEWP5ftS/mhmRru43TmKZUyvAc47H0=";
 

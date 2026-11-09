@@ -2,17 +2,20 @@
   lib,
   callPackage,
   makeSetupHook,
-  buildPackages,
+  pkg-config,
   lunasvg,
 }:
 
 makeSetupHook {
   name = "pkg-config-check-hook";
 
-  propagatedNativeBuildInputs = [ buildPackages.pkg-config ];
+  # setupHooks go in nativeBuildInputs (or nativeInstallCheckInputs), so their
+  # propagatedBuildInputs go into the consumers' nativeBuildInputs
+  # see makeSetupHook docs
+  propagatedBuildInputs = [ pkg-config ];
 
   substitutions = {
-    pkgconfig = lib.getExe buildPackages.pkg-config;
+    pkgconfig = lib.getExe pkg-config;
   };
 
   passthru = {
