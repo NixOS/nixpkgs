@@ -2001,8 +2001,6 @@ let
 
         rio = callPackage ../development/ocaml-modules/rio { };
 
-        riot = callPackage ../development/ocaml-modules/riot { };
-
         rock = callPackage ../development/ocaml-modules/rock { };
 
         rope = callPackage ../development/ocaml-modules/rope { };
