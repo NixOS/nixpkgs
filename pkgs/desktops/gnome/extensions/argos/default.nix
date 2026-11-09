@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "argos";
-  version = "50";
+  version = "50-unstable-2026-10-19";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    tag = "GNOME-50";
-    hash = "sha256-KwW4Hzp+0TqFU1ygPURNbbT+ZzQN7eocn2R4IJFmNZQ=";
+    rev = "b479bdd5858655652897b91debaf927b56df8022";
+    hash = "sha256-ZwGzts6It6D6RLlkE2GD7YZneSo53B4L2wLxmXp9vGg=";
   };
 
   installPhase = ''
