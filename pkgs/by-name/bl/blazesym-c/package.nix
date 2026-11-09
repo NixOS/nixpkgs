@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blazesym-c";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "blazesym";
     tag = "capi-v${finalAttrs.version}";
-    hash = "sha256-0ceEzlimp6UfrkoEYhwH6RWCrvkCpHF13G9vmM1HbQM=";
+    hash = "sha256-WwL/IbR7y916yvFZGdyHlrexqoyr2wDTNalaKMCdnRs=";
   };
 
-  cargoHash = "sha256-uQ7buVP0I+RgWHYFZxQP0hwJFMoB7Fz5D7S2dL1d/CM=";
+  cargoHash = "sha256-uMb45eScPjJV3NXcqr6TMJQZI/IHYY9cXgprG2j4UJA=";
 
   cargoBuildFlags = [
     "--package"

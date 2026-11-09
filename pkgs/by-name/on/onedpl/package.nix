@@ -8,7 +8,7 @@
 }:
 intelLlvmStdenv.mkDerivation (finalAttrs: {
   pname = "onedpl";
-  version = "2022.11.1";
+  version = "2022.14.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,8 +16,8 @@ intelLlvmStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "uxlfoundation";
     repo = "oneDPL";
-    tag = "oneDPL-${finalAttrs.version}-release";
-    hash = "sha256-NfyV34mdKfCxlU+l6ETKWcC9MwvVEgwcBedtLe6WCV4=";
+    tag = "oneDPL-release-${finalAttrs.version}";
+    hash = "sha256-0MvUSxT1DYXAGJ5JzdYLPm9B8vg3DKTY50bpMp4ysaU=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ intelLlvmStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "'oneDPL-(.*)-release'"
+      "oneDPL-release-(\\d+\\.\\d+\\.\\d+)"
     ];
   };
 

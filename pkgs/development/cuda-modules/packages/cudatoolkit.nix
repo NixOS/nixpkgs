@@ -16,7 +16,7 @@
   cuda_nvml_dev ? null,
   cuda_nvprune ? null,
   cuda_nvrtc ? null,
-  cuda_nvtx ? null,
+  nvtx ? null,
   cuda_profiler_api ? null,
   cuda_sanitizer_api ? null,
   libcublas ? null,
@@ -46,7 +46,7 @@ let
     cuda_cuxxfilt
     cuda_nvml_dev
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     cuda_profiler_api
     cuda_sanitizer_api
     libcublas

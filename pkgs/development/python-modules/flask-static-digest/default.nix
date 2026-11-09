@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "flask-static-digest";
   version = "0.4.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nickjj";

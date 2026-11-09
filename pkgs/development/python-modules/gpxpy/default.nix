@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gpxpy";
   version = "1.6.2";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -1,8 +1,8 @@
 {
+  actool,
   autoPatchelfHook,
   bun,
   copyDesktopItems,
-  darwin,
   electron_44,
   lib,
   makeBinaryWrapper,
@@ -10,6 +10,7 @@
   models-dev,
   nodejs,
   opencode,
+  rcodesign,
   stdenv,
   stdenvNoCC,
   writableTmpDirAsHomeHook,
@@ -44,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      substituteInPlace packages/desktop/scripts/utils.ts \
+      substituteInPlace packages/desktop/script/utils.ts \
         --replace-fail 'await $`codesign --force --sign - ''${dest}`' 'true'
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
@@ -63,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-    darwin.autoSignDarwinBinariesHook
+    actool
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
@@ -114,17 +115,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p resources/icons
     cp -R icons/prod/* resources/icons/
 
-    export OPENCODE_CLI_DIST="$TMPDIR/desktop-cli"
-    cli_package=$(bun -e 'import { getCurrentCli } from "./scripts/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
-    mkdir -p "$OPENCODE_CLI_DIST/$cli_package/bin"
-    cp ${lib.getExe opencode} "$OPENCODE_CLI_DIST/$cli_package/bin/opencode"
-    echo '{"version":"${opencode.version}"}' > "$OPENCODE_CLI_DIST/$cli_package/package.json"
+    cli_package=$(bun -e 'import { getCurrentCli } from "./script/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
+    mkdir -p "../cli/dist/$cli_package/bin"
+    cp ${lib.getExe opencode} "../cli/dist/$cli_package/bin/opencode"
+    echo '{"version":"${opencode.version}"}' > "../cli/dist/$cli_package/package.json"
 
     # Build with electron-vite
     bun run build
 
     # Package with electron-builder (unpacked directory mode)
-    cp -r "${electron.dist}" $HOME/.electron-dist
+    cp -r ${electron.dist} "$HOME/.electron-dist"
     chmod -R u+w $HOME/.electron-dist
 
     npx electron-builder --dir \
@@ -158,8 +158,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
       (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
         mkdir -p $out/Applications $out/bin
-        mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
-        makeWrapper "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
+        mv packages/desktop/dist/mac-*/OpenCode.app $out/Applications/OpenCode.app
+        makeWrapper $out/Applications/OpenCode.app/Contents/MacOS/OpenCode $out/bin/opencode-desktop
       '')
       (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
         mkdir -p $out/opt/opencode-desktop
@@ -189,6 +189,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         runHook postInstall
       ''
     ];
+
+  stripDebugList = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    "Applications/OpenCode.app/Contents/MacOS"
+  ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.getExe rcodesign} sign $out/Applications/OpenCode.app
+  '';
 
   meta = {
     description = "AI coding agent desktop client";

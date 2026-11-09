@@ -9,7 +9,6 @@
   python3,
   boost,
   simde,
-  sqlite,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    sqlite
   ]
   ++
     # FAT binaries on x86 linux can use SIMDe as fallback.

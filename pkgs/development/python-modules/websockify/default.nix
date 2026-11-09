@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   jwcrypto,
   numpy,
@@ -17,14 +18,21 @@ buildPythonPackage (finalAttrs: {
   version = "0.13.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "websockify";
     tag = "v${finalAttrs.version}";
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
+
+  patches = [
+    # https://github.com/novnc/websockify/pull/638
+    (fetchpatch {
+      name = "replace-test-symmetric-key.patch";
+      url = "https://github.com/novnc/websockify/commit/f1e281d2c446380a0a8af7575a92b23ad65c6d4d.patch";
+      hash = "sha256-l+j+baTDSEXhOajUKxaT21ET1iEnpiBHwysYnTt3ghk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

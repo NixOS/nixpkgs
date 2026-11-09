@@ -9,17 +9,12 @@
   gtk3,
   xdg-user-dirs,
   keybinder3,
-  libnotify,
   gst_all_1,
-  libva,
-  libvdpau,
-  lcms2,
-  libarchive,
-  alsa-lib,
-  libpulseaudio,
   libgbm,
-  libxscrnsaver,
-  libxv,
+  lz4,
+  vulkan-loader,
+  libgcrypt,
+  librsvg,
 }:
 
 let
@@ -27,11 +22,11 @@ let
     {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-A8JUYzEMQH1sEKYrKZ84QZAgYbz0OvpHa3t9RIUVE9c=";
+        hash = "sha256-GzP4/7j+zFS2XByQI4jtbplFPz2d2xuy9zbMSfqF3f0=";
       };
       aarch64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-LSNvFL1ud/FkzNSGk17ZqN2debnqsjlVDHd4NBjTds0=";
+        hash = "sha256-zbIIOpzOiL3gmrCg0DpVtYnZMr12ZTNUZhnNMcWLj7g=";
       };
     }
     ."${stdenvNoCC.hostPlatform.system}"
@@ -39,7 +34,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.11.9";
+  version = "0.14.11";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -56,18 +51,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     gtk3
     keybinder3
-    libnotify
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    libva
-    libvdpau
-    lcms2
-    libarchive
-    alsa-lib
-    libpulseaudio
     libgbm
-    libxscrnsaver
-    libxv
+    lz4
+    vulkan-loader
+    libgcrypt
+    librsvg
   ];
 
   dontBuild = true;

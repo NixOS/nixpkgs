@@ -74,6 +74,8 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.socks;
 
   disabledTestPaths = [
+    # broken by python-socks v3
+    "tests/test_lowlevel.py::test_use_proxy_from_environment"
     # tests connect to the internet
     "tests/test_requests.py"
     # we don't care about coverage

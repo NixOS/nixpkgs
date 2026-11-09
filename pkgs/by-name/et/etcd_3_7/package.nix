@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "etcd";
-  version = "3.7.2";
+  version = "3.7.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,12 +21,12 @@ buildGoModule (finalAttrs: {
     owner = "etcd-io";
     repo = "etcd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpdEpc8jNaZcOX004B1f42VlKmN5XwGgVcEBJYyDeMk=";
+    hash = "sha256-+MNq3Ucj0qYXLOclSHhxISnoham07Vbs+K8Qyx/CSXk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-hCzGZAzBUGZQzd/f6Bnl3x6tteuIA+sekCiSLyKuyuA=";
+  vendorHash = "sha256-i5lFN/ZmEh67mgpyfLPNX/IpGJ4SYjql00fvlQ1p9pg=";
 
   overrideModAttrs = _: {
     buildPhase = ''

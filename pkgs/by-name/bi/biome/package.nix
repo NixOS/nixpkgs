@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";
-  version = "2.5.15";
+  version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "@biomejs/biome@${finalAttrs.version}";
-    hash = "sha256-27I1d9cqC0oTMvfef4oYJViIx3QF+3b4WnZIx2gj5c4=";
+    hash = "sha256-ogWvhY1SRYIu1llSGWtuGSVKDG6Vhs6YmLO6aembjvw=";
   };
 
-  cargoHash = "sha256-lC4IGhA6TXlmW0rbMvtnFE6R8SH8sI5uHWsS3t48ruQ=";
+  cargoHash = "sha256-8d9he9/GMsGvoZnTexpMzsuEczgwOVB/3OmvU8Pq+Us=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,6 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [ gitMinimal ];
+
+  # tests spin up a local HTTP server on 127.0.0.1
+  __darwinAllowLocalNetworking = true;
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
@@ -65,6 +68,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   preCheck = ''
+    # cargo test builds the lib, bin and integration test targets with fat LTO
+    # in parallel, each taking ~8-10G of RAM, which OOMs builders with 32G
+    export NIX_BUILD_CORES=$(( NIX_BUILD_CORES > 2 ? 2 : NIX_BUILD_CORES ))
+
+    # without a usable cache dir biome falls back to $TMPDIR (/build), and the
+    # snapshot redactor then mangles any "/build" in test output
+    export XDG_CACHE_HOME="$TMPDIR/xdg-cache"
+
     # tests assume git repository
     git init
 

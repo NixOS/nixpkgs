@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atlas-file-manager";
-  version = "1.2.0";
+  version = "1.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AstraSuite";
     repo = "Atlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l/jdB90oPVxFG5LlylQxYskYJN+av+MGjiy4jh5Il6s=";
+    hash = "sha256-6rTlEs/9qHgc+ARVhPiwVwDDePYiMTuKu20NqRhO3SE=";
   };
 
   postPatch = ''

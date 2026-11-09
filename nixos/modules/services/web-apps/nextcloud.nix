@@ -23,7 +23,6 @@ let
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
     "openssl.cafile" = config.security.pki.caBundle;
-    catch_workers_output = "yes";
   };
 
   appStores = {
@@ -35,9 +34,70 @@ let
     # apps installed via cfg.extraApps
     nix-apps = {
       enabled = cfg.extraApps != { };
-      linkTarget = pkgs.linkFarm "nix-apps" (
-        lib.mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps
-      );
+      linkTarget =
+        let
+          appCheckScript =
+            pkgs.writers.writePython3 "nextcloud-app-check.py"
+              {
+                libraries = [ pkgs.python3Packages.packaging ];
+              }
+              ''
+                import sys
+                from packaging import version
+                import xml.etree.ElementTree as ET
+
+                name = sys.argv[1]
+                nextcloud_version = version.parse(sys.argv[2])
+                path = sys.argv[3]
+
+                info = ET.parse(f"{path}/appinfo/info.xml").getroot()
+                nextcloud_dep = info.find('./dependencies/nextcloud')
+
+
+                def truncate(v, n):
+                    return version.Version.from_parts(release=v.release[:n])
+
+
+                min = nextcloud_dep.get('min-version')
+                if min:
+                    min_v = version.parse(min)
+                    if truncate(nextcloud_version, len(min_v.release)) < min_v:
+                        print(f"""
+                            Nextcloud app '{name}' declared minimum nextcloud
+                            version {min}, but we are on {nextcloud_version}.
+                            You can disable this check with
+                            `services.nextcloud.extraAppsCheckVersionRanges`
+                        """)
+                        exit(1)
+
+                max = nextcloud_dep.get('max-version')
+                if max:
+                    max_v = version.parse(max)
+                    if truncate(nextcloud_version, len(max_v.release)) > max_v:
+                        print(f"""
+                            Nextcloud app '{name}' declared maximum nextcloud
+                            version {max}, but we are on {nextcloud_version}.
+                            You can disable this check with
+                            `services.nextcloud.extraAppsCheckVersionRanges`
+                        """)
+                        exit(1)
+              '';
+          checkApp =
+            name: path:
+            if !cfg.extraAppsCheckVersionRanges then
+              path
+            else
+              pkgs.runCommand "nextcloud_${name}-checked" { } ''
+                ${appCheckScript} "${name}" "${cfg.package.version}" "${path}"
+                ln -s "${path}" $out
+              '';
+        in
+        pkgs.linkFarm "nix-apps" (
+          lib.mapAttrsToList (name: path: {
+            inherit name;
+            path = checkApp name path;
+          }) cfg.extraApps
+        );
       writable = false;
     };
     # apps installed via the app store.
@@ -415,6 +475,15 @@ in
         {
           oidc_login_client_secret = "/run/secrets/nextcloud_oidc_secret";
         }
+      '';
+    };
+    extraAppsCheckVersionRanges = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check the Nextcloud version falls within the
+        declared minimum and maximum nextcloud versions
+        of the configured extraApps.
       '';
     };
     extraApps = lib.mkOption {
@@ -1245,6 +1314,7 @@ in
             upload_max_filesize = cfg.maxUploadSize;
             post_max_size = cfg.maxUploadSize;
             memory_limit = cfg.maxUploadSize;
+            error_log = "syslog";
           }
           (lib.mkIf cfg.caching.apcu {
             "apc.enable_cli" = "1";

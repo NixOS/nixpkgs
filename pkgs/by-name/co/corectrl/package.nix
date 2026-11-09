@@ -69,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.runtimeInputs)
   ];
 
   meta = {

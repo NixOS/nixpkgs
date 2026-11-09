@@ -21,15 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "doclang";
-  version = "0.7.3";
+  version = "0.8.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "doclang-project";
     repo = "doclang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U5QuYCTB2OTugfmvskMnoA71u1DUEVMZTi9H7C7PYEY=";
+    hash = "sha256-c/T1igyUVPoK5WC5NjQEHP8fLsNO473bgaAcUjrRiFw=";
   };
 
   build-system = [
@@ -59,7 +58,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "DocLang spec and reference toolkit";
     homepage = "https://github.com/doclang-project/doclang";
-    changelog = "https://github.com/doclang-project/doclang/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/doclang-project/doclang/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "doclang";

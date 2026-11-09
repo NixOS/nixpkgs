@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MOD_OPENCV" true)
     (lib.cmakeBool "MOD_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
     (lib.cmakeBool "MOD_GLAXNIMATE_QT6" (qtbase != null && lib.versions.major qtbase.version == "6"))
+    (lib.cmakeBool "MOD_JACKRACK" enableJackrack)
     (lib.cmakeBool "RELOCATABLE" false)
   ]
   ++ lib.optionals enablePython [

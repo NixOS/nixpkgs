@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.0.23";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "MartenBE";
     repo = "mkslides";

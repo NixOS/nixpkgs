@@ -18,8 +18,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.8";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "persim";

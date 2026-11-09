@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo127Module,
+  buildGoModule,
   installShellFiles,
   stdenv,
   versionCheckHook,
@@ -12,9 +12,9 @@
   openssh,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gh";
-  version = "2.103.0";
+  version = "2.103.3";
 
   __structuredAttrs = true;
   separateDebugInfo = true;
@@ -23,14 +23,14 @@ buildGo127Module (finalAttrs: {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-unaFckDrXrSV/75/eUAUG4ZxMt+SgcY7GRgVwdNHARg=";
+    hash = "sha256-Wg8m6G5DbDk//nw7IEbR+ZcVG9TTFSzJ5cYJkGjhHMw=";
 
     postCheckout = ''
       git -C "$out" log -1 --pretty=%ct > $out/SOURCE_DATE_EPOCH
     '';
   };
 
-  vendorHash = "sha256-o4p/SBVzlj+Qf3XNt5UzAbQUFrJHHOEjTCCE03+kvJs=";
+  vendorHash = "sha256-e9E2iTwF8kYNgW7Vs5upQBD2VT2lJ4dZcUDUk+igq/Y=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
   pname = "wahay";
   version = "0.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "digitalautonomy";
     repo = "wahay";

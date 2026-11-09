@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.8.14";
 
   src = fetchFromGitHub {
-    owner = "rancher";
+    owner = "rancher-archives";
     repo = "rke";
     rev = "v${finalAttrs.version}";
     hash = "sha256-wprIpvNTPu4HD4+FaBZCUpZGdveytLgXOA72loYK+6I=";
@@ -26,10 +26,10 @@ buildGoModule (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/rancher/rke";
+    homepage = "https://github.com/rancher-archives/rke";
     description = "Extremely simple, lightning fast Kubernetes distribution that runs entirely within containers";
     mainProgram = "rke";
-    changelog = "https://github.com/rancher/rke/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/rancher-archives/rke/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

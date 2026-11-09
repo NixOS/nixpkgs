@@ -9,7 +9,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_formats";
-  inherit (nushell) version src cargoHash;
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
@@ -20,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version=skip" ];
   };
 
-  patches = nushell.patches or [ ] ++ [ ../plugin-engine-default-features.patch ];
+  patches = [ ../plugin-engine-default-features.patch ];
 
   meta = {
     description = "Formats plugin for Nushell";

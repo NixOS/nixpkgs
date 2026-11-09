@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "omni-us";
+    owner = "mauvilsa";
     repo = "jsonargparse";
     tag = "v${finalAttrs.version}";
     hash = "sha256-DVt6gytbGFMXVUDWFoqjV7i2HILSStRQDVQ0IOdxNkw=";
@@ -83,8 +83,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module to implement minimal boilerplate CLIs derived from various sources";
-    homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/mauvilsa/jsonargparse";
+    changelog = "https://github.com/mauvilsa/jsonargparse/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

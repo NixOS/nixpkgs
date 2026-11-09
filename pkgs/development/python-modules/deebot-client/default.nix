@@ -19,6 +19,7 @@
   rustPlatform,
   syrupy,
   testfixtures,
+  pkgsHostTarget,
   xz,
 }:
 
@@ -48,7 +49,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = [ xz ];
+  buildInputs = [
+    pkgsHostTarget.zstd
+    xz
+  ];
 
   pythonRelaxDeps = [
     "cryptography"

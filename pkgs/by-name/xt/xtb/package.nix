@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=v(\\d.*)"
+    ];
   };
 
   meta = {

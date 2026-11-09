@@ -44,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'data/font/' 'font/'
   '';
 
-  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
+  env.NIX_CFLAGS_COMPILE = toString (
+    optionals stdenv.hostPlatform.isDarwin [ "-Wno-missing-noreturn" ]
+    # GCC 16's -Wsfinae-incomplete fires on forward-declared types used in SFINAE traits;
+    # upstream demotes it to a warning in https://github.com/CleverRaven/Cataclysm-DDA/pull/86841
+    ++ optionals stdenv.cc.isGNU [ "-Wno-error=sfinae-incomplete" ]
+  );
 
   makeFlags = [
     "PREFIX=$(out)"

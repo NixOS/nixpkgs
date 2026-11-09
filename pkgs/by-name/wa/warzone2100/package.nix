@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   ninja,
   p7zip,
@@ -56,6 +57,23 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
     hash = "sha256-le5NW4hoDqGxzyMLZ+qEAo4IokWLhGBayff7nrl8Tjc=";
   };
+
+  # Build and runtime compatibility with vulkan-headers 1.4.350+, backported
+  # from upstream master. Can be dropped on the next version bump.
+  # https://github.com/Warzone2100/warzone2100/pull/4918
+  # https://github.com/Warzone2100/warzone2100/pull/5026
+  patches = [
+    (fetchpatch {
+      name = "vulkan-headers-1.4.350-drop-deprecated-colorspace-alias.patch";
+      url = "https://github.com/Warzone2100/warzone2100/commit/8701c62ae68ca70da43ec915cbf6776c492e6656.patch";
+      hash = "sha256-Rk6Hq5d78ZZfr2/Ar1LFrG40rjuVBdvVLs5InVBPn58=";
+    })
+    (fetchpatch {
+      name = "vulkan-headers-1.4.357-dispatch-loader-init.patch";
+      url = "https://github.com/Warzone2100/warzone2100/commit/8f1c344b8c5dca71f2bbdd28278fd8c82ffb3e28.patch";
+      hash = "sha256-CfK05EQKR5RcRvc7tmiF5VU/9lwzbVmiU58lXwYivQQ=";
+    })
+  ];
 
   buildInputs = [
     sdl3

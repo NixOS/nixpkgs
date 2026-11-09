@@ -45,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
+  # Set RPATH before the interpreter to work around a patchelf bug:
+  # https://github.com/NixOS/patchelf/issues/674
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
       patchelf --set-rpath ${
         lib.makeLibraryPath [
           "$out"
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
           zstd
         ]
       } "$f" || true
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
     done
   '';
 

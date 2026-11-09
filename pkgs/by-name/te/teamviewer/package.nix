@@ -115,27 +115,30 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        getconf
-        coreutils
-      ]
-    }"
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libxrandr
-        libx11
-        libxext
-        libxdamage
-        libxtst
-        libsm
-        libxfixes
-        dbus
-        icu63
-        # dlopen'd by TeamViewer_Desktop for the Wayland ScreenCast portal
-        pipewire
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      getconf
+      coreutils
+    ])
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      libxrandr
+      libx11
+      libxext
+      libxdamage
+      libxtst
+      libsm
+      libxfixes
+      dbus
+      icu63
+      # dlopen'd by TeamViewer_Desktop for the Wayland ScreenCast portal
+      pipewire
+    ])
   ];
 
   postFixup = ''

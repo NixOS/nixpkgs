@@ -58,13 +58,13 @@ in
 melpaBuild (finalAttrs: {
   pname = "ghostel";
 
-  version = "0.57.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vPegePT5n11cI+eq9VWl0u068b2o50A4Wo8qcdYwJ34=";
+    hash = "sha256-1eIMfkPrczsirteuN3uM4axj8ZW3pt0TpPG+Lpos2uU=";
   };
 
   # these can be put into mkModule, but we put them here to ease user overrideAttrs
@@ -72,7 +72,7 @@ melpaBuild (finalAttrs: {
   zigDeps = finalAttrs.zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-87q0nSOkZaIHW8Ztgf5pR13sHNw7eQKJhu12QjRMTvA=";
+    hash = "sha256-BZzOCIY/3kkpYN115YLeu8snFqW77cJBXF+z+cpNYLk=";
   };
 
   files = ''

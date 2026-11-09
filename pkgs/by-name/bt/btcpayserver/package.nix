@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "2.4.5";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
     tag = "v${version}";
-    hash = "sha256-zdmsEBk3qT/vaHPP3GEvXfj7H5X6envN443rViToGGo=";
+    hash = "sha256-8yVWNpxwXE4yDBX0aN2OgJkrJGBfKgj75pFletRtL7E=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
@@ -41,5 +41,6 @@ buildDotnetModule rec {
     ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "btcpayserver";
   };
 }

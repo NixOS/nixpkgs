@@ -11,14 +11,16 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "opendal";
-  version = "0.46.0";
+  version = "0.47.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "opendal";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OQGpz6o4R0Yp+1vAgFtik/l7wvHwJNcB1BhZLk+BFPg=";
+    # Upstream bundles releases in a single OpenDAL monorepo. Bindings get
+    # separate version. Details: https://github.com/NixOS/nixpkgs/issues/567427
+    tag = "v0.59.5";
+    hash = "sha256-8Agx4CbP5IOV+j8J8EgVPOqmyu4WnCahrGlufe231kU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";

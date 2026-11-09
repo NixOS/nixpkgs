@@ -91,6 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "OT_CHANNEL_MANAGER" true)
     (lib.cmakeBool "OT_CHANNEL_MONITOR" true)
+    # Recover from an RCP failure (e.g. a radio tx timeout) in-process, with a Spinel reset and a
+    # state restore, instead of exiting. OpenThread's default of 0 turns each one into a restart
+    # of otbr-agent. Matches OpenThread's own POSIX build (script/cmake-build) and the Home
+    # Assistant OTBR add-on.
+    (lib.cmakeFeature "OT_RCP_RESTORATION_MAX_COUNT" "2")
 
     # Required by protobuf
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")

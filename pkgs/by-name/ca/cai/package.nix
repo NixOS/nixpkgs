@@ -6,12 +6,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until cai works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "cai";
   version = "1.1.5-unstable-2026-06-05";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aliasrobotics";
@@ -29,9 +35,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "openai" ];
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with pythonPackages; [ hatchling ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     cryptography
     curl-cffi
     dnspython
@@ -70,7 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     websockets
   ];
 
-  nativeInstallCheckInputs = with python3Packages; [
+  nativeInstallCheckInputs = with pythonPackages; [
     inline-snapshot
     litellm
     pytest-asyncio

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrejseplan";
-  version = "1.0.9";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Jawar19";
     repo = "pyRejseplan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ptbGXm0i2DZlE4/LWVE73d2c0oWjriUlKUv4JbGoua8=";
+    hash = "sha256-upfIXTzyMryIcLyKNWJyxsnko19PthAtOCjsWqFWnqE=";
   };
 
   build-system = [

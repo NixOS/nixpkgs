@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fgaz ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

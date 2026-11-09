@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dirigera";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Leggin";
     repo = "dirigera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V3vANdCxlt9SCsU+apxGL8BWYyeMJxekGoYRM3da3tM=";
+    hash = "sha256-NiQNFW61YCUiFDQxaA3Kdi23039JrEgNyvUa8AoSZJc=";
   };
 
   build-system = [ setuptools ];

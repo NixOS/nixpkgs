@@ -4,6 +4,7 @@
   aiohttp,
   anthropic,
   apscheduler,
+  aws-lc,
   azure-ai-contentsafety,
   azure-identity,
   azure-keyvault-secrets,
@@ -12,6 +13,7 @@
   backoff,
   boto3,
   buildPythonPackage,
+  certifi,
   click,
   cryptography,
   detect-secrets,
@@ -38,12 +40,14 @@
   litellm-proxy-extras,
   llm-sandbox,
   mcp,
+  oniguruma,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
   orjson,
   packaging,
+  pkg-config,
   polars,
   prisma,
   prometheus-client,
@@ -77,19 +81,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "litellm";
-  version = "1.106.2";
+  version = "1.108.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WZP27aJWtGpvCTHQShE/ufqp/MerqTM2dTTVj1T9EfI=";
+    hash = "sha256-n30jJ/pDhCAhLTJuDOS+z8cXnvvVYkn4ETxVVR5uZuI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    oniguruma
   ];
 
   cargoRoot = "litellm-rust";
@@ -101,7 +111,7 @@ buildPythonPackage (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-jOR+k7iKF+/TTx2qc7vLBvIoew+bPY8c/tXeFGBywgM=";
+    hash = "sha256-2Hok5ZKrpeyW/KuXdOuVB/vAdxdk4R6bamcqVQoCRmA=";
   };
 
   patches = [
@@ -117,6 +127,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     boto3
+    certifi
     click
     fastuuid
     filelock
@@ -210,7 +221,10 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "aiohttp"
     "boto3"
+    "certifi"
     "click"
+    "filelock"
+    "huggingface-hub"
     "importlib-metadata"
     "jsonschema"
     "openai"

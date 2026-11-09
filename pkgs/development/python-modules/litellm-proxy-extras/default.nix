@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "litellm-proxy-extras";
-  version = "0.4.108";
+  version = "0.4.110";
   pyproject = true;
 
   inherit (litellm) src;

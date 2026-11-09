@@ -11,10 +11,12 @@
   pkg-config,
   jq,
   moreutils,
+  autoPatchelfHook,
   glib-networking,
   openssl,
   webkitgtk_4_1,
   libayatana-appindicator,
+  sqlite,
   actool,
   wrapGAppsHook4,
   desktop-file-utils,
@@ -26,16 +28,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rayburst";
-  version = "4.0.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "AnInsomniacy";
     repo = "rayburst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ViMwZA3HsouYH7bV5BWPuNrOxT1ySfOruBRIyPrasgw=";
+    hash = "sha256-dQGkY681vsPzeKK6a1bUY89Me6WLQqPs6vdlOrl9TMk=";
   };
 
-  cargoHash = "sha256-5OkOO9jnI9/CSGN7Bsmbe7S5MGfAPWBGYz1PPYzHWm0=";
+  cargoHash = "sha256-2OwbO27u4faulirN6k/mzyoVhhTG3xZ8lbHjBLSXtpE=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -44,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     inherit pnpm;
-    hash = "sha256-zFV87FMMtJQXcus3p0OQDUQ1yVgJ0RgN2EangBw6Y1s=";
+    hash = "sha256-uSS4R3X8SsWoyJn87rcJ1dhDdG0r0Sebn3Q+95RabCE=";
     fetcherVersion = 4;
   };
 
@@ -59,18 +61,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq
     moreutils
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    wrapGAppsHook4
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ actool ];
 
   # we don't want to wrap aria2c
   dontWrapGApps = true;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     openssl
     webkitgtk_4_1
     libayatana-appindicator
+    # the bundled aria2-next binary links libstdc++/libgcc_s dynamically
+    stdenv.cc.cc.lib
   ];
+
+  # `libappindicator-sys` dlopen()s the tray library from the executable, but
+  # it has no DT_NEEDED entry, so autoPatchelfHook cannot discover it.
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
 
   __structuredAttrs = true;
 
@@ -95,11 +109,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libayatana-appindicator
-        ]
-      }
       --suffix PATH : ${
         lib.makeBinPath [
           desktop-file-utils
@@ -107,7 +116,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
       # Tricky way to make the protocol handler desktop file point to the wrapper
-      --set-default APPIMAGE rayburst
+      --set APPIMAGE "$out/bin/rayburst"
     )
     wrapGApp $out/bin/rayburst
   '';

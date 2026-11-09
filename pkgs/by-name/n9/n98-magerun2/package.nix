@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   php,
   versionCheckHook,
@@ -17,6 +18,11 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   vendorHash = "sha256-QxsfjbneO7AwqkHx+qqbJvhV344r8TZreWhUeKxBTOE=";
+
+  postInstall = ''
+    rm $out/share/php/n98-magerun2/vendor/rmccue/requests/certificates/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/php/n98-magerun2/vendor/rmccue/requests/certificates/cacert.pem
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

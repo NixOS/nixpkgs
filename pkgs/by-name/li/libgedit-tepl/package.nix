@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-tepl";
-  version = "6.14.0";
+  version = "6.15.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gedit";
     repo = "libgedit-tepl";
     tag = finalAttrs.version;
-    hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
+    hash = "sha256-88iRi6qWsoIOFHIuMLSQEcz6sgCwVFLQUgpH0IsahDI=";
   };
 
   strictDeps = true;

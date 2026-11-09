@@ -54,8 +54,8 @@ let
     src = fetchFromGitHub {
       owner = "qcscine";
       repo = "nevpt2";
-      rev = "e1484fd4901ae93ab0188bde417cf5dc440a8a3b"; # Must match tag in cmake/custom/nevpt2.cmake
-      hash = "sha256-Vl+FhwhJBbD/7U2CwsYE9BClSQYLJ8DKXV9EXxQUmz0=";
+      rev = "65a36d7db403d3b97089106a3ccc15344bf6bc86"; # Must match tag in cmake/custom/nevpt2.cmake
+      hash = "sha256-Ah2CjzW80KtRJoFPGYIKcY/vbn4IEWGFdf1TctQ4wD0=";
     };
     patches = [ ./nevpt2.patch ];
     installPhase = ''
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmolcas";
-  version = "26.06";
+  version = "26.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y4eUfp8PIeWSuF4j9wT6C8z8rYFySUrNMa4ezI3/kXg=";
+    hash = "sha256-C67E4IrhVOkky1VsnbXykLKQDjToFpge587B0YJFV2c=";
   };
 
   patches = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Using env fails in the sandbox
-    substituteInPlace Tools/pymolcas/export.py --replace \
+    substituteInPlace Tools/pymolcas/export.py --replace-fail \
       "/usr/bin/env','python3" "python3"
 
     # Pointing CMake to local QCMaquis and NEVPT2 archives

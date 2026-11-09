@@ -13,27 +13,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastdownload";
-  version = "0.0.7";
+  version = "0.0.8";
   pyproject = true;
-  __structuredAttrs = true;
 
-  # No tag for 0.0.7 on GitHub
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-IFB+246JQGofvXd15uKj2BpN1jPdUGsOnPDhYT6DHWo=";
+    hash = "sha256-euYXbi45feiiV2TUvhswTJu+gV582f82hW98uph0s/c=";
   };
 
-  # pkg_resources used to come with setuptools but was removed
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail \
-        "from pkg_resources import parse_version" \
-        "from packaging.version import parse as parse_version"
-  '';
-
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     fastprogress
@@ -48,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Easily download, verify, and extract archives";
     homepage = "https://github.com/fastai/fastdownload";
+    changelog = "https://github.com/fastai/fastdownload/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };

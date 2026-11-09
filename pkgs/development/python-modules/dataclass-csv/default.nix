@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   hatchling,
+  pyprojectVersionPatchHook,
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "dataclass-csv";
   version = "1.4.1";
   pyproject = true;
@@ -13,25 +15,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dfurtado";
     repo = "dataclass-csv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hDnuPg5xniybR2J91KnJxSlOI+dWzUPQJtYKfqsNCvw=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dataclass_csv" ];
 
   meta = {
     description = "Map CSV data into dataclasses";
     homepage = "https://github.com/dfurtado/dataclass-csv";
-    changelog = "https://github.com/dfurtado/dataclass-csv/releases/tag/${version}";
+    changelog = "https://github.com/dfurtado/dataclass-csv/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ theobori ];
   };
-}
+})

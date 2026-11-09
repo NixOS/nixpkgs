@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/OpenGene/fastp";
     maintainers = with lib.maintainers; [ jbedo ];
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.unix;
   };
 })

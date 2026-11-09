@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "termshot";
   version = "0.6.1";
 

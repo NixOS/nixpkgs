@@ -23,15 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kafka-python";
-  version = "3.0.11";
+  version = "3.0.12";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dpkp";
     repo = "kafka-python";
     tag = finalAttrs.version;
-    hash = "sha256-DwehLBH5OK7DSfMlgbAGvkVrkNBCUazjOYRDUgrtsOU=";
+    hash = "sha256-kgJ8AJ2BFqnjvp8D5lR5ndN/R5WQrHa/triKTs4oHQA=";
   };
 
   build-system = [ setuptools ];

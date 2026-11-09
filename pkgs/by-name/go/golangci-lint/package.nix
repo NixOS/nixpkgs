@@ -27,6 +27,9 @@ buildGo127Module (finalAttrs: {
 
   subPackages = [ "cmd/golangci-lint" ];
 
+  # Tests exist, but not in the selected subPackages
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [

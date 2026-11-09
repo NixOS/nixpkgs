@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchNpmDeps,
   nixosTests,
@@ -17,23 +17,23 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "anubis";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iB0DRagqPZfjmAYkmyf8HpRSz2oVUsJB5DXc9gBdHUM=";
+    hash = "sha256-gDbAbOsOPEaMhYFUnMmfKn1ZbiCzVfcUxTJhwd4le6k=";
   };
 
-  vendorHash = "sha256-7TYCWky6ybc5iyNsLpY3XorwACs/9qMRq+oP5v9sW1I=";
+  vendorHash = "sha256-Jr+VUUU7FF0IksS8xPYzLgpFSj4BW0TVYEFiY5Fr1WI=";
 
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-HELLfMRf8JniTGqTLWz5WreRx3uWOQ7Jak2Sy99JQjM=";
+    hash = "sha256-3PV9tbqbOJCCOUa5YC74Dv418ViUvigAKPa6NkBhKZc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

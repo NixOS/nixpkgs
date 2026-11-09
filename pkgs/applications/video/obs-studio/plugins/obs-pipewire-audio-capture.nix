@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "obs-pipewire-audio-capture";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "obs-pipewire-audio-capture";
     rev = version;
-    hash = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
+    hash = "sha256-VSqPIqApzek3G17APJdpZW1OQi5kX7JLQ2XVGRyIFrY=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=./lib"
     "-DCMAKE_INSTALL_DATADIR=./share"
+    (lib.cmakeBool "LEGACY" (lib.versionOlder obs-studio.version "33"))
   ];
 
   meta = {

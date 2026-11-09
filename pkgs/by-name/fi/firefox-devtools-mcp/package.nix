@@ -9,7 +9,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "firefox-devtools-mcp";
-  version = "0.10.6";
+  version = "0.10.7";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildNpmPackage (finalAttrs: {
     owner = "mozilla";
     repo = "firefox-devtools-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z3cxGgJia1QrYewLGjmVR1f6daZNI+K4qGFg3vYIN6M=";
+    hash = "sha256-B/BL2ou9l5wgAzvc0PiuMphYp/mRmw3c4bRsynugAKs=";
   };
 
-  npmDepsHash = "sha256-x6MnmMZPDQtBC2p7oL5p9yWlI9CkvvzoPB323OMCzv0=";
+  npmDepsHash = "sha256-tSufdG4ov8GCrB7bZmLpw78fJlc5qo7EKy4FikVy938=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -9,7 +9,7 @@
     ];
   };
 
-  nodes =
+  containers =
     let
       sqlite = {
         services.mealie = {
@@ -99,12 +99,8 @@
 
     postgres.start()
     test_mealie(postgres)
-    postgres.send_monitor_command("quit")
-    postgres.wait_for_shutdown()
 
     sqlite.start()
     test_mealie(sqlite)
-    sqlite.send_monitor_command("quit")
-    sqlite.wait_for_shutdown()
   '';
 }

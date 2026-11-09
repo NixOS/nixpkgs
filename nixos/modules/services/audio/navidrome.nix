@@ -185,8 +185,8 @@ in
           --collect \
           --working-directory=${WorkingDirectory} \
           ${optionalString (cfg.environmentFile != null) "-p EnvironmentFile=${cfg.environmentFile}"} \
-          -p Group=${cfg.user} \
-          -p User=${cfg.group} \
+          -p User=${cfg.user} \
+          -p Group=${cfg.group} \
           -u navidrome-admin.service \
           -- \
           ${lib.getExe cfg.package} --configfile ${settingsFile} "$@"

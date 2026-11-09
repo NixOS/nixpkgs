@@ -10,7 +10,7 @@
   rapidgzip,
   rarfile,
   ratarmountcore,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "python-xz" ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     indexed-gzip

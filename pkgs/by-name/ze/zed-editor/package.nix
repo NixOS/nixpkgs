@@ -6,6 +6,7 @@
   pkg-config,
   protobuf,
   fontconfig,
+  aws-lc,
   libgit2,
   openssl,
   sqlite,
@@ -99,7 +100,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.25.2";
+  version = "1.27.0";
 
   outputs = [
     "out"
@@ -112,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xrQonXmu/7J7qgk+nai32pIonWrILS1c54Dcj0JN2Bg=";
+    hash = "sha256-pYT/+23XPsXpkErUVIqlKS3cKPyE7LMtj6rnSl+NqXY=";
   };
 
   postPatch = ''
@@ -135,7 +136,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  cargoHash = "sha256-QFbmkmMp0yzmV3XQVssfALJJrL8njaecTFtGbRG4RP0=";
+  cargoHash = "sha256-SomjXacn8S8EIMqmE4UFWrUXWTudSXvWGIIXZarbIV0=";
 
   __structuredAttrs = true;
 
@@ -155,6 +156,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
+    aws-lc
     libgit2
     sqlite
     zlib

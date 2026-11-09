@@ -230,7 +230,7 @@ python3Packages.buildPythonApplication {
       "policykit_dir=${out}/share/polkit-1/actions"
       "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
       "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
-      "PYTHONEXECDIR=${out}/lib/python${lib.versions.majorMinor python3Packages.python.version}/site-packages"
+      "PYTHONEXECDIR=${out}/${python3Packages.python.sitePackages}"
       "hplip_confdir=${out}/etc/hp"
       "hplip_statedir=${out}/var/lib/hp"
     ];

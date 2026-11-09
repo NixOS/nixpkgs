@@ -8,6 +8,8 @@
   rust-jemalloc-sys,
   buildPackages,
   versionCheckHook,
+  pkg-config,
+  zstd,
 
   # passthru
   nixosTests,
@@ -16,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.17.2";
+  version = "0.17.4";
 
   __structuredAttrs = true;
 
@@ -24,17 +26,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-pnEBvVElyBKTc4tsZIMD48H3RQESlZaHR+8TLE6bCDs=";
+    hash = "sha256-63UsA1N75qOBkStpaZN7TjPZiZx0LuiL4fzjgVYS3Ek=";
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  cargoHash = "sha256-CqLZr1VHgwF4a8d5zQku5Xrl/K/ARYnsSlQriYIieWk=";
+  cargoHash = "sha256-N+xOMGpz1NIS7ZX/YwmJLCeK3/LEhXPGdUN2bZ7ZFR0=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     rust-jemalloc-sys
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (

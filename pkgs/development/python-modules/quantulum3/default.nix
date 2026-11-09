@@ -21,15 +21,19 @@ buildPythonPackage {
   inherit version pname;
   pyproject = true;
 
-  # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "quantulum3";
-    rev = "9dafd76d3586aa5ea1b96164d86c73037e827294";
-    hash = "sha256-fHztPeTbMp1aYsj+STYWzHgwdY0Q9078qXpXxtA8pPs=";
+    tag = version;
+    hash = "sha256-gE5JNUkIa+x/ottgXEf1WlieUG9mEcKjl3GSC2fWATY=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace quantulum3/__init__.py \
+      --replace-fail 'VERSION = (0, 9, 0)' 'VERSION = (0, 10, 0)'
+  '';
+
+  dependencies = [
     inflect
     num2words
     numpy

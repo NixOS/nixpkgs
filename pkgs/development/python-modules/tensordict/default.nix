@@ -25,15 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.15.2";
+  version = "0.15.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zDWQKVhA2xxTmq5gSRLpG+LG4xqYKDF5gMDrwUWybOA=";
+    hash = "sha256-1cCgBv7czF1nQgqdOsK173Q6uR79L0KtUpablOslGEg=";
   };
 
   build-system = [
@@ -72,6 +71,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # Tests upstream's CI installer script (.github/scripts/install_ci_tool.sh), irrelevant here
+    "test_ci_installer_checks_before_execution"
+
     # TypeError: not all arguments converted during string formatting
     "test_dtensor"
 

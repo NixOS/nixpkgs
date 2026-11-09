@@ -125,9 +125,9 @@ in
     environment.variables.ATUIN_CONFIG_DIR = "/etc/atuin";
 
     environment.etc = lib.mkMerge [
-      (lib.mkIf (cfg.settings != { }) {
+      {
         "atuin/config.toml".source = settingsFile;
-      })
+      }
 
       (lib.mkIf (cfg.themes != { }) (
         builtins.mapAttrs' (

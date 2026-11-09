@@ -3,7 +3,6 @@
   lib,
   bundlerEnv,
   fetchFromGitHub,
-  fetchpatch,
   ruby_3_4,
   stdenv,
   tailwindcss_4,
@@ -21,13 +20,6 @@ let
         ;
       tag = sources.version;
     };
-    patches = [
-      (fetchpatch {
-        name = "CVE-2026-66066.patch";
-        url = "https://github.com/we-promise/sure/commit/40a678fe8f774bb144e023c2abab1ac37f7c8d36.patch";
-        hash = "sha256-ocm4CZonT+J8jLw6Ftr36Fb/rguP0nATnW5aGSpUizY=";
-      })
-    ];
     postPatch = ''
       cp -f ${./rubyEnv/Gemfile} ./Gemfile
       cp -f ${./rubyEnv/Gemfile.lock} ./Gemfile.lock

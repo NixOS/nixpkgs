@@ -12,14 +12,14 @@ let
   # The firmware must match glasgow's checked-in blob byte for byte, so libfx2 needs the same sdcc.
   fx2 = python3Packages.fx2.override { sdcc = sdcc_4_5; };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "glasgow";
   version = "0-unstable-2025-07-25";
   # Similar to `pdm show`, but without the commit counter
   pdmVersion =
     let
-      tag = builtins.elemAt (lib.splitString "-" version) 0;
-      rev = lib.substring 0 7 src.rev;
+      tag = builtins.elemAt (lib.splitString "-" finalAttrs.version) 0;
+      rev = lib.substring 0 7 finalAttrs.src.rev;
     in
     "${tag}.1.dev0+g${rev}";
   # Usually the latest commit ID touching the `firmware` directory. Differs from src/rev!
@@ -60,6 +60,11 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ]);
 
+  pythonRelaxDeps = [
+    # pyvcd<0.5,>=0.4.1 not satisfied by version 0.5.0
+    "pyvcd"
+  ];
+
   nativeCheckInputs = [
     # pytestCheckHook discovers way less tests
     python3Packages.unittestCheckHook
@@ -75,7 +80,7 @@ python3Packages.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   preBuild = ''
-    make -C firmware/fx2 GIT_TREE_DIRTY=0 GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${fx2}/share/libfx2
+    make -C firmware/fx2 GIT_TREE_DIRTY=0 GIT_REV_SHORT=${finalAttrs.firmwareGitRev} LIBFX2=${fx2}/share/libfx2
 
     # Normalize the .ihex file, see ./software/deploy-firmware.sh.
     ${python3Packages.python.withPackages (_: [ fx2 ])}/bin/python firmware/fx2/normalize.py \
@@ -89,7 +94,7 @@ python3Packages.buildPythonApplication rec {
     fi
 
     cd software
-    export PDM_BUILD_SCM_VERSION="${pdmVersion}"
+    export PDM_BUILD_SCM_VERSION="${finalAttrs.pdmVersion}"
   '';
 
   # installCheck tries to build_ext again
@@ -131,4 +136,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "glasgow";
   };
-}
+})

@@ -1,27 +1,27 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   stdenv,
 }:
 
-buildGoModule (
+buildGo127Module (
   finalAttrs:
   let
     cmdPackage = "github.com/rqlite/rqlite/v${lib.versions.major finalAttrs.version}/cmd";
   in
   {
     pname = "rqlite";
-    version = "10.6.0";
+    version = "10.6.6";
 
     src = fetchFromGitHub {
       owner = "rqlite";
       repo = "rqlite";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-wYIS1jILOYtDNy7cDRs2AqeoOdKDUMW+sh8EMius8Cs=";
+      hash = "sha256-N3X5VPczKK7U53oYezeY7UbWXqfOK/41yNl14/t8zEg=";
     };
 
-    vendorHash = "sha256-MZpzDK6RlFYUoNtiW31nm1NsidyBVe0D9qlEX5v2aYM=";
+    vendorHash = "sha256-IJlT9GPjfmY9bevMXi8Z4MDmuHQiWlzNbYd71OB0lN0=";
 
     subPackages = [
       "cmd/rqlite"

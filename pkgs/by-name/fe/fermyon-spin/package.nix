@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fermyon-spin";
-  version = "4.2.3";
+  version = "4.2.6";
 
   src = fetchFromGitHub {
     owner = "spinframework";
     repo = "spin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qYpmbAVN5DQqsD8sk3aSwzgM2zHWgCgR6qUN3Nv6XU0=";
+    hash = "sha256-p+o0cC8wO0dRlRjsYeRlunHZLzr7WxTtlaNQWlmkhW0=";
   };
 
-  cargoHash = "sha256-6oHdFhTma4Uf+QkWCGptWpGbkPBybWHJ1alrGXble7g=";
+  cargoHash = "sha256-Fgj38exCyiAg+tE4AXdbDT6WSuY6LhiyQBs2wGA8ZD4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # The update bot handles this automatically. For doing it manually:
     # curl -s https://api.github.com/repos/spinframework/spin/commits/v${finalAttrs.version} | jq '{ sha: .sha[0:8], date: .commit.committer.date[0:10], ts: .commit.committer.date }'
-    VERGEN_GIT_SHA = "6f89ab75";
-    VERGEN_GIT_COMMIT_DATE = "2026-10-15";
-    VERGEN_GIT_COMMIT_TIMESTAMP = "2026-10-15T12:02:49Z";
+    VERGEN_GIT_SHA = "2ecc7e72";
+    VERGEN_GIT_COMMIT_DATE = "2026-10-29";
+    VERGEN_GIT_COMMIT_TIMESTAMP = "2026-10-29T23:46:02Z";
     VERGEN_GIT_BRANCH = "main";
   }
   // lib.optionalAttrs (stdenv.hostPlatform.isMusl && stdenv.buildPlatform.isLinux) {

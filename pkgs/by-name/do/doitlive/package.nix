@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/sloria/doitlive";
     changelog = "https://github.com/sloria/doitlive/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbode ];
+    maintainers = [ ];
     mainProgram = "doitlive";
   };
 })

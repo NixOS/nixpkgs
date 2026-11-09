@@ -53,7 +53,7 @@ let
 in
 buildGo127Module (finalAttrs: {
   pname = "gitea";
-  version = "28.2.0";
+  version = "28.3.0";
 
   outputs = [
     "out"
@@ -64,12 +64,12 @@ buildGo127Module (finalAttrs: {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gCS27gw/zNYVlcbwBiAtqM5JGVOTzbk3LoTd+p+EzKM=";
+    hash = "sha256-y+sawjuhvZn9HBnrfzXtdBwH3i3oXQBYNoRhpsmdURY=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-AXEzpW4nPXu0D5exmUwBYoe5Fb1PHFWSSvnwz7VSQos=";
+  vendorHash = "sha256-H57+G/LeZobc6yzkeCdX4aPTc0mKdYUCTxOQFxzCeL4=";
 
   postPatch = ''
     substituteInPlace modules/setting/server.go \

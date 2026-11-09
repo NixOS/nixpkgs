@@ -1,24 +1,24 @@
 {
   lib,
   stdenv,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "dnscontrol";
-  version = "5.4.0";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "DNSControl";
     repo = "dnscontrol";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kub4DguRCOybMY5YehhPuGXK1q3Zm0nunU00l33fK1U=";
+    hash = "sha256-9UvG21Tnst6ShUrTMUvRIBJ0h5c54Syeo3/IOUeYh3Q=";
   };
 
-  vendorHash = "sha256-aEhK1Q/A8rrzNR75QEZJ7+03fJxDv19jakVkgDWyBk4=";
+  vendorHash = "sha256-q8jgFTTUYF2MUIlRoQHI25KnxA+yA8vXQUMpcKhomnE=";
 
   nativeBuildInputs = [ installShellFiles ];
 

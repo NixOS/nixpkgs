@@ -12,12 +12,11 @@
   protobuf,
   rustc,
   rustPlatform,
+  rust-jemalloc-sys,
   zstd-c,
 
   # dependencies
   bcrypt,
-  build,
-  fastapi,
   grpcio,
   httpx,
   importlib-resources,
@@ -28,17 +27,15 @@
   onnxruntime,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-grpc,
-  opentelemetry-instrumentation-fastapi,
   opentelemetry-sdk,
   orjson,
   overrides,
-  posthog,
   pybase64,
   pydantic,
   pydantic-settings,
   pypika,
   pyyaml,
-  requests,
+  rich,
   tenacity,
   tokenizers,
   tqdm,
@@ -48,6 +45,8 @@
 
   # optional dependencies
   chroma-hnswlib,
+  fastapi,
+  opentelemetry-instrumentation-fastapi,
 
   # tests
   hnswlib,
@@ -70,7 +69,6 @@ buildPythonPackage (finalAttrs: {
   pname = "chromadb";
   version = "1.5.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
@@ -116,11 +114,6 @@ buildPythonPackage (finalAttrs: {
     "build"
   ];
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "posthog"
-  ];
-
   build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
@@ -133,12 +126,13 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
+    rust-jemalloc-sys
     zstd-c
   ];
 
   dependencies = [
     bcrypt
-    fastapi
     grpcio
     httpx
     importlib-resources
@@ -149,17 +143,15 @@ buildPythonPackage (finalAttrs: {
     onnxruntime
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-grpc
-    opentelemetry-instrumentation-fastapi
     opentelemetry-sdk
     orjson
     overrides
-    posthog
     pybase64
     pydantic
     pydantic-settings
     pypika
     pyyaml
-    requests
+    rich
     tenacity
     tokenizers
     tqdm
@@ -169,11 +161,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    dev = [ chroma-hnswlib ];
+    dev = [
+      chroma-hnswlib
+      fastapi
+      opentelemetry-instrumentation-fastapi
+    ];
   };
 
   nativeCheckInputs = [
     chroma-hnswlib
+    fastapi
     hnswlib
     hypothesis
     pandas
@@ -183,6 +180,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sqlite
     starlette
+    opentelemetry-instrumentation-fastapi
     writableTmpDirAsHomeHook
   ];
 

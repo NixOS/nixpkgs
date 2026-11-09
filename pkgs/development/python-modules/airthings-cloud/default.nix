@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "airthings-cloud";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyAirthings";
     tag = finalAttrs.version;
-    hash = "sha256-8fB8bQ7GHPnNk4lVtP5yZ6ys3J2R+olqSPCPpGquWRk=";
+    hash = "sha256-HOhzMKYrKk3OvcfGc9/1Jrend/sjW0ZOmgNVr57jr7k=";
   };
 
   build-system = [ setuptools ];

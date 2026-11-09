@@ -3,7 +3,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.2" then
-      "2.15.0"
+      "2.15.1"
     else if lib.versionAtLeast ocaml.version "5.1" then
       "2.14.0"
     else
@@ -29,9 +29,9 @@ let
         minimalOCamlVersion = "5.1.0";
         hash = "sha256-U6B3/ExryC7WLYj1iIUHoXZQluFE56Rf3dwOpux/qIE=";
       };
-      "2.15.0" = {
+      "2.15.1" = {
         minimalOCamlVersion = "5.2.0";
-        hash = "sha256-MK1F5tTbvZT5MkyZrz28+nj4+Yo8VxdxCBDHghUdMYY=";
+        hash = "sha256-j7ivQPKDbOIqjycknQsSI+eQjrAv3U66tWmEIUTdwLE=";
       };
     }
     .${version};
@@ -65,7 +65,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   # Tests use io_uring, which is blocked by Lix's sandbox because it's

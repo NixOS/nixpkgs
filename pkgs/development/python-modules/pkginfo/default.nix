@@ -6,28 +6,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pkginfo";
-  version = "1.12.1.2";
+  version = "1.13.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XNlXgkrDbxQCYJZOujxr5kQqg1m4xI9K35AhDzOgS3s=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-rXTMgYSyi3ewbMzEk2H9D9xW/YfjB0Jc4cK3WW2+MYU=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # wheel metadata version mismatch 2.1 vs 2.2
-    "test_get_metadata_w_module"
-    "test_get_metadata_w_package_name"
-    "test_installed_ctor_w_dist_info"
-    "test_installed_ctor_w_name"
-    "test_installed_ctor_w_package"
-  ];
 
   pythonImportsCheck = [ "pkginfo" ];
 
@@ -47,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

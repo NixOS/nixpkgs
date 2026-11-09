@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gibberish-detector,
@@ -60,6 +61,10 @@ buildPythonPackage (finalAttrs: {
     "TestGetFilesToScan"
     "TestLineNumberChanges"
     "TestModifiesBaselineFromVersionChange"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_filename_filters_are_invoked_first"
+    "test_success"
   ];
 
   pythonImportsCheck = [ "detect_secrets" ];

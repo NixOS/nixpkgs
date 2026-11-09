@@ -4,22 +4,22 @@
   buildNpmPackage,
   makeWrapper,
   desktop-file-utils,
-  electron_42,
+  electron_44,
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "notion-electron";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "anechunaev";
     repo = "notion-electron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9p5GjTxXKkmUbE7uGeM/LUiZNygoZDlAWV4xpY8BPlg=";
+    hash = "sha256-hgEseSpGoGiqpCHEiIPzEZPkCpk/iQi3vPySnkdSrwA=";
   };
 
-  npmDepsHash = "sha256-cCS2DTt3H3+eLd+cv7AeaVEryXmaF74VFqsf2px0exs=";
+  npmDepsHash = "sha256-7h/aKuMinm5VjGOHX8gStPc/IsOpWm5TEg/3c1l7M18=";
 
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildNpmPackage (finalAttrs: {
       $out/share/applications/notion-electron.desktop
 
     # Disable update functionality as it will be handled via nixpkgs
-    makeWrapper ${electron_42}/bin/electron $out/bin/notion-electron \
+    makeWrapper ${electron_44}/bin/electron $out/bin/notion-electron \
               --add-flags '--disable-update-functionality' \
               --add-flags $out/lib/node_modules/notion-electron
   '';

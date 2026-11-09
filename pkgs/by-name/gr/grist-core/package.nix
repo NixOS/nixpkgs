@@ -34,8 +34,8 @@ stdenv.mkDerivation (
     enterprise = fetchGristEnterprise {
       gristSrc = finalAttrs.src;
       inherit (finalAttrs) version;
-      hash = "sha256-m/kYML0Mk8AmoLQeKQ0TA1vcYZ7lukjyf/yQ8toy2ng=";
-      offlineCacheHash = "sha256-oMLNZZolY9Wg4DwJyYPDL6K28aEyWcXS9ivnzCuYcS0=";
+      hash = "sha256-gwyibFVY9hq1BiTdye9cNPI8tTcUWzLilZx8P4UoTPo=";
+      offlineCacheHash = "sha256-+MOAmVobPfipN0eAufImSKKYlLzOSI3cPc0mB3SZDkM=";
     };
 
     pythonEnv = python3.withPackages (
@@ -66,19 +66,19 @@ stdenv.mkDerivation (
   in
   {
     pname = "grist-core";
-    version = "1.7.21";
+    version = "1.7.22";
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "gristlabs";
       repo = "grist-core";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-Hj96QRJx1O98UowuDw/iwViPnToUisWjx/m0ujIryAE=";
+      hash = "sha256-11kw/nNewH5fgTnMdBl3/J2WjrpGjbIdvMSFIabV58M=";
     };
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${finalAttrs.src}/yarn.lock";
-      hash = "sha256-o3hsHfgq1/14j0O13mjJ4a+dpwQ9kXkDnNOHsEhCroM=";
+      hash = "sha256-4qCYzVG5vqG92xH8e11VxF1onNK/PbsRKqvYrIBgafE=";
     };
 
     env = {

@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2026.10.0";
+  version = "2026.11.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qs7vlre3KWogCnUAPBkFzXKIqpVAERcKZqtxofuPflo=";
+    hash = "sha256-1dRLxqkOSoP9bpS9D2pP8S2E1k2BylBYhXfTgsPmlKc=";
   };
 
   nativeBuildInputs = [
@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     make macos-app
     mkdir -p "$out/Applications" "$out/bin"
-    cp -R UltraStarDeluxe.app "$out/Applications/"
-    ln -s "$out/Applications/UltraStarDeluxe.app/Contents/MacOS/ultrastardx" \
+    cp -R "UltraStar Deluxe.app" "$out/Applications/"
+    ln -s "$out/Applications/UltraStar Deluxe.app/Contents/MacOS/ultrastardx" \
           "$out/bin/ultrastardx"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

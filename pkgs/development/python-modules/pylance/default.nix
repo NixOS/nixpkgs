@@ -10,8 +10,11 @@
   pkg-config,
 
   # buildInputs
+  aws-lc,
   openssl,
   protobuf,
+  # for zstd
+  pkgsHostTarget,
 
   # dependencies
   lance-namespace,
@@ -22,6 +25,7 @@
   torch,
 
   # tests
+  cacert,
   datafusion,
   duckdb,
   ml-dtypes,
@@ -36,15 +40,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "13.0.0";
+  version = "14.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Z3tTWe60/4RJU/3R7rXH77MSgtyScL3pussNXbXlW0=";
+    hash = "sha256-EGj0kF4x3+Oor1mD/E+QxgViCU7X8okX3cSOUNy7KD4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -56,7 +59,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-xt1VN0Q5Y60SslhppwHaC7nI7DXG75bNDib3nWSyupc=";
+    hash = "sha256-pfTNiy+5dAP/VB+kjv5IjtEFEWhR8lUK9L7mcze0dMA=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -103,8 +106,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     protobuf
+    pkgsHostTarget.zstd
   ];
 
   pythonRelaxDeps = [
@@ -124,6 +129,8 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    # reqwest panics with "No CA certificates were loaded from the system" otherwise
+    cacert
     datafusion
     duckdb
     ml-dtypes
@@ -176,17 +183,6 @@ buildPythonPackage (finalAttrs: {
 
     # Flaky (AssertionError)
     "test_index_cache_size"
-
-    # OSError: LanceError(IO): Failed to initialize default tokenizer:
-    # An invalid argument was passed:
-    # 'LinderaError { kind: Parse, source: failed to build tokenizer: LinderaError(kind=Io, source=No such file or directory (os error 2)) }', /build/source/rust/lance-index/src/scalar/inverted/tokenizer/lindera.rs:63:21
-    "test_lindera_load_config_fallback"
-
-    # OSError: LanceError(IO): Failed to load tokenizer config
-    "test_indexed_filter_with_fts_index_with_lindera_ipadic_jp_tokenizer"
-    "test_lindera_ipadic_jp_tokenizer_bin_user_dict"
-    "test_lindera_ipadic_jp_tokenizer_csv_user_dict"
-    "test_lindera_load_config_priority"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...

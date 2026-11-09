@@ -964,11 +964,11 @@
       "dependency": "direct main",
       "description": {
         "name": "openwatchparty",
-        "sha256": "e5c19699e6fdf607c5f01c6fa970bedbc824ffcd87a12d29f7c0f522706a29ef",
+        "sha256": "c557ede0201079af2ef54b6a06c6016d4cb2bd446fb7c9ba90561f8e595c87db",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     "os_media_controls": {
       "dependency": "direct main",

@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.6.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";

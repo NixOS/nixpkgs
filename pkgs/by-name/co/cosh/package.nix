@@ -3,13 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  openssh,
   openssl,
   sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosh";
-  version = "0.4.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tomhrr";
     repo = "cosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5BZgSTKb2Mj20JSyYEYUAgCc6cuImI0Yw0BGx8rSRp0=";
+    hash = "sha256-Yx+6tuaASCUrUcnq++JvkufH1DZB1gwnVtS2YVfEOuM=";
   };
 
-  cargoHash = "sha256-TkplRyPkJLcj4ynGB1BfOHdpk2U+MkHV6ctVsLO5Nuw=";
+  cargoHash = "sha256-UeqgD7gQXllkIUXKTVtXi/NTBhRNNkHSesFECR+vbrs=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -37,6 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "doc"
   ];
 
+  # Remove hardcoded paths
+  postPatch = ''
+    substituteInPlace lib/ssh-agent.ch \
+      --replace-fail "/usr/bin/ssh-add" "${lib.getBin openssh}/bin/ssh-add" \
+      --replace-fail "/usr/bin/ssh-agent" "${lib.getBin openssh}/bin/ssh-agent"
+  '';
+
   # Makefile expects the binary at target/release/cosh, but the already-ran
   # cargoBuildHook builds with --target, so the binary ends up @
   # target/<triple>/release/cosh; symlinking to avoid a second full `cargo
@@ -51,10 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     make all prefix="$out"
   '';
 
-  # Tests require:
-  # • /etc/resolv.conf (VM::new panics without)
-  # • PostgreSQL/MySQL services for some DB tests
-  doCheck = false;
+  doCheck = true;
+
+  checkFlags = [
+    "--skip=append_redirect_test"
+    "--skip=no_zombies"
+  ];
 
   postInstall = ''
     make install prefix="$out"
@@ -64,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Concatenative command-line shell";
+    # VM’s parallelism requires epoll
+    platforms = lib.platforms.linux;
     mainProgram = "cosh";
     homepage = "https://github.com/tomhrr/cosh";
     license = lib.licenses.bsd3;

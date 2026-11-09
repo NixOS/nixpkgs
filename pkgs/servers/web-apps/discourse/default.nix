@@ -12,6 +12,8 @@
 
   defaultGemConfig,
   ruby_3_4,
+  pkg-config,
+  oniguruma,
   fetchzip,
   gzip,
   gnutar,
@@ -54,13 +56,13 @@
 }:
 
 let
-  version = "2026.9.0";
+  version = "2026.9.1";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-xOZyoDA+/UPV/art5z8lNSM7RfNejeYcZAL+JzrPk7A=";
+    hash = "sha256-j3JjLYNcv3lluoCekyUUKMfkSX/ExeDsa8zrQ+pDrwg=";
   };
 
   pnpm = pnpm_10;
@@ -250,8 +252,13 @@ let
           nativeBuildInputs = [
             cargo
             rustc
+            pkg-config
             rustPlatform.cargoSetupHook
             rustPlatform.bindgenHook
+          ];
+
+          buildInputs = [
+            oniguruma
           ];
 
           disallowedReferences = [

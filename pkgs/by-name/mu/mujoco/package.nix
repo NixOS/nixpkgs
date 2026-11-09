@@ -26,8 +26,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
-      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
+      rev = "a6b4a9f00b36c19af9997d68a1cf6e0b5b3d032c";
+      hash = "sha256-yJzrkJxJUtCXmBJK474mu4MHJTT6ZnNnBRNwuCkRHEo=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "b1f8b0c3b8db9c3711349144acf951226700ddb4";
-      hash = "sha256-R8VxOEjJvkBCcQRWpTi9oWI3Mhxp31wrOcQ2IQN3GIw=";
+      rev = "1da510b8155f8fa81924616dcc517ecc4202e4d3";
+      hash = "sha256-8Dljp09cMal3CJuRrt9lZFnG/ABmF1kUU/jZ4mr4uu0=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -90,7 +90,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.16.0";
+  version = "4.0.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-pL4wtmbsRuOWsS1vfThThxvIU8EFtYU9ITaMSrSjA3I=";
+    hash = "sha256-Cj4Z5OKzX8gQfSjNrL/EzK2eOkos0ibX3gkZ/qdIhag=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Install plugins to expose them in python to fix mujoco-warp tests
   # ref. https://github.com/google-deepmind/mujoco/pull/3602
   postPatch = ''
-    for plugin in actuator elasticity sensor; do
+    for plugin in actuator sensor; do
       echo "install(TARGETS $plugin)" >> plugin/$plugin/CMakeLists.txt
     done
 
@@ -191,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoCore = python3Packages.mujoco-core;
       pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };

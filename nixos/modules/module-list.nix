@@ -40,6 +40,7 @@
   ./config/users-groups.nix
   ./config/vte.nix
   ./config/xdg/autostart.nix
+  ./config/xdg/directories.nix
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
@@ -137,7 +138,6 @@
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx5.nix
-  ./i18n/input-method/hime.nix
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/kime.nix
   ./i18n/input-method/nabi.nix
@@ -210,10 +210,11 @@
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
+  ./programs/dux-calendar.nix
+  ./programs/dux-files.nix
   ./programs/dux-search.nix
   ./programs/ente-auth.nix
   ./programs/environment.nix
-  ./programs/envision.nix
   ./programs/ergohaven-entropy.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
@@ -226,6 +227,7 @@
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
   ./programs/foot
+  ./programs/framework-settings.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/fzf.nix
@@ -305,6 +307,7 @@
   ./programs/oddjobd.nix
   ./programs/onlyoffice.nix
   ./programs/opengamepadui.nix
+  ./programs/openlogi.nix
   ./programs/openvpn3.nix
   ./programs/partition-manager.nix
   ./programs/passless.nix
@@ -361,6 +364,7 @@
   ./programs/vim.nix
   ./programs/virt-manager.nix
   ./programs/vivid.nix
+  ./programs/vlc.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
   ./programs/wayland/dux-shell.nix
@@ -368,6 +372,7 @@
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
+  ./programs/wayland/ironbar.nix
   ./programs/wayland/kanshi.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/mango.nix
@@ -713,6 +718,7 @@
   ./services/hardware/hddfancontrol.nix
   ./services/hardware/illum.nix
   ./services/hardware/inputplumber.nix
+  ./services/hardware/intel-lpmd.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/iptsd.nix
   ./services/hardware/irqbalance.nix
@@ -1378,7 +1384,6 @@
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nix-store-gcs-proxy.nix
-  ./services/networking/nixops-dns.nix
   ./services/networking/nm-file-secret-agent.nix
   ./services/networking/nmtrust.nix
   ./services/networking/nncp.nix
@@ -1549,7 +1554,6 @@
   ./services/scheduling/gocron.nix
   ./services/scheduling/prefect.nix
   ./services/scheduling/scx-loader.nix
-  ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
@@ -1577,6 +1581,7 @@
   ./services/security/endlessh.nix
   ./services/security/esdm.nix
   ./services/security/fail2ban.nix
+  ./services/security/falco.nix
   ./services/security/fprintd.nix
   ./services/security/haveged.nix
   ./services/security/hockeypuck.nix
@@ -1745,6 +1750,7 @@
   ./services/web-apps/goupile.nix
   ./services/web-apps/grav.nix
   ./services/web-apps/greenlight.nix
+  ./services/web-apps/grimmory.nix
   ./services/web-apps/grist.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/guacamole-client.nix
@@ -1895,6 +1901,7 @@
   ./services/web-apps/windmill.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/writefreely.nix
+  ./services/web-apps/yopass.nix
   ./services/web-apps/your_spotify.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
@@ -1933,7 +1940,6 @@
   ./services/web-servers/ttyd.nix
   ./services/web-servers/tusd.nix
   ./services/web-servers/uwsgi.nix
-  ./services/web-servers/varnish/default.nix
   ./services/web-servers/vinyl-cache/default.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix

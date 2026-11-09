@@ -14,14 +14,14 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    # 0.I is the latest stable release tag (https://github.com/CleverRaven/Cataclysm-DDA/releases/tag/0.I)
-    version = "0.I-2026-06-11-1250";
+    # 0.I-1 is the latest stable release (https://github.com/CleverRaven/Cataclysm-DDA/releases/tag/0.I-1)
+    version = "0.I-1";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
-      tag = "cdda-${version}";
-      hash = "sha256-DpB9OlSpg0t4L1JdMMPeQC+cLd0zs/ZkCdXSFGWgRhA=";
+      tag = version;
+      hash = "sha256-FO9Gn6fbmz1jGAKIbpATnnu6C1zRFJbTlkJ5IytVpIA=";
     };
 
     patches = [

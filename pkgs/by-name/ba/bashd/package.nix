@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "bashd";
-  version = "0.2.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "matkrin";
     repo = "bashd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTfoOEdgPWVe/1HQnBsTOzhZDK1DP5NRiJewTh+DGmg=";
+    hash = "sha256-pnN5K4fxnxmsYJDw3ieHgmqpxzUDuWnmttwio3q/UPs=";
   };
 
   vendorHash = "sha256-B4szacVckxUeF0xndHX3T6FnGTF0BkGo9k8uZUWURVM=";

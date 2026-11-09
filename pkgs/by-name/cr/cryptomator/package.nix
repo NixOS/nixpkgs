@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  zulu25,
+  zulu27,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
@@ -14,27 +14,22 @@
 }:
 
 let
-  jdk = zulu25.override { enableJavaFX = true; };
+  jdk = zulu27.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.19.2";
+  version = "1.19.6";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-9JWZaTsL2sfnGQAZI56T2iQnTNhERsFNFFCeLMB7WC0=";
+    hash = "sha256-g9DWxQYyfZ9Tk44jIrbFh0ee4/CXUEFVC+1AZr66QSo=";
   };
-
-  patches = [
-    # fix for "java.lang.IllegalStateException: No fuse library found at expected path"
-    ./downgrade-fuse.patch
-  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-CXFVs+QWi8ivZaEhJLGywzomcbsV+TviVxVWvvLR5Z4=";
+  mvnHash = "sha256-Q+ZAQnIMcp5RAIhQqJGnFLluoe5B3RZbT4YLIuzqOe8=";
   mvnFetchExtraArgs.env = {
     inherit (env) SOURCE_DATE_EPOCH;
   };

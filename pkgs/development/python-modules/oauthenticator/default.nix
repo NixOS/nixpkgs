@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "oauthenticator";
   version = "17.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";

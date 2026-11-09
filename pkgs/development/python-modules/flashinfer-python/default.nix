@@ -49,17 +49,28 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flashinfer-python";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wWcx74VrmkgT3U3y+mfqSwe4H9D37W5qhevgm7H5RIQ=";
+    hash = "sha256-guOI+9MMisB/uvmLF5Gg7ZCJ8YLnGirJ867nz0AMnxo=";
   };
+
+  patches = [
+    # The trtllm-gen routing module creates a symlink inside FLASHINFER_CUBIN_DIR, which is the
+    # read-only `flashinfer-cubin` package when installed:
+    #   PermissionError: [Errno 13] Permission denied: '.../flashinfer_cubin/cubins/flashinfer'
+    # Use FLASHINFER_GEN_SRC_DIR instead, like the other trtllm-gen modules.
+    ./trtllm-gen-routing-symlink-in-gen-src-dir.patch
+
+    # trtllmGen_gemm_export/GemmInterface.h misses `#include <functional>`:
+    #   error: incomplete type "std::reference_wrapper<...::ModuleCache>" is not allowed
+    ./gemm-interface-include-functional.patch
+  ];
 
   build-system = [
     apache-tvm-ffi
@@ -175,8 +186,14 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
             cuda_crt
             cuda_cudart
             cuda_nvcc
+            cuda_nvrtc # nvrtc.h and libnvrtc, for the CUTLASS fused MoE module
             libcublas
             libcurand
+            # dcp_lse_reduce includes torch's ATen/cuda/CUDAContext.h (cusparse.h, cusolverDn.h) and
+            # c10d's NCCLUtils.hpp (nccl.h), and links -lnccl
+            libcusolver
+            libcusparse
+            nccl
           ]
         )
       );

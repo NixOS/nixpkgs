@@ -7,8 +7,8 @@
 
 let
   pkg = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "mobile-config-firefox";
     rev = "5.5.1";
     hash = "sha256-kIMeVKUI8/MdCJIkBlcYYEUnN7+ciDpKuReAeKkn8VY=";

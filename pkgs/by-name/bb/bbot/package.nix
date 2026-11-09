@@ -15,16 +15,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "blastdns"
+    "cloudcheck"
     "dnspython"
     "idna"
     "lxml"
+    "puremagic"
+    "pyjwt"
     "radixtarget"
     "regex"
     "tabulate"
     "websockets"
     "yara-python"
-    "pyjwt"
-    "cloudcheck"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];

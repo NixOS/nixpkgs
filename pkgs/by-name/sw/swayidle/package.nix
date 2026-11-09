@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayidle";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fxDwRfAXb9D6epLlyWnXpy9g8V3ovJRpQ/f3M4jxY/s=";
+    hash = "sha256-BkMFQp5SCyPu7kF/4iZUr+YKG/ROFJ3dpn5oLZJdNgQ=";
   };
 
   __structuredAttrs = true;

@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cloudcheck";
-  version = "11.1.0";
+  version = "11.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "cloudcheck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rOMr7J6XZGjWq11Mlr3gkE7IpBlBeQ30gJ5uGXfbxTI=";
+    hash = "sha256-85hjW1hcv8neMEj6BM6AumkUcFiko2jd1diR4qdUMfo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-OmWW3+nCx8a0X25kKQ97+MJlCb7mOh9WN4zI+3oOTd4=";
+    hash = "sha256-tP46N1qoNiMFQYY2wJ1YeiNecOiJqW3ZeqFog5VBaVw=";
   };
 
   nativeBuildInputs = with rustPlatform; [

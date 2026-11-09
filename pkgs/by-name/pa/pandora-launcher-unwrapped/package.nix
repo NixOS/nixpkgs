@@ -9,6 +9,7 @@
   pkg-config,
 
   alsa-lib,
+  aws-lc,
   dbus,
   fontconfig,
   libGL,
@@ -16,9 +17,11 @@
   libxcb,
   libxkbcommon,
   openssl,
+  sqlite,
   udev,
   vulkan-loader,
   wayland,
+  zstd,
 
   copyDesktopItems,
   makeDesktopItem,
@@ -59,8 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     fontconfig
     openssl
+    sqlite
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib

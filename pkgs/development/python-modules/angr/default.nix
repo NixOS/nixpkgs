@@ -4,6 +4,7 @@
   archinfo,
   buildPythonPackage,
   cachetools,
+  callPackage,
   capstone,
   cargo,
   cffi,
@@ -47,8 +48,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "angr";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
-  # nixpkgs-update: no auto update
-  version = "10.0.4";
+  version = "10.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -57,23 +57,25 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "angr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7XPOH5kGpSychDk17jBz7jK7nv9zRsy+dPWaCYCNx50=";
+    hash = "sha256-memxffALYmcDNm1MgzgBom+5FNFKI4ympOJvY/NsHAg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-kVDd3sXTyGZPPXg5rFZZqfC3UNqq6AxxHoZdhzMBKyo=";
+    hash = "sha256-rlztS1GC5GCBHdr9VaeGNOp5ni0qcA8ot1RSJlXFuMI=";
   };
 
   pythonRelaxDeps = [
     "cxxheaderparser"
     "lmdb"
+    "pycparser"
+    "pypcode"
+    "z3-solver"
   ];
 
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"z3-solver==5.1.0.0",' ""
+    # Nix supplies the build dependency; keep the runtime requirement.
+    sed -i '/^\[build-system\]/,/^\[/{ /"z3-solver/d; }' pyproject.toml
 
     # cxxheaderparser 1.x represents member-function pointers using Pointer.
     substituteInPlace angr/sim_type.py \
@@ -148,10 +150,14 @@ buildPythonPackage (finalAttrs: {
     "pyvex"
   ];
 
+  passthru.updateScript = {
+    command = [ (lib.getExe (callPackage ./update.nix { })) ];
+    supportedFeatures = [ "commit" ];
+  };
+
   passthru.tests.smoke =
     runCommandCC "angr-smoke-test"
       {
-        __structuredAttrs = true;
         nativeBuildInputs = [
           (python.withPackages (_: [
             finalAttrs.finalPackage

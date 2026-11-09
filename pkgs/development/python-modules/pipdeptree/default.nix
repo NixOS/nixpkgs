@@ -19,19 +19,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "4.2.8";
+  version = "4.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-dGldvDMJr0NPzzChpe+BRgHsqokavyCTTYCoaW45ZlQ=";
+    hash = "sha256-PHuwLe0ITPWaA06SYC7tZ1jcbPEMCIMCfAEUWsET5Fc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zVul1ZQisqSamgk/C8gu9WD73MU6czpcD9T6fuHXuYI=";
+    hash = "sha256-5EqZBM+Gv47cCrwbl6oPNgP43zNcsvrtRnEVFu/WbRk=";
   };
 
   postPatch = ''

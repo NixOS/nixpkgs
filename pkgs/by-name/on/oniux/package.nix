@@ -2,25 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
-  perl,
+  pkg-config,
+  aws-lc,
+  openssl,
+  sqlite,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oniux";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     owner = "tpo/core";
     repo = "oniux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0XmgaNDob+e5yCEFaySj++6M0uJFmP5aQjjnLJDRx14=";
+    hash = "sha256-MEw5UIPl2xqMcf5IOhKBf0LZam5e2g/iukq+ds/f6Bs=";
   };
 
-  cargoHash = "sha256-zNo7HI+p5grdTayXDehMwAeEq4aOPYGSPb06c4ib95s=";
+  cargoHash = "sha256-Hx6BA+ynbPBtgB4jR9YSFJ++8ndDuRD6CFFsIzh9iAA=";
 
-  nativeBuildInputs = [
-    perl
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+    zstd
   ];
 
   passthru.updateScript = nix-update-script { };

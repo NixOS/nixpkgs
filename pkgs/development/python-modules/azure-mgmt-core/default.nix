@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "azure_mgmt_core";
     inherit (finalAttrs) version;

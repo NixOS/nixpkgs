@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       Luflosi
       gonsolo
-      carlossless
+      karstx
     ];
   };
 })

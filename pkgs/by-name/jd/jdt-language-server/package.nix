@@ -3,19 +3,19 @@
   stdenv,
   fetchurl,
   python3,
-  jdk,
+  jdk25,
 }:
 
 let
-  timestamp = "202609031315";
+  timestamp = "202610191322";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdt-language-server";
-  version = "1.61.0";
+  version = "1.63.0";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
-    hash = "sha256-M45+c9YYNmUbokU5GaDTT6dj6058AzQgkjCb/7iTTGQ=";
+    hash = "sha256-sfKr4LPMy0Ys9k+0pVh8fQnfYM+L53SLFSy9idAYvcQ=";
   };
 
   sourceRoot = ".";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     # in the wrapper, instead of searching for it in PATH at runtime.
     substituteInPlace bin/jdtls.py \
       --replace-fail "jdtls_base_path = Path(__file__).parent.parent" "jdtls_base_path = Path(\"$out/share/java/jdtls/\")" \
-      --replace-fail "java_executable = get_java_executable(known_args)" "java_executable = '${lib.getExe jdk}'"
+      --replace-fail "java_executable = get_java_executable(known_args)" "java_executable = '${lib.getExe jdk25}'"
   '';
 
   installPhase =

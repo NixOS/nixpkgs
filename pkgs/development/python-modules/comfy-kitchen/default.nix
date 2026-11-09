@@ -17,7 +17,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-kitchen";
-  version = "0.2.37";
+  version = "0.2.40";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     repo = "comfy-kitchen";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BqqYlqqQmEM1uAV93WZi9Z6LIXULf8OHaBAvhbSX2oo=";
+    hash = "sha256-hpEGSlrfbXm+b//BygmRA5pVSEkV/saUB4c9m4+YoD4=";
   };
 
   buildInputs = lib.optionals cudaSupport (

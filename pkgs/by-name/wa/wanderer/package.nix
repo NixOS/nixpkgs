@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "wanderer";
-  version = "0.21.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "open-wanderer";
     repo = "wanderer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FaHWJwHpITt1AWVMykZNtPHXdmwpBVrkzzEBNQcwZRg=";
+    hash = "sha256-7B0dSbErdkxPiG+k9CKXiEA+ZYKXEvOwsRvk5jkE1kc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/db";
 
-  vendorHash = "sha256-70tr+t7R1B0maLuu01HaFgANSbN6Rr2PUxcFjc/5xw0=";
+  vendorHash = "sha256-x7NdRBCpDQQ2vvi7sdFevmwi1BxphoqfNK5r6AZExLM=";
 
   postInstall = ''
     mv $out/bin/pocketbase $out/bin/wanderer

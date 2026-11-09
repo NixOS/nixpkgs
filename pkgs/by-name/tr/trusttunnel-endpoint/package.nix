@@ -6,6 +6,8 @@
   boringssl,
   cacert,
   python3,
+  aws-lc,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -43,16 +45,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    pkg-config
   ];
 
   buildInputs = [
     boringssl
+    aws-lc
   ];
 
   nativeCheckInputs = [
     cacert
     python3
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

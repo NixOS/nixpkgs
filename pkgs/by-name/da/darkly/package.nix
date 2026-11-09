@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "darkly";
-  version = "0.5.41";
+  version = "0.5.42";
 
   src = fetchFromGitHub {
     owner = "Bali10050";
     repo = "Darkly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ivTU+lcMXiyCOLbwYaz1hD2qRWQ5Th2tFX8VIAgGszg=";
+    hash = "sha256-/YB80fYW5PpZCiuVx/EhomOU6X9zI/I5l0CUVBjs6Mw=";
   };
 
   nativeBuildInputs = [

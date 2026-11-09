@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     writableTmpDirAsHomeHook
   ];
 

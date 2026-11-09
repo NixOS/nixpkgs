@@ -21,12 +21,12 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alcom";
-  version = "1.1.8";
+  version = "1.1.9";
   src = fetchFromGitHub {
     owner = "vrc-get";
     repo = "vrc-get";
     tag = "gui-v${finalAttrs.version}";
-    hash = "sha256-86oR2+qKCmgkQMROq/RZDsSYINzdG5U08dmPznzMSzg=";
+    hash = "sha256-90FLIJDawG9KoVgk6jxrvwjnue7OJYAxMLLmNhsWlto=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  cargoHash = "sha256-z3VLIRTyS127TS+jdGTdlt1xmMHdwFAsMzkkuVc78lU=";
+  cargoHash = "sha256-h+tblYrLpuUwDDZV2rS3h9q2UuZtZ/5/S2rh4BzFnHg=";
   buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
 

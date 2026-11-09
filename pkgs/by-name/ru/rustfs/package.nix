@@ -7,8 +7,10 @@
   pnpmConfigHook,
   nodejs,
   rustPlatform,
+  pkg-config,
   protobuf,
-  cacert,
+  zstd,
+  aws-lc,
   nix-update,
   nixosTests,
   writeShellApplication,
@@ -56,14 +58,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.3";
+  version = "1.0.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
     tag = finalAttrs.version;
-    hash = "sha256-Vzu3pA6P/BJcPxK8IcKgT8vUNYdEsKKYwsV87M/IVyQ=";
+    hash = "sha256-pgzDpqmGki/LC9w2m2VxOZD7RP0h/ZJ/bXVyIotAQhs=";
   };
 
   postPatch = ''
@@ -71,11 +73,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-OLaCvnyMTXYC1bO0FJo0inINjjWzIpZsi60wzGbcSZA=";
+  cargoHash = "sha256-8CRM2FdAmpx6rL3FMMj1caSBaf+//lQu6uHxBa/DynU=";
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
-    cacert
+  ];
+
+  buildInputs = [
+    zstd
+    aws-lc
   ];
 
   inherit console;

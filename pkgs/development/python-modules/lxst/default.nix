@@ -14,9 +14,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxst";
-  version = "0.5.0";
+  version = "0.5.4";
   format = "wheel";
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "lxst";
@@ -24,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-k1HiWv/5iIuSjaeIIDyELX+1FHI3k15IJwxUwUutpM0=";
+    hash = "sha256-/q3rJE0SN4wnw12+SKJR/02wP688j1W3afnXZW0K3rc=";
   };
 
   # We can't use a postPatch here to do the substitution because the wheel is

@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pygame-gui";
   version = "0.6.14";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MyreMylar";

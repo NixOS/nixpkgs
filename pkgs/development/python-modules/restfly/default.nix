@@ -5,6 +5,7 @@
   httpx,
   pydantic-xml,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-datafiles,
@@ -17,17 +18,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "restfly";
-  version = "2.0.3";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stevemcgrath";
     repo = "restfly";
-    tag = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RE1k0orzDAqGSRfGaMrZ2gKXKVYt/lIYm+fn5HP3POA=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     httpx

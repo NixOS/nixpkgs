@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "50.0";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qs5E6Q6Q9sNLsvvsjMtHuPgRAwgJeNZXWSh4Q8Mp1To=";
+    hash = "sha256-8sjZxcgpTOP9yL59n0vlanLtcVIstUmH8XI6jP2RY30=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemdunitdir=lib/systemd/system"
     # In a separate libsysprof-capture package
     "-Dinstall-static=false"
+  ]
+  # FAILED: [code=1] src/libsysprof/tests/test-flatpak-info
+  # ld.bfd: src/libsysprof/tests/test-flatpak-info.p/test-flatpak-info.c.o: R_LARCH_ALIGN with offset 2 not aligned to instruction boundary
+  # ld.bfd: BFD (GNU Binutils) 2.46 assertion fail /build/binutils-with-gold-2.46/bfd/elfnn-loongarch.c:4355
+  # ld.bfd: src/libsysprof/tests/test-flatpak-info.p/test-flatpak-info.c.o: relocation R_LARCH_CALL36 right shift 2 error 0xffffffffffffeecb
+  ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    (lib.mesonBool "tests" false)
   ];
 
   passthru = {

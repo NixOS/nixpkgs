@@ -3,6 +3,7 @@
   fetchFromGitHub,
   perlPackages,
   makeWrapper,
+  bashNonInteractive,
 }:
 perlPackages.buildPerlPackage {
   pname = "cope";
@@ -22,7 +23,10 @@ perlPackages.buildPerlPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = with perlPackages; [
+  buildInputs = [
+    bashNonInteractive
+  ]
+  ++ (with perlPackages; [
     EnvPath
     ExporterTiny
     FileShareDir
@@ -31,7 +35,9 @@ perlPackages.buildPerlPackage {
     ListMoreUtils
     RegexpCommon
     RegexpIPv6
-  ];
+  ]);
+
+  strictDeps = true;
 
   postInstall =
     let
@@ -64,6 +70,8 @@ perlPackages.buildPerlPackage {
       cp $src/new-cope $out/bin/cope
       cp -f $src/new-cope $out/libexec/cope
     '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Colourful wrapper for terminal programs";

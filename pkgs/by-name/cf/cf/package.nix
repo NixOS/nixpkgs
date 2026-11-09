@@ -9,6 +9,8 @@
   nodejs,
   makeBinaryWrapper,
   installShellFiles,
+  jq,
+  moreutils,
   autoPatchelfHook,
   patchelfUnstable,
   cacert,
@@ -19,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cf";
-  version = "1.0.0-beta.18";
+  version = "1.0.0-beta.28";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -28,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cloudflare";
     repo = "cf";
     tag = "cf@${finalAttrs.version}";
-    hash = "sha256-3AjBiAO5mlEMMyzTrq5n3gnhyI7WL8vSTIHIo0bt9ig=";
+    hash = "sha256-p0GBsdsuV/1tQhcNL0ysi+g4lRr3NvUlM8UpWVsnI1E=";
   };
 
   pnpmWorkspaces = [ "cf" ];
@@ -41,10 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_12;
-    fetcherVersion = 4;
-    # Avoid pnpm's macOS clone probe leaving v11/links in the dependency archive.
-    pnpmInstallFlags = [ "--package-import-method=copy" ];
-    hash = "sha256-N7S2/X/5k1ae8c35K6If61V0cyFwj4TDmUkp+Ctdpes=";
+    fetcherVersion = 5;
+    hash = "sha256-9Wc9WV1aKSBjvyqVAH0kixBES+60KwudvrkwVpV/opo=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     makeBinaryWrapper
     installShellFiles
+    jq
+    moreutils
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+    patchShebangs packages/cli/node_modules/.bin
     # Generated commands are committed; the build task regenerates them online.
     pnpm --filter cf exec vp pack
     runHook postBuild
@@ -78,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     pnpm config set --location=project injectWorkspacePackages true
     pnpm --filter cf --prod deploy $out/lib/cf
+    # pnpm deploy writes these in a nondeterministic order. The workspace
+    # file only holds build settings and is not read at runtime.
+    rm $out/lib/cf/pnpm-workspace.yaml
+    jq '.dependencies |= (to_entries | sort_by(.key) | from_entries)' \
+      $out/lib/cf/package.json | sponge $out/lib/cf/package.json
     # Replace workerd's postinstall copy with a link to its platform package.
     for workerd in $out/lib/cf/node_modules/.pnpm/workerd@*/node_modules/workerd; do
       ln -sfr "$workerd"/../@cloudflare/workerd-*/bin/workerd "$workerd/bin/workerd"
@@ -137,7 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ connornelson ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      philiptaron
+    ];
     mainProgram = "cf";
     # The CLI is built from source; npm supplies native binaries and WASM.
     sourceProvenance = with lib.sourceTypes; [

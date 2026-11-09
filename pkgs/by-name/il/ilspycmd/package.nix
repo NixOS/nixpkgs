@@ -22,7 +22,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     powershell
   ]
-  ++ lib.optionals (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

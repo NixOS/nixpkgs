@@ -6,14 +6,16 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
   rust-jemalloc-sys,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
   version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "pyrefly";
     tag = finalAttrs.version;
     hash = "sha256-Uid4IpymX9+3TtLlLjl1B1nqAczgfgjphe0cuk0neVE=";
@@ -23,7 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-snm1x7OKC5Sz12C8MyAf7ph0O01ghFWWlk6lpHujR7c=";
 
-  buildInputs = [ rust-jemalloc-sys ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    rust-jemalloc-sys
+    zstd
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -45,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Fast type checker and IDE for Python";
-    homepage = "https://github.com/facebook/pyrefly";
+    homepage = "https://github.com/meta/pyrefly";
     license = lib.licenses.mit;
     mainProgram = "pyrefly";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

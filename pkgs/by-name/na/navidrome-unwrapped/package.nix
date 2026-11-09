@@ -88,6 +88,11 @@ buildGo127Module (finalAttrs: {
     "sqlite_fts5"
   ];
 
+  # Required for navidrome without any plugins to launch
+  postInstall = ''
+    mkdir -p "$out/share/plugins"
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
@@ -115,5 +120,6 @@ buildGo127Module (finalAttrs: {
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "navidrome" finalAttrs.version;
   };
 })

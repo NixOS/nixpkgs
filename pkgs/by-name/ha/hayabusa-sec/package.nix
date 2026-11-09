@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hayabusa-sec";
-  version = "4.1.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Yamato-Security";
     repo = "hayabusa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k4t0DY0EkSU8jTzUwkBynopLcI/ZxaShrLVg7x1pN+U=";
+    hash = "sha256-H7/kOCo2XqXkkq6mgxa5zHKfIowWLx+agyrA7nP2c9k=";
     # Include the hayabusa-rules
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-fADma0ssh5t6A1gKd5yyy6DTqjYUvqQNaHT+McKRShU=";
+  cargoHash = "sha256-bszVyLRFRHN42ucFryzmk3/9cIVa2I2CjPCA6nHW+qo=";
 
   nativeBuildInputs = [
     makeWrapper

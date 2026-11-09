@@ -16,19 +16,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sfrbox-api";
-  version = "0.1.2";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yyfCc36egn5qKZwPpWTndfq0ShacEEEV2PW8FMzjF6k=";
+    hash = "sha256-hW/FvUngMOIw1GNIKnx19VDYRyHod/VqJRyZsDhuuPc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12.21,<0.13" "uv_build"
+      --replace-fail "uv_build>=0.13.1,<0.14" "uv_build"
   '';
 
   build-system = [ uv-build ];

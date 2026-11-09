@@ -4,6 +4,7 @@
   fetchFromGitLab,
   meson,
   ninja,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   alsa-lib,
   dbus,
@@ -18,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "q6voiced";
     tag = finalAttrs.version;
     hash = "sha256-VvhDaejcvCERU8oDgsjl3IuV5a8RjkA+pH8PJRHJWJs=";
@@ -28,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # point to /etc/q6voiced/q6voiced.conf at runtime
     "--datadir=/etc"
-  ];
+  ]
+  ++ lib.optionals (!systemdSupport) [ "-Dsystemd=disabled" ];
 
   nativeBuildInputs = [
     meson
@@ -36,15 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    systemd
-    dbus
-    alsa-lib
-  ];
+  buildInputs =
+    lib.optionals systemdSupport [
+      systemd
+    ]
+    ++ [
+      dbus
+      alsa-lib
+    ];
 
   meta = {
     description = "Userspace daemon for the QDSP6 voice call audio driver";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/q6voiced";
+    homepage = "https://gitlab.nura.eco/nura/q6voiced";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "q6voiced";

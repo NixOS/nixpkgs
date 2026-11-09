@@ -76,6 +76,7 @@
   libcrossguid,
   libmicrohttpd,
   bluez,
+  cacert,
   doxygen,
   giflib,
   glib,
@@ -524,6 +525,9 @@ stdenv.mkDerivation (
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
         --replace kodi-standalone $out/bin/kodi-standalone
+
+      rm $out/share/kodi/system/certs/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/kodi/system/certs/cacert.pem
     '';
 
     doInstallCheck = true;

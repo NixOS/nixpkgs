@@ -43,12 +43,6 @@ stdenv.mkDerivation {
     done
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-Wno-error=gnu-folding-constant"
-    ]
-  );
-
   meta = {
     description = "C utility functions for OpenWrt";
     homepage = "https://git.openwrt.org/?p=project/libubox.git;a=summary";

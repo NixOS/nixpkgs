@@ -48,6 +48,9 @@ buildPythonPackage rec {
     description = "Subpackage providing Python access to Snowflake entity metadata";
     homepage = "https://pypi.org/project/snowflake.core";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.vtimofeenko ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      vtimofeenko
+    ];
   };
 }

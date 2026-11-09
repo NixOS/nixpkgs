@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kmock";
-  version = "0.7";
+  version = "0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kmock";
     tag = finalAttrs.version;
-    hash = "sha256-XXJEqAIK+k+6M0mfClboQLP3D/l1u06DTJzAH10LFps=";
+    hash = "sha256-nqTSZgpURCS3Zg3RKa2URkNdP7HGPCgq57EupUd0Xdo=";
   };
 
   build-system = [

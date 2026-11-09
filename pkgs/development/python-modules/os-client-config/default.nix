@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchpatch,
-  fetchPypi,
+  fetchFromGitHub,
   fixtures,
   jsonschema,
   openstacksdk,
@@ -16,16 +16,20 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "os-client-config";
   version = "2.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "os_client_config";
-    inherit version;
-    hash = "sha256-4WomDy/VAK8U8Ve5t7fWkpLOg7D4pGHsaM5qikKWfL0=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "os-client-config";
+    tag = finalAttrs.version;
+    hash = "sha256-nVaL5w3ZrBTxK0BBNYjpr7Ssb9Wa3qO3jjW84oB553I=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   patches = [
     # Replace deprecated assertItemsEqual
@@ -34,6 +38,11 @@ buildPythonPackage rec {
       hash = "sha256-i8DZCdpZ8yoN0WHseczycI4iwDP55Ibzo0KLy7Moy4M=";
     })
   ];
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include os_client_config *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -64,4 +73,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

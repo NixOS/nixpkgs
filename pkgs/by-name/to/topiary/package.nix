@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "topiary";
-  version = "0.7.3";
+  version = "0.8.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "topiary";
     repo = "topiary";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3zHO+a/m4Rv+pUm0Y1dBjFfHPZCfjsyAq56EiHSGJ1Y=";
+    hash = "sha256-Acn9sHbYsDO7zJpEP7QyoCKnN+R3G6bWC1ZdSTeJdfY=";
   };
 
-  cargoHash = "sha256-oJoRuWzaP4F+bS2xdFsOWcuLGyTEcCIHLRdPjG8X2CU=";
+  cargoHash = "sha256-1WKKIVCRM0DLk2RyWObVfb+F2ixH5dxEoODoO458pXU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,49 +28,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "topiary-cli"
   ];
 
-  # Skip tests that cannot be executed in sandbox (operation not permitted)
+  # Skip tests that need to fetch tree-sitter grammars from the network, which
+  # the build sandbox does not allow
   checkFlags = [
     "--skip=formatted_query_tester"
-    "--skip=test_coverage::coverage_input_bash"
-    "--skip=test_coverage::coverage_input_css"
-    "--skip=test_coverage::coverage_input_json"
-    "--skip=test_coverage::coverage_input_nickel"
-    "--skip=test_coverage::coverage_input_ocaml"
-    "--skip=test_coverage::coverage_input_ocamllex"
-    "--skip=test_coverage::coverage_input_openscad"
-    "--skip=test_coverage::coverage_input_sdml"
-    "--skip=test_coverage::coverage_input_toml"
-    "--skip=test_coverage::coverage_input_tree_sitter_query"
-    "--skip=test_coverage::coverage_input_wit"
-    "--skip=test_fmt::fmt_input_bash"
-    "--skip=test_fmt::fmt_input_css"
-    "--skip=test_fmt::fmt_input_json"
-    "--skip=test_fmt::fmt_input_nickel"
-    "--skip=test_fmt::fmt_input_ocaml"
-    "--skip=test_fmt::fmt_input_ocaml_interface"
-    "--skip=test_fmt::fmt_input_ocamllex"
-    "--skip=test_fmt::fmt_input_openscad"
-    "--skip=test_fmt::fmt_input_sdml"
-    "--skip=test_fmt::fmt_input_toml"
-    "--skip=test_fmt::fmt_input_tree_sitter_query"
-    "--skip=test_fmt::fmt_input_wit"
-    "--skip=test_fmt::fmt_queries"
-    "--skip=test_fmt_dir"
-    "--skip=test_fmt_files"
-    "--skip=test_fmt_files_query_fallback"
-    "--skip=test_fmt_invalid"
-    "--skip=test_fmt_stdin"
-    "--skip=test_fmt_stdin_query"
-    "--skip=test_fmt_stdin_query_fallback"
+    "--skip=test_cfg_field_with_custom_queries"
+    "--skip=test_cfg_field_with_relative_queries"
+    "--skip=test_cfg_reports_nickel_warnings"
+    "--skip=test_check"
+    "--skip=test_coverage"
+    "--skip=test_fmt"
+    "--skip=test_format_with_relative_query_path"
+    "--skip=test_git_source_caches_query"
+    "--skip=test_relative_path_canonicalization"
     "--skip=test_vis"
-    "--skip=test_vis_invalid"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
   postInstall = ''
-    install -Dm444 topiary-queries/queries/* -t $out/share/queries
+    mkdir -p $out/share/queries
+    cp -R topiary-queries/queries/. $out/share/queries/
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd topiary \
@@ -87,11 +67,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
     homepage = "https://github.com/topiary/topiary";
-    changelog = "https://github.com/topiary/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/topiary/topiary/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      nartsiss
-    ];
+    maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "topiary";
   };
 })

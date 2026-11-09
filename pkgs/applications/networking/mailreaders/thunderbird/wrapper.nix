@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   lib,
   wrapFirefox,
@@ -16,6 +17,9 @@ browser: args:
 
 .overrideAttrs
   (old: {
+    # Keep update tools from treating the wrapper as the source package.
+    pos = __curPos;
+
     # Thunderbird's native GPG support does not yet support smartcards.
     # The official upstream recommendation is to configure fall back to gnupg
     # using the Thunderbird config `mail.openpgp.allow_external_gnupg`

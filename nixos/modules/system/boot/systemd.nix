@@ -89,6 +89,7 @@ let
     "systemd-fsck-root.service"
     "systemd-growfs@.service"
     "systemd-growfs-root.service"
+    "systemd-loop@.service"
     "systemd-remount-fs.service"
     "systemd-pstore.service"
     "local-fs.target"

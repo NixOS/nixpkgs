@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Microsoft";
-    repo = "ProcDump-for-Linux";
+    repo = "ProcDump-Linux";
     rev = finalAttrs.version;
     sha256 = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
   };
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Linux version of the ProcDump Sysinternals tool";
     mainProgram = "procdump";
-    homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
+    homepage = "https://github.com/microsoft/ProcDump-Linux";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;

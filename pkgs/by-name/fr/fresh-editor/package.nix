@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BherBpkukiGikcvCo/ursft2T7WEljXHFjM9xTrm8pA=";
+    hash = "sha256-za4G56fIJac8bJ22NsWYnVEChmE/JXmHLG0w8O1jeXg=";
   };
 
-  cargoHash = "sha256-81wwGMtF2Phj+t4xUKBiBfN9DdSyL5gQVg8iC2RY1Gc=";
+  cargoHash = "sha256-J2FA74Ry2oRrd/GA5yA0a7k/DzIQoRkg9kMWQEE9ZTo=";
 
   __structuredAttrs = true;
 
@@ -83,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       chillcicada
       dwt
       randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bundix curl jq nix-update nix-prefetch-github ruby_3_4
+#! nix-shell -i bash -p bundix curl jq nix-update nix-prefetch-github nixfmt ruby_3_4
 set -e
 set -o pipefail
 

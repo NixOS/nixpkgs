@@ -14,14 +14,14 @@ let
   src = fetchFromGitHub {
     owner = "TheEssem";
     repo = "mastodon";
-    rev = "63d369283df5c4cffb09d3dc6fd38f5b41a1e2ef";
-    hash = "sha256-tr9c9sDO99Mz8uVlx0NsvFPHYDBRq+9BmoXksq5/1fE=";
+    rev = "dc850e2434c3de2396b869d910193f8d3587ce73";
+    hash = "sha256-Mgc/48YTewqEr7gjqTxT3EDIWHl3qDXEVzOWTZXrDp4=";
   };
 in
 
 (mastodon.override {
   pname = "chuckya";
-  version = "0-unstable-2026-10-10";
+  version = "0-unstable-2026-11-06";
 
   srcOverride = applyPatches { inherit src patches; };
 

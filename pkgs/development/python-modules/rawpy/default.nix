@@ -24,15 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.27.1";
+  version = "0.28.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wEs9IUyG4oQP0OhVPi7+YRR6LmcHHALQOKdoF1d9YNM=";
+    hash = "sha256-zmI5MPMg5rcQK0LCX1TqO1J78R8PXTSRMxM+SksNvJI=";
   };
 
   # cmake is only needed to build libraw when `RAWPY_USE_SYSTEM_LIBRAW` is disabled

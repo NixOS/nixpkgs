@@ -16,13 +16,14 @@
   pkg-config,
   rustPlatform,
   stdenv,
+  sqlite,
   udev,
   wrapGAppsHook4,
   writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayle";
-  version = "0.7.0";
+  version = "0.7.1";
 
   __structuredAttrs = true;
 
@@ -30,10 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "wayle-rs";
     repo = "wayle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3JtLRuXXhOTf8mAcNZipYgBi9h+mncyKoz7MqdfnT2U=";
+    hash = "sha256-XToa3/hr8T1bZ/tnhZzOJhyjg1QIUSlSdZjHptIlM24=";
   };
 
-  cargoHash = "sha256-RuRoLOGdbbsExsQSnpFS82f7UP0fryORkBmRZfrJ6vk=";
+  cargoHash = "sha256-LypA6UCeG1afofYxqomMiY9uYOPFmA4A/EaJY1m/Bf4=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
     libxkbcommon.dev
     pixman
+    sqlite
     udev
 
     # for generating libcava bindings

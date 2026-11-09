@@ -6,6 +6,7 @@
   just,
   libcosmicAppHook,
   glib,
+  zstd,
   nix-update-script,
   nixosTests,
 }:
@@ -35,7 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ glib ];
+  buildInputs = [
+    glib
+    zstd
+  ];
 
   dontUseJustBuild = true;
   dontUseJustCheck = true;

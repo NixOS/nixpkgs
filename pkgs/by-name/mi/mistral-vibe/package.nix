@@ -15,15 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W1gpG0eZYXbY4j3/dtOMpvIznLAmNDYGkXdJJvaA6eA=";
+    hash = "sha256-lgrxLd7sfXMHK2Q1yvopbUZXtogZWxlMijtXl5cMGXc=";
   };
 
   patches = [
@@ -72,6 +71,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   pythonRelaxDeps = true;
+  pythonRemoveDeps = [
+    # Not packaged in nixpkgs, and not imported by vibe
+    "opentelemetry-exporter-otlp-common"
+  ];
   dependencies =
     with python3Packages;
     [
@@ -79,6 +82,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       annotated-types
       anyio
       attrs
+      authlib
       beautifulsoup4
       cachetools
       certifi
@@ -94,31 +98,28 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth
       googleapis-common-protos
       h11
-      httpcore
-      httpx
-      httpx-sse
+      httpcore2
+      httpx2
       humanize
       idna
-      importlib-metadata
       jaraco-classes
       jaraco-context
       jaraco-functools
+      joserfc
       jsonpatch
       jsonpath-python
       jsonpointer
       jsonschema
       jsonschema-specifications
       keyring
-      linkify-it-py
-      markdown-it-py
       markdownify
       mcp
-      mdit-py-plugins
-      mdurl
+      mcp-types
       miniaudio
       mistralai
       more-itertools
       opentelemetry-api
+      opentelemetry-exporter-http-transport
       opentelemetry-exporter-otlp-proto-common
       opentelemetry-exporter-otlp-proto-http
       opentelemetry-proto
@@ -126,7 +127,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-semantic-conventions
       packaging
       pexpect
-      platformdirs
       protobuf
       ptyprocess
       pyasn1
@@ -135,9 +135,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pydantic
       pydantic-core
       pydantic-settings
-      pygments
       pyjwt
-      pyperclip
       python-dateutil
       python-dotenv
       python-multipart
@@ -145,29 +143,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
       referencing
       requests
       rfc8785
-      rich
       rpds-py
       sentry-sdk
       setproctitle
       six
       smmap
+      socksio
       soupsieve
       sse-starlette
       starlette
-      textual
-      textual-speedups
       tomli-w
       tree-sitter
       tree-sitter-bash
       truststore
       typing-extensions
       typing-inspection
-      uc-micro-py
       urllib3
+      uuid-utils
       uvicorn
       watchfiles
       websockets
-      zipp
       zstandard
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -180,12 +175,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
     gitMinimal
+    # respx models its routes on HTTPX
+    python3Packages.httpx
     python3Packages.pyte
     python3Packages.pytest-asyncio
-    python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
     python3Packages.pytestCheckHook
     python3Packages.respx
+    python3Packages.rich
     python3Packages.tomlkit
     uv
     versionCheckHook
@@ -201,10 +198,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # AssertionError: assert <MCPSourceStatus.UNAVAILABLE: 'unavailable'> is <MCPSourceStatus.ENABLED: 'enabled'>
     "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
-
-    # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
-    # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
-    "test_generic_backend_streaming_uses_ssl_cert_file"
+    "test_local_mcp_servers_stay_usable_when_connectors_reject_the_key"
 
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
@@ -219,6 +213,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Flaky: TimeoutError
     "test_unified_host_reads_the_live_public_event_cursor"
 
+    # Flaky: RuntimeError: A turn is already running
+    "test_a_forked_child_can_be_forked_again_onto_an_inherited_turn"
+
     # Flaky: session references are not yet garbage-collected
     "test_closed_sessions_release_their_servers_and_background_tasks"
 
@@ -226,11 +223,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # (device, inode, mtime, size) fingerprint does not change
     "test_changes_when_file_changes"
 
-    # Upstream pins mistralai==2.6.0, whose `create_or_update_user_credentials_async`
-    # was replaced by `create_credentials_async` in later versions
-    "test_connect_http_failure_reads_as_a_sentence_without_the_body"
-    "test_connect_turns_a_no_auth_connector_into_a_connected_one"
-    "test_connect_without_credentials_creates_the_default_user_connection"
+    # TypeError: OTLPSpanExporter.__init__() got an unexpected keyword argument '_transport'
+    # (requires opentelemetry-exporter-otlp-proto-http>=1.45.0)
+    "test_trace_export_swaps_each_batch_and_keeps_tenant_headers"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'alive' == 'gone'
@@ -239,12 +234,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # RuntimeError: Session lease file watcher did not start
     "test_unified_lease_subscription_ends_with_its_connection"
     "test_unified_lease_subscription_reports_held_sessions_then_changes"
+
+    # The skill file watcher never reports changes in the sandbox (TimeoutError)
+    "test_a_configured_skill_path_created_later_is_picked_up"
+    "test_a_new_skill_file_yields_one_change"
+    "test_a_skill_written_after_the_session_opened_is_picked_up_without_reload"
+    "test_a_watch_with_nothing_to_watch_waits_for_a_folder"
+
+    # The file watch never sees the other process's write in the sandbox (TimeoutError)
+    "test_a_read_by_another_process_reaches_the_owners"
+
+    # The killed shell's stdout does not close in time (TimeoutError)
+    "test_killing_a_shell_right_after_its_first_output_kills_its_next_command"
   ];
 
   disabledTestPaths = [
-    # All snapshot tests use syrupy 4.8.0, which is not packaged here.
-    "tests/snapshots/"
-
     # These tests invoke uv run and fail to import the packaged pydantic extension.
     "tests/e2e/agent_loop_characterization/test_resume.py"
     "tests/e2e/agent_loop_characterization/test_subagents.py"
@@ -257,16 +261,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/e2e/test_cli_tui_streaming.py"
     "tests/e2e/test_cli_tui_tool_approval.py"
 
+    # Flaky: telemetry events are not received in the expected order
+    "tests/app_server/test_setup_oidc_telemetry.py"
+
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
 
     # The installer is run with a PATH restricted to /usr/bin:/bin, where the
     # sandbox provides no `bash`
     "tests/test_install_script.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # RuntimeError: Session lease file watcher did not start
-    "tests/app_server/test_session_lease_watch.py"
   ];
 
   __darwinAllowLocalNetworking = true;

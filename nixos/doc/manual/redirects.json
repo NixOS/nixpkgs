@@ -937,12 +937,8 @@
     "index.html#module-services-garage"
   ],
   "module-services-garage-upgrade-scenarios": [
-    "index.html#module-services-garage-upgrade-scenarios"
-  ],
-  "module-services-garage-advanced-upgrades": [
-    "index.html#module-services-garage-advanced-upgrades"
-  ],
-  "module-services-garage-maintainer-info": [
+    "index.html#module-services-garage-upgrade-scenarios",
+    "index.html#module-services-garage-advanced-upgrades",
     "index.html#module-services-garage-maintainer-info"
   ],
   "module-services-youtrack": [
@@ -1747,6 +1743,12 @@
   "module-services-flatpak": [
     "index.html#module-services-flatpak"
   ],
+  "module-services-cassandra": [
+    "index.html#module-services-cassandra"
+  ],
+  "module-services-cassandra-diagnostics": [
+    "index.html#module-services-cassandra-diagnostics"
+  ],
   "module-services-tigerbeetle": [
     "index.html#module-services-tigerbeetle"
   ],
@@ -1936,9 +1938,6 @@
   ],
   "module-services-input-methods-uim": [
     "index.html#module-services-input-methods-uim"
-  ],
-  "module-services-input-methods-hime": [
-    "index.html#module-services-input-methods-hime"
   ],
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
@@ -2993,5 +2992,26 @@
   ],
   "module-garm-setup": [
     "index.html#module-garm-setup"
+  ],
+  "module-services-falco": [
+    "index.html#module-services-falco"
+  ],
+  "module-services-falco-basic-usage": [
+    "index.html#module-services-falco-basic-usage"
+  ],
+  "module-services-falco-configuration": [
+    "index.html#module-services-falco-configuration"
+  ],
+  "module-services-falco-rules": [
+    "index.html#module-services-falco-rules"
+  ],
+  "module-services-falco-outputs": [
+    "index.html#module-services-falco-outputs"
+  ],
+  "module-services-falco-webserver": [
+    "index.html#module-services-falco-webserver"
+  ],
+  "module-services-falco-best-practices": [
+    "index.html#module-services-falco-best-practices"
   ]
 }

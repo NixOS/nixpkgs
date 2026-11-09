@@ -25,13 +25,12 @@ buildPythonPackage (finalAttrs: {
   pname = "mujoco-warp";
   inherit (mujoco) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco_warp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oERRAW6Y5EmI5xoRqLBi11te7idx0rh6YRvcrxsJIlM=";
+    hash = "sha256-5ICPLgtppFgtsHbk3Ek9weROg5lLtV4CynFFGPm6Qss=";
   };
 
   build-system = [

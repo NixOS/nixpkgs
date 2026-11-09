@@ -16,20 +16,20 @@
   libsm,
   libx11,
   libxtst,
-  libpng12,
+  libpng,
   pango,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.70.1";
+  version = "9.70.4";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip {
         url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
-        sha256 = "sha256-rWYAXz+ysf7y3Dz2lUv+o8h78rHTCCFsBUexv1mRwEQ=";
+        hash = "sha256-JV/mUXw3lMdaNWZ1t1TzE5n92bO1Rs814USqHD6CG/g=";
       }
     else
       throw "Platform not supported";
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       libx11
       libxtst
       libsm
-      libpng12
+      libpng
       gstreamer
       gst-plugins-base
       zlib

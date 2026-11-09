@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "hypopg";
-  version = "1.4.3";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "HypoPG";
     repo = "hypopg";
     tag = finalAttrs.version;
-    hash = "sha256-d8j1mvn/9R8LEQCqstBxddRqQYZ9k4hcOrlQp7cPtYI=";
+    hash = "sha256-uxUHGBPLnSk59A4/EYQVIDqXa5zi0mCw2MX6jfZyAPY=";
   };
 
   passthru = {

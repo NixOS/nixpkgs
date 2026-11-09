@@ -7,18 +7,20 @@
   buildPythonPackage,
   rustPlatform,
   callPackage,
+  pkg-config,
+  pkgsHostTarget,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "uv-build";
-  version = "0.12.5";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-tKdqciPQnteeTqkXtWY8mliWUDv5gMdU8x0UPadQZlQ=";
+    hash = "sha256-US3SjwhWE3v4/i46YuBon2GA6PupC4Z0NRUqcV9CPLM=";
   };
 
   # Add the missing FIEMAP ioctl constants for loongarch64
@@ -26,19 +28,24 @@ buildPythonPackage (finalAttrs: {
   patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
     (fetchurl {
       name = "loongarch64-fiemap.patch";
-      url = "https://github.com/lcpu-club/loongarch-packages/raw/28165d5d4f00d1dfb6194c7d4f1f37e9c2ba56b2/uv/loongarch64-fiemap.patch";
-      hash = "sha256-owRf+JtH/4GKsUFB2UwKCvXhLUZJ3vI2Zeywhz4tgbE=";
+      url = "https://github.com/lcpu-club/loongarch-packages/raw/ebcc3b01e19f8c01eaaeae683b62ff1a3d607fff/uv/loongarch64-fiemap.patch";
+      hash = "sha256-QiLw6xFlDQgTP4eTbWmuZogFnSsVZK9jX+N1ueJC5DQ=";
     })
   ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    pkgsHostTarget.zstd
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-27NzA/YXYbcGO6ehXP9OgvgLJQG/YP/I+eeflLmzxRQ=";
+    hash = "sha256-9L47CTlkOVYfGuzE4e7e2FYAI192pAsipzzScF7B1j4=";
   };
 
   buildAndTestSubdir = "crates/uv-build";

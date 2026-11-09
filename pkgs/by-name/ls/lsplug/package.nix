@@ -24,8 +24,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "lsplug"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Replacement for lsusb that shows more useful info and less useless info";
     homepage = "https://git.sr.ht/~martijnbraam/lsplug";

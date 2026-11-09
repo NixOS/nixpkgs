@@ -100,7 +100,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = lib.getExe cfg.package;
-        Restart = "on-failure";
+        Restart = "always";
         User = cfg.user;
         Group = cfg.group;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
@@ -129,8 +129,7 @@ in
           "AF_INET"
           "AF_INET6"
         ];
-        SocketBindDeny = "any";
-        SocketBindAllow = toString cfg.port;
+        # cloudflared's QUIC transport requires binding dynamically allocated UDP ports.
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"

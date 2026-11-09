@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromRadicle,
+  pkg-config,
+  libgit2,
   radicle-node,
   gitMinimal,
   writableTmpDirAsHomeHook,
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-6Hkyf9siagH/GPVxOePpkV2BMloXEamrJSJCnEfIeSo=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   preCheck = ''
     git config --global user.name nixbld

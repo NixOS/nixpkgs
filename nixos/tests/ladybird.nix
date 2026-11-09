@@ -2,7 +2,10 @@
 {
   name = "ladybird";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
+    maintainers = [
+      fgaz
+      schembriaiden
+    ];
   };
 
   nodes.machine =
@@ -14,6 +17,10 @@
 
       services.xserver.enable = true;
       programs.ladybird.enable = true;
+      environment.systemPackages = [
+        pkgs.groff
+        pkgs.groff.perl
+      ];
     };
 
   enableOCR = true;
@@ -28,5 +35,12 @@
     machine.send_key("ctrl-tab")
     machine.wait_for_text("Hello world")
     machine.screenshot("screen")
+
+    # Check that the PDF.js viewer renders the document, not just its toolbar.
+    machine.succeed("printf '.ps 32\\n.sp 1i\\nPDF rendering works\\n' | SOURCE_DATE_EPOCH=1 groff -Tpdf > /tmp/ladybird-test.pdf")
+    machine.send_key("ctrl-l")
+    machine.send_chars("file:///tmp/ladybird-test.pdf\n")
+    machine.wait_for_text("PDF rendering works")
+    machine.screenshot("pdf")
   '';
 }

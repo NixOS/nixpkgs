@@ -5,10 +5,6 @@
   setuptools,
   llm,
   llm-tools-datasette,
-  llm-echo,
-  pytestCheckHook,
-  pytest-httpx,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -27,12 +23,8 @@ buildPythonPackage rec {
 
   dependencies = [ llm ];
 
-  nativeCheckInputs = [
-    llm-echo
-    pytestCheckHook
-    pytest-httpx
-    writableTmpDirAsHomeHook
-  ];
+  # there is only one test that asserts the exact tool output
+  doCheck = false;
 
   pythonImportsCheck = [ "llm_tools_datasette" ];
 

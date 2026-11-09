@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "tjhorner";
   domain = "luxer";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "tjhorner";
     repo = "home-assistant-luxer-one";
     tag = "v${version}";
-    hash = "sha256-bzAdroFE25L0gy1FURYF5p8BaTjzHKtmpKWweDAQH0s=";
+    hash = "sha256-cm8uNebJCml5cQCw3myi9FSYPBSxGc2Wewtn2bxZPrw=";
   };
 
   meta = {

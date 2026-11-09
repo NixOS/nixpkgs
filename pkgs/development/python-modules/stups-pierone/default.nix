@@ -8,6 +8,7 @@
   stups-zign,
   pytestCheckHook,
   hypothesis,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-OypGYHfiFUfcUndylM2N2WfPnfXXJ4gvWypUbltYAYE=";
   };
 
+  postPatch = ''
+    substituteInPlace pierone/__init__.py \
+      --replace-fail "__version__ = '0.22'" "__version__ = '${version}'"
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [ "stups-zign" ];
@@ -32,13 +38,10 @@ buildPythonPackage rec {
     stups-zign
   ];
 
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pierone" ];

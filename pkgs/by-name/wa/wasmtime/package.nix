@@ -5,6 +5,8 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
+  pkg-config,
+  zstd,
   installShellFiles,
   versionCheckHook,
   _experimental-update-script-combinators,
@@ -17,14 +19,19 @@
 let
   sources = {
     lts-36 = {
-      version = "36.0.18";
-      hash = "sha256-HTWu8NI7SnaMR2dUzBAxVyWd9pbe51aPnYUoNkyHgKo=";
-      cargoHash = "sha256-r//pGU4r/GUPQSaRk001JPhuplNZEtRfeq7wqB6mn78=";
+      version = "36.0.19";
+      hash = "sha256-zp/BEh1uWaDEGeyqZUZ4PyNGzMDx1hUruMS499yEJA8=";
+      cargoHash = "sha256-h5qEnyhIDxZIbvuiQ/kKZvxcRwynHm18X2jQcY/ChgE=";
+    };
+    lts-48 = {
+      version = "48.0.6";
+      hash = "sha256-UysbVNsE9OVYF3e2+JVIedrKEn34NprLL1S8IUuWgF8=";
+      cargoHash = "sha256-W40zAZKKKEIOZaSDq8jgv2dz3LVHS0+2l2Hwt/zsMo0=";
     };
     main = {
-      version = "49.0.2";
-      hash = "sha256-XwJOxAswT93KPPe1/Vv2DHHeNRUhfq68x2giRDQmK9o=";
-      cargoHash = "sha256-TjVJ0M5LFAsxHUFF88fHvSAzKqq7ZqPT2zOSnQ8X16o=";
+      version = "50.0.0";
+      hash = "sha256-s0DWWCZLEdKf2joTn+QghgfWkJ6Vy4oCxgdB/0/QQlM=";
+      cargoHash = "sha256-lRH/UVGykOT0rwMQ2S/MpEUMVmIa172NWNKzTPdejLo=";
     };
   };
   source = sources.${variant};
@@ -64,8 +71,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     installShellFiles
   ];
+
+  buildInputs = [ zstd ];
 
   doCheck =
     with stdenv.buildPlatform;

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       used to validate and fix HTML data.
     '';
     license = lib.licenses.libpng; # very close to it - the 3 clauses are identical
-    homepage = "http://html-tidy.org";
+    homepage = "https://www.html-tidy.org";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ edwtjo ];
     mainProgram = "tidy";

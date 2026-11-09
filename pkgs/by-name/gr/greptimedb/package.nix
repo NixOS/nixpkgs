@@ -2,10 +2,14 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  cmake,
+  aws-lc,
   pkg-config,
   protobuf,
   zlib,
+  zstd,
+  libgit2,
+  oniguruma,
+  rust-jemalloc-sys-unprefixed,
   nix-update-script,
   versionCheckHook,
 }:
@@ -42,16 +46,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ zlib ];
-
-  # cmake is here only to build the vendored C sources of aws-lc-sys
-  dontUseCmakeConfigure = true;
+  buildInputs = [
+    zlib
+    aws-lc
+    zstd
+    libgit2
+    oniguruma
+    rust-jemalloc-sys-unprefixed
+  ];
 
   env = {
     # Installed binaries are stripped during fixup, so delete.

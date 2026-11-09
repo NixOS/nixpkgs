@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./disable-flowbench.patch
     ./don-t-use-static-boost-libs.patch
+    ./fix-missing-cstdint.patch
     # <https://github.com/apple/foundationdb/pull/12373>
     ./fix-toml11-4.0.patch
     # GetMsgpack: add 4+ versions of upstream

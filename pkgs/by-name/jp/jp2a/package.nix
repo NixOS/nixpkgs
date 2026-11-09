@@ -56,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/Talinx/jp2a";
     description = "Small utility that converts JPG images to ASCII";
     changelog = "https://github.com/Talinx/jp2a/releases/tag/${finalAttrs.src.tag}";

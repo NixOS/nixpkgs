@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.11.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # upstream does not provide Cargo.lock outside of PyPI
   src = fetchPypi {
     inherit (finalAttrs) pname version;

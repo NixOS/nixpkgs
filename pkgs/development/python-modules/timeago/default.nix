@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.16";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hustcc";
     repo = "timeago";

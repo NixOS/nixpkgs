@@ -33,6 +33,9 @@
   xwayland,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   # Not regular qtmir, experimental support for Mir 2.x
   # Currently following https://gitlab.com/ubports/development/core/qtmir/-/tree/personal/sunweaver/debian-upstream
@@ -49,6 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ];
+
+  patches = [
+    # Adjust to lomiri-api 0.4.0 (components only used by 1 reverse dependency dropped)
+    # Different branch (commit bd7f9e81adc621fc140b6367b6cc6b71e313ccb2), does not apply cleanly
+    ./0001-Vendor-the-Application-API-headers-instead-of-depend.patch
   ];
 
   postPatch =
@@ -136,6 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    pkgConfigModules = [ "qtmirserver" ];
+    pkgConfigModules = [
+      "qtmirserver"
+      "lomiri-shell-application${lib.optionalString withQt6 "-qt6"}"
+    ];
   };
 })

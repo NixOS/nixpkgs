@@ -17,6 +17,12 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-lM04fuzgcLHz8/Jf4wJVYXveFcO6sFyJ9PQAcpweyjk=";
   };
 
+  # This fails during `npmInstallHook` without patching
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "prepare" "dont-prepare"
+  '';
+
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -28,10 +34,18 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [ pnpm_10 ];
   npmConfigHook = pnpmConfigHook;
 
-  dontNpmBuild = true;
+  npmBuildScript = "compile";
+  dontNpmBuild = false;
 
-  # takes too long to finish
+  # Use pnpm to prune deps instead
   dontNpmPrune = true;
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
 
   meta = {
     description = "Static file serving and directory listing";

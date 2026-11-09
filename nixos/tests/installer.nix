@@ -1143,6 +1143,63 @@ let
         '';
       };
 
+  # To test bcachefsEncrypted against multiple kernels
+  mkBcachefsEncryptedTest =
+    {
+      nameSuffix ? "",
+      # Name of a pkgs.linuxPackages* attribute, e.g. "linuxPackages_latest".
+      kernelAttribute ? null,
+    }:
+    makeInstallerTest "bcachefs-encrypted${nameSuffix}" {
+      extraInstallerConfig = {
+        boot = {
+          supportedFilesystems = [ "bcachefs" ];
+        }
+        // optionalAttrs (kernelAttribute != null) {
+          kernelPackages = pkgs.${kernelAttribute};
+        };
+
+        # disable zfs so we can support latest kernel if needed
+        imports = [ no-zfs-module ];
+
+        environment.systemPackages = with pkgs; [ keyutils ];
+      };
+
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+      ''
+      + optionalString (kernelAttribute != null) ''
+        boot.kernelPackages = pkgs.${kernelAttribute};
+      '';
+
+      enableOCR = true;
+      postBootCommands = ''
+        # Enter it wrong once
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("wrong\n")
+        # Then enter it right.
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("password\n")
+      '';
+
+      createPartitions = ''
+        installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 100MB"          # /boot
+          + " mkpart primary linux-swap 100M 1024M"  # swap
+          + " mkpart primary 1024M -1s",             # /
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
+          "echo password | bcachefs unlock -k session /dev/vda3",
+          "echo password | mount -t bcachefs /dev/vda3 /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount /dev/vda1 /mnt/boot",
+        )
+      '';
+    };
 in
 {
 
@@ -1608,47 +1665,16 @@ in
     '';
   };
 
-  bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
-    extraInstallerConfig = {
-      boot.supportedFilesystems = [ "bcachefs" ];
+  bcachefsEncrypted = mkBcachefsEncryptedTest { };
 
-      # disable zfs so we can support latest kernel if needed
-      imports = [ no-zfs-module ];
+  bcachefsEncryptedLatestKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-latest-kernel";
+    kernelAttribute = "linuxPackages_latest";
+  };
 
-      environment.systemPackages = with pkgs; [ keyutils ];
-    };
-
-    extraConfig = ''
-      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-    '';
-
-    enableOCR = true;
-    postBootCommands = ''
-      # Enter it wrong once
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("wrong\n")
-      # Then enter it right.
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("password\n")
-    '';
-
-    createPartitions = ''
-      installer.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
-        "echo password | bcachefs unlock -k session /dev/vda3",
-        "echo password | mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
+  bcachefsEncryptedRcKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-rc-kernel";
+    kernelAttribute = "linuxPackages_testing";
   };
 
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {

@@ -65,6 +65,7 @@
   enablePluginManageSieve ? true,
   enablePluginNewMail ? true,
   enablePluginNotification ? (enablePluginNotificationDialogs || enablePluginNotificationSounds),
+  libayatana-appindicator,
   libcanberra-gtk3,
   libnotify,
   enablePluginPdfViewer ? enablePluginPdf,
@@ -206,7 +207,11 @@ let
     {
       flags = [ "notification-plugin" ];
       enabled = enablePluginNotification;
-      deps = [ libnotify ] ++ [ libcanberra-gtk3 ];
+      deps = [
+        libayatana-appindicator
+        libcanberra-gtk3
+        libnotify
+      ];
     }
     {
       flags = [ "pdf_viewer-plugin" ];

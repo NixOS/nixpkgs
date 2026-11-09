@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vermin";
-  version = "1.8.0";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netromdk";
     repo = "vermin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UJAIwxCnI8gcEPgLep5sKHxcDtJFB65S7OA043VN5S8=";
+    hash = "sha256-XOruR+/9Ujoz6Pa7v6ux6aw4+mkNhlY+sldSttxhjeo=";
   };
 
   build-system = with python3Packages; [

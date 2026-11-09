@@ -73,6 +73,26 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Remove when version > 0.6.2
+    (fetchpatch {
+      name = "0001-lomiri-vendor-launcher-api.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/3b1250eb49046fe9fa06878b9d2a089315b0b3ac.patch";
+      hash = "sha256-i5qjYz+7NJ7r9NK5C/BibDPIlz2A1O+jZuC5tP6PICQ=";
+    })
+    (fetchpatch {
+      name = "0002-lomiri-launcher-api-drop-leftover-lomiri-api-stuff.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/76e829b1286bcf142197c1723b4de3769c84871c.patch";
+      hash = "sha256-FM5xa/PDD4JmfWEQRIxuCevAP3/pWmdU1vi2b86Pswg=";
+    })
+    (fetchpatch {
+      name = "0003-lomiri-notifications-api-from-lomiri-notifications.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/83ba36c472795589bef640a1f3116e987dd60a19.patch";
+      excludes = [
+        "debian/control"
+      ];
+      hash = "sha256-DXWOhwMz5TD0SCaHxrYKpW3mQ2BMyTnVMFu8e9wdJEI=";
+    })
+
     # Fix broken multimedia suspend due to missing media-hub
     (fetchpatch {
       name = "2012-lomiri-dont-suspend-apps.patch";
@@ -142,6 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace plugins/Utils/constants.cpp \
         --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+    ''
+    # Outside of what wrapQtAppsHook handles, so would require extra effort for no gain
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'lomiri/qml' '${finalAttrs.passthru.shellPlugindirSuffix}'
     ''
     + lib.optionalString finalAttrs.finalPackage.doCheck ''
       patchShebangs tests/whitespace/check_whitespace.py
@@ -270,6 +295,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     etcLayoutsFile = "lomiri/keymaps";
+
+    # TODO This is likely not supposed to be the regular Qt QML import prefix
+    # but otherwise i.e. lomiri-notifications cannot be found in lomiri
+    shellPlugindirSuffix =
+      # Juuuuust in case this ever changes
+      assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qtbase.qtQmlPrefix)
+        "Assumption that qtbase.qtQmlPrefix (${qtbase.qtQmlPrefix}) starts with 'lib/' no longer holds, lomiri & its dependencies needs to be adjusted!";
+      lib.strings.removePrefix "lib/" qtbase.qtQmlPrefix;
+
     tests = nixosTests.lomiri;
     updateScript = gitUpdater { };
     greeter = linkFarm "lomiri-greeter" [

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cpak";
-  version = "2.14.8";
+  version = "2.14.13";
 
   src = fetchFromGitHub {
     owner = "Containerpak";
     repo = "cpak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n/uHhOzZvKUE6QSZ6LRBLGOvm9LRibKB2DRFsSwYhEk=";
+    hash = "sha256-y6KhfAld3ZuQs9QfTEDEdoZYUD78cYDpwXlhvmMSFZg=";
   };
 
   vendorHash = "sha256-+JB2fxN/EAABtzh1o+S/SOxpNa0VQ2LHEEg18Z6KtA8=";

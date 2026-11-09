@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "button-card";
-  version = "7.0.1";
+  version = "7.1.0-dev.2";
 
   src = fetchFromGitHub {
     owner = "custom-cards";
     repo = "button-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UJ9DzoT0XAWTxUXtnfOrpd0MQihBw9LY7QI0TXEbUNk=";
+    hash = "sha256-Qq45D/rsYG3uNCLFW4qZbGMbYQHhqan4evkCf7LSTio=";
   };
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-zbuurXlIz13zCAMKOl+/VvsVHrDscNkweZG1eiqrnUM=";
+    hash = "sha256-di+vFgqbtBDRbevvFLcbUrraTfzgesKIsA08Hp0owcc=";
   };
 
   nativeBuildInputs = [

@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  fuse,
+  fuse3,
   versionCheckHook,
   nix-update-script,
 }:
@@ -32,8 +32,11 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
   ];
+
+  tags = [ "fuse3" ];
+  env.CGO_CFLAGS = "-I${lib.getDev fuse3}/include/fuse3";
 
   # Integration tests fail (requires connection to relays)
   doCheck = false;

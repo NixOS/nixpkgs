@@ -29,7 +29,7 @@ let
       cuda_nvdisasm
       cuda_nvprune
       cuda_profiler_api
-      cuda_nvtx
+      nvtx
     ]
     ++ lib.optional (lib.versionAtLeast cudaPackages.cuda_nvcc.version "13") cudaPackages.cuda_crt;
   cudaRoots = lib.unique (

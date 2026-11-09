@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linear";
-  version = "1.31.1";
+  version = "1.32.8";
 
   src = fetchurl {
     url = "https://releases.linear.app/Linear-${finalAttrs.version}-universal.dmg";
-    hash = "sha256-haZz9RdbcQiFbCqdy/S25aCsFoSKn3dFAkYL8NgoTYw=";
+    hash = "sha256-CNQrkXvEQGgjHUep4Urp/awsqV+mtFHoEPzaD3Vu1KM=";
   };
 
   strictDeps = true;

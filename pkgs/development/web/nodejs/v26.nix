@@ -4,15 +4,11 @@
   buildPackages,
   callPackage,
   fetchpatch2,
-  openssl,
-  python3,
-}:
+  ...
+}@args:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix args;
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -23,8 +19,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.12.1";
-  sha256 = "053e3b296859b6d8d93f99ef97fa9cec1c4ee171c72968100c649978c1dbd38c";
+  version = "26.13.0";
+  sha256 = "263f639ecfa7a17b49438d76cdbf9aff73179e3c7cb789da69b900718427fa2e";
   patches =
     (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
       url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";

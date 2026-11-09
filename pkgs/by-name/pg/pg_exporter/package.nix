@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pg_exporter";
-  version = "1.4.1";
+  version = "1.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "pg_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZQWbDpKv7H2VMu49dsYmEoFYun3oHPccwFr4L4JoLYA=";
+    hash = "sha256-/FhxDOfHEwwVpdMhNPdFqIwXnebMat10PGOCB+rVZno=";
   };
 
-  vendorHash = "sha256-XYgRwYKar/sqMCSnJ865FsM55mCVanbXrZ6aTf6Ksvc=";
+  vendorHash = "sha256-LbIsUfxU04Qawsxoh4K1GgYHAL0BVzSPXtqSaNFfgdY=";
 
   env.CGO_ENABLED = 0;
 

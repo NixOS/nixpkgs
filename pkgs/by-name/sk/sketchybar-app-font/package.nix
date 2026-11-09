@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
-  version = "3.0.7";
+  version = "3.0.20";
 
   src = fetchFromGitHub {
     owner = "kvndrsslr";
     repo = "sketchybar-app-font";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vm1GJDAv1PaR6fOHSVVTgqiKX+xp+dMrPjOnjZQSXBY=";
+    hash = "sha256-EutIFcE3eq3Non9nEt7rYc7QHtHSmzSwwL/DkR755sQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {

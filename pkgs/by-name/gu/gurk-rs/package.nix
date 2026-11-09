@@ -1,5 +1,4 @@
 {
-  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
@@ -39,9 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
 
   env = {
-    NIX_LDFLAGS = lib.optionalString (
-      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
-    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
     PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
   };

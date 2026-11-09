@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
   version = "0.3.18.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";

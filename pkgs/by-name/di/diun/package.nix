@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "diun";
-  version = "4.33.0";
+  version = "4.33.1";
 
   src = fetchFromGitHub {
     owner = "crazy-max";
     repo = "diun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EVIT6au5B3wzb5xTc2o/sY7p3+tT5lWjlzQX5HdQNkA=";
+    hash = "sha256-jEA5zPrnDwkY3QWt/0BTmMExFsACXgaRBiSjLyZBf9M=";
   };
   vendorHash = null;
 

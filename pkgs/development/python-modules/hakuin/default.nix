@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pruzko";
     repo = "hakuin";

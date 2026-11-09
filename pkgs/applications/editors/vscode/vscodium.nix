@@ -26,11 +26,11 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-YSI7dPnkCDQRcxHsQXfLOG0JuEwark+eZ0yWWAVpzvM=";
-      aarch64-linux = "sha256-pXvg1Sit99ZQgxjjfb2YLWlb+RUB4yTDfpfhHVs3WBE=";
-      aarch64-darwin = "sha256-OguhoTttdD95/8IL69ei74urK0DlS8yA+uEj2p7VUuA=";
-      loongarch64-linux = "sha256-udOyUGFJWI4JHiMhdifLbJ6riYY84MRaxFEv1C+IxzU=";
-      riscv64-linux = "sha256-9gtdz2kuA7DXw69bDXjcZIhpJrckCysrVmBaRIR60ww=";
+      x86_64-linux = "sha256-yhiVqgQL2RoJxwnXnqx4YtjBqgI3/cJbUD3uuLzYfv0=";
+      aarch64-linux = "sha256-nycK4kJWGBKs0Cvpz1wTyEjaNZs1Yyet/kS4FalTIwk=";
+      aarch64-darwin = "sha256-rej14Ov0fl6p4keIRPFQxo5D3vGStvi+BdAynSXsCRc=";
+      loongarch64-linux = "sha256-uS7mxUGCxWu6NArM9wgUIjL7H8s3sCXE/oRvG4drAj0=";
+      riscv64-linux = "sha256-r+5jMMCT6AR3oklayzOSbdNXkBSl5nKKty8DHYwz7YE=";
     }
     .${system} or throwSystem;
 
@@ -41,8 +41,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.140.06880";
-  vscodeVersion = "1.140.0";
+  version = "1.143.17232";
+  vscodeVersion = "1.143.1";
   pname = "vscodium";
 
   executableName = "codium";

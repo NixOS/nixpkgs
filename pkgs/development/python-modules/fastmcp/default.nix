@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
   version = "3.4.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
@@ -142,11 +141,6 @@ buildPythonPackage (finalAttrs: {
     "test_rate_limiting_recovery_over_time"
     "test_rate_limiting_with_different_operations"
     "test_timeout"
-
-    # RuntimeError: Attempted to exit a cancel scope that isn't the current tasks's current cancel scope
-    "test_stateful_proxy"
-    "test_concurrent_log_requests_no_mixing"
-    "test_multi_proxies_no_mixing"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # floating point error

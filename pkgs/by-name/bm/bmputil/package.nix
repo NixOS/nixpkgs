@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bmputil-cli";
     maintainers = [
       lib.maintainers.shimun
-      lib.maintainers.carlossless
+      lib.maintainers.karstx
     ];
   };
 }

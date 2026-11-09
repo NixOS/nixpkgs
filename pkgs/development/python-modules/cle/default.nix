@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   pname = "cle";
   # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
   # nixpkgs-update: no auto update
-  version = "10.0.4";
+  version = "10.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "angr";
     repo = "cle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SjPIjxB7JdWn734FaeRw3ytv8Qc86DD0t7wuWiUxnQ8=";
+    hash = "sha256-sOwZfl77pPqP4Gp07r9Ydw9KO1Mk5T+7jmjMQBiZs34=";
   };
 
   pythonRelaxDeps = [ "arpy" ];
@@ -62,18 +62,16 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  preCheck =
-    let
-      binaries = fetchFromGitHub {
-        owner = "angr";
-        repo = "binaries";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-EfmNEokXDCbiBpxQLhM1XG2hI/+n+QIFS3eNlEMdbe4=";
-      };
-    in
-    ''
-      ln -s ${binaries} ../binaries
-    '';
+  preCheck = ''
+    ln -s ${finalAttrs.passthru.binaries} ../binaries
+  '';
+
+  passthru.binaries = fetchFromGitHub {
+    owner = "angr";
+    repo = "binaries";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yB9R2MvnUCgLY61ejvf+qRj65YDDkVSifxvtqRJbYOk=";
+  };
 
   disabledTests = [
     # Require the optional unfree pyxdia dependency.

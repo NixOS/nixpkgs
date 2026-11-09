@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  aws-lc,
   cargo-tauri,
   jq,
   libsoup_3,
@@ -13,26 +14,27 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
+  sqlcipher,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "3.10.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "wealthfolio";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dwZaPQh9qA7KOl0pw3yKOl5uDBYy4YzaRpEA9e+1hOM=";
+    hash = "sha256-Z89ZF/BTa6fU/Ogi5V4KhDDlcHKQHIOhUv5if9QrPB8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-hRIe3OuIlvCsLbaIpurAHfTV/oA+mBWWsP8XPKGcE/0=";
+    hash = "sha256-YAaWBxT0w0bIZDKgL6VgjWHbt/XVkJB2MInbRBuhC+0=";
   };
 
   cargoRoot = ".";
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-+ct0reGkqHytMdq+frEi+s5zvd0PdP0kR5Mqr3IrXVI=";
+    hash = "sha256-IoKuEkgVju7+f6kFvtQPU9dAulBk4bjtfcN3jmdm384=";
   };
 
   nativeBuildInputs = [
@@ -61,8 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libsoup_3
     openssl
+    sqlcipher
     webkitgtk_4_1
   ];
 

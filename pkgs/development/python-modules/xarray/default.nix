@@ -42,7 +42,6 @@ buildPythonPackage (finalAttrs: {
   version = "2026.07.0";
   pyproject = true;
   # Needed mainly for pytestFlags with spaces
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pydata";

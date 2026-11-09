@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-keyfile";
     tag = "v${version}";
     fetchSubmodules = true;
@@ -48,8 +48,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
-    homepage = "https://github.com/ethereum/eth-keyfile";
-    changelog = "https://github.com/ethereum/eth-keyfile/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/ApeWorX/eth-keyfile";
+    changelog = "https://github.com/ApeWorX/eth-keyfile/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };

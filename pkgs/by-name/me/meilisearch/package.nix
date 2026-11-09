@@ -4,27 +4,38 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
+  oniguruma,
+  pkg-config,
+  rust-jemalloc-sys-unprefixed,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meilisearch";
-  version = "1.55.0";
+  version = "1.56.1";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meilisearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k2tuArZ+/U/UGvvc70Ow8VC0+tuFgEKfc5GaAdqZDpc=";
+    hash = "sha256-KQhD2YadHhf+qS+SiMgvFjsHu3h755K1FHUwT2uqMQ8=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  cargoHash = "sha256-MZFBymNFSIVV314/BPF020R43uTRPm+Mr5w3e77WBj8=";
+  cargoHash = "sha256-4mrWhoQ0zvb5kThveP34vcDRNiLRRE8Nq4KbLwu9K4M=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    oniguruma
+    rust-jemalloc-sys-unprefixed
+  ];
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };

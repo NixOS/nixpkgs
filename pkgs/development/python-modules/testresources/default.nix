@@ -5,7 +5,6 @@
   fixtures,
   hatch-vcs,
   hatchling,
-  pbr,
   pytestCheckHook,
   testtools,
 }:
@@ -27,23 +26,21 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  dependencies = [ pbr ];
-
   nativeCheckInputs = [
     fixtures
     testtools
     pytestCheckHook
   ];
 
-  env.PBR_VERSION = finalAttrs.version;
-
   meta = {
     description = "Pyunit extension for managing expensive test resources";
     homepage = "https://launchpad.net/testresources";
-    license = with lib.licenses; [
-      asl20 # or
-      bsd3
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        bsd3
+      ];
     maintainers = with lib.maintainers; [ nickcao ];
   };
 })

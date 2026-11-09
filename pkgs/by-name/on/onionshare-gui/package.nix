@@ -6,6 +6,7 @@
   obfs4,
   snowflake,
   tor,
+  webtunnel,
   qt5,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         obfs4
         snowflake
         tor
+        webtunnel
         ;
       inherit (tor) geoip;
     })

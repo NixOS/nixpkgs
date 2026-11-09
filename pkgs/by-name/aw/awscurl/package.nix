@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awscurl";
   version = "0.44";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "okigan";

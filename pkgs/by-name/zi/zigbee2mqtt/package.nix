@@ -14,20 +14,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.14.2";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-az/mbrflILDWSu3kIA280dJWqTlImh1s7FvHeu/DKe4=";
+    hash = "sha256-Vz2zeVkO+L4/T1oagF6htU0oMFwJ6QrJ/WXEbYdymNQ=";
   };
+
+  postPatch = ''
+    # Fails when deps are pruned in `preInstall`.
+    substituteInPlace package.json \
+      --replace-fail "prepack" "dont-prepack"
+  '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-D4qF40ZyyqHjveLvu56Vy6lRJF6LxxhU+79KlfLYhN4=";
+    hash = "sha256-fdGPwyFR1hRJxaJRgayFLe/9xu3SkRm8fKDgSLX/wRY=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   dontNpmPrune = true;

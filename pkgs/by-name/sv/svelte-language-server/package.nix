@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules packages/*/node_modules
     pnpm install --filter=svelte-language-server... --prod --frozen-lockfile --offline --force --ignore-scripts
     mkdir -p $out/lib/node_modules/svelte-language-server/
     mkdir -p $out/bin

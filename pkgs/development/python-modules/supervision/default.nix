@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "supervision";
   version = "0.29.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "roboflow";

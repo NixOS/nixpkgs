@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bitvis-protobuf";
-  version = "2.0.4";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitvis-io";
     repo = "bitvis-protobuf";
     tag = finalAttrs.version;
-    hash = "sha256-WLbWm37VsyTJ2wba8K5dGnILsmp31Kd7OFgK0ScwhRA=";
+    hash = "sha256-kwlohD4QsWYUE3mX3V3kneGRv3vA3HaS2dCGfOftmEI=";
   };
 
   postPatch = ''

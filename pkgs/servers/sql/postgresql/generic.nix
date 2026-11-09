@@ -64,7 +64,10 @@
   icu,
 
   # JIT
-  jitSupport ? stdenv.hostPlatform.canExecute stdenv.buildPlatform,
+  jitSupport ? (
+    # LLVM JIT crashes the backend on riscv64 (26/230 regress tests fail)
+    stdenv.hostPlatform.canExecute stdenv.buildPlatform && !stdenv.hostPlatform.isRiscV64
+  ),
   llvmPackages,
   nukeReferences,
   overrideCC,
@@ -147,6 +150,11 @@ stdenv'.mkDerivation (finalAttrs: {
     # rev, not tag, on purpose: allows updating when new versions
     # are "stamped" a few days before release (tag).
     inherit hash rev;
+    # rev might be "refs/tags/REL_x_y" which is not a valid tag
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "postgres/postgres@${lib.removePrefix "refs/tags/" rev}";
+    };
   };
 
   __structuredAttrs = true;

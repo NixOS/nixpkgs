@@ -182,10 +182,14 @@ in
         after = [
           "nss-lookup.target"
           "network-online.target"
+          "postfix-tlspol.socket"
         ];
         wants = [
           "nss-lookup.target"
           "network-online.target"
+        ];
+        bindsTo = [
+          "postfix-tlspol.socket"
         ];
 
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
@@ -228,6 +232,7 @@ in
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
           RestrictAddressFamilies = [
+            # For outbound sockets and telemetry only
             "AF_INET"
             "AF_INET6"
           ];

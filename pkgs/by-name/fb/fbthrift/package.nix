@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
     hash = "sha256-bzi4DRGOQy8HXLQa6roMY3CRqteoJxz2Xo6SsLfOdhY=";
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     # "/build/source/build/thrift/lib/thrift/gen-cpp2/any_rep_types.h:12:10:
     # fatal error: thrift/lib/thrift/gen-cpp2/type_types.h: No such file or
     # directory"
-    # https://github.com/facebook/fbthrift/pull/709
+    # https://github.com/meta/fbthrift/pull/709
     ./thriftmetadata-dependency-type-cpp2-target.patch
   ];
 
@@ -106,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # See:
   #
-  # * <https://github.com/facebook/fbthrift/issues/618>
-  # * <https://github.com/facebook/fbthrift/issues/607>
+  # * <https://github.com/meta/fbthrift/issues/618>
+  # * <https://github.com/meta/fbthrift/issues/607>
   # * <https://github.com/Homebrew/homebrew-core/blob/2135255c78d026541a4106fa98580795740db694/Formula/f/fbthrift.rb#L52-L55>
   #
   # I don’t know why we didn’t need this before the bump to 202
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Facebook's branch of Apache Thrift";
     mainProgram = "thrift1";
-    homepage = "https://github.com/facebook/fbthrift";
+    homepage = "https://github.com/meta/fbthrift";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

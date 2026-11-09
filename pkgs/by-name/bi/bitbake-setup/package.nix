@@ -13,8 +13,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.19.0";
   format = "wheel";
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "bitbake_setup";
     inherit (finalAttrs) version;

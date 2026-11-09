@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dotagents";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "dotagents";
     tag = finalAttrs.version;
-    hash = "sha256-EnVCH0tKCUEcKu+CvkOgc3y9QM0k3rPeJbJ6qcfXVhI=";
+    hash = "sha256-WJI6DMJarhlg1SdEGrxnuqV5YXUUvGtOnqRT6j9hSwE=";
   };
 
   strictDeps = true;
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-eDumJk2N7z5tvfvAkOWFUr1zZhaBQbA+yGtBf3OEKXg=";
+    hash = "sha256-/74jSkTm965aKcZ/p25Bs26KaJmZCSZAUQ43dFYWZmg=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prod
     find packages/*/dist -type f \( -name "*.d.ts" -o -name "*.map" \) -delete
     find node_modules packages/*/node_modules -xtype l -delete
-    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''

@@ -17,7 +17,7 @@ buildDunePackage {
   doCheck = containers.doCheck && ocaml.meta.branch != "5.0";
 
   buildInputs = [ dune-configurator ];
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
   checkInputs = [
     gen
     iter

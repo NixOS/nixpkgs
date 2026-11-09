@@ -4,27 +4,22 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "firefly-desktop";
   version = "2.1.8";
   src = fetchurl {
-    url = "https://github.com/iotaledger/firefly/releases/download/desktop-${version}/firefly-desktop-${version}.AppImage";
+    url = "https://github.com/iotaledger/firefly/releases/download/desktop-${finalAttrs.version}/firefly-desktop-${finalAttrs.version}.AppImage";
     sha256 = "sha256-MATMl5eEIauDQpz8/wqIzD7IugPVZ2HJAWCbDM4n+hA=";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    install -D ${appimageContents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
+    install -D ${finalAttrs.contents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
     substituteInPlace $out/share/applications/firefly-desktop.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=firefly-desktop' \
       --replace-fail 'Icon=desktop' 'Icon=firefly-desktop'
-    install -D ${appimageContents}/desktop.png $out/share/icons/firefly-desktop.png
+    install -D ${finalAttrs.contents}/desktop.png $out/share/icons/firefly-desktop.png
   '';
 
   meta = {
@@ -35,4 +30,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     mainProgram = "firefly-desktop";
   };
-}
+})

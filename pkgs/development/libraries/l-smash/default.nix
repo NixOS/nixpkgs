@@ -5,14 +5,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "l-smash";
   version = "2.14.5";
 
   src = fetchFromGitHub {
     owner = "l-smash";
     repo = "l-smash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AiyCiKSjkrxvkpJqW2Ddjbb+1//zLKQaatPUeMRJmGU=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

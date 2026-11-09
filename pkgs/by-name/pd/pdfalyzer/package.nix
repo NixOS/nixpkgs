@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   pkgs,
@@ -10,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdfalyzer";
   version = "1.19.6";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
@@ -50,5 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pdfalyzer";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

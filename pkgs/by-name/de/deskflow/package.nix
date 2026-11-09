@@ -108,11 +108,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
 
-  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms";
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
+    "--set"
+    "QT_QPA_PLATFORM_PLUGIN_PATH"
+    "${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
+  ];
 
   strictDeps = true;
 
   doCheck = true;
+  # LoggerTests and ComputerTests share tmp/test/Deskflow.conf: https://github.com/deskflow/deskflow/issues/10352
+  enableParallelChecking = false;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

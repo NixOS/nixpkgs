@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3d0gsSLkO5Np6P4l8AEfEPvzMlkf2wYMCluAtDrwEDc=";
   };
 
+  patches = [
+    ./thrift-include-cstdint.patch
+  ];
+
   outputs = [
     "out"
     "lib"

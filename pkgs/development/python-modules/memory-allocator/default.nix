@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "memory-allocator";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    hash = "sha256-Z108kQGduYyXRB3nPVxkiCHlroE/P1TNCYY9R0tI/iY=";
+    hash = "sha256-jBoEMsJom1K/P1y4nz2do8+l/fTNUNGMEjh0CGGtuLw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

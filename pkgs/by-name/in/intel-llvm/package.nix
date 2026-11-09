@@ -47,28 +47,28 @@ let
   scope = lib.makeScope newScope (self: {
     # == Parameters for overriding ==
 
-    llvmMajorVersion = "22";
+    llvmMajorVersion = "23";
 
-    version = "7.1.1";
+    version = "7.2.0";
 
     src = fetchFromGitHub {
       owner = "intel";
       repo = "llvm";
       tag = "v${self.version}";
-      hash = "sha256-XVfLWx7lsjS1m+w/T2x0kGg2k51r7jCmKX2ZcR2aAHg=";
+      hash = "sha256-3xhZL+iu68B/kUQ0I0EdVCaqcLlqYK3P0CrJz8X8d8A=";
     };
 
     # The commit date of the release tag above, kept in sync by `updateScript`.
     # If you override src, you'll probably also want to override this,
     # as some packages check for this date to decide what features the compiler supports.
-    commitDate = "20260915";
+    commitDate = "20261014";
 
     vc-intrinsics-src = fetchFromGitHub {
       owner = "intel";
       repo = "vc-intrinsics";
       # See LLVMGenXIntrinsics_GIT_TAG in llvm/lib/SYCLLowerIR/CMakeLists.txt
-      rev = "60cea7590bd022d95f5cf336ee765033bd114d69";
-      hash = "sha256-1K16UEa6DHoP2ukSx58OXJdtDWyUyHkq5Gd2DUj1644=";
+      rev = "4fc83e12979096db72c129bd432238d5ca397e4d";
+      hash = "sha256-2vPGb2phD351DNADFA/oRdnylxc0DBEq2YLk6cszu10=";
     };
 
     # ===============================

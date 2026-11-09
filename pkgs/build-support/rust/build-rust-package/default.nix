@@ -35,7 +35,6 @@ lib.extendMkDerivation {
     "depsExtraArgs"
     "cargoUpdateHook"
     "cargoLock"
-    "useFetchCargoVendor"
     "RUSTFLAGS"
   ];
 
@@ -56,7 +55,6 @@ lib.extendMkDerivation {
       cargoDepsHook ? "",
       buildType ? "release",
       meta ? { },
-      useFetchCargoVendor ? true,
       cargoDeps ? null,
       cargoHash ? null,
       cargoLock ? null,
@@ -79,13 +77,6 @@ lib.extendMkDerivation {
       ...
     }@args:
 
-    assert
-      useFetchCargoVendor
-      || throw "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
-
-    assert lib.warnIf (args ? useFetchCargoVendor)
-      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
-      true;
     {
       env =
         let

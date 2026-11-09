@@ -9,13 +9,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "8.7.3";
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rz74HG3ZykYtUoBodxKofpPtGaiKHnO+NoSf+wQmtk8=";
+    hash = "sha256-dPVcpEp7grWDdYYRvK/TZrFXx8FycaZWunG7dZ3d5iI=";
   };
 
   projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
@@ -46,12 +46,13 @@ buildDotnetModule (finalAttrs: {
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        git
-        openssl
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      openssl
+    ])
   ];
 
   passthru = {

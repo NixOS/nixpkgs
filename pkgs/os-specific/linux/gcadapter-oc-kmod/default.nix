@@ -24,12 +24,18 @@ stdenv.mkDerivation {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_SOURCE_DIR=${kernel.dev}/${kerneldir}/build"
-    "INSTALL_MOD_PATH=$(out)"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=extra"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
   ];
 
-  installPhase = ''
-    install -D {,$out/${kerneldir}/extra/}gcadapter_oc.ko
-  '';
+  installTargets = [ "modules_install" ];
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
   meta = {
     description = "Kernel module for overclocking the Nintendo Wii U/Mayflash GameCube adapter";

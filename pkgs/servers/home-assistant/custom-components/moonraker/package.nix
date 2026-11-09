@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.13.4";
+  version = "1.13.4-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
-    tag = version;
-    hash = "sha256-i6ZOcCa5LD0aw6oOvVSjT6ZMfFMweS7hBBVhV4P4tv4=";
+    rev = "84ff69970b03b53b69769ebdd0009b80f667c460";
+    hash = "sha256-AMAW6ynqtCl+Bnf/4HT6RDXk72Oyr1pdI41nuxzZaAI=";
   };
 
   dependencies = [
@@ -40,7 +40,5 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/marcolivierarsenault/moonraker-home-assistant";
     maintainers = with lib.maintainers; [ _9R ];
     license = lib.licenses.mit;
-    # https://github.com/marcolivierarsenault/moonraker-home-assistant/issues/789
-    broken = true;
   };
 }

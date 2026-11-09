@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "zulip-emoji-mapping";
   version = "1.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "GearKite";

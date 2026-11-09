@@ -8,15 +8,15 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "bentopdf";
-  version = "2.8.8";
+  version = "2.8.11";
 
   src = fetchFromGitHub {
     owner = "alam00000";
     repo = "bentopdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dfQXsTEM0dOV9cJpZr5xD+fjruHNHlcOyjDVjmGzREY=";
+    hash = "sha256-ZhG2nkRJt5qMEHhYRyh5wmqS5oKn4f1HX/3Bt6xyJy8=";
   };
-  npmDepsHash = "sha256-Zj99Oec3kn9pkV+29DqykFw0AGSCFdtCoz49i7o1fUo=";
+  npmDepsHash = "sha256-tN6ky6c1WXKXEgb9Gx1mB+9UpjEPlBXcvqXdDgXOkG4=";
   npmDepsFetcherVersion = 2;
 
   npmBuildFlags = [

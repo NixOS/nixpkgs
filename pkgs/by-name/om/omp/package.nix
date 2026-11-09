@@ -15,10 +15,12 @@
   libopus,
   alsa-lib,
   libpulseaudio,
+  oniguruma,
   pipewire,
   darwin,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  zstd,
   nix-update-script,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
 }:
@@ -32,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "omp";
-  version = "18.12.3";
+  version = "18.18.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -41,17 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "can1357";
     repo = "oh-my-pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S+mv25RJBqaVgm0g+visvnHHTwNqZcCoXryTCstt220=";
+    hash = "sha256-vMdG/xSsGezg1gQcUP0brpnt5P6cRPzd/dKaaZ+5i0s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-i8Y3odnituHbm24eI5WkmHXXt7fpIM7MI97e4hGH3hg=";
+    hash = "sha256-CZAYhipisqfbsFn4181iBdMrQCccvDWcu2yCFQ/TERw=";
   };
 
   postPatch = ''
     substituteInPlace packages/coding-agent/src/cli.ts \
       --replace-fail 'if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0)' 'if (false)'
+
+    substituteInPlace Cargo.toml \
+      --replace-fail 'rust-version = "1.101"' 'rust-version = "1.99"'
   '';
 
   # required until https://github.com/NixOS/nixpkgs/issues/255890 & https://github.com/NixOS/nixpkgs/issues/335534 are fixed
@@ -91,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Prevents breaking symlinks in node_modules
     dontFixup = true;
 
-    outputHash = "sha256-t5eagYY2sg+Yf2fBadrd72+lkrF06aaoTRfvzkZHGjM=";
+    outputHash = "sha256-QHMZY+VSqfflE7N5B0xowLn6zAdqD/spjUm36XtUNwU=";
     outputHashMode = "recursive";
   };
 
@@ -113,6 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libopus
+    oniguruma
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
   ++ lib.optionals pipewireSupport [ pipewire ];
@@ -227,11 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/can1357/oh-my-pi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "omp";
-    maintainers = with lib.maintainers; [
-      malix
-      naxdy
-      adamcstephens
-    ];
+    maintainers = with lib.maintainers; [ adamcstephens ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"

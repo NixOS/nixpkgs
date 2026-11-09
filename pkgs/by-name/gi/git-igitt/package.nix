@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-igitt";
-  version = "0.2.0";
+  version = "0.2.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "git-bahn";
     repo = "git-igitt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ge4QheY9dEqU4ndYJcO11TPvVwSuL7/RK6WIakHrV7c=";
+    hash = "sha256-3heVYUe9bAApkZVMM0uAj54X6Hx0lvs7sx4bIJ0elJw=";
   };
 
-  cargoHash = "sha256-XopYsa//QKeXh9yQbqLnbhxj//Umbt5Rm4XSHkAlBuc=";
+  cargoHash = "sha256-0LH7CVeXxyRXcyCS5NZ0b5Gst5AHsF/4wF7hcOppNxI=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -122,35 +122,33 @@ self: super: {
 
   pkgsExtraHardening = nixpkgsFun {
     overlays = [
-      (
-        self': super':
-        {
-          pkgsExtraHardening = super';
-          stdenv = super'.withDefaultHardeningFlags (
-            super'.stdenv.cc.defaultHardeningFlags
-            ++ [
-              "shadowstack"
-              "nostrictaliasing"
-              "pacret"
-              "glibcxxassertions"
-              "libcxxhardeningextensive"
-              "trivialautovarinit"
-            ]
-          ) super'.stdenv;
-          glibc = super'.glibc.override rec {
-            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
-            enableCETRuntimeDefault = enableCET != false;
-          };
-        }
-        // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
-          # causes shadowstack disablement
-          pcre = super'.pcre.override { enableJit = false; };
-        }
-      )
+      (self': super': {
+        pkgsExtraHardening = super';
+        stdenv = super'.withDefaultHardeningFlags (
+          super'.stdenv.cc.defaultHardeningFlags
+          ++ [
+            "shadowstack"
+            "nostrictaliasing"
+            "pacret"
+            "glibcxxassertions"
+            "libcxxhardeningextensive"
+            "trivialautovarinit"
+          ]
+        ) super'.stdenv;
+        glibc = super'.glibc.override rec {
+          enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+          enableCETRuntimeDefault = enableCET != false;
+        };
+      })
     ]
     ++ overlays;
   };
 
+  pkgsConfigured = nixpkgsFun {
+    config = super.config // {
+      configurePlatformsByDefault = true;
+    };
+  };
   pkgsChecked = nixpkgsFun {
     config = super.config // {
       doCheckByDefault = true;

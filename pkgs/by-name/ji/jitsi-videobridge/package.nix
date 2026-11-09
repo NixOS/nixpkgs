@@ -11,10 +11,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi-videobridge2";
-  version = "2.3-307-g4bb0aead1";
+  version = "2.3-318-gbf271b11f";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/jitsi-videobridge2_${finalAttrs.version}-1_all.deb";
-    hash = "sha256-5im9MH8xwJMH3PklZX/Tli641HmmxV6df5jWfsBYxDo=";
+    hash = "sha256-ZQo4vRsdp1hdafZiwssXcw45VnZuECc6wCC3SiLgJTw=";
   };
 
   dontBuild = true;

@@ -12,6 +12,8 @@ buildGoModule (finalAttrs: {
   pname = "godns";
   version = "3.3.6";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";

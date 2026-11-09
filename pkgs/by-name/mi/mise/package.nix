@@ -7,10 +7,13 @@
   installShellFiles,
   coreutils,
   bash,
+  darwin,
   direnv,
   git,
   pkg-config,
+  aws-lc,
   openssl,
+  zstd,
   cmake,
   cacert,
   tzdata,
@@ -24,16 +27,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.10.3";
+  version = "2026.10.17";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w9d/S1+4JBBWmZoLpVU1I4OiRJNGXSIoRHvtAkoR5Y0=";
+    hash = "sha256-3JBs2i+07hY27EpIrmbMu7D5p6rGV6wuerilx0BECjw=";
   };
 
-  cargoHash = "sha256-gkCta9qiXKUmUnp6FfLStE5IM6ax/nmjMzQ+SDNg77U=";
+  cargoHash = "sha256-94BNmTVcJoY9ujO7boBzxMxaMy2tjLzpD+s+RLJxBEs=";
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +44,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    zstd
+    openssl
+  ];
 
   postPatch = ''
     patchShebangs --build \
@@ -83,6 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
     rustPlatform.bindgenHook
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # lists_every_process_on_macos compares against `ps -A`
+    darwin.ps
   ];
 
   env = {
@@ -134,17 +145,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cmd::tests::test_macos_sandbox_preserves_piped_stdin"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # un_dmg shells out to hdiutil
+    # fake hdiutil scripts use /bin/bash, which the Linux sandbox does not provide
     "--skip"
     "file::tests::links::un_dmg_accepts_license_and_extracts_app"
     "--skip"
     "file::tests::links::un_dmg_extracts_app_without_license"
+    "--skip"
+    "file::tests::links::un_dmg_detaches_image_left_attached_by_interrupted_run"
     # the copy probe symlinks /bin/cp, which the sandbox does not provide
     "--skip"
     "backend::spm::tests::test_inline_install_command_uses_install_environment"
     # chmods setuid, which the sandbox refuses
     "--skip"
     "system_install::tests::archive_boundary"
+    # copy sleep from /usr/bin or /bin, which the sandbox does not provide
+    "--skip"
+    "toolset::running::tests::finds_a_process_by_its_executable"
+    "--skip"
+    "toolset::running::tests::finds_a_process_through_a_symlinked_install_path"
+    "--skip"
+    "toolset::running::tests::matches_whole_path_components"
   ];
 
   # every test process resets the same fixed $HOME/cwd

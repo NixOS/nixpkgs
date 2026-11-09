@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  apple-sdk,
   fetchurl,
   gawk,
   fetchpatch,
@@ -35,9 +36,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     startFPC
     gawk
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk;
 
   glibc = stdenv.cc.libc.out;
+
+  # fpc only uses clang to assemble and link, so every cc-wrapper flag is reported as unused
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    NIX_LDFLAGS = "-L${lib.getLib libiconv}/lib";
+  };
 
   # Patch paths for linux systems. Other platforms will need their own patches.
   patches = [
@@ -56,9 +64,13 @@ stdenv.mkDerivation rec {
     substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
     substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
 
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace fpcsrc/compiler/systems/t_darwin.pas \
       --replace-fail "LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib',true)" "LibrarySearchPath.AddLibraryPath(sysrootpath,'$SDKROOT/usr/lib',true)"
 
+  ''
+  + ''
     # Replace the `codesign --remove-signature` command with a custom script, since `codesign` is not available
     # in nixpkgs
     # Remove the -no_uuid strip flag which does not work on llvm-strip, only
@@ -71,14 +83,11 @@ stdenv.mkDerivation rec {
       --replace "-no_uuid" ""
   '';
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    NIX_LDFLAGS="-syslibroot $SDKROOT -L${lib.getLib libiconv}/lib"
-  '';
-
   makeFlags = [
     "NOGDB=1"
     "FPC=${startFPC}/bin/fpc"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "OPT=-XR${apple-sdk.sdkroot}";
 
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
@@ -93,6 +102,14 @@ stdenv.mkDerivation rec {
     # to resolve the location of /etc
     mkdir -p $out/etc
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/etc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for config in "$out/etc/fpc.cfg" "$out/lib/fpc/etc/fpc.cfg"; do
+      printf '%s\n' "-XR${apple-sdk.sdkroot}" >> "$config"
+      # Remove the Xcode binary search path.
+      substituteInPlace "$config" \
+        --replace-fail "-FD/Applications/Xcode.app/Contents/Developer/usr/bin" ""
+    done
   '';
 
   passthru = {

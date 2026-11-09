@@ -45,7 +45,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "50.2.2";
+  version = "51.0.1";
 
   outputs = [
     "out"
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4eKF7930LtMN2lsp9/jSQtq0vBQJqQVIY7NnutSzTVo=";
+    hash = "sha256-oA25CP1lAmy9XcY04S0YnejrorA/EF0kJTQXaKXukvs=";
   };
 
   patches = [

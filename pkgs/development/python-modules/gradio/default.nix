@@ -84,7 +84,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gradio";
   version = "6.29.0"; # please always backport gradio changes
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";

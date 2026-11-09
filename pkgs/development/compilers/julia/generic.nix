@@ -2,6 +2,8 @@
   version,
   hash,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
+  extraMeta ? { },
 }:
 
 {
@@ -139,6 +141,11 @@ stdenv.mkDerivation rec {
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
   ];
 
+  postInstall = ''
+    rm $out/share/julia/cert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/julia/cert.pem
+  '';
+
   # remove forbidden reference to $TMPDIR
   preFixup = lib.optionalString stdenv.hostPlatform.isElf ''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
@@ -189,6 +196,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    inherit knownVulnerabilities;
     description = "High-level performance-oriented dynamical language for technical computing";
     mainProgram = "julia";
     homepage = "https://julialang.org/";
@@ -204,5 +212,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-  };
+  }
+  // extraMeta;
 }

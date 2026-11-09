@@ -5,6 +5,10 @@
   pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  zstd,
+  aws-lc,
+  xz,
+  sqlite,
   withOtel ? false,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -12,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (hydra) version src;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-Hkf6DS/MUrxqD/xp9mIv0CjbRq2FL3QNGIkZMw8BehY=";
+  cargoHash = "sha256-kKQTbnivtC/YzvIHj408b2lZlj4eEUKdMBcdocnXsS0=";
 
   cargoBuildFlags = [
     "--package"
@@ -29,6 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     protobuf
     rust-jemalloc-sys
+    zstd
+    aws-lc
+    xz
+    sqlite
   ];
 
   # The unit tests spin up a PostgreSQL instance, which is not available in the

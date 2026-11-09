@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioindiallsky";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TN-1";
     repo = "aioindiallsky";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-A7TRlQNeUC+bwXeAe8AaayV33rEBSil38oOQOyMKtW8=";
+    hash = "sha256-bmib7Rimx9R/59DKed+H0l/9aeEQnP3vnuNJlqJjsZc=";
   };
 
   build-system = [ setuptools ];

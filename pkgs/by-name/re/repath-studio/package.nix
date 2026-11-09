@@ -14,8 +14,10 @@
   git,
   vips,
   python3,
+  xvfb-run,
 
   writeShellScriptBin,
+  writableTmpDirAsHomeHook,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
@@ -58,13 +60,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.26";
+  version = "0.4.28";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLHQhhIF/GQYVO5p0Wlr8VGt71NOohRnu78tJhGvyp8=";
+    hash = "sha256-w9GAr+M+9m70ad1zflIQtfIklzu9gpH60Q8BJRSrF/A=";
   };
 
   patches = [
@@ -80,7 +82,7 @@ buildNpmPackage (finalAttrs: {
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-8fZjwwZuuiXYTq9NUkvcVaj+mewGfK2vaiq6z7rHoTo=";
+  npmDepsHash = "sha256-PJv7JXqjvY+BKvjRR5unANvNaGqib24Xy/eaMVZF5rc=";
 
   nativeBuildInputs = [
     finalAttrs.passthru.clojureWithHome
@@ -121,6 +123,7 @@ buildNpmPackage (finalAttrs: {
     chmod -R u+w "$electron_dist"
 
     npm run build
+    rm -rf .shadow-cljs .cpcache android ios
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p build
       png2icns build/icon.icns resources/public/img/icon.png
@@ -151,7 +154,7 @@ buildNpmPackage (finalAttrs: {
         # bash
         ''
           mkdir -p $out/share/{repath-studio,icons/hicolor/scalable/apps}
-          cp -r dist/*-unpacked/resources/app.asar $out/share/repath-studio
+          cp -r dist/*-unpacked/resources/app.asar* $out/share/repath-studio/
           cp resources/public/img/icon.svg $out/share/icons/hicolor/scalable/apps/repath-studio.svg
 
           makeWrapper '${lib.getExe electron}' "$out/bin/repath-studio" \
@@ -166,9 +169,14 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+    writableTmpDirAsHomeHook
+    xvfb-run
+  ];
+
   # chromium package not available for darwin
   doCheck = stdenv.hostPlatform.isLinux;
-  checkPhase = lib.optionalString (stdenv.hostPlatform.isLinux) /* sh */ ''
+  checkPhase = lib.optionalString finalAttrs.doCheck /* sh */ ''
     runHook preCheck
     export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
@@ -251,7 +259,7 @@ buildNpmPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash = "sha256-7J1sK7fg/gBLln4KTt9q65Vt0FjCjR81vGRwhwSdw4o=";
+      outputHash = "sha256-j5SIIcAAyMh8nHbeEilHE+WFFy6oB5ifDTBJsBLYt0c=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };

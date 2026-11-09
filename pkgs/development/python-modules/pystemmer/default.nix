@@ -57,8 +57,6 @@ buildPythonPackage (finalAttrs: {
     runHook postCheck
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Snowball stemming algorithms, for information retrieval";
     homepage = "https://github.com/snowballstem/pystemmer";

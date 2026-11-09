@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
 
@@ -12,6 +13,7 @@
 
   # dependencies
   numpy,
+  llvmPackages,
 
   # tests
   pytest-xdist,
@@ -21,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ducc0";
-  version = "0.41.0";
+  version = "0.42.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -29,16 +31,21 @@ buildPythonPackage (finalAttrs: {
     owner = "mtr";
     repo = "ducc";
     tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-OeTTrIcvY9bhnctc6h1xUdSriQN4RNy3vjxWKKlT0ew=";
+    hash = "sha256-y7YeaSF4fb++26lPNGTdZ6XMgGQnwy0pu1wSAmc/y3s=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6", ' ""
+    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6",' ""
   '';
 
   env = {
     DUCC0_USE_NANOBIND = "";
-    DUCC0_OPTIMIZATION = "portable";
+    # multiarch compilation is only supported on x86_64
+    DUCC0_OPTIMIZATION =
+      if stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux then
+        "multiarch-strip"
+      else
+        "portable";
   };
 
   build-system = [
@@ -50,6 +57,10 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
   dependencies = [ numpy ];
+
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
+    llvmPackages.llvm
+  ];
 
   nativeCheckInputs = [
     pytest-xdist

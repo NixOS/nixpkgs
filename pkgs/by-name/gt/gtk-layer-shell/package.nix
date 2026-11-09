@@ -66,7 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to create panels and other desktop components for Wayland using the Layer Shell protocol";
     mainProgram = "gtk-layer-demo";
     homepage = "https://github.com/wmww/gtk-layer-shell";
-    license = lib.licenses.lgpl3Plus;
+    license =
+      with lib.licenses;
+      AND [
+        lgpl3Plus
+        mit
+      ];
     maintainers = with lib.maintainers; [
       eonpatapon
       donovanglover

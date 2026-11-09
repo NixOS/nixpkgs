@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Microcontroller-based FPGA / JTAG programmer";
     homepage = "https://github.com/greatscottgadgets/apollo";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

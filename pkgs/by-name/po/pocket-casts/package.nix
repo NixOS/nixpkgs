@@ -5,10 +5,10 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  electron_42,
+  electron_44,
 }:
 let
-  electron = electron_42;
+  electron = electron_44;
 in
 buildNpmPackage rec {
   pname = "pocket-casts";

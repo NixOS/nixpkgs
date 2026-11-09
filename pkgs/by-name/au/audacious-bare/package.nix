@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  _experimental-update-script-combinators,
   audacious-plugins,
   fetchFromGitHub,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   qt6,
   withPlugins ? false,
@@ -43,6 +45,16 @@ stdenv.mkDerivation rec {
     ln -s ${audacious-plugins}/lib/audacious $out/lib
     lndir -silent ${audacious-plugins}/share $out/share
   '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "audacious-plugins";
+      extraArgs = [ "--version-regex=audacious-plugins-(.*)" ];
+    })
+    (nix-update-script {
+      extraArgs = [ "--version-regex=audacious-(.*)" ];
+    })
+  ];
 
   meta = {
     description = "Lightweight and versatile audio player";

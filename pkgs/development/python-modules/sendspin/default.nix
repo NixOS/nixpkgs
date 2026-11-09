@@ -21,15 +21,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "7.6.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-unNlx0A5Jh3mkPp4G86DY41UExA5IEwMM8E0/jfaBkY=";
+    hash = "sha256-cEISCLSmu5IgvlJ6Dsuc2rk04OL5+Ic0pErApnoT93c=";
   };
+
+  pythonRelaxDeps = [ "aiosendspin" ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook

@@ -14,6 +14,7 @@
     "dist/"
   ],
   "devDependencies": {
+    "@pnpm/npm-conf": "3.0.3",
     "@types/node": "^25.5.0",
     "typescript": "^6.0.2"
   },

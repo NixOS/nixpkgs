@@ -1,16 +1,15 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
-  kustomize,
-  testers,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "kustomize";
-  version = "5.8.2";
+  version = "5.8.3";
 
   ldflags =
     let
@@ -25,14 +24,14 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kustomize";
-    rev = "kustomize/v${finalAttrs.version}";
-    hash = "sha256-5+vLnlzGLsiyw221qltrGL562AKeCO8iA9Z7aNyzkCs=";
+    tag = "kustomize/v${finalAttrs.version}";
+    hash = "sha256-eSb1XL8qdSfOKU3IO4epstT/Q1c5X9YQMbJFyd/3xzI=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-EFNdc2f47Yga9/BSkSE/AraB05mTRgjtwPQ0iP2Nzzs=";
+  vendorHash = "sha256-NkW0o++io+RevB7G3mjmtRzF98J5E4Bc3ftlUIEZiH0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,13 +42,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
-  passthru.tests = {
-    versionCheck = testers.testVersion {
-      command = "${finalAttrs.meta.mainProgram} version";
-      version = "v${finalAttrs.version}";
-      package = kustomize;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Customization of kubernetes YAML configurations";

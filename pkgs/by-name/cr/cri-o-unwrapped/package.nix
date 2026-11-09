@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
   pname = "cri-o";
   version = "1.37.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";

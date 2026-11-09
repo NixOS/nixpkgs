@@ -5,7 +5,7 @@
   fetchzip,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   babelfish,
@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "knowit";
-  version = "0.6.1";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "knowit";
     tag = finalAttrs.version;
-    hash = "sha256-krrAeroM1eQZXi2onV4FdrKIQdPLkZS+/ypyY0Kc+Pw=";
+    hash = "sha256-XH3+oxFqx3FcKtXwCPXJJZqWNYeMmO14IuDRF2fx3Wc=";
   };
 
   matroska_test_zip = fetchzip {
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     cp ${finalAttrs.matroska_test_zip}/*.mkv tests/data/videos/
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     babelfish
@@ -71,6 +71,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "knowit" ];
+
+  disabledTests = [
+    # not a git repo
+    "test_check_knowledge"
+  ];
 
   meta = {
     description = "Extract metadata from media files";

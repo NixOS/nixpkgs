@@ -32,6 +32,7 @@ buildNimPackage (finalAttrs: {
   '';
 
   meta = {
+    broken = true; # requires pcre support, but nim only supports pcre v1
     description = "Script for taking notes and open urls with taskwarrior";
     mainProgram = "taskopen";
     homepage = "https://github.com/ValiValpas/taskopen";

@@ -1,4 +1,5 @@
 {
+  lib,
   makeSetupHook,
 }:
 makeSetupHook {
@@ -6,4 +7,8 @@ makeSetupHook {
   # the config hook must also be used.
   name = "pnpm-build-hook";
 
+  meta = {
+    maintainers = [ lib.maintainers.RossSmyth ];
+    license = lib.licenses.mit;
+  };
 } ./pnpm-build-hook.sh

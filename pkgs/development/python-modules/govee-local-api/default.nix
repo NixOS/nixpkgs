@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -29,6 +30,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "govee_local_api" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_reuseaddr_and_broadcast_are_set"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library to communicate with Govee local API";

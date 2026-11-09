@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.10.10";
 
   src = fetchFromGitHub {
-    owner = "Watfaq";
+    owner = "Watfaq-legacy";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-RmxAi+0tgCAubwUTWv9w77yBdeIoEvYVxxyeHAe4Nbo=";
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
-    homepage = "https://github.com/Watfaq/clash-rs";
+    homepage = "https://github.com/Watfaq-legacy/clash-rs";
     mainProgram = "clash";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];

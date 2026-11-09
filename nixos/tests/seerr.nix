@@ -2,7 +2,6 @@
 {
   name = "seerr";
   meta.maintainers = with lib.maintainers; [
-    matteopacini
     fallenbagel
   ];
 

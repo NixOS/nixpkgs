@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   util-linux,
   SDL2,
   SDL2_ttf,
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -m555 -Dt $out/bin build/*/poptracker
     install -m444 -Dt $out/share/poptracker assets/*
+    rm $out/share/poptracker/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/poptracker/cacert.pem
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which

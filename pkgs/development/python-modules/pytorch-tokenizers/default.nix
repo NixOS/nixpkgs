@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
   version = "1.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";

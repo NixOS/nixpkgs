@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "8.2.4133.87";
+  version = "8.3.4191.30";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-KGs2aJjgVROPy95y5otGowA+AguUmoihmHmNBvftr+M=";
-        x86_64-linux = "sha256-DiWdhnEJzqo9AR33/Jn6XMlITkx32zOnBV5d2UHLJC8=";
+        aarch64-linux = "sha256-h0O6ju12DcMYff0YU2gKcZy95KazEnqmOHd0rGrmiSo=";
+        x86_64-linux = "sha256-9lfwg4RH0RV4T/QGX5FR8BDwgtYkweLhJsSFNVllf4s=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -192,9 +192,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share"
     cp -r usr/share/{applications,xfce4} "$out"/share
     substituteInPlace "$out"/share/applications/*.desktop \
-      --replace-fail /usr/bin/vivaldi "$out"/bin/vivaldi
-    substituteInPlace "$out"/share/applications/*.desktop \
-      --replace-fail vivaldi-stable vivaldi
+      --replace-fail /usr/bin/vivaldi-stable vivaldi
     local d
     for d in 16 24 32 48 64 128 256; do
       mkdir -p "$out"/share/icons/hicolor/''${d}x''${d}/apps
@@ -232,6 +230,7 @@ stdenv.mkDerivation rec {
       marcusramberg
       max06
       wineee
+      brw
     ];
     platforms = [
       "x86_64-linux"

@@ -5,7 +5,6 @@
   cmake,
   ctestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   stdenv,
 
@@ -57,8 +56,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "11429";
-  buildCommit = "d812350";
+  buildNumber = "12110";
+  buildCommit = "cd959ba";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -103,7 +102,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.6.0";
+  version = "0.9.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -117,17 +116,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l6l6JIlIVTaVC6xh5M4fRHFtXsweQuugtkNTWHcZZF4=";
+    hash = "sha256-6LqtpfqTAbYUr/wPPBAM/dXHv3LDTg+1A81k/cFcAjY=";
   };
-
-  patches = [
-    # Initialize dynamically loaded backends before generating test models.
-    # https://github.com/ggml-org/llama.cpp/pull/30034
-    (fetchpatch {
-      url = "https://github.com/ggml-org/llama.cpp/commit/07ccce23cf7fe3c84e13d810accff672b1d966bf.patch";
-      hash = "sha256-KtsPcveFM51fY1hDWntiqCW/KHoWLv05Gmnhd1U/9Zs=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -171,10 +161,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-a17M+L3nLdRnN6WMB6imPFmwqG2g8uv+gwN0XTAUrf8=";
+  npmDepsHash = "sha256-XLtEZsSFdk+2SyfXzBp8HQ2e27PQPpDCn1YjePU1/9w=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src patches;
+    inherit (finalAttrs) src;
+    patches = finalAttrs.patches or [ ];
     preBuild = ''
       pushd ${finalAttrs.npmRoot}
     '';
@@ -267,7 +258,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "test-download-model"
     "test-arg-parser"
     "test-thread-safety"
-    "test-state-restore-fragmented"
+    "test-llama-context-model"
+    # Tests convert_hf_to_gguf, which is not installed, and needs torch.
+    "test-conversion-fp8"
+  ]
+  # icpx DAZ/FTZ makes nlohmann treat 5e-324 as 0 and pass 0.0 to Python.
+  ++ optionals syclSupport [
+    "test-jinja-py"
   ];
 
   passthru.updateScript = ./update.sh;

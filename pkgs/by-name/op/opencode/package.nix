@@ -77,13 +77,19 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-Z+0RJzeJHSfEeDFs0kF8CCr2/Xoi2mWrRH40zgKXLww=";
+      outputHash =
+        if stdenv.hostPlatform.isLinux then
+          "sha256-UOF9owEBSuVKX/hBhef7Wr4ymlNgTL21BiVBr+9a8Zo="
+        else if stdenv.hostPlatform.isDarwin then
+          "sha256-6VvzodSiEko+Q9UldOJ0V4eV2Gd6JelpYNUMBnI5W/c="
+        else
+          throw "Unsupported platform";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "2.1.1";
+  version = "2.2.6";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -92,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CoujRYCvqFXDJ6bzMxinT8CSPyKiLSAzCINjVaZBm/Y=";
+    hash = "sha256-6Of4/r4SKYtxMbHISu8/4yzSpCfHNGuTwfKdAKjNJnM=";
   };
 
   postPatch =

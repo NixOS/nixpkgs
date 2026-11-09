@@ -7,6 +7,7 @@
   makeWrapper,
   pkg-config,
   arp-scan,
+  cacert,
   curl,
   ffmpeg,
   glib,
@@ -260,6 +261,9 @@ stdenv.mkDerivation rec {
     done
 
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
+
+    rm $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
 
     # Combine configs under $out/etc/zoneminder/conf.d/ into
     # $out/etc/zoneminder/zm.conf, because we patch so that we read from

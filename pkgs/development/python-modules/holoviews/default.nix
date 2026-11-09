@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "holoviews";
   version = "1.23.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libusb1,
@@ -19,6 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-VDNXLx6OUBQkflKFHp1LP8N5g15o6vYg3P9XWgIoYIg=";
   };
+
+  patches = [
+    # upstream patches, remove with the next upgrade
+    (fetchpatch {
+      name = "CVE-2026-117609";
+      url = "https://github.com/merbanan/rtl_433/pull/3740.patch";
+      hash = "sha256-tXlEBVTGoQL8bUV66Gg0SClI6+nixDTG9P6DsOTjI4I=";
+    })
+  ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     pkg-config

@@ -31,7 +31,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [
     "lammps"
-    "lammps.pylammps"
   ];
 
   # We could potentially run other examples, but some of them are so old that

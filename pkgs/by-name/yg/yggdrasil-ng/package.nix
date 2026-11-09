@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage (oldAttrs: {
   pname = "yggdrasil-ng";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Yggdrasil-ng";
     tag = "v${oldAttrs.version}";
-    hash = "sha256-sbohqm2TXFnh03JVCzgy53lsTs1Pg/Elov3qr4mMmAI=";
+    hash = "sha256-UAux898QNT+2EyU4oLJZjmPZmHvv81SyHhx24uV+UeA=";
   };
 
-  cargoHash = "sha256-QdvbVSTGhV+9PF6txwiMCTNx8U20X/Fj9U1YYBvIcX8=";
+  cargoHash = "sha256-wcfMhqQXkHxqPXoZC6jWdtjpEcF/LHG9eOvckJFB6Ok=";
 
   __structuredAttrs = true;
 

@@ -10,7 +10,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_gstat";
-  inherit (nushell) version src cargoHash;
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ openssl ];
@@ -21,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Skip the version check and only check the hash because we inherit version from nushell.
     extraArgs = [ "--version=skip" ];
   };
-
-  patches = nushell.patches or [ ];
 
   meta = {
     description = "Git status plugin for Nushell";

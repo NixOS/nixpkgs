@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   actool,
-  electron_42,
+  electron_44,
   python3,
   copyDesktopItems,
   nodejs,
@@ -28,13 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # MPRIS's DesktopEntry property needs to match the desktop entry basename
     ./fix-mpris-desktop-entry.patch
+    ./electron-44.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-y4eLjikf9X/682RdK0ZvW7+GR1Ei82UJ5SVop09B9wg=";
+    hash = "sha256-+pXfFHNPiczjNq+Dk8sQZBgTLsuHmWBaA8u8Tk2CXjU=";
   };
 
   nativeBuildInputs = [
@@ -52,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     pnpm build
 
-    cp -r ${electron_42.dist} electron-dist
+    cp -r ${electron_44.dist} electron-dist
     chmod -R u+w electron-dist
 
     ./node_modules/.bin/electron-builder \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron_42.version}
+      -c.electronVersion=${electron_44.version}
   '';
 
   desktopItems = [
@@ -97,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    makeWrapper ${electron_42}/bin/electron $out/bin/pear-desktop \
+    makeWrapper ${electron_44}/bin/electron $out/bin/pear-desktop \
       --add-flags $out/share/pear-desktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \

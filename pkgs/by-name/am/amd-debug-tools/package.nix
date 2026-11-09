@@ -9,13 +9,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amd-debug-tools";
-  version = "0.2.20";
+  version = "0.2.22";
   pyproject = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-tools.git";
     tag = finalAttrs.version;
-    hash = "sha256-JDacCakZC+4N4IDAODWLSuensAtFArl052I4weK/zJQ=";
+    hash = "sha256-k1BRhfaoPGUi4S1njE1qYjvd4fO0Pkzl0iTy8Tkn0tk=";
   };
 
   build-system = with python3Packages; [
@@ -40,13 +40,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        acpica-tools
-        ethtool
-        libdisplay-info
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      acpica-tools
+      ethtool
+      libdisplay-info
+    ])
   ];
 
   # Tests require hardware-specific features
@@ -54,7 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Debug tools for AMD systems";
-    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-tools.git/";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/superm1/amd-debug-tools.git";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     platforms = lib.platforms.linux;

@@ -18,6 +18,7 @@
   cups,
   libdrm,
   gdk-pixbuf,
+  musl,
   nss,
   nspr,
   libxrandr,
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "6.1.4";
+  version = "6.2.1";
 
   src =
     let
@@ -54,9 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-8RWqYHAG2OkUPQjNwhSRfxsEbXjxsh0xA/EuUQxg/b4=";
-        aarch64-linux = "sha256-ivXtgZjlhoQ0hBIbdUx3VZJY/QUloh8War0OlN2gOfM=";
-        aarch64-darwin = "sha256-jPnGw4iDvfCMlim8ASAv5IdbpNsF6jaW2HsnqLvrCwY=";
+        x86_64-linux = "sha256-QIfiaV9flSmRHryUaLABJNbDwwj6fZIGG3rWz7fiESI=";
+        aarch64-linux = "sha256-Iwb6y49jJMnL+T9X+mUim4fg52GDSE8I/NzZ5mG4XUU=";
+        aarch64-darwin = "sha256-1r4ZyXsW07NaskqhkBfSU1b8IHOnC/GVJcNcDm7tS1k=";
       };
     };
 
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     libdrm
     gdk-pixbuf
+    musl
     nss
     nspr
     alsa-lib
@@ -158,9 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-    ];
-    knownVulnerabilities = [
-      "Uses Electron 39.8.10, which was EOL on March 13 2026, with several known CVEs"
     ];
   };
 })

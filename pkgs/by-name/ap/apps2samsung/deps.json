@@ -136,8 +136,8 @@
   },
   {
     "pname": "Jint",
-    "version": "4.16.4",
-    "hash": "sha256-6SAnago5js1Yyy8snwsmM1TSnrckatVIoujVhyv1tNI="
+    "version": "4.17.0",
+    "hash": "sha256-MzDTp8f5ZAYB4NuJ9+CebzXYN7HInAbEz2/R3FYsvlk="
   },
   {
     "pname": "MicroCom.Runtime",
@@ -516,23 +516,18 @@
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "10.0.12",
-    "hash": "sha256-p8X7daytFESON+fislwXbz7Z/A4SPwMIt4N1TlbxNfs="
+    "version": "10.0.13",
+    "hash": "sha256-VO0kV46tNLW1DSWQhCQ0MvEXM+J1S4sZbnmdNBjTBKc="
   },
   {
     "pname": "System.Security.Cryptography.Xml",
-    "version": "10.0.10",
-    "hash": "sha256-z+XLy6anZHBh14RkiGyhcb2cwwyVO4XMRnz7ZuVrz+M="
-  },
-  {
-    "pname": "System.Security.Cryptography.Xml",
-    "version": "10.0.12",
-    "hash": "sha256-GPqiZ+m9K4WK0/lbEmkVv6FPBfcrTDyLDgdv+cfH8aY="
+    "version": "10.0.13",
+    "hash": "sha256-bsMey8n1EQLZ+3/w6WB652mb8gMpmkcCox1SczIqTok="
   },
   {
     "pname": "TizenSdb.Core",
-    "version": "1.1.6",
-    "hash": "sha256-xfgIA1d0aBtVgcs40QoYdCbuuXROIP5S2QgeCYyEDWc="
+    "version": "1.1.7",
+    "hash": "sha256-I+lsahsqeoAlcBoBEVHi6KVoFD0/c3ilf/0hd9xeOZo="
   },
   {
     "pname": "Tmds.DBus.Protocol",

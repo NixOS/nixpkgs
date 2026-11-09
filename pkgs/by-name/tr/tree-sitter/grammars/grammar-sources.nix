@@ -1423,7 +1423,7 @@
 
   inko = {
     version = "0.9.0";
-    url = "github:inko-lang/tree-sitter-inko";
+    url = "codeberg:inko-lang/tree-sitter-inko";
     hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
@@ -1865,10 +1865,10 @@
   };
 
   matlab = {
-    version = "1.3.0-unstable-2026-03-04";
+    version = "1.3.1-unstable-2026-08-26";
     url = "github:acristoffers/tree-sitter-matlab";
-    rev = "c2390a59016f74e7d5f75ef09510768b4f30217e";
-    hash = "sha256-WgyWvItbysSqeD/LdBr233NYlKF1HaxIDtHIr6BQOjw=";
+    rev = "f03d0347acd8bb05d4edd8c845ac1718729e1fad";
+    hash = "sha256-WfBh8/wWfpUFjH/VdGuVqWDGrvmvmFRW7lTbMCjWJ6U=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2923,9 +2923,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.10.15";
+    version = "2026.10.29";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-UZL/JxyxCLCez8A5PPcbA0wNzRENMR4sB1HIxDeO0FY=";
+    hash = "sha256-FfVUU9S6R54tAt4r8P5sC87Kjr5c6ybOshZhquKMYXs=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
@@ -3134,9 +3134,9 @@
   };
 
   tera = {
-    version = "0.1.0";
+    version = "0.1.2";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-1Gb947YJnEFrCVKAuz06kwJdKD9PMab/alFJtyYjBso=";
+    hash = "sha256-zjD92no4d2aGb4HDR0sbnvV/igwsUbO19QnSnT0QtTg=";
     meta = {
       license = lib.licenses.mit;
     };

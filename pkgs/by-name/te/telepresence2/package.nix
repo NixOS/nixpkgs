@@ -24,6 +24,8 @@ buildGoModule rec {
   pname = "telepresence2";
   version = "2.31.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";

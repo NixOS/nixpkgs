@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sphinx-llms-txt";
   version = "0.7.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jdillard";

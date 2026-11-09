@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "boxflat";
-  version = "1.35.5";
+  version = "1.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R03mQIsa6T1ApV8SMWvilBfiCGcAWvyZ5hDDgAuGd6s=";
+    hash = "sha256-UDgW3Tpn5zVHVWRXmJnEYyiDE5H3IkDV+8MGb6Zg4as=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -36,6 +36,8 @@ python3Packages.buildPythonPackage (finalAttrs: {
     python3Packages.pycairo
     python3Packages.pygobject3
     python3Packages.evdev
+    python3Packages.dbus-python
+    python3Packages.trayer
   ];
 
   nativeBuildInputs = [
@@ -51,17 +53,18 @@ python3Packages.buildPythonPackage (finalAttrs: {
     "pycairo"
     "pygobject"
     "PyYAML"
+    "dbus-python"
+    "trayer"
   ];
 
   preBuild = ''
+    cp entrypoint.py boxflat/entrypoint.py
+
     cat > setup.py << EOF
-    import shutil
     from setuptools import setup
 
     with open('requirements.txt') as f:
         install_requires = f.read().splitlines()
-
-    shutil.copyfile('entrypoint.py', 'boxflat/entrypoint.py')
 
     setup(
       name='boxflat',
@@ -120,7 +123,10 @@ python3Packages.buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${finalAttrs.version}";
     description = "Control your Moza gear settings";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ racci ];
+    maintainers = with lib.maintainers; [
+      racci
+      vinso
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "boxflat";
   };

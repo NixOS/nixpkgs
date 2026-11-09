@@ -282,6 +282,7 @@ in
   amd-sev = runTest ./amd-sev.nix;
   amuled = runTest ./amuled.nix;
   android-translation-layer = runTest ./android-translation-layer.nix;
+  angie = import ./angie.nix { inherit lib runTest; };
   angie-api = runTest ./angie-api.nix;
   angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
@@ -302,6 +303,7 @@ in
   atticd = runTest ./atticd.nix;
   attr = pkgs.callPackage ./attr.nix { };
   atuin = runTest ./atuin.nix;
+  atuin-default-settings = runTest ./atuin-default-settings.nix;
   atuin-programs = runTest ./atuin-programs.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   audit = runTest ./audit.nix;
@@ -417,7 +419,10 @@ in
   chhoto-url = runTest ./chhoto-url.nix;
   chipass = runTest ./chipass.nix;
   chromadb = runTest ./chromadb.nix;
-  chromium = (handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./chromium.nix { }).stable or { };
+  chromium = runTestOn [ "aarch64-linux" "x86_64-linux" ] {
+    imports = [ ./chromium.nix ];
+    _module.args.chromiumPackage = pkgs.chromium;
+  };
   chrony = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony.nix;
   chrony-ptp = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony-ptp.nix;
   cinnamon = runTest ./cinnamon.nix;
@@ -632,6 +637,7 @@ in
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;
+  falco = runTest ./falco.nix;
   fancontrol = runTest ./fancontrol.nix;
   fanout = runTest ./fanout.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
@@ -720,12 +726,8 @@ in
   fsck = runTest ./fsck.nix;
   fscrypt = runTest ./fscrypt.nix;
   ft2-clone = runTest ./ft2-clone.nix;
-  galene = discoverTests (import ./galene.nix { inherit runTest; });
+  galene = import ./galene.nix { inherit runTest; };
   gancio = runTest ./gancio.nix;
-  garage_1 = import ./garage {
-    inherit runTest;
-    package = pkgsLinux.garage_1;
-  };
   garage_2 = import ./garage {
     inherit runTest;
     package = pkgsLinux.garage_2;
@@ -772,6 +774,7 @@ in
   gocd-server = runTest ./gocd-server.nix;
   gocron = runTest ./gocron.nix;
   gocryptfs = runTest ./gocryptfs.nix;
+  goeland = runTest ./goeland.nix;
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
@@ -784,6 +787,7 @@ in
   gotosocial = runTest ./web-apps/gotosocial.nix;
   goupile = runTest ./web-apps/goupile;
   gpauth-tls = runTest ./gpauth-tls.nix;
+  gpu-screen-recorder = runTest ./gpu-screen-recorder.nix;
   grafana = import ./grafana {
     inherit runTest;
   };
@@ -793,6 +797,7 @@ in
   graylog = runTest ./graylog.nix;
   greenlight = runTest ./greenlight.nix;
   greetd-no-shadow = runTest ./greetd-no-shadow.nix;
+  grimmory = runTest ./grimmory.nix;
   grist = runTest ./grist.nix;
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
@@ -958,10 +963,6 @@ in
   kernel-generic = handleTest ./kernel-generic { };
   kernel-latest-ath-user-regd = runTest ./kernel-latest-ath-user-regd.nix;
   kernel-module-verification = runTest ./kernel-module-verification.nix;
-  kernel-module-verification-latest = runTest {
-    imports = [ ./kernel-module-verification.nix ];
-    _module.args.latestKernel = true;
-  };
   kernel-rust = handleTest ./kernel-rust.nix { };
   keter = runTest ./keter.nix;
   kexec = runTest ./kexec.nix;
@@ -1000,8 +1001,16 @@ in
   lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
   lasuite-drive = runTest ./web-apps/lasuite-drive.nix;
   lasuite-meet = runTest ./web-apps/lasuite-meet.nix;
+  latestKernel.kernel-module-verification = runTest {
+    imports = [ ./kernel-module-verification.nix ];
+    _module.args.latestKernel = true;
+  };
   latestKernel.login = runTest {
     imports = [ ./login.nix ];
+    _module.args.latestKernel = true;
+  };
+  latestKernel.systemd-nsresourced-mountfsd = runTest {
+    imports = [ ./systemd-nsresourced-mountfsd.nix ];
     _module.args.latestKernel = true;
   };
   lauti = runTest ./lauti.nix;
@@ -1243,29 +1252,7 @@ in
   nfs3 = handleTest ./nfs { version = 3; };
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = runTest ./nghttpx.nix;
-  nginx = runTest ./nginx.nix;
-  nginx-auth = runTest ./nginx-auth.nix;
-  nginx-compression = runTest ./nginx-compression.nix;
-  nginx-dynamic-modules = runTest ./nginx-dynamic-modules.nix;
-  nginx-etag = runTest ./nginx-etag.nix;
-  nginx-etag-compression = runTest ./nginx-etag-compression.nix;
-  nginx-globalredirect = runTest ./nginx-globalredirect.nix;
-  nginx-grpc-error-pages = runTest ./nginx-grpc-error-pages.nix;
-  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
-  nginx-lua = runTest ./nginx-lua.nix;
-  nginx-mime = runTest ./nginx-mime.nix;
-  nginx-modsecurity = runTest ./nginx-modsecurity.nix;
-  nginx-moreheaders = runTest ./nginx-moreheaders.nix;
-  nginx-njs = runTest ./nginx-njs.nix;
-  nginx-otel = runTest ./nginx-otel.nix;
-  nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
-  nginx-pubhtml = runTest ./nginx-pubhtml.nix;
-  nginx-redirectcode = runTest ./nginx-redirectcode.nix;
-  nginx-sso = runTest ./nginx-sso.nix;
-  nginx-status-page = runTest ./nginx-status-page.nix;
-  nginx-tmpdir = runTest ./nginx-tmpdir.nix;
-  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
-  nginx-variants = import ./nginx-variants.nix { inherit runTest; };
+  nginx = import ./nginx { inherit lib runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nimdow = runTest ./nimdow.nix;
   nipap = runTest ./web-apps/nipap.nix;
@@ -1323,7 +1310,7 @@ in
   npmrc = runTest ./npmrc.nix;
   nscd = runTest ./nscd.nix;
   nsd = runTest ./nsd.nix;
-  ntfy-sh = handleTest ./ntfy-sh.nix { };
+  ntfy-sh = runTest ./ntfy-sh.nix;
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix { };
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
@@ -1395,6 +1382,7 @@ in
     _module.args.name = "opencloud-production";
   };
   openldap = runTest ./openldap.nix;
+  openresty = import ./openresty.nix { inherit lib runTest; };
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
   opensearch-dashboards = handleTest ./opensearch-dashboards.nix { };
@@ -1506,6 +1494,7 @@ in
   plotinus = runTest ./plotinus.nix;
   pocket-id = runTest ./pocket-id.nix;
   podman = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./podman/default.nix { };
+  podman-dns = runTest ./podman/dns.nix;
   podman-tls-ghostunnel = handleTestOn [
     "aarch64-linux"
     "x86_64-linux"
@@ -1580,7 +1569,7 @@ in
   qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
   qemu-firmware = runTestOn [ "x86_64-linux" ] ./qemu-firmware.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
-  qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
+  qemu-vm-restrictnetwork = runTest ./qemu-vm-restrictnetwork.nix;
   qemu-vm-shared-directories = runTest ./qemu-vm-shared-directories.nix;
   qemu-vm-store = runTest ./qemu-vm-store.nix;
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
@@ -1675,8 +1664,7 @@ in
   schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
-  scx = runTest ./scx/default.nix;
-  scx-loader = runTest ./scx/loader.nix;
+  scx-loader = runTest ./scx-loader.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
   searx = runTest ./searx.nix;
@@ -1732,7 +1720,7 @@ in
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
   sshwifty = runTest ./web-apps/sshwifty/default.nix;
-  sslh = handleTest ./sslh.nix { };
+  sslh = runTest ./sslh.nix;
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
   sstorytime = runTest ./sstorytime.nix;
@@ -1745,6 +1733,7 @@ in
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
   static-web-server = runTest ./web-servers/static-web-server.nix;
   step-ca = handleTestOn [ "x86_64-linux" ] ./step-ca.nix { };
+  steve = runTest ./steve;
   stirling-pdf = runTest ./stirling-pdf.nix;
   stirling-pdf-desktop = runTest ./stirling-pdf-desktop.nix;
   stratis = handleTest ./stratis { };
@@ -1857,7 +1846,6 @@ in
   systemd-networkd-vrf = runTest ./systemd-networkd-vrf.nix;
   systemd-no-tainted = runTest ./systemd-no-tainted.nix;
   systemd-nspawn = runTest ./systemd-nspawn.nix;
-  systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
   systemd-nsresourced-mountfsd = runTest ./systemd-nsresourced-mountfsd.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;
@@ -1916,6 +1904,7 @@ in
   tmate-ssh-server = runTest ./tmate-ssh-server.nix;
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
+  toxvpn = runTest ./toxvpn.nix;
   tpm-ek = handleTest ./tpm-ek { };
   tpm2 = import ./tpm2 { inherit runTest; };
   traccar = runTest ./traccar.nix;
@@ -1954,6 +1943,10 @@ in
   umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;
   unbound = runTest ./unbound.nix;
+  ungoogled-chromium = runTestOn [ "aarch64-linux" "x86_64-linux" ] {
+    imports = [ ./chromium.nix ];
+    _module.args.chromiumPackage = pkgs.ungoogled-chromium;
+  };
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unpackerr = runTest ./unpackerr.nix;
@@ -1985,10 +1978,6 @@ in
   valkey = runTest {
     imports = [ ./redis.nix ];
     _module.args.package = pkgs.valkey;
-  };
-  varnish80 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgsLinux.varnish80;
   };
   vault = runTest ./vault.nix;
   vault-agent = runTest ./vault-agent.nix;
@@ -2076,6 +2065,7 @@ in
     inherit lib runTest;
   };
   yggdrasil = runTest ./yggdrasil.nix;
+  yopass = import ./web-apps/yopass.nix { inherit pkgs runTest; };
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;

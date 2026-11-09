@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "time-decode";
-  version = "10.4.2";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-icSMwPtJShFtzbzo0HaMaaq8yUdzJsuwJc3sHAzhsf4=";
+    hash = "sha256-Ov6byoIivoXumfOg1aA9rqtnlt9qzlUh+6HOwFEPIEo=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

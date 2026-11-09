@@ -45,16 +45,14 @@
   enablePlugin ? _systemInfo.buildIsHost, # Whether to support user-supplied plug-ins
   name ? "gcc",
   libcCross ? null,
-  threadsCross ? { }, # for MinGW
+  threadsCross ? null, # for MinGW
   withoutTargetLibc ? stdenv.targetPlatform.libc == null,
   flex,
   gnused ? null,
   buildPackages,
   pkgsBuildTarget,
   libxcrypt,
-  disableGdbPlugin ?
-    !enablePlugin
-    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin),
   nukeReferences,
   callPackage,
   majorMinorVersion,
@@ -199,7 +197,7 @@ assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore

@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "pinecone";
-  version = "9.1.0";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pinecone-io";
-    repo = "pinecone-python-client";
+    repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-yWGW9qx4zb4FnDLXvtXREYXRO7e5Jk/KJoaQlpKMwpg=";
+    hash = "sha256-cb0AO4F0x4RAzLA+wI1BCQ0GCrlPZg0oijqTHUwT2qQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-I3pIy9by+OHo6iU6OZp3VvJJPZOmJ/CYhkzoV8xHoMY=";
+    hash = "sha256-AA2og2s8FmfTZD0f906DaZzvBRiYti3jCw0GCEJTHzM=";
   };
 
   nativeBuildInputs = with rustPlatform; [

@@ -14,7 +14,7 @@ runCommand "test-neovim-rust-analyzer"
       rustc
     ];
 
-    testRustSrc = ''
+    testRustSrc = /* rust */ ''
       fn main() {
         let mut var = vec![None];
         var.push(Some("hello".to_owned()));
@@ -24,10 +24,29 @@ runCommand "test-neovim-rust-analyzer"
     # NB. Wait for server done type calculations before sending `hover` request,
     # otherwise it would return `{unknown}`.
     # Ref: https://github.com/rust-lang/rust-analyzer/blob/7b11fdeb681c12002861b9804a388efde81c9647/docs/dev/lsp-extensions.md#server-status
-    nvimConfig = ''
+    nvimConfig = /* lua */ ''
+      function test_hover ()
+        -- trigger hover request manually
+        -- cannot use `vim.lsp.buf.hover()` since nvim 0.11 removed client-to-server handlers
+        vim.lsp.buf_request_all(
+          vim.api.nvim_get_current_buf(),
+          "textDocument/hover",
+          vim.lsp.util.make_position_params(0, 'utf-8'),
+          function(results)
+            for client_id, response in pairs(results) do
+              if response.result then
+                -- Keep newlines.
+                io.write(response.result.contents.value)
+              end
+            end
+            vim.cmd("q")
+          end
+        )
+      end
+
       local caps = vim.lsp.protocol.make_client_capabilities()
       caps["experimental"] = { serverStatusNotification = true }
-      vim.lsp.buf_attach_client(vim.api.nvim_get_current_buf(), vim.lsp.start_client({
+      vim.lsp.buf_attach_client(vim.api.nvim_get_current_buf(), vim.lsp.start({
         cmd = { "rust-analyzer" },
         capabilities = caps,
         handlers = {
@@ -35,17 +54,10 @@ runCommand "test-neovim-rust-analyzer"
             if msg.health == "ok" then
               if msg.quiescent then
                 vim.cmd("goto 23") -- let mut |var =...
-                vim.lsp.buf.hover()
+                test_hover()
               end
             else
               print("error: server status is not ok: ")
-              vim.cmd("q")
-            end
-          end,
-          ["textDocument/hover"] = function(_, msg, ctx)
-            if msg then
-              -- Keep newlines.
-              io.write(msg.contents.value)
               vim.cmd("q")
             end
           end,

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.37.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "ffmpeg-normalize";

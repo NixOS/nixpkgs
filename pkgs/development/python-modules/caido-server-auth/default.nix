@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "caido_server_auth";
     inherit (finalAttrs) version;

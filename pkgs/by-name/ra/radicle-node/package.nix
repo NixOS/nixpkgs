@@ -6,6 +6,8 @@
   jq,
   lib,
   makeBinaryWrapper,
+  pkg-config,
+  libgit2,
   man-db,
   nixosTests,
   openssh,
@@ -47,8 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     asciidoctor
     installShellFiles
     makeBinaryWrapper
+    pkg-config
   ];
-  nativeCheckInputs = [ gitMinimal ];
+
+  buildInputs = [ libgit2 ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
@@ -60,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=radicle-cli"
     "--package=radicle-remote-helper"
   ];
+
+  nativeCheckInputs = [ gitMinimal ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
@@ -169,10 +175,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://radicle.dev";
     changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     platforms = lib.platforms.unix;
     teams = [ lib.teams.radicle ];
     mainProgram = "rad";

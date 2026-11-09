@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Provides access to sigprocmask(2) and friends and convenience wrappers to python application developers wanting to SIG_BLOCK and SIG_UNBLOCK signals";
     homepage = "https://github.com/ossobv/pysigset";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ dzabraev ];
+    maintainers = [ ];
   };
 }

@@ -4,16 +4,16 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
-  lld,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  inherit (stdenv.hostPlatform) isDarwin isx86_64;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "presenterm";
   version = "0.16.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mfontanini";
@@ -22,19 +22,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-mIJktrgBweaaLD2YaRcs0vP5hKRy/kMN/HEnwO323DA=";
   };
 
-  nativeBuildInputs =
-    lib.optionals isDarwin [
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals (isDarwin && isx86_64) [
-      lld
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [ oniguruma ];
 
   cargoHash = "sha256-OlZXf8Wg32mXGDGbavLVf1ELoqqSmc8z9DNpvGOfAJ8=";
-
-  env = lib.optionalAttrs (isDarwin && isx86_64) {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)

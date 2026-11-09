@@ -2,7 +2,6 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  sympy,
   wikipedia-api,
   pytest-asyncio,
   pytest-cov-stub,
@@ -14,17 +13,16 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "skye-harris";
   domain = "llm_intents";
-  version = "1.10.3";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "llm_intents";
     tag = finalAttrs.version;
-    hash = "sha256-6YwANxkYHX8KqT3Snioq/YzL7ftdL8NGUGNygrYgrbQ=";
+    hash = "sha256-nYGgIdKLMGiUtmy24q5tJoTKORKW71qjakyjzjw4o4E=";
   };
 
   dependencies = [
-    sympy
     wikipedia-api
   ];
 

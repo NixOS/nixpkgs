@@ -24,6 +24,7 @@ lib:
   fetchzip,
   fetchurl,
   versionCheckHook,
+  fetchpatch2,
 
   # Runtime dependencies
   procps,
@@ -41,6 +42,8 @@ lib:
   systemd,
   gnugrep,
   gnused,
+  nftables,
+  gawk,
 
   # Testing dependencies
   nixosTests,
@@ -56,6 +59,25 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = rke2VendorHash;
+
+  overrideModAttrs =
+    let
+      followSymlinksPatch = fetchpatch2 {
+        name = "find-image-follow-symlinks.patch";
+        url = "https://github.com/rorosen/wharfie/commit/a5deff0b2976625d904a084561c2ba43f3a4008a.diff";
+        hash = "sha256-zSN9cz+Tpp+rAOvvxlZPB2x1cxU8s1GNlLsUsOJ5V2Y=";
+      };
+    in
+    {
+      dontFixup = false;
+      fixupPhase = ''
+        runHook preFixup
+
+        patch --directory $out/github.com/rancher/wharfie -p1 < ${followSymlinksPatch}
+
+        runHook postFixup
+      '';
+    };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -129,6 +151,8 @@ buildGoModule (finalAttrs: {
           systemd
           gnugrep
           gnused
+          nftables
+          gawk
         ]
       } \
       --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}

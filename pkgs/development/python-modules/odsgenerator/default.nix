@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "odsgenerator";
-  version = "1.16.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdum";
     repo = "odsgenerator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yeLG84lK3inZvE934hzjAZ+155PGST5qNXUhzIh3UDg=";
+    hash = "sha256-+EwjZG2hSXBVApjrGdd1Pja/w6ny15Vqud2nya+ei5g=";
   };
 
   build-system = [ uv-build ];

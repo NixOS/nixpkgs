@@ -1,7 +1,7 @@
 {
-  "branch": "v0.56.2-b",
-  "commit_hash": "efb50993780079460b0cbed1363e2166a2de1d9f",
+  "branch": "v0.57.1-b",
+  "commit_hash": "acc1aa0bfd4bd575dcb0f76c35ccf12b660a1ab9",
   "commit_message": "[gha] Nix: update inputs",
-  "date": "2026-08-05",
-  "tag": "v0.56.2"
+  "date": "2026-11-03",
+  "tag": "v0.57.1"
 }

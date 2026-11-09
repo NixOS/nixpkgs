@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "awacs";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eRmxXir9X08+YEVE+Bxa+OuasPokgcUoc1SJWGeRJ58=";
+    hash = "sha256-bM8PMgxHZs8eAjo5cpyxKL1E2ByM1Q7D/tC9QJovkFU=";
   };
 
   build-system = [

@@ -14,19 +14,20 @@
   stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc-placement";
-  version = "4.8.0";
+  version = "4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
-    tag = version;
-    hash = "sha256-txxLtg3fDrkPqU0k/PlwvpJJBzVLtJXz82mhPWo+rKc=";
+    tag = finalAttrs.version;
+    hash = "sha256-rSabqfpLkNd/h3TepX5W5Sf0+RnVJri1VUiG6HzVkHE=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -61,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

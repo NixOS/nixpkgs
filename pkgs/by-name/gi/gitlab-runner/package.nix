@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "19.2.1";
+  version = "19.5.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xPheMOKnRjt8+uoFTpV/ENe6NdyT9JZJZEmvbFdKcpA=";
+    hash = "sha256-4iBgXjvt0ZfyJdElv/kcItcdij8SjDhWkOk+PSjxWko=";
   };
 
-  vendorHash = "sha256-kznAIKiJUZUkoNQSsnl6pj4SZspErccc6rmGwuc7iKo=";
+  vendorHash = "sha256-Op1yK76t/v6zNn0D7hAf8QDdRPK0VcQP0Voy8Zt8J7c=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -44,10 +44,14 @@ buildGoModule (finalAttrs: {
     rm common/build_test.go
     rm executors/custom/custom_test.go
 
-    # Timing-dependent test causes spurious failures on Hydra.
-    # Might be fixed upstream in this MR: https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/6623
-    # Try dropping it on next major version bump
-    rm executors/kubernetes/internal/watchers/pod_test.go
+    # Needs DNS
+    rm commands/helpers/probe_url_test.go
+
+    # Use bash from PATH instead of absolute paths
+    substituteInPlace executors/kubernetes/kubernetes_test.go \
+      --replace-fail \
+        '[]byte(shells.BashDetectShellScript)' \
+        '[]byte("exec bash \"$@\"\n")'
   ''
   + lib.optionalString (!stdenv.buildPlatform.isx86_64) ''
     # Kubernetes tests actually work fine inside the network sandbox (they don't
@@ -73,7 +77,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    patchShebangs --build helpers/docker/auth/testdata/docker-credential-bin.sh
+    patchShebangs --build helpers/docker/auth/testdata/
   '';
 
   excludedPackages = [

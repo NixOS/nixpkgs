@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.28.7";
+  version = "1.28.8";
 
   outputs = [
     "bin"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eHMpssV1jiKKcdkmptz5YLzqrMo8rdY4dLpmXfzaAT4=";
+    hash = "sha256-uqjoaYWtZBfMCtbnt5/yiExnecixx6YkDnEhgiyG5SQ=";
   };
 
   depsBuildBuild = [

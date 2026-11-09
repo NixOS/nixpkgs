@@ -5,19 +5,20 @@
   pytest-asyncio,
   pytestCheckHook,
   httpx,
+  httpx2,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "whodap";
-  version = "0.1.16";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "whodap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ybJiAWrAcs/9/8WutqsHvwsiWxR+tJL9wcQRaOiUZNQ=";
+    hash = "sha256-p9a8UJnq1ZqsHRUb46nTq+QLJy8+gOWdM496rZzdn9s=";
   };
 
   postPatch = ''
@@ -28,7 +29,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    httpx2
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

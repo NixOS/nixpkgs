@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
@@ -23,10 +24,22 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KVER=${kernel.modDirVersion}"
+    "KDIR=${KDIR}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=updates"
+  ];
+
   buildPhase = "make -C ${KDIR} M=/build/source modules";
-  installPhase = ''
-    make -C ${KDIR} M=/build/source INSTALL_MOD_PATH="$out" modules_install
-  '';
+
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${KDIR}"
+    "M=$(PWD)"
+  ];
 
   meta = {
     homepage = "https://github.com/twifty/amd-gpu-i2c";

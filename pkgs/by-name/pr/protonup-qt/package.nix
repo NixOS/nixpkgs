@@ -5,7 +5,7 @@
   makeWrapper,
   nix-update-script,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "protonup-qt";
   version = "2.16.0";
 
@@ -14,16 +14,11 @@ let
     hash = "sha256-hipxdQLwuWAfI+hJpLTf49aa7X58omLPG9xKVT+N5+w=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.desktop $out/share/applications/protonup-qt.desktop
-    install -Dm644 ${appimageContents}/net.davidotek.pupgui2.png $out/share/pixmaps/protonup-qt.png
+    install -Dm644 ${finalAttrs.contents}/net.davidotek.pupgui2.desktop $out/share/applications/protonup-qt.desktop
+    install -Dm644 ${finalAttrs.contents}/net.davidotek.pupgui2.png $out/share/pixmaps/protonup-qt.png
     substituteInPlace $out/share/applications/protonup-qt.desktop \
       --replace-fail "Exec=net.davidotek.pupgui2" "Exec=protonup-qt" \
       --replace-fail "Icon=net.davidotek.pupgui2" "Icon=protonup-qt"
@@ -42,8 +37,8 @@ appimageTools.wrapType2 {
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";
-    changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${version}";
+    changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${finalAttrs.version}";
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ michaelBelsanti ];
   };
-}
+})

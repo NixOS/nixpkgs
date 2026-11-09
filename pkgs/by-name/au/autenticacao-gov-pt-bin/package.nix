@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  cacert,
   ccid,
   cjson,
   copyDesktopItems,
@@ -119,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r pteid_out/files/bin $out/app
     cp -r pteid_out/files/lib/lib{pteid,CMD}* $out/app/lib/
     cp -r pteid_out/files/share/certs $out/app/share
+    rm $out/app/share/certs/cacerts.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/app/share/certs/cacerts.pem
     cp -r pteid_out/files/share/icons $out/share
   '';
 

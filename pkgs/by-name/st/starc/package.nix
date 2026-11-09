@@ -6,11 +6,11 @@
 }:
 appimageTools.wrapType2 (finalAttrs: {
   pname = "starc";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchurl {
     url = "https://github.com/story-apps/starc/releases/download/v${finalAttrs.version}/starc-setup.AppImage";
-    hash = "sha256-ZNd69E70yTFOQGBAZuOJqKlzGS+0xSsAP2uh1EWb6B8=";
+    hash = "sha256-rR9RczU+HvwD7wld19/O0KR1XaWpEyNZQBwsz42f1sk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

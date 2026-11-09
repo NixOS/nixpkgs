@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "namecoind";
-  version = "31.1";
+  version = "32.1";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     tag = "nc${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FeFo8KqsJ/uP2IIIHlAU5IXibFiXtKAsfeDmO49wCH0=";
+    hash = "sha256-ty0TTWhzYGfsRk+DAB4+3GsHjvCblzqrW/6pc+8cnls=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

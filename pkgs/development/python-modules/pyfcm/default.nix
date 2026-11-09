@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-lpSbb0DDXLHne062s7g27zRpvTuOHiqQkqGOtWvuWdI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyfcm/__meta__.py \
+      --replace-fail '__version__ = "2.0.0"' '__version__ = "${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

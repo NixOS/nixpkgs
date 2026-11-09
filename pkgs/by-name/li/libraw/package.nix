@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libraw";
-  version = "0.22.2";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
     tag = finalAttrs.version;
-    hash = "sha256-mtDQ3NaHB1ogl61SI0KlKjWlOsNVxeAKal+7YanXJ+s=";
+    hash = "sha256-7ETGLRYVvOAChiE4Fr3wKbfFuysg5QtgL/swf1xQbzc=";
   };
 
   outputs = [
@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit imagemagick hdrmerge;
     inherit (python3.pkgs) rawkit;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";

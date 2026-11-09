@@ -11,9 +11,8 @@
   makeWrapper,
   mono,
   wrapWithMono ? true,
-  openssl,
+  aws-lc,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-cli";
   version = "0.16.0";
@@ -35,10 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     zstd
+    aws-lc
     libsoup_3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
   ];
 
   env = {

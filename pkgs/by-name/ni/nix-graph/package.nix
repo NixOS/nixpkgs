@@ -6,14 +6,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "nix-graph";
-  version = "0.1.2";
+  version = "0.1.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AlexAntonik";
     repo = "nix-graph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ozENFD/Sus/ntu/cE+SlkvCaQ/sdFhUQfwK2zoldAjU=";
+    hash = "sha256-FcffE4t+coDvsVDEu4SMfKP903I1UhWBDfvooJGY0vM=";
   };
 
   vendorHash = null;

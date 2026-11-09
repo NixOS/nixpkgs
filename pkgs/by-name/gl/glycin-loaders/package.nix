@@ -7,7 +7,6 @@
   glib,
   gtk4,
   libglycin,
-  lcms2,
   libheif,
   libjxl,
   librsvg,
@@ -67,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     glib
     gtk4
-    lcms2
   ];
 
   mesonFlags = [
@@ -85,8 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace glycin-loaders/meson.build \
-      --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
+    substituteInPlace meson.build --replace-fail \
+      "meson.get_external_property('rust_target')" \
+      "'${stdenv.hostPlatform.rust.cargoShortTarget}'"
   ''
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
     chmod +x build-aux/setup-integration-test.py
@@ -107,8 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     rm -r $out/share/thumbnailers
   '';
-
-  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     inherit enabledLoaders;

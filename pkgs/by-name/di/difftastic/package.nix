@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "difftastic";
-  version = "0.71.0";
+  version = "0.72.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = "difftastic";
     tag = finalAttrs.version;
-    hash = "sha256-xJdR/t6O8PavCKBiKnueiLR01g7nWGUHp9bcjOuDDA8=";
+    hash = "sha256-3soIU2TmHlUDVznmDm77iK+io8QZnhQ9/BkH71x89io=";
   };
 
-  cargoHash = "sha256-HEX8njuArbgMQI8yDr66siRB8t+4P2Q7rxHuCeaD9Uw=";
+  cargoHash = "sha256-KRgJ+9Sjm3elkXS+lkW6NeKyymp/3crpsuBNEQKnkvY=";
 
   nativeBuildInputs = [ installShellFiles ];
 

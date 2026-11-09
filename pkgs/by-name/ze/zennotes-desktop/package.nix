@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
-  electron_42,
+  electron_44,
   makeBinaryWrapper,
   nix-update-script,
 
@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.70.0";
-  npmDepsHash = "sha256-tEr7+dWpnVRUhdWEH0d0t36bUs/uxBGkprv6837Fa4c=";
+  version = "2.83.0";
+  npmDepsHash = "sha256-G6VOXmAKx2NzNQk0kX+EyTU7eUzC6i2inCc/HkX6Nis=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aU+Z3KRkqkCRft7bUxscv3UCKtQuTSZQsxViGM3EoT8=";
+    hash = "sha256-e0gL35KZFEtd+EcJpaOnnplY6RyOH0SA9a7CHhG5Wvw=";
   };
 
   npmWorkspace = "apps/desktop";
@@ -63,11 +63,11 @@ buildNpmPackage (finalAttrs: {
     done
 
     mkdir -p $out/bin
-    makeWrapper ${electron_42}/bin/electron $out/bin/zennotes-desktop \
+    makeWrapper ${electron_44}/bin/electron $out/bin/zennotes-desktop \
       --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop"
 
     ${lib.optionalString installCli ''
-      makeWrapper ${electron_42}/libexec/electron/electron $out/bin/zn \
+      makeWrapper ${electron_44}/libexec/electron/electron $out/bin/zn \
         --set ELECTRON_RUN_AS_NODE 1 \
         --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop/out/main/cli.js"
     ''}

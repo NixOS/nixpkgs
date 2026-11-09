@@ -106,6 +106,10 @@ in
     ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
     (mkRemovedOptionModule [
       "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
@@ -599,6 +603,10 @@ in
     '')
     (mkRemovedOptionModule [ "services" "castopod" ] ''
       services.castopod has been removed together with pkgs.castopod.
+    '')
+    (mkRemovedOptionModule [ "services" "scx" ] "Please migrate to services.scx-loader instead.")
+    (mkRemovedOptionModule [ "services" "nixops-dns" ] ''
+      services.nixops-dns has been removed together with pkgs.nixops-dns.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

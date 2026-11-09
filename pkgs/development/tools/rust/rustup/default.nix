@@ -7,6 +7,7 @@
   rustPlatform,
   makeBinaryWrapper,
   pkg-config,
+  aws-lc,
   openssl,
   curl,
   writableTmpDirAsHomeHook,
@@ -25,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.29.2";
+  version = "1.29.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-vtfZNMkUAmbdXv0sv7wdm62AjCkYJY188jLx8RrmO2M=";
+    hash = "sha256-KEfqZtjUSVg0aJTgf5jC7jNJOPYIRuf+8uZRtOXQQ9o=";
   };
 
-  cargoHash = "sha256-UL6nS3SbxKXFWftJLeFY622VQEyAimhNz+YJgZsLHJc=";
+  cargoHash = "sha256-7NvkXWG8sa7zDveU1jWJ5C+KMpoSg/zSoP44UXNyjUw=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     curl
     zlib
@@ -159,10 +161,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mic92
     ];

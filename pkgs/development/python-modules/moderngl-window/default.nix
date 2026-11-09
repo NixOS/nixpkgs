@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "moderngl";
-    repo = "moderngl_window";
+    repo = "moderngl-window";
     tag = version;
     hash = "sha256-pElSwzNbZlZT8imK1UsLy2TyvS8TEM7hsVqLxEK1tbg=";
   };
