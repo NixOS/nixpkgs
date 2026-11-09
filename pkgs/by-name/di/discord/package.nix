@@ -90,13 +90,42 @@ let
   # Link the whole directory so Discord's native module boundary check sees
   # the same real path for the module root and the modules it contains
   # See https://github.com/NixOS/nixpkgs/issues/580512
-  stageModules = writeShellScript "discord-stage-modules" ''
-    store_modules="$1"
-    modules_dir="${configDir}/${version}/modules"
-    rm -rf "$modules_dir"
-    mkdir -p "$(dirname "$modules_dir")"
-    ln -s "$store_modules" "$modules_dir"
-  '';
+  #
+  # On Linux the tree is staged as a writable copy instead of a symlink:
+  # discord_voice bundles MediaPipe's selfie-segmentation `.tflite` models,
+  # which the native voice engine opens read-write (O_RDWR). In the read-only
+  # store that open fails with EACCES, so background blur / virtual
+  # backgrounds render a black camera image. The whole tree is copied (not
+  # just discord_voice) to keep a single real module root for the boundary
+  # check above. The copy is reused until the store path changes.
+  stageModules = writeShellScript "discord-stage-modules" (
+    ''
+      store_modules="$1"
+      modules_dir="${configDir}/${version}/modules"
+    ''
+    + (
+      if isLinux then
+        ''
+          stamp="$modules_dir.nix-store-path"
+          if [ -d "$modules_dir" ] && [ ! -L "$modules_dir" ] \
+            && [ "$(cat "$stamp" 2>/dev/null)" = "$store_modules" ]; then
+            exit 0
+          fi
+          rm -rf "$modules_dir" "$modules_dir.tmp" "$stamp"
+          mkdir -p "$(dirname "$modules_dir")"
+          cp -R "$store_modules" "$modules_dir.tmp"
+          chmod -R u+w "$modules_dir.tmp"
+          mv "$modules_dir.tmp" "$modules_dir"
+          printf '%s\n' "$store_modules" > "$stamp"
+        ''
+      else
+        ''
+          rm -rf "$modules_dir"
+          mkdir -p "$(dirname "$modules_dir")"
+          ln -s "$store_modules" "$modules_dir"
+        ''
+    )
+  );
 
   disableBreakingUpdates =
     runCommand "disable-breaking-updates.py"
