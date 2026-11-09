@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-version="2.14.0"
+version="2.21.1"
 
 usage() {
   printf "Usage: %s {about|update} [version]\n" "$0"
