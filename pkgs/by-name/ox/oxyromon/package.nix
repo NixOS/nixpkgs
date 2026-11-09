@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  aws-lc,
   bchunk,
   cdrkit,
   ctrtool,
@@ -13,9 +14,11 @@
   p7zip,
   pkg-config,
   rustPlatform,
+  sqlite,
   versionCheckHook,
   wiimms-iso-tools,
   xdelta,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
   ];
 
   cargoHash = "sha256-P86umWTojzUzGyuVEz7qtZw5BUI2WxJBYdIFF5kr03Q=";
