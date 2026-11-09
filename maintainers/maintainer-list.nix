@@ -5981,6 +5981,15 @@
     githubId = 44802527;
     name = "corps-fini";
   };
+  Cosipa = {
+    email = "cosipa@posteo.me";
+    github = "Cosipa";
+    githubId = 219423800;
+    name = "Cosipa";
+    keys = [
+      { fingerprint = "2C92 F4C9 475D E7B8 A843  80E9 A852 3AE1 22FE 6E85"; }
+    ];
+  };
   costrouc = {
     email = "chris.ostrouchov@gmail.com";
     github = "costrouc";
