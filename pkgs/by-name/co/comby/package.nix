@@ -20,14 +20,14 @@ let
     }:
     ocamlPackages.buildDunePackage {
       inherit pname preConfigure;
-      version = "1.8.1-unstable-2026-06-08";
+      version = "1.8.1-unstable-2026-11-06";
       doCheck = true;
 
       src = fetchFromGitHub {
         owner = "comby-tools";
         repo = "comby";
-        rev = "3b6bdff7bc3b50361b621da9db030152772e7e6b";
-        hash = "sha256-1BbsHnvJ/h99zZb5qKlQpXMsV5xW0idpJWt/SQEOd6M=";
+        rev = "a49be8ef83592bcc392c1bd188a66b9bea9d88e1";
+        hash = "sha256-tVbJwCjEHAiehpMb6teQH+3Jn192gNjMUIqW+oRkgQg=";
       };
 
       nativeBuildInputs = extraNativeInputs;
@@ -54,7 +54,6 @@ let
   combyKernel = mkCombyPackage {
     pname = "comby-kernel";
     extraBuildInputs = [
-      ocamlPackages.ocaml_pcre
       ocamlPackages.bigstringaf
     ];
     # tests cannot be built until all of comby is built
@@ -90,7 +89,6 @@ mkCombyPackage {
     ocamlPackages.conduit-lwt-unix
     ocamlPackages.lwt_react
     ocamlPackages.tar-unix
-    ocamlPackages.ocaml_pcre
     ocamlPackages.cstruct-lwt
     ocamlPackages.dune-configurator
     combyKernel

@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
@@ -23,7 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vj5U24bH8BxGvgTpHjZMldTzQA/8ZqJQBbsaCbFVLuE=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ sqlite ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd qownnotes-tui \

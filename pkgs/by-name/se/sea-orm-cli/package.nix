@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   openssl,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

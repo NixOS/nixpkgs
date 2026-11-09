@@ -4,6 +4,7 @@
   rustPlatform,
   autoPatchelfHook,
   pkg-config,
+  aws-lc,
   libxkbcommon,
   libGL,
   pipewire,
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
     pipewire
     udev
+    aws-lc
   ]
   ++ finalAttrs.runtimeDependencies;
 

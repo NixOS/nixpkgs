@@ -6,8 +6,8 @@
   },
   {
     "pname": "AngleSharp",
-    "version": "1.8.6",
-    "hash": "sha256-mwlYgLKSPFllosNSqik8+Yhr7ezZL6NI0wfUK6obsI0="
+    "version": "1.9.0",
+    "hash": "sha256-bDr9bJ692FpP3oEbqPgc2whl6KqjT0l/GMwyCOUTyvg="
   },
   {
     "pname": "AngleSharp.Xml",
@@ -401,13 +401,13 @@
   },
   {
     "pname": "Polly",
-    "version": "8.8.0",
-    "hash": "sha256-ZV7xox4nUTjMLoHDWFJQuGs6pffDhsefkwHkmGSZwr4="
+    "version": "8.9.0",
+    "hash": "sha256-NRcG/Wt9N9utwENjkIsKDuY0z+kQM0nn1s+ZELDzwVM="
   },
   {
     "pname": "Polly.Core",
-    "version": "8.8.0",
-    "hash": "sha256-Qz675JdkvZJkcYFWRuwIzXGiiOUYUcXnDHvd3UmnlDg="
+    "version": "8.9.0",
+    "hash": "sha256-58jnPAOAYzTyv0MRNtUcAbz+oBUyNzA52uhdhCOgSOU="
   },
   {
     "pname": "SharpZipLib",

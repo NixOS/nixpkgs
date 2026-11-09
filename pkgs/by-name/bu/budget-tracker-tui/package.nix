@@ -3,6 +3,8 @@
   lib,
   nix-update-script,
   rustPlatform,
+  pkg-config,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "budget-tracker-tui";
@@ -17,6 +19,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-WflCwLK4GI0UOzpJGnZBpNd1EDoxn/+wTgNz4HXfbaY=";
   };
   cargoHash = "sha256-zWL9LH83iz/bgodo19Pfitiuqj5Q5M93AgMOFwRErxk=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script { };
 

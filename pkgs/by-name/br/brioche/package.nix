@@ -10,10 +10,11 @@
     }
   ),
   openssl,
-  tzdata,
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
+  zstd,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
+    (lib.getDev sqlite)
   ];
 
   # Tests require network access and CA certificates, which are unavailable in the nix sandbox
