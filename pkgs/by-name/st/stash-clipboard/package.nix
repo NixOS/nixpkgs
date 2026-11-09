@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  sqlite,
   createSymlinks ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-8xQ501X4AJrsZN/jnG/mSRZp4JTcaFxSYM3TeWfDhQ8=";
 
   __structuredAttrs = true;
+
+  buildInputs = [ sqlite ];
 
   postInstall = lib.optionalString createSymlinks ''
     mkdir -p $out
