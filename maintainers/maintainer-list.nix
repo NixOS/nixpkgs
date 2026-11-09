@@ -28833,7 +28833,7 @@
     name = "TakWolf";
   };
   talal = {
-    email = "noreply@talal.ch";
+    email = "noreply@talal.dev";
     github = "talal";
     githubId = 3526562;
     name = "Muhammad Talal Anwar";
