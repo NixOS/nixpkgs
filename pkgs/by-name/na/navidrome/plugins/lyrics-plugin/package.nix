@@ -7,16 +7,16 @@
 buildNavidromeRustPlugin (finalAttrs: {
   pname = "lyrics-plugin";
   bundleName = "nd-lyrics";
-  version = "8.1.0";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "J0R6IT0";
     repo = "navidrome-lyrics-plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VSy8W1kkAIk+xidd7fCMmhlvnadF7vXOPRtPNNMXu3s=";
+    hash = "sha256-5VSgNxjHLiXWdnWHpAmSKC5WSRsrV3XfT4Pqj3VRPfs=";
   };
 
-  cargoHash = "sha256-TWI0u0oXj4/OdsXut2HXitGt0UmBcUUfOfhR1pkgW54=";
+  cargoHash = "sha256-p1cv18z+Bgqz7Z7DHFv2bJ2VdTVInfi7bDIO5pqp2X8=";
 
   meta = {
     changelog = "https://github.com/J0R6IT0/navidrome-lyrics-plugin/releases/tag/v${finalAttrs.version}";
