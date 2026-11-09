@@ -2,26 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "zdns";
-  version = "2.0.5";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zdns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e01+TjJETpWNrdtG+lHHGmS9ZS9RijOo5wRnEv6w5jk=";
+    hash = "sha256-wQXw68Ffa6i09+RkIDUQhIhezDR27eSZ0ppBB8/ihOo=";
   };
 
-  vendorHash = "sha256-YlSm4uMDw5I/R4VRpoo5+t/zTwY7J62faodwKlrfbTs=";
+  vendorHash = "sha256-yvrIj2XBBWRlhTYl8sveq9eu6LYRo3aMzRy1Jgj7+f0=";
 
-  preCheck = ''
-    # Tests require network access
-    substituteInPlace src/cli/worker_manager_test.go \
-      --replace-fail "TestConvertNameServerStringToNameServer" "SkipTestConvertNameServerStringToNameServer"
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${finalAttrs.version}"
+  ];
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestConvertNameServerStringToNameServer"
+        "TestNetworkConditions"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "CLI DNS lookup tool";

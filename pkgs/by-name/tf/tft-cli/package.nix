@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tft-cli";
-  version = "0.0.38";
+  version = "0.0.40";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "testing-farm";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-guoZfFkx9VNXiJy61Cg08G/H4HIcSZ66J+US69SsioM=";
+    hash = "sha256-8oHy0oSwHHhQ3hitmz06/gEUY3L2K8fUuLUVxcy+Q2Y=";
   };
 
   build-system = with python3Packages; [
