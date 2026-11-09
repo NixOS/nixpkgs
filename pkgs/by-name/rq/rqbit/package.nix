@@ -5,8 +5,8 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  openssl,
   aws-lc,
+  cacert,
   buildNpmPackage,
   nodejs,
   nix-update-script,
@@ -51,13 +51,19 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+    pkg-config
+  ];
 
   buildInputs = [
     aws-lc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  ];
+
+  # so we dont need openssl and aws-lc
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "rust-tls"
+    "webui"
+  ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
@@ -76,18 +82,12 @@ rustPlatform.buildRustPackage {
     done
   '';
 
+  nativeCheckInputs = [ cacert ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-
-  checkFlags = [
-    # skip these tests since they require internet access
-    "--skip=tests::e2e::test_e2e_download_tcp"
-    "--skip=tests::e2e::test_e2e_download_utp"
-    "--skip=tests::e2e_stream::test_e2e_stream"
-    "--skip=upnp_server_adapter::tests::test_browse"
-  ];
 
   # required by test `read_buf::tests::can_read_long_metainfo_correctlyv` in `aarch64-darwin`(sandbox=relaxed)
   __darwinAllowLocalNetworking = true;
