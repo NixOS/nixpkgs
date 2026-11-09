@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.70.2-unstable-2026-10-24";
+  version = "3.70.2";
 
   src = fetchFromGitHub {
     owner = "mifi";
