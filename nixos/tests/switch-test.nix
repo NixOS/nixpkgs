@@ -836,6 +836,23 @@ in
               foo = "bar";
               qux = "baz";
             };
+
+            # Started by the switch and writing to stdout from the activation
+            # script, see the "closed output pipe" subtest.
+            brokenPipe.configuration = {
+              systemd.services.broken-pipe-test = {
+                wantedBy = [ "multi-user.target" ];
+                serviceConfig = {
+                  Type = "oneshot";
+                  RemainAfterExit = true;
+                  ExecStart = "${pkgs.coreutils}/bin/true";
+                };
+              };
+              system.activationScripts.broken-pipe-test = ''
+                echo "writing to a closed pipe"
+                touch /run/broken-pipe-test-activation
+              '';
+            };
           };
       };
 
@@ -1037,6 +1054,19 @@ in
           assert exitcode < 124, \
             "switch-to-configuration did not abort as expected, " + \
             f"probably it timed out instead (exit code: {exitcode}), 124 means timeout"
+
+      with subtest("closed output pipe"):
+          # Writes to fd 3 fail with EPIPE: fd 4, the FIFO's only reader, is closed.
+          # Pre-switch checks would fail on that and abort before stopping anything.
+          machine.succeed("rm -f /tmp/broken-pipe && mkfifo /tmp/broken-pipe")
+          (rc, _) = machine.execute(
+              "(exec 4<>/tmp/broken-pipe 3>/tmp/broken-pipe 4<&-; NIXOS_NO_CHECK=1 ${machine}/specialisation/brokenPipe/bin/switch-to-configuration test >&3 2>&3)"
+          )
+          # Not 101 (panic): only the activation script fails, as its echos fail.
+          assert rc == 2, f"expected exit code 2, got {rc}"
+          machine.succeed("test -e /run/broken-pipe-test-activation")
+          machine.succeed("systemctl is-active broken-pipe-test.service")
+          switch_to_specialisation("${machine}", "")
 
       with subtest("fstab mounts"):
           switch_to_specialisation("${machine}", "")
