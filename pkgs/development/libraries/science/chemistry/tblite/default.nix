@@ -29,7 +29,7 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tblite";
-  version = "0.6.0";
+  version = "0.8.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -37,31 +37,22 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tblite";
     repo = "tblite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z0g+bf6APqNLB9mDE49FelitQ9ptZXdFQuYeXIT0NIw=";
+    hash = "sha256-mB083d8mGdDznIh1kTfiJ+yEeRbYScV3UWuAOsSdygg=";
   };
 
   patches = [
-    ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
-
-    # Fix wrong paths in pkg-config file
-    ./pkgconfig.patch
-
     # Several C-API functions with bind(C) were not declared as public in their
     # Fortran modules, leading to link errors with gfortran 16.
     ./fix-c-api-visibility-gfortran16.patch
+
+    # Fix double absolute paths in generated cmake target files
+    ./cmake-paths.patch
   ];
 
   postPatch =
     # Python scripts in test subdirectories to run the tests
     ''
       patchShebangs ./
-    ''
-
-    # libquadmath is only shipped by GCC on architectures that lack native
-    # quad-precision support (e.g. x86_64); on aarch64 it does not exist.
-    + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-      substituteInPlace config/meson.build \
-        --replace-fail "lib_deps += cc.find_library('quadmath')" ""
     '';
 
   nativeBuildInputs = [
@@ -87,6 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     simple-dftd3
   ];
 
+  mesonFlags = [
+    "-Dddx=false"
+    "-Dhdf5=disabled"
+    "-Dtrexio=disabled"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -98,9 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  checkFlags = [
-    "-j1" # Tests hang when multiple are run in parallel
-  ];
+  checkPhase = ''
+    runHook preCheck
+
+    # `meson test` has no per-test exclusion flag (only whole suites via
+    # --suite/--no-suite), and the flaky `xtbml*` tests are spread across the
+    # `unit` and `cli` suites. Build the test list dynamically and drop the
+    # `xtbml*` entries by name.
+    meson test --no-rebuild --print-errorlogs --max-lines=1000000 \
+      --timeout-multiplier=0 \
+      $(meson test --list | sed 's/^.* - //' | grep ':' | grep -v 'xtbml')
+
+    runHook postCheck
+  '';
 
   doCheck = buildType == "meson";
 

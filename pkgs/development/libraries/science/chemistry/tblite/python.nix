@@ -1,13 +1,15 @@
 {
+  lib,
   buildPythonPackage,
+  meson-python,
   meson,
   ninja,
   pkg-config,
-  tblite,
-  numpy,
-  simple-dftd3,
-  cffi,
   gfortran,
+  setuptools,
+  cffi,
+  numpy,
+  tblite,
   blas,
   lapack,
   mctc-lib,
@@ -15,7 +17,7 @@
   toml-f,
   multicharge,
   dftd4,
-  setuptools,
+  simple-dftd3,
 }:
 
 buildPythonPackage {
@@ -24,18 +26,27 @@ buildPythonPackage {
     version
     src
     postPatch
-    patches
     meta
     ;
 
+  pyproject = true;
+
+  sourceRoot = "source/python";
+
+  dontUseMesonConfigure = true;
+
   nativeBuildInputs = [
-    tblite
+    meson-python
     meson
     ninja
     pkg-config
     gfortran
-    mctc-lib
     setuptools
+  ];
+
+  dependencies = [
+    cffi
+    numpy
   ];
 
   buildInputs = [
@@ -50,17 +61,8 @@ buildPythonPackage {
     dftd4
   ];
 
-  propagatedBuildInputs = [
-    tblite
-    simple-dftd3
-    cffi
-    numpy
-  ];
-
-  pyproject = false;
   pythonImportsCheck = [
     "tblite"
     "tblite.interface"
   ];
-  mesonFlags = [ "-Dpython=true" ];
 }
