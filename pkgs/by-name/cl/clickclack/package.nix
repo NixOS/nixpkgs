@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "clickclack";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-YZiGjjJU6qwfRfHKY4jCuuAonTJWA4JuwsSxRxb3C7g=";
   };
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://git.sr.ht/~proycon/clickclack/tree/${finalAttrs.src.tag}/item/CHANGELOG.md";
     description = "Vibration/audio feedback tool to be used with virtual keyboards";
     homepage = "https://git.sr.ht/~proycon/clickclack";
     license = lib.licenses.mit;
