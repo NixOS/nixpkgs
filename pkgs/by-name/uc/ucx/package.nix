@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Unified Communication X library";
-    homepage = "https://www.openucx.org";
+    homepage = "https://openucx.readthedocs.io";
     downloadPage = "https://github.com/openucx/ucx";
     changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
