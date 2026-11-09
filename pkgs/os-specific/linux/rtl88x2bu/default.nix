@@ -5,12 +5,12 @@
   kernel,
   kernelModuleMakeFlags,
   bc,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2026-10-27";
+  version = "0-unstable-2026-10-27";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -40,7 +40,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     description = "Realtek rtl88x2bu driver";
