@@ -8,6 +8,7 @@
   openssl,
   gitMinimal,
   python3,
+  oniguruma,
   nix-update-script,
   versionCheckHook,
 }:
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    oniguruma
   ];
 
   preBuild = ''
