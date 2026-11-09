@@ -1198,6 +1198,12 @@
     githubId = 120214979;
     name = "aktaboot";
   };
+  al2klimov = {
+    email = "alexander.klimov@icinga.com";
+    github = "al2klimov";
+    githubId = 6053266;
+    name = "Alexander A. Klimov";
+  };
   al3xtjames = {
     email = "nix@alextjam.es";
     github = "al3xtjames";

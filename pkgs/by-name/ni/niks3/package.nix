@@ -9,14 +9,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "niks3";
-  version = "1.16.1";
+  version = "1.16.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "niks3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KQNyR2fDRzJy8o6cJkxvgqmTrPswuFDDiZ2PZQynl7Q=";
+    hash = "sha256-ssKKtq4I595Z32NQR9sc/hlKAeqaYtI2jz83M0TZSos=";
   };
 
   vendorHash = "sha256-oE2viHmrFeg7m5fYFzzv6OdJahHgI1iyfNNJoTzSScU=";

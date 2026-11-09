@@ -121,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./packages/server-commands/{dist,package.json} $out/packages/server-commands
     mv ./packages/transcription/{dist,package.json} $out/packages/transcription
     mv ./packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
+    mkdir -p $out/share
+    mv ./config/config-schema.json $out/share/config-schema.json
     mv ./{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
 
     # Remove broken symlinks in node_modules from workspace packages that aren't needed
