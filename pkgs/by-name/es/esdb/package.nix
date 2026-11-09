@@ -2,12 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  unzip,
-  zip,
-  libiconv,
+  python3,
+  sqlite,
   perl,
   aspell,
+  hunspell,
+  zip,
   dos2unix,
+  libiconv,
   singleWordlist ? null,
 }:
 
@@ -20,37 +22,37 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
-    rev = "rel-${finalAttrs.version}";
-    sha256 = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
+    tag = "rel-${finalAttrs.version}";
+    hash = "sha256-YDQ3lHfx67b0JUSaUY888RmBVOVVq0Q2CyhY9Lbc+fE=";
   };
 
   postPatch = ''
-    substituteInPlace scowl/src/Makefile \
-        --replace g++ c++
+    patchShebangs --build combine.py mk-list scowl speller
+
+    substituteInPlace speller/Makefile \
+      --replace-fail '/bin/bash' "$(type -P bash)"
+
+    substituteInPlace speller/HEADER.sh \
+      --replace-fail '`date`' '`date -u -d "@$SOURCE_DATE_EPOCH"`'
   '';
 
   nativeBuildInputs = [
-    unzip
-    zip
+    python3
+  ]
+  ++ lib.optionals (singleWordlist == null) [
+    sqlite
     perl
     aspell
+    hunspell
+    zip
     dos2unix
-  ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
+  ]
+  ++ lib.optional (!stdenv.buildPlatform.isLinux) libiconv;
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
-
-  preConfigure = ''
-    patchShebangs .
-    export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$PWD/varcon"
-  '';
+  env.SCOWL_VERSION = finalAttrs.version;
 
   postBuild = lib.optionalString (singleWordlist == null) ''
-    (
-    cd scowl/speller
-    make aspell
-    make hunspell
-    )
+    make -C speller hunspell
   '';
 
   enableParallelBuilding = false;
@@ -58,68 +60,60 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     if singleWordlist == null then
       ''
-        eval "$preInstall"
+        runHook preInstall
 
-        mkdir -p "$out/share/scowl"
-        mkdir -p "$out/lib" "$out/share/hunspell" "$out/share/myspell"
-        mkdir -p "$out/share/dict"
+        mkdir -p "$out/share/hunspell" "$out/share/myspell" "$out/share/dict"
 
-        cp -r scowl/speller/aspell "$out/lib/aspell"
-        cp scowl/speller/*.{aff,dic} "$out/share/hunspell"
+        cp speller/*.{aff,dic} "$out/share/hunspell"
         ln -s "$out/share/hunspell" "$out/share/myspell/dicts"
 
-        cp scowl/final/* "$out/share/scowl"
+        for region in american british british_s british_z canadian australian; do
+          case $region in
+            american)
+              regcode=en-us
+              ;;
+            british | british_s)
+              regcode=en-gb-ise
+              ;;
+            british_z)
+              regcode=en-gb-ize
+              ;;
+            canadian)
+              regcode=en-ca
+              ;;
+            australian)
+              regcode=en-au
+              ;;
+          esac
+          regcode_var="$regcode"
+          if test "$region" = british; then
+            regcode_var=en-gb
+          fi
 
-        (
-          cd scowl
-          for region in american british british_s british_z canadian australian; do
-            case $region in
-              american)
-                regcode=en-us;
-                ;;
-              british)
-                regcode=en-gb-ise;
-                ;;
-              british_s)
-                regcode=en-gb-ise;
-                ;;
-              british_z)
-                regcode=en-gb-ize;
-                ;;
-              canadian)
-                regcode=en-ca;
-                ;;
-              australian)
-                regcode=en-au;
-                ;;
-            esac
-            regcode_var="$regcode"
-            if test "$region" = british; then
-              regcode_var="en-gb"
-            fi
-
-            echo $region $regcode $regcode_sz
-            for s in 10 20 30 35 40 50 55 60 70 80 90 95; do
-              ./mk-list $regcode $s > "$out/share/dict/w$region.$s"
-              ./mk-list --variants=1 $regcode_var $s > "$out/share/dict/w$region.variants.$s"
-              ./mk-list --variants=2 $regcode_var $s > "$out/share/dict/w$region.acceptable.$s"
-            done
-            ./mk-list $regcode 60 > "$out/share/dict/w$region.txt"
-            ./mk-list --variants=1 $regcode_var 60 > "$out/share/dict/w$region.variants.txt"
-            ./mk-list --variants=2 $regcode_var 80 > "$out/share/dict/w$region.scrabble.txt"
+          # --variants selects only those variant levels, without the base list.
+          for s in 35 40 50 60 65 70 80 85; do
+            ./mk-list $regcode $s > "$out/share/dict/w$region.$s"
+            ./mk-list --variants 1 $regcode_var $s > "$out/share/dict/w$region.variants.$s"
+            ./mk-list --variants 1,2 $regcode_var $s > "$out/share/dict/w$region.acceptable.$s"
           done
-          ./mk-list --variants=1 en-gb 60 > "$out/share/dict/words.variants.txt"
-          ./mk-list --variants=1 en-gb 80 > "$out/share/dict/words.scrabble.txt"
-          ./mk-list en-gb-ise 60 > "$out/share/dict/words.txt"
-        )
+          ./mk-list $regcode 60 > "$out/share/dict/w$region.txt"
+          ./mk-list --variants 1 $regcode_var 60 > "$out/share/dict/w$region.variants.txt"
+          ./mk-list --variants 1,2 $regcode_var 80 > "$out/share/dict/w$region.scrabble.txt"
+        done
+        ./mk-list --variants 1 en-gb 60 > "$out/share/dict/words.variants.txt"
+        ./mk-list --variants 1 en-gb 80 > "$out/share/dict/words.scrabble.txt"
+        ./mk-list en-gb-ise 60 > "$out/share/dict/words.txt"
 
-        eval "$postInstall"
+        runHook postInstall
       ''
     else
       ''
+        runHook preInstall
+
         mkdir -p "$out/share/dict"
-        cd scowl
         ./mk-list ${singleWordlist} > "$out/share/dict/words.txt"
+
+        runHook postInstall
       '';
 
   meta = {
@@ -127,6 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
-    homepage = "http://wordlist.aspell.net/";
+    homepage = "https://wordlist.aspell.net/";
   };
 })
