@@ -29,10 +29,9 @@ let
     runCommand "aws-lc-symbols"
       {
         inherit (aws-lc) src;
-        nativeBuildInputs = [
-          writableTmpDirAsHomeHook
-          go
-        ];
+        nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+        # read_symbols.go runs on the build platform
+        depsBuildBuild = [ go ];
       }
       ''
         cd "$src"
