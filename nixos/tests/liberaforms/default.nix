@@ -12,6 +12,10 @@
       { pkgs, ... }:
       {
         imports = [ ./example.nix ];
+
+        # WARN: Don't use this module in production as it will copy the secret
+        # to the world-readable Nix store.
+        environment.etc."liberaforms-secret".text = "a_secret_key";
       };
   };
 
