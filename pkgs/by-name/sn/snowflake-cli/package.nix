@@ -90,15 +90,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # typer.exceptions.Abort
     "test_drop_application_cascade"
-  ]
-  # Looks like these tests do not work with the sandbox on Darwin
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "test_allow_comments_at_source_url"
-    "test_mixed_recursion"
-    "test_parse_source_invalid_url"
-    "test_parse_source_url"
-    "test_recursion_from_url"
-    "test_source_missing_url"
   ];
 
   disabledTestPaths = [
