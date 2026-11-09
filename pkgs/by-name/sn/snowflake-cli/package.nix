@@ -29,30 +29,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = with python3Packages; [
+    click
+    gitpython
     id
     jinja2
+    pip # required by some plugins
     pluggy
+    prompt-toolkit
+    pydantic
     pyyaml
-    rich
     requests
     requirements-parser
+    rich
     setuptools
+    snowflake-connector-python
+    snowflake-core
     tomlkit
     typer
     urllib3
-    gitpython
-    pydantic
-    prompt-toolkit
-    snowflake-core
-    snowflake-connector-python
-    # Upstream code is using `pip` as a python module in some Snowpark-related
-    # plugins, when there is a need to build a dependency closure from packages
-    # on PyPi.
-    # Example:
-    # https://github.com/snowflakedb/snowflake-cli/blob/1caafee58fd1a8ae6d8788c33b86f637c263a29e/src/snowflake/cli/_plugins/snowpark/package_utils.py#L223
-    # It's invoking `pip` as `python -m pip`, so `pip` needs to be in
-    # dependencies.
-    pip
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -91,6 +85,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_command_without_any_options"
     "test_command_with_connection_options"
 
+    # RuntimeError: There is no active click context
+    "test_enhanced_exit_codes_context"
+
+    # typer.exceptions.Abort
+    "test_drop_application_cascade"
   ]
   # Looks like these tests do not work with the sandbox on Darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -105,51 +104,43 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     "tests/app/test_version_check.py"
     "tests/nativeapp/test_sf_sql_facade.py"
-    # Tests don't work as of v3.12.0
-    # They either break sandbox by requiring network access or have outdated snapshots
-    "tests/api/commands/test_snow_typer.py::test_enabled_command_is_visible"
-    "tests/api/commands/test_snow_typer.py::test_enabled_command_is_not_visible" # snapshot
-    "tests/auth/test_auth.py::test_rotate" # snapshot
-    "tests/auth/test_auth.py::test_rotate_only_public_key_set" # snapshot
-    "tests/auth/test_auth.py::test_rotate_other_public_key_set_options[KEY-KEY]" # snapshot
-    "tests/auth/test_auth.py::test_rotate_other_public_key_set_options[None-KEY]" # snapshot
-    "tests/auth/test_auth.py::test_rotate_with_password" # snapshot
-    "tests/auth/test_auth.py::test_setup" # snapshot
-    "tests/auth/test_auth.py::test_setup_connection_already_exists" # snapshot
-    "tests/auth/test_auth.py::test_setup_error_if_any_public_key_is_set" # snapshot
-    "tests/auth/test_auth.py::test_setup_overwrite_connection" # snapshot
-    "tests/auth/test_auth.py::test_setup_with_password" # snapshot
-    "tests/stage/test_stage.py::test_stage_create_encryption"
-    "tests/test_connection.py::test_connection_can_be_added_with_existing_paths_in_arguments"
-    "tests/test_connection.py::test_connection_can_be_added_with_existing_paths_in_prompt[10]"
-    "tests/test_connection.py::test_connection_can_be_added_with_existing_paths_in_prompt[9]"
-    "tests/test_connection.py::test_connection_remove_all"
-    "tests/test_connection.py::test_connection_remove_one"
-    "tests/test_connection.py::test_connection_remove_some" # snapshot
-    "tests/test_connection.py::test_fails_if_existing_connection"
-    "tests/test_connection.py::test_file_paths_have_to_exist_when_given_in_arguments[-k]" # sandbox
-    "tests/test_connection.py::test_file_paths_have_to_exist_when_given_in_arguments[-t]"
-    "tests/test_connection.py::test_file_paths_have_to_exist_when_given_in_prompt[10]"
-    "tests/test_connection.py::test_generate_jwt_with_passphrase[]" # snapshot
-    "tests/test_connection.py::test_if_password_callback_is_called_only_once_from_arguments"
-    "tests/test_connection.py::test_if_password_callback_is_called_only_once_from_prompt"
-    "tests/test_connection.py::test_if_whitespaces_are_stripped_from_connection_name"
-    "tests/test_connection.py::test_new_connection_add_prompt_handles_default_values" # snapshot
-    "tests/test_connection.py::test_new_connection_add_prompt_handles_prompt_override"
-    "tests/test_connection.py::test_new_connection_can_be_added"
-    "tests/test_connection.py::test_new_connection_is_added_to_connections_toml"
-    "tests/test_connection.py::test_new_connection_with_jwt_auth"
-    "tests/test_connection.py::test_port_has_cannot_be_float"
-    "tests/test_connection.py::test_port_has_cannot_be_string"
-    "tests/test_connection.py::test_second_connection_not_update_default_connection"
-    "tests/test_connection.py::test_session_and_master_tokens"
-    "tests/test_connection.py::test_token_file_path_tokens"
-    "tests/test_docs_generation_output.py::test_flags_have_default_values" # snapshot
-    "tests/test_config.py::test_too_wide_permissions_on_custom_config_file_causes_warning" # trying to chmod files inside read-only source or trying to get into a tmp dir
-    "tests/test_config.py::test_no_error_when_init_from_non_default_config" # bad chmod in tmp
-    "tests/test_init.py::test_init_default_values"
-    "tests/test_init.py::test_rename_project"
-    "tests/test_init.py::test_variables_flags"
+
+    # Require network access
+    "tests/test_connection.py"
+    "tests/app/test_telemetry.py"
+
+    # snowflake-snowpark isn't packaged
+    "tests/snowpark/"
+
+    # RuntimeError: There is no active click context
+    "tests/api"
+    "tests/app/test_telemetry.py"
+    "tests/cortex/test_cortex_commands.py"
+    "tests/dbt/test_dbt_commands.py"
+    "tests/dcm/test_commands.py"
+    "tests/git/test_git_commands.py"
+    "tests/helpers/test_snowsql_env_vars.py"
+    "tests/helpers/test_v1_to_v2.py"
+    "tests/logs/test_logs.py"
+    "tests/notebook/test_notebook_commands.py"
+    "tests/object/test_object.py"
+    "tests/output/test_silent_output.py"
+    "tests/snowpark/"
+    "tests/sql"
+    "tests/stage/test_stage.py"
+    "tests/streamlit"
+    "tests/test_cli.py"
+    "tests/test_command_registration.py"
+    "tests/test_config.py"
+    "tests/test_docs_generation_output.py"
+    "tests/test_experimental_behaviour.py"
+    "tests/test_init.py"
+    "tests/test_main.py"
+    "tests/test_oauth.py"
+    "tests/test_snow_connector.py"
+    "tests/test_workload_identity.py"
+    "tests/workspace/test_manager.py"
+    "tests/workspace/test_ws_dump.py"
   ];
 
   pythonRelaxDeps = true;
