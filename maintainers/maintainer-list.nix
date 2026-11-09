@@ -14571,6 +14571,11 @@
     githubId = 810075;
     name = "Juan Rodal";
   };
+  juanqp07 = {
+    name = "JuanQ";
+    github = "juanqp07";
+    githubId = 87898162;
+  };
   juboba = {
     email = "juboba@gmail.com";
     github = "juboba";
