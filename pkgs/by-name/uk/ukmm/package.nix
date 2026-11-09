@@ -12,6 +12,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -38,7 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libglvnd
     libxkbcommon
     openssl
+    zstd
   ];
+
+  # zarchive's zstd-sys dependency links against libzstd statically, but
+  # nixpkgs' zstd is shared-only by default, so use a static-enabled build
+  # and tell rustc where to find libzstd.a
+  env.RUSTFLAGS = "-L native=${lib.getLib (zstd.override { enableStatic = true; })}/lib";
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
