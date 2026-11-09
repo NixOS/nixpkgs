@@ -4,6 +4,7 @@
   buildPackages,
   stdenv,
   makeBinaryWrapper,
+  runCommandCC,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,6 +91,28 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper "$out/bin/mirth3" "$out/bin/mirthc" \
       --add-flags "-P $lib/lib/mirth"
   '';
+
+  passthru.tests = {
+    hello-world =
+      runCommandCC "${finalAttrs.pname}-hello-world"
+        {
+          src = finalAttrs.finalPackage.examples;
+          buildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          mirthc -o hello.c "$src/share/mirth/examples/hello.mth"
+          cc -o hello hello.c
+          if [ ! -x ./hello ]; then
+            echo "Did not make ./hello executable" >&2
+            exit 1
+          fi
+          if [ "$(./hello)" != "Hello, world!" ]; then
+            echo "Did not print “Hello, world!”" >&2
+            exit 1
+          fi
+          touch "$out"
+        '';
+  };
 
   meta = {
     description = "Concatenative functional programming language with strong static linear types";
