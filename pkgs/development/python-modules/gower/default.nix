@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   pytestCheckHook,
   setuptools,
   scipy,
@@ -37,6 +38,8 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Gower's distance calculation in Python";
