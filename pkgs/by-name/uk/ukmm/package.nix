@@ -12,6 +12,7 @@
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libglvnd
     libxkbcommon
     openssl
+    zstd
   ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
