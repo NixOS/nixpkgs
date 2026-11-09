@@ -14,9 +14,11 @@
   pkg-config,
   wrapGAppsHook3,
 
+  aws-lc,
   glib-networking,
   libsoup_3,
   openssl,
+  sqlite,
   webkitgtk_4_1,
 
   nix-update-script,
@@ -88,9 +90,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib-networking # needed to load icons
     libsoup_3
     openssl
+    sqlite
     webkitgtk_4_1
   ];
 
