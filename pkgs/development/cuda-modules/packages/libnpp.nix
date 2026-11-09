@@ -19,5 +19,18 @@ buildRedist {
       such as color conversion, image compression, filtering, thresholding, and image manipulation.
     '';
     homepage = "https://developer.nvidia.com/npp";
+    pkgConfigModules = [
+      "nppc"
+      "nppial"
+      "nppicc"
+      "nppidei"
+      "nppif"
+      "nppig"
+      "nppim"
+      "nppist"
+      "nppisu"
+      "nppitc"
+      "npps"
+    ];
   };
 }
