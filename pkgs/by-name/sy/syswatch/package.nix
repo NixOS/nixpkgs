@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   cargoHash = "sha256-yhTPEVb3ezGAKrVbwTSyukGUayqgF0xu2dfD+mAXlo4=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [ versionCheckHook ];
 
