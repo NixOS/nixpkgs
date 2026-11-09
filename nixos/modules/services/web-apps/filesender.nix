@@ -15,6 +15,9 @@ let
   cfg = config.services.filesender;
   fpm = config.services.phpfpm.pools.filesender;
 
+  logDir = "/var/log/filesender";
+  stateDir = "/var/lib/filesender";
+
   format = pkgs.formats.php { finalVariable = "config"; };
   formatPrivate = pkgs.formats.php { };
 
@@ -332,7 +335,7 @@ in
         group = config.services.nginx.group;
         phpEnv = {
           FILESENDER_CONFIG_DIR = toString filesenderConfigDirectory;
-          FILESENDER_LOG_DIR = "/var/log/filesender";
+          FILESENDER_LOG_DIR = logDir;
         };
         settings = {
           "listen.owner" = config.services.nginx.user;
@@ -441,7 +444,7 @@ in
       serviceConfig = {
         Environment = [
           "FILESENDER_CONFIG_DIR=${toString filesenderConfigDirectory}"
-          "FILESENDER_LOG_DIR=/var/log/filesender"
+          "FILESENDER_LOG_DIR=${logDir}"
         ];
         Type = "oneshot";
         Group = config.services.nginx.group;
@@ -451,17 +454,27 @@ in
     };
 
     users.extraUsers.filesender = lib.mkIf (cfg.user == "filesender") {
-      home = "/var/lib/filesender";
+      home = stateDir;
       group = config.services.nginx.group;
       createHome = true;
       isSystemUser = true;
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/lib/filesender 0750 ${cfg.user} ${config.services.nginx.group} -"
-      "d /var/lib/filesender/files 0750 ${cfg.user} ${config.services.nginx.group} -"
-      "d /var/lib/filesender/tmp 0750 ${cfg.user} ${config.services.nginx.group} -"
-      "d /var/log/filesender 0750 ${cfg.user} ${config.services.nginx.group} -"
-    ];
+    systemd.tmpfiles.settings = {
+      "10-filesender" =
+        let
+          settings = {
+            mode = "0750";
+            user = cfg.user;
+            group = config.services.nginx.group;
+          };
+        in
+        {
+          "${logDir}".d = settings;
+          "${stateDir}".d = settings;
+          "${stateDir}/files".d = settings;
+          "${stateDir}/tmp".d = settings;
+        };
+    };
   };
 }
