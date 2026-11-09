@@ -29,6 +29,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./fix-gjs.patch
+    # https://github.com/pop-os/shell/pull/1830
+    ./gnome-51.patch
   ];
 
   makeFlags = [ "XDG_DATA_HOME=$(out)/share" ];
