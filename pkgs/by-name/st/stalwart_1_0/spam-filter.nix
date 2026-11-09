@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spam-filter";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "spam-filter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-guNyl8SpdCT2gM+kA0vqN/JIUCqD7T1yPtbzUh6n37w=";
+    hash = "sha256-nfhbbUrhuEWFfMm/MwSW4jc1GZ5fdJQxK6S8lLTnrpE=";
   };
 
   __structuredAttrs = true;
