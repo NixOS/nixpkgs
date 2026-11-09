@@ -8,11 +8,13 @@
   gzip,
   nodejs,
   npmHooks,
+  pkg-config,
   python3,
   rustc,
   versionCheckHook,
   wasm-bindgen-cli_0_2_129,
   wasm-pack,
+  zstd,
   enableExtended ? true,
 }:
 
@@ -106,10 +108,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  buildInputs = [
+    zstd
+  ];
+
   nativeBuildInputs = [
     binaryen
     gzip
     nodejs
+    pkg-config
     rustc
     rustc.llvmPackages.lld
     wasm-bindgen-cli_0_2_129
