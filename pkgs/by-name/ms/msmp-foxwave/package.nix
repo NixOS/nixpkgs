@@ -45,6 +45,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/ZPvM4JfHKyGowin/jn7jDLlyRgA9B2l3uLNAussKAw=";
   };
 
+  postPatch = ''
+    substituteInPlace modules/pluginLoader.py \
+      --replace-fail "self.plugins_dir = " "self.plugins_dir = Path(os.path.expanduser('~/.config/MSMP-Stream/6.0/plugins')) # "
+  '';
+
   dependencies = with python3Packages; [
     pyside6
     pyyaml
