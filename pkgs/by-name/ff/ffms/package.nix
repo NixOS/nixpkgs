@@ -38,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ffms includes a built-in vapoursynth plugin, see:
   # https://github.com/FFMS/ffms2#avisynth-and-vapoursynth-plugin
-  # Note: in vapoursynth ≥ 74 plugins must be python packages
-  passthru.pythonModule = python3;
-  passthru.requiredPythonModules = [ ];
   postInstall = ''
     pluginsDir="$out/${python3.sitePackages}/vapoursynth/plugins"
     mkdir -p "$pluginsDir"

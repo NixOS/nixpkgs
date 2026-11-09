@@ -6123,6 +6123,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffms = toPythonModule (pkgs.ffms.override { python3 = python; });
+
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
   fhirpy = callPackage ../development/python-modules/fhirpy { };
