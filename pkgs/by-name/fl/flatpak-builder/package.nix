@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
