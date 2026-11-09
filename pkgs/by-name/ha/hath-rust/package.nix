@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
+  rust-jemalloc-sys-unprefixed,
   versionCheckHook,
   nix-update-script,
 }:
@@ -18,6 +21,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-gC3Ca0Db/zZtMJO08VuRLMm4EGNcs6HF++b5tlaON2g=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    rust-jemalloc-sys-unprefixed
+  ];
+
+  # The project has no tests.
+  doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

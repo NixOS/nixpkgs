@@ -10,12 +10,13 @@
   ];
 
   settings = {
-    # numtide/treefmt-nix defaults
+    # Based on numtide/treefmt-nix defaults
     excludes = [
       "*.lock"
       "*.patch"
       "*.diff"
       "package-lock.json"
+      "pnpm-lock.yaml"
       "go.mod"
       "go.sum"
       ".gitattributes"

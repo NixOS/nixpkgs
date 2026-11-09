@@ -15,18 +15,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llm-anthropic";
-  version = "0.28";
+  version = "0.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = finalAttrs.version;
-    hash = "sha256-VfolA3CLil50Cad7DzLlr2LbpI8W4YJ502YoWeqbsW4=";
+    hash = "sha256-FEo56gX1khvXzJlAdBZqGp+ARReX/3CTj+KKIDumc5A=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "anthropic"
+    "llm"
   ];
 
   dependencies = [
