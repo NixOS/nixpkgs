@@ -8,14 +8,14 @@
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
-  version = "0.4.7";
+  version = "0.4.8";
 
   scriptPath = "modernx.lua";
   src = fetchFromGitHub {
     owner = "zydezu";
     repo = "ModernX";
-    rev = finalAttrs.version;
-    hash = "sha256-EekTzSC2Komh3H18IK1xr5bpQuAlulsc6CnmGb4aZ+A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kUqwksdNf8xWmzF+ZRy1VZQ/tQWhEOC7TeyOoyrWsvg=";
   };
 
   nativeBuildInputs = [ installFonts ];
@@ -29,7 +29,7 @@ buildLua (finalAttrs: {
 
   meta = {
     description = "Modern OSC UI replacement for MPV that retains the functionality of the default OSC";
-    changelog = "https://github.com/zydezu/ModernX/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/zydezu/ModernX/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/zydezu/ModernX";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [

@@ -5,6 +5,8 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [
+    zstd
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   buildFeatures = [
     "trust-dns"

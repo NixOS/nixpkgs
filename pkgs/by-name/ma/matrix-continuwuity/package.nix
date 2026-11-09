@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bzip2
     zstd
     rust-jemalloc-sys-unprefixed
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     liburing
   ];
 
@@ -71,6 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       bartoostveen
       nyabinary
       snaki
+      logn
     ];
     # Not a typo, continuwuity is a drop-in replacement for conduwuit.
     mainProgram = "conduwuit";

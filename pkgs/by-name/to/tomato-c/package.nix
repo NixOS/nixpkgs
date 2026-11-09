@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Terminal-based pomodoro timer written in pure C";
     changelog = "https://github.com/gabrielzschmitz/Tomato.C/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+    maintainers = with lib.maintainers; [
+      _3JlOy-PYCCKUi
+      gabrielzschmitz
+    ];
     mainProgram = "tomato";
     platforms = lib.platforms.unix;
   };

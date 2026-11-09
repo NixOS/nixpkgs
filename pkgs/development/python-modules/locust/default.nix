@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.46.3";
+  version = "2.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-IFKphE/RuGXsCmddXNppnHzayTSETaFLrOm26+6tyBI=";
+    hash = "sha256-lK2roAp5nfYtK4r7PuBialpekzf2vp5qMa+25Lh7L50=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/locustio/locust/blob/master/locust/webui/package.json#L89

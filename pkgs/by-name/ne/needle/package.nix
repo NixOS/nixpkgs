@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/uber/needle";
     license = lib.licenses.asl20;
     mainProgram = "needle";
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     platforms = lib.platforms.darwin;
   };
 }

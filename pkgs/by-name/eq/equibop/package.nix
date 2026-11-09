@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     # disable auto update for bun
     substituteInPlace scripts/build/compileArrpc.mts \
       --replace-fail -baseline ""
+
+    # Don't copy arrpc into app.asar
+    substituteInPlace package.json \
+      --replace-fail '"static",' '"static", "!static/dist/arrpc*",'
   '';
 
   node-modules = callPackage ./node-modules.nix { equibop = finalAttrs.finalPackage; }; # helps when the parent package is overidden
