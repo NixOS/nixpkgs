@@ -108,6 +108,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       notohh
+      gegnep
     ];
     platforms = lib.platforms.linux;
   };
