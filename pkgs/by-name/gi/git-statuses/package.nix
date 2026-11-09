@@ -4,6 +4,7 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  libgit2,
   openssl,
   git,
   versionCheckHook,
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
+    libgit2
     openssl
   ];
 
