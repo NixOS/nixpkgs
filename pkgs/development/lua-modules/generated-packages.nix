@@ -2623,27 +2623,29 @@ final: prev: {
       fetchFromGitHub,
       fetchurl,
       lua-ffi-zlib,
+      lua-resty-lrucache,
       lua-resty-openssl,
       luaOlder,
     }:
     buildLuarocksPackage {
       pname = "lua-resty-session";
-      version = "4.2.0-1";
+      version = "4.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-session-4.2.0-1.rockspec";
-          sha256 = "1xps6j9ddz4xqminhl56s3gvx2nbbnc9k3bzhjpkz4x6f39ciabf";
+          url = "mirror://luarocks/lua-resty-session-4.3.0-1.rockspec";
+          sha256 = "073whf5xc2bpigdnisq2w5lg6zqrd86xb44ncpim1ccq231cp2h7";
         }).outPath;
       src = fetchFromGitHub {
         owner = "bungle";
         repo = "lua-resty-session";
-        tag = "v4.2.0";
-        hash = "sha256-wRAd6AGcSkhZcA4Cm9cGetEUt1TfABtYpU2avrK1Hdw=";
+        tag = "v4.3.0";
+        hash = "sha256-TnOTsr0ouMWuzePMpG77Km6ToP+CLlBF63+M8EDRWaE=";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [
         lua-ffi-zlib
+        lua-resty-lrucache
         lua-resty-openssl
       ];
 

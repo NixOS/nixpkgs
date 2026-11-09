@@ -549,6 +549,20 @@ in
     };
   });
 
+  lua-resty-openidc = prev.lua-resty-openidc.overrideAttrs (old: {
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail 'lua-resty-session == 4.2.0-1' 'lua-resty-session >= 4.2.0, < 5.0'
+    '';
+  });
+
+  lua-resty-session = prev.lua-resty-session.overrideAttrs (old: {
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail '"lua-resty-lrucache >= 0.09",' ""
+    '';
+  });
+
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
     strictDeps = false;
 
