@@ -5,7 +5,7 @@
   fetchpatch,
   lib,
   nix-update-script,
-  nodejs_22,
+  nodejs_latest,
   python3Minimal,
   stdenvNoCC,
 }:
@@ -21,10 +21,16 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-jCwySndc3ZeEoKVA9Ne2PLStyM73hDPO1vaNeVShwQ0=";
   };
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_latest;
 
   npmDepsHash = "sha256-8x1WuzIaxzaEgM9hu2cCtXr4GLCE6DHt3F7lvnbcMgk=";
   npmDepsFetcherVersion = 2;
+
+  # The lockfile of the pdfkit git dependency is missing fsevents, so
+  # npm >= 11 refuses to install its dev dependencies.  They are
+  # unused because pdfkit has no prepare script and ships its sources
+  # directly.
+  forceGitDeps = true;
 
   makeCacheWritable = true;
 
