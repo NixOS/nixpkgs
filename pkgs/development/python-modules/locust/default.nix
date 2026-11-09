@@ -4,6 +4,7 @@
   python,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   hatch-vcs,
   pytestCheckHook,
@@ -37,6 +38,33 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-+0B4S524UjvaYl7VTZ1IY7UuBuDjUBqOvjHu0UVOi6A=";
   };
+
+  patches =
+    let
+      # Patch to fix CVE-2026-111883.
+      url = "https://github.com/locustio/locust/commit/3a1d0caa5bde59494ede55f513fcb4becbf406a0.patch?full_index=1";
+    in
+    [
+      # Remove when version >= 2.47.0.
+      (fetchpatch2 {
+        inherit url;
+        hash = "sha256-qd0nwy59DlfIMwxQga0EZ+msNJW4BQxV1N0xcrYCDxY=";
+        excludes = [ "locust/test/test_web.py" ];
+      })
+      # Remove when version >= 2.47.0.
+      (fetchpatch2 {
+        inherit url;
+        hash = "sha256-kZWC2Hk6mIrBS9wV43Iy6OeI3Ge6cvTjTe4nzcusXww=";
+        includes = [ "locust/test/test_web.py" ];
+        # There are 17 hunks in total, hunks 15-17 are not present
+        # in version 2.43.1, with the functions having been introduced as part
+        # of release 2.47.0.
+        # The functions are:
+        # def test_swarm_replaces_run_time_timer(self)
+        # def test_swarm_run_time_expires_and_stops_test(self):
+        hunks = [ "1-14" ];
+      })
+    ];
 
   postPatch = ''
     substituteInPlace locust/test/test_main.py \
