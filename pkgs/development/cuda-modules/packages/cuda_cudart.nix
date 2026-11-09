@@ -96,6 +96,11 @@ buildRedist (finalAttrs: {
     popd >/dev/null
   '';
 
+  pkgConfigModules = [
+    "cuda"
+    "cudart"
+  ];
+  # TODO(@ethancedwards8): add this kind of checking to pkgConfigCheckHook
   # Link through the installed package config files, which fails if their library paths are wrong.
   nativeInstallCheckInputs = [ pkg-config ];
   postInstallCheck = ''
@@ -108,9 +113,6 @@ buildRedist (finalAttrs: {
 
   meta = {
     description = "CUDA Runtime";
-    pkgConfigModules = [
-      "cuda"
-      "cudart"
-    ];
+    inherit (finalAttrs) pkgConfigModules;
   };
 })
