@@ -540,28 +540,38 @@ let
             let
               m = loadModule (elemAt initialModules i) "${parentKey}:anon-${toString (i + 1)}" parentFile;
               module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
-              collectedImports =
-                if module.imports != [ ] then
-                  collectStructuredModules module._file module.key module.imports
-                else
-                  { };
+              collectedImports = collectStructuredModules module._file module.key module.imports;
             in
-            {
-              key = module.key;
-              module = module;
-              modules = collectedImports.modules or [ ];
-              disabled =
-                if module.disabledModules != [ ] then
-                  [
-                    {
-                      file = module._file;
-                      disabled = module.disabledModules;
-                    }
-                  ]
-                  ++ (collectedImports.disabled or [ ])
-                else
-                  (collectedImports.disabled or [ ]);
-            }
+            if module.imports == [ ] then
+              # can't recurse deeper
+              {
+                key = module.key;
+                module = module;
+                modules = [ ];
+                ${if module.disabledModules != [ ] then "disabled" else null} = [
+                  {
+                    file = module._file;
+                    disabled = module.disabledModules;
+                  }
+                ];
+              }
+            else
+              {
+                key = module.key;
+                module = module;
+                modules = collectedImports.modules;
+                disabled =
+                  if module.disabledModules != [ ] then
+                    [
+                      {
+                        file = module._file;
+                        disabled = module.disabledModules;
+                      }
+                    ]
+                    ++ collectedImports.disabled
+                  else
+                    collectedImports.disabled;
+              }
           ) (length initialModules);
         in
         {
