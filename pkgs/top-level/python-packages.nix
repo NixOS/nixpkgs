@@ -7637,6 +7637,8 @@ self: super: with self; {
 
   hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
 
+  hatch-rs = callPackage ../development/python-modules/hatch-rs { };
+
   hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
   hatch-tryton = callPackage ../development/python-modules/hatch-tryton { };
