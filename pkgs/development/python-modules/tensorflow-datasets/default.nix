@@ -74,6 +74,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
+  patches = [
+    # Pillow 13 rejects `Image.fromarray(arr, mode=...)` when `mode` doesn't match the dtype
+    # ValueError: Invalid mode for data type
+    ./pillow-13-compat.patch
+  ];
+
   postPatch =
     # The git checkout ships the development `version.py`, which appends a `+nightly` suffix.
     # Upstream replaces it with `version_stable.py` for stable releases.
