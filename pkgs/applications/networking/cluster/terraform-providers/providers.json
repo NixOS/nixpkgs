@@ -1273,13 +1273,13 @@
     "vendorHash": "sha256-HjrB7C0KaLJz9NVLfZdq5EZbNbF9lJPxSkQwnWUF978="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-1cQq2nM4EJFFRtsnE7mXKJv4ILfJDtZSTX4hG/jNdwM=",
+    "hash": "sha256-XuYXf/6pKK7MJazZ1+yelWAbRv8gclkzfmC7PzbXPaY=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.29.2",
+    "rev": "v0.29.3",
     "spdx": "MIT",
-    "vendorHash": "sha256-rD4W2PkRrIQfACm8UWdF0yfZ+Qc5hTjH1lA6U7GJxpE="
+    "vendorHash": "sha256-hXdv+K2nM99L3uVI+tkOvS4HAjzEJEGHBrXEU+QLqpU="
   },
   "tasansga_lldap": {
     "hash": "sha256-GvdSuVeVIEbimFU2Mt/ENe4AlmHgGLnox7RGhjTC7Gw=",
