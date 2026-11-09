@@ -53,8 +53,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  # IO errors in build due to solution building race
-  enableParallelBuilding = false;
   executables = [ "Knossos.NET" ];
   nugetDeps = ./deps.json;
   projectFile = "Knossos.NET/Knossos.NET.csproj";
@@ -70,7 +68,7 @@ buildDotnetModule (finalAttrs: {
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode
+      binaryNativeCode # prebuilt innoextract and 7-Zip in Assets/utils
     ];
     maintainers = with lib.maintainers; [ cdombroski ];
     platforms = lib.platforms.unix;
