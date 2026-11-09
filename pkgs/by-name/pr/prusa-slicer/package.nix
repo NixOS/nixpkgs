@@ -62,14 +62,14 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.6";
+  version = "2.9.7";
   # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
   # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
   # with --cores 32 on clang).
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-SXNIyAncnPU6Zac8/plM32sPBgj9Uj9eVDL3NBu+IL4=";
+    hash = "sha256-0NR3ob43ZFGBb8xGTNCX+X6sqeWSqcWrMYSD97K5Ps4=";
     rev = "version_${finalAttrs.version}";
   };
 
