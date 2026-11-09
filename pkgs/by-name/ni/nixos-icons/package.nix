@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Icons of the Nix logo, in Freedesktop Icon Directory Layout";
     homepage = "https://github.com/NixOS/nixos-artwork";
     license = lib.licenses.cc-by-40;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.all;
   };
 })
