@@ -27,13 +27,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromRadicle {
     seed = "oak.radicle.garden";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
     tag = "releases/desktop/${finalAttrs.version}";
-    hash = "sha256-xp9+pAi529B5WAznRRVJExOlZp/qhPWztZJ5/NyxsIY=";
+    hash = "sha256-quxuiqp1PC4Dq0m91kqHvNclIhMau8hWtA599OmbZyo=";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/.prettierrc"
+      "/desktop"
+      "/package-lock.json"
+      "/package.json"
+      "/shared"
+    ];
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -41,7 +49,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
+  cargoRoot = "desktop";
+  buildAndTestSubdir = "desktop";
+
   postPatch = ''
+    cd desktop
     patchShebangs scripts/copy-katex-assets scripts/check-js scripts/check-rs
 
     mkdir -p public/twemoji
@@ -50,14 +62,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace scripts/check-rs \
       --replace-fail "-Dwarnings" ""
+    cd ..
   '';
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-gVKDUPkChjsZZS5+h1jfMuLekY40WRsvbxwqEw1IuTM=";
+    hash = "sha256-Cz6HoYGzMhVRwPUbw6S7Dh7FwNEO3r2xj7L8k332ZnE=";
   };
 
-  cargoHash = "sha256-ZkcnktTbvbiAPra+wgrm/xILZp1YBpsj0UFZ/AFzx1U=";
+  cargoHash = "sha256-Yt5MyWdVr5Ye0Pdh996pIyHFo/F68fEbQ7Suh634umw=";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -106,6 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
+    pushd desktop
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"
@@ -117,6 +131,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npm run test:unit
     scripts/check-js
     scripts/check-rs
+    popd
 
     runHook postCheck
   '';
