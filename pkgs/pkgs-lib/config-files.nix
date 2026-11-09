@@ -10,21 +10,21 @@
   together, and they do not depend on NixOS. This function puts that pair in a
   module that any system is able to evaluate.
 
-  Write the inputs of this function in a `config-files.nix` file in
-  `modules/generic/pkgs/by-name/<shard>/<package>`, and the modules in more
-  files next to it. The package gets this directory from the `path` argument of
-  `callPackage`, see "Modules of a package" in the Nixpkgs manual. The package
-  exposes the result as `passthru.configFiles`, and the file of the program as
-  `passthru.configModule`. A NixOS module imports `config-files.nix` by path,
-  puts `module` next to the options that only NixOS has, and does not repeat the
-  declarations. A system that is not NixOS calls `eval` and gets the same files.
+  Write the inputs of this function in a `config-files.nix` file in the
+  directory of the package, and the modules in more files next to it. The
+  package exposes the result as `passthru.configFiles`, and the file of the
+  program as `passthru.configModule`. A NixOS module imports `config-files.nix`
+  by path, puts `module` next to the options that only NixOS has, and does not
+  repeat the declarations. A system that is not NixOS calls `eval` and gets the
+  same files.
 
   The NixOS module does not use the attribute of the package, because NixOS
   evaluates the types of all options, also when the service is not enabled,
   and the sandbox that builds the option documentation has no packages. Thus
   an overlay that changes `passthru.configFiles` of the package does not
-  change the NixOS options. The sandbox has the files, because it has
-  `modules`.
+  change the NixOS options. The sandbox has the files only if
+  `configFilesPackages` in `nixos/modules/misc/documentation.nix` has the
+  directory of the package.
 
   The evaluation does not give a `pkgs` module argument, because a modular
   service must not get the complete package set from the modules that it
@@ -115,10 +115,10 @@
   :::{.example}
   ## `pkgs.configFiles` usage example
 
-  The inputs and the module are in `modules/generic/pkgs`:
+  The inputs and the module are in the directory of the package:
 
   ```nix
-  # modules/generic/pkgs/by-name/my/my-program/config-files.nix
+  # pkgs/by-name/my/my-program/config-files.nix
   {
     name = "my-program";
     moduleFiles = [ ./config-module.nix ];
@@ -126,7 +126,7 @@
   ```
 
   ```nix
-  # modules/generic/pkgs/by-name/my/my-program/config-module.nix
+  # pkgs/by-name/my/my-program/config-module.nix
   { formats }:
 
   { lib, config, ... }:
@@ -151,13 +151,10 @@
 
   ```nix
   # pkgs/by-name/my/my-program/package.nix
-  { configFiles, path, stdenv }:
-  let
-    modules = path + "/modules/generic/pkgs/by-name/my/my-program";
-  in
+  { configFiles, stdenv }:
   stdenv.mkDerivation {
-    passthru.configFiles = configFiles (import (modules + "/config-files.nix"));
-    passthru.configModule = modules + "/config-module.nix";
+    passthru.configFiles = configFiles (import ./config-files.nix);
+    passthru.configModule = ./config-module.nix;
   }
   ```
 
@@ -171,7 +168,7 @@
       description = "my-program, a program.";
       type = lib.types.submoduleWith {
         modules = [
-          (pkgs.configFiles (import ../../../../modules/generic/pkgs/by-name/my/my-program/config-files.nix)).module
+          (pkgs.configFiles (import ../../../../pkgs/by-name/my/my-program/config-files.nix)).module
           { options.enable = lib.mkEnableOption "my-program"; }
         ];
       };

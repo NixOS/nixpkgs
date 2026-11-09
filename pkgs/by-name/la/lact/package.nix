@@ -23,15 +23,8 @@
   fuse3,
   autoAddDriverRunpath,
   configFiles,
-  path,
 }:
 
-let
-  # In `modules`, not in this directory, so that the sandbox that builds the
-  # option documentation contains it. See "Modules of a package" in the Nixpkgs
-  # manual.
-  genericModules = path + "/modules/generic/pkgs/by-name/la/lact";
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
   version = "0.10.1";
@@ -140,8 +133,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }
   '';
 
-  passthru.configFiles = configFiles (import (genericModules + "/config-files.nix"));
-  passthru.configModule = genericModules + "/config-module.nix";
+  passthru.configFiles = configFiles (import ./config-files.nix);
+  passthru.configModule = ./config-module.nix;
   passthru.updateScript = nix-update-script { };
   passthru.tests = {
     inherit (nixosTests) lact;

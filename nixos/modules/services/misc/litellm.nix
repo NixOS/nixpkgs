@@ -51,8 +51,7 @@ in
     # The import by path does not evaluate the package, see `pkgs.configFiles`.
     type = types.submoduleWith {
       modules = [
-        (pkgs.configFiles (import ../../../../modules/generic/pkgs/by-name/li/litellm/config-files.nix))
-        .module
+        (pkgs.configFiles (import ../../../../pkgs/by-name/li/litellm/config-files.nix)).module
         {
           options = {
             enable = lib.mkEnableOption "LiteLLM server";

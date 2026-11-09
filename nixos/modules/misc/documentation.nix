@@ -115,14 +115,42 @@ let
           && (t == "directory" -> baseNameOf n != "tests")
           && (t == "file" -> hasSuffix ".nix" n)
         );
-        prefixRegex =
-          "^" + lib.strings.escapeRegex (toString pkgs.path) + "($|/(modules|nixos|lib)($|/.*))";
+        # Package directories, relative to `pkgs/by-name`, that hold modules
+        # of `pkgs.configFiles` that NixOS modules import by path. The
+        # sandbox gets only the directories that this list names, because a
+        # copy of all of `pkgs/by-name` costs too much evaluation time.
+        configFilesPackages = [
+          "la/lact"
+          "li/litellm"
+        ];
+        root = toString pkgs.path;
+        prefixRegex = "^" + lib.strings.escapeRegex root + "($|/(modules|nixos|lib)($|/.*))";
+        # Set lookups, and not a regex alternation, keep the cost for each
+        # entry constant when the list is long.
+        byNamePackages = lib.genAttrs configFilesPackages (_: null);
+        byNameShards = lib.genAttrs (map (p: lib.head (lib.splitString "/" p)) configFilesPackages) (
+          _: null
+        );
+        byNameRegex = "^" + lib.strings.escapeRegex root + "/pkgs(/by-name(/([^/]+)(/([^/]+)(/.*)?)?)?)?";
+        inByName =
+          n:
+          let
+            m = builtins.match byNameRegex n;
+            shard = lib.elemAt m 2;
+            package = lib.elemAt m 4;
+          in
+          configFilesPackages != [ ]
+          && m != null
+          && (
+            shard == null
+            || byNameShards ? ${shard} && (package == null || byNamePackages ? "${shard}/${package}")
+          );
         filteredModules = builtins.path {
           name = "source";
           inherit (pkgs) path;
           filter =
             n: t:
-            builtins.match prefixRegex n != null
+            (builtins.match prefixRegex n != null || inByName n)
             && cleanSourceFilter n t
             && (t == "directory" -> baseNameOf n != "tests")
             && (t == "file" -> hasSuffix ".nix" n);
@@ -173,6 +201,10 @@ let
                 'location. Remove the references to restricted arguments (eg by escaping' \
                 'their antiquotations or adding a `defaultText`) or disable the sandboxed' \
                 'build for the failing module by setting `meta.buildDocsInSandbox = false`.'
+              echo
+              echo 'If a module imports a file from `pkgs/by-name`, and the file is not' \
+                'found, add the directory of the package to `configFilesPackages` in' \
+                '`nixos/modules/misc/documentation.nix`.'
               echo -en "\e[0m"
               exit 1
             } >&2

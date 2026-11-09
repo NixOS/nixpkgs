@@ -269,15 +269,6 @@
   "modules-generic-meta-maintainers": [
     "index.html#modules-generic-meta-maintainers"
   ],
-  "modules-generic-pkgs": [
-    "index.html#modules-generic-pkgs"
-  ],
-  "modules-generic-pkgs-config-files": [
-    "index.html#modules-generic-pkgs-config-files"
-  ],
-  "modules-generic-pkgs-settings": [
-    "index.html#modules-generic-pkgs-settings"
-  ],
   "neovim": [
     "index.html#neovim"
   ],

@@ -22,7 +22,7 @@ in
     # The import by path does not evaluate the package, see `pkgs.configFiles`.
     type = lib.types.submoduleWith {
       modules = [
-        (pkgs.configFiles (import ../../../../modules/generic/pkgs/by-name/la/lact/config-files.nix)).module
+        (pkgs.configFiles (import ../../../../pkgs/by-name/la/lact/config-files.nix)).module
         {
           options = {
             enable = lib.mkEnableOption null // {
