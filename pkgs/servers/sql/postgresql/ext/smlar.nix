@@ -17,6 +17,9 @@ postgresqlBuildExtension {
 
   makeFlags = [ "USE_PGXS=1" ];
 
+  # Upstream has no tags and only a git:// URL, and the version is a bare date
+  passthru.updateScript = null;
+
   meta = {
     description = "Compute similarity of any one-dimensional arrays";
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
