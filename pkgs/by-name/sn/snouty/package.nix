@@ -37,7 +37,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  # Docker and Podman run the credential helper as docker-credential-snouty,
+  # and snouty acts as the helper when it is started by that name.
+  postInstall = ''
+    ln -s snouty $out/bin/docker-credential-snouty
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd snouty \
       --bash <($out/bin/snouty completions bash) \
       --fish <($out/bin/snouty completions fish) \
