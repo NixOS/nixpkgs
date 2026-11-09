@@ -6,26 +6,16 @@
   SDL2,
   agg,
   alsa-lib,
-  desktop-file-utils,
   wrapGAppsHook3,
   gtk3,
-  intltool,
-  libGLU,
-  libxmu,
   libpcap,
-  libtool,
-  lua5_2_compat,
   meson,
   ninja,
   openal,
   pkg-config,
   soundtouch,
-  tinyxml,
   zlib,
 }:
-let
-  lua = lua5_2_compat;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "desmume";
@@ -54,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    desktop-file-utils
-    intltool
-    libtool
-    lua
     meson
     ninja
     pkg-config
@@ -68,12 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     agg
     alsa-lib
     gtk3
-    libGLU
-    libxmu
     libpcap
     openal
     soundtouch
-    tinyxml
     zlib
   ];
 
@@ -84,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
-    "-Db_pie=true"
     "-Dopenal=true"
     "-Dwifi=true"
   ];
