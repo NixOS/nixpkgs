@@ -163,6 +163,8 @@ in
         cinnamon-screensaver = { };
       };
 
+      services.udev.packages = [ pkgs.muffin ];
+
       environment.systemPackages =
         with pkgs;
         (
@@ -210,6 +212,7 @@ in
 
             # other
             glib # for gsettings
+            muffin # for cinnamon-list-windows
             xdg-user-dirs
           ]
           ++ utils.removePackagesByName [
