@@ -1390,11 +1390,11 @@
     "vendorHash": "sha256-Xro8lh5wNsAyYQrM8zIbzcPPTIGE1x99jA3ZMXZXwyk="
   },
   "turbot_turbot": {
-    "hash": "sha256-VyhK0tnYyKDrtG6ER9uwn4kvo4MrAN+NYVh7hf6bkVM=",
+    "hash": "sha256-X/+ba4BJLXL+tF4E+OPBwO3LpgwA5Hy6B4UJUUJ4tDM=",
     "homepage": "https://registry.terraform.io/providers/turbot/turbot",
     "owner": "turbot",
     "repo": "terraform-provider-turbot",
-    "rev": "v1.14.1",
+    "rev": "v1.14.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
