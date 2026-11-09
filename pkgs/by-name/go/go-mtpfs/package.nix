@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-mtpfs";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "hanwen";
     repo = "go-mtpfs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HVfB8/MImgZZLx4tcrlYOfQjpAdHMHshEaSsd+n758w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UMIoHWLn+Kft1utJAuzmwCpNeDRWAs6EgIbD/SAMYDA=";
   };
 
-  vendorHash = "sha256-OrAEvD2rF0Y0bvCD9TUv/E429lASsvC3uK3qNvbg734=";
+  vendorHash = "sha256-0wf84AZlFp0SxpUqqpwAegxz/z4t6HzFBE/Yy66Dv3I=";
 
   ldflags = [
     "-s"
