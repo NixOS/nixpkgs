@@ -25,7 +25,7 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
-  version = "0.5.0";
+  version = "0.6.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grimme-lab";
     repo = "multicharge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
+    hash = "sha256-BNLaUZ4Ecw2ISPsfAOQkptSW5iyDzIg+c3dVTHSoEYQ=";
   };
 
   patches = [
