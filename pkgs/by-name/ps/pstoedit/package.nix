@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wodTvVbsouSjH5JDJ2ELlq5p7HRfNwN457gb6tRAkBg=";
   };
 
+  # drvsvg.cpp's POSIX guard misses Darwin, so it falls through to the Windows-only <io.h>
+  patches = [ ./drvsvg-darwin.patch ];
+
   outputs = [
     "out"
     "dev"
