@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_12,
   nodejs_24,
   makeWrapper,
   pnpmConfigHook,
@@ -11,20 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vitejs";
-  version = "7.3.1";
+  version = "8.3.7";
 
   src = fetchFromGitHub {
     owner = "vitejs";
     repo = "vite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ewtFvWeNFb6LowvA83p53+ilsMDugLzXK1I63lhZUAU=";
+    hash = "sha256-B0vH2vzeWdeDD8KW3yfh7iAudw5zhIa0GpSnVUhYfPI=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs_24
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   pnpmWorkspaces = [ "vite" ];
@@ -35,14 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 3;
-    hash = "sha256-02s37dcEvxFlaGO+RNxTMPuTV0/sx7hiX1Nzc3A/qro=";
+    fetcherVersion = 5;
+    hash = "sha256-87uHGALbfIg4nyk6ZcnFzuDrnHqjGIoDOdJkVyI6LW4=";
   };
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=vite build
+    rm -rf packages/vite/dist
+    pnpm --filter=vite build-bundle
+    pnpm --filter=vite build-types
 
     runHook postBuild
   '';
