@@ -4,25 +4,31 @@
   rustPlatform,
   openssl,
   pkg-config,
+  zstd,
   testers,
   fetchzip,
-  ripunzip,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripunzip";
   version = "2.0.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "GoogleChrome";
     repo = "ripunzip";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oujRw/4yKNNqLJLTN4wxaOllSUGMu077YgWZkD0DJ4M=";
   };
 
   cargoHash = "sha256-J6FtaWjeJhbSB1WoAbh6c4DeShPmqGgmh2NTNRS6CUk=";
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   checkFlags = [
@@ -42,16 +48,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     fetchzipWithRipunzip =
-      testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = ripunzip; })
+      testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = finalAttrs.finalPackage; })
         {
           url = "https://github.com/GoogleChrome/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
           hash = "sha256-BoErC5VL3Vpvkx6xJq6J+eUJrBnjVEdTuSo7zh98Jy4=";
         };
-    version = testers.testVersion {
-      package = ripunzip;
-    };
   };
 
   meta = {

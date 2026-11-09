@@ -3,16 +3,21 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferium";
   version = "4.7.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = "ferium";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
 
@@ -24,7 +29,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Requires an internet connection
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -33,10 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Fast and multi-source CLI program for managing Minecraft mods and modpacks from Modrinth, CurseForge, and GitHub Releases";
     mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
+    changelog = "https://github.com/gorilla-devs/ferium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       leo60228

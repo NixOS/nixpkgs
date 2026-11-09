@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   gitMinimal,
+  libgit2,
   openssl,
   versionCheckHook,
 }:
@@ -12,6 +13,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lstr";
   version = "0.4.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
@@ -24,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ (lib.getDev openssl) ];
+  buildInputs = [
+    (lib.getDev openssl)
+    libgit2
+  ];
 
   nativeCheckInputs = [ gitMinimal ];
 
@@ -35,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Fast, minimalist directory tree viewer written in Rust";
     homepage = "https://github.com/bgreenwell/lstr";
-    changelog = "https://github.com/bgreenwell/lstr/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/bgreenwell/lstr/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       DieracDelta

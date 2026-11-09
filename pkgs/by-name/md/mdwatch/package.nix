@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
 }:
@@ -9,6 +11,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
   version = "0.2.9";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vimlinuz";
@@ -18,6 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-OBknkfnzewil/jKZJEZKAar+QD8h3whw1E4ncAtR99U=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   passthru.updateScript = nix-update-script { };
 
