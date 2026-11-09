@@ -6,6 +6,7 @@
   cacert,
   libgit2,
   openssl,
+  zstd,
   rustfmt,
   installShellFiles,
   makeWrapper,
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     openssl
+    zstd
   ];
 
   nativeCheckInputs = [
