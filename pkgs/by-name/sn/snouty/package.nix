@@ -5,7 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  openssl,
+  sqlite,
   writableTmpDirAsHomeHook,
   cacert,
   podman,
@@ -34,10 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    sqlite
   ];
-
-  env.OPENSSL_NO_VENDOR = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd snouty \
