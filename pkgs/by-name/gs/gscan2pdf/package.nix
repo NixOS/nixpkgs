@@ -74,6 +74,8 @@ perlPackages.buildPerlPackage rec {
     SubOverride
   ]);
 
+  strictDeps = true;
+
   # Required for the program to properly load its SVG assets
   postPatch = ''
     substituteInPlace bin/gscan2pdf \
@@ -105,6 +107,10 @@ perlPackages.buildPerlPackage rec {
     "man"
   ];
 
+  checkInputs = with perlPackages; [
+    GooCanvas2
+  ];
+
   nativeCheckInputs = [
     imagemagick
     libtiff
@@ -114,28 +120,32 @@ perlPackages.buildPerlPackage rec {
     unpaper
     pdftk
 
+    sane-backends
     xvfb-run
     file
     tesseract
   ]
   ++ (with perlPackages; [
+    Gtk3
     TestPod
   ]);
 
   checkPhase = ''
-    # Temporarily disable a test failing because of a behavioural change in ImageMagick7
-    # t/04_Page.t ................................... 1/12
-    #   Failed test 'undefined'
-    #   at t/04_Page.t line 114.
-    #          got: '72'
-    #     expected: '300'
-    # Looks like you failed 1 test of 12.
+    # Skip a failing test, due to a change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/439/
     rm t/04_Page.t
+
+    # Skip a failing test, due to a breaking change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/442/
+    # https://github.com/ImageMagick/ImageMagick/issues/8714
+    rm t/113_save_pdf_with_downsample.t
 
     export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";

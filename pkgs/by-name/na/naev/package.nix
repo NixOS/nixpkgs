@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "2D action/rpg space game";
     mainProgram = "naev";
-    homepage = "http://www.naev.org";
+    homepage = "http://naev.org";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ralismark ];
     platforms = lib.platforms.linux;

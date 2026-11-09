@@ -5,23 +5,26 @@
   csaf-tool,
   lib4sbom,
   packageurl-python,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lib4vex";
-  version = "0.2.1";
+  version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4vex";
     tag = "v${version}";
-    hash = "sha256-n8bWhYwKtJ4fH5VtQUfQqCNuEJj8I8S6eLkm+2SKqL8=";
+    hash = "sha256-XH3Y2kbsJFR202F8bmcd3IWpgHS36W+ylDObtBFNFFg=";
   };
+
+  # https://github.com/anthonyharrison/lib4vex/pull/7
+  postPatch = ''
+    substituteInPlace lib4vex/version.py \
+      --replace-fail '"0.2.2"' '"0.2.3"'
+  '';
 
   build-system = [ setuptools ];
 

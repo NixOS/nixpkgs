@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/autotrace/autotrace";
     description = "Utility for converting bitmap into vector graphics";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ hodapp ];
+    maintainers = [ ];
     license = lib.licenses.gpl2;
     mainProgram = "autotrace";
   };

@@ -6,8 +6,8 @@ callPackage ./generic.nix (
     version = "0.5.1.3";
 
     src = fetchurl {
-      url = "http://downloads.xiph.org/releases/celt/celt-${version}.tar.gz";
-      sha256 = "0bkam9z5vnrxpbxkkh9kw6yzjka9di56h11iijikdd1f71l5nbpw";
+      url = "https://downloads.xiph.org/releases/celt/celt-${version}.tar.gz";
+      hash = "sha256-/C5baDgutDajjDEEaEpsSU35veEzwTn7uj3bXX6qai4=";
     };
 
     # Don't build tests due to badness with ec_ilog

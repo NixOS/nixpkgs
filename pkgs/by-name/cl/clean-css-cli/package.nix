@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/clean-css/clean-css-cli/blob/v${finalAttrs.version}/History.md";
     license = lib.licenses.mit;
     mainProgram = "cleancss";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

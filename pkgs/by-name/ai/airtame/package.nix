@@ -23,24 +23,28 @@
   libGL,
   vulkan-loader,
   curlWithGnuTls,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
   lib,
   libnotify,
-  libappindicator-gtk3,
-  systemd,
+  libappindicator,
+  systemdLibs,
   pciutils,
 }:
 let
-  xorgDeps = with xorg; [
-    libXdamage
-    libXext
-    libXfixes
-    libXcomposite
-    libXrandr
+  xorgDeps = [
+    libxdamage
+    libxext
+    libxfixes
+    libxcomposite
+    libxrandr
   ];
 
   deps = [
-    libgcc.lib
+    libgcc
     glib
     nss
     nspr
@@ -67,11 +71,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "airtame-application";
-  version = "4.15.0";
+  version = "4.16.1";
 
   src = fetchurl {
     url = "https://downloads.airtame.com/app/latest/linux/Airtame-${finalAttrs.version}.deb";
-    hash = "sha256-NCk//XCtn5wguMh2FjGpW28ksfUg2+euEln4gczBweY=";
+    hash = "sha256-Kp0SUMuz8LX2/e4ZiOdKD6m5/Zk+Q6rziApm16QbG0E=";
   };
 
   nativeBuildInputs = [
@@ -82,9 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = deps;
   runtimeDependencies = [
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
     libnotify
-    libappindicator-gtk3
+    libappindicator
     pulseaudio
     pciutils
   ];

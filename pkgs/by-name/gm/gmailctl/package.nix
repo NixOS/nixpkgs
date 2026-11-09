@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gmailctl";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "mbrt";
     repo = "gmailctl";
-    rev = "v${version}";
-    hash = "sha256-euYl7GKidkOFsSxrEnSBIdBNZOKuBBaS3LNQOZy9R9g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3E45ZQShv+pdlrAfPBtz1Xc8L1GU7FaJRDdTYHitC18=";
   };
 
-  vendorHash = "sha256-OXz6GlpC9yhe4pRuVxTUUruJyxBQ63JC4a8xwtuDM/o=";
+  vendorHash = "sha256-yyJjrqkXcRKVAM5qkd92jOp2pD3n+Gm/divTw+EyiLo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,4 +41,4 @@ buildGoModule rec {
       SuperSandro2000
     ];
   };
-}
+})

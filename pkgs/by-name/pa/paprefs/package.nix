@@ -7,17 +7,17 @@
   gettext,
   pkg-config,
   pulseaudioFull,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paprefs";
   version = "1.2";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/paprefs/paprefs-${version}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/paprefs/paprefs-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-s/IeQNw5NtFeP/yRD7DAfBS4jowodxW0VqlIwXY49jM=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pulseaudioFull
-    glibmm
+    glibmm_2_4
     gtkmm3
   ];
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

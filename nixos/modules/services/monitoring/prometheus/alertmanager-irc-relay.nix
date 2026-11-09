@@ -104,5 +104,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.oxzi ];
+  meta.maintainers = [ ];
 }

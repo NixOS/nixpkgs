@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   avahi,
+  ffmpeg_7,
   obs-studio-plugins,
 }:
 
@@ -15,24 +16,19 @@ let
       "arm-rpi2-linux-gnueabihf"
     else if stdenv.hostPlatform.isx86_64 then
       "x86_64-linux-gnu"
-    else if stdenv.hostPlatform.isi686 then
-      "i686-linux-gnu"
     else
       throw "unsupported platform for NDI SDK";
 in
 stdenv.mkDerivation rec {
-  pname = "ndi";
+  pname = "ndi-6";
   version = versionJSON.version;
-  majorVersion = builtins.head (builtins.splitVersion version);
+  majorVersion = lib.versions.major version;
   installerName = "Install_NDI_SDK_v${majorVersion}_Linux";
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
     url = "https://downloads.ndi.tv/SDK/NDI_SDK_Linux/${installerName}.tar.gz";
     hash = versionJSON.hash;
   };
-
-  buildInputs = [ avahi ];
 
   unpackPhase = ''
     unpackFile $src
@@ -41,24 +37,28 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
+    mkdir -p $out $out/share/doc/ndi-6
     mv bin/${ndiPlatform} $out/bin
+    mv lib/${ndiPlatform} $out/lib
+    # Fake ndi version 5 for compatibility with DistroAV (obs plugin using NDI)
+    ln -s $out/lib/libndi.so $out/bin/libndi.so.5
+    mv include examples $out/
+    mv licenses $out/share/doc/ndi-6/licenses
+    mv documentation/* $out/share/doc/ndi-6/
+  '';
+
+  dontPatchELF = true;
+
+  fixupPhase = ''
     for i in $out/bin/*; do
       if [ -L "$i" ]; then continue; fi
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_7.lib}/lib:${stdenv.cc.libc}/lib" "$i"
     done
-    patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" $out/bin/ndi-record
-    mv lib/${ndiPlatform} $out/lib
     for i in $out/lib/*; do
       if [ -L "$i" ]; then continue; fi
-      patchelf --set-rpath "${avahi}/lib:${stdenv.cc.libc}/lib" "$i"
+      patchelf --set-rpath "${avahi}/lib:${ffmpeg_7.lib}/lib:${stdenv.cc.libc}/lib" "$i"
     done
-    rm $out/bin/libndi.so.${majorVersion}
-    ln -s $out/lib/libndi.so.${version} $out/bin/libndi.so.${majorVersion}
-    mv include examples $out/
-    mkdir -p $out/share/doc/${pname}-${version}
-    mv licenses $out/share/doc/${pname}-${version}/licenses
-    mv documentation/* $out/share/doc/${pname}-${version}/
   '';
 
   # Stripping breaks ndi-record.
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (obs-studio-plugins) distroav;
   };
+
   passthru.updateScript = ./update.py;
 
   meta = {
@@ -78,8 +79,11 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "armv7l-linux"
     ];
-    hydraPlatforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      globule655
+      ChaosAttractor
+    ];
   };
 }

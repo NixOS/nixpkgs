@@ -4,24 +4,38 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  aws-lc,
   buildPackages,
   nix-update-script,
+  oniguruma,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mcat-unwrapped";
-  version = "0.4.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "Skardyy";
     repo = "mcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8NWWEV/1Kk3s/Ip6Mtt2uSX8lhsaVFmkldBG1qyCTrM=";
+    hash = "sha256-6d9b8lRbaowaFscHoq+JQAe8Jfv7gs+h8rJYpt+vQes=";
   };
 
-  cargoHash = "sha256-VrJMM++giBJQt+8YBPu370AScLTOgaLZNiRP3wk9nt8=";
+  cargoHash = "sha256-MHa89zFlea4DnDjquifLpV27TfkTQXOOAQhiYi0esFg=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    oniguruma
+  ];
+
+  checkFlags = [
+    # Requires network access: the test embeds a remote URL in the SVG.
+    "--skip=stdin_svg_output_is_image"
   ];
 
   postInstall =

@@ -3,20 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest,
+  pytest-fixture-classes,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.3.2";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
     tag = version;
-    hash = "sha256-h2Zm8Vbw3L9WeXaeFE/fJqiOgI3r+XnJUnnELDkmyaU=";
+    hash = "sha256-z4j9mITPUkug2/YaKwij5nlJYIoMpkDUPUmW/peNUXQ=";
   };
 
   postPatch = ''
@@ -28,9 +30,16 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [ pytest ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-fixture-classes
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # missing pytest-deadfixtures

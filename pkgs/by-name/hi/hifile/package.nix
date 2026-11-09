@@ -2,8 +2,8 @@
   lib,
   appimageTools,
   fetchurl,
-  version ? "0.9.13.1",
-  hash ? "sha256-2IIm6frUgyZ7Xe/wmw2H3bvg4WB1EZtlM1ikSvMK9rQ=",
+  version ? "0.9.20.0",
+  hash ? "sha256-dHs4yxID6Vo92BZPHYRCUMFJ1MKfhX5qSG5KJT59Zbk=",
 }:
 
 let
@@ -14,7 +14,7 @@ let
     inherit hash;
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -29,6 +29,8 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=HiFile' 'Exec=hifile'
     echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop
   '';
+
+  extraPkgs = pkgs: [ pkgs.libgpg-error ];
 
   passthru.updateScript = ./update.sh;
 

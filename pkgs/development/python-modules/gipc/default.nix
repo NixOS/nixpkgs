@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -46,6 +47,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # https://github.com/jgehrcke/gipc/issues/141
+    broken = pythonAtLeast "3.14";
     description = "Gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered

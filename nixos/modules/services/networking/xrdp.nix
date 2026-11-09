@@ -19,7 +19,7 @@ let
     cat > $out/startwm.sh <<EOF
     #!/bin/sh
     . /etc/profile
-    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init"}
+    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init"}
     ${cfg.defaultWindowManager}
     EOF
     chmod +x $out/startwm.sh
@@ -39,8 +39,12 @@ let
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
-    LANG=${config.i18n.defaultLocale}\
-    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+    LANG=${config.i18n.defaultLocale}${
+      lib.optionalString (config.i18n.glibcLocales != null) ''
+        \
+        LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
+      ''
+    }
     ' $out/sesman.ini
 
     ${cfg.extraConfDirCommands}
@@ -184,14 +188,14 @@ in
             fi
             if [ ! -s /run/xrdp/rsakeys.ini ]; then
               mkdir -p /run/xrdp
-              ${pkgs.xrdp}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
+              ${cfg.package}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
             fi
           '';
           serviceConfig = {
             User = "xrdp";
             Group = "xrdp";
             PermissionsStartOnly = true;
-            ExecStart = "${pkgs.xrdp}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
+            ExecStart = "${cfg.package}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
           };
         };
 
@@ -201,7 +205,7 @@ in
           description = "xrdp session manager";
           restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
           serviceConfig = {
-            ExecStart = "${pkgs.xrdp}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
+            ExecStart = "${cfg.package}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
             ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           };
         };

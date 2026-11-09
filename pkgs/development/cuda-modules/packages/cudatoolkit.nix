@@ -4,7 +4,7 @@
   backendStdenv,
   cudaAtLeast,
   cudaMajorMinorVersion,
-  cuda_cccl ? null,
+  cccl ? null,
   cuda_crt ? null,
   cuda_cudart ? null,
   cuda_cuobjdump ? null,
@@ -16,7 +16,7 @@
   cuda_nvml_dev ? null,
   cuda_nvprune ? null,
   cuda_nvrtc ? null,
-  cuda_nvtx ? null,
+  nvtx ? null,
   cuda_profiler_api ? null,
   cuda_sanitizer_api ? null,
   libcublas ? null,
@@ -40,13 +40,13 @@ let
     cuda_nvprune
   ];
   targetPackages = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_cupti
     cuda_cuxxfilt
     cuda_nvml_dev
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     cuda_profiler_api
     cuda_sanitizer_api
     libcublas
@@ -64,7 +64,7 @@ let
   allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
 in
 symlinkJoin rec {
-  name = "cuda-merged-${cudaMajorMinorVersion}";
+  pname = "cuda-merged";
   version = cudaMajorMinorVersion;
 
   paths = builtins.concatMap getAllOutputs allPackages;
@@ -72,7 +72,7 @@ symlinkJoin rec {
   passthru = {
     cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
     lib = symlinkJoin {
-      inherit name;
+      inherit pname version;
       paths = map (p: lib.getLib p) allPackages;
     };
   };

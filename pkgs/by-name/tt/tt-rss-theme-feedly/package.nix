@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tt-rss-theme-feedly";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "levito";
     repo = "tt-rss-feedly-theme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3mD1aY7gjdvucRzY7sLmZ1RsHtraAg1RGE/3uDp6/o4=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Feedly theme for Tiny Tiny RSS";
     license = lib.licenses.mit;
     homepage = "https://github.com/levito/tt-rss-feedly-theme";
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

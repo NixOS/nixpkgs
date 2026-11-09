@@ -1,29 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   hatch-requirements-txt,
   hatch-sphinx,
   hatch-vcs,
   h5py,
   lxml,
+  matplotlib,
   numpy,
-  columnize,
+  scipy,
   pytestCheckHook,
 }:
 
 let
   pname = "sasdata";
-  version = "0.11.0";
+  version = "0.12.2";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HIqEFN0Y+A4C6oF8NcI1puBt4SmyoNoAFobHQcYepnI=";
+  src = fetchFromGitHub {
+    owner = "SasView";
+    repo = "sasdata";
+    tag = "v${version}";
+    hash = "sha256-InPiX2+ypjgFjxN8CgUtHskL4SSRDb/8crLgexvQw8U=";
   };
 
   build-system = [
@@ -31,12 +34,15 @@ buildPythonPackage {
     hatch-requirements-txt
     hatch-sphinx
     hatch-vcs
-    h5py
-    lxml
-    numpy
   ];
 
-  dependencies = [ columnize ];
+  dependencies = [
+    h5py
+    lxml
+    matplotlib
+    numpy
+    scipy
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

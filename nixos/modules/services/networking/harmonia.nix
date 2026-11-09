@@ -6,112 +6,444 @@
 }:
 let
   cfg = config.services.harmonia;
+  cacheCfg = cfg.cache;
+  daemonCfg = cfg.daemon;
+  gcCfg = cfg.gc;
+
   format = pkgs.formats.toml { };
 
-  signKeyPaths = cfg.signKeyPaths ++ lib.optional (cfg.signKeyPath != null) cfg.signKeyPath;
+  signKeyPaths =
+    cacheCfg.signKeyPaths ++ (if cacheCfg.signKeyPath != null then [ cacheCfg.signKeyPath ] else [ ]);
   credentials = lib.imap0 (i: signKeyPath: {
-    id = "sign-key-${builtins.toString i}";
+    id = "sign-key-${toString i}";
     path = signKeyPath;
   }) signKeyPaths;
 in
 {
+  imports = [
+    # Renamed options for flat harmonia -> harmonia.cache
+    (lib.mkRenamedOptionModule
+      [ "services" "harmonia" "enable" ]
+      [ "services" "harmonia" "cache" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "harmonia" "signKeyPath" ]
+      [ "services" "harmonia" "cache" "signKeyPath" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "harmonia" "signKeyPaths" ]
+      [ "services" "harmonia" "cache" "signKeyPaths" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "harmonia" "settings" ]
+      [ "services" "harmonia" "cache" "settings" ]
+    )
+    # Note: package stays at the top level
+  ];
+
   options = {
     services.harmonia = {
-      enable = lib.mkEnableOption "Harmonia: Nix binary cache written in Rust";
-
-      signKeyPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = "DEPRECATED: Use `services.harmonia.signKeyPaths` instead. Path to the signing key to use for signing the cache";
-      };
-
-      signKeyPaths = lib.mkOption {
-        type = lib.types.listOf lib.types.path;
-        default = [ ];
-        description = "Paths to the signing keys to use for signing the cache";
-      };
-
       package = lib.mkPackageOption pkgs "harmonia" { };
 
-      settings = lib.mkOption {
-        inherit (format) type;
-        default = { };
-        description = ''
-          Settings to merge with the default configuration.
-          For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
-        '';
+      cache = {
+        enable = lib.mkEnableOption "Harmonia: Nix binary cache written in Rust";
+
+        signKeyPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "DEPRECATED: Use `services.harmonia.cache.signKeyPaths` instead. Path to the signing key to use for signing the cache";
+        };
+
+        signKeyPaths = lib.mkOption {
+          type = lib.types.listOf lib.types.path;
+          default = [ ];
+          description = "Paths to the signing keys to use for signing the cache";
+        };
+
+        settings = lib.mkOption {
+          inherit (format) type;
+          default = { };
+          description = ''
+            Settings to merge with the default configuration.
+            For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
+          '';
+        };
+      };
+
+      gc = {
+        enable = lib.mkEnableOption "harmonia-gc, a faster nix-collect-garbage";
+
+        automatic = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Run garbage collection automatically on a schedule.";
+        };
+
+        dates = lib.mkOption {
+          type = with lib.types; either singleLineStr (listOf str);
+          apply = lib.toList;
+          default = [ "03:15" ];
+          example = "weekly";
+          description = ''
+            When to run garbage collection. Calendar event in the format
+            specified by {manpage}`systemd.time(7)`.
+          '';
+        };
+
+        randomizedDelaySec = lib.mkOption {
+          type = lib.types.singleLineStr;
+          default = "0";
+          example = "45min";
+          description = "Randomized delay before each run.";
+        };
+
+        persistent = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Run on next boot if a scheduled run was missed.";
+        };
+
+        deleteOlderThan = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "30d";
+          description = "Delete profile generations older than this.";
+        };
+
+        ensureFree = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "50G";
+          description = ''
+            Free space until this much is available, then stop. Accepts an
+            absolute size like "50G" or a percentage of the store's filesystem
+            like "20%".
+          '';
+        };
+
+        keepRecent = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "1d";
+          description = ''
+            Keep store paths registered within this time window. Avoids deleting
+            build dependencies fetched during a recent build.
+          '';
+        };
+
+        noVacuum = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Skip the SQLite VACUUM after garbage collection. Enable on busy
+            builders, where concurrent nix-daemon readers prevent cleanup of
+            the database-sized WAL that VACUUM produces.
+          '';
+        };
+
+        chunkSize = lib.mkOption {
+          type = lib.types.nullOr lib.types.ints.positive;
+          default = null;
+          description = ''
+            Number of dead paths invalidated per database transaction. Lower
+            values keep the WAL (and its disk use) smaller during deletion at
+            the cost of more checkpoints; null uses the built-in default.
+          '';
+        };
+
+        gcRootsDirs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [ "/mnt/extra-roots" ];
+          description = ''
+            Extra directories to scan for GC roots, treated like the standard
+            gcroots directory. Nix only scans its own state directories; this
+            keeps roots that live elsewhere from being collected.
+          '';
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "Extra arguments to pass to harmonia-gc.";
+        };
+      };
+
+      daemon = {
+        enable = lib.mkEnableOption "Harmonia daemon: Nix daemon protocol implementation";
+
+        socketPath = lib.mkOption {
+          type = lib.types.str;
+          default = "/run/harmonia-daemon/socket";
+          description = "Path where the daemon socket will be created";
+        };
+
+        storeDir = lib.mkOption {
+          type = lib.types.str;
+          default = "/nix/store";
+          description = "Path to the Nix store directory";
+        };
+
+        dbPath = lib.mkOption {
+          type = lib.types.str;
+          default = "/nix/var/nix/db/db.sqlite";
+          description = "Path to the Nix database";
+        };
+
+        logLevel = lib.mkOption {
+          type = lib.types.str;
+          default = "info";
+          description = "Log level for the daemon";
+        };
       };
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    warnings = lib.optional (
-      cfg.signKeyPath != null
-    ) "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
-    nix.settings.extra-allowed-users = [ "harmonia" ];
-    users.users.harmonia = {
-      isSystemUser = true;
-      group = "harmonia";
-    };
-    users.groups.harmonia = { };
+  config = lib.mkMerge [
+    (lib.mkIf cacheCfg.enable {
+      warnings =
+        if cacheCfg.signKeyPath != null then
+          [
+            "`services.harmonia.cache.signKeyPath` is deprecated, use `services.harmonia.cache.signKeyPaths` instead"
+          ]
+        else
+          [ ];
 
-    systemd.services.harmonia = {
-      description = "harmonia binary cache service";
-
-      requires = [ "nix-daemon.socket" ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      environment = {
-        CONFIG_FILE = format.generate "harmonia.toml" cfg.settings;
-        SIGN_KEY_PATHS = lib.strings.concatMapStringsSep " " (
-          credential: "%d/${credential.id}"
-        ) credentials;
-        # Note: it's important to set this for nix-store, because it wants to use
-        # $HOME in order to use a temporary cache dir. bizarre failures will occur
-        # otherwise
-        HOME = "/run/harmonia";
+      services.harmonia.cache.settings = builtins.mapAttrs (_: v: lib.mkDefault v) {
+        bind = "[::]:5000";
+        workers = 4;
+        max_connection_rate = 256;
+        priority = 50;
       };
 
-      serviceConfig = {
-        ExecStart = lib.getExe cfg.package;
-        User = "harmonia";
-        Group = "harmonia";
-        Restart = "on-failure";
-        PrivateUsers = true;
-        DeviceAllow = [ "" ];
-        UMask = "0066";
-        RuntimeDirectory = "harmonia";
-        LoadCredential = builtins.map (credential: "${credential.id}:${credential.path}") credentials;
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@resources"
-        ];
-        CapabilityBoundingSet = "";
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        ProtectKernelLogs = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        RestrictRealtime = true;
-        MemoryDenyWriteExecute = true;
-        ProcSubset = "pid";
-        ProtectProc = "invisible";
-        RestrictNamespaces = true;
-        SystemCallArchitectures = "native";
-        PrivateNetwork = false;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        LockPersonality = true;
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-        LimitNOFILE = 65536;
+      # Socket activation lets the service run with PrivateNetwork; the
+      # inherited fd keeps referring to the host netns.
+      systemd.sockets.harmonia = {
+        description = "harmonia binary cache socket";
+        wantedBy = [ "sockets.target" ];
+        socketConfig.ListenStream =
+          let
+            b = cacheCfg.settings.bind;
+          in
+          if lib.hasPrefix "unix:" b then lib.removePrefix "//" (lib.removePrefix "unix:" b) else b;
       };
-    };
-  };
+
+      systemd.services.harmonia = {
+        description = "harmonia binary cache service";
+
+        requires = [ "harmonia.socket" ];
+        after = [ "harmonia.socket" ];
+
+        environment = {
+          CONFIG_FILE = format.generate "harmonia.toml" cacheCfg.settings;
+          SIGN_KEY_PATHS = lib.strings.concatMapStringsSep " " (
+            credential: "%d/${credential.id}"
+          ) credentials;
+          # Note: it's important to set this for nix-store, because it wants to use
+          # $HOME in order to use a temporary cache dir. bizarre failures will occur
+          # otherwise
+          HOME = "/run/harmonia";
+        };
+
+        serviceConfig = {
+          ExecStart = lib.getExe cfg.package;
+          User = "harmonia";
+          Group = "harmonia";
+          DynamicUser = true;
+          Type = "notify";
+          WatchdogSec = 15;
+          Restart = "on-failure";
+          PrivateUsers = true;
+          DeviceAllow = [ "" ];
+          UMask = "0066";
+          RuntimeDirectory = "harmonia";
+          LoadCredential = map (credential: "${credential.id}:${credential.path}") credentials;
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
+          CapabilityBoundingSet = "";
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          ProtectKernelLogs = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          RestrictRealtime = true;
+          MemoryDenyWriteExecute = true;
+          ProcSubset = "pid";
+          ProtectProc = "invisible";
+          RestrictNamespaces = true;
+          SystemCallArchitectures = "native";
+
+          # accept(2) on the inherited fd is exempt from both restrictions.
+          PrivateNetwork = true;
+          RestrictAddressFamilies = [ "AF_UNIX" ];
+          IPAddressDeny = "any";
+
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          LockPersonality = true;
+          LimitNOFILE = 65536;
+        };
+      };
+    })
+
+    (lib.mkIf gcCfg.enable {
+      assertions = [
+        {
+          assertion = gcCfg.automatic -> config.nix.enable;
+          message = "services.harmonia.gc.automatic requires nix.enable";
+        }
+      ];
+
+      warnings = lib.optional (gcCfg.automatic && config.nix.gc.automatic) ''
+        Both services.harmonia.gc.automatic and nix.gc.automatic are enabled.
+        Disable nix.gc.automatic to avoid running two garbage collectors.
+      '';
+
+      systemd.services.harmonia-gc = {
+        description = "Harmonia Nix Garbage Collector";
+        # `nix config show` for keep-derivations/keep-outputs.
+        path = [ config.nix.package ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = lib.escapeShellArgs (
+            [ (lib.getExe' cfg.package "harmonia-gc") ]
+            ++ lib.optionals (gcCfg.deleteOlderThan != null) [
+              "--delete-older-than"
+              gcCfg.deleteOlderThan
+            ]
+            ++ lib.optionals (gcCfg.ensureFree != null) [
+              "--ensure-free"
+              gcCfg.ensureFree
+            ]
+            ++ lib.optionals (gcCfg.keepRecent != null) [
+              "--keep-recent"
+              gcCfg.keepRecent
+            ]
+            ++ lib.optional gcCfg.noVacuum "--no-vacuum"
+            ++ lib.optionals (gcCfg.chunkSize != null) [
+              "--chunk-size"
+              (toString gcCfg.chunkSize)
+            ]
+            ++ lib.concatMap (d: [
+              "--gc-roots-dir"
+              d
+            ]) gcCfg.gcRootsDirs
+            ++ gcCfg.extraArgs
+          );
+        };
+        startAt = lib.optionals gcCfg.automatic gcCfg.dates;
+        restartIfChanged = false;
+      };
+
+      systemd.timers.harmonia-gc = lib.mkIf gcCfg.automatic {
+        timerConfig = {
+          RandomizedDelaySec = gcCfg.randomizedDelaySec;
+          Persistent = gcCfg.persistent;
+        };
+      };
+    })
+
+    (lib.mkIf daemonCfg.enable {
+      systemd.services.harmonia-daemon =
+        let
+          daemonConfig = {
+            socket_path = daemonCfg.socketPath;
+            store_dir = daemonCfg.storeDir;
+            db_path = daemonCfg.dbPath;
+            log_level = daemonCfg.logLevel;
+          };
+          daemonConfigFile = format.generate "harmonia-daemon.toml" daemonConfig;
+        in
+        {
+          description = "Harmonia Nix daemon protocol server";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+
+          environment = {
+            RUST_LOG = daemonCfg.logLevel;
+            RUST_BACKTRACE = "1";
+            HARMONIA_DAEMON_CONFIG = daemonConfigFile;
+          };
+
+          serviceConfig = {
+            Type = "simple";
+            ExecStart = lib.getExe' cfg.package "harmonia-daemon";
+            Restart = "on-failure";
+            RestartSec = 5;
+
+            # Socket will be created at runtime
+            RuntimeDirectory = "harmonia-daemon";
+
+            # Run as root to access the Nix database
+            # Note: The Nix database is owned by root and requires root access
+            NoNewPrivileges = true;
+            PrivateTmp = true;
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            # SQLite needs write access for WAL mode
+            ReadWritePaths = [
+              (builtins.dirOf daemonCfg.dbPath) # Need write access for WAL and SHM files
+            ];
+            ReadOnlyPaths = [
+              daemonCfg.storeDir
+            ];
+
+            # System call filtering
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+              "@chown" # for sockets
+              "~@resources"
+            ];
+            SystemCallArchitectures = "native";
+
+            # Capabilities
+            CapabilityBoundingSet = "";
+
+            # Device access
+            DeviceAllow = [ "" ];
+            PrivateDevices = true;
+
+            # Kernel protection
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectControlGroups = true;
+            ProtectKernelLogs = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+
+            # Memory protection
+            MemoryDenyWriteExecute = true;
+            LockPersonality = true;
+
+            # Process visibility
+            ProcSubset = "pid";
+            ProtectProc = "invisible";
+
+            # Namespace restrictions
+            RestrictNamespaces = true;
+            PrivateMounts = true;
+
+            # Network restrictions
+            RestrictAddressFamilies = "AF_UNIX";
+            PrivateNetwork = false;
+
+            # Resource limits
+            LimitNOFILE = 65536;
+            RestrictRealtime = true;
+
+            # Misc restrictions
+            UMask = "0077";
+          };
+        };
+    })
+  ];
 }

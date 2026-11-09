@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "nss-dev";
+    owner = "mozilla";
     repo = "nss";
     rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
     inherit hash;
@@ -76,6 +76,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   ''
+  + lib.optionalString (lib.versionAtLeast version "3.129") ''
+    substituteInPlace build.sh --replace "\$obj_dir/lib/pkgconfig/nspr.pc" "${nspr.dev}/lib/pkgconfig/nspr.pc"
+  ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
     substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
@@ -108,6 +111,7 @@ stdenv.mkDerivation rec {
       target = getArch stdenv.hostPlatform;
       target_system = stdenv.hostPlatform.uname.system;
       host = getArch stdenv.buildPlatform;
+      targetIsPpc64le = stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian;
 
       buildFlags = [
         "-v"
@@ -126,6 +130,10 @@ stdenv.mkDerivation rec {
       ++ lib.optional stdenv.hostPlatform.isDarwin "--clang"
       ++ lib.optionals (target_system != stdenv.buildPlatform.uname.system) [
         "-DOS=${target_system}"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isPower [
+        "-Ddisable_altivec=${if targetIsPpc64le then "0" else "1"}"
+        "-Ddisable_crypto_vsx=${if targetIsPpc64le then "0" else "1"}"
       ]
       ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         "--disable-tests"
@@ -255,7 +263,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
-    changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
+    changelog = "https://github.com/mozilla/nss/blob/master/doc/src/releases/nss_${underscoreVersion}.md";
     maintainers = with lib.maintainers; [
       hexa
       ajs124

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "helm-schema";
-  version = "2.3.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "losisin";
     repo = "helm-values-schema-json";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F4tfPZnvvagWEO25JOjtYPYDn+8k6sRH0k1UvHIQRzg=";
+    hash = "sha256-DTxVVf8p9IHYPIC5TevnvvLWTQx2VIy3WNPXSczTkSs=";
   };
 
-  vendorHash = "sha256-2HnbASIZqOPM9WOlZeEQKYbkBHXBjV0JaeKKYAAwQ3w=";
+  vendorHash = "sha256-XSaTTzSoKnwoiZu/FqHYOas6dMtr5C4+F5jy4FX1ot8=";
 
   ldflags = [
     "-s"

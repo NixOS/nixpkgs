@@ -10,7 +10,6 @@
   pandas,
   pathvalidate,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools-scm,
   simplejson,
@@ -27,14 +26,14 @@ buildPythonPackage rec {
   version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "pytablewriter";
     tag = "v${version}";
     hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
+
+  pythonRelaxDeps = [ "typepy" ];
 
   build-system = [ setuptools-scm ];
 
@@ -109,6 +108,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/pytablewriter";
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

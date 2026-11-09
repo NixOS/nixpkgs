@@ -2,38 +2,50 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
-  makeWrapper,
-  nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "serve";
-  version = "14.2.4";
+  version = "14.2.6";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "serve";
-    tag = finalAttrs.version;
-    hash = "sha256-QVbau4MrpgEQkwlWx4tU9H93zdM0mSZgIzXpjHRM5mk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lM04fuzgcLHz8/Jf4wJVYXveFcO6sFyJ9PQAcpweyjk=";
   };
+
+  # This fails during `npmInstallHook` without patching
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "prepare" "dont-prepare"
+  '';
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-IJMu0XHwEn2TZP/He79FFGl/PeXOCTD51lIgmImpyKo=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-9gejKf+GqB8BPAQtQSuZsTb6jFro3X1aL1noVfyKTPg=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm_10 ];
   npmConfigHook = pnpmConfigHook;
 
-  dontNpmBuild = true;
+  npmBuildScript = "compile";
+  dontNpmBuild = false;
 
-  # takes too long to finish
+  # Use pnpm to prune deps instead
   dontNpmPrune = true;
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+  '';
 
   meta = {
     description = "Static file serving and directory listing";

@@ -9,7 +9,7 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "otfed";
   version = "0.3.1";
 
@@ -17,8 +17,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "gfngfn";
-    repo = pname;
-    rev = version;
+    repo = "otfed";
+    rev = finalAttrs.version;
     hash = "sha256-6QCom9nrz0B5vCmuBzqsM0zCs8tBLJC6peig+vCgMVA=";
   };
 
@@ -44,4 +44,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -6,7 +6,6 @@
   httpbin,
   multidict,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "warcio";
   version = "1.7.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "webrecorder";

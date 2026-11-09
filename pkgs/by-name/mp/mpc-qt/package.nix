@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpc-qt";
-  version = "25.07";
+  version = "26.07";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-apZR3PgU+Fq1whnWQHhmHPZKAZBKdrVCWaGfu+H7A4s=";
+    hash = "sha256-1tm/Sw/6szY4k2ObFnOsXfffIJ31eokjqkOt90DquWE=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMPCQT_VERSION=${finalAttrs.version}"
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "master";
+  };
 
   meta = {
     description = "Media Player Classic Qute Theater";

@@ -3,16 +3,16 @@
   lib,
   fetchzip,
   libglut,
-  libXmu,
-  libXi,
-  libX11,
-  libICE,
+  libxmu,
+  libxi,
+  libx11,
+  libice,
   libGLU,
   libGL,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   glibc,
-  lua,
+  lua5_2_compat,
   luabind,
   glfw,
   libgccjit,
@@ -20,16 +20,17 @@
   makeWrapper,
 }:
 let
+  lua = lua5_2_compat;
   lpath = lib.makeLibraryPath [
-    libXmu
-    libXi
-    libX11
+    libxmu
+    libxi
+    libx11
     libglut
-    libICE
+    libice
     libGLU
     libGL
-    libSM
-    libXext
+    libsm
+    libxext
     glibc
     lua
     glfw

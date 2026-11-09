@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "33.0.1";
+  version = "35.2.0";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zHLyvFzLR7Ryk6eoD+Lp+w4bIj7MAeREK0YzRXYnx6c=";
+    hash = "sha256-ycDQUDrwMY9yv/apozrKQfcugurGjDiItiTXCcbGeas=";
     fetchSubmodules = true;
   };
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.qcoro
     kdePackages.qtkeychain
     libqalculate
     libarchive
@@ -80,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      synthetica
       eljamm
     ];
     mainProgram = "albert";

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcrcon";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "Tiiffi";
     repo = "mcrcon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "mcrcon";
   };
-}
+})

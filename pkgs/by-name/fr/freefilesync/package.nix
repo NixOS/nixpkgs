@@ -3,11 +3,12 @@
   stdenv,
   fetchurl,
   replaceVars,
-  fetchDebianPatch,
+  fetchFromGitHub,
   copyDesktopItems,
   pkg-config,
   wrapGAppsHook3,
   unzip,
+  cacert,
   curl,
   glib,
   gtk3,
@@ -19,8 +20,16 @@
 }:
 
 let
-  wxwidgets_3_3' = wxwidgets_3_3.overrideAttrs (
+  wxwidgets_3_3_4 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
+      version = "3.3.4";
+      src = fetchFromGitHub {
+        owner = "wxWidgets";
+        repo = "wxWidgets";
+        tag = "v${finalAttrs.version}";
+        fetchSubmodules = true;
+        hash = "sha256-J04XE/62Ih+ZnYkl3cMEAAKRnFhPmOynMbZUbozk/gY=";
+      };
       patches = [
         ./wxcolorhook.patch
       ];
@@ -29,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.6";
+  version = "14.13";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -38,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-OST2QIhPhKl9Qh4nHIno5XAJmLPNki0bU5A1ZXcUVTw=";
+    hash = "sha256-w8KbiP76gEPDg53owlLmY3pkJj9NfK5KKy9kgYg6k2A=";
   };
 
   sourceRoot = ".";
@@ -50,14 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./Makefile.patch {
       gtk3-dev = lib.getDev gtk3;
     })
-    # Fix build with vanilla wxWidgets
-    (fetchDebianPatch {
-      pname = "freefilesync";
-      version = "13.7";
-      debianRevision = "1";
-      patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
-      hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
-    })
+    # Fix build with vanilla wxWidgets (rebased from Debian patch)
+    ./Disable_wxWidgets_uncaught_exception_handling.patch
+    # ../../zen/string_traits.h:60:41: error: call of overloaded 'conversionType(wxCStrData)' is ambiguous
+    ./string_traits.patch
+    # ../../zen/argon2.cpp:42:10: error: missing binary operator before token '16'
+    ./fatal_errors.patch
   ];
 
   postPatch = ''
@@ -78,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3'
+    wxwidgets_3_3_4
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -86,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_54"
     "-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_54"
     # Define libssh2 constants
+    "-DLIBSSH2_ERROR_STORE_OVERFLOW=-55"
     "-DMAX_SFTP_READ_SIZE=30000"
     "-DMAX_SFTP_OUTGOING_SIZE=30000"
   ];
@@ -110,8 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R FreeFileSync/Build/* $out
     mv $out/{Bin,bin}
 
-    mkdir -p $out/share/pixmaps
-    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
+
+    rm $out/Resources/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/Resources/cacert.pem
 
     runHook postInstall
   '';

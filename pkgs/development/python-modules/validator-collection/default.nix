@@ -7,15 +7,12 @@
   jsonschema,
   pyfakefs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "validator-collection";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "insightindustry";

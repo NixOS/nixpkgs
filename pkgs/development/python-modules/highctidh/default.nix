@@ -3,20 +3,19 @@
   buildPythonPackage,
   setuptools,
   pytestCheckHook,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gitUpdater,
 }:
 buildPythonPackage rec {
   pname = "highctidh";
-  version = "1.0.2025051200";
+  version = "1.0.2026101300";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "vula";
     repo = "highctidh";
     tag = "v${version}";
-    hash = "sha256-wGJv9UHAFfCOpTrr8THVk0DC+JUtj3gYYOf6o3EaSqg=";
+    hash = "sha256-NgPVC/Oa0P/ijYHDMuxdsYdj4EGYnD/R/ItvhY4Q+c8=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "Fork of high-ctidh as as a portable shared library with Python bindings";
+    description = "Fork of high-ctidh as a portable shared library with Python bindings";
     homepage = "https://codeberg.org/vula/highctidh";
     license = lib.licenses.publicDomain;
     teams = with lib.teams; [ ngi ];

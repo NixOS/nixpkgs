@@ -1,15 +1,17 @@
-diff --git a/BUILD.gn b/BUILD.gn
-index d5289b8..598bbbc 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -138,8 +138,8 @@ config("library_impl_config") {
+@@ -143,8 +143,12 @@
  # target_defaults and direct_dependent_settings.
  config("common_inherited_config") {
-   defines = []
+   defines = [ "PROTOBUF_ENABLE_DEBUG_LOGGING_MAY_LEAK_PII=0" ]
 -  cflags = []
 -  ldflags = []
 +  cflags = [ "-fvisibility=default" ]
 +  ldflags = [ "-lavutil", "-lavformat", "-lavcodec" ]
- 
-   if (rtc_dlog_always_on) {
-     defines += [ "DLOG_ALWAYS_ON" ]
++
++  if (is_linux) {
++    ldflags += [ "-Wl,--version-script=" + rebase_path("//libwebrtc.version", root_build_dir) ]
++  }
+
+   if (rtc_objc_prefix != "") {
+     defines += [ "RTC_OBJC_TYPE_PREFIX=${rtc_objc_prefix}" ]

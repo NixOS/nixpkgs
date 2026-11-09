@@ -13,6 +13,7 @@
   zeromq,
   flex,
   bison,
+  nix-update-script,
 
   # for tests
   python3,
@@ -49,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.24.5";
+  version = "0.25.7";
 
   src = fetchFromGitHub {
-    owner = "emqx";
+    owner = "nanomq";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-tyhAEYdYCO0Tur7HDXXbBSQ8tzTHCbW9B8aBu0sMEEI=";
+    hash = "sha256-TBzeXZYEkBwvL6A9IqOlFHnNixrJofrcLErIWMB0X+4=";
     fetchSubmodules = true;
   };
 
@@ -96,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
         requests
         paho-mqtt
+        legacy-cgi
+        websockets
       ]
     ))
   ];
@@ -108,17 +111,17 @@ stdenv.mkDerivation (finalAttrs: {
       # effectively distable this test because it is slow
       echo > .github/scripts/fuzzy_test.txt
 
-      # even with the correct paho-mqtt version these tests fail, suggesting
-      # websocket support is indeed broken
-      substituteInPlace .github/scripts/test.py \
-        --replace 'ws_test()' '#ws_test()' \
-        --replace 'ws_v5_test()' '#ws_v5_test()'
+      # ImportError: cannot import name 'T' from 're'
+      substituteInPlace .github/scripts/tls_v5_test.py \
+        --replace-fail "from re import S, T" ""
 
       PATH="$PATH:$out/bin" python .github/scripts/test.py
     )
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: {
@@ -132,5 +135,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2026-22040"
+      "CVE-2025-68699"
+    ];
   };
 })

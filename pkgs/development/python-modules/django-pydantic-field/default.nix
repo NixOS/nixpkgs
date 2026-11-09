@@ -10,28 +10,35 @@
   pytest-django,
   djangorestframework,
   pyyaml,
-  setuptools,
   syrupy,
+  typing-extensions,
   uritemplate,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "django-pydantic-field";
-  version = "0.4.1";
+  version = "0.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
     tag = "v${version}";
-    hash = "sha256-AyI58ij6bMs0i1bwgpBTpEqjYxVo0qC6xBz43iJiHrc=";
+    hash = "sha256-GZ7yPUNSgvjxgyd77GSPLyeFzcSVIVUjyinabKoLsHw=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     django
     pydantic
+    typing-extensions
   ];
 
   nativeCheckInputs = [

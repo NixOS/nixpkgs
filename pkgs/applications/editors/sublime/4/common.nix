@@ -6,10 +6,12 @@
 }:
 
 {
+  config,
   fetchurl,
   stdenv,
   lib,
-  xorg,
+  libxtst,
+  libx11,
   glib,
   libglvnd,
   glibcLocales,
@@ -21,7 +23,7 @@
   writeShellScript,
   common-updater-scripts,
   curl,
-  openssl_1_1,
+  openssl_3_5,
   bzip2,
   sqlite,
 }:
@@ -31,8 +33,7 @@ let
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
   binaries = [
     "sublime_text"
-    "plugin_host-3.3"
-    "plugin_host-3.8"
+    "plugin_host-3.14"
     crashHandlerBinary
   ];
   primaryBinary = "sublime_text";
@@ -41,33 +42,29 @@ let
     "sublime"
     "sublime4"
   ];
-  crashHandlerBinary =
-    if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
+  crashHandlerBinary = "crash_handler";
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = toString ./packages.nix;
 
   neededLibraries = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     glib
     libglvnd
-    openssl_1_1
     gtk3
     cairo
     pango
     curl
-  ]
-  ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
 
-  binaryPackage = stdenv.mkDerivation rec {
+  binaryPackage = stdenv.mkDerivation (finalAttrs: {
     pname = "${pnameBase}-bin";
     version = buildVersion;
 
-    src = passthru.sources.${stdenv.hostPlatform.system};
+    src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
     dontStrip = true;
     dontPatchELF = true;
@@ -86,15 +83,23 @@ let
     buildPhase = ''
       runHook preBuild
 
+      # Remove old plugin host because it depends on EOL openssl 1.1
+      rm plugin_host-3.3
+
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"}:$out \
           $binary
       done
 
-      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
+      # Unable to get plugin_host-3.14 not crash with Python from Nixpkgs
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          sqlite
+          openssl_3_5
+        ]
+      } libpython3.14.so.1.0
 
       runHook postBuild
     '';
@@ -104,7 +109,8 @@ let
 
       # No need to patch these libraries, it works well with our own
       rm libcrypto.so.1.1 libssl.so.1.1
-      ${lib.optionalString (lib.versionAtLeast buildVersion "4145") "rm libsqlite3.so"}
+      rm libsqlite3.so
+      rm libcrypto.so.3 libssl.so.3
 
       mkdir -p $out
       cp -r * $out/
@@ -115,8 +121,6 @@ let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      sed -i 's#/usr/bin/pkexec#pkexec\x00\x00\x00\x00\x00\x00\x00\x00\x00#g' "$out/${primaryBinary}"
-
       wrapProgram $out/${primaryBinary} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
@@ -134,15 +138,13 @@ let
         };
       };
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = pnameBase;
   version = buildVersion;
 
   dontUnpack = true;
-
-  ${primaryBinary} = binaryPackage;
 
   nativeBuildInputs = [
     makeWrapper
@@ -150,7 +152,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    makeWrapper "${binaryPackage}/${primaryBinary}" "$out/bin/${primaryBinary}"
   ''
   + builtins.concatStringsSep "" (
     map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
@@ -159,18 +161,20 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications"
 
     substitute \
-      "''$${primaryBinary}/${primaryBinary}.desktop" \
+      "${binaryPackage}/${primaryBinary}.desktop" \
       "$out/share/applications/${primaryBinary}.desktop" \
       --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
 
-    for directory in ''$${primaryBinary}/Icon/*; do
+    for directory in ${binaryPackage}/Icon/*; do
       size=$(basename $directory)
       mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      ln -s ${binaryPackage}/Icon/$size/* $out/share/icons/hicolor/$size/apps
     done
   '';
 
   passthru = {
+    unwrapped = binaryPackage;
+
     updateScript =
       let
         script = writeShellScript "${packageAttribute}-update-script" ''
@@ -190,8 +194,8 @@ stdenv.mkDerivation rec {
               exit 0
           fi
 
-          for platform in ${lib.escapeShellArgs meta.platforms}; do
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+          for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+              update-source-version "${packageAttribute}".unwrapped "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in
@@ -210,6 +214,7 @@ stdenv.mkDerivation rec {
       demin-dmitriy
       zimbatm
     ];
+    mainProgram = "subl";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
@@ -217,4 +222,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

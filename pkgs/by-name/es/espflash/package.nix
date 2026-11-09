@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espflash";
-  version = "4.2.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ia7o2u7egBTlzQAWnME6+/8V+5Go70wwXi/nJLKbGZM=";
+    hash = "sha256-xGFsrmAK1NXMsYf+oSk6OLYFKcCUQd1CtvFCJrgGk8Q=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-Jh5JoHHfbrpwedXHuCBlIJxCTYjKfofjAoWD8QhGSH8=";
+  cargoHash = "sha256-ArwTVqUEOIztbohfTcrRm1y+4HrZFbe9jMYETRGSSjQ=";
 
   cargoBuildFlags = [
-    "--exclude xtask"
+    "--exclude=xtask"
     "--workspace"
   ];
 
@@ -51,10 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/esp-rs/espflash";
     changelog = "https://github.com/esp-rs/espflash/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "espflash";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 })

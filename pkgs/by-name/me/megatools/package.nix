@@ -11,16 +11,15 @@
   pkg-config,
   curl,
   glib,
-  fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "megatools";
   version = "1.11.5";
 
   src = fetchgit {
     url = "https://xff.cz/git/megatools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XOGjdvMw8wfhBwyOBnQqiiJeOGvYXKMYxiJ6BZeEwDQ=";
   };
 
@@ -37,8 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     glib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -54,4 +52,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

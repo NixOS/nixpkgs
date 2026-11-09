@@ -13,14 +13,14 @@
   patchPpdFilesHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ptouch-driver";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "philpem";
     repo = "printer-driver-ptouch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MVvtfos2ze6uXFg8sEH1UlJ9gg4iq91dLK0k0xuTE1Y=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    changelog = "https://github.com/philpem/printer-driver-ptouch/releases/tag/v${version}";
+    changelog = "https://github.com/philpem/printer-driver-ptouch/releases/tag/v${finalAttrs.version}";
     description = "Printer Driver for Brother P-touch and QL Label Printers";
     downloadPage = "https://github.com/philpem/printer-driver-ptouch";
     homepage = "https://github.com/philpem/printer-driver-ptouch";
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
       for the Brother P-touch and QL label printer families.
     '';
   };
-}
+})

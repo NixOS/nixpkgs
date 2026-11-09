@@ -8,20 +8,19 @@
   util-linux,
   python3,
   boost,
-  sqlite,
-  pcre,
+  simde,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
-  version = "5.4.12";
+  version = "5.4.13";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
-    rev = "vectorscan/${version}";
-    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
+    rev = "vectorscan/${finalAttrs.version}";
+    hash = "sha256-dUrtyMXBhsgJj8w7qXLZK8BYjlRUL1JWyUz7yVREcew=";
   };
 
   postPatch = ''
@@ -31,9 +30,6 @@ stdenv.mkDerivation rec {
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
     substituteInPlace cmake/cflags-generic.cmake \
       --replace-fail "-Werror" ""
-    substituteInPlace cmake/build_wrapper.sh \
-      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
-      --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
   '';
 
   nativeBuildInputs = [
@@ -46,9 +42,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    sqlite
-    pcre
-  ];
+  ]
+  ++
+    # FAT binaries on x86 linux can use SIMDe as fallback.
+    lib.optional (lib.elem stdenv.hostPlatform.system [
+      "x86_64-linux"
+      "i686-linux"
+    ]) simde;
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
   # transparently select the fastest for the current hardware.
@@ -116,16 +116,18 @@ stdenv.mkDerivation rec {
       code will be abstracted away.
     '';
     homepage = "https://www.vectorcamp.gr/vectorscan/";
-    changelog = "https://github.com/VectorCamp/vectorscan/blob/${src.rev}/CHANGELOG-vectorscan.md";
+    changelog = "https://github.com/VectorCamp/vectorscan/blob/${finalAttrs.src.rev}/CHANGELOG-vectorscan.md";
     platforms = lib.platforms.unix;
-    license = with lib.licenses; [
-      bsd3 # and
-      bsd2 # and
-      lib.licenses.boost
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd3
+        bsd2
+        lib.licenses.boost
+      ];
     maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];
   };
-}
+})

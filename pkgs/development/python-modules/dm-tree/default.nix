@@ -19,27 +19,23 @@
   numpy,
   wrapt,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dm-tree";
-  version = "0.1.9";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "tree";
-    tag = version;
-    hash = "sha256-cHuaqA89r90TCPVHNP7B1cfK+WxqmfTXndJ/dRdmM24=";
+    tag = finalAttrs.version;
+    hash = "sha256-L1DOwgJriFoS0rf6g+f3qcw94Q/ia4N6kZ1ai6F/Qng=";
   };
   # Allows to forward cmake args through the conventional `cmakeFlags`
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail \
         "cmake_args = [" \
-        'cmake_args = [ *os.environ.get("cmakeFlags", "").split(),'
-    substituteInPlace tree/CMakeLists.txt \
-      --replace-fail \
-        "CMAKE_CXX_STANDARD 14" \
-        "CMAKE_CXX_STANDARD 17"
+        "cmake_args = [ *\"''${cmakeFlags[*]}\".split(),"
   '';
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
@@ -71,13 +67,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tree" ];
 
   meta = {
-    description = "Tree is a library for working with nested data structures";
-    homepage = "https://github.com/deepmind/tree";
-    changelog = "https://github.com/google-deepmind/tree/releases/tag/${version}";
+    description = "Python library for working with nested data structures";
+    homepage = "https://github.com/google-deepmind/tree";
+    changelog = "https://github.com/google-deepmind/tree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       samuela
       ndl
     ];
   };
-}
+})

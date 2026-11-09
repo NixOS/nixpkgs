@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "refurb";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
-    tag = "v${version}";
-    hash = "sha256-Y401oUQd516Pyf+8sTrje5AoeWCSGKlXktnwyj/nTl8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e1+q3jpJsyGwInFPrgKmXJ68aYr08H18ciYMi9KcxoY=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for refurbishing and modernizing Python codebases";
     mainProgram = "refurb";
     homepage = "https://github.com/dosisod/refurb";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ knl ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
-}
+})

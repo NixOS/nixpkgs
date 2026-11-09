@@ -13,6 +13,11 @@ stdenv.mkDerivation {
     sha256 = "0zqhys0j9gabrd12mnk8ibblpc8dal4kbl8vnhxmdlplsdpwn4wg";
   };
 
+  postPatch = ''
+    substituteInPlace source/style.h \
+      --replace-fail "typedef unsigned        bool   ; /* Unsigned, [0,1].                          */" ""
+  '';
+
   buildPhase = ''
     cd source
     ${stdenv.cc}/bin/cc -D__linux__ -o fw *.c

@@ -3,7 +3,6 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pymediaroom";
   version = "0.6.5.4";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Remote Control for Mediaroom STB";
     homepage = "https://github.com/dgomes/pymediaroom";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -5,16 +5,16 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "anarchism";
-  version = "15.3-1";
+  version = "15.3-4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "anarchism";
-    rev = "debian/${version}";
-    sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
+    rev = "debian/${finalAttrs.version}";
+    hash = "sha256-F3Mb/ulZQ4pRicqpilAhGwboDE9uAMdqzj7ziUhE1ik=";
   };
 
   postPatch = ''
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     platforms = with lib.platforms; all;
   };
-}
+})

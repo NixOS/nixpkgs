@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lcrq,
   lib,
   libsodium,
@@ -10,8 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "librecast";
   version = "0.11.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "librecast";
     repo = "librecast";
     tag = "v${finalAttrs.version}";

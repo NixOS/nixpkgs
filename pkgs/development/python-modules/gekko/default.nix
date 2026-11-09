@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gekko";
-  version = "1.3.0";
+  version = "1.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S/uHA1UPPX159ZOk/vItSVWZ4VVu1Bylhc98LslAutI=";
+    hash = "sha256-XX3Dgd/tRJssAewUZGA3roexL7LqFG2Cbi7iv4Snyk0=";
   };
 
   build-system = [ setuptools ];
@@ -24,7 +21,7 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   # Module has no tests
-  doCHeck = false;
+  doCheck = false;
 
   pythonImportsCheck = [ "gekko" ];
 

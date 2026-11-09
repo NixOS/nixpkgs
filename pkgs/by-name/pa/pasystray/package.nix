@@ -15,14 +15,14 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pasystray";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
 
@@ -66,11 +66,8 @@ stdenv.mkDerivation rec {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [
-      exlevan
-      kamilchm
-    ];
+    maintainers = with lib.maintainers; [ kamilchm ];
     platforms = lib.platforms.linux;
     mainProgram = "pasystray";
   };
-}
+})

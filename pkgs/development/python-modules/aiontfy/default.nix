@@ -12,16 +12,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiontfy";
-  version = "0.6.1";
+  version = "0.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "aiontfy";
-    tag = "v${version}";
-    hash = "sha256-43sl9jCJErROEOIllUFizG6IIBpFWCQTRyJP+0u1z+M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r+VSw/EXkfFyZuiChQQrqAU1hmlfvZLzxdcJvqdfruI=";
   };
 
   build-system = [
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tr4nt0r/aiontfy/releases/tag/${src.tag}";
+    changelog = "https://github.com/tr4nt0r/aiontfy/releases/tag/${finalAttrs.src.tag}";
     description = "Async ntfy client library";
     homepage = "https://github.com/tr4nt0r/aiontfy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

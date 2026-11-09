@@ -13,7 +13,7 @@
   wrapGAppsHook3,
   cairo,
   glib,
-  goocanvas3,
+  goocanvas_3,
   gtk3,
   gtksourceview3,
   json-glib,
@@ -22,14 +22,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "akira";
   version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     glib
-    goocanvas3
+    goocanvas_3
     pantheon.granite
     gtk3
     gtksourceview3
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "com.github.akiraux.akira";
   };
-}
+})

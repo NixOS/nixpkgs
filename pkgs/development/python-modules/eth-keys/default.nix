@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-keys";
     tag = "v${version}";
     hash = "sha256-H/s/D4f4tqP/WTil9uLmFw2Do9sEjMWwEreQEooeszQ=";
@@ -46,8 +46,8 @@ buildPythonPackage rec {
     pydantic
   ]
   ++ optional-dependencies.coincurve
-  ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
-  ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
+  ++ lib.optionals (!isPyPy) eth-hash.optional-dependencies.pysha3
+  ++ lib.optionals isPyPy eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_keys" ];
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Common API for Ethereum key operations";
-    homepage = "https://github.com/ethereum/eth-keys";
-    changelog = "https://github.com/ethereum/eth-keys/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/ApeWorX/eth-keys";
+    changelog = "https://github.com/ApeWorX/eth-keys/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };

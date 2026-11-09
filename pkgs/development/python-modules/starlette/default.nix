@@ -8,7 +8,6 @@
 
   # dependencies
   anyio,
-  typing-extensions,
 
   # optional dependencies
   itsdangerous,
@@ -16,10 +15,12 @@
   python-multipart,
   pyyaml,
   httpx,
+  httpx2,
 
   # tests
+  blockbuster,
+  opentelemetry-sdk,
   pytestCheckHook,
-  pythonOlder,
   trio,
 
   # reverse dependencies
@@ -28,19 +29,19 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.50.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-8REOizYQQkyLZwV4/yRiNGmGV07V0NNky7gtiAdWa7o=";
+    hash = "sha256-5/gQtC0JbQM7eSQeu2aVJtD63v4LjnbSSC0jF96e958=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ];
 
   optional-dependencies.full = [
     itsdangerous
@@ -48,20 +49,16 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     httpx
+    httpx2
   ];
 
   nativeCheckInputs = [
+    blockbuster
+    opentelemetry-sdk
     pytestCheckHook
     trio
-    typing-extensions
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-    "-Wignore::trio.TrioDeprecationWarning"
-    "-Wignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
 
   pythonImportsCheck = [ "starlette" ];
 
@@ -70,9 +67,9 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
-    homepage = "https://www.starlette.io/";
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
+    homepage = "https://starlette.dev";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wd15 ];

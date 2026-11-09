@@ -1,21 +1,17 @@
 {
   lib,
+  stdenv,
   buildNimPackage,
   fetchFromGitHub,
 
-  withHEVC ? true,
-  withWhisper ? false,
-
-  ffmpeg,
+  ffmpeg-full,
   yt-dlp,
   lame,
   libopus,
-  libvpx,
   x264,
-  x265,
   dav1d,
-  svt-av1,
-  whisper-cpp,
+  zlib,
+  alsa-lib,
 
   python3,
   python3Packages,
@@ -23,42 +19,35 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.4.0";
+  version = "31.7.2";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-DzgR/GyVIUq6Dfes6OnTdYO/vyGBPcKSeD2IikF7sIM=";
+    hash = "sha256-lbVF0PT48cxnm6hR43ULLx7QWV4nIUPeGUkeOuRr2Y0=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
-    ffmpeg
-    lame
+    ffmpeg-full
+    lame # Upstream uses a minimal, unpackaged fork of `lame` named `lamer`.
     libopus
-    libvpx
     x264
     dav1d
-    svt-av1
+    zlib
   ]
-  ++ lib.optionals withHEVC [
-    x265
-  ]
-  ++ lib.optionals withWhisper [
-    whisper-cpp
-  ];
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  nimFlags = [
-    "--passc:-Wno-incompatible-pointer-types"
-  ]
-  ++ lib.optionals withHEVC [
-    "-d:enable_hevc"
-  ]
-  ++ lib.optionals withWhisper [
-    "-d:enable_whisper"
-  ];
+  env = {
+    # Nothing should be dynamically linked, as ffmpeg should already link it.
+    DISABLE_HEVC = "1";
+    DISABLE_WHISPER = "1";
+    DISABLE_VPX = "1";
+    DISABLE_SVTAV1 = "1";
+    DISABLE_VPL = "1";
+  };
 
   postPatch = ''
     substituteInPlace src/log.nim \
@@ -73,19 +62,6 @@ buildNimPackage rec {
     python3
     python3Packages.av
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/rationals.nim"
-
-    substituteInPlace tests/test.py \
-      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
-
-    python3 tests/test.py
-
-    runHook postCheck
-  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

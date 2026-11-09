@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "robomachine";
   version = "0.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "RoboMachine";

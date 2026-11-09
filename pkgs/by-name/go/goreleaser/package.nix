@@ -1,30 +1,32 @@
 {
   stdenv,
   lib,
-  buildGo125Module,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
   testers,
   goreleaser,
 }:
-buildGo125Module rec {
+buildGo127Module (finalAttrs: {
   pname = "goreleaser";
-  version = "2.13.0";
+  version = "2.20.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "goreleaser";
-    rev = "v${version}";
-    hash = "sha256-Z0DadF4wiDwykr0NIhL/IbwARwTjMXQDYmQevvjN2W8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RVuLoFiApR4zYL1qlCtPO8Qm1iRtQVRYAFEUFrmKTXQ=";
   };
 
-  vendorHash = "sha256-pDu3ZYQQEhSugOUGD2Xi5mBJRjOWr3AWKS/PPy1MEvs=";
+  vendorHash = "sha256-d/WZfWzUVe2yJEbHuaMAuiJnuOCDsCfcnGFiQcMU954=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtBy=nixpkgs"
   ];
 
@@ -53,7 +55,7 @@ buildGo125Module rec {
   passthru.tests.version = testers.testVersion {
     package = goreleaser;
     command = "goreleaser -v";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -63,8 +65,9 @@ buildGo125Module rec {
       sarcasticadmin
       techknowlogick
       caarlos0
+      anthr76
     ];
     license = lib.licenses.mit;
     mainProgram = "goreleaser";
   };
-}
+})

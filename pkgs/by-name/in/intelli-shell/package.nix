@@ -7,20 +7,21 @@
   openssl,
   sqlite,
   zlib,
+  aws-lc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intelli-shell";
-  version = "3.3.1";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
-    rev = "v${version}";
-    hash = "sha256-gahf7Ijaj2mf9cdE3C4IIyW5UJrs0IbOP3vado/0fXw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nHGCz1Qww17H03NjFUxavTwE177/5PU8j0x5Ul7JsMw=";
   };
 
-  cargoHash = "sha256-skxgDsDicqkA92IaePwCndGuKHov4GNtwXkSbrDlG2A=";
+  cargoHash = "sha256-4pCujsNA5kSQcT9yZB7D0wWaeCgx4Yh1ckC2GrLOxG8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zlib
+    aws-lc
   ];
 
   env = {
@@ -49,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
-}
+})

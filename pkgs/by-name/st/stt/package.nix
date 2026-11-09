@@ -7,12 +7,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stt";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tflite.Linux.tar.xz";
+    url = "https://github.com/coqui-ai/STT/releases/download/v${finalAttrs.version}/native_client.tflite.Linux.tar.xz";
     hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rvolosatovs ];
     mainProgram = "stt";
   };
-}
+})

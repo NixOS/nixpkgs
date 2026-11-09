@@ -9,7 +9,6 @@
   networkx,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -24,14 +23,12 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.15.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.17.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f28Dgc/ixSwbhkAgPaLLVpdLJuI5UN37GnazfZFvGX4=";
+    hash = "sha256-nagHS4C9PveIUT1aIU74MpFtgqpmSH2hGknH2p+J0nA=";
   };
 
   nativeCheckInputs = [
@@ -73,9 +70,11 @@ buildPythonPackage rec {
   '';
 
   # Make MIP use the Gurobi solver, if configured to do so
-  makeWrapperArgs = lib.optional gurobiSupport "--set GUROBI_HOME ${
-    if gurobiHome == null then gurobi.outPath else gurobiHome
-  }";
+  makeWrapperArgs = lib.optionals gurobiSupport [
+    "--set"
+    "GUROBI_HOME"
+    (if gurobiHome == null then gurobi.outPath else gurobiHome)
+  ];
 
   # Tests that rely on Gurobi are activated only when Gurobi support is enabled
   disabledTests = lib.optional (!gurobiSupport) "gurobi";

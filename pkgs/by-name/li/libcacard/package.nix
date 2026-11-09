@@ -7,13 +7,13 @@
   nss,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcacard";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/libcacard/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+79N6Mt9tb3/XstnL/Db5pOfufNEuQDVG6YpUymjMuc=";
+    url = "https://www.spice-space.org/download/libcacard/libcacard-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-Rfwopv88ejWdREgTLKGQ8KnHYFQMRF26RZeltx3kD2g=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

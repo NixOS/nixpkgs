@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -64,16 +63,17 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.3.3";
+    version = "3.0.4";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
-      hash = "sha256-jY1uM9HmJzoFk26ilbtzJnxAsQhmXS19r73JcFeFWRQ=";
+      postFetch = ''
+        sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pandas/_version.py
+      '';
+      hash = "sha256-cPnvBVs5xXjbRoj6KU/KeNn+To9oue7H0OBaJ2JdJG4=";
     };
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
@@ -89,7 +89,7 @@ let
     # that override globally the `numpy` attribute to point to `numpy_1`.
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail "numpy>=2.0" numpy
+        --replace-fail "numpy>=2.0.0" numpy
     '';
 
     build-system = [
@@ -100,8 +100,7 @@ let
       pkg-config
       versioneer
       wheel
-    ]
-    ++ versioneer.optional-dependencies.toml;
+    ];
 
     enableParallelBuilding = true;
 
@@ -219,13 +218,13 @@ let
       # AssertionError: Did not see expected warning of class 'FutureWarning'
       "test_parsing_tzlocal_deprecated"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
       "test_binops"
       # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
       "test_rolling"
     ]
-    ++ lib.optional stdenv.hostPlatform.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # https://github.com/pandas-dev/pandas/issues/37398
       "test_rolling_var_numerical_issues"
     ];

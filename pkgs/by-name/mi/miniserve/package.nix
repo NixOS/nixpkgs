@@ -5,6 +5,7 @@
   pkg-config,
   installShellFiles,
   openssl,
+  zstd,
   cacert,
   stdenv,
   curl,
@@ -14,23 +15,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.32.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9x2LGJwPf6QEvHvGD8i9Bz3tV8DNAtd9Wp9tXsbI2qo=";
+    hash = "sha256-ae2Y51GuFjC65n2JYIPB1D029Zfhy7OvgZeQy+Syzqw=";
   };
 
-  cargoHash = "sha256-JVzWmo+28K1kG4QaiAkGgBr8kkdfqoylJBWi+Fo9L6c=";
+  cargoHash = "sha256-KwkmkbQ1E2LJeif7iQmb7pFjZtXhu7BU+YutGb5UmY4=";
+
+  # Fix archive downloads following symlinks outside the served tree.
+  # https://github.com/svenstaro/miniserve/pull/1573
+  patches = [ ./0001-fix-archive-symlink-escape.patch ];
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [
     curl
@@ -66,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     changelog = "https://github.com/svenstaro/miniserve/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       defelo
     ];

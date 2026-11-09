@@ -89,8 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # maven >= 3.10 creates a .locks directory in the local repository even
+    # with --offline, which fails on the read-only store path of mvnDeps, so
+    # use a writable copy instead
+    cp -dpR ${mvnDeps}/.m2 ./.m2
+    chmod -R u+w ./.m2
+
     mvn package --offline \
-      -Dmaven.repo.local=${mvnDeps}/.m2 \
+      -Dmaven.repo.local=$PWD/.m2 \
       -DskipTests
 
     runHook postBuild

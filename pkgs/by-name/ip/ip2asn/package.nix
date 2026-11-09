@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ip2asn";
   version = "0.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "x123";
     repo = "ip2asn";

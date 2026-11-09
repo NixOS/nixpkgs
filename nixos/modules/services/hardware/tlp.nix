@@ -27,7 +27,7 @@ in
       };
 
       pd = {
-        enable = lib.mkEnableOption "the power-rofiles-daemon like DBus interface for TLP";
+        enable = lib.mkEnableOption "the power-profiles-daemon like DBus interface for TLP";
 
         package = lib.mkPackageOption pkgs "tlp-pd" { };
       };
@@ -171,6 +171,12 @@ in
         # the package itself, so we do it here instead making sure the unit
         # won't fail due to the save dir not existing.
         serviceConfig.StateDirectory = "tlp";
+      };
+
+      services.tlp-pd = lib.mkIf cfg.pd.enable {
+        # have to define again because [Install] in included file not honored
+        # https://github.com/NixOS/nixpkgs/issues/81138
+        wantedBy = [ "graphical.target" ];
       };
     };
   };

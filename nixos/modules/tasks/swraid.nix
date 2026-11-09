@@ -26,6 +26,7 @@ in
       [ "boot" "initrd" "services" "swraid" "mdadmConf" ]
       [ "boot" "swraid" "mdadmConf" ]
     )
+    (lib.mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 
   options.boot.swraid = {
@@ -77,22 +78,6 @@ in
         "raid10"
         "raid456"
       ];
-
-      extraUdevRulesCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-        cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
-      '';
-
-      extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-        # Add RAID mdadm tool.
-        copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
-        copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
-      '';
-
-      extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-        $out/bin/mdadm --version
-      '';
-
-      extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" mdadm_conf.text;
 
       systemd = {
         contents."/etc/mdadm.conf".text = mdadm_conf.text;

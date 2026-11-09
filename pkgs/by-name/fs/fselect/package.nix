@@ -5,23 +5,35 @@
   rustPlatform,
   installShellFiles,
   libiconv,
+  pkg-config,
+  libgit2,
+  xz,
+  zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fselect";
-  version = "0.9.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "jhspetersson";
     repo = "fselect";
-    rev = version;
-    sha256 = "sha256-S9WlDpa9Qe3GVVC/L5KAyekH1NegdDttJ6HH5rwI6Dk=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-NWEfJypalib/gSTas4TdFyHUmvqUTXm3WPKNFXQaFlI=";
   };
 
-  cargoHash = "sha256-q7FBKzVH2EtP2PjrU8bvQTrzvMZ0T+Cgk7o+lpyuTPc=";
+  cargoHash = "sha256-BZKNLOv4PtEyZUETxh4JPL0mXyV2PRrtmg4ROvVLHRY=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [
+    libgit2
+    xz
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postInstall = ''
     installManPage docs/fselect.1
@@ -39,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "fselect";
   };
-}
+})

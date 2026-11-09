@@ -5,13 +5,13 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meow";
   version = "2.1.5";
 
   src = fetchCrate {
-    inherit version;
-    crateName = "${pname}-cli";
+    inherit (finalAttrs) version;
+    crateName = "${finalAttrs.pname}-cli";
     sha256 = "sha256-6tf4/KRZj+1zlxnNgz3kw/HYR2QKg0kEwu+TbKah3e8=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "meow";
     maintainers = with lib.maintainers; [ pixelsergey ];
   };
-}
+})

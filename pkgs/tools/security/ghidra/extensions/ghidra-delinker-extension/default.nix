@@ -1,6 +1,7 @@
 {
   callPackage,
   lib,
+  stdenv,
   ghidra,
   gradle,
   fetchFromGitHub,
@@ -9,32 +10,44 @@
 }:
 ghidra.buildGhidraExtension (finalAttrs: {
   pname = "ghidra-delinker-extension";
-  version = "0.7.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "ghidra-delinker-extension";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hgpf1eqP/DRYczRDvAhXTWoycHe8N/xhMorlYDjytZg=";
+    hash = "sha256-7C8hVqYx8Q10SqMoZWicqi5SVNP1BQh33ENxaigDjzM=";
   };
 
   patches = [
     # The GitHub Maven repository is not available unauthenticated,
     # so patch in the dependency this way and replace the fake path
     # with the locally built derivation later.
-    # This is tracked at boricj/binary-file-toolkit#1.
+    # The vendored-in dependency does not work for us because maven
+    # needs to download dependencies while building.
     ./local-binary-file-toolkit.patch
   ];
 
   postPatch = ''
     substituteInPlace build.gradle \
-      --replace-fail '"''${getGitHash()}"' '"v${finalAttrs.version}"' \
+      --replace-fail '"GIT_VERSION", gitVersionProvider' '"GIT_VERSION", "v${finalAttrs.version}"' \
       --replace-fail '"@binary-file-toolkit@"' '"${binary-file-toolkit}"'
   '';
 
   gradleBuildTask = "buildExtension";
 
   __darwinAllowLocalNetworking = true;
+
+  # Work around a Nix darwin sandbox regression: the default profile only
+  # allows outbound connections to `(remote ip "localhost:*")`, which on
+  # some hosts resolves to ::1 only, so connect() to 127.0.0.1 is denied
+  # (and literal IPs like "127.0.0.1:*" are rejected by the sandbox
+  # compiler). The Gradle client needs to connect to its daemon, which
+  # binds to 127.0.0.1. Restore the interface-based loopback allowance
+  # that Nix used before.
+  sandboxProfile = lib.optionalString stdenv.buildPlatform.isDarwin ''
+    (allow network* (local ip))
+  '';
 
   mitmCache = gradle.fetchDeps {
     pkg = finalAttrs.finalPackage;

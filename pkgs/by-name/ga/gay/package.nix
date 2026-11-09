@@ -3,13 +3,14 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gay";
   version = "1.3.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "gay";
+    inherit (finalAttrs) version;
     hash = "sha256-pSxRrXnv4tfu7awVnOsQwC2ZOS4qsfCphFR/fpTNdPc=";
   };
 
@@ -19,7 +20,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ms-jpq/gay";
     description = "Colour your text / terminal to be more gay";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ CodeLongAndProsper90 ];
+    maintainers = with lib.maintainers; [
+      CodeLongAndProsper90
+      ambossmann
+    ];
     mainProgram = "gay";
   };
-}
+})

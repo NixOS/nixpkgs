@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "social-engineer-toolkit";
   version = "8.0.3";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "trustedsec";
@@ -54,8 +54,12 @@ python3Packages.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    "--chdir ${placeholder "out"}/share/social-engineer-toolkit"
-    "--prefix PYTHONPATH : \"${placeholder "out"}/share/social-engineer-toolkit\""
+    "--chdir"
+    "${placeholder "out"}/share/social-engineer-toolkit"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "out"}/share/social-engineer-toolkit"
   ];
 
   # Project has no tests

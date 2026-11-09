@@ -4,15 +4,12 @@
   buildPythonPackage,
   python,
   graphviz,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gprof2dot";
   version = "2025.04.14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
@@ -21,7 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-kX/DCXO/qwm1iF44gG7aBSUpG4Vf2Aer0zwrtq4YNHo=";
   };
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ graphviz ])
+  ];
 
   # Needed so dot is on path of the test script
   nativeCheckInputs = [ graphviz ];

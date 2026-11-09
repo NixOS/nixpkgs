@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubergrunt";
-  version = "0.18.5";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
-    rev = "v${version}";
-    sha256 = "sha256-aze/Cq5hFTRRGE1F3LLcZpWPTjpBlc2RHVkoBiP4RaU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-mPHckpUFt5Gfnd8k2oSTSWKeJlFmWOIW2HDBstnvE+I=";
   };
 
-  vendorHash = "sha256-CNvYn/d26V0fqmPh2BbkzMgv3jWwWpGtOqowrND+igk=";
+  vendorHash = "sha256-WdjjmV72P5KpkRjQR/narJDp1JlunczN+DkZMzHqwgw=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "norihiro";
     repo = "obs-mute-filter";
     rev = version;
-    sha256 = "sha256-UVYN9R7TnwD3a+KIYTXvxOQWfNUtR8cSWUoKZuNoBJc=";
+    hash = "sha256-UVYN9R7TnwD3a+KIYTXvxOQWfNUtR8cSWUoKZuNoBJc=";
   };
 
   nativeBuildInputs = [ cmake ];

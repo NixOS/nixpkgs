@@ -10,11 +10,61 @@
   runCommandCC,
   ghcWithHoogle,
   ghcWithPackages,
+  haskellLib,
+  iserv-proxy,
   nodejs,
+  windows,
+  writeShellScriptBin,
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  crossSupport = rec {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
+
+    # Both backends provide their own interpreter.
+    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm;
+
+    canProxyTH =
+      # Using iserv-proxy with 9.4 yields
+      #   no location info>: error: Dynamic loading not supported
+      lib.versionAtLeast ghc.version "9.6" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+
+    iservWrapper =
+      let
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            buildProxy = lib.getExe' iserv-proxy.build "iserv-proxy";
+            hostProxy = lib.getExe' (overrides iserv-proxy.host) (
+              "iserv-proxy-interpreter" + stdenv.hostPlatform.extensions.executable
+            );
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            ${lib.optionalString stdenv.hostPlatform.isWindows "export WINEDEBUG=-all WINEPREFIX=$TMP"}
+            ${buildProxy} $@ --pipe ${emulator} ${hostProxy} tmp --stdio
+          '';
+
+        # GHC will add `-prof` to the external interpreter when doing a profiled build.
+        # Since a single derivation can build with both profiling and non-profiling versions
+        # we need both versions made available
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
@@ -32,7 +82,6 @@ let
     removeReferencesTo
     pkg-config
     coreutils
-    glibcLocales
     emscripten
     ;
 
@@ -73,7 +122,9 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  # Cabal does not build the profiled dynamic objects required by wasm TH.
+  enableLibraryProfiling ?
+    !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
@@ -157,6 +208,7 @@ in
   coreSetup ? false, # Use only core packages to build Setup.hs.
   useCpphs ? false,
   hardeningDisable ? null,
+  enableObjectDeterminism ? lib.versionAtLeast ghc.version "9.12",
   enableSeparateBinOutput ? false,
   enableSeparateDataOutput ? false,
   enableSeparateDocOutput ? doHaddock,
@@ -205,9 +257,15 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false,
+  enableExternalInterpreter ?
+    isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
+  __darwinAllowLocalNetworking ? false,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
+
+# We only use iserv-proxy for the external interpreter
+assert enableExternalInterpreter -> crossSupport.canProxyTH;
 
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
@@ -294,15 +352,28 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
+  ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
   ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
+  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+
+  ++ optionals enableExternalInterpreter (
+    map (opt: "--ghc-option=${opt}") (
+      [
+        "-fexternal-interpreter"
+        "-pgmi"
+        crossSupport.iservWrapper
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isWindows [
+        "-L${windows.pthreads}/bin"
+        "-L${windows.pthreads}/lib"
+      ]
+    )
+  );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
-
-  buildFlagsString = optionalString (buildFlags != [ ]) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
     "--verbose"
@@ -354,6 +425,9 @@ let
     (enableFeature enableDeadCodeElimination "split-sections")
     (enableFeature (!dontStrip) "library-stripping")
     (enableFeature (!dontStrip) "executable-stripping")
+  ]
+  ++ optionals enableObjectDeterminism [
+    "--ghc-option=-fobject-determinism"
   ]
   ++ optionals isCross (
     [
@@ -454,7 +528,7 @@ let
   )
   ++ setupHaskellDepends
   ++ collectedToolDepends
-  ++ optional stdenv.hostPlatform.isGhcjs nodejs;
+  ++ optional (stdenv.hostPlatform.isGhcjs || stdenv.hostPlatform.isWasm) nodejs;
   propagatedBuildInputs =
     buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -599,7 +673,8 @@ lib.fix (
 
       env =
         optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-          LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+          # To match LANG for e.g. haddock
+          LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         }
         // env';
 
@@ -735,7 +810,7 @@ lib.fix (
 
       # Cabal takes flags like `--configure-option=--host=...` instead
       configurePlatforms = [ ];
-      inherit configureFlags;
+      inherit configureFlags buildFlags;
 
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
@@ -769,7 +844,7 @@ lib.fix (
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
       ''
       + ''
-        ${setupCommand} build ${buildTarget}${buildFlagsString}
+        ${setupCommand} build ${buildTarget} $buildFlags
         runHook postBuild
       '';
 
@@ -805,6 +880,8 @@ lib.fix (
             ${optionalString doHoogle "--hoogle"} \
             ${optionalString doHaddockQuickjump "--quickjump"} \
             ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
+            ${optionalString enableParallelBuilding "--haddock-option=-j$NIX_BUILD_CORES"} \
+            --haddock-option=--no-tmp-comp-dir \
             ${lib.concatStringsSep " " haddockFlags}
         ''}
         runHook postHaddock
@@ -1009,23 +1086,7 @@ lib.fix (
                 if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
             }
             // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-              # TODO: Why is this written in terms of `buildPackages`, unlike
-              # the outer `env`?
-              #
-              # According to @sternenseemann [1]:
-              #
-              # > The condition is based on `buildPlatform`, so it needs to
-              # > match. `LOCALE_ARCHIVE` is set to accompany `LANG` which
-              # > concerns things we execute on the build platform like
-              # > `haddock`.
-              # >
-              # > Arguably the outer non `buildPackages` one is incorrect and
-              # > probably works by accident in most cases since the locale
-              # > archive is not platform specific (the trouble is that it
-              # > may sometimes be impossible to cross-compile). At least
-              # > that would be my assumption.
-              #
-              # [1]: https://github.com/NixOS/nixpkgs/pull/424368#discussion_r2202683378
+              # To match LANG for e.g. haddock
               LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
             }
             // env';
@@ -1076,6 +1137,9 @@ lib.fix (
     // optionalAttrs (postPhases != [ ]) { inherit postPhases; }
     // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
+    }
+    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
+      inherit __darwinAllowLocalNetworking;
     }
   )
 )

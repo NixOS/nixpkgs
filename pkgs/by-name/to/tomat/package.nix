@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -7,25 +8,25 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tomat";
-  version = "2.5.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "tomat";
-    tag = "v${version}";
-    hash = "sha256-i6gakWbY6N1FB1lAfONuDsoXv5PcaXqnbmfuSBp/DC0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NV5E9fmeriz0FUkssWt0FmaOEYTq/ZWCvgc36Avt/18=";
   };
 
-  cargoHash = "sha256-dLdo0mtf9IO9mBc6MI1Q6fu8x6+TmlFN6rfEFC6cFek=";
+  cargoHash = "sha256-mafq7lFByOh4agC4ehvzjIGSh3H+XFK418y/pgTTyI8=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
 
@@ -34,6 +35,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=timer::tests::test_icon_path_creation"
     "--skip=timer::tests::test_notification_icon_config"
     "--skip=integration::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Apple's plutil is unavailable in the Nix build sandbox.
+    "--skip=service::tests::launchd_service_is_a_valid_plist"
   ];
 
   postInstall = ''
@@ -48,10 +53,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Pomodoro timer for status bars";
     homepage = "https://github.com/jolars/tomat";
-    changelog = "https://github.com/jolars/tomat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jolars/tomat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "tomat";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

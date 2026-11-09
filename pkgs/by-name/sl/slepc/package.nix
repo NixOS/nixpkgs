@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.24.1";
+  version = "3.25.2";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eg0GLPM1AbgUl2/c2+F012LjZweuBNAWjY1WtlghjeY=";
+    hash = "sha256-iy64UXRoSD73ScC8L9NJPS5w5eOVhE4l1T4p1PrqX5w=";
   };
 
   postPatch = ''
@@ -84,15 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckTarget = [ "check_install" ];
 
-  unittestFlagsArray = [
-    "-s"
-    "src/binding/slepc4py/test"
+  unittestFlags = [
+    "--start-directory=src/binding/slepc4py/test"
     "-v"
   ];
 
   pythonImportsCheck = [ "slepc4py" ];
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";

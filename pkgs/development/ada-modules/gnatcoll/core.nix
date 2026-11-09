@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   gnat,
   gprbuild,
@@ -18,7 +18,7 @@
 # gnatcoll-projects depends on gnatcoll-core
 assert enableGnatcollProjects -> enableGnatcollCore;
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnatcoll-core";
   version = "25.0.0";
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix compilation with GNAT 12 https://github.com/AdaCore/gnatcoll-core/issues/88
+    # Fix compilation with GNAT 16
     (fetchpatch2 {
-      name = "gnatcoll-core-gnat-12.patch";
-      url = "https://github.com/AdaCore/gnatcoll-core/commit/515db1c9f1eea8095f2d9ff9570159a78c981ec6.patch";
-      sha256 = "1ghnkhp5fncb7qcmf59kyqvy0sd0pzf1phnr2z7b4ljwlkbmcp36";
+      name = "gnatcoll-core-gnat-16.patch";
+      url = "https://github.com/AdaCore/gnatcoll-core/commit/b266466e0a05b30615ec43d72782c345470455b9.patch?full_index=1";
+      hash = "sha256-rG0D1y2dbXA2M2Arnto+f7iAhg3yCfTPDbDRN+pMJKQ=";
     })
   ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
-    "TARGET=${stdenv.hostPlatform.config}"
+    "TARGET=${stdenvNoCC.hostPlatform.config}"
     "GNATCOLL_MINIMAL_ONLY=${lib.boolToYesNo (!enableGnatcollCore)}"
     "GNATCOLL_PROJECTS=${lib.boolToYesNo enableGnatcollProjects}"
   ];

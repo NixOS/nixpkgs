@@ -21,7 +21,7 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bolt";
   version = "0.9.8";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sDPipSIT2MJMdsOjOQSB+uOe6KXzVnyAqcQxPPr2NsU=";
   };
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

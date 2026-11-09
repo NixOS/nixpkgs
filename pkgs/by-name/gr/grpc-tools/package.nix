@@ -6,19 +6,19 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grpc-tools";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-node";
-    tag = "grpc-tool@${version}";
+    tag = "grpc-tool@${finalAttrs.version}";
     hash = "sha256-bLG7hIKr0maFu/at4Vmf59YMwGAnAEOdPbRlGLasm2k=";
     fetchSubmodules = true;
   };
 
-  sourceRoot = "${src.name}/packages/grpc-tools";
+  sourceRoot = "${finalAttrs.src.name}/packages/grpc-tools";
 
   nativeBuildInputs = [ cmake ];
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.nzhang-zh ];
   };
-}
+})

@@ -10,23 +10,25 @@
   wrapGAppsNoGuiHook,
 
   glib,
-  gtk2,
+  gtk3,
   dbus-glib,
-  libappindicator-gtk2,
+  libayatana-appindicator,
   libnotify,
   python3,
   runtimeShell,
+
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osdlyrics";
-  version = "0.5.15";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
-    rev = version;
-    hash = "sha256-4jEF1LdMwaLNF6zvzAuGW8Iu4dzhrFLutX69LwSjTAI=";
+    tag = finalAttrs.version;
+    hash = "sha256-9/yl7UHd8fx/8IofeGRFQBCTIhKKYFZDV1zoQ6aikDA=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +41,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk2
+    gtk3
     dbus-glib
-    libappindicator-gtk2
+    libayatana-appindicator
     libnotify
     python3.pkgs.wrapPython
     (python3.withPackages (
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Standalone lyrics fetcher/displayer";
     homepage = "https://github.com/osdlyrics/osdlyrics";
@@ -93,4 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pedrohlc ];
     platforms = lib.platforms.linux;
   };
-}
+})

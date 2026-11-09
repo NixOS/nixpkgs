@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "r-syntax";
     publisher = "REditorSupport";
-    version = "0.1.3";
-    hash = "sha256-grkfkmyERVUkB8kSH+NPd2Mv4WF/h/obw8ebmxPx5zU=";
+    version = "0.1.5";
+    hash = "sha256-sJLdYbUXDB+sCM0GHDSXcRjAB+qMrCepAywOlcylV54=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r-syntax/changelog";

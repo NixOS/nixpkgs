@@ -7,15 +7,15 @@
   libcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "n2n";
-  version = "3.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "n2n";
-    rev = version;
-    hash = "sha256-OXmcc6r+fTHs/tDNF3akSsynB/bVRKB6Fl5oYxmu+E0=";
+    rev = finalAttrs.version;
+    hash = "sha256-/Yb6L6Pt2vR7fzVS1QS9Z46yaR26fqE7LPrAEHl5sbw=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   meta = {
     description = "Peer-to-peer VPN";
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ malte-v ];
   };
-}
+})

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest7CheckHook,
-  pythonOlder,
   requests,
   requests-mock,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "favicon";
   version = "0.7.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Find a website's favicon";
     homepage = "https://github.com/scottwernervt/favicon";
-    changelog = "https://github.com/scottwernervt/favicon/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/scottwernervt/favicon/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
   };
 }

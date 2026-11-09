@@ -2,26 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXrandr,
-  libXinerama,
+  libx11,
+  libxrandr,
+  libxinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srandrd";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = "srandrd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Wf+tVqDaNAiH6UHN8fFv2wM+LEch6wKlZOkqWEqLLkw=";
   };
 
   buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
+    libx11
+    libxrandr
+    libxinerama
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "srandrd";
   };
 
-}
+})

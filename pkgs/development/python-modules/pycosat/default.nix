@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "4c99874946a7e939bb941bbb019dd2c20e6068e3107c91366e7779c69d70e0ed";
+    hash = "sha256-TJmHSUan6Tm7lBu7AZ3Swg5gaOMQfJE2bnd5xp1w4O0=";
   };
 
   meta = {

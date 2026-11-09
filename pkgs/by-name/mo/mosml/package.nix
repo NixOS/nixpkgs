@@ -6,7 +6,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosml";
   version = "2.10.1";
 
@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  # Version 2.10.1 (dated August 2014) breaks with newer compilers
+  env.NIX_CFLAGS_COMPILE = "-fpermissive -std=gnu17";
 
   src = fetchFromGitHub {
     owner = "kfl";
     repo = "mosml";
-    rev = "ver-${version}";
+    rev = "ver-${finalAttrs.version}";
     sha256 = "sha256-GK39WvM7NNhoC5f0Wjy4/5VWT+Rbh2qo+W71hWrbPso=";
   };
 
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Light-weight implementation of Standard ML";
     longDescription = ''
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict
@@ -46,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vaibhavsagar ];
   };
-}
+})

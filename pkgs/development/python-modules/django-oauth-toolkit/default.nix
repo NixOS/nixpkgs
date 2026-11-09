@@ -7,27 +7,30 @@
   # propagates
   django,
   jwcrypto,
-  requests,
   oauthlib,
+  requests,
+  urllib3,
 
   # tests
+  django-ninja,
   djangorestframework,
   pytest-cov-stub,
-  pytest-django,
+  pytest-django_4_12,
   pytest-mock,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-oauth-toolkit";
-  version = "3.1.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-oauth";
     repo = "django-oauth-toolkit";
-    tag = version;
-    hash = "sha256-c7LaB8426qjwDveec3BghqCEtPs572PTVodvLAO2CcQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-UsnfGOyVk5w0grG6cTgMmfo+HyrZtsER338YobLyk08=";
   };
 
   build-system = [ setuptools ];
@@ -37,20 +40,26 @@ buildPythonPackage rec {
     jwcrypto
     oauthlib
     requests
+    urllib3
   ];
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings
+    # See below about xdist
+    substituteInPlace pyproject.toml \
+      --replace-fail '    "-n", "auto",' "" \
+      --replace-fail '    "--dist", "loadfile",' ""
   '';
 
-  # xdist is disabled right now because it can cause race conditions on high core machines
-  # https://github.com/jazzband/django-oauth-toolkit/issues/1300
   nativeCheckInputs = [
+    django-ninja
     djangorestframework
     pytest-cov-stub
-    pytest-django
+    pytest-django_4_12
+    django-ninja
     # pytest-xdist
     pytest-mock
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -61,9 +70,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "OAuth2 goodies for the Djangonauts";
-    homepage = "https://github.com/jazzband/django-oauth-toolkit";
-    changelog = "https://github.com/jazzband/django-oauth-toolkit/django-filer/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/django-oauth/django-oauth-toolkit";
+    changelog = "https://github.com/django-oauth/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
-}
+})

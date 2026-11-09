@@ -16,29 +16,30 @@
   glib-networking,
   webkitgtk_4_1,
   openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
-  version = "1.11.3";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q2j6K4ys/z77+n3kdGJ15rWbFlbbIHBWB9hOARsgg2A=";
+    hash = "sha256-iQnKC6R9kXyQUZXjbihDr8l5XdQ266azP6hBqWBsEZM=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
+  cargoHash = "sha256-DJN1HvlYfruQawk2+2JAx5tx61haIG0NKezyycjL7DA=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
+    fetcherVersion = 3;
+    hash = "sha256-DcaetxlNiXWYbkxC6TXpOhx4TgIiHdOkquVHxM6jROo=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    sqlite
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     glib-networking
@@ -62,19 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false; # This version's tests do not pass
 
-  # A fix for a problem with Tauri (tauri-apps/tauri#9304)
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
-  '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "fedistar-frontend"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Multi-column Fediverse client application for desktop";

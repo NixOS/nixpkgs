@@ -3,21 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "6.0.0";
+  version = "6.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_reversion";
     inherit version;
-    hash = "sha256-yrD9kGQLLOs316iXgjynKiG5YK0dajuctONR+rvSfZw=";
+    hash = "sha256-6wEx24IEFrYfq7ddDoE8xA2Mwwq0WiXfbIeskZImZ4Y=";
   };
 
   build-system = [ setuptools ];

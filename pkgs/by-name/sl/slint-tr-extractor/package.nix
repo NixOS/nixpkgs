@@ -7,13 +7,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-tr-extractor";
-  version = "1.14.1";
+  version = "1.18.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-mKc75nvSeCLNZde9D2pdJk1iShdG23LRaZsB7V/S8YY=";
+    hash = "sha256-QgVPJ607mEOSbKU/o+osZ4rgvKOaf5gBHYwW0TBi1sk=";
   };
-  cargoHash = "sha256-uMYZ5kfHmiBnm9vRpoMPtsuICOi7fWervVYdVrjHgtY=";
+  cargoHash = "sha256-/a39Jc29XdirQNWjt4Fu9sUGqAxlB0rtYEiU3Kv1rP0=";
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 

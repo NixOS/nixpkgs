@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   torch,
 }:
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "lion-pytorch";
   version = "0.2.3";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lucidrains";

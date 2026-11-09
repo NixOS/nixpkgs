@@ -3,6 +3,7 @@
   stdenv,
   darwin,
   fetchurl,
+  fetchpatch,
   buildDunePackage,
   base64,
   omd,
@@ -16,7 +17,7 @@
   lem,
   linksem,
   yojson,
-  version ? "0.20",
+  version ? "0.20.1",
 }:
 
 buildDunePackage {
@@ -25,10 +26,16 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-WTmYltCrNkt/OeST79Z1xMC2YDgN2HxLJ3PrE7k+R9M=";
+    hash = "sha256-uoG416pXBeBAZAE6sgwAa4DG20T5UiWsT79gQil+UOs=";
   };
 
-  minimalOCamlVersion = "4.08";
+  patches = [
+    # Compatibility with menhir ≥ 20220203
+    (fetchpatch {
+      url = "https://github.com/rems-project/sail/commit/446fb477c508853595ccc937ed60765aa685ae31.patch";
+      hash = "sha256-+j0USd0Ish11aYEzYLRiqkydhUPQoD9RPNjRhQcyX9c=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -36,7 +43,7 @@ buildDunePackage {
     menhir
     lem
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
   ];
 
@@ -67,6 +74,10 @@ buildDunePackage {
     dune runtest ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
+  # sail loads its dune-site plugins, and the libraries they link against,
+  # through findlib at runtime, so the library can't be split into a
+  # separate "dev" output.
+  outputs = [ "out" ];
   installPhase = ''
     runHook preInstall
     dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
@@ -79,7 +90,7 @@ buildDunePackage {
   meta = {
     homepage = "https://github.com/rems-project/sail";
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
   };
 }

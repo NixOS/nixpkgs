@@ -8,12 +8,13 @@
   vulkan-headers,
   vulkan-loader,
   libgbm,
+  wayland-scanner,
   wayland-protocols,
   wayland,
   glm,
   assimp,
   libxcb,
-  xcbutilwm,
+  libxcb-wm,
   nix-update-script,
 }:
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
   buildInputs = [
     vulkan-headers
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     assimp
     libxcb
-    xcbutilwm
+    libxcb-wm
     wayland
     wayland-protocols
   ];
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Extensible Vulkan benchmarking suite";
     homepage = "https://github.com/vkmark/vkmark";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ muscaln ];
     mainProgram = "vkmark";

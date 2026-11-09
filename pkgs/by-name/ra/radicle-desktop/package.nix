@@ -1,4 +1,5 @@
 {
+  stdenv,
   fetchFromGitHub,
   cargo-tauri,
   fetchFromRadicle,
@@ -8,6 +9,7 @@
   fetchNpmDeps,
   npmHooks,
   lib,
+  libgit2,
   libsoup_3,
   nodejs,
   openssh,
@@ -20,41 +22,56 @@
   wrapGAppsHook4,
   rustfmt,
   clippy,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.8.0";
+  version = "0.18.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
-    repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
-    rev = "aeb405aaf53b56a426ab8d68c7f89b8953683224";
-    hash = "sha256-Z/6GdXf3ag/89H8UMD2GNU4CXA8TWyX8dl8uh0CTem8=";
+    # seed.radicle.dev currently doesn't update its canonical release tags correctly
+    seed = "oak.radicle.garden";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    tag = "releases/desktop/${finalAttrs.version}";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/.prettierrc"
+      "/desktop"
+      "/package-lock.json"
+      "/package.json"
+      "/shared"
+    ];
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
       rm -rf $out/.git
     '';
+    hash = "sha256-quxuiqp1PC4Dq0m91kqHvNclIhMau8hWtA599OmbZyo=";
   };
 
   postPatch = ''
-    patchShebangs scripts/copy-katex-assets scripts/check-js scripts/check-rs
+    patchShebangs desktop/scripts/{copy-katex-assets,check-js,check-rs}
 
-    mkdir -p public/twemoji
-    cp -t public/twemoji -r -- ${finalAttrs.twemojiAssets}/assets/svg/*
-    : >scripts/install-twemoji-assets
+    mkdir -p desktop/public/twemoji
+    cp -t desktop/public/twemoji -r -- ${finalAttrs.twemojiAssets}/assets/svg/*
+    : >desktop/scripts/install-twemoji-assets
 
-    substituteInPlace scripts/check-rs \
+    substituteInPlace desktop/scripts/check-rs \
       --replace-fail "-Dwarnings" ""
   '';
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-lcSNGmIv6u7DT47lOC69BRbVSK5IPiwjtdAS8aVxwqM=";
+    hash = "sha256-Cz6HoYGzMhVRwPUbw6S7Dh7FwNEO3r2xj7L8k332ZnE=";
   };
 
-  cargoHash = "sha256-z5fnwc7EjSvkyu4zTUyAvVfs6quwH2p9VFDK/TdzZJE=";
+  cargoHash = "sha256-Yt5MyWdVr5Ye0Pdh996pIyHFo/F68fEbQ7Suh634umw=";
+
+  cargoRoot = "desktop";
+  buildAndTestSubdir = "desktop";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -81,10 +98,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     glib
     gtk3
+    libgit2
     libsoup_3
     openssl
-    webkitgtk_4_1
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ webkitgtk_4_1 ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
@@ -96,12 +114,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     radicle-node
     rustfmt
     clippy
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    export RAD_HOME="$PWD/_rad-home"
+    pushd desktop
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"
@@ -113,23 +132,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npm run test:unit
     scripts/check-js
     scripts/check-rs
+    popd
 
     runHook postCheck
   '';
 
-  passthru.env = finalAttrs.env;
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    inherit (finalAttrs) env;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/desktop/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-      defelo
-      faukah
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ faukah ];
     mainProgram = "radicle-desktop";
   };
 })

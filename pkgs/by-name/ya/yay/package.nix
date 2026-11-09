@@ -10,16 +10,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "yay";
-  version = "12.5.7";
+  version = "13.0.1";
 
   src = fetchFromGitHub {
     owner = "Jguer";
     repo = "yay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ampSNPa/PkYM6zEbukToDDmLQ5Bq9gmxwgD3RsnX3vU=";
+    hash = "sha256-Dcd0fcpQaFyA1vGSy+/lrTIgeWMFCWnh/rjB0OzySXo=";
   };
 
-  vendorHash = "sha256-Lkqrtb37bq1uwIZ4PzJdSM7QOZ28JMyDx68huxHHuGg=";
+  vendorHash = "sha256-YOfEl8fFl4s8gV2l5QhTIGf8yX/NufRJb8cxa1YZRXM=";
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -66,7 +68,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Jguer/yay";
     mainProgram = "yay";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 })

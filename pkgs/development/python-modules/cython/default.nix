@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   gdb,
   ncurses,
   numpy,
@@ -13,17 +14,25 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cython";
-  version = "3.1.6";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    tag = version;
-    hash = "sha256-OB9DsGabbn5pE+8Ru29D3Jp9Wu+gwlHYYy79x+M+HPI=";
+    tag = finalAttrs.version;
+    hash = "sha256-gIEqq8DAJF197gH1cMuq5JxI4rV/VHS70vg8hywXDqw=";
   };
+
+  patches = [
+    # https://github.com/cython/cython/issues/7942
+    (fetchpatch {
+      url = "https://github.com/cython/cython/pull/7970.patch";
+      hash = "sha256-dsc6Q7ySDt7m8zCJIaIRDvOM0T5HdMSBnv5JH1RwLoE=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -42,8 +51,6 @@ buildPythonPackage rec {
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-
-  strictDeps = true;
 
   checkPhase =
     let
@@ -81,8 +88,12 @@ buildPythonPackage rec {
       runHook postCheck
     '';
 
-  passthru.tests = {
-    inherit pygame-ce sage;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests = {
+      inherit pygame-ce sage;
+    };
   };
 
   # Force code regeneration in source distributions
@@ -117,10 +128,10 @@ buildPythonPackage rec {
       attributes. This allows the compiler to generate very efficient C code
       from Cython code.
     '';
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/cython/cython/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
     maintainers = [ ];
   };
-}
+})
 # TODO: investigate recursive loop when doCheck is true

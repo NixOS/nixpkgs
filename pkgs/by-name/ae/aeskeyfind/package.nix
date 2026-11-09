@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aeskeyfind";
   version = "1.0";
 
   src = fetchurl {
-    url = "https://citpsite.s3.amazonaws.com/memory-content/src/aeskeyfind-${version}.tar.gz";
+    url = "https://citpsite.s3.amazonaws.com/memory-content/src/aeskeyfind-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-FBflwbYehruVJ9sfW+4ZlaDuqCR12zy8iA4Ev3Bgg+Q=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fedx-sudo ];
   };
 
-}
+})

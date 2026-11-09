@@ -2,17 +2,20 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-futures";
   version = "3.3.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "6fe8ccc2c2af7ef2fdd9bf73eab6d617074f09f30ad7d373510b4043d39c42de";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-b+jMwsKvfvL92b9z6rbWFwdPCfMK19NzUQtAQ9OcQt4=";
   };
+
+  build-system = [ setuptools ];
 
   meta = {
     description = "Typing stubs for futures";
@@ -20,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ andersk ];
   };
-}
+})

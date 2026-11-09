@@ -4,14 +4,15 @@
   alsa-lib,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   gtkmm3,
   libGLX,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXv,
+  libx11,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxv,
   libepoxy,
   libpng,
   libselinux,
@@ -42,6 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
+  patches = [
+    ./glslang-include-cstdint.patch
+    (fetchpatch {
+      name = "CVE-2026-39199.patch";
+      url = "https://github.com/snes9xgit/snes9x/commit/96b366100172723f6314c40e237b370f4f7b59f4.patch";
+      hash = "sha256-oYj0vqAeChlXNnuQOAmrg7x9SU0qH18r7+1wLe981oc=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     python3
@@ -53,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXv
+    libx11
+    libxv
     minizip
     zlib
   ]
@@ -66,14 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!withGtk) [
     libpng
-    libXext
-    libXinerama
+    libxext
+    libxinerama
   ]
   ++ lib.optionals withGtk [
     gtkmm3
     libepoxy
-    libXdmcp
-    libXrandr
+    libxdmcp
+    libxrandr
     pcre2
     portaudio
     SDL2
@@ -90,6 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = lib.optionalString withGtk ''
+    # Give jma SYSTEM_ZIP so it includes the system minizip headers.
+    substituteInPlace gtk/CMakeLists.txt \
+      --replace-fail 'target_include_directories(jma PRIVATE' 'target_compile_definitions(jma PRIVATE ''${DEFINES})
+    target_include_directories(jma PRIVATE'
+
     # Please remove after snes9x > 1.63.  Fixed by upstream:
     # https://github.com/snes9xgit/snes9x/commit/a4b4b98fffbde417ad550480021db89f18f11a5d.patch
     substituteInPlace external/SPIRV-Cross/CMakeLists.txt \

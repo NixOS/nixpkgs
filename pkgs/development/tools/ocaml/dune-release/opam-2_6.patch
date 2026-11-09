@@ -1,0 +1,14 @@
+diff --git a/bin/opam.ml b/bin/opam.ml
+index 8ddcfed..d39912d 100644
+--- a/bin/opam.ml
++++ b/bin/opam.ml
+@@ -49,7 +49,8 @@ let write_opam_file ~dry_run ~id ~url ~opam_f pkg dest_opam_file =
+             opam_f v);
+       Pkg.opam_descr pkg >>= fun descr ->
+       let descr =
+-        OpamFile.Descr.read_from_string (Opam.Descr.to_string descr)
++        OpamFile.Descr_legacy.read_from_string (Opam.Descr.to_string descr)
++        |> OpamFile.Descr.of_legacy
+       in
+       let opam =
+         Opam_file.upgrade ~filename ~url ~id opam_t ~version:(`V1 descr)

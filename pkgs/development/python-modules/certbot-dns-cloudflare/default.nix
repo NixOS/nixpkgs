@@ -4,7 +4,6 @@
   certbot,
   cloudflare,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.9";
 
   sourceRoot = "${src.name}/certbot-dns-cloudflare";
 
@@ -36,7 +34,5 @@ buildPythonPackage rec {
 
   meta = certbot.meta // {
     description = "Cloudflare DNS Authenticator plugin for Certbot";
-    # https://github.com/certbot/certbot/pull/10182
-    broken = true;
   };
 }

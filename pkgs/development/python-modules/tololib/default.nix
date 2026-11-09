@@ -4,21 +4,18 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tololib";
   version = "1.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "MatthiasLohr";
     repo = "tololib";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dfyc96VcauERv2E5I6nOIXAHbmTHiRLqS+0XH0GB5HM=";
   };
 
@@ -35,12 +32,17 @@ buildPythonPackage rec {
   # Network discovery doesn't work in the sandbox for darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  disabledTests = [
+    # Test fails aon hydra
+    "test_get_settings"
+  ];
+
   meta = {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
-    changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tolo-cli";
   };
-}
+})

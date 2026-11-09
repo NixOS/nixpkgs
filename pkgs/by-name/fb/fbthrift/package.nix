@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -16,7 +15,7 @@
   wangle,
   zlib,
   zstd,
-  xxHash,
+  xxhash,
 
   mvfst,
 
@@ -25,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2025.10.13.00";
+  version = "2026.07.27.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -36,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Vlmb7PfPl9hyJkpH0vsF4mjNTOxd4lu8CWPE0rRvVo=";
+    hash = "sha256-bzi4DRGOQy8HXLQa6roMY3CRqteoJxz2Xo6SsLfOdhY=";
   };
 
   patches = [
@@ -51,7 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
 
-    ./glog-0.7.patch
+    # On some machines (potentially those with low parallelism), this build
+    # seems to have a missing dependency and seems to fail with:
+    # "/build/source/build/thrift/lib/thrift/gen-cpp2/any_rep_types.h:12:10:
+    # fatal error: thrift/lib/thrift/gen-cpp2/type_types.h: No such file or
+    # directory"
+    # https://github.com/meta/fbthrift/pull/709
+    ./thriftmetadata-dependency-type-cpp2-target.patch
   ];
 
   nativeBuildInputs = [
@@ -72,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     mvfst
-    xxHash
+    xxhash
   ];
 
   cmakeFlags = [
@@ -95,22 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
   ];
 
-  # Fix a typo introduced by the following commit that causes hundreds
-  # of pointless rebuilds when installing:
-  # <https://github.com/facebook/fbthrift/commit/58038399cefc0c2256ce4ef5444dee37147cbf07>
-  postPatch = ''
-    substituteInPlace ThriftLibrary.cmake \
-      --replace-fail .tcch .tcc
-  '';
-
   # Copied from Homebrew; fixes the following build error:
   #
   #     [ERROR:/nix/var/nix/b/5f3kn8spg6j0z0xlags8va6sq7/source/thrift/lib/thrift/RpcMetadata.thrift:1] unordered_map::at: key not found
   #
   # See:
   #
-  # * <https://github.com/facebook/fbthrift/issues/618>
-  # * <https://github.com/facebook/fbthrift/issues/607>
+  # * <https://github.com/meta/fbthrift/issues/618>
+  # * <https://github.com/meta/fbthrift/issues/607>
   # * <https://github.com/Homebrew/homebrew-core/blob/2135255c78d026541a4106fa98580795740db694/Formula/f/fbthrift.rb#L52-L55>
   #
   # I don’t know why we didn’t need this before the bump to 202
@@ -127,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Facebook's branch of Apache Thrift";
     mainProgram = "thrift1";
-    homepage = "https://github.com/facebook/fbthrift";
+    homepage = "https://github.com/meta/fbthrift";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   writeShellApplication,
   curl,
   gnugrep,
@@ -22,13 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       stripRoot = false;
     };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 *.ttf -t "$out/share/fonts/truetype/"
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {

@@ -4,21 +4,21 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alioth";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "alioth";
-    tag = "v${version}";
-    hash = "sha256-lR3TrGCjOp+NprAXUttLWSEi2LDGCOpW9Bg5TH7reys=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ny/YrXHo4qP8NDiRNtXv843RjJKzKFuSH20ZoGp3ODQ=";
   };
 
   # Checks use `debug_assert_eq!`
   checkType = "debug";
 
-  cargoHash = "sha256-lZam3/GuKIoGdWFhOc8E54yHVr0ah39HGiMVmNwCDlI=";
+  cargoHash = "sha256-eWozwXaVtR/3k7w7+tPzK1xlt9/DtvTYC+YPL/A+sU0=";
 
   separateDebugInfo = true;
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

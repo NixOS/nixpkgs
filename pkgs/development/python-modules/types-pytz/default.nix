@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-pytz";
-  version = "2025.2.0.20251108";
+  version = "2026.3.1.20260727";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pytz";
-    inherit version;
-    hash = "sha256-/Kh5F4Nq6EPwcSlWe3TBkp8YcGEGgbTJLLhqPfWBe9s=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Q2QHW2hn3RWyELuMHSlyfWCZFxKbRWAN7+HUs+2l7Lk=";
   };
 
   build-system = [ setuptools ];
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

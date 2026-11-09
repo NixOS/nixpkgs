@@ -1,31 +1,36 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "10.1.2";
+  version = "10.2.6";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = version;
-    sha256 = "sha256-wu/Ouozi89y1abFgDk16uqBHoYDQDIzoqPgwA0BofLo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g605PV9oetJMaV3vo0h+Flh7WYZ+HFVPHC6i65L83BA=";
   };
 
-  vendorHash = "sha256-ihA9RJDFHePox1G47Jr4Q1NSVJ9k5KDXgm8KTe2wYBQ=";
+  vendorHash = "sha256-8hdQolkLnmx2fcawXHuwFCHD8++B4QvydrLFVIuAYXc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.Commit=${version}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Commit=${finalAttrs.version}"
+  ];
+
+  # These tests don't work in the build sandbox.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^TestConfig(FromURL|NoServerError)$"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -40,7 +45,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/polaris help
-    $out/bin/polaris version | grep 'Polaris version:${version}'
+    $out/bin/polaris version | grep 'Polaris version:${finalAttrs.version}'
 
     runHook postInstallCheck
   '';
@@ -49,7 +54,7 @@ buildGoModule rec {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
     mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ longer ];
   };
-}
+})

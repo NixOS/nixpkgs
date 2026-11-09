@@ -5,6 +5,7 @@
   replaceVars,
   isPyPy,
   python,
+  stdenv,
   setuptools,
   pillow,
   pycairo,
@@ -27,7 +28,7 @@
   pybind11,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-mapnik";
   version = "4.1.3.unstable-2025-09-25";
   pyproject = true;
@@ -48,8 +49,6 @@ buildPythonPackage rec {
       libmapnik = "${mapnik}/lib";
     })
   ];
-
-  stdenv = python.stdenv;
 
   build-system = [ setuptools ];
 

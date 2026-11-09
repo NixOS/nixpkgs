@@ -10,12 +10,24 @@ let
   bepastyPython = python3.override {
     self = bepastyPython;
     packageOverrides = self: super: {
+      xstatic-bootstrap = super.xstatic-bootstrap.overridePythonAttrs (oldAttrs: rec {
+        version = "4.5.3.1";
+        src = oldAttrs.src.override {
+          pname = "XStatic-Bootstrap";
+          inherit version;
+          hash = "sha256-z2fSBUN7MlCKiLaafnxbviylqK5xCXORpqb1EOv9KCA=";
+        };
+      });
       xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs (oldAttrs: rec {
         version = "4.7.0.0";
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          pname = "XStatic-Font-Awesome";
           inherit version;
           hash = "sha256-4B+0gMqqfHlj3LMyikcA5jG+9gcNsOi2hYFtIg5oX2w=";
         };
+
+        # uses pkg_resources.declare_namespace, removed in setuptools 83.
+        build-system = [ self.setuptools_80 ];
       });
     };
   };
@@ -28,7 +40,7 @@ in
 bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = with bepastyPython.pkgs; [
     flask
@@ -47,6 +59,11 @@ bepastyPython.pkgs.buildPythonPackage rec {
   ];
 
   buildInputs = with bepastyPython.pkgs; [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "xstatic-jquery-ui"
+    "xstatic-jquery-file-upload"
+  ];
 
   src = fetchPypi {
     inherit pname version;

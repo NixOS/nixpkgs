@@ -16,22 +16,22 @@
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "django-auditlog";
     tag = "v${version}";
-    hash = "sha256-ZOCLlS9SUY8W3jfA+51gy5yUchJr+rpBzH+Sx1G/kUM=";
+    hash = "sha256-/IOzMGRR8EP/AGP7fcqwP4GeSKXPwE6NF6AZmiF1+lA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     python-dateutil
   ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
     cd auditlog_tests
     # strip escape codes otherwise tests fail
-    # see https://github.com/jazzband/django-auditlog/issues/644
+    # see https://github.com/django-commons/django-auditlog/issues/644
     TEST_DB_USER=$PGUSER \
     TEST_DB_HOST=$PGHOST \
     ${python.interpreter} ./manage.py test | cat
@@ -64,9 +64,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "auditlog" ];
 
   meta = {
-    changelog = "https://github.com/jazzband/django-auditlog/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/django-commons/django-auditlog/blob/${src.tag}/CHANGELOG.md";
     description = "Django app that keeps a log of changes made to an object";
-    downloadPage = "https://github.com/jazzband/django-auditlog";
+    homepage = "https://github.com/django-commons/django-auditlog";
+    downloadPage = "https://github.com/django-commons/django-auditlog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];
   };

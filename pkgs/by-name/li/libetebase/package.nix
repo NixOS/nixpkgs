@@ -2,28 +2,34 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libsodium,
   openssl,
   lib,
   stdenv,
   testers,
   libetebase,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libetebase";
   version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B+MfnYbxIbgMHFWWOYhap1MEbV3/NNYuR9goJDTNn9A=";
   };
 
   cargoHash = "sha256-ZLQFERi38+0SUxWaYAL4AepgVuAQKo9pxjcMkzA55BM=";
 
+  env.SODIUM_USE_PKG_CONFIG = true;
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libsodium
+    openssl
+  ];
 
   postInstall = ''
     install -d $out/lib/pkgconfig
@@ -43,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };
-}
+})

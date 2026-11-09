@@ -3,9 +3,9 @@
   lib,
   fetchgit,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnut";
-  version = "unstable-2020-11-06";
+  version = "0-unstable-2020-11-06";
 
   src = fetchgit {
     url = "https://git.ffmpeg.org/nut.git";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wgl2mb9482c1j3yac0v2ilfjs7gb9mhw9kjnrmlj9kp0whm4l1j";
   };
 
-  sourceRoot = "${src.name}/src/trunk";
+  sourceRoot = "${finalAttrs.src.name}/src/trunk";
   makeFlags = [ "prefix=$(out)" ];
   installTargets = [
     "install-libnut"
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ quag ];
     platforms = lib.platforms.linux;
   };
-}
+})

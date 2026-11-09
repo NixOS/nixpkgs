@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg-full,
   xdotool,
   slop,
   libnotify,
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/giph \
       --prefix PATH : ${
         lib.makeBinPath [
-          ffmpeg
+          ffmpeg-full
           xdotool
           libnotify
           slop

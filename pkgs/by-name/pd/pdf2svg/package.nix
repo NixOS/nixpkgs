@@ -5,18 +5,17 @@
   autoreconfHook,
   pkg-config,
   cairo,
-  gtk2,
   poppler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdf2svg";
   version = "0.2.4";
 
   src = fetchFromGitHub {
-    owner = "db9052";
+    owner = "dawbarton";
     repo = "pdf2svg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zME0U+PyENnoLyjo9W2i2MRM00wNmHkYcR2LMEtTbBY=";
   };
 
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     poppler
-    gtk2
   ];
 
   meta = {
@@ -38,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pdf2svg";
   };
-}
+})

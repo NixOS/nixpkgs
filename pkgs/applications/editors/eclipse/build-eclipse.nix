@@ -4,19 +4,21 @@
   makeDesktopItem,
   freetype,
   fontconfig,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   zlib,
   jdk,
   glib,
   glib-networking,
   gtk,
-  libXtst,
+  libxtst,
   libsecret,
   gsettings-desktop-schemas,
   webkitgtk_4_1,
   makeWrapper,
   perl,
+  cacert,
+  jre-generate-cacerts,
   ...
 }:
 
@@ -28,7 +30,7 @@
   version,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   desktopItem = makeDesktopItem {
@@ -52,9 +54,9 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     jdk
-    libX11
-    libXrender
-    libXtst
+    libx11
+    libxrender
+    libxtst
     libsecret
     zlib
   ]
@@ -73,8 +75,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
-        libXrender
+        libx11
+        libxrender
         zlib
       ]
     } $libCairo
@@ -91,7 +93,7 @@ stdenv.mkDerivation rec {
           [
             glib
             gtk
-            libXtst
+            libxtst
             libsecret
           ]
           ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
@@ -103,12 +105,24 @@ stdenv.mkDerivation rec {
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
+  ''
+  # regenerate the bundled JustJ JRE's CA keystore from cacert, as openjdk does
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for cacerts in $out/eclipse/plugins/org.eclipse.justj.openjdk.*/jre/lib/security/cacerts; do
+      [ -e "$cacerts" ] || continue
+      (
+        cd "$(dirname "$cacerts")"
+        rm cacerts
+        JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+          ${jre-generate-cacerts} ${jdk}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      )
+    done
   ''; # */
 
   passthru.updateScript = ./update.sh;
@@ -123,5 +137,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.jerith666 ];
   };
-
-}
+})

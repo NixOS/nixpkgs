@@ -8,13 +8,13 @@
   buildPackages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vrc-get";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-b/rlHfm+AfrluCqoTyBqx86xVaNV3QBGollk5HyD4xk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-NeNl1N6YowEi1KkZcGGXNyTfpNw6VNgSxBJDWE8t02c=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  cargoHash = "sha256-TrmWZBEh2+eKqHu3hwrd2pIQggG3yFszxHQVuLHbs3M=";
+  cargoHash = "sha256-Yl7IM3zVZyqznXePPWZFrObky2vtZCULXaBK5ojKga4=";
 
   # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
   # If no emulator is available, then give up on generating shell completions
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bddvlpr ];
     mainProgram = "vrc-get";
   };
-}
+})

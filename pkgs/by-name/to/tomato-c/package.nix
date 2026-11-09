@@ -4,72 +4,90 @@
   fetchFromGitHub,
   libnotify,
   makeWrapper,
-  mpv,
+  makeDesktopItem,
+  copyDesktopItems,
   ncurses,
+  alsa-lib,
+  libpulseaudio,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomato-c";
-  version = "0-unstable-2024-04-19";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "gabrielzschmitz";
     repo = "Tomato.C";
-    rev = "b3b85764362a7c120f3312f5b618102a4eac9f01";
-    hash = "sha256-7i+vn1dAK+bAGpBlKTnSBUpyJyRiPc7AiUF/tz+RyTI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-by6ed/lZ2XABCMxjWN/iTKIg3cUX5+B/3s2oe3tzo8I=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "sudo " ""
-    substituteInPlace notify.c \
-      --replace-fail "/usr/local" "${placeholder "out"}"
-    substituteInPlace util.c \
-      --replace-fail "/usr/local" "${placeholder "out"}"
-    substituteInPlace tomato.desktop \
-      --replace-fail "/usr/local" "${placeholder "out"}"
-  '';
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    copyDesktopItems
   ];
 
   buildInputs = [
     libnotify
-    mpv
     ncurses
   ];
 
+  enableParallelBuilding = true;
   makeFlags = [
+    "-C build"
+    "DATAPREFIX=${placeholder "out"}/share/tomato"
     "PREFIX=${placeholder "out"}"
   ];
 
-  installFlags = [
-    "CPPFLAGS=$NIX_CFLAGS_COMPILE"
-    "LDFLAGS=$NIX_LDFLAGS"
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postFixup = ''
-    for file in $out/bin/*; do
-      wrapProgram $file \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            libnotify
-            mpv
-          ]
-        }
-    done
+    install -Dm755 build/${finalAttrs.meta.mainProgram} $out/bin/${finalAttrs.meta.mainProgram}
+    wrapProgram "$out/bin/tomato" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          alsa-lib
+          libpulseaudio
+        ]
+      }
+    mkdir -p $out/share/tomato/{sprites,sounds,icons}
+    cp resources/sprites/*.asc $out/share/tomato/sprites/
+    cp resources/sounds/*.mp3 $out/share/tomato/sounds/
+    cp resources/icons/* $out/share/tomato/icons/
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Tomato.c";
+      desktopName = "Pomodoro timer";
+      comment = finalAttrs.meta.description;
+      icon = "tomato";
+      exec = finalAttrs.meta.mainProgram;
+      terminal = true;
+      categories = [ "Utility" ];
+      keywords = [
+        "pomodoro"
+        "productivity"
+        "timer"
+      ];
+    })
+  ];
 
   strictDeps = true;
 
   meta = {
     homepage = "https://github.com/gabrielzschmitz/Tomato.C";
-    description = "Pomodoro timer written in pure C";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    description = "Terminal-based pomodoro timer written in pure C";
+    changelog = "https://github.com/gabrielzschmitz/Tomato.C/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      _3JlOy-PYCCKUi
+      gabrielzschmitz
+    ];
     mainProgram = "tomato";
     platforms = lib.platforms.unix;
   };

@@ -7,118 +7,118 @@
   setuptools,
 
   # dependencies
+  click,
   filelock,
   fsspec,
   hf-xet,
+  httpx2,
   packaging,
   pyyaml,
-  requests,
   tqdm,
   typing-extensions,
 
   # optional-dependencies
-  # cli
-  inquirerpy,
-  # inference
-  aiohttp,
   # torch
   torch,
   safetensors,
-  # hf_transfer
-  hf-transfer,
   # fastai
   toml,
   fastai,
   fastcore,
-  # tensorflow
-  tensorflow,
-  pydot,
-  graphviz,
-  # tensorflow-testing
-  keras,
+  # gradio
+  gradio,
+  requests,
+  # oauth
+  authlib,
+  fastapi,
+  itsdangerous,
+  # mcp
+  mcp,
 
   # tests
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "0.35.3";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    tag = "v${version}";
-    hash = "sha256-KOq3qxt3AyWQIOG0+HUbNr15u85tyTEstoUkYBFkpC4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EbKvIHuUUUcA24dfB4pFJlrAo6Q4WCIPbJps/KUZxXY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    click
     filelock
     fsspec
     hf-xet
+    httpx2
     packaging
     pyyaml
-    requests
     tqdm
     typing-extensions
   ];
 
   optional-dependencies = {
     all = [
-
-    ];
-    cli = [
-      inquirerpy
-    ];
-    inference = [
-      aiohttp
-    ];
-    torch = [
-      torch
-      safetensors
-    ]
-    ++ safetensors.optional-dependencies.torch;
-    hf_transfer = [
-      hf-transfer
     ];
     fastai = [
       toml
       fastai
       fastcore
     ];
-    tensorflow = [
-      tensorflow
-      pydot
-      graphviz
-    ];
-    tensorflow-testing = [
-      tensorflow
-      keras
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet
     ];
+    mcp = [
+      mcp
+    ];
+    oauth = [
+      authlib
+      fastapi
+      itsdangerous
+    ];
+    torch = [
+      torch
+      safetensors
+    ]
+    ++ safetensors.optional-dependencies.torch;
   };
 
   nativeCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
     mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
       osbm
     ];
   };
-}
+})

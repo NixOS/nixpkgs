@@ -17,7 +17,7 @@
   udev,
   udevCheckHook,
   onlyLib ? stdenv.hostPlatform.isStatic,
-  # Otherwise we have a infinity recursion during static compilation
+  # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
   util-linux,
   enableVDO ? false,
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
       moveToOutput bin/lvmdump $scripts
       moveToOutput bin/lvm_import_vdo $scripts
       moveToOutput bin/lvmpersist $scripts
-      moveToOutput libexec/lvresize_fs_helper $scripts/lib
+      moveToOutput libexec/lvresize_fs_helper $scripts
     ''
     + lib.optionalString (!enableCmdlib) ''
       moveToOutput lib/libdevmapper.so $lib
@@ -231,6 +231,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://gitlab.com/lvmteam/lvm2/-/blob/v${
+      lib.replaceString "." "_" version
+    }/WHATS_NEW";
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = lib.platforms.linux;

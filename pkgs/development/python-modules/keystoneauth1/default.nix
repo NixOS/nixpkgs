@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   betamax,
   fixtures,
   hacking,
@@ -11,42 +11,50 @@
   os-service-types,
   oslo-config,
   oslo-utils,
-  pbr,
   pycodestyle,
   pyyaml,
   requests,
   requests-kerberos,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   stevedore,
   testresources,
   testtools,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keystoneauth1";
-  version = "5.12.0";
+  version = "5.18.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3RE8Lz3LQY2fdhxzuM1DqW3fqKYStRxXaCI4HznKSug=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "keystoneauth";
+    tag = finalAttrs.version;
+    hash = "sha256-a9A7tz8l+onST/PJsYCZpiI0WRtJtD4cUf6TazE+Bi0=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include keystoneauth1 *" > MANIFEST.in
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     iso8601
     os-service-types
-    pbr
     requests
     stevedore
     typing-extensions
   ]
   # TODO: remove this workaround and fix breakages
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   optional-dependencies = {
     betamax = [
@@ -58,6 +66,8 @@ buildPythonPackage rec {
     saml2 = [ lxml ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     fixtures
     hacking
@@ -65,20 +75,16 @@ buildPythonPackage rec {
     oslo-utils
     pycodestyle
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testtools
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
-  # https://bugs.launchpad.net/keystoneauth/+bug/2020112
-  checkPhase = ''
-    stestr run \
-      -E "keystoneauth1.tests.unit.test_betamax_fixture.TestBetamaxFixture.test_keystoneauth_betamax_fixture"
-  '';
-
-  pythonImportsCheck = [ "keystoneauth1" ];
+  pythonImportsCheck = [
+    "keystoneauth1"
+    "keystoneauth1.exceptions"
+  ];
 
   meta = {
     description = "Authentication Library for OpenStack Identity";
@@ -86,4 +92,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

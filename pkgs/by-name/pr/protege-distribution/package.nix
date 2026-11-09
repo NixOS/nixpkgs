@@ -10,12 +10,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "protege-distribution";
   version = "5.6.3";
 
   src = fetchurl {
-    url = "https://github.com/protegeproject/protege-distribution/releases/download/protege-${version}/Protege-${version}-platform-independent.zip";
+    url = "https://github.com/protegeproject/protege-distribution/releases/download/protege-${finalAttrs.version}/Protege-${finalAttrs.version}-platform-independent.zip";
     sha256 = "08pr0rn76wcc9bczdf93nlshxbid4z4nyvmaz198hhlq96aqpc3i";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "run-protege";
   };
-}
+})

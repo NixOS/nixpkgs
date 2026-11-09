@@ -2,7 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  withJson ? true,
+  withHttps ? true,
+  withWebsockets ? true,
+  withCurl ? true,
+  withLogger ? true,
+  withUwsc ? withWebsockets, # uwsc depends on websockets
+
+  # nativeBuildInputs
   cmake,
+
+  # Optional dependencies
   curl,
   gnutls,
   jansson,
@@ -29,14 +40,27 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
-    curl
-    gnutls
-    jansson
+  # Fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
+  propagatedBuildInputs = [
     libmicrohttpd
     orcania
-    yder
-    zlib
+  ]
+  ++ lib.optionals withJson [ jansson ]
+  ++ lib.optionals withCurl [ curl ]
+  ++ lib.optionals (withHttps || withWebsockets) [ gnutls ]
+  ++ lib.optionals withLogger [ yder ]
+  ++ lib.optionals withWebsockets [ zlib ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_CURL" withCurl)
+    (lib.cmakeBool "WITH_JANSSON" withJson)
+    (lib.cmakeBool "WITH_GNUTLS" (withHttps || withWebsockets))
+    (lib.cmakeBool "WITH_YDER" withLogger)
+    (lib.cmakeBool "BUILD_UWSC" (withUwsc && withWebsockets))
+    (lib.cmakeBool "WITH_WEBSOCKET" withWebsockets)
+    (lib.cmakeBool "WITH_WEBSOCKET_MESSAGE_LIST" withWebsockets)
   ];
 
   meta = {
@@ -45,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/babelouest/ulfius/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "uwsc";
     platforms = lib.platforms.all;
-  };
+  }
+  // lib.optionalAttrs (withUwsc && withWebsockets) { mainProgram = "uwsc"; };
 })

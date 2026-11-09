@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "proftpd";
-  version = "1.3.9";
+  version = "1.3.9e";
 
   src = fetchFromGitHub {
     owner = "proftpd";
     repo = "proftpd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Iyzk0OctTvDDkYXPDSrvaWQOjkbBXHY7ELyhkUx/X0=";
+    hash = "sha256-TdPdZHQt6H58s/MblgWs2Dd4r8dgL09cC3hk77nkkQM=";
   };
 
   patches = [ ./no-install-user.patch ];
@@ -80,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.proftpd.org/";
-    teams = [ lib.teams.flyingcircus ];
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "proftpd";
     platforms = lib.platforms.unix;

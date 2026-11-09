@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner = "digitalbitbox";
+    owner = "BitBoxSwiss";
     repo = "dbb-app";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
@@ -84,12 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtmultimedia
   ];
 
-  LUPDATE = "${libsForQt5.qttools.dev}/bin/lupdate";
-  LRELEASE = "${libsForQt5.qttools.dev}/bin/lrelease";
-  MOC = "${libsForQt5.qtbase.dev}/bin/moc";
-  QTDIR = libsForQt5.qtbase.dev;
-  RCC = "${libsForQt5.qtbase.dev}/bin/rcc";
-  UIC = "${libsForQt5.qtbase.dev}/bin/uic";
+  env = {
+    LUPDATE = "${libsForQt5.qttools.dev}/bin/lupdate";
+    LRELEASE = "${libsForQt5.qttools.dev}/bin/lrelease";
+    MOC = "${libsForQt5.qtbase.dev}/bin/moc";
+    QTDIR = libsForQt5.qtbase.dev;
+    RCC = "${libsForQt5.qtbase.dev}/bin/rcc";
+    UIC = "${libsForQt5.qtbase.dev}/bin/uic";
+  };
 
   configureFlags = [
     "--enable-libusb"
@@ -99,7 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     "format"
   ];
 
-  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : $out/lib" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/lib"
+  ];
 
   postInstall = ''
     mkdir -p "$out/lib"

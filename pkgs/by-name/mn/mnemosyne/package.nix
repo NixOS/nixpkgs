@@ -2,21 +2,25 @@
   python3Packages,
   fetchurl,
   anki,
+  qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mnemosyne";
   version = "2.10.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
+    url = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${finalAttrs.version}/Mnemosyne-${finalAttrs.version}.tar.gz";
+    hash = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
   };
 
-  nativeBuildInputs = with python3Packages; [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = [ anki ];
+  buildInputs = [
+    anki
+    qt6.qtbase
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     cheroot
@@ -31,11 +35,6 @@ python3Packages.buildPythonApplication rec {
     webob
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace '("", ["/usr/local/bin/mplayer"])' ""
-  '';
-
   # No tests/ directory in tarball
   doCheck = false;
 
@@ -46,9 +45,9 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = {
     homepage = "https://mnemosyne-proj.org/";
@@ -80,4 +79,4 @@ python3Packages.buildPythonApplication rec {
       software even further.
     '';
   };
-}
+})

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "genson";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   # Using Python repository source due to missing genson.schema in setup tools.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4C25rC4/0p5ltShvcTV2LizYqYZTfAdbBvxfFRcwjjc=";
+    hash = "sha256-vH8cG66HohykTYEUmuyVo/RGjWdt6biwjKoGTzxQs9o=";
   };
 
   build-system = [ setuptools ];

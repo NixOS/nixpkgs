@@ -1,11 +1,11 @@
 {
   lib,
-  php82,
+  buildComposerProject2,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-php82.buildComposerProject2 (finalAttrs: {
+buildComposerProject2 (finalAttrs: {
   pname = "box";
   version = "4.6.6";
 

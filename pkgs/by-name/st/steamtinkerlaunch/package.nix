@@ -1,6 +1,7 @@
 {
   bash,
   fetchFromGitHub,
+  fetchpatch2,
   gawk,
   git,
   lib,
@@ -14,7 +15,9 @@
   wget,
   writeShellApplication,
   xdotool,
-  xorg,
+  xprop,
+  xrandr,
+  xwininfo,
   yad,
 }:
 
@@ -28,6 +31,14 @@ stdenvNoCC.mkDerivation {
     rev = "8550ab26a712b7f5f6d0947070181446b9de61fd";
     hash = "sha256-mCcxdm8odHvTt4aP58RHY6NkaUMmMbQesUtY6dvIvOc=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "yad-15-compat.patch";
+      url = "https://github.com/sonic2kk/steamtinkerlaunch/commit/7b5d45e64e2d98e6cbc09cac95140a411f48de53.patch?full_index=1";
+      hash = "sha256-BRtdcjZ1+NLe2aKRyd/VSQrHEg6x4qe63OFUShjT5go=";
+    })
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     tagPrefix = "v";
@@ -70,9 +81,9 @@ stdenvNoCC.mkDerivation {
           util-linux
           wget
           xdotool
-          xorg.xprop
-          xorg.xrandr
-          xorg.xwininfo
+          xprop
+          xrandr
+          xwininfo
           yad
         ];
         name = "stl-head";
@@ -112,8 +123,8 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      urandom
       surfaceflinger
+      RoGreat
     ];
     platforms = lib.platforms.linux;
   };

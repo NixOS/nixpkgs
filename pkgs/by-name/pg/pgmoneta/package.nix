@@ -11,27 +11,31 @@
   libev,
   libgccjit,
   libssh,
+  libyaml,
   lz4,
+  ncurses,
   openssl,
+  pkg-config,
   systemd,
   zlib,
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgmoneta";
-  version = "0.19.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
-    rev = version;
-    hash = "sha256-qsKjUFCuxKSc7klB/S2N3TG+jqnS4NW0RZC6e9JQXtA=";
+    rev = finalAttrs.version;
+    hash = "sha256-55oXnyNLwhtT3s4qTEh24N08vf0zhNUDVoxrUiYkVZc=";
   };
 
   nativeBuildInputs = [
     cmake
     docutils # for rst2man
+    pkg-config
   ];
 
   buildInputs = [
@@ -42,7 +46,9 @@ stdenv.mkDerivation rec {
     libev
     libgccjit
     libssh
+    libyaml
     lz4
+    ncurses
     openssl
     systemd
     zlib
@@ -54,9 +60,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Backup / restore solution for PostgreSQL";
     homepage = "https://pgmoneta.github.io/";
-    changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${version}";
+    changelog = "https://github.com/pgmoneta/pgmoneta/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

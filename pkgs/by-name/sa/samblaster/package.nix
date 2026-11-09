@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samblaster";
   version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "GregoryFaust";
     repo = "samblaster";
-    rev = "v.${version}";
+    rev = "v.${finalAttrs.version}";
     sha256 = "0g24fq5hplnfgqkh3xqpg3lgx3wmxwnh9c7m6yw7pbi40lmgl1jv";
   };
 
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbedo ];
     license = lib.licenses.mit;
     homepage = "https://github.com/GregoryFaust/samblaster";
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,25 +10,26 @@
   obfs4,
   snowflake,
   tor,
+  webtunnel,
 
   versionCheckHook,
   gitUpdater,
   onionshare-gui,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare-cli";
-  version = "2.6.3";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
-    tag = "v${version}";
-    hash = "sha256-DY5rSHkmiqLIa49gcbq7VfcMM1AMFTJ5FPQtS2kR2Zs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TCPn6oTRITMuqB2qMTChIKSm+vm7nPn0NleFK97vLko=";
   };
 
-  sourceRoot = "${src.name}/cli";
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   patches = [
     # hardcode store paths of dependencies
@@ -38,6 +39,7 @@ python3Packages.buildPythonApplication rec {
         obfs4
         snowflake
         tor
+        webtunnel
         ;
       inherit (tor) geoip;
     })
@@ -48,6 +50,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "pkgconfig"
+  ];
 
   dependencies =
     with python3Packages;
@@ -132,7 +138,7 @@ python3Packages.buildPythonApplication rec {
       person you're sharing with can access the files.
     '';
     homepage = "https://onionshare.org/";
-    changelog = "https://github.com/onionshare/onionshare/releases/tag/${src.tag}";
+    changelog = "https://github.com/onionshare/onionshare/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       bbjubjub
@@ -140,4 +146,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "onionshare-cli";
   };
-}
+})

@@ -4,8 +4,10 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  xorg,
-  gtk2,
+  libxcb-util,
+  util-macros,
+  libxcb,
+  gtk3,
   spice,
   spice-protocol,
 }:
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
     owner = "spice";
     repo = "x11spice";
     rev = "51d2a8ba3813469264959bb3ba2fc6fe08097be6";
-    sha256 = "0va5ix14vnqch59gq8wvrhw6q0w0n27sy70xx5kvfj2cl0h1xpg8";
+    hash = "sha256-6N0eIKBMSLdn6R0cr4+wgANsOMybI/xSgQzbTUKPRW0=";
   };
 
   nativeBuildInputs = [
@@ -28,15 +30,15 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.utilmacros
-    gtk2
+    libxcb
+    libxcb-util
+    util-macros
+    gtk3
     spice
     spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   meta = {
     description = "Enable a running X11 desktop to be available via a Spice server";

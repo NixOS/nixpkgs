@@ -6,22 +6,18 @@
   fetchPypi,
   numpy,
   oldest-supported-numpy,
-  pythonOlder,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "casa-formats-io";
-  version = "0.3.0";
-  format = "setuptools";
-  prproject = true;
-
-  disabled = pythonOlder "3.9";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "casa_formats_io";
-    inherit version;
-    hash = "sha256-FpQj0XeZ7vvOzUM/+5qG6FRwNXl3gzoUBItYdQ1M4m4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-m3ETLE88Pubm/A6qETjsFJQBl8NkzcJn+iSPvMvxoGk=";
   };
 
   build-system = [ setuptools-scm ];
@@ -42,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dask-based reader for CASA data";
     homepage = "https://casa-formats-io.readthedocs.io/";
-    changelog = "https://github.com/radio-astro-tools/casa-formats-io/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/radio-astro-tools/casa-formats-io/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

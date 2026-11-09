@@ -31,15 +31,20 @@
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "simgrid";
     repo = "simgrid";
     rev = "v${version}";
-    sha256 = "sha256-wRyUeXx8mvrwBLoj8nHNdjJuUjYfWoXuZS1+E7lmCLc=";
+    hash = "sha256-d5yzlR2uo//EcFtqhNUU2q/RCwBiXrRNUAMkEbA49ZQ=";
   };
+
+  patches = [
+    # https://framagit.org/simgrid/simgrid/-/commit/6159c067c29ac1a3c9a94b025c79cfa3fb109ccd
+    ./pybind11-3.0.2.patch
+  ];
 
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [
@@ -123,8 +128,8 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString buildPythonBindings ''
       # manually install the python binding if requested.
-      mkdir -p $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
-      cp ./lib/simgrid.cpython*.so $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
+      mkdir -p $python/${python3.sitePackages}/
+      cp ./lib/simgrid.cpython*.so $python/${python3.sitePackages}/
     '';
 
   # improve debuggability if requested

@@ -6,7 +6,6 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
-  fetchpatch2,
   fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
@@ -17,16 +16,15 @@
   jansson,
   libjack2,
   libxkbcommon,
-  libpthreadstubs,
-  libXdmcp,
-  qtbase,
-  qtsvg,
+  libpthread-stubs,
+  libxdmcp,
+  qt6,
   speex,
   libv4l,
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -38,7 +36,7 @@
   python3,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   browserSupport ? true,
   cef-binary,
@@ -51,8 +49,6 @@
   cjson,
   libva,
   srt,
-  qtwayland,
-  wrapQtAppsHook,
   nlohmann_json,
   websocketpp,
   asio,
@@ -63,7 +59,7 @@
   qrcodegencpp,
   simde,
   nix-update-script,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 let
@@ -99,13 +95,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "32.0.1";
+  version = "32.2.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = finalAttrs.version;
-    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
+    tag = finalAttrs.version;
+    hash = "sha256-JAV3UvM89asUj6P5pD9a+6/Qfa2kFIVQqVfMOZn5MJE=";
     fetchSubmodules = true;
   };
 
@@ -113,11 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-nix-plugin-path.patch
-    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
-    (fetchpatch2 {
-      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
-      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -126,8 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wrapGAppsHook3
-    wrapQtAppsHook
-    extra-cmake-modules
+    qt6.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ]
   ++ optional scriptingSupport swig
   ++ optional cudaSupport autoAddDriverRunpath;
@@ -139,10 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libv4l
     libxkbcommon
-    libpthreadstubs
-    libXdmcp
-    qtbase
-    qtsvg
+    libpthread-stubs
+    libxdmcp
+    qt6.qtbase
+    qt6.qtsvg
     speex
     wayland
     x264
@@ -153,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     cjson
     libva
     srt
-    qtwayland
+    qt6.qtwayland
     nlohmann_json
     websocketpp
     asio
@@ -196,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
@@ -214,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
       ]
@@ -258,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
+    changelog = "https://github.com/obsproject/obs-studio/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jb55
       materus

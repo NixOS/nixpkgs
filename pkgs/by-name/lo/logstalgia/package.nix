@@ -4,6 +4,7 @@
   fetchurl,
   SDL2,
   ftgl,
+  autoreconfHook,
   pkg-config,
   libpng,
   libjpeg,
@@ -12,29 +13,40 @@
   glew,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   boost,
   glm,
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "logstalgia";
   version = "1.1.4";
 
   src = fetchurl {
-    url = "https://github.com/acaudwell/Logstalgia/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/acaudwell/Logstalgia/releases/download/logstalgia-${finalAttrs.version}/logstalgia-${finalAttrs.version}.tar.gz";
     hash = "sha256-wEnv9AXpJANSIu2ya8xse18AoIkmq9t7Rn4kSSQnkKk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    # Fix build with boost 1.89
+    rm m4/ax_boost_system.m4
+    substituteInPlace configure.ac \
+      --replace-fail "AX_BOOST_SYSTEM" ""
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
     glew
     SDL2
     ftgl
     libpng
     libjpeg
-    libX11
+    libx11
     pcre2
     SDL2_image
     libGLU
@@ -77,4 +89,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "logstalgia";
   };
-}
+})

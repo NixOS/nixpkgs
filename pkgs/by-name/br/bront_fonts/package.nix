@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,9 +16,9 @@ stdenvNoCC.mkDerivation {
     sha256 = "1sx2gv19pgdyccb38sx3qnwszksmva7pqa1c8m35s6cipgjhhgb4";
   };
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/truetype *Bront.ttf
-  '';
+  preInstall = "rm {DejaVuSansMono,UbuntuMono}.ttf";
+
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Bront Fonts";
@@ -28,6 +29,6 @@ stdenvNoCC.mkDerivation {
       ufl
     ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 }

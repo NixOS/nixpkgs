@@ -16,11 +16,7 @@ bundlerApp {
     description = "Improve Terraform's plan output to be easier to read and understand";
     homepage = "https://github.com/coinbase/terraform-landscape";
     license = with lib.licenses; asl20;
-    maintainers = with lib.maintainers; [
-      mbode
-      manveru
-      nicknovitski
-    ];
+    maintainers = with lib.maintainers; [ nicknovitski ];
     platforms = lib.platforms.unix;
   };
 }

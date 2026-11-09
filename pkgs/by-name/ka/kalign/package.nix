@@ -11,14 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kalign";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "TimoLassmann";
     repo = "kalign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QcFNaCTqj6CFiOzQ6ezfBL0mu8PDU11hyNdkcsLOPzA=";
+    hash = "sha256-wcVzKedd8IFKql+TU4wJ4jEGDPdDfpyC5iGXrPYa0oY=";
   };
+
+  patches = [
+    # Allow overriding the hardcoded Homebrew libomp path on macOS and
+    # restrict the workaround to AppleClang so other compilers fall back
+    # to the standard OpenMP detection path.
+    # https://github.com/TimoLassmann/kalign/pull/65
+    ./macos-openmp-config.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
     changelog = "https://github.com/TimoLassmann/kalign/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
   };

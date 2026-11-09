@@ -8,19 +8,16 @@
   z3-solver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-checker";
-  version = "1.2.12";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "model_checker";
-    inherit version;
-    hash = "sha256-vIH3CFgFEO+UlmpS7FhBsQtZv5Yep4OQ6koMGzyJGa4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-jEOonA3kmJSW6INkUo4NVzg2Kv4V78QPEJdItYhQ31k=";
   };
-
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
-  pythonRemoveDeps = [ "z3-solver" ];
 
   build-system = [ setuptools ];
 
@@ -42,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

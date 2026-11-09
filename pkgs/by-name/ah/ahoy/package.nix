@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ahoy";
-  version = "2.5.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "ahoy-cli";
     repo = "ahoy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HBR35sr5WY8bnGmFm5V4ut7AJJj+nSRiJUri4XxycCI=";
+    hash = "sha256-NYnD+lSRAPrLUdY28L3YMUIy9jZFhGbsP3S60KH31Y4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";

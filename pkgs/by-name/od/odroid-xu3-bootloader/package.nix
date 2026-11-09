@@ -37,6 +37,7 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfreeRedistributableFirmware;
     description = "Secure boot enabled boot loader for ODROID-XU{3,4}";
+    homepage = "https://github.com/hardkernel/u-boot";
     maintainers = [ ];
   };
 }

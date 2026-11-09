@@ -15,11 +15,15 @@ let
       "10" = sources.nv-codec-headers-10;
       "11" = sources.nv-codec-headers-11;
       "12" = sources.nv-codec-headers-12;
+      "13" = sources.nv-codec-headers-13;
     }
     .${majorVersion};
 in
 stdenvNoCC.mkDerivation {
   inherit (pick) pname version src;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -33,7 +37,7 @@ stdenvNoCC.mkDerivation {
     description = "FFmpeg version of headers for NVENC - major version ${pick.version}";
     homepage = "https://ffmpeg.org/";
     downloadPage = "https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

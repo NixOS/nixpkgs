@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   matplotlib,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "scikit-fuzzy";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "scikit-fuzzy";

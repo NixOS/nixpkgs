@@ -24,8 +24,7 @@ sub uniq {
 }
 
 sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>&1 |" or die "Failed to execute: $cmd\n";
+    open FILE, "-|", @_ or die "Failed to execute: @_\n";
     my @ret = <FILE>;
     close FILE;
     return ($?, @ret);
@@ -206,12 +205,11 @@ sub pciCheck {
          $device eq "0x4222" || $device eq "0x4227");
 
     # Intel NPU driver
-    # list taken from linux(v6.18): drivers/accel/ivpu/ivpu_drv.h
+    # list taken from linux(v7.1): drivers/accel/ivpu/ivpu_drv.h
     if ($vendor eq "0x8086" &&
-        ($device eq "0xfd3e" || $device eq "0x7d1d" || $device eq "0xad1d" ||
-         $device eq "0x643e" || $device eq "0xb03e"))
+        ($device eq "0x7d1d" || $device eq "0xad1d" || $device eq "0x643e" ||
+         $device eq "0xb03e" || $device eq "0xfd3e" || $device eq "0xd71d"))
     {
-        push @imports, "(modulesPath + \"/hardware/cpu/intel-npu.nix\")";
         push @attrs, "hardware.cpu.intel.npu.enable = true;";
     }
 
@@ -300,7 +298,7 @@ if ($virt eq "oracle") {
 # It is blocked by https://github.com/systemd/systemd/pull/23859
 if ($virt eq "parallels") {
     push @attrs, "hardware.parallels.enable = true;";
-    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+    push @attrs, "nixpkgs.config.allowUnfreePackages = [ \"prl-tools\" ];";
 }
 
 # Likewise for QEMU.
@@ -459,7 +457,7 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @info) = runCommand("@btrfs@ subvol show $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@btrfs@", "subvol", "show", "$rootDir$mountPoint");
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
@@ -506,7 +504,7 @@ EOF
     # This should work for single and multi-device systems.
     # still needs subvolume support
     if ($fsType eq "bcachefs") {
-        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@bcachefs@", "fs", "usage", "$rootDir$mountPoint");
         my $UUID = $info[0];
 
         if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {

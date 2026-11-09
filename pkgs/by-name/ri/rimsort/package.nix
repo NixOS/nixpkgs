@@ -2,33 +2,27 @@
   lib,
   stdenv,
   python3Packages,
+  qt6,
   fetchFromGitHub,
-  fetchzip,
   makeBinaryWrapper,
+  nix-update-script,
 
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
 
   todds,
-
   steam,
 }:
 let
   pname = "rimsort";
-  version = "1.0.47";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
-    rev = "v${version}";
-    hash = "sha256-1wn3WIflrhH3IMBeGFwcHi0zOREakuk/5gqwPY720eA=";
+    tag = "v${version}";
+    hash = "sha256-gxHY4DRfrjx4Wc/nIU6H+ifs8vNdyhsQG0hX2y2lZFo=";
     fetchSubmodules = true;
-  };
-
-  steamworksSrc = fetchzip {
-    url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip"; # Steam sometimes requires auth to download.
-    hash = "sha256-yDA92nGj3AKTNI4vnoLaa+7mDqupQv0E4YKRRUWqyZw=";
   };
 
   steamfiles = python3Packages.buildPythonPackage {
@@ -49,35 +43,35 @@ let
     }).run;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   inherit pname;
   inherit version;
+  inherit src;
 
   unpackPhase = ''
     runHook preUnpack
 
-    cp -r ${src} source
+    cp -r ${finalAttrs.src} source
     chmod -R 755 source
-    cp ${steamworksSrc}/redistributable_bin/linux64/libsteam_api.so source/
 
     runHook postUnpack
   '';
 
   sourceRoot = "source";
 
-  patches = [
-    (replaceVars ./todds-path.patch { inherit todds; })
-    (replaceVars ./steam-run.patch { inherit steam-run; })
-  ];
-
   nativeBuildInputs = [
     makeBinaryWrapper
     copyDesktopItems
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     todds
     steamfiles
+    qt6.qtbase
+    qt6.qtwayland
   ]
   ++ builtins.attrValues {
     inherit (python3Packages)
@@ -104,17 +98,21 @@ stdenv.mkDerivation {
       watchdog
       xmltodict
       zstandard
-      steamworkspy
+      steamworks
       ;
   };
 
   dontBuild = true;
 
   nativeCheckInputs = with python3Packages; [
+    aiohttp
+    pytest-asyncio
     pytestCheckHook
     pytest-cov-stub
+    pytest-mock
     pytest-qt
     pytest-xvfb
+    rapidfuzz
   ];
 
   doCheck = true;
@@ -126,20 +124,23 @@ stdenv.mkDerivation {
   '';
 
   disabledTestPaths = [
-    # requires network
+    # Requires network access (clones GitHub: Community-Rules-Database, Steam-Workshop-Database)
     "tests/models/metadata/test_metadata_factory.py"
+    # Requires network access.
+    "tests/utils/test_privatebin.py"
   ];
 
   pytestFlags = [ "--doctest-modules" ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "RimSort";
+      name = "io.github.rimsort.RimSort";
       desktopName = "RimSort";
       exec = "rimsort";
       icon = "rimsort";
       comment = "RimWorld Mod Manager";
       categories = [ "Game" ];
+      startupWMClass = "io.github.rimsort.RimSort";
     })
   ];
 
@@ -151,35 +152,53 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
 
-    makeBinaryWrapper \
-      ${python3Packages.python.interpreter} \
-      $out/bin/rimsort \
-      --add-flags "-m app" \
-      --chdir $out/lib/rimsort \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set RIMSORT_DISABLE_UPDATER 1
+    # AppInfo reads the displayed version from version.xml
+    # (the release workflow writes it for the other builds)
+    cat > $out/lib/rimsort/version.xml <<EOF
+    <version>
+      <version>${version}</version>
+    </version>
+    EOF
 
     install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
 
     runHook postInstall
   '';
 
+  postFixup = ''
+    makeBinaryWrapper \
+      ${python3Packages.python.interpreter} \
+      $out/bin/rimsort \
+      --add-flags "-m app" \
+      --chdir $out/lib/rimsort \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --set RIMSORT_DISABLE_UPDATER 1 \
+      --set RIMSORT_LAUNCH_PREFIX ${steam-run}/bin/steam-run \
+      --set RIMSORT_TODDS_PATH ${todds}/bin/todds \
+      "''${qtWrapperArgs[@]}"
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # To skip checking the pre-release 'Edge' release as 'vEdge'.
+      "--version-regex"
+      "v([0-9.]+)"
+    ];
+  };
+
   meta = {
     description = "Open source mod manager for the video game RimWorld";
     homepage = "https://github.com/RimSort/RimSort";
     license = with lib.licenses; [
       gpl3Only
-      # For libsteam_api.so
-      (
-        unfreeRedistributable
-        // {
-          url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
-        }
-      )
+      # For vendored libs/libsteam_api.so
+      valveSDK
     ];
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+      twstagg
+    ];
     mainProgram = "rimsort";
-    # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
   };
-}
+})

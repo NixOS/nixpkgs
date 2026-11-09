@@ -5,7 +5,6 @@
   hatchling,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +12,11 @@ buildPythonPackage rec {
   pname = "javaproperties";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "javaproperties";
     tag = "v${version}";
-    sha256 = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
+    hash = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
   };
 
   build-system = [ hatchling ];

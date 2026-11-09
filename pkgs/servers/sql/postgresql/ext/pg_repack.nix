@@ -45,7 +45,7 @@ postgresqlBuildExtension (finalAttrs: {
     '';
     homepage = "https://github.com/reorg/pg_repack";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
     mainProgram = "pg_repack";
   };

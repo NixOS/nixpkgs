@@ -4,17 +4,20 @@
   mkMesonLibrary,
 
   unixtools,
+  freebsd,
 
   nix-util,
   boost,
   curl,
-  aws-sdk-cpp,
+  cmake,
+  aws-c-common,
   aws-crt-cpp,
   libseccomp,
   nlohmann_json,
   sqlite,
 
   busybox-sandbox-shell ? null,
+  pkgsStatic,
 
   # Configuration Options
 
@@ -22,9 +25,21 @@
 
   embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
 
+  withSandboxShell ?
+    stdenv.hostPlatform.isLinux
+    || (lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD),
+  sandboxShell ?
+    if stdenv.hostPlatform.isLinux then
+      "${busybox-sandbox-shell}/bin/busybox"
+    else if stdenv.hostPlatform.isFreeBSD then
+      "${pkgsStatic.bash}/bin/bash"
+    else
+      null,
+
   withAWS ?
     # Default is this way because there have been issues building this dependency
-    stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin),
+    # TODO: aws-crt-cpp is broken on cygwin, find a good way to check that here
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common && !stdenv.hostPlatform.isCygwin,
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -33,34 +48,44 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
-  nativeBuildInputs = lib.optional embeddedSandboxShell unixtools.hexdump;
+  nativeBuildInputs =
+    lib.optionals embeddedSandboxShell [
+      unixtools.hexdump
+    ]
+    ++ lib.optionals withAWS [
+      cmake
+    ];
 
   buildInputs = [
     boost
     curl
     sqlite
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-  # There have been issues building these dependencies
-  ++
-    lib.optional withAWS
-      # Nix >=2.33 doesn't depend on aws-sdk-cpp and only requires aws-crt-cpp for authenticated s3:// requests.
-      (if lib.versionAtLeast (lib.versions.majorMinor version) "2.33" then aws-crt-cpp else aws-sdk-cpp);
+  ++ lib.optionals (lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD) [
+    freebsd.libjail
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libseccomp
+  ]
+  ++ lib.optionals withAWS [
+    aws-crt-cpp
+  ];
 
   propagatedBuildInputs = [
     nix-util
     nlohmann_json
   ];
 
+  # Don't use the default name "build": that conflicts with an existing directory.
+  mesonBuildDir = "meson-build-dir";
+
   mesonFlags = [
     (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
+    (lib.mesonEnable "s3-aws-auth" withAWS)
   ]
-  ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") (
-    lib.mesonEnable "s3-aws-auth" withAWS
-  )
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+  ++ lib.optionals withSandboxShell [
+    (lib.mesonOption "sandbox-shell" sandboxShell)
   ];
 
   meta = {

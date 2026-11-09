@@ -7,7 +7,6 @@
   git,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tornado,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ws4py";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

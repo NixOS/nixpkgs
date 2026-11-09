@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhdm";
   # When updating this package, also consider updating surelog
-  version = "1.86";
+  version = "1.87";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "UHDM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f7QJJEP/jL69DdMJOL5WQdDZU+kBnnLi2eX37AoaXls=";
+    hash = "sha256-kCCNe1elZoExc8OAtvRxwKODxCdNuVzjFQkEMntNjqI=";
     fetchSubmodules = false; # we use all dependencies from nix
   };
 

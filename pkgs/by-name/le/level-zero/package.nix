@@ -9,16 +9,21 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "level-zero";
-  version = "1.26.3";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
-    tag = "v${version}";
-    hash = "sha256-AFdACq4oooxv9XMrFjDwSXO+dIoGETqhuqgc0qENkNI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YX+fE+FXMQlml2H5oGOOJMy9ESM042EvRO/n0QLouWQ=";
   };
+
+  patches = [
+    # The loader checks for drivers in fixed directories before dlopen, ignoring RUNPATH
+    ./search-run-opengl-driver.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -35,15 +40,18 @@ stdenv.mkDerivation rec {
     tests = {
       inherit intel-compute-runtime openvino;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
 
   meta = {
     description = "oneAPI Level Zero Specification Headers and Loader";
     homepage = "https://github.com/oneapi-src/level-zero";
-    changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/oneapi-src/level-zero/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.ziguana ];
+    maintainers = with lib.maintainers; [
+      ziguana
+      recutita
+    ];
   };
-}
+})

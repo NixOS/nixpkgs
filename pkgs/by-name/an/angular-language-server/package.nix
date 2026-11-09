@@ -11,16 +11,15 @@
   common-updater-scripts,
   jq,
   unzip,
-  typescript,
+  typescript_5,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "20.3.0";
+  version = "22.1.0";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
-    url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
-    hash = "sha256-o3e2qVKw/sfnFHbHHdRlB9UjEx1KLD1KVoaAsnlYjmY=";
+    url = "https://github.com/angular/angular/releases/download/vsix-${finalAttrs.version}/ng-template-${finalAttrs.version}.vsix";
+    hash = "sha256-/PftUvaE9EjsKRc0TnF0lftOgp5fzKmR+KGhocXEMrk=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
     makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript_5}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
   '';
 
   passthru = {
@@ -70,8 +69,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         LATEST_VERSION=$(curl -H "Accept: application/vnd.github+json" \
             ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
-          -Lsf https://api.github.com/repos/angular/vscode-ng-language-service/releases/latest | \
-          jq -r .tag_name | cut -c 2-)
+          -Lsf https://api.github.com/repos/angular/angular/releases | \
+          jq -r '.[] | select(.tag_name | startswith("vsix-")) | .tag_name' | \
+          sort | \
+          tail -n 1 | \
+          cut -d '"' -f 2 | \
+          cut -c 6-)
         update-source-version angular-language-server "$LATEST_VERSION"
       '';
     });
@@ -79,9 +82,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "LSP for angular completions, AOT diagnostic, quick info and go to definitions";
-    homepage = "https://github.com/angular/vscode-ng-language-service";
+    homepage = "https://github.com/angular/angular";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    changelog = "https://github.com/angular/vscode-ng-language-service/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/angular/angular/blob/${finalAttrs.version}/vscode-ng-language-service/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "ngserver";

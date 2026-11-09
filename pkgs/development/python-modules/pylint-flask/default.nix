@@ -5,7 +5,6 @@
   fetchPypi,
   pylint,
   pylint-plugin-utils,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pylint-flask";
   version = "0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,6 +37,6 @@ buildPythonPackage rec {
     description = "Pylint plugin to analyze Flask applications";
     homepage = "https://github.com/jschaf/pylint-flask";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

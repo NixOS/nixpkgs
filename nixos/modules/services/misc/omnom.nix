@@ -92,6 +92,18 @@ in
                   "127.0.0.1:''${config.services.omnom.port}"
                 '';
               };
+              # NOTE: this can't be empty, because it will be overwritten by
+              # Omnom's internal default config.
+              base_url = lib.mkOption {
+                type = lib.types.str;
+                internal = true;
+                default = "http://127.0.0.1:${toString cfg.port}/";
+                description = "Full server URL.";
+                example = "https://local.omnom/xy/";
+                defaultText = lib.literalExpression ''
+                  "http://''${config.services.omnom.settings.server.address}/"
+                '';
+              };
               secure_cookie = lib.mkOption {
                 type = lib.types.bool;
                 default = true;

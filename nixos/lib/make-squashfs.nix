@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  squashfsTools,
+  squashfs-tools,
   closureInfo,
 
   fileName ? "squashfs",
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   # to the closure that was used to build it
   unsafeDiscardReferences.out = true;
 
-  nativeBuildInputs = [ squashfsTools ];
+  nativeBuildInputs = [ squashfs-tools ];
 
   buildCommand = ''
     closureInfo=${closureInfo { rootPaths = storeContents; }}

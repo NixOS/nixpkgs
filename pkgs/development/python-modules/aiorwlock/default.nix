@@ -5,21 +5,18 @@
   pytest-asyncio,
   pytestCheckHook,
   poetry-core,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiorwlock";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiorwlock";
-    tag = "v${version}";
-    hash = "sha256-QwjwuXjaxE1Y+Jzn8hJXY4wKltAT8mdOM7jJ9MF+DhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+favszX1mVuuLWqKCIk+i5frX+y2kOArAUVIAJG1otY=";
   };
 
   build-system = [ poetry-core ];
@@ -34,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Read write lock for asyncio";
     homepage = "https://github.com/aio-libs/aiorwlock";
-    changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${version}";
+    changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
   };
-}
+})

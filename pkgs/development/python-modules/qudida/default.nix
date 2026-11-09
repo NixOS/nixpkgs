@@ -4,24 +4,24 @@
   fetchPypi,
   numpy,
   opencv-python,
-  pythonOlder,
   scikit-learn,
+  setuptools_80,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "qudida";
   version = "0.0.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2xmOKIerDJqgAj5WWvv/Qd+3azYfhf1eE/eA11uhjMg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     numpy
     opencv-python
     scikit-learn

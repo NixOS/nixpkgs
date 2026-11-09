@@ -6,24 +6,26 @@
   sqlite,
   installShellFiles,
   makeWrapper,
+  xandikos,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.5.5";
+  version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VMdSATq0W0dCqllmiwzZ7knWD1qKQbsJLNATptGneIs=";
+    hash = "sha256-7/GxRkB714l/pIWlw0l0DHd2kokGa8WR6cLI+7wORMY=";
   };
 
-  cargoHash = "sha256-mev/ipxAmD0MvG1lrNYzcphg4rp5+ET6nnnaTYX5T/4=";
+  cargoHash = "sha256-iSg+iBlgi2GC/KWlau3lhGaEyJ1ovAxG2B1ALm8d2wE=";
 
-  PIMSYNC_VERSION = finalAttrs.version;
+  env.PIMSYNC_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pkg-config
@@ -35,8 +37,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
+  nativeCheckInputs = [
+    xandikos
+    cacert
+  ];
+
   postInstall = ''
     installManPage pimsync.1 pimsync.conf.5 pimsync-migration.7
+    installShellCompletion --zsh contrib/_pimsync
   '';
 
   nativeInstallCheckInputs = [
@@ -55,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.qxrein ];
+    maintainers = [
+      lib.maintainers.qxrein
+      lib.maintainers.antonmosich
+    ];
     mainProgram = "pimsync";
   };
 })

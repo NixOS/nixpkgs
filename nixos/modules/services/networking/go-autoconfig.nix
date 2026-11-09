@@ -56,7 +56,7 @@ in
         serviceConfig = {
           ExecStart = "${pkgs.go-autoconfig}/bin/go-autoconfig -config ${configFile}";
           Restart = "on-failure";
-          WorkingDirectory = ''${pkgs.go-autoconfig}/'';
+          WorkingDirectory = "${pkgs.go-autoconfig}/";
           DynamicUser = true;
         };
       };

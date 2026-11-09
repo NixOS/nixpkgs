@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-screenrec";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
-    owner = "russelltg";
+    owner = "rosalyntg";
     repo = "wl-screenrec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sLuhVeyzFp6sFKGK7Y7DPAPk7IdFAqAtjm56zhrX3fA=";
+    hash = "sha256-x311y/0wRBXvpmVNRh6/TbLgHYvl1y589PNRjW2NCJc=";
   };
 
-  cargoHash = "sha256-atfWEAo6tMLEzFtiLlxp8fyVKa1cF/4SZFMYStDYZwU=";
+  cargoHash = "sha256-3/yVWVNLu03PhgJTwyeatSVY3cvGtWhwEwpvPdBGnKs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "High performance wlroots screen recording, featuring hardware encoding";
-    homepage = "https://github.com/russelltg/wl-screenrec";
+    homepage = "https://github.com/rosalyntg/wl-screenrec";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     mainProgram = "wl-screenrec";

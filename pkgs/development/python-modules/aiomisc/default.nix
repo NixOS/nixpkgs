@@ -3,6 +3,7 @@
   stdenv,
   aiocontextvars,
   aiohttp,
+  aiothreads,
   async-timeout,
   buildPythonPackage,
   colorlog,
@@ -10,7 +11,8 @@
   fastapi,
   fetchPypi,
   logging-journald,
-  poetry-core,
+  setuptools,
+  setuptools-scm,
   pytestCheckHook,
   raven,
   rich,
@@ -18,19 +20,23 @@
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomisc";
-  version = "17.9.9";
+  version = "18.0.37";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c9dlFc6XFahTbg6EEBb1OiKpFJ/zlzIp34UQJc8CXKY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xxS59g7WOZgsjb12RK+fSThniqXMPWAyfPTwSRRwPD0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    aiothreads
     colorlog
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
@@ -42,7 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
     setproctitle
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -75,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

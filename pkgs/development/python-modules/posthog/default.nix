@@ -4,30 +4,38 @@
   backoff,
   buildPythonPackage,
   distro,
+  django,
+  djangorestframework,
   fetchFromGitHub,
+  flask,
   freezegun,
+  google-genai,
+  mcp,
   mock,
-  monotonic,
   openai,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   parameterized,
+  pytest-asyncio,
+  pytest-bdd,
   pytestCheckHook,
-  python-dateutil,
+  pythonAtLeast,
   requests,
   setuptools,
-  six,
   typing-extensions,
+  zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "6.7.0";
+  version = "7.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${version}";
-    hash = "sha256-//PjAWZF6FYsiG9UDg+MPv1x06Yp4msBkYkNAU9Rjsc=";
+    tag = "posthog-v${finalAttrs.version}";
+    hash = "sha256-4sc1PZaN/SdUk/akzyHhuPejUEDYyXuHlBxIw2LYOaA=";
   };
 
   build-system = [ setuptools ];
@@ -35,46 +43,44 @@ buildPythonPackage rec {
   dependencies = [
     backoff
     distro
-    monotonic
-    python-dateutil
     requests
-    six
     typing-extensions
   ];
 
   nativeCheckInputs = [
     anthropic
+    django
+    djangorestframework
+    flask
     freezegun
+    google-genai
+    mcp
     mock
     openai
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     parameterized
+    pytest-asyncio
+    pytest-bdd
     pytestCheckHook
+    zstandard
   ];
 
   pythonImportsCheck = [ "posthog" ];
 
   disabledTests = [
-    "test_load_feature_flags_wrong_key"
     # Tests require network access
     "test_excepthook"
     "test_request"
-    "test_trying_to_use_django_integration"
     "test_upload"
-    # AssertionError: 2 != 3
-    "test_flush_interval"
-  ];
-
-  disabledTestPaths = [
-    # Revisit this at the next version bump, issue open upstream
-    # See https://github.com/PostHog/posthog-python/issues/234
-    "posthog/test/ai/openai/test_openai.py"
   ];
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/posthog/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

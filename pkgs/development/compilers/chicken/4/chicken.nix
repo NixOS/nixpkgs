@@ -10,7 +10,7 @@
 let
   version = "4.13.0";
   platform =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isDarwin then
       "macosx"
     else if isCygwin then
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

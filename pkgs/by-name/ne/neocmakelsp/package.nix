@@ -3,24 +3,32 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  oniguruma,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
-  version = "0.9.0";
+  version = "0.11.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "Decodetalkers";
+    owner = "neocmakelsp";
     repo = "neocmakelsp";
-    rev = "v${version}";
-    hash = "sha256-TFan3gJ5j2sCfM3p8a2bqPwqzn1hFN8ZyCAwAdHRZBU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AgwrIdEh2w92hr9SFnpOnsR48yTyInkD/6uaWeGc0mQ=";
   };
 
-  cargoHash = "sha256-lqD6o+QXapd6JWMEYUWpAmZK4EWkIlqc5ZN/fMmySTs=";
+  cargoHash = "sha256-sZiGeo2OhnyvwwSd86WGVo3UAZKLQt2g9zBecBQLzrQ=";
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
+
+  buildInputs = [ oniguruma ];
 
   postInstall = ''
     installShellCompletion --bash completions/bash/neocmakelsp
@@ -28,9 +36,13 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh completions/zsh/_neocmakelsp
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
-    homepage = "https://github.com/Decodetalkers/neocmakelsp";
+    homepage = "https://github.com/neocmakelsp/neocmakelsp";
+    changelog = "https://github.com/neocmakelsp/neocmakelsp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -39,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "neocmakelsp";
   };
-}
+})

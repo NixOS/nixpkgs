@@ -5,16 +5,17 @@
   cmake,
   calceph,
   withCalceph ? true,
+  cppSupport ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "supernovas";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
-    owner = "smithsonian";
+    owner = "Sigmyne";
     repo = "supernovas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hv+OdLTzGp8y1yovZF+sSXiUi7bJx+a1V2ldsAHG9ME=";
+    hash = "sha256-sLGl9Lh7bpvxhQ568kmwOMgVxFhH2lDRY/ftX6Oqm2w=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_CALCEPH" withCalceph)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
+    (lib.cmakeBool "ENABLE_CPP" cppSupport)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
+
+  doCheck = true;
 
   meta = {
     description = "High-performance astrometry library for C/C++";

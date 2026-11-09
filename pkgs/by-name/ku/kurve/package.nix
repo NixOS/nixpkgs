@@ -13,14 +13,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kurve";
-  version = "2.2.0";
+  version = "3.5.1";
   dontWrapQtApps = true;
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
-    repo = "kurve";
+    repo = "plasma-audio-visualizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWNgQUgjrlzQs+cjzfoD13dHG3M93Akxyg5VNB9Rp9E=";
+    hash = "sha256-EEOKf/0Ti/PyhxUs4n56jRvDFBLVwsZx2icO5PzBIrQ=";
   };
 
   installPhase = ''
@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "KDE Plasma widget displaying CAVA audio visualizations.";
-    homepage = "https://github.com/luisbocanegra/kurve";
-    changelog = "https://github.com/luisbocanegra/kurve/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/luisbocanegra/plasma-audio-visualizer";
+    changelog = "https://github.com/luisbocanegra/plasma-audio-visualizer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ chrisheib ];
     inherit (kdePackages.kwindowsystem.meta) platforms;

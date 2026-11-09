@@ -9,9 +9,8 @@
   funcparserlib,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   reportlab,
-  setuptools,
+  setuptools_80,
   webcolors,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "blockdiag";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
@@ -51,14 +48,14 @@ buildPythonPackage rec {
     # note: this is a postPatch as `seqdiag` uses them directly
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     docutils
     funcparserlib
     pillow
     reportlab
-    setuptools
+    setuptools_80
     webcolors
   ];
 

@@ -2,12 +2,14 @@ import ../make-test-python.nix (
   { pkgs, ... }:
   {
     name = "replace-dependencies";
-    meta.maintainers = with pkgs.lib.maintainers; [ alois31 ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { ... }:
       {
         nix.settings.experimental-features = [ "ca-derivations" ];
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
         system.extraDependencies = [ pkgs.stdenvNoCC ];
       };
 

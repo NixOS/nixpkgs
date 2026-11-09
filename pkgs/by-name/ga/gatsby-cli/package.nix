@@ -13,20 +13,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gatsby-cli";
-  version = "5.15.0";
+  version = "5.16.0";
 
   src = fetchFromGitHub {
     owner = "gatsbyjs";
     repo = "gatsby";
     tag = "gatsby-cli@${finalAttrs.version}";
-    hash = "sha256-sNNbOV9UuCTYHp4cSK9ngCukUXDNV4iOIc9PPQVYymM=";
+    hash = "sha256-OK2GqO7UMYR7EFU4UC1cHtKfsQAMJP7KuUaQCUfyTBE=";
   };
 
   yarnKeepDevDeps = true;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-wfg9Nj9Z8vyp2NdE+fOTuM+pXnfM/r46CbfuE5f3fGU=";
+    hash = "sha256-tmMPz/GunOMMGAHP2/nQkDBeZ+LtCdqQA/Bc6PFzOdk=";
   };
 
   yarnBuildScript = "lerna";
@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/gatsbyjs/gatsby/releases/tag/gatsby%2540${finalAttrs.version}";
+    changelog = "https://github.com/gatsbyjs/gatsby/releases/tag/gatsby@${finalAttrs.version}";
     description = "The Gatsby command line interface";
     homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "gatsby";
   };
 })

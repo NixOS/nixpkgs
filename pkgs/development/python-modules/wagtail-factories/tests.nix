@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "wagtail-factories-tests";
-  format = "other";
+  pyproject = false;
   inherit (wagtail-factories) src version;
 
   dontBuild = true;

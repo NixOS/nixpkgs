@@ -10,6 +10,7 @@
   html5lib,
   matplotlib,
   pillow,
+  pkg-resources-backport,
   pytest,
   pytest-astropy,
   pytest-dependency,
@@ -34,8 +35,18 @@ buildPythonPackage rec {
     hash = "sha256-BcdRBPnJfuW17p31xUhjBmP7Lv98CnmOTCO4aU0xpMM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "auto_use = True" "auto_use = False"
+    filterwarnings_old=$(printf 'filterwarnings =\n    error')
+    filterwarnings_new=$(printf 'filterwarnings =\n    error\n    ignore:astropy.samp.*deprecated:Warning')
+    substituteInPlace setup.cfg \
+      --replace-fail "$filterwarnings_old" "$filterwarnings_new"
+  '';
+
   build-system = [
     astropy-helpers
+    pkg-resources-backport
     setuptools
   ];
 
@@ -48,14 +59,7 @@ buildPythonPackage rec {
     pyvo
   ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     matplotlib
     pillow
@@ -64,6 +68,7 @@ buildPythonPackage rec {
     pytest-dependency
     pytest-rerunfailures
     pytest-timeout
+    pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -71,6 +76,12 @@ buildPythonPackage rec {
   preCheck = ''
     cd build/lib
   '';
+
+  pytestFlags = [
+    "--import-mode=importlib"
+    "-W"
+    "ignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   pythonImportsCheck = [ "astroquery" ];
 

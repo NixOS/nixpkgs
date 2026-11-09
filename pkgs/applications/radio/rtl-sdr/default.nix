@@ -17,10 +17,17 @@ let
     }:
     stdenv.mkDerivation {
       inherit version pname src;
+
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       nativeBuildInputs = [
         pkg-config
         cmake
       ];
+
       propagatedBuildInputs = [ libusb1 ];
 
       cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [

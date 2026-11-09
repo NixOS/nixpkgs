@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pyparsing,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.22";
+  version = "0.23";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "schemdraw";
     tag = version;
-    hash = "sha256-trhpPv9x+S4d9AHT52/uvuCDOX4tJj6EhPzYBxtzyeQ=";
+    hash = "sha256-NAvJDrJKf4CYs9W4zdNAU8WnuXlCK6FU44+5flWzyAk=";
   };
 
   build-system = [ setuptools ];

@@ -1,38 +1,48 @@
 {
   lib,
+  php,
   stdenv,
   buildPecl,
   cargo,
+  cmake,
   rustc,
   fetchFromGitHub,
   rustPlatform,
   curl,
   pcre2,
+  valgrind,
   libiconv,
-  php,
+  pkg-config,
+  zstd,
 }:
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.97.0";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-Kx2HaWvRT+mFIs0LAAptx6nm9DQ83QEuyHNcEPEr7A4=";
+    hash = "sha256-35Pb68wFg/HwuN3qrxRFo/rN9rOdnx30vUScWPQGQ5s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-cwhE6M8r8QnrIiNgEekI25GcKTByySrZsigPd9/Fq7o=";
+    hash = "sha256-IcyygiMLiaKkb+4W+YtTQuRrunego6KtbISw5u1egoI=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-O2";
 
+  configureFlags = [ "--enable-ddtrace-libddwaf-source" ];
+
+  dontUseCmakeConfigure = true;
+
   nativeBuildInputs = [
     cargo
+    cmake
+    pkg-config
     rustc
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
@@ -41,13 +51,18 @@ buildPecl rec {
   buildInputs = [
     curl
     pcre2
+    zstd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    valgrind
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
   meta = {
-    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
+    broken = lib.versionAtLeast php.version "8.6";
+    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.tag}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [
@@ -55,6 +70,5 @@ buildPecl rec {
       bsd3
     ];
     teams = [ lib.teams.php ];
-    broken = lib.versionAtLeast php.version "8.4";
   };
 }

@@ -35,7 +35,7 @@ let
         let
           a = cfg.tcp.anonymousClients.allowedIpRanges;
         in
-        lib.optional (a != [ ]) ''auth-ip-acl=${lib.concatStringsSep ";" a}'';
+        lib.optional (a != [ ]) "auth-ip-acl=${lib.concatStringsSep ";" a}";
       port = lib.optional (!(isNull cfg.tcp.port)) "port=${toString cfg.tcp.port}";
     in
     pkgs.writeTextFile {
@@ -282,11 +282,9 @@ in
       (lib.mkIf (cfg.extraModules != [ ]) {
         services.pulseaudio.daemon.config.dl-search-path =
           let
-            overriddenModules = builtins.map (
-              drv: drv.override { pulseaudio = overriddenPackage; }
-            ) cfg.extraModules;
+            overriddenModules = map (drv: drv.override { pulseaudio = overriddenPackage; }) cfg.extraModules;
             modulePaths =
-              builtins.map (drv: "${drv}/lib/pulseaudio/modules")
+              map (drv: "${drv}/lib/pulseaudio/modules")
                 # User-provided extra modules take precedence
                 (overriddenModules ++ [ overriddenPackage ]);
           in
@@ -297,8 +295,11 @@ in
         services.avahi.enable = true;
       })
       (lib.mkIf cfg.zeroconf.publish.enable {
-        services.avahi.publish.enable = true;
-        services.avahi.publish.userServices = true;
+        services.avahi.settings.publish = {
+          disable-publishing = false;
+          disable-user-service-publishing = false;
+          publish-addresses = true;
+        };
       })
       (lib.mkIf cfg.tcp.openFirewall {
         networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];

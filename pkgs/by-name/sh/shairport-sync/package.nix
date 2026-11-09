@@ -12,7 +12,7 @@
   libdaemon,
   libsodium,
   libgcrypt,
-  ffmpeg,
+  ffmpeg-headless,
   libuuid,
   unixtools,
   popt,
@@ -23,10 +23,11 @@
   libao,
   libsoundio,
   mosquitto,
+  nix-update-script,
   pipewire,
   soxr,
-  alac,
   sndio,
+  enableAvahi ? true,
   enableAirplay2 ? false,
   enableStdout ? true,
   enableAlsa ? true,
@@ -42,46 +43,45 @@
   enableMqttClient ? true,
   enableDbus ? stdenv.hostPlatform.isLinux,
   enableSoxr ? true,
-  enableAlac ? true,
   enableConvolution ? true,
   enableLibdaemon ? false,
+  enableTinySVCmDNS ? true,
+
+  # Enabling session bus support disables system bus support
+  enableSessionBus ? true,
 }:
 
 let
   inherit (lib) optional optionals;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "4.3.7";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
-    tag = version;
-    hash = "sha256-bfOgUeUCxQeCmKKBlvIXptM5lJxgZiH4lOhLJSNih8g=";
+    tag = finalAttrs.version;
+    hash = "sha256-JiiZLgeYFoZ+Xq6tn1+KqW6Ewo+j+5JmxJ0Wm3dXqoE=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    # For glib we want the `dev` output for the same library we are
-    # also linking against, since pkgsHostTarget.glib.dev exposes
-    # some extra tools that are built for build->host execution.
-    # To achieve this, we coerce the output to a string to prevent
-    # mkDerivation's splicing logic from kicking in.
-    "${glib.dev}"
   ]
-  ++ optional enableAirplay2 [
+  ++ optionals enableAirplay2 [
+    libplist.bin
     unixtools.xxd
   ];
 
   buildInputs = [
     openssl
-    avahi
     popt
     libconfig
+    ffmpeg-headless
   ]
+  ++ optional enableAvahi avahi
   ++ optional enableLibdaemon libdaemon
   ++ optional enableAlsa alsa-lib
   ++ optional enableSndio sndio
@@ -92,33 +92,34 @@ stdenv.mkDerivation rec {
   ++ optional enableJack libjack2
   ++ optional enableSoundio libsoundio
   ++ optional enableSoxr soxr
-  ++ optional enableAlac alac
   ++ optional enableConvolution libsndfile
   ++ optionals enableAirplay2 [
     libplist
     libsodium
     libgcrypt
     libuuid
-    ffmpeg
   ]
-  ++ optional stdenv.hostPlatform.isLinux glib;
+  ++ optional (enableDbus || enableMpris) glib;
 
-  postPatch = ''
-    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
-    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' mpris-service.c
+  postPatch = lib.optionalString enableSessionBus ''
+    substituteInPlace dbus/dbus-service.c --replace-fail 'G_BUS_TYPE_SYSTEM' 'G_BUS_TYPE_SESSION'
+    substituteInPlace dbus/mpris-service.c --replace-fail 'G_BUS_TYPE_SYSTEM' 'G_BUS_TYPE_SESSION'
   '';
 
   enableParallelBuilding = true;
+
+  preConfigure = lib.optionalString (enableDbus || enableMpris) ''
+    export PATH=${glib.dev}/bin:$PATH
+  '';
 
   configureFlags = [
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
-    "--with-stdout"
-    "--with-avahi"
   ]
-  ++ optional enablePulse "--with-pa"
-  ++ optional enablePipewire "--with-pw"
+  ++ optional enableAvahi "--with-avahi"
+  ++ optional enablePulse "--with-pulseaudio"
+  ++ optional enablePipewire "--with-pipewire"
   ++ optional enableAlsa "--with-alsa"
   ++ optional enableSndio "--with-sndio"
   ++ optional enableAo "--with-ao"
@@ -127,26 +128,32 @@ stdenv.mkDerivation rec {
   ++ optional enableStdout "--with-stdout"
   ++ optional enablePipe "--with-pipe"
   ++ optional enableSoxr "--with-soxr"
-  ++ optional enableAlac "--with-apple-alac"
   ++ optional enableConvolution "--with-convolution"
   ++ optional enableDbus "--with-dbus-interface"
   ++ optional enableMetadata "--with-metadata"
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableMqttClient "--with-mqtt-client"
+  ++ optional enableTinySVCmDNS "--with-tinysvcmdns"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 
   strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script {
+    # ignore -dev tagged releases
+    extraArgs = [ "--version-regex=^([0-9\\.]+)$" ];
+  };
 
   meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";
+    changelog = "https://github.com/mikebrady/shairport-sync/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [
-      lnl7
       jordanisaacs
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ninja,
   cmake,
+  pkg-config,
   libpng,
   libhwy,
   lcms2,
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ninja
     cmake
+    pkg-config
   ];
 
   buildInputs = [

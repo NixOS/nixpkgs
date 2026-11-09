@@ -9,23 +9,23 @@
   pytest-cov-stub,
   zope-deprecation,
   pyramid,
-  pythonOlder,
+  setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyramid-jinja2";
   version = "2.10.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyramid_jinja2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-jFCMs1wTX5UUnKI2EQ+ciHU0NXV0DRbFy3OlDvHCFnc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     markupsafe
     jinja2
     pyramid
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

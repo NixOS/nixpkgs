@@ -3,33 +3,40 @@
   lib,
   buildNpmPackage,
   electron,
-  nodejs,
+  nodejs_26,
   makeDesktopItem,
   copyDesktopItems,
   icoutils,
+  fetchpatch2,
 }:
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.29";
+  version = "0.7.35";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     tag = "v${version}";
-    hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
+    hash = "sha256-A/ievIKXfFGu90aijxhmEWvfg2RqDtd7AtU+iyma3lU=";
   };
 
-  npmDepsHash = "sha256-WJ5HVVa4rEOsvr52L/OGk+vlxRiKLJTxWmUnpN1FnbY=";
+  npmDepsHash = "sha256-fx/qwz3znXkLi81VLW2tB7TAZGO4M1dkzjzKcj3M4NA=";
 
   patches = [
     # Since version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
     # This patch will probably be removed in the next version
     # If it does not build without it, you just need to do a npm update in the antares project and copy the patch
-    ./npm-lock.patch
+    # https://github.com/antares-sql/antares/pull/1050
+    (fetchpatch2 {
+      url = "https://github.com/antares-sql/antares/commit/8fda56b28892dbaab2cbab0fee2db096bc4930c4.patch?full_index=1";
+      hash = "sha256-uDOEcakBuhbznb7eonJW2NC8QQX4HYR+6+Xa3TO6kFU=";
+    })
   ];
 
-  buildInputs = [ nodejs ];
+  nodejs = nodejs_26;
+
+  buildInputs = [ nodejs_26 ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -37,6 +44,7 @@ buildNpmPackage rec {
   ];
 
   npmBuildScript = "compile";
+  npmRebuildFlags = [ "--ignore-scripts" ];
 
   installPhase = ''
     runHook preInstall

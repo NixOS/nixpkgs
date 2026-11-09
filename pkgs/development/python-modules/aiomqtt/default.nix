@@ -6,21 +6,18 @@
   hatchling,
   paho-mqtt,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomqtt";
-  version = "2.4.0";
+  version = "2.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
-    owner = "sbtinstruments";
+    owner = "empicano";
     repo = "aiomqtt";
     tag = "v${version}";
-    hash = "sha256-b7kCLpJzZGx8YpC0M4O4fqFh3xP73CXFWbKaggD6bOI=";
+    hash = "sha256-f9m+mdlSADOixsKymxsKiVxgWF7JBc3kjVU+rOkC+yM=";
   };
 
   build-system = [ hatchling ];
@@ -40,8 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Idiomatic asyncio MQTT client, wrapped around paho-mqtt";
-    homepage = "https://github.com/sbtinstruments/aiomqtt";
-    changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/empicano/aiomqtt";
+    changelog = "https://github.com/empicano/aiomqtt/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

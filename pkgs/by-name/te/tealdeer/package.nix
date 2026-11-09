@@ -5,20 +5,27 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tealdeer";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "tealdeer-rs";
     repo = "tealdeer";
-    rev = "v${version}";
-    hash = "sha256-QxkFpcEFLn98LvGDQ/PEovzzHTfNiKFQfGaHl/w5aLQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/tkK/LP62UG7Z6GMpUX/15d64zzW4bIoDe32emw3crE=";
   };
 
-  cargoHash = "sha256-45oFBZC8IRCybhnmZfwDsouFVsm2hgPQohem/1nsAxc=";
+  cargoHash = "sha256-Od/dx77FGafEr94yDpDWL4K2I0U/2FuQ1QFjgKiAozU=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  # "rustls-with-webpki-roots" is enabled by default
+  # Enforce native roots so tealdeer uses system cacert updates
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "rustls-with-native-roots"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd tldr \
@@ -28,14 +35,17 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # Disable tests that require Internet access:
-  checkFeatures = [ "ignore-online-tests" ];
+  checkFeatures = [
+    "ignore-online-tests"
+  ]
+  ++ finalAttrs.buildFeatures;
   # tealdeer requires --test-threads=1
   dontUseCargoParallelTests = true;
 
   meta = {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/tealdeer-rs/tealdeer";
-    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       davidak
       newam
@@ -48,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tldr";
   };
-}
+})

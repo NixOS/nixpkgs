@@ -8,10 +8,10 @@
   SDL2,
   xercesc,
   openal,
-  lua,
+  lua5_2_compat,
   libvlc,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   cppunit,
   ftgl,
   glew,
@@ -21,7 +21,10 @@
   libpng,
   fontconfig,
   freetype,
-  xorg,
+  libxext,
+  libx11,
+  libsm,
+  libice,
   makeWrapper,
   bash,
   which,
@@ -32,15 +35,16 @@
   fetchpatch,
 }:
 let
+  lua = lua5_2_compat;
   version = "3.13.0";
   lib-env = buildEnv {
     name = "megaglest-lib-env";
     paths = [
       SDL2
-      xorg.libSM
-      xorg.libICE
-      xorg.libX11
-      xorg.libXext
+      libsm
+      libice
+      libx11
+      libxext
       xercesc
       openal
       libvorbis
@@ -54,7 +58,7 @@ let
       stdenv.cc.cc
       glew
       libGLU
-      wxGTK32
+      wxwidgets_3_2
     ];
   };
   path-env = buildEnv {
@@ -117,14 +121,14 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     SDL2
-    xorg.libX11
+    libx11
     xercesc
     openal
     lua
     libpng
     libjpeg
     libvlc
-    wxGTK32
+    wxwidgets_3_2
     glib
     cppunit
     fontconfig

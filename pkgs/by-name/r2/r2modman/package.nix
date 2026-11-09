@@ -5,64 +5,73 @@
   dart-sass,
   electron,
   fetchFromGitHub,
-  fetchurl,
+  fetchPnpmDeps,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
   nodejs,
-  yarn-berry,
+  pnpm_11,
+  pnpmConfigHook,
 }:
+let
+  pnpm = pnpm_11;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.11";
+  version = "3.2.21";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cnaP5DbEqYEkTPd1QWNArvMMr7UbX/danXa7ISfPpc=";
+    hash = "sha256-uWr/t8+Fo0fMIwbUUeZPmY7L1psqTjuf5bk2vnKxSs8=";
   };
 
-  missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches missingHashes;
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-XusNho027MjQLaBxaXMOb/2rTiSLmi4mfwY2hjHQZgk=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-xfafdQkOTLHUPeFxKn3fujZrEmK+AJ2TN85eHAvilj8=";
   };
 
   patches = [
-    # Temporary fix for MiSide cover image https://github.com/ebkr/r2modmanPlus/pull/2024
-    (fetchurl {
-      url = "https://github.com/ebkr/r2modmanPlus/commit/24a2b8386c7fe9a6856cea06967c96aa685d3660.patch";
-      hash = "sha256-6NmwFRtn8+t9XRPHHVLM05idbCSYcBG0VmUOd8fZKs0=";
-    })
-
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
+
+    # Fix copying of wrapper files to game directory
+    ./wrapper-fix.patch
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     copyDesktopItems
     dart-sass
     makeWrapper
     nodejs
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    pnpm
+    pnpmConfigHook
   ];
 
-  env = {
-    # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
-    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
-  };
+  # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+
+  postPatch = ''
+    # Hide update banner
+    echo "<template></template>" > src/components/banner/ManagerUpdateBanner.vue
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    yarn quasar build --mode electron --skip-pkg
+    pnpm quasar build --mode electron --skip-pkg
+
+    # Remove unecessary devDependencies only required at build time.
+    pnpm prune --prod
 
     runHook postBuild
   '';
@@ -118,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };

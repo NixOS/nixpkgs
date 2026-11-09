@@ -4,7 +4,6 @@
   lndir,
   buildEnv,
 
-  maintainers,
   teams,
 
   version,
@@ -36,6 +35,8 @@
 
   nix-cli,
 
+  nix-nswrapper ? null,
+
   nix-functional-tests,
 
   nix-manual,
@@ -57,6 +58,7 @@ let
       nix-store
       nix-store-c
       nix-fetchers
+      nix-fetchers-c
       nix-expr
       nix-expr-c
       nix-flake
@@ -66,14 +68,13 @@ let
       nix-cmd
       ;
   }
-  // lib.optionalAttrs (lib.versionAtLeast version "2.29pre") {
-    inherit
-      nix-fetchers-c
-      ;
-  }
   //
     lib.optionalAttrs
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       {
         # Currently fails in static build
         inherit
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   /**
-    `doCheck` controles whether tests are added as build gate for the combined package.
+    `doCheck` controls whether tests are added as build gate for the combined package.
     This includes both the unit tests and the functional tests, but not the
     integration tests that run in CI (the flake's `hydraJobs` and some of the `checks`).
   */
@@ -146,7 +147,12 @@ stdenv.mkDerivation (finalAttrs: {
     nix-functional-tests
   ]
   ++
-    lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    lib.optionals
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       [
         # Perl currently fails in static build
         # TODO: Split out tests into a separate derivation?
@@ -178,6 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Forwarded outputs
       ln -sT ${nix-manual} $doc
       ln -sT ${nix-manual.man} $man
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      lndir ${nix-nswrapper} $out
     '';
 
   passthru = {
@@ -225,12 +234,17 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "nix";
     description = "Nix package manager";
-    longDescription = nix-cli.meta.longDescription;
-    homepage = nix-cli.meta.homepage;
-    license = nix-cli.meta.license;
-    maintainers = maintainers;
+    inherit (nix-cli.meta)
+      longDescription
+      homepage
+      donationPage
+      license
+      platforms
+      changelog
+      ;
+
     teams = teams;
-    platforms = nix-cli.meta.platforms;
+
     outputsToInstall = [
       "out"
       "man"
@@ -240,11 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-expr"
       "nix-expr-c"
       "nix-fetchers"
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
       "nix-fetchers-c"
-    ]
-    ++ [
       "nix-flake"
       "nix-flake-c"
       "nix-main"
@@ -254,6 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

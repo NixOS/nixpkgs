@@ -6,8 +6,8 @@
   pkg-config,
   cmake,
   ninja,
-  clang,
   python3,
+  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
@@ -15,11 +15,11 @@
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
-  ffmpeg_6,
+  xxhash,
+  ffmpeg,
   protobuf,
-  openalSoft,
-  minizip,
+  openal-soft,
+  minizip-ng-compat,
   range-v3,
   tl-expected,
   hunspell,
@@ -28,8 +28,16 @@
   microsoft-gsl,
   boost,
   ada,
+  pango,
+  tlottie,
+  libfido2,
+  libavif,
+  libheif,
+  libjxl,
   libicns,
+  wallet-engine,
   apple-sdk_15,
+  swift,
   nix-update-script,
 }:
 
@@ -42,14 +50,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.3.4";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-0d5PFo0tv8yayHqsd44gvodgbyRb1b5IPXtJahkWjHU=";
+    hash = "sha256-s4+nS5baMv2QvVrp9d+bRLWB8ihufLLin2e40BcRAzM=";
   };
 
   nativeBuildInputs = [
@@ -57,21 +65,23 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # to build bundled libdispatch
-    clang
     gobject-introspection
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    swift
   ];
 
   buildInputs = [
     qtbase
     qtsvg
     lz4
-    xxHash
-    ffmpeg_6
-    openalSoft
-    minizip
+    xxhash
+    ffmpeg
+    openal-soft
+    minizip-ng-compat
     range-v3
     tl-expected
     rnnoise
@@ -79,17 +89,24 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
+    libfido2
     (tdlib.override { tde2eOnly = true; })
+    tlottie
+    wallet-engine
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
     qtwayland
     kcoreaddons
     hunspell
+    pango
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libicns
+    libavif
+    libheif
+    libjxl
   ];
 
   dontWrapQtApps = true;
@@ -98,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_Swift_COMPILER_TARGET" stdenv.hostPlatform.swift.triple)
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

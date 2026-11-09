@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libtirpc,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,11 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     libtirpc
   ];
 
+  passthru.tests.nixos = nixosTests.xinetd;
+
   meta = {
     description = "Secure replacement for inetd";
     platforms = lib.platforms.linux;
     homepage = "https://github.com/openSUSE/xinetd";
     license = lib.licenses.xinetd;
     maintainers = with lib.maintainers; [ fgaz ];
+    mainProgram = "xinetd";
   };
 })

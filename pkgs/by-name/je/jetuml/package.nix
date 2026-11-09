@@ -4,21 +4,21 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchurl,
-  jdk,
+  zulu25,
   makeBinaryWrapper,
   imagemagick,
 }:
 
 let
-  jdkWithFX = jdk.override { enableJavaFX = true; };
+  jdkWithFX = zulu25.override { enableJavaFX = true; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetuml";
-  version = "3.9";
+  version = "3.10";
 
   src = fetchurl {
     url = "https://github.com/prmr/JetUML/releases/download/v${finalAttrs.version}/JetUML-${finalAttrs.version}.jar";
-    hash = "sha256-wACGbHeRQ5rXcuI1J3eTfQraWp8eWtkIAPo7BNGcFUU=";
+    hash = "sha256-X3mLfK06gQnZ9vzYX1CDw6r6krIuZU9DtujgcferxsM=";
   };
 
   dontUnpack = true;
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ${jdkWithFX}/lib/openjdk/bin/jar xf $src jet.png
+    ${jdkWithFX}/bin/jar xf $src jet.png
     magick jet.png -resize 128x128 jet128.png
     magick jet.png -resize 48x48 jet48.png
     install -Dm444 jet48.png $out/share/icons/hicolor/48x48/apps/jet.png
@@ -58,7 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm444 $src $out/share/java/JetUML-${finalAttrs.version}.jar
 
-    makeWrapper ${jdkWithFX}/lib/openjdk/bin/java $out/bin/jetuml \
+    makeWrapper ${jdkWithFX}/bin/java $out/bin/jetuml \
+      --add-flags "--enable-native-access=javafx.graphics,javafx.media,javafx.web" \
       --add-flags "-jar $out/share/java/JetUML-${finalAttrs.version}.jar"
 
     runHook postInstall

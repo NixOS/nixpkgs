@@ -2,28 +2,41 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  oniguruma,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polarity";
-  version = "latest-unstable-2025-12-17";
+  version = "0-unstable-2026-08-10";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
     repo = "polarity";
-    rev = "54db456e28778d98d78d671868bfd58b34da18c2";
-    hash = "sha256-YQAU8flTL5Yr9ZZYe2GWwtYWKLPmB+TXZ1JHVnAmJds=";
+    rev = "2d8ad195effd61daa95e97aa3d1e172eefca5e9a";
+    hash = "sha256-EagBLOqLrTKwCR/yQ5docjq2VFD1u907haQqs9bPM6M=";
   };
 
-  cargoHash = "sha256-sOnlMAdDB1RVMQGyCD4mNa7EV++PeKrD5dDK1hG9VkM=";
+  cargoHash = "sha256-7vBLZwUpZ/LQ4MO1JZhpErFvh5EQyS+7IN1U5wyAP/E=";
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(\\d.*)"
+    ];
+  };
 
   meta = {
     description = "Language with Dependent Data and Codata Types";
     homepage = "https://polarity-lang.github.io/";
-    changelog = "https://github.com/polarity-lang/polarity/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/polarity-lang/polarity/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -32,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pol";
     platforms = lib.platforms.all;
   };
-}
+})

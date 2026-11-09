@@ -1,71 +1,60 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
+  glib,
   meson,
   ninja,
-  sassc,
-  gtk3,
-  inkscape,
-  optipng,
-  gtk-engine-murrine,
-  gdk-pixbuf,
-  librsvg,
+  nix-update-script,
   python3,
-  buildPackages,
+  sassc,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pop-gtk-theme";
-  version = "2021-08-19";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "gtk-theme";
-    rev = "6615e4510485c5dc0b379746acc40f538d987c86";
-    sha256 = "16h03x2m4j4hfwp7pdmw1navcy5q7di38jvigfgf263wajyxbznr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I8yujsRiLbDDNrCeWbOHPE+kfypH39DPNkYaRC3WA+s=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
+    glib # for glib-compile-resources
     meson
     ninja
-    sassc
-    gtk3
-    inkscape
-    optipng
     python3
-  ];
-
-  buildInputs = [
-    gdk-pixbuf
-    librsvg
-  ];
-
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
+    sassc
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs gnome-shell
 
-    for file in $(find -name render-\*.sh); do
-      substituteInPlace "$file" \
-        --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="${buildPackages.inkscape}/bin/inkscape"' \
-        --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="${buildPackages.optipng}/bin/optipng"'
-    done
+    # The GTK2 theme needs gtk-engine-murrine, which is no longer packaged.
+    # Replace with -Dgtk2=false once merged:
+    # https://github.com/pop-os/gtk-theme/pull/610
+    substituteInPlace gtk/src/dark/meson.build gtk/src/light/meson.build \
+      --replace-fail "subdir('gtk-2.0')" ""
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "System76 Pop GTK+ Theme";
+    description = "System76 Pop GTK theme";
     homepage = "https://github.com/pop-os/gtk-theme";
-    license = with lib.licenses; [
-      gpl3
-      lgpl21
-      cc-by-sa-40
-    ];
-    platforms = lib.platforms.linux;
-    maintainers = [ ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus # most of the theme
+        lgpl21Plus # the GTK3 stylesheets, derived from upstream Adwaita
+        cc-by-sa-40 # the SVG assets and the sound theme
+      ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
-}
+})

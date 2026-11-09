@@ -1,13 +1,12 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 2738cab631...5bb2b7d17a 100644
+index 95e27199..a1695a3f 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -48,93 +48,20 @@
+@@ -49,74 +49,14 @@ endif()
  include_directories(${PROJECT_SOURCE_DIR})
  include_directories(${PROJECT_SOURCE_DIR}/lib_ccx)
  include_directories(${PROJECT_SOURCE_DIR}/lib_ccx/zvbi)
 -include_directories(${PROJECT_SOURCE_DIR}/thirdparty)
--include_directories(${PROJECT_SOURCE_DIR}/thirdparty/protobuf-c)
  include_directories(${PROJECT_SOURCE_DIR}/thirdparty/lib_hash)
 -include_directories(${PROJECT_SOURCE_DIR}/thirdparty/libpng)
  
@@ -27,13 +26,11 @@ index 2738cab631...5bb2b7d17a 100644
 -include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
  aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/lib_hash/ SOURCEFILE)
 -aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/libpng/ SOURCEFILE)
--aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/protobuf-c/ SOURCEFILE)
 -aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/zlib/ SOURCEFILE)
  aux_source_directory(${PROJECT_SOURCE_DIR}/lib_ccx/zvbi/ SOURCEFILE)
  
 -set(UTF8PROC_SOURCE ${PROJECT_SOURCE_DIR}/thirdparty/utf8proc/utf8proc.c)
-+set(UTF8PROC_SOURCE)
- 
+-
 -set(FREETYPE_SOURCE
 -        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/autofit/autofit.c
 -        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftbase.c
@@ -77,10 +74,13 @@ index 2738cab631...5bb2b7d17a 100644
 -        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/type42/type42.c
 -        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/winfonts/winfnt.c
 -        )
++set(UTF8PROC_SOURCE)
++
 +set(FREETYPE_SOURCE)
  #Windows specific libraries and linker flags
  if(WIN32)
-     include_directories ("${PROJECT_SOURCE_DIR}/thirdparty/win_spec_incld/")
+     if(NOT MINGW)
+@@ -125,17 +65,6 @@ if(WIN32)
      include_directories ("${PROJECT_SOURCE_DIR}/thirdparty/win_iconv/")
      aux_source_directory ("${PROJECT_SOURCE_DIR}/thirdparty/win_iconv/" SOURCEFILE)
      set (EXTRA_LIBS ${EXTRA_LIBS} ws2_32 winmm Bcrypt)
@@ -98,21 +98,11 @@ index 2738cab631...5bb2b7d17a 100644
  endif(WIN32)
  
  if(MSVC)
-@@ -212,9 +139,6 @@
-   pkg_check_modules (NANOMSG REQUIRED libnanomsg)
-   set (EXTRA_LIBS ${EXTRA_LIBS} ${NANOMSG_STATIC_LIBRARIES})
- 
--  include_directories ("${PROJECT_SOURCE_DIR}/thirdparty/protobuf-c/")
--  aux_source_directory ("${PROJECT_SOURCE_DIR}/thirdparty/protobuf-c/" SOURCEFILE)
--
-   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_SHARING")
- endif (PKG_CONFIG_FOUND AND WITH_SHARING)
- 
 diff --git a/src/lib_ccx/CMakeLists.txt b/src/lib_ccx/CMakeLists.txt
-index 4f329bcaab...a334d20c4d 100644
+index a891560b..154c1c15 100644
 --- a/src/lib_ccx/CMakeLists.txt
 +++ b/src/lib_ccx/CMakeLists.txt
-@@ -13,9 +13,39 @@
+@@ -13,9 +13,39 @@ endif(WIN32)
  find_package(PkgConfig)
  pkg_check_modules (GPAC REQUIRED gpac)
  
@@ -152,16 +142,16 @@ index 4f329bcaab...a334d20c4d 100644
  if (WITH_FFMPEG)
      find_package(PkgConfig)
  
-@@ -94,7 +124,7 @@
-     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDISABLE_RUST")
- endif (WITHOUT_RUST)
+@@ -87,7 +117,7 @@ if (WITH_HARDSUBX)
+     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_HARDSUBX")
+ endif (WITH_HARDSUBX)
  
 -file (GLOB HeaderFiles *.h)
 +file (GLOB_RECURSE HeaderFiles *.h)
  file (WRITE ccx.pc "prefix=${CMAKE_INSTALL_PREFIX}\n"
                    "includedir=\${prefix}/include\n"
                    "libdir=\${prefix}/lib\n\n"
-@@ -102,8 +132,8 @@
+@@ -95,8 +125,8 @@ file (WRITE ccx.pc "prefix=${CMAKE_INSTALL_PREFIX}\n"
                    "Description: Closed Caption Extraction library\n"
                    "Version: 0.75\n"
                    "Cflags: -I\${includedir}/\n"
@@ -172,16 +162,3 @@ index 4f329bcaab...a334d20c4d 100644
                    )
  
  install (TARGETS ccx DESTINATION lib)
-diff --git a/src/lib_ccx/params.c b/src/lib_ccx/params.c
-index eb1562e50c...984070a285 100644
---- a/src/lib_ccx/params.c
-+++ b/src/lib_ccx/params.c
-@@ -14,7 +14,7 @@
- #include "../lib_hash/sha2.h"
- #include <string.h>
- #include <stdio.h>
--#include <utf8proc/utf8proc.h>
-+#include <utf8proc.h>
- 
- #ifdef ENABLE_OCR
- #include <tesseract/capi.h>

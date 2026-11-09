@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "makedepend";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchurl {
     url = "mirror://xorg/individual/util/makedepend-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ktDetln/9tjdvB0n/EyozrK22+Fdc/CgTtwJ8cV4LdQ=";
+    hash = "sha256-8njEaGKF1wKSwD9zOcw8CoEfxsS/nAU5BtClcy6skTg=";
   };
 
   strictDeps = true;

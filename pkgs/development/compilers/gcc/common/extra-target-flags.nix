@@ -4,11 +4,8 @@
   withoutTargetLibc,
   libcCross,
   threadsCross,
+  hostIsTarget,
 }:
-
-let
-  inherit (stdenv) hostPlatform targetPlatform;
-in
 
 {
   # For non-cross builds these flags are currently assigned in builder.sh.
@@ -18,7 +15,7 @@ in
     let
       mkFlags =
         dep:
-        lib.optionals ((!lib.systems.equals targetPlatform hostPlatform) && dep != null) (
+        lib.optionals (!hostIsTarget && dep != null) (
           [
             "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
           ]
@@ -28,14 +25,14 @@ in
         );
     in
     mkFlags libcCross
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags threadsCross)
     ++ mkFlags (libcCross.w32api or null);
 
   EXTRA_LDFLAGS_FOR_TARGET =
     let
       mkFlags =
         dep:
-        lib.optionals ((!lib.systems.equals targetPlatform hostPlatform) && dep != null) (
+        lib.optionals (!hostIsTarget && dep != null) (
           [
             "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
           ]
@@ -53,6 +50,6 @@ in
         );
     in
     mkFlags libcCross
-    ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    ++ lib.optionals (!withoutTargetLibc) (mkFlags threadsCross)
     ++ mkFlags (libcCross.w32api or null);
 }

@@ -10,15 +10,15 @@
   libpq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pspg";
-  version = "5.8.14";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "pspg";
-    rev = version;
-    sha256 = "sha256-DZsMZZO5NMutlzLT+wwtPNdnzAnka32ZMqgMvEuw9ag=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Vta5sAfsJWiu+iUYPA5cxUxpk098FTIIYZwNtKRzIJw=";
   };
 
   nativeBuildInputs = [
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jlesquembre ];
     mainProgram = "pspg";
   };
-}
+})

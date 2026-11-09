@@ -7,14 +7,14 @@
   stdenv,
   zlib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-stack";
   version = "0.10.20";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-stack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PULWvJ1sfLbTVOICl/ENPG76tOw+98Whgtc9obO+W6w=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Stacked branch management for Git";
     homepage = "https://github.com/gitext-rs/git-stack";
-    changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${version}";
+    changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "git-stack";
   };
-}
+})

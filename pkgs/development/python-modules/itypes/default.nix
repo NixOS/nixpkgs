@@ -12,9 +12,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     repo = "itypes";
-    owner = "tomchristie";
+    owner = "PavanTatikonda";
     rev = version;
-    sha256 = "1ljhjp9pacbrv2phs58vppz1dlxix01p98kfhyclvbml6dgjcr52";
+    hash = "sha256-omQmXzO0rk2Zh26idAPosdMW/r0bFQ2v2HkxddOVUNI=";
   };
 
   nativeCheckInputs = [ pytest ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple immutable types for python";
-    homepage = "https://github.com/tomchristie/itypes";
+    homepage = "https://github.com/PavanTatikonda/itypes";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

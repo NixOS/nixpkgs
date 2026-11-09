@@ -13,28 +13,20 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   transitions,
 }:
 
 buildPythonPackage rec {
   pname = "pysnooz";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = "pysnooz";
     tag = "v${version}";
-    hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
+    hash = "sha256-sJ2/miVwRH2ggnFi3tLp3trrNJNIiKx66fYJKyuWMx4=";
   };
-
-  patches = [
-    # https://github.com/AustinBrunkhorst/pysnooz/pull/20
-    ./bleak-compat.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -67,7 +59,7 @@ buildPythonPackage rec {
     description = "Library to control SNOOZ white noise machines";
     homepage = "https://github.com/AustinBrunkhorst/pysnooz";
     changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

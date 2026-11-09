@@ -3,31 +3,32 @@
   lib,
   stdenv,
   libiconv,
-  texliveFull,
+  libxslt,
+  texliveBasic,
   xercesc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blahtexml";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "gvanas";
     repo = "blahtexml";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
   postPatch =
     lib.optionalString stdenv.cc.isClang ''
       substituteInPlace makefile \
-        --replace "\$(CXX)" "\$(CXX) -std=c++98"
+        --replace-fail "\$(CXX)" "\$(CXX) -std=c++98"
     ''
     +
     # fix the doc build on TeX Live 2023
     ''
       substituteInPlace Documentation/manual.tex \
-        --replace '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
+        --replace-fail '\usepackage[utf8x]{inputenc}' '\usepackage[utf8]{inputenc}'
     '';
 
   outputs = [
@@ -35,7 +36,13 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
+  nativeBuildInputs = [
+    libxslt
+    (texliveBasic.withPackages (ps: [
+      ps.cm-super
+      ps.ucs
+    ]))
+  ];
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildFlags = [
@@ -77,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.xworld21 ];
     platforms = lib.platforms.all;
   };
-}
+})

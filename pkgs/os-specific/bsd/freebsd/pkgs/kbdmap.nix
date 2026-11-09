@@ -17,5 +17,4 @@ mkDerivation {
   ];
 
   meta.mainProgram = "kbdmap";
-  meta.platforms = lib.platforms.freebsd;
 }

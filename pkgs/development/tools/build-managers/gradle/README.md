@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Gradle build scripts are written in a DSL, computing the list of Gradle
+Gradle build scripts are written in a DSL; computing the list of Gradle
 dependencies is a Turing-complete task, not just in theory but also in
 practice. Fetching all of the dependencies often requires building some
 native code, running some commands to check the host platform, or just
@@ -35,7 +35,7 @@ the Gradle derivation to access these files.
 (Reference: [Repository
 Layout](https://cwiki.apache.org/confluence/display/MAVENOLD/Repository+Layout+-+Final))
 
-Most of Gradle dependencies are fetched from Maven repositories. For
+Most Gradle dependencies are fetched from Maven repositories. For
 each dependency, Gradle finds the first repo where it can successfully
 fetch that dependency, and uses that repo for it. Different repos might
 actually return different files for the same artifact because of e.g.
@@ -128,7 +128,7 @@ Second, for figuring out where to download the snapshot, Gradle consults
 
 (Reference: [Maven
 Metadata](https://maven.apache.org/repositories/metadata.html),
-[Metadata](https://maven.apache.org/ref/3.9.8/maven-repository-metadata/repository-metadata.html)
+[Metadata](https://maven.apache.org/ref/3.9.8/maven-repository-metadata/repository-metadata.html))
 
 Maven metadata files are called `maven-metadata.xml`.
 
@@ -139,7 +139,7 @@ G level metadata is currently unsupported. It's only used for Maven
 plugins, which Gradle presumably doesn't use.
 
 A level metadata is used for getting the version list for an artifact.
-It's an xml with the following items:
+It's an XML file with the following items:
 
 - `<groupId>` - group ID
 - `<artifactId>` - artifact ID

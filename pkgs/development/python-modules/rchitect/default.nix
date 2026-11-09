@@ -6,7 +6,6 @@
   packaging,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   R,
   rPackages,
   setuptools,
@@ -14,18 +13,16 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rchitect";
-  version = "0.4.8";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "rchitect";
-    tag = "v${version}";
-    hash = "sha256-R1Zr0M6NQw+8MYHSm8ll5oe/P1Q/apO4xnWdWVFTgWQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/p77OoEJWc7aME7itWkwZAHJW7sNEB1iAUwvbCis//U=";
   };
 
   postPatch = ''
@@ -61,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
-    changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/randy3k/rchitect/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ savyajha ];
   };
-}
+})

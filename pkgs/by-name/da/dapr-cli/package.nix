@@ -3,20 +3,21 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dapr-cli";
-  version = "1.16.4";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-WNihy2LkL7S5vD+lO5v+jtKNanCWc138y48QdlxKNFU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-toNZAdqESKohgrKkjhfx7qAwseJsYBgSyQZIT/1kNG4=";
   };
 
-  vendorHash = "sha256-UzZJ9mgMvewahYjhTOBC/HgIaxk312a7iqbS4D5O2VU=";
+  vendorHash = "sha256-8zF+NXuSqypv52Eyy4QRcyLM60EiyVj9FLl6ky8PXWI=";
 
   proxyVendor = true;
 
@@ -24,15 +25,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.apiVersion=1.0"
-    "-X github.com/dapr/cli/pkg/standalone.gitcommit=${src.rev}"
-    "-X github.com/dapr/cli/pkg/standalone.gitversion=${version}"
+    "-X github.com/dapr/cli/pkg/standalone.gitcommit=${finalAttrs.src.rev}"
+    "-X github.com/dapr/cli/pkg/standalone.gitversion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -53,4 +52,4 @@ buildGoModule rec {
     ];
     mainProgram = "dapr";
   };
-}
+})

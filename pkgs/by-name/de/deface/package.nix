@@ -6,17 +6,15 @@
   pkgs,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "deface";
   version = "1.5.0";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/mXWeL6OSgW4BMXtAZD/3UxQUGt7UE5ZvH8CXNCueJo=";
   };
 
@@ -37,7 +35,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # Native onnxruntime lib used by Python module onnxruntime can't find its other libs without this
   makeWrapperArgs = [
-    ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"''
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ pkgs.onnxruntime ])
   ];
 
   pythonImportsCheck = [
@@ -49,11 +50,11 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Video anonymization by face detection";
     homepage = "https://github.com/ORB-HD/deface";
-    changelog = "https://github.com/ORB-HD/deface/releases/tag/v${version}";
+    changelog = "https://github.com/ORB-HD/deface/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lurkki ];
     mainProgram = "deface";
     # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
     broken = stdenv.hostPlatform.system == "aarch64-linux";
   };
-}
+})

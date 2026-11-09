@@ -32,19 +32,20 @@
   sqlite,
   withYubikey ? false,
   libyubikey,
+  nixosTests,
 }:
 
 assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.8";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
     tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-NvcXTT0jp3WR/w+JWcNESg6iNYqIV8QAlM8MxpYkpjs=";
+    hash = "sha256-+pFV6dDnL7T5G309cLACa+/0vGppCEdk3ghOQhgSjTs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -100,6 +101,13 @@ stdenv.mkDerivation rec {
     "man"
     "doc"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests.networking.networkmanager)
+      eap
+      eapFiles
+      ;
+  };
 
   meta = {
     homepage = "https://freeradius.org/";

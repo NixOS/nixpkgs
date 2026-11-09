@@ -9,13 +9,16 @@
   gtk3,
   glib,
   libnotify,
-  libX11,
-  pcre,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pnmixer";
   version = "0.7.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "nicklan";
@@ -40,8 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     glib
     libnotify
-    libX11
-    pcre
+    libx11
   ];
 
   meta = {

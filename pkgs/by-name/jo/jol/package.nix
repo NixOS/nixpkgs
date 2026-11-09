@@ -2,22 +2,26 @@
   maven,
   lib,
   fetchFromGitHub,
+  jdk,
   jre_minimal,
   makeWrapper,
   nix-update-script,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jol";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "OpenJDK";
     repo = "jol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZJFuY2QYB8eUS3y3VRMGGwklCS93HHVkNe/dhyIx0SY=";
   };
 
-  mvnHash = "sha256-yQfiHlAZZgINGAYVlK5JflWX3d8Axtv1Ke89S7x86G4=";
+  mvnHash = "sha256-kcur8Va+krmZ99RJ8UJWl7/1YiiitaXvjwyDq5II7Wc=";
+
+  # GraphLayoutImageTests need AWT, missing from maven's default jdk_headless
+  mvnJdk = jdk;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,7 +50,7 @@ maven.buildMavenPackage rec {
       This makes JOL much more accurate than other tools relying on heap dumps, specification assumptions, etc.
     '';
     homepage = "https://openjdk.org/projects/code-tools/jol/";
-    changelog = "https://github.com/openjdk/jol/releases/tag/${version}";
+    changelog = "https://github.com/openjdk/jol/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Plus
       classpathException20
@@ -62,4 +66,4 @@ maven.buildMavenPackage rec {
     ];
     inherit (jre_minimal.meta) platforms;
   };
-}
+})

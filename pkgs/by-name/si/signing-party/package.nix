@@ -39,7 +39,7 @@ let
     TypeTiny
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signing-party";
   version = "2.12";
 
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "signing-party-team";
     repo = "signing-party";
-    rev = "v${version}";
-    sha256 = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
   };
 
   # TODO: Get this patch upstream...
@@ -310,4 +310,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

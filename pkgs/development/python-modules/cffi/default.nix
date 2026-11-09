@@ -10,16 +10,16 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cffi";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-cffi";
     repo = "cffi";
-    tag = "v${version}";
-    hash = "sha256-7Mzz3KmmmE2xQru1GA4aY0DZqn6vxykWiExQvnA1bjM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-01cqKx1TukxJJy00Cs/iuqc1+Yrq2//JJHfsUnJYNyw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,14 +33,23 @@ buildPythonPackage rec {
 
   doCheck = !(stdenv.hostPlatform.isMusl || stdenv.hostPlatform.useLLVM or false);
 
+  disabledTests = [
+    # parse error
+    "test_dont_remove_comment_in_line_directives"
+    "test_multiple_line_directives"
+    "test_commented_line_directive"
+    # exception mismatch
+    "test_unknown_name"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/python-cffi/cffi/releases/tag/v${version}";
+    changelog = "https://github.com/python-cffi/cffi/releases/tag/v${finalAttrs.version}";
     description = "Foreign Function Interface for Python calling C code";
     downloadPage = "https://github.com/python-cffi/cffi";
     homepage = "https://cffi.readthedocs.org/";
     license = lib.licenses.mit0;
     teams = [ lib.teams.python ];
   };
-}
+})

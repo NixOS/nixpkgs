@@ -5,15 +5,15 @@
   ocamlPackages,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledit";
-  version = "2.06";
+  version = "2.08";
 
   src = fetchFromGitHub {
     owner = "chetmurthy";
     repo = "ledit";
-    rev = "3dbd668d9c69aab5ccd61f6b906c14122ae3271d";
-    hash = "sha256-9+isvwOw5Iw5OToztqZ5PiQPj6Pxl2ZqAC7UMF+tCM4=";
+    tag = finalAttrs.version;
+    hash = "sha256-45Y7lzm/KMsSAtnCwYNwIiRPYXNpfMN0UQbkEW9/7aQ=";
   };
 
   preBuild = ''
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
   '';
 
   strictDeps = true;
+
+  dontStrip = true;
 
   nativeBuildInputs = with ocamlPackages; [
     ocaml
@@ -33,6 +35,15 @@ stdenv.mkDerivation {
     camlp-streams
   ];
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    echo hello | $out/bin/ledit -h /dev/null cat > ledit-check.out
+    grep -q hello ledit-check.out
+    runHook postInstallCheck
+  '';
+
   meta = {
     homepage = "http://pauillac.inria.fr/~ddr/ledit/";
     description = "Line editor, allowing to use shell commands with control characters like in emacs";
@@ -40,4 +51,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.delta ];
     mainProgram = "ledit";
   };
-}
+})

@@ -9,16 +9,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockbuster";
-  version = "1.5.25";
+  version = "1.5.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
-    tag = "v${version}";
-    hash = "sha256-1+Q1IdJXqLAy7kIcVU38TC3dtMeWAn7YOLyGrjCkxD0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RIy5xjTpw6Bsxo1oiKQ5fbrBpkL8eujOY85G2GW2lrI=";
   };
 
   build-system = [ hatchling ];
@@ -30,6 +30,8 @@ buildPythonPackage rec {
     pytest-asyncio
     requests
   ];
+
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # network access
@@ -43,7 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utility to detect blocking calls in the async event loop";
     homepage = "https://github.com/cbornet/blockbuster";
+    changelog = "https://github.com/cbornet/blockbuster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

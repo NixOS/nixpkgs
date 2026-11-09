@@ -19,7 +19,7 @@
 buildPythonPackage {
   pname = "wagtail-tests";
   inherit (wagtail) src version;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;

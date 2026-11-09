@@ -9,24 +9,29 @@
   libwebp,
   blas,
   lapack,
+  testers,
   config,
   guiSupport ? false,
-  libX11,
+  libx11,
   enableShared ? !stdenv.hostPlatform.isStatic, # dlib has a build system that forces the user to choose between either shared or static libraries. See https://github.com/davisking/dlib/issues/923#issuecomment-2175865174
   sse4Support ? stdenv.hostPlatform.sse4_1Support,
   avxSupport ? stdenv.hostPlatform.avxSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  python3Packages,
 }@inputs:
-(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
+(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation (finalAttrs: {
   pname = "dlib";
-  version = "20.0";
+  version = "20.0.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    tag = "v${version}";
-    sha256 = "sha256-VTX7s0p2AzlvPUsSMXwZiij+UY9g2y+a1YIge9bi0sw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
   };
 
   postPatch = ''
@@ -39,7 +44,7 @@
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
     (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
   ]
   ++ lib.optionals cudaSupport [
@@ -52,12 +57,9 @@
     cmake
     pkg-config
   ]
-  ++ lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      cuda_nvcc
-    ]
-  );
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
     libpng
@@ -66,7 +68,7 @@
     blas
     lapack
   ]
-  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals guiSupport [ libx11 ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
@@ -76,11 +78,19 @@
       libcurand
       libcusolver
       cudnn
-      cuda_cccl
+      cccl
     ]
   );
 
   passthru = {
+    tests = {
+      python-dlib = python3Packages.dlib;
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      cmake-config = testers.hasCmakeConfigModules {
+        moduleNames = [ "dlib" ];
+        package = finalAttrs.finalPackage;
+      };
+    };
     inherit
       cudaSupport
       cudaPackages
@@ -92,8 +102,10 @@
   meta = {
     description = "General purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
+    changelog = "https://github.com/davisking/dlib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ christopherpoole ];
+    pkgConfigModules = [ "dlib-1" ];
     platforms = lib.platforms.unix;
   };
-}
+})

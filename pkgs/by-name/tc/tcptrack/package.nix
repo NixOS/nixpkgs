@@ -7,9 +7,9 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcptrack";
-  version = "unstable-2017-04-29";
+  version = "1.4.3-unstable-2017-04-29";
 
   src = fetchFromGitHub {
     owner = "bchretien";
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cpp -Wno-error=unused-but-set-variable";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "libpcap based program for live TCP connection monitoring";
     mainProgram = "tcptrack";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

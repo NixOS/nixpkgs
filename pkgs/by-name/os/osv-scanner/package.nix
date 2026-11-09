@@ -1,23 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   osv-scanner,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "osv-scanner";
-  version = "2.3.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "osv-scanner";
-    tag = "v${version}";
-    hash = "sha256-V+GQIEgNgQsOtQ+agalG0oH0Zc8R87swtYsmvyHmNNY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QiViquOBkOl+UnsYZQK8dtE0I2kiOUXT8mfy6/4cFbc=";
   };
 
-  vendorHash = "sha256-28+iPNCihWcc6gDSsNUSXsQAJeeevNOY1/jeq73T41I=";
+  vendorHash = "sha256-0IV+50vJv81yUkDHeVOFLjma1Wzg0T7wdbA1ZSKXWgg=";
 
   subPackages = [
     "cmd/osv-scanner"
@@ -26,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/google/osv-scanner/internal/version.OSVVersion=${version}"
+    "-X=github.com/google/osv-scanner/internal/version.OSVVersion=${finalAttrs.version}"
     "-X=main.commit=n/a"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
@@ -34,19 +35,21 @@ buildGoModule rec {
   # Tests require network connectivity to query https://api.osv.dev.
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = osv-scanner;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = osv-scanner;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Vulnerability scanner written in Go which uses the data provided by https://osv.dev";
     mainProgram = "osv-scanner";
     homepage = "https://github.com/google/osv-scanner";
-    changelog = "https://github.com/google/osv-scanner/releases/tag/v${version}";
+    changelog = "https://github.com/google/osv-scanner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       stehessel
-      urandom
     ];
   };
-}
+})

@@ -1,20 +1,26 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   isabelle,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "isabelle-linter";
-  version = "2025-1.0.0";
+  version = "2025-2-1.0.0";
 
   src = fetchFromGitHub {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
-    rev = "Isabelle2025-v1.0.0";
-    hash = "sha256-cH9EoIbKa6cqLjw83gnYvCy+Dq0d5fFmJCabdPrRJeI=";
+    rev = "Isabelle2025-2-v1.0.0";
+    hash = "sha256-V6Bnxyq/WI6U0sVBHA/vFOI0U3Vd5/GLCxbeWVitm8I=";
   };
+
+  patches = [
+    # Isabelle2025-2 wraps markup in command_range; without the patch then the
+    # commands are ignored span and `isabelle lint` doesn't print anything
+    ./isabelle-linter-command-range.patch
+  ];
 
   nativeBuildInputs = [ isabelle ];
 
@@ -29,6 +35,10 @@ stdenv.mkDerivation rec {
     mkdir -p $dir
     cp -r * $dir/
   '';
+
+  passthru.tests = {
+    inherit (isabelle.tests) linter;
+  };
 
   meta = {
     description = "Linter component for Isabelle";

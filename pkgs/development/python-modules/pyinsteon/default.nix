@@ -8,26 +8,22 @@
   fetchFromGitHub,
   pypubsub,
   pyserial,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.6.3";
+  version = "1.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyinsteon";
     repo = "pyinsteon";
     tag = version;
-    hash = "sha256-SyhPM3NS7iJX8jwTJ4YWZ72eYLn9JT6eESekPf5eCKI=";
+    hash = "sha256-jzFZpoKd4QAnLZ2p/oy0qZvQtI/2D+rkfoVOWGDo0Fg=";
   };
 
   build-system = [ setuptools ];
@@ -38,23 +34,13 @@ buildPythonPackage rec {
     async-timeout
     pypubsub
     pyserial
-    pyserial-asyncio
+    pyserial-asyncio-fast
     voluptuous
   ];
 
   nativeCheckInputs = [
     async-generator
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # RuntimeError: BUG: Dead Listener called, still subscribed!
-    "test_linking_with_i1_device"
-  ];
-
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
-    # Tests are blocking or failing
-    "tests/test_handlers/"
   ];
 
   pythonImportsCheck = [ "pyinsteon" ];
@@ -68,7 +54,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "insteon_tools";
   };

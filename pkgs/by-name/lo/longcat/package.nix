@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.0.12";
+  version = "0.0.21";
 in
 buildGoModule {
   pname = "longcat";
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "mattn";
     repo = "longcat";
     tag = "v${version}";
-    hash = "sha256-MiUkI7qCN/rDJUkBCyET19CH4iYnl1HwKjRZD2dCTVM=";
+    hash = "sha256-2SldcqugPr1muJgSr2JfSro6wtItaXX13w/IsJHZz4Y=";
   };
 
-  vendorHash = "sha256-ka58YOoyBKLX8Z9ak2+rERXsY3rPUaOanfIFErCJCdE=";
+  vendorHash = "sha256-dgQhSZEWWhS3ee9rhXVdB8toj6mGWbp3pIB2PEasy28=";
 
   passthru.updateScript = nix-update-script { };
 

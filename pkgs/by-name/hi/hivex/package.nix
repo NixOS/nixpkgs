@@ -5,6 +5,7 @@
   pkg-config,
   autoreconfHook,
   makeWrapper,
+  bash,
   perlPackages,
   ocamlPackages,
   libxml2,
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.3.24";
 
   src = fetchurl {
-    url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/hivex/hivex-${version}.tar.gz";
     hash = "sha256-pS+kXOzJp4rbLShgXWgmHk8f1FFKd4pUcwE9LMyKGTw=";
   };
 
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     findlib
   ]);
   buildInputs = [
+    bash
     libxml2
   ]
   ++ (with perlPackages; [
@@ -50,6 +52,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    wrapProgram $out/bin/hivexget \
+        --prefix "PATH" : "$out/bin"
+
     wrapProgram $out/bin/hivexregedit \
         --set PERL5LIB "$out/${perlPackages.perl.libPrefix}" \
         --prefix "PATH" : "$out/bin"
@@ -58,11 +63,21 @@ stdenv.mkDerivation rec {
         --prefix "PATH" : "$out/bin"
   '';
 
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    test "$(PATH=/nonexistent "$out/bin/hivexget" images/special '\abcd_äöüß' 'abcd_äöüß')" = 0
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     description = "Windows registry hive extraction library";
     license = lib.licenses.lgpl2Only;
     homepage = "https://github.com/libguestfs/hivex";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

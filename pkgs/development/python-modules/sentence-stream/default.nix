@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sentence-stream";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "sentence-stream";
     tag = "v${version}";
-    hash = "sha256-KCKOiY2x+gj02PR0ps2e5Ei6o17tk5ujgCTr3/fkV0Y=";
+    hash = "sha256-UVoRto2zGf+GZFcYt4NC63Fm9iS7DWgwH7sJrrHxvXs=";
   };
 
   build-system = [

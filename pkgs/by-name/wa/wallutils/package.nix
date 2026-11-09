@@ -2,10 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
-  libXcursor,
-  libXmu,
-  libXpm,
+  libx11,
+  libxcursor,
+  libxmu,
+  libxpm,
   libheif,
   pkg-config,
   wayland,
@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wallutils";
-  version = "5.14.3";
+  version = "5.14.5";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-35JkZa7ihz0vgHwEagIkP7xTd6wLLRqSaeySJY1/Dw8=";
+    hash = "sha256-f8Truo75qYR8shs8hcD2JRLsJtEc7qsn+rPs8yu8Tlk=";
   };
 
   vendorHash = null;
@@ -38,10 +38,10 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXmu
-    libXpm
+    libx11
+    libxcursor
+    libxmu
+    libxpm
     libheif
     wayland
     xbitmaps

@@ -1,27 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  ddt,
+  docutils,
+  elasticsearch,
+  fetchFromGitHub,
   netaddr,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   oslo-concurrency,
   oslo-config,
   oslo-serialization,
   oslo-utils,
   prettytable,
+  pymongo,
+  redis,
   requests,
   setuptools,
+  stestrCheckHook,
   webob,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osprofiler";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d6jaKyO7X5BIBUvVzMRdCshFdMqKiO8SC4+sbohk4kw=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "osprofiler";
+    tag = finalAttrs.version;
+    hash = "sha256-igWYNdGusfEPagzmmoh0lnO1bHn63loxGXm76UVWJZs=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include osprofiler *" > MANIFEST.in
+  '';
 
   build-system = [ setuptools ];
 
@@ -36,13 +54,21 @@ buildPythonPackage rec {
     webob
   ];
 
-  # NOTE(vinetos): OSProfiler depends on jeager-client which use opentracing
-  # Opentracing and jeager-client are archived since 2022.
-  # As this package is made only to support old OpenStack clients and bindings,
-  # We do not really care
-  doCheck = false;
+  nativeCheckInputs = [
+    ddt
+    docutils
+    elasticsearch
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
+    pymongo
+    redis
+    stestrCheckHook
+  ];
 
-  pythonImportsCheck = [ "osprofiler" ];
+  pythonImportsCheck = [
+    "osprofiler"
+    "osprofiler.drivers"
+  ];
 
   meta = {
     description = "OpenStack Library to profile request between all involved services";
@@ -51,4 +77,4 @@ buildPythonPackage rec {
     mainProgram = "osprofiler";
     teams = [ lib.teams.openstack ];
   };
-}
+})

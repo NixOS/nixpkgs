@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "btcd";
-  version = "0.25.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "btcsuite";
     repo = "btcd";
-    rev = "v${version}";
-    hash = "sha256-redoqqbiVdwgNLxDzBccqRBZGwhRTIY5nE9Gx6+4POc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RgoUbHpIujBM6AkqBsR406V/20OUrXYelyqfTPXI0j4=";
   };
 
-  vendorHash = "sha256-qXfZKVoTvq7gNm0G4KKSL8anB8FUt/TxoxbOtH240cc=";
+  vendorHash = "sha256-p99OSye1UowSY3v+SUUyKv8NHGciWcd5sHYAwlDc2WI=";
 
   subPackages = [
     "."
@@ -32,8 +32,8 @@ buildGoModule rec {
   meta = {
     description = "Alternative full node bitcoin implementation written in Go (golang)";
     homepage = "https://github.com/btcsuite/btcd";
-    changelog = "https://github.com/btcsuite/btcd/releases/tag/v${version}";
+    changelog = "https://github.com/btcsuite/btcd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ _0xB10C ];
   };
-}
+})

@@ -4,16 +4,16 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "limitcpu";
   version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/limitcpu/cpulimit-${version}.tar.gz";
+    url = "mirror://sourceforge/limitcpu/cpulimit-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Wf/rGjUXr+RZmHFL6EGSYKQ2MvfOwI8LAmwezN/1fPw=";
   };
 
-  buildFlags = with stdenv; [
+  buildFlags = with stdenv.hostPlatform; [
     (
       if isDarwin then
         "osx"
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     mainProgram = "cpulimit";
   };
-}
+})

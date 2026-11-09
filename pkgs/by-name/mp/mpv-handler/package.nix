@@ -7,14 +7,14 @@
   yt-dlp,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpv-handler";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "akiirui";
     repo = "mpv-handler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QoctjneJA7CdXqGm0ylAh9w6611vv2PD1fzS0exag5A=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lonerOrz ];
     platforms = lib.platforms.linux;
   };
-}
+})

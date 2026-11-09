@@ -1,6 +1,5 @@
 {
   enableGStreamer,
-  enableGtk2,
   enableGtk3,
   gst_all_1,
   lib,
@@ -38,6 +37,18 @@ runCommand "opencv4-tests"
     ignoredTests = [
       "AsyncAPICancelation/cancel*"
       "Photo_CalibrateDebevec.regression"
+
+      # /build/source/modules/imgproc/test/test_connectedcomponents.cpp:444: Failure
+      # Expected equality of these values:
+      #   cv::countNonZero(diff)
+      #     Which is: 243
+      #   0
+      # Probably related to https://github.com/opencv/opencv/issues/28383
+      "Imgproc_ConnectedComponents.chessboard_even"
+      "Imgproc_ConnectedComponents.chessboard_odd"
+      "Imgproc_ConnectedComponents.maxlabels_8conn_even"
+      "Imgproc_ConnectedComponents.maxlabels_8conn_odd"
+      "Imgproc_ConnectedComponents.spaghetti_bbdt_sauf_stats"
     ]
     ++ optionals cudaSupport [
       # opencv4-tests> /build/source/modules/photo/test/test_denoising.cuda.cpp:115: Failure
@@ -64,7 +75,7 @@ runCommand "opencv4-tests"
       #"dnn" #- some caffe tests failed, probably because github workflow also downloads additional models
     ]
     ++ optionals (!isAarch64 && enableGStreamer) [ "gapi" ]
-    ++ optionals (enableGtk2 || enableGtk3) [ "highgui" ];
+    ++ optionals enableGtk3 [ "highgui" ];
 
     inherit runPerformanceTests;
 

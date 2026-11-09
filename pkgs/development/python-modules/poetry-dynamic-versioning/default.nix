@@ -7,22 +7,19 @@
   poetry-core,
   poetry,
   pytestCheckHook,
-  pythonOlder,
   tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "1.9.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "poetry-dynamic-versioning";
     tag = "v${version}";
-    hash = "sha256-SKVx20RrwhCpdDIc2Pu1oFaXWe2d2GnbJGUX7KqMvo0=";
+    hash = "sha256-sETUaOKFS0T4o++W1maKt7qsy0CdnmMQT7vegNKQCbk=";
   };
 
   nativeBuildInputs = [ poetry-core ];

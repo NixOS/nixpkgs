@@ -9,7 +9,7 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
@@ -20,19 +20,26 @@
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.3";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    tag = version;
-    hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
+    tag = finalAttrs.version;
+    hash = "sha256-jkFF+nNZL8lEXgworFLNoEKTr2LgCat1fOFlTh7AWs4=";
   };
 
   postPatch = ''
+    # Upstream is very sensible about msgpack versions, but the updates to here did not change any relevant code,
+    # so basically backport the essential changes from the bump commits, instead of relaxing the version freely.
+    substituteInPlace src/borg/helpers/msgpack.py \
+      --replace-fail "(1, 2, 1)" "(1, 2, 4)"
+    substituteInPlace pyproject.toml \
+      --replace-fail "<=1.2.1" "<=1.2.4"
+
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
       --replace-fail "0o4755" "0o0755"
@@ -62,7 +69,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
-    xxHash
+    xxhash
     zstd
     openssl
   ]
@@ -70,14 +77,21 @@ python.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${openssh}/bin"''
+    "--prefix"
+    "PATH"
+    ":"
+    "${openssh}/bin"
   ];
 
   preInstallSphinx = ''
@@ -99,7 +113,7 @@ python.pkgs.buildPythonApplication rec {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     versionCheckHook
   ];
 
@@ -153,7 +167,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
+    changelog = "https://github.com/borgbackup/borg/blob/${finalAttrs.src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = lib.licenses.bsd3;
@@ -163,4 +177,4 @@ python.pkgs.buildPythonApplication rec {
       dotlambda
     ];
   };
-}
+})

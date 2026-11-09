@@ -18,12 +18,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "recutils";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/recutils/recutils-${version}.tar.gz";
+    url = "mirror://gnu/recutils/recutils-${finalAttrs.version}.tar.gz";
     hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

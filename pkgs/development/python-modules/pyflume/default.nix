@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyjwt,
   ratelimit,
   requests,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyflume";
   version = "0.8.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ChrisMandich";
@@ -41,7 +38,7 @@ buildPythonPackage rec {
     description = "Python module to work with Flume sensors";
     homepage = "https://github.com/ChrisMandich/PyFlume";
     changelog = "https://github.com/ChrisMandich/PyFlume/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

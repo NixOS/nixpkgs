@@ -17,10 +17,10 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-crt-cpp";
   # nixpkgs-update: no auto update
-  version = "0.34.3";
+  version = "0.43.6";
 
   outputs = [
     "out"
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
-    rev = "v${version}";
-    sha256 = "sha256-jKmIsWAzxnfsNgHavR6crhIQXVJq/PbQgaj4KVGrMP0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-nzhGELzTjQxdxg2jX6hCRs1nRUdhKitk14zUrouJnhE=";
   };
 
   postPatch = ''
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

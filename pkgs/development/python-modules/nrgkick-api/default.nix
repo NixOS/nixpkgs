@@ -10,17 +10,19 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nrgkick-api";
-  version = "1.4.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andijakl";
     repo = "nrgkick-api";
-    tag = "v${version}";
-    hash = "sha256-Azk3v4cNBdbwIssb1Eu8z4kEuzQqFTYy4PBbpu9MdhE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jwH9C7+eMCUAPTJjgdXUw3icdgzzx4nuD+zDc2MGnBI=";
   };
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ setuptools ];
 
@@ -38,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for NRGkick Gen2 EV charger local REST API";
     homepage = "https://github.com/andijakl/nrgkick-api";
-    changelog = "https://github.com/andijakl/nrgkick-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/andijakl/nrgkick-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

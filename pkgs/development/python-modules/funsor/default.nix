@@ -1,9 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -15,7 +13,7 @@
   opt-einsum,
   typing-extensions,
 
-  # checks
+  # tests
   pyro-ppl,
   torch,
   pandas,
@@ -26,31 +24,35 @@
   requests,
   scipy,
   torchvision,
-
-  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "funsor";
-  version = "0.4.6";
+  version = "0.4.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "funsor";
-    tag = version;
-    hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
+    tag = finalAttrs.version;
+    hash = "sha256-iTkDd6vz4wesY3jABSMxLtTKioP98DhGB0plLL+vhNY=";
   };
 
   patches = [
-    # Compatibility with torch >= 2.5 (arg_constraints is now a property)
-    (fetchpatch {
-      url = "https://github.com/pyro-ppl/funsor/commit/c5e2a48d73cad4e98058147af4090171272a44e5.patch";
-      hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
-    })
+    # Compatibility with torch >= 2.5, where `Uniform.arg_constraints` is a property.
+    # Remaining part of the pending upstream PR https://github.com/pyro-ppl/funsor/pull/610
+    # (the `Uniform` parameter registration was already merged as part of
+    # https://github.com/pyro-ppl/funsor/pull/614).
+    ./torch-arg-constraints-property.patch
   ];
+
+  # `torch.cholesky` and `Tensor.cholesky` were removed in torch 2.14
+  postPatch = ''
+    substituteInPlace test/pyro/test_convert.py test/pyro/test_hmm.py \
+      --replace-fail "torch.cholesky(cov)" "torch.linalg.cholesky(cov)"
+    substituteInPlace test/test_gaussian.py \
+      --replace-fail "u = x.cholesky()" "u = torch.linalg.cholesky(x)"
+  '';
 
   build-system = [ setuptools ];
 
@@ -81,26 +83,18 @@ buildPythonPackage rec {
     export FUNSOR_BACKEND=torch
   '';
 
-  pythonImportsCheck = [ "funsor" ];
-
-  disabledTests = [
-    # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
-    # FutureWarning: You are using `torch.load` with `weights_only=False`...
-    # TODO: Try to re-enable this test at next release
-    "test_torch_save"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Failures related to JIT
-    # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
-    "test_local_param_ok"
-    "test_plate_ok"
+  pytestFlags = [
+    # FutureWarning: `torch.jit.trace` is not supported in Python 3.14+ and may break.
+    "-Wignore:`torch.jit.:FutureWarning"
   ];
+
+  pythonImportsCheck = [ "funsor" ];
 
   meta = {
     description = "Functional tensors for probabilistic programming";
     homepage = "https://funsor.pyro.ai";
-    changelog = "https://github.com/pyro-ppl/funsor/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/funsor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

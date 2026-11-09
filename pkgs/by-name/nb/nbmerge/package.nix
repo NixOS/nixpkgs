@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nbmerge";
   version = "0.0.4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jbn";
     repo = "nbmerge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uqs/SO/AculHCFYcbjW08kLQX5GSU/eAwkN2iy/vhLM=";
   };
 
@@ -33,9 +33,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Tool to merge/concatenate Jupyter (IPython) notebooks";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "nbmerge";
   };
-}
+})

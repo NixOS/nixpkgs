@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-deepseek";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-deepseek==${version}";
-    hash = "sha256-9iLJ0+wSBdPJqu71waYlq2pZV594mSoZcewsnMOeT64=";
+    hash = "sha256-vqH1kuFxgujQ6Xe1nay1QBEd0uG0XtZvPt1FWxtLJyQ=";
   };
 
   sourceRoot = "${src.name}/libs/partners/deepseek";
@@ -65,6 +65,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-deepseek==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

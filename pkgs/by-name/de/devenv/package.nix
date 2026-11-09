@@ -1,57 +1,68 @@
 {
   lib,
+  stdenv,
+  useMoldLinker,
+  applyPatches,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   gitMinimal,
   makeBinaryWrapper,
+  cmake,
   installShellFiles,
   rustPlatform,
   testers,
   cachix,
   nixVersions,
+  aws-lc,
   openssl,
   dbus,
+  protobuf,
+  sqlite,
   pkg-config,
   glibcLocalesUtf8,
+  boehmgc,
+  libghostty-vt,
+  zstd,
+  llvmPackages,
+  nixd,
+  bash,
   devenv, # required to run version test
 }:
 
 let
-  version = "1.11.2";
-  devenvNixVersion = "2.30.4";
+  version = "2.4.0";
+  devenvNixVersion = "2.35";
+  devenvNixRev = "2a2ff1045ef7361212d7eac0c062534538968de6";
 
-  devenv_nix =
-    let
-      components =
-        (nixVersions.nixComponents_git.override { version = devenvNixVersion; }).overrideSource
-          (fetchFromGitHub {
-            owner = "cachix";
-            repo = "nix";
-            rev = "devenv-${devenvNixVersion}";
-            hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-          });
-    in
-    (
-      # Support for mdbook >= 0.5, https://github.com/NixOS/nix/issues/14628
-      components.appendPatches [
-        (fetchpatch2 {
-          name = "nix-2.30-14695-mdbook-0.5-support.patch";
-          url = "https://github.com/NixOS/nix/commit/5cbd7856de0a9c13351f98e32a1e26d0854d87fd.patch";
-          excludes = [ "doc/manual/package.nix" ];
-          hash = "sha256-GYaTOG9wZT9UI4G6za535PkLyjHKSxwBjJsXbjmI26g=";
-        })
-      ]
-    ).nix-everything.overrideAttrs
-      (old: {
-        pname = "devenv-nix";
-        version = devenvNixVersion;
-        doCheck = false;
-        doInstallCheck = false;
-        # do override src, but the Nix way so the warning is unaware of it
-        __intentionallyOverridingVersion = true;
-      });
+  # Patch the source directly to keep Nix's version parseable by nix-bindings.
+  devenvNixSrc = applyPatches {
+    name = "devenv-nix-${devenvNixVersion}-source";
+    src = fetchFromGitHub {
+      name = "devenv-nix-${devenvNixVersion}-source";
+      owner = "cachix";
+      repo = "nix";
+      rev = devenvNixRev;
+      hash = "sha256-1CSuPNIbGyL2JJjOVg0KU7NWst1yZ6iXGDkiN/3bY5o=";
+    };
+    # Fix ignored nodiscard results when building the pinned Nix fork on Darwin.
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/cachix/nix/commit/34f5e5824de5025c63895ac64457c3a077548fb4.patch";
+        hash = "sha256-bYLhGWpAxyLd50HHt6s7sVlkDEFAJ72Z5fcfWeYxCOo=";
+      })
+    ];
+  };
+
+  nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
+    finalScope: prevScope: {
+      version = devenvNixVersion;
+    }
+  );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
@@ -59,33 +70,83 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-8Ivbm9ltg0hUGQYMuRDOI8hbHUzqB9xKZ9ubKAzzwE8=";
+    hash = "sha256-MCSbrGsgWXod/Qzk4v5tYO/fev1d5OcEGZ2vzVAvMfQ=";
   };
 
-  cargoHash = "sha256-mMmobDZeNqrByowwrDXojVnHeUyC/YbhERpF8iOCZ0s=";
+  cargoHash = "sha256-ed2k0D5tp7tlvpqXdxr4uGJozI2gvW1Dvz1SSJDR4NI=";
 
-  buildAndTestSubdir = "devenv";
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail '"pkg-config",' '"pkg-config", "link-dynamic",'
+  '';
+
+  env = {
+    RUSTFLAGS = "--cfg tracing_unstable";
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    DEVENV_IS_RELEASE = true;
+  };
+
+  cargoBuildFlags = [
+    "-p"
+    "devenv"
+    "-p"
+    "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
+  ];
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     makeBinaryWrapper
     pkg-config
+    protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    sqlite
     dbus
+    libghostty-vt
+    llvmPackages.clang-unwrapped
+    nix_components.nix-expr-c
+    nix_components.nix-store-c
+    nix_components.nix-util-c
+    nix_components.nix-flake-c
+    nix_components.nix-cmd-c
+    nix_components.nix-fetchers-c
+    nix_components.nix-main-c
+    zstd
   ];
 
   nativeCheckInputs = [
     gitMinimal
+    bash
   ];
 
   preCheck = ''
-    git init
+    # Initialize git repo for tests that use git-root-relative imports
+    pushd $NIX_BUILD_TOP/source
+    git init -b main
     git config user.email "test@example.com"
     git config user.name "Test User"
+    git add -A
+    popd
   '';
+
+  useNextest = true;
+  # Binding a TCP socket is not permitted in the darwin sandbox.
+  checkFlags = [
+    "--skip"
+    "waits_for_previous_proxy_to_release_control_socket"
+  ];
+
+  cargoTestFlags = [
+    "-p"
+    "devenv"
+  ];
 
   postInstall =
     let
@@ -95,16 +156,20 @@ rustPlatform.buildRustPackage {
     in
     ''
       wrapProgram $out/bin/devenv \
-        --prefix PATH ":" "$out/bin:${cachix}/bin" \
-        --set DEVENV_NIX ${devenv_nix} \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
+        ${setDefaultLocaleArchive}
+
+      wrapProgram $out/bin/devenv-run-tests \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
         ${setDefaultLocaleArchive}
 
       # Generate manpages
       cargo xtask generate-manpages --out-dir man
       installManPage man/*
 
-      # Generate shell completions
+      # Generate shell completions (devenv must be in PATH)
       compdir=./completions
+      export PATH="$out/bin:$PATH"
       for shell in bash fish zsh; do
         cargo xtask generate-shell-completion $shell --out-dir $compdir
       done
@@ -123,11 +188,15 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    changelog = "https://github.com/cachix/devenv/releases/tag/v${version}";
+    changelog = "https://github.com/cachix/devenv/releases";
     description = "Fast, Declarative, Reproducible, and Composable Developer Environments";
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    teams = [ lib.teams.cachix ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+      anish
+    ];
   };
 }

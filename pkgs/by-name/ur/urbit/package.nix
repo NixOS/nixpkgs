@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchurl,
 }:
 
 let
@@ -9,24 +9,28 @@ let
   arch = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x86_64";
   platform = "${os}-${arch}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urbit";
-  version = "3.5";
+  version = "4.6";
 
-  src = fetchzip {
-    url = "https://github.com/urbit/vere/releases/download/vere-v${version}/${platform}.tgz";
+  src = fetchurl {
+    url = "https://github.com/urbit/vere/releases/download/vere-v${finalAttrs.version}/${platform}.tgz";
     sha256 =
       {
-        x86_64-linux = "sha256-eB80GuyNuVZbBsyNnek8UCtquZbNt5G4Co7IKqq7aeI=";
-        aarch64-linux = "sha256-imbzAsjjznLuxee9mWXpsG/dKEJxdEOTw+JFc4DbQ2Q=";
-        x86_64-darwin = "sha256-0c1ewdrVsfSUivrcLwVuxZdcyrOAKXF7P9W+B7o5aNU=";
-        aarch64-darwin = "sha256-j8PJ04zRz2sZdpetLyzwRasj0CkiRGY+GvzWXG90IaE=";
+        x86_64-linux = "1bm32airwqi6pkxlkd0hwrwd0gwm9x5y05dzgy27yxnbcrnyjcpk";
+        aarch64-linux = "126hw995xipbx9kb4ml8kn6xwkwd96q90cbr3q143ya2wl1sabya";
+        aarch64-darwin = "0dsapvlyfr2cb9c16b46bcnvq75by87ybys96zhf16k92z4rzrfv";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
+  unpackPhase = ''
+    mkdir src
+    tar -C src -xf $src
+  '';
+
   postInstall = ''
-    install -m755 -D vere-v${version}-${platform} $out/bin/urbit
+    install -m755 -D src/vere-v${finalAttrs.version}-${platform} $out/bin/urbit
   '';
 
   passthru.updateScript = ./update-bin.sh;
@@ -37,7 +41,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = [ lib.maintainers.matthew-levan ];
@@ -45,4 +48,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "urbit";
   };
-}
+})

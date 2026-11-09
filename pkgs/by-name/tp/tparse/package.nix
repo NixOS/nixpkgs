@@ -3,17 +3,15 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "tparse";
   version = "0.18.0";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "mfridman";
     repo = "tparse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oJApKmdo8uvnm6npXpzcKBRRkZ901AH1kZqGuoLdB3U=";
   };
 
@@ -22,7 +20,7 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +30,4 @@ buildGoModule {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ obreitwi ];
   };
-}
+})

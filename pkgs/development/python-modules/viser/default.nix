@@ -6,8 +6,8 @@
 
   # nativeBuildInputs
   nodejs,
-  fetchYarnDeps,
-  yarnConfigHook,
+  fetchNpmDeps,
+  npmHooks,
 
   # build-system
   hatchling,
@@ -15,140 +15,122 @@
   # dependencies
   imageio,
   msgspec,
-  nodeenv,
   numpy,
-  opencv-python,
-  plyfile,
-  psutil,
   requests,
   rich,
-  scikit-image,
-  scipy,
   tqdm,
   trimesh,
   typing-extensions,
   websockets,
   yourdfpy,
+  zstandard,
 
   # optional-dependencies
-  hypothesis,
-  pre-commit,
-  pandas,
-  pyright,
-  pytest,
-  ruff,
   gdown,
+  liblzfse,
   matplotlib,
+  opencv-python,
+  pandas,
   plotly,
-  # pyliblzfse,
+  plyfile,
   robot-descriptions,
   torch,
   tyro,
 
-  # nativeCheckInputs
+  # tests
+  hypothesis,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "viser";
-  version = "1.0.4";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nerfstudio-project";
+    owner = "viser-project";
     repo = "viser";
-    tag = "v${version}";
-    hash = "sha256-AS5D6pco6wzQ414yxvv0K9FB3tfP1BvqigRLJJXDduU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jf1/BJpkHxt5teR0ay1YKvCdsC6QFApFPuQswPjPW4g=";
   };
 
-  postPatch = ''
-    # prepare yarn offline cache
-    mkdir -p node_modules
-    cd src/viser/client
-    cp package.json yarn.lock ../../..
-    ln -s ../../../node_modules
-
-    # fix: [vite-plugin-eslint] Failed to load config "react-app" to extend from.
-    substituteInPlace vite.config.mts --replace-fail \
-      "eslint({ failOnError: false, failOnWarning: false })," ""
-
-    cd ../../..
-  '';
+  npmRoot = "src/viser/client";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+    hash = "sha256-ebEJ4lm45L6+Dw1jh0BjciUEQWpFNGqfVMT6loIgZsk=";
+  };
 
   nativeBuildInputs = [
-    yarnConfigHook
     nodejs
+    npmHooks.npmConfigHook
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/src/viser/client/yarn.lock";
-    hash = "sha256-4x+zJIqjVoKmEdOUPGpCuMmlRBfF++3oWtbNYAvd2ko=";
-  };
-
   preBuild = ''
-    cd src/viser/client
-    yarn --offline build
-    cd ../../..
+    pushd ${finalAttrs.npmRoot}
+    npm --offline run build
+    popd
   '';
 
   build-system = [
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
+    "rich"
+    # websockets<17.0.0,>=13.1 not satisfied by version 17.0.1
+    "websockets"
+  ];
   dependencies = [
     imageio
     msgspec
-    nodeenv
     numpy
-    opencv-python
-    plyfile
-    psutil
     requests
     rich
-    scikit-image
-    scipy
     tqdm
     trimesh
     typing-extensions
     websockets
-    yourdfpy
+    zstandard
   ];
 
   optional-dependencies = {
-    dev = [
-      hypothesis
-      pre-commit
-      pyright
-      pytest
-      ruff
-    ];
+    urdf = [ yourdfpy ];
     examples = [
       gdown
+      liblzfse
       matplotlib
+      opencv-python
       pandas
       plotly
       plyfile
-      # pyliblzfse
       robot-descriptions
       torch
       tyro
-    ];
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.urdf;
   };
+
+  pythonImportsCheck = [ "viser" ];
 
   nativeCheckInputs = [
     hypothesis
+    opencv-python
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "viser"
+  disabledTestPaths = [
+    # Require a browser (playwright)
+    "tests/e2e"
   ];
+  __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/nerfstudio-project/viser/releases/tag/${src.tag}";
-    description = "Web-based 3D visualization + Python";
-    homepage = "https://github.com/nerfstudio-project/viser";
+    changelog = "https://github.com/viser-project/viser/releases/tag/${finalAttrs.src.tag}";
+    description = "Web-based 3D visualization in Python";
+    homepage = "https://github.com/viser-project/viser";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

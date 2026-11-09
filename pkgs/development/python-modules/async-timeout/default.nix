@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   pytest-asyncio,
@@ -14,10 +13,8 @@ buildPythonPackage rec {
   version = "5.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
-    owner = "aio-libs";
+    owner = "aio-libs-abandoned";
     repo = "async-timeout";
     tag = "v${version}";
     hash = "sha256-lsSoIv2SnAJbv7V1eRognjv0cCQONwJMlb6fum9wQ/s=";

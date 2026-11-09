@@ -5,16 +5,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nototools";
-  version = "0.3.2";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "googlefonts";
+    owner = "notofonts";
     repo = "nototools";
-    tag = "v${version}";
-    sha256 = "sha256-0se0YcnhDwwMbt2C4hep0T/JEidHfFRUnm2Sy7qr2uk=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-QQVAaBUO5rGTctDssKx77X6xuw8Jvkstr3sYnvIsXgM=";
   };
 
   build-system = with python3Packages; [
@@ -75,8 +75,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
-    homepage = "https://github.com/googlefonts/nototools";
+    homepage = "https://github.com/notofonts/nototools";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

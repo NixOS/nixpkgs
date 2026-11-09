@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
@@ -10,9 +11,10 @@
   aiohttp,
   iso8601,
   python-json-logger,
-  clickclick,
-  typing-extensions,
+  click,
 
+  jsonpatch,
+  kmock,
   pytest-mock,
   pytest-timeout,
   pytest-asyncio,
@@ -20,18 +22,19 @@
   freezegun,
   certvalidator,
   aresponses,
+  looptime,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kopf";
-  version = "1.38.0";
+  version = "1.45.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kopf";
-    tag = version;
-    hash = "sha256-H2Q5nDIODp2VFtMIJ0g8b+/SMZzLueRGBkh1g6LBbgc=";
+    tag = finalAttrs.version;
+    hash = "sha256-ffBdauplO1WkrXcsJuCKBhlkXpoinFqRU24uSoDQIm0=";
   };
 
   build-system = [
@@ -44,8 +47,8 @@ buildPythonPackage rec {
     python-json-logger
     aiohttp
     iso8601
-    clickclick
-    typing-extensions
+    jsonpatch
+    click
   ];
 
   nativeCheckInputs = [
@@ -54,9 +57,11 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-asyncio
     pytest-mock
+    kmock
     freezegun
     certvalidator
     aresponses
+    looptime
   ];
 
   disabledTestPaths = [
@@ -64,10 +69,22 @@ buildPythonPackage rec {
     "tests/admission/test_certificates.py"
     "tests/e2e/test_examples.py"
 
-    #Module certbuilder unavailable in nixpkgs
+    # Module certbuilder unavailable in nixpkgs
     "tests/admission/test_webhook_detection.py"
     "tests/admission/test_webhook_ngrok.py"
     "tests/admission/test_webhook_server.py"
+    "tests/authentication/test_credentials.py"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "tests/posting/test_threadsafety.py";
+
+  disabledTests = [
+    # assert [] to due missing certificate
+    "test_connection_info_as_ssl_context_when_insecure"
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -79,8 +96,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework to write Kubernetes operators";
     homepage = "https://kopf.readthedocs.io/";
-    changelog = "https://github.com/nolar/kopf/releases/tag/${src.tag}";
+    changelog = "https://github.com/nolar/kopf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

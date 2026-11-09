@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "precious";
-  version = "0.10.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "houseabsolute";
     repo = "precious";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xM4NqcT1NGR3tkLOPt59lfFpjRnohU+tTTk9Ijkf97o=";
+    hash = "sha256-tMCTm3dMxkwtRspg2rkU/SJ7qYZHgQD7RCBhT8GsSEU=";
   };
 
-  cargoHash = "sha256-tp0kvG5G7mW0czfZ43AbT7Lcv1sMnO5Zc+t2d5w4aqA=";
+  cargoHash = "sha256-GUl6BCtYpZCMrMFWVzcLvHmoY+1R6j/iGtBqIJaceas=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -30,9 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/houseabsolute/precious/releases/tag/v${finalAttrs.version}";
     mainProgram = "precious";
     maintainers = with lib.maintainers; [ abhisheksingh0x558 ];
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
   };
 })

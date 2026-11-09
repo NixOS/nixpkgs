@@ -6,14 +6,14 @@
 
 appimageTools.wrapType2 rec {
   pname = "jet-pilot";
-  version = "1.35.0";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://github.com/unxsist/jet-pilot/releases/download/v${version}/JET.Pilot_${version}_amd64.AppImage";
-    hash = "sha256-W1VRV29ZV8nD3wAcSNAsWguN8s+zio0lsVaZwAnCOwE=";
+    hash = "sha256-LK1oxxlM/5j95pHyxIRXsM5LDxC2mSUdrfGhp85aw08=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
   meta = {
     description = "Open-source Kubernetes desktop client that focuses on less clutter, speed and good looks";

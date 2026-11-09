@@ -3,18 +3,18 @@
   stdenv,
   fetchurl,
   cmake,
-  pcre,
+  pcre2,
   zlib,
   python3,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppcms";
   version = "2.0.0.beta2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cppcms/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/cppcms/cppcms-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-aXAxx9FB/dIVxr5QkLZuIQamO7PlLwnugSDo78bAiiE=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     python3
   ];
   buildInputs = [
-    pcre
+    pcre2
     zlib
     openssl
   ];
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

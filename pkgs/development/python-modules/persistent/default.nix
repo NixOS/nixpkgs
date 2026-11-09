@@ -11,25 +11,17 @@
   cffi,
   zope-deferredimport,
   zope-interface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "6.1.1";
+  version = "6.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LTIbYOsH75APhals8HH/jDua7m5nm+zEjEbzRX6NnS8=";
+    hash = "sha256-LnzKobGrU0a+kDmAv3SsMB5ae+TmlJyTz58qcWrdixg=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools < 74" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 

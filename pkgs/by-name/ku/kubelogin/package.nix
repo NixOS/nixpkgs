@@ -8,25 +8,28 @@
   kubelogin,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "0.2.13";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "kubelogin";
-    rev = "v${version}";
-    sha256 = "sha256-Vy3HRNBYP+q/DWVib47jolg4W2HgdAAqjcFghfpapSE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lXNKb6F9Q+FA+WlqBZe9/fbcg7HgfcgTdI8A8WBoGuA=";
   };
 
   patches = [
     ./disable-nix-incompatible-test.patch
   ];
 
-  vendorHash = "sha256-CWgvbN8NnroSVqfKF8UG6kXqVWrQ0TmKwri1f218K+M=";
+  vendorHash = "sha256-S5seDNIrtjt+MOJ2C8tVCEWy7FpDP8qjb9MTFMrkEJ0=";
+
+  # hack/changelog-generator is a separate Go module since 0.2.15
+  subPackages = [ "." ];
 
   ldflags = [
-    "-X main.gitTag=v${version}"
+    "-X main.gitTag=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -40,7 +43,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = kubelogin;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -48,8 +51,8 @@ buildGoModule rec {
   meta = {
     description = "Kubernetes credential plugin implementing Azure authentication";
     mainProgram = "kubelogin";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -11,8 +11,7 @@
   libogg,
   libpng,
   libtheora,
-  libX11,
-  lua5_4,
+  libx11,
   minizip,
   openal,
   SDL2,
@@ -24,13 +23,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ete-unwrapped";
-  version = "0-unstable-2025-08-17";
+  version = "0-unstable-2026-06-21";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "etfdevs";
     repo = "ETe";
-    rev = "f6a9fda3b82c1ca8fd4536ae928571e93ff91fcc";
-    hash = "sha256-oTFtUAgkDYtbcw66EFBBFMMUEYWSHYpTAFAv1izqsuo=";
+    rev = "c769004c557e2afabf41f847b32cfb4762ae2521";
+    hash = "sha256-VW7cJb7bRW/IUP2kg2N6cgX2KGo3nFp3NOH8rGFvQwk=";
   };
 
   strictDeps = true;
@@ -48,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libpng
     libtheora
-    libX11
-    lua5_4
+    libx11
     minizip
     openal
     SDL2
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../src";
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_DEDSERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
     (lib.cmakeBool "BUILD_ETMAIN_MOD" true)
@@ -68,16 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/bin
     for f in ete-ded.${arch} ete.${arch}; do
-      mv $out/lib/ete/''${f} $out/bin/''${f}
+      install -Dm755 \
+        "$out/lib/ete/$f" \
+        "$out/bin/$f"
+      rm "$out/lib/ete/$f"
     done
   '';
 
   meta = {
     description = "Improved Wolfenstein: Enemy Territory Engine";
     homepage = "https://github.com/etfdevs/ETe";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       ashleyghooper
       drupol

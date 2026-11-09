@@ -13,13 +13,16 @@
 
 stdenvNoCC.mkDerivation {
   pname = "moka-icon-theme";
-  version = "unstable-2019-05-29";
+  version = "5.4.0-unstable-2019-05-30";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snwh";
     repo = "moka-icon-theme";
     rev = "c0355ea31e5cfdb6b44d8108f602d66817546a09";
-    sha256 = "0m4kfarkl94wdhsds2q1l9x5hfa9l3117l8j6j7qm7sf7yzr90c8";
+    hash = "sha256-iIGUvz9On4qPNBLRE8KgSTlYeqIBC900bJwkOrNyk1Q=";
   };
 
   nativeBuildInputs = [

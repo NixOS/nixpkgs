@@ -1,10 +1,11 @@
 {
-  autoPatchelfHook,
-  buildPythonPackage,
-  cudaPackages,
   lib,
-  python,
   stdenv,
+  cudaPackages,
+  buildPythonPackage,
+  pythonAtLeast,
+  python,
+  autoPatchelfHook,
 }:
 let
   inherit (cudaPackages.tensorrt)
@@ -22,6 +23,9 @@ buildPythonPackage {
   pname = "${cudaPackages.cudaNamePrefix}-${pname}";
 
   inherit version;
+
+  # cudaPackages.tensorrt.src contains wheels for python 3.14 from TensorRT 11.1.
+  disabled = pythonAtLeast (if lib.versionOlder version "11.1" then "3.14" else "3.15");
 
   src =
     let

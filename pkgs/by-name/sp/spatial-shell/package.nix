@@ -28,7 +28,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = {
     description = "Implementing a spatial model inspired by Material Shell, for i3 and sway";
-    homepage = "https://spatial-shell.app";
+    homepage = "https://github.com/lthms/spatial-shell";
     changelog = "https://github.com/lthms/spatial-shell/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fgaz ];

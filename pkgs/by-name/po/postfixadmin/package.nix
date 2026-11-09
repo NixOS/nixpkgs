@@ -9,19 +9,19 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "postfixadmin";
-  version = "4.0.1";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "postfixadmin";
     repo = "postfixadmin";
     tag = "postfixadmin-${finalAttrs.version}";
-    hash = "sha256-mr5FBURTGP2J3JMlcexXjz4GFJNqPR4rZyqHVN7+6iM=";
+    hash = "sha256-56lLWeVwEK/phn+AEfrdZAwisp9/9hrNSkcvHacooc4=";
   };
 
   # Upstream does not ship a lock file, we have to maintain our own for now.
   # https://github.com/postfixadmin/postfixadmin/issues/948
   composerLock = ./composer.lock;
-  vendorHash = "sha256-uyHEfWCC6V4d+ez7FbqBKrh4IfbQ2pgD4UvbdGEfobI=";
+  vendorHash = "sha256-wlrkO+OIrcn/yS3/1cecz/aJLLsBcMOSkp6+blNLDeI=";
 
   postInstall = ''
     out_dir="$out"/share/php/postfixadmin/

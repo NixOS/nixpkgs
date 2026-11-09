@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "opencommit";
-  version = "3.2.10";
+  version = "3.3.11";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
     rev = "v${version}";
-    hash = "sha256-FsPtTuvBvbDIldwxLbuXOxNfOIQ8THboRB6ghTSzTbI=";
+    hash = "sha256-wYwZlqItbjNjdScvPIx8/8ND3FTRsXwwu6e2WI19HcU=";
     postFetch = ''
       cd $out
       # Fix lockfile issues with bundled dependencies
@@ -22,7 +22,7 @@ buildNpmPackage rec {
     '';
   };
 
-  npmDepsHash = "sha256-Ilf9lfFegraQRkYU5v7Zv6MubpN5m6bck3j5UkTXk+4=";
+  npmDepsHash = "sha256-ID7xdL6loDYsCYzQgLp5daTYsIEyJQGK1VoKIZjlxgU=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -30,7 +30,7 @@ buildNpmPackage rec {
     description = "AI-powered commit message generator";
     homepage = "https://www.npmjs.com/package/opencommit";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.matteopacini ];
+    maintainers = [ ];
     mainProgram = "oco";
   };
 

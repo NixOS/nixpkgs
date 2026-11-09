@@ -21,6 +21,8 @@ let
 
     enableParallelBuilding = true;
 
+    env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
     nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs = [ libck ];
@@ -40,6 +42,8 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
+
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   nativeBuildInputs = [ bootstrap ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 

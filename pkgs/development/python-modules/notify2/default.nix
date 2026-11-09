@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z8rrv9rsg1r2qgh2dxj3dfj5xnki98kgi3w839kqby4a26i1yik";
+    hash = "sha256-M/oQjVDELzzTQHzEN1GK0/YiXRuyNwEfFjk8ndPOGX0=";
   };
 
   # Tests require Xorg and Dbus instance

@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-limit";
   version = "0.0.10";
 
   src = fetchFromGitHub {
-    owner = "alopatindev";
+    owner = "cargo-limit";
     repo = "cargo-limit";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
   };
 
@@ -24,14 +24,16 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
-    homepage = "https://github.com/alopatindev/cargo-limit";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    homepage = "https://github.com/cargo-limit/cargo-limit";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];
   };
-}
+})

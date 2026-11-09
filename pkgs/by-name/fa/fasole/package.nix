@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fasole";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "ProggerX";
     repo = "fasole";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qcCJgz/YXfd8+9ST1U4YFxLLd25D8HrfZzsDGpKgCdM=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ proggerx ];
     mainProgram = "fasole";
   };
-}
+})

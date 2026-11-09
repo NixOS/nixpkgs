@@ -120,7 +120,8 @@ runCommand "julia-depot"
             println("Precompiling with CPU_NAME = " * Sys.CPU_NAME)
           end
 
-          Pkg.precompile()
+          # strict=true so a transitive dependency that fails to precompile fails the build.
+          Pkg.precompile(strict=true)
         end
 
         # Remove the registry to save space

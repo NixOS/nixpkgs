@@ -8,7 +8,7 @@
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
-  sourceHighlight,
+  source-highlight,
   meson,
   flex,
   bison,
@@ -16,13 +16,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtracefs";
-  version = "1.8.2";
+  version = "1.8.4";
 
   src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
-    hash = "sha256-rpZUa34HMnDMSsGGwtOriEEHDfnW8emRSHZxzRkY3c4=";
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5cQ8Iaz4fr9qcbf5aXDmxqPpHqgQ1LWiUUvuCpT6NRs=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     xmlto
     docbook_xml_dtd_45
     docbook_xsl
-    sourceHighlight
+    source-highlight
     flex
     bison
   ];
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentasah ];
   };
-}
+})

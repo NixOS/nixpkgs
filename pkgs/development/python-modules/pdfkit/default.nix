@@ -11,14 +11,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "992f821e1e18fc8a0e701ecae24b51a2d598296a180caee0a24c0af181da02a9";
+    hash = "sha256-mS+CHh4Y/IoOcB7K4ktRotWYKWoYDK7gokwK8YHaAqk=";
   };
 
   # tests are not distributed
   doCheck = false;
 
   meta = {
-    homepage = "https://pypi.python.org/pypi/pdfkit";
+    homepage = "https://pypi.org/project/pdfkit/";
     description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
     license = lib.licenses.mit;
   };

@@ -9,6 +9,8 @@
     ```
   */
   redistNames = [
+    "cublas"
+    "cublasdx" # NOTE: MathDx; no manifests are published, so ours are made by hand
     "cublasmp"
     "cuda"
     "cudnn"
@@ -19,7 +21,7 @@
     "cutensor"
     "nppplus"
     "nvcomp"
-    # "nvidia-driver",  # NOTE: Some of the earlier manifests don't follow our scheme.
+    "nvidia-driver" # NOTE: only cuda_compat (CUDA 13.4+); see the README of its manifests
     "nvjpeg2000"
     "nvpl"
     "nvtiff"

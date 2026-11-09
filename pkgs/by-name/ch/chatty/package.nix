@@ -11,7 +11,7 @@
   wrapGAppsHook4,
   evolution-data-server,
   feedbackd,
-  glibmm,
+  glibmm_2_4,
   libsecret,
   gnome-desktop,
   gspell,
@@ -22,22 +22,20 @@
   libadwaita,
   libphonenumber,
   modemmanager,
-  pidgin,
   protobuf,
   sqlite,
-  plugins ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLdl44nLRFLH76499JcaKgXRpf51wqFm174gUa7noKc=";
+    hash = "sha256-XLpvgRSvIi3Wk5SaomROp94HDT8JNFfLdRX1PJgQYkI=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     evolution-data-server
     feedbackd
-    glibmm
+    glibmm_2_4
     libsecret
     gnome-desktop
     gspell
@@ -64,17 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libphonenumber
     modemmanager
-    pidgin
     protobuf
     sqlite
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PURPLE_PLUGIN_PATH : ${lib.escapeShellArg (pidgin.makePluginPath plugins)}
-      ${lib.concatMapStringsSep " " (p: p.wrapArgs or "") plugins}
-    )
-  '';
+  mesonFlags = [
+    (lib.mesonEnable "purple" false)
+  ];
 
   meta = {
     description = "XMPP and SMS messaging via libpurple and ModemManager";

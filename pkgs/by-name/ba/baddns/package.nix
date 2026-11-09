@@ -5,34 +5,33 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "baddns";
-  version = "1.12.294";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "baddns";
-    tag = version;
-    hash = "sha256-HAVoCyI7yxCdAR4qq7yXJz3YxkPnhBdeXLJZmzZpwF4=";
+    tag = finalAttrs.version;
+    hash = "sha256-k+DR7g0XllGzMBqKZ7vnxcPKH+QBkt9Irzd7mSVhWfg=";
   };
 
-  pythonRelaxDeps = true;
-
-  build-system = with python3.pkgs; [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     colorama
+    cloudcheck
     dnspython
+    blastdns
+    blasthttp
     httpx
     python-dateutil
     python-whois
     pyyaml
     setuptools
     tldextract
+    yara-python
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -49,23 +48,43 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "test_cli_cname_http"
+    "test_cli_cname_nxdomain"
     "test_cli_direct"
     "test_cli_validation_customnameservers_valid"
-    "test_cname_http_bigcartel_match"
-    "test_cname_whois_unregistered_baddata"
-    "test_cname_whois_unregistered_match"
-    "test_cname_whois_unregistered_missingdata"
+    "test_cname_dnsnxdomain"
+    "test_cname_http_bigcartel"
+    "test_cname_nxdomain"
+    "test_cname_probe_ip_prefers_ipv4"
+    "test_cname_whois"
+    "test_custom_signatures_dir"
+    "test_debug_mode"
+    "test_default_resolver"
+    "test_delegation_rotating_dkim_selector_not_reported"
+    "test_dmarc"
+    "test_min_confidence"
+    "test_min_severity"
     "test_modules_customnameservers"
-    "test_references_cname_css"
-    "test_references_cname_js"
+    "test_mtasts"
+    "test_ns_cname_chain_follow"
+    "test_ns_nameserver_domain_unregistered[mock_dispatch_whois0]"
+    "test_ns_nosoa"
+    "test_ns_partial_lame"
+    "test_ns_signature_confidence_override"
+    "test_nsec"
+    "test_references"
+    "test_silent_mode"
+    "test_spf"
+    "test_txt_with_cname_findings"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool to check subdomains for subdomain takeovers and other DNS issues";
     homepage = "https://github.com/blacklanternsecurity/baddns/";
-    changelog = "https://github.com/blacklanternsecurity/baddns/releases/tag/${src.tag}";
+    changelog = "https://github.com/blacklanternsecurity/baddns/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "baddns";
   };
-}
+})

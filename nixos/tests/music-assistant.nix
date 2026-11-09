@@ -1,13 +1,13 @@
 {
-  lib,
+  pkgs,
   ...
 }:
 
 {
   name = "music-assistant";
-  meta.maintainers = with lib.maintainers; [ hexa ];
+  meta = { inherit (pkgs.music-assistant.meta) maintainers; };
 
-  nodes.machine = {
+  containers.machine = {
     services.music-assistant = {
       enable = true;
     };

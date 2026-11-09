@@ -4,19 +4,19 @@
   fetchFromGitHub,
   lib,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
 }:
 let
-  version = "0.25.0";
+  version = "0.29.1";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-LDdydMiAp86C2gzUHgVy7UMc2xajyvrSdD4rIpNK4qI=";
+    hash = "sha256-bhm5wcQ5Wn/GmweJ3zqFGl1LLDDN1DNw1J95GZg2lwQ=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -26,16 +26,16 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
-      pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-3egNSL62TyuRg6JDMMptjT0vLlwYdDLnJC2rYzaPE1w=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-oBHe6X1/9KakizfK4jIIcaxvmNtSzdsOJRm3LnIGrHs=";
     };
 
     nativeBuildInputs = [
       faketty
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     # faketty is required to work around a bug in nx.
@@ -61,7 +61,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-aVkPyrnkJMfn6NPbASDhH5ckIIktcFygKGqcSTA3yy8=";
+  vendorHash = "sha256-WpUgk5L3TIOPx4nt4TzTQOWOfF9uGzXV3Id7r+fD118=";
 
   ldflags = [
     "-X=main.version=${version}"

@@ -32,6 +32,7 @@
   gst_all_1,
   json-glib,
   libadwaita,
+  libpwquality,
   buildPackages,
   withPantheon ? false,
   pantheon,
@@ -39,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "49.2";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-s7o9aCE+h/gfFzPoVQDDe4K1k4+QCeT+iZlJY9X7K44=";
+    hash = "sha256-q68zV2RiAwxlu5Y6VjAKd4bn11g08ckKnf/ahzg1wz0=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
     json-glib
     libadwaita
+    libpwquality
     libportal-gtk4
     libarchive
     libsecret

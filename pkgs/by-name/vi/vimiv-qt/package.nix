@@ -7,7 +7,7 @@
   installShellFiles,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vimiv-qt";
   version = "0.9.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "karlch";
     repo = "vimiv-qt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
   };
 
@@ -61,4 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "vimiv";
     platforms = lib.platforms.all;
   };
-}
+})

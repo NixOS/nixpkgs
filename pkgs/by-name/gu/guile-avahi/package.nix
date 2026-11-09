@@ -11,13 +11,13 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-avahi";
   version = "0.4.1";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/guile-avahi.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Yr+OiqaGv6DgsjxSoc4sAjy4OO/D+Q50vdSTPEeIrV8=";
   };
 
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-unused-function";
 
+  guileImportsCheck = [ "avahi" ];
+
   meta = {
     description = "Bindings to Avahi for GNU Guile";
     homepage = "https://www.nongnu.org/guile-avahi/";
@@ -46,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

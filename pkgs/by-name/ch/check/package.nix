@@ -2,16 +2,24 @@
   fetchurl,
   lib,
   stdenv,
+  validatePkgConfig,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "check";
   version = "0.15.2";
 
   src = fetchurl {
-    url = "https://github.com/libcheck/check/releases/download/${version}/check-${version}.tar.gz";
-    sha256 = "02m25y9m46pb6n46s51av62kpd936lkfv3b13kfpckgvmh5lxpm8";
+    url = "https://github.com/libcheck/check/releases/download/${finalAttrs.version}/check-${finalAttrs.version}.tar.gz";
+    hash = "sha256-qN5OC6z7TXbdHGGN7SY1I7U7hdkqFG2INesaUpMvogo=";
   };
+
+  nativeBuildInputs = [
+    validatePkgConfig
+  ];
+
+  strictDeps = true;
 
   # fortify breaks the libcompat vsnprintf implementation
   hardeningDisable = lib.optionals (
@@ -20,6 +28,10 @@ stdenv.mkDerivation rec {
 
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
+
+  __structuredAttrs = true;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     description = "Unit testing framework for C";
@@ -38,5 +50,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     mainProgram = "checkmk";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "check" ];
   };
-}
+})

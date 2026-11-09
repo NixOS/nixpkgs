@@ -6,17 +6,22 @@
   menhir,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mlx";
-  version = "0.10";
+  version = if lib.versionAtLeast ppxlib.version "0.38" then "0.12" else "0.11";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "mlx";
-    rev = version;
-    hash = "sha256-g2v6U4lubYIVKUkU0j+OwtPxK9tKvleuX+vA4ljJ1bA=";
+    tag = finalAttrs.version;
+    hash =
+      {
+        "0.12" = "sha256-7CiSa7YYCnoK1wSVQYyX8WwuWCCtXFKGJabpGameMbU=";
+        "0.11" = "sha256-6cz/nbFGSxE1minncJujZi14TmM8ctDygJP4rmewYgo=";
+      }
+      ."${finalAttrs.version}";
   };
 
   buildInputs = [
@@ -30,4 +35,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ Denommus ];
   };
-}
+})

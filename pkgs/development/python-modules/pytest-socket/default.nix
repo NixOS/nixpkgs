@@ -2,26 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  fetchpatch,
+  uv-build,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-socket";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miketheman";
     repo = "pytest-socket";
     tag = version;
-    hash = "sha256-19YF3q85maCVdVg2HOOPbN45RNjBf6kiFAhLut8B2tQ=";
+    hash = "sha256-Z8aCucbYR6kIgrtZlITPjElwBiIW7DhAk5oTnuiEwWQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # allow uv-build 0.13
+    (fetchpatch {
+      url = "https://github.com/miketheman/pytest-socket/commit/e3ed717f36fe4794adc50712873e7c33fd43a581.patch";
+      hash = "sha256-MVuXAUscU/e4FdASdITN6HH2yTacBingUrfi2vvO1yQ=";
+      excludes = [ ".github/workflows/codspeed.yml" ];
+    })
+  ];
+
+  nativeBuildInputs = [ uv-build ];
 
   buildInputs = [ pytest ];
 

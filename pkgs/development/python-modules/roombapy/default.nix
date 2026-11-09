@@ -1,6 +1,5 @@
 {
   lib,
-  amqtt,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -10,7 +9,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tabulate,
 }:
 
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   pname = "roombapy";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
@@ -46,7 +42,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    amqtt
     pytest-asyncio
     pytestCheckHook
   ];

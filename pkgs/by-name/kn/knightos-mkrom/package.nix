@@ -6,14 +6,14 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mkrom";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "mkrom";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-YFrh0tOGiM90uvU9ZWopW1+9buHDQtetuOtPDSYYaXw=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
   };
-}
+})

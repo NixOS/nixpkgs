@@ -1,39 +1,45 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  gitUpdater,
   libpcap,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "adalanche";
-  version = "2024.1.11";
+  version = "1014";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = "adalanche";
-    tag = "v${version}";
-    hash = "sha256-SJa2PQCXTYdv5jMucpJOD2gC7Qk2dNdINHW4ZvLXSLw=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-y3+YEDZtTPl65vNjEKG69LacBxV3SFqr4xOko8doulk=";
   };
 
-  vendorHash = "sha256-3HulDSR6rWyxvImWBH1m5nfUwnUDQO9ALfyT2D8xmJc=";
+  vendorHash = "sha256-J9aZKGeiLeiNiYyWlzIZLmC3CjaeAXqSa4q+7PDJ7c4=";
 
-  buildInputs = [
-    libpcap
+  # The collectors are for Windows only.
+  excludedPackages = [
+    "collector"
+    "localmachine/collect"
   ];
+
+  buildInputs = [ libpcap ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/lkarlslund/adalanche/modules/version.Version=${version}"
+    "-X=github.com/lkarlslund/adalanche/modules/version.Version=${finalAttrs.version}"
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Active Directory ACL Visualizer and Explorer";
     homepage = "https://github.com/lkarlslund/adalanche";
-    changelog = "https://github.com/lkarlslund/Adalanche/releases/tag/v${version}";
+    changelog = "https://github.com/lkarlslund/Adalanche/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "adalanche";
   };
-}
+})

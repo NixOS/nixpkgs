@@ -4,15 +4,14 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
 
   # build-system, dependencies
   meson,
   ninja,
   pyproject-metadata,
-  tomli,
 
   # tests
+  cmake,
   cython,
   gitMinimal,
   pytestCheckHook,
@@ -21,55 +20,46 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.18.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-xWqZ7J32aaQGYv5GlgMhr25LFBBsFNsihwnBYo4jhI0=";
+    hash = "sha256-UsiGKLDlZxWS3CMGYT+19vNhX9JN7wWbmJTxQ7f5oTk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # TODO: Remove in 0.19.0
-      url = "https://github.com/mesonbuild/meson-python/commit/1e69e7a23f2b24d688dc4220e93de6f0e2bcf9d2.patch";
-      hash = "sha256-FC2ll/OrLV1R0CDB6UkrknVASJQ7rSU+sApdAk75x44=";
-    })
-  ];
 
   build-system = [
     meson
     ninja
     pyproject-metadata
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   dependencies = [
     meson
     ninja
     pyproject-metadata
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
+    cmake
     cython
     gitMinimal
     pytestCheckHook
     pytest-mock
   ];
 
-  # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
-  # actual platform version during tests, which mismatches.
-  # https://github.com/mesonbuild/meson-python/issues/760
-  # FIXME: drop in 0.19.0
-  preCheck =
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        unset MACOSX_DEPLOYMENT_TARGET
-      ''
-    else
-      null;
+  dontUseCmakeConfigure = true;
+
+  # For the ld-wrapper to work, we need to use pure rpaths.
+  # Ones under $out will do (even though there's no native library in it)
+  preCheck = ''
+    substituteInPlace tests/test_wheel.py \
+      --replace-fail /usr/lib/test-ldflags "$out/lib/test-ldflags" \
+      --replace-fail /usr/local/lib "$out/lib"
+    substituteInPlace tests/packages/purelib-and-platlib/meson.build \
+      --replace-fail /usr/local/lib "$out/lib"
+  '';
 
   setupHooks = [ ./add-build-flags.sh ];
 
@@ -77,7 +67,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     teams = [ lib.teams.python ];
   };

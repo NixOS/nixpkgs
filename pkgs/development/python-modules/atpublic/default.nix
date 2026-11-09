@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   sybil,
 }:
@@ -13,12 +12,10 @@ buildPythonPackage rec {
   version = "5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     owner = "warsaw";
     repo = "public";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
   };
 

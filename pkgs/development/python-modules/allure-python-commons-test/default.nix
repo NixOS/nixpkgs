@@ -1,34 +1,31 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
-  attrs,
-  pluggy,
-  six,
+  fetchPypi,
   pyhamcrest,
-  setuptools-scm,
   python,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.15.2";
-  format = "setuptools";
+  version = "2.16.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "allure_python_commons_test";
     inherit version;
-    hash = "sha256-SAjo9rM1zXAVBMD1c+rkMcR8zCeW1L3CErR/SxwjnXg=";
+    hash = "sha256-2W2kmIWF6vgPRKKDwK+/jhnQk8LZoe710U0iqmQnKaE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm<10" "setuptools_scm"
+  '';
 
-  propagatedBuildInputs = [
-    attrs
-    pluggy
-    six
-    pyhamcrest
-  ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ pyhamcrest ];
 
   checkPhase = ''
     ${python.interpreter} -m doctest ./src/container.py

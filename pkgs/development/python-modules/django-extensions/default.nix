@@ -36,6 +36,12 @@ buildPythonPackage rec {
     hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
 
+  patches = lib.optionals (lib.versionAtLeast django.version "6.0") [
+    # Fix some tests when run with Django 6
+    # see https://github.com/django-extensions/django-extensions/pull/1979
+    ./django_6-compat.diff
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

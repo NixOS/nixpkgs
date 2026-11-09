@@ -1,47 +1,53 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
-  zathura_core,
-  girara,
-  libspectre,
-  gettext,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  girara,
+  glib,
+  cairo,
+  libspectre,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
-  version = "0.2.9";
+  version = "2026.07.18";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-ps";
     tag = finalAttrs.version;
-    hash = "sha256-YQtMfHhPAe8LtJfcw8LRGe5LvtPY7DjYKFaWOYlveeI=";
+    hash = "sha256-GAndVfiWsM2pYVH2uWQoDl5iAFJ2HNt2q7BLFkzsASg=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    gettext
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    libspectre
     zathura_core
     girara
+    glib
+    cairo
+    libspectre
   ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-ps/";
@@ -52,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

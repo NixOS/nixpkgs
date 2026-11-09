@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fitfile";
   version = "1.0.1";
   pyproject = true;
@@ -14,9 +14,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "fit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NIshX/IkPmqviYRPT4wRF7evZwn9e7BdCI5x+2Pz7II=";
   };
+
+  # fix metadata check hook
+  postPatch = ''
+    substituteInPlace ./fitfile/version_info.py --replace-fail \
+      "(1, 0, 0)" "(1, 0, 1)"
+  '';
 
   build-system = [
     setuptools
@@ -32,4 +38,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tcgoetz/fit";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

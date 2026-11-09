@@ -9,15 +9,15 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hstr";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "dvorka";
     repo = "hstr";
-    rev = version;
-    hash = "sha256-OuLy1aiEwUJDGy3+UXYF1Vx1nNXic46WIZEM1xrIPfA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c+YUpry96OGJ7nmBw180W2r0z4EBd2Cl3SyOQrNxP+o=";
   };
 
   nativeBuildInputs = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
   };
 
-}
+})

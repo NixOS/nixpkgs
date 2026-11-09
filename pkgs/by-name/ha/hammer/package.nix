@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hammer";
   version = "nightly_20220416";
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.special-circumstanc.es";
     owner = "hammer";
     repo = "hammer";
-    rev = version;
-    sha256 = "sha256-xMZhUnycGeHkNZfHQ2d9mETti8HwGHZNskFqh9f0810=";
+    rev = finalAttrs.version;
+    hash = "sha256-xMZhUnycGeHkNZfHQ2d9mETti8HwGHZNskFqh9f0810=";
   };
 
   nativeBuildInputs = [
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

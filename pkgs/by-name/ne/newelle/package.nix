@@ -12,6 +12,7 @@
   vte-gtk4,
   gsettings-desktop-schemas,
   gtksourceview5,
+  glib-networking,
   webkitgtk_6_0,
   lsb-release,
   bash,
@@ -20,9 +21,16 @@
 }:
 
 let
-  version = "1.0.1";
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until newelle works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+
+  version = "1.5.0";
 in
-python3Packages.buildPythonApplication {
+pythonPackages.buildPythonApplication {
   pname = "newelle";
   inherit version;
   pyproject = false; # uses meson
@@ -31,7 +39,7 @@ python3Packages.buildPythonApplication {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-l/eNf1KLZeuDWf1A/5Y8fggOovKmjW6UFNMvNxuJXkc=";
+    hash = "sha256-P+bwcqrF9BTKFb47vVBO1GzFaqb6zMpaeYlI2g9rhX4=";
   };
 
   postPatch = ''
@@ -54,11 +62,13 @@ python3Packages.buildPythonApplication {
     gsettings-desktop-schemas
     gtksourceview5
     webkitgtk_6_0
+    glib-networking
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     pygobject3
     libxml2
+    cssselect
     pydub
     gtts
     speechrecognition
@@ -75,9 +85,8 @@ python3Packages.buildPythonApplication {
     llama-index-readers-file
     google-genai
     anthropic
+    mcp
   ];
-
-  strictDeps = true;
 
   postInstallCheck = ''
     mesonCheckPhase
@@ -85,15 +94,19 @@ python3Packages.buildPythonApplication {
 
   dontWrapGApps = true;
 
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        lsb-release
-        bash
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      lsb-release
+      bash
+      ffmpeg
+    ])
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -104,6 +117,8 @@ python3Packages.buildPythonApplication {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      michaelAllen
+    ];
   };
 }

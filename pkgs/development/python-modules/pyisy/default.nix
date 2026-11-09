@@ -6,19 +6,20 @@
   fetchFromGitHub,
   python-dateutil,
   requests,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.4.1";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
     tag = "v${version}";
-    hash = "sha256-9gGrrFh5xCuX4GjF6a6RRGkpF/rH07Zz0nyKvgwgEkU=";
+    hash = "sha256-edrZFJYAbV9ImjWak9Ly+YWTXpQc5uHyOMOXbq9WOvA=";
   };
 
   postPatch = ''
@@ -26,7 +27,10 @@ buildPythonPackage rec {
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp

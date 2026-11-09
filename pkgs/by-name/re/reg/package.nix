@@ -5,14 +5,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "reg";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "genuinetools";
     repo = "reg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tfBetjoJkr84XLEEcfdRTtc0UZ4m/uRH1Fpr91lQn8o=";
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "reg";
   };
-}
+})

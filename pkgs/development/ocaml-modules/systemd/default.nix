@@ -10,7 +10,7 @@ buildDunePackage {
   src = fetchFromGitHub {
     owner = "juergenhoetzel";
     repo = "ocaml-systemd";
-    rev = "1.3";
+    tag = "1.3";
     hash = "sha256-/FV+mFhuB3mEZv34XZrA4gO6+QIYssXqurnvkNBTJ2o=";
   };
   minimalOCamlVersion = "4.06";
@@ -18,6 +18,7 @@ buildDunePackage {
   meta = {
     platforms = lib.platforms.linux;
     description = "OCaml module for native access to the systemd facilities";
+    homepage = "https://github.com/juergenhoetzel/ocaml-systemd";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.atagen ];
   };

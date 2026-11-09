@@ -1,5 +1,27 @@
-This directory contains the build expressions needed to build any of the jetbrains IDEs.
+This directory contains the build expressions needed to build any of the JetBrains IDEs.
 The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
+
+## IDE packages
+
+The IDEs live in by-name/:
+
+| IDE Name                       | Package Location                              |
+|--------------------------------|-----------------------------------------------|
+| Clion                          | pkgs/by-name/cl/clion/package.nix             |
+| DataGrip                       | pkgs/by-name/da/datagrip/package.nix          |
+| DataSpell                      | pkgs/by-name/da/dataspell/package.nix         |
+| Gateway                        | pkgs/by-name/je/jetbrains-gateway/package.nix |
+| Goland                         | pkgs/by-name/go/goland/package.nix            |
+| IntelliJ IDEA                  | pkgs/by-name/in/intellij-idea/package.nix     |
+| IntelliJ IDEA (Open Source)    | pkgs/by-name/in/intellij-idea-oss/package.nix |
+| MPS                            | pkgs/by-name/je/jetbrains-mps/package.nix     |
+| PhpStorm                       | pkgs/by-name/ph/phpstorm/package.nix          |
+| PyCharm                        | pkgs/by-name/py/pycharm/package.nix           |
+| PyCharm (Open Source)          | pkgs/by-name/py/pycharm-oss/package.nix       |
+| Rider                          | pkgs/by-name/ri/rider/package.nix             |
+| RubyMine                       | pkgs/by-name/ru/ruby-mine/package.nix         |
+| RustRover                      | pkgs/by-name/ru/rust-rover/package.nix        |
+| WebStorm                       | pkgs/by-name/we/webstorm/package.nix          |
 
 ## Tests:
 - To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.empty`.
@@ -7,10 +29,10 @@ The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
 
 ## How to use plugins:
  - Pass your IDE package and a list of plugin packages to `jetbrains.plugins.addPlugins`.
-   E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea [ ideavim ]`
- - The list has to contain contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
+   E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.intellij-idea [ ideavim ]`
+ - The list has to contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
 
-Nixpkgs does not package Jetbrains plugins, however you can use third-party sources, such as
+Nixpkgs does not package JetBrains plugins, however you can use third-party sources, such as
 [nix-jetbrains-plugins](https://github.com/nix-community/nix-jetbrains-plugins).
 Note that some plugins may not work without modification, if they are packaged in a way that is incompatible with NixOS.
 You can try installing such plugins from within the IDE instead.
@@ -35,35 +57,40 @@ fetchurl {
 }
 ```
 
-## How to update stuff:
- - Run ./bin/update_bin.py, this will update binary IDEs, and automatically commit them
- - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Run ./source/update.py ./source/sources.json. This will update the source version to the latest available version.
-   - Run these commands respectively:
-     - `nix build .#jetbrains.idea-oss.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
-     - `nix build .#jetbrains.pycharm-oss.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
-   - Make sure the Kotlin version used is correct.
-     - Check the recommended Kotlin version in `.idea/kotlinc.xml` in the IDEA source root
-   - Do a test build
-   - If it succeeds, make a commit
-   - make a PR/merge
-   - If it fails, ping/message GenericNerdyUsername or the nixpkgs Jetbrains maintainer team
+## How to update IDEs:
+ - Run `./updater/main.py`.
+   This will update binary and source IDEs.
+   After this you can commit them.
+   - See `./updater/main.py --help` for additional flags.
+   - The IDEs have `passthru.updateScript` set up to run `./updater/main.py`.
+     The script then uses the `UPDATE_NIX_*` environment variables as documented.
+
+To keep things simple, the update script generates files within the package directory:
+- `version.json`: version information for binary packages, and `urls` for the package source.
+- `source_args.json`: arguments to pass to `mkJetBrainsSource` in source packages.
+- `maven_artefacts.json`: maven artefacts used by source packages.
+
+Packages are responsible for importing these files, using `lib.importJSON`.
+Other than `maven_artefacts.json`, which is passed directly to `mkJetBrainsSource` as `mvnDeps`.
 
 ## How to add an IDE:
- - Make dummy entries in `bin/versions.json` (make sure to set the version to something older than the real one)
- - Run `bin/update_bin.py`
- - Add an entry in `ides.json`
- - Add an entry in `default.nix`
+ - Add a new derivation in `/pkgs/by-name/...`
+ - Add an entry to the URL templates in `updater/updateInfo.json`
+ - Add it to the table at the top ("IDE packages")
 
 ### TODO:
+ - get rid of remaining `overrideAttrs` in IDE drvs:
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655348886
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655305961
+ - cleanup this TODO list, especially the following points, which (mostly) have been here since 2023
  - replace `libxcrypt-legacy` with `libxcrypt` when supported
  - make `jetbrains-remote-dev.patch` cleaner
  - is extraLdPath needed for IDEA?
- - set meta.sourceProvenance for everything
  - from source builds:
+   - switch to Bazel builds, see https://github.com/NixOS/nixpkgs/pull/531637
    - remove timestamps in output `.jar` of `jps-bootstrap`
    - automated update scripts
-   - fetch `.jar` s from stuff built in nixpkgs when available
+   - fetch `.jar`s from stuff built in nixpkgs when available
      - what stuff built in nixpkgs provides `.jar`s we care about?
        - kotlin
    - make `configurePhase` respect `$NIX_BUILD_CORES`
@@ -76,7 +103,5 @@ fetchurl {
  - on `aarch64-linux`:
    - from source build
    - see if build (binary or source) works without expat
- - on `x86_64-darwin`:
-   - from source build
  - on `aarch64-darwin`:
    - from source build

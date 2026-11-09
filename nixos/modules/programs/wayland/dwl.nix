@@ -61,11 +61,10 @@ in
         #!${pkgs.runtimeShell}
         # Import environment variables
         ${cfg.extraSessionCommands}
-        # Setup systemd user environment
-        systemctl --user import-environment DISPLAY WAYLAND_DISPLAY
-        systemctl --user start dwl-session.target
-        # Start dwl
-        exec ${lib.getExe cfg.package}
+        # Start dwl, then set up the systemd user environment once dwl
+        # has actually set WAYLAND_DISPLAY (see dwl(1) -s), instead of
+        # importing it before dwl exists.
+        exec ${lib.getExe cfg.package} -s "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY; systemctl --user start dwl-session.target"
       '';
       mode = "0755"; # Make it executable
     };

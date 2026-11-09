@@ -23,6 +23,18 @@ in
       services.displayManager.defaultSession = "none+icewm";
       services.xserver.windowManager.icewm.enable = true;
     };
+  nodes.machineAutologin =
+    { ... }:
+    lib.attrsets.recursiveUpdate machineBase {
+      services.displayManager.ly.x11Support = true;
+      services.xserver.enable = true;
+      services.displayManager.defaultSession = "none+icewm";
+      services.xserver.windowManager.icewm.enable = true;
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
+      };
+    };
   nodes.machineNoX11 =
     { ... }:
     lib.attrsets.recursiveUpdate machineBase {
@@ -82,6 +94,14 @@ in
       machine.wait_for_window("^IceWM ")
       machine.sleep(2)
       machine.screenshot("icewm")
+
+      machineAutologin.wait_until_succeeds("getfacl /dev/dri/card0 | grep video")
+      machineAutologin.send_key("ctrl-alt-f1")
+      machineAutologin.wait_for_file("/run/user/${toString user.uid}/lyxauth")
+      machineAutologin.succeed("xauth merge /run/user/${toString user.uid}/lyxauth")
+      machineAutologin.wait_for_window("^IceWM ")
+      machineAutologin.sleep(2)
+      machineAutologin.screenshot("autologin-icewm")
 
       machineNoX11.wait_until_tty_matches("1", "password")
       machineNoX11.send_key("ctrl-alt-f1")

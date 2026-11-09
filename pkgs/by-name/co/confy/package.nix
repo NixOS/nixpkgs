@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "confy";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromSourcehut {
     owner = "~fabrixxm";
     repo = "confy";
     rev = finalAttrs.version;
-    hash = "sha256-rkVem9bPjp68Pk8fVPMDZLFFQsqeeRsynWciCk6xWhU=";
+    hash = "sha256-7HO4ETyn1nJF0CapDtTSqfFeYBpYjsWKxkXyg3M6RQ4=";
   };
 
   nativeBuildInputs = [

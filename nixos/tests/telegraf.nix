@@ -1,11 +1,11 @@
 { pkgs, ... }:
 {
   name = "telegraf";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mic92 ];
+  meta = {
+    inherit (pkgs.telegraf.meta) maintainers;
   };
 
-  nodes.machine =
+  containers.machine =
     { ... }:
     {
       services.telegraf.enable = true;

@@ -397,6 +397,24 @@ in
           )
         ))
         (mkMerge (
+          flip mapAttrsToList cfg.ipvlans (
+            name: ipvlan: {
+              netdevs."40-${name}" = {
+                netdevConfig = {
+                  Name = name;
+                  Kind = "ipvlan";
+                };
+                ipvlanConfig =
+                  optionalAttrs (ipvlan.mode != null) { Mode = lib.toUpper ipvlan.mode; }
+                  // optionalAttrs (ipvlan.flags != null) { Flags = ipvlan.flags; };
+              };
+              networks."40-${ipvlan.interface}" = {
+                ipvlan = [ name ];
+              };
+            }
+          )
+        ))
+        (mkMerge (
           flip mapAttrsToList cfg.fooOverUDP (
             name: fou: {
               netdevs."40-${name}" = {

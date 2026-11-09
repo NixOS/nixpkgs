@@ -8,13 +8,13 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngircd";
-  version = "27";
+  version = "28";
 
   src = fetchurl {
-    url = "https://ngircd.barton.de/pub/ngircd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-aJeIAxndXi5zwckBlhNQn4jrW42qWCGjb7yj14XCR7g=";
+    url = "https://ngircd.barton.de/pub/ngircd/ngircd-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-tIujIKkx1EWuM1xH+IqUBqIPXHHGI77l93VdBSLUNe4=";
   };
 
   configureFlags = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
+})

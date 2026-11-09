@@ -7,7 +7,6 @@
   scipy,
   scikit-learn,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ let
     pname = "opentsne";
     version = "1.0.4";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pavlin-policar";
@@ -45,7 +42,7 @@ let
     passthru = {
       tests.pytest = self.overridePythonAttrs (old: {
         pname = "${old.pname}-tests";
-        format = "other";
+        pyproject = false;
 
         postPatch = "rm openTSNE -rf";
 
@@ -65,7 +62,7 @@ let
       homepage = "https://github.com/pavlin-policar/openTSNE";
       changelog = "https://github.com/pavlin-policar/openTSNE/releases/tag/v${version}";
       license = lib.licenses.bsd3;
-      maintainers = with lib.maintainers; [ lucasew ];
+      maintainers = [ ];
     };
   };
 in

@@ -53,7 +53,7 @@ let
       else
         mkKeyValueDefault { } sep k v;
   };
-  configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
+  generatedConfigFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
 in
 {
   options.services.qbittorrent = {
@@ -75,8 +75,13 @@ in
 
     profileDir = mkOption {
       type = path;
-      default = "/var/lib/qBittorrent/";
-      description = "the path passed to qbittorrent via --profile.";
+      default = "/var/lib/qBittorrent";
+      description = ''
+        The path passed to qbittorrent via --profile.
+        Please note that the resulting systemd service will be run with some very strict security controls,
+        such as `ProtectHome=yes`, `PrivateUsers=true`, and `ProtectSystem=full` among others, so you cannot specify
+        a profileDir in your home directory. See [this bug report](https://github.com/NixOS/nixpkgs/issues/514206) for further info.
+      '';
     };
 
     openFirewall = mkEnableOption "opening both the webuiPort and torrentPort over TCP in the firewall";
@@ -99,7 +104,7 @@ in
         freeformType = attrsOf (attrsOf anything);
       };
       description = ''
-        Free-form settings mapped to the `qBittorrent.conf` file in the profile.
+        Free-form settings mapped to the {file}`qBittorrent.conf` file in the profile.
         Refer to [Explanation-of-Options-in-qBittorrent](https://github.com/qbittorrent/qBittorrent/wiki/Explanation-of-Options-in-qBittorrent).
         The Password_PBKDF2 format is oddly unique, you will likely want to use [this tool](https://codeberg.org/feathecutie/qbittorrent_password) to generate the format.
         Alternatively you can run qBittorrent independently first and use its webUI to generate the format.
@@ -131,6 +136,15 @@ in
       '';
     };
 
+    configFile = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Path to a {file}`qBittorrent.conf` file to use instead of the one generated from the {option}`services.qbittorrent.serverConfig` option.
+        Note that this configuration file cannot be strictly enforced, since it needs to be writable by qBittorrent.
+      '';
+    };
+
     extraArgs = mkOption {
       type = listOf str;
       default = [ ];
@@ -143,6 +157,13 @@ in
     };
   };
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.configFile == null || cfg.serverConfig == { };
+        message = "Can not set both services.qbittorrent.serverConfig and services.qbittorrent.configFile";
+      }
+    ];
+
     systemd = {
       tmpfiles.settings = {
         qbittorrent = {
@@ -153,11 +174,6 @@ in
           "${cfg.profileDir}/qBittorrent/config/"."d" = {
             mode = "755";
             inherit (cfg) user group;
-          };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."L+" = mkIf (cfg.serverConfig != { }) {
-            mode = "1400";
-            inherit (cfg) user group;
-            argument = "${configFile}";
           };
         };
       };
@@ -170,12 +186,20 @@ in
           "nss-lookup.target"
         ];
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = optionals (cfg.serverConfig != { }) [ configFile ];
+        restartTriggers = optionals (cfg.serverConfig != { }) [ generatedConfigFile ];
 
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
+
+          # the config file has to be writable, so we have to do this weird dance
+          ExecStartPre = lib.mkIf (cfg.serverConfig != { } || cfg.configFile != null) ''
+            ${pkgs.coreutils}/bin/install -Dm600 ${
+              if cfg.serverConfig != { } then generatedConfigFile else cfg.configFile
+            } "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
+          '';
+
           ExecStart = utils.escapeSystemdExecArgs (
             [
               (getExe cfg.package)

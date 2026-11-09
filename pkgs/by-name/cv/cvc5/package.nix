@@ -6,6 +6,7 @@
   cmake,
   flex,
   cadical,
+  cadical' ? cadical.override { version = "2.1.3"; },
   symfpu,
   gmp,
   python3,
@@ -13,38 +14,43 @@
   boost,
   jdk,
   libpoly,
+
+  javaBindings ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvc5";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
-    tag = "cvc5-${version}";
-    hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+    tag = "cvc5-${finalAttrs.version}";
+    hash = "sha256-GhqYYTbn0mh/EjoXy9ovKWRtFXYoeuHGp0KuYvfwH7w=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     cmake
     flex
-  ];
-  buildInputs = [
-    cadical.dev
-    symfpu
-    gmp
-    gtest
-    boost
-    jdk
-    libpoly
     (python3.withPackages (
       ps: with ps; [
         pyparsing
         tomli
       ]
     ))
+  ]
+  ++ lib.optionals javaBindings [ jdk ];
+  buildInputs = [
+    cadical'.dev
+    symfpu
+    gmp
+    gtest
+    boost
+    libpoly
   ];
 
   preConfigure = ''
@@ -56,6 +62,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
     "-DUSE_POLY=ON"
+    (lib.cmakeBool "BUILD_BINDINGS_JAVA" javaBindings)
   ];
 
   doCheck = true;
@@ -68,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shadaj ];
   };
-}
+})

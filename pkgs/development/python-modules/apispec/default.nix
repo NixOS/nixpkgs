@@ -4,25 +4,20 @@
   fetchPypi,
   flit-core,
   marshmallow,
-  mock,
   openapi-spec-validator,
   packaging,
-  prance,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.8.4";
+  version = "6.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/Q7RSvcaKUnZrrlrcs4VF8tKSKXFVmfNBIO37TMVaio=";
+    hash = "sha256-CoiFVc1KpftxdgQb4VaEFU/YlhBV4WcucDq/c36HYb8=";
   };
 
   build-system = [ flit-core ];
@@ -32,15 +27,10 @@ buildPythonPackage rec {
   optional-dependencies = {
     marshmallow = [ marshmallow ];
     yaml = [ pyyaml ];
-    validation = [
-      openapi-spec-validator
-      prance
-    ]
-    ++ prance.optional-dependencies.osv;
   };
 
   nativeCheckInputs = [
-    mock
+    openapi-spec-validator
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;

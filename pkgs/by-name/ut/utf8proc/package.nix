@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "utf8proc";
-  version = "2.11.2";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "JuliaStrings";
     repo = "utf8proc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/+/IrsLQ9ykuVOaItd2ZbX60pPlP2omvS1qJz51AnWA=";
+    hash = "sha256-+MLxHKgssEM/q4eEHYnbpNTwz/5xZ72ut6AozaLNwo0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [
-      lib.maintainers.ftrvxmtrx
       lib.maintainers.sternenseemann
     ];
   };

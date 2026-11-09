@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   makeself,
   yasm,
-  fuse,
-  wxGTK32,
+  fuse3,
+  wxwidgets_3_2,
   lvm2,
   replaceVars,
   e2fsprogs,
@@ -19,11 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.24";
+  version = "1.26.31";
 
-  src = fetchurl {
-    url = "https://launchpad.net/veracrypt/trunk/${finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
-    hash = "sha256-f1wgr0KTd6tW97UsqGiTa5kj14T0YG2piGw2KXiQPng=";
+  src = fetchFromGitHub {
+    owner = "veracrypt";
+    repo = "VeraCrypt";
+    tag = "VeraCrypt_${finalAttrs.version}";
+    hash = "sha256-9lmaXQA2RPXlbOSTfkE5c0UN4FkA05WF2oG2VnvUPyk=";
   };
 
   patches = [
@@ -40,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./nix-system-paths.patch
   ];
 
-  sourceRoot = "src";
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  buildFlags = [ "WITHFUSE3=1" ];
 
   nativeBuildInputs = [
     makeself
@@ -49,35 +53,43 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
   buildInputs = [
-    fuse
+    fuse3
     lvm2
-    wxGTK32
+    wxwidgets_3_2
     pcsclite
   ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
-    install -Dm 755 Main/veracrypt "$out/bin/veracrypt"
-    install -Dm 444 Resources/Icons/VeraCrypt-256x256.xpm "$out/share/pixmaps/veracrypt.xpm"
-    install -Dm 444 License.txt -t "$out/share/doc/veracrypt/"
+    install -Dm755 Main/veracrypt "$out/bin/veracrypt"
+    install -Dm444 License.txt -t "$out/share/doc/veracrypt/"
     install -d $out/share/applications
+
+    for size in 16 22 24 32 48 64 128 256 512; do
+      install -Dm444 "Resources/Icons/VeraCrypt-''${size}x''${size}.png" \
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/veracrypt.png"
+    done
+
+    install -Dm444 "Resources/Icons/VeraCrypt.svg" \
+      "$out/share/icons/hicolor/scalable/apps/veracrypt.svg"
+    install -Dm444 "Resources/Icons/VeraCrypt-symbolic.svg" \
+      "$out/share/icons/hicolor/symbolic/apps/veracrypt-symbolic.svg"
+
     substitute Setup/Linux/veracrypt.desktop $out/share/applications/veracrypt.desktop \
-      --replace-fail "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt" \
-      --replace-fail "Icon=veracrypt" "Icon=veracrypt.xpm"
+      --replace-fail "Exec=/usr/bin/veracrypt" "Exec=$out/bin/veracrypt"
   '';
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
-    license = with lib.licenses; [
-      asl20 # and
-      unfree # TrueCrypt License version 3.0
-    ];
-    maintainers = with lib.maintainers; [
-      dsferruzza
-      ryand56
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        asl20 # and
+        unfree # TrueCrypt License version 3.0
+      ];
+    maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.linux;
   };
 })

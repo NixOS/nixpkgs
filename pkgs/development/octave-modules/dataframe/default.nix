@@ -10,13 +10,13 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "10ara084gkb7d5vxv9qv7zpj8b4mm5y06nccrdy3skw5nfbb4djx";
+    hash = "sha256-XTaylrOFTz18y4xZA3yplSwk7z8bp913aWfNRxBQWYE=";
   };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/dataframe/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Data manipulation toolbox similar to R data.frame";
   };
 }

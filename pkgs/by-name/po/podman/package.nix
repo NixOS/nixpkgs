@@ -7,13 +7,11 @@
   buildGoModule,
   buildPackages,
   gpgme,
-  lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
   libselinux,
-  # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
-  systemd,
+  systemdLibs,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -28,7 +26,6 @@
   fuse-overlayfs,
   util-linuxMinimal,
   nftables,
-  iptables,
   iproute2,
   catatonit,
   gvproxy,
@@ -40,16 +37,19 @@
   writableTmpDirAsHomeHook,
   coreutils,
   runtimeShell,
+  fetchpatch,
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "6.1.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-container-tools";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
+    hash = "sha256-RTPxNoKRqFGDFEYHUwPbsNAAZqNfBXbetfphxrwn6eM=";
   };
 
   patches = [
@@ -59,6 +59,13 @@ buildGoModule (finalAttrs: {
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
+    # Fix `podman completion` in the build sandbox
+    # https://github.com/podman-container-tools/podman/pull/29832
+    (fetchpatch {
+      name = "fix-podman-completion.patch";
+      url = "https://github.com/podman-container-tools/podman/commit/7cef788844bdaae01ca672a55698d40428644eb4.patch";
+      hash = "sha256-CAECXYRFyOF4aIc9qIZQceiz5vE/gFGyitjPI48IhYU=";
+    })
   ];
 
   vendorHash = null;
@@ -83,8 +90,7 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    lvm2
-    systemd
+    systemdLibs
   ];
 
   env = {
@@ -136,7 +142,7 @@ buildGoModule (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemdLibs ]}":$RPATH $out/bin/.podman-wrapped
     substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
       --replace-fail sleep '${coreutils}/bin/sleep' \
       --replace-fail /bin/sh '${runtimeShell}'
@@ -151,19 +157,21 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) podman;
       # related modules
       inherit (nixosTests)
+        podman
+        podman-dns
         podman-tls-ghostunnel
         ;
       oci-containers-podman = nixosTests.oci-containers.podman;
+      oci-containers-podman-rootless-conmon = nixosTests.oci-containers.podman-rootless-conmon;
+      oci-containers-podman-rootless-healthy = nixosTests.oci-containers.podman-rootless-healthy;
     };
     # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
     binPath = lib.makeBinPath (
       lib.optionals stdenv.hostPlatform.isLinux [
         fuse-overlayfs
         util-linuxMinimal
-        iptables
         iproute2
         nftables
       ]
@@ -176,18 +184,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns # dns
+          catatonit # added here for the pause image
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
+        ]
+        ++ extraRuntimes;
     };
   };
 
@@ -199,9 +208,10 @@ buildGoModule (finalAttrs: {
 
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
-    changelog = "https://github.com/containers/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
+    changelog = "https://github.com/podman-container-tools/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.unix;
   };
 })

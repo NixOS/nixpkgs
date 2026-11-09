@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tails";
     repo = "onioncircuits";
     rev = version;
-    sha256 = "sha256-hk4pwPTtj4wt58Wn3NbGc5yQt/FJGdcZC9BbNgvaMqY=";
+    hash = "sha256-hk4pwPTtj4wt58Wn3NbGc5yQt/FJGdcZC9BbNgvaMqY=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     pygobject3
     stem
+    pycountry
   ];
 
   postInstall = ''

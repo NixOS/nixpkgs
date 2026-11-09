@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "ubus";
-  version = "unstable-202-10-17";
+  version = "0-unstable-2025-10-17";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ubus.git";
@@ -23,12 +23,6 @@ stdenv.mkDerivation {
     libjson
   ];
   nativeBuildInputs = [ cmake ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "-Wno-error=gnu-folding-constant"
-    ]
-  );
 
   meta = {
     description = "OpenWrt system message/RPC bus";

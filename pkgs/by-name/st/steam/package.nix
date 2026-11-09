@@ -56,16 +56,10 @@ let
             xz
             zenity
 
-            # Steam expects it to be /sbin specifically
-            (pkgs.runCommand "sbin-ldconfig" { } ''
-              mkdir -p $out/sbin
-              ln -s /bin/ldconfig $out/sbin/ldconfig
-            '')
-
-            # crashes on startup if it can't find libX11 locale files
+            # crashes on startup if it can't find libx11 locale files
             (pkgs.runCommand "xorg-locale" { } ''
               mkdir -p $out
-              ln -s ${xorg.libX11}/share $out/share
+              ln -s ${libx11}/share $out/share
             '')
           ]
           ++ extraPkgs pkgs;
@@ -115,14 +109,10 @@ let
           export LIBVA_DRIVERS_PATH=/run/opengl-driver/lib/dri:/run/opengl-driver-32/lib/dri
           export VDPAU_DRIVER_PATH=/run/opengl-driver/lib/vdpau:/run/opengl-driver-32/lib/vdpau
 
-          # Steam gets confused by the symlinks to bind mounts to symlinks /etc/localtime ends up being, so help it out.
-          # See also: https://github.com/flathub/com.valvesoftware.Steam/blob/28481f09f33c12b6ac7421d13af9ed1523c54ec4/steam_wrapper/steam_wrapper.py#L160
-          if [ -z ''${TZ+x} ]; then
-            new_TZ="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')"
-            if [ $? -eq 0 ]; then
-              export TZ="$new_TZ"
-            fi
-          fi
+          # Redirect /etc/localtime to our faked location in /usr/share to make pressure-vessel happy
+          # See: https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/be8ef5fae5ce14e13c18b255a793a2be8ab03ee5/pressure-vessel/runtime.c#L4183-4245
+          tz="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')"
+          ln -sf /usr/share/zoneinfo/$tz /etc/localtime
 
           set -a
           ${lib.toShellVars extraEnv}
@@ -133,7 +123,18 @@ let
 
         inherit extraPreBwrapCmds;
 
+        # Steam expects /sbin/ldconfig to exist, and since SinceRT3
+        # symlinking it results in a symlink loop in nested containers.
+        # Thus, just copy it.
+        extraBuildCommands = ''
+          cp -f $out/usr/{bin,sbin}/ldconfig
+        '';
+
         extraBwrapArgs = [
+          # pressure-vessel expects to find the timezone info under /usr,
+          # and falls back to weird behaviors otherwise
+          "--bind /etc/zoneinfo /usr/share/zoneinfo"
+
           # Steam will dump crash reports here, make those more accessible
           "--bind-try /tmp/dumps /tmp/dumps"
         ]
@@ -168,7 +169,8 @@ buildRuntimeEnv {
       makeSteamRun =
         package:
         buildRuntimeEnv {
-          name = "steam-run";
+          inherit (steam-unwrapped) version;
+          pname = "steam-run";
 
           extraPkgs = pkgs: package ++ extraPkgs pkgs;
 

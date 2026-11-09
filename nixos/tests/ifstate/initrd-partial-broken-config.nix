@@ -2,7 +2,7 @@ let
   mkIfStateConfig = id: {
     enable = true;
     settings.interfaces.eth1 = {
-      addresses = [ "2001:0db8::${builtins.toString id}/64" ];
+      addresses = [ "2001:0db8::${toString id}/64" ];
       link = {
         state = "up";
         kind = "physical";
@@ -51,7 +51,6 @@ in
           };
 
           systemd = {
-            enable = true;
             network.enable = false;
             services.boot-blocker = {
               before = [ "initrd.target" ];

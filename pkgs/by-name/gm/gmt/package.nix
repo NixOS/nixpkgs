@@ -7,7 +7,7 @@
   apple-sdk,
   fftwSinglePrec,
   netcdf,
-  pcre,
+  pcre2,
   gdal,
   blas,
   lapack,
@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "gmt";
     tag = finalAttrs.version;
-    hash = "sha256-ODJwnjZjWpR5Dg0gNimtrOCCgseJ8INfKEBKP7/bYIc=";
+    hash = "sha256-uGPzMcE0bPJFqH+u9aOz5zhv/UYGnk4oyQ468msfIyE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     netcdf
-    pcre
+    pcre2
     dcw-gmt
     gshhg-gmt
   ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DCW_ROOT" "${dcw-gmt.out}/share/dcw-gmt")
     (lib.cmakeFeature "GDAL_ROOT" "${gdal.out}")
     (lib.cmakeFeature "NETCDF_ROOT" "${netcdf.out}")
-    (lib.cmakeFeature "PCRE_ROOT" "${pcre.out}")
+    (lib.cmakeFeature "PCRE2_ROOT" "${pcre2.out}")
     (lib.cmakeBool "GMT_INSTALL_TRADITIONAL_FOLDERNAMES" false)
     (lib.cmakeBool "GMT_ENABLE_OPENMP" true)
     (lib.cmakeBool "GMT_INSTALL_MODULE_LINKS" false)

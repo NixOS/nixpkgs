@@ -19,7 +19,7 @@
   libhandy,
   libsoup_3,
   libosinfo,
-  systemd,
+  systemdLibs,
   vala,
   libcap,
   yajl,
@@ -48,13 +48,13 @@
   libportal-gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-boxes";
-  version = "49.1";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-boxes/${lib.versions.major version}/gnome-boxes-${version}.tar.xz";
-    hash = "sha256-VUeIAd3Qg4IL0yMZKoN04E879CoOcSYy0F5olVMORMo=";
+    url = "mirror://gnome/sources/gnome-boxes/${lib.versions.major finalAttrs.version}/gnome-boxes-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/Wpd4Y0QkJRsqZ8fWjSqPhXcgYP2pyIm6NFQShNnLWc=";
   };
 
   patches = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     numactl
     spice-gtk
     spice-protocol
-    systemd
+    systemdLibs
     vte
     webkitgtk_4_1
     yajl
@@ -132,11 +132,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Simple GNOME 3 application to access remote or virtual systems";
+    description = "Simple GNOME application to access virtual systems";
     mainProgram = "gnome-boxes";
     homepage = "https://apps.gnome.org/Boxes/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
   };
-}
+})

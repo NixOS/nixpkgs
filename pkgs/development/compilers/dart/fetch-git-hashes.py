@@ -9,7 +9,7 @@ from pathlib import Path
 
 def fetch_git_hash(url: str, rev: str) -> str:
     result = subprocess.run(
-        ["nix-prefetch-git", "--url", url, "--rev", rev],
+        ["nix-prefetch-git", "--fetch-submodules", "--url", url, "--rev", rev],
         capture_output=True,
         text=True,
         check=True,

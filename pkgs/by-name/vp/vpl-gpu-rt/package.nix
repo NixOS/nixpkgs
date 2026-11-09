@@ -6,11 +6,12 @@
   pkg-config,
   libdrm,
   libva,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vpl-gpu-rt";
-  version = "25.4.1";
+  version = "26.3.5";
 
   outputs = [
     "out"
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "vpl-gpu-rt";
-    rev = "intel-onevpl-${version}";
-    hash = "sha256-JuvMz4O3HGwfcOd8QuyFXsBoz5M4Lw3Se73ObJ9s73c=";
+    rev = "intel-onevpl-${finalAttrs.version}";
+    hash = "sha256-YNLgCpxz8rARPClzWN/w484LWOdfA+v8KUB3TiCbUxU=";
   };
 
   nativeBuildInputs = [
@@ -34,15 +35,22 @@ stdenv.mkDerivation rec {
     libva
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=intel-onevpl-(.*)"
+    ];
+  };
+
   meta = {
     description = "oneAPI Video Processing Library Intel GPU implementation";
     homepage = "https://github.com/intel/vpl-gpu-rt";
-    changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${src.rev}";
-    license = [ lib.licenses.mit ];
+    changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       evanrichter
       pjungkamp
     ];
   };
-}
+})

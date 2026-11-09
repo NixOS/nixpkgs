@@ -1,27 +1,27 @@
 {
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   pytestCheckHook,
   torch,
   buildPythonPackage,
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttach";
   version = "0.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qubvel";
     repo = "ttach";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R6QO+9hv0eI7dZW5iJf096+LU1q+vnmOpveurgZemPc=";
   };
 
-  propagatedBuildInputs = [ torch ];
+  build-system = [ setuptools ];
+
+  dependencies = [ torch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
@@ -29,6 +29,6 @@ buildPythonPackage rec {
   meta = {
     description = "Image Test Time Augmentation with PyTorch";
     homepage = "https://github.com/qubvel/ttach";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
   };
-}
+})

@@ -1,0 +1,26 @@
+diff --git a/tests/unit/libutil/backoff.cc b/tests/unit/libutil/backoff.cc
+index 55ddf3fe74..2586fda3af 100644
+--- a/tests/unit/libutil/backoff.cc
++++ b/tests/unit/libutil/backoff.cc
+@@ -1,5 +1,6 @@ TEST(Backoff, defaults)
+ #include <gtest/gtest.h>
+ #include <lix/libutil/backoff.hh>
++#include <utility>
+ 
+ namespace nix {
+ TEST(Backoff, defaults)
+@@ -41,10 +42,10 @@ TEST(Backoff, capped)
+     );
+ 
+     BackoffTiming timings = *backoff.next();
+-    *backoff.next();
+-    *backoff.next();
+-    *backoff.next();
+-    *backoff.next();
++    std::ignore = *backoff.next();
++    std::ignore = *backoff.next();
++    std::ignore = *backoff.next();
++    std::ignore = *backoff.next();
+     timings = *backoff.next();
+     ASSERT_EQ(300000, timings.downloadTimeout.count());
+     ASSERT_FALSE(backoff.next().has_value());

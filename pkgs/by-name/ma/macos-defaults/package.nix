@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "macos-defaults";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dsully";
     repo = "macos-defaults";
     tag = finalAttrs.version;
-    hash = "sha256-dSZjMuw7ott0dgiYo0rqekEvScmrX6iG7xHaPAgo1/E=";
+    hash = "sha256-SIar0QceNQs2tEYIcwwG2u+2Aq3IieOm4sIEX6hXilk=";
   };
 
-  cargoHash = "sha256-xSg6WAkFPS8B1G4WqMW77egCMmOEo3rK2EKcrDYaBjA=";
+  cargoHash = "sha256-0jB9lpguS40n1CrfJsnyZQvfnprC8pCx27xu1RRjaqI=";
 
   checkFlags = [
     # accesses home dir

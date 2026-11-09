@@ -4,31 +4,31 @@
   gettext,
   fetchurl,
   pkg-config,
-  gtk3,
+  gtk4,
   glib,
   meson,
   ninja,
   upower,
   python3,
   desktop-file-utils,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-power-manager";
-  version = "43.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major version}/gnome-power-manager-${version}.tar.xz";
-    hash = "sha256-faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
+    url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major finalAttrs.version}/gnome-power-manager-${finalAttrs.version}.tar.xz";
+    hash = "sha256-vyQ9Y4n4v6cclYU07SZpspllxH9Vw8vkmDspbQ+Z5dc=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
     gettext
 
     # needed by meson_post_install.sh
@@ -38,10 +38,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     upower
   ];
+
+  postPatch = ''
+    substituteInPlace meson_post_install.sh \
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-power-manager"; };
@@ -55,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

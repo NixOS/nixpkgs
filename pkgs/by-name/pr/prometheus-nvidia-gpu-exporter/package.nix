@@ -1,37 +1,46 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  autoAddDriverRunpath,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
-  version = "1.4.1";
+  version = "1.15.1";
+
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then "1" else "0";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = "nvidia_gpu_exporter";
-    rev = "v${version}";
-    hash = "sha256-+sXlQQUs8tmxtaqKUCBTfEZlL8fqBlhzcDFbX8Catsk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-75azonvsJ9fZSp9ht8ZUj4XmkmfsSRl2pp0jfBSEFiI=";
   };
 
-  vendorHash = "sha256-A9CY14pdZLgm5eCWYlWmn3H7VPM4yxramv6pi2ER64I=";
+  vendorHash = "sha256-9CPuhBDi8PnYyFYmW5XbutpRrA7ukPDiXCH4+94b9/o=";
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoAddDriverRunpath;
+
+  # go-nvml loads the driver at runtime and guards optional symbols before use.
+  hardeningDisable = lib.optional stdenv.hostPlatform.isLinux "bindnow";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/prometheus/common/version.Version=${version}"
-    "-X=github.com/prometheus/common/version.Revision=${src.rev}"
-    "-X=github.com/prometheus/common/version.Branch=${src.rev}"
-    "-X=github.com/prometheus/common/version.BuildUser=goreleaser"
+    "-X=github.com/prometheus/common/version.Version=${finalAttrs.version}"
+    "-X=github.com/prometheus/common/version.Revision=${finalAttrs.src.rev}"
+    "-X=github.com/prometheus/common/version.Branch=${finalAttrs.src.rev}"
+    "-X=github.com/prometheus/common/version.BuildUser=nixbld@nixpkgs"
     "-X=github.com/prometheus/common/version.BuildDate=1970-01-01T00:00:00Z"
   ];
 
   meta = {
-    description = "Nvidia GPU exporter for prometheus using nvidia-smi binary";
+    description = "Nvidia GPU exporter for prometheus using nvidia-smi binary or NVML";
     homepage = "https://github.com/utkuozdemir/nvidia_gpu_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "nvidia_gpu_exporter";
   };
-}
+})

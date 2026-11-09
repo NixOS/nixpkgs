@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-dns";
   version = "9.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_dns";
@@ -32,7 +29,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # this is still needed for when the version is overrided
+  # this is still needed for when the version is overridden
   pythonNamespaces = [ "azure.mgmt" ];
 
   # Tests are only available in the mono-repo

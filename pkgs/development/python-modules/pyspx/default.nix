@@ -4,7 +4,6 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sphincs";
     repo = "pyspx";
@@ -22,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-hMZ7JZoo5RdUwQYpGjtZznH/O6rBUXv+svfOAI0cjqs=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.5.0"' 'version="${version}"'
+  '';
 
   build-system = [
     cffi

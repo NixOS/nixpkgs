@@ -6,8 +6,9 @@
   testers,
   nix-update-script,
   extraPackages ? [ ],
+  writableTmpDirAsHomeHook,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dooit";
   version = "3.3.4";
   pyproject = true;
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A3l+E9B2fWyNpDzMr8WRiiHD/fIcUzcIwtmur+2Mk0k=";
   };
 
@@ -41,10 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ extraPackages;
 
-  # /homeless-shelter
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -64,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "TUI todo manager";
     homepage = "https://github.com/dooit-org/dooit";
-    changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dooit-org/dooit/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       khaneliman
@@ -73,4 +71,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "dooit";
   };
-}
+})

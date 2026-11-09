@@ -9,15 +9,15 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "android-file-transfer";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
-    tag = "v${version}";
-    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qt6.wrapQtAppsHook
   ];
+
   buildInputs = [
     fuse3
     qt6.qtbase
@@ -43,7 +44,10 @@ stdenv.mkDerivation rec {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.xaverdh ];
+    maintainers = with lib.maintainers; [
+      azuwis
+      xaverdh
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

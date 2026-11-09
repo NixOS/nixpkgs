@@ -6,17 +6,21 @@
   cargo,
   pkg-config,
   glibc,
+  zstd,
   openssl,
+  libcap_ng,
   libepoxy,
   libdrm,
   pipewire,
   virglrenderer,
   libkrunfw,
+  nix-update-script,
   rustc,
   withBlk ? false,
   withNet ? false,
   withGpu ? false,
   withSound ? false,
+  withInput ? false,
   withTimesync ? false,
   variant ? null,
 }:
@@ -32,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.15.1";
+  version = "1.19.7";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VhlFyYJ/TH12I3dUq0JTus60rQEJq5H4Pm1puCnJV5A=";
+    hash = "sha256-VtepY0sAqP18OIhIPwESoGi7E2Ahs4ihJjLyLH78JAM=";
   };
 
   outputs = [
@@ -48,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-dK3V7HCCvTqmQhB5Op2zmBPa9FO3h9gednU9tpQk+1U=";
+    hash = "sha256-Ab7b37Npf0vNg7rF8KfPdLYCBuBCyRAYhR13RLecV04=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -64,11 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     cargo
+    pkg-config
     rustc
-  ]
-  ++ lib.optional (variant == "sev" || variant == "tdx" || withGpu) pkg-config;
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # https://github.com/libkrun/libkrun/commit/d4bb6e0
+    # Fix riscv64 non-TEE memory region setup
+    # Remove in next release (Not included in 1.19.4)
+    ./riscv64-non-tee-memory.patch
+  ];
 
   buildInputs = [
+    libcap_ng
     libkrunfw'
     glibc
     glibc.static
@@ -79,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     virglrenderer
   ]
   ++ lib.optional withSound pipewire
-  ++ lib.optional (variant == "sev" || variant == "tdx") openssl;
+  ++ lib.optional (variant == "sev" || variant == "tdx") openssl
+  ++ lib.optional stdenv.hostPlatform.isx86_64 zstd;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -88,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withNet "NET=1"
   ++ lib.optional withGpu "GPU=1"
   ++ lib.optional withSound "SND=1"
+  ++ lib.optional withInput "INPUT=1"
   ++ lib.optional withTimesync "TIMESYNC=1"
   ++ lib.optional (variant == "sev") "SEV=1"
   ++ lib.optional (variant == "tdx") "TDX=1";
@@ -100,9 +114,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
+  passthru.updateScript = nix-update-script {
+    attrPath = "libkrun";
+  };
+
   meta = {
     description = "Dynamic library providing Virtualization-based process isolation capabilities";
-    homepage = "https://github.com/containers/libkrun";
+    homepage = "https://github.com/libkrun/libkrun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nickcao

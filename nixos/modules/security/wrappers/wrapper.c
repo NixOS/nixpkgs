@@ -116,7 +116,7 @@ static int make_caps_ambient(const char *self_path) {
         return 1;
     }
     uint64_t set = user_data[0].permitted | (uint64_t)user_data[1].permitted << 32;
-    for (unsigned cap = 0; cap < last_cap; cap++) {
+    for (unsigned cap = 0; cap <= last_cap; cap++) {
         if (!(set & (1ULL << cap))) {
             continue;
         }

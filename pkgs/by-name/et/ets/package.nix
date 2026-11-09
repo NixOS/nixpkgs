@@ -5,15 +5,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ets";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "gdubicki";
     repo = "ets";
-    rev = "v${version}";
-    hash = "sha256-LnNd4rAMJliWKbL4uVl11BAa9FPUcLwVSWnFe1vEk7g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-73U5UqEKAee7Qhqeeqrojk7XDIfyfgtREhVY6VgX+2I=";
   };
 
   vendorHash = "sha256-lzukgI/7gxlWHY81MkK1CzpUUaZ4B+4xZ0RSZUpL62c=";
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}-nixpkgs"
+    "-X main.version=v${finalAttrs.version}-nixpkgs"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -40,7 +40,7 @@ buildGoModule rec {
     description = "Command output timestamper";
     homepage = "https://github.com/gdubicki/ets/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cameronfyfe ];
+    maintainers = [ ];
     mainProgram = "ets";
   };
-}
+})

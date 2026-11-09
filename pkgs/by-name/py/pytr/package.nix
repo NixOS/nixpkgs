@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.4.5";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     tag = "v${version}";
-    hash = "sha256-VfNoovNGvu1tNbYYiIX8KTOfll0WrHxJsLk/Yoyhu6s=";
+    hash = "sha256-xo/J0POH21mLm//+gpfhuxIGdKGHJpFbpL82TIDufrM=";
   };
 
   build-system = with python3Packages; [
@@ -28,9 +28,11 @@ python3Packages.buildPythonApplication rec {
     babel
     certifi
     coloredlogs
-    ecdsa
+    cryptography
+    curl-cffi
     packaging
     pathvalidate
+    playwright
     pygments
     requests-futures
     shtab

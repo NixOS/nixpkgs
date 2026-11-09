@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qsampler";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsampler/qsampler-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cvdnVE3FmsgLy5s6N2nX+2fM4Nyri+rUaxQQeWGluxo=";
+    hash = "sha256-z6TlPsiccyYvr/DqUX+r6mLYHLkctvVD/ihzt8SLRkY=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
   ];
 
-  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libgig ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libgig ])
+  ];
 
   meta = {
     homepage = "https://qsampler.sourceforge.io";

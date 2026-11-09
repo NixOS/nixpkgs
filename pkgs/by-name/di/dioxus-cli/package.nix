@@ -4,9 +4,13 @@
   rustPlatform,
   pkg-config,
   cacert,
+  libgit2,
   openssl,
   rustfmt,
-  nix-update-script,
+  installShellFiles,
+  makeWrapper,
+  esbuild,
+  wasm-bindgen-cli_0_2_127,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -14,15 +18,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.7.2";
+  version = "0.7.10";
 
   src = fetchCrate {
     pname = "dioxus-cli";
     version = finalAttrs.version;
-    hash = "sha256-VCoTxZKFYkGBCu1X/9US/OCFpp6zc5ojmXWJfzozCxc=";
+    hash = "sha256-kPzo5zRSVs46SjiDRKpKxca8kPcWUgqc/LMKQsk0sC8=";
   };
 
-  cargoHash = "sha256-de8z68uXnrzyxTJY53saJ6hT7rvYbSdsSA/WWQa6nl4=";
+  cargoHash = "sha256-cvBVIkIqBjXFifYNpL2DqZpQcBaX/59Xw0ZJKUvUcIs=";
   buildFeatures = [
     "no-downloads"
   ]
@@ -30,14 +34,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   nativeBuildInputs = [
     pkg-config
     cacert
+    installShellFiles
+    makeWrapper
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ];
 
@@ -53,7 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
         package = dioxus-cli;
@@ -65,6 +72,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
+  postInstall = ''
+    installShellCompletion --cmd dx \
+      --bash <($out/bin/dx completions bash) \
+      --fish <($out/bin/dx completions fish) \
+      --zsh <($out/bin/dx completions zsh)
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/dx \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          esbuild
+          wasm-bindgen-cli_0_2_127
+        ]
+      }
+  '';
+
   meta = {
     description = "CLI for building fullstack web, desktop, and mobile apps with a single codebase.";
     homepage = "https://dioxus.dev";
@@ -74,7 +98,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     maintainers = with lib.maintainers; [
-      cathalmullan
+      anish
+      hackcraft_
     ];
     platforms = lib.platforms.all;
     mainProgram = "dx";

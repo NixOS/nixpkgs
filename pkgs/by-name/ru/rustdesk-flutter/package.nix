@@ -8,7 +8,7 @@
   ffmpeg_7,
   gst_all_1,
   fuse3,
-  libXtst,
+  libxtst,
   libaom,
   libopus,
   libpulseaudio,
@@ -32,11 +32,14 @@
   addDriverRunpath,
   perl,
   openssl,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.4/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.5.0/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -66,14 +69,14 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
+    hash = "sha256-1xa7X+swBIb8Lz3c6m8SeNZAiJWNCUpw+UbdSsMkeSk=";
   };
 
   strictDeps = true;
@@ -82,7 +85,8 @@ flutter329.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.5.0/flutter/pubspec.lock | yq > pubspec.lock.json
+  # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
@@ -95,7 +99,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+    hash = "sha256-Ym4USlB1NJO0bm0cr2l/yZhoUBfxtd2uTkkjrR7iD3o=";
   };
 
   dontCargoBuild = true;
@@ -127,7 +131,7 @@ flutter329.buildFlutterApplication rec {
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-    libXtst
+    libxtst
     libaom
     libopus
     libpulseaudio
@@ -140,6 +144,11 @@ flutter329.buildFlutterApplication rec {
     pam
     xdotool
     openssl
+    # Needed for Wayland keyboard-shortcuts-inhibit (flutter/linux/CMakeLists.txt).
+    # CMake locates wayland-scanner via pkg-config and runs it by absolute path.
+    wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
   prePatch = ''
@@ -162,12 +171,12 @@ flutter329.buildFlutterApplication rec {
   postPatch = ''
     cd flutter
     if [ $cargoDepsCopy ]; then # That will be inherited to buildDartPackage and it doesn't have cargoDepsCopy
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
-      sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+      sed -i 's/static=//g' $cargoDepsCopy/*/hwcodec-*/build.rs
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""
@@ -248,7 +257,11 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    teams = [ lib.teams.helsinki-systems ];
+    maintainers = with lib.maintainers; [
+      das_j
+      helsinki-Jo
+      knightfemale
+    ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };

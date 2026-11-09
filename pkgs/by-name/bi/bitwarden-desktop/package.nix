@@ -5,46 +5,38 @@
   copyDesktopItems,
   dart-sass,
   darwin,
-  electron_37,
+  electron_43,
   fetchFromGitHub,
   gnome-keyring,
   jq,
-  llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
-  napi-rs-cli,
   nix-update-script,
-  nodejs_22,
+  nodejs_24,
   pkg-config,
   rustc,
   rustPlatform,
   stdenv,
+  sqlite,
   xcbuild,
 }:
 
 let
-  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_37;
-
-  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
+  electron = electron_43;
 in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2025.12.0";
+  version = "2026.10.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "desktop-v${version}";
-    hash = "sha256-i+hLslZ2i94r04vaOzx9e55AR8aXa9sSK8el+Dcp05A=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-bSkS7WNIpXaOwkgfld4CtQBKhz1vLeVlWbK6Qeb++T4=";
   };
 
   patches = [
-    ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
@@ -53,8 +45,6 @@ buildNpmPackage' rec {
     ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
-    # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
-    ./dont-use-platform-triple.patch
   ];
 
   postPatch = ''
@@ -74,7 +64,7 @@ buildNpmPackage' rec {
     rm -r apps/cli
   '';
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -82,36 +72,29 @@ buildNpmPackage' rec {
     "--legacy-peer-deps"
   ];
 
-  npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    "--ignore-scripts"
-  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       patches
       ;
-    hash = "sha256-rA9zY9TAF6DnsTT3MzU18VeQDm6m25gjZ0rcmnbZb8E=";
+    hash = "sha256-q7fDejVEE5Q0rzGP6ATeljatuC9GWqX3yCx+As1TjmA=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   nativeBuildInputs = [
     cargo
     dart-sass
     jq
     makeWrapper
-    napi-rs-cli
     pkg-config
     rustc
     rustPlatform.cargoCheckHook
@@ -125,6 +108,10 @@ buildNpmPackage' rec {
     darwin.autoSignDarwinBinariesHook
   ];
 
+  buildInputs = [
+    sqlite
+  ];
+
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
@@ -134,8 +121,11 @@ buildNpmPackage' rec {
     # force our dart-sass executable
     echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
 
+    # needed so that the napi executable actually is usable
+    patchShebangs apps/desktop/node_modules
+
     pushd apps/desktop/desktop_native/napi
-    npm run build
+    npm run build -- --release
     popd
 
     pushd apps/desktop/desktop_native/proxy
@@ -153,7 +143,8 @@ buildNpmPackage' rec {
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     popd
   '';
@@ -166,14 +157,18 @@ buildNpmPackage' rec {
   ];
 
   checkFlags = [
+    # fails in zbus
     "--skip=password::password::tests::test"
+    # requires some debug feature to be enabled
+    "--skip=storage::serialization::tests::test_keydata_from_corrupted_bytes"
+    "--skip=storage::serialization::tests::test_keydata_from_empty_bytes"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=clipboard::tests::test_write_read"
   ];
 
   preCheck = ''
-    pushd ${cargoRoot}
+    pushd ${finalAttrs.cargoRoot}
     cargoCheckType=release
     HOME=$(mktemp -d)
   '';
@@ -197,6 +192,7 @@ buildNpmPackage' rec {
     cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+      --run "ulimit -c 0" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
@@ -205,7 +201,7 @@ buildNpmPackage' rec {
     # Extract the polkit policy file from the multiline string in the source code.
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
-    pushd apps/desktop/src/key-management/biometrics
+    pushd apps/desktop/src/key-management/biometrics/native-v2
     awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
@@ -226,7 +222,7 @@ buildNpmPackage' rec {
       name = "bitwarden";
       exec = "bitwarden %U";
       inherit icon;
-      comment = description;
+      comment = finalAttrs.meta.description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/bitwarden" ];
@@ -243,17 +239,19 @@ buildNpmPackage' rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    inherit description;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      tree-sapii
+      amarshall
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "bitwarden";
   };
-}
+})

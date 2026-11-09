@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "libnixxml";
-  version = "unstable-2020-06-25";
+  version = "0-unstable-2020-06-25";
 
   src = fetchFromGitHub {
     owner = "svanderburg";
@@ -45,7 +45,8 @@ stdenv.mkDerivation {
     "--with-gd"
     "--with-glib"
   ];
-  CFLAGS = [
+
+  env.CFLAGS = toString [
     "-Wall"
     "-std=c90"
   ];

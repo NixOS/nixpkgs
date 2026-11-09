@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   go,
   docker,
@@ -6,16 +7,19 @@
 }:
 
 stdenv.mkDerivation {
-  name = "tarsum";
+  pname = "tarsum";
+  inherit (docker) version;
 
   nativeBuildInputs = [ go ];
   disallowedReferences = [ go ];
 
   dontUnpack = true;
 
-  CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
-  GO111MODULE = "off";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+    GO111MODULE = "off";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -44,6 +48,12 @@ stdenv.mkDerivation {
     };
   };
 
-  meta.platforms = go.meta.platforms;
-  meta.mainProgram = "tarsum";
+  meta = {
+    platforms = go.meta.platforms;
+    mainProgram = "tarsum";
+    license = with lib.licenses; [
+      asl20 # upstream
+      mit # nixpkgs wrapper
+    ];
+  };
 }

@@ -7,6 +7,8 @@
   nix-update-script,
   stdenv,
   testers,
+  validatePkgConfig,
+  static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,14 +22,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+vz/qTMRRDHV1VE4nny9vYYtarZHk1xoM4EZiah3jnY=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  patches = [
+    # FIXME: remove when included in a release
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/uvwasi/commit/0820128569533c855d60c0f6382acbb14aa62ad2.patch?full_index=1";
+      hash = "sha256-psjivoarqisOuCdVJAWuFH0aITzwb/obmal3ewVXvG4=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/uvwasi/commit/fe602a6911207efd8dcfc070a752bcf76813c978.patch?full_index=1";
+      hash = "sha256-MyFvRuEhcqZR+Bz2pY9vani8U1iyQrDeni2kKKnJGEI=";
+    })
+  ];
+  postPatch = lib.optionalString static ''
+    substituteInPlace CMakeLists.txt --replace-fail 'TARGETS uvwasi_a uvwasi' 'TARGETS uvwasi_a'
+  '';
+  cmakeFlags = [
+    (lib.cmakeBool "UVWASI_BUILD_SHARED" (!static))
+  ];
+
   outputs = [
     "out"
+    "dev"
   ];
 
   nativeBuildInputs = [
     cmake
+    validatePkgConfig
   ];
-  buildInputs = [
+  propagatedBuildInputs = [
     libuv
   ];
 
@@ -36,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "uvwasi" ];
     };
   };
 
@@ -47,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "uvwasi" ];
   };
 })

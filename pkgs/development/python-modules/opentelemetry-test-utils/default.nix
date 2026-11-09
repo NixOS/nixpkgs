@@ -1,11 +1,11 @@
 {
   buildPythonPackage,
-  pythonOlder,
   asgiref,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
   opentelemetry-sdk,
+  requests,
 }:
 
 buildPythonPackage {
@@ -16,8 +16,6 @@ buildPythonPackage {
   version = opentelemetry-instrumentation.version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
   build-system = [ hatchling ];
@@ -26,6 +24,7 @@ buildPythonPackage {
     asgiref
     opentelemetry-api
     opentelemetry-sdk
+    requests
   ];
 
   pythonImportsCheck = [ "opentelemetry.test" ];

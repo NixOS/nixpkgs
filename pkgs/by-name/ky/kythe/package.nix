@@ -6,13 +6,13 @@
   ncurses5,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.0.74";
+stdenv.mkDerivation (finalAttrs: {
+  version = "0.0.76";
   pname = "kythe";
 
   src = fetchurl {
-    url = "https://github.com/kythe/kythe/releases/download/v${version}/${pname}-v${version}.tar.gz";
-    sha256 = "sha256-UqnG6BESNwQ7jQthJ2N/DrjSujp3bkdJsDbpEew1Kc4=";
+    url = "https://github.com/kythe/kythe/releases/download/v${finalAttrs.version}/kythe-v${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-7qQw91Y9uAXJnk0aQnymDXrvAc7HZpmGUpz+LCYpY1Y=";
   };
 
   buildInputs = [ binutils ];
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mpickering ];
   };
-}
+})

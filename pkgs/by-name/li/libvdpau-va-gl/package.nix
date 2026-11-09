@@ -4,11 +4,11 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
-  libpthreadstubs,
-  libXau,
-  libXdmcp,
-  libXext,
+  libx11,
+  libpthread-stubs,
+  libxau,
+  libxdmcp,
+  libxext,
   libvdpau,
   glib,
   libva,
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libpthreadstubs
-    libXau
-    libXdmcp
-    libXext
+    libx11
+    libpthread-stubs
+    libxau
+    libxdmcp
+    libxext
     libvdpau
     glib
     libva
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/i-rinat/libvdpau-va-gl";
     description = "VDPAU driver with OpenGL/VAAPI backend";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.johnrtitor ];
   };

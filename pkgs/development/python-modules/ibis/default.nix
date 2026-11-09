@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ibis";
   version = "3.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dmulholl";

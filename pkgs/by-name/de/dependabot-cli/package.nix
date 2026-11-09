@@ -12,20 +12,20 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.80.0";
+  version = "1.94.0";
 
   # `tag` is what `dependabot` uses to find the relevant docker images.
   tag = "nixpkgs-dependabot-cli-${version}";
 
   # Get these hashes from
-  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-  updateJobProxy.imageDigest = "sha256:3a7868b09318bef45224e475c3a018deba34f65f451f3ddd5b852b440c65fb83";
-  updateJobProxy.hash = "sha256-PVFo/PT7l3iR5FTt+jDrGVupc6zPoDpiw9Pxqp3yprU=";
+  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
+  updateJobProxy.imageDigest = "sha256:a39e7ef7188c9a4b36692df47a0e8f876e83199e657cd0b6be00e736fbe03c2f";
+  updateJobProxy.hash = "sha256-5/2v869kKBjxhrhWz7M8eVqLfKghPZw8lbyazdOJ9bs=";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-  updaterGitHubActions.imageDigest = "sha256:a791d0ef463a059dc371ef62c6d1ac341a7e1197ed871a0a6451371a8710cd0e";
-  updaterGitHubActions.hash = "sha256-uNqif7HesnXeiGOrc4sC2fgSAHNFJwVwrA3iIv8fVYc=";
+  updaterGitHubActions.imageDigest = "sha256:463c173f72e3f1824d0255a864fc0e075e7704a58448973878ad8c1b94f79d52";
+  updaterGitHubActions.hash = "sha256-0zYX1raxkOU30hwLpXOzQQ747xt6WsCxgJY55nlJNlc=";
 in
 buildGoModule {
   inherit pname version;
@@ -34,10 +34,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-5SD4VIa11r2P9YbURby6Sgi58lv03UB9X5UDOZxjVLQ=";
+    hash = "sha256-m7dyJqd1kmjcyqiVTKF/06VRrKHi0n+Gcqp9GDiPJgs=";
   };
 
-  vendorHash = "sha256-dD48OKpuGAJAro7qV4tqpf/uENV2X1VQ2kUvAuJLXc0=";
+  vendorHash = "sha256-48OdlduXPRXzDmfTzM2Kn/gUpdYZ58TDQe5R30FiSDY=";
 
   ldflags = [
     "-s"
@@ -61,6 +61,10 @@ buildGoModule {
     "-skip=TestDependabot"
   ];
 
+  # Some tests fail on *-darwin because they require host port binding or a Docker environment.
+  # So, we skip the test entirely on *-darwin.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/dependabot --help
@@ -75,7 +79,7 @@ buildGoModule {
     postBuild =
       let
         updateJobProxyImage = dockerTools.pullImage {
-          imageName = "ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy";
+          imageName = "ghcr.io/dependabot/proxy";
           finalImageName = "dependabot-update-job-proxy";
           finalImageTag = tag;
           inherit (updateJobProxy) imageDigest hash;

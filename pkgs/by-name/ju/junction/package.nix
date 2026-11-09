@@ -11,21 +11,22 @@
   pkg-config,
   wrapGAppsHook4,
   gjs,
+  glib,
   gtk4,
   libadwaita,
   libportal-gtk4,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "junction";
-  version = "1.9";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
-    tag = "v${version}";
-    hash = "sha256-gnFig8C46x73gAUl9VVx3Y3hrhEVeP/DvaYHYuv9RTg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eAcf7iIYOZeQcUt8F06gCY6jGAtGHuLIAzoShOF0MRo=";
     fetchSubmodules = true;
   };
 
@@ -64,6 +65,13 @@ stdenv.mkDerivation rec {
     sed -i "1s|.*|#!/usr/bin/gjs -m|" $out/bin/re.sonny.Junction
   '';
 
+  # Needs `gio` to modify mime defaults at runtime.
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix "PATH" : "${lib.makeBinPath [ glib ]}"
+    )
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -73,8 +81,7 @@ stdenv.mkDerivation rec {
     description = "Choose the application to open files and links";
     homepage = "https://apps.gnome.org/Junction/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hqurve ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Forensic imager for media acquisition";
     mainProgram = "guymager";
     homepage = "https://guymager.sourceforge.io";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;

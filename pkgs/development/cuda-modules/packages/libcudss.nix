@@ -1,5 +1,7 @@
 {
+  backendStdenv,
   buildRedist,
+  cuda_nvrtc,
   lib,
   libcublas,
   mpi,
@@ -17,13 +19,35 @@ buildRedist {
     "static"
   ];
 
+  # NOTE: cuDSS links against NVRTC since 1.0.0:
+  # https://docs.nvidia.com/cuda/cudss/release_notes.html
   buildInputs = [
+    cuda_nvrtc
     libcublas
   ]
   # MPI brings in NCCL dependency by way of UCC/UCX.
+  # NOTE: NVIDIA builds the MPI communication layer against OpenMPI 4.x:
+  # https://docs.nvidia.com/cuda/cudss/index.html
   ++ lib.optionals nccl.meta.available [
     mpi
     nccl
+  ];
+
+  # NCCL is not available on all platforms (e.g., Jetson Orin), and we only provide MPI and NCCL together; the
+  # communication layers which require them are loaded at runtime only when requested.
+  autoPatchelfIgnoreMissingDeps = lib.optionals (!nccl.meta.available) [
+    "libmpi.so.40"
+    "libnccl.so.2"
+  ];
+
+  # https://docs.nvidia.com/cuda/cudss/index.html
+  platformAssertions = [
+    {
+      message =
+        "cuDSS supports CUDA compute capabilities 6.0 and newer"
+        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities;
+    }
   ];
 
   # Update the CMake configurations
@@ -39,9 +63,9 @@ buildRedist {
         'file(REAL_PATH "../../" _cudss_search_prefix BASE_DIRECTORY "''${_cudss_cmake_config_realpath}")' \
         "set(_cudss_search_prefix \"''${!outputDev:?}/lib;''${!outputLib:?}/lib;''${!outputInclude:?}/include\")"
 
-    nixLog "patching $PWD/cudss-static-targets.cmake to fix INTERFACE_LINK_DIRECTORIES for cublas"
+    nixLog "patching $PWD/cudss-static-targets.cmake to fix INTERFACE_LINK_DIRECTORIES for cublas and nvrtc"
     sed -Ei \
-      's|INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"|INTERFACE_LINK_DIRECTORIES "${lib.getLib libcublas}/lib"|g' \
+      's|INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"|INTERFACE_LINK_DIRECTORIES "${lib.getLib libcublas}/lib;${lib.getLib cuda_nvrtc}/lib"|g' \
       "$PWD/cudss-static-targets.cmake"
     if grep -Eq 'INTERFACE_LINK_DIRECTORIES "/usr/local/cuda.*/lib64"' "$PWD/cudss-static-targets.cmake"; then
       nixErrorLog "failed to patch $PWD/cudss-static-targets.cmake"
@@ -64,5 +88,6 @@ buildRedist {
     '';
     homepage = "https://developer.nvidia.com/cudss";
     changelog = "https://docs.nvidia.com/cuda/cudss/release_notes.html";
+    cmakeConfigModules = [ "cudss" ];
   };
 }

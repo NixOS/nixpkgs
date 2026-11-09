@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "25.6.0";
+  version = "26.8.29";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-txGz6v9hkvnrmVmBHsi1B2eC/iNT1tg4dU5AcMsSCic=";
+    hash = "sha256-5l/vbTQgOkPbahDSKtm/XtRv879nWZ0eWE0bOMNZIc8=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qtscript ];
 
+  enableParallelBuilding = true;
+
   dontUseQmakeConfigure = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  # https://github.com/smplayer-dev/smplayer/issues/1318
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
 
   meta = {
     homepage = "https://www.smplayer.info";
@@ -53,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.skohtv ];
     platforms = lib.platforms.linux;
   };
 })

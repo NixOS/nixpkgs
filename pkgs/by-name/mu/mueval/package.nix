@@ -17,7 +17,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "mueval-env";
+  pname = "mueval";
+  inherit (haskellPackages.mueval) version;
 
   inherit (haskellPackages) mueval;
 
@@ -37,5 +38,8 @@ stdenv.mkDerivation {
   '';
 
   passthru = { inherit defaultPkgs; };
-  meta.mainProgram = "mueval";
+  meta = {
+    mainProgram = "mueval";
+    inherit (haskellPackages.mueval.meta) license;
+  };
 }

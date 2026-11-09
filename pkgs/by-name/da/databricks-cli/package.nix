@@ -1,41 +1,37 @@
 {
   lib,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   gitMinimal,
   python3,
   versionCheckHook,
   nix-update-script,
 }:
-
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.278.0";
+  version = "1.22.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-b7aO0fgSjbQLDt2YeXnZy0xq/2T6CGmsiXxE5CgnvfI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HtFTeQqCgrKYX7sdh+pGJJw3PD4Q3PGWTDXjdMwPr94=";
   };
 
-  # Otherwise these tests fail asserting that the version is 0.0.0-dev
-  postPatch = ''
-    substituteInPlace bundle/deploy/terraform/init_test.go \
-      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
-  '';
+  vendorHash = "sha256-DIWYP72gchuhwCfP6kOW6WcIcjhAPumZLIVJ5+bcVuE=";
 
-  vendorHash = "sha256-qLIJP2YYCckxzCAYNiBcXNpfKVFQQTwy9ysKrsYKGvI=";
-
-  excludedPackages = [
-    "bundle/internal"
-    "acceptance"
-    "integration"
-    "tools/testrunner"
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildTag=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildSummary=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMajor=${lib.versions.major finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMinor=${lib.versions.minor finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildPatch=${lib.versions.patch finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildIsSnapshot=false"
   ];
 
   postBuild = ''
@@ -48,18 +44,23 @@ buildGoModule (finalAttrs: {
       # Need network
       "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
-      "TestExpandPipelineGlobPaths"
+      "TestExpandGlobPathsInPipelines"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
       "TestWorkspaceVerifyProfileForHost"
       "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
       "TestWorkspaceResolveProfileFromHost"
       "TestWorkspaceResolveProfileFromHost/no_config_file"
-      "TestBundleConfigureDefault"
+      "TestWorkspaceClientNormalizesHostBeforeProfileResolution"
+      "TestClearWorkspaceClient"
+      "TestValidateFolderPermissions"
+      "TestFilesToSync"
       # Use uv venv which doesn't work with nix
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
       "TestPatchWheel"
+      # Requires HOME to be set
+      "TestCacheDirEnvVar"
     ]);
 
   nativeCheckInputs = [

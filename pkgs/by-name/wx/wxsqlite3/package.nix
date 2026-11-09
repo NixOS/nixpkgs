@@ -3,19 +3,19 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxsqlite3";
-  version = "4.11.1";
+  version = "4.12.8";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
-    rev = "v${version}";
-    hash = "sha256-fhhE7nPYNnqvtSCL0Z8v8mcF4gxrmE3lpCd9ji01PQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sZRDEGxTf1Fl77gWma9vkUVDyFC7sC5L5/zJkmRQ4Es=";
   };
 
   enableParallelBuilding = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sqlite
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   doCheck = true;
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
   };
-}
+})

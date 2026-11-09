@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -12,7 +11,6 @@
   jinja2,
   pyyaml,
   sphinx,
-  stdlib-list,
 
   # tests
   beautifulsoup4,
@@ -21,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.6.1";
+  version = "3.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-dafrvrTl4bVBBaAhTCIPVrSA1pdNlbT5Rou3T//fmKQ=";
+    hash = "sha256-pEfyVwvAqIg/1F5kX7WLlhdD+5tq3422u8N6nBizRcA=";
   };
 
   build-system = [ flit-core ];
@@ -40,9 +36,6 @@ buildPythonPackage rec {
     jinja2
     pyyaml
     sphinx
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    stdlib-list
   ];
 
   nativeCheckInputs = [

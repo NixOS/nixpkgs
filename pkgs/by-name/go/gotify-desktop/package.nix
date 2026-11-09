@@ -7,18 +7,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gotify-desktop";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "gotify-desktop";
-    rev = version;
-    sha256 = "sha256-BD8BqG+YheAGvHWrI1/PqCs6T3O3OwXodZq3gvgh1LU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-d7JSNkVkOE03C/c1VeqKAbJezr/cCGhqgpA7OsMFhx4=";
   };
 
-  cargoHash = "sha256-CHo3TYNpXdU3g7vKEwmubPKy+COSZ9Ay77nW8IlK9H4=";
+  cargoHash = "sha256-l3G3pRfUkfipU/eM5el9AlNTi2YcTC60Woeb7Xi1+r0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gotify-desktop";
   };
-}
+})

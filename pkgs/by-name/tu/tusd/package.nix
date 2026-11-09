@@ -5,21 +5,21 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tusd";
-  version = "2.8.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "tus";
     repo = "tusd";
-    tag = "v${version}";
-    hash = "sha256-OzXBeLDjaJk4NVgsauR/NUATh7qHbuEfWNdhytZmd0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uUug+Es1ioGjwPmwU9NuuIVnxbn5M/oorSsvjKTNFXU=";
   };
 
-  vendorHash = "sha256-YununGyB72zE0tmqO3BREJeMTjCuy/1fhPHC5r8OLjg=";
+  vendorHash = "sha256-IxzQFZtT3Krg+lNGomvMciooM1m4k8npExD80bIpAFQ=";
 
   ldflags = [
-    "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${version}"
+    "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${finalAttrs.version}"
   ];
 
   # Tests need the path to the binary:
@@ -34,6 +34,7 @@ buildGoModule rec {
     description = "Reference server implementation in Go of tus: the open protocol for resumable file uploads";
     license = lib.licenses.mit;
     homepage = "https://tus.io/";
+    mainProgram = "tusd";
     maintainers = with lib.maintainers; [
       nh2
       kalbasit
@@ -41,4 +42,4 @@ buildGoModule rec {
       Acconut
     ];
   };
-}
+})

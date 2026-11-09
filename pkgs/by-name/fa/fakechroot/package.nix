@@ -11,14 +11,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fakechroot";
   version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "dex4er";
     repo = "fakechroot";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
 
@@ -96,8 +96,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 
-}
+})

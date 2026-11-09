@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysstat";
-  version = "12.7.7";
+  version = "12.8.0";
 
   src = fetchFromGitHub {
     owner = "sysstat";
     repo = "sysstat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A0ja5/AtRNaXRXCXG2sJsvWrHPePgIIy/+rF+F7RvqI=";
+    hash = "sha256-iBGxggoA6x0VYWgF0QiPnmyjyTSetA1BZwFRBU55s4I=";
   };
 
   buildInputs = [ gettext ];
@@ -36,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     "install_base"
     "install_nls"
     "install_man"
+  ];
+
+  outputs = [
+    "out"
+    "man"
+    "doc"
   ];
 
   patches = [ ./install.patch ];

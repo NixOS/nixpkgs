@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "cz-cli";
-  version = "4.3.0";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "commitizen";
     repo = "cz-cli";
     tag = "v${version}";
-    hash = "sha256-4kyGxidE8dzkHL0oPv/XxDxQ3qlEE6TKSgj+1g9uvJM=";
+    hash = "sha256-+MBFO3sisxV/4iddZTsfJW8QARZ+JlWK5ao3KNJ3zSA=";
   };
 
-  npmDepsHash = "sha256-zQ0T/1khnn+CXm/3yc9nANL0ROEEE03U5fV57btEmPg=";
+  npmDepsHash = "sha256-6UpTaMqd7T17gx4yJowcWJMgKmFeq2r2yckrx1OpTCc=";
 
   meta = {
     description = "Commitizen command line utility";

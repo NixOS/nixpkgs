@@ -6,7 +6,6 @@
   eth-utils,
   hypothesis,
   pytestCheckHook,
-  pythonOlder,
   pydantic,
 }:
 
@@ -14,10 +13,9 @@ buildPythonPackage rec {
   pname = "hexbytes";
   version = "1.3.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "hexbytes";
     tag = "v${version}";
     hash = "sha256-xYXxlyVGdsksxZJtSpz1V3pj4NL7IzX0gaQeCoiHr8g=";
@@ -38,8 +36,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "`bytes` subclass that decodes hex, with a readable console output";
-    homepage = "https://github.com/ethereum/hexbytes";
-    changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
+    homepage = "https://github.com/ApeWorX/hexbytes";
+    changelog = "https://github.com/ApeWorX/hexbytes/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -21,10 +21,7 @@ let
       homepage = "https://github.com/kee-org/keepassrpc";
       platforms = [ "x86_64-linux" ];
       license = lib.licenses.gpl2;
-      maintainers = with lib.maintainers; [
-        svsdep
-        mgregoire
-      ];
+      maintainers = with lib.maintainers; [ mgregoire ];
     };
 
     dontUnpack = true;
@@ -36,7 +33,7 @@ let
 in
 # Mono is required to compile plugin at runtime, after loading.
 buildEnv {
-  name = drv.name;
+  inherit (drv) pname version;
   paths = [
     mono
     drv

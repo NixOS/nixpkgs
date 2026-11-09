@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "blackrenderer";
-  version = "0.6.0";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "BlackFoundryCom";
+    owner = "fontra";
     repo = "black-renderer";
     tag = "v${version}";
-    hash = "sha256-b2W0M32Y4HUyxObjvh0yMUBe5gfcSDXnw1GfhW7hoZk=";
+    hash = "sha256-6mC+JSg0u2hwi7SDFHBoUYCu8sYisWSCOuaTtc0FXi4=";
   };
 
   build-system = [
@@ -46,14 +46,16 @@ buildPythonPackage rec {
     # Wants None existing fonts
     "Tests/test_mainprog.py"
     "Tests/test_glyph_render.py"
+    "Tests/test_canvas_api.py"
+    "Tests/test_compareImages.py"
   ];
 
   pythonImportsCheck = [ "blackrenderer" ];
 
   meta = {
     description = "Renderer for OpenType COLR fonts, with multiple backends";
-    homepage = "https://github.com/BlackFoundryCom/black-renderer";
-    changelog = "https://github.com/BlackFoundryCom/black-renderer/releases/tag/v${version}";
+    homepage = "https://github.com/fontra/black-renderer";
+    changelog = "https://github.com/fontra/black-renderer/releases/tag/v${version}";
     license = lib.licenses.asl20;
     mainProgram = "blackrenderer";
     maintainers = with lib.maintainers; [ jopejoe1 ];

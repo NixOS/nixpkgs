@@ -10,6 +10,7 @@
 
   rapidcheck,
   gtest,
+  zstd,
   runCommand,
 
   # Configuration Options
@@ -30,10 +31,19 @@ mkMesonExecutable (finalAttrs: {
     nix-util-test-support
     rapidcheck
     gtest
-  ];
+  ]
+  ++ lib.optional (lib.versionAtLeast version "2.35pre") zstd;
 
   mesonFlags = [
   ];
+
+  excludedTestPatterns =
+    lib.optionals (lib.versions.majorMinor version == "2.34") [
+      "fchmodatTryNoFollow.fallbackWithoutProc"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.36pre") [
+      "Root*"
+    ];
 
   passthru = {
     tests = {
@@ -49,7 +59,8 @@ mkMesonExecutable (finalAttrs: {
             ''
             + ''
               export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage} \
+                --gtest_filter=-${lib.concatStringsSep ":" finalAttrs.excludedTestPatterns}
               touch $out
             ''
           );

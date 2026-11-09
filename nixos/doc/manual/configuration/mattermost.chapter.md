@@ -99,7 +99,7 @@ these assumptions the best it can.
 
 Here is how to build the above Todo plugin. Note that we rely on
 package-lock.json being assembled correctly, so must use a version where it is!
-If there is no lockfile or the lockfile is incorrect, Nix cannot fetch NPM build
+If there is no lockfile or the lockfile is incorrect, Nix cannot fetch npm build
 and runtime dependencies for a sandbox build.
 
 ```nix

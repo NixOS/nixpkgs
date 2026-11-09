@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "smoke-zephyr";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zeroSteiner";

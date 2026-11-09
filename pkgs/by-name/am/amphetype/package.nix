@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   copyDesktopItems,
   fetchFromGitLab,
   makeDesktopItem,
@@ -13,7 +14,7 @@ let
   description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
-  format = "pyproject";
+  pyproject = true;
   inherit pname version;
 
   src = fetchFromGitLab {
@@ -28,7 +29,8 @@ python3Packages.buildPythonApplication {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
+  # qtwayland is a Linux-only Qt platform plugin; it is unsupported on Darwin.
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     qt5.qtwayland
   ];
 
@@ -42,9 +44,9 @@ python3Packages.buildPythonApplication {
     translitcodec
   ];
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   # no tests
   doCheck = false;

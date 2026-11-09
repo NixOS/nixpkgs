@@ -34,4 +34,6 @@ mkDerivation {
   '';
 
   MK_TESTS = "no";
+
+  meta.platforms = lib.platforms.unix;
 }

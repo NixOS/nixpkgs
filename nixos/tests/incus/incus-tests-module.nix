@@ -1,10 +1,12 @@
 {
+  config,
   lib,
   pkgs,
   ...
 }:
 let
   jsonFormat = pkgs.formats.json { };
+  cfg = config.tests.incus;
 in
 {
   options.tests.incus = {
@@ -60,6 +62,11 @@ in
                 default = { };
               };
 
+              copyChannel = lib.mkEnableOption ''
+                copy channel in test image. disabled by default as it forces image
+                rebuilds excessively. enable to validate channel things.
+              '';
+
               testScript = lib.mkOption {
                 type = lib.types.str;
                 description = "final script provided to test runner";
@@ -69,7 +76,11 @@ in
             config =
               let
                 releases = import ../../release.nix {
-                  configuration = config.nixosConfig;
+                  configuration = lib.recursiveUpdate config.nixosConfig {
+                    virtualisation.incus = {
+                      inherit (cfg) package;
+                    };
+                  };
                 };
 
                 images = {
@@ -104,7 +115,7 @@ in
                   documentation.enable = lib.mkForce false;
                   documentation.nixos.enable = lib.mkForce false;
                   # including a channel forces images to be rebuilt on any changes
-                  system.installer.channel.enable = lib.mkForce false;
+                  system.installer.channel.enable = lib.mkForce config.copyChannel;
 
                   environment.etc."nix/registry.json".text = lib.mkForce "{}";
 
@@ -125,6 +136,17 @@ in
                       } --quiet < ${jsonFormat.generate "${config.name}.json" config.incusConfig}").split(":")[1].strip()
                       server.wait_for_instance(instance_name)
 
+                ''
+                + lib.optionalString config.copyChannel ''
+                  # ensure we test this before containers enable nesting below as lxc-ci's checks are run without nesting
+                  with subtest("[${image_id}] channel initialized correctly"):
+                      server.instance_succeed(instance_name, "systemctl status nix-channel-init.service")
+                      server.instance_succeed(instance_name, "test -e /nix/var/nix/profiles/per-user/root/channels/manifest.nix")
+                      server.instance_succeed(instance_name, "test -L /nix/var/nix/profiles/per-user/root/channels/nixos")
+                      server.instance_succeed(instance_name, "nix-env --profile /nix/var/nix/profiles/per-user/root/channels --query nixos --no-name --out-path")
+                      server.instance_succeed(instance_name, "nix-env --query --available --attr-path --attr nixos.hello")
+                ''
+                + ''
                   with subtest("[${image_id}] can successfully restart"):
                       server.succeed(f"incus restart {instance_name}")
                       server.wait_for_instance(instance_name)
@@ -137,11 +159,11 @@ in
                       server.succeed("systemctl start incus")
 
                   with subtest("[${image_id}] CPU limits can be managed"):
-                      server.set_instance_config(instance_name, "limits.cpu 1", restart=True)
+                      server.set_instance_config(instance_name, "limits.cpu=1", restart=True)
                       server.wait_instance_exec_success(instance_name, "nproc | grep '^1$'", timeout=90)
 
                   with subtest("[${image_id}] CPU limits can be hotplug changed"):
-                      server.set_instance_config(instance_name, "limits.cpu 2")
+                      server.set_instance_config(instance_name, "limits.cpu=2")
                       server.wait_instance_exec_success(instance_name, "nproc | grep '^2$'", timeout=90)
 
                   with subtest("[${image_id}] exec has a valid path"):
@@ -156,6 +178,17 @@ in
 
                       server.succeed(f"incus exec {instance_name} -- test -e /dev/tpm0")
                       server.succeed(f"incus exec {instance_name} -- test -e /dev/tpmrm0")
+
+                  with subtest("[${image_id}] default configuration.nix is created on first boot"):
+                      server.succeed(f"incus exec {instance_name} -- test -f /etc/nixos/configuration.nix")
+                      server.succeed(f"incus exec {instance_name} -- grep -q 'default incus configuration' /etc/nixos/configuration.nix")
+
+                  with subtest("[${image_id}] configuration.nix create service does not overwrite existing config"):
+                      server.succeed(f"incus exec {instance_name} -- systemctl restart incus-create-nixos-config.service")
+                      status = server.succeed(
+                          f"incus exec {instance_name} -- systemctl show -p ActiveState incus-create-nixos-config.service"
+                      ).strip()
+                      assert "inactive" in status, f"Expected inactive (ConditionPathExists should prevent start), got {status}"
                 ''
                 #
                 # container specific
@@ -164,9 +197,24 @@ in
                   lib.optionalString (config.type == "container")
                     # python
                     ''
+                      with subtest("[${image_id}] switch-to-configuration updates /sbin/init via installBootLoader"):
+                          # Remove /sbin/init so we can verify installBootLoader recreates it
+                          server.succeed(f"incus exec {instance_name} -- rm -f /sbin/init")
+                          server.fail(f"incus exec {instance_name} -- test -e /sbin/init")
+
+                          server.succeed(
+                              f"incus exec {instance_name} -- /run/current-system/bin/switch-to-configuration switch"
+                          )
+
+                          # Verify installBootLoader recreated /sbin/init pointing to the system's init
+                          server.succeed(f"incus exec {instance_name} -- test -x /sbin/init")
+                          target = server.succeed(f"incus exec {instance_name} -- readlink -f /sbin/init").strip()
+                          current = server.succeed(f"incus exec {instance_name} -- readlink -f /run/current-system/init").strip()
+                          assert target == current, f"/sbin/init -> {target}, expected {current}"
+
                       # TODO troubleshoot VM hot memory resizing which was introduced in 6.12
                       with subtest("[${image_id}] memory limits can be hotplug changed"):
-                          server.set_instance_config(instance_name, "limits.memory 512MB")
+                          server.set_instance_config(instance_name, "limits.memory=512MB")
                           # can't use lsmem since it sees the host's memory size
                           server.wait_instance_exec_success(instance_name, "grep 'MemTotal:[[:space:]]*500000 kB' /proc/meminfo", timeout=1)
 
@@ -211,7 +259,7 @@ in
                     # python
                     ''
                       with subtest("[${image_id}] memory limits can be managed"):
-                          server.set_instance_config(instance_name, "limits.memory 384MB", restart=True)
+                          server.set_instance_config(instance_name, "limits.memory=384MB", restart=True)
                           lsmem = json.loads(server.instance_succeed(instance_name, "lsmem --json"))
                           memsize = lsmem["memory"][0]["size"]
                           assert memsize == "384M", f"failed to manage memory limit. {memsize} != 384M"

@@ -6,6 +6,7 @@
   jre_headless,
   nixosTests,
   callPackage,
+  bash,
   confFile ? null,
   plugins ? [ ],
   extraFeatures ? [ ],
@@ -24,16 +25,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
-  version = "26.4.7";
+  version = "26.8.2";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${finalAttrs.version}/keycloak-${finalAttrs.version}.zip";
-    hash = "sha256-F214k6kCb+O6LH8bgsImkfPt8XAezuPEBpRS0TUeOy0=";
+    hash = "sha256-peU4/rSl5/VSNpwVht3+SD7ErJAd8m5VQ8iWMlMTSS4=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     jre_headless
+  ];
+
+  buildInputs = [
+    bash
   ];
 
   patches = [
@@ -59,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   ''
   + ''
-    patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bin/kc.sh build ${featuresSubcommand}
+    bash bin/kc.sh build ${featuresSubcommand}
 
     runHook postBuild
   '';
@@ -101,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
       talyz
       nickcao
       leona
+      anish
+      krit
+      jefferyoo
     ];
   };
 })

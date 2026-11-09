@@ -8,12 +8,12 @@
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "recoverjpeg";
   version = "2.6.3";
 
   src = fetchurl {
-    url = "https://www.rfc1149.net/download/recoverjpeg/recoverjpeg-${version}.tar.gz";
+    url = "https://www.rfc1149.net/download/recoverjpeg/recoverjpeg-${finalAttrs.version}.tar.gz";
     sha256 = "009jgxi8lvdp00dwfj0n4x5yqrf64x00xdkpxpwgl2v8wcqn56fv";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; linux;
   };
-}
+})

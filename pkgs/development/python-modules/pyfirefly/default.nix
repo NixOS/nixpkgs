@@ -3,29 +3,32 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   mashumaro,
   orjson,
-  poetry-core,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyfirefly";
-  version = "0.1.9";
+  version = "0.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
     tag = "v${version}";
-    hash = "sha256-VPtXk4sObN5mvZTtmXW+myQ4+Slb285zHMotRkLyhJM=";
+    hash = "sha256-JT9mJqkS8KVVtw3IhR72hYCQ5l1NHrA4tta2L0KMwpI=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -40,7 +43,7 @@ buildPythonPackage rec {
     aresponses
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   meta = {

@@ -3,23 +3,25 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhomepilot";
   version = "0.0.3";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nico0302";
+    owner = "ngres";
     repo = "pyhomepilot";
-    rev = "v${version}";
-    sha256 = "00gmqx8cwsd15iccnlr8ypgqrdg6nw9ha518cfk7pyp8vhw1ziwy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nscfONzo+numYygUBRO35rWM3/UoU8tYLKFpzlDH9QE=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
@@ -28,8 +30,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python module to communicate with the Rademacher HomePilot API";
-    homepage = "https://github.com/nico0302/pyhomepilot";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/ngres/pyhomepilot";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,24 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   stdenvNoCC,
+  nixosTests,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  typescript,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.11.0";
+  version = "1.33.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ioyFTTJu2B0m+U+GgY/VOIesAZLQI3mRZ5ZBh77emFY=";
+    hash = "sha256-OW3KXiylC2AD5vw+uXnidwaST/ujbr+9yzoLh8qNJ/E=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -28,8 +29,7 @@ buildGoModule (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
-      typescript
+      pnpm_11
     ];
 
     sourceRoot = "${finalAttrs.src.name}/web";
@@ -41,9 +41,9 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-6brOEC1UAxjIZB4pujhA624jKTTxfZQiiz/PzqooPeA=";
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-F+B1rj9fcgaDfPYC+8hUZfpNQNiiK9TnT/Ld68fW/WA=";
     };
 
     postBuild = ''
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-clVC3xPV/vJpWogDs1a977osQgPyhvZ4CRnHnKEZMs0=";
+  vendorHash = "sha256-wJ2chWHNP24BH+QcIuJSWDfbMhPn0k0lc67QCN4w7uo=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -66,17 +66,42 @@ buildGoModule (finalAttrs: {
     "-X main.PolarOrgID="
   ];
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  # some season-pack tests use non-existent source paths (e.g. /media/...) and
+  # assert on a same-filesystem check that resolves them up to /. go's
+  # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
+  # something sane. We use realpath, because on macOS it's symliked to
+  # /private/tmp during the build, and tests were failing when comparing
+  # non-resolved paths to resolved paths.
+  preCheck = ''
+    export TMPDIR="$(realpath /tmp)"
+  '';
+
+  checkFlags = [
+    # broken in sandbox for some reason
+    "-skip=TestRollback"
+  ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "qui-web"
-    ];
+  # Required for tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "qui-web"
+      ];
+    };
+    tests.testService = nixosTests.qui;
   };
 
   meta = {
@@ -84,7 +109,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/autobrr/qui";
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ pta2002 ];
+    maintainers = with lib.maintainers; [
+      pta2002
+      tmarkus
+    ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;
   };

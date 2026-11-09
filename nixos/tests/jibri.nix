@@ -5,10 +5,15 @@
     maintainers = pkgs.lib.teams.jitsi.members;
   };
 
+  node.pkgsReadOnly = false;
+
   nodes.machine =
-    { config, pkgs, ... }:
+    { config, ... }:
     {
       virtualisation.memorySize = 5120;
+
+      # jitsi-meet inherits olm's known vulnerabilities
+      nixpkgs.config.permittedInsecurePackages = [ pkgs.jitsi-meet.name ];
 
       services.jitsi-meet = {
         enable = true;
@@ -54,7 +59,7 @@
     )
 
     assert '"busyStatus":"IDLE","health":{"healthStatus":"HEALTHY"' in machine.succeed(
-        "curl -X GET http://machine:2222/jibri/api/v1.0/health"
+        "curl -X GET http://localhost:2222/jibri/api/v1.0/health"
     )
     machine.succeed(
         """curl -H "Content-Type: application/json" -X POST http://localhost:2222/jibri/api/v1.0/startService -d '{"sessionId": "RecordTest","callParams":{"callUrlInfo":{"baseUrl": "https://machine","callName": "TestCall"}},"callLoginParams":{"domain": "recorder.machine", "username": "recorder", "password": "'"$(cat /var/lib/jitsi-meet/jibri-recorder-secret)"'" },"sinkType": "file"}'"""

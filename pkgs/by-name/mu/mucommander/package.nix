@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.mucommander.com/";
     description = "Cross-platform file manager";
     license = lib.licenses.gpl3;

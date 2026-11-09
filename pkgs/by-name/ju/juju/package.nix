@@ -7,18 +7,18 @@
   juju,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "juju";
-  version = "3.6.12";
+  version = "4.0.15";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
-    rev = "v${version}";
-    hash = "sha256-c47+BmknMWoZr5xFGkR0Y8m7aNBm26441qOAsrHhUk8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iugWBXxAKgW77dLYZdjKlmwjuaea3yCjWX4Hr3qobVI=";
   };
 
-  vendorHash = "sha256-v460n6UnaXrimyYCmSgVmWlvkhRn6mYBm1KbH4fMxqM=";
+  vendorHash = "sha256-R84DFkXmI5KUhb/0HMuDqE2QYPKguVdTfBNYkroN/oo=";
 
   subPackages = [
     "cmd/juju"
@@ -47,4 +47,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ citadelcore ];
     mainProgram = "juju";
   };
-}
+})

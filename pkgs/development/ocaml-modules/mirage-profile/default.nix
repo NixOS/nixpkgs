@@ -8,15 +8,15 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-profile";
   version = "0.9.1";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-profile/releases/download/v${version}/mirage-profile-v${version}.tbz";
-    sha256 = "0lh3591ad4v7nxpd410b75idmgdq668mqdilvkg4avrwqw1wzdib";
+    url = "https://github.com/mirage/mirage-profile/releases/download/v${finalAttrs.version}/mirage-profile-v${finalAttrs.version}.tbz";
+    hash = "sha256-K7bPA8c8b0Xe3DQ2XJExuL3aYjkLBNJut2eTpkIqA1I=";
   };
 
   buildInputs = [ ppx_cstruct ];
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

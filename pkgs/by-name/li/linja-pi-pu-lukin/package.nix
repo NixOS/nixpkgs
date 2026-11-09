@@ -2,11 +2,12 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "linja-pi-pu-lukin";
-  version = "unstable-2021-10-29";
+  version = "0-unstable-2021-10-29";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20211029000000/https://jansa-tp.github.io/linja-pi-pu-lukin/PuLukin.otf";
@@ -15,12 +16,10 @@ stdenvNoCC.mkDerivation {
 
   dontUnpack = true;
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D $src $out/share/fonts/opentype/linja-pi-pu-lukin.otf
-
-    runHook postInstall
+  preInstall = ''
+    cp $src linja-pi-pu-lukin.otf
   '';
 
   meta = {

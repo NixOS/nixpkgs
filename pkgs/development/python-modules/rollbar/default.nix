@@ -10,20 +10,17 @@
   pytestCheckHook,
   requests,
   six,
-  pythonOlder,
   webob,
 }:
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UZQC6sObzE+khIIYcva7GEl/t7bIEWcEeGfRdxTTs3k=";
+    hash = "sha256-mK1/kAEseR0LQOrFG2/miLHK3MSq3/dy/Aoj7+dftfw=";
   };
 
   build-system = [ setuptools ];

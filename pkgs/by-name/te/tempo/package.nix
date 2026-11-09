@@ -1,20 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tempo";
-  version = "2.9.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-98qK+U1SltwTdeNH+MXVU9ql9Be2tMOYZ9W3dEqBqAI=";
+    hash = "sha256-p6EtNjQHM0U+fkyIL4OC5ZYrn5Md9SvQV9gPQWq4+ik=";
   };
 
   vendorHash = null;
@@ -42,7 +42,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "High volume, minimal dependency trace storage";
     changelog = "https://github.com/grafana/tempo/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        asl20
+      ];
     homepage = "https://grafana.com/oss/tempo/";
     maintainers = [ lib.maintainers.kashw2 ];
   };

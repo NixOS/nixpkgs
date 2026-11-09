@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
   untokenize,
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # lib2to3 usage and unmaintained since 2019
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "myint";

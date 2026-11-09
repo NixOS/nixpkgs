@@ -2,21 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteoalertapi";
   version = "0.3.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rolfberkenbosch";
     repo = "meteoalert-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Imb4DVcNB3QiVSCLCI+eKpfl73aMn4NIItQVf7p0H+E=";
   };
 
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for MeteoAlarm.org";
     homepage = "https://github.com/rolfberkenbosch/meteoalert-api";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

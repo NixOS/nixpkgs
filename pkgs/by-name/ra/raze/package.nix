@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/raze $out/share/raze
     makeWrapper $out/share/raze/raze $out/bin/raze \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
-    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/pixmaps/org.zdoom.Raze.png
+    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/icons/hicolor/256x256/apps/org.zdoom.Raze.png
     install -Dm644 ../source/platform/posix/org.zdoom.Raze.desktop $out/share/applications/org.zdoom.Raze.desktop
     install -Dm644 ../soundfont/raze.sf2 $out/share/raze/soundfonts/raze.sf2
   '';

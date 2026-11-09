@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gossa";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pldubouilh";
     repo = "gossa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-FGlUj0BJ8KeCfvdN9+NG4rqtaUIxgpqQ+09Ie1/TpAQ=";
   };
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dsymbol ];
     mainProgram = "gossa";
   };
-}
+})

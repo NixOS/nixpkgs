@@ -3,20 +3,29 @@
   buildGoModule,
   fetchFromSourcehut,
   scdoc,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "hut";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~xenrox";
     repo = "hut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pc6E3ORDmaMhoNe8GQeYZrxhe5ySQqsMPe/iUbclnGk=";
+    hash = "sha256-hruD8JNscS3h3f+QrU9n1OH9AyfnHsOb9M3JZkNYbSQ=";
   };
 
-  vendorHash = "sha256-/51cv/EvcBCyCOf91vJ5M75p0bkAQqVoRUp+C+i70Os=";
+  vendorHash = "sha256-zb1+7D6+9kKsFUNtvtO+sXMNNRPHSs6tpWTjtnSsjhI=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     scdoc
@@ -26,7 +35,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     # Recommended in 0.7.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.7.0
-    "-X main.version=v${finalAttrs.version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postBuild = ''

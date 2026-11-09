@@ -9,7 +9,10 @@
 
 stdenv.mkDerivation {
   pname = "footswitch";
-  version = "unstable-2023-10-10";
+  version = "1.0-unstable-2023-10-10";
+
+  __finalAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "rgerganov";
@@ -38,7 +41,7 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   meta = {
-    description = "Command line utlities for programming PCsensor and Scythe foot switches";
+    description = "Command line utilities for programming PCsensor and Scythe foot switches";
     homepage = "https://github.com/rgerganov/footswitch";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

@@ -2,10 +2,13 @@
   version,
   sha256,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
+  extraMeta ? { },
 }:
 
 {
   autoPatchelfHook,
+  cacert,
   fetchurl,
   lib,
   stdenv,
@@ -18,17 +21,20 @@ let
     # Test flaky
     "read"
   ]
+  ++ lib.optionals (lib.versions.majorMinor version == "1.10") [
+    "LinearAlgebra/blas"
+  ]
   ++ lib.optionals (lib.versionAtLeast version "1.10") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/52739
     "REPL"
     # Test flaky
     "ccall"
+    "loading"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.11") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/54280
-    "loading"
     "cmdlineargs"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.12") [
@@ -50,18 +56,15 @@ let
     # Test requires network access
     "Sockets"
     "Distributed"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702
-    "LinearAlgebra/blas"
-    # Test Failed at $out/share/julia/test/misc.jl:724
-    "misc"
   ];
 in
 stdenv.mkDerivation {
   pname = "julia-bin";
 
   inherit version patches;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src =
     {
@@ -72,10 +75,6 @@ stdenv.mkDerivation {
       aarch64-linux = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
         sha256 = sha256.aarch64-linux;
-      };
-      x86_64-darwin = fetchurl {
-        url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-        sha256 = sha256.x86_64-darwin;
       };
       aarch64-darwin = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
@@ -102,6 +101,8 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     cp -r . $out
+    rm $out/share/julia/cert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/julia/cert.pem
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # "$out/share" is intentionally omitted since it contains
@@ -138,6 +139,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    inherit knownVulnerabilities;
     description = "High-level, high-performance, dynamic language for technical computing";
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
@@ -151,9 +153,9 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "julia";
-  };
+  }
+  // extraMeta;
 }

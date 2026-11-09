@@ -1,7 +1,7 @@
 {
   lib,
-  SDL2,
-  SDL2_image,
+  sdl3,
+  sdl3-image,
   fetchFromGitHub,
   gettext,
   git,
@@ -30,17 +30,19 @@
   cacert,
   darwin,
   desktopToDarwinBundle,
+  xxhash,
+  tomlplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.129";
+  version = "0.8.136";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y7iIODMczLFRisOPxLPsl2Ot44I8pvjflD3vI+4rIlk=";
+    hash = "sha256-eZRv3GImEkT/zM0m8gnLF8hhPSbbUA5yPR7lr+fzHOI=";
 
     nativeBuildInputs = [
       git
@@ -53,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
-        implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
+        implot json keycodemapdb nv2a_vsh_cpu volk || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
   __structuredAttrs = true;
   nativeBuildInputs = [
-    SDL2
     meson
     cmake
     ninja
@@ -79,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
-    SDL2
-    SDL2_image
+    sdl3
+    sdl3-image
     gettext
     glib
     gtk3
@@ -92,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     vulkan-headers
     vulkan-loader
+    xxhash
+    tomlplusplus
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libdrm
@@ -107,9 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # As seen in the official build script ($src/build.sh)
     "--disable-cocoa"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "--enable-hvf"
   ];
 
   buildFlags = [ "qemu-system-i386" ];
@@ -128,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./scripts/xemu-version.sh \
       --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
+
+    substituteInPlace subprojects/volk/volk.c \
+      --replace-fail 'libvulkan.so' '${lib.getLib vulkan-loader}/lib/libvulkan.so'
   '';
 
   preConfigure = ''
@@ -147,14 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
 
-  postBuild =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # Needed for HVF acceleration
-      codesign --entitlements $src/accel/hvf/entitlements.plist -f -s - qemu-system-i386-unsigned
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mv qemu-system-i386-unsigned qemu-system-i386
-    '';
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv qemu-system-i386-unsigned qemu-system-i386
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -185,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xemu";
     maintainers = with lib.maintainers; [
       marcin-serwin
-      matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

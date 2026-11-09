@@ -1,9 +1,5 @@
 {
   "version": "0.3.2",
-  "x86_64-darwin": {
-    "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v0.3.2/screenshot-0.3.2-darwin.x86_64.zip",
-    "hash": "sha256-0qOdBQv6TCiwHizvbb47Sj0aUcMtID4qQ3v5D3XGkXg="
-  },
   "aarch64-darwin": {
     "url": "https://github.com/getgauge/gauge_screenshot/releases/download/v0.3.2/screenshot-0.3.2-darwin.arm64.zip",
     "hash": "sha256-hsFevOBgKbUIMpNcEyv/2A/agIuInIjLTdhmg0C54pQ="

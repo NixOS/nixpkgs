@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "datamash";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/datamash/datamash-${version}.tar.gz";
+    url = "mirror://gnu/datamash/datamash-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-84Lr2gNlDdZ5Fh91j5wKbMkpMhNDjUp3qO2jJarLh9I=";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
   };
 
-}
+})

@@ -24,6 +24,7 @@
   yasm,
 
   # runtime deps
+  aws-lc,
   fontconfig,
   freetype,
   gst_all_1,
@@ -34,8 +35,15 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
+  rust-jemalloc-sys,
+  sqlite,
   zlib,
+  zstd,
 
   # tests
   nixosTests,
@@ -52,9 +60,9 @@ let
   );
   runtimePaths = lib.makeLibraryPath (
     lib.optionals (stdenv.hostPlatform.isLinux) [
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
+      libxcursor
+      libxrandr
+      libxi
       libxkbcommon
       vulkan-loader
       wayland
@@ -65,13 +73,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.0.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XMDt3q3LgKtGCgwuf/+0ZF2EfkUENM+mp4icZAyqGiw=";
+    hash = "sha256-ZoYk5aXHuYSxXjeRfqugMeLSP1vcqm/fNqY67wJSWqI=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -81,7 +89,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-FR9/5aZ7e2ekYYCFQMr55JXuJScqjDKb4o+w6nNr4yo=";
+  cargoHash = "sha256-jkRafwC8BLJ/H9Rx3y0kvocf2MM0oKz6xNhyAdPSBgg=";
+
+  postPatch = ''
+    # The mozjs crates all use cbindgen with `cargo metadata` invocations,
+    # which looks up the nearest cargo config.
+    # In our case, that's $cargoDepsCopy/.cargo/config.toml, which is the
+    # template of the config cargo-setup-hook creates in the build directory.
+    # The easiest workaround is to copy the final config back into $cargoDepsCopy,
+    # so `cargo metadata` invoked inside the mozjs crates finds the correct vendor path.
+    cp .cargo/config.toml $cargoDepsCopy/.cargo/config.toml
+    # We also need to make sure that `cargo metadata` knows what versions each of the
+    # mozjs crates' dependencies resolve to in our dependency cache, which can be achieved
+    # by copying our lockfile into the mozjs crate directories.
+    for mozjs_dir in $cargoDepsCopy/*/mozjs_*/; do
+      cp Cargo.lock $mozjs_dir
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The nix cc wrapper prints a warning to stderr when it receives a `--target`
+    # that differs from its default one.
+    # cc-rs probes whether a flag is supported by compiling a test file and
+    # treats any stderr output as unsupported, so every `flag_if_supported`
+    # flag is silently dropped, including `-fno-rtti` for mozjs-sys jsglue:
+    # https://github.com/servo/mozjs/blob/de3c7bdc1178274c31bedccf60ae04a3ff5c0619/mozjs-sys/build.rs#L572
+    # https://github.com/rust-lang/cc-rs/blob/c619f08c5f270c3f153fd3bce20540d2422d1356/src/lib.rs#L1748
+    # Compiling jsglue with RTTI while SpiderMonkey is built without results
+    # in a linker error.
+    substituteInPlace $cargoDepsCopy/*/cc-1.*/src/lib.rs \
+      --replace-fail '"--target={clang_target}"' '"--target=${stdenv.hostPlatform.config}"'
+  '';
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -110,9 +147,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     yasm
   ];
 
-  env.UV_PYTHON = customPython.interpreter;
-
   buildInputs = [
+    aws-lc
     fontconfig
     freetype
     gst_all_1.gstreamer
@@ -123,39 +159,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
     harfbuzz
     libunwind
     libGL
+    rust-jemalloc-sys
+    sqlite
     zlib
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     udev
     vulkan-loader
   ];
 
-  # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
-  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "servo_allocator/use-system-allocator"
-  ];
+  env = {
+    UV_PYTHON = customPython.interpreter;
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # mozjs-sys fails with:
-      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
-      "-Wno-error=format-security"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-    ]
-  );
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        # mozjs-sys fails with:
+        #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+        "-Wno-error=format-security"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      ]
+    );
+  };
 
   # copy resources into `$out` to be used during runtime
-  # link runtime libraries
   postFixup = ''
     mkdir -p $out/resources
     cp -r ./resources $out/
-
-    wrapProgram $out/bin/servo \
+  ''
+  # link runtime libraries
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/servoshell \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
@@ -165,17 +204,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    # undefined libmozjs_sys symbols during linking
-    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/servo/servo/releases/tag/${finalAttrs.src.tag}";
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      hexa
-      supinie
+      niklaskorz
     ];
     teams = with lib.teams; [ ngi ];
-    mainProgram = "servo";
+    mainProgram = "servoshell";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

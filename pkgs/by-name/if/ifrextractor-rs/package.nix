@@ -4,24 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ifrextractor-rs";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "LongSoft";
     repo = "ifrextractor-rs";
-    rev = "v${version}";
-    hash = "sha256-zpoOThjkL2Hu/ytxdqWcr2GXzN4Cm8hph7PJhSF5BlU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Us9p/W5/fsk3gE9xUIDwbhILe/y9GGTkf1N+qKo1n5U=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-Co8mzfZJRUCBSEXr65vWbQUtmXZSN1AMgLID/Zo9BVc=";
 
   meta = {
     description = "Rust utility to extract UEFI IFR data into human-readable text";
@@ -30,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jiegec ];
   };
-}
+})

@@ -5,7 +5,6 @@
   libGLU,
   libglut,
   libglvnd,
-  mesa,
 }:
 buildRedist {
   redistName = "cuda";
@@ -17,7 +16,6 @@ buildRedist {
     libGLU
     libglut
     libglvnd
-    mesa
   ];
 
   outputs = [ "out" ];

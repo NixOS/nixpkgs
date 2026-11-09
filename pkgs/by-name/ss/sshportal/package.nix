@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshportal";
   version = "1.19.5";
 
   src = fetchFromGitHub {
     owner = "moul";
     repo = "sshportal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XJ8Hgc8YoJaH2gYOvoYhcpY4qgasgyr4M+ecKJ/RXTs=";
   };
 
   ldflags = [
-    "-X main.GitTag=${version}"
-    "-X main.GitSha=${version}"
+    "-X main.GitTag=${finalAttrs.version}"
+    "-X main.GitSha=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zaninime ];
     mainProgram = "sshportal";
   };
-}
+})

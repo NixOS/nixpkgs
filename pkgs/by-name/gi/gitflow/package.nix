@@ -8,14 +8,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitflow";
   version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "petervanderdoes";
-    repo = "gitflow";
-    rev = version;
+    repo = "gitflow-avh";
+    rev = finalAttrs.version;
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/petervanderdoes/gitflow";
+    homepage = "https://github.com/petervanderdoes/gitflow-avh";
     description = "Extend git with the Gitflow branching model";
     mainProgram = "git-flow";
     longDescription = ''
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
-}
+})

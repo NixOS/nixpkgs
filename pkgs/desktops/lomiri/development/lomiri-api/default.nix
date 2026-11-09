@@ -13,59 +13,55 @@
   graphviz,
   gtest,
   libqtdbustest,
+  lomiri-qt6,
   pkg-config,
   python3,
   qtbase,
-  qtdeclarative,
+  writableTmpDirAsHomeHook,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.3";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-ypz15XX0ESkOWI6G+a9/36bRg5gBG0X4Y/EvB/m7qm8=";
+    hash = "sha256-V26qaVGfG+kRLjR9CnUzSQr0pbo8kz4pyZ0TvEwybgE=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')
-
-    substituteInPlace data/liblomiri-api.pc.in \
-      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
-
-    # Variable is queried via pkg-config by reverse dependencies
-    # TODO This is likely not supposed to be the regular Qt QML import prefix
-    # but otherwise i.e. lomiri-notifications cannot be found in lomiri
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    pkg-config
+  ]
+  ++ lib.optionals withDocumentation [
     doxygen
     graphviz
-    pkg-config
-    qtdeclarative
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     cmake-extras
     glib
-    gtest
-    libqtdbustest
-    qtbase
-    qtdeclarative
   ];
 
   nativeCheckInputs = [
@@ -73,31 +69,40 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  checkInputs = [
+    gtest
+    libqtdbustest
+    qtbase
+  ];
+
   dontWrapQtApps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
+  ];
 
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  preBuild = ''
-    # Makes fontconfig produce less noise in logs
-    export HOME=$TMPDIR
-  '';
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  preCheck = ''
-    # needs minimal plugin and QtTest QML
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
-  '';
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Only tests use Qt, Qt5 support dropped in 0.4.0
+    && withQt6;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # Tests have been disabled in the Qt5 build
+      package-tests = lomiri-qt6.lomiri-api;
+    };
     updateScript = gitUpdater { };
   };
 
   meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-api/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only
       gpl3Only
@@ -106,10 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
-      "lomiri-shell-api"
-      "lomiri-shell-application"
-      "lomiri-shell-launcher"
-      "lomiri-shell-notifications"
     ];
   };
 })

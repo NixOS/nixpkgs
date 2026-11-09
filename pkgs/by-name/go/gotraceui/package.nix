@@ -4,24 +4,24 @@
   pkg-config,
   buildGoModule,
   libGL,
-  libX11,
+  libx11,
   libxcb,
-  libXcursor,
-  libXfixes,
+  libxcursor,
+  libxfixes,
   libxkbcommon,
   vulkan-headers,
   wayland,
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotraceui";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "gotraceui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Rforuh9YlTv/mTpQm0+BaY+Ssc4DAiDCzVkIerP5Uz0=";
   };
 
@@ -42,10 +42,10 @@ buildGoModule rec {
     vulkan-headers
     libxkbcommon
     wayland
-    libX11
+    libx11
     libxcb
-    libXcursor
-    libXfixes
+    libxcursor
+    libxfixes
     libGL
   ];
 
@@ -63,4 +63,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dominikh ];
   };
-}
+})

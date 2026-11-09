@@ -7,14 +7,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytz";
-  version = "2025.2";
+  version = "2026.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NguePbtJognCGtYYCcf7RTZD4EiziSTHZYE1RnRugcM=";
+    pname = "pytz";
+    inherit (finalAttrs) version;
+    hash = "sha256-+iNyS5xIZUO5/1SjJ+51aayDreVLua/Q/BhnZiBAHIY=";
   };
 
   postPatch = ''
@@ -27,9 +28,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "pytz/tests"
+  unittestFlags = [
+    "--start-directory=pytz/tests"
   ];
 
   pythonImportsCheck = [ "pytz" ];
@@ -44,4 +44,4 @@ buildPythonPackage rec {
       jherland
     ];
   };
-}
+})

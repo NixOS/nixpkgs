@@ -90,6 +90,7 @@ let
     "unixd"
     "slotmem_shm"
     "socache_shmcb"
+    "systemd"
     "mpm_${cfg.mpm}"
   ]
   ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
@@ -110,25 +111,20 @@ let
   }
   ++ cfg.extraModules;
 
-  loggingConf = (
-    if cfg.logFormat != "none" then
-      ''
-        ErrorLog ${cfg.logDir}/error.log
+  loggingConf = ''
+    ErrorLog ${if cfg.logFormat != "none" then "${cfg.logDir}/error.log" else "/dev/null"}
+    ${optionalString (cfg.logLevel != null) "LogLevel ${cfg.logLevel}"}
 
-        LogLevel notice
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+    LogFormat "%{Referer}i -> %U" referer
+    LogFormat "%{User-agent}i" agent
+    ${optionalString (
+      cfg.logFormat == "custom"
+    ) "LogFormat ${lib.strings.escapeNixString cfg.customLogFormat} custom"}
 
-        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-        LogFormat "%h %l %u %t \"%r\" %>s %b" common
-        LogFormat "%{Referer}i -> %U" referer
-        LogFormat "%{User-agent}i" agent
-
-        CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
-      ''
-    else
-      ''
-        ErrorLog /dev/null
-      ''
-  );
+    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+  '';
 
   browserHacks = ''
     <IfModule mod_setenvif.c>
@@ -252,6 +248,8 @@ let
       </VirtualHost>
     '';
 
+  escapeFileName = replaceString "/" "-";
+
   mkVHostCommonConf =
     hostOpts:
     let
@@ -285,8 +283,8 @@ let
     in
     ''
       ${optionalString cfg.logPerVirtualHost ''
-        ErrorLog ${cfg.logDir}/error-${hostOpts.hostName}.log
-        CustomLog ${cfg.logDir}/access-${hostOpts.hostName}.log ${hostOpts.logFormat}
+        ErrorLog ${cfg.logDir}/error-${escapeFileName hostOpts.hostName}.log
+        CustomLog ${cfg.logDir}/access-${escapeFileName hostOpts.hostName}.log ${hostOpts.logFormat}
       ''}
 
       ${optionalString (hostOpts.robotsEntries != "") ''
@@ -429,10 +427,19 @@ let
 
   # Generate the PHP configuration file.  Should probably be factored
   # out into a separate module.
+  toPhpIni =
+    v:
+    if isString v then
+      v
+    else
+      generators.toKeyValue { mkKeyValue = generators.mkKeyValueDefault { } " = "; } (
+        filterAttrs (_: v: v != null) v
+      );
+
   phpIni =
     pkgs.runCommand "php.ini"
       {
-        options = cfg.phpOptions;
+        options = toPhpIni cfg.phpOptions;
         preferLocalBuild = true;
       }
       ''
@@ -582,12 +589,67 @@ in
       };
 
       logFormat = mkOption {
-        type = types.str;
+        type = types.enum [
+          "combined"
+          "common"
+          "referer"
+          "agent"
+          "custom"
+          "none"
+        ];
         default = "common";
-        example = "combined";
+        example = "custom";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent, none.
-          See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
+          Selects the access log format written to log files.
+
+          The values `combined`, `common`, `referer`, and `agent` correspond to predefined Apache HTTPD log formats.
+          Setting the value to `custom` enables the use of a user-defined format string specified via `customLogFormat`.
+          The value `none` disables access logging entirely.
+
+          Further details on Apache log formats are available at <https://httpd.apache.org/docs/2.4/logs.html>.
+        '';
+      };
+
+      customLogFormat = mkOption {
+        type = types.str;
+        default = null;
+        example = ''%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b'';
+        description = ''
+          Defines a custom Apache HTTPD access log format string.
+
+          This option is only consulted when `logFormat` is set to `custom`.
+          The value must be a valid Apache `LogFormat` specification and will be registered under the symbolic name `custom`.
+
+          See <https://httpd.apache.org/docs/2.4/logs.html#formats> for the formal definition of log format directives.
+        '';
+      };
+
+      logLevel = mkOption {
+        type =
+          with types;
+          nullOr (enum [
+            "emerg"
+            "alert"
+            "crit"
+            "error"
+            "warn"
+            "notice"
+            "info"
+            "debug"
+            "trace1"
+            "trace2"
+            "trace3"
+            "trace4"
+            "trace5"
+            "trace6"
+            "trace7"
+            "trace8"
+          ]);
+        default = "notice";
+        example = "crit";
+        description = ''
+          Controls the verbosity of the ErrorLog.
+          See <https://httpd.apache.org/docs/2.4/mod/core.html#loglevel> for more details.
         '';
       };
 
@@ -674,13 +736,40 @@ in
       enablePerl = mkEnableOption "the Perl module (mod_perl)";
 
       phpOptions = mkOption {
-        type = types.lines;
-        default = "";
-        example = ''
-          date.timezone = "CET"
+        type =
+          with types;
+          either lines (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+            )
+          );
+        default = { };
+        example = literalExpression ''
+          {
+            "date.timezone" = "CET";
+          }
         '';
         description = ''
-          Options appended to the PHP configuration file {file}`php.ini`.
+          Structured options appended to the PHP configuration file
+          {file}`php.ini`.
+
+          For backwards compatibility, a string in
+          {file}`php.ini` format is also accepted, but deprecated.
+          It will be removed in a future release. Please migrate to
+          the attribute set format:
+
+          ```nix
+          {
+            services.httpd.phpOptions = {
+              "date.timezone" = "CET";
+            };
+          }
+          ```
         '';
       };
 
@@ -785,9 +874,13 @@ in
       }
     ) vhostCertNames;
 
-    warnings = mapAttrsToList (name: hostOpts: ''
-      Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-    '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
+    warnings =
+      mapAttrsToList (name: hostOpts: ''
+        Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
+      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts)
+      ++ optional (isString cfg.phpOptions) ''
+        Using a string for `services.httpd.phpOptions` is deprecated and will become unsupported in a future release. Please migrate to the attribute set format, e.g. `services.httpd.phpOptions = { "date.timezone" = "CET"; };`.
+      '';
 
     users.users = optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
@@ -847,15 +940,14 @@ in
       };
     };
 
-    services.httpd.phpOptions = ''
-      ; Don't advertise PHP
-      expose_php = off
-    ''
-    + optionalString (config.time.timeZone != null) ''
-
-      ; Apparently PHP doesn't use $TZ.
-      date.timezone = "${config.time.timeZone}"
-    '';
+    services.httpd.phpOptions = {
+      # Don't advertise PHP
+      expose_php = "off";
+    }
+    // optionalAttrs (config.time.timeZone != null) {
+      # Apparently PHP doesn't use $TZ.
+      "date.timezone" = config.time.timeZone;
+    };
 
     services.httpd.extraModules = mkBefore [
       # HTTP authentication mechanisms: basic and digest.
@@ -942,12 +1034,12 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "@${pkg}/bin/httpd httpd -f /etc/httpd/httpd.conf";
-        ExecStop = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful-stop";
+        ExecStart = "${pkg}/bin/httpd -D FOREGROUND -f /etc/httpd/httpd.conf";
         ExecReload = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -k graceful";
+        KillMode = "mixed";
         User = cfg.user;
         Group = cfg.group;
-        Type = "forking";
+        Type = "notify";
         PIDFile = "${runtimeDir}/httpd.pid";
         Restart = "always";
         RestartSec = "5s";

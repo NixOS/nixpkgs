@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bmabey";
     repo = "pyLDAvis";
     rev = version;
-    sha256 = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
+    hash = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
   };
 
   propagatedBuildInputs = [

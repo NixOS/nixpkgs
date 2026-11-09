@@ -11,21 +11,20 @@
   makeWrapper,
   mono,
   wrapWithMono ? true,
-  openssl,
+  aws-lc,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "owmods-cli";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
-    rev = "cli_v${version}";
-    hash = "sha256-5ymU9X4J5UPLHxV+7WB29e5Wuq++wYA9bqI2YPjDtWs=";
+    rev = "cli_v${finalAttrs.version}";
+    hash = "sha256-pl9osDYgCRZGMIp6crIDV1FhzaKO9zFCIGdgZ/O3Ue0=";
   };
 
-  cargoHash = "sha256-Z/muI8JLjOFJBSIMWlvCyFW4JI3lP6/O0AI8Uj8AtBo=";
+  cargoHash = "sha256-EB+mefZXHn0ecu1fi2g4VlSgZs0nExMXzjuD1ZlRJvA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,10 +34,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     zstd
+    aws-lc
     libsoup_3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
   ];
 
   env = {
@@ -54,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     dist/cli/completions/owmods.{bash,fish,zsh}
   ''
   + lib.optionalString wrapWithMono ''
-    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} --prefix PATH : '${mono}/bin'
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -62,8 +59,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";
     homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_cli";
-    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
-    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
+    downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
+    changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${finalAttrs.version}";
     mainProgram = "owmods";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -72,4 +69,4 @@ rustPlatform.buildRustPackage rec {
       locochoco
     ];
   };
-}
+})

@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace";
-  version = "0.4.4";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lancedb";
+    owner = "lance-format";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aNo6rrWnnFpFk3iPX1sQsuXTDkE5ZRA/9P7TQeJr4iI=";
+    hash = "sha256-Wnm9zQCVnlRECxiLZYjX46/+2rU8tpC/s/NKyoS5rO0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace";
@@ -46,9 +46,6 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  pythonRemoveDeps = [
-    "pylance"
-  ];
   dependencies = [
     lance-namespace-urllib3-client
     typing-extensions
@@ -74,7 +71,7 @@ buildPythonPackage (finalAttrs: {
     pylance
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Tests require pylance, which is a circular dependency
   doCheck = false;
@@ -104,7 +101,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Open specification on top of the storage-based Lance table and file format to standardize access to a collection of Lance tables";
-    homepage = "https://github.com/lancedb/lance-namespace/tree/main/python/lance_namespace";
+    homepage = "https://github.com/lance-format/lance-namespace/tree/main/python/lance_namespace";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

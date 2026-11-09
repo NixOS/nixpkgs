@@ -26,19 +26,18 @@ let
 
       stdenvNoCC.mkDerivation (finalAttrs: {
         pname = "coreboot-toolchain-${arch}";
-        version = "25.09";
+        version = "26.09";
 
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-GMLhGspaS+SsldYFwhMoxzpFgU6alm6WASv3lp/FRRY=";
+          hash = "sha256-4NA1T7o/pWobo08B89VyuITaYkMVq5e+bTBys07BnrE=";
           fetchSubmodules = false;
           leaveDotGit = true;
           postFetch = ''
             PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
             rm -rf $out/.git
           '';
-          allowedRequisites = [ ];
         };
 
         archives = ./stable.nix;

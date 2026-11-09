@@ -19,20 +19,20 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ironicclient";
-  version = "5.14.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-ironicclient";
-    tag = version;
-    hash = "sha256-Mang/QJAgkxiKnwx8+q37hy+aRAnsw2uOQgniO545yc=";
+    tag = finalAttrs.version;
+    hash = "sha256-IOLHS8orP9Rm/25+6T9dded1UKsoYzSo8U5K6OXZjmQ=";
   };
 
   build-system = [
@@ -60,27 +60,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     requests-mock
     oslotest
   ];
 
-  env.PBR_VERSION = version;
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_no_options
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_description
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_extra
-      ironicclient.tests.unit.osc.v1.test_baremetal_chassis.TestChassisCreate.test_chassis_create_with_uuid
-      ironicclient.tests.unit.osc.v1.test_baremetal_conductor.TestBaremetalConductorShow.test_conductor_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalCreate
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestBaremetalShow.test_baremetal_show
-      ironicclient.tests.unit.osc.v1.test_baremetal_node.TestNodeHistoryEventGet.test_baremetal_node_history_list
-    ")
-    runHook postCheck
-  '';
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   pythonImportsCheck = [ "ironicclient" ];
 
@@ -91,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cmake-extras";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/cmake-extras";
     tag = finalAttrs.version;
-    hash = "sha256-7dIuQ2SdtpG93cPZTmoxXUCwFhsq11gmg4OJlGTQ3VY=";
+    hash = "sha256-8WGbfvHFd8Z8wLVBfRYiOTGE9GpvjDT4pelE6N+xhmk=";
   };
 
   postPatch = ''

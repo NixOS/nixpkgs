@@ -2,21 +2,21 @@
   stdenvNoCC,
   lib,
   fetchFromGitLab,
+  adwaita-icon-theme,
   gitUpdater,
   gtk3,
   hicolor-icon-theme,
-  ubuntu-themes,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suru-icon-theme";
-  version = "2025.05.0";
+  version = "2026.10.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/suru-icon-theme";
     rev = finalAttrs.version;
-    hash = "sha256-6MyZTRcfCpiCXzwrwNiBP6J4L4oFbFtoymhke13tLy0=";
+    hash = "sha256-/Og9ixEny6bu8iTZyyEqGOcZSvNLy0bB7ZfNeUAs1SI=";
   };
 
   # Commit 79763fa4ff701d1d89d7362c37c65b2a3cbdf543 introduced abunch of symlinks for Lomiri apps' icons to files from this theme.
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hicolor-icon-theme # theme setup hook
   ];
 
-  propagatedBuildInputs = [ ubuntu-themes ];
+  propagatedBuildInputs = [ adwaita-icon-theme ];
 
   dontConfigure = true;
   dontBuild = true;

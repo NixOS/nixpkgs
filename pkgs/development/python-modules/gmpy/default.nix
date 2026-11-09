@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "gmpy";
-  version = "1.17";
+  version = "2.2.2";
   pyproject = true;
 
   # Python 3.11 has finally made changes to its C API for which gmpy 1.17,
@@ -19,10 +19,10 @@ buildPythonPackage rec {
   disabled = isPyPy || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
-    owner = "aleaxit";
-    repo = "gmpy";
-    rev = "refs/tags/gmpy_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-kMidOjhKJlDRu2qaiq9c+XcwD1tNAoPhRTvvGcOJe8I=";
+    owner = "gmpy2";
+    repo = "gmpy2";
+    tag = "v${version}";
+    hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "GMP or MPIR interface to Python 2.4+ and 3.x";
-    homepage = "https://github.com/aleaxit/gmpy/";
+    homepage = "https://github.com/gmpy2/gmpy2/";
     license = lib.licenses.lgpl21Plus;
   };
 }

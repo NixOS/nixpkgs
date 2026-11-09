@@ -5,12 +5,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "empty";
   version = "0.6.21b";
 
   src = fetchzip {
-    url = "mirror://sourceforge/empty/empty/empty-${version}.tgz";
+    url = "mirror://sourceforge/empty/empty/empty-${finalAttrs.version}.tgz";
     sha256 = "1rkixh2byr70pdxrwr4lj1ckh191rjny1m5xbjsa7nqw1fw6c2xs";
     stripRoot = false;
   };
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.djwf ];
     mainProgram = "empty";
   };
-}
+})

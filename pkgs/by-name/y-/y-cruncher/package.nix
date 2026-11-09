@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       bsd3 # Intel Cilk Run-Time Library
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     mainProgram = "y-cruncher";
     platforms = lib.platforms.linux;
   };

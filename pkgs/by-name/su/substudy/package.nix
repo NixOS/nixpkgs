@@ -5,16 +5,17 @@
 
   ffmpeg,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "substudy";
   version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "emk";
     repo = "subtitles-rs";
-    rev = "substudy_v${version}";
+    rev = "substudy_v${finalAttrs.version}";
     hash = "sha256-ACYbSQKaOJ2hS8NbOAppfKo+Mk3CKg0OAwb56AH42Zs=";
   };
 
@@ -22,15 +23,17 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  nativeCheckInputs = [ ffmpeg ];
+  nativeCheckInputs = [
+    ffmpeg
+    writableTmpDirAsHomeHook
+  ];
 
   cargoBuildFlags = [ "-p substudy" ];
 
-  preCheck = ''
-    # That's to make sure the `test_ai_request_static`
-    # test has access to the cache at `$HOME/.cache`
-    export HOME=$(mktemp -d)
-  '';
+  checkFlags = [
+    # flaky: relies on sqlite ms timestamps differing across 3 quick inserts
+    "--skip=cache::tests::test_cache"
+  ];
 
   postFixup = ''
     wrapProgram "$out/bin/substudy" \
@@ -44,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "substudy";
     maintainers = [ ];
   };
-}
+})

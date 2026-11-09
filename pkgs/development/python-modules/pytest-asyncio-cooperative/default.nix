@@ -29,6 +29,9 @@ buildPythonPackage rec {
     "test_session_scope_gen"
     "test_session_scope_async_gen"
     "test_retry"
+    # pytester outcomes shift under pytest 9 (warning -> error)
+    "test_fixture_nested_exception"
+    "test_shared_fixture_caching"
   ];
 
   pythonImportsCheck = [ "pytest_asyncio_cooperative" ];

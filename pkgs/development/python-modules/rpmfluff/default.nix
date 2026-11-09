@@ -12,16 +12,15 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "19vnlzma8b0aghdiixk0q3wc10y6306hsnic0qvswaaiki94fss1";
+    hash = "sha256-QWtHUpxRKa43BixaDQ0YxoPA+MBg9hgbfAospOqndqc=";
   };
 
-  LC_ALL = "en_US.utf-8";
+  env.LC_ALL = "en_US.utf-8";
   buildInputs = [ glibcLocales ];
 
   meta = {
     description = "Lightweight way of building RPMs, and sabotaging them";
     homepage = "https://pagure.io/rpmfluff";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ disassembler ];
   };
 }

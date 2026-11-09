@@ -2,28 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   spotipy,
   click,
   pycryptodomex,
   mutagen,
   requests,
   deezer-py,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deemix";
   version = "3.6.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xEahzA1PIrGPfnnOcuXQLVQpSVOUFk6/0v9ViLgWCwk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     spotipy
     click
     pycryptodomex
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ natto1784 ];
   };
-}
+})

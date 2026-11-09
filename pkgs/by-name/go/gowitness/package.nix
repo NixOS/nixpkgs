@@ -5,18 +5,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gowitness";
-  version = "3.1.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "gowitness";
-    tag = version;
-    hash = "sha256-XFzU2zqKyHO89LUIcbL1wRYNkFv/ps1UrobDqmhrVRY=";
+    tag = finalAttrs.version;
+    hash = "sha256-nd9tlUEqKmPsSXWiH2FiQNs78H2YK9ld/qmJ+MCTuYU=";
   };
 
-  vendorHash = "sha256-B6T60o4kwezYH9OXJqbv8VrNpcfVghC+QiA+dmzuDVY=";
+  vendorHash = "sha256-CVQNidHA4H0pPHuwMw2DPVgLeuzoJE8mewsgp0o4EIA=";
 
   ldflags = [
     "-s"
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "Web screenshot utility";
     homepage = "https://github.com/sensepost/gowitness";
-    changelog = "https://github.com/sensepost/gowitness/releases/tag/${version}";
+    changelog = "https://github.com/sensepost/gowitness/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gowitness";
   };
-}
+})

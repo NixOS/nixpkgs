@@ -16,53 +16,39 @@
   m17n_db,
   expat,
   withAnthy ? true,
-  anthy ? null,
+  anthy,
   withGtk ? true,
-  withGtk2 ? withGtk,
-  gtk2 ? null,
   withGtk3 ? withGtk,
-  gtk3 ? null,
+  gtk3,
+  withGtk4 ? withGtk,
+  gtk4,
   # Was never enabled in the history of this package and is not needed by any
   # dependent package, hence disabled to save up closure size.
   withQt ? false,
   withQt5 ? withQt,
-  qt5 ? null,
+  qt5,
   withLibnotify ? true,
-  libnotify ? null,
+  libnotify,
   withSqlite ? true,
-  sqlite ? null,
+  sqlite,
   withNetworking ? true,
-  curl ? null,
-  openssl ? null,
+  curl,
+  openssl,
   withFFI ? true,
-  libffi ? null,
+  libffi,
 
   # Things that are clearly an overkill to be enabled by default
   withMisc ? false,
-  libeb ? null,
+  libeb,
 }:
 
-let
-  automake = automake116x;
-in
-
-assert withGtk2 -> gtk2 != null;
-assert withGtk3 -> gtk3 != null;
-
-assert withAnthy -> anthy != null;
-assert withLibnotify -> libnotify != null;
-assert withSqlite -> sqlite != null;
-assert withNetworking -> curl != null && openssl != null;
-assert withFFI -> libffi != null;
-assert withMisc -> libeb != null;
-
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.9.6";
+  version = "1.9.9";
   pname = "uim";
 
   src = fetchurl {
     url = "https://github.com/uim/uim/releases/download/${finalAttrs.version}/uim-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Z/Dl+kKSpTPtxvmLhC32DFMaic+C0DNqThq3IgKrjIM=";
+    hash = "sha256-Vkv1pFRMyaBbVRinj/yAWvMd0FgD1r2XO9sQ5xIVzVY=";
     meta = {
       homepage = "https://github.com/uim/uim/";
     };
@@ -70,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoconf
-    automake
+    automake116x
     intltool
     libtool
     pkg-config
@@ -90,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     expat
   ]
   ++ lib.optional withAnthy anthy
-  ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3
+  ++ lib.optional withGtk4 gtk4
   ++ lib.optionals withQt5 [
     qt5.qtbase
     qt5.qtx11extras
@@ -126,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-expat=${expat.dev}"
   ]
   ++ lib.optional withAnthy "--with-anthy-utf8"
-  ++ lib.optional withGtk2 "--with-gtk2"
   ++ lib.optional withGtk3 "--with-gtk3"
+  ++ lib.optional withGtk4 "--with-gtk4"
   ++ lib.optionals withQt5 [
     "--with-qt5"
     "--with-qt5-immodule"

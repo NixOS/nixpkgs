@@ -35,6 +35,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/74th/xonsh-direnv/";
     changelog = "https://github.com/74th/xonsh-direnv/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

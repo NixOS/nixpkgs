@@ -36,7 +36,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = {
     description = "Functional language for reasoning about formal systems";
-    homepage = "https://complogic.cs.mcgill.ca/beluga";
+    homepage = "https://github.com/Beluga-lang/Beluga";
     changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.bcdarwin ];

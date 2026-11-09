@@ -3,9 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   python,
-  py-multiaddr,
+  multiaddr,
   requests,
   pytestCheckHook,
   pytest-cov-stub,
@@ -23,8 +22,7 @@
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
-    py-multiaddr
+    multiaddr
     requests
   ];
 

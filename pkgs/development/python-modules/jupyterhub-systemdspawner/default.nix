@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jupyterhub,
-  pythonOlder,
   setuptools,
   tornado,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";

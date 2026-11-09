@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "roogle";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "hkmatsumoto";
     repo = "roogle";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-oeQwRcDn4X/CL+O4APmGv9T19c9oD5tCBRz4K41K1Zg=";
   };
 
@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage rec {
     description = "Rust API search engine which allows you to search functions by names and type signatures";
     mainProgram = "roogle";
     homepage = "https://github.com/hkmatsumoto/roogle";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

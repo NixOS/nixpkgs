@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  squashfsTools,
+  squashfs-tools,
   makeBinaryWrapper,
   alsa-lib,
   atk,
@@ -17,25 +17,27 @@
   libGL,
   pango,
   sqlite,
-  systemd,
+  systemdLibs,
   wayland,
-  xorg,
+  libxext,
+  libx11,
+  libxcb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.14.0";
-  revision = "68";
+  version = "3.5.0";
+  revision = "75";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-wuMQBfJfMbQdq4eUNl9bitf4IGcpczX0FDdnQAgyALBpHI7CbcIF9Aq4hIy0dblYgeISM1HFqPiSIcFCS+VuSQ==";
+    hash = "sha512-7mxxam+Fqbyi9VY3MHqY3bllYkMm8OF5+ifOqVLp/F/uSfSJ6XURTtmnqKIR8flXclRPi9yci6BCmk5NXWMglw==";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
-    squashfsTools
+    squashfs-tools
   ];
 
   buildInputs = [
@@ -52,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     pango
     sqlite
-    systemd
+    systemdLibs
     wayland
-    xorg.libxcb
-    xorg.libX11
-    xorg.libXext
+    libxcb
+    libx11
+    libxext
   ];
 
   unpackPhase = ''
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

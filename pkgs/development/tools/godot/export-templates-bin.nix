@@ -14,6 +14,8 @@
 # https://docs.godotengine.org/en/stable/tutorials/export/exporting_projects.html#export-templates
 let
   self = stdenvNoCC.mkDerivation {
+    __structuredAttrs = true;
+
     pname = "godot-export-templates${lib.optionalString withMono "-mono"}-bin";
     version = version;
 
@@ -25,6 +27,8 @@ let
     nativeBuildInputs = [
       unzip
     ];
+
+    strictDeps = true;
 
     unpackPhase = ''
       runHook preUnpack

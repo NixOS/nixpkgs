@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "andilippi";
     repo = "obs-scene-as-transition";
     rev = "v${version}";
-    sha256 = "sha256-qeiJR68MqvhpzvY7yNnR6w77SvavlZTdbnGBWrd7iZM=";
+    hash = "sha256-qeiJR68MqvhpzvY7yNnR6w77SvavlZTdbnGBWrd7iZM=";
   };
 
   nativeBuildInputs = [ cmake ];

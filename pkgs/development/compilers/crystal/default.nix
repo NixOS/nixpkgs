@@ -19,11 +19,13 @@
   llvmPackages_19,
   llvmPackages_20,
   llvmPackages_21,
+  llvmPackages_22,
   makeWrapper,
   openssl,
   pcre2,
   pkg-config,
   installShellFiles,
+  asciidoctor,
   readline,
   tzdata,
   which,
@@ -36,7 +38,6 @@ let
   archs = {
     x86_64-linux = "linux-x86_64";
     i686-linux = "linux-i686";
-    x86_64-darwin = "darwin-universal";
     aarch64-darwin = "darwin-universal";
     aarch64-linux = "linux-aarch64";
   };
@@ -100,6 +101,7 @@ let
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
+      __structuredAttrs = true;
       inherit buildFlags doCheck version;
 
       src = fetchFromGitHub {
@@ -180,7 +182,8 @@ let
         pkg-config
         llvmPackages.llvm
         installShellFiles
-      ];
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "1.21") [ asciidoctor ];
       buildInputs = [
         boehmgc
         pcre2
@@ -198,15 +201,16 @@ let
         "progress=1"
       ];
 
-      LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+      env = {
+        LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-      FLAGS = [
-        "--single-module" # needed for deterministic builds
-      ];
+        # needed for deterministic builds
+        FLAGS = "--single-module";
 
-      # This makes sure we don't keep depending on the previous version of
-      # crystal used to build this one.
-      CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+        # This makes sure we don't keep depending on the previous version of
+        # crystal used to build this one.
+        CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
+      };
 
       # We *have* to add `which` to the PATH or crystal is unable to build
       # stuff later if which is not available.
@@ -236,7 +240,14 @@ let
 
         installShellCompletion --cmd ${finalAttrs.meta.mainProgram} etc/completion.*
 
-        installManPage man/crystal.1
+        ${lib.optionalString (lib.versionAtLeast version "1.21") ''
+          mkdir -p man
+          for adoc in doc/man/*.adoc; do
+            asciidoctor -a crystal_version=${version} -b manpage \
+              -o man/$(basename "$adoc" .adoc).1 "$adoc"
+          done
+        ''}
+        installManPage man/*.1
 
         install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
@@ -274,8 +285,7 @@ let
         homepage = "https://crystal-lang.org/";
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          david50407
-          manveru
+          davy-tw
           peterhoeg
           donovanglover
         ];
@@ -288,7 +298,6 @@ rec {
     sha256s = {
       x86_64-linux = "sha256-F0LjdV02U9G6B8ApHxClF/o5KvhxMNukSX7Z2CwSNIs=";
       aarch64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
-      x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
       aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
     };
   };
@@ -333,5 +342,29 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_18;
+  crystal_1_19 = generic {
+    version = "1.19.2";
+    sha256 = "sha256-+ZOZbcj0SgRoWslMZjjzBIbgNi8TP4GuFYD56yN66A8=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal_1_20 = generic {
+    version = "1.20.3";
+    sha256 = "sha256-MSVX0TO9SqXKzradL9McNCBHKpk3Evd+tXED87zEEqo=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal_1_21 = generic {
+    version = "1.21.1";
+    sha256 = "sha256-/vXpN0COkLYzPU5YtUcyhQtRRiPLtMcWAwjQtawymFo=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_21;
 }

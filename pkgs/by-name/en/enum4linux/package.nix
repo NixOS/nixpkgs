@@ -8,14 +8,14 @@
   openldap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enum4linux";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "CiscoCXSecurity";
     repo = "enum4linux";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/R0P4Ft9Y0LZwKwhDGAe36UKviih6CNbJbj1lcNKEkM=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fishi0x01 ];
     platforms = lib.platforms.unix;
   };
-}
+})

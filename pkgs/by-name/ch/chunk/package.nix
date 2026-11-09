@@ -2,11 +2,20 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "chunk";
   version = "2021-03-03";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "theleagueof";
@@ -15,14 +24,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-NMkRvrUgy9yzOT3a1rN6Ch/p8Cr902CwL4G0w7jVm1E=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Ultra-bold, ultra-awesome slab serif typeface";

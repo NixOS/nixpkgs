@@ -9,7 +9,7 @@ appimageTools.wrapAppImage rec {
   pname = "chain-desktop-wallet";
   version = "1.5.1";
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/crypto-com/chain-desktop-wallet/releases/download/v${version}/Crypto.com-DeFi-Desktop-Wallet-${version}.AppImage";

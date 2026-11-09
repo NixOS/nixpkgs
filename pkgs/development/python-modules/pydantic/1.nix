@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   cython,
@@ -25,6 +26,9 @@ buildPythonPackage rec {
   pname = "pydantic";
   version = "1.10.24";
   pyproject = true;
+
+  # https://github.com/pydantic/pydantic/pull/12263
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "pydantic";
@@ -56,6 +60,11 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   pythonImportsCheck = [ "pydantic" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Data validation and settings management using Python type hinting";

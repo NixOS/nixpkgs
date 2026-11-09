@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pghistory";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Opus10";
+    owner = "AmbitionEng";
     repo = "django-pghistory";
     tag = version;
-    hash = "sha256-8irD4crkczaZfMvajgMQBkksJ2wdomI3kUC6T6IU1as=";
+    hash = "sha256-YW2zcLSE3AALtyBe9KGMQpkF/HOvF90TW2ffmzj8u9o=";
   };
 
   build-system = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pghistory" ];
 
   meta = {
-    changelog = "https://github.com/Opus10/django-pghistory/releases/tag/${src.tag}";
+    changelog = "https://github.com/AmbitionEng/django-pghistory/releases/tag/${src.tag}";
     description = "History tracking for Django and Postgres";
     homepage = "https://django-pghistory.readthedocs.io";
     maintainers = with lib.maintainers; [ pyrox0 ];

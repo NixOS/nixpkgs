@@ -3,14 +3,14 @@
   python3,
   fetchPypi,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "rsstail-py";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "rsstail";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-nAqk8qomG02SVq2cbQAO0MidGbxCHCk2kPNB+7YgGOQ=";
   };
 
@@ -22,8 +22,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line syndication feed monitor";
     mainProgram = "rsstail";
     homepage = "https://github.com/gvalkov/rsstail.py";
-    changelog = "https://github.com/gvalkov/rsstail.py/releases/tag/v${version}";
+    changelog = "https://github.com/gvalkov/rsstail.py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zoriya ];
   };
-}
+})

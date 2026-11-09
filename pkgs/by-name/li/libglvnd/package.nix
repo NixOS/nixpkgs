@@ -7,12 +7,12 @@
   pkg-config,
   python3,
   addDriverRunpath,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libglvnd";
   version = "1.7.0";
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
-    rev = "v${version}";
-    sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
   patches = [
@@ -41,10 +41,12 @@ stdenv.mkDerivation rec {
     addDriverRunpath
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
+
+  strictDeps = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
@@ -74,7 +76,7 @@ stdenv.mkDerivation rec {
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
     # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-asm";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-asm";
 
   outputs = [
     "out"
@@ -90,6 +92,8 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (addDriverRunpath) driverLink; };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GL Vendor-Neutral Dispatch library";
     longDescription = ''
@@ -99,9 +103,9 @@ stdenv.mkDerivation rec {
       dispatch each API call to at runtime.
       Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
-    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       bsd1
@@ -112,6 +116,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    maintainers = [ ];
+    teams = [ lib.teams.freedesktop ];
   };
-}
+})

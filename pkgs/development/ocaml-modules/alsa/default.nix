@@ -6,7 +6,7 @@
   alsa-lib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "alsa";
   version = "0.3.0";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-alsa";
-    rev = version;
-    sha256 = "1qy22g73qc311rmv41w005rdlj5mfnn4yj1dx1jhqzr31zixl8hj";
+    rev = finalAttrs.version;
+    hash = "sha256-EiLa4w8jfwxl6C1IT6x1tUjacgGAB7JrDmEwPM4TwuM=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

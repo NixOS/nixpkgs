@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "go-jsonschema";
-  version = "0.20.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "omissis";
     repo = "go-jsonschema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e1eL5Blf9l4cSR7Tg740eTFza3ViJEiwLaoUsUZzQu4=";
+    hash = "sha256-yxOsZAplHM9sElykebFBMdK+w65EVheBtS4l8Y2VZJw=";
   };
 
-  vendorHash = "sha256-vHtigJ2YNFFWGxv6/pGwmmGE0Fn+2S7NguyrhVME7ak=";
+  vendorHash = "sha256-NkqAeSGWVKvIkik4j9wE2O5LV9sDP3RE/B0LilYml7A=";
 
   ldflags = [
     "-X main.version=v${finalAttrs.version}"

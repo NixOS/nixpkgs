@@ -13,12 +13,10 @@
   cachetools,
   cloudpickle,
   correctionlib,
-  dask,
-  dask-awkward,
-  dask-histogram,
   fsspec,
   hist,
   ipywidgets,
+  loky,
   lz4,
   matplotlib,
   mplhep,
@@ -27,6 +25,8 @@
   packaging,
   pandas,
   pyarrow,
+  pydantic,
+  pyyaml,
   requests,
   rich,
   scipy,
@@ -42,25 +42,21 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coffea";
-  version = "2025.11.0";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "CoffeaTeam";
+    owner = "scikit-hep";
     repo = "coffea";
-    tag = "v${version}";
-    hash = "sha256-vv1eHb8vt4nxdnpLmE0J5g/3oYmcoIykKCuOcQoxA60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zVcTAlL4Wl6oUm2VOmX0zBgsHbEyI93RNQwf4NBhE9s=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
-  ];
-
-  pythonRelaxDeps = [
-    "dask"
   ];
 
   dependencies = [
@@ -69,12 +65,10 @@ buildPythonPackage rec {
     cachetools
     cloudpickle
     correctionlib
-    dask
-    dask-awkward
-    dask-histogram
     fsspec
     hist
     ipywidgets
+    loky
     lz4
     matplotlib
     mplhep
@@ -83,6 +77,8 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    pydantic
+    pyyaml
     requests
     rich
     scipy
@@ -90,8 +86,7 @@ buildPythonPackage rec {
     tqdm
     uproot
     vector
-  ]
-  ++ dask.optional-dependencies.array;
+  ];
 
   nativeCheckInputs = [
     distributed
@@ -104,7 +99,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Requires internet access
-    # https://github.com/CoffeaTeam/coffea/issues/1094
+    # https://github.com/scikit-hep/coffea/issues/1094
     "test_lumimask"
 
     # Flaky: FileNotFoundError: [Errno 2] No such file or directory
@@ -117,9 +112,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
-    homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    homepage = "https://github.com/scikit-hep/coffea";
+    changelog = "https://github.com/scikit-hep/coffea/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

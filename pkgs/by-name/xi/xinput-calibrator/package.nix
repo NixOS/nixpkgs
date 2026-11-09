@@ -6,7 +6,9 @@
   pkg-config,
   meson,
   ninja,
-  xorg,
+  libxrandr,
+  libxi,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,9 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxi
+    libxrandr
   ];
 
   meta = {

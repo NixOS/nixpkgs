@@ -19,6 +19,7 @@
   smartmontools,
   systemd,
   udevCheckHook,
+  usbutils,
   util-linux,
   glib,
   x86_energy_perf_policy,
@@ -27,15 +28,15 @@
   networkmanager,
   tlp-pd,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlp";
-  version = "1.9.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
-    rev = version;
-    hash = "sha256-aM/4+cgtUe6qv3MNT4moXvNzqG5gKvwMbg14L8ifWlc=";
+    tag = finalAttrs.version;
+    hash = "sha256-/xTg53eJ+AKrlG++nQGLsosaWzg1JrwGIGB2+h0MZDI=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
           perl
           smartmontools
           systemd
+          usbutils
           util-linux
           glib # gdbus
         ]
@@ -139,6 +141,9 @@ stdenv.mkDerivation rec {
       rm -rf $out/share/metainfo
     '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   passthru.tests = {
     inherit tlp-pd;
   };
@@ -146,7 +151,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced Power Management for Linux";
     homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
-    changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
+    changelog = "https://github.com/linrunner/TLP/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     mainProgram = "tlp";
     maintainers = with lib.maintainers; [
@@ -154,4 +159,4 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

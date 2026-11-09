@@ -9,13 +9,13 @@
 callPackage ./default.nix {
   # The patch version is the timestamp of the git commit,
   # obtain via `cat $(nix-build -A luajit_2_0.src)/.relver`
-  version = "2.0.1741557863";
+  version = "2.0.1791886455";
 
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
-    rev = "85c3f2fb6f59276ebf07312859a69d6d5a897f62";
-    hash = "sha256-5UIZ650M/0W08iX1ajaHvDbNgjbzZJ1akVwNbiDUeyY=";
+    rev = "acf8fcbd932a68d130fa3e3654e1b622e10fd6af";
+    hash = "sha256-nol/3bLNUf3H2O0zk13Pi2NPbsMdStNvxvGXoZHPWZc=";
   };
 
   extraMeta = {

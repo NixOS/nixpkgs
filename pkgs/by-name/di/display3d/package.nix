@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "display3d";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "renpenguin";
     repo = "display3d";
-    tag = "v${version}";
-    hash = "sha256-dFfU80/1fhBz9/0fVZigo+nZx6Lj66OsP52oMDpS+BY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f2iT+3xqtFY8e9kmwpEac0/WQLFVL6tXUk/lQgBQzaM=";
   };
 
-  cargoHash = "sha256-eXpoWKYonNZQqqIFrxO4RnLLX1s1osaZxZt3gVTYd4o=";
+  cargoHash = "sha256-IEaiehlOCQGun/CUIbPlCITAm6L/XV1uyQSmlBPnxGk=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ renpenguin ];
     mainProgram = "display3d";
   };
-}
+})

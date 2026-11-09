@@ -6,15 +6,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
-  version = "20241231";
+  version = "20260126";
 
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
       "https://invisible-island.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-GSwvrgSNTn9RS6RRYn+cTmEnZQmfgZwZGR+f3j5glnM=";
+    hash = "sha256-thjF+0TC9fBIhD25D30bJPePR7B5E8jHuoyULT6ySwA=";
   };
+
+  strictDeps = true;
 
   configureFlags = [
     # change yacc to byacc
@@ -26,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/byacc $out/bin/yacc
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://invisible-island.net/byacc/byacc.html";

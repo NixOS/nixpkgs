@@ -17,10 +17,10 @@ lib.makeOverridable (
     state ? null,
     channel ? "main",
     name ? "fetchpijul",
-  # TODO: Changes in pijul are unordered so there's many ways to end up with the same repository state.
-  # This makes leaveDotPijul unfeasible to implement until pijul CLI implements
-  # a way of reordering changes to sort them in a consistent and deterministic manner.
-  # leaveDotPijul ? false
+    # TODO: Changes in pijul are unordered so there's many ways to end up with the same repository state.
+    # This makes leaveDotPijul unfeasible to implement until pijul CLI implements
+    # a way of reordering changes to sort them in a consistent and deterministic manner.
+    # leaveDotPijul ? false
   }:
   if change != null && state != null then
     throw "Only one of 'change' or 'state' can be set"
@@ -33,6 +33,8 @@ lib.makeOverridable (
       ];
       strictDeps = true;
 
+      __structuredAttrs = true;
+
       dontUnpack = true;
       dontConfigure = true;
       dontBuild = true;
@@ -41,7 +43,7 @@ lib.makeOverridable (
         runHook preInstall
 
         success=
-        for remote in $remotes; do
+        for remote in "''${remotes[@]}"; do
           if
             pijul clone \
               ''${change:+--change "$change"} \

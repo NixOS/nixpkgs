@@ -4,19 +4,20 @@
   fetchFromGitHub,
   lib,
   mashumaro,
+  numpy,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onedrive-personal-sdk";
-  version = "0.0.17";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "onedrive-personal-sdk";
-    tag = "v${version}";
-    hash = "sha256-dJ8cFZKnSN8sQxe2wMqwPXf7CaFKUP6TZbS/J4Z0qa0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fWD0GxGSNQZyVZoQRDP3KD3VS716BnptYmDxkmNw0Bs=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     mashumaro
+    numpy
   ];
 
   pythonImportsCheck = [ "onedrive_personal_sdk" ];
@@ -32,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/zweckj/onedrive-personal-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/zweckj/onedrive-personal-sdk/releases/tag/${finalAttrs.src.tag}";
     description = "Package to interact with the Microsoft Graph API for personal OneDrives";
     homepage = "https://github.com/zweckj/onedrive-personal-sdk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

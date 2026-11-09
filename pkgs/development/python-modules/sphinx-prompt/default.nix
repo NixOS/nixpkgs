@@ -6,6 +6,7 @@
   # build-system
   poetry-core,
   poetry-dynamic-versioning,
+  pyprojectVersionPatchHook,
 
   # dependencies
   docutils,
@@ -16,26 +17,30 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-prompt";
-  version = "1.10.0";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    tag = version;
-    hash = "sha256-JKCTn2YkdyGLvchMT9C61PxjYxuQFzt3SjCE9JvgtVc=";
+    tag = finalAttrs.version;
+    hash = "sha256-ut1g4Clq8mVUYwCe0XMt4GIXUJ4Hy7k8DjWbR7GJ8Bg=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+    # create the old sphinx-prompt directory for compatibility
+    # https://github.com/sbrunner/sphinx-prompt/issues/612
+    cp -r sphinx{_,-}prompt
   '';
 
   build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     docutils
@@ -53,10 +58,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # AsserationError
+    "test[arguments10-options10-content10"
+  ];
+
   meta = {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
+    changelog = "https://github.com/sbrunner/sphinx-prompt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

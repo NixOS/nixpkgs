@@ -2,37 +2,38 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXft,
+  libx11,
+  libxinerama,
+  libxrandr,
+  libxft,
   bison,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "cwm";
-  version = "7.4";
+  version = "7.9";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "cwm";
-    rev = "v${version}";
-    hash = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YC+x4YSPAgZ47PFMbzICv9ixfDxA1PG3ncLiMahSoUc=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     pkg-config
     bison
   ];
   buildInputs = [
-    libX11
-    libXinerama
-    libXrandr
-    libXft
+    libx11
+    libxinerama
+    libxrandr
+    libxft
   ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
@@ -42,10 +43,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/leahneukirchen/cwm";
     maintainers = with lib.maintainers; [
       _0x4A6F
-      mkf
+      iamanaws
     ];
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     mainProgram = "cwm";
   };
-}
+})

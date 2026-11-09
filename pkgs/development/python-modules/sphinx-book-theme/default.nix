@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   pydata-sphinx-theme,
@@ -10,21 +9,20 @@
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "1.1.4";
+  version = "1.4.0";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    hash = "sha256-hDs/XIaEZA9KLQGr0pi+tmRS0bI5TNnvW+Xr1WQOoOE=";
+    hash = "sha256-EP1X1mfuC1ZZKMPOlVYuKBxdG5S9Wiqvxc1BpdSY3NA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pydata-sphinx-theme
     sphinx
   ];

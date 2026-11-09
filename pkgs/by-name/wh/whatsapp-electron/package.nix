@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp";
-  version = "1.1.1";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "dagmoller";
     repo = "whatsapp-electron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i3rk/wAr2MtJqXv7Z9uG0YzIsvaxrDvcXsXQhDEmzxw=";
+    hash = "sha256-hz3pBudNFJprEZpT53UnsQtWRoiWXco+HnVZtunor2c=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-5AlnAtxiQDbJEbxthGT8DQhZG5tdkrFk0+47czalnlU=";
+    hash = "sha256-Z+dukXaK5V/eWBCyKqp1/Nm9rDQcUqH8XJSi1WqPPL8=";
   };
 
   patches = [ ./icon.patch ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/whatsapp-electron"
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/whatsapp-electron"
 
-    install -D assets/whatsapp-icon-512x512.png $out/share/pixmaps/whatsapp.png
+    install -D assets/whatsapp-icon-512x512.png $out/share/icons/hicolor/512x512/apps/whatsapp.png
     install -D assets/whatsapp-icon-512x512.svg $out/share/icons/hicolor/scalable/apps/whatsapp.svg
     runHook postInstall
   '';

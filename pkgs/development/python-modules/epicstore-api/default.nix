@@ -31,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/SD4RK/epicstore_api/releases/tag/v_${src.tag}";
+    changelog = "https://github.com/SD4RK/epicstore_api/releases/tag/${src.tag}";
     description = "Epic Games Store Web API Wrapper written in Python";
     homepage = "https://github.com/SD4RK/epicstore_api";
     license = lib.licenses.mit;

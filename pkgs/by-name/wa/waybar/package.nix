@@ -22,9 +22,10 @@
   libmpdclient,
   libnl,
   libpulseaudio,
-  libsigcxx,
+  libsigcxx_2_0,
   libxkbcommon,
   meson,
+  modemmanager,
   ncurses,
   ninja,
   pipewire,
@@ -51,6 +52,7 @@
   gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
+  mangoSupport ? true,
   mpdSupport ? true,
   mprisSupport ? stdenv.hostPlatform.isLinux,
   niriSupport ? true,
@@ -63,33 +65,45 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   traySupport ? true,
   udevSupport ? true,
+  umbrielSupport ? true,
   upowerSupport ? true,
   wireplumberSupport ? true,
+  wwanSupport ? true,
   withMediaPlayer ? mprisSupport && false,
   nix-update-script,
 }:
 
+let
+  libcava =
+    let
+      # This comes from subprojects/libcava.wrap in the waybar sources
+      version = "8d6e963db9cd29c2b3b5a5df1e46bb65c410f9cc";
+    in
+    {
+      inherit version;
+
+      src = fetchFromGitHub {
+        owner = "LukashonakV";
+        repo = "cava";
+        rev = version;
+        hash = "sha256-tWY3D3sEVFDHJjO/enCu0lEobM1CF4vupavOHgIslnA=";
+      };
+    };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
+    hash = "sha256-mHBaRnquV9tSt8FuaAU9/HG7B8gditQX6p3NgwiLmMY=";
   };
 
-  libcavaSrc = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    tag = "0.10.4";
-    hash = "sha256-9eTDqM+O1tA/3bEfd1apm8LbEcR9CVgELTIspSVPMKM=";
-  };
-
-  postUnpack = lib.optional cavaSupport ''
+  postUnpack = lib.optionalString cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${finalAttrs.libcavaSrc} subprojects/cava-0.10.4
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-${libcava.version}
     patchShebangs .
     popd
   '';
@@ -114,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     gtkmm3
     jsoncpp
-    libsigcxx
+    libsigcxx_2_0
     libxkbcommon
     spdlog
     wayland
@@ -141,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional udevSupport udev
   ++ lib.optional upowerSupport upower
   ++ lib.optional wireplumberSupport wireplumber
+  ++ lib.optional wwanSupport modemmanager
   ++ lib.optional (cavaSupport || pipewireSupport) pipewire
   ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
@@ -168,10 +183,13 @@ stdenv.mkDerivation (finalAttrs: {
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
+      "wwan" = wwanSupport;
     })
     ++ (lib.mapAttrsToList lib.mesonBool {
       "experimental" = experimentalPatches;
+      "mango" = mangoSupport;
       "niri" = niriSupport;
+      "umbriel" = umbrielSupport;
     });
 
   env = lib.optionalAttrs systemdSupport {
@@ -211,7 +229,6 @@ stdenv.mkDerivation (finalAttrs: {
       lovesegfault
       minijackson
       rodrgz
-      synthetica
       khaneliman
     ];
     platforms = lib.platforms.linux;

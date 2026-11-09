@@ -9,14 +9,12 @@
   qcheck,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dolmen";
   version = "0.10";
 
-  minimalOCamlVersion = "4.08";
-
   src = fetchurl {
-    url = "https://github.com/Gbury/dolmen/releases/download/v${version}/dolmen-${version}.tbz";
+    url = "https://github.com/Gbury/dolmen/releases/download/v${finalAttrs.version}/dolmen-${finalAttrs.version}.tbz";
     hash = "sha256-xchfd+OSTzeOjYLxZu7+QTG04EG/nN7KRnQQ8zxx+mE=";
   };
 
@@ -27,7 +25,8 @@ buildDunePackage rec {
     hmap
   ];
 
-  doCheck = true;
+  # Tests fail with menhir ≥ 20260122
+  doCheck = false;
 
   checkInputs = [ qcheck ];
 
@@ -37,4 +36,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Gbury/dolmen";
   };
-}
+})

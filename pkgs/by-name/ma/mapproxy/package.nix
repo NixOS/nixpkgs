@@ -5,17 +5,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapproxy";
-  version = "5.1.1";
+  version = "7.0.0";
   pyproject = true;
-  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
-    tag = version;
-    hash = "sha256-4TRaY/NfOjmq5v+6Rv2UGwF1rqnw4UggVOX2HMa5mVI=";
+    tag = finalAttrs.version;
+    hash = "sha256-R2lL0lEXnu3tAg9fsI7zTY7DSMcxmu9ohUTkG5XL6l0=";
   };
 
   prePatch = ''
@@ -27,11 +26,16 @@ python3Packages.buildPythonApplication rec {
   pythonRemoveDeps = [ "future" ];
 
   dependencies = with python3Packages; [
+    babel
     boto3 # needed for caches service
+    jinja2
     jsonschema
+    multiprocess
     pillow
+    python-dateutil
     pyyaml
     pyproj
+    requests
     shapely
     gdal
     lxml
@@ -52,4 +56,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ rakesh4g ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

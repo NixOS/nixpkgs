@@ -14,20 +14,36 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.36.0";
+  version = "0.47.1";
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HGMzNXm6vWKf/RHPwB/soDqxAvCOW1J6BPs0tsrEuTI=";
+    hash = "sha256-vyV2QpOlCnr8WUijJYYx7oVhMhEy+jRJxXe9rRBlowA=";
   };
 
-  cargoHash = "sha256-jai0FNuCUcgN+ZmmYgbFrMK1Z1vcv21wALkEb74h7H0=";
+  cargoHash = "sha256-1lJwKpI1NE3Q7RgEgWkdITHj7nt4WRLk9fC5yWndJKs=";
 
   nativeBuildInputs = [
     installShellFiles
-  ];
+    buildPackages.mkdocs
+  ]
+  # Via buildPackages: nested python3.pkgs.* access is not spliced, so these
+  # would otherwise be built for the host platform, breaking pkgsStatic.
+  ++ (with buildPackages.python3.pkgs; [
+    mdx-breakless-lists
+    mdx-truly-sane-lists
+    mike
+    mkdocs-include-markdown-plugin
+    mkdocs-material
+    mkdocs-redirects
+    mkdocs-table-reader-plugin
+  ]);
 
   nativeCheckInputs = [
     gitMinimal
@@ -49,6 +65,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "jj-lib"
     "-p"
     "jj-cli"
+    # Flaky test that asserts an ordering that ties on random operation ids.
+    "-E"
+    "!test(test_build_truncated_evolution_graph)"
   ];
 
   env = {
@@ -57,6 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBGIT2_NO_VENDOR = "1";
     LIBSSH2_SYS_USE_PKG_CONFIG = "1";
   };
+
+  preBuild = ''
+    mkdocs build -d $name
+  '';
 
   postInstall =
     let
@@ -69,7 +92,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
         --fish <(COMPLETE=fish ${jj}) \
+        --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
+    ''
+    + ''
+      mkdir -p $doc/share/doc
+      mv $name $doc/share/doc
     '';
 
   doInstallCheck = true;
@@ -82,7 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/jj-vcs/jj";
+    homepage = "https://jj-vcs.dev/";
     changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

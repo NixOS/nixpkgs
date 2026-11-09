@@ -9,11 +9,15 @@
   lndir,
   perl,
   pkg-config,
+  copyPathToStore,
+  makeSetupHook,
   which,
   cmake,
   ninja,
   libproxy,
-  xorg,
+  libxcb-cursor,
+  libxtst,
+  libxdmcp,
   zstd,
   double-conversion,
   util-linux,
@@ -39,11 +43,11 @@
   glib,
   harfbuzz,
   icu,
-  libX11,
-  libXcomposite,
-  libXext,
-  libXi,
-  libXrender,
+  libx11,
+  libxcomposite,
+  libxext,
+  libxi,
+  libxrender,
   libjpeg,
   libpng,
   libxcb,
@@ -54,15 +58,15 @@
   pcre2,
   sqlite,
   udev,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
   zlib,
   at-spi2-core,
-  unixODBC,
-  unixODBCDrivers,
+  unixodbc,
+  unixodbcDrivers,
   libGL,
   # darwin
   moltenvk,
@@ -84,12 +88,17 @@
   wayland-scanner,
   # options
   qttranslations ? null,
+  fetchpatch,
 }:
 
 let
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  fix_qt_builtin_paths = copyPathToStore ../../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = copyPathToStore ../../hooks/fix-qt-module-paths.sh;
+  qtPluginPrefix = "lib/qt-6/plugins";
+  qtQmlPrefix = "lib/qt-6/qml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtbase";
 
   inherit src version;
@@ -119,11 +128,11 @@ stdenv.mkDerivation rec {
     libproxy
     dbus
     glib
-    # unixODBC drivers
-    unixODBC
-    unixODBCDrivers.psql
-    unixODBCDrivers.sqlite
-    unixODBCDrivers.mariadb
+    # unixodbc drivers
+    unixodbc
+    unixodbcDrivers.psql
+    unixodbcDrivers.sqlite
+    unixodbcDrivers.mariadb
   ]
   ++ lib.optionals systemdSupport [
     systemd
@@ -144,21 +153,21 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
     # X11 libs
-    libX11
-    libXcomposite
-    libXext
-    libXi
-    libXrender
+    libx11
+    libxcomposite
+    libxext
+    libxi
+    libxrender
     libxcb
     libxkbcommon
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
-    xorg.libXdmcp
-    xorg.libXtst
-    xorg.xcbutilcursor
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxdmcp
+    libxtst
+    libxcb-cursor
     libepoxy
   ]
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
@@ -230,12 +239,15 @@ stdenv.mkDerivation rec {
     ./use-cmake-from-path.patch
 
     # macdeployqt fixes
-    # get qmlimportscanner location from environment variable
-    ./find-qmlimportscanner.patch
-    # pass QML2_IMPORT_PATH from environment to qmlimportscanner
-    ./qmlimportscanner-import-path.patch
-    # don't pass qtbase's QML directory to qmlimportscanner if it's empty
-    ./skip-missing-qml-directory.patch
+    # FIXME: these should probably be a wrapper
+    ./macdeployqt-fixes.patch
+
+    # backport touchpad scrolling fix
+    # FIXME: remove in 6.12.1
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/ddf0f49dc949beab8485b3bfb8e88616e4bd8076.diff";
+      hash = "sha256-fWTHLU0IQxOknxPitqhHN8VVVPz/tLQlGzF2t7rYdFc=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -255,19 +267,21 @@ stdenv.mkDerivation rec {
         --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
     done
 
+    # Unlike Apple's PlistBuddy, xcbuild's only accepts capitalized commands,
+    # so the usage-description probe in permissions.prf always fails and the
+    # darwin permission plugins (Bluetooth, camera, ...) are silently never
+    # linked into qmake-built apps.
+    substituteInPlace mkspecs/features/permissions.prf \
+      --replace-fail "-c 'print " "-c 'Print "
+
     substituteInPlace mkspecs/common/macx.conf \
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
-  fix_qt_builtin_paths = ../../hooks/fix-qt-builtin-paths.sh;
-  fix_qt_module_paths = ../../hooks/fix-qt-module-paths.sh;
   preHook = ''
-    . "$fix_qt_builtin_paths"
-    . "$fix_qt_module_paths"
+    . ${fix_qt_builtin_paths}
+    . ${fix_qt_module_paths}
   '';
-
-  qtPluginPrefix = "lib/qt-6/plugins";
-  qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
     # makes Qt print the configure summary
@@ -317,7 +331,19 @@ stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
-    fixQtBuiltinPaths "$out" '*.pr?'
+    # fixQtBuiltinPaths reads qtPluginPrefix/qtQmlPrefix from the environment,
+    # but the setup hook only exports them for downstream packages; without
+    # them e.g. $$[QT_INSTALL_PLUGINS] in qt.prf is rewritten to "$out/"
+    # instead of "$out/${qtPluginPrefix}", breaking static plugin linking.
+    qtPluginPrefix=${qtPluginPrefix} qtQmlPrefix=${qtQmlPrefix} \
+      fixQtBuiltinPaths "$out" '*.pr?'
+
+    # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
+    # but we need it to be the output of this derivation.
+    # Use a different placeholder and explicitly substitute this
+    # to keep compatibility with __structuredAttrs and avoid substituteAll.
+    substituteInPlace "''${!outputDev}/nix-support/setup-hook" \
+      --replace-fail "@qtbaseOut@" $out
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # FIXME: not sure why this isn't added automatically?
@@ -327,7 +353,26 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  setupHook = ../../hooks/qtbase-setup-hook.sh;
+  setupHook =
+    let
+      hook = makeSetupHook {
+        name = "qtbase6-setup-hook";
+        substitutions = {
+          inherit
+            fix_qt_builtin_paths
+            fix_qt_module_paths
+            qtPluginPrefix
+            qtQmlPrefix
+            ;
+        };
+        meta.license = lib.licenses.mit;
+      } ../../hooks/qtbase-setup-hook.sh;
+    in
+    "${hook}/nix-support/setup-hook";
+
+  passthru = {
+    inherit qtPluginPrefix qtQmlPrefix;
+  };
 
   meta = {
     homepage = "https://www.qt.io/";

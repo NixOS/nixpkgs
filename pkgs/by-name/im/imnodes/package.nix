@@ -6,24 +6,27 @@
   cmake,
   imgui,
   SDL2,
-  xorg,
+  libxext,
   imnodes,
   withExamples ? false,
 }:
 
 stdenv.mkDerivation {
   pname = "imnodes";
-  version = "unstable-2024-03-12";
+  version = "0.5-unstable-2025-06-25";
   outputs = [
     "out"
     "dev"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Nelarius";
     repo = "imnodes";
-    rev = "8563e1655bd9bb1f249e6552cc6274d506ee788b";
-    hash = "sha256-E7NNCxYq9dyVvutWbpl2a+D2Ap2ErvdYHBDqpX0kb0c=";
+    rev = "b2ec254ce576ac3d42dfb7aef61deadbff8e7211";
+    hash = "sha256-Hdde198chSm3Ii0grEB4imqp7vVu6mYxa1VPZovvb7A=";
   };
   patches = [
     # CMake install rules
@@ -39,7 +42,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals withExamples [
     SDL2
-    xorg.libXext
+    libxext
   ];
 
   cmakeFlags = [ (lib.cmakeBool "IMNODES_EXAMPLES" withExamples) ];

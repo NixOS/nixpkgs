@@ -2,44 +2,53 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron,
+  electron_44,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
   makeWrapper,
   ivpn-service,
 }:
+let
+  electron = electron_44;
+in
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  version = "3.15.0";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
+    hash = "sha256-sbi4B9gNzgipsqgTxbPrZRNjB5ulwp0gmCwjYyyYj6o=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-OOBBUDJwTP2T/KqzJPRV+A9ncRmb14KBoAXqa0T6c58=";
+  npmDepsHash = "sha256-fQQEhTa9m0ixcv1DlIQaldFFLkvhbWCXoDge/U5xtDU=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  # electron 42's install.js no longer honors ELECTRON_SKIP_BINARY_DOWNLOAD and
+  # unconditionally downloads the electron binary.
+  # install-app-deps is a no-op here, so drop the whole postinstall,
+  # that way the electron download is skipped properly.
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail '"postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",' ""
+  '';
 
   postBuild = ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=electron-dist \
+      -c.electronDist="$electron_dist" \
       -c.electronVersion=${electron.version} \
       --config electron-builder.config.js
   '';
@@ -84,7 +93,7 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://github.com/ivpn/desktop-app";
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = [ "x86_64-linux" ];
   };
 })

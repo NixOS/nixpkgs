@@ -1,24 +1,22 @@
-diff --git i/build.rs w/build.rs
-index 2174a43..cf93c2f 100644
---- i/build.rs
-+++ w/build.rs
-@@ -14,17 +14,8 @@ fn main() {
-     // Print the path to make it available during the build
-     println!("cargo:rustc-env=SUS_HOME={}", home_dir.to_str().unwrap());
- 
--    // note: add error checking yourself.
--    let output = std::process::Command::new("git")
--        .args(["rev-parse", "HEAD"])
--        .output()
--        .unwrap();
--    let git_hash = String::from_utf8(output.stdout).unwrap();
--    println!("cargo:rustc-env=GIT_HASH={}", git_hash);
--    println!(
--        "cargo:rustc-env=BUILD_DATE={}",
--        chrono::Local::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, false)
--    );
-+    println!("cargo:rustc-env=GIT_HASH=@GIT_HASH@");
-+    println!("cargo:rustc-env=BUILD_DATE=@GIT_DATE@");
- }
- 
- fn get_sus_dir() -> PathBuf {
+diff --git a/build.rs b/build.rs
+index d7c26bb..ffaed27 100644
+--- a/build.rs
++++ b/build.rs
+@@ -22,16 +22,8 @@ fn main() -> Result<(), String> {
+         } else {
+             " without LSP Support"
+         };
+-        let git_hash = std::process::Command::new("git")
+-            .args(["rev-parse", "HEAD"])
+-            .output()
+-            .unwrap();
+-        let git_hash = String::from_utf8(git_hash.stdout).unwrap();
+-        let git_hash = git_hash.trim();
+-        let build_date = chrono::Local::now().format("%Y-%m-%d_%H:%M:%S");
+-
+         println!(
+-            "cargo:rustc-env=EXTRA_VERSION_STRING= ({git_hash}) built at {build_date}{build_features}"
++            "cargo:rustc-env=EXTRA_VERSION_STRING= (@GIT_HASH@) committed at @GIT_DATE@{build_features}"
+         );
+     } else {
+         println!("cargo:rustc-env=EXTRA_VERSION_STRING=");

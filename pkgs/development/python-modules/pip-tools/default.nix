@@ -5,60 +5,62 @@
   build,
   click,
   fetchFromGitHub,
-  pep517,
   pip,
+  pyproject-hooks,
+  pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  tomli,
   tomli-w,
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-tools";
-  version = "7.5.1-unstable-2025-11-08";
+  version = "7.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "pypa";
     repo = "pip-tools";
-    rev = "785ed5e30f4c86c24141898553a356402b142adf";
-    hash = "sha256-2mYUjLqrpN/sjR79t/ZIfpvVXAgpk/tpZWFcT/6e7uk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
   };
 
   patches = [
     ./fix-setup-py-bad-syntax-detection.patch
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "7.5.1";
-
   build-system = [ setuptools-scm ];
 
   dependencies = [
     build
     click
-    pep517
     pip
+    pyproject-hooks
     setuptools
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pytest-mock
     pytest-xdist
     pytestCheckHook
     tomli-w
   ];
 
-  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
+
+  disabledTestPaths = [
+    # Most tests require network access
+    "tests/test_cli_compile.py"
+  ];
 
   disabledTests = [
     # Tests require network access
@@ -66,6 +68,15 @@ buildPythonPackage rec {
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
     "test_bad_setup_file"
+    "test_get_hashes_local_repository_cache_miss"
+    "test_toggle_reuse_hashes_local_repository"
+    "test_get_hashes_from_mixed"
+    "test_toggle_reuse_hashes_local_repository"
+    "test_generate_hashes_all_platforms"
+    "test_iter_dependencies_after_combine_install_requirements"
+    "test_iter_dependencies_after_combine_install_requirements_extras"
+    "test_name_collision"
+    "test_build_project_metadata_upgrading_raises_error"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"
@@ -75,11 +86,6 @@ buildPythonPackage rec {
     # Deprecations
     "test_error_in_pyproject_toml"
 
-    # pip 25.0 compat issues
-    # https://github.com/jazzband/pip-tools/issues/2112
-    # requirement doesn't end with semicolon
-    "test_resolver"
-    "test_resolver__custom_unsafe_deps"
     # constraints.txt is now in a tmpdir
     "test_preserve_via_requirements_constrained_dependencies_when_run_twice"
     "test_annotate_option"
@@ -93,9 +99,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Keeps your pinned dependencies fresh";
-    homepage = "https://github.com/jazzband/pip-tools/";
-    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
+    homepage = "https://github.com/pypa/pip-tools/";
+    changelog = "https://github.com/pypa/pip-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

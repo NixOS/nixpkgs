@@ -14,8 +14,10 @@ let
     name:
     (buildOpenRAEngine {
       inherit version;
-      description = "Open-source re-implementation of Westwood Studios' 2D Command and Conquer games";
-      homepage = "https://www.openra.net/";
+      meta = {
+        description = "Open-source re-implementation of Westwood Studios' 2D Command and Conquer games";
+        homepage = "https://www.openra.net/";
+      };
       mods = [
         "cnc"
         "d2k"
@@ -27,7 +29,6 @@ let
         repo = "OpenRA";
         inherit rev sha256 postFetch;
       };
-      pos = __curPos;
     } name).overrideAttrs
       (origAttrs: {
         postInstall = ''

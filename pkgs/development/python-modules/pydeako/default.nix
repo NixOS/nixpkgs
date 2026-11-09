@@ -4,8 +4,7 @@
   fetchFromGitHub,
   mock,
   pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+  pytest9_0CheckHook,
   setuptools,
   zeroconf,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pydeako";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "DeakoLights";
@@ -34,7 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytest-asyncio
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pythonImportsCheck = [ "pydeako" ];

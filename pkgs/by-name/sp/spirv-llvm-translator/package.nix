@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  srcOnly,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   lit,
@@ -16,25 +16,35 @@ let
   llvmMajor = lib.versions.major llvm.version;
 
   versions = {
-    "21" = rec {
-      version = "21.1.0";
+    "23" = rec {
+      version = "23.1.2";
       rev = "v${version}";
-      hash = "sha256-kk8BbPl/UBW1gaO/cuOQ9OsiNTEk0TkvRDLKUAh6exk=";
+      hash = "sha256-V7AZ0e85ogfkFPMUBYqELQzHIsowM112PW4oHpzXU20=";
+    };
+    "22" = rec {
+      version = "22.1.7";
+      rev = "v${version}";
+      hash = "sha256-3yOvvT7cJ4Smz3aOJH6kh7CmfMNWaBAz6qxPnRA7zlE=";
+    };
+    "21" = rec {
+      version = "21.1.12";
+      rev = "v${version}";
+      hash = "sha256-f/91YTqK3yBr/0oxceVKhJsDHj78T+Zt6Vf6iuiUpg4=";
     };
     "20" = rec {
-      version = "20.1.5";
+      version = "20.1.18";
       rev = "v${version}";
-      hash = "sha256-GdlC/Vl61nTNdua2s+CW2YOvkSKK6MNOvBc/393iths=";
+      hash = "sha256-jVnNi5VOqWx8o6AuMfmenrncKUqvb/ii5xb6AhhQ9lE=";
     };
     "19" = rec {
-      version = "19.1.10";
+      version = "19.1.23";
       rev = "v${version}";
-      hash = "sha256-VgA47AGMnOKYNeW95nxJZzmKnYK8D/9okgssPnPqXXI=";
+      hash = "sha256-b1fbUuHYoeT14ixuSgLstGSBwb+cIm5O+a24/ydITF0=";
     };
     "18" = rec {
-      version = "18.1.15";
+      version = "18.1.28";
       rev = "v${version}";
-      hash = "sha256-rt3RTZut41uDEh0YmpOzH3sOezeEVWtAIGMKCHLSJBw=";
+      hash = "sha256-JQQzbfZ0fVvEbjcmyFYZnzeXUjktOjWFpW6EsQykqr0=";
     };
   };
 
@@ -50,13 +60,11 @@ stdenv.mkDerivation {
   inherit (branch) version;
 
   src = fetchFromGitHub {
+    name = "spirv-llvm-translator-${branch.rev}-source";
     owner = "KhronosGroup";
     repo = "SPIRV-LLVM-Translator";
     inherit (branch) rev hash;
   };
-
-  # TODO: Remove.
-  patches = [ ];
 
   nativeBuildInputs = [
     pkg-config
@@ -79,7 +87,7 @@ stdenv.mkDerivation {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${srcOnly spirv-headers}"
   ]
   ++ lib.optional (
     lib.toInt llvmMajor >= 19
@@ -102,7 +110,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.tests = lib.genAttrs (lib.attrNames versions) (
-    version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }
+    version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvmPackages_${version}".llvm; }
   );
 
   meta = {
@@ -111,7 +119,7 @@ stdenv.mkDerivation {
     mainProgram = "llvm-spirv";
     license = lib.licenses.ncsa;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gloaming ];
+    maintainers = [ ];
     broken = !(versions ? ${llvmMajor});
   };
 }

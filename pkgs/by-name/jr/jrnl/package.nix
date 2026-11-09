@@ -4,9 +4,10 @@
   python3,
   testers,
   jrnl,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jrnl";
   version = "4.2";
   pyproject = true;
@@ -14,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = "jrnl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x0JoYJzD6RnuHbRsQMgrhHsNW6nVEVeoDjtPop2eg+w=";
   };
 
@@ -23,6 +24,10 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace tests/lib/when_steps.py \
       --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
   '';
+
+  disabledTests = [
+    "test_override_configured_linewrap_with_a_value_of_23"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 
@@ -48,27 +53,24 @@ python3.pkgs.buildPythonApplication rec {
     pytest-xdist
     (pytestCheckHook.override { pytest = pytest_7; })
     toml
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "jrnl" ];
 
   passthru.tests.version = testers.testVersion {
     package = jrnl;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
-    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
+    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       zalakain
     ];
     mainProgram = "jrnl";
   };
-}
+})

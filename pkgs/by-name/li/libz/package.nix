@@ -3,11 +3,15 @@
   stdenv,
   fetchFromGitLab,
   gitUpdater,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libz";
   version = "1.2.8.2025.03.07";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "sortix";
@@ -15,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "libz-${finalAttrs.version}";
     hash = "sha256-tr9r0X+iHz3LZFgIxi3JMQUnSlyTRtAIhtjwI+DIhpc=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   outputs = [
     "out"
@@ -29,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://sortix.org/libz/";
     description = "Clean fork of zlib";
-    license = [ lib.licenses.zlib ];
+    license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

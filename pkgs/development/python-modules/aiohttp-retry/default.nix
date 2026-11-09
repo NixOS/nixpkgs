@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-aiohttp,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,14 +13,17 @@ buildPythonPackage rec {
   version = "2.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "inyutin";
     repo = "aiohttp_retry";
     tag = "v${version}";
     hash = "sha256-8S4gjeN8ktdDNd8GUsejaZdCaG/VXYPo0RJpwrrttGQ=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="2.9.0"' 'version="${version}"'
+  '';
 
   build-system = [ setuptools ];
 

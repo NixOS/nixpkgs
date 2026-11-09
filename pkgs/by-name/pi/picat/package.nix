@@ -30,8 +30,8 @@ stdenv.mkDerivation {
     {
       x86_64-linux = "linux64";
       aarch64-linux = "linux64";
+      riscv64-linux = "linux64";
       x86_64-cygwin = "cygwin64";
-      x86_64-darwin = "mac64";
       aarch64-darwin = "mac64";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -68,8 +68,8 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-cygwin"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

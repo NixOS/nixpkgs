@@ -5,22 +5,26 @@
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-azure-native";
-  version = "2.13.0";
+  version = "3.28.0";
+  majorVersion = lib.versions.major version;
   rev = "v${version}";
-  hash = "sha256-YyJxACeXyY7hZkTbLXT/ASNWa1uv9h3cvPoItR183fU=";
-  vendorHash = "sha256-20wHbNE/fenxP9wgTSzAnx6b1UYlw4i1fi6SesTs0sc=";
+  hash = "sha256-RVs2BW1E+736/30019NIQrM16/rk9YHNdJji9EOocKI=";
+  vendorHash = "sha256-VmOwOM9LQFdNqFPQV9K19s87wLoDiwOTyvaALxaZG84=";
   cmdGen = "pulumi-gen-azure-native";
   cmdRes = "pulumi-resource-azure-native";
   extraLdflags = [
     "-X github.com/pulumi/${repo}/v2/provider/pkg/version.Version=${version}"
   ];
+  postPatch = ''
+    cp -v ../versions/v${majorVersion}.yaml pkg/versionLookup/default-versions.yaml
+  '';
   postConfigure = ''
     pushd ..
 
     chmod +w . provider/cmd/${cmdRes} sdk/
     chmod -R +w reports/ versions/
-    mkdir bin
-    ${cmdGen} schema ${version}
+    install -dm 0755 bin
+    ${cmdGen} schema
 
     cp bin/schema-full.json provider/cmd/${cmdRes}
     cp bin/metadata-compact.json provider/cmd/${cmdRes}

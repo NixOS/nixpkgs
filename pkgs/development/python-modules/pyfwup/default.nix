@@ -6,7 +6,6 @@
   tqdm,
   libusb1,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.3";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";

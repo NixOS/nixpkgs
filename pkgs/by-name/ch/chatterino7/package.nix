@@ -11,13 +11,13 @@
   (
     finalAttrs: _: {
       pname = "chatterino7";
-      version = "7.5.4";
+      version = "2.5.6";
 
       src = fetchFromGitHub {
         owner = "SevenTV";
         repo = "chatterino7";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-zA198AIFIRx4qE5MZwrGOFFrpnVrZMVQx1SX0RJpDo4=";
+        hash = "sha256-ob/l1HMiwFXO8VoIx1vnVi7agU0bS0lgI9j2SC/aiWA=";
         fetchSubmodules = true;
         leaveDotGit = true;
         postFetch = ''
@@ -28,7 +28,7 @@
 
       passthru.updateScript = gitUpdater {
         rev-prefix = "v";
-        ignoredVersions = "beta";
+        ignoredVersions = "beta|^7\\.";
       };
 
       meta = {

@@ -1,26 +1,28 @@
 {
   lib,
+  backports-tarfile,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  more-itertools,
   ninja,
   numpy,
   packaging,
   pybind11,
   torch,
+  versioneer,
   which,
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.5.1";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     tag = version;
-    hash = "sha256-GhyUOp/iLpuKKQAwQsA6D7IiW8ym8QTC4OmRxEKydVA=";
+    hash = "sha256-htzrk6ernF5LI9c1qKb1qrsHyzOTVz6nZ+msfDCmqN4=";
     # fix source non-reproducibility due to versioneer + git-archive, as with Numba, Pytensor etc. derivations:
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/monai/_version.py
@@ -32,7 +34,10 @@ buildPythonPackage rec {
   '';
 
   build-system = [
+    backports-tarfile
+    more-itertools
     ninja
+    versioneer
     which
   ];
 

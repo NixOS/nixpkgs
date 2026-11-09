@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   poetry-core,
   asks,
@@ -13,13 +12,11 @@ buildPythonPackage rec {
   pname = "rmcl";
   version = "0.4.2";
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58de4758e7e3cb7acbf28fcfa80f4155252afdfb191beb4ba4aa36961f66cc67";
+    hash = "sha256-WN5HWOfjy3rL8o/PqA9BVSUq/fsZG+tLpKo2lh9mzGc=";
   };
 
   postPatch = ''

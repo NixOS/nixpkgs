@@ -18,19 +18,18 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages_19,
   gitMinimal,
   writableTmpDirAsHomeHook,
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.20";
+  version = "0.9.1";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  inherit (llvmPackages_19) llvm;
+  inherit (rustPlatform.rust.rustc.llvmPackages) llvm;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -42,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-LAiN9Opc0XQVepQ9IhK9JFWGoeRR3U6V680jgGiaDGo=";
+    hash = "sha256-eIx4T1oGmwRvb8vps2CfauSGW6MDPs1j3lN+TNKzRdM=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -53,14 +52,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "test-helper-0.0.0" = "sha256-MjylM9agdGIGMp1Iip/jolHCzErST2XiEl5PIqt+ykg=";
+      "test-helper-0.0.0" = "sha256-nPNYhfGVL6rNdfCoWLNJuVeP6Gt4m1CwEOyPtFYIXfk=";
     };
   };
 
-  # `cargo-llvm-cov` reads these environment variables to find these binaries,
-  # which are needed to run the tests
-  LLVM_COV = "${llvm}/bin/llvm-cov";
-  LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  env = {
+    # `cargo-llvm-cov` reads these environment variables to find these binaries,
+    # which are needed to run the tests
+    LLVM_COV = "${llvm}/bin/llvm-cov";
+    LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  };
 
   nativeCheckInputs = [
     gitMinimal
@@ -73,6 +74,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git add .
   '';
 
+  checkFlags = [
+    "--skip=trybuild"
+    "--skip=ui_test"
+  ];
+
   meta = {
     inherit homepage;
     changelog = homepage + "/blob/v${version}/CHANGELOG.md";
@@ -83,14 +89,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       wucke13
       matthiasbeyer
       CobaltCause
+      chrjabs
     ];
 
     broken = stdenv.targetPlatform.isRedox;

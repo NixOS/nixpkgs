@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     repo = "aribb25";
     # tag = version; FIXME: uncomment in next release
     rev = "c14938692b313b5ba953543fd94fd1cad0eeef18"; # 0.2.7 with build fixes
-    sha256 = "1kb9crfqib0npiyjk4zb63zqlzbhqm35nz8nafsvdjd71qbd2amp";
+    hash = "sha256-tyrRFg6nyba1UxZ9W0bFcH2K/zDrkyl9vBasiF1mac0=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,11 @@ stdenv.mkDerivation {
         sha256 = "1283kqv1r4rbaba0sv2hphkhcxgjkmh8ndlcd24fhx43nn63hd28";
       })
     ];
+
+  postPatch = ''
+    substituteInPlace src/td.c \
+      --replace-fail 'static void show_usage();' 'static void show_usage(int exit_code);'
+  '';
 
   meta = {
     description = "Sample implementation of the ARIB STD-B25 standard";

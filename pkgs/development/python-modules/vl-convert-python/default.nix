@@ -5,27 +5,30 @@
   rustPlatform,
   protobuf,
   libffi,
+  pkg-config,
+  sqlite,
+  zstd,
   callPackage,
   librusty_v8 ? callPackage ./librusty_v8.nix { },
   nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "vl-convert-python";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vl-convert";
     tag = "v${version}";
-    hash = "sha256-jOqqqr6O/wHFwUHJ/7iE4N/JXXH1MvqQkAQJ47Ww7YI=";
+    hash = "sha256-W23cau2VzpvfO6DRa/40UVv4j8AbsNLfAfDaMkTyj6w=";
   };
 
   patches = [ ./libffi-sys-system-feature.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-oPUpX7aMZBSsVujcXkIBNL8pk2JJ0RyBCwoVsuARkkQ=";
+    hash = "sha256-P228JMS5K0TbZYyPgKhIbZ1NviwO1jHO5dClFYerNbI=";
   };
 
   buildAndTestSubdir = "vl-convert-python";
@@ -37,9 +40,16 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
+  ];
 
-  buildInputs = [ libffi ];
+  buildInputs = [
+    libffi
+    sqlite
+    zstd
+  ];
 
   pythonImportsCheck = [ "vl_convert" ];
 
@@ -55,6 +65,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/vega/vl-convert";
     changelog = "https://github.com/vega/vl-convert/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ antonmosich ];
+    maintainers = [ ];
   };
 }

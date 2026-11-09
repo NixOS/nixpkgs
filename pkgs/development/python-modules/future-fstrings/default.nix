@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "future_fstrings";
-    sha256 = "6cf41cbe97c398ab5a81168ce0dbb8ad95862d3caf23c21e4430627b90844089";
+    hash = "sha256-bPQcvpfDmKtagRaM4Nu4rZWGLTyvI8IeRDBie5CEQIk=";
   };
 
   # No tests included in Pypi archive
@@ -25,6 +24,5 @@ buildPythonPackage rec {
     mainProgram = "future-fstrings-show";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
-    broken = pythonOlder "3.6"; # dependency tokenize-rt not packaged
   };
 }

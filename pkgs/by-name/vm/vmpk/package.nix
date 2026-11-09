@@ -9,13 +9,13 @@
   docbook-xsl-nons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vmpk";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-O/uIg1Wq6Hwt7J5AkoXQshBhrKrQdfVTbb8qr7ttSNw=";
+    url = "mirror://sourceforge/vmpk/${finalAttrs.version}/vmpk-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-5T17gsIyw5SSjPzhnkRzsrnTqLQblKQoY77VWqGRVNs=";
   };
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

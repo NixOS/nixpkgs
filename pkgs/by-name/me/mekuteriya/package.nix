@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mekuteriya";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "mek-ut-er-ya";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-u3NK5KL3GjGekcFd4cB/z0omsL2FgiX8dMpcVl5h9s0=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.frectonz ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -7,10 +7,9 @@
   python3,
   udev,
   udevCheckHook,
-  systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "media-player-info";
   version = "26";
 
@@ -18,19 +17,18 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "media-player-info";
     repo = "media-player-info";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VoMr5Lxy6u/BA/9t65/S8AW41YU0FLp6eftYUVdoMjY=";
   };
 
-  buildInputs = [
-    udev
-    systemd
-  ];
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    python3
     udevCheckHook
+
+    # used at *build* time only
+    python3
+    udev
   ];
 
   doInstallCheck = true;
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Repository of data files describing media player capabilities";
     homepage = "https://www.freedesktop.org/wiki/Software/media-player-info/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

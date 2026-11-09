@@ -20,22 +20,25 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygame";
   version = "2.6.1";
   pyproject = true;
 
+  # https://github.com/NixOS/nixpkgs/pull/475917
+  disabled = pythonAtLeast "3.14";
+
   src = fetchFromGitHub {
     owner = "pygame";
     repo = "pygame";
-    tag = version;
+    tag = finalAttrs.version;
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
@@ -51,21 +54,20 @@ buildPythonPackage rec {
           "${lib.getDev dep}/"
           "${lib.getDev dep}/include"
           "${lib.getDev dep}/include/SDL2"
-        ]) buildInputs
+        ]) finalAttrs.buildInputs
       );
       buildinputs_lib = builtins.toJSON (
         builtins.concatMap (dep: [
           "${lib.getLib dep}/"
           "${lib.getLib dep}/lib"
-        ]) buildInputs
+        ]) finalAttrs.buildInputs
       );
     })
 
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
 
-    # Can be removed with the next SDL3 bump.
-    ./skip-rle-tests.patch
+    ./skip-failing-tests.patch
 
     # https://github.com/pygame/pygame/pull/4497
     ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
@@ -79,6 +81,14 @@ buildPythonPackage rec {
     substituteInPlace src_py/sysfont.py \
       --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
       --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
+  ''
+  # Cython >= 3.3 errors out with "Illegal use of special attribute __dict__".
+  # The assignment is redundant: Cython already allocates __dict__ in tp_new.
+  + ''
+    substituteInPlace src_c/cython/pygame/_sprite.pyx \
+      --replace-fail \
+        "        self.__dict__ = {}" \
+        ""
   '';
 
   build-system = [
@@ -95,7 +105,7 @@ buildPythonPackage rec {
     freetype
     libjpeg
     libpng
-    libX11
+    libx11
     portmidi
     SDL2
     (SDL2_image.override { enableSTB = false; })
@@ -130,12 +140,12 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for games (original distribution)";
-    homepage = "https://www.pygame.org/";
-    changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
+    homepage = "https://github.com/pygame/pygame";
+    changelog = "https://github.com/pygame/pygame/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
     # https://github.com/pygame/pygame/issues/4706
     broken = pythonAtLeast "3.14";
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "txt2tags";
   version = "3.9";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "txt2tags";
     repo = "txt2tags";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PwPGJJg79ny13gEb1WmgIVHcXQppI/j5mhIyOZjR19k=";
   };
 
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "txt2tags" ];
 
   meta = {
-    changelog = "https://github.com/txt2tags/txt2tags/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/txt2tags/txt2tags/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Convert between markup languages";
     mainProgram = "txt2tags";
     homepage = "https://txt2tags.org/";
@@ -43,4 +43,4 @@ python3.pkgs.buildPythonApplication rec {
       kovirobi
     ];
   };
-}
+})

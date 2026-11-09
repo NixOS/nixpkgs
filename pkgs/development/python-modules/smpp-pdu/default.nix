@@ -10,7 +10,7 @@
 buildPythonPackage {
   pname = "smpp-pdu";
   version = "0.3-unstable-2022-09-01";
-  format = "pyproject";
+  pyproject = true;
 
   # Upstream was once mozes/smpp.pdu, but it's dead and Python 2 only.
   src = fetchFromGitHub {
@@ -34,6 +34,6 @@ buildPythonPackage {
     description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";
     homepage = "https://github.com/hologram-io/smpp.pdu";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = [ ];
   };
 }

@@ -6,14 +6,14 @@
   patsh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csvquote";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "dbro";
     repo = "csvquote";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-847JAoDEfA9K4LB8z9cqSw+GTImqmITBylB/4odLDb0=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

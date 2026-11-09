@@ -1,6 +1,8 @@
 {
   backendStdenv,
   boost178,
+  boost186,
+  boost191,
   buildRedist,
   cudaAtLeast,
   e2fsprogs,
@@ -14,7 +16,10 @@
   rdma-core,
   ucx,
   wayland,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxdamage,
+  libxcursor,
 }:
 let
   # NOTE(@connorbaker): nsight_systems doesn't support Jetson, so no need for case splitting on aarch64-linux.
@@ -44,6 +49,13 @@ buildRedist (
         lib.getLib qt.qtwayland;
     qtWaylandPlugins = "${qtwayland}/${qt.qtbase.qtPluginPrefix}";
     inherit (qt) wrapQtAppsHook qtwebengine;
+    boost =
+      if cudaAtLeast "13.5" then
+        boost191
+      else if cudaAtLeast "13.4" then
+        boost186
+      else
+        boost178;
   in
   {
     redistName = "cuda";
@@ -66,7 +78,7 @@ buildRedist (
     ];
 
     # NOTE(@connorbaker): nsight-exporter and nsight-sys are deprecated scripts wrapping nsys, it's fine to remove them.
-    prePatch = ''
+    prePatch = lib.optionalString (lib.versionOlder finalAttrs.version "2025.5.2.26") ''
       if [[ -d bin ]]; then
         nixLog "Removing bin wrapper scripts"
         for knownWrapper in bin/{nsys{,-ui},nsight-{exporter,sys}}; do
@@ -107,7 +119,7 @@ buildRedist (
       qt6.qttools
       qtwebengine
       qt6.qtwayland
-      boost178
+      boost
       e2fsprogs
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
@@ -119,10 +131,10 @@ buildRedist (
       rdma-core
       ucx
       wayland
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libXtst
+      libxcursor
+      libxdamage
+      libxrandr
+      libxtst
     ]
     # NOTE(@connorbaker): Seems to be required only for aarch64-linux.
     ++ lib.optionals (backendStdenv.hostPlatform.isAarch64 && cudaAtLeast "11.8") [

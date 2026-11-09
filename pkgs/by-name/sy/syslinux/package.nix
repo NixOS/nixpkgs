@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "syslinux";
-  version = "unstable-2019-02-07";
+  version = "6.04-pre2-unstable-2019-02-07";
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
@@ -121,6 +121,11 @@ stdenv.mkDerivation {
   ++ lib.optional stdenv.hostPlatform.isi686 "efi32"
   # Build "x86_64" EFI for x86_64
   ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;

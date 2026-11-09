@@ -8,13 +8,13 @@
   withFftw3 ? (!stdenv.hostPlatform.isMinGW),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "speexdsp";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/speex/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jHdzQ+SmOZVpxyq8OKlbJNtWiCyD29tsZCSl9K61TT0=";
+    url = "https://downloads.xiph.org/releases/speex/speexdsp-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jHdzQ+SmOZVpxyq8OKlbJNtWiCyD29tsZCSl9K61TT0=";
   };
 
   patches = [ ./build-fix.patch ];
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

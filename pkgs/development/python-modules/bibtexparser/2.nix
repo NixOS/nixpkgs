@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "2.0.0b8";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-bibtexparser";
     tag = "v${version}";
-    hash = "sha256-531Mh/5DUYayXm1H0v4dPX0P9mRcqcQcU/A+f4wwqxg=";
+    hash = "sha256-ZapMA1x+DUjZuq7RAK3pADuPJuvWXyEuDBfLcEf+Z7Q=";
   };
 
   build-system = [ setuptools ];
@@ -26,6 +26,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bibtexparser" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Bibtex parser for Python";

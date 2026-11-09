@@ -12,7 +12,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
 
   # runtime
   alsa-lib,
@@ -21,18 +21,20 @@
   elfutils,
   glib,
   gsl,
+  jansson,
   json_c,
   kmod,
   libdrm,
   liboping,
   libpciaccess,
   libunwind,
-  libX11,
-  libXext,
-  libXrandr,
-  libXv,
+  libx11,
+  libxext,
+  libxrandr,
+  libxv,
   openssl,
   peg,
+  pciutils,
   procps,
   python3,
   udev,
@@ -41,16 +43,16 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-gpu-tools";
-  version = "2.2";
+  version = "2.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Lt/mqx13nHyD5QiDl8oWGiYIiK006uQvbbzHH44LB/0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bm6CF8XsonQaWgNK+dN2hHJQ+xug7IM1SmQHybkizGQ=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [
@@ -72,18 +74,20 @@ stdenv.mkDerivation rec {
     elfutils
     glib
     gsl
+    jansson
     json_c
     kmod
     libdrm
     liboping
     libpciaccess
     libunwind
-    libX11
-    libXext
-    libXrandr
-    libXv
+    libx11
+    libxext
+    libxrandr
+    libxv
     openssl
     peg
+    pciutils
     procps
     python3
     udev
@@ -93,13 +97,13 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    patchShebangs lib man scripts tests
+    patchShebangs docs lib man scripts tests
   '';
 
   hardeningDisable = [ "bindnow" ];
 
   meta = {
-    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${finalAttrs.version}/NEWS";
     homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = lib.licenses.mit;
@@ -107,6 +111,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      ilkecan
+    ];
   };
-}
+})

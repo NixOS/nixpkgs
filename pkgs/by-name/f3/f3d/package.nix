@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  help2man,
-  gzip,
-  libXt,
-  openusd,
-  onetbb,
-  vtk,
-  autoPatchelfHook,
-  python3Packages,
-  opencascade-occt,
   assimp,
+  autoPatchelfHook,
+  cmake,
   fontconfig,
+  gzip,
+  help2man,
+  libxcb,
+  libxt,
+  onetbb,
+  opencascade-occt,
+  openusd,
+  python3Packages,
+  vtk,
   withManual ? !stdenv.hostPlatform.isDarwin,
   withPythonBinding ? false,
   withUsd ? openusd.meta.available,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.3.0";
+  version = "4.0.1";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-nZXz5FiGAcDqTi5hlSH7rq2QazhqYg1IoNDog35dygA=";
+    hash = "sha256-W1AMS4B+If9Q8qJf5UHPJy8lrrxkHzgLKp2j51Xct+E=";
     fetchLFS = true;
   };
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withManual [
     # manpage
-    help2man
     gzip
+    help2man
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
@@ -48,10 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vtk
-    opencascade-occt
     assimp
     fontconfig
+    libxcb
+    opencascade-occt
+    vtk
   ]
   ++ lib.optionals withPythonBinding [
     python3Packages.python
@@ -59,9 +60,9 @@ stdenv.mkDerivation rec {
     python3Packages.pybind11
   ]
   ++ lib.optionals withUsd [
-    libXt
-    openusd
+    libxt
     onetbb
+    openusd
   ];
 
   cmakeFlags = [
@@ -84,9 +85,15 @@ stdenv.mkDerivation rec {
     "-DF3D_PLUGIN_BUILD_USD=ON"
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
+      --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+      --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
+  '';
+
   meta = {
     description = "Fast and minimalist 3D viewer using VTK";
-    homepage = "https://f3d-app.github.io/f3d";
+    homepage = "https://f3d.app";
     changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

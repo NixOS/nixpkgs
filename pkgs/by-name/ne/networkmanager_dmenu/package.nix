@@ -12,15 +12,15 @@
 let
   inherit (python3Packages) python pygobject3;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager_dmenu";
-  version = "2.6.2";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "v${version}";
-    sha256 = "sha256-NTkGKUZ3xA9ZWBLZgjIR5wrUXVhccGkGqnnm0a79p+Q=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-hDiVNPW9SChUfJNowm2QNxkO7q2WOe63MbqCciLouIQ=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jensbin ];
     platforms = lib.platforms.all;
   };
-}
+})

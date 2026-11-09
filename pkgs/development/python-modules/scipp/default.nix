@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -21,7 +20,7 @@
   boost,
   eigen,
   gtest,
-  pybind11,
+  pybind11_3_0,
   onetbb,
 
   # tests
@@ -37,17 +36,18 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scipp";
-  version = "25.12.0";
+  version = "26.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
-    tag = version;
-    hash = "sha256-Gv5Lgufsj5kCtOC+zTgeWTwwYm8j2Ct8cTK1RJ5+XDg=";
+    tag = finalAttrs.version;
+    hash = "sha256-1u9KT6o83hn9x/WGXj26OsGJOQpMBu1G4FiDIVaGXoM=";
   };
+
   env = {
     SKIP_REMOTE_SOURCES = "true";
   };
@@ -72,7 +72,8 @@ buildPythonPackage rec {
     boost
     eigen
     gtest
-    pybind11
+    # https://github.com/scipp/scipp/blob/v26.9.0/pyproject.toml#L7-L10
+    pybind11_3_0
     units-llnl.passthru.top-level
     onetbb
   ];
@@ -101,13 +102,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-dimensional data arrays with labeled dimensions";
     homepage = "https://scipp.github.io";
+    changelog = "https://github.com/scipp/scipp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # Got:
-    #
-    #   error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
-    #
-    # Needs debugging along with upstream.
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

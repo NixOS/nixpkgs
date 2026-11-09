@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     mv usr $out
     mv opt $out
-    install -Dm644 $out/opt/pixeluvo/pixeluvo.png -t $out/share/pixmaps/
+    install -Dm644 $out/opt/pixeluvo/pixeluvo.png -t $out/share/icons/hicolor/48x48/apps
 
     substituteInPlace $out/share/applications/pixeluvo.desktop \
       --replace '/opt/pixeluvo/pixeluvo.png' pixeluvo

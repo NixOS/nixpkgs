@@ -9,13 +9,13 @@
 
 buildPecl rec {
   pname = "phalcon";
-  version = "5.9.3";
+  version = "5.23.0";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
-    rev = "v${version}";
-    hash = "sha256-1+8+kIaKvgQCE+qvZOkYOW/RdDv4ln0njC5VzL9jvnQ=";
+    tag = "v${version}";
+    hash = "sha256-Eh52Hnf6GB4T3a68lqWQTDAQ+WAEWEPrQn0eh3XKZxI=";
   };
 
   internalDeps = [
@@ -38,5 +38,6 @@ buildPecl rec {
     homepage = "https://phalcon.io";
     maintainers = [ lib.maintainers.krzaczek ];
     teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

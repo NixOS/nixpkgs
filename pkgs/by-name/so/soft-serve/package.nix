@@ -8,28 +8,25 @@
   bash,
 }:
 
-let
-  version = "0.11.1";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "soft-serve";
-  inherit version;
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
-    rev = "v${version}";
-    hash = "sha256-rWLjir4BqeLgwTGpumIoZ+No3bJyqeyrrNJ8da1Ivhg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IkKS2y0YLLamGxMAIwfD+otZPSJFyT3PyT07whkQaCY=";
   };
 
-  vendorHash = "sha256-DBgVcbt2kejtEJSajJh6vS4feT3Lwm+KqUOks55iWIc=";
+  vendorHash = "sha256-SN1SZ/AXRDvyhHmRJJEwycYuqWU1ItB2O1n16nSLdMQ=";
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,9 +48,9 @@ buildGoModule {
   meta = {
     description = "Tasty, self-hosted Git server for the command line";
     homepage = "https://github.com/charmbracelet/soft-serve";
-    changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${finalAttrs.version}";
     mainProgram = "soft";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

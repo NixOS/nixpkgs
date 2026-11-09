@@ -35,16 +35,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.13.0";
+  version = "3.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    tag = "v${version}";
-    hash = "sha256-JsWmwJbIJIF3eEj7wYzNOSAiNHQkQ5LHKrE0lVQtU/U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
 
   build-system = [
@@ -86,9 +86,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Require unpackaged `grain`
+    "test_basics_grain"
     "test_fit_with_data_adapter_grain_dataloader"
-    "test_fit_with_data_adapter_grain_datast"
-    "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
     "test_image_dataset_from_directory_binary_grain"
     "test_image_dataset_from_directory_color_modes_grain"
     "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
@@ -100,7 +101,13 @@ buildPythonPackage rec {
     "test_image_dataset_from_directory_pad_to_aspect_ratio_grain"
     "test_image_dataset_from_directory_shuffle_grain"
     "test_image_dataset_from_directory_validation_split_grain"
+    "test_no_targets_grain"
+    "test_not_batched_grain"
     "test_sample_count_grain"
+    "test_sampling_rate_grain"
+    "test_sequence_stride_grain"
+    "test_shuffle_grain"
+    "test_start_and_end_index_grain"
     "test_text_dataset_from_directory_binary_grain"
     "test_text_dataset_from_directory_follow_links_grain"
     "test_text_dataset_from_directory_manual_labels_grain"
@@ -108,12 +115,24 @@ buildPythonPackage rec {
     "test_text_dataset_from_directory_not_batched_grain"
     "test_text_dataset_from_directory_standalone_grain"
     "test_text_dataset_from_directory_validation_split_grain"
+    "test_timeseries_regression_grain"
 
     # Tries to install the package in the sandbox
     "test_keras_imports"
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
+
+    # jax >= 0.11.2 serializes StableHLO portable artifacts targeting v1.18.0, which use
+    # `vhlo.custom_call_v2`. tensorflow's `XlaCallModule` (StableHLO v1.13.7) cannot
+    # deserialize them, breaking `JaxLayer`/`FlaxLayer` native serialization.
+    "test_jax_layer_native_serialization"
+    "test_jax_layer_stateless"
+    "test_jax_layer_training_independent"
+    "test_jax_layer_training_state"
+    "test_jax_layer_training_state_dtype_policy"
+    "test_with_polymorphic_shape_more_than_26_dimension_names"
+    "test_with_structures_as_inputs_and_outputs"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Hangs forever
@@ -121,10 +140,17 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
     # Require unpackaged `grain`
     "keras/src/layers/preprocessing/data_layer_test.py"
+    "keras/src/layers/preprocessing/discretization_test.py"
     "keras/src/layers/preprocessing/image_preprocessing/resizing_test.py"
     "keras/src/layers/preprocessing/rescaling_test.py"
+    "keras/src/layers/preprocessing/string_lookup_test.py"
+    "keras/src/layers/preprocessing/text_vectorization_test.py"
     "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
 
     # These tests succeed when run individually, but crash within the full test suite:
@@ -157,8 +183,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
+    changelog = "https://github.com/keras-team/keras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

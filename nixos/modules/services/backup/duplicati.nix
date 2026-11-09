@@ -72,7 +72,7 @@ in
           Each line in this option should be of the format --option=value.
           The options in this file take precedence over the options provided
           through command line arguments.
-          <link xlink:href="https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file">Duplicati docs: parameters-file</link>
+          [Duplicati docs: parameters-file](https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file)
         '';
       };
 
@@ -85,7 +85,7 @@ in
           Each line in the file option should be of the format --option=value.
           The options in this file take precedence over the options provided
           through command line arguments.
-          <link xlink:href="https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file">Duplicati docs: parameters-file</link>
+          [Duplicati docs: parameters-file](https://duplicati.readthedocs.io/en/latest/06-advanced-options/#parameters-file)
         '';
       };
     };

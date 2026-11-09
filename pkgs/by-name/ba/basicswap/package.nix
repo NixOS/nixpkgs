@@ -12,14 +12,16 @@
 }:
 
 let
-  secp256k1_anonswap = secp256k1.overrideAttrs (old: {
+  secp256k1_basicswap = secp256k1.overrideAttrs (old: {
     src = fetchFromGitHub {
-      owner = "tecnovert";
+      owner = "basicswap";
       repo = "secp256k1";
-      rev = "fd8b63ccf8bcb48358a42c456f34e2488a55a688";
-      hash = "sha256-/bmKZRBBjirI4YqRKfzoxdAt6UVoWHmrNQQHX7l+eH8=";
+      rev = "98679b41ab5f03bcc87a0849405de7dc34be04c4";
+      hash = "sha256-09sL1lNMCDM3OfV9oBLubfgUdomhNJ5/pNjeEMViJsI=";
     };
     configureFlags = old.configureFlags ++ [
+      "--enable-build-tests=no"
+      "--enable-build-exhaustive-tests=no"
       "--enable-experimental"
       "--enable-module-ed25519"
       "--enable-module-generator"
@@ -27,24 +29,20 @@ let
       "--enable-module-ecdsaotves"
     ];
   });
-  coincurve-anonswap =
+  coincurve-basicswap =
     (python3Packages.coincurve.override {
-      secp256k1 = secp256k1_anonswap;
+      secp256k1 = secp256k1_basicswap;
     }).overrideAttrs
-      (old: {
+      {
+        version = "21.0.4";
         src = fetchFromGitHub {
-          owner = "tecnovert";
+          owner = "basicswap";
           repo = "coincurve";
-          rev = "932366c9d4d8e487162b5c1b2a2d9693e24e0483";
-          hash = "sha256-zOekPmP1zR/S+zxq/7OrEz24k8SInlsB+wJ8kPlmqe4=";
+          tag = "basicswap_v0.4";
+          hash = "sha256-Aq/Ni6clM/OtbDK0ALwOTOZBit2bWNzVLfzkBku+X1A=";
         };
         patches = [ ];
-        preCheck = ''
-          rm -rf src/coincurve
-          # don't run benchmark tests
-          rm tests/test_bench.py
-        '';
-      });
+      };
   bindir = linkFarm "bindir" (
     lib.mapAttrs (_: p: "${lib.getBin p}/bin") {
       particl = particl-core;
@@ -56,16 +54,16 @@ let
     }
   );
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
-  version = "0.14.4";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
-    tag = "v${version}";
-    hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oqBbS76ce7ab8A+BfW4nTQbIFWKLBi0bYWwIqk4Ynrg=";
   };
 
   postPatch = ''
@@ -80,16 +78,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies = with python3Packages; [
-    coincurve-anonswap
+    coincurve-basicswap
     wheel
     pyzmq
-    protobuf
-    sqlalchemy_1_4
     python-gnupg
     jinja2
     pycryptodome
     pysocks
-    mnemonic
+    websocket-client
   ];
 
   postInstall = ''
@@ -107,4 +103,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ linsui ];
     mainProgram = "basicswap-run";
   };
-}
+})

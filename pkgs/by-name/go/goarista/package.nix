@@ -7,16 +7,18 @@
 
 buildGoModule {
   pname = "goarista";
-  version = "0-unstable-2025-09-01";
+  version = "0-unstable-2026-09-27";
 
   src = fetchFromGitHub {
     owner = "aristanetworks";
     repo = "goarista";
-    rev = "4c0e3d6d22a8b50c5a7e107011bbd843ea3a1f76";
-    hash = "sha256-S1RKLcLhy8gPQlbJM4txOCqNWVHQOlJq2zY4Rdhfdls=";
+    rev = "aaff1a13d702c35eba8df1cab3d7973ff828e139";
+    hash = "sha256-x1X8mjZDGR/RwIITo56BrQO1qmI67t0aR1WTEJ0W3io=";
   };
 
-  vendorHash = "sha256-n+P3L3dT2kYuTyI2qX/nrLRgFIUsP3kkwNZmRQ8EFRs=";
+  vendorHash = "sha256-MN9npxcsvHOC1HokR9JxTZl5cxF2hyzxSiNoB5/jaJo=";
+
+  passthru.updateScript = ./update.sh;
 
   checkFlags =
     let

@@ -24,7 +24,7 @@ buildPerlPackage rec {
     repo = "strip-nondeterminism";
     domain = "salsa.debian.org";
     rev = version;
-    sha256 = "C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
+    hash = "sha256-C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
   };
 
   strictDeps = true;

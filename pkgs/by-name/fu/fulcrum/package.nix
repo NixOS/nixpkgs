@@ -4,38 +4,65 @@
   fetchFromGitHub,
   pkg-config,
   python3,
-  rocksdb_7_10,
+  rocksdb_9_10,
   zeromq,
-  nix-update-script,
   libsForQt5,
+  nix-update-script,
+  testers,
 }:
 
+let
+  # Fulcrum uses Qt Core and Network. Trim optional dependencies from its
+  # private Qt build to reduce the server's closure.
+  qtbase = libsForQt5.qtbase.override {
+    # Neither printing nor GTK integration is needed. GTK would also bring
+    # CUPS back in indirectly if only Qt's direct CUPS dependency were removed.
+    cups = null;
+    withGtk3 = false;
+
+    # Translations are built with Qt tools that use another Qt build with CUPS
+    # support, so disable them to keep CUPS out of the build dependencies too.
+    qttranslations = null;
+
+    # Fulcrum uses RocksDB, so it does not need Qt's MySQL or PostgreSQL drivers.
+    mysqlSupport = false;
+    libpq = null;
+  };
+
+  # qmake propagates qtbase.dev. Use the same Qt variant here so the build hook
+  # does not reintroduce the default Qt build and its dependencies.
+  qmake = libsForQt5.qmake.override { inherit qtbase; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fulcrum";
-  version = "1.12.0.1";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/RlvbZ6/f0Jxj6oCeHjGWqlktvtNUNczOXi2/wYw2LQ=";
+    hash = "sha256-YfID94tmNTg+BqEEAmB3if+gNCNrU3NamTOMVfjXAMY=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    libsForQt5.qmake
+    qmake
   ];
 
   buildInputs = [
     python3
-    libsForQt5.qtbase
-    rocksdb_7_10
+    qtbase
+    rocksdb_9_10
     zeromq
   ];
 
-  dontWrapQtApps = true; # no GUI
+  # This command-line server does not need a wrapper to locate Qt GUI plugins.
+  dontWrapQtApps = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";
@@ -43,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ prusnak ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+    mainProgram = "Fulcrum";
   };
 })

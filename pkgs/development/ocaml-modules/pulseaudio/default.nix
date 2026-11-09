@@ -7,15 +7,15 @@
   pulseaudio,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pulseaudio";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-pulseaudio";
-    rev = "v${version}";
-    sha256 = "sha256-eG2HS5g3ycDftRDyXGBwPJE7VRnLXNUgcEgNfVm//ds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eG2HS5g3ycDftRDyXGBwPJE7VRnLXNUgcEgNfVm//ds=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

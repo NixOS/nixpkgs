@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Analyze Windows Recycle Bin INFO2 file";
     mainProgram = "rifiuti";
     homepage = "https://sourceforge.net/projects/odessa/files/Rifiuti";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };

@@ -7,6 +7,7 @@
   rustPlatform,
   makeBinaryWrapper,
   pkg-config,
+  aws-lc,
   openssl,
   curl,
   writableTmpDirAsHomeHook,
@@ -25,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.28.2";
+  version = "1.29.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-iX5hEaQwCW9MuyafjXml8jV3EDnxRNUlOoy3Cur/Iyw=";
+    hash = "sha256-KEfqZtjUSVg0aJTgf5jC7jNJOPYIRuf+8uZRtOXQQ9o=";
   };
 
-  cargoHash = "sha256-KljaAzYHbny7KHOO51MotdmNpHCKWdt6kc/FIpFN6c0=";
+  cargoHash = "sha256-7NvkXWG8sa7zDveU1jWJ5C+KMpoSg/zSoP44UXNyjUw=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -44,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     curl
     zlib
@@ -78,9 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # TODO: Investigate this.
   doCheck = !stdenv.hostPlatform.isDarwin;
   # Random failures when running tests in parallel.
-  preCheck = ''
-    export NIX_BUILD_CORES=1
-  '';
+  dontUseCargoParallelTests = true;
 
   # skip failing tests
   checkFlags = [
@@ -89,7 +89,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=suite::cli_exact::check_updates_some"
     "--skip=suite::cli_exact::check_updates_with_update"
     # rustup-init is not used in nix rustup
-    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+    "--skip=suite::cli_rustup_init_ui"
+    # reaches out to the network to test TLS roots, which can't be done in the
+    # build sandbox
+    "--skip=suite::static_roots::store_static_roots"
+    # tries to hide the cc from rustup by setting PATH to an empty directory,
+    # but this doesn't work due to how nixpkgs wraps binaries
+    "--skip=suite::cli_inst_interactive::install_warns_if_default_linker_missing"
   ];
 
   postInstall = ''
@@ -154,10 +160,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       mic92
     ];

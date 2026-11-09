@@ -4,6 +4,8 @@
   lib,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
+  applyPatches,
   makeBinaryWrapper,
 }:
 
@@ -90,6 +92,13 @@ let
         inherit packageOverrides;
         self = luaOnBuild;
       };
+      inherit
+        luaOnBuildForBuild
+        luaOnBuildForHost
+        luaOnBuildForTarget
+        luaOnHostForHost
+        luaOnTargetForTarget
+        ;
 
       tests = callPackage ./tests {
         lua = self;
@@ -102,10 +111,25 @@ let
 in
 
 rec {
+  lua5_5 = callPackage ./interpreter.nix {
+    self = lua5_5;
+    version = "5.5.1";
+    hash = "sha256-HEtAaNZwYfKiIxrStUIud6zqFIfqmJD2Mgr2FPQ3Pc4=";
+    makeWrapper = makeBinaryWrapper;
+    inherit passthruFun;
+
+    patches = lib.optional stdenv.hostPlatform.isDarwin ./5.5.darwin.patch;
+  };
+
+  lua5_5_compat = lua5_5.override {
+    self = lua5_5_compat;
+    compat = true;
+  };
+
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.7";
-    hash = "sha256-n79eKO+GxphY9tPTTszDLpEcGii0Eg/z6EqqcM+/HjA=";
+    version = "5.4.9";
+    hash = "sha256-IzW2xYKlJlT5RhK/ENL0ZygF0FMpqmVosdjNnlxvuOY=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 
@@ -177,6 +201,13 @@ rec {
 
   luajit_openresty = import ../luajit/openresty.nix {
     self = luajit_openresty;
-    inherit callPackage fetchFromGitHub passthruFun;
+    inherit
+      callPackage
+      fetchFromGitHub
+      fetchpatch2
+      applyPatches
+      stdenv
+      passthruFun
+      ;
   };
 }

@@ -7,14 +7,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-secrets";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "git-secrets";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "10lnxg0q855zi3d6804ivlrn6dc817kilzdh05mmz8a0ccvm2qc7";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "git-secrets";
   };
-}
+})

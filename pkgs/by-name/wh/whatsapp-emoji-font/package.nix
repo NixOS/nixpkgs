@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "whatsapp-emoji-linux";
-  version = "2.25.9.78-2";
+  version = "2.26.8.72-1";
 
   src = fetchFromGitHub {
     tag = version;
     owner = "dmlls";
     repo = "whatsapp-emoji-linux";
-    hash = "sha256-qWI8aSqgwaCMgg97huwICT3Hsgke2Wgj5mQCcUuK6OQ=";
+    hash = "sha256-72qqW68kmAqm2+Z5ldWMHEJL8LXpE93A32VsmW+dbY8=";
   };
 
   makeFlags = [

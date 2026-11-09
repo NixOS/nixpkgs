@@ -11,14 +11,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clboss";
-  version = "0.15.1";
+  version = "0.17.2";
 
   # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
   src = fetchzip {
-    url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${version}/clboss-v${version}.tar.gz";
-    hash = "sha256-9wrgJzXVBKGSNB2UbP+CnUmaRwdXgRAnHBZbvm/Am7Q=";
+    url = "https://github.com/ksedgwic/clboss/releases/download/v${finalAttrs.version}/clboss-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-o9JZKyrMk9hT9qpnpvTDgmYofL3tEp1bfx1kgxjR6nM=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Automated C-Lightning Node Manager";
-    homepage = "https://github.com/ZmnSCPxj/clboss";
+    homepage = "https://github.com/ksedgwic/clboss";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "clboss";
   };
-}
+})

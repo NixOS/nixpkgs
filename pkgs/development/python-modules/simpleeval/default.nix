@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "simpleeval";
-  version = "1.0.3";
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danthedeckie";
     repo = "simpleeval";
     tag = version;
-    hash = "sha256-CwCuQ/wd8nLKKXji2dzz9mvZrQEm2/kEm93Pan/8+90=";
+    hash = "sha256-w3Ukb1W5DV9LVcV4IyraBsaFjOgoOoxzQ62N3BBxk1M=";
   };
 
   build-system = [ hatchling ];

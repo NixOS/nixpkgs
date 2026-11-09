@@ -9,15 +9,15 @@
   ojs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "promise_jsoo";
   version = "0.3.1";
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mnxn/promise_jsoo/releases/download/v${version}/promise_jsoo-v${version}.tbz";
-    sha256 = "00pjnsbv0yv3hhxbbl8dsljgr95kjgi9w8j1x46gjyxg9zayrxzl";
+    url = "https://github.com/mnxn/promise_jsoo/releases/download/v${finalAttrs.version}/promise_jsoo-v${finalAttrs.version}.tbz";
+    hash = "sha256-9Pfs1U+ve/kM6UEinuKTs6T8JNUN0bU6hGN7sJe28gI=";
   };
 
   buildInputs = [
@@ -37,4 +37,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jayesh-bhoot ];
   };
-}
+})

@@ -1,9 +1,13 @@
 {
   mkKdeDerivation,
   qtsvg,
+  kirigami-addons,
 }:
 mkKdeDerivation {
   pname = "calindori";
 
-  extraBuildInputs = [ qtsvg ];
+  extraBuildInputs = [
+    qtsvg
+    kirigami-addons
+  ];
 }

@@ -9,25 +9,22 @@
   pyface,
   pygments,
   pyqt5,
-  pythonOlder,
+  qt5,
   traitsui,
   vtk,
-  wrapQtAppsHook,
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.8.3";
+  version = "4.9.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-72nMvfWPIPGzlJMNXjoW3aSxo5rcvHb3mr0mSD0prPU=";
+    hash = "sha256-0Sz7Nipliw2Z8IgYSrttyoBdiszEN71egTHCIZh3g94=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     apptools

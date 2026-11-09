@@ -4,13 +4,15 @@
   rustPlatform,
   fetchFromGitLab,
   python3,
-  xorg,
+  libxscrnsaver,
+  libx11,
+  libxcb,
   libpulseaudio,
   pkg-config,
   patchelf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xidlehook";
   version = "0.10.0";
 
@@ -19,17 +21,17 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "xidlehook";
-    rev = version;
+    rev = finalAttrs.version;
 
-    sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
+    hash = "sha256-i4YzqGnThplfrOrxwrZJU4UO7lNzI8AMA565Dh1yh94=";
   };
 
   cargoHash = "sha256-U1kjOWrFEp1pZnbawW2MCtC4UN7ELD/kcYWfEmn94Pg=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXScrnSaver
+    libx11
+    libxcb
+    libxscrnsaver
     libpulseaudio
   ];
   nativeBuildInputs = [
@@ -55,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "xidlehook";
   };
-}
+})

@@ -5,13 +5,13 @@
   rustPlatform,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taskchampion-sync-server";
   version = "0.7.1";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskchampion-sync-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ywBmVid70ZKUkTwxORrwXPV0zur0RdHToTLTx9ynjqU=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mlaradji ];
     mainProgram = "taskchampion-sync-server";
   };
-}
+})

@@ -12,23 +12,22 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
+  uv,
   virtualenv,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.3.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";
     tag = version;
-    hash = "sha256-w2YKQzni8e6rpnQJH2J0bHzRigjWOlWiI8Po5d3ZqS8=";
+    hash = "sha256-vm47wuSEKfU4CjonokylTyGe62jGS/5m2dhLKhY5TPc=";
   };
 
   build-system = [ flit-core ];
@@ -38,8 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pyproject-hooks
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
@@ -49,7 +47,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit src version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;
@@ -62,6 +60,7 @@ buildPythonPackage rec {
         pytest-xdist
         pytestCheckHook
         setuptools
+        uv
         virtualenv
         wheel
       ];
@@ -82,8 +81,11 @@ buildPythonPackage rec {
         "test_output"
         "test_wheel_metadata"
         # Tests require network access to run pip install
-        "test_verbose_output"
+        "test_logging_output"
+        "test_pythonpath_does_not_interfere_with_outer_pip"
         "test_requirement_installation"
+        "test_verbose_logging_output"
+        "test_verbose_output"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Expects Apple's Python and its quirks

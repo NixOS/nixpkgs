@@ -3,10 +3,13 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  pkg-config,
+  sqlite,
+  zstd,
   nixosTests,
   rustPlatform,
   rustc,
-  wasm-bindgen-cli_0_2_100,
+  wasm-bindgen-cli_0_2_120,
   wasm-pack,
   which,
   runCommand,
@@ -16,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lldap";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "lldap";
     repo = "lldap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UBQWOrHika8X24tYdFfY8ETPh9zvI7/HV5j4aK8Uq+Y=";
+    hash = "sha256-EafYBCorK5t8ZLoXTjqLg+Q6GDRZjalpRqSoVySdpOk=";
   };
 
-  cargoHash = "sha256-SO7+HiiXNB/KF3fjzSMeiTPjRQq/unEfsnplx4kZv9c=";
+  cargoHash = "sha256-GhSoPDMsWRuW6SYS/QTPgsA7fBFup5C5+DBqnlFqwlQ=";
   ## workaround for overrideAttrs on buildRustPackage
   ## see https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -43,7 +46,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lldap_set_password"
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/lldap \
       --set LLDAP_ASSETS_PATH ${finalAttrs.finalPackage.frontend}
@@ -61,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       pname = finalAttrs.pname + "-frontend";
       nativeBuildInputs = [
         wasm-pack
-        wasm-bindgen-cli_0_2_100
+        wasm-bindgen-cli_0_2_120
         binaryen
         which
         rustc

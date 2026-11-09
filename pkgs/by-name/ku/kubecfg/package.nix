@@ -6,23 +6,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubecfg";
-  version = "0.36.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "kubecfg";
     repo = "kubecfg";
-    rev = "v${version}";
-    hash = "sha256-27xek+rLJK7jbqi9QDuWdA9KrO5QXUPAj9IRXVxiS8Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zUPz/y47thlGDw1OFsHO6+WG6PuLzKGn17SnhO7okiw=";
   };
 
-  vendorHash = "sha256-nAjm4AotRYZGRv05A+dviNq6Moo53Zo/bOiQf972ZF8=";
+  vendorHash = "sha256-irXFpynf0o9+JCAU78NFtW70AYpqWsYBSvk8JhIRFC8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -37,11 +37,11 @@ buildGoModule rec {
     description = "Tool for managing Kubernetes resources as code";
     mainProgram = "kubecfg";
     homepage = "https://github.com/kubecfg/kubecfg";
-    changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";
+    changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       benley
       qjoly
     ];
   };
-}
+})

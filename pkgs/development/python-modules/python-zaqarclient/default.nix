@@ -11,30 +11,29 @@
   oslo-log,
   oslo-utils,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
+  websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-zaqarclient";
-  version = "4.2.0";
+  version = "4.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
-    tag = version;
-    hash = "sha256-RjR1qriPp0zLzT+51y2KV/q+/zAF7/HRExuC81enF7A=";
+    tag = finalAttrs.version;
+    hash = "sha256-atUQs3helpHj+j1q1fNCgSGED5bbi/d41lIJUWlSLkg=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -59,17 +58,16 @@ buildPythonPackage rec {
     stevedore
   ];
 
+  optional-dependencies = {
+    websocket = [ websocket-client ];
+  };
+
   nativeCheckInputs = [
     ddt
     requests-mock
-    stestr
-  ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+    stestrCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.websocket;
 
   pythonImportsCheck = [ "zaqarclient" ];
 
@@ -79,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

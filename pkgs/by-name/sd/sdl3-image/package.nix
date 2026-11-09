@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-image";
-  version = "3.2.6";
+  version = "3.4.8";
 
   outputs = [
     "lib"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL_image";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-CnUCqFq9ZaM/WQcmaCpQdjtjR9l5ymzgeqEJx7ZW/s4=";
+    hash = "sha256-knu9AXyCrO9WDcJwu3+1MmkJDYkli5bbwnqpMErIIzs=";
   };
 
   strictDeps = true;
@@ -46,21 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     sdl3
     libtiff
+    libpng
     libwebp
     libjxl
   ]
   ++ (lib.optional (!stdenv.hostPlatform.isDarwin) libavif)
-  ++ (lib.optionals (!enableSTB) [
-    libpng
-    libjpeg
-  ]);
+  ++ (lib.optional (!enableSTB) libjpeg);
 
   cmakeFlags = [
     # fail when a dependency could not be found
     (lib.cmakeBool "SDLIMAGE_STRICT" true)
     # disable shared dependencies as they're opened at runtime using SDL_LoadObject otherwise.
     (lib.cmakeBool "SDLIMAGE_DEPS_SHARED" false)
-    # disable stbi
+    # enable stb conditionally
     (lib.cmakeBool "SDLIMAGE_BACKEND_STB" enableSTB)
     # enable imageio backend
     (lib.cmakeBool "SDLIMAGE_BACKEND_IMAGEIO" enableImageIO)

@@ -3,15 +3,12 @@
   fetchPypi,
   buildPythonPackage,
   pycodestyle,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-blind-except";
   version = "0.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

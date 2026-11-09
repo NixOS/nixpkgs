@@ -1,5 +1,4 @@
 {
-  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
@@ -10,36 +9,41 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  sqlite,
+  sqlcipher,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
-  version = "0.6.4";
+  version = "0.10.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
+    hash = "sha256-qJOmuwctXDm6kSQOfx4j6Vu/nfcJg7vX+zPr1RgtidE=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
+  cargoHash = "sha256-HbqFWiRMx21OA5gLUjHDav01Kbd6lCD6ODd22hNZpDw=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+    sqlcipher
+  ];
 
   env = {
-    NIX_LDFLAGS = lib.optionalString (
-      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
-    ) "-framework AppKit";
     OPENSSL_NO_VENDOR = true;
     PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
   };
@@ -58,6 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ devhell ];
+    maintainers = with lib.maintainers; [
+      devhell
+      mattkang
+      nicknb
+      faukah
+    ];
   };
 })

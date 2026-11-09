@@ -12,15 +12,15 @@ let
     ?>
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jirafeau";
-  version = "4.4.0";
+  version = "4.7.2";
 
   src = fetchFromGitLab {
-    owner = "mojo42";
+    owner = "jirafeau";
     repo = "Jirafeau";
-    rev = version;
-    hash = "sha256-jJ2r8XTtAzawTVo2A2pDwy7Z6KHeyBkgXXaCPY0w/rg=";
+    rev = finalAttrs.version;
+    hash = "sha256-zCmSdlHkYQVQXBeVk8AUPoC0UBxz3hWIdM2tGmnLTrw=";
   };
 
   installPhase = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";
     license = lib.licenses.agpl3Plus;
-    homepage = "https://gitlab.com/mojo42/Jirafeau";
+    homepage = "https://gitlab.com/jirafeau/Jirafeau";
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

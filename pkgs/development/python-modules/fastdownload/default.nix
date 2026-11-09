@@ -2,35 +2,42 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   fastprogress,
   fastcore,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastdownload";
-  version = "0.0.7";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.0.8";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IFB+246JQGofvXd15uKj2BpN1jPdUGsOnPDhYT6DHWo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-euYXbi45feiiV2TUvhswTJu+gV582f82hW98uph0s/c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fastprogress
     fastcore
   ];
 
-  # no real tests
-  doCheck = false;
   pythonImportsCheck = [ "fastdownload" ];
 
+  # no tests
+  doCheck = false;
+
   meta = {
-    homepage = "https://github.com/fastai/fastdownload";
     description = "Easily download, verify, and extract archives";
+    homepage = "https://github.com/fastai/fastdownload";
+    changelog = "https://github.com/fastai/fastdownload/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

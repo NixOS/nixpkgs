@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry,
+  substitute,
+  yarn-berry_4,
   nodejs,
   pkg-config,
   node-gyp,
   python3Packages,
-  electron_39,
+  electron_43,
   vips,
   xvfb-run,
   copyDesktopItems,
@@ -16,17 +17,34 @@
   nix-update-script,
 }:
 let
-  electron = electron_39;
+  yarn-berry = yarn-berry_4;
+  electron = electron_43;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.10.0";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
-    tag = version;
-    hash = "sha256-ZEjhYjMcCA2ABNfcwe7JbYCoTBHr+geyMSSh6ceBt5g=";
+    tag = finalAttrs.version;
+    hash = "sha256-VHNJ8RhxU7KTGf+5/kq2bj7T6ISrFLJ38wPIB6QwHTQ=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L187
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   # This might need to be updated between releases.
@@ -34,8 +52,8 @@ stdenv.mkDerivation rec {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-ZAb8zDdxsJYRD6LRhtFS8XRc8NbstJbUyaQCbvSdKSg=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-iFLLePb3lL7cBu9E6v3MuwycRwuY/y5f+JXmWpdWqNw=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +127,7 @@ stdenv.mkDerivation rec {
       icon = "rocketchat-desktop";
       exec = "rocketchat-desktop";
       terminal = false;
-      startupWMClass = "Rocket.Chat";
+      startupWMClass = "rocket-chat";
       mimeTypes = [ "x-scheme-handler/rocketchat" ];
     })
   ];
@@ -140,9 +158,9 @@ stdenv.mkDerivation rec {
     description = "Official Desktop client for Rocket.Chat";
     mainProgram = "rocketchat-desktop";
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
-    changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${src.tag}";
+    changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mynacol ];
+    maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;
   };
-}
+})

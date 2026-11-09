@@ -12,16 +12,16 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "boxflat";
-  version = "1.35.3";
+  version = "1.37.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lawstorant";
     repo = "boxflat";
-    tag = "v${version}";
-    hash = "sha256-ayreXC73OLNpnwNuJe0ImC/ch5W+O0lnkuD31ztTqso=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UDgW3Tpn5zVHVWRXmJnEYyiDE5H3IkDV+8MGb6Zg4as=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -36,6 +36,8 @@ python3Packages.buildPythonPackage rec {
     python3Packages.pycairo
     python3Packages.pygobject3
     python3Packages.evdev
+    python3Packages.dbus-python
+    python3Packages.trayer
   ];
 
   nativeBuildInputs = [
@@ -51,22 +53,23 @@ python3Packages.buildPythonPackage rec {
     "pycairo"
     "pygobject"
     "PyYAML"
+    "dbus-python"
+    "trayer"
   ];
 
   preBuild = ''
+    cp entrypoint.py boxflat/entrypoint.py
+
     cat > setup.py << EOF
-    import shutil
     from setuptools import setup
 
     with open('requirements.txt') as f:
         install_requires = f.read().splitlines()
 
-    shutil.copyfile('entrypoint.py', 'boxflat/entrypoint.py')
-
     setup(
       name='boxflat',
       packages=['boxflat', 'boxflat.panels', 'boxflat.widgets'],
-      version='${version}',
+      version='${finalAttrs.version}',
       install_requires=install_requires,
       entry_points={
         'console_scripts': ['boxflat=boxflat.entrypoint:main']
@@ -117,11 +120,14 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/Lawstorant/boxflat";
-    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${version}";
+    changelog = "https://github.com/Lawstorant/boxflat/releases/tag/v${finalAttrs.version}";
     description = "Control your Moza gear settings";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ racci ];
+    maintainers = with lib.maintainers; [
+      racci
+      vinso
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "boxflat";
   };
-}
+})

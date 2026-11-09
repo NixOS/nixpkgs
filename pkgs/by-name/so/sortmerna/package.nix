@@ -18,14 +18,14 @@ let
     hash = "sha256-MkhlDme6ZwKPuRINhfpv7cxliI2GU3RmTfC6O0ke/IQ=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sortmerna";
   version = "4.3.7";
 
   src = fetchFromGitHub {
     owner = "sortmerna";
     repo = "sortmerna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oxwZBkeW3usEcJE1XLu1UigKsgOsljwGFTpb7U3845I=";
   };
 
@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     "-DZLIB_STATIC=off"
   ];
 
+  patches = [
+    ./ssw-stdbool.patch
+  ];
+
   postPatch = ''
     # Fix missing pthread dependency for the main binary.
     substituteInPlace src/sortmerna/CMakeLists.txt \
@@ -63,10 +67,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tools for filtering, mapping, and OTU-picking from shotgun genomics data";
     mainProgram = "sortmerna";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.x86_64;
     homepage = "https://bioinfo.lifl.fr/RNA/sortmerna/";
     maintainers = with lib.maintainers; [ luispedro ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   cmake,
   bzip2,
@@ -11,24 +12,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "HEASARC";
     repo = "cfitsio";
     tag = "cfitsio-${finalAttrs.version}";
-    hash = "sha256-nKxX3YNRJZpmcP8/0O2pMsYjcH6vzAWMpqaHYO+HoUo=";
+    hash = "sha256-k05ylMYf+hsYur3BgNAweMeDc89rsBBtie+P7bd+7qg=";
   };
+
+  patches = [
+    # fix for CVE-2026-115504 can be removed with next release
+    (fetchpatch {
+      url = "https://github.com/heasarc/cfitsio/commit/113781d8aa442cf8d3c27295d9084674b8b039f2.patch";
+      hash = "sha256-Je+z9a0ySQ93vfgGSr/PuqtxY3qPsmuOwVwsTQ3nfyY=";
+    })
+  ];
 
   outputs = [
     "bin"
     "dev"
     "out"
-    "doc"
-  ];
-
-  patches = [
-    ./cfitsio-pc-cmake.patch
   ];
 
   nativeBuildInputs = [
@@ -68,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixup installation
   # Remove installed test tools and benchmark
   postInstall = ''
-    install -Dm644 -t "$out/share/doc/${finalAttrs.pname}" ../docs/*.pdf
     rm "$out/bin/cookbook"
     rmdir "$out/bin"
     rm "$bin/bin/smem" "$bin/bin/speed"
@@ -79,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
+    homepage = "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription = ''
       CFITSIO is a library of C and Fortran subroutines for reading and
@@ -91,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       FITS files.
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
-    license = lib.licenses.mit;
+    license = lib.licenses.cfitsio;
     maintainers = with lib.maintainers; [
       returntoreality
       xbreak

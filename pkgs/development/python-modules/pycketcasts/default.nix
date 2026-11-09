@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-magic,
-  pythonOlder,
   requests,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pycketcasts";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nwithan8";

@@ -16,7 +16,7 @@ buildPythonPackage {
     owner = "apenwarr";
     repo = "mkdocs-exclude";
     rev = "fdd67d2685ff706de126e99daeaaaf3f6f7cf3ae";
-    sha256 = "1phhl79xf4xq8w2sb2w5zm4bahcr33gsbxkz7dl1dws4qhcbxrfd";
+    hash = "sha256-zeW+GMRE8xZoO3/2pd8YmUG1SP2Fi6UFR7gT19OhEN4=";
   };
 
   propagatedBuildInputs = [ mkdocs ];

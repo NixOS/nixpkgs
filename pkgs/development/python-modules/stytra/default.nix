@@ -18,11 +18,11 @@
   opencv4,
   pandas,
   pims,
+  pkg-resources-backport,
   pyqt5,
   pyqtgraph,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   qdarkstyle,
   qimage2ndarray,
   scikit-image,
@@ -35,11 +35,10 @@ buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
+    hash = "sha256-qrnQdXXvWZqcCuUFZW48A+x1NGLfPBV0Lx92jytXjwo=";
   };
 
   patches = [
@@ -73,6 +72,7 @@ buildPythonPackage rec {
     imageio-ffmpeg
     arrayqueues
     av
+    pkg-resources-backport
   ];
 
   nativeCheckInputs = [
@@ -89,6 +89,8 @@ buildPythonPackage rec {
     description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }

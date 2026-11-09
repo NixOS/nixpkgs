@@ -9,7 +9,14 @@
 
 let
   sources = {
-    # v18: No upstream ticket, yet (2025-07-07)
+    "19" = {
+      version = "19beta4";
+      hash = "sha256-H9sKI4ev5E3IP1/DPRrnlSq4vatsWUw7DEob3fbEu3s=";
+    };
+    "18" = {
+      version = "18.0";
+      hash = "sha256-+1YKJxMFkok7MsYeA9GRkc2FLxuBGRLpC+JzdK/xqoM=";
+    };
     "17" = {
       version = "17.1";
       hash = "sha256-9St/ESPiFq2NiPKqbwHLwkIyATKUkOGxFcUrWgT+Iqo=";
@@ -25,10 +32,6 @@ let
     "14" = {
       version = "1.6.3";
       hash = "sha256-KgLidJHjUK9BTp6ffmGUj1chcwIe6IzlcadRpGCfNdM=";
-    };
-    "13" = {
-      version = "1.5.3";
-      hash = "sha256-IU4Clec3DkKWT7+kw0VtQNybt94i7M2rSSgJG/XdcRs=";
     };
   };
 

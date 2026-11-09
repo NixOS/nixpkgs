@@ -5,12 +5,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboil";
   version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
+    url = "https://liboil.freedesktop.org/download/liboil-${finalAttrs.version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
-  # errors
-  configureFlags = lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "--build=x86_64";
-
   # fixes a cast in inline asm: easier than patching
   buildFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-fheinous-gnu-extensions";
 
@@ -39,7 +33,7 @@ stdenv.mkDerivation rec {
     mainProgram = "oil-bugreport";
     homepage = "https://liboil.freedesktop.org";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

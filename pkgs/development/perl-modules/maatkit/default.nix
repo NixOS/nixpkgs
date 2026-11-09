@@ -11,7 +11,7 @@ buildPerlPackage {
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/maatkit/maatkit-7540.tar.gz";
-    sha256 = "1a7rxrddkrsfxb2wj01ha91ld0vapfkqcy8j9p08l76zz2l8p2v1";
+    hash = "sha256-YYuLqPjfHIrATRJ5hqe7aoNGQ1IwAMnF6k7n2Vru+ag=";
   };
 
   outputs = [ "out" ];

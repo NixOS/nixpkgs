@@ -7,16 +7,16 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.9";
+  version = "8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YVF47TE9NDFfFaUi2xpdEsqcOV43hbsGKAq/+V2aBUY=";
+    url = "mirror://sourceforge/awstats/awstats-${version}.tar.gz";
+    hash = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
   };
 
   postPatch = ''
     substituteInPlace wwwroot/cgi-bin/awstats.pl \
-      --replace /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
+      --replace-fail /usr/share/awstats/ "$out/wwwroot/cgi-bin/"
   '';
 
   outputs = [
@@ -27,7 +27,12 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
-  buildInputs = [ ]; # plugins will need some
+  buildInputs = with perlPackages; [
+    JSONXS
+    TryTiny
+  ];
+
+  strictDeps = true;
 
   preConfigure = ''
     touch Makefile.PL
@@ -47,6 +52,8 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     mv wwwroot "$out/wwwroot"
     rm -r "$out/wwwroot/classes/src/"
@@ -60,7 +67,11 @@ perlPackages.buildPerlPackage rec {
     mkdir -p "$doc/share/doc"
     mv README.md docs/
     mv docs "$doc/share/doc/awstats"
+
+    runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://www.awstats.org/docs/awstats_changelog.txt";

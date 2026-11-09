@@ -7,6 +7,7 @@
   liblxqt,
   libqtxdg,
   lxqt-build-tools,
+  lxqt-themes,
   qtsvg,
   qttools,
   qtwayland,
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-about";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-about";
     rev = version;
-    hash = "sha256-EP0Sd/VvLufqtn/7ZQwdI/h+BJhkGks7jTlEoEqYWgk=";
+    hash = "sha256-wJ4KJ+gSj0sdlO1l68RzAaOM8HxdPP6S1gWCoRfRZ3c=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,13 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
   ];
+
+  # The logo is supplied by lxqt-themes
+  postPatch = ''
+    substituteInPlace aboutdialog/lxqtaboutdialog.cpp \
+      --replace-fail 'QStringLiteral(LXQT_SHARE_DIR) + QStringLiteral("/graphics/lxqt_logo.png")' \
+                     'QStringLiteral("${lxqt-themes}/share/lxqt/graphics/lxqt_logo.png")'
+  '';
 
   passthru.updateScript = gitUpdater { };
 

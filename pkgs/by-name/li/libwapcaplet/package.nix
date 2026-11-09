@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.3";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libwapcaplet-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/libwapcaplet-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-myqh3W1mRfjpkrNpf9vYfwwOHaVyH6VO0ptITRMWDFw=";
   };
 

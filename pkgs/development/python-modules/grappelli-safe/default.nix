@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   version = "1.1.1";
   pname = "grappelli-safe";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "grappelli_safe";
@@ -39,7 +36,7 @@ buildPythonPackage rec {
       address these specific issues.
     '';
     homepage = "https://github.com/stephenmcd/grappelli-safe";
-    downloadPage = "http://pypi.python.org/pypi/grappelli_safe/";
+    downloadPage = "http://pypi.org/pypi/grappelli_safe/";
     changelog = "https://github.com/stephenmcd/grappelli-safe/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ prikhi ];

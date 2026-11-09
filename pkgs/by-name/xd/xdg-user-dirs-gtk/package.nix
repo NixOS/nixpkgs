@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-user-dirs-gtk";
-  version = "0.14";
+  version = "0.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/xdg-user-dirs-gtk/${lib.versions.majorMinor finalAttrs.version}/xdg-user-dirs-gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-U3++FCskc27XiU5KAfaf11jLbHpnejgoeVKdIX9KKHM=";
+    hash = "sha256-voJd5/iRddterQzTdE0nYRCccJQyUahwkiWRYwJVIKk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fetch “xdg-user-dirs” translations from correct localedir.
     substituteInPlace update.c --replace-fail \
       'bindtextdomain ("xdg-user-dirs", GLIBLOCALEDIR);' \
-      'bindtextdomain ("xdg-user-dirs", "${xdg-user-dirs}/share/locale");'
+      'bindtextdomain ("xdg-user-dirs", "${lib.getLib xdg-user-dirs}/share/locale");'
 
     patchShebangs meson_custom_install_desktop_file.sh
   '';

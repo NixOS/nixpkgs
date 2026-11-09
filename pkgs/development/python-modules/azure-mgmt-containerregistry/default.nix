@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   azure-common,
   azure-mgmt-core,
   isodate,
@@ -12,15 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerregistry";
-  version = "14.0.0";
+  version = "15.1.0b3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_mgmt_containerregistry";
     inherit version;
-    hash = "sha256-c4PxxVR7z/525BHt2CUNVcNM3fXvaATVh1wWPMpmxLU=";
+    hash = "sha256-G+0gQPPBXGk/5rStcCxdXWCPnAU3G6XR8cb8LkZNW58=";
   };
 
   build-system = [ setuptools ];

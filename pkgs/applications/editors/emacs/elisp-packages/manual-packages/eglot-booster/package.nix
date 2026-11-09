@@ -22,6 +22,6 @@ melpaBuild {
     homepage = "https://github.com/jdtsmith/eglot-booster";
     description = "Boost eglot using lsp-booster";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mannerbund ];
+    maintainers = [ ];
   };
 }

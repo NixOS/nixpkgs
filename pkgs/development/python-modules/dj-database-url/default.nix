@@ -3,22 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "3.0.1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "dj-database-url";
     tag = "v${version}";
-    hash = "sha256-wiPTszgix4QjF82f5mmNvDKGspYl15jScK2TAsP5zP8=";
+    hash = "sha256-d9wkxe7xJSTufc2La4W/etPAaW6YF47y0IqPa5YWknY=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ django ];
 
@@ -29,8 +35,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Use Database URLs in your Django Application";
-    homepage = "https://github.com/jazzband/dj-database-url";
-    changelog = "https://github.com/jazzband/dj-database-url/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/django-commons/dj-database-url";
+    changelog = "https://github.com/django-commons/dj-database-url/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

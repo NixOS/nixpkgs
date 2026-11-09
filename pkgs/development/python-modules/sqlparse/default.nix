@@ -5,25 +5,21 @@
   hatchling,
   installShellFiles,
   pytestCheckHook,
-  pythonOlder,
 
   # for passthru.tests
   django,
-  django_4,
   django-silk,
   pgadmin4,
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.5.3";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CfZ3h/VqCxbs294b/H9dnDNxymg8/qqOb/YLSAfsknI=";
+    hash = "sha256-ETw1x1Nlq5zJxyMdaMZCj7EcCF/I6esa1lm33b9s0rk=";
   };
 
   build-system = [ hatchling ];
@@ -39,7 +35,6 @@ buildPythonPackage rec {
   passthru.tests = {
     inherit
       django
-      django_4
       django-silk
       pgadmin4
       ;

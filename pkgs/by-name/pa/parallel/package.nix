@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parallel";
-  version = "20251222";
+  version = "20261022";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/parallel-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-tWtTiNoPLK3/b3DG6eafivlRbrJmWtok00ctWWWSwnU=";
+    hash = "sha256-T7DS1NFKTvZEjHiMsrz96fvgC41L3GN6fkwI+MVFOlU=";
   };
 
   outputs = [
@@ -56,6 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
       }"
   '';
 
+  # Force run `check` instead of the `tests` target, because the `test` target depends on a private testsuite.
+  # The reason `check` isn't used by default is due to it failing when selecting the target to run. (due to stdenv not overriding the Makefiles SHELL variable from `/bin/bash`).
+  #
+  # See:
+  #   https://github.com/NixOS/nixpkgs/blob/ef4f672aa2be8b268a4280e8e2a68cd97a4cf67b/pkgs/stdenv/generic/setup.sh#L1541
+  #   https://github.com/NixOS/nixpkgs/blob/ef4f672aa2be8b268a4280e8e2a68cd97a4cf67b/pkgs/stdenv/generic/setup.sh#L1555
+  checkTarget = "check";
   doCheck = true;
 
   meta = {

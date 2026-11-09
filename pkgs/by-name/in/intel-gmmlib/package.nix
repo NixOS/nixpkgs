@@ -8,15 +8,15 @@
   intel-media-driver,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-gmmlib";
-  version = "22.9.0";
+  version = "22.10.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
-    tag = "intel-gmmlib-${version}";
-    hash = "sha256-hgVdUTbPLEKVZpg+73kxpeMQ5gOjBHeRAJgTYds9lYQ=";
+    tag = "intel-gmmlib-${finalAttrs.version}";
+    hash = "sha256-PhW9lW6vMDXt/HS4HKfsK7/5PMygnIek58Sipiub3vs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      recutita
+    ];
   };
-}
+})

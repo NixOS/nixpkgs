@@ -23,6 +23,9 @@ stdenv.mkDerivation {
 
   patches = [
     ./darwin-no-universal.patch
+
+    # https://github.com/libui-ng/libui-ng/pull/348
+    ./0001-Remove-cm_print_error-declaration.patch
   ];
 
   nativeBuildInputs = [
@@ -50,5 +53,7 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

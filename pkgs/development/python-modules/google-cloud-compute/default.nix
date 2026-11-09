@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   google-api-core,
   mock,
   proto-plus,
@@ -14,18 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.37.0";
+  version = "1.56.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_compute";
     inherit version;
-    hash = "sha256-J/ApQytSkwN59YnPP6XjOs6WajOepUzWRLK1+eCkgeM=";
+    hash = "sha256-rWM5y65nl51skTH9eVy/rN657CTHjJwAcso3zDhfrjA=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

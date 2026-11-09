@@ -5,25 +5,36 @@
   nix-update-script,
   testers,
   ipatool,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipatool";
-  version = "2.2.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
-    rev = "v${version}";
-    hash = "sha256-z6f5PNxAH+8mS2kWjhST0LFhwTR01m7rR5O95ee+p2E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wT2oo2TvwkpH8WC497q7W7hX6PozESpkm240LVGcvLU=";
   };
 
-  vendorHash = "sha256-f6mXTePiM5kZUdrYqvbN5pyNp1OGNMeJZMUJ3pvaRrc=";
+  vendorHash = "sha256-ePQ78/Ki1u9US9yLvWVx3oxvBWXYA1Pg3jl+IGYpXW8=";
+
+  # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
+  proxyVendor = true;
+
+  # Fixes "unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/" on macOS
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/majd/ipatool/v2/cmd.version=${version}"
+    "-X github.com/majd/ipatool/v2/cmd.version=${finalAttrs.version}"
   ];
 
   # go generate ./... fails because of a missing module: github.com/golang/mock/mockgen
@@ -33,10 +44,17 @@ buildGoModule rec {
   # '';
   doCheck = false;
 
+  postInstall = ''
+    installShellCompletion --cmd ipatool \
+      --bash <($out/bin/ipatool completion bash) \
+      --fish <($out/bin/ipatool completion fish) \
+      --zsh <($out/bin/ipatool completion zsh)
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = ipatool;
       command = "ipatool --version";
     };
@@ -45,9 +63,9 @@ buildGoModule rec {
   meta = {
     description = "Command-line tool that allows searching and downloading app packages (known as ipa files) from the iOS App Store";
     homepage = "https://github.com/majd/ipatool";
-    changelog = "https://github.com/majd/ipatool/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/majd/ipatool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "ipatool";
   };
-}
+})

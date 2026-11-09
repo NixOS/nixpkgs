@@ -68,7 +68,7 @@ let
         ${lib.concatMapStringsSep " " (x: "-c ${x}") ([ configFile ] ++ cfg.extraConfigFiles)} \
         "${listenerProtocol}://${
           if (isIpv6 bindAddress) then "[${bindAddress}]" else "${bindAddress}"
-        }:${builtins.toString clientListener.port}/"
+        }:${toString clientListener.port}/"
     '';
 
   defaultExtras = [
@@ -1494,7 +1494,7 @@ in
             PrivateDevices = true;
             PrivateTmp = true;
             PrivateUsers = true;
-            ProcSubset = "pid";
+            ProcSubset = "all"; # pid breaks most process metrics
             ProtectClock = true;
             ProtectControlGroups = true;
             ProtectHome = true;

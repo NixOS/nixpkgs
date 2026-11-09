@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   compatIfNeeded,
   libelf,
@@ -24,4 +25,6 @@ mkDerivation {
 
   # since we built libpe and co separate they are not internal and thus not pie...?
   MK_PIE = "no";
+
+  meta.platforms = lib.platforms.unix;
 }

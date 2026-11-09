@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sway-new-workspace";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nzig";
     repo = "sway-new-workspace";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CoSfpsaGqNNR5jdAQys3nQxshI0NXXr8MacUnSTKFNo=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bbenno ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,15 +6,12 @@
   setuptools-scm,
   dulwich,
   mercurial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "hg_git";
@@ -31,6 +28,11 @@ buildPythonPackage rec {
     dulwich
     mercurial
   ];
+
+  # the dulwich version we are using is ahead of the one used upstream by hg-git.
+  # the build was failing because it could not import 'ANNOTATED_TAG_SUFFIX' from
+  # 'dulwich.refs'.
+  patches = [ ./dulwich_ANNOTATED_TAG_SUFFIX_renamed.patch ];
 
   pythonRelaxDeps = [ "dulwich" ];
 

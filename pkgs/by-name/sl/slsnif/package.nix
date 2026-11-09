@@ -4,14 +4,22 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slsnif";
   version = "0.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/slsnif/slsnif-${version}.tar.gz";
+    url = "mirror://sourceforge/slsnif/slsnif-${finalAttrs.version}.tar.gz";
     sha256 = "0gn8c5hj8m3sywpwdgn6w5xl4rzsvg0z7d2w8dxi6p152j5b0pii";
   };
+
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
+  configureFlags = [
+    "ac_cv_type_signal=void"
+  ];
 
   meta = {
     description = "Serial line sniffer";
@@ -20,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "slsnif";
   };
-}
+})

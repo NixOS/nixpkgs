@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "meek";
   version = "0.38.0";
 
@@ -14,8 +14,8 @@ buildGoModule rec {
     group = "tpo";
     owner = "anti-censorship/pluggable-transports";
     repo = "meek";
-    rev = "v${version}";
-    sha256 = "sha256-zmIRXrHWrEzR+RcX/gkuqw2oBmyGoXDQ45ZjA4vwGSs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zmIRXrHWrEzR+RcX/gkuqw2oBmyGoXDQ45ZjA4vwGSs=";
   };
 
   vendorHash = "sha256-eAO6vEPKqWWZkmJXmOCeTa7TE8opynYvvxzPDSe9p+I=";
@@ -45,4 +45,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     license = lib.licenses.cc0;
   };
-}
+})

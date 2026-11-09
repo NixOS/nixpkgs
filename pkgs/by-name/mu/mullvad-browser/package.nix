@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg_7,
+  ffmpeg_8,
 
   audioSupport ? mediaSupport,
 
@@ -73,11 +73,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -94,10 +94,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
+    ++ lib.optionals mediaSupport [ ffmpeg_8 ]
   );
 
-  version = "15.0.3";
+  version = "16.0";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,19 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-qrjKGaS4GYp8C4LzElbN9/+v5MYKsVRHaZDsBZe2Bcs=";
+      hash = "sha256-qlccbcAKrSFK+akuQU86a9nhITm0gZ9a8vOqqj2fSqM=";
+    };
+
+    aarch64-linux = fetchurl {
+      urls = [
+        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-aarch64-${version}.tar.xz"
+      ];
+      hash = "sha256-f9pB/+TC1zKlRPVQku9IMSjCJKKqRoDYY+eTx14Ds9k=";
     };
   };
 
@@ -121,12 +133,6 @@ let
         version = "1.0";
         about = "Mullvad Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -149,7 +155,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -200,7 +206,7 @@ stdenv.mkDerivation rec {
     mv mullvadbrowser.real mullvadbrowser
 
     # store state at `~/.mullvad` instead of relative to executable
-    touch "$MB_IN_STORE/system-install"
+    touch "$MB_IN_STORE/is-packaged-app"
 
     # Add bundled libraries to libPath.
     libPath=${libPath}:$MB_IN_STORE
@@ -225,9 +231,6 @@ stdenv.mkDerivation rec {
 
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
-
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
 
     // Allow sandbox access to sound devices if using ALSA directly
     ${
@@ -282,7 +285,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/mullvad-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/mullvad-browser/distribution/policies.json
 
     runHook postInstall
   '';
@@ -291,7 +293,7 @@ stdenv.mkDerivation rec {
     inherit sources;
     updateScript = callPackage ./update.nix {
       inherit pname version meta;
-      baseUrl = "https://cdn.mullvad.net/browser/";
+      baseUrl = "https://dist.torproject.org/mullvadbrowser/";
       name = "mullvad-browser";
     };
   };
@@ -305,6 +307,7 @@ stdenv.mkDerivation rec {
       felschr
       panicgh
       sigmasquadron
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

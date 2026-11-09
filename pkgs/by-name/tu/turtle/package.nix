@@ -9,17 +9,17 @@
   meld,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "turtle";
-  version = "0.13.3";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "turtle";
-    tag = version;
-    hash = "sha256-bfoo2xWBr4jR5EX5H8hiXl6C6HSpNJ93icDg1gwWXqE=";
+    tag = finalAttrs.version;
+    hash = "sha256-+XDDscw5xBUp39tbZLqZWK+wsRDi401mRDjx+VR6Cu0=";
   };
 
   postPatch = ''
@@ -58,7 +58,10 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   postFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]})
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
+      --prefix PATH : ${lib.makeBinPath [ meld ]}
+    )
     wrapPythonPrograms
   ''
   # Dialogs are not imported, but executed. The same does
@@ -82,4 +85,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

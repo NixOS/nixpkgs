@@ -13,19 +13,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menulibre";
   version = "2.4.0";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
-    tag = "menulibre-${version}";
+    tag = "menulibre-${finalAttrs.version}";
     hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     gnome-menus
     psutil
@@ -62,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "menulibre";
     platforms = lib.platforms.linux;
   };
-}
+})

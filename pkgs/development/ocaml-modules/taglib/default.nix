@@ -15,8 +15,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-taglib";
-    rev = "v${version}";
-    sha256 = "sha256-tAvzVr0PW1o0kKFxdi/ks4obqnyBm8YfiiFupXZkUho=";
+    tag = "v${version}";
+    hash = "sha256-tAvzVr0PW1o0kKFxdi/ks4obqnyBm8YfiiFupXZkUho=";
   };
 
   minimalOCamlVersion = "4.05.0"; # Documented version 4.02.0. 4.05.0 actually required.

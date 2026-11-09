@@ -30,7 +30,7 @@ in
       default = null;
       description = ''
         Optional path to a file containing the mycelium key material.
-        If unset, the default location (`/var/lib/mycelium/key.bin`) will be used.
+        If unset, the location `/var/lib/mycelium/key.bin` will be used.
         If no key exist at this location, it will be generated on startup.
       '';
     };

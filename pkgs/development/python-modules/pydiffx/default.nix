@@ -23,6 +23,8 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail 'tag_build = .dev' 'tag_build ='
     substituteInPlace pydiffx/tests/testcases.py \
       --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';

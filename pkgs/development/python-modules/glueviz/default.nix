@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   astropy,
   dill,
   echo,
@@ -26,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "glueviz";
-  version = "1.24.1";
+  version = "1.27.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
     tag = "v${version}";
-    hash = "sha256-21XFH1fIt8vLd0blZJn6ZRmLJaof/E30zHrBVLjXOaA=";
+    hash = "sha256-9uILbcf/Fy0GT4WG+NuGKmbiQIjrAFeOlCCYau1mHqg=";
   };
 
   buildInputs = [ pyqt-builder ];

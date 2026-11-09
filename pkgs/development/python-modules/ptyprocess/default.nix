@@ -4,7 +4,6 @@
   fetchPypi,
   fetchpatch,
   flit-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ptyprocess";
   version = "0.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

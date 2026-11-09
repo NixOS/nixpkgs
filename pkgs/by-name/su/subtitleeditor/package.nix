@@ -12,22 +12,22 @@
   gtkmm3,
   gst_all_1,
   hicolor-icon-theme,
-  libsigcxx,
+  libsigcxx_2_0,
   libxmlxx,
   xdg-utils,
   isocodes,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subtitleeditor";
-  version = "unstable-2019-11-30";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
-    owner = "kitone";
+    owner = "subtitleeditor";
     repo = "subtitleeditor";
-    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
-    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-Pb4+FU8TiVc0iqV2NBJzrXWqM3vp4X8If2Opb6NdvLw=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     hicolor-icon-theme
-    libsigcxx
+    libsigcxx_2_0
     libxmlxx
     xdg-utils
     isocodes
@@ -71,10 +71,10 @@ stdenv.mkDerivation {
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.
     '';
-    homepage = "http://kitone.github.io/subtitleeditor/";
+    homepage = "https://subtitleeditor.github.io/subtitleeditor/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.plcplc ];
     mainProgram = "subtitleeditor";
   };
-}
+})

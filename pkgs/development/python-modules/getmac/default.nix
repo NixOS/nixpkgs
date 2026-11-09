@@ -6,41 +6,30 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = "getmac";
     tag = version;
-    hash = "sha256-ZbTCbbASs7+ChmgcDePXSbiHOst6/eCkq9SiKgYhFyM=";
+    hash = "sha256-dyuu2P7I4Ce5KJtreTGWYIv0UnSn9b4Y6JfcsBDeD/0=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    py
     pytest-benchmark
     pytest-mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # Disable CLI tests
-    "test_cli_main_basic"
-    "test_cli_main_verbose"
-    "test_cli_main_debug"
-    "test_cli_multiple_debug_levels"
-    # Disable test that require network access
-    "test_uuid_lanscan_iface"
     # Mocking issue
     "test_initialize_method_cache_valid_types"
   ];

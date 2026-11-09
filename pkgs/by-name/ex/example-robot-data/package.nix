@@ -1,22 +1,19 @@
 {
-  cmake,
-  doxygen,
   fetchFromGitHub,
   lib,
   jrl-cmakemodules,
-  pkg-config,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "example-robot-data";
-  version = "4.4.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnI1EaTSqk7mbihwFTgnMxgPZxMSYnAwaCLEXS3LUbE=";
+    hash = "sha256-6YVq++dOuyphEGrK/Oi+EIY7imTAw56b3pJCvyrRK8E=";
   };
 
   outputs = [
@@ -26,17 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
-  propagatedBuildInputs = [
+  buildInputs = [
     jrl-cmakemodules
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false) ];
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false) ];
 
   doCheck = true;
 

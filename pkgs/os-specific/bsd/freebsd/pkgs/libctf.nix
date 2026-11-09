@@ -42,5 +42,4 @@ mkDerivation {
 
   alwaysKeepStatic = true;
 
-  meta.platforms = lib.platforms.freebsd;
 }

@@ -7,7 +7,6 @@
   django-phonenumber-field,
   fetchFromGitHub,
   mercadopago,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "3.1.0";
+  version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-payments";
     tag = "v${version}";
-    hash = "sha256-b8CXMzuTfeF3Q9Ed/Ke2mGGBXYajJYcFkfzkb1lVAIE=";
+    hash = "sha256-vEmmX+IjE6HaIq/i1h2xc5ArkNlenVhD19mBgHvvmbM=";
   };
 
   build-system = [

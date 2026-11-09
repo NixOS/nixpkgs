@@ -79,7 +79,7 @@ in
     assertions = [
       {
         assertion = cfg.automatic -> config.nix.enable;
-        message = ''nix.gc.automatic requires nix.enable'';
+        message = "nix.gc.automatic requires nix.enable";
       }
     ];
 

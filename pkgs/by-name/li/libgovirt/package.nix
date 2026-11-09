@@ -8,7 +8,7 @@
   gobject-introspection,
   ninja,
   glib,
-  librest_1_0,
+  librest,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchzip {
-    url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor version}/libgovirt-${version}.tar.xz";
     sha256 = "sha256-6RDuJTyaVYlO4Kq+niQyepom6xj1lqdBbyWL/VnZUdk=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    librest_1_0
+    librest
   ];
 
   passthru = {

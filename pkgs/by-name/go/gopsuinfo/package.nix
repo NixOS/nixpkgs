@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopsuinfo";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "gopsuinfo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-h+CdiQh7IguCduIMCCI/UPIUAdXlNSHdkz6hrG10h3c=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   # Install icons
-  postInstall = ''make install DESTDIR=$out'';
+  postInstall = "make install DESTDIR=$out";
 
   meta = {
     description = "Gopsutil-based command to display system usage info";
@@ -40,4 +40,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "gopsuinfo";
   };
-}
+})

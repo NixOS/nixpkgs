@@ -5,12 +5,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
+  httpx2,
   numpy,
+  httpx2-pytest,
   openai,
   pip,
   pluggy,
@@ -22,7 +22,6 @@
   sqlite-migrate,
   cogapp,
   pytest-asyncio,
-  pytest-httpx,
   pytest-recording,
   sqlite-utils,
   syrupy,
@@ -81,6 +80,7 @@ let
       llm-hacker-news ? false,
       llm-jq ? false,
       llm-llama-server ? false,
+      llm-lmstudio ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
@@ -162,24 +162,23 @@ let
       '') withPluginsArgNames
     )
   );
-
-  llm = buildPythonPackage rec {
+  llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.28";
+    version = "0.35";
     pyproject = true;
 
     build-system = [ setuptools ];
 
-    disabled = pythonOlder "3.8";
-
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      tag = version;
-      hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
+      tag = finalAttrs.version;
+      hash = "sha256-vaoNxU1KIuT7EV9uiCAA7JamtwExONPlnmjioDE3wH8=";
     };
 
-    patches = [ ./001-disable-install-uninstall-commands.patch ];
+    patches = [
+      ./001-disable-install-uninstall-commands.patch
+    ];
 
     postPatch = ''
       substituteInPlace llm/cli.py \
@@ -189,7 +188,7 @@ let
     dependencies = [
       click-default-group
       condense-json
-      numpy
+      httpx2
       openai
       pip
       pluggy
@@ -198,7 +197,6 @@ let
       python-ulid
       pyyaml
       setuptools # for pkg_resources
-      sqlite-migrate
       sqlite-utils
     ];
 
@@ -206,7 +204,7 @@ let
       cogapp
       numpy
       pytest-asyncio
-      pytest-httpx
+      httpx2-pytest
       pytest-recording
       syrupy
       pytestCheckHook
@@ -249,13 +247,13 @@ let
       };
 
       # include tests for all the plugins
-      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests or { }) withPluginsArgNames);
     };
 
     meta = {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       mainProgram = "llm";
       maintainers = with lib.maintainers; [
@@ -264,6 +262,6 @@ let
         philiptaron
       ];
     };
-  };
+  });
 in
 llm

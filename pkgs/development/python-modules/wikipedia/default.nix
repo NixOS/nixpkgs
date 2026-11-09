@@ -2,29 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   beautifulsoup4,
   requests,
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wikipedia";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     requests
   ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests/ '*test.py'" ];
+  unittestFlags = [
+    "--start-directory=tests"
+    "--pattern=*test.py"
+  ];
+
+  pythonImportsCheck = [ "wikipedia" ];
 
   meta = {
     description = "Pythonic wrapper for the Wikipedia API";
@@ -33,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

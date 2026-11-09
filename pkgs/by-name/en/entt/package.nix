@@ -4,18 +4,20 @@
   fetchFromGitHub,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entt";
-  version = "3.14.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "skypjack";
     repo = "entt";
-    rev = "v${version}";
-    hash = "sha256-IPAM7fr/tvSOMKWUbXbloNAnlp5t7J0ynSsTMZ2jKYs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+sIe2zn2uY/BHB+KIuJ5+1fa8qDjDnsnLBWk14WuUT0=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DENTT_INSTALL=ON" ];
 
   meta = {
     homepage = "https://github.com/skypjack/entt";
@@ -24,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
   };
-}
+})

@@ -1,11 +1,16 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   fontconfig,
   freetype,
+  libGL,
+  libx11,
+  libxcb,
+  libxi,
   libxkbcommon,
+  vulkan-loader,
   wayland,
   SDL2,
   SDL2_image,
@@ -15,17 +20,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hail";
-  version = "0.3.0";
+  version = "0.5.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "periwinkle";
     repo = "hail";
     tag = finalAttrs.version;
-    hash = "sha256-PpZfOC4M6XNcdAWd2E8ONruOq9yOTRutjKi86mmoxAo=";
+    hash = "sha256-yfPw98Bj108BNhR7ObrlAKsh2v+mViojuEuDLlyBDUE=";
   };
 
-  cargoHash = "sha256-+zxoICy3lrS+7fZU0yD1C4uKRj/JtDvizKla1xmz+PY=";
+  cargoHash = "sha256-4nHOyQ2hEhwf4iSDuHjRawYDfv3b0a508IFcq6JUN8M=";
+
+  # Configurator and split editor, which hail starts from its keybinds
+  cargoBuildFlags = [
+    "--package=hail"
+    "--package=hail_config"
+    "--package=hail_editor"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,6 +49,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SDL2_image
     SDL2_gfx
   ];
+
+  # Windowing and graphics libraries the configurator and split editor load at runtime
+  postFixup = ''
+    patchelf --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        libx11
+        libxcb
+        libxi
+        libxkbcommon
+        vulkan-loader
+        wayland
+      ]
+    } $out/bin/hail_config $out/bin/hail_editor
+  '';
 
   passthru.updateScript = nix-update-script { };
 

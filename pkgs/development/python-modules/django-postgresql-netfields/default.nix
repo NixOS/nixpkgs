@@ -6,7 +6,6 @@
   netaddr,
   six,
   fetchFromGitHub,
-  pythonOlder,
   djangorestframework,
   # required for tests
   postgresql,
@@ -18,16 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-postgresql-netfields";
-  version = "1.3.2";
+  version = "1.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jimfunk";
     repo = "django-postgresql-netfields";
     rev = "v${version}";
-    hash = "sha256-iZ6KmbVlp2nf3T0Pj4XD1einhoK0kmUmUXOZBmmrzZw=";
+    hash = "sha256-Lae7Ql+poy0IDdEsIG8o3SHgqiJ1U8VWCgrLWmLE7TU=";
   };
 
   propagatedBuildInputs = [

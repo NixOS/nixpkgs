@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cda687be2754395fcab664e908ebf589facd41e8436d233d2be37a69efb1c536";
+    hash = "sha256-zaaHvidUOV/KtmTpCOv1ifrNQehDbSM9K+N6ae+xxTY=";
   };
 
   # no tests are defined in 1.3.5

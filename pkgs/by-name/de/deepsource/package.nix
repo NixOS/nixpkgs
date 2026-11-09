@@ -7,15 +7,15 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "deepsource";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "DeepSourceCorp";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-eJRoy/mgcdYgUV9covQbWwn5sk1hJB1UkKnNd/hjuEY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pg4PDOWHcim63ZpMNkQBnmkUtL/s5WYBr2HDYa1wl+w=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -38,7 +38,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -61,4 +61,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nipeharefa ];
   };
-}
+})

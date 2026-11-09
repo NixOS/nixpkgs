@@ -2,16 +2,13 @@
   lib,
   buildPythonPackage,
   cliff,
-  fetchPypi,
+  fetchFromGitHub,
   keystoneauth1,
-  makePythonPath,
   openstackdocstheme,
-  installer,
   osc-lib,
   oslo-serialization,
   oslo-utils,
   pbr,
-  python-neutronclient,
   requests,
   setuptools,
   sphinx,
@@ -19,16 +16,20 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-octaviaclient";
-  version = "3.12.0";
+  version = "3.15.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_octaviaclient";
-    inherit version;
-    hash = "sha256-5brfxkpJQousEcXl0YerzYDjrfl0XyWV0RXPTz146Y4=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-octaviaclient";
+    tag = finalAttrs.version;
+    hash = "sha256-fVDz+fJjacvwY3+BeddQ8DPxtHd72rmTB24UIWhjtaU=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   # NOTE(vinetos): This explicit dependency is removed to avoid infinite recursion
   pythonRemoveDeps = [ "python-openstackclient" ];
@@ -47,7 +48,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     keystoneauth1
-    python-neutronclient
     osc-lib
     oslo-serialization
     oslo-utils
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

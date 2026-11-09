@@ -8,13 +8,13 @@
 
 luarocks_bootstrap.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "0-unstable-2024-05-31";
+  version = "0-unstable-2026-10-18";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "9d0440da358eac11afdbef392e2cf3272a8c7101";
-    hash = "sha256-9SC+YQ06u35LN3mPohG7Lz0eLXPsMGKG3mhS+0zSO7Y=";
+    rev = "a3cb5421f9a107c0d24e0d62becef4c3494ad8e0";
+    hash = "sha256-1Nyzy5Z7WmIiaxaaUWWSnPPdvS4ghXU5wULguiOSlcs=";
   };
 
   propagatedNativeBuildInputs = old.propagatedNativeBuildInputs ++ [
@@ -41,6 +41,7 @@ luarocks_bootstrap.overrideAttrs (old: {
       maintainers
       platforms
       ;
+    homepage = "https://github.com/nix-community/luarocks-nix";
     mainProgram = "luarocks";
   };
 })

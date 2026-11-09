@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cxxtools";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "maekitalo";
     repo = "cxxtools";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-AiMVmtvI20nyv/nuHHxGH4xFnlc9AagVkKlnRlaYCPM=";
   };
 
@@ -27,6 +27,16 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/maekitalo/cxxtools/commit/6e1439a108ce3892428e95f341f2d23ae32a590e.patch";
       hash = "sha256-ZnlbdWBjL9lEtNLEF/ZPa0IzvJ7i4xWI4GbY8KeA6A4=";
+    })
+    # fix build with C++20 (GCC 16 default)
+    (fetchpatch {
+      url = "https://github.com/maekitalo/cxxtools/commit/354ddfecd33067d8aac339437defdcf0b8c32b68.patch";
+      excludes = [ "src/log.cpp" ]; # doesn't apply to 3.0, only silences enum-mixing warnings
+      hash = "sha256-ZmiSoDWmSPns1wiX4kNgU+khNm2ZtMfi8W9aMvDFlgc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/maekitalo/cxxtools/commit/7de2501261ace60a5851af6ec3f1832ab25d4458.patch";
+      hash = "sha256-JhVIy9UYabvWBHPlPjZG8AjsDKdD0ehbBHQPL4TpvKc=";
     })
   ];
 
@@ -46,10 +56,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.tntnet.org/cxxtools.html";
+    homepage = "https://github.com/maekitalo/cxxtools";
     description = "Comprehensive C++ class library for Unix and Linux";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

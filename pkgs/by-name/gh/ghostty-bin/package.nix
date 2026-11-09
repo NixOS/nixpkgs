@@ -8,22 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ghostty-bin";
-  version = "1.2.3";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://release.files.ghostty.org/${finalAttrs.version}/Ghostty.dmg";
-    hash = "sha256-817pHxFuKAJ6ufje9FCYx1dbRLQH/4g6Lc0phcSDIGs=";
+    hash = "sha256-OgIHXb0kMY13hCavQd7lUH1T7MRXjt6WkS7Jzm0Y0+g=";
   };
 
   sourceRoot = ".";
-
-  # otherwise fails to unpack with:
-  # ERROR: Dangerous link path was ignored : Ghostty.app/Contents/Resources/terminfo/67/ghostty : ../78/xterm-ghostty
-  unpackPhase = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-    runHook preUnpack
-    7zz -snld x $src
-    runHook postUnpack
-  '';
 
   nativeBuildInputs = [
     _7zz

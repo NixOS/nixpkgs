@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espup";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-blEjUFBzkwplwZgTAtI84MCHvxujNF1WsPJJezRNjxQ=";
+    hash = "sha256-mNpOaiAcNoVRiKtHcyYKS9RA0cYTR2ImOLauSAcgBHI=";
   };
 
-  cargoHash = "sha256-Y6Y+62lJ3k6GMkU82CDkTt1Prd3UrtBKqA5Spctochw=";
+  cargoHash = "sha256-Oicd+7lvXuYmTYt/QqswuEm7TQUCwtlD8yWllmi/ZoE=";
 
   nativeBuildInputs = [
     pkg-config

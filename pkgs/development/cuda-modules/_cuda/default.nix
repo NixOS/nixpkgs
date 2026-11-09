@@ -5,7 +5,7 @@
 #
 # Since this attribute set is used to construct the CUDA package sets, it must exist outside the fixed point of the
 # package sets. Make these attributes available directly in the package set construction could cause confusion if
-# users override the attribute set with the expection that changes will be reflected in the enclosing CUDA package
+# users override the attribute set with the expectation that changes will be reflected in the enclosing CUDA package
 # set. To avoid this, we declare `_cuda` and inherit its members here, at top-level. (This also allows us to benefit
 # from import caching, as it should be evaluated once per system, rather than per-system and CUDA package set.)
 

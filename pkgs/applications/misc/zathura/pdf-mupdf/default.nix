@@ -1,37 +1,32 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  fetchFromGitHub,
   meson,
   ninja,
-  fetchFromGitHub,
-  cairo,
-  girara,
-  gtk-mac-integration,
-  gumbo,
-  jbig2dec,
-  libjpeg,
-  mupdf,
-  openjpeg,
   pkg-config,
-  zathura_core,
-  tesseract,
-  leptonica,
-  mujs,
   desktop-file-utils,
   appstream,
-  appstream-glib,
+  zathura_core,
+  girara,
+  mupdf,
+  glib,
+  cairo,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.4.6";
+  version = "2026.07.18";
   pname = "zathura-pdf-mupdf";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-mupdf";
     tag = finalAttrs.version;
-    hash = "sha256-vg/ac62MPTWRbTPjbh+rKcFjVb5237wBEIVvTef6K5Q=";
+    hash = "sha256-zHqs+7Pu6ps4+PV/3rW1FETQVcat2QlPpUvwQXPHgV8=";
   };
 
   nativeBuildInputs = [
@@ -40,29 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     desktop-file-utils
     appstream
-    appstream-glib
   ];
 
   buildInputs = [
-    cairo
-    girara
-    gumbo
-    jbig2dec
-    libjpeg
-    mupdf
-    openjpeg
     zathura_core
-    tesseract
-    leptonica
-    mujs
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+    girara
+    mupdf
+    glib
+    cairo
+  ];
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
-
-  postPatch = ''
-    sed -i -e '/^mupdfthird =/d' -e 's/, mupdfthird//g' meson.build
-  '';
 
   passthru.updateScript = gitUpdater { };
 
@@ -75,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

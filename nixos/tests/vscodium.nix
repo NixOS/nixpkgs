@@ -13,6 +13,8 @@ let
         environment.variables.DISPLAY = "do not use";
 
         fonts.packages = with pkgs; [ dejavu_fonts ];
+
+        programs.ydotool.enable = true;
       };
     xorg =
       { lib, pkgs, ... }:
@@ -28,6 +30,8 @@ let
           ${lib.getExe pkgs.vscodium} --force-device-scale-factor=2
         '';
         test-support.displayManager.auto.user = "alice";
+
+        programs.ydotool.enable = true;
       };
   };
 
@@ -41,7 +45,6 @@ let
         nodes."${name}" = machine;
 
         meta.maintainers = with lib.maintainers; [
-          synthetica
           turion
         ];
 
@@ -52,6 +55,8 @@ let
         enableOCR = true;
 
         testScript = ''
+          machine = ${name}
+
           @polling_condition
           def codium_running():
               machine.succeed('pgrep -x codium')
@@ -63,9 +68,9 @@ let
 
           codium_running.wait() # type: ignore[union-attr]
           with codium_running: # type: ignore[union-attr]
-              # Wait until vscodium is visible. "File" is in the menu bar.
-              machine.wait_for_text('(Get|Started|with|Customize|theme)')
-              machine.screenshot('start_screen')
+              # Wait until vscodium is visible.
+              machine.wait_for_text('Search')
+              machine.screenshot('screen')
 
               test_string = 'testfile'
 
@@ -83,7 +88,8 @@ let
               machine.send_key('ctrl-s')
               machine.wait_for_text('(Save|Desktop|alice|Size)')
               machine.screenshot('save_window')
-              machine.send_key('ret')
+              machine.succeed('ydotool mousemove -a 490 380')
+              machine.succeed('ydotool click 0xC0')
 
               # (the default filename is the first line of the file)
               machine.wait_for_file(f'/home/alice/{test_string}')

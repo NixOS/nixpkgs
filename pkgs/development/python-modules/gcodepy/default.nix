@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "gcodepy";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rmeno12";

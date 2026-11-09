@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Cyvx57ZWitvbybuSRkP3nZ3tr+Bh+h7Wh9HZrE5FO/0=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     SDL2
     pkg-config
@@ -56,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
     pkgConfigModules = [ "SDL2_ttf" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })

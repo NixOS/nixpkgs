@@ -17,7 +17,7 @@ in
       type = types.str;
       default = "http://localhost:8053/";
       description = ''
-        HTTP XML API address of an Bind server.
+        HTTP API address of a BIND server.
       '';
     };
     bindTimeout = mkOption {
@@ -29,13 +29,14 @@ in
     };
     bindVersion = mkOption {
       type = types.enum [
-        "xml.v2"
+        "json"
+        "xml"
         "xml.v3"
         "auto"
       ];
-      default = "auto";
+      default = "json";
       description = ''
-        BIND statistics version. Can be detected automatically.
+        BIND statistics version. Defaults to JSON.
       '';
     };
     bindGroups = mkOption {

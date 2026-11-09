@@ -25,11 +25,10 @@ stdenv.mkDerivation {
 
   # By targeting the development version, we can omit the patches Arch uses
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "LibreGames";
     repo = "jumpnbump";
     rev = "5744738211ca691444f779aafee3537fb3562516";
-    sha256 = "0f1k26jicmb95bx19wgcdpwsbbl343i7mqqqc2z9lkb8drlsyqcy";
+    hash = "sha256-nmGvaW5oTZq+YBjjeuIgg66l+W3s8RT6KmlVFqURMzg=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -58,7 +57,7 @@ stdenv.mkDerivation {
     pillow
   ];
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
   '';
   postFixup = ''
     wrapPythonPrograms

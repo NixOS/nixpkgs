@@ -20,14 +20,14 @@
   zbar,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "merkaartor";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
 
@@ -38,7 +38,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openstreetmap/merkaartor/commit/28cca84e9f5db0aaba87c2084ed32f9677598823.diff";
       hash = "sha256-so0La5djYhWF6NqLpShWa3vGl5A2jkS3Xwg5Pe1yse4=";
     })
+    # calls `app.setDesktopFileName` - distros that don't wrap the binary apparently don't need this.
+    ./desktop-filename.patch
   ];
+
+  # protobuf's headers pull in abseil, and the abseil in nixpkgs is built as
+  # C++20: its installed headers use std::partial_ordering and friends, which
+  # fails to compile when the consumer uses C++17.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -85,4 +94,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -75,10 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
       amplitude, this software does not aim to be an audio editor.
     '';
     homepage = "https://gillesdegottex.gitlab.io/dfasma-website/";
-    license = [
-      lib.licenses.gpl3Plus
-      reaperFork.meta.license
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        reaperFork.meta.license
+      ];
     platforms = lib.platforms.linux;
   };
 })

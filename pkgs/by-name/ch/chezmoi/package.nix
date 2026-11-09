@@ -1,22 +1,23 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "chezmoi";
-  version = "2.68.1";
+  version = "2.73.3";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VJGT6sQhrLHqTJOcLknHj/Wz04Pj2/CBUqI5R6xPdQ4=";
+    hash = "sha256-Y6jXngROGFU6cH4V5wmLAHFFNVIf++joHIqsKhXYC0g=";
   };
 
-  vendorHash = "sha256-yNEx2/Vw5kjC428SObBCQ+OI7XwLUicbCvCpmVkdOtQ=";
+  vendorHash = "sha256-ukLTgpSIRZQWZriZFCfqh6Z4+48e710BpJvgXfS3dOM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,6 +39,8 @@ buildGo125Module (finalAttrs: {
     installShellCompletion --fish completions/chezmoi.fish
     installShellCompletion --zsh completions/chezmoi.zsh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage your dotfiles across multiple machines, securely";

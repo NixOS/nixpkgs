@@ -80,7 +80,6 @@ mkDerivation {
   MK_TESTS = "no";
 
   meta = {
-    platforms = lib.platforms.freebsd;
-    license = with lib.licenses; [ cddl ];
+    license = lib.licenses.cddl;
   };
 }

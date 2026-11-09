@@ -116,6 +116,5 @@ in
 
   meta.maintainers = with maintainers; [
     dan-theriault
-    phaer
   ];
 }

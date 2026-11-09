@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "leather";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+WS+wghvMVOmwW5wfyDLcY+BH1evEWB19MD0gFxgi5U=";
+    hash = "sha256-ZxGcKu6TvoIfB3GTvYU04pbAWzi9F02cWoDEqjHRpNM=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "http://leather.rtfd.io";
+    homepage = "https://leather.readthedocs.io";
     description = "Python charting library";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

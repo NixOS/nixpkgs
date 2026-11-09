@@ -17,6 +17,9 @@ lib.fetchers.withNormalizedHash { } (
     builder = ./builder.sh;
     nativeBuildInputs = [ breezy ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";
 

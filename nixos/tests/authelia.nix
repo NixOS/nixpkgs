@@ -28,12 +28,10 @@
         # This is purely for testing purposes!
         environment.etc."authelia/storageEncryptionKeyFile" = {
           mode = "0400";
-          user = "authelia-testing";
           text = "you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this";
         };
         environment.etc."authelia/jwtSecretFile" = {
           mode = "0400";
-          user = "authelia-testing";
           text = "a_very_important_secret";
         };
         environment.etc."authelia/users_database.yml" = {
@@ -153,6 +151,8 @@
   };
 
   testScript = ''
+    from datetime import timedelta
+
     start_all()
 
     authelia.wait_for_unit("simplehttp.service")
@@ -161,14 +161,28 @@
     authelia.wait_for_open_port(443)
     authelia.wait_for_unit("multi-user.target")
 
+    # FIXME: Authelia currently does not notify systemd of its readiness.
+    # Set the service with Type=notify and remove this when the following PR is merged
+    # and available in a release: https://github.com/authelia/authelia/pull/12772
+    authelia.wait_until_succeeds(
+      "curl --insecure -sSf -H Host:auth.example.com https://authelia:443/",
+      timeout=timedelta(seconds=10)
+    )
+
     with subtest("Check for authelia"):
       # expect the login page
-      assert "Login - Authelia", "could not reach authelia" in \
-        authelia.succeed("curl --insecure -sSf -H Host:auth.example.com https://authelia:443/")
+      t.assertIn(
+        "<noscript>You need to enable JavaScript to run this app.</noscript>",
+        authelia.succeed("curl --insecure -sSf -H Host:auth.example.com https://authelia:443/"),
+        "Login - Authelia"
+      )
 
     with subtest("Check contacting basic http server via traefik with https works"):
-      assert "hello", "could not reach raw static site" in \
-        authelia.succeed("curl --insecure -sSf -H Host:static.example.com https://authelia:443/")
+      t.assertIn(
+        "hello",
+        authelia.succeed("curl --insecure -sSf -H Host:static.example.com https://authelia:443/"),
+        "could not reach raw static site"
+      )
 
     with subtest("Test traefik and authelia"):
       with subtest("No details fail"):
@@ -177,7 +191,10 @@
         authelia.fail("curl --insecure -sSf -u 'bob:wordpass' -H Host:static-basic-auth.example.com https://authelia:443/")
         authelia.fail("curl --insecure -sSf -u 'alice:password' -H Host:static-basic-auth.example.com https://authelia:443/")
       with subtest("Correct details pass"):
-        assert "hello", "could not reach authed static site with valid credentials" in \
-          authelia.succeed("curl --insecure -sSf -u 'bob:password' -H Host:static-basic-auth.example.com https://authelia:443/")
+        t.assertIn(
+          "hello",
+          authelia.succeed("curl --insecure -sSf -u 'bob:password' -H Host:static-basic-auth.example.com https://authelia:443/"),
+          "could not reach authed static site with valid credentials"
+        )
   '';
 }

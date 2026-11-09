@@ -4,14 +4,17 @@
   rustPlatform,
   fetchFromGitHub,
   arrow-cpp,
+
   # nativeBuildInputs
-  binaryen,
   lld,
   llvmPackages,
   pkg-config,
   protobuf,
+  python3,
   rustfmt,
   nasm,
+  wasm-bindgen-cli_0_2_129,
+
   # buildInputs
   freetype,
   glib,
@@ -19,7 +22,10 @@
   libxkbcommon,
   openssl,
   vulkan-loader,
+  # linux-only:
+  udev,
   wayland,
+
   versionCheckHook,
   # passthru
   nix-update-script,
@@ -30,12 +36,15 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
+    "audio"
     "map_view"
   ],
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.28.1";
+  version = "0.42.0";
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -46,22 +55,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-ABT7za04QEQABpeRZArEval5aiy/FkNKj8psr6lrFos=";
+    hash = "sha256-9/6EHSYClMGvJHqKzEys7eylPJCm0Xv1mRsMmyPgdP0=";
   };
 
-  # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
-  postPatch = ''
-    substituteInPlace rerun_py/build.rs \
-      --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
-  '';
+  postPatch =
+    # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
+    ''
+      substituteInPlace rerun_py/build.rs \
+        --replace-fail \
+          '"rerun_sdk/rerun_cli/rerun"' \
+          '"rerun_sdk/rerun"'
+    ''
+    # cargo-auditable forwards `--config` to a `cargo metadata` call that runs from a different
+    # directory, where the relative path doesn't resolve. Use an absolute path instead.
+    + ''
+      substituteInPlace scripts/build_web_viewer.py \
+        --replace-fail \
+          '"--config=.cargo/config.toml",' \
+          'f"--config={WORKSPACE_ROOT / '"'"'.cargo/config.toml'"'"'}",'
+    '';
 
-  cargoHash = "sha256-WQtKSBf8PQ0itbbFWQKvaDvq7BiRV+i6YcKiPpdilBU=";
+  cargoHash = "sha256-qKGcGg0GFheV2DF5nKVAIFVpSdo63EsCOQb3QLZQuUw=";
 
   cargoBuildFlags = [
-    "--package rerun-cli"
-    "--package rerun_c"
+    "--package"
+    "rerun-cli"
+    "--package"
+    "rerun_c"
   ];
-  cargoTestFlags = [ "--package rerun-cli" ];
+  cargoTestFlags = [
+    "--package"
+    "rerun-cli"
+  ];
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "native_viewer"
@@ -74,38 +99,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # When web_viewer is compiled, the wasm webviewer first needs to be built
   # If this doesn't exist, the build will fail. More information: https://github.com/rerun-io/rerun/issues/6028
-  # The command is taken from https://github.com/rerun-io/rerun/blob/dd025f1384f9944d785d0fb75ca4ca1cd1792f17/pixi.toml#L198C72-L198C187
+  # The command is taken from https://github.com/rerun-io/rerun/blob/0.42.0/pixi.toml#L231
   # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
   # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
   preBuild = ''
-    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
-      # transform the environment variable that is a space separated list into a comma separated list
-      buildWebViewerFeatures=$(echo $buildWebViewerFeatures | tr ' ' ',')
-      # Create the features option only if there are features to pass
-      buildWebViewerFeaturesCargoOption=""
-      if [[ ! -z "$buildWebViewerFeatures" ]]; then
-        buildWebViewerFeaturesCargoOption="--features $buildWebViewerFeatures"
-        echo "Features passed to the web viewer build: $buildWebViewerFeatures"
-      else
-        echo "No features will be passed to the web viewer build"
-      fi
+    if [[ " ''${cargoBuildFeatures[*]} " == *" web_viewer "* ]]; then
+      # join the bash array into a comma-separated list for cargo's --features flag
+      buildWebViewerFeaturesJoined=$(IFS=,; echo "''${buildWebViewerFeatures[*]}")
+      echo "Features passed to the web viewer build: '$buildWebViewerFeaturesJoined'"
       echo "Building the wasm web viewer for rerun's web_viewer feature"
-      cargo run -p re_dev_tools -- build-web-viewer --no-default-features $buildWebViewerFeaturesCargoOption --release -g
+      # `--features` replaces re_viewer's default web features (`analytics,default_web`).
+      # Always pass it (even empty) so that analytics does not get enabled.
+      # The cargo setup hook exports `ZSTD_SYS_USE_PKG_CONFIG`, but pkg-config can't provide zstd
+      # for wasm32-unknown-unknown. Unset it so that zstd-sys builds its vendored copy instead.
+      env -u ZSTD_SYS_USE_PKG_CONFIG \
+        python3 scripts/build_web_viewer.py --features "$buildWebViewerFeaturesJoined" --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
   '';
 
   nativeBuildInputs = [
-    (lib.getBin binaryen) # wasm-opt
-
     # @SomeoneSerge: Upstream suggests `mold`, but I didn't get it to work
     lld
 
     pkg-config
     protobuf
+    python3
     rustfmt
     nasm
+    wasm-bindgen-cli_0_2_129
   ];
 
   # NOTE: Without setting these environment variables the web-viewer
@@ -124,18 +147,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     in
     {
       CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
-      CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
+      CFLAGS_wasm32_unknown_unknown = toString [
+        "-isystem ${includeDir}"
+        "-resource-dir ${resourceDir}"
+      ];
     };
 
   buildInputs = [
     freetype
     glib
     gtk3
-    (lib.getDev openssl)
     libxkbcommon
+    openssl
     vulkan-loader
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    (lib.getLib wayland)
+  ];
 
   propagatedBuildInputs = [ arrow-cpp ];
 
@@ -154,7 +183,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     while IFS= read -r -d $'\0' path ; do
       elfHasDynamicSection "$path" || continue
-      for dep in $addDlopenRunpaths ; do
+      for dep in "''${addDlopenRunpaths[@]}" ; do
         patchelf "$path" --add-rpath "$dep"
       done
     done < <(
@@ -191,7 +220,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (python3Packages) rerun-sdk;
+      inherit (python3Packages) rerun-sdk rerun-notebook;
     };
   };
 

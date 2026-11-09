@@ -8,6 +8,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "4th";
   version = "3.64.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://sourceforge.net/projects/forth-4th/files/4th-${finalAttrs.version}/4th-${finalAttrs.version}-unix.tar.gz";
     hash = "sha256-ufQiuRDPmcYzFSQf16cuZSrOEbH3itq7yZYo87zPs1g=";
@@ -20,8 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
+  preBuild = ''
+    cp sources/include${if stdenv.hostPlatform.is64bit then "64" else "32"}/* sources/
+    make -C sources clean
+  '';
+
   makeFlags = [
-    "-C sources"
+    "-C"
+    "sources"
     "CC:=$(CC)"
     "AR:=$(AR)"
   ];

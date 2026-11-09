@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "doxygen-awesome-css";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "jothepro";
     repo = "doxygen-awesome-css";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Q+1+Y8AsR3fZxYwewaBBKHIu0uwuYFZmUByHg17KZ9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QXwR6nkjoowTxnbKdv2LFwwCVcehsdeeatK81B6c6sc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

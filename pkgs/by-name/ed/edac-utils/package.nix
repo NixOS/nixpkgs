@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "edac-utils";
-  version = "unstable-2023-01-30";
+  version = "0.18-unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "grondo";
@@ -36,6 +36,7 @@ stdenv.mkDerivation {
   # a Perl script. Perl from buildInputs is used by patchShebangsAuto in
   # fixupPhase to update the hash bang line.
   strictDeps = true;
+  __structuredAttrs = true;
   nativeBuildInputs = [ perl ];
   buildInputs = [
     perl

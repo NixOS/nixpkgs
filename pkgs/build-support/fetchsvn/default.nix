@@ -66,7 +66,12 @@ else
     ]
     ++ lib.optional sshSupport openssh;
 
-    SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    env = lib.optionalAttrs sshSupport {
+      SVN_SSH = lib.getExe buildPackages.openssh;
+    };
 
     outputHashAlgo = if hash != "" then null else "sha256";
     outputHashMode = "recursive";

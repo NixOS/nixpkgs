@@ -9,14 +9,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msfpc";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "g0tmi1k";
     repo = "msfpc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "UIdE0oSaNu16pf+M96x8AnNju88hdzokv86wm8uBYDQ=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
   };
-}
+})

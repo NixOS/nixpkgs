@@ -72,11 +72,9 @@ lib.recurseIntoAttrs rec {
     {
       name ? null,
       version,
-      description,
-      homepage,
+      meta,
       mods,
       src,
-      pos,
     }@engine:
     # Allow specifying the name at a later point if no name has been given.
     let
@@ -99,10 +97,8 @@ lib.recurseIntoAttrs rec {
       name ? null,
       version,
       title,
-      description,
-      homepage,
+      meta,
       src,
-      pos,
       engine,
       assetsError ? "",
     }@mod:

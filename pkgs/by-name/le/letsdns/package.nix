@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "1.2.1";
+  version = "1.2.2";
 in
 python3Packages.buildPythonApplication {
   pname = "letsdns";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "LetsDNS";
     repo = "letsdns";
     tag = version;
-    hash = "sha256-TwGVm7sEOPvUqtvaAuIU/X5W3H4VAC8dskNunt8UO0I=";
+    hash = "sha256-tSr1cjgDq7h9pCP2NXG0MegRYsdvTiG8lSedoTRvp6g=";
   };
 
   build-system = [

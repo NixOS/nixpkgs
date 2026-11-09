@@ -30,6 +30,7 @@
   license-expression,
   lxml,
   markupsafe,
+  multiregex,
   packageurl-python,
   packaging,
   parameter-expansion-patched,
@@ -45,7 +46,6 @@
   pygments,
   pymaven-patch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools,
@@ -57,19 +57,17 @@
   urlpy,
   writableTmpDirAsHomeHook,
   xmltodict,
-  zipp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scancode-toolkit";
-  version = "32.4.1";
+  version = "32.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qZUILeB1lGv0V9Uq81/aOI9pJTtayfZH/O5kwNnpf28=";
+    pname = "scancode_toolkit";
+    inherit (finalAttrs) version;
+    hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
   dontConfigure = true;
@@ -105,6 +103,7 @@ buildPythonPackage rec {
     license-expression
     lxml
     markupsafe
+    multiregex
     packageurl-python
     packaging
     parameter-expansion-patched
@@ -128,16 +127,13 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ zipp ];
-
-  nativeBuildInputs = [
-    writableTmpDirAsHomeHook
   ];
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Pre-genrating license index
+  # Pre-generating license index
   postInstall = ''
     $out/bin/scancode-reindex-licenses
   '';
@@ -149,12 +145,13 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
-    homepage = "https://github.com/nexB/scancode-toolkit";
-    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/scancode-toolkit";
+    changelog = "https://github.com/aboutcode-org/scancode-toolkit/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20
       cc-by-40
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

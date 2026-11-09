@@ -2,19 +2,22 @@
   fetchFromGitHub,
   lib,
   rebar3Relx,
+  erlang,
 }:
 
 rebar3Relx rec {
   pname = "erlfmt";
-  version = "1.7.0";
+  version = "1.8.0";
   releaseType = "escript";
 
   src = fetchFromGitHub {
     owner = "WhatsApp";
     repo = "erlfmt";
-    hash = "sha256-bljqWqpzAPP7+cVA3F+vXoUzUFzD4zXpUl/4XmMypB4=";
+    hash = "sha256-0guZxRStVHnUCh9+tmP+/FzgZF+TUgB2oCZu+P4FJBs=";
     tag = "v${version}";
   };
+
+  buildInputs = [ erlang ];
 
   meta = {
     homepage = "https://github.com/WhatsApp/erlfmt";

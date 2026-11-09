@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchDebianPatch,
   fltk,
   giflib,
   libjpeg,
   libpng,
-  libXdmcp,
+  libxdmcp,
   openssl,
   pkg-config,
   wget,
@@ -23,6 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7DZ+Ruu1sb+yKHSigdFEVe0xkrsQXSQ2esPhujD3Qrc=";
   };
 
+  patches = [
+    (fetchDebianPatch {
+      pname = "dillo";
+      version = "3.0.5";
+      debianRevision = "7.2";
+      patch = "gcc-15.patch";
+      hash = "sha256-DFtR5h8N/vl0Lv5tRHgO2Lz0719ORGog02r0zSYMVYU=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -32,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXdmcp
+    libxdmcp
     openssl
   ];
 
@@ -51,6 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "dillo";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })

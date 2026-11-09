@@ -7,12 +7,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbsd";
   version = "0.12.2";
 
   src = fetchurl {
-    url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    url = "https://libbsd.freedesktop.org/releases/libbsd-${finalAttrs.version}.tar.xz";
     hash = "sha256-uIzJFj0MZSqvOamZkdl03bocOpcR248bWDivKhRzEBQ=";
   };
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libmd ];
+
+  strictDeps = true;
 
   patches = [
     # `strtonum(3)` is not available on our default SDK version.
@@ -45,6 +47,8 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) [ "LDFLAGS=-Wl,--undefined-version" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Common functions found on BSD systems";
     homepage = "https://libbsd.freedesktop.org/";
@@ -61,4 +65,4 @@ stdenv.mkDerivation rec {
     badPlatforms = lib.platforms.microblaze;
     maintainers = [ ];
   };
-}
+})

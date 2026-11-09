@@ -2,7 +2,7 @@ diff --git a/libgnome-desktop/gnome-desktop-thumbnail-script.c b/libgnome-deskto
 index ddcc1511..546c2a36 100644
 --- a/libgnome-desktop/gnome-desktop-thumbnail-script.c
 +++ b/libgnome-desktop/gnome-desktop-thumbnail-script.c
-@@ -555,9 +555,9 @@ add_bwrap (GPtrArray   *array,
+@@ -555,9 +555,10 @@ add_bwrap (GPtrArray   *array,
    g_return_val_if_fail (script->s_infile != NULL, FALSE);
  
    add_args (array,
@@ -12,6 +12,7 @@ index ddcc1511..546c2a36 100644
 +	    "@bubblewrap_bin@",
 +	    "--ro-bind", "@storeDir@", "@storeDir@",
 +	    "--ro-bind-try", "/run/current-system", "/run/current-system",
++	    "--ro-bind-try", "/run/opengl-driver", "/run/opengl-driver",
  	    NULL);
  
    /* These directories might be symlinks into /usr/... */

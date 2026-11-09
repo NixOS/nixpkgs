@@ -14,16 +14,17 @@
   fira-code,
   fontconfig,
   harfbuzz,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silicon";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "silicon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lwwbjSXW5uonJNZTAqTK14Ib4QDOD4puxY2CsiJk4/Q=";
   };
 
@@ -54,21 +55,21 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [
       evanjs
       _0x4A6F
     ];
     mainProgram = "silicon";
   };
-}
+})

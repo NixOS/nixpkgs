@@ -2,29 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  six,
+  setuptools_80,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "genshi";
-  version = "0.7.9";
-  format = "setuptools";
+  version = "0.7.11";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Genshi";
-    inherit version;
-    hash = "sha256-x2FwqLLcGJROCRUQPChMuInfzuNODhQLozY8gPdUGtI=";
+    inherit pname version;
+    hash = "sha256-gsT5u/SwO+UWKiTW2OT9v+PtJgLT68v1BaMzUKN53Lc=";
   };
 
-  # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
-  # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
-  doCheck = false;
+  build-system = [ setuptools_80 ];
 
-  propagatedBuildInputs = [
-    setuptools
-    six
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python components for parsing HTML, XML and other textual content";

@@ -61,8 +61,7 @@ buildPythonPackage {
   '';
 
   enabledTestPaths = [
-    "onnx/test"
-    "examples"
+    "tests"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       "man"
     ];
     description = "Modified version of kerberos tools that support automatic ticket refresh";
+    homepage = "https://github.com/rra/kstart";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

@@ -1,13 +1,13 @@
 {
   buildPythonPackage,
   debtcollector,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
   pname = "debtcollector-tests";
   inherit (debtcollector) version src;
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -20,10 +20,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     debtcollector
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

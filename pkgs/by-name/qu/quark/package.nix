@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "quark";
-  version = "unstable-2021-02-22";
+  version = "0-unstable-2021-02-22";
 
   src = fetchgit {
     url = "git://git.suckless.org/quark";

@@ -14,7 +14,11 @@
   runCommandCC,
   setJavaClassPath,
   unzip,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
   zlib,
   # extra params
   extraCLibs ? [ ],
@@ -42,7 +46,11 @@ let
     "runCommandCC"
     "setJavaClassPath"
     "unzip"
-    "xorg"
+    "libxtst"
+    "libxrender"
+    "libxi"
+    "libxext"
+    "libx11"
     "zlib"
     "extraCLibs"
     "gtkSupport"
@@ -61,11 +69,17 @@ let
     ++ extraCLibs
   );
 
-  # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
+  # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc.
+  # Wrapper (not symlink) because GCC >= 16 implicitly links -latomic_asneeded,
+  # which is not on musl-gcc's library search path.
   musl-gcc = (
     runCommandCC "musl-gcc" { } ''
       mkdir -p $out/bin
-      ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
+      cat > $out/bin/${stdenv.hostPlatform.system}-musl-gcc <<EOF
+        #!/bin/sh
+        exec ${lib.getDev musl}/bin/musl-gcc -fno-link-libatomic "\$@"
+      EOF
+      chmod +x $out/bin/${stdenv.hostPlatform.system}-musl-gcc
     ''
   );
   binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
@@ -128,11 +142,11 @@ let
         alsa-lib # libasound.so wanted by lib/libjsound.so
         fontconfig
         (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-        xorg.libX11
-        xorg.libXext
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
+        libx11
+        libxext
+        libxi
+        libxrender
+        libxtst
       ];
 
       postInstall =
@@ -172,7 +186,8 @@ let
 
           mkdir -p $out/share
           # move files in $out like LICENSE.txt
-          find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+          # NOTE: The `release` file must be located at $JAVA_HOME/release
+          find $out/ -maxdepth 1 -type f ! -name release -exec mv {} $out/share \;
           # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
           rm -f $out/LICENSE_NATIVEIMAGE.txt
 

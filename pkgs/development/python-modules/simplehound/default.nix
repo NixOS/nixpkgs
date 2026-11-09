@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
 }:
 
@@ -12,13 +11,12 @@ buildPythonPackage rec {
   pname = "simplehound";
   version = "0.6";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "robmarkcole";
     repo = "simplehound";
     rev = "v${version}";
-    sha256 = "1b5m3xjmk0l6ynf0yvarplsfsslgklalfcib7sikxg3v5hiv9qwh";
+    hash = "sha256-kOO0Iyx7vD6jPisyRxWdj2rtNL1ZbQ+c9YaCWWUftaw=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -33,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for Sighthound";
     homepage = "https://github.com/robmarkcole/simplehound";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

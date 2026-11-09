@@ -8,7 +8,7 @@
   installShellFiles,
 }:
 let
-  version = "0.5.1";
+  version = "0.5.4";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-t7Qou3H6dlO97puWQGkPlyb0jjpGoYCrz041iZWWL/s=";
+    hash = "sha256-1bUMFxPpb9H/pRdCOX0u8Tn8RPmJElDs7o9t5JtRFuU=";
   };
 
-  cargoHash = "sha256-bJr0u025syrP/LGgIbXD0mRvQrvnnOntiaAfr/9tQ90=";
+  cargoHash = "sha256-OmlcPZuQ1RbyFrF5tuztucgtCA544UHJxEaXh/mfSHQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       Frostman
       matthiasbeyer

@@ -5,7 +5,6 @@
   setuptools-scm,
   django,
   python,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,10 +13,8 @@ buildPythonPackage rec {
   version = "1.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "jazzband";
+    owner = "django-commons";
     repo = "django-widget-tweaks";
     tag = version;
     hash = "sha256-ymjBuNGfndUwQdBU2xnc9CA51oOaEPA+RaAspJMKQ04=";
@@ -33,8 +30,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tweak the form field rendering in templates, not in python-level form definitions";
-    homepage = "https://github.com/jazzband/django-widget-tweaks";
-    changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${src.tag}/CHANGES.rst";
+    homepage = "https://github.com/django-commons/django-widget-tweaks";
+    changelog = "https://github.com/django-commons/django-widget-tweaks/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxxk ];
   };

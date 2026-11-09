@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysoma";
   version = "0.0.14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the HTTP API provided by SOMA Connect";
     homepage = "https://pypi.org/project/pysoma";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

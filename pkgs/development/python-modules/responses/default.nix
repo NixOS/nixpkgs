@@ -5,11 +5,9 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
-  tomli,
   tomli-w,
   types-pyyaml,
   types-toml,
@@ -18,10 +16,8 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.25.7";
+  version = "0.26.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -29,7 +25,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "responses";
     tag = version;
-    hash = "sha256-eiJwu0sRtr3S4yAnbsIak7g03CNqOTS16rNXoXRQumA=";
+    hash = "sha256-8+zc7UebB9pBLC5nc7QtuXQIoQ+k+NH1XvajQMGIXNg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,8 +43,7 @@ buildPythonPackage rec {
     pytest-httpserver
     pytestCheckHook
     tomli-w
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "responses" ];
 

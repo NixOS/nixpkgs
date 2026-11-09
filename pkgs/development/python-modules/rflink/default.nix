@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "rflink";
-  version = "0.0.67";
+  version = "0.0.68";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
     tag = version;
-    hash = "sha256-LAmn9/l+J++CvRa5gypuoQ41mZVSoVqbPpbqVSP6CN4=";
+    hash = "sha256-0mMBZYN3xzRotVuLw2HgzSVhsXUv531x3i97B2lI5KE=";
   };
 
   build-system = [ setuptools ];

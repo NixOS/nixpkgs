@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtxdg-tools";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qtxdg-tools";
     rev = version;
-    hash = "sha256-v6mIpGuZ3YFb+P9FLlgNp5xf0ceAaVnMxRG+sQLP72Y=";
+    hash = "sha256-pVFdodYoLQs8o8rF8etd7BKImgJRoDsckGg9DRrwVIY=";
   };
 
   nativeBuildInputs = [

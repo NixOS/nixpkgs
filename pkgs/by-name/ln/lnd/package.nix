@@ -21,23 +21,25 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lnd";
-  version = "0.19.3-beta";
+  version = "0.21.6-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
-    rev = "v${version}";
-    hash = "sha256-j37tLwVmAI18N0Xb3epACKRpJbs60HamZOlKDxWngFA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-khTu7oDifgbVWPVf2doP0EsJaCETUH6VXmLswkZ3jNo=";
   };
 
-  vendorHash = "sha256-Ah5jOknXSoWEOnn0UKRuuwqT+E4eAkCg1h4qzW0rSHM=";
+  vendorHash = "sha256-IHMuTwyc+aTPYECdfI5QCijFzXWuAQtZiDlZaLnhjcY=";
 
   subPackages = [
     "cmd/lncli"
     "cmd/lnd"
   ];
+
+  env.CGO_ENABLED = 0;
 
   inherit tags;
 
@@ -46,9 +48,9 @@ buildGoModule rec {
     homepage = "https://github.com/lightningnetwork/lnd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      bleetube
       cypherpunk2140
       prusnak
     ];
+    mainProgram = "lnd";
   };
-}
+})

@@ -8,12 +8,12 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "farbfeld";
   version = "4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/farbfeld/farbfeld-${version}.tar.gz";
+    url = "https://dl.suckless.org/farbfeld/farbfeld-${finalAttrs.version}.tar.gz";
     sha256 = "0ap7rcngffhdd57jw9j22arzkbrhwh0zpxhwbdfwl8fixlhmkpy7";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

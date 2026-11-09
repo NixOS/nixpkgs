@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  writeScriptBin,
   fetchFromGitHub,
   cjson,
   cmake,
@@ -12,39 +11,48 @@
   libogg,
   libpng,
   libtheora,
-  libX11,
+  libx11,
   lua5_4,
   minizip,
   openal,
   SDL2,
   sqlite,
   zlib,
+  versionCheckHook,
 }:
 let
-  version = "2.83.2";
-  fakeGit = writeScriptBin "git" ''
-    if [ "$1" = "describe" ]; then
-      echo "${version}"
-    fi
-  '';
+  binarySuffix =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "aarch64"
+    else if stdenv.hostPlatform.isi686 then
+      "i386"
+    else
+      throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "etlegacy-unwrapped";
-  inherit version;
+  version = "2.86.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
-    tag = "v${version}";
-    hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4EvO73Ob+viDAkmXmnuaGJBCSzTD3xrPZae3fA4oxfo=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    fakeGit
   ];
+
+  env = {
+    CI_ETL_TAG = finalAttrs.version;
+    CI_ETL_DESCRIBE = finalAttrs.version;
+  };
 
   buildInputs = [
     cjson
@@ -55,7 +63,7 @@ stdenv.mkDerivation {
     libogg
     libpng
     libtheora
-    libX11
+    libx11
     lua5_4
     minizip
     openal
@@ -66,9 +74,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
+    (lib.cmakeBool "BUNDLED_WOLFSSL" false)
+    (lib.cmakeBool "BUNDLED_OPENSSL" false)
+    (lib.cmakeBool "BUNDLED_CURL" false)
     (lib.cmakeBool "BUNDLED_ZLIB" false)
     (lib.cmakeBool "BUNDLED_CJSON" false)
     (lib.cmakeBool "BUNDLED_JPEG" false)
@@ -86,16 +96,22 @@ stdenv.mkDerivation {
     (lib.cmakeBool "INSTALL_OMNIBOT" false)
     (lib.cmakeBool "INSTALL_GEOIP" false)
     (lib.cmakeBool "INSTALL_WOLFADMIN" false)
+    (lib.cmakeBool "FEATURE_FREETYPE" true)
+    (lib.cmakeBool "FEATURE_GETTEXT" true)
     (lib.cmakeBool "FEATURE_AUTOUPDATE" false)
     (lib.cmakeBool "FEATURE_RENDERER2" false)
+    (lib.cmakeBool "RENDERER_DYNAMIC" true)
     (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
     (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       ET: Legacy, an open source project fully compatible client and server
       for the popular online FPS game Wolfenstein: Enemy Territory - whose
@@ -104,5 +120,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       ashleyghooper
     ];
+    mainProgram = "etl." + binarySuffix;
+    platforms = lib.platforms.linux;
   };
-}
+})

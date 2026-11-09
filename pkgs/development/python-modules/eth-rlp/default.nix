@@ -7,7 +7,6 @@
   eth-utils,
   hexbytes,
   pytestCheckHook,
-  pythonOlder,
   rlp,
   pydantic,
 }:
@@ -16,10 +15,9 @@ buildPythonPackage rec {
   pname = "eth-rlp";
   version = "2.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "eth-rlp";
     rev = "v${version}";
     hash = "sha256-e8nPfxk3OnFEcPnfTy1IEUCHVId6E/ssNOUeAe331+U=";
@@ -47,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "RLP definitions for common Ethereum objects";
-    homepage = "https://github.com/ethereum/eth-rlp";
+    homepage = "https://github.com/ApeWorX/eth-rlp";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

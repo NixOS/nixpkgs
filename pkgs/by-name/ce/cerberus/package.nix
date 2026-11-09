@@ -3,7 +3,6 @@
   fetchpatch,
   fetchFromGitHub,
   ocamlPackages,
-  opam,
   makeBinaryWrapper,
   writableTmpDirAsHomeHook,
   unstableGitUpdater,
@@ -39,6 +38,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   '';
 
   minimalOCamlVersion = "4.12";
+
+  # The custom installPhase installs everything into $out.
+  outputs = [ "out" ];
 
   depsBuildBuild = [
     ocamlPackages.menhir
@@ -95,7 +97,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
+    # Bypass `dune exec` so its stderr warnings don't pollute test output.
     PATH="$out/bin":$PATH
+    export WITH_CERB=cerberus
 
     patchShebangs --build tests
 

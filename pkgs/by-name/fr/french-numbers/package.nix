@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "french-numbers";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6mcqT0RZddHlzjyZzx0JGTfCRcQ2UQ3Qlmk0VVNzsnI=";
   };
 
@@ -20,11 +20,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Represent numbers in French language";
     homepage = "https://github.com/evenfurther/french-numbers";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "french-numbers";
     maintainers = with lib.maintainers; [ samueltardieu ];
   };
-}
+})

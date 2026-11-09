@@ -4,20 +4,24 @@
   replaceVars,
   pkg-config,
   fetchurl,
+  fetchpatch,
+  testers,
   python3Packages,
   gettext,
   itstool,
   libtool,
   texinfo,
-  systemdMinimal,
   util-linux,
   autoreconfHook,
   glib,
   dotconf,
   libsndfile,
-  runtimeShell,
+  withSystemd ? stdenv.hostPlatform.isLinux,
+  systemdLibs,
   withLibao ? true,
   libao,
+  withPipewire ? true,
+  pipewire,
   withPulse ? false,
   libpulseaudio,
   withAlsa ? false,
@@ -31,16 +35,17 @@
   pcaudiolib,
   mbrola,
   withPico ? true,
-  svox,
+  picotts,
   libsOnly ? false,
+  nixosTests,
 }:
 
-let
-  inherit (python3Packages) python pyxdg wrapPython;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
   version = "0.12.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${finalAttrs.version}/speech-dispatcher-${finalAttrs.version}.tar.gz";
@@ -52,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       utillinux = util-linux;
       # patch context
       bindir = null;
+    })
+    (fetchpatch {
+      name = "use-binsh.patch";
+      url = "https://github.com/brailcom/speechd/commit/66d5fe65cffd4c0ce9cfb4c6d292866ed8726999.diff?full_index=1";
+      hash = "sha256-7R5BH6QmxovvtXoH/T76qu6YMfm1HE+CA0eB0mzwmfY=";
     })
   ]
   ++ lib.optionals (withEspeak && espeak.mbrolaSupport) [
@@ -68,7 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     itstool
     texinfo
-    wrapPython
+    python3Packages.python
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -77,10 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libao
     libpulseaudio
-    python
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemdMinimal # libsystemd
+  ++ lib.optionals withSystemd [
+    systemdLibs
+  ]
+  ++ lib.optionals withPipewire [
+    pipewire
   ]
   ++ lib.optionals withAlsa [
     alsa-lib
@@ -94,42 +107,43 @@ stdenv.mkDerivation (finalAttrs: {
     flite
   ]
   ++ lib.optionals withPico [
-    svox
+    picotts
   ];
 
   pythonPath = [
-    pyxdg
+    python3Packages.pyxdg
   ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    # Audio method falls back from left to right.
-    "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ]
-  ++ lib.optionals withPulse [
-    "--with-pulse"
-  ]
-  ++ lib.optionals withAlsa [
-    "--with-alsa"
-  ]
-  ++ lib.optionals withLibao [
-    "--with-libao"
-  ]
-  ++ lib.optionals withOss [
-    "--with-oss"
-  ]
-  ++ lib.optionals withEspeak [
-    "--with-espeak-ng"
-  ]
-  ++ lib.optionals withPico [
-    "--with-pico"
-  ];
+  configureFlags =
+    let
+      inherit (lib) withFeature;
+    in
+    [
+      "--sysconfdir=/etc"
+      # Audio method falls back from left to right.
+      ''--with-default-audio-method="${
+        lib.concatStringsSep "," (
+          lib.optional withLibao "libao"
+          ++ lib.optional withPulse "pulse"
+          ++ lib.optional withAlsa "alsa"
+          ++ lib.optional withPipewire "pipewire"
+          ++ lib.optional withOss "oss"
+        )
+      }"''
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+      (withFeature withPulse "pulse")
+      (withFeature withLibao "libao")
+      (withFeature withPipewire "pipewire")
+      (withFeature withAlsa "alsa")
+      (withFeature withOss "oss")
+      (withFeature withEspeak "espeak-ng")
+      (withFeature withFlite "flite")
+      (withFeature withPico "pico")
+    ];
 
   postPatch = lib.optionalString withPico ''
-    substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
-    substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
+    substituteInPlace src/modules/pico.c --replace-fail "/usr/share/pico/lang" "${picotts}/share/pico/lang"
   '';
 
   installFlags = [
@@ -148,15 +162,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests = lib.optionalAttrs (!libsOnly) {
+      nixos = nixosTests.speechd;
+
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
+
   meta = {
     description =
-      "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
+      "Common high-level interface to speech synthesis"
+      + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
+    changelog = "https://github.com/brailcom/speechd/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      berce
-      jtojnar
-    ];
+    maintainers = with lib.maintainers; [ jtojnar ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
     platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
     mainProgram = "speech-dispatcher";

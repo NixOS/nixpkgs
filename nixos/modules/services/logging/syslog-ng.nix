@@ -77,9 +77,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.journald.settings.Journal.ForwardToSyslog = lib.mkOptionDefault true;
+
     systemd.services.syslog-ng = {
       description = "syslog-ng daemon";
-      preStart = "mkdir -p /{var,run}/syslog-ng";
       wantedBy = [ "multi-user.target" ];
       after = [ "multi-user.target" ]; # makes sure hostname etc is set
       serviceConfig = {
@@ -87,6 +88,7 @@ in
         PIDFile = pidFile;
         StandardOutput = "null";
         Restart = "on-failure";
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p /var/syslog-ng /run/syslog-ng";
         ExecStart = "${cfg.package}/sbin/syslog-ng ${lib.concatStringsSep " " syslogngOptions}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };

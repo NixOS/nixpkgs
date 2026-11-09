@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envfs";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "envfs";
     rev = finalAttrs.version;
-    hash = "sha256-bpATdm/lB+zomPYGCxA7omWK/SKPIaqr94J+fjMaXfE=";
+    hash = "sha256-+RDJKyzF3jx/D5L45RybzivMjHOYe1Y4rIw9Y1G2z+g=";
   };
 
-  cargoHash = "sha256-nMUdAFRHJZDwvLASBVykzzkwk3HxslDehqqm1U99qYg=";
+  cargoHash = "sha256-v3v0nGaBNCvDMVt6b5RqlgbW6uWiXHHwTGApX61abog=";
 
   postInstall = ''
     ln -s envfs $out/bin/mount.envfs
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      envfs = nixosTests.envfs;
+      inherit (nixosTests) envfs;
     };
 
     updateScript = nix-update-script { };

@@ -149,15 +149,15 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inspircd";
-  version = "4.9.0";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
-    rev = "v${version}";
-    sha256 = "sha256-DoXf0F7tjfQZRFMrVECrlRlJLt7PymjwHSg9+4RLH00=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-crIxqqBMwu+lYnftlOdZ/jNvOh0vS7Zr0YDMAR8wlfs=";
   };
 
   outputs = [
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
     # this manually sets the flags instead of using configureFlags, because otherwise stdenv passes flags like --bindir, which make configure fail
     ./configure \
       --disable-auto-extras \
-      --distribution-label nixpkgs${version} \
+      --distribution-label nixpkgs${finalAttrs.version} \
       --disable-ownership \
       --binary-dir  ${placeholder "bin"}/bin \
       --config-dir  /etc/inspircd \
@@ -229,6 +229,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Modular C++ IRC server";
     license = [
       lib.licenses.gpl2Only
@@ -253,4 +255,4 @@ stdenv.mkDerivation rec {
     # in binary form. They can be built locally of course.
     hydraPlatforms = [ ];
   };
-}
+})

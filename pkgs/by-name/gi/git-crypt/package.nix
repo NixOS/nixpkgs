@@ -10,14 +10,14 @@
   docbook_xsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-crypt";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
     repo = "git-crypt";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-d5nMDFQkJY+obYkhvr8yT9mjlGEBWFLN5xGizJ9kwHw=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://github.com/AGWA/git-crypt/issues/232
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DOPENSSL_API_COMPAT=0x30000000L"
   ];
 
@@ -71,10 +71,13 @@ stdenv.mkDerivation rec {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ dochang ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      dochang
+      luochen1990
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "git-crypt";
   };
 
-}
+})

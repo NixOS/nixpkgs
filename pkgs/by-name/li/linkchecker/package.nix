@@ -4,9 +4,10 @@
   fetchFromGitHub,
   gettext,
   pdfSupport ? true,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "linkchecker";
   version = "10.6.0";
   pyproject = true;
@@ -14,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "linkchecker";
     repo = "linkchecker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CzDShtqcGO2TP5qNVf2zkI3Yyh80I+pSVIFzmi3AaGQ=";
   };
 
@@ -41,12 +42,8 @@ python3Packages.buildPythonApplication rec {
     parameterized
     pytestCheckHook
     pyftpdlib
+    writableTmpDirAsHomeHook
   ];
-
-  # Needed for tests to be able to create a ~/.local/share/linkchecker/plugins directory
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     "test_timeit2" # flakey, and depends sleep being precise to the milisecond
@@ -58,11 +55,11 @@ python3Packages.buildPythonApplication rec {
     description = "Check websites for broken links";
     mainProgram = "linkchecker";
     homepage = "https://linkcheck.github.io/linkchecker/";
-    changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${version}";
+    changelog = "https://github.com/linkchecker/linkchecker/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
       tweber
     ];
   };
-}
+})

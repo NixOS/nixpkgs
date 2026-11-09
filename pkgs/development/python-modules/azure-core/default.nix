@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   aiodns,
   aiohttp,
   flask,
@@ -12,10 +11,9 @@
   opentelemetry-instrumentation,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
-  pytest,
   pytest-asyncio,
   pytest-trio,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   requests,
   setuptools,
   six,
@@ -24,18 +22,16 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.35.0";
+  version = "1.41.0";
   pname = "azure-core";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-wL5ShIlIXp7eWbaXHrY8HqrPg+9TABv+OQTkdelyvlw=";
+    hash = "sha256-9G/1380jDyXPHBnoo0uNwIozeyUD4mi7YAoWwA24rVo=";
   };
 
   build-system = [ setuptools ];
@@ -58,10 +54,9 @@ buildPythonPackage rec {
     opentelemetry-instrumentation
     opentelemetry-instrumentation-requests
     opentelemetry-sdk
-    pytest
     pytest-trio
     pytest-asyncio
-    pytestCheckHook
+    pytest8_3CheckHook
     trio
   ]
   ++ lib.concatAttrValues optional-dependencies;

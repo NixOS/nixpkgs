@@ -8,21 +8,31 @@
 
 buildGoModule (finalAttrs: {
   pname = "trzsz-ssh";
-  version = "0.1.23";
+  version = "0.1.27";
 
   src = fetchFromGitHub {
     owner = "trzsz";
     repo = "trzsz-ssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cp5XI7ggpt48llojcmarYPi9mTM+YBqwjG/eNAnKTxc=";
+    hash = "sha256-wiObvHGSJdf8qXO1u7PvLdaQ1cvkLAgmQoGkw3hUMkQ=";
   };
 
-  vendorHash = "sha256-pI9BlttS9a1XrgBBmUd+h529fLbsbwSMwjKn4P50liE=";
+  vendorHash = "sha256-C6Trg2DURrHE+cYF7BewVWONOh3soEKkbnN4JjYbC48=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Failing test - Expected output is a table in plain text, but got ANSI color codes for the table's border
+        # Reported upstream: https://github.com/trzsz/trzsz-ssh/issues/277
+        "TestTableExample"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeCheckInputs = [
     versionCheckHook

@@ -34,7 +34,7 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.44";
+  version = "2.46";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
-    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
+    hash = "sha256-uMmj15bcCw6OqTXcJMXI1vNF6xd62lrGpbESLHfWIVg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -120,14 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./avr-size.patch
 
     ./windres-locate-gcc.patch
-
-    # Backported against CVE patched in the 2.45 series. See:
-    # https://nvd.nist.gov/vuln/detail/CVE-2025-5244
-    ./CVE-2025-5244.diff
-
-    # Backported against CVE patched in the 2.45 series. See:
-    # https://nvd.nist.gov/vuln/detail/CVE-2025-5245
-    ./CVE-2025-5245.diff
   ];
 
   outputs = [
@@ -286,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
     for target in ${lib.escapeShellArgs allGasTargets}; do
       mkdir "$NIX_BUILD_TOP/build-$target"
       env -C "$NIX_BUILD_TOP/build-$target" \
-        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        "$configureScript" "''${configureFlags[@]}" \
         --enable-gas --program-prefix "$target-"  --target "$target"
     done
   '';
@@ -301,7 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString withAllTargets ''
     for target in ${lib.escapeShellArgs allGasTargets}; do
       make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
-        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        "''${makeFlags[@]}" "''${buildFlags[@]}" \
         TARGET-gas=as-new all-gas
     done
   '';
@@ -336,7 +328,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString withAllTargets ''
       for target in ${lib.escapeShellArgs allGasTargets}; do
         make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
-          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          "''${makeFlags[@]}" "''${installFlags[@]}" \
           install-exec-bindir
       done
     ''
@@ -352,15 +344,23 @@ stdenv.mkDerivation (finalAttrs: {
     # The plugin API is not a function of any targets. Expose it separately,
     # currently only used by LLVM for enabling BFD to do LTO with LLVM bitcode.
     # (Tar will exit with an error if there are no matches).
-    plugin-api-header = runCommand "libbfd-plugin-api-header" { } ''
-      mkdir -p $out
-      tar --directory=$out \
-      --extract \
-      --file=${finalAttrs.src} \
-      --strip-components=1 \
-        --wildcards '*'/include/plugin-api.h
-    '';
+    plugin-api-header =
+      runCommand "libbfd-plugin-api-header"
+        {
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p $out
+          tar --directory=$out \
+          --extract \
+          --file=${finalAttrs.src} \
+          --strip-components=1 \
+            --wildcards '*'/include/plugin-api.h
+        '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";

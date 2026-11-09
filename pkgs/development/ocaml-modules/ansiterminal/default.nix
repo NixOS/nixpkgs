@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ANSITerminal";
   version = "0.8.5";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ANSITerminal/releases/download/${version}/ANSITerminal-${version}.tbz";
+    url = "https://github.com/Chris00/ANSITerminal/releases/download/${finalAttrs.version}/ANSITerminal-${finalAttrs.version}.tbz";
     hash = "sha256-q3OyGLajAmfSu8QzEtzzE5gbiwvsVV2SsGuHZkst0w4=";
   };
 
@@ -27,7 +27,10 @@ buildDunePackage rec {
       this part is currently work in progress).
     '';
     homepage = "https://github.com/Chris00/ANSITerminal";
-    license = lib.licenses.lgpl3;
+    license = with lib.licenses; [
+      lgpl3Plus
+      ocamlLgplLinkingException
+    ];
     maintainers = [ lib.maintainers.jirkamarsik ];
   };
-}
+})

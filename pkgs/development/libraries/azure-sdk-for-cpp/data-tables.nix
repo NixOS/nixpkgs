@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-data-tables_1.0.0-beta.6";
     hash = "sha256-gfkjoA16UP6ToIueYPfhQFh+LEhlVtvTk3qRJoHR5OY=";
   };
-  sourceRoot = "source/sdk/tables/azure-data-tables";
+  sourceRoot = "${finalAttrs.src.name}/sdk/tables/azure-data-tables";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

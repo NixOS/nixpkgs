@@ -6,13 +6,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ansible-lint";
   version = "25.8.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ansible_lint";
     hash = "sha256-Nd093RLYBjh2kVvy8GuaG4D9J6fLHKTOUcjOu4RpCSI=";
   };
@@ -87,13 +87,18 @@ python3Packages.buildPythonApplication rec {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ ansible ]}"
+  ];
 
   meta = {
     description = "Best practices checker for Ansible";
     mainProgram = "ansible-lint";
     homepage = "https://github.com/ansible/ansible-lint";
-    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
+    changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sengaya
@@ -101,4 +106,4 @@ python3Packages.buildPythonApplication rec {
       robsliwi
     ];
   };
-}
+})

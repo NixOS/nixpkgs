@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pytestCheckHook,
   nbval,
   jupyter-packaging,
@@ -13,13 +12,10 @@
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
 
   pname = "ipydatawidgets";
   version = "4.3.5";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

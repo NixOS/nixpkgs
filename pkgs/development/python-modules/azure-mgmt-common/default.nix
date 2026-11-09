@@ -7,21 +7,25 @@
   azure-mgmt-nspkg,
   requests,
   msrestazure,
+  setuptools,
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.20.0";
-  format = "setuptools";
+  pyproject = true;
+
   pname = "azure-mgmt-common";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "c63812c13d9f36615c07f874bc602b733bb516f1ed62ab73189b8f71c6bfbfe6";
+    hash = "sha256-xjgSwT2fNmFcB/h0vGArczu1FvHtYqtzGJuPcca/v+Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-nspkg
     requests
@@ -35,13 +39,12 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.common" ];
+
   meta = {
     description = "This is the Microsoft Azure Resource Management common code";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      olcai
-      maxwilson
-    ];
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

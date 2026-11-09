@@ -81,8 +81,9 @@ in
         "sqlite"
         "mysql"
         "postgresql"
+        "sqlite_system"
       ];
-      default = "sqlite";
+      default = "sqlite_system";
       description = ''
         Which database backend vaultwarden will be using.
       '';
@@ -173,6 +174,7 @@ in
     domain = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
+      example = "bitwarden.example.com";
       description = "The domain under which VaultWarden will be reachable.";
     };
 
@@ -208,7 +210,8 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.backupDir != null -> cfg.dbBackend == "sqlite";
+        assertion =
+          cfg.backupDir != null -> (cfg.dbBackend == "sqlite" || cfg.dbBackend == "sqlite_system");
         message = "Backups for database backends other than sqlite will need customization";
       }
       {
@@ -323,7 +326,7 @@ in
       services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
         description = "Backup vaultwarden";
         environment = {
-          DATA_FOLDER = dataDir;
+          DATA_FOLDER = configEnv.DATA_FOLDER;
           BACKUP_FOLDER = cfg.backupDir;
         };
         path = [ pkgs.sqlite ];

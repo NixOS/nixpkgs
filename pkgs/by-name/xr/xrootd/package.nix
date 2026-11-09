@@ -3,18 +3,17 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  davix,
   cmake,
   gtest,
   makeWrapper,
   pkg-config,
   curl,
   isa-l,
-  fuse,
   libkrb5,
   libuuid,
   libxcrypt,
   libxml2,
+  libzip,
   openssl,
   readline,
   scitokens-cpp,
@@ -30,14 +29,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.9.1";
+  version = "6.0.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-XClMtQfCGWpLtILGQyYCsKMcOlhLHC5i7UabzXH/imc=";
+    hash = "sha256-RSODctDfDkdY1YnxFINGwbpNxEkNCYjW1QEDk9VAYFw=";
   };
 
   postPatch = ''
@@ -65,20 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    davix
     curl
     libkrb5
     libuuid
     libxcrypt
     libxml2
+    libzip
     openssl
     readline
     scitokens-cpp
     zlib
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
-    fuse
   ]
   ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     isa-l # not available on Apple silicon
@@ -86,17 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
     voms # only available on Linux due to gsoap failing to build on Darwin
   ];
 
-  # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
+  # https://github.com/xrootd/xrootd/blob/v6.0.2/config/
   postInstall = ''
-    mkdir -p "$out/lib/tmpfiles.d"
-    install -m 644 -T ../packaging/rhel/xrootd.tmpfiles "$out/lib/tmpfiles.d/xrootd.conf"
     mkdir -p "$out/etc/xrootd"
-    install -m 644 -t "$out/etc/xrootd" ../packaging/common/*.cfg
-    install -m 644 -t "$out/etc/xrootd" ../packaging/common/client.conf
+    install -m 644 -t "$out/etc/xrootd" ../config/*.cfg
+    install -m 644 -t "$out/etc/xrootd" ../config/client.conf
     mkdir -p "$out/etc/xrootd/client.plugins.d"
-    install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../packaging/common/client-plugin.conf.example
+    install -m 644 -t "$out/etc/xrootd/client.plugins.d" ../config/client-plugin.conf.example
     mkdir -p "$out/etc/logrotate.d"
-    install -m 644 -T ../packaging/common/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
+    install -m 644 -T ../config/xrootd.logrotate "$out/etc/logrotate.d/xrootd"
   ''
   # Leaving those in bin/ leads to a cyclic reference between $dev and $bin
   # This happens since https://github.com/xrootd/xrootd/commit/fe268eb622e2192d54a4230cea54c41660bd5788
@@ -107,14 +103,22 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/lib/systemd/system"
-    install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
+    install -m 644 -t "$out/lib/systemd/system" ../systemd/*.service ../systemd/*.socket
+  ''
+  # Install missing private headers needed by Python bindings
+  + ''
+    mkdir -p $dev/include/xrootd/private/XrdCks
+    cp ../src/XrdCks/XrdCksXAttr.hh $dev/include/xrootd/private/XrdCks/
+    mkdir -p $dev/include/xrootd/private/XrdOuc
+    cp ../src/XrdOuc/XrdOucXAttr.hh $dev/include/xrootd/private/XrdOuc/
   '';
 
   cmakeFlags = [
     (lib.cmakeFeature "XRootD_VERSION_STRING" finalAttrs.version)
     (lib.cmakeBool "FORCE_ENABLED" true)
-    (lib.cmakeBool "ENABLE_DAVIX" true)
-    (lib.cmakeBool "ENABLE_FUSE" (!stdenv.hostPlatform.isDarwin)) # XRootD doesn't support MacFUSE
+    # TODO(@ShamrockLee): Turn on for Linux after XRootD migrates to FUSE 3.
+    # See https://github.com/xrootd/xrootd/issues/2423
+    (lib.cmakeBool "ENABLE_FUSE" false)
     (lib.cmakeBool "ENABLE_MACAROONS" false)
     (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
     (lib.cmakeBool "ENABLE_SCITOKENS" true)
@@ -158,5 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+    mainProgram = "xrootd";
   };
 })

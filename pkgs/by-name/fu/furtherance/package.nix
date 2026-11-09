@@ -7,22 +7,25 @@
   libxkbcommon,
   openssl,
   pkg-config,
-  xorg,
+  libxscrnsaver,
+  libxi,
+  libxcursor,
+  libx11,
   vulkan-loader,
   wayland,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "furtherance";
-  version = "26.1.0";
+  version = "26.7.0";
 
   src = fetchFromGitHub {
     owner = "unobserved-io";
     repo = "Furtherance";
     rev = finalAttrs.version;
-    hash = "sha256-EwOLTq82NNuRMUCFSKryl6fBtXxhNps+tzOo3Uhe3yA=";
+    hash = "sha256-UMkFEbLdwZsSJviO29FNmLYLL5/HofhriMptpjSAYuY=";
   };
 
-  cargoHash = "sha256-iJW7tnGnwdp494ylJyNEuC80SIV8wRu8ygd5lcul2KA=";
+  cargoHash = "sha256-fdslQutVEGq1EG+Q8QAYKf9XfoostvHKWZrr4YwEowQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     openssl
     libxkbcommon
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcursor
-    xorg.libXi
+    libx11
+    libxscrnsaver
+    libxcursor
+    libxi
     vulkan-loader
     wayland
   ];
@@ -46,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/bin/${finalAttrs.pname} \
+    patchelf $out/bin/${finalAttrs.meta.mainProgram} \
       --add-rpath ${
         lib.makeLibraryPath [
           vulkan-loader

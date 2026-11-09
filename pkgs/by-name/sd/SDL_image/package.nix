@@ -3,7 +3,7 @@
   SDL,
   fetchFromGitHub,
   giflib,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libtiff,
@@ -11,17 +11,18 @@
   pkg-config,
   stdenv,
   unstableGitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12-unstable-2025-11-06";
+  version = "1.2.12-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_image";
-    rev = "7c6ea40bb75262740cd07f7658bc543f13c65b3c";
-    hash = "sha256-V8d9En6fJArslFLIaeCdfVD5YoHPbKjOpR79Va8w8js=";
+    rev = "2ffb2e3e1eba037897164e3ac6c67570d8bccd79";
+    hash = "sha256-fGwSb3GYfzcrWn7F70xhNxBXygYdD2uuzFQudS1lCqU=";
   };
 
   configureFlags = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     giflib
-    libXpm
+    libxpm
     libjpeg
     libpng
     libtiff
@@ -56,17 +57,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "release-1.*";
-    tagPrefix = "release-";
-    branch = "SDL-1.2";
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = unstableGitUpdater {
+      tagFormat = "release-1.*";
+      tagPrefix = "release-";
+      branch = "SDL-1.2";
+    };
   };
 
   meta = {
-    homepage = "http://www.libsdl.org/projects/SDL_image/";
+    homepage = "https://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
+    pkgConfigModules = [ "SDL_image" ];
+    identifiers.cpeParts =
+      let
+        # version shenanigans to strip -unstable suffix which is not supported by CPE
+        versionString = "${lib.versions.majorMinor finalAttrs.version}.${lib.versions.patch finalAttrs.version}";
+      in
+      lib.meta.cpeFullVersionWithVendor "libsdl" versionString;
   };
 })

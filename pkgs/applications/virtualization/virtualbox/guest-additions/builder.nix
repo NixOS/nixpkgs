@@ -1,25 +1,26 @@
 {
-  stdenv,
-  kernel,
-  fetchurl,
-  lib,
-  pam,
-  libxslt,
-  libXext,
-  libXcursor,
-  libXmu,
-  glib,
-  libXrandr,
   dbus,
-  xz,
-  pkg-config,
-  which,
-  xorg,
-  yasm,
-  patchelf,
-  makeself,
+  fetchurl,
+  glib,
+  lib,
+  libxcrypt,
+  libxcursor,
+  libxext,
+  libxmu,
+  libxrandr,
+  libxslt,
   linuxHeaders,
+  makeself,
   openssl,
+  pam,
+  patchelf,
+  pkg-config,
+  stdenv,
+  which,
+  xorg-server,
+  xrandr,
+  xz,
+  yasm,
   virtualboxVersion,
   virtualboxSubVersion,
   virtualboxSha256,
@@ -30,7 +31,7 @@ let
   buildType = "release";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
+  pname = "VirtualBox-GuestAdditions-builder";
   version = "${virtualboxVersion}${virtualboxSubVersion}";
 
   inherit virtualboxVersion virtualboxSubVersion;
@@ -48,24 +49,22 @@ stdenv.mkDerivation (finalAttrs: {
     which
     yasm
     makeself
-    xorg.xorgserver
+    xorg-server
     openssl
     linuxHeaders
     xz
-  ]
-  ++ kernel.moduleBuildDependencies;
+    libxcrypt
+  ];
+
   buildInputs = [
     dbus
     libxslt
-    libXext
-    libXcursor
+    libxext
+    libxcursor
     pam
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
   ];
-
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   prePatch = ''
     rm -r src/VBox/Additions/x11/x11include/
@@ -89,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxDRMClient /run/current-system/sw/bin/VBoxDRMClient
     substituteInPlace ./src/VBox/Additions/common/VBoxGuest/lib/VBoxGuestR3LibDrmClient.cpp --replace-fail /usr/bin/VBoxClient /run/current-system/sw/bin/VBoxClient
-    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xorg.xrandr}/bin/xrandr
-    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg.xorgserver.dev}/include/xorg "
+    substituteInPlace ./src/VBox/Additions/x11/VBoxClient/display.cpp --replace-fail /usr/X11/bin/xrandr ${xrandr}/bin/xrandr
+    substituteInPlace ./src/VBox/Additions/x11/vboxvideo/Makefile.kmk --replace-fail /usr/include/xorg "${xorg-server.dev}/include/xorg "
   '';
 
   configurePhase = ''
@@ -138,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./configure \
       --only-additions \
-      --with-linux=${kernel.dev} \
       --disable-kmods
 
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig @' \

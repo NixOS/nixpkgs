@@ -3,7 +3,7 @@
   lib,
   python3,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pypi-mirror";
   version = "5.2.1";
   pyproject = true;
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "montag451";
     repo = "pypi-mirror";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hRqQDYgOKpv4jmNvyrt/+EInPM/Xwsr3IjtrySAGRgY=";
   };
 
@@ -24,6 +24,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "pypi-mirror";
     homepage = "https://github.com/montag451/pypi-mirror";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
-}
+})

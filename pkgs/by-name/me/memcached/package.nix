@@ -7,13 +7,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.39";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.45";
   pname = "memcached";
 
   src = fetchurl {
-    url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-I+VQfpM7FUYxYdTF05IbDF80C1Qtbt1/bF4Xw08Ro2M=";
+    url = "https://memcached.org/files/memcached-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-02LGTm2NUocVNQHqv3yFtKdhQy+/U/XXsIXQuxZTwd0=";
   };
 
   configureFlags = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.coconnor ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "memcached";
   };
   passthru.tests = {
     smoke-tests = nixosTests.memcached;
   };
-}
+})

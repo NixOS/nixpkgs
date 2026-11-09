@@ -5,18 +5,22 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splint";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "https://www.splint.org/downloads/${pname}-${version}.src.tgz";
+    url = "https://www.splint.org/downloads/splint-${finalAttrs.version}.src.tgz";
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 
   patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   buildInputs = [ flex ];
+
+  buildFlags = [
+    "CFLAGS=-std=gnu99"
+  ];
 
   doCheck = true;
 
@@ -36,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

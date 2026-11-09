@@ -6,21 +6,18 @@
   jq,
   oniguruma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.10.2";
+  version = "1.12.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
     tag = version;
-    hash = "sha256-1BhRX9OWCfHnelktsrje4ejFxMTpSaGbYuocQ2H4pAI=";
+    hash = "sha256-glWEqoS+QaoIiBJu9DXd+VvhPnWOgRT4VaYfMpjbR5g=";
   };
 
   env.JQPY_USE_SYSTEM_LIBS = 1;
@@ -41,6 +38,7 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to match exact error text, fails with jq 1.8
     "test_value_error_is_raised_if_program_is_invalid"
+    "test_value_error_is_raised_if_input_cannot_be_processed_by_program"
   ];
 
   pythonImportsCheck = [ "jq" ];

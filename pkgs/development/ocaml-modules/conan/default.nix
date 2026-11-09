@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   buildDunePackage,
-  version ? "0.0.6",
   ptime,
   re,
   uutf,
@@ -12,13 +11,13 @@
   rresult,
 }:
 
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "conan";
-  inherit version;
+  version = "0.0.7";
 
   src = fetchurl {
-    url = "https://github.com/mirage/conan/releases/download/v${version}/conan-${version}.tbz";
-    hash = "sha256-shAle4gXFf+53L+IZ4yFWewq7yZ5WlMEr9WotLvxHhY=";
+    url = "https://github.com/mirage/conan/releases/download/v${finalAttrs.version}/conan-${finalAttrs.version}.tbz";
+    hash = "sha256-4ZbyGLnPRImRQ8vO71i+jlEWYB/FJCSelY7uBuH4dBU=";
   };
 
   propagatedBuildInputs = [
@@ -44,4 +43,4 @@ buildDunePackage {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

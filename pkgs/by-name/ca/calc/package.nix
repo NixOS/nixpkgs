@@ -2,23 +2,22 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
+  man,
   ncurses,
   readline,
-  unixtools,
   enableReadline ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calc";
-  version = "2.15.0.2";
+  version = "2.17.0.2";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/v${finalAttrs.version}/calc-${finalAttrs.version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/calc-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-dPEj32SiR7RhI9fBa9ny9+EEuuiXS2WswRcDVuOMJXc=";
+    hash = "sha256-Q/iTdJcXJuHX17cRo/aT0txoUFU+VDNyFzYYcF5X5/Q=";
   };
 
   postPatch = ''
@@ -28,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    makeWrapper
-    unixtools.col
+    man
   ];
 
   buildInputs = lib.optionals enableReadline [
@@ -46,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CALC_INCDIR=/include"
     "MANDIR=/share/man/man1"
 
+    "EXTRA_CFLAGS=-Wno-error=format-security"
     # Handle LDFLAGS defaults in calc
     "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
   ]

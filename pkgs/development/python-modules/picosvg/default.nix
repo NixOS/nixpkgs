@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools-scm,
   absl-py,
   lxml,
@@ -20,6 +21,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ocdHF0kYnfllpvul32itu1QtlDrqVeq5sT8Ecb5V1yk=";
   };
+
+  patches = [
+    # Fix test failures with skia-pathops 0.9.x (m143)
+    # https://github.com/googlefonts/picosvg/pull/331
+    (fetchpatch {
+      url = "https://github.com/googlefonts/picosvg/commit/885ee64b75f526e938eb76e09fab7d93e946a355.patch";
+      hash = "sha256-fR3FfnEPHwSO1rMtmQEr1pyvByTx8T53FxSpuAKWIjw=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 

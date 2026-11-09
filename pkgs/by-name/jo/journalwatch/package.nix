@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "journalwatch";
   version = "1.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "The-Compiler";
     repo = "journalwatch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha512-60+ewzOIox2wsQFXMAgD7XN+zvPA1ScPz6V4MB5taVDhqCxUTMVOxodf+4AMhxtNQloXZ3ye7/0bjh1NPDjxQg==";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ florianjacob ];
     mainProgram = "journalwatch";
   };
-}
+})

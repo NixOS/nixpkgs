@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
-  jdk17,
-  jdk21,
+  gradle_9,
+  jdk25,
   makeBinaryWrapper,
   openssl,
   libdeflate,
-  jre_headless,
+  jdk25_headless,
   writeScript,
   nixosTests,
 
@@ -19,7 +18,6 @@
   ],
 }:
 let
-  gradle_jdk17 = gradle.override { javaToolchains = [ jdk17 ]; };
   velocityNativePlatform =
     {
       x86_64-linux = "linux_x86_64";
@@ -34,17 +32,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "velocity";
-  version = "3.4.0-unstable-2025-12-07";
+  version = "4.3.2-unstable-2026-10-28";
 
   src = fetchFromGitHub {
     owner = "PaperMC";
     repo = "Velocity";
-    rev = "8f65a8142029717d3af09ecf82792f7345dc873a";
-    hash = "sha256-51n5ztuvGzWqvIfFOteV/CsvcInE7/aZmEeLCGonfLE=";
+    rev = "ed4c46ef43e7d93db0f69522a354a39412c66117";
+    hash = "sha256-KS/Fx96+IBtwvso7vdvWwIX++TS9MStxLd8UoGMSY9k=";
   };
 
   nativeBuildInputs = [
-    gradle_jdk17
+    gradle_9
     makeBinaryWrapper
   ];
 
@@ -54,15 +52,21 @@ stdenv.mkDerivation (finalAttrs: {
     libdeflate
 
     # needed for building velocity-native jni
-    jdk21
+    jdk25
   ];
 
   strictDeps = true;
 
-  mitmCache = gradle_jdk17.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
+
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle --write-verification-metadata sha256
+  '';
 
   patches = [
     ./fix-version.patch # remove build-time dependency on git and use version string from a env var instead
@@ -97,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/velocity
     cp proxy/build/libs/velocity-proxy-${builtins.head (builtins.split "-" finalAttrs.version)}-SNAPSHOT-all.jar $out/share/velocity/velocity.jar
 
-    makeWrapper ${lib.getExe jre_headless} "$out/bin/velocity" \
+    makeWrapper ${lib.getExe jdk25_headless} "$out/bin/velocity" \
       --append-flags "-jar $out/share/velocity/velocity.jar"
 
     ${lib.optionalString withVelocityNative ''

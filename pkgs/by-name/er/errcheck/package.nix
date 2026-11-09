@@ -4,18 +4,18 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "errcheck";
-  version = "1.9.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "kisielk";
     repo = "errcheck";
-    rev = "v${version}";
-    hash = "sha256-DhOoJL4InJHl4ImIrhV086a++srC5E4LF2VQb838+L8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3oap11vNjA7YZAFEkVTkZgXuJW5PRPvGkSYoAVo//8M=";
   };
 
-  vendorHash = "sha256-znkT0S13wCB47InP2QBCZqeWxDdEeIwQPoVWoxiAosQ=";
+  vendorHash = "sha256-sFcuL18a8Jw/e3qphOzrm/ORu8zJWY5B9refZCrCWeY=";
 
   subPackages = [ "." ];
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

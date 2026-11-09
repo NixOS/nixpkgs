@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openhue-cli";
-  version = "0.21";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "openhue";
     repo = "openhue-cli";
     tag = finalAttrs.version;
-    hash = "sha256-u6ulk+qv1FlZ7PdUiO9UXtRqWWp2MMRAnc8F9vHnRBo=";
+    hash = "sha256-2Bp07/FJZlAgeIxLjhlGunq+5/GCXWG1QuK/1J+2uCE=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-3930OjQ26n7J3XDWjCthfQjORP5wpJ3ZZK/m6/wi2X4=";
+  vendorHash = "sha256-3nKSlJ+EiAiW/UhHRminZ0QIqMqKv7UBjsNBBR8uY1M=";
 
   env.CGO_ENABLED = 0;
 

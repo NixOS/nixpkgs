@@ -1,31 +1,31 @@
 {
   buildPythonPackage,
-  python-manilaclient,
-  stestr,
   ddt,
-  tempest,
-  mock,
+  fixtures,
+  python-manilaclient,
   python-openstackclient,
+  requests-mock,
+  stestrCheckHook,
+  tempest,
+  testtools,
 }:
 
 buildPythonPackage {
   pname = "python-manilaclient-tests";
   inherit (python-manilaclient) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;
 
   nativeCheckInputs = [
-    python-manilaclient
-    stestr
     ddt
-    tempest
-    mock
+    fixtures
+    python-manilaclient
     python-openstackclient
+    requests-mock
+    stestrCheckHook
+    tempest
+    testtools
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

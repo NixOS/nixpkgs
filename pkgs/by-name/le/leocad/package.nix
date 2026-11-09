@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--set-default LEOCAD_LIB ${parts}"
+    "--set-default"
+    "LEOCAD_LIB"
+    parts
   ];
 
   passthru = {
@@ -71,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  passthru = {
+  meta = {
     description = "CAD program for creating virtual LEGO models";
     mainProgram = "leocad";
     homepage = "https://www.leocad.org/";

@@ -3,11 +3,13 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   callPackage,
-  nodejs_20,
+  nodejs_24,
   yarn,
 }:
 let
   common = callPackage ./common.nix { };
+
+  nodejs = nodejs_24;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tandoor-recipes-frontend";
@@ -22,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_20
-    (yarn.override { nodejs = nodejs_20; })
+    nodejs
+    (yarn.override { inherit nodejs; })
   ];
 
   configurePhase = ''

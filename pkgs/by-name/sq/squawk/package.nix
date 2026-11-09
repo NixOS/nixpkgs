@@ -8,18 +8,18 @@
   rustPlatform,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "squawk";
-  version = "2.34.0";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     owner = "sbdchd";
     repo = "squawk";
-    tag = "v${version}";
-    hash = "sha256-SdCtZ+A4MuHhTrL5v65uDb47FeIBaGweHRXhD9crx2k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D37eJT9A8hGi0E0kbjMjW9yitTbnHlKCE03y7p2A/us=";
   };
 
-  cargoHash = "sha256-r12pNc7C4mNYzIaE/99jrWBQ/YPqR30k90TFx1hBGR4=";
+  cargoHash = "sha256-AIKjV9bBhdA7vsTD9wtVwcgAlcvhrM8J+tIKPr+sUZA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,8 +49,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Linter for PostgreSQL, focused on migrations";
     homepage = "https://squawkhq.com";
-    changelog = "https://github.com/sbdchd/squawk/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Only ];
-    maintainers = [ ];
+    changelog = "https://github.com/sbdchd/squawk/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = [ lib.maintainers.dibenzepin ];
   };
-}
+})

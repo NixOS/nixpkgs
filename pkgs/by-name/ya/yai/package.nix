@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yai";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ekkinox";
     repo = "yai";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-MoblXLfptlIYJbXQTpbc8GBo2a3Zgxdvwra8IUEGiZs==";
   };
 
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   ldflags = [
     "-w -s"
-    "-X main.buildVersion=${version}"
+    "-X main.buildVersion=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ georgesalkhouri ];
     mainProgram = "yai";
   };
-}
+})

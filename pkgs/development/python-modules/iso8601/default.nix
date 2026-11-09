@@ -6,15 +6,12 @@
   poetry-core,
   pytestCheckHook,
   pytz,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "iso8601";
   version = "2.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,7 +34,7 @@ buildPythonPackage rec {
     description = "Simple module to parse ISO 8601 dates";
     homepage = "https://pyiso8601.readthedocs.io/";
     changelog = "https://github.com/micktwomey/pyiso8601/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

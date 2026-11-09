@@ -10,15 +10,15 @@
   sqlite,
   stdenv,
   alsa-lib,
-  xorg,
+  libxcb,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
   version = "0.1.48";
 
   src = fetchFromGitHub {
-    owner = "louis030195";
-    repo = "screen-pipe";
+    owner = "screenpipe";
+    repo = "screenpipe";
     rev = "v${version}";
     hash = "sha256-rWKRCqWFuPO84C52mMrrS4euD6XdJU8kqZsAz28+vWE=";
   };
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    xorg.libxcb
+    libxcb
   ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";
@@ -64,9 +64,9 @@ rustPlatform.buildRustPackage rec {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
     description = "Personalized AI powered by what you've seen, said, or heard";
-    homepage = "https://github.com/louis030195/screen-pipe";
+    homepage = "https://github.com/screenpipe/screenpipe";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "screen-pipe";
   };
 }

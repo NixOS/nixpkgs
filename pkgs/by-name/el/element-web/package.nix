@@ -3,7 +3,8 @@
   stdenv,
   jq,
   element-web-unwrapped,
-  conf ? { },
+  config,
+  conf ? config.element-web.conf or { },
 }:
 
 if (conf == { }) then

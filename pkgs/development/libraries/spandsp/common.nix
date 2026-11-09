@@ -40,17 +40,26 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/freeswitch/spandsp/pull/111
     ./Fix-tests-pcap_parse-build-on-musl.patch
+
+    # https://github.com/freeswitch/spandsp/pull/116
+    ./fix-bit-operations-ub.patch
   ]
   ++ patches;
 
   postPatch = ''
     patchShebangs autogen.sh
-
-    # pkg-config? What's that?
-    # Actually *check* the value given for --{en,dis}able-tests, not just whether the option was passed
+  ''
+  # pkg-config? What's that?
+  # Actually *check* the value given for --{en,dis}able-tests, not just whether the option was passed
+  + ''
     substituteInPlace configure.ac \
       --replace-fail '$xml2_include_dir /usr/include /usr/local/include /usr/include/libxml2 /usr/local/include/libxml2' '$xml2_include_dir ${lib.getDev libxml2}/include ${lib.getDev libxml2}/include/libxml2 /usr/local/include/libxml2' \
       --replace-fail 'if test -n "$enable_tests" ; then' 'if test "$enable_tests" = "yes" ; then'
+  ''
+  # Don't install generated test data
+  + ''
+    substituteInPlace test-data/{etsi,itu}/fax/Makefile.am \
+      --replace-fail 'nobase_data_DATA' 'noinst_DATA'
   '';
 
   outputs = [
@@ -167,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Seemingly runs forever, with tons of output
     "v22bis_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isPower64 [
+    # Output differs from x86-generated reference due to float precision
+    "lpc10_tests"
   ];
 
   checkPhase = ''
@@ -214,6 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ misuzu ];
     teams = [ lib.teams.ngi ];
     license = lib.licenses.gpl2;
-    downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
+    downloadPage = "https://github.com/freeswitch/spandsp";
   };
 })

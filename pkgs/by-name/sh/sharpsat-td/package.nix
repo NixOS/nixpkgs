@@ -91,7 +91,6 @@ stdenv.mkDerivation {
     # uses clhash, which is non-portable
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
   };
 }

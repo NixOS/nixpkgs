@@ -47,7 +47,7 @@ robustly than text search through `maintainer-list.nix`.
 
 The maintainer is designated by a `selector` which must be one of:
 - `handle` (default): the maintainer's attribute name in `lib.maintainers`;
-- `email`, `name`, `github`, `githubId`, `matrix`, `name`:
+- `email`, `name`, `github`, `githubId`, `matrix`:
   attributes of the maintainer's object, matched exactly; see [`maintainer-list.nix`] for the fields' definition.
 
 [`maintainer-list.nix`]: ../maintainer-list.nix

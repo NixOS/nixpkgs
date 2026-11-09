@@ -4,14 +4,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clolcat";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "IchMageBaume";
     repo = "clolcat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-fLa239dwEXe4Jyy5ntgfU9V0h5wrBsvq6/s2HCis7Sc=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.wtfpl;
     mainProgram = "clolcat";
   };
-}
+})

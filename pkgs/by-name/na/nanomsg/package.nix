@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.5";
   pname = "nanomsg";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nanomsg";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "01ddfzjlkf2dgijrmm3j3j8irccsnbgfvjcnwslsfaxnrmrq5s64";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nanocat";
     platforms = lib.platforms.unix;
   };
-}
+})

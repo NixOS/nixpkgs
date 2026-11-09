@@ -8,7 +8,6 @@
   psutil,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   pyvips,
   scipy,
   setuptools-scm,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.11.0";
+  version = "0.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";
     repo = "scooby";
     tag = "v${version}";
-    hash = "sha256-krExDVT9evG9ODZjTGpX+S1ygh7lMob06fzOwhh/hzA=";
+    hash = "sha256-41GPjsfue7w1Wu9WCKxOttoxKRYHwQIsmrEAOgkeY7U=";
   };
 
   build-system = [ setuptools-scm ];

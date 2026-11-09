@@ -5,8 +5,8 @@
   gradle_9,
   jdk21,
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.1.0";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260102.2";
-    hash = "sha256-LmK1FnMd8udAfkfe1QyJd0kVSUfs1xAmzTiz80USlpo=";
+    tag = "r20260201";
+    hash = "sha256-7n6/YgRzte2qsgQEfqppdpp5t8+xBjfOKjvNotAgJB0=";
   };
 
   postPatch = ''
@@ -63,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     gtk3
     glib

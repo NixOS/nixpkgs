@@ -2,24 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   black,
   fetchpatch,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "black-macchiato";
   version = "1.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbolster";
     repo = "black-macchiato";
-    rev = version;
-    sha256 = "0lc9w50nlbmlzj44krk7kxcia202fhybbnwfh77xixlc7vb4rayl";
+    rev = finalAttrs.version;
+    hash = "sha256-1KtM1j6M9tjPgY7btTx0AggVWZ9n5kmI/LQuakHhiVE=";
   };
 
   patches = [
@@ -30,11 +28,12 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ black ];
+  build-system = [ setuptools ];
+
+  dependencies = [ black ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    black
   ];
 
   pythonImportsCheck = [ "black" ];
@@ -46,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jperras ];
   };
-}
+})

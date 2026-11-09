@@ -1,22 +1,21 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   unstableGitUpdater,
 }:
 buildGoModule {
   pname = "mozhi";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2026-10-15";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "aryak";
     repo = "mozhi";
-    rev = "67f216b3fa9edb3b3ec995a4a6fb6777ea934177";
-    hash = "sha256-fQkOyfuBbRLvCzwv7kT1AEJUAWQshWOZDTYfp7plkag=";
+    rev = "eed4fb99a2d3a2ea54ed5bf8dc718a32d0785898";
+    hash = "sha256-rtA0bA26W/XAfRVKW+VVeWcJOcJjJJqOxAu5XzYTv1g=";
   };
 
-  vendorHash = "sha256-ptwP+ZuuzxRpIuNDoXnAML1KYEh9zTBcOs9YTI8z63A=";
+  vendorHash = "sha256-ZFbgq/zeBTK6wb5VHHyTNrq8RuNhWTy8PyA1mZcbKYc=";
 
   passthru.updateScript = unstableGitUpdater { };
 

@@ -9,13 +9,13 @@
   libunistring,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bigloo";
-  version = "4.6a";
+  version = "4.7a";
 
   src = fetchurl {
-    url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${version}.tar.gz";
-    hash = "sha256-lwXsPeAMwcUe52mYlIQaN3DAaodCFbRWNbiESuba8KY=";
+    url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RCXDf0meLfGnvjM0roUg/XYhRzPZ2f6XsvunHRxM9js=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling
@@ -85,4 +84,4 @@ stdenv.mkDerivation rec {
       between Scheme and C# programs.
     '';
   };
-}
+})

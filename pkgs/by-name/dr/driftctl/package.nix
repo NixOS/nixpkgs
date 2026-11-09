@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "driftctl";
   version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "driftctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IDKfW0NCEsgKXpHA7SwkHjMeoGAIYITlDVR/vI/b9hk=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/snyk/driftctl/pkg/version.version=v${version}"
+    "-X github.com/snyk/driftctl/pkg/version.version=v${finalAttrs.version}"
     "-X github.com/snyk/driftctl/build.env=release"
     "-X github.com/snyk/driftctl/build.enableUsageReporting=false"
   ];
@@ -41,7 +41,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/driftctl --help
-    $out/bin/driftctl version | grep "v${version}"
+    $out/bin/driftctl version | grep "v${finalAttrs.version}"
     # check there's no telemetry flag
     $out/bin/driftctl --help | grep -vz "telemetry"
 
@@ -50,7 +50,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://driftctl.com/";
-    changelog = "https://github.com/snyk/driftctl/releases/tag/v${version}";
+    changelog = "https://github.com/snyk/driftctl/releases/tag/v${finalAttrs.version}";
     description = "Detect, track and alert on infrastructure drift";
     mainProgram = "driftctl";
     longDescription = ''
@@ -64,4 +64,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})

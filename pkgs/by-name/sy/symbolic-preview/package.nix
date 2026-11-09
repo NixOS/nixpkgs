@@ -15,12 +15,12 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symbolic-preview";
   version = "0.0.9";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/symbolic-preview/uploads/e2fed158fc0d267f2051302bcf14848b/symbolic-preview-${version}.tar.xz";
+    url = "https://gitlab.gnome.org/World/design/symbolic-preview/uploads/e2fed158fc0d267f2051302bcf14848b/symbolic-preview-${finalAttrs.version}.tar.xz";
     hash = "sha256-kx+70LCQzzWAw2Xd3fKGq941540IM3Y1+r4Em4MNWbw=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

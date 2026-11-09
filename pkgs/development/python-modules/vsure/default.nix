@@ -3,23 +3,23 @@
   buildPythonPackage,
   fetchPypi,
   click,
-  pythonOlder,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vsure";
-  version = "2.6.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.10.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dz7Ud8sOIz/w9IiRgDZWDln65efgf6skNmECwg+MRw0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-bYJpdSrTidyJ8rCFxGd2BxbPT5D1N9rGLXslQO/vKk8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     requests
   ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for working with verisure devices";
-    mainProgram = "vsure";
     homepage = "https://github.com/persandstrom/python-verisure";
     changelog = "https://github.com/persandstrom/python-verisure#version-history";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "vsure";
   };
-}
+})

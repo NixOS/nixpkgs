@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "Find and recover deleted files on block devices";
     mainProgram = "magicrescue";
     homepage = "https://github.com/jbj/magicrescue";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };

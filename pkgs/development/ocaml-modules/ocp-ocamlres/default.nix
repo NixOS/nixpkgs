@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-ocamlres";
-    rev = "v${version}";
-    sha256 = "0smfwrj8qhzknhzawygxi0vgl2af4vyi652fkma59rzjpvscqrnn";
+    tag = "v${version}";
+    hash = "sha256-1mbM9L7y51RUnU4UE/0mTgn6Noj9ea4+tPNDjGTmrmo=";
   };
 
   nativeBuildInputs = [

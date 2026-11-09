@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  electron,
+  actool,
+  electron_44,
   python3,
   copyDesktopItems,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeDesktopItem,
@@ -15,25 +16,31 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pear-desktop";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "pear-devs";
     repo = "pear-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M8YFpeauM55fpNyHSGQm8iZieV0oWqOieVThhglKKPE=";
+    hash = "sha256-RSQPwsED3YK5VScVAXH3f8Lz74v1b2448gro1Vo22hg=";
   };
 
   patches = [
     # MPRIS's DesktopEntry property needs to match the desktop entry basename
     ./fix-mpris-desktop-entry.patch
+    ./electron-44.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-xZQ8rnLGD0ZxxUUPLHmNJ6mA+lnUHCTBvtJTiIPxaZU=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-+pXfFHNPiczjNq+Dk8sQZBgTLsuHmWBaA8u8Tk2CXjU=";
   };
 
   nativeBuildInputs = [
@@ -41,32 +48,32 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ actool ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  postBuild =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -R ${electron.dist}/Electron.app Electron.app
-      chmod -R u+w Electron.app
-    ''
-    + ''
-      pnpm build
-      ./node_modules/.bin/electron-builder \
-        --dir \
-        -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
-        -c.electronVersion=${electron.version}
-    '';
+  postBuild = ''
+    pnpm build
+
+    cp -r ${electron_44.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    ./node_modules/.bin/electron-builder \
+      --dir \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron_44.version}
+  '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = "com.github.th_ch.youtube_music";
+      name = "com.github.th-ch.youtube-music";
       exec = "pear-desktop %u";
       icon = "pear-desktop";
       desktopName = "Pear Desktop";
-      startupWMClass = "com.github.th_ch.youtube_music";
+      startupWMClass = "com.github.th-ch.youtube-music";
       categories = [ "AudioVideo" ];
     })
   ];
@@ -96,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    makeWrapper ${electron}/bin/electron $out/bin/pear-desktop \
+    makeWrapper ${electron_44}/bin/electron $out/bin/pear-desktop \
       --add-flags $out/share/pear-desktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
@@ -121,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

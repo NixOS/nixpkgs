@@ -3,17 +3,18 @@
   python3Packages,
   fetchFromGitHub,
   git,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-archive-all";
   version = "1.23.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kentzo";
     repo = "git-archive-all";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fIPjggOx+CEorj1bazz8s81ZdppkTL0OlA5tRqCYZyc=";
   };
 
@@ -33,8 +34,11 @@ python3Packages.buildPythonApplication rec {
       --replace "import pycodestyle" ""
   '';
 
+  build-system = [ python3Packages.setuptools ];
+
   nativeCheckInputs = [
     git
+    writableTmpDirAsHomeHook
   ];
 
   checkInputs = with python3Packages; [
@@ -44,10 +48,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests = [ "pycodestyle" ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   meta = {
     description = "Archive a repository with all its submodules";
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "git-archive-all";
   };
-}
+})

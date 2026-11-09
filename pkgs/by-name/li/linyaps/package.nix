@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  fetchpatch,
   lib,
   stdenv,
   cmake,
@@ -10,10 +9,11 @@
   linyaps-box,
   cli11,
   curl,
+  elfutils,
   gpgme,
   gtest,
   libarchive,
-  libelf,
+  libcap,
   libsodium,
   libsysprof-capture,
   nlohmann_json,
@@ -24,7 +24,7 @@
   uncrustify,
   xz,
   yaml-cpp,
-  replaceVars,
+  versionCheckHook,
   bash,
   binutils,
   coreutils,
@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps";
-  version = "1.10.0";
+  version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = finalAttrs.pname;
     tag = finalAttrs.version;
-    hash = "sha256-C5rP6r3V+hxTjM+kmXjS4MnuL6P5wxSVP9nNmlQbcB8=";
+    hash = "sha256-RWSoVTTYwFzYvFBHvBJmLungjEVYryHwzK6P2h5SiaQ=";
   };
 
   patches = [
@@ -53,6 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace apps/ll-cli/src/main.cpp \
+      --replace-fail "ociRuntimeCLI, { BINDIR }" "ociRuntimeCLI, { \"${lib.getBin linyaps-box}/bin\" }"
+
     substituteInPlace apps/ll-init/CMakeLists.txt \
       --replace-fail "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc" \
                      "target_link_options(\''${LL_INIT_TARGET} PRIVATE -static -static-libgcc -L${stdenv.cc.libc.static}/lib"
@@ -68,10 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cli11
     curl
+    elfutils
     gpgme
     gtest
     libarchive
-    libelf
+    libcap
     libsodium
     libsysprof-capture
     nlohmann_json
@@ -92,6 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "CPM_LOCAL_PACKAGES_ONLY" true)
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   postInstall = ''
     # move to the right location for systemd.packages option
     # https://github.com/NixOS/nixpkgs/blob/85dbfc7aaf52ecb755f87e577ddbe6dbbdbc1054/nixos/modules/system/boot/systemd.nix#L605
@@ -103,21 +114,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add runtime dependencies to PATH for all wrapped binaries
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bash
-        binutils
-        coreutils
-        desktop-file-utils
-        erofs-utils
-        fuse3
-        fuse-overlayfs
-        glib
-        gnutar
-        shared-mime-info
-        linyaps-box
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bash
+      binutils
+      coreutils
+      desktop-file-utils
+      erofs-utils
+      fuse3
+      fuse-overlayfs
+      glib
+      gnutar
+      shared-mime-info
+      linyaps-box
+    ])
   ];
 
   # Note: ll-init must be statically linked and should not be wrapped

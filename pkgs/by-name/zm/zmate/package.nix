@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "zmate";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ziinaio";
     repo = "zmate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7RDcRu41zyYIEwQ3wghesTbGAp6sqe44/sFZTzMqpNA=";
+    hash = "sha256-NQIHnFyQvRVQxCHBEgSxCMa91d6qeMUe+i8zxB5aO1Q=";
   };
 
-  vendorHash = "sha256-o4RQ2feBP/qt7iv8jUb1zyHJzurjqh+dW3W5qjEuO1o=";
+  vendorHash = "sha256-yT96OL0hUAU6uBR5Du2p2vSG6q9wjWlP5QBOhGk+Xl4=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

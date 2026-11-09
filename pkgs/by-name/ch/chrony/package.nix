@@ -5,20 +5,19 @@
   pkg-config,
   gnutls,
   libedit,
-  texinfo,
   libcap,
   libseccomp,
   pps-tools,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrony";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchurl {
-    url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
+    url = "https://chrony-project.org/releases/chrony-${finalAttrs.version}.tar.gz";
+    hash = "sha256-SSTG9TAQW81bnp4zxIoq4b/YiSIshIC8QWAREO/IZNA=";
   };
 
   outputs = [
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnutls
     libedit
-    texinfo
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
@@ -66,6 +64,8 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) chrony chrony-ptp;
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "https://chrony-project.org/";
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
       different computer.
     '';
   };
-}
+})

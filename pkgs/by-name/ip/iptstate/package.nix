@@ -6,12 +6,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iptstate";
   version = "2.2.7";
 
   src = fetchurl {
-    url = "https://github.com/jaymzh/iptstate/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/jaymzh/iptstate/releases/download/v${finalAttrs.version}/iptstate-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-iW3wYCiFRWomMfeV1jT8ITEeUF+MkQNI5jEoYPIJeVU=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mainProgram = "iptstate";
     homepage = "https://github.com/jaymzh/iptstate";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ trevorj ];
+    maintainers = [ ];
     downloadPage = "https://github.com/jaymzh/iptstate/releases";
     license = lib.licenses.zlib;
   };
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -m755 -D iptstate $out/bin/iptstate
   '';
-}
+})

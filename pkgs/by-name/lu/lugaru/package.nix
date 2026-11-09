@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "osslugaru";
     repo = "lugaru";
     rev = version;
-    sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
+    hash = "sha256-//rbIBwGX6e9LHIFtthl/SH6jaLObpNwM2zwjhxdOSE=";
   };
 
   nativeBuildInputs = [

@@ -9,17 +9,18 @@
   libcap,
   libseccomp,
   nlohmann_json,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "linyaps-box";
-  version = "2.1.2";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "OpenAtom-Linyaps";
     repo = "linyaps-box";
     rev = finalAttrs.version;
-    hash = "sha256-i4wSddstCosDpBEcunoVsV464PTHmuvDDEFrsPQKnxU=";
+    hash = "sha256-UqTgunWXBg4Qgk3qLDTZxfr95HeZ+D27cE0xuXoX1xg=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     libcap
     libseccomp
     nlohmann_json
+    systemdLibs
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "linyaps-box_ENABLE_SECCOMP" true)
+    (lib.cmakeBool "linyaps-box_OFFLINE_BUILD" true)
   ];
 
   meta = {

@@ -4,15 +4,12 @@
   fetchPypi,
   pytest,
   invoke,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylnk3";
   version = "0.4.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
@@ -33,7 +30,7 @@ buildPythonPackage rec {
     description = "Python library for reading and writing Windows shortcut files (.lnk)";
     mainProgram = "pylnk3";
     homepage = "https://github.com/strayge/pylnk";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fedx-sudo ];
   };
 }

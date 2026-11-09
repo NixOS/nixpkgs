@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lzvrb7nci22yp21ab2qqc9p0fhkazqj29vw0wln2r4ckb2nbawv";
+    hash = "sha256-m6tlxZqMZGEpB3wnIfFXEzpwE8NYLBXE9UJEZs/K+9M=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "wnielson-markdown-macros-pull-1.patch";
       url = "https://github.com/wnielson/markdown-macros/commit/e38cba9acb6789cc128f6fe9ca427ba71815a20f.patch";
-      sha256 = "17njbgq2srzkf03ar6yn92frnsbda3g45cdi529fdh0x8mmyxci0";
+      hash = "sha256-ILLua0UdwOaSKLGxQt5QbWmbnUjWm6wGcPNnLfBb0p4=";
     })
   ];
 

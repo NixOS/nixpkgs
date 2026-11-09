@@ -9,11 +9,11 @@
 buildPythonPackage rec {
   pname = "colorama";
   version = "0.4.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44";
+    hash = "sha256-CGlfXLftbgUxogVyaXKXJzxHuMrlpj/8bW7VwgG+bkQ=";
   };
 
   nativeBuildInputs = [ hatchling ];

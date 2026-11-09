@@ -1,4 +1,5 @@
 {
+  cctools,
   cmake,
   fetchFromGitHub,
   git,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "4.0.4";
+  version = "4.3.1";
 
   outputs = [
     "out"
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-49ZDTYdsgv/RxUZlhIDrqJ3a3QCYA4pGG0QgOpKxzrI=";
+    hash = "sha256-1Noz5uu14qA58QsGvbhck4h083PrNY5ElBnNS50weZU=";
   };
 
   postPatch = ''
@@ -46,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     git
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   buildInputs = [
@@ -74,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3Clear;
     pkgConfigModules = [ "lcevc_dec" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
-    # https://github.com/v-novaltd/LCEVCdec/blob/bf7e0d91c969502e90a925942510a1ca8088afec/cmake/modules/VNovaProject.cmake#L29
-    platforms = lib.platforms.aarch ++ lib.platforms.x86;
+    # https://github.com/v-novaltd/LCEVCdec/blob/main/cmake/modules/CMakeProject.cmake#L22
+    platforms = lib.platforms.aarch ++ lib.platforms.x86 ++ lib.platforms.riscv64;
   };
 })

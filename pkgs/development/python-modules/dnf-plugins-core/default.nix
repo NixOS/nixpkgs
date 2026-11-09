@@ -25,7 +25,7 @@ in
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
   version = "4.10.1";
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"
@@ -117,7 +117,10 @@ buildPythonPackage rec {
     done
   '';
 
-  makeWrapperArgs = [ ''--add-flags "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"'' ];
+  makeWrapperArgs = [
+    "--add-flags"
+    "--setopt=pluginpath=${placeholder "out"}/${python.sitePackages}/dnf-plugins"
+  ];
 
   meta = {
     description = "Core plugins to use with DNF package manager";

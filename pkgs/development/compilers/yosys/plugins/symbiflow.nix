@@ -103,6 +103,8 @@ lib.genAttrs plugins (
       description = "Symbiflow ${plugin} plugin for Yosys";
       license = lib.licenses.isc;
       platforms = lib.platforms.all;
+      # incompatible with yosys >= 0.67
+      broken = true;
       maintainers = with lib.maintainers; [
         ollieB
         thoughtpolice

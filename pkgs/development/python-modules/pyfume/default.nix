@@ -5,7 +5,6 @@
   fst-pso,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   setuptools,
   simpful,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyfume";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

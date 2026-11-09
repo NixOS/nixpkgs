@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   blueprint-compiler,
   desktop-file-utils,
   glib,
@@ -15,14 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "door-knocker";
-  version = "0.8.0";
+  version = "0.9.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tytan652";
     repo = "door-knocker";
     rev = finalAttrs.version;
-    hash = "sha256-Yz/HVffOJNpu0D8SE32ehwI3UQ7yPKMqR6yYIAVuBDc=";
+    hash = "sha256-h7wDJRePWUZ/oHdkSXLFcDWau1K8Yof9pQXFjexZxbA=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,8 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
 }:
 
 {
-  basic = import ./basic.nix { inherit system pkgs; };
-  provision = import ./provision { inherit system pkgs; };
+  basic = runTest ./basic.nix;
+  provision = runTest ./provision;
 }

@@ -16,6 +16,10 @@ in
 
     package = lib.mkPackageOption pkgs "blocky" { };
 
+    enableConfigCheck = lib.mkEnableOption "checking the config during build time" // {
+      default = true;
+    };
+
     settings = lib.mkOption {
       type = format.type;
       default = { };
@@ -60,10 +64,19 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         Restart = "on-failure";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
+        RestrictAddressFamilies =
+          let
+            logType = lib.attrByPath [ "settings" "queryLog" "type" ] "" cfg;
+          in
+          (lib.optional (lib.elem logType [
+            "mysql"
+            "postgresql"
+            "timescale"
+          ]) "AF_UNIX")
+          ++ [
+            "AF_INET"
+            "AF_INET6"
+          ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RuntimeDirectory = "blocky";
@@ -80,6 +93,14 @@ in
         ];
       };
     };
+    system.checks = lib.mkIf cfg.enableConfigCheck [
+      (pkgs.runCommand "check-blocky-config" { } ''
+        ${lib.getExe cfg.package} --config ${configFile} validate && touch $out
+      '')
+    ];
   };
-  meta.maintainers = with lib.maintainers; [ paepcke ];
+  meta.maintainers = with lib.maintainers; [
+    paepcke
+    kuflierl
+  ];
 }

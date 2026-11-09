@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "crlfsuite";
   version = "2.5.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Nefcore";
+    owner = "Raghavd3v";
     repo = "CRLFsuite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 
@@ -35,11 +35,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "CRLF injection (HTTP Response Splitting) scanner";
     mainProgram = "crlfsuite";
-    homepage = "https://github.com/Nefcore/CRLFsuite";
+    homepage = "https://github.com/Raghavd3v/CRLFsuite";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      c0bw3b
       fab
     ];
   };
-}
+})

@@ -9,7 +9,6 @@
   libadwaita,
   librsvg,
   gettext,
-  itstool,
   libxml2,
   meson,
   ninja,
@@ -20,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mahjongg";
-  version = "49.0.1";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.major finalAttrs.version}/gnome-mahjongg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RbOkjcse1hiaY7a/VVCOizjrWpVmV6f+KlIlzC+LwTI=";
+    hash = "sha256-g4moJK97Xq6S1snGLqn94VJ/iAwQ/lEkbTi+7DG4wog=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     pkg-config
     libxml2
-    itstool
     gettext
     wrapGAppsHook4
     glib # for glib-compile-schemas
@@ -46,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     librsvg
   ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
     teams = [ lib.teams.gnome ];
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
 })

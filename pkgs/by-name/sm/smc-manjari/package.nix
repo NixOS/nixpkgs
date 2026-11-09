@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitLab,
   python3Packages,
+  installFonts,
   gnumake,
   truetype ? false,
 }:
@@ -22,21 +23,16 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     gnumake
     python3Packages.fontmake
+    installFonts
   ];
 
   buildFlags = [ "otf" ] ++ lib.optional truetype "ttf";
 
-  installPhase = ''
-    runHook preInstall
+  makeFlags = [ "INSTALLPATH=." ];
 
-    install -Dm444 -t $out/share/fonts/opentype build/*.otf
-    ${lib.optionalString truetype "install -Dm444 -t $out/share/fonts/truetype build/*.ttf"}
-
+  postInstall = ''
     install -Dm644 -t $out/etc/fonts/conf.d *.conf
-
     install -Dm644 -t $out/share/doc/${pname}-${version} OFL.txt FONTLOG.md
-
-    runHook postInstall
   '';
 
   meta = {
@@ -44,6 +40,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Manjari Malayalam Typeface";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ adtya ];
+    maintainers = [ ];
   };
 }

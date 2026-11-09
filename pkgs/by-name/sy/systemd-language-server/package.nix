@@ -6,7 +6,15 @@
   pandoc,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "systemd-language-server";
   version = "0.3.5";
   pyproject = true;
@@ -14,18 +22,18 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "psacawa";
     repo = "systemd-language-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QRd2mV4qRh4OfVJ2/5cOm3Wh8ydsLTG9Twp346DHjs0=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with pythonPackages; [
     poetry-core
   ];
 
   pythonRelaxDeps = [
     "lxml"
   ];
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     lxml
     pygls
   ];
@@ -34,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     pandoc
-    python3Packages.pytestCheckHook
+    pythonPackages.pytestCheckHook
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -47,9 +55,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Language Server for Systemd unit files";
     homepage = "https://github.com/psacawa/systemd-language-server";
-    changelog = "https://github.com/psacawa/systemd-language-server/releases/tag/${version}";
+    changelog = "https://github.com/psacawa/systemd-language-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "systemd-language-server";
   };
-}
+})

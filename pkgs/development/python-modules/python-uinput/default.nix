@@ -17,13 +17,13 @@ buildPythonPackage rec {
 
   buildInputs = [ udev ];
 
-  NIX_CFLAGS_LINK = "-ludev";
+  env.NIX_CFLAGS_LINK = "-ludev";
 
   doCheck = false; # no tests
 
   meta = {
     description = "Pythonic API to Linux uinput kernel module";
-    homepage = "https://tjjr.fi/sw/python-uinput/";
+    homepage = "https://github.com/pyinput/python-uinput";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };

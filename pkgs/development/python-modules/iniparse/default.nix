@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "iniparse";
-  version = "0.5";
+  version = "0.5.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "932e5239d526e7acb504017bb707be67019ac428a6932368e6851691093aa842";
+    hash = "sha256-T0/QCdSeQpCnIem8VxZxnpp2fJx/3D1+vEA+8zedYSk=";
   };
 
   checkPhase = ''
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Accessing and Modifying INI files";
     homepage = "https://github.com/candlepin/python-iniparse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
   };
 }

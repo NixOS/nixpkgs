@@ -1,12 +1,17 @@
 {
+  lib,
   buildDunePackage,
+  ocaml,
   alcotest,
   atd,
+  atd-jsonlike,
+  atd-yamlx,
   atdgen-codec-runtime,
   atdgen-runtime,
+  atdml,
   biniou,
   re,
-  python3,
+  yamlx,
 }:
 
 buildDunePackage {
@@ -20,15 +25,18 @@ buildDunePackage {
 
   propagatedBuildInputs = [ atdgen-runtime ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.14";
   nativeCheckInputs = [
     atd
+    atdml
     biniou
-    (python3.withPackages (ps: [ ps.jsonschema ]))
   ];
   checkInputs = [
     alcotest
     atdgen-codec-runtime
+    yamlx
+    atd-jsonlike
+    atd-yamlx
   ];
 
   meta = (removeAttrs atd.meta [ "mainProgram" ]) // {

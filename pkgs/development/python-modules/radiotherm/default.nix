@@ -4,20 +4,18 @@
   fetchFromGitHub,
   mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "radiotherm";
   version = "2.1.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mhrivnak";
     repo = "radiotherm";
     rev = version;
-    sha256 = "0p37pc7l2malmjfkdlh4q2cfa6dqpsk1rah2j2xil0pj57ai6bks";
+    hash = "sha256-ei4T1SnyAhq7kAKqHKa+uBnlmMAE0jadrFRVQQ+7Z1w=";
   };
 
   nativeCheckInputs = [
@@ -30,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Wifi Radiothermostat";
     homepage = "https://github.com/mhrivnak/radiotherm";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

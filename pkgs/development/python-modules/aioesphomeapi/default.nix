@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   cython,
@@ -11,10 +12,12 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
+  backports-zstd,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzdata,
   tzlocal,
   zeroconf,
 
@@ -24,16 +27,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "43.6.0";
+  version = "46.23.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
-    tag = "v${version}";
-    hash = "sha256-ghm+44EEgzlIfbcHrIrOLVyCSYH+Sj2b7RWIhD3mgUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7n6K+MY0s2oOvnbUXrZA/PCamfpel1jYZr4RXzH+Y6s=";
   };
 
   build-system = [
@@ -41,7 +44,10 @@ buildPythonPackage rec {
     cython
   ];
 
-  pythonRelaxDeps = [ "cryptography" ];
+  pythonRelaxDeps = [
+    "aiohappyeyeballs"
+    "cryptography"
+  ];
 
   dependencies = [
     aiohappyeyeballs
@@ -50,8 +56,12 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzdata
     tzlocal
     zeroconf
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    backports-zstd
   ];
 
   nativeCheckInputs = [
@@ -61,7 +71,7 @@ buildPythonPackage rec {
   ];
 
   # Lack of network sandboxing leads to conflicting listeners when testing
-  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  # this package e.g. in nixpkgs-review on the two supported python package sets.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
@@ -76,11 +86,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
-    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       hexa
     ];
   };
-}
+})

@@ -1,5 +1,4 @@
 {
-  lib,
   buildDunePackage,
   mirage-crypto,
   dune-configurator,
@@ -12,8 +11,6 @@
   ppx_deriving_yojson,
   ppx_deriving,
   yojson,
-  withFreestanding ? false,
-  ocaml-freestanding,
 }:
 
 buildDunePackage {
@@ -31,9 +28,6 @@ buildDunePackage {
   propagatedBuildInputs = [
     mirage-crypto
     mirage-crypto-rng
-  ]
-  ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   doCheck = true;

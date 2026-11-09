@@ -4,22 +4,10 @@
   crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
+  crossOverlays,
+  bootStages,
 }:
 
-let
-  bootStages = import ../. {
-    inherit lib localSystem overlays;
-
-    crossSystem = localSystem;
-    crossOverlays = [ ];
-
-    # Ignore custom stdenvs when cross compiling for compatibility
-    # Use replaceCrossStdenv instead.
-    config = removeAttrs config [ "replaceStdenv" ];
-  };
-
-in
 lib.init bootStages
 ++ [
 
@@ -83,7 +71,10 @@ lib.init bootStages
                   || p.isGenode;
               in
               f hostPlatform && !(f buildPlatform)
-            ) buildPackages.updateAutotoolsGnuConfigScriptsHook;
+            ) buildPackages.updateAutotoolsGnuConfigScriptsHook
+            ++ lib.optional (
+              hostPlatform.isCygwin && !buildPlatform.isCygwin
+            ) buildPackages.cygwin.cygwinDllLinkHook;
         })
       );
     in
@@ -124,6 +115,8 @@ lib.init bootStages
                 buildPackages.zig.cc
               else if crossSystem.useArocc or false then
                 buildPackages.arocc
+              else if crossSystem.useGccNG or false then
+                buildPackages.gccNGPackages.gcc
               else
                 buildPackages.gcc;
 

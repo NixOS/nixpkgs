@@ -6,21 +6,21 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "copykitten";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Klavionik";
     repo = "copykitten";
-    tag = "v${version}";
-    hash = "sha256-hjkRVX2+CuLyQw8/1cHRf84qbxPxAnDxCm5gVwdhecs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PFRKEPQ4XfiPmg+YZa+V1FON+IOwXwNxLBwOfsLl1NU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-Ujed/3vckHMkYaQ1Euj+KaPG4yeERS7HBbl5SzvbOWE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-gaad4F3rTIqJf38xZleKduM1M6KdANmItm8bk1iDz4I=";
   };
 
   build-system = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   meta = {
     description = "Robust, dependency-free way to use the system clipboard in Python";
     homepage = "https://github.com/Klavionik/copykitten";
-    changelog = "https://github.com/Klavionik/copykitten/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Klavionik/copykitten/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.samasaur ];
     platforms = lib.platforms.all;
   };
-}
+})

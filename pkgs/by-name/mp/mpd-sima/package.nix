@@ -4,16 +4,17 @@
   python3Packages,
   sphinxHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mpd-sima";
   version = "0.18.2";
 
   src = fetchFromGitLab {
     owner = "kaliko";
     repo = "sima";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lMvM1EqS1govhv4B2hJzIg5DFQYgEr4yJJtgOQxnVlY=";
   };
 
@@ -36,9 +37,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -50,4 +49,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
     mainProgram = "mpd-sima";
   };
-}
+})

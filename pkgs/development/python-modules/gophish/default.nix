@@ -9,7 +9,6 @@
   packaging,
   pyparsing,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   six,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "gophish";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gophish";

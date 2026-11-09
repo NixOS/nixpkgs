@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   callPackage,
   versionCheckHook,
@@ -10,20 +11,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wild-unwrapped";
-  version = "0.7.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    owner = "davidlattimore";
+    owner = "wild-linker";
     repo = "wild";
     tag = finalAttrs.version;
-    hash = "sha256-x0IZuWjj0LRMj4pu2FVaD8SENm/UVtE1e4rl0EOZZZM=";
+    hash = "sha256-2E5W7UmWi9nBoWobZtZ5Td+0qaFSC7gKeF2t8yuZFK4=";
   };
 
-  cargoHash = "sha256-5s0qS8y0+EH+R1tgN2W5/+t+GdjbQdRVLlcA2KjpHsE=";
+  __structuredAttrs = true;
 
-  cargoBuildFlags = [ "-p wild-linker" ];
+  cargoHash = "sha256-QqSKVBus3D/JkzhxudTtlcQFsY+KQPdWAbnCcf0L2pY=";
 
-  strictDeps = true;
+  cargoBuildFlags = [
+    "-p"
+    "wild-linker"
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -34,6 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   doCheck = false; # Tests are ran in passthru tests
+  checkFlags = [
+    "--skip=wasm/"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # https://github.com/davidlattimore/wild/discussions/832#discussioncomment-14482948
+    "--skip=integration_test::program_name_71___unresolved_symbols_object_c__"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -46,14 +58,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Very fast linker for Linux";
-    homepage = "https://github.com/davidlattimore/wild";
-    changelog = "https://github.com/davidlattimore/wild/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = [
-      lib.licenses.asl20 # or
+    homepage = "https://github.com/wild-linker/wild";
+    changelog = "https://github.com/wild-linker/wild/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.OR [
+      lib.licenses.asl20
       lib.licenses.mit
     ];
     mainProgram = "wild";
     maintainers = with lib.maintainers; [ RossSmyth ];
-    platforms = lib.platforms.linux;
+    # Wild can run on Linux and Darwin, but can only target ELF platforms.
+    # On linux this is native, on Darwin this is cross (or emulated)
+    platforms = with lib.platforms; lib.optionals (stdenv.targetPlatform.isElf) (linux ++ darwin);
   };
 })

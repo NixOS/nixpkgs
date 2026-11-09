@@ -12,16 +12,17 @@
   libusb1,
   curl,
   udev,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbladeRF";
   version = "2025.10";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gp+OnAlECGZs4+JEWNX5Gt7LYdTFJUItpmDdJgeoJO4=";
     fetchSubmodules = true;
   };
@@ -29,6 +30,12 @@ stdenv.mkDerivation rec {
   patches = [
     # fix clang build: https://github.com/Nuand/bladeRF/pull/1045
     ./clang-fix.patch
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/Nuand/bladeRF/commit/87bdb1a4bbbc45b749bb90db504fe9cf8fe7a595.patch";
+      hash = "sha256-/sB18hwBSIqMkjaC7J0rb4STUrq4BWlJKnyy0Szac9c=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -79,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

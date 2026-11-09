@@ -82,7 +82,7 @@ in
 {
   meta = {
     doc = ./gnome.md;
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   imports = [
@@ -325,14 +325,18 @@ in
       i18n.inputMethod.enable = mkDefault true;
       i18n.inputMethod.type = mkDefault "ibus";
       programs.dconf.enable = true;
-      security.polkit.enable = true;
+      security.polkit = {
+        enable = true;
+        # Required by gnome-initial-setup, gnome-system-monitor, gvfs for admin://
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
       services.dleyna.enable = mkDefault true;
       services.power-profiles-daemon.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
-      services.gnome.gnome-keyring.enable = true;
+      services.gnome.gnome-keyring.enable = mkDefault true;
       services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.localsearch.enable = mkDefault true;
@@ -390,7 +394,20 @@ in
       systemd.packages = [
         pkgs.gnome-session
         pkgs.gnome-shell
+      ]
+      ++ removeExcluded [
+        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
+
+      # Restarting this unit terminates the active GNOME session.
+      systemd.user.services.gnome-session-monitor = {
+        restartIfChanged = false;
+        overrideStrategy = "asDropin";
+        # No need to add the NixOS default Environment="Path=coreutils:...",
+        # to the gnome-session-monitor service.
+        enableDefaultPath = false;
+      };
 
       services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
@@ -431,6 +448,7 @@ in
           optionalPackages = [
             pkgs.adwaita-icon-theme
             nixos-background-info
+            pkgs.glycin-thumbnailer # Image thumbnailers
             pkgs.gnome-backgrounds
             pkgs.gnome-bluetooth
             pkgs.gnome-color-manager
@@ -439,37 +457,42 @@ in
             pkgs.gnome-user-docs
             pkgs.glib # for gsettings program
             pkgs.gnome-menus
+            pkgs.gst-thumbnailers # Audio and video thumbnailers
             pkgs.gtk3.out # for gtk-launch program
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
+            pkgs.gnome-extensions-app
+            pkgs.gnome-tecla
           ];
         in
         mandatoryPackages ++ removeExcluded optionalPackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-51/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
       environment.systemPackages = removeExcluded [
         pkgs.baobab
         pkgs.decibels
         pkgs.epiphany
-        pkgs.gnome-text-editor
         pkgs.gnome-calculator
         pkgs.gnome-calendar
         pkgs.gnome-characters
         pkgs.gnome-clocks
+        pkgs.gnome-connections
         pkgs.gnome-console
         pkgs.gnome-contacts
+        # gnome-disk-utility is controlled below via `programs.gnome-disks`
         pkgs.gnome-font-viewer
         pkgs.gnome-logs
         pkgs.gnome-maps
         pkgs.gnome-music
+        # gnome-software is controlled below via `services.gnome.gnome-software`
         pkgs.gnome-system-monitor
+        pkgs.gnome-text-editor
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus
         pkgs.papers
-        pkgs.gnome-connections
         pkgs.showtime
         pkgs.simple-scan
         pkgs.snapshot
@@ -506,6 +529,7 @@ in
       ];
     })
 
+    # Note: This is an arbitrary list of packages, there is no "official" list of GNOME games.
     (lib.mkIf serviceCfg.games.enable {
       environment.systemPackages = removeExcluded [
         pkgs.aisleriot
@@ -531,18 +555,13 @@ in
       ];
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-51/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
       environment.systemPackages = removeExcluded [
         pkgs.dconf-editor
         pkgs.devhelp
         pkgs.d-spy
         pkgs.gnome-builder
-        # boxes would make sense in this option, however
-        # it doesn't function well enough to be included
-        # in default configurations.
-        # https://github.com/NixOS/nixpkgs/issues/60908
-        # pkgs.gnome-boxes
         pkgs.sysprof
       ];
 

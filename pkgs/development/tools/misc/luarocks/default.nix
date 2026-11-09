@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks_bootstrap";
-  version = "3.12.2";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hQysstYGUcZnnEXL+9ECS0sBViYggeDIMgo6LpUexBA=";
+    hash = "sha256-ETVoDpeFSsW7ld2z31Vog3RKsMquoxd7c8m9y7Fb1wk=";
   };
 
   patches = [
@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   #   Error: Unknown flag: --build=x86_64-unknown-linux-gnu
   configurePlatforms = [ ];
 
+  # ... nor the --enable-static/--disable-shared that pkgsStatic injects:
+  #   Error: Unknown flag: --enable-static
+  dontAddStaticConfigureFlags = true;
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -57,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
         appendToVar configureFlags "--with-lua-include=$lua_inc"
+    fi
+    lua_lib="${lua}/lib"
+    if test -d "$lua_lib"; then
+        appendToVar configureFlags "--with-lua-lib=$lua_lib"
     fi
   '';
 
@@ -132,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Package manager for Lua";
+    homepage = "https://github.com/luarocks/luarocks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin

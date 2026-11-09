@@ -5,15 +5,15 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-translations";
-  version = "6.6.1";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-translations";
-    tag = version;
-    hash = "sha256-6y1zHKO/qpkAL5fs6QUjNJki16X+bxW/175Sz1PUPQw=";
+    tag = finalAttrs.version;
+    hash = "sha256-DHwW9YrQFNtTvY4/QMBVLQ2idyuknacZvoMIMiHFsU4=";
   };
 
   nativeBuildInputs = [
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

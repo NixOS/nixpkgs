@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Data recovery program for NTFS file systems";
     mainProgram = "scrounge-ntfs";
     homepage = "http://thewalter.net/stef/software/scrounge/";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };

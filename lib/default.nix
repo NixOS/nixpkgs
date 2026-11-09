@@ -73,7 +73,7 @@ let
       types = callLibs ./types.nix;
 
       # constants
-      licenses = callLibs ./licenses.nix;
+      licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
       systems = callLibs ./systems;
 
@@ -89,6 +89,14 @@ let
 
       # domain-specific
       fetchers = callLibs ./fetchers.nix;
+      services = callLibs ./services/lib.nix;
+      importService = self.modules.importApply ./services/service.nix;
+
+      # Modules that are not specific to a module class
+      genericModules = {
+        meta-maintainers = ./modules/generic/meta-maintainers.nix;
+        assertions = ./modules/generic/assertions.nix;
+      };
 
       # Eval-time filesystem handling
       path = callLibs ./path;
@@ -105,6 +113,24 @@ let
       # network
       network = callLibs ./network;
 
+      # flakes
+      flakes = callLibs ./flakes.nix;
+
+      inherit (builtins)
+        getContext
+        hasContext
+        convertHash
+        hashString
+        parseDrvName
+        placeholder
+        fromJSON
+        fromTOML
+        toFile
+        toJSON
+        toString
+        toXML
+        tryEval
+        ;
       inherit (self.trivial)
         id
         const
@@ -112,6 +138,8 @@ let
         concat
         "or"
         and
+        mul
+        div
         xor
         bitAnd
         bitOr
@@ -163,6 +191,8 @@ let
         pathExists
         genericClosure
         readFile
+        ceil
+        floor
         ;
       inherit (self.fixedPoints)
         fix
@@ -295,6 +325,7 @@ let
         elemAt
         isList
         concatAttrValues
+        replaceElemAt
         ;
       inherit (self.strings)
         concatStrings
@@ -326,7 +357,6 @@ let
         escape
         escapeShellArg
         escapeShellArgs
-        isPath
         isStorePath
         isStringLike
         isValidPosixName
@@ -371,6 +401,8 @@ let
         toInt
         toIntBase10
         fileContents
+        appendContext
+        unsafeDiscardStringContext
         ;
       inherit (self.stringsWithDeps)
         textClosureList
@@ -395,7 +427,13 @@ let
         renameCrossIndexTo
         mapCrossIndex
         ;
-      inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
+      inherit (self.derivations)
+        lazyDerivation
+        optionalDrvAttr
+        warnOnInstantiate
+        addDrvOutputDependencies
+        unsafeDiscardOutputDependency
+        ;
       inherit (self.generators) mkLuaInline;
       inherit (self.meta)
         addMetaAttrs
@@ -414,12 +452,20 @@ let
         getLicenseFromSpdxIdOr
         getExe
         getExe'
+        getDarwinApp
+        getDarwinApp'
         ;
       inherit (self.filesystem)
         pathType
         pathIsDirectory
         pathIsRegularFile
+        baseNameOf
+        dirOf
+        isPath
         packagesFromDirectoryRecursive
+        hashFile
+        readDir
+        readFileType
         ;
       inherit (self.sources)
         cleanSourceFilter
@@ -433,6 +479,7 @@ let
         pathIsGitRepo
         revOrTag
         repoRevToName
+        filterSource
         ;
       inherit (self.modules)
         evalModules
@@ -563,10 +610,15 @@ let
         imap
         ;
       inherit (self.versions)
+        compareVersions
         splitVersion
         ;
       inherit (self.network.ipv6)
         mkEUI64Suffix
+        ;
+      inherit (self.flakes)
+        parseFlakeRef
+        flakeRefToString
         ;
     }
   );

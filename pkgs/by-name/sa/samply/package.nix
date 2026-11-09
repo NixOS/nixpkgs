@@ -4,18 +4,21 @@
   fetchCrate,
   versionCheckHook,
   nix-update-script,
+  sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samply";
   version = "0.13.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zTwAsE6zXY3esO7x6UTCO2DbzdUSKZ6qc5Rr9qcI+Z8=";
   };
 
   cargoHash = "sha256-mQykzO9Ldokd3PZ1fY4pK/GtLmYMVas2iHj1Pqi9WqQ=";
+
+  buildInputs = [ sqlite ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -25,12 +28,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command line profiler for macOS and Linux";
     homepage = "https://github.com/mstange/samply";
-    changelog = "https://github.com/mstange/samply/releases/tag/samply-v${version}";
+    changelog = "https://github.com/mstange/samply/releases/tag/samply-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "samply";
   };
-}
+})

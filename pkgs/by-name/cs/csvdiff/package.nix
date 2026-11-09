@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "csvdiff";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aswinkarthik";
     repo = "csvdiff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-66R5XxrNQ1YMMQicw0VCF/XzRo//5Gqdjlher/uMoTE=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ turion ];
   };
-}
+})

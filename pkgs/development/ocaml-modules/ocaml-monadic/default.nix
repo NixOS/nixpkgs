@@ -5,7 +5,7 @@
   ppxlib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-monadic";
   version = "0.5.0";
 
@@ -13,17 +13,17 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "zepalmer";
-    repo = pname;
-    rev = version;
-    sha256 = "1ynv3yhdqmkhkgnz6c5kv6ryjcc934sdvw9rhh8rjg2dlzlffgbw";
+    repo = "ocaml-monadic";
+    rev = finalAttrs.version;
+    hash = "sha256-fD3n6KdNPJkRhDnx3TQZiTHps9mzMPPtm3BW3KAf2/o=";
   };
 
   buildInputs = [ ppxlib ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "PPX extension to provide an OCaml-friendly monadic syntax";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

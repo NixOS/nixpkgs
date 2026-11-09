@@ -14,15 +14,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uftrace";
-  version = "0.18.1";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
-    rev = "v${version}";
-    sha256 = "sha256-9fVBV23gVN1kSkdqBlWV0oEIj6ew6yVO4edUTTHV5H0=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-4iwb1FQUQy8fFKOPrF6Ts2oOfQofNeMSO+v7G9nxiWo=";
   };
 
   nativeBuildInputs = [
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nthorne ];
   };
-}
+})

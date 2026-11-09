@@ -13,13 +13,13 @@ let
       mkValueString =
         v:
         if v == true then
-          ''true''
+          "true"
         else if v == false then
-          ''false''
+          "false"
         else if builtins.isInt v then
-          ''${builtins.toString v}''
+          "${toString v}"
         else if builtins.isPath v then
-          ''"${builtins.toString v}"''
+          ''"${toString v}"''
         else if builtins.isString v then
           ''"${v}"''
         else
@@ -153,9 +153,9 @@ in
     services.phpfpm.pools.privatebin = {
       inherit user group;
       phpPackage = pkgs.php83;
-      phpOptions = ''
-        log_errors = on
-      '';
+      phpOptions = {
+        log_errors = "on";
+      };
       settings = {
         "listen.mode" = lib.mkDefault "0660";
         "listen.owner" = lib.mkDefault user;
@@ -167,7 +167,7 @@ in
         "pm.max_spare_servers" = lib.mkDefault 4;
         "pm.max_requests" = lib.mkDefault 500;
       };
-      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (builtins.toString privatebinSettings);
+      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (toString privatebinSettings);
     };
 
     services.nginx = lib.mkIf cfg.enableNginx {

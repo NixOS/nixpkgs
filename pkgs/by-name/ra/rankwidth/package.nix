@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rankwidth";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchurl {
-    url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
-    sha256 = "sha256-weA1Bv4lzfy0KMBR/Fay0q/7Wwb7o/LOdWYxRmvvtEE=";
+    url = "mirror://sourceforge/rankwidth/rw-${finalAttrs.version}.tar.gz";
+    hash = "sha256-iajtNkiTrBtwq3ChUuPn2zzzSLtpCYqm27lpY535J9s=";
   };
 
   configureFlags = [
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Calculates rank-width and rank-decompositions";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

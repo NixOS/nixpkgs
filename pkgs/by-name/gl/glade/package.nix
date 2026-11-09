@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/glade-${version}.tar.xz";
     sha256 = "McmtrqhJlyq5UXtWThmsGZd8qXdYsQntwxZwCPU+PZw=";
   };
 

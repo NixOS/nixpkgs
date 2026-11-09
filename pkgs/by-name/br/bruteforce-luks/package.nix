@@ -6,14 +6,14 @@
   cryptsetup,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bruteforce-luks";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "glv2";
     repo = "bruteforce-luks";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-t07YyfCjaXQs/OMekcPNBT8DeSRtq2+8tUpsPP2pG7o=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

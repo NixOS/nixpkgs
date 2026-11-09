@@ -2,16 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "interruptingcow";
   version = "0.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "3e8cd5058b651e625702cba53e3b1fb76d7a5ec07ab69c52a167a9f784e3306c";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-PozVBYtlHmJXAsulPjsft216XsB6tpxSoWep94TjMGw=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   meta = {
     description = "Watchdog that interrupts long running code";
@@ -19,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benley ];
   };
-}
+})

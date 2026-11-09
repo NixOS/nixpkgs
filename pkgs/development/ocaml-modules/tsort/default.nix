@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "dmbaturin";
     repo = "ocaml-tsort";
     rev = version;
-    sha256 = "sha256-/gxjXDRhQdbt0ZBdCNk/j1oWhAbm2UOfye2D9QvPr3o=";
+    hash = "sha256-/gxjXDRhQdbt0ZBdCNk/j1oWhAbm2UOfye2D9QvPr3o=";
   };
 
   propagatedBuildInputs = [ containers ];

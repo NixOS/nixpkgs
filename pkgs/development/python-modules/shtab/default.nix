@@ -1,59 +1,61 @@
 {
   lib,
+  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  pytest-timeout,
+  installShellFiles,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
+  versionCheckHook,
   bashInteractive,
+  fish,
+  zsh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.7.2";
+  version = "1.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "tqdm";
     repo = "shtab";
-    tag = "v${version}";
-    hash = "sha256-ngTAST+6lBek0PHvULmlJZAHVU49YN5+XAu5KEk6cIM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mbki7g0BuMfrSa107nXuvySbxp1AVhGfWFJSVQe6sYE=";
   };
 
-  patches = [
-    # Fix bash error on optional nargs="?" (iterative/shtab#184)
-    (fetchpatch2 {
-      url = "https://github.com/iterative/shtab/commit/a04ddf92896f7e206c9b19d48dcc532765364c59.patch?full_index=1";
-      hash = "sha256-H4v81xQLI9Y9R5OyDPJevCLh4gIUaiJKHVEU/eWdNbA=";
-    })
-  ];
-
   nativeBuildInputs = [
+    installShellFiles
     setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [
     bashInteractive
-    pytest-timeout
+    fish
     pytestCheckHook
     pytest-cov-stub
+    versionCheckHook
+    zsh
   ];
 
   pythonImportsCheck = [ "shtab" ];
 
+  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    installShellCompletion --cmd shtab \
+        --bash <("$out/bin/shtab" --print-own-completion bash) \
+        --fish <("$out/bin/shtab" --print-own-completion fish) \
+        --zsh <("$out/bin/shtab" --print-own-completion zsh)
+  '';
+
   meta = {
-    description = "Module for shell tab completion of Python CLI applications";
+    description = "Automagic shell tab completion for Python CLI applications";
     mainProgram = "shtab";
-    homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/${src.tag}";
+    homepage = "https://tqdm.github.io/shtab/";
+    changelog = "https://github.com/tqdm/shtab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

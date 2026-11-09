@@ -8,14 +8,14 @@
   jack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ltc-tools";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "ltc-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0vp25b970r1hv5ndzs4di63rgwnl31jfaj3jz5dka276kx34q4al";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tg-x ];
   };
-}
+})

@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitLab,
   testers,
   gitUpdater,
   autoreconfHook,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "util-macros";
   version = "1.20.2";
 
@@ -31,13 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU autoconf macros shared across X.Org projects";
     homepage = "https://gitlab.freedesktop.org/xorg/util/macros";
-    license = with lib.licenses; [
-      hpndSellVariant
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        hpndSellVariant
+        mit
+      ];
     maintainers = with lib.maintainers; [
       raboof
       jopejoe1

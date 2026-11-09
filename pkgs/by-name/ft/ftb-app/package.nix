@@ -7,7 +7,7 @@
 }:
 let
   pname = "ftb-app";
-  version = "1.27.2";
+  version = "1.30.0";
 
   src =
     let
@@ -15,11 +15,11 @@ let
         {
           aarch64-linux = {
             url = "https://piston.feed-the-beast.com/app/ftb-app-linux-${version}-arm64.AppImage";
-            hash = "sha256-il7DIY1c5TDmRSzc86BTOCn4P20P3Wd4STkLGyFm2+c=";
+            hash = "sha256-ldH3LhdXwS3vhiUYA/DdO2l7tRpRMs0EC70eeNNHcSc=";
           };
           x86_64-linux = {
             url = "https://piston.feed-the-beast.com/app/ftb-app-linux-${version}-x86_64.AppImage";
-            hash = "sha256-35GEI1OBvVkUvHvQAzzGz8ux9h+5W3acH0Wr5VkqyBw=";
+            hash = "sha256-NsZXfQj6exU2JWHCT+/NQJ/ivjVrIWVU7lajeS4bDrY=";
           };
         }
         .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -39,7 +39,7 @@ let
   };
 in
 let
-  appimageContents = appimageTools.extractType2 { inherit pname src version; };
+  appimageContents = appimageTools.extract { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit

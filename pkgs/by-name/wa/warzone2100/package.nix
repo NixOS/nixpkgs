@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   ninja,
   p7zip,
@@ -14,7 +15,7 @@
   libvorbis,
   libopus,
   openal,
-  openalSoft,
+  openal-soft,
   physfs,
   miniupnpc,
   libsodium,
@@ -36,25 +37,43 @@
 
   gitUpdater,
 
-  withVideos ? false,
+  withVideos ? true,
 }:
 
 let
   pname = "warzone2100";
-  sequences_src = fetchurl {
-    url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
-    sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
+
+  sequences = fetchurl {
+    url = "mirror://sourceforge/warzone2100/warzone2100/Videos/high-quality-en/sequences.wz";
+    hash = "sha256-kP9VLKSnDiU34CfiLFCY6k7RvBG7f8lBOMbJQac9Kfo=";
   };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "4.6.2";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-hWIW2r6vLgOuj351jDlbJ9IYif6LX+RfOvznAP3n1x8=";
+    hash = "sha256-le5NW4hoDqGxzyMLZ+qEAo4IokWLhGBayff7nrl8Tjc=";
   };
+
+  # Build and runtime compatibility with vulkan-headers 1.4.350+, backported
+  # from upstream master. Can be dropped on the next version bump.
+  # https://github.com/Warzone2100/warzone2100/pull/4918
+  # https://github.com/Warzone2100/warzone2100/pull/5026
+  patches = [
+    (fetchpatch {
+      name = "vulkan-headers-1.4.350-drop-deprecated-colorspace-alias.patch";
+      url = "https://github.com/Warzone2100/warzone2100/commit/8701c62ae68ca70da43ec915cbf6776c492e6656.patch";
+      hash = "sha256-Rk6Hq5d78ZZfr2/Ar1LFrG40rjuVBdvVLs5InVBPn58=";
+    })
+    (fetchpatch {
+      name = "vulkan-headers-1.4.357-dispatch-loader-init.patch";
+      url = "https://github.com/Warzone2100/warzone2100/commit/8f1c344b8c5dca71f2bbdd28278fd8c82ffb3e28.patch";
+      hash = "sha256-CfK05EQKR5RcRvc7tmiF5VU/9lwzbVmiU58lXwYivQQ=";
+    })
+  ];
 
   buildInputs = [
     sdl3
@@ -62,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libopus
     openal
-    openalSoft
+    openal-soft
     physfs
     miniupnpc
     libsodium
@@ -114,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
-    cp ${sequences_src} $out/share/warzone2100/sequences.wz
+    ln -sn ${sequences} $out/share/warzone2100/sequences.wz
   '';
 
   passthru.tests = {

@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shadowenv";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "shadowenv";
-    rev = version;
-    hash = "sha256-WsUeqkuT4NhoaCJG1hqz+uWyvWQBfxtDheEkWkYmSWU=";
+    rev = finalAttrs.version;
+    hash = "sha256-j1NfMLFmcKQWue6IYdfTnWWkxET4PahkjBNknOAkLsU=";
   };
 
-  cargoHash = "sha256-vAMap35rpmEKSHJ9yW/PzPbEWtLw30DawDmI+QfcOsw=";
+  cargoHash = "sha256-fJ12sIYkCfenrh7Bw/xOsLT8chABTwaICr6mXt0UGF0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "shadowenv";
   };
-}
+})

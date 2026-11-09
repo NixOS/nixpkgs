@@ -23,6 +23,8 @@ buildPythonPackage {
     pname
     version
     src
+    postPatch
+    patches
     meta
     ;
 
@@ -55,12 +57,7 @@ buildPythonPackage {
     numpy
   ];
 
-  patches = [
-    # Add multicharge to the meson deps; otherwise we get missing mod_multicharge errors
-    ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
-  ];
-
-  format = "other";
+  pyproject = false;
   pythonImportsCheck = [
     "tblite"
     "tblite.interface"

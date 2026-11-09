@@ -145,7 +145,7 @@ export WINEDEBUG=-all
 export WINEDLLOVERRIDES="mscoree,mshtml="
 
 wine="wine"
-wine64="wine64"
+wine64="wine"
 wineboot="wineboot"
 
 # $PATH is the way for user to control where wine is located (including custom Wine versions).

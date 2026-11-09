@@ -4,41 +4,38 @@
   fetchFromGitHub,
   autoreconfHook,
   smartmontools,
-  makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapraid";
-  version = "12.4";
+  version = "15.1";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
-    rev = "v${version}";
-    hash = "sha256-7guTRH9AZCsQYyWLpws19/sEe9GVFop21GYPzXCK6Fg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+bpuktwHRSTZH0un+nncEiYk9QJYS4fPdejrmYnYHW0=";
   };
 
-  VERSION = version;
+  env.VERSION = finalAttrs.version;
 
   doCheck = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    makeWrapper
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  # SMART is only supported on Linux and requires the smartmontools package
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/snapraid \
-     --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
-  '';
+  # SMART is only supported on Linux; smartctl is not discovered through PATH.
+  configureFlags = lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-smartctl=${lib.getExe' smartmontools "smartctl"}"
+  ];
 
   meta = {
     homepage = "http://www.snapraid.it/";
+    downloadPage = "https://github.com/amadvance/snapraid/releases";
+    changelog = "https://github.com/amadvance/snapraid/blob/v${finalAttrs.version}/HISTORY";
     description = "Backup program for disk arrays";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
     mainProgram = "snapraid";
   };
-}
+})

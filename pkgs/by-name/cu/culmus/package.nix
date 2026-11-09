@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.133";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
     hash = "sha256-wMaHN0LQdUT2us8q1S65yzkpdNVkJ5ONwd+8g5nGTQU=";
   };
 

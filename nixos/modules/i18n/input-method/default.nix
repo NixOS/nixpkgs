@@ -12,7 +12,6 @@ let
     "fcitx5"
     "nabi"
     "uim"
-    "hime"
     "kime"
   ];
 
@@ -23,11 +22,16 @@ let
         allowSubstitutes = false;
         buildInputs = [
           cfg.package
+          pkgs.gtk2
+        ];
+
+        disallowedReferences = [
+          (lib.getDev pkgs.gtk2)
         ];
       }
       ''
         mkdir -p $out/etc/gtk-2.0/
-        GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk2.dev "gtk-query-immodules-2.0"} > $out/etc/gtk-2.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-2.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
       '';
 
   gtk3_cache =
@@ -37,11 +41,16 @@ let
         allowSubstitutes = false;
         buildInputs = [
           cfg.package
+          pkgs.gtk3
+        ];
+
+        disallowedReferences = [
+          (lib.getDev pkgs.gtk3)
         ];
       }
       ''
         mkdir -p $out/etc/gtk-3.0/
-        GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${lib.getExe' pkgs.gtk3.dev "gtk-query-immodules-3.0"} > $out/etc/gtk-3.0/immodules.cache
+        GTK_PATH=${cfg.package}/lib/gtk-3.0/ ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
       '';
 
 in
@@ -76,7 +85,6 @@ in
           - fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
           - nabi: A Korean input method based on XIM. Nabi doesn't support Qt 5.
           - uim: The universal input method, is a library with a XIM bridge. uim mainly support Chinese, Japanese and Korean.
-          - hime: An extremely easy-to-use input method framework.
           - kime: Koream IME.
         '';
       };

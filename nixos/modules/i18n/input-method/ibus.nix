@@ -25,7 +25,9 @@ let
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
       # GNOME will launch ibus using systemd
-      NotShowIn=GNOME;
+      # ibus complains loudly when launched from this autoStart file under KDE
+      # KDE will launch ibus from kwin if enabled in keyboard -> virtual keyboard
+      NotShowIn=GNOME;KDE;
     '';
   };
 in
@@ -56,6 +58,15 @@ in
         example = lib.literalExpression ''"''${pkgs.kdePackages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
       };
+      waylandFrontend = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Use the Wayland input method frontend.
+          This doesn't set `QT_IM_MODULE` environment variable.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#GTK_IM_MODULE).
+        '';
+      };
     };
   };
 
@@ -76,9 +87,10 @@ in
     ];
 
     environment.variables = {
-      GTK_IM_MODULE = "ibus";
-      QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
+      QT_IM_MODULE = "ibus";
     };
 
     xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [

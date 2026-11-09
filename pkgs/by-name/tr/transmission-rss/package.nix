@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
@@ -11,7 +12,7 @@ rustPlatform.buildRustPackage {
   pname = "transmission-rss";
 
   src = fetchFromGitHub {
-    owner = "herlon214";
+    owner = "mxfp0";
     repo = "transmission-rss";
     rev = "5bbad7a81621a194b7a8b11a56051308a7ccbf06";
     sha256 = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
@@ -27,8 +28,10 @@ rustPlatform.buildRustPackage {
   env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Add torrents to transmission based on RSS list";
-    homepage = "https://github.com/herlon214/transmission-rss";
+    homepage = "https://github.com/mxfp0/transmission-rss";
     maintainers = with lib.maintainers; [ icewind1991 ];
     license = lib.licenses.mit;
     mainProgram = "transmission-rss";

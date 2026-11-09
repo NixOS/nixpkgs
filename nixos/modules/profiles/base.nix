@@ -27,7 +27,6 @@
     pkgs.vim
 
     # Some networking tools.
-    pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
     pkgs.socat
@@ -53,6 +52,9 @@
   # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems = lib.mkMerge [
     [
+      "ext2"
+      "ext3"
+      "ext4"
       "btrfs"
       "cifs"
       "f2fs"

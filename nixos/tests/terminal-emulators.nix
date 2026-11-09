@@ -39,6 +39,12 @@ let
     germinal.pkg = p: p.germinal;
 
     ghostty.pkg = p: p.ghostty;
+    ghostty.cmd = "ghostty -e $command";
+
+    gnome-console.pkg = p: p.gnome-console;
+    gnome-console.executable = "kgx";
+    gnome-console.cmd = "kgx -e $command";
+    gnome-console.kill = true;
 
     gnome-terminal.pkg = p: p.gnome-terminal;
 
@@ -50,10 +56,6 @@ let
 
     kermit.pkg = p: p.kermit-terminal;
 
-    kgx.pkg = p: p.kgx;
-    kgx.cmd = "kgx -e $command";
-    kgx.kill = true;
-
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";
 
@@ -61,7 +63,7 @@ let
 
     lxterminal.pkg = p: p.lxterminal;
 
-    mate-terminal.pkg = p: p.mate.mate-terminal;
+    mate-terminal.pkg = p: p.mate-terminal;
     mate-terminal.cmd = "SHELL=$command mate-terminal --disable-factory"; # factory mode uses dbus, and we don't have a proper dbus session set up
 
     mlterm.pkg = p: p.mlterm;
@@ -91,8 +93,6 @@ let
     terminology.pkg = p: p.enlightenment.terminology;
     terminology.cmd = "SHELL=$command terminology --no-wizard=true";
     terminology.colourTest = false; # broken by gloss effect
-
-    termite.pkg = p: p.termite;
 
     termonad.pkg = p: p.termonad;
 
@@ -183,8 +183,6 @@ mapAttrs (
 
     testScript =
       { nodes, ... }:
-      let
-      in
       ''
         with subtest("wait for x"):
             start_all()

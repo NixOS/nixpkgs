@@ -5,24 +5,36 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
+  aws-lc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shadowsocks-rust";
-  version = "1.23.5";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "shadowsocks-rust";
-    tag = "v${version}";
-    hash = "sha256-szFFnQw38d8EWDKUF3/biuniNkd4Rz4sq7TvZGM8dcc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BS6tc/ac7zewfzYvGWf+OkYjNjBwOWYTumVtQpjWHdg=";
   };
 
-  cargoHash = "sha256-I+qHJ5w4aJOZCNhoMJpqOjrcmiHI+Mjfy5d8rl6L+Hw=";
+  cargoPatches = [
+    # TODO: remove once this is merged upstream and released
+    # https://github.com/shadowsocks/shadowsocks-rust/pull/2203
+    ./update-webpki-roots.patch
+  ];
+
+  cargoHash = "sha256-Lwc/TYs4cfN3W/Wc74lL0nqD6LCbwDWfMnPyhiXoR+k=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [
+    zstd
+    aws-lc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   buildFeatures = [
     "trust-dns"
@@ -55,8 +67,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
-    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
+    changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${finalAttrs.version}/debian/changelog";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

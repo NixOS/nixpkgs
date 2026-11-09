@@ -14,19 +14,24 @@
 
 buildPythonPackage rec {
   pname = "python-tds";
-  version = "1.13.0";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "denisenkom";
     repo = "pytds";
-    rev = version;
-    hash = "sha256-ubAXCifSfNtxbFIJZD8IuK/8oPT9vo77YBCexoO9zsw=";
+    tag = version;
+    hash = "sha256-W9Sk2X2bSMjtRu1XPnjWXOLjVVa+MYC7+ttrZc48c4I=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "version.get_git_version()" '"${version}"'
+  '';
+
+  preCheck = ''
+    # upstream conftest.py crashes without pytest-mypy installed
+    rm conftest.py
   '';
 
   build-system = [ setuptools ];
@@ -40,6 +45,15 @@ buildPythonPackage rec {
     namedlist
     pydes
     cryptography
+  ];
+
+  disabledTestPaths = [
+    # requires live SQL Server / sqlalchemy fixtures
+    "tests/connected_test.py"
+    "tests/fedauth_test.py"
+    "tests/sqlalchemy_test.py"
+    "tests/transaction_test.py"
+    "tests/types_test.py"
   ];
 
   disabledTests = [
@@ -59,6 +73,8 @@ buildPythonPackage rec {
     "test_cert_with_san"
     "test_encrypted_socket"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pytds" ];
 

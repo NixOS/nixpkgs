@@ -9,14 +9,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rkvm";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "htrefil";
     repo = "rkvm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pGCoNmGOeV7ND4kcRjlJZbEMnmKQhlCtyjMoWIwVZrM=";
   };
 
@@ -44,9 +44,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Virtual KVM switch for Linux machines";
     homepage = "https://github.com/htrefil/rkvm";
-    changelog = "https://github.com/htrefil/rkvm/releases/tag/${version}";
+    changelog = "https://github.com/htrefil/rkvm/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

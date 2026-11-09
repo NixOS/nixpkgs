@@ -7,15 +7,12 @@
   mock,
   python-dateutil,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "messagebird";
   version = "2.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "messagebird";
@@ -45,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client for MessageBird's REST API";
     homepage = "https://github.com/messagebird/python-rest-api";
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

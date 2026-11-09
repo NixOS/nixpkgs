@@ -5,22 +5,22 @@
   fetchpatch,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   libjack2,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   zita-resampler,
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtuner";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "XTuner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1i5chfnf3hcivwzni9z6cn9pb68qmwsx8bf4z7d29a5vig8kbhrv";
     fetchSubmodules = true;
   };
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     libjack2
     liblo
-    libsigcxx
+    libsigcxx_2_0
     zita-resampler
     fftwFloat
   ];
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "xtuner";
   };
-}
+})

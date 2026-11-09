@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   fontconfig,
-  libXft,
-  libXrender,
+  libxft,
+  libxrender,
 }:
 
 stdenv.mkDerivation {
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
+    libx11
     fontconfig
-    libXft
-    libXrender
+    libxft
+    libxrender
   ];
 
   makeFlags = [
@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple text widget for X resembling the watch(1) command";
+    homepage = "https://github.com/sineemore/stw";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ somasis ];
     platforms = lib.platforms.unix;

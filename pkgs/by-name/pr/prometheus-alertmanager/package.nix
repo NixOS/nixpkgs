@@ -1,25 +1,41 @@
 {
   lib,
-  go,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   versionCheckHook,
+  common-updater-scripts,
+  curlMinimal,
+  elm2nix,
+  nix-update,
+  nixfmt,
+  writeShellApplication,
 }:
 
+let
+  elmUi = callPackage ./elm-ui.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.30.0";
+  version = "0.34.2";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-103Jb2CA/Zz+MBIJei3vhqcPyg7e5JkpFKqh1hjAhLc=";
+    hash = "sha256-iOtR8wA9N63fop6ZqGN7AeJgGmSaUwUn552T8WHxtYc=";
   };
 
-  vendorHash = "sha256-LgGsXaJ97uXtqHHicsLOaMNx3PzlVPhz/xG+KvO4nLI=";
+  postPatch = ''
+    cp -r ${elmUi}/. ui/app/dist
+  '';
+
+  # don't copy elmUi into go vendor
+  overrideModAttrs.postPatch = "";
+
+  vendorHash = "sha256-YtFwsrlRVoMX4w7PoKpBbYq21lEOtzQt3jnLOdXk7VI=";
 
   subPackages = [
     "cmd/alertmanager"
@@ -36,7 +52,7 @@ buildGoModule (finalAttrs: {
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
-      "-X ${t}.GoVersion=${lib.getVersion go}"
+      "-X ${t}.GoVersion=${lib.getVersion finalAttrs.passthru.go}"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,7 +64,33 @@ buildGoModule (finalAttrs: {
     installShellCompletion amtool.zsh
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+  passthru = {
+    inherit elmUi;
+    tests = { inherit (nixosTests.prometheus) alertmanager; };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "alertmanager-update";
+      runtimeInputs = [
+        curlMinimal
+        common-updater-scripts
+        elm2nix
+        nix-update
+        nixfmt
+      ];
+      text = ''
+        TAG=$(list-git-tags --url="https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}" | sort -V | tail -n1)
+
+        pushd pkgs/by-name/pr/prometheus-alertmanager
+        wcurl --output="elm.json" "https://raw.githubusercontent.com/prometheus/alertmanager/refs/tags/''${TAG}/ui/app/elm.json"
+        elm2nix convert > elm-srcs.nix
+        elm2nix snapshot > registry.dat
+        rm elm.json
+        nixfmt elm-srcs.nix
+        popd
+
+        nix-update prometheus-alertmanager --version "''${TAG#v}" --subpackage elmUi
+      '';
+    });
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

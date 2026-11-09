@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vpelletier";
     repo = "python-libusb1";
     tag = version;
-    hash = "sha256-nytxew6KogpEpSnRtmY0UNH+07x0k0XLZ/MRC9NSpDg=";
+    hash = "sha256-w+Q00GWNobqQlvqryZlJl7SZPEMYgMtbuKpUSLneqNw=";
   };
 
   patches = [

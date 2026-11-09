@@ -8,29 +8,22 @@
   gettext,
   itstool,
   desktop-file-utils,
+  wrapGAppsHook3,
   gnome,
   glib,
   gtk3,
-  libexif,
-  libtiff,
   colord,
-  colord-gtk,
-  libcanberra-gtk3,
   lcms2,
-  vte,
-  exiv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-color-manager";
-  version = "3.32.0";
+  version = "3.36.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor version}/gnome-color-manager-${version}.tar.xz";
-    hash = "sha256-fDwXj6rPy/EdVt4izSZZRqfViqEOPNlowpOOL79Q/e4=";
+    url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor finalAttrs.version}/gnome-color-manager-${finalAttrs.version}.tar.xz";
+    hash = "sha256-OQTUKrtOpWbfC4gOgr8Ln4Y4bGkvFbMYRppMe+M6iH8=";
   };
-
-  patches = [ ./0001-Fix-build-with-Exiv2-0.28.patch ];
 
   nativeBuildInputs = [
     meson
@@ -40,27 +33,23 @@ stdenv.mkDerivation rec {
     glib
     itstool
     desktop-file-utils
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
     gtk3
-    libexif
-    libtiff
     colord
-    colord-gtk
-    libcanberra-gtk3
     lcms2
-    vte
-    exiv2
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-color-manager";
-      freeze = true;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -70,4 +59,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

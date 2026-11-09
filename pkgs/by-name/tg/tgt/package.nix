@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libxslt,
   libaio,
-  systemd,
+  systemdLibs,
   perl,
   docbook_xsl,
   coreutils,
@@ -13,14 +13,14 @@
   sg3_utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tgt";
   version = "1.0.95";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = "tgt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-e7rI8/WQl1L78l2Nk9ajomRucPwsSqZ7fLSHSw11jeY=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     libaio
   ];
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };
-}
+})

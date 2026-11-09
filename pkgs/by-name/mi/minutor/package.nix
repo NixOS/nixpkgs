@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minutor";
-  version = "2.21.0";
+  version = "26.3";
 
   src = fetchFromGitHub {
     owner = "mrkite";
     repo = "minutor";
     tag = finalAttrs.version;
-    sha256 = "0ldjnrk429ywf8cxdpjkam5k73s6fq7lvksandfn3xn7gl9np5rk";
+    sha256 = "sha256-w6BsNPtXyyyKi+VdjBm6fD2Dz10lq9QrMbtENkbE3f0=";
   };
 
   preConfigure = ''

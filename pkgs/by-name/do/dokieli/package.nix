@@ -16,20 +16,39 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2025-12-16";
+  version = "0-unstable-2026-11-03";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "5a9fa93eb670f79bb350e44c8fa850f42893a8ee";
-    hash = "sha256-zqr30yjhPqpY8Iv7/Jq77iWjHiDRtEguULwtmQ13xr4=";
+    rev = "e1de48743ace45cdbf4cc23caa902710d4a739bc";
+    hash = "sha256-86MIQkXGbYGSjlgOQHxZpi35QNS5iHbYKL+3HPwdw64=";
   };
+
+  # fails in `preInstall` without doing this
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "postinstall" "dont-postinstall"
+  '';
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-JJ4AtggWyTjyLtZwTn6oxj1fgRd3Itv9S1/gB3XlSOI=";
+    hash = "sha256-snXQpcdHv/jkcFmTbjt+HrdE7gkrQqLbVv3nHDOYGW8=";
   };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
+  '';
+
+  # Save space by removing non-production deps before install
+  preInstall = ''
+    yarn workspaces focus -A --production
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -42,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
 
@@ -69,10 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
-    homepage = "https://github.com/linkeddata/dokieli";
-    license = with lib.licenses; [
-      cc-by-40
-      mit
+    homepage = "https://github.com/dokieli/dokieli";
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.cc-by-40
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];

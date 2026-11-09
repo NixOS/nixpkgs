@@ -9,14 +9,17 @@
   libseccomp,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oci-seccomp-bpf-hook";
-  version = "1.2.11";
+  version = "1.3.0";
+
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
-    rev = "v${version}";
-    sha256 = "sha256-1LRwbKOLNBkY/TMTLlWq2lkFzCabXqwdaMRT9HNr6HE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-seizupkZHWCPsnPMiLlEZrw1cPQNsfsGxYg2S9ZGBbw=";
   };
   vendorHash = null;
 
@@ -62,4 +65,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ saschagrunert ];
     platforms = lib.platforms.linux;
   };
-}
+})

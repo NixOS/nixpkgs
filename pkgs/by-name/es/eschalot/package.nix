@@ -5,7 +5,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eschalot";
   version = "1.2.0.20191006";
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tor hidden service name generator";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

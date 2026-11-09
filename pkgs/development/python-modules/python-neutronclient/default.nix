@@ -14,7 +14,6 @@
   oslo-log,
   oslo-serialization,
   oslo-utils,
-  os-client-config,
   keystoneauth1,
   python-keystoneclient,
   requests,
@@ -25,25 +24,26 @@
   osprofiler,
   python-openstackclient,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   testtools,
   testscenarios,
   tempest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-neutronclient";
-  version = "11.6.0";
+  version = "14.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-neutronclient";
-    tag = version;
-    hash = "sha256-nz7KiFe8IWJypGCjFgrEgGTEsC0xlW3YG/QRNJUzcpc=";
+    tag = finalAttrs.version;
+    hash = "sha256-b2bw+O28bM761LAhlRjqDUj9bebrkLCyHFdumOMG0qE=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     setuptools
@@ -60,7 +60,6 @@ buildPythonPackage rec {
     oslo-log
     oslo-serialization
     oslo-utils
-    os-client-config
     keystoneauth1
     python-keystoneclient
     requests
@@ -73,19 +72,11 @@ buildPythonPackage rec {
     osprofiler
     python-openstackclient
     requests-mock
-    stestr
+    stestrCheckHook
     testtools
     testscenarios
     tempest
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "neutronclient" ];
 
@@ -95,4 +86,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

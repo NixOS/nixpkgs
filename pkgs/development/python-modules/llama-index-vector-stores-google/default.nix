@@ -5,27 +5,22 @@
   google-generativeai,
   llama-index-core,
   hatchling,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-google";
-  version = "0.4.1";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_google";
-    inherit version;
-    hash = "sha256-+7Lx//NNjYe0UWWOmLTxajKrfjG9OReVpPgOoO2fczk=";
+    inherit (finalAttrs) version;
+    hash = "sha256-bGxsNAE6tC0bOLfjzn3kY1Se17yh6c7jjk/sgyMPdck=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     google-generativeai
@@ -40,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

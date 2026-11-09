@@ -8,12 +8,12 @@
   lxml,
   oauthlib,
   pyjwt,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -21,23 +21,21 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
-  version = "4.7.0";
+  version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    tag = version;
-    hash = "sha256-PQPnLTTCAUE1UmaDRmEXLozY0607e2/fLsvzcJzo4bQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-4Z08ZHTSPSNG9x9XZWwGuvKYk3UnogLm5pO/MHWN0CE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     defusedxml
     oauthlib
@@ -57,13 +55,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     httpretty
     responses
     typing-extensions
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # missing google-auth-stubs
@@ -72,6 +71,9 @@ buildPythonPackage rec {
     # network access
     "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_login"
     "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_partial_pipeline"
+
+    # shopify is not packaged
+    "social_core/tests/backends/test_shopify.py"
   ];
 
   pythonImportsCheck = [ "social_core" ];
@@ -79,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
-    changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-social-auth/social-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

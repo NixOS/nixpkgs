@@ -33,10 +33,9 @@
   doxygen ? null,
   graphviz ? null,
   imagemagick ? null,
-  # for manual, tetex is used to get the eps2pdf binary
-  # texlive to get latexmk. building manual still fails though
+  # for manual, texlive is used to get latexmk and the
+  # epstopdf binary. building manual still fails though
   dia,
-  tetex ? null,
   ghostscript ? null,
   texliveMedium ? null,
 
@@ -61,15 +60,15 @@ let
     )
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ns-3";
-  version = "44";
+  version = "47";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo = "ns-3-dev";
-    rev = "ns-3.${version}";
-    hash = "sha256-rw/WAMk4ZitULqkdyEh9vAFp1UrD1tw2JqgxOT5JQ5I=";
+    rev = "ns-3.${finalAttrs.version}";
+    hash = "sha256-Av5Ret1v4RLafvYvUtCEh4Xb1ZwU3CgNOcDlRJrJsn8=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +92,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withManual [
       dia
-      tetex
       ghostscript
       imagemagick
       texliveMedium
@@ -118,13 +116,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace src/tap-bridge/CMakeLists.txt \
-       --replace '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
+       --replace-fail '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
   '';
 
   doCheck = false;
@@ -133,7 +131,7 @@ stdenv.mkDerivation rec {
     "build" + lib.optionalString enableDoxygen " doxygen" + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
-  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
+  env.CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   # Make generated python bindings discoverable in customized python environment
   passthru = {
@@ -152,7 +150,7 @@ stdenv.mkDerivation rec {
     "-DNS3_GTK3=ON"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ]
-  ++ lib.optional doCheck "-DNS3_TESTS=ON";
+  ++ lib.optional finalAttrs.finalPackage.doCheck "-DNS3_TESTS=ON";
 
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [
@@ -171,7 +169,6 @@ stdenv.mkDerivation rec {
     ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken =
-      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-      || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
-}
+})

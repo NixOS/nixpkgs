@@ -5,19 +5,19 @@
 }:
 mkYaziPlugin {
   pname = "restore.yazi";
-  version = "25.5.31-unstable-2025-12-04";
+  version = "0-unstable-2026-09-08";
 
   src = fetchFromGitHub {
     owner = "boydaihungst";
     repo = "restore.yazi";
-    rev = "6395e52b3af3a8832f0249970a168c41fb92b31b";
-    hash = "sha256-HfXhYe3XPKkd/ivpQB85EsZyvLiflJE0tRNGVid2A9A=";
+    rev = "864dd054e0c8029dc90e8a62067945cf053d6533";
+    hash = "sha256-HRnHjCTvcuX0R2uDQQRqCF8sWtIquSyt8veSgk7MTqk=";
   };
 
   meta = {
     description = "Undo/Recover trashed files/folders";
     homepage = "https://github.com/boydaihungst/restore.yazi";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ khaneliman ];
   };
 }

@@ -1,12 +1,14 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
+  removeReferencesTo,
   ocaml-crunch,
   astring,
   cmdliner,
+  cmdliner_1,
   cppo,
   fpath,
-  result,
   tyxml,
   markup,
   yojson,
@@ -18,17 +20,18 @@
   fmt,
 }:
 
-buildDunePackage {
+buildDunePackage (self: {
   pname = "odoc";
   inherit (odoc-parser) version src;
 
   nativeBuildInputs = [
     cppo
     ocaml-crunch
+    removeReferencesTo
   ];
   buildInputs = [
     astring
-    cmdliner
+    (if lib.versionAtLeast self.version "3.2.0" then cmdliner else cmdliner_1)
     fpath
     tyxml
     odoc-parser
@@ -55,6 +58,10 @@ buildDunePackage {
     patchShebangs test
   '';
 
+  postInstall = ''
+    remove-references-to -t ${ocaml} $out/bin/odoc
+  '';
+
   meta = {
     description = "Documentation generator for OCaml";
     mainProgram = "odoc";
@@ -63,4 +70,4 @@ buildDunePackage {
     homepage = "https://github.com/ocaml/odoc";
     changelog = "https://github.com/ocaml/odoc/blob/${odoc-parser.version}/CHANGES.md";
   };
-}
+})

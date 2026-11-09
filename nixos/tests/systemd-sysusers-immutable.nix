@@ -46,6 +46,7 @@ in
     with subtest("sysuser user is created"):
       print(machine.succeed("getent passwd sysuser"))
       assert machine.succeed("stat -c '%U' /sysuser") == "sysuser\n"
+      assert "wheel" in machine.succeed("id -nG sysuser").split(), "sysuser is not in its configured group"
       assert "${sysuserPassword}" in machine.succeed("getent shadow sysuser"), "sysuser user password is not correct"
 
     with subtest("Fail to add new user manually"):

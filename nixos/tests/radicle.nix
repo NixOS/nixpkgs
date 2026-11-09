@@ -2,7 +2,7 @@
 # and verifies that an alice peer can host a repository on the seed,
 # and that a bob peer can send alice a patch via the seed.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   # The Node ID depends on nodes.seed.services.radicle.privateKeyFile
@@ -36,9 +36,7 @@ let
           ${nodes.seed.networking.primaryIPAddress} ${nodes.seed.services.radicle.httpd.nginx.serverName}
         '';
       };
-      security.pki.certificateFiles = [
-        seed-tls-certs.ca.cert
-      ];
+      security.pki.certificateFiles = [ seed-tls-certs.ca.cert ];
     };
 
   radicleConfig =
@@ -46,9 +44,7 @@ let
     alias:
     pkgs.writeText "config.json" (
       builtins.toJSON {
-        preferredSeeds = [
-          "${seed-nid}@seed:${toString nodes.seed.services.radicle.node.listenPort}"
-        ];
+        preferredSeeds = [ "${seed-nid}@seed:${toString nodes.seed.services.radicle.node.listenPort}" ];
         node = {
           inherit alias;
           relay = "never";
@@ -63,53 +59,50 @@ in
 {
   name = "radicle";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      julm
-      lorenzleutgeb
-    ];
-  };
+  meta.maintainers = lib.teams.radicle.members;
 
   nodes = {
-    seed =
-      { pkgs, config, ... }:
-      {
-        imports = [ commonHostConfig ];
+    seed = { pkgs, config, ... }: {
+      imports = [ commonHostConfig ];
 
-        services.radicle = {
-          enable = true;
-          privateKeyFile = seed-ssh-keys.snakeOilEd25519PrivateKey;
-          publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
-          node = {
-            openFirewall = true;
-          };
-          httpd = {
-            enable = true;
-            nginx = {
-              serverName = seed-tls-certs.domain;
-              addSSL = true;
-              sslCertificate = seed-tls-certs.${seed-tls-certs.domain}.cert;
-              sslCertificateKey = seed-tls-certs.${seed-tls-certs.domain}.key;
-            };
-          };
-          settings = {
-            preferredSeeds = [ ];
-            node = {
-              relay = "always";
-              seedingPolicy = {
-                default = "allow";
-                scope = "all";
-              };
-            };
-          };
-        };
-
-        services.nginx = {
-          enable = true;
-        };
-
-        networking.firewall.allowedTCPPorts = [ 443 ];
+      virtualisation.credentials."dev.radicle.node.secret" = {
+        source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+        mechanism = "fw_cfg";
       };
+
+      services.radicle = {
+        enable = true;
+        publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
+        node = {
+          openFirewall = true;
+        };
+        httpd = {
+          enable = true;
+          nginx = {
+            serverName = seed-tls-certs.domain;
+            addSSL = true;
+            sslCertificate = seed-tls-certs.${seed-tls-certs.domain}.cert;
+            sslCertificateKey = seed-tls-certs.${seed-tls-certs.domain}.key;
+          };
+        };
+        settings = {
+          preferredSeeds = [ ];
+          node = {
+            relay = "always";
+            seedingPolicy = {
+              default = "allow";
+              scope = "all";
+            };
+          };
+        };
+      };
+
+      services.nginx = {
+        enable = true;
+      };
+
+      networking.firewall.allowedTCPPorts = [ 443 ];
+    };
 
     alice = {
       imports = [ commonHostConfig ];
@@ -119,6 +112,9 @@ in
       imports = [ commonHostConfig ];
     };
   };
+
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
 
   testScript =
     { nodes, ... }@args:

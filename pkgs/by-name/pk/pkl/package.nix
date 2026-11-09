@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  temurin-bin-21,
+  gradle_9,
+  temurin-bin-25,
   kotlin,
   nix-update-script,
   replaceVars,
@@ -11,19 +11,20 @@
   installShellFiles,
 }:
 let
-  jdk = temurin-bin-21;
+  jdk = temurin-bin-25;
+  gradle = gradle_9;
   gradleOverlay = gradle.override { java = jdk; };
   kotlinOverlay = kotlin.override { jre = jdk; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
-  version = "0.29.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl";
     tag = finalAttrs.version;
-    hash = "sha256-vel4Il/muHd4wqV5tfMPwBHoxgei8vPcnk2kS2/XG3I=";
+    hash = "sha256-jO18ugPyHv7NsaZyJYHFusoYRqR6SJm2JgPvVZkF/Nw=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -39,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable_bad_tests.patch
   ];
 
+  postPatch = ''
+    substituteInPlace pkl-core/pkl-core.gradle.kts \
+      --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
+  '';
+
   nativeBuildInputs = [
     gradleOverlay
     jdk
@@ -52,11 +58,22 @@ stdenv.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  doCheck = !(stdenv.hostPlatform.isDarwin);
+  # On aarch64-darwin, no artifact for idea:ideaIC:2025.2.3 is available
+  doCheck = !(stdenv.hostPlatform.isDarwin) && !(stdenv.hostPlatform.isAarch64);
+
+  # build only the cli binary to work around this issue:
+  # "Failed to query the value of task ':pkl-internal-intellij-plugin:initializeIntellijPlatformPlugin' property 'latestPluginVersion'."
+  gradleBuildTask = "pkl-cli:build";
 
   gradleFlags = [
     "-x"
     "spotlessCheck"
+    # disable the checks to work around this issue:
+    # Could not determine the dependencies of task ':pkl-cli:check'.
+    # > Could not create task ':pkl-cli:testStartJavaExecutableJdk17'.
+    #    > Cannot find a Java installation on your machine (Linux 6.18.13 amd64) matching: {languageVersion=17, vendor=any vendor, implementation=vendor-specific, nativeImageCapable=false}. Toolchain auto-provisioning is not enabled.
+    "-x"
+    "check"
     "-DreleaseBuild=true"
     "-Dorg.gradle.java.home=${jdk}"
     "-Porg.gradle.java.installations.auto-download=false"
@@ -67,7 +84,18 @@ stdenv.mkDerivation (finalAttrs: {
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
   '';
 
-  JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
+  # The dependency collector also resolves Kotlin's Bouncy Castle configuration,
+  # which uses version ranges. The fetched artifacts are pinned in deps.json.
+  preGradleUpdate = ''
+    substituteInPlace build-logic/src/main/kotlin/pklAllProjects.gradle.kts \
+      --replace-fail 'failOnDynamicVersions()' ""
+  '';
+
+  env.JAVA_TOOL_OPTIONS =
+    "-Dfile.encoding=utf-8"
+    # Java's dual-stack sockets prevent Gradle from connecting to its daemon
+    # inside the Darwin sandbox.
+    + lib.optionalString stdenv.hostPlatform.isDarwin " -Djava.net.preferIPv4Stack=true";
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''

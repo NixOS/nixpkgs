@@ -7,7 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
-  pythonOlder,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pytest-aiohttp,
   pytest-cov-stub,
@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "swan-solutions";
     repo = "knocki-homeassistant";
@@ -30,6 +28,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

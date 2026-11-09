@@ -13,16 +13,22 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libofx";
   version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
     repo = "libofx";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
+
+  # C++20 changes the signature of std::allocator::allocate. Vendored patch
+  # from the approved PR to fix this.
+  # https://github.com/libofx/libofx/issues/105
+  # https://github.com/libofx/libofx/pull/106
+  patches = [ ./c++20-allocate.patch ];
 
   preConfigure = "./autogen.sh";
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
@@ -47,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

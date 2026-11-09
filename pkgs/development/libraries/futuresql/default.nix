@@ -1,27 +1,26 @@
 {
   stdenv,
-  lib,
   fetchurl,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   qtbase,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "futuresql";
   version = "0.1.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/futuresql/futuresql-${version}.tar.xz";
+    url = "mirror://kde/stable/futuresql/futuresql-${finalAttrs.version}.tar.xz";
     hash = "sha256-5E7Y1alhizynuimD7ZxfdXLm4KWxmflIaINLccy+vUM=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ];
   buildInputs = [ qtbase ];
-  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ];
 
   # a library, nothing to wrap
   dontWrapQtApps = true;
-}
+})

@@ -34,9 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Complains about not being able to find the fontconfig config file otherwise
-  FONTCONFIG_FILE = lib.optional docSupport (makeFontsConf {
-    fontDirectories = [ ];
-  });
+  env = lib.optionalAttrs docSupport {
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ ];
+    };
+  };
 
   nativeBuildInputs = [
     cmake

@@ -21,14 +21,14 @@ let
     findutils
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-top";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "nix-top";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dpH1qfAHt8kDEG1QMFcD67rOhDsWZuaw3WSUZdPx3oQ=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "nix-top";
   };
-}
+})

@@ -13,14 +13,14 @@
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.8.10";
+  version = "0.8.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbbLabs";
     repo = "python-tidal";
     tag = "v${version}";
-    hash = "sha256-hqtTe/KIGds01udMKoH5xXnoEe17FuOXLvWtp1yvJ2c=";
+    hash = "sha256-5IGMSiDwEGCnMtTARmx8Z9nfc3BaCe6z32m5j2FFBAI=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tamland/python-tidal/blob/v${version}/HISTORY.rst";
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       drafolin
       drawbu

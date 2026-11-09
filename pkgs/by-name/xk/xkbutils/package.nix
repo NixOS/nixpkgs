@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkbutils";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xkbutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MaK77h4JzLoB3pKJe49UC1Rd6BLzGNMd4HvTpade4l4=";
+    hash = "sha256-Xze+DuMa2hFEFXgMViY4obTwOzheVkSZJ78NVmV4eiY=";
   };
 
   strictDeps = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collection of small XKB utilities";
     longDescription = ''
-      xkbutils is a collection of small utilities using the X Keyboard extenison:
+      xkbutils is a collection of small utilities using the X Keyboard extension:
       - xkbbell: generate X Keyboard Extension bell events
       - xkbvleds: display X Keyboard Extension LED state in a window
       - xkbwatch: report state changes using the X Keyboard Extension

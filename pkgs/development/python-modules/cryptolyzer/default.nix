@@ -1,41 +1,34 @@
 {
   lib,
+  asn1crypto,
   attrs,
   beautifulsoup4,
   buildPythonPackage,
   certvalidator,
   colorama,
+  cryptodatahub,
   cryptoparser,
   dnspython,
-  fetchPypi,
-  pathlib2,
-  pyfakefs,
-  python-dateutil,
-  pythonOlder,
+  fetchFromGitLab,
+  oscrypto,
+  pycryptodomex,
   requests,
   setuptools,
   setuptools-scm,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.0.2";
+  version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-c/cBOrvqyvdGfDKPRUhIu9FqtQUERb/fJBGmncZpbSM=";
+  src = fetchFromGitLab {
+    owner = "coroner";
+    repo = "cryptolyzer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wGPxK6yL2g7EPb1hyfenm3Op3xJIpJsaWQJcTXx6O/o=";
   };
-
-  patches = [
-    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
-    ./fix-dirs-exclude.patch
-  ];
-
-  pythonRemoveDeps = [ "bs4" ];
 
   build-system = [
     setuptools
@@ -43,15 +36,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    asn1crypto
     attrs
     beautifulsoup4
     certvalidator
     colorama
+    cryptodatahub
     cryptoparser
     dnspython
-    pathlib2
-    pyfakefs
-    python-dateutil
+    oscrypto
+    pycryptodomex
     requests
     urllib3
   ];
@@ -69,13 +63,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptolyzer" ];
 
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
   meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     mainProgram = "cryptolyze";
-    maintainers = with lib.maintainers; [ kranzes ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})

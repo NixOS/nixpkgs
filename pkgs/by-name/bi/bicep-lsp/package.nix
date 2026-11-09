@@ -43,14 +43,13 @@ buildDotnetModule rec {
     stdenv.cc.cc.lib
   ];
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
+  doCheck = !stdenv.hostPlatform.isDarwin; # mono is not available on aarch64-darwin
 
   meta = {
     description = "Domain Specific Language (DSL) for deploying Azure resources declaratively";
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.stridtech ];
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
   };

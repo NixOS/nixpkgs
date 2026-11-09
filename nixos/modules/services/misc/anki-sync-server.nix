@@ -31,7 +31,7 @@ let
     # export passwords in environment variables in plaintext.
     ${concatMapStringsSep "\n" (
       x:
-      ''export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}''
+      "export SYNC_USER${toString x.i}=${escapeShellArg x.user.username}:${escapeShellArg x.user.password}"
     ) usersWithIndexesNoFile}
     exec ${lib.getExe cfg.package}
   '';
@@ -108,7 +108,7 @@ in
     assertions = [
       {
         assertion = (builtins.length usersWithIndexesFile) + (builtins.length usersWithIndexesNoFile) > 0;
-        message = "At least one username-password pair must be set.";
+        message = "At least one username-password pair must be set in services.anki-sync-server.users.";
       }
     ];
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];

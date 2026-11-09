@@ -5,7 +5,6 @@
   fetchFromGitHub,
 
   # build-system
-  pybind11,
   setuptools,
   setuptools-scm,
 
@@ -15,10 +14,7 @@
 
   # dependencies
   cloudpickle,
-  importlib-metadata,
   numpy,
-  orjson,
-  packaging,
   pyvers,
   torch,
 
@@ -27,25 +23,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.10.0";
+  version = "0.15.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    tag = "v${version}";
-    hash = "sha256-yxyA9BfN2hp1C3s+g2zBM2gVtckH3LV7luWw8DshFUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1cCgBv7czF1nQgqdOsK173Q6uR79L0KtUpablOslGEg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "pybind11[global]" "pybind11"
-  '';
-
   build-system = [
-    pybind11
     setuptools
     setuptools-scm
   ];
@@ -58,19 +48,16 @@ buildPythonPackage rec {
 
   dependencies = [
     cloudpickle
-    importlib-metadata
     numpy
-    orjson
-    packaging
     pyvers
     torch
   ];
 
   pythonImportsCheck = [ "tensordict" ];
 
-  # We have to delete the source because otherwise it is used instead of the installed package.
+  # Prevent the source files from being imported at test time
   preCheck = ''
-    rm -rf tensordict
+    rm -f tensordict/__init__.py
   '';
 
   nativeCheckInputs = [
@@ -78,13 +65,33 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/distributed/test_distributed.py"
+  ];
+
   disabledTests = [
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
-    "test_tensorclass_instance_methods"
-    "test_tensorclass_stub_methods"
+    # Tests upstream's CI installer script (.github/scripts/install_ci_tool.sh), irrelevant here
+    "test_ci_installer_checks_before_execution"
+
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
+
+    # AssertionError: assert 'a string!' == 'a metadata!'
+    "test_save_load_memmap"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_filter_class_default"
+    "test_cast_filter_inheritance"
+    "test_cast_to"
+    "test_casts"
+    "test_dtype_shorthand_cast_filter"
+    "test_td_params_cast"
+    "test_to_dtype_cast_filter"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool
@@ -95,23 +102,11 @@ buildPythonPackage rec {
     "test_multiprocessing"
   ];
 
-  disabledTestPaths = [
-    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-    "test/test_compile.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Hangs forever
-    "test/test_distributed.py"
-    # Hangs after testing due to pool usage
-    "test/test_h5.py"
-    "test/test_memmap.py"
-  ];
-
   meta = {
     description = "Pytorch dedicated tensor container";
-    changelog = "https://github.com/pytorch/tensordict/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

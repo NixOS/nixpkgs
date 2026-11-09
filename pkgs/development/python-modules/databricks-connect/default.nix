@@ -6,19 +6,16 @@
   setuptools,
   six,
   py4j,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-connect";
-  version = "11.3.40";
+  version = "11.3.61";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rSuW/6fSro1pAxDj2tZ+EYvO0zf0yCWXNaS9Ls7xJfw=";
+    hash = "sha256-EUXLjd6XFfK+sldjfkPRe2Pryx5zrmx6HvaAu+/aN/A=";
   };
 
   sourceRoot = ".";

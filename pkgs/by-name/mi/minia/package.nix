@@ -7,14 +7,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minia";
   version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "GATB";
     repo = "minia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0bmfrywixaaql898l0ixsfkhxjf2hb08ssnqzlzacfizxdp46siq";
     fetchSubmodules = true;
   };
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GATB/minia";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ jbedo ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
-}
+})

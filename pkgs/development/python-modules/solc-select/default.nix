@@ -5,18 +5,19 @@
   setuptools,
   packaging,
   pycryptodome,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "solc-select";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "solc-select";
-    tag = "v${version}";
-    hash = "sha256-ZB9WM6YTWEqfs5y1DqxbSADiFw997PHIR9uVSjJg1/E=";
+    tag = "v.${version}";
+    hash = "sha256-pPDiP8GNE/KAFS4Jm6jLpKozktxy70+f00QFUa4wMiQ=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     pycryptodome
+    requests
   ];
 
   # no tests

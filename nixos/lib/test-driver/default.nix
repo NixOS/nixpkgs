@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
 
   buildPythonApplication,
   colorama,
@@ -7,21 +8,26 @@
   imagemagick_light,
   ipython,
   junit-xml,
-  mypy,
   ptpython,
+  pydantic,
+  pytest,
   python,
-  ruff,
+  ovmfvartool,
   remote-pdb,
+  ruff,
+  ty,
 
   netpbm,
+  vhost-device-vsock,
   nixosTests,
-  qemu_pkg ? qemu_test,
-  qemu_test,
   setuptools,
   socat,
+  systemd,
   tesseract4,
+  util-linux,
   vde2,
 
+  enableNspawn ? false,
   enableOCR ? false,
   extraPythonPackages ? (_: [ ]),
 }:
@@ -42,6 +48,8 @@ buildPythonApplication {
     ipython
     junit-xml
     ptpython
+    pydantic
+    ovmfvartool
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
@@ -49,32 +57,46 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     netpbm
-    qemu_pkg
     socat
+    util-linux
     vde2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    vhost-device-vsock
+  ]
+  ++ lib.optionals enableNspawn [
+    systemd
   ]
   ++ lib.optionals enableOCR [
     imagemagick_light
     tesseract4
   ];
 
-  passthru.tests = {
-    inherit (nixosTests.nixos-test-driver) driver-timeout;
-  };
+  # containers tests require extra nix features that are not available in ofborg.
+  passthru.tests = removeAttrs nixosTests.nixos-test-driver [
+    "containers"
+    "nspawn-interactive"
+  ];
 
   doCheck = true;
 
   nativeCheckInputs = [
-    mypy
+    pytest
     ruff
+    ty
   ];
 
   checkPhase = ''
-    echo -e "\x1b[32m## run mypy\x1b[0m"
-    mypy test_driver extract-docstrings.py
+    echo -e "\x1b[32m## run doctests\x1b[0m"
+    pytest --doctest-modules -p no:cacheprovider test_driver
+    echo -e "\x1b[32m## run ty\x1b[0m"
+    # Installation adds the driver to PYTHONPATH; keep ty imports in the source tree.
+    PYTHONPATH=".:$PYTHONPATH" ty check --error-on-warning test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
   '';
+
+  meta.license = lib.licenses.mit;
 }

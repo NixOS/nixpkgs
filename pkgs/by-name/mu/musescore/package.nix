@@ -1,76 +1,109 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
+
+  # nativeBuildInputs
   cmake,
-  wrapGAppsHook3,
-  pkg-config,
   ninja,
+  pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
   alsa-lib,
   alsa-plugins,
+  # MuseScore Studio v4.7.x does not support FFmpeg v9. Support for it is coming in v5.
+  ffmpeg_8,
+  flac,
   freetype,
-  libjack2,
+  qt6,
   lame,
   libogg,
+  libopus,
+  libopusenc,
   libpulseaudio,
   libsndfile,
   libvorbis,
+  mnxdom,
+  pipewire,
   portaudio,
   portmidi,
-  flac,
-  libopusenc,
-  libopus,
-  tinyxml-2,
-  kdePackages,
+  pugixml,
+  utf8cpp,
+
+  # passthru tests
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.6.5";
+  version = "4.7.5";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lfgf09gLeoiXc0xsJvvKAnSJUjy/L2Fdis/9SNjb1KM=";
+    hash = "sha256-WzVsItF4cyhd99Ax0BWkiX3JoxPY9+xpag7fu8yORD0=";
   };
 
+  patches = [
+    # Fix for https://github.com/musescore/MuseScore/issues/34091 also reported
+    # downstream at: https://github.com/NixOS/nixpkgs/issues/540783. PR not
+    # accepted upstream, see: https://github.com/musescore/MuseScore/pull/34204
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
+      hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
+    })
+    # Fixes the build with Qt >= 6.12, see the patch's comment. Not sent or
+    # reported upstream, because upstream doesn't seem to like to handle
+    # Qt-related build issues, see
+    # https://github.com/musescore/MuseScore/pull/34204
+    ./qmlcachegen-unity-build.diff
+  ];
+
   cmakeFlags = [
-    "-DMUSE_APP_BUILD_MODE=release"
+    (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
-    "-DMUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT=OFF"
-    # Use our versions of system libraries
-    "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_HARFBUZZ=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
-    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
-    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
-    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
-    # Don't bundle qt qml files, relevant really only for darwin, but we set
-    # this for all platforms anyway.
-    "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    # Upstream defaults this to OFF outside their CI builds
+    (lib.cmakeBool "MUSE_MODULE_AUDIO_PIPEWIRE" stdenv.hostPlatform.isLinux)
+  ]
+  # Use our versions of system libraries, see:
+  # https://github.com/musescore/MuseScore/issues/11572
+  ++ map (l: lib.cmakeBool "MUE_COMPILE_USE_SYSTEM_${l}" true) [
+    "FREETYPE"
+    "HARFBUZZ"
+    "MNXDOM"
+    # Implies also OPUS
+    "OPUSENC"
+    "FLAC"
+    "PUGIXML"
+    "LAME"
+    "UTF8CPP"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/musescore/MuseScore/issues/33467
+    (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ libjack2 ]
-    }"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set"
+      "ALSA_PLUGIN_DIR"
+      "${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default"
+      "QT_QPA_PLATFORM"
+      "xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -79,11 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    kdePackages.wrapQtAppsHook
     cmake
-    kdePackages.qttools
-    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
     ninja
+    pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Since https://github.com/musescore/MuseScore/pull/13847/commits/685ac998
@@ -92,30 +125,44 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    flac
     freetype
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtnetworkauth
+    qt6.qtscxml
+    qt6.qtsvg
     lame
     libogg
+    libopus
+    libopusenc
     libpulseaudio
     libsndfile
     libvorbis
+    mnxdom
     portaudio
     portmidi
-    flac
-    libopusenc
-    libopus
-    tinyxml-2
-    kdePackages.qtbase
-    kdePackages.qtdeclarative
-    kdePackages.qt5compat
-    kdePackages.qtsvg
-    kdePackages.qtscxml
-    kdePackages.qtnetworkauth
+    pugixml
+    utf8cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    kdePackages.qtwayland
+    pipewire
+    qt6.qtwayland
   ];
+
+  # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
+  # Nixpkgs' provided ffmpeg, for both MacOS & Linux. Note that upstream uses
+  # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
+  preConfigure = ''
+    substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg_8}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg_8}/lib" \
+  '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -150,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
-  passthru.tests = nixosTests.musescore;
+  passthru.tests.nixos = nixosTests.musescore;
 
   meta = {
     description = "Music notation and composition software";

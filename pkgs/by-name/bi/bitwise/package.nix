@@ -7,15 +7,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitwise";
-  version = "0.50";
+  version = "0.70";
 
   src = fetchFromGitHub {
     owner = "mellowcandle";
     repo = "bitwise";
-    rev = "v${version}";
-    sha256 = "sha256-x+ky1X0c0bQZnkNvNNuXN2BoMDtDSCt/8dBAG92jCCQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-UJHgW89VXMNuqxSncI7Di0GzrMShBLWGx2mDOVZkIxc=";
   };
 
   buildInputs = [
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "bitwise";
   };
-}
+})

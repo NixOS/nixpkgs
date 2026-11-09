@@ -29,8 +29,6 @@
 buildDunePackage {
   pname = "dns-cli";
 
-  minimalOCamlVersion = "4.08";
-
   inherit (dns) version src;
 
   # no need to propagate as this is primarily

@@ -4,18 +4,21 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vitetris";
   version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "vicgeralds";
     repo = "vitetris";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [
+    "format"
+    "fortify"
+  ];
 
   makeFlags = [
     "INSTALL=install"
@@ -38,4 +41,4 @@ stdenv.mkDerivation rec {
       garbage, network play, joystick (gamepad) support on Linux or with Allegro.
     '';
   };
-}
+})

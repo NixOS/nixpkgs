@@ -1,26 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchPypi,
-  pythonOlder,
+  python,
   requests,
-  setuptools,
+  flit-core,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "12.5.1";
+  version = "15.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VAfQksNVwxOT52fS3LLVqMOYDKqaBzrLMtDMs8AbBLU=";
+    hash = "sha256-7oe2lkGfTWWgY3wxWDk96KIgHegbWJYyQYUXcT5OyO0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     requests
@@ -29,6 +28,11 @@ buildPythonPackage rec {
 
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+  '';
 
   pythonImportsCheck = [ "stripe" ];
 

@@ -23,24 +23,24 @@
   libnotify,
   libpulseaudio,
   libuuid,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
+  libxtst,
   libgbm,
   nspr,
   nss,
   openssl,
   pango,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libcxx
-    systemd
+    systemdLibs
     libpulseaudio
     stdenv.cc.cc
     alsa-lib
@@ -80,23 +80,23 @@ stdenv.mkDerivation rec {
     libdrm
     libnotify
     libuuid
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXScrnSaver
-    libXtst
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
     libgbm
     nspr
     nss
     pango
-    systemd
+    systemdLibs
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

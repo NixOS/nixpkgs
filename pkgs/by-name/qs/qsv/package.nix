@@ -5,6 +5,8 @@
   lib,
   pkg-config,
   rustPlatform,
+  aws-lc,
+  rust-jemalloc-sys,
   sqlite,
   zstd,
   cmake,
@@ -15,7 +17,7 @@
   withUi ? true,
   buildFeatures ?
     # enable all features except self_update by default
-    # https://github.com/dathere/qsv/blob/11.0.2/Cargo.toml#L370
+    # https://github.com/dathere/qsv/blob/19.1.0/Cargo.toml#L370
     [
       "apply"
       "feature_capable"
@@ -31,23 +33,24 @@
   mainProgram ? "qsv",
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "11.0.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version buildFeatures;
+  version = "28.0.0";
+
+  inherit buildFeatures;
 
   src = fetchFromGitHub {
     owner = "dathere";
     repo = "qsv";
-    rev = version;
-    hash = "sha256-EuNDwzO4tVjJUz8mXI0fDczoPLD89zmbSyfFI8ZrgwU=";
+    rev = finalAttrs.version;
+    hash = "sha256-cEahgrsV04ZK17j8fIU3NgKcC2VFTG4xnVvFXseVIs4=";
   };
 
-  cargoHash = "sha256-l8hkDr3CtpyXWDTS8oje6W0iu5O28j4rLIXprxTEwHc=";
+  cargoHash = "sha256-Pm4VilMxVcm/BiZ3dZw3YJnhSsdrcmu4oSz7y1WiijM=";
 
   buildInputs = [
+    aws-lc
+    rust-jemalloc-sys
     file
     sqlite
     zstd
@@ -70,16 +73,17 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
-    changelog = "https://github.com/dathere/qsv/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      mit
-      # or
-      unlicense
-    ];
+    changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        unlicense
+      ];
     inherit mainProgram;
     maintainers = with lib.maintainers; [
       detroyejr
       misuzu
     ];
   };
-}
+})

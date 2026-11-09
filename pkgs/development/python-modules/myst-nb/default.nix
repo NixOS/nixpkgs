@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   importlib-metadata,
@@ -19,15 +18,13 @@
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version;
     pname = "myst_nb";
-    hash = "sha256-3zzUaA9Rpa9nP9RrOLVivjVZrvFHXpBu0PLmbkWHzks=";
+    hash = "sha256-wUVZjeYkRqb9AJdz3QcaQNO3YQas54DeGr38aWH2FMI=";
   };
 
   nativeBuildInputs = [ flit-core ];

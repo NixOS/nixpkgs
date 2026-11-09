@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  installShellFiles,
   rustPlatform,
   pkg-config,
   openssl,
@@ -15,6 +16,7 @@
   coreutils,
   tzdata,
   cmake,
+  cyrus_sasl,
   perl,
   git,
   nixosTests,
@@ -26,16 +28,31 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.52.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jwEJ+myovZYcohvxH1VvvOW8xok3HSLvhtMsLC2M3KY=";
+    hash = "sha256-mbfD8mcn3O+dewq7VG9l3es6za0C47pk1xxBRDm2ybs=";
   };
 
-  cargoHash = "sha256-EfgDL5asygFqr8pVcTR9BsYU3fcG28xhrCn5nCkVfcA=";
+  cargoPatches = [
+    # Make the postgres and doris sinks (sqlx) use the system CA store
+    # https://github.com/NixOS/nixpkgs/issues/576544
+    ./sqlx-native-roots-and-bump-webpki.patch
+  ];
+
+  patches = [
+    # mongodb uses webpki-roots when no tlsCAFile is given.
+    # Use SSL_CERT_FILE, which vector sets at startup through openssl-probe.
+    ./mongodb-metrics-system-ca.patch
+  ];
+
+  cargoHash = "sha256-FOqW75iqSbYtPmVefUKIlkzzrS4AmR3wxzSMFqfAf8s=";
+
+  # cargo-auditable passes Vector's aws-config feature to vdev, which has no such feature.
+  auditable = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -43,10 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
     git
     rustPlatform.bindgenHook
+    installShellFiles
   ]
   # Provides the mig command used by the build scripts
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
   buildInputs = [
+    cyrus_sasl
     oniguruma
     openssl
     protobuf
@@ -61,59 +80,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  # Fix build with gcc 15
-  # https://github.com/vectordotdev/vector/issues/22888
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+  env = {
+    # Fix build with gcc 15
+    # https://github.com/vectordotdev/vector/issues/22888
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
 
-  # Without this, we get SIGSEGV failure
-  RUST_MIN_STACK = 33554432;
+    # Without this, we get SIGSEGV failure
+    RUST_MIN_STACK = 33554432;
 
-  # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
-  PROTOC_INCLUDE = "${protobuf}/include";
-  RUSTONIG_SYSTEM_LIBONIG = true;
+    # needed for internal protobuf c wrapper library
+    PROTOC = "${protobuf}/bin/protoc";
+    RUSTONIG_SYSTEM_LIBONIG = true;
 
-  TZDIR = "${tzdata}/share/zoneinfo";
+    # upstream forces openssl/vendored
+    OPENSSL_NO_VENDOR = true;
 
-  # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    TZDIR = "${tzdata}/share/zoneinfo";
 
-  CARGO_PROFILE_RELEASE_LTO = "fat";
-  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
-  # TODO investigate compilation failure for tests
-  # there are about 100 tests failing (out of 1100) for version 0.22.0
+    CARGO_PROFILE_RELEASE_LTO = "fat";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  };
+
+  # upstream does not keep up to date with rust. let's not fail on every warning
+  postPatch = ''
+    sed -i 's/#!\[deny(warnings)]/#!\[warn(warnings)]/' lib/*/src/lib.rs src/lib.rs src/main.rs vdev/src/main.rs
+  '';
+
+  # tests have proven too flaky and required too many exclusions
   doCheck = false;
 
-  checkFlags = [
-    # tries to make a network access
-    "--skip=sinks::loki::tests::healthcheck_grafana_cloud"
-
-    # flaky on linux-aarch64
-    "--skip=kubernetes::api_watcher::tests::test_stream_errors"
-
-    # flaky on linux-x86_64
-    "--skip=sources::socket::test::tcp_with_tls_intermediate_ca"
-    "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
-    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events"
-    "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events_gzip_request"
-    "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
-  ];
-
-  # recent overhauls of DNS support in 0.9 mean that we try to resolve
-  # vector.dev during the checkPhase, which obviously isn't going to work.
-  # these tests in the DNS module are trivial though, so stubbing them out is
-  # fine IMO.
-  #
-  # the geoip transform yields maxmindb.so which contains references to rustc.
-  # neither figured out why the shared object is included in the output
-  # (it doesn't seem to be a runtime dependencies of the geoip transform),
-  # nor do I know why it depends on rustc.
-  # However, in order for the closure size to stay at a reasonable level,
-  # transforms-geoip is patched out of Cargo.toml for now - unless explicitly asked for.
-  postPatch = ''
-    substituteInPlace ./src/dns.rs \
-      --replace-fail "#[tokio::test]" ""
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd vector --$shell <($out/bin/vector completion $shell)
+    done
   '';
 
   nativeInstallCheckInputs = [
@@ -122,9 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 

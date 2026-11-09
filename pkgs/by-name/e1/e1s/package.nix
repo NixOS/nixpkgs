@@ -3,31 +3,28 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+buildGoModule (finalAttrs: {
   pname = "e1s";
-  version = "1.0.52";
-in
-buildGoModule {
-  inherit pname version;
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "keidarcy";
     repo = "e1s";
-    tag = "v${version}";
-    hash = "sha256-ObqCd27gMG1WWqAObZZP1rGLJuh8weCdC0zrLfoPwMo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bOG6txoreiP/buYO3rvcxhL1yAxlECkbwf9FqvWLz9k=";
   };
 
-  vendorHash = "sha256-8z2RVT2W8TLXdZBAmi/2fu63pijVgzqSvF9xpGexlQ0=";
+  vendorHash = "sha256-vVUuoAsoxVKDGxLOQBjOx56IiPWBbtYBJbJNq+kPV7A=";
 
   meta = {
     description = "Easily Manage AWS ECS Resources in Terminal";
     homepage = "https://github.com/keidarcy/e1s";
-    changelog = "https://github.com/keidarcy/e1s/releases/tag/v${version}";
+    changelog = "https://github.com/keidarcy/e1s/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "e1s";
     maintainers = with lib.maintainers; [
       zelkourban
-      carlossless
+      karstx
     ];
   };
-}
+})

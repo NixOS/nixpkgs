@@ -9,13 +9,13 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evisum";
-  version = "0.6.4";
+  version = "2.0.13";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "hlyotWUTfDKkEjAvDrlE7xYEMG7XksCg3X9Xksdca/g=";
+    url = "https://download.enlightenment.org/rel/apps/evisum/evisum-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ntih3sFIbogai4tlG6YPla1nlgzxDbhGIkk0sYg5LD4=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "System and process monitor written with EFL";
     mainProgram = "evisum";
-    homepage = "https://www.enlightenment.org";
-    license = with lib.licenses; [ isc ];
+    homepage = "https://git.enlightenment.org/enlightenment/evisum";
+    license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   config,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -11,7 +12,7 @@
 
   # buildInputs
   eigen,
-  libXt,
+  libxt,
   libpcap,
   libusb1,
   llvmPackages,
@@ -42,7 +43,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+KyaajJM0I5CAcr8AiOLC4TkGV3Gm73a0/X8LQWFZMI=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # see https://github.com/NixOS/nixpkgs/issues/485826 to be removed at next release after 1.15.1
+      name = "boost-1.89.patch";
+      url = "https://github.com/PointCloudLibrary/pcl/commit/99333442ac63971297b4cdd05fab9d2bd2ff57a4.patch";
+      hash = "sha256-5vg8VjxoAfEOx9n7Tby1DXe1u4rn+zharkefUovLHv0=";
+    })
+  ];
+
   strictDeps = true;
+  __structuredAttrs = true;
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
   # when SSE not detected
@@ -59,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     eigen
-    libXt
+    libxt
     libpcap
     qt6.qtbase
     libusb1
@@ -76,11 +92,26 @@ stdenv.mkDerivation (finalAttrs: {
     vtk
   ];
 
+  postInstall = ''
+    moveToOutput "share/pcl-*" "$dev"
+  '';
+
+  # PCLConfig.cmake is in dev and needs an absolute path back to the libraries
+  postFixup = ''
+    substituteInPlace "$dev"/share/pcl-*/PCLConfig.cmake \
+      --replace-fail \
+        'set(PCL_LIBRARY_DIRS "''${PCL_ROOT}/lib")' \
+        "set(PCL_LIBRARY_DIRS \"$out/lib\")"
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CUDA" cudaSupport)
     (lib.cmakeBool "BUILD_GPU" cudaSupport)
     (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
     (lib.cmakeBool "WITH_CUDA" cudaSupport)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDA_ARCH_BIN" cudaPackages.flags.cmakeCudaArchitecturesString)
   ];
 
   passthru.updateScript = gitUpdater {

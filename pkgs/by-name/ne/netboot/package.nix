@@ -38,11 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Mini PXE server";
+    homepage = "https://netboot.sourceforge.net";
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
 })

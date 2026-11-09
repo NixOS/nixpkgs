@@ -7,7 +7,7 @@
   pkg-config,
   sqlite,
 }:
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "hack_parallel";
   version = "1.0.1";
   minimalOCamlVersion = "4.08";
@@ -15,8 +15,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "rvantonder";
     repo = "hack_parallel";
-    rev = version;
-    sha256 = "0qjlkw35r4q2cm0n2x0i73zvx1xgrp6axaia2nm8zxpm49mid629";
+    rev = finalAttrs.version;
+    hash = "sha256-SZgWayL19o+qFSqqrszNr4e+/zgRdGFBZQKTXAafVGI=";
   };
 
   patches = [ ./hack_parallel.patch ];
@@ -51,4 +51,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/rvantonder/hack_parallel";
   };
-}
+})

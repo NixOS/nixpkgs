@@ -7,16 +7,17 @@
   rustPlatform,
   versionCheckHook,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusthound-ce";
-  version = "2.4.5";
+  version = "2.5.30";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-KqcBhag1NOkZxcuS+J48kwJpCoZ1PZv2S10XXwuIoWc=";
+    hash = "sha256-fcxqv2Xojsr9E5JgJ1Qsfvq5WeQuOXhzlA/qZk/g+74=";
   };
 
-  cargoHash = "sha256-4+iqFmpTzoL/sn/Fxji3czcX3XthHDv1Az+5IVMN3gI=";
+  cargoHash = "sha256-x3LC/cN+SIwmf220ZAPJmGkcU3V9QfPFakOLShNpHV0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Active Directory data ingestor for BloodHound Community Edition written in Rust";
     homepage = "https://github.com/g0h4n/RustHound-CE";
-    changelog = "https://github.com/g0h4n/RustHound-CE/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/g0h4n/RustHound-CE/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eleonora ];
     mainProgram = "rusthound-ce";

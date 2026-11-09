@@ -152,7 +152,6 @@ in
           plasma-browser-integration
           plasma-workspace-wallpapers
           konsole
-          kwin-x11
           (lib.getBin qttools) # Expose qdbus in PATH
           ark
           elisa
@@ -168,14 +167,22 @@ in
           ffmpegthumbs
           krdp
           kconfig # required for xdg-terminal from xdg-utils
+          qtbase # for qtpaths which is required for xdg-mime from xdg-utils
+          # touch keyboard
+          plasma-keyboard
+          qtvirtualkeyboard # used by plasma-keyboard KCM
+
+          # experimental(?) Union theme
+          union
         ]
+        ++ lib.optional config.networking.networkmanager.enable qrca
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
           qtsensors
         ]
-        ++ lib.optionals config.services.flatpak.enable [
+        ++ lib.optionals (config.services.flatpak.enable || config.services.fwupd.enable) [
           # Since PackageKit Nix support is not there yet,
-          # only install discover if flatpak is enabled.
+          # only install discover if flatpak or fwupd is enabled.
           discover
         ];
       in
@@ -189,8 +196,8 @@ in
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
           let
-            kioPluginPath = "${pkgs.plasma5Packages.qtbase.qtPluginPrefix}/kf5/kio";
-            inherit (pkgs.plasma5Packages) kio;
+            kioPluginPath = "${pkgs.libsForQt5.qtbase.qtPluginPrefix}/kf5/kio";
+            inherit (pkgs.libsForQt5.__internalKF5) kio;
           in
           pkgs.runCommand "kio5-plugins-only" { } ''
             mkdir -p $out/${kioPluginPath}
@@ -211,10 +218,10 @@ in
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
       ++ lib.optional config.services.printing.enable print-manager
+      ++ lib.optional config.hardware.sane.enable skanpage
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
-      ++ lib.optional config.services.xserver.wacom.enable wacomtablet
       ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
     environment.pathsToLink = [
@@ -265,6 +272,7 @@ in
 
     services.power-profiles-daemon.enable = mkDefault true;
     services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+    programs.fuse.enable = true;
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
@@ -298,7 +306,7 @@ in
     services.orca.enable = mkDefault true;
 
     services.displayManager = {
-      sessionPackages = [ kdePackages.plasma-workspace ];
+      sessionPackages = [ kdePackages.plasma-workspace.sessions ];
       defaultSession = mkDefault "plasma";
     };
     services.displayManager.sddm = {

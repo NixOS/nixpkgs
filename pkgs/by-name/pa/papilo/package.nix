@@ -9,30 +9,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papilo";
-  version = "2.4.4";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VHOwr3uIhurab1zI9FeecBXZIp1ee2pk8fhVak6H0+A=";
+    hash = "sha256-EnFfFJ2PIWB0Xw8k6HZ1MU4KQRxgvC4kFM2Y/38/4PE=";
   };
 
   # skip SEGFAULT tests
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace test/CMakeLists.txt \
-        --replace-fail '"matrix-buffer"' "" \
-        --replace-fail '"vector-comparisons"' "" \
-        --replace-fail '"matrix-comparisons"' "" \
-        --replace-fail '"presolve-activity-is-updated-correctly-huge-values"' "" \
-        --replace-fail '"problem-comparisons"' "" \
-        --replace-fail "Boost_IOSTREAMS_FOUND" "FALSE"
-    ''
-    + (lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace test/CMakeLists.txt \
-        --replace-fail '"happy-path-replace-variable"' ""
-    '');
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace-fail '"matrix-buffer"' "" \
+      --replace-fail '"vector-comparisons"' "" \
+      --replace-fail '"matrix-comparisons"' "" \
+      --replace-fail '"presolve-activity-is-updated-correctly-huge-values"' "" \
+      --replace-fail '"problem-comparisons"' "" \
+      --replace-fail "Boost_IOSTREAMS_FOUND" "FALSE"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -50,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://scipopt.org/";
     description = "Parallel Presolve for Integer and Linear Optimization";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = lib.licenses.asl20;
     mainProgram = "papilo";
-    maintainers = with lib.maintainers; [ david-r-cox ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

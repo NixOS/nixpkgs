@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
   version = "1.3.7";
 
   src = fetchurl {
-    url = "${meta.homepage}${pname}-${version}.tar.bz2";
+    url = "${meta.homepage}cln-${version}.tar.bz2";
     sha256 = "sha256-fH7YR0lYM35N9btX6lF2rQNlAEy7mLYhdlvEYGoQ2Gs=";
   };
 

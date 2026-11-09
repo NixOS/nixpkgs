@@ -18,16 +18,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wike";
-  version = "3.2.0";
+  version = "3.2.1";
   pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
-    tag = version;
-    hash = "sha256-4J23dUK844ZYQp9LAvaQgN2cnGaPt7eWGOFSAe7WRH8=";
+    tag = finalAttrs.version;
+    hash = "sha256-FD0XucAp5SMXTsp+FrsGNYcmatSWiD9U9lAHRB1Aj3k=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/wike" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {
@@ -76,4 +76,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "wike";
   };
-}
+})

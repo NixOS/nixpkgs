@@ -6,20 +6,17 @@
   fetchPypi,
   msrest,
   msrestazure,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-sqlvirtualmachine";
-  version = "0.5.0";
+  version = "1.0.0b5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-talCNRKnsShErAFDZqHVPIEBehTzlna+7fAEpTKqKq0=";
+    hash = "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
     extension = "zip";
   };
 

@@ -54,6 +54,15 @@ in
           :::
         '';
       };
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--resolver=10.1.2.3:53"
+          "--quiet"
+        ];
+        description = "Ad-hoc command-line arguments passed to the service at startup.";
+      };
       intermediatePasswordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.externalPath;
         default = null;
@@ -114,6 +123,7 @@ in
               + lib.optionalString (
                 cfg.intermediatePasswordFile != null
               ) " --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+              + lib.optionalString (cfg.extraArgs != [ ]) " ${lib.escapeShellArgs cfg.extraArgs}"
             )
           ];
 

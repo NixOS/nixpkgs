@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "ajsonrpc";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pavlov99/ajsonrpc";
     changelog = "https://github.com/pavlov99/ajsonrpc/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "async-json-rpc-server";
   };
 }

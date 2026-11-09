@@ -4,20 +4,20 @@
   fetchFromGitHub,
   pcre2,
   uthash,
-  lua5_4,
+  lua5_5,
   makeWrapper,
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mle";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
-    rev = "v${version}";
-    sha256 = "0rkk7mh6w5y1lrbdv7wmxdgl5cqzpzw0p26adazkqlfdyb6wbj9k";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-xyelmIWqT4FmkFmI02XfdoIgkumQEso5Lf6oEaZP9yM=";
   };
 
   # Fix location of Lua 5.4 header and library
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcre2
     uthash
-    lua5_4
+    lua5_5
   ];
 
   doCheck = true;
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ adsr ];
     mainProgram = "mle";
   };
-}
+})

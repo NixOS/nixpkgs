@@ -71,7 +71,7 @@ in
       serviceConfig = {
         ExecStartPre = [
           "${cfg.package}/bin/beszel-hub migrate up"
-          "${cfg.package}/bin/beszel-hub history-sync"
+          "${cfg.package}/bin/beszel-hub migrate history-sync"
         ];
         ExecStart = ''
           ${cfg.package}/bin/beszel-hub serve --http='${cfg.host}:${toString cfg.port}'

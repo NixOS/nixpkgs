@@ -12,22 +12,23 @@
   pscript,
   pyjwt,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
   setuptools,
   uvicorn,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timetagger";
-  version = "25.12.1";
+  version = "26.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger";
-    tag = "v${version}";
-    hash = "sha256-XuYxle5U5Ui8ITsCgiJjwaRdfHwEa9cF0lAMoXwJamw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X82Ai6E844deRGs6KcJATEid3X6IlDq4+LCEU4lc4hM=";
   };
 
   build-system = [ setuptools ];
@@ -53,12 +54,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "timetagger" ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    #  RuntimeError: There is no current event loop in thread 'MainThread'
+    "tests/test_server_apiserver.py"
+  ];
+
   meta = {
     description = "Library to interact with TimeTagger";
     homepage = "https://github.com/almarklein/timetagger";
-    changelog = "https://github.com/almarklein/timetagger/releases/tag/${src.tag}";
+    changelog = "https://github.com/almarklein/timetagger/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "timetagger";
   };
-}
+})

@@ -3,33 +3,36 @@
   fetchurl,
   python3Packages,
   libjack2,
-  qt5,
+  qt6,
   which,
   bash,
 }:
-
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patchance";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/Houston4444/Patchance/releases/download/v${version}/Patchance-${version}-source.tar.gz";
-    hash = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
+    url = "https://github.com/Houston4444/Patchance/releases/download/v${finalAttrs.version}/Patchance-${finalAttrs.version}-source.tar.gz";
+    hash = "sha256-U7/l+zz8T1cmEEYwr68N+J6G/K0rbJFmKUOveeVv7kw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
-    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
-    qt5.qttools # lrelease to build translations.
+    python3Packages.pyqt6 # pyuic6 and pyrcc6 to build resources.
+    qt6.qttools # lrelease to build translations.
     which # which to find lrelease.
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     libjack2
     bash
   ];
-  propagatedBuildInputs = [ python3Packages.pyqt5 ];
+  propagatedBuildInputs = [
+    python3Packages.pyqt6
+    python3Packages.qtpy
+    python3Packages.jack-client
+  ];
 
   dontWrapQtApps = true; # The program is a python script.
 
@@ -47,11 +50,22 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/patchance/src" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/patchance/src" "$out ''${pythonPath[*]}"
     for file in $out/bin/*; do
       wrapQtApp "$file"
     done
   '';
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'rcc -g python' '$(RCC) -g python'
+  '';
+
+  makeFlags = [
+    "QT_VERSION=6"
+    "QT_API=PyQt6"
+    "RCC=${qt6.qtbase}/libexec/rcc"
+  ];
 
   meta = {
     homepage = "https://github.com/Houston4444/Patchance";
@@ -61,4 +75,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,12 +5,13 @@
   fetchFromGitHub,
   freetype,
   gtk3-x11,
-  pcre,
+  pcre2,
   pkg-config,
   webkitgtk_4_1,
-  xorg,
+  libxrandr,
+  libx11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnnoise-plugin";
   version = "1.10";
   outputs = [
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "werman";
     repo = "noise-suppression-for-voice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 
@@ -41,9 +42,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     gtk3-x11
-    pcre
-    xorg.libX11
-    xorg.libXrandr
+    pcre2
+    libx11
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
@@ -59,6 +60,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = lib.licenses.gpl3;
@@ -69,4 +72,4 @@ stdenv.mkDerivation rec {
       sciencentistguy
     ];
   };
-}
+})

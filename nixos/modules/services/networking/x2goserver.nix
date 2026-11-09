@@ -165,8 +165,8 @@ in
         "L+ /usr/local/bin/cp - - - - ${coreutils}/bin/cp"
         "L+ /usr/local/bin/sed - - - - ${gnused}/bin/sed"
         "L+ /usr/local/bin/setsid - - - - ${util-linux}/bin/setsid"
-        "L+ /usr/local/bin/xrandr - - - - ${xorg.xrandr}/bin/xrandr"
-        "L+ /usr/local/bin/xmodmap - - - - ${xorg.xmodmap}/bin/xmodmap"
+        "L+ /usr/local/bin/xrandr - - - - ${xrandr}/bin/xrandr"
+        "L+ /usr/local/bin/xmodmap - - - - ${xmodmap}/bin/xmodmap"
       ];
 
     systemd.services.x2goserver = {
@@ -180,12 +180,14 @@ in
         User = "x2go";
         Group = "x2go";
         RuntimeDirectory = "x2go";
-        StateDirectory = "x2go";
+        StateDirectory = [
+          "x2go"
+          "x2go/conf"
+        ];
       };
       preStart = ''
         if [ ! -e /var/lib/x2go/setup_ran ]
         then
-          mkdir -p /var/lib/x2go/conf
           cp -r ${cfg.package}/etc/x2go/* /var/lib/x2go/conf/
           ln -sf ${x2goServerConf} /var/lib/x2go/conf/x2goserver.conf
           ln -sf ${x2goAgentOptions} /var/lib/x2go/conf/x2goagent.options

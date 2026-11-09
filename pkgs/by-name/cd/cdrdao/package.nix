@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   pkg-config,
   libiconv,
@@ -39,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     libmad
     libao
   ];
+
+  env = {
+    am_cv_func_iconv_works = "yes";
+  };
 
   hardeningDisable = [ "format" ];
 

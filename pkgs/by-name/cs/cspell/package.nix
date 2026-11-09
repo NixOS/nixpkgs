@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -11,16 +11,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cspell";
-  version = "9.5.0";
+  version = "10.4.0";
 
   src = fetchFromGitHub {
     owner = "streetsidesoftware";
     repo = "cspell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O8CwJZfFSKmPP8tE5KcpW1bC3kUKjjjHS7QAKBc79qc=";
+    hash = "sha256-YrX0LPepN+nO/abqMFQpN9uuBnwrL5/ne/AznExi7yI=";
   };
 
-  pnpmWorkspaces = [ "cspell..." ];
+  pnpmWorkspaces = [
+    "cspell..."
+    "@internal/scripts"
+  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -29,15 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-DBCwysotJBsM8GYro2NTwMe+t29zooX8yAr1FyPR3Ek=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-R2PlFAZPnt0L2Zvpbp8UTjqigbGHm+rvY5w6yTGZ9Qk=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
   ];
 
   buildInputs = [
@@ -48,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # Build the internal tsdown config first, upstream does it in a postinstall script
+    pnpm --filter "@internal/tsdown" build
     pnpm --filter "cspell..." build
 
     runHook postBuild
@@ -64,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Re-install only production dependencies
     rm -rf node_modules packages/*/node_modules scripts/node_modules
-    pnpm config set nodeLinker hoisted
-    pnpm config set preferSymlinkedExecutables false
+    export pnpm_config_node_linker=hoisted
+    export pnpm_config_prefer_symlinked_executables=false
     pnpm --filter="cspell..." --offline --prod install
 
     mv ./package.json ./packages ./bin.mjs ./node_modules $out/lib/node_modules/cspell
@@ -93,6 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/streetsidesoftware/cspell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "cspell";
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 })

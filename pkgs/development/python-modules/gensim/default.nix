@@ -19,7 +19,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gensim";
   version = "4.4.0";
   pyproject = true;
@@ -27,9 +27,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piskvorky";
     repo = "gensim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TXutcU43ReBj9ss9+zBJFUxb5JqVHpl+B0c7hqcJAJY=";
   };
+
+  patches = [
+    # Fall back to serial chunkize when the multiprocessing start method is not
+    # "fork" (the default changed to "forkserver" on Linux with Python 3.14).
+    # Vendored (filtered to gensim/utils.py) from the not yet merged
+    # https://github.com/piskvorky/gensim/pull/3649
+    ./python314-chunkize-forkserver.patch
+  ];
 
   build-system = [
     cython
@@ -70,7 +78,8 @@ buildPythonPackage rec {
     description = "Topic-modelling library";
     homepage = "https://radimrehurek.com/gensim/";
     downloadPage = "https://github.com/piskvorky/gensim";
-    changelog = "https://github.com/RaRe-Technologies/gensim/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/RaRe-Technologies/gensim/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
+    maintainers = [ ];
   };
-}
+})

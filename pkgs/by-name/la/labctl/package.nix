@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "labctl";
   version = "0.0.22-unstable-2024-05-10";
 
@@ -21,8 +21,8 @@ buildGoModule rec {
   vendorHash = "sha256-Ycr/IZckIFysS9Goes58hhgh96UMRHjYWfWlQU23mXk=";
 
   ldflags = [
-    "-X=github.com/labctl/labctl/app.version=${version}"
-    "-X=github.com/labctl/labctl/app.commit=${src.rev}"
+    "-X=github.com/labctl/labctl/app.version=${finalAttrs.version}"
+    "-X=github.com/labctl/labctl/app.commit=${finalAttrs.src.rev}"
     "-X=github.com/labctl/labctl/app.date=1970-01-01T00:00:00Z"
   ];
 
@@ -40,5 +40,7 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "labctl";
+    # `github.com/containernetworking/plugins/pkg/ns` has no Go files for Darwin.
+    platforms = lib.platforms.linux;
   };
-}
+})

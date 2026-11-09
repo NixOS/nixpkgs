@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-go-inject-tag";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "favadi";
     repo = "protoc-go-inject-tag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8mpkwv80PMfOPiammg596hW7xdrcum9Hl/v5O1DPWgY=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ elrohirgt ];
     mainProgram = "protoc-go-inject-tag";
   };
-}
+})

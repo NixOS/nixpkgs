@@ -7,11 +7,12 @@
   meson,
   ninja,
   fmt_9,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "jack-passthrough";
-  version = "2021-9-25";
+  version = "0-unstable-2021-09-25";
 
   # https://github.com/guysherman/jack-passthrough
   src = fetchFromGitHub {
@@ -26,10 +27,13 @@ stdenv.mkDerivation {
     meson
     ninja
   ];
+
   buildInputs = [
     fmt_9
     libjack2
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Simple app to help with JACK apps that behave strangely";
@@ -39,10 +43,14 @@ stdenv.mkDerivation {
       more ports than they normally would or to prevent them from
       auto-connecting to certain things.
     '';
+    homepage = "https://github.com/guysherman/jack-passthrough";
     # license unknown: https://github.com/guysherman/jack-passthrough/issues/2
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.PowerUser64 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "jack-passthru";
   };
 }

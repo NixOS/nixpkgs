@@ -33,12 +33,31 @@ in
         services = {
           displayManager.sessionPackages = [ cfg.package ];
 
+          # GDM 50 falls back to launching "gnome-session" as the user
+          # session command when neither AccountsService nor displayManager
+          # .defaultSession pins one. On Niri-only setups that produces a
+          # login loop because gnome-session isn't installed. Pin Niri as
+          # the default so it works out of the box; users with multiple
+          # sessions can still override.
+          displayManager.defaultSession = lib.mkDefault "niri";
+
           # Recommended by upstream
           # https://github.com/YaLTeR/niri/wiki/Important-Software#portals
           gnome.gnome-keyring.enable = lib.mkDefault true;
         };
 
         systemd.packages = [ cfg.package ];
+
+        # Restarting the compositor kills the graphical session; same
+        # treatment as the display-manager modules.
+        systemd.user.services.niri = {
+          restartIfChanged = false;
+          # Defining the unit here generates a drop-in; without this it
+          # would carry the NixOS default Environment="PATH=coreutils:…",
+          # clobbering the PATH that niri-session imported into the user
+          # manager and breaking spawn actions that rely on it.
+          enableDefaultPath = false;
+        };
 
         xdg.portal = {
           enable = lib.mkDefault true;

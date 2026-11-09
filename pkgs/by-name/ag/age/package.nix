@@ -16,23 +16,23 @@
   nix-update-script,
 }:
 
-buildGoModule (final: {
+buildGoModule (finalAttrs: {
   pname = "age";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    tag = "v${final.version}";
-    hash = "sha256-Qs/q3zQYV0PukABBPf/aU5V1oOhw95NG6K301VYJk8A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A1VUzovKWxwelSc9/xofBwTfbRil9t75fRavb5p2JlA=";
   };
 
-  vendorHash = "sha256-iVDkYXXR2pXlUVywPgVRNMORxOOEhAmzpSM0xqSQMSQ=";
+  vendorHash = "sha256-cNh9U7OjoxewskX/+Ezln+U7p44g2h+Zx1dVKAaK6Ww=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${final.version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -67,15 +67,15 @@ buildGoModule (final: {
   # convenience function for wrapping sops with plugins
   passthru.withPlugins =
     filter:
-    runCommand "age-${final.version}-with-plugins" { nativeBuildInputs = [ makeWrapper ]; } ''
-      makeWrapper ${lib.getBin final.finalPackage}/bin/age $out/bin/age \
-        --prefix PATH : "${lib.makeBinPath (filter final.passthru.plugins)}"
+    runCommand "age-${finalAttrs.version}-with-plugins" { nativeBuildInputs = [ makeWrapper ]; } ''
+      makeWrapper ${lib.getBin finalAttrs.finalPackage}/bin/age $out/bin/age \
+        --prefix PATH : "${lib.makeBinPath (filter finalAttrs.passthru.plugins)}"
     '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/FiloSottile/age/releases/tag/v${final.version}";
+    changelog = "https://github.com/FiloSottile/age/releases/tag/v${finalAttrs.version}";
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = lib.licenses.bsd3;

@@ -4,6 +4,7 @@
 
   nodes.machine = {
     virtualisation.fileSystems."/var" = {
+      fsType = "none";
       options = [
         "bind"
         "nosuid"

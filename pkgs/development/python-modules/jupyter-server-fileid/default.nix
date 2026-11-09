@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   jupyter-events,
@@ -13,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server-fileid";
-  version = "0.9.3";
+  version = "0.10.0";
   pyproject = true;
-
-  disables = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_server_fileid";
     tag = "v${version}";
-    hash = "sha256-ob7hnqU7GdaDHEPF7+gwkmsboKZgiiLzzwxbBUwYHYo=";
+    hash = "sha256-Kt8CGO09NKTs7I5QJjzRdjeFJ1OJNwEQH2/2lPLPhUA=";
   };
 
   build-system = [ hatchling ];

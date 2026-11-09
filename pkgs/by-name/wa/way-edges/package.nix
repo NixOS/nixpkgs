@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "way-edges";
-  version = "0.11.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "way-edges";
     repo = "way-edges";
     tag = finalAttrs.version;
-    hash = "sha256-1P4iOsoQolxfVGZEe+x0DvcDwB5bdBqR0OsfL+y3qQM=";
+    hash = "sha256-aFKdy+dr/BWGNTnMrv/0AjvE5tGOdZ0wbvVY3ZyPql8=";
   };
-  cargoHash = "sha256-RSCBQUZp6mxZcwsvr6OwQeXa5CmEhN8QUezv0By5j/s=";
+  cargoHash = "sha256-TswMHWiBVqkb/zz/ZvP9Ipo5cRq6768VskF539Xk7Js=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libpulseaudio
   ];
 
-  RUSTFLAGS = [
+  env.RUSTFLAGS = toString [
     "--cfg tokio_unstable"
     "--cfg tokio_uring"
   ];

@@ -26,7 +26,6 @@
 
 assert lib.elem stdenv.system [
   "x86_64-linux"
-  "x86_64-darwin"
   "aarch64-linux"
   "aarch64-darwin"
 ];
@@ -144,30 +143,26 @@ let
 
       passthru = { inherit tests; };
 
-      # The recursiveUpdate below breaks default meta.position, so manually override it.
-      pos = __curPos;
-      meta =
-        with lib;
-        recursiveUpdate {
-          homepage = "https://hadoop.apache.org/";
-          description = "Framework for distributed processing of large data sets across clusters of computers";
-          license = lib.licenses.asl20;
-          sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+      meta = {
+        homepage = "https://hadoop.apache.org/";
+        description = "Framework for distributed processing of large data sets across clusters of computers";
+        license = lib.licenses.asl20;
+        sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
 
-          longDescription = ''
-            The Apache Hadoop software library is a framework that allows for
-            the distributed processing of large data sets across clusters of
-            computers using a simple programming model. It is designed to
-            scale up from single servers to thousands of machines, each
-            offering local computation and storage. Rather than rely on
-            hardware to deliver high-avaiability, the library itself is
-            designed to detect and handle failures at the application layer,
-            so delivering a highly-availabile service on top of a cluster of
-            computers, each of which may be prone to failures.
-          '';
-          maintainers = with lib.maintainers; [ illustris ];
-          platforms = attrNames platformAttrs;
-        } (attrByPath [ stdenv.system "meta" ] { } platformAttrs);
+        longDescription = ''
+          The Apache Hadoop software library is a framework that allows for
+          the distributed processing of large data sets across clusters of
+          computers using a simple programming model. It is designed to
+          scale up from single servers to thousands of machines, each
+          offering local computation and storage. Rather than rely on
+          hardware to deliver high-availability, the library itself is
+          designed to detect and handle failures at the application layer,
+          so delivering a highly-available service on top of a cluster of
+          computers, each of which may be prone to failures.
+        '';
+        maintainers = with lib.maintainers; [ illustris ];
+        platforms = lib.attrNames platformAttrs;
+      };
     });
 in
 {
@@ -182,7 +177,6 @@ in
         srcHash = "sha256-AkZjpHk57S3pYiZambxgRHR7PD51HSI4H1HHW9ICah4=";
         variant = "lean";
       };
-      x86_64-darwin = x86_64-linux;
       aarch64-linux = {
         version = "3.4.0";
         hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
@@ -203,7 +197,6 @@ in
         hash = "sha256-9RlQWcDUECrap//xf3sqhd+Qa8tuGZSHFjGfmXhkGgQ=";
         srcHash = "sha256-4OEsVhBNV9CJ+PN4FgCduUCVA9/el5yezSCZ6ko3+bU=";
       };
-      x86_64-darwin = x86_64-linux;
       aarch64-linux = x86_64-linux // {
         hash = "sha256-5Lv2uA72BJEva5v2yncyPe5gKNCNOPNsoHffVt6KXQ0=";
       };

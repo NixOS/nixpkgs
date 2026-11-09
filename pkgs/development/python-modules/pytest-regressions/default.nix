@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   matplotlib,
   numpy,
   pandas,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.8.1";
+  version = "2.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ESSS";
     repo = "pytest-regressions";
     tag = "v${version}";
-    hash = "sha256-8FbPWKYHy/0ITrCx9044iYOR7B9g8tgEdV+QfUg4esk=";
+    hash = "sha256-BojXizPr1b09YOa4wEeHQheyubKR2nBvtzLlcvt3380=";
   };
 
   build-system = [ setuptools-scm ];
@@ -53,22 +50,36 @@ buildPythonPackage rec {
     ];
   };
 
+  # matplotlib and pillow are purposly omitted as it only is required for one test and has a big closure size trough pillow, gdk-pixbuf, gobject-introspection and many more
   nativeCheckInputs = [
-    matplotlib
     pandas
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ optional-dependencies.dataframe
+  ++ optional-dependencies.num;
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
+  disabledTests = [
+    # https://github.com/ESSS/pytest-regressions/issues/225
+    "test_categorical"
+    "test_dataframe_with"
+    "test_different_data_types"
+    "test_nonrange_index"
+    "test_string_array"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isBigEndian) [
     # https://github.com/ESSS/pytest-regressions/issues/156
     # i686-linux not listed in the report, but seems to have this issue as well
     "test_different_data_types"
     "test_common_case" # not listed in the issue, but fails after the above is skipped
+  ];
+
+  disabledTestPaths = [
+    # only test file using image extra
+    "tests/test_image_regression.py"
   ];
 
   pythonImportsCheck = [

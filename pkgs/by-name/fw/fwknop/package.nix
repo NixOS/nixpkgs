@@ -15,14 +15,14 @@
   buildClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwknop";
   version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "mrash";
     repo = "fwknop";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jnEBRJCt7pAmXRIBVT2OwJqT5Zr/JaRgPDqccx0W/9o=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

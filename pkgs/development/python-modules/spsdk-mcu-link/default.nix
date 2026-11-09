@@ -20,16 +20,16 @@
   spsdk-mcu-link,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spsdk-mcu-link";
-  version = "0.6.6";
+  version = "0.6.18";
   pyproject = true;
 
   # Latest tag missing on GitHub
   src = fetchPypi {
     pname = "spsdk_mcu_link";
-    inherit version;
-    hash = "sha256-KISqhJJFtHFCDOFs+Zx0ghX0lGK5tazVqEIOT9gyAQs=";
+    inherit (finalAttrs) version;
+    hash = "sha256-YOJpnh525r08FDXUVNA/GYNLMjjqCs1E852A9lt/gHc=";
   };
 
   build-system = [
@@ -40,6 +40,9 @@ buildPythonPackage rec {
     # unpackaged
     "libusb_package"
     "wasmtime"
+
+    # cyclic dependency
+    "spsdk"
   ];
 
   pythonRelaxDeps = [
@@ -78,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

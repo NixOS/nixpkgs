@@ -12,15 +12,15 @@
   enablePython ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proot";
-  version = "5.4.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
-    rev = "v${version}";
-    sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-cCsCr6jpvAIYWlxIC2H6nhI5FFI3ApetD/yAaJbDO28=";
   };
 
   postPatch = ''
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "proot";
   };
-}
+})

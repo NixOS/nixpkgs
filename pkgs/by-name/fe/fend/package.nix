@@ -4,7 +4,7 @@
   rustPlatform,
   pandoc,
   pkg-config,
-  openssl,
+  aws-lc,
   installShellFiles,
   copyDesktopItems,
   makeDesktopItem,
@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fend";
-  version = "1.5.7";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3qEKYb8uYsTZ+UkpJkCKeGmY3iRQz9VfklE4LmcdA2E=";
+    hash = "sha256-RYIgfe4uhD+Xm0vRt3I4oSPkYpO7/oHYqePVkANDUqw=";
   };
 
-  cargoHash = "sha256-HzmRO7MDSVJHkeOWIKrEnaFmq68rCBcmWvXwQWGzA/s=";
+  cargoHash = "sha256-AISd8on8S58RmR8dpoYq0GJBwNsQAL8lW2MXv9NFqBk=";
 
   nativeBuildInputs = [
     pandoc
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     pkg-config
-    openssl
+    aws-lc
   ];
 
   postBuild = ''

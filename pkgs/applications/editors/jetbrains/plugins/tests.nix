@@ -1,43 +1,56 @@
 {
-  jetbrains,
-  symlinkJoin,
-  lib,
-  runCommand,
-  fetchzip,
+  # keep-sorted start
+  clion,
+  datagrip,
+  dataspell,
   fetchurl,
+  fetchzip,
+  goland,
+  intellij-idea,
+  intellij-idea-oss,
+  jetbrains,
+  jetbrains-gateway,
+  jetbrains-mps,
+  lib,
+  phpstorm,
+  pycharm,
+  pycharm-oss,
+  rider,
+  ruby-mine,
+  runCommand,
+  rust-rover,
+  symlinkJoin,
+  webstorm,
+  # keep-sorted end
+
   # If not set, all IDEs are tested.
-  ideName ? null,
+  ide ? null,
 }:
 
 let
   ides =
-    if ideName == null then
-      with jetbrains;
+    if ide == null then
       [
-        aqua
+        # keep-sorted start
         clion
         datagrip
         dataspell
-        gateway
         goland
-        idea-community-src
-        idea-community-bin
-        idea-oss
-        idea
-        mps
+        intellij-idea
+        intellij-idea-oss
+        jetbrains-gateway
+        jetbrains-mps
         phpstorm
-        pycharm-community-src
-        pycharm-community-bin
-        pycharm-oss
         pycharm
+        pycharm-oss
         rider
         ruby-mine
         rust-rover
         webstorm
-        writerside
+        # keep-sorted end
       ]
     else
-      [ (jetbrains.${ideName}) ];
+      [ ide ];
 in
 {
   # Check to see if the process for adding plugins is breaking anything, instead of the plugins themselves

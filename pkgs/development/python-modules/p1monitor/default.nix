@@ -8,8 +8,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
-  pythonOlder,
+  syrupy_5,
   yarl,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "p1monitor";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pythonImportsCheck = [ "p1monitor" ];

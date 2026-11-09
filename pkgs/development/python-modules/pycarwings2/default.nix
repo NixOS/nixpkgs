@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   iso8601,
   requests,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pycarwings2";
   version = "2.14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "filcole";

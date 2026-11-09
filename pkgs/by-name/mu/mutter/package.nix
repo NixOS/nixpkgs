@@ -19,19 +19,19 @@
   libadwaita,
   libxcvt,
   libGL,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
-  libXrandr,
-  libXinerama,
-  libXau,
+  libxrandr,
+  libxinerama,
+  libxau,
   libinput,
   libdrm,
   libgbm,
@@ -40,7 +40,6 @@
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
-  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -49,13 +48,14 @@
   pipewire,
   libgudev,
   libwacom,
-  libSM,
+  libsm,
   xwayland,
   mesa-gl-headers,
   meson,
   gnome-settings-daemon,
-  xorgserver,
+  xorg-server,
   python3,
+  python3Packages,
   wayland-scanner,
   wrapGAppsHook4,
   gi-docgen,
@@ -71,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "49.2";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -82,16 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-J2ORoIDlCVaSQKyGECVdd4q2qIoyUPmxd0AlXxNOPAo=";
+    hash = "sha256-XSjzriJWkkKPyvuWUA1nPzQyi2mLhpYMnBRg0LHZg7M=";
   };
 
   mesonFlags = [
-    "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dtests=disabled"
-    # For NVIDIA proprietary driver up to 470.
-    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
-    "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
@@ -117,11 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    python3.pkgs.argcomplete # for register-python-argcomplete
+    python3Packages.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
-    xorgserver
+    xorg-server
     gobject-introspection
     udevCheckHook
   ];
@@ -130,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     egl-wayland
     glib
-    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -149,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libstartup_notification
     libwacom
-    libSM
+    libsm
     colord
     lcms2
     pango
@@ -161,19 +156,19 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     xkeyboard_config
     libxkbcommon
     libxcb
-    libXrandr
-    libXinerama
-    libXau
+    libxrandr
+    libxinerama
+    libxau
 
     # for gdctl and gnome-service-client shebangs
     (python3.withPackages (pp: [
@@ -206,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "17"; # bumped each dev cycle
+    libmutter_api_version = "51"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {

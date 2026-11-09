@@ -11,13 +11,13 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "jose";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchurl {
-    url = "https://github.com/ulrikstrid/ocaml-jose/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-F6Odq5JXTkAxdqV3HQusoF+9rvt4BZytslKnsIjJLI8=";
+    url = "https://github.com/ulrikstrid/ocaml-jose/releases/download/${finalAttrs.version}/jose-${finalAttrs.version}.tbz";
+    hash = "sha256-fg0HLIb5caJw7p1kL6TYzPLijhdoqlbrm3NvoUBBQXQ=";
   };
 
   propagatedBuildInputs = [
@@ -44,4 +44,4 @@ buildDunePackage rec {
       marijanp
     ];
   };
-}
+})

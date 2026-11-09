@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "pIzYhGNZfflELEuqaczAYJHKd7px5DjTYJ+64PO4Hd0=";
+    hash = "sha256-pIzYhGNZfflELEuqaczAYJHKd7px5DjTYJ+64PO4Hd0=";
   };
 
   doCheck = true;
@@ -25,14 +25,14 @@ buildDunePackage rec {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
     changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/${version}/CHANGES.md";
     description = "Lock-free thread-safe integer keyed hash table";
-    license = with lib.licenses; [ isc ];
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ toastal ];
   };
 }

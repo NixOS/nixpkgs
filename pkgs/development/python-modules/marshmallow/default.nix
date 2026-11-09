@@ -3,14 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
-
-  # dependencies
-  backports-datetime-fromisoformat,
-  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -19,29 +14,24 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "4.1.2";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-qEjq1tEWoYqlN7L/cECnpFGPinSdZXexJHZfXreLAZc=";
+    hash = "sha256-P3MaS0wXyRCYyHW07ifPoglP95SUakhH5rdkAsktXag=";
   };
 
   build-system = [ flit-core ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    backports-datetime-fromisoformat
-    typing-extensions
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     simplejson
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isx86_32 [
+  disabledTests = lib.optionals stdenv.hostPlatform.is32bit [
     # Raises a slightly different error than upstream expects: 'Timestamp is too large' instead of 'out of range'
     "test_from_timestamp_with_overflow_value"
   ];

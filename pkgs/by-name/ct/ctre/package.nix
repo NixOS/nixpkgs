@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctre";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "hanickadot";
     repo = "compile-time-regular-expressions";
-    rev = "v${version}";
-    hash = "sha256-/44oZi6j8+a1D6ZGZpoy82GHjPtqzOvuS7d3SPbH7fs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YtshxSdVT9V9V0KcYF+9NtgW0kYUCQ4I9EbcWNajuxI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.all;
   };
-}
+})

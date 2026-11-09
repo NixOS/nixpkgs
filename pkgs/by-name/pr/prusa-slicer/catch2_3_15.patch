@@ -1,0 +1,32 @@
+From 8abf7e1b707adf145d7434dbf53ad14c9c7cccd3 Mon Sep 17 00:00:00 2001
+From: Andreas Schneider <asn@cryptomilk.org>
+Date: Fri, 12 Jun 2026 18:20:39 +0200
+Subject: [PATCH] Fix build with Catch2 v3: include
+ catch_interfaces_capture.hpp
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Catch::getResultCapture() requires an explicit include of
+<catch2/interfaces/catch_interfaces_capture.hpp> in Catch2 v3,
+which was not previously included.
+
+tests/sla_print/sla_test_utils.cpp:87:32: error: ‘getResultCapture’ is not a member of ‘Catch’
+    m.WriteOBJFile((Catch::getResultCapture().getCurrentTestName() + "_" +
+                           ^~~~~~~~~~~~~~~~
+---
+ tests/sla_print/sla_test_utils.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/sla_print/sla_test_utils.cpp b/tests/sla_print/sla_test_utils.cpp
+index 01eb222969c..c9355ca8e91 100644
+--- a/tests/sla_print/sla_test_utils.cpp
++++ b/tests/sla_print/sla_test_utils.cpp
+@@ -5,6 +5,7 @@
+ #include "libslic3r/SLA/BranchingTreeSLA.hpp"
+ 
+ #include <iomanip>
++#include <catch2/interfaces/catch_interfaces_capture.hpp>
+ 
+ void test_support_model_collision(
+     const std::string            &obj_filename,

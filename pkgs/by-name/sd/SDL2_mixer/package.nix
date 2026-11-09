@@ -15,19 +15,20 @@
   wavpack,
   libxmp,
   game-music-emu,
+  testers,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-6HOTLwGi2oSQChwHE/oNHfZpcMh8xTuwNQSpKS01bwI=";
+    hash = "sha256-ln2RncnKbHIqvFia/ZlnbOGoVDJV8gF3538Wft3/wrw=";
   };
 
   nativeBuildInputs = [
@@ -59,14 +60,28 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
+    # disable dynamic loading of dependencies
     (lib.enableFeature false "music-mod-modplug-shared")
     (lib.enableFeature false "music-mp3-mpg123-shared")
     (lib.enableFeature false "music-opus-shared")
     (lib.enableFeature false "music-midi-fluidsynth-shared")
+    (lib.enableFeature false "music-ogg-vorbis-shared")
+
     (lib.enableFeature enableSdltest "sdltest")
+
     # override default path to allow MIDI files to be played
     (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
+
+    # even though we have libvorbisfile from the libvorbis package, configure will default to the stb implementation
+    (lib.enableFeature false "music-ogg-stb")
+    (lib.enableFeature true "music-ogg-vorbis")
   ];
+
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/libsdl-org/SDL_mixer";
@@ -74,5 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "SDL2_mixer" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })

@@ -4,12 +4,12 @@
   glib,
   autoreconfHook,
   pkg-config,
-  systemd,
+  systemdLibs,
   fetchFromGitLab,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop-testing";
   version = "2021.1";
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-desktop-testing";
-    rev = "v${version}";
-    sha256 = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jtojnar ];
   };
-}
+})

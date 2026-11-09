@@ -6,15 +6,15 @@
   babashka,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neil";
-  version = "0.3.68";
+  version = "0.3.71";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
-    rev = "v${version}";
-    sha256 = "sha256-ulqVrFsuYvRKxASHI6AqnHkKKdmDVgtivsRIscivcXw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1m/C2aaaV9ewL8WZOCXQD47cDY2Kd607ihjsnYfdnVs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = babashka.meta.platforms;
     maintainers = with lib.maintainers; [ jlesquembre ];
   };
-}
+})

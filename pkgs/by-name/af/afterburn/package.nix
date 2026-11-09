@@ -6,14 +6,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "afterburn";
   version = "5.10.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "afterburn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-APVbrR4V2Go7ba+1AFZKi0eBxRnT2bm+Fy2/KmvhsjE=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "afterburn";
   };
-}
+})

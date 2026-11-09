@@ -9,23 +9,26 @@
   libxkbcommon,
   openssl,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lutgen-studio";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
-    tag = "lutgen-studio-v${version}";
-    hash = "sha256-ENhaJTbaAv52YFNjce9Ln/LQvP/Nw2Tk5eMmr8mKwQ0=";
+    tag = "lutgen-studio-v${finalAttrs.version}";
+    hash = "sha256-8sayt1gLJPdhesUvSoykUYjIiGLRJH5avsRSrWLfIVE=";
   };
 
-  cargoHash = "sha256-PEso+fTH1DndRUPULYIDMAqnrfz8W9iVVxZ7W2N/I5U=";
+  cargoHash = "sha256-CJXobmGOFEOiycrtgKjupVwTCYLMQcEI7RdLGpwmSyg=";
 
   cargoBuildFlags = [
     "--bin"
@@ -47,10 +50,10 @@ rustPlatform.buildRustPackage rec {
         libxkbcommon
         openssl
         wayland
-        xorg.libXcursor
-        xorg.libXrandr
-        xorg.libXi
-        xorg.libX11
+        libxcursor
+        libxrandr
+        libxi
+        libx11
       ];
     in
     ''
@@ -69,4 +72,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "lutgen-studio";
     license = lib.licenses.mit;
   };
-}
+})

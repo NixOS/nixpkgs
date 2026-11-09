@@ -45,8 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Linux command line tool for setting up USB gadgets using configfs";
+    homepage = "https://github.com/linux-usb-gadgets/gt";
     mainProgram = "gt";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

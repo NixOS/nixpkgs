@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "djlint";
-  version = "1.36.4";
+  version = "1.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Riverside-Healthcare";
+    owner = "djlint";
     repo = "djlint";
-    tag = "v${version}";
-    hash = "sha256-1DXBDVe8Ae8joJOYwwlBZB8MVubDPVhh+TiJBpL2u2M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PnTGd5/O66Yq/nP8IYUpSKiBr3ImJaL8XVUv3E/JLY8=";
   };
 
   build-system = with python3.pkgs; [
@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     click
-    colorama
     cssbeautifier
     jsbeautifier
     json5
@@ -35,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     regex
     tomli
-    tqdm
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "djlint" ];
@@ -43,9 +42,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang";
     mainProgram = "djlint";
-    homepage = "https://github.com/Riverside-Healthcare/djlint";
-    license = lib.licenses.gpl3Only;
-    changelog = "https://github.com/djlint/djLint/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/djlint/djLint";
+    license = lib.licenses.gpl3Plus;
+    changelog = "https://github.com/djlint/djLint/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

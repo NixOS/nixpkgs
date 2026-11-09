@@ -16,6 +16,8 @@
   fmt,
   jsoncpp,
   icu77,
+  libzippp,
+  libzip,
   # options
   enableMysql ? false,
   libmysqlclient,
@@ -121,15 +123,15 @@ let
   inherit (lib) flatten;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gerbera";
-  version = "3.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
-    rev = "v${version}";
-    sha256 = "sha256-dszd4WSTjOWwLNha0yq1gtC5kxCrJMhnnhKYaor8JyU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-4j3TXPdc1MXzt7wFogAbRISPiE9hgySMpZGKuoNeUv0=";
   };
 
   postPatch =
@@ -167,6 +169,8 @@ stdenv.mkDerivation rec {
     fmt
     jsoncpp
     icu77
+    libzippp
+    libzip
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
@@ -174,7 +178,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://docs.gerbera.io/";
-    changelog = "https://github.com/gerbera/gerbera/releases/tag/v${version}";
+    changelog = "https://github.com/gerbera/gerbera/releases/tag/v${finalAttrs.version}";
     description = "UPnP Media Server for 2024";
     longDescription = ''
       Gerbera is a Mediatomb fork.
@@ -186,4 +190,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gerbera";
   };
-}
+})

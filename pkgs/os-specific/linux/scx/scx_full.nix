@@ -1,14 +1,19 @@
 {
-  lib,
+  buildEnv,
   scx,
 }:
-scx.cscheds.overrideAttrs (oldAttrs: {
+buildEnv {
   pname = "scx_full";
-  postInstall = (oldAttrs.postInstall or "") + ''
-    cp ${lib.getBin scx.rustscheds}/bin/* ${placeholder "out"}/bin/
-  '';
+  inherit (scx.rustscheds) version;
 
-  meta = oldAttrs.meta // {
+  paths = [
+    scx.cscheds
+    scx.rustscheds
+  ];
+
+  passthru.schedulers = scx.cscheds.schedulers ++ scx.rustscheds.schedulers;
+
+  meta = {
     description = "Sched-ext C and Rust userspace schedulers";
     longDescription = ''
       This includes C based schedulers such as scx_central, scx_flatcg,
@@ -22,4 +27,4 @@ scx.cscheds.overrideAttrs (oldAttrs: {
     '';
     homepage = "https://github.com/sched-ext/scx";
   };
-})
+}

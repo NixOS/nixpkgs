@@ -5,8 +5,11 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  makeBinaryWrapper,
   libgit2,
   openssl,
+  aws-lc,
+  zstd,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -14,25 +17,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
-  version = "0.62.2";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HNXfcZuj+yLWatwdSOP0WDkX4y9pcVwrNjsaZdD3ZNo=";
+    hash = "sha256-2jRqyS7NsH4fkw5IfDs+hwWzFYpW5kNGc3y49ly4e1w=";
   };
 
-  cargoHash = "sha256-wmr1dOqV8IAhqmG4SjeCra+CEpajwZJWUlTNYVVgHVo=";
+  cargoHash = "sha256-vqcmIOkQ1qzIRd10bQ/9x4jEwJCYwQIgS6GX0j/g0wI=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeBinaryWrapper
   ];
 
   buildInputs = [
     libgit2
     openssl
+    aws-lc
+    zstd
   ];
 
   env = {
@@ -55,6 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
+  postFixup = ''
+    wrapProgram $out/bin/pixi --set-default PIXI_TLS_ROOT_CERTS system
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -68,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://pixi.sh/latest/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      esteve
       xiaoxiangmoe
     ];
     mainProgram = "pixi";

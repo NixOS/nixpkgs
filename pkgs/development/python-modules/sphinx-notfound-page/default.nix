@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
   # documentation build dependencies
   sphinxHook,
   sphinx-prompt,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "sphinx-notfound-page";
   version = "1.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"

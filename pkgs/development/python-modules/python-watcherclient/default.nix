@@ -10,28 +10,26 @@
   oslo-serialization,
   oslo-utils,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-watcherclient";
-  version = "4.9.0";
+  version = "4.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
-    tag = version;
-    hash = "sha256-ik//J9R9F4SCljexijcfXuSbDgDUNnMTqfpxIPd2Jm8=";
+    tag = finalAttrs.version;
+    hash = "sha256-/qjWKM+2VYvI1beMxexso3OPA5riywG8F67EJJRurJw=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -55,13 +53,7 @@ buildPythonPackage rec {
     oslo-utils
   ];
 
-  nativeCheckInputs = [ stestr ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ stestrCheckHook ];
 
   pythonImportsCheck = [ "watcherclient" ];
 
@@ -72,4 +64,4 @@ buildPythonPackage rec {
     mainProgram = "watcher";
     teams = [ lib.teams.openstack ];
   };
-}
+})

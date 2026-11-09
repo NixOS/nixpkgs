@@ -8,22 +8,19 @@
   pytz,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   tcolorpy,
 }:
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.4";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "typepy";
     tag = "v${version}";
-    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
+    hash = "sha256-QzfzAWQjKQBIVkgH+dPVVhlk717R71DiOhXZyfooJus=";
   };
 
   build-system = [ setuptools-scm ];
@@ -51,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/typepy";
     changelog = "https://github.com/thombashi/typepy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    maintainers = [ ];
   };
 }

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-mednafen";
-  version = "0-unstable-2025-12-28";
+  version = "0-unstable-2026-05-22";
 
   src = fetchFromGitHub {
     owner = "highscore-emu";
     repo = "mednafen-highscore";
-    rev = "58404782e3f69186c7be821a880cf1442b240f2f";
-    hash = "sha256-FXSfBAPpi+Ch9vuPQf6nqLMKxvrbXG+6F5HHaU9fs2s=";
+    rev = "e13c337a2cde6d5304f2a33311447280ef206a7a";
+    hash = "sha256-nwvOkL1RzqXCqMFiDuSvNhgmujvxFYpdp4OScvEmppI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/highscore";

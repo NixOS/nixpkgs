@@ -10,7 +10,6 @@
   anyio,
   pycrdt,
   pycrdt-store,
-  sqlite-anyio,
 
   # optional-dependencies
   channels,
@@ -25,16 +24,16 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrdt-websocket";
-  version = "0.16.0";
+  version = "0.16.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt-websocket";
-    tag = version;
-    hash = "sha256-Qux8IxJR1nGbdpGz7RZBKJjYN0qfwfEpd2UDlduOna0=";
+    tag = finalAttrs.version;
+    hash = "sha256-kovH35Ho3Rx4AymG7FXvBpKKgPM7LVL2YjkK3oNkgmU=";
   };
 
   build-system = [ hatchling ];
@@ -43,7 +42,6 @@ buildPythonPackage rec {
     anyio
     pycrdt
     pycrdt-store
-    sqlite-anyio
   ];
 
   optional-dependencies = {
@@ -79,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "WebSocket Connector for pycrdt";
     homepage = "https://github.com/jupyter-server/pycrdt-websocket";
-    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/pycrdt-websocket/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

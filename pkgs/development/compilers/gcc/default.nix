@@ -30,37 +30,40 @@
   which,
   patchelf,
   binutils,
+  autoconf269,
   isl ? null, # optional, for the Graphite optimization framework.
   zlib ? null,
   libucontext ? null,
   gnat-bootstrap ? null,
+  # Allows only computing system equality once across every file responsible for
+  # building gcc. Not part of the public API
+  _systemInfo ? {
+    buildIsHost = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+    hostIsTarget = lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform;
+  },
   enableMultilib ? false,
-  enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), # Whether to support user-supplied plug-ins
+  enablePlugin ? _systemInfo.buildIsHost, # Whether to support user-supplied plug-ins
   name ? "gcc",
   libcCross ? null,
-  threadsCross ? { }, # for MinGW
+  threadsCross ? null, # for MinGW
   withoutTargetLibc ? stdenv.targetPlatform.libc == null,
   flex,
   gnused ? null,
   buildPackages,
   pkgsBuildTarget,
   libxcrypt,
-  disableGdbPlugin ?
-    !enablePlugin
-    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin),
   nukeReferences,
   callPackage,
   majorMinorVersion,
-  apple-sdk,
+  apple-sdk_14,
+  apple-sdk_15,
   darwin,
 }:
 
 let
   inherit (lib)
     callPackageWith
-    filter
-    getBin
-    maintainers
     makeLibraryPath
     makeSearchPathOutput
     mapAttrs
@@ -69,18 +72,18 @@ let
     optionals
     optionalString
     pipe
-    platforms
-    versionAtLeast
     versions
     ;
+
+  inherit (_systemInfo) buildIsHost hostIsTarget;
 
   gccVersions = import ./versions.nix;
   version = gccVersions.fromMajorMinor majorMinorVersion;
 
   majorVersion = versions.major version;
-  atLeast14 = versionAtLeast version "14";
-  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
+
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
 
   # releases have a form: MAJOR.MINOR.MICRO, like 14.2.1
   # snapshots have a form like MAJOR.MINOR.MICRO.DATE, like 14.2.1.20250322
@@ -97,21 +100,16 @@ let
   disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-  targetConfig =
-    if (!lib.systems.equals targetPlatform hostPlatform) then targetPlatform.config else null;
+  targetConfig = if (!hostIsTarget) then targetPlatform.config else null;
 
   patches = callFile ./patches { };
 
   # Cross-gcc settings (build == host != target)
-  crossMingw = (!lib.systems.equals targetPlatform hostPlatform) && targetPlatform.isMinGW;
+  crossMingw = (!hostIsTarget) && targetPlatform.isMinGW;
   stageNameAddon = optionalString withoutTargetLibc "-nolibc";
-  crossNameAddon = optionalString (
-    !lib.systems.equals targetPlatform hostPlatform
-  ) "${targetPlatform.config}${stageNameAddon}-";
+  crossNameAddon = optionalString (!hostIsTarget) "${targetPlatform.config}${stageNameAddon}-";
 
-  targetPrefix = lib.optionalString (
-    !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (!hostIsTarget) "${stdenv.targetPlatform.config}-";
 
   callFile = callPackageWith {
     # lets
@@ -130,7 +128,9 @@ let
       ;
     # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc${majorVersion}.cc.override)" | jq '.[]' --raw-output'
     inherit
-      apple-sdk
+      apple-sdk_14
+      apple-sdk_15
+      autoconf269
       binutils
       buildPackages
       cargo
@@ -151,6 +151,7 @@ let
       gnat-bootstrap
       gnused
       isl
+      is13
       langAda
       langC
       langCC
@@ -182,6 +183,8 @@ let
       which
       zlib
       ;
+
+    inherit buildIsHost hostIsTarget;
   };
 
 in
@@ -194,7 +197,7 @@ assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -220,6 +223,8 @@ pipe
       };
 
       inherit patches;
+
+      __structuredAttrs = true;
 
       outputs = [
         "out"
@@ -265,7 +270,7 @@ pipe
         substituteInPlace libgfortran/configure \
           --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
       ''
-      + (optionalString ((!lib.systems.equals targetPlatform hostPlatform) || stdenv.cc.libc != null)
+      + (optionalString ((!hostIsTarget) || stdenv.cc.libc != null)
         # On NixOS, use the right path to the dynamic linker instead of
         # `/lib/ld*.so'.
         (
@@ -313,6 +318,8 @@ pipe
         depsTargetTarget
         ;
 
+      strictDeps = true;
+
       preConfigure = (callFile ./common/pre-configure.nix { }) + ''
         ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
       '';
@@ -335,11 +342,7 @@ pipe
         let
           target =
             optionalString profiledCompiler "profiled"
-            + optionalString (
-              (lib.systems.equals targetPlatform hostPlatform)
-              && (lib.systems.equals hostPlatform buildPlatform)
-              && !disableBootstrap
-            ) "bootstrap";
+            + optionalString (hostIsTarget && buildIsHost && !disableBootstrap) "bootstrap";
         in
         optional (target != "") target;
 
@@ -369,15 +372,18 @@ pipe
         # compiler (after the specs for the cross-gcc are created). Having
         # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-        CPATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
+        CPATH = optionals hostIsTarget (
           makeSearchPathOutput "dev" "include" ([ ] ++ optional (zlib != null) zlib)
         );
 
-        LIBRARY_PATH = optionals (lib.systems.equals targetPlatform hostPlatform) (
-          makeLibraryPath (optional (zlib != null) zlib)
-        );
+        LIBRARY_PATH = optionals hostIsTarget (makeLibraryPath (optional (zlib != null) zlib));
 
         NIX_LDFLAGS = optionalString hostPlatform.isSunOS "-lm";
+
+        # Override isysroot for GNAT on Darwin due to SDK version sensitivity; GNAT 14+ requires Apple SDK 15 or later.
+        NIX_CFLAGS_COMPILE = optionalString (
+          hostPlatform.isDarwin && langAda
+        ) "-isysroot ${appleSdk.sdkroot}";
 
         inherit (callFile ./common/extra-target-flags.nix { })
           EXTRA_FLAGS_FOR_TARGET
@@ -437,10 +443,18 @@ pipe
         langJit
         targetPlatform
         hostPlatform
+        hostIsTarget
         withoutTargetLibc
         enableShared
         libcCross
         ;
     })
-    (callPackage ./common/checksum.nix { inherit langC langCC; })
+    (callPackage ./common/checksum.nix {
+      inherit
+        langC
+        langCC
+        buildIsHost
+        hostIsTarget
+        ;
+    })
   ]

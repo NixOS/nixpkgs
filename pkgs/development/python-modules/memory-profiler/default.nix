@@ -27,7 +27,7 @@ python.pkgs.buildPythonPackage rec {
       This is a python module for monitoring memory consumption of a process as
       well as line-by-line analysis of memory consumption for python programs.
     '';
-    homepage = "https://pypi.python.org/pypi/memory_profiler";
+    homepage = "https://pypi.org/project/memory_profiler/";
     license = lib.licenses.bsd3;
   };
 }

@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cni-plugin-dnsname";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "dnsname";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kebN1OLMOrBKBz4aBV0VYm+LmLm6S0mKnVgG2u5I+d4=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mikroskeem ];
   };
-}
+})

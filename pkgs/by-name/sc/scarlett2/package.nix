@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     description = "Firmware Management Utility for Scarlett 2nd, 3rd, and 4th Gen, Clarett USB, and Clarett+ interfaces";
     homepage = "https://github.com/geoffreybennett/scarlett2";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ squalus ];
+    maintainers = [ ];
     mainProgram = "scarlett2";
   };
 

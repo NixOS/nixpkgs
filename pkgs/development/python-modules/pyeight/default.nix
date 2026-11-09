@@ -4,15 +4,12 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyeight";
   version = "0.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mezz64";
@@ -34,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with the Eight Sleep API";
     homepage = "https://github.com/mezz64/pyEight";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

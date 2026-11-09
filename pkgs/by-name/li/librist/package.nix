@@ -10,7 +10,7 @@
   mbedtls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
   version = "0.2.11";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
 
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ];
+
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  };
 
   buildInputs = [
     cjson
@@ -51,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raphaelr ];
     platforms = lib.platforms.all;
   };
-}
+})

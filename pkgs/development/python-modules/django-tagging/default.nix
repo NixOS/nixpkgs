@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
   django,
@@ -11,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28d68fa4831705e51ad7d1e845ed6dd9e354f9b6f8a5f63b655a430646ef4e8d";
+    hash = "sha256-KNaPpIMXBeUa19HoRe1t2eNU+bb4pfY7ZVpDBkbvTo0=";
   };
 
   # error: invalid command 'test'
@@ -22,5 +23,9 @@ buildPythonPackage rec {
   meta = {
     description = "Generic tagging application for Django projects";
     homepage = "https://github.com/Fantomas42/django-tagging";
+    license = lib.licenses.AND [
+      lib.licenses.mit
+      lib.licenses.bsd3
+    ];
   };
 }

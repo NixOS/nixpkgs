@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 {
 
   ###### interface
@@ -15,8 +13,8 @@ with lib;
 
     services.rpcbind = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable `rpcbind`, an ONC RPC directory service
@@ -32,29 +30,34 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.rpcbind.enable {
-    environment.systemPackages = [ pkgs.rpcbind ];
+  config = lib.mkMerge [
+    (lib.mkIf config.services.rpcbind.enable {
+      environment.systemPackages = [ pkgs.rpcbind ];
 
-    systemd.packages = [ pkgs.rpcbind ];
+      systemd.packages = [ pkgs.rpcbind ];
 
-    systemd.services.rpcbind = {
-      wantedBy = [ "multi-user.target" ];
-      # rpcbind performs a check for /var/run/rpcbind.lock at startup
-      # and will crash if /var/run isn't present. In the stock NixOS
-      # var.conf tmpfiles configuration file, /var/run is symlinked to
-      # /run, so rpcbind can enter a race condition in which /var/run
-      # isn't symlinked yet but tries to interact with the path, so
-      # controlling the order explicitly here ensures that rpcbind can
-      # start successfully. The `wants` instead of `requires` should
-      # avoid creating a strict/brittle dependency.
-      wants = [ "systemd-tmpfiles-setup.service" ];
-      after = [ "systemd-tmpfiles-setup.service" ];
-    };
+      systemd.services.rpcbind = {
+        wantedBy = [ "multi-user.target" ];
+        # rpcbind performs a check for /var/run/rpcbind.lock at startup
+        # and will crash if /var/run isn't present. In the stock NixOS
+        # var.conf tmpfiles configuration file, /var/run is symlinked to
+        # /run, so rpcbind can enter a race condition in which /var/run
+        # isn't symlinked yet but tries to interact with the path, so
+        # controlling the order explicitly here ensures that rpcbind can
+        # start successfully. The `wants` instead of `requires` should
+        # avoid creating a strict/brittle dependency.
+        wants = [ "systemd-tmpfiles-setup.service" ];
+        after = [ "systemd-tmpfiles-setup.service" ];
+      };
+    })
 
-    users.users.rpc = {
-      group = "nogroup";
-      uid = config.ids.uids.rpc;
-    };
-  };
+    {
+      users.users.rpc = {
+        enable = config.services.rpcbind.enable;
+        group = "nogroup";
+        uid = config.ids.uids.rpc;
+      };
+    }
+  ];
 
 }

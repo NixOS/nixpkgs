@@ -6,19 +6,21 @@
   obs-studio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-replay-source";
-  version = "1.8.1";
+  version = "1.8.1-unstable-2026-09-23";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-replay-source";
-    rev = version;
-    sha256 = "sha256-+PSALDqHXPyR0J7YnLn3QgPN6eIoH3yTIm1Bp7Li8c8=";
+    rev = "842a48eaf74fdaa2a3236ba30c42cf574359970f";
+    hash = "sha256-ZIG+jkq7TiZ+d+bektimPRg4E0YQPUjpowotDJHuigQ=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postInstall = ''
     rm -rf $out/obs-plugins $out/data

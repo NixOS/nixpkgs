@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "3v1n0";
     repo = "libfprint-tod-vfs0090";
     rev = "6084a1545589beec0c741200b18b0902cca225ba";
-    sha256 = "sha256-tSML/8USd/LuHF/YGLvNgykixF6VYtfE4SXzeV47840=";
+    hash = "sha256-tSML/8USd/LuHF/YGLvNgykixF6VYtfE4SXzeV47840=";
   };
 
   patches = [

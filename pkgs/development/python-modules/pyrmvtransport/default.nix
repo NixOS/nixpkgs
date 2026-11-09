@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   flit,
   async-timeout,
   lxml,
@@ -16,9 +15,7 @@
 buildPythonPackage rec {
   pname = "pyrmvtransport";
   version = "0.3.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgtobi";

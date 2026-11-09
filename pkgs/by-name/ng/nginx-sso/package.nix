@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nginx-sso";
-  version = "0.27.6";
+  version = "0.27.9";
 
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
-    rev = "v${version}";
-    hash = "sha256-nYqk1VK6R9HH67NLQDUifW3AjIW5pjD1Jmf+cYH3SQo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XG+zy2QAUFRXHdMrIuaXUaVNyUfpNAJ0WhZuyO6b+H4=";
   };
 
-  vendorHash = "sha256-KflzlrjOOTDZQq2yP0zQsDgULrbnoeRRxOVHxKINsYw=";
+  vendorHash = "sha256-RAOaYLf2SOBnyceMo6Da2BNpuWvjdweF5L9nRM392R8=";
 
   postInstall = ''
     mkdir -p $out/share
@@ -24,7 +24,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) nginx-sso;
+    nginx-sso = nixosTests.nginx.mainline.sso;
   };
 
   meta = {
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nginx-sso";
   };
-}
+})

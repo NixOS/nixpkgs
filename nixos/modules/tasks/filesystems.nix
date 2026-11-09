@@ -4,7 +4,7 @@
   pkgs,
   utils,
   ...
-}@moduleArgs:
+}:
 let
   inherit (lib)
     any
@@ -122,7 +122,6 @@ let
         };
 
         fsType = mkOption {
-          default = "auto";
           example = "ext3";
           type = nonEmptyStr;
           description = ''
@@ -237,11 +236,9 @@ let
           (mkIf config.autoResize [ "x-systemd.growfs" ])
           (mkIf config.autoFormat [ "x-systemd.makefs" ])
           (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
-          (mkIf
-            # With scripted stage 1, depends is implemented by sorting 'config.system.build.fileSystems'
-            (lib.length config.depends > 0 && (inInitrd -> moduleArgs.config.boot.initrd.systemd.enable))
-            (map (x: "x-systemd.requires-mounts-for=${optionalString inInitrd "/sysroot"}${x}") config.depends)
-          )
+          (mkIf (lib.length config.depends > 0) (
+            map (x: "x-systemd.requires-mounts-for=${optionalString inInitrd "/sysroot"}${x}") config.depends
+          ))
         ];
 
     };
@@ -284,7 +281,6 @@ let
       ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
         "ext3"
         "ext4"
-        "reiserfs"
         "xfs"
         "jfs"
         "f2fs"
@@ -359,8 +355,7 @@ in
         entry in the list is an attribute set with the following fields:
         `mountPoint`, `device`,
         `fsType` (a file system type recognised by
-        {command}`mount`; defaults to
-        `"auto"`), and `options`
+        {command}`mount`), and `options`
         (the mount options passed to {command}`mount` using the
         {option}`-o` flag; defaults to `[ "defaults" ]`).
 

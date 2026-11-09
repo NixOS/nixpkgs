@@ -2,6 +2,8 @@
   config,
   hostPkgs,
   lib,
+  containers,
+  nodes,
   options,
   ...
 }:
@@ -27,9 +29,61 @@ let
     */
     f:
     lib.mkOverride (opt.highestPrio - 1) (f opt.value);
+
+  requiredFeaturesModuleType = {
+    freeformType = types.attrsOf types.bool;
+    options = {
+      devnet = mkOption {
+        type = types.bool;
+        default = containers != { } && nodes != { };
+        defaultText = lib.literalMD "`true` if both VMs and containers are present.";
+        description = ''
+          This heuristic setting that assumes that the majority of tests requires VMs and containers
+          to communicate over network. To support such tests, adding "/dev/net" to `nix.settings.extra-sandbox-paths` is necessary.
+
+          Override this to `false` if the heuristic is wrong in some cases.
+        '';
+      };
+      nixos-test = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Standard requirement for NixOS integration tests";
+      };
+      uid-range = mkOption {
+        type = types.bool;
+        default = containers != { };
+        defaultText = lib.literalMD "`true` if containers are present.";
+        description = "Containers use systemd-nspawn, which requires pid 0 inside of the sandbox. `uid-range` enables that.";
+      };
+      kvm = mkOption {
+        type = types.bool;
+        default = isLinux && nodes != { };
+        defaultText = lib.literalMD "`true` if built to run on Linux and any virtual machines are specified.";
+        description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
+      };
+      apple-virt = mkOption {
+        type = types.bool;
+        default = isDarwin;
+        defaultText = lib.literalMD "`true` if built to run on Darwin.";
+        description = "Whether Apple virtualization functionality is required for running this test.";
+      };
+    };
+  };
 in
 {
   options = {
+    requiredFeatures = mkOption {
+      description = "Builder features that are required for running this test.";
+      example = lib.literalExpression ''
+        {
+          cuda = true;
+          devnet = mkForce false;
+        }
+      '';
+      type = types.submodule requiredFeaturesModuleType;
+      default = { }; # this is necessary due to a bug in the module system.
+    };
+
     passthru = mkOption {
       type = types.lazyAttrsOf types.raw;
       description = ''
@@ -46,8 +100,13 @@ in
       description = ''
         Halt test execution after any test fail and provide the possibility to
         hook into the sandbox to connect with either the test driver via
-        `telnet localhost 4444` or with the VMs via SSH and vsocks (see also
-        `sshBackdoor.enable`).
+        `socat readline tcp:127.0.0.1:4444` or with the VMs via SSH and vsocks
+        (see also `sshBackdoor.enable`).
+
+        When using this option, consider running tests with build log output
+        enabled and without remote builders. Otherwise you will not see the
+        command required to attach to the test controller, and you cannot
+        connect to the test controller, respectively.
       '';
     };
 
@@ -79,6 +138,10 @@ in
     };
   };
 
+  imports = [
+    ../../modules/misc/assertions.nix
+  ];
+
   config = {
     rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
     rawTestDerivationArg =
@@ -91,17 +154,22 @@ in
         config.enableDebugHook -> isLinux
       ) "The debugging hook is not supported for macOS host systems!";
       {
-        name = "vm-test-run-${config.name}";
+        name =
+          let
+            inherit (config.driverConfiguration) containers vms;
+            kind = lib.concatStringsSep "-and-" (
+              (lib.optional (containers != { }) "container") ++ (lib.optional (vms != { }) "vm")
+            );
+          in
+          "${kind}-test-run-${config.name}";
 
-        requiredSystemFeatures = [
-          "nixos-test"
-        ]
-        ++ lib.optional isLinux "kvm"
-        ++ lib.optional isDarwin "apple-virt";
+        requiredSystemFeatures = lib.attrNames (lib.filterAttrs (_: v: v) config.requiredFeatures);
 
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh
-          hostPkgs.inetutils
+          # For SSH backdoor connections in systemd-nspawn containers and PDB with interactive
+          # line-editing
+          hostPkgs.socat
         ];
 
         buildCommand = ''
@@ -127,12 +195,13 @@ in
       };
     test = lib.lazyDerivation {
       # lazyDerivation improves performance when only passthru items and/or meta are used.
-      derivation = config.rawTestDerivation;
+      derivation = lib.asserts.checkAssertWarn config.assertions config.warnings config.rawTestDerivation;
       inherit (config) passthru meta;
     };
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;
+    passthru.options = options;
 
     /**
       For discoverTests only. Deprecated. Will be removed when discoverTests can be removed from NixOS all-tests.nix.

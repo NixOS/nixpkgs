@@ -5,13 +5,11 @@
   autoreconfHook,
   intltool,
   pkg-config,
-  libX11,
-  gtk2,
+  libx11,
   gtk3,
   libxslt,
   docbook_xsl,
   wrapGAppsHook3,
-  withGtk3 ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    (if withGtk3 then gtk3 else gtk2)
+    libx11
+    gtk3
   ];
 
   patches = [
@@ -47,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.XSLTPROC = lib.getExe' libxslt "xsltproc";
 
-  configureFlags = lib.optional withGtk3 "--enable-gtk3";
+  configureFlags = [ "--enable-gtk3" ];
 
   meta = {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";

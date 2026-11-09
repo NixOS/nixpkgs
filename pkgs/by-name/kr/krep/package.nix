@@ -7,18 +7,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krep";
-  version = "1.1.2";
+  version = "3.1.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "davidesantangelo";
     repo = "krep";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mZ5ki1f0q4k3imxeF9qbn8ZU/at+NNBhroau/5Z4WU4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Aswyc1TDHRfFYutFpKnIbs/1puYeztVgowqbi+D4J0Q=";
   };
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "ENABLE_ARCH_DETECTION=0"
+    "HAS_AVX512=0"
+    "HAS_AVX2=0"
   ];
 
   installFlags = [

@@ -45,6 +45,8 @@ lib.extendMkDerivation {
           RossSmyth
         ];
         license = lib.map (lib.flip lib.getAttr lib.licensesSpdx) license;
+        # Sending a bunch of trivial jobs to Hydra is not that great.
+        hydraPlatforms = [ ];
       }
       // lib.optionalAttrs (homepage != null) { inherit homepage; };
     };

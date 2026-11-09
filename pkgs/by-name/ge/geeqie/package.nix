@@ -7,23 +7,22 @@
   ninja,
   xxd,
   gettext,
-  intltool,
-  gtk3,
+  gtk4,
   lcms2,
   exiv2,
-  libchamplain_libsoup3,
-  clutter-gtk,
   ffmpegthumbnailer,
   fbida,
   libarchive,
   djvulibre,
   libheif,
+  libshumate,
+  libspelling,
+  ffmpeg-headless,
   openjpeg,
   libjxl,
   libraw,
   lua5_3,
   poppler,
-  gspell,
   libtiff,
   libwebp,
   gphoto2,
@@ -32,30 +31,23 @@
   exiftool,
   zenity,
   libnotify,
-  wrapGAppsHook3,
-  fetchpatch,
+  wrapGAppsHook4,
   doxygen,
   nix-update-script,
+  openexr,
+  cfitsio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.5";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
-    rev = "v${version}";
-    hash = "sha256-k2FXj2ZKZzB5XpCcWzEv7Q1ozATfU3221XKcOFdWOGU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VS+/K7DBYXh3n39cEG/mODbWmyAzrm6l9zCfSmkNqpM=";
   };
-
-  patches = [
-    # Remove changelog from menu
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/geeqie/-/raw/debian/master/debian/patches/Remove-changelog-from-menu-item.patch";
-      hash = "sha256-0awKKTLg/gUZhmwluVbHCOqssog9SneFOaUtG89q0go=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -64,8 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    intltool
-    wrapGAppsHook3
+    wrapGAppsHook4
     doxygen
     meson
     ninja
@@ -73,24 +64,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     lcms2
     exiv2
-    libchamplain_libsoup3
-    clutter-gtk
     ffmpegthumbnailer
     fbida
     libarchive
     djvulibre
     libheif
+    libshumate
+    libspelling
+    ffmpeg-headless
     openjpeg
     libjxl
     libraw
     lua5_3
     poppler
-    gspell
     libtiff
     libwebp
+    openexr
+    cfitsio
   ];
 
   postInstall = ''
@@ -154,6 +147,15 @@ stdenv.mkDerivation rec {
             lcms2
           ]
         }:$PATH'
+        # Sets file mtime to the Exif.Image.DateTime of the file.
+        sed -i $out/lib/geeqie/geeqie-exif-datetime-to-file \
+            -e '1 a export PATH=${
+              lib.makeBinPath [
+                zenity
+                exiv2
+                exiftool
+              ]
+            }:$PATH'
   '';
 
   enableParallelBuilding = true;
@@ -179,6 +181,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.geeqie.org/";
+    changelog = "https://github.com/BestImageViewer/geeqie/blob/${finalAttrs.src.tag}/NEWS";
 
     maintainers = with lib.maintainers; [
       pSub
@@ -186,4 +189,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
-}
+})

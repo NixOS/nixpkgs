@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sfz";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "weihanglo";
     repo = "sfz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mKH1vgk+3tZEnjJRkfa0dDR383VN1VLNd3HEzC7f8YI=";
   };
 
@@ -23,11 +23,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple static file serving command-line tool written in Rust";
     homepage = "https://github.com/weihanglo/sfz";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
-    maintainers = with lib.maintainers; [ dit7ya ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = [ ];
     mainProgram = "sfz";
   };
-}
+})

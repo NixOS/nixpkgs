@@ -1,25 +1,24 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "woodpecker-pipeline-transform";
-  version = "0.2.0";
+  version = "1.0.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "lafriks";
     repo = "woodpecker-pipeline-transform";
-    rev = "v${version}";
-    hash = "sha256-ngtpWjbL/ccmKTNQdL3osduELYSxcOu5z5UtqclNNSY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UXQ+b3SI+MO0T993hslQaRVMdHdPt9RnjyhfmLtooAU=";
   };
 
-  vendorHash = "sha256-SZxFsn187UWZqaxwMDdzAmfpRLZSCIpbsAI1mAu7Z6w=";
+  vendorHash = "sha256-NE4KUbYA19YJPQW9quSYgm0exj3lToj9Zkiv05TgyOI=";
 
   meta = {
     description = "Utility to convert different pipelines to Woodpecker CI pipelines";
-    changelog = "https://codeberg.org/lafriks/woodpecker-pipeline-transform/src/tag/v${version}";
+    changelog = "https://codeberg.org/lafriks/woodpecker-pipeline-transform/src/tag/v${finalAttrs.version}";
     homepage = "https://codeberg.org/lafriks/woodpecker-pipeline-transform";
     license = lib.licenses.mit;
     mainProgram = "pipeline-convert";
@@ -28,4 +27,4 @@ buildGoModule rec {
       luftmensch-luftmensch
     ];
   };
-}
+})

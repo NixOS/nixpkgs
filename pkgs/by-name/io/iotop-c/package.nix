@@ -6,15 +6,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iotop-c";
-  version = "1.30";
+  version = "1.33";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
-    rev = "v${version}";
-    sha256 = "sha256-L0zChYDtlEi9tdHdNNWO0KugTorFIbYK0zDPNcLUMuo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9BxjAIcp5RITYj8GqVfkPb42Xl3yyETHTtrWXvXKPms=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

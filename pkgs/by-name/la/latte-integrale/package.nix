@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software for counting lattice points and integration over convex polytopes";
     homepage = "https://www.math.ucdavis.edu/~latte/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ amesgen ];
     platforms = lib.platforms.unix;
   };
 })

@@ -12,7 +12,10 @@
   udev,
   vulkan-loader,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -50,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
     vulkan-loader
     wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rustPlatform.bindgenHook
@@ -86,12 +89,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "jumpy";
     homepage = "https://fishfolk.org/games/jumpy";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-      # Assets
-      cc-by-nc-40
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        (OR [
+          mit
+          asl20
+        ])
+        # Assets
+        cc-by-nc-40
+      ];
     maintainers = [ ];
   };
 })

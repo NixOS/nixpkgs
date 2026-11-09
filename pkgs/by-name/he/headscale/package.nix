@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   iana-etc,
@@ -9,24 +9,24 @@
   postgresql,
   stdenv,
 }:
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "headscale";
-  version = "0.27.1";
+  version = "0.29.7";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
-    tag = "v${version}";
-    hash = "sha256-eMqGJL+dxBThtW+0uMvnP5n2gk2kwOao6SukA38OMOE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PmbCdLDqBfz8iqnGRU3XWQU7gvrQ/jeAdYc3mvvjWGk=";
   };
 
   postPatch = ''
     substituteInPlace hscontrol/types/version.go \
-      --replace-fail 'Version:   "dev"' 'Version: "${version}"' \
-      --replace-fail 'Commit:    "unknown"' 'Commit: "${src.tag}"'
+      --replace-fail 'Version:   "dev"' 'Version: "${finalAttrs.version}"' \
+      --replace-fail 'Commit:    "unknown"' 'Commit: "${finalAttrs.src.tag}"'
   '';
 
-  vendorHash = "sha256-VOi4PGZ8I+2MiwtzxpKc/4smsL5KcH/pHVkjJfAFPJ0=";
+  vendorHash = "sha256-ADl65VpgS3uKYX0dYkRPPKcOelD9sJdwlq+CA0eA7Nk=";
 
   subPackages = [ "cmd/headscale" ];
 
@@ -76,6 +76,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       kradalby
       misterio77
+      debtquity
     ];
   };
-}
+})

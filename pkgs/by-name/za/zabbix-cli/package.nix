@@ -3,20 +3,20 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  testers,
-  zabbix-cli,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zabbix-cli";
-  version = "3.6.2";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
-    tag = version;
-    hash = "sha256-Y4IR/le+7X3MYmrVnZMr+Gu59LkCB5UfMJ2s9ovSjLM=";
+    tag = finalAttrs.version;
+    hash = "sha256-pI6UEI8Jx481rS/cTGBsQCtOGB+vMC1epYO8Pqkn4K0=";
   };
 
   build-system = with python3Packages; [
@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       httpx
-      httpx.optional-dependencies.socks
       packaging
       platformdirs
       prompt-toolkit
@@ -41,9 +40,7 @@ python3Packages.buildPythonApplication rec {
       typer
       typing-extensions
     ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+    ++ httpx.optional-dependencies.socks;
 
   nativeCheckInputs = with python3Packages; [
     freezegun
@@ -58,11 +55,7 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # Disable failing test with Click >= v8.2.0
-    "test_patch_get_click_type"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Requires network access
     "test_authenticator_login_with_any"
     "test_client_auth_method"
@@ -74,16 +67,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zabbix_cli" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = zabbix-cli;
-    command = "HOME=$(mktemp -d) zabbix-cli --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
+    changelog = "https://github.com/unioslo/zabbix-cli/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     mainProgram = "zabbix-cli";
     maintainers = [ lib.maintainers.anthonyroussel ];
   };
-}
+})

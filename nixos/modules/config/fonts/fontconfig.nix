@@ -30,7 +30,6 @@ let
   cfg = config.fonts.fontconfig;
 
   fcBool = x: "<bool>" + (lib.boolToString x) + "</bool>";
-  pkg = pkgs.fontconfig;
 
   # configuration file to read fontconfig cache
   # priority 0
@@ -49,7 +48,7 @@ let
           inherit fontconfig;
           fontDirectories = config.fonts.packages;
         };
-      cache = makeCache pkgs.fontconfig;
+      cache = makeCache cfg.package;
       cache32 = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
@@ -127,6 +126,38 @@ let
       </fontconfig>
     '';
 
+  # user defined font aliases
+  # priority 53
+  aliases =
+    let
+      mkFontBlock =
+        key: fonts:
+        lib.optionalString ((builtins.length fonts) > 0) ''
+          <${key}>
+          ${lib.concatMapStrings (font: "<family>${font}</family>") fonts}
+          </${key}>
+        '';
+
+      mkAliasBlock = family: opts: ''
+        <alias binding="${opts.binding}">
+          <family>${family}</family>
+          ${mkFontBlock "prefer" opts.prefer}
+          ${mkFontBlock "accept" opts.accept}
+          ${mkFontBlock "default" opts.default}
+        </alias>
+      '';
+    in
+    pkgs.writeText "fc-53-user-aliases.conf" ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+      <fontconfig>
+
+        <!-- User defined aliases -->
+        ${lib.concatStrings (lib.mapAttrsToList mkAliasBlock cfg.aliases)}
+
+      </fontconfig>
+    '';
+
   # bitmap font options
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
@@ -177,7 +208,7 @@ let
   # Replace default linked config with a different variant
   replaceDefaultConfig = defaultConfig: newConfig: ''
     rm $dst/${defaultConfig}
-    ln -s ${pkg.out}/share/fontconfig/conf.avail/${newConfig} \
+    ln -s ${cfg.package.out}/share/fontconfig/conf.avail/${newConfig} \
           $dst/
   '';
 
@@ -192,7 +223,7 @@ let
         mkdir -p $dst
 
         # fonts.conf
-        ln -s ${pkg.out}/etc/fonts/fonts.conf \
+        ln -s ${cfg.package.out}/etc/fonts/fonts.conf \
               $dst/../fonts.conf
         # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
         mkdir -p $out/etc/fonts/2.11
@@ -200,7 +231,7 @@ let
               $out/etc/fonts/2.11/fonts.conf
 
         # fontconfig default config files
-        ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
+        ln -s ${cfg.package.out}/etc/fonts/conf.d/*.conf \
               $dst/
 
         ${lib.optionalString (!cfg.antialias) (
@@ -244,6 +275,9 @@ let
 
         # 53-no-bitmaps.conf
         ln -s ${rejectBitmaps} $dst/53-no-bitmaps.conf
+
+        # 53-user-aliases.conf
+        ln -s ${aliases} $dst/53-user-aliases.conf
 
         ${lib.optionalString (!cfg.allowType1) ''
           # 53-nixos-reject-type1.conf
@@ -316,6 +350,8 @@ in
             dependency on all those fonts.
           '';
         };
+
+        package = lib.mkPackageOption pkgs "fontconfig" { };
 
         confPackages = lib.mkOption {
           internal = true;
@@ -518,8 +554,71 @@ in
 
         useEmbeddedBitmaps = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = true;
           description = "Use embedded bitmaps in fonts like Calibri.";
+        };
+
+        aliases = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule {
+              options = {
+                binding = lib.mkOption {
+                  type = lib.types.enum [
+                    "same"
+                    "weak"
+                    "strong"
+                  ];
+                  default = "same";
+                  description = ''
+                    Binding precedence for this font family. See
+                    fontconfig "Font Matching" section for details.
+                  '';
+                };
+
+                prefer = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Fonts whose glyphs are chosen preferentially prior
+                    to fonts which match the alias family.
+                  '';
+                };
+
+                accept = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Fonts that are chosen if none of the preferred
+                    fonts, nor the alias family could provide the
+                    desired glyph.
+                  '';
+                };
+
+                default = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Last chance fallback fonts which are chosen by
+                    default if none of the other options could
+                    provide the desired glyph.
+                  '';
+                };
+              };
+            }
+          );
+          default = { };
+          example = lib.literalExpression ''
+            {
+                # use FreeSans for Greek symbols missing in Helvetica
+                "Helvetica" = {
+                    default = [ "FreeSans" ];
+                };
+            };
+          '';
+          description = ''
+            Font aliases that can substitute preferential fonts,
+            or specify custom fallback fonts.
+          '';
         };
 
       };
@@ -529,14 +628,14 @@ in
   };
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.fontconfig ];
+      environment.systemPackages = [ cfg.package ];
       environment.etc.fonts.source = "${fontconfigEtc}/etc/fonts/";
       security.apparmor.includes."abstractions/fonts" = ''
         # fonts.conf
-        r ${pkg.out}/etc/fonts/fonts.conf,
+        r ${cfg.package.out}/etc/fonts/fonts.conf,
 
         # fontconfig default config files
-        r ${pkg.out}/etc/fonts/conf.d/*.conf,
+        r ${cfg.package.out}/etc/fonts/conf.d/*.conf,
 
         # 00-nixos-cache.conf
         r ${cacheConf},
@@ -546,7 +645,7 @@ in
 
         # 50-user.conf
         ${lib.optionalString cfg.includeUserConf ''
-          r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+          r ${cfg.package.out}/etc/fonts/conf.d.bak/50-user.conf,
         ''}
 
         # local.conf (indirect priority 51)
@@ -556,6 +655,9 @@ in
 
         # 52-nixos-default-fonts.conf
         r ${defaultFontsConf},
+
+        # 53-user-aliases.conf
+        r ${aliases},
 
         # 53-no-bitmaps.conf
         r ${rejectBitmaps},

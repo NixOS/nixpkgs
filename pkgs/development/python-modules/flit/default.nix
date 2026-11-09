@@ -26,7 +26,7 @@
 buildPythonPackage rec {
   pname = "flit";
   version = "3.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

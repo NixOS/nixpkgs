@@ -6,15 +6,18 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
+  wrapGAppsHook3,
+  makeWrapper,
   _7zz,
-
   glib,
+  gsettings-desktop-schemas,
   libGL,
   libGLU,
   libgcc,
   gtk3,
   gtk2,
-  xorg,
+  libxxf86vm,
+  libxtst,
   temurin-jre-bin,
 }:
 
@@ -29,9 +32,11 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ ulysseszhan ];
+    maintainers = with lib.maintainers; [
+      ulysseszhan
+      layzyoldman
+    ];
     mainProgram = "VESTA";
   };
 
@@ -39,20 +44,24 @@ let
     nativeBuildInputs = [
       copyDesktopItems
       autoPatchelfHook
+      wrapGAppsHook3
+      makeWrapper
     ];
     buildInputs = [
       glib
+      gsettings-desktop-schemas
       libGL
       libGLU
       libgcc
       gtk3
       gtk2
       temurin-jre-bin
-    ]
-    ++ (with xorg; [
-      libXxf86vm
-      libXtst
-    ]);
+      libxxf86vm
+      libxtst
+    ];
+
+    # Prevent wrapGAppsHook3 from auto-wrapping binaries.
+    dontWrapGApps = true;
 
     src = fetchzip {
       url = "https://jp-minerals.org/vesta/archives/${version}/VESTA-gtk3.tar.bz2";
@@ -66,13 +75,18 @@ let
       cp -r * $out/lib/VESTA
 
       mkdir -p $out/bin
-      ln -s $out/lib/VESTA/VESTA{,-core,-gui} -t $out/bin
+      ln -s $out/lib/VESTA/VESTA{-core,-gui} -t $out/bin
 
       mkdir -p $out/share/icons/hicolor/{128x128,256x256}/apps
       ln -s $out/lib/VESTA/img/logo.png $out/share/icons/hicolor/128x128/apps/VESTA.png
       ln -s $out/lib/VESTA/img/logo@2x.png $out/share/icons/hicolor/256x256/apps/VESTA.png
 
       runHook postInstall
+    '';
+
+    # Wrap GSettings/XDG_DATA_DIRS into a single wrapper.
+    postFixup = ''
+      makeWrapper $out/lib/VESTA/VESTA $out/bin/VESTA "''${gappsWrapperArgs[@]}"
     '';
 
     desktopItems = [
@@ -84,14 +98,18 @@ let
         exec = "VESTA %u";
         icon = "VESTA";
         categories = [ "Science" ];
-        mimeTypes = [ "application/x-vesta" ];
+        mimeTypes = [
+          "chemical/x-cif"
+          "chemical/x-pdb"
+          "chemical/x-xyz"
+        ];
       })
     ];
   };
 
   darwinArgs = {
     nativeBuildInputs = [
-      _7zz # instead of undmg because of APFS
+      _7zz
     ];
     src = fetchurl {
       url = "https://jp-minerals.org/vesta/archives/${version}/VESTA.dmg";
@@ -116,7 +134,6 @@ stdenvNoCC.mkDerivation (
   }
   // {
     "x86_64-linux" = linuxArgs;
-    "x86_64-darwin" = darwinArgs;
   }
   .${stdenvNoCC.hostPlatform.system} or { }
 )

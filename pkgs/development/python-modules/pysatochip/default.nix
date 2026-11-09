@@ -4,29 +4,25 @@
   fetchFromGitHub,
   certifi,
   cryptography,
-  ecdsa,
   pyaes,
   pyopenssl,
   pyscard,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.17.0";
+  version = "0.18.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "toporin";
     repo = "pysatochip";
     tag = "v${version}";
-    hash = "sha256-9QenE9YpgrKwiN9kpS+KWdqFeba7AGXDneW5p+9/t1A=";
+    hash = "sha256-Axtxd/Jmdqo6JayCbDNk5wOToXT7/GlEKxWMC12mXyc=";
   };
 
   propagatedBuildInputs = [
     cryptography
-    ecdsa
     pyaes
     pyopenssl
     pyscard

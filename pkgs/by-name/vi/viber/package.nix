@@ -5,8 +5,10 @@
   dpkg,
   makeWrapper,
   alsa-lib,
+  atk,
   bintools,
   brotli,
+  bzip2,
   cairo,
   cups,
   curl,
@@ -14,10 +16,14 @@
   expat,
   fontconfig,
   freetype,
+  gdk-pixbuf,
   glib,
+  gnutls,
   gsm,
   gst_all_1,
+  gtk3,
   harfbuzz,
+  jbigkit,
   lcms,
   libbluray,
   libcap,
@@ -26,20 +32,25 @@
   libgbm,
   libGL,
   libGLU,
+  libinput,
+  libjpeg,
   libkrb5,
   libmng,
   libopenmpt,
   libopus,
   libpulseaudio,
   librsvg,
+  libssh,
   libtheora,
   libtiff,
   libva,
   libvdpau,
+  libvorbis,
   libwebp,
   libxkbcommon,
   libxkbfile,
-  libxml2,
+  # Viber's bundled Qt6WebEngineCore and libavformat need the libxml2.so.2 soname
+  libxml2_13,
   libxslt,
   mtdev,
   nspr,
@@ -48,6 +59,7 @@
   ocl-icd,
   openjpeg,
   openssl,
+  pango,
   snappy,
   speex,
   systemdLibs,
@@ -55,7 +67,27 @@
   twolame,
   wavpack,
   wayland,
-  xorg,
+  xkeyboard-config,
+  libxcb-wm,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxshmfence,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   xvidcore,
   zlib,
   zstd,
@@ -64,13 +96,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "viber";
-  version = "24.9.0.3";
+  version = "27.3.0.2";
 
   src = fetchurl {
     # Taking Internet Archive snapshot of a specific version to avoid breakage
     # on new versions
-    url = "https://web.archive.org/web/20250830135453/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    hash = "sha256-i7fG8Sdl/v5QAyTsCh6OKe4BDYnQ0jBJgSdqMOrkLNo=";
+    url = "https://web.archive.org/web/20260518041738/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    hash = "sha256-lhU03Ay5IABux66BCLDhugmkdu7x4TtLNwp5zVLdIPM=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   libPath = lib.makeLibraryPath [
     alsa-lib
+    atk
     brotli
+    bzip2
     cairo
     cups
     curl
@@ -88,13 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     freetype
+    gdk-pixbuf
     glib
+    gnutls
     gsm
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
+    gtk3
     harfbuzz
+    jbigkit
     lcms
     libbluray
     libcap
@@ -103,20 +141,24 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     libGL
     libGLU
+    libinput
+    libjpeg
     libkrb5
     libmng
     libopenmpt
     libopus
     libpulseaudio
     librsvg
+    libssh
     libtheora
     libtiff
     libva
     libvdpau
+    libvorbis
     libwebp
     libxkbcommon
     libxkbfile
-    libxml2
+    libxml2_13
     libxslt
     mtdev
     nspr
@@ -125,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     ocl-icd
     openjpeg
     openssl
+    pango
     snappy
     speex
     stdenv.cc.cc
@@ -133,24 +176,26 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     wavpack
     wayland
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.libxcb
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-util
+    libxcb-wm
     xvidcore
     zlib
     zstd
@@ -172,8 +217,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/opt/viber/Viber $out/bin/viber \
       --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
-      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
+      --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set QML2_IMPORT_PATH "$out/opt/viber/qml"
 
     mv $out/usr/share $out/share
@@ -181,8 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix the desktop link
     substituteInPlace $out/share/applications/viber.desktop \
       --replace-fail "/opt/viber/" "$out/opt/viber/"
-    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/opt/viber/lib/libxml2.so.2"
 
     runHook postInstall
   '';

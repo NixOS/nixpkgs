@@ -15,15 +15,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.0.76";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.0.78";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
-    rev = version;
-    sha256 = "sha256-9PfIzUObm3Nu2k2TFjbQ3cqIDkPz07ZUczEcfm3bpDc=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Ydp5A0mBkyNBIqVpRUt15e0TINXw9xChkPWzQ0AcfqA=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    echo "${version}" > RELEASE
+    echo "${finalAttrs.version}" > RELEASE
     substituteInPlace "Makefile" \
       --replace "/bin/pwd" "pwd" \
       --replace "HTMLOld.3pm" "HTMLOld.3"
@@ -177,4 +177,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

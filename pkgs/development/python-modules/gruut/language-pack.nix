@@ -17,6 +17,10 @@ buildPythonPackage rec {
     cd "${pname}"
   '';
 
+  postPatch = ''
+    echo "${version}" > "gruut_lang_${lang}/VERSION"
+  '';
+
   pythonImportsCheck = [ "gruut_lang_${lang}" ];
 
   doCheck = false;

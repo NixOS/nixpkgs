@@ -12,7 +12,6 @@ SOURCES_JSON="${SCRIPT_DIR}/sources.json"
 # Platform configuration
 declare -A PLATFORM_URLS=(
     ["x86_64-linux"]="https://prod.download.desktop.kiro.dev/stable/metadata-linux-x64-stable.json"
-    ["x86_64-darwin"]="https://prod.download.desktop.kiro.dev/stable/metadata-dmg-darwin-x64-stable.json"
     ["aarch64-darwin"]="https://prod.download.desktop.kiro.dev/stable/metadata-dmg-darwin-arm64-stable.json"
 )
 

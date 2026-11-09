@@ -5,29 +5,45 @@
   withTeXLive ? true,
   texliveSmall,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cgt-calc";
-  version = "1.13.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KapJI";
+    owner = "cgt-calc";
     repo = "capital-gains-calculator";
-    rev = "v${version}";
-    hash = "sha256-y/Y05wG89nccXyxfjqazyPJhd8dOkfwRJre+Rzx97Hw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ApmMnNL5l5W4IA8lWqtcDJM78Zt2vvdXfKaaDZzC8GM=";
   };
 
+  patches = [
+  ];
+
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
   dependencies = with python3Packages; [
+    colorama
     defusedxml
+    iso4217parse
     jinja2
+    openpyxl
     pandas
+    pdfplumber
+    pyrate-limiter
     requests
+    shtab
     types-requests
+    xlrd
     yfinance
+  ];
+
+  pythonRelaxDeps = [
+    "pandas"
+    "shtab"
+    "yfinance"
   ];
 
   makeWrapperArgs = lib.optionals withTeXLive [
@@ -39,10 +55,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "UK capital gains tax calculator";
-    homepage = "https://github.com/KapJI/capital-gains-calculator";
+    homepage = "https://github.com/cgt-calc/capital-gains-calculator";
     license = lib.licenses.mit;
     mainProgram = "cgt-calc";
     maintainers = with lib.maintainers; [ ambroisie ];
     platforms = lib.platforms.unix;
   };
-}
+})

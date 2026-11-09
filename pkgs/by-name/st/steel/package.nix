@@ -17,18 +17,18 @@
   includeLSP ? true,
   includeForge ? true,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steel";
-  version = "0-unstable-2025-12-17";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "b7c2306320ea05649ebcac3af7ecaa7aa0c77117";
-    hash = "sha256-TjOTfka+ieAVHMjXymVDHlu29z6VoyB/7wYUGSiV/G4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rfifl52OXqL821l/aJBVbOXO90iPZG0UvjHJxaAIaEI=";
   };
 
-  cargoHash = "sha256-bXAgp83U48GsTAuki3tsoOK7X+UepKJIlS0bL5qMc8I=";
+  cargoHash = "sha256-2trUpxAQzsJp/ezphLb0A4Z7E/F1Ll1Q2ChrBGyxzEg=";
 
   nativeBuildInputs = [
     curl
@@ -89,9 +89,15 @@ rustPlatform.buildRustPackage {
       --zsh <($out/bin/steel completions zsh)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
-  '';
+  postFixup =
+    lib.concatMapStringsSep "\n"
+      (bin: ''wrapProgram "$out/bin/${bin}" --prefix SEARCH_STEEL_PATHS : "$out/lib/steel/cogs"'')
+      [
+        "cargo-steel-lib"
+        "forge"
+        "steel"
+        "steel-language-server"
+      ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -100,7 +106,10 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version-regex"
+      "^v(.*)"
+    ];
   };
 
   meta = {
@@ -115,4 +124,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

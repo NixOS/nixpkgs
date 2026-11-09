@@ -26,7 +26,7 @@ let
     util-linux
   ];
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "whipper";
   version = "0.10.0";
   pyproject = true;
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
     discid
     pillow
-    setuptools
+    setuptools_80
   ];
 
   buildInputs = [
@@ -81,14 +81,6 @@ python3.pkgs.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ bins;
-
-  makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath bins)
-    "\${gappsWrapperArgs[@]}"
-  ];
 
   dontWrapGApps = true;
 
@@ -112,6 +104,13 @@ python3.pkgs.buildPythonApplication rec {
     installManPage man/*.1
   '';
 
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix" "PATH" ":" "${lib.makeBinPath bins}"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = whipper;
     command = "HOME=$TMPDIR whipper --version";
@@ -125,4 +124,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "whipper";
   };
-}
+})

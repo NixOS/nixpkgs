@@ -5,7 +5,7 @@
   runCommand,
   makeBinaryWrapper,
 
-  # manually pased
+  # manually passed
   python,
   requiredPythonModules,
 
@@ -23,10 +23,16 @@
 let
   env =
     let
-      paths = requiredPythonModules (extraLibs ++ [ python ]) ++ [
-        (runCommand "bin" { } ''
-          mkdir -p $out/bin
-        '')
+      paths = requiredPythonModules extraLibs ++ [
+        (runCommand "${python.name}-env-bin"
+          {
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          ''
+            mkdir -p $out/bin
+          ''
+        )
       ];
       pythonPath = "${placeholder "out"}/${python.sitePackages}";
       pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
@@ -70,6 +76,8 @@ let
       ''
       + postBuild;
 
+      derivationArgs.strictDeps = true;
+
       inherit (python) meta;
 
       passthru = python.passthru // {
@@ -78,6 +86,7 @@ let
         env = stdenv.mkDerivation {
           name = "interactive-${python.name}-environment";
           nativeBuildInputs = [ env ];
+          strictDeps = true;
 
           buildCommand = ''
             echo >&2 ""
@@ -85,6 +94,8 @@ let
             echo >&2 ""
             exit 1
           '';
+
+          __structuredAttrs = true;
         };
       };
     };

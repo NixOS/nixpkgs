@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ktor-cli";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "ktorio";
     repo = "ktor-cli";
-    tag = version;
-    hash = "sha256-DZEEaTz55vIBU8Byl51cEWgXu2Wjmctz/9XBAKX8VKY=";
+    tag = finalAttrs.version;
+    hash = "sha256-okw/h/q+7t1WFKjsVej3aChaLf9PC1ovKcwRYDSODz0=";
   };
 
   subPackages = "cmd/ktor";
@@ -22,15 +22,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Command-line tool for creating Ktor projects";
     homepage = "https://github.com/ktorio/ktor-cli";
-    changelog = "https://github.com/ktorio/ktor-cli/releases/tag/${version}";
+    changelog = "https://github.com/ktorio/ktor-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "ktor";
   };
-}
+})

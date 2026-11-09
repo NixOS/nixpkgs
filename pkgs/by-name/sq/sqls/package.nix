@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sqls";
-  version = "0.2.30";
+  version = "0.2.48";
 
   src = fetchFromGitHub {
     owner = "sqls-server";
     repo = "sqls";
-    rev = "v${version}";
-    hash = "sha256-vsU0EZZ7Wwo2esv7StmSB4DbQXCwp4Mi+KsylCL0WcM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TjGu8QcwYIPoW2v61fXpq/oZKoksOUZ2/dnleJhPjFM=";
   };
 
-  vendorHash = "sha256-BSGKFSw/ReeADnB3FuEJoxstkCcJx434vNaFf5A+Gbw=";
+  vendorHash = "sha256-VVa77h0mgWLEuL2+Q3qre5V71kbBaWaugNN9TcTC8y0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.revision=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.revision=${finalAttrs.src.rev}"
   ];
 
   doCheck = false;
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
   };
-}
+})

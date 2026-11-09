@@ -12,15 +12,13 @@
   mirage-clock-unix,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-nat";
-  version = "3.0.2";
-
-  minimalOCamlVersion = "4.08";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-Z1g3qb26x/S6asYv6roTW77r41SHy7OGN7MoZJ/E8Is=";
+    url = "https://github.com/mirage/mirage-nat/releases/download/v${finalAttrs.version}/mirage-nat-${finalAttrs.version}.tbz";
+    hash = "sha256-u1jSVMdV9bfcfbetN+zwRUWlMSgcpjEBvJlAyDZCrvA=";
   };
 
   propagatedBuildInputs = [
@@ -40,8 +38,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Mirage-nat is a library for network address translation to be used with MirageOS";
-    homepage = "https://github.com/mirage/${pname}";
+    homepage = "https://github.com/mirage/mirage-nat";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

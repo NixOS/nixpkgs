@@ -6,18 +6,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nps";
-  version = "0.2.12";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "OleMussmann";
     repo = "nps";
-    tag = "v${version}";
-    hash = "sha256-kOVpn13lJYeO/99e39c0wbe7qcKHyMj5v4prBtZ3N7s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aX0iAz5Q5b2wCnBStHafZHaN4jmf3026XH0sc8dviBQ=";
   };
 
-  cargoHash = "sha256-dJA9fOU06txPAx5kMl7aGoFeKo7UXqB7X+viUfJqG/M=";
+  cargoHash = "sha256-jNWTIS52Sdrg1bNP2icMjA3mqgTBjWvNU8ciILDZp2g=";
 
   nativeCheckInputs = [ nix ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
         direct    SEARCH_TERMbar (PACKAGE_NAME starts with SEARCH_TERM)
         exact     SEARCH_TERM (PACKAGE_NAME is exactly SEARCH_TERM)
     '';
-    changelog = "https://github.com/OleMussmann/nps/releases/tag/v${version}";
+    changelog = "https://github.com/OleMussmann/nps/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/OleMussmann/nps";
     license = lib.licenses.mit;
     mainProgram = "nps";
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

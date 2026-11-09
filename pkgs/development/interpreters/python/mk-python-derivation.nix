@@ -18,6 +18,7 @@
   pypaInstallHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
+  pythonMetadataCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
   pythonRelaxDepsHook,
@@ -34,13 +35,13 @@
 let
   inherit (builtins) unsafeGetAttrPos;
   inherit (lib)
+    concatMapStrings
     elem
     extendDerivation
     fixedWidthString
     flip
     getName
     hasSuffix
-    head
     isBool
     max
     optional
@@ -48,12 +49,10 @@ let
     optionals
     optionalString
     removePrefix
-    splitString
     stringLength
+    all
+    seq
     ;
-
-  getOptionalAttrs =
-    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
 
   leftPadName =
     name: against:
@@ -61,6 +60,8 @@ let
       len = max (stringLength name) (stringLength against);
     in
     fixedWidthString len " " name;
+
+  hasZipSuffix = hasSuffix "zip";
 
   isPythonModule =
     drv:
@@ -82,23 +83,28 @@ let
     "installer"
   ];
 
-  isBootstrapPackage' = flip elem (
-    [
-      "build"
-      "packaging"
-      "pyproject-hooks"
-      "wheel"
-    ]
-    ++ optionals (python.pythonOlder "3.11") [
-      "tomli"
-    ]
-  );
+  isBootstrapPackage' = flip elem [
+    "build"
+    "packaging"
+    "pyproject-hooks"
+    "wheel"
+  ];
 
   isSetuptoolsDependency' = flip elem [
     "setuptools"
     "wheel"
   ];
 
+  bootstrappedPypaBuildHook = pypaBuildHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
+    wheel = null;
+  };
+  bootstrappedPypaInstallHook = pypaInstallHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
+  };
+  bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+  };
 in
 
 lib.extendMkDerivation {
@@ -113,7 +119,6 @@ lib.extendMkDerivation {
     "doInstallCheck"
     "pyproject"
     "format"
-    "stdenv"
     "dependencies"
     "optional-dependencies"
     "build-system"
@@ -199,6 +204,8 @@ lib.extendMkDerivation {
 
       doCheck ? true,
 
+      __structuredAttrs ? true,
+
       ...
     }@attrs:
 
@@ -263,17 +270,17 @@ lib.extendMkDerivation {
                 * If ${theirName} provides executables that are called at run time, pass its
                   bin path to makeWrapperArgs:
 
-                      makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv} ] }" ];
+                      makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ ${getName drv} ]) ];
 
               ${optionalLocation}
             '';
 
           checkDrv =
             attrName: drv:
-            if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
+            if isPythonModule drv && isMismatchedPython drv then throwMismatch attrName drv else true;
 
         in
-        attrName: inputs: map (checkDrv attrName) inputs;
+        attrName: inputs: seq (all (checkDrv attrName) inputs) inputs;
 
       isBootstrapInstallPackage = isBootstrapInstallPackage' (finalAttrs.pname or null);
 
@@ -283,6 +290,8 @@ lib.extendMkDerivation {
 
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
+      runtimeDepsCheckHook =
+        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
@@ -314,33 +323,19 @@ lib.extendMkDerivation {
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
+      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
         setuptoolsBuildHook
       ]
       ++ optionals (format' == "pyproject") [
-        (
-          if isBootstrapPackage then
-            pypaBuildHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
-              wheel = null;
-            }
-          else
-            pypaBuildHook
-        )
-        (
-          if isBootstrapPackage then
-            pythonRuntimeDepsCheckHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-            }
-          else
-            pythonRuntimeDepsCheckHook
-        )
+        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
         wheelUnpackHook
+        runtimeDepsCheckHook
       ]
       ++ optionals (format' == "egg") [
         eggUnpackHook
@@ -348,19 +343,26 @@ lib.extendMkDerivation {
         eggInstallHook
       ]
       ++ optionals (format' != "other") [
-        (
-          if isBootstrapInstallPackage then
-            pypaInstallHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
-            }
-          else
-            pypaInstallHook
-        )
+        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
       ]
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
       ]
+      ++
+        optionals
+          (
+            finalAttrs ? "pname"
+            && finalAttrs ? "version"
+            # We don't care about the METADATA of Python applications.
+            && isPythonModule finalAttrs.passthru
+            # METADATA is unlikely to be correct if pyproject is false or null.
+            && pyproject == true
+            && !isBootstrapPackage
+          )
+          [
+            pythonMetadataCheckHook
+          ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
         pythonNamespacesHook
@@ -373,26 +375,33 @@ lib.extendMkDerivation {
 
       buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-      propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
-        propagatedBuildInputs
-        ++ getFinalPassthru "dependencies"
+      propagatedBuildInputs =
+        validatePythonMatches "propagatedBuildInputs" (
+          propagatedBuildInputs ++ getFinalPassthru "dependencies"
+        )
         ++ [
           # we propagate python even for packages transformed with 'toPythonApplication'
           # this pollutes the PATH but avoids rebuilds
           # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
           python
-        ]
-      );
+        ];
 
-      inherit strictDeps;
+      inherit __structuredAttrs strictDeps;
 
-      LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      env = {
+        LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      }
+      // (attrs.env or { });
 
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
       doInstallCheck = attrs.doCheck or true;
       nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
       installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
+
+      # If given use the specified checkPhase, otherwise use the setup hook.
+      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+      ${if attrs ? checkPhase then "installCheckPhase" else null} = attrs.checkPhase;
 
       inherit dontWrapPythonPrograms;
 
@@ -411,12 +420,14 @@ lib.extendMkDerivation {
 
       passthru = {
         inherit
-          disabled
           pyproject
           build-system
           dependencies
           optional-dependencies
           ;
+
+        disabled = finalAttrs ? meta.problems.unsupportedPython;
+
         updateScript = nix-update-script { };
       }
       // attrs.passthru or { };
@@ -426,45 +437,163 @@ lib.extendMkDerivation {
         platforms = python.meta.platforms;
         isBuildPythonPackage = python.meta.platforms;
       }
-      // meta;
-    }
-    // optionalAttrs (attrs ? checkPhase) {
-      # If given use the specified checkPhase, otherwise use the setup hook.
-      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
-    }
-    //
-      lib.mapAttrs
-        (
-          name: value:
-          lib.throwIf (
-            attrs.${name} == [ ]
-          ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
-        )
-        (
-          getOptionalAttrs [
-            "enabledTestMarks"
-            "enabledTestPaths"
-            "enabledTests"
-          ] attrs
-        );
+      // meta
+      // {
+        problems = meta.problems or { } // {
+          ## Public meta.problems interface for all Python packages
+
+          # Unsupported Python interpreter
+          ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
+            meta.problems.unsupportedPython or { }
+            // {
+              kind = "broken";
+              message =
+                meta.problems.unsupportedPython.message
+                  or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
+            };
+
+          ## Implementation details, subject to changes (`buildPythonPackage-internal-*`)
+
+          # Deprecated <pkg>.overridePythonPackage argument disabled (internal)
+          # makeOverridablePythonPackage will specify this problem as { } when <pkg>.overridePythonAttrs overrides argument disabled;
+          # fill its content here.
+          ${
+            if meta ? problems.buildPythonPackage-internal-disabled-overridePythonAttrs then
+              "buildPythonPackage-internal-disabled-overridePythonAttrs"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos = unsafeGetAttrPos "disabled" attrs;
+                  posString = lib.optionalString (pos != null) "At ${pos.file}:${toString pos.line}\n";
+                in
+                ''
+                  ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                    Add/remove `meta.problems.unsupportedPython` instead.
+                ''
+                + posString;
+            };
+
+          # Any of enabledTest* is an empty list (internal)
+          ${
+            if
+              # `enabledTestPaths` is the most common,
+              # and then `enabledTests`,
+              # `enabledTestMarks` being the least common.
+              finalAttrs ? enabledTestPaths && finalAttrs.enabledTestPaths == [ ]
+              || finalAttrs ? enabledTests && finalAttrs.enabledTests == [ ]
+              || finalAttrs ? enabledTestMarks && finalAttrs.enabledTestMarks == [ ]
+            then
+              "buildPythonPackage-internal-enabledTests-empty"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message = ''
+                ${finalAttrs.name}: Unexpected empty list found in enabledTest* attributes:
+              ''
+              +
+                # Cold path, use more compact expression.
+                concatMapStrings
+                  (
+                    n:
+                    let
+                      pos = if attrs.${n} or null != [ ] then unsafeGetAttrPos n attrs else null;
+                      posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                    in
+                    optionalString (finalAttrs.${n} or null == [ ]) "- ${n}${posString}\n"
+                  )
+                  [
+                    "enabledTestMark"
+                    "enabledTestPath"
+                    "enabledTests"
+                  ]
+              + ''
+                Defining these attributes as empty lists is ambiguous.
+                To opt out from whitelisting, omit them, or set them as `null` when overriding.
+              '';
+            };
+
+          # Deprecated pytestFlagsArray (internal)
+          ${
+            if
+              finalAttrs ? pytestFlagsArray
+              && finalAttrs.pytestFlagsArray != null
+              && finalAttrs.pytestFlagsArray != [ ]
+            then
+              "buildPythonPackage-internal-pytestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos =
+                    if attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ] then
+                      unsafeGetAttrPos "pytestFlagsArray" attrs
+                    else
+                      null;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument pytestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
+            };
+
+          # Deprecated unittestFlagsArray (internal)
+          ${
+            if
+              finalAttrs ? unittestFlagsArray
+              && finalAttrs.unittestFlagsArray != null
+              && finalAttrs.unittestFlagsArray != [ ]
+            then
+              "buildPythonPackage-internal-unittestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos =
+                    if
+                      attrs ? unittestFlagsArray && attrs.unittestFlagsArray != null && attrs.unittestFlagsArray != [ ]
+                    then
+                      unsafeGetAttrPos "unittestFlagsArray" attrs
+                    else
+                      null;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument unittestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
+            };
+
+          # Deprecated argument stdenv (internal)
+          ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
+            kind = "broken";
+            message =
+              let
+                pos = unsafeGetAttrPos "stdenv" attrs;
+                posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+              in
+              ''
+                ${finalAttrs.name}: Deprecated argument `stdenv` found${posString}
+                  Override `stdenv` with `buildPythonPackage.override` or `buildPythonApplication.override` instead.
+              '';
+          };
+        };
+      };
+    };
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.
-  transformDrv =
-    let
-      # Workaround to make the `lib.extendDerivation`-based disabled functionality
-      # respect `<pkg>.overrideAttrs`
-      # It doesn't cover `<pkg>.<output>.overrideAttrs`.
-      disablePythonPackage =
-        drv:
-        extendDerivation (
-          drv.disabled
-          -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
-        ) { } drv
-        // {
-          overrideAttrs = fdrv: disablePythonPackage (drv.overrideAttrs fdrv);
-        };
-    in
-    drv: disablePythonPackage (toPythonModule drv);
+  transformDrv = toPythonModule;
 }

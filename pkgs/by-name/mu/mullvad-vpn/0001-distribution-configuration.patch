@@ -1,0 +1,51 @@
+diff --git a/desktop/packages/mullvad-vpn/tasks/distribution.cjs b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
+index ae1725c61d..1e51dcbad6 100644
+--- a/desktop/packages/mullvad-vpn/tasks/distribution.cjs
++++ b/desktop/packages/mullvad-vpn/tasks/distribution.cjs
+@@ -30,6 +30,7 @@
+     publish: null,
+     asar: true,
+     compression: noCompression ? 'store' : 'normal',
++    electronDist: '@electron-dist@',
+     extraResources: [
+       { from: distAssets('ca.crt'), to: '.' },
+       { from: distAssets('relays/relays.json'), to: '.' },
+@@ -171,11 +172,7 @@
+     linux: {
+       target: [
+         {
+-          target: 'deb',
+-          arch: getLinuxTargetArch(),
+-        },
+-        {
+-          target: 'rpm',
++          target: 'dir',
+           arch: getLinuxTargetArch(),
+         },
+       ],
+@@ -185,9 +182,6 @@
+       icon: distAssets('icon.icns'),
+       extraFiles: [{ from: distAssets('linux/mullvad-gui-launcher.sh'), to: '.' }],
+       extraResources: [
+-        { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-problem-report')), to: '.' },
+-        { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-setup')), to: '.' },
+-        { from: distAssets(path.join('linux', 'apparmor_mullvad')), to: '.' },
+       ],
+     },
+ 
+@@ -524,6 +518,7 @@
+ // than a non-tilde version component
+ // https://docs.fedoraproject.org/en-US/packaging-guidelines/Versioning/#_complex_versioning
+ function getLinuxVersion() {
++  return "@version@";
+   const [version, ...prereleaseParts] = productVersion().split('-');
+   const [major, minor] = version.split('.');
+   const prerelease = prereleaseParts.join('-');
+@@ -538,6 +533,7 @@
+ 
+ // Returns the product version.
+ function productVersion() {
++  return "@version@";
+   const args = ['run', '-q', '--bin', 'mullvad-version'];
+   return execFileSync('cargo', args, { encoding: 'utf-8' }).trim();
+ }

@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   xorgproto,
 }:
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     xorgproto
   ];
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
+    # last successful hydra build on aarch64-linux was in 2022
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     homepage = "https://www.umaxx.net/";
     description = "Minimal utility to set display colour temperature";
     maintainers = with lib.maintainers; [

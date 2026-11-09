@@ -87,6 +87,10 @@ stdenv.mkDerivation {
 }
 ```
 
+Free Pascal's macOS configuration fixes `-XR` to its `apple-sdk` input; environment variables and downstream SDK inputs do not change it.
+Select another SDK with `-XR` or `fpc.override { apple-sdk = pkgs.apple-sdk_27; }`.
+When bypassing the packaged configuration (e.g., with `-n`), supply `-XR` explicitly.
+
 #### What is a “deployment target” (or minimum version)? {#sec-darwin-troubleshooting-using-deployment-targets}
 
 The “deployment target” refers to the minimum version of macOS that is expected to run an application.
@@ -121,7 +125,8 @@ Generally, only the last SDK release for a major version is packaged.
 |---------------|-------------|------------------------------|
 | 15.0–15.4     | 14.4        | `apple-sdk_14` / `apple-sdk` |
 | 16.0          | 15.0        | `apple-sdk_15`               |
-| 26.0+         | 26.0+       | `apple-sdk_26`, etc          |
+| 26.0          | 26.0        | `apple-sdk_26`               |
+| 27.0+         | 27.0+       | `apple-sdk_27`, etc          |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
@@ -191,6 +196,13 @@ stdenv.mkDerivation {
   '';
 }
 ```
+
+### Macro library not available {#sec-darwin-missing-macros}
+
+Some frameworks provide macros that are only shipped with Xcode.
+For example, the AppleIntelligence framework, Swift Data, and SwiftUI (as of the 27.0 SDK).
+A non-free package making these available will be added at a later date.
+Until then, they are unfortunately not available in Nixpkgs.
 
 #### How to use libiconv on Darwin {#sec-darwin-troubleshooting-libiconv}
 

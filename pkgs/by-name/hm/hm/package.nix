@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hm";
-  version = "18.0";
+  version = "19.0";
 
   src = fetchFromGitLab {
     domain = "vcgit.hhi.fraunhofer.de";
     owner = "jvet";
     repo = "HM";
     tag = "HM-${finalAttrs.version}";
-    hash = "sha256-zWBwrnCNKi2sIopdu2XQj/7IoTsJQzlcIFNNKM0glDQ=";
+    hash = "sha256-WrERof59/UOC1SRx7NIptKSCuMUMQ/1DRQStBDkUPKo=";
   };
 
   postPatch = ''
@@ -59,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "HM-"; };
+    updateScript = gitUpdater {
+      rev-prefix = "HM-";
+      ignoredVersions = "rc";
+    };
   };
 
   meta = {

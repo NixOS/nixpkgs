@@ -12,18 +12,18 @@
   wrapGAppsHook4,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "powersupply";
-  version = "0.10.1";
+  version = "0.10.2";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "powersupply";
-    rev = version;
-    hash = "sha256-sPdtrm2WQYjPu+1bb0ltBiqS9t8FFvbgRdGe1PEthy0=";
+    rev = finalAttrs.version;
+    hash = "sha256-i0AZfxYWj8ct2jiXl2GnCGMU3xBSRRny4H0G/5Qs14Y=";
   };
 
   postPatch = ''
@@ -50,14 +50,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  strictDeps = true;
-
   meta = {
     description = "Graphical app to display power status of mobile Linux platforms";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
+    homepage = "https://gitlab.nura.eco/nura/powersupply";
     license = lib.licenses.mit;
     mainProgram = "powersupply";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

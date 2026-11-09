@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   fetchpatch2,
@@ -18,16 +17,16 @@ maven.buildMavenPackage rec {
   pname = "jsign";
   # For build from non-release, increment version by one and add -SNAPSHOT
   # e.g. 7.3-SNAPSHOT
-  version = "7.3";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner = "ebourg";
     repo = "jsign";
     tag = version;
-    hash = "sha256-FlVTKM1swdNP3kht8MELgUAHPv+FBpwt23WNl/moGjI=";
+    hash = "sha256-Eg23jy5K4F8pL0qqt7Ut/9NOXR9UfnQD7S7qtX9vAjk=";
   };
 
-  mvnHash = "sha256-N91gwM3vsDZQM/BptF5RgRQ/A8g56NOJ6bc2SkxLnBs=";
+  mvnHash = "sha256-51K3IuKiyJOK85/9MeYvFdbDsGr+XUObmYooTjJjSAE=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -61,7 +60,5 @@ maven.buildMavenPackage rec {
       johnazoidberg
     ];
     mainProgram = "jsign";
-    # Build doesn't work, upstream says running the .jar is supported on darwin though
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

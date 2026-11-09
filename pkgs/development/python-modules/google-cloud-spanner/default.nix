@@ -13,6 +13,7 @@
   google-cloud-testutils,
   grpc-google-iam-v1,
   grpc-interceptor,
+  opentelemetry-resourcedetector-gcp,
   proto-plus,
   protobuf,
   sqlparse,
@@ -29,21 +30,30 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
+
+  # update
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-spanner";
-  version = "3.58.0";
+  version = "3.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-spanner";
-    tag = "v${version}";
-    hash = "sha256-bIagQjQv+oatIo8mkA8t5wP9igMnorkiudgyWkVnJcg=";
+    repo = "google-cloud-python";
+    tag = "google-cloud-spanner-v${finalAttrs.version}";
+    hash = "sha256-vsJuqmG2/H5Lf/uGnEnkmBDBL2Mkxzk1z8gbGEpR0Eg=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-spanner";
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     deprecated
@@ -51,6 +61,7 @@ buildPythonPackage rec {
     google-cloud-core
     grpc-google-iam-v1
     grpc-interceptor
+    opentelemetry-resourcedetector-gcp
     proto-plus
     protobuf
     sqlparse
@@ -79,7 +90,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # prevent google directory from shadowing google imports
@@ -97,10 +108,18 @@ buildPythonPackage rec {
     "test_snapshot_read_concurrent"
     # Flaky, can retry too quickly and fail
     "test_retry_helper"
+    # Flaky, system speed sensitive
+    "test_transaction_for_concurrent_statement_should_begin_one_transaction_with_query"
+    "test_transaction_for_concurrent_statement_should_begin_one_transaction_with_read"
+  ];
+
+  enabledTestPaths = [
+    "tests/"
   ];
 
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/_async/test_database_api.py"
     "tests/system/test_backup_api.py"
     "tests/system/test_database_api.py"
     "tests/system/test_dbapi.py"
@@ -115,7 +134,10 @@ buildPythonPackage rec {
     "tests/unit/spanner_dbapi/test_connect.py"
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"
-    "samples/samples/"
+    # hangs
+    "tests/mockserver_tests/test_dbapi_inline_begin.py"
+    # Missing values in response, likely due to version mismatches
+    "tests/mockserver_tests/test_frontend_metrics.py"
   ];
 
   pythonImportsCheck = [
@@ -127,11 +149,25 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  # The ATOM feed loses this update most of the time due to a high update volume,
+  # so query github directly.
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "google-cloud-spanner-v([0-9.]+)"
+        "--use-github-releases"
+      ];
+    };
+  };
+
   meta = {
     description = "Cloud Spanner API client library";
-    homepage = "https://github.com/googleapis/python-spanner";
-    changelog = "https://github.com/googleapis/python-spanner/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-spanner";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-spanner-v${finalAttrs.version}/packages/google-cloud-spanner/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

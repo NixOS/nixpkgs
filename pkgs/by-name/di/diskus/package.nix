@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diskus";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "diskus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-z0w2wzlbF7mY8kr6N//Rsm8G5P1jhrEwoOJ7MYrbKIE=";
   };
 
@@ -20,11 +20,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimal, fast alternative to 'du -sh'";
     homepage = "https://github.com/sharkdp/diskus";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
-    maintainers = [ lib.maintainers.fuerbringer ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     longDescription = ''
       diskus is a very simple program that computes the total size of the
@@ -32,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     '';
     mainProgram = "diskus";
   };
-}
+})

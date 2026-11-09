@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "result";
   version = "0.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rustedpy";
@@ -38,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rustedpy/result";
     changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emattiza ];
+    maintainers = [ ];
   };
 }

@@ -10,28 +10,28 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
-  enableSound ? false,
+  enableSound ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timr-tui";
-  version = "1.6.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "sectore";
     repo = "timr-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s2FnMwDq4tYBaWaT9y1GLbVGFs7zSnOmjcF5leO12JE=";
+    hash = "sha256-01Agrh8A15ykdaws2hYJDma8zNG91HXu77tCEc1wx6Q=";
   };
 
-  cargoHash = "sha256-9yd348QGjFxt+QmEBuYzd612mFm/PyETrZy4z5wW+nI=";
+  cargoHash = "sha256-d/lp5hxWjTCq2gTwsBWowC1+ntoctLyTDdi9hhdBcIM=";
 
-  # Enable upstream "sound" feature when requested
-  buildFeatures = lib.optionals enableSound [ "sound" ];
+  # `sound` is a default feature since v1.12.0
+  buildNoDefaultFeatures = !enableSound;
 
-  nativeBuildInputs = lib.optionals (enableSound && stdenv.isLinux) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [ pkg-config ];
 
   # Runtime/FFI deps for the sound feature (Linux)
-  buildInputs = lib.optionals (enableSound && stdenv.isLinux) [
+  buildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [
     (alsa-lib-with-plugins.override {
       plugins = [
         alsa-plugins
@@ -55,12 +55,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "TUI to organize your time: Pomodoro, Countdown, Timer";
+    description = "TUI to organize your time: Pomodoro, Tabata, Countdown, Timer, Event";
     homepage = "https://github.com/sectore/timr-tui";
     changelog = "https://github.com/sectore/timr-tui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "timr-tui";
-    maintainers = [ lib.maintainers.flokkq ];
+    maintainers = with lib.maintainers; [
+      flokkq
+      sectore
+    ];
     platforms = lib.platforms.unix;
   };
 })

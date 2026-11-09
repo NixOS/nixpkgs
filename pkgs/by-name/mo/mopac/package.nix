@@ -11,15 +11,15 @@
 
 assert blas.isILP64 == lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mopac";
-  version = "23.2.2";
+  version = "23.2.5";
 
   src = fetchFromGitHub {
     owner = "openmopac";
     repo = "mopac";
-    rev = "v${version}";
-    hash = "sha256-VBbW0N67ZbTymYfLrT625rkWeeYbFrEdTxPOCanFT0c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/A/JmXdTlnQjTCfuph0jth6p9TA28KQmHwmd/P2L/ao=";
   };
 
   nativeBuildInputs = [
@@ -39,18 +39,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Semiempirical quantum chemistry";
     homepage = "https://github.com/openmopac/mopac";
-    license = lib.licenses.lgpl3Plus;
+    # also mopac-makpol, mopac-param
+    mainProgram = "mopac";
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];
   };
-}
+})

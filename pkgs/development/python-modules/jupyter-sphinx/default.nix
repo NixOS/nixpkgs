@@ -8,7 +8,6 @@
   ipywidgets,
   nbconvert,
   nbformat,
-  pythonOlder,
   sphinx,
   pytestCheckHook,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "jupyter-sphinx";
   version = "0.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter";
@@ -45,8 +42,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # https://github.com/jupyter/jupyter-sphinx/issues/280"
+    # https://github.com/jupyter/jupyter-sphinx/issues/280
     "test_builder_priority"
+  ];
+
+  pytestFlags = [
+    # https://github.com/jupyter/jupyter-sphinx/issues/287
+    "-Wignore::sphinx.deprecation.RemovedInSphinx11Warning"
   ];
 
   preCheck = ''

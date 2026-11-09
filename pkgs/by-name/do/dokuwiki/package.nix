@@ -7,15 +7,15 @@
   dokuwiki,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dokuwiki";
-  version = "2025-05-14b";
+  version = "2026-07-14c";
 
   src = fetchFromGitHub {
     owner = "dokuwiki";
     repo = "dokuwiki";
-    rev = "release-${version}";
-    sha256 = "sha256-J7B+mvvGtAPK+WjlkHyadG61vli+zZfozfEmEynYQaE=";
+    rev = "release-${finalAttrs.version}";
+    sha256 = "sha256-84kMuFTWYo6Cjd6qpkZsLZoECIP9IzSrc9dX1uKMp0M=";
   };
 
   preload = writeText "preload.php" ''
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/dokuwiki
     cp -r * $out/share/dokuwiki
-    cp ${preload} $out/share/dokuwiki/inc/preload.php
-    cp ${phpLocalConfig} $out/share/dokuwiki/conf/local.php
-    cp ${phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
+    cp ${finalAttrs.preload} $out/share/dokuwiki/inc/preload.php
+    cp ${finalAttrs.phpLocalConfig} $out/share/dokuwiki/conf/local.php
+    cp ${finalAttrs.phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
 
     runHook postInstall
   '';
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
         localConfig ? null,
         pluginsConfig ? null,
         aclConfig ? null,
+        extraConfigs ? { },
         pname ? (p: "${p.pname}-combined"),
       }:
       let
@@ -76,6 +77,12 @@ stdenv.mkDerivation rec {
               ""
             ]
           );
+
+        configs = {
+          "local.php" = localConfig;
+          "plugins.local.php" = pluginsConfig;
+        }
+        // extraConfigs;
       in
       basePackage.overrideAttrs (prev: {
         pname = if builtins.isFunction pname then pname prev else pname;
@@ -87,8 +94,9 @@ stdenv.mkDerivation rec {
           ${lib.concatMapStringsSep "\n" (
             plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
           ) plugins}
-          ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
-          ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
+          ${lib.concatMapAttrsStringSep "\n" (
+            name: path: "${isNotEmpty path "ln -sf ${path} $out/share/dokuwiki/conf/${name}"}"
+          ) configs}
           ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
         '';
       });
@@ -102,9 +110,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "dokuwiki" finalAttrs.version;
     maintainers = with lib.maintainers; [
       _1000101
       e1mo
     ];
   };
-}
+})

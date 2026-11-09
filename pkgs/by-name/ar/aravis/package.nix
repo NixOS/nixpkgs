@@ -21,6 +21,8 @@
 
   enablePacketSocket ? true,
   enableFastHeartbeat ? false,
+
+  nix-update-script,
 }:
 
 assert enableGstPlugin -> gst_all_1 != null;
@@ -28,15 +30,15 @@ assert enableViewer -> enableGstPlugin;
 assert enableViewer -> gtk3 != null;
 assert enableViewer -> wrapGAppsHook3 != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aravis";
-  version = "0.8.35";
+  version = "0.8.36";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = "aravis";
-    tag = version;
-    hash = "sha256-RRIYZHtljZ44s1kmmUI1KMx92+PLLI/eCJRs4m0+egg=";
+    tag = finalAttrs.version;
+    hash = "sha256-4t3uGTE+Y8kPOmpl13B0ZixllRzNh9w1Bg7DfAqCg+Y=";
   };
 
   outputs = [
@@ -84,6 +86,10 @@ stdenv.mkDerivation rec {
   # needed for fakegv tests
   __darwinAllowLocalNetworking = true;
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
+
   meta = {
     description = "Library for video acquisition using GenICam cameras";
     longDescription = ''
@@ -95,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tpw_rules ];
     platforms = lib.platforms.unix;
   };
-}
+})

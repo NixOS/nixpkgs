@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cyclonedx-gomod";
-  version = "1.9.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-gomod";
-    tag = "v${version}";
-    hash = "sha256-iD8mDqQl18ufJBoRkpqYZc+I259HfnFNp29guvBtGDk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lTIgASBf+mbbsugRDYlPIeNoIrhGwftpoB+lKj/9H44=";
   };
 
-  vendorHash = "sha256-Yw+lci0vBDWeJVjOX83LKNb7afcsIK/AC5GZPRSzcdo=";
+  vendorHash = "sha256-BtSBlkdEgJNJ1JWK33FIWMLfxbEDgx8mv36Mx2QesA4=";
 
   ldflags = [
     "-w"
@@ -28,9 +28,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to create CycloneDX Software Bill of Materials (SBOM) from Go modules";
     homepage = "https://github.com/CycloneDX/cyclonedx-gomod";
-    changelog = "https://github.com/CycloneDX/cyclonedx-gomod/releases/tag/v${version}";
+    changelog = "https://github.com/CycloneDX/cyclonedx-gomod/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cyclonedx-gomod";
   };
-}
+})

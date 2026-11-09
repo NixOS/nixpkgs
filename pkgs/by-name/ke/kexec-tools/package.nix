@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
     badPlatforms = [
       "microblaze-linux"
       "microblazeel-linux"
-      "riscv64-linux"
       "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"
@@ -78,5 +77,6 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Only;
     mainProgram = "kexec";
+    maintainers = [ lib.maintainers.zowoq ];
   };
 }

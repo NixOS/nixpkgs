@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   SDL2,
   SDL2_mixer,
   buildOpenGLES ? false,
@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   pname = "rigel-engine";
   version = "0-unstable-2024-05-26";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "lethal-guitar";
     repo = "RigelEngine";
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     SDL2
     SDL2_mixer
   ];

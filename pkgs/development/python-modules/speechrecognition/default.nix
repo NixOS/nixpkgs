@@ -2,42 +2,58 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cacert,
-  faster-whisper,
+
   flac,
-  google-cloud-speech,
-  groq,
-  httpx,
-  openai-whisper,
-  openai,
-  pocketsphinx,
-  pyaudio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  respx,
+
+  # build-system
   setuptools,
-  soundfile,
+
+  # dependencies
   standard-aifc,
   typing-extensions,
+
+  # optional-dependencies
+  # assemblyai
+  requests,
+  # audio
+  pyaudio,
+  # cohere
+  cohere,
+  # faster-whisper
+  faster-whisper,
+  # google-cloud
+  google-cloud-speech,
+  # grok
+  groq,
+  httpx,
+  # openai
+  openai,
+  # pocketsphinx
+  pocketsphinx,
+  # whisper-local
+  openai-whisper,
+  soundfile,
+
+  # tests
+  pytest-httpserver,
+  pytestCheckHook,
+  respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
-  version = "3.14.3";
+  version = "3.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    tag = version;
-    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
+    tag = finalAttrs.version;
+    hash = "sha256-rzCBOQ0dIfreMRDHMSgMYspJ5KyOSxN18B3mf+n9v2w=";
   };
 
+  # Remove Bundled binaries
   postPatch = ''
-    # Remove Bundled binaries
     rm speech_recognition/flac-*
     rm -r third-party
 
@@ -55,6 +71,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
+    cohere = [ cohere ];
     faster-whisper = [ faster-whisper ];
     google-cloud = [ google-cloud-speech ];
     groq = [
@@ -70,15 +87,17 @@ buildPythonPackage rec {
       openai-whisper
       soundfile
     ];
+    # vosk = [ vosk ];
   };
 
   nativeCheckInputs = [
     groq
-    pytestCheckHook
     pocketsphinx
+    pytest-httpserver
+    pytestCheckHook
     respx
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -87,14 +106,25 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
+  disabledTestPaths = [
+    # vosk is not available in nixpkgs
+    "tests/recognizers/test_vosk.py"
+
+    # openai 3.x uses httpx2, which respx cannot intercept; these tests
+    # attempt a real network call and fail with openai.APIConnectionError.
+    "tests/recognizers/whisper_api/test_openai.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

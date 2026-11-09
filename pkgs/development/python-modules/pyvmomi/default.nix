@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyvmomi";
-  version = "9.0.0.0";
+  version = "9.1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "pyvmomi";
     tag = "v${version}";
-    hash = "sha256-4r0UtLR1dhhNQ+Lx12JiEozDAjMxPly+RR0LWRg/A4E=";
+    hash = "sha256-r7knotP4vRX7LA3dsdUoCjzj6Z3TjMLEBs7BnRWSl0A=";
   };
 
   build-system = [ setuptools ];

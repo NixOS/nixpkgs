@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rush-parallel";
-  version = "0.7.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "rush";
-    rev = "v${version}";
-    hash = "sha256-5xuRA3Jf9SiNc6E/XBP9PCSA7vmioww0G5QkUAzHmEI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T0uR/RPz/E8JlBnW5hTCSK/fRWC8YSptxt0rzaS/Dfo=";
   };
 
-  vendorHash = "sha256-zCloMhjHNkPZHYX1e1nx072IYbWHFWam4Af0l0s8a6M=";
+  vendorHash = "sha256-EnVmzHxalg6CnmNyLFklS5eYE+Yo4fQnmkyLECcuZqQ=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Cross-platform command-line tool for executing jobs in parallel";
     homepage = "https://github.com/shenwei356/rush";
-    changelog = "https://github.com/shenwei356/rush/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/shenwei356/rush/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "rush-parallel";
   };
-}
+})

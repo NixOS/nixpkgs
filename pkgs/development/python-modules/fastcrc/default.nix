@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
@@ -10,20 +9,18 @@
 }:
 let
   pname = "fastcrc";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "fastcrc";
     tag = "v${version}";
-    hash = "sha256-iBbYiF0y/3Cax4P9+/gKS6FUBqZ3BleCwnpItsVd7Ps=";
+    hash = "sha256-13z56Ei+++UzlXs1Kmrm0qOWbr88oPMmX7mi9fK4Gbk=";
   };
 in
 buildPythonPackage {
   inherit pname version src;
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -32,7 +29,7 @@ buildPythonPackage {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-VbS5xTqj+Flxxdg06MO34AZCVozlNgFvc+yKemEmCzs=";
+    hash = "sha256-Z4pMDuW0gR/by3v4/dPsanhgl09tTGe6FMJr41p9/fk=";
   };
 
   pythonImportsCheck = [ "fastcrc" ];

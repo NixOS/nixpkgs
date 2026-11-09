@@ -10,23 +10,22 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_37,
-  nodejs_22,
+  electron_44,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_37;
+  electron = electron_44;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.0";
+  version = "2.12.6";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
-    tag = "v${version}";
-    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CrQ6kdOY/NqJv8AQ7MuHDUHzY37cRb2bWSVruxjVdJk=";
   };
 
   desktopItems = [
@@ -52,6 +51,10 @@ buildNpmPackage rec {
   ];
 
   patches = [
+    # the upstream use an EOL electron version
+    ./electron-version.patch
+    # clipboard APIs are async since electron 44
+    ./electron-44-clipboard.patch
     # set electron version and dist dir
     # disable before-pack: it would copy prebuilt libraries
     (replaceVars ./electron-builder.patch {
@@ -64,10 +67,7 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
-  nodejs = nodejs_22;
-
-  npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
+  npmDepsHash = "sha256-LF/E7JJZQQzEHTEQeFiYa1eMeV+OrqK+8ktwhTmRY30=";
 
   makeCacheWritable = true;
 
@@ -80,6 +80,11 @@ buildNpmPackage rec {
   preBuild = ''
     # delete prebuilt libs
     rm -r build-config/lib
+    rm -r node_modules/better-sqlite3/prebuilds
+
+    # prevent copying previously deleted libs to node_modules
+    substituteInPlace build-config/postinstall.js \
+      --replace-fail 'copyLib()' ""
 
     # don't spam the build logs
     substituteInPlace build-config/pack.js \
@@ -122,12 +127,19 @@ buildNpmPackage rec {
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
+    longDescription = ''
+      Some functionalities (e.g. lyrics window) are broken when lx-music-desktop
+      runs using a Wayland ozone platform due to Electron's lack of support
+      for Wayland. If you do need these features, please consider unsetting
+      `NIXOS_OZONE_WL` and passing `--ozone-platform=x11` from the command line
+      to restore the expected behavior.
+    '';
     homepage = "https://github.com/lyswhut/lx-music-desktop";
-    changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
     maintainers = with lib.maintainers; [ starryreverie ];
   };
-}
+})

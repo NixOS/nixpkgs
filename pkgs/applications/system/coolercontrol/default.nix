@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "3.0.2";
+  version = "5.1.1";
 
   src = fetchFromGitLab {
     owner = "coolercontrol";
     repo = "coolercontrol";
-    rev = version;
-    hash = "sha256-puWnnNc3T/R+vPp3oyxP2aTHo1rZ5RWyW6KF6wywF1I=";
+    tag = version;
+    hash = "sha256-XlMlu39tboZN/9qVIORv5yobbHXkxNzyNqxQl0wc8Ro=";
   };
 
   meta = {
@@ -24,7 +24,6 @@ let
     ];
     maintainers = with lib.maintainers; [
       codifryed
-      OPNA2608
     ];
   };
 

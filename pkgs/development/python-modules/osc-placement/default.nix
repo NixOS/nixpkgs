@@ -9,27 +9,25 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc-placement";
-  version = "4.7.0";
+  version = "4.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
-    tag = version;
-    hash = "sha256-OLvi/eIgEEUoZKxowU7On5m2OkRsCEsU/Me7rPruIdM=";
+    tag = finalAttrs.version;
+    hash = "sha256-rSabqfpLkNd/h3TepX5W5Sf0+RnVJri1VUiG6HzVkHE=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -53,14 +51,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     oslo-serialization
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "osc_placement" ];
 
@@ -70,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

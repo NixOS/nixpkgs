@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "twhiteman";
     repo = "pyDes";
     rev = "e988a5ffc9abb8010fc75dba54904d1c5dbe83db";
-    sha256 = "0sic8wbyk5azb4d4m6zbc96lfqcw8s2pzcv9nric5yqc751613ww";
+    hash = "sha256-nI9gQjkM+8Jitmmzf4VGnGFHTWLrm0oaWV+V6RdHLGo=";
   };
 
   checkPhase = ''

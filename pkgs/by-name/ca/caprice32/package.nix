@@ -11,7 +11,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "caprice32";
   version = "4.6.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     repo = "caprice32";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "ColinPitrat";
     sha256 = "0hng5krwgc1h9bz1xlkp2hwnvas965nd7sb3z9mb2m6x9ghxlacz";
   };
@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  patches = [ ./string.patch ];
+  patches = [
+    ./string.patch
+    ./cstdint.patch
+  ];
 
   makeFlags = [
     "APP_PATH=${placeholder "out"}/share/caprice32"
@@ -69,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "cap32";
   };
-}
+})

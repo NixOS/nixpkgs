@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,7 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # smtpd will be removed in version 3.12
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

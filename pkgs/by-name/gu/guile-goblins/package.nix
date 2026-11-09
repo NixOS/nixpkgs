@@ -10,13 +10,13 @@
   texinfo,
   pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-goblins";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchurl {
-    url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${version}.tar.gz";
-    hash = "sha256-IFZEB/HbBx1EDAO8+0xB/UB3iyogyzKbE+pbfbWrU5o=";
+    url = "https://spritely.institute/files/releases/guile-goblins/guile-goblins-${finalAttrs.version}.tar.gz";
+    hash = "sha256-KrgWQOV9PpfoSi0KcxDrZdzxR1AD9PODpSfhylEART4=";
   };
 
   strictDeps = true;
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
   doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
+  guileImportsCheck = [ "goblins" ];
+
   meta = {
     description = "Spritely Goblins for Guile";
     homepage = "https://spritely.institute/goblins/";
@@ -46,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

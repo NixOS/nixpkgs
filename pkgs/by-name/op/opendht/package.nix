@@ -14,21 +14,22 @@
   restinio,
   llhttp,
   openssl,
+  simdutf,
   fmt,
   nix-update-script,
   enableProxyServerAndClient ? false,
   enablePushNotifications ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opendht";
-  version = "3.5.4";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    tag = "v${version}";
-    hash = "sha256-mnnd6yATIk/TEuFG/M98d+pfeh42IKWBBYjkTP52xeM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T9p/tWSNrU/MTkrLT3J33pO6q58YCmmHNOb/tbxk3YE=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     restinio
     llhttp
     openssl
+    simdutf
   ];
 
   cmakeFlags =
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       taeer
       olynch
@@ -83,4 +85,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

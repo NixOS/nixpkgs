@@ -300,7 +300,7 @@ in
             type = lib.types.str;
             default =
               if cfg.hostname == "localhost" then "http://${cfg.hostname}" else "https://${cfg.hostname}";
-            defaultText = ''http(s)://''${config.services.bookstack.hostname}'';
+            defaultText = "http(s)://\${config.services.bookstack.hostname}";
             description = ''
               The root URL that you want to host BookStack on. All URLs in BookStack
               will be generated using this value. It is used to validate specific
@@ -372,11 +372,11 @@ in
     services.phpfpm.pools.bookstack = {
       inherit user group;
       phpPackage = cfg.package.phpPackage;
-      phpOptions = ''
-        log_errors = on
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        log_errors = "on";
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = lib.mkDefault "0660";
         "listen.owner" = lib.mkDefault user;
@@ -485,7 +485,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    ymarkus
     savyajha
   ];
 }

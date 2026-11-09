@@ -4,17 +4,17 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  xorg,
+  libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flitter";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aXTQeUKhwa2uVipKIs8n0XBiWa5o7U6UMlAUlnzXyzE=";
   };
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
   ];
 
   meta = {
@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexozer/flitter";
     platforms = lib.platforms.unix;
     mainProgram = "flitter";
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

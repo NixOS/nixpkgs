@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/qgroundcontrol
     cp -rv resources/ $out/share/qgroundcontrol
 
-    mkdir -p $out/share/pixmaps
-    cp -v resources/icons/qgroundcontrol.png $out/share/pixmaps
+    install -D resources/icons/qgroundcontrol.png -t $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';
@@ -97,12 +96,18 @@ stdenv.mkDerivation rec {
     ./disable-bad-message.patch
   ];
 
+  # -Werror breaks the build with newer compilers, e.g. GCC 16's
+  # -Wunused-but-set-variable in QGCTileCacheWorker.cpp
+  postPatch = ''
+    substituteInPlace QGCCommon.pri --replace-fail "-Werror " ""
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "https://qgroundcontrol.com/";
-    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/ChangeLog.md";
+    changelog = "https://github.com/mavlink/qgroundcontrol/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

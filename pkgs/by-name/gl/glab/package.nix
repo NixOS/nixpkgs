@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitLab,
   installShellFiles,
   makeBinaryWrapper,
@@ -11,15 +11,17 @@
   gitMinimal,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "glab";
-  version = "1.80.4";
+  version = "1.126.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HjE7dhXA8RMS7Qm4rUENrAbCg072oxFpvcLRMzKzX28=";
+    hash = "sha256-Lzp0up2KJTrBQTMuEl3neV+ty1RM5ZGgLgPAfIl16C0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -28,7 +30,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-l8aazpohXHUHPz5o+llIBbEzAYNRf6z4Eb+4ENXhrSA=";
+  vendorHash = "sha256-8JesLR9Wg2uMDfdhw6FhvGgoJQ7oMCCDzb6Paag2qjs=";
 
   ldflags = [
     "-s"
@@ -66,6 +68,17 @@ buildGoModule (finalAttrs: {
     git init
   '';
 
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "Test_addTelemetryHook"
+        "Test_buildTelemetryEvent"
+        "Test_sendTelemetryData"
+      ];
+    in
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})" ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     gitMinimal
@@ -85,6 +98,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       anthonyroussel
+      turebentzin
     ];
     mainProgram = "glab";
   };

@@ -6,23 +6,26 @@
   libadwaita,
   meson,
   ninja,
-  python3,
   runCommand,
   stdenv,
   testers,
   wrapGAppsNoGuiHook,
   xvfb-run,
+  gnome,
+  python3Packages,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "blueprint-compiler";
-  version = "0.18.0";
+  version = "0.22.2";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "blueprint-compiler";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3vAFkP/psM/IsFtzVOIVSU77Z+RV4d3N70U7ggrDqfo=";
+    hash = "sha256-DRpPUfiufwK2c2RW01IYIX6tgVyxfFl5hnv5F8+9aD4=";
   };
 
   postPatch = ''
@@ -30,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    gobject-introspection
     meson
     ninja
     wrapGAppsNoGuiHook
@@ -37,17 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libadwaita
-    (python3.withPackages (
-      ps: with ps; [
-        pygobject3
-      ]
-    ))
   ];
 
   propagatedBuildInputs = [
     # For setup hook, so that the compiler can find typelib files
     gobject-introspection
   ];
+
+  dependencies = [ python3Packages.pygobject3 ];
 
   nativeCheckInputs = [
     dbus
@@ -67,18 +68,32 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+      # regression test that `blueprint-compiler` can be used in a standalone
+      # context outside of nix builds, and doesn't rely on the setup hooks of
+      # its propagated inputs for basic functionality.
+      # see https://github.com/NixOS/nixpkgs/pull/400415
+      standalone = runCommand "blueprint-compiler-test-standalone" { } ''
+        ${lib.getExe finalAttrs.finalPackage} --help && touch $out
+      '';
     };
-    # regression test that `blueprint-compiler` can be used in a standalone
-    # context outside of nix builds, and doesn't rely on the setup hooks of
-    # its propagated inputs for basic functionality.
-    # see https://github.com/NixOS/nixpkgs/pull/400415
-    standalone = runCommand "blueprint-compiler-test-standalone" { } ''
-      ${lib.getExe finalAttrs.finalPackage} --help && touch $out
-    '';
+    updateScript = gnome.updateScript {
+      packageName = "blueprint-compiler";
+    };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Markup language for GTK user interface files";
@@ -89,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       benediktbroich
       ranfdev
     ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
 })

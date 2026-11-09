@@ -6,18 +6,30 @@
   replaceVars,
   openssl,
   python3Packages,
+  pkg-config,
+  zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitm-cache";
   version = "0.1.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chayleaf";
     repo = "mitm-cache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   cargoHash = "sha256-DTPlPCumkVI2naYoNdO8T3pQNSawBA0FZ9LxVpqKqN0=";
 
@@ -35,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ chayleaf ];
     mainProgram = "mitm-cache";
   };
-}
+})

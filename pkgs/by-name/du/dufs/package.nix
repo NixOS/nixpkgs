@@ -3,25 +3,31 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nixosTests,
   stdenv,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dufs";
-  version = "0.45.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
-    rev = "v${version}";
-    hash = "sha256-83lFnT4eRYaBe4e2o6l6AGQycm/oK96n5DXutBNvBsE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wGRu0E4uAlNtBIZ7C9O0S9VAjQjdn2M0/KV8mqgQWDU=";
   };
 
-  cargoHash = "sha256-WdjqG2URtloh5OnpBBnEWHD3WKGkCKLDcCyWRVGIXto=";
+  cargoHash = "sha256-DFJjJ8e3EdNC+4AcSXwNPOvJ6rbb7wZR44gmyZzDI2o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.
@@ -35,17 +41,22 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/dufs --completions zsh)
   '';
 
+  passthru.tests = { inherit (nixosTests) dufs; };
+
   meta = {
     description = "File server that supports static serving, uploading, searching, accessing control, webdav";
     mainProgram = "dufs";
     homepage = "https://github.com/sigoden/dufs";
-    changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    changelog = "https://github.com/sigoden/dufs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
+      font44
       holymonson
     ];
   };
-}
+})

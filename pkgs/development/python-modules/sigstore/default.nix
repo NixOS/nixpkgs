@@ -1,69 +1,69 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
-  cryptography,
   fetchFromGitHub,
-  flit-core,
+
+  # build-system
+  uv-build,
+
+  # dependencies
+  cryptography,
   id,
-  importlib-resources,
-  nix-update-script,
   platformdirs,
-  pretend,
-  pyasn1,
   pydantic,
   pyjwt,
-  pyopenssl,
-  pytestCheckHook,
   requests,
   rfc3161-client,
   rfc8785,
   rich,
-  securesystemslib,
   sigstore-models,
-  sigstore-protobuf-specs,
   sigstore-rekor-types,
   tuf,
+
+  # tests
+  pretend,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
+
+  # passthru
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
-  pname = "sigstore-python";
-  version = "4.0.0";
+buildPythonPackage (finalAttrs: {
+  pname = "sigstore";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
-    tag = "v${version}";
-    hash = "sha256-KAHGg2o5t8qfbvLGTzaVoV7AcMkgi3rXxyOQgSASl7A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YpqkKyhgr8cZ3NxVGVmTkv1Wz+lqkBikHY4N2LVK/UI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.12.0,<0.13.0' uv_build
+  '';
+
+  build-system = [ uv-build ];
+
   pythonRelaxDeps = [
-    "sigstore-rekor-types"
-    "rfc3161-client"
-    "cryptography"
+    "rich"
+    "tuf"
   ];
 
-  build-system = [ flit-core ];
-
   dependencies = [
-    appdirs
     cryptography
     id
-    importlib-resources
+    platformdirs
     pydantic
     pyjwt
-    pyopenssl
-    pyasn1
-    rfc8785
-    rfc3161-client
-    platformdirs
     requests
+    rfc3161-client
+    rfc8785
     rich
-    securesystemslib
     sigstore-models
-    sigstore-protobuf-specs
     sigstore-rekor-types
     tuf
   ];
@@ -99,9 +99,9 @@ buildPythonPackage rec {
   meta = {
     description = "Codesigning tool for Python packages";
     homepage = "https://github.com/sigstore/sigstore-python";
-    changelog = "https://github.com/sigstore/sigstore-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sigstore/sigstore-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "sigstore";
   };
-}
+})

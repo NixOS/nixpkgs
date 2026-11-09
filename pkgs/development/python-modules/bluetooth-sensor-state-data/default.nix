@@ -6,22 +6,19 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
-  version = "1.9.0";
+  version = "1.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-sensor-state-data";
     tag = "v${version}";
-    hash = "sha256-V7stHAID6zkLFYDX5HUVF38/8OHa4AZr48FPmSoDcAE=";
+    hash = "sha256-NTYuXK88lAhVKDs4/d7RjwL53YsG3Izm14q5iOIHbIc=";
   };
 
   build-system = [ poetry-core ];

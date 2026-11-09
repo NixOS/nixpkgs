@@ -39,7 +39,7 @@ weechat.override {
 }
 ```
 
-In order to also keep all default plugins installed, it is possible to use the following method:
+To also keep all default plugins installed, it is possible to use the following method:
 
 ```nix
 weechat.override {
@@ -86,8 +86,7 @@ weechat.override {
     { availablePlugins, ... }:
     {
       scripts = with pkgs.weechatScripts; [
-        weechat-xmpp
-        weechat-matrix-bridge
+        weechat-matrix
         wee-slack
       ];
       init = ''

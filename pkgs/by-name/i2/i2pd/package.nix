@@ -10,15 +10,15 @@
   miniupnpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i2pd";
-  version = "2.58.0";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
-    tag = version;
-    hash = "sha256-moUcivW3YIE2SvjS7rCXTjeCKUW/u/NXWH3VmJ9x6jg=";
+    tag = finalAttrs.version;
+    hash = "sha256-dfCeY64TGRoTMNvKZk5jrhyRc8b8K03KM7YV5w/pbUM=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "i2pd";
   };
-}
+})

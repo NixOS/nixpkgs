@@ -7,14 +7,14 @@
   gnutar,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rset";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "eradman";
     repo = "rset";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-b797R79aMopiPApTJ4Q3SP2MRjqCcNNO9BIxtuiNZks=";
   };
 
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://scriptedconfiguration.org/";
     description = "Configure systems using any scripting language";
-    changelog = "https://github.com/eradman/rset/raw/${version}/NEWS";
+    changelog = "https://github.com/eradman/rset/raw/${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

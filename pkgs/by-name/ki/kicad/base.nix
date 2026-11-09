@@ -2,12 +2,9 @@
   lib,
   stdenv,
   cmake,
-  libGLU,
-  libGL,
   zlib,
   wxGTK,
   gtk3,
-  libX11,
   gettext,
   glew,
   glm,
@@ -17,38 +14,24 @@
   boost,
   pkg-config,
   doxygen,
-  graphviz,
-  libpthreadstubs,
-  libXdmcp,
-  unixODBC,
+  unixodbc,
   libgit2,
   libsecret,
-  libgcrypt,
-  libgpg-error,
   ninja,
   writableTmpDirAsHomeHook,
 
-  util-linuxMinimal,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libXtst,
-  pcre2,
-  libdeflate,
-
   swig,
   python,
+  poppler,
   wxPython,
   opencascade-occt_7_6,
   libngspice,
+  libspnav,
   valgrind,
   protobuf_29,
   nng,
+  glslang,
+  sqlite,
 
   stable,
   testing,
@@ -85,8 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+
     # https://gitlab.com/kicad/code/kicad/-/issues/15687
-    ./runtime_stock_data_path.patch
+    (
+      if (!stable && !testing) then
+        ./runtime_stock_data_path-10.0.9.patch
+      else
+        ./runtime_stock_data_path.patch
+    )
   ];
 
   # tagged releases don't have "unknown"
@@ -119,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
     (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
     (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+    (cmakeBool "KICAD_UPDATE_CHECK" false)
   ]
   ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
@@ -130,54 +120,38 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     doxygen
-    graphviz
     pkg-config
     libgit2
     libsecret
-    libgcrypt
-    libgpg-error
-  ]
-  # wanted by configuration on linux, doesn't seem to affect performance
-  # no effect on closure size
-  ++ optionals (stdenv.hostPlatform.isLinux) [
-    util-linuxMinimal
-    libselinux
-    libsepol
-    libthai
-    libdatrie
-    libxkbcommon
-    libepoxy
-    dbus
-    at-spi2-core
-    libXtst
-    pcre2
   ];
 
   buildInputs = [
-    libGLU
-    libGL
     zlib
-    libX11
     wxGTK
     gtk3
-    libXdmcp
     gettext
     glew
     glm
-    libpthreadstubs
     cairo
     curl
     openssl
     boost
     swig
     python
-    unixODBC
-    libdeflate
+    poppler
+    unixodbc
     opencascade-occt
     protobuf_29
 
     # This would otherwise cause a linking requirement for mbedtls.
     (nng.override { mbedtlsSupport = false; })
+  ]
+  ++ optionals (!stable && !testing) [
+    glslang
+    sqlite
+  ]
+  ++ optionals (stdenv.hostPlatform.isLinux) [
+    libspnav
   ]
   ++ optionals withScripting [ wxPython ]
   ++ optionals withNgspice [ libngspice ]

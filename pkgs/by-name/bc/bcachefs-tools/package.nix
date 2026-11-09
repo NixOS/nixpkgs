@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
+  libunwind,
   keyutils,
+  kmod,
   liburcu,
   zlib,
   libaio,
@@ -17,6 +20,8 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
+  jq,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -28,23 +33,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.34.0";
+  version = "1.39.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u9RMI1EP+2yhoHtu0Lf1/4RZPrwSFsVc/DgdFJ9xZsA=";
+    hash = "sha256-H8uzTohV30NU1wYhr/WXN76g1zDqGEzRE5QZcmcM7Jc=";
   };
+
+  # Fix build with linux-headers 7.3
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/koverstreet/bcachefs-tools/commit/adef3bf68249ac674ddc2cbdfe8c7d0d153e15a8.diff";
+      hash = "sha256-nQsL+1fTQ4ltVyTIwIpO9z9nS66Dtr6WTepBZQ0phL8=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-v17x6/ojK4fGqgBBCKKARYOs/8ECT2FXp7ZgGGAUSss=";
+    hash = "sha256-4ZStyYaT+6Suup1ue2wFFCTAlnsnEO9WaUJHe47BKXY=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
+
+    substituteInPlace src/commands/mount.rs \
+      --replace-fail 'std::process::Command::new("modprobe")' 'std::process::Command::new("${lib.getExe' kmod "modprobe"}")'
   '';
 
   nativeBuildInputs = [
@@ -53,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
+    jq
     makeWrapper
     installShellFiles
   ];
@@ -62,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     keyutils
     lz4
     libsodium
+    libunwind
     liburcu
     libuuid
     zstd
@@ -93,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMGENERATORDIR = "${placeholder "out"}/lib/systemd/system-generators";
   };
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
@@ -128,7 +148,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       smoke-test = nixosTests.bcachefs;
-      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+      inherit (nixosTests.installer)
+        bcachefsSimple
+        bcachefsEncrypted
+        bcachefsMulti
+        bcachefsEncryptedLatestKernel
+        bcachefsEncryptedRcKernel
+        ;
     };
 
     updateScript = nix-update-script { };
@@ -145,6 +171,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
-    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hr";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "LuRsT";
     repo = "hr";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-05num4v8C3n+uieKQJVLOzu9OOMBsUMPqq08Ou6gmYQ=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "hr";
   };
-}
+})

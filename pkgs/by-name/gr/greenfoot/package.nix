@@ -14,7 +14,7 @@ let
     openjfx_jdk = openjfx21.override { withWebKit = true; };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "greenfoot";
   version = "3.9.0";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.greenfoot.org/download/files/Greenfoot-linux-arm64-${
-      builtins.replaceStrings [ "." ] [ "" ] version
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.deb";
     hash = "sha256-d5bkK+teTA4fxFb46ovbZE28l8WILGStv3Vg3nJZfv0=";
   };
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.chvp ];
     platforms = lib.platforms.linux;
   };
-}
+})

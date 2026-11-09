@@ -3,27 +3,24 @@
   aiomisc,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   pytest,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomisc-pytest";
-  version = "1.3.4";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "aiomisc_pytest";
-    inherit version;
-    hash = "sha256-9Of1pSUcMiIhkz7OW5erF4oDlf/ABkaamDBPg7+WbBE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-cbYrkO6YRSPFfhjgdXzuVA2wY5RyEmWcG+myGZu1TGU=";
   };
 
-  build-system = [ poetry-core ];
-
   pythonRelaxDeps = [ "pytest" ];
+
+  build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 
@@ -40,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

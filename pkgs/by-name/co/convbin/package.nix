@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "convbin";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
     repo = "convbin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-k0hwBdjOweFoAE6jzhlRFZsMOVDDpi4R4LHA7SwO3os=";
     fetchSubmodules = true;
   };
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "convbin";
   };
-}
+})

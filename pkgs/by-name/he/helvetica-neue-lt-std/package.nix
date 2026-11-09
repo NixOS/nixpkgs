@@ -2,10 +2,11 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "helvetica-neue-lt-std";
+  pname = "helvetica-neue-lt-std";
   version = "2014.08.16"; # date of most recent file in distribution
 
   src = fetchzip {
@@ -14,12 +15,11 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-ytoTTrnwN1lMw/gTxS4DRAq+tV5WzB2xHP4vVxLZ1ZI=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
+  # AppleDouble metadata files named ._*.otf would be installed as fonts
+  preInstall = ''
+    rm -r __MACOSX
   '';
 
   meta = {

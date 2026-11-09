@@ -6,22 +6,22 @@
   xxd,
   cairo,
   fluidsynth,
-  libX11,
+  libx11,
   libjack2,
   alsa-lib,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   libsmf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mamba";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Mamba";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S1+nGnB1LHIUgYves0qtWh+QXYKjtKWICpOo38b3zbY=";
     fetchSubmodules = true;
   };
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fluidsynth
-    libX11
+    libx11
     libjack2
     alsa-lib
     liblo
-    libsigcxx
+    libsigcxx_2_0
     libsmf
   ];
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

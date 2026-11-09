@@ -5,7 +5,10 @@ in
 {
   name = "dependency-track";
   meta = {
-    maintainers = pkgs.lib.teams.cyberus.members;
+    maintainers = with pkgs.lib.maintainers; [
+      e1mo
+      xanderio
+    ];
   };
 
   nodes = {
@@ -44,7 +47,7 @@ in
 
           port = dependencyTrackPort;
           nginx.domain = "localhost";
-          database.passwordFile = "${pkgs.writeText "dbPassword" ''hunter2'THE'''H''''E''}";
+          database.passwordFile = "${pkgs.writeText "dbPassword" "hunter2'THE''H'''E"}";
         };
       };
   };

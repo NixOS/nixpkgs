@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cross";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "cross-rs";
     repo = "cross";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 
@@ -34,12 +34,14 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Zero setup cross compilation and cross testing";
     homepage = "https://github.com/cross-rs/cross";
-    changelog = "https://github.com/cross-rs/cross/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    changelog = "https://github.com/cross-rs/cross/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "cross";
   };
-}
+})

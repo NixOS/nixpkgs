@@ -23,7 +23,7 @@
 buildPythonPackage {
   pname = "pysim";
   version = "unstable-2023-08-13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osmocom";
@@ -63,6 +63,6 @@ buildPythonPackage {
     description = "Python tool to program SIMs / USIMs / ISIMs";
     homepage = "https://github.com/osmocom/pysim";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = [ ];
   };
 }

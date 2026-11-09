@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   requests,
   pytestCheckHook,
   responses,
@@ -11,19 +10,17 @@
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.6.5";
+  version = "3.6.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "abdullahselek";
     repo = "HerePy";
     tag = version;
-    hash = "sha256-8DwzzC0sTrGnMpuADc55HCIeH/KyWacv8X+Ubh+n7ZM=";
+    hash = "sha256-JJUfQClB4gExxqNfL8u//HCvnO049hm8n3zuRnB0sBE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ requests ];
 

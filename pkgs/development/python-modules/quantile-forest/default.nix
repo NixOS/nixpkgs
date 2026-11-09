@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   setuptools,
   wheel,
@@ -16,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "quantile-forest";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zillow";
     repo = "quantile-forest";
     tag = "v${version}";
-    hash = "sha256-KNHp6/TUy7Aof3P4TNGpsRlNVePrHEc4HFvMqyr4gPg=";
+    hash = "sha256-K/8W/BkQVeFsJyQMdOHX997/yrhTcvHU9vuYmZ4W+Qo=";
   };
 
   build-system = [

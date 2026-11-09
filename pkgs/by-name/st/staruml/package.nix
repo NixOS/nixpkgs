@@ -7,8 +7,19 @@
   hicolor-icon-theme,
   gtk3,
   glib,
-  systemd,
-  xorg,
+  systemdLibs,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   nss,
   nspr,
   atk,
@@ -29,12 +40,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.0.0";
+  version = "7.1.1";
   pname = "staruml";
 
   src = fetchurl {
     url = "https://files.staruml.io/releases-v7/StarUML_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-z25qeE2G9F010IE1WFxwIifYqowjB4dpUDgRg38RtQc=";
+    hash = "sha256-EzWn+FBQwWF39WVxjmniU7m8HHLX2eRzUreaZ6qrXFs=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib
     ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${lib.getLib systemdLibs}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --interpreter ${bintools.dynamicLinker} --add-needed libGL.so.1 $out/opt/StarUML/staruml
 
@@ -75,17 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           glib
           gtk3
-          xorg.libXdamage
-          xorg.libX11
-          xorg.libxcb
-          xorg.libXcomposite
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXi
-          xorg.libXrender
-          xorg.libXtst
-          xorg.libxshmfence
+          libxdamage
+          libx11
+          libxcb
+          libxcomposite
+          libxcursor
+          libxext
+          libxfixes
+          libxi
+          libxrender
+          libxtst
+          libxshmfence
           libxkbcommon
           nss
           nspr
@@ -95,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
           gdk-pixbuf
           pango
           cairo
-          xorg.libXrandr
+          libxrandr
           expat
           libdrm
           libgbm

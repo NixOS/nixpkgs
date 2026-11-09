@@ -7,14 +7,14 @@
   opaline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ott";
   version = "0.34";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-S6EMQgEBrtXB9hTM7x6irZPsI9c9JHeuCk/9pcpQMNg=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jwiegley ];
     platforms = lib.platforms.unix;
   };
-}
+})

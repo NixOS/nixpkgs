@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitLab {
     domain = "gitlab.scd31.com";
-    owner = "stephen";
+    owner = "sophie";
     repo = "tile-downloader";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+FnLGMUGyuaN7uPRvuounDKwF6pV9NKv3r/ajdKtdCE=";
@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Multi-threaded raster tile downloader, primarily designed for downloading OSM tiles for usage offline";
     mainProgram = "tile-downloader";
-    homepage = "https://gitlab.scd31.com/stephen/tile-downloader";
+    homepage = "https://gitlab.scd31.com/sophie/tile-downloader";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ scd31 ];
+    maintainers = with lib.maintainers; [ n3tcat ];
   };
 })

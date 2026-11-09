@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   # link against packaged libnitrokey
-  USE_SYSTEM_LIBNITROKEY = 1;
+  env.USE_SYSTEM_LIBNITROKEY = 1;
 
   nativeBuildInputs = [ installShellFiles ];
 

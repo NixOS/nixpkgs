@@ -2,22 +2,23 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
   callPackage,
+  fetchFromGitHub,
+  iana-etc,
   installShellFiles,
+  libredirect,
   versionCheckHook,
-  fuse,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.1.8";
+  version = "4.2.9";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R3R5DfI+lctpFh68z9zsNhNc3siVIOj02lclYIYElzg=";
+    hash = "sha256-zsbrS5kIKmuZkIrb+GD/34ij6hLoygZq9lfj4xYCuLM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,15 +34,23 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-Kx553w93A6nCBJTejY2TEUQhfYiByivMAfcVsWa1z6U=";
+  vendorHash = "sha256-3Ve8phO3GSnVu9FJWzPbIDBgLi76GsQXUkW5hyQ2Ho8=";
 
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libredirect.hook;
 
   tags = [ "jsoniter" ];
 
+  subPackages = [
+    "."
+    "pkg/gowebdav/cmd/gowebdav"
+  ];
+
   ldflags = [
     "-s"
-    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>\""
+    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@oplist.org>\""
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.Version=${finalAttrs.version}"
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=${finalAttrs.frontend.version}"
   ];
@@ -56,6 +65,10 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$(<COMMIT)"
   '';
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
+
   checkFlags =
     let
       # Skip tests that require network access
@@ -64,17 +77,9 @@ buildGoModule (finalAttrs: {
         "TestWebsocketAll"
         "TestWebsocketCaller"
         "TestDownloadOrder"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # --- FAIL: TestTask_Cancel (0.01s)
-        # task_test.go:48: task is running
-        # task_test.go:61: task status not canceled: canceling
-        "TestTask_Cancel"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd OpenList \
@@ -86,9 +91,9 @@ buildGoModule (finalAttrs: {
     $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
   '';
 
-  doInstallCheck = true;
+  # panic: open /etc/protocols: operation not permitted
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/OpenList";
   versionCheckProgramArg = "version";
 
   passthru.updateScript = lib.getExe (callPackage ./update.nix { });

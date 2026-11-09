@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   gitUpdater,
   unstableGitUpdater,
   cctools,
@@ -20,7 +21,6 @@
   nghttp2,
   openjpeg,
   libcaca,
-  mesa,
   mesa_glu,
   xvidcore,
   openssl,
@@ -29,7 +29,9 @@
   pulseaudio,
   SDL2,
   curl,
-  xorg,
+  libxv,
+  libx11,
+  xorgproto,
 
   withFullDeps ? false,
   withFfmpeg ? withFullDeps,
@@ -38,42 +40,30 @@
 
 let
   stable = rec {
-    version = "2.4.0"; # See below TODO.
+    version = "26.07.0";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
       rev = "v${version}";
-      hash = "sha256-RADDqc5RxNV2EfRTzJP/yz66p0riyn81zvwU3r9xncM=";
+      hash = "sha256-L4GKXCFsKVxWXZJJeiAegXJySoS9+/V+/cuzEJEse+I=";
     };
     updateScript = gitUpdater {
-      odd-unstable = true;
       rev-prefix = "v";
       ignoredVersions = "^(abi|test)";
     };
-  }
-  // {
-    # ffmpeg 7.0.2 works, but 7.1.1 (which is packaged in nixpkgs) doesn't
-    # because v2.4.0 of this package relies on internal private ffmpeg fields.
-    # TODO: remove this, and switch to simply using ffmpeg-headless,
-    #       when updating stable to 2.6
-    ffmpeg-headless = ffmpeg-headless.override {
-      version = "7.0.2";
-      hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
-    };
   };
   unstable = {
-    version = "2.4.0-unstable-2025-12-23";
+    version = "26.07.0-unstable-2026-11-06";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "035540740e7a9901cd5f5b08ff5df4f31ac28ec2";
-      hash = "sha256-CAP6NYSU+ctjl9BMD22rybNcWVm3eAVDAiZKfp8/xDc=";
+      rev = "1b47f9e82a7cad2de292f5ce1e9517fa8c1fc5e2";
+      hash = "sha256-vBdDUI7/d32E55LFw8rKlNcY6bVOYIMGpF7yNQsCCzI=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
       tagPrefix = "v";
     };
-    inherit ffmpeg-headless;
   };
   channelToUse = if releaseChannel == "unstable" then unstable else stable;
 in
@@ -88,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     cctools
   ]
   ++ lib.optionals withFfmpeg [
-    channelToUse.ffmpeg-headless
+    ffmpeg-headless
   ];
 
   # ref: https://wiki.gpac.io/Build/build/GPAC-Build-Guide-for-Linux/#gpac-easy-build-recommended-for-most-users
@@ -108,10 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openjpeg
     libcaca
-    xorg.libX11
-    xorg.libXv
-    xorg.xorgproto
-    mesa
+    libx11
+    libxv
+    xorgproto
     mesa_glu
     xvidcore
     openssl
@@ -123,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    rm $out/share/gpac/res/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/gpac/res/ca-bundle.crt
+  '';
 
   passthru.updateScript = channelToUse.updateScript;
 

@@ -7,7 +7,7 @@
   zlib,
   bzip2,
   libpng,
-  libX11,
+  libx11,
   lua5_1,
   toluapp,
   SDL2,
@@ -18,14 +18,28 @@
 
 stdenv.mkDerivation rec {
   pname = "stratagus";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "wargus";
     repo = "stratagus";
-    rev = "v${version}";
-    sha256 = "sha256-q8AvIWr/bOzI0wV0D2emxIXYEKDYmFxbtwr2BS+xYfA=";
+    tag = "v${version}";
+    sha256 = "sha256-VzTBd+59tGDdgp1ykdqXuBpT2pVHTnR71bb9/EVyW5Q=";
   };
+
+  patches = [
+    ./copy.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.9)" "cmake_minimum_required(VERSION 3.25)"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/include/stratagus
+    cp -r /build/source/gameheaders $out/include/stratagus/gameheaders
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +55,7 @@ stdenv.mkDerivation rec {
     SDL2_image
     SDL2_mixer
     libGL
-    libX11
+    libx11
   ];
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"

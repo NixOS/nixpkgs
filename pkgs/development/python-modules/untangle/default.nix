@@ -6,7 +6,7 @@
   defusedxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "untangle";
   version = "1.2.1";
   format = "setuptools";
@@ -14,8 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stchris";
     repo = "untangle";
-    # 1.1.1 is not tagged on GitHub
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
   };
 
@@ -23,15 +22,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   meta = {
     description = "Convert XML documents into Python objects";
     homepage = "https://github.com/stchris/untangle";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.arnoldfarkas ];
+    maintainers = [ ];
   };
-}
+})

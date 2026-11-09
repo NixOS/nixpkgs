@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     description = "Program for writing Microsoft-compatible boot records";
     homepage = "https://ms-sys.sourceforge.net/";

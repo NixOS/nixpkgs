@@ -14,7 +14,7 @@ buildPerlPackage rec {
     owner = "bioperl";
     repo = "bioperl-ext";
     rev = "bioperl-ext-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-+0tZ6q3PFem8DWa2vq+njOLmjDvMB0JhD0FGk00lVMA=";
+    hash = "sha256-+0tZ6q3PFem8DWa2vq+njOLmjDvMB0JhD0FGk00lVMA=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ buildPerlPackage rec {
     longDescription = ''
       Part of BioPerl Extensions (BioPerl-Ext) distribution, a collection of Bioperl C-compiled extensions.
     '';
-    license = with lib.licenses; [ artistic1 ];
+    license = lib.licenses.artistic1;
     maintainers = with lib.maintainers; [ apraga ];
   };
 }

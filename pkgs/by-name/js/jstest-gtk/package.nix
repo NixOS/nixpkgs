@@ -5,8 +5,8 @@
   cmake,
   pkg-config,
   gtkmm3,
-  libsigcxx,
-  xorg,
+  libsigcxx_2_0,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     gtkmm3
-    libsigcxx
-    xorg.libX11
+    libsigcxx_2_0
+    libx11
   ];
 
   meta = {

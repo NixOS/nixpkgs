@@ -10,15 +10,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tym";
-  version = "3.5.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "endaaman";
     repo = "tym";
-    rev = version;
-    sha256 = "sha256-ySriCBmwDiDmAkIIByaZgmK0nUyYiVb0VAV5bi38JGw=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-+57ZQ/U5Q2JXcnlWL8M6elMM0NAJ59NciyUzK2cyXkA=";
   };
 
   nativeBuildInputs = [
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "tym";
   };
-}
+})

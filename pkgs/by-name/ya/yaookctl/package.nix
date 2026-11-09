@@ -6,13 +6,13 @@
 }:
 python3.pkgs.buildPythonApplication {
   pname = "yaookctl";
-  version = "0-unstable-2025-12-12";
+  version = "0-unstable-2026-10-08";
 
   src = fetchFromGitLab {
     owner = "yaook";
     repo = "yaookctl";
-    rev = "94215db203cd8e471616d557cd83d71f0bc9918d";
-    hash = "sha256-rAd69fJQSqo6Xe0yL4CmPn0/HmygWkojwBXPEOAY1dE=";
+    rev = "e859efaeb2168edd10b3ebf4895b47c475cd09f5";
+    hash = "sha256-417m1kW9vSmEiFAl4R0aXdTktpIgm+iA85na9r3uZtE=";
   };
 
   pyproject = true;
@@ -25,9 +25,24 @@ python3.pkgs.buildPythonApplication {
     click
     click-option-group
     kubernetes-asyncio
+    minio
     prettytable
     typing-extensions
   ];
+
+  # Try to import all submodules in order to get warned of new dependencies
+  checkPhase = ''
+    runHook preCheck
+    ${python3.interpreter} -c "
+      import pkgutil, importlib
+      import yaookctl
+      for _, name, _ in pkgutil.walk_packages(yaookctl.__path__, yaookctl.__name__ + '.'):
+          if name.endswith('.__main__'):
+              continue
+          importlib.import_module(name)
+    "
+    runHook postCheck
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

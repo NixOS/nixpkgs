@@ -7,15 +7,15 @@
   rofi-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-pulse-select";
   version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
     repo = "rofi-pulse-select";
-    rev = version;
-    sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
+    rev = finalAttrs.version;
+    hash = "sha256-4wqvhHOsaW9P+I04w6y62T2BI4ol0SFYuhFVARfYBZA=";
   };
 
   installPhase = ''
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ DamienCassou ];
     platforms = lib.platforms.linux;
   };
-}
+})

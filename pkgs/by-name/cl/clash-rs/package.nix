@@ -6,36 +6,44 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.3";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
-    owner = "Watfaq";
+    owner = "Watfaq-legacy";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MVj+GcSt0Q9bWLz7MpCIj9MtnHh/GRB3p+DapMPLxeY=";
+    hash = "sha256-RmxAi+0tgCAubwUTWv9w77yBdeIoEvYVxxyeHAe4Nbo=";
   };
 
-  cargoHash = "sha256-Ikur9G6oSdKbK7gdZozBkplUjPfSjIABTVHjX7UPPvc=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
   patches = [
-    ./unbounded-shifts.patch
+    # Remove the `npm ci` call in build.rs as it fails.
+    ./skip-npm-ci.patch
   ];
 
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-lJh/m6Ibgny1qFeeo3SDFJWXbZ/BX12/LX/m6g6RJZE=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-WZjV7wcuQKCfe9aRN06wuId2Ql9wLB97e1SOCeLMIKo=";
+  };
+
+  npmRoot = "clash-dashboard";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
@@ -44,10 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires nightly features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # if_let_guard is stable since Rust 1.95.0, but some deps still carry
+    # the stale #![feature(if_let_guard)] attribute.
+    RUSTFLAGS = "-A stable-features";
   };
 
   buildFeatures = [ "plus" ];
@@ -70,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
-    homepage = "https://github.com/Watfaq/clash-rs";
+    homepage = "https://github.com/Watfaq-legacy/clash-rs";
     mainProgram = "clash";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];

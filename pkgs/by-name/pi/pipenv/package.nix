@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cacert,
   python3,
   fetchFromGitHub,
   installShellFiles,
@@ -33,14 +34,14 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2025.0.4";
+  version = "2026.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-yHbrxhRWo2iD9uBFBQzi5LqUVOc1vpLvXlORtAI32KA=";
+    hash = "sha256-+8xUbpGIEuFboeK+JVVAt46gNcw1tfkmnTYt/IrISik=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -99,7 +100,12 @@ buildPythonApplication rec {
     '';
   };
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    rm $out/${python3.sitePackages}/pipenv/patched/pip/_vendor/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python3.sitePackages}/pipenv/patched/pip/_vendor/certifi/cacert.pem
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
@@ -108,6 +114,7 @@ buildPythonApplication rec {
 
   meta = {
     description = "Python Development Workflow for Humans";
+    homepage = "https://github.com/pypa/pipenv";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "pipenv";

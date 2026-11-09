@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   untangle,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyqvrpro";
   version = "0.52";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oblogic7";

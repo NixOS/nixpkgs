@@ -22,13 +22,12 @@ stdenv.mkDerivation {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=extra"
+    "DEPMOD=true"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D framework_laptop.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
-    runHook postInstall
-  '';
+  installTargets = [ "modules_install" ];
 
   passthru.updateScript = unstableGitUpdater { };
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       Waveform data can be used to produce a visual rendering of the audio, similar in appearance to audio editing applications.
     '';
     homepage = "https://github.com/bbc/audiowaveform";
-    changelog = "https://github.com/bbc/audiowaveform/blob/${version}/ChangeLog";
+    changelog = "https://github.com/bbc/audiowaveform/blob/${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ edbentley ];

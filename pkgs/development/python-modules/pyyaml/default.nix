@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   setuptools,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pyyaml";
   version = "6.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yaml";

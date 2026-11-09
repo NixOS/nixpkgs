@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   fetchurl,
-  pythonOlder,
   pythonAtLeast,
 
   # buildInputs
@@ -20,20 +19,19 @@
   torch-bin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchaudio";
-  version = "2.9.1";
+  version = "2.11.1";
   format = "wheel";
 
   src =
     let
-      pyVerNoDot = lib.replaceStrings [ "." ] [ "" ] python.pythonVersion;
       unsupported = throw "Unsupported system";
-      srcs = (import ./binary-hashes.nix version)."${stdenv.system}-${pyVerNoDot}" or unsupported;
+      srcs = (import ./binary-hashes.nix finalAttrs.version).${stdenv.system} or unsupported;
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  disabled = pythonAtLeast "3.15";
 
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6
@@ -49,7 +47,7 @@ buildPythonPackage rec {
 
       # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
       # libnvToolsExt-$hash.so.1
-      cuda_nvtx
+      nvtx
     ]
   );
 
@@ -60,7 +58,7 @@ buildPythonPackage rec {
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
@@ -71,8 +69,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
+    changelog = "https://github.com/pytorch/audio/releases/tag/v${finalAttrs.version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
@@ -88,4 +87,4 @@ buildPythonPackage rec {
       junjihashimoto
     ];
   };
-}
+})

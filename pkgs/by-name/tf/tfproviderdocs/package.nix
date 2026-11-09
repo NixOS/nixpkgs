@@ -4,14 +4,14 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tfproviderdocs";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "bflad";
     repo = "tfproviderdocs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KCkohIGkh6sg/e0qBi90hMqh/XQQNCBF6Di6V2gxqak=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/bflad/tfproviderdocs/version.Version=${version}"
+    "-X github.com/bflad/tfproviderdocs/version.Version=${finalAttrs.version}"
     "-X github.com/bflad/tfproviderdocs/version.VersionPrerelease="
   ];
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tembleking ];
     mainProgram = "tfproviderdocs";
   };
-}
+})

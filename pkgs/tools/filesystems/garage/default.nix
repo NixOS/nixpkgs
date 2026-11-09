@@ -2,11 +2,17 @@
   lib,
   rustPlatform,
   fetchFromGitea,
-  openssl,
+  fetchpatch2,
+  installShellFiles,
+  libsodium,
   pkg-config,
   protobuf,
+  sqlite,
+  zstd,
   cacert,
+  nix-update-script,
   nixosTests,
+  stdenv,
 }:
 let
   generic =
@@ -26,31 +32,39 @@ let
         domain = "git.deuxfleurs.fr";
         owner = "Deuxfleurs";
         repo = "garage";
-        rev = "v${version}";
+        tag = "v${version}";
         inherit hash;
       };
 
       inherit cargoHash cargoPatches;
 
       nativeBuildInputs = [
+        installShellFiles
         protobuf
         pkg-config
       ];
 
       buildInputs = [
-        openssl
+        libsodium
+        sqlite
+        zstd
       ];
 
       checkInputs = [
         cacert
       ];
 
-      env.OPENSSL_NO_VENDOR = true;
+      env = {
+        SODIUM_USE_PKG_CONFIG = true;
+        LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+        ZSTD_SYS_USE_PKG_CONFIG = true;
+      };
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.1.0/nix/compile.nix#L71-L78
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.4.1/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
+      buildNoDefaultFeatures = true;
       buildFeatures = [
-        "bundled-libs"
+        "system-libs"
         "consul-discovery"
         "fjall"
         "journald"
@@ -63,7 +77,25 @@ let
         "telemetry-otlp"
       ];
 
-      passthru.tests = nixosTests."garage_${lib.versions.major version}";
+      postInstall =
+        lib.optionalString
+          ((lib.versionAtLeast version "2.3.0") && (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+          ''
+            installShellCompletion --cmd garage \
+              --bash <($out/bin/garage completions bash) \
+              --fish <($out/bin/garage completions fish) \
+              --zsh <($out/bin/garage completions zsh)
+          '';
+
+      passthru = {
+        tests = nixosTests."garage_${lib.versions.major version}";
+        updateScript = nix-update-script {
+          extraArgs = [
+            "--version-regex"
+            "v(${lib.versions.major version}\\.[0-9.]+)"
+          ];
+        };
+      };
 
       meta = {
         description = "S3-compatible object store for small self-hosted geo-distributed deployments";
@@ -71,29 +103,29 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
-          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
+          herbetom
         ];
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
         mainProgram = "garage";
+        platforms = lib.platforms.linux;
       };
     };
 in
-rec {
+{
   garage_1 = generic {
-    version = "1.3.0";
-    hash = "sha256-6w+jun0UmQHmoXcokGpPM95BbQyOKefTeAelAFKxNCM=";
-    cargoHash = "sha256-mWLsOTWxzMdDfzEDu+WHJ12SVscEVfBVuOTVFbfnk0g=";
+    version = "1.3.1";
+    hash = "sha256-wkCnJmbulnhzwHvzdpzh9MRceOzmPdhOogffwhqNGPg=";
+    cargoHash = "sha256-jfYe2A6zkVgTLrWBDbahICSKCRO3FwsBPNSVFapH0Rs=";
+    eol = true;
   };
 
   garage_2 = generic {
-    version = "2.1.0";
-    hash = "sha256-GGwF6kVIJ7MPvO6VRj2ebquJEjJQBwpW18P6L2sGVDs=";
-    cargoHash = "sha256-0pT2fqseN1numJZdC0FFg1JXbDq1YmlmBPQVbOpxtkw=";
+    version = "2.5.0";
+    hash = "sha256-5jWgH+hi0Ouqszapw00KOBHFjxlV/y4T7IB22IRaEHE=";
+    cargoHash = "sha256-xk1lMNnGp4qWK7BvgdUKIvc+cR5HDw0GFfV6q64yMso=";
   };
-
-  garage = garage_1;
 }

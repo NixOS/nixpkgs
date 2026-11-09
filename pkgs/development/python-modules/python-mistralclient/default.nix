@@ -19,24 +19,25 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
   tempest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mistralclient";
-  version = "6.1.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
-    tag = version;
-    hash = "sha256-8tB1QPaxdLdti96gOzaXuqLftmTJVM0bosJiKs+0CFs=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ohotgzzjs2N2U41re2dsK5FZ21uuPpBmiu86DPS9uYw=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -69,23 +70,17 @@ buildPythonPackage rec {
     oslotest
     osprofiler
     requests-mock
-    stestr
+    stestrCheckHook
     tempest
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "mistralclient" ];
 
   meta = {
     description = "OpenStack Mistral Command-line Client";
-    homepage = "https://opendev.org/openstack/python-mistralclient/";
+    homepage = "https://github.com/openstack/python-mistralclient";
     license = lib.licenses.asl20;
     mainProgram = "mistral";
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -11,15 +11,15 @@
   xdg-utils,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpodder";
   version = "3.11.5";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "gpodder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Hhk9JeHMg+FrekiNXP6Q8loCtst+FHT4EJTnh64VOhc=";
   };
 
@@ -84,7 +84,12 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xdg-utils ])
+  ];
 
   passthru.updateScript = gitUpdater { };
 
@@ -99,4 +104,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

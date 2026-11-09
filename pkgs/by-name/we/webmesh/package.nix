@@ -7,14 +7,14 @@
   webmesh,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webmesh";
   version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "webmeshproj";
     repo = "webmesh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Inh7j01/xBJgGYmX1tGBRNYjn1N4AO2sywBwZ8yXlsY=";
   };
 
@@ -31,8 +31,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/webmeshproj/webmesh/pkg/version.Version=${version}"
-    "-X github.com/webmeshproj/webmesh/pkg/version.GitCommit=v${version}"
+    "-X github.com/webmeshproj/webmesh/pkg/version.Version=${finalAttrs.version}"
+    "-X github.com/webmeshproj/webmesh/pkg/version.GitCommit=v${finalAttrs.version}"
   ];
 
   passthru = {
@@ -51,4 +51,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

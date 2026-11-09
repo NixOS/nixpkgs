@@ -10,8 +10,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-prometheus";
-    rev = "a1e0ba671e13ceb9541a4d62d3ff7d206393d438";
-    sha256 = "sha256-tZdRbLxUs4qPbN39g/y1dVCa0b+6Pk8uvCvsKVbUkMk=";
+    rev = "635f45bf06cc2fba9b5c3e1b0a06398bdd0ec718";
+    sha256 = "sha256-tEfejuJ7cBVXfSiee1kE4EWqYqBWiLtQABE2PKCbZbM=";
   };
 
   patches = [
@@ -23,7 +23,6 @@ mkDiscoursePlugin {
 
   meta = {
     homepage = "https://github.com/discourse/discourse-prometheus";
-    maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
     description = "Official Discourse Plugin for Prometheus Monitoring";
   };

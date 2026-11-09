@@ -4,7 +4,7 @@
   name = "firefoxpwa";
   meta.maintainers = with lib.maintainers; [ camillemndn ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       imports = [ ./common/x11.nix ];
@@ -26,9 +26,12 @@
   testScript = ''
     machine.start()
 
-    with subtest("Install a progressive web app"):
+    with subtest("Wait for Jellyfin to be ready"):
         machine.wait_for_unit("jellyfin.service")
         machine.wait_for_open_port(8096)
+        machine.wait_until_succeeds("curl -fs http://localhost:8096/web/manifest.json")
+
+    with subtest("Install a progressive web app"):
         machine.succeed("firefoxpwa site install http://localhost:8096/web/manifest.json >&2")
 
     with subtest("Launch the progressive web app"):

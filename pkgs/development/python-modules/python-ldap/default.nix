@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   distutils,
@@ -19,22 +20,23 @@
   jaraco-functools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ldap";
-  version = "3.4.5";
+  version = "3.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
-    tag = "python-ldap-${version}";
-    hash = "sha256-olRu5HacRKaAcNbQczA+UCbDxhySUOO7qH0KdWlSbT0=";
+    tag = "python-ldap-${finalAttrs.version}";
+    hash = "sha256-EvLH8Yyx2iEde4OFk9MkzPtPr/n7NnGxAb8xJTo8Tn8=";
   };
 
-  postPatch = ''
-    # unused in 3.4.5; https://github.com/python-ldap/python-ldap/pull/597
-    sed -i "/setuptools-scm/d" pyproject.toml
-  '';
+  patches = [
+    # 20261023: can remove patch once it's upstreamed
+    #   https://github.com/python-ldap/python-ldap/issues/687#issuecomment-6360014514
+    ./001-test-simple-bind-fileno-invalid.patch
+  ];
 
   build-system = [
     distutils
@@ -64,19 +66,19 @@ buildPythonPackage rec {
     export SCHEMA="${openldap}/etc/schema"
   '';
 
-  disabledTests = [
-    # https://github.com/python-ldap/python-ldap/issues/501
-    "test_tls_ext_noca"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python modules for implementing LDAP clients";
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
-    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
-    license = lib.licenses.psfl;
-    maintainers = [ ];
+    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.AND [
+      lib.licenses.psfl
+      lib.licenses.mit # for contributions after 2021-07-01 and specific contributors
+    ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
-}
+})

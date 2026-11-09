@@ -16,5 +16,8 @@ mkKdeDerivation {
     qttools
   ];
   extraPropagatedBuildInputs = [ kcmutils ];
+
+  dontQmlLint = true; # weird namespace setup
+
   meta.mainProgram = "knewstuff-dialog6";
 }

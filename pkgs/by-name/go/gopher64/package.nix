@@ -1,100 +1,127 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
+  rustPlatform,
+
+  # nativeBuildInputs
+  cargo-bundle,
+  cctools,
   pkg-config,
 
-  bzip2,
-  libGL,
-  libX11,
-  libXcursor,
-  libxkbcommon,
-  libXi,
+  # buildInputs
+  fontconfig,
   moltenvk,
+  openssl,
   sdl3,
-  wayland,
+  sdl3-ttf,
+  vulkan-loader,
   zstd,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gopher64";
-  version = "1.0.17";
+  version = "1.1.42";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gopher64";
     repo = "gopher64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DDFtPISV17jQMECBIqYbbGhZpjYXuNnOq7EiEVtSzgc=";
     fetchSubmodules = true;
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse HEAD > $out/GIT_REV
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    hash = "sha256-kVX0lcdo9tuUr5rFyipeXh6Ru6RngUHgYz44CMWxses=";
   };
 
   cargoPatches = [
-    # upstream rebuilds SDL3 from source
-    # this patch makes it use the SDL3 library provided by nixpkgs
+    # upstream builds SDL3 from source or uses a prebuilt binary
+    # this patch makes the package use the SDL3 dynamic library provided by nixpkgs
     ./use-sdl3-via-pkg-config.patch
 
-    # make the build script use the @GIT_REV@ string that will be substituted in the logic below
-    ./set-git-rev.patch
-
-    # enum CicType is not used, but dead code is treated as an error
-    ./allow-unused-type.patch
+    ./no-lto.patch
+    ./no-git-describe.patch
+    ./no-homebrew.patch
   ];
 
+  cargoHash = "sha256-JFTe2Tpiej3G56rRfyn62pAA7PK8C/fQEcgQwChz2mw=";
+
+  # don't use lld on aarch64-linux
   postPatch = ''
-    # use the file generated in the fetcher to supply the git revision
-    substituteInPlace build.rs \
-      --replace-fail "@GIT_REV@" $(cat GIT_REV)
+    substituteInPlace .cargo/config.toml \
+      --replace-fail 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' ""
   '';
 
-  cargoHash = "sha256-31kEYwlDA6iYcwPZyQU4gM/VLfPNeYcDKhhBqzNp/QE=";
-
-  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    OPENSSL_NO_VENDOR = "1";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+    GIT_DESCRIBE = finalAttrs.version;
+  };
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+    cctools.libtool
   ];
 
   buildInputs = [
-    bzip2
+    fontconfig
+    openssl
     sdl3
+    sdl3-ttf
     zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    moltenvk
   ];
 
-  # these are dlopen-ed during runtime
-  runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux [
-    libGL
-    libxkbcommon
+  # no checks
+  doCheck = false;
 
-    # for X11
-    libX11
-    libXcursor
-    libXi
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
 
-    # for wayland
-    wayland
-  ];
+    # cargo-bundle expects the binary in target/release
+    release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    mv $release_target/gopher64 target/release/gopher64
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/bin/gopher64 --add-rpath ${lib.makeLibraryPath finalAttrs.runtimeDependencies}
+    export CARGO_BUNDLE_SKIP_BUILD=true
+    app_path=$(cargo bundle --release --format osx | xargs)
+
+    mkdir -p $out/Applications $out/bin
+    mv $app_path $out/Applications/
+
+    ln -s $out/Applications/Gopher64.app/Contents/MacOS/gopher64 $out/bin/gopher64
+
+    runHook postInstall
   '';
 
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf "$out/bin/gopher64" \
+        --add-rpath "${lib.makeLibraryPath [ vulkan-loader ]}"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool $out/Applications/Gopher64.app/Contents/MacOS/gopher64 \
+        -add_rpath "${lib.makeLibraryPath [ moltenvk ]}"
+    '';
+
+  # Error: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
-    changelog = "https://github.com/gopher64/gopher64/releases/tag/${finalAttrs.src.tag}";
-    description = "N64 emulator written in Rust";
-    homepage = "https://github.com/gopher64/gopher64";
+    description = "N64 emulator";
+    homepage = "https://loganmc10.itch.io/gopher64";
+    downloadPage = "https://github.com/gopher64/gopher64/releases";
+    changelog = "https://github.com/gopher64/gopher64/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      prince213
+      tomasajt
+    ];
     mainProgram = "gopher64";
-    maintainers = with lib.maintainers; [ tomasajt ];
   };
 })

@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/9999years/git-prole";
     changelog = "https://github.com/9999years/git-prole/releases/tag/v${version}";
     description = "`git-worktree(1)` manager";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-prole";
   };

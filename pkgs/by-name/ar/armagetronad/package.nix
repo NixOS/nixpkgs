@@ -23,13 +23,14 @@
   libGL,
   libGLU,
   libpng,
-  libX11,
+  libx11,
   libxml2,
   protobuf,
   xvfb-run,
   gnugrep,
   nixosTests,
   dedicatedServer ? false,
+  ...
 }:
 
 let
@@ -45,14 +46,20 @@ let
           repo = "armagetronad";
           inherit rev hash;
         };
+
+      # abseil (via protobuf) requires C++20, but configure prefers C++17.
+      cxx20PostPatch = ''
+        substituteInPlace configure.ac \
+          --replace-fail "AX_CXXFLAGS_GCC_OPTION(-std=c++17)" "AX_CXXFLAGS_GCC_OPTION(-std=c++20)"
+      '';
     in
     {
       # https://gitlab.com/armagetronad/armagetronad/-/tags
       ${latestVersionMajor} =
         let
-          version = "${latestVersionMajor}.2.5";
+          version = "${latestVersionMajor}.3.1";
           rev = "v${version}";
-          hash = "sha256-bj+oUqz0WHAjZ0iS7GlbIfLeMFSPQkH99mPaLdapkPo=";
+          hash = "sha256-uC6GPt4ddnsKW2EnkDdqP9Cj4rbunbwty6hpE/ZiXJA=";
         in
         dedicatedServer: {
           inherit version;
@@ -60,7 +67,7 @@ let
           extraBuildInputs = lib.optionals (!dedicatedServer) [
             libGL
             libGLU
-            libX11
+            libx11
             libpng
             SDL
             SDL_image
@@ -71,8 +78,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "3675f21cd5be4932a7a168b321576e0b09e64aaf";
-          hash = "sha256-d2vPFAyx6LhEIxtEUdhrlqqYeCY0NnETlq7TVvX5vVo=";
+          rev = "bd705b0b659399194a2472ae52e523d1124ea90d";
+          hash = "sha256-66rX8C8L4hZ1GgE+J3mh0O/dGvdymLbv1VwtdaV5s6c=";
         in
         dedicatedServer: {
           version = "${unstableVersionMajor}-${lib.substring 0 8 rev}";
@@ -87,19 +94,23 @@ let
             freetype
             libGL
             libGLU
-            libX11
+            libx11
             SDL2
             SDL2_image
             SDL2_mixer
           ];
-          extraNativeBuildInputs = [ bison ];
+          extraNativeBuildInputs = [
+            bison
+            protobuf.dev
+          ];
+          postPatch = cxx20PostPatch;
         };
 
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
       "${latestVersionMajor}-sty+ct+ap" =
         let
-          rev = "22fdbee08ca301c09ae4dee7210ccef02536670d";
-          hash = "sha256-F+nnQxI2TTTa+gJYWjQPFjd8tQLCh/dEu/oTV0ie8BI=";
+          rev = "940b919d0f309274293cd0d090d2116091d6b641";
+          hash = "sha256-bOUy0t8cbJdbororhEtAufE7mKTQAn/82UNi4U5kyqI=";
         in
         dedicatedServer: {
           version = "${latestVersionMajor}-sty+ct+ap-${lib.substring 0 8 rev}";
@@ -107,7 +118,7 @@ let
           extraBuildInputs = lib.optionals (!dedicatedServer) [
             libGL
             libGLU
-            libX11
+            libx11
             libpng
             SDL
             SDL_image
@@ -144,6 +155,8 @@ let
     stdenv.mkDerivation {
       pname = mainProgram;
       inherit (resolvedParams) version src;
+
+      postPatch = resolvedParams.postPatch or "";
 
       # Build works fine; install has a race.
       enableParallelBuilding = true;

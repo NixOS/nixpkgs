@@ -1,24 +1,22 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "2.3.0";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
-    hash = "sha256-kAzV9zchgxB2CmdWOa1vRuhRDSE0qTon9sVvmo9AeB0=";
+    hash = "sha256-0MrT99GbtBrYkKxathl51YvaKnyflNQgwnp8JP1zrRc=";
   };
 
   postPatch = ''
@@ -32,6 +30,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "govee_local_api" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_reuseaddr_and_broadcast_are_set"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library to communicate with Govee local API";

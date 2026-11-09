@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "piping-server-rust";
   version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "nwtgck";
     repo = "piping-server-rust";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8kYaANVWmBOncTdhtjjbaYnEFQeuWjemdz/kTjwj2fw=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Infinitely transfer between every device over pure HTTP with pipes or browsers";
     homepage = "https://github.com/nwtgck/piping-server-rust";
-    changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nwtgck/piping-server-rust/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "piping-server";
   };
-}
+})

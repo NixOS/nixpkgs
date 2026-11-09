@@ -9,10 +9,10 @@
   libpulseaudio,
 }:
 let
-  versionMajor = "9.2";
-  versionMinor = "18";
-  versionBuild_x86_64 = "3";
-  versionBuild_i686 = "3";
+  versionMajor = "10.2";
+  versionMinor = "3";
+  versionBuild_x86_64 = "1";
+  versionBuild_i686 = "1";
 in
 stdenv.mkDerivation rec {
   pname = "nomachine-client";
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
-        sha256 = "sha256-/ElNG6zIOdE3Qwf/si9fKXMLxM81ZmRZmvbc6rw/M0c=";
+        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
+        hash = "sha256-JOg97ElcbLM6uc6DCAwfGnoytsEgY/BSFmmdIE4oC1o=";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
-        url = "https://download.nomachine.com/download/${versionMajor}/Linux/nomachine_${version}_${versionBuild_i686}_i686.tar.gz";
-        sha256 = "sha256-uLkBprPjYyWN0jwB6rJwG1sLbIg/jAjx57joLBhVwr0=";
+        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${version}_${versionBuild_i686}_i686.tar.gz";
+        hash = "sha256-Shq1vkmOIUwANRLizoUMQPz0ul6MOm+LQJTr+pOTJfU=";
       }
     else
       throw "NoMachine client is not supported on ${stdenv.hostPlatform.system}";
@@ -98,12 +98,13 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nomachine.com/";
     mainProgram = "nxplayer";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = {
-      fullName = "NoMachine 7 End-User License Agreement";
-      url = "https://www.nomachine.com/licensing-7";
+    license = lib.licenses.mkLicense {
+      shortName = "noMachine";
+      fullName = "NoMachine End User License Agreement, version 10";
+      url = "https://www.nomachine.com/licensing/nomachine-end-user-license-agreement";
       free = false;
     };
-    maintainers = with lib.maintainers; [ talyz ];
+    maintainers = with lib.maintainers; [ danc86 ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

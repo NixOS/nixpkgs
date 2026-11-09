@@ -7,27 +7,29 @@
   pep440,
   pip,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setupmeta";
-  version = "3.8.0";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = "setupmeta";
-    tag = "v${version}";
-    hash = "sha256-2SKiIkwfmXVOQBKBNUmw4SjiVpyLjIMpSHNA9IQxqwY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aTSb6wy272Rt3axxG/4gidY515G6g4sQWzBZ31qH9jA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'args["versioning"] = "dev"' 'args["version"] = "${finalAttrs.version}"'
+  '';
+
   preBuild = ''
-    export PYGRADLE_PROJECT_VERSION=${version};
+    export PYGRADLE_PROJECT_VERSION=${finalAttrs.version};
   '';
 
   build-system = [ setuptools ];
@@ -61,7 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to simplify setup.py files";
     homepage = "https://github.com/codrsquad/setupmeta";
+    changelog = "https://github.com/codrsquad/setupmeta/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

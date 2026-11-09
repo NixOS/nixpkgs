@@ -27,12 +27,16 @@ fi
 
 if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
-    echo "structuredAttrs is enabled"
 
-    for outputName in "${!outputs[@]}"; do
-        # ex: out=/nix/store/...
-        export "$outputName=${outputs[$outputName]}"
-    done
+    _exportOutputsByName() {
+        local outputName
+        for outputName in "${!outputs[@]}"; do
+            # ex: out=/nix/store/...
+            export "$outputName=${outputs[$outputName]}"
+        done
+    }
+
+    _exportOutputsByName
 else
     __structuredAttrs=
     : "${outputs:=out}"
@@ -1313,10 +1317,11 @@ unpackPhase() {
     # source archives, we record the contents of the current
     # directory, then look below which directory got added.  Yeah,
     # it's rather hacky.
-    local dirsBefore=""
+    local -a dirsBefore=()
+    local dirBefore
     for i in *; do
         if [ -d "$i" ]; then
-            dirsBefore="$dirsBefore $i "
+            dirsBefore+=("$i")
         fi
     done
 
@@ -1335,17 +1340,17 @@ unpackPhase() {
     elif [ -z "$sourceRoot" ]; then
         for i in *; do
             if [ -d "$i" ]; then
-                case $dirsBefore in
-                    *\ $i\ *)
-                        ;;
-                    *)
-                        if [ -n "$sourceRoot" ]; then
-                            echo "unpacker produced multiple directories"
-                            exit 1
-                        fi
-                        sourceRoot="$i"
-                        ;;
-                esac
+                for dirBefore in "${dirsBefore[@]}"; do
+                    if [ "$i" = "$dirBefore" ]; then
+                        continue 2
+                    fi
+                done
+
+                if [ -n "$sourceRoot" ]; then
+                    echo "unpacker produced multiple directories"
+                    exit 1
+                fi
+                sourceRoot="$i"
             fi
         done
     fi
@@ -1455,7 +1460,16 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        prependToVar configureFlags "${prefixKey:---prefix=}$prefix"
+        # For __structuredAttrs: if prefixKey ends in a space,
+        # we need to add the prefixKey and the prefix as separate entries,
+        # and since we prepend, we do it in reverse order.
+        local -r prefixKeyOrDefault="${prefixKey:---prefix=}"
+        if [ "${prefixKeyOrDefault: -1}" = " " ]; then
+            prependToVar configureFlags "$prefix"
+            prependToVar configureFlags "${prefixKeyOrDefault::-1}"
+        else
+            prependToVar configureFlags "$prefixKeyOrDefault$prefix"
+        fi
     fi
 
     if [[ -f "$configureScript" ]]; then

@@ -7,15 +7,15 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "parse-argv";
   version = "0.2.0";
 
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/parse-argv/releases/download/v${version}/parse-argv-v${version}.tbz";
-    sha256 = "06dl04fcmwpkydzni2fzwrhk0bqypd55mgxfax9v82x65xrgj5gw";
+    url = "https://github.com/mirage/parse-argv/releases/download/v${finalAttrs.version}/parse-argv-v${finalAttrs.version}.tbz";
+    hash = "sha256-/BX5ci+mC7RTV66/Wkq7Hi8wYebfiWh/8/PyyhwBtBk=";
   };
 
   propagatedBuildInputs = [ astring ];
@@ -29,4 +29,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

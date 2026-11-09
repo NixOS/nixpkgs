@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   altair,
   ipytablewidgets,
   ipywidgets,
@@ -17,9 +16,7 @@
 buildPythonPackage rec {
   pname = "vega";
   version = "4.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -52,6 +49,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # these tests are broken with jupyter-notebook >= 7
     "vega/tests/test_entrypoint.py"
+
+    # (from pandas) ValueError("Invalid frequency: H. Failed to parse with error message: KeyError('H'). Did you mean h?")
+    "vega/tests/test_utils.py::test_sanitize_dataframe"
   ];
 
   pythonImportsCheck = [ "vega" ];

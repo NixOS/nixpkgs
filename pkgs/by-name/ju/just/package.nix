@@ -5,6 +5,7 @@
   rustPlatform,
   bashInteractive,
   coreutils,
+  installAgentSkills,
   installShellFiles,
   libiconv,
   mdbook,
@@ -16,12 +17,10 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-let
-  version = "1.45.0";
-in
-rustPlatform.buildRustPackage {
-  inherit version;
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "just";
+  version = "1.59.0";
   outputs = [
     "out"
   ]
@@ -30,18 +29,22 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
-    tag = version;
-    hash = "sha256-D+xMPpn8JLX88eIO9zY051K81KPGBhcFvhBIwuTDymk=";
+    tag = finalAttrs.version;
+    hash = "sha256-3VMa1BhVIstQNg9Vl0WsVwWe9OKoqGywWZvmdWJOiBM=";
   };
 
-  cargoHash = "sha256-zokI+mWyI/HmzP7GuO59usEsscl3tpeyhNT2tXmLny8=";
+  cargoHash = "sha256-eFHruoEJXQdyryoQMH88vfqo3gXfjdFqlcqq2usNPC8=";
 
-  nativeBuildInputs =
-    lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
-    ++ lib.optionals withDocumentation [ mdbook ];
+  nativeBuildInputs = [
+    installAgentSkills
+  ]
+  ++ lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
+  ++ lib.optionals withDocumentation [ mdbook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -49,6 +52,7 @@ rustPlatform.buildRustPackage {
     export USER=just-user
     export USERNAME=just-user
     export JUST_CHOOSER="${coreutils}/bin/cat"
+    export XDG_RUNTIME_DIR=$(mktemp -d)
 
     # Prevent string.rs from being changed
     cp tests/string.rs $TMPDIR/string.rs
@@ -66,10 +70,6 @@ rustPlatform.buildRustPackage {
     patchShebangs tests
   '';
 
-  patches = [
-    ./fix-just-path-in-tests.patch
-  ];
-
   cargoBuildFlags = [
     "--package=just"
   ]
@@ -82,6 +82,7 @@ rustPlatform.buildRustPackage {
     "--skip=config::tests::show_arguments" # interferes with JUST_CHOOSER being set
     "--skip=edit::editor_precedence" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=shebang::powershell_shebang_on_unix_has_no_bom" # requires powershell
   ];
 
   postInstall =
@@ -111,14 +112,14 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/casey/just";
-    changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/casey/just/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
-      xrelkd
       jk
       ryan4yin
+      xrelkd
     ];
     mainProgram = "just";
   };
-}
+})

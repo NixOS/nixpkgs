@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "notebook-shim";
   version = "0.2.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";

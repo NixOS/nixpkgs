@@ -5,15 +5,15 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "factplusplus";
   version = "1.6.5";
 
   src = fetchFromBitbucket {
     owner = "dtsarkov";
     repo = "factplusplus";
-    rev = "Release-${version}";
-    sha256 = "wzK1QJsNN0Q73NM+vjaE/vLuGf8J1Zu5ZPAkZNiKnME=";
+    rev = "Release-${finalAttrs.version}";
+    hash = "sha256-wzK1QJsNN0Q73NM+vjaE/vLuGf8J1Zu5ZPAkZNiKnME=";
   };
 
   buildInputs = [ jdk ];
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     broken = !stdenv.hostPlatform.isLinux;
     mainProgram = "FaCT++";
   };
-}
+})

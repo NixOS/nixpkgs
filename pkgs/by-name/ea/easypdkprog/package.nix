@@ -5,14 +5,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easypdkprog";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "free-pdk";
     repo = "easy-pdk-programmer-software";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0hc3gdmn6l01z63hzzwdhbdyy288gh5v219bsfm8fb1498vpnd6f";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ david-sawatzke ];
     platforms = lib.platforms.unix;
   };
-}
+})

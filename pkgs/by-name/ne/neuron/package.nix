@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   readline,
-  xorg,
+  libxext,
+  libxcomposite,
+  libx11,
   mpi,
   cmake,
   bison,
@@ -26,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "neuron";
   version = "8.2.7";
 
-  # format is for pythonModule conversion
-  format = "other";
+  # pyproject is for pythonModule conversion
+  pyproject = false;
 
   nativeBuildInputs = [
     cmake
@@ -42,9 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = optionals useIv [
-    xorg.libX11.dev
-    xorg.libXcomposite.dev
-    xorg.libXext.dev
+    libx11.dev
+    libxcomposite.dev
+    libxext.dev
   ];
 
   propagatedBuildInputs = [

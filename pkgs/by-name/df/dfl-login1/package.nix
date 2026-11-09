@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   qt6,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    systemd
+    systemdLibs
   ];
 
   dontWrapQtApps = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/desktop-frameworks/login1";
     changelog = "https://gitlab.com/desktop-frameworks/login1/-/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

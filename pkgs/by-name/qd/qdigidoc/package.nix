@@ -14,14 +14,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdigidoc";
   version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "DigiDoc4-Client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sp+qlWtsMZHyoG0OVKbhalgak5KIx7C7Rpp0PbKVxK8=";
     fetchSubmodules = true;
   };
@@ -64,7 +64,10 @@ stdenv.mkDerivation rec {
   # LD_LIBRARY_PATH takes precedence for all calling objects, see dlopen(3).
   # https://github.com/open-eid/cmake/pull/35 might be an alternative.
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${opensc}/lib/pkcs11/"
   ];
 
   meta = {
@@ -78,4 +81,4 @@ stdenv.mkDerivation rec {
       mmahut
     ];
   };
-}
+})

@@ -6,10 +6,9 @@
   setuptools,
   pytestCheckHook,
   nvidia-ml-py,
-  pynvml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynvml";
   version = "13.0.1";
   pyproject = true;
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpuopenanalytics";
     repo = "pynvml";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Jwj3cm0l7qR/q5jzwKbD52L7ePYCdzXrYFOceMA776M=";
   };
 
@@ -39,11 +38,13 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  passthru.tests.tester-nvmlInit = cudaPackages.writeGpuTestPython { libraries = [ pynvml ]; } ''
-    from pynvml_utils import nvidia_smi  # noqa: F401
-    nvsmi = nvidia_smi.getInstance()
-    print(nvsmi.DeviceQuery('memory.free, memory.total'))
-  '';
+  passthru.tests.tester-nvmlInit =
+    cudaPackages.writeGpuTestPython { libraries = [ finalAttrs.finalPackage ]; }
+      ''
+        from pynvml_utils import nvidia_smi  # noqa: F401
+        nvsmi = nvidia_smi.getInstance()
+        print(nvsmi.DeviceQuery('memory.free, memory.total'))
+      '';
 
   meta = {
     description = "Unofficial Python bindings for the NVIDIA Management Library";
@@ -52,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
-}
+})

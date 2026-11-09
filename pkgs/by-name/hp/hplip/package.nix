@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
   pkg-config,
   autoreconfHook,
@@ -35,16 +36,21 @@
 let
 
   pname = "hplip";
-  version = "3.25.2";
+  version = "3.26.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    hash = "sha256-6HL/KOslF3Balfbhg576HlCnejOq6JBSeN8r2CCRllM=";
+    url = "mirror://sourceforge/hplip/hplip-${version}.tar.gz";
+    hash = "sha256-X7IjWpy27AfLR4bEBmsVE1nDATJNVKqr9prn7vNWBrM=";
   };
 
   plugin = fetchurl {
-    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
-    hash = "sha256-miz41WYehGVI27tZUjGlRIpctjcpzJPfjR9lLf0WelQ=";
+    url = "https://developers.hp.com/sites/default/files/2026-09/hplip-${version}-plugin.run";
+    # HTTP 403 otherwise
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0 Gecko/20100101 Firefox/150.0"
+    ];
+    hash = "sha256-u4MHEr+sxFZ+hxRSLxNZp0nfNEeGJWyFE+3t8+lFUyU=";
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -70,11 +76,18 @@ let
     "arm64"
   ];
 
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${net-tools}/bin"
+  ];
+
 in
 
 python3Packages.buildPythonApplication {
   inherit pname version;
-  format = "other";
+  pyproject = false;
 
   srcs = [ src ] ++ lib.optional withPlugin plugin;
 
@@ -85,7 +98,7 @@ python3Packages.buildPythonApplication {
     sh "$curSrc" --noexec --keep
   '';
 
-  sourceRoot = "${pname}-${version}";
+  sourceRoot = "hplip-${version}";
 
   buildInputs = [
     libjpeg
@@ -124,7 +137,6 @@ python3Packages.buildPythonApplication {
       usbutils
       dbus-python
       distro
-      distutils
     ]
     ++ lib.optionals withQt5 [
       pyqt5
@@ -148,9 +160,14 @@ python3Packages.buildPythonApplication {
     ./gcc-compatability.patch
 
     # Remove all ImageProcessor functionality since that is closed source
-    (fetchurl {
-      url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
-      hash = "sha256-tNYccuwrcx5WCe7ULk8r8J6MVcUytGspiW64zAvO0qI=";
+    ./remove-imageprocessor.patch
+    # Python 3.14 removed urllib.request.URLopener. Remove references to it until
+    # upstream updates the code accordingly.
+    # See https://bugs.launchpad.net/hplip/+bug/2115046 and
+    # https://bugs.launchpad.net/ubuntu/+source/hplip/+bug/2146570
+    (fetchpatch {
+      url = "https://launchpadlibrarian.net/800485629/hplip-no-urlopener.patch";
+      hash = "sha256-LCd43WnwPo6SBjcxGI3bVryWedDeyKXc9tCF16edDK4=";
     })
   ];
 
@@ -203,12 +220,6 @@ python3Packages.buildPythonApplication {
     ++ lib.optional withStaticPPDInstall "--enable-cups-ppd-install"
     ++ lib.optional withQt5 "--enable-qt5";
 
-  # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
-  # generation of '*.ppd' files.
-  # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
-  # Could not find how to fix the problem in 'ppdc' so this is a workaround.
-  CUPS_DATADIR = "${cups}/share/cups";
-
   makeFlags =
     let
       out = placeholder "out";
@@ -219,7 +230,7 @@ python3Packages.buildPythonApplication {
       "policykit_dir=${out}/share/polkit-1/actions"
       "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
       "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
-      "PYTHONEXECDIR=${out}/lib/python${lib.versions.majorMinor python3Packages.python.version}/site-packages"
+      "PYTHONEXECDIR=${out}/${python3Packages.python.sitePackages}"
       "hplip_confdir=${out}/etc/hp"
       "hplip_statedir=${out}/var/lib/hp"
     ];
@@ -234,6 +245,12 @@ python3Packages.buildPythonApplication {
   enableParallelInstalling = false;
 
   env = {
+    # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
+    # generation of '*.ppd' files.
+    # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
+    # Could not find how to fix the problem in 'ppdc' so this is a workaround.
+    CUPS_DATADIR = "${cups}/share/cups";
+
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-int"
       "-Wno-error=implicit-function-declaration"
@@ -306,7 +323,7 @@ python3Packages.buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     for bin in $out/bin/*; do
       py=$(readlink -m $bin)
@@ -317,10 +334,9 @@ python3Packages.buildPythonApplication {
       ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
-          $makeWrapperArgs "''${gappsWrapperArgs[@]}"
+          ${lib.escapeShellArgs makeWrapperArgs}
     done
   '';
-
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
     # Patch udev rules:
@@ -358,6 +374,6 @@ python3Packages.buildPythonApplication {
           gpl2Plus
         ];
     platforms = lib.attrNames hplipPlatforms;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }

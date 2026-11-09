@@ -41,15 +41,17 @@ python3Packages.buildPythonApplication {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-        mediainfo
-      ]
-    }"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          ffmpeg
+          mediainfo
+        ]
+      }"
+    )
+  '';
 
   meta = {
     description = "Modern yet simple multi-platform video cutter and joiner";

@@ -10,14 +10,18 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "why3find";
-  version = "1.2.0";
+  version = "1.3.0";
+
+  # why3find looks up its dune-site locations in its library directory at
+  # runtime, so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
 
   src = fetchFromGitLab {
     domain = "git.frama-c.com";
     owner = "pub";
     repo = "why3find";
     tag = finalAttrs.version;
-    hash = "sha256-fqB6VrJ79E6KSAnq8TZGNFlvWbDaBNh+gbuRf0CFFy8=";
+    hash = "sha256-G1Cmmo83Le1WRBTeit2NvyXvWpw0yJtd2kRiGMKSPrs=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

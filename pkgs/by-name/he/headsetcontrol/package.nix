@@ -7,15 +7,15 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "headsetcontrol";
-  version = "3.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Sapd";
     repo = "HeadsetControl";
-    rev = version;
-    sha256 = "sha256-9LUqYV0MMTtlFYZCEn81kML5F46GDYWYwoKpO0UORcQ=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-QwgH6w2CFRbH22Dc+MOdbtNZENbjf70XLhQ7D4DnhQc=";
   };
 
   nativeBuildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ leixb ];
     platforms = lib.platforms.all;
   };
-}
+})

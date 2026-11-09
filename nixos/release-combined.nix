@@ -3,8 +3,9 @@
 # succeeds, and all other jobs have finished (they may fail).
 
 {
+  lib ? (import ../lib),
   nixpkgs ? {
-    outPath = (import ../lib).cleanSource ./..;
+    outPath = lib.cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
   },
@@ -26,9 +27,9 @@ let
     set:
     if builtins.isAttrs set then
       if (set.type or "") == "derivation" then
-        set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+        set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: v: removeMaintainers v) set
     else
       set;
 
@@ -43,12 +44,12 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
+  nixpkgs = removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
     }
-  )) [ "unstable" ];
+  );
 
   tested =
     let
@@ -57,7 +58,7 @@ rec {
       onSystems =
         systems: x:
         map (system: "${x}.${system}") (
-          pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
+          lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
         );
     in
     pkgs.releaseTools.aggregate {
@@ -66,7 +67,7 @@ rec {
         description = "Release-critical builds for the NixOS channel";
         maintainers = [ ];
       };
-      constituents = pkgs.lib.concatLists [
+      constituents = lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
@@ -78,7 +79,6 @@ rec {
         (onFullSupported "nixos.tests.acme.dns01")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosCdrom")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosUsb")
-        (onFullSupported "nixos.tests.boot-stage1")
         (onFullSupported "nixos.tests.boot.uefiCdrom")
         (onFullSupported "nixos.tests.boot.uefiUsb")
         (onFullSupported "nixos.tests.chromium")
@@ -99,7 +99,6 @@ rec {
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
         (onFullSupported "nixos.tests.gitlab.gitlab")
-        (onFullSupported "nixos.tests.gitlab.runner")
         (onFullSupported "nixos.tests.gnome")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
@@ -166,7 +165,7 @@ rec {
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
-        (onFullSupported "nixos.tests.initrd-network-ssh")
+        (onFullSupported "nixos.tests.systemd-initrd-networkd-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")
@@ -181,16 +180,22 @@ rec {
         (onFullSupported "nixos.tests.printing-socket")
         (onFullSupported "nixos.tests.proxy")
         (onFullSupported "nixos.tests.sddm.default")
-        (onFullSupported "nixos.tests.shadow")
-        (onFullSupported "nixos.tests.simple")
+        (onFullSupported "nixos.tests.shadow.login")
+        (onFullSupported "nixos.tests.simple-container")
+        (onFullSupported "nixos.tests.simple-vm")
         (onFullSupported "nixos.tests.sway")
         (onFullSupported "nixos.tests.switchTest")
+        (onFullSupported "nixos.tests.switchTest-basics")
+        (onFullSupported "nixos.tests.switchTest-units")
+        (onFullSupported "nixos.tests.switchTest-user")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         (onSystems [ "x86_64-linux" ] "nixpkgs.mesa_i686") # i686 sanity check + useful
         [
+          # Include all release-critical jobs from nixpkgs-unstable channel
+          "nixpkgs.unstable"
           "nixpkgs.tarball"
           "nixpkgs.release-checks"
         ]

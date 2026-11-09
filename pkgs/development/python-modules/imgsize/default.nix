@@ -3,27 +3,24 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "imgsize";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ojii";
     repo = "imgsize";
     tag = version;
-    sha256 = "sha256-Cm6dywl9QOtF8qZ3L/XHCeNf3mU1ki5l8RUpWQilBPw=";
+    hash = "sha256-5EpmZMszpubl3/vyCufADLwNlrHN3JwnLlLzR4xN2fw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-8vSBsnNqvHlbSj7m09U9fqBMRHnC2qtpMtWp2KYGA08=";
+    hash = "sha256-I62N8iW0CZ2UVzUSqCnOto1otmmRANa4SKszbHBk39w=";
   };
 
   nativeBuildInputs = [

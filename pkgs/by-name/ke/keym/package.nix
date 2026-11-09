@@ -2,14 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXtst,
-  libXi,
+  libx11,
+  libxtst,
+  libxi,
 }:
 
 stdenv.mkDerivation {
   pname = "keym";
-  version = "unstable-2022-07-10";
+  version = "0-unstable-2022-06-10";
 
   src = fetchFromGitHub {
     owner = "cwkx";
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXtst
-    libXi
+    libx11
+    libxtst
+    libxi
   ];
 
   makeFlags = [

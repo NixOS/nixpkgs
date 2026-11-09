@@ -2,30 +2,38 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deploy-rs";
-  version = "0-unstable-2025-12-18";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "d5eff7f948535b9c723d60cd8239f8f11ddc90fa";
-    hash = "sha256-znKOwPXQnt3o7lDb3hdf19oDo0BLP4MfBOYiWkEHoik=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i5dTwfPglZYE1zpg2IvBq+n0wDxMdrLwgHuRxZmO6Tw=";
   };
 
-  cargoHash = "sha256-9O93YTEz+e2oxenE0gwxsbz55clbKo9+37yVOqz7ErE=";
+  cargoHash = "sha256-bgx2aKAYtq/8A2fa8xlhSjh2Jd6Pas5rUF+IiYEoxXQ=";
+
+  # Tests use the FSEvents API on macOS, which the darwin sandbox blocks by default
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.FSEvents"))
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Multi-profile Nix-flake deploy tool";
     homepage = "https://github.com/serokell/deploy-rs";
+    changelog = "https://github.com/serokell/deploy-rs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       teutat3s
       jk
     ];
-    teams = [ lib.teams.serokell ];
     mainProgram = "deploy";
   };
-}
+})

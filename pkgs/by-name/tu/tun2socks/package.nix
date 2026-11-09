@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tun2socks";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "xjasonlyu";
     repo = "tun2socks";
     tag = "v${version}";
-    hash = "sha256-ec4M107BE6MCnW/uz9S83JYJtY9tsQQXDFL98h951DA=";
+    hash = "sha256-eObTZsNy5sBzgM7YNsA6Q4IWazWv3MTywrLtkv7XLOc=";
   };
 
-  vendorHash = "sha256-YAAdyV2p/Ci9RzgVWYXBwR/ctERSQ8SPK7AbwRuUJiI=";
+  vendorHash = "sha256-slsPN0XvE6/8CcAEhSwm743IGYNpIljq1DVTsjpY6lk=";
 
   ldflags = [
     "-w"
@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/xjasonlyu/tun2socks";
     description = "Routes network traffic from any application through a proxy";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tun2socks";
   };

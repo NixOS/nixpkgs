@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   exiftool,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyexiftool";
   version = "0.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sylikc";
@@ -38,10 +35,12 @@ buildPythonPackage rec {
     changelog = "https://github.com/sylikc/pyexiftool/blob/${src.rev}/CHANGELOG.md";
     description = "Python wrapper for exiftool";
     homepage = "https://github.com/sylikc/pyexiftool";
-    license = with lib.licenses; [
-      bsd3 # or
-      gpl3Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        bsd3
+        gpl3Plus
+      ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

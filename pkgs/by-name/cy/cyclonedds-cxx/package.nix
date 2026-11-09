@@ -6,9 +6,9 @@
   cyclonedds,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyclonedds-cxx";
-  version = "0.10.5";
+  version = "11.0.1";
 
   outputs = [
     "out"
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds-cxx";
-    rev = version;
-    hash = "sha256-whFVEQec/Ca+dr6R7z9mMrNg315z3oIWchVT+vQ36So=";
+    tag = finalAttrs.version;
+    hash = "sha256-O6jNvq8NcwLxL7zIDeNdh10XUJ9FjHb3HYfCCa38cyA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ linbreux ];
   };
-}
+})

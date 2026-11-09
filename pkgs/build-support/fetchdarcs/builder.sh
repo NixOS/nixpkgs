@@ -20,7 +20,7 @@ set -o noglob
 success=
 for repository in $repositories; do
     echo "Trying to clone $repository $tagtext into $out …"
-    if darcs clone --lazy $tagflags "$repository" "$out"; then
+    if darcs clone --lazy --no-cache $tagflags "$repository" "$out"; then
         # remove metadata, because it can change
         rm -rf "$out/_darcs"
         success=1

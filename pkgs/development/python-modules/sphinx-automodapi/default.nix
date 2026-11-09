@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "sphinx-automodapi";
     tag = "v${version}";
-    hash = "sha256-L+noKcyhT3wsbgdgyd29I9yCN81BlB8Fvfyl4fKioEw=";
+    hash = "sha256-u7paD0W7sqUaW9A630AG5jjnX6CJT6PhrQtthQvlXhA=";
     leaveDotGit = true;
   };
 

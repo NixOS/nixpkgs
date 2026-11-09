@@ -1,38 +1,43 @@
 {
-  stdenv,
   lib,
-  fetchgit,
-  pkg-config,
+  stdenv,
   addDriverRunpath,
   desktop-file-utils,
+  fetchgit,
+  gitUpdater,
+  gpu-screen-recorder,
+  gtk3,
+  libayatana-appindicator,
+  libdrm,
+  libglvnd,
+  libpulseaudio,
+  libx11,
+  libxrandr,
   makeWrapper,
   meson,
   ninja,
-  gtk3,
-  libayatana-appindicator,
-  libpulseaudio,
-  libdrm,
-  gpu-screen-recorder,
-  libglvnd,
-  libX11,
-  libXrandr,
+  nixosTests,
+  pkg-config,
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
-  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.7.9";
+  version = "5.8.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
-    url = "https://repo.dec05eba.com/${pname}";
-    tag = version;
-    hash = "sha256-RFY5hQqv5XkLliB3+YJX4TXLxV9y1/P8PIYMi6MCbww=";
+    url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
+    tag = finalAttrs.version;
+    hash = "sha256-LOaHYk7c8USZz5p17YdzcgGJ+FZkEt1qn15VggnQyJQ=";
   };
 
   nativeBuildInputs = [
+    addDriverRunpath
     desktop-file-utils
     pkg-config
     makeWrapper
@@ -40,16 +45,17 @@ stdenv.mkDerivation rec {
     ninja
     wrapGAppsHook3
   ];
-
   buildInputs = [
     gtk3
     libayatana-appindicator
     libpulseaudio
     libdrm
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     wayland
   ];
+
+  mesonBuildType = "release";
 
   preFixup =
     let
@@ -60,26 +66,28 @@ stdenv.mkDerivation rec {
     ''
       gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
       gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libglvnd
-          addDriverRunpath.driverLink
-        ]
-      })
     '';
 
-  passthru.updateScript = gitUpdater { };
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gpu-screen-recorder-gtk-wrapped
+    addDriverRunpath $out/bin/.gpu-screen-recorder-gtk-wrapped
+  '';
+
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
-    changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
     description = "GTK frontend for gpu-screen-recorder";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
     license = lib.licenses.gpl3Only;
-    mainProgram = "gpu-screen-recorder-gtk";
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
+    mainProgram = "gpu-screen-recorder-gtk";
   };
-}
+})

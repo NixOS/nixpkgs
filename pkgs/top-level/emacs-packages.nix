@@ -66,7 +66,7 @@ let
   emacsWithPackages =
     { pkgs, lib }:
     pkgs.callPackage ../applications/editors/emacs/build-support/wrapper.nix {
-      inherit (pkgs.xorg) lndir;
+      inherit (pkgs) lndir;
       inherit lib;
     };
 
@@ -146,10 +146,6 @@ lib.makeScope pkgs'.newScope (
 
         # EXWM is not tagged very often, prefer it from elpa devel.
         inherit (elpaDevelPackages) exwm;
-
-        # Telega uploads packages incompatible with stable tdlib to melpa
-        # Prefer the one from melpa stable
-        inherit (melpaStablePackages) telega;
 
       }
     )

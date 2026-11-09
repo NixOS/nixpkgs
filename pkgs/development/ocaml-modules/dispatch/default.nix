@@ -7,7 +7,7 @@
   result,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dispatch";
   version = "0.5.0";
 
@@ -16,8 +16,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-dispatch";
-    rev = version;
-    sha256 = "12r39ylbxc297cbwjadhd1ghxnwwcdzfjk68r97wim8hcgzxyxv4";
+    rev = finalAttrs.version;
+    hash = "sha256-ZHff/2MQ1chPyshM6X5jnNsOX2iwKckXO0mwvqhPI4s=";
   };
 
   propagatedBuildInputs = [ result ];
@@ -27,10 +27,10 @@ buildDunePackage rec {
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
     description = "Path-based dispatching for client- and server-side applications";
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

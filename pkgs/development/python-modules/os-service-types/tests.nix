@@ -4,14 +4,14 @@
   os-service-types,
   oslotest,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
 buildPythonPackage {
   pname = "os-service-types-tests";
   inherit (os-service-types) version src;
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -27,11 +27,7 @@ buildPythonPackage {
     keystoneauth1
     oslotest
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

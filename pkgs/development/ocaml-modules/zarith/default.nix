@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "Zarith";
-    rev = "release-${version}";
+    tag = "release-${version}";
     hash =
       {
         "1.13" = "sha256-CNVKoJeO3fsmWaV/dwnUA8lgI4ZlxR/LKCXpCXUrpSg=";

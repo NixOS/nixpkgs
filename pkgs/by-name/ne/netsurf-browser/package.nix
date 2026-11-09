@@ -9,8 +9,8 @@
   gperf,
   gtk2,
   gtk3,
-  libXcursor,
-  libXrandr,
+  libxcursor,
+  libxrandr,
   libidn,
   libjpeg,
   libjxl,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.11";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-wopiau/uQo0FOxP4i1xECSIkWXZSLRLq8TfP0y0gHLI=";
   };
 
@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     check
     curl
     gperf
-    libXcursor
-    libXrandr
+    libxcursor
+    libxrandr
     libidn
     libjpeg
     libjxl
@@ -145,6 +145,15 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "TARGET=${uilib}"
   ];
+
+  postInstall = ''
+    # Unused in our configuration.
+    # See https://github.com/netsurf-browser/netsurf/blob/9d93ad260796dc43cba840d3e28740f2cda56efc/content/fetchers/curl.c#L2071
+    # and grep src for ca_bundle and ca_path to see the platforms that do use it.
+    # We remove it to avoid a false positive when looking for vendored ca-bundles.
+    # https://github.com/NixOS/nixpkgs/issues/576541
+    rm $out/share/ca-bundle.txt
+  '';
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";

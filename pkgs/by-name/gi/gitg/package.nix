@@ -30,13 +30,13 @@
   libdazzle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitg";
-  version = "44";
+  version = "50";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor version}/gitg-${version}.tar.xz";
-    hash = "sha256-NCoxaE2rlnHNNBvT485mWtzuBGDCoIHdxJPNvAMTJTA=";
+    url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor finalAttrs.version}/gitg-${finalAttrs.version}.tar.xz";
+    hash = "sha256-MxIWqGkgzU6KubADbmPOyz4aHRFixhqjG9aSTphagVQ=";
   };
 
   patches = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gitg";
-    changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
     maintainers = with lib.maintainers; [
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

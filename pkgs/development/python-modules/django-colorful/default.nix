@@ -4,19 +4,29 @@
   fetchPypi,
   django,
   setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-colorful";
-  version = "1.3";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/SRvL7KX7QdNxDSZZtM6HILQMIt/sNbvbi52uQzv/7c=";
+    pname = "django_colorful";
+    inherit (finalAttrs) version;
+    hash = "sha256-9mg3SyD22BNaLeRTTKDW2L2z1GI124ZkqNhTLlrw9m4=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm>=8" "setuptools_scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ django ];
 
@@ -31,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

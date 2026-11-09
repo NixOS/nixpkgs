@@ -18,14 +18,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-extras";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
     tag = finalAttrs.version;
-    hash = "sha256-wNYAcWcihMFXWuVfrSzxDVE15MR2+cgnss018FextpU=";
+    hash = "sha256-Y3p3VXltTg7tbVKjLdoBgL6yAlCdKBUEYzyHyqawxBg=";
   };
+
+  patches = [
+    # Fixes finding of printer test page in LSS
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-ui-extras/-/merge_requests/104 merged & in release
+    ./1001-lomiri-ui-extras-fix-cups-testpage-finding.patch
+  ];
 
   postPatch = ''
     substituteInPlace modules/Lomiri/Components/Extras{,/{plugin,PamAuthentication}}/CMakeLists.txt \

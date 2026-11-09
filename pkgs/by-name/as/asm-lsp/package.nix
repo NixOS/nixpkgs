@@ -5,31 +5,28 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  zstd,
+  writableTmpDirAsHomeHook,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asm-lsp";
   version = "0.10.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "asm-lsp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vEilIoIK6fxZBhmyDueP2zvbh1/t2wd4cnq/0y6p+TI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs = [ zstd ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   cargoHash = "sha256-D91n+sx8qwkn/rEWP5ftS/mhmRru43TmKZUyvAc47H0=";
 
-  # tests expect ~/.cache/asm-lsp to be writable
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Language server for NASM/GAS/GO Assembly";
@@ -42,4 +39,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "asm-lsp";
     platforms = lib.platforms.unix;
   };
-}
+})

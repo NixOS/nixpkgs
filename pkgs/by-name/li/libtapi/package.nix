@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   ninja,
   python3,
@@ -57,6 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Check-for-no_exported_symbols-linker-support.patch
     # Fix build on Linux. GCC is more picky than clang about the field order.
     ./0003-Match-designator-order-with-declaration-order.patch
+    # Add missing <cstdint> include for gcc 15.
+    (fetchpatch2 {
+      url = "https://github.com/llvm/llvm-project/commit/e2f25af711425fb238317582441f4bda56131891.patch?full_index=1";
+      hash = "sha256-zJwl4aeX71UR7a8XHpKl4atbw+hEGCHOQmiFLIJirTY=";
+    })
+    # Fix build with GCC on aarch64.
+    # Backport of https://github.com/llvm/llvm-project/commit/d54dfdd1b53ff72344287d250c2b67329792c840.
+    ./0004-Backport-GCC-14-aarch64-fix.patch
   ];
 
   postPatch = ''

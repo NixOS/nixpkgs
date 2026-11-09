@@ -3,9 +3,10 @@
   lib,
   guile-lib,
   akkuPackages,
-  nodePackages,
+  katex,
   perlPackages,
   python3Packages,
+  rPackages,
   runCommand,
   testers,
   writers,
@@ -44,6 +45,8 @@ let
     writePyPy3
     writePython3
     writePython3Bin
+    writeRscript
+    writeRscriptBin
     writeRuby
     writeRust
     writeRustBin
@@ -148,13 +151,14 @@ recurseIntoAttrs {
     );
 
     js = expectSuccessBin (
-      writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
-        var semver = require('semver');
+      writeJSBin "test-writers-js-bin" { libraries = [ katex ]; } ''
+        var katex = require('katex');
 
-        if (semver.valid('1.2.3')) {
-          console.log('success')
+        var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+        if (html instanceof katex.ParseError) {
+          console.log("fail")
         } else {
-          console.log('fail')
+          console.log("success")
         }
       ''
     );
@@ -174,6 +178,12 @@ recurseIntoAttrs {
           - test: success
         """)
         print(y[0]['test'])
+      ''
+    );
+
+    rscript = expectSuccessBin (
+      writeRscriptBin "test-writers-rscript-bin" { } /* R */ ''
+        cat("success")
       ''
     );
 
@@ -253,6 +263,23 @@ recurseIntoAttrs {
       ''
     );
 
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-doc-comment" ''
+          # Doc comment example
+          def main [] {}
+        '';
+      in
+      runCommand "test-writers-nushell-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
+
     babashka = expectSuccess (
       writeBabashka "test-writers-babashka" { } ''
         (println "success")
@@ -319,13 +346,14 @@ recurseIntoAttrs {
     );
 
     js = expectSuccess (
-      writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
-        var semver = require('semver');
+      writeJS "test-writers-js" { libraries = [ katex ]; } ''
+        var katex = require('katex');
 
-        if (semver.valid('1.2.3')) {
-          console.log('success')
+        var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+        if (html instanceof katex.ParseError) {
+          console.log("fail")
         } else {
-          console.log('fail')
+          console.log("success")
         }
       ''
     );
@@ -346,6 +374,17 @@ recurseIntoAttrs {
         """)
         print(y[0]['test'])
       ''
+    );
+
+    rscript = expectSuccess (
+      writeRscript "test-writers-rscript"
+        {
+          libraries = [ rPackages.jsonlite ];
+        }
+        /* R */ ''
+          result <- jsonlite::fromJSON('{"message":"success"}')
+          cat(result$message)
+        ''
     );
 
     # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
@@ -454,6 +493,25 @@ recurseIntoAttrs {
         ''
       )
     );
+
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-path-doc-comment" (
+          writeText "test" ''
+            # Doc comment example
+            def main [] {}
+          ''
+        );
+      in
+      runCommand "test-writers-nushell-path-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
   };
 
   data = recurseIntoAttrs {
@@ -475,7 +533,11 @@ recurseIntoAttrs {
 
     yaml = expectDataEqual {
       file = writeYAML "data.yaml" { hello = "world"; };
-      expected = "hello: world\n";
+      expected = ''
+        %YAML 1.1
+        ---
+        hello: world
+      '';
     };
   };
 
@@ -596,7 +658,7 @@ recurseIntoAttrs {
 
     no-empty-wrapper =
       let
-        bin = writeBashBin "bin" { makeWrapperArgs = [ ]; } ''true'';
+        bin = writeBashBin "bin" { makeWrapperArgs = [ ]; } "true";
       in
       runCommand "run-test-writers-wrapping-no-empty-wrapper" { } ''
         ls -A ${bin}/bin

@@ -5,14 +5,14 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombl";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "snyball";
     repo = "tombl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XHvAgJ8/+ZkBxwZpMgaDchr0hBa1FXAd/j1+HH9N6qw=";
   };
 
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Easily query TOML files from bash";
     homepage = "https://github.com/snyball/tombl";
-    changelog = "https://github.com/snyball/tombl/releases/tag/v${version}";
+    changelog = "https://github.com/snyball/tombl/releases/tag/v${finalAttrs.version}";
     mainProgram = "tombl";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ oskardotglobal ];
   };
-}
+})

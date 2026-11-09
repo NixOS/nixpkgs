@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   dill,
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,9 @@ buildPythonPackage rec {
   version = "0.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # AttributeError: module 'ast' has no attribute 'Num'
+  # https://docs.python.org/3/whatsnew/3.14.html#id9
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "google";

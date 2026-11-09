@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lobtui";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "lobtui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ig/KdCuQZYSiCydouN29IsIRKh8qngtzcOknTozDRRM=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "lobtui";
     platforms = lib.platforms.linux;
   };
-}
+})

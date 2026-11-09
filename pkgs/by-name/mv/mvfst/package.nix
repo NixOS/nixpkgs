@@ -10,6 +10,7 @@
   folly,
   gflags,
   glog,
+  openssl,
 
   fizz,
 
@@ -22,24 +23,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.10.13.00";
+  version = "2026.07.27.00";
 
   outputs = [
-    "bin"
     "out"
     "dev"
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bsg+Zqv+aEDH6r6lZazCG25Wj2zG/VSgpmEOKrb44/k=";
+    hash = "sha256-H5T039YtYWP01UFtg7Y/7uGt9jhYEa7Q7j/9JhhSDfw=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     folly
     gflags
     glog
+    openssl
   ];
 
   propagatedBuildInputs = [
@@ -95,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Make sure the libraries the `tperf` binary uses are installed.
     printf 'install(TARGETS mvfst_test_utils)\n' >> quic/common/test/CMakeLists.txt
-    printf 'install(TARGETS mvfst_dsr_backend)\n' >> quic/dsr/CMakeLists.txt
   '';
 
   disabledTests = [
@@ -119,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Implementation of the QUIC transport protocol";
-    homepage = "https://github.com/facebook/mvfst";
+    homepage = "https://github.com/meta/mvfst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

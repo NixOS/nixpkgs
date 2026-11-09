@@ -8,7 +8,6 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   z3-solver,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "deal-solver";
   version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
@@ -27,9 +24,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ flit-core ];
-
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
-  pythonRemoveDeps = [ "z3-solver" ];
 
   dependencies = [
     z3-solver
@@ -50,6 +44,9 @@ buildPythonPackage rec {
     # Flaky tests, sometimes it works sometimes it doesn't
     "test_expr_asserts_ok"
     "test_fuzz_math_floats"
+    "test_model_skip_helpers2"
+    # test does not pass on python314 because an error message has changed
+    "test_type_error__table"
   ];
 
   meta = {

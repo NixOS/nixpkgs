@@ -4,22 +4,22 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "zigpy-cli";
-  version = "1.2.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
-    tag = "v${version}";
-    hash = "sha256-vY6mv5R7A4kVg4Z4nWdm5hgQv6fewyIbOrvhDUuiXa0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fgIxBHJMhyjz0N1NF5iPyI8m/OZlb40kz4bnKqCZnX0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = with python3.pkgs; [
@@ -34,7 +34,6 @@ python3.pkgs.buildPythonApplication rec {
     zigpy
     zigpy-deconz
     zigpy-xbee
-    zigpy-zboss
     zigpy-zigate
     zigpy-znp
   ];
@@ -54,9 +53,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command line interface for zigpy";
     mainProgram = "zigpy";
     homepage = "https://github.com/zigpy/zigpy-cli";
-    changelog = "https://github.com/zigpy/zigpy-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/zigpy/zigpy-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;
   };
-}
+})

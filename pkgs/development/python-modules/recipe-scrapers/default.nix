@@ -11,22 +11,19 @@
   pytestCheckHook,
   responses,
   setuptools,
-  pythonOlder,
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "recipe-scrapers";
-  version = "15.11.0";
+  version = "15.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
-    tag = version;
-    hash = "sha256-S0/RPVeEr/lAPJZSUwCippuXyirYnmaAuesWGYwg6kE=";
+    tag = finalAttrs.version;
+    hash = "sha256-ysoOAhp6sFIn81MmEZth1cuxhyb64p6odOYzY27p6qI=";
   };
 
   build-system = [ setuptools ];
@@ -64,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for scraping recipes data";
     homepage = "https://github.com/hhursev/recipe-scrapers";
-    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${src.tag}";
+    changelog = "https://github.com/hhursev/recipe-scrapers/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

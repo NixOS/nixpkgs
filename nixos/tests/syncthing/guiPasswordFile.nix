@@ -1,10 +1,13 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing-guiPasswordFile";
-  meta.maintainers = with lib.maintainers; [ nullcube ];
+  meta.maintainers = with lib.maintainers; [
+    nullcube
+    me-and
+  ];
   enableOCR = true;
 
-  nodes.machine = {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../common/x11.nix ];
     environment.systemPackages = with pkgs; [
       syncthing
@@ -26,7 +29,7 @@
         insecureAdminAccess = false;
         user = "alice";
       };
-      guiPasswordFile = (pkgs.writeText "syncthing-password-file" ''alice_password'').outPath;
+      guiPasswordFile = (pkgs.writeText "syncthing-password-file" "alice_password").outPath;
     };
   };
 

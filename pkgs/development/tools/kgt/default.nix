@@ -80,6 +80,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "BNF wrangling and railroad diagrams";
     mainProgram = "kgt";
     longDescription = ''
@@ -91,7 +93,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/katef/kgt";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
   };
 
 }

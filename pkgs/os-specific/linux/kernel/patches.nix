@@ -28,30 +28,17 @@
     patch = ./request-key-helper.patch;
   };
 
-  hardened =
-    let
-      mkPatch =
-        kernelVersion:
-        {
-          version,
-          sha256,
-          patch,
-        }:
-        let
-          src = patch;
-        in
-        {
-          name = lib.removeSuffix ".patch" src.name;
-          patch = fetchurl (lib.removeAttrs src [ "extra" ]);
-          extra = src.extra;
-          inherit version sha256;
-        };
-      patches = lib.importJSON ./hardened/patches.json;
-    in
-    lib.mapAttrs mkPatch patches;
+  libbpf_C23_compat = {
+    name = "c23-compat-libbpf";
+    patch = ./C23-compat-6.1.patch;
+  };
 
-  export-rt-sched-migrate = {
-    name = "export-rt-sched-migrate";
-    patch = ./export-rt-sched-migrate.patch;
+  tools_128bit_types = rec {
+    name = "tools-add-128-bit-integer-types-for-aarch64";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://github.com/torvalds/linux/commit/10a47fb67340bca274276faf855d7d460afd9a7a.patch";
+      hash = "sha256-w6ZnvodW2kS3bqtZVvVN5qDt1Zc7fJvnywki3MBsER0=";
+    };
   };
 }

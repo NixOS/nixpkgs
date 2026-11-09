@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitLab,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "sigsum";
-  version = "0.13.1";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "git.glasklar.is";
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "core";
     repo = "sigsum-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GQ8ENsMc9vrAG23wHDPcWVadRVov3XOgR5WxnXtg94A=";
+    hash = "sha256-fmjYDhFchKCYND8h3rNlAg9CyN/rqzWcDXWPW6+Gak4=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "info.Main.Version" '"${finalAttrs.version}"'
   '';
 
-  vendorHash = "sha256-SWNvBEIV25G9lp95DsftFKa48iGUgBQ4RdplJ5D1xUg=";
+  vendorHash = "sha256-f3vuVsGyHMjcUUAqoor6ue0axs4FkiMZcuPiwX3DpFI=";
 
   ldflags = [
     "-s"
@@ -37,7 +37,9 @@ buildGoModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/sigsum-key";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
+  };
 
   meta = {
     description = "System for public and transparent logging of signed checksums";

@@ -12,18 +12,22 @@
   eliom,
   resource-pooling,
   ocsigen-ppx-rpc,
+  js_of_ocaml-ppx_deriving_json,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-ocsigen-start";
-  version = "7.1.0";
+  version = "8.0.0";
 
   nativeBuildInputs = [
     ocaml
     findlib
     eliom
   ];
-  buildInputs = [ ocsigen-ppx-rpc ];
+  buildInputs = [
+    ocsigen-ppx-rpc
+    js_of_ocaml-ppx_deriving_json
+  ];
   propagatedBuildInputs = [
     pgocaml_ppx
     safepass
@@ -42,8 +46,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";
-    rev = version;
-    hash = "sha256-2DFFceUI7BYgGKvJ1sZphLWt/Rusa5Y86yc94Mi/quo=";
+    rev = "b64139e365ab1d244033133629431f7a73e3e054";
+    hash = "sha256-N6bPEibcN7WM23hSK4260+hZWo9PSRoSLjemF7m/9Ic=";
   };
 
   preInstall = ''

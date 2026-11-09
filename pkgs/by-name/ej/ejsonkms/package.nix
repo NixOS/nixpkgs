@@ -6,21 +6,21 @@
   ejsonkms,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ejsonkms";
-  version = "0.2.9";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "envato";
     repo = "ejsonkms";
-    rev = "v${version}";
-    hash = "sha256-IQZYpxY6t7W9a3PKc9o7+MbOOxsa0Hs1H8HneilrdBs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LW471u99QMHQ3r/LooUxEEFgjQq41TIJ/uRd48hSavg=";
   };
 
-  vendorHash = "sha256-xOp02g7F1rb3Zq8lbjvDrYrFrcT+msv/KUqQd2qVKdA=";
+  vendorHash = "sha256-wwyyBPSkAqTdpDdI++KMKDiDN+Mz89oMqbO6eokSb6s=";
 
   ldflags = [
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -30,7 +30,7 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = ejsonkms;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
   };
-}
+})

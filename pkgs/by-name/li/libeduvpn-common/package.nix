@@ -1,34 +1,42 @@
 {
   lib,
   buildGoModule,
-  fetchurl,
+  fetchFromCodeberg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "libeduvpn-common";
-  version = "4.0.0";
+  version = "5.0.3";
 
-  src = fetchurl {
-    url = "https://codeberg.org/eduVPN/eduvpn-common/releases/download/${version}/eduvpn-common-${version}.tar.xz";
-    hash = "sha256-pMxcHiX6Ct6QpU13JnoEyqt7bd58dmOxoncIp6PDvgo=";
+  src = fetchFromCodeberg {
+    owner = "eduVPN";
+    repo = "eduvpn-common";
+    tag = finalAttrs.version;
+    hash = "sha256-tJT0+ZCtiHOcWFBsIFuVocwGTDaj7fCK8B5eu+J1Y50=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-FoYK6f7AvkYf8PjI2JK0Jld/nFQ4Q5fulepqEhw3B4g=";
 
   buildPhase = ''
     runHook preBuild
-    go build -o libeduvpn-common-${version}.so -buildmode=c-shared -tags=release ./exports
+    go build -o libeduvpn-common-${finalAttrs.version}.so -buildmode=c-shared ./exports
     runHook postBuild
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    go test ./...
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/lib libeduvpn-common-${version}.so
+    install -Dt $out/lib libeduvpn-common-${finalAttrs.version}.so
     runHook postInstall
   '';
 
   meta = {
-    changelog = "https://codeberg.org/eduVPN/eduvpn-common/raw/tag/${version}/CHANGES.md";
+    changelog = "https://codeberg.org/eduVPN/eduvpn-common/raw/tag/${finalAttrs.version}/CHANGES.md";
     description = "Code to be shared between eduVPN clients";
     homepage = "https://codeberg.org/eduVPN/eduvpn-common";
     maintainers = with lib.maintainers; [
@@ -38,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

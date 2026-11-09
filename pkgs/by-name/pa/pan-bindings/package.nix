@@ -27,7 +27,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "pan-bindings";
+  pname = "pan-bindings";
 
   inherit src version;
 

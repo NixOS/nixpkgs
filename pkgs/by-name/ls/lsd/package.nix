@@ -4,19 +4,21 @@
   rustPlatform,
   installShellFiles,
   pandoc,
+  pkg-config,
+  libgit2,
   testers,
   lsd,
   git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lsd";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BDwptBRGy2IGc3FrgFZ1rt/e1bpKs1Y0C3H4JfqRqHc=";
   };
 
@@ -25,6 +27,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pandoc
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
   ];
 
   postInstall = ''
@@ -51,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lsd";
   };
-}
+})

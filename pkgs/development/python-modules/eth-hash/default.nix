@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.pycryptodome
   # safe-pysha3 is not available on pypy
-  ++ lib.optional (!isPyPy) optional-dependencies.pysha3;
+  ++ lib.optionals (!isPyPy) optional-dependencies.pysha3;
 
   # Backends need to be tested separately and can not use hook
   checkPhase = ''

@@ -5,15 +5,15 @@
   fontc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "googlesans-code";
-  version = "6.001";
+  version = "7.001";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "googlesans-code";
-    tag = "v${version}";
-    hash = "sha256-ScFx+uty9x+VTWxw7NJm3M7AYr0C00bdSnJJmFW3Jy0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t0WNdfjc2jyg7kkKzwNN57NA9Fw4qK0PxcsxL5/k9XU=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Google Sans Code font family";
     homepage = "https://github.com/googlefonts/googlesans-code";
-    changelog = "https://github.com/googlefonts/googlesans-code/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googlefonts/googlesans-code/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ shiphan ];
     platforms = lib.platforms.all;
   };
-}
+})

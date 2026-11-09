@@ -6,30 +6,42 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpufrequtils";
   version = "008";
 
   src = fetchurl {
-    url = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils-${version}.tar.gz";
+    url = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils-${finalAttrs.version}.tar.gz";
     hash = "sha256-AFOgcYPQaUg70GJhS8YcuAgMV32mHN9+ExsGThoa8Yg=";
   };
 
-  patches = [
-    # I am not 100% sure that this is ok, but it breaks repeatable builds.
-    ./remove-pot-creation-date.patch
-  ];
-
-  patchPhase = ''
-    sed -e "s@= /usr/bin/@= @g" \
-      -e "s@/usr/@$out/@" \
-      -i Makefile
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail /usr/bin/install install
   '';
+
+  makeFlags = [
+    "bindir=$(out)/bin"
+    "sbindir=$(out)/sbin"
+    "mandir=$(man)/man"
+    "includedir=$(dev)/include"
+    "libdir=$(lib)/lib"
+    "localedir=$(out)/share/locale"
+    "docdir=$(man)/share/doc/packages/cpufrequtils"
+    "confdir=$(out)/etc/"
+  ];
 
   buildInputs = [
     stdenv.cc.libc.linuxHeaders
     libtool
     gettext
+  ];
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
   ];
 
   meta = {
@@ -39,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "cpufreq-set";
   };
-}
+})

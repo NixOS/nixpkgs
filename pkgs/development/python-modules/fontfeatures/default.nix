@@ -1,11 +1,9 @@
 {
   lib,
+  babelfont,
   buildPythonPackage,
   fetchPypi,
-  beziers,
   fonttools,
-  fs,
-  glyphtools,
   lxml,
   pytestCheckHook,
   youseedee,
@@ -25,12 +23,13 @@ buildPythonPackage rec {
     hash = "sha256-3PpUgaTXyFcthJrFaQqeUOvDYYFosJeXuRFnFrwp0R8=";
   };
 
-  propagatedBuildInputs = [
-    beziers
+  dependencies = [
     fonttools
-    fs
-    glyphtools
     lxml
+  ];
+
+  optional-dependencies.shaper = [
+    babelfont
     youseedee
   ];
 

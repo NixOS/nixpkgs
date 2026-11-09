@@ -4,24 +4,24 @@
   buildPythonPackage,
   pyserial,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crownstone-uart";
   version = "2.7.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Sc6BCIRbf1+GraTScmV4EAgwtSE/JXNe0f2XhKyACIY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     crownstone-core
     pyserial
   ];
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for communicating with Crownstone USB dongles";
     homepage = "https://github.com/crownstone/crownstone-lib-python-uart";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/crownstone/crownstone-lib-python-uart/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

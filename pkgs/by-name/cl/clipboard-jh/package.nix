@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   libffi,
@@ -8,20 +9,24 @@
   wayland-protocols,
   wayland-scanner,
   wayland,
-  xorg,
+  libx11,
   nix-update-script,
   alsa-lib,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+let
+  # GCC 16 breaks the build; Darwin needs clang for upstream's -fobjc-arc flag.
+  stdenv' = if stdenv.hostPlatform.isDarwin then stdenv else gcc15Stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "clipboard-jh";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3SloqijgbX3XIwdO2VBOd61or7tnByi7w45dCBKTkm8=";
   };
 
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     libffi
     wayland-protocols
     wayland
-    xorg.libX11
+    libx11
     alsa-lib
   ];
 
@@ -63,8 +68,8 @@ stdenv.mkDerivation rec {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "cb";
   };
-}
+})

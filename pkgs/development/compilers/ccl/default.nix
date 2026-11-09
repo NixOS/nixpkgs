@@ -14,86 +14,78 @@ let
     # TODO: there are also FreeBSD and Windows versions
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "sha256-cAae50xvBoXfg+tiJM4i8+eRnheyM0dseE5EDWDia/E=";
+      hash = "sha256-lv/2fFO1bcZ6zAbpL/F3S3NAFWRlBmnJXnxj8SAKT10=";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
+      faslExt = "lx64fsl";
     };
     i686-linux = {
       arch = "linuxx86";
-      sha256 = x86_64-linux.sha256;
+      hash = x86_64-linux.hash;
       runtime = "lx86cl";
       kernel = "linuxx8632";
+      faslExt = "lx32fsl";
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = "sha256-iyUMTDuHbyfEAxAAhjXANjh6HhpLkWG5+diXI6aFUUc=";
+      hash = "sha256-W9vbUwFHmcDmFZLU8/diJPcESqvPgU3ilNW+SrYRpN0=";
       runtime = "armcl";
       kernel = "linuxarm";
-    };
-    x86_64-darwin = {
-      arch = "darwinx86";
-      sha256 = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
-      runtime = "dx86cl64";
-      kernel = "darwinx8664";
+      faslExt = "lafsl";
     };
     armv6l-linux = armv7l-linux;
+    aarch64-linux = {
+      arch = "linuxarm64";
+      hash = "sha256-dmxO9jcI6pFS9FZetZ2Jp5qz3a+FKmnA75FjP4n2EzI=";
+      runtime = "arm64cl";
+      kernel = "linuxarm64";
+      faslExt = "la64fsl";
+    };
+    aarch64-darwin = {
+      arch = "darwinarm64";
+      hash = "sha256-wm2HkFPGaRGC2nec7q23/U4tY9BKSmA8//Wi8SS+AhE=";
+      runtime = "darm64cl";
+      kernel = "darwinarm64";
+      faslExt = "da64fsl";
+    };
   };
   cfg =
     options.${stdenv.hostPlatform.system}
       or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccl";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchurl {
-    url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
-    sha256 = cfg.sha256;
+    url = "https://github.com/Clozure/ccl/releases/download/v${finalAttrs.version}/ccl-${finalAttrs.version}-${cfg.arch}.tar.gz";
+    hash = cfg.hash;
   };
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        bootstrap_cmds
-        m4
-      ]
-    else
-      [
-        glibc
-        m4
-      ];
+  nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
 
-  CCL_RUNTIME = cfg.runtime;
-  CCL_KERNEL = cfg.kernel;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux glibc;
 
-  postPatch =
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-          --replace "M4 = gm4"   "M4 = m4" \
-          --replace "dtrace"     "/usr/sbin/dtrace" \
-          --replace "/bin/rm"    "${coreutils}/bin/rm" \
-          --replace "/bin/echo"  "${coreutils}/bin/echo"
+  env = {
+    CCL_RUNTIME = cfg.runtime;
+    CCL_KERNEL = cfg.kernel;
+  };
 
-        substituteInPlace lisp-kernel/m4macros.m4 \
-          --replace "/bin/pwd" "${coreutils}/bin/pwd"
-      ''
-    else
-      ''
-        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-          --replace "/bin/rm"    "${coreutils}/bin/rm" \
-          --replace "/bin/echo"  "${coreutils}/bin/echo"
+  postPatch = ''
+    substituteInPlace lisp-kernel/${finalAttrs.env.CCL_KERNEL}/Makefile \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-quiet "/bin/echo" "${coreutils}/bin/echo"
 
-        substituteInPlace lisp-kernel/m4macros.m4 \
-          --replace "/bin/pwd" "${coreutils}/bin/pwd"
-      '';
+    substituteInPlace lisp-kernel/m4macros.m4 \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
+  '';
 
   buildPhase = ''
-    make -C lisp-kernel/${CCL_KERNEL} clean
-    make -C lisp-kernel/${CCL_KERNEL} all
+    make -C lisp-kernel/${finalAttrs.env.CCL_KERNEL} clean
+    make -C lisp-kernel/${finalAttrs.env.CCL_KERNEL} all
 
-    ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
+    ./${finalAttrs.env.CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
   '';
 
   installPhase = ''
@@ -101,16 +93,18 @@ stdenv.mkDerivation rec {
     cp -r .  "$out/share/ccl-installation"
 
     mkdir -p "$out/bin"
-    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
-    chmod a+x "$out"/bin/"${CCL_RUNTIME}"
-    ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
+    echo -e '#!${runtimeShell}\n'"$out/share/ccl-installation/${finalAttrs.env.CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}"
+    chmod a+x "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}"
+    ln -s "$out"/bin/"${finalAttrs.env.CCL_RUNTIME}" "$out"/bin/ccl
   '';
 
   hardeningDisable = [ "format" ];
 
+  passthru = {
+    inherit (cfg) faslExt;
+  };
+
   meta = {
-    # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
     homepage = "https://ccl.clozure.com/";
     license = lib.licenses.asl20;
@@ -118,4 +112,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lisp ];
     platforms = lib.attrNames options;
   };
-}
+})

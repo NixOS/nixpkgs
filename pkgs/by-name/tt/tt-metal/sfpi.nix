@@ -5,13 +5,14 @@
   runCommand,
   autoPatchelfHook,
   ncurses,
-  isl_0_23,
   mpfr,
   libmpc,
   xz,
+  zstd,
+  expat,
 }:
 let
-  version = "7.1.0";
+  version = "7.85.0";
 in
 runCommand "sfpi-${version}"
   {
@@ -21,23 +22,30 @@ runCommand "sfpi-${version}"
       autoPatchelfHook
     ];
 
+    # patchelf 0.19 makes cc1plus segfault with the default 4 KiB page size
+    patchelfFlags = [
+      "--page-size"
+      "65536"
+    ];
+
     buildInputs = [
       ncurses
-      isl_0_23
       mpfr
       libmpc
       xz
+      zstd
+      expat
     ];
 
     src =
       {
         aarch64-linux = fetchurl {
-          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_aarch64.txz";
-          hash = "sha256-MzI159hiitk1iyeGfQaDOQZhqGjfafpCMz6zmM3HrYs=";
+          url = "https://github.com/tenstorrent/sfpi/releases/download/${version}/sfpi_${version}_aarch64_debian.txz";
+          hash = "sha256-QumjtO4FNdKYgqEc2PEhpDvdairFmzhDJcAdgEEULhU=";
         };
         x86_64-linux = fetchurl {
-          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_x86_64.txz";
-          hash = "sha256-rQfFveg1ht+jLfk3ZOJadX26+ODE3WW5E0/18eIl7RQ=";
+          url = "https://github.com/tenstorrent/sfpi/releases/download/${version}/sfpi_${version}_x86_64_debian.txz";
+          hash = "sha256-m4iWjFceMWWKg0iwQuNumIsM8O8EeMBQa4B4w/tROcM=";
         };
       }
       ."${stdenv.hostPlatform.system}" or (throw "SFPI does not support ${stdenv.hostPlatform.system}");

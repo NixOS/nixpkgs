@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   procps,
   python3,
   libdwarf,
@@ -15,22 +15,22 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apitrace";
-  version = "13.0";
+  version = "14.0";
 
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
-    rev = version;
-    hash = "sha256-ZZ2RL9nvwvHBEuKSDr1tgRhxBeg+XJKPUvSiHz6g/cg=";
+    rev = finalAttrs.version;
+    hash = "sha256-nZBs5j095p2GerRqeMjAuNVySkLAfWX3mS+9ICXPie4=";
     fetchSubmodules = true;
   };
 
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
   buildInputs = [
-    libX11
+    libx11
     procps
     libdwarf
     gtest
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

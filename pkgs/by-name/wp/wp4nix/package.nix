@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wp4nix";
   version = "1.0.0";
 
@@ -15,8 +15,8 @@ buildGoModule rec {
     domain = "git.helsinki.tools";
     owner = "helsinki-systems";
     repo = "wp4nix";
-    rev = "v${version}";
-    sha256 = "sha256-WJteeFUMr684yZEtUP13MqRjJ1UAeo48AzOPdLEE65w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WJteeFUMr684yZEtUP13MqRjJ1UAeo48AzOPdLEE65w=";
   };
 
   vendorHash = null;
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ onny ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,15 +6,15 @@
   menhir,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "FrontC";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "FrontC";
-    rev = "v${version}";
-    sha256 = "1mi1vh4qgscnb470qwidccaqd068j1bqlz6pf6wddk21paliwnqb";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C1seqbpBzNa4cdd8ileQyICGFWMtcgwOWZbphwncIdY=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -22,10 +22,10 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     inherit (ocaml.meta) platforms;
     description = "C Parsing Library";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.maurer ];
   };
-}
+})

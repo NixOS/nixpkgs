@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powerstat";
-  version = "0.04.05";
+  version = "0.04.06";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "powerstat";
-    rev = "V${version}";
-    hash = "sha256-KR+Nzm9uRISNuqqnlTwfQP1jvSK4lAy//zdn7M8HPLk=";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-naCaCwteDYwIGqvffRGc5AoYMOXHP2OlKMx4zaEztmE=";
   };
 
   installFlags = [
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

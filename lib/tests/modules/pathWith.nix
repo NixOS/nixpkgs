@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 let
   inherit (builtins)
     storeDir
@@ -12,6 +12,8 @@ in
   imports = [
     {
       options = {
+        assertionsResult = mkOption { };
+
         pathInStore = mkOption { type = types.lazyAttrsOf (types.pathWith { inStore = true; }); };
         pathNotInStore = mkOption { type = types.lazyAttrsOf (types.pathWith { inStore = false; }); };
         anyPath = mkOption { type = types.lazyAttrsOf (types.pathWith { }); };
@@ -19,6 +21,13 @@ in
           type = types.lazyAttrsOf (
             types.pathWith {
               inStore = false;
+              absolute = true;
+            }
+          );
+        };
+        absolutePath = mkOption {
+          type = types.lazyAttrsOf (
+            types.pathWith {
               absolute = true;
             }
           );
@@ -85,7 +94,21 @@ in
   absolutePathNotInStore.bad1 = "./this/is/relative";
   absolutePathNotInStore.bad2 = "${storeDir}/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15";
 
+  absolutePath.ok1 = "/var/lib/postgresql";
+  absolutePath.ok2 = {
+    type = "derivation";
+    outPath = abort "do not instantiate (via outPath)";
+    drvPath = abort "do not instantiate (via drvPath)";
+    meta.description = "just a test fixture";
+  };
+
   conflictingPathOptionType = "/foo/bar";
 
   impossiblePathOptionType = "/foo/bar";
+
+  assertionsResult =
+    assert config.absolutePath.ok1 == "/var/lib/postgresql";
+    assert config.absolutePath.ok2.type == "derivation";
+    assert config.absolutePath.ok2.meta.description == "just a test fixture";
+    "ok";
 }

@@ -22,13 +22,13 @@ let
       # mldoc requires Angstrom to expose `unsafe_lookahead`
       (fetchpatch {
         url = "https://github.com/logseq/angstrom/commit/bbe36c99c13678937d4c983a427e02a733d6cc24.patch";
-        sha256 = "sha256-RapY1QJ8U0HOqJ9TFDnCYB4tFLFuThESzdBZqjYuDUA=";
+        hash = "sha256-RapY1QJ8U0HOqJ9TFDnCYB4tFLFuThESzdBZqjYuDUA=";
       })
     ];
   });
   uri' = uri.override { angstrom = angstrom'; };
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mldoc";
   version = "1.5.8";
 
@@ -39,7 +39,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "mldoc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7uuNUFMSQEgakTKfpYixp43gnfpQSW++snBzgr0Ni0Y=";
   };
 
@@ -67,4 +67,4 @@ buildDunePackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
   };
-}
+})

@@ -1,128 +1,158 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   bun,
+  darwin,
   fetchFromGitHub,
-  fzf,
+  installShellFiles,
   makeBinaryWrapper,
   models-dev,
+  nodejs,
   nix-update-script,
   ripgrep,
-  testers,
+  sysctl,
+  versionCheckHook,
+  wayland,
   writableTmpDirAsHomeHook,
 }:
 let
-  pname = "opencode";
-  version = "1.0.224";
-  src = fetchFromGitHub {
-    owner = "sst";
-    repo = "opencode";
-    tag = "v${version}";
-    hash = "sha256-4ozluoXTovh1wpWVzxCN4jUO7cMxZER/0KMOBsJFO64=";
-  };
+  node_modules =
+    finalAttrs:
+    stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
+      __structuredAttrs = true;
+      strictDeps = true;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
 
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
 
-    dontConfigure = true;
+      dontConfigure = true;
 
-    buildPhase = ''
-      runHook preBuild
+      buildPhase = ''
+        runHook preBuild
 
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        bun install \
+          --cpu="*" \
+          --filter './' \
+          --filter './packages/cli' \
+          --filter './packages/desktop' \
+          --filter './packages/app' \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
 
-      bun install \
-        --cpu="*" \
-        --filter=./packages/opencode \
-        --force \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*" \
-        --production
+        bun --bun ./nix/scripts/canonicalize-node-modules.ts
+        bun --bun ./nix/scripts/normalize-bun-binaries.ts
 
-      bun run ./nix/scripts/canonicalize-node-modules.ts
-      bun run ./nix/scripts/normalize-bun-binaries.ts
+        runHook postBuild
+      '';
 
-      runHook postBuild
-    '';
+      installPhase = ''
+        runHook preInstall
 
-    installPhase = ''
-      runHook preInstall
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
 
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+        # opencode targets only Linux and Darwin (see meta.platforms), so the
+        # Windows executables that "bun install --os=*" fetches are never
+        # executed. Dropping them keeps the output reproducible on hosts whose
+        # security endpoint agents scan the store, and removes the vulnerable
+        # bundled 7za.exe that will be quarantined.
+        find $out -type f -name '*.exe' -delete
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
 
-    outputHash = "sha256-+HEd3I11VqejTi7cikbTL5+DmNGyvUC4Cm4ysfujwes=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
+      outputHash =
+        if stdenv.hostPlatform.isLinux then
+          "sha256-UOF9owEBSuVKX/hBhef7Wr4ymlNgTL21BiVBr+9a8Zo="
+        else if stdenv.hostPlatform.isDarwin then
+          "sha256-6VvzodSiEko+Q9UldOJ0V4eV2Gd6JelpYNUMBnI5W/c="
+        else
+          throw "Unsupported platform";
+      outputHashMode = "recursive";
+    };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "opencode";
+  version = "2.2.6";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "anomalyco";
+    repo = "opencode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Of4/r4SKYtxMbHISu8/4yzSpCfHNGuTwfKdAKjNJnM=";
+  };
+
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail \
+        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    # Avoid requiring prettier just to format the schema JSON
+    + ''
+      substituteInPlace packages/cli/script/schema.ts \
+        --replace-fail 'import { format } from "prettier"' 'const format = (s: string) => JSON.stringify(JSON.parse(s), null, 2)'
+    '';
+
+  node_modules = node_modules finalAttrs;
 
   nativeBuildInputs = [
     bun
+    installShellFiles
     makeBinaryWrapper
-    models-dev
+    nodejs
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
-  patches = [
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    ./relax-bun-version-check.patch
-  ];
+  env = {
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+    OPENCODE_VERSION = finalAttrs.version;
+    OPENCODE_CHANNEL = "latest";
+    NODE_OPTIONS = "--max-old-space-size=4096";
+  };
 
-  dontConfigure = true;
+  configurePhase = ''
+    runHook preConfigure
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-  env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "stable";
+    cp -R "$node_modules"/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
+
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    # Copy all node_modules including the .bun directory with actual packages
-    cp -r ${finalAttrs.node_modules}/node_modules .
-    cp -r ${finalAttrs.node_modules}/packages .
-
-    (
-      cd packages/opencode
-
-      # Fix symlinks to workspace packages
-      chmod -R u+w ./node_modules
-      mkdir -p ./node_modules/@opencode-ai
-      rm -f ./node_modules/@opencode-ai/{script,sdk,plugin}
-      ln -s $(pwd)/../../packages/script ./node_modules/@opencode-ai/script
-      ln -s $(pwd)/../../packages/sdk/js ./node_modules/@opencode-ai/sdk
-      ln -s $(pwd)/../../packages/plugin ./node_modules/@opencode-ai/plugin
-
-      # Use upstream bundle.ts for Nix-compatible bundling
-      cp ../../nix/bundle.ts ./bundle.ts
-      chmod +x ./bundle.ts
-      bun run ./bundle.ts
-    )
+    cd ./packages/cli
+    bun --bun ./script/build.ts --single --skip-install
+    bun --bun ./script/schema.ts cli.json
+    bun --bun ../schema/script/config-schema.ts config.json
 
     runHook postBuild
   '';
@@ -130,81 +160,58 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cd packages/opencode
-    if [ ! -d dist ]; then
-      echo "ERROR: dist directory missing after bundle step"
-      exit 1
-    fi
+    install -Dm755 dist/cli-*/bin/opencode $out/bin/opencode
 
-    mkdir -p $out/lib/opencode
-    cp -r dist $out/lib/opencode/
-    chmod -R u+w $out/lib/opencode/dist
-
-    # Select bundled worker assets deterministically (sorted find output)
-    worker_file=$(find "$out/lib/opencode/dist" -type f \( -path '*/tui/worker.*' -o -name 'worker.*' \) | sort | head -n1)
-    parser_worker_file=$(find "$out/lib/opencode/dist" -type f -name 'parser.worker.*' | sort | head -n1)
-    if [ -z "$worker_file" ]; then
-      echo "ERROR: bundled worker not found"
-      exit 1
-    fi
-
-    main_wasm=$(printf '%s\n' "$out"/lib/opencode/dist/tree-sitter-*.wasm | sort | head -n1)
-    wasm_list=$(find "$out/lib/opencode/dist" -maxdepth 1 -name 'tree-sitter-*.wasm' -print)
-    for patch_file in "$worker_file" "$parser_worker_file"; do
-      [ -z "$patch_file" ] && continue
-      [ ! -f "$patch_file" ] && continue
-      if [ -n "$wasm_list" ] && grep -q 'tree-sitter' "$patch_file"; then
-        # Rewrite wasm references to absolute store paths to avoid runtime resolve failures.
-        bun --bun ../../nix/scripts/patch-wasm.ts "$patch_file" "$main_wasm" $wasm_list
-      fi
-    done
-
-    mkdir -p $out/lib/opencode/node_modules
-    cp -r ../../node_modules/.bun $out/lib/opencode/node_modules/
-    mkdir -p $out/lib/opencode/node_modules/@opentui
-
-    # Generate and install JSON schema
-    mkdir -p $out/share/opencode
-    HOME=$TMPDIR bun --bun script/schema.ts $out/share/opencode/schema.json
-
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe bun} $out/bin/opencode \
-      --add-flags "run" \
-      --add-flags "$out/lib/opencode/dist/src/index.js" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          fzf
-          ripgrep
+    wrapArgs=(
+      --set OPENCODE_DISABLE_AUTOUPDATE true
+      --suffix PATH : ${lib.makeBinPath [ ripgrep ]}
+    )
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapArgs+=(--prefix PATH : ${lib.makeBinPath [ sysctl ]})
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          wayland
         ]
-      } \
-      --argv0 opencode
+      })
+    ''}
+
+    wrapProgram $out/bin/opencode "''${wrapArgs[@]}"
+
+    install -Dm644 cli.json $out/share/cli.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
 
-  postInstall = ''
-    # Add symlinks for platform-specific native modules
-    pkgs=(
-      $out/lib/opencode/node_modules/.bun/@opentui+core-*
-      $out/lib/opencode/node_modules/.bun/@opentui+solid-*
-      $out/lib/opencode/node_modules/.bun/@opentui+core@*
-      $out/lib/opencode/node_modules/.bun/@opentui+solid@*
-    )
-    for pkg in "''${pkgs[@]}"; do
-      if [ -d "$pkg" ]; then
-        pkgName=$(basename "$pkg" | sed 's/@opentui+\([^@]*\)@.*/\1/')
-        ln -sf ../.bun/$(basename "$pkg")/node_modules/@opentui/$pkgName \
-          $out/lib/opencode/node_modules/@opentui/$pkgName
-      fi
-    done
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd opencode \
+      --bash <($out/bin/opencode --completions bash) \
+      --zsh <($out/bin/opencode --completions zsh) \
+      --fish <($out/bin/opencode --completions fish)
   '';
 
+  dontStrip = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "OPENCODE_DISABLE_MODELS_FETCH"
+  ];
+  versionCheckProgramArg = "--version";
+
   passthru = {
-    jsonschema = "${placeholder "out"}/share/opencode/schema.json";
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "HOME=$(mktemp -d) opencode --version";
-      inherit (finalAttrs) version;
+    jsonschema = {
+      cli = "${finalAttrs.finalPackage}/share/cli.json";
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -216,20 +223,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AI coding agent built for the terminal";
-    longDescription = ''
-      OpenCode is a terminal-based agent that can build anything.
-      It combines a TypeScript/JavaScript core with a Go-based TUI
-      to provide an interactive AI coding experience.
-    '';
-    homepage = "https://github.com/sst/opencode";
+    homepage = "https://github.com/anomalyco/opencode";
+    changelog = "https://github.com/anomalyco/opencode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ delafthi ];
+    maintainers = with lib.maintainers; [
+      delafthi
+      DuskyElf
+      graham33
+      xiaoxiangmoe
+    ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
   };

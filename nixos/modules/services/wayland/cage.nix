@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  utils,
   ...
 }:
 
@@ -11,43 +12,52 @@ let
   cfg = config.services.cage;
 in
 {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage = {
+    enable = mkEnableOption "cage kiosk service";
 
-  options.services.cage.user = mkOption {
-    type = types.str;
-    default = "demo";
-    description = ''
-      User to log-in as.
-    '';
-  };
-
-  options.services.cage.extraArguments = mkOption {
-    type = types.listOf types.str;
-    default = [ ];
-    defaultText = literalExpression "[]";
-    description = "Additional command line arguments to pass to Cage.";
-    example = [ "-d" ];
-  };
-
-  options.services.cage.environment = mkOption {
-    type = types.attrsOf types.str;
-    default = { };
-    example = {
-      WLR_LIBINPUT_NO_DEVICES = "1";
+    restartIfChanged = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = "Whether to restart the 'cage-tty1' service when its configuration changes.";
     };
-    description = "Additional environment variables to pass to Cage.";
-  };
 
-  options.services.cage.program = mkOption {
-    type = types.path;
-    default = "${pkgs.xterm}/bin/xterm";
-    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = ''
-      Program to run in cage.
-    '';
-  };
+    user = mkOption {
+      type = types.str;
+      default = "demo";
+      description = ''
+        User to log-in as.
+      '';
+    };
 
-  options.services.cage.package = mkPackageOption pkgs "cage" { };
+    extraArguments = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      description = "Additional command line arguments to pass to Cage.";
+      example = [ "-d" ];
+    };
+
+    environment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        WLR_LIBINPUT_NO_DEVICES = "1";
+      };
+      description = "Additional environment variables to pass to Cage.";
+    };
+
+    program = mkOption {
+      type = types.path;
+      default = "${pkgs.xterm}/bin/xterm";
+      defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+      description = ''
+        Program to run in cage.
+      '';
+    };
+
+    package = mkPackageOption pkgs "cage" { };
+  };
 
   config = mkIf cfg.enable {
 
@@ -72,7 +82,7 @@ in
       wantedBy = [ "graphical.target" ];
       conflicts = [ "getty@tty1.service" ];
 
-      restartIfChanged = false;
+      restartIfChanged = cfg.restartIfChanged;
       unitConfig.ConditionPathExists = "/dev/tty1";
       serviceConfig = {
         ExecStart = ''
@@ -105,13 +115,45 @@ in
 
     security.polkit.enable = true;
 
-    security.pam.services.cage.text = ''
-      auth    required pam_unix.so nullok
-      account required pam_unix.so
-      session required pam_unix.so
-      session required pam_env.so conffile=/etc/pam/environment readenv=0
-      session required ${config.systemd.package}/lib/security/pam_systemd.so
-    '';
+    security.pam.services.cage = {
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = config.security.pam.pam_unixModulePath;
+            settings.nullok = true;
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = config.security.pam.pam_unixModulePath;
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "unix";
+            control = "required";
+            modulePath = config.security.pam.pam_unixModulePath;
+          }
+          {
+            name = "env";
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+            settings.conffile = "/etc/pam/environment";
+            settings.readenv = 0;
+          }
+          {
+            name = "systemd";
+            control = "required";
+            modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+          }
+        ];
+      };
+    };
 
     hardware.graphics.enable = mkDefault true;
 

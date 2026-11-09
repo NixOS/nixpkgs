@@ -6,18 +6,18 @@
   fetchFromGitHub,
   lksctp-tools,
   iproute2,
-  unstableGitUpdater,
+  nix-update-script,
   makeWrapper,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueransim";
-  version = "3.2.6-unstable-2024-08-27";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "aligungr";
     repo = "ueransim";
-    rev = "528061fe10389876da58d3bd15e8cba6d7c152a9";
-    hash = "sha256-8OxJzEcpFT6e/nQw1VK9kBdw9ulXedCpUEaBxIAN9cA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lTo/XYkRddyNdOpNO7MIAwq5mKMHDarCVzXjDomeXec=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source 5G UE and RAN (gNodeB) implementation";

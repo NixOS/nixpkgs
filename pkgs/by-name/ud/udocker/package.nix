@@ -1,13 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  singularity,
+  apptainer,
   python3Packages,
   testers,
   udocker,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "udocker";
   version = "1.3.17";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "udocker";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-P49fkLvdCm/Eco+nD3SGM04PRQatBzq9CHlayueQetk=";
   };
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
   buildInputs = [
-    singularity
+    apptainer
   ];
 
   build-system = with python3Packages; [
@@ -62,10 +62,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Basic user tool to execute simple docker containers in user space without root privileges";
     homepage = "https://indigo-dc.gitbooks.io/udocker";
-    changelog = "https://github.com/indigo-dc/udocker/releases/tag/${version}";
+    changelog = "https://github.com/indigo-dc/udocker/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bzizou ];
     platforms = lib.platforms.linux;
     mainProgram = "udocker";
   };
-}
+})

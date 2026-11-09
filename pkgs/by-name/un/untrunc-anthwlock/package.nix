@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
-  version = "0-unstable-2024-08-14";
+  version = "0-unstable-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "anthwlock";
     repo = "untrunc";
-    rev = "13cafedf59369db478af537fb909f0d7fd0eb85f";
-    hash = "sha256-4GIPj8so7POEwxKZzFBoJTu76XKbGHYmXC/ILeo0dVE=";
+    rev = "87a5d9202ae48495b9aa6b5880649dbdf32c82d0";
+    hash = "sha256-TlYh2SadBKOO9NivCRQZ/3Jpno0f+IonOewU+ax0/GI=";
   };
 
   nativeBuildInputs = [

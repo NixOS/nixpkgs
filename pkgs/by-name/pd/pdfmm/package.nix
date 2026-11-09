@@ -10,15 +10,15 @@
   resholve,
 }:
 
-resholve.mkDerivation {
+resholve.mkDerivation (finalAttrs: {
   pname = "pdfmm";
-  version = "unstable-2019-01-24";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jpfleury";
     repo = "pdfmm";
-    rev = "45ee7796659d23bb030bf06647f1af85e1d2b52d";
-    hash = "sha256-TOISD/2g7MwnLrtpMnfr2Ln0IiwlJVNavWl4eh/uwN0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DX/czFumKN8flrYMf1wXZRFj09rDBJtzQkHZSglghUY=";
   };
 
   dontBuild = true;
@@ -53,8 +53,8 @@ resholve.mkDerivation {
     description = "Graphical assistant to reduce the size of a PDF file";
     homepage = "https://github.com/jpfleury/pdfmm";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = [ ];
     mainProgram = "pdfmm";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

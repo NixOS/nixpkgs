@@ -2,7 +2,7 @@
   stdenv,
   fetchurl,
   lib,
-  extra-cmake-modules,
+  cmake,
   exiv2,
   ffmpeg,
   libvlc,
@@ -27,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    cmake
+    kdePackages.extra-cmake-modules
     kdePackages.wrapQtAppsHook
   ];
 
@@ -44,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   meta = {

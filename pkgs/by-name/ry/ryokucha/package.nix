@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ryokucha";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "ryokucha";
     rev = finalAttrs.version;
-    hash = "sha256-bmN8ZiFjUXtWMrZz7BJtO/9TMjcc4d3x8EpFvhvsewY=";
+    hash = "sha256-imKZSbNZHKIbLtD9E0D+AaKTvGSz8u2/2dJR0cpn/fo=";
   };
 
   outputs = [

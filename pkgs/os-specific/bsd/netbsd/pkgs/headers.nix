@@ -4,10 +4,11 @@
   include,
   sys-headers,
   libpthread-headers,
+  version,
 }:
 
 symlinkJoin {
-  name = "netbsd-headers-9.2";
+  name = "netbsd-headers-${version}";
   paths = [
     include
     sys-headers

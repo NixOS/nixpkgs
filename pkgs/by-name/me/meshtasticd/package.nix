@@ -5,25 +5,20 @@
   fetchzip,
   libarchive,
   pkg-config,
+  jq,
   platformio-core,
   writableTmpDirAsHomeHook,
   bluez,
   i2c-tools,
-  libX11,
+  libx11,
   libgpiod_1,
   libinput,
   libusb1,
   libuv,
   libxkbcommon,
   ulfius,
-  openssl,
-  gnutls,
-  jansson,
-  zlib,
-  libmicrohttpd,
-  orcania,
-  yder,
   yaml-cpp,
+  jsoncpp,
   udevCheckHook,
   versionCheckHook,
   makeBinaryWrapper,
@@ -36,11 +31,11 @@
 assert builtins.isBool enableDefaultConfig;
 
 let
-  version = "2.7.16.a597230";
+  version = "2.8.1.8e6a88d";
 
   platformio-deps-native = fetchzip {
     url = "https://github.com/meshtastic/firmware/releases/download/v${version}/platformio-deps-native-tft-${version}.zip";
-    hash = "sha256-Jo7e6zsCaiJs6NyIRmD6BWJFwbs0xVlUih206ePUpwk=";
+    hash = "sha256-9VFnbSgWLO7dqZjZDU/SL/WrwrCMf4REI/dc/LNAQQ8=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "firmware";
-    hash = "sha256-oU3Z8qjBNeNGPGT74VStAPHgsGqsQJKngHJR6m2CBa0=";
+    hash = "sha256-lhm4Dwg0Wk7Z0otQWa20eFRoZVWQ7cLJloWNreiMV68=";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
   };
@@ -69,32 +64,30 @@ stdenv.mkDerivation (finalAttrs: {
     }))
     writableTmpDirAsHomeHook
     makeBinaryWrapper
+    jq
   ];
 
   buildInputs = [
     bluez
-    gnutls
     i2c-tools
-    jansson
-    libX11
+    libx11
     libgpiod_1
     libinput
-    libmicrohttpd
     libusb1
     libuv
     libxkbcommon
-    openssl
-    orcania
     ulfius
     yaml-cpp
-    yder
-    zlib
+    jsoncpp
   ];
 
   preConfigure = ''
     mkdir -p platformio-deps-native
     cp -ar ${platformio-deps-native}/. platformio-deps-native
     chmod +w -R platformio-deps-native
+    rm -f platformio-deps-native/core/appstate.json
+    jq "map_values($(date +%s))" platformio-deps-native/core/.cache/downloads/usage.db > usage_new.db
+    mv usage_new.db platformio-deps-native/core/.cache/downloads/usage.db
 
     export PLATFORMIO_CORE_DIR=platformio-deps-native/core
     export PLATFORMIO_LIBDEPS_DIR=platformio-deps-native/libdeps
@@ -118,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 bin/org.meshtastic.meshtasticd.svg -t $out/share/icons/hicolor/scalable/apps/
     install -Dm644 bin/org.meshtastic.meshtasticd.desktop -t $out/share/applications/
-    install -Dm755 .pio/build/native-tft/program $out/bin/meshtasticd
+    install -Dm755 .pio/build/native-tft/meshtasticd -t $out/bin
 
     install -Dm644 bin/99-meshtasticd-udev.rules -t $out/etc/udev/rules.d
   ''

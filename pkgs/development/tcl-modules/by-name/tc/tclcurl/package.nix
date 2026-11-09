@@ -3,23 +3,25 @@
   mkTclDerivation,
   fetchFromGitHub,
   curl,
+  tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tclcurl";
   version = "7.22.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclcurl-fa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XQuP+SiqvGX3ckBShUxsGBADjV3QdvYpU4hW6LMbMMQ=";
   };
 
-  buildInputs = [ curl ];
+  nativeBuildInputs = [
+    curl # for curl-config
+  ];
 
-  # Uses curl-config
-  strictDeps = false;
+  buildInputs = [ curl ];
 
   makeFlags = [ "LDFLAGS=-lcurl" ];
 
@@ -29,5 +31,6 @@ mkTclDerivation rec {
     changelog = "https://github.com/flightaware/tclcurl-fa/blob/master/ChangeLog.txt";
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ fgaz ];
+    broken = tcl.isTcl9;
   };
-}
+})

@@ -4,11 +4,16 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
+  aws-lc,
   openssl,
+  sqlite,
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -16,23 +21,27 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2025-12-04";
+  version = "0-unstable-2026-10-19";
 
   src = fetchFromGitHub {
-    owner = "faiface";
+    owner = "par-team";
     repo = "par-lang";
-    rev = "9056718048a5c8d1ff32c60f9fc5db5af36a0259";
-    hash = "sha256-uerYlhUqwpt3BbYiN6+CubhZAcMRXTFKqKSqyqh5WYY=";
+    rev = "fb2448369917bd45a98dc7644c8cca8a5c9cc4b4";
+    hash = "sha256-Ju6vAE1Ef4UK6dB9YRKT1GusQwGF3GphltMbgIFfe3Y=";
   };
 
-  cargoHash = "sha256-sW+gAIp/DjlTo44QDXpP6COrCK/CcDlx3no284MEQJo=";
+  cargoHash = "sha256-9Hct0CSKlegLhxgBkH1GoMnHlKiwV42DuRyGQndT++k=";
 
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+  ];
 
   postFixup =
     let
@@ -40,22 +49,22 @@ rustPlatform.buildRustPackage {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par-lang
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par
     '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    echo 'def Main = Console.Open.print("Hello, World!").close' > test.par
-    diff -U3 --color=auto <($out/bin/par-lang run test.par) <(echo 'Hello, World!')
+    $out/bin/par new hello
+    diff -U3 --color=auto <($out/bin/par run --package hello 2>&1) <(echo 'Hello, World!')
 
     runHook postInstallCheck
   '';
@@ -66,7 +75,7 @@ rustPlatform.buildRustPackage {
       desktopName = "Par Playground";
       genericName = "Experimental concurrent programming language";
       categories = [ "Development" ];
-      exec = "par-lang playground %f";
+      exec = "par playground %f";
     })
   ];
 
@@ -74,9 +83,9 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Experimental concurrent programming language";
-    homepage = "https://github.com/faiface/par-lang";
+    homepage = "https://github.com/par-team/par-lang";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "par-lang";
+    mainProgram = "par";
   };
 }

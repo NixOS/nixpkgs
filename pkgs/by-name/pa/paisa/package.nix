@@ -3,65 +3,37 @@
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_24,
   versionCheckHook,
-  node-gyp,
-  python3,
-  pkg-config,
-  cairo,
-  giflib,
-  libjpeg,
-  libpng,
-  librsvg,
-  pango,
-  pixman,
   nixosTests,
 }:
 
 let
-  # paisa docker builds with nodejs 22, but we need node 20 so we can build
-  # node-canvas from source (which currently fails with nodejs 22 due to some
-  # deprecations in the v8 javascript engine and nan c++
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_20; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_24; };
 in
 buildGoModule (finalAttrs: {
   pname = "paisa";
-  version = "0.7.3";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "ananthakumaran";
     repo = "paisa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nJpyqEOlXNvnMvheWtfUMARBgQRk8TpXHyVsXDxJ3oo=";
+    hash = "sha256-UsuHoB+dLx0+VD9DM15rBLu+6gptFyvf9fAqEsauQnQ=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-KnHJ6+aMahTeNdbRcRAgBERGVYen/tM/tDcFI/NyLdE=";
+  vendorHash = "sha256-th2jxlYseQjkIvu0mbUnNRzAFgHHTrm/lh4+CvonfWc=";
   frontend = buildNpmPackage' {
     pname = "paisa-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-8LPW9pcipVMWuZ4wOlpAOaRdT5o1gom39gqcfmhY1eE=";
+    npmDepsHash = "sha256-QkYtUk/JhL+KC8/9uSd/oGjsjdmwZl47W2oZh3oRGGA=";
 
-    buildInputs = [
-      # needed for building node-canvas from source which is a dependency of
-      # pdfjs
-      # https://github.com/Automattic/node-canvas/blob/master/Readme.md#compiling
-      cairo
-      giflib
-      libjpeg
-      libpng
-      librsvg
-      pango
-      pixman
-    ];
-
-    nativeBuildInputs = [
-      (python3.withPackages (ps: with ps; [ distutils ]))
-      pkg-config
-      node-gyp
-    ];
+    # canvas fails to build with GCC 16 on Node 24. Paisa uses PDF.js in the
+    # browser, the optional native canvas binding is not needed.
+    npmFlags = [ "--ignore-scripts" ];
 
     postBuild = ''
       mkdir -p $out/web/

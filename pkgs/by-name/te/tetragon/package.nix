@@ -3,29 +3,37 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  go,
-  llvm,
-  clang,
+  go_1_27,
+  llvm_22,
+  clang_22,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
+  installShellFiles,
+  nix-update-script,
+  versionCheckHook,
 }:
-
+let
+  go = go_1_27;
+  llvm = llvm_22;
+  clang = clang_22;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A6a7yjxenB/7sfdfoIaJAxdkw0ouNinZtahNMRAytwA=";
+    hash = "sha256-/UnmA3k3NcCEFA+JW19dbQCN9fUYAWkbKV+SGmRmdhw=";
   };
 
   nativeBuildInputs = [
     pkg-config
     writableTmpDirAsHomeHook
     gitMinimal
+    installShellFiles
   ];
 
   buildInputs = [
@@ -35,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
+    VERSION = finalAttrs.version;
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
     NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
@@ -68,16 +77,37 @@ stdenv.mkDerivation (finalAttrs: {
     cp -n -r ./bpf/objs $out/lib/tetragon/bpf
     install -m755 -D ./tetra $out/bin/tetra
     install -m755 -D ./tetragon $out/bin/tetragon
-
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tetra \
+      --bash <($out/bin/tetra completion bash) \
+      --fish <($out/bin/tetra completion fish) \
+      --zsh <($out/bin/tetra completion zsh)
+    installShellCompletion --cmd tetragon \
+      --bash <($out/bin/tetragon completion bash) \
+      --fish <($out/bin/tetragon completion fish) \
+      --zsh <($out/bin/tetragon completion zsh)
+  ''
+  + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  versionCheckProgram = "${placeholder "out"}/bin/tetra";
+  versionCheckProgramArg = "version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
     homepage = "https://github.com/cilium/tetragon";
     license = lib.licenses.asl20;
     mainProgram = "tetragon";
-    maintainers = with lib.maintainers; [ gangaram ];
+    maintainers = with lib.maintainers; [
+      gangaram
+      RoGreat
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

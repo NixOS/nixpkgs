@@ -2,15 +2,16 @@
   stdenv,
   lib,
   fetchurl,
+  cacert,
   nixosTests,
   dataDir ? "/var/lib/monica",
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monica";
   version = "4.1.2";
 
   src = fetchurl {
-    url = "https://github.com/monicahq/monica/releases/download/v${version}/monica-v${version}.tar.bz2";
+    url = "https://github.com/monicahq/monica/releases/download/v${finalAttrs.version}/monica-v${finalAttrs.version}.tar.bz2";
     hash = "sha256-7ZdOSI/gldSWub5FIyYQw3gpLe+PRAnq03u6DXdZ2YE=";
   };
 
@@ -19,6 +20,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out
     cp -R * $out/
+    rm $out/vendor/composer/ca-bundle/res/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/vendor/composer/ca-bundle/res/cacert.pem
+    rm $out/vendor/stripe/stripe-php/data/ca-certificates.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/vendor/stripe/stripe-php/data/ca-certificates.crt
     rm -rf $out/storage
     ln -s ${dataDir}/.env $out/.env
     ln -s ${dataDir}/storage $out/storage
@@ -36,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

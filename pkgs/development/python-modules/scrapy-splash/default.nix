@@ -43,5 +43,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ evanjs ];
+    # incompatible with scrapy >= 2.14
+    # also deprecated by scrapy committers, see https://github.com/scrapy-plugins/scrapy-splash/issues/327
+    broken = true;
   };
 }

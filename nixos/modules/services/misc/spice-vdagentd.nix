@@ -21,12 +21,10 @@ in
     systemd.services.spice-vdagentd = {
       description = "spice-vdagent daemon";
       wantedBy = [ "graphical.target" ];
-      preStart = ''
-        mkdir -p "/run/spice-vdagentd/"
-      '';
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagentd";
+        RuntimeDirectory = "spice-vdagentd";
       };
     };
   };

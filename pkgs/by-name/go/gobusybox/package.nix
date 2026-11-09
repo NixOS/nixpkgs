@@ -1,21 +1,28 @@
 {
   lib,
-  # Build fails with Go 1.25, with the following error:
-  # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
-  # Wait for upstream to update their vendored dependencies before unpinning.
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
+  applyPatches,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gobusybox";
   version = "0.2.0-unstable-2024-03-05";
 
-  src = fetchFromGitHub {
-    owner = "u-root";
-    repo = "gobusybox";
-    rev = "d8fbaca23e26beab648c86c8a67335ad65d0d15c";
-    hash = "sha256-hS6YwN6eekyDjp7E6sisW+8HO5WHTEC68XyKZFPihK4=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "u-root";
+      repo = "gobusybox";
+      rev = "d8fbaca23e26beab648c86c8a67335ad65d0d15c";
+      hash = "sha256-hS6YwN6eekyDjp7E6sisW+8HO5WHTEC68XyKZFPihK4=";
+    };
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/u-root/gobusybox/commit/4204bda4af46406562e377e23ec6f9c87bfbda84.patch";
+        hash = "sha256-3AOl/sxBZVLhLnSnqY3H8V6BBEjh+3gW3aPS5Wqob4s=";
+      })
+    ];
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -30,7 +37,7 @@ buildGo124Module (finalAttrs: {
 
   env.CGO_ENABLED = "0";
 
-  vendorHash = "sha256-s4bQLXNFhyAk+UNI1xJXQABjBXtPFXiWvmdttV/6Bm8=";
+  vendorHash = "sha256-xezqzOPTCIdoT2t0rFqYa/1uO1YIIEeXSUV62YLUeOQ=";
 
   ldflags = [ "-s" ];
 

@@ -33,7 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.xiph.org/xiph/celt"; # http://www.celt-codec.org/ is gone
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      codyopel
       raskin
     ];
     platforms = lib.platforms.unix;

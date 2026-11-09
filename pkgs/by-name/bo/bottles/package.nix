@@ -5,6 +5,8 @@
   extraPkgs ? pkgs: [ ],
   extraLibraries ? pkgs: [ ],
   removeWarningPopup ? false,
+  withObsVkCapture ? false,
+  withLsfgVk ? false,
 }:
 
 let
@@ -17,33 +19,35 @@ let
       pkgs:
       with pkgs;
       [
-        (bottles-unwrapped.override { inherit removeWarningPopup; })
+        (bottles-unwrapped.override { inherit removeWarningPopup withObsVkCapture withLsfgVk; })
         # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
         # See https://github.com/bottlesdevs/Bottles/issues/2401
         vkbasalt
       ]
+      ++ lib.optional withLsfgVk lsfg-vk
       ++ extraPkgs pkgs;
 
     multiPkgs =
       let
         xorgDeps =
-          pkgs: with pkgs.xorg; [
-            libpthreadstubs
-            libSM
-            libX11
-            libXaw
+          pkgs: with pkgs; [
+            libpthread-stubs
+            libsm
+            libx11
+            libxaw
             libxcb
-            libXcomposite
-            libXcursor
-            libXdmcp
-            libXext
-            libXi
-            libXinerama
-            libXmu
-            libXrandr
-            libXrender
-            libXv
-            libXxf86vm
+            libxcomposite
+            libxcursor
+            libxdmcp
+            libxext
+            libxfixes
+            libxi
+            libxinerama
+            libxmu
+            libxrandr
+            libxrender
+            libxv
+            libxxf86vm
           ];
         gstreamerDeps =
           pkgs: with pkgs.gst_all_1; [
@@ -104,6 +108,8 @@ let
         openal
 
         # Steam runtime
+        attr
+        glibc
         libgcrypt
         libgpg-error
         p11-kit
@@ -116,7 +122,7 @@ let
   };
 in
 symlinkJoin {
-  name = "bottles";
+  pname = "bottles";
   paths = [
     (buildFHSEnv (
       fhsEnv
@@ -139,5 +145,5 @@ symlinkJoin {
     ln -s ${bottles-unwrapped}/share/icons $out/share
   '';
 
-  inherit (bottles-unwrapped) meta;
+  inherit (bottles-unwrapped) meta version;
 }

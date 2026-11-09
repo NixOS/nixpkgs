@@ -21,7 +21,7 @@
   rustc,
   rustPlatform,
   stdenv,
-  typescript,
+  typescript_5,
   webkitgtk_4_1,
   writableTmpDirAsHomeHook,
 }:
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     rustPlatform.cargoSetupHook
-    typescript
+    typescript_5
   ];
 
   buildInputs = [

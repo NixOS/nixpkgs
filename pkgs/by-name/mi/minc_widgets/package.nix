@@ -14,13 +14,16 @@
 
 stdenv.mkDerivation {
   pname = "minc-widgets";
-  version = "unstable-2016-04-20";
+  version = "1.0.0-unstable-2016-04-20";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "minc-widgets";
     rev = "f08b643894c81a1a2e0fbfe595a17a42ba8906db";
-    sha256 = "1b9g6lf37wpp211ikaji4rf74rl9xcmrlyqcw1zq3z12ji9y33bm";
+    hash = "sha256-dY3hU5Qi/IF/4Ax7mivriWZyXCZRqhlDEPfyMxw1L60=";
   };
 
   patches = [

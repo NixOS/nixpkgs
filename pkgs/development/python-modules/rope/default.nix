@@ -6,22 +6,19 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rope";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-rope";
     repo = "rope";
     tag = version;
-    hash = "sha256-LcxpJhMtyk0kT759ape9zQzdwmL1321Spdbg9zuuXtI=";
+    hash = "sha256-gKoLfEjYmXEWrST4PuzpTx5m63LJh49/OMoop6p3drk=";
   };
 
   build-system = [ setuptools ];

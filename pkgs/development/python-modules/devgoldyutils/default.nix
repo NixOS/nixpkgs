@@ -8,11 +8,11 @@
 buildPythonPackage rec {
   pname = "devgoldyutils";
   version = "3.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2kGu9QPP5WqKv2gO9DAkE9SNDerzNaEDRt5DrrYD9nQ=";
+    hash = "sha256-2kGu9QPP5WqKv2gO9DAkE9SNDerzNaEDRt5DrrYD9nQ=";
   };
 
   doCheck = false;

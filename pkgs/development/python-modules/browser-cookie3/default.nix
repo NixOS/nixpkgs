@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   lz4,
   keyring,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "browser-cookie3";
   version = "0.20.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "borisbabic";
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     description = "Loads cookies from your browser into a cookiejar object";
     homepage = "https://github.com/borisbabic/browser_cookie3";
     changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ borisbabic ];
   };
 }

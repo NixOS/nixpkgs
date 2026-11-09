@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.09";
   pname = "epstool";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/e/epstool/epstool_${version}.orig.tar.xz";
+    url = "http://ftp.de.debian.org/debian/pool/main/e/epstool/epstool_${finalAttrs.version}.orig.tar.xz";
     hash = "sha256-HoUknRpE+UGLH5Wjrr2LB4TauOSd62QXrJuZbKCPYBE=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "epstool";
   };
-}
+})

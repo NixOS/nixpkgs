@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sl";
   version = "5.05";
 
   src = fetchFromGitHub {
     owner = "eyJhb";
     repo = "sl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "11a1rdgb8wagikhxgm81g80g5qsl59mv4qgsval3isykqh8729bj";
   };
 
@@ -32,13 +32,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
     homepage = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html";
-    license = rec {
-      shortName = "Toyoda Masashi's free software license";
-      fullName = shortName;
-      url = "https://github.com/eyJhb/sl/blob/master/LICENSE";
-    };
+    license = lib.licenses.sl;
     maintainers = with lib.maintainers; [ eyjhb ];
     platforms = lib.platforms.unix;
     mainProgram = "sl";
   };
-}
+})

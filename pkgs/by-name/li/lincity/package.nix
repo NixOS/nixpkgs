@@ -4,12 +4,12 @@
   fetchurl,
   fetchpatch,
   gettext,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
-  libICE,
-  libSM,
-  libpng12,
+  libice,
+  libsm,
+  libpng,
   zlib,
 }:
 
@@ -25,11 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   buildInputs = [
-    libICE
-    libpng12
-    libSM
-    libX11
-    libXext
+    libice
+    libpng
+    libsm
+    libx11
+    libxext
     xorgproto
     zlib
   ];
@@ -84,6 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlincity";
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 })

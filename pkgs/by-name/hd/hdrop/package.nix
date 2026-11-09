@@ -1,5 +1,6 @@
 {
   coreutils,
+  curl,
   fetchFromGitHub,
   gawk,
   hyprland,
@@ -15,13 +16,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-JlfSGJBN3aJnZcN8aY464mmADP5boenGQzOxv2sswGc=";
+    hash = "sha256-Z8jtuO1GTk7md9iXOiE2poAY1D9YOIqzSlEY7Eai/pg=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
         lib.makeBinPath (
           [
             coreutils
+            curl
             util-linux
             jq
             libnotify

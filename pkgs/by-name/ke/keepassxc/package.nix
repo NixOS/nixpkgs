@@ -3,16 +3,15 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libsForQt5,
+  qt6,
 
   apple-sdk_15,
   asciidoctor,
   botan3,
-  curl,
   darwinMinVersionHook,
-  libXi,
-  libXtst,
-  libargon2,
+  keyutils,
+  libxi,
+  libxtst,
   libusb1,
   minizip,
   nix-update-script,
@@ -23,53 +22,70 @@
   wrapGAppsHook3,
   zlib,
 
-  withKeePassBrowser ? true,
-  withKeePassBrowserPasskeys ? true,
-  withKeePassFDOSecrets ? stdenv.hostPlatform.isLinux,
-  withKeePassKeeShare ? true,
+  withKeePassMinimal ? false,
+  withKeePassBrowser ? !withKeePassMinimal,
+  withKeePassDocs ? true,
+  withKeePassFDOSecrets ? !withKeePassMinimal && stdenv.hostPlatform.isLinux,
   withKeePassNetworking ? true,
-  withKeePassSSHAgent ? true,
+  withKeePassSSHAgent ? !withKeePassMinimal,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
 
   nixosTests,
 }:
 
+assert
+  !withKeePassMinimal || (!withKeePassBrowser && !withKeePassSSHAgent && !withKeePassFDOSecrets);
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepassxc";
-  version = "2.7.11";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     tag = finalAttrs.version;
-    hash = "sha256-Hec3RBC/f0GV6ZBniy+BjMAkABlg111mShrQv0aYm6g=";
+    hash = "sha256-821zL+xnCsHU8VvxsJh2a2LRGstSIq3tWQbWBk8g4hc=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
-    "-Wno-old-style-cast"
-    "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
-  ]);
+  __structuredAttrs = true;
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
-
-  patches = [
-    ./darwin.patch
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (withKeePassDocs && stdenv.hostPlatform.isLinux) [
+    "man"
+    "doc"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-old-style-cast"
+      "-Wno-error"
+      "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
+    ];
+  };
+
+  patches = [ ./darwin-remove-macdeployqt.patch ];
+
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
     (lib.cmakeBool "WITH_GUI_TESTS" true)
-    (lib.cmakeBool "WITH_XC_UPDATECHECK" false)
-    (lib.cmakeBool "WITH_XC_X11" withKeePassX11)
-    (lib.cmakeBool "WITH_XC_BROWSER" withKeePassBrowser)
-    (lib.cmakeBool "WITH_XC_BROWSER_PASSKEYS" withKeePassBrowserPasskeys)
-    (lib.cmakeBool "WITH_XC_KEESHARE" withKeePassKeeShare)
-    (lib.cmakeBool "WITH_XC_NETWORKING" withKeePassNetworking)
-    (lib.cmakeBool "WITH_XC_SSHAGENT" withKeePassSSHAgent)
-    (lib.cmakeBool "WITH_XC_FDOSECRETS" withKeePassFDOSecrets)
-    (lib.cmakeBool "WITH_XC_YUBIKEY" withKeePassYubiKey)
+    (lib.cmakeBool "KPXC_FEATURE_UPDATES" false)
+    (lib.cmakeBool "WITH_X11" withKeePassX11)
+    (lib.cmakeBool "KPXC_MINIMAL" withKeePassMinimal)
+    (lib.cmakeBool "KPXC_FEATURE_DOCS" withKeePassDocs)
+    (lib.cmakeBool "KPXC_FEATURE_BROWSER" withKeePassBrowser)
+    (lib.cmakeBool "KPXC_FEATURE_NETWORK" withKeePassNetworking)
+    (lib.cmakeBool "KPXC_FEATURE_SSHAGENT" withKeePassSSHAgent)
+    (lib.cmakeBool "KPXC_FEATURE_FDOSECRETS" withKeePassFDOSecrets)
   ];
 
   doCheck = true;
@@ -98,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       export LC_ALL="en_US.UTF-8"
       export QT_QPA_PLATFORM=offscreen
-      export QT_PLUGIN_PATH="${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}"
 
       make test ARGS+="-E '${disabledTests}' --output-on-failure"
 
@@ -106,12 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [
-    asciidoctor
     cmake
-    libsForQt5.wrapQtAppsHook
-    libsForQt5.qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
     pkg-config
   ]
+  ++ lib.optional withKeePassDocs asciidoctor
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
@@ -123,6 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.concatLines [
+    (lib.optionalString (withKeePassDocs && stdenv.hostPlatform.isLinux) ''
+      mkdir -p $doc/share/doc
+      mv $out/share/keepassxc/docs/ $doc/share/doc/keepassxc
+    '')
+
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/bin"
       for program in keepassxc-cli keepassxc-proxy; do
@@ -131,20 +151,22 @@ stdenv.mkDerivation (finalAttrs: {
     '')
 
     # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/src/browser/NativeMessageInstaller.cpp#L317
+    # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/utils/keepassxc-snap-helper.sh#L48-L58
     (lib.optionalString withKeePassBrowser ''
       mkdir -p "$out/lib/mozilla/native-messaging-hosts"
       substituteAll "${./firefox-native-messaging-host.json}" "$out/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
+
+      mkdir -p "$out/etc/chromium/native-messaging-hosts"
+      substituteAll "${./chromium-native-messaging-host.json}" "$out/etc/chromium/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
     '')
   ];
 
   buildInputs = [
     botan3
-    curl
-    libXi
-    libXtst
-    libargon2
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+    libxi
+    libxtst
+    qt6.qtbase
+    qt6.qtsvg
     minizip
     pcsclite
     qrencode
@@ -152,18 +174,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libsForQt5.qtmacextras
-
     apple-sdk_15
     # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
     # https://developer.apple.com/documentation/screencapturekit
     (darwinMinVersionHook "12.3")
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    keyutils
     libusb1
-  ]
-  ++ lib.optionals withKeePassX11 [
-    libsForQt5.qtx11extras
   ];
 
   passthru = {
@@ -183,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
+    donationPage = "https://keepassxc.org/donate/";
     changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";

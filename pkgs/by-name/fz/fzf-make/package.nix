@@ -3,26 +3,36 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  pkg-config,
+  oniguruma,
+  versionCheckHook,
   runtimeShell,
   bat,
   gnugrep,
   gnumake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fzf-make";
-  version = "0.65.0";
+  version = "0.76.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
-    tag = "v${version}";
-    hash = "sha256-KL2dRyfwwa365hEMeVixAP9DFx3QObJVeesj95tOUmo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7PchjXqrN8N2uLnxxl9weHE9Q7xNo+6+FAr9iTW+63A=";
   };
 
-  cargoHash = "sha256-QaR0Se8ecNKj7OcngwEOrK63VT200D+/Xm3RaIiLdec=";
+  cargoHash = "sha256-W0DAhQC9Fe4Tk+9mMZrIBQRyVhHSUHWg51LHSJ/h2HA=";
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
+
+  buildInputs = [ oniguruma ];
 
   postInstall = ''
     wrapProgram $out/bin/fzf-make \
@@ -36,14 +46,17 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Fuzzy finder for Makefile";
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/kyu08/fzf-make/releases/tag/v${version}";
+    homepage = "https://github.com/kyu08/fzf-make";
+    changelog = "https://github.com/kyu08/fzf-make/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sigmanificient
     ];
     mainProgram = "fzf-make";
   };
-}
+})

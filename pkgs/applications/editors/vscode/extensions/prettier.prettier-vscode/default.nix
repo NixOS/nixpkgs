@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   libsecret,
-  nodejs,
+  nodejs-slim,
   npmHooks,
   pkg-config,
   clang_20,
@@ -16,34 +16,35 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "prettier-vscode-${finalAttrs.version}.vsix";
     pname = "prettier-vscode-vsix";
-    version = "12.0.7";
+    version = "12.4.0";
 
     src = fetchFromGitHub {
       owner = "prettier";
       repo = "prettier-vscode";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-pbUvgchOEWgBm0D5wdAPMfHouFdHZPEvCChD9JJf4Xk=";
+      hash = "sha256-N++WB0CvqYQTRg3SQFf9QJrwSJXtUd7z/kvWXQqOSC4=";
     };
 
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-npm-deps";
       inherit (finalAttrs) src;
-      hash = "sha256-VcJ3mzuspML2z3EzAUi21tavPtI62/Jo3X8swnMXwOs=";
+      hash = "sha256-vktxhQA2a+D9Nr4vhbmGCnNdGzt0U89K50g0SgiV5SE=";
     };
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       libsecret
     ];
 
     nativeBuildInputs = [
-      nodejs
-      nodejs.python
+      nodejs-slim
+      nodejs-slim.npm
+      nodejs-slim.python
       npmHooks.npmConfigHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       clang_20 # clang_21 breaks @vscode/vsce's optional dependency keytar
     ];
 

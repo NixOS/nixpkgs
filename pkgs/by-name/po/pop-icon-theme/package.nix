@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pop-icon-theme";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "icon-theme";
     rev = "v${version}";
-    sha256 = "sha256-V8xBZj6T4Ly/GHV0CVLZ1a4UZbmCkhYRe05qUfJk7Wg=";
+    sha256 = "sha256-4Ae06/ywjZUk6zHAk7CpYcK3Y2xSX+Rae/QZOE1ZT3I=";
   };
 
   nativeBuildInputs = [

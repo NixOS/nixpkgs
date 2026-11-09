@@ -3,24 +3,24 @@
   fetchFromGitHub,
   lib,
   zlib,
-  pcre,
+  pcre2,
   gnutls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tintin";
-  version = "2.02.51";
+  version = "2.02.61";
 
   src = fetchFromGitHub {
     owner = "scandum";
     repo = "tintin";
-    rev = version;
-    hash = "sha256-QU9Q2VbJ44NHm//LTwDoHQIUV/LnLM94I7GtoCxL3js=";
+    rev = finalAttrs.version;
+    hash = "sha256-U6i9Xf5nHeCFtGvqNBK3ndCYYKJaBbceOdhqzos62fo=";
   };
 
   buildInputs = [
     zlib
-    pcre
+    pcre2
     gnutls
   ];
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tt++";
     platforms = lib.platforms.unix;
   };
-}
+})

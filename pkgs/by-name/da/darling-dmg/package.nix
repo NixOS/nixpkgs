@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DCOMPILE_WITH_LZFSE=1"
     "-llzfse"
   ];
@@ -57,6 +57,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    broken = true; # stuck on fuse2
     homepage = "https://www.darlinghq.org/";
     description = "FUSE module for .dmg files (containing an HFS+ filesystem)";
     mainProgram = "darling-dmg";

@@ -4,17 +4,13 @@
   fetchurl,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "chrysalis";
   version = "0.13.3";
   src = fetchurl {
-    url = "https://github.com/keyboardio/chrysalis/releases/download/v${version}/chrysalis-${version}-x64.AppImage";
+    url = "https://github.com/keyboardio/chrysalis/releases/download/v${finalAttrs.version}/chrysalis-${finalAttrs.version}-x64.AppImage";
     hash = "sha512-F6Y87rgIclj1OA3gVX/gqqp9AvXKQlBXrbqk/26F1KHPF9NzHJgVmeszSo3Nhb6xg4CzWmzkqc8IW2H/Bg57kw==";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.glib ];
 
@@ -24,17 +20,17 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     install -m 444 \
-      -D ${appimageContents}/usr/lib/chrysalis/resources/static/udev/60-kaleidoscope.rules \
+      -D ${finalAttrs.contents}/usr/lib/chrysalis/resources/static/udev/60-kaleidoscope.rules \
       -t $out/lib/udev/rules.d
 
     install -m 444 \
-        -D ${appimageContents}/Chrysalis.desktop \
+        -D ${finalAttrs.contents}/Chrysalis.desktop \
         -t $out/share/applications
     substituteInPlace \
         $out/share/applications/Chrysalis.desktop \
-        --replace-fail 'Exec=Chrysalis' 'Exec=${pname}'
+        --replace-fail 'Exec=Chrysalis' 'Exec=chrysalis'
 
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
+    cp -r ${finalAttrs.contents}/usr/share $out/share
   '';
 
   passthru.updateScript = ./update.sh;
@@ -48,8 +44,8 @@ appimageTools.wrapType2 {
       nshalman
     ];
     platforms = [ "x86_64-linux" ];
-    # buildFHSEnv will create a symlink in $out/bin/${pname}
-    mainProgram = pname;
+    # buildFHSEnv will create a symlink in $out/bin/chrysalis
+    mainProgram = "chrysalis";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

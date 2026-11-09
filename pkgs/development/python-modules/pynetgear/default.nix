@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynetgear";
   version = "0.10.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatMaul";
@@ -32,7 +29,7 @@ buildPythonPackage rec {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
     changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

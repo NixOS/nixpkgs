@@ -70,14 +70,17 @@ buildDotnetModule (finalAttrs: {
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
 
-    ${lib.optionalString finalAttrs.doCheck ''
+    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
       # For some reason these tests fail (intermittently?) with a zero timestamp
       touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
     ''}
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.runtimeInputs)
   ];
 
   postInstall = ''
@@ -188,6 +191,7 @@ buildDotnetModule (finalAttrs: {
     app = finalAttrs.finalPackage.overrideAttrs {
       pname = "${finalAttrs.pname}-tested";
       doCheck = true;
+      passthru.tests = { };
     };
   };
 
@@ -197,7 +201,7 @@ buildDotnetModule (finalAttrs: {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
     changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       l0b0
       MattSturgeon
@@ -230,5 +234,8 @@ buildDotnetModule (finalAttrs: {
           ''
       }
     '';
+    knownVulnerabilities = [
+      "NexusMods.App has been discontinued upstream: https://www.nexusmods.com/news/15424"
+    ];
   };
 })

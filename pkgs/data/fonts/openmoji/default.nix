@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  fonttools,
   nanoemoji,
-  python3Packages,
   woff2,
   xmlstarlet,
   # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
@@ -42,13 +42,13 @@ assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
 
 stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "16.0.0";
+  version = "17.0.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = "openmoji";
     rev = version;
-    hash = "sha256-4dYtLaABu88z25Ud/cuOECajxSJWR01qcTIZNWN7Fhw=";
+    hash = "sha256-mE34l94C/jc7Fd4v7opMeneFZAou5w9KhjLSVxw0s/0=";
   };
 
   patches = [
@@ -57,8 +57,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    fonttools
     nanoemoji
-    python3Packages.fonttools
     woff2
     xmlstarlet
   ];

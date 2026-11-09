@@ -6,9 +6,9 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpu_features";
-  version = "0.10.1";
+  version = "0.11.0";
 
   outputs = [
     "out"
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "cpu_features";
-    rev = "v${version}";
-    hash = "sha256-IBJc1sHHh4G3oTzQm1RAHHahsEECC+BDl14DHJ8M1Ys=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TrC1WMLAhko57rAyDCiAC/IJ0unAqVhyjkh7gKibyi4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

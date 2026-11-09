@@ -3,7 +3,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pygtrie,
   orjson,
   setuptools-scm,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sqltrie";
-  version = "0.11.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.11.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "sqltrie";
     tag = version;
-    hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
+    hash = "sha256-sBu82SDOBqlQLONYgQ4eCw6MVFsLIs5/LfevP4cUDTo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -6,23 +6,23 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "auth0-cli";
-  version = "1.25.1";
+  version = "1.33.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    tag = "v${version}";
-    hash = "sha256-Qtxn3VnqJOAIKI4jURFXnH5fHCWtZU419XtnjdqFlkY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XDNZW0yIu7KtvR/SYMbS9wlcsOW5dIXP2/247zJz5NA=";
   };
 
-  vendorHash = "sha256-WN71xEU9GBNj0M5tnVthBdxh13UH78zUOaCEtczFDck=";
+  vendorHash = "sha256-LOMjKGIEGZugc5d+kt4+t+/hwXRGo2XXWDWM+rP9nfA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${finalAttrs.version}"
     "-X=github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
   ];
 
@@ -31,10 +31,12 @@ buildGoModule rec {
     # This is because subPackages above limits what is built to just what we
     # want but also limits the tests
     unset subPackages
-    # Test requires network access
-    substituteInPlace internal/cli/universal_login_customize_test.go \
-      --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
   '';
+
+  checkFlags = [
+    # requires network access
+    "-skip=^TestFetchUniversalLoginBrandingData$"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,9 +54,9 @@ buildGoModule rec {
   meta = {
     description = "Supercharge your developer workflow";
     homepage = "https://auth0.github.io/auth0-cli";
-    changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${version}";
+    changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "auth0";
   };
-}
+})

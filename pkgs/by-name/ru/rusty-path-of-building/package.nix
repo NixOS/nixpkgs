@@ -1,7 +1,6 @@
 {
   lib,
   rustPlatform,
-  fetchurl,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
@@ -9,24 +8,28 @@
   pkg-config,
   icoutils,
   luajit,
-  zlib,
+  openssl,
   libxkbcommon,
   vulkan-loader,
   wayland,
-  xorg,
+  aws-lc,
+  zstd,
+  libxi,
+  libxcursor,
+  libx11,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
-  version = "0.2.10";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
-    rev = "v${version}";
-    hash = "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hi3hNoD21d60wjY8H/T9bvBLNhpq2+r0q4EzVRhicpA=";
   };
 
-  cargoHash = "sha256-OX4L8EmgMJVT6sFZRdhPl36ZUcXq2JEFpb/PJml2YE8=";
+  cargoHash = "sha256-RbfiGQPQdgdZuoFxPDfbmCjPYBfaNqfZThyg6y0UnQM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,22 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     luajit
-    luajit.pkgs.lua-curl
-    luajit.pkgs.luautf8
-    luajit.pkgs.luasocket
-
-    # this is weird and vendored and should probably stay that way
-    (luajit.pkgs.buildLuaPackage {
-      pname = "lzip";
-      inherit version;
-      src = "${src}/lua/libs/lzip";
-
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ zlib ];
-      installFlags = [ "LUA_CMOD=$(out)/lib/lua/${luajit.luaversion}" ];
-    })
-
+    openssl
     wayland
+    aws-lc
+    zstd
   ];
 
   postInstall = ''
@@ -66,9 +57,9 @@ rustPlatform.buildRustPackage rec {
           libxkbcommon
           vulkan-loader
           wayland
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
+          libx11
+          libxcursor
+          libxi
         ]
       }
 
@@ -82,7 +73,7 @@ rustPlatform.buildRustPackage rec {
       name = "rusty-path-of-building-1";
       desktopName = "Path of Building";
       comment = "Offline build planner for Path of Exile";
-      exec = "rusty-path-of-building poe1";
+      exec = "rusty-path-of-building poe1 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -94,12 +85,13 @@ rustPlatform.buildRustPackage rec {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob" ];
     })
     (makeDesktopItem {
       name = "rusty-path-of-building-2";
       desktopName = "Path of Building 2";
       comment = "Offline build planner for Path of Exile 2";
-      exec = "rusty-path-of-building poe2";
+      exec = "rusty-path-of-building poe2 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -111,15 +103,19 @@ rustPlatform.buildRustPackage rec {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob2" ];
     })
   ];
 
   meta = {
     description = "A cross-platform runtime for Path of Building and Path of Building 2.";
     homepage = "https://github.com/meehl/rusty-path-of-building";
-    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ k900 ];
+    maintainers = with lib.maintainers; [
+      k900
+      cholli
+    ];
     mainProgram = "rusty-path-of-building";
   };
-}
+})

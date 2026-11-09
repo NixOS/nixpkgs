@@ -5,6 +5,7 @@
   autoreconfHook,
   autoconf-archive,
   alsa-lib,
+  darwinMinVersionHook,
   fftw,
   iniparser,
   libGL,
@@ -20,15 +21,15 @@
   withPipewire ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cava";
-  version = "0.10.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
-    rev = version;
-    hash = "sha256-dWPW9vd9LdGALt7Po4nZnW5HkivtZcIUBlXEFurq2os=";
+    tag = finalAttrs.version;
+    hash = "sha256-0vQWobnt9pAZTJc45Lgcfad72BE8DUPGQ5/YwMSmU98=";
   };
 
   buildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     alsa-lib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "14.2")
     portaudio
   ]
   ++ lib.optionals withSDL2 [
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "-v";
 
   preAutoreconf = ''
-    echo ${version} > version
+    echo ${finalAttrs.version} > version
   '';
 
   meta = {
@@ -70,10 +72,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/karlstav/cava";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      offline
       mirrexagon
     ];
     platforms = lib.platforms.unix;
     mainProgram = "cava";
   };
-}
+})

@@ -11,7 +11,6 @@
   pandas,
   pyarrow,
   pytest,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,
@@ -19,25 +18,27 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "recordlinkage";
   version = "0.16";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7NoMEN/xOLFwaBXeMysShfZwrn6MzpJZYhNQHVieaqQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     wheel
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "pandas"
+  ];
+
+  dependencies = [
     pyarrow
     jellyfish
     numpy
@@ -59,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to link records in or between data sources";
     homepage = "https://recordlinkage.readthedocs.io/";
-    changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${version}";
+    changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
-}
+})

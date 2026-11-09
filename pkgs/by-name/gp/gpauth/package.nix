@@ -1,46 +1,67 @@
 {
   rustPlatform,
   lib,
-  fetchFromGitHub,
+  gpclient,
+  glib-networking,
+  makeBinaryWrapper,
   openssl,
   pkg-config,
   perl,
   webkitgtk_4_1,
+  wrapGAppsHook3,
   stdenv,
-  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.5.0";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    tag = "v${version}";
-    hash = "sha256-dxRqf5iOlgJegeAqtTwoVqNHXU3eOse5eMYFknhAh2M=";
-    fetchSubmodules = true;
-  };
+  # Anchor automatic updates on gpclient so the bot builds both packages.
+  # nixpkgs-update: no auto update
+  inherit (gpclient)
+    cargoHash
+    src
+    version
+    ;
 
   buildAndTestSubdir = "apps/gpauth";
 
-  cargoHash = "sha256-VkDq98Y6uBSal7m4V9vjW1XermOPOWulo3Jo34QFRsA=";
-
   nativeBuildInputs = [
+    makeBinaryWrapper
     perl
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
   buildInputs = [
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
     webkitgtk_4_1
   ];
 
-  passthru.updateScript = nix-update-script { };
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fail in sandbox because netdev tries to read SystemConfiguration
+    "--skip=cli::tests::host_id_arg_sets_profile_host_id_seed"
+    "--skip=cli::tests::client_version_arg_sets_profile_client_version"
+  ];
+
+  dontWrapGApps = true;
+
+  postFixup = ''
+    wrapProgram "$out/bin/gpauth" \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : "${lib.makeBinPath [ openssl ]}"
+  '';
+
+  passthru = {
+    tests.runtime-tls = nixosTests.gpauth-tls;
+  };
 
   meta = {
-    changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/changelog.md";
     description = "CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
     longDescription = ''
       A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO
@@ -49,13 +70,12 @@ rustPlatform.buildRustPackage rec {
       The CLI version is always free and open source in this repo. It has almost
       the same features as the GUI version.
     '';
-    homepage = "https://github.com/${src.owner}/${src.repo}";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      binary-eater
       booxter
       m1dugh
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

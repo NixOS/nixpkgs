@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rhack";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = "rhack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "088ynf65szaa86pxwwasn3wwi00z5pn7i8w9gh5dyn983z4d8237";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

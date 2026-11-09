@@ -6,7 +6,7 @@
   makeWrapper,
   perlPackages,
   replaceVars,
-  xorg,
+  xmessage,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -24,7 +24,7 @@ perlPackages.buildPerlPackage rec {
 
   patches = [
     (replaceVars ./0001-Fix-paths.patch {
-      xmessage = xorg.xmessage;
+      xmessage = xmessage;
       inherit fluxbox gnused;
       # replaced in postPatch
       fbmenugen = null;
@@ -46,8 +46,10 @@ perlPackages.buildPerlPackage rec {
     perlPackages.Gtk3
     perlPackages.LinuxDesktopFiles
     perlPackages.perl
-    xorg.xmessage
+    xmessage
   ];
+
+  strictDeps = true;
 
   dontConfigure = true;
 
@@ -69,6 +71,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru.updateScript = gitUpdater { };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/trizen/fbmenugen";

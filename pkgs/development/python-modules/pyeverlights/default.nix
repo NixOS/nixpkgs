@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "joncar";
     repo = "pyeverlights";
     rev = version;
-    sha256 = "16xpq933j8yydq78fnf4f7ivyw5a45ix4mfycpmm91aj549p6pm0";
+    hash = "sha256-oF5zEylShVTrZd5V0mMhqnC/43HEWYcObt4jOUbCt5s=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interfacing with an EverLights control box";
     homepage = "https://github.com/joncar/pyeverlights";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

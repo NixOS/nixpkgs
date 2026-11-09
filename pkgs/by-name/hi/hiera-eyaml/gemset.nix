@@ -13,6 +13,16 @@
     };
     version = "4.3.0";
   };
+  base64 = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "01qml0yilb9basf7is2614skjp8384h2pycfx86cr8023arfj98g";
+      type = "gem";
+    };
+    version = "0.2.0";
+  };
   highline = {
     dependencies = [ "reline" ];
     groups = [ "default" ];

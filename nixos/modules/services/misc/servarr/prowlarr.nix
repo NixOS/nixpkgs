@@ -45,9 +45,12 @@ in
         description = "Prowlarr";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
-          HOME = "/var/empty";
-        };
+        environment =
+          servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings
+          // servarr.commonDotnetEnvVars
+          // {
+            HOME = "/var/empty";
+          };
 
         serviceConfig = {
           Type = "simple";
@@ -57,6 +60,7 @@ in
           ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
         };
+        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       };
 
       tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {

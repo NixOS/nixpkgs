@@ -7,17 +7,17 @@
 
 buildNpmPackage {
   pname = "coc-pyright";
-  version = "0-unstable-2026-01-01";
+  version = "0-unstable-2026-11-01";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-pyright";
     # No tagged releases, this commit corresponds to the latest release of the package.
-    rev = "33184c03e543b29227df989cf893752bae5f3ea2";
-    hash = "sha256-fj6iSQHprf/lkDGI5aFsogMAPv6a3Ghp9uDqnTM3/MY=";
+    rev = "692b1e88b6df9de2ee033618414ddc72f3e6855d";
+    hash = "sha256-rquFuEOK4/zx4iAqgVLUcYpnO8GSVr0JJme+I69IRv4=";
   };
 
-  npmDepsHash = "sha256-0KKEPl0H0HxNCw7GTaxE+voQhS5J1TSpd4JjyWW62UI=";
+  npmDepsHash = "sha256-bProL/Mu0D7Pih75Mlko2B+o0RtImVIjd8yWJukOeTs=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -25,6 +25,6 @@ buildNpmPackage {
     description = "Pyright extension for coc.nvim";
     homepage = "https://github.com/fannheyward/coc-pyright";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

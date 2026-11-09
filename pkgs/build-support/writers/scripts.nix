@@ -6,6 +6,7 @@
   makeBinaryWrapper,
   mkNugetDeps,
   mkNugetSource,
+  nginx-config-formatter,
   pkgs,
   stdenv,
 }:
@@ -17,6 +18,7 @@ let
     last
     optionalString
     strings
+    toFunction
     types
     ;
 in
@@ -31,7 +33,7 @@ rec {
       : the [interpreter](https://en.wikipedia.org/wiki/Shebang_(Unix)) to use for the script.
     : `check` (String)
       : A command to check the script. For example, this could be a linting check.
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper].
 
     `nameOrPath` (String)
@@ -195,7 +197,7 @@ rec {
     : `strip` (Boolean, Default: true)
       : Whether to [strip](https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase) the executable or not.
 
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
 
     `nameOrPath` (String)
@@ -403,9 +405,18 @@ rec {
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.dash}";
+          check = argsOrScript.check or "${lib.getExe pkgs.dash} -n";
+        }
+      ) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.dash}";
+        check = "${lib.getExe pkgs.dash} -n";
+      } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to dash
@@ -751,7 +762,7 @@ rec {
     ## `pkgs.writers.writeHaskell` usage example
 
     ```nix
-    writeHaskell "missiles" { libraries = [ pkgs.haskellPackages.acme-missiles ]; } ''
+    writeHaskell "missiles" { libraries = hpkgs: [ hpkgs.acme-missiles ]; } ''
       import Acme.Missiles
 
       main = launchMissiles
@@ -777,7 +788,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${(ghc.withPackages (_: libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (toFunction libraries))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit makeWrapperArgs strip;
@@ -797,7 +808,7 @@ rec {
     ## `pkgs.writers.writeNim` usage example
 
     ```nix
-      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+      writeNim "hello-nim" { nim = pkgs.nim; } ''
         echo "hello nim"
       '';
     ```
@@ -807,7 +818,7 @@ rec {
     name:
     {
       makeWrapperArgs ? [ ],
-      nim ? pkgs.nim2,
+      nim ? pkgs.nim,
       nimCompileOptions ? { },
       strip ? true,
     }:
@@ -877,10 +888,14 @@ rec {
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
       makeScriptWriter (
-        argsOrScript // { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; }
+        argsOrScript
+        // {
+          # Separate the shebang from doc comments attached to `main`.
+          interpreter = "${lib.getExe pkgs.nushell} --no-config-file\n";
+        }
       ) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.nushell} --no-config-file"; } name argsOrScript;
+      writeNu name { } argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to nu
@@ -1013,7 +1028,7 @@ rec {
 
     :::
   */
-  writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
+  writeLua = makeLuaWriter pkgs.lua5_2_compat pkgs.lua52Packages buildPackages.lua52Packages;
 
   writeLuaBin = name: writeLua "/bin/${name}";
 
@@ -1086,7 +1101,7 @@ rec {
     in
     writeDash name ''
       export NODE_PATH=${node-env}/lib/node_modules
-      exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
+      exec ${lib.getExe pkgs.nodejs-slim} ${pkgs.writeText "js" content} "$@"
     '';
 
   /**
@@ -1094,25 +1109,20 @@ rec {
   */
   writeJSBin = name: writeJS "/bin/${name}";
 
-  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
-    awk -f
-    {sub(/^[ \t]+/,"");idx=0}
-    /\{/{ctx++;idx=1}
-    /\}/{ctx--}
-    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
-  '';
-
   writeNginxConfig =
     name: text:
     pkgs.runCommandLocal name
       {
         inherit text;
-        passAsFile = [ "text" ];
-        nativeBuildInputs = [ gixy ];
+        __structuredAttrs = true;
+        nativeBuildInputs = [
+          gixy
+          nginx-config-formatter
+        ];
       } # sh
       ''
-        # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
+        sed -i 's/ ;/;/g' $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
@@ -1199,15 +1209,10 @@ rec {
       ])
       // {
         interpreter =
-          if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
-            if libraries == [ ] then
-              python.interpreter
-            else if (lib.isFunction libraries) then
-              (python.withPackages libraries).interpreter
-            else
-              (python.withPackages (ps: libraries)).interpreter
+          if libraries == [ ] then
+            python.interpreter
           else
-            python.interpreter;
+            (python.withPackages (toFunction libraries)).interpreter;
         check = optionalString (python.isPy3k && doCheck) (
           writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
@@ -1358,4 +1363,75 @@ rec {
   writeFSharp = makeFSharpWriter { };
 
   writeFSharpBin = name: writeFSharp "/bin/${name}";
+
+  /**
+    Creates an executable R script.
+
+    # Inputs
+
+    `name` (String)
+    : Name of or path to the script, as in `makeScriptWriter`.
+
+    `config` (AttrSet)
+    : `libraries` (List of packages, Default: [])
+      : R packages available to the script.
+    : `options` (List of strings, Default: [])
+      : Additional command-line options passed to Rscript.
+    : `doCheck` (Boolean, Default: true)
+      : Whether to check the script with jarl.
+
+    Other attributes are passed to `makeScriptWriter`.
+
+    `content` (String or Path)
+    : Script source or a file containing it.
+
+    # Examples
+
+    :::{.example}
+    ## `pkgs.writers.writeRscript` usage example
+
+    ```nix
+    writeRscript "example" { libraries = [ pkgs.rPackages.jsonlite ]; } ''
+      message <- jsonlite::fromJSON('{"text":"Hello!"}')
+      cat(message$text)
+    ''
+    ```
+
+    :::
+  */
+  writeRscript =
+    name:
+    args@{
+      libraries ? [ ],
+      options ? [ ],
+      doCheck ? true,
+      ...
+    }:
+    let
+      R = pkgs.rWrapper.override { packages = libraries; };
+      rest = (
+        removeAttrs args [
+          "libraries"
+          "options"
+          "doCheck"
+        ]
+      );
+
+      rCheck = writeDash "rCheck" /* sh */ ''
+        exec ${buildPackages.jarl}/bin/jarl check "$1"
+      '';
+    in
+    makeScriptWriter (
+      rest
+      // {
+        interpreter = toString ([ "${R}/bin/Rscript" ] ++ options);
+        check = if doCheck then rCheck else "";
+      }
+    ) name;
+
+  /**
+    Takes the same arguments as `writeRscript`, but creates the script
+    at `$out/bin/<name>` (like `writeScriptBin`).
+  */
+  writeRscriptBin = name: writeRscript "/bin/${name}";
 }

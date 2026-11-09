@@ -3,20 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymata-express";
   version = "1.21";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MrYsLab";
     repo = "pymata-express";
     rev = version;
-    sha256 = "1mibyn84kjahrv3kn51yl5mhkyig4piv6wanggzjflh5nm96bhy8";
+    hash = "sha256-yMNlUrUFUif/e1Zxs+MlL/oJa6E+FDvHzlDJSZD1K9Y=";
   };
 
   propagatedBuildInputs = [ pyserial ];
@@ -34,7 +32,7 @@ buildPythonPackage rec {
       hardware remotely over a serial link.
     '';
     homepage = "https://mryslab.github.io/pymata-express/";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

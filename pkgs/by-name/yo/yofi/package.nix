@@ -10,14 +10,14 @@
   libgcc,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yofi";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "l4l";
     repo = "yofi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cepAZyA4RBgqeF20g6YOlZTM0aRqErw17yuQ3U24UEg=";
   };
 
@@ -61,4 +61,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ rayslash ];
     mainProgram = "yofi";
   };
-}
+})

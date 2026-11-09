@@ -8,7 +8,7 @@ diff --color -ruN netatop-3.2.2.orig/Makefile netatop-3.2.2/Makefile
 -			cd /usr/src; dkms add -m netatop -v $(CURVERS)
 -			dkms build   -m netatop -v $(CURVERS)
 -			dkms install -m netatop -v $(CURVERS)
-+			install -m 0644 netatop.ko -Dt $(out)/lib/modules/$(KMODDIRVERSION)/extra
++			$(MAKE) -C $(KERNDIR) M=$(THISDIR) modules_install INSTALL_MOD_PATH=$(out) INSTALL_MOD_DIR=extra
  			#
 -			install netatopd -t /usr/sbin
 -			install -m 0644 netatop.service -t /lib/systemd/system

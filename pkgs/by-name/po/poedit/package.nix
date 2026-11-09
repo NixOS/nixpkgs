@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   autoconf,
   automake,
   libtool,
   gettext,
   pkg-config,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   icu,
   lucenepp,
@@ -22,15 +23,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poedit";
-  version = "3.6.2";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
-    rev = "v${version}-oss";
-    hash = "sha256-Lb1R7GMB0GeS2xZASR7w4ee33mMEKP9gPabRHkHlIJI=";
+    rev = "v${finalAttrs.version}-oss";
+    hash = "sha256-I5JwyXNQJSxz6Q9dumev53TM6nv/clYtjOjW8fHA+dk=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     lucenepp
     nlohmann_json
-    wxGTK32
+    wxwidgets_3_2
     icu
     pugixml
     gtk3
@@ -77,14 +78,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)-oss"
+    ];
+  };
+
   meta = {
     description = "Cross-platform gettext catalogs (.po files) editor";
     mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dasj19 ];
+    maintainers = with lib.maintainers; [ RumBugen ];
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

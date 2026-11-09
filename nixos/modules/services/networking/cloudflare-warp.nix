@@ -73,6 +73,8 @@ in
             "${cfg.rootDir}"
             "/etc/resolv.conf"
           ];
+          # warp-svc uses this absolute FHS path instead of looking up nft in PATH.
+          BindReadOnlyPaths = [ "${lib.getExe pkgs.nftables}:/usr/sbin/nft" ];
           CapabilityBoundingSet = caps;
           AmbientCapabilities = caps;
           Restart = "always";

@@ -7,7 +7,6 @@
   fetchPypi,
   pyjwt,
   python-jose,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
   version = "5.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
@@ -47,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     changelog = "https://github.com/jazzband/djangorestframework-simplejwt/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ arnoldfarkas ];
+    maintainers = [ ];
   };
 }

@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wander";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = "wander";
-    rev = "v${version}";
-    sha256 = "sha256-1+bKdIAWdg/+5FBDbtvjDV0xpZ5jot3y6F+KuLO9WVk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-PBeEb0WJFflhN/DzW5mqnqlvE8BWLEbqkZGfWSbFEFE=";
   };
 
   vendorHash = "sha256-0S8tzP5yNUrH6fp+v7nbUPTMWzYXyGw+ZNcXkSN+tWY=";
@@ -39,4 +39,4 @@ buildGoModule rec {
     homepage = "https://github.com/robinovitch61/wander";
     mainProgram = "wander";
   };
-}
+})

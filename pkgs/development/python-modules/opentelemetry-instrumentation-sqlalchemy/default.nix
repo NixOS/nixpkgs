@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -22,8 +21,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-sqlalchemy";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-sqlalchemy";
 

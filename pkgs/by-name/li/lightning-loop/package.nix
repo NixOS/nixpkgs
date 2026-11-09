@@ -1,22 +1,22 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   lib,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "lightning-loop";
-  version = "0.31.5-beta";
+  version = "0.35.3-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
-    rev = "v${version}";
-    hash = "sha256-pmZturc7b3wd+qgSQPNzeY0LoMTF82dqUgOe8NfPeZw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SknhwI1WtdN8RWST+d7CLDwVorevqAqvFjeIvh+Os1I=";
   };
 
-  vendorHash = "sha256-X/+yi04FkN8hauqeFytagIdfigb6EGTvv8tVrlm7MGw=";
+  vendorHash = "sha256-22jb50m0DDaXFkUSrbx+mv6SCAm3BWSp4/xhX0B57CM=";
 
   subPackages = [
     "cmd/loop"
@@ -45,4 +45,4 @@ buildGoModule rec {
       starius
     ];
   };
-}
+})

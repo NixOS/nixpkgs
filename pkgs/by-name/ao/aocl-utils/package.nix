@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aocl-utils";
-  version = "5.1";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
-    tag = version;
-    hash = "sha256-1g5gERVxXKAeCyNR9/HheUfj+MPxJso3NzqDonvuyMo=";
+    tag = finalAttrs.version;
+    hash = "sha256-VbkAhcivyDgAAo91g1UwvQZ3gRy3JFooB9YIAlUtYBc=";
   };
 
   patches = [ ./pkg-config.patch ];
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

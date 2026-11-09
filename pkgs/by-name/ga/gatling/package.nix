@@ -12,12 +12,12 @@
 let
   version = "0.16";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gatling";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.fefe.de/gatling/${pname}-${version}.tar.xz";
+    url = "https://www.fefe.de/gatling/gatling-${finalAttrs.version}.tar.xz";
     sha256 = "0nrnws5qrl4frqcsfa9z973vv5mifgr9z170qbvg3mq1wa7475jz";
   };
 
@@ -44,10 +44,12 @@ stdenv.mkDerivation rec {
     make gatling
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
   meta = {
     description = "High performance web server";
     homepage = "http://www.fefe.de/gatling/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

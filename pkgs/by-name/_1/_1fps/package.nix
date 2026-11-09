@@ -2,17 +2,19 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "1fps";
   version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "1fpsvideo";
     repo = "1fps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8dtcW/niwmhVXB2kZdR/RjNg2ArSClL1w4nGI5rP3+Y=";
   };
 
@@ -21,9 +23,9 @@ buildGoModule rec {
   vendorHash = "sha256-29x5Lh++NBAsg2O2Vr6pf9iRuVOvow2R5Iqz6twZGXA=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXi
+    libx11
+    libxtst
+    libxi
   ];
 
   meta = {
@@ -33,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ renesat ];
     mainProgram = "1fps";
   };
-}
+})

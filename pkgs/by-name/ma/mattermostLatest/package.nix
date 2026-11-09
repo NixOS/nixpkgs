@@ -1,23 +1,26 @@
 {
   mattermost,
-}:
+  ...
+}@args:
 
-mattermost.override {
-  versionInfo = {
-    # Latest, non-RC releases only.
-    # If the latest is an ESR (Extended Support Release),
-    # duplicate it here to facilitate the update script.
-    # See https://docs.mattermost.com/about/mattermost-server-releases.html
-    # and make sure the version regex is up to date here.
-    # Ensure you also check ../mattermost/package.nix for ESR releases.
-    regex = "^v(11\\.[0-9]+\\.[0-9]+)$";
-    version = "11.2.1";
-    srcHash = "sha256-y92zzL8yHlDxOStvAr1Mu+PPhTVlVQueBNtm4dhC/4w=";
-    vendorHash = "sha256-mvQivHijLEdfTk7QzlfWQQn9S/9lMfrI+jSKKz0bh3M=";
-    npmDepsHash = "sha256-YuJ0IfvhWb6kzBoTMYWV3mUhMuhrAelKoyXlmnQJovo=";
-    lockfileOverlay = ''
-      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
-    '';
-    autoUpdate = ./package.nix;
-  };
-}
+mattermost.override (
+  {
+    latestVersionInfo = {
+      # Latest, non-RC releases only.
+      # If the latest is an ESR (Extended Support Release),
+      # duplicate it here to facilitate the update script.
+      # Note that the Mattermost package will prefer whichever is later of this one
+      # or itself, in case the update script is lagging on one set of hashes.
+      # See https://docs.mattermost.com/about/mattermost-server-releases.html
+      # and make sure the version regex is up to date here.
+      # Ensure you also check ../mattermost/package.nix for ESR releases.
+      regex = "^v(12\\.[0-9]+\\.[0-9]+)$";
+      version = "12.0.2";
+      srcHash = "sha256-4Bp9mTEBSnQ5wQsFlme+EPAxgFAKaSVm8pxbC9B8rXc=";
+      vendorHash = "sha256-wN2n/dwWkvz4R0KH/ElqfjHadCtDhHt8e4xgWTRnC3k=";
+      npmDepsHash = "sha256-hx1vW5dovxidAgxQv1vqkR/tQHLzqs7uMxYbB+6w2g8=";
+      autoUpdate = ./package.nix;
+    };
+  }
+  // args
+)

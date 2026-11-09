@@ -10,9 +10,9 @@ lib.makeOverridable (
     ...
   }@args:
 
-  assert lib.assertMsg (lib.xor (tag != null) (
-    rev != null
-  )) "fetchFromRadicle requires one of either `rev` or `tag` to be provided (not both).";
+  assert
+    lib.xor (tag != null) (rev != null)
+    || throw "fetchFromRadicle requires one of either `rev` or `tag` to be provided (not both).";
 
   let
     namespacePrefix = lib.optionalString (node != null) "refs/namespaces/${node}/";

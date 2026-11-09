@@ -14,7 +14,7 @@ with lib;
 let
   cfg = config.testing;
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   backdoorService = {
     requires = [
@@ -78,6 +78,8 @@ let
     # Allow very slow start
     DefaultTimeoutStartSec = 300;
     DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in
@@ -86,7 +88,8 @@ in
 
   options.testing = {
     backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
-      default = true;
+      # See assertion below for why the backdoor doesn't work with containers.
+      default = !config.boot.isContainer;
     };
 
     initrdBackdoor = lib.mkEnableOption ''
@@ -103,9 +106,16 @@ in
 
     assertions = [
       {
-        assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
+        assertion = config.boot.isContainer -> !cfg.backdoor;
         message = ''
-          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+          `testing.backdoor` uses virtio console, which does not work with
+          containers (we use `nsenter` instead).
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.initrdBackdoor;
+        message = ''
+          `testing.initrdBackdoor` does not work with containers as there is no initrd.
         '';
       }
     ];
@@ -180,7 +190,7 @@ in
     # that do not specify any nodes, or an empty attr set as nodes) will not
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.package) {
       qemu = {
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
@@ -214,21 +224,30 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xorg.xwininfo ];
+    environment.systemPackages = [
+      pkgs.xwininfo
+    ]
+    ++ lib.optionals config.boot.isNspawnContainer [
+      # Unlike a QEMU machine, an nspawn container has no monitor that can
+      # capture its display or inject keyboard input, so the test driver uses
+      # `xwd' and `xdotool' inside the container instead.
+      pkgs.xdotool
+      pkgs.xwd
+    ];
 
     # Log everything to the serial console.
-    services.journald.extraConfig = ''
-      ForwardToConsole=yes
-      TTYPath=/dev/${qemu-common.qemuSerialDevice}
-      MaxLevelConsole=debug
-    '';
+    services.journald.settings.Journal = {
+      ForwardToConsole = true;
+      TTYPath = "/dev/${qemu-common.qemuSerialDevice}";
+      MaxLevelConsole = "debug";
+    };
 
     systemd.settings.Manager = managerSettings;
-    systemd.user.extraConfig = ''
+    systemd.user.settings.Manager = {
       # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+      DefaultTimeoutStartSec = 300;
+      DefaultDeviceTimeoutSec = 300;
+    };
 
     boot.consoleLogLevel = 7;
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "joferkington";
     repo = "mpldatacursor";
     rev = "v${version}";
-    sha256 = "0i1lwl6x6hgjq4xwsc138i4v5895lmnpfqwpzpnj5mlck6fy6rda";
+    hash = "sha256-qmXjnZmM1iLt/Zdjd22lJaGySUQjMM07wfJB0w3lNEQ=";
   };
 
   propagatedBuildInputs = [ matplotlib ];

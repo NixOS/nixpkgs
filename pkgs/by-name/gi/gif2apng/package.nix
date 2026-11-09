@@ -7,12 +7,12 @@
   zopfli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gif2apng";
   version = "1.9";
 
   src = fetchzip {
-    url = "mirror://sourceforge/gif2apng/gif2apng-${version}-src.zip";
+    url = "mirror://sourceforge/gif2apng/gif2apng-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-rt1Vp4hjeFAVWJOU04BdU2YvBwECe9Q1c7EpNpIN+uE=";
   };
@@ -46,19 +46,21 @@ stdenv.mkDerivation rec {
     zopfli
   ];
 
-  preBuild = ''
-    buildFlagsArray+=("LIBS=-lzopfli -lstdc++ -lz")
-  '';
+  strictDeps = true;
+
+  buildFlags = [ "LIBS=-lzopfli -lstdc++ -lz" ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
 
-  NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
+  env.NIX_CFLAGS_COMPILE = "-DENABLE_LOCAL_ZOPFLI";
 
   installPhase = ''
     runHook preInstall
     install -Dm755 gif2apng $out/bin/gif2apng
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gif2apng.sourceforge.net/";
@@ -67,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

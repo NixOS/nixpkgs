@@ -19,7 +19,7 @@
   ompdSupport ? true,
   ompdGdbSupport ? ompdSupport,
   getVersionFile,
-  fetchpatch,
+  checkPhaseThreadLimitHook,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -30,15 +30,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/openmp "$out"
-      ''
+      runCommand "openmp-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/openmp "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "23") ''
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+            cp -r ${monorepoSrc}/third-party "$out"
+            cp -r ${monorepoSrc}/runtimes "$out"
+          ''
+        )
     else
       src;
 
-  sourceRoot = "${finalAttrs.src.name}/openmp";
+  # LLVM 23 removed OpenMP's standalone build
+  # https://openmp.llvm.org/Building.html
+  sourceRoot =
+    "${finalAttrs.src.name}/"
+    + (if lib.versionAtLeast release_version "23" then "runtimes" else "openmp");
 
   outputs = [
     "out"
@@ -60,12 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
     lit
   ];
 
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
   buildInputs = [
     llvm
   ]
   ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
@@ -77,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
     (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
   ]
+  ++ lib.optionals (lib.versionAtLeast release_version "23") [
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "openmp")
+  ]
   ++ devExtraCmakeFlags;
 
   doCheck = false;
@@ -84,8 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "check-openmp";
 
   preCheck = ''
-    patchShebangs ../tools/archer/tests/deflake.bash
+    patchShebangs ${
+      if lib.versionAtLeast release_version "23" then "../../openmp" else ".."
+    }/tools/archer/tests/deflake.bash
   '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

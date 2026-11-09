@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   pname = "usb-protocol";
   version = "0.9.2";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
@@ -52,6 +50,6 @@ buildPythonPackage rec {
     description = "Python library providing utilities, data structures, constants, parsers, and tools for working with the USB protocol";
     homepage = "https://github.com/greatscottgadgets/python-usb-protocol";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

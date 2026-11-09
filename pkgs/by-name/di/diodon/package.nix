@@ -14,19 +14,19 @@
   xvfb-run,
   libayatana-appindicator,
   libpeas,
-  libXtst,
+  libxtst,
   zeitgeist,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diodon";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "diodon-dev";
     repo = "diodon";
     tag = finalAttrs.version;
-    hash = "sha256-VCJANasrGmC0jIy8JNNURvmgpL/SLOaVsKo7Pf+X8DQ=";
+    hash = "sha256-lcDJe9uJeDPtVBwh3QzQdRX4/exOl6gLStpQxLiT10M=";
   };
 
   strictDeps = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libayatana-appindicator
     libpeas
-    libXtst
+    libxtst
     zeitgeist
   ];
 

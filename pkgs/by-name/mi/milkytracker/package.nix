@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
-    install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
+    install -Dm644 $src/resources/pictures/carton.png $out/share/icons/hicolor/128x128/apps/milkytracker.png
     install -Dm644 resources/org.milkytracker.MilkyTracker.metainfo.xml $out/share/appdata/org.milkytracker.MilkyTracker.metainfo.xml
   '';
 

@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   fontconfig,
-  libX11,
-  libXext,
-  libXft,
+  libx11,
+  libxext,
+  libxft,
   ncurses,
   pkg-config,
   nix-update-script,
@@ -13,9 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "mcaimi-st";
-  version = "0-unstable-2025-09-22";
+  version = "0.9.3-unstable-2025-09-22";
 
-  src = fetchFromGitHub {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromCodeberg {
     owner = "mcaimi";
     repo = "st";
     rev = "667ded8e13457b0ba9d84b98545885e5a3e9dcc7";
@@ -24,12 +27,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
+    ncurses
   ];
+
   buildInputs = [
     fontconfig
-    libX11
-    libXext
-    libXft
+    libx11
+    libxext
+    libxft
     ncurses
   ];
 
@@ -43,7 +48,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = "https://github.com/mcaimi/st";
+    homepage = "https://codeberg.org/mcaimi/st";
     description = "Suckless Terminal fork";
     mainProgram = "st";
     license = lib.licenses.mit;

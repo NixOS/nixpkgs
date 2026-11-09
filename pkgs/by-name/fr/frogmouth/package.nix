@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "frogmouth";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "frogmouth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0fcCON/M9JklE7X9aRfzTkEFG4ckJqLoQlYCSrWHHGQ=";
   };
 
@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Markdown browser for your terminal";
     mainProgram = "frogmouth";
     homepage = "https://github.com/Textualize/frogmouth";
-    changelog = "https://github.com/Textualize/frogmouth/blob/${src.rev}/ChangeLog.md";
+    changelog = "https://github.com/Textualize/frogmouth/blob/${finalAttrs.src.rev}/ChangeLog.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

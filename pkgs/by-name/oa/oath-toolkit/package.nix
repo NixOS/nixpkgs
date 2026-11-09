@@ -12,13 +12,13 @@ let
   securityDependency = if stdenv.hostPlatform.isDarwin then xmlsec else pam;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oath-toolkit";
-  version = "2.6.13";
+  version = "2.6.15";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-W12C6aRFUgbST8vX7li/THk5ii5nmX2AvUWuknWGsYs=";
+    url = "mirror://savannah/oath-toolkit/oath-toolkit-${finalAttrs.version}.tar.gz";
+    hash = "sha256-itJKqf8TwO3z78JXPZDoXPi1zn6CwIBCV0wVkfnZHqo=";
   };
 
   buildInputs = [ securityDependency ];
@@ -33,5 +33,9 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ schnusch ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "oathtool";
+    license = with lib.licenses; [
+      lgpl21Plus # Libraries
+      gpl3Plus # Tools
+    ];
   };
-}
+})

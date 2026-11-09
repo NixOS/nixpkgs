@@ -11,14 +11,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "navi";
   version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zvqxVu147u/m/4B3fhbuQ46txGMrlgQv9d4GGiR8SoQ=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "navi";
     maintainers = with lib.maintainers; [ cust0dian ];
   };
-}
+})

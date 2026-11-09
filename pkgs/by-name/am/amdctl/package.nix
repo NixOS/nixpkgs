@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amdctl";
   version = "0.11";
 
   src = fetchFromGitHub {
     owner = "kevinlekiller";
     repo = "amdctl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2wBk/9aAD7ARMGbcVxk+CzEvUf8U4RS4ZwTCj8cHNNo=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

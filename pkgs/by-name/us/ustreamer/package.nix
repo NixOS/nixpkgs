@@ -21,15 +21,15 @@
   withJanus ? true,
   withPython ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ustreamer";
-  version = "6.40";
+  version = "6.67";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
-    tag = "v${version}";
-    hash = "sha256-jKltFQsx8Q9+TMTOg1p6nljII72CLEg6VYe60/KojUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fIjvxgFiwpPJ2M8v5AxeRnm+7kofXozD5dEe6pIjczk=";
   };
 
   buildInputs = [
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       setuptools
       build
       pip
+      installer
     ]
   )
   ++ lib.optionals withSystemd [
@@ -62,7 +63,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     which
-  ];
+  ]
+  ++ lib.optional withPython python3Packages.python;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -103,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ustreamer";
   };
-}
+})

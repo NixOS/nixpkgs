@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption;
 
   unsafeGetAttrPosStringOr =
     default: name: value:

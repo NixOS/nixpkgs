@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build system
   setuptools,
@@ -20,31 +19,23 @@
   py3rijndael,
 
   # tests
+  aiointercept,
   aioresponses,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "samsungtvws";
-  version = "2.7.2";
+  version = "3.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
-    tag = "v${version}";
-    hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vME+XCju/4pQTczsxPgs0LJTa4ptWDQlc8jnIKnNMeA=";
   };
-
-  patches = [
-    # https://github.com/xchwarze/samsung-tv-ws-api/pull/159
-    (fetchpatch {
-      name = "replace-async-timeout-with-asyncio.timeout.patch";
-      url = "https://github.com/xchwarze/samsung-tv-ws-api/commit/c5b363aababe0e859cf3aa521a658c83c567f876.patch";
-      hash = "sha256-gEtcqmxy2Til0KYLGwCxRThx9fndqdMbYam5WbzDKOo=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -65,20 +56,20 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ optional-dependencies.async
-  ++ optional-dependencies.encrypted;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "samsungtvws" ];
 
   meta = {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
-    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

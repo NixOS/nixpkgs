@@ -12,19 +12,26 @@
   bison,
   flex,
   ctestCheckHook,
+  buildPackages,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.22.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gGAO+D0A/hEoHMm6OvRBc1Mks9y52kfd0q/Sg96pdW4=";
+    hash = "sha256-ZXGxpjqQq+qlxEDM4tWOF1hHGZsy3s/K0c2bIxMky10=";
   };
+
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    # Compiling the tests doesn't work for cross builds.
+    substituteInPlace lib/py/CMakeLists.txt \
+      --replace-fail 'COMMAND ''${THRIFT_COMPILER} --gen py test/test_thrift_file/TestServer.thrift' ""
+  '';
 
   # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
@@ -35,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     flex
     pkg-config
-    (python3.withPackages (
+    (buildPackages.python3.withPackages (
       ps:
       with ps;
       [
@@ -74,7 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # FIXME: Fails to link in static mode with undefined reference to
     # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-    (lib.cmakeBool "BUILD_TESTING" (!static))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    # Building tutorials requires running thrift.
+    (lib.cmakeBool "BUILD_TUTORIALS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   ];
 
   disabledTests = [
@@ -85,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Tests that hang up in the Darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
-    "python_test"
+    "PythonThriftTNonblockingServer"
 
     # fails on hydra, passes locally
     "concurrency_test"
@@ -95,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "TInterruptTest"
     "TServerIntegrationTest"
     "processor"
+    "processor_test"
     "TNonblockingServerTest"
     "TNonblockingSSLServerTest"
     "StressTest"
@@ -102,14 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
     "StressTestNonBlocking"
   ];
 
-  doCheck = !static;
+  doCheck = !static && !stdenv.hostPlatform.isDarwin; # FIXME darwin?
 
   enableParallelChecking = false;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
+    downloadPage = "https://github.com/apache/thrift";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ bjornfor ];

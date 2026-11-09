@@ -60,6 +60,7 @@ with self;
     pname = "accessor_core";
     hash = "sha256-ku83ZfLtVI8FvQhrKcnJmhmoNlYcVMKx1tor5N8Nq7M=";
     meta.description = "Accessors for Core types, for use with the Accessor library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.5";
     propagatedBuildInputs = [
       accessor_base
       core_kernel
@@ -176,6 +177,7 @@ with self;
       async_websocket
       cohttp_async_websocket
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   async_sendfile = janePackage {
@@ -433,17 +435,19 @@ with self;
     propagatedBuildInputs = [
       async_ssl
       async_websocket
-      cohttp-async
+      cohttp-async_5_3
       ppx_jane
       uri-sexp
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   cohttp_static_handler = janePackage {
     pname = "cohttp_static_handler";
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
     meta.description = "Library for easily creating a cohttp handler for static files";
-    propagatedBuildInputs = [ cohttp-async ];
+    propagatedBuildInputs = [ cohttp-async_5_3 ];
+    __darwinAllowLocalNetworking = true;
   };
 
   content_security_policy = janePackage {
@@ -460,8 +464,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    version = "0.17.1";
-    hash = "sha256-XkABcvglVJLVnWJmvfr5eVywyclPSDqanVOLQNqdNtQ=";
+    version = "0.17.2";
+    hash = "sha256-KIpQ6W2gsuq44TtGPpIs/j1kwbSP3GMmIwvZAYMYtNo=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [
@@ -786,27 +790,6 @@ with self;
     ];
   };
 
-  janestreet_csv = janePackage {
-    pname = "janestreet_csv";
-    hash = "sha256-at7ywGDaYIDsqhxxLYJhB8a697ccfPtKKI8LvCmRgG8=";
-    propagatedBuildInputs = [
-      async
-      bignum
-      core_kernel
-      core_unix
-      csvfields
-      delimited_parsing
-      fieldslib
-      numeric_string
-      ppx_jane
-      re2
-      textutils
-      tyxml
-      ocaml_pcre
-    ];
-    meta.description = "Tools for working with CSVs on the command line";
-  };
-
   jane_rope = janePackage {
     pname = "jane_rope";
     hash = "sha256-Lo4+ZUX9R2EGrz4BN+LqdJgVXB3hQqNifgwsjFC1Hfs=";
@@ -1024,7 +1007,6 @@ with self;
     propagatedBuildInputs = [
       core_unix
       patience_diff
-      ocaml_pcre
     ];
     meta = {
       description = "File Diff using the Patience Diff algorithm";
@@ -1577,7 +1559,7 @@ with self;
       if lib.versionAtLeast ppxlib.version "0.36" then
         {
           version = "0.17.1";
-          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=$";
+          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=";
         }
       else
         {
@@ -2300,7 +2282,8 @@ with self;
 
   zstandard = janePackage {
     pname = "zstandard";
-    hash = "sha256-EUI7fnN8ZaM1l0RBsgSAMWO+VXA8VoCv/lO5kcj+j4E=";
+    version = "0.17.1";
+    hash = "sha256-xGwKQOv2mSBKf1LfNtQpb6htGRVbNPujKhjMEVHvsxU=";
     meta.description = "OCaml bindings to Zstandard";
     buildInputs = [ ppx_jane ];
     propagatedBuildInputs = [

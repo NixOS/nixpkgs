@@ -11,13 +11,10 @@
   ipmitool,
   libvirt,
   monitoring-plugins,
-  mtr,
   net-snmp,
   nfdump,
-  nmap,
   rrdtool,
   system-sendmail,
-  whois,
   dataDir ? "/var/lib/librenms",
   logDir ? "/var/log/librenms",
 }:
@@ -27,16 +24,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.10.0";
+  version = "26.10.2";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-SzDSeWTnsXy274H2mkGIHOsW26EoL7aony7Xcb+e+h4=";
+    hash = "sha256-BoeNACFMgGWA3U92/JYh6Ni8RTe5M0Hz8ar7ui8R+x4=";
   };
 
-  vendorHash = "sha256-lCDBz0+VUTlvH371WRCPBh8NFWn6BTVS6BPMQM621dE=";
+  vendorHash = "sha256-7OfUySl2nOyKo5gEcMiLXXIiny7qs4wA4VhxWBwj0qM=";
 
   php = phpPackage;
 
@@ -45,14 +42,11 @@ phpPackage.buildComposerProject2 rec {
     ipmitool
     libvirt
     monitoring-plugins
-    mtr
     net-snmp
     nfdump
-    nmap
     rrdtool
     system-sendmail
     unixtools.whereis
-    whois
     (python3.withPackages (
       ps: with ps; [
         pymysql
@@ -78,36 +72,35 @@ phpPackage.buildComposerProject2 rec {
 
     substituteInPlace \
       $out/resources/definitions/config_definitions.json \
-      --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
       --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
       --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
       --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
       --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
       --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
       --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
-      --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
       --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
-      --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
-      --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
       --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
+      --replace-fail '"default": "/usr/bin/snmptrap",' '"default": "${net-snmp}/bin/snmptrap",' \
       --replace-fail '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace-fail '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
-      --replace-fail '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
       --replace-fail '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace-fail '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
+
+    if grep -q /usr/bin $out/resources/definitions/config_definitions.json; then
+      echo "Please patch the extra /usr/bin paths found above!"
+      exit 1
+    fi
 
     substituteInPlace $out/LibreNMS/wrapper.py --replace-fail '/usr/bin/env php' '${phpPackage}/bin/php'
     substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/app/Listeners/CommandStartingListener.php --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php \
+      --replace-fail "! function_exists('posix_getpwuid') || ! function_exists('posix_geteuid')" "true"
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
-
-    php $out/artisan vue-i18n:generate --multi-locales --format=umd
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs
@@ -127,8 +120,10 @@ phpPackage.buildComposerProject2 rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ netali ];
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [
+      netali
+      johannwagner
+    ];
     platforms = lib.platforms.linux;
   };
 }

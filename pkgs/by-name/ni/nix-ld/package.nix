@@ -6,23 +6,25 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-ld";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-ld";
-    rev = version;
-    hash = "sha256-I9cEWy07pUNsOfBPG7qMYHx/YmE1uxaadP3ObHu7ALQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-1X4XlIo9iAvCHLK3kOhJ7iLvN2Ym7O8ln3XDDxmesaM=";
   };
 
-  cargoHash = "sha256-8mkMq16CfEc/RHH3msXEnoiDHGGRjr2Omp2TVd07ObE=";
+  cargoHash = "sha256-sALalBTD49aIXTn7x1Qw4MgbxAojxrkUh6nU4lH9i9k=";
 
   hardeningDisable = [ "stackprotector" ];
 
-  NIX_SYSTEM = stdenv.system;
-  RUSTC_BOOTSTRAP = "1";
+  env = {
+    NIX_SYSTEM = stdenv.system;
+    RUSTC_BOOTSTRAP = "1";
+  };
 
   preCheck = ''
     export NIX_LD=${stdenv.cc.bintools.dynamicLinker}
@@ -51,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
-}
+})

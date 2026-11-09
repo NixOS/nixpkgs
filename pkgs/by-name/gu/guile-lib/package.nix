@@ -9,12 +9,12 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-lib";
   version = "0.2.8.1";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-lib/guile-lib-${finalAttrs.version}.tar.gz";
     hash = "sha256-E3TC2Dnmoz0ZDNHavZx/h3U/g4T1W4ZvPhQhVcIrSbE=";
   };
 
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "$(dirname $(echo ${lib.getLib stdenv.cc.cc}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
+  guileImportsCheck = [ "htmlprag" ];
+
   meta = {
     homepage = "https://www.nongnu.org/guile-lib/";
     description = "Collection of useful Guile Scheme modules";
@@ -63,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

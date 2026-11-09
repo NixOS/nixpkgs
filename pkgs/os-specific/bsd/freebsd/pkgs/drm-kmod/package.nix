@@ -52,6 +52,7 @@ mkDerivation rec {
     "-Wno-format" # error: passing 'printf' format string where 'freebsd_kprintf' format string is expected
     "-Wno-sometimes-uninitialized" # this one is actually kind of concerning but it does trip
     "-Wno-unused-function"
+    "-Wno-default-const-init-var-unsafe"
   ];
 
   env = sys.passthru.env;
@@ -68,11 +69,11 @@ mkDerivation rec {
 
   makeFlags = [
     "DEBUG_FLAGS=-g"
+    "XARGS_J=xargs-j"
   ];
 
   meta = {
     description = "Linux drm driver, ported to FreeBSD";
-    platforms = lib.platforms.freebsd;
     license = with lib.licenses; [
       bsd2
       gpl2Only

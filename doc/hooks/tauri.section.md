@@ -73,11 +73,15 @@ Controls the flags passed to `cargo tauri build`.
 
 #### `tauriBundleType` {#tauri-bundle-type}
 
-The [bundle type](https://tauri.app/v1/guides/building/) to build.
+The [bundle type](https://tauri.app/reference/javascript/api/namespaceapp/#bundletype) to build.
 
 #### `dontTauriBuild` {#dont-tauri-build}
 
 Disables using `tauriBuildHook`.
+
+#### `dontTauriFixup` {#dont-tauri-fixup}
+
+Disables the `tauriFixupHook` pre fixup phase.
 
 #### `dontTauriInstall` {#dont-tauri-install}
 

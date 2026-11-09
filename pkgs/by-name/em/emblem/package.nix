@@ -18,20 +18,20 @@
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "design";
     repo = "emblem";
-    rev = version;
-    sha256 = "sha256-knq8OKoc8Xv7lOr0ub9+2JfeQE84UlTHR1q4SFFF8Ug=";
+    tag = version;
+    hash = "sha256-hKsME/edn8E+tKF3TbhqQF7GsRdbvfXprV4fFgHdx6w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CsISaVlRGtVVEna1jyGZo/IdWcJdwHJv6LXcXYha2UE=";
+    hash = "sha256-M0z+twxu16FON/OgbG3SCfVYCHAkkfSzf5QTt983MhA=";
   };
 
   nativeBuildInputs = [

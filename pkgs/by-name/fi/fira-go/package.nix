@@ -2,27 +2,27 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-go";
   version = "1.001";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://carrois.com/downloads/FiraGO/Download_Folder_FiraGO_${
-      lib.replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
     hash = "sha256-+lw4dh7G/Xv3pzGXdMUl9xNc2Nk7wUOAh+lq3K1LrXs=";
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install --mode=644 -Dt $out/share/fonts/opentype Download_Folder_FiraGO*/Fonts/FiraGO_OTF*/*/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://carrois.com/fira/";
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.loicreynier ];
     platforms = lib.platforms.all;
   };
-}
+})

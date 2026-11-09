@@ -2,7 +2,7 @@
   copyDesktopItems,
   fetchFromGitHub,
   fetchpatch,
-  glibmm,
+  glibmm_2_4,
   gst_all_1,
   lib,
   libarchive,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     libarchive
     kdePackages.qtbase
     kdePackages.qtsvg
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -D resources/icons/icon.png $out/share/pixmaps/jamesdsp.png
+    install -D resources/icons/icon.png $out/share/icons/hicolor/512x512/apps/jamesdsp.png
     install -D resources/icons/icon.svg $out/share/icons/hicolor/scalable/apps/jamesdsp.svg
   '';
 

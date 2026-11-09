@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrome-export";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "bdesham";
     repo = "chrome-export";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0p1914wfjggjavw7a0dh2nb7z97z3wrkwrpwxkdc2pj5w5lv405m";
   };
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
     homepage = "https://github.com/bdesham/chrome-export";
-    license = [ lib.licenses.isc ];
+    license = lib.licenses.isc;
     maintainers = [ lib.maintainers.bdesham ];
     platforms = python3.meta.platforms;
   };
-}
+})

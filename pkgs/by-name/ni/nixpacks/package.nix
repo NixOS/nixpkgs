@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpacks";
   version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "nixpacks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y2zrXS56fSsPaVmJcUxTMYhOroYjcNKepuI9tmdORsY=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.zoedsoupe ];
     mainProgram = "nixpacks";
   };
-}
+})

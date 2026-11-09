@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   gi-docgen,
   meson,
   ninja,
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.5.1";
+  version = "1.7.0";
 
   outputs = [
     "out"
@@ -35,18 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2q34twATQ4jH6TPgtiNYaqp/L76LOmJZOHUTMDuYduY=";
+    hash = "sha256-OJbMS2p7+DFBwn3yPOSM3WhGdgO8a3ZJYDB83LvvgOU=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Required for cross-compiled libshumate to get $dev/share/vala/vapi/shumate-1.0.{deps,vapi}
-      # https://gitlab.gnome.org/GNOME/libshumate/-/merge_requests/263
-      url = "https://gitlab.gnome.org/GNOME/libshumate/-/commit/8a8a5013ed69f443b84500b4f745079025863a32.patch";
-      name = "meson-use-find_program-instead-of-dependency-for-vapigen";
-      hash = "sha256-nYLUMLcghnWU/hlCWOHMmFIUdDa7UkX4TP7C4ftZVJM=";
-    })
-  ];
 
   depsBuildBuild = [
     # required to find native gi-docgen when cross compiling

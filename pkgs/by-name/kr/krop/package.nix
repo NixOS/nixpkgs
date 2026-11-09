@@ -6,7 +6,7 @@
   ghostscript,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "krop";
   version = "0.7.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arminstraub";
     repo = "krop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8mhTUP0oS+AnZXVmywxBTbR1OOg18U0RQ1H9lyjaiVI=";
   };
 
@@ -32,7 +32,9 @@ python3Packages.buildPythonApplication rec {
     ghostscript
   ];
 
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
@@ -52,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "krop";
   };
-}
+})

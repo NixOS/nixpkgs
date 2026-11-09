@@ -6,6 +6,8 @@
   tilt-assets,
   stdenv,
   installShellFiles,
+  nix-update,
+  writeShellScript,
 }:
 
 buildGoModule rec {
@@ -36,6 +38,15 @@ buildGoModule rec {
     mkdir -p pkg/assets/build
     cp -r ${tilt-assets}/* pkg/assets/build/
   '';
+
+  passthru = {
+    inherit tilt-assets;
+    updateScript = writeShellScript "update-tilt" ''
+      set -euo pipefail
+      ${lib.getExe nix-update} "$@" --override-filename pkgs/by-name/ti/tilt/package.nix tilt
+      ${lib.getExe nix-update} --version=skip --no-src tilt.tilt-assets
+    '';
+  };
 
   meta = {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";

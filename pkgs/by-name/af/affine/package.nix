@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitHub,
+  substitute,
   rustPlatform,
   electron,
   nodejs_22,
@@ -46,17 +47,33 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.25.7";
+  version = "0.26.7";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+MdPo2THiwgRT4x/Xnf9+1C+Bu0BsV9P1yIXhgdA3CQ=";
+    hash = "sha256-RotC2mNtMig3QKcKo8zr15myAqkPDuBopvV9wLlr2tQ=";
+
+    # Remove when updating since upstream has updated Yarn
+    # https://github.com/toeverything/AFFiNE/commit/6375f5ab8c389831327284f4795d8397de085153
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-0SOuaMjVihmSBQhVKZHIZkIUs+MXnW5VkrhGRD6xNcM=";
+    hash = "sha256-vZkKFUaNe9iIAkdUfXnnuD2lM6kuzwqj1Dyt5GAgXsM=";
   };
 
   # keep yarnOfflineCache same output style with offlineCache = yarn-berry.fetchYarnBerryDeps { inherit (finalAttrs) src missingHashes; hash = "" };
@@ -106,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-pPLnNsQ7+ao+MQw6Zmf/XA8ITWr+AeUA0gvu6qVUECw=";
+    outputHash = "sha256-gje8iTCiy3N/zYRuf/CGUVfGw0RSVXTPu4SjnE9+OY8=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
@@ -251,7 +268,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];

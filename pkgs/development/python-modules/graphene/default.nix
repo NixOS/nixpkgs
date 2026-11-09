@@ -9,7 +9,6 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   python-dateutil,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "graphene";
   version = "3.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "graphql-python";

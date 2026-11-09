@@ -6,15 +6,15 @@
   gd,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gd";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-gd";
-    rev = "v${version}";
-    sha256 = "sha256-78cqxVEappTybRLk7Y6vW1POvZKFIxtGNVcmkKq9GEE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-78cqxVEappTybRLk7Y6vW1POvZKFIxtGNVcmkKq9GEE=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -26,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

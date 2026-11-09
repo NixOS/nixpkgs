@@ -6,15 +6,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcstar";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitLab {
     owner = "Kerenoc";
     repo = "GCstar";
-    rev = "v${version}";
-    hash = "sha256-37yjKI4l/nUzDnra1AGxDQxNafMsLi1bSifG6pz33zg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cVDOu1BH3WEHhaHa5d8usTrc5M8ZKaKCLNzsSIC+HsU=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     JSON
     ImageExifTool
     librelative
+    LocaleCodes
     LWP
     LWPProtocolHttps
     MP3Info
@@ -44,6 +45,9 @@ stdenv.mkDerivation rec {
     XMLSimple
     XMLParser
   ];
+
+  # DateTime::Format::Strptime requires lang locale to be defined for correct date formatting.
+  env.LANG = "C.UTF-8";
 
   installPhase = ''
     runHook preInstall
@@ -73,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dasj19 ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,14 +6,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pg-schema-diff";
-  version = "1.0.3";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "pg-schema-diff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pAGd62P+w8BnGMQp2kzAg/mLPvJG6ma25K/JmjpivLk=";
+    hash = "sha256-ycp4dM7PwuKH71Od4qqcwJ5JOJfSHv/hq4jrRYljfjM=";
   };
+
+  subPackages = [
+    "cmd/pg-schema-diff"
+  ];
 
   nativeCheckInputs = [
     postgresql

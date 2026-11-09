@@ -8,16 +8,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "radian";
-  version = "0.6.15";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "radian";
-    tag = "v${version}";
-    hash = "sha256-9dpLQ3QRppvwOw4THASfF8kCkIVZmWLALLRwy1LRPiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M7NyL0arkM9VNnOf65Dt3ITWCmiwmXWwLGXc0/Td+iw=";
   };
 
   build-system = with python3Packages; [
@@ -54,7 +54,13 @@ python3Packages.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ];
 
-  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
+  checkInputs = [ rPackages.renv ];
+
+  makeWrapperArgs = [
+    "--set"
+    "R_HOME"
+    "${R}/lib/R"
+  ];
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${R}/lib/R/lib
@@ -66,8 +72,8 @@ python3Packages.buildPythonApplication rec {
     description = "21 century R console";
     mainProgram = "radian";
     homepage = "https://github.com/randy3k/radian";
-    changelog = "https://github.com/randy3k/radian/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/randy3k/radian/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ savyajha ];
   };
-}
+})

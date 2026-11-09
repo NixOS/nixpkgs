@@ -10,15 +10,16 @@
   pandoc,
   systemd,
   nixosTests,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgbouncer";
-  version = "1.25.1";
+  version = "1.26.1";
 
   src = fetchurl {
-    url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-blZq6S/j739qG54m1gSffXyjnEDinns49tVQCuFdhGU=";
+    url = "https://www.pgbouncer.org/downloads/files/${finalAttrs.version}/pgbouncer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-AIhqKZS0hEzTcRCXDfd3dyz8QqdMQAUiyC+6UJo/Qtk=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,9 @@ stdenv.mkDerivation rec {
     openssl
     c-ares
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional systemdSupport systemd;
   enableParallelBuilding = true;
-  configureFlags = lib.optional stdenv.hostPlatform.isLinux "--with-systemd";
+  configureFlags = lib.optional systemdSupport "--with-systemd";
 
   passthru.tests = {
     pgbouncer = nixosTests.pgbouncer;
@@ -44,10 +45,10 @@ stdenv.mkDerivation rec {
     mainProgram = "pgbouncer";
     description = "Lightweight connection pooler for PostgreSQL";
     changelog = "https://github.com/pgbouncer/pgbouncer/releases/tag/pgbouncer_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.all;
   };
-}
+})

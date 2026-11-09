@@ -2,40 +2,55 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  gzip,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
-  gzip,
   gitMinimal,
-  deno,
+  python3,
   nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.67";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OA5foQEAs01bAi78c6tEaLKaQHcRhRVtNkwpOjbPgEQ=";
+    hash = "sha256-za4G56fIJac8bJ22NsWYnVEChmE/JXmHLG0w8O1jeXg=";
   };
 
-  cargoHash = "sha256-/sJ956ZqtI1xV0JW3RwRd0b5pYW2W/vQhb9ApF61eF0=";
+  cargoHash = "sha256-J2FA74Ry2oRrd/GA5yA0a7k/DzIQoRkg9kMWQEE9ZTo=";
 
-  passthru.updateScript = nix-update-script { };
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
-    pkg-config
     gzip
+    makeBinaryWrapper
+    pkg-config
   ];
 
   nativeCheckInputs = [
+    python3
     gitMinimal
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
   ];
+
+  preBuild = ''
+    mkdir -p $out/share/fresh-editor/plugins/
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags "--no-upgrade-check" \
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
+  '';
 
   # Tests create a local http server to check update functionality
   __darwinAllowLocalNetworking = true;
@@ -43,37 +58,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Due to issues with incorrect import paths with the actual app, I have disabled the checks below. Need to report upstream.
   checkFlags = [
     "--skip=e2e::"
+    "--skip=services::plugins::embedded::tests::test_extract_plugins"
+    # require network access
+    "--skip=services::release_checker::tests::the_release_feed_override_is_shared_by_check_and_update"
   ];
   cargoTestFlags = [
     "--lib"
     "--bins"
   ];
+  # cfg(debug_assertions) is not set for release builds, so we need to run tests in debug mode to get the assertions enabled.
+  checkType = "debug";
 
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = deno.librusty_v8;
-  preBuild = ''
-    mkdir -p $out/share/fresh-editor/plugins/
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = ''
-    rm -rf $out/bin/fresh.dSYM
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Terminal-based text editor with LSP support and TypeScript plugins";
-    homepage = "https://github.com/sinelaw/fresh";
+    description = "Terminal based IDE & text editor: easy, powerful and fast";
+    homepage = "https://getfresh.dev";
     changelog = "https://github.com/sinelaw/fresh/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
+      randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryNativeCode # librusty_v8.a
-    ];
   };
 })

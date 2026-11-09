@@ -21,12 +21,12 @@
   cstruct,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "paf";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/paf-le-chien/releases/download/${version}/paf-${version}.tbz";
+    url = "https://github.com/dinosaure/paf-le-chien/releases/download/${finalAttrs.version}/paf-${finalAttrs.version}.tbz";
     hash = "sha256-0q07gZpzUyDoWlA4m/P+EGSvvVKAZ7RwVkpOziqzG2M=";
   };
 
@@ -64,4 +64,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     homepage = "https://github.com/dinosaure/paf-le-chien";
   };
-}
+})

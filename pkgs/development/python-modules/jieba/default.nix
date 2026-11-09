@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "fxsjy";
     repo = "jieba";
     rev = "v${version}";
-    sha256 = "028vmd6sj6wn9l1ilw7qfmlpyiysnlzdgdlhwxs6j4fvq0gyrwxk";
+    hash = "sha256-s/PsH8DbEWl055C21z612kd/aXX4cBoDTZYbqU2rGwk=";
   };
 
   # UnicodeEncodeError
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Chinese Words Segementation Utilities";
+    description = "Chinese Words Segmentation Utilities";
     homepage = "https://github.com/fxsjy/jieba";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];

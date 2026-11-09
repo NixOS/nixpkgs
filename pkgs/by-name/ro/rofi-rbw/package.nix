@@ -13,16 +13,16 @@
   xdotool,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofi-rbw";
-  version = "1.5.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
-    tag = version;
-    hash = "sha256-Qdbz3UjWMCuJUzR6UMt/apt+OjMAr2U7uMtv9wxEZKE=";
+    tag = finalAttrs.version;
+    hash = "sha256-ynOvp6BSK20hW1wZmYBRFTtCYSrZecJhRPcovLTG6d4=";
   };
 
   build-system = [
@@ -63,9 +63,8 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       equirosa
-      dit7ya
     ];
     platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";
   };
-}
+})

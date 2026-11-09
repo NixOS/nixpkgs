@@ -12,15 +12,15 @@
   libselinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bubblewrap";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
-    rev = "v${version}";
-    hash = "sha256-8IDMLQPeO576N1lizVudXUmTV6hNOiowjzRpEWBsZ+U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sgIATYiBYbHaftA+ShIqfxS3OScz7VurjPciL2WB1oQ=";
   };
 
   outputs = [
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/containers/bubblewrap/releases/tag/${src.rev}";
+    changelog = "https://github.com/containers/bubblewrap/releases/tag/${finalAttrs.src.tag}";
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
     mainProgram = "bwrap";
   };
-}
+})

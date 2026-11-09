@@ -1,28 +1,27 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.17-unstable-2025-11-24";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
-    rev = "c997e31172ed2d785fc960296b826a9587bd5de9";
-    hash = "sha256-ZfE8xa+og14dlUmvYfatecSdrhmuMbFFNTw5RZ3ZHXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h9CtMzHOQj2ev/9rx8DvdskH7SK31S7i43uezYoHZI8=";
   };
 
-  vendorHash = "sha256-SrQahSHO5ZIkcLR3BR5CR5BTStW1pH1Ij1Eql0b3tuU=";
+  vendorHash = "sha256-aIvIHFCucqJqGF0EcuJ9lJ2xUM/MvQs4UExSQvphCuE=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.Rev=${finalAttrs.version}"
   ];
 
@@ -33,6 +32,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "/usr/local/bin/go-csp-collector" "$out/bin/go-csp-collector"
   '';
 
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "A content security policy violation collector written in Golang";
     homepage = "https://github.com/jacobbednarz/go-csp-collector";
-    changelog = "https://github.com/jacobbednarz/go-csp-collector/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jacobbednarz/go-csp-collector/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "go-csp-collector";
     maintainers = with lib.maintainers; [ stepbrobd ];

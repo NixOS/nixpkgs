@@ -5,19 +5,19 @@
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   makeBinaryWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minimacy";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = "minimacy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VR7MCXRJHudFXBorjR6L/umn0p9NIu3zP2XMH3d9DHQ=";
   };
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   enableParallelBuilding = true;
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -5,12 +5,12 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apng2gif";
   version = "1.8";
 
   src = fetchzip {
-    url = "mirror://sourceforge/apng2gif/apng2gif-${version}-src.zip";
+    url = "mirror://sourceforge/apng2gif/apng2gif-${finalAttrs.version}-src.zip";
     stripRoot = false;
     hash = "sha256-qX8gmE0Lu2p15kL0y6cmX/bI0uk5Ehfi8ygt07BbgmU=";
   };
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

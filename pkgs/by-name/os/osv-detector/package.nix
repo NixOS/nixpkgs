@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "osv-detector";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "G-Rath";
     repo = "osv-detector";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vIkLrKyDeMfRe/0EPhlKlHAO6XB0/OFY5mTUHeZbcg8=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -47,15 +47,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = osv-detector;
     command = "osv-detector -version";
-    version = "osv-detector ${version} (unknown, commit none)";
+    version = "osv-detector ${finalAttrs.version} (unknown, commit none)";
   };
 
   meta = {
     description = "Auditing tool for detecting vulnerabilities";
     mainProgram = "osv-detector";
     homepage = "https://github.com/G-Rath/osv-detector";
-    changelog = "https://github.com/G-Rath/osv-detector/releases/tag/v${version}";
+    changelog = "https://github.com/G-Rath/osv-detector/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

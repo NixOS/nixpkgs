@@ -9,17 +9,16 @@
   dbus,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ockam";
   version = "0.157.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "build-trust";
     repo = "ockam";
-    rev = "ockam_v${version}";
+    rev = "ockam_v${finalAttrs.version}";
     hash = "sha256-o895VPlUGmLUsIeOnShjCetKoS/4x0nbEKxipEbuBu4=";
   };
 
@@ -38,12 +37,12 @@ rustPlatform.buildRustPackage {
   # too many tests fail for now
   doCheck = false;
 
-  cargoBuildFlags = [ "-p ockam" ];
+  cargoBuildFlags = [ "--package=ockam" ];
 
   meta = {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";
     homepage = "https://github.com/build-trust/ockam";
-    license = lib.licenses.mpl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

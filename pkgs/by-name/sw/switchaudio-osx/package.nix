@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xcodebuild,
   xcbuildHook,
 }:
 
@@ -16,8 +15,6 @@ stdenv.mkDerivation rec {
     tag = version;
     hash = "sha256-AZJn5kHK/al94ONfIHcG+W0jyMfgdJkIngN+PVj+I44=";
   };
-
-  buildInputs = [ xcodebuild ];
 
   nativeBuildInputs = [ xcbuildHook ];
 

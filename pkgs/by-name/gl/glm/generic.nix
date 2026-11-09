@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    changelog = "https://github.com/g-truc/glm/releases/tag/${src.tag}";
     description = "OpenGL Mathematics library for C++";
     longDescription = ''
       OpenGL Mathematics (GLM) is a header only C++ mathematics library for

@@ -6,35 +6,31 @@
 }:
 
 let
-  versions = lib.importJSON ./versions.json;
-  arch =
-    if stdenv.hostPlatform.isi686 then
-      "386"
-    else if stdenv.hostPlatform.isx86_64 then
-      "amd64"
-    else if stdenv.hostPlatform.isAarch32 then
-      "arm"
-    else if stdenv.hostPlatform.isAarch64 then
-      "arm64"
-    else
-      throw "Unsupported architecture";
-  os =
-    if stdenv.hostPlatform.isLinux then
-      "linux"
-    else if stdenv.hostPlatform.isDarwin then
-      "darwin"
-    else
-      throw "Unsupported os";
-  versionInfo = versions."${os}-${arch}";
-  inherit (versionInfo) version sha256 url;
-
+  version = "3.39.13";
+  sources = {
+    i686-linux = fetchurl {
+      url = "https://bin.ngrok.com/a/bXbZMkw2tQW/ngrok-v3-3.39.13-linux-386";
+      hash = "sha256-Wu0jSajA4ruVGDMFRznKb+R+agfDutVBrK0/mMBFMxs=";
+    };
+    x86_64-linux = fetchurl {
+      url = "https://bin.ngrok.com/a/2u8ZAPuZnnL/ngrok-v3-3.39.13-linux-amd64";
+      hash = "sha256-Q5k4S/TWpa1lE2dwqTFTbbnpeRH1JobjQZ3ENKdN918=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://bin.ngrok.com/a/gNfeve1VDdJ/ngrok-v3-3.39.13-linux-arm64";
+      hash = "sha256-uVEr2+z8FJUQ9fC80Y16BtAz1+KjcfdrN81VtE8D5bU=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://bin.ngrok.com/a/aRfC2Kft1Jc/ngrok-v3-3.39.13-darwin-arm64";
+      hash = "sha256-aGwy8dav+GTrLyId7clzAtexz4Y8a3HlfrgBDWUoQyE=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngrok";
   inherit version;
 
-  # run ./update
-  src = fetchurl { inherit sha256 url; };
+  src = sources.${stdenv.hostPlatform.system};
 
   sourceRoot = ".";
 
@@ -57,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    platforms = builtins.attrNames sources;
+    inherit sources;
     updateScript = ./update.sh;
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
@@ -71,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://ngrok.com/docs/agent/changelog/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = lib.platforms.unix;
+    platforms = builtins.attrNames sources;
     maintainers = with lib.maintainers; [
       bobvanderlinden
       brodes

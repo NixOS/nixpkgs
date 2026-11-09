@@ -9,16 +9,13 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "seventeentrack";
   version = "2022.04.6";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "McSwindler";
@@ -67,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to track package info from 17track.com";
     homepage = "https://github.com/McSwindler/seventeentrack";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

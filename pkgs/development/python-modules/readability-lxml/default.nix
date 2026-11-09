@@ -1,8 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   pytestCheckHook,
   chardet,
   cssselect,
@@ -13,40 +13,42 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.4";
-  format = "setuptools";
+  version = "0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
-    rev = "v${version}";
-    hash = "sha256-6A4zpe3GvHHf235Ovr2RT/cJgj7bWasn96yqy73pVgY=";
+    tag = "${version}";
+    hash = "sha256-N7f4PYwuTP5MSRw3xXm3lopZfKe6UHkSOJbUMeL5VBU=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "chardet"
+    "cssselect"
+    "lxml"
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     chardet
     cssselect
     lxml
     lxml-html-clean
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'sys.platform == "darwin"' "False"
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     timeout-decorator
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test is broken on darwin. Fix in master from https://github.com/buriy/python-readability/pull/178
-    "test_many_repeated_spaces"
-  ];
+  pythonImportsCheck = [ "readability" ];
 
   meta = {
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
+    changelog = "https://github.com/buriy/python-readability/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siraben ];
   };

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   unicodecsv,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -14,14 +13,17 @@ buildPythonPackage rec {
   version = "1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "python-registry";
     tag = version;
     hash = "sha256-OgRPcyx+NJnbtETMakUT0p8Pb0Qfzgj+qvWtmJksnT8=";
   };
+
+  postPatch = ''
+    substituteInPlace Registry/__init__.py \
+      --replace-fail '1.3.1' '${version}'
+  '';
 
   pythonRemoveDeps = [ "enum-compat" ];
 
@@ -43,6 +45,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/williballenthin/python-registry";
     changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }

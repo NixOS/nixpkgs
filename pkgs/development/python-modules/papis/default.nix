@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   hatchling,
@@ -16,17 +15,15 @@
   dominate,
   filetype,
   habanero,
-  isbnlib,
+  lark,
   lxml,
   platformdirs,
   prompt-toolkit,
   pygments,
-  pyparsing,
   python-doi,
   python-slugify,
   pyyaml,
   requests,
-  stevedore,
 
   # optional dependencies
   chardet,
@@ -45,17 +42,19 @@
   pytest-cov-stub,
   sphinx,
   sphinx-click,
+  writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "papis";
-  version = "0.14.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "papis";
     repo = "papis";
-    tag = "v${version}";
-    hash = "sha256-V4YswLNYwfBYe/Td0PEeDG++ClZoF08yxXjUXuyppPI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZDGcuOCmddPaX6CldPf7YGHyIZfrG62ZQ6NXzFPDVAM=";
   };
 
   build-system = [ hatchling ];
@@ -69,19 +68,17 @@ buildPythonPackage rec {
     dominate
     filetype
     habanero
-    isbnlib
+    lark
     lxml
     platformdirs
     prompt-toolkit
     pygments
-    pyparsing
     python-doi
     python-slugify
     pyyaml
     requests
-    stevedore
   ]
-  ++ lib.optionals withOptDeps optional-dependencies.complete;
+  ++ lib.optionals withOptDeps finalAttrs.passthru.optional-dependencies.complete;
 
   optional-dependencies = {
     complete = [
@@ -102,45 +99,37 @@ buildPythonPackage rec {
     pytest-cov-stub
     sphinx
     sphinx-click
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   enabledTestPaths = [
     "papis"
     "tests"
   ];
 
-  disabledTestPaths = [
-    # Require network access
-    "tests/downloaders"
-    "papis/downloaders/usenix.py"
-  ];
-
   disabledTests = [
     # Require network access
+    "test_add_folder_name_cli"
+    "test_add_link_cli"
+    "test_download_document"
+    "test_get_matching_importers_by_name"
+    "test_matching_importers_by_uri"
     "test_yaml_unicode_dump"
-  ];
-
-  patches = [
-    (fetchpatch2 {
-      name = "fix-support-new-click-in-papisrunner.patch";
-      url = "https://github.com/papis/papis/commit/0e3ffff4bd1b62cdf0a9fdc7f54d6a2e2ab90082.patch?full_index=1";
-      hash = "sha256-KUw5U5izTTWqXHzGWLibtqHWAsVxla6SA8x6SJ07/zU=";
-    })
+  ]
+  ++ lib.optionals withOptDeps [
+    # Require network access
+    "test_csl_style_download"
   ];
 
   meta = {
     description = "Powerful command-line document and bibliography manager";
     mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
-    changelog = "https://github.com/papis/papis/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/papis/papis/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       nico202
-      teto
+      octvs
     ];
   };
-}
+})

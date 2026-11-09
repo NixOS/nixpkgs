@@ -9,26 +9,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "miniflux";
-  version = "2.2.15";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-19i+TeBcPnI1Gfpf81gHE9sLvytsS4x1A5XU8oD7YIU=";
+    hash = "sha256-qia5Xnmku0w6o2UVfxKvAHicF/1pAKcXIfQf8A/wmVM=";
   };
 
-  vendorHash = "sha256-XrTmXAUABlTQaA3Z0vU0HQW5Q1e/Yg6yq690oZH8M+A=";
+  vendorHash = "sha256-st4lJ12JwHv1AwxNEEzus+8GkDn5C3bmBJjJtzVt1v0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
+  # skip tests that require network access
+  checkFlags = [ "-skip=TestResolvesToPrivateIP" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X miniflux.app/v2/internal/version.Version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux

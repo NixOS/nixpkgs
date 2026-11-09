@@ -3,15 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "annotated-types";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "annotated-types";
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   pythonImportsCheck = [ "annotated_types" ];
 

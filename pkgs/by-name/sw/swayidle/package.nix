@@ -14,17 +14,18 @@
   systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swayidle";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
-    tag = "v${version}";
-    hash = "sha256-fxDwRfAXb9D6epLlyWnXpy9g8V3ovJRpQ/f3M4jxY/s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BkMFQp5SCyPu7kF/4iZUr+YKG/ROFJ3dpn5oLZJdNgQ=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Idle management daemon for Wayland";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     longDescription = ''
       Sway's idle management daemon. It is compatible with any Wayland
       compositor which implements the KDE idle protocol.
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wineee ];
     platforms = lib.platforms.linux;
   };
-}
+})

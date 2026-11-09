@@ -4,15 +4,15 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pure-splitmix";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "Lysxia";
-    repo = pname;
-    rev = version;
-    sha256 = "RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
+    repo = "pure-splitmix";
+    rev = finalAttrs.version;
+    hash = "sha256-RUnsAB4hMV87ItCyGhc47bHGY1iOwVv9kco2HxnzqbU=";
   };
 
   doCheck = true;
@@ -23,4 +23,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

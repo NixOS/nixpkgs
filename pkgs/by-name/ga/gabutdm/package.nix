@@ -19,14 +19,14 @@
   aria2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gabutdm";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = "gabutdm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-nzhEJiGBH+semfwLPdpIfPNGQLorqPwwmiAUNM91Br4=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

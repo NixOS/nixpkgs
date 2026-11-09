@@ -20,6 +20,7 @@ let
   testModules = [
     ./call-test.nix
     ./driver.nix
+    ./driver-configuration.nix
     ./interactive.nix
     ./legacy.nix
     ./meta.nix

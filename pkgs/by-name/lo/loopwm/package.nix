@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "loopwm";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
-    hash = "sha256-UiEUdRKQLJdOj+fI4fmTi71TreP1gM+jr+53dhtESRE=";
+    hash = "sha256-UU6X+qs4Q837ixhZuRMzcEY5oaLOWA5PaE117+AH04Y=";
   };
 
   sourceRoot = ".";
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS Window management made elegant";
     homepage = "https://github.com/MrKai77/Loop";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = [ ];
     mainProgram = "loopwm";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -10,18 +10,18 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krankerl";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ChristophWurst";
     repo = "krankerl";
-    rev = "v${version}";
-    sha256 = "sha256-fFtjQFkNB5vn9nlFJI6nRdqxB9PmOGl3ySZ5LG2tgPg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-jQe4rDhRQdTILjbgMN1Fa3O2OCJxJOr8nmKDeI1AFos=";
   };
 
-  cargoHash = "sha256-tu+PJeGm8u5TSuoPBhaO4k6PkmI9JduuLlaQjvBv05E=";
+  cargoHash = "sha256-lfW28vMxhnf6R1y82itf9dUTAtelH39Am3JYL/YlQNo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

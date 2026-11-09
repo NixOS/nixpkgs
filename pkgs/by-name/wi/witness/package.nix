@@ -12,15 +12,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "witness";
-  version = "0.10.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-MKiPIZFeCWOT4zTbG7SjwdNUHFuqsL4pGu4VvVwyn3s=";
+    sha256 = "sha256-HCSaNK6zYyqH9c+NrYrgdlMcnwvg2WUrgBpo0MlbgIg=";
   };
-  vendorHash = "sha256-V3SuhBbhXyA0SFOGfBrV/qH+cROr2obHOBcivkgRO6U=";
+  vendorHash = "sha256-TFklnNeXRQBWegKxbAMJnxWn5FTgsJSiwAShOn9co/s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -75,8 +75,8 @@ buildGoModule (finalAttrs: {
       attack vectors and can be used as a framework for automated governance.
     '';
     mainProgram = "witness";
-    homepage = "https://github.com/testifysec/witness";
-    changelog = "https://github.com/testifysec/witness/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/in-toto/witness";
+    changelog = "https://github.com/in-toto/witness/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fkautz

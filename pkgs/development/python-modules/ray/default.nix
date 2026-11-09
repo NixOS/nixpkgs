@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   pythonAtLeast,
   python,
   fetchPypi,
@@ -61,6 +60,9 @@
   scipy,
   # serve
   fastapi,
+  grpcio-reflection,
+  jinja2,
+  mmh3,
   starlette,
   uvicorn,
   watchfiles,
@@ -70,17 +72,17 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.53.0";
-in
-buildPythonPackage rec {
-  inherit pname version;
+  version = "2.60.0";
   format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -94,32 +96,33 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-TbtfzhNkdj8pdBBV9Qq+M89yY5cUH5zA6EXdPMlj5FU=";
-          cp311 = "sha256-6wAMF/cwEHH90VxExM06wPeVO7THwifmFxn+cEgZW80=";
-          cp312 = "sha256-FPRjY+m0zwwci02GI+wzfFvUCDd4MbXltQBnkwE3u8o=";
-          cp313 = "sha256-c9u6p5Yqf144qoz5SD4OmBcgXpiao9yFnHOMKvGuAd8=";
+          cp311 = "sha256-4if2sq+KtGJt2aNaWGCzOGQyXqE3OD1X+FTUY37j/qI=";
+          cp312 = "sha256-uVG0CWWUemNhWDCRa+BPJkQNI03h6aKdvyFV0D+prSo=";
+          cp313 = "sha256-f3+yCaLfN18UHo0OEy52RLjo7+OFW3D0hE+/sU6mZyw=";
+          cp314 = "sha256-DsP0SvKWHYytL41pm0cOL2hD1EPMxvQDlIru63etNcM=";
         };
         aarch64-linux = {
-          cp310 = "sha256-QQgoDYocuQ19aOXJVMNeY7i7mkuhX4jF59oOICVkdxI=";
-          cp311 = "sha256-oLu5iwsPJaPuB1yhAXHhJg5wtrxpDNUJ7NfOEiivhU0=";
-          cp312 = "sha256-ZeLOWNPca6o89Fgk2InBlo695WXuVN/YCpivjzGvjko=";
-          cp313 = "sha256-cZblNY38yCEb6GT0Xm3+SCcgLfKUrzx6dv+PvAgOBSI=";
+          cp311 = "sha256-1R1iPWr070n13ufTNAuVtEzcd0tqeWToYyrN/Oi576w=";
+          cp312 = "sha256-DwjHrwY1g7aL5V/quQ3QViVdTWiaN+Z7yU/K15gAop4=";
+          cp313 = "sha256-A7Bc4j0wnkwtFia/lDQ+Oj6eJvpMDSynC2b4a4TJfyY=";
+          cp314 = "sha256-sgIVpX+IeyA0Y9W4B0yLEzvOI66JyFUiufky3cWJMB8=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-TbkUoKbdYI+knAZpKaEoJ0Wi29c8ruZ9e4D+aEymW90=";
-          cp311 = "sha256-vT7Ew0J3bdrCOuKxCMZPWTn0F8zEh1kA1YbHyXhGMmk=";
-          cp312 = "sha256-2LldBH2UdJOAP7hBeuoxIl3KzasVr9x1uKI4kBlJ1Fc=";
-          cp313 = "sha256-hbRyq2+48RifjO+BkT/ZGyTdabP6fcyn4USCe9kk9sA=";
+          cp311 = "sha256-qkIHy/QIF9C/TjWqeTuKOphwCMNCwOjLzeGKbjG2uFo=";
+          cp312 = "sha256-ue49K9MhC5fi4lMEYzOhLghhfG+z5qH6wIJonWcJZgo=";
+          cp313 = "sha256-zPGU/1NM2ClNUrQyfRRXpcDWAfSMwchJyJjx1NvEQyg=";
+          cp314 = "sha256-Nn1u/noVZR11qgx1SFP4TvJ9kx1J68UxoweQKo5yiBE=";
         };
       };
     in
     fetchPypi {
-      inherit pname version format;
+      inherit (finalAttrs) pname version;
+      format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
@@ -217,10 +220,16 @@ buildPythonPackage rec {
     serve = lib.unique (
       [
         fastapi
+        grpcio-reflection
+        jinja2
+        mmh3
+        numpy
         requests
         starlette
         uvicorn
         watchfiles
+        # `ray-haproxy` (upstream, linux-only) is not packaged: it only ships an HAProxy binary, and
+        # ray falls back to `haproxy` from PATH
       ]
       ++ self.default
     );
@@ -262,11 +271,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
-    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
@@ -275,4 +289,4 @@ buildPythonPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

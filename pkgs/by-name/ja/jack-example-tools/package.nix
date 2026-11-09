@@ -20,14 +20,14 @@
   enableAlsa ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jack-example-tools";
   version = "4";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack-example-tools";
-    rev = "tags/${final.version}";
+    rev = "tags/${finalAttrs.version}";
     hash = "sha256-5jmynNxwNVLxEZ1MaqQUG6kRwipDkjhrdDCbZHtmAHk=";
   };
 

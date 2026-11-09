@@ -48,6 +48,7 @@ rec {
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
     luarocksMoveDataFolder
     luarocksCheckHook
+    bustedCheckHook
     ;
 
   inherit lua;
@@ -65,9 +66,7 @@ rec {
     ;
 
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
-  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
-    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
-  };
+  wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix { };
 
   luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
@@ -112,6 +111,12 @@ rec {
     }
   ) { };
 
+  image-nvim = callPackage ../development/lua-modules/image-nvim { };
+
+  json = callPackage ../development/lua-modules/json { };
+
+  lua-https = callPackage ../development/lua-modules/lua-https { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
@@ -131,7 +136,7 @@ rec {
       };
 
       # The makefile tries to link to `-llua<luaversion>`
-      LUA_LIBS = "-llua";
+      env.LUA_LIBS = "-llua";
 
       buildInputs =
         lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
@@ -160,13 +165,14 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
-      version = "0.1.32";
+      # The version needs to fit to nginxModules.lua
+      version = "0.1.34rc3";
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
-        sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
+        sha256 = "sha256-+rtbaHEqKSvaba+zZwRUnUsdu3Jndi8OVGUtFC55Fts=";
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
@@ -253,39 +259,5 @@ rec {
     inherit (pkgs) zenity;
   };
 
-  vicious = callPackage (
-    { fetchFromGitHub }:
-    stdenv.mkDerivation rec {
-      pname = "vicious";
-      version = "2.6.0";
-
-      src = fetchFromGitHub {
-        owner = "vicious-widgets";
-        repo = "vicious";
-        rev = "v${version}";
-        sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
-      };
-
-      buildInputs = [ lua ];
-
-      installPhase = ''
-        mkdir -p $out/lib/lua/${lua.luaversion}/
-        cp -r . $out/lib/lua/${lua.luaversion}/vicious/
-        printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
-      '';
-
-      meta = {
-        description = "Modular widget library for the awesome window manager";
-        homepage = "https://vicious.rtfd.io";
-        changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
-        license = lib.licenses.gpl2Plus;
-        maintainers = with lib.maintainers; [
-          makefu
-          mic92
-          McSinyx
-        ];
-        platforms = lib.platforms.linux;
-      };
-    }
-  ) { };
+  readline = callPackage ../development/lua-modules/readline { inherit (pkgs) readline; };
 }

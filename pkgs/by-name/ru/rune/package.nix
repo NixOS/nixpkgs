@@ -2,24 +2,36 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  oniguruma,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rune";
-  version = "0.14.1";
+  version = "0.14.2";
+
+  __structuredAttrs = true;
 
   src = fetchCrate {
     pname = "rune-cli";
     inherit (finalAttrs) version;
-    hash = "sha256-Y/iCH6hwYRhDnu+lPVcJd2YaK3c4YJbfp9VEP1/c1ic=";
+    hash = "sha256-f/kpdDrLQLuKrOTV+AkxzbzBBLIW6j+RAERn5YIUSL4=";
   };
 
-  cargoHash = "sha256-Xp87BvDh3uPtvUMmG1R8g6lEZcf/frEHVXdQ/+kV5OI=";
+  cargoHash = "sha256-l/RlOi7DVLNlqAb5M0pvU7Eks3xmhmOgmkLFvoGyMLs=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
 
   env = {
     RUNE_VERSION = finalAttrs.version;
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -31,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "rune";
   };
 })

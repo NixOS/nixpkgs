@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-psutil";
-  version = "7.0.0.20250822";
-  format = "setuptools";
+  version = "7.2.2.20260518";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "types_psutil";
-    inherit version;
-    hash = "sha256-Imy8DA6pzApQuKvMHZGibIdty0C+I4Ex9peINpBBlpg=";
+    inherit (finalAttrs) version;
+    hash = "sha256-n4JfYxRjpbTSbxn2OuvJ7CXwEUDWVQJvOtimeEH5szE=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
@@ -26,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

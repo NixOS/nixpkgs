@@ -5,21 +5,20 @@
   setuptools,
   cryptography,
   python-dateutil,
-  six,
   pbr,
   coverage,
   oslotest,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyghmi";
-  version = "1.6.11";
+  version = "1.6.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yFSpeGcrgO0kwrmbdQ4KPhlqWze2h1g7YdDFNNpoL34=";
+    hash = "sha256-MKCy4UWj5DKcjYaUhjXu47NHnsan7LxMw1B+bfP+WcI=";
   };
 
   build-system = [
@@ -27,26 +26,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    coverage
-    oslotest
-    stestr
-  ];
-
   dependencies = [
     cryptography
     python-dateutil
-    six
-    pbr
+  ];
+
+  nativeCheckInputs = [
+    coverage
+    oslotest
+    stestrCheckHook
   ];
 
   pythonImportsCheck = [ "pyghmi" ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   meta = {
     description = "Pure Python (mostly IPMI) server management library";

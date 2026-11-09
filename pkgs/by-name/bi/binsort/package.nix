@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4-1";
 
   src = fetchurl {
-    url = "http://neoscientists.org/~tmueller/binsort/download/binsort-${finalAttrs.version}.tar.gz";
+    url = "https://neoscientists.org/~tmueller/binsort/download/binsort-${finalAttrs.version}.tar.gz";
     hash = "sha256-l9T0LlDslxCgZYf8NrbsRly7bREOTGwptLteeg3TNRg=";
   };
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   stdenv,
   replaceVars,
 
@@ -10,12 +9,16 @@
   hatchling,
 
   # native dependencies
-  xorg,
+  libxrandr,
+  libxfixes,
+  libx11,
+  libxcb,
 
   # tests
   lsof,
   pillow,
   pytest-cov-stub,
+  pytest-rerunfailures,
   pytest,
   pyvirtualdisplay,
   xvfb-run,
@@ -23,21 +26,24 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "10.1.0";
+  version = "10.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cYK69+4WylaeKAQCi2q5vL9r5cRvwogIQPM7UTuctPg=";
+    hash = "sha256-qycYYHdVReYvKdexH4LyeawQSPW73SbPrYSDAgjb05M=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./linux-paths.patch {
-      x11 = "${xorg.libX11}/lib/libX11.so";
-      xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
-      xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
+      x11 = "${libx11}/lib/libX11.so";
+      xcb = "${libxcb}/lib/libxcb.so";
+      xcb-randr = "${libxcb}/lib/libxcb-randr.so";
+      xcb-render = "${libxcb}/lib/libxcb-render.so";
+      xcb-shm = "${libxcb}/lib/libxcb-shm.so";
+      xcb-xfixes = "${libxcb}/lib/libxcb-xfixes.so";
+      xfixes = "${libxfixes}/lib/libXfixes.so";
+      xrandr = "${libxrandr}/lib/libXrandr.so";
     })
   ];
 
@@ -49,14 +55,25 @@ buildPythonPackage rec {
     lsof
     pillow
     pytest-cov-stub
+    pytest-rerunfailures
     pytest
     pyvirtualdisplay
     xvfb-run
   ];
 
+  disabledTests = [
+    "test_grab_with_tuple"
+    "test_grab_with_tuple_percents"
+    "test_resource_leaks"
+    # we always provide store path to libraries, so mocking the case where it
+    # does not exist is nonsensical
+    "test_no_xlib_library"
+    "test_no_xrandr_extension"
+  ];
+
   checkPhase = ''
     runHook preCheck
-    xvfb-run pytest -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    xvfb-run pytest -v -k "${lib.concatStringsSep " and " (map (t: "not ${t}") disabledTests)}"
     runHook postCheck
   '';
 

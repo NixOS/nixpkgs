@@ -6,6 +6,14 @@
 }:
 let
 
+  attrsToExports = lib.concatMapAttrsStringSep "\n" (
+    exportPoint: clientsAndOptions:
+    exportPoint
+    + lib.concatMapAttrsStringSep "" (
+      client: options: " ${client}(${lib.concatStringsSep "," options})"
+    ) clientsAndOptions
+  );
+
   cfg = config.services.nfs.server;
 
   exports = pkgs.writeText "exports" cfg.exports;
@@ -48,12 +56,26 @@ in
         };
 
         exports = lib.mkOption {
-          type = lib.types.lines;
+          type = with lib.types; coercedTo (attrsOf (attrsOf (listOf str))) attrsToExports lines;
           default = "";
           description = ''
             Contents of the /etc/exports file.  See
             {manpage}`exports(5)` for the format.
           '';
+          example = {
+            "/usr" = {
+              "*.local.domain" = [ "ro" ];
+              "@trusted" = [ "rw" ];
+            };
+            "/home/joe" = {
+              "pc001" = [
+                "rw"
+                "all_squash"
+                "anonuid=150"
+                "anongid=100"
+              ];
+            };
+          };
         };
 
         hostName = lib.mkOption {
@@ -129,26 +151,20 @@ in
     systemd.services.nfs-server = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-
-      preStart = ''
-        mkdir -p /var/lib/nfs/v4recovery
-      '';
+      serviceConfig.StateDirectory = [ "nfs/v4recovery" ];
     };
 
     systemd.services.nfs-mountd = {
       enable = true;
       restartTriggers = [ exports ];
+      serviceConfig.StateDirectory = [ "nfs" ];
 
-      preStart = ''
-        mkdir -p /var/lib/nfs
-
-        ${lib.optionalString cfg.createMountPoints ''
-          # create export directories:
-          # skip comments, take first col which may either be a quoted
-          # "foo bar" or just foo (-> man export)
-          sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-          | xargs -d '\n' mkdir -p
-        ''}
+      preStart = lib.optionalString cfg.createMountPoints ''
+        # create export directories:
+        # skip comments, take first col which may either be a quoted
+        # "foo bar" or just foo (-> man export)
+        sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+        | xargs -d '\n' mkdir -p
       '';
     };
 

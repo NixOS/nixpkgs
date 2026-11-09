@@ -1,24 +1,25 @@
 {
-  buildGoModule,
+  stdenv,
+  buildGo127Module,
   lib,
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
   nixosTests,
 }:
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "beszel";
-  version = "0.17.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
-    tag = "v${version}";
-    hash = "sha256-MY/rsWdIiYsqcw6gqDkfA8A/Ied3OSHfJI3KUBxoRKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OB1pbfUKeE+tu/ehhoJhkPBmOBDLiQzGxb74bin2Qmg=";
   };
 
   webui = buildNpmPackage {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -46,22 +47,50 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/internal/site";
+    sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-1au4kSxyjdwFExIoUBSPf/At0jQsfbzlEXuigygBTRM=";
+    npmDepsHash = "sha256-pL4Qmi17CC4t6G/Mw/AgZUPf6cl0UPm75zfHVfrkoKI=";
   };
 
-  vendorHash = "sha256-gfQU3jGwTGmMJIy9KTjk/Ncwpk886vMo4CJvm5Y5xpA=";
+  vendorHash = "sha256-NStpXYnaVkJxmzT1fIPFqSNbNSJqpnC0LsVQweFOwcI=";
 
   preBuild = ''
     mkdir -p internal/site/dist
-    cp -r ${webui}/* internal/site/dist
+    cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCollectorStartHelpers/nvtop_collector"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestIoctlDeviceSizeFailure"
+        # This subtest assumes enough host CPUs for an 8s CPU delta over 1s to stay below 100%.
+        "TestServiceUpdateCPUPercent/subsequent_call_calculates_CPU_percentage"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCollectorStartHelpers/nvidia-smi_collector"
+        "TestCollectorStartHelpers/tegrastats_collector"
+        "TestNewGPUManagerPriorityNvtopFallback"
+        "TestNewGPUManagerPriorityMixedCollectors"
+        "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
+        "TestNewGPUManagerConfiguredCollectorsMustStart"
+        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+        "TestMonitorTCPAddressFallback/first_address_fails"
+      ];
+    in
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing,no_ui"
+    ];
 
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
     mv $out/bin/hub $out/bin/beszel-hub
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     updateScript = nix-update-script {
@@ -75,7 +104,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
-    changelog = "https://github.com/henrygd/beszel/releases/tag/v${version}";
+    changelog = "https://github.com/henrygd/beszel/releases/tag/v${finalAttrs.version}";
     description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
     maintainers = with lib.maintainers; [
       bot-wxt1221
@@ -84,4 +113,4 @@ buildGoModule rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -1,22 +1,42 @@
 {
   lib,
-  buildGoModule,
+  rustPlatform,
   fetchFromGitHub,
   nixosTests,
+  pkg-config,
+  aws-lc,
+  cacert,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0.4.0";
+  version = "0.9.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qb+6DzaObeNjV+XVXLR6GkgtodIVTqTxC4G4Ef2xFrE=";
+    hash = "sha256-4e8mPfpP1JRSvzYSEQQZ15y9vxzviVTskR/MDMczoPA=";
   };
 
-  vendorHash = "sha256-GJKSvdv41rRSCGVAgUDxHdXoxRj/h+eDktjRJ3O5QFE=";
+  cargoHash = "sha256-fWaeKuE9nr+yKT8ZInR79LDwwg1VsA2jdN/wdhtgln8=";
+
+  buildInputs = [
+    aws-lc
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # Tests spawn a local webserver
+  __darwinAllowLocalNetworking = true;
+
+  checkInputs = [
+    cacert
+  ];
 
   passthru.tests = nixosTests.lk-jwt-service;
 

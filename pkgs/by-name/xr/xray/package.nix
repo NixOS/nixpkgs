@@ -2,29 +2,36 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  buildGoModule,
+  buildGo127Module,
   makeWrapper,
   nix-update-script,
-  v2ray-geoip,
-  v2ray-domain-list-community,
+  xray-rules-dat,
   assets ? [
-    v2ray-geoip
-    v2ray-domain-list-community
+    xray-rules-dat
   ],
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "xray";
-  version = "25.12.8";
+  version = "26.10.31";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
-    hash = "sha256-6A+1Anl0LRsF5bzYjHkqUAyRPbClQwQEElDeEvGfgyc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wTKW8XUP/HXWI7e4jbBw3aGSPpPX7KjkxFwLMb9vxSA=";
   };
 
-  vendorHash = "sha256-LzCjzEOREqR108v7zR5jWuDwcrb1K58rpv9RyQUxgic=";
+  vendorHash = "sha256-+beH/Cfu3YLo6CmP/vFo0ULQ89NzZ8MFPfTYs+V/Sow=";
+
+  patches = [
+    ./use-system-certs.patch
+  ];
+
+  postPatch = ''
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.mod
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.sum
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -43,7 +50,7 @@ buildGoModule rec {
   '';
 
   assetsDrv = symlinkJoin {
-    name = "v2ray-assets";
+    name = "xray-assets";
     paths = assets;
   };
 
@@ -61,7 +68,10 @@ buildGoModule rec {
     description = "Platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
-    license = with lib.licenses; [ mpl20 ];
-    maintainers = with lib.maintainers; [ iopq ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      iopq
+      nix-julia
+    ];
   };
-}
+})

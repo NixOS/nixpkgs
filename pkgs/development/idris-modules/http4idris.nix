@@ -14,7 +14,7 @@ build-idris-package {
     owner = "A1kmm";
     repo = "http4idris";
     rev = "f44ffd2a15628869c7aadf241e3c9b1ee7b40941";
-    sha256 = "16bs7rxbsq7m7jm96zkqiq8hj68l907m8xgmjrcxzl158qvzhw1w";
+    hash = "sha256-PHD4N0Yl0N9ZlvV1VA9IFBkJEY54fpOqPPVgvXo+epk=";
   };
 
   meta = {

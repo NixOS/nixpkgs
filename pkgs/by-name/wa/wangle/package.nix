@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2025.10.13.00";
+  version = "2026.07.27.00";
 
   outputs = [
     "out"
@@ -32,15 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lptILtCaVeO8yXlIYHaATfJw6VyPxUJCx7nxfOZVIIc=";
+    hash = "sha256-BGl1LGaYRmYdG4h98HhAT7X4tXEMjlzh27nGLCY/B1c=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -101,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       abstractions for building services in a consistent, modular, and
       composable way.
     '';
-    homepage = "https://github.com/facebook/wangle";
+    homepage = "https://github.com/meta/wangle";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

@@ -9,18 +9,18 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prqlc";
-  version = "0.13.5";
+  version = "0.13.14";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
-    rev = version;
-    hash = "sha256-XMxwxg7ij8PBKDWgEfyqCNNPz+a2D5GjIwIS8TMDSHo=";
+    tag = finalAttrs.version;
+    hash = "sha256-ntqtg0/WsBmr8IHz0CSxJTRFH2vfwnZDaZJyBAcBobQ=";
   };
 
-  cargoHash = "sha256-Rw3BZ+l6NiFIhH2zD4UG2hW9st0XP5/UPl1xtvm0XzE=";
+  cargoHash = "sha256-CcQe/L1zcdx+9OUiLnLED6ta5lE/njJvggTKWRYwZgA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,9 +33,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  env = {
-    PYO3_PYTHON = "${python3}/bin/python3";
-  };
+  env.PYO3_PYTHON = "${python3}/bin/python3";
 
   # we are only interested in the prqlc binary
   postInstall = ''
@@ -45,8 +43,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
-    changelog = "https://github.com/prql/prql/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/prql/prql/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

@@ -2,19 +2,23 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua,
-  luaPackages,
+  lua5_5,
   pandoc,
 }:
+
+let
+  lua = lua5_5;
+  luaPackages = lua.pkgs;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromSourcehut {
     owner = "~xerool";
     repo = "fennel-ls";
     rev = finalAttrs.version;
-    hash = "sha256-BU0SkdBjq8kicvACIo3N2gf1UvTmzA3FKSt39Lxp3rs=";
+    hash = "sha256-RIkwL/nF0LwQZOXlUidyQVfRWuFBO5TobNTZrUFuJ64=";
   };
   buildInputs = [
     lua

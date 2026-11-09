@@ -6,17 +6,20 @@
   installShellFiles,
   bash,
   openssh,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3sup";
-  version = "0.13.11";
+  version = "0.13.13";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
-    rev = version;
-    sha256 = "sha256-MLGgH9Tg3lcl/nDGlGgfvgjoxjXRux79Cz6Tig0kDM4=";
+    tag = finalAttrs.version;
+    hash = "sha256-6S8PMIRITXbS5fFexCBEekVDZwTvZ4bN9sanjiDY39M=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +38,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${version}"
-    "-X github.com/alexellis/k3sup/cmd.Version=${version}"
+    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/alexellis/k3sup/cmd.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -50,6 +52,10 @@ buildGoModule rec {
       --fish <($out/bin/k3sup completion fish)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
@@ -60,4 +66,4 @@ buildGoModule rec {
       qjoly
     ];
   };
-}
+})

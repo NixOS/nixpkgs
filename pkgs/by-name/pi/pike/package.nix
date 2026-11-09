@@ -10,7 +10,7 @@
   bison,
   flex,
   gmp,
-  pcre,
+  pcre2,
   nettle,
   libjpeg,
   libpng,
@@ -38,7 +38,7 @@
   ncurses,
   libnsl,
   libxcrypt-legacy,
-  nix-update-script,
+  gitUpdater,
   makeBinaryWrapper,
 }:
 
@@ -105,28 +105,28 @@ let
         powerful built-in data types allowing simple and really fast data manipulation.
       '';
       homepage = "https://pike.lysator.liu.se/";
-      license = with lib.licenses; [
-        gpl2Only
-        # or
-        lgpl2Plus
-        # or
-        mpl20
-      ];
+      license =
+        with lib.licenses;
+        OR [
+          gpl2Only
+          lgpl2Plus
+          mpl20
+        ];
       maintainers = with lib.maintainers; [ siraben ];
-      platforms = with lib.platforms; unix ++ windows;
+      platforms = [ "x86_64-linux" ];
       mainProgram = "pike";
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "9.0.11";
+  version = "9.0.16";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+IWYF2FvL395/+Aat4yGioxUi6vIhNjzLMPV7EvPtw=";
+    hash = "sha256-K3lRGaCkNkzdkSJrrjJkPf1qfwItiz6RpcyP6eoeZW8=";
   };
 
   nativeBuildInputs = [
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
-    pcre
+    pcre2
     nettle
     libjpeg
     libpng
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { allowedVersions = "^9\\..*"; };
 
   meta = {
     description = "Pike programming language";
@@ -200,15 +200,16 @@ stdenv.mkDerivation (finalAttrs: {
       powerful built-in data types allowing simple and really fast data manipulation.
     '';
     homepage = "https://pike.lysator.liu.se/";
-    license = with lib.licenses; [
-      gpl2Only
-      # or
-      lgpl2Plus
-      # or
-      mpl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Only
+        lgpl2Plus
+        mpl20
+      ];
     maintainers = with lib.maintainers; [ siraben ];
-    platforms = with lib.platforms; unix ++ windows;
+    # Bootstrap binary is only available for x86_64-linux
+    platforms = [ "x86_64-linux" ];
     mainProgram = "pike";
   };
 })

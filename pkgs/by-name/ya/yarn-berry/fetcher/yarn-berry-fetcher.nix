@@ -13,20 +13,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-berry-${toString berryVersion}-fetcher";
-  version = "1.2.3";
+  version = "1.3.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "cyberchaos.dev";
     owner = "yuka";
     repo = "yarn-berry-fetcher";
     tag = finalAttrs.version;
-    hash = "sha256-Qfhx1lwd050GabP2Xj0kRi4nIlOHUE4xbZO0kO0IJ8A=";
+    hash = "sha256-4dT01SgTPwo9Vw7WIKtdRVP5+dd45YsTPOuf3V6SJg8=";
   };
 
-  cargoHash = "sha256-tOu1x8kmVCXKvthV0xyzisTb7BwOtfWTyu/cv4HRbpc=";
+  cargoHash = "sha256-l8zTzr2y8i2ENb8iadIBz59YLmNwfDZcrbUqIUibFqg=";
+
+  # See https://github.com/NixOS/nixpkgs/issues/415328
+  # Remove reqwest's "native-tls" feature and use the default "rustls" backend.
+  # On macOS with sandbox = true, fails with errSSLBadCert (-9808 / "bad certificate format")
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail ', features = ["native-tls"]' ""
+  '';
 
   env.YARN_ZIP_SUPPORTED_CACHE_VERSION = berryCacheVersion;
   env.LIBZIP_SYS_USE_PKG_CONFIG = 1;
+
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -42,7 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "yarn-berry-fetcher";
     maintainers = with lib.maintainers; [
-      yuka
       flokli
     ];
   };

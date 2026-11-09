@@ -6,18 +6,21 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hanko";
-  version = "0.5.4";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
-    owner = "SRv6d";
+    owner = "marvinvogt";
     repo = "hanko";
-    tag = "v${version}";
-    hash = "sha256-9HRoXqZ3wdD6xf33tooEHiBWSZlggjUFomblwF4cFtA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-raQl8inNOO9pRQnlESrQ5dSbQG7uC3LtQIv8AOqD+e0=";
   };
 
-  cargoHash = "sha256-wHvhlWi99igZ2gKAIcBYg207JrbQNCOjlcVttIy3MV0=";
+  cargoHash = "sha256-EuYJX1Ds4Kq2Vka5gDnFHRHl3F20xMDm2XgYy4+FZXE=";
+
+  # Upstream tests require network access, which is unavailable in the sandbox.
+  doCheck = false;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -35,10 +38,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Keeps your Git allowed signers file up to date";
-    homepage = "https://github.com/SRv6d/hanko";
-    changelog = "https://github.com/SRv6d/hanko/blob/main/CHANGELOG.md";
+    homepage = "https://github.com/marvinvogt/hanko";
+    changelog = "https://github.com/marvinvogt/hanko/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ srv6d ];
     mainProgram = "hanko";
   };
-}
+})

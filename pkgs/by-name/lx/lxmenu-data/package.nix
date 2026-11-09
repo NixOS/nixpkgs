@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxmenu-data";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxmenu-data";
     tag = finalAttrs.version;
-    hash = "sha256-5QdQ+7nzj7wDrfdt4GT8VW4+sHgZdE7h3cReY2pmcak=";
+    hash = "sha256-JwyJkZIJye8Mtx8yOcpxzOO1Gw0K5ZT00DGgXNqziJQ=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://lxde.org/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.lgpl21Only;
     description = "Freedesktop.org desktop menus for LXDE";
     platforms = lib.platforms.linux;
   };

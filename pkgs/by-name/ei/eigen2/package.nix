@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eigen";
   version = "2.0.17";
 
   src = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-C1Bu2H4zxd/2QVzz9AOdoCSRwOYjF41Vr/0S8Fm2kzQ=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [ ./cmake-4-build.patch ];
 
   meta = {
-    homepage = "https://eigen.tuxfamily.org";
+    homepage = "https://libeigen.gitlab.io/";
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

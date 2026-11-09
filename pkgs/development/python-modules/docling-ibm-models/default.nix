@@ -4,93 +4,73 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  setuptools,
 
   # dependencies
-  accelerate,
-  docling-core,
   huggingface-hub,
-  jsonlines,
   numpy,
   opencv-python-headless,
   pillow,
-  pydantic,
-  rtree,
   safetensors,
   torch,
   torchvision,
-  tqdm,
   transformers,
 
   # tests
-  datasets,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-ibm-models";
-  version = "3.10.3";
+  version = "4.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
-    tag = "v${version}";
-    hash = "sha256-eX0dnXh+WB/TIgKJzkpp1SOqJ2KSxoOD4JL+nsfqkLM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ELMMnDGXPfq6S7EFwuHI2Zb9PnvcBrQcfAC8ek2VCJE=";
   };
 
+  # No [build-system] table upstream, so it falls back to setuptools
   build-system = [
-    poetry-core
-  ];
-
-  dependencies = [
-    accelerate
-    docling-core
-    huggingface-hub
-    jsonlines
-    numpy
-    opencv-python-headless
-    pillow
-    pydantic
-    rtree
-    safetensors
-    torch
-    torchvision
-    tqdm
-    transformers
+    setuptools
   ];
 
   pythonRelaxDeps = [
-    "jsonlines"
-    "numpy"
-    "transformers"
+    "huggingface_hub"
+  ];
+  dependencies = [
+    huggingface-hub
+    numpy
+    # Declared as an optional extra upstream, but cv2 is imported unconditionally by tableformer
+    opencv-python-headless
+    pillow
+    safetensors
+    torch
+    torchvision
+    transformers
   ];
 
-  pythonImportsCheck = [
-    "docling_ibm_models"
-  ];
+  pythonImportsCheck = [ "docling_ibm_models" ];
 
   nativeCheckInputs = [
-    datasets
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # Requires network access
-    "test_code_formula_predictor" # huggingface_hub.errors.LocalEntryNotFoundError
-    "test_figure_classifier" # huggingface_hub.errors.LocalEntryNotFoundError
-    "test_layoutpredictor"
-    "test_readingorder"
-    "test_tf_predictor"
+  disabledTestPaths = [
+    # Require network access
+    "tests/test_tableformer_v2.py"
+    "tests/test_tf_predictor.py"
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-ibm-models/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Docling IBM models";
-    homepage = "https://github.com/DS4SD/docling-ibm-models";
+    homepage = "https://github.com/docling-project/docling-ibm-models";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

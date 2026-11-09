@@ -14,12 +14,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gfs2-utils";
   version = "3.6.1";
 
   src = fetchurl {
-    url = "https://pagure.io/gfs2-utils/archive/${version}/gfs2-utils-${version}.tar.gz";
+    url = "https://pagure.io/gfs2-utils/archive/${finalAttrs.version}/gfs2-utils-${finalAttrs.version}.tar.gz";
     hash = "sha256-VxvjRwPeWiImeJsSV7IJFrH0AvqD+IPgt22u9Gbqk4I=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

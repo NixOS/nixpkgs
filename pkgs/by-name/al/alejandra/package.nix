@@ -6,18 +6,18 @@
   alejandra,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alejandra";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "alejandra";
-    tag = version;
-    hash = "sha256-Oi1n2ncF4/AWeY6X55o2FddIRICokbciqFYK64XorYk=";
+    tag = finalAttrs.version;
+    hash = "sha256-7NLiwk8LB7U9qWrSyz+VqBbGLDuzskw7g52PSwk0kL8=";
   };
 
-  cargoHash = "sha256-IX4xp8llB7USpS/SSQ9L8+17hQk5nkXFP8NgFKVLqKU=";
+  cargoHash = "sha256-2zl5Qcunm50Gbt1cZPk9h293jMj8E3U9h+gVhmA4YPc=";
 
   passthru.tests = {
     version = testers.testVersion { package = alejandra; };
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Uncompromising Nix Code Formatter";
     homepage = "https://github.com/kamadorueda/alejandra";
-    changelog = "https://github.com/kamadorueda/alejandra/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kamadorueda/alejandra/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "alejandra";
   };
-}
+})

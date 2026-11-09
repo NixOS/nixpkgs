@@ -6,8 +6,8 @@
   lv2,
   fftw,
   cmake,
-  libXpm,
-  libXft,
+  libxpm,
+  libxft,
   libjack2,
   libsamplerate,
   libsndfile,
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXft
-    libXpm
+    libxft
+    libxpm
     lv2
     fftw
     libjack2

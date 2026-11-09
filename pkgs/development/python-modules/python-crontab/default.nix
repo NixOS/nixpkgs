@@ -1,40 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  python-dateutil,
+  fetchFromGitLab,
   pytestCheckHook,
-  pythonOlder,
+  python-dateutil,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-crontab";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "python_crontab";
-    inherit version;
-    hash = "sha256-AHyK7mjd3z4E7E3OD6wSS5O9aL50cPyV0qlhehXeKRs=";
+  src = fetchFromGitLab {
+    owner = "doctormo";
+    repo = "python-crontab";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MVQNZDCEsX8cjDQQviTfwOarul8+CkdCvWfJMc5Sbq0=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "= '3.3.0'," "= '${finalAttrs.version}',"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    "test_07_non_posix_shell"
-    # doctest that assumes /tmp is writeable, awkward to patch
-    "test_03_usage"
-    # Test is assuming $CURRENT_YEAR is not a leap year
-    "test_19_frequency_at_month"
-    "test_20_frequency_at_year"
-  ];
 
   pythonImportsCheck = [ "crontab" ];
 
@@ -45,7 +39,10 @@ buildPythonPackage rec {
       and accessing the system cron automatically and simply using a direct API.
     '';
     homepage = "https://gitlab.com/doctormo/python-crontab/";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ kfollesdal ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
+      fab
+      kfollesdal
+    ];
   };
-}
+})

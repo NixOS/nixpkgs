@@ -16,7 +16,7 @@
 buildDunePackage rec {
   pname = "utop";
 
-  version = "2.16.0";
+  version = "2.17.0";
   propagatedBuildInputs = [
     findlib
     lambda-term
@@ -27,9 +27,13 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.11";
 
+  # The toplevel loads the utop library at runtime,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
+
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    hash = "sha256-C595E10hMvshHL6ImUHP0NVMx7uAYrigRD44xUC4x2M=";
+    hash = "sha256-FOGTkf+LGMFbARc3TU0PxXIAUJV72AKYZQVkuJT6hdo=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
   dacite,
   diskcache,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "datashaper";
   version = "0.0.49";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

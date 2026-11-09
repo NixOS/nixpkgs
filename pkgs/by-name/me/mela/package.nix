@@ -5,15 +5,18 @@
   gfortran,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mela";
   version = "2.0.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vbertone";
     repo = "MELA";
-    rev = version;
-    sha256 = "01sgd4mwx4n58x95brphp4dskqkkx8434bvsr38r5drg9na5nc9y";
+    tag = finalAttrs.version;
+    hash = "sha256-PjFblE0vt5LRyHovMgjqc+KpG7nw5lVSR8WSzitpTwc=";
   };
 
   nativeBuildInputs = [ gfortran ];
@@ -28,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

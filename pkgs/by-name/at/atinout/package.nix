@@ -10,8 +10,13 @@ stdenv.mkDerivation {
   pname = "atinout";
   version = "0.9.2-alpha";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.cc.isClang) "-Werror=implicit-fallthrough=0";
-  LANG = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+  env = {
+    LANG = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+  }
+  // lib.optionalAttrs (!stdenv.cc.isClang) {
+    NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
+  };
+
   nativeBuildInputs = [
     ronn
     mount
@@ -22,6 +27,12 @@ stdenv.mkDerivation {
     rev = "4976a6cb5237373b7e23cd02d7cd5517f306e3f6";
     sha256 = "0bninv2bklz7ly140cxx8iyaqjlq809jjx6xqpimn34ghwsaxbpv";
   };
+
+  postPatch = ''
+    # it writes through the pointer, and glibc's C23 strchr keeps the const
+    substituteInPlace atinout.c \
+      --replace-fail "tr_lf_cr(const char *s)" "tr_lf_cr(char *s)"
+  '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

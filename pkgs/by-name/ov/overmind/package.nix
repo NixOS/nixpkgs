@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "overmind";
   version = "2.5.1";
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DarthSim";
     repo = "overmind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wX29nFmzmbxbaXtwIWZNvueXFv9SKIOqexkc5pEITpw=";
   };
 
@@ -35,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/DarthSim/overmind";
     description = "Process manager for Procfile-based applications and tmux";
     mainProgram = "overmind";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "arris-tg2492lg";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vanbalken";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     description = "Library to connect to an Arris TG2492LG";
     homepage = "https://github.com/vanbalken/arris-tg2492lg";
     changelog = "https://github.com/vanbalken/arris-tg2492lg/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

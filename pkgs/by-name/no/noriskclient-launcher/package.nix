@@ -5,6 +5,7 @@
   glib,
   glib-networking,
   gsettings-desktop-schemas,
+  jdk25,
   jdk17,
   jdk21,
   jdk8,
@@ -12,16 +13,17 @@
     jdk8
     jdk17
     jdk21
+    jdk25
   ],
   lib,
   libGL,
   libjack2,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
   noriskclient-launcher-unwrapped,
   pipewire,
   stdenv,
@@ -54,11 +56,11 @@ symlinkJoin {
 
       # glfw
       libGL
-      libX11
-      libXcursor
-      libXext
-      libXrandr
-      libXxf86vm
+      libx11
+      libxcursor
+      libxext
+      libxrandr
+      libxxf86vm
 
       # narrator support
       flite
@@ -84,7 +86,7 @@ symlinkJoin {
 
     glibPostInstallHook
     gappsWrapperArgsHook
-    wrapGAppsHook
+    wrapGApp "$out/bin/noriskclient-launcher-v3"
   '';
 
   meta = {

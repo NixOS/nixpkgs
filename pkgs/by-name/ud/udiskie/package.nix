@@ -5,27 +5,28 @@
   gobject-introspection,
   gtk3,
   installShellFiles,
-  libappindicator-gtk3,
+  keyutils,
+  libappindicator,
   libnotify,
   librsvg,
   python3Packages,
+  stdenv,
   udisks,
+  versionCheckHook,
   wrapGAppsHook3,
-  testers,
-  udiskie,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "udiskie";
-  version = "2.5.8";
+  version = "2.7.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
-    rev = "v${version}";
-    hash = "sha256-FFp1+7cCfkMI74rEAez8aJsaplEUa3madoSx+lwplzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6vlh1Ggfk4Ehwcmqr0a1YtBjTfCqQqdctkXqdS1BSis=";
   };
 
   patches = [
@@ -34,6 +35,9 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace udiskie/locale.py --subst-var out
+
+    substituteInPlace udiskie/keyutils.py \
+      --replace-fail 'ctypes.util.find_library("keyutils")' '"${lib.getLib keyutils}/lib/libkeyutils${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   nativeBuildInputs = [
@@ -51,7 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     libnotify
     librsvg # SVG icons
     udisks
@@ -59,7 +63,6 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     docopt
-    keyutils
     pygobject3
     pyyaml
   ];
@@ -84,16 +87,16 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = udiskie;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/coldfix/udiskie";
-    changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/coldfix/udiskie/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
-      udiskie is a udisks2 front-end that allows to manage removeable media such
+      udiskie is a udisks2 front-end that allows to manage removable media such
       as CDs or flash drives from userspace.
 
       Its features include:
@@ -108,5 +111,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+    mainProgram = "udiskie";
   };
-}
+})

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tektoncd-cli-pac";
-  version = "0.40.0";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
-    owner = "openshift-pipelines";
+    owner = "tektoncd";
     repo = "pipelines-as-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FHhJyOHaYaYvizNZ3iKsWy+CH9VWa8LXBmaawVdcaFo=";
+    hash = "sha256-ZuYaYBSDpU2NCBssw+j3cP4jV6t+pCezFrQRQBS/zKk=";
   };
 
   vendorHash = null;
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://pipelinesascode.com";
-    changelog = "https://github.com/openshift-pipelines/pipelines-as-code/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/tektoncd/pipelines-as-code/releases/tag/v${finalAttrs.version}";
     description = "CLI for interacting with Tekton Pipelines as Code";
     longDescription = ''
       tkn-pac CLI Plugin – Easily manage Pipelines-as-Code repositories.

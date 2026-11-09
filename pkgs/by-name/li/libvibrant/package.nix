@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   linuxPackages,
 }:
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     linuxPackages.nvidia_x11.settings.libXNVCtrl
   ];
 

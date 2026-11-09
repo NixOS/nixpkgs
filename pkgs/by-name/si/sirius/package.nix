@@ -22,6 +22,7 @@
   boost,
   eigen,
   libvdwxc,
+  fftwMpi,
   dftd4,
   simple-dftd3,
   mctc-lib,
@@ -53,14 +54,39 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.10.0";
+  version = "7.12.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
+    hash = "sha256-9PlXyJLfunbinsZM6V3PFklqY/JWJkbVD8/vvkIsywA=";
   };
+
+  postPatch = ''
+    # The Python module's CMakeLists.txt forces C++17, but the bundled camp
+    # library in umpire >= 2026.07 uses C++20 concepts. The main library
+    # already uses C++20 (set in the root CMakeLists.txt), so align the
+    # Python module to avoid compilation errors.
+    substituteInPlace python_module/CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+
+    # siriusConfig.cmake uses find_library with NO_DEFAULT_PATH to locate
+    # libsirius_cxx, but with split outputs the library lives in $out/lib
+    # while the config is in $dev. Remove NO_DEFAULT_PATH so the library
+    # can be found across outputs.
+    substituteInPlace cmake/siriusConfig.cmake.in \
+      --replace-fail "NO_DEFAULT_PATH" ""
+
+    # src/CMakeLists.txt uses ''${CMAKE_CUDA_ARCHITECTURES} unquoted in
+    # set_target_properties, which breaks when multiple architectures are
+    # set (semicolon-separated list splits into separate arguments).
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'CUDA_ARCHITECTURES ''${CMAKE_CUDA_ARCHITECTURES}' 'CUDA_ARCHITECTURES "''${CMAKE_CUDA_ARCHITECTURES}"'
+  '';
 
   outputs = [
     "out"
@@ -70,9 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gfortran
+    mpi
     pkg-config
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals enablePython [ pythonPackages.python ];
 
   buildInputs = [
     blas
@@ -90,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     eigen
     libvdwxc
+    fftwMpi
     jonquil
     simple-dftd3
     dftd4
@@ -100,12 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cudatoolkit
+    cudaPackages.nvtx
+    cudaPackages.libcufft
+    cudaPackages.libcusolver
     cudaPackages.libcublas
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
+    rocmPackages.rocsolver
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -133,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
     "-include cstdint"
   ];
@@ -149,7 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     "-DSIRIUS_USE_CUDA=ON"
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
@@ -160,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSIRIUS_CREATE_PYTHON_MODULE=ON"
   ];
 
-  doCheck = true;
+  doCheck = !umpire.passthru.rocmSupport;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
   # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox

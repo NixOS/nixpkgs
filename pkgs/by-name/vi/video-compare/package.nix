@@ -7,15 +7,15 @@
   ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "video-compare";
-  version = "20250928";
+  version = "20261004";
 
   src = fetchFromGitHub {
     owner = "pixop";
     repo = "video-compare";
-    tag = version;
-    hash = "sha256-md+h39tMbd07pHZzQ1eae5QCkqYErMoD6oEYov9lLBU=";
+    tag = finalAttrs.version;
+    hash = "sha256-WeZDRVNEaa6A+TulOiHa7dQak2WTTNPT8TQPiG+fxQw=";
   };
 
   postPatch = ''
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     mainProgram = "video-compare";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -26,5 +26,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/gildor478/ocamlmod";
     description = "Generate OCaml modules from source files";
     mainProgram = "ocamlmod";
+    license = lib.licenses.WITH lib.licenses.lgpl21Only lib.licenses.ocamlLgplLinkingException;
   };
 })

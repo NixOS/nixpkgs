@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -12,15 +11,18 @@
   py-cpuinfo,
 
   # dependencies
-  deprecated,
   numpy,
+  typing-extensions,
 
   # optional-dependencies
   crc32c,
+  google-crc32c,
+  pcodec,
   pyzstd,
 
   # tests
   msgpack,
+  python,
   pytestCheckHook,
   importlib-metadata,
   zstd,
@@ -28,14 +30,12 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.16.3";
+  version = "0.16.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9cFhl+q8KeSfJc683d1MgAcj7tlPeEZwehEYIYU15k=";
+    hash = "sha256-DQ+2CFL4TAvZVDzE0que79N/yO/MQQrNR3fmKh0wAxg=";
   };
 
   build-system = [
@@ -46,14 +46,15 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    deprecated
     numpy
+    typing-extensions
   ];
 
   optional-dependencies = {
     crc32c = [ crc32c ];
+    google_crc32c = [ google-crc32c ];
     msgpack = [ msgpack ];
-    pyzstd = [ pyzstd ];
+    pcodec = [ pcodec ];
     # zfpy = [ zfpy ];
   };
 
@@ -64,12 +65,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     importlib-metadata
+    pyzstd
     zstd
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  disabledTestPaths = [
+    # https://github.com/zarr-developers/numcodecs/issues/815
+    "numcodecs/tests/test_pcodec.py"
+  ];
+
   # https://github.com/NixOS/nixpkgs/issues/255262
-  preCheck = "pushd $out";
+  preCheck = "pushd $out/${python.sitePackages}";
   postCheck = "popd";
 
   meta = {

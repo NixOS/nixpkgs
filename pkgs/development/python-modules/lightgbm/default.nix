@@ -4,7 +4,6 @@
   stdenv,
   pkgs,
   buildPythonPackage,
-  fetchPypi,
 
   # build-system
   scikit-build-core,
@@ -18,11 +17,12 @@
 
   # buildInputs
   llvmPackages,
-  boost,
+  boost187,
   ocl-icd,
   opencl-headers,
 
   # dependencies
+  narwhals,
   numpy,
   scipy,
 
@@ -42,29 +42,22 @@
 assert gpuSupport -> !cudaSupport;
 assert cudaSupport -> !gpuSupport;
 
-buildPythonPackage rec {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   inherit (pkgs.lightgbm)
     pname
     version
     patches
+    src
     ;
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yxxZcg61aTicC6dNFPUjUbVzr0ifIwAyocnzFPi6t/4=";
-  };
-
-  # Patch dll search path to fix proper discovery of lib_lightgbm.so
-  #   Exception: Cannot find lightgbm library file in following paths:
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lib_lightgbm.so
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/bin/lib_lightgbm.so
-  # /nix/store/...-python3.13-lightgbm-4.6.0/lib/python3.13/site-packages/lightgbm/lib/lib_lightgbm.so
-  postPatch = ''
-    substituteInPlace lightgbm/libpath.py \
-      --replace-fail \
-        'curr_path.parents[0] / "lib",' \
-        'curr_path.parents[1] / "lib",'
+  # These need to be in the root for the build to work.
+  # The tarballs on PyPi are structured the same.
+  postUnpack = ''
+    mv source/python-package/{pyproject.toml,README.rst} source/
   '';
 
   build-system = [
@@ -85,16 +78,18 @@ buildPythonPackage rec {
   buildInputs =
     (lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ])
     ++ (lib.optionals gpuSupport [
-      boost
+      boost187
       ocl-icd
       opencl-headers
     ])
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
       cudaPackages.cuda_cudart
+      cudaPackages.nccl
     ];
 
   dependencies = [
+    narwhals
     numpy
     scipy
   ];
@@ -102,6 +97,17 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "USE_GPU" gpuSupport)
     (lib.cmakeBool "USE_CUDA" cudaSupport)
+    # Set in pyproject.toml for `cmake.args` in `[tool.scikit-build]`,
+    # but not set by our hooks.
+    (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
+  ]
+  ++ lib.optionals cudaSupport [
+    # build fails otherwise
+    (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
+
+    # needed to find nccl
+    (lib.cmakeBool "BUILD_WITH_SHARED_NCCL" true)
+    (lib.cmakeFeature "NCCL_ROOT" "${lib.getLib cudaPackages.nccl}")
   ];
 
   optional-dependencies = {
@@ -120,16 +126,16 @@ buildPythonPackage rec {
     scikit-learn = [ scikit-learn ];
   };
 
-  # No python tests
-  doCheck = false;
-
   pythonImportsCheck = [ "lightgbm" ];
 
   meta = {
     description = "Fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
-    homepage = "https://github.com/Microsoft/LightGBM";
-    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
+    homepage = "https://github.com/lightgbm-org/LightGBM";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh ];
+    maintainers = with lib.maintainers; [
+      flokli
+      teh
+    ];
   };
-}
+})

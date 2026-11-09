@@ -20,7 +20,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   meta = {
     description = "Text similarity measurement and index searching based on bigrams";
-    homepage = "https://pgbigm.osdn.jp/";
+    homepage = "https://github.com/pgbigm/pg_bigm";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;

@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "gsm0338";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsch";
@@ -28,6 +28,6 @@ buildPythonPackage {
     description = "Python codec for GSM 03.38";
     homepage = "https://github.com/dsch/gsm0338";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = [ ];
   };
 }

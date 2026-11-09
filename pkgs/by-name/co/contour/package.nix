@@ -1,17 +1,19 @@
 {
   lib,
   stdenv,
+  llvmPackages,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   boxed-cpp,
+  cairo,
   freetype,
   fontconfig,
   libunicode,
   libutempter,
   termbench-pro,
   qt6,
-  pcre,
   boost,
   catch2_3,
   fmt,
@@ -28,18 +30,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.6.1.7494";
+  version = "0.8.0.9335";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jgasZhdcJ+UF3VIl8HLcxBayvbA/dkaOG8UtANRgeP4=";
+    hash = "sha256-WIBAIzHskEoxijHIIGm+NQ0jfvbnwyES1tiTfnetTxs=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./dont-fix-app-bundle.diff
-    ./remove-deep-flag-from-codesign.diff
+  patches = [
+    # fix undefined references to YAMLConfigReader::loadFromEntry<Enum> at link time when gcc inlines them
+    (fetchpatch2 {
+      name = "config-define-config-enum-reader-in-header.patch";
+      url = "https://github.com/contour-terminal/contour/commit/e63db64edeb8f922bbf50d03c5ea7556407b80ac.patch";
+      hash = "sha256-fZVHUnb9azQRoQKyZ4HumSPMlSdIkw3zB8X6lVpe3EQ=";
+    })
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-L${lib.getLib llvmPackages.libcxx}/lib";
+  };
+
+  # Dependencies are already managed by nix
+  cmakeFlags = [
+    (lib.cmakeBool "CONTOUR_USE_CPM" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "CONTOUR_MACOS_DEPLOY" false)
   ];
 
   outputs = [
@@ -59,13 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boxed-cpp
+    cairo
     fontconfig
     freetype
     libunicode
     termbench-pro
     qt6.qtmultimedia
     qt6.qt5compat
-    pcre
     boost
     catch2_3
     fmt
@@ -78,8 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libutil
   ];
-
-  cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share

@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXt,
+  libx11,
+  libxext,
+  libxt,
   imake,
   gccmakedep,
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
-    url = "http://www.ibiblio.org/pub/linux/libs/X/${pname}-${version}.tgz";
+    url = "http://www.ibiblio.org/pub/linux/libs/X/xzoom-${version}.tgz";
     sha256 = "0jzl5py4ny4n4i58lxx2hdwq9zphqf7h3m14spl3079y5mlzssxj";
   };
   patches = [
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
-    libXt
+    libx11
+    libxext
+    libxt
   ];
 
   makeFlags = [

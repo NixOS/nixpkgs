@@ -22,6 +22,9 @@ let
     // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
       IPCPassword = "#ipcPassword#";
     }
+    // lib.optionalAttrs (cfg.licenseFile != null) {
+      LicenseID = "#licenseID#";
+    }
   );
 
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
@@ -60,7 +63,7 @@ in
             description = "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = lib.mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+          package = lib.mkPackageOption pkgs [ "archisteamfarm" "ui" ] {
             extraDescription = ''
               ::: {.note}
               Contents must be in lib/dist
@@ -78,7 +81,7 @@ in
       description = "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = lib.mkPackageOption pkgs "ArchiSteamFarm" {
+    package = lib.mkPackageOption pkgs "archisteamfarm" {
       extraDescription = ''
         ::: {.warning}
         Should always be the latest version, for security reasons,
@@ -107,6 +110,12 @@ in
         Statistics = false;
       };
       default = { };
+    };
+
+    licenseFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = "Path to a file containing the license. The file must be readable by the `archisteamfarm` user/group.";
     };
 
     ipcPasswordFile = lib.mkOption {
@@ -248,48 +257,40 @@ in
           }
         ];
 
-        preStart =
-          let
-            createBotsScript =
-              pkgs.runCommand "ASF-bots"
-                {
-                  preferLocalBuild = true;
-                }
-                ''
-                  mkdir -p $out
-                  # clean potential removed bots
-                  rm -rf $out/*.json
-                  for i in ${
-                    lib.concatStringsSep " " (map (x: "${lib.getName x},${x}") (lib.mapAttrsToList mkBot cfg.bots))
-                  }; do IFS=",";
-                    set -- $i
-                    ln -fs $2 $out/$1
-                  done
-                '';
-            replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
-          in
-          ''
-            mkdir -p config
+        preStart = ''
+          mkdir -p config
 
-            cp --no-preserve=mode ${configFile} config/ASF.json
+          cp --no-preserve=mode '${configFile}' config/ASF.json
 
-            ${lib.optionalString (cfg.ipcPasswordFile != null) ''
-              ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
-            ''}
+          ${lib.optionalString (cfg.licenseFile != null) ''
+            ${lib.getExe pkgs.replace-secret} '#licenseID#' '${cfg.licenseFile}' config/ASF.json
+          ''}
 
-            ${lib.optionalString (cfg.ipcSettings != { }) ''
-              ln -fs ${ipc-config} config/IPC.config
-            ''}
+          ${lib.optionalString (cfg.ipcPasswordFile != null) ''
+            ${lib.getExe pkgs.replace-secret} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+          ''}
 
-            ${lib.optionalString (cfg.bots != { }) ''
-              ln -fs ${createBotsScript}/* config/
-            ''}
+          ${lib.optionalString (cfg.ipcSettings != { }) ''
+            ln -fs ${ipc-config} config/IPC.config
+          ''}
 
-            rm -f www
-            ${lib.optionalString cfg.web-ui.enable ''
-              ln -s ${cfg.web-ui.package}/ www
-            ''}
-          '';
+          for f in config/*.nixbot; do
+            [[ -f "$f" ]] || continue
+            rm "$f"
+            [[ -f "''${f%.nixbot}" ]] || continue
+            rm "''${f%.nixbot}"
+          done
+
+          ${lib.concatMapStrings (x: ''
+            cp --no-preserve=mode '${x}' 'config/${lib.getName x}'
+            touch 'config/${lib.getName x}.nixbot'
+          '') (lib.mapAttrsToList mkBot cfg.bots)}
+
+          rm -f www
+          ${lib.optionalString cfg.web-ui.enable ''
+            ln -s '${cfg.web-ui.package}/' www
+          ''}
+        '';
       };
     };
   };

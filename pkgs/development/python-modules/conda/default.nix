@@ -26,9 +26,8 @@
   defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
 }:
 buildPythonPackage rec {
-  __structuredAttrs = true;
   pname = "conda";
-  version = "25.11.1";
+  version = "26.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,12 +35,17 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     tag = version;
-    hash = "sha256-Jp7C7rwgzVGjNBRwViyDIBom67VevYG5e46/wpAWJX4=";
+    hash = "sha256-Wc/hAhazJu8xfqp1p+wlpQXkFlybefbfom0Rkc7JV2M=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "certifi"
+    "ruamel-yaml"
   ];
 
   dependencies = [

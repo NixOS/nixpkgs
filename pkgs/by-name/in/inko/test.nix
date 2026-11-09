@@ -1,6 +1,7 @@
 {
   inko,
   writeText,
+  writableTmpDirAsHomeHook,
   runCommand,
   ...
 }:
@@ -39,8 +40,12 @@ let
       '';
 in
 
-runCommand "inko-test" { } ''
-  ${inko}/bin/inko run ${source} > $out
-  cat $out | grep -q Hello
-  cat $out | grep -q world
-''
+runCommand "inko-test"
+  {
+    nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+  }
+  ''
+    ${inko}/bin/inko run ${source} > $out
+    cat $out | grep -q Hello
+    cat $out | grep -q world
+  ''

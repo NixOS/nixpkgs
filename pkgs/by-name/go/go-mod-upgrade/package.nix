@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "go-mod-upgrade";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "oligot";
     repo = "go-mod-upgrade";
     tag = "v${version}";
-    hash = "sha256-eBes8PDx3E8hAcSXiRmEJTelsm7EWtI3Ffsl5RIAVJ8=";
+    hash = "sha256-7xS8KFsp4fDUgLhCwdIDDHR1yM8TpO3IMpgG1VP/2D0=";
   };
 
-  vendorHash = "sha256-92lKUBkSx5Rvm1FfZLAd3LZS+TPAasRYOMFLTt/QzXc=";
+  vendorHash = "sha256-U6v8gxOca1p69Ec2pAO95sYtbaI7OyiJ1uFgqrZ3xr0=";
 
   ldflags = [
     "-X main.version=${version}"

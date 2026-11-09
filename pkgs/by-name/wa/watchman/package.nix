@@ -30,18 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.10.13.00";
+  version = "2026.07.27.00";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yD8OaA6n2aqwgyQ58VEiBw6+IbwUgXrWEUPinJDip+U=";
+    hash = "sha256-cfx0hRsWDq6NTr8QvnLt/LsZ4Ja8d3lejUSgzsockp4=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
     # If we want to have one watchman per system, we need to have the state in
     # $HOME for reliability in face of differing TMPDIR values.
-    # https://github.com/facebook/watchman/issues/1092
+    # https://github.com/meta/watchman/issues/1092
     (lib.cmakeBool "WATCHMAN_USE_XDG_STATE_HOME" true)
 
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
@@ -90,6 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # fmt v12.2.0 changed the definition of its fmt/core.h header to no longer
+  # include fmt/format.h, so we must pull that one in instead. vendored from
+  # https://github.com/meta/watchman/pull/1348 with a small modification to
+  # the surrounding context in watchman/watcher/eden.cpp to avoid the changes
+  # in 542ccb794647fe7bdeb59db8f54cd434db42bd30.
+  patches = [ ./fmt-12.2.0-format-header.patch ];
+
   postPatch = ''
     patchShebangs .
 
@@ -101,11 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail /usr/bin /var/empty
 
-    # Facebook Thrift requires C++20 now but Watchman hasn’t been
-    # updated yet… (Aren’t these things meant to be integrated together
-    # in a monorepo?)
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
   passthru.updateScript = ./update.sh;

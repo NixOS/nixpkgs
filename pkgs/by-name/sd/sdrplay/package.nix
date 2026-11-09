@@ -6,21 +6,22 @@
 }:
 
 let
-  version = "3.15.1";
+  version = "3.15.2";
 
   sources = rec {
     x86_64-linux = {
       url = "https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-${version}.run";
-      hash = "sha256-CTcyv10Xz9G2LqHh4qOW9tKBEcB+rztE2R7xJIU4QBQ=";
+      hash = "sha256-OpfKdkJju+dvsPIiDmQIlCNX6IZMGeFAim1ph684L+M=";
     };
 
-    x86_64-darwin = {
+    aarch64-darwin = {
       url = "https://www.sdrplay.com/software/SDRplayAPI-macos-installer-universal-3.15.1.pkg";
       hash = "sha256-XRSM7aH653XS0t9bP89G3uJ7YiLiU1xMBjwvLqL3rMM=";
     };
 
     aarch64-linux = x86_64-linux;
-    aarch64-darwin = x86_64-darwin;
+
+    armv7l-linux = x86_64-linux;
   };
 
   platforms = lib.attrNames sources;

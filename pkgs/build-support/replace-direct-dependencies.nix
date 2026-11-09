@@ -61,6 +61,16 @@ else
                 exit 1
             fi
             echo "s|$oldBasename|$newBasename|g" >> rewrite.sed
+            # If the name parts agree, we can also rewrite the old hash by the new.
+            # Binaries sometimes contain the full string ("hash-name") only in
+            # garbled form, but at least with the hash intact. For instance
+            # this happens when compilers optimize string operations into
+            # vector stores.
+            if [ "''${oldBasename:32}" = "''${newBasename:32}" ]; then
+                echo "s|''${oldBasename:0:32}|''${newBasename:0:32}|g" >> rewrite.sed
+            else
+                echo "''${oldBasename:0:32} $oldBasename" >> name-changing
+            fi
         done
     }
     createRewriteScript ${
@@ -79,4 +89,11 @@ else
       )
     }
     nix-store --dump ${drv} | sed -f rewrite.sed | nix-store --restore $out
+    if [ -e name-changing ]; then
+        while read -r oldHash oldBasename; do
+            if nix-store --dump $out | grep -aqF "$oldHash"; then
+                echo "warning: $out still contains the hash of $oldBasename" >&2
+            fi
+        done < name-changing
+    fi
   ''

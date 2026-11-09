@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -25,22 +24,23 @@
   fastapi,
   google-genai,
   google-generativeai,
+  jsonref,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
   redis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.11.3";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jxnl";
+    owner = "567-labs";
     repo = "instructor";
-    tag = "v${version}";
-    hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nBVjmd+Y/woAOtLU4pUQiKrVAtpSBng0PpDc8TLk8fE=";
   };
 
   build-system = [ hatchling ];
@@ -70,6 +70,7 @@ buildPythonPackage rec {
     fastapi
     google-genai
     google-generativeai
+    jsonref
     pytest-asyncio
     pytestCheckHook
     python-dotenv
@@ -85,6 +86,9 @@ buildPythonPackage rec {
     "test_partial"
     "test_provider_invalid_type_raises_error"
 
+    # instructor.core.exceptions.ConfigurationError: response_model must be a Pydantic BaseModel subclass, got type
+    "test_openai_schema_raises_error"
+
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
 
@@ -99,13 +103,16 @@ buildPythonPackage rec {
     # pydantic validation mismatch
     "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
     "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
+
+    # Upstream bug: test expects TypeError but code raises ConfigurationError
+    "test_openai_schema_raises_error"
   ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
     "tests/llm/"
     # Network and requires API keys
-    "tests/test_auto_client.py"
+    "tests/providers/test_auto_client.py"
     # annoying dependencies
     "tests/docs"
     "examples"
@@ -113,10 +120,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Structured outputs for llm";
-    homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
+    homepage = "https://github.com/567-labs/instructor";
+    changelog = "https://github.com/567-labs/instructor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";
   };
-}
+})

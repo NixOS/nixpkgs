@@ -8,10 +8,17 @@
 let
   cfg = config.services.autobrr;
   configFormat = pkgs.formats.toml { };
-  configTemplate = configFormat.generate "autobrr.toml" cfg.settings;
-  templaterCmd = ''${lib.getExe pkgs.dasel} put -f '${configTemplate}' -v "$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)" -o %S/autobrr/config.toml "sessionSecret"'';
+  configFile = configFormat.generate "autobrr.toml" cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "autobrr"
+      "secretFile"
+    ] "autobrr no longer uses a session secret since version 1.82.0.")
+  ];
+
   options = {
     services.autobrr = {
       enable = lib.mkEnableOption "Autobrr";
@@ -22,19 +29,32 @@ in
         description = "Open ports in the firewall for the Autobrr web interface.";
       };
 
-      secretFile = lib.mkOption {
-        type = lib.types.path;
-        description = "File containing the session secret for the Autobrr web interface.";
-      };
-
       settings = lib.mkOption {
-        type = lib.types.submodule { freeformType = configFormat.type; };
-        default = {
-          host = "127.0.0.1";
-          port = 7474;
-          checkForUpdates = true;
+        type = lib.types.submodule {
+          freeformType = configFormat.type;
+          options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              description = "The host address autobrr listens on.";
+            };
+
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 7474;
+              description = "The port autobrr listens on.";
+            };
+
+            checkForUpdates = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether autobrr needs to check for updates.";
+            };
+          };
         };
+        default = { };
         example = {
+          port = 7654;
           logLevel = "DEBUG";
         };
         description = ''
@@ -50,37 +70,38 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !(cfg.settings ? sessionSecret);
-        message = ''
-          Session secrets should not be passed via settings, as
-          these are stored in the world-readable nix store.
+    systemd = {
+      tmpfiles.settings = {
+        "10-autobrr" = {
+          # DynamicUser uses /var/lib/private/
+          "/var/lib/private/autobrr/config.toml"."L+" = {
+            argument = "${configFile}";
+          };
+        };
+      };
 
-          Use the secretFile option instead.'';
-      }
-    ];
+      services.autobrr = {
+        description = "Autobrr";
+        after = [
+          "syslog.target"
+          "network-online.target"
+        ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = [ configFile ];
 
-    systemd.services.autobrr = {
-      description = "Autobrr";
-      after = [
-        "syslog.target"
-        "network-online.target"
-      ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
-        StateDirectory = "autobrr";
-        ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
-        ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
-        Restart = "on-failure";
+        serviceConfig = {
+          Type = "simple";
+          DynamicUser = true;
+          StateDirectory = "autobrr";
+          ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
+          Restart = "on-failure";
+        };
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
+
+  meta.maintainers = with lib.maintainers; [ av-gal ];
 }

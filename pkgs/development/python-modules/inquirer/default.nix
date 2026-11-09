@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # native
   poetry-core,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "inquirer";
   version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "magmax";

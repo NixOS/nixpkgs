@@ -41,7 +41,7 @@ runTest (
               dbtype = "pgsql";
               dbname = "nextcloud";
               dbuser = adminuser;
-              dbpassFile = config.services.nextcloud.config.adminpassFile;
+              dbpassFile = "${pkgs.writeText "dbpass" "database-password"}"; # Don't try this at home!
             };
 
             secretFile = "/etc/nextcloud-secrets.json";

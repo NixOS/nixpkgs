@@ -61,7 +61,7 @@ in
       description = "Lidarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "LIDARR" cfg.settings;
+      environment = servarr.mkServarrSettingsEnvVars "LIDARR" cfg.settings // servarr.commonDotnetEnvVars;
 
       serviceConfig = {
         Type = "simple";

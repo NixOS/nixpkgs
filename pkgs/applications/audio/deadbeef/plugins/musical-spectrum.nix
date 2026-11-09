@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "deadbeef-musical-spectrum-plugin";
-  version = "unstable-2020-07-01";
+  version = "0-unstable-2020-07-01";
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   ];
   makeFlags = [ "gtk3" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   installPhase = ''
     runHook preInstall

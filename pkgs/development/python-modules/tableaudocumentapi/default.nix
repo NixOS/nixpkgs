@@ -4,7 +4,6 @@
   fetchPypi,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   fetchpatch,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
 
   pyproject = true;
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

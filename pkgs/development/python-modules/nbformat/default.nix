@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   hatchling,
   hatch-nodejs-version,
@@ -17,13 +16,12 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.10.4";
+  version = "5.11.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MiFosU+Tel0RNimI7KwqSVLT2OOiy+sjGVhGMSJtWzo=";
+    hash = "sha256-MtRSHGjG59WynHbe+u7Z9C6nMxQrmxn4gnfOEDkLnE0=";
   };
 
   build-system = [

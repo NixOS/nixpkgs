@@ -14,7 +14,7 @@ let
     inherit (cfg) folders port;
     listen_addr = cfg.listenAddress;
     storage_path = "$STATE_DIRECTORY";
-    imap = (builtins.removeAttrs cfg.imap [ "passwordFile" ]) // {
+    imap = (removeAttrs cfg.imap [ "passwordFile" ]) // {
       password = "$IMAP_PASSWORD";
       use_ssl = true;
     };

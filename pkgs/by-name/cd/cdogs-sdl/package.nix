@@ -12,15 +12,15 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdogs-sdl";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     repo = "cdogs-sdl";
     owner = "cxong";
-    rev = version;
-    sha256 = "sha256-g1eLFdHsmqnz6zTlmaiLOXgX5dnS94k/PvaFJE3gfLo=";
+    tag = finalAttrs.version;
+    hash = "sha256-1t8LiR5zg+Z9eeP1rS5kU3deMlbPB9+tBLziuFzlQ+Q=";
   };
 
   postPatch = ''
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   nativeBuildInputs = [
@@ -63,8 +65,8 @@ stdenv.mkDerivation rec {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ nixinator ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
-}
+})

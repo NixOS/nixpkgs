@@ -50,7 +50,7 @@ in
         # check if following issue is still valid
         # https://github.com/mudler/LocalAI/issues/2207
         machine.succeed("${jq}/bin/jq --exit-status '.[] | select(.name == \"api_call\").metrics | debug | any(.labels.path == \"/metricsls\" and .count == \"1\")' metrics.json")
-        machine.copy_from_vm("metrics.json")
+        machine.copy_from_machine("metrics.json")
       '';
   };
 
@@ -101,11 +101,11 @@ in
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .data[].id == \"${model}\"' models.json")
 
               machine.succeed("curl -f http://localhost:${port}/embeddings --json @${writers.writeJSON "request.json" requests.request} --output embeddings.json")
-              machine.copy_from_vm("embeddings.json")
+              machine.copy_from_machine("embeddings.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .model == \"${model}\"' embeddings.json")
 
               machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-              machine.copy_from_vm("metrics.json")
+              machine.copy_from_machine("metrics.json")
             '';
         };
 
@@ -206,21 +206,21 @@ in
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .data[].id == \"${model}\"' models.json")
 
               machine.succeed("curl -f http://localhost:${port}/v1/chat/completions --json @${writers.writeJSON "request-chat-completions.json" requests.chat-completions} --output chat-completions.json")
-              machine.copy_from_vm("chat-completions.json")
+              machine.copy_from_machine("chat-completions.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .object == \"chat.completion\"' chat-completions.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .choices | first.message.content | split(\" \") | last | tonumber == 3' chat-completions.json")
 
               machine.succeed("curl -f http://localhost:${port}/v1/edits --json @${writers.writeJSON "request-edit-completions.json" requests.edit-completions} --output edit-completions.json")
-              machine.copy_from_vm("edit-completions.json")
+              machine.copy_from_machine("edit-completions.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .object == \"edit\"' edit-completions.json")
               machine.succeed("${jq}/bin/jq --exit-status '.usage.completion_tokens | debug == ${toString requests.edit-completions.max_tokens}' edit-completions.json")
 
               machine.succeed("curl -f http://localhost:${port}/v1/completions --json @${writers.writeJSON "request-completions.json" requests.completions} --output completions.json")
-              machine.copy_from_vm("completions.json")
+              machine.copy_from_machine("completions.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .object ==\"text_completion\"' completions.json")
 
               machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-              machine.copy_from_vm("metrics.json")
+              machine.copy_from_machine("metrics.json")
             '';
         };
 
@@ -289,14 +289,14 @@ in
               machine.succeed("${jq}/bin/jq --exit-status 'debug' models.json")
 
               machine.succeed("curl -f http://localhost:${port}/tts --json @${writers.writeJSON "request.json" requests.request} --output out.wav")
-              machine.copy_from_vm("out.wav")
+              machine.copy_from_machine("out.wav")
 
               machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${model-stt} --output transcription.json")
-              machine.copy_from_vm("transcription.json")
+              machine.copy_from_machine("transcription.json")
               machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${requests.request.input}\"' transcription.json")
 
               machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-              machine.copy_from_vm("metrics.json")
+              machine.copy_from_machine("metrics.json")
             '';
         };
     }

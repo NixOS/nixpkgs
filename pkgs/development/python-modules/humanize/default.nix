@@ -4,28 +4,26 @@
   fetchFromGitHub,
   freezegun,
   gettext,
-  pytestCheckHook,
-  pythonOlder,
-  python,
   hatch-vcs,
   hatchling,
+  pytest-benchmark,
+  pytestCheckHook,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "humanize";
-  version = "4.12.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "4.16.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = "humanize";
-    tag = version;
-    hash = "sha256-VsB59tS2KRZ0JKd1FzA+RTEzpkUyj9RhhSopseHg+m8=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ht4lK+Qd6pU4i6MUycaT3j69ldkTRtQ21QzKuLGgrLY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
     gettext
@@ -41,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    pytest-benchmark
     pytestCheckHook
   ];
 
@@ -49,11 +48,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
-    changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
+    changelog = "https://github.com/python-humanize/humanize/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rmcgibbo
       Luflosi
     ];
   };
-}
+})

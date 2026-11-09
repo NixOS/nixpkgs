@@ -8,14 +8,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickfix";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "quickfix";
     repo = "quickfix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fgpwgvyw992mbiawgza34427aakn5zrik3sjld0i924a9d17qwg";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free; # similar to BSD 4-clause
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

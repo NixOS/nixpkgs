@@ -87,21 +87,36 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
+          )
       else
         src;
 
@@ -222,7 +237,64 @@ stdenv.mkDerivation (
               hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
               stripLen = 1;
             }
-          );
+          )
+      ++ lib.optionals (lib.versions.major release_version == "21") [
+        # Several LLVM versions have a bug in SelectionDAG that causes
+        # miscompilations around conditional poisions. This was exposed due to
+        # Rust 1.97.0 exercising the involved code path heavily and generating
+        # segfaulting code. The patch was made to LLVM 23, but the tests have
+        # many conflicts, so we vendor a version-specific modified version.
+        #
+        # This should be backported to older LLVM versions as well, but this
+        # has not yet been done in order to ship the more important fixes
+        # quickly.
+        #
+        # Rust issue: https://github.com/rust-lang/rust/issues/159035
+        # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
+        # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
+        (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+      ]
+      ++ lib.optionals (lib.versions.major release_version == "22") [
+        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+        # the time of the LLVM PR, and was thus not backported upstream, the
+        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+        # fetch the patch from there.
+        (fetchpatch {
+          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          stripLen = 1;
+          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "22") [
+        # Fixes incorrect template specializations that cause building LLVM to fail to build after Darwin bumps its
+        # system libc++ headers to 22.1.6+apple-sdk-27.0. These definitions were also UB apparently.
+        # See: https://github.com/llvm/llvm-project/pull/160804
+        (getVersionFile "llvm/get-rid-of-incorrect-std-template-specializations.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
+        # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
+        # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
+        # Hopefully, Apple does not change the version number scheme again any time soon.
+        (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "22") [
+        # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
+        (getVersionFile "llvm/llvm-textapi-separate-arch-name-enum-label.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
+        # a new arm64 subtype that gives more pointer authentication machinery.
+        # Vendored backport of the patch for LLVM 23
+        (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # macOS 27 requires the string pool to be pointer-aligned when dylibs are linked against the 27.0 SDK.
+        # While ld64 does align them correctly, they are misaligned by LLVM’s `strip`.
+        # See: https://github.com/llvm/llvm-project/issues/203678
+        (getVersionFile "llvm/align-__linkedit-entries-to-pointer-size.patch")
+      ];
 
     nativeBuildInputs = [
       cmake
@@ -242,6 +314,7 @@ stdenv.mkDerivation (
     buildInputs = [
       libxml2
       libffi
+      python3 # for opt-viewer scripts
     ]
     ++ optional enablePFM libpfm; # exegesis
 
@@ -254,6 +327,8 @@ stdenv.mkDerivation (
       which
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
+
+    strictDeps = true;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -293,60 +368,22 @@ stdenv.mkDerivation (
           ''
         +
           # fails when run in sandbox
-          optionalString (!stdenv.hostPlatform.isx86) ''
+          ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
+        +
+          # This test fails with a `dysmutil` crash; have not yet dug into what's
+          # going on here (TODO(@rrbutani)).
+          lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
+            rm test/tools/dsymutil/ARM/obfuscated.test
+          ''
+        +
+          # Requires a version of `codesign` that supports signing bundles, which sigtool does not support.
+          lib.optionalString (lib.versionAtLeast release_version "23") ''
+            rm test/tools/dsymutil/codesign.test
+          ''
       )
-      +
-        # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
-          # fails when run in sandbox
-          (
-            ''
-              substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-            ''
-            +
-              # This test fails on darwin x86_64 because `sw_vers` reports a different
-              # macOS version than what LLVM finds by reading
-              # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-              # the sandbox on macOS).
-              #
-              # The `sw_vers` provided by nixpkgs reports the macOS version associated
-              # with the `CoreFoundation` framework with which it was built. Because
-              # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-              # `sw_vers` reports is not guaranteed to match the macOS version of the host
-              # that's building this derivation.
-              #
-              # Astute readers will note that we only _patch_ this test on aarch64-darwin
-              # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-              # So why does this test pass on aarch64?
-              #
-              # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-              # CoreFoundation framework instead of the nixpkgs provided one.
-              #
-              # Not entirely sure what the right fix is here. I'm assuming aarch64
-              # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-              # (still digging into how this ends up happening, will follow up) but that
-              # aside I think the more pertinent question is: should we be patching LLVM's
-              # macOS version detection logic to use `sw_vers` instead of reading host
-              # paths? This *is* a way in which details about builder machines can creep
-              # into the artifacts that are produced, affecting reproducibility, but it's
-              # not clear to me when/where/for what this even gets used in LLVM.
-              #
-              # TODO(@rrbutani): fix/follow-up
-              ''
-                substituteInPlace unittests/TargetParser/Host.cpp \
-                  --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-              ''
-            +
-              # This test fails with a `dysmutil` crash; have not yet dug into what's
-              # going on here (TODO(@rrbutani)).
-              lib.optionalString (lib.versionOlder release_version "19") ''
-                rm test/tools/dsymutil/ARM/obfuscated.test
-              ''
-          )
 
       +
         # FileSystem permissions tests fail with various special bits
@@ -384,10 +421,13 @@ stdenv.mkDerivation (
         rm test/tools/llvm-objcopy/MachO/universal-object.test
       ''
       +
-        # Seems to require certain floating point hardware (NEON?)
-        optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
-          rm test/ExecutionEngine/frem.ll
-        ''
+        # Seems to require certain floating point hardware (NEON?). Tests were
+        # reorganized in LLVM 20.
+        optionalString
+          (stdenv.hostPlatform.system == "armv6l-linux" && lib.versionOlder release_version "20")
+          ''
+            rm test/ExecutionEngine/frem.ll
+          ''
       +
         # 1. TODO: Why does this test fail on FreeBSD?
         # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
@@ -452,10 +492,23 @@ stdenv.mkDerivation (
         check_version patch ${patch}
       '';
 
-    # E.g. Mesa uses the build-id as a cache key (see #93946):
-    LDFLAGS = optionalString (
-      enableSharedLibraries && !stdenv.hostPlatform.isDarwin
-    ) "-Wl,--build-id=sha1";
+    env =
+      # E.g. Mesa uses the build-id as a cache key (see #93946):
+      lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
+        LDFLAGS = "-Wl,--build-id=sha1";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        # This test was introduced by https://github.com/llvm/llvm-project/pull/158719 to check
+        # for a Windows-specific quirk.
+        # It is also unconditionally run on other platforms because running binaries
+        # without any environment variables should work, but as the test binaries link against
+        # our libLLVM.dylib that has not been installed at this point, and the `DYLD_LIBRARY_PATH`
+        # we set for tests to work around this issue is cleared away by the test itself,
+        # it will fail.
+        # Unfortunately "fixing" the test to pass just `DYLD_LIBRARY_PATH` would void the purpose
+        # of the test itself, so we skip it instead.
+        GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+      };
 
     cmakeBuildType = "Release";
 
@@ -555,6 +608,13 @@ stdenv.mkDerivation (
               )
             )
           ]
+      ++ optionals stdenv.hostPlatform.is32bit [
+        # building some targets (*cough* RISC-V *cough*) OOMs on 32-bit
+        # so build a reduced set of things that is vaguely reasonable
+        #
+        # ARM is here because cargo-auditable tests just assume LLVM knows what an ARM is. Don't ask.
+        (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "Native;AMDGPU;ARM;BPF;NVPTX;SPIRV;WebAssembly")
+      ]
       ++ devExtraCmakeFlags;
 
     postInstall = ''
@@ -603,6 +663,9 @@ stdenv.mkDerivation (
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
+
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://llvm.org/";
       description = "Collection of modular and reusable compiler and toolchain technologies";
@@ -620,6 +683,10 @@ stdenv.mkDerivation (
         widely used in academic research. Code in the LLVM project is licensed
         under the "Apache 2.0 License with LLVM exceptions".
       '';
+      identifiers.cpeParts = llvm_meta.identifiers.cpeParts // {
+        inherit version;
+        update = "*";
+      };
     };
   }
   // lib.optionalAttrs enableManpages {
@@ -639,6 +706,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man pages for LLVM ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

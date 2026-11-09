@@ -5,12 +5,12 @@
   libmtsupport,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfacet";
   version = "0.0.1alpha2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/multitran/libfacet-${version}.tar.bz2";
+    url = "mirror://sourceforge/multitran/libfacet-${finalAttrs.version}.tar.bz2";
     sha256 = "dc53351c4035a3c27dc6c1d0410e808346fbc107e7e7c112ec65c59d0df7a144";
   };
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://multitran.sourceforge.net/";
-    description = "Multitran lib: enchanced locale facets";
+    description = "Multitran lib: enhanced locale facets";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

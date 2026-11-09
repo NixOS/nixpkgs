@@ -3,21 +3,24 @@
   buildGoModule,
   fetchFromGitHub,
   libpcap,
+  nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "naabu";
-  version = "2.3.7";
+  version = "2.7.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
-    tag = "v${version}";
-    hash = "sha256-caiUb++eaZN+v/uZ/kgBMztv0saSiBrpqQ2QMbgjLlY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xd1mFbEogXboTIj3cLj+BM97hZNgWd1sUoWPZHSpp3Q=";
   };
 
-  vendorHash = "sha256-RGDMOR65IWtkBnVX2NCIu20vvuQNi0+mBcf0Sc8EXJg=";
+  vendorHash = "sha256-lvwzNzGoN92TF+6pPfstszXV+GyhteQK3SHR5YMtCmA=";
 
   buildInputs = [ libpcap ];
 
@@ -25,14 +28,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/naabu/" ];
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
 
   doInstallCheck = true;
 
   versionCheckProgramArg = "-version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast SYN/CONNECT port scanner";
@@ -43,9 +45,9 @@ buildGoModule rec {
       all ports that return a reply.
     '';
     homepage = "https://github.com/projectdiscovery/naabu";
-    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/naabu/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "naabu";
   };
-}
+})

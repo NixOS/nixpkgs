@@ -1,8 +1,8 @@
 {
   lib,
   buildHomeAssistantComponent,
-  fetchFromGitea,
-  libgpiod,
+  fetchFromCodeberg,
+  gpiod,
 }:
 
 buildHomeAssistantComponent rec {
@@ -10,15 +10,14 @@ buildHomeAssistantComponent rec {
   domain = "gpio";
   version = "0.0.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "raboof";
     repo = "ha-gpio";
     rev = "v${version}";
     hash = "sha256-JyyJPI0lbZLJj+016WgS1KXU5rnxUmRMafel4/wKsYk=";
   };
 
-  dependencies = [ libgpiod ];
+  dependencies = [ gpiod ];
 
   meta = {
     description = "Home Assistant GPIO custom integration";

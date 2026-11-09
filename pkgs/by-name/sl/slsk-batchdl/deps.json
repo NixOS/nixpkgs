@@ -40,16 +40,6 @@
     "hash": "sha256-MRt7yj6+/ORmr2WBERpQ+1gMRzIaPFKddHoB4zZmv2k="
   },
   {
-    "pname": "Microsoft.Bcl.AsyncInterfaces",
-    "version": "9.0.1",
-    "hash": "sha256-A3W2Hvhlf1ODx1NYWHwUyziZOGMaDPvXHZ/ubgNLYJA="
-  },
-  {
-    "pname": "Microsoft.CSharp",
-    "version": "4.7.0",
-    "hash": "sha256-Enknv2RsFF68lEPdrf5M+BpV1kHoLTVRApKUwuk/pj0="
-  },
-  {
     "pname": "Newtonsoft.Json",
     "version": "13.0.3",
     "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
@@ -80,39 +70,9 @@
     "hash": "sha256-7IPt39cY+0j0ZcRr/J45xPtEjnSXdUJ/5ai3ebaYQiE="
   },
   {
-    "pname": "System.IO.Pipelines",
-    "version": "9.0.1",
-    "hash": "sha256-CnmDanknCGbNnoDjgZw62M/Grg8IMTJDa8x3P07UR2A="
-  },
-  {
     "pname": "System.Management",
     "version": "7.0.2",
     "hash": "sha256-bJ21ILQfbHb8mX2wnVh7WP/Ip7gdVPIw+BamQuifTVY="
-  },
-  {
-    "pname": "System.Memory",
-    "version": "4.6.0",
-    "hash": "sha256-OhAEKzUM6eEaH99DcGaMz2pFLG/q/N4KVWqqiBYUOFo="
-  },
-  {
-    "pname": "System.Text.Encodings.Web",
-    "version": "9.0.1",
-    "hash": "sha256-iuAVcTiiZQLCZjDfDqdLLPHqZdZqvFabwLFHiVYdRJo="
-  },
-  {
-    "pname": "System.Text.Json",
-    "version": "9.0.1",
-    "hash": "sha256-2dqE+Mx5eJZ8db74ofUiUXHOSxDCmXw5n9VC9w4fUr0="
-  },
-  {
-    "pname": "System.Threading.Tasks.Extensions",
-    "version": "4.6.0",
-    "hash": "sha256-OwIB0dpcdnyfvTUUj6gQfKW2XF2pWsQhykwM1HNCHqY="
-  },
-  {
-    "pname": "System.ValueTuple",
-    "version": "4.5.0",
-    "hash": "sha256-niH6l2fU52vAzuBlwdQMw0OEoRS/7E1w5smBFoqSaAI="
   },
   {
     "pname": "TagLibSharp",

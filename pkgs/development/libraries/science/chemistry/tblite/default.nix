@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   gfortran,
   buildType ? "meson",
@@ -27,15 +27,17 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tblite";
-  version = "0.5.0";
+  version = "0.6.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "tblite";
     repo = "tblite";
-    rev = "v${version}";
-    hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z0g+bf6APqNLB9mDE49FelitQ9ptZXdFQuYeXIT0NIw=";
   };
 
   patches = [
@@ -43,12 +45,24 @@ stdenv.mkDerivation rec {
 
     # Fix wrong paths in pkg-config file
     ./pkgconfig.patch
+
+    # Several C-API functions with bind(C) were not declared as public in their
+    # Fortran modules, leading to link errors with gfortran 16.
+    ./fix-c-api-visibility-gfortran16.patch
   ];
 
-  # Python scripts in test subdirectories to run the tests
-  postPatch = ''
-    patchShebangs ./
-  '';
+  postPatch =
+    # Python scripts in test subdirectories to run the tests
+    ''
+      patchShebangs ./
+    ''
+
+    # libquadmath is only shipped by GCC on architectures that lack native
+    # quad-precision support (e.g. x86_64); on aarch64 it does not exist.
+    + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
+      substituteInPlace config/meson.build \
+        --replace-fail "lib_deps += cc.find_library('quadmath')" ""
+    '';
 
   nativeBuildInputs = [
     gfortran
@@ -78,7 +92,9 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    # Runs python test drivers (test/*/tester.py) during checkPhase, so it must be available on the
+    # build host (strictDeps)
     python3
   ];
 
@@ -88,19 +104,13 @@ stdenv.mkDerivation rec {
 
   doCheck = buildType == "meson";
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with lib.licenses; [
-      gpl3Plus
-      lgpl3Plus
-    ];
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/tblite/tblite";
+    changelog = "https://github.com/tblite/tblite/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

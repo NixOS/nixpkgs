@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-codspeed";
-  version = "4.2.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ofVgb+9YUNiCPhRZHY3Fm1nXRZK+9Uq8pc5XAm3P6oU=";
+    hash = "sha256-M2dqibNz7tiiEu2ioiOIyOgNfoS8xlZy11vqUU2pKRU=";
   };
 
-  cargoHash = "sha256-xcLs2Tdi7wp7F5Jwl1QvEC1wQeK7pBjBZKxGVrzqzu0=";
+  cargoHash = "sha256-NLu5je+8JDEy+jMg8FotuQu6THVH49Sb1Xd4488FmAo=";
 
   nativeBuildInputs = [
     curl
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # requires an extra dependency, blit
     "--skip=test_package_in_deps_build"
 
-    # requires criteron, which requires additional dependencies
+    # requires criterion, which requires additional dependencies
     "--skip=test_cargo_config_rustflags"
 
     # requires additional dependencies

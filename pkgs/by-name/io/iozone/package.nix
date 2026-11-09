@@ -11,10 +11,11 @@ let
       "linux"
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       "linux-AMD64"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      "macosx"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "linux-arm"
+    # iozone has no riscv64 so use linux
+    else if stdenv.hostPlatform.system == "riscv64-linux" then
+      "linux"
     else
       throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
 in
@@ -24,12 +25,12 @@ stdenv.mkDerivation rec {
   version = "3.507";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
+    url = "https://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
     hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
   };
 
   license = fetchurl {
-    url = "http://www.iozone.org/docs/Iozone_License.txt";
+    url = "https://www.iozone.org/docs/Iozone_License.txt";
     hash = "sha256-O/8yztxKBI/UKs6vwv9mq16Rn3cf/UHpSxdVnAPVCYw=";
   };
 
@@ -69,8 +70,8 @@ stdenv.mkDerivation rec {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = with lib.maintainers; [
       Baughn

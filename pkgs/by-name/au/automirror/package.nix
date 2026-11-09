@@ -6,14 +6,14 @@
   ronn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "automirror";
   version = "49";
 
   src = fetchFromGitHub {
     owner = "schlomo";
     repo = "automirror";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1syyf7dcm8fbyw31cpgmacg80h7pg036dayaaf0svvdsk0hqlsch";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "automirror";
   };
-}
+})

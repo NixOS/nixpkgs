@@ -3,17 +3,25 @@
   lib,
   stdenv,
   writeText,
-  jdk,
+  openjdk21,
+  openjfx21,
   makeWrapper,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+let
+  openjfx_jdk = openjfx21.override { withWebKit = true; };
+  jdk = openjdk21.override {
+    enableJavaFX = true;
+    inherit openjfx_jdk;
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapui";
-  version = "5.9.1";
+  version = "5.10.0";
 
   src = fetchurl {
-    url = "https://dl.eviware.com/soapuios/${version}/SoapUI-${version}-linux-bin.tar.gz";
-    sha256 = "sha256-VlI6TcesavKOpKf/R8S6IubepkthArFf8Jmi7YUGHjs=";
+    url = "https://dl.eviware.com/soapuios/${finalAttrs.version}/SoapUI-${finalAttrs.version}-linux-bin.tar.gz";
+    sha256 = "sha256-5zwE/snEYApm23wjTnTWfgiEM0ymSNHPcIzKoY6ZK3c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,7 +40,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Adjust java path to point to derivation paths
-    (writeText "soapui-${version}.patch" ''
+    (writeText "soapui-${finalAttrs.version}.patch" ''
       --- a/bin/soapui.sh
       +++ b/bin/soapui.sh
       @@ -50,7 +50,7 @@
@@ -64,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux; # we don't fetch the dmg yet
     mainProgram = "soapui";
   };
-}
+})

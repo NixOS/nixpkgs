@@ -11,12 +11,12 @@
   rav1e,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rav1e";
   version = "0.8.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GCfh2v3w5C8h4GuPKkTMUAhPspT1W0drrRpELCJWeTI=";
   };
 
@@ -30,14 +30,6 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # remove feature that requires libgit2 and is only used to print a version string
     substituteInPlace Cargo.toml --replace-fail '"git_version",' ""
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
-    # and linking it with cctools ld64.
-    substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
-
-    # Thin LTO doesn’t appear to work with Rust 1.79. rav1e fail to build when building fern.
-    substituteInPlace Cargo.toml --replace-fail 'lto = "thin"' 'lto = "fat"'
   '';
 
   checkType = "debug";
@@ -64,9 +56,9 @@ rustPlatform.buildRustPackage rec {
       Features: https://github.com/xiph/rav1e#features
     '';
     homepage = "https://github.com/xiph/rav1e";
-    changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
+    changelog = "https://github.com/xiph/rav1e/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "rav1e";
   };
-}
+})

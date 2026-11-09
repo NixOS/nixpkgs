@@ -7,14 +7,14 @@
   docker,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pname = "airlift";
   pyproject = true;
   version = "0.4.0";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JcW2FXl+SrdveRmG5bD1ttf6F3LwvGZQF4ZCTpDpPa8=";
   };
 
@@ -51,8 +51,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Flexible, configuration driven CLI for Apache Airflow local development";
     homepage = "https://github.com/jl178/airlift";
     license = lib.licenses.mit;
-    changelog = "https://github.com/jl178/airlift/releases/tag/v${version}";
+    changelog = "https://github.com/jl178/airlift/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jl178 ];
     mainProgram = "airlift";
   };
-}
+})

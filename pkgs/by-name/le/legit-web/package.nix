@@ -5,25 +5,25 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "legit";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
-    rev = "v${version}";
-    hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TMwfboBeeyPSzHoI8WHrj9sirO2dc+nCb+YDdFJMKoA=";
   };
 
-  vendorHash = "sha256-4XplNx+Pyv6dn+ophBFxQ3lv3xAf1jP2DpLYX1RenvQ=";
+  vendorHash = "sha256-ynv0pBdVPIhTz7RvCwVWr0vUWwfw+PEjFXs9PdQMqm8=";
 
   postInstall = ''
     mkdir -p $out/lib/legit/templates
     mkdir -p $out/lib/legit/static
 
-    cp -r $src/templates/* $out/lib/legit/templates
-    cp -r $src/static/* $out/lib/legit/static
+    cp -r templates/* $out/lib/legit/templates
+    cp -r static/* $out/lib/legit/static
   '';
 
   passthru.tests = { inherit (nixosTests) legit; };
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.ratsclub ];
     mainProgram = "legit";
   };
-}
+})

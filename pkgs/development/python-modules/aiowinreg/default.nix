@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   prompt-toolkit,
-  pythonOlder,
   setuptools,
   winacl,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "aiowinreg";
   version = "0.0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "skelsec";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     description = "Python module to parse the registry hive";
     homepage = "https://github.com/skelsec/aiowinreg";
     changelog = "https://github.com/skelsec/aiowinreg/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "awinreg";
   };

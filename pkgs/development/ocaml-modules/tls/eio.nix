@@ -1,4 +1,6 @@
 {
+  lib,
+  ocaml,
   buildDunePackage,
   crowbar,
   eio,
@@ -19,9 +21,9 @@ buildDunePackage {
 
   __darwinAllowLocalNetworking = true;
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
   checkInputs = [
     crowbar

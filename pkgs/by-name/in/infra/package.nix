@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = {
     description = "Manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
-    changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/infrahq/infra/releases/tag/v${version}";
     license = lib.licenses.elastic20;
     mainProgram = "infra";
   };

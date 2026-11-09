@@ -38,7 +38,7 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
-  version = "1.8.59";
+  version = "1.8.68";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "89e7366783e13d63085878ba407da83107ccd401";
-    hash = "sha256-7w/PDv58o2U23gOLqFV9TFfCejud4xcjdflX3gkRDUE=";
+    rev = "c15d3f5a5de6e3ba5839822c451152e5e18bb700";
+    hash = "sha256-OnITeci0oM6flxdrBZ5w7Gk4BGiNer96MYnD2P6fsMQ=";
   };
 
   buildInputs = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i "/vptr/d" test/CMakeLists.txt
   '';
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
-    license = [ lib.licenses.boost ];
+    license = lib.licenses.boost;
     platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.vyorkin

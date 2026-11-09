@@ -14,12 +14,12 @@
   wcslib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnuastro";
   version = "0.24";
 
   src = fetchurl {
-    url = "mirror://gnu/gnuastro/gnuastro-${version}.tar.gz";
+    url = "mirror://gnu/gnuastro/gnuastro-${finalAttrs.version}.tar.gz";
     hash = "sha256-xOZAHu5dgWGbgtjRimRHhRs24HVBGOv1vfrHoDGU+YE=";
   };
 
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU astronomy utilities and library";
     homepage = "https://www.gnu.org/software/gnuastro/";
-    changelog = "https://git.savannah.gnu.org/cgit/gnuastro.git/plain/NEWS?id=gnuastro_v${version}";
+    changelog = "https://git.savannah.gnu.org/cgit/gnuastro.git/plain/NEWS?id=gnuastro_v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

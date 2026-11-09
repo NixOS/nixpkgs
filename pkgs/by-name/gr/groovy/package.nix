@@ -13,13 +13,13 @@
 
 # at runtime, need jdk
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "groovy";
-  version = "5.0.2";
+  version = "6.0.0";
 
   src = fetchurl {
-    url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
-    sha256 = "sha256-cPgvEbG3ZOIH3PVWiILHjcdyk/MHgWJCOUo/enTyDoE=";
+    url = "mirror://apache/groovy/${finalAttrs.version}/distribution/apache-groovy-binary-${finalAttrs.version}.zip";
+    hash = "sha256-VKsah38B2i7RbtQ8Hteo1sNrEicUxpWXEnAOiebv3nw=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       desktopName = "Groovy Console";
       exec = "groovyConsole";
       icon = "groovy";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
       startupNotify = false;
       categories = [ "Development" ];
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -20,11 +20,18 @@
   nss,
   nspr,
   libdrm,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   libxkbcommon,
   libxshmfence,
   pango,
-  systemd,
+  systemdLibs,
   icu,
   openssl,
   zlib,
@@ -32,14 +39,14 @@
 }:
 let
   pname = "sidequest";
-  version = "0.10.42";
+  version = "1.4.1";
 
   sidequest = stdenv.mkDerivation {
     inherit pname version;
 
     src = fetchurl {
       url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-      hash = "sha256-YZp7OAjUOXepVv5dPhh9Q2HicUKjSOGfhrWyMKy2gME=";
+      hash = "sha256-R0jE3sr3QRBffGiVE1oNaYmg0irHVmS67Bb/WOLP5I4=";
     };
 
     nativeBuildInputs = [
@@ -67,9 +74,7 @@ let
       mkdir -p "$out/libexec" "$out/bin"
       cp --recursive . "$out/libexec/sidequest"
       ln -s "$out/libexec/sidequest/sidequest" "$out/bin/sidequest"
-      for size in 16 24 32 48 64 128 256 512 1024; do
-        install -D --mode=0644 resources/app.asar.unpacked/build/icons/''${size}x''${size}.png $out/share/icons/hicolor/''${size}x''${size}/apps/sidequest.png
-      done
+      install -Dm644 resources/icon.png $out/share/icons/hicolor/512x512/apps/sidequest.png
 
       runHook postInstall
     '';
@@ -93,19 +98,19 @@ let
             nss
             nspr
             libdrm
-            xorg.libX11
-            xorg.libxcb
-            xorg.libXcomposite
-            xorg.libXdamage
-            xorg.libXext
-            xorg.libXfixes
-            xorg.libXrandr
-            xorg.libxshmfence
+            libx11
+            libxcb
+            libxcomposite
+            libxdamage
+            libxext
+            libxfixes
+            libxrandr
+            libxshmfence
             libxkbcommon
-            xorg.libxkbfile
+            libxkbfile
             pango
             (lib.getLib stdenv.cc.cc)
-            systemd
+            systemdLibs
           ]
         }:$out/libexec/sidequest" \
         --add-needed libGL.so.1 \
@@ -143,6 +148,9 @@ buildFHSEnv {
       rvolosatovs
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "SideQuest";
+    mainProgram = "sidequest";
+    knownVulnerabilities = [
+      "Uses EOL Electron 29, many known CVEs."
+    ];
   };
 }

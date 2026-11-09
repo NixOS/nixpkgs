@@ -2,43 +2,47 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  json_c,
-  libxkbcommon,
+  bash-completion,
+  exiv2,
+  ffmpeg,
   fontconfig,
   giflib,
+  json_c,
+  libavif,
+  libdrm,
   libheif,
   libjpeg,
-  libwebp,
-  libtiff,
-  librsvg,
-  libpng,
   libjxl,
-  libexif,
-  libavif,
-  libsixel,
+  libpng,
   libraw,
-  libdrm,
-  openexr,
-  bash-completion,
-  testers,
+  librsvg,
+  libsixel,
+  libtiff,
+  libwebp,
+  libxkbcommon,
+  luajit,
+  meson,
+  minizip-ng,
+  ninja,
   nix-update-script,
+  openexr,
+  openjpeg,
+  pkg-config,
+  testers,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "4.6";
+  version = "5.7";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q5TqY5UgSGZVVoARcz1ig0UkZBKgRoT9Ndvg/f1T38Q=";
+    hash = "sha256-peRcF/r45Nb/EAJaIM7xxgjK9M2guvXlhYYrfkm2svM=";
   };
 
   strictDeps = true;
@@ -60,25 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
-    wayland
-    wayland-protocols
-    json_c
-    libxkbcommon
+    exiv2
+    ffmpeg
     fontconfig
     giflib
+    json_c
+    libavif
+    libdrm
     libheif
     libjpeg
-    libwebp
-    libtiff
-    librsvg
-    libpng
     libjxl
-    libexif
-    libavif
-    libsixel
+    libpng
     libraw
-    libdrm
+    librsvg
+    libsixel
+    libtiff
+    libwebp
+    libxkbcommon
+    luajit
+    minizip-ng
     openexr
+    openjpeg
+    wayland
+    wayland-protocols
   ];
 
   passthru = {

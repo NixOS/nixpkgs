@@ -5,15 +5,15 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openlibm";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "JuliaLang";
+    owner = "JuliaMath";
     repo = "openlibm";
-    rev = "v${version}";
-    sha256 = "sha256-fSEszCJ1PXkSydTLk8KAyu7zffUrKf+7a1ZDf3Wl/lE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vBy7VhYPmmaIbDN6SAXkbbM2xDh1XiIqEnYpnzop+Zg=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "High quality system independent, portable, open source libm implementation";
     homepage = "https://openlibm.org/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

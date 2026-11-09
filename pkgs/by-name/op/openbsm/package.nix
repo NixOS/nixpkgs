@@ -4,14 +4,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openbsm";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "openbsm";
     repo = "openbsm";
-    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${version}");
+    rev = lib.toUpper (builtins.replaceStrings [ "." "-" ] [ "_" "_" ] "openbsm-${finalAttrs.version}");
     sha256 = "0b98359hd8mm585sh145ss828pg2y8vgz38lqrb7nypapiyqdnd1";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.bsd2;
   };
-}
+})

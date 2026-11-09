@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   boto3,
   cryptography,
   eventlet,
@@ -17,20 +17,25 @@
   requests,
   setuptools,
   six,
-  stestr,
+  stestrCheckHook,
   swiftclient,
   xattr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swift";
-  version = "2.36.0";
+  version = "2.38.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3qtd++4Xm6B9TPfKvx85s71/Hz8qFrhN+XR9TuvfHXw=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "swift";
+    tag = finalAttrs.version;
+    hash = "sha256-EzG3P6If2Rjj6ufEbOQFKe8LOterWef+C1xRJEwM4tg=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -55,7 +60,7 @@ buildPythonPackage rec {
     boto3
     libredirect.hook
     mock
-    stestr
+    stestrCheckHook
     swiftclient
   ];
 
@@ -66,13 +71,11 @@ buildPythonPackage rec {
   # a lot of tests currently fail while establishing a connection
   doCheck = false;
 
-  checkPhase = ''
+  preCheck = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
 
     export SWIFT_TEST_CONFIG_FILE=test/sample.conf
-
-    stestr run
   '';
 
   pythonImportsCheck = [ "swift" ];
@@ -83,4 +86,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -28,15 +28,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapserver";
-  version = "8.6.0";
+  version = "8.6.6";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
-    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-KfCYYbBAsOKWkpaPIiN+xxu1IXoMkk0NWSdndk8FpTg=";
+    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-Mur8yflPhegMxuq10yygT/a0TfFjdV20D4UM4m8Ffpk=";
   };
 
   nativeBuildInputs = [
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

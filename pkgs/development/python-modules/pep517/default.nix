@@ -4,9 +4,6 @@
   fetchPypi,
   flit-core,
   tomli,
-  pythonOlder,
-  importlib-metadata,
-  zipp,
   pytestCheckHook,
   setuptools,
   testpath,
@@ -17,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pep517";
   version = "0.13.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +25,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tomli
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    zipp
   ];
 
   nativeCheckInputs = [

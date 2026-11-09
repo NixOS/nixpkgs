@@ -9,11 +9,11 @@
   cmake,
   fontconfig,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   freetype,
   alsa-lib,
 
@@ -69,11 +69,11 @@ let
   ];
 
   x11Libs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -108,11 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       # Regression tests require big sound files stored in LFS, skip them
       rm -v tests/RegressionTests.cpp
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Remove hardcoded LTO flags: needs extra setup on Linux
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
-    ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
       substituteInPlace CMakeLists.txt \
         --replace-fail 'include(Tests)' '# Not building tests' \
@@ -144,6 +139,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "Catch2_SOURCE_DIR" "${catch2_3.src}")
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
+    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+    # a Link Time Optimization flag, and instructs the plugin compiled here to
+    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+    # successful linking while still providing LTO benefits. If our build of
+    # `juce` was used as a dependency, we could have patched that `-flto` line
+    # in our juce's source, but that is not possible because it is used as a
+    # Git Submodule.
+    "-ffat-lto-objects"
+  ]);
+
   installPhase = ''
     runHook preInstall
 
@@ -172,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.bluewingsmusic.com/Fire";
     license = lib.licenses.agpl3Only; # Not clarified if Only or Plus
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
   }
   // lib.optionalAttrs withStandalone {
     mainProgram = "Fire";

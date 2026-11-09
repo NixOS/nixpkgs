@@ -7,18 +7,31 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cedar";
-  version = "4.5.1";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "cedar-policy";
     repo = "cedar";
-    tag = "v${version}";
-    hash = "sha256-f8d7KL1DzEfJqEJ5uwwOJCgePE/frOXIFcXuoybIp2U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MdHongi0OeKKHh0lgf9AogwVDUV6SmogU3I5GFQ6Lts=";
   };
 
-  cargoHash = "sha256-MK6Zcpf12mGzntEv632kQjH7YOx31QBCmSJHxjE3l1c=";
+  cargoHash = "sha256-/4meYPBxeygCke6r9vUikdyA9Ep+BrvTHDuDAi7WfLQ=";
+
+  cargoBuildFlags = [
+    "--bin"
+    "cedar"
+    "--bin"
+    "cedar-language-server"
+  ];
+
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  preCheck = ''
+    export TMPDIR="/tmp"
+  '';
 
   passthru = {
     tests.version = testers.testVersion { package = cedar; };
@@ -28,9 +41,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Implementation of the Cedar Policy Language";
     homepage = "https://github.com/cedar-policy/cedar";
-    changelog = "https://github.com/cedar-policy/cedar/releases/tag/v${version}";
+    changelog = "https://github.com/cedar-policy/cedar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ meain ];
     mainProgram = "cedar";
   };
-}
+})

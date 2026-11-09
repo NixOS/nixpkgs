@@ -9,14 +9,14 @@
   yajl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kore";
   version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = "kore";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
   };
 
@@ -72,10 +72,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Easy to use web application framework for C";
     homepage = "https://kore.io";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ johnmh ];
   };
-}
+})

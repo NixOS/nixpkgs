@@ -2,22 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colorthief";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fengsp";
     repo = "color-thief-py";
-    rev = version;
-    sha256 = "0lzpflal1iqbj4k7hayss5z024qf2sn8c3wxw03a0mgxg06ca2hm";
+    tag = finalAttrs.version;
+    hash = "sha256-FQrFDHj9VaAG4J0PhqwWDhMBftHaK3gmkQvHQBV191M=";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pillow ];
 
   # no tests implemented
   doCheck = false;
@@ -30,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

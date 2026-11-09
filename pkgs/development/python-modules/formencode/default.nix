@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools-scm,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "formencode";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "FormEncode validates and converts nested structures";
-    homepage = "http://formencode.org";
+    homepage = "https://www.formencode.org";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

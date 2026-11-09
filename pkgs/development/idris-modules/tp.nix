@@ -11,7 +11,7 @@ build-idris-package {
     owner = "superfunc";
     repo = "tp";
     rev = "ef59ccf355ae462bd4f55d596e6d03a9376b67b2";
-    sha256 = "1a924qvm1dqfg419x8n35w0sz74vyyqsynz5g393f82jsrrwci8z";
+    hash = "sha256-H0XGc9ZSIDfSeOVbr7H3m5yvAS/Dop4CeQ63UDcmIqk=";
   };
 
   # tests fail with permission error

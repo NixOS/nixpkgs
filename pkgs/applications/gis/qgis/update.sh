@@ -17,4 +17,4 @@ elif [ "$package" == "qgis-ltr" ]; then
     version="$(curl --silent $url | jq '.ltr' | make_version)"
 fi
 
-update-source-version "$package" "$version"
+update-source-version "$package.unwrapped" "$version"

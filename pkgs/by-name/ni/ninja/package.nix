@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash =
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt.bin
   ];
 
+  strictDeps = true;
+
   patches = [
     ./0001-spawn-sh-instead-of-bin-sh.patch
   ]
@@ -66,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # write rebuild args to file after bootstrap
-    substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
+    substituteInPlace configure.py --replace-fail "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
   '';
 
   buildPhase = ''
@@ -113,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru.updateScript = nix-update-script { };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Small build system with a focus on speed";

@@ -13,14 +13,14 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gehomesdk";
-  version = "2025.11.5";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-HS33yTE+3n0DKRD4+cr8zAE+xcW1ca7q8inQ7qwKJMA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-4WGkodI608LmlHpzYfPIrexZBNAsImmj2B55+WJgq2E=";
   };
 
   build-system = [ setuptools ];
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/simbaja/gehome";
-    changelog = "https://github.com/simbaja/gehome/releases/tag/v${version}";
+    changelog = "https://github.com/simbaja/gehome/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gehome-appliance-data";
   };
-}
+})

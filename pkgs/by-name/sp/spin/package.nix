@@ -19,21 +19,21 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spin";
   version = "6.5.2";
 
   src = fetchFromGitHub {
     owner = "nimble-code";
     repo = "Spin";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
     sha256 = "sha256-drvQXfDZCZRycBZt/VNngy8zs4XVJg+d1b4dQXVcyFU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison ];
 
-  sourceRoot = "${src.name}/Src";
+  sourceRoot = "${finalAttrs.src.name}/Src";
 
   preBuild = ''
     mkdir -p $out/bin
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
       siraben
     ];
   };
-}
+})

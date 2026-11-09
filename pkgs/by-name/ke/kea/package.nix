@@ -25,15 +25,17 @@
 
   # tests
   nixosTests,
+  testers,
+  kea,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "3.0.2"; # only even minor versions are stable
+  version = "3.2.1"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KfTkT6SPYv4VFY0XQR4ANJYgMlDbezRZwsecCfN5pUE=";
+    hash = "sha256-NHgiC+YrOqNhosf5fV0pibk094ZOgtS9FwVuHiCLlzU=";
   };
 
   patches = [
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "postgresql" withPostgresql)
     (lib.mesonOption "localstatedir" "/var")
     (lib.mesonOption "runstatedir" "/run")
+    (lib.mesonOption "python.platlibdir" "${placeholder "python"}/${python3.sitePackages}")
+    (lib.mesonOption "python.purelibdir" "${placeholder "python"}/${python3.sitePackages}")
   ];
 
   postConfigure = ''
@@ -102,11 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja doc
   '';
 
-  postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
-  '';
-
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
@@ -116,11 +115,15 @@ stdenv.mkDerivation (finalAttrs: {
     networking-networkd = lib.recurseIntoAttrs {
       inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
     };
+
+    version = testers.testVersion {
+      package = kea;
+      command = "kea-shell -v";
+      version = finalAttrs.version;
+    };
   };
 
   meta = {
-    # error: in-class initializer for static data member is not a constant expression
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.isc.org/isc-projects/kea/-/wikis/Release-Notes/release-notes-${finalAttrs.version}";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";

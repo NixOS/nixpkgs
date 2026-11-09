@@ -2,68 +2,39 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchFromGitLab,
   gettext,
 }:
 let
-  # on update check compatibility to nixpkgs inkex
-  version = "3.2.2";
-
-  # remove and use nixpkgs version is recent enough
-  inkex' = python3.pkgs.inkex.overrideAttrs (old: rec {
-    # this is no special commit, just the most recent as of writing
-    version = "3150a5b3b06f7e4c2104d9e8eb6dc448982bb2b0";
-    src = fetchFromGitLab {
-      owner = "inkscape";
-      repo = "extensions";
-      rev = "${version}";
-      hash = "sha256-FYBZ66ERC3nVYCaAmFPqKnBxDOKAoQwT14C0fKLn10c=";
-    };
-
-    postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
-    '';
-  });
-
-  dependencies =
-    with python3.pkgs;
-    [
-      pyembroidery
-      # inkex upstream release & nixpkgs is too old
-      # use nixpkgs inkex once up to date
-      inkex'
-      wxpython
-      networkx
-      platformdirs
-      shapely
-      lxml
-      appdirs
-      numpy
-      jinja2
-      requests
-      colormath2
-      flask
-      fonttools
-      trimesh
-      scipy
-      diskcache
-      flask-cors
-    ]
-    # Inkstitch uses the builtin tomllib instead when Python >=3.11
-    ++ lib.optional (pythonOlder "3.11") tomli;
+  dependencies = with python3.pkgs; [
+    pystitch
+    inkex
+    wxpython
+    networkx
+    platformdirs
+    shapely
+    lxml
+    numpy
+    jinja2
+    colormath2
+    flask
+    fonttools
+    trimesh
+    diskcache
+    flask-cors
+  ];
   pyEnv = python3.withPackages (_: dependencies);
 in
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "inkstitch";
-  inherit version;
+  version = "3.3.0";
   pyproject = false; # Uses a Makefile (yikes)
 
   src = fetchFromGitHub {
     owner = "inkstitch";
     repo = "inkstitch";
-    tag = "v${version}";
-    hash = "sha256-6EVfjmTXEYgZta01amK8E6t5h2JBPfGGNnqfBG8LQfo=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true; # required to get the embedded fonts
+    hash = "sha256-vQL0Zgzfi3YHfh/WKbIg1ZaaboQQoFj+f5QBvdD9JYU=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +46,7 @@ python3.pkgs.buildPythonApplication {
 
   env = {
     # to overwrite version string
-    GITHUB_REF = version;
+    GITHUB_REF = finalAttrs.version;
     BUILD = "nixpkgs";
   };
   makeFlags = [ "manual" ];
@@ -90,10 +61,8 @@ python3.pkgs.buildPythonApplication {
   '';
 
   patches = [
-    ./0001-force-frozen-true.patch
+    ./0001-force-frozen-True.patch
     ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
-    ./0003-lazy-load-module-to-access-global_settings.patch
-    ./0004-enable-force-insertion-of-python-path.patch
   ];
 
   doCheck = false;
@@ -118,10 +87,10 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Inkscape extension for machine embroidery design";
     homepage = "https://inkstitch.org/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       tropf
       pluiedev
     ];
   };
-}
+})

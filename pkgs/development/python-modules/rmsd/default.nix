@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "rmsd";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dhLsFGts45PitSVZxXw5FND3EOeHHWYrH8PZJEYoq+M=";
+    hash = "sha256-VQz+mnootttCRJEcMA8Yx7VzmWCcdgHHSVkJ3JZXIX0=";
   };
 
   build-system = [ setuptools ];

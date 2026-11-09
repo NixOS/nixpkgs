@@ -1,10 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   pythonAtLeast,
   stdenv,
+
+  # sets various thread limit env vars for packages
+  # invoking joblib during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also:
+  # https://github.com/joblib/joblib/blob/b030e4e1ed6a227c0e587c31b266c03b3b692372/joblib/_parallel_backends.py#L59-L67
+  # https://github.com/joblib/joblib/blob/b030e4e1ed6a227c0e587c31b266c03b3b692372/joblib/_parallel_backends.py#L221-L248
+  checkPhaseThreadLimitHook,
 
   # build-system
   setuptools,
@@ -21,14 +28,12 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.5.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P6pcOQVLLwPKVH2psvUv3mfAYkDDGFPzBq6pfxNke1U=";
+    hash = "sha256-hWGjJp5oARBoY/0NbYS7c3vp52MeM6rtP7nOWVNojaM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,6 +47,14 @@ buildPythonPackage rec {
     pytestCheckHook
     threadpoolctl
   ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
+  # joblib expects to set thread limits itself while checking for propagation of thread limit environment variables.
+  # Setting these via checkPhaseThreadLimitHook on joblib itself causes tests to fail, but we do want the hook to propagate.
+  dontLimitCheckPhaseThreads = true;
 
   enabledTestPaths = [ "joblib/test" ];
 

@@ -12,11 +12,12 @@
   gnupg,
   lib,
   libargon2,
+  libgcrypt,
   lsof,
   makeBinaryWrapper,
   nix-update-script,
-  pinentry,
-  stdenvNoCC,
+  pinentry-curses,
+  stdenv,
   util-linuxMinimal,
   versionCheckHook,
   zsh,
@@ -36,12 +37,12 @@ let
     gnupg
     libargon2
     lsof
-    pinentry
+    pinentry-curses
     util-linuxMinimal
   ];
 
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tomb";
   version = "2.13";
 
@@ -55,7 +56,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
-    pinentry
+    libgcrypt
+    pinentry-curses
     zsh
   ];
 
@@ -68,11 +70,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sed -i 's/VERSION=".*"/VERSION="${finalAttrs.version}"/' tomb
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    make -C extras/kdf-keys
+
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -D -m755 -t $out/bin tomb
     install -D -m644 -t $out/share/man/man1/ doc/tomb.1
+    make -C extras/kdf-keys DESTDIR=$out PREFIX= install
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}

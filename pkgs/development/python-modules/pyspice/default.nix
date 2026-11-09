@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   libngspice,
   numpy,
@@ -19,12 +18,11 @@ buildPythonPackage rec {
   pname = "pyspice";
   version = "1.5";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "PySpice";
     inherit version;
-    sha256 = "d28448accad98959e0f5932af8736e90a1f3f9ff965121c6881d24cdfca23d22";
+    hash = "sha256-0oRIrMrZiVng9ZMq+HNukKHz+f+WUSHGiB0kzfyiPSI=";
   };
 
   propagatedBuildInputs = [

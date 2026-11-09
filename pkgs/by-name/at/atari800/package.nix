@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  SDL,
+  SDL2,
   autoreconfHook,
   fetchFromGitHub,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   readline,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atari800";
-  version = "5.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
     rev = "ATARI800_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-D66YRRTqdoV9TqDFonJ9XNpfP52AicuYgdiW27RCIuQ=";
+    hash = "sha256-cDiEFPE9JPonLdlBcKWZ1FGDMAQwuVihYtshcd8bcyM=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL
+    SDL2
     libGL
     libGLU
-    libX11
+    libx11
     readline
     zlib
   ];
@@ -41,12 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature true "opengl")
     (lib.withFeature true "readline")
     (lib.withFeature true "x")
-    (lib.withFeatureAs true "sound" "sdl")
-    (lib.withFeatureAs true "video" "sdl")
+    (lib.withFeatureAs true "sound" "sdl2")
+    (lib.withFeatureAs true "video" "sdl2")
   ];
 
   meta = {
     homepage = "https://atari800.github.io/";
+    changelog = "https://github.com/atari800/atari800/releases/tag/${finalAttrs.src.rev}";
     description = "Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and 5200 game
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       WinCE, Sega Dreamcast, Android and other systems supported by the SDL
       library.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

@@ -22,9 +22,14 @@ stdenv.mkDerivation {
     bison
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Os -g -Wall";
-
-  NIX_LDFLAGS = [ "-lpthread" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Os"
+      "-g"
+      "-Wall"
+    ];
+    NIX_LDFLAGS = toString [ "-lpthread" ];
+  };
 
   makeFlags = [ "prefix=" ];
 

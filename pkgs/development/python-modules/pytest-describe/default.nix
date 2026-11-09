@@ -15,7 +15,7 @@
 
 let
   pname = "pytest-describe";
-  version = "3.0.0";
+  version = "3.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,8 +25,13 @@ buildPythonPackage {
     owner = "pytest-dev";
     repo = "pytest-describe";
     tag = version;
-    hash = "sha256-rMO+Hkz3iWFML8UUq4aDl+t7epzqXmYGZrgRB9OYf6w=";
+    hash = "sha256-nvTINE3QtV2pCKD/aixYDSO2ryW1uYDv55FLOMP7Vlc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.4,<0.10.0" uv_build
+  '';
 
   build-system = [ uv-build ];
 

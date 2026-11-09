@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elfcat";
   version = "0.1.10";
 
   src = fetchFromGitHub {
-    owner = "ruslashev";
+    owner = "rbakbashev";
     repo = "elfcat";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-8jyOYV455APlf8F6HmgyvgfNGddMzrcGhj7yFQT6qvg=";
   };
 
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "ELF visualizer, generates HTML files from ELF binaries";
-    homepage = "https://github.com/ruslashev/elfcat";
+    homepage = "https://github.com/rbakbashev/elfcat";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ moni ];
     mainProgram = "elfcat";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "trevorspray";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2kprXyZUAe8lBV48mBpmkhBtOoxgrP/TOTdS3Kw2WTE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-t6F86JzKLS6f+TN9iMUjqZJkS+ccNRsYa99Mdl2BYwQ=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -34,4 +34,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "trevorspray";
   };
-}
+})

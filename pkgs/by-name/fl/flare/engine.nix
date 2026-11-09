@@ -2,35 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   SDL2,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+let
+  common = import ./common.nix { inherit lib nix-update-script; };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "flare-engine";
-  version = "1.14";
+  inherit (common) version;
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = "flare-engine";
-    tag = "v${version}";
-    hash = "sha256-DIzfTqwZJ8NAPB/TWzvPjepHb7hIbIr+Kk+doXJmpLc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QwrSMkJE8dNIODlmdi1c6qgTULhJP9HEV8wI7k5vHAA=";
   };
 
-  patches = [
-    ./desktop.patch
-
-    # cmake-4 compatibility patch
-    (fetchpatch {
-      name = "cmake-4.patch";
-      url = "https://github.com/flareteam/flare-engine/commit/9500379f886484382bba2f893faf49865de9f2c0.patch";
-      hash = "sha256-nUn54ZBEvvFkIhzE/UBbsvF0rFC9JAeQACTAPtsc1VI=";
-    })
-  ];
+  patches = [ ./desktop.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -40,14 +34,15 @@ stdenv.mkDerivation rec {
     SDL2_ttf
   ];
 
+  passthru = {
+    inherit (common) updateScript;
+  };
+
   meta = {
     description = "Free/Libre Action Roleplaying Engine";
     homepage = "https://github.com/flareteam/flare-engine";
-    maintainers = with lib.maintainers; [
-      aanderse
-      McSinyx
-    ];
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+    inherit (common) maintainers;
   };
-}
+})

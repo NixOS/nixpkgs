@@ -1,6 +1,6 @@
 {
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   exiftool,
   fetchurl,
   ffmpeg-headless,
@@ -12,27 +12,34 @@
 }:
 let
   latestVersionForNc = {
-    "31" = {
-      version = "7.7.0";
-      appHash = "sha256-ORv+6XkN+qTk5bXMFKv2Mv/jU+7F12IbWE9JjV2ot9o=";
-      srcHash = "sha256-hiYAQshi84oOw1qfNECWAssbln8UPwD+8Hfb2pKw8no=";
+    "33" = {
+      version = "8.1.0";
+      appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
+      srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
+      vendorHash = null;
     };
-    "32" = latestVersionForNc."31";
+    "34" = {
+      version = "11.0.2";
+      appHash = "sha256-ygV6UFNKOr5zUaSPtwcH/wIf7hfxbzj4kUTFoM0sxD8=";
+      srcHash = "sha256-Fp9tgiyHXnqEsS4xA+eEDGkl0ouXQhnHQn5eETyot+c=";
+      vendorHash = "sha256-rEJXO55TKg3GMV5/5JQsRf0tktzNQovY9ONtDFuznqk=";
+    };
+    "35" = latestVersionForNc."34";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
       or (throw "memories currently does not support nextcloud version ${ncVersion}");
 
-  commonMeta = with lib; {
+  commonMeta = {
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 
-  go-vod = buildGoModule rec {
+  go-vod = buildGo127Module rec {
     pname = "go-vod";
-    inherit (currentVersionInfo) version;
+    inherit (currentVersionInfo) version vendorHash;
 
     src = fetchFromGitHub {
       owner = "pulsejet";
@@ -43,7 +50,7 @@ let
 
     sourceRoot = "${src.name}/go-vod";
 
-    vendorHash = null;
+    nativeCheckInputs = [ ffmpeg-headless ];
 
     meta = commonMeta // {
       description = "Extremely minimal on-demand video transcoding server in go";

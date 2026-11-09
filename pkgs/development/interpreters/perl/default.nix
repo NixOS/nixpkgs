@@ -12,6 +12,7 @@ let
       perlOnHostForHost,
       perlOnTargetForTarget,
       perlAttr ? null,
+      tests ? { },
       self, # is perlOnHostForTarget
     }:
     let
@@ -64,14 +65,16 @@ let
         inherit overrides;
         self = perlOnBuild;
       };
+
+      inherit tests;
     };
 
 in
 rec {
   perl5 = callPackage ./interpreter.nix {
     self = perl5;
-    version = "5.42.0";
-    sha256 = "sha256-4JPvGE1/mhuXl+JGUpb1VRCtttq4hCsMPtUzKWYwltw=";
+    version = "5.42.3";
+    sha256 = "sha256-ETd0CYWDe1zfFfDPq5Miedy0NS+RL+1vwUTotPCCNic=";
     inherit passthruFun;
   };
 }

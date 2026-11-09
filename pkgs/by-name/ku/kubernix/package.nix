@@ -2,40 +2,36 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubernix";
-  version = "0.2.0-unstable-2021-11-16";
+  version = "1.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
-    rev = "630087e023e403d461c4bb8b1c9368b26a2c0744";
-    sha256 = "sha256-IkfVpNxWOqQt/aXsN4iD9dkKKyOui3maKowVibuKbvM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-guXoQ09tZ/qOEQomlIODED2f01DDFSQyyDNl7vLzahI=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-AYWbXxCdtkKePmHTj6MkbLMsW060eB5Ym/o1Hus4FDw=";
 
-  patches = [
-    # Need a specific version of clap and clap_derive: fails with anything greater.
-    ./Cargo.toml.patch
-    # error: 1 positional argument in format string, but no arguments were given
-    ./fix-compile-error.patch
-  ];
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
+  # Tests require network access
   doCheck = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     mainProgram = "kubernix";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ saschagrunert ];
     platforms = lib.platforms.linux;
   };
-}
+})

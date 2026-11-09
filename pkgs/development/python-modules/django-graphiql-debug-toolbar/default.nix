@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -22,13 +21,12 @@ buildPythonPackage rec {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "flavors";
     repo = "django-graphiql-debug-toolbar";
     rev = version;
-    sha256 = "0fikr7xl786jqfkjdifymqpqnxy4qj8g3nlkgfm24wwq0za719dw";
+    hash = "sha256-vKVw1AeYcyKqe5Pa8ZDExHeLL67exSanw9KgQ/vJMzo=";
   };
 
   patches = [

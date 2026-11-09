@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc44bf3c3979dada4b6b633ddeeb8ffbe8388ee9409e4d4e8310c2da1792db03";
+    hash = "sha256-/ES/PDl52tpLa2M93uuP++g4julAnk1OgxDC2heS2wM=";
   };
 
   patches = [
@@ -24,14 +24,14 @@ buildPythonPackage rec {
     # Remove if https://github.com/bmc/munkres/pull/41 is merged.
     (fetchpatch {
       url = "https://github.com/bmc/munkres/commit/380a0d593a0569a761c4a035edaa4414c3b4b31d.patch";
-      sha256 = "0ga63k68r2080blzi04ajdl1m6xd87mmlqa8hxn9hyixrg1682vb";
+      hash = "sha256-awtkwss9ephsh0hhWutBrZsaaJOKgPjpAgiIjMwcRj0=";
     })
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    homepage = "http://bmc.github.com/munkres/";
+    homepage = "https://software.clapper.org/munkres/";
     description = "Munkres algorithm for the Assignment Problem";
     license = lib.licenses.bsd3;
     maintainers = [ ];

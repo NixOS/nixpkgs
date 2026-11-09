@@ -3,17 +3,18 @@
   stdenv,
   fetchurl,
   bzip2,
+  bashNonInteractive,
   enableNLS ? false,
   libnatspec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unzip";
   version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings [ "." ] [ "" ] version}.tar.gz";
-    sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
+    url = "mirror://sourceforge/infozip/unzip${lib.replaceString "." "" finalAttrs.version}.tar.gz";
+    hash = "sha256-A22WmRZG0ESe0KqVLk++IbR2zplKvCduSdMOaGcIvTc=";
   };
 
   hardeningDisable = [
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     ./CVE-2018-18384.patch
     ./dont-hardcode-cc.patch
     (fetchurl {
+      url = "https://sources.debian.org/data/main/u/unzip/6.0-31/debian/patches/cve-2018-1000035-unzip-buffer-overflow.patch";
+      name = "CVE-2018-1000035-unzip-buffer-overflow.patch";
+      hash = "sha256-TqvD+u3dVuvD1QU0hrYfh1jYQJAnJf1VXTRyz/sJRDc=";
+    })
+    (fetchurl {
       url = "https://github.com/madler/unzip/commit/41beb477c5744bc396fa1162ee0c14218ec12213.patch";
       name = "CVE-2019-13232-1.patch";
       sha256 = "04jzd6chg9fw4l5zadkfsrfm5llrd7vhd1dgdjjd29nrvkrjyn14";
@@ -57,11 +63,7 @@ stdenv.mkDerivation rec {
     # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
-    (fetchurl {
-      name = "CVE-2021-4217.patch";
-      url = "https://git.launchpad.net/ubuntu/+source/unzip/plain/debian/patches/CVE-2021-4217.patch?id=94a790fcbb5d6c53cdf5d786bcaa0b8dc10309b6";
-      hash = "sha256-YKE4jVNSlrHLbszXNYYRtAQs0ly4AsodEz6tadMIVqE=";
-    })
+    ./CVE-2021-4217.patch
   ]
   ++ lib.optional enableNLS (fetchurl {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -75,11 +77,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bzip2 ];
-  buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
+  buildInputs = [
+    bashNonInteractive # for zipgrep shebang
+    bzip2
+  ]
+  ++ lib.optional enableNLS libnatspec;
+
+  strictDeps = true;
 
   makefile = "unix/Makefile";
 
-  NIX_LDFLAGS = "-lbz2" + lib.optionalString enableNLS " -lnatspec";
+  env = {
+    NIX_LDFLAGS = toString (
+      [
+        "-lbz2"
+      ]
+      ++ lib.optionals enableNLS [
+        "-lnatspec"
+      ]
+    );
+  };
 
   buildFlags = [
     "generic"
@@ -100,6 +117,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.info-zip.org";
     description = "Extraction utility for archives compressed in .zip format";
@@ -108,4 +127,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "unzip";
   };
-}
+})

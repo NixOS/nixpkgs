@@ -10,6 +10,14 @@
 }:
 let
   cfg = config.services.mihomo;
+
+  AmbientCapabilities =
+    lib.optional cfg.tunMode "CAP_NET_ADMIN"
+    ++ lib.optionals cfg.processesInfo [
+      "CAP_DAC_READ_SEARCH"
+      "CAP_SYS_PTRACE"
+    ];
+  CapabilityBoundingSet = AmbientCapabilities;
 in
 {
   options.services.mihomo = {
@@ -48,13 +56,36 @@ in
     };
 
     tunMode = lib.mkEnableOption ''
-      necessary permission for Mihomo's systemd service for TUN mode to function properly.
+      necessary capabilities for Mihomo's systemd service for TUN mode to function properly.
 
       Keep in mind, that you still need to enable TUN mode manually in Mihomo's configuration
+    '';
+
+    processesInfo = lib.mkEnableOption ''
+      necessary capabilities for rules about process information such as `process-name`
     '';
   };
 
   config = lib.mkIf cfg.enable {
+    security.polkit = lib.mkIf (cfg.tunMode && config.services.resolved.enable) {
+      enable = lib.mkDefault true;
+      extraConfig = ''
+        // systemd-resolved access for Mihomo TUN DNS setup
+        polkit.addRule(function(action, subject) {
+          var actions = [
+            "org.freedesktop.resolve1.revert",
+            "org.freedesktop.resolve1.set-default-route",
+            "org.freedesktop.resolve1.set-dns-servers",
+            "org.freedesktop.resolve1.set-domains",
+          ];
+
+          if (actions.indexOf(action.id) >= 0 && subject.user == "mihomo") {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
+
     ### systemd service
     systemd.services."mihomo" = {
       description = "Mihomo daemon, A rule-based proxy in Go.";
@@ -76,8 +107,7 @@ in
         LoadCredential = "config.yaml:${cfg.configFile}";
 
         ### Hardening
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
+        inherit AmbientCapabilities CapabilityBoundingSet;
         DeviceAllow = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -105,11 +135,9 @@ in
         UMask = "0077";
       }
       // lib.optionalAttrs cfg.tunMode {
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
         PrivateDevices = false;
         PrivateUsers = false;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
       };
     };
   };

@@ -5,7 +5,7 @@ set -euo pipefail
 
 new_version="$(curl -s "https://api.github.com/repos/retrospy/RetroSpy/releases?per_page=1" | jq -r '.[0].tag_name')"
 new_version=${new_version#v}
-old_version=$(nix-instantiate --eval -A retrospy.version | jq -e -r)
+old_version=$(nix-instantiate --eval --raw -A retrospy.version)
 
 if [[ "$new_version" == "$old_version" ]]; then
     echo "Up to date"

@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "GitHub CLI extension to chatter with Webhooks";
     homepage = "https://github.com/cli/gh-webhook";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ adamperkowski ];
+    maintainers = with lib.maintainers; [ koi ];
     mainProgram = "gh-webhook";
   };
 })

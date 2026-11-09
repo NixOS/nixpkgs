@@ -8,7 +8,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "CMAK";
+  pname = "kafka-cmak";
   version = "3.0.0.6";
 
   src = fetchzip {
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cluster Manager for Apache Kafka, previously known as Kafka Manager";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cafkafk ];
     platforms = lib.platforms.unix;
     mainProgram = "cmak";

@@ -1,26 +1,29 @@
 {
   lib,
   stdenv,
-  nixosTests,
+  callPackage,
   rustPlatform,
   fetchFromGitLab,
+
   versionCheckHook,
   installShellFiles,
   nix-update-script,
+
+  nixosTests,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.2.1";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-81i0bkrf86adQWxeZgIoZp/zQQbRJwPqQqZci0ANRFw=";
+    hash = "sha256-W03ehUuzVFBWmUz5HqWwLjSFV8yMU25ZWP5zdCu9hDo=";
   };
 
-  cargoHash = "sha256-Bf9XmlY0IMPY4Convftd0Hv8mQbYoiE8WrkkAeaS6Z8=";
+  cargoHash = "sha256-xMeypqecqYSugmFxSuaC+ZI55XD90ouwG4IYFhS4RpQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,14 +40,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=daemon::filter::tests"
     "--skip=treedb::raw::tests::write_then_read_1000"
     "--skip=ip_pattern_matches"
+    # flaky and fails in hydra
+    "--skip=concepts::config::tests::merge_config_distinct_concurrency"
+    # Action environment reset clears PATH, causing bare `env` command lookup to fail in sandbox
+    "--skip=concepts::action::tests::action_env"
   ];
+
   cargoTestFlags = [
     # Skip integration tests for the same reason
     "--lib"
   ];
 
   postInstall = ''
-    installBin $releaseDir/ip46tables $releaseDir/nft46
     installManPage $releaseDir/reaction*.1
     installShellCompletion --cmd reaction \
       --bash $releaseDir/reaction.bash \
@@ -58,17 +65,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
-  passthru.tests = { inherit (nixosTests) reaction reaction-firewall; };
+  passthru = {
+    inherit (callPackage ./plugins { }) mkReactionPlugin plugins;
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) reaction;
+    }
+    // finalAttrs.passthru.plugins;
+  };
 
   meta = {
+    changelog = "https://framagit.org/ppom/reaction/-/releases/v${finalAttrs.version}";
     description = "Scan logs and take action: an alternative to fail2ban";
     homepage = "https://framagit.org/ppom/reaction";
-    changelog = "https://framagit.org/ppom/reaction/-/releases/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
     maintainers = with lib.maintainers; [ ppom ];
-    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.ngi ];
   };
 })

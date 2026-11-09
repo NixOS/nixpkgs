@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ev3dev";
     repo = "ev3dev-lang-python";
     rev = version;
-    sha256 = "XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
+    hash = "sha256-XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python language bindings for ev3dev";
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

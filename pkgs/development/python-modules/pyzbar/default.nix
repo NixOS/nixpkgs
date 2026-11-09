@@ -1,17 +1,17 @@
 {
   lib,
+  pkgs,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
   pillow,
-  zbar,
   pytestCheckHook,
   setuptools,
 }:
 
 let
-  zbar' = zbar.override {
+  zbar' = pkgs.zbar.override {
     enableVideo = false;
     withXorg = false;
   };
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "NaturalHistoryMuseum";
     repo = "pyzbar";
     tag = "v${version}";
-    sha256 = "8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
+    hash = "sha256-8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
   };
 
   build-system = [ setuptools ];

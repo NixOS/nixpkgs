@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -9,17 +9,24 @@
   # dependencies
   bleak,
   pycayennelpp,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
+  pycryptodome,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshcore";
-  version = "2.2.3";
+  version = "2.3.17";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-lmMflAlrNnfsc10J3CBxor9ftHK10bWyGTbjASJv82s=";
+  src = fetchFromGitHub {
+    owner = "meshcore-dev";
+    repo = "meshcore_py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hhl012J64WCSs2/rVI6vNwwQwj/+j5wudtzhKml7bHg=";
   };
 
   build-system = [ hatchling ];
@@ -27,7 +34,13 @@ buildPythonPackage rec {
   dependencies = [
     bleak
     pycayennelpp
-    pyserial-asyncio
+    pyserial-asyncio-fast
+    pycryptodome
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "meshcore" ];
@@ -35,7 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for communicating with meshcore companion radios";
     homepage = "https://github.com/meshcore-dev/meshcore_py";
+    changelog = "https://github.com/meshcore-dev/meshcore_py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.haylin ];
+    maintainers = with lib.maintainers; [ haylin ];
   };
-}
+})

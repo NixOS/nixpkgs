@@ -1,4 +1,8 @@
-{ python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 let
   version = "0.3.2";
@@ -7,7 +11,7 @@ python3Packages.buildPythonPackage rec {
   pname = "tesh";
   inherit version;
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OceanSprint";
@@ -23,4 +27,9 @@ python3Packages.buildPythonPackage rec {
     pexpect
     distutils
   ];
+
+  meta = {
+    homepage = "https://github.com/OceanSprint/tesh";
+    license = lib.licenses.mit;
+  };
 }

@@ -11,6 +11,7 @@
   libsodium,
   nlohmann_json,
   openssl,
+  zstd,
 
   # Configuration Options
 
@@ -25,8 +26,9 @@ mkMesonLibrary (finalAttrs: {
 
   buildInputs = [
     brotli
+    libblake3
   ]
-  ++ lib.optional (lib.versionAtLeast version "2.27") libblake3
+  ++ lib.optional (lib.versionAtLeast version "2.35pre") zstd
   ++ [
     libsodium
     openssl

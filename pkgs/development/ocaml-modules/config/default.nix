@@ -7,12 +7,12 @@
   spices,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "config";
   version = "0.0.3";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-sys/config.ml/releases/download/${version}/config-${version}.tbz";
+    url = "https://github.com/ocaml-sys/config.ml/releases/download/${finalAttrs.version}/config-${finalAttrs.version}.tbz";
     hash = "sha256-bcRCfLX2ro8vnQTJiX2aYGJC+eD26vkPynMYg817YFM=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-sys/config.ml";
     license = lib.licenses.mit;
   };
-}
+})

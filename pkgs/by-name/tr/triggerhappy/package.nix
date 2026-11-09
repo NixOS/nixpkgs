@@ -5,16 +5,17 @@
   pkg-config,
   perl,
   systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "triggerhappy";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "wertarbyte";
     repo = "triggerhappy";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     sha256 = "0gb1qhrxwq7i5abd408d01a2dpf28nr1fph1fg7w7n0i5i1nnk90";
   };
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     pkg-config
     perl
   ];
-  buildInputs = [ systemd ];
+  buildInputs = lib.optionals systemdSupport [ systemd ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -46,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ taha ];
   };
-}
+})

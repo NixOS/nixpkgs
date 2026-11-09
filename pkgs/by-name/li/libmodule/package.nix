@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodule";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "libmodule";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-93ItLKThtT9JRc+X/bRm06pugsN31HAF3qTUqqCu6nE=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
       eadwu
     ];
   };
-}
+})

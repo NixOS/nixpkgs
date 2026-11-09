@@ -3,29 +3,34 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   installShellFiles,
   testers,
   nix-update-script,
+  writableTmpDirAsHomeHook,
   ghq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ghq";
-  version = "1.8.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
-    tag = "v${version}";
-    sha256 = "sha256-5BN96/RShfJpkfpJe0qrZVDuyFoAV9kgCiBv4REY/5Y=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-UrxfWZw9TBQUuTfhp2IVfVxnFvGF1GIRfP87mkND/1Q=";
   };
 
-  vendorHash = "sha256-jP2Ne/EhmE3tACY1+lHucgBt3VnT4gaQisE3/gVM5Ec=";
+  vendorHash = "sha256-FvMqeUfX4c2Vm+L2GIDGoxN3w+7UyNI0VRada0zSvcc=";
 
-  doCheck = false;
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -51,4 +56,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "ghq";
   };
-}
+})

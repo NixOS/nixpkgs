@@ -14,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.17.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_trace";
     inherit version;
-    hash = "sha256-aHA7/JNxgIPwYdkTCjhS4xgewba3lrdoVpl8KPUblZU=";
+    hash = "sha256-Xg4CtR253vC+0vg2J/pQQ6juzQDkd6f7mNHgTDGnE8A=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

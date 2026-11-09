@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gobgp";
-  version = "4.2.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
-    rev = "v${version}";
-    sha256 = "sha256-KSP5mdyLbsLij/twNZiuMs8YxVg9gGa7JSmt6Q0btns=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-lqXEV0Ptk4OpJ6cRWqW2gZb6HSbL3Ue/M3+vcRqEGfg=";
   };
 
-  vendorHash = "sha256-y8nhrKQnTXfnDDyr/xZd5b9ccXaM85rd8RKHtoDBuwI=";
+  vendorHash = "sha256-qQrA5uR6f/MAWSV8Sn9eibUCXanV304LqDLzfJRdPSQ=";
 
   postConfigure = ''
     export CGO_ENABLED=0
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ higebu ];
     mainProgram = "gobgp";
   };
-}
+})

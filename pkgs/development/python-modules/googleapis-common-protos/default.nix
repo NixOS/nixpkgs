@@ -8,32 +8,40 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "googleapis-common-protos";
-  version = "3.31.3";
+  version = "1.73.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "googleapis-common-protos-v${finalAttrs.version}";
+    hash = "sha256-LrsmLySAOTsECwxa1NaFuyZAjar0Jbg9DHNi6uqYaxk=";
   };
 
-  sourceRoot = "${src.name}/packages/googleapis-common-protos";
+  sourceRoot = "${finalAttrs.src.name}/packages/googleapis-common-protos";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     grpc
     protobuf
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "googleapis-common-protos-v([0-9.]+)"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "googleapis-common-protos-v([0-9.]+)"
+      ];
+    };
   };
 
   # does not contain tests
@@ -49,9 +57,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Common protobufs used in Google APIs";
-    homepage = "https://github.com/googleapis/python-api-common-protos";
-    changelog = "https://github.com/googleapis/python-api-common-protos/releases/tag/${src.tag}";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos";
+    changelog = "https://github.com/googleapis/google-cloud-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libpthreadstubs,
+  libpthread-stubs,
   qtbase,
   qtwebsockets,
   wrapQtAppsHook,
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "danvratil";
     repo = "qcoro";
     rev = "v${version}";
-    sha256 = "sha256-NF+va2pS2NJt4OE+yfN/jVnfkueBdjoyg2lQJhMRWe4=";
+    hash = "sha256-NF+va2pS2NJt4OE+yfN/jVnfkueBdjoyg2lQJhMRWe4=";
   };
 
   outputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebsockets
-    libpthreadstubs
+    libpthread-stubs
   ];
 
   meta = {

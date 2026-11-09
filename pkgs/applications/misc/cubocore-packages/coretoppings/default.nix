@@ -6,12 +6,14 @@
   ffmpeg,
   cmake,
   ninja,
-  v4l-utils,
+  libv4l,
   grim,
   wf-recorder,
   libdbusmenu,
   playerctl,
-  xorg,
+  libxdamage,
+  xrandr,
+  xinput,
   iio-sensor-proxy,
   inotify-tools,
   bluez,
@@ -21,7 +23,7 @@
   gawk,
   polkit,
   libnotify,
-  systemd,
+  systemdLibs,
   xdg-utils,
   libcprime,
   libcsys,
@@ -54,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtconnectivity
     libdbusmenu
     ffmpeg
-    v4l-utils
+    libv4l
     grim
     wf-recorder
     playerctl
-    xorg.xrandr
-    xorg.xinput
-    xorg.libXdamage
+    xrandr
+    xinput
+    libxdamage
     iio-sensor-proxy
     inotify-tools
     bluez
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gawk
     polkit
     libnotify
-    systemd
+    systemdLibs
     xdg-utils
     libcprime
     libcsys

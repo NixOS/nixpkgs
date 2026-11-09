@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatStringsSep
     mkEnableOption
-    mkIf
     mkOption
     types
     ;

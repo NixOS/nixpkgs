@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "flh";
     repo = "ocaml-fontconfig";
     rev = "42daf1697ffcee9c89ee4be3103b6427f7a7b7e5";
-    sha256 = "1fw6bzydmnyh2g4x35mcbg0hypnxqhynivk4nakcsx7prr8zr3yh";
+    hash = "sha256-0I/8Uc73dM2msmTuaD3E3V4PwVusltHJE9Db2vxfhrs=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "4.03") ''
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Fontconfig bindings for OCaml";
+    homepage = "https://github.com/flh/ocaml-fontconfig";
     license = lib.licenses.gpl2Plus;
     platforms = ocaml.meta.platforms;
     maintainers = with lib.maintainers; [ vbgl ];

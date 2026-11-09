@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,13 +10,11 @@ buildPythonPackage rec {
   version = "0.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "PyVolumio";
     rev = "v${version}";
-    sha256 = "1nyvflap39cwq1cm9wwl9idvfmz1ixsl80f1dnskx22fk0lmvj4h";
+    hash = "sha256-kMhdKZhOiD61bcEBRHWP4Ve3W0yU81RZwJylcRV129s=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to control Volumio";
     homepage = "https://github.com/OnFreund/PyVolumio";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

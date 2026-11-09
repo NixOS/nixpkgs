@@ -26,12 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Use `gtest` from Nixpkgs to allow an offline build
     ./use-nix-googletest.patch
-    # fix: qt6_generate_deploy_app_script deprecated keyword
-    (fetchpatch2 {
-      url = "https://github.com/daniel-fahey/proton-bridge/commit/9b282369523ce2aabcf95369a2ed3867efb5a4ac.patch?full_index=1";
-      relative = guiSourcePath;
-      hash = "sha256-CGBelsplAqLI+6GtDR+VELfVsLoHPN0324gfZ3obKpI=";
-    })
     # fix: make libQt6WaylandEglClientHwIntegration conditional for Qt 6.10
     (fetchpatch2 {
       url = "https://github.com/daniel-fahey/proton-bridge/commit/7823fe4904186253798fc633724988d43dd642e0.patch?full_index=1";

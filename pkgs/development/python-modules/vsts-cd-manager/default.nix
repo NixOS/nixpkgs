@@ -2,21 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   mock,
 }:
 
-buildPythonPackage rec {
-  version = "1.0.2";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "vsts-cd-manager";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ys4hrmjbxl4qr26qr3dhhs27yfwn1635vwjdqh1qgjmrmcr1c0b";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-C7CQWc1VPhwgbpLvMkyw3PkjNIRtZGxExoT2JWuGRHs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     mock
   ];
@@ -32,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

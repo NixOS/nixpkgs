@@ -3,21 +3,18 @@
   buildPythonPackage,
   django,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.32.0";
+  version = "0.34.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "django_leaflet";
     inherit version;
-    hash = "sha256-ATzLBu4IBxyuyYpl3/1oqzaU2vznLK/zTz1481VoriU=";
+    hash = "sha256-gzbnKnu/8LNjBUmC8CrB16O8srL6S8oyYBTd3q63xRU=";
   };
 
   build-system = [ setuptools ];

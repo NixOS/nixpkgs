@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview4
   ];
 
+  mesonFlags = [
+    # Work around https://gitlab.gnome.org/GNOME/gupnp-tools/-/issues/29
+    "-Dc_args=-Wno-error=deprecated-declarations"
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gupnp-tools";

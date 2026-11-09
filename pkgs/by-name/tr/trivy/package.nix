@@ -2,39 +2,40 @@
   lib,
   stdenv,
   buildPackages,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  trivy,
+  versionCheckHook,
 }:
-buildGoModule rec {
+
+buildGo127Module (finalAttrs: {
   pname = "trivy";
-  version = "0.68.2";
+  version = "0.76.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
-    tag = "v${version}";
-    hash = "sha256-0s9N7BHLJOTnOfa9tQ70D5tfTDSEHsiLUYHpWZjuoEU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yG7YCGPxSBjtPwvqOZURqPChzcHKG7q63XAgdA8QfQA=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-0HbMMzkxDbDb/Q7s490JfjK63tPdWDuEbV2oQjvD1zI=";
+  vendorHash = "sha256-qF280cc4PfdcVW37ddC6AmQp/FZfYrQFau8w3D2IAb0=";
 
   subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${finalAttrs.version}"
   ];
 
   env.GOEXPERIMENT = "jsonv2";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Tests require network access
   doCheck = false;
@@ -48,16 +49,10 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = trivy;
-    command = "trivy --version";
-    version = "Version: ${version}";
-  };
-
   meta = {
     description = "Simple and comprehensive vulnerability scanner for containers, suitable for CI";
     homepage = "https://github.com/aquasecurity/trivy";
-    changelog = "https://github.com/aquasecurity/trivy/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/trivy/releases/tag/${finalAttrs.src.tag}";
     longDescription = ''
       Trivy is a simple and comprehensive vulnerability scanner for containers
       and other artifacts. A software vulnerability is a glitch, flaw, or
@@ -72,4 +67,4 @@ buildGoModule rec {
       jk
     ];
   };
-}
+})

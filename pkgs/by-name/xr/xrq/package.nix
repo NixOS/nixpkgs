@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     description = "X utility for querying xrdb";

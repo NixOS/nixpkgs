@@ -9,19 +9,21 @@
   pytestCheckHook,
   python-dotenv,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opendal";
-  version = "0.46.0";
+  version = "0.47.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "opendal";
-    tag = "v${version}";
-    hash = "sha256-OQGpz6o4R0Yp+1vAgFtik/l7wvHwJNcB1BhZLk+BFPg=";
+    # Upstream bundles releases in a single OpenDAL monorepo. Bindings get
+    # separate version. Details: https://github.com/NixOS/nixpkgs/issues/567427
+    tag = "v0.59.5";
+    hash = "sha256-8Agx4CbP5IOV+j8J8EgVPOqmyu4WnCahrGlufe231kU=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -54,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

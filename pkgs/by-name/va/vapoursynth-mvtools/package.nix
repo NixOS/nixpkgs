@@ -9,14 +9,14 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-mvtools";
   version = "24";
 
   src = fetchFromGitHub {
-    owner = "dubhater";
+    owner = "dubhatervapoursynth";
     repo = "vapoursynth-mvtools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bEifU1PPNOBr6o9D6DGIzTaG4xjygBxkQYnZxd/4SwQ=";
   };
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Set of filters for motion estimation and compensation";
-    homepage = "https://github.com/dubhater/vapoursynth-mvtools";
+    homepage = "https://github.com/dubhatervapoursynth/vapoursynth-mvtools";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

@@ -27,9 +27,17 @@
   nss,
   openssl,
   pango,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
+  libxcb,
   zlib,
 }:
 
@@ -121,8 +129,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/pixmaps
-    cp ${targetPath}/resources/app/resources/linux/code.png $out/share/pixmaps/azuredatastudio.png
+    install -D ${targetPath}/resources/app/resources/linux/code.png $out/share/icons/azuredatastudio.png
 
     runHook postInstall
   '';
@@ -164,19 +171,19 @@ stdenv.mkDerivation rec {
       nss
       nspr
       libdrm
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxshmfence
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxshmfence
       libxkbcommon
-      xorg.libxkbfile
+      libxkbfile
       pango
       stdenv.cc.cc
-      systemd
+      systemdLibs
     ])
     targetPath
     sqltoolsserviceRpath

@@ -9,14 +9,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdupes";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo = "fdupes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-epregz+i2mML5zCQErQDJFUFUxnUoqcBlUPGPJ4tcmc=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "fdupes";
   };
-}
+})

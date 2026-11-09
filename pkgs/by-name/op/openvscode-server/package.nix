@@ -10,11 +10,13 @@
   git,
   pkg-config,
   runCommand,
-  nodejs,
+  nodejs_22,
+  nodejs-slim_22,
   node-gyp,
   libsecret,
   libkrb5,
-  xorg,
+  libx11,
+  libxkbfile,
   ripgrep,
   cctools,
   nixosTests,
@@ -22,13 +24,14 @@
 }:
 let
 
+  nodejs = nodejs_22;
+
   system = stdenv.hostPlatform.system;
 
   vsBuildTarget =
     {
       x86_64-linux = "linux-x64";
       aarch64-linux = "linux-arm64";
-      x86_64-darwin = "darwin-x64";
       aarch64-darwin = "darwin-arm64";
     }
     .${system} or (throw "Unsupported system ${system}");
@@ -36,13 +39,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.106.3";
+  version = "1.109.5";
+
+  executableName = "openvscode-server";
+  longName = "OpenVSCode Server";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-wcmk35oqJ6d5MR9YnqC/pR0pC03/vCFCd9KLRByQWqk=";
+    hash = "sha256-FWexstn6pmKPkMuoXOWr4+levM+3FK74q1HLu4kFWTc=";
   };
 
   ## fetchNpmDeps doesn't correctly process git dependencies
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-FnlzXlhu72G9dUnezzc62qH2TG5mU9EJNe9akWtR6zg=";
+        outputHash = "sha256-DMjqFMdp7ocGdvMEmrKqB8RhF+BTN/9ybOKQAeuSG/o=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -97,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [
     nodejs
-    nodejs.python
+    nodejs-slim_22.python
     pkg-config
     makeWrapper
     git
@@ -107,11 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ (with xorg; [
-      libX11
+    ++ [
+      libx11
       libxkbfile
       libkrb5
-    ])
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
     ];
@@ -235,13 +241,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dguenther
-      ghuntley
       emilytrau
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "openvscode-server";

@@ -19,15 +19,15 @@ assert (
   ]
 );
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstore";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "mstore";
-    rev = "v${version}";
-    hash = "sha256-zfrxdrZ1Um52qTRNGJoqZNQuHhK3xM/mKfk0aBLrcjw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hmkjy8HFOUnRWwEFChnDrpyHzqAfwpTupWlPoKoeSX8=";
   };
 
   patches = [
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

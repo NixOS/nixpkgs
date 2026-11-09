@@ -11,7 +11,7 @@ buildNpmPackage rec {
   version = "0.9.2";
 
   src = fetchFromGitHub {
-    owner = "badaix";
+    owner = "snapcast";
     repo = "snapweb";
     rev = "v${version}";
     hash = "sha256-7W7rvJPVcRtXcQt+wWAvrl0DOIh7zEfXZdFDcH23/ls=";
@@ -33,7 +33,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Web client for Snapcast";
-    homepage = "https://github.com/badaix/snapweb";
+    homepage = "https://github.com/snapcast/snapweb";
     maintainers = with lib.maintainers; [ ettom ];
     license = lib.licenses.gpl3Plus;
   };

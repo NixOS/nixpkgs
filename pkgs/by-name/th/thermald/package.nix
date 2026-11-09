@@ -17,9 +17,9 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thermald";
-  version = "2.5.10";
+  version = "2.5.13";
 
   outputs = [
     "out"
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
-    rev = "v${version}";
-    sha256 = "sha256-+dk3lOlI8kaf8NvcWQSvTxSqVGPCgvVnTB9nltqQHrU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-SFVQQzWOG8vdxiWV9lFnz9niVJB5QaclWGENzGgqZCk=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
     "--localstatedir=/var"
     "--enable-gtk-doc"
+    "--enable-doc"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
@@ -78,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "thermald";
   };
-}
+})

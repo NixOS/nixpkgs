@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     shellNames = {
       "x86_64-linux" = "bin/shell-linux-amd64";
       "aarch64-linux" = "bin/shell-linux-arm64";
-      "x86_64-darwin" = "bin/shell-macos-amd64";
       "aarch64-darwin" = "bin/shell-macos-arm64";
     };
     # versionCheckHook cannot be used because appfire-cli requires $HOME to be set
@@ -77,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       Since the /nix/store is not writable, you can instead place the file
       at {file}`$HOME/acli.properties` to achieve the same effect.
     '';
-    homepage = "https://apps.appf.re/acli";
+    homepage = "https://support.appfire.com/space/ACLI/60555464/Appfire+Command+Line+Interface+(CLI)";
     license = lib.licenses.unfreeRedistributable;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ twey ];

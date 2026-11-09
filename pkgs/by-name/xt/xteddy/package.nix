@@ -3,20 +3,21 @@
   stdenv,
   fetchFromGitLab,
   pkg-config,
-  xorg,
+  libxext,
+  libx11,
   imlib2,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xteddy";
   version = "2.2-5";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "games-team";
     repo = "xteddy";
-    rev = "debian/${version}";
-    sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
+    rev = "debian/${finalAttrs.version}";
+    hash = "sha256-HqPD0RQU42lWk8IzEAMbDhwGKvZPkbgdwVJh09Dhp2Y=";
   };
 
   nativeBuildInputs = [
@@ -25,13 +26,13 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     imlib2
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxext
   ];
 
   patches = [
-    "${src}/debian/patches/10_libXext.patch"
-    "${src}/debian/patches/wrong-man-page-section.patch"
+    "${finalAttrs.src}/debian/patches/10_libXext.patch"
+    "${finalAttrs.src}/debian/patches/wrong-man-page-section.patch"
   ];
 
   postPatch = ''
@@ -53,9 +54,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cuddly teddy bear for your X desktop";
-    homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
+    homepage = "https://salsa.debian.org/games-team/xteddy";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.linux;
   };
-}
+})

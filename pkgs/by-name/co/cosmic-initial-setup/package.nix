@@ -4,27 +4,37 @@
   rustPlatform,
   fetchFromGitHub,
   just,
+  aws-lc,
   killall,
   libcosmicAppHook,
   libinput,
   openssl,
   udev,
+  zstd,
   nixosTests,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.1";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-VO8r2r7zzFZU5gYBTxUpS/829QQvlVGsG798XfqqXR0=";
+    hash = "sha256-jqAvYY6MC3pbfMLmOSpQ/pMUPY22LI3pv+oFyjSKS6g=";
   };
 
-  cargoHash = "sha256-fjcYPA+kuhD9JLjoZkzAziJK8qF/a/gdSafmckLD8n0=";
+  postPatch = ''
+    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
+    substituteInPlace justfile \
+      --replace-fail \
+      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
+      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
+  '';
+
+  cargoHash = "sha256-J4qpXO1gZcp1ivGy4u2dcn47dq2XHsnkKYgVMixiq4Q=";
 
   buildFeatures = [ "nixos" ];
 
@@ -36,29 +46,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
 
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env = {
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+    DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  };
+
   nativeBuildInputs = [
     libcosmicAppHook
     just
   ];
 
   buildInputs = [
+    aws-lc
     killall
     libinput
     openssl
     udev
+    zstd
   ];
-
-  postPatch = ''
-    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
-    substituteInPlace justfile \
-      --replace-fail \
-      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
-      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
-  '';
-
-  preFixup = ''
-    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
-  '';
 
   dontUseJustBuild = true;
   dontUseJustCheck = true;
@@ -72,7 +80,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
+  '';
 
   passthru = {
     tests = {

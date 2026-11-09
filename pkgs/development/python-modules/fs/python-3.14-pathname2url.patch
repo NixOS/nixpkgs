@@ -1,0 +1,49 @@
+Python 3.14 gives absolute paths an empty authority, so pathname2url("/tmp")
+returns "///tmp" rather than "/tmp". fs appends that to a protocol prefix that
+already ends in "//", producing URLs like "osfs://///tmp/foo".
+
+https://github.com/PyFilesystem/pyfilesystem2/issues/596
+
+--- a/fs/_url_tools.py
++++ b/fs/_url_tools.py
+@@ -3,6 +3,7 @@
+ import platform
+ import re
+ import six
++import sys
+ 
+ if typing.TYPE_CHECKING:
+     from typing import Text
+@@ -10,6 +11,17 @@
+ _WINDOWS_PLATFORM = platform.system() == "Windows"
+ 
+ 
++def _pathname2url(path):
++    # type: (Text) -> Text
++    """Convert a path to a URL path, as Python < 3.14 used to."""
++    url = six.moves.urllib.request.pathname2url(path)
++    # Python 3.14 gives absolute paths an empty authority, so that the
++    # result can be appended to "file:" rather than to "file://".
++    if sys.version_info >= (3, 14) and url.startswith("///"):
++        url = url[2:]
++    return url
++
++
+ def url_quote(path_snippet):
+     # type: (Text) -> Text
+     """Quote a URL without quoting the Windows drive letter, if any.
+@@ -26,12 +38,12 @@
+         drive_letter, path = path_snippet.split(":", 1)
+         if six.PY2:
+             path = path.encode("utf-8")
+-        path = six.moves.urllib.request.pathname2url(path)
++        path = _pathname2url(path)
+         path_snippet = "{}:{}".format(drive_letter, path)
+     else:
+         if six.PY2:
+             path_snippet = path_snippet.encode("utf-8")
+-        path_snippet = six.moves.urllib.request.pathname2url(path_snippet)
++        path_snippet = _pathname2url(path_snippet)
+     return path_snippet
+ 
+ 

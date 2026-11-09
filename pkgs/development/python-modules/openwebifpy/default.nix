@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "openwebifpy";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;

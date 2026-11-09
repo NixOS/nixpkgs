@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lark,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "bc-python-hcl2";
   version = "0.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bridgecrewio/python-hcl2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ anhdle14 ];
+    maintainers = [ ];
     mainProgram = "hcl2tojson";
   };
 }

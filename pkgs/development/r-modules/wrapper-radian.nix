@@ -3,7 +3,7 @@
   runCommand,
   R,
   radian,
-  makeWrapper,
+  makeBinaryWrapper,
   recommendedPackages,
   packages,
   wrapR ? false,
@@ -14,6 +14,8 @@ runCommand (radian.name + "-wrapper")
     preferLocalBuild = true;
     allowSubstitutes = false;
 
+    __structuredAttrs = true;
+
     buildInputs = [
       R
       radian
@@ -21,7 +23,7 @@ runCommand (radian.name + "-wrapper")
     ++ recommendedPackages
     ++ packages;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
     passthru = { inherit recommendedPackages; };
 

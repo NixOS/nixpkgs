@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surfraw";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://gitlab.com/surfraw/Surfraw/uploads/2de827b2786ef2fe43b6f07913ca7b7f/surfraw-${version}.tar.gz";
+    url = "https://gitlab.com/surfraw/Surfraw/uploads/2de827b2786ef2fe43b6f07913ca7b7f/surfraw-${finalAttrs.version}.tar.gz";
     sha256 = "099nbif0x5cbcf18snc58nx1a3q7z0v9br9p2jiq9pcc7ic2015d";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.publicDomain;
   };
-}
+})

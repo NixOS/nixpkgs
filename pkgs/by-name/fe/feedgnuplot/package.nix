@@ -9,6 +9,7 @@
   perlPackages,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 let
@@ -24,8 +25,8 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "dkogan";
     repo = "feedgnuplot";
-    rev = "v${version}";
-    sha256 = "sha256-r5rszxr65lSozkUNaqfBn4I4XjLtvQ6T/BG366JXLRM=";
+    tag = "v${version}";
+    hash = "sha256-r5rszxr65lSozkUNaqfBn4I4XjLtvQ6T/BG366JXLRM=";
   };
 
   outputs = [ "out" ];
@@ -45,8 +46,10 @@ perlPackages.buildPerlPackage rec {
     StringShellQuote
   ]);
 
+  strictDeps = true;
+
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = fontsConf;
+  env.FONTCONFIG_FILE = fontsConf;
 
   postPatch = ''
     patchShebangs .
@@ -57,12 +60,17 @@ perlPackages.buildPerlPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/feedgnuplot \
-        --prefix "PATH" ":" "$PATH" \
+        --prefix "PATH" ":" "$HOST_PATH" \
         --prefix "PERL5LIB" ":" "$PERL5LIB"
 
     installShellCompletion --bash --name feedgnuplot.bash completions/bash/feedgnuplot
     installShellCompletion --zsh completions/zsh/_feedgnuplot
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "General purpose pipe-oriented plotting tool";

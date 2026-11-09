@@ -8,16 +8,16 @@
   copyDesktopItems,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pixelflasher";
-  version = "8.9.1.0";
-  format = "other";
+  version = "10.0.0.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "badabing2005";
     repo = "PixelFlasher";
-    tag = "v${version}";
-    hash = "sha256-/B0AZesAwB94y4o+5+f0L0vnbgVaUaCP4gEcDCViH/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wHdNpRElGlRzVlhSncSm9gTKWle+l5oxKE09R0iOO4A=";
   };
 
   desktopItems = [
@@ -61,11 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   buildPhase =
     let
-      specFile =
-        if stdenv.hostPlatform.isDarwin then
-          if stdenv.hostPlatform.isAarch64 then "build-on-mac" else "build-on-mac-intel-only"
-        else
-          "build-on-linux";
+      specFile = if stdenv.hostPlatform.isDarwin then "build-on-mac" else "build-on-linux";
     in
     ''
       runHook preBuild
@@ -91,10 +87,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Pixel™ phone flashing GUI utility with features";
     homepage = "https://github.com/badabing2005/PixelFlasher";
-    changelog = "https://github.com/badabing2005/PixelFlasher/releases/tag/v${version}";
+    changelog = "https://github.com/badabing2005/PixelFlasher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ cything ];
     mainProgram = "pixelflasher";
     platforms = lib.platforms.linux;
   };
-}
+})

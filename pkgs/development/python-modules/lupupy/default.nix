@@ -4,7 +4,6 @@
   colorlog,
   pyyaml,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "lupupy";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,7 +36,7 @@ buildPythonPackage rec {
     mainProgram = "lupupy";
     homepage = "https://github.com/majuss/lupupy";
     changelog = "https://github.com/majuss/lupupy/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -36,7 +36,7 @@ python3Packages.buildPythonPackage rec {
     emoji
     get-video-properties
     ibm-watson
-    (matrix-nio.override { withOlm = true; })
+    (matrix-nio.override { withVodozemac = true; })
     mattermostdriver
     motor
     multidict

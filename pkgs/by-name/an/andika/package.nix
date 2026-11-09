@@ -2,22 +2,29 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "andika";
   version = "7.000";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/andika/Andika-${version}.zip";
+    url = "https://software.sil.org/downloads/r/andika/Andika-${finalAttrs.version}.zip";
     hash = "sha256-46kbzFxNEpSuqyUwpScnxxgZi1dJlwK+AUkdULcinok=";
   };
+
+  nativeBuildInputs = [ installFonts ];
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 OFL.txt OFL-FAQ.txt README.txt FONTLOG.txt -t $out/share/doc/andika-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -34,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.f--t ];
   };
-}
+})

@@ -9,11 +9,11 @@
 buildKodiAddon rec {
   pname = "upnext";
   namespace = "service.upnext";
-  version = "1.1.9+matrix.1";
+  version = "1.3.4";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-oNUk80MEzK6Qssn1KjT6psPTazISRoUif1IMo+BKJxo=";
+    hash = "sha256-ZEqrK8n6LIcew4416ZPvLZbMWy2qhuhkoHAWiJP15V0=";
   };
 
   passthru = {

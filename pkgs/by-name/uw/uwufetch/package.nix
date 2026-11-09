@@ -6,14 +6,14 @@
   viu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uwufetch";
   version = "2.1";
 
   src = fetchFromGitHub {
-    owner = "TheDarkBug";
+    owner = "ad-oliviero";
     repo = "uwufetch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [
-    "UWUFETCH_VERSION=${version}"
+    "UWUFETCH_VERSION=${finalAttrs.version}"
   ];
 
   installFlags = [
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Meme system info tool for Linux";
-    homepage = "https://github.com/TheDarkBug/uwufetch";
+    homepage = "https://github.com/ad-oliviero/uwufetch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bbjubjub ];
     mainProgram = "uwufetch";
   };
-}
+})

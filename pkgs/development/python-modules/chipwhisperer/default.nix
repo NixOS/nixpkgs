@@ -4,7 +4,6 @@
   fetchFromGitHub,
 
   # build
-  pythonAtLeast,
   setuptools,
   setuptools-scm,
   cython,
@@ -15,9 +14,12 @@
   ecpy,
   fastdtw,
   libusb1,
-  numpy,
   pyserial,
   tqdm,
+  numba,
+  zarr,
+  crc,
+  pycryptodome,
 
   # install
   udevCheckHook,
@@ -34,13 +36,13 @@
 
 buildPythonPackage rec {
   pname = "chipwhisperer";
-  version = "5.7.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "newaetech";
     repo = "chipwhisperer";
-    tag = version;
-    hash = "sha256-C7QP044QEP7vmz1lMseLtMTYoKn5SoFV/q9URY7yQ6I=";
+    tag = "v${version}";
+    hash = "sha256-/YqNpNccJo+AmRfU5LwkVxK9wIIAUrtwjOfzH83NadU=";
   };
 
   pyproject = true;
@@ -54,10 +56,6 @@ buildPythonPackage rec {
     cython
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
-
   dependencies = [
     colorama
     configobj
@@ -66,11 +64,19 @@ buildPythonPackage rec {
     libusb1
     pyserial
     tqdm
+    numba
+    zarr
+    crc
+    pycryptodome
   ];
 
   nativeInstallCheckInputs = [
     udevCheckHook
   ];
+  postPatch = ''
+    substituteInPlace software/chipwhisperer/__init__.py \
+      --replace-fail "__version__ = '6.0.0'" "__version__ = '6.1.0'"
+  ''; # the repo erroneously labels the version as 6.0.0 instead of the 6.1.0 which it really is
 
   postInstall = ''
     # Install udev rules
@@ -105,7 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Toolchain for side-channel power analysis and glitching attacks";
     homepage = "https://github.com/newaetech/chipwhisperer";
-    changelog = "https://github.com/newaetech/chipwhisperer/releases/tag/${version}";
+    changelog = "https://github.com/newaetech/chipwhisperer/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.krishnans2006 ];
   };

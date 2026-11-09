@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "uhashring";
-  version = "2.4";
+  version = "2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultrabug";
     repo = "uhashring";
     tag = version;
-    hash = "sha256-6zNPExbcwTUne0lT8V6xp2Gf6J1VgG7Q93qizVOAc+k=";
+    hash = "sha256-rxYAqzyGqS+Pp70jD36bvXJHvMshUWbTvmqB+H+3BAM=";
   };
 
   build-system = [

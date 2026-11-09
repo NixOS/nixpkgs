@@ -3,43 +3,35 @@
   astroid,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   packaging,
   poetry-core,
   semver,
+  tomli,
   pytestCheckHook,
-  pythonOlder,
+  stdenv, # for meta.broken
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requirements-detector";
-  version = "1.3.2";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = "requirements-detector";
-    tag = version;
-    hash = "sha256-IWVIYDE/5/9sFgOFftRE4nmY0IDJ0oOvvaGMODkozQg=";
+    tag = finalAttrs.version;
+    hash = "sha256-AdKVZUb3MTxh6mRJly0xcCm6ogu83m0IsKcamSUup7M=";
   };
 
-  patches = [
-    # Remove duplicate import, https://github.com/prospector-dev/requirements-detector/pull/53
-    (fetchpatch {
-      name = "remove-import.patch";
-      url = "https://github.com/prospector-dev/requirements-detector/commit/be412669f53a78b3376cac712c84f158fbb1374a.patch";
-      hash = "sha256-IskSs3BZ1pTeqjtCUksC8wL+3fOYqAi7nw/QD0zsie4=";
-    })
-  ];
-
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = lib.optionals stdenv.hostPlatform.isDarwin [ "astroid" ];
 
   dependencies = [
     astroid
     packaging
     semver
+    tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -49,9 +41,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
-    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
+    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
     mainProgram = "detect-requirements";
   };
-}
+})

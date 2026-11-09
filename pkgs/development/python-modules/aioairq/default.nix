@@ -9,16 +9,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioairq";
-  version = "0.4.7";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CorantGmbH";
     repo = "aioairq";
-    tag = "v${version}";
-    hash = "sha256-CliY2MfkRfpOmWM70vDRxG6tY2eoaPiRFHb0qt2Kmyw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I8pbNYbSWns0fbJvgJ71AZK0SzpY/51MXLr7+D5/xF4=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to retrieve data from air-Q devices";
     homepage = "https://github.com/CorantGmbH/aioairq";
-    changelog = "https://github.com/CorantGmbH/aioairq/releases/tag/${src.tag}";
+    changelog = "https://github.com/CorantGmbH/aioairq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

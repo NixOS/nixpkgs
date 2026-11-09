@@ -6,31 +6,27 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyngrok";
-  version = "7.5.0";
+  version = "9.1.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-L+kcuiwlMez7EktQcfN3gIthpooUyjyZ/Lfz/a4FJ48=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-SjT67m3l2dfWee8f+/sN+qqa24YA/oBMQxaqDdeD+0o=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pyyaml
-  ];
+  dependencies = [ pyyaml ];
 
   pythonImportsCheck = [ "pyngrok" ];
 
   meta = {
     description = "Python wrapper for ngrok";
     homepage = "https://github.com/alexdlaird/pyngrok";
-    changelog = "https://github.com/alexdlaird/pyngrok/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/alexdlaird/pyngrok/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

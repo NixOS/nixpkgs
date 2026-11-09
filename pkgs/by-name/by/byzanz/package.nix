@@ -13,12 +13,13 @@
   libtool,
   pkg-config,
   which,
-  xorg,
+  libxdamage,
+  xwininfo,
 }:
 
 stdenv.mkDerivation {
   pname = "byzanz";
-  version = "unstable-2016-03-12";
+  version = "0.2.1-unstable-2016-03-12";
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/Archive/byzanz";
@@ -57,8 +58,8 @@ stdenv.mkDerivation {
     libtool
     cairo
     gtk3
-    xorg.xwininfo
-    xorg.libXdamage
+    xwininfo
+    libxdamage
   ]
   ++ (with gst_all_1; [
     gstreamer
@@ -72,7 +73,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
-    homepage = "https://github.com/GNOME/byzanz";
+    homepage = "https://gitlab.gnome.org/Archive/byzanz";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];

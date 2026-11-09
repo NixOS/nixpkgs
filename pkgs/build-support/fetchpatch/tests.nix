@@ -6,26 +6,26 @@ in
 
 {
   simple = testers.invalidateFetcherByDrvHash fetchpatch {
-    url = "https://github.com/facebook/zstd/pull/2724/commits/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch";
+    url = "https://github.com/facebook/zstd/commit/e1f85dbca3a0ed5ef06c8396912a0914db8dea6a.patch?full_index=1";
     sha256 =
       if isFetchpatch2 then
-        "sha256-w4yU0wt64d0WkuBQPeGf8vn5TH6qSBJvNIgka9QK+/Q="
+        "sha256-2kFh8FC96njAKH69uJp1vZSye47Suf76RfBodqosLU0="
       else
         "sha256-PuYAqnJWAE+L9bsroOnnBGJhERW8LHrGSLtIEkKU9vg=";
   };
 
   relative = testers.invalidateFetcherByDrvHash fetchpatch {
-    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
+    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch?full_index=1";
     relative = "include";
     sha256 =
       if isFetchpatch2 then
-        "sha256-1TtmuKeNIl/Yp+sfzBMR8Ue78tPIgjqGgjasa5IN52o="
+        "sha256-NS1CH+V5I29Yc0PHXdVxAn5tAHTvnGphRjhv4hZGYIo="
       else
         "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
   };
 
   hunks = testers.invalidateFetcherByDrvHash fetchpatch {
-    url = "https://github.com/openssh/openssh-portable/commit/35d5917652106aede47621bb3f64044604164043.patch";
+    url = "https://github.com/openssh/openssh-portable/commit/35d5917652106aede47621bb3f64044604164043.patch?full_index=1";
     stripLen = 1;
     hunks = [
       2
@@ -37,13 +37,13 @@ in
     ];
     sha256 =
       if isFetchpatch2 then
-        "sha256-SXJALY4zC4y/ZV7uVglf+XB5cpC5tS4M8QDGlFRmcFM="
+        "sha256-2eiufShDHVpiK9DaGUzfu1MlGrgE9OJAhmQcEcAViQw="
       else
         "sha256-MV7uGgA1ESMR7W6H5FjAIxKcpySdQjWB+L2zaHjd96M=";
   };
 
   full = testers.invalidateFetcherByDrvHash fetchpatch {
-    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
+    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch?full_index=1";
     relative = "test";
     stripLen = 1;
     extraPrefix = "foo/bar/";
@@ -66,10 +66,10 @@ in
   };
 
   fileWithSpace = testers.invalidateFetcherByDrvHash fetchpatch {
-    url = "https://github.com/jfly/annoying-filenames/commit/1e86a219f5fc9c4137b409bc9c38036f3922724b.patch";
+    url = "https://github.com/jfly/annoying-filenames/commit/1e86a219f5fc9c4137b409bc9c38036f3922724b.patch?full_index=1";
     sha256 =
       if isFetchpatch2 then
-        "sha256-RB6pjigoXtzHILkGFXYd3Lz2aM9DvO0NRmLdey1N6gg="
+        "sha256-HIS/I7tLl/XYcyLuyjrIkPmLPxJPAuAguMUmhL9Ei8g="
       else
         "sha256-aptUvVojqIIIVNuHqkl+C+dZBGFfs+1MUd0FNV+4j4E=";
   };

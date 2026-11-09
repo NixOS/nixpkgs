@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tuleap-cli";
   version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "csgroup-oss";
     repo = "tuleap-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qiQnu167BIF+LzwahheBE0KwxFmRcahdU7quTpPtEEk=";
   };
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "tuleap-cli";
   };
-}
+})

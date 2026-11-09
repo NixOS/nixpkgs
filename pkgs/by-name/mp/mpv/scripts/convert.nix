@@ -30,7 +30,7 @@ buildLua {
       --replace-fail 'yad_exe = "yad"' \
                 'yad_exe = "${lib.getExe yad}"' \
       --replace-fail 'notify_send_exe = "notify-send"' \
-                'notify_send_exe = "${lib.getExe libnotify}"' \
+                'notify_send_exe = "${lib.getExe libnotify}"'
   '';
 
   scriptPath = "convert_script.lua";
@@ -38,7 +38,7 @@ buildLua {
   meta = {
     description = "Convert parts of a video while you are watching it in mpv";
     homepage = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
     longDescription = ''
       When this script is loaded into mpv, you can hit Alt+W to mark the beginning
       and Alt+W again to mark the end of the clip. Then a settings window opens.

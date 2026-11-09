@@ -5,7 +5,7 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   node-gyp-build,
-  nodejs-slim,
+  nodejs-slim_22,
   matrix-sdk-crypto-nodejs,
   nixosTests,
   nix-update-script,
@@ -14,13 +14,13 @@
 
 let
   pname = "matrix-appservice-irc";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     tag = version;
-    hash = "sha256-bM1CUuFRBOg/4y50gI7ZLwnrbBU6pZlqyitTI2WeVsA=";
+    hash = "sha256-N3lMC+wxAxWr2CWN6z4RZkrgLtvz5WOBj4nl25sqAec=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs-slim
+    nodejs-slim_22
     yarn
     node-gyp-build
   ];

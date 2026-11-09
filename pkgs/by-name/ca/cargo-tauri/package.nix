@@ -14,20 +14,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
-  version = "2.9.6";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-cli-v${finalAttrs.version}";
-    hash = "sha256-VtZxFkxOLMNwl3A/2qoNJ/HXr5FXFKQYw+ri5Yp8eOE=";
+    hash = "sha256-vTx/viT/F7Bux3jMxM/Y2uJ8RQ6orODScGCcvgpXhrU=";
   };
 
-  cargoHash = "sha256-uAjEQBHDpVv73MbeoU86tObiXSUKKjImpMTLHXKMRNs=";
+  cargoHash = "sha256-v0ZlUfgkWSOmiFhz5xjazcTU2yt3g/J4tAwsKTzwRj0=";
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
     pkg-config
   ];
+
+  # Explicitly enable optional `rustls` dependency.
+  postPatch = ''
+    substituteInPlace crates/tauri/Cargo.toml \
+      --replace-fail 'dep:rustls' 'rustls'
+  '';
 
   buildInputs =
     # Required for tauri-macos-sign and RPM support in tauri-bundler
@@ -39,7 +47,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zstd
     ];
 
-  cargoBuildFlags = [ "--package tauri-cli" ];
+  patches = [
+    ./skip-icon-macos.patch
+  ];
+
+  cargoBuildFlags = [
+    "--package"
+    "tauri-cli"
+  ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -49,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     # See ./doc/hooks/tauri.section.md
     hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
+    gst-plugin = callPackage ./gst-plugin.nix { };
 
     tests = {
       hook = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
@@ -67,12 +83,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Build smaller, faster, and more secure desktop applications with a web frontend";
     homepage = "https://tauri.app/";
     changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-cli-v${finalAttrs.version}";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
-      dit7ya
       getchoo
       happysalada
     ];

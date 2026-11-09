@@ -9,13 +9,13 @@
 
 clangStdenv.mkDerivation rec {
   pname = "pg_checksums";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "credativ";
     repo = "pg_checksums";
     rev = version;
-    sha256 = "sha256-iPgiiOxj3EDK7uf0D94oZSGz3RQbK3yEvdKNCW2Q1N0=";
+    sha256 = "sha256-CXWJroUkp6g1g0T5skx8P5rZyv1Pvzb/DQ7ezuDNi7s=";
   };
 
   nativeBuildInputs = [

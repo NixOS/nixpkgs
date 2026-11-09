@@ -1,24 +1,34 @@
 {
   lib,
-  bc,
   buildDotnetModule,
   fetchFromGitHub,
+  fetchpatch2,
+  dotnetCorePackages,
+  bc,
   copyDesktopItems,
   icoutils,
+  versionCheckHook,
   makeDesktopItem,
-  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
   pname = "scarab";
-  version = "2.6.0.0";
+  version = "2.7.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = "scarab";
     tag = "v${version}";
-    hash = "sha256-xnvS3FDY4hi3yauwoSzO1fO6tJJAwFCkAc0Wzfs/puQ=";
+    hash = "sha256-3sztodNIB05MHA2mMPAjizRHCjiOMYFNChsmXfQJq0I=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-test-missing-shasum.patch";
+      url = "https://github.com/fifty-six/Scarab/commit/581e86fefb457772d2d067f094b6dafcc49a4075.patch?full_index=1";
+      hash = "sha256-N5a0QeJFQzvxX8RavwPILuLg10pWLVQhvodWpeUtItE=";
+    })
+  ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nugetDeps = ./deps.json;
@@ -37,6 +47,9 @@ buildDotnetModule rec {
 
   doCheck = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   postFixup = ''
     # Icons for the desktop file
     icotool -x $src/Scarab/Assets/omegamaggotprime.ico
@@ -47,7 +60,9 @@ buildDotnetModule rec {
       install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
     done
 
-    wrapProgram "$out/bin/Scarab" --run '. ${./scaling-settings.bash}'
+    wrapProgram "$out/bin/Scarab" \
+      --prefix PATH : "${lib.makeBinPath [ bc ]}" \
+      --run '. ${./scaling-settings.bash}'
   '';
 
   desktopItems = [

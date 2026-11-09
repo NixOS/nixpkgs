@@ -1,22 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   eval-type-backport,
-  httpx,
-  invoke,
+  httpx2,
+  jsonpath-python,
   opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   pydantic,
   python-dateutil,
-  pyyaml,
   typing-inspection,
 
   # optional-dependencies
@@ -24,47 +21,44 @@
   griffe,
   mcp,
   google-auth,
+  msgpack,
   requests,
+  websockets,
+  zstandard,
+  opentelemetry-exporter-otlp-proto-http,
 
   # tests
+  opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "1.10.0";
+  version = "3.7.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mistralai";
-    repo = "client-python";
-    tag = "v${version}";
-    hash = "sha256-B7ZJTwykFnOibTJL5AP3eKT15rLgAJ1hc53BL9TR0CM=";
+  # Upstream stopped tagging releases on GitHub after v3.2.0
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-l8xSW43clvuLW7CPRm3T0i+QTyHd/kUQPadsJf5gG/I=";
   };
 
-  preBuild = ''
-    python scripts/prepare_readme.py
-  '';
-
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   pythonRelaxDeps = [
-    "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-semantic-conventions"
   ];
   dependencies = [
     eval-type-backport
-    httpx
-    invoke
+    httpx2
+    jsonpath-python
     opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-sdk
     opentelemetry-semantic-conventions
     pydantic
     python-dateutil
-    pyyaml
     typing-inspection
   ];
 
@@ -74,23 +68,62 @@ buildPythonPackage rec {
       griffe
       mcp
     ];
+    mcp = [
+      mcp
+    ];
     gcp = [
       google-auth
       requests
+    ];
+    realtime = [
+      websockets
+    ];
+    telemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
+    workflow_payload_compression = [
+      msgpack
+      zstandard
     ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.agents
+  ++ finalAttrs.passthru.optional-dependencies.gcp
+  ++ finalAttrs.passthru.optional-dependencies.realtime
+  ++ finalAttrs.passthru.optional-dependencies.telemetry
+  ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'HTTPX2ClientInstrumentor' from 'opentelemetry.instrumentation.httpx'
+    # (requires opentelemetry-instrumentation-httpx>=0.65b0)
+    "src/mistralai/extra/tests/test_otel_tracing.py"
+
+    # ModuleNotFoundError: No module named 'livekit'
+    "src/mistralai/extra/tests/voice_agents/"
+  ]
+  ++ lib.optionals (lib.versionOlder mcp.version "2.2") [
+    # Upstream requires mcp>=2.2,<3 and these test modules import mcp>=2.2 APIs
+    # (MCPError, mcp.client._transport) that are absent from older versions such
+    # as mcp_1, used by some application scopes (e.g. oterm for fastmcp-slim).
+    "src/mistralai/extra/tests/test_connectors_gateway.py"
+    "src/mistralai/extra/tests/test_mcp_streamable_http.py"
   ];
 
   meta = {
     description = "Python client library for Mistral AI platform";
     homepage = "https://github.com/mistralai/client-python";
-    changelog = "https://github.com/mistralai/client-python/blob/${src.tag}/RELEASES.md";
+    changelog = "https://github.com/mistralai/client-python/blob/main/RELEASES.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      mana-byte
+    ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomatrix";
   version = "101.0.0";
 
   src = fetchFromGitHub {
     owner = "GeertJohan";
     repo = "gomatrix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VeRHVR8InfU+vEw2F/w3KFbNVSKS8ziRlQ98f3cuBfM=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     homepage = "https://github.com/GeertJohan/gomatrix";
     mainProgram = "gomatrix";
   };
-}
+})

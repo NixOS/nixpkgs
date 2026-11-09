@@ -10,22 +10,22 @@
   libjpeg,
   libogg,
   libvorbis,
-  libX11,
+  libx11,
   openal,
   curl,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dhewm3";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "dhewm";
     repo = "dhewm3";
-    rev = version;
-    sha256 = "sha256-losqnxnjRPOczjrRPyyOxCeg9TNScXLcXADgo9Bxm5k=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-sC6XNEYqTFC49y+Pn6y3mS1/g9XbZaDl/6TOmGkdtFM=";
   };
 
   # Add libGLU libGL linking
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     SDL2
     libGLU
     libGL
-    libX11
+    libx11
     zlib
     libjpeg
     libogg
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

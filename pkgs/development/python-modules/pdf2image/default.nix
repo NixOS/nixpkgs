@@ -4,15 +4,12 @@
   fetchPypi,
   pillow,
   poppler-utils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pdf2image";
   version = "1.17.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,7 +20,9 @@ buildPythonPackage rec {
     # replace all default values of paths to poppler-utils
     substituteInPlace pdf2image/pdf2image.py \
       --replace-fail 'poppler_path: Union[str, PurePath] = None' \
-                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"'
+                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"' \
+      --replace-fail 'poppler_path: str = None' \
+                     'poppler_path: str = "${poppler-utils}/bin"'
   '';
 
   propagatedBuildInputs = [ pillow ];

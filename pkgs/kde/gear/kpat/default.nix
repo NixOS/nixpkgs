@@ -20,6 +20,12 @@ mkKdeDerivation {
     freecell-solver
   ];
 
-  qtWrapperArgs = [ "--prefix XDG_DATA_DIRS : ${libkdegames}/share" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${libkdegames}/share"
+  ];
+
   meta.mainProgram = "kpat";
 }

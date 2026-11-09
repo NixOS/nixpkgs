@@ -5,14 +5,14 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2";
   pname = "sutils";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sutils";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0i2g6a6xdaq3w613dhq7mnsz4ymwqn6kvkyan5kgy49mzq97va6j";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
   };
-}
+})

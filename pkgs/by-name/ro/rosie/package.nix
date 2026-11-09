@@ -5,7 +5,7 @@
   libbsd,
   readline,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rosie";
   version = "1.4.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     # The Makefile calls git to update submodules, unless this file exists
-    touch ${src.name}/submodules/~~present~~
+    touch ${finalAttrs.src.name}/submodules/~~present~~
   '';
 
   preConfigure = ''
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
     mainProgram = "rosie";
@@ -63,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kovirobi ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

@@ -8,7 +8,7 @@
   gettext,
   imagemagick,
   libpng,
-  lua,
+  lua5_2_compat,
   pkg-config,
   povray,
   SDL2,
@@ -17,6 +17,9 @@
   SDL2_ttf,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domino-chain";
@@ -38,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn /usr/share/fonts/truetype/freefont/ ${freefont_ttf}/share/fonts/truetype/
     substituteInPlace src/domino-chain/screen.cpp \
       --replace-fail /usr/share/fonts/truetype/freefont/ ${freefont_ttf}/share/fonts/truetype/
+    substituteInPlace Makefile \
+      --replace-fail "LIBS += -lboost_system\$(BOOST_TAGS)" ""
   '';
 
   nativeBuildInputs = [

@@ -7,14 +7,14 @@
   wayland,
   gitUpdater,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waycorner";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "waycorner";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-b8juIhJ3kh+NJc8RUVVoatqjWISSW0ir/vk2Dz/428Y=";
   };
 
@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Hot corners for Wayland";
     mainProgram = "waycorner";
-    changelog = "https://github.com/AndreasBackx/waycorner/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/AndreasBackx/waycorner/blob/${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/AndreasBackx/waycorner";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NotAShelf ];
   };
-}
+})

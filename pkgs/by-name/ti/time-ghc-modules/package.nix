@@ -10,14 +10,14 @@
   gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "time-ghc-modules";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "codedownio";
     repo = "time-ghc-modules";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.thomasjm ];
     platforms = lib.platforms.all;
   };
-}
+})

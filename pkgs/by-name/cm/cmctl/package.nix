@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cmctl";
-  version = "2.3.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cmctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yX3A63MU1PaFQmAemp62F5sHlgWpkInhbIIZx7HfdEc=";
+    hash = "sha256-Kf5b5wZpY2lLqyx6vm4I1j28ptZ1M2CXFQVjUfj7MVA=";
   };
 
-  vendorHash = "sha256-LDmhlSWa6/Z4KyXnF9OFVkgTksV7TL+m1os0NW89ZpY=";
+  vendorHash = "sha256-wwNMjqPBLxs7A1/qmk8kuJy/hKHiGc6+IamMLvECqE0=";
 
   ldflags = [
     "-s"
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Command line utility to interact with a cert-manager instalation on Kubernetes";
+    description = "Command line utility to interact with a cert-manager installation on Kubernetes";
     mainProgram = "cmctl";
     longDescription = ''
       cert-manager adds certificates and certificate issuers as resource types

@@ -18,7 +18,7 @@ let
 
   pluginOptions = lib.types.submodule {
     options = {
-      active = lib.mkEnableOption "Whether to enable this plugin";
+      active = lib.mkEnableOption "this plugin";
       direction = lib.mkOption {
         type = lib.types.enum [
           "in"
@@ -90,7 +90,7 @@ let
     else if lib.isList v then
       lib.concatStringsSep " " (map prepareConfigValue v)
     else
-      builtins.toString v;
+      toString v;
   prepareConfigText =
     conf:
     lib.concatLines (
@@ -100,6 +100,8 @@ in
 {
   options.security.auditd = {
     enable = lib.mkEnableOption "the Linux Audit daemon";
+
+    package = lib.mkPackageOption pkgs "auditd" { default = "audit"; };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -146,24 +148,23 @@ in
       defaultText = lib.literalExpression ''
         {
           af_unix = {
-            path = lib.getExe' pkgs.audit "audisp-af_unix";
+            path = lib.getExe' config.security.auditd.package "audisp-af_unix";
             args = [
               "0640"
-              "/var/run/audispd_events"
+              "/run/audit/audispd_events"
               "string"
             ];
-            format = "binary";
           };
           remote = {
-            path = lib.getExe' pkgs.audit "audisp-remote";
+            path = lib.getExe' config.security.auditd.package "audisp-remote";
             settings = { };
           };
           filter = {
-            path = lib.getExe' pkgs.audit "audisp-filter";
+            path = lib.getExe' config.security.auditd.package "audisp-filter";
             args = [
               "allowlist"
               "/etc/audit/audisp-filter.conf"
-              (lib.getExe' pkgs.audit "audisp-syslog")
+              (lib.getExe' config.security.auditd.package "audisp-syslog")
               "LOG_USER"
               "LOG_INFO"
               "interpret"
@@ -171,7 +172,7 @@ in
             settings = { };
           };
           syslog = {
-            path = lib.getExe' pkgs.audit "audisp-syslog";
+            path = lib.getExe' config.security.auditd.package "audisp-syslog";
             args = [ "LOG_INFO" ];
           };
         }
@@ -226,24 +227,23 @@ in
 
     security.auditd.plugins = {
       af_unix = {
-        path = lib.getExe' pkgs.audit "audisp-af_unix";
+        path = lib.getExe' cfg.package "audisp-af_unix";
         args = [
           "0640"
           "/run/audit/audispd_events"
           "string"
         ];
-        format = "binary";
       };
       remote = {
-        path = lib.getExe' pkgs.audit "audisp-remote";
+        path = lib.getExe' cfg.package "audisp-remote";
         settings = { };
       };
       filter = {
-        path = lib.getExe' pkgs.audit "audisp-filter";
+        path = lib.getExe' cfg.package "audisp-filter";
         args = [
           "allowlist"
           "/etc/audit/audisp-filter.conf"
-          (lib.getExe' pkgs.audit "audisp-syslog")
+          (lib.getExe' cfg.package "audisp-syslog")
           "LOG_USER"
           "LOG_INFO"
           "interpret"
@@ -251,12 +251,12 @@ in
         settings = { };
       };
       syslog = {
-        path = lib.getExe' pkgs.audit "audisp-syslog";
+        path = lib.getExe' cfg.package "audisp-syslog";
         args = [ "LOG_INFO" ];
       };
     };
 
-    systemd.packages = [ pkgs.audit.out ];
+    systemd.packages = [ cfg.package.out ];
 
     systemd.services.auditd = {
       wantedBy = [ "multi-user.target" ];
@@ -271,7 +271,7 @@ in
         ExecStart = [
           # the upstream unit does not allow symlinks, so clear and rewrite the ExecStart
           ""
-          "${lib.getExe' pkgs.audit "auditd"} -l -s nochange"
+          "${lib.getExe' cfg.package "auditd"} -l -s nochange"
         ];
       };
     };

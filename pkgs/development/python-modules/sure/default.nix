@@ -10,17 +10,20 @@
   isPyPy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sure";
   version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yPxvq8Dn9phO6ruUJUDkVkblvvC7mf5Z4C2mNOTUuco=";
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail version=version 'version="${finalAttrs.version}"'
+
     substituteInPlace setup.cfg \
       --replace "rednose = 1" ""
   '';
@@ -54,8 +57,8 @@ buildPythonPackage rec {
     description = "Utility belt for automated testing";
     mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
-    changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/gabrielfalcao/sure/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

@@ -2,31 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  multiprocess,
-  pandas-stubs,
-  pandas,
+  pyprojectVersionPatchHook,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  multiprocess,
+  pandas,
+  pandas-stubs,
   pydantic,
+
+  # tests
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandantic";
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "wesselhuising";
     repo = "pandantic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lqd4aQiBMbATFMdftKQeTlqQ3MGrxm2shb7qil+84iA=";
   };
 
+  # Upstream forgot to bump the version in `pyproject.toml` for the 1.0.1 release
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "pandas"
+    "pandas-stubs"
+  ];
   dependencies = [
     multiprocess
     pandas
@@ -34,15 +47,15 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "pandantic" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Module to enriche the Pydantic BaseModel class";
     homepage = "https://github.com/wesselhuising/pandantic";
-    changelog = "https://github.com/wesselhuising/pandantic/releases/tag/${src.tag}";
+    changelog = "https://github.com/wesselhuising/pandantic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "unasync";
     rev = "v${version}";
-    sha256 = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
+    hash = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
   };
 
   build-system = [ setuptools ];
@@ -42,10 +42,12 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-trio/unasync/releases/tag/v${version}";
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

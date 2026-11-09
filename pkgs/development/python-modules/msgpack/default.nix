@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.1.1";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-python";
     tag = "v${version}";
-    hash = "sha256-j1MpdnfG6tCgAFlza64erMhJm/MkSK2QnixNv7MrQes=";
+    hash = "sha256-BLuQYb0ClT2t91vPgM/ObemWTtdIOaPLHRwDzXlGM/k=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "MessagePack serializer implementation";
     homepage = "https://github.com/msgpack/msgpack-python";
-    changelog = "https://github.com/msgpack/msgpack-python/blob/${src.tag}/ChangeLog.rst";
+    changelog = "https://github.com/msgpack/msgpack-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
   };

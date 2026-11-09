@@ -7,10 +7,6 @@
 let
   cfg = config.services.nextcloud;
 
-  overridePackage = cfg.package.override {
-    inherit (config.security.pki) caBundle;
-  };
-
   fpm = config.services.phpfpm.pools.nextcloud;
 
   jsonFormat = pkgs.formats.json { };
@@ -27,7 +23,6 @@ let
     "opcache.revalidate_freq" = "1";
     "opcache.fast_shutdown" = "1";
     "openssl.cafile" = config.security.pki.caBundle;
-    catch_workers_output = "yes";
   };
 
   appStores = {
@@ -39,9 +34,70 @@ let
     # apps installed via cfg.extraApps
     nix-apps = {
       enabled = cfg.extraApps != { };
-      linkTarget = pkgs.linkFarm "nix-apps" (
-        lib.mapAttrsToList (name: path: { inherit name path; }) cfg.extraApps
-      );
+      linkTarget =
+        let
+          appCheckScript =
+            pkgs.writers.writePython3 "nextcloud-app-check.py"
+              {
+                libraries = [ pkgs.python3Packages.packaging ];
+              }
+              ''
+                import sys
+                from packaging import version
+                import xml.etree.ElementTree as ET
+
+                name = sys.argv[1]
+                nextcloud_version = version.parse(sys.argv[2])
+                path = sys.argv[3]
+
+                info = ET.parse(f"{path}/appinfo/info.xml").getroot()
+                nextcloud_dep = info.find('./dependencies/nextcloud')
+
+
+                def truncate(v, n):
+                    return version.Version.from_parts(release=v.release[:n])
+
+
+                min = nextcloud_dep.get('min-version')
+                if min:
+                    min_v = version.parse(min)
+                    if truncate(nextcloud_version, len(min_v.release)) < min_v:
+                        print(f"""
+                            Nextcloud app '{name}' declared minimum nextcloud
+                            version {min}, but we are on {nextcloud_version}.
+                            You can disable this check with
+                            `services.nextcloud.extraAppsCheckVersionRanges`
+                        """)
+                        exit(1)
+
+                max = nextcloud_dep.get('max-version')
+                if max:
+                    max_v = version.parse(max)
+                    if truncate(nextcloud_version, len(max_v.release)) > max_v:
+                        print(f"""
+                            Nextcloud app '{name}' declared maximum nextcloud
+                            version {max}, but we are on {nextcloud_version}.
+                            You can disable this check with
+                            `services.nextcloud.extraAppsCheckVersionRanges`
+                        """)
+                        exit(1)
+              '';
+          checkApp =
+            name: path:
+            if !cfg.extraAppsCheckVersionRanges then
+              path
+            else
+              pkgs.runCommand "nextcloud_${name}-checked" { } ''
+                ${appCheckScript} "${name}" "${cfg.package.version}" "${path}"
+                ln -s "${path}" $out
+              '';
+        in
+        pkgs.linkFarm "nix-apps" (
+          lib.mapAttrsToList (name: path: {
+            inherit name;
+            path = checkApp name path;
+          }) cfg.extraApps
+        );
       writable = false;
     };
     # apps installed via the app store.
@@ -53,13 +109,13 @@ let
   };
 
   webroot =
-    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
+    pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
       }
       ''
         mkdir $out
-        ln -sfv "${overridePackage}"/* "$out"
+        ln -sfv "${cfg.package}"/* "$out"
         ${lib.concatStrings (
           lib.mapAttrsToList (
             name: store:
@@ -111,8 +167,7 @@ let
     ]
   );
 
-  # NOTE: The credentials required by all services at runtime, not including things like the
-  #       admin password which is only needed by the setup service.
+  # NOTE: The credentials required by all services at runtime.
   runtimeSystemdCredentials =
     [ ]
     ++ (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
@@ -161,6 +216,7 @@ let
             --uid=nextcloud \
             --same-dir \
             --pty \
+            --pipe \
             --wait \
             --collect \
             --service-type=exec \
@@ -297,9 +353,6 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
-        )}
         ${objectstoreConfig}
       ];
 
@@ -307,6 +360,12 @@ let
         "${jsonFormat.generate "nextcloud-settings.json" cfg.settings}",
         "impossible: this should never happen (decoding generated settings file %s failed)"
       ));
+
+      $CONFIG = array_replace_recursive($CONFIG, [
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}'),") cfg.secrets
+        )}
+      ]);
 
       ${lib.optionalString (cfg.secretFile != null) ''
         $CONFIG = array_replace_recursive($CONFIG, nix_read_secret_and_decode_json_file('secret_file'));
@@ -370,6 +429,12 @@ in
       [ "services" "nextcloud" "config" "objectstore" "s3" "autocreate" ]
       [ "services" "nextcloud" "config" "objectstore" "s3" "verify_bucket_exists" ]
     )
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "adminuser" ] ''
+      To create an admin user after the installation, use nextcloud-occ user:add <username> and nextcloud-occ group:adduser admin <username>.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpassFile" ] ''
+      To create an admin user after the installation, use nextcloud-occ user:add <username> and nextcloud-occ group:adduser admin <username>.
+    '')
   ];
 
   options.services.nextcloud = {
@@ -410,6 +475,15 @@ in
         {
           oidc_login_client_secret = "/run/secrets/nextcloud_oidc_secret";
         }
+      '';
+    };
+    extraAppsCheckVersionRanges = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check the Nextcloud version falls within the
+        declared minimum and maximum nextcloud versions
+        of the configured extraApps.
       '';
     };
     extraApps = lib.mkOption {
@@ -465,13 +539,14 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud31"
-        "nextcloud32"
+        "nextcloud33"
+        "nextcloud34"
+        "nextcloud35"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
       default = [ "php84" ];
-      example = "php82";
+      example = "php85";
     };
 
     finalPackage = lib.mkOption {
@@ -667,22 +742,6 @@ in
           __Note:__ since Nextcloud 20 it's not an option anymore to create a database
           schema with a custom table prefix. This option only exists for backwards compatibility
           with installations that were originally provisioned with Nextcloud <20.
-        '';
-      };
-      adminuser = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = "root";
-        description = ''
-          Username for the admin account. The username is only set during the
-          initial setup of Nextcloud! Since the username also acts as unique
-          ID internally, it cannot be changed later!
-        '';
-      };
-      adminpassFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = ''
-          The full path to a file that contains the admin's password. The password is
-          set only in the initial setup of Nextcloud by the systemd service `nextcloud-setup.service`.
         '';
       };
       objectstore = {
@@ -1195,7 +1254,7 @@ in
       {
         warnings =
           let
-            latest = 32;
+            latest = 35;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1221,13 +1280,16 @@ in
             If you have an existing installation with a custom table prefix, make sure it is
             set correctly in `config.php` and remove the option from your NixOS config.
           '')
-          ++ (lib.optional (lib.versionOlder overridePackage.version "26") (upgradeWarning 25 "23.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "27") (upgradeWarning 26 "23.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "32") (upgradeWarning 31 "25.11"));
+          ++ (lib.optional (lib.versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "32") (upgradeWarning 31 "25.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "33") (upgradeWarning 32 "26.05"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "34") (upgradeWarning 33 "26.11"))
+          ++ (lib.optional (lib.versionOlder cfg.package.version "35") (upgradeWarning 34 "26.11"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1236,12 +1298,14 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "25.05" then
-            pkgs.nextcloud30
           else if lib.versionOlder stateVersion "25.11" then
             pkgs.nextcloud31
-          else
+          else if lib.versionOlder stateVersion "26.05" then
             pkgs.nextcloud32
+          else if lib.versionOlder stateVersion "26.11" then
+            pkgs.nextcloud33
+          else
+            pkgs.nextcloud35
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
@@ -1250,6 +1314,7 @@ in
             upload_max_filesize = cfg.maxUploadSize;
             post_max_size = cfg.maxUploadSize;
             memory_limit = cfg.maxUploadSize;
+            error_log = "syslog";
           }
           (lib.mkIf cfg.caching.apcu {
             "apc.enable_cli" = "1";
@@ -1285,26 +1350,6 @@ in
               Either set it to sqlite as it used to be, or convert to another type as described
               in the official db conversion page:
               https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
-            '';
-          }
-          {
-            assertion =
-              lib.versionAtLeast overridePackage.version "32.0.0"
-              || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
-            message = ''
-              Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
-            '';
-          }
-          {
-            assertion = cfg.config.adminuser == null -> cfg.config.adminpassFile == null;
-            message = ''
-              If `services.nextcloud.config.adminuser` is null, `services.nextcloud.config.adminpassFile` must be null as well in order to disable initial admin user creation.
-            '';
-          }
-          {
-            assertion = cfg.config.adminpassFile == null -> cfg.config.adminuser == null;
-            message = ''
-              If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
             '';
           }
           {
@@ -1357,14 +1402,6 @@ in
                     arg = "DBPASS";
                     value = if c.dbpassFile != null then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"'' else ''""'';
                   };
-                  adminpass =
-                    if c.adminpassFile != null then
-                      {
-                        arg = "ADMINPASS";
-                        value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
-                      }
-                    else
-                      null;
                   installFlags = lib.concatStringsSep " \\\n    " (
                     lib.mapAttrsToList (k: v: "${k} ${toString v}") {
                       "--database" = ''"${c.dbtype}"'';
@@ -1375,16 +1412,13 @@ in
                       ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
                       ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
                       "--database-pass" = "\"\$${dbpass.arg}\"";
-                      ${if c.adminuser != null then "--admin-user" else null} = ''"${c.adminuser}"'';
-                      ${if adminpass != null then "--admin-pass" else null} = "\"\$${adminpass.arg}\"";
-                      ${if c.adminuser == null && adminpass == null then "--disable-admin-user" else null} = "";
+                      "--disable-admin-user" = "";
                       "--data-dir" = ''"${datadir}/data"'';
                     }
                   );
                 in
                 ''
                   ${mkExport dbpass}
-                  ${lib.optionalString (adminpass != null) (mkExport adminpass)}
                   ${lib.getExe occ} maintenance:install \
                       ${installFlags}
                 '';
@@ -1410,12 +1444,6 @@ in
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                     echo "dbpassFile ${c.dbpassFile} is empty!"
-                    exit 1
-                  fi
-                ''}
-                ${lib.optionalString (c.adminpassFile != null) ''
-                  if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
-                    echo "adminpassFile ${c.adminpassFile} is empty!"
                     exit 1
                   fi
                 ''}
@@ -1460,9 +1488,7 @@ in
               '';
               serviceConfig.Type = "oneshot";
               serviceConfig.User = "nextcloud";
-              serviceConfig.LoadCredential =
-                lib.optional (cfg.config.adminpassFile != null) "adminpass:${cfg.config.adminpassFile}"
-                ++ runtimeSystemdCredentials;
+              serviceConfig.LoadCredential = runtimeSystemdCredentials;
               # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
               # an automatic creation of the database user.
               environment.NC_setup_create_db_user = "false";
@@ -1472,21 +1498,12 @@ in
             # NOTE: In contrast to the occ wrapper script running phpCli directly will not
             #       set NEXTCLOUD_CONFIG_DIR by itself currently.
             environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
-              ${phpCli} -f ${webroot}/cron.php
-            '';
             serviceConfig = {
               Type = "exec";
               User = "nextcloud";
               KillMode = "process";
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
+              ExecStart = "${phpCli} -f ${webroot}/cron.php";
               LoadCredential = runtimeSystemdCredentials;
             };
           };
@@ -1503,14 +1520,6 @@ in
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
             script = ''
-              # NOTE: This early returns the script when nextcloud is in maintenance mode
-              #       or needs `occ upgrade`. Using ExecCondition= is not possible here
-              #       because it doesn't work with systemd credentials.
-              if [[ $(${lib.getExe occ} status --output=json | ${lib.getExe pkgs.jq} '. | if .maintenance or .needsDbUpgrade then "skip" else "" end' --raw-output) == "skip" ]]; then
-                echo "Nextcloud is in maintenance mode or needs DB upgrade, exiting."
-                exit 0
-              fi
-
               ${lib.getExe occ} db:add-missing-columns
               ${lib.getExe occ} db:add-missing-indices
               ${lib.getExe occ} db:add-missing-primary-keys
@@ -1519,6 +1528,7 @@ in
               Type = "exec";
               User = "nextcloud";
               LoadCredential = runtimeSystemdCredentials;
+              ExecCondition = "${phpCli} -f ${webroot}/occ status --exit-code";
             };
           };
 
@@ -1622,6 +1632,7 @@ in
               "upgrade.disable-web" = true;
               # NixOS already provides its own integrity check and the nix store is read-only, therefore Nextcloud does not need to do its own integrity checks.
               "integrity.check.disabled" = true;
+              "default_certificates_bundle_path" = config.security.pki.caBundle;
             }
             (lib.mkIf cfg.configureRedis {
               "memcache.distributed" = ''\OC\Memcache\Redis'';
@@ -1713,7 +1724,7 @@ in
                 fastcgi_pass unix:${fpm.socket};
                 fastcgi_intercept_errors on;
                 fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
-                fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
+                fastcgi_read_timeout ${toString cfg.fastcgiTimeout}s;
               '';
             };
             "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
@@ -1789,5 +1800,5 @@ in
   );
 
   meta.doc = ./nextcloud.md;
-  meta.maintainers = lib.teams.nextcloud.members;
+  meta.teams = [ lib.teams.nextcloud ];
 }

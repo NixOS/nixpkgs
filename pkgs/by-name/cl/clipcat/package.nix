@@ -2,32 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   protobuf,
   installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
-  version = "0.21.1";
+  version = "0.26.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";
-    tag = "v${version}";
-    hash = "sha256-MYWkUb9v8hnW6gUTpIcz0+jhlc8y3hZxsEQxRIZVVxI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M7B6QLyABsGoy6dbKsCx1AKEfEoDhkY/cbzGbk59TiU=";
   };
 
-  cargoHash = "sha256-7ntsq6x/8QFaU6Hl4tk+Rtvc8ttcK9Mp00nlirNlUKY=";
-
   patches = [
-    # Fix compilation errors caused by stricter restrictions on unused code in Rust 1.89.
-    # TODO: remove this patch after upstream fix it.
-    ./dummy.patch
-    # https://github.com/xrelkd/clipcat/pull/871
-    ./remove_unnecessary_parenthesis.patch
+    # Remove lints that were removed in rustc 1.99,
+    # which fails the build with `renamed_and_removed_lints = "deny"`
+    (fetchpatch {
+      name = "drop-removed-lint.patch";
+      url = "https://github.com/xrelkd/clipcat/commit/9761d95bfa267cb1c5b28ac27c4b63572b915f04.patch";
+      hash = "sha256-ODpwBAtSCDM6M9WCxWvpl/P2DyJPNQnPj8MNEXJbbCQ=";
+    })
+    (fetchpatch {
+      name = "remove-deprecated-linter-options.patch";
+      url = "https://github.com/xrelkd/clipcat/commit/424fcef2d4e98a256d2897a2e901a9f7d28f0fd6.patch";
+      hash = "sha256-YiH0oHiEhJvfzeS6FOC+2rpCHpPXVIY0dE6vkpwicSw=";
+    })
   ];
+
+  cargoHash = "sha256-YYlNH95A2aGVWd0vw2vmTMXTA3ornCBHbcFrg59uh3I=";
 
   nativeBuildInputs = [
     protobuf
@@ -65,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "clipcatd";
   };
-}
+})

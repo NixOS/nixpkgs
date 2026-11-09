@@ -4,13 +4,13 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "csv";
   version = "2.4";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ocaml-${pname}/releases/download/${version}/csv-${version}.tbz";
-    sha256 = "13m9n8mdss6jfbiw7d5bybxn4n85vmg4zw7dc968qrgjfy0w9zhk";
+    url = "https://github.com/Chris00/ocaml-csv/releases/download/${finalAttrs.version}/csv-${finalAttrs.version}.tbz";
+    hash = "sha256-E/7EgXfyZYxMYu3wT17dBVli+/KrtMPjctJo3SqyqY4=";
   };
 
   preConfigure = ''
@@ -25,4 +25,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Chris00/ocaml-csv";
   };
-}
+})

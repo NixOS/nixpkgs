@@ -9,24 +9,25 @@
   universal-ctags,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ctags-lsp";
-  version = "0.9.1";
+  version = "0.11.0";
   vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "netmute";
     repo = "ctags-lsp";
-    tag = "v${version}";
-    hash = "sha256-QF1TBHo2/2Hsnbv4kDw/RYUw9pN8fAVX11lE3J1/k8I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9VKXdffK46gl7MLN1kpSpQRIoJzu4nTS9C1r//qsOuo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  nativeCheckInputs = [ universal-ctags ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -46,11 +47,11 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/netmute/ctags-lsp/releases/tag/v${version}";
+    changelog = "https://github.com/netmute/ctags-lsp/releases/tag/v${finalAttrs.version}";
     description = "LSP implementation using universal-ctags as backend";
     homepage = "https://github.com/netmute/ctags-lsp";
     license = lib.licenses.mit;
     mainProgram = "ctags-lsp";
     maintainers = with lib.maintainers; [ voronind ];
   };
-}
+})

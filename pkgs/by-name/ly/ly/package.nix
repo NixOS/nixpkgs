@@ -1,56 +1,78 @@
 {
-  stdenv,
+  fetchFromCodeberg,
   lib,
-  fetchFromGitea,
-  linux-pam,
   libxcb,
+  linux-pam,
   makeBinaryWrapper,
-  zig_0_15,
-  callPackage,
   nixosTests,
+  stdenv,
+  versionCheckHook,
   x11Support ? true,
+  zig_0_17,
+  nix-update-script,
 }:
-
+let
+  zig = zig_0_17;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.3.0";
+  version = "1.5.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OmbOWZZR5kvqWJkNhTkV5O2tfFj5BtJPLtINe59Y0tI=";
+    hash = "sha256-inrfs8c9ga1IJM1xm6KVxWpp2iubHSGpEM5s5hyJdcE=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_15.hook
+    zig
   ];
+
   buildInputs = [
     linux-pam
   ]
-  ++ (lib.optionals x11Support [ libxcb ]);
+  ++ lib.optionals x11Support [ libxcb ];
 
-  postPatch = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        zig = zig_0_15;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-ZaWJuJkQyx5eQlwOVmdz3BCrYddDNmKnP7QVYARSFp8=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
-  zigBuildFlags = [
-    "-Denable_x11_support=${lib.boolToString x11Support}"
-  ];
 
-  passthru.tests = { inherit (nixosTests) ly; };
+  zigBuildFlags = [ "-Denable_x11_support=${lib.boolToString x11Support}" ];
+
+  postInstall = ''
+    install -Dm0644 res/config.ini "$out/etc/config.ini"
+    install -Dm0755 res/setup.sh "$out/etc/setup.sh"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    tests = { inherit (nixosTests) ly; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "TUI display manager";
-    license = lib.licenses.wtfpl;
+    longDescription = ''
+      Ly is a lightweight TUI (ncurses-like) display manager for Linux
+      and BSD, designed with portability in mind (e.g. it does not
+      require systemd to run).
+    '';
     homepage = "https://codeberg.org/fairyglade/ly";
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    license = lib.licenses.wtfpl;
     mainProgram = "ly";
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
+    platforms = lib.platforms.unix;
   };
 })

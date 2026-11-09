@@ -8,15 +8,15 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "0.2.3";
   pname = "notty";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
-    sha256 = "sha256-dGWfsUBz20Q4mJiRqyTyS++Bqkl9rBbZpn+aHJwgCCQ=";
+    url = "https://github.com/pqwy/notty/releases/download/v${finalAttrs.version}/notty-${finalAttrs.version}.tbz";
+    hash = "sha256-dGWfsUBz20Q4mJiRqyTyS++Bqkl9rBbZpn+aHJwgCCQ=";
   };
 
   # Compatibility with OCaml 5.4
@@ -38,4 +38,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

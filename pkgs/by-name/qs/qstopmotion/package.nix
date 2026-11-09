@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   gphoto2,
   libgphoto2,
@@ -17,8 +17,6 @@
 
   # buildInputs
   guvcview,
-  pcre,
-  v4l-utils,
 
   ffmpeg,
 }:
@@ -36,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     gphoto2
     libgphoto2
@@ -59,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtxmlpatterns
     libsForQt5.qwt
     libv4l
-    pcre
-    v4l-utils
   ];
 
   postPatch = ''
@@ -70,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
         "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia" \
       --replace-fail \
         "cmake_minimum_required(VERSION 3.0.2)" \
-        "cmake_minimum_required(VERSION 3.5)"
+        "cmake_minimum_required(VERSION 3.10)"
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
 

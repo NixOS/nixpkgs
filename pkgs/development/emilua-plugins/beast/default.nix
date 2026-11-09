@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emilua_beast";
   version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "beast";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MASaZvhIVKmeBUcn/NjlBZ+xh+2RgwHBH2o08lklGa0=";
   };
 

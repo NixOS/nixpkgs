@@ -10,16 +10,21 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kallisto";
   version = "0.51.1";
 
   src = fetchFromGitHub {
     repo = "kallisto";
     owner = "pachterlab";
-    rev = "v${version}";
-    sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
+
+  patches = [
+    # https://github.com/pmelsted/bifrost/pull/18
+    ./bifrost-fix-datastorage-sz_link-typo.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt ext/bifrost/CMakeLists.txt \
@@ -62,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.arcadio ];
   };
-}
+})

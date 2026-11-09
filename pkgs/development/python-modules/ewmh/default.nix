@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  xlib,
+  python-xlib,
 }:
 
 buildPythonPackage rec {
@@ -12,10 +12,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g9l14my3v8zlgq1yd8wh5gpara0qcapsfmvg7lq2lapglzhjsy5";
+    hash = "sha256-xWsJP31XUYHpebs6fRXDQGV1X4EcNR/wox/t4SsJND0=";
   };
 
-  propagatedBuildInputs = [ xlib ];
+  propagatedBuildInputs = [ python-xlib ];
 
   # No tests included
   doCheck = false;

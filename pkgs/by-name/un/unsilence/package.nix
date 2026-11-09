@@ -21,11 +21,15 @@ python3Packages.buildPythonPackage rec {
   ];
 
   dependencies = with python3Packages; [
+    pkg-resources-backport
     rich
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   doCheck = false;

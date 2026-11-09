@@ -27,7 +27,7 @@ buildNpmPackage (finalAttrs: {
     description = "Elm single-page-apps made easy";
     homepage = "https://www.elm-spa.dev/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-spa";
   };
 })

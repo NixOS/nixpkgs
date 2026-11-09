@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "c2patool";
-  version = "0.26.8";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "contentauth";
     repo = "c2pa-rs";
     tag = "c2patool-v${finalAttrs.version}";
-    hash = "sha256-2LZeXy/uuWH2BW9bmpRs+a2G7BOFOTPGS03Efn96Dp8=";
+    hash = "sha256-mLF67Kq+lZMaDuBkWW0mD/uKnv0HIrMMrcGEyvUpX1w=";
   };
 
-  cargoHash = "sha256-Qdl7uIfS993a3FPwAXbQVLwsEgFHLaYN48Elw4JMYpQ=";
+  cargoHash = "sha256-LrzoSShsichdc6RevA087aRo8+OhdCrKz4CPp1jRy5o=";
 
   # use the non-vendored openssl
   env.OPENSSL_NO_VENDOR = 1;
@@ -56,10 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Command line tool for working with C2PA manifests and media assets";
     homepage = "https://github.com/contentauth/c2pa-rs/tree/main/cli";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };

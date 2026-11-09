@@ -5,25 +5,28 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "routedns";
-  version = "0.1.128";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
-    rev = "v${version}";
-    hash = "sha256-jUk0wa+hw0MIXnV1K/n19rGRKKolEf6q+dtKHmnuj3I=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hutpyaFdtHlBcADDAghnYl9IgQ986OTc1y6Tv+vcV+Y=";
   };
 
-  vendorHash = "sha256-woInU618JPwVxGDJDZQ6+j9wY6qNSB5Xu8wXf7s2qvQ=";
+  vendorHash = "sha256-25UOMNZGUstFBhdx9/ROe42Pp/ReHiwFRZF4YlyzcZg=";
 
   subPackages = [ "./cmd/routedns" ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/folbricht/routedns.BuildVersion=v${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -34,4 +37,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jsimonetti ];
     mainProgram = "routedns";
   };
-}
+})

@@ -8,7 +8,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libESMTP";
   version = "1.1.0";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libesmtp";
     repo = "libESMTP";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     homepage = "https://libesmtp.github.io/";
     license = lib.licenses.lgpl21Plus;
   };
-}
+})

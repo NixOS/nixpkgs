@@ -8,18 +8,18 @@
   aprutil,
   bash,
   gcc,
-  pycxx,
+  cxx,
   subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.23";
+  version = "1.9.25";
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
-    hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
+    hash = "sha256-M9LzUr/6FZSUWFQdGM6Ew1/ySE5C/Q7cNXi+jGa+JdY=";
   };
 
   patches = [ ./replace-python-first.patch ];
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
-      --pycxx-dir=${pycxx.dev}/include \
+      --pycxx-dir=${cxx.dev}/include \
       --svn-inc-dir=${subversion.dev}/include/subversion-1 \
-      --pycxx-src-dir=${pycxx.dev}/src \
+      --pycxx-src-dir=${cxx.dev}/src \
       --apr-lib-dir=${apr.out}/lib \
       --svn-lib-dir=${subversion.out}/lib \
       --svn-bin-dir=${subversion.out}/bin

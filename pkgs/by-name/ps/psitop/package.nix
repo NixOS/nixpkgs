@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "psitop";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "jamespwilliams";
     repo = "psitop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TD+NTlfmBtz+m2w2FnTcUIJQakpvVBCK/MAHfCrOue4=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Top for /proc/pressure";
     homepage = "https://github.com/jamespwilliams/psitop";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ravi-arnan ];
     mainProgram = "psitop";
   };
-}
+})

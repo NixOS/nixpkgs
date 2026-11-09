@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
+  uv-dynamic-versioning,
   aiohttp,
   attrs,
   defusedxml,
-  pytest-asyncio_0,
+  serialx,
+  pytest-asyncio,
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
@@ -16,44 +17,33 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "2.0.0";
+  version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-OiBTlAcSLhaMWbp5k+0yU1amSpLKnJA+3Q56lyiSDUA=";
+    hash = "sha256-WQxa5ocs/+p8L7927nPqvOtPUiNd4DxYGbNwbhjsAu0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   dependencies = [
     aiohttp
     attrs
     defusedxml
+    serialx
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-aiohttp
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # stuck on EpollSelector.poll()
-    "test_power"
-    "test_multiple"
-    "test_invalid_command"
-    "test_state"
-    "test_silent_server_request"
-    "test_silent_server_disconnect"
-    "test_heartbeat"
-    "test_cancellation"
-    "test_unsupported_zone"
   ];
 
   pythonImportsCheck = [

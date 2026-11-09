@@ -1,22 +1,29 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing";
-  meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
+  meta.maintainers = with lib.maintainers; [
+    chkno
+    me-and
+  ];
 
-  nodes = rec {
-    a = {
-      environment.systemPackages = with pkgs; [
-        curl
-        libxml2
-        syncthing
-      ];
-      services.syncthing = {
-        enable = true;
-        openDefaultPorts = true;
+  containers =
+    let
+      containerModule = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+          curl
+          libxml2
+          syncthing
+        ];
+        services.syncthing = {
+          enable = true;
+          openDefaultPorts = true;
+        };
       };
+    in
+    {
+      a = containerModule;
+      b = containerModule;
     };
-    b = a;
-  };
 
   testScript = ''
     import json

@@ -1,6 +1,6 @@
 {
   brotli,
-  clang_18,
+  clang,
   cmake,
   fetchFromGitHub,
   flex,
@@ -58,7 +58,7 @@ postgresqlBuildExtension (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang_18
+    clang
     cmake
     flex
     netcat
@@ -110,6 +110,5 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ mtrsk ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
-    broken = lib.versionOlder postgresql.version "14";
   };
 })

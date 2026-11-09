@@ -6,12 +6,12 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vorbisgain";
   version = "0.37";
 
   src = fetchurl {
-    url = "https://sjeng.org/ftp/vorbis/vorbisgain-${version}.tar.gz";
+    url = "https://sjeng.org/ftp/vorbis/vorbisgain-${finalAttrs.version}.tar.gz";
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "Utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
     license = lib.licenses.gpl2Only;
@@ -33,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "vorbisgain";
   };
-}
+})

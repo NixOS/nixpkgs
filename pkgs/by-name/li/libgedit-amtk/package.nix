@@ -16,9 +16,9 @@
   xvfb-run,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-amtk";
-  version = "5.9.2";
+  version = "5.11.0";
 
   outputs = [
     "out"
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-amtk";
-    rev = version;
-    hash = "sha256-TpPiVIsHIBrRzDG2oBwtrIYB3CYEW6SRRVow9pe2XFs=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-zn0ZE1qp8akVNxP4Bi8Yo2menaEYl/czoRHeMi8WpxU=";
   };
 
   strictDeps = true;
@@ -74,13 +75,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
-    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = with lib.maintainers; [
-      manveru
       bobby285271
     ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

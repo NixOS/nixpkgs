@@ -8,13 +8,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "git-identity";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "madx";
     repo = "git-identity";
     tag = "v${version}";
-    hash = "sha256-u4lIW0bntaKrVUwodXZ8ZwWxSZtLuhVSUAbIj8jjcLw=";
+    hash = "sha256-Wz3+rRi6k7cNXPPBE8L39UOABxaL+E8nNSAeKNMOQMM=";
   };
 
   nativeBuildInputs = [

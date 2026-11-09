@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   toml,
   pyyaml,
   packvers,
@@ -14,10 +13,8 @@ buildPythonPackage rec {
   version = "0.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "dparse2";
     tag = version;
     hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
@@ -40,8 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to parse Python dependency files";
-    homepage = "https://github.com/nexB/dparse2";
-    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
+    homepage = "https://github.com/aboutcode-org/dparse2";
+    changelog = "https://github.com/aboutcode-org/dparse2/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

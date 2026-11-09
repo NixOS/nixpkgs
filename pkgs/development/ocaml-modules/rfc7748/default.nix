@@ -9,15 +9,15 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "rfc7748";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "burgerdev";
     repo = "ocaml-rfc7748";
-    rev = "v${version}";
-    sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
   # Compatibility with OCaml 5.0
@@ -45,4 +45,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fufexan ];
   };
-}
+})

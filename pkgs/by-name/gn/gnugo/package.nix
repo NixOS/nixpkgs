@@ -5,12 +5,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnugo";
   version = "3.8";
 
   src = fetchurl {
-    url = "mirror://gnu/gnugo/gnugo-${version}.tar.gz";
+    url = "mirror://gnu/gnugo/gnugo-${finalAttrs.version}.tar.gz";
     sha256 = "0wkahvqpzq6lzl5r49a4sd4p52frdmphnqsfdv7gdp24bykdfs6s";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-34";
+  version = "3.32-35";
 
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-oTh45xoJYrJL0BbV5hdPfvv7wz49gExpvN3G5AOk3R0=";
+    hash = "sha256-ur00Vq+bl+R5MBpmGQO8nX9rEVNMgih1OzWlpY0RDIk=";
   };
 
   patches = [
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jdk11 ];
 
   postPatch = ''
+    substituteInPlace structorizer.sh --replace "\$DIR/Structorizer.app/Contents/Java/Structorizer.jar" "$out/share/java/structorizer.jar"
+
     chmod +x makeStructorizer
     chmod +x makeBigJar
 
@@ -58,9 +60,10 @@ stdenv.mkDerivation rec {
 
     install -d $out/bin $out/share/mime/packages $out/share/applications
 
-    install -D ${pname}.jar -t $out/share/java/
-      makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
-      --add-flags "-jar $out/share/java/${pname}.jar" \
+    install -D structorizer.jar -t $out/share/java/
+    cp structorizer.sh $out/bin/structorizer
+    wrapProgram $out/bin/structorizer \
+      --prefix PATH : ${lib.makeBinPath [ jdk11 ]} \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
       ''${gappsWrapperArgs[@]}
 
@@ -69,7 +72,7 @@ stdenv.mkDerivation rec {
 
     cd src/lu/fisch/${pname}/gui
     install -vD icons/000_${pname}.png $out/share/icons/hicolor/16x16/apps/${pname}.png
-    for icon_width in 24 32 48 64 128 256; do
+    for icon_width in 20 24 32 48 64 128 256; do
       install -vD icons_"$icon_width"/000_${pname}.png $out/share/icons/hicolor/"$icon_width"x"$icon_width"/apps/${pname}.png
     done
 

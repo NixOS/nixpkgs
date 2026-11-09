@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "each";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "arraypad";
     repo = "each";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5Aa/uHWrU4bpWd28Uddnuhmi6guHy09W9AU8sAfea6I=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line tool for processing CSV, JSON and other structured data";
     mainProgram = "each";
     homepage = "https://github.com/arraypad/each";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
   };
-}
+})

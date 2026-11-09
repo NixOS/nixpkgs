@@ -6,12 +6,12 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-quickcheck";
   version = "0.1.0";
 
   src = fetchurl {
-    url = "https://files.ngyro.com/guile-quickcheck/guile-quickcheck-${version}.tar.gz";
+    url = "https://files.ngyro.com/guile-quickcheck/guile-quickcheck-${finalAttrs.version}.tar.gz";
     hash = "sha256-y5msW+mbQ7YeucRS2VNUPokOKoP8g6ysKJ2UMWiIvA4=";
   };
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  guileImportsCheck = [ "quickcheck" ];
+
   meta = {
     homepage = "https://ngyro.com/software/guile-quickcheck.html";
     description = "Guile library providing tools for randomized, property-based testing";
@@ -31,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

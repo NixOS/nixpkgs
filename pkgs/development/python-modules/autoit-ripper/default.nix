@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pefile,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "autoit-ripper";
   version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,7 +30,7 @@ buildPythonPackage rec {
     mainProgram = "autoit-ripper";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
     changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

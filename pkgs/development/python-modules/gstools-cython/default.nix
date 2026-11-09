@@ -13,20 +13,15 @@
 
 buildPythonPackage rec {
   pname = "gstools-cython";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools-Cython";
     tag = "v${version}";
-    hash = "sha256-Kzn/ThLjTGy3ZYIkTwCV1wi22c7rWo4u/L3llppC6wQ=";
+    hash = "sha256-D5oOSOVfmwAOF7MYpMmOMXIS82NJeztRJh4sDXS+Ouc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.0.10,<3.1.0" "Cython>=3.1.0,<4.0.0"
-  '';
 
   build-system = [
     cython

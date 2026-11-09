@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ldp5r4ggskji6qx4bp2qxy2vrvb3fam03ksn0gq2hdxgrlg2x07";
+    hash = "sha256-B3TxaH69QYEfsHoOUJUba+ctfMfiLtKxiXLq90gut9E=";
   };
 
   buildInputs = [ zlib ];

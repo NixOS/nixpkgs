@@ -4,16 +4,17 @@
   fetchFromSourcehut,
   sqlite,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mobroute";
   version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mobroute";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qQmOvo8fVZfAE0XzX1YPhfzXrBXEWwRkNNnhLQFd4ec=";
   };
   vendorHash = "sha256-HcHPQq9KmqSB5RdmZDFR6BXsVoJ4XfBMClS8hR8weCU=";
@@ -24,9 +25,7 @@ buildGoModule rec {
     "sqlite_math_functions"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
     mv $out/bin/{cli,mobroute}
@@ -54,4 +53,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

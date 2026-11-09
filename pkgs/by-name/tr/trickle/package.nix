@@ -44,14 +44,16 @@ stdenv.mkDerivation {
     sed -i 's|^_select(int|select(int|' trickle-overload.c
   '';
 
-  NIX_LDFLAGS = [
-    "-levent"
-    "-ltirpc"
-  ];
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${libtirpc.dev}/include/tirpc"
-    "-Wno-error=incompatible-pointer-types"
-  ];
+  env = {
+    NIX_LDFLAGS = toString [
+      "-levent"
+      "-ltirpc"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${libtirpc.dev}/include/tirpc"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
 
   configureFlags = [ "--with-libevent" ];
 
@@ -60,7 +62,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Lightweight userspace bandwidth shaper";
     license = lib.licenses.bsd3;
-    homepage = "https://monkey.org/~marius/pages/?page=trickle";
+    homepage = "https://github.com/mariusae/trickle";
     platforms = lib.platforms.linux;
     mainProgram = "trickle";
   };

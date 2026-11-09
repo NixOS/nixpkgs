@@ -11,16 +11,16 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "augeas";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "augeas";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-U5tm3LDUeI/idHtL2Zy33BigkyvHunXPjToDC59G9VE=";
+    hash = "sha256-FH+i/6nnhbp2j+45eNT63LzI/uY5KvLYePivyaO1odM=";
   };
 
   patches = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     ./bootstrap --gnulib-srcdir=.gnulib
   '';
 
+  configureFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "--disable-gnulib-tests" ];
   nativeBuildInputs = [
     autoreconfHook
     bison
@@ -66,9 +67,9 @@ stdenv.mkDerivation rec {
     description = "Configuration editing tool";
     license = lib.licenses.lgpl21Only;
     homepage = "https://augeas.net/";
-    changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${version}";
+    changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${finalAttrs.version}";
     mainProgram = "augtool";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
     platforms = lib.platforms.unix;
   };
-}
+})

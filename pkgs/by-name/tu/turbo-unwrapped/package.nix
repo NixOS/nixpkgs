@@ -2,49 +2,74 @@
   lib,
   stdenv,
   capnproto,
-  extra-cmake-modules,
+  cctools,
   fetchFromGitHub,
-  fontconfig,
   installShellFiles,
   llvmPackages,
-  nix-update-script,
-  openssl,
   pkg-config,
   protobuf,
-  rust-jemalloc-sys,
   rustPlatform,
-  zlib,
+  xcbuild,
+  zig_0_15,
+  zstd,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+let
   pname = "turbo-unwrapped";
-  version = "2.6.1";
+  version = "2.11.7";
+
+  ghostty-src = fetchFromGitHub {
+    owner = "ghostty-org";
+    repo = "ghostty";
+    rev = "a887df42c56f6de86c0fe6da9c4eeca37931e083";
+    hash = "sha256-1Zz65SCk3rkJ9+Q0MmyNOTNiDSLBRIHRd3IvFM4iNXw=";
+  };
+  ghostty-deps = zig_0_15.fetchDeps {
+    inherit pname version;
+    src = ghostty-src;
+    fetchAll = true;
+    hash = "sha256-PnM+hZIlLyQwK8vJgd/Bhjt1lNIz06T8FahwliRmMrY=";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NQjN3u+xTQkU9cenBTHRwGyMsy8Sm1xbHckaq/DYHJk=";
+    hash = "sha256-kxYQLRgHHmlYkLK5X/ohK1pxevG7nXsgbW7Sz6irQus=";
   };
 
-  cargoHash = "sha256-ear1NoKgOOiC0wvbzrhxh0t23m0Bl5AtcKi0DmVw3f8=";
+  cargoHash = "sha256-kva0HTfCfapLhda1ppMM7e4dT/fgJzvRYw/t26p9e0s=";
 
   nativeBuildInputs = [
     capnproto
-    extra-cmake-modules
     installShellFiles
     pkg-config
     protobuf
+    zig_0_15.hook
   ]
   # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
-
-  buildInputs = [
-    fontconfig
-    openssl
-    rust-jemalloc-sys
-    zlib
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ llvmPackages.bintools ]
+  # Tools required for building `libghostty-vt-sys` on darwin.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
   ];
+
+  buildInputs = [ zstd ];
+
+  dontUseZigBuild = true;
+  dontUseZigCheck = true;
+  dontUseZigInstall = true;
+
+  env = {
+    # Use vendored ghostty source and dependencies.
+    GHOSTTY_SOURCE_DIR = ghostty-src;
+    GHOSTTY_ZIG_SYSTEM_DIR = ghostty-deps;
+    # nightly features are used
+    RUSTC_BOOTSTRAP = 1;
+  };
 
   cargoBuildFlags = [
     "--package"
@@ -61,18 +86,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/turbo completion zsh)
   '';
 
-  env = {
-    # nightly features are used
-    RUSTC_BOOTSTRAP = 1;
-  };
-
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+    inherit ghostty-src ghostty-deps;
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -82,6 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       getchoo
+      hythera
     ];
     mainProgram = "turbo";
   };

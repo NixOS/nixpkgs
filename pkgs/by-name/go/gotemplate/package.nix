@@ -3,30 +3,31 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
 
   pname = "gotemplate";
-  version = "3.12.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "gotemplate";
-    tag = "v${version}";
-    hash = "sha256-XcSlQ0Gw+EW2sJK+M2Sp9pcSSy2wsdRZ3MeFewhx7nw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O3tImosacomIQGAnbShCOWjwuvwo3HsXViVBSHj6Z6c=";
   };
 
-  vendorHash = "sha256-iNH0YmmZ/Qlc7WDoIbORd+uVg0rbQVKL6hX7YvbL0BE=";
+  vendorHash = "sha256-gxKtwA9i9wYWYsBx7zSfKiTsADN8cC7tbWzoX2mctZM=";
 
   # This is the value reported when running `gotemplate --version`,
   # see https://github.com/coveooss/gotemplate/issues/262
-  ldflags = [ "-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${finalAttrs.version}" ];
 
   meta = {
     description = "CLI for go text/template";
+    homepage = "https://github.com/coveooss/gotemplate";
     mainProgram = "gotemplate";
-    changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${version}";
+    changelog = "https://github.com/coveooss/gotemplate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.giorgiga ];
   };
 
-}
+})

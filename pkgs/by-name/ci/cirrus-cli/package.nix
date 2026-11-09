@@ -4,24 +4,28 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cirrus-cli";
-  version = "0.158.0";
+  version = "1.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
-    rev = "v${version}";
-    hash = "sha256-VrF5Mp+InnStjEQaNXNvveImubxysRlRjrIq+SN6h3o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bh1fLHmd5iCMHMJHgBaeZ8zQ9Fjl5Q4jpk1GUyrhiic=";
   };
 
-  vendorHash = "sha256-+3EWlbOr6MGx5M8IP28ZbTZYp+9lpmi+q5bBmnTDGoA=";
+  vendorHash = "sha256-RcgU3DR7ndF7YDCNQaeDh/EpCMs9JQhbpKP7dwB2ilI=";
 
   ldflags = [
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"
-    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${version}"
+    "-s"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${finalAttrs.version}"
+    "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -32,14 +36,17 @@ buildGoModule rec {
       --fish <($out/bin/cirrus completion fish)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   # tests fail on read-only filesystem
   doCheck = false;
 
   meta = {
     description = "CLI for executing Cirrus tasks locally and in any CI";
     homepage = "https://github.com/cirruslabs/cirrus-cli";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "cirrus";
   };
-}
+})

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   natsort,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "seedir";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "earnestt1234";
@@ -31,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "seedir" ];
 
   meta = {
-    description = "Module for for creating, editing, and reading folder tree diagrams";
+    description = "Module for creating, editing, and reading folder tree diagrams";
     homepage = "https://github.com/earnestt1234/seedir";
     changelog = "https://github.com/earnestt1234/seedir/releases/tag/v${version}";
     license = lib.licenses.mit;

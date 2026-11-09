@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "pywaterkotte";
   version = "0.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chboland";
@@ -38,7 +35,7 @@ buildPythonPackage rec {
     description = "Library to communicate with Waterkotte heatpumps";
     homepage = "https://github.com/chboland/pywaterkotte";
     changelog = "https://github.com/chboland/pywaterkotte/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

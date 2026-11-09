@@ -3,12 +3,8 @@
 let
   inherit (systemdUtils.lib)
     assertValueOneOf
-    automountConfig
     checkUnitConfig
     makeJobScript
-    mountConfig
-    serviceConfig
-    unitConfig
     unitNameType
     ;
 
@@ -379,6 +375,14 @@ rec {
           '';
         };
 
+        enableDefaultPath = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to append {option}`systemd.defaultPath` to the service's {env}`PATH` environment variable.
+          '';
+        };
+
         serviceConfig = mkOption {
           default = { };
           example = {
@@ -621,7 +625,7 @@ rec {
 
       listenStreams = mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = types.listOf (types.coercedTo types.port toString types.str);
         example = [
           "0.0.0.0:993"
           "/run/my-socket"

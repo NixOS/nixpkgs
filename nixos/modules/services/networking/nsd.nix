@@ -148,7 +148,7 @@ let
   '';
 
   maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
-  maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
+  maybeToString = prefix: x: optionalString (x != null) "${prefix} ${toString x}";
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
   keyConfigFile = concatStrings (
@@ -988,8 +988,9 @@ in
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
 
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
 
       startLimitBurst = 4;
       startLimitIntervalSec = 5 * 60; # 5 mins

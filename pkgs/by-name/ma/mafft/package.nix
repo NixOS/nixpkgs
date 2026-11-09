@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   runCommand,
   mafft,
 }:
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-VNe00r12qEkLEbpZdJCe5xZ73JA3uAmuAeG+eSeRDI0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "reduce-extern-symbols-alpine-compat";
+      url = "https://gitlab.com/sysimm/mafft/-/commit/aa3b7d54e0a05c5ed7d665c094c3d89f2b6a907f.patch";
+      hash = "sha256-g89cFcnrLMlU/RLhS1kzCYPd5BWaH7wdz6tR+Ys3bVE=";
+    })
+  ];
 
   preBuild = ''
     cd ./core

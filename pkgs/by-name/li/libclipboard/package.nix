@@ -4,13 +4,13 @@
   cmake,
   pkg-config,
   libxcb,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "libclipboard";
+  pname = "libclipboard";
   version = "1.1";
 
   src = fetchFromGitHub {
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
   ];
   nativeBuildInputs = [
     cmake

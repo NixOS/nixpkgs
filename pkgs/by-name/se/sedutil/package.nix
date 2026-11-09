@@ -7,14 +7,14 @@
   libnvme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sedutil";
   version = "1.49.13";
 
   src = fetchFromGitHub {
     owner = "Drive-Trust-Alliance";
     repo = "sedutil";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bSeTbpeecufXNZKNb5A0gWYF3qkBc2fSmNTZxkDW+Vc=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "sedutil-cli";
   };
-}
+})

@@ -6,8 +6,9 @@
   dssi,
   fetchurl,
   flac,
+  gtk3,
   libjack2,
-  ladspaH,
+  ladspa-header,
   ladspaPlugins,
   liblo,
   libmad,
@@ -28,13 +29,13 @@
   suil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtractor";
-  version = "1.5.8";
+  version = "1.6.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
-    hash = "sha256-nHN+bEfshFHBpmQLuQxffI7BcKigYpj3HzsFjGWlLtQ=";
+    url = "mirror://sourceforge/qtractor/qtractor-${finalAttrs.version}.tar.gz";
+    hash = "sha256-rXjiDytSXb+aSZZVASSkzGvqvkxaCFduBSQWUXEKku8=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +46,23 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
+  # Qt's GTK3 file chooser uses GSettings. GTK3's GSettings schemas
+  # are installed below share/gsettings-schemas, which is not otherwise
+  # exposed to the wrapped Qt application.
+  qtWrapperArgs = [
+    "--suffix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+  ];
+
   buildInputs = [
     alsa-lib
     aubio
     dssi
     flac
     libjack2
-    ladspaH
+    ladspa-header
     ladspaPlugins
     liblo
     libmad
@@ -74,10 +85,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
-    changelog = "https://github.com/rncbc/qtractor/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/rncbc/qtractor/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "qtractor";
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

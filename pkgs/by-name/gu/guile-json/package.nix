@@ -7,15 +7,16 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-json";
   version = "4.7.3";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-json/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
+    url = "mirror://savannah/guile-json/guile-json-${finalAttrs.version}.tar.gz";
+    hash = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     guile
@@ -28,6 +29,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
+  guileImportsCheck = [
+    "json"
+  ];
+
   meta = {
     description = "JSON Bindings for GNU Guile";
     homepage = "https://savannah.nongnu.org/projects/guile-json";
@@ -35,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.all;
   };
-}
+})

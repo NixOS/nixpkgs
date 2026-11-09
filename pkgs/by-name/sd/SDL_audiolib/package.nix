@@ -5,8 +5,9 @@
   fetchFromGitHub,
   pkg-config,
   stdenv,
+  libogg,
   flac,
-  fmt,
+  fmt_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    libogg # required by flac
     flac
-    fmt
+    fmt_11
   ];
 
   strictDeps = true;

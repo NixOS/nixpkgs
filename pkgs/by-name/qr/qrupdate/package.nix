@@ -7,17 +7,18 @@
   which,
   gfortran,
   blas,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qrupdate";
-  version = "1.1.5";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mpimd-csc";
     repo = "qrupdate-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dHxLPrN00wwozagY2JyfZkD3sKUD2+BcnbjNgZepzFg=";
+    hash = "sha256-0QyNAvxz1ivOCrbSyc0xNTdILMTJ+ARFCrMqstnGIFY=";
   };
 
   cmakeFlags =
@@ -42,11 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DBLA_VENDOR=Generic"
     ];
 
-  # https://github.com/mpimd-csc/qrupdate-ng/issues/4
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    ./disable-zch1dn-test.patch
-  ];
-
   postPatch = ''
     sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
   '';
@@ -57,10 +53,26 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     which
     gfortran
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    # when linking C examples against libgfortran, see
+    # https://github.com/NixOS/nixpkgs/pull/370526
+    gfortran.cc
   ];
+
   buildInputs = [
     blas
     lapack
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/7
+    "test_tchshx"
   ];
 
   meta = {

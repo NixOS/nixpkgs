@@ -21,8 +21,6 @@ let
       (listOf settingType)
     ];
 
-  genAttrs' = names: f: lib.listToAttrs (map f names);
-
   regexEscape =
     let
       # taken from https://github.com/python/cpython/blob/05cb728d68a278d11466f9a6c8258d914135c96c/Lib/re.py#L251-L266
@@ -235,18 +233,19 @@ in
         }
         {
           assertion =
-            !cfg.enable
-            || !cfg.gitHttpBackend.enable
-            || !cfg.gitHttpBackend.checkExportOkFiles
-            || cfg.settings.strict-export == "git-daemon-export-ok";
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> cfg.gitHttpBackend.checkExportOkFiles
+            -> (cfg.settings ? strict-export && cfg.settings.strict-export == "git-daemon-export-ok");
           message = "Misconfigured services.cgit.${vhost}: When gitHttpBackend.checkExportOkFiles is true then settings.strict-export must be \"git-daemon-export-ok\".";
         }
         {
           assertion =
-            !cfg.enable
-            || !cfg.gitHttpBackend.enable
-            || cfg.settings.strict-export == null
-            || cfg.gitHttpBackend.checkExportOkFiles;
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> !cfg.gitHttpBackend.checkExportOkFiles
+            -> cfg.settings ? strict-export
+            -> cfg.settings.strict-export == null;
           message = "Misconfigured services.cgit.${vhost}: settings.strict-export is set but the gitHttpBackend is enabled and checkExportOkFiles is false.";
         }
       ]) cfgs
@@ -299,7 +298,7 @@ in
       lib.mapAttrsToList (name: cfg: {
         ${cfg.nginx.virtualHost} = {
           locations =
-            (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
+            (lib.genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
                 alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";

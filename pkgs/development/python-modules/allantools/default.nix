@@ -8,7 +8,6 @@
   numpydoc,
   pytest,
   scipy,
-  pythonOlder,
   pytestCheckHook,
 }:
 

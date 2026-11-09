@@ -7,7 +7,6 @@
   nixosTests,
   openssl,
   systemd,
-  lua,
   luajit,
   protobuf,
   libsodium,
@@ -15,29 +14,31 @@
   rustPlatform,
   cargo,
   rustc,
+  python3,
   enableProtoBuf ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.2.6";
+  version = "5.4.9";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-INt/KcULGvsensXF6LIZ0RKtrPK4rPPaQW/yR+JaxAc=";
+    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Zv6r2G4y1fs45QZk55lC9kut63Iy197FvD2iaLTjgf8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-A3NX1zj9+9qCLTkfca3v8Rr8oc/zL/Ruknjl3g1aMG4=";
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
+    hash = "sha256-Q7R+2mehLNwbfL4cNnakH7rkb5iYOc12CU0OAZpK1jc=";
   };
 
-  cargoRoot = "settings/rust";
+  cargoRoot = "rec-rust-lib/rust";
 
   nativeBuildInputs = [
     cargo
     rustc
+    python3
     rustPlatform.cargoSetupHook
     pkg-config
   ];
@@ -46,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     openssl
     systemd
-    lua
     luajit
     libsodium
     curl
@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://doc.powerdns.com/recursor/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = lib.platforms.linux;

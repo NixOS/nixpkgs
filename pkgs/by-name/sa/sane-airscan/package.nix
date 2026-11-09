@@ -13,9 +13,9 @@
   gnutls,
   sane-backends,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sane-airscan";
-  version = "0.99.36";
+  version = "0.99.38";
 
   nativeBuildInputs = [
     meson
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexpevzner";
     repo = "sane-airscan";
-    rev = version;
-    sha256 = "sha256-vpTUZVD5ONcQeDnjPmQDY9Qf/bmDqZMnxA+I8ALOB7Y=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-LgheG67QVH9gcXLCgrmpXvE39n3H6ub1k4PYTpcGDxM=";
   };
 
   meta = {
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zaninime ];
   };
-}
+})

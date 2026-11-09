@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   niapy,
@@ -14,14 +15,12 @@
   pandas,
   plotly,
   scikit-learn,
-  pythonOlder,
-  tomli,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niaarm";
   # nixpkgs-update: no auto update
   version = "0.13.4";
@@ -30,17 +29,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-524rJ5b9e0U1rqu1iCGMA3Tgnn9bO4biCC1FMoGNqms=";
   };
 
   pythonRelaxDeps = [
     "numpy"
+    "pandas"
     "plotly"
     "scikit-learn"
   ];
 
   build-system = [ poetry-core ];
+
+  # Fix upstream version typo
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     niapy
@@ -49,18 +54,19 @@ buildPythonPackage rec {
     pandas
     plotly
     scikit-learn
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    MPLBACKEND = "Agg";
+  };
 
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Fatal Python error: Aborted
-    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+
+    # AttributeError: 'Poly3DCollection' object has no attribute '_vec'
     "test_hill_slopes"
-    "test_two_key_plot"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -71,8 +77,8 @@ buildPythonPackage rec {
     description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
-    changelog = "https://github.com/firefly-cpp/NiaARM/releases/tag/${src.tag}";
+    changelog = "https://github.com/firefly-cpp/NiaARM/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})

@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WebAssembly REPL";
     homepage = "https://webassembly.js.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "wasm";
   };
 })

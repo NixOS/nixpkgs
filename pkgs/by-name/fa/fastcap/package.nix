@@ -6,12 +6,12 @@
   texliveMedium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastcap";
   version = "2.0-18Sep92";
 
   src = fetchzip {
-    url = "https://www.rle.mit.edu/cpg/codes/fastcap-${version}.tgz";
+    url = "https://www.rle.mit.edu/cpg/codes/fastcap-${finalAttrs.version}.tgz";
     hash = "sha256-fnmC6WNd7xk8fphxkMZUq2+Qz+2mWIP2lvBUBAmUvHI";
     stripRoot = false;
   };
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./fastcap-mulglobal-drop-conflicting-lib.patch
     ./fastcap-mulsetup-add-forward-declarations.patch
+    ./fastcap-mulglobal-add-ualloc-declaration.patch
   ];
 
   nativeBuildInputs = [
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./doc/Makefile \
-      --replace '/bin/rm' 'rm'
+      --replace-fail '/bin/rm' 'rm'
 
     for f in "doc/*.tex" ; do
       sed -i -E $f \
@@ -54,8 +55,14 @@ stdenv.mkDerivation rec {
     "all"
   ];
 
-  # GCC 14 makes these errors by default
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=return-mismatch -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # gcc14
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=return-mismatch"
+    "-Wno-error=implicit-int"
+    # gcc15
+    "-std=gnu17"
+  ];
 
   outputs = [
     "out"
@@ -76,8 +83,8 @@ stdenv.mkDerivation rec {
     mv bin $out/bin
     rm $out/bin/README
 
-    mkdir -p $doc/share/doc/fastcap-${version}
-    cp doc/*.pdf $doc/share/doc/fastcap-${version}
+    mkdir -p $doc/share/doc/fastcap-${finalAttrs.version}
+    cp doc/*.pdf $doc/share/doc/fastcap-${finalAttrs.version}
 
     mkdir -p $out/share/fastcap
     mv examples $out/share/fastcap
@@ -98,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "fastcap";
   };
-}
+})

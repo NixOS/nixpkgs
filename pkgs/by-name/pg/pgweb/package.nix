@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgweb";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = "pgweb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3UWld72AN504+Bo8aIY31qMO1xIRL3MXG5ImzMeSoU8=";
   };
 
@@ -44,7 +44,7 @@ buildGoModule rec {
 
   passthru.tests = {
     version = testers.testVersion {
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       package = pgweb;
       command = "pgweb --version";
     };
@@ -52,7 +52,7 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
+    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${finalAttrs.version}";
     description = "Web-based database browser for PostgreSQL";
     longDescription = ''
       A simple postgres browser that runs as a web server. You can view data,
@@ -66,4 +66,4 @@ buildGoModule rec {
       luisnquin
     ];
   };
-}
+})

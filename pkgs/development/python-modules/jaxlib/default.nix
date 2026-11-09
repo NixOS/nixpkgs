@@ -66,7 +66,7 @@ let
 
   meta = {
     description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
 
@@ -116,12 +116,12 @@ let
       (lib.getOutput "static" cuda_cudart) # libcudart_static.a
 
       # Headers
-      (lib.getDev cuda_cccl) # block_load.cuh
+      (lib.getDev cccl) # block_load.cuh
       (lib.getDev cuda_cudart) # cuda.h
       (lib.getDev cuda_cupti) # cupti.h
       (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811
       (lib.getDev cuda_nvml_dev) # nvml.h
-      (lib.getDev cuda_nvtx) # nvToolsExt.h
+      (lib.getDev nvtx) # nvToolsExt.h
       (lib.getDev libcublas) # cublas_api.h
       (lib.getDev libcufft) # cufft.h
       (lib.getDev libcurand) # curand.h
@@ -230,7 +230,7 @@ let
       owner = "google";
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
-      rev = "refs/tags/${pname}-v${version}";
+      tag = "${pname}-v${version}";
       hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
     };
 
@@ -426,8 +426,6 @@ let
   platformTag =
     if effectiveStdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
-    else if effectiveStdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${arch}"
     else if effectiveStdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
     else

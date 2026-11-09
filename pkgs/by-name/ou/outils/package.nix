@@ -5,14 +5,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "outils";
   version = "0.13";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "outils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FokJytwQsbGsryBzyglpb1Hg3wti/CPQTOfIGIz9ThA=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ somasis ];
   };
-}
+})

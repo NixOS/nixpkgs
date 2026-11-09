@@ -12,7 +12,7 @@
   python3Packages,
   docbook-xsl-nons,
   docbook_xml_dtd_42,
-  libgcrypt,
+  gnutls,
   gobject-introspection,
   buildPackages,
   withIntrospection ?
@@ -69,9 +69,9 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsecret";
-  version = "0.21.7";
+  version = "0.21.8.2";
 
   outputs = [
     "out"
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsecret/${lib.versions.majorMinor version}/libsecret-${version}.tar.xz";
-    hash = "sha256-a0UuR1BZCitWF63EACbyjS9JA94V8SUOHRxAv9aO1V4=";
+    url = "mirror://gnome/sources/libsecret/${lib.versions.majorMinor finalAttrs.version}/libsecret-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FClIM5xblx2PaoxwmVIfb9MZtv5z0mlLTm0zEO0otuY=";
   };
 
   depsBuildBuild = [
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libgcrypt
+    gnutls
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ]
   ++ lib.optionals abrmdSupport [ tpm2-abrmd ];
@@ -128,6 +128,9 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonBool "tpm2" withTpm2Tss)
     (lib.mesonOption "bashcompdir" "share/bash-completion/completions")
+    (lib.mesonOption "crypto" "gnutls")
+    # interactive test environment relies on dbus-run-session
+    (lib.mesonEnable "test_setup" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
@@ -221,4 +224,4 @@ stdenv.mkDerivation rec {
         glib.meta.platforms;
     inherit (glib.meta) maintainers teams;
   };
-}
+})

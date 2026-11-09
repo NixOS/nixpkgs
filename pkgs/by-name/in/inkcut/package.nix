@@ -1,22 +1,21 @@
 {
   lib,
-  fetchpatch,
   python3,
   fetchFromGitHub,
-  qt5,
   cups,
+  qt6,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
-  version = "2.1.7";
-  format = "pyproject";
+  version = "2.1.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inkcut";
     repo = "inkcut";
     tag = "v${version}";
-    hash = "sha256-inB3yR4ykepN5rYzyPlXW/J/HuSxGs6EDhshpa7n7o8=";
+    hash = "sha256-1HKojkXjM+Q2UGXKhEoQTXXGkaHbhBsljJuFBmwjmsc=";
   };
 
   postPatch = ''
@@ -24,7 +23,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail ", 'lpr', " ", '${cups}/bin/lpr', "
   '';
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+
+  buildInputs = [ qt6.qtbase ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -37,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
     pycups
     qtconsole
-    pyqt5
+    pyqt6
   ];
 
   # QtApplication.instance() does not work during tests?
@@ -56,11 +57,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "--unset"
-    "PYTHONPATH"
-    "\${qtWrapperArgs[@]}"
-  ];
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--unset"
+      "PYTHONPATH"
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   postInstall = ''
     mkdir -p $out/share/inkscape/extensions

@@ -2,21 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
   pyusb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-yubico";
   version = "1.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2EZkJ6pZIqxdS36cZbaTEIQnz1N9ZT1oyyEsBxPo5vU=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyusb ];
 
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "yubico" ];
@@ -31,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ s1341 ];
   };
-}
+})

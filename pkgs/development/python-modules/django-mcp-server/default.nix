@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "omarbenhamid";
+    owner = "gts360";
     repo = "django-mcp-server";
     tag = "v${version}";
     hash = "sha256-HR4AzeDT/oWJe/exsV5AqwSebJPGT/vlzuk3qTgVb/M=";
@@ -42,8 +42,9 @@ buildPythonPackage rec {
   doCheck = false; # Needs to run both test server and client simultaneously
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Django MCP Server implementation";
-    homepage = "https://github.com/omarbenhamid/django-mcp-server";
+    homepage = "https://github.com/gts360/django-mcp-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };

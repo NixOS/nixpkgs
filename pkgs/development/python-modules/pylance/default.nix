@@ -10,8 +10,11 @@
   pkg-config,
 
   # buildInputs
+  aws-lc,
   openssl,
   protobuf,
+  # for zstd
+  pkgsHostTarget,
 
   # dependencies
   lance-namespace,
@@ -22,39 +25,74 @@
   torch,
 
   # tests
+  cacert,
   datafusion,
   duckdb,
   ml-dtypes,
   pandas,
   pillow,
   polars,
+  psutil,
+  pytest-xdist,
   pytestCheckHook,
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "1.0.1";
+  version = "14.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    tag = "v${version}";
-    hash = "sha256-S/zVpsfoQG9NYnJyAJm+a0LllVE/lfaCua+NA9DGIsw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EGj0kF4x3+Oor1mD/E+QxgViCU7X8okX3cSOUNy7KD4=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-5ngkyjzxQ2NVxst3t7U18hdZ5zHNo0gjv0dif9HlyhU=";
+    hash = "sha256-pfTNiy+5dAP/VB+kjv5IjtEFEWhR8lUK9L7mcze0dMA=";
   };
+
+  # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
+  # `_mm512_dpwssd_epi32`. With the current toolchain, stdarch's signature for these intrinsics
+  # mismatches LLVM's `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+  # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+  # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+  # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+  # AVX2 / scalar kernels.
+  postPatch = ''
+    lanceDistance="../rust/lance-linalg/src/distance"
+
+    substituteInPlace "$lanceDistance/dot_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/l2_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/cosine_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  ''
+  # Same for `lance-index`'s pairwise BQ/SQ kernels: make their AVX-512 VNNI dispatch
+  # statically false so that the scalar fallbacks are always used.
+  + ''
+    lanceVector="../rust/lance-index/src/vector"
+
+    substituteInPlace "$lanceVector/bq/pairwise.rs" \
+      --replace-fail "if simd && *x86::HAS_AVX512_VNNI {" "if false {"
+
+    substituteInPlace "$lanceVector/sq/pairwise.rs" \
+      --replace-fail "dim <= MAX_BATCHED_DIM && has_vnni" "false && dim <= MAX_BATCHED_DIM && has_vnni" \
+      --replace-fail "if self.batched {" "if false {"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -68,12 +106,16 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     protobuf
+    pkgsHostTarget.zstd
   ];
 
-  pythonRelaxDeps = [ "pyarrow" ];
-
+  pythonRelaxDeps = [
+    "lance-namespace"
+    "pyarrow"
+  ];
   dependencies = [
     lance-namespace
     numpy
@@ -87,16 +129,20 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    # reqwest panics with "No CA certificates were loaded from the system" otherwise
+    cacert
     datafusion
     duckdb
     ml-dtypes
     pandas
     pillow
     polars
+    psutil
+    pytest-xdist
     pytestCheckHook
     tqdm
   ]
-  ++ optional-dependencies.torch;
+  ++ finalAttrs.passthru.optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
@@ -107,9 +153,16 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "torch_tests/test_bench_utils.py"
+    "torch_tests/test_distance.py"
+    "torch_tests/test_torch_kmeans.py"
+  ];
+
   disabledTests = [
-    # Hangs indefinitely
-    "test_all_permutations"
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_create_index_progress_callback_error_before_completion_propagates"
 
     # Writes to read-only build directory
     "test_add_data_storage_version"
@@ -124,30 +177,30 @@ buildPythonPackage rec {
     "test_lance_log_file"
     "test_lance_log_file_invalid_path"
     "test_lance_log_file_with_directory_creation"
+    "test_lance_log_filters_trace_event_targets"
     "test_timestamp_precision"
     "test_tracing"
 
     # Flaky (AssertionError)
     "test_index_cache_size"
-
-    # OSError: LanceError(IO): Failed to initialize default tokenizer:
-    # An invalid argument was passed:
-    # 'LinderaError { kind: Parse, source: failed to build tokenizer: LinderaError(kind=Io, source=No such file or directory (os error 2)) }', /build/source/rust/lance-index/src/scalar/inverted/tokenizer/lindera.rs:63:21
-    "test_lindera_load_config_fallback"
-
-    # OSError: LanceError(IO): Failed to load tokenizer config
-    "test_indexed_filter_with_fts_index_with_lindera_ipadic_jp_tokenizer"
-    "test_lindera_ipadic_jp_tokenizer_bin_user_dict"
-    "test_lindera_ipadic_jp_tokenizer_csv_user_dict"
-    "test_lindera_load_config_priority"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
     "test_merge_insert_large"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_index_cast_centroids"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "test_create_index_unsupported_accelerator"
+    "test_index_cast_centroids"
+    "test_index_with_no_centroid_movement"
+    "test_torch_index_with_nans"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -155,8 +208,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";
-    changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
+    changelog = "https://github.com/lancedb/lance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

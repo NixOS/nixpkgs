@@ -10,7 +10,6 @@
   pkg-config,
   boost,
   cairo,
-  fuse,
   glib,
   libarchive,
   librsvg,
@@ -19,14 +18,19 @@
   xz, # for liblzma
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libappimage";
   version = "1.0.4-5";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "libappimage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V9Ilo0zFo9Urke+jCA4CSQB5tpzLC/S5jmon+bA+TEU=";
   };
 
@@ -54,6 +58,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/AppImageCommunity/libappimage/commit/e5f6ea562611d534dc8e899a12ddf15c50e820be.patch";
       hash = "sha256-P6fPoiqVX3TrKGrU2EXIMBpQLGl7xNcy41Iq7vRM+n8=";
     })
+
+    # Respect relative/absolute CMAKE_INSTALL_INCLUDEDIR
+    ./209.patch
   ];
 
   postPatch = ''
@@ -80,7 +87,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    fuse
     libarchive
     squashfuse
     xdg-utils-cxx
@@ -103,4 +109,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ k900 ];
     platforms = lib.platforms.linux;
   };
-}
+})

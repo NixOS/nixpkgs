@@ -8,14 +8,14 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keystone";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "keystone-engine";
     repo = "keystone";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "020d1l1aqb82g36l8lyfn2j8c660mm6sh1nl4haiykwgdl9xnxfa";
   };
 
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
-    homepage = "https://www.keystone-engine.org";
+    homepage = "https://github.com/keystone-engine/keystone";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "kstool";
     platforms = lib.platforms.unix;
   };
-}
+})

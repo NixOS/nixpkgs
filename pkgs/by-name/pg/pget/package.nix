@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pget";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "Code-Hex";
     repo = "pget";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SDe9QH1iSRfMBSCfYiOJPXUbDvxH5cCCWvQq9uTWT9Y=";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Ligthiago ];
     mainProgram = "pget";
   };
-}
+})

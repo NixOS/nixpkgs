@@ -16,6 +16,7 @@
 
   # tests
   httpretty,
+  mocket,
   opentelemetry-test-utils,
   pytestCheckHook,
   respx,
@@ -48,6 +49,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     httpretty
+    mocket
     opentelemetry-test-utils
     pytestCheckHook
     respx

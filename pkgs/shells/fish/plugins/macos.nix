@@ -4,16 +4,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "macos";
-  version = "7.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "halostatue";
     repo = "fish-macos";
-    tag = "v${version}";
-    hash = "sha256-yTwN2ztdU+vk+AXEfsJUN7J4KqrbLSWHgA0q5rUT5CE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VKJp+7YzqHMNniWs4aGq0gR11mPJU4gPIEgUPhdfA30=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -21,8 +20,8 @@ buildFishPlugin rec {
   meta = {
     description = "MacOS functions for Fish";
     homepage = "https://github.com/halostatue/fish-macos";
-    changelog = "https://github.com/halostatue/fish-macos/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/halostatue/fish-macos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.samasaur ];
   };
-}
+})

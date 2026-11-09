@@ -2,20 +2,17 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   pymupdf,
   numpy,
   ipython,
-  texlive,
+  texliveSmall,
 }:
 
 buildPythonPackage {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
   version = "unstable-2022-11-01";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "allefeld";
@@ -34,7 +31,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tikz" ];
 
-  nativeCheckInputs = [ texlive.combined.scheme-small ];
+  # https://github.com/allefeld/pytikz/issues/12
+  dontCheckPythonMetadata = true;
+
+  nativeCheckInputs = [ texliveSmall ];
   checkPhase = ''
     runHook preCheck
     python -c 'if 1:

@@ -11,14 +11,14 @@
   dsq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dsq";
   version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FZBJe+2y4HV3Pgeap4yvD0a8M/j+6pAJEFpoQVVE1ec=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "main.Version=${version}"
+    "main.Version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   preCheck = ''
     substituteInPlace scripts/test.py \
-      --replace 'dsq latest' 'dsq ${version}'
+      --replace 'dsq latest' 'dsq ${finalAttrs.version}'
   '';
 
   checkPhase = ''
@@ -64,4 +64,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liff ];
   };
-}
+})

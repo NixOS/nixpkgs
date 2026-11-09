@@ -7,27 +7,27 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airgradient";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
-    owner = "airgradienthq";
-    repo = "python-airgradient";
-    tag = "v${version}";
-    hash = "sha256-llhdLqVueATKCb4wyPYjnsdOpbbE2BnUU0PH0jwHPMU=";
+    owner = "Open-Air-Foundation";
+    repo = "integration-home-assistant-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OlCCImVvoDqOA/LiSShCXwQACHw5Hmwc10BXaMz1DD8=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 
@@ -50,9 +50,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module for AirGradient";
-    homepage = "https://github.com/airgradienthq/python-airgradient";
-    changelog = "https://github.com/airgradienthq/python-airgradient/releases/tag/v${version}";
+    homepage = "https://github.com/Open-Air-Foundation/integration-home-assistant-python";
+    changelog = "https://github.com/Open-Air-Foundation/integration-home-assistant-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

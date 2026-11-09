@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-fund";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "acfoltzer";
     repo = "cargo-fund";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8mnCwWwReNH9s/gbxIhe7XdJRIA6BSUKm5jzykU5qMU=";
   };
 
@@ -39,10 +39,12 @@ rustPlatform.buildRustPackage rec {
     description = "Discover funding links for your project's dependencies";
     mainProgram = "cargo-fund";
     homepage = "https://github.com/acfoltzer/cargo-fund";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ johntitor ];
   };
-}
+})

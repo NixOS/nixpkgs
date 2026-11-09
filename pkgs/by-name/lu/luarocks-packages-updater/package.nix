@@ -1,5 +1,6 @@
 {
   nix,
+  nixfmt,
   makeWrapper,
   python3Packages,
   lib,
@@ -9,18 +10,21 @@
   lua5_2,
   lua5_3,
   lua5_4,
+  lua5_5,
   luajit,
 }:
 let
 
   path = lib.makeBinPath [
     nix
+    nixfmt
     nix-prefetch-scripts
     luarocks-nix
     lua5_1
     lua5_2
     lua5_3
     lua5_4
+    lua5_5
     luajit
   ];
 

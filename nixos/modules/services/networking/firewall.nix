@@ -118,7 +118,7 @@ in
 
       logRefusedConnections = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to log rejected or dropped incoming connections.
           Note: The logs are found in the kernel logs, i.e. dmesg
@@ -205,8 +205,8 @@ in
             "loose"
           ]
         );
-        default = true;
-        defaultText = lib.literalMD "`true` except if the iptables based firewall is in use and the kernel lacks rpfilter support";
+        default = "loose";
+        defaultText = "loose";
         example = "loose";
         description = ''
           Performs a reverse path filter test on a packet.  If a reply

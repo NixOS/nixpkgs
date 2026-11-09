@@ -6,14 +6,17 @@
   callPackage,
   fetchFromGitHub,
   fontconfig,
+  makeFontsConf,
   freetype,
   glib,
   glslang,
+  gst_all_1,
   gtk4-layer-shell,
   harfbuzz,
-  libGL,
-  libX11,
   libadwaita,
+  libGL,
+  libx11,
+  libxml2,
   ncurses,
   nixosTests,
   oniguruma,
@@ -22,23 +25,16 @@
   removeReferencesTo,
   versionCheckHook,
   wrapGAppsHook4,
-  zig_0_14,
+  writableTmpDirAsHomeHook,
+  zig_0_17,
 
-  # Usually you would override `zig.hook` with this, but we do that internally
-  # since upstream recommends a non-default level
+  # Upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
 }:
-let
-  zig = zig_0_14;
-
-  zig_hook = zig.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.2.3";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -52,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0tmLOJCrrEnVc/ZCp/e646DTddXjv249QcSwkaukL30=";
+    hash = "sha256-ywmIjwix0P5TC8kD/zTmt82CNrLXMFETaWZj0NirpoM=";
   };
 
   deps = callPackage ./deps.nix {
@@ -66,12 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     removeReferencesTo
-    zig_hook
+    zig_0_17
 
     # GTK frontend
     glib # Required for `glib-compile-schemas`
     wrapGAppsHook4
     blueprint-compiler
+    libxml2 # `xmllint`
   ];
 
   buildInputs = [
@@ -79,8 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GTK frontend
     libadwaita
-    libX11
+    libx11
     gtk4-layer-shell
+    gst_all_1.gstreamer # Used for playing audio, e.g. audible bells
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
 
     # OpenGL renderer
     glslang
@@ -93,18 +93,50 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ];
 
-  zigBuildFlags = [
+  dontSetZigDefaultFlags = true;
+
+  zigCheckFlags = [
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
+    "-Dcpu=baseline"
+    # Required for systemd units and D-Bus files to resolve to the executable path
+    "-Dinstalled-exe-path=${placeholder "out"}/bin/ghostty"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
   };
 
-  zigCheckFlags = finalAttrs.zigBuildFlags;
+  # Only specify the optimization level for the actual build.
+  # Tests do not work on ReleaseFast as they rely on triggering
+  # specific integrity violations within the internal data structures.
+  zigBuildFlags = finalAttrs.zigCheckFlags ++ [
+    "-Doptimize=${optimizeLevel}"
+  ];
 
   doCheck = true;
+
+  # Required for Fontconfig tests
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  env.FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ ];
+  };
+
+  # FIXME: Ghostty currently unconditionally builds libghostty-vt,
+  # even though that should really be built as its own package.
+  # Having the libghostty-vt binaries around also bloats our runtime
+  # closure immensely (from ~1 GiB to ~1.8 GiB) since the static library
+  # references glibc.dev, the Zig compiler and the dependency cache.
+  #
+  # The GUI app doesn't need any of this so we just nuke all -vt related
+  # output files for now.
+  postInstall = ''
+    rm -r $out/include/ghostty/{vt.h,vt}
+    rm $out/lib/libghostty-vt.*
+    rm $out/share/pkgconfig/libghostty-vt*.pc
+  '';
 
   /**
     Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
@@ -143,6 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+
+    substituteInPlace $out/share/applications/com.mitchellh.ghostty.desktop \
+      --replace-fail "Exec=$out/bin/ghostty" "Exec=ghostty"
   '';
 
   nativeInstallCheckInputs = [
@@ -168,6 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
       features, or native UIs. Ghostty provides all three.
     '';
     homepage = "https://ghostty.org/";
+    donationPage = "https://ghostty.org/docs/sponsor";
     downloadPage = "https://ghostty.org/download";
     changelog = "https://ghostty.org/docs/install/release-notes/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version

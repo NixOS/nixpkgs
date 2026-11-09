@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,13 +14,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-0Gb0CRdgzSnpeN+x8TrH5TCrAA57+jsBWZ4FgJ8cm08=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D -m444 -t $out/share/fonts/truetype $src/Desktop\ Font/Linearicons-Free.ttf
-
-    runHook postInstall
-  '';
+  preInstall = ''cd "$src/Desktop Font/"'';
 
   meta = {
     description = "Crisp Line Icons by Perxis";

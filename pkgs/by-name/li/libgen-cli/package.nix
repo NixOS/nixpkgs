@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "libgen-cli";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = "libgen-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EicXsxAvVe/umpcOn4dVlTexaAol1qYPg/h5MU5dysM=";
   };
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zaninime ];
     mainProgram = "libgen-cli";
   };
-}
+})

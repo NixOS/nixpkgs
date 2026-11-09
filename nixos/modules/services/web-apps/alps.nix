@@ -1,151 +1,108 @@
 {
+  config,
   lib,
   pkgs,
-  config,
+  utils,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.alps;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "alps" "port" ] ''
+      Use `services.alps.settings.server.addr` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "bindIP" ] ''
+      Use `services.alps.settings.server.addr` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "theme" ] ''
+      Themes are no longer customizable.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "imaps" "port" ] ''
+      Use `services.alps.settings.provider.imap.server` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "imaps" "host" ] ''
+      Use `services.alps.settings.provider.imap.server` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "smtps" "port" ] ''
+      Use `services.alps.settings.smtp.server` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "smtps" "host" ] ''
+      Use `services.alps.settings.smtp.server` instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "alps" "args" ] ''
+      Use `services.alps.settings` instead.
+    '')
+  ];
+
   options.services.alps = {
-    enable = mkEnableOption "alps";
+    enable = lib.mkEnableOption "alps";
+    package = lib.mkPackageOption pkgs "alps" { };
 
-    port = mkOption {
-      type = types.port;
-      default = 1323;
+    settings = lib.mkOption {
       description = ''
-        TCP port the service should listen on.
+        The ALPS configuration, see <https://github.com/migadu/alps/blob/main/docs/CONFIGURATION.md> for documentation.
+
+        Options containing secret data should be set to an attribute set
+        containing the attribute `_secret` - a string pointing to a file
+        containing the value the option should be set to.
       '';
-    };
-
-    bindIP = mkOption {
-      default = "[::]";
-      type = types.str;
-      description = ''
-        The IP the service should listen on.
-      '';
-    };
-
-    theme = mkOption {
-      type = types.enum [
-        "alps"
-        "sourcehut"
-      ];
-      default = "sourcehut";
-      description = ''
-        The frontend's theme to use.
-      '';
-    };
-
-    imaps = {
-      port = mkOption {
-        type = types.port;
-        default = 993;
-        description = ''
-          The IMAPS server port.
-        '';
+      default = { };
+      type = lib.types.submodule {
+        freeformType = lib.types.toml;
+        options = { };
       };
-
-      host = mkOption {
-        type = types.str;
-        default = "[::1]";
-        example = "mail.example.org";
-        description = ''
-          The IMAPS server address.
-        '';
-      };
-    };
-
-    smtps = {
-      port = mkOption {
-        type = types.port;
-        default = 465;
-        description = ''
-          The SMTPS server port.
-        '';
-      };
-
-      host = mkOption {
-        type = types.str;
-        default = cfg.imaps.host;
-        defaultText = "services.alps.imaps.host";
-        example = "mail.example.org";
-        description = ''
-          The SMTPS server address.
-        '';
-      };
-    };
-
-    package = mkOption {
-      internal = true;
-      type = types.package;
-      default = pkgs.alps;
-    };
-
-    args = mkOption {
-      internal = true;
-      type = types.listOf types.str;
-      default = [
-        "-addr"
-        "${cfg.bindIP}:${toString cfg.port}"
-        "-theme"
-        "${cfg.theme}"
-        "imaps://${cfg.imaps.host}:${toString cfg.imaps.port}"
-        "smtps://${cfg.smtps.host}:${toString cfg.smtps.port}"
-      ];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    systemd.packages = [ cfg.package ];
+
     systemd.services.alps = {
-      description = "alps is a simple and extensible webmail.";
-      documentation = [ "https://git.sr.ht/~migadu/alps" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [
-        "network.target"
-        "network-online.target"
-      ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/alps ${escapeShellArgs cfg.args}";
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
         DynamicUser = true;
+        RuntimeDirectory = "alps";
+        ExecStartPre =
+          let
+            script = pkgs.writeShellScript "alps-pre-start" ''
+              ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/alps/config.json"}
+              ${lib.getExe pkgs.remarshal} -f json -t toml /run/alps/config.json /run/alps/config.toml
+              chown --reference=/run/alps /run/alps/config.json /run/alps/config.toml
+            '';
+          in
+          "+${script}";
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} -config \${RUNTIME_DIRECTORY}/config.toml"
+        ];
+
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateIPC = true;
-        PrivateTmp = true;
         PrivateUsers = true;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
-        ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SocketBindAllow = cfg.port;
-        SocketBindDeny = "any";
-        SystemCallArchitectures = "native";
+        SystemCallArchitectures = [ "native" ];
         SystemCallFilter = [
           "@system-service"
-          "~@privileged @obsolete"
+          "~@privileged"
+          "~@resources"
         ];
       };
     };

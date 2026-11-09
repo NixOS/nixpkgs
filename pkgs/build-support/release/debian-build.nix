@@ -75,8 +75,8 @@ vmTools.runInLinuxImage (
             ${
               if (src ? version) then "--pkgversion=$(echo ${src.version} | tr _ -)" else "--pkgversion=0.0.0"
             } \
-            ''${debMaintainer:+--maintainer="'$debMaintainer'"} \
-            ''${debName:+--pkgname="'$debName'"} \
+            ''${debMaintainer:+--maintainer="$debMaintainer"} \
+            ''${debName:+--pkgname="$debName"} \
             $checkInstallFlags \
             -- \
             $SHELL -c "''${installCommand:-make install}"

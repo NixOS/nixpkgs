@@ -7,14 +7,14 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcircle";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "libcircle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EfnoNL6wo6qQES6XzMtpTpYcsJ8V2gy32i26wiTldH0=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

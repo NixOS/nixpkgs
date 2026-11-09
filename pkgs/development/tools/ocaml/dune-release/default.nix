@@ -11,7 +11,6 @@
   rresult,
   logs,
   fpath,
-  odoc,
   opam-format,
   opam-core,
   opam-state,
@@ -40,14 +39,17 @@ let
     coreutils
   ];
 in
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dune-release";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    hash = "sha256-bhDf/zb6mnSB53ibb1yb8Yf1TTmVEu8rb8KUnJieCnY=";
+    url = "https://github.com/ocamllabs/dune-release/releases/download/${finalAttrs.version}/dune-release-${finalAttrs.version}.tbz";
+    hash = "sha256-A0es0mk6aEMdKvweVfffkaezfgIi1DWAr3dLmNwGOTo=";
   };
+
+  # Compatibility with opam-format 2.6
+  patches = [ ./opam-2_6.patch ];
 
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [
@@ -60,14 +62,12 @@ buildDunePackage rec {
     opam-core
     rresult
     logs
-    odoc
     bos
     yojson
     astring
     fpath
   ];
   nativeCheckInputs = [
-    odoc
     gitMinimal
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
@@ -98,8 +98,8 @@ buildDunePackage rec {
     description = "Release dune packages in opam";
     mainProgram = "dune-release";
     homepage = "https://github.com/ocamllabs/dune-release";
-    changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/tarides/dune-release/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

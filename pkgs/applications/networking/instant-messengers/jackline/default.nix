@@ -8,7 +8,7 @@ with ocamlPackages;
 
 buildDunePackage {
   pname = "jackline";
-  version = "unstable-2024-10-21";
+  version = "0.1.0-unstable-2024-10-21";
 
   minimalOCamlVersion = "4.13";
 
@@ -18,6 +18,10 @@ buildDunePackage {
     rev = "cf6b26e37e37b0b48be9fd2e74fc563375f757f0";
     hash = "sha256-6QZZ77C1G3x/GOJsUEQMrCatVsyyxNjq36ez/TgeHSY=";
   };
+
+  postPatch = ''
+    substituteInPlace cli/dune --replace-warn 'notty notty.lwt' 'notty-community.lwt'
+  '';
 
   nativeBuildInputs = [
     ppx_sexp_conv
@@ -35,7 +39,7 @@ buildDunePackage {
     otr
     astring
     ptime
-    notty
+    notty-community
     sexplib
     hex
     uchar

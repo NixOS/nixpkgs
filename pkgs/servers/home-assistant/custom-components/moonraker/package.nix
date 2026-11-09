@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "marcolivierarsenault";
   domain = "moonraker";
-  version = "1.12.1";
+  version = "1.13.4-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "marcolivierarsenault";
     repo = "moonraker-home-assistant";
-    tag = version;
-    hash = "sha256-jTL6hdS3jcIWivo+3qnIq3tTdLQ7AhxHERdZ41CGbR8=";
+    rev = "84ff69970b03b53b69769ebdd0009b80f667c460";
+    hash = "sha256-AMAW6ynqtCl+Bnf/4HT6RDXk72Oyr1pdI41nuxzZaAI=";
   };
 
   dependencies = [
@@ -32,10 +32,7 @@ buildHomeAssistantComponent rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
-
-  #skip phases with nothing to do
-  dontConfigure = true;
+  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
   meta = {
     changelog = "https://github.com/marcolivierarsenault/moonraker-home-assistant/releases/tag/${version}";

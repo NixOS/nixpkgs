@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2025.10.13.00";
+  version = "2026.07.27.00";
 
   outputs = [
     "out"
@@ -27,15 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "fb303";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IF3fQY8QfDBo8DoLFIFuZD8OgrrJfXLXDgFcsD1CmaY=";
+    hash = "sha256-euqoTxNizn4cA9UY/U6X6m2bV1owEuqEQIDEiDM9n5w=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
-    homepage = "https://github.com/facebook/fb303";
+    homepage = "https://github.com/meta/fb303";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

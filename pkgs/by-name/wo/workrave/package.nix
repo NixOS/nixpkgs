@@ -10,35 +10,35 @@
   intltool,
   libtool,
   pkg-config,
-  libICE,
-  libSM,
-  libXScrnSaver,
-  libXtst,
+  libice,
+  libsm,
+  libxscrnsaver,
+  libxtst,
   gobject-introspection,
   glib,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   atk,
   pango,
-  pangomm,
+  pangomm_1_4,
   cairo,
-  cairomm,
+  cairomm_1_0,
   dbus,
   dbus-glib,
   gst_all_1,
-  libsigcxx,
+  libsigcxx_2_0,
   boost,
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "workrave";
   version = "1.10.54";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
-    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
+    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion finalAttrs.version);
     sha256 = "sha256-pbMkzwxgKc4vjFhBeOf513hFytYiTPST19L8Nq4CVTg=";
   };
 
@@ -56,24 +56,24 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libICE
-    libSM
-    libXScrnSaver
-    libXtst
+    libice
+    libsm
+    libxscrnsaver
+    libxtst
     glib
-    glibmm
+    glibmm_2_4
     gtkmm3
     atk
     pango
-    pangomm
+    pangomm_1_4
     cairo
-    cairomm
+    cairomm_1_0
     dbus
     dbus-glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    libsigcxx
+    libsigcxx_2_0
     boost
   ];
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.linux;
   };
-}
+})

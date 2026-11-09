@@ -2,17 +2,20 @@
   lib,
   stdenv,
   fetchurl,
+  meson,
+  ninja,
   removeReferencesTo,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.4.3";
+  version = "3.0.8";
 
+  # fetchFromGitHub isn't used because it's unavailable during bootstrapping
   src = fetchurl {
-    url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-USA9me1XP6c0S/B8pibxDHzAlOCEasSqACO9DIPCWkE=";
+    url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RPZ83agZLv7Nm+n43y/lTwh/jIQGLd/wAnEz+UVDv4o=";
   };
 
   outputs = [
@@ -23,9 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    removeReferencesTo
+  ];
 
-  enableParallelBuilding = true;
+  strictDeps = true;
 
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
@@ -49,12 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    url = "https://github.com/pkgconf/pkgconf";
     rev-prefix = "pkgconf-";
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    homepage = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
       pkgconf is a program which helps to configure compiler and linker flags
@@ -65,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    changelog = "https://gitea.treehouse.systems/ariadne/pkgconf/src/tag/pkgconf-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [

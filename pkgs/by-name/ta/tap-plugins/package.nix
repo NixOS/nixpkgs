@@ -1,19 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchgit,
   ladspa-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tap-plugins";
-  version = "0-unstable-2020-12-09";
+  version = "0-unstable-2023-07-14";
 
-  src = fetchFromGitHub {
-    owner = "tomscii";
-    repo = "tap-plugins";
-    rev = "5d882799f37dffe37fc73451f2c5b4fb24316f3b";
-    hash = "sha256-bwybMxIAbOzPr43QGshjbnRK5GdziGiYDsTutZdSj4s=";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchgit {
+    url = "https://git.hq.sig7.se/tap-plugins.git";
+    rev = "85640223047d49a305e90ba1b92303eb066ba474";
+    hash = "sha256-179ztvsmxJiKXJ1QCYHCqCv3R1XWLcvVlUXyqaZYb2o=";
   };
 
   buildInputs = [

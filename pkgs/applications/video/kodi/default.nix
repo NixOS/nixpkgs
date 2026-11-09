@@ -6,16 +6,15 @@ unwrapped.overrideAttrs (oldAttrs: {
   passthru =
     let
       finalKodi = oldAttrs.passthru.kodi;
-      kodiPackages = callPackage ../../../top-level/kodi-packages.nix { kodi = finalKodi; };
     in
     oldAttrs.passthru
     // {
-      packages = kodiPackages;
+      packages = callPackage ../../../top-level/kodi-packages.nix { kodi = finalKodi; };
       withPackages =
         func:
         callPackage ./wrapper.nix {
           kodi = finalKodi;
-          addons = kodiPackages.requiredKodiAddons (func kodiPackages);
+          addons = finalKodi.packages.requiredKodiAddons (func finalKodi.packages);
         };
     };
 })

@@ -11,18 +11,18 @@
   openssl,
   pkg-config,
   stdenv,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.5.2";
   pname = "ppp";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = "ppp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NV8U0F8IhHXn0YuVbfFr992ATQZaXA16bb5hBIwm9Gs=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     openssl
   ]
   ++ lib.optionals withSystemd [
-    systemdMinimal
+    systemdLibs
   ];
 
   postPatch = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_LDFLAGS = "-lcrypt";
+  env.NIX_LDFLAGS = "-lcrypt";
 
   installFlags = [
     "sysconfdir=$(out)/etc"
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ stv0g ];
   };
-}
+})

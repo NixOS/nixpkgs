@@ -1,12 +1,17 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
 }:
 let
   cfg = config.services.adguardhome;
+  opt = options.services.adguardhome;
   settingsFormat = pkgs.formats.yaml { };
+
+  defaultHost = "0.0.0.0";
+  defaultPort = 3000;
 
   args = lib.concatStringsSep " " (
     [
@@ -18,24 +23,15 @@ let
     ++ cfg.extraArgs
   );
 
-  settings =
-    if (cfg.settings != null) then
-      cfg.settings
-      // (
-        if cfg.settings.schema_version < 23 then
-          {
-            bind_host = cfg.host;
-            bind_port = cfg.port;
-          }
-        else
-          {
-            http.address = "${cfg.host}:${toString cfg.port}";
-          }
-      )
-    else
-      null;
+  minimumSchemaVersion = 23;
 
-  configFile = (settingsFormat.generate "AdGuardHome.yaml" settings).overrideAttrs (_: {
+  webPort =
+    if cfg.settings != null then
+      lib.toInt (lib.last (lib.splitString ":" cfg.settings.http.address))
+    else
+      defaultPort;
+
+  configFile = (settingsFormat.generate "AdGuardHome.yaml" cfg.settings).overrideAttrs (_: {
     checkPhase = "${cfg.package}/bin/AdGuardHome -c $out --check-config";
   });
 in
@@ -62,7 +58,7 @@ in
     };
 
     allowDHCP = lib.mkOption {
-      default = settings.dhcp.enabled or false;
+      default = cfg.settings.dhcp.enabled or false;
       defaultText = lib.literalExpression "config.services.adguardhome.settings.dhcp.enabled or false";
       type = bool;
       description = ''
@@ -84,20 +80,16 @@ in
       '';
     };
 
+    # deprecated in favor of `settings.http.address`
     host = lib.mkOption {
-      default = "0.0.0.0";
-      type = str;
-      description = ''
-        Host address to bind HTTP server to.
-      '';
+      type = nullOr str;
+      default = null;
+      visible = false;
     };
-
     port = lib.mkOption {
-      default = 3000;
-      type = port;
-      description = ''
-        Port to serve HTTP pages on.
-      '';
+      type = nullOr port;
+      default = null;
+      visible = false;
     };
 
     settings = lib.mkOption {
@@ -112,6 +104,14 @@ in
             description = ''
               Schema version for the configuration.
               Defaults to the `schema_version` supplied by `cfg.package`.
+            '';
+          };
+
+          http.address = lib.mkOption {
+            default = "${defaultHost}:${toString defaultPort}";
+            type = str;
+            description = ''
+              Address to serve the web interface on, in the `host:port` format.
             '';
           };
         };
@@ -143,26 +143,44 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings =
+      lib.concatMap
+        (
+          name:
+          lib.optional (cfg.${name} != null) ''
+            The option `services.adguardhome.${name}' defined in ${
+              lib.showFiles opt.${name}.files
+            } is deprecated, set `services.adguardhome.settings.http.address' instead.
+          ''
+        )
+        [
+          "host"
+          "port"
+        ];
+
+    services.adguardhome.settings = lib.mkIf (cfg.host != null || cfg.port != null) {
+      http.address = "${lib.defaultTo defaultHost cfg.host}:${toString (lib.defaultTo defaultPort cfg.port)}";
+    };
+
     assertions = [
       {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_host" ] cfg.settings);
-        message = "AdGuard option `settings.bind_host' has been superseded by `services.adguardhome.host'";
-      }
-      {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_port" ] cfg.settings);
-        message = "AdGuard option `settings.bind_port' has been superseded by `services.adguardhome.port'";
+        assertion = cfg.settings != null -> cfg.settings.schema_version >= minimumSchemaVersion;
+        message = "AdGuard option `settings.schema_version' must be at least ${toString minimumSchemaVersion}";
       }
       {
         assertion =
-          settings != null -> cfg.mutableSettings || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings;
+          cfg.settings != null
+          -> cfg.mutableSettings || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
         message = "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
       }
       {
         assertion =
-          settings != null
+          cfg.settings != null
           ->
             cfg.mutableSettings
-            || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings && lib.isList settings.dns.bootstrap_dns;
+            ||
+              lib.hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings
+              && lib.isList cfg.settings.dns.bootstrap_dns;
         message = "AdGuard setting dns.bootstrap_dns needs to be a list";
       }
     ];
@@ -176,34 +194,78 @@ in
         StartLimitBurst = 10;
       };
 
-      preStart = lib.optionalString (settings != null) ''
-        if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
-           && [ "${toString cfg.mutableSettings}" = "1" ]; then
-          # First run a schema_version update on the existing configuration
-          # This ensures that both the new config and the existing one have the same schema_version
-          # Note: --check-config has the side effect of modifying the file at rest!
-          ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
+      preStart =
+        let
+          installFresh = ''
+            cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
+            chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
+          '';
+        in
+        lib.optionalString (cfg.settings != null) (
+          if cfg.mutableSettings then
+            ''
+              if [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ]; then
+                # First run a schema_version update on the existing configuration
+                # This ensures that both the new config and the existing one have the same schema_version
+                # Note: --check-config has the side effect of modifying the file at rest!
+                ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
 
-          # Writing directly to AdGuardHome.yaml results in empty file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
-          mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
-        else
-          cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
-          chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
-        fi
-      '';
+                # sed operation needed to fix protection_disabled_until value changed by yaml-merge
+                ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" \
+                | sed -E "s/(protection_disabled_until: [0-9]{4}-[0-9]{2}-[0-9]{2}) /\1T/" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+                mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
+              else
+                ${installFresh}
+              fi
+            ''
+          else
+            installFresh
+        );
 
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${args}";
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
         StateDirectory = "AdGuardHome";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        SystemCallArchitectures = "native";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_INET"
+          "AF_INET6"
+        ]
+        # AF_UNIX to be able to connect to e.g. /dev/log
+        ++ lib.optionals (cfg.settings.log.file or "" == "syslog") [ "AF_UNIX" ]
+        ++ lib.optionals cfg.allowDHCP [ "AF_PACKET" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        UMask = "0077";
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ webPort ];
   };
 }

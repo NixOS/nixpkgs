@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://erratique.ch/software/react/releases/react-${version}.tbz";
-    sha256 = "sha256-xK3TFdbx8VPRFe58qN1gwSZf9NQIwmYSX8tRJP0ij5k=";
+    hash = "sha256-xK3TFdbx8VPRFe58qN1gwSZf9NQIwmYSX8tRJP0ij5k=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     inherit (ocaml.meta) platforms;
     maintainers = with lib.maintainers; [
-      vbmithr
       gal_bolle
     ];
   };

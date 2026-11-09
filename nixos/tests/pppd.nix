@@ -27,7 +27,7 @@ in
             ];
             after = [ "network.target" ];
             serviceConfig = {
-              ExecStart = "${pkgs.rpPPPoE}/sbin/pppoe-server -F -O /etc/ppp/pppoe-server-options -q ${pkgs.ppp}/sbin/pppd -I eth1 -L 192.0.2.1 -R 192.0.2.2";
+              ExecStart = "${pkgs.rp-pppoe}/sbin/pppoe-server -F -O /etc/ppp/pppoe-server-options -q ${pkgs.ppp}/sbin/pppd -I eth1 -L 192.0.2.1 -R 192.0.2.2";
             };
             wantedBy = [ "multi-user.target" ];
           };

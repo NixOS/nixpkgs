@@ -2,25 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
-  perl,
+  pkg-config,
+  aws-lc,
+  openssl,
+  sqlite,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oniux";
-  version = "0.6.1";
+  version = "0.15.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     owner = "tpo/core";
     repo = "oniux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-icrNKF9cGPBZPbaGCj2c8OtdP6A14whPoP39zhs4wlo=";
+    hash = "sha256-MEw5UIPl2xqMcf5IOhKBf0LZam5e2g/iukq+ds/f6Bs=";
   };
 
-  cargoHash = "sha256-juWtf0aX70xJTx9KpXOATyXARhk7aTaveUFN0OPKrbs=";
+  cargoHash = "sha256-Hx6BA+ynbPBtgB4jR9YSFJ++8ndDuRD6CFFsIzh9iAA=";
 
-  nativeBuildInputs = [
-    perl
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+    zstd
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -30,10 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Isolate Applications over Tor using Linux Namespaces";
     maintainers = with lib.maintainers; [ tnias ];
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     mainProgram = "oniux";
   };
 })

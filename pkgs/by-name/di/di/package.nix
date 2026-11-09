@@ -2,24 +2,31 @@
   lib,
   stdenv,
   fetchurl,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "di";
-  version = "6.0.0";
+  version = "6.2.2.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/diskinfo-di/${pname}-${version}.tar.gz";
-    sha256 = "sha256-e2Y+TbBEsfpJhr0Bj4J8GOlv5tH5o2cy3LsEUOf1GMs=";
+    url = "mirror://sourceforge/diskinfo-di/di-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Ge7rfrytMGGueBTNrlWTrM+yuyYc4keVpgSigsv8YP4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://diskinfo-di.sourceforge.io/";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ manveru ];
     platforms = lib.platforms.all;
+    mainProgram = "di";
   };
-}
+})

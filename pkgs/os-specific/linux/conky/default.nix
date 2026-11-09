@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -10,7 +9,7 @@
   # dependencies
   glib,
   libxfixes,
-  libXinerama,
+  libxinerama,
   catch2,
   gperf,
 
@@ -29,14 +28,19 @@
   ncurses ? null,
   x11Support ? true,
   freetype,
-  xorg,
+  libxft,
+  libxext,
+  libxi,
+  libx11,
+  libsm,
+  libice,
   waylandSupport ? true,
   pango,
   wayland,
   wayland-protocols,
   wayland-scanner,
   xdamageSupport ? x11Support,
-  libXdamage ? null,
+  libxdamage ? null,
   doubleBufferSupport ? x11Support,
   imlib2Support ? x11Support,
   imlib2 ? null,
@@ -52,7 +56,7 @@
   wirelesstools ? null,
   nvidiaSupport ? false,
   libXNVCtrl ? null,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? false,
   libpulseaudio ? null,
 
   curlSupport ? true,
@@ -72,12 +76,11 @@ assert docsSupport -> pandoc != null && python3 != null;
 
 assert ncursesSupport -> ncurses != null;
 
-assert xdamageSupport -> x11Support && libXdamage != null;
+assert xdamageSupport -> x11Support && libxdamage != null;
 assert imlib2Support -> x11Support && imlib2 != null;
 assert luaSupport -> lua != null;
 assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
 assert luaCairoSupport -> luaSupport && toluapp != null && cairo != null;
-assert luaCairoSupport || luaImlib2Support -> lua.luaversion == "5.4";
 
 assert wirelessSupport -> wirelesstools != null;
 assert nvidiaSupport -> libXNVCtrl != null;
@@ -91,13 +94,13 @@ assert extrasSupport -> python3 != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
-  version = "1.22.2";
+  version = "1.25.5";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tMnfdW1sbZkt8v6DITM2R0ZwyN+xs7VLGZDityYt38Q=";
+    hash = "sha256-hcALqCI5rJyDgbbYXw3ndzr3smKktvHmj2s8ubYAbkI=";
   };
 
   # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
@@ -126,18 +129,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libXinerama
+    libxinerama
   ]
   ++ lib.optional ncursesSupport ncurses
   ++ lib.optionals x11Support [
     freetype
     libxfixes
-    xorg.libICE
-    xorg.libX11
-    xorg.libXext
-    xorg.libXft
-    xorg.libXfixes
-    xorg.libSM
+    libice
+    libx11
+    libxext
+    libxi
+    libxft
+    libxfixes
+    libsm
     expat
   ]
   ++ lib.optionals waylandSupport [
@@ -145,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ]
-  ++ lib.optional xdamageSupport libXdamage
+  ++ lib.optional xdamageSupport libxdamage
   ++ lib.optional imlib2Support imlib2
   ++ lib.optional luaSupport lua
   ++ lib.optional luaImlib2Support imlib2

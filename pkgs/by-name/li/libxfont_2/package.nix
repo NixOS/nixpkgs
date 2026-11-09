@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfont_2";
-  version = "2.0.7";
+  version = "2.0.9";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXfont2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-i3uC/eukh2m2lDPo4/u5hKX2vzaLDV9Hq+7EnePljvs=";
+    hash = "sha256-8EKjcGZoFee5Qem3AZAkdVvRxsKVSvv6UVrzeCUXmeI=";
   };
 
   strictDeps = true;
@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     inherit (libxfont_1.meta) description homepage license;

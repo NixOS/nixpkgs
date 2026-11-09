@@ -2,32 +2,34 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "favirecon";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "favirecon";
-    tag = "v${version}";
-    hash = "sha256-GpPqTtbSVLwNLKpxSb2YMZIOEHgfKn0U6K2f1ISrufc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/CnhvcFNLNj8dFqypgXmOkteKepNmIH1icOXnldA/T8=";
   };
 
-  vendorHash = "sha256-jjKDiow5sdwKpA1f+Dzkyb8wQuU26MHcafNYhk9H9MM=";
+  vendorHash = "sha256-v/SBkfyO+NI+LXBK2OOTchmydIw69ycNF6amPOVt4rA=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to detect technologies, WAF, exposed panels and known services";
     homepage = "https://github.com/edoardottt/favirecon";
-    changelog = "https://github.com/edoardottt/favirecon/releases/tag/${src.tag}";
+    changelog = "https://github.com/edoardottt/favirecon/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "favirecon";
   };
-}
+})

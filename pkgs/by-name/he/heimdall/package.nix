@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   # heimdall cli looked up from PATH by gui
-  preFixup = lib.optional enableGUI ''
+  preFixup = lib.optionalString enableGUI ''
     qtWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
 

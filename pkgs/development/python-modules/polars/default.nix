@@ -20,8 +20,7 @@
   mimalloc,
   jemalloc,
   rust-jemalloc-sys,
-  # Another alternative is to try `mimalloc`
-  polarsMemoryAllocator ? mimalloc, # polarsJemalloc,
+  polarsMemoryAllocator ? polarsJemalloc, # mimalloc (see meta.problems),
   polarsJemalloc ?
     let
       jemalloc' = rust-jemalloc-sys.override {
@@ -36,33 +35,31 @@
     assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
     jemalloc',
 
-  polars,
   python,
 }:
 
 let
-  version = "1.36.1";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
   jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polars";
-  inherit version;
+  version = "1.42.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
-    tag = "py-${version}";
-    hash = "sha256-0usMg/xQZOzrLf2gIfNFtzj96cYVzq5gFaKTFLqyfK0=";
+    tag = "py-${finalAttrs.version}";
+    hash = "sha256-xHO+3mgwKvRRQZiAnThwkKFDvfe3ehkifBPINi101Ws=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-20AI4AGSxnmYitQjfwTFwxMBplEqvN4WXPFdoqJBgSg=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-EHtQ5BzG6EFJD7e8NMajqNEXlAU/QyyIFLil1irfaqo=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -84,6 +81,9 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    # The mimalloc work-around doesn't seem to work.
+    # runtime paths do not list mimalloc, and jemalloc is
+    # compiled & used regardless.
     polarsMemoryAllocator
     (pkgs.__splicedPackages.zstd or pkgs.zstd)
   ];
@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
     RUSTFLAGS = lib.concatStringsSep " " (
       lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
-        "--cfg use_mimalloc"
+        "--cfg allocator=\"mimalloc\""
       ]
     );
     RUST_BACKTRACE = true;
@@ -128,7 +128,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
       }
@@ -145,7 +145,7 @@ buildPythonPackage rec {
         nativeBuildInputs = [
           (python.withPackages (ps: [
             ps.pyarrow
-            polars
+            finalAttrs.finalPackage
           ]))
         ];
         failureHook = ''
@@ -159,13 +159,13 @@ buildPythonPackage rec {
         EOF
       '';
   passthru.tests.pytest = stdenv.mkDerivation {
-    pname = "${polars.pname}-pytest";
+    pname = "${finalAttrs.pname}-pytest";
 
-    inherit (polars) version src;
+    inherit (finalAttrs) version src;
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "${src.name}/py-polars";
+    sourceRoot = "${finalAttrs.src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
@@ -183,7 +183,7 @@ buildPythonPackage rec {
     checkPhase = "pytestCheckPhase";
     nativeBuildInputs = [
       (python.withPackages (ps: [
-        polars
+        finalAttrs.finalPackage
         ps.aiosqlite
         ps.altair
         ps.boto3
@@ -217,7 +217,6 @@ buildPythonPackage rec {
     ];
     nativeCheckInputs = [
       pytestCheckHook
-      pytest-codspeed
       pytest-cov-stub
       pytest-xdist
       pytest-benchmark
@@ -292,7 +291,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dataframes powered by a multithreaded, vectorized query engine, written in Rust";
     homepage = "https://github.com/pola-rs/polars";
-    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
+    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -300,5 +299,8 @@ buildPythonPackage rec {
     ];
     mainProgram = "polars";
     platforms = lib.platforms.all;
+  }
+  // lib.optionalAttrs (polarsMemoryAllocator.pname == "mimalloc") {
+    problems.brokenMimalloc = "mimalloc polarsMemoryAllocator does not actually link mimalloc.";
   };
-}
+})

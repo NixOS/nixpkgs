@@ -18,11 +18,11 @@ fi
 
 # Update Darwin hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/releases/mac/universal/Positron-${current_version}-universal.dmg" \
+    "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${current_version}-arm64.dmg" \
     | jq -r .hash)
 
 new_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/releases/mac/universal/Positron-${new_version}-universal.dmg" \
+    "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${new_version}-arm64.dmg" \
     | jq -r .hash)
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix

@@ -10,14 +10,14 @@
   libintl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exif";
   version = "0.6.22";
 
   src = fetchFromGitHub {
     owner = "libexif";
     repo = "exif";
-    rev = "exif-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    rev = "exif-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}-release";
     sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     mainProgram = "exif";
   };
-}
+})

@@ -19,14 +19,14 @@ let
     }:
     stdenv.mkDerivation rec {
       inherit pname;
-      version = "3.51.1";
+      version = "3.54.0";
 
       # nixpkgs-update: no auto update
       src =
         assert version == sqlite.version;
         fetchurl {
-          url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
-          hash = "sha256-D452WsjqfDbPjqm//dXBA1ZPSopjXyFfn3g7M4oT2XE=";
+          url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+          hash = "sha256-iEdlmCHgxRFr0UqUZEyCupMrLZoFrIGvLjSvgUqtfFg=";
         };
 
       nativeBuildInputs = [ unzip ];
@@ -39,7 +39,7 @@ let
       meta = {
         inherit description homepage mainProgram;
         downloadPage = "http://sqlite.org/download.html";
-        license = lib.licenses.publicDomain;
+        license = lib.licenses.blessing;
         maintainers = with lib.maintainers; [ johnazoidberg ];
         platforms = lib.platforms.unix;
       };

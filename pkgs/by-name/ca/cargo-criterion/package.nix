@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-criterion";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bheisler";
     repo = "cargo-criterion";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 
@@ -21,13 +21,15 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo extension for running Criterion.rs benchmarks";
     mainProgram = "cargo-criterion";
     homepage = "https://github.com/bheisler/cargo-criterion";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       humancalico
       matthiasbeyer
     ];
   };
-}
+})

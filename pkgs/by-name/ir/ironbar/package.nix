@@ -12,7 +12,6 @@
   gtk4-layer-shell,
   adwaita-icon-theme,
   libxkbcommon,
-  openssl,
   pkg-config,
   hicolor-icon-theme,
   rustPlatform,
@@ -24,25 +23,25 @@
   libinput,
   libevdev,
   features ? [ ],
-  systemd,
+  systemdLibs,
   dbus,
 }:
 
 let
   hasFeature = f: features == [ ] || builtins.elem f features;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ironbar";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
-    rev = "v${version}";
-    hash = "sha256-vhkNdvzY9xd8qmKgKtpVRTdvmS1QxnGKDFCpttqX1GE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JBUpT7eJTRXUe5xLmzDr/MnoFgqyp9LjfI9aY0tWqsg=";
   };
 
-  cargoHash = "sha256-ptzq0407IaNrXXiksQKXDUbs2wPTz4GHtnCG49EbOcY=";
+  cargoHash = "sha256-pcPHatZVGRxqu0TmZ8+ZXV/XOj829LDhg9mB1Jt7yhg=";
 
   buildInputs = [
     gtk4
@@ -55,10 +54,9 @@ rustPlatform.buildRustPackage rec {
     hicolor-icon-theme
     gsettings-desktop-schemas
     libxkbcommon
-    systemd
+    systemdLibs
     dbus
   ]
-  ++ lib.optionals (hasFeature "http") [ openssl ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
   ++ lib.optionals (hasFeature "cairo") [ luajit ]
   ++ lib.optionals (hasFeature "keyboard") [
@@ -74,6 +72,15 @@ rustPlatform.buildRustPackage rec {
   propagatedBuildInputs = [ gtk4 ];
 
   runtimeDeps = [ luajitPackages.lgi ];
+
+  postPatch = ''
+    substituteInPlace ironbar.service \
+      --replace-fail '/usr/bin/ironbar' "$out/bin/ironbar"
+  '';
+
+  postInstall = ''
+    install -Dm644 ironbar.service "$out/lib/systemd/user/ironbar.service"
+  '';
 
   buildNoDefaultFeatures = features != [ ];
   buildFeatures = features;
@@ -95,7 +102,7 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      ${gappsWrapperArgs}
+      ${finalAttrs.gappsWrapperArgs}
     )
   '';
 
@@ -111,4 +118,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ironbar";
   };
-}
+})

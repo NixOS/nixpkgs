@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  substitute,
-  fetchpatch,
   fetchurl,
+  fetchpatch2,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -16,6 +15,9 @@
   enableExamples ? false,
   enableUtils ? true,
   libusb1,
+  protobuf,
+  grpc,
+  openssl,
   # Disable dpdk for now due to compilation issues.
   enableDpdk ? false,
   dpdk,
@@ -32,19 +34,21 @@
   enableN320 ? true,
   enableE300 ? true,
   enableE320 ? true,
+  # passthru.tests
+  soapyuhd,
 }:
 
 let
-  inherit (lib) optionals cmakeBool;
+  inherit (lib) optionals cmakeBool cmakeFeature;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
   # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
   #
-  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
+  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --arg commit true
   #
-  version = "4.9.0.0";
+  version = "4.11.0.0";
 
   outputs = [
     "out"
@@ -57,41 +61,43 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-XA/ADJ0HjD6DxqFTVMwFa7tRgM56mHAEL+a0paWxKyM=";
+    hash = "sha256-L8bd9KP3WauFKN6jEI5VECaTBgEuB8IcSiiLbXFMWZY=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "194gsmvn7gmwj7b1lw9sq0d0y0babbd0q1229qbb3qjc6f6m0p0y";
+    sha256 = "0b5hy1bjyhd5s2b98jdjfk8r7aa939z6jwfnpl5qqp4dvhiyc9bm";
   };
-  # This are the minimum required Python dependencies, this attribute might
-  # be useful if you want to build a development environment with a python
-  # interpreter able to import the uhd module.
-  pythonPath =
-    optionals (enablePythonApi || enableUtils) [
-      python3.pkgs.numpy
-      python3.pkgs.setuptools
-    ]
-    ++ optionals enableUtils [
-      python3.pkgs.requests
-      python3.pkgs.six
 
-      /*
-        These deps are needed for the usrp_hwd.py utility, however even if they
-        would have been added here, the utility wouldn't have worked because it
-        depends on an old python library mprpc that is not supported for Python >
-        3.8. See also report upstream:
-        https://github.com/EttusResearch/uhd/issues/744
-
-        python3.pkgs.gevent
-        python3.pkgs.pyudev
-        python3.pkgs.pyroute2
-      */
-    ];
+  inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {
-    runtimePython = python3.withPackages (ps: finalAttrs.pythonPath);
+    runtimePython = python3.withPackages (ps: finalAttrs.finalPackage.passthru.pythonPath);
+    # This are the minimum required Python dependencies, this attribute might
+    # be useful if you want to build a development environment with a python
+    # interpreter able to import the uhd module.
+    pythonPath =
+      optionals (enablePythonApi || enableUtils) [
+        python3.pkgs.numpy
+        python3.pkgs.setuptools
+      ]
+      ++ optionals enableUtils [
+        python3.pkgs.requests
+        python3.pkgs.six
+
+        /*
+          These deps are needed for the usrp_hwd.py utility, however even if they
+          would have been added here, the utility wouldn't have worked because it
+          depends on an old python library mprpc that is not supported for Python >
+          3.8. See also report upstream:
+          https://github.com/EttusResearch/uhd/issues/744
+
+          python3.pkgs.gevent
+          python3.pkgs.pyudev
+          python3.pkgs.pyroute2
+        */
+      ];
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
@@ -100,11 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    "-DENABLE_LIBUHD=ON"
-    "-DENABLE_USB=ON"
+    (cmakeBool "ENABLE_LIBUHD" true)
+    (cmakeBool "ENABLE_USB" true)
     # Regardless of doCheck, we want to build the tests to help us gain
     # confident that the package is OK.
-    "-DENABLE_TESTS=ON"
+    (cmakeBool "ENABLE_TESTS" true)
     (cmakeBool "ENABLE_EXAMPLES" enableExamples)
     (cmakeBool "ENABLE_UTILS" enableUtils)
     (cmakeBool "ENABLE_C_API" enableCApi)
@@ -147,17 +153,21 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
+
+    # Force protobuf into config mode instead of using CMake's builtin module, as gRPC's later re-import of Protobuf causes conflicts with libupb targets.
+    # https://github.com/protocolbuffers/protobuf/issues/18307
+    (cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (cmakeFeature "GRPC_CPP_PLUGIN" (lib.getExe' grpc "grpc_cpp_plugin"))
   ]
   ++ optionals stdenv.hostPlatform.isAarch32 [
-    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
+    (cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-psabi")
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    # Present both here and in buildInputs for cross compilation.
-    python3
-    python3.pkgs.mako
+    grpc
+    (python3.withPackages (ps: [ ps.mako ]))
     # We add this unconditionally, but actually run wrapPythonPrograms only if
     # python utilities are enabled
     python3.pkgs.wrapPython
@@ -167,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       boost
       libusb1
+      protobuf
+      openssl
     ]
     ++ optionals enableExamples [
       ncurses
@@ -176,14 +188,19 @@ stdenv.mkDerivation (finalAttrs: {
       dpdk
     ];
 
-  patches = [
-    ./fix-pkg-config.patch
-  ];
-
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
+
+  # Add missing log_add_impl.hpp to the installed headers.
+  # https://github.com/EttusResearch/uhd/pull/945
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/EttusResearch/uhd/commit/6bc1d4d011825b2dca6d60b1cfb327dc07c63414.patch?full_index=1";
+      hash = "sha256-Rx1B3za4sFbX3d6Vj8bVaPvPunNwc4Ir0WiXjLDgoQk=";
+    })
+  ];
 
   # Build only the host software
   preConfigure = "cd host";
@@ -222,6 +239,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  passthru.tests = { inherit soapyuhd; };
+
   meta = {
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
@@ -231,7 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       USRP devices are designed and sold by Ettus Research, LLC and its parent
       company, National Instruments.
     '';
-    homepage = "https://uhd.ettus.com/";
+    homepage = "https://uhd.readthedocs.io";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [

@@ -7,15 +7,15 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
-  version = "1.5.27";
+  version = "1.7.12";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
-    rev = "v${version}";
-    hash = "sha256-aJRw1a/XJivNZS3NkZ4U6nC12+wY/aoNv33mbAzNl0k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2DbRhS4TQCK8ttFLVlIL9QYa1LHMJSoZWF9q7qVqGaY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
@@ -57,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

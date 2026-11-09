@@ -7,14 +7,14 @@
   picosat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aiger";
   version = "1.9.20";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "aiger";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     hash = "sha256-ggkxITuD8phq3VF6tGc/JWQGBhTfPxBdnRobKswYVa4=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   pkgconfigItems = [
     (makePkgconfigItem {
       name = "aiger";
-      inherit version;
+      inherit (finalAttrs) version;
       cflags = [ "-I\${includedir}" ];
       libs = [
         "-L\${libdir}"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         includedir = "@includedir@";
         libdir = "@libdir@";
       };
-      inherit (meta) description;
+      inherit (finalAttrs.meta) description;
     })
   ];
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.unix;
   };
-}
+})

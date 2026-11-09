@@ -6,10 +6,11 @@
 }:
 let
   cfg = config.console;
+  i18nCfg = config.i18n;
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
-  isUnicode = lib.hasSuffix "UTF-8" (lib.toUpper config.i18n.defaultLocale);
+  isUnicode = config.i18n.defaultCharset == "UTF-8" || cfg.useXkbConfig;
 
   optimizedKeymap =
     pkgs.runCommand "keymap"
@@ -23,10 +24,12 @@ let
       '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
-  vconsoleConf = pkgs.writeText "vconsole.conf" ''
-    KEYMAP=${cfg.keyMap}
-    ${lib.optionalString (cfg.font != null) "FONT=${cfg.font}"}
-  '';
+  vconsoleConf =
+    withFont:
+    pkgs.writeText "vconsole.conf" ''
+      KEYMAP=${cfg.keyMap}
+      ${lib.optionalString (withFont && cfg.font != null) "FONT=${cfg.font}"}
+    '';
 
   consoleEnv =
     kbd:
@@ -162,25 +165,15 @@ in
           environment.systemPackages = [ pkgs.kbd ];
 
           # Let systemd-vconsole-setup.service do the work of setting up the
-          # virtual consoles.
-          environment.etc."vconsole.conf".source = vconsoleConf;
+          # virtual consoles. Skip when imperative so localectl can manage it.
+          environment.etc."vconsole.conf" = lib.mkIf (!i18nCfg.imperativeLocale) {
+            source = vconsoleConf true;
+          };
           # Provide kbd with additional packages.
           environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
-          boot.initrd.preLVMCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-            lib.mkBefore ''
-              kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-              printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
-              loadkmap < ${optimizedKeymap}
-
-              ${lib.optionalString (cfg.earlySetup && cfg.font != null) ''
-                setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
-              ''}
-            ''
-          );
-
           boot.initrd.systemd.contents = {
-            "/etc/vconsole.conf".source = vconsoleConf;
+            "/etc/vconsole.conf".source = vconsoleConf cfg.earlySetup;
             # Add everything if we want full console setup...
             "/etc/kbd" = lib.mkIf cfg.earlySetup {
               source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share";
@@ -198,7 +191,7 @@ in
             "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
             "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
           ]
-          ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
+          ++ lib.optionals (cfg.font != null && cfg.earlySetup && lib.hasPrefix builtins.storeDir cfg.font) [
             "${cfg.font}"
           ]
           ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
@@ -209,13 +202,22 @@ in
             "systemd-vconsole-setup.service"
           ];
 
+          # When imperative, seed /etc/vconsole.conf on first boot from declared
+          # defaults so the keymap isn't lost before localectl is ever used
+          systemd.tmpfiles.rules = lib.mkIf i18nCfg.imperativeLocale [
+            "C /etc/vconsole.conf - - - - ${vconsoleConf true}"
+          ];
+
           systemd.services.reload-systemd-vconsole-setup = {
             description = "Reset console on configuration changes";
             wantedBy = [ "multi-user.target" ];
-            restartTriggers = [
-              vconsoleConf
-              (consoleEnv pkgs.kbd)
-            ];
+            restartTriggers =
+              lib.optionals (!i18nCfg.imperativeLocale) [
+                (config.environment.etc."vconsole.conf".source)
+              ]
+              ++ [
+                (consoleEnv pkgs.kbd)
+              ];
             reloadIfChanged = true;
             serviceConfig = {
               RemainAfterExit = true;
@@ -231,27 +233,6 @@ in
             "vt.default_grn=${makeColor 1 cfg.colors}"
             "vt.default_blu=${makeColor 2 cfg.colors}"
           ];
-        })
-
-        (lib.mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
-          boot.initrd.extraUtilsCommands = ''
-            mkdir -p $out/share/consolefonts
-            ${
-              if lib.substring 0 1 cfg.font == "/" then
-                ''
-                  font="${cfg.font}"
-                ''
-              else
-                ''
-                  font="$(echo ${consoleEnv pkgs.kbd}/share/consolefonts/${cfg.font}.*)"
-                ''
-            }
-            if [[ $font == *.gz ]]; then
-              gzip -cd $font > $out/share/consolefonts/font.psf
-            else
-              cp -L $font $out/share/consolefonts/font.psf
-            fi
-          '';
         })
       ]
     ))

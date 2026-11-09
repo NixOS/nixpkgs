@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation {
   pname = "xannotate";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-BDRg29ojBOFfwD4hx3XbcabwrJn2nfgI9Ld27FaQoRw=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     description = "Tool to scribble over X windows";

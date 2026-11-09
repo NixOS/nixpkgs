@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
   pytest-cov-stub,
   pyyaml,
@@ -11,20 +10,18 @@
 
 buildPythonPackage rec {
   pname = "tinydb";
-  version = "4.8.2";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "msiemens";
     repo = "tinydb";
     tag = "v${version}";
-    hash = "sha256-N/45XB7ZuZiq25v6DQx4K9NRVnBbUHPeiKKbxQ9YB3E=";
+    hash = "sha256-7YKqbBf+WrSVDZdPb6dT/22f5uggXy8uQ3lkxvWD5AI=";
   };
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   nativeCheckInputs = [
@@ -40,6 +37,9 @@ buildPythonPackage rec {
     homepage = "https://tinydb.readthedocs.org/";
     changelog = "https://tinydb.readthedocs.io/en/latest/changelog.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcus7070 ];
+    maintainers = with lib.maintainers; [
+      marcus7070
+      sachin-sankar
+    ];
   };
 }

@@ -7,7 +7,7 @@
   libnotify,
   makeWrapper,
   pkg-config,
-  libX11,
+  libx11,
   enableAlsaUtils ? true,
   alsa-utils,
   coreutils,
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     gdk-pixbuf
     libnotify
-    libX11
+    libx11
   ];
 
   cargoHash = "sha256-o6gzP0mo7+np5Ba22gPAHcPPXoFTYThNsMr6nNC/Zm4=";

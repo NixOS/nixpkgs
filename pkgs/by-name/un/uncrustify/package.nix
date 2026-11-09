@@ -6,15 +6,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uncrustify";
-  version = "0.82.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "uncrustify";
     repo = "uncrustify";
-    rev = "uncrustify-${version}";
-    sha256 = "sha256-sBIjBN3tP/gwTWHDLwonEIfk3OduqQtixn4sn28V7pI=";
+    rev = "uncrustify-${finalAttrs.version}";
+    sha256 = "sha256-EcT9A9rQCfSqJqqhfdSIZP/29W+I+PHbfvqQ4Bsq5mE=";
   };
 
   nativeBuildInputs = [
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

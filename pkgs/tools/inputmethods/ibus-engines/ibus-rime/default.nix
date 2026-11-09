@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-rime";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "ibus-rime";
     rev = version;
-    sha256 = "sha256-6lqPdcIJmwHcr4G6BhIDMhEtEOpOPgWqfkKXqaDjUY0=";
+    sha256 = "sha256-7RyCJpgGMqq5s4ijTDA2aq2CtpnQ1HOwO9aPrizSaSo=";
   };
 
   buildInputs = [

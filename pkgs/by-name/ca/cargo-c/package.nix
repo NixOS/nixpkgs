@@ -5,6 +5,8 @@
   pkg-config,
   curl,
   openssl,
+  libgit2,
+  sqlite,
   stdenv,
   libiconv,
   rav1e,
@@ -12,25 +14,29 @@
 
 let
   # this version may need to be updated along with package version
-  cargoVersion = "0.90.0";
+  cargoVersion = "0.100.0";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-c";
-  version = "0.10.15";
+  version = "0.10.26";
+
+  __structuredAttrs = true;
 
   src = fetchCrate {
-    inherit pname;
-    version = "${version}+cargo-${cargoVersion}";
-    hash = "sha256-szqDSHGihE+Oj8L3EBlC5XH4kSBYOptd0Xtk3MhXooQ=";
+    inherit (finalAttrs) pname;
+    version = "${finalAttrs.version}+cargo-${cargoVersion}";
+    hash = "sha256-rt7LegE5DEOF/BP7OCSkl8hcziUpz7dJr7kMNDwXw1c=";
   };
 
-  cargoHash = "sha256-36ygs/EhCktG1jmBnP9c7EgnfcWnGrqqcW3qAw+Yfy4=";
+  cargoHash = "sha256-j4PIJnPy04vEzTPTo2aD5xMKLUTeyXt13+YdZaqCm2E=";
 
   nativeBuildInputs = [
     pkg-config
     (lib.getDev curl)
   ];
   buildInputs = [
+    sqlite
+    libgit2
     openssl
     curl
   ]
@@ -63,11 +69,11 @@ rustPlatform.buildRustPackage rec {
       to be used by any C (and C-compatible) software.
     '';
     homepage = "https://github.com/lu-zero/cargo-c";
-    changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${version}";
+    changelog = "https://github.com/lu-zero/cargo-c/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       cpu
       matthiasbeyer
     ];
   };
-}
+})

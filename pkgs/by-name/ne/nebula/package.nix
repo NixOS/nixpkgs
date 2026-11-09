@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nixosTests,
   withPkcs11 ? true,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "nebula";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = "nebula";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p/2A1ZTBUPvrA8eAgLxjR7NSAfiIEkDcjX0Db8dCmfQ=";
+    hash = "sha256-N50vOtzp1ZikqCkVoS2MRMCY2otg8QHAvVJwfgCbyRI=";
   };
 
-  vendorHash = "sha256-rod6YDosI9nBf2v6Q/rw/fT9p9N8Zo/lu989UhyL8/s=";
+  vendorHash = "sha256-tmNpGNjMY5PtJO/DU+eoZy2Miqu2VzBTiHKThVCDVZs=";
 
   subPackages = [
     "cmd/nebula"
@@ -78,6 +78,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/slackhq/nebula/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      herbetom
       numinit
     ];
   };

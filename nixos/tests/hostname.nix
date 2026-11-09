@@ -1,11 +1,10 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  runTest,
+  lib,
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+with lib;
 
 let
   makeHostNameTest =
@@ -19,7 +18,7 @@ let
         in
         if (res.success && res.value != null) then res.value else "null";
     in
-    makeTest {
+    runTest {
       name = "hostname-${fqdn}";
       meta = with pkgs.lib.maintainers; {
         maintainers = [
@@ -42,8 +41,6 @@ let
         { nodes, ... }:
         ''
           start_all()
-
-          machine = ${hostName}
 
           machine.systemctl("start network-online.target")
           machine.wait_for_unit("network-online.target")

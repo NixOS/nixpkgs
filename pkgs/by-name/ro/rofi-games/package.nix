@@ -3,29 +3,34 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+
   cargo,
   just,
   rofi,
   pkg-config,
+
   glib,
   cairo,
   pango,
+  sqlite,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-games";
-  version = "1.13.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "rofi-games";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Id2PfgLc9MQI82u7qKKJVaqpGfGFfCKZldVKlYHc5JE=";
+    hash = "sha256-+2I4WR5SOLYSWnPUrJFlRwhnebu4RNy3Dd4/gKW8xXU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EO5gVoZIB7Dduc8LfXwcBriPYyIfGNWEog1bCkegqcI=";
+    hash = "sha256-dPm9+rxEtx32HVaXLrbxZiVyUrYwFPvuk/gRQR4Fo+s=";
   };
 
   patches = [
@@ -49,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     cairo
     pango
+    sqlite
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Rolv-Apneseth/rofi-games/blob/${finalAttrs.src.rev}/CHANGELOG.md";

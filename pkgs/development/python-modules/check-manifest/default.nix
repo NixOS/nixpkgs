@@ -8,23 +8,24 @@
   pep517,
   pytestCheckHook,
   setuptools,
-  tomli,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "check-manifest";
   version = "0.51";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "check-manifest";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tT6xQZwqJIsyrO9BjWweIeNgYaopziewerVBk0mFVYg=";
   };
+
+  patches = [
+    # upstream fix for setuptools >= 83, unreleased as of 0.51
+    ./setuptools-83-ignorelist.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -32,8 +33,7 @@ buildPythonPackage rec {
     build
     pep517
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     git
@@ -45,6 +45,14 @@ buildPythonPackage rec {
   disabledTests = [
     # Test wants to setup a venv
     "test_build_sdist_pep517_isolated"
+
+    # Tests wants to read/write in a restricted area
+    "test_get_ignore_from_manifest"
+    "test_read_"
+
+    # Tests wants to write in argv
+    "test_extra_ignore_args"
+    "test_ignore_bad_ideas_args"
   ];
 
   pythonImportsCheck = [ "check_manifest" ];
@@ -52,9 +60,9 @@ buildPythonPackage rec {
   meta = {
     description = "Check MANIFEST.in in a Python source package for completeness";
     homepage = "https://github.com/mgedmin/check-manifest";
-    changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/mgedmin/check-manifest/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lewo ];
     mainProgram = "check-manifest";
   };
-}
+})

@@ -4,19 +4,19 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twiggy";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FguDuah3MlC0wgz8VnXV5xepIVhTwYmQzijgX0sbdNY=";
   };
 
   cargoHash = "sha256-FaoEqCdMb3h93zGvc+EZ8LfYgMPY3dT/fScpRgGVeAo=";
 
   meta = {
-    homepage = "https://rustwasm.github.io/twiggy/";
+    homepage = "https://alexene.dev/twiggy/";
     description = "Code size profiler for Wasm";
     mainProgram = "twiggy";
     license = with lib.licenses; [
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

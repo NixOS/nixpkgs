@@ -1,7 +1,10 @@
 {
+  lib,
+  ocaml,
   buildDunePackage,
   pbrt,
   stdlib-shims,
+  pbrt_services,
 }:
 
 buildDunePackage {
@@ -12,7 +15,8 @@ buildDunePackage {
   buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [ pbrt ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "5.1";
+  checkInputs = [ pbrt_services ];
 
   meta = pbrt.meta // {
     description = "Protobuf Compiler for OCaml";

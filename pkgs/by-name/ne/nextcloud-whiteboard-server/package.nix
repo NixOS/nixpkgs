@@ -5,19 +5,27 @@
   stdenv,
   makeWrapper,
   nodejs,
+  npm-lockfile-fix,
+  nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nextcloud-whiteboard-server";
-  version = "1.3.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "whiteboard";
-    tag = "v${version}";
-    hash = "sha256-fk+BiQ6jM/SvBioz56WHIhWGErgroCvagQq6/vMWCyk=";
+    tag = "v${finalAttrs.version}";
+    postFetch = ''
+      # Requested upstream: https://github.com/nextcloud/whiteboard/pull/1421
+      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+    '';
+    hash = "sha256-MlJHLiql2gGmUjNNPehkRTW4iQqTW5DL43+t1Wis6ys=";
   };
 
-  npmDepsHash = "sha256-x6ccAOq0yZ8DfZLIp2ZNpT8HMAjBr+e4gsEOUOskABs=";
+  npmDepsHash = "sha256-4zallneSkRAiJqyWhkkzHkQ55wi4Uf5RdHS8tc1KbLc=";
+
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -26,6 +34,8 @@ buildNpmPackage rec {
       --add-flags "$out/lib/node_modules/whiteboard/websocket_server/main.js"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Backend server for the Nextcloud Whiteboard app";
     homepage = "https://apps.nextcloud.com/apps/whiteboard";
@@ -33,4 +43,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.onny ];
     mainProgram = "nextcloud-whiteboard-server";
   };
-}
+})

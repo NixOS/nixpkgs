@@ -1,5 +1,6 @@
 {
   qtModule,
+  fetchzip,
   qtdeclarative,
   qtwebchannel,
   qtpositioning,
@@ -7,7 +8,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -15,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -47,7 +53,6 @@
   pulseaudio,
   libcap,
   pciutils,
-  systemd,
   pipewire,
   gn,
   ffmpeg,
@@ -69,6 +74,13 @@
 
 qtModule {
   pname = "qtwebengine";
+
+  version = "6.140.0-rc";
+  src = fetchzip {
+    url = "https://download.qt.io/development_releases/qtwebengine/6.140.0-rc/qtwebengine-everywhere-src-6.140.0-rc.tar.xz";
+    hash = "sha256-ij7oWNkbzf98FwKjhub3lyvDb32G4qFtUiYJvdlw01Y=";
+  };
+
   nativeBuildInputs = [
     bison
     coreutils
@@ -109,54 +121,31 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
+    # Look for things in the right places in our split-prefix config
+    ./split-prefix.patch
+
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
-    })
+
+    # Don't require compiler to identify as AppleClang on Darwin
+    ./darwin-compiler.patch
+
+    # Disable Metal shader precompilation, which requires Apple proprietary tools
+    ./darwin-no-metal.patch
+
+    # Generating debug symbols fails the build because it can't find dsymutil
+    # FIXME: figure out how to fix this properly
+    ./darwin-no-debug-symbols.patch
+
+    # Darwin toolchain fixes
+    # FIXME: do we still need these?
+    ./clang-base-path-from-cmake-compiler.patch
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
     # Patch Chromium build tools
-    (
-      cd src/3rdparty/chromium;
-
-      # Manually fix unsupported shebangs
-      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
-        --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
-      patchShebangs .
-    )
-
-    substituteInPlace cmake/Functions.cmake \
-      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
-
-    # Patch library paths in sources
-    substituteInPlace src/core/web_engine_library_info.cpp \
-      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
-
-    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
-
-    # Disable metal shader compilation, Xcode only
-    substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
-      --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
-
-    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+    (cd src/3rdparty/chromium; patchShebangs .)
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
@@ -177,7 +166,6 @@ qtModule {
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
-    "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -192,7 +180,8 @@ qtModule {
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' stdenv.cc "clang++"}"
   ];
 
   propagatedBuildInputs = [
@@ -226,6 +215,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -248,19 +238,19 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire
@@ -283,10 +273,19 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
+  # Add dlopen-only dependencies after shrink-rpath, which would remove them.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        pipewire
+        pciutils
+      ]
+    }" "$out/lib/libQt6WebEngineCore.so"
+  '';
+
   meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7a-linux"

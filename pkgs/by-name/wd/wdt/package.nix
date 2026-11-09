@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2025-11-18";
+  version = "1.27.1612021-unstable-2026-10-07";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "wdt";
-    rev = "635f8fd8658bd1b9149d22a61edc956c93049dfd";
-    sha256 = "sha256-laNTFuFXFHzyfVVHe0iNeFHSnBU+Trakugoino7rk0Y=";
+    rev = "fa978c431afec70234c4cfafad4f0bc6627549d1";
+    hash = "sha256-H+s0FfLYSRx7WTRR10K4TA6XXQrtXihfT7dMlbdAKjE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   ];
 
   # source is expected to be named wdt
-  # https://github.com/facebook/wdt/blob/43319e59d0c77092468367cdadab37d12d7a2383/CMakeLists.txt#L238
+  # https://github.com/meta/wdt/blob/43319e59d0c77092468367cdadab37d12d7a2383/CMakeLists.txt#L238
   postUnpack = ''
     ln -s $sourceRoot wdt
   '';
@@ -51,14 +51,19 @@ stdenv.mkDerivation {
     };
   };
 
+  # We must increase the pinned C++ standard since headers from Folly
+  # v2026.07.27.00 require at least C++20
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
+        "find_package(Boost COMPONENTS filesystem REQUIRED)" \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
   '';
 
   meta = {
     description = "Warp speed Data Transfer";
-    homepage = "https://github.com/facebook/wdt";
+    homepage = "https://github.com/meta/wdt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];

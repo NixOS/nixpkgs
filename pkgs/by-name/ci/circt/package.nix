@@ -9,11 +9,9 @@
   ninja,
   lit,
   z3,
-  sv-lang,
   fmt,
   boost,
   mimalloc,
-  gitUpdater,
   callPackage,
   versionCheckHook,
 
@@ -24,19 +22,22 @@
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
   circt-llvm = callPackage ./circt-llvm.nix { };
+  circt-sv-lang = callPackage ./sv-lang.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "circt";
-  version = "1.138.0";
+  version = "1.161.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
-    rev = "firtool-${version}";
-    hash = "sha256-yx6sk6FO7MHNuRFBMhOXTSjtDQ0B6XyhGHb4uHSXx/8=";
+    tag = "firtool-${finalAttrs.version}";
+    hash = "sha256-OUnFe6RwACzY+gf2fGEJxhitaQWApreg8tV/nda6+ek=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     boost
     fmt
     mimalloc
-    sv-lang
+    circt-sv-lang
   ];
 
   cmakeFlags = [
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
-  LIT_FILTER_OUT =
+  env.LIT_FILTER_OUT =
     let
       lit-filters =
         # There are some tests depending on `clang-tools` to work. They are activated only when detected
@@ -83,22 +84,7 @@ stdenv.mkDerivation rec {
         #    https://github.com/NixOS/nixpkgs/issues/214945 discusses this issue.
         #
         # As a temporary fix, we disabled these tests when using clang stdenv
-        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\\.mlir" ]
-        # Disable some tests on x86_64-darwin
-        ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-          # These test seem to pass on hydra (rosetta) but not on x86_64-darwin machines
-          "CIRCT :: Target/ExportSMTLIB/.*\\.mlir"
-          "CIRCT :: circt-bmc/.*\\.mlir"
-          # These tests were having issues on rosetta
-          "CIRCT :: Dialect/.*/Reduction/.*\\.mlir"
-          "CIRCT :: Dialect/SMT/.*\\.mlir"
-          "CIRCT :: circt-as-dis/.*\\.mlir"
-          "CIRCT :: circt-reduce/.*\\.mlir"
-          "CIRCT :: circt-test/basic.mlir"
-          "CIRCT :: firld/.*\\.mlir"
-          "CIRCT :: Tools/domaintool/clock-spec-json.mlir"
-        ]
-        ++ [
+        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\\.mlir" ] ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
           "CIRCT :: Dialect/FIRRTL/SFCTests/ExtractSeqMems/Compose.fir"
           "CIRCT :: Dialect/FIRRTL/SFCTests/ExtractSeqMems/Simple2.fir"
@@ -110,18 +96,27 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs tools/circt-test
 
+    # Keep the self-contained TableGen tests compatible with nixpkgs' lit.
+    substituteInPlace test/Tools/circt-tblgen/self-contained/self_contained_td_format.py \
+      --replace-fail \
+        'timeout = test.config.maxIndividualTestTime or None' \
+        'timeout = getattr(test.config, "maxIndividualTestTime", None)'
+
+    # Replace slang references to match the package in nixpkgs
     substituteInPlace \
       lib/Tools/circt-verilog-lsp-server/VerilogServerImpl/CMakeLists.txt \
       lib/Conversion/ImportVerilog/CMakeLists.txt \
+      unittests/Conversion/ImportVerilog/CMakeLists.txt \
       --replace-fail "slang_slang" "slang::slang"
-  '';
 
-  preConfigure = ''
+    # Patch shebang in test mlir files
     find ./test -name '*.mlir' -exec sed -i 's|/usr/bin/env|${coreutils}/bin/env|g' {} \;
+
     # circt uses git to check its version, but when cloned on nix it can't access git.
     # So this hard codes the version.
     substituteInPlace cmake/modules/GenVersionFile.cmake \
-      --replace-fail "unknown git version" "${src.rev}"
+      --replace-fail "unknown git version" "${finalAttrs.src.rev}"
+
     # Increase timeout on tests because some were failing on hydra.
     # Using `replace-warn` so it doesn't break when upstream changes the timeout.
     substituteInPlace integration_test/CMakeLists.txt \
@@ -164,10 +159,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "firtool-";
-    };
+    updateScript = ./update.sh;
     llvm = circt-llvm;
+    sv-lang = circt-sv-lang;
   };
 
   meta = {
@@ -181,4 +175,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

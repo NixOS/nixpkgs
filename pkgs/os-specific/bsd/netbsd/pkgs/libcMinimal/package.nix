@@ -33,6 +33,10 @@ mkDerivation {
   MKPROFILE = "no";
   extraPaths = [
     "common"
+    # 11.0 added `lib/csu/common/csu-common.h` and made `lib/libc/gen`
+    # include it; the build already puts `lib/csu/common` on the include
+    # path, but the sources have to be present for that to resolve.
+    "lib/csu"
     "lib/i18n_module"
     "libexec/ld.elf_so"
     "sys"
@@ -45,6 +49,10 @@ mkDerivation {
     # The patch is vendored because the archive software inlined my
     # attachment so I am not sure how to programmatically download it.
     ./0001-Allow-building-libc-without-generating-tags.patch
+
+    # We build the lexers with flex, not NetBSD's lex, and the two disagree
+    # about where the generated file's own includes land.
+    ./nslexer-declare-strdup.patch
   ];
 
   nativeBuildInputs = [
@@ -59,6 +67,9 @@ mkDerivation {
     statHook
     flex
     byacc
+    # 11.0's libc has `arch/x86_64/genassym.cf`, which 9.2 did not, so `assym.h`
+    # is now generated as part of building libc rather than only the kernel.
+    genassym
     gencat
   ];
 

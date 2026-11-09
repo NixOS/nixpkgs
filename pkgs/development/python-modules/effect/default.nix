@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   six,
   testtools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "1.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ev+2A3B8ZIsHsReB67eTpLmu6KzxrFdkw+0hEq3wyeo=";
@@ -23,7 +20,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace effect/test_do.py \
-      --replace "py.test" "pytest"
+      --replace-fail "py.test" "pytest"
+    substituteInPlace effect/test_base.py \
+      --replace-fail "assertEquals" "assertEqual"
   '';
 
   propagatedBuildInputs = [

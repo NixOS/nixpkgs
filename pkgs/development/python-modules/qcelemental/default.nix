@@ -1,9 +1,10 @@
 {
-  stdenv,
   buildPythonPackage,
   lib,
   fetchPypi,
   poetry-core,
+  setuptools,
+  setuptools-scm,
   ipykernel,
   networkx,
   numpy,
@@ -11,23 +12,24 @@
   pint,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcelemental";
-  version = "0.29.0";
+  version = "0.51.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v2NO5lLn2V6QbikZiVEyJCM7HXBcJq/qyG5FHzFrPAQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-RQlGuV1k2IeWF6RI7t/drqkYOroghtNCTjE0UvXdlmg=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    poetry-core
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     numpy
@@ -47,16 +49,36 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "qcelemental" ];
 
+  # These tests require network access
+  disabledTestPaths = [
+    "qcelemental/tests/test_gph_uno_bipartite.py"
+    "qcelemental/tests/test_model_general.py"
+    "qcelemental/tests/test_model_results.py"
+    "qcelemental/tests/test_molecule.py"
+    "qcelemental/tests/test_molparse_align_chiral.py"
+    "qcelemental/tests/test_molparse_from_schema.py"
+    "qcelemental/tests/test_molparse_from_string.py"
+    "qcelemental/tests/test_molparse_mae.py"
+    "qcelemental/tests/test_molparse_pubchem.py"
+    "qcelemental/tests/test_molparse_to_schema.py"
+    "qcelemental/tests/test_molparse_to_string.py"
+    "qcelemental/tests/test_molutil.py"
+    "qcelemental/tests/test_utils.py"
+    "qcelemental/tests/test_zqcschema.py"
+  ];
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
     homepage = "https://github.com/MolSSI/QCElemental";
-    changelog = "https://github.com/MolSSI/QCElemental/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/MolSSI/QCElemental/blob/v${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
   };
-}
+})

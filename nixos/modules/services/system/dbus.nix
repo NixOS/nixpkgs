@@ -32,7 +32,19 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption "dbus in stage 1";
+      enable = mkEnableOption "dbus in stage 1" // {
+        # TODO: This isn't really necessary, but it avoids a very
+        # common red herring error message:
+        #
+        # $ systemctl ...
+        # Failed to connect to system scope bus via local transport: No such file or directory.
+        #
+        # When systemctl tries and fails to control the system manager
+        # over dbus, it fals back to a private bus socket after
+        # printing this message. It works, but users often think it is
+        # the source of their problem when it isn't.
+        default = true;
+      };
     };
 
     services.dbus = {
@@ -56,7 +68,7 @@ in
           "dbus"
           "broker"
         ];
-        default = "dbus";
+        default = "broker";
         description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
           Can be either the classic dbus daemon or dbus-broker, which aims to provide high
@@ -104,6 +116,8 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      system.switch.inhibitors.dbus-implementation = cfg.implementation;
+
       environment.etc."dbus-1".source = configDir;
 
       environment.pathsToLink = [
@@ -161,6 +175,13 @@ in
           "${config.boot.initrd.systemd.package}/share/dbus-1/system.d"
         ];
         targets.sockets.wants = [ "dbus.socket" ];
+
+        # Otherwise, dbus waits on cryptsetup, and systemctl says the
+        # bus couldn't be found. This isn't an error (systemctl will
+        # fall back to a private bus with PID 1), but it's confusing
+        # to unaware users.
+        services.dbus.unitConfig.DefaultDependencies = false;
+        sockets.dbus.unitConfig.DefaultDependencies = false;
       };
     })
 

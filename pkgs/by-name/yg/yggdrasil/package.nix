@@ -3,20 +3,27 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+  stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yggdrasil";
-  version = "0.5.12";
+  version = "0.5.15";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
-    rev = "v${version}";
-    hash = "sha256-NlNQnYmK//p35pj2MInD6RVsajM/bGDhOuzOZZYoWRw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Z8niRksjOC6ZPx6Ot9QG9R3ZLWIJBTIjwGEa2EvBlg8=";
   };
 
-  vendorHash = "sha256-xZpUWIR3xTjhhNSwPoHx7GLUgcZJrWfF0FMExlluBmg=";
+  vendorHash = "sha256-pZjyeDNZFpXhFUs50JzBmo46jQv66YghT6OzuOh6eDg=";
+
+  # These tests require root, but look up the build user before skipping.
+  # Sandboxed Darwin build UIDs may have no account database entry.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^(TestCurrentUserid|TestCommonUsername)$"
+  ];
 
   subPackages = [
     "cmd/genkeys"
@@ -25,7 +32,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${finalAttrs.version}"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=yggdrasil"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/config.defaultAdminListen=unix:///var/run/yggdrasil/yggdrasil.sock"
     "-s"
@@ -45,4 +52,4 @@ buildGoModule rec {
       peigongdsd
     ];
   };
-}
+})

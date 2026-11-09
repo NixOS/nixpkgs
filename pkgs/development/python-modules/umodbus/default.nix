@@ -4,15 +4,12 @@
   fetchFromGitHub,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "umodbus";
   version = "1.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "AdvancedClimateSystems";
@@ -32,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://github.com/AdvancedClimateSystems/uModbus/";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

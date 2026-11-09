@@ -26,6 +26,8 @@ buildPythonPackage rec {
     ''
       substituteInPlace ./opaque/__init__.py --replace-fail \
         "ctypes.util.find_library('opaque') or ctypes.util.find_library('libopaque')" "'${lib.getLib libopaque}/lib/libopaque${soext}'"
+      substituteInPlace ./setup.py --replace-fail \
+        'version="1.0.0",' 'version="${version}",'
     '';
 
   build-system = [ setuptools ];

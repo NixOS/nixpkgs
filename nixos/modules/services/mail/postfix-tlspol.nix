@@ -55,7 +55,7 @@ in
                 Due to hardening on the systemd unit the socket can never be created world readable/writable.
                 :::
               '';
-              apply = value: (builtins.fromTOML "v=0o${value}").v;
+              apply = value: (fromTOML "v=0o${value}").v;
             };
 
             log-level = mkOption {
@@ -164,16 +164,33 @@ in
       };
       users.groups.postfix-tlspol = { };
 
+      systemd.sockets.postfix-tlspol = {
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          Accept = false;
+          ListenStream = [
+            (lib.removePrefix "unix:" cfg.settings.server.address)
+          ];
+          SocketUser = "postfix-tlspol";
+          SocketGroup = "postfix-tlspol";
+          SocketMode = cfg.settings.server.socket-permissions;
+          DirectoryMode = "0755";
+        };
+      };
+
       systemd.services.postfix-tlspol = {
         after = [
           "nss-lookup.target"
           "network-online.target"
+          "postfix-tlspol.socket"
         ];
         wants = [
           "nss-lookup.target"
           "network-online.target"
         ];
-        wantedBy = [ "multi-user.target" ];
+        bindsTo = [
+          "postfix-tlspol.socket"
+        ];
 
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
@@ -215,11 +232,9 @@ in
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
           RestrictAddressFamilies = [
+            # For outbound sockets and telemetry only
             "AF_INET"
             "AF_INET6"
-          ]
-          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-            "AF_UNIX"
           ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
@@ -234,10 +249,8 @@ in
             "noroot"
             "noroot-locked"
           ];
-          RuntimeDirectory = "postfix-tlspol";
-          RuntimeDirectoryMode = "1750";
           WorkingDirectory = "/var/cache/postfix-tlspol";
-          UMask = "0117";
+          UMask = "0077";
         };
       };
     })

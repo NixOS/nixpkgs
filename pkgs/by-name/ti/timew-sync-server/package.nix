@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "timew-sync-server";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = "timew-sync-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3THRP+hydvq/dnxzUOFGeuu8//qL7pFN0RHJVxzgibI=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "timew-sync-server";
   };
-}
+})

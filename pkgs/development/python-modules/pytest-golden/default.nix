@@ -4,39 +4,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   ruamel-yaml,
-  poetry-core,
+  hatchling,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-golden";
-  version = "0.2.2";
+  version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "pytest-golden";
-    tag = "v${version}";
-    hash = "sha256-l5fXWDK6gWJc3dkYFTokI9tWvawMRnF0td/lSwqkYXE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E8H9HmTbWft5SDPUbuD9zRDRm7gHJsvWJfm9jznd1tY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "poetry>=0.12" poetry-core \
-      --replace-fail poetry.masonry.api poetry.core.masonry.api
-  '';
 
   pythonRelaxDeps = [ "testfixtures" ];
 
-  build-system = [
-    # hatchling used for > 0.2.2
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 
@@ -56,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

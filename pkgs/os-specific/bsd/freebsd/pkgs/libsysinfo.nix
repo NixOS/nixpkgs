@@ -51,6 +51,5 @@ mkDerivation rec {
     homepage = "https://github.com/bsdimp/libsysinfo";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rhelmot ];
-    platforms = lib.platforms.freebsd;
   };
 }

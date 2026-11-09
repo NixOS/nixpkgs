@@ -12,15 +12,12 @@
   pandas,
   tabulate,
   pytest-cases,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-harvest";
   version = "1.10.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "smarie";

@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "uwhoisd";
-  version = "0.1.2";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kgaughan";
     repo = "uwhoisd";
-    tag = "v${version}";
-    hash = "sha256-Em+SkQ/olmKGntwOG+CUe3x1ZIIH8grOBVxY/a3eVGI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fYcuwypxG1woupKcttiYBjf5FWAziQWXMaSGFLdlOKM=";
   };
 
   build-system = with python3.pkgs; [
@@ -32,8 +32,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Universal WHOIS proxy server";
     homepage = "https://github.com/kgaughan/uwhoisd";
-    changelog = "https://github.com/kgaughan/uwhoisd/releases/tag/${src.tag}";
+    changelog = "https://github.com/kgaughan/uwhoisd/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

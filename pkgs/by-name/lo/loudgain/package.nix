@@ -11,14 +11,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loudgain";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "Moonbase59";
     repo = "loudgain";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XLj+n0GlY/GAkJlW2JVMd0jxMzgdv/YeSTuF6QUIGwU=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     sed -e "1aPATH=$out/bin:\$PATH" -i "$out/bin/rgbpm"
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     license = lib.licenses.free;
   };
-}
+})

@@ -17,13 +17,14 @@
 
   # buildInputs
   libsForQt5,
+  libsm,
   llvmPackages,
   glew,
   vcg,
 }:
 
 let
-  version = "2025.7";
+  version = "2025.7.post1";
 in
 buildPythonPackage {
   inherit version;
@@ -34,7 +35,7 @@ buildPythonPackage {
     owner = "cnr-isti-vclab";
     repo = "pymeshlab";
     tag = "v${version}";
-    hash = "sha256-LCR2/AyX9uVX4xhZareUL6YlpUsCFiGDMBB5nFp+H6k=";
+    hash = "sha256-TfnPdnq1rBx+spRw966jwyKxgXSlISLmacXQbvKU+OI=";
   };
 
   patches = [
@@ -60,6 +61,7 @@ buildPythonPackage {
   buildInputs = [
     glew
     libsForQt5.qtbase
+    libsm
     vcg
   ]
   ++ lib.optionals stdenv.cc.isClang [

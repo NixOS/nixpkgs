@@ -2,15 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  setuptools,
 
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  numpy,
   packaging,
   pandas,
   pyogrio,
   pyproj,
-  rtree,
   shapely,
 
   # optional-dependencies
@@ -21,34 +23,35 @@
   matplotlib,
   psycopg,
   pyarrow,
+  scipy,
   sqlalchemy,
   xyzservices,
+
+  # tests
+  pytestCheckHook,
+  rtree,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopandas";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    tag = "v${version}";
-    hash = "sha256-7ZsO4jresikA17M8cyHskdcVnTscGHxTCLJv5p1SvfI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KXFNAsbeDLUupQSFnUSrvnSXqr5b8WUeDYaFbBvj9Xo=";
   };
 
-  build-system = [ setuptools ];
-
-  patches = [
-    # fix tests for geos 3.14
-    # see https://github.com/geopandas/geopandas/pull/3645
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/geopandas/geopandas/pull/3645.patch";
-      hash = "sha256-TLJixFRR+g739PLgwhTGuwYTVJ4SRr2BMGD14CLgmcY=";
-    })
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
+    numpy
     packaging
     pandas
     pyogrio
@@ -71,6 +74,7 @@ buildPythonPackage rec {
       matplotlib
       psycopg
       pyarrow
+      scipy
       sqlalchemy
       xyzservices
     ];
@@ -79,16 +83,27 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
+    writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.all;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Requires network access
     "test_read_file_url"
+
+    # Require geodatasets (circular dependency)
+    "TestAxisLabels"
+    "TestStyleMapping"
+
+    # shapely.__version__ is "0+unknown" in nixpkgs, so pyogrio rejects `mask`:
+    # ValueError: 'mask' parameter requires Shapely >= 2.0
+    "test_read_file_crs_warning_messages"
+    "test_read_file_mask"
+    "test_read_file_multi_layer_with_layer_arg_no_warning"
+
+    # GDAL shares pyarrow's libarrow and leaves a `geoarrow.wkb` extension type registered,
+    # breaking the subsequent test_geoarrow.py tests
+    "test_write_parquet_2_0_gdal_readable"
   ];
 
   enabledTestPaths = [ "geopandas" ];
@@ -98,8 +113,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/geopandas/geopandas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

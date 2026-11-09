@@ -11,13 +11,13 @@
   uri,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-block-unix";
   version = "2.14.2";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-block-unix/releases/download/v${version}/mirage-block-unix-${version}.tbz";
-    sha256 = "sha256-6ReAzd+pCd5ccmXOh6GlSxHo4GuEgptxLha62n+dBsE=";
+    url = "https://github.com/mirage/mirage-block-unix/releases/download/v${finalAttrs.version}/mirage-block-unix-${finalAttrs.version}.tbz";
+    hash = "sha256-6ReAzd+pCd5ccmXOh6GlSxHo4GuEgptxLha62n+dBsE=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -42,4 +42,4 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/mirage-block-unix";
     license = lib.licenses.isc;
   };
-}
+})

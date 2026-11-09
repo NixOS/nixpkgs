@@ -6,13 +6,15 @@
   pkg-config,
   sqlite,
   openssl,
+  zstd,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,24 +22,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-4Vx5ATVdE8AoMWjDKKkwGOFVOwI0Qhyfr8MiAo+7MNw=";
+    hash = "sha256-InCAlqPG2p5q049aiPgMZu32LWZQbaqd06amnxrKcEo=";
   };
 
-  cargoHash = "sha256-x1Pws9XbvwZqxJTJmPHQd6qbNLgkHxCK3YIZbRylk2M=";
+  # Working around a bug in cargo that appears with cargo-auditable, see
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124.
+  postPatch = ''
+    substituteInPlace crates/arti/Cargo.toml \
+      --replace-fail '"http"' '"dep:http"' \
+      --replace-fail '"tokio-util"' '"dep:tokio-util"' \
+      --replace-fail '"opentelemetry-appender-tracing",' ""
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+    substituteInPlace crates/equix/Cargo.toml \
+      --replace-fail '"dep:visibility"' '"visibility"'
+  '';
 
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildAndTestSubdir = "crates/arti";
+  cargoHash = "sha256-grgIqU1gw1UqeGgR4aR7cAOxBW91F12bHMgOj4pgLcY=";
 
-  cargoBuildFlags = [
-    "--package"
-    "arti"
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  cargoTestFlags = [
-    "--package"
-    "arti"
-  ];
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   # `full` includes all stable and non-conflicting feature flags. the primary
   # downsides are increased binary size and memory usage for building, but
@@ -54,18 +63,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # problematic test that hangs the build
     "--skip=reload_cfg::test::watch_single_file"
-
-    # some of the cli tests attempt to validate that the filesystem and build
-    # is securely configured, which is somewhat broken by the nix build sandbox
-    "--skip=cli_tests"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  # some of the CLI tests attempt to validate that the filesystem and runtime
+  # environment are securely configured, which breaks inside the nix build
+  # sandbox. this does NOT affect downstream users of Arti.
+  env.ARTI_FS_DISABLE_PERMISSION_CHECKS = 1;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
+    tests = { inherit (nixosTests) tor; };
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 
@@ -74,10 +83,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = with lib.maintainers; [
+      rapiteanu
+      whispersofthedawn
     ];
-    maintainers = with lib.maintainers; [ rapiteanu ];
   };
 })

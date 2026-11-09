@@ -10,13 +10,13 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "https://github.com/stk-kriging/stk/releases/download/${version}/${pname}-${version}-octpkg.tar.gz";
-    sha256 = "sha256-wTjM9LUcC8BEj3TNxAz877LqJvuoxWUse9PIZoWGnIU=";
+    hash = "sha256-wTjM9LUcC8BEj3TNxAz877LqJvuoxWUse9PIZoWGnIU=";
   };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/stk/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "STK is a (not so) Small Toolbox for Kriging";
     longDescription = ''
       The STK is a (not so) Small Toolbox for Kriging. Its primary focus is on

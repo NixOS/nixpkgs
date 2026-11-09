@@ -6,20 +6,28 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   nixosTests,
+  testers,
+  upterm,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "upterm";
-  version = "0.20.0";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qTw8bYROAAB7FwKCCQamIbWGbqSexXl87DdvSNsFZ/I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XDD7qC7TBfNUz7QQnQI+p1CddrzUWXR7mokXEcRBr28=";
   };
 
-  vendorHash = "sha256-5OAS7s9A95h5LihXgOwkOXAMylS7g+lqjaI3MKTvlW0=";
+  vendorHash = "sha256-/or+hvaOm6WLJGBt+49g5QBZLZuXGYQGKbwTudCIq2I=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/owenthereal/upterm/internal/version.Version=${finalAttrs.version}"
+  ];
 
   subPackages = [
     "cmd/upterm"
@@ -47,14 +55,26 @@ buildGoModule (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests = { inherit (nixosTests) uptermd; };
+  passthru.tests = {
+    inherit (nixosTests) uptermd;
+    version = testers.testVersion {
+      package = upterm;
+      command = "HOME=$PWD upterm version"; # upterm tries to write to $HOME
+      version = "Upterm version ${finalAttrs.version}";
+    };
+  };
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
+    changelog = "https://github.com/owenthereal/upterm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hax404 ];
+    maintainers = with lib.maintainers; [
+      hax404
+      debtquity
+    ];
+    mainProgram = "upterm";
   };
 })

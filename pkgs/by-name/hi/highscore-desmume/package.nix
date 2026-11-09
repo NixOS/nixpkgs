@@ -7,7 +7,7 @@
   pkg-config,
   libhighscore,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   libpcap,
   unstableGitUpdater,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libhighscore
     libGL
-    libX11
+    libx11
     SDL2
     libpcap
   ];

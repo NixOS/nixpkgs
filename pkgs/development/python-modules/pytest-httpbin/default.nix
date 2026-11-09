@@ -5,7 +5,6 @@
   httpbin,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pytest-httpbin";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kevin1024";

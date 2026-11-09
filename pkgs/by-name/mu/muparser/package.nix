@@ -6,14 +6,14 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muparser";
   version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "beltoforion";
     repo = "muparser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CE3xgJr2RNsNMrj8Cf6xd/pD9M1OlHEclTW6xZV5X30=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,7 +1,8 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  # python module stuff
+  buildPythonPackage,
   setuptools,
   # dependencies
   cached-property,
@@ -20,10 +21,10 @@
   hypothesis,
   pytestCheckHook,
   pytest-xdist,
-  eth-hash,
+  pycryptodome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-evm";
   version = "0.12.1-beta.1";
   pyproject = true;
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py-evm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n2F0ApdmIED0wrGuNN45lyb7cGu8pRn8mLDehT7Ru9E=";
   };
 
@@ -56,8 +57,13 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ]
-  ++ eth-hash.optional-dependencies.pycryptodome;
+    pycryptodome
+  ];
+
+  pytestFlags = [
+    # 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    "-Wignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # side-effect: runs pip online check and is blocked by sandbox
@@ -77,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

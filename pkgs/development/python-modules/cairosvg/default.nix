@@ -17,16 +17,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cairosvg";
-  version = "2.8.2";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "CairoSVG";
-    tag = version;
-    hash = "sha256-KWUZA8pcHMnDEkAYZt3zDzPNynhGBuLZuagNPfHF8EA=";
+    tag = finalAttrs.version;
+    hash = "sha256-yIUuhBmq15xwHznEq8l5z8QSkhQQc3GjTbJw5L2ZX+I=";
   };
 
   build-system = [ setuptools ];
@@ -49,10 +49,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://cairosvg.org";
-    changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${version}";
+    changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
     mainProgram = "cairosvg";
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

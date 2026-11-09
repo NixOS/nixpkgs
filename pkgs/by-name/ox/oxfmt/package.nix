@@ -6,12 +6,14 @@
   cargo,
   cmake,
   makeBinaryWrapper,
+  nodejs_24,
   nodejs-slim,
   pnpmConfigHook,
   pnpm_10,
   rustPlatform,
   rustc,
   versionCheckHook,
+  nix-update-script,
 }:
 
 # Build with pnpm instead of buildRustPackage because Prettier integration
@@ -19,40 +21,32 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.18.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-AatmbW8UE8UbV533I2nhijHNlqIsgvtlE7X98uT7aTA=";
+    hash = "sha256-7tzZNjDZWiE4fS/Q4IiW5bjpxOda7ikxQhm6SCkMKmw=";
   };
-
-  # Remove patchedDependencies from both workspace and lockfile
-  # to avoid LOCKFILE_CONFIG_MISMATCH error
-  postPatch = ''
-    substituteInPlace pnpm-workspace.yaml pnpm-lock.yaml \
-      --replace-fail "patchedDependencies:" "_patchedDependencies:"
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4G52/8WZgNFM/vcHXBbtWabBZwWo3ZBVadFjOI2SmUk=";
+    hash = "sha256-MACrb5UkJTzA8btBrmNBc0k9WTdzir9ckDkHJmi1klY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-Do2sFEK/8Axj9B9M/W9zqMboPrAo5Zm/zdrMXZvmFg0=";
-    prePnpmInstall = finalAttrs.postPatch;
+    fetcherVersion = 3;
+    hash = "sha256-pDhvndbEIUJAwGSbMUGB0g/Zat25ecjQXu+Jh5h8XwU=";
   };
 
   nativeBuildInputs = [
     cargo
     cmake
     makeBinaryWrapper
-    nodejs-slim
+    nodejs_24
     pnpmConfigHook
     pnpm_10
     rustPlatform.cargoSetupHook
@@ -63,6 +57,22 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   env.OXC_VERSION = finalAttrs.version;
+
+  # @napi-rs/cli >= 3.8 reads the process start time and machine identity via
+  # host binaries while acquiring its filesystem reconciliation lock. The
+  # Darwin build sandbox denies those execs; Node raises them as synchronous
+  # `spawn EPERM` from execFile, which escapes napi's callback-based error
+  # handling. Point the lookups at a store no-op so the sandbox allows them.
+  # Empty output is treated as unverifiable identity and only disables stale
+  # lock detection.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
+      substituteInPlace "$cli" \
+        --replace-fail '"/bin/ps"' '":"' \
+        --replace-fail '"/usr/sbin/ioreg"' '":"' \
+        --replace-fail '"/usr/sbin/sysctl"' '":"'
+    done
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -95,9 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^oxfmt_v([0-9.]+)$" ];
+  };
+
   meta = {
-    description = "JavaScript formatter with Prettier integration";
-    homepage = "https://github.com/oxc-project/oxc";
+    description = "High-performance formatter for the JavaScript ecosystem";
+    homepage = "https://oxc.rs/docs/guide/usage/formatter";
+    downloadPage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];

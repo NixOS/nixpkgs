@@ -5,9 +5,8 @@
   fetchpatch,
   ftfy,
   packaging,
-  pythonOlder,
   regex,
-  setuptools,
+  setuptools_80,
   torch,
   torchvision,
   tqdm,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "clip-anytorch";
   version = "2.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "rom1504";
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     ftfy

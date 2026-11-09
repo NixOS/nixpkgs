@@ -1,4 +1,5 @@
 {
+  lib,
   writeShellApplication,
   bc,
   diffutils,
@@ -10,7 +11,10 @@
 }:
 writeShellApplication {
   name = "edido";
-  meta.description = "Tool to apply display configuration from `boot.kernelParams`";
+  meta = {
+    description = "Tool to apply display configuration from `boot.kernelParams`";
+    license = lib.licenses.mit;
+  };
   runtimeInputs = [
     diffutils
     findutils

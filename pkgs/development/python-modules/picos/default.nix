@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "picos";
-  version = "2.6.1";
+  version = "2.6.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u9yaKeP34YW55+PyVy3wPR0p0jBmiLywvZzw2zWdd6g=";
+    hash = "sha256-869PnpjwxEnrS2Atfk4CzAkn56kJSqU/XXmnSHZZ5DM=";
   };
 
   # Needed only for the tests
@@ -36,7 +36,7 @@ buildPythonPackage rec {
         --replace-fail "mappingproxy(OrderedDict({'x': <3×1 Real Variable: x>}))" "mappingproxy(OrderedDict([('x', <3×1 Real Variable: x>)]))"
     ''
     # TypeError: '<=' not supported between instances of 'ComplexAffineExpression' and 'float'
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm tests/ptest_quantentr.py
     '';
 

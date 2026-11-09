@@ -27,12 +27,11 @@
   libkrb5,
   libxml2,
   libxslt,
-  python2,
   stdenv,
   which,
   libiconv,
   libpq,
-  nodejs,
+  nodejs-slim,
   clang,
   sqlite,
   zlib,
@@ -43,6 +42,7 @@
   xapian,
   gpgme,
   util-linux,
+  readline,
   tzdata,
   icu,
   libffi,
@@ -53,19 +53,21 @@
   cmake,
   libssh2,
   openssl,
-  openssl_1_1,
   libmysqlclient,
   git,
   perl,
   pcre2,
   gecode_3,
   curl,
+  cacert,
   libsodium,
   snappy,
   libossp_uuid,
   lxc,
   libpcap,
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   gtk3,
   lerc,
   buildRubyGem,
@@ -91,6 +93,7 @@
   fribidi,
   harfbuzz,
   bison,
+  h3_3,
   flex,
   pango,
   python3,
@@ -123,6 +126,7 @@
   libsysprof-capture,
   imlib2,
   autoSignDarwinBinariesHook,
+  systemd,
 }@args:
 
 let
@@ -138,6 +142,14 @@ in
 {
   ZenTest = attrs: {
     meta.mainProgram = "zentest";
+  };
+
+  algoliasearch = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/resources/ca-bundle.crt
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/resources/ca-bundle.crt
+    '';
   };
 
   atk = attrs: {
@@ -180,8 +192,8 @@ in
       glib
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -192,9 +204,17 @@ in
       expat
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
+  };
+
+  certified = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/certs/ca-bundle.crt
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/certs/ca-bundle.crt
+    '';
   };
 
   charlock_holmes = attrs: {
@@ -260,7 +280,9 @@ in
   };
 
   dep-selector-libgecode = attrs: {
-    USE_SYSTEM_GECODE = true;
+    env = attrs.env or { } // {
+      USE_SYSTEM_GECODE = true;
+    };
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
       sed -i $installPath/lib/dep-selector-libgecode.rb -e 's@VENDORED_GECODE_DIR =.*@VENDORED_GECODE_DIR = "${gecode_3}"@'
@@ -287,6 +309,14 @@ in
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
+  };
+
+  excon = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/data/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/data/cacert.pem
     '';
   };
 
@@ -324,7 +354,9 @@ in
   };
 
   mimemagic = attrs: {
-    FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    env = attrs.env or { } // {
+      FREEDESKTOP_MIME_TYPES_PATH = "${shared-mime-info}/share/mime/packages/freedesktop.org.xml";
+    };
   };
 
   mini_magick = attrs: {
@@ -336,7 +368,7 @@ in
 
   mini_racer = attrs: {
     buildFlags = [
-      "--with-v8-dir=\"${nodejs.libv8}\""
+      "--with-v8-dir=\"${nodejs-slim.libv8}\""
     ];
     dontBuild = false;
     postPatch = ''
@@ -475,63 +507,17 @@ in
     meta.mainProgram = "rbprettier";
   };
 
-  prometheus-client-mmap =
-    attrs:
-    {
-      dontBuild = false;
-      postPatch =
-        let
-          getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
-        in
-        ''
-          substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
-        '';
-    }
-    // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        src = stdenv.mkDerivation {
-          inherit (buildRubyGem { inherit (attrs) gemName version source; })
-            name
-            src
-            unpackPhase
-            nativeBuildInputs
-            ;
-          dontBuilt = true;
-          installPhase = ''
-            cp -R ext/fast_mmaped_file_rs $out
-            rm $out/Cargo.lock
-            cp Cargo.lock $out
-          '';
-        };
-        hash = "sha256-mukk+tWWeG62q4GcDzkk8TyxVsDjShz30wEj82cElt4=";
-      };
-
-      nativeBuildInputs = [
-        cargo
-        rustc
-        rustPlatform.cargoSetupHook
-        rustPlatform.bindgenHook
-      ];
-
-      disallowedReferences = [
-        rustc.unwrapped
-      ];
-
-      preInstall = ''
-        export CARGO_HOME="$PWD/../.cargo/"
-      '';
-
-      postInstall = ''
-        find $out -type f -name .rustc_info.json -delete
-      '';
-    };
-
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [
       glib
       libsysprof-capture
       pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
     ];
   };
 
@@ -540,12 +526,13 @@ in
       binutils
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
       libselinux
       libsepol
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+      systemd
+    ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
@@ -563,9 +550,9 @@ in
       libsysprof-capture
       libthai
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
-      xorg.libXtst
+      libpthread-stubs
+      libxdmcp
+      libxtst
       libxkbcommon
       libepoxy
     ];
@@ -605,9 +592,7 @@ in
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin cctools
     ++ lib.optional (
-      lib.versionAtLeast attrs.version "1.53.0"
-      && stdenv.hostPlatform.isDarwin
-      && stdenv.hostPlatform.isAarch64
+      lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin
     ) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
@@ -639,6 +624,21 @@ in
     '';
   };
 
+  h3 = attrs: {
+    # This gem attempts to build h3 using cmake, but fails because that is not in the path
+    # Use h3 from nixpkgs instead, and reduce closure size by deleting the h3 source code
+    dontBuild = false; # allow applying patches
+    postPatch = ''
+      substituteInPlace ext/h3/Makefile \
+        --replace-fail 'cd src; cmake . -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=true -DBUILD_FILTERS=OFF -DBUILD_BENCHMARKS=OFF -DENABLE_LINTING=OFF; make' ':'
+      substituteInPlace lib/h3/bindings/base.rb \
+        --replace-fail '__dir__ + "/../../../ext/h3/src/lib"' '"${h3_3}/lib"'
+    '';
+    postInstall = ''
+      rm -rf $out/${ruby.gemPath}/gems/h3-${attrs.version}/ext/h3/src
+    '';
+  };
+
   hiredis-client = attrs: {
     buildInputs = [
       openssl
@@ -651,6 +651,20 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
+  httpclient = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      for f in cacert.pem cacert1024.pem; do
+        rm $installPath/lib/httpclient/$f
+        ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/lib/httpclient/$f
+      done
+    '';
   };
 
   iconv = attrs: {
@@ -658,6 +672,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
@@ -677,7 +692,7 @@ in
   };
 
   execjs = attrs: {
-    propagatedBuildInputs = [ nodejs.libv8 ];
+    propagatedBuildInputs = [ nodejs-slim.libv8 ];
   };
 
   libxml-ruby = attrs: {
@@ -789,6 +804,14 @@ in
     ];
   };
 
+  nap = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/support/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/support/cacert.pem
+    '';
+  };
+
   ncursesw = attrs: {
     buildInputs = [ ncurses ];
     buildFlags = [
@@ -828,10 +851,15 @@ in
       }
     );
 
-  openssl = attrs: {
+  openssl =
+    attrs:
     # https://github.com/ruby/openssl/issues/369
-    buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
-  };
+    assert
+      lib.versionAtLeast attrs.version "3.0.0"
+      || throw "OpenSSL 1.1 is EOL and the corresponding Ruby gem was removed.";
+    {
+      buildInputs = [ openssl ];
+    };
 
   opus-ruby = attrs: {
     dontBuild = false;
@@ -869,8 +897,8 @@ in
       harfbuzz
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux
@@ -908,6 +936,11 @@ in
       imlib2.dev
     ];
     buildFlags = [ "--without-imlib2-config" ];
+  };
+
+  prawn-gmagick = attrs: {
+    buildInputs = [ graphicsmagick ];
+    nativeBuildInputs = [ pkg-config ];
   };
 
   psych = attrs: {
@@ -971,6 +1004,10 @@ in
     ];
   };
 
+  readline-ext = attrs: {
+    buildInputs = [ readline ];
+  };
+
   rest-client = attrs: {
     meta.mainProgram = "restclient";
   };
@@ -1006,6 +1043,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {
@@ -1053,10 +1091,26 @@ in
     buildFlags = [ "--with-ssh" ];
   };
 
+  rbtrace =
+    attrs:
+    # unpack the vendored msgpack so the gnu-config hook can refresh its old config.{guess,sub}
+    lib.optionalAttrs (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64) {
+      dontBuild = false;
+      postPatch = ''
+        tar -xzf ext/src/msgpack-1.1.0.tar.gz -C ext/src
+      '';
+      preConfigure = ''
+        tar -czf ext/src/msgpack-1.1.0.tar.gz -C ext/src msgpack-1.1.0
+        rm -r ext/src/msgpack-1.1.0
+      '';
+    };
+
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = toString libsass;
+    env = attrs.env or { } // {
+      SASS_LIBSASS_PATH = toString libsass;
+    };
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
@@ -1070,6 +1124,8 @@ in
       substituteInPlace ext/sass/Rakefile \
         --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
         --replace ' => %w[dart-sass]' ""
+
+      sed -i "/^file File.absolute_path('cli.rb', ARCHDIR)/a\\  mkdir_p ARCHDIR" ext/sass/Rakefile
     '';
   };
 
@@ -1144,6 +1200,10 @@ in
     meta.mainProgram = "tt";
   };
 
+  trilogy = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   typhoeus = attrs: {
     buildInputs = [ curl ];
   };
@@ -1203,5 +1263,7 @@ in
 
   zookeeper = attrs: {
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+    # avoid failing on strchr discarding const
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=discarded-qualifiers";
   };
 }

@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "goat";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "blampe";
     repo = "goat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+x+bOgNa9nOMWUMUVK816DK7f4SuoWEbRr2OZ+iSPig=";
+    hash = "sha256-aWfopBdr5YC/nksp4wi32OUPUR1vPp36FLlMVSMi4/8=";
   };
 
   vendorHash = "sha256-RRjEFZLbfeiFUWjGZI4HSZ8PhVj1IMlU5D4Nb1sexoQ=";

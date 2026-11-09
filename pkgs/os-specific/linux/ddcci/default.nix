@@ -4,48 +4,55 @@
   fetchFromGitLab,
   kernel,
   kernelModuleMakeFlags,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.4.5-unstable-2024-09-26";
+  version = "0.4.5-unstable-2025-09-27";
   name = "${pname}-${kernel.version}-${version}";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
-    rev = "0233e1ee5eddb4b8a706464f3097bad5620b65f4";
-    hash = "sha256-Osvojt8UE+cenOuMoSY+T+sODTAAKkvY/XmBa5bQX88=";
+    rev = "bbb7553373f815d78e93a4a9f071ce968563694a";
+    hash = "sha256-fQjsDjbtFKhs0bUCFfKRgCg516TXdwIkhKEbIISjgs0=";
   };
-
-  patches = [
-    # See https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/17
-    (fetchpatch {
-      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/e0605c9cdff7bf3fe9587434614473ba8b7e5f63.patch";
-      hash = "sha256-sTq03HtWQBd7Wy4o1XbdmMjXQE2dG+1jajx4HtwBHjM=";
-    })
-  ];
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  prePatch = ''
-    substituteInPlace ./ddcci/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
-    substituteInPlace ./ddcci-backlight/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
-  '';
+  patches = [
+    ./0001-Use-sysfs_emit-and-field-width-specifier.patch
+  ];
 
   makeFlags = kernelModuleMakeFlags ++ [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "KVER=${kernel.modDirVersion}"
-    "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-    "INCLUDEDIR=$(out)/include"
+    "KERNELRELEASE=${kernel.modDirVersion}"
   ];
+
+  installFlags = [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci "''${makeFlags[@]}"
+    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight "''${makeFlags[@]}"
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
+    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
+    runHook postInstall
+  '';
 
   meta = {
     description = "Kernel module driver for DDC/CI monitors";

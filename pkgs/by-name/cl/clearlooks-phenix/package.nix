@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "7.1";
   pname = "clearlooks-phenix";
 
   src = fetchzip {
-    url = "https://github.com/jpfleury/clearlooks-phenix/archive/${version}.tar.gz";
+    url = "https://github.com/jpfleury/clearlooks-phenix/archive/${finalAttrs.version}.tar.gz";
     sha256 = "sha256-UJgKPoNcpBkIxITAIn3INsANJn/hD8l9NCr/entbZx8=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.prikhi ];
     platforms = lib.platforms.linux;
   };
-}
+})

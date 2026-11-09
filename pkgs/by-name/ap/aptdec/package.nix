@@ -8,14 +8,14 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aptdec";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "Xerbo";
     repo = "aptdec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Pr2PlCPSEIWnThJXKcQEudmxhLJC2sVa9BfAOEKHB4=";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

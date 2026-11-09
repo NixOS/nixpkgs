@@ -7,18 +7,25 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clipman";
-  version = "1.6.5";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "clipman";
-    rev = "v${version}";
-    sha256 = "sha256-fAiXivLXpxezvMUKv0HfDvzSN60G4RFfgi6/fO0C1p8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-K10ne2tov8/zq2xReZ4ypX8Tsz+5ijOP9dCbpMXFlGI=";
   };
 
-  vendorHash = "sha256-QD/ucnIqPHgKaYRmBO4fwDVqC7kKlYmBaZp3XBWudy0=";
+  vendorHash = "sha256-H/a5n396U0+guxj/bTGf6R1LkPtGV0YnX7ETdC+pDTo=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.version=${finalAttrs.version}"
+  ];
 
   outputs = [
     "out"
@@ -46,4 +53,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "clipman";
   };
-}
+})

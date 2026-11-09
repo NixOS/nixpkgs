@@ -27,5 +27,4 @@ function updatePlatform() {
 updatePlatform aarch64-darwin macos-arm64
 updatePlatform aarch64-linux linux-arm64
 updatePlatform armv7l-linux linux-armv7
-updatePlatform x86_64-darwin macos-x64
 updatePlatform x86_64-linux linux-x64

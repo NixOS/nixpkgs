@@ -7,11 +7,11 @@
 
 let
   pname = "sweethome3d";
-  version = "7.5";
+  version = "7.6.1";
 
   src = fetchzip {
     url = "mirror://sourceforge/sweethome3d/SweetHome3D-${version}-src.zip";
-    hash = "sha256-+rAhq5sFXC34AMYCcdAYZzrUa3LDy4S5Zid4DlEVvTQ=";
+    hash = "sha256-6ZPQo9ZFiUMeQKagxs2rtyi8r99Wtimt/1tqn60GwPc=";
   };
 
   patches = [
@@ -29,11 +29,12 @@ let
     ];
     platforms = [
       "i686-linux"
-      "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
     ];
     mainProgram = "sweethome3d";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 in
 {

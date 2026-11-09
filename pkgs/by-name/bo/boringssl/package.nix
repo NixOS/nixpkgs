@@ -2,26 +2,38 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch,
   cmake,
   ninja,
   perl,
   gitUpdater,
+
+  withShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "0.20251124.0";
+  version = "0.20261105.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-xRuerQhS2uk9eFNaSkl8krcepVwUDmAxc9nhLCI1w98=";
+    hash = "sha256-/0V/4R4opWgHOA75IIEAXRFgzHu8QzmmuVrCj/WdJ/w=";
   };
 
   patches = [
-    # Add SECP224R1 for backward compatibility
-    ./secp224r1-compat.patch
+    # Revert https://boringssl-review.googlesource.com/c/boringssl/+/104808 to restore
+    # compatibility with the Rust boring-sys crate (as used by dependant packages in nixpkgs).
+    # The change moved the SHA wrapper functions to `inline static` header functions for better
+    # MSVC compatibility, which in turn breaks Rust FFI.
+    (fetchpatch {
+      name = "boringssl-revert-inline-sha-functions.patch";
+      url = "https://boringssl.googlesource.com/boringssl/+/77cb16a15b27beefab1e1284064a4d99895ef230^!?format=TEXT";
+      decode = "base64 -d";
+      revert = true;
+      hash = "sha256-UMVOxHtif9xlGs/6xLwmbohkkqnc5OPjkYktYlE+TEg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -30,10 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
+      "-Wno-error=array-bounds"
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=character-conversion"
@@ -46,15 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    isShared = withShared;
+  };
 
   meta = {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
     maintainers = with lib.maintainers; [
-      thoughtpolice
-      theoparis
       niklaskorz
     ];
     license = with lib.licenses; [
@@ -63,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       bsd3
     ];
+    platforms = lib.platforms.all;
   };
 })

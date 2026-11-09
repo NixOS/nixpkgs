@@ -1,44 +1,53 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  stdenv,
 }:
 
-buildGoModule (finalAttrs: {
-  pname = "rqlite";
-  version = "9.3.5";
+buildGo127Module (
+  finalAttrs:
+  let
+    cmdPackage = "github.com/rqlite/rqlite/v${lib.versions.major finalAttrs.version}/cmd";
+  in
+  {
+    pname = "rqlite";
+    version = "10.6.6";
 
-  src = fetchFromGitHub {
-    owner = "rqlite";
-    repo = "rqlite";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-JYFTFIPtLNbYhv+ITWEm7ZBJrOBHc/wynxy74uouA2c=";
-  };
+    src = fetchFromGitHub {
+      owner = "rqlite";
+      repo = "rqlite";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-N3X5VPczKK7U53oYezeY7UbWXqfOK/41yNl14/t8zEg=";
+    };
 
-  vendorHash = "sha256-9KaBRiuNQGTcx8Gc8wPy6bj5d6pFKsLS87nsDwWet0o=";
+    vendorHash = "sha256-IJlT9GPjfmY9bevMXi8Z4MDmuHQiWlzNbYd71OB0lN0=";
 
-  subPackages = [
-    "cmd/rqlite"
-    "cmd/rqlited"
-    "cmd/rqbench"
-  ];
+    subPackages = [
+      "cmd/rqlite"
+      "cmd/rqlited"
+      "cmd/rqbench"
+    ];
 
-  # Leaving other flags from https://github.com/rqlite/rqlite/blob/master/package.sh
-  # since automatically retrieving those is nontrivial and inessential
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/rqlite/rqlite/cmd.Version=${finalAttrs.version}"
-  ];
+    # Mirror the upstream release build metadata
+    ldflags = [
+      "-s"
+      "-X ${cmdPackage}.CompilerCommand=${stdenv.cc.targetPrefix}cc"
+      "-X ${cmdPackage}.Version=${finalAttrs.version}"
+      "-X ${cmdPackage}.Branch=${finalAttrs.src.tag}"
+      "-X ${cmdPackage}.Commit=${finalAttrs.src.tag}"
+      "-X ${cmdPackage}.Buildtime=1970-01-01T00:00:00Z"
+    ];
 
-  # Tests are in a different subPackage which fails trying to access the network
-  doCheck = false;
+    doCheck = true;
 
-  meta = {
-    description = "Lightweight, distributed relational database built on SQLite";
-    homepage = "https://github.com/rqlite/rqlite";
-    changelog = "https://github.com/rqlite/rqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
-  };
-})
+    meta = {
+      description = "Lightweight, fault-tolerant, distributed relational database built on SQLite";
+      homepage = "https://github.com/rqlite/rqlite";
+      changelog = "https://github.com/rqlite/rqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+      license = lib.licenses.mit;
+      mainProgram = "rqlite";
+      maintainers = with lib.maintainers; [ iamanaws ];
+    };
+  }
+)

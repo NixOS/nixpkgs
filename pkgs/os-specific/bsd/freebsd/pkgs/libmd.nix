@@ -70,6 +70,8 @@ mkDerivation (
             cp "$f" "$man/share/man/$f"
           done
         '';
+
+    meta.platforms = lib.platforms.unix;
   }
   // lib.optionalAttrs bootstrapInstallation {
     nativeBuildInputs = [

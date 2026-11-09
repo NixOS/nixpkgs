@@ -10,18 +10,18 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "authoscope";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "authoscope";
-    tag = "v${version}";
-    hash = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fLK5AmRuFpj/5pKA451aV0R0TC4zUQqrNPOiFS/CCTk=";
   };
 
-  cargoHash = "sha256-TagEeT6EgvFgdEc/M7dVn9vC1TmAA2zou5ZoWX46fOI=";
+  cargoHash = "sha256-uS1ALPYsv+YEY0z24GDwQe0foQMBl8e29ExarTnRQps=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    installManPage docs/${pname}.1
+    installManPage docs/authoscope.1
   '';
 
   # Tests requires access to httpin.org
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scriptable network authentication cracker";
     homepage = "https://github.com/kpcyrd/authoscope";
-    changelog = "https://github.com/kpcyrd/authoscope/releases/tag/v${version}";
+    changelog = "https://github.com/kpcyrd/authoscope/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

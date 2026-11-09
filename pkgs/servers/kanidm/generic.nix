@@ -18,7 +18,7 @@
   nix-update-script,
   pkg-config,
   udev,
-  openssl,
+  aws-lc,
   sqlite,
   pam,
   bashInteractive,
@@ -59,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit hash;
   };
 
+  __structuredAttrs = true;
+
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches =
@@ -74,17 +76,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
       profile = {
         cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
-      }
-      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.5") {
         client_config_path = "/etc/kanidm/config";
         resolver_config_path = "/etc/kanidm/unixd";
         resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
         server_admin_bind_path = socket_path;
         server_config_path = "/etc/kanidm/server.toml";
         server_ui_pkg_path = "@htmx_ui_pkg_path@";
-      }
-      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.8") {
         resolver_service_account_token_path = "/etc/kanidm/token";
+        server_migration_path = "/etc/kanidm/migrations.d";
       };
     in
     ''
@@ -98,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
+    aws-lc
     sqlite
     pam
     rust-jemalloc-sys
@@ -125,6 +124,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--config"
     ''profile.release.lto="off"''
   ];
+
+  # A bunch of the tests break due to the sandboxing.
+  doCheck = false;
 
   preFixup = ''
     installShellCompletion \
@@ -181,6 +183,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       Flakebi
+      herbetom
     ];
     knownVulnerabilities = lib.optionals unsupported [
       ''

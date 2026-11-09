@@ -3,24 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfibaro";
-  version = "0.8.3";
+  version = "0.8.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rappenze";
     repo = "pyfibaro";
-    tag = version;
-    hash = "sha256-KdlndW066TDxZpkIP0Oa3Lii0mBpwELfHtoGKiwh6GE=";
+    tag = finalAttrs.version;
+    hash = "sha256-eMKaw/E1RLE5HoQa6g+fgmeQaObcOvwrybkHDmeT4dE=";
   };
 
   build-system = [ setuptools ];
@@ -37,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to access FIBARO Home center";
     homepage = "https://github.com/rappenze/pyfibaro";
-    changelog = "https://github.com/rappenze/pyfibaro/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/rappenze/pyfibaro/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxmux";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "edeneast";
     repo = "tuxmux";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WcHsFKpYexBEg382837NqGgNMTKzVUG3XIER9aa1zK8=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ edeneast ];
     mainProgram = "tux";
   };
-}
+})

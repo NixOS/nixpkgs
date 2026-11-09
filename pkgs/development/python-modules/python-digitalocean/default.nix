@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonpickle,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "python-digitalocean";
   version = "1.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "koalalorenzo";
@@ -49,7 +46,7 @@ buildPythonPackage rec {
     description = "Python API to manage Digital Ocean Droplets and Images";
     homepage = "https://github.com/koalalorenzo/python-digitalocean";
     changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${version}";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Fri, 16 Oct 2026 13:30:00 +0530
+Subject: [PATCH] coda-qt: fix undefined references when linking
+
+Include HttpRequest.cpp in coda-qt build sources and compile
+StreamSocket::send(http::Request&) when QTAPP is defined, resolving
+undefined references to http::Response::readData and
+StreamSocket::send(http::Request&).
+---
+ net/Socket.cpp | 2 +-
+ qt/Makefile.am | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/Socket.cpp b/net/Socket.cpp
+index 28e833f..eb4b304 100644
+--- a/net/Socket.cpp
++++ b/net/Socket.cpp
+@@ -1148,7 +1148,7 @@ bool StreamSocket::send(const http::Response& response)
+     return false;
+ }
+ 
+-#if !MOBILEAPP
++#if !MOBILEAPP || defined(QTAPP)
+ bool StreamSocket::send(http::Request& request)
+ {
+     if (request.writeData(_outBuffer, getSendBufferCapacity()))
+diff --git a/qt/Makefile.am b/qt/Makefile.am
+index 2132e48..5e36879 100644
+--- a/qt/Makefile.am
++++ b/qt/Makefile.am
+@@ -53,6 +53,7 @@ cmake_list= \
+             ../kit/LogUI.cpp \
+             ../kit/KitWebSocket.cpp \
+             ../net/FakeSocket.cpp \
++            ../net/HttpRequest.cpp \
+             ../net/Socket.cpp \
+             ../wsd/ClientSession.cpp \
+             ../wsd/DocumentBroker.cpp \
+-- 
+2.47.0

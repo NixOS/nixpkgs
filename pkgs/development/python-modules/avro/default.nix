@@ -1,28 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   fetchPypi,
-  typing-extensions,
   pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xbjdLdTBCBbw3BJ8wpz9Q7XkBc9+aEDolGCgJL89CY0=";
+    hash = "sha256-6QDntZpHgfY9npNeiPbsUMTWC+P0rfnGO1HtOdV4/gg=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [ pytest7CheckHook ];
 

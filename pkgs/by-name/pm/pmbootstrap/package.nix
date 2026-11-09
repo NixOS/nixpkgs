@@ -15,15 +15,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.8.0";
+  version = "3.12.1";
   pyproject = true;
 
   src = fetchFromGitLab {
-    owner = "postmarketOS";
+    owner = "nura";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-PbaWqtBcAXnVmB2a2DflQhayvuT3qNBCHaXuDfdrtrY=";
-    domain = "gitlab.postmarketos.org";
+    hash = "sha256-1esDcRY9CbdvgvAyy/X4HI2F4GG0P/ddbhuNtC3etcM=";
+    domain = "gitlab.nura.eco";
   };
 
   pmb_test = "${src}/test";
@@ -63,25 +63,25 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        git
-        openssl
-        multipath-tools
-        util-linux
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      openssl
+      multipath-tools
+      util-linux
+    ])
   ];
 
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/pmbootstrap";
+    description = "Sophisticated chroot/build/flash tool to develop and install Nura";
+    homepage = "https://gitlab.nura.eco/nura/pmbootstrap";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       onny
-      lucasew
       ungeskriptet
     ];
     mainProgram = "pmbootstrap";

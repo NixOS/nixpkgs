@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kbst";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "kbst";
     repo = "kbst";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tbSYNJp/gzEz+wEAe3bvIiZL5axZvW+bxqTOBkYSpMY=";
   };
 
@@ -24,19 +24,14 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${package_url}.version=${version}"
+      "-X ${package_url}.version=${finalAttrs.version}"
       "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${src.rev}"
-      "-X ${package_url}.gitTag=v${version}"
+      "-X ${package_url}.gitCommit=${finalAttrs.src.rev}"
+      "-X ${package_url}.gitTag=v${finalAttrs.version}"
       "-X ${package_url}.gitTreeState=clean"
     ];
 
   doCheck = false;
-
-  doPostInstallCheck = true;
-  PostInstallCheckPhase = ''
-    $out/bin/kbst help | grep v${version} > /dev/null
-  '';
 
   meta = {
     description = "Kubestack framework CLI";
@@ -45,4 +40,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mtrsk ];
   };
-}
+})

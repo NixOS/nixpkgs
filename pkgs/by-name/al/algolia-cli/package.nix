@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 let
-  version = "1.7.2";
+  version = "1.18.0";
 in
 buildGoModule {
   pname = "algolia-cli";
@@ -16,10 +16,10 @@ buildGoModule {
     owner = "algolia";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-7g96LEtY6VCNwnJxKVQIOeqJSHrAdIIO3feUb+DmDJ0=";
+    hash = "sha256-b/P+RvLKkAxu2Wr71bS7BxjxrogeJs71umm6FupqkPQ=";
   };
 
-  vendorHash = "sha256-zDhsJ9iUKm0RzALVlvZDIPYaTqfIDIuUWAU+h5gp4Es=";
+  vendorHash = "sha256-25A4lnNZmGhA/P1Y30nvBbS3Q+UFNukJrdoPxA0Axto=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,6 +43,6 @@ buildGoModule {
     mainProgram = "algolia";
     homepage = "https://algolia.com/doc/tools/cli/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 }

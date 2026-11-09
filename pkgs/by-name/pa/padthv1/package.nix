@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "padthv1";
-  version = "1.3.2";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/padthv1/padthv1-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sXpJjD79+rLrWHwpAxACjR+8KVGbQss8qKGMTN7nb9M=";
+    hash = "sha256-pvm5rY43oQD0gdT64jXM3XXXCDZ0OTNqM9q2XWW1paU=";
   };
 
   nativeBuildInputs = [

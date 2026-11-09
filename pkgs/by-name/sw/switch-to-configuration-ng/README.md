@@ -9,6 +9,5 @@ For more information on what happens during a switch, see [what-happens-during-a
 ```
 cd ./pkgs/by-name/sw/switch-to-configuration-ng
 nix-shell ../../../.. -A switch-to-configuration-ng
-cd ./src
 cargo build
 ```

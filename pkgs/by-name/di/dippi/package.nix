@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -14,18 +15,19 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dippi";
-  version = "4.2.0";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
-    rev = version;
-    hash = "sha256-iA7ymByLVrkOatW4Y79pGV7GhlS8G2gHY6PHpOfMq8g=";
+    rev = finalAttrs.version;
+    hash = "sha256-gvBPJGbbx6KVOyqQ/FtaSC0tzWo9xft+ASLX81F2jLo=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     vala
@@ -49,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

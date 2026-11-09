@@ -9,7 +9,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
-  librsvg,
+  fvs2,
   gtk4,
   gtksourceview5,
   libadwaita,
@@ -24,28 +24,34 @@
   gamescope,
   mangohud,
   vkbasalt-cli,
+  vulkan-tools,
   vmtouch,
-  libportal,
+  libportal-gtk4,
+  libsecret,
+  obs-studio-plugins,
+  libxml2,
+  umu-launcher,
   nix-update-script,
   removeWarningPopup ? false,
+  withObsVkCapture ? false,
+  withLsfgVk ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "60.1";
+  version = "67.6";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
+    tag = finalAttrs.version;
+    hash = "sha256-omRbaEiaLiLzpL8XHCUWn+ST0HVXyHt70cD2PS4k77k=";
   };
 
   patches = [
     ./vulkan_icd.patch
     ./redirect-bugtracker.patch
     ./remove-flatpak-check.patch
-    ./terminal.patch # Needed for `Launch with Terminal`
   ]
   ++ (
     if removeWarningPopup then
@@ -66,14 +72,15 @@ python3Packages.buildPythonApplication rec {
     gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
+    libxml2
   ];
 
   buildInputs = [
-    librsvg
     gtk4
     gtksourceview5
     libadwaita
-    libportal
+    libportal-gtk4
+    libsecret
   ];
 
   propagatedBuildInputs =
@@ -87,7 +94,6 @@ python3Packages.buildPythonApplication rec {
       icoextract
       patool
       pathvalidate
-      fvs
       orjson
       pycairo
       pygobject3
@@ -96,6 +102,8 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
+      pysocks
     ]
     ++ [
       cabextract
@@ -103,19 +111,23 @@ python3Packages.buildPythonApplication rec {
       xdpyinfo
       imagemagick
       vkbasalt-cli
+      vulkan-tools
 
       gamemode
       gamescope
       mangohud
       vmtouch
+      fvs2
+      umu-launcher
 
       # Undocumented (subprocess.Popen())
       lsb-release
       pciutils
       procps
-    ];
+    ]
+    ++ lib.optional withObsVkCapture obs-studio-plugins.obs-vkcapture;
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -131,11 +143,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
       XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

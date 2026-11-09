@@ -1,15 +1,28 @@
 let
   nixpkgs = import ../../..;
   inherit (nixpkgs { }) pkgs lib;
+  isVersioned = attr: builtins.match "[A-Za-z0-9-]+(_[0-9]+)+" attr != null;
   getEvaluating =
     x:
-    builtins.attrNames (
+    lib.mapAttrsToList (_: v: v.pname) (
       lib.filterAttrs (
-        _: v: (builtins.tryEval (v.outPath or null)).success && lib.isDerivation v && !v.meta.broken
+        n: v:
+        !(isVersioned n)
+        && (builtins.tryEval (v.outPath or null)).success
+        && lib.isDerivation v
+        && !v.meta.broken
       ) x
     );
   brokenDeps = lib.subtractLists (getEvaluating pkgs.haskellPackages) (
-    getEvaluating (nixpkgs { config.allowBroken = true; }).haskellPackages
+    getEvaluating
+      (nixpkgs {
+        config.problems.matchers = lib.mkForce [
+          {
+            kind = "broken";
+            handler = "ignore";
+          }
+        ];
+      }).haskellPackages
   );
 in
 ''

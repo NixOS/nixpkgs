@@ -1,24 +1,29 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pytestCheckHook,
-  hatchling,
   hatch-vcs,
+  hatchling,
+  http-sf,
+  httpx2,
+  pytest-mypy,
+  pytestCheckHook,
   requests,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "http-message-signatures";
-  version = "1.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
-    tag = "v${version}";
-    hash = "sha256-c5zwH28FFbEmLfL4nBBE2S1YEbwicoJo3UAYn/0zXEM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3ADx7xaAVBStvFHFqffrIKO5SrgIROMs+yFt03IcP+A=";
   };
 
   build-system = [
@@ -28,12 +33,21 @@ buildPythonPackage rec {
 
   dependencies = [
     cryptography
+    http-sf
   ];
 
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    httpx2 = [ httpx2 ];
+  };
+
   nativeCheckInputs = [
+    pytest-mypy
     pytestCheckHook
     requests
-  ];
+    typing-extensions
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   enabledTestPaths = [ "test/test.py" ];
 
@@ -42,7 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/pyauth/http-message-signatures";
+    changelog = "https://github.com/pyauth/http-message-signatures/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

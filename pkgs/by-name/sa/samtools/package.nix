@@ -5,16 +5,20 @@
   zlib,
   htslib,
   perl,
+  nix-update-script,
   ncurses ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samtools";
-  version = "1.22.1";
+  version = "1.24";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-Aqpc0LpS4GwggAVOBZ19d6iF3+lxfDHNid/npAR+2g4=";
+    url = "https://github.com/samtools/samtools/releases/download/${finalAttrs.version}/samtools-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-ibKkQBI+6qQAOSzhc259YM6QQYQwJ9doGXU8WoJGv90=";
   };
 
   # tests require `bgzip` from the htslib package
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     htslib
   ];
 
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="-lz -lbz2 -llzma"
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";
@@ -47,14 +51,17 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tools for manipulating SAM/BAM/CRAM format";
     license = lib.licenses.mit;
-    homepage = "http://www.htslib.org/";
+    homepage = "https://www.htslib.org/";
+    changelog = "https://github.com/samtools/samtools/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       mimame
       unode
     ];
   };
-}
+})

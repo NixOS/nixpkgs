@@ -7,14 +7,14 @@
   oniguruma,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hired";
   version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "sidju";
     repo = "hired";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A1iz34CSc6GWo6FvkGwIgUwMmYaIzwdCzZFACFSZ9qI=";
     fetchSubmodules = true;
   };
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "hired";
   };
-}
+})

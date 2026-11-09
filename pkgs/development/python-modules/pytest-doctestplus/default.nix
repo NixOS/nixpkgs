@@ -7,23 +7,20 @@
   packaging,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.4.0";
+  version = "1.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "pytest-doctestplus";
     tag = "v${version}";
-    hash = "sha256-hKxTniN7BHDdIHqxNGOuvD7Rk5ChSh1Zn6fo6G+Uty4=";
+    hash = "sha256-5vvLnvE0dvLYBNx34gsyQEcWlr7Cd063+rRjlnHM7OE=";
   };
 
   postPatch = ''

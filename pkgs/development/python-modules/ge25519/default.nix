@@ -8,7 +8,6 @@
   parts,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ge25519";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of Ed25519 group elements and operations";
     homepage = "https://github.com/nthparty/ge25519";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

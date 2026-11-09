@@ -9,17 +9,17 @@
   libnotify,
   libmpdclient,
   discount,
-  systemd,
+  systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpd-notification";
   version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "eworm-de";
     repo = "mpd-notification";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1xTIqJtTz7vfg34JvlwNe6kNZuPfd3KnAT0rI8ZYk2U=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libmpdclient
     discount
-    systemd
+    systemdLibs
   ];
 
   installPhase = ''
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mpd-notification";
   };
-}
+})

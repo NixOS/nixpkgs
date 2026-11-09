@@ -1,14 +1,12 @@
 diff --git a/src/qml/qml/qqmltypeloader.cpp b/src/qml/qml/qqmltypeloader.cpp
-index 5d09bf21c6..eacc8ccaea 100644
+index 5f9c040c6f..5f34e49757 100644
 --- a/src/qml/qml/qqmltypeloader.cpp
 +++ b/src/qml/qml/qqmltypeloader.cpp
-@@ -1235,7 +1235,8 @@ QQmlTypeLoader::QQmlTypeLoader(QQmlEngine *engine)
-     // env import paths
-     addEnvImportPath("QML_IMPORT_PATH");
-     addEnvImportPath("QML2_IMPORT_PATH");
--
-+    addEnvImportPath("NIXPKGS_QT6_QML_IMPORT_PATH");
-+ 
-     addImportPath(QStringLiteral("qrc:/qt/qml"));
-     addImportPath(QStringLiteral("qrc:/qt-project.org/imports"));
+@@ -1278,6 +1278,7 @@ QQmlTypeLoader::QQmlTypeLoader(QV4::ExecutionEngine *engine)
  
+     addEnvPath("QML2_IMPORT_PATH", &QQmlTypeLoader::addImportPath);
+     addEnvPath("QML_IMPORT_PATH", &QQmlTypeLoader::addImportPath);
++    addEnvPath("NIXPKGS_QT6_QML_IMPORT_PATH", &QQmlTypeLoader::addImportPath);
+ 
+     const auto qmlImportPaths = QLibraryInfo::paths(QLibraryInfo::QmlImportsPath);
+     for (const auto &qmlImportPath : qmlImportPaths)

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pycodestyle";
     tag = version;
-    hash = "sha256-1EEQp/QEulrdU9tTe28NerQ33IWlAiSlicpmNYciW88=";
+    hash = "sha256-o/OddDPcCB/tc6qQ0OAJ5UpXaVh3zL2n8Z9BqPIrGdQ=";
   };
 
   build-system = [ setuptools ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

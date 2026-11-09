@@ -30,23 +30,11 @@ in
           p:
           wayland-lib.genFinalPackage p {
             enableXWayland = cfg.xwayland.enable;
+            withUWSM = cfg.withUWSM;
           };
       };
 
-    portalPackage =
-      lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" {
-        extraDescription = ''
-          If the package is not overridable with `hyprland`, then the Hyprland package
-          used by the portal may differ from the one set in the module option {option}`package`.
-        '';
-      }
-      // {
-        apply =
-          p:
-          wayland-lib.genFinalPackage p {
-            hyprland = cfg.package;
-          };
-      };
+    portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
@@ -56,7 +44,7 @@ in
       description = ''
         Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
         This has improved systemd support and is recommended for most users.
-        This automatically starts appropiate targets like `graphical-session.target`,
+        This automatically starts appropriate targets like `graphical-session.target`,
         and `wayland-session@Hyprland.target`.
 
         ::: {.note}
@@ -81,7 +69,15 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment = {
+          systemPackages = [ cfg.package ];
+
+          # Allows lua stub file to be accessed from /run/current-system/sw/share/hypr
+          pathsToLink = [ "/share/hypr" ];
+        };
+
+        # Hyprland asks rtkit for SCHED_RR on startup
+        security.rtkit.enable = lib.mkDefault true;
 
         xdg.portal = {
           enable = true;
@@ -89,27 +85,18 @@ in
           configPackages = lib.mkDefault [ cfg.package ];
         };
 
+        # To make the Hyprland session available in DM
+        services.displayManager.sessionPackages = [ cfg.package ];
+
         systemd = lib.mkIf cfg.systemd.setPath.enable {
-          user.extraConfig = ''
-            DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
-          '';
+          user.settings.Manager = {
+            DefaultEnvironment = "PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH";
+          };
         };
       }
 
       (lib.mkIf (cfg.withUWSM) {
         programs.uwsm.enable = true;
-        # Configure UWSM to launch Hyprland from a display manager like SDDM
-        programs.uwsm.waylandCompositors = {
-          hyprland = {
-            prettyName = "Hyprland";
-            comment = "Hyprland compositor managed by UWSM";
-            binPath = "/run/current-system/sw/bin/start-hyprland";
-          };
-        };
-      })
-      (lib.mkIf (!cfg.withUWSM) {
-        # To make a vanilla Hyprland session available in DM
-        services.displayManager.sessionPackages = [ cfg.package ];
       })
 
       (import ./wayland-session.nix {
@@ -139,5 +126,5 @@ in
     ] "Nvidia patches are no longer needed")
   ];
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

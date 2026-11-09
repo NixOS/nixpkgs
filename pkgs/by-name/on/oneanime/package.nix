@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter335,
+  flutter347,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -12,7 +12,7 @@
   libgbm,
   libpulseaudio,
   mpv-unwrapped,
-  mimalloc,
+  imagemagick,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
@@ -56,16 +56,16 @@ let
     };
   });
 
-  version = "1.4.3";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-dDXDBem2G/CSGOiHTAtMZ9PrTj8b1zIiqabh/dNiSkQ=";
+    hash = "sha256-p5o+DtHeZx5S8mxzLrPFEhpKxuprZNnXsJtj1+Mi2BI=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 
@@ -79,27 +79,6 @@ flutter335.buildFlutterApplication {
   gitHashes = lib.importJSON ./git-hashes.json;
 
   customSourceBuilders = {
-    # unofficial media_kit_libs_linux
-    media_kit_libs_linux =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "media_kit_libs_linux";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          sed -i '/set(MIMALLOC "mimalloc-/,/add_custom_target/d' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-          sed -i '/set(PLUGIN_NAME "media_kit_libs_linux_plugin")/i add_custom_target("MIMALLOC_TARGET" ALL DEPENDS ${mimalloc}/lib/mimalloc.o)' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          cp -r . $out
-
-          runHook postInstall
-        '';
-      };
     # unofficial media_kit_video
     media_kit_video =
       { version, src, ... }:
@@ -129,6 +108,7 @@ flutter335.buildFlutterApplication {
   nativeBuildInputs = [
     autoPatchelfHook
     desktop-file-utils
+    imagemagick
   ];
 
   buildInputs = [
@@ -141,8 +121,9 @@ flutter335.buildFlutterApplication {
   ];
 
   postInstall = ''
+    mkdir -p $out/share/icons/hicolor/128x128/apps
     ln --symbolic --no-dereference --force ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/oneanime/lib/libmpv.so.2
-    install -D --mode=0644 assets/images/logo/logo_android_2.png  $out/share/pixmaps/oneanime.png
+    magick assets/images/logo/logo_android_2.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/oneanime.png
     desktop-file-edit oneAnime.desktop \
       --set-key="Icon" --set-value="oneanime"
     install -D --mode=0644 oneAnime.desktop --target-directory $out/share/applications

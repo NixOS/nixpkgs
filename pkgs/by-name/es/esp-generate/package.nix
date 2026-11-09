@@ -1,29 +1,34 @@
 {
   lib,
   fetchFromGitHub,
+  gitMinimal,
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "esp-generate";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "esp-generate";
-    rev = "v${version}";
-    hash = "sha256-cSwTdUP3N19zzf6ecODCCc64jSmGq139UxUyevBQ3No=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PG6IryXm2ntp7A5lm9IOWtlH9uLvavHg9LBLvP57iGQ=";
   };
 
-  cargoHash = "sha256-z9Tq6N1xPon+BPfdPnwg7XP7Pn3rPug9xxqS/MrtBMk=";
+  cargoHash = "sha256-v+IP/XChhgFNyFlt1IeIICKIvOpQBi/xId7qkPnPlcQ=";
+
+  nativeCheckInputs = [ gitMinimal ];
 
   meta = {
     description = "Template generation tool to create no_std applications targeting Espressif's chips";
     homepage = "https://github.com/esp-rs/esp-generate";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})

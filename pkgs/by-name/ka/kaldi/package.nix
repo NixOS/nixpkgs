@@ -8,6 +8,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  fetchurl,
   python3,
   _experimental-update-script-combinators,
   common-updater-scripts,
@@ -27,6 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "e02e35f0254bb033fab73d1df99fc34123e31d56";
     sha256 = "sha256-ZnVSQTETrMeU+pkqy50ldAe8g1pbnG7VS1utcUy28ls=";
   };
+
+  postPatch = ''
+    cp ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/rhasspy/rhasspy-speech/8a7bcc977d9c12fed89ab990089ed64524e54d2a/kaldi/src/online2bin/online2-cli-nnet3-decode-faster.cc";
+        hash = "sha256-eKItaomBw3xE9unVuMSmzUwJfnpfLExxusKW+bhvaJI=";
+      }
+    } src/online2bin/online2-cli-nnet3-decode-faster.cc
+
+    substituteInPlace src/online2bin/Makefile \
+      --replace-fail "ivector-randomize" "ivector-randomize online2-cli-nnet3-decode-faster"
+  '';
 
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"
@@ -73,9 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "kkm000";
         repo = "openfst";
         rev = "338225416178ac36b8002d70387f5556e44c8d05";
-        hash = "sha256-y1E6bQgBfYt1Co02UutOyEM2FnETuUl144tHwypiX+M=";
-        # https://github.com/kkm000/openfst/issues/59
-        postFetch = ''(cd "$out"; patch -p1 < '${./gcc14.patch}')'';
+        hash = "sha256-9xsL78mkR40zkoRYWsH+iaPa5MYc4BzwslzxGKv4j4I=";
+        postFetch = ''
+          cd "$out"
+          # https://github.com/kkm000/openfst/issues/59
+          patch -p1 < ${./gcc14.patch}
+          # Patch for compiling openfst with gcc >= 15
+          patch -p1 < ${./fix-gcc15-copy-constructor.patch}
+        '';
       };
     };
 

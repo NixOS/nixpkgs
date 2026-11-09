@@ -1,30 +1,33 @@
 {
   lib,
   stdenv,
-  autoconf-archive,
-  autoreconfHook,
   fetchFromGitHub,
+
+  meson,
+  ninja,
+  pkg-config,
+
   gettext,
   libnl,
+  libtraceevent,
+  libtracefs,
   ncurses,
-  nix-update-script,
   pciutils,
-  pkg-config,
-  powertop,
+
   testers,
-  xorg,
-  zlib,
+  nix-update-script,
+  powertop,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powertop";
-  version = "2.15";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = "powertop";
-    tag = "v${version}";
-    hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s60ToU99Oercf56icoowjS4L2FRFmB+KN7i3pEmsw4w=";
   };
 
   outputs = [
@@ -33,23 +36,22 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
 
   buildInputs = [
     gettext
     libnl
+    libtraceevent
+    libtracefs
     ncurses
     pciutils
-    zlib
   ];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace-fail "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace-fail "/usr/bin/xset" "${lib.getExe xorg.xset}"
-    substituteInPlace src/tuning/bluetooth.cpp --replace-fail "/usr/bin/hcitool" "hcitool"
   '';
 
   passthru = {
@@ -57,13 +59,13 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = powertop;
       command = "powertop --version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
   meta = {
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${finalAttrs.version}";
     description = "Analyze power consumption on Intel-based laptops";
     mainProgram = "powertop";
     license = lib.licenses.gpl2Only;
@@ -73,4 +75,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

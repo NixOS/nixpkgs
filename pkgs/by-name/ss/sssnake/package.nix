@@ -4,14 +4,14 @@
   fetchFromGitHub,
   ncurses,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sssnake";
-  version = "0.3.2";
+  version = "0.4.0";
   src = fetchFromGitHub {
     owner = "angeljumbo";
     repo = "sssnake";
-    rev = "v${version}";
-    hash = "sha256-zkErOV6Az0kJdwyXzMCnVW1997zpAB79TBvf/41Igic=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RU+yYT+GcCsk0lBisE2/4Y9zMVLA6dbN4n0ibAovav4=";
   };
   postPatch = ''
     substituteInPlace makefile --replace '-lncursesw' '-lncursesw -D_XOPEN_SOURCE=500'
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     description = "Cli snake game that plays itself";
     mainProgram = "sssnake";
     homepage = "https://github.com/angeljumbo/sssnake";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

@@ -23,16 +23,16 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abiword";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-dYbJ726Zuxs7+VTTCWHYQLsVZ/86hRUBQRac6toO4UI=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-TjOHixfCXDQlUUbD1L5wcGe4Nl0+1UqZw4EF+1/eZ4w=";
   };
 
   nativeBuildInputs = [
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
       sna
     ];
   };
-}
+})

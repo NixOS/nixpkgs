@@ -1,9 +1,16 @@
-{ buildPythonPackage, usbrelay }:
+{
+  buildPythonPackage,
+  setuptools,
+  usbrelay,
+}:
 
 buildPythonPackage {
-  format = "setuptools";
   pname = "usbrelay_py";
-  inherit (usbrelay) version src;
+  version = "1.1";
+  pyproject = true;
+  inherit (usbrelay) src;
+
+  build-system = [ setuptools ];
 
   preConfigure = ''
     cd usbrelay_py
@@ -12,6 +19,8 @@ buildPythonPackage {
   buildInputs = [ usbrelay ];
 
   pythonImportsCheck = [ "usbrelay_py" ];
+
+  passthru.updateScript = null;
 
   inherit (usbrelay) meta;
 }

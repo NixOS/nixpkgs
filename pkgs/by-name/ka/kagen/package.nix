@@ -19,22 +19,27 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "kagen";
   version = "1.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "KarlsruheGraphGeneration";
     repo = "kagen";
     tag = "v${finalAttrs.version}";
-    # use vendor libmorton and xxHash
+    # use vendor libmorton and xxhash
     fetchSubmodules = true;
     hash = "sha256-VLQxeI9EzeJEp1krlLPRSct3SQmAF8cj34u3fkmppQg=";
   };
 
   nativeBuildInputs = [
     cmake
+    mpi
     pkg-config
   ];
 
   buildInputs = [
     imagemagick
+    gtest
   ];
 
   propagatedBuildInputs = [

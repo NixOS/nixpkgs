@@ -4,25 +4,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
+  pyprojectVersionPatchHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
+  trio,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "15.0.1";
+  version = "17.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
+    hash = "sha256-7qY2u0rIHnwQNZtgZ59YOcO2EKCV++/lc9q1BHRdJr0=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
@@ -40,13 +41,10 @@ buildPythonPackage rec {
   ++ lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/python-websockets/websockets/issues/1569
     "test_writing_in_send_context_fails"
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
-    "test_reject_invalid_server_certificate"
   ];
 
   nativeCheckInputs = [
+    trio
     unittestCheckHook
     werkzeug
   ];

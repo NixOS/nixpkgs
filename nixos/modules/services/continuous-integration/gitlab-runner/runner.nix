@@ -189,11 +189,15 @@ let
                         [ "--docker-image ${service.dockerImage}" ]
                         ++ optional service.dockerDisableCache "--docker-disable-cache"
                         ++ optional service.dockerPrivileged "--docker-privileged"
+                        ++ optional service.dockerServicesPrivileged "--docker-services_privileged true"
                         ++ optional (service.dockerPullPolicy != null) "--docker-pull-policy ${service.dockerPullPolicy}"
                         ++ map (v: "--docker-volumes ${escapeShellArg v}") service.dockerVolumes
                         ++ map (v: "--docker-extra-hosts ${escapeShellArg v}") service.dockerExtraHosts
                         ++ map (v: "--docker-allowed-images ${escapeShellArg v}") service.dockerAllowedImages
                         ++ map (v: "--docker-allowed-services ${escapeShellArg v}") service.dockerAllowedServices
+                        ++ map (
+                          v: "--docker-allowed-privileged-services ${escapeShellArg v}"
+                        ) service.dockerAllowedPrivilegedServices
                       )
                     )
                   )
@@ -521,6 +525,13 @@ in
                 Give extended privileges to container.
               '';
             };
+            dockerServicesPrivileged = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Give extended privileges to services.
+              '';
+            };
             dockerExtraHosts = mkOption {
               type = types.listOf types.str;
               default = [ ];
@@ -552,6 +563,19 @@ in
               ];
               description = ''
                 Whitelist allowed services.
+              '';
+            };
+            dockerAllowedPrivilegedServices = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+              example = [
+                "docker.io/library/docker:*-dind-rootless"
+                "docker.io/library/docker:dind-rootless"
+                "docker:*-dind-rootless"
+                "docker:dind-rootless"
+              ];
+              description = ''
+                Whitelist allowed privileged services.
               '';
             };
             preGetSourcesScript = mkOption {
@@ -728,7 +752,7 @@ in
         mapAttrsToList
           (
             name: serviceConfig:
-            ''`services.gitlab-runner.services.${name}.protected` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.protected` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -740,7 +764,7 @@ in
         mapAttrsToList
           (
             name: serviceConfig:
-            ''`services.gitlab-runner.services.${name}.runUntagged` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.runUntagged` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -752,7 +776,7 @@ in
         mapAttrsToList
           (
             name: v:
-            ''`services.gitlab-runner.services.${name}.maximumTimeout` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.maximumTimeout` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -764,7 +788,7 @@ in
         mapAttrsToList
           (
             name: v:
-            ''`services.gitlab-runner.services.${name}.tagList` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration.''
+            "`services.gitlab-runner.services.${name}.tagList` with runner authentication tokens has no effect and will be ignored. Please remove it from your configuration."
           )
           (
             filterAttrs (
@@ -893,5 +917,5 @@ in
     )
   ];
 
-  meta.maintainers = teams.gitlab.members;
+  meta.teams = [ teams.gitlab ];
 }

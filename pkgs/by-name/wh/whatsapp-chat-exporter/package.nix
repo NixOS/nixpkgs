@@ -2,10 +2,11 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 let
-  version = "0.12.1";
+  version = "0.13.1";
 in
 python3Packages.buildPythonApplication {
   pname = "whatsapp-chat-exporter";
@@ -16,16 +17,20 @@ python3Packages.buildPythonApplication {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     tag = version;
-    hash = "sha256-AyxRIjcAGjxCe0m2cSESQWd75v5tzpsCmb+3wChbH7c=";
+    hash = "sha256-XRDvXYV4RWSjFkVW1JEA2JkwddgJP1ZE+RgB/WP7PLM=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     bleach
+    javaobj-py3
     jinja2
     pycryptodome
-    javaobj-py3
-    vobject
+    tqdm
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter";
@@ -40,7 +45,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "wtsexporter";
     maintainers = with lib.maintainers; [
       bbenno
-      EstebanMacanek
     ];
   };
 }

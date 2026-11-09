@@ -15,7 +15,7 @@
   glibc,
   harfbuzz,
   libGL,
-  libX11,
+  libx11,
   libgpg-error,
   libselinux,
   libxcb,
@@ -28,19 +28,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "navicat-premium";
-  version = "17.3.5";
+  version = "18.0.2";
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit (finalAttrs) pname version;
     src =
       {
         x86_64-linux = fetchurl {
-          url = "https://web.archive.org/web/20251209223816/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-          hash = "sha256-T2NsaUv/S2dWEP1QUBA+tHrM1UeP4Mh8jamg1obeEFs=";
+          url = "https://web.archive.org/web/20261023084705/https://dn.navicat.com/download/navicat18-premium-en-x86_64.AppImage";
+          hash = "sha256-hPu4ZFphUEiSUW0Jd8Emka5+Nxw5V97Q8/q+dzXlHo8=";
         };
         aarch64-linux = fetchurl {
-          url = "https://web.archive.org/web/20251209224531/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-          hash = "sha256-GMyIaDUFlcSfN0RydJjxOi3S5WexhyaJLXKtx9Kwvzs=";
+          url = "https://web.archive.org/web/20261023084726/https://dn.navicat.com/download/navicat18-premium-en-aarch64.AppImage";
+          hash = "sha256-2JzGfqMVhwU9B96yz/vzsdlqVy0/WLFD6rSR85iqAb8=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibc
     harfbuzz
     libGL
-    libX11
+    libx11
     libgpg-error
     libselinux
     libxcb
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
           glibc
           harfbuzz
           libGL
-          libX11
+          libx11
           libgpg-error
           libselinux
           libxcb

@@ -6,14 +6,14 @@
   SDL_image,
   SDL_mixer,
   SDL_sound,
-  libsigcxx,
+  libsigcxx_2_0,
   physfs,
   boost,
   expat,
   freetype,
   libjpeg,
-  wxGTK32,
-  lua,
+  wxwidgets_3_2,
+  lua5_2_compat,
   perl,
   pkg-config,
   zlib,
@@ -27,6 +27,9 @@
   flac,
   libogg,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation {
   pname = "asc";
@@ -51,7 +54,7 @@ stdenv.mkDerivation {
     expat
     freetype
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     lua
     perl
     zlib
@@ -64,7 +67,7 @@ stdenv.mkDerivation {
     flac
     libvorbis
     libogg
-    libsigcxx
+    libsigcxx_2_0
   ];
 
   meta = {

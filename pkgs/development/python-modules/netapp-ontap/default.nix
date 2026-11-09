@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  apipkg,
   marshmallow,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,
@@ -12,15 +12,13 @@
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.17.1.0";
+  version = "9.19.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    hash = "sha256-bzDGsKCEH3oszuz4OKnOg7WTMQTnJAGh7POmGhRCyzc=";
+    hash = "sha256-YFAY1LBXiZGIlKzex6vtQHi1QN7j9YHHwNar5in8uxo=";
   };
 
   postPatch = ''
@@ -31,6 +29,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    apipkg
     marshmallow
     requests
     requests-toolbelt

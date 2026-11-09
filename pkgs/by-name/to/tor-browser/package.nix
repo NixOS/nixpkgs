@@ -21,11 +21,11 @@
   glib,
   gtk3,
   libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxt,
+  libxtst,
   libgbm,
   pango,
   pciutils,
@@ -40,7 +40,7 @@
   libGL,
 
   mediaSupport ? true,
-  ffmpeg_7,
+  ffmpeg_8,
 
   audioSupport ? mediaSupport,
 
@@ -78,11 +78,11 @@ let
       glib
       gtk3
       libxcb
-      libX11
-      libXext
-      libXrender
-      libXt
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxt
+      libxtst
       libgbm
       pango
       pciutils
@@ -99,10 +99,10 @@ let
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals libvaSupport [ libva ]
-    ++ lib.optionals mediaSupport [ ffmpeg_7 ]
+    ++ lib.optionals mediaSupport [ ffmpeg_8 ]
   );
 
-  version = "15.0.3";
+  version = "16.0";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,17 +112,17 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-MVbxV8U1WKT3loM174Zk0QG33qftzr/Ay3w/hbFAF2U=";
+      hash = "sha256-3jNwtnOJwoSHOM3VFbsuOyMqSukykOrnQYXExDopGiQ=";
     };
 
-    i686-linux = fetchurl {
+    aarch64-linux = fetchurl {
       urls = [
-        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-aarch64-${version}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-aarch64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-aarch64-${version}.tar.xz"
       ];
-      hash = "sha256-3IEmpO1ZanAVXiUINhA44hX06J1/9vEJ8T8hQjfnAHY=";
+      hash = "sha256-HMUMziBz1IyIKZSX54bVH299ZtXPONMuMAd3LWwUanc=";
     };
   };
 
@@ -134,12 +134,6 @@ let
         version = "1.0";
         about = "Tor Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -162,7 +156,7 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
     dbus-glib
-    libXtst
+    libxtst
   ];
 
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
@@ -173,7 +167,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "torbrowser";
+      name = "tor-browser";
       exec = "tor-browser %U";
       icon = "tor-browser";
       desktopName = "Tor Browser";
@@ -213,8 +207,8 @@ stdenv.mkDerivation rec {
     # firefox is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv firefox.real firefox
 
-    # store state at `~/.tor browser` instead of relative to executable
-    touch "$TBB_IN_STORE/system-install"
+    # store state at `~/.tor project` instead of relative to executable
+    touch "$TBB_IN_STORE/is-packaged-app"
 
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
@@ -226,7 +220,7 @@ stdenv.mkDerivation rec {
     ''}
 
     # Fixup paths to pluggable transports.
-    substituteInPlace TorBrowser/Data/Tor/torrc-defaults \
+    substituteInPlace TorBrowser/Tor/torrc-defaults \
       --replace-fail './TorBrowser' "$TBB_IN_STORE/TorBrowser"
 
     # Prepare for autoconfig.
@@ -245,13 +239,10 @@ stdenv.mkDerivation rec {
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
 
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
-
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
     // path capture.
-    lockPref("extensions.torlauncher.torrc-defaults_path", "$TBB_IN_STORE/TorBrowser/Data/Tor/torrc-defaults");
+    lockPref("extensions.torlauncher.torrc-defaults_path", "$TBB_IN_STORE/TorBrowser/Tor/torrc-defaults");
     lockPref("extensions.torlauncher.tor_path", "$TBB_IN_STORE/TorBrowser/Tor/tor");
 
     // Optionally use IPC for communicating with Tor
@@ -294,9 +285,9 @@ stdenv.mkDerivation rec {
     # relative to torrc-defaults_path but if we do not hard-code them
     # here, these paths end up being written to the torrc in the user's
     # state dir.
-    cat >>TorBrowser/Data/Tor/torrc-defaults <<EOF
-    GeoIPFile $TBB_IN_STORE/TorBrowser/Data/Tor/geoip
-    GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
+    cat >>TorBrowser/Tor/torrc-defaults <<EOF
+    GeoIPFile $TBB_IN_STORE/TorBrowser/Tor/geoip
+    GeoIPv6File $TBB_IN_STORE/TorBrowser/Tor/geoip6
     EOF
 
     mkdir -p $out/bin
@@ -331,7 +322,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
 
     runHook postInstall
   '';
@@ -347,14 +337,15 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
-    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
+    donationPage = "https://donate.torproject.org/";
+    changelog = "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/raw/maint-${lib.versions.majorMinor version}/projects/browser/Bundle-Data/Docs-TBB/ChangeLog.txt";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [
       c4patino
       felschr
       hax404
-      joachifm
       panicgh
+      whispersofthedawn
     ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

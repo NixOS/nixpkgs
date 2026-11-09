@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
-  env.NIX_CFLAGS_COMPILE = [ "-Wno-array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-array-bounds";
 
   passthru.updateScript = nix-update-script { };
 
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       gpl3Only
     ];
-    platforms = lib.intersectLists lib.platforms.unix lib.platforms.x86_64;
+    platforms = lib.platforms.unix;
   };
 })

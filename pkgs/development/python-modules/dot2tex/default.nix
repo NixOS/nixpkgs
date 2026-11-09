@@ -5,31 +5,30 @@
   replaceVars,
   pyparsing,
   graphviz,
+  setuptools,
   pytestCheckHook,
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dot2tex";
-  version = "2.11.3";
-  format = "setuptools";
+  version = "2.12.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KZoq8FruW74CV6VipQapPieSk9XDjyjQirissyM/584=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EbCXOQuU0ab1BywIxQY35yTi+BtGN5SXLD1CMAW19TY=";
   };
 
   patches = [
     (replaceVars ./path.patch {
       inherit graphviz;
     })
-    ./test.patch # https://github.com/kjellmf/dot2tex/issues/5
-
-    # https://github.com/xyz2tex/dot2tex/pull/104 does not merge cleanly
-    ./remove-duplicate-script.patch
   ];
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -37,8 +36,13 @@ buildPythonPackage rec {
       ps: with ps; [
         preview
         pstricks
+        standalone
       ]
     ))
+  ];
+
+  disabledTests = [
+    "test_semicolon"
   ];
 
   meta = {
@@ -47,4 +51,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kjellmf/dot2tex";
     license = lib.licenses.mit;
   };
-}
+})

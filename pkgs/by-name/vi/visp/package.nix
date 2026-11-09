@@ -14,7 +14,7 @@
   libpng,
   librealsense,
   libxml2,
-  libX11,
+  libx11,
   nlohmann_json,
   #ogre,
   openblas,
@@ -23,8 +23,8 @@
   python3Packages,
   stdenv,
   texliveSmall,
-  v4l-utils,
-  xorg,
+  libv4l,
+  libpthread-stubs,
   zbar,
   zlib,
 }:
@@ -79,28 +79,26 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     librealsense
-    libX11
+    libx11
     libxml2
     nlohmann_json
     #ogre
     openblas
     opencv
     python3Packages.numpy
-    xorg.libpthreadstubs
+    libpthread-stubs
     zbar
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     coin3d
-    v4l-utils
+    libv4l
   ];
 
   doCheck = true;
 
   meta = {
     description = "Open Source Visual Servoing Platform";
-    # ref. https://github.com/lagadic/visp/pull/1658
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
     homepage = "https://visp.inria.fr";
     changelog = "https://github.com/lagadic/visp/blob/v${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.gpl2Plus;

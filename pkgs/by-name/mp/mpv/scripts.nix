@@ -82,16 +82,15 @@ let
 
   scope =
     self:
-    with lib;
-    pipe
+    lib.pipe
       {
         inherit (self) callPackage;
         directory = ./scripts;
       }
       [
-        packagesFromDirectoryRecursive
-        recurseIntoAttrs
-        (mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
+        lib.packagesFromDirectoryRecursive
+        lib.recurseIntoAttrs
+        (lib.mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests)
       ];
 
   mkAliases = self: {
@@ -111,6 +110,7 @@ let
       encode
       seekTo
       ; # added 2024-11-28
+    mpv-cheatsheet = throw "'mpv-cheatsheet' is no longer maintained, use 'mpv-cheatsheet-ng' instead"; # added 2026-02-13
     youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
   };
 in

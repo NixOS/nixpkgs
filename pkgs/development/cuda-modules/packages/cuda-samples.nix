@@ -3,12 +3,12 @@
   backendStdenv,
   _cuda,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_culibos,
   cuda_cudart,
   cuda_nvcc,
   cuda_nvrtc,
-  cuda_nvtx,
+  nvtx,
   cuda_profiler_api,
   cudaAtLeast,
   cudaNamePrefix,
@@ -17,6 +17,7 @@
   flags,
   lib,
   libcublas,
+  libcudla,
   libcufft,
   libcurand,
   libcusolver,
@@ -70,10 +71,10 @@ backendStdenv.mkDerivation (finalAttrs: {
           "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/nv" \
-          "${lib.getOutput "include" cuda_cccl}/include/nv" \
+          "${lib.getOutput "include" cccl}/include/nv" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/cuda" \
-          "${lib.getOutput "include" cuda_cccl}/include/cuda"
+          "${lib.getOutput "include" cccl}/include/cuda"
     ''
     + lib.optionalString (samplesAtLeast "13") ''
       nixLog "patching sample 0_Introduction/matrixMul_nvrtc"
@@ -84,10 +85,10 @@ backendStdenv.mkDerivation (finalAttrs: {
           "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/nv" \
-          "${lib.getOutput "include" cuda_cccl}/include/nv" \
+          "${lib.getOutput "include" cccl}/include/nv" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/cuda" \
-          "${lib.getOutput "include" cuda_cccl}/include/cuda"
+          "${lib.getOutput "include" cccl}/include/cuda"
     ''
     # These three samples give undefined references, like
     # nvlink error   : Undefined reference to '__cudaCDP2Free' in 'CMakeFiles/cdpBezierTessellation.dir/BezierLineCDP.cu.o'
@@ -112,6 +113,20 @@ backendStdenv.mkDerivation (finalAttrs: {
         --replace-fail \
           "add_subdirectory(graphConditionalNodes)" \
           "# add_subdirectory(graphConditionalNodes)"
+    ''
+    # CCCL 3.5 (CUDA 13.5) no longer includes thrust/tuple.h from the Thrust headers these samples include, so they
+    # fail with errors like `namespace "thrust" has no member "make_tuple"`.
+    + lib.optionalString (cudaAtLeast "13.5") ''
+      for file in \
+        2_Concepts_and_Techniques/particles/particleSystem_cuda.cu \
+        2_Concepts_and_Techniques/particles/particles_kernel_impl.cuh \
+        2_Concepts_and_Techniques/segmentationTreeThrust/segmentationTree.cu \
+        5_Domain_Specific/smokeParticles/ParticleSystem_cuda.cu \
+        5_Domain_Specific/smokeParticles/particles_kernel_device.cuh; do
+        nixLog "including thrust/tuple.h in Samples/$file"
+        sed -i '1i #include <thrust/tuple.h>' "$NIX_BUILD_TOP/$sourceRoot/Samples/$file"
+      done
+      unset -v file
     ''
     # For some reason this sample requires a static library, which we don't propagate by default due to size.
     + ''
@@ -183,10 +198,10 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     cuda_profiler_api
     libcublas
     libcufft
@@ -197,6 +212,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     libnvjitlink
     libnvjpeg
   ]
+  ++ lib.optionals libcudla.meta.available [ libcudla ]
   ++ lib.optionals (cudaAtLeast "13") [ cuda_culibos ];
 
   cmakeFlags = [

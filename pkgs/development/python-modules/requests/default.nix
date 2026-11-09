@@ -11,25 +11,20 @@
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests";
-  version = "2.32.5";
+  version = "2.34.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
-
-  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "psf";
     repo = "requests";
-    tag = "v${version}";
-    hash = "sha256-cEBalMFoYFaGG8M48k+OEBvzLegzrTNP1NxH2ljP6qg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J2/sNpFUDHkNBeN7BfiMamv7YaWixZAZHxaqmPVEptc=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +47,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ optional-dependencies.socks;
+  ++ finalAttrs.passthru.optional-dependencies.socks;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin
@@ -69,24 +64,26 @@ buildPythonPackage rec {
     "TestRequests"
     "TestTimeout"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted
     "test_basic_response"
     "test_text_response"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted
     "tests/test_lowlevel.py"
   ];
 
   pythonImportsCheck = [ "requests" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
-    changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/psf/requests/blob/${finalAttrs.src.tag}/HISTORY.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

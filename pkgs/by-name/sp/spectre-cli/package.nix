@@ -10,7 +10,7 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectre-cli";
   version = "unstable-2022-02-05";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "spectre.app";
     repo = "cli";
     rev = "a5e7aab28f44b90e5bd1204126339a81f64942d2";
-    sha256 = "1hp4l1rhg7bzgx0hcai08rvcy6l9645sfngy2cr96l1bpypcld5i";
+    hash = "sha256-sTTKrr8rUJMyE/5ZpwsxiRrPdkYgKgZBf3+dB3Og5MI=";
     fetchSubmodules = true;
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
 
      # The default buildPhase wants to create a ´build´ dir so we rename the build script to stop conflicts.
      mv build build.sh
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     mainProgram = "spectre";
     platforms = lib.platforms.all;
   };
-}
+})

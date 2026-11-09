@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cldr-annotations";
-  version = "48";
+  version = "49";
 
   src = fetchzip {
     url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
     stripRoot = false;
-    hash = "sha256-Q+dA8Y4VfO8abyHRVgoRQMfY5NG6vZn/ZorxF/SEOmo=";
+    hash = "sha256-s0nDPUMwP/DgeL7PdeKyFASAU8hTHw644qPWrl+F6zw=";
   };
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "Names and keywords for Unicode characters from the Common Locale Data Repository";
+    description = "Names and keywords for Unicode characters from the Common Locale Data & Rules";
     homepage = "https://cldr.unicode.org";
     license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;

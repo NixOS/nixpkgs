@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
     hash = "sha256-HAvycSEZZfZwoVp3g7QWcwfbdyZKwWJKBuVmeWTajuk=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       Each section has an active/bypass switch, frequency, bandwidth and gain controls.
       There is also a global bypass switch and gain control.
       The 2nd order resonant filters are implemented using a Mitra-Regalia style lattice filter.
-      All switches and controls are internally smoothed, so they can be used 'live' whithout any clicks or zipper noises.
+      All switches and controls are internally smoothed, so they can be used 'live' without any clicks or zipper noises.
       This should make this plugin a good candidate for use in systems that allow automation of plugin control ports, such as Ardour, or for stage use.
     '';
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html";

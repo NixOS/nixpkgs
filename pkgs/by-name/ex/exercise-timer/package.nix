@@ -1,56 +1,53 @@
 {
   lib,
   stdenv,
-  alsa-lib,
   appstream-glib,
-  cargo,
+  blueprint-compiler,
   desktop-file-utils,
-  fetchFromGitHub,
+  fetchFromGitLab,
   glib,
+  gst_all_1,
   gtk4,
+  json-glib,
   libadwaita,
   meson,
   ninja,
   nix-update-script,
   pkg-config,
-  rustPlatform,
-  rustc,
+  vala,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exercise-timer";
-  version = "1.8.5";
+  version = "1.9.1";
 
-  src = fetchFromGitHub {
-    owner = "mfep";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "exercise-timer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yparZ9XmHkjwvgpnERpi8hvRXdb8R+kAyFOFl+exXb4=";
-    fetchLFS = true;
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-JObzeiQHEGIDjOung3o8dpaXVcOoJS2v1hyrcS1fqcI=";
+    hash = "sha256-81bGX5Oa5z5AbtYDzPcSyFsz0/zWcDw/Ky9n+EfnZNo=";
   };
 
   nativeBuildInputs = [
     appstream-glib
-    cargo
+    blueprint-compiler
     desktop-file-utils
     glib
     gtk4
     meson
     ninja
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustc
     wrapGAppsHook4
+    vala
   ];
 
   buildInputs = [
-    alsa-lib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    json-glib
     libadwaita
   ];
 
@@ -63,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Timer app for high intensity interval training";
     homepage = "https://apps.gnome.org/Hiit/";
-    changelog = "https://github.com/mfep/exercise-timer/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://gitlab.gnome.org/World/exercise-timer/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "hiit";

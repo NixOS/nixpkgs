@@ -5,12 +5,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanha";
   version = "0.1.2";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "kanha";
     hash = "sha256-ftTmYCkra3x/oDgGJ2WSf6yLeKXkwLJXhjuBdv7fVLY=";
   };
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pwnwriter ];
     mainProgram = "kanha";
   };
-}
+})

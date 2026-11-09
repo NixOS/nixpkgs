@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.6.6";
+  version = "3.7.4";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-n3VoRxMOBQK/8mbVbORSBz73tsuKAUMG7dFZIbaqdHU=";
+    hash = "sha256-H+6CTQZmQkuJRuk43DUlDxNox42j6Wj3YWOt28SAEyg=";
   };
 
   dontFixup = true;
@@ -52,7 +52,6 @@ stdenvNoCC.mkDerivation rec {
       emaiax
     ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

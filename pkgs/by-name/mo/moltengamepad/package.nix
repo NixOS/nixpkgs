@@ -3,35 +3,54 @@
   stdenv,
   fetchFromGitHub,
   udev,
+  go-md2man,
+  linuxHeaders,
+  installShellFiles,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moltengamepad";
-  version = "unstable-2016-05-04";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "jgeumlek";
     repo = "MoltenGamepad";
-    rev = "6656357964c22be97227fc5353b53c6ab1e69929";
-    sha256 = "05cpxfzxgm86kxx0a9f76bshjwpz9w1g8bn30ib1i5a3fv7bmirl";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pfUx5wUkXcshHvBoD47ZRHfJPGHPSzz72H3WBIauFw0=";
   };
 
-  hardeningDisable = [ "format" ];
+  postPatch = ''
+    # https://github.com/jgeumlek/MoltenGamepad/pull/99
+    sed -e '16i#include <memory>' -i source/core/uinput.h
+    sed -e '8i#include <string>' -i source/core/udev.h
+  '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
   buildInputs = [ udev ];
 
-  buildPhase = ''
-    make
+  preBuild = ''
+    make eventlists INPUT_HEADER=${linuxHeaders}/include/linux/input-event-codes.h
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp moltengamepad $out/bin
+    runHook preInstall
+
+    installBin moltengamepad
+    installManPage documentation/moltengamepad.1
+
+    runHook postInstall
   '';
 
-  patchPhase = ''
-    sed -i -e '159d;161d;472d;473d;474d;475d' source/eventlists/key_list.cpp
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/jgeumlek/MoltenGamepad";
@@ -40,5 +59,4 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-
-}
+})

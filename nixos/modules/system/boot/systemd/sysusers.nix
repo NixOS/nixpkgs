@@ -21,9 +21,13 @@ let
       lib.mapAttrsToList (
         username: opts:
         let
-          uid = if opts.uid == null then "/var/lib/nixos/uid/${username}" else toString opts.uid;
+          # systemd-sysusers does not split "uid:group" when the UID is a path,
+          # so a ":group" suffix would become part of the path and the marker
+          # file would never be read. The group is set with an "m" line below.
+          id =
+            if opts.uid == null then "/var/lib/nixos/uid/${username}" else "${toString opts.uid}:${opts.group}";
         in
-        ''u ${username} ${uid}:${opts.group} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
+        ''u ${username} ${id} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
       ) systemUsers
     )}
 
@@ -31,9 +35,9 @@ let
     ${lib.concatLines (
       lib.mapAttrsToList (
         groupname: opts:
-        ''g ${groupname} ${
+        "g ${groupname} ${
           if opts.gid == null then "/var/lib/nixos/gid/${groupname}" else toString opts.gid
-        }''
+        }"
       ) userCfg.groups
     )}
 
@@ -42,6 +46,16 @@ let
       lib.mapAttrsToList (
         groupname: opts: (lib.concatMapStrings (username: "m ${username} ${groupname}\n")) opts.members
       ) userCfg.groups
+    )}
+    ${lib.concatStrings (
+      lib.mapAttrsToList (username: opts: "m ${username} ${opts.group}\n") (
+        lib.filterAttrs (
+          username: opts:
+          opts.uid == null
+          && opts.group != username
+          && !(lib.elem username (userCfg.groups.${opts.group}.members or [ ]))
+        ) systemUsers
+      )
     )}
   '';
 
@@ -152,7 +166,7 @@ in
           # systemd-sysusers cannot find it when we also pass another flag.
           ExecStart = lib.mkIf immutableEtc [
             ""
-            "${config.systemd.package}/bin/systemd-sysusers --root ${builtins.dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
+            "${config.systemd.package}/bin/systemd-sysusers --root ${dirOf immutablePasswordFilesLocation} /etc/sysusers.d/00-nixos.conf"
           ];
 
           # Make the source files writable before executing sysusers.

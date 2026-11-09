@@ -21,10 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  hardeningDisable = [
+    "strictflexarrays1"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "mawk -W version";
+      version = lib.replaceString "-" " " finalAttrs.version;
     };
     updateScript = directoryListingUpdater {
       inherit (finalAttrs) pname version;

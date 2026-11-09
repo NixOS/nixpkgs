@@ -1,10 +1,10 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   icalendar,
   lib,
-  poetry-core,
-  poetry-dynamic-versioning,
   pyicu,
   pytestCheckHook,
   recurring-ical-events,
@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "icalendar-searcher";
-  version = "1.0.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "python-caldav";
+    owner = "PyCalendar";
     repo = "icalendar-searcher";
     tag = "v${version}";
-    hash = "sha256-RwWm41+7AyoqwVGBaa+50ljUILJG5kCD4LMsULWjVEM=";
+    hash = "sha256-FNrc+SQar8vftn2zGtMtQW5Tb9KwELSozt8oO4ogxn0=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
-    changelog = "https://github.com/python-caldav/icalendar-searcher/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PyCalendar/icalendar-searcher/blob/${src.tag}/CHANGELOG.md";
     description = "Search, filter and sort iCalendar components";
-    homepage = "https://github.com/python-caldav/icalendar-searcher";
+    homepage = "https://github.com/PyCalendar/icalendar-searcher";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
   };

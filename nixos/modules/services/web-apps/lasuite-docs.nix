@@ -8,6 +8,7 @@
 let
   inherit (lib)
     getExe
+    hasAttr
     mapAttrs
     match
     mkEnableOption
@@ -17,6 +18,7 @@ let
     types
     optional
     optionalString
+    escapeShellArg
     ;
 
   cfg = config.services.lasuite-docs;
@@ -35,16 +37,23 @@ let
 
   proxySuffix = if match "unix:.*" cfg.bind != null then ":" else "";
 
-  commonServiceConfig = {
+  commonServiceConfig = commonServiceConfig' // {
     RuntimeDirectory = "lasuite-docs";
     StateDirectory = "lasuite-docs";
     WorkingDirectory = "/var/lib/lasuite-docs";
-
     User = "lasuite-docs";
+  };
+
+  commonServiceConfigYhub = commonServiceConfig' // {
+    StateDirectory = "lasuite-docs-yhub-server";
+    WorkingDirectory = "%S/lasuite-docs-yhub-server";
+    User = "lasuite-docs-yhub-server";
+    RuntimeDirectory = "lasuite-docs-yhub-server";
+  };
+
+  commonServiceConfig' = {
     DynamicUser = true;
-    SupplementaryGroups = mkIf cfg.redis.createLocally [
-      config.services.redis.servers.lasuite-docs.group
-    ];
+    Slice = "system-lasuite-docs.slice";
     # hardening
     AmbientCapabilities = "";
     CapabilityBoundingSet = [ "" ];
@@ -76,6 +85,41 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  mkJWTPrivateKeySetupService = service: humanServiceName: defaults: {
+    description = "Key setup for ${humanServiceName}";
+    path = [ pkgs.openssl.bin ];
+    unitConfig.ConditionPathExists = "!%S/${service}/private.pem";
+
+    serviceConfig = defaults // {
+      Type = "oneshot";
+      ExecStart = "openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out private.pem";
+      ExecSearchPath = lib.makeBinPath [ pkgs.openssl.bin ];
+    };
+  };
+
+  # Convert environment variables to be used as systemd-run arguments
+  envArgs = lib.concatStringsSep " " (
+    lib.mapAttrsToList (name: value: "-E ${escapeShellArg "${name}=${value}"}") pythonEnvironment
+  );
+
+  yhubEnv =
+    lib.mapAttrs (
+      _: val: if lib.isBool val then lib.boolToString val else toString val
+    ) cfg.yhub.settings
+    // lib.optionalAttrs cfg.postgresql.createLocally {
+      PGHOST = "/run/postgresql";
+      PGDATABASE = "lasuite-docs-yhub-server";
+    };
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScriptBin "lasuite-docs-manage" ''
+    exec ${lib.getExe' config.systemd.package "systemd-run"} \
+      -p User=${commonServiceConfig.User} -p DynamicUser=yes \
+      -p StateDirectory=${commonServiceConfig.StateDirectory} --working-directory=${commonServiceConfig.WorkingDirectory} \
+      --quiet --collect --pipe --pty \
+      ${envArgs} ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -140,9 +184,113 @@ in
           Configure local Redis cache server for docs.
         '';
       };
+
+      port = mkOption {
+        type = types.port;
+        default = 26379;
+        description = ''
+          Port for the Redis instance of LaSuite docs.
+
+          Please note that yhub uses `@redis/client@v5` which doesn't suport UDS.
+        '';
+      };
+
+    };
+
+    yhub = {
+      package = mkPackageOption pkgs "lasuite-docs-yhub-server" { };
+
+      settings = mkOption {
+        description = ''
+          Settings passed as environment variables to the Y collaboration server.
+          By default, the migration mode from the old collaboration-server is enabled.
+          To turn it off, set `SOFT_MIGRATION = false;` and disable the migration
+          service by also setting [](#opt-services.lasuite-docs.collaborationServer.enable)
+          to `true`.
+        '';
+
+        default = { };
+        type = types.submodule {
+          freeformType = types.attrsOf types.str;
+          config = {
+            POSTGRES = lib.mkIf (cfg.postgresql.createLocally) (lib.mkOptionDefault "");
+          };
+          options = {
+            POSTGRES = mkOption {
+              type = types.str;
+              description = ''
+                Connection URL to PostgreSQL.
+                See the [upstream docs on the format](https://github.com/suitenumerique/docs/tree/v6.0.0/src/yhub-server#database-schema-yarn-init-db) for more information.
+                It's possible to override parameters of this URL via
+                [the supported environment variables](https://github.com/porsager/postgres/tree/v3.4.9#environmental-variables) of the client library.
+                This is e.g. necessary since the URL format doesn't support declaring a UNIX socket.
+
+                Set to an empty string if `services.lasuite-docs.postgresql.createLocally == true`.
+              '';
+            };
+
+            REDIS = mkOption {
+              type = types.nullOr types.str;
+              defaultText = lib.literalExpression ''
+                if config.services.lasuite-docs.redis.createLocally then
+                  "redis://''${config.services.redis.servers.lasuite-docs.bind}:''${toString config.services.redis.servers.lasuite-docs.port}/2"
+                else null
+              '';
+              default =
+                if cfg.redis.createLocally then
+                  "redis://${config.services.redis.servers.lasuite-docs.bind}:${toString config.services.redis.servers.lasuite-docs.port}/2"
+                else
+                  null;
+              description = "URL of the redis backend";
+            };
+
+            YHUB_JWT_PRIVATE_KEY_FILE = mkOption {
+              type = types.externalPath;
+              default = "/var/lib/lasuite-docs-yhub-server/private.pem";
+              description = ''
+                Path to the RSA private key (PEM) yhub signs its calls to the backend with.
+                Generated by `lasuite-docs-yhub-server-setup-keys.service`.
+              '';
+            };
+
+            PORT = mkOption {
+              type = types.port;
+              default = 3002;
+              description = "Port of Yhub server.";
+            };
+
+            COLLABORATION_BACKEND_BASE_URL = mkOption {
+              type = types.str;
+              default = "https://${cfg.domain}";
+              defaultText = lib.literalExpression "https://\${cfg.domain}";
+              description = "URL to the backend server base";
+            };
+
+            COLLABORATION_SERVER_ORIGIN = mkOption {
+              type = types.str;
+              default = "https://${cfg.domain}";
+              defaultText = lib.literalExpression "https://\${cfg.domain}";
+              description = "Origins allowed to connect to the collaboration server";
+            };
+
+            SOFT_MIGRATION = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether we're in soft-migration mode where the old server is still used to import documents.
+                See [Upgrade guide to v6 for more details](https://github.com/suitenumerique/docs/blob/v6.0.0/UPGRADE.md).
+              '';
+            };
+          };
+        };
+      };
     };
 
     collaborationServer = {
+      enable = mkEnableOption "legacy collaboration server" // {
+        default = true;
+      };
+
       package = mkPackageOption pkgs "lasuite-docs-collaboration-server" { };
 
       port = mkOption {
@@ -301,7 +449,7 @@ in
             type = types.nullOr types.str;
             default =
               if cfg.redis.createLocally then
-                "unix://${config.services.redis.servers.lasuite-docs.unixSocket}?db=0"
+                "redis://${config.services.redis.servers.lasuite-docs.bind}:${toString config.services.redis.servers.lasuite-docs.port}/0"
               else
                 null;
             description = "URL of the redis backend";
@@ -311,10 +459,26 @@ in
             type = types.nullOr types.str;
             default =
               if cfg.redis.createLocally then
-                "redis+socket://${config.services.redis.servers.lasuite-docs.unixSocket}?db=1"
+                "redis://${config.services.redis.servers.lasuite-docs.bind}:${toString config.services.redis.servers.lasuite-docs.port}/1"
               else
                 null;
             description = "URL of the redis backend for celery";
+          };
+
+          JWT_PRIVATE_KEY_FILE = mkOption {
+            type = types.externalPath;
+            default = "/var/lib/lasuite-docs/private.pem";
+            description = ''
+              Path to the RSA private key (PEM) the backend signs its calls to the collaboration server with.
+              Generated by `lasuite-docs-setup-keys.service`.
+            '';
+          };
+
+          YHUB_API_BASE_URL = mkOption {
+            default = "http://localhost:${toString cfg.yhub.settings.PORT}";
+            defaultText = lib.literalExpression "http://localhost:\${cfg.yhub.settings.PORT}";
+            type = types.str;
+            description = "Internal base URL for the Y collaboration server.";
           };
         };
       };
@@ -346,10 +510,125 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.slices.system-lasuite-docs = { };
+    environment.systemPackages = [ manage ];
+
+    assertions = [
+      {
+        assertion = cfg.collaborationServer.enable == cfg.yhub.settings.SOFT_MIGRATION;
+        message = ''
+          `services.lasuite-docs`: `yhub.SOFT_MIGRATION` and `collaborationServer.enable`
+          must have the same value!
+        '';
+      }
+    ];
+
+    # Some settings options in LaSuite has been renamed in 5.0.0
+    # Show warnings if those settings are not renamed
+    # TODO: remove it when the retrocompatibility options will be gone
+    warnings =
+      (optional (hasAttr "AI_API_KEY" cfg.settings) "AI_API_KEY has been renamed as OPENAI_SDK_API_KEY in LaSuite Docs")
+      ++ (optional (hasAttr "AI_API_KEY_FILE" cfg.settings) "AI_API_KEY_FILE has been renamed as OPENAI_SDK_API_KEY_FILE in LaSuite Docs")
+      ++ (optional (hasAttr "AI_BASE_URL" cfg.settings) "AI_BASE_URL has been renamed as OPENAI_SDK_BASE_URL in LaSuite Docs")
+      ++ optional (cfg.collaborationServer.enable) "services.lasuite-docs: collaboration server is deprecated and only used to migrate to the y-server. Read upstream migration docs (https://github.com/suitenumerique/docs/blob/v6.0.0/UPGRADE.md) for more details.";
+
+    systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
+      wantedBy = [ "lasuite-docs.target" ];
+      requiredBy = [ "lasuite-docs.service" ];
+      before = [ "lasuite-docs.service" ];
+      after = [ "postgresql-setup.service" ];
+
+      serviceConfig = {
+        Slice = "system-lasuite-docs.slice";
+        Type = "oneshot";
+        User = "postgres";
+
+        # lasuite-docs user cannot create a C function as it is unsafe.
+        ExecStart = ''
+          ${lib.getExe' config.services.postgresql.package "psql"} --port=${toString config.services.postgresql.settings.port} -d lasuite-docs -c "CREATE OR REPLACE FUNCTION public.immutable_unaccent(regdictionary, text) RETURNS text LANGUAGE c IMMUTABLE PARALLEL SAFE STRICT AS '$libdir/unaccent', 'unaccent_dict';"
+        '';
+
+        # hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+      };
+
+    };
+
+    systemd.services.lasuite-docs-yhub-server-setup-keys =
+      mkJWTPrivateKeySetupService "lasuite-docs-yhub-server" "Y collaboration server of LaSuite docs"
+        commonServiceConfigYhub;
+
+    systemd.services.lasuite-docs-setup-keys =
+      mkJWTPrivateKeySetupService "lasuite-docs" "LaSuite docs"
+        commonServiceConfig;
+
+    systemd.services.lasuite-docs-yhub-server-setup-db = {
+      description = "DB setup for Y collaboration server of LaSuite docs";
+      after = optional cfg.redis.createLocally "redis-lasuite-docs.service";
+      wants = optional cfg.redis.createLocally "redis-lasuite-docs.service";
+      environment = yhubEnv;
+      serviceConfig = commonServiceConfigYhub // {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe' cfg.yhub.package "y-init-db"}";
+      };
+    };
+
+    systemd.services.lasuite-docs-yhub-server = {
+      description = "Y collaboration server of LaSuite docs";
+      environment = yhubEnv;
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "lasuite-docs-yhub-server-setup-db.service"
+        "lasuite-docs-yhub-server-setup-keys.service"
+      ]
+      ++ optional cfg.postgresql.createLocally "postgresql.target"
+      ++ optional cfg.redis.createLocally "redis-lasuite-docs.service";
+      requires = [
+        "lasuite-docs-yhub-server-setup-db.service"
+        "lasuite-docs-yhub-server-setup-keys.service"
+      ];
+      wants =
+        (optional cfg.postgresql.createLocally "postgresql.target")
+        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+
+      serviceConfig = commonServiceConfigYhub // {
+        ExecStart = lib.getExe cfg.yhub.package;
+      };
+    };
+
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
       after = [
         "network.target"
+        "lasuite-docs-setup-keys.service"
       ]
       ++ (optional cfg.postgresql.createLocally "postgresql.target")
       ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
@@ -357,6 +636,7 @@ in
         (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wantedBy = [ "multi-user.target" ];
+      requires = [ "lasuite-docs-setup-keys.service" ];
 
       preStart = ''
         if [ ! -f .version ]; then
@@ -427,7 +707,7 @@ in
       // commonServiceConfig;
     };
 
-    systemd.services.lasuite-docs-collaboration-server = {
+    systemd.services.lasuite-docs-collaboration-server = lib.mkIf cfg.collaborationServer.enable {
       description = "Docs Collaboration Server from SuiteNumérique";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -442,16 +722,26 @@ in
 
     services.postgresql = mkIf cfg.postgresql.createLocally {
       enable = true;
-      ensureDatabases = [ "lasuite-docs" ];
+      ensureDatabases = [
+        "lasuite-docs"
+        "lasuite-docs-yhub-server"
+      ];
       ensureUsers = [
         {
           name = "lasuite-docs";
           ensureDBOwnership = true;
         }
+        {
+          name = "lasuite-docs-yhub-server";
+          ensureDBOwnership = true;
+        }
       ];
     };
 
-    services.redis.servers.lasuite-docs = mkIf cfg.redis.createLocally { enable = true; };
+    services.redis.servers.lasuite-docs = mkIf cfg.redis.createLocally {
+      enable = true;
+      inherit (cfg.redis) port;
+    };
 
     services.nginx = mkIf cfg.enableNginx {
       enable = true;
@@ -469,6 +759,11 @@ in
           tryFiles = "$uri /docs/[id]/index.html";
         };
 
+        locations."~ '^/user-reconciliations/(active|inactive)/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/?$'" =
+          {
+            tryFiles = "$uri /user-reconciliations/$1/[id]/index.html";
+          };
+
         locations."/api" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
@@ -479,15 +774,25 @@ in
           recommendedProxySettings = true;
         };
 
-        locations."/collaboration/ws/" = {
-          proxyPass = "http://localhost:${toString cfg.collaborationServer.port}";
+        locations."/metrics" = {
+          proxyPass = "http://${cfg.bind}";
+          recommendedProxySettings = true;
+        };
+
+        locations."/static/" = {
+          alias = "${cfg.backendPackage}/share/static/";
+        };
+
+        locations."/collaboration/ws/v1/" = {
+          proxyPass = "http://localhost:${toString cfg.yhub.settings.PORT}";
           recommendedProxySettings = true;
           proxyWebsockets = true;
         };
 
-        locations."/collaboration/api/" = {
-          proxyPass = "http://localhost:${toString cfg.collaborationServer.port}";
+        locations."~ ^/collaboration/(ydoc|rollback|prune|changeset|activity|jwks)/" = {
+          proxyPass = "http://localhost:${toString cfg.yhub.settings.PORT}";
           recommendedProxySettings = true;
+          proxyWebsockets = true;
         };
 
         locations."/media-auth" = {

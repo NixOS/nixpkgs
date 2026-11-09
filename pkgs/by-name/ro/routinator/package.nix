@@ -3,25 +3,30 @@
   rustPlatform,
   fetchFromGitHub,
   nixosTests,
+  pkg-config,
+  aws-lc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "routinator";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "routinator";
-    rev = "v${version}";
-    hash = "sha256-tgDhIM8Dw4k/ocXa3U1xqS/TDmqNbjnNzIyCxEmu294=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0z8vUIbWT9LF1uglz/5QNZ/RTiGN4k/OK55cB1r1wAQ=";
   };
 
-  cargoHash = "sha256-XOy8sm6nzmihFYsgLcusoYKwgTvx0qX8o8XWV4EMXZ8=";
+  cargoHash = "sha256-mlY9tFNTKf25VM4hJNegc1grxtZ/iJmlNmBd5SBellc=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ aws-lc ];
 
   meta = {
     description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
-    changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/NLnetLabs/routinator/blob/v${finalAttrs.version}/Changelog.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
@@ -30,4 +35,4 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = {
     basic-functioniality = nixosTests.routinator;
   };
-}
+})

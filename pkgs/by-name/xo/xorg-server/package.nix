@@ -11,7 +11,8 @@
   # deps
   dbus,
   dri-pkgconfig-stub,
-  fontutil,
+  fetchpatch,
+  font-util,
   libdrm,
   libepoxy,
   libgbm,
@@ -42,14 +43,14 @@
   pixman,
   udev,
   xkbcomp,
-  xkeyboardconfig,
+  xkeyboard-config,
   xorgproto,
   xtrans,
   zlib,
 
   # darwin specific deps
   darwin,
-  utilmacros,
+  util-macros,
   libapplewm,
 
   writeScript,
@@ -57,7 +58,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorg-server";
-  version = "21.1.20";
+  # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
+  # necessary, these can be moved out of lockstep in order to merge updates
+  # quickly.
+  version = "21.1.25";
 
   outputs = [
     "out"
@@ -66,10 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dpW8YYJLOoG2utL3iwVADKAVAD3kAtGzIhFxBbcC6Tc=";
+    hash = "sha256-atTjx7WaMJsyyS5cFc4SZxEPnhPxrHjaYjYaYo2hoOs=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+  patches = [
+    # Revert "damage: Unlink a damage from the list it was actually inserted on"
+    # Upstream broke AMD drivers see issue below.
+    # https://gitlab.freedesktop.org/xorg/xserver/-/issues/1930
+    (fetchpatch {
+      name = "revert-damage-unlink-abi-break.patch";
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/a10192e7c3237a707e9bb712a566e2f14415dddd.patch";
+      hash = "sha256-vtloUZrdtQ9L56KhNy7m3praW9KmeMmwVGM+rX5EmUw=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin/bundle_main.patch
     ./darwin/find-cpp.patch
     ./darwin/stub.patch
@@ -84,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [
-    fontutil
+    font-util
     libx11
     libxau
     libxcb
@@ -110,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     dri-pkgconfig-stub
     libdrm
     libgbm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libtirpc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -145,10 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddefault_font_path="
 
     "-Dxkb_bin_dir=${xkbcomp}/bin"
-    "-Dxkb_dir=${xkeyboardconfig}/share/X11/xkb"
+    "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
     "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+
     "-Dxcsecurity=true"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -160,6 +175,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dapple-applications-dir=${placeholder "out"}/Applications"
     "-Dbundle-id-prefix=org.nixos.xquartz"
     "-Dsha1=CommonCrypto"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    # fixed upstream (unreleased)
+    "-Dudev=false"
+    "-Dudev_kms=false"
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -184,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "X server implementation by X.org";
@@ -234,7 +256,9 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariantMitDisclaimerXserver # 1780-1793
     ];
     mainProgram = "X";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     pkgConfigModules = [ "xorg-server" ];
     platforms = lib.platforms.unix;
   };

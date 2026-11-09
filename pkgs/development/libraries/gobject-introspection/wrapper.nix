@@ -50,7 +50,7 @@ then
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
 
       cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
@@ -79,6 +79,10 @@ then
     # override the variable to use the absolute path to g_ir_X in PATH which can be run
     + ''
       cat >> $dev/nix-support/setup-hook <<-'EOF'
+        # Override when gobject-introspection is a build-time dependency. Otherwise its $dev/bin
+        # is not on PATH.
+        [[ -z ''${strictDeps-} ]] || (( "$hostOffset" < 0 )) || return 0
+
         override-pkg-config-gir-variables() {
           PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner)"
           PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler)"
@@ -109,7 +113,7 @@ else
       eval fixupPhase
       ${lib.concatMapStrings (output: ''
         mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
+        ${lib.getExe buildPackages.lndir} ${overriddenUnwrappedGir.${output}} ${"$" + "${output}"}
       '') overriddenUnwrappedGir.outputs}
     '';
   })

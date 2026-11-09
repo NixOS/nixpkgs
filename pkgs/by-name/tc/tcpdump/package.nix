@@ -7,13 +7,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpdump";
-  version = "4.99.5";
+  version = "4.99.7";
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
-    hash = "sha256-jHWFbgCt3urfcNrWfJ/z3TaFNrK4Vjq/aFTXx2TNOts=";
+    url = "https://www.tcpdump.org/release/tcpdump-${finalAttrs.version}.tar.gz";
+    hash = "sha256-i+Nk4o07dF7xRZs4XNL0vA4eutel0uvfcAcdbJtbmlQ=";
   };
 
   postPatch = ''
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tcpdump";
   };
-}
+})

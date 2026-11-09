@@ -8,12 +8,12 @@
   SDL_net,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gav";
   version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gav/gav-${version}.tar.gz";
+    url = "mirror://sourceforge/gav/gav-${finalAttrs.version}.tar.gz";
     sha256 = "8f0deb8b2cd775b339229054f4f282583a4cfbcba9d27a6213cf910bab944f3e";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,42 +1,38 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitea,
   async-timeout,
-  httpx,
+  buildPythonPackage,
+  fetchFromCodeberg,
   httpx-socks,
+  httpx,
   proxy-py,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   python-socks,
   rencode,
   setuptools,
-  fetchpatch,
+  sniffio,
+  tiny-proxy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobtclientrpc";
-  version = "5.0.1";
+  version = "6.0.1";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientrpc";
-    tag = "v${version}";
-    hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4FWfzt+A9BY4nnaQU3xwdDFhuOMtfBFHYNoHaEOy7+0=";
   };
 
-  patches = [
-    # compatibility with python3.14: fix retrival of non-running event loop
-    (fetchpatch {
-      url = "https://codeberg.org/plotski/aiobtclientrpc/commit/1328e281d28f17c9b2c092539b4ab7402f1082b3.patch";
-      hash = "sha256-ixHyG/w2h7tkaVYxmvpInfNW4AxVTn4Bflztzt1TOwM=";
-    })
+  pythonRelaxDeps = [
+    "async-timeout"
+    "python-socks"
   ];
-
-  pythonRelaxDeps = [ "async-timeout" ];
 
   build-system = [ setuptools ];
 
@@ -46,14 +42,16 @@ buildPythonPackage rec {
     httpx-socks
     python-socks
     rencode
-  ]
-  ++ python-socks.optional-dependencies.asyncio;
+  ];
 
   nativeCheckInputs = [
     proxy-py
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    sniffio
+    tiny-proxy
   ];
 
   disabledTests = [
@@ -68,6 +66,8 @@ buildPythonPackage rec {
     "test_timeout[rtorrent_http]"
     "test_event_subscriptions_survive_reconnecting[rtorrent_http]"
     "test_waiting_for_event[rtorrent_http]"
+    "test_proxy[rtorrent_http-socks4_proxy]"
+    "test_proxy[rtorrent_http-socks5_proxy]"
     # Tests are outdated
     "test_DelugeRPCRequest_equality"
   ];
@@ -77,7 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous low-level communication with BitTorrent clients";
     homepage = "https://aiobtclientrpc.readthedocs.io";
+    changelog = "https://codeberg.org/plotski/aiobtclientrpc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

@@ -1,35 +1,29 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   asn1crypto,
   badldap,
+  buildPythonPackage,
+  certipy,
   cryptography,
   dnspython,
+  fetchFromGitHub,
+  hatchling,
   kerbad,
-  winacl,
-
-  # test
-  certipy,
   pytestCheckHook,
+  winacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bloodyad";
-  version = "2.5.2";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
-    tag = "v${version}";
-    hash = "sha256-RWh73ZlzvTn1nGjQm9Keacvgm0AP0MGCYo/fM45nsmk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z/yvjraALxhodCFQtLPmyXEz0qT3BBC7Nq5Qlv2OM2s=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
@@ -45,7 +39,7 @@ buildPythonPackage rec {
   # but this causes a FileAlreadyExists error during installation
   # on Darwin (case-insensitive filesystem).
   # https://github.com/CravateRouge/bloodyAD/issues/99
-  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace pyproject.toml \
       --replace-fail "bloodyAD = \"bloodyAD.main:main\"" ""
   '';
@@ -76,19 +70,21 @@ buildPythonPackage rec {
     "test_06AddRemoveGetDnsRecord"
     "test_certificate_authentications"
     "test_04ComputerRbcdRestoreGetSetAttribute"
+    # AssertionError
+    "test_applyFormatters_with_trustDirection_single_item_list"
+    "test_applyFormatters_with_userAccountControl_single_value"
   ];
 
   disabledTestPaths = [
-    # TypeError: applyFormatters() takes 1 positional argument but 2 were given
-    # https://github.com/CravateRouge/bloodyAD/issues/98
-    "tests/test_formatters.py"
+    # Missing file
+    "tests/test_functional.py"
   ];
 
   meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
-    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
+    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

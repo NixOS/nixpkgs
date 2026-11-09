@@ -7,7 +7,8 @@
 }:
 
 buildEnv {
-  name = "kubo-migrator-${kubo-migrator-unwrapped.version}";
+  pname = "kubo-migrator";
+  inherit (kubo-migrator-unwrapped) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

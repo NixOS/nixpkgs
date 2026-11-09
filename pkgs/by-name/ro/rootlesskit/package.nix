@@ -6,14 +6,16 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rootlesskit";
   version = "2.3.6";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y4ZuHddLisLjiftqprDdORDwM9/lSyrinWsMYtUzmco=";
   };
 
@@ -28,7 +30,7 @@ buildGoModule rec {
     homepage = "https://github.com/rootless-containers/rootlesskit";
     description = ''Kind of Linux-native "fake root" utility, made for mainly running Docker and Kubernetes as an unprivileged user'';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

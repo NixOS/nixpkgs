@@ -11,18 +11,18 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-python";
   version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
-  sourceRoot = "${src.name}/nemo-python";
+  sourceRoot = "${finalAttrs.src.name}/nemo-python";
 
   patches = [
     # Load extensions from NEMO_PYTHON_EXTENSION_DIR environment variable
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

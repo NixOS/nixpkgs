@@ -1,12 +1,10 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitLab,
   flit-core,
   ifaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +12,16 @@ buildPythonPackage rec {
   version = "0.7.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "stavros";
     repo = "python-yeelight";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WLEXTDVcSpGCmfEI31cQXGf9+4EIUCkcaeaj25f4ERU=";
   };
 
   build-system = [ flit-core ];
 
-  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [ ifaddr ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

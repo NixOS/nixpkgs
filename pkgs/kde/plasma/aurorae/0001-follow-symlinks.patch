@@ -1,5 +1,5 @@
---- a/src/aurorae.cpp
-+++ b/src/aurorae.cpp
+--- a/v1/aurorae.cpp
++++ b/v1/aurorae.cpp
 @@ -201,7 +201,7 @@ void Helper::init()
      // so let's try to locate our plugin:
      QString pluginPath;

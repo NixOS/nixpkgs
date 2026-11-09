@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.13.5";
+  version = "1.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
     tag = version;
-    hash = "sha256-eGKQ32+VOt7T66SVKcbxyAAyN7kVspfTbukv/mldZ8Q=";
+    hash = "sha256-quAV496VmkMK3qTMLp5Mx4d81pGbaXIW2RE7tGHtAxA=";
   };
 
   build-system = [
@@ -42,7 +39,7 @@ buildPythonPackage rec {
     description = "Python wrapper of the TestRail API";
     homepage = "https://github.com/tolstislon/testrail-api";
     changelog = "https://github.com/tolstislon/testrail-api/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
 }

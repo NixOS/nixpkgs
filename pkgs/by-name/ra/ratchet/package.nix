@@ -5,7 +5,7 @@
   callPackage,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ratchet";
   version = "0.11.4";
 
@@ -38,14 +38,14 @@ buildGoModule rec {
       "-s"
       "-w"
       "-X ${package_url}/internal/version.name=ratchet"
-      "-X ${package_url}/internal/version.version=${version}"
-      "-X ${package_url}/internal/version.commit=${src.rev}"
+      "-X ${package_url}/internal/version.version=${finalAttrs.version}"
+      "-X ${package_url}/internal/version.commit=${finalAttrs.src.rev}"
     ];
 
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/ratchet --version 2>&1 | grep ${version};
+    $out/bin/ratchet --version 2>&1 | grep ${finalAttrs.version};
   '';
 
   installPhase = ''
@@ -69,4 +69,4 @@ buildGoModule rec {
       ryanccn
     ];
   };
-}
+})

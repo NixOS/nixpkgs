@@ -1,19 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   aiohttp,
   demjson3,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.8.0";
-
-  disabled = pythonOlder "3.7";
+  version = "0.10.1";
 
   pyproject = true;
 
@@ -21,17 +18,17 @@ buildPythonPackage rec {
     owner = "nielstron";
     repo = "pysyncthru";
     tag = version;
-    hash = "sha256-Zije1WzfgIU9pT0H7T/Mx+5gEBCsRgMLkfsa/KB0YtI=";
+    hash = "sha256-IJfj65p80Q4LwWkGV0A0QPtK2+FPkNVz9/WaNGzgTy8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     demjson3
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pysyncthru" ];
 

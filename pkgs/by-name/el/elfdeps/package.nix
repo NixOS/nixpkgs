@@ -5,21 +5,21 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "elfdeps";
-  version = "0.2.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "elfdeps";
-    tag = "v${version}";
-    hash = "sha256-5CrxVmtZcBYBMXw7o58CpFopYFgXD4W/S42aow1z1Xw=";
+    tag = finalAttrs.version;
+    hash = "sha256-mQAFU87OEA4ZjfsOAnSFaoOIez7dss3x35fTDdTnm10=";
   };
 
   build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [ python3Packages.pyelftools ];
@@ -51,4 +51,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "elfdeps";
   };
-}
+})

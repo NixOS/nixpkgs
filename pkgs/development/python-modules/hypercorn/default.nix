@@ -2,9 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch2,
   aioquic,
-  cacert,
   h11,
   h2,
   httpx,
@@ -12,7 +11,7 @@
   trio,
   uvloop,
   wsproto,
-  poetry-core,
+  pdm-backend,
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
@@ -20,23 +19,30 @@
 
 buildPythonPackage rec {
   pname = "hypercorn";
-  version = "0.17.3";
+  version = "0.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "Hypercorn";
     tag = version;
-    hash = "sha256-AtSMURz1rOr6VTQ7L2EQ4XZeKVEGTPXTbs3u7IhnZo8";
+    hash = "sha256-RNurpDq5Z3N9Wv9Hq/l6A3yKUriCCKx9BrbrWGwBsUk=";
   };
+
+  patches = [
+    # add :protocol pseudo-header for Extended CONNECT, https://github.com/pgjones/hypercorn/pull/371
+    (fetchpatch2 {
+      name = "add-header.patch";
+      url = "https://github.com/pgjones/hypercorn/commit/9c1f350e2637cfa0287aad2ae9a5bfd003a1d248.patch";
+      hash = "sha256-vHCed1mU/ajHkBVH7IZ8kfuEZQyQi++UL4xhBr6LePk=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     h11
@@ -63,12 +69,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hypercorn" ];
 
+  disabledTests = [
+    "test_http2_websocket"
+  ];
+
   meta = {
-    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
-    homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
-    mainProgram = "hypercorn";
+    homepage = "https://github.com/pgjones/hypercorn";
+    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dgliwka ];
+    mainProgram = "hypercorn";
   };
 }

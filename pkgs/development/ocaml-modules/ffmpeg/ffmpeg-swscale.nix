@@ -11,7 +11,7 @@
 buildDunePackage {
   pname = "ffmpeg-swscale";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.12";
 
   inherit (ffmpeg-base) version src;
 

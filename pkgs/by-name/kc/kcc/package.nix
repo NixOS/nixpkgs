@@ -13,16 +13,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kcc";
-  version = "9.3.3";
+  version = "9.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ciromattia";
     repo = "kcc";
-    tag = "v${version}";
-    hash = "sha256-ftS5umfaj6EQV81CuR6xGDrijuBe6ZiFOvBrNtD1Nxk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yix0uqSHeWcNw9r0SOhYqTw8A/fTUh3HAOnbgNaQndY=";
   };
 
   nativeBuildInputs = [
@@ -55,12 +55,16 @@ python3.pkgs.buildPythonApplication rec {
   # Note: python scripts wouldn't get wrapped anyway, but let's be explicit about it
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ]
-  ++ lib.optionals archiveSupport [
-    ''--prefix PATH : ${lib.makeBinPath [ p7zip ]}''
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+  ''
+  + lib.optionalString archiveSupport ''
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ p7zip ]}"
+  ''
+  + ''
+    )
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/kcc-c2e";
@@ -90,11 +94,11 @@ python3.pkgs.buildPythonApplication rec {
     description = "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";
     homepage = "https://kcc.iosphe.re";
     mainProgram = "kcc";
-    changelog = "https://github.com/ciromattia/kcc/releases/tag/v${version}";
+    changelog = "https://github.com/ciromattia/kcc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       dawidsowa
       adfaure
     ];
   };
-}
+})

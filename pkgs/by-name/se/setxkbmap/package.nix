@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=setxkbmap-(.*)" ]; };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Set keymaps, layouts, and options via the X Keyboard Extension (XKB)";
     longDescription = ''
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/setxkbmap";
     license = lib.licenses.hpnd;
     mainProgram = "setxkbmap";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })

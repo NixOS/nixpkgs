@@ -3,24 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  pythonOlder,
-
   unittestCheckHook,
 
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "khanaa";
   version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cakimpei";
     repo = "khanaa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QFvvahVEld3BooINeUYJDahZyfh5xmQNtWRLAOdr6lw=";
   };
 
@@ -32,9 +28,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
   ];
 
   pythonImportsCheck = [ "khanaa" ];
@@ -46,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

@@ -6,9 +6,9 @@
   autoPatchelfHook,
   makeWrapper,
   libcxx,
-  libX11,
-  libXt,
-  libXdamage,
+  libx11,
+  libxt,
+  libxdamage,
   glib,
   gtk3,
   dbus-glib,
@@ -62,9 +62,9 @@ rec {
       dbus-glib
       glib
       gtk3
-      libX11
-      libXdamage
-      libXt
+      libx11
+      libxdamage
+      libxt
     ];
     installPhase = ''
       runHook preInstall
@@ -136,7 +136,7 @@ rec {
     pname = "replay-node-cli";
     version = "0.1.7-" + builtins.head (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
     src = fetchFromGitHub {
-      owner = "RecordReplay";
+      owner = "replayio";
       repo = "replay-node-cli";
       rev = "5269c8b8e7c5c7a9618a68f883d19c11a68be837";
       sha256 = "04d22q3dvs9vxpb9ps64pdxq9ziwgvnzdgsn6p9p0lzjagh0f5n0";

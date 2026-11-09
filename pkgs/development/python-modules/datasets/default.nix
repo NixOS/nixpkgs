@@ -1,32 +1,33 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  dill,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+
+  # dependencies
+  dill,
+  filelock,
   fsspec,
   huggingface-hub,
   multiprocess,
   numpy,
-  packaging,
   pandas,
   pyarrow,
-  requests,
-  responses,
-  setuptools,
+  pyyaml,
   tqdm,
   xxhash,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datasets";
-  version = "4.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
-    tag = version;
-    hash = "sha256-Cr25PgLNGX/KcFZE5h1oiaDW9J50ccMqA5z3q4sITus=";
+    tag = finalAttrs.version;
+    hash = "sha256-lQL9DeEU5FdPQESO7kwsV9zl8UHwweFKeFhp1587EYc=";
   };
 
   build-system = [
@@ -34,45 +35,36 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    aiohttp
     dill
+    filelock
     fsspec
     huggingface-hub
     multiprocess
     numpy
-    packaging
     pandas
     pyarrow
-    requests
-    responses
+    pyyaml
     tqdm
     xxhash
-  ];
-
-  pythonRelaxDeps = [
-    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
-    # "pin until dill has official support for determinism"
-    "dill"
-    "multiprocess"
-    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L129
-    # "to support protocol=kwargs in fsspec's `open`, `get_fs_token_paths`"
-    "fsspec"
-  ];
+  ]
+  ++ fsspec.optional-dependencies.http;
 
   # Tests require pervasive internet access
   doCheck = false;
 
-  # Module import will attempt to create a cache directory
-  postFixup = "export HF_MODULES_CACHE=$TMPDIR";
-
   pythonImportsCheck = [ "datasets" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
-    changelog = "https://github.com/huggingface/datasets/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})

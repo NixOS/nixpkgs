@@ -1,8 +1,6 @@
-diff --git a/Makefile b/Makefile
-index a16a69968..aa741b037 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -454,8 +454,10 @@ install-libs: libs install-headers
+@@ -491,8 +491,10 @@ install-libs: libs install-headers
  ifeq ($(shared),yes)
  	install -m $(SO_INSTALL_MODE) $(OUT)/libmupdf.$(SO)$(SO_VERSION) $(DESTDIR)$(libdir)/libmupdf.$(SO)$(SO_VERSION)
    ifneq ($(OS),OpenBSD)
@@ -15,11 +13,9 @@ index a16a69968..aa741b037 100644
    endif
  else
  	install -m 644 $(MUPDF_LIB) $(DESTDIR)$(libdir)
-diff --git a/Makerules b/Makerules
-index ba4df2189..8eb62622a 100644
 --- a/Makerules
 +++ b/Makerules
-@@ -212,101 +212,82 @@ ifneq "$(CLUSTER)" ""
+@@ -220,105 +220,86 @@ ifneq "$(CLUSTER)" ""
    CFLAGS += -DCLUSTER
  endif
  
@@ -93,6 +89,10 @@ index ba4df2189..8eb62622a 100644
 -    SYS_BROTLI_CFLAGS := $(shell pkg-config --cflags libbrotlidec libbrotlienc)
 -    SYS_BROTLI_LIBS := $(shell pkg-config --libs libbrotlidec libbrotlienc)
 -  endif
+-  ifeq ($(shell pkg-config --exists libcmark-gfm && echo yes),yes)
+-    SYS_CMARK_GFM_CFLAGS := $(shell pkg-config --cflags libcmark-gfm)
+-    SYS_CMARK_GFM_LIBS := $(shell pkg-config --libs libcmark-gfm)
+-  endif
 +ifeq ($(shell pkg-config --exists 'freetype2 >= 18.3.12' && echo yes),yes)
 +  SYS_FREETYPE_CFLAGS := $(shell pkg-config --cflags freetype2)
 +  SYS_FREETYPE_LIBS := $(shell pkg-config --libs freetype2)
@@ -124,6 +124,10 @@ index ba4df2189..8eb62622a 100644
 +ifeq ($(shell pkg-config --exists 'libbrotlidec libbrotlienc >= 0.6.0' && echo yes),yes)
 +  SYS_BROTLI_CFLAGS := $(shell pkg-config --cflags libbrotlidec libbrotlienc)
 +  SYS_BROTLI_LIBS := $(shell pkg-config --libs libbrotlidec libbrotlienc)
++endif
++ifeq ($(shell pkg-config --exists libcmark-gfm && echo yes),yes)
++  SYS_CMARK_GFM_CFLAGS := $(shell pkg-config --cflags libcmark-gfm)
++  SYS_CMARK_GFM_LIBS := $(shell pkg-config --libs libcmark-gfm)
 +endif
  
 -  HAVE_SYS_LEPTONICA := $(shell pkg-config --exists 'lept >= 1.7.4' && echo yes)
@@ -189,7 +193,7 @@ index ba4df2189..8eb62622a 100644
    ifeq ($(HAVE_GLUT),)
      HAVE_GLUT := $(shell pkg-config --exists gl x11 xrandr && echo yes)
    endif
-@@ -321,29 +302,28 @@ else
+@@ -333,29 +314,28 @@ else
        SYS_GLUT_LIBS := -lglut
      endif
    endif

@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-12-19";
+  version = "2.0.0-unstable-2026-10-31";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "ed389b9c3b3b9ee2c777b021c7825416c460ed64";
-    hash = "sha256-bavnyTRNGVSuoxNVsn94AJfbddHYg9skkW/4G/ExNeU=";
+    rev = "84b10d0136a976a1284931b6f5aa4976873feecd";
+    hash = "sha256-Ka7Txn7E/OS958mBludtH4V6gtTw+AaOlSeOSMLfPtg=";
   };
 
   buildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         install -Dm644 tutorial.pdf $out/share/tutorial.pdf
         cp -r pdf_viewer/shaders $out/share/
-        install -Dm644 -t $out/etc/ pdf_viewer/{keys,prefs}.config
+        install -Dm644 -t $out/share/ pdf_viewer/{keys,prefs}.config
         installManPage resources/sioyek.1
       '';
 
@@ -82,12 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sioyek.info/";
     description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
-    changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
+    # no changelog for unstable version, change back to
+    # https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}
+    # once stable again
+    changelog = "https://github.com/ahrm/sioyek/releases";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       podocarp
       stephen-huan
       xyven1
+      stephsi
     ];
     platforms = lib.platforms.unix;
   };

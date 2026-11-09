@@ -12,7 +12,7 @@
   cairo,
   dbus,
   xorg_sys_opengl,
-  systemd,
+  systemdLibs,
   libcap,
   libdrm,
   pulseaudio,
@@ -27,7 +27,18 @@
   vulkan-loader,
   libasyncns,
   pango,
-  xorg,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxcursor,
+  libxau,
+  libx11,
+  libxcb,
   wayland,
 }:
 
@@ -41,10 +52,6 @@ let
       url = "https://mega.nz/file/QmBXXDiC#XoG19N2_uBIHVKDNId5mE4cod9q29iPkYOfGDgAX_Oo";
       outputHash = "IdcowkU2k2grg133jTf3EOENATCCige64BMYXtFupRE=";
     };
-    x86_64-darwin = {
-      url = "https://mega.nz/file/Uy4WzbCL#5tCRmmrizaIdilo2iYLSVkoSSNDleyQ8ZNYYT5hJsR4";
-      outputHash = "D/2G7w89Z4JTP0TEjnlBKI7XCBx2LBurXZcEp0gW+JA=";
-    };
     aarch64-darwin = {
       url = "https://mega.nz/file/xr4AHIrb#pD5wDIiYys2my4_59UWiYoqBpdyUQHf_CalPZe7hpME";
       outputHash = "PpDUFnobznB5FHYSF+m9S3RcNIdi7eWyxxDHRdS+zlY=";
@@ -54,7 +61,7 @@ let
   runtimeDeps = [
     dbus.lib
     xorg_sys_opengl
-    systemd
+    systemdLibs
     libcap.lib
     libdrm
     pulseaudio
@@ -66,21 +73,19 @@ let
     libGL
     vulkan-loader
     libasyncns
-  ]
-  ++ (with xorg; [
-    libX11
+    libx11
     libxcb
-    libXau
-    libXdmcp
-    libXext
-    libXcursor
-    libXrender
-    libXfixes
-    libXinerama
-    libXi
-    libXrandr
-    libXScrnSaver
-  ]);
+    libxau
+    libxdmcp
+    libxext
+    libxcursor
+    libxrender
+    libxfixes
+    libxinerama
+    libxi
+    libxrandr
+    libxscrnsaver
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;

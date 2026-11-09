@@ -10,10 +10,7 @@ let
   # renderHost :: Either ServerOptions Path -> String
   renderHost =
     server:
-    if builtins.isString server then
-      "unix://${server}"
-    else
-      "${server.host},${builtins.toString server.port}";
+    if builtins.isString server then "unix://${server}" else "${server.host},${toString server.port}";
 
   # Filter out submodule parameters whose value is null or false or is
   # the key _module.
@@ -43,7 +40,7 @@ let
         else if builtins.isString v then
           "${n}=${v}"
         else
-          "${n}=${builtins.toString v}"
+          "${n}=${toString v}"
       ) (filterParams backend.params);
 
       # NB: params are delimited by a ";" which is the same delimiter
@@ -86,11 +83,11 @@ let
     ${lib.concatMapStringsSep "\n" renderFrontend cfg.frontends}
     ${lib.concatMapStringsSep "\n" renderBackend cfg.backends}
 
-    backlog=${builtins.toString cfg.backlog}
+    backlog=${toString cfg.backlog}
     backend-address-family=${cfg.backend-address-family}
 
-    workers=${builtins.toString cfg.workers}
-    rlimit-nofile=${builtins.toString cfg.rlimit-nofile}
+    workers=${toString cfg.workers}
+    rlimit-nofile=${toString cfg.rlimit-nofile}
 
     ${lib.optionalString cfg.single-thread "single-thread=yes"}
     ${lib.optionalString cfg.single-process "single-process=yes"}

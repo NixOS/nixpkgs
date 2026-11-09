@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "texture-synthesis";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "embarkstudios";
     repo = "texture-synthesis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BJa6T+qlbn7uABKIEhFhwLrw5sG/9al4L/2sbllfPFg=";
   };
 
@@ -26,16 +26,18 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # tests fail for unknown reasons on aarch64-darwin
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ ];
     mainProgram = "texture-synthesis";
   };
-}
+})

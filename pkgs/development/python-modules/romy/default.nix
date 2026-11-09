@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   aiohttp,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "romy";
   version = "0.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "xeniter";

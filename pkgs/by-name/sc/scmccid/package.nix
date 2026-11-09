@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://support.identiv.com/products";
     description = "PCSC drivers for linux, for the SCM SCR3310 v2.0 card and others";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

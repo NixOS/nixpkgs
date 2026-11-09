@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sybil";
-  version = "9.1.0";
+  version = "10.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simplistix";
     repo = "sybil";
-    tag = version;
-    hash = "sha256-ov8b8NPBbiqB/pcKgdD2D+xNSxUM1uGK8EP+20K7eGQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-wRJ43CzatyP5VuCZSF+6Eh1kGmdNhbzDPoBHbV/96oo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   # Circular dependency with testfixtures
   doCheck = false;
@@ -30,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
-    changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/simplistix/sybil/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

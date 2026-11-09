@@ -3,6 +3,7 @@
   stdenv,
   util-linux,
   coreutils,
+  fetchgit,
   fetchurl,
   groff,
   system-sendmail,
@@ -12,28 +13,18 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mdadm";
-  version = "4.4";
+  version = "4.6";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/utils/raid/mdadm/mdadm-${version}.tar.xz";
-    sha256 = "sha256-m0iPNe0VPfmZJLX+Qe7TgOhRLejxihGGKMrN1oGx1XM=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
+    tag = "mdadm-${finalAttrs.version}";
+    hash = "sha256-jFsVPJC4lcShkSwQCGjVdVkvk4q4weM7i5DzrLgpuSM=";
   };
 
   patches = [
-    ./no-self-references.patch
     ./fix-hardcoded-mapdir.patch
-    # Fixes build on musl
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/e58d2b17d3c40faffc0d426aab00184f28d9dafa/srcpkgs/mdadm/patches/musl.patch";
-      hash = "sha256-TIcQs+8RM5Q6Z8MHkI50kaJd7f9WdS/EVI16F7b2+SA=";
-    })
-    # Fixes build on musl 1.2.5+
-    (fetchurl {
-      url = "https://lore.kernel.org/linux-raid/20240220165158.3521874-1-raj.khem@gmail.com/raw";
-      hash = "sha256-JOZ8n7zi+nq236NPpB4e2gUy8I3l3DbcoLhpeL73f98=";
-    })
   ];
 
   makeFlags = [
@@ -41,12 +32,17 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
     "BINDIR=$(out)/sbin"
     "SYSTEMD_DIR=$(out)/lib/systemd/system"
-    "MANDIR=$(out)/share/man"
+    "MANDIR=$(man)/share/man"
     "RUN_DIR=/dev/.mdadm"
     "STRIP="
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
   installFlags = [ "install-systemd" ];
@@ -90,10 +86,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/tree/CHANGELOG.md?h=${finalAttrs.src.tag}";
     description = "Programs for managing RAID arrays under Linux";
     homepage = "https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mdadm";
     platforms = lib.platforms.linux;
   };
-}
+})

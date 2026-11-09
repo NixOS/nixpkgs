@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   python,
   pythonAtLeast,
 }:
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b3zsy7p84gag6q8ai2ylyrhx213qdk2h2zb6im3xn0m5n264y62";
+    hash = "sha256-wnhihC0V2D5qNOsLKGbDI4gOs6deRIWweeoRdI/Xf6w=";
   };
 
   postPatch = ''
@@ -25,9 +24,6 @@ buildPythonPackage rec {
     substituteInPlace test/test_selector.py \
       --replace "test_events_watched_outside_test_are_ignored" "xtest_events_watched_outside_test_are_ignored"
   '';
-
-  # https://github.com/Martiusweb/asynctest/issues/132
-  doCheck = pythonOlder "3.7";
 
   checkPhase = ''
     ${python.interpreter} -m unittest test

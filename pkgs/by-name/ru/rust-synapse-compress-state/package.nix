@@ -6,16 +6,17 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  rust-jemalloc-sys,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-synapse-compress-state";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "rust-synapse-compress-state";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nNQ/d4FFAvI+UY+XeqExyhngq+k+j5Pkz94ch27aoVM=";
   };
 
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys
+  ];
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
@@ -45,4 +49,4 @@ rustPlatform.buildRustPackage rec {
       maralorn
     ];
   };
-}
+})

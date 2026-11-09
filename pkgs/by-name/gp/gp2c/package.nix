@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gp2c";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
-    hash = "sha256-r2ESzAKUBFfiOdpEM9Gg2Npg7u8p98xyL2TNSsALezA=";
+    hash = "sha256-Zav0CBYF2Rua780Nit0WGMeZvRH9ckB4DNBkLuwYnm0=";
   };
 
   buildInputs = [

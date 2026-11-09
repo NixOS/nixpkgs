@@ -8,30 +8,14 @@
   certifi,
   diff-match-patch,
   fetchFromGitHub,
-  flake8,
   importlib-metadata,
-  livereload,
-  mypy,
-  networkx,
   ordered-set,
   pillow,
   pixelmatch,
   poetry-core,
-  pre-commit,
-  pydocstyle,
   pyee,
-  pylint,
-  pytest,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  readme-renderer,
-  sphinx,
-  sphinxcontrib-asyncio,
   syncer,
-  tox,
   tqdm,
   typing-extensions,
   typing-inspect,
@@ -41,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
-  version = "2.0.0rc11";
+  version = "2.0.0rc13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
-    hash = "sha256-vhsqz/2wNLqjtwVdLyLyO+JX7g2sz5MEMoHOnsDl/KQ=";
+    hash = "sha256-zx3uzD0y5FIw2ZWU3fPzY3nmnuhLRo7Ml+rTY1HUA9Q=";
   };
 
   postPatch = ''
@@ -64,7 +48,7 @@ buildPythonPackage rec {
       --replace-fail '_port = get_free_port()' ""
 
     substituteInPlace tests/utils/server.py \
-      --replace-fail '_Middleware' '_Middlewares' \
+      --replace-fail '_Middleware' '_Middlewares'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -86,23 +70,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     diff-match-patch
-    flake8
-    livereload
-    mypy
-    networkx
     pixelmatch
-    pre-commit
-    pydocstyle
-    pylint
-    pytest
-    pytest-cov-stub
-    pytest-timeout
-    pytest-xdist
-    readme-renderer
-    sphinx
-    sphinxcontrib-asyncio
     syncer
-    tox
     pytestCheckHook
   ];
 

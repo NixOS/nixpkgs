@@ -16,6 +16,11 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-nkmNp8oXaGQH8ES69ci+/flhvgtLM/vdiBvOqWA3pZ0=";
   };
 
+  postPatch = ''
+    substituteInPlace elm.json \
+      --replace-fail '"elm-version": "0.19.1"' '"elm-version": "0.19.2"'
+  '';
+
   npmDepsHash = "sha256-mGDXhPU2dwTwbJZPi5tUoSMTmzauHBBU1QN2IyZ1YBA=";
 
   nativeBuildInputs = [
@@ -40,6 +45,6 @@ buildNpmPackage (finalAttrs: {
     description = "Elm offline documentation previewer";
     homepage = "https://github.com/dmy/elm-doc-preview";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

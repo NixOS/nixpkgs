@@ -2,20 +2,13 @@
   buildPythonPackage,
   cliff,
   sphinx,
-  stestr,
-  testscenarios,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
   pname = "cliff";
   inherit (cliff) version src;
-  format = "other";
-
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;
@@ -23,11 +16,6 @@ buildPythonPackage {
   nativeCheckInputs = [
     cliff
     sphinx
-    stestr
-    testscenarios
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

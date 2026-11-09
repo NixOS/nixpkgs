@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pybind11,
   pytestCheckHook,
   python-dateutil,
@@ -40,8 +39,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  # pelican requires > 2.7
-  doCheck = !pythonOlder "3.6";
+  doCheck = true;
 
   disabledTests = [
     # incompatible with pytest7

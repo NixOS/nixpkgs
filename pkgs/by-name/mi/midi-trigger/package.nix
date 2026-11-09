@@ -6,14 +6,14 @@
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "midi-trigger";
   version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "unclechu";
     repo = "MIDI-Trigger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tMnN8mTd6Bm46ZIDy0JPSVe77xCZws2XwQLQexDWPgU=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
   };
-}
+})

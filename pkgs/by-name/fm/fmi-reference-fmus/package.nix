@@ -10,34 +10,34 @@
 
 # C.f. <https://fmi-standard.org/>
 assert lib.asserts.assertMsg (
-  FMIVersion >= 1 && FMIVersion <= 3
-) "FMIVersion must be a valid FMI specification standard: 1, 2, or 3; not ${toString FMIVersion}";
+  FMIVersion >= 2 && FMIVersion <= 3
+) "FMIVersion must be a valid FMI specification standard of: 2 or 3; not ${toString FMIVersion}";
 
-# NB: this derivation does not package the fmusim executables, only
-# the FMUs.
 stdenv.mkDerivation (finalAttrs: {
   pname = "reference-fmus";
-  version = "0.0.39";
+  version = "0.0.42";
   src = fetchFromGitHub {
     owner = "modelica";
     repo = "reference-fmus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3bjqfEyPhqVrJOHHhniacyUAo82InCd6LLx3tyC8DYg=";
+    hash = "sha256-lJODxTu346n4/BE1EYJr4vzCnAcqpEZlfHA2LZb/Lm8=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DFMI_VERSION=${toString FMIVersion}"
-    (lib.cmakeBool "WITH_FMUSIM" false)
   ];
-  CFLAGS = lib.optionalString (FMIVersion == 3) "-Wno-stringop-truncation";
+
+  env = lib.optionalAttrs (FMIVersion == 3) {
+    CFLAGS = "-Wno-stringop-truncation";
+  };
 
   meta = {
     # CMakeLists.txt explicitly states support for aarch64-darwin, but
     # the build fails in a Nix environment. C.f.
     # <https://github.com/NixOS/nixpkgs/pull/397658#issuecomment-2851958172>.
-    broken = with stdenv.hostPlatform; isAarch64 && isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Functional Mock-up Units for development, testing and debugging";
     homepage = "https://github.com/modelica/Reference-FMUs";
     license = lib.licenses.bsd2;

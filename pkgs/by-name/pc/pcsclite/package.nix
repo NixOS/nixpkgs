@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   flex,
@@ -21,11 +20,13 @@
   nix-update-script,
   pname ? "pcsclite",
   polkitSupport ? false,
+  nixosTests,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.3.0";
+  version = "2.5.2";
 
   outputs = [
     "out"
@@ -39,18 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "salsa.debian.org";
     owner = "rousseau";
     repo = "PCSC";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-37qeWGEuutF0cOOidoLchKJLQCvJFdVRZXepWzD4pZs=";
+    tag = finalAttrs.version;
+    hash = "sha256-7C710Z44tySox3aJ14EZWYT9ITdqMJtVCZFqN0FHvuk=";
   };
-
-  # fix build with macOS 11 SDK
-  patches = [
-    (fetchpatch {
-      url = "https://salsa.debian.org/rousseau/PCSC/-/commit/f41fdaaf7c82bc270af6d7439c6da037bf149be8.patch";
-      revert = true;
-      hash = "sha256-8A76JfYqcILi52X9l/uIpJXeRJDf2dkrNEToOsxGZXk=";
-    })
-  ];
 
   mesonFlags = [
     (lib.mesonOption "sysconfdir" "/etc")
@@ -67,17 +59,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "libudev" false)
   ];
 
-  # disable building pcsc-wirecheck{,-gen} when cross compiling
-  # see also: https://github.com/LudovicRousseau/PCSC/issues/25
   postPatch = ''
     substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
       --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
+    substituteInPlace meson.build \
+      --replace-fail \
+        "install_dir : get_option('sysconfdir') / 'default'" \
+        "install_dir : '${placeholder "out"}/etc/default'"
   ''
   + lib.optionalString systemdSupport ''
     substituteInPlace meson.build \
       --replace-fail \
-        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + unit + 'unitdir')" \
+        "systemdsystemunitdir = systemd.get_variable(pkgconfig : 'systemd' + systemdunit + 'unitdir')" \
         "systemdsystemunitdir = '${placeholder "out"}/lib/systemd/system'"
+    substituteInPlace meson.build \
+      --replace-fail \
+        "sysusersdir = systemd.get_variable(pkgconfig : 'sysusersdir')" \
+        "sysusersdir = '${placeholder "out"}/lib/sysusers.d'"
   ''
   + lib.optionalString polkitSupport ''
     substituteInPlace meson.build \
@@ -89,7 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # pcsc-spy is a debugging utility and it drags python into the closure
     moveToOutput bin/pcsc-spy "$dev"
+    patchShebangs --host "$dev/bin/pcsc-spy"
   '';
+
+  __structuredAttrs = true;
+  separateDebugInfo = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -110,11 +113,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      nixos = nixosTests.pcsclite;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "pcscd --version";
       };
+      pcsc-spy = runCommand "pcsc-spy-test" { } ''
+        status=0
+        ${finalAttrs.finalPackage.dev}/bin/pcsc-spy --help > help.txt 2>&1 || status=$?
+        test "$status" -eq 1
+        grep -F "Usage: pcsc-spy" help.txt
+        touch "$out"
+      '';
     };
     updateScript = nix-update-script { };
   };

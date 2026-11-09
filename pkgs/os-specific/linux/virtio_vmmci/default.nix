@@ -6,14 +6,15 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
-  name = "virtio_vmmci";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "virtio_vmmci";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "virtio_vmmci";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-h8yu4+vTgpAD+sKa1KnVD+qubiIlkYtG2nmQnXOi/sk=";
   };
 
@@ -28,7 +29,6 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = kernelModuleMakeFlags ++ [
-    "DEPMOD=echo"
     "INSTALL_MOD_PATH=$(out)"
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-}
+})

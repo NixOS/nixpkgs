@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unclutter";
   version = "8";
   src = fetchurl {
-    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-${version}.tar.gz";
+    url = "https://www.ibiblio.org/pub/X11/contrib/utilities/unclutter-${finalAttrs.version}.tar.gz";
     sha256 = "33a78949a7dedf2e8669ae7b5b2c72067896497820292c96afaa60bb71d1f2a6";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   buildFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     mainProgram = "unclutter";
   };
-}
+})

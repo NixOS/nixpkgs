@@ -22,18 +22,26 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Necessary until posthog works with mcp 2.x
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "gnome-frog";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-p1gqom9saNEIm6FXinEuIJtMGwjGfQx9uLpR2kb46Uw=";
   };
 
-  format = "other";
+  pyproject = false;
 
   patches = [ ./update-compatible-with-non-flatpak-env.patch ];
   postPatch = ''
@@ -68,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gstreamer
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with pythonPackages; [
     loguru
     nanoid
     posthog
@@ -89,11 +97,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = "https://getfrog.app/";
+    homepage = "https://github.com/TenderOwl/Frog";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.axodentally ];
     platforms = lib.platforms.linux;
   };
-}
+})

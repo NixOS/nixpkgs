@@ -6,7 +6,7 @@ set -eu -o pipefail
 
 version=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/fxsth/audiothekar/releases/latest | jq -e -r .tag_name | tail -c +2)
-old_version=$(nix-instantiate --eval -A audiothekar.version | jq -e -r)
+old_version=$(nix-instantiate --eval --raw -A audiothekar.version)
 
 if [[ $version == "$old_version" ]]; then
     echo "New version same as old version, nothing to do." >&2

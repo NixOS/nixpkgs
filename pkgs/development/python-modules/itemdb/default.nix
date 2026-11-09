@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "itemdb";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     flit-core
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "almarklein";
     repo = "itemdb";
     tag = "v${version}";
-    sha256 = "sha256-HXdOERq2td6CME8zWN0DRVkSlmdqTg2po7aJrOuITHE=";
+    hash = "sha256-HXdOERq2td6CME8zWN0DRVkSlmdqTg2po7aJrOuITHE=";
   };
 
   meta = {

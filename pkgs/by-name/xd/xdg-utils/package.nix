@@ -3,8 +3,10 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
+  fetchpatch,
   runCommand,
   writeText,
+  versionCheckHook,
   # docs deps
   libxslt,
   docbook_xml_dtd_412,
@@ -142,7 +144,6 @@ let
         "ktraderclient" # KDE 3
         "ktradertest" # KDE 3
         "mimetype" # alternative tool for file, pulls in perl, avoid
-        "qtpaths" # Plasma
         "qtxdg-mat" # LXQT
       ];
       fix."/usr/bin/file" = true;
@@ -297,7 +298,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -305,7 +306,7 @@ stdenv.mkDerivation (self: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${self.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -315,6 +316,11 @@ stdenv.mkDerivation (self: {
     ./allow-forcing-portal-use.patch
     #  Enable build of xdg-terminal
     ./enable-xdg-terminal.patch
+    # Get rid of qtpaths runtime dependency (can be dropped in next release)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/e6a6e4f1fbcb029bac0cb8eecdeb2879694e1ba8.patch";
+      hash = "sha256-toSFzIaw7gCWZH/kvIalWDQYL1xecOsRBAHvpbBlsY8=";
+    })
   ];
 
   # just needed when built from git
@@ -333,10 +339,14 @@ stdenv.mkDerivation (self: {
     map (resholve.phraseSolution "xdg-utils-resholved") solutions
   );
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/xdg-terminal";
+
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
       {
-        nativeBuildInputs = [ self.finalPackage ];
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
         preferLocalBuild = true;
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
@@ -365,9 +375,11 @@ stdenv.mkDerivation (self: {
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
+    downloadPage = "https://gitlab.freedesktop.org/xdg/xdg-utils";
+    changelog = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/releases/${finalAttrs.src.tag}";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
     license = lib.licenses.mit;
-    maintainers = [ ];
     platforms = lib.platforms.all;
+    teams = [ lib.teams.freedesktop ];
   };
 })

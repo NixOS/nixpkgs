@@ -12,12 +12,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-utils";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${version}/downloads/wayland-utils-${version}.tar.xz";
+    url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${finalAttrs.version}/downloads/wayland-utils-${finalAttrs.version}.tar.xz";
     hash = "sha256-o50OZWF8auGG12jCI/VwYKOkNfb58C0DB0+UUxO/zw0=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "wayland-info";
   };
-}
+})

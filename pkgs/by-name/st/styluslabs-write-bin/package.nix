@@ -3,31 +3,19 @@
   lib,
   libsForQt5,
   libglvnd,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
 }:
-let
-  desktopItem = makeDesktopItem {
-    name = "Write";
-    exec = "Write";
-    comment = "A word processor for handwriting";
-    icon = "write_stylus";
-    desktopName = "Write";
-    genericName = "Write";
-    categories = [
-      "Office"
-      "Graphics"
-    ];
-  };
-in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "styluslabs-write-bin";
   version = "300";
 
   src = fetchurl {
-    url = "http://www.styluslabs.com/write/write${version}.tar.gz";
+    url = "http://www.styluslabs.com/write/write${finalAttrs.version}.tar.gz";
     sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
   };
 
@@ -35,18 +23,37 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Write";
+      exec = "Write";
+      comment = "A word processor for handwriting";
+      icon = "write_stylus";
+      desktopName = "Write";
+      genericName = "Write";
+      categories = [
+        "Office"
+        "Graphics"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -R Write $out/
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
 
-    # Create desktop item
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
     mkdir -p $out/share/icons
     ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
+
+    runHook postInstall
   '';
+
   preFixup =
     let
       libPath = lib.makeLibraryPath [
@@ -54,8 +61,8 @@ stdenv.mkDerivation rec {
         libsForQt5.qtsvg # libQt5Svg.so.5
         (lib.getLib stdenv.cc.cc) # libstdc++.so.6
         libglvnd # libGL.so.1
-        libX11 # libX11.so.6
-        libXi # libXi.so.6
+        libx11 # libX11.so.6
+        libxi # libXi.so.6
       ];
     in
     ''
@@ -77,4 +84,4 @@ stdenv.mkDerivation rec {
       atemu
     ];
   };
-}
+})

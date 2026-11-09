@@ -5,13 +5,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plantuml-server";
-  version = "1.2025.10";
+  version = "1.2026.9";
 
   src = fetchurl {
-    url = "https://github.com/plantuml/plantuml-server/releases/download/v${version}/plantuml-v${version}.war";
-    hash = "sha256-GbFbQRVTQsGstu61FKpAypvopP6peHHMzxFA8yGtRp4=";
+    url = "https://github.com/plantuml/plantuml-server/releases/download/v${finalAttrs.version}/plantuml-v${finalAttrs.version}.war";
+    hash = "sha256-YcLrJd83Ub5Ud0fc+4SuKwlu24rOrts7sWbv/h1LkuI=";
   };
 
   dontUnpack = true;
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
       anthonyroussel
     ];
   };
-}
+})

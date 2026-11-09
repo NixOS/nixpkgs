@@ -2,8 +2,22 @@
   fetchurl,
   lib,
   stdenv,
-  squashfsTools,
-  xorg,
+  squashfs-tools,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   alsa-lib,
   freetype,
   glib,
@@ -18,7 +32,7 @@
   libpng,
   libnotify,
   libgcrypt,
-  systemd,
+  systemdLibs,
   fontconfig,
   dbus,
   expat,
@@ -37,8 +51,8 @@
 let
   # determine these versions from
   # curl -H 'Snap-Device-Series: 16' http://api.snapcraft.io/v2/snaps/info/nordpass
-  version = "6.5.20";
-  snapVersion = "203";
+  version = "7.6.18";
+  snapVersion = "221";
   snapId = "00CQ2MvSr0Ex7zwdGhCYTa0ZLMw3H6hf";
   snapBaseUrl = "https://api.snapcraft.io/api/v1/snaps/download/";
 
@@ -69,22 +83,22 @@ let
     nss_latest
     pango
     stdenv.cc.cc
-    systemd
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
+    systemdLibs
+    libice
+    libsm
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
     zlib
   ];
 
@@ -95,10 +109,10 @@ let
 
     src = fetchurl {
       url = "${snapBaseUrl}${snapId}_${snapVersion}.snap";
-      hash = "sha256-t78kbKVI9WAhL1+1qZ4tJWXUoXhXUCuUYobbbm09peA=";
+      hash = "sha256-KIFdUwyojAYTAaBXyLAgsHxMIAfS2rK4b2xtuJjwH8A=";
     };
 
-    nativeBuildInputs = [ squashfsTools ];
+    nativeBuildInputs = [ squashfs-tools ];
 
     dontStrip = true;
     dontPatchELF = true;
@@ -141,7 +155,7 @@ let
       description = "Secure and simple password manager for a stress-free online experience";
       license = lib.licenses.unfree;
       mainProgram = "nordpass";
-      maintainers = with lib.maintainers; [ coconnor ];
+      maintainers = [ ];
       platforms = [ "x86_64-linux" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
@@ -149,7 +163,7 @@ let
 in
 
 buildFHSEnv {
-  name = "nordpass";
+  inherit (thisPackage) pname version;
   targetPkgs = _: deps ++ [ thisPackage ];
   runScript = "nordpass";
 

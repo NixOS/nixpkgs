@@ -1,52 +1,54 @@
 {
   lib,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
+  fetchPnpmDeps,
   fetchzip,
 
   nodejs,
-  pnpm_9,
-  fetchPnpmDeps,
+  openlistPnpm ? pnpm_11,
   pnpmConfigHook,
+  pnpm_11,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "openlist-frontend";
-  version = "4.1.8";
+  version = "4.2.9";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList-Frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TzRqMyKDTuqFohMqoBAPkLrJ/eYveHYocsxo8WuNUWY=";
+    hash = "sha256-x9FQ5k2YpNGwU3xa6utHz5csHC6PdHKHDUY/uc/RN10=";
   };
 
   i18n = fetchzip {
     url = "https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v${finalAttrs.version}/i18n.tar.gz";
-    hash = "sha256-8b3u0yezYCYLyKPTM/QRXArqhbRC1foT3bFoNhsdYiw=";
+    hash = "sha256-RkIRLA8Zc90lYYnZfWwR+gxBl1jj81OpXVLL5qQJT+c=";
     stripRoot = false;
   };
 
+  postPatch = ''
+    cp -r ${finalAttrs.i18n}/* src/lang/
+  '';
+
   nativeBuildInputs = [
     nodejs
-    pnpmConfigHook
-    pnpm_9
+    openlistPnpm
   ];
 
+  npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-bPI8g7wN9k1fBzj+F9wRDw7XPGT6DKDllbyOmUKi7HY=";
+    pnpm = openlistPnpm;
+    fetcherVersion = 4;
+    hash = "sha256-Hlz82KV41gpFx8BltxD/f4z0we4/KSMAtQdLo+V7WBM=";
   };
 
-  buildPhase = ''
-    runHook preBuild
+  npmConfigHook = pnpmConfigHook;
 
-    cp -r ${finalAttrs.i18n}/* src/lang/
-    pnpm build
-
-    runHook postBuild
-  '';
+  # [plugin vite:legacy-generate-polyfill-chunk]
+  # Error: getaddrinfo ENOTFOUND localhost
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -62,5 +64,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OpenListTeam/OpenList-Frontend";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
+    inherit (nodejs.meta) platforms;
   };
 })

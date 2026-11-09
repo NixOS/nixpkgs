@@ -4,34 +4,41 @@
   fetchFromGitHub,
   fetchgit,
   fetchHex,
+  cacert,
   erlang,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   writeScript,
   common-updater-scripts,
   coreutils,
   git,
   gnused,
   nix,
-  nixfmt,
   rebar3-nix,
 }:
 
 let
-  version = "3.25.1";
-  owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
-  rebar3 = stdenv.mkDerivation rec {
+  rebar3 = stdenv.mkDerivation (finalAttrs: {
     pname = "rebar3";
-    inherit version erlang;
+    version = "3.28.0";
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     # How to obtain `sha256`:
     # nix-prefetch-url --unpack https://github.com/erlang/rebar3/archive/${version}.tar.gz
     src = fetchFromGitHub {
-      inherit owner;
-      repo = pname;
-      rev = version;
-      sha256 = "Wpg8MDVwum/cBpwbcY3Cjt2JkuQHEp7wxbZKgyP6crc=";
+      owner = "erlang";
+      repo = "rebar3";
+      tag = finalAttrs.version;
+      sha256 = "bhNpZNBYVnM/81EERADvzUGkN9jIR7wPv/kXCC5tWO8=";
     };
+
+    nativeBuildInputs = [
+      erlang
+      writableTmpDirAsHomeHook
+    ];
 
     buildInputs = [ erlang ];
 
@@ -49,25 +56,46 @@ let
       for i in _checkouts/* ; do
           ln -s $(pwd)/$i $(pwd)/_build/default/lib/
       done
+    ''
+    # OTP 29 tests fail on warnings, fixed in https://github.com/erlang/rebar3/pull/2996
+    + lib.optionalString ((lib.versions.major erlang.version) == "29") ''
+      substituteInPlace rebar.config --replace-fail 'nowarn_deprecated_catch' 'nowarn_deprecated_catch,nowarn_export_var_subexpr'
+
+      substituteInPlace apps/rebar/test/rebar_xref_SUITE.erl \
+        --replace-fail 'xref_test, xref_ignore_test,' 'xref_test,'
     '';
 
     buildPhase = ''
-      HOME=. escript bootstrap
+      runHook preBuild
+
+      escript bootstrap
+
+      runHook postBuild
     '';
 
     checkPhase = ''
-      HOME=. escript ./rebar3 ct
+      runHook preCheck
+
+      ERL_FLAGS="-public_key cacerts_path '\"${cacert}/etc/ssl/certs/ca-bundle.crt\"'" \
+        escript ./rebar3 ct
+
+      runHook postCheck
     '';
 
     doCheck = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp rebar3 $out/bin/rebar3
+
+      runHook postInstall
     '';
 
     meta = {
       homepage = "https://github.com/rebar/rebar3";
+      changelog = "https://github.com/erlang/rebar3/releases/tag/${finalAttrs.version}";
       description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
       mainProgram = "rebar3";
 
@@ -95,24 +123,23 @@ let
           git
           gnused
           nix
-          nixfmt
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
       latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
-      if [ "$latest" != "${version}" ]; then
+      if [ "$latest" != "${finalAttrs.version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
         update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
         tmpdir=$(mktemp -d)
         cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
         (cd "$tmpdir" && rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
-        nixfmt "$nix_path/rebar-deps.nix"
+        nix run -f $nixpkgs/ci fmt.pkg "$nix_path/rebar-deps.nix"
       else
         echo "rebar3 is already up-to-date"
       fi
     '';
-  };
+  });
 
   # Alias rebar3 so we can use it as default parameter below
   _rebar3 = rebar3;
@@ -125,7 +152,7 @@ let
     }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
-      globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
+      globalPluginNames = lib.unique (map (p: p.pname) globalPlugins);
       rebar3Patched = (
         rebar3.overrideAttrs (old: {
 

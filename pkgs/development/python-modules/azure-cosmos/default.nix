@@ -3,22 +3,19 @@
   azure-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-cosmos";
-  version = "4.14.2";
+  version = "4.16.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_cosmos";
     inherit version;
-    hash = "sha256-f7dGRJ7xWTBMWvb+aHVI5WHB8eJX/WUF1gFY0AEB7G4=";
+    hash = "sha256-2gpNmVfeez8Biy67cot+BJRiPU21hjnrkszRQO3cEtM=";
   };
 
   build-system = [ setuptools ];

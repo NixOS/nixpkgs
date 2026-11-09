@@ -21,11 +21,12 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontWrapQtApps = true;
 
-  propagatedUserEnvPkgs = with qt6; [
-    qt5compat
-    qtwayland
-    qtquick3d
-    qtsvg
+  propagatedBuildInputs = with qt6; [
+    # avoid .dev outputs propagation
+    qt5compat.out
+    qtwayland.out
+    qtquick3d.out
+    qtsvg.out
   ];
 
   installPhase = ''
@@ -42,7 +43,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Soothing pastel theme for SDDM based on corners theme";
     homepage = "https://github.com/khaneliman/sddm-catppuccin-corners";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.linux;
   };

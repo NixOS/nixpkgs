@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gimoji";
-  version = "1.1.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "zeenix";
     repo = "gimoji";
-    rev = version;
-    hash = "sha256-X1IiDnnRXiZBL/JBDfioKc/724TnVKaEjZLrNwX5SoA=";
+    rev = finalAttrs.version;
+    hash = "sha256-YfKMawhoLyWXy37/qegpR4EuyrKPIEBxUmnIPtuJnxU=";
   };
 
-  cargoHash = "sha256-vAhHCNsViYyNSKeSGUL2oIp8bp5UCm8HReyDuoFvfqs=";
+  cargoHash = "sha256-6RJj1DwZzRVQgExg5E4izrUeHtUdRAXcNQJPAAv3ya0=";
 
   meta = {
     description = "Easily add emojis to your git commit messages";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gimoji";
     maintainers = with lib.maintainers; [ a-kenji ];
   };
-}
+})

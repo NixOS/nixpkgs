@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "librime-octagram";
-  version = "0-unstable-2024-11-18";
+  version = "0-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "lotem";
     repo = "librime-octagram";
-    rev = "dfcc15115788c828d9dd7b4bff68067d3ce2ffb8";
-    hash = "sha256-dgUsH10V87mEcX/k3N118qbKo3fKDFcS8inhS6p5bJc=";
+    rev = "57d18b9f58e5284bd891d559f6bdd16cf60341e9";
+    hash = "sha256-nQA8u0iqioLBM2rA57NPd7TOS49aHQl+mHKfu0sRwhY=";
   };
 
   installPhase = ''
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "RIME essay grammar plugin";
     homepage = "https://github.com/lotem/librime-octagram";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ azuwis ];
   };
 }

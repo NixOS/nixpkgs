@@ -1,7 +1,9 @@
+diff --git a/desktop/onionshare/gui_common.py b/desktop/onionshare/gui_common.py
+index 1425fa17..09de5069 100644
 --- a/onionshare/gui_common.py
 +++ b/onionshare/gui_common.py
-@@ -482,52 +482,12 @@ class GuiCommon:
-         }
+@@ -549,57 +549,13 @@ class GuiCommon:
+         return "\n".join(lines)
  
      def get_tor_paths(self):
 -        if self.common.platform == "Linux":
@@ -16,6 +18,7 @@
 -                obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy")
 -                snowflake_file_path = os.path.join(base_path, "snowflake-client")
 -                meek_client_file_path = os.path.join(base_path, "meek-client")
+-                webtunnel_file_path = os.path.join(base_path, "webtunnel-client")
 -            else:
 -                # Fallback to looking in the path
 -                self.common.log("GuiCommon", "get_tor_paths", "using paths from PATH")
@@ -23,6 +26,7 @@
 -                obfs4proxy_file_path = shutil.which("obfs4proxy")
 -                snowflake_file_path = shutil.which("snowflake-client")
 -                meek_client_file_path = shutil.which("meek-client")
+-                webtunnel_file_path = shutil.which("webtunnel-client")
 -                prefix = os.path.dirname(os.path.dirname(tor_path))
 -                tor_geo_ip_file_path = os.path.join(prefix, "share/tor/geoip")
 -                tor_geo_ipv6_file_path = os.path.join(prefix, "share/tor/geoip6")
@@ -33,6 +37,7 @@
 -            obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy.exe")
 -            snowflake_file_path = os.path.join(base_path, "snowflake-client.exe")
 -            meek_client_file_path = os.path.join(base_path, "meek-client.exe")
+-            webtunnel_file_path = os.path.join(base_path, "webtunnel-client.exe")
 -            tor_geo_ip_file_path = os.path.join(base_path, "geoip")
 -            tor_geo_ipv6_file_path = os.path.join(base_path, "geoip6")
 -        elif self.common.platform == "Darwin":
@@ -41,6 +46,7 @@
 -            obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy")
 -            snowflake_file_path = os.path.join(base_path, "snowflake-client")
 -            meek_client_file_path = os.path.join(base_path, "meek-client")
+-            webtunnel_file_path = os.path.join(base_path, "webtunnel-client")
 -            tor_geo_ip_file_path = os.path.join(base_path, "geoip")
 -            tor_geo_ipv6_file_path = os.path.join(base_path, "geoip6")
 -        elif self.common.platform == "BSD":
@@ -50,12 +56,14 @@
 -            obfs4proxy_file_path = "/usr/local/bin/obfs4proxy"
 -            meek_client_file_path = "/usr/local/bin/meek-client"
 -            snowflake_file_path = "/usr/local/bin/snowflake-client"
+-            webtunnel_file_path = "/usr/local/bin/webtunnel-client"
 +        tor_path = "@tor@/bin/tor"
 +        tor_geo_ip_file_path = "@geoip@/share/tor/geoip"
 +        tor_geo_ipv6_file_path = "@geoip@/share/tor/geoip6"
 +        obfs4proxy_file_path = "@obfs4@/bin/obfs4proxy"
 +        meek_client_file_path = "@meek@/bin/meek-client"
 +        snowflake_file_path = "@snowflake@/bin/snowflake-client"
++        webtunnel_file_path = "@webtunnel@/bin/webtunnel-client"
  
          return (
              tor_path,

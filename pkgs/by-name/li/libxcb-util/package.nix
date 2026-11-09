@@ -39,11 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "XCB utility libraries";
     longDescription = ''
       The XCB util modules provides a number of libraries which sit on top of libxcb, the core
-      X protocol library, and some of the extension libraries. These experimental libraries provid
+      X protocol library, and some of the extension libraries. These experimental libraries provide
       convenience functions and interfaces which make the raw X protocol more usable. Some of the
       libraries also provide client-side code which is not strictly part of the X protocol but which
       have traditionally been provided by Xlib.

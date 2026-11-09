@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication {
   pname = "escrotum";
   version = "1.0.1-unstable-2020-12-07";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Roger";
@@ -51,7 +51,12 @@ python3Packages.buildPythonApplication {
     "man"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg-full ])
+  ];
 
   postInstall = ''
     mkdir -p $man/share/man/man1

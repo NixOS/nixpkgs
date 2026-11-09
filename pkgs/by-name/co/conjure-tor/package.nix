@@ -6,17 +6,17 @@
 }:
 buildGoModule {
   pname = "conjure-tor";
-  version = "0-unstable-2024-11-11";
+  version = "0-unstable-2026-01-13";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     owner = "tpo";
     repo = "anti-censorship/pluggable-transports/conjure";
-    rev = "a773daab19928f37caf2ec4181f0da2e0d20d35a";
-    hash = "sha256-WC9QEgwhu7ynf2p8SXzMf8JNp6ZzF4S9Lk2SjUWj2lU=";
+    rev = "0090962226b82aa4a8fc38506f9b98de67d0781e";
+    hash = "sha256-WGyzoc03QqPtLiZrUMCRMlPNm6JVSOnZv2a8KeZt7P4=";
   };
 
-  vendorHash = "sha256-vdcpNYa2gjacK0DMQ6VP9kX6f10JOHn8+Wr1Ql+lI7o=";
+  vendorHash = "sha256-6m/qNRrbWMREdDK/VpDAILynplyzbicdplxDrcTipSc=";
 
   passthru.updateScript = nix-update-script { };
 

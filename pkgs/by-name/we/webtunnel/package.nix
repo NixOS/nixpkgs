@@ -4,20 +4,20 @@
   fetchFromGitLab,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webtunnel";
-  version = "0.0.3";
+  version = "0.0.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     group = "tpo";
     owner = "anti-censorship/pluggable-transports";
     repo = "webtunnel";
-    rev = "v${version}";
-    hash = "sha256-HB95GCIJeO5fKUW23VHrtNZdc9x9fk2vnmI9JogDWSQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-m++vVtUGwkprCMwEeRgHSww4rXGfozv62x9uZQ9pDWo=";
   };
 
-  vendorHash = "sha256-3AAPySLAoMimXUOiy8Ctl+ghG5q+3dWRNGXHpl9nfG0=";
+  vendorHash = "sha256-mVvs1p63tQG7+s/5Hg4tcpCmNo/B8U5ArKqeuec5Mc4=";
 
   meta = {
     description = "Pluggable Transport based on HTTP Upgrade(HTTPT)";
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.gbtb ];
     license = lib.licenses.mit;
   };
-}
+})

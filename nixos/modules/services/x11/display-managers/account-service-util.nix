@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication {
   name = "set-session";
 
-  format = "other";
+  pyproject = false;
 
   src = ./set-session.py;
 
@@ -40,6 +40,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = {
-    maintainers = [ ] ++ lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
   };
 }

@@ -26,9 +26,9 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gedit";
-  version = "48.2";
+  version = "51.0";
 
   outputs = [
     "out"
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "gedit";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-M8ZyjY4wSogEjhEx9sOKfuGkbiypDmZoU0H4ja+TgaY=";
+    hash = "sha256-8O4FPIxyzqq2GqUX6RFYsDkwKCCwq2boXL0VDq+UZnI=";
   };
 
   patches = [
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "gedit";
   };
-}
+})

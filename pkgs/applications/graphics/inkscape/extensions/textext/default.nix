@@ -19,16 +19,16 @@ let
     ./__main__.py $*
   '';
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "textext";
-  version = "1.12.0";
+  version = "1.13.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    tag = version;
-    sha256 = "sha256-Ka8NIvzhMZYPlc3q0U5Je7eXyBT61dJ3O++ETl+D7w0=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-fEPSpI9uO+r3d5p+gV1XcorYvUPw0sLgG9nHUPeTtYs=";
   };
 
   patches = [
@@ -109,11 +109,25 @@ python3.pkgs.buildPythonApplication rec {
 
     # Include gobject-introspection typelibs in the wrapper.
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # TexText probes for a GUI toolkit by spawning a subprocess
+    # (`sys.executable -c "import gi; gi.require_version('Gtk', '3.0'); ..."`)
+    # instead of importing in-process. The Python wrapper makes runtime
+    # dependencies importable via a site.addsitedir preamble and deliberately
+    # does not export PYTHONPATH, so the spawned probe interpreter cannot import
+    # gi and TexText aborts with "Neither GTK nor TkInter has been found".
+    # Export PYTHONPATH so the probe subprocess inherits the dependencies too.
+    # See https://github.com/NixOS/nixpkgs/issues/384042
+    makeWrapperArgs+=(--prefix PYTHONPATH : "${
+      lib.makeSearchPath python3.sitePackages (
+        finalAttrs.propagatedBuildInputs ++ [ python3.pkgs.pycairo ]
+      )
+    }")
   '';
 
   postFixup = ''
     # Wrap the project so it can find runtime dependencies.
-    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/inkscape/extensions/textext" "$out ''${pythonPath[*]}"
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 
@@ -124,4 +138,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.raboof ];
     platforms = lib.platforms.all;
   };
-}
+})

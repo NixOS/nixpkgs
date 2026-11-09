@@ -2,13 +2,13 @@
   buildPythonPackage,
   oslo-config,
   oslotest,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
   pname = "oslotest-tests";
   inherit (oslotest) version src;
-  format = "other";
+  pyproject = false;
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -22,10 +22,6 @@ buildPythonPackage {
   nativeCheckInputs = [
     oslotest
     oslo-config
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

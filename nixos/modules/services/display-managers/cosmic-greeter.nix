@@ -16,7 +16,7 @@ let
 in
 
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options.services.displayManager.cosmic-greeter = {
     enable = lib.mkEnableOption "COSMIC greeter";
@@ -26,6 +26,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       pkgs.cosmic-comp
+      pkgs.cosmic-icons
       cfg.package
     ];
 
@@ -38,7 +39,8 @@ in
         };
         initial_session = lib.mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           user = cfgAutoLogin.user;
-          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-session ${lib.getExe' pkgs.cosmic-session "start-cosmic"}'';
+          # greetd starts this on a tty, so set the session type the greeter would pass.
+          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" XDG_SESSION_TYPE=wayland systemd-cat -t cosmic-session ${lib.getExe' pkgs.cosmic-session "start-cosmic"}'';
         };
       };
     };
@@ -73,7 +75,9 @@ in
       extraGroups = [ "video" ];
     };
     # Required for authentication
-    security.pam.services.cosmic-greeter = { };
+    security.pam.services.cosmic-greeter = {
+      allowNullPassword = true;
+    };
 
     hardware.graphics.enable = true;
     services.accounts-daemon.enable = true;

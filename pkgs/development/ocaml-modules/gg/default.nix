@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${homepage}/releases/gg-${version}.tbz";
-    sha256 = "sha256:0j7bpj8k17csnz6v6frkz9aycywsb7xmznnb31g8rbfk3626f3ci";
+    hash = "sha256-kQ1nhBnTrYxeGMvaX/tZmnvmVfozO7PNt5qdMJG860g=";
   };
 
   strictDeps = true;

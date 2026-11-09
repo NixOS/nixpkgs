@@ -14,19 +14,19 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "6.13.1";
+      version = "6.15.0";
       shortRev = "591ed6e"; # for internal version info
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "sha256-VYdm1aNz1IXvDezrJB5yyViIWPl4zf4/xmkw2pm8gyk=";
+        sha256 = "sha256-Q9IZ+ANy+B1YuzkwPqQAJ8c8nSbuSzVg7JrUGOGHibs=";
       };
 
       inherit subPackages postInstall;
 
-      vendorHash = "sha256-32jz5CI94BZxMDo6Crc05DDvlXxMsldJpWvhfHLS37o=";
+      vendorHash = "sha256-tPI9dNOD1OnkBy1PDs3insRp7+2j7gyMELl29QsGU9w=";
 
       doCheck = false;
 
@@ -46,7 +46,6 @@ let
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [
           thefloweringash
-          teutat3s
         ];
       };
     };

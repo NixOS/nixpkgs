@@ -18,7 +18,7 @@ build-idris-package {
     owner = "clayrat";
     repo = "idris-semidirect";
     rev = "e19c58f7a25c53bba2ab058821e038bae3c093d2";
-    sha256 = "0182r9z34kbv3l78pw4qf48ng3hqj4sqzy53074mb0b2c3pikcrl";
+    hash = "sha256-NLMZ72BigVXJAaP4jzWRGI5nEXGY8IsOHXtNMn7KAgU=";
   };
 
   meta = {

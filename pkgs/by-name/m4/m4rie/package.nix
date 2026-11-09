@@ -7,14 +7,14 @@
   m4ri,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20250128";
   pname = "m4rie";
 
   src = fetchFromGitHub {
     owner = "malb";
     repo = "m4rie";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tw6ZX8hKfr9wQLF2nuO1dSkkTYZX6pzNWMlWfzLqQNE=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

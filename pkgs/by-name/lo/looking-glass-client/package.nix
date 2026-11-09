@@ -14,16 +14,16 @@
   libGL,
   nanosvg,
 
-  libX11,
+  libx11,
   libxkbcommon,
-  libXext,
-  libXrandr,
-  libXi,
-  libXScrnSaver,
-  libXinerama,
-  libXcursor,
-  libXpresent,
-  libXdmcp,
+  libxext,
+  libxrandr,
+  libxi,
+  libxscrnsaver,
+  libxinerama,
+  libxcursor,
+  libxpresent,
+  libxdmcp,
 
   wayland,
   wayland-protocols,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libGL
     freefont_ttf
     spice-protocol
@@ -75,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xorgSupport [
     libxkbcommon
-    libXi
-    libXScrnSaver
-    libXinerama
-    libXcursor
-    libXpresent
-    libXext
-    libXrandr
-    libXdmcp
+    libxi
+    libxscrnsaver
+    libxinerama
+    libxcursor
+    libxpresent
+    libxext
+    libxrandr
+    libxdmcp
   ]
   ++ lib.optionals waylandSupport [
     libxkbcommon

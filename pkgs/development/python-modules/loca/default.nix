@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromSourcehut,
   flit-core,
 }:
@@ -9,14 +8,13 @@
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "loca";
     rev = version;
-    sha256 = "1l6jimw3wd81nz1jrzsfw1zzsdm0jm998xlddcqaq0h38sx69w8g";
+    hash = "sha256-D/FkukYDAqwwa412lFKVoDb9f+BO/yzDtwE1PniN0tA=";
   };
 
   nativeBuildInputs = [ flit-core ];

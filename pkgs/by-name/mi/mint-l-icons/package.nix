@@ -3,35 +3,33 @@
   lib,
   fetchFromGitHub,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
+  mint-y-icons,
   gtk3,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.8.0";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
-    rev = "256fe2e44655ce197701e35aefc40f49fe30356d";
-    hash = "sha256-BYzgGOVmUZBkz6lG1vFXtqiyUf3xnhXsoP+q4aLLMJs=";
+    rev = "9d3ea71d980fc9744c85c5e5b2dcb10bedbe0fc3";
+    hash = "sha256-6XbuDv/wp6JuL0eVpSbLWCtrVQWQlc137tO4wsP570M=";
   };
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
+    mint-y-icons
   ];
 
   nativeBuildInputs = [
     gtk3
   ];
 
-  # FIXME: https://hydra.nixos.org/build/287344480/nixlog/5
-  dontCheckForBrokenSymlinks = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''

@@ -1,19 +1,20 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   mashumaro,
   orjson,
+  poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  rich,
   syrupy,
+  tenacity,
   typer,
   yarl,
   zeroconf,
@@ -21,57 +22,60 @@
 
 buildPythonPackage rec {
   pname = "peblar";
-  version = "0.4.0";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-peblar";
     tag = "v${version}";
-    hash = "sha256-cHb/VTaa7tkePqV7eLpDSxrnY8hAnjshwtwyWmJnt/4=";
+    hash = "sha256-co3440R9OVEdcLPNsBu1jz6WzZTz746IEFcyTlzNkc0=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version for GitHub releases
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  patches = [
+    ./typer-0.26.patch
+  ];
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
     mashumaro
     orjson
+    tenacity
     yarl
   ];
 
   optional-dependencies = {
     cli = [
+      rich
       typer
       zeroconf
     ];
   };
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "peblar" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python client for Peblar EV chargers";
     homepage = "https://github.com/frenck/python-peblar";
     changelog = "https://github.com/frenck/python-peblar/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "peblar";
     maintainers = with lib.maintainers; [ fab ];
   };
 }

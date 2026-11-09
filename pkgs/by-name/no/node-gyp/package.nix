@@ -6,18 +6,18 @@
   nodejs,
 }:
 
-(buildNpmPackage.override { inherit nodejs; }) rec {
+buildNpmPackage rec {
   pname = "node-gyp";
-  version = "12.1.0";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "node-gyp";
     tag = "v${version}";
-    hash = "sha256-2BiRCFpGtuV/mL3U3jUkN1Tw91ON78y9iabDM0CMm2U=";
+    hash = "sha256-+6mFr1K42E3rTpcKW51D3FTvhCmutfK1BSnEePQ902Y=";
   };
 
-  npmDepsHash = "sha256-1ARSkUAIId0Y2xtyNjJ4FVx7y6kHZhYi83e4T4A2qS8=";
+  npmDepsHash = "sha256-OqLtv5XnY16Ln9fDkJY1teRAs9NYnv9XoVZTYLLpFu8=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -25,11 +25,17 @@
       --replace-quiet sys.platform '"${stdenv.targetPlatform.parsed.kernel.name}"'
   '';
 
+  inherit nodejs;
+
   dontNpmBuild = true;
 
   # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
   # This is important when build nodejs packages in sandbox.
-  makeWrapperArgs = [ "--set npm_config_nodedir ${nodejs}" ];
+  makeWrapperArgs = [
+    "--set"
+    "npm_config_nodedir"
+    nodejs
+  ];
 
   passthru.updateScript = ./update.sh;
 

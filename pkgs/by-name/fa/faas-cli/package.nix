@@ -6,8 +6,7 @@
   makeWrapper,
   git,
   installShellFiles,
-  testers,
-  faas-cli,
+  versionCheckHook,
 }:
 let
   faasPlatform =
@@ -22,15 +21,17 @@ let
     }
     .${cpuName} or cpuName;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.17.8";
+  version = "0.18.12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = version;
-    sha256 = "sha256-gyd9uX5i5nl7x476SGfBwWUL1hTLsPCCdsmwo783x5Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-I7P30c7rEVqemgUu/1AtM6jq2f4KB8xyDpjGBMvkLRU=";
   };
 
   vendorHash = null;
@@ -41,9 +42,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
-    "-X github.com/openfaas/faas-cli/version.Version=${version}"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/openfaas/faas-cli/version.Version=${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
@@ -61,10 +61,9 @@ buildGoModule rec {
       --zsh <($out/bin/faas-cli completion --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    command = "${faas-cli}/bin/faas-cli version --short-version --warn-update=false";
-    package = faas-cli;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Official CLI for OpenFaaS";
@@ -76,4 +75,4 @@ buildGoModule rec {
       techknowlogick
     ];
   };
-}
+})

@@ -6,14 +6,14 @@
   python3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cod";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dim-an";
     repo = "cod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mT7OkR8fXXTE3TPx9AmH6ehKGLk4CP9euBPs2zVAJnI=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.GitSha=${src.rev}"
+    "-X main.GitSha=${finalAttrs.src.rev}"
   ];
 
   nativeCheckInputs = [ python3 ];
@@ -43,7 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/dim-an/cod/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "cod";
   };
-}
+})

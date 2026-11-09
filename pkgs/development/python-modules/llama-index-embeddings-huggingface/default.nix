@@ -4,21 +4,18 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
   sentence-transformers,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-huggingface";
-  version = "0.6.1";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_embeddings_huggingface";
     inherit version;
-    hash = "sha256-OyH/7aIvgiHtVXeLs9rtcWZKsHs0Hx3S9AiWO9IDVbk=";
+    hash = "sha256-AvNN8T47g+kWn8/fYktvvpBvznW3RIzfaYALq8KBqaY=";
   };
 
   build-system = [ hatchling ];

@@ -12,16 +12,16 @@
   libusb1,
   libjpeg,
   libmodule,
-  libXdmcp,
+  libxdmcp,
   util-linux,
-  libpthreadstubs,
+  libpthread-stubs,
   enableDdc ? true,
   ddcutil,
   enableDpms ? true,
-  libXext,
+  libxext,
   enableGamma ? true,
   libdrm,
-  libXrandr,
+  libxrandr,
   libiio,
   wayland,
   enableScreen ? true,
@@ -39,10 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LOhBBd7QL5kH4TzMFgrh70C37WsFdsiKArP+tIEiPWo=";
   };
 
-  # dbus-1.pc has datadir=/etc
-  SYSTEM_BUS_DIR = "${placeholder "out"}/share/dbus-1/system-services";
-  # polkit-gobject-1.pc has prefix=${polkit.out}
-  POLKIT_ACTION_DIR = "${placeholder "out"}/share/polkit-1/actions";
+  env = {
+    # dbus-1.pc has datadir=/etc
+    SYSTEM_BUS_DIR = "${placeholder "out"}/share/dbus-1/system-services";
+    # polkit-gobject-1.pc has prefix=${polkit.out}
+    POLKIT_ACTION_DIR = "${placeholder "out"}/share/polkit-1/actions";
+  };
 
   postPatch = ''
     sed -i "s@pkg_get_variable(SYSTEM_BUS_DIR.*@set(SYSTEM_BUS_DIR $SYSTEM_BUS_DIR)@" CMakeLists.txt
@@ -81,13 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
     libmodule
     libiio
 
-    libXdmcp
+    libxdmcp
     util-linux
-    libpthreadstubs
+    libpthread-stubs
   ]
   ++ lib.optionals enableDdc [ ddcutil ]
-  ++ lib.optionals enableDpms [ libXext ]
-  ++ lib.optionals enableGamma [ libXrandr ]
+  ++ lib.optionals enableDpms [ libxext ]
+  ++ lib.optionals enableGamma [ libxrandr ]
   ++ lib.optionals (enableDpms || enableGamma || enableScreen) [
     libdrm
     wayland

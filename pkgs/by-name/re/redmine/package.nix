@@ -1,19 +1,28 @@
 {
+  defaultGemConfig,
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchpatch,
   bundlerEnv,
-  ruby_3_3,
+  ruby_4_0,
   makeWrapper,
   nixosTests,
+  openssl,
+  rustc,
+  cargo,
+  rustPlatform,
+  buildRubyGem,
+  pkg-config,
+  oniguruma,
 }:
 
 let
-  version = "6.0.7";
+  version = "7.0.3";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    ruby = ruby_4_0;
     gemdir = ./.;
     groups = [
       "development"
@@ -23,15 +32,52 @@ let
       "minimagick"
       "test"
     ];
+    gemConfig = defaultGemConfig // {
+      trilogy = attrs: {
+        buildInputs = [ openssl ];
+      };
+      commonmarker = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-Xw0VWl3qZLvNNmRFHuWkltC1XfoIaHJKWM8Po4FSmoQ=";
+        };
+        dontBuild = false;
+        nativeBuildInputs = [
+          cargo
+          rustc
+          pkg-config
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+        buildInputs = [ oniguruma ];
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iCRWCgdnPce1nxygv5182FTGxMl9D+VVpdvrozK43+g=";
+    hash = "sha256-C2skwDM0Gp161Sz8+nsbyRPBkcemBPdA2GPxYkndPBU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,10 +86,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rubyEnv.wrappedRuby
     rubyEnv.bundler
   ];
-
-  # taken from https://www.redmine.org/issues/33784
-  # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-  patches = [ ./0001-python3.patch ];
 
   buildPhase = ''
     mv config config.dist

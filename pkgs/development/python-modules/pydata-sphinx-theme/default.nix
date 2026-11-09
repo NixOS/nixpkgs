@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   accessible-pygments,
@@ -13,18 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pydata-sphinx-theme";
-  version = "0.16.1";
+  version = "0.20.0";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit version format;
+    inherit version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    hash = "sha256-IlMx6KxLMmgsGPysWlem9xfE5jLOpd0OJHtVFV+uzN4=";
+    hash = "sha256-VnREg8nXLHg+B13nFquV1IYQi2lgXfdSgHgJC3PxH2k=";
   };
 
   propagatedBuildInputs = [

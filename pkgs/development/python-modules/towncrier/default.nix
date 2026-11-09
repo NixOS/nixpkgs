@@ -5,26 +5,21 @@
   fetchPypi,
   git, # shells out to git
   hatchling,
-  importlib-resources,
   incremental,
   jinja2,
   mock,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   twisted,
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "25.8.0";
+  version = "26.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7vFtKfgxrVers64yoFZXOYZiGfHr+90pfTKJTrmUDrE=";
+    hash = "sha256-rOkDFjHHGMwHCRB7h1Xm4xNQ64rNyHevQ98xd63bmlU=";
   };
 
   build-system = [ hatchling ];
@@ -33,9 +28,7 @@ buildPythonPackage rec {
     click
     incremental
     jinja2
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

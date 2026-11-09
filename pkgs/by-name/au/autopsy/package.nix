@@ -3,6 +3,7 @@
   lib,
   makeWrapper,
   fetchzip,
+  cacert,
   testdisk,
   imagemagick,
   jdk,
@@ -16,13 +17,13 @@ let
     }
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autopsy";
-  version = "4.22.1";
+  version = "4.23.1";
 
   src = fetchzip {
-    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}_v2.zip";
-    hash = "sha256-IHpUzwSXoghjixsPwpj3lMwHIby3+zx7BjzGRlAVcVs=";
+    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${finalAttrs.version}/autopsy-${finalAttrs.version}.zip";
+    hash = "sha256-4MADKow3FX0n4IzblWxcfNLfDKSkLDtIil24/QioF7U=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +63,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    for f in \
+      $out/autopsy/plaso/plaso-20180818-amd64/certifi/cacert.pem \
+      $out/autopsy/gstreamer/1.0/x86_64/etc/ssl/certs/ca-certificates.crt; do
+      rm $f
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $f
+    done
+  '';
+
   meta = {
     description = "Graphical interface to The Sleuth Kit and other open source digital forensics tools";
     homepage = "https://www.sleuthkit.org/autopsy";
-    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${version}";
+    changelog = "https://github.com/sleuthkit/autopsy/releases/tag/autopsy-${finalAttrs.version}";
     # Autopsy brings a lot of vendored dependencies
     license = with lib.licenses; [
       asl20
@@ -85,4 +95,4 @@ stdenv.mkDerivation rec {
     # Autopsy theoretically also supports darwin
     platforms = lib.platforms.x86_64;
   };
-}
+})

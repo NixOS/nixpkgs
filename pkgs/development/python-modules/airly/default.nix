@@ -5,23 +5,26 @@
   aiounittest,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airly";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ak-ambi";
     repo = "python-airly";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # aiounittest is not supported on 3.12
   doCheck = pythonOlder "3.12";
@@ -36,17 +39,12 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  disabledTests = [
-    "InstallationsLoaderTestCase"
-    "MeasurementsSessionTestCase"
-  ];
-
   pythonImportsCheck = [ "airly" ];
 
   meta = {
     description = "Python module for getting air quality data from Airly sensors";
     homepage = "https://github.com/ak-ambi/python-airly";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

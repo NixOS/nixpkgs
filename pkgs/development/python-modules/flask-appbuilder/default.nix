@@ -18,7 +18,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   python-dateutil,
-  pythonOlder,
   prison,
   pyjwt,
   pyyaml,
@@ -27,15 +26,13 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.8.0";
+  version = "5.2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-MrkDcUCNgHzHnTM3DJenPXOP7HLTTthD/YBtupNprhM=";
+    hash = "sha256-BSdiM5S0C4Wf9HBW42IaYe76qhbM8YjycsZClDB1h8o=";
   };
 
   propagatedBuildInputs = [

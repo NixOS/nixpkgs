@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hack";
-  version = "0.6.40";
+  version = "0.6.46";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-j2T4ElD69oMDTBVPSO6d1bjsJjoJieiaG+YNEmQ47aU=";
+    hash = "sha256-Y4fXldVLvzSIz7AbMaqYWF0NgbAwsUIOCjqxJKn/5fY=";
   };
 
-  cargoHash = "sha256-1S7e/R3XCbNRQg152CqNuqieU+nfLXf5o8/5kC9UpSY=";
+  cargoHash = "sha256-RixDrDyMzCk+dlfzApeXMnpCYuvrcEktc5Yfi3YZt2A=";
 
   # some necessary files are absent in the crate version
   doCheck = false;
@@ -34,10 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-hack";
     homepage = "https://github.com/taiki-e/cargo-hack";
     changelog = "https://github.com/taiki-e/cargo-hack/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ defelo ];
   };
 })

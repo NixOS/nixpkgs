@@ -8,25 +8,29 @@
   udev,
   nix-update-script,
   versionCheckHook,
+  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wlink";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-YxozhEJh/KBirlA6ymIEbJY3r7wYSeTL40W2xQLyue0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-bFbwsBdhOOqGqd2jQ5n/g5Zx0Io9JRlz4zHgxWbaCfk=";
   };
 
-  cargoHash = "sha256-Hv+W8yFw6zAKwrV6gf9fWOkR/LFNgAD7WwQsHBqTnPI=";
+  cargoHash = "sha256-GtvZZrZOj2Rw3ZUOHrSW+kBkU97lQtU7SpIujfAVwTI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   buildInputs = [
     libusb1
-    udev
-  ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ udev ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -38,14 +42,16 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "WCH-Link flash tool for WCH's RISC-V MCUs(CH32V, CH56X, CH57X, CH58X, CH59X, CH32L103, CH32X035, CH641, CH643)";
     homepage = "https://github.com/ch32-rs/wlink";
-    changelog = "https://github.com/ch32-rs/wlink/releases/tag/v${version}";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
-    platforms = with lib.platforms; linux ++ darwin ++ windows;
-    broken = !stdenv.hostPlatform.isLinux;
+    changelog = "https://github.com/ch32-rs/wlink/releases/tag/v${finalAttrs.version}";
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
+    platforms = with lib.platforms; linux ++ lib.platforms.darwin ++ windows;
+    broken = stdenv.hostPlatform.isWindows;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "wlink";
   };
-}
+})

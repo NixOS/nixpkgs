@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   versionCheckHook,
   protobuf,
@@ -10,15 +10,14 @@
   protoc-gen-go-grpc,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cunicu";
   version = "0.12.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "cunicu";
     repo = "cunicu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1y9olRSPu2akvE728oXBr70Pt03xj65R2GaOlZ/7RTg=";
   };
 
@@ -46,7 +45,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X cunicu.li/cunicu/pkg/buildinfo.Version=${version}"
+    "-X cunicu.li/cunicu/pkg/buildinfo.Version=${finalAttrs.version}"
     "-X cunicu.li/cunicu/pkg/buildinfo.BuiltBy=Nix"
   ];
 
@@ -76,4 +75,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "cunicu";
   };
-}
+})

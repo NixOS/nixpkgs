@@ -8,19 +8,19 @@
   integers,
   patch,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "raylib";
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/tjammer/raylib-ocaml/releases/download/${version}/raylib-${version}.tbz";
+    url = "https://github.com/tjammer/raylib-ocaml/releases/download/${finalAttrs.version}/raylib-${finalAttrs.version}.tbz";
     hash = "sha256-/SeKgQOrhsAgMNk6ODAZlopL0mL0lVfCTx1ugmV1P/s=";
   };
 
@@ -45,11 +45,11 @@ buildDunePackage rec {
     ctypes
     integers
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
   ];
 
   meta = {
@@ -58,4 +58,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ r17x ];
     license = lib.licenses.mit;
   };
-}
+})

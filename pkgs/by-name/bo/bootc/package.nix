@@ -12,9 +12,11 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootc";
   version = "1.6.0";
+
+  __structuredAttrs = true;
 
   cargoHash = "sha256-KGwXQ6+/w3uHuPqSADsqJSip+SMdC104dfW7tNxGwnc=";
   doInstallCheck = true;
@@ -22,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bootc-dev";
     repo = "bootc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TztsiC+DwD9yEAmjTuiuOi+Kf8WEYMsOVVnMKpSM3/g=";
   };
 
@@ -56,7 +58,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_tar_write_tar_layer"
   ];
 
-  cargoBuildFlags = [ "-p bootc" ];
+  cargoBuildFlags = [
+    "-p"
+    "bootc"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -70,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ thesola10 ];
     platforms = lib.platforms.linux;
   };
-}
+})

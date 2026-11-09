@@ -87,7 +87,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/flammie/omorfi";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lurkki ];
-    # Darwin build fails due to hfst not being found
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -9,17 +9,19 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyuhd";
-  version = "0.4.1-unstable-2025-10-05";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyUHD";
-    # version that supports cmake 4
-    rev = "cf78b9ca3bddfc9263d2acb7e8afcb0036938163";
-    hash = "sha256-/hJ78dUL477gX3c2kV8kUknIk01PUf+ie1Gl7Ujq1Ac=";
+    tag = "soapy-uhd-${finalAttrs.version}";
+    hash = "sha256-keIZysr40LAscSKyfbSFQ4+t9oiPjwS4RbXr8Mgb2cc=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -38,10 +40,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/pothosware/SoapyAirspy";
+    homepage = "https://github.com/pothosware/SoapyUHD";
     description = "SoapySDR plugin for UHD devices";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

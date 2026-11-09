@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beangulp";
   version = "0.2.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beangulp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h7xLHwEyS+tOI7v6Erp12VfVnxOf4930++zghhC3in4=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ alapshin ];
   };
-}
+})

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "geoparquet";
   version = "0.7.5";
   pyproject = true;
@@ -22,6 +22,11 @@ buildPythonPackage {
     rev = "b09b12dd0ebc34d73f082c3d97ccb69a889167e3";
     hash = "sha256-WGZfDQh7Abh83n8jsCGr41IlKKq7QVDlauuWi20llh8=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.0.3"' 'version="${version}"'
+  '';
 
   build-system = [ setuptools ];
 

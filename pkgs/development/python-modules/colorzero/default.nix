@@ -2,22 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pkginfo,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colorzero";
   version = "2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "waveform80";
     repo = "colorzero";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-0NoQsy86OHQNLZsTEuF5s2MlRUoacF28jNeHgFKAH14=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ pkginfo ];
 
@@ -34,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

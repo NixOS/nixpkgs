@@ -7,6 +7,7 @@
   xfce4-dev-tools,
   wrapGAppsHook3,
   polkit,
+  bashNonInteractive,
   xfce4-exo,
   libxfce4util,
   libxfce4ui,
@@ -22,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-session";
-  version = "4.20.3";
+  version = "4.20.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-session";
     tag = "xfce4-session-${finalAttrs.version}";
-    hash = "sha256-HfVspmAkjuGgoI87VHNHFGZP17ZA0b31llY93gUtWxs=";
+    hash = "sha256-mL5fOWJtpkpskBQmyYhcVRzGJlzAHsvtcy4j3DceOBE=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     xfce4-dev-tools
     wrapGAppsHook3
+    iceauth
   ];
 
   buildInputs = [
+    bashNonInteractive
     xfce4-exo
     gtk3
     gtk-layer-shell
@@ -50,8 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     libwnck
     xfconf
     polkit
-    iceauth
   ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--enable-maintainer-mode"

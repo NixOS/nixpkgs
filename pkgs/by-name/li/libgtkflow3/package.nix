@@ -12,7 +12,7 @@
   libgflow,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgtkflow3";
   version = "1.0.6";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "notabug.org";
     owner = "grindhold";
     repo = "libgtkflow";
-    rev = "gtkflow3_${version}";
+    rev = "gtkflow3_${finalAttrs.version}";
     hash = "sha256-JoVq7U5JQ3pRxptR7igWFw7lcBTsgr3aVXxayLqhyFo=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

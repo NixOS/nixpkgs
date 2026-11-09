@@ -1,7 +1,8 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchurl,
+  unzip,
   jdk_headless,
   makeWrapper,
   buildPackages,
@@ -9,23 +10,28 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hentai-at-home";
-  version = "1.6.4";
+  version = "1.6.6";
 
-  src = fetchzip {
-    url = "https://repo.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
-    hash = "sha512-dcHWZiU0ySLlEhZeK1n2T/dyO6Wk9eS7CpZRSfzY3KvHrPBthQnaFrarSopPXJan1+zWROu1pEff1WSr5+HO4Q==";
-    stripRoot = false;
+  src = fetchurl {
+    url = "https://upld.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
+    # sha256 from upstream: https://e-hentai.org/hentaiathome.php
+    hash = "sha256-WyfjAC4d6OHTaKKU0koLac89wcvJchxlySt1DmUoGoc=";
   };
 
+  sourceRoot = ".";
+
   nativeBuildInputs = [
+    unzip
     jdk_headless
     makeWrapper
   ];
 
-  LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenvNoCC.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  env = {
+    LANG = "en_US.UTF-8";
+  }
+  // lib.optionalAttrs (stdenvNoCC.buildPlatform.libc == "glibc") {
+    LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  };
 
   makeFlags = [ "all" ];
   enableParallelBuilding = false;

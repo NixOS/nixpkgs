@@ -6,7 +6,7 @@
   libmad,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mad";
   version = "0.5.3";
 
@@ -15,8 +15,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-mad";
-    rev = "v${version}";
-    sha256 = "sha256-rSFzWyUYTrGL7GvVsY5qKdCXqY/XJQkuBerexG838jc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rSFzWyUYTrGL7GvVsY5qKdCXqY/XJQkuBerexG838jc=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -28,4 +28,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

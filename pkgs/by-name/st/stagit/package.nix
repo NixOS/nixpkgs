@@ -5,14 +5,14 @@
   fetchgit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stagit";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchgit {
     url = "git://git.codemadness.org/stagit";
-    rev = version;
-    sha256 = "sha256-mVYR8THGGfaTsx3aaSbQBxExRo87K47SD+PU5cZ8z58=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-GPJs63ElNBJFn571ZKLiQ8pABr4jX/fj2t53wDS284o=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
       sikmir
     ];
   };
-}
+})

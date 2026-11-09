@@ -5,21 +5,17 @@
   meson,
   ninja,
   pkg-config,
-  check,
-  dbus,
-  xvfb-run,
   glib,
-  gtk3,
-  gettext,
-  libiconv,
-  json-glib,
-  libintl,
+  gitUpdater,
   zathura,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "girara";
-  version = "0.4.5";
+  version = "2026.07.18";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -29,53 +25,31 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "girara";
-    tag = version;
-    hash = "sha256-XjRmGgljlkvxwcbPmA9ZFAPAjbClSQDdmQU/GFeLLxI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q4IbB8Wecob9NH6UPqyIifyd3D+IpMCfe725U3htR+s=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    gettext
-    check
-    dbus
-    glib # for glib-compile-resources
   ];
 
   buildInputs = [
-    libintl
-    libiconv
-    json-glib
-  ];
-
-  propagatedBuildInputs = [
     glib
-    gtk3
-  ];
-
-  nativeCheckInputs = [
-    xvfb-run
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" (
-      (stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.hostPlatform.isDarwin)
-    ))
   ];
 
-  checkPhase = ''
-    export NO_AT_BRIDGE=1
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
-  '';
-
-  passthru.tests = {
-    inherit zathura;
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit zathura;
+    };
   };
 
   meta = {
@@ -86,7 +60,7 @@ stdenv.mkDerivation rec {
       that focuses on simplicity and minimalism.
     '';
     license = lib.licenses.zlib;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
-}
+})

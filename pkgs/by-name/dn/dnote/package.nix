@@ -15,20 +15,25 @@
 
 buildGoModule rec {
   pname = "dnote";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dnote";
     repo = "dnote";
     tag = "cli-v${version}";
-    hash = "sha256-2vVopuFf9bx8U3+U4wznC/9nlLtan+fU5v9HUCEI1R4=";
+    hash = "sha256-wQC3RbuT7MO6GWGQUmMTtZy88ZPBAyuPtKO49hMnhvw=";
   };
+
+  postPatch = ''
+    # This is not used and compile error
+    rm -rf pkg/e2e
+  '';
 
   npmDeps = fetchNpmDeps {
     inherit version src;
     pname = "${pname}-webui";
     sourceRoot = "${src.name}/pkg/server/assets";
-    hash = "sha256-gUr8ptPsE7uw/F52CZi1P2L7eLgGiELEz6tI+fwAN0I=";
+    hash = "sha256-Hc9304vz9hwBvq/D5YaNNuke0AltFnlSCgnUZ/0j/x4=";
   };
 
   overrideModAttrs = oldAttrs: {
@@ -94,17 +99,14 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/dnote-cli
-    mv $out/bin/migrate $out/bin/dnote-migrate
     mv $out/bin/server $out/bin/dnote-server
-    mv $out/bin/templates $out/bin/dnote-templates
+    mv $out/bin/schema $out/bin/dnote-schema
     mv $out/bin/watcher $out/bin/dnote-watcher
   '';
 
-  checkFlags = [
-    "-p 1"
-  ];
+  checkFlags = [ "-p 1" ];
 
-  vendorHash = "sha256-4mP5z3ZVlHYhItRjkbXvcOxVm6PuZ6viL2GHqzCH9tA=";
+  vendorHash = "sha256-YURzSakmtgkb02ptcEyhyyxxlQV6EgBKmZ8Bl/MvrrA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -126,9 +128,6 @@ buildGoModule rec {
     changelog = "https://github.com/dnote/dnote/blob/cli-v${version}/CHANGELOG.md";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    license = with lib.licenses; [
-      gpl3Only
-      agpl3Only
-    ];
+    license = lib.licenses.asl20;
   };
 }

@@ -8,7 +8,7 @@
   libevdev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evemu";
   version = "2.7.0";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # each time it is downloaded :/
   src = fetchgit {
     url = "git://git.freedesktop.org/git/evemu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-SQDaARuqBMBVlUz+Nw6mjdxaZfVOukmzTlIqy8U2rus=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

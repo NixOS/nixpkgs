@@ -5,23 +5,20 @@
   matplotlib,
   numpy,
   packaging,
-  pythonOlder,
   scipy,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "adjusttext";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Phlya";
     repo = "adjusttext";
     tag = "v${version}";
-    hash = "sha256-WMWT2os3ADQOc1ogoCFKBEWnb6/CxgtiWmY45bYomks=";
+    hash = "sha256-MzVyY5GKy41kaGnV234OHmokrUarrV3HCq5GnrdjibM=";
   };
 
   build-system = [

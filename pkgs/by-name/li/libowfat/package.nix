@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libowfat";
   version = "0.34";
 
   src = fetchurl {
-    url = "https://www.fefe.de/libowfat/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1DMNNzrJWBs5e8JKIq0ff11Yp/422dI5/jUs7/xdMEs=";
+    url = "https://deb.debian.org/debian/pool/main/libo/libowfat/libowfat_${finalAttrs.version}.orig.tar.xz";
+    hash = "sha256-1DMNNzrJWBs5e8JKIq0ff11Yp/422dI5/jUs7/xdMEs=";
   };
 
   # Fix for glibc 2.34 from Gentoo
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=incompatible-pointer-types" ];
+
   meta = {
     description = "GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";
@@ -40,4 +42,4 @@ stdenv.mkDerivation rec {
     # build tool "json" is built for the host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

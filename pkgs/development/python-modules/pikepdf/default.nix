@@ -1,64 +1,83 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
+  clang-tools,
+  cmake,
   fetchFromGitHub,
+  fonttools,
   hypothesis,
-  pythonOlder,
   jbig2dec,
+  jsonschema,
   deprecated,
   lxml,
+  withMupdf ? false,
   mupdf-headless,
+  nanobind,
+  ninja,
   numpy,
   packaging,
   pillow,
   psutil,
-  pybind11,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   python-xmp-toolkit,
   qpdf,
-  setuptools,
+  referencing,
   replaceVars,
+  scikit-build-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.0.2";
+  version = "10.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pikepdf";
     repo = "pikepdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-ncWgIcQp6/GOrNwIvwJ4nvf+SUfr0N53MXYq9LpfiB4=";
+    hash = "sha256-6EDwFOs/++LBlAbHcCV42IvQ909B/9IlyV04ahZJqFo=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
-      mutool = lib.getExe' mupdf-headless "mutool";
+      mutool =
+        if withMupdf then
+          lib.getExe' mupdf-headless "mutool"
+        else
+          # replace with non-existing path. This is okay, as this is only
+          # called by Jupyter/iPython
+          "mutool";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "shims_enabled = not cflags_defined" "shims_enabled = False"
-  '';
 
   buildInputs = [ qpdf ];
 
   build-system = [
-    pybind11
-    setuptools
+    cmake
+    nanobind
+    ninja
+    scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
+
+  dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
     attrs
@@ -78,6 +97,14 @@ buildPythonPackage rec {
     pillow
   ];
 
+  optional-dependencies = {
+    pdfa = [
+      fonttools
+      jsonschema
+      referencing
+    ];
+  };
+
   pythonImportsCheck = [ "pikepdf" ];
 
   meta = {
@@ -85,6 +112,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${finalAttrs.src.tag}/docs/releasenotes/version${lib.versions.major finalAttrs.version}.md";
   };
-}
+})

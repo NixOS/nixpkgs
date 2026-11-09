@@ -9,7 +9,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "debian-goodies";
   version = "0.88.2";
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debian-goodies";
-    tag = "debian/${version}";
-    sha256 = "sha256-KPPRxYmCEYwlUAR29tc8w4rerXpswO/rbpEjXPoDV4Q=";
+    tag = "debian/${finalAttrs.version}";
+    hash = "sha256-KPPRxYmCEYwlUAR29tc8w4rerXpswO/rbpEjXPoDV4Q=";
   };
 
   postPatch = ''
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

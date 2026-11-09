@@ -9,11 +9,12 @@
   pkg-config,
   hsmSupport ? true,
   nixosTests,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.29.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
@@ -24,10 +25,10 @@ buildGoModule rec {
     # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
     # see https://github.com/NixOS/nixpkgs/issues/84312#issuecomment-2475948960.
     forceFetchGit = true;
-    hash = "sha256-TFpgVE394r6FkRWovlmDd3v/tGic2CekmO1Hp7S6KCE=";
+    hash = "sha256-4cvrjAVvMDHlNhY/lbfgl6ZvX5LJGnPx0Km2BjPX8iU=";
   };
 
-  vendorHash = "sha256-9PlJaB3BCwoE+uFo5jUggANSH7ZWnintZYBgFL21LZ4=";
+  vendorHash = "sha256-FBkQXKNtstQ+F7jvKUj6oCbsri+SjGKy0tG59TtUHPQ=";
 
   ldflags = [
     "-w"
@@ -50,9 +51,7 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/system systemd/step-ca.service
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted

@@ -7,18 +7,19 @@
   python3Packages,
   unstableGitUpdater,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "chirp";
-  version = "0.4.0-unstable-2025-12-30";
+  version = "0.4.0-unstable-2026-10-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "412685c82eecd3b05d43ffbd09b34466238d3e6e";
-    hash = "sha256-bYpJrYQHP+/pXzikBJ0ZxQYThLeGo4UE88leJKbzVNo=";
+    rev = "0b4076d9b19a2a133d11f31546cff8153b39eb89";
+    hash = "sha256-leElCq3D0crog3206nduFAh1LfoJWRdNWsOExaM30zk=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication {
     pytest-xdist
     ddt
     pyyaml
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
@@ -57,10 +59,6 @@ python3Packages.buildPythonApplication {
 
   preBuild = ''
     make -C chirp/locale
-  '';
-
-  preCheck = ''
-    export HOME="$TMPDIR"
   '';
 
   # many upstream test failures

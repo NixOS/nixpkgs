@@ -2,25 +2,25 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
-  pythonOlder,
   requests,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sseclient";
   version = "0.0.27";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-sv5TTcszsdP6rRPWDFp8cY4o+FmH8qA07PXsJ5kYwRw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     six
   ];
@@ -29,10 +29,12 @@ buildPythonPackage rec {
 
   disabledTests = [ "event_stream" ];
 
+  pythonImportsCheck = [ "sseclient" ];
+
   meta = {
     description = "Client library for reading Server Sent Event streams";
     homepage = "https://github.com/btubbs/sseclient";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

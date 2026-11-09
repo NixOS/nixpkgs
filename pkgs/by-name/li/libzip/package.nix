@@ -6,13 +6,13 @@
   perl,
   zlib,
   groff,
-  withBzip2 ? false,
+  withBzip2 ? true,
   bzip2,
-  withLZMA ? false,
+  withLZMA ? true,
   xz,
   withOpenssl ? false,
   openssl,
-  withZstd ? false,
+  withZstd ? true,
   zstd,
   testers,
 }:
@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];
 
+  strictDeps = true;
+
   # Don't build the regression tests because they don't build with
   # pkgsStatic and are not executed anyway.
   cmakeFlags = [ "-DBUILD_REGRESS=0" ];
@@ -54,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://libzip.org/";

@@ -131,7 +131,8 @@ in
             repo = remoteRepo;
             encryption.mode = "none";
             startAt = [ ];
-            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+            # This uses extraArgs instead of BORG_RSH to test propagation of these args
+            extraArgs = [ "--rsh=ssh -oStrictHostKeyChecking=no -i /root/id_ed25519" ];
           };
 
           commandFail = {

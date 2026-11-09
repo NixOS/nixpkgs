@@ -5,13 +5,13 @@
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "ghidra-firmware-utils";
-  version = "2025.12.14";
+  version = "2026.08.31";
 
   src = fetchFromGitHub {
     owner = "al3xtjames";
     repo = "ghidra-firmware-utils";
     rev = finalAttrs.version;
-    hash = "sha256-dg3b2Ft7fFRGhWhZILEEKY3hAXk0Ha4dwDusgkPgZ34=";
+    hash = "sha256-M2GC2LHitZ9kJ5lOMb8koi4sxXGwXn119KXNb9BYArA=";
   };
 
   meta = {

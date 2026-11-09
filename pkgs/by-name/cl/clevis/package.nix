@@ -1,10 +1,11 @@
 {
   lib,
-  asciidoc-full,
+  asciidoc,
   coreutils,
   cryptsetup,
   curl,
   fetchFromGitHub,
+  gawk,
   gnugrep,
   gnused,
   jansson,
@@ -17,18 +18,19 @@
   nixosTests,
   pkg-config,
   stdenv,
+  systemd,
   tpm2-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
-  version = "21";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "clevis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2vDQP+yvH4v46fLEWG/37r5cYP3OeDfJz71cDHEGiUg=";
+    hash = "sha256-/Feigc1iOdID5hq+AbaNwYW5eL/g6hh6oR6KKmRK2eM=";
   };
 
   patches = [
@@ -37,8 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./0000-tang-timeout.patch
   ];
 
+  # The tpm1 and pkcs11 pins became 'auto' feature options in v24, but the
+  # meson setup hook forces -Dauto_features=enabled, which turns their
+  # required programs (tpm_sealdata from the TPM 1.2 stack, pcscd and
+  # pkcs11-tool) into hard errors. Disable them explicitly to keep the same
+  # pins v22 built (it had no such options and skipped the pins silently).
+  mesonFlags = [
+    "-Dtpm1=disabled"
+    "-Dpkcs11=disabled"
+  ];
+
   nativeBuildInputs = [
-    asciidoc-full
+    asciidoc
     makeWrapper
     meson
     ninja
@@ -52,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     jose
     libpwquality
     luksmeta
+    systemd
     tpm2-tools
   ];
 
@@ -74,11 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
   # The xargs command is a little bit convoluted because a simpler version would
   # be vulnerable to code injection. This hint is a courtesy of Stack Exchange:
   # https://unix.stackexchange.com/a/267438
+  #
+  # The systemd pkgconfig variable 'systemdsystemunitdir' points into the
+  # read-only systemd store path. Redirect unit installation to $out.
   postPatch = ''
     for f in $(find src/ -type f -print0 |\
                  xargs -0 -I@ sh -c 'grep -q "/bin/cat" "$1" && echo "$1"' sh @); do
       substituteInPlace "$f" --replace-fail '/bin/cat' '${lib.getExe' coreutils "cat"}'
     done
+
+    substituteInPlace src/luks/systemd/meson.build \
+      --replace-fail "unitdir = systemd.get_pkgconfig_variable('systemdsystemunitdir')" \
+        "unitdir = join_paths(get_option('prefix'), 'lib', 'systemd', 'system')"
   '';
 
   # We wrap the main clevis binary entrypoint but not the sub-binaries.
@@ -94,10 +114,23 @@ stdenv.mkDerivation (finalAttrs: {
         luksmeta
         tpm2-tools
       ];
+      askpassPath = [
+        coreutils
+        cryptsetup
+        curl
+        gawk
+        gnugrep
+        gnused
+        jose
+        luksmeta
+      ];
     in
     ''
       wrapProgram $out/bin/clevis \
         --prefix PATH ':' "${lib.makeBinPath includeIntoPath}:${placeholder "out"}/bin"
+
+      wrapProgram $out/libexec/clevis-luks-askpass \
+        --prefix PATH ':' "${lib.makeBinPath askpassPath}:${placeholder "out"}/bin"
     '';
 
   passthru.tests = {
@@ -108,11 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
       clevisLuksFallback
       clevisZfs
       clevisZfsFallback
+      clevisLuksAskpass
+      clevisLuksAskpassFallback
       ;
-    clevisLuksSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuks;
-    clevisLuksFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisLuksFallback;
-    clevisZfsSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfs;
-    clevisZfsFallbackSystemdStage1 = nixosTests.installer-systemd-stage-1.clevisZfsFallback;
   };
 
   meta = {
@@ -125,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/latchset/clevis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gaelj ];
+    mainProgram = "clevis";
   };
 })

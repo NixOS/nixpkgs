@@ -3,7 +3,7 @@
   name = "php-${php.version}-fpm-nginx-test";
   meta.maintainers = lib.teams.php.members;
 
-  nodes.machine =
+  containers.machine =
     { config, pkgs, ... }:
     {
       environment.systemPackages = [ php ];
@@ -44,17 +44,33 @@
           "pm.min_spare_servers" = 1;
           "pm.start_servers" = 2;
         };
+        phpEnv = {
+          # check that keywords and special characters are escaped properly
+          keyword = "false";
+          characters = "^ = \\";
+          quoted = "\"'";
+          newline = "hello\nworld";
+        };
       };
     };
   testScript =
-    { ... }:
+    # python
     ''
       machine.wait_for_unit("nginx.service")
       machine.wait_for_unit("phpfpm-foobar.service")
 
       # Check so we get an evaluated PHP back
-      response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/")
-      assert "PHP Version ${php.version}" in response, "PHP version not detected"
+      response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1:80/")
+      t.assertIn("PHP Version ${php.version}", response, "PHP version not detected")
+
+      expected_env = {
+        "keyword": "false",
+        "characters": "^ = \\",
+        "quoted": "&quot;&#039;",
+        "newline": "hello\nworld",
+      }
+      for env, value in expected_env.items():
+        assert f'<tr><td class="e">{env} </td><td class="v">{value} </td></tr>' in response, f"phpEnv.{env} not detected"
 
       # Check so we have database and some other extensions loaded
       for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:

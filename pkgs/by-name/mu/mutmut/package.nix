@@ -4,34 +4,34 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mutmut";
-  version = "3.2.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mutmut";
     owner = "boxed";
-    tag = version;
-    hash = "sha256-+e2FmfpGtK401IW8LNqeHk0v8Hh5rF3LbZJkSOJ3yPY=";
+    tag = finalAttrs.version;
+    hash = "sha256-M5OJ+b/+Ra8WEHLBgKMiINbTkRSuyjVGZqex2/alxcw=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt --replace-fail 'junit-xml==1.8' 'junit-xml==1.9'
+    substituteInPlace pyproject.toml --replace-fail \
+      'uv_build>=0.12.3,<1' 'uv_build'
   '';
 
-  disabled = python3Packages.pythonOlder "3.7";
+  build-system = [ python3Packages.uv-build ];
 
-  doCheck = false;
-
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
-    click
-    parso
-    junit-xml
-    setproctitle
-    textual
+  dependencies = [
+    python3Packages.click
+    python3Packages.parso
+    python3Packages.junit-xml
+    python3Packages.setproctitle
+    python3Packages.textual
+    python3Packages.coverage
+    python3Packages.libcst
+    python3Packages.pytest
   ];
 
   pythonImportsCheck = [ "mutmut" ];
@@ -40,11 +40,10 @@ python3Packages.buildPythonApplication rec {
     description = "Mutation testing system for Python, with a strong focus on ease of use";
     mainProgram = "mutmut";
     homepage = "https://github.com/boxed/mutmut";
-    changelog = "https://github.com/boxed/mutmut/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/boxed/mutmut/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      l0b0
-      synthetica
+    maintainers = [
+      lib.maintainers.l0b0
     ];
   };
-}
+})

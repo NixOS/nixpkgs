@@ -18,7 +18,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "morphosis";
   version = "48.2";
   pyproject = false;
@@ -27,11 +27,9 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "morphosis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
@@ -54,9 +52,15 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [ pygobject3 ];
 
   dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ pandoc ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ pandoc ])
   ];
 
   passthru = {
@@ -71,4 +75,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "morphosis";
     platforms = lib.platforms.linux;
   };
-}
+})

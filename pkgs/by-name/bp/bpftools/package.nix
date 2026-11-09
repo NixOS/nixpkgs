@@ -8,6 +8,7 @@
   libbfd,
   libbfd_2_38,
   elfutils,
+  openssl,
   readline,
   zlib,
   python3,
@@ -15,7 +16,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftools";
 
   inherit (linuxHeaders) version src;
@@ -26,6 +27,11 @@ stdenv.mkDerivation rec {
     # fix unknown type name '__vector128' on powerpc64*
     # https://www.spinics.net/lists/bpf/msg28613.html
     ./include-asm-types-for-powerpc64.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Fix unknown type name `__u128` on aarch64, analogous to
+    # https://github.com/libbpf/libbpf/commit/f90a9c487d7542d91fa584b83b6a624a4fbeb341
+    ./add-128-bit-integer-types-for-aarch64.patch
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -36,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     (
-      if (lib.versionAtLeast version "5.20") then
+      if (lib.versionAtLeast finalAttrs.version "5.20") then
         [
           libopcodes
           libbfd
@@ -50,6 +56,7 @@ stdenv.mkDerivation rec {
     ++ [
       elfutils
       zlib
+      openssl
       readline
     ];
 
@@ -88,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

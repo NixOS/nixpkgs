@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   twine,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "nagiosplugin";
   version = "1.4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,54 +3,43 @@
   fetchFromGitHub,
   python3Packages,
 }:
-
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
+    }
+  );
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "1.0.3";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
-    tag = "v${version}";
-    hash = "sha256-UCsJ8eDuHL14u2GFIYEY/drtZ6jht5zN/G/6QNlEy2g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dugBcQqUWItvuO3VYFANm/istcVwGilwzZ33cfaSW3g=";
   };
 
-  patches = [
-    # This patch mocks nix channel listing network calls in tests
-    ./tests-mock-nix-channels.patch
-  ];
+  build-system = [ pythonPackages.hatchling ];
 
-  build-system = [ python3Packages.hatchling ];
-
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     beautifulsoup4
     fastmcp
-    mcp
     requests
   ];
 
-  pythonRelaxDeps = [ "fastmcp" ];
-
-  nativeCheckInputs = with python3Packages; [
-    anthropic
+  nativeCheckInputs = with pythonPackages; [
     pytestCheckHook
     pytest-asyncio
-    python-dotenv
-  ];
-
-  disabledTestMarks = [
-    # Require network access
-    "integration"
+    pytest-cov-stub
   ];
 
   disabledTestPaths = [
-    # Require network access
-    "tests/test_nixhub.py"
-    "tests/test_mcp_behavior.py"
-    "tests/test_options.py"
-    # Requires configured channels
-    "tests/test_channels.py"
+    # Requires network access
+    "tests/test_integration.py"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];
@@ -58,9 +47,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "MCP server for NixOS";
     homepage = "https://github.com/utensils/mcp-nixos";
-    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${src.tag}";
+    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
     mainProgram = "mcp-nixos";
   };
-}
+})

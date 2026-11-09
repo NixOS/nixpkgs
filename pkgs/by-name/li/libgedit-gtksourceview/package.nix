@@ -8,6 +8,8 @@
   meson,
   ninja,
   pkg-config,
+  libgedit-amtk,
+  libgedit-gfls,
   libxml2,
   glib,
   gtk3,
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.5.0";
+  version = "299.8.0";
 
   outputs = [
     "out"
@@ -30,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-gtksourceview";
-    rev = finalAttrs.version;
-    hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-Xt8LRLBfzXM28Y9sQJ5U6rb6t4Eql1471YPJIFRDIjg=";
   };
 
   patches = [
@@ -51,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libgedit-amtk
+    libgedit-gfls
     libxml2
   ];
 

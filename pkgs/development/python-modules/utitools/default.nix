@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "utitools";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "utitools";
-    tag = "v${version}";
-    hash = "sha256-oI+a+sc9+qi7aFP0dLINAQekib/9pZm10A5jhVIHWvo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mx9vcMCeDTJyWJKm0Ci9IEAPCNfx9NvPGC8cuNYnH1M=";
   };
 
   build-system = [ flit-core ];
@@ -32,10 +32,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    # Requires pyobjc-framework-coreservices and pyobjc-framework-uniformtypeidentifiers
+    # which are currently not packaged in nixpgs.
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Utilities for working with Uniform Type Identifiers";
     homepage = "https://github.com/RhetTbull/utitools";
-    changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RhetTbull/utitools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

@@ -6,12 +6,12 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fst";
   version = "0.4.3";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     crateName = "fst-bin";
     hash = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
   };
@@ -34,10 +34,12 @@ rustPlatform.buildRustPackage rec {
     description = "Represent large sets and maps compactly with finite state transducers";
     mainProgram = "fst";
     homepage = "https://github.com/BurntSushi/fst";
-    license = with lib.licenses; [
-      unlicense # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        unlicense
+        mit
+      ];
     maintainers = with lib.maintainers; [ rmcgibbo ];
   };
-}
+})

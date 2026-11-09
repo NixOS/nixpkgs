@@ -12,60 +12,53 @@
 }:
 
 let
-  # The x86-64-modern may need to be refined further in the future
-  # but stdenv.hostPlatform CPU flags do not currently work on Darwin
-  # https://discourse.nixos.org/t/darwin-system-and-stdenv-hostplatform-features/9745
-  archDarwin = if stdenv.hostPlatform.isx86_64 then "x86-64-modern" else "apple-silicon";
   arch =
     if stdenv.hostPlatform.isDarwin then
-      archDarwin
+      "apple-silicon"
     else if stdenv.hostPlatform.isx86_64 then
       "x86-64"
     else if stdenv.hostPlatform.isi686 then
       "x86-32"
     else if stdenv.hostPlatform.isAarch64 then
       "armv8"
+    else if stdenv.hostPlatform.isAarch32 then
+      "armv7"
+    else if stdenv.hostPlatform.isRiscV64 then
+      "riscv64"
     else
       "unknown";
 
-  # These files can be found in src/evaluate.h
-  nnueBigFile = "nn-1c0000000000.nnue";
-  nnueBigHash = "sha256-HAAAAAAApn1imZnZMtDDc/dFDOQ80S0FYoaPTq+a4q0=";
-  nnueBig = fetchurl {
-    name = nnueBigFile;
-    url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    hash = nnueBigHash;
-  };
-  nnueSmallFile = "nn-37f18f62d772.nnue";
-  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
-  nnueSmall = fetchurl {
-    name = nnueSmallFile;
-    url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    hash = nnueSmallHash;
+  # This file can be found in src/evaluate.h
+  nnueFile = "nn-1a298aa575a0.nnue";
+  nnueHash = "sha256-GimKpXWghUNNKQJ5eNw2hn/pxbzqk3ZlS3qOuh5S38I=";
+  nnue = fetchurl {
+    name = nnueFile;
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    hash = nnueHash;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "17.1";
+  version = "19";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     tag = "sf_${version}";
-    hash = "sha256-c8o1d7/yPnF3Eo7M/MSzYuYQr2qt2tIwyu7WfuKMAzg=";
+    hash = "sha256-4sRJb8zYhbkuIsI6pOcfH6ZIotXBp7k1kHlxL8jk3vQ=";
   };
 
   postUnpack = ''
     sourceRoot+=/src
-    cp "${nnueBig}" "$sourceRoot/${nnueBigFile}"
-    cp "${nnueSmall}" "$sourceRoot/${nnueSmallFile}"
+    cp "${nnue}" "$sourceRoot/${nnueFile}"
   '';
 
   makeFlags = [
     "PREFIX=$(out)"
     "ARCH=${arch}"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
   ];
   buildFlags = [ "build" ];
 
@@ -92,10 +85,8 @@ stdenv.mkDerivation rec {
         runtimeEnv = {
           PNAME = pname;
           PKG_FILE = toString ./package.nix;
-          NNUE_BIG_FILE = nnueBigFile;
-          NNUE_BIG_HASH = nnueBigHash;
-          NNUE_SMALL_FILE = nnueSmallFile;
-          NNUE_SMALL_HASH = nnueSmallHash;
+          NNUE_FILE = nnueFile;
+          NNUE_HASH = nnueHash;
         };
         text = builtins.readFile ./update.bash;
       }))
@@ -118,9 +109,10 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
+      "armv7l-linux"
+      "riscv64-linux"
     ];
     license = lib.licenses.gpl3Only;
   };

@@ -3,20 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "9.0.10";
+  version = "9.0.37";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wtFaap0FNLFKd2T1EkatqZVj4mP2W4CwJR0adgrEobo=";
+    hash = "sha256-iSOrQTxXWyfaKBXJvvSCkBgaq1ZTmLXn4jzHrOISopM=";
   };
 
   build-system = [ setuptools ];

@@ -5,23 +5,30 @@
   fetchFromGitLab,
   pkg-config,
   icu,
+  stdenv, # for meta.broken
 }:
 let
   codeParserBindings = callPackage ./code-parser.nix { };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.10.1";
+  version = "5.14.17";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
-    rev = "v${version}";
-    hash = "sha256-UB3rR6Fk/5M8rpixyg7R0Zd5JZYpG4gEEDHXOQ4b3vI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nCaDje8hxitswoTwl4oeQmH/c8TiSCfgJMXRj6NpsxQ=";
   };
 
-  vendorHash = "sha256-EM41vNyE4nkv5IcGyRXqn+d7EHGMju2e76KWfHuOTmY=";
+  # A dependency rather than an actual package to build.
+  # Can be removed once GitLab Elasticsearch Indexer upstreams their changes
+  excludedPackages = [
+    "third_party/icu"
+  ];
+
+  vendorHash = "sha256-0Mt/IRtprLN/7rcY13WnVwlZfFAwl0EC5E0hnJzCBDE=";
 
   buildInputs = [ icu ];
   nativeBuildInputs = [ pkg-config ];
@@ -51,10 +58,16 @@ buildGoModule rec {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Indexes Git repositories into Elasticsearch for GitLab";
+    homepage = "https://gitlab.com/gitlab-org/gitlab-elasticsearch-indexer";
     mainProgram = "gitlab-elasticsearch-indexer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yayayayaka ];
-    teams = [ lib.teams.cyberus ];
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+      yayayayaka
+    ];
   };
-}
+})

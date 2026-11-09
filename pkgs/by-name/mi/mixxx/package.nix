@@ -49,21 +49,21 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mixxx";
-  version = "2.5.4";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
-    rev = version;
-    hash = "sha256-D/+ys7VE2/xHUiDG80/voc1BFxwp9M0V89gPWy57XA0=";
+    rev = finalAttrs.version;
+    hash = "sha256-G4jRr6MyXov6j6rtF9Lulk1HmyMXdmPq9JsoY6dyVXU=";
   };
 
   # Should be removed when bumping to 2.6.x
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION ${libdjinterop.version}"
   '';
 
   nativeBuildInputs = [
@@ -122,7 +122,11 @@ stdenv.mkDerivation rec {
     wavpack
   ];
 
-  qtWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
+  qtWrapperArgs = [
+    "--set"
+    "LOCALE_ARCHIVE"
+    "${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
@@ -147,7 +151,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
-    changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mixxxdj/mixxx/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
       benley
@@ -155,4 +159,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

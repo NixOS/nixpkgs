@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   ziafont,
@@ -13,16 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.12";
+  version = "0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziamath";
     tag = version;
-    hash = "sha256-ShR9O170Q26l6XHSe2CO4bEuQm4JNOxiPZ2kbKDLNEU=";
+    hash = "sha256-4TSKxCCU4DP+CQKJoi3nBqstHVUb9ycz+JAlYctxGxY=";
   };
 
   build-system = [ setuptools ];

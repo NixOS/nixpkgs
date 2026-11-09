@@ -75,9 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  preFixup = ''
+    # xslt-config will end up in $dev, so we must patch its shebangs for the build host
+    patchShebangs --build $bin/bin/xslt-config
+  '';
+
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
+
+    substituteInPlace "$dev/lib/cmake/libxslt/libxslt-config.cmake" \
+      --replace-fail '"''${PACKAGE_PREFIX_DIR}/lib"' "\"$out/lib\""
   ''
   + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
@@ -94,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "C library and tools to do XSL transformations";
@@ -101,5 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jtojnar ];
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "xmlsoft" finalAttrs.version;
   };
 })

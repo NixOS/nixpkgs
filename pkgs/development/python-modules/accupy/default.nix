@@ -3,14 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   mpmath,
   numpy,
   pybind11,
   pyfma,
   eigen,
-  importlib-metadata,
   pytestCheckHook,
   matplotlib,
   dufte,
@@ -22,10 +20,8 @@ buildPythonPackage rec {
   version = "0.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "nschloe";
+    owner = "sigma-py";
     repo = "accupy";
     rev = version;
     hash = "sha256-xxwLmL/rFgDFQNr8mRBFG1/NArQk9wanelL4Lu7ls2s=";
@@ -42,8 +38,7 @@ buildPythonPackage rec {
     mpmath
     numpy
     pyfma
-  ]
-  ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  ];
 
   nativeCheckInputs = [
     perfplot
@@ -82,8 +77,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Accurate sums and dot products for Python";
-    homepage = "https://github.com/nschloe/accupy";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/sigma-py/accupy";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

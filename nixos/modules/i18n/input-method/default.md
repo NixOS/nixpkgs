@@ -108,6 +108,8 @@ Available extra Fcitx5 addons are:
 
   - Anthy (`fcitx5-anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
+  - Array (`fcitx5-array`): Array is a Chinese shape-based input method that
+    uses a grid of 30 keys.
   - Chewing (`fcitx5-chewing`): Chewing is an
     intelligent Zhuyin input method. It is one of the most popular input
     methods among Traditional Chinese Unix users.
@@ -157,24 +159,6 @@ The following snippet can be used to configure uim:
 
 Note: The [](#opt-i18n.inputMethod.uim.toolbar) option can be
 used to choose uim toolbar.
-
-## Hime {#module-services-input-methods-hime}
-
-Hime is an extremely easy-to-use input method framework. It is lightweight,
-stable, powerful and supports many commonly used input methods, including
-Cangjie, Zhuyin, Dayi, Rank, Shrimp, Greek, Korean Pinyin, Latin Alphabet,
-etc...
-
-The following snippet can be used to configure Hime:
-
-```nix
-{
-  i18n.inputMethod = {
-    enable = true;
-    type = "hime";
-  };
-}
-```
 
 ## Kime {#module-services-input-methods-kime}
 

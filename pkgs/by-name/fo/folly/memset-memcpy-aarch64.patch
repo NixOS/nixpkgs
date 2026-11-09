@@ -1,0 +1,24 @@
+diff --git a/folly/CMakeLists.txt b/folly/CMakeLists.txt
+index dc77e24731..cd6635ffd6 100644
+--- a/folly/CMakeLists.txt
++++ b/folly/CMakeLists.txt
+@@ -807,6 +807,9 @@
+   NAME memcpy-impl
+   SRCS
+     FollyMemcpy.cpp
++    $<$<BOOL:${IS_AARCH64_ARCH}>:memcpy_select_aarch64.cpp>
++  DEPS
++    $<$<BOOL:${IS_AARCH64_ARCH}>:folly_external_aor_memcpy_aarch64>
+ )
+ 
+ folly_add_library(
+@@ -860,6 +868,9 @@
+   NAME memset-impl
+   SRCS
+     FollyMemset.cpp
++    $<$<BOOL:${IS_AARCH64_ARCH}>:memset_select_aarch64.cpp>
++  DEPS
++    $<$<BOOL:${IS_AARCH64_ARCH}>:folly_external_aor_memset_aarch64>
+ )
+ 
+ folly_add_library(

@@ -8,14 +8,14 @@
   pkg-config,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ktx-tools";
   version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "KTX-Software";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yBRLKa0h64vDBvaessh2FwP16d8+jvW6udbyZvOMzTQ=";
   };
 
@@ -29,7 +29,12 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  cmakeFlags = [ "-DKTX_FEATURE_DOC=ON" ];
+  cmakeFlags = [
+    "-DKTX_FEATURE_DOC=ON"
+    # 4.4.x does not build with GCC 16's default of gnu++20; fixed upstream in 5.0.0
+    # https://github.com/KhronosGroup/KTX-Software/issues/1172
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -61,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/KTX-Software";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bonsairobo ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

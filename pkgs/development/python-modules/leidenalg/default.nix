@@ -10,16 +10,16 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "leidenalg";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vtraag";
     repo = "leidenalg";
-    tag = version;
-    hash = "sha256-u4xW1gsWDpbsFVLlOIiPZtpw9t4iFBC7fzwn04flev8=";
+    tag = finalAttrs.version;
+    hash = "sha256-E8mFzEVzff3BEt5sPDXy8/ofZgVfzgiUyIqT59/Trd0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     libleidenalg
   ];
 
-  propagatedBuildInputs = [ igraph ];
+  dependencies = [ igraph ];
 
   nativeCheckInputs = [
     ddt
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "leidenalg" ];
 
   meta = {
-    changelog = "https://github.com/vtraag/leidenalg/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/vtraag/leidenalg/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Implementation of the Leiden algorithm for various quality functions to be used with igraph in Python";
     homepage = "https://github.com/vtraag/leidenalg";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jboy ];
   };
-}
+})

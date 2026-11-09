@@ -1,5 +1,5 @@
 {
-  buildPythonApplication,
+  buildPythonPackage,
   dulwich,
   docutils,
   lib,
@@ -10,12 +10,13 @@
   pyyaml,
   setuptools,
   sphinx,
-  stestr,
+  stestrCheckHook,
   testtools,
   testscenarios,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage (finalAttrs: {
   pname = "reno";
   version = "4.1.0";
   pyproject = true;
@@ -23,11 +24,11 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "reno";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-le9JtE0XODlYhTFsrjxFXG/Weshr+FyN4M4S3BMBLUE=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     setuptools
@@ -44,35 +45,31 @@ buildPythonApplication rec {
     # Python packages
     docutils
     sphinx
-    stestr
+    stestrCheckHook
     testtools
     testscenarios
+    writableTmpDirAsHomeHook
 
     # Required programs to run all tests
     git
     gnupg
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    export HOME=$(mktemp -d)
-    stestr run -e <(echo "
-      # Expects to be run from a git repository
-      reno.tests.test_cache.TestCache.test_build_cache_db
-      reno.tests.test_semver.TestSemVer.test_major_post_release
-      reno.tests.test_semver.TestSemVer.test_major_working_and_post_release
-      reno.tests.test_semver.TestSemVer.test_major_working_copy
-      reno.tests.test_semver.TestSemVer.test_minor_post_release
-      reno.tests.test_semver.TestSemVer.test_minor_working_and_post_release
-      reno.tests.test_semver.TestSemVer.test_minor_working_copy
-      reno.tests.test_semver.TestSemVer.test_patch_post_release
-      reno.tests.test_semver.TestSemVer.test_patch_working_and_post_release
-      reno.tests.test_semver.TestSemVer.test_patch_working_copy
-      reno.tests.test_semver.TestSemVer.test_same
-      reno.tests.test_semver.TestSemVer.test_same_with_note
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    # Expects to be run from a git repository
+    "reno.tests.test_cache.TestCache.test_build_cache_db"
+    "reno.tests.test_semver.TestSemVer.test_major_post_release"
+    "reno.tests.test_semver.TestSemVer.test_major_working_and_post_release"
+    "reno.tests.test_semver.TestSemVer.test_major_working_copy"
+    "reno.tests.test_semver.TestSemVer.test_minor_post_release"
+    "reno.tests.test_semver.TestSemVer.test_minor_working_and_post_release"
+    "reno.tests.test_semver.TestSemVer.test_minor_working_copy"
+    "reno.tests.test_semver.TestSemVer.test_patch_post_release"
+    "reno.tests.test_semver.TestSemVer.test_patch_working_and_post_release"
+    "reno.tests.test_semver.TestSemVer.test_patch_working_copy"
+    "reno.tests.test_semver.TestSemVer.test_same"
+    "reno.tests.test_semver.TestSemVer.test_same_with_note"
+  ];
 
   pythonImportsCheck = [ "reno" ];
 
@@ -87,4 +84,4 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

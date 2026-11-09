@@ -4,13 +4,14 @@
   fetchFromGitHub,
   glibcLocales,
   meson,
+  cmake,
   ninja,
   pkg-config,
   python3,
   cld2,
   cli11,
   fmt_11,
-  coreutils,
+  tl-expected,
   emacs,
   glib,
   gmime3,
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.12.13";
+  version = "1.14.4";
 
   outputs = [
     "out"
@@ -31,16 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djcb";
     repo = "mu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rz0bxgJtz4qHrfHRjJhnvxtFFNM89A39YH9oJ2YGC5g=";
+    hash = "sha256-BZfc5NRh/Z/M85OlSWTOeg0p9zBOIg25/PArgXIGTpQ=";
   };
 
   postPatch = ''
-    substituteInPlace lib/utils/mu-utils-file.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/tests/bench-indexer.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/mu-maildir.cc \
-      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     patchShebangs build-aux/date.py
   '';
 
@@ -71,19 +66,23 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gmime3
     texinfo
+    tl-expected
     xapian
   ];
 
   mesonFlags = [
     (lib.strings.mesonEnable "guile" false)
+    (lib.strings.mesonEnable "scm" false)
     (lib.strings.mesonEnable "readline" false)
-    (lib.strings.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.strings.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")
   ];
 
   nativeBuildInputs = [
     pkg-config
     meson
+    # tl-expected is only findable through cmake :(
+    cmake
     ninja
     python3
     glibcLocales

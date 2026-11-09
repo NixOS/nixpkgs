@@ -8,6 +8,9 @@ buildGoModule {
   pname = "horcrux";
   version = "0.3-unstable-2023-09-19";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "horcrux";
@@ -22,6 +25,9 @@ buildGoModule {
     homepage = "https://github.com/jesseduffield/horcrux";
     license = lib.licenses.mit;
     mainProgram = "horcrux";
-    maintainers = with lib.maintainers; [ mh ];
+    maintainers = with lib.maintainers; [
+      mh
+      coolcuber
+    ];
   };
 }

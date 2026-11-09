@@ -69,13 +69,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"npm run webpack-prod"' '""'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # coreaudio-sys runs bindgen, which needs libclang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [

@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage {
   pname = "clippy";
   inherit (rustc) version src;
 
-  separateDebugInfo = true;
+  separateDebugInfo = !stdenv.buildPlatform.is32bit;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ rustc.llvm ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   # Without disabling the test the build fails with:
   # error: failed to run custom build command for `rustc_llvm v0.0.0

@@ -25,7 +25,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.0.3";
+  version = "1.2.0";
 
   nativeBuildInputs = [
     cmake
@@ -44,30 +44,45 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     level-zero
   ]
-  ++ lib.optionals useJemalloc [
-    hwloc
-  ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     numactl
     gtest
     gbenchmark
+  ];
+
+  propagatedBuildInputs = [
+    hwloc
   ];
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j7qQwBetICf1sTz+ssZQLm9P0SiH68lcEvtV1YLuW5s=";
+    hash = "sha256-HC4ZtW9rcoY9krWJnhdD/vwborBVKjbaZKyS/5MmRjw=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   patches = [
+    # The IPC test scripts put `#!/bin/bash` after the license header, so
+    # ctest cannot execute them (exec format error).
+    # https://github.com/oneapi-src/unified-memory-framework/pull/1618
     (fetchpatch {
-      name = "gtest-use-find_package.patch";
-      url = "https://github.com/oneapi-src/unified-memory-framework/commit/503d302a72f719a3f11fce0e610f07a3793549d9.patch";
-      hash = "sha256-T29pJuWGcj/Kfw3VNW5lNBG5OrBsB1UAvwroQ+km4Vs=";
+      name = "move-shebangs-to-the-top.patch";
+      url = "https://github.com/oneapi-src/unified-memory-framework/commit/3ab0bc195f72060555f154475ec3abe01d2ba742.patch";
+      hash = "sha256-0+dgOFNmGrxXPWxtsc1mvzj0V8+eJhH2HkGooDcNdhs=";
+    })
+    # Several file provider tests share a backing file name in the same
+    # working directory and race when ctest runs them in parallel.
+    # https://github.com/oneapi-src/unified-memory-framework/pull/1620
+    (fetchpatch {
+      name = "use-different-temporary-file-names.patch";
+      url = "https://github.com/oneapi-src/unified-memory-framework/commit/afa229239daabfee2722f780f83d933654d5965a.patch";
+      hash = "sha256-mDQCz9sAxFemsGGhY6hwx4vsQgSrchuik/a4+7Gdp9M=";
     })
   ];
 
@@ -81,6 +96,17 @@ stdenv.mkDerivation (finalAttrs: {
     # causing the package to link to /build
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${jemalloc_targ_BINARY_DIR}" "$out/jemalloc"
+
+    # $<BUILD_INTERFACE:hwloc> only links hwloc at build time, so the installed
+    # cmake targets omit it. Downstream static consumers (e.g. UR adapters in
+    # intel-llvm) then fail to link. Export hwloc unconditionally instead.
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse $<BUILD_INTERFACE:''${UMF_HWLOC_NAME}>)' \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse ''${UMF_HWLOC_NAME})'
+
+    # ctest runs the IPC test scripts directly
+    patchShebangs --build test
   '';
 
   # If included, jemalloc needs to be vendored, as they don't support using a pre-built version
@@ -103,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "UMF_BUILD_LIBUMF_POOL_JEMALLOC" useJemalloc)
 
-    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # We won't be able to run these inside the sandbox, so no use in building them
     (lib.cmakeBool "UMF_BUILD_GPU_TESTS" false)
     (lib.cmakeBool "UMF_BUILD_BENCHMARKS" false)
@@ -125,11 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   dontUseNinjaCheck = true;
 
-  NIX_LDFLAGS = lib.optionalString finalAttrs.doCheck "-rpath ${
-    lib.makeLibraryPath [
-      onetbb
-    ]
-  }";
+  env = lib.optionalAttrs finalAttrs.doCheck {
+    NIX_LDFLAGS = "-rpath ${
+      lib.makeLibraryPath [
+        onetbb
+      ]
+    }";
+  };
 
   disabledTests = [
     # These tests try to access sysfs, which is unavailable in the sandbox
@@ -157,6 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.asl20
       lib.licenses.llvm-exception
     ];
-    maintainers = [ lib.maintainers.blenderfreaky ];
+    maintainers = [ lib.maintainers.kilyanni ];
   };
 })

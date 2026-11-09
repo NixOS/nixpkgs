@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dmsuite";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -38,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   # Slight precision error probably due to different BLAS backend on Darwin
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_cheb_scaled"
   ];
 

@@ -1,7 +1,6 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  python3Packages,
   fetchFromGitHub,
   gitMinimal,
   stdenv,
@@ -10,41 +9,25 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-let
-  # commitizen 4.9.1 is not compatible with version 3.0.52 of prompt-toolkit
-  python = python3.override {
-    packageOverrides = self: super: {
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.51";
-        pname = "prompt_toolkit";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
-        };
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
-python3Packages.buildPythonPackage rec {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "commitizen";
-  version = "4.10.1";
+  version = "4.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    tag = "v${version}";
-    hash = "sha256-B4V2UPTEXQNASrwGRZbfFOqPuBIFzBM39a5rAC+Hk5Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ab94id1in6CPturJgqzUO6RTlvcKoL5bLxKrxqI2LKg=";
   };
 
-  pythonRelaxDeps = [
-    "argcomplete"
-    "decli"
-    "termcolor"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >= 0.9.17, < 0.14" "uv-build"
+  '';
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ uv-build ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,7 +37,6 @@ python3Packages.buildPythonPackage rec {
     colorama
     decli
     deprecated
-    importlib-metadata
     jinja2
     packaging
     prompt-toolkit
@@ -64,28 +46,31 @@ python3Packages.buildPythonPackage rec {
     tomlkit
   ];
 
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gitMinimal ])
+  ];
+
   nativeCheckInputs = [
     gitMinimal
-    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ (with python3Packages; [
     argcomplete
-    py
     pytest-freezer
+    pytest-gitconfig
     pytest-mock
     pytest-regressions
-    pytest7CheckHook
+    pytest-xdist
+    pytestCheckHook
   ]);
-
-  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "commitizen" ];
 
   # The tests require a functional git installation
   preCheck = ''
-    git config --global user.name "Nix Builder"
-    git config --global user.email "nix-builder@nixos.org"
     git init .
   '';
 
@@ -98,8 +83,6 @@ python3Packages.buildPythonPackage rec {
     "test_bump_pre_commit_changelog"
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
-    # fatal: not a git repository (or any of the parent directories): .git
-    "test_commitizen_debug_excepthook"
   ];
 
   postInstall =
@@ -113,6 +96,10 @@ python3Packages.buildPythonPackage rec {
         --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
     '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -120,7 +107,7 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
-    changelog = "https://github.com/commitizen-tools/commitizen/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "cz";
     maintainers = with lib.maintainers; [
@@ -128,4 +115,4 @@ python3Packages.buildPythonPackage rec {
       anthonyroussel
     ];
   };
-}
+})

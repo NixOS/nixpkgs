@@ -9,7 +9,8 @@
   pkg-config,
   dbus,
   linuxHeaders,
-  systemd,
+  systemdLibs,
+  expat,
 }:
 
 let
@@ -45,7 +46,7 @@ let
       meta = meta // {
         description = "C-Util Project is a collection of utility libraries for the C11 language";
         homepage = "https://c-util.github.io/";
-        license = [
+        license = lib.licenses.OR [
           lib.licenses.asl20
           lib.licenses.lgpl21Plus
         ];
@@ -126,6 +127,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/bus1/dbus-broker/commit/fd5c6e191bffcf5b3e6c9abb8b0b03479accc04b.patch";
       hash = "sha256-+QgZzm/qRnVSr0wDNw9Np3LRreRKl6CQXJextLPy6fc=";
     })
+    (fetchpatch {
+      name = "CVE-2026-16730-1.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/c4a3c886366f7bd566ec9a55b3855ade8290fa17.patch";
+      hash = "sha256-8O4YX83NI6ztS5oR2JY1++QrWLVCCSCNTpwcp2bu9LE=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-16730-2.patch";
+      url = "https://github.com/bus1/dbus-broker/commit/aaa9fd6bbc2d5d7bfeca039f9c457b7f88a50dde.patch";
+      hash = "sha256-f0p5oDw/6Wxe26fcqfKua766ylMg5NydywFM3MZYV8I=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -145,7 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     c-utf8
     dbus
     linuxHeaders
-    systemd
+    systemdLibs
+    expat
   ];
 
   mesonFlags = [
@@ -163,9 +175,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install -Dm444 $src/README.md $out/share/doc/dbus-broker/README
-
-    sed -i $out/lib/systemd/{system,user}/dbus-broker.service \
-      -e 's,^ExecReload.*busctl,ExecReload=${systemd}/bin/busctl,'
   '';
 
   doCheck = true;

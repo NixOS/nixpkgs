@@ -92,8 +92,6 @@ in
       {
         imports = [ common ];
 
-        boot.initrd.systemd.enable = true;
-
         boot.initrd.systemd.repart.enable = true;
         systemd.repart.partitions = {
           "10-root" = {
@@ -110,8 +108,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Growing existing partition 1." in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Growing existing partition 1.' --identifier systemd-repart")
       '';
   };
 
@@ -128,8 +125,6 @@ in
       }:
       {
         imports = [ common ];
-
-        boot.initrd.systemd.enable = true;
 
         boot.initrd.availableKernelModules = [ "dm_crypt" ];
         boot.initrd.luks.devices = lib.mkVMOverride {
@@ -173,8 +168,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Encrypting future partition 2" in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Encrypting future partition 2' --identifier systemd-repart")
 
         assert "/dev/mapper/created-crypt" in machine.succeed("mount")
       '';
@@ -205,8 +199,7 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --unit systemd-repart.service")
-        assert "Growing existing partition 1." in systemd_repart_logs
+        machine.succeed("journalctl --grep 'Growing existing partition 1.' --identifier systemd-repart")
       '';
   };
 
@@ -252,8 +245,6 @@ in
           copyChannel = false;
         };
 
-        boot.initrd.systemd.enable = true;
-
         boot.initrd.systemd.repart.enable = true;
         boot.initrd.systemd.repart.device = "/dev/vda";
         systemd.repart.partitions = {
@@ -273,8 +264,112 @@ in
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
-        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
-        assert "Adding new partition 2 to partition table." in systemd_repart_logs
+        machine.succeed("journalctl --boot --grep 'Adding new partition 2 to partition table.' --identifier systemd-repart")
       '';
   };
+
+  factory-reset = makeTest {
+    name = "systemd-repart-factory-reset";
+    meta.maintainers = with maintainers; [ willibutz ];
+
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
+        imports = [ common ];
+
+        virtualisation = {
+          useEFIBoot = true;
+          tpm.enable = true;
+          efi.OVMF = pkgs.OVMFFull;
+          useDefaultFilesystems = false;
+          fileSystems = {
+            "/state" = {
+              device = "/dev/mapper/state";
+              fsType = "ext4";
+            };
+          };
+        };
+
+        boot = {
+          loader.systemd-boot.enable = true;
+
+          initrd = {
+            systemd = {
+              # avoids reaching cryptsetup.target before recreation of the
+              # "state" volume completed, during the factory reset and tries to
+              # ensure that devices are retriggered before trying to work with them.
+              services.systemd-repart.before = [
+                "systemd-cryptsetup@state.service"
+              ];
+              services.systemd-factory-reset-complete.before = [
+                "systemd-cryptsetup@state.service"
+              ];
+              repart = {
+                enable = true;
+                extraArgs = [
+                  "--tpm2-pcrs=platform-code"
+                ];
+              };
+            };
+            luks.devices = lib.mkVMOverride {
+              state = {
+                device = "/dev/disk/by-partlabel/state";
+                crypttabExtraOpts = [ "tpm2-device=auto" ];
+              };
+            };
+          };
+        };
+
+        systemd.repart.partitions = {
+          "10-esp".Type = "esp";
+          "20-root".Type = "linux-generic";
+          "30-state" = {
+            Type = "linux-generic";
+            Label = "state";
+            Format = "ext4";
+            Encrypt = "tpm2";
+            SizeMinBytes = "64M";
+            SizeMaxBytes = "64M";
+            FactoryReset = true;
+          };
+        };
+
+        # doesn't actually reboot through the service because otherwise the test
+        # instrumentation becomes very unreliable, instead uses machine.reboot()
+        systemd.services.systemd-factory-reset-reboot.enable = false;
+      };
+
+    testScript =
+      { nodes, ... }:
+      # python
+      ''
+        ${useDiskImage {
+          inherit (nodes) machine;
+          sizeDiff = "+64M";
+        }}
+
+        machine.start(allow_reboot=True)
+        machine.wait_for_unit("default.target")
+
+        first_uuid = machine.succeed("blkid -s UUID -o value /dev/disk/by-label/state")
+
+        machine.succeed("mountpoint /state")
+        machine.succeed("touch /state/foo")
+
+        with subtest("factory reset requested through target"):
+          machine.systemctl("start factory-reset.target")
+
+        # reboot manually to keep control over test vm
+        machine.reboot()
+        machine.wait_for_unit("default.target")
+
+        with subtest("state partition recreated and empty after reset"):
+          second_uuid = machine.succeed("blkid -s UUID -o value /dev/disk/by-label/state")
+          t.assertNotEqual(first_uuid, second_uuid)
+
+          machine.succeed("mountpoint /state")
+          machine.fail("test -e /state/foo")
+      '';
+  };
+
 }

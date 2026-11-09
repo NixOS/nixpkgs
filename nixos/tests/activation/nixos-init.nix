@@ -8,9 +8,9 @@
   nodes.machine =
     { modulesPath, ... }:
     {
-      boot.initrd.systemd.enable = true;
       system.etc.overlay.enable = true;
       services.userborn.enable = true;
+      boot.postBootCommands = lib.mkForce "";
 
       system.nixos-init.enable = true;
       # Forcibly set this to only these specific values.

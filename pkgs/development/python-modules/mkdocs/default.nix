@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # buildtime
   hatchling,
@@ -12,7 +11,6 @@
   # runtime deps
   click,
   ghp-import,
-  importlib-metadata,
   jinja2,
   markdown,
   markupsafe,
@@ -34,17 +32,15 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs";
   version = "1.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
@@ -74,8 +70,7 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     i18n = [ babel ];
@@ -85,19 +80,18 @@ buildPythonPackage rec {
     unittestCheckHook
     mock
   ]
-  ++ optional-dependencies.i18n;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.i18n;
 
-  unittestFlagsArray = [
+  unittestFlags = [
+    "--start-directory=mkdocs"
+    "--pattern=*tests.py"
     "-v"
-    "-p"
-    "'*tests.py'"
-    "mkdocs"
   ];
 
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = {
-    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
+    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${finalAttrs.src.tag}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
     downloadPage = "https://github.com/mkdocs/mkdocs";
@@ -113,4 +107,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rkoe ];
   };
-}
+})

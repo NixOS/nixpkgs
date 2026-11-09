@@ -8,12 +8,12 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-semver";
   version = "0.1.1";
 
   src = fetchurl {
-    url = "https://files.ngyro.com/guile-semver/guile-semver-${version}.tar.gz";
+    url = "https://files.ngyro.com/guile-semver/guile-semver-${finalAttrs.version}.tar.gz";
     hash = "sha256-T3kJGTdf6yBKjqLtqSopHZu03kyOscZ3Z4RYmoYlN4E=";
   };
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  guileImportsCheck = [ "semver" ];
+
   meta = {
     description = "GNU Guile library implementing Semantic Versioning 2.0.0";
     homepage = "https://ngyro.com/software/guile-semver.html";
@@ -35,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

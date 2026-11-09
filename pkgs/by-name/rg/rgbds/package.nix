@@ -8,14 +8,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rgbds";
-  version = "0.9.4";
+  version = "1.0.4";
   src = fetchFromGitHub {
     owner = "gbdev";
     repo = "rgbds";
-    rev = "v${version}";
-    hash = "sha256-PFnU6vWfwvtnB93J+PcxZk000hbHnbe7GR+HCvH26dg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NNw0ZsUEpbmTGq8GZqAszi3Im1Pj331xNSYa7Aq2wWM=";
   };
   nativeBuildInputs = [
     bison
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with lib.maintainers; [
       NieDzejkob
+      mattcurrie
     ];
     platforms = lib.platforms.all;
   };
-}
+})

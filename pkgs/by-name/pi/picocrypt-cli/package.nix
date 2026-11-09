@@ -29,10 +29,7 @@ buildGoModule (finalAttrs: {
     description = "Command-line interface for Picocrypt";
     homepage = "https://github.com/Picocrypt/CLI";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      ryand56
-    ];
+    maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "picocrypt";
   };
 })

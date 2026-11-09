@@ -6,15 +6,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysklogd";
-  version = "2.7.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "sysklogd";
-    rev = "v${version}";
-    hash = "sha256-HwzqWZox5qc/TvCafx4XjA4njQhcHBS0gZthqPzONHk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VR8VohyGQyCbGBz8freZQeDIzIkXTtAyOvTCoTMOpAs=";
   };
 
   nativeBuildInputs = [
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aanderse ];
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
   };
-}
+})

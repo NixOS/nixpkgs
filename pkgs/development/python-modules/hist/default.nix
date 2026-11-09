@@ -1,51 +1,65 @@
 {
   lib,
-  fetchPypi,
+  stdenv,
   buildPythonPackage,
-  boost-histogram,
-  histoprint,
+  fetchFromGitHub,
+
+  # build-system
   hatchling,
   hatch-vcs,
+
+  # dependencies
+  boost-histogram,
+  histoprint,
   numpy,
+
+  # tests
   pytestCheckHook,
   pytest-mpl,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hist";
-  version = "2.9.0";
-  format = "pyproject";
+  version = "2.12.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FtSPIhoeEi+B3z2j1vt2O92COIdo4D/FXcGSYZBsdOs=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "hist";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GvsgTqkIjzEI9W9RdSMrNIwt9COIsT1xwSZ2+h67KKU=";
   };
 
-  buildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boost-histogram
     histoprint
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # line 23: 92372 Trace/BPT trap: 5
+    "test_to_hist_empty"
+  ];
+
+  pythonImportsCheck = [ "hist" ];
+
   meta = {
     description = "Histogramming for analysis powered by boost-histogram";
-    mainProgram = "hist";
+    mainProgram = "";
     homepage = "https://hist.readthedocs.io/";
-    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
+    downloadPage = "https://github.com/scikit-hep/hist";
+    changelog = "https://github.com/scikit-hep/hist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

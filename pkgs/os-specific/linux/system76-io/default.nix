@@ -6,18 +6,19 @@
   kernelModuleMakeFlags,
 }:
 let
-  version = "1.0.4";
   hash = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
 in
-stdenv.mkDerivation {
-  name = "system76-io-module-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-io-module";
+  version = "1.0.4";
 
   passthru.moduleName = "system76_io";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-io-dkms";
-    rev = version;
+    rev = finalAttrs.version;
     inherit hash;
   };
 
@@ -25,16 +26,24 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=misc"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
+  ];
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    install -D system76-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-io.ko
-    install -D system76-thelio-io.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76-thelio-io.ko
-  '';
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
   meta = {
     maintainers = with lib.maintainers; [ ahoneybun ];
@@ -48,4 +57,4 @@ stdenv.mkDerivation {
     description = "DKMS module for controlling System76 Io board";
     homepage = "https://github.com/pop-os/system76-io-dkms";
   };
-}
+})

@@ -2,6 +2,7 @@
   buildPackages,
   callPackage,
   makeRustPlatform,
+  nix-update-script,
 }:
 let
   # Need to use the build platform rustc and Cargo so that
@@ -18,9 +19,9 @@ let
     auditable-bootstrap = bootstrap;
   };
 
-  version = "0.7.2";
-  hash = "sha256-hR6PjTOps8JSM7UbfGlCoZmmwtWExVqYwh4lxDiFWdc=";
-  cargoHash = "sha256-JEfnUJ9J6Xak3AOCwQCnu+v+3Wl3QbXX20qVFWB6040=";
+  version = "0.7.7";
+  hash = "sha256-N/adXtdMJWaKiV2kc36RgDMEJ5Kx8ly+S7GrGabqjMI=";
+  cargoHash = "sha256-A2gKYWy2MA0kZSbhgunoEhjO4V15X+NORQdBAoB1SeQ=";
 
   # cargo-auditable cannot be built with cargo-auditable until cargo-auditable is built
   bootstrap = auditableBuilder {
@@ -32,4 +33,5 @@ in
 auditableBuilder {
   inherit version hash cargoHash;
   auditable = true;
+  passthru.updateScript = nix-update-script { };
 }

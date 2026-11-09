@@ -7,7 +7,7 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lens";
   version = "1.2.5";
 
@@ -16,8 +16,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "pdonadeo";
     repo = "ocaml-lens";
-    rev = "v${version}";
-    sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-do8aRUwLXfzIh68QwDU/6c3y1KTWYLWsma6QpO6xQ8w=";
   };
 
   minimalOCamlVersion = "4.10";
@@ -37,4 +37,4 @@ buildDunePackage rec {
       kazcw
     ];
   };
-}
+})

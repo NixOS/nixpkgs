@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  uv-build,
 
   # dependencies
   asgiref,
@@ -20,17 +20,22 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "7.6.1";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     tag = "v${version}";
-    hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
+    hash = "sha256-LR6mD3i/1e6c3DXqBgKqv2BhR0VbXzyskGHkPSXD3Gg=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     asgiref
@@ -45,6 +50,11 @@ buildPythonPackage rec {
     pytest-django
   ];
 
+  disabledTests = [
+    # timing sensitive
+    "test_iter_caching"
+  ];
+
   meta = {
     description = "Provides a country field for Django models";
     longDescription = ''
@@ -52,7 +62,7 @@ buildPythonPackage rec {
       forms, flag icons static files, and a country field for models.
     '';
     homepage = "https://github.com/SmileyChris/django-countries";
-    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

@@ -26,12 +26,13 @@
   withNetSnmp ? true,
   krb5,
   pcre2,
+  perl,
   python3,
   rustPlatform,
   rustc,
   openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   zlib,
   rsync,
   withCockpit ? true,
@@ -41,29 +42,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
-  version = "3.1.3";
+  version = "3.3.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
     rev = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-hRTK9xBu8v8+SGa/3IB8Alh/aGUiRRn2LmYOvXy0Yd4=";
+    hash = "sha256-N/+fTTgkqs25ToR/OH9BaBHxheVDZWR4RANFtC71rBg=";
   };
 
   patches = [
-    (fetchpatch {
-      # https://github.com/389ds/389-ds-base/pull/6930
-      name = "389-ds-base-rustc-1_89.patch";
-      url = "https://github.com/389ds/389-ds-base/commit/1701419551c246e9dc21778b118220eeb2258125.patch";
-      hash = "sha256-trzY/fDH3rs66DWbWI+PY46tIC9ShuVqspMHqEEKZYA=";
-    })
+    ./0001-remove-hard-coded-vendor-paths.patch
   ];
 
+  cargoRoot = "src";
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/src";
+    inherit (finalAttrs) src cargoRoot;
     name = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-pNzMQjeBpmzFg6oWCxhLDmKGUKIW6jGmZQWai5Yunjc=";
+    hash = "sha256-1qCH2Onb69Jcqqs3JfDJslavzMrHO6//OtYtDq2iCgY=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     cargo
     rustc
+    rustPlatform.cargoSetupHook
   ]
   ++ lib.optional withCockpit rsync;
 
@@ -92,8 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     openssl
     zlib
+    perl
+    python3
   ]
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withOpenldap openldap
   ++ lib.optional withBdb db
   ++ lib.optional withNetSnmp net-snmp;
@@ -106,10 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh --prefix="$out"
   '';
 
-  preBuild = ''
-    ln -s ${finalAttrs.cargoDeps} ./vendor
-  '';
-
   configureFlags = [
     "--enable-rust-offline"
     "--enable-autobind"
@@ -120,12 +119,16 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withOpenldap [
     "--with-openldap"
+    "--with-openldap-inc=${lib.getDev openldap}/include"
+    "--with-openldap-lib=${lib.getLib openldap}/lib"
+    "--with-openldap-bin=${lib.getBin openldap}/bin"
   ]
   ++ lib.optionals withBdb [
     "--with-db-inc=${lib.getDev db}/include"
     "--with-db-lib=${lib.getLib db}/lib"
   ]
   ++ lib.optionals withNetSnmp [
+    "--with-netsnmp=${lib.getDev net-snmp}"
     "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
     "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
   ]

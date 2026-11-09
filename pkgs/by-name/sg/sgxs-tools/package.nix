@@ -3,19 +3,19 @@
   fetchCrate,
   rustPlatform,
   pkg-config,
-  openssl_3,
+  openssl_3_5,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sgxs-tools";
   version = "0.9.2";
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
-  buildInputs = [ openssl_3 ];
+  buildInputs = [ openssl_3_5 ];
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vLbSjDULrYL8emQTha4fhEbr00OlhXNa00QhCKCnWDc=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mpl20;
   };
-}
+})

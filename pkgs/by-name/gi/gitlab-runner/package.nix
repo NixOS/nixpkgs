@@ -4,22 +4,24 @@
   bash,
   buildGoModule,
   fetchFromGitLab,
+  gitMinimal,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.5.0";
+  version = "19.5.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xuRYnK5Ev2M/vrVWMHcTcK7LLwlQ30MVadMjA67fHpY=";
+    hash = "sha256-4iBgXjvt0ZfyJdElv/kcItcdij8SjDhWkOk+PSjxWko=";
   };
 
-  vendorHash = "sha256-5Gh9jQ4GkvtN8inEUphehbsnmfyQldvxjbxBkXQ63wc=";
+  vendorHash = "sha256-Op1yK76t/v6zNn0D7hAf8QDdRPK0VcQP0Voy8Zt8J7c=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -36,26 +38,34 @@ buildGoModule (finalAttrs: {
     substituteInPlace commands/helpers/file_archiver_test.go \
       --replace-fail "func TestCacheArchiverAddingUntrackedFiles" "func OFF_TestCacheArchiverAddingUntrackedFiles" \
       --replace-fail "func TestCacheArchiverAddingUntrackedUnicodeFiles" "func OFF_TestCacheArchiverAddingUntrackedUnicodeFiles"
-    rm shells/abstract_test.go
 
-    # No writable developer environment
+    # Needs `make development_setup` (git repo at tmp/gitlab-test/)
     rm common/build_settings_test.go
     rm common/build_test.go
     rm executors/custom/custom_test.go
 
-    # No Docker during build
-    rm executors/docker/docker_test.go
-    rm executors/docker/services_test.go
-    rm executors/docker/terminal_test.go
-    rm helpers/docker/auth/auth_test.go
+    # Needs DNS
+    rm commands/helpers/probe_url_test.go
 
-    # No Kubernetes during build
-    rm executors/kubernetes/feature_test.go
+    # Use bash from PATH instead of absolute paths
+    substituteInPlace executors/kubernetes/kubernetes_test.go \
+      --replace-fail \
+        '[]byte(shells.BashDetectShellScript)' \
+        '[]byte("exec bash \"$@\"\n")'
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.isx86_64) ''
+    # Kubernetes tests actually work fine inside the network sandbox (they don't
+    # expect real Kubernetes), but they fail on aarch64-linux because their
+    # mocks expect x86_64
     rm executors/kubernetes/kubernetes_test.go
     rm executors/kubernetes/overwrites_test.go
   ''
   + lib.optionalString stdenv.buildPlatform.isDarwin ''
-    # Invalid bind arguments break Unix socket tests
+    # Darwin's sandbox blocks sendfile(2) during local HTTP PUT uploads
+    substituteInPlace commands/helpers/cache_archiver_test.go \
+      --replace-fail "func TestUploadExistingArchiveIfNeeded" "func OFF_TestUploadExistingArchiveIfNeeded"
+
+    # Invalid bind arguments break Unix socket tests.
     substituteInPlace commands/wrapper_test.go \
       --replace-fail "func TestRunnerWrapperCommand_createListener" "func OFF_TestRunnerWrapperCommand_createListener"
 
@@ -64,6 +74,10 @@ buildGoModule (finalAttrs: {
       --replace-fail "func TestCertificate" "func OFF_TestCertificate"
     substituteInPlace network/client_test.go \
       --replace-fail "func TestClientInvalidSSL" "func OFF_TestClientInvalidSSL"
+  '';
+
+  postPatch = ''
+    patchShebangs --build helpers/docker/auth/testdata/
   '';
 
   excludedPackages = [
@@ -84,6 +98,11 @@ buildGoModule (finalAttrs: {
       "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
       "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
     ];
+
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
     # Make the tests pass outside of GitLab CI
@@ -108,6 +127,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "GitLab Runner the continuous integration executor of GitLab";
     homepage = "https://docs.gitlab.com/runner";
+    changelog = "https://gitlab.com/gitlab-org/gitlab-runner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "gitlab-runner";
     maintainers = with lib.maintainers; [ zimbatm ];

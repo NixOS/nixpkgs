@@ -1,9 +1,9 @@
 {
   acl,
   bash,
+  cockpit,
   coreutils,
   fetchFromGitHub,
-  firewalld,
   getent,
   glibc,
   iproute2,
@@ -13,46 +13,38 @@
   makeWrapper,
   mbuffer,
   msmtp,
+  nix-update-script,
   nodejs,
   openssh,
-  python312,
   samba,
   shadow,
   smartmontools,
   stdenv,
   su,
-  systemd,
+  systemdLibs,
   util-linux,
   yarn-berry,
   zfs,
 }:
 
-let
-  # Using python312 because py-libzfs is not compatible with newer versions
-  python = (
-    python312.withPackages (ps: [
-      ps.pyudev
-      ps.py-libzfs
-    ])
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.12-2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oeXSOxogfAazRsKfngq2+DOyo//wRJQSqm7gaCza4WY=";
+    hash = "sha256-AeHawdStX+A+/8z4IWaf1w5irNZDIWs52y1nsEF+fHg=";
   };
 
   missingHashes = ./missing-hashes.json;
 
+  # Use buildPackages for cross-compilation support
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
+    hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
@@ -63,11 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
+  disallowedRequisites = [ finalAttrs.offlineCache ];
+
+  passthru.updateScript = nix-update-script { };
+
   passthru.cockpitPath = [
     acl
     bash
     coreutils
-    firewalld
     getent
     glibc
     iproute2
@@ -76,14 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
     msmtp
     nodejs
     openssh
-    python
     samba
     shadow
     smartmontools
     su
-    systemd
+    systemdLibs
     util-linux
     zfs
+    cockpit.passthru.python3Packages.pyudev
+    cockpit.passthru.python3Packages.py-libzfs
   ];
 
   env = {
@@ -92,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
-  patchPhase =
+  postPatch =
     let
       # houston-common-lib has @types/electron which pulls in electron.
       # Electron's postinstall downloads binaries, which fails in sandbox.
@@ -101,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       houstonUiDir = "houston-common/houston-common-ui";
     in
     ''
-      runHook prePatch
-
       # Remove electron type dependency
       substituteInPlace ${houstonLibDir}/package.json \
         --replace-fail '"@types/electron": "^1.6.12",' ""
@@ -126,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "VueDevTools()," "" \
         --replace-fail "import dts from 'vite-plugin-dts'" ""
       sed -i '/dts({/,/})/d' ${houstonUiDir}/vite.config.ts
-
-      runHook postPatch
     '';
 
   buildPhase = ''
@@ -151,11 +143,12 @@ stdenv.mkDerivation (finalAttrs: {
     for script in $out/etc/zfs/zed.d/*; do
       if [ -f "$script" ]; then
         wrapProgram "$script" \
+          --set PYTHONPATH "/etc/cockpit/${cockpit.passthru.python3Packages.python.sitePackages}" \
           --set PATH "${
             lib.makeBinPath [
+              "/etc/cockpit"
               coreutils
               bash
-              python
               jq
             ]
           }"

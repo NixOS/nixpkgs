@@ -16,12 +16,16 @@ in
 
 {
   name = "radicle-ci-broker";
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.maintainers = lib.teams.radicle.members;
 
   nodes.seed = {
+    virtualisation.credentials."dev.radicle.node.secret" = {
+      source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+      mechanism = "fw_cfg";
+    };
+
     services.radicle = {
       enable = true;
-      privateKeyFile = seed-ssh-keys.snakeOilEd25519PrivateKey;
       publicKey = seed-ssh-keys.snakeOilEd25519PublicKey;
       node.openFirewall = true;
       settings = {
@@ -51,23 +55,24 @@ in
     };
   };
 
-  nodes.alice =
-    { pkgs, ... }:
-    {
-      environment.etc."gitconfig".text = ''
-        [init]
-          defaultBranch = main
-        [user]
-          email = root@alice
-          name = alice
-      '';
+  nodes.alice = { pkgs, ... }: {
+    environment.etc."gitconfig".text = ''
+      [init]
+        defaultBranch = main
+      [user]
+        email = root@alice
+        name = alice
+    '';
 
-      environment.systemPackages = with pkgs; [
-        gitMinimal
-        radicle-node
-        radicle-job
-      ];
-    };
+    environment.systemPackages = with pkgs; [
+      gitMinimal
+      radicle-node
+      radicle-job
+    ];
+  };
+
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
 
   testScript = ''
     import json

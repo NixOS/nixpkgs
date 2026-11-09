@@ -2,8 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+  flit-core,
   traitlets,
 
   # tests
@@ -12,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.1.7";
+  version = "0.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "matplotlib-inline";
     tag = version;
-    hash = "sha256-y7T8BshNa8NVWzH8oLS4dTAyhG+YmkkYQJFAyMXsJFA=";
+    hash = "sha256-pLJGwykQ0+LK+cljGQmkSDuBSAdGq+SCPYGQ0ZF7nq0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [ traitlets ];
 

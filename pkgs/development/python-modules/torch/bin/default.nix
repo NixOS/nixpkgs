@@ -3,8 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
+  isPyPy,
   fetchurl,
 
   # nativeBuildInputs
@@ -17,6 +16,7 @@
 
   # dependencies
   filelock,
+  fsspec,
   jinja2,
   networkx,
   numpy,
@@ -25,8 +25,12 @@
   setuptools,
   sympy,
   typing-extensions,
+  # linux-only
+  cuda-bindings,
+  # x86_64-linux only
   triton,
 
+  config,
   callPackage,
 }:
 
@@ -34,7 +38,8 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.9.1";
+  version = "2.15.0";
+  cuda-bindings' = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
   inherit version;
@@ -44,7 +49,16 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "cxxdev"
+  ];
+  cudaPropagateToOutput = "cxxdev";
+
+  # determine supported interpreters by the ones we have x86_64-linux wheels for
+  disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -59,7 +73,7 @@ buildPythonPackage {
     [
       # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
       # libnvToolsExt-$hash.so.1
-      cuda_nvtx
+      nvtx
 
       cuda_cudart
       cuda_cupti
@@ -68,7 +82,6 @@ buildPythonPackage {
       libcublas
       libcufft
       libcufile
-      libcurand
       libcusolver
       libcusparse
       libcusparse_lt
@@ -85,8 +98,17 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
+  pythonRemoveDeps = [
+    "cuda-toolkit"
+    "nvidia-cublas"
+    "nvidia-cudnn-cu13"
+    "nvidia-cusparselt-cu13"
+    "nvidia-nccl-cu13"
+    "nvidia-nvshmem-cu13"
+  ];
   dependencies = [
     filelock
+    fsspec
     jinja2
     networkx
     numpy
@@ -96,7 +118,12 @@ buildPythonPackage {
     sympy
     typing-extensions
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cuda-bindings'
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   postInstall = ''
     # ONNX conversion
@@ -105,6 +132,15 @@ buildPythonPackage {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
+
+    # Any consumer that doesn't set MKL_ROOT (e.g. torchcodec) would fail RPATH_CHANGE at install time,
+    # as those paths collapse to /lib, /lib/intel64
+    (
+      cd $out/${python.sitePackages}/torch/share/cmake/Caffe2
+      patch -p2 < ${../source/disable-cmake-mkl-rpath.patch}
+    )
+
+    mkdir -p "$cxxdev"
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/296179
@@ -131,7 +167,17 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ../tests { };
+  passthru.tests = callPackage ../tests {
+    inherit (config) rocmSupport cudaSupport;
+  };
+
+  # Expose mostly the same attrs as the source build to stay compatible
+  passthru = {
+    inherit cudaPackages triton;
+    cudaSupport = stdenv.hostPlatform.isLinux;
+    rocmSupport = false;
+    cudaCapabilities = lib.optionals stdenv.hostPlatform.isLinux cudaPackages.flags.cudaCapabilities;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
@@ -158,5 +204,15 @@ buildPythonPackage {
       GaetanLepage
       junjihashimoto
     ];
+    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings'.version "13.0.3") {
+      unsupported-cuda-version = {
+        message = ''
+          The cudaPackages used by torch-bin is too old,
+          the minimum required cuda-bindings version is 13.0.3, but the current used one is ${cuda-bindings'.version}.
+          Please override cudaPackages of torch-bin with a more recent version.
+        '';
+        kind = "broken";
+      };
+    };
   };
 }

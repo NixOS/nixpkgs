@@ -9,14 +9,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libff";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "scipr-lab";
     repo = "libff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0dczi829497vqlmn6n4fgi89bc2h9f13gx30av5z2h6ikik7crgn";
     fetchSubmodules = true;
   };
@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace "VERSION 2.8" "VERSION 3.10"
+    # CMake >= 4.3 treats install(DIRECTORY "" ...) as a no-op instead of
+    # installing the current source directory, so no headers get installed.
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/27568
+    substituteInPlace libff/CMakeLists.txt \
+      --replace-fail 'DIRECTORY "" DESTINATION "include/libff"' 'DIRECTORY "./" DESTINATION "include/libff"'
   ''
   + lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"
@@ -53,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ arturcygan ];
   };
-}
+})

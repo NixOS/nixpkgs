@@ -6,21 +6,27 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eludris";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "eludris";
     repo = "eludris";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TVYgimkGUSITB3IaMlMd10PWomqyJRvONvJwiW85U4M=";
   };
 
   cargoHash = "sha256-JpXjnkZHz12YxgTSqTcWdQTkrMugP7ZGw48145BeBZk=";
 
-  cargoBuildFlags = [ "-p eludris" ];
-  cargoTestFlags = [ "-p eludris" ];
+  cargoBuildFlags = [
+    "--package"
+    "eludris"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "eludris"
+  ];
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ooliver1 ];
   };
-}
+})

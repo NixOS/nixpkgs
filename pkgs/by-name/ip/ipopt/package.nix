@@ -17,15 +17,18 @@
 assert (!blas.isILP64) && (!lapack.isILP64);
 assert !mumps.mpiSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipopt";
-  version = "3.14.19";
+  version = "3.14.20";
+
+  __structuredAttrs = true;
+  srictDeps = true;
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
-    rev = "releases/${version}";
-    sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-bQo/AxzbgKCnL8VZuvq/w3qgrtzg67kIOqQTa1zQuSY=";
   };
 
   outputs =
@@ -61,6 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    changelog = "https://github.com/coin-or/Ipopt/releases/tag/releases%2F${finalAttrs.version}";
     description = "Software package for large-scale nonlinear optimization";
     homepage = "https://projects.coin-or.org/Ipopt";
     license = lib.licenses.epl20;
@@ -70,4 +74,4 @@ stdenv.mkDerivation rec {
       qbisi
     ];
   };
-}
+})

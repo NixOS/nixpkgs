@@ -25,6 +25,11 @@
   buildTests ? true,
   llvmTargetsToBuild ? [ "NATIVE" ], # "NATIVE" resolves into x86 or aarch64 depending on stdenv
   llvmProjectsToBuild ? [
+    # Required for building the GSan runtime in triton>=3.8.0, which needs a `clang++` inside the
+    # LLVM prefix (`find_program` uses `NO_DEFAULT_PATH`):
+    # https://github.com/triton-lang/triton/blob/v3.8.0/third_party/nvidia/CMakeLists.txt#L11
+    "clang"
+
     # Required for building triton>=3.5.0
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
     "lld"
@@ -68,7 +73,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "22.0.0-unstable-2025-07-15"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "23.0.0-unstable-2026-08-17"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -80,12 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # See https://github.com/triton-lang/triton/blob/main/cmake/llvm-hash.txt
+  # Triton pins its LLVM in `cmake/llvm-info.json`. For the 3.8 release, this is not an upstream
+  # commit but a `triton-lang/llvm-project` branch carrying SLP vectorizer and AMDGPU backports:
+  # https://github.com/triton-lang/triton/blob/release/3.8.x/cmake/llvm-info.json
   src = fetchFromGitHub {
-    owner = "llvm";
+    owner = "triton-lang";
     repo = "llvm-project";
-    rev = "7d5de3033187c8a3bb4d2e322f5462cdaf49808f";
-    hash = "sha256-ayW6sOZGvP3SBjfmpXvYQJrPOAElY0MEHPFvj2fq+bM=";
+    rev = "5f07f818b51b786b0a87b4e514882600ecba112f";
+    hash = "sha256-1sWaezAmvrPbrYVh2CLgtPEjkDiZBQkNymp18Eosbd0=";
   };
 
   nativeBuildInputs = [
@@ -128,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "LLVM_TOOL_LLVM_DRIVER_BUILD" true) # Save space by using busybox style tool binary
     # Way too slow, only uses one core
     # (lib.cmakeBool "LLVM_ENABLE_DOXYGEN" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" (buildDocs || buildMan))
@@ -137,6 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_TESTS" buildTests)
     (lib.cmakeBool "MLIR_INCLUDE_TESTS" buildTests)
     (lib.cmakeBool "LLVM_BUILD_TESTS" buildTests)
+    # clang is only shipped so triton can compile its GSan runtime, so don't pull
+    # its suite into `check-all`; scan-build, plugin and HIP tests fail in the sandbox
+    (lib.cmakeBool "CLANG_INCLUDE_TESTS" false)
     # Cross compilation code taken/modified from LLVM 16 derivation
   ]
   ++ lib.optionals (!isNative) (
@@ -183,6 +197,15 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +w -R ./mlir
       patchShebangs ./mlir/test/mlir-reduce
     ''
+    # llvm-debuginfod uses HTTPServer directly, but in multicall driver + shared libs builds, the
+    # driver only links LLVMDebuginfod (which links LLVMHTTP privately):
+    # `undefined reference to symbol '_ZN4llvm10HTTPServer6listenEv'`
+    + ''
+      substituteInPlace llvm/tools/llvm-driver/CMakeLists.txt \
+        --replace-fail \
+          "target_link_libraries(llvm-driver PUBLIC LLVMDebuginfod)" \
+          "target_link_libraries(llvm-driver PUBLIC LLVMDebuginfod LLVMHTTP)"
+    ''
     # FileSystem permissions tests fail with various special bits
     + ''
       rm llvm/test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
@@ -199,6 +222,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Not sure why this fails
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
+    ''
+    # The second llvm-install-name-tool invocation fails with
+    # "is not a Mach-O file" on aarch64-linux, even on a fresh copy of
+    # the original yaml2obj output. Root cause unknown.
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      rm llvm/test/tools/llvm-objcopy/MachO/install-name-tool-change.test
     '';
 
   postInstall = ''
@@ -219,7 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage = "https://github.com/llvm/llvm-project";
     changelog = "https://github.com/llvm/llvm-project/releases/tag/llvmorg-${finalAttrs.version}";
-    license = with lib.licenses; [ ncsa ];
+    license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [
       SomeoneSerge
     ];

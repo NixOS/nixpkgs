@@ -22,14 +22,14 @@ let
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ff2mpv-rust";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kJpKcwwwGjFYE7R4ZhkEGK44QqxsUEB/Scj0RoySta4=";
   };
 
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ryze ];
     mainProgram = "ff2mpv-rust";
   };
-}
+})

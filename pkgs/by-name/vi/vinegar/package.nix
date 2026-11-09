@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   wine64Packages,
-  fetchpatch,
   fetchFromGitHub,
   glib,
   makeBinaryWrapper,
@@ -19,61 +18,98 @@
   vulkan-loader,
   wayland,
   winetricks,
-  xorg,
+  libxfixes,
+  libxcursor,
+  libx11,
   symlinkJoin,
   nix-update-script,
+  gettext,
 }:
 let
+  # Based on wine 11.19
+  kombuchaPatches = fetchFromGitHub {
+    name = "kombucha";
+    owner = "vinegarhq";
+    repo = "kombucha";
+    rev = "f72e02afb19b400d29958fde0cf2b183a92bb300";
+    hash = "sha256-FLFKL9h+8LUCVTk6aG3UY7M0EhdhOtdSCcObPpGvi94=";
+    meta.license = lib.licenses.lgpl21Only;
+  };
+
   wine =
-    (wine64Packages.staging.override {
+    (wine64Packages.unstable.override {
       dbusSupport = true;
       embedInstallers = true;
       pulseaudioSupport = true;
       x11Support = true;
       waylandSupport = true;
+      alsaSupport = false;
     }).overrideAttrs
       (oldAttrs: {
-        # https://github.com/flathub/org.vinegarhq.Vinegar/blob/a3c2f1249dec9548bd870027f55edcc58343b685/wine.yml#L31-L38
-        # --with-wayland is added by waylandSupport = true;
-        configureFlags = oldAttrs.configureFlags or [ ] ++ [
+        # https://github.com/vinegarhq/kombucha/blob/f72e02afb19b400d29958fde0cf2b183a92bb300/.github/workflows/build.yml
+        configureFlags = lib.remove "--enable-win64" (oldAttrs.configureFlags or [ ]) ++ [
+          "--disable-dxdiagn"
+          "--disable-mscoree"
+          "--disable-mshtml"
           "--disable-tests"
           "--disable-win16"
-          "--with-dbus"
-          "--with-pulse"
-          "--with-x"
-          "--without-oss"
+          "--disable-winedbg"
+          "--disable-winemenubuilder"
+          "--enable-archs=x86_64"
+          "--with-mingw"
+          "--without-alsa"
         ];
 
-        patches = oldAttrs.patches or [ ] ++ [
-          (fetchpatch {
-            name = "loader-prefer-winedllpath.patch";
-            url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/3e07606350d803fa386eb4c358836a230819380d/patches/wine/loader-prefer-winedllpath.patch";
-            hash = "sha256-89wnr2rIbyw490hHwckB9g1GKCXm6BERnplfwEUlNOg=";
-          })
-        ];
+        patches =
+          oldAttrs.patches or [ ]
+          ++ map (name: "${kombuchaPatches}/patches/stable/${name}") [
+            "0001-explorer-Enable-virtual-desktop-shell-by-default.patch"
+            "0002-ntdll-Add-kombucha_hacks.patch"
+            "0003-ntdll-Keep-more-LFH-block-groups-alive.patch"
+            "0004-ntdll-HACK-Search-for-ucrtbase-using-common-rules.patch"
+            "0005-ntdll-Use-default-loadorder-for-DXVK-DLLs.patch"
+            "0006-server-Force-persistence-to-0-seconds.patch"
+            "0007-server-Notify-if-ntsync-is-unavailable.patch"
+            "0008-win32u-Apply-work-area-changes-to-virtual-desktop-mo.patch"
+            "0009-explorer-Account-for-the-actual-size-of-the-taskbar-.patch"
+            "0010-explorer-Update-system-work-area-rect-to-exclude-tas.patch"
+            "0011-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
+            "0012-wine.inf-Add-KombuchaOverrides.patch"
+            "0013-wineboot-Add-WINEBOOT_HIDE_DIALOG-environment-variab.patch"
+            "0014-winewayland-Add-warning-regarding-experimental-statu.patch"
+            "0015-winex11.drv-Move-Xfixes-extension-query-to-process_a.patch"
+            "0016-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
+            "0017-winex11-Don-t-hide-cursor-under-X11-sessions.patch"
+            "0018-winex11-Raise-hidden-windows-above-siblings-in-virtu.patch"
+            "0019-server-print-tag-and-wine-commit-to-stdout.patch"
+          ];
 
-        postInstall = ''
-          cp $out/bin/wine $out/bin/wine64
+        postPatch = (oldAttrs.postPatch or "") + ''
+          substituteInPlace server/main.c \
+            --replace-fail 'using TAG, built from WINE_COMMIT.' 'using stable+20261009201837, built from Wine ${oldAttrs.version}.'
         '';
       });
 in
 buildGoModule (finalAttrs: {
   pname = "vinegar";
-  version = "1.8.1";
+  version = "1.9.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rc6LKZx0OOZDedtTpHIQT4grx1FejRiVnJnVDUddy4=";
+    hash = "sha256-5RwRiHVOYxMBL92Z8H+0VxJtz6Y7yXpv70UqesLINCk=";
   };
 
-  vendorHash = "sha256-TZhdwHom4DTgLs4z/eADeoKakMtyFrvVljDg4JJp7dc=";
+  vendorHash = "sha256-kS8awIGI5xHY4i7hvKMLcZKdMiFaoirokd3TSpMbC8c=";
 
   nativeBuildInputs = [
     glib
     makeBinaryWrapper
     pkg-config
+    gettext
   ];
 
   buildInputs = [
@@ -91,13 +127,15 @@ buildGoModule (finalAttrs: {
     wayland
     wine
     winetricks
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXfixes
+    libx11
+    libxcursor
+    libxfixes
   ];
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail 'gtk-update-icon-cache' '${lib.getExe' gtk4 "gtk4-update-icon-cache"}'
+    substituteInPlace internal/config/config.go \
+      --replace-fail 'cfg.Studio.WineRoot = dirs.WinePath' 'cfg.Studio.WineRoot = "${wine}"'
   '';
 
   buildPhase = ''

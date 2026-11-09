@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchgit,
-  setuptools,
+  setuptools_80,
   lazr-delegates,
   zope-interface,
   pytestCheckHook,
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-eYJY4JRoqTMG4j1jyiYrI8xEKdJ+wQYVVU/6OqVIodk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     lazr-delegates

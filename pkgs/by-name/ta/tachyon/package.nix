@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "tachyon";
   version = "0.99.5";
   src = fetchurl {
-    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
+    url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/tachyon-${version}.tar.gz";
     sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
   buildInputs =
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
       "linux-arm"
     else if stdenv.hostPlatform.system == "armv7l-linux" then
       "linux-arm"
+    else if stdenv.hostPlatform.system == "riscv64-linux" then
+      "linux-arm"
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       "macosx"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      "macosx-x86-64-thr"
     else if stdenv.hostPlatform.system == "i686-cygwin" then
       "win32"
     else if stdenv.hostPlatform.system == "x86_64-freebsd" then

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   catch2,
@@ -10,24 +9,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zug";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "arximboldi";
     repo = "zug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ti0EurhGQgWSXzSOlH9/Zsp6kQ/+qGjWbfHGTPpfehs=";
+    hash = "sha256-0HrvCpbVnxEvwvG4btXu0hRzdcHsGwM/HUWES/fmxrs=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arximboldi/zug/commit/c8c74ada30d931e40636c13763b892f20d3ce1ae.patch";
-      hash = "sha256-0x+ScRnziBeyHWYJowcVb2zahkcK2qKrMVVk2twhtHA=";
-    })
-
-    # https://github.com/arximboldi/zug/issues/45
-    ./gcc15.patch
-  ];
+  # this test assumes properties of a random sampling function, which no longer
+  # holds after gcc 16's implementation of
+  # "P0952R2: A new specification for std::generate_canonical"
+  # https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p0952r2.html
+  # https://github.com/arximboldi/zug/issues/54
+  #
+  # zug plumbs in its test suite in very non-standard ways, making it annoying
+  # to disable tests through standard ctest machinery. this appears to be the
+  # easiest way.
+  postPatch = ''
+    substituteInPlace test/transducer/random_sample.cpp --replace-fail \
+      'TEST_CASE("random_sample, simple")' \
+      'TEST_CASE("random_sample, simple", "[.]")'
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -47,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/arximboldi/zug";
     description = "Library for functional interactive c++ programs";
-    maintainers = with lib.maintainers; [ nek0 ];
+    maintainers = [ ];
     license = lib.licenses.boost;
   };
 })

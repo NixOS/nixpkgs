@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "batchspawner";
   version = "1.3.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "batchspawner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z7kB8b7s11wokTachLI/N+bdUV+FfCRTemL1KYQpzio=";
   };
 
@@ -54,12 +54,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "batchspawner" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Spawner for Jupyterhub to spawn notebooks using batch resource managers";
     mainProgram = "batchspawner-singleuser";
     homepage = "https://github.com/jupyterhub/batchspawner";
-    changelog = "https://github.com/jupyterhub/batchspawner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterhub/batchspawner/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

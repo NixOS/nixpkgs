@@ -35,11 +35,11 @@ let
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_5";
-    version = "5.7.6";
+    version = "5.7.9";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
+      sha256 = "3627332dbfc308cafad38c8e3fecb3635a283080402455901c5cfbc4bc84eb5e";
     };
 
     outputs = [
@@ -130,6 +130,7 @@ let
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
     '';
 
+    __darwinAllowLocalNetworking = true;
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
       cmocka

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
   version = "0-unstable-2021-02-08";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sommer";
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Password Safe V3 compatible password vault";
     mainProgram = "loxodo";
-    homepage = "https://www.christoph-sommer.de/loxodo/";
+    homepage = "https://github.com/sommer/loxodo";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];

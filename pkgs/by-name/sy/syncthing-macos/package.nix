@@ -3,15 +3,16 @@
   fetchurl,
   stdenv,
   undmg,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syncthing-macos";
-  version = "1.30.0-1";
+  version = "2.1.5-1";
 
   src = fetchurl {
     url = "https://github.com/syncthing/syncthing-macos/releases/download/v${finalAttrs.version}/Syncthing-${finalAttrs.version}.dmg";
-    hash = "sha256-9kerr89PZ90fQwxPfqrSlujuLYY9THv6Ne/cUErt3YU=";
+    hash = "sha256-UJA6KmIhhW4cNuPFxf856JcFPSmqH2ha1XZiLJMGnog=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -26,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Official frugal and native macOS Syncthing application bundle";

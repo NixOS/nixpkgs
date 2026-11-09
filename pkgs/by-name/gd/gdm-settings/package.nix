@@ -21,7 +21,7 @@
   ],
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gdm-settings";
   version = "5.0";
   pyproject = false;
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gdm-settings";
     repo = "gdm-settings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x7w6m0+uwkm95onR+ioQAoLlaPoUmLc0+NgawQIIa/Y=";
   };
 
@@ -49,20 +49,24 @@ python3Packages.buildPythonApplication rec {
   dependencies = [ python3Packages.pygobject3 ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--set-default HOST_DATA_DIRS ${dataDirs}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--set-default"
+      "HOST_DATA_DIRS"
+      "${dataDirs}"
+    )
+  '';
 
   pythonImportsCheck = [ "gdms" ];
 
   meta = {
     description = "Settings app for GNOME's Login Manager";
     homepage = "https://gdm-settings.github.io/";
-    changelog = "https://github.com/gdm-settings/gdm-settings/releases/tag/v${version}";
+    changelog = "https://github.com/gdm-settings/gdm-settings/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "gdm-settings";
     inherit (gdm.meta) platforms;
   };
-}
+})

@@ -1,30 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wcwidth";
-  version = "0.2.13";
+  version = "0.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cuoMBjmesobZeP3ttpI6nrR+HEhs5j6bTmT8GDA5crU=";
+  src = fetchFromGitHub {
+    owner = "jquast";
+    repo = "wcwidth";
+    tag = finalAttrs.version;
+    hash = "sha256-uztBkFbXnDNzOdQ5sd6S0yi8s3o+eLgvDXAFcTkHUvo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
-  # To prevent infinite recursion with pytest
-  doCheck = false;
+  # Otherwise tests import wcwidth from the sources instead of the installed files in $out.
+  #   AssertionError: C extension not loaded in extension mode
+  preCheck = ''
+    rm -rf wcwidth
+  '';
 
   pythonImportsCheck = [ "wcwidth" ];
 
@@ -37,8 +47,8 @@ buildPythonPackage rec {
       no 3rd-party dependencies.
     '';
     homepage = "https://github.com/jquast/wcwidth";
-    changelog = "https://github.com/jquast/wcwidth/releases/tag/${version}";
+    changelog = "https://github.com/jquast/wcwidth/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

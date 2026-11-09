@@ -49,19 +49,19 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
+  version = "25.0.0";
   # executables don't adhere to the string gnatcoll-* scheme
   pname =
     if onlyExecutable then
       builtins.replaceStrings [ "_" ] [ "-" ] component
     else
       "gnatcoll-${component}";
-  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0q35ii0aa4hh59v768l5cilg1b30a4ckcvlbfy0lkcbp3rcfnbz3";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   # as we usually do in nixpkgs where possible
   postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     for f in gnatcoll_db2ada/Makefile gnatinspect/Makefile; do
-      substituteInPlace "$f" --replace "=static" "=relocatable"
+      substituteInPlace "$f" --replace-fail "=static" "=relocatable"
     done
   '';
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-ndk";
   version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "cargo-ndk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1LtjBbfrHKgfqcwz40l7d4+d9C4vY/BKI2P2Oshk+a0=";
   };
 
@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo extension for building Android NDK projects";
     mainProgram = "cargo-ndk";
     homepage = "https://github.com/bbqsrc/cargo-ndk";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
   };
-}
+})

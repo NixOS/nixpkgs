@@ -12,22 +12,24 @@
   python3,
   lib,
   stdenv,
-  systemd,
+  systemdLibs,
   xkeyboard_config,
-  xorg,
+  libxrandr,
+  libxext,
+  libxkbfile,
   wrapGAppsHook3,
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-desktop";
-  version = "6.6.1";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
-    tag = version;
-    hash = "sha256-vBRaUXsPAPOpMEs2pl6AaaKIMeeXB0UdCb1hzYd43KY=";
+    tag = finalAttrs.version;
+    hash = "sha256-AcUJ9anKuvUAJKaQVHbkYShmrlSHG35gV/NIkPgJojk=";
   };
 
   outputs = [
@@ -44,11 +46,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf
     isocodes
-    systemd
+    systemdLibs
     xkeyboard_config
-    xorg.libxkbfile
-    xorg.libXext
-    xorg.libXrandr
+    libxkbfile
+    libxext
+    libxrandr
   ];
 
   nativeBuildInputs = [
@@ -86,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

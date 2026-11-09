@@ -50,7 +50,7 @@ let
           (lib.concatStringsSep "," permissions)
           dataset
         ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") ''
+      ${lib.optionalString ((dirOf dataset) != ".") ''
         else
           ${lib.escapeShellArgs [
             "/run/booted-system/sw/bin/zfs"
@@ -58,7 +58,7 @@ let
             cfg.user
             (lib.concatStringsSep "," permissions)
             # Remove the last part of the path
-            (builtins.dirOf dataset)
+            (dirOf dataset)
           ]}
       ''}
       fi
@@ -82,14 +82,14 @@ let
         (lib.concatStringsSep "," permissions)
         dataset
       ]}
-      ${lib.optionalString ((builtins.dirOf dataset) != ".") (
+      ${lib.optionalString ((dirOf dataset) != ".") (
         lib.escapeShellArgs [
           "/run/booted-system/sw/bin/zfs"
           "unallow"
           cfg.user
           (lib.concatStringsSep "," permissions)
           # Remove the last part of the path
-          (builtins.dirOf dataset)
+          (dirOf dataset)
         ]
       )}
     ''}";
@@ -240,7 +240,7 @@ in
                 '';
               };
 
-              recursive = lib.mkEnableOption ''the transfer of child datasets'';
+              recursive = lib.mkEnableOption "the transfer of child datasets";
 
               sshKey = lib.mkOption {
                 type = with lib.types; nullOr (coercedTo path toString str);
@@ -362,7 +362,6 @@ in
           {
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
             after = [ "zfs.target" ];
-            startAt = cfg.interval;
             # syncoid may need zpool to get feature@extensible_dataset
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
@@ -433,7 +432,11 @@ in
               RestrictSUIDSGID = true;
               RootDirectory = "/run/syncoid/${escapeUnitName name}";
               RootDirectoryStartOnly = true;
-              BindPaths = [ "/dev/zfs" ];
+              BindPaths = [
+                "/dev/zfs"
+                # Required if outside of /var
+                config.users.users.${cfg.user}.home
+              ];
               BindReadOnlyPaths = [
                 builtins.storeDir
                 "/etc"
@@ -459,7 +462,8 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@timer"
+                # NB: pv after 1.11.0 uses timer syscalls (specifically setitimer)
+                # "~@timer"
               ];
               SystemCallArchitectures = "native";
               # This is for BindPaths= and BindReadOnlyPaths=
@@ -471,6 +475,23 @@ in
           c.service
         ]
       )
+    ) cfg.commands;
+
+    systemd.timers = lib.concatMapAttrs (
+      name: c:
+      lib.optionalAttrs
+        (config.systemd.services."syncoid-${escapeUnitName name}".enable && cfg.interval != [ ])
+        {
+          "syncoid-${escapeUnitName name}" = {
+            wantedBy = [ "timers.target" ];
+            timerConfig = {
+              OnCalendar = cfg.interval;
+              # Backup timers should catch up on missed windows (e.g. the
+              # machine was powered off), like restic and btrbk do.
+              Persistent = true;
+            };
+          };
+        }
     ) cfg.commands;
   };
 

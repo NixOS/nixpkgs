@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rosenpass";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "rosenpass";
     repo = "rosenpass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fQIeKGyTkFWUV9M1o256G4U1Os5OlVsRZu+5olEkbD4=";
+    hash = "sha256-i05iIZJX3pvw/9J/rM7UBY9a2YRv25sdJU4duxw0qw8=";
   };
 
-  cargoHash = "sha256-vx6kSdDOXiIp2626yKVieDuS9DD5/wKyXutMiKMKn24=";
+  cargoHash = "sha256-YzPile/lvNMSEgBsKuKhxgv+JnKT3CtuTpfNM8gJctI=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate
@@ -50,16 +50,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Build post-quantum-secure VPNs with WireGuard";
     homepage = "https://rosenpass.eu/";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = with lib.maintainers; [ wucke13 ];
     teams = with lib.teams; [ ngi ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     mainProgram = "rosenpass";

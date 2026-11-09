@@ -7,7 +7,7 @@
   buildPackages,
   optimize ? false, # impure hardware optimizations
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gf2x";
   version = "1.3.0";
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.inria.fr";
     owner = "gf2x";
     repo = "gf2x";
-    rev = "gf2x-${version}";
-    sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
+    rev = "gf2x-${finalAttrs.version}";
+    hash = "sha256-LZKg0WE2hhoPd7WE8tAyc8TPoaprN8HJMuRvEsGT5RE=";
   };
 
   patches = [
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -14,14 +14,14 @@
   icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsearch";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
     repo = "fsearch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VBcoDxh4ip2zLBcXVHDe9s1lVRQF4bZJKsGUt6sPcos=";
   };
 
@@ -41,11 +41,6 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  preFixup = ''
-    substituteInPlace $out/share/applications/io.github.cboxdoerfer.FSearch.desktop \
-      --replace "Exec=fsearch" "Exec=$out/bin/fsearch"
-  '';
-
   meta = {
     description = "Fast file search utility for Unix-like systems based on GTK+3";
     homepage = "https://github.com/cboxdoerfer/fsearch.git";
@@ -55,4 +50,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fsearch";
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/fsearch.x86_64-darwin
   };
-}
+})

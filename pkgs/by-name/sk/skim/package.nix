@@ -1,18 +1,19 @@
 {
   lib,
-  stdenv,
+  zellij,
+  ncurses,
+  hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   runtimeShell,
   rustPlatform,
-  skim,
-  testers,
+  versionCheckHook,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "0.20.5";
+  version = "5.9.0";
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -23,17 +24,23 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "skim-rs";
     repo = "skim";
-    tag = "v${version}";
-    hash = "sha256-BX0WW7dNpNLwxlclFCxj0QnrQ58lchKiEnmethzceqk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vlj8RfKouWDUHOOW6L/kXitSsxcTvhmpGmo7rrW9zv8=";
   };
 
   postPatch = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    substituteInPlace plugin/skim.vim \
+      --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-t2hkWTb/GhesNCWe2/YunZFo26xcXMjoNCiaKaFLOBk=";
+  cargoHash = "sha256-BBgrhqynqVYX2Tfytm7cN/wKHePblDqm79GEX8qyvgk=";
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [
+    zellij
+    ncurses
+    hexdump
+  ];
 
   postBuild = ''
     cat <<SCRIPT > sk-share
@@ -58,19 +65,27 @@ rustPlatform.buildRustPackage rec {
       --zsh shell/completion.zsh
   '';
 
-  # Doc tests are broken on aarch64
-  # https://github.com/lotabout/skim/issues/440
-  cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
+  useNextest = true;
+
+  checkPhase = ''
+    cargo nextest run --release --offline --lib --bins --examples --tests --profile ci
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/skim-rs/skim";
-    changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
+    changelog = "https://github.com/skim-rs/skim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
@@ -79,4 +94,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "sk";
   };
-}
+})

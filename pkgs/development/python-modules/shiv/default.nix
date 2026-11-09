@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "shiv";
   version = "1.0.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -41,6 +41,11 @@ buildPythonPackage rec {
     "test_preamble_no_pip"
     "test_alternate_root"
     "test_alternate_root_environment_variable"
+    # Network required (pip install in test fails in sandbox)
+    "test_ensure_no_modify"
+    "test_find_entry_point"
+    "test_find_entry_point_two_points"
+    "test_console_script_exists"
   ];
 
   meta = {

@@ -9,12 +9,12 @@
   libxkbcommon,
   wayland,
   fontconfig,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxxf86vm,
+  libxtst,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -23,12 +23,12 @@ let
     libGL
     libxkbcommon
     wayland
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libXtst
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
+    libxtst
     fontconfig
   ];
   jdkWithFX = jdk.override { enableJavaFX = true; };
@@ -71,9 +71,9 @@ maven.buildMavenPackage rec {
 
   mvnHash = # OpenJFX artifacts are platform dependent
     if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-      "sha256-gerjxTj8UQEVthMO3unWPEG7SPseMt5JPPureC/wUsw="
+      "sha256-ZsEppL26eMoZr7DohbfrV57qRFDl+3UiTf4XyGLr3a4="
     else
-      "sha256-LoOiLisqc99gIGClpVe8tq5/2prmyyOzLDkpmuSgwVo=";
+      "sha256-mA2rBKDp3V3xfsrnAwJn5m7+h+2azu6SPczSsO75u4g=";
 
   installPhase = ''
     runHook preInstall
@@ -114,6 +114,6 @@ maven.buildMavenPackage rec {
     mainProgram = "vatprism";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thepuzzlemaker ];
+    maintainers = with lib.maintainers; [ tahlonbrahic ];
   };
 }

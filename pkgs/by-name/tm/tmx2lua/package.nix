@@ -4,14 +4,16 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tmx2lua";
   version = "1.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hawkthorne";
     repo = "tmx2lua";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vORmsr1hcdPzZYZZJ9GTOJ5B/fT2sp47Kc1dzbgDW9M=";
   };
 
@@ -20,9 +22,9 @@ buildGoModule rec {
   meta = {
     description = "Convert TMX files to Lua for LÖVE";
     homepage = "https://github.com/hawkthorne/tmx2lua";
-    changelog = "https://github.com/hawkthorne/tmx2lua/releases/tag/v${version}";
+    changelog = "https://github.com/hawkthorne/tmx2lua/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "tmx2lua";
   };
-}
+})

@@ -11,6 +11,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-rom";
   version = "48";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "X16Community";
@@ -57,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ pluiedev ];
     inherit (cc65.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

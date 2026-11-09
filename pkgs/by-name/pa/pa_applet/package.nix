@@ -9,8 +9,8 @@
   autoconf,
   automake,
   libnotify,
-  libX11,
-  xf86inputevdev,
+  libx11,
+  xf86-input-evdev,
 }:
 
 stdenv.mkDerivation {
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     libpulseaudio
     glibc
     libnotify
-    libX11
-    xf86inputevdev
+    libx11
+    xf86-input-evdev
   ];
 
   preConfigure = ''
@@ -43,12 +43,16 @@ stdenv.mkDerivation {
   '';
 
   # work around a problem related to gtk3 updates
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=unused-but-set-variable"
+  ];
 
   postInstall = "";
 
   meta = {
     description = "";
+    homepage = "https://github.com/fernandotcl/pa-applet";
     mainProgram = "pa-applet";
     license = lib.licenses.bsd2;
     maintainers = [ ];

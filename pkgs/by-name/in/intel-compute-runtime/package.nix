@@ -1,24 +1,25 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   intel-gmmlib,
   intel-graphics-compiler,
   level-zero,
   libva,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "25.48.36300.8";
+  version = "26.40.40196.8";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-ymXvbDX01WnsQ2pxCnQU1dKhK+/Jzz1m3Tgg665mdcM=";
+    tag = finalAttrs.version;
+    hash = "sha256-Xzx0ayQHHo5JcokmTyWdcqTFI0nw985sl6Rq+8ouRQA=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +43,8 @@ stdenv.mkDerivation rec {
     # disable spectre mitigations (already mitigated in the kernel)
     # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
     (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
-  ];
-
-  outputs = [
-    "out"
-    "drivers"
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   # causes redefinition of _FORTIFY_SOURCE
@@ -55,9 +53,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
-
-    mkdir -p $drivers/lib
-    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''
@@ -69,19 +64,28 @@ stdenv.mkDerivation rec {
         stdenv.cc.cc
       ]
     } \
-      $out/lib/intel-opencl/libigdrcl.so
+      $out/lib/intel-opencl/libigdrcl.so \
+      $out/lib/libze_intel_gpu.so.1 \
+      $out/lib/libocloc.so
   '';
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
 
   meta = {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      recutita
+    ];
   };
-}
+})

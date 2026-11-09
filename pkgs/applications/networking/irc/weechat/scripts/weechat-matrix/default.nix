@@ -60,7 +60,7 @@ buildPythonPackage {
     attrs
     logbook
     pygments
-    (matrix-nio.override { withOlm = true; })
+    (matrix-nio.override { withVodozemac = true; })
     aiohttp
     requests
   ];
@@ -70,7 +70,7 @@ buildPythonPackage {
   dontBuild = true;
   doCheck = false;
 
-  format = "other";
+  pyproject = false;
 
   installPhase = ''
     mkdir -p $out/share $out/bin

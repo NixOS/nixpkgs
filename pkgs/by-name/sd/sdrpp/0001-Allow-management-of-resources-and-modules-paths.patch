@@ -1,4 +1,4 @@
-From 89189428a6857bc5607d8e28b9090c0d8bd0f8e3 Mon Sep 17 00:00:00 2001
+From 746644667cff9490d0f9a5f4ab70c76137dc80a2 Mon Sep 17 00:00:00 2001
 From: Francesco Zanini <francesco@zanini.me>
 Date: Mon, 6 Oct 2025 16:19:55 +0200
 Subject: [PATCH] Allow management of resources and modules paths
@@ -13,17 +13,20 @@ This commit adds some functionality to the config manager to replace
 
 The prefix path used is either the installation directory, or the
 content of the `SDRPP_PREFIX` environment variable, if present.
+
+NOTE: Paths are transformed using a *temporary copy* of the config. This fixes
+the issue described here https://github.com/NixOS/nixpkgs/issues/467610.
 ---
- core/src/config.cpp | 31 ++++++++++++++++++++++++++++++-
+ core/src/config.cpp | 34 ++++++++++++++++++++++++++++++++--
  core/src/config.h   |  4 +++-
  core/src/core.cpp   | 15 ++-------------
- 3 files changed, 35 insertions(+), 15 deletions(-)
+ 3 files changed, 37 insertions(+), 16 deletions(-)
 
 diff --git a/core/src/config.cpp b/core/src/config.cpp
-index 6de1888fd803d4bbe04c7a4ed2187103dd8a5081..4cab471b24b985ca717afae4322618759ffd47b4 100644
+index 6de1888f..dfde5628 100644
 --- a/core/src/config.cpp
 +++ b/core/src/config.cpp
-@@ -41,12 +41,16 @@ void ConfigManager::load(json def, bool lock) {
+@@ -41,13 +41,18 @@ void ConfigManager::load(json def, bool lock) {
          conf = def;
          save(false);
      }
@@ -36,11 +39,14 @@ index 6de1888fd803d4bbe04c7a4ed2187103dd8a5081..4cab471b24b985ca717afae432261875
  void ConfigManager::save(bool lock) {
      if (lock) { mtx.lock(); }
      std::ofstream file(path.c_str());
-+    transformPaths(conf, false);
-     file << conf.dump(4);
+-    file << conf.dump(4);
++    auto tmp_conf = conf;
++    transformPaths(tmp_conf, false);
++    file << tmp_conf.dump(4);
      file.close();
      if (lock) { mtx.unlock(); }
-@@ -98,4 +102,29 @@ void ConfigManager::autoSaveWorker() {
+ }
+@@ -98,4 +103,29 @@ void ConfigManager::autoSaveWorker() {
              termCond.wait_for(lock, std::chrono::milliseconds(1000), [this]() { return termFlag; });
          }
      }
@@ -73,10 +79,10 @@ index 6de1888fd803d4bbe04c7a4ed2187103dd8a5081..4cab471b24b985ca717afae432261875
 +    }
 +}
 diff --git a/core/src/config.h b/core/src/config.h
-index fbbdeb4a54e06524a399e35afe8e187732bf851e..f9deef01e8d0850ab65a68ac33c9ed124486a1d5 100644
+index fbbdeb4a..f9deef01 100644
 --- a/core/src/config.h
 +++ b/core/src/config.h
-@@ -33,4 +33,6 @@ class ConfigManager {
+@@ -33,4 +33,6 @@ private:
      std::mutex termMtx;
      std::condition_variable termCond;
      volatile bool termFlag = false;
@@ -86,7 +92,7 @@ index fbbdeb4a54e06524a399e35afe8e187732bf851e..f9deef01e8d0850ab65a68ac33c9ed12
 +    static void transformPaths(json& conf, bool expand);
 +};
 diff --git a/core/src/core.cpp b/core/src/core.cpp
-index 37358062ed957e562bf971fa121d885073f2827c..f1b5396cad3154546bb3a2322403b7f3618ad253 100644
+index 37358062..f1b5396c 100644
 --- a/core/src/core.cpp
 +++ b/core/src/core.cpp
 @@ -267,19 +267,8 @@ int sdrpp_main(int argc, char* argv[]) {
@@ -111,3 +117,6 @@ index 37358062ed957e562bf971fa121d885073f2827c..f1b5396cad3154546bb3a2322403b7f3
  
      // Load config
      flog::info("Loading config");
+-- 
+2.52.0
+

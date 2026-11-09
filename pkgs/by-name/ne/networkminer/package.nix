@@ -4,7 +4,6 @@
   fetchzip,
   dos2unix,
   msbuild,
-  gtk2,
   mono,
   dotnetCorePackages,
 }:
@@ -61,17 +60,12 @@ buildDotnetModule rec {
     cp -r NetworkMiner/bin/Release $out/share/NetworkMiner
     makeWrapper ${lib.getExe mono} $out/bin/NetworkMiner \
       --add-flags "$out/share/NetworkMiner/NetworkMiner.exe" \
-      --add-flags "--noupdatecheck" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          gtk2
-        ]
-      }
+      --add-flags "--noupdatecheck"
 
     install -D NetworkMiner/NetworkMiner.desktop $out/share/applications/NetworkMiner.desktop
     substituteInPlace $out/share/applications/NetworkMiner.desktop \
       --replace-fail "Icon=./Images/NetworkMiner_logo_313x313.png" "Icon=NetworkMiner"
-    install -D NetworkMiner/networkminericon-96x96.png $out/share/pixmaps/NetworkMiner.png
+    install -D NetworkMiner/networkminericon-96x96.png $out/share/icons/hicolor/96x96/apps/NetworkMiner.png
 
     runHook postInstall
   '';

@@ -7,20 +7,23 @@
   rustPlatform,
   pkg-config,
   perl,
-  ffmpeg,
+  ffmpeg_8,
   alsa-lib,
   gtk3,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phira-unwrapped";
-  version = "0.6.7";
+  version = "0.8.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TeamFlos";
     repo = "phira";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4WIvLfKeh+quu7dHKMlUKt+NQnui2/txlFYZoU3voPA=";
+    hash = "sha256-Ev0TJVjrXwHg+wgQCTBaUmpgwC/fA62ldrSrBzLQrXI=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +36,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    # The handwritten FFI bindings in prpr-avc target FFmpeg 8.
+    ffmpeg_8
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for crate alsa-sys
@@ -44,20 +49,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # use dynamically linked ffmpeg instead of expecting static lib
     ./ffmpeg.patch
 
-    # error[E0554]: `#![feature]` may not be used on the stable release channel
-    ./stable-features.patch
-
-    # missing macro from tracing crate
+    # missing warn macro import
     ./tracing.patch
 
     # allow using env var to specify location of assets and data
     ./assets.patch
   ];
 
-  cargoHash = "sha256-6mRb3M56G20fA+px1cZyrGpel0v54qoVAQK2ZgTzkmI=";
+  cargoHash = "sha256-EqYKFRBd79dYWH9PrzHJpoMoSEE9UIG6lbHTf+hxBU8=";
 
   # The developer put assets necessary for this test in gitignore, so it cannot run.
-  checkFlags = [ "--skip test_parse_chart" ];
+  checkFlags = [ "--skip=test_parse_chart" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -73,6 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 assets/icon.png $out/share/icons/hicolor/128x128/apps/phira.png
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Rhythm game with custom charts and multiplayer";

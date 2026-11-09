@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  xorg,
+  mkfontscale,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
     mkdir -p "$out/share/fonts/misc"

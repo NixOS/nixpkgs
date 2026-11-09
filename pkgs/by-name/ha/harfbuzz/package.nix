@@ -13,6 +13,11 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withRaster ? false,
+  withVector ? false,
+  withGPU ? false,
+  withCairo ? false,
+  cairo,
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
@@ -31,15 +36,22 @@
   qt5,
   testers,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "12.2.0";
+  version = "14.5.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7LYDqkJqiyRmVxhme9pkqEwVBNt0VO5Mrb02Lupk5UU=";
+    hash = "sha256-fi+k6MfJjo2BQGcfV3JUKvqqaszPvXRlBohrbYX3+NY=";
   };
+
+  # This test fails reliably when executed through mesonCheckPhase but passes with
+  # a direct 'meson test' checkPhase, the validated symbols are fine but msan is not happy
+  # skipping this for now as it is not relevant for the packaging
+  patches = [
+    ./disable-check-symbols-test.patch
+    ./fix-disabled-vector-tests.patch
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -59,10 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # upstream recommends cairo, but it is only used for development purposes
-    # and is not part of the library.
+    # and hb-raster and is not part of the main library.
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
-    (lib.mesonEnable "cairo" false)
+    (lib.mesonEnable "cairo" withCairo)
+    # experimental libraries
+    (lib.mesonEnable "raster" withRaster)
+    (lib.mesonEnable "vector" withVector)
+    (lib.mesonEnable "gpu" withGPU)
+    # hb-gpu has a dependency on glfw3, which would introduce a cyclic dependency on harfbuzz
+    # (glfw3 -> libdecor -> gtk3 -> harfbuzz)
+    (lib.mesonEnable "gpu_demo" false)
     # chafa is only used in a development utility, not in the library
     (lib.mesonEnable "chafa" false)
     (lib.mesonEnable "coretext" withCoreText)
@@ -87,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection;
+  ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional withCairo cairo;
 
   buildInputs = [
     glib
@@ -102,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doCheck = true;
+
+  # test_native_coretext_variations depends on the system fonts.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts"
+  ];
 
   # Slightly hacky; some pkgs expect them in a single directory.
   postFixup = lib.optionalString withIcu ''
@@ -137,6 +162,10 @@ stdenv.mkDerivation (finalAttrs: {
       "harfbuzz"
       "harfbuzz-gobject"
       "harfbuzz-subset"
-    ];
+      "harfbuzz-vector"
+    ]
+    ++ (lib.optional withIcu "harfbuzz-icu")
+    ++ (lib.optional withRaster "harfbuzz-raster")
+    ++ (lib.optional withCairo "harfbuzz-cairo");
   };
 })

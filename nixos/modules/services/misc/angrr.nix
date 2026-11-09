@@ -27,6 +27,16 @@ let
         keep-latest-n = 5;
         keep-booted-system = true;
         keep-current-system = true;
+        keep-n-per-bucket = [
+          {
+            bucket-window = "1 day";
+            bucket-amount = 7;
+          }
+          {
+            bucket-window = "1 week";
+            bucket-amount = 4;
+          }
+        ];
       };
       user = {
         enable = false;
@@ -198,6 +208,13 @@ let
           Whether to keep the last booted system generation. Only useful for system profiles.
         '';
       };
+      keep-n-per-bucket = lib.mkOption {
+        type = with lib.types; listOf (submodule keepNPerBucketOptions);
+        default = [ ];
+        description = ''
+          Specify a list of rules having n, bucket-window, and bucket-amount attributes.
+        '';
+      };
     };
   };
   filterOptions = {
@@ -214,6 +231,31 @@ let
         default = [ ];
         description = ''
           Extra command-line arguments pass to the external filter program.
+        '';
+      };
+    };
+  };
+  keepNPerBucketOptions = {
+    freeformType = toml.type;
+    options = {
+      n = lib.mkOption {
+        type = lib.types.int;
+        default = 1;
+        description = ''
+          Retain n generations every bucket-window duration for bucket-amount buckets.
+        '';
+      };
+      bucket-window = lib.mkOption {
+        type = lib.types.str;
+        description = ''
+          The duration of the bucket window.
+        '';
+      };
+      bucket-amount = lib.mkOption {
+        type = lib.types.int;
+        default = 1;
+        description = ''
+          The number of buckets to keep.
         '';
       };
     };
@@ -236,7 +278,6 @@ in
 {
   meta.maintainers = pkgs.angrr.meta.maintainers;
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "angrr" "period" ] configFileMigrationMsg)
     (lib.mkRemovedOptionModule [ "services" "angrr" "removeRoot" ] configFileMigrationMsg)
     (lib.mkRemovedOptionModule [ "services" "angrr" "ownedOnly" ] configFileMigrationMsg)
   ];
@@ -265,6 +306,15 @@ in
         default = [ ];
         description = ''
           Extra command-line arguments pass to angrr.
+        '';
+      };
+      period = lib.mkOption {
+        type = with lib.types; nullOr str;
+        default = null;
+        description = ''
+          If set, it configures {option}`services.angrr.settings` to a preset that
+          monitor .direnv, results, system, and user profiles,
+          retaining GC roots that are younger than the specified period.
         '';
       };
       settings = lib.mkOption {
@@ -371,6 +421,38 @@ in
         programs.direnv.direnvrcExtra = lib.mkIf direnvCfg.autoUse ''
           _angrr_auto_use "$@"
         '';
+      })
+
+      # When period is set, configure a preset retention policy
+      # Users can still override settings via services.angrr.settings
+      (lib.mkIf (cfg.period != null) {
+        services.angrr.settings = {
+          temporary-root-policies = {
+            direnv = {
+              path-regex = "/\\.direnv/";
+              period = cfg.period;
+            };
+            result = {
+              path-regex = "/result[^/]*$";
+              period = cfg.period;
+            };
+          };
+          profile-policies = {
+            system = {
+              profile-paths = [ "/nix/var/nix/profiles/system" ];
+              keep-since = cfg.period;
+              keep-booted-system = true;
+              keep-current-system = true;
+            };
+            user = {
+              profile-paths = [
+                "~/.local/state/nix/profiles/profile"
+                "/nix/var/nix/profiles/per-user/root/profile"
+              ];
+              keep-since = cfg.period;
+            };
+          };
+        };
       })
     ]
   );

@@ -3,7 +3,6 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   perl,
   xcbuild,
   writableTmpDirAsHomeHook,
@@ -14,27 +13,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.12.0";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-Pas9NQKLblVuB0Gx4j6Y64Mb2+RaCg7iquSWtN4K7kU=";
+    hash = "sha256-bSkS7WNIpXaOwkgfld4CtQBKhz1vLeVlWbK6Qeb++T4=";
   };
-
-  patches = [
-    ./fix-lockfile.patch
-  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-N7e8WKk2REEH4gP5c7k5zsu3n44hFFLxQ2X35viMuwM=";
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -59,6 +54,11 @@ buildNpmPackage (finalAttrs: {
     "--ignore-scripts"
   ];
 
+  # The default `npm prune`` is scoped to npmWorkspace and leaves root devDependencies behind.
+  # Prune from the repository root before installing node_modules.
+  # Note, this is an issue with npm 11+, see https://github.com/npm/cli/issues/8277
+  dontNpmPrune = true;
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
@@ -73,6 +73,10 @@ buildNpmPackage (finalAttrs: {
     shopt -s globstar
     rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
     shopt -u globstar
+    # Save closure size by pruning all non-production dependencies before installation
+    npm prune --omit=dev --offline --ignore-scripts --legacy-peer-deps
+    # Delete all JS sourcemaps, since they are unnneeded.
+    find . -type f -name '*.map' -delete
   '';
 
   postInstall = ''
@@ -93,6 +97,7 @@ buildNpmPackage (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
+    inherit (finalAttrs) npmDeps;
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
@@ -113,6 +118,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
       dotlambda
+      caverav
     ];
   };
 })

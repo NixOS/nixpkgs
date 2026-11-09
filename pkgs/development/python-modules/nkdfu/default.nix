@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "nkdfu";
   version = "0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Python tool for Nitrokeys' firmware update";
     mainProgram = "nkdfu";
     homepage = "https://github.com/Nitrokey/nkdfu";
-    license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ frogamic ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

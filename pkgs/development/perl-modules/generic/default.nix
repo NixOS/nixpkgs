@@ -12,7 +12,6 @@
     "out"
     "devdoc"
   ],
-  src ? null,
 
   # enabling or disabling does nothing for perl packages so set it explicitly
   # to false to not change hashes when enableParallelBuildingByDefault is enabled
@@ -48,6 +47,10 @@ lib.throwIf (attrs ? name)
       defaultMeta = {
         homepage = "https://metacpan.org/dist/${attrs.pname}";
         inherit (perl.meta) platforms;
+        identifiers.purlParts = {
+          type = "cpan";
+          spec = "${attrs.pname}@${attrs.version}";
+        };
       };
 
       package = stdenv.mkDerivation (
@@ -64,7 +67,6 @@ lib.throwIf (attrs ? name)
 
           inherit
             outputs
-            src
             doCheck
             checkTarget
             enableParallelBuilding

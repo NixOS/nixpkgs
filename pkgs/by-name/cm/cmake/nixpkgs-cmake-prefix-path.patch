@@ -1,8 +1,8 @@
 diff --git a/Source/cmFindBase.cxx b/Source/cmFindBase.cxx
-index b8d4765692..902c1e5290 100644
+index e9e8dfd4b9..d115cd1897 100644
 --- a/Source/cmFindBase.cxx
 +++ b/Source/cmFindBase.cxx
-@@ -312,6 +312,11 @@ void cmFindBase::FillCMakeEnvironmentPath()
+@@ -308,6 +308,11 @@ void cmFindBase::FillCMakeEnvironmentPath()
    // Add CMAKE_*_PATH environment variables
    std::string var = cmStrCat("CMAKE_", this->CMakePathName, "_PATH");
    paths.AddEnvPrefixPath("CMAKE_PREFIX_PATH");
@@ -15,10 +15,10 @@ index b8d4765692..902c1e5290 100644
  
    if (this->CMakePathName == "PROGRAM") {
 diff --git a/Source/cmFindPackageCommand.cxx b/Source/cmFindPackageCommand.cxx
-index 6201894fd1..9533862a2b 100644
+index 2f2c5c6662..4594afd0e7 100644
 --- a/Source/cmFindPackageCommand.cxx
 +++ b/Source/cmFindPackageCommand.cxx
-@@ -2467,6 +2467,7 @@ void cmFindPackageCommand::FillPrefixesCMakeEnvironment()
+@@ -2520,6 +2520,7 @@ void cmFindPackageCommand::FillPrefixesCMakeEnvironment()
  
    // And now the general CMake environment variables
    paths.AddEnvPath("CMAKE_PREFIX_PATH");

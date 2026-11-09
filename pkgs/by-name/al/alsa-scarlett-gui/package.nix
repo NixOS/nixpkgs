@@ -11,24 +11,27 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-scarlett-gui";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "alsa-scarlett-gui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DkfpMK0T67B4mnriignf4hx6Ifddls0rN0SxyfEsPZg=";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=discarded-qualifiers"
+  ];
 
   makeFlags = [
     "DESTDIR=\${out}"
     "PREFIX=''"
   ];
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace file.c \
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/alsa-scarlett-gui --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
 
     substituteInPlace $out/share/applications/vu.b4.alsa-scarlett-gui.desktop \
-      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
+      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=alsa-scarlett-gui"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE
@@ -63,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mdorman ];
     platforms = lib.platforms.linux;
   };
-}
+})

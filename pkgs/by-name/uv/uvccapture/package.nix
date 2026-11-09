@@ -13,12 +13,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uvccapture";
   version = "0.5";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_${version}.orig.tar.gz";
+    url = "mirror://debian/pool/main/u/uvccapture/uvccapture_${finalAttrs.version}.orig.tar.gz";
     sha256 = "1b3akkcmr3brbf93akr8xi20w8zqf2g0qfq928500wy04qi6jqpi";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "uvccapture";
   };
-}
+})

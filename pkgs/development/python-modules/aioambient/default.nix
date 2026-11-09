@@ -11,7 +11,6 @@
   pytestCheckHook,
   python-engineio,
   python-socketio,
-  pythonOlder,
   websockets,
   yarl,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "aioambient";
   version = "2025.02.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bachya";

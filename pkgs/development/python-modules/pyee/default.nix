@@ -6,7 +6,6 @@
   pytest-asyncio_0,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   twisted,
@@ -16,15 +15,18 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "13.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "13.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s5HjxaQ00fURiiVhUAHbyPZpz0EKtn0ExNTgfFVIHDc=";
+    hash = "sha256-C5MffBRTVmftTH4NUxcWNocV6GC5iHcPx+uFeNH2f8g=";
   };
+
+  postPatch = ''
+    # specifies a string for addopts, but must be a list since pytest9
+    sed -i '/addopts/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     setuptools

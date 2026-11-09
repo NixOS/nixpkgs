@@ -2,21 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imagesize";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aRUERK/7nLDVzFqSs2dvCy+3zZrjnpR6XhGja0SXzUo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-srpqTepIen681TJI00dqykSdMNsSot3l4MXKliT9d+U=";
   };
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "imagesize" ];
 
   meta = {
     description = "Getting image size from png/jpeg/jpeg2000/gif file";
     homepage = "https://github.com/shibukawa/imagesize_py";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/shibukawa/imagesize_py/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

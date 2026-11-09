@@ -4,18 +4,18 @@
   fetchFromGitHub,
   cmake,
   libGL,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libprojectm";
-  version = "4.1.6";
+  version = "4.1.8";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IUVll+nRvIAOxrb16gWb9OpKzMRRuj28j/v+LvaLY5Y=";
+    hash = "sha256-gwAbEb2mYzTYVcOHEejJvAuM9E7BC5iEF2AQqHqdjFA=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    xorg.libX11
+    libx11
   ];
 
   strictDeps = true;

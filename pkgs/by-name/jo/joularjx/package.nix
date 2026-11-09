@@ -8,18 +8,18 @@
 
 maven.buildMavenPackage rec {
   pname = "joularjx";
-  version = "2.9.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "joular";
     repo = "joularjx";
     rev = version;
-    hash = "sha256-/Drv6PVMmz3QNEu8zMokTKBZeYWMjuKczu18qKqNAx4=";
+    hash = "sha256-hr8a3Qr1LdFfGBLVJVkm6hhCW7knG4VpXj7nCtcptuU=";
   };
 
-  mvnHash = "sha256-TKHo0hZBjgBeUWYvbjF3MZ6Egp3qB2LGwWfrGrcVkOk=";
+  mvnHash = "sha256-AZqYh7Qt+ReP04btjAxotFEG61L/QzmEjTyUSlrwu1g=";
 
-  mvnParameters = "-DskipTests";
+  mvnParameters = "-DskipTests -Dmaven.javadoc.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
 

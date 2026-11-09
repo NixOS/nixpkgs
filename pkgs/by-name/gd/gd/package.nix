@@ -12,18 +12,18 @@
   libwebp,
   libtiff,
   withXorg ? true,
-  libXpm,
+  libxpm,
   libavif,
   fontconfig,
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gd";
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
+    url = "https://github.com/libgd/libgd/releases/download/gd-${finalAttrs.version}/libgd-${finalAttrs.version}.tar.xz";
     sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withXorg [
     fontconfig
-    libXpm
+    libxpm
   ];
 
   outputs = [
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -12,7 +12,7 @@
   makeShellWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "grap";
   version = "1.3.1";
   pyproject = false;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "QuoSecGmbH";
     repo = "grap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zLIKoNOdrmTyZkQGRogeKfIRk4kpG0hmeN0519SJbbo=";
   };
 
@@ -38,11 +38,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    boost183.all
     libseccomp
-  ];
-
-  strictDeps = true;
+  ]
+  ++ boost183.all;
 
   cmakeFlags = [
     "-DPYTHON_SITE_DIR=${placeholder "out"}/${python3Packages.python.sitePackages}"
@@ -50,6 +48,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+     --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
     substituteInPlace src/tools/grap-match/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
 
     substituteInPlace src/tools/grap/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
@@ -61,7 +62,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     cd $out/${python3Packages.python.sitePackages}
-    mv pygrap.so _pygrap.so
+
     substituteInPlace pygrap.py \
       --replace-fail "import imp" "import importlib" \
       --replace-fail "imp." "importlib."
@@ -80,4 +81,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "grap";
   };
-}
+})

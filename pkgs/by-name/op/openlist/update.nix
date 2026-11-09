@@ -18,7 +18,6 @@ writeShellApplication {
   ];
 
   text = ''
-    # get old info
     oldVersion=$(nix-instantiate --eval --strict -A "openlist.version" | jq -e -r)
 
     get_latest_release() {

@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-test-runner";
-  version = "unstable-2019-10-02";
+  version = "19.04.0-unstable-2019-10-02";
 
   src = fetchbzr {
     url = "lp:dbus-test-runner";
     rev = "109";
-    sha256 = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
+    hash = "sha256-4yH19X98SVqpviCBIWzIX6FYHWxCbREpuKCNjQuTFDk=";
   };
 
   patches = [

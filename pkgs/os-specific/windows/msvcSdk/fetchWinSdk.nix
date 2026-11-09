@@ -3,6 +3,7 @@
   config,
   stdenvNoCC,
   xwin,
+  cacert,
 }:
 let
   host = stdenvNoCC.hostPlatform;
@@ -45,7 +46,10 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
-      nativeBuildInputs = [ xwin ];
+      nativeBuildInputs = [
+        xwin
+        cacert
+      ];
 
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";

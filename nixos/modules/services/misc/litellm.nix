@@ -9,6 +9,36 @@ let
 
   cfg = config.services.litellm;
   settingsFormat = pkgs.formats.yaml { };
+
+  tiktokenEncodings = {
+    cl100k_base = {
+      url = "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken";
+      hash = "sha256-Ijkht27pm96ZW3/3OFE+7xAPtR0YyTWXoRO8/+hlsqc=";
+    };
+  };
+
+  tiktokenCacheEntries = lib.mapAttrsToList (
+    _: encoding:
+    let
+      cacheKey = builtins.hashString "sha1" encoding.url;
+      sourceFile = pkgs.fetchurl {
+        inherit (encoding) url hash;
+      };
+    in
+    {
+      inherit cacheKey sourceFile;
+    }
+  ) tiktokenEncodings;
+
+  seedTiktokenCacheScript = pkgs.writeShellScript "litellm-seed-tiktoken-cache" ''
+    set -eu
+
+    mkdir -p "$CUSTOM_TIKTOKEN_CACHE_DIR"
+
+    ${lib.concatMapStringsSep "\n" (entry: ''
+      ln -sf ${entry.sourceFile} "$CUSTOM_TIKTOKEN_CACHE_DIR/${entry.cacheKey}"
+    '') tiktokenCacheEntries}
+  '';
 in
 {
   options = {
@@ -132,22 +162,50 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}/ui' 0700 - - - -"
+      "d '${cfg.stateDir}/tiktoken-cache' 0700 - - - -"
+    ];
+
     systemd.services.litellm = {
       description = "LLM Gateway to provide model access, fallbacks and spend tracking across 100+ LLMs.";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment = cfg.environment;
+      environment = {
+        # LiteLLM will try to "restructure" (rewrite) its packaged UI files on startup
+        # to support extensionless routes (e.g. `/ui/login`). In Nix builds the packaged
+        # UI lives in the read-only Nix store, so point it at a writable runtime path.
+        LITELLM_NON_ROOT = "true";
+        LITELLM_UI_PATH = "${cfg.stateDir}/ui";
+
+        # LiteLLM sets TIKTOKEN_CACHE_DIR internally from this variable.
+        CUSTOM_TIKTOKEN_CACHE_DIR = "${cfg.stateDir}/tiktoken-cache";
+      }
+      // cfg.environment;
 
       serviceConfig =
         let
           configFile = settingsFormat.generate "config.yaml" cfg.settings;
         in
         {
+          ExecStartPre = [
+            # Seed tokenizer cache with fixed-output files so startup does not
+            # depend on outbound network access.
+            seedTiktokenCacheScript
+
+            # LiteLLM may rewrite/copy UI assets with read-only permissions
+            # during previous runs; normalize writability on each start.
+            "${pkgs.runtimeShell} -euc 'chmod -R u+rwX ${cfg.stateDir}/ui'"
+          ];
           ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
-          StateDirectory = "litellm";
+          StateDirectory = [
+            "litellm"
+            "litellm/ui"
+            "litellm/tiktoken-cache"
+          ];
           RuntimeDirectory = "litellm";
           RuntimeDirectoryMode = "0755";
           PrivateTmp = true;

@@ -3,6 +3,9 @@
   lib,
   fetchurl,
   buildFHSEnv,
+  symlinkJoin,
+  runCommand,
+  extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
   at-spi2-atk,
@@ -20,8 +23,8 @@
   glibc,
   gsettings-desktop-schemas,
   gst_all_1,
-  gtk2,
   gtk3,
+  libGL,
   libnotify,
   libpulseaudio,
   libudev0-shim,
@@ -35,7 +38,18 @@
   qt5,
   wrapGAppsHook3,
   xkeyboard_config,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 let
 
@@ -54,8 +68,21 @@ let
   # into `~/.local/share/fonts/`, otherwise the default template fonts, and
   # things like bullet points, will not look as expected.
 
-  # TODO: Find out which of these fonts we'd be allowed to distribute along
-  #       with this package, or how to make this easier for users otherwise.
+  fonts = symlinkJoin {
+    name = "onlyoffice-fonts";
+    paths = [ noto-fonts-cjk-sans ] ++ extraFontPackages;
+  };
+
+  # OnlyOffice doesn't follow symlinks, so we have to copy them over.
+  # https://github.com/ONLYOFFICE/DocumentServer/issues/1859
+  fontsDir = runCommand "onlyoffice-fonts-dir" { } ''
+    font_regexp='.*\.\(ttf\|ttc\|otf\)?'
+    mkdir -p $out
+
+    find ${fonts} -type l -iregex "$font_regexp" -print0 | while IFS= read -r -d "" file; do
+      cp -L --update=none "$file" $out/
+    done
+  '';
 
   runtimeLibs = lib.makeLibraryPath [
     curl
@@ -67,11 +94,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.1.0";
+    version = "10.0.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-D36E7hYCTJ9Lw9XnB8nxMGMJDJRhM+K+bviuM9uuzhk=";
+      hash = "sha256-IZDttAIqKsL27uD3iBVSDw5Ozh6KEJfGRab5siXItZw=";
     };
 
     nativeBuildInputs = [
@@ -94,7 +121,6 @@ let
       gsettings-desktop-schemas
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
-      gtk2
       gtk3
       libnotify
       libpulseaudio
@@ -106,18 +132,18 @@ let
       qt5.qtdeclarative
       qt5.qtsvg
       qt5.qtwayland
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXrender
-      xorg.libXScrnSaver
-      xorg.libXtst
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxscrnsaver
+      libxtst
     ];
 
     dontWrapQtApps = true;
@@ -150,7 +176,7 @@ let
       gappsWrapperArgs+=(
         --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
-        --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+        --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
         --set QT_QPA_PLATFORM "xcb"
         # the bundled version of qt does not support wayland
       )
@@ -161,17 +187,21 @@ in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
-# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
     derivation
-    noto-fonts-cjk-sans
+    libGL
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";
+
+  extraBuildCommands = ''
+    mkdir -p $out/usr/share
+    ln -s ${fontsDir} $out/usr/share/fonts
+  '';
 
   extraInstallCommands = ''
     mkdir -p $out/share
@@ -181,7 +211,10 @@ buildFHSEnv {
         --replace-fail "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    inherit derivation;
+  };
 
   meta = {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";

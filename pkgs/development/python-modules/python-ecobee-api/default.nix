@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-ecobee-api";
-  version = "0.3.2";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-ecobee-api";
     tag = version;
-    hash = "sha256-6uZc022C3EgEgsPGD302qAtFqubwQSETQr3SQSYXeb8=";
+    hash = "sha256-cV8Na06iB2fRcAbtCyE+qc293nkKxAbO0G2NV+60UUo=";
   };
 
   build-system = [ setuptools ];

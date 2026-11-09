@@ -22,20 +22,18 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "gdrcopy";
-  version = "2.5.1";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "gdrcopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2cDsDc1lGW9rNF1q3EhjmiJhNaIwuFYlNdooPe7/R2I=";
+    hash = "sha256-Waq/Of0LcLDqyaWaU47lorJcG30CijcdTsvf9nMqgrg=";
   };
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [
-    cuda_nvcc
-  ];
+  nativeBuildInputs = [ cuda_nvcc ];
 
   postPatch = ''
     nixLog "patching shebang in $PWD/config_arch"
@@ -84,6 +82,14 @@ backendStdenv.mkDerivation (finalAttrs: {
     # NOTE: We cannot use `all` because it includes the driver, which needs the driver source code.
     "lib"
     "exes"
+  ];
+
+  # Neither is needed at runtime: no binary here has libcudart in DT_NEEDED, and libcuda.so.1 comes from the driver.
+  # nvlink records both in the device code of gdrcopy_pplat, the only test built with relocatable device code;
+  # cuda_nvcc's nvlink wrapper removes them.
+  disallowedRequisites = [
+    (lib.getBin cuda_nvcc)
+    (lib.getLib cuda_cudart)
   ];
 
   # Tests require gdrdrv be installed (don't know how to communicate dependency on the driver).

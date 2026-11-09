@@ -3,17 +3,17 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
   xorgproto,
   writeScript,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ico";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/ico-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OPNp1DHnUygP3nD6SJzJTOIE+fjqvS9J/H0yr6afRAU=";
+    hash = "sha256-VqltZCnDh+VK7CO1IvVISH1duClgkvIbsom2eEUGmRU=";
   };
 
   strictDeps = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 

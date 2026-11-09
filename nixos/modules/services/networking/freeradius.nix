@@ -28,7 +28,7 @@ let
       ProtectSystem = "full";
       ProtectHome = "on";
       Restart = "on-failure";
-      RestartSec = 2;
+      RestartSec = 1;
       LogsDirectory = "radius";
     };
   };

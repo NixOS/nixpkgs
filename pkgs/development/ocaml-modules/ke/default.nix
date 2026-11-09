@@ -7,13 +7,13 @@
   bigstringaf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ke";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-${version}.tbz";
-    sha256 = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
+    url = "https://github.com/mirage/ke/releases/download/v${finalAttrs.version}/ke-${finalAttrs.version}.tbz";
+    hash = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
   };
 
   propagatedBuildInputs = [ fmt ];
@@ -33,4 +33,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

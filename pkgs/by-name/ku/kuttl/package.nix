@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kuttl";
-  version = "0.22.0";
+  version = "0.28.0";
   cli = "kubectl-kuttl";
 
   src = fetchFromGitHub {
     owner = "kudobuilder";
     repo = "kuttl";
-    rev = "v${version}";
-    sha256 = "sha256-M9sZNrze7v1dj0j+hOo30kB87YKxFF/hZJ7R2C/Pzwg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-2BsEKR6qJD5GLASrOh1hPKR3RmoCRzS+h1H58c0zCgA=";
   };
 
-  vendorHash = "sha256-WhgmseJVfhvVHARI2XaMkRE/sIfpeJj0JzYiAgza6jQ=";
+  vendorHash = "sha256-fnjgSVefNqfjV5AU7fOWClkcxGv/jRW/iyaNjuXtJSA=";
 
   subPackages = [ "cmd/kubectl-kuttl" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}"
+    "-X github.com/kudobuilder/kuttl/internal/version.gitVersion=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "kubectl-kuttl";
   };
-}
+})

@@ -5,15 +5,16 @@
   fetchpatch,
   gettext,
   perlPackages,
+  bashNonInteractive,
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intltool";
   version = "0.51.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/intltool/trunk/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/intltool/trunk/${finalAttrs.version}/+download/intltool-${finalAttrs.version}.tar.gz";
     sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
 
@@ -33,6 +34,9 @@ stdenv.mkDerivation rec {
     perl
     XMLParser
   ];
+
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive;
+
   propagatedBuildInputs = [
     gettext
   ]
@@ -41,11 +45,16 @@ stdenv.mkDerivation rec {
     XMLParser
   ]);
 
+  strictDeps = true;
+
   postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
@@ -53,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

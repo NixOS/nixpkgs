@@ -50,6 +50,6 @@ stdenvNoCC.mkDerivation {
     homepage = "http://www.left4gore.com";
     description = "Memory patcher which adds the gore back into Left 4 Dead 2";
     license = lib.licenses.unfree; # Probably the best choice
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 }

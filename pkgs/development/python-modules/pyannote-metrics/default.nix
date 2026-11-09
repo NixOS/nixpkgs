@@ -17,29 +17,28 @@
   # undeclared cli dependencies
   docopt,
   tabulate,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-metrics";
-  version = "4.0.0";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";
-    tag = version;
-    hash = "sha256-Ga5oSRkVdeQkDnjFcFebdZnFljjyn/TrtV8Y6UJxT2c=";
+    tag = finalAttrs.version;
+    hash = "sha256-q2ScNFy0D2XZAri5xWPpBmBZswicUOtzIokBAxTuu9M=";
   };
 
   postPatch = ''
     substituteInPlace src/pyannote/metrics/cli.py \
-      --replace-fail \
-        'version="Evaluation"' \
-        'version="${version}"'
+      --replace-fail 'version="Evaluation"' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -57,6 +56,8 @@ buildPythonPackage rec {
     # Imported in pyannote/metrics/cli.py
     docopt
     tabulate
+    # Imporrted in pyannote/metrics/types.py
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "pyannote.metrics" ];
@@ -74,4 +75,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pyannote-metrics";
   };
-}
+})

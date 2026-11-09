@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "package-version-server";
-  version = "0.0.7";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "package-version-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/YyJ8+tKrNKVrN+F/oHgtExBBRatIIOvWr9mAyTHA3E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1+7oqWiJd7AZUlaDGYRtR1lyenrlhyaaGeWufW9lPUU=";
   };
 
-  cargoHash = "sha256-/t1GPdb/zXe0pKeG/A4FKjKFFZ0zy2nT2PV8nxenKXc=";
+  cargoHash = "sha256-AOE0fs3QK8vTIMOIxMg6SooDSQVtqFdB0tF3S88J7Ew=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  doCheck = lib.versionAtLeast version "0.0.8";
+  # Needs https://github.com/zed-industries/package-version-server/pull/2 to be merged
+  doCheck = false;
 
   meta = {
     description = "Language server that handles hover information in package.json files";
@@ -37,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ felixdorn ];
     mainProgram = "package-version-server";
   };
-}
+})

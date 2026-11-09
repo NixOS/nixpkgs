@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   fetchFromGitHub,
   autoreconfHook,
   lcms2,
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libraw";
-  version = "0.21.4";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
     tag = finalAttrs.version;
-    hash = "sha256-JAGIM7A9RbK22F8KczRcb+29t4fDDXzoCA3a4s/z6Q8=";
+    hash = "sha256-7ETGLRYVvOAChiE4Fr3wKbfFuysg5QtgL/swf1xQbzc=";
   };
 
   outputs = [
@@ -37,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
@@ -44,17 +47,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     inherit imagemagick hdrmerge;
     inherit (python3.pkgs) rawkit;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";
+    changelog = "https://www.libraw.org/download#changelog";
     license = with lib.licenses; [
       cddl
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "libraw"
+      "libraw_r"
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libraw" finalAttrs.version;
   };
 })

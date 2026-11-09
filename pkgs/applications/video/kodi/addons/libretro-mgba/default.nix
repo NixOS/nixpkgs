@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro.mgba";
     rev = "${version}-Matrix";
-    sha256 = "sha256-lxpj6Y34apYcE22q4W3Anhigp79r4RgiJ36DbES1kzU=";
+    hash = "sha256-lxpj6Y34apYcE22q4W3Anhigp79r4RgiJ36DbES1kzU=";
   };
 
   extraCMakeFlags = [

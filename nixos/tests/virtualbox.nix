@@ -307,7 +307,11 @@ let
                     "echo 'Could not get IPv4 address for ${name}!' >&2; "
                     "exit 1"
                 )
-            ).strip()
+            )
+
+            ip = ip + '\n'
+            ip = ip[:ip.find('\n')]
+
             return ip
 
 
@@ -456,6 +460,7 @@ let
 
       meta = with pkgs.lib.maintainers; {
         maintainers = [ aszlig ];
+        broken = builtins.trace "This test depends on the removed scripted stage 1." true;
       };
     };
 
@@ -503,12 +508,12 @@ mapAttrs (mkVBoxTest { } vboxVMs) {
   simple-gui = ''
     # Home to select Tools, down to move to the VM, enter to start it.
     def send_vm_startup():
-        machine.send_key("home")
-        machine.send_key("down")
+        machine.send_key("ctrl-m")
         machine.send_key("ret")
 
 
     create_vm_simple()
+    machine.succeed(ru("VBoxManage setextradata global \"GUI/Input/SelectorShortcuts\" \"ToolsGlobalMachineManager=Ctrl+M\""))
     machine.succeed(ru("VirtualBox >&2 &"))
     machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
     machine.sleep(5)

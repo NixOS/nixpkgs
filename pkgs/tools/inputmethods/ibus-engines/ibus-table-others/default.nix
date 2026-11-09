@@ -8,13 +8,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ibus-table-others";
-  version = "1.3.21";
+  version = "1.3.22";
 
   src = fetchurl {
-    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-/3ZDQCc/u2HKlL0+kZ0g4Gbjrkk++l3lSrWQz7CvwaQ=";
+    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${finalAttrs.version}/ibus-table-others-${finalAttrs.version}.tar.gz";
+    hash = "sha256-DnBNOj0fqCkoJThJvEej0qxHAsVgLHm6r4qcOLCrMqM=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
       McSinyx
     ];
   };
-}
+})

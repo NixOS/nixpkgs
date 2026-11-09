@@ -9,7 +9,7 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snagboot";
   version = "2.4";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZjN4k5prOoEdAT4z37XiHdnUgLsz3zeR3+0zxY+2420=";
   };
 
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = snagboot;
       command = "snagrecover --version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -81,4 +81,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

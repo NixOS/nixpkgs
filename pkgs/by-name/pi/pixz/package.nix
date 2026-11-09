@@ -15,7 +15,7 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixz";
   version = "1.0.7";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vasi";
     repo = "pixz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };
   preConfigure = ''
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Parallel compressor/decompressor for xz format";
+    homepage = "https://github.com/vasi/pixz";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     mainProgram = "pixz";
   };
-}
+})

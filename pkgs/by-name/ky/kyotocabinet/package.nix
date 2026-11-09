@@ -5,12 +5,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kyotocabinet";
   version = "1.2.80";
 
   src = fetchurl {
-    url = "https://dbmx.net/kyotocabinet/pkg/kyotocabinet-${version}.tar.gz";
+    url = "https://dbmx.net/kyotocabinet/pkg/kyotocabinet-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-TIXXNmaNgpIL/b25KsPWa32xEI8JWBp2ndkWCgLe80k=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

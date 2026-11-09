@@ -3,19 +3,18 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  # Remove "? null" once https://github.com/NixOS/nixpkgs/pull/444714 is merged
-  tt-smi ? null,
+  tt-smi,
   pstree,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tt-system-tools";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-system-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZtEs1XRho/EJShAV6+8Db2wxCK2QQBuNp+TRqb+ZiM4=";
+    hash = "sha256-fqmMO6Zo61gO0HtKasSKTt7kC8YGr5crymwbqVNQLck=";
   };
 
   nativeBuildInputs = [
@@ -44,8 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "System tools for Tenstorrent cards";
     homepage = "https://github.com/tenstorrent/tt-system-tools";
     changelog = "https://github.com/tenstorrent/tt-system-tools/blob/${finalAttrs.src.tag}/debian/changelog";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
 })

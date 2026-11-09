@@ -18,6 +18,8 @@
   cudaPackages,
   enableRocm ? config.rocmSupport,
   rocmPackages,
+  # gdrcopy support (the `gdr_copy` transport, `libuct_cuda_gdrcopy.so`)
+  withGdrcopy ? enableCuda,
 }:
 
 let
@@ -42,14 +44,29 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.19.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-54yLejOFdCa2KYstZuo+hZ5lSQR8WTZMa7lS0prc5NY=";
+    # Otherwise compilation fails with:
+    #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
+    fetchSubmodules = true;
+    hash = "sha256-R/uUjkYLPtY9c3vZWrkzKaSgK9Z/cppJCwQ1V1cuwPc=";
   };
+
+  # UCX uses the `#pragma omp master` declaration which is deprecated since
+  # OpenMP 5.1. Since UCX builds with -Werror by default, this causes build
+  # failures in GCC 16 which introduced the `deprecated-openmp` warning.
+  # Accordingly, we replace it with the new `#pragma omp masked` version in
+  # compilers which support OpenMP 5.1.
+  # https://github.com/openucx/ucx/pull/11697
+  patches = [ ./deprecated-openmp-pragma.patch ];
+
+  postPatch = ''
+    patchShebangs config/nvcc_wrap.sh
+  '';
 
   outputs = [
     "out"
@@ -79,7 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_nvml_dev
-
+  ]
+  ++ lib.optionals withGdrcopy [
+    cudaPackages.gdrcopy
   ]
   ++ lib.optionals enableRocm rocmList;
 
@@ -102,8 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_nvcc}" ]
-  ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" ];
+  ++ lib.optionals enableCuda [
+    "--with-cuda=${cudaPackages.cuda_nvcc}"
+  ]
+  ++ lib.optionals withGdrcopy [
+    "--with-gdrcopy=${lib.getDev cudaPackages.gdrcopy}"
+  ]
+  ++ lib.optionals enableRocm [
+    "--with-rocm=${rocm}"
+  ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
@@ -118,11 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
+    downloadPage = "https://github.com/openucx/ucx";
+    changelog = "https://github.com/openucx/ucx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     # LoongArch64 is not supported.
     # See: https://github.com/openucx/ucx/issues/9873
     badPlatforms = lib.platforms.loongarch64;
     maintainers = with lib.maintainers; [ markuskowa ];
+    problems = lib.optionalAttrs (withGdrcopy && !enableCuda) {
+      gdrcopy-requires-cuda = {
+        kind = "broken";
+        message = "gdrcopy support (withGdrcopy) requires CUDA support (enableCuda).";
+      };
+    };
   };
 })

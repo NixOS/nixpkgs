@@ -21,23 +21,25 @@
   ceph,
   useDbus ? true,
   dbus,
+  rdma-core,
+  openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "9.4";
+  version = "15.10"; # nixpkgs-update: no auto update
 
   outputs = [
     "out"
     "man"
-    "tools"
   ];
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
-    tag = "V${version}";
-    hash = "sha256-Adax64aaioYfPg7SMtylS2wpYV52l8KgXBA8eJefGkY=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-tJ0wbLdDQrTd07StcPiTPOhwPCLWOSZdouF4MhOQqsw=";
+    fetchSubmodules = true;
   };
 
   patches = lib.optional useDbus ./allow-bypassing-dbus-pkg-config-test.patch;
@@ -54,6 +56,9 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
     "-DUSE_MAN_PAGE=ON"
     "-DUSE_MONITORING=ON"
+    "-DUSE_NFS_RDMA=ON"
+    "-DUSE_TLS=ON"
+    "-DUSE_QOS=ON"
   ]
   ++ lib.optionals useCeph [
     "-DUSE_RADOS_RECOV=ON"
@@ -90,12 +95,10 @@ stdenv.mkDerivation rec {
     liburcu
     nfs-utils
     prometheus-cpp-lite
+    rdma-core
+    openssl
   ]
   ++ lib.optional useCeph ceph;
-
-  postPatch = ''
-    substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
-  '';
 
   postFixup = ''
     patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
@@ -107,10 +110,7 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath $out/lib $out/lib/libganesha_rados_urls.so
   '';
 
-  postInstall = ''
-    install -Dm755 ../tools/mount.9P $tools/bin/mount.9P
-  ''
-  + lib.optionalString useDbus ''
+  postInstall = lib.optionalString useDbus ''
     # Policy for D-Bus statistics interface
     install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
@@ -122,10 +122,5 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3Plus;
     mainProgram = "ganesha.nfsd";
-    outputsToInstall = [
-      "out"
-      "man"
-      "tools"
-    ];
   };
-}
+})

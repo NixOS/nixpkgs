@@ -8,6 +8,7 @@
   gi-docgen,
   docbook-xsl-nons,
   gettext,
+  blueprint-compiler,
   desktop-file-utils,
   wayland-scanner,
   wrapGAppsHook4,
@@ -22,13 +23,15 @@
   shared-mime-info,
   libnotify,
   libexif,
+  libglycin,
+  libglycin-gtk4,
   libjxl,
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
   tinysparql,
   localsearch,
-  gexiv2,
+  gexiv2_0_16,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
@@ -37,11 +40,12 @@
   gsettings-desktop-schemas,
   gnome-user-share,
   gobject-introspection,
+  glycin-loaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "49.2";
+  version = "51.0.1";
 
   outputs = [
     "out"
@@ -51,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JXazS+0ngaifCQUeyfyuOuF+txcs175nj1kqoU5MJrE=";
+    hash = "sha256-oA25CP1lAmy9XcY04S0YnejrorA/EF0kJTQXaKXukvs=";
   };
 
   patches = [
@@ -60,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -73,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_16
     glib-networking
     icu
     gnome-desktop
@@ -94,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
     localsearch
     gnome-autoar
+    libglycin
+    libglycin-gtk4
+    glycin-loaders
   ];
 
   propagatedBuildInputs = [

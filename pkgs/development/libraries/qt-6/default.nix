@@ -2,6 +2,7 @@
   newScope,
   lib,
   stdenv,
+  callPackages,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
@@ -88,7 +89,6 @@ let
           gst-plugins-base
           gst-plugins-good
           gst-libav
-          gst-vaapi
           ;
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
@@ -124,6 +124,7 @@ let
 
       wrapQtAppsHook = callPackage (
         {
+          wrapQtAppsHook,
           makeBinaryWrapper,
           qtwayland,
           qtbase,
@@ -134,6 +135,10 @@ let
           depsTargetTargetPropagated = [
             (onlyPluginsAndQml qtbase)
           ];
+          passthru.tests = callPackages ./tests/wrap-qt-apps-hook.nix {
+            inherit qtbase wrapQtAppsHook;
+          };
+          meta.license = lib.licenses.mit;
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 
@@ -145,6 +150,7 @@ let
           substitutions = {
             fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
           };
+          meta.license = lib.licenses.mit;
         } ./hooks/qmake-hook.sh
       ) { };
     }

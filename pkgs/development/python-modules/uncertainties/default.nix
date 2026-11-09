@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -13,27 +12,20 @@
 
   # tests
   pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     tag = version;
-    hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
+    hash = "sha256-XfEiE27azEBNCZ6sIBncJI1cYocoXwgxEkclVgR5O34=";
   };
-
-  patches = [
-    (fetchpatch {
-      # python 3.14 compat
-      url = "https://github.com/lmfit/uncertainties/commit/633da70494ae6570cc69a910e1f6231538acf374.patch";
-      hash = "sha256-P1LiIqA2p58bjupJaf18A6YxBeu+PNpueHACry24OwQ=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -44,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ]
   ++ optional-dependencies.arrays;
 

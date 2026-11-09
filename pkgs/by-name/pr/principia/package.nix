@@ -4,52 +4,38 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapGAppsHook3,
 
   curl,
   freetype,
-  glew,
-  gtk3,
   libGL,
   libjpeg,
   libpng,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+  sdl3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2025.04.05";
+  version = "2026.10.22";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
-    rev = finalAttrs.version;
-    hash = "sha256-cXtc1E4iJf3//UyzZzhky/NV7zk4959xSwGLHdCeyk0=";
+    tag = finalAttrs.version;
+    hash = "sha256-ccx8jyHoxOa7GZQHsmV3JfazHsRpCcbz/vU9S4RHn3A=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
   ];
 
   buildInputs = [
     curl
     freetype
-    glew
-    gtk3
     libGL
     libjpeg
     libpng
-    SDL2
-    SDL2_gfx
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
+    sdl3
   ];
 
   cmakeFlags = [

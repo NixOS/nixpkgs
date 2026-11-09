@@ -8,7 +8,6 @@
   home-assistant-bluetooth,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "sensirion-ble";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "akx";

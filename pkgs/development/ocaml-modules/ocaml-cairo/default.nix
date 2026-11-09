@@ -17,16 +17,14 @@
   pango,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "ocaml-cairo";
-in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "http://cgit.freedesktop.org/cairo-ocaml/snapshot/cairo-ocaml-${version}.zip";
-    sha256 = "0l4p9bp6kclr570mxma8wafibr1g5fsjj8h10yr4b507g0hmlh0l";
+    url = "http://cgit.freedesktop.org/cairo-ocaml/snapshot/cairo-ocaml-${finalAttrs.version}.zip";
+    hash = "sha256-FEBaIXgHlEWyBwEiKbUrL+QVneJI1V7BKZmyae5Kl1A=";
   };
 
   patches = [ ./META.patch ];
@@ -75,4 +73,4 @@ stdenv.mkDerivation rec {
     broken = lib.versionAtLeast ocaml.version "4.06";
     inherit (ocaml.meta) platforms;
   };
-}
+})

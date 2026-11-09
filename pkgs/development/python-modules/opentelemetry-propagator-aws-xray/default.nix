@@ -1,12 +1,10 @@
 {
-  lib,
   buildPythonPackage,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-instrumentation-botocore,
   opentelemetry-test-utils,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   requests,
   pytest-benchmark,
@@ -22,6 +20,8 @@ buildPythonPackage {
   build-system = [ hatchling ];
 
   dependencies = [ opentelemetry-api ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [
     opentelemetry-test-utils

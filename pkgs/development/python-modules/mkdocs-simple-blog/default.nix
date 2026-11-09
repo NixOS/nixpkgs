@@ -3,36 +3,42 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pyprojectVersionPatchHook,
+  pytest-cov-stub,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-simple-blog";
-  version = "0.2.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";
-    tag = "v${version}";
-    hash = "sha256-pzoQb5cBzd7Gt2jbai4cr37i5n30y0lfaukhQETSsjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z2+ou+bjE/glInl4of0gkoNEc9eGD8k/LDcQpKGWsB8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    mkdocs
+  dependencies = [ mkdocs ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
   ];
-
-  # This package has no tests
-  doCheck = false;
 
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
   meta = {
     description = "Simple blog generator plugin for MkDocs";
     homepage = "https://fernandocelmer.github.io/mkdocs-simple-blog/";
-    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/v${version}";
+    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

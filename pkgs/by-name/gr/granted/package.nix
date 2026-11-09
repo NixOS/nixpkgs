@@ -9,29 +9,29 @@
   xdg-utils,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "granted";
-  version = "0.38.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
-    owner = "common-fate";
+    owner = "fwdcloudsec";
     repo = "granted";
-    rev = "v${version}";
-    sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-mirBLZ/ahSOCisbvNI7qO3rEWmk2UycWtSrsrsVm79s=";
   };
 
-  vendorHash = "sha256-Y8g5495IYgQ2lvq5qbnQmoxwEYfzzx12KfMS6wF2QXE=";
+  vendorHash = "sha256-QCVjMIaWBwGcceZhU8Qptdd8cWuiSa89puZ1zDg5vKY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/common-fate/granted/internal/build.Version=v${version}"
-    "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
-    "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
-    "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
-    "-X github.com/common-fate/granted/internal/build.ConfigFolderName=.granted"
+    "-X github.com/fwdcloudsec/granted/internal/build.Version=v${finalAttrs.version}"
+    "-X github.com/fwdcloudsec/granted/internal/build.Commit=${finalAttrs.src.rev}"
+    "-X github.com/fwdcloudsec/granted/internal/build.Date=1970-01-01-00:00:01"
+    "-X github.com/fwdcloudsec/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/fwdcloudsec/granted/internal/build.ConfigFolderName=.granted"
   ];
 
   subPackages = [
@@ -87,11 +87,11 @@ buildGoModule rec {
 
   meta = {
     description = "Easiest way to access your cloud";
-    homepage = "https://github.com/common-fate/granted";
-    changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
+    homepage = "https://github.com/fwdcloudsec/granted";
+    changelog = "https://github.com/fwdcloudsec/granted/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jlbribeiro
     ];
   };
-}
+})

@@ -3,22 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "6.2.2";
+  version = "7.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
     tag = "v${version}";
-    hash = "sha256-seoyqkrRQpRiMd5GTEvenjirn173Hq40Zuk1u7TvMPI=";
+    hash = "sha256-RDZs6It9QkkzZnrXoH3s67TIVfkLsEodAfqqykv4cOc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

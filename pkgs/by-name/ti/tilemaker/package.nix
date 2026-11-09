@@ -3,37 +3,28 @@
   stdenv,
   fetchFromGitHub,
   buildPackages,
-  fetchpatch,
   cmake,
-  installShellFiles,
   boost,
-  lua,
+  lua5_5,
   protobuf_21,
   rapidjson,
   shapelib,
   sqlite,
   zlib,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilemaker";
-  version = "3.0.0";
+  version = "3.2.0";
+  # XXX: Check the Lua version on update
 
   src = fetchFromGitHub {
     owner = "systemed";
     repo = "tilemaker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rB5oP03yaIzklwkGsIeS9ELbHOY9AObwjRrK9HBQFI4=";
+    hash = "sha256-WVDdsH3aBvXVdWMb07bYIPzKHNO92Pi0g36/+KARx9o=";
   };
-
-  patches = [
-    # fixes for Boost 1.86
-    (fetchpatch {
-      url = "https://github.com/systemed/tilemaker/commit/6509f0cf50943a90b36b5c6802118b72124b1e7a.patch";
-      hash = "sha256-C4aCUGTTUtY24oARihMnljjRbw80xRdMUyvu/b1Nsdw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/options_parser.cpp \
@@ -43,14 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "default_value(\"static\")" "default_value(\"$out/share/tilemaker/static\")"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
-    lua
+    lua5_5
     protobuf_21
     rapidjson
     shapelib
@@ -65,22 +53,19 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 
   postInstall = ''
-    installManPage ../docs/man/tilemaker.1
     install -Dm644 ../resources/*.{json,lua} -t $out/share/tilemaker
     cp -r ../server/static $out/share/tilemaker
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "tilemaker --help";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Make OpenStreetMap vector tiles without the stack";
     homepage = "https://tilemaker.org/";
     changelog = "https://github.com/systemed/tilemaker/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.free; # FTWPL
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
     mainProgram = "tilemaker";
   };

@@ -2,28 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pyparsing,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhocon";
-  version = "0.3.61";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.3.63";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chimpler";
     repo = "pyhocon";
-    tag = version;
-    hash = "sha256-xXx30uxJ8+KPVdYC6yRzEDJbwYSzIO/Gy1xrehvI5ZE=";
+    tag = finalAttrs.version;
+    hash = "sha256-uguNvXBaccAUdQx1zcpn/i3jSa5Y4uWTqkFr6rI4fBc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyparsing
     python-dateutil
   ];
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chreekat ];
   };
-}
+})

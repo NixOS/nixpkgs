@@ -7,14 +7,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "progress";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "Xfennec";
     repo = "progress";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-riewkageSZIlwDNMjYep9Pb2q1GJ+WMXazokJGbb4bE=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "progress";
   };
-}
+})

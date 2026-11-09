@@ -1,5 +1,9 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
+let
+  # !!! Don't do this with real keys. The /nix store is world-readable!
+  ENCRYPTION_KEY = pkgs.writeText "pocket-id-encryption-key" "SUeAyRRFZ1uf03ClOE+o++BVENSE/Ptb9YFRF2Sk+zM=";
+in
 {
   name = "pocket-id";
   meta.maintainers = with lib.maintainers; [
@@ -16,6 +20,9 @@
           settings = {
             PORT = 10001;
           };
+          credentials = {
+            inherit ENCRYPTION_KEY;
+          };
         };
       };
 
@@ -29,9 +36,16 @@
           enable = true;
           settings = {
             PORT = 10001;
-            DB_PROVIDER = "postgres";
-            DB_CONNECTION_STRING = "host=/run/postgresql user=${username} database=${username}";
+            DB_CONNECTION_STRING = "postgresql:///${username}?host=/run/postgresql";
           };
+          credentials = {
+            inherit ENCRYPTION_KEY;
+          };
+        };
+
+        systemd.services.pocket-id = {
+          after = [ "postgresql.target" ];
+          requires = [ "postgresql.target" ];
         };
 
         services.postgresql = {

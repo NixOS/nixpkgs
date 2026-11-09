@@ -4,7 +4,7 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   librsvg,
-  xorg,
+  lndir,
   shared-mime-info,
 }:
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    xorg.lndir
+    lndir
   ];
 
   installPhase = ''
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
 
   preFixup = ''
     makeWrapperArgs=(
-      --prefix PATH : "${lib.makeBinPath runtimeDeps}"
+      ${lib.optionalString (runtimeDeps != [ ]) "--prefix PATH : ${lib.makeBinPath runtimeDeps}"}
     )
     gappsWrapperArgs+=(
       # Thumbnailers

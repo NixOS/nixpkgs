@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vipsdisp";
-  version = "4.1.2";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
-    owner = "jcupitt";
+    owner = "libvips";
     repo = "vipsdisp";
     tag = "v${version}";
-    hash = "sha256-9L8l/afD6phq8T3ReYqQQgD1CztW5gw0MME23Ut/lEE=";
+    hash = "sha256-DXXDU/EtpWfNvV0PhQ+qjlxTBNERn9GGNeD00n9ejN0=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/jcupitt/vipsdisp";
+    homepage = "https://github.com/libvips/vipsdisp";
     description = "Tiny image viewer with libvips";
     license = lib.licenses.mit;
     mainProgram = "vipsdisp";

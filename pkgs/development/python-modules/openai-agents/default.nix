@@ -3,38 +3,42 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  griffe,
+  griffelib,
   mcp,
   openai,
   pydantic,
   requests,
-  types-requests,
   typing-extensions,
+  websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openai-agents";
-  version = "0.4.2";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "openai_agents";
-    hash = "sha256-KByv+DmzqyzzvFIRCr6TysoASYXEG/B96OYNA8SnUo4=";
+    hash = "sha256-bD17njTTykv3Y9RVfQHshEaFKQ8NgMty4QowQCnA1+4=";
   };
 
   build-system = [
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "openai"
+  ];
+
   dependencies = [
-    griffe
+    griffelib
     mcp
     openai
     pydantic
     requests
-    types-requests
     typing-extensions
+    websockets
   ];
 
   pythonImportsCheck = [
@@ -42,10 +46,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/openai/openai-agents-python/releases/tag/${version}";
+    changelog = "https://github.com/openai/openai-agents-python/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/openai/openai-agents-python";
     description = "Lightweight, powerful framework for multi-agent workflows";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bryanhonof ];
   };
-}
+})

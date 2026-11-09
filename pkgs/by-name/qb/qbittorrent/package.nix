@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.1.4";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-9RfKir/e+8Kvln20F+paXqtWzC3KVef2kNGyk1YpSv4=";
+    hash = "sha256-kJNl7AaH+vy57vFuofvEgW4fo5JbU9wwQJZJglmUkZA=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
 
-  qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ python3 ])
+  ];
 
   dontWrapGApps = true;
 
@@ -84,10 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Featureful free software BitTorrent client";
     homepage = "https://www.qbittorrent.org";
     changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${finalAttrs.version}/Changelog";
-    license = with lib.licenses; [
-      gpl2Only
-      gpl3Only
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Plus # code
+        gpl3Plus # assets
+      ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       Anton-Latukha

@@ -4,7 +4,7 @@
   autoreconfHook,
   boost,
   fetchFromGitHub,
-  libtorrent-rasterbar,
+  libtorrent-rasterbar-2_0_x,
   libvlc,
   openssl,
   pkg-config,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bittorrent";
-  version = "2.15";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "vlc-bittorrent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7FHeQYHbMKZJ3yeHqxTTAUwghTje+gEX8gSEJzfG5sQ=";
+    hash = "sha256-/+U648Dw8CJ76ElvSnMsrXOVx0jGjCIv6bmgwzFFZhk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    libtorrent-rasterbar
+    libtorrent-rasterbar-2_0_x
     libvlc
     openssl
   ];

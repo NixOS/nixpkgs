@@ -8,15 +8,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcint";
-  version = "6.1.3";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
-    rev = "v${version}";
-    hash = "sha256-k9luTarszZAqh33SzPMM3BYj01HT7cfTipt44nSC+2A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hKxylqRFIuSBVm6IkuLEwUmRHcMO0HPzodIILppIaoA=";
   };
 
   postPatch = ''
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
       It provides C/Fortran API to evaluate one-electron / two-electron
       integrals for Cartesian / real-spheric / spinor Gaussian type functions.
     '';
-    homepage = "http://wiki.sunqm.net/libcint";
+    homepage = "https://github.com/sunqm/libcint";
     downloadPage = "https://github.com/sunqm/libcint";
     changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

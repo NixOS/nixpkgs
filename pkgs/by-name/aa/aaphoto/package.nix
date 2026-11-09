@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       saturation and gamma levels of the image by analization.
 
       This can be a solution for those kind of users who are not able to manage
-      and correct images with complicated graphical softwares, or just simply
+      and correct images with complicated graphical software, or just simply
       don't intend to spend a lot of time with manually correcting the images
       one-by-one.
     '';

@@ -5,14 +5,14 @@
   ocamlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obuild";
   version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "ocaml-obuild";
     repo = "obuild";
-    rev = "obuild-v${version}";
+    rev = "obuild-v${finalAttrs.version}";
     hash = "sha256-me9/FVD7S0uPIpFZzcxDfYKVWn9ifq6JryBAGCo681I=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ocaml-obuild/obuild";
     inherit (ocamlPackages.ocaml.meta) platforms;
     description = "Simple package build system for OCaml";
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

@@ -9,33 +9,36 @@
   git,
   glibcLocales,
   gnupg,
-  gpgme,
+  gpg,
   merge3,
+  nix-update-script,
+  openssh,
   paramiko,
   pytestCheckHook,
   rich,
-  rustPlatform,
   rustc,
-  setuptools,
+  rustPlatform,
   setuptools-rust,
+  setuptools,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "0.24.1";
+  version = "1.2.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "dulwich-${version}";
-    hash = "sha256-GGVvTKDLWPcx1f28Esl9sDXj33157NhSssYD/C+fLy4=";
+    tag = "dulwich-${finalAttrs.version}";
+    hash = "sha256-JijCxPx0nPW2pXsT90YzB3X8aQ9jD/vGzIST0fMY7yM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-qGAvy0grueKI+A0nsXntf/EWtozSc138iFDhlfiktK8=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-OXZY37Gg8saT8aZWAvhcP+kT3zkrXRg4vwCqg9YbxXE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +62,7 @@ buildPythonPackage rec {
     https = [ urllib3 ];
     merge = [ merge3 ];
     pgp = [
-      gpgme
+      gpg
       gnupg
     ];
     paramiko = [ paramiko ];
@@ -70,33 +73,34 @@ buildPythonPackage rec {
     geventhttpclient
     git
     glibcLocales
+    openssh # for ssh-keygen
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
-    "test_file_win"
-    # dulwich.errors.NotGitRepository: No git repository was found at .
-    "WorktreeCliTests"
-    # Adding a symlink to a directory outside the repo doesn't raise
-    "test_add_symlink_absolute_to_system"
     # Depends on setuid which is not available in sandboxed environments
     "SharedRepositoryTests"
-    # TypeError: pack index v1 only supports SHA-1 names
-    "test_pack_index_v1_with_sha256"
   ];
 
   disabledTestPaths = [
-    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
-    "tests/contrib"
+    # AssertionError: GPGMEError not raised
+    "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Implementation of the Git file formats and protocols";
@@ -105,7 +109,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${finalAttrs.src.tag}/NEWS";
     license = with lib.licenses; [
       asl20
       gpl2Plus
@@ -115,4 +119,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

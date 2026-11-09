@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
-  nodejs,
+  nodejs-slim,
   npmHooks,
   pkg-config,
   libsecret,
@@ -17,34 +17,35 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "vscode-js-debug-${finalAttrs.version}.vsix";
     pname = "vscode-js-debug-vsix";
-    version = "1.105.0";
+    version = "1.140.0";
 
     src = fetchFromGitHub {
       owner = "microsoft";
       repo = "vscode-js-debug";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dYEINhJGrJFEq5422BEp3ups6vK0lpVW34GaYPMdfXk=";
+      hash = "sha256-4bYss4fWLGrOsmfKYbaF9zSGl45jmUH73GCuba2IFw0=";
     };
 
     npmDeps = fetchNpmDeps {
       name = "${finalAttrs.pname}-npm-deps";
       inherit (finalAttrs) src;
-      hash = "sha256-bBy0u6NaOAkX6vRJrRYYWUxCG6HM3h0PrzN6tZj5pVY=";
+      hash = "sha256-VoWBedocCL1EyMm7y2f4eOfl3s8SB6LujJQp6wAUJRM=";
     };
     makeCacheWritable = true;
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       libsecret
     ];
     nativeBuildInputs = [
-      nodejs
-      nodejs.python
+      nodejs-slim
+      nodejs-slim.npm
+      nodejs-slim.python
       npmHooks.npmConfigHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
       clang_20 # clang_21 breaks @vscode/vsce's optional dependency keytar
     ];

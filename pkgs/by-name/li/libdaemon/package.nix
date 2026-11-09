@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdaemon";
   version = "0.14";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/libdaemon/${pname}-${version}.tar.gz";
+    url = "https://0pointer.de/lennart/projects/libdaemon/libdaemon-${finalAttrs.version}.tar.gz";
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-includes.patch ];
 
+  strictDeps = true;
+
   configureFlags = [
     "--disable-lynx"
   ]
@@ -29,10 +31,12 @@ stdenv.mkDerivation rec {
     "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";
     homepage = "http://0pointer.de/lennart/projects/libdaemon/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "re-flex";
-  version = "6.0.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "RE-flex";
-    rev = "v${version}";
-    hash = "sha256-p04o2e7Dxx7N6ByCwERz4hKz+vfTIuuZ//AoWSC1qao=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ixyu0FvBMPdTTTjbhvnspxeIEylJyWk5u60YsNlcp38=";
   };
 
   outputs = [
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prrlvr ];
     mainProgram = "reflex";
   };
-}
+})

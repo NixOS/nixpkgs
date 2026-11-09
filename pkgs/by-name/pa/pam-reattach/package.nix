@@ -6,20 +6,23 @@
   openpam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_reattach";
   version = "1.3";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fabianishere";
     repo = "pam_reattach";
-    rev = "v${version}";
-    sha256 = "1k77kxqszdwgrb50w7algj22pb4fy5b9649cjb08zq9fqrzxcbz7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5y/Wf8Yu4Y/AkiwRk1bxjqwrhHxUHQ7Kyo+3r3Gf58w=";
   };
 
   cmakeFlags = [
-    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-    "-DENABLE_CLI=ON"
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
+    (lib.cmakeBool "ENABLE_CLI" true)
   ];
 
   buildInputs = [ openpam ];
@@ -32,5 +35,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lockejan ];
     platforms = lib.platforms.darwin;
+    mainProgram = "reattach-to-session-namespace";
   };
-}
+})

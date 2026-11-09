@@ -8,13 +8,13 @@
 }:
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgddl";
-  version = "0.30";
+  version = "0.31";
 
   src = fetchFromGitHub {
     owner = "lacanoid";
     repo = "pgddl";
     tag = finalAttrs.version;
-    hash = "sha256-w08IgnobIhlwRGrz+feEnZbI1KrWrMRI4BvNVUZFSSg=";
+    hash = "sha256-8EP3I4DmfzW5B+w/c3V6jvaVWtgZcNjL24sKVlme5hU=";
   };
 
   nativeBuildInputs = [

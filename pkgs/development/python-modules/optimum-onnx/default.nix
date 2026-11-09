@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "optimum-onnx";
-  version = "0.0.3";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum-onnx";
     tag = "v${version}";
-    hash = "sha256-IFXtKkJwmrcdjfXE2YccbRylU723fTG70Z6c9fIL5mE=";
+    hash = "sha256-Thx3QPLgi8w8znvMGSuCyRu/tUynCkQFywtKKv7UhuA=";
   };
 
   build-system = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "optimum"
     "transformers"
   ];
   dependencies = [
@@ -47,9 +48,6 @@ buildPythonPackage rec {
       onnxruntime
     ];
     # onnxruntime-gpu = [ onnxruntime-gpu ];
-    quality = [
-      ruff
-    ];
   };
 
   pythonImportsCheck = [ "optimum.onnxruntime" ];

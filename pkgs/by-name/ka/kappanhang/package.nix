@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kappanhang";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "nonoo";
     repo = "kappanhang";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-l0V2NVzLsnpPe5EJcr5i9U7OGaYzNRDd1f/ogrdCnvk=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
     description = "Remote control for Icom radio transceivers";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "kappanhang";
   };
-}
+})

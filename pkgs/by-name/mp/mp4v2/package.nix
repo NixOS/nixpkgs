@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mp4v2";
   version = "5.0.1";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     # 2020-06-20: THE current upstream, maintained and used in distros fork.
     owner = "TechSmith";
     repo = "mp4v2";
-    rev = "Release-ThirdParty-MP4v2-${version}";
+    rev = "Release-ThirdParty-MP4v2-${finalAttrs.version}";
     sha256 = "sha256-OP+oVTH9pqYfHtYL1Kjrs1qey/J40ijLi5Gu8GJnvSY=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mpl11;
   };
-}
+})

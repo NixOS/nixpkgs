@@ -68,6 +68,9 @@ stdenv.mkDerivation {
   disabledTests = [
     "test_cifspacegroup_11"
     "pybindtest_obconv_writers"
+    # These tests fail with GCC 15
+    "test_align_4"
+    "test_align_5"
   ];
 
   doCheck = true;

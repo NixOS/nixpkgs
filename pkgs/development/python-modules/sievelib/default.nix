@@ -4,21 +4,18 @@
   fetchPypi,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.4.3";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bFemWvAc6WbJCxPlLxT7+acDd2egcbg4FHTMWrIxBPQ=";
+    hash = "sha256-VcEa0/QEqsX/D07J4K41Th2AOu1yxEUkWY0l3qyGsLg=";
   };
 
   build-system = [ setuptools-scm ];

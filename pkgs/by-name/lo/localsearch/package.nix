@@ -8,7 +8,7 @@
   gettext,
   itstool,
   libxslt,
-  gexiv2,
+  gexiv2_0_16,
   tinysparql,
   meson,
   mesonEmulatorHook,
@@ -27,11 +27,8 @@
   icu,
   json-glib,
   libcue,
-  libexif,
   libgsf,
-  libgudev,
   libgxps,
-  libiptcdata,
   libjpeg,
   libosinfo,
   libpng,
@@ -40,8 +37,9 @@
   libuuid,
   libwebp,
   libxml2,
+  libzip,
   poppler,
-  systemd,
+  systemdLibs,
   taglib,
   upower,
   totem-pl-parser,
@@ -50,11 +48,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.10.2";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tN2JyF12YXEButTsmjNnj2MexQMumIDrQj3OUuh4ooU=";
+    hash = "sha256-S/RUQM56iZ8uyk0gND0x/GIPoqP+U7uSneJEMFMw6TA=";
   };
 
   patches = [
@@ -87,17 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     exempi
     ffmpeg
     giflib
-    gexiv2
+    gexiv2_0_16
     totem-pl-parser
     tinysparql
     icu
     json-glib
     libcue
-    libexif
     libgsf
-    libgudev
     libgxps
-    libiptcdata
     libjpeg
     libosinfo
     libpng
@@ -105,12 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libwebp
     libxml2
+    libzip
     poppler
     taglib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     upower
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -120,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+    # avformat (from ffmpeg) and libmediainfo are interchangable
+    "-Dlibmediainfo=disabled"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dbattery_detection=none"

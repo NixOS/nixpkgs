@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pysecuritas";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

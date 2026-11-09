@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/Sammler";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    teams = [ lib.teams.redcodelabs ];
   };
 }

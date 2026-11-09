@@ -965,12 +965,12 @@ in
                     type = types.nonEmptyStr;
                     default =
                       if versionOlder config.system.stateVersion "24.05" then
-                        "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
+                        "${httpConf.scheme}://${httpConf.host}:${toString httpConf.port}/media/"
                       else
                         null;
                     defaultText = literalExpression ''
                       if lib.versionOlder config.system.stateVersion "24.05"
-                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}/media/"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{toString httpConf.port}/media/"
                       else null;
                     '';
                     description = ''
@@ -1019,12 +1019,12 @@ in
                     type = types.nullOr types.nonEmptyStr;
                     default =
                       if versionOlder config.system.stateVersion "24.05" then
-                        "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
+                        "${httpConf.scheme}://${httpConf.host}:${toString httpConf.port}"
                       else
                         null;
                     defaultText = literalExpression ''
                       if lib.versionOlder config.system.stateVersion "24.05"
-                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{builtins.toString httpConf.port}"
+                      then "$\{httpConf.scheme}://$\{httpConf.host}:$\{toString httpConf.port}"
                       else null;
                     '';
                     description = ''
@@ -1167,17 +1167,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      optionals
-        (
+    assertions = [
+      {
+        assertion =
           cfg.config.":pleroma".":media_proxy".enabled
-          && cfg.config.":pleroma".":media_proxy".base_url == null
-        )
-        [
-          ''
-            `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set when the media proxy is enabled.
-          ''
-        ];
+          -> cfg.config.":pleroma".":media_proxy".base_url != null;
+        message = ''
+          `services.akkoma.config.":pleroma".":media_proxy".base_url` must be set to a URL with a different host component (domain name) than the web endpoint when the media proxy is enabled.
+        '';
+      }
+    ];
     warnings =
       optionals (with config.security; cfg.installWrapper && (!sudo.enable) && (!sudo-rs.enable))
         [
@@ -1393,6 +1392,6 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mvs ];
+  meta.maintainers = with lib.maintainers; [ yuka ];
   meta.doc = ./akkoma.md;
 }

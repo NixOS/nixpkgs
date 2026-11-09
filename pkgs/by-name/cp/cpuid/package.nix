@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cpuid";
-  version = "20250513";
+  version = "20260503";
 
   src = fetchurl {
-    url = "http://etallen.com/cpuid/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-b0dKIrWEhIjkVLAaMduA65WNVWdLUzlTP8DmrreTYms=";
+    url = "https://etallen.com/cpuid/cpuid-${finalAttrs.version}.src.tar.gz";
+    sha256 = "sha256-juEPtI1KogxISnXWhSiDcQKG7Sl1wxS9ptCwODkIy/4=";
   };
 
   # For pod2man during the build process.
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

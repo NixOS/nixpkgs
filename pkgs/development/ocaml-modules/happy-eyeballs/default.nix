@@ -9,15 +9,13 @@
   logs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "happy-eyeballs";
-  version = "2.0.1";
-
-  minimalOCamlVersion = "4.08";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "https://github.com/roburio/happy-eyeballs/releases/download/v${version}/happy-eyeballs-${version}.tbz";
-    hash = "sha256-slVFiDApMbqF4Yhh5hCjraeCNJbU1JoZXpU1VsNR0mk=";
+    url = "https://github.com/roburio/happy-eyeballs/releases/download/v${finalAttrs.version}/happy-eyeballs-${finalAttrs.version}.tbz";
+    hash = "sha256-Ct4Vt44VZW0X/qk9CG5D9s7r5INjDGDM6sIIYn298ao=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +29,10 @@ buildDunePackage rec {
   meta = {
     description = "Connecting to a remote host via IP version 4 or 6";
     homepage = "https://github.com/roburio/happy-eyeballs";
-    license = lib.licenses.isc;
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       vbgl
       ulrikstrid
     ];
   };
-}
+})

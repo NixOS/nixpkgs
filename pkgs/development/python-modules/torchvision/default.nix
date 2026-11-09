@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   torch,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
 
   # nativeBuildInputs
@@ -27,20 +25,17 @@
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
-  pname = "torchvision";
-  version = "0.24.1";
 in
-buildPythonPackage {
-  format = "setuptools";
-  inherit pname version;
-
-  stdenv = torch.stdenv;
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
+  pname = "torchvision";
+  version = "0.29.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    tag = "v${version}";
-    hash = "sha256-ddJWD2xjoNAuyZIaZD7ctcuSQZ9lSUGExWCq1W5prI8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iy9IWqC72BMhWmuz1vKHOpZIMitZkIFcdIy6lLjVCFs=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +49,16 @@ buildPythonPackage {
     libjpeg_turbo
     libpng
     torch.cxxdev
-  ];
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcusparse # cusparse.h
+    ]
+  );
 
   dependencies = [
     numpy
@@ -64,6 +68,9 @@ buildPythonPackage {
   ];
 
   env = {
+    # Otherwise, the version is read from `version.txt` (`0.29.1a0`)
+    BUILD_VERSION = finalAttrs.version;
+
     TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
     TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
   }
@@ -88,10 +95,11 @@ buildPythonPackage {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
+    changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

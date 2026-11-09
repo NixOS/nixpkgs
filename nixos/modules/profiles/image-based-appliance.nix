@@ -21,6 +21,5 @@
 
   # The system avoids interpreters as much as possible to reduce its attack
   # surface.
-  boot.initrd.systemd.enable = lib.mkDefault true;
   networking.useNetworkd = lib.mkDefault true;
 }

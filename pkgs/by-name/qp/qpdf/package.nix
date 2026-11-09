@@ -6,12 +6,12 @@
   libjpeg,
   perl,
   zlib,
+  bash,
   ctestCheckHook,
 
   # for passthru.tests
   cups-filters,
   pdfmixtool,
-  pdfslicer,
   python3,
   testers,
   versionCheckHook,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "12.2.0";
+  version = "12.4.2";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tzOZVQ/XO2mWNtz3mFTdrpdD2PvvCwje5nbEyiIkcZw=";
+    hash = "sha256-57zplmLTWz+SRgIrE/rowQF+QppPyCYRTvLsXimpdWc=";
   };
 
   outputs = [
@@ -46,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
-  nativeCheckInputs = [ ctestCheckHook ];
+  nativeCheckInputs = [
+    bash
+    ctestCheckHook
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -80,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       cups-filters
       pdfmixtool
-      pdfslicer
       ;
   };
 

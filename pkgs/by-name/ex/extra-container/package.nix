@@ -7,15 +7,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "extra-container";
-  version = "0.14";
+  version = "0.17";
 
   src = fetchFromGitHub {
-    owner = "erikarvstedt";
+    owner = "extra-container";
     repo = "extra-container";
-    rev = version;
-    hash = "sha256-XGp4HHH6D6ZKiO5RnMzqYJYnZB538EnEflvlTsOKpvo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fLE3qALPTc9audJ/r1IXMd8eva4mpTYyKW50iJJcDxA=";
   };
 
   buildCommand = ''
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Run declarative containers without full system rebuilds";
-    homepage = "https://github.com/erikarvstedt/extra-container";
-    changelog = "https://github.com/erikarvstedt/extra-container/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/extra-container/extra-container";
+    changelog = "https://github.com/extra-container/extra-container/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.erikarvstedt ];
+    maintainers = [ lib.maintainers.stevelr ];
     mainProgram = "extra-container";
   };
-}
+})

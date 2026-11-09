@@ -20,7 +20,7 @@ build-idris-package {
     owner = "Termina1";
     repo = "tlhydra";
     rev = "3fc9049447d9560fe16f4d36a2f2996494ac2b33";
-    sha256 = "1y3gcbc1ypv00vwa0w3v0n6ckf7gnz26xsfmgnidsaxzff3y0ymh";
+    hash = "sha256-sHrgh3O/K92ifdXpbsS377jJjAV7cKD4BmBfH9hib/g=";
   };
 
   meta = {

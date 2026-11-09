@@ -5,13 +5,13 @@
 }:
 buildDotnetModule {
   pname = "liborbispkg-pkgtool";
-  version = "0.3-unstable-2024-10-12";
+  version = "0.3-unstable-2025-11-13";
 
   src = fetchFromGitHub {
     owner = "OpenOrbis";
     repo = "LibOrbisPkg";
-    rev = "75616a28de0f49f05eeff872211e806fb6de3818";
-    hash = "sha256-ySlMzUfJ0IXi/NWbj53jqCRDNm9Xh4TuffyKhNh4wuM=";
+    rev = "c1caa3ba25097fe602c0d842a0357bf7037b0838";
+    hash = "sha256-bCnaWooLHmUK5Say4fQINUuzTAmXr8qULmkD8bVVUjU=";
   };
 
   projectFile = "PkgTool.Core/PkgTool.Core.csproj";
@@ -21,7 +21,7 @@ buildDotnetModule {
   '';
 
   meta = {
-    description = "Library, GUI, CLI for creating, inspecting, and modifying PS4 PKG, SFO, PFS, and related filetypes";
+    description = "CLI for creating, inspecting, and modifying PS4 PKG, SFO, PFS, and related filetypes";
     homepage = "https://github.com/OpenOrbis/LibOrbisPkg";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.ryand56 ];

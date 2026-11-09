@@ -5,14 +5,16 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "passphrase2pgp";
   version = "1.3.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "passphrase2pgp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-it1XYzLiteL0oq4SZp5E3s6oSkFKi3ZY0Lt+P0gmNag=";
   };
 
@@ -40,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

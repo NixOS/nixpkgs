@@ -1,4 +1,5 @@
 {
+  lib,
   replaceVarsWith,
   runtimeShell,
   installShellFiles,
@@ -22,5 +23,8 @@ replaceVarsWith {
     installManPage ${./nixos-build-vms.8}
   '';
 
-  meta.mainProgram = "nixos-build-vms";
+  meta = {
+    mainProgram = "nixos-build-vms";
+    license = lib.licenses.mit;
+  };
 }

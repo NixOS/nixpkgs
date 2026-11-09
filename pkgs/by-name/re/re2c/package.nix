@@ -12,21 +12,23 @@
   spamassassin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "re2c";
-  version = "4.3.1";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
-    rev = version;
-    hash = "sha256-ihtAB6HLgYhX+FKPFy01RByy/M468YrHv2v5wB9bJws=";
+    rev = finalAttrs.version;
+    hash = "sha256-Ks6+67MpQOCYn4+GxTHA/7cG2Ayfa4S5cfSLd1U1kac=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     python3
   ];
+
+  strictDeps = true;
 
   doCheck = true;
   enableParallelBuilding = true;
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Tool for writing very fast and very flexible scanners";
     homepage = "https://re2c.org";
@@ -55,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

@@ -40,6 +40,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  # opt out of GCC 15's stricter C standards
+  # https://github.com/NixOS/nixpkgs/issues/475479
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+
   buildInputs = [ openssl ];
 
   unpackPhase = ''
@@ -50,7 +54,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Command line SMTP client";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     homepage = "https://deanproxy.com/code";
     platforms = lib.platforms.unix;
     mainProgram = "email";
