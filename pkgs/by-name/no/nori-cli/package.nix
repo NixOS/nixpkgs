@@ -1,14 +1,15 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, gnutar
-, gzip
-, buildFHSEnv
-, appimageTools
-, alsa-lib
-, webkitgtk_4_1
-, cacert
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gnutar,
+  gzip,
+  buildFHSEnv,
+  appimageTools,
+  alsa-lib,
+  webkitgtk_4_1,
+  cacert,
+  nix-update-script,
 }:
 
 let
@@ -25,7 +26,10 @@ let
     inherit version src;
 
     dontUnpack = true;
-    nativeBuildInputs = [ gnutar gzip ];
+    nativeBuildInputs = [
+      gnutar
+      gzip
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -43,34 +47,38 @@ let
 
   fhsDefaults = appimageTools.defaultFhsEnvArgs;
 in
-buildFHSEnv (fhsDefaults // {
-  inherit pname version;
+buildFHSEnv (
+  fhsDefaults
+  // {
+    inherit pname version;
 
-  executableName = "nori-cli";
-  runScript = "${unpacked}/bin/nori-cli";
+    executableName = "nori-cli";
+    runScript = "${unpacked}/bin/nori-cli";
 
-  # The CLI uses CPAL/ALSA for audio and WebKitGTK for provider sign-in.
-  targetPkgs = pkgs:
-    fhsDefaults.targetPkgs pkgs
-    ++ (with pkgs; [
-      alsa-lib
-      webkitgtk_4_1
-    ]);
+    # The CLI uses CPAL/ALSA for audio and WebKitGTK for provider sign-in.
+    targetPkgs =
+      pkgs:
+      fhsDefaults.targetPkgs pkgs
+      ++ ([
+        alsa-lib
+        webkitgtk_4_1
+      ]);
 
-  profile = ''
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
+    profile = ''
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    '';
 
-  passthru.updateScript = nix-update-script { };
+    passthru.updateScript = nix-update-script { };
 
-  meta = {
-    maintainers = with lib.maintainers; [ juanqp07 ];
-    description = "Nori terminal music player for Navidrome, Subsonic and YouTube Music";
-    homepage = "https://norifm.com/";
-    changelog = "https://github.com/norifm/nori/releases/tag/v${version}";
-    license = lib.licenses.agpl3Plus;
-    mainProgram = "nori-cli";
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-  };
-})
+    meta = {
+      maintainers = with lib.maintainers; [ juanqp07 ];
+      description = "Nori terminal music player for Navidrome, Subsonic and YouTube Music";
+      homepage = "https://norifm.com/";
+      changelog = "https://github.com/norifm/nori/releases/tag/v${version}";
+      license = lib.licenses.agpl3Plus;
+      mainProgram = "nori-cli";
+      platforms = [ "x86_64-linux" ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    };
+  }
+)

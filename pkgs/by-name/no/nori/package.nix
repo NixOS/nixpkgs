@@ -1,7 +1,8 @@
-{ lib
-, appimageTools
-, fetchurl
-, nix-update-script
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  nix-update-script,
 }:
 
 appimageTools.wrapType2 (finalAttrs: {
