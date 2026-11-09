@@ -3,27 +3,29 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  testers,
-  ipatool,
   writableTmpDirAsHomeHook,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "ipatool";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wT2oo2TvwkpH8WC497q7W7hX6PozESpkm240LVGcvLU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oWcP+CSMq6lnm/Qz1h+1A8Ivp1IpR5MFe42EUjz1eeg=";
   };
 
-  vendorHash = "sha256-ePQ78/Ki1u9US9yLvWVx3oxvBWXYA1Pg3jl+IGYpXW8=";
+  vendorHash = "sha256-Fb5Zufd/K8a0why62V8ShQR65P/FefRFfde5tYVB4JQ=";
 
   # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
   proxyVendor = true;
+
+  # Upstream added a developer tool, profilegen, that should not be installed
+  subPackages = [ "." ];
 
   # Fixes "unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/" on macOS
   nativeBuildInputs = [
@@ -51,14 +53,10 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/ipatool completion zsh)
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-      package = ipatool;
-      command = "ipatool --version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line tool that allows searching and downloading app packages (known as ipa files) from the iOS App Store";
