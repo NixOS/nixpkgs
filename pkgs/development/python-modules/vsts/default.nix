@@ -23,6 +23,9 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py --replace-fail "msrest>=0.6.0,<0.7.0" "msrest"
+    substituteInPlace vsts/__init__.py \
+      --replace-fail "import pkg_resources" "import pkgutil" \
+      --replace-fail "pkg_resources.declare_namespace(__name__)" "__path__ = pkgutil.extend_path(__path__, __name__)"
   '';
 
   # Tests are highly impure
