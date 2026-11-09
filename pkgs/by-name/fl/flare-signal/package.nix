@@ -10,6 +10,9 @@
   gst_all_1,
   openssl,
   protobuf,
+  aws-lc,
+  sqlite,
+  sqlcipher,
   libspelling,
   libsecret,
   libadwaita,
@@ -24,18 +27,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.22.7";
+  version = "0.22.8";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-ZPL75VZf5qClJ7QJ9zMdYIS+lYb9BQAUzLLdToUyoj4=";
+    hash = "sha256-yZqILhe/6ii+4zENilFrAISOy4cPCsYoXHoVQhgJndI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-W5+4Ho2cGmnj0xNs+xfMHh3AVP+HS7RwyXS59nw0UMk=";
+    hash = "sha256-YE5+Eqt8bHUfinScPJtjzwOMZ3W2ddeFEnFA0MFH4nY=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    protobuf
   ];
 
   buildInputs = [
@@ -58,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libspelling
     openssl
-    protobuf
+    aws-lc
+    sqlite
+    sqlcipher
 
     # To reproduce audio messages
     gst_all_1.gstreamer
