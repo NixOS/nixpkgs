@@ -36,6 +36,7 @@
   toml-f,
   greenx,
   gmp,
+  libwignernj,
   addDriverRunpath,
   enableElpa ? false,
   elpa,
@@ -107,19 +108,31 @@ let
       inherit (self) mctc-lib mstore toml-f;
     };
 
-    tblite = tblite.override {
-      buildType = "cmake";
-      inherit (self)
-        mctc-lib
-        mstore
-        toml-f
-        multicharge
-        dftd4
-        simple-dftd3
-        ;
-    };
+    tblite =
+      (tblite.override {
+        buildType = "cmake";
+        inherit (self)
+          mctc-lib
+          mstore
+          toml-f
+          multicharge
+          dftd4
+          simple-dftd3
+          ;
+      }).overrideAttrs
+        (_: {
+          # ddX and trexio don't provide CMake config files
+          cmakeFlags = [
+            (lib.cmakeBool "TBLITE_WITH_DDX" false)
+            (lib.cmakeBool "TBLITE_WITH_HDF5" true)
+            (lib.cmakeBool "TBLITE_WITH_TREXIO" false)
+            (lib.cmakeBool "TBLITE_WITH_MPI" false)
+            (lib.cmakeBool "TBLITE_WITH_SCALAPACK" false)
+          ];
+        });
 
     sirius = sirius.override {
+      libxc = libxc_7;
       inherit (self)
         mctc-lib
         toml-f
@@ -133,7 +146,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
-  version = "2026.2";
+  # Using a post-v2026.2 commit because tblite 0.8.0 / dftd4 4.3.0 support
+  # (PRs #6190, #6218, #6424) was merged after the v2026.2 release.
+  version = "2026.2-unstable-2026-11-05";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -141,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ojG00n6KiaDW9vLgw/sIrhS8ceyh1mmlxgacw8KfMnA=";
+    rev = "bc428196533ec1afec9844324d6ed8d98daaa661";
+    hash = "sha256-0EPNftfFulFZMJUnia/GW5pB0d9kswuJTwpd7IN87I4=";
     fetchSubmodules = true;
   };
 
@@ -153,10 +168,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix pkg-config path generation
     ./pkgconfig.patch
-
-    # SIRIUS 7.12 removed the call_fftw_fin argument from sirius_finalize()
-    ./sirius-7.12-finalize-api.patch
   ];
+
+  postPatch = ''
+    patchShebangs tools exts/dbcsr/tools/build_utils exts/dbcsr/.cp2k
+  '';
 
   nativeBuildInputs = [
     python3
@@ -195,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     trexio
     greenx
     gmp
+    libwignernj
     grimmeCmake.dftd4
     grimmeCmake.simple-dftd3
     grimmeCmake.tblite
@@ -218,10 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ (lib.getBin mpi) ];
   propagatedUserEnvPkgs = [ mpi ];
-
-  postPatch = ''
-    patchShebangs tools exts/dbcsr/tools/build_utils exts/dbcsr/.cp2k
-  '';
 
   cmakeFlags = [
     (lib.strings.cmakeBool "CP2K_USE_DFTD4" true)
