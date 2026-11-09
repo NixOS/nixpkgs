@@ -2,8 +2,11 @@
   fetchFromGitHub,
   lib,
   openssl,
+  pkg-config,
   rustPlatform,
+  sqlite,
   stdenv,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taskchampion-sync-server";
@@ -24,9 +27,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   meta = {
     description = "Sync server for Taskwarrior 3";
