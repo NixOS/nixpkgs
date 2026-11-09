@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   libiconv,
+  libgit2,
   openssl,
   gitMinimal,
   pkg-config,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    (libgit2.override { withExperimentalSha256 = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
