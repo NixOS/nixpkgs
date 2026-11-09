@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -418,8 +419,16 @@ in
               database = cfg.settings.files.database;
             in
             [
-              "${getExe' pkgs.coreutils "echo"} 'Deleting query logs older than ${days} days'"
-              "${getExe cfg.package} sqlite3 '${database}' 'DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1'"
+              (utils.escapeSystemdExecArgs [
+                (getExe' pkgs.coreutils "echo")
+                "Deleting query logs older than ${days} days"
+              ])
+              (utils.escapeSystemdExecArgs [
+                (getExe cfg.package)
+                "sqlite3"
+                database
+                "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"
+              ])
             ];
           # Hardening
           NoNewPrivileges = true;
