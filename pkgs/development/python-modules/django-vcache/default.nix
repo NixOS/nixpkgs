@@ -1,10 +1,12 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   django,
   fetchFromGitLab,
   hatchling,
   ormsgpack,
+  pkg-config,
   pythonOlder,
   pyzstd,
   rustPlatform,
@@ -36,9 +38,12 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optional (pythonOlder "3.14") pyzstd;
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ aws-lc ];
 
   pythonImportsCheck = [ "django_vcache" ];
 
