@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "yap";
-  version = "8.0.1-unstable-2025-10-27";
+  version = "8.0.2-unstable-2026-10-28";
 
   src = fetchFromGitHub {
     owner = "vscosta";
     repo = "yap";
-    rev = "d5ef32dec671e8d1bc7465e3d2ecdf468c568f16";
-    hash = "sha256-aNA7OV+UjdcCL5Ia2tzPgDLcn6/bzvKfdk2aWk300zk=";
+    rev = "18cee3ed23055912414ec906d63971da919f8e28";
+    hash = "sha256-NSeQqtiGg0HCC48zjTa4ddsL2eLOXmdGRQ5FA/k7iL4=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,6 @@ stdenv.mkDerivation {
     (lib.cmakeBool "WITH_Gecode" false)
   ];
 
-  # -fcommon: workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: libYap.a(pl-dtoa.o):/build/yap-6.3.3/H/pl-yap.h:230: multiple definition of `ATOM_';
-  #     libYap.a(pl-buffer.o):/build/yap-6.3.3/H/pl-yap.h:230: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
-
   passthru.updateScript = writeShellScript "update-yap" ''
     ${lib.getExe nix-update} yap --version=branch
     version=$(nix eval --raw --file . yap.version)
@@ -66,6 +60,7 @@ stdenv.mkDerivation {
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || !stdenv.hostPlatform.is64bit;
     homepage = "https://github.com/vscosta/yap";
     description = "ISO-compatible high-performance Prolog compiler";
+    mainProgram = "yap";
     license = lib.licenses.artistic2;
     platforms = lib.platforms.linux;
   };
