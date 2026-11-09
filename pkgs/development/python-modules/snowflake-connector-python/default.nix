@@ -3,9 +3,10 @@
   aioboto3,
   aiohttp,
   asn1crypto,
-  buildPythonPackage,
+  azure-identity,
   boto3,
   botocore,
+  buildPythonPackage,
   certifi,
   charset-normalizer,
   cryptography,
@@ -35,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "snowflake-connector-python";
-  version = "4.3.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bJK6U5lomcPMGeKEmv+9m+uM5+3GJKKUA3dEwP/ynVo=";
+    hash = "sha256-Jz2HzSwio1RNx5Fl7QX+1AQ43DYsnLZHnC8BJTreLiU=";
   };
 
   build-system = [
@@ -73,6 +74,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    azure = [
+      azure-identity
+    ];
     boto = [
       boto3
       botocore
@@ -120,20 +124,34 @@ buildPythonPackage (finalAttrs: {
     "test/unit/aio/test_oauth_token_async.py"
     "test/unit/aio/test_proxies_async.py"
     # aio tests that connect to the internet
-    "test/unit/aio/test_connection_async_unit.py::test_invalid_backoff_policy"
+    "test/unit/aio/test_connection_async_unit.py"
     "test/unit/aio/test_ocsp.py"
-    "test/unit/aio/test_s3_util_async.py::test_download_retry_exceeded_error"
     "test/unit/aio/test_s3_util_async.py::test_accelerate_in_china_endpoint"
+    "test/unit/aio/test_s3_util_async.py::test_download_expiry_error"
+    "test/unit/aio/test_s3_util_async.py::test_download_retry_exceeded_error"
     "test/unit/aio/test_s3_util_async.py::test_get_header_expiry_error"
     "test/unit/aio/test_s3_util_async.py::test_upload_expiry_error"
-    "test/unit/aio/test_s3_util_async.py::test_download_expiry_error"
+    "test/unit/aio/test_telemetry_async.py"
+    "test/unit/test_storage_client.py"
+
     # snowflake.connector.errors.ProgrammingError: 251008: 251008: Failed to load private key:
     # argument 'password': Cannot convert "<class 'int'>" instance to a buffer.
     "test/unit/aio/test_auth_keypair_async.py::test_auth_keypair"
+    # test/unit/aio/test_connection_async_unit.py - RuntimeError: There is no current event loop in thread 'MainThread'.
+    "test/unit/aio/test_connection_async_unit.py"
+    # test/unit/aio/test_secondary_roles_async.py - Failed: 'anyio' not found in `markers` configuration option
+    "test/unit/aio/test_secondary_roles_async.py"
+    # AssertionError: /build/source/.wiremock/wiremock-standalone.jar does not exist
+    "test/unit/aio/test_auth_jwt_error_codes_async.py"
+    "test/unit/aio/test_result_batch_async.py"
+    "test/unit/test_auth_jwt_error_codes.py"
+    "test/unit/test_redirect_retry.py"
+    "test/unit/test_result_batch.py"
   ];
 
   disabledTests = [
     # Tests connect to the internet
+    "test_aks_path_plumbs_mi_token_to_api"
     "test_status_when_num_of_chunks_is_zero"
     "test_test_socket_get_cert"
     # Missing .wiremock/wiremock-standalone.jar
