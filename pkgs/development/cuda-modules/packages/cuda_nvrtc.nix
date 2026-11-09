@@ -25,5 +25,8 @@ buildRedist {
       and creates handles that can be used to obtain the PTX.
     '';
     homepage = "https://docs.nvidia.com/cuda/nvrtc";
+    pkgConfigModules = [
+      "nvrtc"
+    ];
   };
 }
