@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  pkg-config,
   sqlite,
   createSymlinks ? true,
 }:
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ sqlite ];
 
   postInstall = lib.optionalString createSymlinks ''
