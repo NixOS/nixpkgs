@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fheroes2";
-  version = "1.1.17";
+  version = "1.1.18";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = finalAttrs.version;
-    hash = "sha256-th5XWNpVweVdfxdNK0XaPL8L3UbuafnIdENRYIgfcXw=";
+    hash = "sha256-I/zneZVvUN2WjnNsIb8cmeAbsxu4gu4zZFEsau/SRQg=";
   };
 
   nativeBuildInputs = [ imagemagick ];
