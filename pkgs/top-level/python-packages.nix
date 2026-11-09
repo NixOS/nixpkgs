@@ -22434,6 +22434,8 @@ self: super: with self; {
 
   vapoursynth = callPackage ../development/python-modules/vapoursynth { };
 
+  vapoursynth-mvtools = callPackage ../development/python-modules/vapoursynth-mvtools { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };

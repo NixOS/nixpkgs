@@ -2,14 +2,15 @@
   lib,
   stdenv,
   fetchPypi,
-  python3Packages,
+  buildPythonPackage,
   vapoursynth,
+  meson-python,
   pkg-config,
   nasm,
   fftwFloat,
 }:
 
-python3Packages.buildPythonPackage (finalAttrs: {
+buildPythonPackage (finalAttrs: {
   pname = "vapoursynth-mvtools";
   version = "29";
   pyproject = true;
@@ -28,7 +29,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    python3Packages.meson-python
+    meson-python
   ];
 
   nativeBuildInputs = [
