@@ -722,10 +722,10 @@ let
           config;
     in
     if m ? config || m ? options then
-      let
-        badAttrs = removeAttrs m attrsToRemove;
-      in
-      if badAttrs != { } then
+      if removeAttrs m attrsToRemove != { } then
+        let
+          badAttrs = removeAttrs m attrsToRemove; # Recompute for the error message
+        in
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
         {
