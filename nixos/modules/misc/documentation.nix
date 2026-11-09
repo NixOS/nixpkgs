@@ -122,6 +122,7 @@ let
         configFilesPackages = [
           "la/lact"
           "li/litellm"
+          "pi/picom"
         ];
         root = toString pkgs.path;
         prefixRegex = "^" + lib.strings.escapeRegex root + "($|/(modules|nixos|lib)($|/.*))";
