@@ -162,6 +162,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
 
+  pytestFlags = [
+    # astropy tries to download the leap-second table, which fails in the sandbox
+    "-Wignore::astropy.utils.exceptions.AstropyWarning"
+  ];
+
   disabledTests = [
     "rst" # Docs
     "test_print_params" # Needs to be online
