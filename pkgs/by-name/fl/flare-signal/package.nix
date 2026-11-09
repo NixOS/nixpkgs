@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
   version = "0.22.8";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "flare";
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    protobuf
   ];
 
   buildInputs = [
@@ -62,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libspelling
     openssl
-    protobuf
     sqlcipher
     sqlite
 
