@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/majd/ipatool";
     changelog = "https://github.com/majd/ipatool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     mainProgram = "ipatool";
   };
 })
