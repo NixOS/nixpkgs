@@ -2436,17 +2436,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-protobuf";
-      version = "0.5.3-1";
+      version = "0.6.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-protobuf-0.5.3-1.rockspec";
-          sha256 = "0jz3yxdf9n1zfnkywqjghn6nlfvkkv9li003kkzh7z0wzidqaljh";
+          url = "mirror://luarocks/lua-protobuf-0.6.0-1.rockspec";
+          sha256 = "1avg2zbgbs2h3qd6nvb0blfsz40bqqicyxbszmz15ccv1j2zsrca";
         }).outPath;
       src = fetchFromGitHub {
         owner = "starwing";
         repo = "lua-protobuf";
-        tag = "0.5.3";
-        hash = "sha256-9vAv/Rhf9xrQnbd0nkaxGrcTRKkUSlpYRAJe2zpdIiY=";
+        tag = "0.6.0";
+        hash = "sha256-x1a4dtiF8oXHiUIZre6UZ/dsWEcoXiCQCldh90wZqLk=";
       };
 
       disabled = luaOlder "5.1";
