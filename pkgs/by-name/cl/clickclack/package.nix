@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clickclack";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "clickclack";
     rev = finalAttrs.version;
-    hash = "sha256-YmlbGEmZgT/30c+mWQzdz4rKc69d75zhoNUA5FdxdMc=";
+    hash = "sha256-YZiGjjJU6qwfRfHKY4jCuuAonTJWA4JuwsSxRxb3C7g=";
   };
 
   buildInputs = [
