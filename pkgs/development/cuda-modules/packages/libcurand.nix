@@ -27,5 +27,8 @@ buildRedist {
       pseudorandom and quasirandom numbers.
     '';
     homepage = "https://developer.nvidia.com/curand";
+    pkgConfigModules = [
+      "curand"
+    ];
   };
 }
