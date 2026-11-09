@@ -1,10 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  bash,
   buildDotnetModule,
   copyDesktopItems,
-  coreutils,
   dotnetCorePackages,
   makeDesktopItem,
   nix-update-script,
@@ -13,7 +11,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "knossosnet";
-  version = "1.3.13";
+  version = "1.3.14";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,18 +20,10 @@ buildDotnetModule (finalAttrs: {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lx7PjqbEnF2xFrUtWJ6g2qSQ++k/hyjGLQ5bl7RqWM0=";
+    hash = "sha256-J/UjIh0Xmj3HpETPO7GN/cNqJdDg0owcGmd92n1ygZ4=";
   };
 
   patches = [ ./dotnet-8-upgrade.patch ];
-
-  postPatch = ''
-    # Let appimages be executable
-    substituteInPlace Knossos.NET/Classes/KnUtils.cs \
-      --replace-fail "\"/bin/bash\"" "\"${lib.getExe bash}\"" \
-      --replace-fail "\"chmod -R " "\"${lib.getExe' coreutils "chmod"} -R " \
-      --replace-fail "\"chmod {permissions}" "\"${lib.getExe' coreutils "chmod"} {permissions}"
-  '';
 
   nativeBuildInputs = [ copyDesktopItems ];
 

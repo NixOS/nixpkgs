@@ -6,8 +6,8 @@
   },
   {
     "pname": "Avalonia",
-    "version": "11.3.9",
-    "hash": "sha256-bjSH8REHeK19bh8IacmyllDPaWND+TJdkhKGc8LVvjE="
+    "version": "11.3.15",
+    "hash": "sha256-6fhS6WGCHGw0jLloKmdE7BDilTPvoPwBZgwNT7p+GbM="
   },
   {
     "pname": "Avalonia.Angle.Windows.Natives",
@@ -21,8 +21,8 @@
   },
   {
     "pname": "Avalonia.Controls.ColorPicker",
-    "version": "11.3.9",
-    "hash": "sha256-Kk3AmO7foyO5JdnGKfE9KwtVyGwe6SgUZnXCX/OuZjo="
+    "version": "11.3.15",
+    "hash": "sha256-gvL+wVIT8K6LL2Uf2WJmhlOXO1EE8oo4O4aX6FiYLvg="
   },
   {
     "pname": "Avalonia.Controls.DataGrid",
@@ -31,18 +31,18 @@
   },
   {
     "pname": "Avalonia.Desktop",
-    "version": "11.3.9",
-    "hash": "sha256-ib4psuecjBXKow0UC6oXvcVNhizFKokadCVqmwyQtCc="
+    "version": "11.3.15",
+    "hash": "sha256-I5/WDxRBq7zKag/V62SgDEdsphqvenicAfUMr3FGbaY="
   },
   {
     "pname": "Avalonia.Diagnostics",
-    "version": "11.3.9",
-    "hash": "sha256-psajJAfqzLpMVx3//nezH7TixDJepN3/y6GwNn8k+TM="
+    "version": "11.3.15",
+    "hash": "sha256-7kjJ6Oajamsrdbzpp4sHVEEWlO9utrjSb5LFtNfdGnA="
   },
   {
     "pname": "Avalonia.FreeDesktop",
-    "version": "11.3.9",
-    "hash": "sha256-+adR3ErHqoqTBAJ5hMiyP6efX/hCAcWWCowCqA0Bxrw="
+    "version": "11.3.15",
+    "hash": "sha256-+YHaPVp/CtCuEBy/3PxjpTM1POfP6I0mMJQStvr/zQM="
   },
   {
     "pname": "Avalonia.HtmlRenderer",
@@ -51,43 +51,43 @@
   },
   {
     "pname": "Avalonia.Markup.Xaml.Loader",
-    "version": "11.3.9",
-    "hash": "sha256-8qrDtgGhNEy5ClNo0+OyxYVRHIElUMlDVHla9RgsgCU="
+    "version": "11.3.15",
+    "hash": "sha256-g1Q0f1/0BMO47QsGsdKICQw/BzL+ms5fAmFfIAtm7CU="
   },
   {
     "pname": "Avalonia.Native",
-    "version": "11.3.9",
-    "hash": "sha256-cQ9/MKZ03jaLqAGRDLCzws5OfP/mSOoPRr1OxXNGa3o="
+    "version": "11.3.15",
+    "hash": "sha256-zbSkAdgILVoN8+mfnd7wy9LAHW33nDxVgvPz/QKjAiM="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
-    "version": "11.3.9",
-    "hash": "sha256-HxHN91T0BbQMkcZwozuVOQwmywm1oayTLYvUozwt1J0="
+    "version": "11.3.15",
+    "hash": "sha256-0up4wo1Mzg6cWCsUTjARFtRYBGrASa9CofEIjqOnEus="
   },
   {
     "pname": "Avalonia.Skia",
-    "version": "11.3.9",
-    "hash": "sha256-KCL1LNUd2i+50vQpDgfI+aMkIBUWtxExyuc43QIK21o="
+    "version": "11.3.15",
+    "hash": "sha256-EB0DTwoH/W4JjRphNr61X4dSNZyBNxbKzJmCC+6ImOo="
   },
   {
     "pname": "Avalonia.Themes.Fluent",
-    "version": "11.3.9",
-    "hash": "sha256-4HuNP/nSB7T+n9KZQgXNvbgudG3eITnDACj8Y2NV6OU="
+    "version": "11.3.15",
+    "hash": "sha256-xZOLcp4GOjsQNFuNgut69v19zxIUUtyh/mLy+s1kG5E="
   },
   {
     "pname": "Avalonia.Themes.Simple",
-    "version": "11.3.9",
-    "hash": "sha256-0MyHPZbkp0DduFwoOMScAOKpqQ/Zs6DOUfexVLKzSco="
+    "version": "11.3.15",
+    "hash": "sha256-D+x2e2hmP5gO4ch8LdahT/ehNB7lGmd7JJnMqyRY+9s="
   },
   {
     "pname": "Avalonia.Win32",
-    "version": "11.3.9",
-    "hash": "sha256-OwWQymPLmN362vMD6kZk8dBD/+lSpvGqIW0T/AquYig="
+    "version": "11.3.15",
+    "hash": "sha256-QbS7lyT4Wp8tecRDZ4ghTryzfELg4JoIoOzaaRTNWWQ="
   },
   {
     "pname": "Avalonia.X11",
-    "version": "11.3.9",
-    "hash": "sha256-B8P+m2VyPwXCyVWGAKewZCqO8fycgYWjWx830VbR79A="
+    "version": "11.3.15",
+    "hash": "sha256-vGSx23Ir5iuCUBa1h3G8nBmgWltjMDpRKKdkE5bCHhw="
   },
   {
     "pname": "CommunityToolkit.Mvvm",
