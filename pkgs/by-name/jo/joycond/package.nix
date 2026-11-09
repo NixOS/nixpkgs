@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "joycond";
-  version = "0-unstable-2026-03-02";
+  version = "0.1.0-unstable-2026-11-09";
 
   src = fetchFromGitHub {
     owner = "DanielOgorchock";
     repo = "joycond";
-    rev = "0df025ac5dc284b1f31172b6b252321ba788c4de";
-    sha256 = "sha256-2rHSQFQvpNZWZJQenZxPEVkbUFQvhRz1Om1AnnIio4M=";
+    rev = "4fe23eed61965e951402520d872ab497c8c93703";
+    sha256 = "sha256-R6znMDWZGKrxMyI0R85m4IG1Cal+QWLyRYhncN3I3UE=";
   };
 
   nativeBuildInputs = [
