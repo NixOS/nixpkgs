@@ -118,6 +118,8 @@ in
     ]
     ++ lib.optionals cfg.pd.enable [ cfg.pd.package ];
 
+    services.dbus.packages = lib.optionals cfg.pd.enable [ cfg.pd.package ];
+
     services.tlp.settings =
       let
         cfg = config.powerManagement;

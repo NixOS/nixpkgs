@@ -327,6 +327,8 @@ in
 
     environment.systemPackages = [ pkgs.xpra ];
 
+    services.dbus.packages = [ pkgs.xpra ];
+
     services.pulseaudio.enable = mkDefault cfg.pulseaudio;
     services.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
   };
