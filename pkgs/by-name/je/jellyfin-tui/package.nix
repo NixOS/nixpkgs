@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   mpv,
+  sqlite,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     mpv
+    sqlite
   ];
 
   nativeInstallCheckInputs = [
