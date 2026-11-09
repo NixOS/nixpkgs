@@ -4,7 +4,7 @@
   callPackage,
 }:
 let
-  version = "5.6.285";
+  version = "5.6.287";
   pname = "gdevelop";
   meta = {
     description = "Graphical Game Development Studio";
