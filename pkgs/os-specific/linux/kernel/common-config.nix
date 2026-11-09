@@ -607,6 +607,10 @@ let
       DRM_NOVA = whenAtLeast "6.16" no;
 
       ANDROID_BINDER_IPC_RUST = whenAtLeast "7.4" yes;
+
+      # Do not enable Tyr yet, it's stil WIP. It might conflict with
+      # Panthor. aarch64 only, that's a Mali GPU driver.
+      DRM_TYR = lib.mkIf stdenv.hostPlatform.isAarch64 (whenAtLeast "6.18" no);
     };
 
     sound = {
