@@ -10,9 +10,10 @@
       webserver.nginx = { };
     };
 
+    secrets.keyFile = "/etc/liberaforms-secret";
+
     settings = {
       ROOT_USER = "ngi@nixos.org";
-      SECRET_KEY = "a_secret_key";
       SESSION_TYPE = "filesystem";
       TOKEN_EXPIRATION = 604800;
       DEFAULT_TIMEZONE = "Asia/Shanghai";

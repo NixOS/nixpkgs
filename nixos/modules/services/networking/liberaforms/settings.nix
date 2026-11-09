@@ -39,15 +39,6 @@
       description = "Default language for the interface.";
     };
 
-    # TODO: read from file
-    SECRET_KEY = lib.mkOption {
-      type = lib.types.str;
-      description = ''
-        Secret key for session management and CSRF protection.
-        Generate with: python3 -c 'import secrets; print(secrets.token_hex(32))'.
-      '';
-    };
-
     TMP_DIR = lib.mkOption {
       type = lib.types.str;
       default = "/var/cache/liberaforms";
@@ -79,15 +70,6 @@
       description = ''
         Maximum valid age for password resets and invitations, in seconds.
         86400 = 24h, 604800 = 7 days.
-      '';
-    };
-
-    # TODO: `flask cryptokey create`
-    CRYPTO_KEY = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        Encryption key for form data. Required if E2EE_MODE is not DISABLED.
       '';
     };
 
