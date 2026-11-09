@@ -63,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=services::plugins::embedded::tests::test_extract_plugins"
     # require network access
     "--skip=services::release_checker::tests::the_release_feed_override_is_shared_by_check_and_update"
+    # flaky: https://github.com/NixOS/nixpkgs/pull/585026#issuecomment-6741147524
+    "--skip=services::release_checker::tests::test_update_checker"
   ];
   cargoTestFlags = [
     "--lib"
