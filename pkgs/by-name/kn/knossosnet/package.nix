@@ -23,7 +23,13 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-J/UjIh0Xmj3HpETPO7GN/cNqJdDg0owcGmd92n1ygZ4=";
   };
 
-  patches = [ ./dotnet-8-upgrade.patch ];
+  # Build in .NET 10 LTS. Remove when addressed upstream.
+  postPatch = ''
+    substituteInPlace Knossos.NET/Knossos.NET.csproj VP.NET/VP.NET.csproj \
+      --replace-fail '<TargetFramework>net6.0</' '<TargetFramework>net10.0</'
+    substituteInPlace IonKiwi.lz4/IonKiwi.lz4.csproj \
+      --replace-fail '<TargetFrameworks>net60</TargetFrameworks>' '<TargetFramework>net10.0</TargetFramework>'
+  '';
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -46,7 +52,7 @@ buildDotnetModule (finalAttrs: {
     })
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
   # IO errors in build due to solution building race
   enableParallelBuilding = false;
   executables = [ "Knossos.NET" ];
