@@ -5,6 +5,9 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
+  aws-lc,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,7 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-GZQk7bw8VFq6gEiJ2sLgbkvTACKxZlNbkI54cHt5dVc=";
 
   nativeBuildInputs = [
+    pkg-config
     installShellFiles
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
   ];
 
   postInstall = ''
