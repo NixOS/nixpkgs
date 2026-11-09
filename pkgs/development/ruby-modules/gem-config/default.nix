@@ -804,13 +804,16 @@ in
     ];
   };
 
-  nap = attrs: {
-    postInstall = ''
-      installPath=$(cat $out/nix-support/gem-meta/install-path)
-      rm $installPath/support/cacert.pem
-      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/support/cacert.pem
-    '';
-  };
+  # nap 1.2.0 dropped its bundled cacert.pem and uses the system CA store
+  nap =
+    attrs:
+    lib.optionalAttrs (lib.versionOlder attrs.version "1.2.0") {
+      postInstall = ''
+        installPath=$(cat $out/nix-support/gem-meta/install-path)
+        rm $installPath/support/cacert.pem
+        ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/support/cacert.pem
+      '';
+    };
 
   ncursesw = attrs: {
     buildInputs = [ ncurses ];
