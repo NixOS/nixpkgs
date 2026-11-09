@@ -407,12 +407,12 @@ in
 
       pihole-ftl-log-deleter = mkIf cfg.queryLogDeleter.enable {
         description = "Pi-hole FTL DNS query log deleter";
+        # Avoid creating an empty database file if it doesn't yet exist
+        unitConfig.ConditionFileNotEmpty = cfg.settings.files.database;
         serviceConfig = {
           Type = "oneshot";
           User = cfg.user;
           Group = cfg.group;
-          # Avoid creating an empty database file if it doesn't yet exist
-          ConditionFileNotEmpty = cfg.settings.files.database;
           ExecStart =
             let
               days = toString cfg.queryLogDeleter.age;
