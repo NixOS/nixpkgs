@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages(ps: [ps.requests ps.tomli ps.packaging])"
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ps.packaging])"
 
 from itertools import chain
 import json
@@ -10,27 +10,20 @@ import re
 import subprocess
 import sys
 from typing import Dict, List, Optional, Set, TextIO
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from packaging.requirements import Requirement
-import tomli
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
 
 PKG_SET = "apache-airflow.pythonPackages"
 
-# If some requirements are matched by multiple or no Python packages, the
-# following can be used to choose the correct one
-PKG_PREFERENCES = {
-    "anthropic": "anthropic",
-    "dnspython": "dnspython",
-    "elasticsearch-dsl": "elasticsearch-dsl",
-    "google-api-python-client": "google-api-python-client",
-    "numpy": "numpy",
-    "protobuf": "protobuf",
-    "pydantic": "pydantic",
-    "requests_toolbelt": "requests-toolbelt",
-    "setuptools": "setuptools",
-    "sqlalchemy": "sqlalchemy",
-}
+# Optional manual overrides when multiple packages match and cannot be resolved
+# automatically, or when the attribute name deviates completely from the requirement name.
+PKG_PREFERENCES: Dict[str, str] = {}
 
 # Requirements missing from the airflow provider metadata
 EXTRA_REQS = {
@@ -38,17 +31,34 @@ EXTRA_REQS = {
 }
 
 
-def get_version():
+def get_version() -> str:
     with open(os.path.dirname(sys.argv[0]) + "/python-package.nix") as fh:
         # A version consists of digits, dots, and possibly a "b" (for beta)
         m = re.search(r'version = "([\d.b]+)";', fh.read())
         return m.group(1)
 
 
-def get_file_from_github(version: str, path: str):
-    with urlopen(
-        f"https://raw.githubusercontent.com/apache/airflow/{version}/{path}"
-    ) as response:
+def get_source_dir() -> Optional[Path]:
+    try:
+        out = subprocess.check_output(
+            ["nix-build", str(repository_root()), "-A", "apache-airflow.src", "--no-out-link"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        if out and os.path.isdir(out):
+            return Path(out)
+    except Exception as e:
+        logging.debug("Could not build apache-airflow.src locally: %s", e)
+    return None
+
+
+def get_file_from_github(version: str, path: str) -> bytes:
+    url = f"https://raw.githubusercontent.com/apache/airflow/{version}/{path}"
+    req = Request(url)
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
+    with urlopen(req) as response:
         return response.read()
 
 
@@ -62,7 +72,7 @@ def dump_packages() -> Dict[str, Dict[str, str]]:
         [
             "nix-env",
             "-f",
-            repository_root(),
+            str(repository_root()),
             "-qa",
             "-A",
             PKG_SET,
@@ -87,7 +97,7 @@ def remove_version_constraint(req: str) -> str:
 def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
     # Extract the base name, removing any extras (e.g., '[flask]')
     base_req_name = req.split("[")[0]
-    logging.debug(f"Searching for base_req_name: {base_req_name}")
+    logging.debug("Searching for base_req_name: %s", base_req_name)
     if base_req_name in PKG_PREFERENCES:
         return f"{PKG_SET}.{PKG_PREFERENCES[base_req_name]}"
     attr_paths = []
@@ -104,13 +114,53 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
         pattern = re.compile(rf"^python\d+\.\d+-{name}-(?:[\d\.]+|unstable-.*)", re.I)
         for attr_path, package in packages.items():
-            # logging.debug("Checking match for %s with %s", name, package["name"])
             if pattern.match(package["name"]):
                 attr_paths.append(attr_path)
     # Let's hope there's only one derivation with a matching name
-    assert len(attr_paths) <= 1, f"{req} matches more than one derivation: {attr_paths}"
-    if attr_paths:
+    attr_paths = list(dict.fromkeys(attr_paths))
+    if len(attr_paths) == 1:
         return attr_paths[0]
+    elif len(attr_paths) > 1:
+        candidates = {ap[len(PKG_SET + ".") :]: ap for ap in attr_paths}
+        norm_req = base_req_name.replace("_", "-").lower()
+
+        # 1. Prefer exact attribute match (treating '-' and '_' as equal)
+        exact_matches = [
+            ap
+            for attr, ap in candidates.items()
+            if attr.replace("_", "-").lower() == norm_req
+            or (
+                base_req_name.startswith(("python-", "python_"))
+                and attr.replace("_", "-").lower() == norm_req[len("python-") :]
+            )
+        ]
+        if len(exact_matches) == 1:
+            logging.debug(
+                "Disambiguated %s from %s to exact match %s",
+                base_req_name,
+                list(candidates.keys()),
+                exact_matches[0],
+            )
+            return exact_matches[0]
+
+        # 2. Prefer the general suffixless version (i.e. attribute without version suffix like _1, _1_4, etc.)
+        suffixless = [
+            ap
+            for attr, ap in candidates.items()
+            if not re.search(r"[-_]v?\d+([-_]\d+)*$|\d+$", attr)
+        ]
+        if len(suffixless) == 1:
+            logging.debug(
+                "Disambiguated %s from %s to suffixless match %s",
+                base_req_name,
+                list(candidates.keys()),
+                suffixless[0],
+            )
+            return suffixless[0]
+
+        raise AssertionError(
+            f"{req} matches multiple derivations and could not be resolved to a suffixless version: {list(candidates.keys())}"
+        )
     return None
 
 
@@ -155,12 +205,16 @@ def get_cross_provider_reqs(
     return reqs
 
 
-def parse_pyproject_toml(version: str, provider_name: str) -> Dict:
+def parse_pyproject_toml(source_dir: Optional[Path], version: str, provider_name: str) -> Dict:
     provider_dir = provider_name.replace(".", "/")
     path = f"providers/{provider_dir}/pyproject.toml"
     try:
-        content = get_file_from_github(version, path)
-        data = tomli.loads(content.decode("utf-8"))
+        if source_dir:
+            with open(source_dir / path, "rb") as f:
+                data = tomllib.load(f)
+        else:
+            content = get_file_from_github(version, path)
+            data = tomllib.loads(content.decode("utf-8"))
 
         dependencies = data.get("project", {}).get("dependencies", [])
 
@@ -195,52 +249,10 @@ def parse_pyproject_toml(version: str, provider_name: str) -> Dict:
         }
     except HTTPError:
         logging.warning("Couldn't get pyproject.toml for %s", provider_name)
-        return {"deps": [], "imports": [], "cross-providers-deps": []}
+        return {"deps": [], "imports": [], "cross-providers-deps": [], "version": "unknown"}
     except Exception as e:
-        logging.error(f"Error parsing pyproject.toml for {provider_name}: {e}")
-        return {"deps": [], "imports": [], "cross-providers-deps": []}
-
-
-def get_provider_reqs(version: str, packages: Dict, provider_names: List[str]) -> Dict:
-    provider_data = {}
-    for provider in provider_names:
-        data = parse_pyproject_toml(version, provider)
-        provider_data[provider] = {
-            "deps": data["deps"],
-            "cross-providers-deps": data["cross-providers-deps"],
-        }
-
-    provider_reqs = {}
-    cross_provider_deps = {}
-    for provider, data in provider_data.items():
-        provider_reqs[provider] = list(
-            provider_reqs_to_attr_paths(data["deps"], packages)
-        ) + EXTRA_REQS.get(provider, [])
-        cross_provider_deps[provider] = data["cross-providers-deps"]
-
-    transitive_provider_reqs = {}
-    # Add transitive cross-provider reqs
-    for provider in provider_reqs:
-        transitive_provider_reqs[provider] = get_cross_provider_reqs(
-            provider, provider_reqs, cross_provider_deps
-        )
-    return transitive_provider_reqs
-
-
-def get_provider_imports(version: str, provider_names: List[str]) -> Dict:
-    provider_imports = {}
-    for provider in provider_names:
-        data = parse_pyproject_toml(version, provider)
-        provider_imports[provider] = data["imports"]
-    return provider_imports
-
-
-def get_provider_versions(version: str, provider_names: List[str]) -> Dict:
-    provider_versions = {}
-    for provider in provider_names:
-        data = parse_pyproject_toml(version, provider)
-        provider_versions[provider] = data["version"]
-    return provider_versions
+        logging.error("Error parsing pyproject.toml for %s: %s", provider_name, e)
+        return {"deps": [], "imports": [], "cross-providers-deps": [], "version": "unknown"}
 
 
 def to_nix_expr(
@@ -248,7 +260,7 @@ def to_nix_expr(
 ) -> None:
     fh.write("# Warning: generated by update-providers.py, do not update manually\n")
     fh.write("{\n")
-    for provider, reqs in provider_reqs.items():
+    for provider, reqs in sorted(provider_reqs.items()):
         provider_name = provider.replace(".", "_")
         fh.write(f"  {provider_name} = {{\n")
         fh.write(
@@ -272,10 +284,14 @@ def get_all_providers_from_github(version: str) -> List[str]:
     """
     providers = []
     try:
+        headers = {}
+        token = os.environ.get("GITHUB_TOKEN")
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+
         # Get the SHA of the 'providers' directory for the given version
-        with urlopen(
-            f"https://api.github.com/repos/apache/airflow/contents/?ref={version}"
-        ) as response:
+        req = Request(f"https://api.github.com/repos/apache/airflow/contents/?ref={version}", headers=headers)
+        with urlopen(req) as response:
             root_contents = json.loads(response.read())
 
         providers_dir_info = next(
@@ -296,9 +312,8 @@ def get_all_providers_from_github(version: str) -> List[str]:
         providers_dir_sha = providers_dir_info["sha"]
 
         # Now, get the tree for the 'providers' directory recursively
-        with urlopen(
-            f"https://api.github.com/repos/apache/airflow/git/trees/{providers_dir_sha}?recursive=1"
-        ) as response:
+        req = Request(f"https://api.github.com/repos/apache/airflow/git/trees/{providers_dir_sha}?recursive=1", headers=headers)
+        with urlopen(req) as response:
             tree = json.loads(response.read())
 
         pyproject_paths = [
@@ -316,26 +331,64 @@ def get_all_providers_from_github(version: str) -> List[str]:
                 providers.append(provider_name)
 
     except HTTPError as e:
-        logging.error(f"Error fetching provider list from GitHub: {e}")
+        logging.error("Error fetching provider list from GitHub: %s", e)
         sys.exit(1)
 
     return sorted(providers)
 
 
+def get_all_providers(source_dir: Optional[Path], version: str) -> List[str]:
+    if source_dir:
+        providers_dir = source_dir / "providers"
+        providers = []
+        for p in providers_dir.glob("**/pyproject.toml"):
+            rel = p.relative_to(providers_dir).parent
+            rel_str = str(rel)
+            if rel_str and not rel_str.startswith("tests"):
+                providers.append(rel_str.replace("/", "."))
+        return sorted(providers)
+    return get_all_providers_from_github(version)
+
+
 def main() -> None:
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     version = get_version()
     packages = dump_packages()
     logging.info("Generating providers.nix for version %s", version)
 
-    # Fetch provider names from GitHub API
-    provider_names = get_all_providers_from_github(version)
+    source_dir = get_source_dir()
+    if source_dir:
+        logging.info("Using local source at %s", source_dir)
+    else:
+        logging.info("Local source not available; fetching from GitHub API")
 
-    provider_reqs = get_provider_reqs(version, packages, provider_names)
-    provider_imports = get_provider_imports(version, provider_names)
-    provider_versions = get_provider_versions(version, provider_names)
+    provider_names = get_all_providers(source_dir, version)
+
+    # Parse all pyproject.toml files once in a single pass
+    parsed_providers = {
+        name: parse_pyproject_toml(source_dir, version, name)
+        for name in provider_names
+    }
+
+    provider_reqs = {}
+    cross_provider_deps = {}
+    for provider, data in parsed_providers.items():
+        provider_reqs[provider] = list(
+            provider_reqs_to_attr_paths(data["deps"], packages)
+        ) + EXTRA_REQS.get(provider, [])
+        cross_provider_deps[provider] = data["cross-providers-deps"]
+
+    transitive_provider_reqs = {}
+    for provider in provider_reqs:
+        transitive_provider_reqs[provider] = get_cross_provider_reqs(
+            provider, provider_reqs, cross_provider_deps
+        )
+
+    provider_imports = {name: data["imports"] for name, data in parsed_providers.items()}
+    provider_versions = {name: data["version"] for name, data in parsed_providers.items()}
+
     with open(os.path.join(os.path.dirname(sys.argv[0]), "providers.nix"), "w") as fh:
-        to_nix_expr(provider_reqs, provider_imports, provider_versions, fh)
+        to_nix_expr(transitive_provider_reqs, provider_imports, provider_versions, fh)
 
 
 if __name__ == "__main__":
