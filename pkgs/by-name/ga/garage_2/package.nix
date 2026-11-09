@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage {
       '';
 
   passthru = {
-    tests = nixosTests."garage_${lib.versions.major version}";
+    tests = lib.optionalAttrs (!eol) nixosTests."garage_${lib.versions.major version}";
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
