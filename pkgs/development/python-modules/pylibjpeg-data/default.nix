@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   flit-core,
 }:
 
@@ -26,6 +27,8 @@ buildPythonPackage {
     "ljdata.ds"
     "ljdata.jpg"
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "JPEG and DICOM data used for testing pylibjpeg";
