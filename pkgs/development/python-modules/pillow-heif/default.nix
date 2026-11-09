@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cmake,
@@ -36,6 +37,19 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-jDQDcKsHKCG3RJ1AlMx+XB0R1/MhT+avI7/aBo8+sFo=";
   };
+
+  patches = [
+    # fix compatibility with libheif 1.23.7
+    (fetchpatch {
+      url = "https://github.com/bigcat88/pillow_heif/commit/558ee2bfbe85a64b4371bcc1bc067883c5f9573d.diff";
+      excludes = [
+        "CHANGELOG.md"
+        "LICENSES_bundled.txt"
+        "libheif/*"
+      ];
+      hash = "sha256-ToIAnz4PH87gyIBTnB57n3hA9BZXxtw0tS9mW4LUAGA=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
