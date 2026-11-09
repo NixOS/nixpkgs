@@ -4605,9 +4605,9 @@ with pkgs;
     electron_44
     electron_45
     ;
-  electron = electron_43;
-  electron-bin = electron_43-bin;
-  electron-chromedriver = electron-chromedriver_43;
+  electron = electron_45;
+  electron-bin = electron_45-bin;
+  electron-chromedriver = electron-chromedriver_45;
 
   bandit = with python3Packages; toPythonApplication bandit;
 
