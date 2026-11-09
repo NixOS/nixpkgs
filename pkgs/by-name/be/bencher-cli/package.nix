@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   mold,
+  pkg-config,
+  aws-lc,
   nix-update-script,
   versionCheckHook,
   rustc,
@@ -21,7 +23,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-BBBAeb3iOzH3o3mHnByYpWkHFsf193mDb2K/8VelMYw=";
 
-  nativeBuildInputs = [ mold ];
+  nativeBuildInputs = [
+    pkg-config
+    mold
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
