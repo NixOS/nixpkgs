@@ -6,6 +6,7 @@
   gpgme,
   installShellFiles,
   lib,
+  libgit2,
   libgpg-error,
   lua5_5,
   makeWrapper,
@@ -15,6 +16,7 @@
   pkg-config,
   rustPlatform,
   versionCheckHook,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
@@ -48,8 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gnupg
     gpgme
+    libgit2
     libgpg-error
     openssl
+    zstd
   ];
 
   env = {
