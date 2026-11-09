@@ -417,17 +417,21 @@ let
     let
       applyModuleArgs' = applyModuleArgs args;
 
+      # loadModule :: (m: Module) -> (fallbackKey: String) -> (fallbackFile: String) -> LoadedModule
+      #
       # Like unifyModuleSyntax, but also imports paths and calls functions if necessary
+      # Partially applied where possible, to save on function calls.
       loadModule =
-        fallbackFile: fallbackKey: m:
+        m:
         if isFunction m then
-          unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgs' fallbackKey m)
+          fallbackKey: unifyModuleSyntax' (applyModuleArgs' fallbackKey m) fallbackKey
         else if isAttrs m then
           if m._type or "module" == "module" then
-            unifyModuleSyntax fallbackFile fallbackKey m
+            unifyModuleSyntax' m
           else if m._type == "if" || m._type == "override" then
-            loadModule fallbackFile fallbackKey { config = m; }
+            loadModule { config = m; }
           else
+            fallbackKey: fallbackFile:
             throw (
               messages.not_a_module {
                 inherit fallbackFile;
@@ -438,6 +442,7 @@ let
               }
             )
         else if isList m then
+          fallbackKey: fallbackFile:
           let
             defs = [
               {
@@ -448,12 +453,14 @@ let
           in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else
+          _: _:
           let
             contents = import m;
+            path = (toString m);
           in
-          unifyModuleSyntax (toString m) (toString m) (
-            if isFunction contents then applyModuleArgs' (toString m) contents else contents
-          );
+          unifyModuleSyntax' (
+            if isFunction contents then applyModuleArgs' path contents else contents
+          ) path path;
 
       throwClassMismatch =
         m:
@@ -526,7 +533,7 @@ let
           modules = genList (
             i:
             let
-              m = loadModule parentFile "${parentKey}:anon-${toString (i + 1)}" (elemAt initialModules i);
+              m = loadModule (elemAt initialModules i) "${parentKey}:anon-${toString (i + 1)}" parentFile;
               module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
               collectedImports =
                 if module.imports != [ ] then
@@ -628,6 +635,8 @@ let
     Massage a module into canonical form, that is, a set consisting
     of ‘options’, ‘config’ and ‘imports’ attributes.
 
+    In the future, this will no longer be accessible outside of Nixpkgs.
+
     # Inputs
 
     `file`
@@ -643,6 +652,32 @@ let
     : 3\. Function argument
   */
   unifyModuleSyntax =
+    file: key: m:
+    # Internal representation uses
+    unifyModuleSyntax' m key file;
+
+  /**
+    Massage a module into canonical form, that is, a set consisting
+    of ‘options’, ‘config’ and ‘imports’ attributes.
+
+    This is the same as `unifyModuleSyntax`, just with the order of the
+    parameters changed for better partial application.
+
+    # Inputs
+
+    `m`
+
+    : 1\. Function argument
+
+    `key`
+
+    : 2\. Function argument
+
+    `file`
+
+    : 3\. Function argument
+  */
+  unifyModuleSyntax' =
     let
       attrsToRemove = [
         "_class"
@@ -665,7 +700,7 @@ let
         "freeformType"
       ];
     in
-    file: key: m:
+    m: key: file:
     let
       addMeta =
         config:
