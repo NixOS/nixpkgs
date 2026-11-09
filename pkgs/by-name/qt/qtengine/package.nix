@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtengine";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "kossLAN";
     repo = "qtengine";
     tag = finalAttrs.version;
-    hash = "sha256-dzti6tZBSZ/ZOHcBe3rFt3iuDj5L/8B8JEsqe7xqDUQ=";
+    hash = "sha256-qITtV7EBgBOL59l9XvFQUUPBUnoGx0R1x8wvdPOtUC4=";
   };
 
   nativeBuildInputs = [
