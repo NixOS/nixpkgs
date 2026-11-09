@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bubblewrap,
   curl,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # --expose-internals is required by the HMR service and the loader's internal module loader
     makeBinaryWrapper ${nodejs_24}/bin/node $out/bin/dsh \
-      --prefix PATH : ${lib.makeBinPath [ pnpm_11 ]} \
+      --prefix PATH : ${lib.makeBinPath [ pnpm_11 bubblewrap ]} \
       --add-flags "--expose-internals $out/libexec/dsh/apps/cli/lib/bin.js"
 
     runHook postInstall
