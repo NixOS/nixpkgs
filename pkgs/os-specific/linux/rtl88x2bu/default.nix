@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation {
   pname = "rtl88x2bu";
-  version = "${kernel.version}-unstable-2026-08-18";
+  version = "${kernel.version}-unstable-2026-10-27";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RinCat";
     repo = "RTL88x2BU-Linux-Driver";
-    rev = "ad889cc324baf2f13724e3d7b6e880804d3adae7";
-    hash = "sha256-COMFTSlaDeWdRLMmpJOK7hyCXeUC9QX2D5YIortl/ko=";
+    rev = "465ae7cb522a382adc85ea5c31f228af8d172148";
+    hash = "sha256-+UDY9B6ZjwkDNbVoYhpwAiZ+cLd72/LMp/mQ6LJN5+0=";
   };
 
   hardeningDisable = [ "pic" ];
