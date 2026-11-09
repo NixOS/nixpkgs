@@ -18,6 +18,8 @@ buildNavidromeRustPlugin (finalAttrs: {
 
   cargoHash = "sha256-p1cv18z+Bgqz7Z7DHFv2bJ2VdTVInfi7bDIO5pqp2X8=";
 
+  doNativeCheck = true;
+
   meta = {
     changelog = "https://github.com/J0R6IT0/navidrome-lyrics-plugin/releases/tag/v${finalAttrs.version}";
     description = "Fetches lyrics from various sources";
