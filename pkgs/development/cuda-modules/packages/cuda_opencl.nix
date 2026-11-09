@@ -10,6 +10,11 @@ buildRedist {
     "lib"
   ];
 
+  # Before 13.4 the pkg-config file asks for -lopencl, but the library is libOpenCL.so.
+  postPatch = ''
+    sed -i --follow-symlinks 's/-lopencl\b/-lOpenCL/' share/pkgconfig/*.pc
+  '';
+
   meta = {
     description = "Low-level API for heterogeneous computing that runs on CUDA-powered GPUs";
     longDescription = ''
@@ -18,5 +23,8 @@ buildRedist {
       language on a GPU.
     '';
     homepage = "https://developer.nvidia.com/opencl";
+    pkgConfigModules = [
+      "opencl"
+    ];
   };
 }
