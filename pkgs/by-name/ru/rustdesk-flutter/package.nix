@@ -12,6 +12,7 @@
   libaom,
   libopus,
   libpulseaudio,
+  libsodium,
   libva,
   libvdpau,
   libvpx,
@@ -135,6 +136,7 @@ flutter329.buildFlutterApplication rec {
     libaom
     libopus
     libpulseaudio
+    libsodium
     libva
     libvdpau
     libvpx
