@@ -1,9 +1,11 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   django,
   django-async-backend,
   fetchFromGitLab,
+  pkg-config,
   postgresql,
   postgresqlTestHook,
   psycopg,
@@ -31,9 +33,12 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = [ aws-lc ];
 
   dependencies = [
     django
