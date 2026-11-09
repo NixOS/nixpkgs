@@ -30,5 +30,9 @@ buildRedist {
   meta = {
     description = "High-performance FFT product CUDA library";
     homepage = "https://developer.nvidia.com/cufft";
+    pkgConfigModules = [
+      "cufft"
+      "cufftw"
+    ];
   };
 }
