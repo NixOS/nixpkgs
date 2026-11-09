@@ -21,7 +21,7 @@
   # tests
   matplotlib,
   numpy,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-regressions,
   pytestCheckHook,
 }:
@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     matplotlib
     numpy
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-regressions
     pytestCheckHook
   ];
