@@ -1,13 +1,18 @@
 {
   lib,
   applyPatches,
+  buildRubyGem,
   bundlerEnv,
+  cargo,
+  defaultGemConfig,
   fetchFromGitHub,
   fetchNpmDeps,
   nixosTests,
   nodejs,
   npmHooks,
   ruby_4_0,
+  rustPlatform,
+  rustc,
   stdenv,
   tailwindcss_3,
   gemset ? import ./gemset.nix,
@@ -53,6 +58,41 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gemset ruby;
     inherit (finalAttrs) version;
     gemdir = finalAttrs.src;
+
+    gemConfig = defaultGemConfig // {
+      tzf2 = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-O2VVj6VnqVSYUXgbb8fzXcgjhQMnKYKsWlj/rAN4kh0=";
+        };
+
+        dontBuild = false;
+
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+
+        preInstall = ''
+          export CARGO_HOME="$NIX_BUILD_TOP/.cargo"
+        '';
+
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 
   npmDeps = fetchNpmDeps {

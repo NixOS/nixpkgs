@@ -1,5 +1,8 @@
 {
   lib,
+  zstd,
+  libgit2,
+  pkg-config,
   rustPlatform,
   fetchFromGitHub,
   nixosTests,
@@ -19,6 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-ilWyC0YuvTA1wzxbQWQ3l4T+3ojblMSelPlIG1xVArY=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    zstd
+    libgit2
+  ];
 
   # static-web-server already has special handling for files with modification
   # time = Unix epoch, but the nix store is Unix epoch + 1 second.

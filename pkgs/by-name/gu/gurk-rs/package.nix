@@ -9,6 +9,8 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  sqlite,
+  sqlcipher,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,7 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlite
+    sqlcipher
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
