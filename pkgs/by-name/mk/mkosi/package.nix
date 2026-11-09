@@ -65,7 +65,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mkosi";
-  version = "27";
+  version = "27.1";
   pyproject = true;
 
   outputs = [
@@ -77,7 +77,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "systemd";
     repo = "mkosi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uUNPGFXrwTiSC6/EcYIxbAizjcS3Hqe1LABa5BmWGgw=";
+    hash = "sha256-XKoD8+dFDzBVo1h84N27sXIUsJ4kH53MjTkG0qjrFYg=";
   };
 
   patches = [
