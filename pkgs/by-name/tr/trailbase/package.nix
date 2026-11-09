@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchPnpmDeps,
+  aws-lc,
   pkg-config,
   protobuf,
   cmake,
@@ -11,6 +12,8 @@
   python3,
   geos,
   nodejs,
+  sqlite,
+  zstd,
   pnpm_11,
   pnpmConfigHook,
   versionCheckHook,
@@ -26,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
   version = "0.35.7";
 
+  strictDeps = true;
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
@@ -89,7 +93,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [ geos ];
+  buildInputs = [
+    aws-lc
+    geos
+    sqlite
+    zstd
+  ];
 
   cargoBuildFlags = [
     "--bin"
