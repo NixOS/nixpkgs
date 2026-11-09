@@ -1,0 +1,12 @@
+--- a/libcinnamon-desktop/gnome-desktop-thumbnail-script.c
++++ b/libcinnamon-desktop/gnome-desktop-thumbnail-script.c
+@@ -445,5 +445,7 @@
+   add_args (array,
+-            "bwrap",
+-            "--ro-bind", "/usr", "/usr",
++            "@bubblewrap_bin@",
++            "--ro-bind", "@storeDir@", "@storeDir@",
++            "--ro-bind-try", "/run/current-system", "/run/current-system",
++            "--ro-bind-try", "/run/opengl-driver", "/run/opengl-driver",
+             "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
+             NULL);
