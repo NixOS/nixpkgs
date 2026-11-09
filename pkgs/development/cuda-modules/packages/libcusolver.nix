@@ -40,5 +40,8 @@ buildRedist {
       lib.licenses.nvidiaCudaRedist
       lib.licenses.asl20
     ];
+    pkgConfigModules = [
+      "cusolver"
+    ];
   };
 }
