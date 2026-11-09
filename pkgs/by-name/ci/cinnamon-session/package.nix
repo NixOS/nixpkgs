@@ -7,7 +7,6 @@
   gsettings-desktop-schemas,
   gtk3,
   libcanberra,
-  libxslt,
   meson,
   ninja,
   pkg-config,
@@ -39,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon-session";
-  version = "6.6.4";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
     tag = finalAttrs.version;
-    hash = "sha256-rx7+tBXQ9kvnRYNxgF1QXyhk9NamUIjti/6GGrACYU0=";
+    hash = "sha256-DAJpmnWRYSJNUQ6S5jxQM5IrnbdImVQ/CR5UAAOcQG4=";
   };
 
   buildInputs = [
@@ -80,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     libexecinfo
     python3
     pkg-config
-    libxslt
   ];
 
   mesonFlags = [
@@ -100,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_CONFIG_DIRS : "${cinnamon-settings-daemon}/etc/xdg"
     )
   '';
+
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon-session";
