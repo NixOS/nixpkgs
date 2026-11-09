@@ -2,12 +2,15 @@
   lib,
   fetchFromGitHub,
   rocmPackages,
+  pkg-config,
   python3,
   cargo,
   rustc,
   cmake,
   clang,
+  sqlite,
   zlib,
+  zstd,
   libxml2,
   libedit,
   rustPlatform,
@@ -38,12 +41,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rocmPackages.hipblaslt
     rocmPackages.rocm-cmake
     rocmPackages.hipfft
+    sqlite
     zlib
+    zstd
     libxml2
     libedit
   ];
 
   nativeBuildInputs = [
+    pkg-config
     python3
     cargo
     rustc

@@ -6,6 +6,7 @@
   installShellFiles,
   pkg-config,
   openssl,
+  zstd,
   versionCheckHook,
 }:
 
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mago \

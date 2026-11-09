@@ -2050,31 +2050,6 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
-  hdf5 = callPackage ../tools/misc/hdf5 {
-    fortranSupport = false;
-    fortran = gfortran;
-  };
-
-  hdf5-mpi = hdf5.override {
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-cpp = hdf5.override { cppSupport = true; };
-
-  hdf5-fortran = hdf5.override { fortranSupport = true; };
-
-  hdf5-fortran-mpi = hdf5.override {
-    fortranSupport = true;
-    mpiSupport = true;
-    cppSupport = false;
-  };
-
-  hdf5-threadsafe = hdf5.override {
-    cppSupport = false;
-    threadsafe = true;
-  };
-
   host = bind.host;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
@@ -4605,9 +4580,9 @@ with pkgs;
     electron_44
     electron_45
     ;
-  electron = electron_43;
-  electron-bin = electron_43-bin;
-  electron-chromedriver = electron-chromedriver_43;
+  electron = electron_45;
+  electron-bin = electron_45-bin;
+  electron-chromedriver = electron-chromedriver_45;
 
   bandit = with python3Packages; toPythonApplication bandit;
 
