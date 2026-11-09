@@ -22,6 +22,9 @@ buildPythonPackage {
 
   doCheck = false;
 
+  # src is local
+  passthru.updateScript = null;
+
   meta = {
     description = "Waitress WSGI server serving django";
     mainProgram = "waitress-serve-django";
