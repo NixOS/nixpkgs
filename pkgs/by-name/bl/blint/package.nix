@@ -4,7 +4,10 @@
   python3Packages,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
-  nixosTests,
+
+  # tests
+  runCommand,
+  jq,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -71,7 +74,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_universal_binary_attributes_properties_per_slice"
   ];
 
-  passthru.tests = { inherit (nixosTests) blint; };
+  passthru.tests =
+    runCommand "blint-test"
+      {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          writableTmpDirAsHomeHook
+          jq
+        ];
+      }
+      ''
+        blint -i ${lib.getExe finalAttrs.finalPackage} -o blint
+        jq . blint/*.json | tee $out
+      '';
 
   meta = {
     description = "Binary Linter to check the security properties, and capabilities in executables";
