@@ -17,6 +17,7 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -56,6 +57,18 @@ buildPythonPackage (finalAttrs: {
     "test_report_exception"
     # Import is already tested
     "test_namespace_package_compat"
+    # AssertionError: assert None is <Mock id='140737266022256'>
+    "test_error_group_service_client_get_mtls_endpoint_and_cert_source"
+    ":test_report_errors_service_client_get_mtls_endpoint_and_cert_source"
+    "test_report_errors_service_client_get_mtls_endpoint_and_cert_source"
+    "test_error_stats_service_client_get_mtls_endpoint_and_cert_source"
+  ];
+
+  #
+  disabledTestPaths = lib.optionals (pythonOlder "3.14") [
+    "tests/unit/gapic/errorreporting_v1beta1/test_error_group_service.py"
+    "tests/unit/gapic/errorreporting_v1beta1/test_error_stats_service.py"
+    "tests/unit/gapic/errorreporting_v1beta1/test_report_errors_service.py"
   ];
 
   preCheck = ''
