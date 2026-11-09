@@ -5,7 +5,7 @@
   gradle_9,
   nix-update-script,
   libGL,
-  jdk21,
+  jetbrains,
   git,
   cargo,
   rustc,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    jdk21
+    jetbrains.jdk-no-jcef
     gradle_9
     git
     cargo
