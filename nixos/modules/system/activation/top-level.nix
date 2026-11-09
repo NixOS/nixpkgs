@@ -156,7 +156,24 @@ in
 
     system.build = {
       toplevel = mkOption {
-        type = types.package;
+        type = lib.mkOptionType {
+          name = "nixosToplevel";
+          description = "package";
+          descriptionClass = "noun";
+          # Only check for the existence of `drvPath` and `outPath` so that `nix flake show` is fast
+          check = x: x ? drvPath && x ? outPath;
+          merge =
+            loc: defs:
+            let
+              toplevel = lib.mergeOneOption loc defs;
+            in
+            toplevel
+            // {
+              # Check assertions when something asks about the type (e.g. `nix flake check`),
+              # leaving `name` cheap so that `nix flake show` is fast.
+              type = lib.asserts.checkAssertWarn config.assertions [ ] toplevel.type;
+            };
+        };
         readOnly = true;
         description = ''
           This option contains the store path that typically represents a NixOS system.
