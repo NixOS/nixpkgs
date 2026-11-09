@@ -31,7 +31,12 @@ buildDotnetModule rec {
     openssl
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Handy utility to make decrypted PS3 disc dumps";
