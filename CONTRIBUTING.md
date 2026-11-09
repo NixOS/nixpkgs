@@ -137,6 +137,18 @@ Details not covered by the title and links to existing related issues should go 
 
 When a PR is created, it will be pre-populated with some checkboxes.
 
+Check only the entries that describe what you actually did.
+Entries that cannot apply to your change may be left unchecked, or removed if your summary reads better without them: a change that does not touch NixOS cannot be tested with a NixOS test.
+
+Neither leaving such an entry unchecked nor removing it is a merge requirement, and [reviewers][pr-review] are asked not to make it one.
+Keep the section headings and the template itself in place, so that summaries stay comparable between pull requests.
+
+You are also welcome to add entries that are specific to your change: an `stdenv`
+change may warrant a note on the compilers and bootstrapping stages exercised,
+a bootloader change on the machines it was actually booted on. Keep such
+entries short and checkable, and explain anything longer in the summary at the
+top.
+
 #### Tested using sandboxing
 
 When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
@@ -303,6 +315,7 @@ When doing a review:
 - Aim to drive the proposal to a timely conclusion.
 - Focus on the proposed changes and keep the scope narrow.
 - Help the contributor prioritise their efforts towards getting their change merged.
+- Leave the [pull request template][pr-template] alone: which entries are ticked, and whether inapplicable ones were removed, is not a merge requirement and not worth review time.
 
 If you find anything related that could be improved but is not immediately required for acceptance, consider:
 - Implementing the changes yourself in a follow-up pull request,
