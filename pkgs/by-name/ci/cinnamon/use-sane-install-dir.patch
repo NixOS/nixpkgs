@@ -4,30 +4,31 @@ Date: Sat, 6 Feb 2021 14:26:26 +0100
 Subject: [PATCH] use sane install dir
 
 ---
- meson.build | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ meson.build | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index bd803f20..3c1e9a4f 100644
+index 4e3c218..46c981b 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -127,8 +127,14 @@ configure_file(
- )
+@@ -268,10 +268,16 @@ endif
  
  install_subdir(
 -    'files',
 -    install_dir: '/',
 +    'files/usr',
 +    install_dir: get_option('prefix'),
-+    strip_directory: true,
-+)
+     strip_directory: true,
+     exclude_files : excluded_files
+ )
 +
 +install_subdir(
 +    'files/etc',
 +    install_dir: join_paths(get_option('prefix'), 'etc'),
-     strip_directory: true,
- )
++    strip_directory: true,
++)
  
+ session_files = ['cinnamon.session']
+ if get_option('wayland')
 -- 
 2.30.0
-
