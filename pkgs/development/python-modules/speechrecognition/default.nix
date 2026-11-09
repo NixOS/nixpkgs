@@ -109,6 +109,10 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # vosk is not available in nixpkgs
     "tests/recognizers/test_vosk.py"
+
+    # openai 3.x uses httpx2, which respx cannot intercept; these tests
+    # attempt a real network call and fail with openai.APIConnectionError.
+    "tests/recognizers/whisper_api/test_openai.py"
   ];
 
   __darwinAllowLocalNetworking = true;
