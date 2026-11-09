@@ -1,0 +1,6 @@
+diff --git a/crates/jix-nix/nix-version b/crates/jix-nix/nix-version
+--- a/crates/jix-nix/nix-version
++++ b/crates/jix-nix/nix-version
+@@ -1 +1 @@
+-2.34.8
++2.34.9
