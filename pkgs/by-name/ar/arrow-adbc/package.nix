@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Database connectivity API standard and libraries for Apache Arrow";
     homepage = "https://arrow.apache.org/adbc/";
     changelog = "https://github.com/apache/arrow-adbc/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = lib.licenses.afl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.all;
   };
