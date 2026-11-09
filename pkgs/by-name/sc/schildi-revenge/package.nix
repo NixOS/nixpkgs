@@ -10,6 +10,10 @@
   cargo,
   rustc,
   rustPlatform,
+  pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
   ];
 
   # Workaround for a Vergen related build failure
