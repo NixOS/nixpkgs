@@ -204,9 +204,14 @@ It's important to test a modified package's executables.
 Look into `./result/bin` and run all files in there, or at a minimum, the main executable.
 For example, if you make a change to `texlive`, you probably would only check the binaries associated with the change you made, rather than testing all of them.
 
+#### Release notes
+
+The last two entries are about [release notes](#release-notes).
+Only check the first one when a package update is major or breaking, and the second one when a NixOS module is added or receives a significant update.
+
 #### Meets Nixpkgs contribution standards
 
-The last two checkboxes are about whether it fits the guidelines in this `CONTRIBUTING.md` file.
+The first two checkboxes are about whether the change fits the guidelines in this `CONTRIBUTING.md` file together with the READMEs of the areas it touches, and whether it follows the [automation/AI policy](#automationai-policy).
 This document details our standards for commit messages, reviews, licensing of contributions, etc...
 Everyone should read and understand these standards before submitting a pull request.
 
