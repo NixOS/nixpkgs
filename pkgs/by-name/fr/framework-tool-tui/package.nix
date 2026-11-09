@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   udev,
+  libgit2,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool-tui";
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-+Baf6BFb8DtRoVBM/P2pVidiq+BA+tWt0XqKYwsSh7o=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    libgit2
+    udev
+  ];
 
   meta = {
     description = "TUI for controlling and monitoring Framework Computers hardware";
