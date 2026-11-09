@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dogtail";
-  version = "2.0.1";
+  version = "2.1.2";
   pyproject = true;
 
   outputs = [
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "dogtail";
     repo = "dogtail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+mtof4KFhybLjoQ2pMindZJt2rNxSbtgGl9wJQahMYI=";
+    hash = "sha256-G6JW3MSA3MLrG+i1ZVt5En4L4jM9ce9Y9qy8WYsGviY=";
   };
 
   patches = [ ./0001-nixos-support.patch ];
