@@ -1,9 +1,12 @@
 {
   lib,
+  aws-lc,
   buildPythonPackage,
   django-vpg,
   fetchFromGitLab,
+  pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,8 +27,14 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = [
+    aws-lc
+    zstd
   ];
 
   dependencies = [ django-vpg ];
