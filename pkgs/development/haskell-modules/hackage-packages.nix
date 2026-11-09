@@ -441716,6 +441716,126 @@ self: {
     }
   ) { };
 
+  liquid-fixpoint_0_9_6_3_2 = callPackage (
+    {
+      mkDerivation,
+      aeson,
+      ansi-terminal,
+      array,
+      ascii-progress,
+      async,
+      attoparsec,
+      base,
+      binary,
+      boxes,
+      bytestring,
+      cereal,
+      cmdargs,
+      containers,
+      deepseq,
+      directory,
+      fgl,
+      filepath,
+      hashable,
+      intern,
+      lens-family,
+      megaparsec,
+      mtl,
+      optparse-applicative,
+      parallel,
+      parser-combinators,
+      pretty,
+      process,
+      rest-rewrite,
+      smtlib-backends,
+      smtlib-backends-process,
+      stm,
+      store,
+      syb,
+      tagged,
+      tasty,
+      tasty-ant-xml,
+      tasty-hunit,
+      tasty-quickcheck,
+      tasty-rerun,
+      text,
+      transformers,
+      unordered-containers,
+      vector,
+    }:
+    mkDerivation {
+      pname = "liquid-fixpoint";
+      version = "0.9.6.3.2";
+      sha256 = "1anf30y3xvlhwbph2wy0iysgr28044q99knz5fzqa7hfzi9vy62n";
+      isLibrary = true;
+      isExecutable = true;
+      libraryHaskellDepends = [
+        aeson
+        ansi-terminal
+        array
+        ascii-progress
+        async
+        attoparsec
+        base
+        binary
+        boxes
+        bytestring
+        cereal
+        cmdargs
+        containers
+        deepseq
+        directory
+        fgl
+        filepath
+        hashable
+        intern
+        lens-family
+        megaparsec
+        mtl
+        parallel
+        parser-combinators
+        pretty
+        process
+        rest-rewrite
+        smtlib-backends
+        smtlib-backends-process
+        stm
+        store
+        syb
+        text
+        transformers
+        unordered-containers
+        vector
+      ];
+      executableHaskellDepends = [ base ];
+      testHaskellDepends = [
+        base
+        containers
+        directory
+        filepath
+        hashable
+        mtl
+        optparse-applicative
+        process
+        stm
+        tagged
+        tasty
+        tasty-ant-xml
+        tasty-hunit
+        tasty-quickcheck
+        tasty-rerun
+        text
+        transformers
+        unordered-containers
+      ];
+      description = "Predicate Abstraction-based Horn-Clause/Implication Constraint Solver";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
+      mainProgram = "fixpoint";
+      maintainers = [ lib.maintainers.artem ];
+    }
+  ) { };
+
   liquid-fixpoint = callPackage (
     {
       mkDerivation,
@@ -442054,6 +442174,39 @@ self: {
     }
   ) { };
 
+  liquid-prelude_0_9_10_1_2 = callPackage (
+    {
+      mkDerivation,
+      base,
+      bytestring,
+      Cabal,
+      containers,
+      ghc-prim,
+      liquidhaskell,
+      liquidhaskell-boot,
+    }:
+    mkDerivation {
+      pname = "liquid-prelude";
+      version = "0.9.10.1.2";
+      sha256 = "07a9zpp3q2albipasag02jjzcws9fcz40cja6za1555n9qhqzy96";
+      setupHaskellDepends = [
+        base
+        Cabal
+        liquidhaskell-boot
+      ];
+      libraryHaskellDepends = [
+        base
+        bytestring
+        containers
+        ghc-prim
+        liquidhaskell
+      ];
+      description = "General utility modules for LiquidHaskell";
+      license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+    }
+  ) { };
+
   liquid-prelude = callPackage (
     {
       mkDerivation,
@@ -442147,6 +442300,43 @@ self: {
     }
   ) { };
 
+  liquidhaskell_0_9_10_1_2 = callPackage (
+    {
+      mkDerivation,
+      base,
+      bytestring,
+      Cabal,
+      containers,
+      ghc-prim,
+      liquidhaskell-boot,
+      z3,
+    }:
+    mkDerivation {
+      pname = "liquidhaskell";
+      version = "0.9.10.1.2";
+      sha256 = "16bv11zi54z5c6lh8ynpmlcdhp4v1qdpi90hlg15m4926p2cbna5";
+      revision = "1";
+      editedCabalFile = "115rawks2y1w2bk5qdd6yb8a5slm5ks19w0kj4smcp915hgq68qp";
+      setupHaskellDepends = [
+        base
+        Cabal
+        liquidhaskell-boot
+      ];
+      libraryHaskellDepends = [
+        base
+        bytestring
+        containers
+        ghc-prim
+        liquidhaskell-boot
+      ];
+      testSystemDepends = [ z3 ];
+      description = "Liquid Types for Haskell";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
+      maintainers = [ lib.maintainers.artem ];
+    }
+  ) { inherit (pkgs) z3; };
+
   liquidhaskell = callPackage (
     {
       mkDerivation,
@@ -442215,6 +442405,126 @@ self: {
       maintainers = [ lib.maintainers.artem ];
     }
   ) { inherit (pkgs) z3; };
+
+  liquidhaskell-boot_0_9_10_1_2 = callPackage (
+    {
+      mkDerivation,
+      aeson,
+      array,
+      base,
+      binary,
+      bytestring,
+      Cabal,
+      cereal,
+      cmdargs,
+      containers,
+      deepseq,
+      Diff,
+      directory,
+      exceptions,
+      extra,
+      filepath,
+      fingertree,
+      free,
+      ghc,
+      ghc-boot,
+      ghc-internal,
+      ghc-paths,
+      ghc-prim,
+      githash,
+      gitrev,
+      hashable,
+      hscolour,
+      liquid-fixpoint,
+      megaparsec,
+      mtl,
+      optparse-applicative,
+      pretty,
+      split,
+      syb,
+      tasty,
+      tasty-ant-xml,
+      tasty-hunit,
+      template-haskell,
+      temporary,
+      text,
+      th-compat,
+      time,
+      transformers,
+      unordered-containers,
+      vector,
+    }:
+    mkDerivation {
+      pname = "liquidhaskell-boot";
+      version = "0.9.10.1.2";
+      sha256 = "0kckh95w3y1gjfhy8k2fyg9mmqq3vq8gcbacyywwsmr2mx752k5z";
+      revision = "1";
+      editedCabalFile = "00yxwj9x4fi4yxvv87l1fqz2wnpihvdaakv79d885vsfi9nfqxk1";
+      libraryHaskellDepends = [
+        aeson
+        array
+        base
+        binary
+        bytestring
+        Cabal
+        cereal
+        cmdargs
+        containers
+        deepseq
+        Diff
+        directory
+        exceptions
+        extra
+        filepath
+        fingertree
+        free
+        ghc
+        ghc-boot
+        ghc-prim
+        githash
+        gitrev
+        hashable
+        hscolour
+        liquid-fixpoint
+        megaparsec
+        mtl
+        optparse-applicative
+        pretty
+        split
+        syb
+        template-haskell
+        temporary
+        text
+        th-compat
+        time
+        transformers
+        unordered-containers
+        vector
+      ];
+      testHaskellDepends = [
+        base
+        directory
+        filepath
+        ghc
+        ghc-internal
+        ghc-paths
+        ghc-prim
+        liquid-fixpoint
+        megaparsec
+        syb
+        tasty
+        tasty-ant-xml
+        tasty-hunit
+        template-haskell
+        time
+        unordered-containers
+      ];
+      description = "Liquid Types for Haskell";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
+      maintainers = [ lib.maintainers.artem ];
+    }
+  ) { };
 
   liquidhaskell-boot = callPackage (
     {

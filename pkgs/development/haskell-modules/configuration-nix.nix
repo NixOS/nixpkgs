@@ -1145,6 +1145,28 @@ builtins.intersectAttrs super {
     '';
   }) super.liquid-fixpoint_0_9_6_3_7;
 
+  # Same as liquid-fixpoint above, for the GHC 9.10 LiquidHaskell stack
+  liquid-fixpoint_0_9_6_3_2 = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/fixpoint:$PATH
+    ''
+    + (drv.preCheck or "");
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
+  }) super.liquid-fixpoint_0_9_6_3_2;
+
   # overrideCabal because
   # - tests need to execute the built executable "liquid"
   # - LiquidHaskell needs an SMT solver. We use Z3.
@@ -1168,10 +1190,21 @@ builtins.intersectAttrs super {
     doHaddock = false;
   }) super.liquidhaskell_0_9_14_1_1;
 
+  # Same as liquidhaskell above, for the GHC 9.10 LiquidHaskell stack
+  liquidhaskell_0_9_10_1_2 = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/liquid:$PATH
+    ''
+    + (drv.preCheck or "");
+    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+    doHaddock = false;
+  }) super.liquidhaskell_0_9_10_1_2;
+
   # The liquid-* packages run the LiquidHaskell plugin while compiling their
   # library, so they need an SMT solver as well.
   liquid-parallel = addBuildTool pkgs.z3 super.liquid-parallel;
   liquid-prelude = addBuildTool pkgs.z3 super.liquid-prelude;
+  liquid-prelude_0_9_10_1_2 = addBuildTool pkgs.z3 super.liquid-prelude_0_9_10_1_2;
   liquid-prelude_0_9_14_1 = addBuildTool pkgs.z3 super.liquid-prelude_0_9_14_1;
   liquid-vector = addBuildTool pkgs.z3 super.liquid-vector;
 

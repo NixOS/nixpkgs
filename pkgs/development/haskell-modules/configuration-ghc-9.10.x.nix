@@ -72,6 +72,15 @@ in
 
   ghc-exactprint = doDistribute self.ghc-exactprint_1_10_0_0;
 
+  # Each LiquidHaskell release supports only one GHC major version
+  liquid-fixpoint = doDistribute self.liquid-fixpoint_0_9_6_3_2;
+  liquid-prelude = doDistribute self.liquid-prelude_0_9_10_1_2;
+  # liquid-vector 0.13.1.0.2 needs liquidhaskell >= 0.9.12.2.1, and LiquidHaskell 0.9.10
+  # does not load the Data.Vector_LHAssumptions specs of any liquid-vector release
+  liquid-vector = markBroken super.liquid-vector;
+  liquidhaskell = doDistribute self.liquidhaskell_0_9_10_1_2;
+  liquidhaskell-boot = doDistribute self.liquidhaskell-boot_0_9_10_1_2;
+
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
