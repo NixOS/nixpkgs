@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-minimum-required.patch
     ./darwin.patch
     ./glog-cmake.patch
+    ./protobuf-config.patch
     ./random-shuffle.patch
     ./random-shuffle-includes.patch
     (fetchpatch {
