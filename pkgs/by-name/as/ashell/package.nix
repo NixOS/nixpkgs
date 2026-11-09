@@ -57,7 +57,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/MalpenZibo/ashell";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ashell";
-    maintainers = with lib.maintainers; [ justdeeevin ];
+    maintainers = with lib.maintainers; [
+      mBornand
+    ];
     platforms = lib.platforms.linux;
   };
 })
