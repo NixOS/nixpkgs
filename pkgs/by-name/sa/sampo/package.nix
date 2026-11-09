@@ -6,6 +6,7 @@
   nix-update-script,
   pkg-config,
   openssl,
+  aws-lc,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    aws-lc
+  ];
 
   # Disable self-update
   buildNoDefaultFeatures = true;
