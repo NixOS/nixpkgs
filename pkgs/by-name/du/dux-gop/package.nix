@@ -1,12 +1,12 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
 
-buildGoLatestModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dux-gop";
   version = "2.1.1";
 
