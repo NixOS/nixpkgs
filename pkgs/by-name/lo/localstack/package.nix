@@ -1,52 +1,51 @@
 {
   lib,
   python3,
-  fetchFromGitHub,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "localstack";
-  version = "4.13.0";
-  pyproject = true;
+  version = "2026.8.2";
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "localstack";
-    repo = "localstack";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vagQ2+eG93ns+E9HT/aDWlDn9jhhIyE7PxBXedsgyH0=";
+  src = fetchPypi {
+    pname = finalAttrs.pname;
+    version = finalAttrs.version;
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-vqcC9dhVjK/J+7/72BoeUyCHJyDgjNa+Gk8dppSr3uc=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-    setuptools-scm
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
-    apispec
     asn1crypto
     boto3
-    build
     cachetools
     click
     cryptography
-    localstack-client
-    localstack-ext
+    dnslib
+    dnspython
+    docker
     plux
     psutil
+    pyjwt
+    pyotp
+    python-dateutil
     python-dotenv
     pyyaml
     packaging
     requests
     rich
     semver
-    tailer
+    tabulate
   ];
 
-  pythonRelaxDeps = [
-    "dill"
+  nativeBuildInputs = [
+    python3.pkgs.wheelUnpackHook
   ];
 
-  pythonImportsCheck = [ "localstack" ];
+  pythonImportsCheck = [ "localstack_cli" ];
 
   # Test suite requires boto, which has been removed from nixpkgs
   # Just do minimal test, buildPythonPackage maps checkPhase
@@ -67,10 +66,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    description = "Fully functional local Cloud stack";
-    homepage = "https://github.com/localstack/localstack";
-    license = lib.licenses.asl20;
-    maintainers = [ ];
+    description = "Fully functional local Cloud stack (legacy CLI)";
+    homepage = "https://localstack.cloud/";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.purcell ];
     mainProgram = "localstack";
   };
 })
