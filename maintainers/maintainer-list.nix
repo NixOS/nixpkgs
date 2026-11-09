@@ -27729,6 +27729,13 @@
     github = "snapdgn";
     githubId = 85608760;
   };
+  snapetech = {
+    email = "support@snape.tech";
+    github = "snapetech";
+    githubId = 71525329;
+    name = "SnapeTech";
+  };
+
   snglth = {
     email = "illia@ishestakov.com";
     github = "snglth";
