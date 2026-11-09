@@ -6538,17 +6538,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "tree-sitter-cli";
-      version = "0.26.8-1";
+      version = "0.27.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/tree-sitter-cli-0.26.8-1.rockspec";
-          sha256 = "01gkqv1nlp8sjlljb7hkj2rq41dc9dfdbamzsg80n6855ynhj8nx";
+          url = "mirror://luarocks/tree-sitter-cli-0.27.2-1.rockspec";
+          sha256 = "05ksp791bnw5payqylbrr4jzi90km6zw4q4i82chb595ishmgbq8";
         }).outPath;
       src = fetchFromGitHub {
         owner = "FourierTransformer";
         repo = "tree-sitter-cli";
-        rev = "20947767690a1e81141c8ae4618cee80280861de";
-        hash = "sha256-Dqhf7qfDyddaxuenPDpZsAuY3e5X9eXNISUslI5KDs4=";
+        rev = "7ad5c8ec901530414e70315fed399e1b716daac7";
+        hash = "sha256-hrzsrr4Dd/m1fan92kmpfZNN4tqkjlhNsn0IcH7g/Zc=";
       };
 
       nativeBuildInputs = [ luarocks-build-tree-sitter-cli ];
