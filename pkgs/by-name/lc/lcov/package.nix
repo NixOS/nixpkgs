@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/linux-test-project/lcov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
     platforms = lib.platforms.all;
     mainProgram = "lcov";
   };
