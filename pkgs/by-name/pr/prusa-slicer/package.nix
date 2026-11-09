@@ -253,6 +253,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     + lib.optionalString clangStdenv.hostPlatform.isDarwin ''
       # remove unused files
       rm $out/bin/*.a
+
+      # generate app bundle
+      local bundleContents=$out/Applications/PrusaSlicer.app/Contents
+      install -Dm444 src/Info.plist -t $bundleContents
+      mkdir $bundleContents/{MacOS,Resources}
+      ln -s $out/bin/PrusaSlicer $bundleContents/MacOS/PrusaSlicer
+      for icon in $out/share/PrusaSlicer/icons/*.icns; do
+        ln -s $icon $bundleContents/Resources/
+      done
     '';
 
   preFixup = lib.optionalString clangStdenv.hostPlatform.isLinux ''
@@ -286,9 +295,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       tmarkus
       fliegendewurst
     ];
+    mainDarwinApp = "mainDarwinApp.app";
     platforms = lib.platforms.unix;
-  }
-  // lib.optionalAttrs (clangStdenv.hostPlatform.isDarwin) {
-    mainProgram = "PrusaSlicer";
   };
 })
