@@ -11,6 +11,7 @@ with lib;
 
 let
   cfg = config.networking.wireless;
+  wpaSupplicantCfg = config.networking.wireless.wpaSupplicant;
   opt = options.networking.wireless;
 
   wpa3Protocols = [
@@ -262,6 +263,8 @@ let
             "args=$iface_args"
         }
 
+        args+=" ${lib.escapeShellArgs wpaSupplicantCfg.extraArgs}"
+
         # finally start daemon
         # shellcheck disable=SC2086
         exec wpa_supplicant $args
@@ -276,6 +279,20 @@ in
   options = {
     networking.wireless = {
       enable = mkEnableOption "wpa_supplicant";
+
+      wpaSupplicant = {
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [
+            "-dd"
+          ];
+          description = ''
+            Additional non-interface command line options to pass to `wpa_supplicant`.
+            Refer to `wpa_supplicant(8)` for the full list of command line options.
+          '';
+        };
+      };
 
       interfaces = mkOption {
         type = types.listOf types.str;
