@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "ipy";
-  version = "1.01";
+  version = "1.2";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "IPy";
+    pname = "ipy";
     inherit version;
-    hash = "sha256-7eynQd6i1UrKVo+iN0AojD/obA8+pwA0RXHp7xSnzBo=";
+    hash = "sha256-wUXmZOhGQvrIdaBD+rGgtQvWUpc4XcQ42/4l8k5lrGE=";
   };
 
   build-system = [ setuptools ];
