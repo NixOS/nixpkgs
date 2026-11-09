@@ -35,7 +35,7 @@ let
     homepage = "https://apps.nextcloud.com/apps/memories";
     changelog = "https://github.com/pulsejet/memories/blob/v${currentVersionInfo.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ rahoni ];
   };
 
   go-vod = buildGo127Module rec {
