@@ -406,6 +406,7 @@ mapAliases {
   llamaindex-py-client = throw "'llamaindex-pyclient' has been removed as it was removed from upstream"; # Added 2026-04-03
   llfuse = throw "'llfuse' hase been removed, as it depends on fuse2, and is no longer developed. Please use 'mfusepy' instead"; # Added 2026-05-20
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
+  localstack-ext = throw "'localstack-ext' has been removed as it was discontinued upstream"; # Added 2026-11-09
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
   lsprotocol_2025 = lsprotocol; # added 2026-01-05
