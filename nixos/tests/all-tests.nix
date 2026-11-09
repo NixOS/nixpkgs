@@ -623,6 +623,7 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
+  erofs-store-image = pkgs.callPackage ./erofs-store-image.nix { };
   ersatztv = runTest ./ersatztv.nix;
   espanso = import ./espanso.nix {
     inherit lib runTest;
@@ -1573,6 +1574,7 @@ in
   qemu-vm-restrictnetwork = runTest ./qemu-vm-restrictnetwork.nix;
   qemu-vm-shared-directories = runTest ./qemu-vm-shared-directories.nix;
   qemu-vm-store = runTest ./qemu-vm-store.nix;
+  qemu-vm-store-compression = runTest ./qemu-vm-store-compression.nix;
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
@@ -2004,6 +2006,7 @@ in
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
   vscodium = import ./vscodium.nix { inherit runTest; };
   vsftpd = runTest ./vsftpd.nix;
+  vz-vm-eval = pkgs.callPackage ./vz-vm-eval.nix { };
   waagent = runTest ./waagent.nix;
   wakapi = runTest ./wakapi.nix;
   wanderer = runTest ./wanderer.nix;

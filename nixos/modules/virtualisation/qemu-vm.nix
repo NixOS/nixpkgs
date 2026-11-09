@@ -179,6 +179,8 @@ let
 
       ${import ../../lib/erofs-store-image.nix {
         inherit hostPkgs;
+        compression = cfg.nixStoreImageCompression;
+        kernelConfig = config.boot.kernelPackages.kernel.configfile;
         storePaths = "${
           hostPkgs.closureInfo {
             rootPaths = [
@@ -412,6 +414,7 @@ in
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
     ./credentials-options.nix
+    ./nix-store-image.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
