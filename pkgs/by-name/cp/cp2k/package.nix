@@ -37,9 +37,11 @@
   greenx,
   gmp,
   libwignernj,
+  libtorch-bin,
   addDriverRunpath,
   enableElpa ? false,
   elpa,
+  enableLibtorch ? false,
   cudaPackages,
   rocmPackages,
   newScope,
@@ -218,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     grimmeCmake.sirius
     grimmeCmake.toml-f
   ]
+  ++ lib.optional enableLibtorch libtorch-bin
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
@@ -253,6 +256,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "CP2K_USE_LIBVDWXC" true)
     (lib.strings.cmakeBool "CP2K_USE_PLUMED" true)
     (lib.strings.cmakeBool "CP2K_USE_GREENX" true)
+    (lib.strings.cmakeBool "CP2K_USE_LIBTORCH" enableLibtorch)
     (lib.strings.cmakeBool "CP2K_USE_ELPA" enableElpa)
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ]
