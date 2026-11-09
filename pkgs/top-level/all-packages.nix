@@ -5961,8 +5961,6 @@ with pkgs;
 
   nvidia-vaapi-driver = hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
-  nvtop = callPackage ../tools/system/nvtop { };
-
   inherit (callPackages ../development/libraries/ogre { })
     ogre_13
     ogre_14
