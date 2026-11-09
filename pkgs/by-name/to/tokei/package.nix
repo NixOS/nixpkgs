@@ -24,9 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+  # Does not effect the final build output.
+  preCheck = ''
+    LIBGIT2_NO_VENDOR=0
+  '';
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
-
-  dontCargoUseSystemLibs = true;
 
   # enable all output formats
   buildFeatures = [ "all" ];
