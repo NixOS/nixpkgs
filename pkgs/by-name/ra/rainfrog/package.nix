@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
+  sqlite,
   versionCheckHook,
   nix-update-script,
 }:
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 ];
+  buildInputs = [
+    libgit2
+    sqlite
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
