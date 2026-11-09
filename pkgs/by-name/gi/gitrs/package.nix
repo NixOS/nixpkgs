@@ -7,6 +7,7 @@
   libiconv,
   rustPlatform,
   libz,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl.dev
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
