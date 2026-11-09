@@ -3,7 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
   openssl,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-outdated";
@@ -20,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libgit2 openssl sqlite ];
 
   meta = {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";
