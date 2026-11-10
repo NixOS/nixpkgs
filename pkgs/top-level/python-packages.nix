@@ -10264,6 +10264,8 @@ self: super: with self; {
 
   llm-jq = callPackage ../development/python-modules/llm-jq { };
 
+  llm-keys-ui = callPackage ../development/python-modules/llm-keys-ui { };
+
   llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
 
   llm-lmstudio = callPackage ../development/python-modules/llm-lmstudio { };

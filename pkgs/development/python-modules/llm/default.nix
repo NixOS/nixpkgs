@@ -85,6 +85,7 @@ let
       llm-groq ? false,
       llm-hacker-news ? false,
       llm-jq ? false,
+      llm-keys-ui ? false,
       llm-llama-server ? false,
       llm-lmstudio ? false,
       llm-mistral ? false,
