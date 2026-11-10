@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
