@@ -8,15 +8,7 @@
   nix-update-script,
 }:
 
-let
-  pythonPackages = python3Packages.overrideScope (
-    final: prev: {
-      # mcp v2 breaks fastmcp-slim
-      mcp = final.mcp_1;
-    }
-  );
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "oterm";
   version = "0.26.0";
   pyproject = true;
@@ -30,10 +22,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
-  build-system = with pythonPackages; [ hatchling ];
+  build-system = with python3Packages; [ hatchling ];
 
   dependencies =
-    with pythonPackages;
+    with python3Packages;
     [
       aiosql
       aiosqlite

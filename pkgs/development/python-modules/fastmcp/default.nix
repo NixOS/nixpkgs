@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  python,
   writableTmpDirAsHomeHook,
 
   # build-system
@@ -12,6 +12,7 @@
 
   # dependencies
   fastmcp-slim,
+  fastmcp-tasks,
 
   # tests
   dirty-equals,
@@ -21,34 +22,24 @@
   psutil,
   pytest-asyncio,
   pytest-examples,
-  pytest-httpx,
   pytest-rerunfailures,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "3.4.7";
+  version = "4.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EysVbtFbop5ENupc9T5EmtUSZ8osVtQSzpwa6rea/OQ=";
+    hash = "sha256-FzJkoFfmbgS/XQn+5JjegcrqMF7jTy8Wnq6jHcrCZK8=";
   };
-
-  patches = [
-    # Fix python 3.14 compatibility (https://github.com/PrefectHQ/fastmcp/pull/4796)
-    # TODO: remove when updating to the next release
-    (fetchpatch {
-      url = "https://github.com/PrefectHQ/fastmcp/commit/6be0ac8e15d35ff8f5121266855bc34c1158c9a1.patch";
-      includes = [ "fastmcp_slim/fastmcp/tools/function_tool.py" ];
-      hash = "sha256-7N86b5sslWLgoB2dS2Xh3JfZX3oTHeXfeSJOaWKI5b0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -73,8 +64,21 @@ buildPythonPackage (finalAttrs: {
     code-mode = fastmcp-slim.optional-dependencies.code-mode;
     gemini = fastmcp-slim.optional-dependencies.gemini;
     openai = fastmcp-slim.optional-dependencies.openai;
-    tasks = fastmcp-slim.optional-dependencies.tasks;
+    tasks = [ fastmcp-tasks ];
   };
+
+  # Upstream declares the `fastmcp` script in fastmcp-slim, but the CLI needs its `server` extra.
+  # Install it here so that it gets wrapped with all of the required dependencies.
+  postInstall = ''
+    mkdir -p $out/bin
+    cat > $out/bin/fastmcp <<EOF
+    #!${python.interpreter}
+    import sys
+    from fastmcp.cli import app
+    sys.exit(app())
+    EOF
+    chmod +x $out/bin/fastmcp
+  '';
 
   pythonImportsCheck = [ "fastmcp" ];
 
@@ -86,11 +90,11 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     pytest-examples
-    pytest-httpx
     pytest-rerunfailures
     pytest-timeout
     pytest-xdist
     pytestCheckHook
+    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.anthropic
@@ -102,36 +106,43 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.tasks
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
+  # Some tests spawn the `fastmcp` CLI
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
+
   disabledTests = [
-    # requires internet
+    # Requires internet access
     "test_github_api_schema_performance"
 
-    # RuntimeError: Client failed to connect: Connection closed
-    "test_single_server_config_include_tags_filtering"
-    "test_run_mcp_config"
-
-    # requires uv
+    # Requires uv
     "test_uv_transport"
     "test_uv_transport_module"
 
-    # Hang forever
-    "test_nested_streamable_http_server_resolves_correctly"
-
     # Requires prefab-ui (optional dependency)
     # https://github.com/NixOS/nixpkgs/pull/510123 adds the prefab-ui package.
+    "TestPickerForm"
     "TestPrefabAppConfig"
     "test_doc_examples_quality"
-    "test_run_dev_apps_with_host"
     "test_run_dev_apps_log_panel_propagation"
+    "test_run_dev_apps_with_host"
 
     # AssertionError: assert 'INFO' == 'DEBUG'
     "test_temporary_settings"
 
-    # Subprocess-based multi-client tests fail in sandbox
-    "test_multi_client"
-    "test_multi_server"
-    "test_server_starts_without_auth"
+    # Spawning servers from an MCP config file does not work in the sandbox
+    "test_run_mcp_config"
+    "test_single_server_config_include_tags_filtering"
+
+    # Subprocess-based multi-client tests fail in the sandbox
     "test_canonical_multi_client_with_transforms"
+    "test_multi_client"
+    "test_server_starts_without_auth"
+
+    # Unlike the rest of the module, these spawn a server that does a real
+    # `import fastmcp`, and `stdio_client` does not forward PYTHONPATH to it
+    "TestLogFile"
+    "test_stdio_advertises_list_changed_for_all_components"
 
     # Server startup is flaky when the suite runs with pytest-xdist
     "test_unauthorized_access"
@@ -157,10 +168,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Requires prefab-ui (optional dependency)
     "tests/apps"
+    "tests/server/test_session_scope.py"
     "tests/test_apps_prefab.py"
     "tests/test_fastmcp_app.py"
-    # Subprocess crash recovery tests are flaky in sandbox
-    "tests/client/test_stdio.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -171,5 +181,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PrefectHQ/fastmcp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    mainProgram = "fastmcp";
   };
 })

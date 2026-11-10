@@ -29,6 +29,7 @@
   ddgs,
   exa-py,
   fastmcp-slim,
+  fastmcp-tasks,
   google-genai,
   groq,
   huggingface-hub,
@@ -130,8 +131,8 @@ buildPythonPackage (finalAttrs: {
     ++ logfire.optional-dependencies.httpx;
     mcp = [ fastmcp-slim ] ++ fastmcp-slim.optional-dependencies.client;
     mcp-tasks = [
-      # fastmcp-tasks is not packaged yet (requires FastMCP 4)
       fastmcp-slim
+      fastmcp-tasks
     ]
     ++ fastmcp-slim.optional-dependencies.client;
     mistral = [ mistralai ];
