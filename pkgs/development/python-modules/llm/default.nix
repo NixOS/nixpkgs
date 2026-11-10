@@ -63,6 +63,7 @@ let
   withPlugins =
     # Keep this list up to date with the plugins in python3Packages!
     {
+      llm-all-models-async ? false,
       llm-anthropic ? false,
       llm-cmd ? false,
       llm-command-r ? false,

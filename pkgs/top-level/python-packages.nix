@@ -10220,6 +10220,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-all-models-async = callPackage ../development/python-modules/llm-all-models-async { };
+
   llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
