@@ -1346,31 +1346,26 @@ let
     in
     throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}";
 
-  # Check that a type with v2 merge has a coherent check attribute.
-  # Throws an error if the type uses an ad-hoc `type // { check }` override.
-  # Returns the last argument like `seq`, allowing usage: checkV2MergeCoherence loc type expr
-  checkV2MergeCoherence =
-    loc: type: result:
-    if type.check.isV2MergeCoherent or false then
-      result
-    else
-      throw ''
-        The option `${showOption loc}' has a type `${type.description}' that uses
-        an ad-hoc `type // { check = ...; }' override, which is incompatible with
-        the v2 merge mechanism.
+  # Throws an error for a type using an ad-hoc `type // { check }` override.
+  throwNoV2MergeCoherence =
+    loc: type:
+    throw ''
+      The option `${showOption loc}' has a type `${type.description}' that uses
+      an ad-hoc `type // { check = ...; }' override, which is incompatible with
+      the v2 merge mechanism.
 
-        Please use `lib.types.addCheck` instead of `type // { check }' to add
-        custom validation. For example:
+      Please use `lib.types.addCheck` instead of `type // { check }' to add
+      custom validation. For example:
 
-          lib.types.addCheck baseType (value: /* your check */)
+        lib.types.addCheck baseType (value: /* your check */)
 
-        instead of:
+      instead of:
 
-          baseType // { check = value: /* your check */; }
+        baseType // { check = value: /* your check */; }
 
-        Alternatively, this message may also occur as false positive when mixing Nixpkgs
-        versions, if one Nixpkgs is between 83fed2e6..58696117 (Aug 28 - Oct 28 2025)
-      '';
+      Alternatively, this message may also occur as false positive when mixing Nixpkgs
+      versions, if one Nixpkgs is between 83fed2e6..58696117 (Aug 28 - Oct 28 2025)
+    '';
 
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
@@ -1469,23 +1464,23 @@ let
       )
         (
           if type.merge ? v2 then
-            let
-              # Check for v2 merge coherence
-              r = checkV2MergeCoherence loc type (
-                type.merge.v2 {
+            if type.check.isV2MergeCoherent or false then
+              let
+                r = type.merge.v2 {
                   inherit loc;
                   defs = defsFinal;
-                }
-              );
-            in
-            r
-            // {
-              valueMeta = r.valueMeta // {
-                _internal = {
-                  inherit type;
                 };
-              };
-            }
+              in
+              r
+              // {
+                valueMeta = r.valueMeta // {
+                  _internal = {
+                    inherit type;
+                  };
+                };
+              }
+            else
+              throwNoV2MergeCoherence loc type
           else
             {
               headError = null;
