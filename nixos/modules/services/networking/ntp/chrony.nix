@@ -49,6 +49,13 @@ let
     "${configFile}"
   ]
   ++ lib.optional cfg.enableMemoryLocking "-m"
+  # `-s` uses the `rtcfile`-estimated drift to set the system time more accurately
+  # after the machine has been off for longer, and works without network.
+  # See https://github.com/NixOS/nixpkgs/pull/259405#issuecomment-6759151559
+  # for elaboration.
+  # Technically `-s` only requires `rtcfile`, not `rtcautotrim`,
+  # but our `enableRTCTrimming` currently controls both jointly.
+  ++ lib.optional cfg.enableRTCTrimming "-s"
   ++ cfg.extraFlags;
 
   dispatcherScriptFile = pkgs.callPackage (
