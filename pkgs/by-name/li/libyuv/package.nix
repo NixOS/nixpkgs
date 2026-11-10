@@ -7,7 +7,7 @@
   gtest,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libyuv";
   version = "1908"; # Defined in: include/libyuv/version.h
 
@@ -27,21 +27,26 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DUNIT_TEST=ON"
+    (lib.cmakeBool "UNIT_TEST" finalAttrs.finalPackage.doCheck)
   ];
 
   buildInputs = [
     libjpeg
+  ];
+
+  checkInputs = [
     gtest
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     mkdir -p $out/lib/pkgconfig
     cp ${./yuv.pc} $out/lib/pkgconfig/libyuv.pc
 
     substituteInPlace $out/lib/pkgconfig/libyuv.pc \
-      --replace "@PREFIX@" "$out" \
-      --replace "@VERSION@" "$version"
+      --replace-fail "@PREFIX@" "$out" \
+      --replace-fail "@VERSION@" "$version"
   '';
 
   # [==========] 3454 tests from 8 test suites ran.
@@ -57,6 +62,8 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
@@ -65,4 +72,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ leixb ];
     license = lib.licenses.bsd3;
   };
-}
+})
