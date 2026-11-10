@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.11.0";
+  version = "2026.11.1";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -5648,12 +5648,9 @@
         ourgroceries
       ];
     "overkiz" =
-      ps:
-      with ps;
-      [
+      ps: with ps; [
         pyoverkiz
-      ]
-      ++ pyoverkiz.optional-dependencies.nexity;
+      ]; # missing inputs: pyoverkiz.optional-dependencies.nexity
     "overseerr" =
       ps: with ps; [
         aiohasupervisor
@@ -9575,7 +9572,6 @@
     "otp"
     "ouman_eh_800"
     "ourgroceries"
-    "overkiz"
     "overseerr"
     "ovhcloud_ai_endpoints"
     "ovo_energy"
