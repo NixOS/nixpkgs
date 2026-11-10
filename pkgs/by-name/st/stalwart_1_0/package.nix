@@ -3,9 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  protobuf,
+  aws-lc,
   bzip2,
-  openssl,
+  rust-jemalloc-sys-unprefixed,
   sqlite,
   foundationdb,
   zstd,
@@ -36,11 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-iGbpHgtLvKBO/YUB0LOuxRRIny9RONkTNpMjjOvWI2M=";
 
   env = {
-    # https://docs.rs/openssl/latest/openssl/#manual
-    OPENSSL_NO_VENDOR = true;
-    OPENSSL_DIR = lib.getDev openssl;
-    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-    ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   }
@@ -49,23 +44,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
         # Required to fix Stalwart on ARM systems with 16 KB page size.
-        # Using rust-jemalloc-sys causes segmentation faults on x86_64.
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
       };
 
+  # for jieba-rs's include-flate proc macro
   depsBuildBuild = [
     pkg-config
     zstd
   ];
 
   nativeBuildInputs = [
-    protobuf
+    pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
-    openssl
+    rust-jemalloc-sys-unprefixed
     sqlite
     zstd
   ]
@@ -94,7 +90,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = true;
   nativeCheckInputs = [
-    openssl
     # ... panicked at crates/utils/src/lib.rs:94:17: Failed to build TLS connectors: Failed to build platform verifier: unexpected error: No CA certificates were loaded from the system
     cacert
   ];
