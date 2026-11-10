@@ -50,8 +50,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/jech/galene-stt";
     changelog = "https://github.com/jech/galene-stt/blob/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.mit;
-    teams = with lib.teams; [ ngi ];
-    inherit (galene.meta) maintainers;
+    inherit (galene.meta) maintainers teams;
     mainProgram = "galene-stt";
   };
 })

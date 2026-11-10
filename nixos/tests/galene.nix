@@ -6,6 +6,95 @@ let
   galenePort = 8443;
   galeneTestGroupAdminName = "admin";
   galeneTestGroupAdminPassword = "1234";
+
+  commonService =
+    { pkgs, ... }:
+    {
+      imports = [ ./common/x11.nix ];
+      services.xserver.enable = true;
+      services.galene = {
+        enable = true;
+        insecure = true;
+        httpPort = galenePort;
+        groupsDir = galeneTestGroupsDir;
+      };
+      environment.systemPackages = [
+        (pkgs.firefox.override {
+          extraPrefs = ''
+            defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
+          '';
+        })
+      ];
+    };
+
+  interactiveConfig = {
+    sshBackdoor.enable = true;
+    nodes.machine = {
+      virtualisation.memorySize = 4096;
+      virtualisation.cores = 4;
+      virtualisation.forwardPorts = [
+        {
+          from = "host";
+          host.port = galenePort;
+          guest.port = galenePort;
+        }
+      ];
+      networking.firewall.allowedTCPPorts = [ galenePort ];
+    };
+  };
+
+  mkGroupConfigFile =
+    pkgs: groupConfig: (pkgs.formats.json { }).generate galeneTestGroupFile groupConfig;
+
+  adminGroupConfig =
+    pkgs:
+    mkGroupConfigFile pkgs {
+      op = [
+        {
+          username = galeneTestGroupAdminName;
+          password = galeneTestGroupAdminPassword;
+        }
+      ];
+      other = [ { } ];
+    };
+
+  startGaleneScript = ''
+    with subtest("galene starts"):
+        # Starts?
+        machine.wait_for_unit("galene")
+        machine.wait_for_open_port(${toString galenePort})
+
+        # Responds fine?
+        machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
+
+    machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
+    machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
+  '';
+
+  firefoxLoginScript = username: password: ''
+    with subtest("galene can join group"):
+        # Open site
+        machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
+        # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
+        machine.wait_for_window("Test — Mozilla Firefox")
+        machine.send_key("ctrl-minus")
+        machine.send_key("ctrl-minus")
+        machine.send_key("alt-f10")
+        machine.wait_for_text(r"(Galène|Username|Password|Connect)")
+        machine.screenshot("galene-group-test-join")
+
+        # Log in
+        machine.send_chars("${username}")
+        machine.send_key("tab")
+        machine.send_chars("${password}")
+        machine.send_key("ret")
+        machine.sleep(5)
+        # Close "Remember credentials?" FF prompt
+        machine.send_key("esc")
+        machine.sleep(5)
+        machine.wait_for_text(r"(Enable|Share|Screen)")
+        machine.screenshot("galene-group-test-logged-in")
+  '';
 in
 {
   basic = runTest (
@@ -13,80 +102,30 @@ in
     {
       name = "galene-works";
       meta = {
-        inherit (pkgs.galene.meta) maintainers;
+        inherit (pkgs.galene.meta) teams maintainers;
         platforms = lib.platforms.linux;
       };
 
       nodes.machine =
         { config, pkgs, ... }:
         {
-          imports = [ ./common/x11.nix ];
-
-          services.xserver.enable = true;
+          imports = [ commonService ];
 
           environment = {
             # https://galene.org/INSTALL.html
-            etc.${galeneTestGroupFile}.source = (pkgs.formats.json { }).generate galeneTestGroupFile {
-              op = [
-                {
-                  username = galeneTestGroupAdminName;
-                  password = galeneTestGroupAdminPassword;
-                }
-              ];
-              other = [ { } ];
-            };
-
-            systemPackages = with pkgs; [
-              firefox
-            ];
-          };
-
-          services.galene = {
-            enable = true;
-            insecure = true;
-            httpPort = galenePort;
-            groupsDir = galeneTestGroupsDir;
+            etc.${galeneTestGroupFile}.source = adminGroupConfig pkgs;
           };
         };
 
       enableOCR = true;
+      interactive = interactiveConfig;
 
       testScript = ''
         machine.wait_for_x()
 
-        with subtest("galene starts"):
-            # Starts?
-            machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${toString galenePort})
+        ${startGaleneScript}
 
-            # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
-
-        machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
-
-        with subtest("galene can join group"):
-            # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
-            # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
-            machine.wait_for_window("Test — Mozilla Firefox")
-            machine.send_key("ctrl-minus")
-            machine.send_key("ctrl-minus")
-            machine.send_key("alt-f10")
-            machine.wait_for_text(r"(Galène|Username|Password|Connect)")
-            machine.screenshot("galene-group-test-join")
-
-            # Log in as admin
-            machine.send_chars("${galeneTestGroupAdminName}")
-            machine.send_key("tab")
-            machine.send_chars("${galeneTestGroupAdminPassword}")
-            machine.send_key("ret")
-            machine.sleep(5)
-            # Close "Remember credentials?" FF prompt
-            machine.send_key("esc")
-            machine.sleep(5)
-            machine.wait_for_text(r"(Enable|Share|Screen)")
-            machine.screenshot("galene-group-test-logged-in")
+        ${firefoxLoginScript galeneTestGroupAdminName galeneTestGroupAdminPassword}
       '';
     }
   );
@@ -96,81 +135,34 @@ in
     {
       name = "galene-file-transfer-works";
       meta = {
-        inherit (pkgs.galene-file-transfer.meta) maintainers;
+        inherit (pkgs.galene-file-transfer.meta) teams maintainers;
         platforms = lib.platforms.linux;
       };
 
       nodes.machine =
         { config, pkgs, ... }:
         {
-          imports = [ ./common/x11.nix ];
-
-          services.xserver.enable = true;
+          imports = [ commonService ];
 
           environment = {
             # https://galene.org/INSTALL.html
-            etc.${galeneTestGroupFile}.source = (pkgs.formats.json { }).generate galeneTestGroupFile {
-              op = [
-                {
-                  username = galeneTestGroupAdminName;
-                  password = galeneTestGroupAdminPassword;
-                }
-              ];
-              other = [ { } ];
-            };
+            etc.${galeneTestGroupFile}.source = adminGroupConfig pkgs;
 
             systemPackages = with pkgs; [
-              firefox
               galene-file-transfer
             ];
-          };
-
-          services.galene = {
-            enable = true;
-            insecure = true;
-            httpPort = galenePort;
-            groupsDir = galeneTestGroupsDir;
           };
         };
 
       enableOCR = true;
+      interactive = interactiveConfig;
 
       testScript = ''
         machine.wait_for_x()
 
-        with subtest("galene starts"):
-            # Starts?
-            machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${toString galenePort})
+        ${startGaleneScript}
 
-            # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
-
-        machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
-
-        with subtest("galene can join group"):
-            # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
-            # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
-            machine.wait_for_window("Test — Mozilla Firefox")
-            machine.send_key("ctrl-minus")
-            machine.send_key("ctrl-minus")
-            machine.send_key("alt-f10")
-            machine.wait_for_text(r"(Galène|Username|Password|Connect)")
-            machine.screenshot("galene-group-test-join")
-
-            # Log in as admin
-            machine.send_chars("${galeneTestGroupAdminName}")
-            machine.send_key("tab")
-            machine.send_chars("${galeneTestGroupAdminPassword}")
-            machine.send_key("ret")
-            machine.sleep(5)
-            # Close "Remember credentials?" FF prompt
-            machine.send_key("esc")
-            machine.sleep(5)
-            machine.wait_for_text(r"(Enable|Share|Screen)")
-            machine.screenshot("galene-group-test-logged-in")
+        ${firefoxLoginScript galeneTestGroupAdminName galeneTestGroupAdminPassword}
 
         with subtest("galene-file-transfer works"):
             machine.succeed(
@@ -212,35 +204,23 @@ in
       galeneStreamSrtPort = 9710;
       galeneStreamFeedImage = "galene-stream-feed.png";
       galeneStreamFeedLabel = "Example";
-
-      # Firefox obfuscates ICE host candidates as mDNS .local names.
-      # Galene's Pion server disables mDNS, so it cannot resolve them and the
-      # WebRTC transport never completes (the stream stays black).
-      firefoxWithWebrtc = pkgs.firefox.override {
-        extraPrefs = ''
-          defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
-        '';
-      };
     in
     {
       name = "galene-stream-works";
       meta = {
-        # inherit (pkgs.galene-stream.meta) teams;
-        inherit (pkgs.galene.meta) maintainers;
+        inherit (pkgs.galene-stream.meta) teams maintainers;
         platforms = lib.platforms.linux;
       };
 
       nodes.machine =
         { config, pkgs, ... }:
         {
-          imports = [ ./common/x11.nix ];
-
-          services.xserver.enable = true;
+          imports = [ commonService ];
 
           environment = {
             # https://galene.org/INSTALL.html
             etc = {
-              ${galeneTestGroupFile}.source = (pkgs.formats.json { }).generate galeneTestGroupFile {
+              ${galeneTestGroupFile}.source = mkGroupConfigFile pkgs {
                 presenter = [
                   {
                     username = galeneTestGroupBotName;
@@ -264,34 +244,18 @@ in
 
             systemPackages = with pkgs; [
               ffmpeg
-              firefoxWithWebrtc
               galene-stream
             ];
-          };
-
-          services.galene = {
-            enable = true;
-            insecure = true;
-            httpPort = galenePort;
-            groupsDir = galeneTestGroupsDir;
           };
         };
 
       enableOCR = true;
+      interactive = interactiveConfig;
 
       testScript = ''
         machine.wait_for_x()
 
-        with subtest("galene starts"):
-            # Starts?
-            machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${toString galenePort})
-
-            # Reponds fine?
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
-
-        machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
+        ${startGaleneScript}
 
         with subtest("galene-stream works"):
             # Start interface for stream data
@@ -364,30 +328,22 @@ in
       galeneStreamerName = "streamer";
       galeneStreamerPassword = "1234";
       galeneStreamSrtPort = 9710;
-
-      firefoxWithWebrtc = pkgs.firefox.override {
-        extraPrefs = ''
-          defaultPref("media.peerconnection.ice.obfuscate_host_addresses", false);
-        '';
-      };
     in
     {
       name = "galene-stt-works";
       meta = {
-        inherit (pkgs.galene-stt.meta) maintainers;
+        inherit (pkgs.galene-stt.meta) teams maintainers;
         platforms = lib.platforms.linux;
       };
 
       nodes.machine =
         { config, pkgs, ... }:
         {
-          imports = [ ./common/x11.nix ];
-
-          services.xserver.enable = true;
+          imports = [ commonService ];
 
           environment = {
             # https://galene.org/INSTALL.html
-            etc.${galeneTestGroupFile}.source = (pkgs.formats.json { }).generate galeneTestGroupFile {
+            etc.${galeneTestGroupFile}.source = mkGroupConfigFile pkgs {
               op = [
                 {
                   username = galeneTestGroupAdminName;
@@ -409,55 +365,21 @@ in
 
             systemPackages = with pkgs; [
               ffmpeg
-              firefoxWithWebrtc
               galene-stream
               galene-stt
             ];
           };
-
-          services.galene = {
-            enable = true;
-            insecure = true;
-            httpPort = galenePort;
-            groupsDir = galeneTestGroupsDir;
-          };
         };
 
       enableOCR = true;
+      interactive = interactiveConfig;
 
       testScript = ''
         machine.wait_for_x()
 
-        with subtest("galene starts"):
-            machine.wait_for_unit("galene")
-            machine.wait_for_open_port(${toString galenePort})
-            machine.succeed("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}' >&2")
+        ${startGaleneScript}
 
-        machine.succeed("cp -v /etc/${galeneTestGroupFile} ${galeneTestGroupsDir}/test.json >&2")
-        machine.wait_until_succeeds("curl -s -D - -o /dev/null 'http://localhost:${toString galenePort}/group/test/' >&2")
-
-        with subtest("galene can join group"):
-            # Open site
-            machine.succeed("firefox --new-window 'http://localhost:${toString galenePort}/group/test/' >&2 &")
-            # Note: Firefox doesn't use a regular "-" in the window title, but "—" (Hex: 0xe2 0x80 0x94)
-            machine.wait_for_window("Test — Mozilla Firefox")
-            machine.send_key("ctrl-minus")
-            machine.send_key("ctrl-minus")
-            machine.send_key("alt-f10")
-            machine.wait_for_text(r"(Galène|Username|Password|Connect)")
-            machine.screenshot("galene-group-test-join")
-
-            # Log in
-            machine.send_chars("${galeneTestGroupAdminName}")
-            machine.send_key("tab")
-            machine.send_chars("${galeneTestGroupAdminPassword}")
-            machine.send_key("ret")
-            machine.sleep(5)
-            # Close "Remember credentials?" FF prompt
-            machine.send_key("esc")
-            machine.sleep(5)
-            machine.wait_for_text(r"(Enable|Share|Screen)")
-            machine.screenshot("galene-group-test-logged-in")
+        ${firefoxLoginScript galeneTestGroupAdminName galeneTestGroupAdminPassword}
 
         with subtest("galene-stream publishes speech audio"):
             machine.succeed(
