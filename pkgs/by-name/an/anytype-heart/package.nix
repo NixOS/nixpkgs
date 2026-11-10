@@ -7,6 +7,7 @@
   protoc-gen-js,
   protobuf,
   tantivy-go,
+  zstd,
 }:
 
 let
@@ -46,6 +47,9 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 1;
   proxyVendor = true;
+
+  buildInputs = [ zstd ];
+  env.NIX_LDFLAGS = "-lzstd";
 
   nativeBuildInputs = [
     protoc-gen-grpc-web
