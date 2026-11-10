@@ -12,14 +12,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.23.0";
+  version = "3.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
     tag = "v${version}";
-    hash = "sha256-x8QkRBwM/H/n7yHGjE8UfBhOzkGr0PBixe9g4EuZLUg=";
+    hash = "sha256-ZJ71vVqSeDg6TL8UTKjTQ+2RM8kb4aIgAev7CEqEWEI=";
   };
 
   postPatch = ''
