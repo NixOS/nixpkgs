@@ -861,10 +861,10 @@ let
             "echo -n supersecret | cryptsetup luksFormat ${luksFormatOpts} -q /dev/vda3 -",
             "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
             "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
-            "mount LABEL=nixos /mnt",
+            "mount -t ext4 LABEL=nixos /mnt",
             "mkfs.ext4 -L boot /dev/vda1",
             "mkdir -p /mnt/boot",
-            "mount LABEL=boot /mnt/boot",
+            "mount -t ext4 LABEL=boot /mnt/boot",
         )
       '';
       postBootCommands = ''
@@ -885,7 +885,7 @@ let
           "mkswap /dev/vda1 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda2",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
       )
     '';
   };
@@ -917,10 +917,10 @@ let
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
     bootLoader = "grub";
@@ -986,7 +986,7 @@ let
           "echo -n password | mount -t bcachefs /dev/vda3 /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       extraConfig = ''
@@ -1026,10 +1026,10 @@ let
           "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
           "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
           "mkfs.ext4 -L nixos /dev/mapper/crypt-root",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       extraConfig = ''
@@ -1066,10 +1066,10 @@ let
           "echo -n password | cryptsetup luksFormat -q /dev/vda3 -",
           "echo -n password | cryptsetup luksOpen --key-file - /dev/vda3 crypt-root",
           "mkfs.ext4 -L nixos /dev/mapper/crypt-root",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
       '';
       postBootCommands = optionalString fallback ''
@@ -1117,7 +1117,7 @@ let
           "mount -t zfs rpool/root /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle")
         '';
         extraConfig =
@@ -1238,10 +1238,10 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
     bootLoader = "systemd-boot";
@@ -1266,10 +1266,10 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
       )
     '';
   };
@@ -1286,10 +1286,10 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
       )
     '';
   };
@@ -1321,7 +1321,7 @@ in
           "swapon -L swap",
 
           "mkfs.ext4 -L nixos /dev/vda3",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
 
           # Use as many ZFS features as possible to verify that GRUB can handle them
           "zpool create"
@@ -1401,7 +1401,7 @@ in
           "mount -t zfs rpool/root/usr /mnt/usr",
           "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=BOOT /mnt/boot",
+          "mount -t vfat LABEL=BOOT /mnt/boot",
           "udevadm settle",
       )
     '';
@@ -1427,9 +1427,9 @@ in
           "swapon -L swap",
           "mkfs.ext4 -L boot /dev/MyVolGroup/boot",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
-          "mount LABEL=nixos /mnt",
+          "mount -t xfs LABEL=nixos /mnt",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
       )
     '';
     extraConfig = ''
@@ -1461,10 +1461,10 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/vda4",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir -p /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "modprobe dm_mod dm_crypt",
           "echo -n supersecret > /mnt/keyfile",
           "cryptsetup luksFormat -q /dev/vda3 --key-file /mnt/keyfile",
@@ -1508,9 +1508,9 @@ in
           "mkfs.vfat -n efi /dev/vda1",
           "mkfs.ext4 -L nixos /dev/crypt/nixos",
           "mkswap -L swap /dev/crypt/swap",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkdir -p /mnt/{etc/nixos,boot/efi}",
-          "mount LABEL=efi /mnt/boot/efi",
+          "mount -t vfat LABEL=efi /mnt/boot/efi",
           "swapon -L swap",
           "mv luks.key /mnt/etc/nixos/"
       )
@@ -1549,7 +1549,7 @@ in
           "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
           "mkswap -L swap /dev/vda2",
           "swapon -L swap",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkdir -p /mnt/etc/nixos",
           # Add a keyfile so stage 1 can unlock the root device without a second,
           # interactive prompt. This keeps the test independent of the stage 1
@@ -1605,10 +1605,10 @@ in
           "mkswap -f /dev/md1 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L nixos /dev/md0",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "udevadm settle",
       )
     '';
@@ -1631,10 +1631,10 @@ in
           "make-bcache -B /dev/vda4 -C /dev/vda3",
           "udevadm settle",
           "mkfs.ext4 -L nixos /dev/bcache0",
-          "mount LABEL=nixos /mnt",
+          "mount -t ext4 LABEL=nixos /mnt",
           "mkfs.ext4 -L boot /dev/vda1",
           "mkdir /mnt/boot",
-          "mount LABEL=boot /mnt/boot",
+          "mount -t ext4 LABEL=boot /mnt/boot",
           "mkswap -f /dev/vda2 -L swap",
           "swapon -L swap",
       )
@@ -1713,7 +1713,7 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.ext4 -L root /dev/vda3",
-          "mount LABEL=root /mnt",
+          "mount -t ext4 LABEL=root /mnt",
       )
     '';
     grubIdentifier = "label";
@@ -1753,7 +1753,7 @@ in
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
       )
     '';
   };
@@ -1768,7 +1768,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create /mnt/boot",
           "btrfs subvol create /mnt/nixos",
           "btrfs subvol create /mnt/nixos/default",
@@ -1790,7 +1790,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create /mnt/badpath",
           "btrfs subvol create /mnt/badpath/boot",
           "btrfs subvol create /mnt/nixos",
@@ -1816,7 +1816,7 @@ in
           "swapon -L swap",
           "mkfs.btrfs -L root /dev/vda3",
           "btrfs device scan",
-          "mount LABEL=root /mnt",
+          "mount -t btrfs LABEL=root /mnt",
           "btrfs subvol create '/mnt/nixos in space'",
           "btrfs subvol create /mnt/boot",
           "umount /mnt",
