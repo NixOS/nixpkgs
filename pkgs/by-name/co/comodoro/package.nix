@@ -8,6 +8,7 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   installShellFiles,
   lib,
+  libgit2,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # dbus is provided by vendors on windows
-  buildInputs = lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
+  buildInputs = [ libgit2 ] ++ lib.optional (notify && !stdenv.hostPlatform.isWindows) dbus';
 
   buildFeatures =
     buildFeatures'
