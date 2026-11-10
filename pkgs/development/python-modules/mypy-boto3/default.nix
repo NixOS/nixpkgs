@@ -187,8 +187,8 @@ in
       "sha256-grSmFdAOEod9lLhFAZ0df1nh0VgLpH6FXk8kRTfS/dU=";
 
   mypy-boto3-chime-sdk-identity =
-    buildMypyBoto3Package "chime-sdk-identity" "1.43.0"
-      "sha256-UFQbNUX0qbRtX3VkmgMJPZyPqcj51+Of1C/RJdvSyjo=";
+    buildMypyBoto3Package "chime-sdk-identity" "1.44.0"
+      "sha256-idl8Flv9iuINTZxjNp4EVz8XDC9+L0p+13Ydz3Y1hho=";
 
   mypy-boto3-chime-sdk-media-pipelines =
     buildMypyBoto3Package "chime-sdk-media-pipelines" "1.43.0"
