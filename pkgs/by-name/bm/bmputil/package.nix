@@ -7,6 +7,8 @@
   versionCheckHook,
   udevCheckHook,
   pkg-config,
+  aws-lc,
+  oniguruma,
   udev,
 }:
 rustPlatform.buildRustPackage rec {
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    aws-lc
+    oniguruma
     udev
   ];
 
