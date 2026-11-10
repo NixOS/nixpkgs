@@ -16,6 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-KirMifJ5Mc3WXuIZjFv6ZIzpz/bjGHMU2jnRGGQ2w/I=";
   };
+  patches = [ ./include-stdio.patch ];
   buildInputs = [
     lcrq
     librecast
