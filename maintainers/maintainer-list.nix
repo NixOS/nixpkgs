@@ -6911,6 +6911,12 @@
     githubId = 25856103;
     name = "DDoSolitary";
   };
+  ddymko = {
+    email = "dymkod@gmail.com";
+    github = "ddymko";
+    githubId = 1588386;
+    name = "David Dymko";
+  };
   de11n = {
     email = "nixpkgs-commits@deshaw.com";
     github = "de11n";
