@@ -12913,12 +12913,12 @@ final: prev: {
 
   nvim-dap-lldb = buildVimPlugin {
     pname = "nvim-dap-lldb";
-    version = "2.0.1-unstable-2026-09-08";
+    version = "2.1.0";
     src = fetchFromGitHub {
       owner = "julianolf";
       repo = "nvim-dap-lldb";
-      rev = "4725dd751ac7403b9f8c748776f7d9555394675d";
-      hash = "sha256-OKYWSdJSmoYlYKjHs6WSxE734iSZosGsI/hhyDsKsFA=";
+      tag = "v2.1.0";
+      hash = "sha256-xVzFmT3d+TUF8mBfyOls/UeBSXcEV2vhD7MXRVw/9i0=";
     };
     meta.homepage = "https://github.com/julianolf/nvim-dap-lldb/";
     meta.license = getLicenseFromSpdxId "MIT";
