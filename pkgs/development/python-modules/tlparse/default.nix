@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  oniguruma,
   pytestCheckHook,
   versionCheckHook,
 }:
@@ -30,6 +32,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
   ];
 
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ oniguruma ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -40,6 +46,8 @@ buildPythonPackage (finalAttrs: {
       version
       src
       cargoHash
+      nativeBuildInputs
+      buildInputs
       ;
   };
 
