@@ -7817,12 +7817,12 @@ final: prev: {
 
   hurl-nvim = buildVimPlugin {
     pname = "hurl.nvim";
-    version = "2.3.0";
+    version = "2.4.0";
     src = fetchFromGitHub {
       owner = "jellydn";
       repo = "hurl.nvim";
-      tag = "v2.3.0";
-      hash = "sha256-S6rl1GpISR3a+IVqqgh2FD7eeoldw2HnZKiCqsX2bLY=";
+      tag = "v2.4.0";
+      hash = "sha256-S1d4WP5d9owL86QKrkV8YYMJpGhSzp4TwaoHoqcTbtc=";
     };
     meta.homepage = "https://github.com/jellydn/hurl.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
