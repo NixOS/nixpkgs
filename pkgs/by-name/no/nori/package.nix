@@ -18,6 +18,7 @@ appimageTools.wrapType2 (finalAttrs: {
   # bundled in the upstream AppImage.
   extraPkgs = pkgs: [
     pkgs.webkitgtk_4_1
+    pkgs.libsoup_3
   ];
 
   extraInstallCommands = ''
