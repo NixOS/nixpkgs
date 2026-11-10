@@ -163,8 +163,8 @@ in
       "sha256-EMl1KCe3/wEmsfTPgMbzDWo1V+NakqzhZJRPYNadeZQ=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.43.106"
-      "sha256-0PBpqvgwL5UXHAbs4s8FBBN9vFbZPsimv2yJbyjqJxs=";
+    buildMypyBoto3Package "batch" "1.43.127"
+      "sha256-sWN40ZIvAXi/HRuJ94f1v0VEvvS/Zsi8h3fjoMU+Sfo=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.43.99"
@@ -459,8 +459,8 @@ in
       "sha256-02BUkAFhr9sT8ohkJJFPYNni0O9/UI/G0GUee/Kx5Dw=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.43.124"
-      "sha256-9DoGqYTxALmqCL1Fcnd55YojP9ZtAvsG8XkiUl8R350=";
+    buildMypyBoto3Package "ecs" "1.43.127"
+      "sha256-nIjpymBDNrwvJ97RL3hQL8r8S7o7F5eJ/ULjF7GILws=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.43.23"
@@ -511,8 +511,8 @@ in
       "sha256-kvrpSJ/opDyYAyGrVZzHxKFG78wx90Glha7+IOMwg3E=";
 
   mypy-boto3-es =
-    buildMypyBoto3Package "es" "1.43.47"
-      "sha256-5oCX/SqzPteV6nkys8NQXuFB5AX9VURIidU4MBmJil8=";
+    buildMypyBoto3Package "es" "1.43.127"
+      "sha256-27qvyeJapDu9OdTBHj2S+NR+Q9j0m/pXjoK3z2+S1HM=";
 
   mypy-boto3-events =
     buildMypyBoto3Package "events" "1.43.102"
@@ -571,8 +571,8 @@ in
       "sha256-wf3aeGNU4zu7+6Y3ajm2y8gqRcVaWkZHk/QVK2/1TW0=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.43.126"
-      "sha256-HwDp+KyIqFaMRMS/FJfml5Qd3o3m5mqO7xYuBEZf2NA=";
+    buildMypyBoto3Package "glue" "1.43.127"
+      "sha256-0zt5RwrGMyg4G6ApUyx5UEiGJtnsM3I8XBaPOj408jo=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.43.115"
       "sha256-n7khY8t0w6f8zs1e2TYOGzi+Xn+l6mqA0LusWljvTDU=";
@@ -966,8 +966,8 @@ in
       "sha256-suAzwQBnbqikSkuyEbdAOyfW4QE8f+2WiWC8/gsvVwg=";
 
   mypy-boto3-opensearch =
-    buildMypyBoto3Package "opensearch" "1.43.121"
-      "sha256-rpOV0KoOHnSNG+8WSRhqM2aXhVdmMfCXrhykh8DwirA=";
+    buildMypyBoto3Package "opensearch" "1.43.127"
+      "sha256-KA/j4euxpKqiT2GhO0H5egpYpU8rpXgm0sfw1J/IHAI=";
 
   mypy-boto3-opensearchserverless =
     buildMypyBoto3Package "opensearchserverless" "1.43.118"
@@ -1162,16 +1162,16 @@ in
       "sha256-cxGV8VgwaZo24p08irspGLzNNYfrLtyyM/gEaWeJMnk=";
 
   mypy-boto3-s3control =
-    buildMypyBoto3Package "s3control" "1.43.90"
-      "sha256-k5prXdPyZ1Lz9zlnD311TeYpg97MPK5EWy5pWQ58k5U=";
+    buildMypyBoto3Package "s3control" "1.43.127"
+      "sha256-boGYqhn8XzNaFTkCf5UWHJb0bMRtmL6agH1OQW8D124=";
 
   mypy-boto3-s3outposts =
     buildMypyBoto3Package "s3outposts" "1.43.0"
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.125"
-      "sha256-T8xSCxmjEUdZoWqQSNCXik1JisAH9rV8X/9ye5kxHS0=";
+    buildMypyBoto3Package "sagemaker" "1.43.127"
+      "sha256-gm7Er/TZt7xPoCiBNneDhe8ydLLCAAoQd6xw25jlfyo=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
