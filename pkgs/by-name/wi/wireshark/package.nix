@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wireshark";
     owner = "wireshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AMI36rWrGCg7dnC+Qi1YQoMqW/uprFBAGX5krG56HNw=";
+    hash = "sha256-kTtrizE6WExIKlX3wEbYJ11ebV1olj5tpipjaoSrxaA=";
   };
 
   patches = [
