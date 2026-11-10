@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "panel";
   version = "1.9.4";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   # artifacts using npm, the bundling invoked in setup.py
   # tries to fetch even more artifacts
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     hash = "sha256-yJxMHnKCl9rwYo6lBw+w2orXd4HioxQtMCR5U3wd5qQ=";
     dist = "py3";
@@ -65,8 +65,8 @@ buildPythonPackage rec {
     description = "High level dashboarding library for python visualization libraries";
     mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
-    changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/panel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ locnide ];
   };
-}
+})
