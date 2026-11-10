@@ -359,8 +359,8 @@ in
       "sha256-L0BCYp6uPd5u91DQzyPUY8wlTCT/OPvjk14/h24yfNc=";
 
   mypy-boto3-cur =
-    buildMypyBoto3Package "cur" "1.43.0"
-      "sha256-pi0hMLpgYGrNU0/infONBg2WmES6NV0tfPgTjuRtWXk=";
+    buildMypyBoto3Package "cur" "1.44.0"
+      "sha256-bSi5O0X+E8QhoKlKkT4CMOlmcc/SGlzxFxSwgmf4Raw=";
 
   mypy-boto3-customer-profiles =
     buildMypyBoto3Package "customer-profiles" "1.43.123"
