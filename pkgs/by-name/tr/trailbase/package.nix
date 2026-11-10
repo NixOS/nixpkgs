@@ -27,7 +27,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.35.7";
+  version = "0.35.12";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LMTL1pdfJIZ8yVeI4B2xQEK+id5jYT9NkvLYv1K2MaM=";
+    hash = "sha256-cWaFuB2PQTTAee36bLjl/BBkPhh/y7kYEMu8zfjWDeA=";
     fetchSubmodules = true;
     fetchTags = true; # required for `git describe`. implies `leaveDotGit`
     postFetch = ''
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "Some(\"$(cat describe.txt)\".to_string())"
   '';
 
-  cargoHash = "sha256-TbLbs/OLqy5lR0BowyKhRWoWIXCIXUw4nUf6oPF4OQc=";
+  cargoHash = "sha256-bAdKwkE2gEjd8JuOOZb46e9SvUjeXd72pn7B1BvPNXQ=";
 
   patches = [ ./skip-pnpm-install.patch ];
 
@@ -75,8 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       pnpmWorkspaces
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-BYuL30m62vPoNdnJrsZxJK4G7+FlR/gsPSsxf9ZVsK8=";
+    fetcherVersion = 5;
+    hash = "sha256-I1fU+4z/2Q1rh4hCuXUru9ni0Only67f9WlstTqiF+0=";
   };
 
   # wasmtime's cargo-auditable build is broken:
