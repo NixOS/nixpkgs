@@ -114,6 +114,8 @@ let
     # WASI
     "wasm64-wasip1"
     "wasm32-wasip1"
+    "wasm64-wasip2"
+    "wasm32-wasip2"
 
     # Windows
     "aarch64-windows"
