@@ -2,7 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -31,9 +31,8 @@ buildGoModule (finalAttrs: {
     mv $out/bin/cmd $out/bin/summon
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "CLI that provides on-demand secrets access for common DevOps tools";
