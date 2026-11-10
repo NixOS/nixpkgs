@@ -22440,6 +22440,8 @@ self: super: with self; {
 
   vapoursynth-eedi3 = callPackage ../development/python-modules/vapoursynth-eedi3 { };
 
+  vapoursynth-bestsource = callPackage ../development/python-modules/vapoursynth-bestsource { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
