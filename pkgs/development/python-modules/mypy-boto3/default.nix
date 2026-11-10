@@ -511,8 +511,8 @@ in
       "sha256-kvrpSJ/opDyYAyGrVZzHxKFG78wx90Glha7+IOMwg3E=";
 
   mypy-boto3-es =
-    buildMypyBoto3Package "es" "1.43.47"
-      "sha256-5oCX/SqzPteV6nkys8NQXuFB5AX9VURIidU4MBmJil8=";
+    buildMypyBoto3Package "es" "1.43.127"
+      "sha256-27qvyeJapDu9OdTBHj2S+NR+Q9j0m/pXjoK3z2+S1HM=";
 
   mypy-boto3-events =
     buildMypyBoto3Package "events" "1.43.102"
