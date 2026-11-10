@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-async-backend";
-  version = "6.1.2";
+  version = "6.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-async";
     repo = "django-async-backend";
     tag = "v${version}";
-    hash = "sha256-pfcqTtyV37bZFSZaRcFIt9cgR8XZ7PDijVC18lMziRU=";
+    hash = "sha256-kjR0IFQjjTS+2M+2SdzzyDLR/PQtWIU9eUYgLK9PIs8=";
   };
 
   postPatch = ''
