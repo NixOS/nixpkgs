@@ -13441,12 +13441,12 @@ final: prev: {
 
   nvim-lsp-file-operations = buildVimPlugin {
     pname = "nvim-lsp-file-operations";
-    version = "1.5.0";
+    version = "1.6.0";
     src = fetchFromGitHub {
       owner = "antosha417";
       repo = "nvim-lsp-file-operations";
-      tag = "v1.5.0";
-      hash = "sha256-e0qZ0ZNT306YU1dFYaIItKV9qw9P3QbH7XCdTnsusx8=";
+      tag = "v1.6.0";
+      hash = "sha256-bCuZU6g9av8SKwKZtG2CyhtA2/fjkxEYGgav9lTGDWA=";
     };
     meta.homepage = "https://github.com/antosha417/nvim-lsp-file-operations/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
