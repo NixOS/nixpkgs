@@ -71,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
   };
 
-  docs = fetchurl {
-    url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
-  };
-
   buildInputs = [
     blas
     boehmgc
@@ -179,10 +174,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString downloadDocs ''
-    ln -s ${finalAttrs.docs} ../tarfiles/${finalAttrs.docs.name}
-    make -C libraries all-in-Macaulay2-docs
-  '';
+  preBuild =
+    let
+      docs = fetchurl {
+        url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
+        hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
+      };
+    in
+    lib.optionalString downloadDocs ''
+      ln -s ${docs} ../tarfiles/${docs.name}
+      make -C libraries all-in-Macaulay2-docs
+    '';
 
   buildFlags = lib.optionals downloadDocs [
     "MakeDocumentation=false"
