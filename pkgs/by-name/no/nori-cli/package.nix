@@ -70,7 +70,9 @@ buildFHSEnv (
       export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
-    passthru.updateScript = nix-update-script { };
+    passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v([\\d.]+)" ];
+  };
 
     meta = {
       maintainers = with lib.maintainers; [ juanqp07 ];
