@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   libgtop,
   xmessage,
   which,
@@ -31,6 +32,10 @@ stdenv.mkDerivation {
     cp das_watchdog $out/bin/
     cp test_rt $out/bin/
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/kmatheussen/das_watchdog";
