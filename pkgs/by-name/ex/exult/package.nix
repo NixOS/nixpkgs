@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  patches = [ ./bundled-mods.patch ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace macosx/macosx.am \
       --replace-fail '$(DESTDIR)/Applications/' "$out/Applications/"

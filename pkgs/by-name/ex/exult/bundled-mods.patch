@@ -1,0 +1,106 @@
+diff --git a/gamemgr/modmgr.cc b/gamemgr/modmgr.cc
+index c188399..9af7765 100644
+--- a/gamemgr/modmgr.cc
++++ b/gamemgr/modmgr.cc
+@@ -36,6 +36,7 @@
+ #include <cstdlib>
+ #include <fstream>
+ #include <iostream>
++#include <sstream>
+ #include <string>
+ #include <vector>
+ 
+@@ -50,6 +51,18 @@ using std::ifstream;
+ using std::string;
+ using std::vector;
+ 
++void to_lowercase(string& str) {
++	for (auto& chr : str) {
++		chr = static_cast<char>(std::tolower(static_cast<unsigned char>(chr)));
++	}
++}
++
++string to_lowercase(const string& str) {
++	string s(str);
++	to_lowercase(s);
++	return s;
++}
++
+ // BaseGameInfo: Generic information and functions common to mods and games
+ void BaseGameInfo::setup_game_paths() {
+ 	// Make aliases to the current game's paths.
+@@ -159,7 +172,7 @@ ModInfo::ModInfo(
+ 
+ 	const string tagstr(to_uppercase(static_cast<const string>(mod_title)));
+ 	const string system_path_tag(path_prefix + "_" + tagstr);
+-	const string mods_dir("<" + path_prefix + "_MODS>");
++	const string mods_dir(configfile.substr(0, configfile.find_last_of("/\\")));
+ 	const string data_directory(mods_dir + "/" + mod_title);
+ 	const string mods_save_dir("<" + path_prefix + "_SAVEGAME>/mods");
+ 	const string savedata_directory(mods_save_dir + "/" + mod_title);
+@@ -557,33 +570,43 @@ ModManager::ModManager(
+ void ModManager::gather_mods() {
+ 	modlist.clear();    // Just to be on the safe side.
+ 
+-	FileList     filenames;
+-	const string pathname("<" + path_prefix + "_MODS>");
++	std::string gameid(path_prefix);
++	to_lowercase(gameid);
++	std::string mp_string("<" + path_prefix + "_MODS>:" + EXULT_DATADIR + "/" + gameid + "/mods");
++	std::istringstream modspath(mp_string);
+ 
+-	// If the dir doesn't exist, leave at once.
+-	if (!U7exists(pathname)) {
+-		return;
+-	}
++	for (string pathname; getline(modspath, pathname, ':'); ) {
++		cout << "Checking mod path " << pathname << endl;
+ 
+-	U7ListFiles(pathname + "/*.cfg", filenames);
+-	const int num_mods = filenames.size();
++		if (!U7exists(pathname)) {
++			continue;
++		}
+ 
+-	if (num_mods > 0) {
+-		modlist.reserve(num_mods);
+-		for (int i = 0; i < num_mods; i++) {
+-#if 0
+-			// std::filesystem isn't reliably available yet, but this is much cleaner
+-			std::filesystem::path modcfg(filenames[i]);
+-			auto modtitle = modcfg.stem();
+-#else
+-			const auto& filename = filenames[i];
+-			auto        pathend  = filename.find_last_of("/\\") + 1;
+-			auto        modtitle = filename.substr(
+-                    pathend, filename.length() - pathend - strlen(".cfg"));
+-#endif
+-			modlist.emplace_back(
++		FileList     filenames;
++		U7ListFiles(pathname + "/*.cfg", filenames);
++		const int num_mods = filenames.size();
++
++		if (num_mods > 0) {
++			cout << "Found " << num_mods << " configuration files in mod path." << endl;
++			modlist.reserve(num_mods);
++			for (int i = 0; i < num_mods; i++) {
++	#if 0
++				// std::filesystem isn't reliably available yet, but this is much cleaner
++				std::filesystem::path modcfg(filenames[i]);
++				auto modtitle = modcfg.stem();
++	#else
++				const auto& filename = filenames[i];
++				auto        pathend  = filename.find_last_of("/\\") + 1;
++				auto        modtitle = filename.substr(
++						pathend, filename.length() - pathend - strlen(".cfg"));
++	#endif
++				if (find_mod(modtitle) != nullptr) {
++					continue;
++				}
++				modlist.emplace_back(
+ 					type, language, cfgname, modtitle, path_prefix, expansion,
+ 					sibeta, editing, filenames[i]);
++			}
+ 		}
+ 	}
+ }
