@@ -31,14 +31,14 @@ in
 buildPythonPackage (finalAttrs: {
   pname = "playwright";
   # run ./pkgs/development/web/playwright/update.sh to update
-  version = "1.64.0";
+  version = "1.65.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BVgk+YS0CMVTmK1MQr3iEl+TQrGJXuhlYp4EG6Wd6PU=";
+    hash = "sha256-dnUsj7ftIjxD5JkDo+h3k9bXI6USnfXKh6a4sTfgSu8=";
   };
 
   patches = [
