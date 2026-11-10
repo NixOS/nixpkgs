@@ -7,11 +7,15 @@
   libpcap,
   nix-update-script,
   pkg-config,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dynamips";
   version = "0.2.25";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -34,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DYNAMIPS_CODE" "stable")
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -45,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       routers.
     '';
     homepage = "https://github.com/GNS3/dynamips";
-    changelog = "https://github.com/GNS3/dynamips/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/GNS3/dynamips/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "dynamips";
     maintainers = with lib.maintainers; [
