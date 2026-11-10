@@ -900,7 +900,6 @@ let
             # We're descending into attribute ‘name’.
             let
               loc = prefix ++ [ name ];
-              defns' = rawDefinitionsByName.${name} or [ ];
               isOptionDecl =
                 m:
                 m.options ? _type
@@ -909,11 +908,13 @@ let
             # Fast path for the overwhelmingly common case: a single option declaration.
             if length decls == 1 && (head decls).options._type or null == "option" then
               {
-                matchedOptions = evalSingleOptionDecl loc (head decls) defns';
+                matchedOptions = evalSingleOptionDecl loc (head decls) (rawDefinitionsByName.${name} or [ ]);
               }
             else if all isOptionDecl decls then
               {
-                matchedOptions = evalOptionValue loc (mergeOptionDecls loc decls) defns';
+                matchedOptions = evalOptionValue loc (mergeOptionDecls loc decls) (
+                  rawDefinitionsByName.${name} or [ ]
+                );
               }
             # This may look like duplicate computations are performed,
             # but testing with a minimal NixOS config (defined below):
@@ -956,7 +957,9 @@ let
               # All of the above are merely syntax sugar though.
               then
                 {
-                  matchedOptions = evalOptionValue loc (mergeOptionDecls loc (map optionTreeToOption decls)) defns';
+                  matchedOptions = evalOptionValue loc (mergeOptionDecls loc (map optionTreeToOption decls)) (
+                    rawDefinitionsByName.${name} or [ ]
+                  );
                 }
               else
                 let
@@ -969,7 +972,10 @@ let
               let
                 # The definitions of 'name' with properties pushed down one level.
                 nested = mergeModules' loc decls (
-                  if rawDefinitionsByName ? ${name} then concatMap pushDownDefinition defns' else [ ]
+                  if rawDefinitionsByName ? ${name} then
+                    concatMap pushDownDefinition rawDefinitionsByName.${name}
+                  else
+                    [ ]
                 );
               in
               {
