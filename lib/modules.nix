@@ -898,96 +898,99 @@ let
           (
             name: decls:
             # We're descending into attribute ‘name’.
-            let
-              loc = prefix ++ [ name ];
-              isOptionDecl =
-                m:
-                m.options ? _type
-                && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file);
-            in
             # Fast path for the overwhelmingly common case: a single option declaration.
             if length decls == 1 && (head decls).options._type or null == "option" then
               {
-                matchedOptions = evalSingleOptionDecl loc (head decls) (rawDefinitionsByName.${name} or [ ]);
-              }
-            else if all isOptionDecl decls then
-              {
-                matchedOptions = evalOptionValue loc (mergeOptionDecls loc decls) (
+                matchedOptions = evalSingleOptionDecl (prefix ++ [ name ]) (head decls) (
                   rawDefinitionsByName.${name} or [ ]
                 );
               }
-            # This may look like duplicate computations are performed,
-            # but testing with a minimal NixOS config (defined below):
-            #
-            # 1. In 87% of cases, the fast path above applies
-            # 2. In 12% of cases, there's only one decl and we short-circuit
-            # 3. In another 1% of cases, we loop again and short-circuit when
-            #    any isOptionDecl decls` fails
-            # 4. In the final case, we pass the `any` and have to refilter.
-            #    This only triggers in 2 of the 50000 calls to this function.
-            #
-            # The minimal config was defined with this expression:
-            #
-            # let nixos = import ./nixos/lib/eval-config.nix {
-            #   modules = [
-            #     ./nixos/modules/profiles/minimal.nix
-            #     {
-            #       fileSystems."/" = {
-            #         device = "/dev/sda1";
-            #         fsType = "ext4";
-            #       };
-            #       boot.loader.grub.devices = [ "/dev/sda" ];
-            #     }
-            #   ];
-            # }; in nixos.config.system.build.toplevel
-            else if length decls != 1 && any isOptionDecl decls then
+            else
               let
-                optionDecls = filter isOptionDecl decls;
+                loc = prefix ++ [ name ];
+                isOptionDecl =
+                  m:
+                  m.options ? _type
+                  && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file);
               in
-              if
-                all (x: x.options.type.name or null == "submodule") optionDecls
-              # Raw options can only be merged into submodules. Merging into
-              # attrsets might be nice, but ambiguous. Suppose we have
-              # attrset as a `attrsOf submodule`. User declares option
-              # attrset.foo.bar, this could mean:
-              #  a. option `bar` is only available in `attrset.foo`
-              #  b. option `foo.bar` is available in all `attrset.*`
-              #  c. reject and require "<name>" as a reminder that it behaves like (b).
-              #  d. magically combine (a) and (c).
-              # All of the above are merely syntax sugar though.
-              then
+              if all isOptionDecl decls then
                 {
-                  matchedOptions = evalOptionValue loc (mergeOptionDecls loc (map optionTreeToOption decls)) (
+                  matchedOptions = evalOptionValue loc (mergeOptionDecls loc decls) (
                     rawDefinitionsByName.${name} or [ ]
                   );
                 }
+              # This may look like duplicate computations are performed,
+              # but testing with a minimal NixOS config (defined below):
+              #
+              # 1. In 87% of cases, the fast path above applies
+              # 2. In 12% of cases, there's only one decl and we short-circuit
+              # 3. In another 1% of cases, we loop again and short-circuit when
+              #    any isOptionDecl decls` fails
+              # 4. In the final case, we pass the `any` and have to refilter.
+              #    This only triggers in 2 of the 50000 calls to this function.
+              #
+              # The minimal config was defined with this expression:
+              #
+              # let nixos = import ./nixos/lib/eval-config.nix {
+              #   modules = [
+              #     ./nixos/modules/profiles/minimal.nix
+              #     {
+              #       fileSystems."/" = {
+              #         device = "/dev/sda1";
+              #         fsType = "ext4";
+              #       };
+              #       boot.loader.grub.devices = [ "/dev/sda" ];
+              #     }
+              #   ];
+              # }; in nixos.config.system.build.toplevel
+              else if length decls != 1 && any isOptionDecl decls then
+                let
+                  optionDecls = filter isOptionDecl decls;
+                in
+                if
+                  all (x: x.options.type.name or null == "submodule") optionDecls
+                # Raw options can only be merged into submodules. Merging into
+                # attrsets might be nice, but ambiguous. Suppose we have
+                # attrset as a `attrsOf submodule`. User declares option
+                # attrset.foo.bar, this could mean:
+                #  a. option `bar` is only available in `attrset.foo`
+                #  b. option `foo.bar` is available in all `attrset.*`
+                #  c. reject and require "<name>" as a reminder that it behaves like (b).
+                #  d. magically combine (a) and (c).
+                # All of the above are merely syntax sugar though.
+                then
+                  {
+                    matchedOptions = evalOptionValue loc (mergeOptionDecls loc (map optionTreeToOption decls)) (
+                      rawDefinitionsByName.${name} or [ ]
+                    );
+                  }
+                else
+                  let
+                    nonOptions = filter (m: m.options._type or null != "option") decls;
+                  in
+                  throw "The option `${showOption loc}' in module `${(head optionDecls)._file}' would be a parent of the following options, but its type `${
+                    (head optionDecls).options.type.description or "<no description>"
+                  }' does not support nested options.\n${showRawDecls loc nonOptions}"
               else
                 let
-                  nonOptions = filter (m: m.options._type or null != "option") decls;
+                  # The definitions of 'name' with properties pushed down one level.
+                  nested = mergeModules' loc decls (
+                    if rawDefinitionsByName ? ${name} then
+                      concatMap pushDownDefinition rawDefinitionsByName.${name}
+                    else
+                      [ ]
+                  );
                 in
-                throw "The option `${showOption loc}' in module `${(head optionDecls)._file}' would be a parent of the following options, but its type `${
-                  (head optionDecls).options.type.description or "<no description>"
-                }' does not support nested options.\n${showRawDecls loc nonOptions}"
-            else
-              let
-                # The definitions of 'name' with properties pushed down one level.
-                nested = mergeModules' loc decls (
-                  if rawDefinitionsByName ? ${name} then
-                    concatMap pushDownDefinition rawDefinitionsByName.${name}
-                  else
-                    [ ]
-                );
-              in
-              {
-                matchedOptions = nested.matchedOptions;
-                # Prefix here rather than in the parent, so that the parent can
-                # concatenate the (mostly empty) lists without a function call per name.
-                unmatchedDefns =
-                  if nested.unmatchedDefns == [ ] then
-                    [ ]
-                  else
-                    map (def: def // { prefix = [ name ] ++ def.prefix; }) nested.unmatchedDefns;
-              }
+                {
+                  matchedOptions = nested.matchedOptions;
+                  # Prefix here rather than in the parent, so that the parent can
+                  # concatenate the (mostly empty) lists without a function call per name.
+                  unmatchedDefns =
+                    if nested.unmatchedDefns == [ ] then
+                      [ ]
+                    else
+                      map (def: def // { prefix = [ name ] ++ def.prefix; }) nested.unmatchedDefns;
+                }
           )
           (
             map (
