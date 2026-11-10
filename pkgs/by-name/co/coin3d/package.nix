@@ -4,6 +4,8 @@
   fetchFromGitHub,
   boost,
   cmake,
+  fontconfig,
+  freetype,
   libGL,
   libGLU,
   libx11,
@@ -25,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    fontconfig
+    freetype
     libGL
     libGLU
     expat
@@ -34,6 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
   ];
+
+  postFixup =
+    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.hasSharedLibraries)
+      ''
+        patchelf --add-rpath ${
+          lib.makeLibraryPath [
+            libGLU
+            freetype
+            fontconfig
+          ]
+        } "$out/lib/libCoin.so"
+      '';
 
   meta = {
     homepage = "https://github.com/coin3d/coin";
