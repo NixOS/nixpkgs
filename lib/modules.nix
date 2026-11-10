@@ -1130,13 +1130,18 @@ let
     fixupOptionType loc (
       foldl'
         (
-          res: opt:
+          res:
+          {
+            options,
+            _file,
+            pos ? null,
+            ...
+          }:
           let
-            optOptions = opt.options;
             typeSet =
-              if res ? type && optOptions ? type then
+              if res ? type && options ? type then
                 let
-                  mergedType = res.type.typeMerge optOptions.type.functor;
+                  mergedType = res.type.typeMerge options.type.functor;
                 in
                 if mergedType != null then
                   {
@@ -1145,44 +1150,44 @@ let
                 else
                   # Keep in sync with the same error below!
                   throw
-                    "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+                    "The option `${showOption loc}' in `${_file}' is already declared in ${showFiles res.declarations}."
               else
                 { };
           in
           if
-            (res ? default && optOptions ? default)
-            || (res ? example && optOptions ? example)
-            || (res ? description && optOptions ? description)
-            || (res ? apply && optOptions ? apply)
+            (res ? default && options ? default)
+            || (res ? example && options ? example)
+            || (res ? description && options ? description)
+            || (res ? apply && options ? apply)
           then
             # Keep in sync with the same error above!
             throw
-              "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+              "The option `${showOption loc}' in `${_file}' is already declared in ${showFiles res.declarations}."
           else
-            optOptions
+            options
             // res
             // {
-              declarations = res.declarations ++ [ opt._file ];
+              declarations = res.declarations ++ [ _file ];
               # In the case of modules that are generated dynamically, we won't
               # have exact declaration lines; fall back to just the file being
               # evaluated.
               declarationPositions =
                 res.declarationPositions
                 ++ (
-                  if opt.pos != null then
-                    [ opt.pos ]
+                  if pos != null then
+                    [ pos ]
                   else
                     [
                       {
-                        file = opt._file;
+                        file = _file;
                         line = null;
                         column = null;
                       }
                     ]
                 );
               options =
-                if optOptions.type.getSubModules or null != null then
-                  map (setDefaultModuleLocation opt._file) optOptions.type.getSubModules ++ res.options
+                if options.type.getSubModules or null != null then
+                  map (setDefaultModuleLocation _file) options.type.getSubModules ++ res.options
                 else
                   res.options;
             }
