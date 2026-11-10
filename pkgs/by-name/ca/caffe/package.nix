@@ -137,6 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/Dependencies.cmake --replace-fail \
       'find_package(Boost 1.55 REQUIRED COMPONENTS system thread filesystem)' \
       'find_package(Boost 1.55 REQUIRED COMPONENTS thread filesystem)'
+    substituteInPlace cmake/ProtoBuf.cmake --replace-fail \
+      'list(APPEND Caffe_LINKER_LIBS PUBLIC ''${PROTOBUF_LIBRARIES})' \
+      'list(APPEND Caffe_LINKER_LIBS PUBLIC ''${PROTOBUF_LIBRARIES})
+    find_package(absl CONFIG REQUIRED)
+    list(APPEND Caffe_LINKER_LIBS PUBLIC absl::log absl::check)'
   '';
 
   preConfigure = lib.optionalString pythonSupport ''
