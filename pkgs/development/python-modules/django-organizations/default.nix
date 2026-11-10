@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bennylope/django-organizations";
     changelog = "https://github.com/bennylope/django-organizations/blob/${version}/HISTORY.rst";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }
