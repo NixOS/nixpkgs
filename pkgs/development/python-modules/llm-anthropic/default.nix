@@ -54,6 +54,7 @@ buildPythonPackage (finalAttrs: {
     "test_prompt"
     "test_schema_prompt"
     "test_thinking_prompt"
+    "test_mcp_server_side_tool"
 
     # TypeError: Messages.stream() got an unexpected keyword argument 'temperature'
     "test_image_with_no_prompt"
