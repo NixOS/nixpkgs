@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   patches = [ ./no-doctest.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libgit2
+  ];
 
   postInstall = ''
     mv $out/bin/crdgen $out/bin/autokuma-crdgen

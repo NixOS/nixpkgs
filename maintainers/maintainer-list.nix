@@ -19751,7 +19751,7 @@
     name = "Marek Mahut";
   };
   mmclinton = {
-    email = "nixpkg.concur071@simplelogin.com";
+    email = "github.mmc@pm.me";
     github = "mmclinton";
     githubId = 96266047;
     name = "Miller Clinton";
@@ -28906,7 +28906,7 @@
     name = "TakWolf";
   };
   talal = {
-    email = "noreply@talal.ch";
+    email = "noreply@talal.dev";
     github = "talal";
     githubId = 3526562;
     name = "Muhammad Talal Anwar";

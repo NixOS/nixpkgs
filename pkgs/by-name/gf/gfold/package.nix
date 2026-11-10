@@ -2,9 +2,11 @@
   fetchFromGitHub,
   gfold,
   lib,
+  libgit2,
   rustPlatform,
   testers,
   mold,
+  pkg-config,
   nix-update-script,
 }:
 
@@ -21,7 +23,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-LvUr3T2XOm7mHUjDE5HgBQiHI3Sq9oW7wxAjj2IXQ80=";
 
-  nativeBuildInputs = [ mold ];
+  nativeBuildInputs = [
+    mold
+    pkg-config
+  ];
+
+  buildInputs = [ libgit2 ];
 
   passthru = {
     updateScript = nix-update-script { };

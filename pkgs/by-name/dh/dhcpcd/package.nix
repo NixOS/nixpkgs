@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "dhcpcd";
   };
 })

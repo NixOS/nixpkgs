@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   cacert,
+  pkg-config,
+  aws-lc,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-rpxy";
@@ -20,6 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cacert
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   cargoHash = "sha256-sehnZSQnlb1yd8A7iE/D5kuGX45QeIB2jcndpIt2Nzg=";
