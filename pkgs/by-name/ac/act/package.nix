@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "act";
-  version = "0.2.92";
+  version = "0.2.97";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = "act";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ai8DcpQHzXsjN7FRgXpH7str0nvXPPpMYdEL4pWABv0=";
+    hash = "sha256-sVwFJGeKb/+gA2fI72Nzwgg6iz0RoDS8gK56aWRmdCw=";
   };
 
   vendorHash = "sha256-swbESCLfvFlfpzVDhECGbwmrs8g3GgFisLJXfraytro=";

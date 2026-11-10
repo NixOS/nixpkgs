@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '<0.12.0' '<0.13.0'
+      --replace-fail '>=0.11.6,<0.12.0' '>=0.13'
   '';
 
   preFixup = ''

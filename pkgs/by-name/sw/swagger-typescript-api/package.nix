@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swagger-typescript-api";
-  version = "13.13.0";
+  version = "13.14.0";
 
   src = fetchFromGitHub {
     owner = "acacode";
     repo = "swagger-typescript-api";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lV24rJwgmcTODyvb/qkpKWII4EhKd+xGrs1uwjuSVq4=";
+    hash = "sha256-kmmvyTH8oW2AEYID5U+cHoni1hKZ2OwwINoBI1jRvcA=";
   };
 
   node_modules = stdenv.mkDerivation {

@@ -4,7 +4,9 @@
   fetchFromGitHub,
   gitMinimal,
   nix-update-script,
+  pkg-config,
   versionCheckHook,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
+    pkg-config
+  ];
+
+  checkInputs = [
+    zstd
   ];
 
   doInstallCheck = true;

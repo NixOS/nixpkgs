@@ -4,6 +4,7 @@
   nix-update-script,
   rustPlatform,
   restic,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-g1UylYWQL741PxNBjhVg5pSBd8P4QKPujMWAkXbusRo=";
 
-  buildInputs = [ restic ];
+  buildInputs = [
+    restic
+    sqlite
+  ];
 
   passthru.updateScript = nix-update-script { };
 

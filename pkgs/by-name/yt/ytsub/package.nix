@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  aws-lc,
   sqlite,
 }:
 
@@ -19,7 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5siJSf4NzgyPbGcqziNR6ms5eneeZSt+tvQ/EICMZ8s=";
 
-  buildInputs = [ sqlite ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
 
   meta = {
     description = "Subscriptions only TUI Youtube client";
