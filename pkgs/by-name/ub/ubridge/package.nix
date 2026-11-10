@@ -1,9 +1,12 @@
 {
   lib,
   stdenv,
+  criterion,
   fetchFromGitHub,
   libpcap,
   nix-update-script,
+  nixosTests,
+  pkg-config,
   versionCheckHook,
 }:
 
@@ -38,11 +41,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doCheck = true;
+  nativeCheckInputs = [ pkg-config ];
+  checkInputs = [ criterion ];
+  checkTarget = "test";
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "-v";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.nixos = nixosTests.gns3-server;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Bridge for UDP tunnels, Ethernet, TAP, and VMnet interfaces";
