@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "srsly";
-  version = "2.5.3";
+  version = "2.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "srsly";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-dZuw0+tNIMseznGBQwIS6uICZEozkBWzF7FMQIo0Tbo=";
+    hash = "sha256-LX1B7DhM5UMhMB1t049Tac4z2OcDMbWjF/ZKsVQd1hE=";
   };
 
   build-system = [
