@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  nix-update-script,
   lib,
   ninja,
   libx11,
@@ -25,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcb
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "C++ library providing linear algebra and various utility functions";
