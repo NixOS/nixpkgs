@@ -134,6 +134,11 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/pretix/pretix/commit/eabfe9c2fab6ad61a8325d6a766324830fce43b6.patch";
       hash = "sha256-YXetX9/kwV6qEbRjwqz5VPPkZWPaWESwpXcrdRC6MhA=";
     })
+    (fetchpatch {
+      name = "CVE-2026-125744.patch";
+      url = "https://github.com/pretix/pretix/commit/cf48fd3a77380df8da42d6d504904f48a7fbf38a.patch";
+      hash = "sha256-OxpBuEMwhcEjksDx5oEYgX51pHX1XQfNs8elUoKJW2o=";
+    })
   ];
 
   pythonRelaxDeps = [
