@@ -3,15 +3,14 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
-  autoconf,
   autoconf-archive,
   autoreconfHook,
-  automake,
   libogg,
-  libtool,
   libvorbis,
   libx11,
+  nix-update-script,
   pkg-config,
+  versionCheckHook,
   zlib,
   enableTools ? false,
 }:
@@ -20,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "exult";
   version = "1.12.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
@@ -27,18 +29,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rAUg8RoPsou1g27MZ84vFc0uDvUGzLXkGj33Vbsjlr8=";
   };
 
-  # We can't use just DESTDIR because with it we'll have /nix/store/...-exult-1.12.0/nix/store/...-exult-1.12.0/bin
-  postPatch = ''
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace macosx/macosx.am \
-      --replace-fail DESTDIR NIX_DESTDIR
+      --replace-fail '$(DESTDIR)/Applications/' "$out/Applications/"
   '';
 
   nativeBuildInputs = [
-    autoconf
     autoconf-archive
     autoreconfHook
-    automake
-    libtool
     pkg-config
   ];
 
@@ -50,10 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  configureFlags = [ (lib.enableFeature enableTools "tools") ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
   enableParallelBuilding = true;
 
-  makeFlags = [ "NIX_DESTDIR=$(out)" ]; # see postPatch
-  configureFlags = lib.optional (!enableTools) "--disable-tools";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "Recreation of Ultima VII for modern operating systems";
@@ -67,9 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
       as close to (or perhaps even surpassing) its original splendor as is
       possible.
     '';
-    homepage = "http://exult.info";
+    homepage = "https://exult.info";
+    changelog = "https://github.com/exult/exult/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ keenanweaver ];
+    platforms = lib.platforms.unix;
     mainProgram = "exult";
   };
 })
