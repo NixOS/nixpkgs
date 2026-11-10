@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "TexturesLibraryEditor";
-  version = "1.7";
+  version = "2.1";
 
   src = fetchzip {
     url = "mirror://sourceforge/sweethome3d/TexturesLibraryEditor-${finalAttrs.version}-src.zip";
-    hash = "sha256-v8hMEUujTgWvFnBTF8Dnd1iWgoIXBzGMUxBgmjdxx+g=";
+    hash = "sha256-pZTVAS0wo0N9Rlu8ud6B1GXINhBQBYhTdxlodRqvk34=";
   };
 
   strictDeps = true;
