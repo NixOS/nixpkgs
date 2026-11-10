@@ -34,6 +34,7 @@
   stdenv,
   udev,
   valgrind-light,
+  venus-protocol,
   vulkan-loader,
   wayland,
   wayland-protocols,
@@ -105,7 +106,6 @@
     "wayland"
   ],
   vulkanLayers ? [
-    "anti-lag"
     "device-select"
     "intel-nullhw"
     "overlay"
@@ -291,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
+    venus-protocol
     vulkan-loader
     wayland
     wayland-protocols
