@@ -1,0 +1,89 @@
+From ae29a8772f38fdb1efc24af9ec2e3f6814eb2158 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Sun, 4 May 2025 09:30:55 +0200
+Subject: [PATCH] Makefile: Add install into the system
+
+---
+ Makefile     | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ libnop.pc.in |  7 +++++++
+ 2 files changed, 51 insertions(+)
+ create mode 100644 libnop.pc.in
+
+diff --git a/Makefile b/Makefile
+index 84cb459..e5b8a67 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,7 @@
+ what_to_build:: all
+ 
++VERSION ?= 0-unstable-2022-09-04
++
+ -include local.mk
+ 
+ TOOLCHAIN ?=
+@@ -17,6 +19,12 @@ HOST_CFLAGS := -g -O2 -Wall -Werror -Wextra -Iinclude
+ HOST_CXXFLAGS := -std=c++14
+ HOST_LDFLAGS :=
+ 
++# Define install locations in the system
++INSTALL_PREFIX ?= /usr/local
++INCLUDE_INSTALL_DIR ?= $(INSTALL_PREFIX)/include/
++PKGCONFIG_INSTALL_DIR ?= $(INSTALL_PREFIX)/lib/pkgconfig
++CMAKE_CONFIG_INSTALL_DIR ?= $(INSTALL_PREFIX)/lib/cmake/libnop
++
+ ifeq ($(HOST_OS),Linux)
+ HOST_LDFLAGS := -lpthread
+ endif
+@@ -138,3 +146,39 @@ all:: $(ALL)
+ # we generate .d as a side-effect of compiling. override generic rule:
+ %.d:
+ -include $(DEPS)
++
++# Handle install into the system
++.PHONY: install install-pkgconfig install-cmake
++
++install: install-headers install-pkgconfig install-cmake
++
++install-headers:
++	@echo "Installing headers to $(INCLUDE_INSTALL_DIR)"
++	mkdir -p $(INCLUDE_INSTALL_DIR)
++	cp -r include/* $(INCLUDE_INSTALL_DIR)
++
++install-pkgconfig: $(OUT)/libnop.pc
++	@echo "Installing pkg-config file to $(PKGCONFIG_INSTALL_DIR)"
++	mkdir -p $(PKGCONFIG_INSTALL_DIR)
++	cp $< $(PKGCONFIG_INSTALL_DIR)
++
++PC_TEMPLATE := libnop.pc.in
++
++$(OUT)/libnop.pc: $(PC_TEMPLATE)
++	mkdir -p $(dir $@)
++	sed \
++		-e 's|@prefix@|$(INSTALL_PREFIX)|g' \
++		-e 's|@includedir@|$(INSTALL_PREFIX)/include|g' \
++		-e 's|@version@|$(VERSION)|g' \
++		$< > $@
++
++install-cmake: $(OUT)/libnopConfig.cmake
++	@echo "Installing CMake config to $(CMAKE_CONFIG_INSTALL_DIR)"
++	mkdir -p $(CMAKE_CONFIG_INSTALL_DIR)
++	cp $< $(CMAKE_CONFIG_INSTALL_DIR)
++
++$(OUT)/libnopConfig.cmake:
++	mkdir -p $(dir $@)
++	echo "set(LIBNOP_INCLUDE_DIR \"$(INCLUDE_INSTALL_DIR)\")" > $@
++	echo "set(LIBNOP_FOUND TRUE)" >> $@
++	echo "mark_as_advanced(LIBNOP_INCLUDE_DIR)" >> $@
+diff --git a/libnop.pc.in b/libnop.pc.in
+new file mode 100644
+index 0000000..8c5475b
+--- /dev/null
++++ b/libnop.pc.in
+@@ -0,0 +1,7 @@
++prefix=@prefix@
++includedir=@includedir@
++
++Name: libnop
++Description: Header-only C++ Native Object Protocols library
++Version: @version@
++Cflags: -I${includedir}

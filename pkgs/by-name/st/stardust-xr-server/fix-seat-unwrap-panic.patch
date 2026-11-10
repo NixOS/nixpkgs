@@ -1,0 +1,58 @@
+diff --git a/src/wayland/xdg/backend.rs b/src/wayland/xdg/backend.rs
+index e3860b8..9404a86 100644
+--- a/src/wayland/xdg/backend.rs
++++ b/src/wayland/xdg/backend.rs
+@@ -29,9 +29,9 @@ pub struct XdgBackend {
+ }
+ 
+ impl XdgBackend {
+-	pub fn new(seat: &Arc<Seat>, toplevel: &Arc<Toplevel>) -> Self {
++	pub fn new(seat: Weak<Seat>, toplevel: &Arc<Toplevel>) -> Self {
+ 		Self {
+-			seat: Arc::downgrade(seat),
++			seat,
+ 			toplevel: Arc::downgrade(toplevel),
+ 			children: DashMap::new(),
+ 		}
+diff --git a/src/wayland/xdg/surface.rs b/src/wayland/xdg/surface.rs
+index ddc3562..df733da 100644
+--- a/src/wayland/xdg/surface.rs
++++ b/src/wayland/xdg/surface.rs
+@@ -74,7 +74,6 @@ impl XdgSurface for Surface {
+ 
+ 		let toplevel_weak = Arc::downgrade(&toplevel);
+ 		let display = client.get::<Display>(ObjectId::DISPLAY).unwrap();
+-		let seat = Arc::downgrade(display.seat.get().unwrap());
+ 		let pid = display.pid;
+ 		let configured = self.configured.clone();
+ 		let mut first_commit = true;
+@@ -94,7 +93,8 @@ impl XdgSurface for Surface {
+ 				&& configured.load(std::sync::atomic::Ordering::SeqCst)
+ 				&& surface.currently_has_valid_buffer()
+ 			{
+-				let mapped_inner = MappedInner::create(&seat.upgrade().unwrap(), &toplevel, pid);
++				let seat = display.seat.get().map(Arc::downgrade).unwrap_or_default();
++				let mapped_inner = MappedInner::create(seat, &toplevel, pid);
+ 				*surface.panel_item.lock() = Arc::downgrade(&mapped_inner.panel_item);
+ 				mapped_lock.replace(mapped_inner);
+ 				return false;
+diff --git a/src/wayland/xdg/toplevel.rs b/src/wayland/xdg/toplevel.rs
+index b10223e..a2e0f93 100644
+--- a/src/wayland/xdg/toplevel.rs
++++ b/src/wayland/xdg/toplevel.rs
+@@ -13,6 +13,7 @@ use crate::{
+ use mint::Vector2;
+ use parking_lot::Mutex;
+ use std::sync::Arc;
++use std::sync::Weak;
+ use waynest::ObjectId;
+ pub use waynest_protocols::server::stable::xdg_shell::xdg_toplevel::*;
+ use waynest_server::Client as _;
+@@ -23,7 +24,7 @@ pub struct MappedInner {
+ 	pub panel_item: Arc<PanelItem<XdgBackend>>,
+ }
+ impl MappedInner {
+-	pub fn create(seat: &Arc<Seat>, toplevel: &Arc<Toplevel>, pid: Option<i32>) -> Self {
++	pub fn create(seat: Weak<Seat>, toplevel: &Arc<Toplevel>, pid: Option<i32>) -> Self {
+ 		let (panel_item_node, panel_item) =
+ 			PanelItem::create(Box::new(XdgBackend::new(seat, toplevel)), pid);

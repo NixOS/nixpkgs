@@ -1,0 +1,368 @@
+From d8b34ab0604d80d0be22b8b78e9aa6bf4fac7db0 Mon Sep 17 00:00:00 2001
+From: Sian Cao <yinshuiboy@gmail.com>
+Date: Thu, 27 Oct 2016 15:19:32 +0800
+Subject: [PATCH 2/2] texture: Support copy_sub_image
+
+We need copy_sub_image to implement blurring effects of partial framebuffer
+contents as texture sources.
+
+---
+ cogl/cogl-atlas-texture.c                   |  1 +
+ cogl/cogl-driver.h                          | 10 ++++++++
+ cogl/cogl-sub-texture.c                     |  1 +
+ cogl/cogl-texture-2d-sliced.c               |  1 +
+ cogl/cogl-texture-2d.c                      | 30 ++++++++++++++++++++++
+ cogl/cogl-texture-3d.c                      |  1 +
+ cogl/cogl-texture-private.h                 |  9 +++++++
+ cogl/cogl-texture-rectangle.c               |  1 +
+ cogl/cogl-texture.c                         | 33 ++++++++++++++++++++++++
+ cogl/cogl-texture.h                         |  9 +++++++
+ cogl/driver/gl/cogl-texture-2d-gl-private.h |  9 +++++++
+ cogl/driver/gl/cogl-texture-2d-gl.c         | 39 +++++++++++++++++++++++++++++
+ cogl/driver/gl/gl/cogl-driver-gl.c          |  1 +
+ cogl/driver/gl/gles/cogl-driver-gles.c      |  1 +
+ cogl/driver/nop/cogl-driver-nop.c           |  1 +
+ cogl/winsys/cogl-texture-pixmap-x11.c       |  1 +
+ 16 files changed, 148 insertions(+)
+
+diff --git a/cogl/cogl-atlas-texture.c b/cogl/cogl-atlas-texture.c
+index 1c8b569..e411302 100644
+--- a/cogl/cogl-atlas-texture.c
++++ b/cogl/cogl-atlas-texture.c
+@@ -1027,6 +1027,7 @@ cogl_atlas_texture_vtable =
+     FALSE, /* not primitive */
+     _cogl_atlas_texture_allocate,
+     _cogl_atlas_texture_set_region,
++    NULL, /* copy_sub_image */
+     NULL, /* get_data */
+     _cogl_atlas_texture_foreach_sub_texture_in_region,
+     _cogl_atlas_texture_get_max_waste,
+diff --git a/cogl/cogl-driver.h b/cogl/cogl-driver.h
+index 648228c..4a0aeaf 100644
+--- a/cogl/cogl-driver.h
++++ b/cogl/cogl-driver.h
+@@ -192,6 +192,16 @@ struct _CoglDriverVtable
+                                    int level,
+                                    CoglError **error);
+ 
++  CoglBool
++  (* texture_2d_copy_sub_image) (CoglTexture2D *tex_2d,
++                                 GLint xoffset,
++                                 GLint yoffset,
++                                 GLint x,
++                                 GLint y,
++                                 GLsizei width,
++                                 GLsizei height,
++                                 CoglError **error);
++
+   /* Reads back the full contents of the given texture and write it to
+    * @data in the given @format and with the given @rowstride.
+    *
+diff --git a/cogl/cogl-sub-texture.c b/cogl/cogl-sub-texture.c
+index 7baf95e..0a16193 100644
+--- a/cogl/cogl-sub-texture.c
++++ b/cogl/cogl-sub-texture.c
+@@ -460,6 +460,7 @@ cogl_sub_texture_vtable =
+     FALSE, /* not primitive */
+     _cogl_sub_texture_allocate,
+     _cogl_sub_texture_set_region,
++    NULL, /* copy_sub_image */
+     NULL, /* get_data */
+     _cogl_sub_texture_foreach_sub_texture_in_region,
+     _cogl_sub_texture_get_max_waste,
+diff --git a/cogl/cogl-texture-2d-sliced.c b/cogl/cogl-texture-2d-sliced.c
+index e76bef6..b0b099f 100644
+--- a/cogl/cogl-texture-2d-sliced.c
++++ b/cogl/cogl-texture-2d-sliced.c
+@@ -1526,6 +1526,7 @@ cogl_texture_2d_sliced_vtable =
+     FALSE, /* not primitive */
+     _cogl_texture_2d_sliced_allocate,
+     _cogl_texture_2d_sliced_set_region,
++    NULL, /* copy_sub_image */
+     NULL, /* get_data */
+     _cogl_texture_2d_sliced_foreach_sub_texture_in_region,
+     _cogl_texture_2d_sliced_get_max_waste,
+diff --git a/cogl/cogl-texture-2d.c b/cogl/cogl-texture-2d.c
+index cc28cd9..d9ab188 100644
+--- a/cogl/cogl-texture-2d.c
++++ b/cogl/cogl-texture-2d.c
+@@ -628,6 +628,35 @@ _cogl_texture_2d_set_region (CoglTexture *tex,
+ }
+ 
+ static CoglBool
++_cogl_texture_2d_copy_sub_image (CoglTexture *tex,
++                                 GLint xoffset,
++                                 GLint yoffset,
++                                 GLint x,
++                                 GLint y,
++                                 GLsizei width,
++                                 GLsizei height,
++                                 CoglError **error)
++{
++  CoglContext *ctx = tex->context;
++  CoglTexture2D *tex_2d = COGL_TEXTURE_2D (tex);
++
++  cogl_texture_allocate (tex, NULL); /* (abort on error) */
++
++  ctx->driver_vtable->texture_2d_copy_sub_image (tex_2d,
++                                                 xoffset,
++                                                 yoffset,
++                                                 x,
++                                                 y,
++                                                 width,
++                                                 height,
++                                                 error);
++
++  tex_2d->mipmaps_dirty = TRUE;
++
++  return TRUE;
++}
++
++static CoglBool
+ _cogl_texture_2d_get_data (CoglTexture *tex,
+                            CoglPixelFormat format,
+                            int rowstride,
+@@ -675,6 +704,7 @@ cogl_texture_2d_vtable =
+     TRUE, /* primitive */
+     _cogl_texture_2d_allocate,
+     _cogl_texture_2d_set_region,
++    _cogl_texture_2d_copy_sub_image,
+     _cogl_texture_2d_get_data,
+     NULL, /* foreach_sub_texture_in_region */
+     _cogl_texture_2d_get_max_waste,
+diff --git a/cogl/cogl-texture-3d.c b/cogl/cogl-texture-3d.c
+index 8e2ff08..a59d386 100644
+--- a/cogl/cogl-texture-3d.c
++++ b/cogl/cogl-texture-3d.c
+@@ -741,6 +741,7 @@ cogl_texture_3d_vtable =
+     TRUE, /* primitive */
+     _cogl_texture_3d_allocate,
+     _cogl_texture_3d_set_region,
++    NULL, /* copy_sub_image */
+     _cogl_texture_3d_get_data,
+     NULL, /* foreach_sub_texture_in_region */
+     _cogl_texture_3d_get_max_waste,
+diff --git a/cogl/cogl-texture-private.h b/cogl/cogl-texture-private.h
+index 472c41d..34ff81c 100644
+--- a/cogl/cogl-texture-private.h
++++ b/cogl/cogl-texture-private.h
+@@ -90,6 +90,15 @@ struct _CoglTextureVtable
+                            CoglBitmap *bitmap,
+                            CoglError **error);
+ 
++    CoglBool (* copy_sub_image) (CoglTexture *texture,
++                                 GLint xoffset,
++                                 GLint yoffset,
++                                 GLint x,
++                                 GLint y,
++                                 GLsizei width,
++                                 GLsizei height,
++                                 CoglError **error);
++
+   /* This should copy the image data of the texture into @data. The
+      requested format will have been first passed through
+      ctx->texture_driver->find_best_gl_get_data_format so it should
+diff --git a/cogl/cogl-texture-rectangle.c b/cogl/cogl-texture-rectangle.c
+index 65d2f06..9f533c9 100644
+--- a/cogl/cogl-texture-rectangle.c
++++ b/cogl/cogl-texture-rectangle.c
+@@ -761,6 +761,7 @@ cogl_texture_rectangle_vtable =
+     TRUE, /* primitive */
+     _cogl_texture_rectangle_allocate,
+     _cogl_texture_rectangle_set_region,
++    NULL, /* copy_sub_image */
+     _cogl_texture_rectangle_get_data,
+     NULL, /* foreach_sub_texture_in_region */
+     _cogl_texture_rectangle_get_max_waste,
+diff --git a/cogl/cogl-texture.c b/cogl/cogl-texture.c
+index d93db22..1f4b43c 100644
+--- a/cogl/cogl-texture.c
++++ b/cogl/cogl-texture.c
+@@ -514,6 +514,39 @@ cogl_texture_set_region (CoglTexture *texture,
+ }
+ 
+ CoglBool
++cogl_texture_copy_sub_image (CoglTexture *texture,
++                             int xoffset,
++                             int yoffset,
++                             int x,
++                             int y,
++                             size_t width,
++                             size_t height)
++{
++  CoglError *ignore_error = NULL;
++  CoglBool status;
++
++  if (!texture->allocated)
++    cogl_texture_allocate (texture, NULL);
++
++  if (!texture->vtable->copy_sub_image)
++    return FALSE;
++
++  status = texture->vtable->copy_sub_image (texture,
++                                            xoffset,
++                                            yoffset,
++                                            x,
++                                            y,
++                                            width,
++                                            height,
++                                            &ignore_error);
++
++  if (!status)
++    cogl_error_free (ignore_error);
++  return status;
++}
++
++
++CoglBool
+ cogl_texture_set_data (CoglTexture *texture,
+                        CoglPixelFormat format,
+                        int rowstride,
+diff --git a/cogl/cogl-texture.h b/cogl/cogl-texture.h
+index 2718830..81657d1 100644
+--- a/cogl/cogl-texture.h
++++ b/cogl/cogl-texture.h
+@@ -399,6 +399,15 @@ cogl_texture_set_region (CoglTexture *texture,
+                          unsigned int rowstride,
+                          const uint8_t *data);
+ 
++CoglBool
++cogl_texture_copy_sub_image (CoglTexture *texture,
++                             int xoffset,
++                             int yoffset,
++                             int x,
++                             int y,
++                             size_t width,
++                             size_t height);
++
+ #if defined (COGL_ENABLE_EXPERIMENTAL_API)
+ 
+ /**
+diff --git a/cogl/driver/gl/cogl-texture-2d-gl-private.h b/cogl/driver/gl/cogl-texture-2d-gl-private.h
+index e5c6585..d2f9985 100644
+--- a/cogl/driver/gl/cogl-texture-2d-gl-private.h
++++ b/cogl/driver/gl/cogl-texture-2d-gl-private.h
+@@ -109,6 +109,15 @@ _cogl_texture_2d_gl_copy_from_bitmap (CoglTexture2D *tex_2d,
+                                       int dst_y,
+                                       int level,
+                                       CoglError **error);
++CoglBool
++_cogl_texture_2d_gl_copy_sub_image (CoglTexture2D *tex_2d,
++                                    GLint xoffset,
++                                    GLint yoffset,
++                                    GLint x,
++                                    GLint y,
++                                    GLsizei width,
++                                    GLsizei height,
++                                    CoglError **error);
+ 
+ void
+ _cogl_texture_2d_gl_get_data (CoglTexture2D *tex_2d,
+diff --git a/cogl/driver/gl/cogl-texture-2d-gl.c b/cogl/driver/gl/cogl-texture-2d-gl.c
+index 8675f52..bc15ac5 100644
+--- a/cogl/driver/gl/cogl-texture-2d-gl.c
++++ b/cogl/driver/gl/cogl-texture-2d-gl.c
+@@ -35,6 +35,7 @@
+ #include <config.h>
+ 
+ #include <string.h>
++#include <stdio.h>
+ 
+ #include "cogl-private.h"
+ #include "cogl-texture-private.h"
+@@ -719,6 +720,44 @@ _cogl_texture_2d_gl_copy_from_bitmap (CoglTexture2D *tex_2d,
+   return status;
+ }
+ 
++CoglBool
++_cogl_texture_2d_gl_copy_sub_image (CoglTexture2D *tex_2d,
++                                    GLint xoffset,
++                                    GLint yoffset,
++                                    GLint x,
++                                    GLint y,
++                                    GLsizei width,
++                                    GLsizei height,
++                                    CoglError **error)
++{
++  CoglContext *ctx = COGL_TEXTURE (tex_2d)->context;
++
++  if (ctx->current_read_buffer == NULL)
++    return FALSE;
++
++  if (ctx->current_draw_buffer)
++    _cogl_framebuffer_flush_journal (ctx->current_draw_buffer);
++
++  if (ctx->current_read_buffer != NULL &&
++      ctx->current_read_buffer != ctx->current_draw_buffer)
++    _cogl_framebuffer_flush_journal (ctx->current_read_buffer);
++
++  _cogl_bind_gl_texture_transient (GL_TEXTURE_2D,
++                                   tex_2d->gl_texture,
++                                   tex_2d->is_foreign);
++
++  ctx->glCopyTexSubImage2D (GL_TEXTURE_2D,
++                            0,
++                            xoffset,
++                            yoffset,
++                            x,
++                            y,
++                            width,
++                            height);
++
++  return TRUE;
++}
++
+ void
+ _cogl_texture_2d_gl_get_data (CoglTexture2D *tex_2d,
+                               CoglPixelFormat format,
+diff --git a/cogl/driver/gl/gl/cogl-driver-gl.c b/cogl/driver/gl/gl/cogl-driver-gl.c
+index f305b6a..f7f5020 100644
+--- a/cogl/driver/gl/gl/cogl-driver-gl.c
++++ b/cogl/driver/gl/gl/cogl-driver-gl.c
+@@ -695,6 +695,7 @@ _cogl_driver_gl =
+     _cogl_texture_2d_gl_get_gl_handle,
+     _cogl_texture_2d_gl_generate_mipmap,
+     _cogl_texture_2d_gl_copy_from_bitmap,
++    _cogl_texture_2d_gl_copy_sub_image,
+     _cogl_texture_2d_gl_get_data,
+     _cogl_gl_flush_attributes_state,
+     _cogl_clip_stack_gl_flush,
+diff --git a/cogl/driver/gl/gles/cogl-driver-gles.c b/cogl/driver/gl/gles/cogl-driver-gles.c
+index e94449f..f5ac771 100644
+--- a/cogl/driver/gl/gles/cogl-driver-gles.c
++++ b/cogl/driver/gl/gles/cogl-driver-gles.c
+@@ -476,6 +476,7 @@ _cogl_driver_gles =
+     _cogl_texture_2d_gl_get_gl_handle,
+     _cogl_texture_2d_gl_generate_mipmap,
+     _cogl_texture_2d_gl_copy_from_bitmap,
++    _cogl_texture_2d_gl_copy_sub_image,
+     NULL, /* texture_2d_get_data */
+     _cogl_gl_flush_attributes_state,
+     _cogl_clip_stack_gl_flush,
+diff --git a/cogl/driver/nop/cogl-driver-nop.c b/cogl/driver/nop/cogl-driver-nop.c
+index 53f5975..9d88955 100644
+--- a/cogl/driver/nop/cogl-driver-nop.c
++++ b/cogl/driver/nop/cogl-driver-nop.c
+@@ -80,6 +80,7 @@ _cogl_driver_nop =
+     _cogl_texture_2d_nop_get_gl_handle,
+     _cogl_texture_2d_nop_generate_mipmap,
+     _cogl_texture_2d_nop_copy_from_bitmap,
++    NULL, /* texture_2d_copy_from_image */
+     NULL, /* texture_2d_get_data */
+     _cogl_nop_flush_attributes_state,
+     _cogl_clip_stack_nop_flush,
+diff --git a/cogl/winsys/cogl-texture-pixmap-x11.c b/cogl/winsys/cogl-texture-pixmap-x11.c
+index 398c357..a44cdaf 100644
+--- a/cogl/winsys/cogl-texture-pixmap-x11.c
++++ b/cogl/winsys/cogl-texture-pixmap-x11.c
+@@ -1164,6 +1164,7 @@ cogl_texture_pixmap_x11_vtable =
+     FALSE, /* not primitive */
+     _cogl_texture_pixmap_x11_allocate,
+     _cogl_texture_pixmap_x11_set_region,
++    NULL, /* copy_sub_image */
+     _cogl_texture_pixmap_x11_get_data,
+     _cogl_texture_pixmap_x11_foreach_sub_texture_in_region,
+     _cogl_texture_pixmap_x11_get_max_waste,
+-- 
+2.9.5
+

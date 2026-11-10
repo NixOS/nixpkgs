@@ -1,0 +1,15 @@
+diff --git a/testing/functional/__init__.py b/testing/functional/__init__.py
+index 6c82d2c7..22163fa3 100644
+--- a/testing/functional/__init__.py
++++ b/testing/functional/__init__.py
+@@ -94,8 +94,8 @@ class FunctionalTestCase(DuplicityTestCase):
+         for item in passphrase_input:
+             assert isinstance(item, str), f"item {os.fsdecode(item)} in passphrase_input is not unicode"
+ 
+-        # set python path to be dev directory
+-        os.environ["PYTHONPATH"] = _top_dir
++        # prepend dev directory to python path
++        os.environ["PYTHONPATH"] = _top_dir + ":" + os.environ["PYTHONPATH"]
+ 
+         cmd_list = []
+ 

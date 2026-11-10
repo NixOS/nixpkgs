@@ -1,0 +1,63 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "loganalyzer";
+  version = "23.5.1";
+
+  src = fetchFromGitHub {
+    owner = "pbek";
+    repo = "loganalyzer";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-k9hOGI/TmiftwhSHQEh3ZVV8kkMSs1yKejqHelFSQJ4=";
+  };
+
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+  ];
+
+  nativeBuildInputs = [
+    libsForQt5.wrapQtAppsHook
+  ];
+
+  sourceRoot = "${src.name}/src";
+
+  buildPhase = ''
+    runHook preBuild
+
+    qmake LogAnalyzer.pro CONFIG+=release PREFIX=/
+    make
+
+    runHook postBuild
+  '';
+
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
+
+  postInstall =
+    let
+      outBin =
+        if stdenv.hostPlatform.isDarwin then
+          "LogAnalyzer.app/Contents/MacOS/LogAnalyzer"
+        else
+          "LogAnalyzer";
+    in
+    ''
+      ln -s $out/bin/${outBin} $out/bin/loganalyzer
+    '';
+
+  meta = {
+    description = "Tool that helps you to analyze your log files by reducing the content with patterns you define";
+    homepage = "https://github.com/pbek/loganalyzer";
+    changelog = "https://github.com/pbek/loganalyzer/blob/develop/CHANGELOG.md";
+    downloadPage = "https://github.com/pbek/loganalyzer/releases/tag/v${version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pbek ];
+    platforms = lib.platforms.unix;
+  };
+}

@@ -1,0 +1,4 @@
+Run the nixpkgs/pkgs/servers/web-apps/discourse/update.py script to
+update plugins! See the Plugins section of the Discourse chapter in
+the NixOS manual (https://nixos.org/manual/nixos/unstable/index.html#module-services-discourse)
+for more info.

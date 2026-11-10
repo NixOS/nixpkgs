@@ -1,0 +1,33 @@
+From 2a5fd83d4436583f2ddc0e193269a4d800ee45c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sebasti=C3=A1n=20Alba?= <sebasjosue84@gmail.com>
+Date: Wed, 8 Apr 2026 18:32:25 -0400
+Subject: [PATCH] Prevent read overrun in libkdb_ldap
+
+In berval2tl_data(), reject inputs of length less than 2 to prevent an
+integer underflow and subsequent read overrun.  (The security impact
+is negligible as the attacker would have to control the KDB LDAP
+server.)
+
+[ghudson@mit.edu: wrote commit message]
+
+ticket: 9206 (new)
+tags: pullup
+target_version: 1.22-next
+---
+ plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c b/src/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
+index 418d253d17..9aa68bacd7 100644
+--- a/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
++++ b/plugins/kdb/ldap/libkdb_ldap/ldap_principal2.c
+@@ -80,6 +80,9 @@ getstringtime(krb5_timestamp);
+ krb5_error_code
+ berval2tl_data(struct berval *in, krb5_tl_data **out)
+ {
++    if (in->bv_len < 2)
++        return EINVAL;
++
+     *out = (krb5_tl_data *) malloc (sizeof (krb5_tl_data));
+     if (*out == NULL)
+         return ENOMEM;

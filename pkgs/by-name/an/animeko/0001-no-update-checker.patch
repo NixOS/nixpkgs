@@ -1,0 +1,29 @@
+--- a/app/shared/ui-settings/src/commonMain/kotlin/ui/update/UpdateChecker.kt
++++ b/app/shared/ui-settings/src/commonMain/kotlin/ui/update/UpdateChecker.kt
+@@ -40,25 +40,7 @@
+             expectSuccess = true
+         }.use { client ->
+             withExceptionCollector {
+-                return kotlin.runCatching {
+-                    client.getVersionFromAniServer("https://danmaku-global.myani.org/", currentVersion, releaseClass)
+-                        .also {
+-                            logger.info { "Got latest version from global server: ${it?.name}" }
+-                        }
+-                }.recoverCatching { exception ->
+-                    collect(exception)
+-                    client.getVersionFromAniServer("https://danmaku-cn.myani.org/", currentVersion, releaseClass).also {
+-                        logger.info { "Got latest version from CN server: ${it?.name}" }
+-                    }
+-                }.onFailure { exception ->
+-                    collect(exception)
+-                    if (exception is CancellationException || exception is IOException) {
+-                        throwLast()
+-                    }
+-                    val finalException = getLast()!!
+-                    logger.error(finalException) { "Failed to get latest version" }
+-                    throw finalException
+-                }.getOrThrow()// should not throw, because of `onFailure`   
++                return null
+             }
+         }
+     }

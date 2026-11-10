@@ -1,0 +1,21 @@
+diff --git a/src/common/PAM/Writer.vala b/src/common/PAM/Writer.vala
+index 6b80269..063f3b0 100644
+--- a/src/common/PAM/Writer.vala
++++ b/src/common/PAM/Writer.vala
+@@ -25,6 +25,17 @@ namespace PC.PAM {
+         private string filename;
+ 
+         public static Writer new_for_time () {
++            var time_file = File.new_for_path (Constants.PAM_TIME_CONF_PATH);
++            if (!time_file.query_exists ()) {
++                var security_dir = time_file.get_parent ();
++                try {
++                    security_dir.make_directory_with_parents ();
++                    time_file.create (FileCreateFlags.NONE);
++                } catch (Error err) {
++                    critical ("Could not create \"%s\": %s", Constants.PAM_TIME_CONF_PATH, err.message);
++                }
++            }
++
+             return new Writer (Constants.PAM_TIME_CONF_PATH);
+         }

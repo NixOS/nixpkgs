@@ -1,0 +1,22 @@
+--- a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
++++ b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
+@@ -185,7 +185,7 @@
+ 	else
+ 		layout_variant = g_strdup (layout);
+ 
+-	argv[0] = "tecla";
++	argv[0] = "@tecla@/bin/tecla";
+ 	argv[1] = layout_variant;
+ 	argv[2] = NULL;
+ 
+--- a/gnome-initial-setup/pages/timezone/tz.h
++++ b/gnome-initial-setup/pages/timezone/tz.h
+@@ -28,7 +28,7 @@
+ G_BEGIN_DECLS
+ 
+ #ifndef __sun
+-#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
++#  define TZ_DATA_FILE "@tzdata@/share/zoneinfo/zone.tab"
+ #else
+ #  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
+ #endif

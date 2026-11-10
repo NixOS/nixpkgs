@@ -1,0 +1,15 @@
+SIRIUS 7.12 removed the call_fftw_fin argument from sirius_finalize().
+The third argument is now error_code (integer, optional), so drop the
+third .FALSE. that was previously passed for call_fftw_fin.
+
+--- a/src/sirius_interface.F
++++ b/src/sirius_interface.F
+@@ -123,7 +123,7 @@
+ !> \author JHU
+ ! **************************************************************************************************
+    SUBROUTINE cp_sirius_finalize()
+-      CALL sirius_finalize(.FALSE., .FALSE., .FALSE.)
++      CALL sirius_finalize(.FALSE., .FALSE.)
+    END SUBROUTINE cp_sirius_finalize
+ 
+ !***************************************************************************************************

@@ -1,0 +1,15 @@
+diff --git a/koch.nim b/koch.nim
+index 4666d40db..3e9148d40 100644
+--- a/koch.nim
++++ b/koch.nim
+@@ -242,8 +242,8 @@ proc buildTool(toolname, args: string) =
+ 
+ proc buildTools(args: string = "") =
+   bundleNimsuggest(args)
+-  nimCompileFold("Compile nimgrep", "tools/nimgrep.nim",
+-                 options = "-d:release " & args)
++  # nimCompileFold("Compile nimgrep", "tools/nimgrep.nim",
++  #                options = "-d:release " & args)
+   when defined(windows): buildVccTool(args)
+   bundleNimpretty(args)
+   nimCompileFold("Compile testament", "testament/testament.nim", options = "-d:release " & args)

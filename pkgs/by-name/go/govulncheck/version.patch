@@ -1,0 +1,15 @@
+diff --git a/internal/scan/run.go b/internal/scan/run.go
+index fa7fe37..216ca43 100644
+--- a/internal/scan/run.go
++++ b/internal/scan/run.go
+@@ -99,8 +99,8 @@ func scannerVersion(cfg *config, bi *debug.BuildInfo) {
+ 	if bi.Path != "" {
+ 		cfg.ScannerName = path.Base(bi.Path)
+ 	}
+-	if bi.Main.Version != "" && bi.Main.Version != "(devel)" {
+-		cfg.ScannerVersion = bi.Main.Version
++	if true {
++		cfg.ScannerVersion = "@version@"
+ 		return
+ 	}
+ 

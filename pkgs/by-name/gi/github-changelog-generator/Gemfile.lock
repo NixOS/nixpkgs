@@ -1,0 +1,112 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (8.0.1)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.3.1)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
+      minitest (>= 5.1)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
+      uri (>= 0.13.1)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    async (2.23.1)
+      console (~> 1.29)
+      fiber-annotation
+      io-event (~> 1.9)
+      metrics (~> 0.12)
+      traces (~> 0.15)
+    async-http (0.87.0)
+      async (>= 2.10.2)
+      async-pool (~> 0.9)
+      io-endpoint (~> 0.14)
+      io-stream (~> 0.6)
+      metrics (~> 0.12)
+      protocol-http (~> 0.49)
+      protocol-http1 (~> 0.30)
+      protocol-http2 (~> 0.22)
+      traces (~> 0.10)
+    async-http-faraday (0.21.0)
+      async-http (~> 0.42)
+      faraday
+    async-pool (0.10.3)
+      async (>= 1.25)
+    base64 (0.2.0)
+    benchmark (0.4.0)
+    bigdecimal (3.1.9)
+    concurrent-ruby (1.3.5)
+    connection_pool (2.5.0)
+    console (1.30.2)
+      fiber-annotation
+      fiber-local (~> 1.1)
+      json
+    drb (2.2.1)
+    faraday (2.12.2)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-http-cache (2.5.1)
+      faraday (>= 0.8)
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
+    fiber-annotation (0.2.0)
+    fiber-local (1.1.0)
+      fiber-storage
+    fiber-storage (1.0.0)
+    github_changelog_generator (1.16.4)
+      activesupport
+      async (>= 1.25.0)
+      async-http-faraday
+      faraday-http-cache
+      multi_json
+      octokit (~> 4.6)
+      rainbow (>= 2.2.1)
+      rake (>= 10.0)
+    i18n (1.14.7)
+      concurrent-ruby (~> 1.0)
+    io-endpoint (0.15.2)
+    io-event (1.9.0)
+    io-stream (0.6.1)
+    json (2.10.1)
+    logger (1.6.6)
+    metrics (0.12.2)
+    minitest (5.25.4)
+    multi_json (1.15.0)
+    net-http (0.6.0)
+      uri
+    octokit (4.25.1)
+      faraday (>= 1, < 3)
+      sawyer (~> 0.9)
+    protocol-hpack (1.5.1)
+    protocol-http (0.49.0)
+    protocol-http1 (0.30.0)
+      protocol-http (~> 0.22)
+    protocol-http2 (0.22.1)
+      protocol-hpack (~> 1.4)
+      protocol-http (~> 0.47)
+    public_suffix (6.0.1)
+    rainbow (3.1.1)
+    rake (13.2.1)
+    sawyer (0.9.2)
+      addressable (>= 2.3.5)
+      faraday (>= 0.17.3, < 3)
+    securerandom (0.4.1)
+    traces (0.15.2)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+    uri (1.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  github_changelog_generator (= 1.16.4)
+
+BUNDLED WITH
+   2.6.2

@@ -1,0 +1,24 @@
+From 097472be88b64284a90361bee7493e3bb0067f18 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Tue, 7 Jan 2025 10:34:57 +0100
+Subject: [PATCH] Do not retrieve disabled profiles
+
+---
+ src/qml/CalendarChoicePopup.qml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 02d2c717..42bf6462 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -69,6 +69,7 @@ Page {
+ 
+     SyncManager {
+         id: buteoSync
++        filterDisabled: true
+         filterHidden: true
+         filterBy.key: "category"
+         filterBy.value: "calendar"
+-- 
+GitLab
+

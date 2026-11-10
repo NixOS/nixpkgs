@@ -1,0 +1,21 @@
+diff --git a/src/plugins/controls/label-freetype/plugin.c b/src/plugins/controls/label-freetype/plugin.c
+index 917b04c0..83f2bec2 100644
+--- a/src/plugins/controls/label-freetype/plugin.c
++++ b/src/plugins/controls/label-freetype/plugin.c
+@@ -127,7 +127,7 @@ find_default_font_path (void)
+         FILE *fp;
+         static char fc_match_out[PATH_MAX];
+
+-        fp = popen ("/usr/bin/fc-match -f %{file}", "r");
++        fp = popen ("@fcmatch@ -f %{file}", "r");
+         if (!fp)
+                 return FONT_FALLBACK;
+
+@@ -144,7 +144,7 @@ find_default_monospace_font_path (void)
+         FILE *fp;
+         static char fc_match_out[PATH_MAX];
+
+-        fp = popen ("/usr/bin/fc-match -f %{file} monospace", "r");
++        fp = popen ("@fcmatch@ -f %{file} monospace", "r");
+         if (!fp)
+                 return MONOSPACE_FONT_FALLBACK;

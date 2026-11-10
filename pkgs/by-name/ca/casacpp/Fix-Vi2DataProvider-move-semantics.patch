@@ -1,0 +1,58 @@
+From 7d946685a48be3a0c854793950b7d0dd95125041 Mon Sep 17 00:00:00 2001
+From: Kiran Shila <me@kiranshila.com>
+Date: Wed, 20 May 2026 15:11:25 +0800
+Subject: Fix Vi2DataProvider move semantics
+
+---
+ msvis/MSVis/statistics/Vi2DataProvider.h | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/msvis/MSVis/statistics/Vi2DataProvider.h b/msvis/MSVis/statistics/Vi2DataProvider.h
+index 4570d13..cb76a2e 100644
+--- a/msvis/MSVis/statistics/Vi2DataProvider.h
++++ b/msvis/MSVis/statistics/Vi2DataProvider.h
+@@ -121,7 +121,7 @@ public:
+ 	}
+ 
+ 	Vi2DataProvider(Vi2DataProvider&& other)
+-		: vi2(other.vi2)
++		: vi2(std::move(other.vi2))
+ 		, mergedColumns(other.mergedColumns)
+ 		, datasetIndex(other.datasetIndex)
+ 		, datasetChunkOrigin(other.datasetChunkOrigin)
+@@ -130,14 +130,13 @@ public:
+ 		, component(other.component)
+ 		, use_data_weights(other.use_data_weights)
+ 		, omit_flagged_data(other.omit_flagged_data)
+-		, data_iterator(other.data_iterator)
+-		, weights_iterator(other.weights_iterator)
+-		, mask_iterator(other.mask_iterator) {
+-		other.vi2 = nullptr;
++		, data_iterator(std::move(other.data_iterator))
++		, weights_iterator(std::move(other.weights_iterator))
++		, mask_iterator(std::move(other.mask_iterator)) {
+ 	}
+ 
+ 	Vi2DataProvider& operator=(Vi2DataProvider&& other) {
+-		vi2 = other.vi2;
++		vi2 = std::move(other.vi2);
+ 		mergedColumns = other.mergedColumns;
+ 		datasetIndex = other.datasetIndex;
+ 		datasetChunkOrigin = other.datasetChunkOrigin;
+@@ -146,10 +145,9 @@ public:
+ 		component = other.component;
+ 		const_cast<casacore::Bool&> (use_data_weights) = other.use_data_weights;
+ 		const_cast<casacore::Bool&> (omit_flagged_data) = other.omit_flagged_data;
+-		data_iterator = other.data_iterator;
+-		weights_iterator = other.weights_iterator;
+-		mask_iterator = other.mask_iterator;
+-		other.vi2 = nullptr;
++		data_iterator = std::move(other.data_iterator);
++		weights_iterator = std::move(other.weights_iterator);
++		mask_iterator = std::move(other.mask_iterator);
+ 		return *this;
+ 	}
+ 
+-- 
+2.53.0
+

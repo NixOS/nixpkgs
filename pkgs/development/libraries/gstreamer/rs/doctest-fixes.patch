@@ -1,0 +1,98 @@
+diff --git a/audio/elevenlabs/src/synthesizer/imp.rs b/audio/elevenlabs/src/synthesizer/imp.rs
+index c31cb4f4d..a55b4fbb6 100644
+--- a/audio/elevenlabs/src/synthesizer/imp.rs
++++ b/audio/elevenlabs/src/synthesizer/imp.rs
+@@ -21,7 +21,7 @@
+ //!
+ //! Example usage with srt file as input:
+ //!
+-//! ```
++//! ```sh
+ //! gst-launch-1.0 filesrc location=/home/meh/Documents/chaplin-fr-shifted.srt ! \
+ //! subparse ! clocksync ! queue ! \
+ //! elevenlabssynthesizer voice-id=kENkNtk0xyzG09WW40xE overflow=shift api-key=XXX ! autoaudiosink
+diff --git a/audio/whisper/src/transcriber/imp.rs b/audio/whisper/src/transcriber/imp.rs
+index 28e5446ce..939a66138 100644
+--- a/audio/whisper/src/transcriber/imp.rs
++++ b/audio/whisper/src/transcriber/imp.rs
+@@ -34,21 +34,21 @@
+  * The element re-exports the features exposed by the whisper-rs crate to select backends, this is
+  * an example for building the element with CUDA support enabled:
+  *
+- * ```
++ * ```sh
+  * cargo build --features=cuda
+  * ```
+  *
+  * You can download models using the [whisper.cpp download script], this is an example for
+  * downloading the large-v3 model:
+  *
+- * ```
++ * ```sh
+  * ./download-ggml-model.sh large-v3
+  * ```
+  *
+  * Equipped with this, this is an example for running live inference with the element introducing a
+  * 6 seconds latency:
+  *
+- * ```
++ * ```sh
+  * gst-launch-1.0 filesrc location=/home/meh/Music/chaplin.wav ! \
+  *   wavparse ! audioconvert ! audioresample ! clocksync ! \
+  *   queue max-size-time=5000000000 max-size-buffers=0 max-size-bytes=0 ! \
+diff --git a/utils/debugseimetainserter/src/debugseimetainserter/mod.rs b/utils/debugseimetainserter/src/debugseimetainserter/mod.rs
+index a1d8d83ed..e090c6afd 100644
+--- a/utils/debugseimetainserter/src/debugseimetainserter/mod.rs
++++ b/utils/debugseimetainserter/src/debugseimetainserter/mod.rs
+@@ -12,7 +12,7 @@
+  * Adds GstVideoSEIUserDataUnregisteredMeta to video buffers for testing SEI insertion.
+  *
+  * ## Example launch line
+- * ```
++ * ```sh
+  * gst-launch-1.0 videotestsrc ! x264enc ! h264parse ! \
+  *   debugseimetainserter uuid=12345678-1234-1234-1234-123456789abc data="test payload" ! \
+  *   h264seiinserter ! filesink location=output.h264
+diff --git a/utils/tracers/src/pipeline_snapshot/imp.rs b/utils/tracers/src/pipeline_snapshot/imp.rs
+index 6e4d5c54e..cccfbdc82 100644
+--- a/utils/tracers/src/pipeline_snapshot/imp.rs
++++ b/utils/tracers/src/pipeline_snapshot/imp.rs
+@@ -33,23 +33,23 @@
+  * - `dot-prefix` (string, default: "pipeline-snapshot-"): when dumping pipelines to a `dot` file each file is named `$prefix$pipeline_name.dot`.
+  * - `dot-ts` (boolean, default: "true"): if the current timestamp should be added as a prefix to each pipeline `dot` file.
+  * - `cleanup-mode` (enum, default: "none"): Determines how .dot files are cleaned up:
+- *     - "initial": Removes all existing .dot files from the target folder when the tracer starts
+- *     - "automatic": Performs cleanup before each snapshot. If folder-mode is enabled, cleans up .dot files within folders.
+- *                    If folder-mode is None, cleans up .dot files directly in the target directory
+- *     - "none": Never removes any .dot files
++ *   - "initial": Removes all existing .dot files from the target folder when the tracer starts
++ *   - "automatic": Performs cleanup before each snapshot. If folder-mode is enabled, cleans up .dot files within folders.
++ *    if folder-mode is None, cleans up .dot files directly in the target directory
++ *   - "none": Never removes any .dot files
+  * - `folder-mode` (enum, default: "none"): Controls how .dot files are organized in folders:
+- *     - "none": All .dot files are stored directly in the target directory without subfolder organization
+- *     - "numbered": Creates a new numbered folder (starting from 0) for each snapshot operation
+- *     - "timed": Creates a new folder named with the current timestamp for each snapshot operation
++ *   - "none": All .dot files are stored directly in the target directory without subfolder organization
++ *   - "numbered": Creates a new numbered folder (starting from 0) for each snapshot operation
++ *   - "timed": Creates a new folder named with the current timestamp for each snapshot operation
+  * - `dots-viewer-websocket-url`: A websocket URL to connect to a dots-viewer server instance,
+- *                                allowing the user to snapshot running pipelines from the web
+-*                                page. To trigger a snapshot, the user should send a json message
+-*                                with the following format:
+-*                                ```json
+-*                                {
+-*                                    "type": "Snapshot"
+-*                                }
+-*                                ```
++ *    allowing the user to snapshot running pipelines from the web
++ *    page. To trigger a snapshot, the user should send a json message
++ *    with the following format:
++ *    ```json
++ *    {
++ *        "type": "Snapshot"
++ *    }
++ *    ```
+  *
+  * Examples:
+  *

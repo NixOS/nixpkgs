@@ -1,0 +1,27 @@
+From 32dd88d622379087ed97d9f2c07bc0155b5a9d29 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Sun, 27 Jul 2025 17:18:06 +0200
+Subject: [PATCH] Reduce loglevel for sleep cycle messages in loop
+
+Logging this information every 5 minutes on INFO is not super actionable
+and should be considered an implementation detail.
+---
+ tlsrpt_reporter/tlsrpt.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tlsrpt_reporter/tlsrpt.py b/tlsrpt_reporter/tlsrpt.py
+index b724596..5377ba2 100644
+--- a/tlsrpt_reporter/tlsrpt.py
++++ b/tlsrpt_reporter/tlsrpt.py
+@@ -1437,9 +1437,9 @@ def run_loop(self):
+             dt = self.wakeuptime - tlsrpt_utc_time_now()
+             seconds_to_sleep = dt.total_seconds()
+             if seconds_to_sleep >= 0:
+-                logger.info("Sleeping for %d seconds", seconds_to_sleep)
++                logger.debug("Sleeping for %d seconds", seconds_to_sleep)
+             else:
+-                logger.info("Skipping sleeping for negative %d seconds", seconds_to_sleep)
++                logger.debug("Skipping sleeping for negative %d seconds", seconds_to_sleep)
+             for key, _ in sel.select(timeout=seconds_to_sleep):
+                 if key.fileobj == interrupt_read:
+                     signumb = interrupt_read.recv(1)

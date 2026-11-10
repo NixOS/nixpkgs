@@ -1,0 +1,406 @@
+If you need to update this patch, apply it to the old version, then use Git to
+rebase it onto the new version.
+
+diff --git a/src/MicroHs/ExpPrint.hs b/src/MicroHs/ExpPrint.hs
+index 59afc0d0..bada27d2 100644
+--- a/src/MicroHs/ExpPrint.hs
++++ b/src/MicroHs/ExpPrint.hs
+@@ -30,7 +30,7 @@ removeUnused (ds, emain) = dfs roots M.empty
+     dMap = M.fromList ds
+     dfs :: [Ident] -> M.Map Exp -> [LDef]
+     dfs [] done = M.toList done
+-    dfs (i:is) done | Just _ <- M.lookup i done = dfs is done
++    dfs (i:is) done | isJust (M.lookup i done) = dfs is done
+                     | otherwise = dfs (freeVars e ++ is) (M.insert i e done)
+                                   where e = fromMaybe (error $ "removeUnused: undef " ++ show i) $ M.lookup i dMap
+ 
+@@ -81,7 +81,7 @@ toStringCMdl :: CMdl -> String
+ toStringCMdl (ds, emain) =
+   let
+     def :: (Ident, Exp) -> (String -> String) -> (String -> String)
+-    def (i, e) r | Just (e', _) <- getForExp e = def (i, e') r
++    def (i, e) r | isJust (getForExp e) = let Just (e', _) = getForExp e in def (i, e') r
+     def (i, e) r =
+       ("A " ++) . toStringP e . ((":" ++ showIdent i ++  " @\n") ++) . r . ("@" ++)
+ 
+diff --git a/src/MicroHs/Expr.hs b/src/MicroHs/Expr.hs
+index bd05f1bc..14225927 100644
+--- a/src/MicroHs/Expr.hs
++++ b/src/MicroHs/Expr.hs
+@@ -514,7 +514,7 @@ getTupleConstr i =
+ getExprTuple :: EType -> Maybe [EType]
+ getExprTuple = loop []
+   where loop ts (EApp f a) = loop (a:ts) f
+-        loop ts (EVar i) | Just n <- getTupleConstr i, length ts == n = Just ts
++        loop ts (EVar i) | isJust (getTupleConstr i) && length ts == fromJust (getTupleConstr i) = Just ts
+         loop _ _ = Nothing
+ 
+ -- Create a tuple selector, component i (0 based) of n
+@@ -1015,13 +1015,13 @@ ppExprR raw = ppE
+     ppApp :: [Expr] -> Expr -> Doc
+     ppApp as (EApp f a) = ppApp (a:as) f
+     ppApp as f | raw = ppApply f as
+-    ppApp as (EVar i) | isOperChar cop, [a, b] <- as = parens $ ppE a <+> text op <+> ppExpr b
+-                      | isOperChar cop, [a] <- as    = parens $ ppE a <+> text op
+-                      | cop == ',' && length op + 1 == length as
+-                                                     = ppE (ETuple as)
+-                      | op == "[]", length as == 1   = ppE (EListish (LList as))
+-                        where op = unIdent (unQualIdent i)
+-                              cop = head op
++    ppApp as (EVar i) = case as of
++      [a, b] | isOperChar cop -> parens $ ppE a <+> text op <+> ppExpr b
++      [a] | isOperChar cop -> parens $ ppE a <+> text op
++      _ | cop == ',' && length op + 1 == length as -> ppE (ETuple as)
++        | op == "[]" && length as == 1 -> ppE (EListish (LList as))
++      where op = unIdent (unQualIdent i)
++            cop = head op
+     ppApp as f = ppApply f as
+     ppApply f as = parens $ hsep (map ppE (f:as))
+ 
+@@ -1212,5 +1212,5 @@ getImplies _ = Nothing
+ 
+ dropForallContext :: EType -> EType
+ dropForallContext (EForall _ _ t) = dropForallContext t
+-dropForallContext t | Just (_, t') <- getImplies t = dropForallContext t'
++dropForallContext t | isJust (getImplies t) = let Just (_, t') = getImplies t in dropForallContext t'
+                     | otherwise = t
+diff --git a/src/MicroHs/FFI.hs b/src/MicroHs/FFI.hs
+index 4e79ab18..292a28fb 100644
+--- a/src/MicroHs/FFI.hs
++++ b/src/MicroHs/FFI.hs
+@@ -1,6 +1,7 @@
+ module MicroHs.FFI(makeFFI) where
+ import qualified Prelude(); import MHSPrelude
+ import Data.List
++import Data.Maybe(fromJust, isJust)
+ import MicroHs.Desugar(LDef)
+ import MicroHs.Exp
+ import MicroHs.Expr
+@@ -175,7 +176,8 @@ arity = length . fst . getArrows
+ cTypeHsName :: HasCallStack => EType -> String
+ cTypeHsName (EApp (EVar ptr) _t) | ptr == identPtr = "Ptr"
+                                  | ptr == identFunPtr = "FunPtr"
+-cTypeHsName (EVar i) | Just c <- lookup (unIdent i) cHsTypes = c
++cTypeHsName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) cHsTypes
+ cTypeHsName t = errorMessage (getSLoc t) $ "Not a valid C type: " ++ showEType t
+ 
+ cHsTypes :: [(String, String)]
+@@ -193,7 +195,8 @@ cHsTypes =
+ -- Use to construct 'foreign export ccall' signature.
+ cTypeName :: EType -> String
+ cTypeName (EApp (EVar ptr) _t) | ptr == identPtr = "void*"
+-cTypeName (EVar i) | Just c <- lookup (unIdent i) cTypes = c
++cTypeName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) cTypes
+ cTypeName t = errorMessage (getSLoc t) $ "Not a valid C type: " ++ showEType t
+ 
+ cTypes :: [(String, String)]
+@@ -211,7 +214,8 @@ cTypes =
+ -- Use to construct 'foreign import javascript' return value wrapper.
+ jsTypeNameR :: EType -> String
+ jsTypeNameR (EApp (EVar ptr) _) | ptr == identPtr = "PTR"
+-jsTypeNameR (EVar i) | Just c <- lookup (unIdent i) jsTypesR = c
++jsTypeNameR (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) jsTypesR
+ jsTypeNameR t = errorMessage (getSLoc t) $ "Not a valid Javascript return type: " ++ showEType t
+ 
+ jsTypesR :: [(String, String)]
+@@ -224,7 +228,8 @@ jsTypesR =
+ -- Use to construct 'foreign import javascript' argument wrapper.
+ jsTypeName :: EType -> String
+ jsTypeName (EApp (EVar ptr) _) | ptr == identPtr = "Ptr"
+-jsTypeName (EVar i) | Just c <- lookup (unIdent i) jsTypes = c
++jsTypeName (EVar i) | isJust mc = fromJust mc
++  where mc = lookup (unIdent i) jsTypes
+ jsTypeName t = errorMessage (getSLoc t) $ "Not a valid Javascript argument type: " ++ showEType t
+ 
+ jsTypes :: [(String, String)]
+diff --git a/src/MicroHs/Lex.hs b/src/MicroHs/Lex.hs
+index 12e0213f..ebe591df 100644
+--- a/src/MicroHs/Lex.hs
++++ b/src/MicroHs/Lex.hs
+@@ -8,7 +8,7 @@ module MicroHs.Lex(
+ import qualified Prelude(); import MHSPrelude hiding(lex)
+ import Data.Char
+ import Data.List
+-import Data.Maybe (fromJust)
++import Data.Maybe (fromJust, isJust)
+ import MicroHs.Ident
+ import Text.ParserComb(TokenMachine(..))
+ 
+@@ -101,14 +101,14 @@ lex loc ('(':dcs@(d:cs)) | d == '#'  = TSpec loc 'L' : lex (addCol loc 2) cs
+                          | otherwise = TSpec loc '(' : lex (addCol loc 1) dcs
+ lex loc ('#':')':cs) = TSpec loc 'R' : lex (addCol loc 2) cs
+ -- Recognize #line 123 "file/name.hs"
+-lex loc ('#':xcs) | (SLoc _ _ 1) <- loc, Just cs <- stripPrefix "line " xcs =
++lex (SLoc _ _ 1) ('#':'l':'i':'n':'e':' ':cs) =
+   case span (/= '\n') cs of
+     (line, rs) ->        -- rs will contain the '\n', so subtract 1 below
+       let ws = words line
+           file = tail $ init $ ws!!1   -- strip the initial and final '"'
+           loc' = SLoc file (readInt (ws!!0) - 1) 1
+       in  lex loc' rs
+-                  | (SLoc _ 1 1) <- loc, take 1 xcs == "!" =
++lex loc@(SLoc _ 1 1) ('#':xcs@('!':cs)) =
+   -- It's a shebang (#!), ignore the rest of the line
+   skipLine loc xcs
+ lex loc ('!':' ':cs) =  -- ! followed by a space is always an operator
+@@ -231,7 +231,7 @@ tIndent ts = TIndent (tokensLoc ts) : ts
+ 
+ lexLitStr :: SLoc -> SLoc -> (String -> Token) -> (String -> Maybe Int) -> (String -> String) -> String -> [Token]
+ lexLitStr oloc loc mk end post acs = loop loc [] acs
+-  where loop l rs cs | Just k <- end cs   = mk (decodeEscs $ post $ reverse rs) : lex (addCol l k) (drop k cs)
++  where loop l rs cs | isJust (end cs)    = let Just k = end cs in mk (decodeEscs $ post $ reverse rs) : lex (addCol l k) (drop k cs)
+         loop l rs ('\\':c:cs) | isSpace c = remGap l rs cs
+         loop l rs ('\\':'^':'\\':cs)      = loop (addCol l 3) ('\\':'^':'\\':rs) cs  -- special hack for unescaped \
+         loop l rs ('\\':cs)               = loop' (addCol l 1) ('\\':rs) cs
+@@ -270,8 +270,10 @@ decodeEsc ('x':cs) = conv 16 0 cs
+ decodeEsc ('o':cs) = conv 8 0 cs
+ decodeEsc ('^':c:cs) | '@' <= c && c <= '_' = chr (ord c - ord '@') : decodeEscs cs
+ decodeEsc cs@(c:_) | isDigit c = conv 10 0 cs
+-decodeEsc (c1:c2:c3:cs) | Just c <- lookup [c1,c2,c3] ctlCodes = c : decodeEscs cs
+-decodeEsc (c1:c2:cs) | Just c <- lookup [c1,c2] ctlCodes = c : decodeEscs cs
++decodeEsc (c1:c2:c3:cs) | isJust mc = let Just c = mc in c : decodeEscs cs
++  where mc = lookup [c1,c2,c3] ctlCodes
++decodeEsc (c1:c2:cs) | isJust mc = let Just c = mc in c : decodeEscs cs
++  where mc = lookup [c1,c2] ctlCodes
+ decodeEsc (c  :cs) = c : decodeEscs cs
+ decodeEsc []       = mhsError "Bad \\ escape"
+ 
+@@ -417,7 +419,7 @@ pragma loc cs =
+   in  case words cs of
+         p : _ | map toUpper p == "SOURCE" -> TPragma loc p : skip
+         -- hsc2hs generates LINE pragmas
+-        p : ln@(_:_) : fn : _ | map toUpper p == "LINE", all isDigit ln ->
++        p : ln@(_:_) : fn : _ | map toUpper p == "LINE" && all isDigit ln ->
+           let f = tail (init fn)
+               l = readInt ln - 1
+           in  seq l $ skipNest (SLoc f l 1) 1 ('#':cs)
+diff --git a/src/MicroHs/Main.hs b/src/MicroHs/Main.hs
+index 913c197b..7f17e313 100644
+--- a/src/MicroHs/Main.hs
++++ b/src/MicroHs/Main.hs
+@@ -141,16 +141,16 @@ decodeArgs f mdls (arg:args) =
+     "-z"        -> decodeArgs f{compress = True} mdls args
+     "-b64"      -> decodeArgs f{base64 = True} mdls args
+     "-Q"        -> decodeArgs f{installPkg = True} mdls args
+-    "-o" | s : args' <- args
+-                -> decodeArgs f{output = s} mdls args'
+-    "-optc" | s : args' <- args
+-                -> decodeArgs f{cArgs = cArgs f ++ [s]} mdls args'
+-    "-optl" | s : args' <- args
+-                -> decodeArgs f{lArgs = lArgs f ++ [s]} mdls args'
+-    "-optF" | s : args' <- args
+-                -> decodeArgs f{fArgs = fArgs f ++ [s]} mdls args'
+-    "-pgmF" | s : args' <- args
+-                -> decodeArgs f{fPgm = Just s} mdls args'
++    "-o" | not (null args)
++                -> let s : args' = args in decodeArgs f{output = s} mdls args'
++    "-optc" | not (null args)
++                -> let s : args' = args in decodeArgs f{cArgs = cArgs f ++ [s]} mdls args'
++    "-optl" | not (null args)
++                -> let s : args' = args in decodeArgs f{lArgs = lArgs f ++ [s]} mdls args'
++    "-optF" | not (null args)
++                -> let s : args' = args in decodeArgs f{fArgs = fArgs f ++ [s]} mdls args'
++    "-pgmF" | not (null args)
++                -> let s : args' = args in decodeArgs f{fPgm = Just s} mdls args'
+     "-F"        -> decodeArgs f{doF = True} mdls args
+     '-':'i':[]  -> decodeArgs f{paths = []} mdls args
+     '-':'i':s   -> decodeArgs f{paths = paths f ++ [s]} mdls args
+@@ -163,7 +163,7 @@ decodeArgs f mdls (arg:args) =
+     '-':'a':s   -> decodeArgs f{pkgPath = pkgPath f ++ [s]} mdls args
+     '-':'L':s   -> decodeArgs f{listPkg = Just s} mdls args
+     '-':'p':s   -> decodeArgs f{preload = preload f ++ [s]} mdls args
+-    '-':'d':'d':'u':'m':'p':'-':r | Just d <- lookup r dumpFlagTable ->
++    '-':'d':'d':'u':'m':'p':'-':r | isJust (lookup r dumpFlagTable) -> let Just d = lookup r dumpFlagTable in
+                    decodeArgs f{dumpFlags = d : dumpFlags f} mdls args
+     "--stdin"   -> decodeArgs f{useStdin = True} mdls args
+     '-':_       -> mhsError $ "Unknown flag: " ++ arg ++ "\n" ++ usage
+diff --git a/src/MicroHs/TypeCheck.hs b/src/MicroHs/TypeCheck.hs
+index db7f3527..b006e8f9 100644
+--- a/src/MicroHs/TypeCheck.hs
++++ b/src/MicroHs/TypeCheck.hs
+@@ -824,7 +824,7 @@ tInst :: HasCallStack => Expr -> EType -> T (Expr, EType)
+ tInst ae (EForall _ vks t) = do
+   t' <- tInstForall vks t
+   tInst ae t'
+-tInst ae at | Just (ctx, t) <- getImplies at = do
++tInst ae at | isJust (getImplies at) = let Just (ctx, t) = getImplies at in do
+   --tcTrace $ "tInst: addConstraint: " ++ show ae ++ ", " ++ show d ++ " :: " ++ show ctx
+ {-
+   if eqExpr ae eCannotHappen then
+@@ -1326,7 +1326,7 @@ expandClass d = return [d]
+ -- Ignoring initial quantifiers and context, how many arrows does the type have?
+ countArrows :: EType -> Int
+ countArrows (EForall _ _ t) = countArrows t
+-countArrows t | Just (_, t') <- getImplies t = countArrows t'
++countArrows t | isJust (getImplies t) = let Just (_, t') = getImplies t in countArrows t'
+               | otherwise = length . fst . getArrows $ t
+ 
+ simpleEqn :: Expr -> [Eqn]
+@@ -1772,7 +1772,7 @@ tInferExpr = tInfer tcExpr
+ 
+ tCheckExpr :: HasCallStack =>
+               EType -> Expr -> T Expr
+-tCheckExpr t e | Just (ctx, t') <- getImplies t = do
++tCheckExpr t e | isJust (getImplies t) = let Just (ctx, t') = getImplies t in do
+ --  tcTrace $ "tCheckExpr: " ++ show (e, ctx, t')
+   xt <- expandSyn t
+   unless (eqEType t xt) undefined
+@@ -2125,7 +2125,7 @@ needDsCase ex lbls ae =
+       vt <- gets valueTable
+       case stLookupGlbUnqMany lbl vt of
+         -- check the return type of an unambiguous label
+-        Just [Entry _ t] | (t':_, _) <- getArrows (dropForallContext t) -> needT t'
++        Just [Entry _ t] | not $ null $ fst $ getArrows (dropForallContext t) -> needT $ head $ fst $ getArrows $ dropForallContext t
+         _ -> return Nothing
+ 
+ -- Do a record update using case.
+@@ -2184,8 +2184,8 @@ tcExprAp mt ae args = do
+                  EUVar r -> fmap (fromMaybe t) (getUVar r)
+                  _ -> return t
+ --             tcTrace $ "exExprAp: EVar " ++ showIdent i ++ " :: " ++ showExpr t ++ " = " ++ showExpr t' ++ " mt=" ++ show mt
+-             case fn of
+-               EVar ii | ii == mkIdent "Data.Function.$", f:as <- args -> tcExprAp mt f as
++             case (fn, args) of
++               (EVar ii, f:as) | ii == mkIdent "Data.Function.$" -> tcExprAp mt f as
+                _ -> tcExprApFn mt fn t' args
+     EQVar f t ->  -- already resolved
+       tcExprApFn mt f t args
+@@ -2216,17 +2216,17 @@ tcExprApFn mt fn atfn aargs = do
+   let -- loop _ats aas ft | trace ("loop: " ++ show (aas, ft)) False = undefined
+       loop ats [] ft = final (reverse ats) ft
+       loop ats aas@(a:as) aft = do
+-        case nextArg aft of
+-          AReqd (IdKind i k) ft -> useType i k a ft
+-          AForall _ (IdKind i k:iks) ft | ETypeArg t <- a -> do
++        case (nextArg aft, a) of
++          (AReqd (IdKind i k) ft, _) -> useType i k a ft
++          (AForall _ (IdKind i k:iks) ft, ETypeArg t) -> do
+             -- traceM ("AForall " ++ show (i, t))
+             useType i k t (EForall QExpl iks ft)
+-          AForall _ iks ft -> do
++          (AForall _ iks ft, _) -> do
+             ft' <- tInstForall iks ft
+             loop ats aas ft'
+-          AConstaint ctx ft ->
++          (AConstaint ctx ft, _) ->
+             loop (ArgCtx ctx : ats) aas ft
+-          ARet aft' -> do
++          (ARet aft', _) -> do
+             (at, rt) <- unArrow loc aft'
+             --traceM ("ARet " ++ show (at, rt))
+             loop (ArgExpr a at : ats) as rt
+@@ -2543,7 +2543,7 @@ nextArg :: EType -> Arg
+ nextArg (EForall _ []  t)                  = nextArg t
+ nextArg (EForall QReqd (ik:iks) t)         = AReqd ik (EForall QReqd iks t)
+ nextArg (EForall q     iks      t)         = AForall q iks t
+-nextArg t | Just (ctx, t') <- getImplies t = AConstaint ctx t'
++nextArg t | isJust (getImplies t) = let Just (ctx, t') = getImplies t in AConstaint ctx t'
+           | otherwise                      = ARet t
+ 
+ tcExprLam :: HasCallStack => Expected -> SLoc -> [Eqn] -> T Expr
+@@ -2559,7 +2559,7 @@ tcEqns' top at eqns =
+   case at of
+     EForall QExpl iks t -> withExtTyps iks $ tcEqns' top t eqns
+     EForall QImpl   _ t ->                   tcEqns' top t eqns
+-    _ | Just (ctx, t') <- getImplies at -> do
++    _ | isJust (getImplies at) -> let Just (ctx, t') = getImplies at in do
+       let loc = getSLoc eqns
+       d <- newADictIdent loc
+       f <- newIdent loc "fcnD"
+@@ -3109,7 +3109,7 @@ skolemise (EForall _ tvs ty) = do -- Rule PRPOLY
+   (sks1, ty') <- shallowSkolemise tvs ty
+   (sks2, ty'') <- skolemise ty'
+   return (sks1 ++ sks2, ty'')
+-skolemise t@(EApp _ _) | Just (arg_ty, res_ty) <- getArrow t = do
++skolemise t@(EApp _ _) | isJust (getArrow t) = let Just (arg_ty, res_ty) = getArrow t in do
+   (sks, res_ty') <- skolemise res_ty
+   return (sks, arg_ty `tArrow` res_ty')
+ skolemise (EApp f a) = do
+@@ -3178,13 +3178,13 @@ subsCheckRho loc exp1 (EForall _ vs1 t1) (EForall _ vs2 t2) | length vs1 == leng
+ subsCheckRho loc exp1 sigma1@EForall{} rho2 = do -- Rule SPEC
+   (exp1', rho1) <- tInst exp1 sigma1
+   subsCheckRho loc exp1' rho1 rho2
+-subsCheckRho loc exp1 arho1 rho2 | Just _ <- getImplies arho1 = do
++subsCheckRho loc exp1 arho1 rho2 | isJust (getImplies arho1) = do
+   (exp1', rho1) <- tInst exp1 arho1
+   subsCheckRho loc exp1' rho1 rho2
+-subsCheckRho loc exp1 rho1 rho2 | Just (a2, r2) <- getArrow rho2 = do -- Rule FUN
++subsCheckRho loc exp1 rho1 rho2 | isJust (getArrow rho2) = let Just (a2, r2) = getArrow rho2 in do -- Rule FUN
+   (a1, r1) <- unArrow loc rho1
+   subsCheckFun loc exp1 a1 r1 a2 r2
+-subsCheckRho loc exp1 rho1 rho2 | Just (a1, r1) <- getArrow rho1 = do -- Rule FUN
++subsCheckRho loc exp1 rho1 rho2 | isJust (getArrow rho1) = let Just (a1, r1) = getArrow rho1 in do -- Rule FUN
+   (a2,r2) <- unArrow loc rho2
+   subsCheckFun loc exp1 a1 r1 a2 r2
+ subsCheckRho loc exp1 tau1 tau2 = do  -- Rule MONO
+@@ -3366,10 +3366,12 @@ canonPatSynType at = do
+       pure $ mkTyp [] emptyCtx [] emptyCtx ty
+ 
+ splitPatSynType :: EType -> ([IdKind], EConstraint, [IdKind], EConstraint, EType)
+-splitPatSynType (EForall _ vks1 t0)
+-  | Just  (ctx1, EForall _ vks2 t1) <- getImplies t0
+-  , Just  (ctx2, ty) <- getImplies t1
+-  = (vks1, ctx1, vks2, ctx2, ty)
++splitPatSynType (EForall _ vks1 t0) | isJust x = fromJust x
++  where
++    x = do
++      (ctx1, EForall _ vks2 t1) <- getImplies t0
++      (ctx2, ty) <- getImplies t1
++      Just (vks1, ctx1, vks2, ctx2, ty)
+ splitPatSynType t = impossibleShow t
+ 
+ -----
+@@ -3465,7 +3467,7 @@ defaultOneTyVar tv = do
+ --  traceM $ "defaultOneTyVar: cvs = " ++ show cvs
+   dvs <- getSuperClasses cvs                            -- add superclasses
+ --  traceM $ "defaultOneTyVar: dvs = " ++ show dvs
+-  let oneCls c | Just ts <- M.lookup c (defaults old) =
++  let oneCls c | isJust (M.lookup c $ defaults old) = let Just ts = M.lookup c (defaults old) in
+         take 1 $ filter (\ t -> all (\ cc -> soluble cc t) cvs) ts
+                | otherwise = []
+       soluble c t = fst $ flip tcRun old $ do
+@@ -3571,7 +3573,7 @@ solvers =
+ -- Examine each goal, either solve it (possibly producing new goals) or let it remain unsolved.
+ solveMany :: [Goal] -> [UGoal] -> [(EType, Soln)] -> [Improve] -> T ([UGoal], [Soln], [Improve])
+ solveMany [] uns sol imp = return (uns, map snd sol, imp)
+-solveMany ((di, ct) : cnss) uns sol imp | Just (_, (dd, _)) <- find (eqEType ct . fst) sol =
++solveMany ((di, ct) : cnss) uns sol imp | isJust (find (eqEType ct . fst) sol) = let Just (_, (dd, _)) = find (eqEType ct . fst) sol in
+   solveMany cnss uns ((ct, (di, EVar dd)) : sol) imp
+ -- Need to handle ct of the form C => T, and forall a . T
+ solveMany (cns@(di, ct) : cnss) uns sol imp = do
+@@ -3889,7 +3891,7 @@ solveEq eqs t1 t2 | normTypeEq eqs t1 `eqEType` normTypeEq eqs t2 = Just []
+ -- XXX This guaranteed by how it's called, but I'm not sure it always works properly.
+ addTypeEq :: EType -> EType -> TypeEqTable -> TypeEqTable
+ addTypeEq t1 t2 aeqs =
+-  let deref (EVar i) | Just t <- lookup i aeqs = t
++  let deref (EVar i) | isJust (lookup i aeqs) = fromJust $ lookup i aeqs
+       deref (ESign t _) = t
+       deref t = t
+       t1' = deref t1
+@@ -3990,7 +3992,7 @@ standaloneDeriving str narg act = do
+ --  traceM ("standaloneDeriving 1 " ++ show (_vks, _ctx, cc))
+   (cls, ts, tname) <-
+     case getAppM cc of
+-      Just (c, ts@(_:_)) | Just (n, _) <- getAppM (last ts) -> return (c, init ts, n)
++      Just (c, ts@(_:_)) | isJust (getAppM $ last ts) -> let Just (n, _) = getAppM (last ts) in return (c, init ts, n)
+       _ -> tcError (getSLoc act) "malformed standalone deriving"
+ --  traceM ("standaloneDeriving 2 " ++ show (act, cls, tname))
+   dtable <- gets dataTable
+diff --git a/src/Text/ParserComb.hs b/src/Text/ParserComb.hs
+index 6efd5a3f..8ab72759 100644
+--- a/src/Text/ParserComb.hs
++++ b/src/Text/ParserComb.hs
+@@ -127,7 +127,9 @@ satisfy msg f = P $ \ acs ->
+ satisfyM :: forall tm t a . TokenMachine tm t => String -> (t -> Maybe a) -> Prsr tm t a
+ satisfyM msg f = P $ \ acs ->
+   case tmNextToken acs of
+-    (c, cs) | Just a <- f c -> Success a cs noFail
++    (c, cs) -> case f c of
++        Just a -> Success a cs noFail
++        _ -> Failure (LastFail (tmLeft acs) (firstToken acs) [msg])
+     _ -> Failure (LastFail (tmLeft acs) (firstToken acs) [msg])
+ 
+ infixl 9 <?>

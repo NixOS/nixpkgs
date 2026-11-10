@@ -1,0 +1,231 @@
+diff --git a/include/llvm/CodeGen/RDFGraph.h b/include/llvm/CodeGen/RDFGraph.h
+index cf7344e8c3..30c38da96c 100644
+--- a/include/llvm/CodeGen/RDFGraph.h
++++ b/include/llvm/CodeGen/RDFGraph.h
+@@ -447,7 +447,7 @@
+   AllocatorTy MemPool;
+ };
+ 
+-using RegisterSet = std::set<RegisterRef>;
++using RegisterSet = std::set<RegisterRef, RegisterRefLess>;
+ 
+ struct TargetOperandInfo {
+   TargetOperandInfo(const TargetInstrInfo &tii) : TII(tii) {}
+diff --git a/include/llvm/CodeGen/RDFRegisters.h b/include/llvm/CodeGen/RDFRegisters.h
+index 7eed0b4e1e..c5060f00a0 100644
+--- a/include/llvm/CodeGen/RDFRegisters.h
++++ b/include/llvm/CodeGen/RDFRegisters.h
+@@ -201,6 +201,33 @@
+   std::vector<AliasInfo> AliasInfos;
+ };
+ 
++struct RegisterRefEqualTo {
++  constexpr RegisterRefEqualTo(const llvm::rdf::PhysicalRegisterInfo &pri)
++      : PRI(&pri) {}
++
++  bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {
++    return PRI->equal_to(A, B);
++  }
++
++private:
++  // Make it a pointer just in case. See comment in `RegisterRefLess` below.
++  const llvm::rdf::PhysicalRegisterInfo *PRI;
++};
++
++struct RegisterRefLess {
++  constexpr RegisterRefLess(const llvm::rdf::PhysicalRegisterInfo &pri)
++      : PRI(&pri) {}
++
++  bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {
++    return PRI->less(A, B);
++  }
++
++private:
++  // Make it a pointer because apparently some versions of MSVC use std::swap
++  // on the comparator object.
++  const llvm::rdf::PhysicalRegisterInfo *PRI;
++};
++
+ struct RegisterAggr {
+   RegisterAggr(const PhysicalRegisterInfo &pri)
+       : Units(pri.getTRI().getNumRegUnits()), PRI(pri) {}
+@@ -336,18 +363,6 @@
+   }
+ };
+ 
+-template <> struct equal_to<llvm::rdf::RegisterRef> {
+-  constexpr equal_to(const llvm::rdf::PhysicalRegisterInfo &pri) : PRI(&pri) {}
+-
+-  bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {
+-    return PRI->equal_to(A, B);
+-  }
+-
+-private:
+-  // Make it a pointer just in case. See comment in `less` below.
+-  const llvm::rdf::PhysicalRegisterInfo *PRI;
+-};
+-
+ template <> struct equal_to<llvm::rdf::RegisterAggr> {
+   bool operator()(const llvm::rdf::RegisterAggr &A,
+                   const llvm::rdf::RegisterAggr &B) const {
+@@ -355,23 +370,10 @@
+   }
+ };
+ 
+-template <> struct less<llvm::rdf::RegisterRef> {
+-  constexpr less(const llvm::rdf::PhysicalRegisterInfo &pri) : PRI(&pri) {}
+-
+-  bool operator()(llvm::rdf::RegisterRef A, llvm::rdf::RegisterRef B) const {
+-    return PRI->less(A, B);
+-  }
+-
+-private:
+-  // Make it a pointer because apparently some versions of MSVC use std::swap
+-  // on the std::less specialization.
+-  const llvm::rdf::PhysicalRegisterInfo *PRI;
+-};
+-
+ } // namespace std
+ 
+ namespace llvm::rdf {
+-using RegisterSet = std::set<RegisterRef, std::less<RegisterRef>>;
++using RegisterSet = std::set<RegisterRef, RegisterRefLess>;
+ } // namespace llvm::rdf
+ 
+ #endif // LLVM_CODEGEN_RDFREGISTERS_H
+diff --git a/lib/CodeGen/RDFLiveness.cpp b/lib/CodeGen/RDFLiveness.cpp
+index 11f3fedaa5..43bfbad397 100644
+--- a/lib/CodeGen/RDFLiveness.cpp
++++ b/lib/CodeGen/RDFLiveness.cpp
+@@ -655,8 +655,9 @@
+   // defs, cache the result of subtracting these defs from a given register
+   // ref.
+   using RefHash = std::hash<RegisterRef>;
+-  using RefEqual = std::equal_to<RegisterRef>;
+-  using SubMap = std::unordered_map<RegisterRef, RegisterRef>;
++  using RefEqual = RegisterRefEqualTo;
++  using SubMap =
++      std::unordered_map<RegisterRef, RegisterRef, RefHash, RefEqual>;
+   std::unordered_map<RegisterAggr, SubMap> Subs;
+   auto ClearIn = [](RegisterRef RR, const RegisterAggr &Mid, SubMap &SM) {
+     if (Mid.empty())
+@@ -873,7 +874,7 @@
+       std::vector<RegisterRef> LV;
+       for (const MachineBasicBlock::RegisterMaskPair &LI : B.liveins())
+         LV.push_back(RegisterRef(LI.PhysReg, LI.LaneMask));
+-      llvm::sort(LV, std::less<RegisterRef>(PRI));
++      llvm::sort(LV, RegisterRefLess(PRI));
+       dbgs() << printMBBReference(B) << "\t rec = {";
+       for (auto I : LV)
+         dbgs() << ' ' << Print(I, DFG);
+@@ -883,7 +884,7 @@
+       LV.clear();
+       for (RegisterRef RR : LiveMap[&B].refs())
+         LV.push_back(RR);
+-      llvm::sort(LV, std::less<RegisterRef>(PRI));
++      llvm::sort(LV, RegisterRefLess(PRI));
+       dbgs() << "\tcomp = {";
+       for (auto I : LV)
+         dbgs() << ' ' << Print(I, DFG);
+diff --git a/lib/Target/Hexagon/RDFCopy.cpp b/lib/Target/Hexagon/RDFCopy.cpp
+index b26821cd01..b2c1075244 100644
+--- a/lib/Target/Hexagon/RDFCopy.cpp
++++ b/lib/Target/Hexagon/RDFCopy.cpp
+@@ -109,7 +109,7 @@
+   for (NodeAddr<InstrNode*> IA : BA.Addr->members(DFG)) {
+     if (DFG.IsCode<NodeAttrs::Stmt>(IA)) {
+       NodeAddr<StmtNode*> SA = IA;
+-      EqualityMap EM(std::less<RegisterRef>(DFG.getPRI()));
++      EqualityMap EM(RegisterRefLess(DFG.getPRI()));
+       if (interpretAsCopy(SA.Addr->getCode(), EM))
+         recordCopy(SA, EM);
+     }
+diff --git a/lib/Target/Hexagon/RDFCopy.h b/lib/Target/Hexagon/RDFCopy.h
+index e4fb898928..92b2c65982 100644
+--- a/lib/Target/Hexagon/RDFCopy.h
++++ b/lib/Target/Hexagon/RDFCopy.h
+@@ -25,8 +25,8 @@
+ namespace rdf {
+ 
+   struct CopyPropagation {
+-    CopyPropagation(DataFlowGraph &dfg) : MDT(dfg.getDT()), DFG(dfg),
+-        RDefMap(std::less<RegisterRef>(DFG.getPRI())) {}
++    CopyPropagation(DataFlowGraph &dfg)
++        : MDT(dfg.getDT()), DFG(dfg), RDefMap(RegisterRefLess(DFG.getPRI())) {}
+ 
+     virtual ~CopyPropagation() = default;
+ 
+@@ -35,7 +35,7 @@
+     bool trace() const { return Trace; }
+     DataFlowGraph &getDFG() { return DFG; }
+ 
+-    using EqualityMap = std::map<RegisterRef, RegisterRef>;
++    using EqualityMap = std::map<RegisterRef, RegisterRef, RegisterRefLess>;
+     virtual bool interpretAsCopy(const MachineInstr *MI, EqualityMap &EM);
+ 
+   private:
+@@ -45,7 +45,7 @@
+     bool Trace = false;
+ 
+     // map: register -> (map: stmt -> reaching def)
+-    std::map<RegisterRef,std::map<NodeId,NodeId>> RDefMap;
++    std::map<RegisterRef, std::map<NodeId, NodeId>, RegisterRefLess> RDefMap;
+     // map: statement -> (map: dst reg -> src reg)
+     std::map<NodeId, EqualityMap> CopyMap;
+     std::vector<NodeId> Copies;
+diff --git a/unittests/CodeGen/TypeTraitsTest.cpp b/unittests/CodeGen/TypeTraitsTest.cpp
+index 0ca4fa4e82..592e7cdda4 100644
+--- a/unittests/CodeGen/TypeTraitsTest.cpp
++++ b/unittests/CodeGen/TypeTraitsTest.cpp
+@@ -6,13 +6,16 @@
+ //
+ //===----------------------------------------------------------------------===//
+ 
++#include "llvm/CodeGen/RDFRegisters.h"
+ #include "llvm/CodeGen/RegisterPressure.h"
+ #include "llvm/CodeGen/ScheduleDAG.h"
+ #include "llvm/CodeGen/SelectionDAGNodes.h"
+ #include "llvm/CodeGen/SlotIndexes.h"
+ #include "llvm/CodeGen/TargetPassConfig.h"
+ #include "gtest/gtest.h"
++#include <functional>
+ #include <type_traits>
++#include <utility>
+ 
+ using namespace llvm;
+ 
+@@ -26,3 +29,34 @@
+               "trivially copyable");
+ #endif
+ 
++// https://llvm.org/PR105169
++// Verify that we won't accidently specialize std::less and std::equal_to in a
++// wrong way.
++// C++17 [namespace.std]/2, C++20/23 [namespace.std]/5:
++//   A program may explicitly instantiate a template defined in the standard
++//   library only if the declaration
++//   - depends on the name of a user-defined type and
++//   - the instantiation meets the standard library requirements for the
++//   original template.
++template <class Fn> constexpr bool CheckStdCmpRequirements() {
++  // std::less and std::equal_to are literal, default constructible, and
++  // copyable classes.
++  Fn f1;
++  auto f2 = f1;
++  auto f3 = std::move(f2);
++  f2 = f3;
++  f2 = std::move(f3);
++
++  // Properties held on all known implementations, although not guaranteed by
++  // the standard.
++  static_assert(std::is_empty_v<Fn>);
++  static_assert(std::is_trivially_default_constructible_v<Fn>);
++  static_assert(std::is_trivially_copyable_v<Fn>);
++
++  return true;
++}
++
++static_assert(CheckStdCmpRequirements<std::less<rdf::RegisterRef>>(),
++              "same as the original template");
++static_assert(CheckStdCmpRequirements<std::equal_to<rdf::RegisterRef>>(),
++              "same as the original template");

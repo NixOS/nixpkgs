@@ -1,0 +1,26 @@
+From 379f9476c2a5ee370cd7ec856ee9092cace88499 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Wed, 30 Oct 2024 15:44:40 +0100
+Subject: [PATCH] Avoid ast.Str on Python 3.8+
+
+It has been deprecated since Python 3.8 and was removed from Python 3.14+.
+---
+ setup.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 30ee0575..62272c18 100644
+--- a/setup.py
++++ b/setup.py
+@@ -93,8 +93,9 @@ def default_environment():
+         if (len(a.targets) == 1 and
+                 isinstance(a.targets[0], ast.Name) and
+                 a.targets[0].id == "__version__" and
+-                isinstance(a.value, ast.Str)):
+-            version = a.value.s
++                ((sys.version_info >= (3, 8) and isinstance(a.value, ast.Constant)) or
++                    isinstance(a.value, ast.Str))):
++            version = a.value.value if sys.version_info >= (3, 8) else a.value.s
+ 
+ setup(name='html5lib',
+       version=version,

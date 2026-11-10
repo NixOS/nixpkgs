@@ -1,0 +1,70 @@
+From a4cfd7d7420409c1ab22e83c4f9d196644f02c83 Mon Sep 17 00:00:00 2001
+From: Andrew Morgan <andrew@amorgan.xyz>
+Date: Thu, 8 Oct 2026 18:58:11 +0100
+Subject: [PATCH] Maintain support for integer `sub`
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This was allowed before authlib 1.7, and we even had a regression test
+for it. In 1.7.0, authlib migrated its OAuth/OIDC internals to
+`joserfc`: https://github.com/authlib/authlib/pull/852
+
+Authlib’s old `JWTClaims.validate_sub()` did not enforce the `sub`
+claim’s type, whereas joserfc's validator does. And that requirement is
+consistent with the JWT/OIDC spec.
+
+Keep the old behaviour in place to ensure we don't break any setups.
+---
+ synapse/handlers/oidc.py | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/synapse/handlers/oidc.py b/synapse/handlers/oidc.py
+index 09b19056a72..9a5b58ffcf5 100644
+--- a/synapse/handlers/oidc.py
++++ b/synapse/handlers/oidc.py
+@@ -1051,7 +1051,8 @@ async def _parse_id_token(self, token: Token, nonce: str) -> CodeIDToken:
+         claims = await self._verify_jwt(
+             alg_values=alg_values,
+             token=id_token,
+-            claims_cls=CodeIDToken,
++            # Use a custom verification class that allows int `sub` fields.
++            claims_cls=_CodeIDTokenWithIntegerSubject,
+             claims_options=claims_options,
+             claims_params=claims_params,
+         )
+@@ -1521,6 +1522,34 @@ async def handle_backchannel_logout(
+         finish_request(request)
+ 
+ 
++class _CodeIDTokenWithIntegerSubject(CodeIDToken):  # type: ignore[misc]
++    """Preserve compatibility with providers that issue integer `sub` fields."""
++
++    def validate(self, now: int | None = None, leeway: int = 0) -> None:
++        """"""
++        subject = self.get("sub")
++
++        if type(subject) is not int:
++            # Validate the typical way.
++            super().validate(now, leeway)
++            return
++
++        # Convert the `sub` field to a string.
++        #
++        # OIDC requires a string subject, but Authlib before 1.7 accepted integers.
++        # The original token's signature has already been verified by jwt.decode.
++        self["sub"] = str(subject)
++
++        try:
++            # Try validating with a str `sub`.
++            # If validation still fails, the exception will still bubble up.
++            super().validate(now, leeway)
++        finally:
++            # Preserve the original value for custom mapping providers and anything
++            # else.
++            self["sub"] = subject
++
++
+ class LogoutToken(JWTClaims):  # type: ignore[misc]
+     """
+     Holds and verify claims of a logout token, as per

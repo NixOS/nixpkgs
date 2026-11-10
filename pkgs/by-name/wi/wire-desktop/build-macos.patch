@@ -1,0 +1,10 @@
+--- a/bin/build-tools/lib/build-macos.ts	2026-03-14 19:53:19.400997490 +0300
++++ b/bin/build-tools/lib/build-macos.ts	2026-03-14 19:53:21.919315580 +0300
+@@ -98,6 +98,7 @@
+     protocols: [{name: `${commonConfig.name} Core Protocol`, schemes: [commonConfig.customProtocolName]}],
+     prune: true,
+     quiet: false,
++    electronZipDir: "node_modules/electron-dist",
+   };
+ 
+   if (macOSConfig.electronMirror) {

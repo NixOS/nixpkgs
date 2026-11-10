@@ -1,0 +1,81 @@
+From 29ec6fada935ef966e5859082435ed57daa9522d Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Tue, 16 Mar 2021 15:03:59 -0400
+Subject: [PATCH] [NixOS] Unwrap executable name for .desktop search
+
+Why is this necessary even though -a "$0" is used in the wrapper?
+Because it's completely bypassing argv0! This looks at the executable
+file in-use according to the kernel!
+
+Wrappers cannot affect the `/proc/.../exe` symlink!
+
+Co-authored-by: Yaroslav Bolyukin <iam@lach.pw>
+diff --git a/src/nixos_utils.h b/src/nixos_utils.h
+new file mode 100644
+index 0000000..726065d
+--- /dev/null
++++ b/src/nixos_utils.h
+@@ -0,0 +1,41 @@
++#ifndef NIXOS_UTILS_H
++#define NIXOS_UTILS_H
++
++// kwin
++// #include <kwinglobals.h>
++
++namespace KWin
++{
++
++static QString unwrapExecutablePath(const QString &in_executablePath)
++{
++    // NixOS fixes many packaging issues through "wrapper" scripts that manipulates the environment or does
++    // miscellaneous trickeries and mischievous things to make the programs work.
++    // In turn, programs often employs different mischievous schemes and trickeries to do *other things.
++    // It often happens that they conflict.
++    // Here, `kwin` tries to detect the .desktop file for a given process.
++    // `kwin` followed the process `/proc/.../exe` up to the actual binary running.
++    // It normally would be fine, e.g. /usr/bin/foobar is what's in the desktop file.
++    // But it's not the truth here! It's extremely likely the resolved path is /nix/store/.../bin/.foobar-wrapped
++    // rather than what the desktop file points to, something like /nix/store/.../bin/foobar !!
++    // Since the wrappers for Nixpkgs *always* prepend a dot and append -wrapped, we assume here that we can keep
++    // `/^(.*)\/\.([^/]*)-wrapped/` until the (equivalent) regex does not match.
++    // This should canonicalize the wrapper name to the expected name to look for in the desktop file.
++
++    // Use a copy of the const string
++    QString executablePath(in_executablePath);
++
++    // While the parts needed are present, "unwrap" one layer of wrapper names.
++    while (executablePath.endsWith("-wrapped") && executablePath[executablePath.lastIndexOf("/")+1] == QChar('.')) {
++        // Approximately equivalent to s/-wrapped$//
++        executablePath.remove(executablePath.length() - 8, 8);
++        // Approximately equivalent to s;/\.;/;
++        executablePath.remove(executablePath.lastIndexOf("/")+1, 1);
++    }
++
++    return executablePath;
++}
++
++}// namespace
++
++#endif // NIXOS_UTILS_H
+diff --git a/src/wayland/clientconnection.cpp b/src/wayland/clientconnection.cpp
+index 194e0498c0..69ddda9b25 100644
+--- a/src/wayland/clientconnection.cpp
++++ b/src/wayland/clientconnection.cpp
+@@ -19,6 +19,8 @@
+ #include <systemd/sd-login.h>
+ #endif
+
++#include "nixos_utils.h"
++
+ namespace KWin
+ {
+
+@@ -92,7 +94,7 @@ ClientConnectionPrivate::ClientConnectionPrivate(wl_client *c, Display *display,
+     wl_client_add_destroy_listener(c, &destroyListener);
+
+     wl_client_get_credentials(client, &pid, &user, &group);
+-    executablePath = executablePathFromPid(pid);
++    executablePath = unwrapExecutablePath(executablePathFromPid(pid));
+
+ #if HAVE_SYSTEMD
+     sandboxed = isSandboxed(pid);

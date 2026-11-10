@@ -1,0 +1,55 @@
+{ lib, ... }:
+let
+  certs = import ./common/acme/server/snakeoil-certs.nix;
+  mobilizonDomain = certs.domain;
+  port = 41395;
+in
+
+{
+  name = "mobilizon";
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+  ];
+
+  nodes.server =
+    { pkgs, ... }:
+    {
+      services.mobilizon = {
+        enable = true;
+        settings = {
+          ":mobilizon" = {
+            ":instance" = {
+              name = "Test Mobilizon";
+              hostname = mobilizonDomain;
+            };
+            "Mobilizon.Web.Endpoint".http.port = port;
+          };
+        };
+      };
+
+      security.pki.certificateFiles = [ certs.ca.cert ];
+
+      services.nginx.virtualHosts."${mobilizonDomain}" = {
+        enableACME = lib.mkForce false;
+        sslCertificate = certs.${mobilizonDomain}.cert;
+        sslCertificateKey = certs.${mobilizonDomain}.key;
+      };
+
+      networking.hosts."::1" = [ mobilizonDomain ];
+
+      # https://framagit.org/kaihuri/mobilizon/-/work_items/2070
+      services.postgresql.package = pkgs.postgresql_17;
+    };
+
+  testScript = ''
+    server.wait_for_unit("mobilizon.service")
+    server.wait_for_open_port(${toString port})
+    server.succeed("curl --fail https://${mobilizonDomain}/")
+
+    # Verify ownership is set up correctly
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/sitemap").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/uploads").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
+  '';
+}

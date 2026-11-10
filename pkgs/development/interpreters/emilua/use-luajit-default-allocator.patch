@@ -1,0 +1,65 @@
+diff --git a/src/allocator.cpp b/src/allocator.cpp
+index cb80c99..c41ed4e 100644
+--- a/src/allocator.cpp
++++ b/src/allocator.cpp
+@@ -9,25 +9,6 @@ namespace emilua {
+ 
+ namespace interprocess = boost::interprocess;
+ 
+-static inline
+-void* do_std_alloc(void* ptr, std::size_t osize, std::size_t nsize)
+-{
+-    if (nsize == 0) {
+-        // free_sized only appeared in C23
+-        free(ptr);
+-        return nullptr;
+-    } else {
+-        // even in C23, we don't have realloc_sized() to pass osize along
+-        auto ret = realloc(ptr, nsize);
+-        if (nsize <= osize) {
+-            // According to Programming in Lua 3rd edition § 32.1 ¶ 8, Lua is
+-            // unable to recover from allocation shrinking failures.
+-            assert(ret);
+-        }
+-        return ret;
+-    }
+-}
+-
+ general_purpose_allocator::general_purpose_allocator(
+     std::shared_ptr<void> block, std::size_t block_size)
+     : block{std::move(block)}
+@@ -50,17 +31,8 @@ lua_Alloc general_purpose_allocator::get_lua_allocator()
+             ptr, osize, nsize);
+     };
+ 
+-    static constexpr auto use_c_allocator = [](
+-        void* /*ud*/, void* ptr, std::size_t osize, std::size_t nsize
+-    ) -> void* {
+-        return do_std_alloc(ptr, osize, nsize);
+-    };
+-
+-    if (allocator) {
+-        return use_boost_allocator;
+-    } else {
+-        return use_c_allocator;
+-    }
++    assert(allocator);
++    return use_boost_allocator;
+ }
+ 
+ void general_purpose_allocator::allow_reserved_zone()
+diff --git a/src/core.cpp b/src/core.cpp
+index 8cb4365..fb63706 100644
+--- a/src/core.cpp
++++ b/src/core.cpp
+@@ -183,7 +183,9 @@ vm_context::vm_context(
+     , lua_errmem(false)
+     , exit_request(false)
+     , alloc{memory_resource, memory_resource_size}
+-    , L_(lua_newstate(alloc.get_lua_allocator(), &alloc))
++    , L_(memory_resource
++         ? lua_newstate(alloc.get_lua_allocator(), &alloc)
++         : luaL_newstate())
+     , current_fiber_(nullptr)
+ {
+     if (!L_)

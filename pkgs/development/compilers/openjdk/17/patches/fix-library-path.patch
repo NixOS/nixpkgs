@@ -1,0 +1,61 @@
+diff --git a/src/hotspot/os/linux/os_linux.cpp b/src/hotspot/os/linux/os_linux.cpp
+index 7c951cee51..bcc61ff43d 100644
+--- a/src/hotspot/os/linux/os_linux.cpp
++++ b/src/hotspot/os/linux/os_linux.cpp
+@@ -416,18 +416,8 @@
+   //        1: ...
+   //        ...
+   //        7: The default directories, normally /lib and /usr/lib.
+-#ifndef OVERRIDE_LIBPATH
+-  #if defined(_LP64)
+-    #define DEFAULT_LIBPATH "/usr/lib64:/lib64:/lib:/usr/lib"
+-  #else
+-    #define DEFAULT_LIBPATH "/lib:/usr/lib"
+-  #endif
+-#else
+-  #define DEFAULT_LIBPATH OVERRIDE_LIBPATH
+-#endif
+ 
+ // Base path of extensions installed on the system.
+-#define SYS_EXT_DIR     "/usr/java/packages"
+ #define EXTENSIONS_DIR  "/lib/ext"
+ 
+   // Buffer that fits several snprintfs.
+@@ -435,7 +425,7 @@
+   // by the nulls included by the sizeof operator.
+   const size_t bufsize =
+     MAX2((size_t)MAXPATHLEN,  // For dll_dir & friends.
+-         (size_t)MAXPATHLEN + sizeof(EXTENSIONS_DIR) + sizeof(SYS_EXT_DIR) + sizeof(EXTENSIONS_DIR)); // extensions dir
++         (size_t)MAXPATHLEN + sizeof(EXTENSIONS_DIR) + sizeof(EXTENSIONS_DIR)); // extensions dir
+   char *buf = NEW_C_HEAP_ARRAY(char, bufsize, mtInternal);
+ 
+   // sysclasspath, java_home, dll_dir
+@@ -482,24 +472,20 @@
+     // should always exist (until the legacy problem cited above is
+     // addressed).
+     const char *v = ::getenv("LD_LIBRARY_PATH");
+-    const char *v_colon = ":";
+-    if (v == NULL) { v = ""; v_colon = ""; }
+-    // That's +1 for the colon and +1 for the trailing '\0'.
+-    size_t pathsize = strlen(v) + 1 + sizeof(SYS_EXT_DIR) + sizeof("/lib/") + sizeof(DEFAULT_LIBPATH) + 1;
++    if (v == NULL) { v = ""; }
++    size_t pathsize = strlen(v) + 1;
+     char *ld_library_path = NEW_C_HEAP_ARRAY(char, pathsize, mtInternal);
+-    os::snprintf_checked(ld_library_path, pathsize, "%s%s" SYS_EXT_DIR "/lib:" DEFAULT_LIBPATH, v, v_colon);
++    os::snprintf_checked(ld_library_path, pathsize, "%s", v);
+     Arguments::set_library_path(ld_library_path);
+     FREE_C_HEAP_ARRAY(char, ld_library_path);
+   }
+ 
+   // Extensions directories.
+-  os::snprintf_checked(buf, bufsize, "%s" EXTENSIONS_DIR ":" SYS_EXT_DIR EXTENSIONS_DIR, Arguments::get_java_home());
++  os::snprintf_checked(buf, bufsize, "%s" EXTENSIONS_DIR, Arguments::get_java_home());
+   Arguments::set_ext_dirs(buf);
+ 
+   FREE_C_HEAP_ARRAY(char, buf);
+ 
+-#undef DEFAULT_LIBPATH
+-#undef SYS_EXT_DIR
+ #undef EXTENSIONS_DIR
+ }
+ 

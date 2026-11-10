@@ -1,0 +1,19 @@
+diff --git a/src/JudySL/JudySL.c b/src/JudySL/JudySL.c
+index d7314a7..6252bab 100644
+--- a/src/JudySL/JudySL.c
++++ b/src/JudySL/JudySL.c
+@@ -184,12 +184,12 @@
+ typedef struct SHORCUTLEAF
+ {
+     Pvoid_t   scl_Pvalue;               // callers value area.
+-    uint8_t   scl_Index[WORDSIZE];      // base Index string.
++    uint8_t   scl_Index[];              // base Index string.
+ } scl_t  , *Pscl_t;
+ 
+ // overhead of the scl_Pvalue only, the scl_Index is calculate elsewhere
+ 
+-#define STRUCTOVD       (sizeof(scl_t) - WORDSIZE)
++#define STRUCTOVD       (sizeof(scl_t))
+ 
+ // How big to malloc a shortcut leaf; stringlen should already include the
+ // trailing null char:

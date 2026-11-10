@@ -1,0 +1,42 @@
+--- a/src/git-mirage/git_mirage_ssh.ml
++++ b/src/git-mirage/git_mirage_ssh.ml
+@@ -3,7 +3,7 @@
+ type endpoint = {
+   port : int;
+   hostname : string;
+-  authenticator : Awa.Keys.authenticator option;
++  authenticator : Awa.Keys.authenticator;
+   user : string;
+   credentials : [ `Password of string | `Pubkey of Awa.Hostkey.priv ];
+   path : string;
+@@ -67,8 +67,8 @@
+       >>= function
+       | Error (`Msg err) -> Lwt.return_error (`Connect (`Msg err))
+       | Ok ((_ipaddr, _port), flow) -> (
+-          client_of_flow ?authenticator:edn.authenticator ~user:edn.user
+-            edn.credentials channel_request flow
++          client_of_flow edn.authenticator ~user:edn.user edn.credentials
++            channel_request flow
+           >>= function
+           | Error err -> Lwt.return_error (`Connect err)
+           | Ok _ as v -> Lwt.return v)
+@@ -130,7 +130,7 @@
+             req Smart_git.git_capabilities;
+             opt git_mirage_ssh_key;
+             opt git_mirage_ssh_password;
+-            opt git_mirage_ssh_authenticator;
++            req git_mirage_ssh_authenticator;
+           ]
+         ~k:k1 ctx
+     in
+--- a/src/git-mirage/git_mirage_ssh.mli
++++ b/src/git-mirage/git_mirage_ssh.mli
+@@ -1,7 +1,7 @@
+ type endpoint = {
+   port : int;
+   hostname : string;
+-  authenticator : Awa.Keys.authenticator option;
++  authenticator : Awa.Keys.authenticator;
+   user : string;
+   credentials : [ `Password of string | `Pubkey of Awa.Hostkey.priv ];
+   path : string;

@@ -1,0 +1,12 @@
+diff -ur a/test/use_result.c b/test/use_result.c
+--- a/test/use_result.c	1969-12-31 19:00:01.000000000 -0500
++++ b/test/use_result.c	2023-09-05 00:08:12.979889343 -0400
+@@ -23,6 +23,8 @@
+   51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
+ */
+ 
++#include <unistd.h>
++
+ #include "tap.h"
+ 
+ SQLINTEGER my_max_rows= 100;

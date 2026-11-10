@@ -1,0 +1,58 @@
+Several C-API functions with bind(C) were not declared as public in their
+Fortran modules, leading to link errors with gfortran 16.
+
+--- a/src/tblite/api/calculator.f90
++++ b/src/tblite/api/calculator.f90
+@@ -46,8 +46,11 @@
+       & new_xtb_calculator_api
+    public :: set_calculator_mixer_damping_api, set_calculator_max_iter_api, &
+       & set_calculator_accuracy_api, set_calculator_temperature_api, &
+-      & set_calculator_save_integrals_api
++      & set_calculator_save_integrals_api, set_calculator_guess_api
+    public :: get_singlepoint_api
++   public :: get_calculator_shell_count, get_calculator_shell_map, &
++      & get_calculator_angular_momenta, get_calculator_orbital_count, &
++      & get_calculator_orbital_map
+    public :: push_back_post_processing_param_api, push_back_post_processing_str_api
+ 
+ 
+--- a/src/tblite/api/container.f90
++++ b/src/tblite/api/container.f90
+@@ -36,6 +36,7 @@
+    private
+ 
+    public :: vp_container, delete_container_api
++   public :: push_back_api, new_spin_polarization_api, new_electric_field_api
+ 
+ 
+    !> Void pointer to a container instance
+--- a/src/tblite/api/double_dictionary.f90
++++ b/src/tblite/api/double_dictionary.f90
+@@ -32,6 +32,7 @@
+    public :: vp_double_dictionary
+    public :: get_array_entry_index_api, get_n_entries_dict_api, get_label_entry_index_api, &
+       & get_array_size_index_api, get_array_entry_label_api, get_array_size_label_api
++   public :: delete_post_processing_api
+ 
+    type :: vp_double_dictionary
+       type(double_dictionary_type) :: ptr
+--- a/src/tblite/api/error.f90
++++ b/src/tblite/api/error.f90
+@@ -28,6 +28,7 @@
+ 
+    public :: vp_error
+    public :: new_error_api, check_error_api, clear_error_api, get_error_api, delete_error_api
++   public :: set_error_api
+ 
+ 
+    !> Void pointer to error handle
+--- a/src/tblite/api/result.f90
++++ b/src/tblite/api/result.f90
+@@ -41,6 +41,7 @@
+       & get_result_density_matrix_api, get_result_overlap_matrix_api, &
+       & get_result_hamiltonian_matrix_api, get_result_bond_orders_api, &
+       & get_post_processing_dict_api
++   public :: save_result_wavefunction_api, load_result_wavefunction_api
+ 
+ 
+    !> Void pointer holding results of a calculation

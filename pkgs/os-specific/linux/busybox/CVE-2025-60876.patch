@@ -1,0 +1,40 @@
+From radoslav.kolev at suse.com  Fri Nov 21 09:21:18 2025
+From: radoslav.kolev at suse.com (Radoslav Kolev)
+Date: Fri, 21 Nov 2025 11:21:18 +0200
+Subject: [PATCH v2 1/1] wget: don't allow control characters or spaces in the
+ URL
+In-Reply-To: <20251121092118.3562853-1-radoslav.kolev@suse.com>
+References: <20251121092118.3562853-1-radoslav.kolev@suse.com>
+Message-ID: <20251121092118.3562853-2-radoslav.kolev@suse.com>
+
+Fixes CVE-2025-60876 malicious URL can be used to inject
+HTTP headers in the request.
+
+Signed-off-by: Radoslav Kolev <radoslav.kolev at suse.com>
+Reviewed-by: Emmanuel Deloget <logout at free.fr>
+---
+ networking/wget.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/networking/wget.c b/networking/wget.c
+index ec3767793..fa555427b 100644
+--- a/networking/wget.c
++++ b/networking/wget.c
+@@ -536,6 +536,15 @@ static void parse_url(const char *src_url, struct host_info *h)
+ {
+ 	char *url, *p, *sp;
+ 
++	/* Fix for CVE-2025-60876 - don't allow control characters or spaces in the URL */
++	/* otherwise a malicious URL can be used to inject HTTP headers in the request */
++	const unsigned char *u = (void *) src_url;
++	while (*u) {
++		if (*u <= ' ')
++			bb_simple_error_msg_and_die("Unencoded control character found in the URL!");
++		u++;
++	}
++
+ 	free(h->allocated);
+ 	h->allocated = url = xstrdup(src_url);
+ 
+-- 
+2.51.1

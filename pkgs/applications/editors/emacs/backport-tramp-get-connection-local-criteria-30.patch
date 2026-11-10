@@ -1,0 +1,32 @@
+A CVE-2026-108976 fix[1] was backported to emacs30[2] and
+emacs30-macport[3].  Those backports are incomplete because the fix
+uses a new function tramp-get-connection-local-criteria which is not
+available in Emacs 30.  So in this patch we backport that new function
+tramp-get-connection-local-criteria from Emacs 31 to Emacs 30.
+
+Fixes: https://github.com/NixOS/nixpkgs/issues/575236
+
+[1]: https://cgit.git.savannah.gnu.org/cgit/emacs.git/commit/?h=emacs-31&id=044b0203267db3b7912325d076d79a79000afe75
+[2]: https://github.com/NixOS/nixpkgs/pull/573455
+[3]: https://github.com/NixOS/nixpkgs/pull/573469
+
+--- a/lisp/net/tramp.el
++++ b/lisp/net/tramp.el
+@@ -1608,6 +1608,17 @@ If nil, return `tramp-default-port'."
+   (or (tramp-file-name-port vec)
+       (tramp-get-method-parameter vec 'tramp-default-port)))
+ 
++(defsubst tramp-get-connection-local-criteria (vec)
++  "Get connection-local criteria for VEC."
++  (append
++   '(:application tramp)
++   (and-let* ((method (tramp-file-name-method vec)))
++     `(:protocol ,(substring-no-properties method)))
++   (and-let* ((user-domain (tramp-file-name-user-domain vec)))
++     `(:user ,(substring-no-properties user-domain)))
++   (and-let* ((host-port (tramp-file-name-host-port vec)))
++     `(:machine ,(substring-no-properties host-port)))))
++
+ ;;;###tramp-autoload
+ (defun tramp-file-name-unify (vec &optional localname)
+   "Unify VEC by removing localname and hop from `tramp-file-name' structure.

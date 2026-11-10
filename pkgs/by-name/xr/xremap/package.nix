@@ -1,0 +1,98 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  xremap,
+
+  withVariant ? "full",
+}:
+let
+  variants = {
+    full = {
+      features = [ "full" ];
+      descriptionSuffix = "full variant";
+    };
+    x11 = {
+      suffix = "-x11";
+      features = [ "x11" ];
+      descriptionSuffix = "X11";
+    };
+    gnome = {
+      suffix = "-gnome";
+      features = [ "gnome" ];
+      descriptionSuffix = "Gnome";
+    };
+    kde = {
+      suffix = "-kde";
+      features = [ "kde" ];
+      descriptionSuffix = "KDE";
+    };
+    wlroots = {
+      suffix = "-wlroots";
+      features = [ "wlroots" ];
+      descriptionSuffix = "wlroots";
+    };
+    hyprland = {
+      suffix = "-hyprland";
+      features = [ "hypr" ];
+      descriptionSuffix = "Hyprland";
+    };
+    niri = {
+      suffix = "-niri";
+      features = [ "niri" ];
+      descriptionSuffix = "Niri";
+    };
+    cosmic = {
+      suffix = "-cosmic";
+      features = [ "cosmic" ];
+      descriptionSuffix = "Cosmic";
+    };
+    pantheon = {
+      suffix = "-pantheon";
+      features = [ "pantheon" ];
+      descriptionSuffix = "Pantheon";
+    };
+    socket = {
+      suffix = "-socket";
+      features = [ "socket" ];
+      descriptionSuffix = "Socket client";
+    };
+  };
+
+  variant = variants.${withVariant} or null;
+in
+assert (
+  lib.assertMsg (variant != null)
+    "Unknown variant ${withVariant}: expected one of ${lib.concatStringsSep ", " (lib.attrNames variants)}"
+);
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "xremap${variant.suffix or ""}";
+  version = "0.15.16";
+
+  src = fetchFromGitHub {
+    owner = "xremap";
+    repo = "xremap";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LrPAPy5RM0tb9LNWhszbkT0n6ewMzJc11ywtfVL0Uh0=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = variant.features;
+
+  cargoHash = "sha256-dXNHTJ8VEo7nnm9qRCUEaiBLPrkgmm8NbtzvXVr5k/8=";
+
+  passthru = lib.mapAttrs (name: lib.const (xremap.override { withVariant = name; })) variants;
+
+  meta = {
+    description = "Key remapper for X11 and Wayland (${variant.descriptionSuffix} support)";
+    homepage = "https://github.com/xremap/xremap";
+    changelog = "https://github.com/xremap/xremap/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    mainProgram = "xremap";
+    maintainers = [ lib.maintainers.hakan-demirli ];
+    platforms = lib.platforms.linux;
+  };
+})

@@ -1,0 +1,263 @@
+diff --git a/RNS/Utilities/rnodeconf.py b/RNS/Utilities/rnodeconf.py
+index 566df60..8f6201d 100755
+--- a/RNS/Utilities/rnodeconf.py
++++ b/RNS/Utilities/rnodeconf.py
+@@ -1453,18 +1453,17 @@ def main():
+                         print("\nReady to extract firmware images from the RNode")
+                         print("Press enter to start the extraction process")
+                         input()
+-                        extract_recovery_esptool()
+ 
+                         hash_f = open(EXT_DIR+"/extracted_rnode_firmware.version", "wb")
+                         hash_f.write(v_str.encode("utf-8"))
+                         hash_f.close()
+ 
+                         extraction_parts = [
+-                            ("bootloader", "python \""+CNF_DIR+"/recovery_esptool.py\" --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x1000 0x4650 \""+EXT_DIR+"/extracted_rnode_firmware.bootloader\""),
+-                            ("partition table", "python \""+CNF_DIR+"/recovery_esptool.py\" --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x8000 0xC00 \""+EXT_DIR+"/extracted_rnode_firmware.partitions\""),
+-                            ("app boot", "python \""+CNF_DIR+"/recovery_esptool.py\" --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0xe000 0x2000 \""+EXT_DIR+"/extracted_rnode_firmware.boot_app0\""),
+-                            ("application image", "python \""+CNF_DIR+"/recovery_esptool.py\" --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x10000 0x200000 \""+EXT_DIR+"/extracted_rnode_firmware.bin\""),
+-                            ("console image", "python \""+CNF_DIR+"/recovery_esptool.py\" --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x210000 0x1F0000 \""+EXT_DIR+"/extracted_console_image.bin\""),
++                            ("bootloader", "@esptool@ --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x1000 0x4650 \""+EXT_DIR+"/extracted_rnode_firmware.bootloader\""),
++                            ("partition table", "@esptool@ --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x8000 0xC00 \""+EXT_DIR+"/extracted_rnode_firmware.partitions\""),
++                            ("app boot", "@esptool@ --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0xe000 0x2000 \""+EXT_DIR+"/extracted_rnode_firmware.boot_app0\""),
++                            ("application image", "@esptool@ --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x10000 0x200000 \""+EXT_DIR+"/extracted_rnode_firmware.bin\""),
++                            ("console image", "@esptool@ --chip esp32 --port "+port_path+" --baud "+args.baud_flash+" --before default_reset --after hard_reset read_flash 0x210000 0x1F0000 \""+EXT_DIR+"/extracted_console_image.bin\""),
+                         ]
+                         import subprocess, shlex
+                         for part, command in extraction_parts:
+@@ -2290,25 +2289,12 @@ def main():
+                     graceful_exit()
+             elif platform == ROM.PLATFORM_ESP32:
+                 numeric_version = float(selected_version)
+-                flasher_dir = UPD_DIR+"/"+selected_version
+-                flasher = flasher_dir+"/esptool.py"
+-                if not os.path.isfile(flasher):
+-                    if os.path.isfile(CNF_DIR+"/recovery_esptool.py"):
+-                        import shutil
+-                        if not os.path.isdir(flasher_dir):
+-                            os.makedirs(flasher_dir)
+-                        shutil.copy(CNF_DIR+"/recovery_esptool.py", flasher)
+-                        RNS.log("No flasher present, using recovery flasher to write firmware to device")
+-
+-                if os.path.isfile(flasher):
+-                    import stat
+-                    os.chmod(flasher, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP)
+ 
+-                if which(flasher) is not None:
++                if True:
+                     if fw_filename == "rnode_firmware_tbeam.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2326,7 +2312,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2344,7 +2330,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_tbeam_sx1262.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2362,7 +2348,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2380,7 +2366,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_lora32v10.zip":
+                         if numeric_version >= 1.59:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2398,7 +2384,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2416,7 +2402,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_lora32v20.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2434,7 +2420,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2452,7 +2438,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_lora32v21.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2470,7 +2456,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2487,7 +2473,7 @@ def main():
+                             ]
+                     elif fw_filename == "rnode_firmware_lora32v21_tcxo.zip":
+                         return [
+-                            sys.executable, flasher,
++                            "@esptool@",
+                             "--chip", "esp32",
+                             "--port", args.port,
+                             "--baud", args.baud_flash,
+@@ -2506,7 +2492,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_heltec32v2.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2524,7 +2510,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2541,7 +2527,7 @@ def main():
+                             ]
+                     elif fw_filename == "rnode_firmware_heltec32v3.zip":
+                         return [
+-                            sys.executable, flasher,
++                            "@esptool@",
+                             "--chip", "esp32-s3",
+                             "--port", args.port,
+                             "--baud", args.baud_flash,
+@@ -2559,7 +2545,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_featheresp32.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                               sys.executable,  flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2577,7 +2563,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2595,7 +2581,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_esp32_generic.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2613,7 +2599,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2631,7 +2617,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_ng20.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2649,7 +2635,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2667,7 +2653,7 @@ def main():
+                     elif fw_filename == "rnode_firmware_ng21.zip":
+                         if numeric_version >= 1.55:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2685,7 +2671,7 @@ def main():
+                             ]
+                         else:
+                             return [
+-                                sys.executable, flasher,
++                                "@esptool@",
+                                 "--chip", "esp32",
+                                 "--port", args.port,
+                                 "--baud", args.baud_flash,
+@@ -2702,7 +2688,7 @@ def main():
+                             ]
+                     elif fw_filename == "rnode_firmware_t3s3.zip":
+                         return [
+-                            sys.executable, flasher,
++                            "@esptool@",
+                             "--chip", "esp32s3",
+                             "--port", args.port,
+                             "--baud", args.baud_flash,
+@@ -2720,7 +2706,7 @@ def main():
+                         ]
+                     elif fw_filename == "extracted_rnode_firmware.zip":
+                         return [
+-                            sys.executable, flasher,
++                            "@esptool@",
+                             "--chip", "esp32",
+                             "--port", args.port,
+                             "--baud", args.baud_flash,

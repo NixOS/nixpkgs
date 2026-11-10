@@ -1,0 +1,13 @@
+diff --git a/src/sage/plot/plot3d/plot3d.py b/src/sage/plot/plot3d/plot3d.py
+index bdf15a85e9d..36580eeab6b 100644
+--- a/src/sage/plot/plot3d/plot3d.py
++++ b/src/sage/plot/plot3d/plot3d.py
+@@ -316,7 +316,7 @@ class _Coordinates:
+             ....: [ 0.16763356,  0.19993708,  0.31403568,  0.47359696, 0.55282422],
+             ....: [ 0.16763356,  0.25683223,  0.16649297,  0.10594339, 0.55282422]])
+             sage: import scipy.interpolate
+-            sage: f=scipy.interpolate.RectBivariateSpline(v_phi,v_theta,m_r).ev
++            sage: f=lambda *x: scipy.interpolate.RectBivariateSpline(v_phi,v_theta,m_r).ev(*x).item()
+             sage: spherical_plot3d(f,(0,2*pi),(0,pi))
+             Graphics3d Object
+         """

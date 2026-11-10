@@ -1,0 +1,14 @@
+diff --git a/lib/LWP/Protocol/https.pm b/lib/LWP/Protocol/https.pm
+index 645e828..7098f64 100644
+--- a/lib/LWP/Protocol/https.pm
++++ b/lib/LWP/Protocol/https.pm
+@@ -29,6 +29,9 @@ sub _extra_sock_opts
+         }
+     }
+     if ($ssl_opts{SSL_verify_mode}) {
++        if ($ENV{NIX_SSL_CERT_FILE}) {
++            $ssl_opts{SSL_ca_file} //= $ENV{NIX_SSL_CERT_FILE};
++        }
+         unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
+             if ($Net::HTTPS::SSL_SOCKET_CLASS eq 'IO::Socket::SSL'
+                 && defined &IO::Socket::SSL::default_ca

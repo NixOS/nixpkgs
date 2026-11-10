@@ -1,0 +1,11 @@
+diff --git a/tests/module.ua b/tests/module.ua
+index 92e463a6..ff3f0489 100644
+--- a/tests/module.ua
++++ b/tests/module.ua
+@@ -89,6 +89,3 @@ B ← A
+   D‼ ← ^0^1
+ └─╴
+ ⍤⤙≍ 6 M!D‼++ 1 2 3
+-
+-~ "gh: uiua-lang/example-module subfolder" ~ Lang
+-⍤⤙≍ "Uiua" Lang

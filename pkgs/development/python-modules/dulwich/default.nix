@@ -1,0 +1,122 @@
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  fastimport,
+  fetchFromGitHub,
+  gevent,
+  geventhttpclient,
+  git,
+  glibcLocales,
+  gnupg,
+  gpg,
+  merge3,
+  nix-update-script,
+  openssh,
+  paramiko,
+  pytestCheckHook,
+  rich,
+  rustc,
+  rustPlatform,
+  setuptools-rust,
+  setuptools,
+  urllib3,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "dulwich";
+  version = "1.2.21";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "jelmer";
+    repo = "dulwich";
+    tag = "dulwich-${finalAttrs.version}";
+    hash = "sha256-JijCxPx0nPW2pXsT90YzB3X8aQ9jD/vGzIST0fMY7yM=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-OXZY37Gg8saT8aZWAvhcP+kT3zkrXRg4vwCqg9YbxXE=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
+
+  dependencies = [
+    urllib3
+  ];
+
+  optional-dependencies = {
+    colordiff = [ rich ];
+    fastimport = [ fastimport ];
+    https = [ urllib3 ];
+    merge = [ merge3 ];
+    pgp = [
+      gpg
+      gnupg
+    ];
+    paramiko = [ paramiko ];
+  };
+
+  nativeCheckInputs = [
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    openssh # for ssh-keygen
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    # Depends on setuid which is not available in sandboxed environments
+    "SharedRepositoryTests"
+  ];
+
+  disabledTestPaths = [
+    # AssertionError: GPGMEError not raised
+    "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "dulwich" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
+
+  meta = {
+    description = "Implementation of the Git file formats and protocols";
+    longDescription = ''
+      Dulwich is a Python implementation of the Git file formats and protocols, which
+      does not depend on Git itself. All functionality is available in pure Python.
+    '';
+    homepage = "https://www.dulwich.io/";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${finalAttrs.src.tag}/NEWS";
+    license = with lib.licenses; [
+      asl20
+      gpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      koral
+      sarahec
+    ];
+  };
+})

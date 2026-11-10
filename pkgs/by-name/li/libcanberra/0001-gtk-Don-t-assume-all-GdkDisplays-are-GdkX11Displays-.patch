@@ -1,0 +1,52 @@
+--- a/src/canberra-gtk-module.c
++++ b/src/canberra-gtk-module.c
+@@ -307,6 +307,11 @@
+         guchar *data = NULL;
+         gint ret = -1;
+ 
++#ifdef GDK_IS_X11_DISPLAY
++        if (!GDK_IS_X11_DISPLAY(d))
++                return 0;
++#endif
++
+         if (XGetWindowProperty(GDK_DISPLAY_XDISPLAY(d), GDK_WINDOW_XID(w),
+                                gdk_x11_get_xatom_by_name_for_display(d, "_NET_WM_DESKTOP"),
+                                0, G_MAXLONG, False, XA_CARDINAL, &type_return,
+@@ -335,6 +340,11 @@
+         guchar *data = NULL;
+         gint ret = -1;
+ 
++#ifdef GDK_IS_X11_DISPLAY
++        if (!GDK_IS_X11_DISPLAY(d))
++                return 0;
++#endif
++
+         if (XGetWindowProperty(GDK_DISPLAY_XDISPLAY(d), DefaultRootWindow(GDK_DISPLAY_XDISPLAY(d)),
+                                gdk_x11_get_xatom_by_name_for_display(d, "_NET_CURRENT_DESKTOP"),
+                                0, G_MAXLONG, False, XA_CARDINAL, &type_return,
+@@ -365,6 +375,11 @@
+         gboolean ret = FALSE;
+         Atom xembed;
+ 
++#ifdef GDK_IS_X11_DISPLAY
++        if (!GDK_IS_X11_DISPLAY(d))
++                return FALSE;
++#endif
++
+         /* Gnome Panel applets are XEMBED windows. We need to make sure we
+          * ignore them */
+ 
+--- a/src/canberra-gtk.c
++++ b/src/canberra-gtk.c
+@@ -185,6 +185,11 @@
+         guchar *data = NULL;
+         gint ret = -1;
+ 
++#ifdef GDK_IS_X11_DISPLAY
++        if (!GDK_IS_X11_DISPLAY(d))
++                return 0;
++#endif
++
+         if (XGetWindowProperty(GDK_DISPLAY_XDISPLAY(d), GDK_WINDOW_XID(w),
+                                gdk_x11_get_xatom_by_name_for_display(d, "_NET_WM_DESKTOP"),
+                                0, G_MAXLONG, False, XA_CARDINAL, &type_return,

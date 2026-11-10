@@ -1,0 +1,56 @@
+From 6466578967d3d39c46f7ec10b308bca36568697d Mon Sep 17 00:00:00 2001
+From: Paolo Lucente <pl+github@pmacct.net>
+Date: Tue, 11 Mar 2025 23:02:05 +0000
+Subject: [PATCH] * fix, making gcc15 happy. Patch contributed by Petr Gajdos
+
+---
+
+diff --git a/src/pmacct.h b/src/pmacct.h
+index ab7b3bba5..121141a28 100644
+--- a/src/pmacct.h
++++ b/src/pmacct.h
+@@ -368,9 +368,9 @@ struct child_ctl2 {
+ #include "util.h"
+ 
+ /* prototypes */
+-void startup_handle_falling_child();
+-void handle_falling_child();
+-void ignore_falling_child();
++void startup_handle_falling_child(int);
++void handle_falling_child(int);
++void ignore_falling_child(int);
+ void PM_sigint_handler(int);
+ void PM_sigalrm_noop_handler(int);
+ void reload(int);
+diff --git a/src/signals.c b/src/signals.c
+index 94fdbd12e..ad9a627e1 100644
+--- a/src/signals.c
++++ b/src/signals.c
+@@ -29,7 +29,7 @@
+ extern struct plugins_list_entry *plugin_list;
+ 
+ /* functions */
+-void startup_handle_falling_child()
++void startup_handle_falling_child(int unused)
+ {
+   int i, j;
+ 
+@@ -42,7 +42,7 @@ void startup_handle_falling_child()
+   }
+ }
+ 
+-void handle_falling_child()
++void handle_falling_child(int unused)
+ {
+   struct plugins_list_entry *list = NULL;
+   int j, ret;
+@@ -100,7 +100,7 @@ void handle_falling_child()
+   }
+ }
+ 
+-void ignore_falling_child()
++void ignore_falling_child(int unused)
+ {
+   pid_t cpid;
+   int status;
+

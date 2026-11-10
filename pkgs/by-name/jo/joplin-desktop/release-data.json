@@ -1,0 +1,13 @@
+{
+  "version": "3.7.22",
+  "hash": "sha256-/fepgOVEBFfBW/VkVhihpPfe1GkO7EloKi7zWQavd+8=",
+  "plugins": {
+    "io.github.jackgruber.backup": {
+      "name": "joplin-plugin-backup",
+      "url": "https://github.com/JackGruber/joplin-plugin-backup/archive/2c3da7056e7ac39c86c2051a4fdb99d9534dd0a1.tar.gz",
+      "hash": "sha256-rPmBg/+mJH7Fp26gVzuSGFxi1Y4MtfRT+hqppk3tHdY=",
+      "npmDepsHash": "sha256-xZJ0Oir1A6sLe0ztIyBu39Yy3D6sNrVaciOYG0k85l0="
+    }
+  },
+  "deps_hash": "sha256-cvTrj3SUl9V10DUNG5I6ffLZV90qcFO534jJjJauvE4="
+}

@@ -1,0 +1,25 @@
+From 0135015e24a2f52e225be84f47c2c910b51774b7 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 23:07:35 -0400
+Subject: [PATCH] Add-missing-sys-types_h
+
+---
+ network_cmds_lib/network_cmds_lib.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/network_cmds_lib/network_cmds_lib.h b/network_cmds_lib/network_cmds_lib.h
+index d04e8fd..aee4c64 100644
+--- a/network_cmds_lib/network_cmds_lib.h
++++ b/network_cmds_lib/network_cmds_lib.h
+@@ -29,6 +29,8 @@
+ #ifndef network_cmds_lib_h
+ #define network_cmds_lib_h
+ 
++#include <sys/types.h>
++
+ /*
+  * @function   clean_non_printable
+  * @discussion Modifies a string to replace the non-printable ASCII characters
+-- 
+2.51.2
+

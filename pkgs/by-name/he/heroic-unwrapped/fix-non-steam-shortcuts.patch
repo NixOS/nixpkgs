@@ -1,0 +1,18 @@
+diff --git a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
+index 41730f1..495282b 100644
+--- a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
++++ b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
+@@ -326,11 +326,8 @@ async function buildShortcutEntryConfig(gameInfo: GameInfo): Promise<{
+     // parameters out). The best we can do here is search for an
+     // `heroic` wrapper executable (which these types of packages make
+     // available) and launch it
+-    const heroicWrapper = await searchForExecutableOnPath('heroic')
+-    if (heroicWrapper) {
+-      exe = `"${heroicWrapper}"`
+-      startDir = `"${dirname(heroicWrapper)}"`
+-    }
++    exe = `"heroic"`
++    startDir = `"${userHome}"`
+   }
+ 
+   if (isFlatpak) {
