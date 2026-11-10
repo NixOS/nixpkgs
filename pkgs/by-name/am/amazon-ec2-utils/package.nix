@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-utils";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
+    hash = "sha256-FrGYiZ7vhXNcCQa3iTb3X4UajqpnMyVD+uDekrJSCi8=";
   };
 
   strictDeps = true;
@@ -43,15 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir $out
 
-    for file in {ebsnvme-id,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
+    for file in {ebsnvme,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
       install -D -m 755 -t $out/bin "$file"
     done
+    cp -P ebsnvme-id $out/bin/
 
     wrapProgram $out/bin/ec2-metadata \
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
           curl
+          gnused
           util-linux
         ]
       }
@@ -96,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/ebsnvme-id --help
+    $out/bin/ebsnvme --help
+    $out/bin/ebsnvme-id --help 2>&1 | grep -q 'usage: ebsnvme-id id'
 
     runHook postInstallCheck
   '';
