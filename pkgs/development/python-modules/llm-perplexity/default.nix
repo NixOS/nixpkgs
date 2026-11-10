@@ -12,21 +12,20 @@
 
   # tests
   pytestCheckHook,
+  pytest-recording,
   writableTmpDirAsHomeHook,
-  python-dotenv,
-  pillow,
   llm-perplexity,
 }:
 buildPythonPackage rec {
   pname = "llm-perplexity";
-  version = "2026.2.1";
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hex";
     repo = "llm-perplexity";
     tag = version;
-    hash = "sha256-fZrIKIAGXaMwBq2njtqSUcgRHIbr0ajjx6mECoguFm0=";
+    hash = "sha256-fHR67oaDSuTkRIpUrnLFuoHr1YZcikFEcq+8RmgVxnE=";
   };
 
   build-system = [ setuptools ];
@@ -38,9 +37,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-recording
     writableTmpDirAsHomeHook
-    python-dotenv
-    pillow
   ];
 
   pythonImportsCheck = [ "llm_perplexity" ];
