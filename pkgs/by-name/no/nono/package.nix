@@ -6,6 +6,7 @@
 
   pkg-config,
 
+  aws-lc,
   dbus,
 
   installShellFiles,
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    # cargoSetupHook makes aws-lc-sys (via aws-lc-rs) link the system library
+    aws-lc
     dbus
   ];
 
