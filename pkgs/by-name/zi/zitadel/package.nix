@@ -4,6 +4,7 @@
   buildGoModule,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   lib,
 
   buf,
@@ -187,6 +188,17 @@ buildGoModule (finalAttrs: {
   inherit version;
 
   src = zitadelRepo;
+
+  patches = [
+    # `zitadel setup` fails at step 64 with "type eventstore.command2[] does
+    # not exist" on databases that never ran step 64, e.g. every 2.71.x one.
+    # https://github.com/zitadel/zitadel/issues/13039
+    (fetchpatch {
+      name = "setup-64-create-command2-type.patch";
+      url = "https://github.com/zitadel/zitadel/commit/c4ac8a10324a6f4fcbaaf44b5aa4c97ceb2411df.patch";
+      hash = "sha256-v0MzY4CSAjG13IeNppoyWhioNYmUCdDCYOn4j3Rbmug=";
+    })
+  ];
 
   nativeBuildInputs = [
     dart-sass
