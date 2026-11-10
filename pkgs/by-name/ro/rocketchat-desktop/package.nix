@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.19.1";
+  version = "4.19.2";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-49rgPRWJDqlCn8a8pgkk6mktxx8hy2yLZgzm2HkCXn4=";
+    hash = "sha256-pBXZi+xkoYJJnDTa3wYO0RJxx/DJHVt1Tfbh9Yf1hXQ=";
   };
 
   patches = [
