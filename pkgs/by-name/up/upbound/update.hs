@@ -75,7 +75,7 @@ main = do
   -- Build fetchurlAttrSet
   fetchurlAttrSet <- fmap Map.fromList $ forM ["docker-credential-up", "up"] $ \cmd -> do
     attrs <- forM (Map.toList archMapping) $ \(key, arch) -> do
-      let url = baseUrl ++ "/v" ++ version ++ "/bundle/" ++ cmd ++ "/" ++ arch ++ ".tar.gz"
+      let url = baseUrl ++ "/v" ++ version ++ "/bundle/" ++ arch ++ "/" ++ cmd ++ ".tar.gz"
       _hash <- readProcess "nix-prefetch-url" [url] ""
       let hash = T.unpack $ T.strip $ T.pack _hash
       _sha256Hash <- readProcess "nix" ["hash", "convert", hash, "--hash-algo", "sha256"] ""
