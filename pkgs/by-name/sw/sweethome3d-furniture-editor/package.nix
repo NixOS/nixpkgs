@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "FurnitureLibraryEditor";
-  version = "1.28";
+  version = "2.2";
 
   src = fetchzip {
     url = "mirror://sourceforge/sweethome3d/FurnitureLibraryEditor-${finalAttrs.version}-src.zip";
-    hash = "sha256-pqsSxQPzsyx4PS98fgU6UFhPWhpQoepGm0uJtkvV46c=";
+    hash = "sha256-KIPtdWaV9EB03WIkQvp08oMLiRz7fJ5XRHkhG/MiQlE=";
   };
 
   strictDeps = true;
