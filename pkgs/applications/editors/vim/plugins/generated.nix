@@ -3653,12 +3653,12 @@ final: prev: {
 
   codecompanion-nvim = buildVimPlugin {
     pname = "codecompanion.nvim";
-    version = "20.0.1";
+    version = "20.1.0";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "codecompanion.nvim";
-      tag = "v20.0.1";
-      hash = "sha256-29Z/aTSK6xtLCNp+FJH1D89MpNztm6Hjgfz80XZVTlI=";
+      tag = "v20.1.0";
+      hash = "sha256-v7nfqV22b+dDY7Efe7bj+TZe9VrA2c+H676cm7shFlI=";
     };
     meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
