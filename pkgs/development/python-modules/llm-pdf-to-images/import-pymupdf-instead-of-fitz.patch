@@ -1,0 +1,24 @@
+--- a/llm_pdf_to_images.py
++++ b/llm_pdf_to_images.py
+@@ -1,6 +1,6 @@
+ import os
+ import tempfile
+-import fitz
++import pymupdf
+ from urllib.parse import urlparse, parse_qs
+ import llm
+ 
+@@ -34,11 +34,11 @@
+         raise ValueError(f"PDF file not found: {pdf_path}")
+ 
+     # open PDF
+-    doc = fitz.open(pdf_path)
++    doc = pymupdf.open(pdf_path)
+ 
+     # compute scale matrix
+     scale = dpi / 72.0
+-    matrix = fitz.Matrix(scale, scale)
++    matrix = pymupdf.Matrix(scale, scale)
+ 
+     # prepare output directory
+     out_dir = tempfile.mkdtemp(prefix="llm_pdf_to_images_")
