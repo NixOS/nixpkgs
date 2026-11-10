@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   stdenv,
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
+    aws-lc
     openssl
     xz
   ];
