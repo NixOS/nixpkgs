@@ -67,7 +67,7 @@ buildPythonPackage (finalAttrs: {
     "test_urlpatterns"
   ];
 
-  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "6") [
+  disabledTestPaths = [
     # AssertionError: assert '�\\u0125\\u01a6.txt' == 'ÀĥƦ.txt'"
     "tests/test_parsers.py::TestFileUploadParser::test_get_encoded_filename"
   ];
