@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
@@ -10,7 +10,9 @@
   stdenvNoCC,
   testers,
 }:
-buildGoModule (finalAttrs: {
+# Stash build currently fails for Go 1.27
+# https://github.com/stashapp/stash/issues/7342
+buildGo126Module (finalAttrs: {
   pname = "stash";
   version = "0.31.1";
   appDate = "2026-04-13 01:48:00";
