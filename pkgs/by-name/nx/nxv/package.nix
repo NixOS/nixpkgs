@@ -4,6 +4,9 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  pkg-config,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +21,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-2nZpwkaVedkH3dHkaB/QSTthylwMw6S08JhgiZaBX7M=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   # Tests use mockito which needs to bind to localhost
   __darwinAllowLocalNetworking = true;
