@@ -1,4 +1,5 @@
 {
+  buildPackages,
   buildGoModule,
   lib,
   navidrome,
@@ -11,6 +12,7 @@ lib.extendMkDerivation {
   constructDrv = buildGoModule;
 
   excludeDrvArgNames = [
+    "doNativeCheck"
     "meta"
     "passthru"
   ];
@@ -22,16 +24,30 @@ lib.extendMkDerivation {
       src,
       vendorHash,
       bundleName ? finalAttrs.pname,
+      doNativeCheck ? false,
       meta,
       passthru ? { },
       ...
     }@args:
+    let
+      nativeTests = buildPackages.buildGoModule {
+        inherit
+          pname
+          version
+          src
+          vendorHash
+          ;
+        doCheck = true;
+        installPhase = "mkdir -p $out";
+      };
+    in
     {
       __structuredAttrs = true;
 
       nativeBuildInputs = [
         navidromePluginInstallHook
-      ];
+      ]
+      ++ lib.optional doNativeCheck nativeTests;
 
       ldflags = [ "-buildmode=c-shared" ];
 

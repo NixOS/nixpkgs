@@ -18,6 +18,8 @@ buildNavidromeGoPlugin (finalAttrs: {
 
   vendorHash = "sha256-G1B6W8ZKoLuNwvOt3z5vSKcQmF2574j41A0lC+u39uI=";
 
+  doNativeCheck = true;
+
   meta = {
     changelog = "https://github.com/navidrome/apple-music-plugin/releases/tag/v${finalAttrs.version}";
     description = "Fetches artist metadata from Apple Music using free iTunes/Apple Music endpoints";
