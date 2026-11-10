@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    ddt
   ];
 
   disabledTests = [
