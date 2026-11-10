@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/martsberger/django-sql-utils";
     changelog = "https://github.com/martsberger/django-sql-utils/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

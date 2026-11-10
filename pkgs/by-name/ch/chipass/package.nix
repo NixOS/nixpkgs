@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromCodeberg,
+  fetchpatch,
 
   appstream,
   asciidoctor,
@@ -60,6 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
   # Remove on next version bump.
   patches = [
     ./0001-fix_qt6_keypad_removal.patch
+    # Botan 3.14 randomizes ECDSA signatures by default, which breaks
+    # TestPasskeys' hardcoded signatures; request RFC 6979 signatures again.
+    # Backported from main, remove on next version bump.
+    (fetchpatch {
+      name = "botan-3.14-deterministic-ecdsa.patch";
+      url = "https://codeberg.org/ChiPass/ChiPass/commit/61e8d48334e9f840ea49737b58417fe1f273d8da.patch";
+      hash = "sha256-+gPXFxBPOB3Xb1yhoO6fz3T1wwBniNQ/6cC8ZT7XT6A=";
+    })
+    (fetchpatch {
+      name = "botan-3.14-deterministic-ecdsa-format.patch";
+      url = "https://codeberg.org/ChiPass/ChiPass/commit/387a12b979377cc42a708a3364f349021e06def2.patch";
+      hash = "sha256-5/2HrgO/wF9btdx9mkcCXtfGDQPmiXfCue5MtFMcSNc=";
+    })
   ];
 
   # Upstream develops against a build of PCSC from Xcode.

@@ -1,8 +1,10 @@
 {
   lib,
+  aws-lc,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
   versionCheckHook,
   nix-update-script,
 }:
@@ -22,8 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
     versionCheckHook
   ];
+
+  buildInputs = [ aws-lc ];
 
   doInstallCheck = true;
 

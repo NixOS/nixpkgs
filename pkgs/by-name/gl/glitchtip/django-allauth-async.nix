@@ -117,7 +117,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://allauth.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

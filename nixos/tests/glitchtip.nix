@@ -8,7 +8,6 @@ in
 {
   name = "glitchtip";
   meta.maintainers = with lib.maintainers; [
-    defelo
     felbinger
   ];
 

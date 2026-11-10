@@ -4,9 +4,11 @@
   fetchFromGitHub,
   pkg-config,
   protobuf,
+  aws-lc,
   openssl,
   sqlite,
   zlib,
+  zstd,
   cacert,
   testers,
   nix-update-script,
@@ -39,9 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
     sqlite
     zlib
+    zstd
   ];
 
   nativeCheckInputs = [ cacert ];

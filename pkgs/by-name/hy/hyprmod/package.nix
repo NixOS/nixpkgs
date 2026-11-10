@@ -77,9 +77,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export XDG_DATA_DIRS="$GSETTINGS_SCHEMAS_PATH''${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
   '';
 
+  # hyprland-schema 0.8 makes scrolling:follow_focus an unbounded int. these two
+  # tests still expect bounds on every int and a bool for every depends_on parent.
+  # upstream relaxes them in https://github.com/BlueManCZ/hyprmod/pull/106
   checkPhase = ''
     runHook preCheck
-    xvfb-run -s '-screen 0 1024x768x24' pytest
+    xvfb-run -s '-screen 0 1024x768x24' pytest \
+      --deselect tests/test_schema.py::TestNumericConstraints::test_int_has_min_max \
+      --deselect tests/test_schema.py::TestDependencies::test_depends_on_references_bool_option
     runHook postCheck
   '';
 
