@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   protobuf,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     protobuf
+    rust-jemalloc-sys
   ];
 
   env = {

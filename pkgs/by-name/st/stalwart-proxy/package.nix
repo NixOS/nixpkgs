@@ -1,21 +1,37 @@
 {
   lib,
-  cacert,
   fetchFromGitHub,
   rustPlatform,
+
+  aws-lc,
+  cacert,
+  pkg-config,
+  sqlite,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxy";
   version = "1.0.5";
+
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "proxy";
     tag = "v${finalAttrs.version}";
     hash = "sha256-BpScQFek0T+lHjjtfXyOZDOVfEWOGpLwSkPVtljzqMc=";
   };
+  cargoHash = "sha256-UTTGTxzi0y1T3+SnSNrKRCus0lnoODCtN5qRknZJ1HE=";
+
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
-  cargoHash = "sha256-UTTGTxzi0y1T3+SnSNrKRCus0lnoODCtN5qRknZJ1HE=";
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
+
   # `Result::unwrap()` on an `Err` value: Tls("platform verifier: unexpected error: No CA certificates were loaded from the system")
   nativeCheckInputs = [
     cacert
@@ -26,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "tests::sql_store::sql_store_resolves_and_misses"
     "tests::sql_store::sql_store_upsert_and_remove"
   ] (test: "--skip=${test}");
+
   meta = {
     description = "Multi-protocol e-mail migration proxy";
     longDescription = ''
