@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp "${finalAttrs.desktopItem}/share/applications/"* $out/share/applications
     makeWrapper ${jdk}/bin/java $out/bin/${finalAttrs.meta.mainProgram} \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-jar $out/share/java/TexturesLibraryEditor-${finalAttrs.version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      --add-flags "-jar $out/share/java/TexturesLibraryEditor-${finalAttrs.version}.jar"
 
     runHook postInstall
   '';
