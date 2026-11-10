@@ -20,6 +20,7 @@
   src,
   meta,
   patches,
+  passthru,
 }:
 
 let
@@ -56,6 +57,7 @@ stdenv.mkDerivation {
     src
     meta
     patches
+    passthru
     ;
 
   desktopItems = [

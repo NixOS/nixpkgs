@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   fetchzip,
   stdenv,
   callPackage,
@@ -36,27 +37,21 @@ let
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
   };
+
+  passthru = lib.optionalAttrs config.allowAliases {
+    # Added 2026-11-10
+    application = throw "'sweethome3d.application' has been renamed to 'sweethome3d'";
+    furniture-editor = throw "'sweethome3d.furniture-editor' has been renamed to 'sweethome3d-furniture-editor'";
+    textures-editor = throw "'sweethome3d.textures-editor' has been renamed to 'sweethome3d-textures-editor'";
+  };
 in
-{
-  application =
-    if stdenv.hostPlatform.isDarwin then
-      callPackage ./darwin.nix {
-        inherit
-          pname
-          version
-          src
-          meta
-          patches
-          ;
-      }
-    else
-      callPackage ./linux.nix {
-        inherit
-          pname
-          version
-          src
-          meta
-          patches
-          ;
-      };
+callPackage (if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
+  inherit
+    pname
+    version
+    src
+    meta
+    patches
+    passthru
+    ;
 }
