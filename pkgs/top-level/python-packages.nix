@@ -10300,6 +10300,8 @@ self: super: with self; {
 
   llm-tools-datasette = callPackage ../development/python-modules/llm-tools-datasette { };
 
+  llm-tools-edit = callPackage ../development/python-modules/llm-tools-edit { };
+
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
 
   llm-tools-simpleeval = callPackage ../development/python-modules/llm-tools-simpleeval { };

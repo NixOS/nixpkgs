@@ -102,6 +102,7 @@ let
       llm-templates-fabric ? false,
       llm-templates-github ? false,
       llm-tools-datasette ? false,
+      llm-tools-edit ? false,
       llm-tools-quickjs ? false,
       llm-tools-simpleeval ? false,
       llm-tools-sqlite ? false,
