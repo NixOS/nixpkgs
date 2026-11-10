@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   zstd,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,6 +22,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zstd ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to detect open source licenses from texts";
