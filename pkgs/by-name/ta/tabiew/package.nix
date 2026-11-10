@@ -5,6 +5,8 @@
   installShellFiles,
   openssl,
   pkg-config,
+  sqlcipher,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabiew";
@@ -24,7 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    sqlcipher
+    zstd
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

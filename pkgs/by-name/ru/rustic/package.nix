@@ -33,8 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    fuse3
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ] ++ [
     aws-lc
     zstd
   ];

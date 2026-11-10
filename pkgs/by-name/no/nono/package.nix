@@ -12,11 +12,12 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   nix-update-script,
+  aws-lc,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.80.0";
+  version = "0.81.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -24,9 +25,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VaHeLMUZOxPjIeBSf37vWfm9fChskJYJgD4I9pKbgyo=";
+    hash = "sha256-0difjQr5qWP82ydktjBvWIvwqt4ndNuxj3WkWQj1Y+k=";
   };
-  cargoHash = "sha256-c8PL9lA0Jocse+rir5kTt5I6yGq5z7XN0pcWPrk2DGE=";
+  cargoHash = "sha256-GNcVJFAjZKPk0T14g0gL7FVj+HVAkjB4oTYf1naRRTk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     dbus
   ];
 
@@ -105,6 +107,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "bypass_protection_glob_requires_paired_allow"
       "read_glob_grants_read_not_write"
 
+      # namespace_isolation_run
+      # need /bin/cat
+      "isolated_network_namespace_has_only_loopback"
+      "isolated_workload_holds_no_capabilities"
+
       # symlink_hop_run_linux
       # need /bin/cat
       "multi_hop_symlinked_leaf_resolves_through_symlinked_directory"
@@ -114,6 +121,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "outer_exec_gate_does_not_break_same_fs_rename_from_child_dir"
       # needs /usr/bin/env
       "outer_exec_gate_rejects_an_env_shebang_target_writable_by_outer_caps"
+      # needs /bin/true
+      "outer_exec_gate_includes_wrapper_target_after_env_assignment"
 
       # tool_sandbox::policy::intercept_tests
       # needs /usr/bin/touch
@@ -122,6 +131,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # url_open
       # needs /usr/bin/touch
       "open_url_in_browser_skips_trojan_in_writable_path_dir"
+
+      # migration
+      # the build's stdout is a pty, so `colored` emits ANSI codes the
+      # assertion does not expect
+      "migration::tests::install_prompt_omits_legacy_first_time_guidance"
 
       # wiring
       # cannot set the setuid bit in the build sandbox
@@ -138,6 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "server::tests::test_route_diagnostics_summarises_each_route"
       "tls_intercept::bundle::tests::bundle_contains_ephemeral_and_system_roots"
       "tls_intercept::bundle::tests::bundle_file_has_restrictive_permissions"
+      "server::tests::aws_intercept_falls_back_to_http1_and_signs_request"
       # fail due to credential capture not configured
       "proxy_runtime::tests::capture_helper_with_interaction_stdin_true_inherits_terminal_stdin"
       "proxy_runtime::tests::capture_helper_with_stdio_true_receives_null_not_terminal_stdin"
@@ -150,6 +165,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "proxy_runtime::tests::proxy_credential_capture_backend_runs_provider_protocol"
       # needs /usr/bin/touch
       "proxy_runtime::tests::load_command_credential_source_skips_trojan_in_writable_path_dir"
+      # needs /bin/sleep
+      "proxy_runtime::tests::proxy_credential_capture_timeout_collects_and_unregisters_helper"
+      "proxy_runtime::tests::supervisor_credential_source_timeout_collects_and_unregisters_helper"
       # panic
       "server::tests::reactive_proxy_auth_retry_answered_after_407"
       "server::tests::test_oauth_capture_routes_activate_intercept"

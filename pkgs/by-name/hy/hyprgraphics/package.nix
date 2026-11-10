@@ -22,13 +22,13 @@
 
 gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
+    hash = "sha256-SdzBAddYgebEcMI9hnQim4SCgQJrFBi8ezyFXS5yJ40=";
   };
 
   nativeBuildInputs = [
