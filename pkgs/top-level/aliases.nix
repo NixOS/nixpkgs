@@ -2814,8 +2814,13 @@ mapAliases {
   vacuum = throw "'vacuum' has been removed as upstream Vacuum-IM has been unmaintained since December 2021"; # Added 2026-04-26
   valum = throw "'valum' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   vamp.vampSDK = throw "'vamp.vampSDK' has been renamed to/replaced by 'vamp-plugin-sdk'"; # Converted to throw 2025-10-27
+  vapoursynth = throw "VapourSynth is now a Python package, use 'python3Packages.vapoursynth' for 'vspipe' and 'python3.withPackages' to create a VapourSynth environment with plugins"; # Added 2026-11-10
+  vapoursynth-bestsource = throw "vapoursynth-bestsource is now a Python package, use 'python3.withPackages' to create a VapourSynth environment with plugins"; # Added 2026-11-10
+  vapoursynth-eedi3 = throw "vapoursynth-eedi3 is now a Python package, use 'python3.withPackages' to create a VapourSynth environment with plugins"; # Added 2026-11-10
+  vapoursynth-mvtools = throw "vapoursynth-mvtools is now a Python package, use 'python3.withPackages' to create a VapourSynth environment with plugins"; # Added 2026-11-10
   vapoursynth-nnedi3 = throw "'vapoursynth-nnedi3' has been removed per upstream. Use vapoursynth-znedi3 instead."; # Added 2026-04-20
   vapoursynth-nnedi3cl = throw "'vapoursynth-nnedi3' has been removed as it was archived upstream and no longer supports the latest vapoursynth."; # Added 2026-11-10
+  vapoursynth-znedi3 = throw "vapoursynth-znedi3 is now a Python package, use 'python3.withPackages' to create a VapourSynth environment with plugins"; # Added 2026-11-10
   varnish60 = throw "varnish 6.0 has been removed as it used unmaintaned dependencies. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish60Packages = throw "varnish 6.0 has been removed as it used unmaintained dependencies.  Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish77 = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
