@@ -533,14 +533,19 @@ let
           }
       */
       collectStructuredModules =
-        parentFile: parentKey: initialModules:
+        {
+          _file,
+          key,
+          imports,
+          ...
+        }:
         let
           modules = genList (
             i:
             let
-              m = loadModule (elemAt initialModules i) "${parentKey}:anon-${toString (i + 1)}" parentFile;
+              m = loadModule (elemAt imports i) "${key}:anon-${toString (i + 1)}" _file;
               module = if class == null || m._class == null || m._class == class then m else throwClassMismatch m;
-              collectedImports = collectStructuredModules module._file module.key module.imports;
+              collectedImports = collectStructuredModules module;
             in
             if module.imports == [ ] then
               # can't recurse deeper
@@ -572,7 +577,7 @@ let
                   else
                     collectedImports.disabled;
               }
-          ) (length initialModules);
+          ) (length imports);
         in
         {
           disabled = concatLists (catDisabled modules);
@@ -621,11 +626,19 @@ let
         map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
     {
-      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules);
+      modules = filterModules modulesPath (collectStructuredModules {
+        _file = unknownModule;
+        key = "";
+        imports = initialModules;
+      });
       # Intentionally not shared with `modules` above: this allows
       # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
-      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules);
+      graph = toGraph modulesPath (collectStructuredModules {
+        _file = unknownModule;
+        key = "";
+        imports = initialModules;
+      });
     };
 
   /**
