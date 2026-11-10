@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/microsoft/edit";
     changelog = "https://github.com/microsoft/edit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     platforms = lib.platforms.all;
   };
 })
