@@ -3830,14 +3830,14 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_99 = callPackage ../development/compilers/rust/1_99.nix { };
-  rust = rust_1_99;
+  rust_1_100 = callPackage ../development/compilers/rust/1_100.nix { };
+  rust = rust_1_100;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_99 = rust_1_99.packages.stable;
-  rustPackages = rustPackages_1_99;
+  rustPackages_1_100 = rust_1_100.packages.stable;
+  rustPackages = rustPackages_1_100;
 
   inherit (rustPackages)
     cargo
