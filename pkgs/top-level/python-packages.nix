@@ -22436,11 +22436,13 @@ self: super: with self; {
 
   vapoursynth = callPackage ../development/python-modules/vapoursynth { };
 
-  vapoursynth-mvtools = callPackage ../development/python-modules/vapoursynth-mvtools { };
+  vapoursynth-bestsource = callPackage ../development/python-modules/vapoursynth-bestsource { };
 
   vapoursynth-eedi3 = callPackage ../development/python-modules/vapoursynth-eedi3 { };
 
-  vapoursynth-bestsource = callPackage ../development/python-modules/vapoursynth-bestsource { };
+  vapoursynth-mvtools = callPackage ../development/python-modules/vapoursynth-mvtools { };
+
+  vapoursynth-znedi3 = callPackage ../development/python-modules/vapoursynth-znedi3 { };
 
   variants = callPackage ../development/python-modules/variants { };
 
