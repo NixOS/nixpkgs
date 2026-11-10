@@ -11,8 +11,8 @@ vmTools.runInLinuxVM (
     postPatch = old.postPatch or "" + ''
       # The runwrapper uses LD_PRELOAD to override available user/groups
       substituteInPlace Makefile.in --replace-fail \
-        'TEST_LOG_COMPILER = $(srcdir)/test/runwrapper' \
-        'TEST_LOG_COMPILER = $(srcdir)/test/run'
+        'RUN_LOG_COMPILER = $(srcdir)/test/runwrapper' \
+        'RUN_LOG_COMPILER = $(srcdir)/test/run'
     '';
     nativeCheckInputs = old.nativeCheckInputs or [ ] ++ [
       perl
