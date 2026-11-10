@@ -4,18 +4,11 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
-  hyprutils,
   hyprtoolkit,
-  hyprgraphics,
   hyprlang,
-  aquamarine,
-  pixman,
-  libdrm,
   sdbus-cpp_2,
   polkit,
   systemd,
-  cairo,
-  pango,
   libxkbcommon,
 }:
 gcc16Stdenv.mkDerivation (finalAttrs: {
@@ -35,18 +28,11 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyprutils
     hyprtoolkit
-    hyprgraphics
     hyprlang
-    aquamarine
-    pixman
-    libdrm
     sdbus-cpp_2
     polkit
     systemd
-    cairo
-    pango
     libxkbcommon
   ];
 
