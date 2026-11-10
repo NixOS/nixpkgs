@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "11.1.1";
+  version = "12.0.0-pre1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-vSCiCDatoRnA1vpqLDuelC/2cBCKp+fXGT/O0DYjHuk=";
+    hash = "sha256-512hMejxP/SzovvstXZd7BfMAhCfGMymrc3ymljsnIY=";
   };
 
   postUnpack = ''
