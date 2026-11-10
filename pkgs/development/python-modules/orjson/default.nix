@@ -25,7 +25,7 @@
   ufolib2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orjson";
   version = "3.13.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ijl";
     repo = "orjson";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AFHhZWHDAmSH1TFm4YOnUCpXaAmTgbjPus3GnMTSqA4=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-2D+P3TyJkJuLexikbwJZ9Og9dIoQVEKTtIp3xPT2VYM=";
   };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
-    changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ijl/orjson/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -85,4 +85,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})
