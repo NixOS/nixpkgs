@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jpeddicord/askalono";
     changelog = "https://github.com/jpeddicord/askalono/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "askalono";
   };
 })
