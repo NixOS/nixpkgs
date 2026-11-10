@@ -9,6 +9,7 @@
   python3,
   pkg-config,
   catch2_3,
+  miniz,
 }:
 
 let
@@ -35,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausaxs";
-  version = "1.3.1";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "AUSAXS";
     repo = "AUSAXS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3w1bTO2qWUic/1Js4VC7YAne20JegPwCWbfChq5lzy0=";
+    hash = "sha256-RXRw1oERi6okF4kyyF5TsfWkKme9axS/AbXRoz/+TYI=";
   };
 
   patches = [ ./cmake-no-fetchcontent.patch ];
@@ -63,11 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     catch2_3
     curl
     cli11
+    miniz
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_SYSTEM_CATCH" true)
     (lib.cmakeBool "USE_SYSTEM_CLI11" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIZ" true)
   ];
 
   postInstall = ''
@@ -82,5 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ kyehn ];
     platforms = lib.platforms.unix;
+    # asm/sigcontext.h:81: error: ';' expected (got '__u128')
+    broken = stdenv.hostPlatform.system != "x86_64-linux";
   };
 })
