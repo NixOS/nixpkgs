@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-etherscan-api";
+  pname = "etherscan-python";
   version = "2.1.0";
   pyproject = true;
 

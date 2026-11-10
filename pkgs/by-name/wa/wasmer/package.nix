@@ -9,7 +9,10 @@
   nix-update,
   curl,
   writeShellApplication,
+  pkg-config,
   installShellFiles,
+  aws-lc,
+  zstd,
   llvmPackages_22,
   libffi,
   libxml2,
@@ -83,11 +86,16 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    pkg-config
     installShellFiles
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals withLLVM [
+  buildInputs = [
+    aws-lc
+    zstd
+  ]
+  ++ lib.optionals withLLVM [
     llvmPackages_22.llvm
     libffi
     libxml2

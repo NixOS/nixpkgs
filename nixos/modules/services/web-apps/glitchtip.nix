@@ -23,7 +23,6 @@ in
 
 {
   meta.maintainers = with lib.maintainers; [
-    defelo
     felbinger
   ];
 

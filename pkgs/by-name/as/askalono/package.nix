@@ -4,6 +4,7 @@
   fetchCrate,
   pkg-config,
   zstd,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,12 +23,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ zstd ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool to detect open source licenses from texts";
     homepage = "https://github.com/jpeddicord/askalono";
     changelog = "https://github.com/jpeddicord/askalono/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "askalono";
   };
 })

@@ -4,6 +4,9 @@
   fetchFromGitHub,
   rustfmt,
   perl,
+  pkg-config,
+  aws-lc,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # openssl crate requires perl during build process
   nativeBuildInputs = [
     perl
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    openssl
   ];
 
   nativeCheckInputs = [

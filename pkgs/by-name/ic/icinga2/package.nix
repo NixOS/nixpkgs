@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DICINGA2_GROUP=icinga2"
       "-DICINGA2_GIT_VERSION_INFO=OFF"
       "-DUSE_SYSTEMD=ON"
+      "-DCMAKE_CXX_STANDARD=20"
     ];
 
   outputs = [

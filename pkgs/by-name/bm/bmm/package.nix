@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  sqlite,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-AOGNMFAr32WZnyw5nNQa6svLpSc3UQonZ7RjZ5zap1I=";
+
+  buildInputs = [
+    sqlite
+  ];
 
   doInstallCheck = true;
 

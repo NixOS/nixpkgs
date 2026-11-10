@@ -69,6 +69,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/getsentry/symbolic";
     changelog = "https://github.com/getsentry/symbolic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 })

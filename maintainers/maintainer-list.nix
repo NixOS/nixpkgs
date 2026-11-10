@@ -30255,6 +30255,12 @@
     githubId = 144389458;
     name = "sapii";
   };
+  treierxyz = {
+    email = "me@treier.xyz";
+    github = "treierxyz";
+    githubId = 33978534;
+    name = "Oliver Jõgar";
+  };
   trespaul = {
     email = "paul@trespaul.com";
     github = "trespaul";

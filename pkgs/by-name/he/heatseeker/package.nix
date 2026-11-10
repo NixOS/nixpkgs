@@ -5,6 +5,7 @@
   coreutils,
   libgit2,
   pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,11 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "screen::unix::tests::winsize_test"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "General-purpose fuzzy selector";
     homepage = "https://github.com/rschmitt/heatseeker";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
     mainProgram = "hs";
     platforms = lib.platforms.unix;
   };

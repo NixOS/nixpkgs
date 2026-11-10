@@ -20,13 +20,33 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
-      nodes.client = clientConfig { };
+      nodes.client = clientConfig {
+        networking.interfaces.lo = {
+          ipv4.addresses = [
+            {
+              address = "10.99.0.1";
+              prefixLength = 32;
+            }
+          ];
+          ipv6.addresses = [
+            {
+              address = "fd00:99::1";
+              prefixLength = 128;
+            }
+          ];
+        };
+      };
       testScript = ''
         start_all()
         client.wait_for_unit("network.target")
+        ${lib.optionalString (!networkd) ''
+          client.require_unit_state("network-addresses-lo.service", "active")
+        ''}
         loopback_addresses = client.succeed("ip addr show lo")
         assert "inet 127.0.0.1/8" in loopback_addresses
         assert "inet6 ::1/128" in loopback_addresses
+        client.wait_until_succeeds("ip addr show lo | grep -q 'inet 10.99.0.1/32'")
+        client.wait_until_succeeds("ip addr show lo | grep -q 'inet6 fd00:99::1/128'")
       '';
     };
     static = {

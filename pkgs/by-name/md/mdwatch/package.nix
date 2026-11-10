@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-OBknkfnzewil/jKZJEZKAar+QD8h3whw1E4ncAtR99U=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   passthru.updateScript = nix-update-script { };
 

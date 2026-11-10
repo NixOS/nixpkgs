@@ -8,22 +8,27 @@
   wrapGAppsHook4,
   webkitgtk_4_1,
   pkg-config,
+  aws-lc,
+  sqlite,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arnis";
-  version = "3.3.0";
+  version = "3.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "louis-e";
     repo = "arnis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fn2YGDJVb8ICfVOxVCUzPR+T+aYJr83e95O7YXxh+AE=";
+    hash = "sha256-oD61x47w1s8fzFYyzA7/NbIR0J7TXDiPnO71JjuQjF4=";
   };
 
-  cargoHash = "sha256-tPOHSiX7md/ga0+0ROB0Ar4/ZRW/Vifl/4XlxULOzbU=";
+  cargoHash = "sha256-+1S3RVZTFSkmw3FzS+h/Kiy/l4JhSGt8OreHQ6FfT9o=";
+
+  env.AWS_LC_SYS_USE_SYSTEM = true;
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -34,7 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    aws-lc
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
 
