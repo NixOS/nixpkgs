@@ -235,8 +235,8 @@ in
       "sha256-AJqAYFWEDK4sI0seK+uF1mpDfuyqOt91iV9sonDbmlM=";
 
   mypy-boto3-cloudhsmv2 =
-    buildMypyBoto3Package "cloudhsmv2" "1.43.0"
-      "sha256-iWBFQhEfZEsk/iHFMz2q3FvZqY/DeOcgJLLMbcFtD7Q=";
+    buildMypyBoto3Package "cloudhsmv2" "1.44.0"
+      "sha256-IM69ukduQBTNHmfgPE2PpBaM/g6dnkF/Nc97nSYocpA=";
 
   mypy-boto3-cloudsearch =
     buildMypyBoto3Package "cloudsearch" "1.43.0"
