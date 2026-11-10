@@ -35,14 +35,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-staging";
-  version = "0.83.0";
-  shortRev = "7b40053";
+  version = "0.83.1";
+  shortRev = "15cff04";
 
   src = fetchFromGitHub {
     owner = "dosbox-staging";
     repo = "dosbox-staging";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pDAJVuuOI0VktLFw+JGvoKWgxzRywmXoCo2JJlN0Ul8=";
+    hash = "sha256-U5IxgihLQzO/qwUZyFQZV/OTJ1qkyzJxAFWIi4Iu1wk=";
   };
 
   strictDeps = true;
