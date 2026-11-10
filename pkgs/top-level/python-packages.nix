@@ -5535,6 +5535,8 @@ self: super: with self; {
 
   elastic-transport = callPackage ../development/python-modules/elastic-transport { };
 
+  elastic-transport_9 = callPackage ../development/python-modules/elastic-transport/9.nix { };
+
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
