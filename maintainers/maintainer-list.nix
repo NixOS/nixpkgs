@@ -30382,6 +30382,11 @@
     github = "tudbut";
     githubId = 48156391;
   };
+  tulku = {
+    name = "Lucas Chiesa";
+    github = "tulku";
+    githubId = 764126;
+  };
   Tungsten842 = {
     name = "Tungsten842";
     email = "886724vf@anonaddy.me";
