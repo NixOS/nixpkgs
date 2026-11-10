@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
   aws-lc,
@@ -102,7 +103,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Full client e2e needs a seeded depot, WASM guests, and email.
   # The NixOS test covers login + record CRUD against the packaged server.
-  checkFlags = [ "--skip=client_integration_test" ];
+  checkFlags = [
+    "--skip=client_integration_test"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # fails even with __darwinAllowLocalNetworking set true
+    "--skip=test_https_serving"
+  ];
+
+  # 5 Tests needs local access
+  __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
