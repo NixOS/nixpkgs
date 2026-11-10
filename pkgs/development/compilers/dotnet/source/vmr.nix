@@ -433,6 +433,12 @@ stdenv.mkDerivation {
     substituteInPlace \
       src/arcade/src/Microsoft.DotNet.ArcadeAzureIntegration/Microsoft.DotNet.ArcadeAzureIntegration.csproj \
         --replace-fail ';$(NetMinimum)' ""
+  ''
+  + lib.optionalString (lib.versionAtLeast version "10" && lib.versionOlder version "11") ''
+    # https://github.com/dotnet/source-build/issues/5691
+    substituteInPlace \
+      Directory.Build.rsp \
+        --replace-fail ' -warnAsError -warnNotAsError:"NU1901;NU1902;NU1903"' ""
   '';
 
   prepFlags = [
