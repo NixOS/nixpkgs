@@ -5543,6 +5543,8 @@ self: super: with self; {
 
   elasticsearch8 = callPackage ../development/python-modules/elasticsearch8 { };
 
+  elasticsearch9 = callPackage ../development/python-modules/elasticsearch9 { };
+
   elasticsearchdsl = self.elasticsearch-dsl;
 
   electrickiwi-api = callPackage ../development/python-modules/electrickiwi-api { };
