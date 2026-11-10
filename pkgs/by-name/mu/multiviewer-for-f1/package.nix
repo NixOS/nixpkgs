@@ -29,6 +29,8 @@
   libx11,
   libxcb,
   writeScript,
+  libGL,
+  libva,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
@@ -43,6 +45,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dpkg
     makeWrapper
     autoPatchelfHook
+  ];
+
+  runtimeDependencies = map lib.getLib [
+    libGL
+    libva
   ];
 
   buildInputs = [
@@ -90,7 +97,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper "$out/share/multiviewer/multiviewer" $out/bin/multiviewer \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/multiviewer\""
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libudev0-shim
+          libGL
+          libva
+        ]
+      }:\"$out/share/multiviewer\""
 
     runHook postInstall
   '';
