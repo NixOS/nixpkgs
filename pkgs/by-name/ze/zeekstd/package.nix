@@ -6,6 +6,8 @@
   rustPlatform,
   writeShellScript,
   versionCheckHook,
+  zstd,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeekstd";
@@ -19,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-fyqgPFTEyuEj+FZlIwqgfseefbCmAlxzUkoV+QU5S+s=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ zstd ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
