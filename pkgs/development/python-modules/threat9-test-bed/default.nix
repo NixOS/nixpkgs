@@ -4,6 +4,7 @@
   click,
   faker,
   fetchFromGitHub,
+  fetchpatch,
   flask,
   gunicorn,
   pyopenssl,
@@ -26,7 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
-  patches = [ ./asyncio-loop.patch ];
+  patches = [
+    ./asyncio-loop.patch
+    # https://github.com/threat9/threat9-test-bed/pull/25/
+    (fetchpatch {
+      name = "fix_write_to.patch";
+      url = "https://github.com/threat9/threat9-test-bed/commit/6dc75f0c1e42c69e3f948e16476803f9277454ea.patch";
+      hash = "sha256-g3XBWbDbwqajTgZjDe0CiSmYovbh5+JM/W2hLdpUvKM=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 

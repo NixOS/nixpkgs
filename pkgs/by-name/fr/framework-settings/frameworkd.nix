@@ -2,6 +2,7 @@
   lib,
   pkg-config,
   rustPlatform,
+  libgit2,
   udev,
 
   src,
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-9ij55dKL6GAcSB+Dh5GsorjF5GWYvdeF1FHMKmT3R+8=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    libgit2
+    udev
+  ];
 
   meta = {
     description = "DBus daemon for framework configuration";

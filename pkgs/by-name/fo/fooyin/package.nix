@@ -22,6 +22,8 @@
   libpulseaudio,
   libsndfile,
   libvorbis,
+  libx11,
+  libxcb,
   mpg123,
   nix-update-script,
   opusfile,
@@ -38,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0EtAmgIZNHMvg9sKimAdiG1EnVBN5i4Jj3dIYFvNqKk=";
+    hash = "sha256-WOL3ZjJAN4JUthHN3rUj1GXr0jazz+4zeeIGOc3wzLA=";
   };
 
   __structuredAttrs = true;
@@ -69,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     kdsingleapplication
     zlib
     libarchive
+    libx11
+    libxcb
     # output plugins
     alsa-lib
     jack2
