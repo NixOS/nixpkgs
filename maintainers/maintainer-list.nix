@@ -14866,6 +14866,14 @@
     github = "kaeeraa";
     githubId = 99148867;
   };
+  kaelte = {
+    email = "klt@fsfe.org";
+    github = "kaelte";
+    githubId = 10630145;
+    keys = [ { fingerprint = "CB01 1CF2 3C98 7401 7A87  3F03 D9C3 7709 CB60 C7F9"; } ];
+    matrix = "@klt:fsfe.org";
+    name = "Nikolaus Thiel";
+  };
   kagehisa = {
     name = "Sven Woelfel";
     email = "woelfel.pub@gmail.com";
