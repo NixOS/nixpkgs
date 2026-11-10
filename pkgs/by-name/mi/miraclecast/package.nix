@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   stdenv,
 
   # nativeBuildInputs
@@ -108,6 +109,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/miracle-wifid \
       --suffix PATH : ${lib.makeBinPath [ wpa_supplicant ]}
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Connect external monitors to your system via Wifi-Display specification also known as Miracast";
