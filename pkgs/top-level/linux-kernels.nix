@@ -263,6 +263,8 @@ in
 
         apfs = callPackage ../os-specific/linux/apfs { };
 
+        aws-neuronx = callPackage ../os-specific/linux/aws-neuronx { };
+
         ax99100 = callPackage ../os-specific/linux/ax99100 { };
 
         batman_adv = callPackage ../os-specific/linux/batman-adv { };
