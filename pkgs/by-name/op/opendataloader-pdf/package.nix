@@ -8,7 +8,7 @@
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "opendataloader-pdf";
-  version = "2.4.7";
+  version = "2.5.20";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,12 +17,12 @@ maven.buildMavenPackage (finalAttrs: {
     owner = "opendataloader-project";
     repo = "opendataloader-pdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qCU0Yb4N0KtbqVSscGLmv0xps4RwR++WxS/A44WwRlk=";
+    hash = "sha256-LMeQY+/heCP7s7u6piiWmg/K3XuytVED1Yro00PUQ/o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/java";
 
-  mvnHash = "sha256-Rjz/c3ZDe3jZjWEdPvP132p/13MZ/ivxfY/T2k43lHE=";
+  mvnHash = "sha256-U3B8KxCna0V/WMbygd0BYoDcMTBhTHvVlDuISUwIdes=";
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ maven.buildMavenPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 opendataloader-pdf-cli/target/opendataloader-pdf-cli-0.0.0.jar $out/share/opendataloader-pdf-cli/opendataloader-pdf-cli.jar
+    install -Dm644 opendataloader-pdf-cli/target/opendataloader-pdf-cli-${finalAttrs.version}-SNAPSHOT.jar $out/share/opendataloader-pdf-cli/opendataloader-pdf-cli.jar
 
     mkdir -p $out/bin
     makeWrapper ${lib.getExe jre} $out/bin/${finalAttrs.meta.mainProgram} \
