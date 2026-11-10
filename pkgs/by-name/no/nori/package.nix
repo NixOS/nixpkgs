@@ -31,7 +31,9 @@ appimageTools.wrapType2 (finalAttrs: {
       "$out/share/icons/hicolor/512x512/apps/nori.png"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v([\\d.]+)" ];
+  };
 
   meta = {
     maintainers = with lib.maintainers; [ juanqp07 ];
