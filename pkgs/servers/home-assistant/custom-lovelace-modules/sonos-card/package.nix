@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "sonos-card";
-  version = "10.9.0";
+  version = "10.9.1";
 
   src = fetchFromGitHub {
     owner = "punxaphil";
     repo = "custom-sonos-card";
     tag = "v${version}";
-    hash = "sha256-NJKJVwYNuuJmpSnhT7S6M2riEGkA2OYXYFxPHt9lO4g=";
+    hash = "sha256-dtiEuyl+4FF/OUFL4YZ/9NLiphS/ZVd83mBUx6AP5Ak=";
   };
 
   postPatch = ''
