@@ -219,8 +219,8 @@ in
       "sha256-ncZ7f1d0ZqqhUfHuOf+B/TkWJ4qKnaI3jcMup0fS7tY=";
 
   mypy-boto3-clouddirectory =
-    buildMypyBoto3Package "clouddirectory" "1.43.69"
-      "sha256-iGWIsG2t7LS4gMbNAVPyarrc8qmhtpleps/OhDInY24=";
+    buildMypyBoto3Package "clouddirectory" "1.44.0"
+      "sha256-sxA5hor4KNpFidS/POwwYnN+gC4XdKTCS6DkpPicatg=";
 
   mypy-boto3-cloudformation =
     buildMypyBoto3Package "cloudformation" "1.43.110"
