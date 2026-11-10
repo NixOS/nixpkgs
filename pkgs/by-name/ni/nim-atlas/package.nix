@@ -21,12 +21,12 @@ in
 buildNimPackage (
   final: prev: rec {
     pname = "atlas";
-    version = "0.16.3";
+    version = "0.16.4";
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";
       rev = "${version}";
-      hash = "sha256-Lsb/m1r9NIy44OtdfDvEjPVLjfkXg0/9AUbnOPbXyPM=";
+      hash = "sha256-zEj945h7Aw0dzzy1HBKVeAjHoO9HEW52jxem58N+7Cw=";
     };
     buildInputs = [ openssl ];
     preConfigure = ''
