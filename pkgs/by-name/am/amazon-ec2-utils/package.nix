@@ -20,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-utils";
   version = "2.3.0";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-utils";
@@ -27,12 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FrGYiZ7vhXNcCQa3iTb3X4UajqpnMyVD+uDekrJSCi8=";
   };
 
-  strictDeps = true;
+  postPatch = ''
+    substituteInPlace {51-ec2-hvm-devices,70-ec2-nvme-devices}.rules \
+      --replace-fail /usr/sbin $out/bin
+
+    substituteInPlace 53-ec2-read-ahead-kb.rules \
+      --replace-fail /bin/awk ${lib.getExe gawk}
+  '';
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -41,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    mkdir $out
+    runHook preInstall
 
-    for file in {ebsnvme,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
-      install -D -m 755 -t $out/bin "$file"
-    done
+    install -Dm755 -t $out/bin ebsnvme ec2-metadata ec2nvme-nsid ec2udev-vbd
     cp -P ebsnvme-id $out/bin/
+
+    install -Dm644 -t $out/lib/udev/rules.d *.rules
 
     wrapProgram $out/bin/ec2-metadata \
       --prefix PATH : ${
@@ -66,25 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
 
-    for file in *.rules; do
-      install -D -m 644 -t $out/lib/udev/rules.d "$file"
-    done
-
-    substituteInPlace $out/lib/udev/rules.d/{51-ec2-hvm-devices,70-ec2-nvme-devices}.rules \
-      --replace-fail /usr/sbin $out/bin
-
-    substituteInPlace $out/lib/udev/rules.d/53-ec2-read-ahead-kb.rules \
-      --replace-fail /bin/awk ${gawk}/bin/awk
-
     installManPage doc/*.8
+
+    runHook postInstall
   '';
 
-  outputs = [
-    "out"
-    "man"
-  ];
-
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   # We can't run `ec2-metadata` since it calls IMDS even with `--help`.
   installCheckPhase = ''
