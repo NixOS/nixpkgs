@@ -443,8 +443,8 @@ in
       "sha256-8bU5bePN3fhzl37c+bCBBST10W5YVatCle+ckcXV74I=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.124"
-      "sha256-OIb/pr6Gt0pqPccO0qvuc92tsMR5q9Nvr4KyJZ/FTJQ=";
+    buildMypyBoto3Package "ec2" "1.44.0"
+      "sha256-R9TOCFcoJRDJKScT3MtdjJMWcSVCS2ZH58+mtF3w/V4=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
