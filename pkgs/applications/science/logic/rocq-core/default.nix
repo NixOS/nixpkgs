@@ -76,7 +76,10 @@ let
   ocamlBuildInputs = [
     ocamlPackages.findlib
   ];
-  ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
+  ocamlPropagatedBuildInputs = [
+    ocamlPackages.findlib
+    ocamlPackages.zarith
+  ];
   self = stdenv.mkDerivation {
     pname = "rocq";
     inherit (fetched) version src;
