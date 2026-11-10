@@ -11,6 +11,7 @@
   libxi,
   libxcursor,
   libx11,
+  sqlite,
   vulkan-loader,
   wayland,
 }:
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxscrnsaver
     libxcursor
     libxi
+    sqlite
     vulkan-loader
     wayland
   ];

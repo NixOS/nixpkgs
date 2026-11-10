@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchCrate,
+  pkg-config,
+  zstd,
   testers,
   nix-update-script,
   dotslash,
@@ -17,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-+FWDeR4AcFSFz0gGQ8VMvX68/F0yEm25cNfHeedqsWE=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
+
   doCheck = false; # http tests
 
   passthru = {

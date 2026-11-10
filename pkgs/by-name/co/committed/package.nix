@@ -5,6 +5,8 @@
   versionCheckHook,
   nix-update-script,
   git,
+  libgit2,
+  pkg-config,
 }:
 let
   version = "1.1.11";
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-qV5WaszJ/VeC6XkgBim3IRmDCU7ieAIGl7Vr5t1F8Ow=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   nativeCheckInputs = [
     git

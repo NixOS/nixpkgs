@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
   versionCheckHook,
 }:
@@ -18,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-/X3aGWL+YAJNeVyztl059RGUmfzlxO31HSOnG7SH/VU=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   # buildRustPackage sets RUST_LOG="" by default, which suppresses marmite's warn! output.
   # These tests assert on that stderr output and would fail otherwise:

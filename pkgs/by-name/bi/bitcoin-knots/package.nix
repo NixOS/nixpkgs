@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-Fxtm+bQbXjCr9aSNcgSq32T1OSyh6Ly/NLXahKnJaE0=";
+        hash = "sha256-ULDiGSMdNXSmS8LXSyUp2QQl+HGWaz3VJ0XWU+up7zg=";
       };
 
       verifyBuilderKeys =

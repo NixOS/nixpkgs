@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,7 +19,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sha256 = "sha256-sCPrHy1+hdv6schBxOP1+Y1hpag4/hdKPhG/PZhqKQA=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [ zstd ];
 
   cargoHash = "sha256-AVSphRupcncOmlIh4GXcPab2ePhS1jgaQLBKv2sRwuo=";
 
