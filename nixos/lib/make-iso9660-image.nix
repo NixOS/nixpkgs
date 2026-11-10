@@ -47,7 +47,8 @@
   # The path (in the ISO file system) of the boot image.
   bootImage ? "",
 
-  # The path (in the ISO file system) of the efi boot image.
+  # The ESP image file to append as its own GPT partition. This is the
+  # file on disk, not a path inside the ISO. Required when efiBootable is set.
   efiBootImage ? "",
 
   # The path (outside the ISO file system) of the isohybrid-mbr image.
