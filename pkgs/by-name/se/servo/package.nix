@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  rustPackages_1_98,
   fetchFromGitHub,
   nix-update-script,
 
@@ -46,6 +46,8 @@
 }:
 
 let
+  inherit (rustPackages_1_98) rustPlatform;
+
   # match .python-version
   customPython = python311.withPackages (
     ps: with ps; [
@@ -69,13 +71,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-blDr9zZHHAGqK8Eoh0ixazeUDZKr2T1El7Y5k2axXcc=";
+    hash = "sha256-ZoYk5aXHuYSxXjeRfqugMeLSP1vcqm/fNqY67wJSWqI=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-3jUZNiESi9zYFQAbf1dYmHVgHNzmD2aY2CuS8K7SxEY=";
+  cargoHash = "sha256-jkRafwC8BLJ/H9Rx3y0kvocf2MM0oKz6xNhyAdPSBgg=";
 
   postPatch = ''
     # The mozjs crates all use cbindgen with `cargo metadata` invocations,
