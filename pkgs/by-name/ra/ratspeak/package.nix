@@ -17,6 +17,8 @@
   webkitgtk_4_1,
   wrapGAppsHook4,
   sqlite,
+  # rsLXST is an optional, experimental dependency
+  withExperimentalVoice ? true,
 }:
 
 let
@@ -62,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # The app expects the protocol repos next to its own checkout.
+  # rsLXST must be in tree even when it's disabled for the build. See:
+  # https://docs.ratspeak.org/docs/reference/building-from-source#common-build-problems
   postUnpack = ''
     cp -r ${rsReticulum} rsReticulum
     cp -r ${rsLXMF} rsLXMF
@@ -73,6 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-VXduGeMzGvuMLUa/tFk0N+zmbDqh8cwZGs5IAYGHxLQ=";
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+  buildNoDefaultFeatures = !withExperimentalVoice;
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -117,16 +122,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license =
       with lib.licenses;
       # https://github.com/ratspeak/Ratspeak/blob/v1.0.43/NOTICE
-      AND [
-        # Ratspeak, rsReticulum, rsLXMF
-        reticulum
-        # lrgp-rs
-        mit
+      AND (
+        [
+          # Ratspeak, rsReticulum, rsLXMF
+          reticulum
+          # lrgp-rs
+          mit
+        ]
         # rsLXST is distributed under a non-free license that only allows
         # unmodified, non-commercial use with Ratspeak.
         # https://github.com/ratspeak/rsLXST/blob/ratspeak-v1.0.43/LICENSE
-        unfreeRedistributable
-      ];
+        ++ lib.optional withExperimentalVoice unfreeRedistributable
+      );
     maintainers = with lib.maintainers; [ eldios ];
     platforms = lib.platforms.linux;
     mainProgram = "ratspeak";
