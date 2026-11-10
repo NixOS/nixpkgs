@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "omp";
-  version = "18.18.1";
+  version = "18.18.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,20 +43,30 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "can1357";
     repo = "oh-my-pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vMdG/xSsGezg1gQcUP0brpnt5P6cRPzd/dKaaZ+5i0s=";
+    hash = "sha256-mFauJAhpcr1BHVDAuq5b5lC/X3V6RsYa0924km+Bffw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-CZAYhipisqfbsFn4181iBdMrQCccvDWcu2yCFQ/TERw=";
+    hash = "sha256-l3jkK6Qn+EY12hT7dCVoGyCu/XFsAtkbdgnX6HxXZro=";
   };
 
   postPatch = ''
     substituteInPlace packages/coding-agent/src/cli.ts \
       --replace-fail 'if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0)' 'if (false)'
 
+  ''
+  + lib.optionalString (lib.versionOlder rustPlatform.rust.rustc.version "1.101") ''
     substituteInPlace Cargo.toml \
       --replace-fail 'rust-version = "1.101"' 'rust-version = "1.99"'
+
+    substituteInPlace crates/pi-shell/src/bash/vm/proc.rs \
+      --replace-fail 'pub const fn has_work(&self)' 'pub fn has_work(&self)'
+
+    substituteInPlace crates/pi-natives/src/desktop/macos/session.rs \
+      --replace-fail \
+        'displays_asleep(selector, &online_displays(), CGDisplayIsAsleep)' \
+        'displays_asleep(selector, &online_displays(), |id| CGDisplayIsAsleep(id))'
   '';
 
   # required until https://github.com/NixOS/nixpkgs/issues/255890 & https://github.com/NixOS/nixpkgs/issues/335534 are fixed
@@ -146,6 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
     cargo build --release -p pi-natives ${lib.optionalString pipewireSupport "--features wayland-pipewire"}
     install -Dm755 "target/release/libpi_natives${stdenv.hostPlatform.extensions.sharedLibrary}" \
       "packages/natives/native/${addonName}"
+    bun scripts/stamp-native-version.ts \
+      "packages/natives/native/${addonName}" \
+      --version "${finalAttrs.version}" \
+      --no-sign
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       autoPatchelf -- "packages/natives/native/${addonName}"
