@@ -4,14 +4,14 @@
   buildDunePackage,
 }:
 
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "windtrap";
-  version = "0.1.0";
+  version = "0.3.1";
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {
-    url = "https://github.com/invariant-hq/windtrap/releases/download/0.1.0/windtrap-0.1.0.tbz";
-    hash = "sha256-IkGylLJO1dVuqLg00pbm+rxdvdkkqJ9RwUsA2mbFCiU=";
+    url = "https://github.com/invariant-hq/windtrap/releases/download/v${finalAttrs.version}/windtrap-${finalAttrs.version}.tbz";
+    hash = "sha256-mox5Jsd7HCWAEOAn6yGRZORqA2v+LfMrNLh4GITI0Rw=";
   };
 
   doCheck = true;
@@ -28,4 +28,4 @@ buildDunePackage {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.joblade ];
   };
-}
+})
