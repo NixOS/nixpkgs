@@ -6637,6 +6637,12 @@
     github = "RealDaroche";
     githubId = 94007359;
   };
+  darrenmeehan = {
+    email = "hi@drn.ie";
+    github = "darrenmeehan";
+    githubId = 411136;
+    name = "Darren Meehan";
+  };
   darshancode2005 = {
     name = "Darshan Thakare";
     email = "darshanthakaregsoc2023@gmail.com";
