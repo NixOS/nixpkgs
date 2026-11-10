@@ -1,9 +1,11 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   openssl,
   pkg-config,
   rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,7 +25,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    openssl
+    zstd
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
