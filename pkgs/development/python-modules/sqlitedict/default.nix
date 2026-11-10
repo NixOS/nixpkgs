@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "RaRe-Technologies";
+    owner = "piskvorky";
     repo = "sqlitedict";
     tag = "v${version}";
     hash = "sha256-GfvvkQ6a75UBPn70IFOvjvL1MedSc4siiIjA3IsQnic=";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Persistent, thread-safe dict";
-    homepage = "https://github.com/RaRe-Technologies/sqlitedict";
+    homepage = "https://github.com/piskvorky/sqlitedict";
     changelog = "https://github.com/piskvorky/sqlitedict/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];

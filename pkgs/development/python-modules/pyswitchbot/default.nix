@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Danielhiversen";
+    owner = "sblibs";
     repo = "pySwitchbot";
     tag = finalAttrs.version;
     hash = "sha256-CpSdniWAtyXO03Ti7/Z3cwA1XVN1lfk4mbmjlAvzeMQ=";
@@ -45,8 +45,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python library to control Switchbot IoT devices";
-    homepage = "https://github.com/Danielhiversen/pySwitchbot";
-    changelog = "https://github.com/Danielhiversen/pySwitchbot/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/sblibs/pySwitchbot";
+    changelog = "https://github.com/sblibs/pySwitchbot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "RaRe-Technologies";
+    owner = "piskvorky";
     repo = "smart_open";
     tag = "v${finalAttrs.version}";
     hash = "sha256-Qr2GzmRDCCvR6Q/msSC8F2i8EDYmCIuQP8f593aIisI=";
@@ -78,7 +78,7 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # https://github.com/RaRe-Technologies/smart_open/issues/784
+    # https://github.com/piskvorky/smart_open/issues/784
     "test_https_seek_forward"
     "test_seek_from_current"
     "test_seek_from_end"

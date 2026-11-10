@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "hex-inc";
+    owner = "vega";
     repo = "vegafusion";
     tag = "v${version}";
     hash = "sha256-yiECw9WGd+03KFOWa+bwR10gQFqzx4Riy6uw2zwdc3s=";
@@ -106,7 +106,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Core tools for using VegaFusion from Python";
-    homepage = "https://github.com/hex-inc/vegafusion";
+    homepage = "https://github.com/vega/vegafusion";
     license = lib.licenses.bsd3;
     maintainers = with maintainers; [ wariuccio ];
   };

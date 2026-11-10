@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "modal-com";
+    owner = "modal-labs";
     repo = "pytest-markdown-docs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-V1volx1BckCmYwnM9Q43gRECYdccwaPWX7zUsk/+BoI=";
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Run pytest on markdown code fence blocks";
-    homepage = "https://github.com/modal-com/pytest-markdown-docs";
+    homepage = "https://github.com/modal-labs/pytest-markdown-docs";
     changelog = "https://github.com/modal-labs/pytest-markdown-docs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];

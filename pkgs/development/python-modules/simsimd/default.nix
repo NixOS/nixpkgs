@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
-    repo = "SimSIMD";
+    repo = "NumKong";
     tag = "v${version}";
     hash = "sha256-J4lxmsIgzBhG2MSu2LPDY/5IKTNWEG0fDX1EI4NgLB0=";
   };
@@ -41,9 +41,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/SimSIMD/releases/tag/${src.tag}";
+    changelog = "https://github.com/ashvardanian/NumKong/releases/tag/${src.tag}";
     description = "Portable mixed-precision BLAS-like vector math library for x86 and ARM";
-    homepage = "https://github.com/ashvardanian/SimSIMD";
+    homepage = "https://github.com/ashvardanian/NumKong";
     license =
       with lib.licenses;
       OR [

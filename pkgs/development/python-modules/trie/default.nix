@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "ethereum";
+    owner = "ApeWorX";
     repo = "py-trie";
     tag = "v${version}";
     hash = "sha256-QDywlAyFbQGgkATVifdixlnob4Tmsvr/VZ1rafzWKrU=";
@@ -59,8 +59,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library which implements the Ethereum Trie structure";
-    homepage = "https://github.com/ethereum/py-trie";
-    changelog = "https://github.com/ethereum/py-trie/blob/v${version}/CHANGELOG.rst";
+    homepage = "https://github.com/ApeWorX/py-trie";
+    changelog = "https://github.com/ApeWorX/py-trie/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };

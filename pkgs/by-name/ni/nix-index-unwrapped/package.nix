@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "nix-community";
+    owner = "NixOS";
     repo = "nix-index";
     tag = "v${finalAttrs.version}";
     hash = "sha256-yl/acohrgP0C5w4eozNcWcpCGhmMMjFbzgHsKwXKw00=";
@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Files database for nixpkgs";
-    homepage = "https://github.com/nix-community/nix-index";
-    changelog = "https://github.com/nix-community/nix-index/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/NixOS/nix-index";
+    changelog = "https://github.com/NixOS/nix-index/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bennofs
