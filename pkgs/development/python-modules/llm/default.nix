@@ -88,6 +88,7 @@ let
       llm-keys-ui ? false,
       llm-llama-server ? false,
       llm-lmstudio ? false,
+      llm-mcp-client ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
