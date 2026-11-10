@@ -1,0 +1,14 @@
+diff -Nru ostinato-414d89860de0987843295d149bcabeac7c6fd9e5/server/drone_main.cpp ostinato-414d89860de0987843295d149bcabeac7c6fd9e5.new/server/drone_main.cpp
+--- ostinato-414d89860de0987843295d149bcabeac7c6fd9e5/server/drone_main.cpp	2015-12-24 16:46:35.000000000 +0800
++++ ostinato-414d89860de0987843295d149bcabeac7c6fd9e5.new/server/drone_main.cpp	2015-12-30 20:59:04.319199699 +0800
+@@ -62,8 +62,8 @@
+     /* (Portable Mode) If we have a .ini file in the same directory as the 
+        executable, we use that instead of the platform specific location
+        and format for the settings */
+-    QString portableIni = QCoreApplication::applicationDirPath() 
+-            + "/drone.ini";
++    QString portableIni = argc > 2 ? argv[2] :
++            QCoreApplication::applicationDirPath() + "/drone.ini";
+     if (QFile::exists(portableIni))
+         appSettings = new QSettings(portableIni, QSettings::IniFormat);
+     else

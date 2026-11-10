@@ -1,0 +1,13 @@
+diff --git a/frigate/api/review.py b/frigate/api/review.py
+index 76619dcb2..f72c0efc3 100644
+--- a/frigate/api/review.py
++++ b/frigate/api/review.py
+@@ -660,7 +660,7 @@ def motion_activity(
+             df.iloc[i : i + chunk, 0] = 0.0
+ 
+     # change types for output
+-    df.index = df.index.astype(int) // (10**9)
++    df.index = df.index.as_unit("s").astype("int64")
+     normalized = df.reset_index().to_dict("records")
+     return JSONResponse(content=normalized)
+ 

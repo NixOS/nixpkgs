@@ -1,0 +1,28 @@
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -52,9 +52,8 @@
+ 
+   void checkForPiper() async {
+     final Directory appDir = await getDataDir();
+-    Directory piperDir = Directory(path.join(appDir.path, "piper"));
+     setState(() {
+-      piperPresent = piperDir.existsSync();
++      piperPresent = true;
+       if (piperPresent) {
+         title = "Voice Selection";
+       }
+diff --git a/lib/voice_buttons.dart b/lib/voice_buttons.dart
+--- a/lib/voice_buttons.dart
++++ b/lib/voice_buttons.dart
+@@ -168,8 +168,8 @@
+                           File modelConf = File(path.join(getHome()!,
+                               ".config/speech-dispatcher/modules/piper.conf"));
+                           String configString = modelTemplate;
+-                          configString = configString.replaceAll("PIPER_PATH",
+-                              path.join(appDir.path, "piper", "piper"));
++                          configString =
++                              configString.replaceAll("PIPER_PATH", "piper");
+                           configString = configString.replaceAll("MODEL_PATH",
+                               path.join(modelDir.path, widget.voiceData[4]));
+                           configString = configString.replaceAll(

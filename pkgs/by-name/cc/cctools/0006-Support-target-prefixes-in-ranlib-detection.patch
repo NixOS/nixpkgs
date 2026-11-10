@@ -1,0 +1,30 @@
+From e25de788260051892b9e34177ea957cbafe6c415 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 2 May 2024 07:55:05 -0400
+Subject: [PATCH 6/6] Support target prefixes in ranlib detection
+
+---
+ misc/libtool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/misc/libtool.c b/misc/libtool.c
+index 289ec4d..8265d53 100644
+--- a/misc/libtool.c
++++ b/misc/libtool.c
+@@ -426,11 +426,11 @@ char **envp)
+ 	    p++;
+ 	else
+ 	    p = argv[0];
+-	if(strncmp(p, "ranlib", sizeof("ranlib") - 1) == 0) {
++	if(strncmp(p, "@targetPrefix@ranlib", sizeof("@targetPrefix@ranlib") - 1) == 0) {
+ 	    cmd_flags.ranlib = TRUE;
+ 	}
+ 	else if (getenv("LIBTOOL_FORCE_RANLIB")) {
+-	    progname = "ranlib";
++	    progname = "@targetPrefix@ranlib";
+ 	    cmd_flags.ranlib = TRUE;
+ 	}
+ 
+-- 
+2.45.2
+

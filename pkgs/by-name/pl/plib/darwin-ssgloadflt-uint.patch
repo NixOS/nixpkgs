@@ -1,0 +1,14 @@
+diff --git a/src/ssg/ssgLoadFLT.cxx b/src/ssg/ssgLoadFLT.cxx
+--- a/src/ssg/ssgLoadFLT.cxx
++++ b/src/ssg/ssgLoadFLT.cxx
+@@ -112,6 +112,10 @@
+ # include <sys/stat.h>
+ # include <sys/mman.h>
+ #endif
++#if defined(__APPLE__)
++typedef unsigned int uint;
++typedef unsigned short ushort;
++#endif
+ #ifdef UL_MSVC
+ # include <io.h>
+ #endif

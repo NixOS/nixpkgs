@@ -1,0 +1,12 @@
+diff --git a/src/octoprint/util/pip.py b/src/octoprint/util/pip.py
+index 53500e5d5..39f76c1e5 100644
+--- a/src/octoprint/util/pip.py
++++ b/src/octoprint/util/pip.py
+@@ -284,6 +284,7 @@ class PipCaller(CommandlineCaller):
+     @classmethod
+     def autodetect_pip(cls):
+         commands = [
++            ["@pip@"],
+             [sys.executable, "-m", "pip"],
+             [
+                 os.path.join(

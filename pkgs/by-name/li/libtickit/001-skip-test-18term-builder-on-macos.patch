@@ -1,0 +1,27 @@
+From 6179359c0b9247ae981b8b2a2897eabc921147fd Mon Sep 17 00:00:00 2001
+From: Gustavo Coutinho de Souza <dev@onemoresuza.mailer.me>
+Date: Tue, 8 Aug 2023 15:45:43 -0300
+Subject: [PATCH] test: skip test 18 if on MacOS
+
+---
+ t/18term-builder.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/t/18term-builder.c b/t/18term-builder.c
+index 8b23ab4..c1b64a2 100644
+--- a/t/18term-builder.c
++++ b/t/18term-builder.c
+@@ -21,6 +21,11 @@ static void output(TickitTerm *tt, const char *bytes, size_t len, void *user)
+ 
+ int main(int argc, char *argv[])
+ {
++
++  #if defined(__APPLE__) || defined(__MACH__)
++    skip_all("the test does not seem to work on MacOS");
++    return exit_status();
++  #endif
+   // getstr override
+   {
+     /* We need a termtype that isn't xterm, but that will actually load.
+-- 
+2.41.0

@@ -1,0 +1,62 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Thu, 27 Apr 2023 12:18:39 +0200
+Subject: shiboken2/clang: Write scope resolution for all parameters of native
+ wrappers
+
+Make sure types are correct for cases like:
+
+- QtDBusHelper::QDBusReply::QDBusReply(::QDBusReply<void>)
+- Qt3DInput*Event constructors taking the equivalent QtGui classes
+  (Qt3DInput::QMouseEvent(::QMouseEvent *);
+
+[ChangeLog][shiboken6] Support for parameters/function return
+types with scope resolution has been improved.
+
+Fixes: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: Id29758fceb88188f4cd834fbd5a7cc0ab511fb1a
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+(cherry picked from commit dd863857436bbeeba4c0a1077f5ad16653296277)
+---
+ sources/shiboken2/generator/generator.cpp | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/sources/shiboken2/generator/generator.cpp b/sources/shiboken2/generator/generator.cpp
+index 6028282..6147b8a 100644
+--- a/sources/shiboken2/generator/generator.cpp
++++ b/sources/shiboken2/generator/generator.cpp
+@@ -899,21 +899,23 @@ QString Generator::translateType(const AbstractMetaType *cType,
+                 if (index >= (s.size() - (constLen + 1))) // (VarType const)  or (VarType const[*|&])
+                     s = s.remove(index, constLen);
+             }
+-        } else if (options & Generator::ExcludeConst || options & Generator::ExcludeReference) {
++        } else {
+             AbstractMetaType *copyType = cType->copy();
++            if (options & Generator::ExcludeConst || options & Generator::ExcludeReference) {
++                if (options & Generator::ExcludeConst)
++                    copyType->setConstant(false);
+ 
+-            if (options & Generator::ExcludeConst)
+-                copyType->setConstant(false);
+-
+-            if (options & Generator::ExcludeReference)
+-                copyType->setReferenceType(NoReference);
+-
++                if (options & Generator::ExcludeReference)
++                    copyType->setReferenceType(NoReference);
++            }
+             s = copyType->cppSignature();
+-            if (!copyType->typeEntry()->isVoid() && !copyType->typeEntry()->isCppPrimitive())
+-                s.prepend(QLatin1String("::"));
++            const auto te = copyType->typeEntry();
++            if (!te->isVoid() && !te->isCppPrimitive()) { // Add scope resolution
++                const auto pos = s.indexOf(te->qualifiedCppName()); // Skip const/volatile
++                Q_ASSERT(pos >= 0);
++                s.insert(pos, QLatin1String("::"));
++            }
+             delete copyType;
+-        } else {
+-            s = cType->cppSignature();
+         }
+     }
+ 

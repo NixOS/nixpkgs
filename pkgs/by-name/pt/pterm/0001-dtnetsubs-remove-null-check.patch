@@ -1,0 +1,16 @@
+diff --git a/dtnetsubs.c b/dtnetsubs.c
+index ad1c30d..c1fda9b 100644
+--- a/dtnetsubs.c
++++ b/dtnetsubs.c
+@@ -865,10 +865,7 @@ int dtSend (NetFet *fet, const void *buf, int len)
+     ** Update the IN pointer, then wake the send thread.
+     */
+     fet->sendin = in;
+-    if (ssemp (fet) != NULL)
+-    {
+-        sem_post (ssemp (fet));
+-    }
++    sem_post (ssemp (fet));
+     
+     if (dtSendFree (fet) == 0)
+         {

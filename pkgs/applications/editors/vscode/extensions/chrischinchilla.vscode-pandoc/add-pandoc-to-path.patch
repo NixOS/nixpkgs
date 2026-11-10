@@ -1,0 +1,13 @@
+diff --git a/src/extension.ts b/src/extension.ts
+index 49637fa..c48c655 100644
+--- a/src/extension.ts
++++ b/src/extension.ts
+@@ -375,7 +375,7 @@ function renderDoc(
+   execFile(
+     command,
+     args,
+-    { cwd: filePath },
++    { cwd: filePath, env: { ...process.env, PATH: process.env.PATH ? `${process.env.PATH}${path.delimiter}@pandocBin@` : "@pandocBin@" } },
+     function (error, stdout, stderr) {
+       if (stdout !== null) {
+         pandocOutputChannel.append(stdout.toString() + "\n");

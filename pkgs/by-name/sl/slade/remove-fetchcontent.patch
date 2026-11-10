@@ -1,0 +1,86 @@
+diff --git a/cmake/unix.cmake b/cmake/unix.cmake
+index 6fa7280f..d077cfeb 100644
+--- a/cmake/unix.cmake
++++ b/cmake/unix.cmake
+@@ -30,6 +30,7 @@ endif (CMAKE_INSTALL_PREFIX)
+ 
+ find_package(FluidSynth REQUIRED)
+ find_package(OpenGL REQUIRED)
++find_package(Lua REQUIRED)
+ find_package(MPG123 REQUIRED)
+ find_package(PNG REQUIRED)
+ find_package(glm REQUIRED)
+@@ -39,15 +40,11 @@ find_package(LibArchive REQUIRED)
+ 
+ # Cpptrace
+ include(FetchContent)
+-FetchContent_Declare(
+-	cpptrace
+-	GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
+-	GIT_TAG v1.0.4
+-)
+-FetchContent_MakeAvailable(cpptrace)
++find_package(cpptrace REQUIRED)
+ 
+ include_directories(
+ 	${FREETYPE_INCLUDE_DIRS}
++	${LUA_INCLUDE_DIR}
+ 	${MPG123_INCLUDE_DIR}
+ 	${WebP_INCLUDE_DIRS}
+ 	${FLUIDSYNTH_INCLUDE_DIR}
+@@ -105,6 +102,7 @@ target_link_libraries(slade
+ 	${SFML_LIBRARIES}
+ 	${FREETYPE_LIBRARIES}
+ 	${OPENGL_LIBRARIES}
++	${LUA_LIBRARIES}
+ 	${MPG123_LIBRARIES}
+ 	${FLUIDSYNTH_LIBRARIES}
+ 	glm::glm
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index 8dace7bb..7623facd 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -37,33 +37,14 @@ add_subdirectory(sqlitecpp)
+ 
+ # JSON (nlohmann)
+ include(FetchContent)
+-FetchContent_Declare(json
+-	URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+-	DOWNLOAD_EXTRACT_TIMESTAMP true
+-)
+-FetchContent_MakeAvailable(json)
+-
+-# Lua (via marovira/lua which provides the lua::lua target)
+-if (NOT NO_LUA)
+-	FetchContent_Declare(lua
+-		GIT_REPOSITORY https://github.com/marovira/lua.git
+-		GIT_TAG 5.5.1
+-	)
+-	FetchContent_MakeAvailable(lua)
+-endif ()
++find_package(nlohmann_json REQUIRED)
+ 
+ # md4c (for parsing Markdown to HTML)
+ set(BUILD_MD2HTML_EXECUTABLE OFF CACHE BOOL "" FORCE)
+ set(BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
+ set(BUILD_SHARED_LIBS OFF)
+-FetchContent_Declare(md4c
+-	URL https://github.com/mity/md4c/archive/refs/tags/v0.6.0.tar.gz
+-	DOWNLOAD_EXTRACT_TIMESTAMP true
+-)
+-FetchContent_MakeAvailable(md4c)
++find_package(md4c REQUIRED)
+ set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVED})
+-target_include_directories(md4c INTERFACE $<BUILD_INTERFACE:${md4c_SOURCE_DIR}/src>)
+-target_include_directories(md4c-html INTERFACE $<BUILD_INTERFACE:${md4c_SOURCE_DIR}/src>)
+ 
+ add_library(external STATIC ${EXTERNAL_SOURCES})
+ target_link_libraries(external
+@@ -75,7 +56,4 @@ target_link_libraries(external
+ 	nlohmann_json::nlohmann_json
+ 	md4c-html
+ )
+-if (NOT NO_LUA)
+-	target_link_libraries(external lua::lua)
+-endif ()
+ set(EXTERNAL_LIBRARIES external PARENT_SCOPE)

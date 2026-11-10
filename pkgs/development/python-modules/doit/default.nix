@@ -1,0 +1,81 @@
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  importlib-metadata,
+  isPy3k,
+  mock,
+  pytestCheckHook,
+  cloudpickle,
+  pyinotify,
+  macfsevents,
+  setuptools,
+  toml,
+  doit-py,
+  pyflakes,
+  configclass,
+  mergedict,
+  doit,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "doit";
+  version = "0.37.0";
+  pyproject = true;
+
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-08cuDkao+h3avqj4MHYkAt7gkMrzPDDCKVrHAQ248Jw=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cloudpickle
+    importlib-metadata
+    toml
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux pyinotify
+  ++ lib.optional stdenv.hostPlatform.isDarwin macfsevents;
+
+  nativeCheckInputs = [
+    configclass
+    doit-py
+    mergedict
+    mock
+    pyflakes
+    pytestCheckHook
+  ];
+
+  # escape infinite recursion with doit-py
+  doCheck = false;
+
+  passthru.tests = {
+    # hangs on darwin
+    # note: overridePythonAttrs is not available in finalAttrs.finalPackage
+    check = doit.overridePythonAttrs (_: {
+      doCheck = !stdenv.hostPlatform.isDarwin;
+    });
+  };
+
+  pythonImportsCheck = [ "doit" ];
+
+  meta = {
+    homepage = "https://pydoit.org/";
+    description = "Task management & automation tool";
+    changelog = "https://github.com/pydoit/doit/blob/${finalAttrs.version}/CHANGES";
+    mainProgram = "doit";
+    license = lib.licenses.mit;
+    longDescription = ''
+      doit is a modern open-source build-tool written in python
+      designed to be simple to use and flexible to deal with complex
+      work-flows. It is specially suitable for building and managing
+      custom work-flows where there is no out-of-the-box solution
+      available.
+    '';
+    maintainers = with lib.maintainers; [ pSub ];
+  };
+})

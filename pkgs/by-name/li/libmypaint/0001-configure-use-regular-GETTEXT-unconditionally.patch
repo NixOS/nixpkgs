@@ -1,0 +1,37 @@
+From dd663ee7bf6a2ff7dd47fc360ac7cd44c83039d0 Mon Sep 17 00:00:00 2001
+From: Grimmauld <Grimmauld@grimmauld.de>
+Date: Sat, 12 Jul 2025 12:46:58 +0200
+Subject: [PATCH] configure: use regular GETTEXT unconditionally
+
+Modern autoconf breaks when `IT_PROG_INTLTOOL` is conditional [1].
+
+`glib` gettext is obsolete and broken, so switch to regular gettext instead.
+This also needs to be unconditional.
+
+To achieve unconditional directives, indentation needs to be removed
+as indentation is part of the syntax.
+
+[1] https://github.com/mypaint/libmypaint/issues/178
+---
+ configure.ac | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 416d9fe..9479db9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -248,8 +248,9 @@ if test "x$enable_i18n" != "xno"; then
+   AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+                      [The prefix for our gettext translation domains.])
+   AC_SUBST(GETTEXT_PACKAGE)
+-  IT_PROG_INTLTOOL
+-  AM_GLIB_GNU_GETTEXT
++IT_PROG_INTLTOOL
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.21])
+ 
+   dnl Debian: stdlib
+   dnl Windows, and OSX: -lintl
+-- 
+2.49.0
+

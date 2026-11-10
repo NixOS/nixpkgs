@@ -1,0 +1,107 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  gitMinimal,
+  python3,
+  installShellFiles,
+  installAgentSkills,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "worktrunk";
+  version = "0.81.0";
+
+  src = fetchFromGitHub {
+    owner = "max-sixty";
+    repo = "worktrunk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sgim8WgH5nGr1GhSZRtwkRu87b/S2W9gp7eHgtTGBAo=";
+  };
+
+  cargoHash = "sha256-cJ5rd4+5IIxuUTWWAe5DF2cDU+lyZVMUq+l+I029peU=";
+
+  cargoBuildFlags = [ "--package=worktrunk" ];
+
+  # vergen-gitcl calls `git describe` at build time; VERGEN_IDEMPOTENT makes it
+  # fall back gracefully when no git history is available (Nix sandbox).
+  env.VERGEN_IDEMPOTENT = "1";
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/shell_exec.rs \
+      --replace-fail '/usr/bin/python3' 'python3'
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    installAgentSkills
+    # wt reads config from $HOME when generating completions
+    writableTmpDirAsHomeHook
+  ];
+
+  dontInstallAgentSkills = true;
+
+  postInstall = ''
+    installSkill skills/worktrunk worktrunk
+    installSkill skills/wt-switch-create worktrunk
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wt \
+      --bash <($out/bin/wt config shell completions bash) \
+      --fish <($out/bin/wt config shell completions fish) \
+      --nushell <($out/bin/wt config shell completions nu) \
+      --zsh <($out/bin/wt config shell completions zsh)
+  '';
+
+  nativeCheckInputs = [
+    gitMinimal
+    # shell_exec and signal_forwarder tests run python3 as a child process
+    python3
+  ];
+
+  checkFlags = [
+    # Integration tests use insta snapshots with environment-specific paths
+    "--skip=integration_tests::"
+    # Relies on environment-specific behavior. Notably, fails on the r-ryantm update-bot host
+    "--skip=git::repository::working_tree::tests::working_tree_diff_stats_with_untracked_reports_only_a_moves_line_delta"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These tests probe the live process table — on macOS that means libproc
+    # (`proc_listallpids` / `proc_pidinfo`). Inside the Nix darwin sandbox,
+    # those calls are denied. The build process can't even read its own pid
+    # from the table, so two tests panic:
+    "--skip=shell::utils::tests::test_process_name_and_ppid_self"
+    "--skip=shell::utils::tests::test_probe_reports_invoked_name_for_sh"
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Git worktree manager for parallel AI agent workflows";
+    longDescription = ''
+      worktrunk wraps git worktree with a simpler interface and integrates with
+      AI coding tools like Claude Code, Cursor, and Aider.
+    '';
+    homepage = "https://worktrunk.dev/";
+    changelog = "https://github.com/max-sixty/worktrunk/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wt";
+    maintainers = with lib.maintainers; [
+      siriobalmelli
+      DuskyElf
+      yzx9
+      nirvdrum
+    ];
+  };
+})

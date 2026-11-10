@@ -1,0 +1,55 @@
+From a4ed1625ee4e74c4e8664742165d6a485b737d57 Mon Sep 17 00:00:00 2001
+From: Jonas Rembser <jonas.rembser@cern.ch>
+Date: Tue, 22 Apr 2025 12:36:46 +0200
+Subject: [PATCH] Work around find_package(LLVM) overwriting
+ LLVM_LINK_LLVM_DYLIB
+
+---
+ clang/CMakeLists.txt          | 10 ++++++++++
+ .../clang/cmake/modules/ClangConfig.cmake.in           |  6 ++++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/clang/CMakeLists.txt b/clang/CMakeLists.txt
+index 5f2b7f064d..a9581d081e 100644
+--- a/clang/CMakeLists.txt
++++ b/clang/CMakeLists.txt
+@@ -28,7 +28,17 @@ if(CLANG_BUILT_STANDALONE)
+     mark_as_advanced(LLVM_ENABLE_ASSERTIONS)
+   endif()
+ 
++  # Remember current value of LLVM_LINK_LLVM_DYLIB and reset later, because
++  # find_package(LLVM) is overwriting it without a good reason. See:
++  # https://github.com/llvm/llvm-project/pull/135570
++  if(DEFINED LLVM_LINK_LLVM_DYLIB)
++    set(llvm_link_llvm_dylib ${LLVM_LINK_LLVM_DYLIB})
++  endif()
+   find_package(LLVM REQUIRED HINTS "${LLVM_CMAKE_DIR}")
++  if(DEFINED llvm_link_llvm_dylib)
++    set(LLVM_LINK_LLVM_DYLIB ${llvm_link_llvm_dylib})
++  endif()
++
+   list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
+ 
+   # Turn into CACHE PATHs for overwritting
+diff --git a/clang/cmake/modules/ClangConfig.cmake.in b/clang/cmake/modules/ClangConfig.cmake.in
+index 5f67681649..36a34ddab2 100644
+--- a/clang/cmake/modules/ClangConfig.cmake.in
++++ b/clang/cmake/modules/ClangConfig.cmake.in
+@@ -3,8 +3,14 @@
+ @CLANG_CONFIG_CODE@
+ 
+ set(LLVM_VERSION @LLVM_VERSION_MAJOR@.@LLVM_VERSION_MINOR@.@LLVM_VERSION_PATCH@)
++
++# ROOT calls find_package(LLVM) before find_package(Clang), and
++# find_package(LLVM) is overwriting LLVM_LINK_LLVM_DYLIB without a good
++# reason. See: https://github.com/llvm/llvm-project/pull/135570
++# So we need to set it to what it needs to be for ROOT.
+ find_package(LLVM ${LLVM_VERSION} EXACT REQUIRED CONFIG
+              HINTS "@CLANG_CONFIG_LLVM_CMAKE_DIR@")
++set(LLVM_LINK_LLVM_DYLIB OFF)
+ 
+ set(CLANG_EXPORTED_TARGETS "@CLANG_EXPORTS@")
+ set(CLANG_CMAKE_DIR "@CLANG_CONFIG_CMAKE_DIR@")
+-- 
+2.49.0
+

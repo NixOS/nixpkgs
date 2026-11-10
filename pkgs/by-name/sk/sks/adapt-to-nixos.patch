@@ -1,0 +1,27 @@
+--- a/version.ml	2018-09-08 15:56:18.919154257 +0200
++++ b/version.ml	2018-09-08 15:56:07.544028575 +0200
+@@ -24,16 +24,6 @@
+ 
+ let run () =
+   let bdb_version = Bdb.version () in
+-  let dbstats_dir =
+-    let split = Str.regexp_string "." in
+-    let major_minor_string major minor =
+-      sprintf "Further details about the BDB environment can be seen by \
+-	  executing\ndb%s.%s_stat -x in the KDB and Ptree directories\n" major minor
+-    in
+-    match Str.split split bdb_version with
+-    | major :: minor :: _ -> major_minor_string major minor
+-    | [] | _ :: []        -> major_minor_string "X"   "Y"
+-  in
+   printf "SKS version %s%s\n"
+     Common.version Common.version_suffix;
+ 	
+@@ -44,5 +34,6 @@
+          requirement for recon of SKS %s\n"
+       Common.compatible_version_string;
+ 	
+-  printf "%s" dbstats_dir
++  printf "Further details about the BDB environment can be seen by executing\n\
++    db_stat -x in the KDB and PTree directories\n"
+ 

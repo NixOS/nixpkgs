@@ -1,0 +1,49 @@
+From b225ea23753ce35356ad1b53c0854813004bb605 Mon Sep 17 00:00:00 2001
+From: rathmann <Uwe.Rathmann@tigertal.de>
+Date: Thu, 22 May 2025 15:33:04 +0200
+Subject: [PATCH] pkgconfig for Qt 5/6 adjustments
+
+---
+ src/src.pro | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/src/src.pro b/src/src.pro
+index 96e0624..8990ece 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -81,22 +81,27 @@ contains(QWT_CONFIG, QwtPkgConfig) {
+ 
+     greaterThan(QT_MAJOR_VERSION, 4) {
+ 
+-        QMAKE_PKGCONFIG_FILE = Qt$${QT_MAJOR_VERSION}$${QMAKE_PKGCONFIG_NAME}
+-        QMAKE_PKGCONFIG_REQUIRES = Qt5Widgets Qt5Concurrent Qt5PrintSupport
++        QTLIB_PREFIX = Qt$${QT_MAJOR_VERSION}  # e.g., "Qt5"
++        QMAKE_PKGCONFIG_FILE = $${QTLIB_PREFIX}$${QMAKE_PKGCONFIG_NAME}  # e.g., "Qt5Qwt6"
++
++        # Base Qt library requirements
++        QMAKE_PKGCONFIG_REQUIRES = $${QTLIB_PREFIX}Widgets
++        QMAKE_PKGCONFIG_REQUIRES += $${QTLIB_PREFIX}Concurrent
++        QMAKE_PKGCONFIG_REQUIRES += $${QTLIB_PREFIX}PrintSupport
+ 
+         contains(QWT_CONFIG, QwtSvg) {
+-            QMAKE_PKGCONFIG_REQUIRES += Qt5Svg
++            QMAKE_PKGCONFIG_REQUIRES += $${QTLIB_PREFIX}Svg
+         }
+ 
+         contains(QWT_CONFIG, QwtOpenGL) {
+-            QMAKE_PKGCONFIG_REQUIRES += Qt5OpenGL
++            QMAKE_PKGCONFIG_REQUIRES += $${QTLIB_PREFIX}OpenGL
+         }
+ 
+         QMAKE_DISTCLEAN += $${DESTDIR}/$${QMAKE_PKGCONFIG_DESTDIR}/$${QMAKE_PKGCONFIG_FILE}.pc
+     }
+     else {
+ 
+-        # there is no QMAKE_PKGCONFIG_FILE fo Qt4
++        # there is no QMAKE_PKGCONFIG_FILE for Qt4
+         QMAKE_PKGCONFIG_REQUIRES = QtGui 
+ 
+         contains(QWT_CONFIG, QwtSvg) {
+-- 
+2.54.0
+

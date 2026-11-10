@@ -1,0 +1,24 @@
+diff --git a/tests/client/helpers.py b/tests/client/helpers.py
+index f3b2467..279d219 100644
+--- a/tests/client/helpers.py
++++ b/tests/client/helpers.py
+@@ -124,6 +124,7 @@ class ChannelConnector(BaseConnector):
+                 protocol,
+                 self._ssl_context,
+                 server_side=False,
++                server_hostname=req.host,
+             )
+         except MultiplexerTransportClose as ex:
+             raise ClientConnectorError(
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 1ff805f..021bb8c 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -630,6 +630,7 @@ async def snitun_loopback(
+             server_protocol,
+             client_ssl_context,
+             server_side=False,
++            server_hostname="localhost",
+         )
+         assert tls_wrapped_server_transport is not None, "Failed to start TLS"
+         server_protocol.connection_made(tls_wrapped_server_transport)

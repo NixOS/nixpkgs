@@ -1,0 +1,20 @@
+From: Sebastián Mancilla <smancill@smancill.dev>
+Subject: Fix virtual destruction
+
+---
+ src/shogun/solver/LDASolver.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/shogun/solver/LDASolver.h b/src/shogun/solver/LDASolver.h
+index 9300a85c5..d500eca5d 100644
+--- a/src/shogun/solver/LDASolver.h
++++ b/src/shogun/solver/LDASolver.h
+@@ -87,7 +87,7 @@ namespace shogun
+ 			compute_within_cov();
+ 		}
+ 
+-		~LDASolver()
++		virtual ~LDASolver()
+ 		{
+ 			SG_UNREF(m_features)
+ 			SG_UNREF(m_labels)

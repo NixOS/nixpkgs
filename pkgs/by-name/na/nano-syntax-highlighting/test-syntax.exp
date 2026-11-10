@@ -1,0 +1,42 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -p expect -p nano -i "expect -f"
+
+proc abort {error} {
+    puts stderr "\n\n\033\[31m$error\033\[39m"
+    exit 1
+}
+
+if {$argc != 2} {
+    abort [format "Usage: %s <nanorcPath> <syntaxName>" [file tail "$argv0"]]
+}
+lassign $argv nanorcPath syntaxName
+
+puts stderr "Testing $syntaxName ($nanorcPath)"
+
+set timeout 10
+# Ensure nano generates ANSI colors so that we can detect errors
+set env(TERM) xterm-256color
+spawn nano --rcfile "$nanorcPath" --syntax "$syntaxName"
+# Send Ctrl-X (exit)
+send "\030"
+lassign [wait] _ _ osError exitCode
+
+if {$osError == -1} {
+    abort "errno: $exitCode"
+} elseif {$exitCode != 0} {
+    abort "nano exited with status $exitCode"
+}
+
+expect {
+    # Check for errors printed to stderr after the nano buffer is closed
+    # Example: "Error in /nix/store/.../nano.nanorc on line 26: Color 'normal' takes no prefix"
+    -re {Error.*} {
+      abort $expect_out(0,string)
+    }
+
+    # Check for Nano status bar errors (red background: \033[41m)
+    # Example: "Unknown syntax name: Invalid"
+    -re {\e\[41m[\s\[]*([^\e]*?)[\s\]]*\e} {
+      abort $expect_out(1,string)
+    }
+}

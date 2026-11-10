@@ -1,0 +1,18 @@
+Remove the version-less duplicate declaration of org.yaml:snakeyaml.
+
+Maven >= 3.10 rejects duplicate dependencies in a POM as a model
+validation error. The versioned declaration earlier in the file is kept
+so the version still comes from the snakeyaml.version property.
+--- a/pom.xml
++++ b/pom.xml
+@@ -332,10 +332,6 @@
+             <artifactId>javers-core</artifactId>
+         </dependency>
+ 
+-        <dependency>
+-            <groupId>org.yaml</groupId>
+-            <artifactId>snakeyaml</artifactId>
+-        </dependency>
+ 
+         <dependency>
+             <groupId>org.graalvm.polyglot</groupId>

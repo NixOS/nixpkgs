@@ -1,0 +1,26 @@
+From: John Ericson <git@JohnEricson.me>
+Subject: [PATCH] libatomic: Do not install into the toplevel gcc objdir
+
+GCC 16 added an `all-local` hook that copies `libatomic.la` into
+`../../gcc/`, so that the compiler being built in the same object tree can
+link `-latomic`.  There is no such tree here: each runtime library is built
+on its own, against an already-finished compiler, which is given the library
+through the wrapper instead.  The rule just fails:
+
+    install: cannot create regular file '/build/build/../../gcc/libatomic.so.1.2.0'
+
+Drop the hook rather than the rule, so the difference from upstream stays as
+small as possible.
+---
+diff --git a/libatomic/Makefile.am b/libatomic/Makefile.am
+index 49689d451..c389e8cd6 100644
+--- a/libatomic/Makefile.am
++++ b/libatomic/Makefile.am
+@@ -181,7 +181,6 @@ all-multi: $(libatomic_la_LIBADD)
+ # from $gcc_objdir seems to fix the issue.
+ 
+ gcc_objdir = `pwd`/$(MULTIBUILDTOP)../../gcc/
+-all-local: stmp-libatomic
+ stmp-libatomic: libatomic.la
+ 	$(LIBTOOL) --mode=install $(INSTALL_DATA) libatomic.la $(gcc_objdir)$(MULTISUBDIR)/
+ if LIBAT_BUILD_ASNEEDED_SOLINK

@@ -1,0 +1,102 @@
+From 39c6275341ac22f99342b92d0096c1bc5d753460 Mon Sep 17 00:00:00 2001
+From: Ryan Burns <rtburns@protonmail.com>
+Date: Sun, 14 Jun 2026 16:54:22 -0700
+Subject: [PATCH] Respect relative/absolute CMAKE_INSTALL_INCLUDEDIR
+
+CMAKE_INSTALL_INCLUDEDIR is already used in some places, but not
+consistently, causing headers to be installed to multiple locations when
+it is specified differently from the default "include" value.
+
+Additionally, upstream GNUInstallDirs documentations notes that install
+dirs may be specified as relative (to install prefix) or absolute paths,
+so we should only append to the install prefix when non-absolute paths
+are given.
+---
+ cmake/libappimage.pc.in               |  5 ++---
+ cmake/scripts.cmake                   |  2 +-
+ src/CMakeLists.txt                    | 11 +++++++++++
+ src/libappimage/CMakeLists.txt        |  4 ++--
+ src/libappimage_shared/CMakeLists.txt |  2 +-
+ 5 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/cmake/libappimage.pc.in b/cmake/libappimage.pc.in
+index 32682d86..6bff1e1a 100644
+--- a/cmake/libappimage.pc.in
++++ b/cmake/libappimage.pc.in
+@@ -1,7 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-# Use prefix as base path to make the package relocatable
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_REL_LIBDIR@
++includedir=@CMAKE_INSTALL_REL_INCLUDEDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: AppImage management and desktop integration
+diff --git a/cmake/scripts.cmake b/cmake/scripts.cmake
+index 0228e739..6482440a 100644
+--- a/cmake/scripts.cmake
++++ b/cmake/scripts.cmake
+@@ -257,6 +257,6 @@ function(configure_libappimage_module target)
+     target_include_directories(${target}
+         PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/>
+         PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/libappimage>
+-        INTERFACE $<INSTALL_INTERFACE:include/>
++        INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/>
+     )
+ endfunction()
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 9737205b..17a6cb3f 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -47,6 +47,17 @@ install(
+ 
+ if(NOT LIBAPPIMAGE_SHARED_ONLY)
+     # pkg-config
++    # Use prefix as base path to make the package relocatable, when possible
++    if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++        set(CMAKE_INSTALL_REL_INCLUDEDIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
++    else()
++        set(CMAKE_INSTALL_REL_INCLUDEDIR "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++    endif()
++    if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++        set(CMAKE_INSTALL_REL_LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
++    else()
++        set(CMAKE_INSTALL_REL_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++    endif()
+     configure_file("${PROJECT_SOURCE_DIR}/cmake/libappimage.pc.in" "${PROJECT_BINARY_DIR}/libappimage.pc" @ONLY)
+ 
+     install(FILES "${PROJECT_BINARY_DIR}/libappimage.pc"
+diff --git a/src/libappimage/CMakeLists.txt b/src/libappimage/CMakeLists.txt
+index 47005221..992b5fad 100644
+--- a/src/libappimage/CMakeLists.txt
++++ b/src/libappimage/CMakeLists.txt
+@@ -70,13 +70,13 @@ install(
+ # install public headers
+ install(
+     DIRECTORY ${PROJECT_SOURCE_DIR}/include/appimage/
+-    DESTINATION include/appimage
++    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/appimage"
+     COMPONENT libappimage-dev
+ )
+ 
+ install(
+     DIRECTORY ${PROJECT_BINARY_DIR}/generated-headers/appimage/
+-    DESTINATION include/appimage
++    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/appimage"
+     COMPONENT libappimage-dev
+ )
+ 
+diff --git a/src/libappimage_shared/CMakeLists.txt b/src/libappimage_shared/CMakeLists.txt
+index ef7238bb..234414d3 100644
+--- a/src/libappimage_shared/CMakeLists.txt
++++ b/src/libappimage_shared/CMakeLists.txt
+@@ -13,7 +13,7 @@ add_library(libappimage_shared STATIC
+ set_target_properties(libappimage_shared PROPERTIES PREFIX "")
+ target_include_directories(libappimage_shared PUBLIC
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+-    $<INSTALL_INTERFACE:include>
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ set_property(TARGET libappimage_shared PROPERTY PUBLIC_HEADER ${libappimage_shared_public_header})
+ target_link_libraries(libappimage_shared PRIVATE libappimage_hashlib)

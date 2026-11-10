@@ -1,0 +1,52 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  isPy3k,
+  python,
+}:
+
+buildPythonPackage rec {
+  version = "0.99.2dev-384-2b73caca";
+  format = "setuptools";
+  pname = "kaa-base";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ojlWtVd/GCW0wQnHTRy76Zukvch470FdwOl/TtD/f0w=";
+  };
+
+  doCheck = false;
+
+  disabled = isPyPy || isPy3k;
+
+  # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/${python.sitePackages}"
+
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+
+    ${python}/bin/${python.executable} setup.py install \
+      --install-lib=$out/${python.sitePackages} \
+      --prefix="$out"
+
+    eapth="$out/${python.sitePackages}/easy-install.pth"
+    if [ -e "$eapth" ]; then
+    mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
+    fi
+
+    rm -f "$out/${python.sitePackages}"/site.py*
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Generic application framework, providing the foundation for other modules";
+    homepage = "https://github.com/freevo/kaa-base";
+    license = lib.licenses.lgpl21;
+    maintainers = [ ];
+  };
+}

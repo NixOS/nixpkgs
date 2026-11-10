@@ -1,0 +1,32 @@
+From 5bfab42bc531e40d99ea88a1fb7662c8388ee833 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Fri, 9 Jan 2026 21:23:39 +0100
+Subject: [PATCH] Remove cm_print_error declaration
+
+With CMocka 2.0.0 this `cm_print_error` is now a macro so using it as
+a function name causes syntax errors. I've checked that 1.1.8 has this
+declaration in `cmocka.h` header so it seems to no longer be needed even
+with the older version.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ test/unit/drawmatrix.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/test/unit/drawmatrix.c b/test/unit/drawmatrix.c
+index 2e263fc0..49623388 100644
+--- a/test/unit/drawmatrix.c
++++ b/test/unit/drawmatrix.c
+@@ -15,9 +15,6 @@ static int compareDouble(double a, double b, double epsilon)
+ 	return diff <= epsilon * eps_scale;
+ }
+ 
+-// It's not defined in cmocka.h but exists in cmocka.c
+-void cm_print_error(const char * const format, ...);
+-
+ // Check if a == b without aborting the test.
+ static int expectDoubleEqual(double a, double b, int first_error, const char* error_prefix)
+ {
+-- 
+2.52.0
+

@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index fe65e47..b26b770 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1038,12 +1038,18 @@ ifeq ($(GCC_MAJORVERSION_BELOW15),1)
+   CMAKE_CFLAGS:=""
+ endif
+ 
++ifeq ($(DISCORDRPC),1)
++	LDFLAGS += -L$(DISCORDRPC_LD_PATH) -ldiscord-rpc
++endif
++LDFLAGS += -L$(APCPP_LD_PATH) -lAPCpp
++LDFLAGS += $(shell pkg-config --libs sdl2 ixwebsocket zlib)
++
++
+ $(APCPP_LIB): lib/APCpp/Archipelago.cpp lib/APCpp/Archipelago.h
+ 	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) -DMBEDTLS_FATAL_WARNINGS=OFF -DCMAKE_C_FLAGS=$(CMAKE_CFLAGS) && CXX=$(CXX) cmake --build .
+ 
+-$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(if $(RPC_LIBS),$(BUILD_DIR)/$(RPC_LIBS),) $(APCPP_LIB)
+-	$(LD) $(LDFLAGS_STATIC) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) $(APCPP_LIB) -Wl,-rpath,.
+-	cp $(APCPP_LIB) $(BUILD_DIR)
++$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES)
++	$(LD) $(LDFLAGS_STATIC) -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) -Wl,-rpath,.
+ 
+ .PHONY: all clean distclean default diff test load libultra res
+ .PRECIOUS: $(BUILD_DIR)/bin/%.elf $(SOUND_BIN_DIR)/%.ctl $(SOUND_BIN_DIR)/%.tbl $(SOUND_SAMPLE_TABLES) $(SOUND_BIN_DIR)/%.s $(BUILD_DIR)/%

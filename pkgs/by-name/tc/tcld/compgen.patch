@@ -1,0 +1,12 @@
+diff --git a/app/app.go b/app/app.go
+index a9c2dae..23d1527 100644
+--- a/app/app.go
++++ b/app/app.go
+@@ -38,6 +38,7 @@ func NewApp(params AppParams) (*cli.App, error) {
+ 			EnableDebugLogsFlag,
+ 		},
+ 		Commands: enabledCommands,
++		EnableBashCompletion: true,
+ 	}
+ 
+ 	return app, nil

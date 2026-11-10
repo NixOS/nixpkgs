@@ -1,0 +1,132 @@
+diff --git c/CMakeLists.txt w/CMakeLists.txt
+index 63803d8..49982bc 100644
+--- c/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -25,6 +25,12 @@ option(MOONCHILD_INPUT_SDL3 "Use SDL3 input backend" ON)
+ 
+ option(MOONCHILD_AUDIO_SDL3 "Use SDL3 audio backend" ON)
+ 
++# Vendoring options
++option(MOONCHILD_VENDORED_SDL3 "Use vendored SDL3 library" ON)
++option(MOONCHILD_VENDORED_ZLIB "Use vendored zlib library" ON)
++option(MOONCHILD_VENDORED_GAMECONTROLLERDB "Use vendored SDL_GameControllerDB" ON)
++option(MOONCHILD_VENDORED_PL_MPEG "Use vendored pl_mpeg library" ON)
++
+ # Aggregate flags
+ if(MOONCHILD_WINDOW_SDL3 OR MOONCHILD_RENDERER_SDL3 OR MOONCHILD_INPUT_SDL3 OR MOONCHILD_AUDIO_SDL3)
+     set(MOONCHILD_USE_SDL3 ON)
+@@ -57,6 +63,7 @@ endif()
+ 
+ # SDL3 stuff
+ if(MOONCHILD_USE_SDL3)
++  if(MOONCHILD_VENDORED_SDL3)
+     set(SDL_SHARED       OFF CACHE BOOL "" FORCE)
+     set(SDL_STATIC       ON  CACHE BOOL "" FORCE)
+     set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+@@ -74,13 +81,28 @@ if(MOONCHILD_USE_SDL3)
+     else()
+         message(FATAL_ERROR "Could not find an SDL3 target to link!")
+     endif()
++  else()
++    find_package(SDL3)
++  endif()
+ endif()
+ 
+ # zlib stuff
+-set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+-set(ZLIB_BUILD_SHARED   OFF CACHE BOOL "" FORCE)
+-set(ZLIB_BUILD_STATIC   ON  CACHE BOOL "" FORCE)
+-add_subdirectory("${LIBRARY_DIR}/zlib" "${CMAKE_BINARY_DIR}/zlib" EXCLUDE_FROM_ALL)
++if(MOONCHILD_VENDORED_ZLIB)
++  set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
++  set(ZLIB_BUILD_SHARED   OFF CACHE BOOL "" FORCE)
++  set(ZLIB_BUILD_STATIC   ON  CACHE BOOL "" FORCE)
++  add_subdirectory("${LIBRARY_DIR}/zlib" "${CMAKE_BINARY_DIR}/zlib" EXCLUDE_FROM_ALL)
++else()
++  find_package(ZLIB)
++endif()
++
++# SDL_gamecontrollerdb path
++if(MOONCHILD_VENDORED_GAMECONTROLLERDB)
++  set(MOONCHILD_GAMECONTROLLERDB_PATH "gamecontrollerdb.txt")
++else()
++  set(MOONCHILD_GAMECONTROLLERDB_PATH "$ENV{MOONCHILD_GAMECONTROLLERDB_PATH}")
++  file(TO_CMAKE_PATH "${MOONCHILD_GAMECONTROLLERDB_PATH}" MOONCHILD_GAMECONTROLLERDB_PATH)
++endif()
+ 
+ # Game + framework
+ # TODO: Unglobify this
+@@ -171,6 +193,15 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
+     ${LIBRARY_DIR}/pl_mpeg
+     ${BACKEND_INCLUDES}
+ )
++if(MOONCHILD_VENDORED_PL_MPEG)
++  target_include_directories(${EXECUTABLE_NAME} PRIVATE
++    ${LIBRARY_DIR}/pl_mpeg
++  )
++else()
++  target_include_directories(${EXECUTABLE_NAME} PRIVATE
++    $ENV{MOONCHILD_PL_MPEG_PATH}
++  )
++endif()
+ 
+ # Backend selection macros
+ if(MOONCHILD_WINDOW_SDL3)
+@@ -185,6 +216,11 @@ if(MOONCHILD_RENDERER_SDL3)
+ endif()
+ if(MOONCHILD_INPUT_SDL3)
+     target_compile_definitions(${EXECUTABLE_NAME} PRIVATE MOONCHILD_INPUT_SDL3)
++    if(NOT MOONCHILD_GAMECONTROLLERDB_PATH STREQUAL "")
++        target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
++            MOONCHILD_GAMECONTROLLERDB_PATH=\"${MOONCHILD_GAMECONTROLLERDB_PATH}\"
++        )
++    endif()
+ endif()
+ if(MOONCHILD_AUDIO_SDL3)
+     target_compile_definitions(${EXECUTABLE_NAME} PRIVATE MOONCHILD_AUDIO_SDL3)
+@@ -201,10 +237,16 @@ if(MSVC)
+     target_compile_definitions(${EXECUTABLE_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+ endif()
+ 
+-target_link_libraries(${EXECUTABLE_NAME} PRIVATE zlibstatic)
++if(MOONCHILD_VENDORED_ZLIB)
++  target_link_libraries(${EXECUTABLE_NAME} PRIVATE zlibstatic)
++else()
++  target_link_libraries(${EXECUTABLE_NAME} PRIVATE ZLIB::ZLIB)
++endif()
+ 
+-if(MOONCHILD_USE_SDL3)
++if(MOONCHILD_USE_SDL3 AND MOONCHILD_VENDORED_SDL3)
+     target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${MOONCHILD_SDL_TARGET})
++elseif(MOONCHILD_USE_SDL3 AND NOT MOONCHILD_VENDORED_SDL3)
++    target_link_libraries(${EXECUTABLE_NAME} PRIVATE SDL3::SDL3)
+ endif()
+ 
+ # Platform specific configuration
+@@ -239,7 +281,7 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+     RUNTIME_OUTPUT_DIRECTORY_RELEASE        ${MOONCHILD_BIN_DIR}/Release
+ )
+ 
+-if(MOONCHILD_INPUT_SDL3 AND NOT EMSCRIPTEN)
++if(MOONCHILD_INPUT_SDL3 AND NOT EMSCRIPTEN AND MOONCHILD_VENDORED_GAMECONTROLLERDB)
+     add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+         COMMAND ${CMAKE_COMMAND} -E copy_if_different
+             "${LIBRARY_DIR}/SDL_GameControllerDB/gamecontrollerdb.txt"
+diff --git c/Platform/Backends/Input/SDL3Input.cpp w/Platform/Backends/Input/SDL3Input.cpp
+index d214516..1412c00 100644
+--- c/Platform/Backends/Input/SDL3Input.cpp
++++ w/Platform/Backends/Input/SDL3Input.cpp
+@@ -19,10 +19,12 @@ bool SDL3Input::Init()
+         return false;
+     }
+ 
+-    if (SDL_AddGamepadMappingsFromFile("gamecontrollerdb.txt") < 0)
++#ifdef MOONCHILD_GAMECONTROLLERDB_PATH
++    if (SDL_AddGamepadMappingsFromFile(MOONCHILD_GAMECONTROLLERDB_PATH) < 0)
+     {
+         printf("SDL gamepad mapping load failed! %s\n", SDL_GetError());
+     }
++#endif
+ 
+     int count = 0;
+     if (SDL_JoystickID* ids = SDL_GetGamepads(&count))

@@ -1,0 +1,91 @@
+From 8bc85cdac6c39215d0d7ea4facfea593efe785ec Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 07/18] Add CrashReporterClient header
+
+Based on: https://github.com/apple-oss-distributions/WebKit2/blob/523170e4638816ec4a39c8128a4f3c4ab70a6f89/Platform/spi/Cocoa/CrashReporterClientSPI.h
+---
+ include/CrashReporterClient.h | 48 +++++++++++++++++++++++++++++++++++
+ include/meson.build           |  4 +++
+ meson.build                   |  1 +
+ 3 files changed, 53 insertions(+)
+ create mode 100644 include/CrashReporterClient.h
+ create mode 100644 include/meson.build
+
+diff --git a/include/CrashReporterClient.h b/include/CrashReporterClient.h
+new file mode 100644
+index 0000000..f892448
+--- /dev/null
++++ b/include/CrashReporterClient.h
+@@ -0,0 +1,48 @@
++/*
++ * Copyright (C) 2017 Apple Inc. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS
++ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
++ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
++ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
++ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
++ * THE POSSIBILITY OF SUCH DAMAGE.
++ */
++#pragma once
++
++#define CRASHREPORTER_ANNOTATIONS_SECTION "__crash_info"
++#define CRASHREPORTER_ANNOTATIONS_VERSION 5
++#define CRASH_REPORTER_CLIENT_HIDDEN __attribute__((visibility("hidden")))
++
++#define _crc_make_getter(attr) ((const char *)(unsigned long)gCRAnnotations.attr)
++#define _crc_make_setter(attr, arg) (gCRAnnotations.attr = (uint64_t)(unsigned long)(arg))
++#define CRGetCrashLogMessage() _crc_make_getter(message)
++#define CRSetCrashLogMessage(m) _crc_make_setter(message, m)
++
++struct crashreporter_annotations_t {
++    uint64_t version;
++    uint64_t message;
++    uint64_t signature_string;
++    uint64_t backtrace;
++    uint64_t message2;
++    uint64_t thread;
++    uint64_t dialog_mode;
++    uint64_t abort_cause;
++};
++
++CRASH_REPORTER_CLIENT_HIDDEN
++extern struct crashreporter_annotations_t gCRAnnotations;
+diff --git a/include/meson.build b/include/meson.build
+new file mode 100644
+index 0000000..bbe6fcb
+--- /dev/null
++++ b/include/meson.build
+@@ -0,0 +1,4 @@
++add_project_arguments(
++    '-I' + meson.global_source_root() / 'include',
++    language : [ 'c', 'cpp' ],
++)
+diff --git a/meson.build b/meson.build
+index cd4e8da..a79f03f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,4 +39,5 @@ openssl_dep = dependency(
+ xar_dep = cc.find_library('xar')
+ 
+ 
++subdir('include')
+ subdir('src')
+-- 
+2.47.2
+

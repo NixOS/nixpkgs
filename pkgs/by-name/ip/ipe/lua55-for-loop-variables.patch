@@ -1,0 +1,38 @@
+diff --git a/scripts/update-styles.lua b/scripts/update-styles.lua
+index 1265fcf..910f1a4 100644
+--- a/scripts/update-styles.lua
++++ b/scripts/update-styles.lua
+@@ -20,7 +20,8 @@ local home = os.getenv("HOME")
+ 
+ if ipestyles then
+   styleDirs = { "." }
+-  for w in string.gmatch(ipestyles, "[^:;]+") do
++  for dir in string.gmatch(ipestyles, "[^:;]+") do
++    local w = dir
+     if w == "_" then w = config.system_styles end
+     styleDirs[#styleDirs + 1] = w
+   end
+diff --git a/src/ipe/lua/main.lua b/src/ipe/lua/main.lua
+index 7f724bb..07de184 100644
+--- a/src/ipe/lua/main.lua
++++ b/src/ipe/lua/main.lua
+@@ -363,7 +363,8 @@ local home = os.getenv("HOME")
+ local ipeletpath = os.getenv("IPELETPATH")
+ if ipeletpath then
+   config.ipeletDirs = {}
+-  for w in string.gmatch(ipeletpath, prefs.fname_pattern) do
++  for ipelet in string.gmatch(ipeletpath, prefs.fname_pattern) do
++    local w = ipelet
+     if w == "_" then w = config.system_ipelets end
+     if w:sub(1,4) == "ipe:" then
+       w = config.ipedrive .. w:sub(5)
+@@ -388,7 +389,8 @@ end
+ local ipestyles = os.getenv("IPESTYLES")
+ if ipestyles then
+   config.styleDirs = {}
+-  for w in string.gmatch(ipestyles, prefs.fname_pattern) do
++  for dir in string.gmatch(ipestyles, prefs.fname_pattern) do
++    local w = dir
+     if w == "_" then w = config.system_styles end
+     if w:sub(1,4) == "ipe:" then
+       w = config.ipedrive .. w:sub(5)

@@ -1,0 +1,25 @@
+diff --git a/src/Utils/ui/config.py b/src/Utils/ui/config.py
+index 1bbc89490..2f9bcf082 100644
+--- a/src/Utils/ui/config.py
++++ b/src/Utils/ui/config.py
+@@ -1864,16 +1864,16 @@ def save_allow_prerelease(value: bool) -> None:
+ 
+ 
+ def load_update_notifications() -> bool:
+-    """Whether to show the app-update banner on startup (default True)."""
++    """Whether to show the app-update banner on startup (default False)."""
+     path = get_ui_config_path()
+     if not path.is_file():
+-        return True
++        return False
+     try:
+         parser = _read_ini(path)
+         return parser.getboolean(_UPDATES_SECTION, "update_notifications",
+-                                 fallback=True)
++                                 fallback=False)
+     except Exception:
+-        return True
++        return False
+ 
+ 
+ def save_update_notifications(value: bool) -> None:

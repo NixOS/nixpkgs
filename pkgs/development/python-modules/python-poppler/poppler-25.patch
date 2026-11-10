@@ -1,0 +1,39 @@
+diff --git a/src/cpp/image.cpp b/src/cpp/image.cpp
+index 725359b..91131f4 100644
+--- a/src/cpp/image.cpp
++++ b/src/cpp/image.cpp
+@@ -102,7 +102,11 @@ PYBIND11_MODULE(image, m)
+         .def(py::init<int, int, image::format_enum>(), py::arg("iwidth"), py::arg("iheight"), py::arg("iformat"))
+         .def("bytes_per_row", &image::bytes_per_row)
+         // .def("const_data", &image::const_data)
++#if HAS_VERSION(25, 1)
++        .def("copy", &image::copy)
++#else
+         .def("copy", &image::copy, py::arg("rect") = rect())
++#endif
+         .def("data", &data)
+         .def("set_data", &set_data)
+         .def("format", &image::format)
+diff --git a/src/poppler/image.py b/src/poppler/image.py
+index a8c27e2..0a6834c 100644
+--- a/src/poppler/image.py
++++ b/src/poppler/image.py
+@@ -16,7 +16,6 @@
+ # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ 
+ from poppler.cpp import image
+-from poppler.rectangle import Rectangle
+ 
+ 
+ class Image:
+@@ -47,8 +46,8 @@ def bytes_per_row(self):
+     def const_data(self):
+         return self._image.data()
+ 
+-    def copy(self, rect=None):
+-        image = self._image.copy(rect or Rectangle()._rect)
++    def copy(self):
++        image = self._image.copy()
+         return Image.from_object(image)
+ 
+     @property

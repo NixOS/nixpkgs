@@ -1,0 +1,17 @@
+diff --git a/cps/logger.py b/cps/logger.py
+index b204de31..3206e2bf 100644
+--- a/cps/logger.py
++++ b/cps/logger.py
+@@ -32,10 +32,10 @@ ACCESS_FORMATTER_TORNADO = Formatter("[%(asctime)s] %(message)s")
+ 
+ FORMATTER           = Formatter("[%(asctime)s] %(levelname)5s {%(name)s:%(lineno)d} %(message)s")
+ DEFAULT_LOG_LEVEL   = logging.INFO
+-DEFAULT_LOG_FILE    = os.path.join(_CONFIG_DIR, "calibre-web.log")
+-DEFAULT_ACCESS_LOG  = os.path.join(_CONFIG_DIR, "access.log")
+ LOG_TO_STDERR       = '/dev/stderr'
+ LOG_TO_STDOUT       = '/dev/stdout'
++DEFAULT_LOG_FILE    = LOG_TO_STDOUT
++DEFAULT_ACCESS_LOG  = LOG_TO_STDOUT
+ 
+ logging.addLevelName(logging.WARNING, "WARN")
+ logging.addLevelName(logging.CRITICAL, "CRIT")

@@ -1,0 +1,17 @@
+diff --git i/src/Main.cpp w/src/Main.cpp
+index 76ad20da..b8cad3d3 100644
+--- i/src/Main.cpp
++++ w/src/Main.cpp
+@@ -129,6 +129,7 @@ int main(int argc, char** argv)
+ 
+     QCoreApplication::setOrganizationName("Merkaartor");
+     QCoreApplication::setOrganizationDomain("merkaartor.org");
++    QGuiApplication::setDesktopFileName("org.merkaartor.merkaartor");
+ #ifdef FRISIUS_BUILD
+     QCoreApplication::setApplicationName("Frisius");
+ #else
+@@ -294,4 +295,3 @@ int main(int argc, char** argv)
+ 
+     return x;
+ }
+-

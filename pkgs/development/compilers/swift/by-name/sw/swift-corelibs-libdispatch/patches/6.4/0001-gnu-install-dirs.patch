@@ -1,0 +1,55 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 4 Jul 2026 15:19:17 -0400
+Subject: [PATCH 1/2] gnu-install-dirs
+
+---
+ src/BlocksRuntime/CMakeLists.txt | 4 ++--
+ src/CMakeLists.txt               | 4 ++--
+ src/swift/CMakeLists.txt         | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/BlocksRuntime/CMakeLists.txt b/src/BlocksRuntime/CMakeLists.txt
+index 3732b0a..1c01de7 100644
+--- a/src/BlocksRuntime/CMakeLists.txt
++++ b/src/BlocksRuntime/CMakeLists.txt
+@@ -37,6 +37,6 @@ endif()
+ set_property(GLOBAL APPEND PROPERTY DISPATCH_EXPORTS BlocksRuntime)
+ install(TARGETS BlocksRuntime
+         EXPORT dispatchExports
+-        ARCHIVE DESTINATION ${INSTALL_TARGET_DIR}
+-        LIBRARY DESTINATION ${INSTALL_TARGET_DIR}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c105830..a9db5de 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -184,6 +184,6 @@ endif()
+ set_property(GLOBAL APPEND PROPERTY DISPATCH_EXPORTS dispatch)
+ install(TARGETS dispatch
+         EXPORT dispatchExports
+-        ARCHIVE DESTINATION ${INSTALL_TARGET_DIR}
+-        LIBRARY DESTINATION ${INSTALL_TARGET_DIR}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/src/swift/CMakeLists.txt b/src/swift/CMakeLists.txt
+index a0082fb..4f9e88d 100644
+--- a/src/swift/CMakeLists.txt
++++ b/src/swift/CMakeLists.txt
+@@ -40,8 +40,8 @@ install_swift_module(swiftDispatch)
+ set_property(GLOBAL APPEND PROPERTY DISPATCH_EXPORTS swiftDispatch)
+ install(TARGETS swiftDispatch
+   EXPORT dispatchExports
+-  ARCHIVE DESTINATION ${INSTALL_TARGET_DIR}
+-  LIBRARY DESTINATION ${INSTALL_TARGET_DIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+ if(HAVE_OBJC AND NOT BUILD_SHARED_LIBS)
+   set_property(GLOBAL APPEND PROPERTY DISPATCH_EXPORTS DispatchStubs)
+-- 
+2.54.0
+

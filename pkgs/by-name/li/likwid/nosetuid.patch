@@ -1,0 +1,20 @@
+--- a/Makefile	2024-01-10 13:49:40.225104028 +0100
++++ b/Makefile	2024-01-10 13:50:25.660033418 +0100
+@@ -393,7 +393,7 @@
+ install_daemon:
+ 	@echo "===> INSTALL access daemon to $(ACCESSDAEMON)"
+ 	@mkdir -p `dirname $(ACCESSDAEMON)`
+-	install -m 4755 $(INSTALL_CHOWN) $(DAEMON_TARGET) $(ACCESSDAEMON)
++	install -m 755 $(DAEMON_TARGET) $(ACCESSDAEMON)
+ move_daemon:
+ 	@echo "===> MOVE access daemon from $(ACCESSDAEMON) to $(INSTALLED_ACCESSDAEMON)"
+ 	@mkdir -p `dirname $(INSTALLED_ACCESSDAEMON)`
+@@ -430,7 +430,7 @@
+ install_freq:
+ 	@echo "===> INSTALL setFrequencies tool to $(SBINPREFIX)/$(FREQ_TARGET)"
+ 	@mkdir -p $(SBINPREFIX)
+-	@install -m 4755 $(INSTALL_CHOWN) $(FREQ_TARGET) $(SBINPREFIX)/$(FREQ_TARGET)
++	@install -m 755 $(FREQ_TARGET) $(SBINPREFIX)/$(FREQ_TARGET)
+ move_freq:
+ 	@echo "===> MOVE setFrequencies tool from $(SBINPREFIX)/$(FREQ_TARGET) to $(INSTALLED_SBINPREFIX)/$(FREQ_TARGET)"
+ 	@mkdir -p $(INSTALLED_SBINPREFIX)

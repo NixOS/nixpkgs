@@ -1,0 +1,41 @@
+diff --git a/src/barman/command_wrappers.py b/src/barman/command_wrappers.py
+index 455f05d1..3d1d85b9 100644
+--- a/src/barman/command_wrappers.py
++++ b/src/barman/command_wrappers.py
+@@ -1415,7 +1415,7 @@ class BarmanSubProcess(object):
+         # * be sure to run it with the right python interpreter
+         # * pass the current configuration file with -c
+         # * set it quiet with -q
+-        self.command = [sys.executable, command, "-c", config, "-q", subcommand]
++        self.command = [command, "-c", config, "-q", subcommand]
+         self.keep_descriptors = keep_descriptors
+         # Handle args for the sub-command (like the server name)
+         if args:
+diff --git a/tests/test_command_wrappers.py b/tests/test_command_wrappers.py
+index 22fcef18..d3ba693f 100644
+--- a/tests/test_command_wrappers.py
++++ b/tests/test_command_wrappers.py
+@@ -2282,7 +2282,6 @@ class TestBarmanSubProcess(object):
+             subcommand="fake-cmd", config="fake_conf"
+         )
+         assert subprocess.command == [
+-            sys.executable,
+             sys.argv[0],
+             "-c",
+             "fake_conf",
+@@ -2307,7 +2306,6 @@ class TestBarmanSubProcess(object):
+             args=["a", "b"],
+         )
+         assert subprocess.command == [
+-            sys.executable,
+             "path/to/barman",
+             "-c",
+             "fake_conf",
+@@ -2329,7 +2327,6 @@ class TestBarmanSubProcess(object):
+         subprocess.execute()
+ 
+         command = [
+-            sys.executable,
+             "path/to/barman",
+             "-c",
+             "fake_conf",

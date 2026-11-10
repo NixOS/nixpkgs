@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 24 Sep 2026 21:46:45 -0400
+Subject: [PATCH 9/9] Fix _Differentiation module build on Darwin
+
+Without this, it can fail to find the _Builtin_float module. This
+presumably used to work due to the SDK overlay, which is no longer
+built (see: https://github.com/swiftlang/swift/pull/81726).
+---
+ stdlib/public/Differentiation/CMakeLists.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/stdlib/public/Differentiation/CMakeLists.txt b/stdlib/public/Differentiation/CMakeLists.txt
+index f7149eacb0a..8f1579406b7 100644
+--- a/stdlib/public/Differentiation/CMakeLists.txt
++++ b/stdlib/public/Differentiation/CMakeLists.txt
+@@ -16,6 +16,8 @@ else()
+ set(swiftDifferentiationSIMDFiles)
+ endif()
+ 
++set(swiftDifferentiationDarwinDependencies _Builtin_float)
++
+ add_swift_target_library(swift_Differentiation ${SWIFT_STDLIB_LIBRARY_BUILD_TYPES} IS_STDLIB
+   Differentiable.swift
+   DifferentialOperators.swift
+@@ -31,6 +33,12 @@ add_swift_target_library(swift_Differentiation ${SWIFT_STDLIB_LIBRARY_BUILD_TYPE
+     TgmathDerivatives.swift.gyb
+     ${swiftDifferentiationSIMDFiles}
+ 
++  SWIFT_MODULE_DEPENDS_OSX ${swiftDifferentiationDarwinDependencies}
++  SWIFT_MODULE_DEPENDS_IOS ${swiftDifferentiationDarwinDependencies}
++  SWIFT_MODULE_DEPENDS_TVOS ${swiftDifferentiationDarwinDependencies}
++  SWIFT_MODULE_DEPENDS_WATCHOS ${swiftDifferentiationDarwinDependencies}
++  SWIFT_MODULE_DEPENDS_XROS ${swiftDifferentiationDarwinDependencies}
++
+   SWIFT_MODULE_DEPENDS_ANDROID Android
+   SWIFT_MODULE_DEPENDS_LINUX Glibc
+   SWIFT_MODULE_DEPENDS_LINUX_STATIC Musl
+-- 
+2.54.0
+

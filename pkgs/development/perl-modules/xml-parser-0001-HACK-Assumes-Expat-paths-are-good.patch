@@ -1,0 +1,45 @@
+From e996904128653c67b04ddbdb1e10cef158098957 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Fri, 6 Dec 2019 23:00:51 -0500
+Subject: [PATCH] [HACK]: Assumes Expat paths are good.
+
+The `check_lib` check fails with the cross-compilation build platform's
+Perl, since apparently `mktemp` is missing...
+
+Even then, side-stepping the issue, it seems it is not actually enough
+to work, as the compilation fails.
+---
+ Makefile.PL | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 505d1df..fc38b76 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -29,12 +29,17 @@ foreach (@ARGV) {
+ @ARGV = @replacement_args;
+ 
+ unless (
+-    check_lib(    # fill in what you prompted the user for here
+-        lib     => [qw(expat)],
+-        header  => ['expat.h'],
+-        incpath => $expat_incpath,
+-        ( $expat_libpath ? ( libpath => $expat_libpath ) : () ),
+-    )
++    #check_lib(    # fill in what you prompted the user for here
++    #    lib     => [qw(expat)],
++    #    header  => ['expat.h'],
++    #    incpath => $expat_incpath,
++    #    ( $expat_libpath ? ( libpath => $expat_libpath ) : () ),
++    #)
++    # The check_lib implementation fails horribly with cross-compilation.
++    # We are giving known good paths to expat.
++    # And in all cases, the previous behaviour of not actually failing
++    # seemed to work just fine :/.
++    false
+ ) {
+     warn <<'Expat_Not_Installed;';
+ 
+-- 
+2.23.0
+

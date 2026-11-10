@@ -1,0 +1,60 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  util-macros,
+  xorg-server,
+  xorgproto,
+  libpciaccess,
+  nix-update-script,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "xf86-video-siliconmotion";
+  version = "1.7.10";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    group = "xorg";
+    owner = "driver";
+    repo = "xf86-video-siliconmotion";
+    tag = "xf86-video-siliconmotion-${finalAttrs.version}";
+    hash = "sha256-CRuzdxlES6TFMDGIKk5sBAXF2Pa781jmTzlVT+A2Muk=";
+  };
+
+  # Xorg loads helper modules after loading this driver, so their symbols must
+  # be resolved lazily.
+  hardeningDisable = [ "bindnow" ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    util-macros
+    xorg-server # for some autoconf macros
+  ];
+
+  buildInputs = [
+    xorg-server
+    xorgproto
+    libpciaccess
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=xf86-video-siliconmotion-(.*)" ];
+  };
+
+  meta = {
+    description = "Silicon Motion video driver for the Xorg X server";
+    homepage = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-siliconmotion";
+    license = with lib.licenses; [
+      x11
+      mit
+    ];
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isAarch64;
+  };
+})

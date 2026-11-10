@@ -1,0 +1,47 @@
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -200,6 +200,8 @@
+     },
+     "apps/yaak-client/node_modules/@types/node": {
+       "version": "24.12.0",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.12.0.tgz",
++      "integrity": "sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -226,6 +228,8 @@
+     },
+     "apps/yaak-client/node_modules/undici-types": {
+       "version": "7.16.0",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
++      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -14944,6 +14948,8 @@
+     },
+     "packages/plugin-runtime/node_modules/@types/node": {
+       "version": "24.13.2",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.13.2.tgz",
++      "integrity": "sha512-fRa09kZTgu8o71KFcDjUFuc7F+dEbZYZmkI0mg5YBTRs0yMKjYHsq/c0urDKeDb+D5qVgXOdFcuu+DZPKOITwA==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -14952,6 +14958,8 @@
+     },
+     "packages/plugin-runtime/node_modules/undici-types": {
+       "version": "7.18.2",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.18.2.tgz",
++      "integrity": "sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -14999,6 +15007,8 @@
+     },
+     "plugins-external/httpsnippet/node_modules/@types/node": {
+       "version": "22.19.15",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-22.19.15.tgz",
++      "integrity": "sha512-F0R/h2+dsy5wJAUe3tAU6oqa2qbWY5TpNfL/RGmo1y38hiyO1w3x2jPtt76wmuaJI4DQnOBu21cNXQ2STIUUWg==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {

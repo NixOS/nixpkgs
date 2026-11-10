@@ -1,0 +1,116 @@
+diff --git a/src/common/mime_types.rs b/src/common/mime_types.rs
+index 7517ef8..6fbe349 100644
+--- a/src/common/mime_types.rs
++++ b/src/common/mime_types.rs
+@@ -102,7 +102,7 @@ mod tests {
+         );
+         assert_eq!(
+             MimeType::try_from(Path::new("./tests/assets/cat"))?.0,
+-            "application/x-shellscript"
++            "text/x-shellscript"
+         );
+         assert_eq!(
+             MimeType::try_from(Path::new(
+diff --git a/src/common/snapshots/handlr__common__path__tests__mime_table_json-2.snap b/src/common/snapshots/handlr__common__path__tests__mime_table_json-2.snap
+index b4bcd48..73cba27 100644
+--- a/src/common/snapshots/handlr__common__path__tests__mime_table_json-2.snap
++++ b/src/common/snapshots/handlr__common__path__tests__mime_table_json-2.snap
+@@ -2,4 +2,4 @@
+ source: src/common/path.rs
+ expression: "String::from_utf8(buffer)?"
+ ---
+-[{"path":"tests/assets","mime":"inode/directory"},{"path":"tests/assets/cat","mime":"application/x-shellscript"},{"path":"tests/assets/cmus.desktop","mime":"application/x-desktop"},{"path":"tests/assets/empty.txt","mime":"text/plain"},{"path":"tests/assets/no_html_tags.html","mime":"text/html"},{"path":"tests/assets/org.wezfurlong.wezterm.desktop","mime":"application/x-desktop"},{"path":"tests/assets/p.html","mime":"text/html"},{"path":"tests/assets/rust.vim","mime":"text/plain"},{"path":"tests/assets/SettingsWidgetFdoSecrets.ui","mime":"application/x-designer"},{"path":"https://duckduckgo.com/","mime":"x-scheme-handler/https"},{"path":".","mime":"inode/directory"},{"path":"../README.md","mime":"text/markdown"}]
++[{"path":"tests/assets","mime":"inode/directory"},{"path":"tests/assets/cat","mime":"text/x-shellscript"},{"path":"tests/assets/cmus.desktop","mime":"application/x-desktop"},{"path":"tests/assets/empty.txt","mime":"text/plain"},{"path":"tests/assets/no_html_tags.html","mime":"text/html"},{"path":"tests/assets/org.wezfurlong.wezterm.desktop","mime":"application/x-desktop"},{"path":"tests/assets/p.html","mime":"text/html"},{"path":"tests/assets/rust.vim","mime":"text/plain"},{"path":"tests/assets/SettingsWidgetFdoSecrets.ui","mime":"application/x-designer"},{"path":"https://duckduckgo.com/","mime":"x-scheme-handler/https"},{"path":".","mime":"inode/directory"},{"path":"../README.md","mime":"text/markdown"}]
+diff --git a/src/common/snapshots/handlr__common__path__tests__mime_table_json.snap b/src/common/snapshots/handlr__common__path__tests__mime_table_json.snap
+index b4bcd48..73cba27 100644
+--- a/src/common/snapshots/handlr__common__path__tests__mime_table_json.snap
++++ b/src/common/snapshots/handlr__common__path__tests__mime_table_json.snap
+@@ -2,4 +2,4 @@
+ source: src/common/path.rs
+ expression: "String::from_utf8(buffer)?"
+ ---
+-[{"path":"tests/assets","mime":"inode/directory"},{"path":"tests/assets/cat","mime":"application/x-shellscript"},{"path":"tests/assets/cmus.desktop","mime":"application/x-desktop"},{"path":"tests/assets/empty.txt","mime":"text/plain"},{"path":"tests/assets/no_html_tags.html","mime":"text/html"},{"path":"tests/assets/org.wezfurlong.wezterm.desktop","mime":"application/x-desktop"},{"path":"tests/assets/p.html","mime":"text/html"},{"path":"tests/assets/rust.vim","mime":"text/plain"},{"path":"tests/assets/SettingsWidgetFdoSecrets.ui","mime":"application/x-designer"},{"path":"https://duckduckgo.com/","mime":"x-scheme-handler/https"},{"path":".","mime":"inode/directory"},{"path":"../README.md","mime":"text/markdown"}]
++[{"path":"tests/assets","mime":"inode/directory"},{"path":"tests/assets/cat","mime":"text/x-shellscript"},{"path":"tests/assets/cmus.desktop","mime":"application/x-desktop"},{"path":"tests/assets/empty.txt","mime":"text/plain"},{"path":"tests/assets/no_html_tags.html","mime":"text/html"},{"path":"tests/assets/org.wezfurlong.wezterm.desktop","mime":"application/x-desktop"},{"path":"tests/assets/p.html","mime":"text/html"},{"path":"tests/assets/rust.vim","mime":"text/plain"},{"path":"tests/assets/SettingsWidgetFdoSecrets.ui","mime":"application/x-designer"},{"path":"https://duckduckgo.com/","mime":"x-scheme-handler/https"},{"path":".","mime":"inode/directory"},{"path":"../README.md","mime":"text/markdown"}]
+diff --git a/src/common/snapshots/handlr__common__path__tests__mime_table_piped.snap b/src/common/snapshots/handlr__common__path__tests__mime_table_piped.snap
+index c5f818a..081a5b7 100644
+--- a/src/common/snapshots/handlr__common__path__tests__mime_table_piped.snap
++++ b/src/common/snapshots/handlr__common__path__tests__mime_table_piped.snap
+@@ -2,16 +2,16 @@
+ source: src/common/path.rs
+ expression: "String::from_utf8(buffer)?"
+ ---
+-path                                       	mime                     
+-tests/assets                               	inode/directory          
+-tests/assets/cat                           	application/x-shellscript
+-tests/assets/cmus.desktop                  	application/x-desktop    
+-tests/assets/empty.txt                     	text/plain               
+-tests/assets/no_html_tags.html             	text/html                
+-tests/assets/org.wezfurlong.wezterm.desktop	application/x-desktop    
+-tests/assets/p.html                        	text/html                
+-tests/assets/rust.vim                      	text/plain               
+-tests/assets/SettingsWidgetFdoSecrets.ui   	application/x-designer   
+-https://duckduckgo.com/                    	x-scheme-handler/https   
+-.                                          	inode/directory          
++path                                       	mime                  
++tests/assets                               	inode/directory       
++tests/assets/cat                           	text/x-shellscript    
++tests/assets/cmus.desktop                  	application/x-desktop 
++tests/assets/empty.txt                     	text/plain            
++tests/assets/no_html_tags.html             	text/html             
++tests/assets/org.wezfurlong.wezterm.desktop	application/x-desktop 
++tests/assets/p.html                        	text/html             
++tests/assets/rust.vim                      	text/plain            
++tests/assets/SettingsWidgetFdoSecrets.ui   	application/x-designer
++https://duckduckgo.com/                    	x-scheme-handler/https
++.                                          	inode/directory       
+ ../README.md                               	text/markdown
+diff --git a/src/common/snapshots/handlr__common__path__tests__mime_table_terminal.snap b/src/common/snapshots/handlr__common__path__tests__mime_table_terminal.snap
+index 14a1115..22a6148 100644
+--- a/src/common/snapshots/handlr__common__path__tests__mime_table_terminal.snap
++++ b/src/common/snapshots/handlr__common__path__tests__mime_table_terminal.snap
+@@ -2,19 +2,19 @@
+ source: src/common/path.rs
+ expression: "String::from_utf8(buffer)?"
+ ---
+-┌─────────────────────────────────────────────┬───────────────────────────┐
+-│[37m [39m[37mpath[39m[37m                                       [39m[37m [39m│[37m [39m[37mmime[39m[37m                     [39m[37m [39m│
+-├─────────────────────────────────────────────┼───────────────────────────┤
+-│[40m [49m[40mtests/assets[49m[40m                               [49m[40m [49m│[40m [49m[40minode/directory[49m[40m          [49m[40m [49m│
+-│[37m [39m[37mtests/assets/cat[39m[37m                           [39m[37m [39m│[37m [39m[37mapplication/x-shellscript[39m[37m [39m│
+-│[40m [49m[40mtests/assets/cmus.desktop[49m[40m                  [49m[40m [49m│[40m [49m[40mapplication/x-desktop[49m[40m    [49m[40m [49m│
+-│[37m [39m[37mtests/assets/empty.txt[39m[37m                     [39m[37m [39m│[37m [39m[37mtext/plain[39m[37m               [39m[37m [39m│
+-│[40m [49m[40mtests/assets/no_html_tags.html[49m[40m             [49m[40m [49m│[40m [49m[40mtext/html[49m[40m                [49m[40m [49m│
+-│[37m [39m[37mtests/assets/org.wezfurlong.wezterm.desktop[39m[37m [39m│[37m [39m[37mapplication/x-desktop[39m[37m    [39m[37m [39m│
+-│[40m [49m[40mtests/assets/p.html[49m[40m                        [49m[40m [49m│[40m [49m[40mtext/html[49m[40m                [49m[40m [49m│
+-│[37m [39m[37mtests/assets/rust.vim[39m[37m                      [39m[37m [39m│[37m [39m[37mtext/plain[39m[37m               [39m[37m [39m│
+-│[40m [49m[40mtests/assets/SettingsWidgetFdoSecrets.ui[49m[40m   [49m[40m [49m│[40m [49m[40mapplication/x-designer[49m[40m   [49m[40m [49m│
+-│[37m [39m[37mhttps://duckduckgo.com/[39m[37m                    [39m[37m [39m│[37m [39m[37mx-scheme-handler/https[39m[37m   [39m[37m [39m│
+-│[40m [49m[40m.[49m[40m                                          [49m[40m [49m│[40m [49m[40minode/directory[49m[40m          [49m[40m [49m│
+-│[37m [39m[37m../README.md[39m[37m                               [39m[37m [39m│[37m [39m[37mtext/markdown[39m[37m            [39m[37m [39m│
+-└─────────────────────────────────────────────┴───────────────────────────┘
++┌─────────────────────────────────────────────┬────────────────────────┐
++│[37m [39m[37mpath[39m[37m                                       [39m[37m [39m│[37m [39m[37mmime[39m[37m                  [39m[37m [39m│
++├─────────────────────────────────────────────┼────────────────────────┤
++│[40m [49m[40mtests/assets[49m[40m                               [49m[40m [49m│[40m [49m[40minode/directory[49m[40m       [49m[40m [49m│
++│[37m [39m[37mtests/assets/cat[39m[37m                           [39m[37m [39m│[37m [39m[37mtext/x-shellscript[39m[37m    [39m[37m [39m│
++│[40m [49m[40mtests/assets/cmus.desktop[49m[40m                  [49m[40m [49m│[40m [49m[40mapplication/x-desktop[49m[40m [49m[40m [49m│
++│[37m [39m[37mtests/assets/empty.txt[39m[37m                     [39m[37m [39m│[37m [39m[37mtext/plain[39m[37m            [39m[37m [39m│
++│[40m [49m[40mtests/assets/no_html_tags.html[49m[40m             [49m[40m [49m│[40m [49m[40mtext/html[49m[40m             [49m[40m [49m│
++│[37m [39m[37mtests/assets/org.wezfurlong.wezterm.desktop[39m[37m [39m│[37m [39m[37mapplication/x-desktop[39m[37m [39m[37m [39m│
++│[40m [49m[40mtests/assets/p.html[49m[40m                        [49m[40m [49m│[40m [49m[40mtext/html[49m[40m             [49m[40m [49m│
++│[37m [39m[37mtests/assets/rust.vim[39m[37m                      [39m[37m [39m│[37m [39m[37mtext/plain[39m[37m            [39m[37m [39m│
++│[40m [49m[40mtests/assets/SettingsWidgetFdoSecrets.ui[49m[40m   [49m[40m [49m│[40m [49m[40mapplication/x-designer[49m[40m [49m│
++│[37m [39m[37mhttps://duckduckgo.com/[39m[37m                    [39m[37m [39m│[37m [39m[37mx-scheme-handler/https[39m[37m [39m│
++│[40m [49m[40m.[49m[40m                                          [49m[40m [49m│[40m [49m[40minode/directory[49m[40m       [49m[40m [49m│
++│[37m [39m[37m../README.md[39m[37m                               [39m[37m [39m│[37m [39m[37mtext/markdown[39m[37m         [39m[37m [39m│
++└─────────────────────────────────────────────┴────────────────────────┘
+diff --git a/tests/assets/Helix.desktop b/tests/assets/Helix.desktop
+index 25d5c3b..fa9e3f3 100644
+--- a/tests/assets/Helix.desktop
++++ b/tests/assets/Helix.desktop
+@@ -88,4 +88,4 @@ Keywords[tr]=Metin;düzenleyici;
+ Icon=helix
+ Categories=Utility;TextEditor;
+ StartupNotify=false
+-MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
++MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;text/x-shellscript;text/x-c;text/x-c++;

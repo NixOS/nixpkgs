@@ -1,0 +1,10 @@
+--- a/tests/__init__.py
++++ b/tests/__init__.py
+@@ -37,6 +37,7 @@
+     This function shall be invoked per test, because the test suite undoes its effect before starting the next test.
+     """
+     _logger.info("asyncio_allow_event_loop_access_from_top_level()")
++    asyncio.set_event_loop(asyncio.new_event_loop())
+
+     def swap(mod: Any, name: str, new: Any) -> None:
+         restore = _PATCH_RESTORE_PREFIX + name

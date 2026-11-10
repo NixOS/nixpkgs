@@ -1,0 +1,24 @@
+diff --git a/libmu_sieve/extensions/Makefile.am b/libmu_sieve/extensions/Makefile.am
+--- a/libmu_sieve/extensions/Makefile.am
++++ b/libmu_sieve/extensions/Makefile.am
+@@ -25,7 +25,7 @@ mod_LTLIBRARIES =\
+  vacation.la
+ AM_CPPFLAGS = $(MU_APP_COMMON_INCLUDES)
+ AM_LDFLAGS = -module -avoid-version -no-undefined -rpath '$(moddir)'
+-LIBS = ../libmu_sieve.la
++LIBS = ../libmu_sieve.la $(MU_LIB_MAILUTILS)
+ 
+ if MU_COND_DBM
+   mod_LTLIBRARIES += uidnew.la
+diff --git a/examples/Makefile.am b/examples/Makefile.am
+--- a/examples/Makefile.am
++++ b/examples/Makefile.am
+@@ -60,7 +60,7 @@ LDADD = \
+  $(MU_COMMON_LIBRARIES)
+ 
+ numaddr_la_SOURCES = numaddr.c
+-numaddr_la_LIBADD = $(MU_LIB_SIEVE)
++numaddr_la_LIBADD = $(MU_LIB_SIEVE) $(MU_LIB_MAILUTILS)
+ numaddr_la_LDFLAGS = -module -avoid-version -no-undefined -rpath '$(moddir)'
+ 
+ msg_send_LDADD =\

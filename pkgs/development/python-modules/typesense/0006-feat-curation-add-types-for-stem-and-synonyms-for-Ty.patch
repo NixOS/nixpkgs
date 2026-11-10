@@ -1,0 +1,194 @@
+From a5f8ce27a246a1c0a3dd5236cffa0afeaaf166b5 Mon Sep 17 00:00:00 2001
+From: Fanis Tharropoulos <ftharropoulos@gmail.com>
+Date: Thu, 7 May 2026 19:26:14 +0300
+Subject: [PATCH 6/6] feat(curation): add types for `stem` and `synonyms` for
+ Typesense v30.2
+
+---
+ src/typesense/types/curation_set.py | 56 ++++++++++++++++++++++++++---
+ tests/curation_set_test.py          | 13 ++++++-
+ tests/curation_sets_test.py         |  4 +++
+ 3 files changed, 67 insertions(+), 6 deletions(-)
+
+diff --git a/src/typesense/types/curation_set.py b/src/typesense/types/curation_set.py
+index 6468166..f99a020 100644
+--- a/src/typesense/types/curation_set.py
++++ b/src/typesense/types/curation_set.py
+@@ -33,15 +33,36 @@ class CurationRuleTagsSchema(typing.TypedDict):
+     tags: typing.List[str]
+ 
+ 
+-class CurationRuleQuerySchema(typing.TypedDict):
++class CurationRuleQueryBaseSchema(typing.TypedDict):
+     """
+-    Schema for a curation rule using query and match.
++    Schema for the base of a curation rule using query and match.
+     """
+ 
+     query: str
+     match: typing.Literal["exact", "contains"]
+ 
+ 
++class CurationRuleQueryCreateSchema(CurationRuleQueryBaseSchema):
++    """
++    Schema for creating a curation rule using query and match.
++    """
++
++    stem: typing.NotRequired[bool]
++    synonyms: typing.NotRequired[bool]
++
++
++class CurationRuleQuerySchema(CurationRuleQueryBaseSchema):
++    """
++    Schema for retrieving a curation rule using query and match.
++    """
++
++    stem: typing.NotRequired[
++        bool
++    ]  # TODO: This is a bug in Typesense server upstream, so until 31.0 is
++    # released, this is staying as notrequired.
++    synonyms: typing.NotRequired[bool]
++
++
+ class CurationRuleFilterBySchema(typing.TypedDict):
+     """
+     Schema for a curation rule using filter_by.
+@@ -85,20 +106,45 @@ class CurationItemSchema(typing.TypedDict):
+     metadata: typing.NotRequired[typing.Dict[str, typing.Any]]
+ 
+ 
++class CurationItemUpsertSchema(typing.TypedDict):
++    """
++    Schema for creating or updating a single curation item.
++    """
++
++    id: str
++    rule: typing.Union[
++        CurationRuleTagsSchema,
++        CurationRuleQueryCreateSchema,
++        CurationRuleFilterBySchema,
++    ]
++    includes: typing.NotRequired[typing.List[CurationIncludeSchema]]
++    excludes: typing.NotRequired[typing.List[CurationExcludeSchema]]
++    filter_by: typing.NotRequired[str]
++    sort_by: typing.NotRequired[str]
++    replace_query: typing.NotRequired[str]
++    remove_matched_tokens: typing.NotRequired[bool]
++    filter_curated_hits: typing.NotRequired[bool]
++    stop_processing: typing.NotRequired[bool]
++    effective_from_ts: typing.NotRequired[int]
++    effective_to_ts: typing.NotRequired[int]
++    metadata: typing.NotRequired[typing.Dict[str, typing.Any]]
++
++
+ class CurationSetUpsertSchema(typing.TypedDict):
+     """
+     Payload schema to create or replace a curation set.
+     """
+ 
+-    items: typing.List[CurationItemSchema]
++    items: typing.List[CurationItemUpsertSchema]
+ 
+ 
+-class CurationSetSchema(CurationSetUpsertSchema, total=False):
++class CurationSetSchema(typing.TypedDict):
+     """
+     Response schema for a curation set.
+     """
+ 
+-    name: typing.NotRequired[str]
++    items: typing.List[CurationItemSchema]
++    name: str
+ 
+ 
+ class CurationSetsListEntrySchema(typing.TypedDict):
+diff --git a/tests/curation_set_test.py b/tests/curation_set_test.py
+index a75196a..fe07278 100644
+--- a/tests/curation_set_test.py
++++ b/tests/curation_set_test.py
+@@ -1,6 +1,5 @@
+ """Tests for the CurationSet class including items APIs."""
+ 
+-
+ import pytest
+ 
+ from tests.utils.version import is_v30_or_above
+@@ -62,6 +61,8 @@ def test_actual_retrieve(
+                 "rule": {
+                     "match": "contains",
+                     "query": "shoe",
++                    "stem": False,
++                    "synonyms": False,
+                 },
+                 "stop_processing": True,
+             },
+@@ -108,6 +109,8 @@ def test_actual_list_items(
+             "rule": {
+                 "match": "contains",
+                 "query": "shoe",
++                "stem": False,
++                "synonyms": False,
+             },
+             "stop_processing": True,
+         },
+@@ -140,6 +143,8 @@ def test_actual_get_item(
+         "rule": {
+             "match": "contains",
+             "query": "shoe",
++            "stem": False,
++            "synonyms": False,
+         },
+         "stop_processing": True,
+     }
+@@ -218,6 +223,8 @@ async def test_actual_retrieve_async(
+                 "rule": {
+                     "match": "contains",
+                     "query": "shoe",
++                    "stem": False,
++                    "synonyms": False,
+                 },
+                 "stop_processing": True,
+             },
+@@ -263,6 +270,8 @@ async def test_actual_list_items_async(
+             "rule": {
+                 "match": "contains",
+                 "query": "shoe",
++                "stem": False,
++                "synonyms": False,
+             },
+             "stop_processing": True,
+         },
+@@ -295,6 +304,8 @@ async def test_actual_get_item_async(
+         "rule": {
+             "match": "contains",
+             "query": "shoe",
++            "stem": False,
++            "synonyms": False,
+         },
+         "stop_processing": True,
+     }
+diff --git a/tests/curation_sets_test.py b/tests/curation_sets_test.py
+index 0a06a05..e4a635a 100644
+--- a/tests/curation_sets_test.py
++++ b/tests/curation_sets_test.py
+@@ -87,6 +87,8 @@ def test_actual_upsert(
+                 "rule": {
+                     "match": "contains",
+                     "query": "shoe",
++                    "stem": False,
++                    "synonyms": False,
+                 },
+                 "stop_processing": True,
+             },
+@@ -150,6 +152,8 @@ async def test_actual_upsert_async(
+                 "rule": {
+                     "match": "contains",
+                     "query": "shoe",
++                    "stem": False,
++                    "synonyms": False,
+                 },
+                 "stop_processing": True,
+             },
+-- 
+2.53.0
+

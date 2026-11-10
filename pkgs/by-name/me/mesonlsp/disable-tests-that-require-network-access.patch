@@ -1,0 +1,43 @@
+From 32376566bc8e0e8b43e51cd7e6f14f15ac219baf Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Mon, 3 Jun 2024 20:31:27 +0300
+Subject: [PATCH] Disable tests that require network access.
+
+---
+ tests/libutils/test.cpp | 20 --------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/tests/libutils/test.cpp b/tests/libutils/test.cpp
+index 2b20191c..c313312b 100644
+--- a/tests/libutils/test.cpp
++++ b/tests/libutils/test.cpp
+@@ -131,26 +131,6 @@ TEST(UtilsTest, testMergingDirectories) {
+   ASSERT_EQ('a', std::ifstream(outputDir / "i1/a.txt").get());
+ }
+ 
+-TEST(UtilsTest, testDownloadAndExtraction) {
+-  auto zipFileName = std::filesystem::path{randomFile() + "-1"};
+-  auto result = downloadFile(
+-      "https://github.com/JCWasmx86/mesonlsp/archive/refs/heads/main.zip",
+-      zipFileName);
+-  ASSERT_TRUE(result);
+-  auto directoryName = std::filesystem::path{randomFile() + "-2"};
+-  std::filesystem::create_directory(directoryName);
+-  result = extractFile(zipFileName, directoryName);
+-  ASSERT_TRUE(result);
+-  auto mustExist =
+-      directoryName / "mesonlsp-main/Benchmarks/extract_git_data.sh";
+-  ASSERT_TRUE(std::filesystem::exists(mustExist));
+-  auto mustFailFilename = std::filesystem::path{randomFile() + "-3"};
+-  result =
+-      downloadFile("lnfvwoefvnwefvwvipwnefv2efvpov2nvov", mustFailFilename);
+-  ASSERT_FALSE(result);
+-  ASSERT_FALSE(std::filesystem::exists(mustFailFilename));
+-}
+-
+ int main(int argc, char **argv) {
+   testing::InitGoogleTest(&argc, argv);
+   return RUN_ALL_TESTS();
+-- 
+2.55.0
+

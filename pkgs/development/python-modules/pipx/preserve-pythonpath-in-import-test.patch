@@ -1,0 +1,6 @@
+diff --git a/tests/test_imports.py b/tests/test_imports.py
+--- a/tests/test_imports.py
++++ b/tests/test_imports.py
+@@ -13 +13 @@ def test_importing_util_first_succeeds(root: Path) -> None:
+-    env = {**os.environ, "PYTHONPATH": str(root / "src")}
++    env = {**os.environ, "PYTHONPATH": str(root / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")}

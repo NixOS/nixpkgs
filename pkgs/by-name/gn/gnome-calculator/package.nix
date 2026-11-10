@@ -1,0 +1,84 @@
+{
+  stdenv,
+  lib,
+  appstream,
+  blueprint-compiler,
+  meson,
+  ninja,
+  vala,
+  gettext,
+  itstool,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  gtk4,
+  glib,
+  glib-networking,
+  gtksourceview5,
+  wrapGAppsHook4,
+  gnome,
+  mpfr,
+  gmp,
+  libsoup_3,
+  libmpc,
+  libadwaita,
+  gsettings-desktop-schemas,
+  libgee,
+  writableTmpDirAsHomeHook,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gnome-calculator";
+  version = "51.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major finalAttrs.version}/gnome-calculator-${finalAttrs.version}.tar.xz";
+    hash = "sha256-W/tMU+7GH+tsA/r4UhiATodBPstkfgj95jeb8rGDkZA=";
+  };
+
+  nativeBuildInputs = [
+    appstream
+    blueprint-compiler
+    meson
+    ninja
+    pkg-config
+    vala
+    gettext
+    itstool
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    gtk4
+    glib
+    glib-networking
+    libxml2
+    gtksourceview5
+    mpfr
+    gmp
+    libgee
+    gsettings-desktop-schemas
+    libsoup_3
+    libmpc
+    libadwaita
+  ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gnome-calculator";
+    };
+  };
+
+  meta = {
+    homepage = "https://apps.gnome.org/Calculator/";
+    description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
+    mainProgram = "gnome-calculator";
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+  };
+})

@@ -1,0 +1,59 @@
+From 7b8b17c82b1bc672df9c50d2b002242f00bc04a4 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sun, 21 Dec 2025 14:51:33 +0100
+Subject: [PATCH] Fix handling of absolute install dirs in .pc installation
+
+CMAKE_INSTALL_*DIRs can be absolute and in this case shouldn't be
+appended to the install prefix. This is handled automatically by CMake
+for installation but needs to be done manually when generating
+pkg-config file.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src/CMakeLists.txt | 12 +++++++++++-
+ src/gpgmepp.pc.in  |  4 ++--
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7be46cb..913dd79 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -209,10 +209,20 @@ set(pkgconfig_host_line "")
+ if(PKGCONFIG_HOST)
+     set(pkgconfig_host_line "host=${PKGCONFIG_HOST}\n")
+ endif()
++if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(pkgconfig_includedir "${CMAKE_INSTALL_INCLUDEDIR}")
++else()
++    set(pkgconfig_includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++endif()
++if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++    set(pkgconfig_libdir "${CMAKE_INSTALL_LIBDIR}")
++else()
++    set(pkgconfig_libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++endif()
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gpgmepp.pc.in
+                ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc @ONLY)
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gpgmepp.pc
+-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+ 
+ install(FILES ${Gpgmepp_HEADERS}
+         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gpgme++)
+diff --git a/src/gpgmepp.pc.in b/src/gpgmepp.pc.in
+index 626c5fb..cf3e67b 100644
+--- a/src/gpgmepp.pc.in
++++ b/src/gpgmepp.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@pkgconfig_includedir@
++libdir=@pkgconfig_libdir@
+ @pkgconfig_host_line@
+ Name: gpgmepp
+ Description: GnuPG Made Easy (C++ binding)
+-- 
+2.51.2
+

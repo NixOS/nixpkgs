@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 24213ced0d..691b2c24ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -395,6 +395,7 @@
+     set(DATA_INSTALL_DIR "share")
+ elseif(APPLE AND WITH_APP_BUNDLE)
+     set(PROGNAME KeePassXC)
++    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/Applications")
+     set(BUNDLE_INSTALL_DIR "${PROGNAME}.app/Contents")
+     set(CMAKE_INSTALL_MANDIR "${BUNDLE_INSTALL_DIR}/Resources/man")
+     set(CLI_INSTALL_DIR "${BUNDLE_INSTALL_DIR}/MacOS")
+@@ -473,7 +474,6 @@
+ endif()
+ 
+ if(APPLE)
+-    set(_deployqt_exe_name macdeployqt)
+     set(CMAKE_MACOSX_RPATH TRUE)
+     list(APPEND CMAKE_INSTALL_RPATH "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib")
+ elseif(WIN32)
+diff --git a/src/post_install/CMakeLists.txt b/src/post_install/CMakeLists.txt
+index 359c891f..a6a061a3 100644
+--- a/src/post_install/CMakeLists.txt
++++ b/src/post_install/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # The install commands in this subdirectory will be executed after all the install commands in the
+ # current scope are ran. It is required for correct functtioning of macdeployqt.
+ 
+-if(APPLE AND WITH_APP_BUNDLE)
++if(FALSE)
+     # Run macdeloyqt on the main app and any extra binaries and plugins as specified by the
+     # _MACDEPLOYQT_EXTRA_BINARIES global property.
+     # All install(TARGETS) calls should have already been called.

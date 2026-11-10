@@ -1,0 +1,60 @@
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -83,6 +83,7 @@ foreach(arch ${archs})
+                 QT_USE_QSTRINGBUILDER
+                 QTWEBENGINECORE_VERSION_STR=${QT_REPO_MODULE_VERSION}
+                 QTWEBENGINEPROCESS_NAME=${qtWebEngineProcessName}
++                QTWEBENGINE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                 "${forwardDeclarationMacro}"
+             CXX_COMPILE_OPTIONS
+                 ${gnCxxCompileOptions}
+diff --git a/src/core/api/qtwebenginecoreglobal.h b/src/core/api/qtwebenginecoreglobal.h
+index 334d53d8e..9df9276bb 100644
+--- a/src/core/api/qtwebenginecoreglobal.h
++++ b/src/core/api/qtwebenginecoreglobal.h
+@@ -19,6 +19,7 @@ Q_WEBENGINECORE_EXPORT Q_DECL_CONST_FUNCTION const char *qWebEngineVersion() noe
+ Q_WEBENGINECORE_EXPORT Q_DECL_CONST_FUNCTION const char *qWebEngineProcessName() noexcept;
+ Q_WEBENGINECORE_EXPORT Q_DECL_CONST_FUNCTION const char *qWebEngineChromiumVersion() noexcept;
+ Q_WEBENGINECORE_EXPORT Q_DECL_CONST_FUNCTION const char *qWebEngineChromiumSecurityPatchVersion() noexcept;
++Q_WEBENGINECORE_EXPORT Q_DECL_CONST_FUNCTION const char *qWebEngineInstallPrefix() noexcept;
+ 
+ Q_WEBENGINECORE_EXPORT QString qWebEngineGetDomainAndRegistry(const QUrl &url);
+ 
+--- a/src/core/web_engine_context.cpp
++++ b/src/core/web_engine_context.cpp
+@@ -1035,4 +1035,8 @@ const char *qWebEngineChromiumSecurityPatchVersion() noexcept
+     return STRINGIFY_EXPANDED(CHROMIUM_SECURITY_PATCH_VERSION);
+ }
+ 
++const char *qWebEngineInstallPrefix() noexcept
++{
++    return STRINGIFY_EXPANDED(QTWEBENGINE_INSTALL_PREFIX);
++}
+ QT_END_NAMESPACE
+--- a/src/core/web_engine_library_info.cpp
++++ b/src/core/web_engine_library_info.cpp
+@@ -172,6 +172,7 @@ QString subProcessPath()
+                 candidatePaths << p % QLatin1Char('/') % processBinary;
+             for (auto &p : QLibraryInfo::paths(QLibraryInfo::BinariesPath))
+                 candidatePaths << p % QLatin1Char('/') % processBinary;
++            candidatePaths << QString(qWebEngineInstallPrefix()) % "/libexec/"_L1 % processBinary;
+ #endif
+             candidatePaths << QCoreApplication::applicationDirPath()
+                               % QLatin1Char('/') % processBinary;
+@@ -235,6 +236,7 @@ QString localesPath()
+ #endif
+             for (auto &p : QLibraryInfo::paths(QLibraryInfo::TranslationsPath))
+                 candidatePaths << p % QDir::separator() % "qtwebengine_locales"_L1;
++            candidatePaths << QString(qWebEngineInstallPrefix()) % QDir::separator() % "qtwebengine_locales"_L1;
+             candidatePaths << fallbackDir();
+         }
+ 
+@@ -358,7 +360,7 @@ QString resourcesPath()
+                 candidatePaths << p % QDir::separator() % "resources"_L1;
+                 candidatePaths << p;
+             }
+-
++            candidatePaths << QString(qWebEngineInstallPrefix()) % QDir::separator() % "resources"_L1;
+             candidatePaths << QCoreApplication::applicationDirPath();
+             candidatePaths << fallbackDir();
+         }

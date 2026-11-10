@@ -1,0 +1,57 @@
+diff --git a/R/zzz.R b/R/zzz.R
+index 2af2b3e..21ddc00 100644
+--- a/R/zzz.R
++++ b/R/zzz.R
+@@ -22,7 +22,7 @@ pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS", "PKG_CXX_HL_LIBS", "
+ 
+   path <- Sys.getenv(
+     x = "RHDF5LIB_RPATH",
+-    unset = system.file("lib", package="Rhdf5lib", mustWork=TRUE)
++    unset = ""
+   )
+ 
+   sysname <- Sys.info()['sysname']
+@@ -47,7 +47,7 @@ pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS", "PKG_CXX_HL_LIBS", "
+                               sprintf('-L%s -lhdf5 %s', 
+                                       patharch, winlibs)
+                             }, {
+-                              sprintf('"%s/libhdf5.a"%s%s', 
++                              sprintf('-lhdf5', 
+                                       patharch, .getSzipLoc(patharch), .getDynamicLinks(patharch))
+                             }
+                      )
+@@ -58,7 +58,7 @@ pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS", "PKG_CXX_HL_LIBS", "
+                               sprintf('-L%s -lhdf5_cpp -lhdf5 %s', 
+                                       patharch, winlibs)
+                             }, {
+-                              sprintf('"%s/libhdf5_cpp.a" "%s/libhdf5.a"%s%s',
++                              sprintf('-lhdf5_cpp -lhdf5',
+                                       patharch, patharch, .getSzipLoc(patharch), .getDynamicLinks(patharch))
+                             }
+                      )
+@@ -69,7 +69,7 @@ pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS", "PKG_CXX_HL_LIBS", "
+                               sprintf('-L%s -lhdf5_hl -lhdf5 %s', 
+                                       patharch, winlibs)
+                             }, {
+-                              sprintf('"%s/libhdf5_hl.a" "%s/libhdf5.a"%s%s', 
++                              sprintf('-lhdf5_hl -lhdf5', 
+                                       patharch, patharch, .getSzipLoc(patharch), .getDynamicLinks(patharch))
+                             }
+                      )
+@@ -80,7 +80,7 @@ pkgconfig <- function(opt = c("PKG_CXX_LIBS", "PKG_C_LIBS", "PKG_CXX_HL_LIBS", "
+                               sprintf('-L%s -lhdf5_hl_cpp -lhdf5_hl -lhdf5_cpp -lhdf5 %s', 
+                                       patharch, winlibs)
+                             }, {
+-                              sprintf('"%s/libhdf5_hl_cpp.a" "%s/libhdf5_hl.a" "%s/libhdf5_cpp.a" "%s/libhdf5.a"%s%s',
++                              sprintf('-lhdf5_hl_cpp -lhdf5_hl -lhdf5_cpp -lhdf5',
+                                       patharch, patharch, patharch, patharch, .getSzipLoc(patharch), .getDynamicLinks(patharch))
+                             }
+                      )
+@@ -113,6 +113,7 @@ getHdf5Version <- function() {
+ #' @noRd
+ #' @keywords internal
+ .getDynamicLinks <- function(path) {
++  return("")
+   settings_file <- file.path(path, "libhdf5.settings")
+   libhdf5_settings <- readLines(settings_file)
+   libstr <- grep("Extra libraries", x = libhdf5_settings, fixed = TRUE, value = TRUE) |> 

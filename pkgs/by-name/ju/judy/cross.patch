@@ -1,0 +1,22 @@
+--- a/src/Judy1/Makefile.am
++++ b/src/Judy1/Makefile.am
+@@ -18,7 +18,7 @@
+ libinline_la_CFLAGS = $(AM_CFLAGS) -DJUDYGETINLINE
+ 
+ Judy1Tables.c: Judy1TablesGen.c
+-	$(CC) $(INCLUDES) $(AM_CFLAGS) @CFLAGS@ -o Judy1TablesGen Judy1TablesGen.c; ./Judy1TablesGen
++	$(CC_FOR_BUILD) $(INCLUDES) $(AM_CFLAGS) @CFLAGS@ -o Judy1TablesGen Judy1TablesGen.c; ./Judy1TablesGen
+ 
+ Judy1ByCount.c:../JudyCommon/JudyByCount.c
+ 	cp -f ../JudyCommon/JudyByCount.c      		Judy1ByCount.c   
+--- a/src/JudyL/Makefile.am
++++ b/src/JudyL/Makefile.am
+@@ -18,7 +18,7 @@
+ libinline_la_CFLAGS = $(AM_CFLAGS) -DJUDYGETINLINE
+ 
+ JudyLTables.c: JudyLTablesGen.c
+-	$(CC) $(INCLUDES) $(AM_CFLAGS) @CFLAGS@ -o JudyLTablesGen JudyLTablesGen.c; ./JudyLTablesGen 
++	$(CC_FOR_BUILD) $(INCLUDES) $(AM_CFLAGS) @CFLAGS@ -o JudyLTablesGen JudyLTablesGen.c; ./JudyLTablesGen 
+ 
+ JudyLByCount.c:   ../JudyCommon/JudyByCount.c
+ 	cp -f ../JudyCommon/JudyByCount.c      		JudyLByCount.c   

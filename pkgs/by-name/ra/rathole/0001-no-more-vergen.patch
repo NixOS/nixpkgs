@@ -1,0 +1,22 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index e7a944e..e6bae43 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -7,7 +7,6 @@ description = "A reverse proxy for NAT traversal"
+ license = "Apache-2.0"
+ repository = "https://github.com/rapiz1/rathole"
+ readme = "README.md"
+-build = "build.rs"
+ include = ["src/**/*", "LICENSE", "README.md", "build.rs"]
+ 
+ [features]
+@@ -130,9 +129,4 @@ p12 = { version = "0.6.3", optional = true }
+ openssl = { version = "0.10", features = ["vendored"], optional = true }
+ 
+ [build-dependencies]
+-vergen = { version = "7.4.2", default-features = false, features = [
+-    "build",
+-    "git",
+-    "cargo",
+-] }
+ anyhow = "1.0"

@@ -1,0 +1,611 @@
+From 2235635249f63e127963b0c8d66b8da20d57363a Mon Sep 17 00:00:00 2001
+From: Daeho Ro <40587651+daeho-ro@users.noreply.github.com>
+Date: Wed, 5 Aug 2026 23:25:44 +0900
+Subject: [PATCH] Include <fmt/format.h> for fmt::format instead of
+ <fmt/core.h>
+
+---
+ watchman/ChildProcess.cpp                 | 2 +-
+ watchman/Client.h                         | 2 +-
+ watchman/ContentHash.cpp                  | 2 +-
+ watchman/CookieSync.cpp                   | 2 +-
+ watchman/Errors.h                         | 2 +-
+ watchman/InMemoryView.cpp                 | 2 +-
+ watchman/LRUCache.h                       | 2 +-
+ watchman/Logging.cpp                      | 2 +-
+ watchman/Options.cpp                      | 2 +-
+ watchman/PathUtils.cpp                    | 2 +-
+ watchman/Poison.cpp                       | 2 +-
+ watchman/ProcessLock.cpp                  | 2 +-
+ watchman/SanityCheck.cpp                  | 2 +-
+ watchman/SignalHandler.cpp                | 2 +-
+ watchman/UserDir.cpp                      | 2 +-
+ watchman/benchmarks/bser.cpp              | 2 +-
+ watchman/bser.h                           | 2 +-
+ watchman/cmds/heapprof.cpp                | 2 +-
+ watchman/cppclient/WatchmanClient.cpp     | 2 +-
+ watchman/cppclient/WatchmanConnection.cpp | 2 +-
+ watchman/fs/FileSystem.cpp                | 2 +-
+ watchman/fs/ParallelWalk.cpp              | 2 +-
+ watchman/fs/UnixDirHandle.cpp             | 2 +-
+ watchman/main.cpp                         | 2 +-
+ watchman/query/GlobTree.cpp               | 2 +-
+ watchman/query/TermRegistry.cpp           | 2 +-
+ watchman/query/intcompare.cpp             | 2 +-
+ watchman/query/parse.cpp                  | 2 +-
+ watchman/query/pcre.cpp                   | 2 +-
+ watchman/query/type.cpp                   | 2 +-
+ watchman/root/init.cpp                    | 2 +-
+ watchman/root/resolve.cpp                 | 2 +-
+ watchman/root/watchlist.cpp               | 2 +-
+ watchman/scm/Git.cpp                      | 2 +-
+ watchman/scm/Mercurial.cpp                | 2 +-
+ watchman/test/ArtTest.cpp                 | 2 +-
+ watchman/test/BserTest.cpp                | 2 +-
+ watchman/thirdparty/jansson/load.cpp      | 2 +-
+ watchman/thirdparty/jansson/value.cpp     | 2 +-
+ watchman/watcher/WatcherRegistry.cpp      | 2 +-
+ watchman/watcher/eden.cpp                 | 2 +-
+ watchman/watchman_string.h                | 2 +-
+ watchman/winbuild/susres.cpp              | 2 +-
+ 43 files changed, 43 insertions(+), 43 deletions(-)
+
+diff --git a/watchman/ChildProcess.cpp b/watchman/ChildProcess.cpp
+index abfb15993529..8ace18c98703 100644
+--- a/watchman/ChildProcess.cpp
++++ b/watchman/ChildProcess.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/ChildProcess.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/ScopeGuard.h>
+ #include <folly/String.h>
+ #include <memory>
+diff --git a/watchman/Client.h b/watchman/Client.h
+index c3f3b9273d64..e5e3f16a3626 100644
+--- a/watchman/Client.h
++++ b/watchman/Client.h
+@@ -7,7 +7,7 @@
+ 
+ #pragma once
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <chrono>
+ #include <deque>
+diff --git a/watchman/ContentHash.cpp b/watchman/ContentHash.cpp
+index cdecf02ff67b..3fa84487ac96 100644
+--- a/watchman/ContentHash.cpp
++++ b/watchman/ContentHash.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/ContentHash.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/ScopeGuard.h>
+ #include <string>
+ #include "watchman/Hash.h"
+diff --git a/watchman/CookieSync.cpp b/watchman/CookieSync.cpp
+index 99dcc2692c5b..3e619db9ff5f 100644
+--- a/watchman/CookieSync.cpp
++++ b/watchman/CookieSync.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/CookieSync.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <exception>
+ #include <optional>
+diff --git a/watchman/Errors.h b/watchman/Errors.h
+index 072628fed1c2..aef90104b84c 100644
+--- a/watchman/Errors.h
++++ b/watchman/Errors.h
+@@ -7,7 +7,7 @@
+ 
+ #pragma once
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <cstdint>
+ #include <string>
+ #include <system_error>
+diff --git a/watchman/InMemoryView.cpp b/watchman/InMemoryView.cpp
+index 38ea8baa828f..ee2fc79c1a27 100644
+--- a/watchman/InMemoryView.cpp
++++ b/watchman/InMemoryView.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/InMemoryView.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/ScopeGuard.h>
+ #include <algorithm>
+ #include <chrono>
+diff --git a/watchman/LRUCache.h b/watchman/LRUCache.h
+index 89aa9beb8298..e6dcba1cc293 100644
+--- a/watchman/LRUCache.h
++++ b/watchman/LRUCache.h
+@@ -6,7 +6,7 @@
+  */
+ 
+ #pragma once
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/Synchronized.h>
+ #include <folly/futures/Future.h>
+ #include <chrono>
+diff --git a/watchman/Logging.cpp b/watchman/Logging.cpp
+index 7ad66d3723f5..11c56affa73a 100644
+--- a/watchman/Logging.cpp
++++ b/watchman/Logging.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include "watchman/portability/Backtrace.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <array>
+ #include <limits>
+ #include <optional>
+diff --git a/watchman/Options.cpp b/watchman/Options.cpp
+index 4cae973f92e9..0b8cf659c47a 100644
+--- a/watchman/Options.cpp
++++ b/watchman/Options.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/Options.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <string.h>
+ #include "watchman/CommandRegistry.h"
+ #include "watchman/LogConfig.h"
+diff --git a/watchman/PathUtils.cpp b/watchman/PathUtils.cpp
+index 9712e2e13ba4..fb03b5f6084e 100644
+--- a/watchman/PathUtils.cpp
++++ b/watchman/PathUtils.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "watchman/PathUtils.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/Exception.h>
+ #include <folly/String.h>
+ #include <folly/portability/Fcntl.h>
+diff --git a/watchman/Poison.cpp b/watchman/Poison.cpp
+index 65741d5ea321..ee307d7ac2ae 100644
+--- a/watchman/Poison.cpp
++++ b/watchman/Poison.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/Logging.h"
+ #include "watchman/WatchmanConfig.h"
+ 
+diff --git a/watchman/ProcessLock.cpp b/watchman/ProcessLock.cpp
+index 5cb3ef0ffbc8..960be71530db 100644
+--- a/watchman/ProcessLock.cpp
++++ b/watchman/ProcessLock.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "ProcessLock.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ 
+ #include "watchman/Logging.h"
+diff --git a/watchman/SanityCheck.cpp b/watchman/SanityCheck.cpp
+index f0e430afd3ae..a4ee1eef57dc 100644
+--- a/watchman/SanityCheck.cpp
++++ b/watchman/SanityCheck.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ 
+ #include "watchman/Connect.h"
+diff --git a/watchman/SignalHandler.cpp b/watchman/SignalHandler.cpp
+index 8606b9c4dd85..c2bd56d50a72 100644
+--- a/watchman/SignalHandler.cpp
++++ b/watchman/SignalHandler.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/Logging.h"
+ #include "watchman/Shutdown.h"
+ 
+diff --git a/watchman/UserDir.cpp b/watchman/UserDir.cpp
+index 50e1c481914b..1e374cf84ab4 100644
+--- a/watchman/UserDir.cpp
++++ b/watchman/UserDir.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "watchman/UserDir.h"
+ #include <eden/common/utils/StringConv.h>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <folly/portability/Unistd.h>
+ #include "watchman/Logging.h"
+diff --git a/watchman/benchmarks/bser.cpp b/watchman/benchmarks/bser.cpp
+index 8c48e6b62a00..2133f3da134c 100644
+--- a/watchman/benchmarks/bser.cpp
++++ b/watchman/benchmarks/bser.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "watchman/bser.h"
+ #include <benchmark/benchmark.h>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <random>
+ #include <vector>
+ 
+diff --git a/watchman/bser.h b/watchman/bser.h
+index 92a3a3328b84..49e719fb31a2 100644
+--- a/watchman/bser.h
++++ b/watchman/bser.h
+@@ -7,7 +7,7 @@
+ 
+ #pragma once
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/thirdparty/jansson/jansson.h"
+ 
+ typedef struct bser_ctx {
+diff --git a/watchman/cmds/heapprof.cpp b/watchman/cmds/heapprof.cpp
+index d30c9dcfc4fb..fa0334f939c1 100644
+--- a/watchman/cmds/heapprof.cpp
++++ b/watchman/cmds/heapprof.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <folly/memory/Malloc.h>
+ #include "watchman/Client.h"
+diff --git a/watchman/cppclient/WatchmanClient.cpp b/watchman/cppclient/WatchmanClient.cpp
+index 5331149c42ac..d4fc4536a5db 100644
+--- a/watchman/cppclient/WatchmanClient.cpp
++++ b/watchman/cppclient/WatchmanClient.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "WatchmanClient.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <glog/logging.h>
+ 
+ #include <utility>
+diff --git a/watchman/cppclient/WatchmanConnection.cpp b/watchman/cppclient/WatchmanConnection.cpp
+index c041baa41d53..fa6aba15d627 100644
+--- a/watchman/cppclient/WatchmanConnection.cpp
++++ b/watchman/cppclient/WatchmanConnection.cpp
+@@ -9,7 +9,7 @@
+ 
+ #include <cstdlib>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include <folly/ExceptionWrapper.h>
+ #include <folly/SocketAddress.h>
+diff --git a/watchman/fs/FileSystem.cpp b/watchman/fs/FileSystem.cpp
+index 7cc159a6bd1c..85fc2c0f6fa1 100644
+--- a/watchman/fs/FileSystem.cpp
++++ b/watchman/fs/FileSystem.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/fs/FileSystem.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <system_error>
+ #include "watchman/fs/FSDetect.h"
+diff --git a/watchman/fs/ParallelWalk.cpp b/watchman/fs/ParallelWalk.cpp
+index 5a063dbca390..36ecea6826af 100644
+--- a/watchman/fs/ParallelWalk.cpp
++++ b/watchman/fs/ParallelWalk.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/fs/ParallelWalk.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/concurrency/UnboundedQueue.h>
+ #include <folly/executors/CPUThreadPoolExecutor.h>
+ #include <folly/system/HardwareConcurrency.h>
+diff --git a/watchman/fs/UnixDirHandle.cpp b/watchman/fs/UnixDirHandle.cpp
+index 6b644e5fb241..1198182112db 100644
+--- a/watchman/fs/UnixDirHandle.cpp
++++ b/watchman/fs/UnixDirHandle.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "watchman/fs/DirHandle.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <system_error>
+ #include "watchman/Logging.h"
+diff --git a/watchman/main.cpp b/watchman/main.cpp
+index 9511b916b024..4382297b1b21 100644
+--- a/watchman/main.cpp
++++ b/watchman/main.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/Exception.h>
+ #include <folly/ScopeGuard.h>
+ #include <folly/Singleton.h>
+diff --git a/watchman/query/GlobTree.cpp b/watchman/query/GlobTree.cpp
+index c771db5225fd..568ee7cec5ef 100644
+--- a/watchman/query/GlobTree.cpp
++++ b/watchman/query/GlobTree.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include "watchman/query/GlobTree.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/Range.h>
+ 
+ namespace watchman {
+diff --git a/watchman/query/TermRegistry.cpp b/watchman/query/TermRegistry.cpp
+index 4efe2c5b46a0..f2cc1abd9eb4 100644
+--- a/watchman/query/TermRegistry.cpp
++++ b/watchman/query/TermRegistry.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/query/TermRegistry.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/CommandRegistry.h"
+ #include "watchman/Errors.h"
+ #include "watchman/query/QueryExpr.h"
+diff --git a/watchman/query/intcompare.cpp b/watchman/query/intcompare.cpp
+index 4b13bb9d3c16..3f308456b718 100644
+--- a/watchman/query/intcompare.cpp
++++ b/watchman/query/intcompare.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/query/intcompare.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/Errors.h"
+ #include "watchman/query/FileResult.h"
+ #include "watchman/query/QueryExpr.h"
+diff --git a/watchman/query/parse.cpp b/watchman/query/parse.cpp
+index 90fe43245364..772c1c85e7be 100644
+--- a/watchman/query/parse.cpp
++++ b/watchman/query/parse.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include "watchman/CommandRegistry.h"
+ #include "watchman/Errors.h"
+diff --git a/watchman/query/pcre.cpp b/watchman/query/pcre.cpp
+index 0b7abebf397f..34b68700aab3 100644
+--- a/watchman/query/pcre.cpp
++++ b/watchman/query/pcre.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <memory>
+ #include "watchman/Errors.h"
+ #include "watchman/fs/FileSystem.h"
+diff --git a/watchman/query/type.cpp b/watchman/query/type.cpp
+index cf87e9f7d601..6a303a684d3b 100644
+--- a/watchman/query/type.cpp
++++ b/watchman/query/type.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include "watchman/Errors.h"
+ #include "watchman/fs/FileInformation.h"
+ #include "watchman/query/FileResult.h"
+diff --git a/watchman/root/init.cpp b/watchman/root/init.cpp
+index d8d8f14660b0..979c2f13b9b6 100644
+--- a/watchman/root/init.cpp
++++ b/watchman/root/init.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include "watchman/Logging.h"
+ #include "watchman/QueryableView.h"
+diff --git a/watchman/root/resolve.cpp b/watchman/root/resolve.cpp
+index 667de1303b73..3fe5ddc69df3 100644
+--- a/watchman/root/resolve.cpp
++++ b/watchman/root/resolve.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <system_error>
+ #include "watchman/Errors.h"
+diff --git a/watchman/root/watchlist.cpp b/watchman/root/watchlist.cpp
+index ec36b16c64bb..67b3e41e6456 100644
+--- a/watchman/root/watchlist.cpp
++++ b/watchman/root/watchlist.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/root/watchlist.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/Synchronized.h>
+ #include <vector>
+ #include "watchman/QueryableView.h"
+diff --git a/watchman/scm/Git.cpp b/watchman/scm/Git.cpp
+index c92a5a42cd09..39b45c728bee 100644
+--- a/watchman/scm/Git.cpp
++++ b/watchman/scm/Git.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/scm/Git.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <folly/portability/SysTime.h>
+ #include "watchman/ChildProcess.h"
+diff --git a/watchman/scm/Mercurial.cpp b/watchman/scm/Mercurial.cpp
+index bdb586e73f9b..0952506c4160 100644
+--- a/watchman/scm/Mercurial.cpp
++++ b/watchman/scm/Mercurial.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "Mercurial.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ #include <folly/portability/SysTime.h>
+ #include <chrono>
+diff --git a/watchman/test/ArtTest.cpp b/watchman/test/ArtTest.cpp
+index a1f86034e9c4..05c4d249e6a0 100644
+--- a/watchman/test/ArtTest.cpp
++++ b/watchman/test/ArtTest.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/logging/xlog.h>
+ #include <folly/portability/GTest.h>
+ #include <stdio.h>
+diff --git a/watchman/test/BserTest.cpp b/watchman/test/BserTest.cpp
+index 119b4849b5dc..9fb5b2f66883 100644
+--- a/watchman/test/BserTest.cpp
++++ b/watchman/test/BserTest.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include "watchman/bser.h"
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/ScopeGuard.h>
+ #include <folly/logging/xlog.h>
+ #include <folly/portability/GTest.h>
+diff --git a/watchman/thirdparty/jansson/load.cpp b/watchman/thirdparty/jansson/load.cpp
+index 888588cab88d..c2f29b309b19 100644
+--- a/watchman/thirdparty/jansson/load.cpp
++++ b/watchman/thirdparty/jansson/load.cpp
+@@ -20,7 +20,7 @@
+ 
+ #include <system_error>
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/String.h>
+ 
+ 
+diff --git a/watchman/thirdparty/jansson/value.cpp b/watchman/thirdparty/jansson/value.cpp
+index 5c241421f650..1ac20171210b 100644
+--- a/watchman/thirdparty/jansson/value.cpp
++++ b/watchman/thirdparty/jansson/value.cpp
+@@ -13,7 +13,7 @@
+ 
+ #include <algorithm>
+ #include <cmath>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <string>
+ #include <sstream>
+ 
+diff --git a/watchman/watcher/WatcherRegistry.cpp b/watchman/watcher/WatcherRegistry.cpp
+index bf7fcaf8e06a..2384842f50ce 100644
+--- a/watchman/watcher/WatcherRegistry.cpp
++++ b/watchman/watcher/WatcherRegistry.cpp
+@@ -5,7 +5,7 @@
+  * LICENSE file in the root directory of this source tree.
+  */
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ 
+ #include "watchman/watcher/WatcherRegistry.h"
+ 
+diff --git a/watchman/watcher/eden.cpp b/watchman/watcher/eden.cpp
+index 66bd8f98cf2f..836c88d9f240 100644
+--- a/watchman/watcher/eden.cpp
++++ b/watchman/watcher/eden.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include <cpptoml.h>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/ScopeGuard.h>
+ #include <folly/String.h>
+ #include <folly/futures/Future.h>
+diff --git a/watchman/watchman_string.h b/watchman/watchman_string.h
+index 0a653f39eed5..5f03973a90d5 100644
+--- a/watchman/watchman_string.h
++++ b/watchman/watchman_string.h
+@@ -9,7 +9,7 @@
+ 
+ #include "watchman/watchman_system.h"
+ 
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <folly/FBString.h>
+ 
+ #include <stdint.h>
+diff --git a/watchman/winbuild/susres.cpp b/watchman/winbuild/susres.cpp
+index cc686912c10a..fd9306a24976 100644
+--- a/watchman/winbuild/susres.cpp
++++ b/watchman/winbuild/susres.cpp
+@@ -6,7 +6,7 @@
+  */
+ 
+ #include <errno.h>
+-#include <fmt/core.h>
++#include <fmt/format.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <windows.h>

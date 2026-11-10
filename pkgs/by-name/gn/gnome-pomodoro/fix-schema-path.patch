@@ -1,0 +1,23 @@
+diff --git a/meson.build b/meson.build
+index 09857a1..a07d27c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -40,7 +40,8 @@ add_project_arguments(
+ )
+ 
+ # We are going to use these variables later on for the plugins
+-gschema_dir = get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
++nix_package_name = '@pname@' + '-' + '@version@'
++gschema_dir = get_option('prefix') / get_option('datadir') / 'gsettings-schemas' / nix_package_name / 'glib-2.0' / 'schemas'
+ plugin_libdir = get_option('prefix') / get_option('libdir') / meson.project_name() / 'plugins'
+ extension_dir = get_option('prefix') / get_option('datadir') / 'gnome-shell' / 'extensions' / 'pomodoro@arun.codito.in'
+ 
+@@ -134,7 +135,7 @@
+ subdir('tests')
+ 
+ gnome.post_install(
+-  glib_compile_schemas: true,
++  glib_compile_schemas: false,
+   gtk_update_icon_cache: true,
+   update_desktop_database: true,
+ )

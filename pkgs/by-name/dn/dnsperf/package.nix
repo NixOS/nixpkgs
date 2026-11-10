@@ -1,0 +1,63 @@
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromCodeberg,
+  fetchpatch,
+  ldns,
+  libck,
+  nghttp2,
+  openssl,
+  pkg-config,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "dnsperf";
+  version = "2.16.0";
+
+  src = fetchFromCodeberg {
+    owner = "DNS-OARC";
+    repo = "dnsperf";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4DSIdEj7fqDLaT7ZrLg/bgK/QeCE4puMdWr18h9Tr0A=";
+  };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    ldns # optional for DDNS (but cheap anyway)
+    libck
+    nghttp2
+    openssl
+  ];
+
+  strictDeps = true;
+
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # dnsperf doesn't have support for musl (https://github.com/DNS-OARC/dnsperf/issues/265)
+    # and strerror_r returns int on non-glibc: https://github.com/NixOS/nixpkgs/issues/370498
+    # TODO: remove if better non-glibc detection is ever upstreamed
+    (fetchpatch {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/5bd92b8f86a0bf15dddf8fa180adf14344d6cc15/testing/dnsperf/musl-perf_strerror_r.patch";
+      hash = "sha256-yTJHXkti/xSklmVfAV45lEsOiHy7oL1phImNTNtcPkM=";
+    })
+  ];
+
+  doCheck = true;
+
+  meta = {
+    description = "Tools for DNS benchmaring";
+    homepage = "https://www.dns-oarc.net/tools/dnsperf";
+    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
+    mainProgram = "dnsperf";
+    maintainers = with lib.maintainers; [
+      vcunat
+      mfrw
+    ];
+  };
+})

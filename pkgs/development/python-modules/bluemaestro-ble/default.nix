@@ -1,0 +1,47 @@
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  sensor-state-data,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "bluemaestro-ble";
+  version = "1.2.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Bluetooth-Devices";
+    repo = "bluemaestro-ble";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Uz4JE7ALfHxmdi7OesdJZqp4JhQdQGNwoiDxZyk8g9c=";
+  };
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    bluetooth-data-tools
+    bluetooth-sensor-state-data
+    sensor-state-data
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "bluemaestro_ble" ];
+
+  meta = {
+    description = "Library for bluemaestro BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/bluemaestro-ble";
+    changelog = "https://github.com/Bluetooth-Devices/bluemaestro-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

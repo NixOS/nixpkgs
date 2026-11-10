@@ -1,0 +1,12 @@
+--- a/core/fxcodec/BUILD.gn
++++ b/core/fxcodec/BUILD.gn
+@@ -251,8 +251,7 @@ source_set("fxcodec") {
+       "jpeg/jpeg_common.c",
+       "jpeg/jpeg_common.h",
+     ]
+-    public_deps += [ "//third_party/libjpeg_turbo:libjpeg_headers" ]
+-    deps += [ "//third_party:jpeg" ]
++    public_deps += [ "//third_party:jpeg" ]
+   }
+ 
+   if (pdf_use_libyuv) {

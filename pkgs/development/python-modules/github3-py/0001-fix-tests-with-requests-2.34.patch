@@ -1,0 +1,43 @@
+From d3882be89d276646281de9aadc2b6fbcfbca0f08 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 26 Jul 2026 19:30:35 +0530
+Subject: [PATCH] fix tests with requests 2.34
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/unit/test_github_session.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tests/unit/test_github_session.py b/tests/unit/test_github_session.py
+index d57e9b41..d7b4a051 100644
+--- a/tests/unit/test_github_session.py
++++ b/tests/unit/test_github_session.py
+@@ -40,7 +40,7 @@ class TestGitHubSession:
+         r = s.get("http://example.com")
+         assert r is response
+         request_mock.assert_called_once_with(
+-            "GET", "http://example.com", allow_redirects=True, timeout=(4, 10)
++            "GET", "http://example.com", params=None, allow_redirects=True, timeout=(4, 10)
+         )
+ 
+     @unittest.mock.patch.object(requests.Session, "request")
+@@ -57,6 +57,7 @@ class TestGitHubSession:
+         request_mock.assert_called_once_with(
+             "GET",
+             "http://example.com",
++            params=None,
+             allow_redirects=True,
+             timeout=(300, 400),
+         )
+@@ -148,7 +149,7 @@ class TestGitHubSession:
+         r = s.get("http://example.com")
+         assert r is response
+         request_mock.assert_called_once_with(
+-            "GET", "http://example.com", allow_redirects=True, timeout=(4, 10)
++            "GET", "http://example.com", params=None, allow_redirects=True, timeout=(4, 10)
+         )
+ 
+     @unittest.mock.patch.object(requests.Session, "request")
+-- 
+2.54.0
+
