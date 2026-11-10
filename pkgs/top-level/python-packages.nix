@@ -5759,6 +5759,8 @@ self: super: with self; {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  etherscan-python = callPackage ../development/python-modules/etherscan-python { };
+
   ethtool = callPackage ../development/python-modules/ethtool { };
 
   etils = callPackage ../development/python-modules/etils { };
@@ -17090,8 +17092,6 @@ self: super: with self; {
   python-escpos = callPackage ../development/python-modules/python-escpos { };
 
   python-etcd = callPackage ../development/python-modules/python-etcd { };
-
-  python-etherscan-api = callPackage ../development/python-modules/python-etherscan-api { };
 
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
