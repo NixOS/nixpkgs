@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  aws-lc,
   bzip2,
   openssl,
   xz,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     bzip2
     openssl
     xz
