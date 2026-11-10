@@ -697,6 +697,13 @@ in
       "i686-linux"
       "x86_64-linux"
     ];
+    # Default environment for U-Boot does not work with
+    # large NixOS kernel.
+    prePatch = ''
+      substituteInPlace include/env/x86.env --replace-fail \
+        'ramdisk_addr_r=0x4000000' \
+        'ramdisk_addr_r=0x8000000'
+    '';
     filesToInstall = [ "u-boot.rom" ];
   };
 
