@@ -48,14 +48,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ finalAttrs.runtimeDependencies;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     description = "Ready to go Wayland status bar for Hyprland";
     homepage = "https://github.com/MalpenZibo/ashell";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ashell";
-    maintainers = with lib.maintainers; [ justdeeevin ];
+    maintainers = with lib.maintainers; [
+      mBornand
+    ];
     platforms = lib.platforms.linux;
   };
 })
