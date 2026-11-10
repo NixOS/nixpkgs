@@ -175,8 +175,8 @@ in
       "sha256-aQhTdAcGRSH/h0PxSXrZov015MiYS7RrFHn+yfeiWOs=";
 
   mypy-boto3-budgets =
-    buildMypyBoto3Package "budgets" "1.43.110"
-      "sha256-vDaymYbrkY6fhBngtwo4S40vkqP+VYq1jlv6PUG7BFw=";
+    buildMypyBoto3Package "budgets" "1.44.0"
+      "sha256-Kki3EhUWb/k7TgciMzVC4i56srCL51GFV9BlRhVewLY=";
 
   mypy-boto3-ce =
     buildMypyBoto3Package "ce" "1.43.110"
