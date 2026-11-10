@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   fetchFromGitHub,
   krb5,
   nix-update-script,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     krb5
     openssl
     sqlite
