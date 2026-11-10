@@ -371,8 +371,8 @@ in
       "sha256-PgH6PmMLrYLMhEiYhvFJXwvc3rWuGGb6bZP7LshxP/Y=";
 
   mypy-boto3-dataexchange =
-    buildMypyBoto3Package "dataexchange" "1.43.0"
-      "sha256-OPnECfEDg+3xeJVSRN61zMJcKvDfPWvcS0elJNEG1jM=";
+    buildMypyBoto3Package "dataexchange" "1.44.0"
+      "sha256-L4ghjLUYPnNJTzrp1q0ABzOlpsdV/qv3qqF6RFCHAOU=";
 
   mypy-boto3-datapipeline =
     buildMypyBoto3Package "datapipeline" "1.43.0"
