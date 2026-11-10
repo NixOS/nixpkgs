@@ -20,7 +20,13 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd" ];
 
-  patches = [ ./fix-go-mod.patch ];
+  postPatch = ''
+    # Use the declared SDK version instead of forcing latest
+    substituteInPlace go.mod \
+      --replace-fail \
+      'replace github.com/cyberark/conjur-api-go => github.com/cyberark/conjur-api-go latest' \
+      ""
+  '';
 
   ldflags = [
     "-X github.com/cyberark/summon/pkg/version.Version=${finalAttrs.version}"
