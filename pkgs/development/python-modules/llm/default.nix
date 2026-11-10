@@ -92,6 +92,7 @@ let
       llm-meta-ai ? false,
       llm-mistral ? false,
       llm-ollama ? false,
+      llm-openai-decisions ? false,
       llm-openai-plugin ? false,
       llm-openrouter ? false,
       llm-pdf-to-images ? false,

@@ -10278,6 +10278,8 @@ self: super: with self; {
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
+  llm-openai-decisions = callPackage ../development/python-modules/llm-openai-decisions { };
+
   llm-openai-plugin = callPackage ../development/python-modules/llm-openai-plugin { };
 
   llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
