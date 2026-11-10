@@ -7,8 +7,10 @@
   jdk_headless,
   jre_headless,
   makeWrapper,
+  maven,
   pandoc,
   python3,
+  strip-nondeterminism,
   stdenvNoCC,
   lib,
   testers,
@@ -16,13 +18,13 @@
 
 let
   pname = "validator-nu";
-  version = "25.12.12";
+  version = "26.11.9.2";
 
   src = fetchFromGitHub {
     owner = "validator";
     repo = "validator";
-    rev = "7ed7f67468f7f61975dcc78891ea462fce578828";
-    hash = "sha256-cdDmhRyXIdoNWhP4oqu7vRb5abuNXRqvt4P4Dzq48xY=";
+    tag = version;
+    hash = "sha256-9/yWPGFImFFqiKgpxcSvHFiXAKUu+SlDo5qmdfFGbg8=";
   };
 
   deps = stdenvNoCC.mkDerivation {
@@ -33,28 +35,72 @@ let
       ant
       cacert
       jdk_headless
+      maven
       python3
+      strip-nondeterminism
     ];
 
     postPatch = ''
       substituteInPlace build/build.xml \
         --replace-fail \
         'src="https://html.spec.whatwg.org/"' \
-        'src="https://html.spec.whatwg.org/commit-snapshots/0aa021ab4f21a6550f1591a9cc98449aaea9eefa/"'
+        'src="https://html.spec.whatwg.org/commit-snapshots/24c5e48bf66ea61bc199ec6338c81258275ba9c6/"'
+
+      python3 - <<'PY'
+from pathlib import Path
+
+path = Path("build/shade-with-maven.py")
+text = path.read_text()
+text = text.replace(
+    'mvn_cmd, "install:install-file",',
+    'mvn_cmd, "-Dmaven.repo.local=" + os.path.join(os.getcwd(), ".m2", "repository"), "install:install-file",',
+)
+text = text.replace(
+    'cmd = [mvn_cmd, "clean", "package"]',
+    'cmd = [mvn_cmd, "-Dmaven.repo.local=" + os.path.join(os.getcwd(), ".m2", "repository"), "clean", "package"]',
+)
+path.write_text(text)
+PY
     '';
 
     buildPhase = ''
-      python checker.py dldeps
+      export MAVEN_OPTS="-Dmaven.repo.local=$PWD/.m2/repository"
+
+      python3 checker.py dldeps
+      ant -f build/build.xml dl-html5spec
+
+      # Populate the local Maven repository with plugins and dependencies needed
+      # for offline shading in the main build.
+      ant -f jing-trang/build.xml jar
+      python3 build/shade-with-maven.py
+
+      # Remove artifacts produced from locally built jars so the fixed-output
+      # hash stays platform-independent.
+      rm -rf \
+        .m2/repository/com/thaiopensource/jing \
+        .m2/repository/isorelax/isorelax \
+        .m2/repository/nu/validator/jing-shaded
     '';
 
     installPhase = ''
-      mkdir "$out" "$out/build"
+      mkdir -p "$out" "$out/resources"
       mv dependencies extras "$out"
-      mv build/html5spec "$out/build"
+      mv resources/spec "$out/resources/spec"
+
+      if [ -d .m2 ]; then
+        cp -r .m2 "$out/"
+        find "$out/.m2" -type f \( \
+          -name "_remote.repositories" -o \
+          -name "resolver-status.properties" -o \
+          -name "*.lastUpdated" \
+        \) -delete
+      fi
+
+      find "$out" -type f \( -name '*.jar' -o -name '*.zip' \) -exec strip-nondeterminism {} +
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-8cMoLeOnKNqisezkVS2UeVW11gtkGmhvQWrbSVuqbb8=";
+    outputHash = "sha256-j1DqSMRpQUPX3uaXXvek4NjtS1E6JlqLnAdZOwnBYRg=";
   };
 
 in
@@ -66,6 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installShellFiles
     jdk_headless
     makeWrapper
+    maven
     pandoc
     python3
   ];
@@ -74,12 +121,39 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     substituteInPlace build/build.py --replace-fail \
       'validatorVersion = "%s.%s.%s" % (year, month, day)' \
       'validatorVersion = "${finalAttrs.version}"'
+
+    python3 - <<'PY'
+from pathlib import Path
+
+path = Path("build/shade-with-maven.py")
+text = path.read_text()
+text = text.replace(
+    'mvn_cmd, "install:install-file",',
+    'mvn_cmd, "-o", "-Dmaven.repo.local=" + os.path.join(os.getcwd(), ".m2", "repository"), "install:install-file",',
+)
+text = text.replace(
+    'cmd = [mvn_cmd, "clean", "package"]',
+    'cmd = [mvn_cmd, "-o", "-Dmaven.repo.local=" + os.path.join(os.getcwd(), ".m2", "repository"), "clean", "package"]',
+)
+path.write_text(text)
+PY
   '';
 
   buildPhase = ''
     ln -s '${deps}/dependencies' '${deps}/extras' .
-    ln -s '${deps}/build/html5spec' build/
-    JAVA_HOME='${jdk_headless}' python checker.py --offline build
+    mkdir -p resources
+    ln -s '${deps}/resources/spec' resources/spec
+
+    if [ -d "${deps}/.m2" ]; then
+      cp -r "${deps}/.m2" .m2
+      chmod -R +w .m2
+      export MAVEN_OPTS="-Dmaven.repo.local=$PWD/.m2/repository"
+    fi
+
+    ant -f jing-trang/build.xml jar
+    python3 build/shade-with-maven.py
+
+    JAVA_HOME='${jdk_headless}' python3 checker.py --offline build
     make -C docs VNU_VERSION='${finalAttrs.version}' DATE='date -d @$(SOURCE_DATE_EPOCH)'
   '';
 
