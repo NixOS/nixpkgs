@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # Opt out of forced system libs: libgit2-sys 0.16 (via shadow-rs) needs libgit2 1.7,
+  # nixpkgs has 1.9. TODO: remove on next release, upstream already bumped libgit2-sys.
+  dontCargoUseSystemLibs = true;
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd joshuto \
       --bash <($out/bin/joshuto completions bash) \
