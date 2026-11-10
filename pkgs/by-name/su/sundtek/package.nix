@@ -20,9 +20,9 @@ let
   sha256 =
     with stdenv.hostPlatform;
     if isx86_64 then
-      "1jfsng5n3phw5rqpkid9m5j7m7zgj5bifh7swvba7f97y6imdaax"
+      "1fid37p37lvscixcdlcs1b5wkyphs29kmh0iz7vvhpsrnfd7i0bc"
     else
-      "15y6r5w306pcq4g1rn9f7vf70f3a7qhq237ngaf0wxh2nr0aamxp";
+      "1vla84badxzhccb3mxwvywqyjqbp7m0i019wyg68rr8h4rhpn9yp";
 in
 stdenv.mkDerivation {
   src = fetchurl {
