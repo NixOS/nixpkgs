@@ -24792,12 +24792,12 @@ final: prev: {
 
   vim-test = buildVimPlugin {
     pname = "vim-test";
-    version = "3.4.0";
+    version = "3.7.0";
     src = fetchFromGitHub {
       owner = "vim-test";
       repo = "vim-test";
-      tag = "v3.4.0";
-      hash = "sha256-az9rmgWrmKrAVVYNPsxmnrN2W0cEGKeMn6U9RKqwfNM=";
+      tag = "v3.7.0";
+      hash = "sha256-EjFw3AveDV1CnodEs21ffsX5cArGGF2scJujEFCLDRk=";
     };
     meta.homepage = "https://github.com/vim-test/vim-test/";
     meta.license = getLicenseFromSpdxId "MIT";
