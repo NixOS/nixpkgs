@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gmqtt";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Yft2QRCfV8op9z0tjyy0h95J12M474xoIo25YbbpaWo=";
+    hash = "sha256-S3YbuVn3fC7Gjt8rLJ0ET19kzWzVvmW0AgajnZ4m53Q=";
   };
 
   build-system = [ setuptools ];
