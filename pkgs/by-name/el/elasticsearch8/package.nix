@@ -77,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
     sourceProvenance = with lib.sourceTypes; [
