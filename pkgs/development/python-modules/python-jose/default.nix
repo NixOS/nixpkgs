@@ -62,6 +62,9 @@ buildPythonPackage rec {
     description = "JOSE implementation in Python";
     homepage = "https://github.com/mpdavis/python-jose";
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${src.tag}";
+    knownVulnerabilities = [
+      "CVE-2026-120459"
+    ];
     license = lib.licenses.mit;
     maintainers = [ ];
   };
