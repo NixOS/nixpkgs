@@ -6,14 +6,14 @@
   yarn,
   yarnConfigHook,
   yarnInstallHook,
-  nodejs_22,
+  nodejs-slim_24,
   nix-update-script,
 }:
 
 let
   # The latest nodejs is always used in yarn, leading to build issues when it's
   # different from the pinned one.
-  nodejs = nodejs_22;
+  nodejs = nodejs-slim_24;
   yarnConfigHook' = yarnConfigHook.override {
     yarn = yarn.override { inherit nodejs; };
   };

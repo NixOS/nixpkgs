@@ -2993,21 +2993,17 @@ with haskellLib;
   stripe-signature = doJailbreak super.stripe-signature;
   stripe-wreq = doJailbreak super.stripe-wreq;
 
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-low = overrideCabal {
-    version = "0.2.0.1";
-    sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.2.0.1" super.botan-low);
-
-  # 2026-05-10: Remove again, when hackage bump is recent enough
-  botan-bindings = overrideCabal {
-    version = "0.3.0.0";
-    sha256 = "sha256-tsarIc3LcUKPgSWZ+xcGPWGO2f9OF6SWHB6nmX/vJYw=";
-    revision = null;
-    editedCabalFile = null;
-  } (warnAfterVersion "0.3.0.0" super.botan-bindings);
+  # 2026-05-10: Remove overrideCabal again, when hackage bump is recent enough
+  # 2026-11-05: Adapt tests to Botan 3.14, which rejects DSA groups with
+  # q > 256 bits and reports PBKDF2 without a PRF as not implemented
+  botan-low = appendPatch ./patches/botan-low-botan-3.14-tests.patch (
+    overrideCabal {
+      version = "0.2.0.1";
+      sha256 = "sha256-yC+GJDNO58TIc197Mgn/vqpt4fY3YghLhJfmGkQjsxk=";
+      revision = null;
+      editedCabalFile = null;
+    } (warnAfterVersion "0.2.0.1" super.botan-low)
+  );
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

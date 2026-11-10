@@ -3,6 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  libgit2,
+  oniguruma,
+  sqlite,
   openssl,
 }:
 
@@ -21,7 +24,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-qRjObQBrJNXCOSQC6nlrxeRQiWbjQ297accEHgCuRLI=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    oniguruma
+    openssl
+    sqlite
+  ];
 
   meta = {
     description = "Write, edit, and publish your blog without ever leaving your terminal";

@@ -3,11 +3,16 @@
   replaceVars,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   buildNpmPackage,
   openapi-generator-cli,
   nixosTests,
   nix-update-script,
+  openssl,
   perl,
+  pkg-config,
+  sqlite,
+  zstd,
   withRDPLegacyTLSBackend ? false,
 }:
 rustPlatform.buildRustPackage (
@@ -60,7 +65,17 @@ rustPlatform.buildRustPackage (
       RUSTFLAGS = "--cfg tokio_unstable";
     };
 
-    nativeBuildInputs = lib.optional withRDPLegacyTLSBackend perl;
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optional withRDPLegacyTLSBackend perl;
+
+    buildInputs = [
+      aws-lc
+      sqlite
+      zstd
+    ]
+    ++ lib.optional withRDPLegacyTLSBackend openssl;
 
     buildFeatures = [
       "postgres"

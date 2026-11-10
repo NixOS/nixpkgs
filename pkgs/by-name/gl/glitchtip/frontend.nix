@@ -60,7 +60,6 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

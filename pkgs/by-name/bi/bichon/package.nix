@@ -6,7 +6,9 @@
   pnpm_11,
   pnpmConfigHook,
   nodejs,
+  aws-lc,
   openssl,
+  zstd,
   pkg-config,
   versionCheckHook,
   nix-update-script,
@@ -45,7 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ];
 
   env.GIT_HASH = finalAttrs.src.rev;

@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "caper";
-  version = "0.9";
+  version = "1.0";
 
   src = fetchFromGitLab {
     owner = "niksu";
     repo = "caper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TSryjz0NrGdkc+6vmfBqsuVpV3N9FvteTFsVqpUcm0w=";
+    hash = "sha256-Ih7PSzPDZ7p+T/1SWE7xSS30uaGtL6kX64/doFAfhtQ=";
   };
 
   nativeBuildInputs = [

@@ -73,7 +73,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/django-vpg/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };
