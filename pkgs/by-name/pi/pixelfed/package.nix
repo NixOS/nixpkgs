@@ -30,16 +30,16 @@ let
 in
 phpPackage.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.9";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eWNpoCyKK7vDx4kCKsZhieMyZhTDC9FS6gVqLKPzviQ=";
+    hash = "sha256-50SjsCPCNmErBfAe0dYl0bpaWoJ3v2qikABcpCgEkmQ=";
   };
 
-  vendorHash = "sha256-A7uHuE+9tfNMxtHhZL5+hsnW3qkJaPeKW119xB32qRM=";
+  vendorHash = "sha256-QCfbArftb6+SZXsvaDET/IyyyaSV+HosU9ckBrnnm3s=";
 
   postInstall = ''
     chmod -R u+w $out/share
