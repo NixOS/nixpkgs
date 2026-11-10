@@ -1410,17 +1410,14 @@ let
 
           # Process mkOverride properties.
           defsFiltered = filterOverrides' defsNormalized;
-
-          # Sort mkOrder properties.
-          defsSorted =
-            # Avoid sorting if we don't have to.
+        in
+        {
+          values =
+            # Sort mkOrder properties.
             if any (def: def.value._type or "" == "order") defsFiltered.values then
               sortProperties defsFiltered.values
             else
               defsFiltered.values;
-        in
-        {
-          values = defsSorted;
           highestPrio = defsFiltered.highestPrio;
         };
     defsFinal = defsFinal'.values;
