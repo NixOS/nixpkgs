@@ -98,6 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "check";
 
+  # The `now.ck` test depends on the current time, which is inherently
+  # non-deterministic.  Avoid that causing unexpected behaviour by overriding
+  # it with `SOURCE_DATE_EPOCH`, which is set as a default step in stdenv to
+  # the modification time of the most recent file in the unpacked sources, so
+  # we'll be testing as if "now" is the time the sources were released.
+  preCheck = ''
+    checkFlagsArray+=(CHECK_NOW_TIMESTAMP="$SOURCE_DATE_EPOCH")
+  '';
+
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"
   ];
