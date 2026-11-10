@@ -6,7 +6,6 @@
 
   # build-system
   rustPlatform,
-  cffi,
 
   # native dependencies
   libiconv,
@@ -17,7 +16,6 @@
   pytestCheckHook,
   python-dateutil,
   pytz,
-  xxhash,
 
   # for passthru.tests
   falcon,
@@ -29,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = "orjson";
     tag = version;
-    hash = "sha256-pmp8j6035L46ejDOkz9aQnMdX48MFFmNHM3k5TW6kqM=";
+    hash = "sha256-AFHhZWHDAmSH1TFm4YOnUCpXaAmTgbjPus3GnMTSqA4=";
   };
 
   patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -46,16 +44,13 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-h0zx3D4gVvPhHX4ziXUL4eKJEKlYOAj+9wiRbV2yuRw=";
+    hash = "sha256-2D+P3TyJkJuLexikbwJZ9Og9dIoQVEKTtIp3xPT2VYM=";
   };
 
-  nativeBuildInputs = [
-    cffi
-  ]
-  ++ (with rustPlatform; [
+  nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
-  ]);
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -65,7 +60,6 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     pytz
-    xxhash
   ];
 
   pythonImportsCheck = [ "orjson" ];
