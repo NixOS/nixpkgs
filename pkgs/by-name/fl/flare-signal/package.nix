@@ -82,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      marcel
+    ];
     platforms = lib.platforms.linux;
   };
 })
