@@ -110,9 +110,6 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ant furniture textures help
-    mkdir -p $out/share/{java,applications}
-    mv "build/"*.jar $out/share/java/.
     ant
 
     runHook postBuild
@@ -121,7 +118,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/java
     cp install/SweetHome3D-${version}.jar $out/share/java/.
 
     ${installIcons "sweethome3d" icons}
@@ -129,7 +126,7 @@ stdenv.mkDerivation {
     makeWrapper ${jdk}/bin/java $out/bin/${meta.mainProgram} \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "${lib.optionalString enableJava2dOpenGL "-Dsun.java2d.opengl=true "}-Dcom.eteks.sweethome3d.j3d.useOffScreen3DView=true -jar $out/share/java/SweetHome3D-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      --add-flags "${lib.optionalString enableJava2dOpenGL "-Dsun.java2d.opengl=true "}-Dcom.eteks.sweethome3d.j3d.useOffScreen3DView=true -jar $out/share/java/SweetHome3D-${version}.jar"
 
 
     # remember the store paths found inside the .jar libraries. note that
