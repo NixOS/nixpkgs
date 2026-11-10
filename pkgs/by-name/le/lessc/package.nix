@@ -10,7 +10,7 @@
   testers,
   runCommand,
   writeText,
-  nix-update-script,
+  gitUpdater,
   lessc,
 }:
 
@@ -70,7 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "alpha";
+    };
     plugins = callPackage ./plugins { };
     wrapper = callPackage ./wrapper { };
     withPlugins = fn: lessc.wrapper.override { plugins = fn lessc.plugins; };
