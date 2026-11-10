@@ -6,13 +6,14 @@
   cmake,
   gfortran,
   perl,
+  python3,
   version ? "6.2.2",
 }:
 
 let
   versionHashes = {
     "6.2.2" = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
-    "7.0.0" = "sha256-mGyGtKDurOrSS0AYrtwhF62pJGPBLbPPNBgFV7fyyug=";
+    "7.1.2" = "sha256-aziifUOOrL8lkHiZQ8pb3RaKXvXs0mm4qB5gXHlkmZo=";
   };
 
 in
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     hash = versionHashes."${version}";
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "7.1.0") [
     # Fix build with newer CMake versions
     (fetchpatch {
       url = "https://gitlab.com/libxc/libxc/-/commit/450202adb8a3d698841dca853f2999b1befd932e.patch";
@@ -35,9 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # Timeout increase has already been included upstream in master.
-  # Check upon updates if this can be removed.
-  postPatch = ''
+  # Timeout increase has been included upstream 7.1.0.
+  postPatch = lib.optionalString (lib.versionOlder version "7.1.0") ''
     substituteInPlace testsuite/CMakeLists.txt \
         --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
   '';
@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
     perl
     cmake
     gfortran
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "7.1.0") [
+    (python3.withPackages (ps: [
+      ps.pytest
+      ps.numpy
+    ]))
   ];
 
   preConfigure = ''
@@ -69,6 +75,14 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  # Exclude python-tests: they require ENABLE_PYTHON=ON and the pylibxc module,
+  # which is not built in the default configuration.
+  checkPhase = ''
+    runHook preCheck
+    ctest --exclude-regex python-tests --output-on-failure
+    runHook postCheck
+  '';
 
   meta = {
     description = "Library of exchange-correlation functionals for density-functional theory";
