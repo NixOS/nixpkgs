@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItem = makeDesktopItem {
     name = finalAttrs.pname;
     exec = finalAttrs.meta.mainProgram;
+    icon = finalAttrs.meta.mainProgram;
+    startupWMClass = "com-eteks-textureslibraryeditor-TexturesLibraryEditorBootstrap";
     desktopName = "Sweet Home 3D - Textures Library Editor";
     comment = finalAttrs.meta.description;
     genericName = "Computer Aided (Interior) Design";
@@ -73,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/{java,applications}
     cp TexturesLibraryEditor-${finalAttrs.version}.jar $out/share/java/.
     cp "${finalAttrs.desktopItem}/share/applications/"* $out/share/applications
+    install -Dm644 src/com/eteks/textureslibraryeditor/resources/frameIcon.png \
+      $out/share/icons/hicolor/16x16/apps/${finalAttrs.meta.mainProgram}.png
+    install -Dm644 src/com/eteks/textureslibraryeditor/resources/frameIcon32x32.png \
+      $out/share/icons/hicolor/32x32/apps/${finalAttrs.meta.mainProgram}.png
     makeWrapper ${jdk}/bin/java $out/bin/${finalAttrs.meta.mainProgram} \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-jar $out/share/java/TexturesLibraryEditor-${finalAttrs.version}.jar"
