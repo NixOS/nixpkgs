@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.5.2";
+  version = "2.5.3";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     tag = finalAttrs.version;
-    hash = "sha256-7C710Z44tySox3aJ14EZWYT9ITdqMJtVCZFqN0FHvuk=";
+    hash = "sha256-+1NtseRHYJmNoth1WhiamKsBjbytTKsUB7/U4g6KkGI=";
   };
 
   mesonFlags = [
