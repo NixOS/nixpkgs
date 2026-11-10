@@ -18,6 +18,8 @@
   llvm,
   llvmPackages,
   rocksdb,
+  rust-jemalloc-sys-unprefixed,
+  zstd,
   nix-update-script,
 }:
 
@@ -49,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     libz
+    rust-jemalloc-sys-unprefixed
+    zstd
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
