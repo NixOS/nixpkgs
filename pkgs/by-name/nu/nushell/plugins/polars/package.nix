@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (nushell)
     version
     src
-    cargoPatches
     cargoHash
     ;
 

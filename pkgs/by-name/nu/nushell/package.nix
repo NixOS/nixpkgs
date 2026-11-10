@@ -26,27 +26,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.116.1";
+  version = "0.117.0";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-b62ICCP7Li88obcju4xBNVw7D+6TtRURrOUvzqcjHis=";
+    hash = "sha256-+lA9T0Wa/K50qCfyGFdNlEmCZWCeBk8KcxIvDCKk2no=";
   };
 
-  patches = [
-    # `version check` used ureq's default webpki-roots store instead of the system store.
-    ./version-check-system-roots.patch
-  ];
-
-  cargoPatches = [
-    # webpki-roots 1.0.10 removes emSign ECC Root CA - G3.
-    # rustls-webpki 0.103.16 blocks the revoked eMudhra intermediates.
-    ./bump-webpki.patch
-  ];
-
-  cargoHash = "sha256-FBBC70/tk9/maqUgIg7BSHY2UuxHYD6CRlwW/wRMijk=";
+  cargoHash = "sha256-0t1ubpyPiXucUlJ+Nwu2u3LZ15GtX6mF2kMy9HkbClw=";
 
   nativeBuildInputs = [
     pkg-config
