@@ -1,4 +1,5 @@
 {
+  aws-lc,
   fetchFromGitHub,
   git,
   lib,
@@ -24,7 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 ];
+  buildInputs = [
+    aws-lc
+    libgit2
+  ];
 
   env.LIBGIT2_NO_VENDOR = 1;
 
