@@ -28,7 +28,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/eepykate/fet.sh";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ elkowar ];
+    maintainers = with lib.maintainers; [
+      elkowar
+      givikuna
+    ];
     mainProgram = "fet.sh";
   };
 }
