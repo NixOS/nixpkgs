@@ -491,8 +491,8 @@ in
       "sha256-8RIRHfVRtNpwN4FGXFPZ1eVgBIAHsRdEpSoxhHa1kWQ=";
 
   mypy-boto3-elbv2 =
-    buildMypyBoto3Package "elbv2" "1.43.88"
-      "sha256-gwGI01weMHiIFmvWL7AM4Dva6Qu2k0o1jADy71MvKcQ=";
+    buildMypyBoto3Package "elbv2" "1.44.0"
+      "sha256-DMqMxg82PMIuyumvdroD1y4Mt1lDX//+A8IEGdIDAy0=";
 
   mypy-boto3-emr =
     buildMypyBoto3Package "emr" "1.43.124"
