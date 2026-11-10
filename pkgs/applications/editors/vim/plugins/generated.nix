@@ -4522,12 +4522,12 @@ final: prev: {
 
   dadbod-grip-nvim = buildVimPlugin {
     pname = "dadbod-grip.nvim";
-    version = "3.16.0";
+    version = "3.20.2";
     src = fetchFromGitHub {
       owner = "joryeugene";
       repo = "dadbod-grip.nvim";
-      tag = "v3.16.0";
-      hash = "sha256-7+klWuATkX8GFurwx+T2h0bNVpAkFbcw65QAfCFQRt0=";
+      tag = "v3.20.2";
+      hash = "sha256-shghrqNBZ7bKxtagG9aT2chaXMlMUKAAMDdOFqrtXQE=";
     };
     meta.homepage = "https://github.com/joryeugene/dadbod-grip.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
