@@ -6,6 +6,7 @@
   copyDesktopItems,
   makeDesktopItem,
   gradle_9,
+  openjdk25,
   nix-update-script,
   libGL,
   libx11,
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-x"
     "spotlessCheck"
     "--no-configuration-cache"
+    "-Dorg.gradle.java.installations.paths=${openjdk25}"
   ];
 
   gradleBuildTask = ":desktopApp:createDistributable";
