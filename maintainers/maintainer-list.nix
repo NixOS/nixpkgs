@@ -23012,6 +23012,12 @@
     githubId = 1368952;
     name = "Pedro Lara Campos";
   };
+  pedrosandre = {
+    name = "Pedro André";
+    github = "PedroSAndre";
+    githubId = 48893259;
+    email = "pedro@ndre.pt";
+  };
   peelz = {
     email = "peelz.dev+nixpkgs@gmail.com";
     github = "notpeelz";
