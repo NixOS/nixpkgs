@@ -11,6 +11,7 @@
   callPackage,
   testers,
   faircamp,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libopus
     vips
+    zstd
   ];
 
   postInstall = ''
