@@ -7,17 +7,17 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "pg_exporter";
-  version = "1.5.0";
+  version = "1.6.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "pg_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/FhxDOfHEwwVpdMhNPdFqIwXnebMat10PGOCB+rVZno=";
+    hash = "sha256-6j8plIpBOXCb0oNSC6qyKLxtB38nlxQ4K6GzXY9APJk=";
   };
 
-  vendorHash = "sha256-LbIsUfxU04Qawsxoh4K1GgYHAL0BVzSPXtqSaNFfgdY=";
+  vendorHash = "sha256-sncGKHs+p+btdJd8CU3q3hn4FNhMIioJxzh/O6JG3A4=";
 
   env.CGO_ENABLED = 0;
 
