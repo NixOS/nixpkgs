@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7r/+U+TwAgrgyKv4HOWIMQ8czVRVAfqr+mkpH24FsCk=";
+    hash = "sha256-GymSyI5/nDFQ2Mrh//Q9B77aIR0lfgrTYWWcmdFRnfE=";
   };
 
   postPatch = ''
