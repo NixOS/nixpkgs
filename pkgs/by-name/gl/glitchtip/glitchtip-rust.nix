@@ -38,7 +38,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-rust/-/tags/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
   };

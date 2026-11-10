@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/clokep/celery-batches";
     changelog = "https://github.com/clokep/celery-batches/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ defelo ];
+    maintainers = [ ];
   };
 }

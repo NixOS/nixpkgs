@@ -83,7 +83,6 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/glitchtip/django-vtasks/-/releases/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
     broken = lib.versionOlder (lib.versions.major django.version) "6";
