@@ -39,8 +39,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     freezegun
-    pytest-benchmark
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # save compute time
+    "tests/test_benchmarks.py"
   ];
 
   pythonImportsCheck = [ "humanize" ];
