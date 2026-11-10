@@ -2,6 +2,7 @@
   fetchFromGitHub,
   rustPlatform,
   lib,
+  libgit2,
   versionCheckHook,
   pkg-config,
   nix-update-script,
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-VJ1vXEZkOYUGba8hfgdlNpT0QAvHDPdR+TNhDNprKNk=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   nativeCheckInputs = [ git ];
 
