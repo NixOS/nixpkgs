@@ -208,7 +208,8 @@ in
       machine.wait_until_succeeds("ls /var/ssl/imp.example.org-key.pem")
       machine.wait_until_succeeds("ls /var/ssl/imp.example.org-cert.pem")
       machine.wait_for_unit("nginx.service")
-      assert 1 < int(machine.succeed('journalctl -u nginx | grep "Starting Nginx" | wc -l'))
+      # certmgr restarts nginx once the certificates are issued, which may happen after nginx is first up
+      machine.wait_until_succeeds('test "$(journalctl -u nginx | grep -c "Starting Nginx")" -gt 1')
       machine.succeed("curl --cacert /var/ssl/imp.example.org-ca.pem https://imp.example.org")
       machine.succeed(
           "curl --cacert /var/ssl/decl.example.org-ca.pem https://decl.example.org"
