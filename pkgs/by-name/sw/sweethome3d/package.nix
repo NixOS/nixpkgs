@@ -4,6 +4,9 @@
   fetchzip,
   stdenv,
   callPackage,
+
+  # Smoother 2D views, but they stop repainting under XWayland
+  enableJava2dOpenGL ? false,
 }:
 
 let
@@ -45,14 +48,19 @@ let
     furniture-editor = throw "'sweethome3d.furniture-editor' has been renamed to 'sweethome3d-furniture-editor'";
     textures-editor = throw "'sweethome3d.textures-editor' has been renamed to 'sweethome3d-textures-editor'";
   };
+
+  common = {
+    inherit
+      pname
+      version
+      src
+      meta
+      patches
+      passthru
+      ;
+  };
 in
-callPackage (if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
-  inherit
-    pname
-    version
-    src
-    meta
-    patches
-    passthru
-    ;
-}
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix common
+else
+  callPackage ./linux.nix (common // { inherit enableJava2dOpenGL; })
