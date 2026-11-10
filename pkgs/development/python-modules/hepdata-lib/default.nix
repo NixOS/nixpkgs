@@ -11,7 +11,7 @@
   root,
   imagemagick,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   withRootSupport ? false,
 }:
 
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     (imagemagick.override { ghostscriptSupport = true; })
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 
