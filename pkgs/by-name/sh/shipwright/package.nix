@@ -294,7 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qubitnano ];
     license = with lib.licenses; [
       # libultraship, Torch
       mit
