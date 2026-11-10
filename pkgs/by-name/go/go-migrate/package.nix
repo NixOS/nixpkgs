@@ -27,13 +27,20 @@ buildGoModule (finalAttrs: {
   ];
 
   tags = [
+    # Remote source drivers
+    "aws_s3"
+    "bitbucket"
+    "github" # Also builds github_ee
+    "gitlab"
+    "go_bindata"
+    "godoc_vfs"
+    "google_cloud_storage"
+    # Database drivers
     "cassandra"
     "clickhouse"
     "cockroachdb"
-    "crate"
     "firebird"
     "mongodb"
-    "multistmt"
     "mysql"
     "neo4j"
     "pgx"
@@ -42,12 +49,9 @@ buildGoModule (finalAttrs: {
     "ql"
     "redshift"
     "rqlite"
-    "shell"
     "spanner"
     "sqlite3"
     "sqlserver"
-    "stub"
-    "testing"
     "yugabytedb"
   ];
 
