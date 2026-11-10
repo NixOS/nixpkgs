@@ -11,13 +11,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Pho3niX90";
   domain = "solis_modbus";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "Pho3niX90";
     repo = "solis_modbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BsmImf4OWRLnOKB4w0LU3bgayKiRSO3rLR/CAXs5Fq0=";
+    hash = "sha256-mezX13lhuSC3XOYtadbkpktp7T/M1bI6qUZZXW+YpGE=";
   };
 
   dependencies = [
