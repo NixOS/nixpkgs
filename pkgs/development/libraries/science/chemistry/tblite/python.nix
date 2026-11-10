@@ -17,6 +17,9 @@
   toml-f,
   multicharge,
   dftd4,
+  ddx,
+  hdf5-fortran,
+  trexio,
   simple-dftd3,
 }:
 
@@ -59,6 +62,9 @@ buildPythonPackage {
     toml-f
     multicharge
     dftd4
+    ddx
+    hdf5-fortran
+    trexio
   ];
 
   pythonImportsCheck = [

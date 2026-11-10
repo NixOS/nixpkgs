@@ -16,7 +16,14 @@
   multicharge,
   dftd4,
   simple-dftd3,
+  ddx,
+  hdf5-fortran,
+  trexio,
   python3,
+  mpi,
+  scalapack,
+  mpiCheckPhaseHook,
+  enableMpi ? false,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
@@ -76,12 +83,33 @@ stdenv.mkDerivation (finalAttrs: {
     multicharge
     dftd4
     simple-dftd3
+    ddx
+    hdf5-fortran
+    trexio
+  ]
+  ++ lib.optionals enableMpi [
+    mpi
+    scalapack
   ];
 
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
+
   mesonFlags = [
-    "-Dddx=false"
-    "-Dhdf5=disabled"
-    "-Dtrexio=disabled"
+    (lib.mesonBool "ddx" true)
+    (lib.mesonEnable "hdf5" true)
+    (lib.mesonEnable "trexio" true)
+    (lib.mesonBool "mpi" enableMpi)
+    (lib.mesonBool "scalapack" enableMpi)
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "TBLITE_WITH_DDX" true)
+    (lib.cmakeBool "TBLITE_WITH_HDF5" true)
+    (lib.cmakeBool "TBLITE_WITH_TREXIO" true)
+    (lib.cmakeBool "TBLITE_WITH_MPI" enableMpi)
+    (lib.cmakeBool "TBLITE_WITH_SCALAPACK" enableMpi)
   ];
 
   outputs = [
@@ -93,7 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Runs python test drivers (test/*/tester.py) during checkPhase, so it must be available on the
     # build host (strictDeps)
     python3
-  ];
+  ]
+  ++ lib.optional enableMpi mpiCheckPhaseHook;
 
   checkPhase = ''
     runHook preCheck
