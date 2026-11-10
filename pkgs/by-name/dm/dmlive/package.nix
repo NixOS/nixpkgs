@@ -6,6 +6,7 @@
   pkg-config,
   makeWrapper,
   openssl,
+  sqlite,
   mpv,
   ffmpeg,
 }:
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
+    sqlite
   ];
 
   postInstall = ''
