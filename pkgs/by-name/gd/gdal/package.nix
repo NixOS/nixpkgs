@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -94,6 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/OSGeo/gdal/pull/15259
     ./proj-9.9.0-compat.patch
+
+    (fetchpatch {
+      name = "test_ogr_gml_billion_laugh-expat-2.10.patch";
+      url = "https://github.com/OSGeo/gdal/commit/7cf7bb5976130bb065cfc05f5ba9aedee77b62c1.diff";
+      hash = "sha256-cRYW+OkXLWpEXnomkG1Ojm/wF1CjeCrwHVpc2u6hS7k=";
+    })
   ];
 
   nativeBuildInputs = [
