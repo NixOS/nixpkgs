@@ -14,14 +14,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "immich-model";
-  version = "0-unstable-2026-10-06";
+  version = "0-unstable-2026-10-20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "ml-models";
-    rev = "8bf3fd1b44b0c8608f52fb6e50ddff52826576d8";
-    hash = "sha256-HkgA6o3AM7evoMn86y+v/eGmQaPiE1nvnxWWgGIg4YQ=";
+    rev = "a1eeff2c2118d76067efecf4cc4630998eac519a";
+    hash = "sha256-q6J+QxyqQACkjoqEQk4YoKR0eP8vSzkihu5R+5oTXE0=";
   };
 
   pythonRelaxDeps = [
