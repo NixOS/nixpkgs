@@ -2618,12 +2618,12 @@ final: prev: {
 
   claudecode-nvim = buildVimPlugin {
     pname = "claudecode.nvim";
-    version = "0.3.0-unstable-2026-06-25";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "coder";
       repo = "claudecode.nvim";
-      rev = "2390c6e45c4789072c293ac69de051d169668b29";
-      hash = "sha256-oMBPSRQFDmJ9Lq+ZP8vFMHaocm4sPX3D/orVMNwVXuM=";
+      tag = "v0.4.0";
+      hash = "sha256-UCV849d1RJFNeGs3ElmRu7mgRQj4J2mW2j1PJSXxcBA=";
     };
     meta.homepage = "https://github.com/coder/claudecode.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
