@@ -528,6 +528,8 @@ let
         };
       };
 
+      basdp.language-gas-x86 = callPackage ./basdp.language-gas-x86 { };
+
       batisteo.vscode-django = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "batisteo";
