@@ -1,5 +1,6 @@
 {
   lib,
+  aws-lc,
   cacert,
   curl,
   rustPlatform,
@@ -9,6 +10,7 @@
   openssl,
   stdenv,
   zig,
+  zstd,
   nix-update-script,
 }:
 
@@ -33,7 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     openssl
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
