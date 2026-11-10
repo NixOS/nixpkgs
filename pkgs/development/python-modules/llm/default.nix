@@ -6,6 +6,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  click,
   click-default-group,
   condense-json,
   httpx2,
@@ -25,6 +26,7 @@
   pytest-recording,
   sqlite-utils,
   syrupy,
+  typing-extensions,
   llm-echo,
 }:
 let
@@ -164,7 +166,7 @@ let
   );
   llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.35";
+    version = "0.37.1";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -173,7 +175,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = finalAttrs.version;
-      hash = "sha256-vaoNxU1KIuT7EV9uiCAA7JamtwExONPlnmjioDE3wH8=";
+      hash = "sha256-dJoECKdRbGCAT2Q7M1pBWL37w+4qRxo+ChfdMJBVIQc=";
     };
 
     patches = [
@@ -186,6 +188,7 @@ let
     '';
 
     dependencies = [
+      click
       click-default-group
       condense-json
       httpx2
@@ -198,6 +201,7 @@ let
       pyyaml
       setuptools # for pkg_resources
       sqlite-utils
+      typing-extensions
     ];
 
     nativeCheckInputs = [
