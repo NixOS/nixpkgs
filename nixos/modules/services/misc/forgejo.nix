@@ -837,6 +837,8 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = cfg.dump.interval;
     };
+
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta.doc = ./forgejo.md;
