@@ -6,6 +6,7 @@ const execFile = promisify(nodeExecFile)
 export type Commit = {
   subject: string
   sha: string
+  parents: string[]
   author: { name: string; email: string }
   committer: { name: string; email: string }
   changedPaths: string[]
@@ -82,13 +83,13 @@ export async function getCommitDetailsForPR({
 
   return Promise.all(
     shas.map(async (sha) => {
-      // Subject, author name, author email, committer name, committer email (all tab-separated)
-      // then a blank line, then filenames.
+      // Subject, author name, author email, committer name, committer email,
+      // parents (all tab-separated), then a blank line, then filenames.
       const result = (
         await runGit({
           args: [
             'log',
-            '--format=%s\t%aN\t%aE\t%cN\t%cE',
+            '--format=%s\t%aN\t%aE\t%cN\t%cE\t%P',
             '--name-only',
             '-1',
             sha,
@@ -99,8 +100,14 @@ export async function getCommitDetailsForPR({
         })
       ).stdout.split('\n')
 
-      const [subject, authorName, authorEmail, committerName, committerEmail] =
-        result[0].split('\t')
+      const [
+        subject,
+        authorName,
+        authorEmail,
+        committerName,
+        committerEmail,
+        parents,
+      ] = result[0].split('\t')
 
       const changedPaths = result.slice(2, -1)
 
@@ -110,6 +117,7 @@ export async function getCommitDetailsForPR({
 
       return {
         sha,
+        parents: parents.split(' ').filter(Boolean),
         subject,
         author: { name: authorName, email: authorEmail },
         committer: { name: committerName, email: committerEmail },
