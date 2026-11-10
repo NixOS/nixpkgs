@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "broadlink-async";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DAB-LABS";
     repo = "broadlink-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyiyiYUUl1n0rs9CpeeigXo8ArpFDJwoSVmJt8zk484=";
+    hash = "sha256-AZo0DVRDK6gyV67EUPGujmv73MuXKPi7QPjegGwsl5g=";
   };
 
   build-system = [ setuptools ];
