@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgs,
   python,
   buildPythonPackage,
   fetchFromGitHub,
@@ -31,6 +32,7 @@
   onednn,
   numactl,
   llvmPackages,
+  oniguruma,
 
   # dependencies
   aioprometheus,
@@ -484,7 +486,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ];
 
   buildInputs = [
+    oniguruma
     openssl
+    pkgs.zstd
   ]
   ++ lib.optionals cpuSupport [
     onednn
