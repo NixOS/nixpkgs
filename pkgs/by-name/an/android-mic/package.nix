@@ -11,6 +11,7 @@
   alsa-lib,
   libjack2,
   pipewire,
+  aws-lc,
   android-tools,
   versionCheckHook,
   nix-update-script,
@@ -24,13 +25,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "android-mic";
-  version = "2.2.11";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "teamclouday";
     repo = "AndroidMic";
     tag = finalAttrs.version;
-    hash = "sha256-gACK6Zh3u7MGyqrCUU7ymV617izVADI194dxc76f1GE=";
+    hash = "sha256-02/UWOMYEPGwifWKZLrdhnaErs3U7e98QQzuKV/LqPs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/RustApp";
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '`git rev-parse --short HEAD`' '"${finalAttrs.version}"'
   '';
 
-  cargoHash = "sha256-mWYxBUl3GgoBEAxThku/eJkLusomIalborG0SneMjjA=";
+  cargoHash = "sha256-sy1JuEt0hIz3B/KppBJLUgbostpRbfCtCm/yv21dJbU=";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -57,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     alsa-lib
     libjack2
     pipewire
+    aws-lc
   ];
 
   env = {
