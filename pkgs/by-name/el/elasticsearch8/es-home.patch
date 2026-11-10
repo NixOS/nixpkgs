@@ -1,0 +1,22 @@
+--- a/bin/elasticsearch-env
++++ b/bin/elasticsearch-env
+@@ -19,6 +19,7 @@
+   fi
+ done
+ 
++if [ -z "$ES_HOME" ]; then
+ # determine Elasticsearch home; to do this, we strip from the path until we find
+ # bin, and then strip bin (there is an assumption here that there is no nested
+ # directory under bin also named bin)
+@@ -31,6 +32,11 @@
+   ES_HOME=`dirname "$ES_HOME"`
+ done
+ ES_HOME=`dirname "$ES_HOME"`
++fi
++
++if [ -z "$ES_JAVA_HOME" ]; then
++  ES_JAVA_HOME=@jdk@
++fi
+ 
+ # now set the path to java
+ if [ ! -z "$ES_JAVA_HOME" ]; then

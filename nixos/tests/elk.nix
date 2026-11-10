@@ -294,5 +294,11 @@ in
       filebeat = pkgs.filebeat7;
       metricbeat = pkgs.metricbeat7;
     };
+    ELK-8 = mkElkTest "elk-8" {
+      elasticsearch = pkgs.elasticsearch8;
+      logstash = pkgs.logstash7;
+      filebeat = pkgs.filebeat7;
+      metricbeat = pkgs.metricbeat7;
+    };
   };
 }
