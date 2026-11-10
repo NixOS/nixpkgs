@@ -96,12 +96,12 @@ final: prev: {
 
   Coqtail = buildVimPlugin {
     pname = "Coqtail";
-    version = "1.10.0";
+    version = "1.11.0";
     src = fetchFromGitHub {
       owner = "whonore";
       repo = "Coqtail";
-      tag = "v1.10.0";
-      hash = "sha256-mF7l3xwavRCq4jR4I3MXf1RE2TC9E0DqAy3HaF4hXIM=";
+      tag = "v1.11.0";
+      hash = "sha256-I7cWQl5/4AXzl2RsE7H2/fa1zU6RYega1zsu6VAuhHE=";
     };
     meta.homepage = "https://github.com/whonore/Coqtail/";
     meta.license = getLicenseFromSpdxId "MIT";
