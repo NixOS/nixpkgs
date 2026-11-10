@@ -7,6 +7,7 @@
   fuzzel,
   wayland,
   libxkbcommon,
+  sqlite,
   writableTmpDirAsHomeHook,
   additionalPrograms ? [ ],
 }:
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     wayland
     libxkbcommon
+    sqlite
   ];
 
   preCheck = ''
