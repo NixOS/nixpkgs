@@ -21,9 +21,11 @@ let
     };
   };
 
-  base = sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-in vscode-utils.buildVscodeMarketplaceExtension {
+  base =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+in
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "debugpy";
     publisher = "ms-python";
