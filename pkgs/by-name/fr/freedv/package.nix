@@ -30,15 +30,15 @@
 let
   codec2' = codec2.override { freedvSupport = true; };
   freedvBackendSrc = fetchFromGitHub {
-    owner = "tmiw";
+    owner = "freedv";
     repo = "freedv-backend";
-    rev = "v1.0.0";
-    hash = "sha256-t1Bu9XaNRa9zQKEffC4fJxclvzcu9UPMY4Gzt0kTfAY=";
+    tag = "v1.0.1";
+    hash = "sha256-S8XSBVdAXP8eZ5NZJeuLCOF95g6lPMOHuX/OVdsYH0k=";
   };
   ebur128Src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
-    rev = "v1.2.6";
+    tag = "v1.2.6";
     hash = "sha256-UKO2k+kKH/dwt2xfaYMrH/GXjEkIrnxh1kGG/3P5d3Y=";
   };
   opusSrc = fetchFromGitHub {
@@ -79,21 +79,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "freedv";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nd0oOGiMrERviaGOtdOQ0KTSSL/+69Q2bRHjojBUknU=";
+    hash = "sha256-bvAHyRJAEFYJzoDhtF5BqQbb3IZ7aruKnu29GLKqtwU=";
   };
 
   postPatch = ''
     cp -R ${freedvBackendSrc} freedv-backend
     chmod -R u+w freedv-backend
     substituteInPlace cmake/BuildFreeDVBackend.cmake \
-      --replace-fail "GIT_REPOSITORY https://github.com/tmiw/freedv-backend" "URL $(realpath freedv-backend)" \
-      --replace-fail "GIT_TAG v1.0.0" ""
+      --replace-fail "GIT_REPOSITORY https://github.com/freedv/freedv-backend" "URL $(realpath freedv-backend)" \
+      --replace-fail "GIT_TAG v1.0.1" ""
     cp -R ${ebur128Src} freedv-backend/ebur128
     cp -R ${radaeSrc} freedv-backend/radae
     cp -R ${rnnoiseSrc} freedv-backend/rnnoise
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "GIT_TAG main" ""
     substituteInPlace freedv-backend/cmake/BuildRNNoise.cmake \
       --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath freedv-backend/rnnoise)" \
-      --replace-fail "GIT_TAG main" ""
+      --replace-fail "GIT_TAG \''${RNNOISE_GIT_TAG}" ""
 
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
@@ -174,7 +174,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_NATIVE_AUDIO" (with stdenv.hostPlatform; isLinux || isDarwin))
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${codec2'.src}/src";
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+    [
+      "-I${codec2'.src}/src"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-Wno-error=array-bounds"
+    ]
+  );
 
   doCheck = false;
 
