@@ -1,0 +1,110 @@
+diff --git a/z3/src/z3_solver.cpp b/z3/src/z3_solver.cpp
+index a6131307..068f7125 100644
+--- a/z3/src/z3_solver.cpp
++++ b/z3/src/z3_solver.cpp
+@@ -37,10 +37,17 @@ typedef Z3_ast (*variadic_fun)(Z3_context c, unsigned num, Z3_ast const args[]);
+ Z3_ast ext_Z3_mk_bvcomp(Z3_context c, Z3_ast t1, Z3_ast t2)
+ {
+   Z3_ast eq = Z3_mk_eq(c, t1, t2);
++  Z3_inc_ref(c, eq);
+   Z3_sort bvsort1 = Z3_mk_bv_sort(c, 1);
+   Z3_ast one = Z3_mk_unsigned_int(c, 1, bvsort1);
++  Z3_inc_ref(c, one);
+   Z3_ast zero = Z3_mk_unsigned_int(c, 0, bvsort1);
+-  return Z3_mk_ite(c, eq, one, zero);
++  Z3_inc_ref(c, zero);
++  Z3_ast result = Z3_mk_ite(c, eq, one, zero);
++  Z3_dec_ref(c, zero);
++  Z3_dec_ref(c, one);
++  Z3_dec_ref(c, eq);
++  return result;
+ }
+ 
+ const std::unordered_map<PrimOp, un_fun> unary_ops(
+diff --git a/z3/src/z3_sort.cpp b/z3/src/z3_sort.cpp
+index fb2b9ab6..c89bcea3 100644
+--- a/z3/src/z3_sort.cpp
++++ b/z3/src/z3_sort.cpp
+@@ -16,7 +16,12 @@ std::size_t Z3Sort::hash() const
+ {
+   if (is_function)
+   {
+-    return z_func.hash();
++    std::size_t h = z_func.range().hash();
++    for (unsigned i = 0; i < z_func.arity(); i++)
++    {
++      h ^= z_func.domain(i).hash() + 0x9e3779b9 + (h << 6) + (h >> 2);
++    }
++    return h;
+   }
+   return type.hash();
+ }
+@@ -137,12 +142,27 @@ Datatype Z3Sort::get_datatype() const
+ bool Z3Sort::compare(const Sort & s) const
+ {
+   std::shared_ptr<Z3Sort> zs = std::static_pointer_cast<Z3Sort>(s);
+-  return hash() == zs->hash();
+-  //	if (zs->is_function) {
+-  //		cout << "FUNCTOIN" << endl;
+-  //		return hash() == (zs->z_func).hash()
+-  //	}
+-  //	return hash() == (zs->type).hash();
++  if (is_function != zs->is_function)
++  {
++    return false;
++  }
++  if (!is_function)
++  {
++    return z3::eq(type, zs->type);
++  }
++  const func_decl & other = zs->z_func;
++  if (z_func.arity() != other.arity() || !z3::eq(z_func.range(), other.range()))
++  {
++    return false;
++  }
++  for (unsigned i = 0; i < z_func.arity(); i++)
++  {
++    if (!z3::eq(z_func.domain(i), other.domain(i)))
++    {
++      return false;
++    }
++  }
++  return true;
+ }
+ 
+ SortKind Z3Sort::get_sort_kind() const
+diff --git a/z3/src/z3_term.cpp b/z3/src/z3_term.cpp
+index 6fccc4c9..09e67a56 100644
+--- a/z3/src/z3_term.cpp
++++ b/z3/src/z3_term.cpp
+@@ -107,11 +107,11 @@ bool Z3Term::compare(const Term & absterm) const
+   std::shared_ptr<Z3Term> zs = std::static_pointer_cast<Z3Term>(absterm);
+   if (is_function && zs->is_function)
+   {
+-    return z_func.hash() == (zs->z_func).hash();
++    return z3::eq(z_func, zs->z_func);
+   }
+   else if (!is_function && !zs->is_function)
+   {
+-    return term.hash() == (zs->term).hash();
++    return z3::eq(term, zs->term);
+   }
+   return false;
+ }
+@@ -250,15 +250,7 @@ Sort Z3Term::get_sort() const
+     return std::make_shared<Z3Sort>(term.get_sort(), *ctx);
+   }
+ 
+-  z3::sort_vector domain(*ctx);
+-  for (int i = 0; i < z_func.arity(); i++)
+-  {
+-    domain.push_back(z_func.domain(i));
+-  }
+-
+-  z3::func_decl func = ctx->function(z_func.name(), domain, z_func.range());
+-
+-  return std::make_shared<Z3Sort>(func, *ctx);
++  return std::make_shared<Z3Sort>(z_func, *ctx);
+ }
+ 
+ bool Z3Term::is_symbol() const
