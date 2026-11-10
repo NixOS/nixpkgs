@@ -3177,6 +3177,12 @@
     name = "Fabian Möller";
     keys = [ { fingerprint = "6309 E212 29D4 DA30 AF24  BDED 754B 5C09 63C4 2C50"; } ];
   };
+  b6d5b38e0d7ae6bd0d951815cd92df43 = {
+    email = "hanus.valenta@gmail.com";
+    github = "b6d5b38e0d7ae6bd0d951815cd92df43";
+    githubId = 93769207;
+    name = "Hanuš Valenta";
+  };
   baba = {
     name = "Baba";
     email = "babakinha@proton.me";
