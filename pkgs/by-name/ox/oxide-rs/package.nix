@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
   cacert,
   curl,
   pkg-config,
@@ -57,6 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     curl
     libgit2
     openssl
