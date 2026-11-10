@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://wiki.samba.org/index.php/LinuxCIFS_utils";
+    maintainers = with lib.maintainers; [ cdombroski ];
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
