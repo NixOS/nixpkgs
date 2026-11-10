@@ -2185,12 +2185,12 @@ final: prev: {
 
   boolean-toggle-nvim = buildVimPlugin {
     pname = "boolean-toggle.nvim";
-    version = "0.5.0-1";
+    version = "0.5.1-1";
     src = fetchFromGitHub {
       owner = "DrKJeff16";
       repo = "boolean-toggle.nvim";
-      tag = "v0.5.0-1";
-      hash = "sha256-93ppL2JP2K+lfeCtJG0R8YW6cLk8JJrPa5RAGKnzOlE=";
+      tag = "v0.5.1-1";
+      hash = "sha256-tNVqwGS7fyNE1qvcaItYqY4oO755nWG7XjB2CBPOuZU=";
     };
     meta.homepage = "https://github.com/DrKJeff16/boolean-toggle.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-2.0-only";
