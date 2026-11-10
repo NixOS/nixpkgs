@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
@@ -19,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-YUIEKr1nQij4f/4kOeJq6AgqeQq+U3bOBTJaJM2Bs2Y=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
