@@ -1,8 +1,10 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
   pytestCheckHook,
   geoarrow-types,
   pyarrow,
@@ -57,7 +59,10 @@ let
       nativeBuildInputs = with rustPlatform; [
         cargoSetupHook
         maturinBuildHook
+        pkg-config
       ];
+
+      buildInputs = [ pkgs.zstd ];
 
       env = {
         CARGO_TARGET_DIR = "./target";
