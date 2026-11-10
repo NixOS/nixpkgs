@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Board definitions for Amaranth HDL";
