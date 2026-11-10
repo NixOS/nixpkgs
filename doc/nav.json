@@ -765,6 +765,10 @@
               "file": "packages/urxvt.section.md"
             },
             {
+              "id": "vapoursynth",
+              "file": "packages/vapoursynth.section.md"
+            },
+            {
               "id": "vcpkg",
               "file": "packages/vcpkg.section.md"
             },

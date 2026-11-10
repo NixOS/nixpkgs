@@ -906,6 +906,9 @@
   "sec-treefmt-options-reference": [
     "index.html#sec-treefmt-options-reference"
   ],
+  "sec-vapoursynth-integration": [
+    "index.html#sec-vapoursynth-integration"
+  ],
   "ssec-buildEnv-collisions": [
     "index.html#ssec-buildEnv-collisions"
   ],
@@ -4970,6 +4973,15 @@
   ],
   "sec-urxvt-pkg": [
     "index.html#sec-urxvt-pkg"
+  ],
+  "sec-vapoursynth": [
+    "index.html#sec-vapoursynth"
+  ],
+  "sec-vapoursynth-use": [
+    "index.html#sec-vapoursynth-use"
+  ],
+  "sec-vapoursynth-plugins": [
+    "index.html#sec-vapoursynth-plugins"
   ],
   "sec-vcpkg": [
     "index.html#sec-vcpkg"
