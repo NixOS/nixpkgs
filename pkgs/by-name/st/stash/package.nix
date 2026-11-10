@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
+  writableTmpDirAsHomeHook,
   nixosTests,
   nodejs,
   pnpm_10,
@@ -41,6 +42,9 @@ buildGo126Module (finalAttrs: {
   ];
 
   subPackages = [ "cmd/stash" ];
+
+  # This should fix the error Message "failed to create modcache index dir: mkdir /homeless-shelter: permission denied"
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   postConfigure = ''
     cp -a ${finalAttrs.passthru.frontend} ui/v2.5/build
