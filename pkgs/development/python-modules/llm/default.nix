@@ -72,6 +72,7 @@ let
       llm-docs ? false,
       llm-echo ? false,
       llm-fragments-github ? false,
+      llm-fragments-pdf ? false,
       llm-fragments-pypi ? false,
       llm-fragments-reader ? false,
       llm-fragments-symbex ? false,

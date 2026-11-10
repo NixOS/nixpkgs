@@ -10238,6 +10238,8 @@ self: super: with self; {
 
   llm-fragments-github = callPackage ../development/python-modules/llm-fragments-github { };
 
+  llm-fragments-pdf = callPackage ../development/python-modules/llm-fragments-pdf { };
+
   llm-fragments-pypi = callPackage ../development/python-modules/llm-fragments-pypi { };
 
   llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
