@@ -67,7 +67,9 @@ stdenv.mkDerivation {
       desktopName = "Sweet Home 3D";
       icon = "sweethome3d";
       comment = meta.description;
-      exec = meta.mainProgram;
+      exec = "${meta.mainProgram} %f";
+      mimeTypes = [ "application/x-sweet-home-3d" ];
+      startupWMClass = "com-eteks-sweethome3d-SweetHome3DBootstrap";
       genericName = "Computer Aided (Interior) Design";
       categories = [
         "Graphics"
@@ -120,6 +122,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin $out/share/java
     cp install/SweetHome3D-${version}.jar $out/share/java/.
+    install -Dm644 ${./sweethome3d-mime.xml} $out/share/mime/packages/sweethome3d.xml
 
     ${installIcons "sweethome3d" icons}
 
