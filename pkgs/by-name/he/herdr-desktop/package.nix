@@ -156,12 +156,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # Upstream tests debug builds: some tests read element bounds that GPUI
+  # records only with debug assertions on.
+  checkType = "debug";
+
   checkFlags = [
-    # Read element bounds that only debug builds record.
-    "--skip=window::tests::fitted_popups_use_their_rendered_size_at_the_window_edge"
-    "--skip=terminal::tests::each_terminal_keeps_its_find_bar_inside_its_own_pane"
-    "--skip=terminal::tests::find_bar_chevrons_step_older_up_and_newer_down"
-    "--skip=terminal::tests::shipped_find_binding_opens_search_but_ctrl_f_reaches_the_program"
     # Clears PATH to /usr/bin:/bin and runs /usr/bin/printf under an
     # interactive /bin/sh; the sandbox has no /usr/bin, and its /bin/sh is
     # BusyBox, which greets with a banner.
