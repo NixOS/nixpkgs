@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "2.4.2";
+  version = "2.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "zigpy";
     repo = "zha";
     tag = finalAttrs.version;
-    hash = "sha256-0d3bh1gHCQ4YC4NSi4gKXRzsyTazwY8AC9f/sbbwPrA=";
+    hash = "sha256-5nouE72Zw9y1hciH93EUP4s6miu9qWxh/8EmSw69ID4=";
   };
 
   postPatch = ''
