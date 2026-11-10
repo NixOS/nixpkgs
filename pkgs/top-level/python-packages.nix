@@ -14216,6 +14216,10 @@ self: super: with self; {
 
   properdocs-theme-mkdocs = callPackage ../development/python-modules/properdocs-theme-mkdocs { };
 
+  properdocs-theme-readthedocs =
+    callPackage ../development/python-modules/properdocs-theme-readthedocs
+      { };
+
   property-cached = callPackage ../development/python-modules/property-cached { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
