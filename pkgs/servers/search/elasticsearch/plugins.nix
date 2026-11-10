@@ -10,6 +10,14 @@
 let
   esVersion = elasticsearch.version;
 
+  removedIn8 = {
+    ingest-attachment = "has been merged into Elasticsearch core in 8.0"; # Added 2026-11-10
+    repository-gcs = "has been merged into Elasticsearch core in 8.0"; # Added 2026-11-10
+    repository-s3 = "has been merged into Elasticsearch core in 8.0"; # Added 2026-11-10
+    search-guard = "is not available for Elasticsearch ${esVersion}"; # Added 2026-11-10
+  };
+  isEs8OrNewer = lib.versionAtLeast esVersion "8";
+
   esPlugin =
     a@{
       pluginName,
@@ -39,7 +47,7 @@ let
       }
     );
 in
-{
+lib.flip removeAttrs (lib.optionals isEs8OrNewer (lib.attrNames removedIn8)) {
 
   analysis-icu = esPlugin rec {
     name = "elasticsearch-analysis-icu-${version}";
@@ -50,6 +58,8 @@ in
       hash =
         if version == "7.17.27" then
           "sha256-HGHhcWj+6IWZ9kQCGJD7HmmvwqYV1zjN0tCsEpN4IAA="
+        else if version == "8.19.24" then
+          "sha512-LH39FDXQItfujCUzjyJMeLpd+pu1n/NKZOlPxQEEB5cW0uISFWVEy9OFbLfVnN46YY1WC4/QGMZp2f16Y6SQVg=="
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -68,6 +78,8 @@ in
       hash =
         if version == "7.17.27" then
           "sha256-j0WXuGmE3bRNBnDx/uWxfWrIUrdatDt52ASj8m3mrVg="
+        else if version == "8.19.24" then
+          "sha512-XAAEDpjo/nT1n7EDLLEFeKhChk1oGfWnwih97vEIL3SqCccVFDwB+wgAaVEo5v7HNiqaMgqmSaBayO3WK2YELQ=="
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -86,6 +98,8 @@ in
       hash =
         if version == "7.17.27" then
           "sha256-X8b8z9LznJQ24aF9GugRuDz1c9buqT7QGS3jhuDbYBM="
+        else if version == "8.19.24" then
+          "sha512-Lv0zVlk3+nUER/MZf8vK+WMzdSmIlIK/XUB+BIwi3+WhMA3AHjW8fFW89L0HorxBTUamHBU3cAFLm5KgNtVq/A=="
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -104,6 +118,8 @@ in
       hash =
         if version == "7.17.27" then
           "sha256-0hHHkywdpjKqzZ9vFqQ9B2aLCky17AYzFcSiaz/zGSw="
+        else if version == "8.19.24" then
+          "sha512-NxOH01+l0L3elUlQ26X/zOldoq3BFVZLSCEl0GfsESPnEDeLMJCwtdzD+5ThmtiDcbr4Xu/Q3IPFcnBVKHzH/w=="
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -122,6 +138,8 @@ in
       hash =
         if version == "7.17.27" then
           "sha256-44p0Pn0mYKR5hWtC8jdaUbh9mbUGiHN9PK98ZT1jQFY="
+        else if version == "8.19.24" then
+          "sha512-jAnQPBWLaw8loB3YVBVE6xmYSSJLDGtKa0kkJnC9XvnPtyAyYEKUYY6UQtX8UybRLCLIH3KWEqAs5PvECp/xRw=="
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -213,6 +231,9 @@ in
       };
     };
 }
+// lib.optionalAttrs (config.allowAliases && isEs8OrNewer) (
+  lib.mapAttrs (name: reason: throw "elasticsearchPlugins.${name} ${reason}") removedIn8
+)
 // lib.optionalAttrs config.allowAliases {
   analysis-lemmagen = throw "elasticsearchPlugins.analysis-lemmagen has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
 }

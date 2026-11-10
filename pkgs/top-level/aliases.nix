@@ -253,7 +253,6 @@ mapAliases {
 
   # Various to preserve
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
-  elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve, reason: common typo
   fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   uclibc = uclibc-ng; # preserve, because uclibc-ng can't be used in config string

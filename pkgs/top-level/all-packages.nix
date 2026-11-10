@@ -1877,11 +1877,12 @@ with pkgs;
     util-linux = util-linuxMinimal;
     jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  elasticsearch = elasticsearch7;
+  elasticsearch = elasticsearch8;
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
+  elasticsearch7Plugins = elasticsearchPlugins.override { elasticsearch = elasticsearch7; };
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
 
