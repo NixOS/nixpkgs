@@ -97,6 +97,7 @@ let
       llm-openrouter ? false,
       llm-pdf-to-images ? false,
       llm-perplexity ? false,
+      llm-public-ai ? false,
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,

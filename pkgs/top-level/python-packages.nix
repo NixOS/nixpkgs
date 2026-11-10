@@ -10288,6 +10288,8 @@ self: super: with self; {
 
   llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
 
+  llm-public-ai = callPackage ../development/python-modules/llm-public-ai { };
+
   llm-sandbox = callPackage ../development/python-modules/llm-sandbox { };
 
   llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
