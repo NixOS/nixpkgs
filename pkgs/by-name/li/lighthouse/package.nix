@@ -13,6 +13,7 @@
   sqlite,
   stdenv,
   testers,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     rust-jemalloc-sys
     sqlite
+    zstd
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     openssl

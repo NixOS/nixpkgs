@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       navigation, and handling of incoming packets.
     '';
     license = lib.licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mBornand ];
     platforms = lib.platforms.all;
   };
 })

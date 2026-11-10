@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   testers,
   wizer,
   writableTmpDirAsHomeHook,
@@ -30,6 +32,10 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [
     "cli"
   ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

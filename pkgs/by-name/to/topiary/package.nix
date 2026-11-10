@@ -3,7 +3,9 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  aws-lc,
   installShellFiles,
+  pkg-config,
   versionCheckHook,
   nix-update-script,
 }:
@@ -21,7 +23,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-1WKKIVCRM0DLk2RyWObVfb+F2ixH5dxEoODoO458pXU=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
+
+  env = {
+    TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
+  };
 
   cargoBuildFlags = [
     "-p"
@@ -44,8 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_vis"
   ];
   cargoTestFlags = finalAttrs.cargoBuildFlags;
-
-  env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";
 
   postInstall = ''
     mkdir -p $out/share/queries

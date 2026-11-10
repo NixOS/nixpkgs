@@ -1,7 +1,10 @@
 {
+  aws-lc,
   fetchFromGitHub,
   lib,
+  libgit2,
   nix-update-script,
+  pkg-config,
   versionCheckHook,
   rustPlatform,
 }:
@@ -17,6 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-fR03iwfd5QZ3iU4jxYcQbVcgR+s+dUIRIIgHDt+n8EA=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    libgit2
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

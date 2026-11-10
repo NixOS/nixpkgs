@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromCodeberg,
+  fetchFromGitHub,
   pkg-config,
   makeWrapper,
   installShellFiles,
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  src = fetchFromCodeberg {
-    owner = "mmc";
+  src = fetchFromGitHub {
+    owner = "mmclinton";
     repo = "spectral";
     tag = "v${finalAttrs.version}";
     hash = "sha256-lHk4Tn7fYdc/emTat3x/Xs5h0bToFVr4zQ3P9w/Oe78=";
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It creates a virtual microphone that can be used with any application,
       filtering out background noise in real-time.
     '';
-    homepage = "https://codeberg.org/mmc/spectral";
+    homepage = "https://github.com/mmclinton/spectral";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.mmclinton ];
     mainProgram = "spectral";
