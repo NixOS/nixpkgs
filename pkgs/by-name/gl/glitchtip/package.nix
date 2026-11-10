@@ -155,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/glitchtip/glitchtip-backend/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      defelo
       felbinger
     ];
     mainProgram = "glitchtip-manage";
