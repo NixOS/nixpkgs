@@ -75,6 +75,7 @@ let
       llm-fragments-pdf ? false,
       llm-fragments-pypi ? false,
       llm-fragments-reader ? false,
+      llm-fragments-site-text ? false,
       llm-fragments-symbex ? false,
       llm-gemini ? false,
       llm-gguf ? false,

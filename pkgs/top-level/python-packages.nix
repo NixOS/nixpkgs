@@ -10244,6 +10244,8 @@ self: super: with self; {
 
   llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
 
+  llm-fragments-site-text = callPackage ../development/python-modules/llm-fragments-site-text { };
+
   llm-fragments-symbex = callPackage ../development/python-modules/llm-fragments-symbex { };
 
   llm-gemini = callPackage ../development/python-modules/llm-gemini { };
