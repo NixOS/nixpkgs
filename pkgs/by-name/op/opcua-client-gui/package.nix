@@ -6,28 +6,30 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  qt5,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "opcua-client-gui";
-  version = "0.8.4";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-client-gui";
     tag = finalAttrs.version;
-    hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
+    hash = "sha256-4GjKfcWktbPV6JAO7My95GiYVXGl6QnwVomkwKXuHGo=";
   };
 
+  build-system = with python3Packages; [ setuptools ];
+
   buildInputs = [
-    qt5.qtwayland
+    qt6.qtwayland
   ];
 
   nativeBuildInputs = [
     copyDesktopItems
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
@@ -35,12 +37,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    pyqt5
+  dependencies = with python3Packages; [
+    pyqt6
     asyncua
-    opcua-widgets
     numpy
     pyqtgraph
+  ];
+
+  pythonImportsCheck = [
+    "uaclient"
+    "uawidgets"
   ];
 
   desktopItems = [
@@ -48,10 +54,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       name = "opcua-client";
       exec = "opcua-client";
       comment = "OPC UA Client";
-      type = "Application";
-      #no icon because the app dosn't have one
+      # No icon because the app doesn't have one.
       desktopName = "opcua-client";
-      terminal = false;
       categories = [ "Utility" ];
     })
   ];
