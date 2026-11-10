@@ -6,7 +6,9 @@
   rustPlatform,
   fetchFromGitHub,
   protobuf,
+  pkg-config,
   sqlite,
+  aws-lc,
 
   meson,
   ninja,
@@ -51,9 +53,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # TECHNICALLY, we could remove this, but then we'd be using the vendored precompiled protoc binary...
   env.PROTOC = "protoc";
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
 
   passthru.dummy-service = stdenv.mkDerivation {
     pname = "galaxy-dummy-service";
