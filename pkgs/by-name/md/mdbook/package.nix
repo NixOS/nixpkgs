@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   nix,
   rustPlatform,
   installShellFiles,
@@ -22,6 +22,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-OmlcPZuQ1RbyFrF5tuztucgtCA544UHJxEaXh/mfSHQ=";
+
+  patches = [
+    # fix tests which assert on output when compiling with rust 1.100
+    (fetchpatch {
+      name = "rust-1.100-cargo-clippy-lints.patch";
+      url = "https://github.com/rust-lang/mdBook/commit/7a8d704ab8b82fdc28c8d0bd97aa814c58b5d985.patch";
+      hash = "sha256-od6TIOEUrEECGlPldbck1sriU17TjgPwlZJ1ZRukc8c=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
