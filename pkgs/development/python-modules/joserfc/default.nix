@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "joserfc";
-  version = "1.7.4";
+  version = "1.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
     tag = finalAttrs.version;
-    hash = "sha256-VE5WWkklZXMBPS+mXcJj+HLgyBYZkxu2AthLo5V78J8=";
+    hash = "sha256-birvQGduuehzxZyZsZ1a6l9Y1yMgHKsJqS4MQNAam8E=";
   };
 
   build-system = [ setuptools ];
@@ -38,14 +38,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
-
-  disabledTests = [
-    # https://github.com/authlib/joserfc/issues/94
-    "test_ECDH_ES_with_EC_key"
-    "test_import_p512_key"
-    "test_ec_incorrect_curve"
-    "test_ES512"
-  ];
 
   pythonImportsCheck = [ "joserfc" ];
 
