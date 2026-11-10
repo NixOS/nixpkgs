@@ -267,8 +267,8 @@ in
       "sha256-VNe142gcoSRXelM5aEtx0dmZNUErDS+P0Wx3i8ZdpdI=";
 
   mypy-boto3-codecatalyst =
-    buildMypyBoto3Package "codecatalyst" "1.43.0"
-      "sha256-wslSfhGAP7FLmfRb+9Ez1eHm2kYScWzbm1DjaH9t5Qk=";
+    buildMypyBoto3Package "codecatalyst" "1.44.0"
+      "sha256-DJqr/sR5I1GxV53V5F3bckrU3e/D53TVs9wU2sIOHPg=";
 
   mypy-boto3-codecommit =
     buildMypyBoto3Package "codecommit" "1.43.115"
