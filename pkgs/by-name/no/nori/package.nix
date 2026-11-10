@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 (finalAttrs: {
   pname = "nori";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/norifm/nori/releases/download/v${finalAttrs.version}/nori-desktop-${finalAttrs.version}-linux-x86_64.AppImage";
-    hash = "sha256-6Es8SDpk3tMDTUZIvzwhnNi4CdH+atMxYi08DnJrv+4=";
+    hash = "sha256-WpC6EKM66bPO0cXnCsyBFDvJWYu0h1mj2ngjjZCrmwg=";
   };
 
   # Nori's sign-in window uses the host WebKitGTK; it is intentionally not
