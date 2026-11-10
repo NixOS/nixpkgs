@@ -1,8 +1,10 @@
 {
+  aws-lc,
   cacert,
   fetchFromGitHub,
   lib,
   nix-update-script,
+  pkg-config,
   runCommand,
   rustPlatform,
   stdenv,
@@ -25,6 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-UQ8qNqoeDwkwhmVZebi++gb2GP61dr1Zv2QU9mJ6KJ8=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ aws-lc ];
+
   cargoBuildFlags = [ "--package=buzz-cli" ];
   cargoTestFlags = [ "--package=buzz-cli" ];
 

@@ -10,6 +10,8 @@
   sphinx,
   stdenv,
   versionCheckHook,
+  pkg-config,
+  zstd,
 }:
 
 let
@@ -134,12 +136,14 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
     installShellFiles
     sphinx
+    pkg-config
   ];
 
   buildInputs = [
     openssl
     fuse3
     acl
+    zstd
   ];
 
   doInstallCheck = true;
