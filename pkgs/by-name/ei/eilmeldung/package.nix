@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    rustPlatform.bindgenHook
   ];
 
   passthru.updateScript = nix-update-script { };
