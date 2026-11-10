@@ -4,13 +4,15 @@
   fetchFromGitHub,
   libpcap,
   nix-update-script,
-  testers,
-  ubridge,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubridge";
   version = "1.3.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -36,13 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = ubridge;
-      command = "ubridge -v";
-    };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-v";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Bridge for UDP tunnels, Ethernet, TAP, and VMnet interfaces";
