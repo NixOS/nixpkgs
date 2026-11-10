@@ -407,8 +407,8 @@ in
       "sha256-u6i3fJH4Yrq184pZaSu0yTmMoX/M1klPvAcU0JKalFQ=";
 
   mypy-boto3-dlm =
-    buildMypyBoto3Package "dlm" "1.43.0"
-      "sha256-jkgV+/T/mGbAFQh46ZYBLTM66Rtd762XUUsbcFciJkk=";
+    buildMypyBoto3Package "dlm" "1.44.0"
+      "sha256-2P9ZsVJFrQpzvA1sgXrN9BGsxlZhJX/ipvRqfg2zdXI=";
 
   mypy-boto3-dms =
     buildMypyBoto3Package "dms" "1.43.59"
