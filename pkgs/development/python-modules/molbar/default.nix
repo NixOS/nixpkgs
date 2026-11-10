@@ -3,6 +3,7 @@
   lib,
   gfortran,
   fetchgit,
+  gitUpdater,
   cmake,
   ninja,
   networkx,
@@ -61,6 +62,11 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   doCheck = false; # Doesn't find the fortran libs before installation
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release_v";
+    ignoredVersions = "rc";
+  };
 
   meta = {
     description = "Unique molecular identifiers for molecular barcoding";
