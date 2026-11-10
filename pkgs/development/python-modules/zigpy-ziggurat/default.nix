@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zigpy-ziggurat";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-ziggurat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tf5nAYK/UpqegRFSDCmr0fX40X5BmsLlc+ftggK0Am0=";
+    hash = "sha256-bZz4GpL5p1fdKSXiKfcOMh0nr//RaAQXC0dBXI5d7EM=";
   };
 
   postPatch = ''
