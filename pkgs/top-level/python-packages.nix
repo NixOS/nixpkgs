@@ -14214,6 +14214,8 @@ self: super: with self; {
 
   propcache = callPackage ../development/python-modules/propcache { };
 
+  properdocs = callPackage ../development/python-modules/properdocs { };
+
   properdocs-theme-mkdocs = callPackage ../development/python-modules/properdocs-theme-mkdocs { };
 
   properdocs-theme-readthedocs =
