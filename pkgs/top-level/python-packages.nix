@@ -10306,6 +10306,8 @@ self: super: with self; {
 
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
 
+  llm-tools-rag = callPackage ../development/python-modules/llm-tools-rag { };
+
   llm-tools-simpleeval = callPackage ../development/python-modules/llm-tools-simpleeval { };
 
   llm-tools-sqlite = callPackage ../development/python-modules/llm-tools-sqlite { };

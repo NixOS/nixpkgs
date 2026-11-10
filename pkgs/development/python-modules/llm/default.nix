@@ -105,6 +105,7 @@ let
       llm-tools-edit ? false,
       llm-tools-exa ? false,
       llm-tools-quickjs ? false,
+      llm-tools-rag ? false,
       llm-tools-simpleeval ? false,
       llm-tools-sqlite ? false,
       llm-venice ? false,
