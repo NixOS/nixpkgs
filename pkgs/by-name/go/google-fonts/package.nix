@@ -50,6 +50,8 @@ stdenvNoCC.mkDerivation {
   # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [ " " ] [ "" ] font) fonts;
   installPhase = ''
+    runHook preInstall
+
     adobeBlankDest=$adobeBlank/share/fonts/truetype
     install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
     rm -r ofl/adobeblank
@@ -66,7 +68,10 @@ stdenvNoCC.mkDerivation {
           find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
         done
       ''
-  );
+  )
+  + ''
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://fonts.google.com";
