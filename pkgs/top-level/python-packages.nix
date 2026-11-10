@@ -5697,6 +5697,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  es-client_8 = callPackage ../development/python-modules/es-client/8.nix { };
+
   escapism = callPackage ../development/python-modules/escapism { };
 
   eseries = callPackage ../development/python-modules/eseries { };
