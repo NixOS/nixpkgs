@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation (
 
         set -e
 
-        dirname="pkgs/development/tools/gauge/plugins/${pname}"
+        dirname="pkgs/by-name/ga/gauge/plugins/${pname}"
 
         currentVersion=$(nix eval --raw -f default.nix gaugePlugins.${pname}.version)
 
