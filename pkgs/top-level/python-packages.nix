@@ -10302,6 +10302,8 @@ self: super: with self; {
 
   llm-tools-edit = callPackage ../development/python-modules/llm-tools-edit { };
 
+  llm-tools-exa = callPackage ../development/python-modules/llm-tools-exa { };
+
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
 
   llm-tools-simpleeval = callPackage ../development/python-modules/llm-tools-simpleeval { };
