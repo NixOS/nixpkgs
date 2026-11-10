@@ -1,0 +1,61 @@
+--- a/test/Test/Botan/Low/PubKey/Sign.hs
++++ b/test/Test/Botan/Low/PubKey/Sign.hs
+@@ -22,8 +22,9 @@
+ ecGroup :: ByteString
+ ecGroup = "secp256r1"
+ 
++-- Botan >= 3.14 rejects DSA parameters with q larger than 256 bits
+ dlGroup :: ByteString
+-dlGroup = "modp/ietf/1024"
++dlGroup = "dsa/jce/1024"
+ 
+ sha :: ByteString
+ sha = "SHA-256"
+--- a/test/Test/Botan/Low/PubKey/Verify.hs
++++ b/test/Test/Botan/Low/PubKey/Verify.hs
+@@ -25,8 +25,9 @@
+ ecGroup :: ByteString
+ ecGroup = "secp256r1"
+ 
++-- Botan >= 3.14 rejects DSA parameters with q larger than 256 bits
+ dlGroup :: ByteString
+-dlGroup = "modp/ietf/1024"
++dlGroup = "dsa/jce/1024"
+ 
+ sha :: ByteString
+ sha = "SHA-256"
+--- a/test/Test/Botan/Low/PubKey.hs
++++ b/test/Test/Botan/Low/PubKey.hs
+@@ -27,6 +27,10 @@
+ dlGroup :: ByteString
+ dlGroup = "modp/ietf/1024"
+ 
++-- Botan >= 3.14 rejects DSA parameters with q larger than 256 bits
++dsaGroup :: ByteString
++dsaGroup = "dsa/jce/1024"
++
+ -- TODO: More exhaustive testing in botan
+ -- pks :: [(PKName, PKParams)]
+ pks :: [(ByteString, ByteString)]
+@@ -34,7 +38,7 @@
+     [ ("RSA", "2048")
+     , ("SM2", ecGroup)
+     , ("ElGamal", dlGroup)
+-    , ("DSA", dlGroup)
++    , ("DSA", dsaGroup)
+     , ("ECDSA", ecGroup)
+     , ("ECKCDSA", ecGroup)
+     , ("ECGDSA", ecGroup)
+--- a/test/Test/Botan/Low/PwdHash.hs
++++ b/test/Test/Botan/Low/PwdHash.hs
+@@ -106,8 +106,8 @@
+ test_pwdhash_badSchemeName useTimed = do
+     -- PBKDF2
+     go PBKDF2 >>= \case
+-      Left BadParameterException{} -> pure ()
+-      Right{} -> assertFailure "got success, but expected BadParameterException"
++      Left NotImplementedException{} -> pure ()
++      Right{} -> assertFailure "got success, but expected NotImplementedException"
+     go (pbkdf2 HMAC) >>= \case
+       Left NotImplementedException{} -> pure ()
+       Right{} -> assertFailure "got success, but expected NotImplementedException"
