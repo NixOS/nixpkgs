@@ -71,8 +71,8 @@ in
       "sha256-NJRXFhQ6qocoXe/gr79NFyIMbZPKa4G0D2k1NeGP9D4=";
 
   mypy-boto3-amplifyuibuilder =
-    buildMypyBoto3Package "amplifyuibuilder" "1.43.0"
-      "sha256-XrlXdqhPSVWqssEe+UuREy69icRZE/wCxvM5KVnHS64=";
+    buildMypyBoto3Package "amplifyuibuilder" "1.44.0"
+      "sha256-zN8eKHLqOIWxBKti84XvvjXuf6rIAOV46zmswFN7Ehs=";
 
   mypy-boto3-apigateway =
     buildMypyBoto3Package "apigateway" "1.43.100"
