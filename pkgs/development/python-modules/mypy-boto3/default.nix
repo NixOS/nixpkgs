@@ -535,8 +535,8 @@ in
       "sha256-lrvrYopThGYoQ2sHv99ZmfyLbVpcxpcnA5ZqyVyP70M=";
 
   mypy-boto3-fis =
-    buildMypyBoto3Package "fis" "1.43.0"
-      "sha256-r/8/UTc1qhymzpKf/F3hXQlA2tMZBwd4JmqCio6cFdc=";
+    buildMypyBoto3Package "fis" "1.44.0"
+      "sha256-6vRlZkMB25BqngXqmYzhMUE9a7iX9SpxNv5deb1fZUo=";
 
   mypy-boto3-fms =
     buildMypyBoto3Package "fms" "1.43.110"
