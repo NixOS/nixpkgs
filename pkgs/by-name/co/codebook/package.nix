@@ -4,6 +4,8 @@
   nix-update-script,
   rustPlatform,
   versionCheckHook,
+  aws-lc,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,6 +26,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
 
   # Integration tests require internet access for dictionaries
   doCheck = false;
