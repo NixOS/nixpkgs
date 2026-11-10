@@ -222,12 +222,12 @@ final: prev: {
 
   LazyVim = buildVimPlugin {
     pname = "LazyVim";
-    version = "16.0.1";
+    version = "16.0.2";
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      tag = "v16.0.1";
-      hash = "sha256-GmzjorJkvbo8RmLD3oPBgiukcxzHyR6wyIAP3aWJ8E4=";
+      tag = "v16.0.2";
+      hash = "sha256-flV94qch1QSJ/Y3wlQgJn1IK+qNjoK8B1AttYK1Ds+Y=";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
