@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
 }:
 
@@ -16,6 +17,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-FiM51ZV61aCFWHyNIudQl1B7X5ov0SXyWIVE4am1Vmw=";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Little satellite utility for LeftWM";
