@@ -8,6 +8,10 @@
   perl,
   openssl,
   curl,
+  aws-lc,
+  libgit2,
+  sqlite,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,7 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  buildInputs = [
+    aws-lc
+    libgit2
+    openssl
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildAndTestSubdir = "crates/release_plz";
 
