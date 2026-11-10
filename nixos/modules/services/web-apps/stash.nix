@@ -120,32 +120,18 @@ let
           Add directories containing your adult videos and images.
           Stash will use these directories to find videos and/or images during scanning.
         '';
-        example = literalExpression ''
-          {
-            stash = [
-              {
-                Path = "/media/drive/videos";
-                ExcludeImage = true;
-              }
-            ];
-          }
-        '';
+        example = {
+          stash = [
+            {
+              path = "/media/drive/videos";
+            }
+          ];
+        };
       };
       stash_boxes = mkOption {
         type = types.listOf stashBoxType;
         default = [ ];
         description = "Stash-box facilitates automated tagging of scenes and performers based on fingerprints and filenames";
-        example = literalExpression ''
-          {
-            stash_boxes = [
-              {
-                name = "StashDB";
-                endpoint = "https://stashdb.org/graphql";
-                apikey = "aaaaaaaaaaaa.bbbbbbbbbbbbbbbbbbbbbbbb.cccccccccccccc";
-              }
-            ];
-          }
-        '';
       };
       ui.frontPageContent = mkOption {
         description = "Search filters to display on the front page.";
@@ -157,24 +143,6 @@ let
           presets.recentlyAddedPerformers
           presets.recentlyReleasedGalleries
         ];
-        example = literalExpression ''
-          presets: [
-            # To get the savedFilterId, you can query `{ findSavedFilters(mode: <FilterMode>) { id name } }` on localhost:9999/graphql
-            {
-              __typename = "SavedFilter";
-              savedFilterId = 1;
-            }
-            # basic custom filter
-            {
-              __typename = "CustomFilter";
-              title = "Random Scenes";
-              mode = "SCENES";
-              sortBy = "random";
-              direction = "DESC";
-            }
-            presets.recentlyAddedImages
-          ]
-        '';
         apply = type: if lib.isFunction type then (type uiPresets) else type;
       };
       blobs_path = mkOption {
@@ -344,13 +312,13 @@ let
             find $srcs -mindepth 1 -name '*.yml' | while read plugin_file; do
               grep -q "^#pkgignore" "$plugin_file" && continue
 
-              plugin_dir=$(dirname$plugin_file)
-              out_path=$out/$(basename$plugin_dir)
+              plugin_dir=$(dirname $plugin_file)
+              out_path=$out/$(basename $plugin_dir)
               mkdir -p $out_path
               ls $plugin_dir | xargs -I{} ln -sf "$plugin_dir/{}" $out_path
 
               env \
-                plugin_id=$(basename$plugin_file .yml) \
+                plugin_id=$(basename $plugin_file .yml) \
                 plugin_name="$(yq '.name'$plugin_file)" \
                 plugin_description="$(yq '.description'$plugin_file)" \
                 plugin_version="$(yq '.version'$plugin_file)" \
@@ -415,14 +383,26 @@ in
         type = types.nullOr types.nonEmptyStr;
         default = null;
         example = "admin";
-        description = "Username for login.";
+        description = ''
+          Username for login.
+
+          ::: {.warning}
+          This option takes precedence over {option}`services.stash.settings.username`
+          :::
+        '';
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/path/to/password/file";
-        description = "Path to file containing password for login.";
+        description = ''
+          Path to file containing password for login.
+
+          ::: {.warning}
+          This option takes precedence over {option}`services.stash.settings.password`
+          :::
+        '';
       };
 
       jwtSecretKeyFile = mkOption {
@@ -437,9 +417,14 @@ in
       };
 
       mutableSettings = mkOption {
-        description = "Whether the Stash config.yml is writeable by Stash.";
         type = types.bool;
         default = true;
+        description = ''
+          Whether the Stash config.yml is writeable by Stash.
+
+          If `false`, Any config changes done from within Stash UI will be temporary and reset to those defined in {option}`services.stash.settings` upon `Stash.service` restart.
+          If `true`, the {option}`services.stash.settings` will only be used to initialize the Stash configuration if it does not exist, and are subsequently ignored.
+        '';
       };
       mutablePlugins = mkEnableOption "Whether plugins/themes can be installed, updated, uninstalled manually.";
       mutableScrapers = mkEnableOption "Whether scrapers can be installed, updated, uninstalled manually.";
