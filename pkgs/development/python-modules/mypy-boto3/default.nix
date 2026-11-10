@@ -327,8 +327,8 @@ in
       "sha256-7fTiBDQhVg3bafWhrSUceL3wqKPyY9knBUBTLvHp3KU=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.43.33"
-      "sha256-Y+cDD5dq7C8tiGW37YheNcHTMxFyYCX6P6JPSjN7ttA=";
+    buildMypyBoto3Package "compute-optimizer" "1.44.0"
+      "sha256-NWQTQY7M1kKGjbLex3VlWbcVbWTDib8NCRcYp12RX2M=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.43.42"
