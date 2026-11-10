@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "my-pv";
-  version = "0.0.16";
+  version = "0.0.17";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "my-PV";
     repo = "py-mypv";
     tag = finalAttrs.version;
-    hash = "sha256-dwnklWA18a+oboOVrDHaQiU52wHxOfjxVlbQpmMJ0Cc=";
+    hash = "sha256-zpzVJRzmNkloY+ZVnaTWMruTJrK7ScdYObfdg7Uh/TQ=";
   };
 
   postPatch = ''
