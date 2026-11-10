@@ -14,7 +14,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mashumaro";
   version = "3.23";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1zjQBQ/19Fzx/V5DQr7mhSQZZHkONOMUnFWJnBc42tc=";
   };
 
@@ -43,14 +43,14 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "mashumaro" ];
 
   meta = {
     description = "Serialization library on top of dataclasses";
     homepage = "https://github.com/Fatal1ty/mashumaro";
-    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
+    changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})
