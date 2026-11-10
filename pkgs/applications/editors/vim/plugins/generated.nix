@@ -23562,12 +23562,12 @@ final: prev: {
 
   vim-plug = buildVimPlugin {
     pname = "vim-plug";
-    version = "0.14.0-unstable-2026-10-15";
+    version = "0.15.0";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "vim-plug";
-      rev = "7e5aae5e1187842cb0b1d8def986e48d481c4410";
-      hash = "sha256-b2AMS15l1j/5v8IYdhz8JDGW+UvmbqUN3YS4uO4CYsE=";
+      tag = "0.15.0";
+      hash = "sha256-BMeLUcGJtP25/W96lSUFAot68zqdv+jiKnmcJguUrOI=";
     };
     meta.homepage = "https://github.com/junegunn/vim-plug/";
     meta.license = getLicenseFromSpdxId "MIT";
