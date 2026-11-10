@@ -3,25 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  httpx2,
   llm,
   llm-tools-datasette,
 }:
 
 buildPythonPackage rec {
   pname = "llm-tools-datasette";
-  version = "0.1";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-tools-datasette";
     tag = version;
-    hash = "sha256-Us9bPk2qpTlgJqQ0Cl9QdeqW+h8j+pmnkriM0WXEyyA=";
+    hash = "sha256-c+bJtki4ASlx0IwJngIMVJPX03RGPZlnamvXZEbFsXc=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ llm ];
+  dependencies = [
+    httpx2
+    llm
+  ];
 
   # there is only one test that asserts the exact tool output
   doCheck = false;
