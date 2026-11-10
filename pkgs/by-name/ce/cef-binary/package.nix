@@ -36,6 +36,7 @@
   srcHashes ? {
     aarch64-linux = "sha256-gRYcEylZAUvKTOmV1zw9TyiEkv6FZ0vhVT1mLwne57k=";
     x86_64-linux = "sha256-6usxPmA53kZIVYk9KHxNXrTscSaXjqg8YWS/SiPcAXo=";
+    aarch64-darwin = "sha256-gObVhvxoOhMALUm5E/e3HQGGa3YZvsdZ5bMCudU+aZU=";
   },
 }:
 
@@ -85,12 +86,14 @@ stdenv.mkDerivation {
       selectSystem {
         aarch64-linux = "linuxarm64";
         x86_64-linux = "linux64";
+        aarch64-darwin = "macosarm64";
       }
     }_minimal.tar.bz2";
     hash = selectSystem srcHashes;
   };
 
-  stripDebugList = [ "Release" ];
+  # Stripping would invalidate the framework's code signature on Darwin
+  stripDebugList = lib.optionals stdenv.hostPlatform.isLinux [ "Release" ];
 
   dontPatchELF = true;
 
@@ -98,19 +101,23 @@ stdenv.mkDerivation {
     runHook preInstall
 
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
-    patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
-    patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
+
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
+      patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
+      patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
+      patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+      patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
+      patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
+    ''}
+
     cp --recursive . $out
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit buildType;
+    inherit buildType gitRevision;
     updateScript = ./update.sh;
   };
 
