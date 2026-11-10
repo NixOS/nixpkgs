@@ -890,6 +890,24 @@ let
   mergeModules' =
     let
       catUnmatched = catAttrs "unmatchedDefns";
+      # Convert an option tree decl to a submodule option decl
+      optionTreeToOption =
+        decl:
+        if decl.options._type or null == "option" then
+          decl
+        else
+          decl
+          // {
+            options = mkOption {
+              type = types.submoduleWith {
+                modules = [ { options = decl.options; } ];
+                # `null` is not intended for use by modules. It is an internal
+                # value that means "whatever the user has declared elsewhere".
+                # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
+                shorthandOnlyDefinesConfig = null;
+              };
+            };
+          };
     in
     prefix: modules: configs:
     let
@@ -1026,25 +1044,6 @@ let
             )
         ) configs
       );
-
-      # Convert an option tree decl to a submodule option decl
-      optionTreeToOption =
-        decl:
-        if decl.options._type or null == "option" then
-          decl
-        else
-          decl
-          // {
-            options = mkOption {
-              type = types.submoduleWith {
-                modules = [ { options = decl.options; } ];
-                # `null` is not intended for use by modules. It is an internal
-                # value that means "whatever the user has declared elsewhere".
-                # This might become obsolete with https://github.com/NixOS/nixpkgs/issues/162398
-                shorthandOnlyDefinesConfig = null;
-              };
-            };
-          };
     in
     {
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
