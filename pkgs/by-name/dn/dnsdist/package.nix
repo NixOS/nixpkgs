@@ -1,6 +1,7 @@
 {
   boost,
   cargo,
+  fetchpatch,
   fetchurl,
   fstrm,
   lib,
@@ -29,13 +30,22 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "2.0.10";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YKCU155Ci4bl7KGITWi0lb1NA3rw9u/BRI4WvMDTIrw=";
+    hash = "sha256-QcwiSBf/D3dTtG/luBTduSId2dv3bp6xoJ8Bw8XLtKo=";
   };
 
+  patches = [
+    # Fix build without hostname
+    # https://github.com/PowerDNS/pdns/pull/18271 - should become part of 2.1.4
+    (fetchpatch {
+      url = "https://github.com/PowerDNS/pdns/commit/a9833e04ce84a8ebeed4039c7ec5e0e75516406d.patch";
+      relative = "pdns/dnsdistdist";
+      hash = "sha256-aM2xhk8Jesvbn5t+lu8tlb11lHM8thQ3Qf//VTcjri0=";
+    })
+  ];
   nativeBuildInputs = [
     cargo
     pkg-config
@@ -83,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) cargoRoot src;
-    hash = "sha256-O9FKlT8bqDz+rQBocZ5ZWMimYyRTfPrKBxp+hDs10c4=";
+    hash = "sha256-GSfn3qu/LqBP5xtt9CaY4h8GjaIVtlMZe+Mf2bz9KNs=";
   };
 
   cargoRoot = "dnsdist-rust-lib/rust";
