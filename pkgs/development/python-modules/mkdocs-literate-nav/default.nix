@@ -4,21 +4,22 @@
   fetchFromGitHub,
   hatchling,
   mkdocs,
+  properdocs,
   pytestCheckHook,
   testfixtures,
   pytest-golden,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-literate-nav";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "mkdocs-literate-nav";
-    tag = "v${version}";
-    hash = "sha256-WP8VqiD/Kqswh1TWhSBsNfxn3gxKlRlg6RvGayAdQto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YsWZhMGmOaZjJpQSPddW3TlBCieefQ42Tne85fdP1t0=";
   };
 
   build-system = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   dependencies = [
     mkdocs
+    properdocs
   ];
 
   pythonImportsCheck = [
@@ -45,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})
