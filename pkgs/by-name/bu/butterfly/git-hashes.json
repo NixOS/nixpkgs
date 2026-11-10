@@ -1,15 +1,18 @@
 {
+  "barcode": "sha256-jNuJOm3pnnnp+Vx7eqxFh0SpOSDvI8wCD9gbD4856ac=",
   "dart_leap": "sha256-oO5851cIdrW/asgOePxvwUgjn1XchkH9CKJUruvlLYI=",
-  "keybinder": "sha256-fEKJ9tK8peI07ecxz1NWBjg7li8Db46LzL8wEHKL0a0=",
-  "lw_file_system": "sha256-VPbq1lRkClavaXfK+G1d17mq8bb4ueobnIAEfiOfc3I=",
-  "lw_file_system_api": "sha256-AMnuK6jA40lmYpYy7XASyNsGfgAqfJsEZzDbQPNo6zk=",
-  "lw_sysapi": "sha256-gjrogcHPi5GCt5hNEmkR5zKiaircavXIms/HpArhKm8=",
-  "material_leap": "sha256-EuuueH4gyWX9L0jzExY7/ugaxmkJkWb0pO+9QMpu8T0=",
+  "keybinder": "sha256-fZJ+wcGHr5n2xpUojeJSIWrx1ZStmHHPdbv/CexUWOI=",
+  "lw_file_system": "sha256-SB50rTSXkBur7TxZ6yBRSov2Li36Qrs7NMJyEck/8mQ=",
+  "lw_file_system_api": "sha256-gEHKMmvFIkfCrhmoF8U537A+qjCfO7lRWnaMliNMsxc=",
+  "lw_sysapi": "sha256-2oR+tRfW43NoxsjHY+qTmswXn35HtBnKK8BSfT/XfwI=",
+  "material_leap": "sha256-GUT6iV034DBVW7HJC0giAU8maVXBmCo7pyJNxZO2b2E=",
   "networker": "sha256-FnDEgsr70tBsYXoTV43Q2QHkL0+vLCvJQ0zfAKBRvSQ=",
   "networker_crypto": "sha256-bEcosHCwmgbBpUpL3wkUsSqi7z/0itAFRk+KCGGeWX8=",
   "networker_socket": "sha256-bEcosHCwmgbBpUpL3wkUsSqi7z/0itAFRk+KCGGeWX8=",
-  "onenote_parser": "sha256-7SJT4NjQFcWKAo0zJQSpjxFrQTxfYWCL72GPIgBvsJs=",
-  "phosphor_flutter": "sha256-Z5iikuoGDjRGE73Iig8WGORtedQf1EpVoxeD+B7S57c=",
-  "settings_leap": "sha256-stconni5X/gBa0Gr4jzHa1K4GC9oQCAYo/tv2zup0bw=",
-  "swamp_api": "sha256-mR37YsOQQO3PwyxR6TghL6VfV7b8sTwrhvLm7Ks4TI0="
+  "onenote_parser": "sha256-xlW3Nz+Rx7aRyJMwFLyFbOTP4sP5umdxlQPd4dra978=",
+  "phosphor_flutter": "sha256-QFagf2pbvJGRaCmmAoMYsTQcp4bvJjs2MwwCrvrU5z0=",
+  "popover": "sha256-yoBGJrd7+5HHvTbbxJ81j9bnT9yJBpgyOO+kl+KABHw=",
+  "settings_leap": "sha256-OuE6pYPpLbCEVVqnz1Fg90rKlrzgh2lo70tca/CEe7o=",
+  "svg_normalizer": "sha256-D+uHNfywLO6+M8XccwXvGVLvk/osBuEXzjuXznnweTM=",
+  "swamp_api": "sha256-vLpp1um5do8j6sppNBgJsmqcIxXsp4zYOrhaarPKQSc="
 }
