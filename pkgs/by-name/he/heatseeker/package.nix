@@ -5,6 +5,7 @@
   coreutils,
   libgit2,
   pkg-config,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip"
     "screen::unix::tests::winsize_test"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "General-purpose fuzzy selector";
