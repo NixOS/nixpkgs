@@ -12,6 +12,7 @@
   desktop-file-utils,
   openssl,
   libadwaita,
+  sqlite,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     libadwaita
+    sqlite
   ];
 
   mesonBuildType = "release";
