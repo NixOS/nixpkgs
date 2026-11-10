@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   less,
   installShellFiles,
@@ -25,7 +26,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
   };
 
-  cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
+  cargoPatches = [
+    # cargo 1.100 changed the way the target directory is structured. bat's
+    # tests assumed the old layout, so pull the patch which respects
+    # `CARGO_BIN_EXE_bat`.
+    (fetchpatch {
+      name = "replace-deprecated-cargo_bin-with-cargo_bin-macro.patch";
+      url = "https://github.com/sharkdp/bat/commit/6c75acfffcf63ca8df7a3e4b2808f64ceb13cdf2.patch";
+      hash = "sha256-G7I6scEuoUztBORne6arRDUCDkqq2gmTG09pcnhD1Rk=";
+    })
+  ];
+
+  cargoHash = "sha256-o0r8iCta5JrTbqlNR4SlNKySsgnahzKbLHGRjSdKL+g=";
 
   env.LIBGIT2_NO_VENDOR = 1;
 
