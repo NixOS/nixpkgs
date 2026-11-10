@@ -14,29 +14,24 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-server";
-  version = "2.2.59";
+  version = "2.2.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xsiwD+o9M/ZwR8t+EA9mWxAlfSKLCvNr1U2qRcmSDzg=";
+    hash = "sha256-jLDD2sVWwVBjXv6tvxyYDwo2wEdzoH5uUjXc0IpZSq0=";
   };
 
-  # GNS3 2.3.26 requires a static BusyBox for the Docker integration
+  # GNS3 2.2 requires a static BusyBox for the Docker integration
   prePatch = ''
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
   pythonRelaxDeps = [
-    "aiofiles"
     "aiohttp"
-    "aiohttp-cors"
-    "jsonschema"
     "platformdirs"
-    "psutil"
-    "sentry-sdk"
   ];
 
   build-system = with python3Packages; [ setuptools ];
@@ -45,7 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     aiofiles
     aiohttp
     aiohttp-cors
-    async-generator
     async-timeout
     distro
     jinja2
@@ -57,7 +51,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     py-cpuinfo
     sentry-sdk
     truststore
-    yarl
   ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -117,7 +110,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       API.
     '';
     homepage = "https://www.gns3.com/";
-    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ anthonyroussel ];
