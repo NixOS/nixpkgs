@@ -8,12 +8,11 @@
   libvpx,
   makeBinaryWrapper,
   mkvtoolnix-cli,
-  python3,
   rav1e,
   svt-av1,
   symlinkJoin,
   testers,
-  vapoursynth,
+  python3Packages,
   x264,
   x265,
   withAom ? true, # AV1 reference encoder
@@ -47,7 +46,7 @@ symlinkJoin {
   postBuild =
     let
       runtimePrograms = [
-        vapoursynth
+        python3Packages.vapoursynth
         (ffmpeg.override { inherit withVmaf; })
       ]
       ++ lib.optional withAom libaom
@@ -60,10 +59,8 @@ symlinkJoin {
       ++ lib.optional withX265 x265;
     in
     ''
-      wrapProgram $out/bin/av1an \
-        --prefix LD_LIBRARY_PATH : ${vapoursynth}/lib \
-        --prefix PATH : ${lib.makeBinPath runtimePrograms} \
-        --prefix PYTHONPATH : ${vapoursynth}/${python3.sitePackages}
+      wrapProgram "$out/bin/av1an" \
+        --prefix PATH : ${lib.makeBinPath runtimePrograms}
     '';
 
   passthru = {
@@ -71,6 +68,10 @@ symlinkJoin {
       package = av1an;
       inherit (av1an-unwrapped) version;
     };
+    # Make av1an a python package, so it can be added to
+    # python3.withPackages to link vapoursynth plugins
+    pythonModule = python3Packages.vapoursynth.pythonModule;
+    requiredPythonModules = [ python3Packages.vapoursynth ];
   };
 
   meta = {
