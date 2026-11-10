@@ -2,26 +2,38 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
+  testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "summon";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qJBJ5zxILl9lxPH67j6r2H7K8WRpKZo5vqe4nIaL35w=";
+    hash = "sha256-bP5AaxyAJogPGefWZdDCkl3aYPVJcPAuaop4XYKcCfM=";
   };
 
-  vendorHash = "sha256-7fyHgbmP+lm1F3wGKrNvhaWyLk10aIu4JSRqSZeGrdU=";
+  vendorHash = "sha256-eMW9HHbMR3Q3o/5Y1FKKstnEdtuPrR3cQeBUWJvsBEk=";
 
   subPackages = [ "cmd" ];
+
+  patches = [ ./fix-go-mod.patch ];
+
+  ldflags = [
+    "-X github.com/cyberark/summon/pkg/version.Version=${finalAttrs.version}"
+    "-X github.com/cyberark/summon/pkg/version.Tag=nix"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/summon
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "CLI that provides on-demand secrets access for common DevOps tools";
