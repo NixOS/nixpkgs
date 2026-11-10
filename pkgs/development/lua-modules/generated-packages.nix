@@ -3820,6 +3820,42 @@ final: prev: {
     }
   ) { };
 
+  luarocks-build-luke = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaAtLeast,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luarocks-build-luke";
+      version = "0.3.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luarocks-build-luke-0.3.2-1.rockspec";
+          sha256 = "1lhppg1q8qlzx215mys8lyiizipf6mrri357g5ava05rvmd4xcn8";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/gvvaughan/luke/archive/luarocks-build-luke-v0.3.2.zip";
+        sha256 = "120zhxgimr85x63ihcja7c0f4jg92k5pngrc25l3lf4z1dzjbjrc";
+      };
+
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
+
+      meta = {
+        homepage = "https://github.com/gvvaughan/luke";
+        license = lib.licenses.mit;
+        description = "LuaRocks build backend for luke";
+        longDescription = ''
+          Build a rock from the recipe in the `build` table of its rockspec,
+                with `build.type = 'luke'`.  The backend is one file that needs
+                nothing else installed.
+        '';
+      };
+    }
+  ) { };
+
   luarocks-build-rust-mlua = callPackage (
     {
       buildLuarocksPackage,
