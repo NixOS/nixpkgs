@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -29,6 +30,12 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     installManPage man/mlr.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion \
+      --cmd mlr \
+      --bash <($out/bin/mlr completion bash) \
+      --zsh <($out/bin/mlr completion zsh)
   '';
 
   meta = {
