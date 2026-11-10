@@ -9,6 +9,7 @@
   pkg-config,
   pkl,
   python3,
+  aws-lc,
   libgit2,
   openssl,
   cacert,
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libgit2
     openssl
   ];
