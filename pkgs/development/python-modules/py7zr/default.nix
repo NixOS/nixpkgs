@@ -14,7 +14,7 @@
   pyzstd,
   texttable,
   py-cpuinfo,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytest-httpserver,
   pytest-remotedata,
   pytest-timeout,
@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     py-cpuinfo
-    pytest-benchmark
+    pytest-benchmark-stub
     pytest-httpserver
     pytest-remotedata
     pytest-timeout

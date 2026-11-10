@@ -16673,6 +16673,8 @@ self: super: with self; {
 
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
+  pytest-benchmark-stub = callPackage ../development/python-modules/pytest-benchmark-stub { };
+
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
   pytest-cache = self.pytestcache; # added 2021-01-04

@@ -6,7 +6,7 @@
 
   # tests
   dirty-equals,
-  pytest-benchmark,
+  pytest-benchmark-stub,
   pytestCheckHook,
 }:
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
-    pytest-benchmark
+    pytest-benchmark-stub
     pytestCheckHook
   ];
 
