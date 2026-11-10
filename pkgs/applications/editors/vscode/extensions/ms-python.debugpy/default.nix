@@ -1,14 +1,33 @@
 {
   lib,
+  stdenv,
   vscode-utils,
 }:
+let
+  sources = {
+    "x86_64-linux" = {
+      arch = "linux-x64";
+      hash = "sha256-OuQX94vOF5krng77oWCkOoWotpW9OH4VDU3yTjZsewE=";
+    };
 
-vscode-utils.buildVscodeMarketplaceExtension {
-  mktplcRef = {
+    "aarch64-linux" = {
+      arch = "linux-arm64";
+      hash = "sha256-KUKuG0yENmmV0mIGQrcDxbOvUhLaSpczqYJp4111IwA=";
+    };
+
+    "aarch64-darwin" = {
+      arch = "darwin-arm64";
+      hash = "sha256-mmvbMMfwtgLXgZoIn+4wQ4IVbuo8gwFTplGcHkh3PuA=";
+    };
+  };
+
+  base = sources.${stdenv.hostPlatform.system}
+    or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+in vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = base // {
     name = "debugpy";
     publisher = "ms-python";
     version = "2026.6.0";
-    hash = "sha256-zgfBcgIKc78f9qpcl9ULoQTUQ1ETAxfwpH/SSOhyaZc=";
   };
 
   meta = {
