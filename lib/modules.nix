@@ -829,9 +829,10 @@ let
 
   # Push down the properties of a definition's value. In the common case
   # of no property to push down, the definition is reused as-is.
-  pushDownDefinition =
+  pushDownDefinitions = concatMap (
     { file, value }@def:
-    if value ? _type then map (value: { inherit file value; }) (pushDownProperties value) else [ def ];
+    if value ? _type then map (value: { inherit file value; }) (pushDownProperties value) else [ def ]
+  );
 
   /**
     Merge a list of modules.  This will recurse over the option
@@ -975,10 +976,7 @@ let
                 let
                   # The definitions of 'name' with properties pushed down one level.
                   nested = mergeModules' loc decls (
-                    if rawDefinitionsByName ? ${name} then
-                      concatMap pushDownDefinition rawDefinitionsByName.${name}
-                    else
-                      [ ]
+                    if rawDefinitionsByName ? ${name} then pushDownDefinitions rawDefinitionsByName.${name} else [ ]
                   );
                 in
                 {
