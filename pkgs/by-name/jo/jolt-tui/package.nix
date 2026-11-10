@@ -3,6 +3,7 @@
   lib,
   pkg-config,
   rustPlatform,
+  sqlite,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [ "--package=jolt-tui" ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ sqlite ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
